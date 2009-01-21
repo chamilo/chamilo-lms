@@ -323,6 +323,7 @@ $OnlyLettersAndNumbersAllowed = "مسموح فقط بالحروف والأرقا
 $langBasicOverview = "نظرة عامة أساسية ";
 $CourseAdminRole = "مدير المقرر ";
 $UserRole = "الدور";
+$OnlyImagesAllowed = "فقط PNG, JPG or GIF الصور المسموح بها هي ";
 $ViewRight = "معاينة";
 $EditRight = "تحرير";
 $DeleteRight = "حذف";

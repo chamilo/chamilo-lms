@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "(&#51060; &#44284;&#51221;&#50640;
 $dropbox_lang["mailingNothingFor"]  = "Nothing for";
 $dropbox_lang["justUploadInSelect"]  = "---JustUpload---";
 $dropbox_lang["justUploadInList"]  = "Upload by";
-$dropbox_lang["mailingJustUploadNoOther"]  = "&#50629;&#47196;&#46300;&#45716; &#45796;&#47480; &#49688;&#49888;&#51088;&#50752; &#44208;&#54633;&#54624; &#49688; &#50630;&#49845;&#45768;&#45796;";
 $dropbox_lang["giveFeedback"] = "&#54588;&#46300;&#48177; &#50416;&#44592;/&#49688;&#51221;";
 $dropbox_lang["showFeedback"] = "&#54588;&#46300;&#48177; &#48372;&#44592;";
 $dropbox_lang["backList"] = "dropbox&#47196; &#46028;&#50500;&#44032;&#44592;";

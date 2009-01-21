@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "(ne registrita por &#265;i-kurso) 
 $dropbox_lang["mailingNothingFor"]  = "Nenio por ";
 $dropbox_lang["justUploadInSelect"]  = "---NurAl&#349;uto---";
 $dropbox_lang["justUploadInList"]  = "Al&#349;uto far ";
-$dropbox_lang["mailingJustUploadNoOther"]  = "NurAl&#349;uto ne estas kombinebla kun aliaj destinoj ";
 $dropbox_lang["giveFeedback"] = "Donu/ Redaktu retrokupla&#309;on  XX";
 $dropbox_lang["showFeedback"] = "Montru retrokupla&#309;on ";
 $dropbox_lang["backList"] = "Reiri al via demetujo ";
@@ -118,7 +117,7 @@ $InvalidGroupDetected = "Malvalida grupo trovitas.";
 $DropboxFileTooBig = "La dosiero estas tro granda.";
 $TheFileIsNotUploaded = "La dosiero ne estas al&#349;utita";
 $FileUploadSucces = "La dosiero estas sukcese al&#349;utita.";
-$mailingNonMailingError = "Mesa&#285;o ne povas esti superskribata per ne-mesa&#285;o kaj inverse";
+$MailingNonMailingError = "Mesa&#285;o ne povas esti superskribata per ne-mesa&#285;o kaj inverse";
 $MailingSelectNoOther = "Mesa&#285;o ne estas kombinebla kun aliaj adresitoj.";
-$mailingJustUploadSelectNoOther = "Nur al&#349;uto estas nekombinebla kun aliaj adresitoj.";
+$MailingJustUploadSelectNoOther = "Nur al&#349;uto estas nekombinebla kun aliaj adresitoj.";
 ?>

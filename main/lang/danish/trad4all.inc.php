@@ -322,6 +322,7 @@ $OnlyLettersAndNumbersAllowed = "Kun bogstaver og tal er tilladt";
 $langBasicOverview = "Alm. overblik";
 $CourseAdminRole = "Kursusadministration";
 $UserRole = "Rolle";
+$OnlyImagesAllowed = "Det er kun muligt at anvende PNG, JPG eller GIF billeder ";
 $ViewRight = "Visning";
 $EditRight = "Rediger";
 $DeleteRight = "Slet";

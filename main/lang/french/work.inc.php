@@ -48,4 +48,10 @@ $ExpiryDateToSendWorkIs = "Date d\'expiration de remise des travaux";
 $EnableExpiryDate = "Activer la date d\'expiration";
 $EnableEndDate = "Activer la date de fin";
 $IsNotPosibleSaveTheDocument = "Impossible de sauver le document";
+$EndDateCannotBeBeforeTheExpireDate = "La date de fin ne peut pas être avant la date d\'expiration";
+$SelectAFilter = "Choisissez un filtre";
+$FilterByNotExpired = "Filtrer - non expirés";
+$FilterAssignments = "Filtrer tâches";
+$WeightNecessary = "Poids nécessaire";
+$QualificationOver = "Cotation sur";
 ?>

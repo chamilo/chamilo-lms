@@ -285,6 +285,7 @@ $InvalidDate = "Malvalida dato";
 $OnlyLettersAndNumbersAllowed = "Nur literoj kaj ciferoj estas permesataj";
 $CourseAdminRole = "Kursadministranto";
 $UserRole = "Rolo";
+$OnlyImagesAllowed = "Permesitaj estas nur bildoj PNG-, JPG- a&#365; GIF-aj";
 $ViewRight = "Vidrajto";
 $EditRight = "Redakti";
 $DeleteRight = "Forigi";

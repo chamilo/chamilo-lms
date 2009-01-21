@@ -119,13 +119,13 @@ $IncorrectData = "Incorrect data";
 $Resource = "Resource";
 $PleaseEnableScoringSystem = "Please enable scoring system";
 $AllResultDeleted = "All results have been removed";
-$ImportNoFile = "Has not imported file";
+$ImportNoFile = "There is no file to import";
 $ProblemUploadingFile = "There was a problem sending your file. Nothing has been received.";
 $AllResultsEdited = "All results have been edited";
 $UserInfoDoesNotMatch = "The user info doesn\'t match.";
 $ScoreDoesNotMatch = "The score doesn\'t match";
 $FileUploadComplete = "File upload successfull";
 $NoResultsAvailable = "No results available";
-$CannotChangeTheMaxNote = "Cannot change the note max";
+$CannotChangeTheMaxNote = "Cannot change the max note";
 $GradebookWeightUpdated = "Weights updated successfully";
 ?>

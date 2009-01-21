@@ -13,4 +13,12 @@ $WriteYourNoteHere = "Cliquez ici pour écrire une nouvelle note";
 $SearchByTitle = "Rechercher par titre";
 $WriteTheTitleHere = "Entrez le titre ici";
 $UpdateDate = "Dernière modification";
+$NoteAddNew = "Ajouter une nouvelle note";
+$OrderByCreationDate = "Trier par date de création";
+$OrderByModificationDate = "Trier par date de modification";
+$OrderByTitle = "Trier par titre";
+$NoteTitle = "Titre de la note";
+$NoteComment = "Contenu de la note";
+$NoteAdded = "Note ajoutée";
+$NoteConfirmDelete = "Êtes-vous certain de vouloir supprimer cette note";
 ?>

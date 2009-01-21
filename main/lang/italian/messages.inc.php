@@ -21,4 +21,10 @@ $InvalidMessageId = "L\'identificativo del messaggio cui rispondere non è valido
 $ErrorSendingMessage = "C\'è stato un errore nel tentativo di spedire un messaggio";
 $SureYouWantToDeleteSelectedMessages = "Sei sicuro di voler eliminare i messaggi selezionati?";
 $SelectedMessagesDeleted = "I messaggi selezionati sono stati eliminati";
+$EnterTitle = "Metti un titolo";
+$TypeYourMessage = "Scrivi qui il tuo messaggio";
+$MessageDeleted = "Messaggio eliminato";
+$ConfirmDeleteMessage = "Sei sicuro di voler eliminare il messaggio?";
+$DeleteMessage = "Elimina il messaggio";
+$ReadMessage = "Leggi il messaggio";
 ?>

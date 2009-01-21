@@ -235,6 +235,7 @@ $OnlyLettersAndNumbersAllowed = "只可使用英文字母及數字";
 $langBasicOverview = "基本全覽";
 $CourseAdminRole = "課程管理員";
 $UserRole = "角色";
+$OnlyImagesAllowed = "只允許 PNG, JPG or GIF 圖片";
 $ViewRight = "檢視";
 $EditRight = "編輯";
 $DeleteRight = "刪除";

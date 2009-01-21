@@ -124,7 +124,6 @@ $FullUserName = "Fulde navn";
 $SearchForUser = "Søgning på bruger";
 $SearchButton = "Søg";
 $SearchNoResultsFound = "Søgningen gav intet resultat";
-$OnlyImagesAllowed = "Det er kun muligt at anvende PNG, JPG eller GIF billeder ";
 $UsernameWrong = "Dit brugernavn kan kun indeholde bogstaver, tal og følgende tegn:  _ . -";
 $PasswordRequestFrom = "Dette er en forespørgsel på adgangskoden tilknyttet denne e-mailadresse";
 $CorrespondsToAccount = "E-mailadressen svarer til følgende brugerprofil:";

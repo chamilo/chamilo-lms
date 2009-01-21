@@ -125,7 +125,6 @@ $FullUserName = "Naam";
 $SearchForUser = "Zoek naar een gebruiker";
 $SearchButton = "Zoek";
 $SearchNoResultsFound = "Geen zoekresultaten gevonden.";
-$OnlyImagesAllowed = "Enkel afbeeldingen van het type PNG, JPG of GIF zijn toegestaan.";
 $UsernameWrong = "De gebruikersnaam mag enkel letters, cijfers en _.- bevatten.";
 $PasswordRequestFrom = "Dit is een wachtwoordaanvraag voor het e-mailadres";
 $CorrespondsToAccount = "Dit e-mailadres komt overeen met de volgende gebruiker.";

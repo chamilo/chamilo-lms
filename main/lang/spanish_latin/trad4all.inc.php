@@ -294,6 +294,7 @@ $OnlyLettersAndNumbersAllowed = "Solamente se permiten letras y números";
 $langBasicOverview = "Vista básica";
 $CourseAdminRole = "Administrador del curso";
 $UserRole = "Rol";
+$OnlyImagesAllowed = "Sólo están permitidas imágenes PNG, JPG y GIF ";
 $ViewRight = "Ver";
 $EditRight = "Editar";
 $DeleteRight = "Borrar";

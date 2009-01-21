@@ -126,7 +126,6 @@ $FullUserName = "Full name";
 $SearchForUser = "Search for user";
 $SearchButton = "Search";
 $SearchNoResultsFound = "No search results found";
-$OnlyImagesAllowed = "Only PNG, JPG or GIF images allowed";
 $UsernameWrong = "Your username can only contain letters, numbers and _.-";
 $PasswordRequestFrom = "This is a password request for the e-mail address";
 $CorrespondsToAccount = "This e-mail address corresponds to the following user account.";

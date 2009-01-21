@@ -123,7 +123,6 @@ $FullUserName = "ชื่อ-นามสกุลจริง";
 $SearchForUser = "ผู้ใช้ค้นหา";
 $SearchButton = "ค้นหา";
 $SearchNoResultsFound = "ไม่พบรายการที่ค้นหา";
-$OnlyImagesAllowed = "อนุญาตเฉพาะไฟล์ภาพ สกุล.png,jpgและ.gif";
 $UsernameWrong = "การตั้งชื่อผู้ใช้ ต้องเป็นตัวอักษร ตัวเลขและสัญลักษณ์การแยกคำโดยใช้ _.-";
 $PasswordRequestFrom = "นี่เป็นรหัสผ่านที่ร้องขอ สำหรับชื่อที่อยู่อีเมลของ";
 $CorrespondsToAccount = "ชื่อที่อยู่อีเมลที่ตรงกับสมาชิก/ผู้เรียน ต่อไปนี้";

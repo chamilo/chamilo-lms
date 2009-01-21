@@ -129,7 +129,6 @@ $FullUserName = "Nome completo";
 $SearchForUser = "Procurar por usuários";
 $SearchButton = "Procurar";
 $SearchNoResultsFound = "Nenhum resultado encontrado ";
-$OnlyImagesAllowed = "Somente imagens PNG, JPG ou GIF são permitidas.";
 $UsernameWrong = "Seu nome de usuário só pode conter letras, números e os seguintes carecteres _.- ";
 $PasswordRequestFrom = "Este é um pedido de envio de senha para seu endereço de E-mail ";
 $CorrespondsToAccount = "Este endereço de E-mail corresponde ao seguinte usuário. ";

@@ -123,7 +123,6 @@ $FullUserName = "Numele intreg";
 $SearchForUser = "Cauta un utilizator";
 $SearchButton = "Cauta";
 $SearchNoResultsFound = "Nu sa gasit nici un rezultat";
-$OnlyImagesAllowed = "Doar imagini de tipul PNG, JPG sau GIF permise";
 $UsernameWrong = "Numele dumneavoastra de utilizator poate contine litere, numere si _.-";
 $PasswordRequestFrom = "Aceasta este o cerere de parola pt adresa de e-mail";
 $CorrespondsToAccount = "Aceasta adresa de e-mail corespunde urmatorului cont de utilizator.";

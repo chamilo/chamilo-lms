@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "(tidak terdaftar untuk mata kuliah
 $dropbox_lang["mailingNothingFor"]  = "Tidak ada untuk";
 $dropbox_lang["justUploadInSelect"]  = "---Hanya Upload---";
 $dropbox_lang["justUploadInList"]  = "Upload oleh";
-$dropbox_lang["mailingJustUploadNoOther"]  = "Hanya Upload tidak dapat digabung dengan penerima lain";
 $dropbox_lang["giveFeedback"] = "Sumbang / Edit Masukan";
 $dropbox_lang["showFeedback"] = "Tampilkan Masukan";
 $dropbox_lang["backList"] = "Kembali ke dropbox anda";
@@ -118,7 +117,7 @@ $InvalidGroupDetected = "Group tidak syah terdeteksi";
 $DropboxFileTooBig = "File dropbox terlalu besar.";
 $TheFileIsNotUploaded = "File tersebut tidak di-upload.";
 $FileUploadSucces = "File tersebut sukses di-upload.";
-$mailingNonMailingError = "Mailing tidak dapat ditimpah oleh non-mailing dan sebaliknya";
+$MailingNonMailingError = "Mailing tidak dapat ditimpah oleh non-mailing dan sebaliknya";
 $MailingSelectNoOther = "Mailing tidak dapat digabung dengan penerima lain";
-$mailingJustUploadSelectNoOther = "Hanya Upload tidak dapat dikombinasi dengan penerima lain";
+$MailingJustUploadSelectNoOther = "Hanya Upload tidak dapat dikombinasi dengan penerima lain";
 ?>

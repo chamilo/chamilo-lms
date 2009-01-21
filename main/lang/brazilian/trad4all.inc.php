@@ -321,6 +321,7 @@ $OnlyLettersAndNumbersAllowed = "Somente letras e números são permitidos";
 $langBasicOverview = "Visualização Básica";
 $CourseAdminRole = "Administrador do curso";
 $UserRole = "Função";
+$OnlyImagesAllowed = "Somente imagens PNG, JPG ou GIF são permitidas.";
 $ViewRight = "Visualizar";
 $EditRight = "Editar";
 $DeleteRight = "Apagar";

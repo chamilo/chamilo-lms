@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "(nie zapisany na ten kurs)";
 $dropbox_lang["mailingNothingFor"]  = "Nic dla";
 $dropbox_lang["justUploadInSelect"]  = "--PoprostuZa&#322;aduj--";
 $dropbox_lang["justUploadInList"]  = "Za&#322;adowane przez";
-$dropbox_lang["mailingJustUploadNoOther"]  = "PoprostuZa&#322;aduj nie mo&#380;e byc &#322;&#261;czone z innymi odbiorcami";
 $dropbox_lang["giveFeedback"] = "Dodaj/Edytuj Odpowid&#378;";
 $dropbox_lang["showFeedback"] = "Poka&#380; Odpowied&#378;";
 $dropbox_lang["backList"] = "Powrót do skrzynki nadawczej";

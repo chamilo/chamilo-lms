@@ -283,6 +283,7 @@ $OnlyLettersAndNumbersAllowed = "Tiktai raidės ir skaičiai leidžiami";
 $langBasicOverview = "Paprastoji peržiūra";
 $CourseAdminRole = "Kurso administratorius";
 $UserRole = "Vaidmuo";
+$OnlyImagesAllowed = "Tiktai PNG, JPG ar GIF paveikslėliai leidžiami";
 $ViewRight = "Peržiūrėti";
 $EditRight = "Redaguoti";
 $DeleteRight = "Trinti";

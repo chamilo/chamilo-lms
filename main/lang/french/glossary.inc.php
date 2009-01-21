@@ -18,4 +18,5 @@ $PreSelectedOrder = "Prédéfini";
 $TermAdded = "Terme ajouté";
 $YouMustEnterATermName = "Veuillez entrer un terme";
 $YouMustEnterATermDefinition = "Veuillez entrer la définition du terme";
+$TableView = "Vue tableau";
 ?>

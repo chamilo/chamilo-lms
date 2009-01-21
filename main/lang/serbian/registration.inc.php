@@ -122,6 +122,5 @@ $FullUserName = "Puno ime";
 $SearchForUser = "Pretraga korisnika";
 $SearchButton = "Traži";
 $SearchNoResultsFound = "Nema rezultata za ovu pretragu";
-$OnlyImagesAllowed = "Samo slike tipa PNG, Jpg ili GIF su dozvoljene";
 $UsernameWrong = "Vaše korisni&#263;ko ime može da sadrži samo slova, brojeve i _.-";
 ?>

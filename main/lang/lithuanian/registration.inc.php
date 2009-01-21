@@ -124,7 +124,6 @@ $FullUserName = "Pilnas vardas";
 $SearchForUser = "Ieškoti vartotojo";
 $SearchButton = "Paieška";
 $SearchNoResultsFound = "Paieškos rezultatų nėra";
-$OnlyImagesAllowed = "Tiktai PNG, JPG ar GIF paveikslėliai leidžiami";
 $UsernameWrong = "Vartotojo vardas gali turįti tik raides, skaičius ir  _.-";
 $PasswordRequestFrom = "This is a password request for the e-mail address";
 $CorrespondsToAccount = "Šis el. pašto adresas susijęs su šia vartotojo sąskaita.";

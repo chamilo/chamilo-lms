@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "(nije registovan za ovaj kurs)";
 $dropbox_lang["mailingNothingFor"]  = "Ništa za";
 $dropbox_lang["justUploadInSelect"]  = "---SamoU&#269;itavanje---";
 $dropbox_lang["justUploadInList"]  = "Na server u&#269;itao";
-$dropbox_lang["mailingJustUploadNoOther"]  = "Samo u&#269;itavanje ne može biti kombinovano sa drugim primaocima";
 $dropbox_lang["giveFeedback"] = "Daj/Izmeni odgovor";
 $dropbox_lang["showFeedback"] = "Prikaži odgovor";
 $dropbox_lang["backList"] = "Idi nazad u moj dropbox";

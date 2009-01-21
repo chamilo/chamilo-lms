@@ -124,7 +124,6 @@ $FullUserName = "Tam isim";
 $SearchForUser = "Kullan&#305;c&#305; ara";
 $SearchButton = "Ara";
 $SearchNoResultsFound = "Aramada hiç bir sonuç bulunamad&#305;";
-$OnlyImagesAllowed = "Sadece PNG, JPG veya GIF tipindeki görüntüler kabul edilir";
 $UsernameWrong = "Kullan&#305;c&#305; ad&#305; sadece harfler ve rakamlardan olu&#351;mal&#305;d&#305;r ....";
 $PasswordRequestFrom = "E-Posta adresi için &#351;ifre iste&#287;i";
 $CorrespondsToAccount = "Bu e-posta adresi a&#351;a&#287;&#305;daki kullan&#305;c&#305;ya aittir.";

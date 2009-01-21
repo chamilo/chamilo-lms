@@ -125,7 +125,6 @@ $FullUserName = "Fullständigt namn";
 $SearchForUser = "Sök efter användare";
 $SearchButton = "Sök";
 $SearchNoResultsFound = "Inga sökta objekt funna";
-$OnlyImagesAllowed = "Bara bilder av typen PNG, JPG och GIF är tillåtna";
 $UsernameWrong = "Ditt användarnamn kan bara innehålla bokstäver, siffror och _.-";
 $PasswordRequestFrom = "Detta är lösenords fråga för e-post adressen";
 $CorrespondsToAccount = "Denna e-post adress stämmer överens med följande användar konto.";

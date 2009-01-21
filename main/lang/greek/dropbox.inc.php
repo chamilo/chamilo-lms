@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "(όχι εγγεγραμμένος)";
 $dropbox_lang["mailingNothingFor"]  = "Τίποτε για ";
 $dropbox_lang["justUploadInSelect"]  = "--- Ανέβασμα αρχείου ---";
 $dropbox_lang["justUploadInList"]  = "Ανέβασμα αρχείου από τον/την";
-$dropbox_lang["mailingJustUploadNoOther"]  = "Το ανέβασμα αρχείου δεν μπορεί να συνδιαστεί με αποστολή σε άλλους παραλήπτες";
 $dropbox_lang["giveFeedback"] = "Give / Edit Feedback";
 $dropbox_lang["showFeedback"] = "Show Feedback";
 $dropbox_lang["backList"] = "Επιστροφή στο Χώρο Ανταλλαγής Αρχείων";

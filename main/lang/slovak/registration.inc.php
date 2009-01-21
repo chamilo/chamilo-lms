@@ -118,7 +118,6 @@ $FullUserName = "Celé meno";
 $SearchForUser = "Hlada&#357; používate&#318;a";
 $SearchButton = "Vyh&#318;adávanie";
 $SearchNoResultsFound = "Žiadne výsledky vyh&#318;adávania";
-$OnlyImagesAllowed = "Povolené len obrázky typu PNG, JPG alebo GIF";
 $langphone = "Telefón";
 $MyProgress = "Moje pokroky";
 $Select = "Vybra&#357;";

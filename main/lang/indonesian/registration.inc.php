@@ -124,7 +124,6 @@ $FullUserName = "Nama Lengkap";
 $SearchForUser = "Cari user";
 $SearchButton = "Cari";
 $SearchNoResultsFound = "Tidak diketemukan hasil";
-$OnlyImagesAllowed = "Hanya gambar bertype PNG, JPG atau GIF yang diijinkan";
 $UsernameWrong = "Nama user hanya dapat berisi huruf angka dan _.-";
 $PasswordRequestFrom = "Ini adalah permohonan password untuk alamat email";
 $CorrespondsToAccount = "Alamat email ini berhubungan dengan user berikut ini.";

@@ -124,7 +124,6 @@ $FullUserName = "Nome completu";
 $SearchForUser = "Buscar por usuariu";
 $SearchButton = "Buscar";
 $SearchNoResultsFound = "Nun s\'atoparen resultaos nesta busca";
-$OnlyImagesAllowed = "Namás tán permitíes imáxenes PNG, JPG y GIF";
 $UsernameWrong = "El so nome d\'usuariu tien de tener lletres, númberos y _.-";
 $PasswordRequestFrom = "Esti ye un pidimientu de seña pa la direición de corréu electrónicu ";
 $CorrespondsToAccount = "Esta direición de corréu electrónicu correspuende al usuariu: ";

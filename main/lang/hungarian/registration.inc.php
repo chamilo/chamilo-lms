@@ -127,7 +127,6 @@ $FullUserName = "Teljes név";
 $SearchForUser = "Keresés felhasználóra";
 $SearchButton = "Keresés";
 $SearchNoResultsFound = "A keresés nem járt eredménnyel";
-$OnlyImagesAllowed = "Csak a PNG, JPG és GIF képformátumok engedélyezettek.";
 $UsernameWrong = "A felhasználói név csak bet&#369;ket, számokat és \"_.-\" karaktereket tartalmazhat.";
 $PasswordRequestFrom = "Ez egy jelszó kérelem ehhez az email címhez";
 $CorrespondsToAccount = "Ez az email cím a következ&#337; felhasználói fiókhoz tartozik";

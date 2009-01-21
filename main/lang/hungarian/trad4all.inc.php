@@ -323,6 +323,7 @@ $OnlyLettersAndNumbersAllowed = "Csak bet&#369;k és számok engedélyezettek";
 $langBasicOverview = "Rövid leírás";
 $CourseAdminRole = "Kurzus adminisztrátor";
 $UserRole = "Szerep";
+$OnlyImagesAllowed = "Csak a PNG, JPG és GIF képformátumok engedélyezettek.";
 $ViewRight = "Megnéz";
 $EditRight = "Módosít";
 $DeleteRight = "Töröl";

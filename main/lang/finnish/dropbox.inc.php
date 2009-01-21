@@ -46,7 +46,6 @@ $dropbox_lang["mailingFileSentTo"]  = "vastaanottaja";
 $dropbox_lang["mailingFileNotRegistered"]  = "(ei ole rekisteröitynyt tälle kurssille)";
 $dropbox_lang["justUploadInSelect"]  = "Tallenna itsellesi";
 $dropbox_lang["justUploadInList"]  = "Tallentaja";
-$dropbox_lang["mailingJustUploadNoOther"]  = "Et voi tallentaa itsellesi ja lähettää toiselle samalla kertaa";
 $dropbox_lang["giveFeedback"] = "Anna / muokkaa palautetta";
 $dropbox_lang["showFeedback"] = "Näytä palaute";
 $dropbox_lang["backList"] = "Takaisin";

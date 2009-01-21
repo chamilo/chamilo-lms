@@ -319,6 +319,7 @@ $OnlyLettersAndNumbersAllowed = "Ir at&#316;auti tikai burti un cipari";
 $langBasicOverview = "Pamat p&#257;rskats";
 $CourseAdminRole = "Kursa administrators";
 $UserRole = "Loma";
+$OnlyImagesAllowed = "Tikai PNG, JPG vai GIF form&#257;ta att&#275;li ir at&#316;auti";
 $ViewRight = "Skat&#299;t";
 $EditRight = "Main&#299;t";
 $DeleteRight = "Dz&#275;st";

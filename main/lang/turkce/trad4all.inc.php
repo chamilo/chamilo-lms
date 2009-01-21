@@ -285,6 +285,7 @@ $InvalidDate = "Hatal&#305; tarih";
 $OnlyLettersAndNumbersAllowed = "Sadece harfler ve rakamlar kullan&#305;labilir";
 $CourseAdminRole = "S&#305;n&#305;f yöneticisi";
 $UserRole = "Rol";
+$OnlyImagesAllowed = "Sadece PNG, JPG veya GIF tipindeki görüntüler kabul edilir";
 $ViewRight = "Görünüm";
 $EditRight = "Düzelt";
 $DeleteRight = "Sil";

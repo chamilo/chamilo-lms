@@ -89,7 +89,6 @@ $NoPeriod = " ";
 $FixedPeriod = " ";
 $ResourceFilter = "Filtro de recurso";
 $NoReservations = " ";
-$NoReservations = " ";
 $NoReservation = " ";
 $MaxUsers = " ";
 $AutoAccept = "Aceptar usuarios";

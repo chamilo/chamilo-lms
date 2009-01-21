@@ -125,7 +125,6 @@ $FullUserName = "Nome completo";
 $SearchForUser = "Procura por usuario";
 $SearchButton = "Procurar";
 $SearchNoResultsFound = "Non se atoparon resultados na procura";
-$OnlyImagesAllowed = "Só se permiten imaxes PNG, JPG e GIF";
 $UsernameWrong = "O seu nome de usuario só pode conter letras, números e os seguintes caracteres _.-";
 $PasswordRequestFrom = "Esta é unha petición de envío de contrasinal para o teu enderezo de correo electrónico";
 $CorrespondsToAccount = "Este enderezo de correo electrónico corresponden ao seguinte usuario.";

@@ -124,7 +124,6 @@ $FullUserName = "Полное имя";
 $SearchForUser = "Поиск пользователя";
 $SearchButton = "Поиск";
 $SearchNoResultsFound = "Поиск не дал результатов";
-$OnlyImagesAllowed = "Разрешены изображения только в формате PNG, JPG или GIF ";
 $UsernameWrong = "Ваше имя пользователя может содержать только буквы, цифры и _.-";
 $PasswordRequestFrom = "Для эл. адреса трубуется пароль";
 $CorrespondsToAccount = "Этот эл. адрес соответствует следующей учетной записи пользователя";

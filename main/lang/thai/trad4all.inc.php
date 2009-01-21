@@ -285,6 +285,7 @@ $InvalidDate = "วัน ไม่ถูกต้อง";
 $OnlyLettersAndNumbersAllowed = "รับข้อมูลที่เป็นตัวอักษรและตัวเลขเท่านั้น";
 $CourseAdminRole = "ผู้จัดหลักสูตรวิชา";
 $UserRole = "บทบาท";
+$OnlyImagesAllowed = "อนุญาตเฉพาะไฟล์ภาพ สกุล.png,jpgและ.gif";
 $ViewRight = "ดู";
 $EditRight = "แก้ไข";
 $DeleteRight = "ลบ";

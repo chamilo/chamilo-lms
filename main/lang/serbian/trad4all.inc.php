@@ -290,6 +290,7 @@ $InvalidDate = "Pogrešan datum";
 $OnlyLettersAndNumbersAllowed = "Dozvoljena je upotreba samo brojeva i slova.";
 $CourseAdminRole = "Administrator kursa";
 $UserRole = "Uloga";
+$OnlyImagesAllowed = "Samo slike tipa PNG, Jpg ili GIF su dozvoljene";
 $ViewRight = "Pogled";
 $EditRight = "Izmeni";
 $DeleteRight = "Brisanje";

@@ -323,6 +323,7 @@ $OnlyLettersAndNumbersAllowed = "Enkel letters en cijfers toegelaten";
 $langBasicOverview = "Basis weergave";
 $CourseAdminRole = "Cursusbeheerder";
 $UserRole = "Rol";
+$OnlyImagesAllowed = "Enkel afbeeldingen van het type PNG, JPG of GIF zijn toegestaan.";
 $ViewRight = "Bekijken";
 $EditRight = "Wijzigen";
 $DeleteRight = "Verwijderen";

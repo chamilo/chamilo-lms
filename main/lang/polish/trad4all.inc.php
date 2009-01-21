@@ -320,6 +320,7 @@ $OnlyLettersAndNumbersAllowed = "Dozwolone s&#261; tylko litery i liczby";
 $langBasicOverview = "Krótki przegl&#261;d";
 $CourseAdminRole = "Administrator kursu";
 $UserRole = "Rola";
+$OnlyImagesAllowed = "Tylko obrazy w formatach PNG, JPG lub GIF s&#261; dozwolone";
 $ViewRight = "Widok";
 $EditRight = "Edycja";
 $DeleteRight = "Usu&#324;";

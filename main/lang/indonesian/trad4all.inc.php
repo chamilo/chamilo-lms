@@ -285,6 +285,7 @@ $InvalidDate = "Tangal tidak sah";
 $OnlyLettersAndNumbersAllowed = "Hanya huruf dan angka yang diijinkan";
 $CourseAdminRole = "Admin Perkuliahan";
 $UserRole = "Peran";
+$OnlyImagesAllowed = "Hanya gambar bertype PNG, JPG atau GIF yang diijinkan";
 $ViewRight = "Lihat";
 $EditRight = "Edit";
 $DeleteRight = "Hapus";

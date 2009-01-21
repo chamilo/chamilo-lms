@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "(没有注册该课程)";
 $dropbox_lang["mailingNothingFor"]  = "没有";
 $dropbox_lang["justUploadInSelect"]  = "---仅上传---";
 $dropbox_lang["justUploadInList"]  = "上传人";
-$dropbox_lang["mailingJustUploadNoOther"]  = "不能和其他收件人一起上传";
 $dropbox_lang["giveFeedback"] = "发送/编辑反馈意见";
 $dropbox_lang["showFeedback"] = "显示反馈意见";
 $dropbox_lang["backList"] = "返回投递箱";

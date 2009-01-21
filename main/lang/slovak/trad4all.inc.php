@@ -321,6 +321,7 @@ $OnlyLettersAndNumbersAllowed = "Povolené sú len &#269;ísla a písmená.";
 $langBasicOverview = "Základný preh&#318;ad";
 $CourseAdminRole = "Administrátor kurzu";
 $UserRole = "Rola";
+$OnlyImagesAllowed = "Povolené len obrázky typu PNG, JPG alebo GIF";
 $ViewRight = "Prezerat";
 $EditRight = "Upravova&#357;";
 $DeleteRight = "Maza&#357;";

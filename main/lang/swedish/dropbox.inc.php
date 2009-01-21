@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "(ej registrerad för denna kurs)";
 $dropbox_lang["mailingNothingFor"]  = "Ingenting för";
 $dropbox_lang["justUploadInSelect"]  = "---NyligenUpladdat---";
 $dropbox_lang["justUploadInList"]  = "Uppladdat av";
-$dropbox_lang["mailingJustUploadNoOther"]  = "Nyligen uppladdat kan inte kombineras med andra mottagare";
 $dropbox_lang["giveFeedback"] = "Ge / Ändra feedback";
 $dropbox_lang["showFeedback"] = "Visa feedback";
 $dropbox_lang["backList"] = "Gå tillbaka till din dropbox";

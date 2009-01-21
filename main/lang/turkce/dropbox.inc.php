@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "(bu derse kay&#305;tl&#305; de&#28
 $dropbox_lang["mailingNothingFor"]  = "Nothing for";
 $dropbox_lang["justUploadInSelect"]  = "--SadeceGönder--";
 $dropbox_lang["justUploadInList"]  = "Gönderen";
-$dropbox_lang["mailingJustUploadNoOther"]  = "Sadece Gönder seçene&#287;inde di&#287;er al&#305;c&#305;lar ile birle&#351;tirilme yap&#305;lamaz.";
 $dropbox_lang["giveFeedback"] = "Geri dönü&#351; Ver/Düzenle";
 $dropbox_lang["showFeedback"] = "Geri dönü&#351; göster";
 $dropbox_lang["backList"] = "Gelen Giden Kutusuna dön";

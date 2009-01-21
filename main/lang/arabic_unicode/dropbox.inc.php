@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "غير مسجل في هذا الم
 $dropbox_lang["mailingNothingFor"]  = "لا شيء لـ";
 $dropbox_lang["justUploadInSelect"]  = "رفع فقط";
 $dropbox_lang["justUploadInList"]  = "رفع بواسطة";
-$dropbox_lang["mailingJustUploadNoOther"]  = "فقط رفع الملفات لا يمكن أن يشارك مع المستلمين الآخرينِ";
 $dropbox_lang["giveFeedback"] = "إدراج / تحرير إقتراحات";
 $dropbox_lang["showFeedback"] = "عرض الاقتراحات";
 $dropbox_lang["backList"] = "عودة إلى صندوق التجميع الخاص بك";
@@ -118,9 +117,9 @@ $InvalidGroupDetected = " لقد تم اكتشاف مجموعة غير صالح�
 $DropboxFileTooBig = ".لف صندوق المشاركات كبير جدا";
 $TheFileIsNotUploaded = ". لم يتم تحميل الملف";
 $FileUploadSucces = ".لقد تم تحميل الملف بنجاح";
-$mailingNonMailingError = "لا يمكن استبدال الإرسال بعدم الإرسال و العكس بالعكس";
+$MailingNonMailingError = "لا يمكن استبدال الإرسال بعدم الإرسال و العكس بالعكس";
 $MailingSelectNoOther = "لا يمكن دمج الإرسال مع مستلمات أخرى";
-$mailingJustUploadSelectNoOther = "هكذا، لا يمكن دمج التحميل مع مستلمات أخرى";
+$MailingJustUploadSelectNoOther = "هكذا، لا يمكن دمج التحميل مع مستلمات أخرى";
 $NoFilesHere = "لا يوجد ملفات هنا";
 $NoFilesHere = "لا يوجد ملفات هنا";
 $NewDropboxFileUploaded = "ملف جديد تم إرساله في أداة صندوق التجميع";

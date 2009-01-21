@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "(nav re&#291;istr&#275;ts šim kurs
 $dropbox_lang["mailingNothingFor"]  = "Nav nek&#257; priekš";
 $dropbox_lang["justUploadInSelect"]  = "---Vienk&#257;rši augšupl&#257;d&#275;---";
 $dropbox_lang["justUploadInList"]  = "Augšupl&#257;d&#275; ar";
-$dropbox_lang["mailingJustUploadNoOther"]  = "Vienk&#257;rša augšupiel&#257;de nevar b&#363;t apvienota ar citiem sa&#326;&#275;m&#275;jiem";
 $dropbox_lang["giveFeedback"] = "Rakst&#299;t / Labot atsauksmi";
 $dropbox_lang["showFeedback"] = "Par&#257;d&#299;t atsauksmi";
 $dropbox_lang["backList"] = "Atgriezties pie J&#363;su Apmai&#326;as kastes";

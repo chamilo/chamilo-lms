@@ -82,4 +82,5 @@ $EditBlog = "Editar título y subtítulo";
 $DeleteBlog = "Borrar este blog";
 $NoTasks = "Sin tareas";
 $Shared = "Compartido";
+$PermissionGrantedByGroupOrRole = "Permiso concedido por grupo o rol";
 ?>

@@ -123,7 +123,6 @@ $FullUserName = "全名";
 $SearchForUser = "搜尋使用者";
 $SearchButton = "搜尋";
 $SearchNoResultsFound = "沒有搜尋結果";
-$OnlyImagesAllowed = "只允許 PNG, JPG or GIF 圖片";
 $UsernameWrong = "你的使用者名稱只可包含英文字母、數字或_.-";
 $PasswordRequestFrom = "這要求密碼訊息來自電郵地址：";
 $CorrespondsToAccount = "此電郵地址對應以下用戶";

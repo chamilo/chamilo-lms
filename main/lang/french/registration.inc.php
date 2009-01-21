@@ -124,7 +124,6 @@ $FullUserName = "Nom complet";
 $SearchForUser = "Rechercher un utilisateur";
 $SearchButton = "Rechercher";
 $SearchNoResultsFound = "Aucun résultat trouvé";
-$OnlyImagesAllowed = "Seuls les formats PNG, JPG ou GIF sont autorisés";
 $UsernameWrong = "Votre login ne peut contenir que les lettres, des chiffres et les signes _ . -";
 $PasswordRequestFrom = "Ceci est une demande de mot de passe pour l\'adresse email";
 $CorrespondsToAccount = "Cette adresse email correspond au compte utilisateur suivant.";

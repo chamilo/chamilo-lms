@@ -323,6 +323,7 @@ $OnlyLettersAndNumbersAllowed = "Dozvoljeni su samo slova i brojevi";
 $langBasicOverview = "Osnovni pregled";
 $CourseAdminRole = "Upravitelj kolegija";
 $UserRole = "Status";
+$OnlyImagesAllowed = "Dozvoljene su slike samo PNG, JPG ili GIF formata";
 $ViewRight = "Pogled";
 $EditRight = "Uredi";
 $DeleteRight = "Izbriši";

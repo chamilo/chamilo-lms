@@ -124,7 +124,6 @@ $FullUserName = "全名";
 $SearchForUser = "用户搜索";
 $SearchButton = "搜索";
 $SearchNoResultsFound = "搜索无结果";
-$OnlyImagesAllowed = "只允许PNG, JPG 或 GIF 格式的图片";
 $UsernameWrong = "你的用户名只可用字母, 数字和_.- ";
 $PasswordRequestFrom = "这是该电邮的密码索取请求";
 $CorrespondsToAccount = "此电邮地址与下列用户一致.";

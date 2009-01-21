@@ -294,6 +294,7 @@ $OnlyLettersAndNumbersAllowed = "Numai litere si numere sunt permise";
 $langBasicOverview = "Privire de ansamblu de baza";
 $CourseAdminRole = "Administrator de curs";
 $UserRole = "Rol";
+$OnlyImagesAllowed = "Doar imagini de tipul PNG, JPG sau GIF permise";
 $ViewRight = "Vezi drepturile";
 $EditRight = "Editeaza";
 $DeleteRight = "Stergere";

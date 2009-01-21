@@ -65,7 +65,6 @@ $dropbox_lang["mailingFileNotRegistered"]  = "ไม่ได้สมัครเรียนในวิชานี้";
 $dropbox_lang["mailingNothingFor"]  = "ไม่มีเจ้าของ";
 $dropbox_lang["justUploadInSelect"]  = "ส่งเข้ามาล่าสุด";
 $dropbox_lang["justUploadInList"]  = "โอนไฟล์โดย";
-$dropbox_lang["mailingJustUploadNoOther"]  = "เป็นแค่โอนย้ายไฟล์ขึ้นกล่องเก็บงาน ไม่ได้ส่งให้ผู้อื่น";
 $dropbox_lang["giveFeedback"] = "ชื่อภาษาอังกฤษ / แก้ไข การตอบกลับ";
 $dropbox_lang["showFeedback"] = "แสดงความเห็นที่ตอบกลับ";
 $dropbox_lang["backList"] = "กลับไปที่กล่องรับส่งงาน";

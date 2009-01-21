@@ -124,7 +124,6 @@ $FullUserName = "Puno ime";
 $SearchForUser = "Pretraga korisnika";
 $SearchButton = "Pretraga";
 $SearchNoResultsFound = "Nema traženih rezultata";
-$OnlyImagesAllowed = "Dozvoljene su slike samo PNG, JPG ili GIF formata";
 $UsernameWrong = "Vaše korisni&#269;ko ime može sadržavati isklju&#269;ivo slova, brojeve i _.-";
 $PasswordRequestFrom = "Ovo je zahtjev za zaporku e-pošte";
 $CorrespondsToAccount = "Ova adresa e-pošte odgovara sljede&#263;em korisni&#269;kom ra&#269;unu.";

@@ -123,7 +123,6 @@ $FullUserName = "Nomo";
 $SearchForUser = "Ser&#265;i uzanton";
 $SearchButton = "Ser&#265;i";
 $SearchNoResultsFound = "Neniu ser&#265;ita rezulto estas trovita";
-$OnlyImagesAllowed = "Permesitaj estas nur bildoj PNG-, JPG- a&#365; GIF-aj";
 $UsernameWrong = "Uzulnomo enhavu nur literojn, ciferojn kaj _.";
 $PasswordRequestFrom = "&#264;i tio estas peto de pasvorto por la retpo&#349;ta adreso";
 $CorrespondsToAccount = "&#265;i tiu retpo&#349;ta adreso kongruas kun jena uzanto.";

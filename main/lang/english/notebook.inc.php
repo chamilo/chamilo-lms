@@ -17,8 +17,8 @@ $NoteAddNew = "Note add new";
 $OrderByCreationDate = "Order by creation date";
 $OrderByModificationDate = "Order by modification date";
 $OrderByTitle = "Order by title";
-$NoteTitle = "Title of Note";
-$NoteComment = "Comments of Note";
+$NoteTitle = "Note title";
+$NoteComment = "Note details";
 $NoteAdded = "Note added";
-$NoteConfirmDelete = "Note Confirm Delete";
+$NoteConfirmDelete = "Are you sure you want to delete this note";
 ?>

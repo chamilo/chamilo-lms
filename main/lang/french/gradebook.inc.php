@@ -118,4 +118,14 @@ $OnlyNumbers = "Nombres uniquement";
 $IncorrectData = "Données incorrectes";
 $Resource = "Ressource";
 $PleaseEnableScoringSystem = "Veuillez activer le système de cotation";
+$AllResultDeleted = "Tous les résultats ont été supprimés";
+$ImportNoFile = "Aucun fichier à importer";
+$ProblemUploadingFile = "Un problème est survenu lors de l\'envoi de votre fichier. Aucun fichier reçu par le serveur.";
+$AllResultsEdited = "Tous les résultats ont été mis à jour";
+$UserInfoDoesNotMatch = "Les informations utilisateur ne correspondent pas.";
+$ScoreDoesNotMatch = "Le score ne correspond pas";
+$FileUploadComplete = "L\'envoi du fichier s\'est bien déroulé";
+$NoResultsAvailable = "Aucun résultat disponible";
+$CannotChangeTheMaxNote = "Vous ne pouvez pas modifier le score maximum";
+$GradebookWeightUpdated = "Les poids ont été mis à jour avec succès";
 ?>

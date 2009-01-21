@@ -129,7 +129,6 @@ $FullUserName = "Polno ime";
 $SearchForUser = "Išèi uporabnika";
 $SearchButton = "Išèi";
 $SearchNoResultsFound = "Ni rezultatov iskanja";
-$OnlyImagesAllowed = "Dovoljene so le slike s konènicami PNG, JPG ali GIF";
 $UsernameWrong = "Tvoje uporabniško ime lahko vsebuje le èrke, številke in znake _.-";
 $PasswordRequestFrom = "Zahteva po geslu za e-poštni naslov";
 $CorrespondsToAccount = "Ta e-poštni naslov odgovarja naslednjemu uporabniškemu raèunu";

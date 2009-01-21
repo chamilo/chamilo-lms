@@ -321,6 +321,7 @@ $OnlyLettersAndNumbersAllowed = "只允许字母和数字";
 $langBasicOverview = "&#22522;&#26412;&#20840;&#35272;";
 $CourseAdminRole = "课程管理员";
 $UserRole = "角色";
+$OnlyImagesAllowed = "只允许PNG, JPG 或 GIF 格式的图片";
 $ViewRight = "查看";
 $EditRight = "编辑";
 $DeleteRight = "删除";

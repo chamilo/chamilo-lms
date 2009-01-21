@@ -122,6 +122,5 @@ $FullUserName = "Pilns v&#257;rds";
 $SearchForUser = "Mekl&#275;t lietot&#257;ju";
 $SearchButton = "Mekl&#275;t";
 $SearchNoResultsFound = "Mekl&#275;jot nekas netika atrasts";
-$OnlyImagesAllowed = "Tikai PNG, JPG vai GIF form&#257;ta att&#275;li ir at&#316;auti";
 $UsernameWrong = "J&#363;su lietot&#257;jv&#257;rds dr&#299;kst satur&#275;t tikai burtus, ciparus un _.-";
 ?>

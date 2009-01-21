@@ -1900,7 +1900,7 @@ class CourseManager
         $sql = "SELECT code FROM $t_course WHERE directory LIKE BINARY '$path'";
         $res = api_sql_query($sql,__FILE__,__LINE__);
         if ($res === false) {return false;}
-        if (Database::num_rows() != 1) {return false;}
+        if (Database::num_rows($res) != 1) {return false;}
         $row = Database::fetch_array($res);
         return $row['code'];
     }

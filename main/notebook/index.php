@@ -37,10 +37,10 @@ Display::display_introduction_section(TOOL_NOTEBOOK,'left');
 
 // action links
 echo '<div class="actions">';
-if (api_is_allowed_to_edit())
-{
+//if (api_is_allowed_to_edit())
+//{
 	echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
-}
+//}
 echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date">'.Display::return_icon('calendar_select.gif',get_lang('OrderByCreationDate')).get_lang('OrderByCreationDate').'</a>';
 echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=update_date">'.Display::return_icon('calendar_select.gif',get_lang('OrderByModificationDate')).get_lang('OrderByModificationDate').'</a>';
 echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=title">'.Display::return_icon('comment.gif',get_lang('OrderByTitle')).get_lang('OrderByTitle').'</a>';
@@ -244,9 +244,15 @@ function display_notes()
 	}
 	
 	// Database table definition
-	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-
-	$sql = "SELECT * FROM $t_notebook WHERE user_id = '".Database::escape_string(api_get_user_id())."' ORDER BY ".$_SESSION['notebook_view']." ASC";
+	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);	
+	$order_by = "";
+	if ($_SESSION['notebook_view'] == 'creation_date' || $_SESSION['notebook_view'] == 'update_date') {
+		$order_by = " ORDER BY ".$_SESSION['notebook_view']." DESC ";
+	} else {
+		$order_by = " ORDER BY ".$_SESSION['notebook_view']." ASC ";
+	}
+	
+	$sql = "SELECT * FROM $t_notebook WHERE user_id = '".Database::escape_string(api_get_user_id())."' $order_by";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result))
 	{

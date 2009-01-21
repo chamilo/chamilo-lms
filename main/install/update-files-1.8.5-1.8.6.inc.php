@@ -19,6 +19,20 @@ require_once("../inc/lib/main_api.lib.php");
 require_once("../inc/lib/fileUpload.lib.php");
 require_once('../inc/lib/database.lib.php');
 
+/*
+==============================================================================
+        FUNCTIONS
+==============================================================================
+*/
+function insert_db($db_name, $folder_name, $text){
+
+    $_course['dbName'] = $db_name;
+    
+    $doc_id = add_document_180($_course, '/'.$folder_name, 'folder', 0, ucfirst($text));
+    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', 1);
+    
+}
+
 if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 {
 	// Edit the Dokeos config file
@@ -109,6 +123,16 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			mkdir($currentCourseRepositorySys."document/images",$perm);
 			insert_db($db_name,"images",get_lang('Images'));
 		}
+        //document > images
+        if(!is_dir($currentCourseRepositorySys."document/images/gallery")){
+            mkdir($currentCourseRepositorySys."document/images/gallery",$perm);
+            insert_db($db_name,"gallery",get_lang('Gallery'));
+        }
+        //document > images
+        if(!is_dir($currentCourseRepositorySys."document/images/gallery/shared")){
+            mkdir($currentCourseRepositorySys."document/images/gallery/shared",$perm);
+            insert_db($db_name,"shared",get_lang('SharedImagesDirectory'));
+        }
 		//document > video
 		if(!is_dir($currentCourseRepositorySys."document/video")){
 			mkdir($currentCourseRepositorySys."document/video",$perm);

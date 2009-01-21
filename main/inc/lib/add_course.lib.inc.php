@@ -202,6 +202,7 @@ function prepare_course_repository($courseRepository, $courseId)
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images/gallery/", $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images/gallery/shared/", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/audio", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/flash", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/video", $perm);

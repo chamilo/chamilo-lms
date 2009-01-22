@@ -124,4 +124,5 @@ $NoFilesHere = "Nun hai archivos equí";
 $NoFilesHere = "Nun hai archivos equí";
 $NewDropboxFileUploaded = "Un archivu nuevu unvióse al buzón de llabores / deberes";
 $NewDropboxFileUploadedContent = "Im archivu nuevu unvióse al buzón de llabores / deberes del so cursu";
+$ErrorNoFilesInFolder = "Compruebe polo menos un archivu";
 ?>

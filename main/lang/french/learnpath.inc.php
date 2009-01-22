@@ -212,4 +212,9 @@ $UplUnableToSaveFile = "Impossible de sauvegarder le fichier";
 $UnknownPackageFormat = "Le format du fichier envoyé n\'a pas pu être identifié. Veuillez vérifier qu\'il s\'agit bien d\'un fichier valide.";
 $EditLPSettings = "Éditer les paramètres du parcours";
 $SaveLPSettings = "Sauver les paramètres du parcours";
+$ShowAllAttempts = "Montrer toutes les tentatives";
+$HideAllAttempts = "Cacher toutes les tentatives";
+$ShowAllAttemptsByExercise = "Voir toutes les tentatives par exercice";
+$ShowAttempt = "Voir tentative";
+$ShowAndQualifyAttempt = "Voir et coter tentative";
 ?>

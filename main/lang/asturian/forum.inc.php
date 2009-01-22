@@ -125,4 +125,6 @@ $TitleColumnGradebook = "Títulu nel cuadernu de notes";
 $QualifyThreadGradebook = "Poner nota nel cuadernu de notes";
 $QualifyWeight = "Porcentaxe d\'esta nota na nota final";
 $QualifyNumeric = "Nota numbérica pa ";
+$AlterQualifyThread = "Editar la nota del tema";
+$ForumMoved = "Esti foru ta movíu a otru sitiu";
 ?>

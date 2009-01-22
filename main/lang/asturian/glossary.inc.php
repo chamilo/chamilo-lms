@@ -15,4 +15,8 @@ $OrderBy = "Ordenar por";
 $CreationDate = "Fecha de creación";
 $UpdateDate = "Última modificación";
 $PreSelectedOrder = "Ordenar por seleición";
+$TermAdded = "Términu amestáu";
+$YouMustEnterATermName = "Usté tien d\'escribir un nome de términu";
+$YouMustEnterATermDefinition = "Tien d\'escribir un definición del términu";
+$TableView = "Ver cuadru";
 ?>

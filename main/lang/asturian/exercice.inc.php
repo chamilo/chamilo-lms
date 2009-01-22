@@ -262,4 +262,14 @@ $FilterExercices = "Filtrar exercicios";
 $FilterByNotRevised = "Filtrar por Ensin unviar";
 $FilterByRevised = "Filtrar por Revisáu";
 $Duration = "Duración";
+$TryAgain = "Inténtelo otra vez";
+$SeeTheory = "Revisar la teoría";
+$EndActivity = "Fin de l\'actividá";
+$GoToQuestion = "Dir a entruga";
+$NoFeedback = "Esame (ensin retroalimentación)";
+$DirectFeedback = "Autoevaluación (retroalimentación inmediata)";
+$FeedbackType = "Tipu d\'evaluación";
+$Scenario = "Escenariu";
+$VisitUrl = "Visitar esta direición";
+$ExitTest = "Salir del esame";
 ?>

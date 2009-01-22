@@ -82,4 +82,5 @@ $EditBlog = "Editar títulu y sotítulu";
 $DeleteBlog = "Esborrar esti blog";
 $NoTasks = "Ensin llabores/deberes";
 $Shared = "Compartíu";
+$PermissionGrantedByGroupOrRole = "Permisu concedíu por grupu o usuariu con nivel";
 ?>

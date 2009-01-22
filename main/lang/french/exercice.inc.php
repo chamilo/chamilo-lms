@@ -262,4 +262,14 @@ $FilterExercices = "Filtrer exercices";
 $FilterByNotRevised = "Seulement non cotés";
 $FilterByRevised = "Seulement cotés";
 $Duration = "Durée";
+$TryAgain = "Réessayer";
+$SeeTheory = "Voir la théorie";
+$EndActivity = "Fin de l\'activité";
+$GoToQuestion = "Aller à la question";
+$NoFeedback = "Examen (pas de feedback)";
+$DirectFeedback = "Auto-évaluation (feedback immédiat)";
+$FeedbackType = "Évaluation :";
+$Scenario = "Scénario";
+$VisitUrl = "Suivre ce lien";
+$ExitTest = "Sortir du test";
 ?>

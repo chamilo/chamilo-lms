@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 17777 2009-01-16 16:25:39Z juliomontoya $
+<?php // $Id: update-db-1.8.5-1.8.6.inc.php 17922 2009-01-22 04:28:37Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -212,7 +212,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				error_log('Database '.$dbUserForm.' was not found, skipping',0);				
 			}else{
 				mysql_select_db($dbUserForm);
-				foreach($$u_q_listu_q_list as $query){
+				foreach($u_q_list as $query){
 					if($only_test){
 						error_log("mysql_query($dbUserForm,$query)",0);
 						error_log("In $dbUserForm, executed: $query",0);
@@ -306,7 +306,24 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								error_log("In ".$row_course['db_name'].", executed: $query",0);
 							}
 						}
-					}												
+					}
+                    
+                    $t_d = $row_course['db_name'].".document";
+                    $t_ip = $row_course['db_name'].".item_property";
+                    
+                    if($singleDbForm)
+                    {
+                        $t_d = "$prefix{$row_course['db_name']}_document";
+                        $t_ip = "$prefix{$row_course['db_name']}_item_property";
+                    }
+                    // shared documents folder   
+                    $mysql = "INSERT INTO $t_d (path,title,filetype,size) VALUES ('/shared_folder','".get_lang('SharedDocumentsDirectory')."','folder','0')";
+                    $myres = mysql_query($query);
+                    if ($myres !== false) {
+                    	$doc_id = mysql_insert_id();
+                        $mysql = "INSERT INTO $t_ip (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)";
+                        $myres = mysql_query($query);
+                    }
 				}
 			}
 		}

@@ -19,20 +19,6 @@ require_once("../inc/lib/main_api.lib.php");
 require_once("../inc/lib/fileUpload.lib.php");
 require_once('../inc/lib/database.lib.php');
 
-/*
-==============================================================================
-        FUNCTIONS
-==============================================================================
-*/
-function insert_db($db_name, $folder_name, $text){
-
-    $_course['dbName'] = $db_name;
-    
-    $doc_id = add_document_180($_course, '/'.$folder_name, 'folder', 0, ucfirst($text));
-    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', 1);
-    
-}
-
 if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 {
 	// Edit the Dokeos config file
@@ -106,45 +92,14 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		rename($origCRS,$sys_course_path.$courses_directories['directory']);
 		error_log('Creating dirs in '.$currentCourseRepositorySys,0);
 	
-		//FOLDER DOCUMENT
+		//DOCUMENT FOLDER
 
-		//document > audio
-		if(!is_dir($currentCourseRepositorySys."document/audio")){
-			mkdir($currentCourseRepositorySys."document/audio",$perm);
-			insert_db($db_name,"audio",get_lang('Audio'));
-		}
-		//document > flash
-		if(!is_dir($currentCourseRepositorySys."document/flash")){
-			mkdir($currentCourseRepositorySys."document/flash",$perm);
-			insert_db($db_name,"flash",get_lang('Flash'));
-		}
-		//document > images
-		if(!is_dir($currentCourseRepositorySys."document/images")){
-			mkdir($currentCourseRepositorySys."document/images",$perm);
-			insert_db($db_name,"images",get_lang('Images'));
-		}
-        //document > images
-        if(!is_dir($currentCourseRepositorySys."document/images/gallery")){
-            mkdir($currentCourseRepositorySys."document/images/gallery",$perm);
-            insert_db($db_name,"gallery",get_lang('DefaultCourseImages'));
+        //document > shared_folder
+        if(!is_dir($currentCourseRepositorySys."document/shared_folder")){
+            mkdir($currentCourseRepositorySys."document/shared_folder",$perm);
         }
-        //document > images
-        if(!is_dir($currentCourseRepositorySys."document/images/gallery/shared")){
-            mkdir($currentCourseRepositorySys."document/images/gallery/shared",$perm);
-            insert_db($db_name,"shared",get_lang('SharedImagesDirectory'));
-        }
-		//document > video
-		if(!is_dir($currentCourseRepositorySys."document/video")){
-			mkdir($currentCourseRepositorySys."document/video",$perm);
-			insert_db($db_name,"video",get_lang('Video'));
-		}
-		//document > video > flv
-		if(!is_dir($currentCourseRepositorySys."document/video/flv")){
-			mkdir($currentCourseRepositorySys."document/video/flv",$perm);
-			insert_db($db_name,"video",get_lang('Video')." (flv)");
-		}
 
-		//FOLDER UPLOAD
+		//UPLOAD FOLDER
 
 		//upload > forum > images
 		if(!is_dir($currentCourseRepositorySys."upload/forum/images")){

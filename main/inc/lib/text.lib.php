@@ -1,4 +1,4 @@
-<?php // $Id: text.lib.php 17094 2008-12-07 11:18:17Z ivantcholakov $
+<?php // $Id: text.lib.php 17946 2009-01-22 20:52:23Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -427,4 +427,20 @@ function date_to_str_ago($date)
 	
 	return $str;	
 }
+/**
+ * This functions cuts a paragraph 
+ * i.e cut('Merry Xmas from Lima',13) = "Merry Xmas fr..." 
+ * @param string the text to "cut" 
+ * @param int count of chars
+ * @return string 
+ * */
+function cut($text,$maxchar)
+{
+	if (strlen($text) > $maxchar) {
+		return substr($text, 0, $maxchar).'...'	;
+	} else {
+		return $text;
+	}	
+}
+
 ?>

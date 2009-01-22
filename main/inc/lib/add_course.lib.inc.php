@@ -631,6 +631,7 @@ function update_Db_course($courseDbName)
 		max_attempt int NOT NULL default 0,
 		start_time datetime NOT NULL default '0000-00-00 00:00:00',
 		end_time datetime NOT NULL default '0000-00-00 00:00:00',
+		feedback_type int NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -663,6 +664,7 @@ function update_Db_course($courseDbName)
 		position mediumint unsigned NOT NULL default 1,
 	    hotspot_coordinates text,
 	    hotspot_type enum('square','circle','poly','delineation') default NULL,
+	    destination text NOT NULL,
 		PRIMARY KEY (id, question_id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);

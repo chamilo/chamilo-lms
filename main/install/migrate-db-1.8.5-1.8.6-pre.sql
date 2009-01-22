@@ -188,3 +188,5 @@ INSERT INTO course_setting(variable,value,category) VALUES ('allow_open_chat_win
 INSERT INTO course_setting(variable,value,category) VALUES ('email_alert_to_teacher_on_new_user_in_course',0,'registration');
 INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('glossary','glossary/index.php','glossary.gif',0,'0','squaregrey.gif',0,'_self','authoring');
 INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('notebook','notebook/index.php','notebook.gif',0,'0','squaregrey.gif',0,'_self','interaction');
+ALTER TABLE quiz ADD feedback_type int NOT NULL default 0;
+ALTER TABLE quiz_answer ADD destination text NOT NULL;

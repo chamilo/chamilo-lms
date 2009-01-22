@@ -135,7 +135,7 @@ ALTER TABLE lp ADD author varchar(255) NOT NULL default '';
 ALTER TABLE lp_item ADD terms TEXT NULL;
 ALTER TABLE lp_item ADD search_did INT NULL;
 CREATE TABLE wiki (id int NOT NULL auto_increment, page_id int NOT NULL default 0, reflink varchar(250) NOT NULL default 'index', title text NOT NULL, content mediumtext NOT NULL, user_id int NOT NULL default 0, group_id int default NULL, dtime datetime NOT NULL default '0000-00-00 00:00:00', addlock int NOT NULL default 1, editlock int NOT NULL default 0, visibility int NOT NULL default 1, addlock_disc int NOT NULL default 1, visibility_disc int NOT NULL default 1, ratinglock_disc int NOT NULL default 1, assignment int NOT NULL default 0, comment text NOT NULL, progress text NOT NULL, score int default 0, version int default NULL, is_editing int NOT NULL default 0, hits int default 0, linksto text NOT NULL, tag text NOT NULL, user_ip varchar(39) NOT NULL, PRIMARY KEY  (id) );
-INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('wiki','wiki/index.php','wiki.gif',0,'1','squaregrey.gif',0,'_self','interaction');
+INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('wiki','wiki/index.php','wiki.gif',0,'0','squaregrey.gif',0,'_self','interaction');
 ALTER TABLE group_category ADD COLUMN wiki_state tinyint unsigned NOT NULL default 1;
 ALTER TABLE group_info ADD COLUMN wiki_state enum('0','1','2') NOT NULL default '0';
 ALTER TABLE announcement ADD session_id SMALLINT UNSIGNED NOT NULL;

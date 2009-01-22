@@ -1,4 +1,4 @@
-<?php // $Id: reporting.php 16739 2008-11-13 15:36:40Z pcool $
+<?php // $Id: reporting.php 17927 2009-01-22 09:06:25Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,7 +26,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 16739 2008-11-13 15:36:40Z pcool $
+* 	@version $Id: reporting.php 17927 2009-01-22 09:06:25Z pcool $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -49,13 +49,13 @@ if ($_POST['export_report'])
 		case 'xls':
 			$survey_data = survey_manager::get_survey($_GET['survey_id']);
 			$filename = 'survey_results_'.$_GET['survey_id'].'.xls';
-			$data = SurveyUtil::export_complete_report_xls($filename);
+			$data = SurveyUtil::export_complete_report_xls($filename, $_GET['user_id']);
 			exit;
 			break;
 		case 'csv':
 		default:
 			$survey_data = survey_manager::get_survey($_GET['survey_id']);
-			$data = SurveyUtil::export_complete_report();
+			$data = SurveyUtil::export_complete_report($_GET['user_id']);
 			//$filename = 'fileexport.csv';
 			$filename = 'survey_results_'.$_GET['survey_id'].'.csv';
 

@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17926 2009-01-22 08:25:35Z pcool $
+* 	@version $Id: survey.lib.php 17927 2009-01-22 09:06:25Z pcool $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2565,6 +2565,21 @@ class SurveyUtil {
 		if (isset($_GET['user']))
 		{
 			Display::display_normal_message(get_lang('AllQuestionsOnOnePage'), false);
+			
+			// export the user report
+			echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user_id='.Security::remove_XSS($_GET['user']).'">';
+			echo '<input type="hidden" name="export_report" value="export_report">';
+			echo '<input type="hidden" name="export_format" value="csv">';
+			echo '</form>';
+			echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user_id='.Security::remove_XSS($_GET['user']).'">';
+			echo '<input type="hidden" name="export_report" value="export_report">';
+			echo '<input type="hidden" name="export_format" value="xls">';
+			echo '</form>';
+			echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'">';
+			echo '<a class="survey_export_link" href="#" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a> ';
+			echo '<a class="survey_export_link" href="#" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a> ';			
+			
+			// the delete link
 			echo '<a href="reporting.php?action=deleteuserreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;user='.Security::remove_XSS($_GET['user']).'" ><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /> '.get_lang('DeleteSurveyByUser').'</a>';
 			// getting all the questions and options
 			$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.max_value, survey_question.sort, survey_question.type,
@@ -3153,7 +3168,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function export_complete_report()
+	function export_complete_report($user_id=0)
 	{
 		// Database table definitions
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -3253,7 +3268,12 @@ class SurveyUtil {
 		// getting all the answers of the users
 		$old_user='';
 		$answers_of_user = array();
-		$sql = "SELECT * FROM $table_survey_answer WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' ORDER BY user ASC";
+		$sql = "SELECT * FROM $table_survey_answer WHERE survey_id='".Database::escape_string($_GET['survey_id'])."'";
+		if ($user_id<>0)
+		{
+			$sql .= "AND user='".Database::escape_string($user_id)."' ";
+		}
+		$sql .= "ORDER BY user ASC";
 		
 		$open_question_iterator = 1;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -3377,7 +3397,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function export_complete_report_xls($filename)
+	function export_complete_report_xls($filename, $user_id=0)
 	{
 		require_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php');
 		$workbook = new Spreadsheet_Excel_Writer();
@@ -3489,8 +3509,14 @@ class SurveyUtil {
 		$old_user='';
 		$answers_of_user = array();
 		$sql = "SELECT * FROM $table_survey_answer " .
-				"WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' " .
-						"ORDER BY user ASC";
+				"WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' ";
+		if ($user_id<>0)
+		{
+			$sql .= "AND user='".Database::escape_string($user_id)."' ";
+		}
+		$sql .=	"ORDER BY user ASC";
+
+
 		$open_question_iterator = 1;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = Database::fetch_array($result))

@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17885 2009-01-21 10:08:12Z pcool $
+* 	@version $Id: survey.lib.php 17926 2009-01-22 08:25:35Z pcool $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2573,7 +2573,7 @@ class SurveyUtil {
 					LEFT JOIN $table_survey_question_option survey_question_option
 					ON survey_question.question_id = survey_question_option.question_id
 					WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-					ORDER BY survey_question.sort ASC";
+					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			while ($row = Database::fetch_array($result,'ASSOC'))
 			{

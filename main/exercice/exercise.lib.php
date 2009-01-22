@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 17589 2009-01-08 11:19:25Z ivantcholakov $
+<?php // $Id: exercise.lib.php 17944 2009-01-22 20:41:25Z juliomontoya $
  
 /*
 ==============================================================================
@@ -29,13 +29,16 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 17589 2009-01-08 11:19:25Z ivantcholakov $
+* 	@version $Id: exercise.lib.php 17944 2009-01-22 20:41:25Z juliomontoya $
 */
 
 
 require("../inc/lib/fckeditor/fckeditor.php") ;
 function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 {
+	echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
+	echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
+	
 	// reads question informations
 	if(!$objQuestionTmp = Question::read($questionId))
 	{
@@ -56,13 +59,13 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 
 			$questionName=api_parse_tex($questionName);
 			$s.=$questionName.'</div>';
-			$s.="<table class='exercise_options'>
+			$s.="<table class='exercise_questions'>
 			<tr>
 			  <td valign='top' colspan='2'>
-				<i>";
+				";
 			$questionDescription=api_parse_tex($questionDescription);
 			$s.=$questionDescription;
-			$s.="</i>
+			$s.="
 			  </td>
 			</tr>";
 	
@@ -75,7 +78,12 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			}
 
 		}  // end if(!$onlyAnswers)
-
+		$s.= '</table>';
+		$s.="<script>$(document).ready( function(){
+			  $('.rounded').corners();
+			  $('.exercise_options').corners();
+			});</script>";
+		$s.="<div class=\"rounded exercise_questions\" style=\"width: 720px; padding: 3px; background-color:#ccc;\"><table width=\"720\" class='exercise_options' style=\"width: 720px; background-color:#fff;\">";
 		// construction of the Answer object
 		$objAnswerTmp=new Answer($questionId);
 
@@ -99,8 +107,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 			$oFCKeditor->Config['IMUploadPath'] = 'upload/test/';
 			$oFCKeditor->ToolbarSet = "Test";
-			//$oFCKeditor->Width  = '80%';
-			$oFCKeditor->Width  = '100%';
+			$oFCKeditor->Width  = '80%';
 			$oFCKeditor->Height = '300';
 			$oFCKeditor->Value	= '' ;
 
@@ -153,7 +160,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			{
 			$s.="
 			<tr>
-			  <td align='center'>
+			  <td  width=\"50\">
 				<input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'>
 			  </td>
 			  <td>";
@@ -166,7 +173,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			elseif($answerType == MULTIPLE_ANSWER)
 			{
 			$s.="<tr>
-			  <td align='center'>
+			  <td width=\"50\">
 			<input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
 			  </td>
 			  <td>";
@@ -255,6 +262,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 				}
 			}
 		}	// end for()
+		$s .= '</table></div>';
 
 		// destruction of the Answer object
 		unset($objAnswerTmp);
@@ -289,15 +297,14 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 
 		if(!$onlyAnswers)
 		{
-			$s=$questionName;
-			$s.="</td>
-			</tr>
+			$s=$questionName.'</div>';
+			$s.="<table class='exercise_questions'>
 			<tr>
 			  <td valign='top' colspan='2'>
-				<i>";
+				";
 			$questionDescription=api_parse_tex($questionDescription);
 			$s.=$questionDescription;
-			$s.="</i>
+			$s.="
 			  </td>
 			</tr>";
 		}

@@ -23,7 +23,7 @@
 *	5 arrays are created to receive the attributes of each answer belonging to a specified question
 * 	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer.class.php 16879 2008-11-23 05:14:43Z yannoo $
+* 	@version $Id: answer.class.php 17944 2009-01-22 20:41:25Z juliomontoya $
 */
 
 
@@ -42,6 +42,7 @@ class Answer
 	var $position;
 	var $hotspot_coordinates;
 	var $hotspot_type;
+	var $destination;
 
 	// these arrays are used to save temporarily new answers
 	// then they are moved into the arrays above or deleted in the event of cancellation
@@ -55,6 +56,7 @@ class Answer
 
 	var $nbrAnswers;
 	var $new_nbrAnswers;
+	var $new_destination; // id of the next question if feedback option is set to Directfeedback
 
 /**
 	 * constructor of the class
@@ -73,7 +75,7 @@ class Answer
 		$this->position=array();
 		$this->hotspot_coordinates=array();
 		$this->hotspot_type=array();
-
+		$this->destination= array();
 		// clears $new_* arrays
 		$this->cancel();
 
@@ -95,8 +97,8 @@ class Answer
 		$this->new_position=array();
 		$this->new_hotspot_coordinates=array();
 		$this->new_hotspot_type=array();
-
 		$this->new_nbrAnswers=0;
+		$this->new_destination=array();
 	}
 
 	/**
@@ -112,7 +114,7 @@ class Answer
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
 
-		$sql="SELECT answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type FROM
+		$sql="SELECT answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination FROM
 		      $TBL_ANSWER WHERE question_id ='".Database::escape_string($questionId)."' ORDER BY position";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -129,7 +131,7 @@ class Answer
 			$this->position[$i]=$object->position;
 			$this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 			$this->hotspot_type[$i]=$object->hotspot_type;
-
+			$this->destination[$i]=$object->destination;
 			$i++;
 		}
 
@@ -158,7 +160,7 @@ class Answer
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
 
-		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type " .
+		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type,destination " .
 				"FROM $TBL_ANSWER WHERE question_id='".Database::escape_string($questionId)."' " .
 				"ORDER BY $field $order";
 
@@ -174,6 +176,7 @@ class Answer
 			$this->comment[$i]=$object->comment;
 			$this->weighting[$i]=$object->ponderation;
 			$this->position[$i]=$object->position;
+			$this->destination[$i]=$object->destination;
 
 			$i++;
 		}
@@ -201,6 +204,17 @@ class Answer
 	function selectQuestionId()
 	{
 		return $this->questionId;
+	}
+	
+	/**
+	 * returns the question ID of the destination question
+	 *
+	 * @author - Julio Montoya
+	 * @return - integer - the question ID
+	 */
+	function selectDestination($id)
+	{
+		return $this->destination[$id];
 	}
 
 	/**
@@ -232,7 +246,8 @@ class Answer
 						'grade' => $this->weighting[$i],
 						'hotspot_coord' => $this->hotspot_coordinates[$i],
 						'hotspot_type'	=> $this->hotspot_type[$i],
-						'correct'		=> $this->correct[$i]
+						'correct'		=> $this->correct[$i],
+						'destination'	=> $this->destination[$i]
 				);
 	 		}
 	 	}
@@ -356,12 +371,10 @@ class Answer
 	 * @param coordinates 	Coordinates for hotspot exercises (optional)
 	 * @param integer		Type for hotspot exercises (optional)
 	 */
-	function createAnswer($answer,$correct,$comment,$weighting,$position,$new_hotspot_coordinates = NULL, $new_hotspot_type = NULL)
+	function createAnswer($answer,$correct,$comment,$weighting,$position,$new_hotspot_coordinates = NULL, $new_hotspot_type = NULL,$destination='')
 	{
 		$this->new_nbrAnswers++;
-
-		$id=$this->new_nbrAnswers;
-
+		$id=$this->new_nbrAnswers;		
 		$this->new_answer[$id]=$answer;
 		$this->new_correct[$id]=$correct;
 		$this->new_comment[$id]=$comment;
@@ -369,6 +382,7 @@ class Answer
 		$this->new_position[$id]=$position;
 		$this->new_hotspot_coordinates[$id]=$new_hotspot_coordinates;
 		$this->new_hotspot_type[$id]=$new_hotspot_type;
+		$this->new_destination[$id]=$destination;	
 	}
 
 	/**
@@ -380,7 +394,7 @@ class Answer
 	 * @param	integer	Answer weighting
 	 * @param	integer	Answer position
 	 */
-	function updateAnswers($answer,$comment,$weighting,$position)
+	function updateAnswers($answer,$comment,$weighting,$position,$destination)
 	{
 		global $TBL_REPONSES;
 
@@ -390,7 +404,8 @@ class Answer
 				"answer = '".Database::escape_string($answer)."', " .
 				"comment = '".Database::escape_string($comment)."', " .
 				"ponderation = '".Database::escape_string($weighting)."', " .
-				"position = '".Database::escape_string($position)."' " .
+				"position = '".Database::escape_string($position)."', " .
+				"destination = '".Database::escape_string($destination)."' " .
 				"WHERE id = '".Database::escape_string($position)."' " .
 				"AND question_i` = '".Database::escape_string($questionId)."'";
 
@@ -415,7 +430,7 @@ class Answer
 		// inserts new answers into data base
 		$sql="INSERT INTO $TBL_REPONSES" .
 				"(id,question_id,answer,correct,comment," .
-				"ponderation,position,hotspot_coordinates,hotspot_type) VALUES";
+				"ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
 
 		for($i=1;$i <= $this->new_nbrAnswers;$i++)
 		{
@@ -426,13 +441,12 @@ class Answer
 			$position				= Database::escape_string($this->new_position[$i]);
 			$hotspot_coordinates	= Database::escape_string($this->new_hotspot_coordinates[$i]);
 			$hotspot_type			= Database::escape_string($this->new_hotspot_type[$i]);
-
+			$destination			= Database::escape_string($this->new_destination[$i]);
+			
 			$sql.="('$i','$questionId','$answer','$correct','$comment',
-					'$weighting','$position','$hotspot_coordinates','$hotspot_type'),";
-		}
-
-		$sql = substr($sql,0,-1);
-
+					'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
+		}		
+		$sql = substr($sql,0,-1);	
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		// moves $new_* arrays
@@ -445,7 +459,7 @@ class Answer
 		$this->hotspot_type=$this->new_hotspot_type;
 
 		$this->nbrAnswers=$this->new_nbrAnswers;
-
+		$this->destination=$this->new_destination;
 		// clears $new_* arrays
 		$this->cancel();
 	}
@@ -466,7 +480,7 @@ class Answer
 			// inserts new answers into data base
 			$sql="INSERT INTO $TBL_REPONSES" .
 					"(id,question_id,answer,correct,comment," .
-					"ponderation,position,hotspot_coordinates,hotspot_type) VALUES";
+					"ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
 
 			for($i=1;$i <= $this->nbrAnswers;$i++)
 			{
@@ -477,9 +491,9 @@ class Answer
 				$position				= Database::escape_string($this->position[$i]);
 				$hotspot_coordinates	= Database::escape_string($this->hotspot_coordinates[$i]);
 				$hotspot_type			= Database::escape_string($this->hotspot_type[$i]);
-
+				$destination			= Database::escape_string($this->destination[$i]);
 				$sql.="('$i','$newQuestionId','$answer','$correct','$comment'," .
-						"'$weighting','$position','$hotspot_coordinates','$hotspot_type'),";
+						"'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 			}
 
 			$sql=substr($sql,0,-1);

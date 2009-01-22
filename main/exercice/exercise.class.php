@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 17741 2009-01-15 17:36:02Z cfasanando $
+* 	@version $Id: exercise.class.php 17944 2009-01-22 20:41:25Z juliomontoya $
 */
 
 
@@ -42,6 +42,7 @@ class Exercise
 	var $active;
 	var $timeLimit;
 	var $attempts;
+	var $feedbacktype;
 	var $end_time;
     var $start_time;
 
@@ -85,7 +86,7 @@ class Exercise
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-		$sql="SELECT title,description,sound,type,random,active, results_disabled, max_attempt,start_time,end_time FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
+		$sql="SELECT title,description,sound,type,random,active, results_disabled, max_attempt,start_time,end_time,feedback_type FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		// if the exercise has been found
@@ -100,6 +101,7 @@ class Exercise
 			$this->active=$object->active;
 			$this->results_disabled =$object->results_disabled;
 			$this->attempts = $object->max_attempt;
+			$this->feedbacktype = $object->feedback_type;
 			$this->end_time = $object->end_time;
             $this->start_time = $object->start_time;
 			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
@@ -168,6 +170,17 @@ class Exercise
 	{
 		return $this->attempts;
 	}
+	
+	/** returns the number of FeedbackType  * 	
+	 *  0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback
+	 * @return - numeric - exercise attempts
+	 */
+	function selectFeedbackType()
+	{
+		return $this->feedbacktype;
+	}
+	
+	
 	/**
 	 * returns the time limit
 	 */
@@ -339,6 +352,18 @@ class Exercise
 	{
 		$this->attempts=$attempts;
 	}
+	
+	
+	/**
+	 * changes the exercise feedback type
+	 *
+	 * @param - numeric $attempts - exercise max attempts
+	 */
+	function updateFeedbackType($feedback_type)
+	{
+		$this->feedbacktype=$feedback_type;
+	}
+	
 
 	/**
 	 * changes the exercise description
@@ -465,12 +490,14 @@ class Exercise
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);        
         $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
+
 		$id=$this->id;
 		$exercise=addslashes($this->exercise);
 		$description=addslashes($this->description);
 		$sound=addslashes($this->sound);
 		$type=$this->type;
 		$attempts=$this->attempts;
+		$feedbacktype=$this->feedbacktype;
 		$random=$this->random;
 		$active=$this->active;
 		$results_disabled = intval($this->results_disabled);
@@ -487,6 +514,7 @@ class Exercise
 						type='".Database::escape_string($type)."',
 						random='".Database::escape_string($random)."',
 						active='".Database::escape_string($active)."',
+						feedback_type='".Database::escape_string($feedbacktype)."',
 						max_attempt='".Database::escape_string($attempts)."', " .
 						"results_disabled='".Database::escape_string($results_disabled)."'
 					WHERE id='".Database::escape_string($id)."'";
@@ -503,7 +531,7 @@ class Exercise
 		// creates a new exercise
 		else
 		{
-			$sql="INSERT INTO $TBL_EXERCICES(start_time,end_time,title,description,sound,type,random,active, results_disabled, max_attempt) 
+			$sql="INSERT INTO $TBL_EXERCICES(start_time,end_time,title,description,sound,type,random,active, results_disabled, max_attempt,feedback_type) 
 					VALUES(
 						'$start_time','$end_time',
 						'".Database::escape_string($exercise)."',
@@ -513,7 +541,8 @@ class Exercise
 						'".Database::escape_string($random)."',
 						'".Database::escape_string($active)."',
 						'".Database::escape_string($results_disabled)."',
-						'".Database::escape_string($attempts)."'
+						'".Database::escape_string($attempts)."',
+						'".Database::escape_string($feedbacktype)."'
 						)";
 			api_sql_query($sql,__FILE__,__LINE__);
 
@@ -786,17 +815,14 @@ class Exercise
 		// fck editor
 		global $fck_attribute;
 		$fck_attribute = array();
-		$fck_attribute['Height'] = '250';
-		$fck_attribute['Width'] = '100%';
+		$fck_attribute['Height'] = '250px';
+		$fck_attribute['Width'] = '50%'; 
 		$fck_attribute['ToolbarSet'] = 'NewTest'; 
 		
 		$fck_attribute['Config']['InDocument'] = false;		
-		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-		
+		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';		
 		//$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
-		
-		
-		
+
 		$form -> addElement ('html_editor', 'exerciseDescription', get_lang('ExerciseDescription').' : ');
 
 		// type
@@ -814,8 +840,9 @@ class Exercise
 			
 		// Random questions
 		$form -> addElement('html','<div id="options" style="display: none;">');
-		$random = array();
-		
+	
+		$random = array();	
+		$option=array();
 		$max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
 		$option = range(0,$max);
 		$option[0]=get_lang('DoNotRandomize');
@@ -825,6 +852,14 @@ class Exercise
 		
 		//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
 		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');
+		
+			
+		$feedback_option[0]=get_lang('Feedback');
+		$feedback_option[1]=get_lang('DirectFeedback');
+		$feedback_option[2]=get_lang('NoFeedback');
+		
+		$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType').' : ',$feedback_option); 
+		
 		
 		$attempt_option=range(0,10);
         $attempt_option[0]=get_lang('Infinite');
@@ -899,7 +934,8 @@ class Exercise
 			$defaults['exerciseType'] = $this -> selectType();
 			$defaults['exerciseTitle'] = $this -> selectTitle();
 			$defaults['exerciseDescription'] = $this -> selectDescription();
-			$defaults['exerciseAttempts'] = $this->selectAttempts();	
+			$defaults['exerciseAttempts'] = $this->selectAttempts();
+			$defaults['exerciseFeedbackType'] = $this->selectFeedbackType(); 
 			
   			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
             	$defaults['enabletimelimit'] = 1;
@@ -913,6 +949,7 @@ class Exercise
 			$defaults['exerciseAttempts'] = 0;
 			$defaults['randomQuestions'] = 0;
 			$defaults['exerciseDescription'] = '';
+			$defaults['exerciseFeedbackType'] = 0;
 			
 			$defaults['start_time'] = date('Y-m-d 12:00:00');
 			$defaults['end_time'] = date('Y-m-d 12:00:00');
@@ -932,6 +969,7 @@ class Exercise
 	function processCreation($form)
 	{
 		$this -> updateAttempts($form -> getSubmitValue('exerciseAttempts'));
+		$this -> updateFeedbackType($form -> getSubmitValue('exerciseFeedbackType'));
 		$this -> updateTitle($form -> getSubmitValue('exerciseTitle'));
 		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
 		$this -> updateType($form -> getSubmitValue('exerciseType'));

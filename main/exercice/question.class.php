@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 17948 2009-01-22 21:39:22Z juliomontoya $
+<?php // $Id: question.class.php 17954 2009-01-22 22:55:56Z cfasanando $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 17948 2009-01-22 21:39:22Z juliomontoya $
+* 	@version $Id: question.class.php 17954 2009-01-22 22:55:56Z cfasanando $
 */
 
 
@@ -632,7 +632,7 @@ abstract class Question
 					'".Database::escape_string($weighting)."',
 					'".Database::escape_string($position)."',
 					'".Database::escape_string($type)."',
-					'".Database::escape_string($picture)."'',
+					'".Database::escape_string($picture)."',
 					'".Database::escape_string($level)."'
 					)";
 			api_sql_query($sql,__FILE__,__LINE__);

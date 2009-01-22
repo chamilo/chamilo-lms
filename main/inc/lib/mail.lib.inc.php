@@ -1,6 +1,6 @@
 <?php //$id: $
 require(api_get_path(INCLUDE_PATH).'lib/phpmailer/class.phpmailer.php');
-require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
+require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.dist.php');
 
  //regular expression to test for valid email address
  // this should actually be revised to use the complete RFC3696 description
@@ -30,6 +30,7 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
    $mail->Mailer  = $platform_email['SMTP_MAILER'];
    $mail->Host    = $platform_email['SMTP_HOST'];
    $mail->Port    = $platform_email['SMTP_PORT'];
+   $mail->CharSet = $platform_email['SMTP_CHARSET']; 
    $mail->WordWrap = 200; // stay far below SMTP protocol 980 chars limit
 
    if($platform_email['SMTP_AUTH'])

@@ -11,6 +11,7 @@ $platform_email['SMTP_MAILER']       = 'mail'; //mail, sendmail or smtp
 $platform_email['SMTP_AUTH']         = 0; 
 $platform_email['SMTP_USER']         = ''; 
 $platform_email['SMTP_PASS']         = ''; 
+$platform_email['SMTP_CHARSET']      = $charset; 
 
 // ====================================================================
 

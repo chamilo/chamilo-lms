@@ -190,3 +190,4 @@ INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,cate
 INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('notebook','notebook/index.php','notebook.gif',0,'0','squaregrey.gif',0,'_self','interaction');
 ALTER TABLE quiz ADD feedback_type int NOT NULL default 0;
 ALTER TABLE quiz_answer ADD destination text NOT NULL;
+CREATE TABLE glossary(glossary_id int unsigned NOT NULL auto_increment, name varchar(255) NOT NULL, description text not null, display_order int, PRIMARY KEY  (glossary_id));

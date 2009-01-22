@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 17741 2009-01-15 17:36:02Z cfasanando $
+<?php // $Id: question.class.php 17948 2009-01-22 21:39:22Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 17741 2009-01-15 17:36:02Z cfasanando $
+* 	@version $Id: question.class.php 17948 2009-01-22 21:39:22Z juliomontoya $
 */
 
 
@@ -62,9 +62,8 @@ abstract class Question
 	var $weighting;
 	var $position;
 	var $type;
-
+	var $level;
 	var $picture;
-
 	var $exerciseList;  // array with the list of exercises which this question is in
 
 	static $typePicture = 'new_question.png';
@@ -91,7 +90,7 @@ abstract class Question
 		$this->weighting=0;
 		$this->position=1;
 		$this->picture='';
-
+		$this->level = 0;
 		$this->exerciseList=array();
 	}
 
@@ -109,7 +108,7 @@ abstract class Question
 		$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-		$sql="SELECT question,description,ponderation,position,type,picture FROM $TBL_QUESTIONS WHERE id='".Database::escape_string($id)."'";
+		$sql="SELECT question,description,ponderation,position,type,picture,level FROM $TBL_QUESTIONS WHERE id='".Database::escape_string($id)."'";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -124,6 +123,7 @@ abstract class Question
 			$objQuestion->position=$object->position;
 			$objQuestion->type=$object->type;
 			$objQuestion->picture=$object->picture;
+			$objQuestion->level=(int) $object->level;
 
 			$sql="SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE question_id='".intval($id)."'";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -210,6 +210,17 @@ abstract class Question
 	}
 
 	/**
+	 * returns the level of the question
+	 *
+	 * @author - Nicolas Raynaud
+	 * @return - integer - level of the question, 0 by default.
+	 */
+	function selectLevel()
+	{
+		return $this->level;
+	}
+
+	/**
 	 * returns the picture name
 	 *
 	 * @author - Olivier Brouckaert
@@ -284,6 +295,17 @@ abstract class Question
 	function updatePosition($position)
 	{
 		$this->position=$position;
+	}
+
+	/**
+	 * changes the question level
+	 *
+	 * @author - Nicolas Raynaud
+	 * @param - integer $level - question level
+	 */
+	function updateLevel($level)
+	{
+		$this->level=$level;
 	}
 
 	/**
@@ -564,6 +586,7 @@ abstract class Question
 		$position=$this->position;
 		$type=$this->type;
 		$picture=addslashes($this->picture);
+		$level=$this->level; 
 
 		// question already exists		
 		if(!empty($id))
@@ -574,7 +597,8 @@ abstract class Question
 					ponderation	='".Database::escape_string($weighting)."',
 					position	='".Database::escape_string($position)."',
 					type		='".Database::escape_string($type)."',
-					picture		='".Database::escape_string($picture)."' 
+					picture		='".Database::escape_string($picture)."',
+					level		='".Database::escape_string($level)."' 
 				WHERE id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 			if(!empty($exerciseId)) {
@@ -602,13 +626,14 @@ abstract class Question
 			$this -> updatePosition($current_position+1);
 			$position = $this -> position;
 			
-			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture) VALUES(
+			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture,level) VALUES(
 					'".Database::escape_string($question)."',
 					'".Database::escape_string($description)."',
 					'".Database::escape_string($weighting)."',
 					'".Database::escape_string($position)."',
 					'".Database::escape_string($type)."',
-					'".Database::escape_string($picture)."'
+					'".Database::escape_string($picture)."'',
+					'".Database::escape_string($level)."'
 					)";
 			api_sql_query($sql,__FILE__,__LINE__);
 
@@ -967,6 +992,9 @@ abstract class Question
 		$answerType= intval($_REQUEST['answerType']);
 		$form->addElement('hidden','answerType',$_REQUEST['answerType']);
 
+		// question level
+		$form->addElement('text','questionLevel',get_lang('Level'));
+		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
 
 		// html editor
 		global $fck_attribute;
@@ -1001,6 +1029,7 @@ abstract class Question
 		$defaults = array();
 		$defaults['questionName'] = $this -> question;
 		$defaults['questionDescription'] = $this -> description;
+		$defaults['questionLevel'] = $this -> level;
 		$form -> setDefaults($defaults);
 	}
 
@@ -1013,6 +1042,7 @@ abstract class Question
 
 		$this -> updateTitle($form->getSubmitValue('questionName'));
 	    $this -> updateDescription($form->getSubmitValue('questionDescription'));
+	    $this -> updateLevel($form->getSubmitValue('questionLevel'));
 	    $this -> save($objExercise -> id);
 
 	    // modify the exercise

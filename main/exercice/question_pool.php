@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 17302 2008-12-15 21:13:36Z ivantcholakov $
+<?php // $Id: question_pool.php 17948 2009-01-22 21:39:22Z juliomontoya $
  
 /*
 ==============================================================================
@@ -30,7 +30,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 17302 2008-12-15 21:13:36Z ivantcholakov $
+* 	@version $Id: question_pool.php 17948 2009-01-22 21:39:22Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -62,6 +62,9 @@ if ( empty ( $fromExercise ) ) {
 }
 if(isset($_GET['exerciseId'])){
 	$exerciseId = intval($_GET['exerciseId']);
+}
+if(isset($_GET['exerciseLevel'])){
+	$exerciseLevel = intval($_GET['exerciseLevel']);
 }
 if(!empty($_GET['page'])){
 	$page = intval($_GET['page']);
@@ -158,6 +161,8 @@ if($is_allowedToEdit)
 
 	<form method="get" action="<?php echo api_get_self(); ?>" style="display:inline;">
 	<input type="hidden" name="fromExercise" value="<?php echo $fromExercise; ?>">
+	
+	
 
 	<?php echo get_lang('Filter'); ?> : 
 	<select name="exerciseId">
@@ -171,14 +176,38 @@ if($is_allowedToEdit)
 	// shows a list-box allowing to filter questions
 	while($row=Database::fetch_array($result))
 	{
-	?>
-
-	<option value="<?php echo $row['id']; ?>" <?php if($exerciseId == $row['id']) echo 'selected="selected"'; ?>><?php echo $row['title']; ?></option>
-
-	<?php
+		?>
+		<option value="<?php echo $row['id']; ?>" <?php if($exerciseId == $row['id']) echo 'selected="selected"'; ?>><?php echo $row['title']; ?></option>
+		<?php
 	}
 	?> 
-    </select> <input type="submit" value="<?php echo get_lang('Ok'); ?>">
+    </select>
+    
+    <?php echo get_lang('Level'); ?> : <select name="exerciseLevel">
+	<option value="-1">-- <?php echo get_lang('AllExercises'); ?> --</option>
+	<?php 
+		$sqlMaxLevel = "SELECT MAX(level) FROM $TBL_QUESTIONS";
+		$resultMaxLevel = api_sql_query($sqlMaxLevel,__FILE__,__LINE__);
+		if ($result0MaxLevel = Database::fetch_array($resultMaxLevel)) 
+		{
+			$maxLevel = $result0MaxLevel[0];
+		}
+		else
+		{
+			$maxLevel = -1;
+		}
+		for ($level = 0; $level <= $maxLevel; $level++)
+		{
+	?>	
+		<option value="<?php echo $level; ?>" <?php if($exerciseLevel == $level) echo 'selected="selected"'; ?>><?php echo $level; ?></option>	
+	<?php
+		}
+	?> 
+
+    </select> 
+
+
+    <input type="submit" value="<?php echo get_lang('Ok'); ?>">
     </form>
 </div>
 
@@ -189,7 +218,9 @@ if($is_allowedToEdit)
 	// if we have selected an exercise in the list-box 'Filter'
 	if($exerciseId > 0)
 	{
-		$sql="SELECT id,question,type FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($exerciseId)."' ORDER BY question_order LIMIT $from, ".($limitQuestPage + 1);
+		//$sql="SELECT id,question,type FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($exerciseId)."' ORDER BY question_order LIMIT $from, ".($limitQuestPage + 1);
+		$sql="SELECT id,question,type,level FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($exerciseId)."' ".
+			 (!is_null($exerciseLevel) && $exerciseLevel >= 0 ? 'AND level=\''.$exerciseLevel.'\' ' : '')."ORDER BY question_order";
 	} 
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
 	elseif($exerciseId == -1)
@@ -203,14 +234,23 @@ if($is_allowedToEdit)
 		//	' as exercices ON exercice_id=exercices.id WHERE exercices.active = -1 LIMIT $from, '.($limitQuestPage + 1);
 
 		// This is more safe to changes, it is a mix between old and new logic.
-		$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id FROM '.$TBL_QUESTIONS.
+		
+		/*$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id FROM '.$TBL_QUESTIONS.
 			' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.
 			' as exercices ON exercice_id=exercices.id WHERE quizz_questions.exercice_id IS NULL OR exercices.active = -1 LIMIT '.$from.', '.($limitQuestPage + 1);
+	
+		*/
+		$sql='SELECT id, question, type, exercice_id,level FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id AND exercice_id IS NULL '.
+			(!is_null($exerciseLevel) && $exerciseLevel >= 0 ? 'WHERE level=\''.$exerciseLevel.'\' ' : '');
+
+			
 	}
 	// if we have not selected any option in the list-box 'Filter'
 	else
 	{
-		$sql="SELECT id,question,type FROM $TBL_QUESTIONS LIMIT $from, ".($limitQuestPage + 1);
+		//$sql="SELECT id,question,type FROM $TBL_QUESTIONS LIMIT $from, ".($limitQuestPage + 1);
+		$sql="SELECT id,question,type,level FROM $TBL_QUESTIONS ".
+			(!is_null($exerciseLevel) && $exerciseLevel >= 0 ? 'WHERE level=\''.$exerciseLevel.'\' ' : '');
 		// forces the value to 0
 		$exerciseId=0;
 	}
@@ -219,7 +259,7 @@ if($is_allowedToEdit)
 	$nbrQuestions=Database::num_rows($result);
 	
     echo '<tr>',
-      '<td colspan="',($fromExercise?2:3),'">',
+      '<td colspan="',($fromExercise?3:3),'">',
     	'<table border="0" cellpadding="0" cellspacing="0" width="100%">',
     	'<tr>',
     	  '<td>';
@@ -253,6 +293,7 @@ if($is_allowedToEdit)
 	if(!empty($fromExercise))
 	{
         echo '<th>',get_lang('Question'),'</th>',
+            '<th>',get_lang('Level'),'</th>',
             '<th>',get_lang('Reuse'),'</th>';
 	}
 	else
@@ -287,14 +328,17 @@ if($is_allowedToEdit)
                 echo '<a href="admin.php?',api_get_cidreq(),'?editQuestion=',$row['id'],'"><img src="../img/edit.gif" border="0" alt="',get_lang('Modify'),'"></a>',
                     '</td>',
                     '<td align="center">',
-                    '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>',
-                    '</td>';
+                    '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>';
+                    //'<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>';
 			}
 			else
 			{
-                echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
-                echo '</td>';
+                //echo $row['level'],'</td>',
+//					'<td><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
+				echo $row['level'],'</td>',
+					'<td><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
 			}
+            echo '  </td>';
             echo '</tr>';
 
 			// skips the last question, that is only used to know if we have or not to create a link "Next page"
@@ -310,7 +354,7 @@ if($is_allowedToEdit)
 	if(!$nbrQuestions)
 	{
         echo '<tr>',
-            '<td colspan="',($fromExercise?2:3),'">',get_lang('NoQuestion'),'</td>',
+            '<td colspan="',($fromExercise?3:3),'">',get_lang('NoQuestion'),'</td>',
             '</tr>';
 	}
     echo '</table>';

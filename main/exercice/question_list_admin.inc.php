@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 16726 2008-11-12 15:44:48Z pcool $
+<?php // $Id: question_list_admin.inc.php 17948 2009-01-22 21:39:22Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 16726 2008-11-12 15:44:48Z pcool $
+* 	@version $Id: question_list_admin.inc.php 17948 2009-01-22 21:39:22Z juliomontoya $
 */
 
 
@@ -94,6 +94,7 @@ echo '</div></div>';
 	<tr class="row_odd">
 		<th><?php echo get_lang('Question'); ?></th>
 		<th><?php echo get_lang('Type');?></th>
+		<th><?php echo get_lang('Level'); ?></th>
 		<th><?php echo get_lang('Export'); ?></th>
 		<th><?php echo get_lang('Modify'); ?></th>
 	</tr>
@@ -113,7 +114,9 @@ if($nbrQuestions)
 ?>
 
 <tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
-  <td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td> <td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
+  <td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td>
+  <td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
+  <td align="center"><?php echo $objQuestionTmp->selectLevel(); ?></td>
   <td align="center"><a href="<?php echo api_get_self(); ?>?action=exportqti2&questionId=<?php echo $id; ?>"><img src="../img/export.png" border="0" align="absmiddle" alt="IMS/QTI" /></a></td>
   <td> <a href="<?php echo api_get_self(); ?>?myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo api_get_self(); ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a>
 

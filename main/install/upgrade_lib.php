@@ -96,7 +96,8 @@ function upgrade_16x_to_180($values)
 		COURSE SECTION
 		UPGRADES TO COURSE DATABASES
 	*/
-	$prefix = ''; 
+	$prefix = '';
+    global $singleDbForm, $_configuration;
 	if ($singleDbForm)
 	{
 		$prefix = $_configuration['table_prefix'];

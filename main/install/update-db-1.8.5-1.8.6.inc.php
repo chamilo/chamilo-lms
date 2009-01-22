@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 17935 2009-01-22 15:43:23Z yannoo $
+<?php // $Id: update-db-1.8.5-1.8.6.inc.php 17943 2009-01-22 19:56:26Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -167,6 +167,57 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			$sql="INSERT INTO $dbNameForm.access_url_rel_user SET user_id=".$row[0].", access_url_id=1";					
 			$res = mysql_query($sql);
 		}
+        // Check if course_module exists, as it was not installed in Dokeos 1.8.5 because of a broken query, and insert it if necessary
+        $query = "SELECT * FROM $dbNameForm.course_module";
+        $result = mysql_query($query);
+        if ($result === false) {
+        	//the course_module table doesn't exist, create it
+            $sql = "CREATE TABLE $dbNameForm.course_module (
+                      id int unsigned NOT NULL auto_increment,
+                      name varchar(100) NOT NULL,
+                      link varchar(255) NOT NULL,
+                      image varchar(100) default NULL,
+                      `row` int unsigned NOT NULL default '0',
+                      `column` int unsigned NOT NULL default '0',
+                      position varchar(20) NOT NULL default 'basic',
+                      PRIMARY KEY  (id)
+                    )
+                    ";
+            $result = mysql_query($sql);
+            if ($result !== false) {
+            	$sql = "INSERT INTO $dbNameForm.course_module (name, link, image, `row`,`column`, position) VALUES
+                    ('calendar_event','calendar/agenda.php','agenda.gif',1,1,'basic'),
+                    ('link','link/link.php','links.gif',4,1,'basic'),
+                    ('document','document/document.php','documents.gif',3,1,'basic'),
+                    ('student_publication','work/work.php','works.gif',3,2,'basic'),
+                    ('announcement','announcements/announcements.php','valves.gif',2,1,'basic'),
+                    ('user','user/user.php','members.gif',2,3,'basic'),
+                    ('forum','forum/index.php','forum.gif',1,2,'basic'),
+                    ('quiz','exercice/exercice.php','quiz.gif',2,2,'basic'),
+                    ('group','group/group.php','group.gif',3,3,'basic'),
+                    ('course_description','course_description/','info.gif',1,3,'basic'),
+                    ('chat','chat/chat.php','chat.gif',0,0,'external'),
+                    ('dropbox','dropbox/index.php','dropbox.gif',4,2,'basic'),
+                    ('tracking','tracking/courseLog.php','statistics.gif',1,3,'courseadmin'),
+                    ('homepage_link','link/link.php?action=addlink','npage.gif',1,1,'courseadmin'),
+                    ('course_setting','course_info/infocours.php','reference.gif',1,1,'courseadmin'),
+                    ('External','','external.gif',0,0,'external'),
+                    ('AddedLearnpath','','scormbuilder.gif',0,0,'external'),
+                    ('conference','conference/index.php?type=conference','conf.gif',0,0,'external'),
+                    ('conference','conference/index.php?type=classroom','conf.gif',0,0,'external'),
+                    ('learnpath','newscorm/lp_controller.php','scorm.gif',5,1,'basic'),
+                    ('blog','blog/blog.php','blog.gif',1,2,'basic'),
+                    ('blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
+                    ('course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
+                    ('survey','survey/survey_list.php','survey.gif',2,1,'basic'),
+                    ('wiki','wiki/index.php','wiki.gif',2,3,'basic'),
+                    ('gradebook','gradebook/index.php','gradebook.gif',2,2,'basic'),
+                    ('glossary','glossary/index.php','glossary.gif',2,1,'basic'),
+                    ('notebook','notebook/index.php','notebook.gif',2,1,'basic')";
+                $res = mysql_query($sql);
+            }
+        }
+
 		
 		//get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','stats');

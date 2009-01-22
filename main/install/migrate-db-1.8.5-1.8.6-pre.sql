@@ -104,6 +104,8 @@ ALTER TABLE track_e_attempt_recording ADD INDEX (exe_id);
 ALTER TABLE track_e_hotspot CHANGE hotspot_coordinate hotspot_coordinate text NOT NULL;
 ALTER TABLE track_e_exercices ADD orig_lp_id int  NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD orig_lp_item_id int  NOT NULL default 0;
+ALTER TABLE track_e_exercices ADD exe_duration int UNSIGNED NOT NULL default 0;
+
 -- xxUSERxx
 
 -- xxCOURSExx

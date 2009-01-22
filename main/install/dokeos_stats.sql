@@ -112,6 +112,8 @@ ALTER TABLE track_e_exercices ADD session_id SMALLINT UNSIGNED NOT NULL default 
 ALTER TABLE track_e_exercices ADD INDEX ( session_id ) ;
 ALTER TABLE track_e_exercices ADD orig_lp_id int  NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD orig_lp_item_id int  NOT NULL default 0;
+ALTER TABLE track_e_exercices ADD exe_duration int UNSIGNED NOT NULL default 0;
+  
 
 CREATE TABLE track_e_attempt (
   exe_id int default NULL,

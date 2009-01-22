@@ -267,6 +267,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(mysql_num_rows($res)>0)
 			{
 				$i=0;
+                $list = array();
 				//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
 				while($row = mysql_fetch_array($res))
 				{

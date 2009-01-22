@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.4-1.8.5.inc.php 16653 2008-11-03 22:49:07Z ivantcholakov $
+<?php // $Id: update-db-1.8.4-1.8.5.inc.php 17935 2009-01-22 15:43:23Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -259,6 +259,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(mysql_num_rows($res)>0)
 			{
 				$i=0;
+                $list = array();
 				//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
 				while($row = mysql_fetch_array($res))
 				{

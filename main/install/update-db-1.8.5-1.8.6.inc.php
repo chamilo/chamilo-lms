@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 17923 2009-01-22 04:45:35Z yannoo $
+<?php // $Id: update-db-1.8.5-1.8.6.inc.php 17935 2009-01-22 15:43:23Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -269,6 +269,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(mysql_num_rows($res)>0)
 			{
 				$i=0;
+                $list = array();
 				//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
 				while($row = mysql_fetch_array($res))
 				{
@@ -286,7 +287,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					{									
 						mysql_select_db($row_course['db_name']);
 					}
-				
+                    
 					foreach($c_q_list as $query)
 					{
 						if ($singleDbForm) //otherwise just use the main one

@@ -127,4 +127,5 @@ $ScoreDoesNotMatch = "Rezultat se ne ujema";
 $FileUploadComplete = "Nalaganje datoteke je bilo uspešno";
 $NoResultsAvailable = "Noben rezultat ni na voljo";
 $CannotChangeTheMaxNote = "Ne morem spremenite vrednosti max";
+$GradebookWeightUpdated = "Uteži so bile uspešno ažurirane";
 ?>

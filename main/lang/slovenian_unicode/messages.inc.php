@@ -21,4 +21,10 @@ $InvalidMessageId = "Identiteta sporočila, na katerega želite odgovoriti, ni v
 $ErrorSendingMessage = "Napaka pri poskusu pošiljanja sporočila.";
 $SureYouWantToDeleteSelectedMessages = "Ste prepričani, da želite odstranite izbrana sporočila ?";
 $SelectedMessagesDeleted = "Izbrana sporočila so bila odstranjena";
+$EnterTitle = "Vstavite naslov sporočila";
+$TypeYourMessage = "Vnesite besedilo sporočila";
+$MessageDeleted = "Sporočilo je bilo odstranjeno";
+$ConfirmDeleteMessage = "Ste prepričani, da želite odstraniti sporočilo?";
+$DeleteMessage = "Odstrani sporočilo";
+$ReadMessage = "Preberi sporočilo";
 ?>

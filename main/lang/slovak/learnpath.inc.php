@@ -193,4 +193,9 @@ $UplUnableToSaveFile = "Nie je možné uloži&#357; súbor";
 $UnknownPackageFormat = "Formát tohto balenia nebolo možné rozozna&#357;. Overte prosím, &#269;i je formát balenia platný.";
 $EditLPSettings = "Upravi&#357; nastavenia u&#269;ebnej osnovy";
 $SaveLPSettings = "Uloži&#357; nastavenia u&#269;ebnej osnovy";
+$ShowAllAttempts = "Ukáza&#357; všetky pokusy";
+$HideAllAttempts = "Skry&#357; všetky pokusy";
+$ShowAllAttemptsByExercise = "Ukáza&#357; všetky pokusy pod&#318;a cvi&#269;enia";
+$ShowAttempt = "Ukáza&#357; pokus";
+$ShowAndQualifyAttempt = "Ukáza&#357; a posúdi&#357; pokus";
 ?>

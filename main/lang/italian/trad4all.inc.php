@@ -661,4 +661,6 @@ $AddSpecificSearchField = "Aggiungi un campo specifico di ricerca";
 $Subscribers = "Richiedenti";
 $Accept = "Accettare";
 $Reserved = "Prenotato";
+$SharedDocumentsDirectory = "Documenti condivisi";
+$Gallery = "Galleria";
 ?>

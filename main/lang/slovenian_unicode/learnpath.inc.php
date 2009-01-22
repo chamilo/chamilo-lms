@@ -212,4 +212,9 @@ $UplUnableToSaveFile = "Ne morem shraniti datoteke";
 $UnknownPackageFormat = "Format tega paketa ni bil prepoznan. Preverite, če je paket dejansko veljaven paket.";
 $EditLPSettings = "Uredi nastavitve učne poti";
 $SaveLPSettings = "Shrani nastavitve učne poti";
+$ShowAllAttempts = "Prikaži vse poskuse";
+$HideAllAttempts = "Skrij vse poskuse";
+$ShowAllAttemptsByExercise = "Prikaže vse poskuse (po vajah/testih)";
+$ShowAttempt = "Prikži poskus";
+$ShowAndQualifyAttempt = "Prikaži in oceni poskus";
 ?>

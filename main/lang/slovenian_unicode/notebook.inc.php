@@ -13,4 +13,12 @@ $WriteYourNoteHere = "Tule zapišite svojo beležko";
 $SearchByTitle = "Išči po naslovu";
 $WriteTheTitleHere = "Tule dodaj naslov";
 $UpdateDate = "Ažuriraj datum";
+$NoteAddNew = "Dodaj novo";
+$OrderByCreationDate = "Po datumu nastanka";
+$OrderByModificationDate = "Po datumu spremembe";
+$OrderByTitle = "Po naslovu";
+$NoteTitle = "Naslov beležke";
+$NoteComment = "Podrobnosti beležke";
+$NoteAdded = "Beležka je bila dodana";
+$NoteConfirmDelete = "Ste prepričani, da želite odstraniti beležko?";
 ?>

@@ -660,4 +660,8 @@ $SpecificSearchFieldsIntro = "Tu lahko določite polja, ki jih boste uporabili z
 $AddSpecificSearchField = "Dodaj specifično iskalno polje";
 $Subscribers = "Vpisani";
 $Accept = "Sprejmi";
+$Reserved = "Rezervirano";
+$SharedDocumentsDirectory = "Mapa skupnih dokumentov";
+$Gallery = "Galerija";
+$Audio = "Avdio";
 ?>

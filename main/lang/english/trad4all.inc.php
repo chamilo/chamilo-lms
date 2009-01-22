@@ -661,6 +661,7 @@ $AddSpecificSearchField = "Add a specific search field";
 $Subscribers = "Subscribers";
 $Accept = "Accept";
 $Reserved = "Reserved";
-$SharedImagesDirectory = "Shared images directory";
+$SharedDocumentsDirectory = "Shared documents directory";
 $Gallery = "Gallery";
+$Audio = "Audio";
 ?>

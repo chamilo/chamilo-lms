@@ -212,4 +212,9 @@ $UplUnableToSaveFile = "Impossibile salvare il file";
 $UnknownPackageFormat = "Il formato del pacchetto non è riconosciuto. Scegli un pacchetto valido.";
 $EditLPSettings = "Modifica le proprietà del modulo didattico";
 $SaveLPSettings = "Salva le proprietà del modulo didattico";
+$ShowAllAttempts = "Mostra tutti i tentativi";
+$HideAllAttempts = "Nascondi i tentativi";
+$ShowAllAttemptsByExercise = "Mostra tutti i tentativi per quesito";
+$ShowAttempt = "Mostra il tentativo";
+$ShowAndQualifyAttempt = "Mostra e valuta il tentativo";
 ?>

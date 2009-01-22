@@ -262,4 +262,14 @@ $FilterExercices = "Filter exercices";
 $FilterByNotRevised = "Only unqualified";
 $FilterByRevised = "Only qualified";
 $Duration = "Duration";
+$TryAgain = "Try again";
+$SeeTheory = "Theory link";
+$EndActivity = "End of activity";
+$GoToQuestion = "Go to question";
+$NoFeedback = "Exam (no feedback)";
+$DirectFeedback = "Self-evaluation (immediate feedback)";
+$FeedbackType = "Evaluation :";
+$Scenario = "Scenario";
+$VisitUrl = "Visit this link";
+$ExitTest = "Exit test";
 ?>

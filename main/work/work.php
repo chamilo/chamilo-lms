@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17787 2009-01-17 00:41:06Z ivantcholakov $
+*  	@version $Id: work.php 17970 2009-01-23 19:38:23Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1112,7 +1112,7 @@ if ($is_course_member) {
 								<div class="label">' . get_lang("Document") . '
 								</div>
 								<div class="formw">
-									<a href="' . $workUrl . '">' . $workUrl . '</a>
+									<a href="' . $workUrl . '">' . get_lang("ClickHereToDownloadTheFile") . '</a>
 								</div>
 					</div>';
 			$form->addElement('html', $html);

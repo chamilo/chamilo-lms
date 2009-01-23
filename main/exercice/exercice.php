@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17972 2009-01-23 20:11:22Z juliomontoya $
+<?php // $Id: exercice.php 17976 2009-01-23 21:21:13Z juliomontoya $
 
 /*
 ==============================================================================
@@ -1013,7 +1013,6 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 					WHERE exe_user_id = '".$_user['user_id']."' AND exe_cours_id = '".Database::escape_string($_cid)."'
 					ORDER BY exe_cours_id ASC, exe_date DESC";
 					//error_log($hpsql);
-
 		}
 
 		$results=getManyResultsXCol($sql,11);
@@ -1033,7 +1032,6 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 			$user_list_name = $user_list_id = array();
 
 			for ($i = 0; $i < $sizeof; $i++) {
-
 				$revised = false;
 				$sql_exe='SELECT exe_id FROM '.Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING).' WHERE author != '."''".' AND exe_id = '."'".$results[$i][5]."'".' LIMIT 1';
 				$query = api_sql_query($sql_exe,__FILE__,__LINE__);
@@ -1056,14 +1054,14 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 
 				$user_list_name[] =  $results[$i][0];
 				$user_list_id[] =  $results[$i][9];
-
 				$id = $results[$i][5];
 				$mailid = $results[$i][6];
 				$user = $results[$i][0];
 				$test = $results[$i][1];
 				$dt = strftime($dateTimeFormatLong,$results[$i][4]);
 				$res = $results[$i][2];
-				$duration = intval($results[$i][11]);
+				
+				$duration = intval($results[$i][10]);
 				echo '<tr';
 				if ($i%2==0) {
 					echo 'class="row_odd"';
@@ -1072,10 +1070,12 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 				}
 				echo '>';
 				$add_start_date = $lang_nostartdate;
+				
 				if ($is_allowedToEdit || $is_tutor) {
 					$user = $results[$i][0];
-					echo '<td>'.$user.' '.$duration.'</td>';
+					echo '<td>'.$user.' </td>';
 				}
+				
 				echo '<td>'.$test.'</td>';
 				echo '<td>';
 				if ($results[$i][7] > 1) {
@@ -1091,7 +1091,9 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 				echo '</td>';
 
 				echo '<td>'.$add_start_date.format_locale_date('%b %d, %Y %H:%M',$results[$i][4]).'</td>';//get_lang('dateTimeFormatLong')
-				echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
+				
+				// there are already a duration test period calculated??
+				//echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
 		  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100).'% ('.$res.' / '.$results[$i][3].')</td>';
 				echo '<td>'.(($is_allowedToEdit||$is_tutor)?
 							"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".
@@ -1138,11 +1140,6 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 		<br />
 		<?php
 }
-
-
-
-
-
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
 	Display::display_footer();

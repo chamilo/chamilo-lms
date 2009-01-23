@@ -20,7 +20,6 @@ $(document).ready(function() {
         autoFill: false
       });
       /* prefilter form */
-      $("#tags").show();
       $('#prefilter').change(function () {
         var str = "";
         $("#prefilter option:selected").each(function () {

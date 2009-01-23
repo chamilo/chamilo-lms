@@ -29,7 +29,6 @@
     ---------------------------------------------------------------------
  */
 require_once ('rsys.php');
-
 Rsys :: protect_script('m_item');
 $tool_name = get_lang('ResourceList');
 //$interbreadcrumb[] = array ("url" => "../admin/index.php", "name" => get_lang('PlatformAdmin'));
@@ -265,7 +264,7 @@ switch ($_GET['action']) {
 				api_display_tool_title(get_lang('EditRight'));
 				$form = new FormValidator('itemright', 'post', "m_item.php?id=".$item['id']."&action=m_rights&subaction=edit");
 
-				$form->add_textfield('classn', get_lang('LangClass'), true, array ('readonly' => 'readonly'));
+				$form->add_textfield('classn', get_lang('Class'), true, array ('readonly' => 'readonly'));
 
 				$form->addElement('checkbox', 'edit_right', get_lang('EditRight'));
 				$form->addElement('checkbox', 'delete_right', get_lang('DeleteRight'));
@@ -315,7 +314,7 @@ switch ($_GET['action']) {
 				
 				
 				$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));
-				$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageItems'));
+				$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageResources'));
 				Display :: display_header(str_replace('#ITEM#', $item['name'], get_lang('MItemRights')));
 				
 				api_display_tool_title(get_lang('MItemRights2'));
@@ -329,7 +328,7 @@ switch ($_GET['action']) {
 				$table = new SortableTable('itemrights', array ('Rsys', 'get_num_itemrights'), array ('Rsys', 'get_table_itemrights'), 1);
 				$table->set_header(0, '', false, array ('style' => 'width:10px'));
 				$table->set_additional_parameters(array('action'=>'m_rights','item_id'=>$_GET['item_id']));
-				$table->set_header(1, get_lang('LangClass'), false);
+				$table->set_header(1, get_lang('Class'), false);
                 $table->set_header(2, get_lang('EditItemRight'), false);
 				$table->set_header(3, get_lang('DeleteItemRight'), false);
 				$table->set_header(4, get_lang('MBookingPeriodsRight'), false);
@@ -356,7 +355,7 @@ switch ($_GET['action']) {
 	
 		$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));
 			
-		$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageItems'));
+		$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageResources'));
 	
 		//$interbreadcrumb[] = array ("url" => "m_item.php", "name" => $tool_name);
 		Display :: display_header(get_lang('AddNewResource'));
@@ -429,9 +428,9 @@ switch ($_GET['action']) {
 	default :
 		$NoSearchResults = get_lang('NoItems');		
 		$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));		
-		//$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageItems'));
+		//$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageResources'));
 	
-		Display :: display_header(get_lang('ManageItems'));
+		Display :: display_header(get_lang('ManageResources'));
 		api_display_tool_title(get_lang('ResourceList'));
 
 		echo $msg;

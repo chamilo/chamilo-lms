@@ -43,9 +43,10 @@ $tool_name = get_lang('BookingPeriodList');
  *  @param  -   int     $id     The reservation-id
  */
 function modify_filter($id) {
-		$out = '<a href="m_reservation.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditBookingPeriod").'"><img alt="" src="../img/edit.gif" /></a>';
-		$out .= ' <a href="m_reservation.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteBookingPeriod").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteBookingPeriod")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
-		$out .= ' <a href="m_reservation.php?action=accept&amp;rid='.$id.'" title="'.get_lang("AutoAccept").'"><img alt="" src="../img/visible.gif" /></a>';
+		$out = ' <a href="m_reservation.php?action=accept&amp;rid='.$id.'" alt="'.get_lang('AutoAccept').'"><img title="'.get_lang('AutoAccept').'"  alt="'.get_lang('AutoAccept').'" src="../img/students.gif" /></a>';
+		$out .= '<a href="m_reservation.php?action=edit&amp;id='.$id.'" alt="'.get_lang('EditBookingPeriod').'"><img title="'.get_lang('EditBookingPeriod').'" alt="'.get_lang('EditBookingPeriod').'" src="../img/edit.gif" /></a>';		
+		$out .= ' <a href="m_reservation.php?action=delete&amp;id='.$id.'" alt="'.get_lang('DeleteBookingPeriod').'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteBookingPeriod")))."'".')) return false;"><img title="'.get_lang('DeleteBookingPeriod').'" alt="'.get_lang('DeleteBookingPeriod').'" src="../img/delete.gif" /></a>';
+		
 	return $out;
 }
 
@@ -92,13 +93,13 @@ if (isset ($_POST['action'])) {
  */
  
 switch ($_GET['action']) {
-	case 'overviewsubscriptions' :
-	
+	case 'overviewsubscriptions' :	
 		$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));		
 		$interbreadcrumb[] = array ("url" => "m_reservation.php", "name" => get_lang('ManageBookingPeriods'));		
 		
 		Display :: display_header(get_lang('OverviewSubscriptions'));
 		api_display_tool_title(get_lang('Overview'));
+		
 		echo '<div class="actions">';   
 		echo '<form id="cat_form" action="m_reservation.php" method="get">';		
 		echo '<input type="hidden" name="action" value="overviewsubscriptions"/>';
@@ -119,6 +120,7 @@ switch ($_GET['action']) {
 		break;
 	case 'accept' :
 		$NoSearchResults = get_lang('NoReservation');
+		
 		if (empty ($_GET['rid'])) {
 			$_GET['rid'] = $_POST['rid'];
 		}
@@ -141,10 +143,10 @@ switch ($_GET['action']) {
 		$table->set_header(0, '', false, array ('style' => 'width:10px'));
 		$table->set_header(1, get_lang('SubscribedPerson'), true);
 		$table->set_header(2, get_lang('Class'), true);
-		$table->set_header(3, get_lang('SubscribedStartDate'), true);
-		$table->set_header(4, get_lang('SubscribedEndDate'), true);		
-		$table->set_header(5, get_lang('Accept'), true, array ('style' => 'width:30px;'));
-		$table->set_header(6, get_lang('Delete'), true, array ('style' => 'width:30px;'));
+		$table->set_header(3, get_lang('SubscribedStartDate'), false);
+		$table->set_header(4, get_lang('SubscribedEndDate'), false);		
+		$table->set_header(5, get_lang('Accept'), false, array ('style' => 'width:30px;'));
+		$table->set_header(6, get_lang('Delete'), false, array ('style' => 'width:30px;'));
 		$table->set_form_actions(array ('accept_users' => get_lang('AcceptUsers'), 'unaccept_users' => get_lang('UnacceptedUsers'), 'delete_subscriptions' => get_lang('Delete_subscriptions')), 'accepting');
 		//$table->set_form_actions(array ('accept_users' => get_lang('AcceptUsers'), 'unaccept_users' => get_lang('UnacceptedUsers')), 'accepting');
 		$table->display();
@@ -291,10 +293,7 @@ switch ($_GET['action']) {
 		        'H' => date('H',time()),
 		        'i' => '00'
 		    );
-		    
-		    
-		    
-		    			 
+		    		    			 
 			$defaultvalues['start'] = $date_defaults_start;
 			$defaultvalues['end'] = $date_defaults_end;			
 			$defaultvalues['subscribe_from'] = $date_defaults_start_sub;
@@ -311,8 +310,7 @@ switch ($_GET['action']) {
 			
 			$form->setDefaults($defaultvalues);
 			$form->Display();
-		} 
-		else {
+		} else {
 			if ($_GET['cat_id'] != 0)
 				Display :: display_normal_message(get_lang('NoItems'),false);
 		}

@@ -119,18 +119,12 @@ if ($reservation[0][9] < $reservation[0][4]) {
 				$start_end .= "<li>".$end_time_last_block." en ".$res_end_at."</li>";
 			}
 			$start_end .= "</ul>";
-		}
-		else
-		{
+		} else {
 			$start_end = " ".Rsys :: timestamp_to_datetime($time_start)." en ".$res_end_at;
 		}
-
-
-
-		//$form->addElement('html', "timestart:".$time_start."-".Rsys :: mysql_datetime_to_timestamp($res_start_at));	
-
-		$form->addElement('html', "<p> **** ".str_replace('#start_end',$start_end,str_replace('#from_till', $from_till,str_replace('#name#', "<b>".$item[3]."</b>",str_replace('#start#', "<b>".$reservation[0][5]."</b>", str_replace('#end#', "<b>".$reservation[0][6]."</b>", get_lang("SubscribeTimePickerInformation"))))))." ****</p>");
 		
+		//$form->addElement('html', "timestart:".$time_start."-".Rsys :: mysql_datetime_to_timestamp($res_start_at));
+		$form->addElement('html', "<p>".str_replace('#start_end',$start_end,str_replace('#from_till', $from_till,str_replace('#name#', "<b>".$item[3]."</b>",str_replace('#start#', "<b>".$reservation[0][5]."</b>", str_replace('#end#', "<b>".$reservation[0][6]."</b>", get_lang("SubscribeTimePickerInformation"))))))." </p>");
 		$form->add_timewindow('startpicker', 'endpicker', get_lang('StartDate'), get_lang('EndDate'));
 		$form->addElement('hidden', 'min', $reservation[0][12]);
 		$form->addElement('hidden', 'max', $reservation[0][13]);
@@ -139,8 +133,7 @@ if ($reservation[0][9] < $reservation[0][4]) {
 		//$defaultvalues['endpicker'] = Rsys :: timestamp_to_datetime($datum +900);
 		$defaultvalues['endpicker'] = Rsys :: timestamp_to_datetime($datum +($min_timepicker*60));
 		$form->setDefaults($defaultvalues);
-	}
-	else {
+	} else {
 		$form->addElement('html', "<p> * ".str_replace('#name#', "<b>".$item[3]."</b>",str_replace('#start#', "<b>".$reservation[0][5]."</b>", str_replace('#end#', "<b>".$reservation[0][6]."</b>", get_lang('SubscribeInformation'))))." *</p>");
 	}
 	$buttons[] = $form->createElement('submit', 'submit', get_lang('Ok'));
@@ -186,14 +179,12 @@ if ($reservation[0][9] < $reservation[0][4]) {
 					break;
 			}
 		}
-	}
-	else
+	} else
 		$form->display();
-}else {
+} else {
 	Display :: display_normal_message(Rsys :: get_return_msg2(get_lang('ReservationTresspassing'), "javascript:history.go(-2)", get_lang('BookingView')),false);
 }
 
 
 Display :: display_footer();
 ?>
-

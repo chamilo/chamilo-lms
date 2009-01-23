@@ -75,7 +75,7 @@ elseif((empty($_SESSION['swidth']))) {
 else 
 	$gogogo=true;
 
-echo '<div style="float: left;"><form id="cat_form" action="reservation.php" method="get"><input type="hidden" name="cat" value="'.$_GET['cat'].'" /><div style="float: left;">'.get_lang('ResourceType').': <select name="cat" onchange="this.form.submit();"><option value="0">'.get_lang('NONE').'</option>';
+echo '<div style="float: left;"><form id="cat_form" action="reservation.php" method="get"><input type="hidden" name="cat" value="'.$_GET['cat'].'" /><div style="float: left;">'.get_lang('ResourceType').': <select name="cat" onchange="this.form.submit();"><option value="0">'.get_lang('Select').'</option>';
 $cats = Rsys :: get_category_with_items();
 
 if(count($cats)>0){
@@ -89,7 +89,7 @@ if ($gogogo&&!empty($_GET['cat'])) {
 	$itemlist = Rsys :: get_cat_items($_GET['cat']);
     echo '<div style="float: left;">';
 	if (count($itemlist) != 0) {
-	echo '<form id="item_form" action="reservation.php?cat='.$_GET['cat'].'&amp;item=" method="get">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="hidden" name="cat" value="'.$_GET['cat'].'" />'.get_lang('Resource').': <select name="item" onchange="this.form.submit();"><option value="0">'.get_lang('NONE').'</option>';
+	echo '<form id="item_form" action="reservation.php?cat='.$_GET['cat'].'&amp;item=" method="get">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="hidden" name="cat" value="'.$_GET['cat'].'" />'.get_lang('Resource').': <select name="item" onchange="this.form.submit();"><option value="0">'.get_lang('Select').'</option>';
 		foreach ($itemlist as $id => $item)
 			echo '<option value="'.$id.'"'. ($id == $_GET['item'] ? ' selected="selected"' : '').'>'.$item.'</option>';
 		echo '</select></form>';

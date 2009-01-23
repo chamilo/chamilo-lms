@@ -583,33 +583,33 @@ class Rsys {
 					if ($lijn2[1] == $lijn[0]) {
 						
 						if ($lijn2[2] == 0) {
-							$tabel[$count][2] = '<img src="../img/setting_false.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=edit&set=1\'" />';
+							$tabel[$count][2] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=edit&set=1\'" />';
 						} else {
-							$tabel[$count][2] = '<img src="../img/setting_true.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=edit&set=0\'" />';
+							$tabel[$count][2] = '<img src="../img/right.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=edit&set=0\'" />';
 						}
 						if ($lijn2[3] == 0) {
-							$tabel[$count][3] = '<img src="../img/setting_false.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=delete&set=1\'" />';
+							$tabel[$count][3] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=delete&set=1\'" />';
 						} else {
-							$tabel[$count][3] = '<img src="../img/setting_true.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=delete&set=0\'" />';
+							$tabel[$count][3] = '<img src="../img/right.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=delete&set=0\'" />';
 						}
 						if ($lijn2[4] == 0) {
-							$tabel[$count][4] = '<img src="../img/setting_false.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=manage&set=1\'" />';
+							$tabel[$count][4] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=manage&set=1\'" />';
 						} else {
-							$tabel[$count][4] = '<img src="../img/setting_true.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=manage&set=0\'" />';
+							$tabel[$count][4] = '<img src="../img/right.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=manage&set=0\'" />';
 						}
 	                    if ($lijn2[5] == 0) {
-       		                 $tabel[$count][5] = '<img src="../img/setting_false.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=1\'" />';
+       		                 $tabel[$count][5] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=1\'" />';
                 	    } else {
-                        	$tabel[$count][5] = '<img src="../img/setting_true.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=0\'" />';
+                        	$tabel[$count][5] = '<img src="../img/right.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=0\'" />';
 	                    }
 			$controle = true;
 			}
 			}
 			if (!$controle) {
-				$tabel[$count][2] = '<img src="../img/setting_false.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=edit&set=1\'" />';
-				$tabel[$count][3] = '<img src="../img/setting_false.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=delete&set=1\'" />';
-				$tabel[$count][4] = '<img src="../img/setting_false.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=manage&set=1\'" />';
-				$tabel[$count][5] = '<img src="../img/setting_false.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=1\'" />';
+				$tabel[$count][2] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=edit&set=1\'" />';
+				$tabel[$count][3] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=delete&set=1\'" />';
+				$tabel[$count][4] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=manage&set=1\'" />';
+				$tabel[$count][5] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=1\'" />';
 			}
 			$tabel[$count][6] = $itemid."-".$lijn[0];
 			}
@@ -762,11 +762,18 @@ class Rsys {
 				$begindatum = $item['start_at'];
 				$einddatum = $item['end_at'];
 				
-				$inhoud = str_replace('#NAME#', $item_name, get_lang("BlackoutMessage".$value));
-				$inhoud = str_replace('#BEGINDATUM#', $begindatum, $inhoud);
-				$inhoud = str_replace('#EINDDATUM#', $einddatum, $inhoud);
+				if ($value==1) {
+					$inhoud = str_replace('#NAME#', $item_name, get_lang('ReservationActive'));
+					$inhoud = str_replace('#BEGIN#', $begindatum, $inhoud);
+					$inhoud = str_replace('#BEGIN#', $einddatum, $inhoud);				
+					$titel = str_replace('#NAME#', $item_name, get_lang('ReservationAvailable'));					
+				} else {
+					$inhoud = str_replace('#NAME#', $item_name, get_lang('ReservationCancelled'));
+					$inhoud = str_replace('#BEGIN#', $begindatum, $inhoud);
+					$inhoud = str_replace('#BEGIN#', $einddatum, $inhoud);				
+					$titel = str_replace('#NAME#', $item_name, get_lang('ReservationUnavailable'));
+				}
 				
-				$titel = str_replace('#NAME#', $item_name, get_lang("BlackoutTitle".$value));
 				
 				api_send_mail($user_info['mail'], $titel, $inhoud);
 			}
@@ -1243,7 +1250,7 @@ class Rsys {
 		}
 		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;*/
 		$sql = "SELECT dummy AS col0, CONCAT(u.lastname,' ',u.firstname) AS col1, s.user_id AS col2, accepted AS col3, r.start_at, r.end_at, s.start_at, s.end_at
-			FROM ".Rsys :: getTable('subscription')." s,".Database :: get_main_table(TABLE_MAIN_USER)." u,".Rsys :: getTable('reservation')." r
+			FROM ".Rsys :: getTable('subscription')." s,".Database :: get_main_table(TABLE_MAIN_USER)." u,".Database :: get_main_table(TABLE_MAIN_RESERVATION_RESERVATION)." r
 			where u.user_id = s.user_id
 			and s.reservation_id = r.id";
 	
@@ -1258,10 +1265,10 @@ class Rsys {
 		$count = 0;
 		$x = count($arr);
 		while ($count < $x) {
-			$sql = "SELECT `name` 
-										FROM ".Database :: get_main_table(TABLE_MAIN_CLASS)." cl
-										INNER JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = cl.id
-										WHERE cu.user_id='".$arr[$count][2]."' LIMIT 1";
+			$sql = "SELECT name
+					FROM ".Database :: get_main_table(TABLE_MAIN_CLASS)." cl
+					INNER JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = cl.id
+					WHERE cu.user_id=".$arr[$count][2]." LIMIT 1";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			while ($array = Database::fetch_array($result, 'NUM')) {
 				$arr2[] = $array;
@@ -1270,28 +1277,30 @@ class Rsys {
 			$count ++;
 		}
 		$count = -1;
-		foreach ($arr as $lijn) {
-			$count ++;
-			$controle = false;
-			$tabel[$count][0] = $lijn[0];
-			$tabel[$count][1] = $lijn[1];
-			if ($lijn[3] == 0) {
-				$tabel[$count][5] = '<img src="../img/setting_false.gif" onclick="document.location.href=\'m_reservation.php?action=accept&rid='.$_GET['rid'].'&amp;dummy='.$lijn[0].'&switch=edit&set=1\'" />';
-			} else {
-				$tabel[$count][5] = '<img src="../img/setting_true.gif" onclick="document.location.href=\'m_reservation.php?action=accept&rid='.$_GET['rid'].'&amp;dummy='.$lijn[0].'&switch=edit&set=0\'" />';
+		if (is_array($arr)) {
+			foreach ($arr as $lijn) {
+				$count ++;
+				$controle = false;
+				$tabel[$count][0] = $lijn[0];
+				$tabel[$count][1] = $lijn[1];
+				if ($lijn[3] == 0) {
+					$tabel[$count][5] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_reservation.php?action=accept&rid='.$_GET['rid'].'&amp;dummy='.$lijn[0].'&switch=edit&set=1\'" />';
+				} else {
+					$tabel[$count][5] = '<img src="../img/right.gif" onclick="document.location.href=\'m_reservation.php?action=accept&rid='.$_GET['rid'].'&amp;dummy='.$lijn[0].'&switch=edit&set=0\'" />';
+				}
+				$tabel[$count][2] = $lijn[2];
+				if ($lijn[6] == '0000-00-00 00:00:00' && $lijn[7] == '0000-00-00 00:00:00')
+				{
+					$tabel[$count][3] = $lijn[4];
+					$tabel[$count][4] = $lijn[5];
+				}
+				else
+				{
+					$tabel[$count][3] = $lijn[6];
+					$tabel[$count][4] = $lijn[7];	
+				}
+				$tabel[$count][6] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_reservation.php?action=accept&rid='.$_GET['rid'].'&amp;dummy='.$lijn[0].'&switch=delete\'" />';
 			}
-			$tabel[$count][2] = $lijn[2];
-			if ($lijn[6] == '0000-00-00 00:00:00' && $lijn[7] == '0000-00-00 00:00:00')
-			{
-				$tabel[$count][3] = $lijn[4];
-				$tabel[$count][4] = $lijn[5];
-			}
-			else
-			{
-				$tabel[$count][3] = $lijn[6];
-				$tabel[$count][4] = $lijn[7];	
-			}
-			$tabel[$count][6] = '<img src="../img/setting_false.gif" onclick="document.location.href=\'m_reservation.php?action=accept&rid='.$_GET['rid'].'&amp;dummy='.$lijn[0].'&switch=delete\'" />';
 		}
 		return $tabel;
 	}
@@ -1327,10 +1336,16 @@ class Rsys {
 		$begin_datum = $item['start_at'];
 		$eind_datum = $item['end_at'];
 		
-		$titel = str_replace('#ITEM#', $item_name, get_lang("AcceptedUserTitle".$value));
-		$inhoud = str_replace('#ITEM#', $item_name, get_lang("AcceptedUserMessage".$value));
-		$inhoud = str_replace('#BEGINDATUM', $begin_datum, $inhoud);
-		$inhoud = str_replace('#EINDDATUM', $eind_datum, $inhoud);
+		if ($value==1) {
+			$titel = str_replace('#ITEM#', $item_name, get_lang('ReservationAccepted'));
+			$inhoud = str_replace('#ITEM#', $item_name, get_lang('ReservationForItemAccepted'));
+		} else {
+			$titel = str_replace('#ITEM#', $item_name, get_lang('ReservationDenied'));
+			$inhoud = str_replace('#ITEM#', $item_name, get_lang('ReservationForDenied'));
+		}		
+		
+		$inhoud = str_replace('#BEGIN', $begin_datum, $inhoud);
+		$inhoud = str_replace('#END', $eind_datum, $inhoud);
 		api_send_mail($user_info['mail'], $titel, $inhoud);
 	}
 

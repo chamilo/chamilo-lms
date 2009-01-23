@@ -21,7 +21,11 @@ Display::display_header(null,'Path');
 if (api_get_setting('search_enabled') !== 'true') {
     Display::display_error_message(get_lang('SearchFeatureNotEnabledComment'));
 } else {
-    search_widget_show(empty($search_action)?null:'index.php');
+    if (!empty($_GET['action'])) {
+        search_widget_show($_GET['action']);
+    } else {
+        search_widget_show();
+    }
 }
 
 // initialize

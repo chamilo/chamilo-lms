@@ -19,4 +19,24 @@ $(document).ready(function() {
         mustMatch: false,
         autoFill: false
       });
+      /* prefilter form */
+      $("#tags").show();
+      $('#prefilter').change(function () {
+        var str = "";
+        $("#prefilter option:selected").each(function () {
+            str += $(this).text() + " ";
+        });
+        process_terms = function(data) {
+            $(".sf-select-multiple").html("");
+            $.each(data, function(i,item) {
+                $.each(item.terms, function(index, term) {
+                    $('<option />').val(index).text(term).appendTo("#sf-" + item.prefix);
+                });
+            });
+        };
+        url = "/main/inc/lib/search/get_terms.php";
+        params = "?term=" + $(this).val() + "&prefix=" + $(this).attr("title") + "&operator=" + $("input[@name=operator]:checked").val();
+        $.getJSON(url + params, process_terms);
+      });
+
 });

@@ -800,12 +800,12 @@ function update_Db_course($courseDbName)
 		post_group_id int DEFAULT 0 NOT NULL,
 		sent_date datetime NOT NULL default '0000-00-00 00:00:00',
 		filetype set('file','folder') NOT NULL default 'file',
-		has_properties int,
-		view_properties tinyint,
-		qualification INT UNSIGNED NOT NULL,
+		has_properties int UNSIGNED NOT NULL DEFAULT 0,
+		view_properties tinyint NULL,
+		qualification INT UNSIGNED NOT NULL DEFAULT 0,
  		date_of_qualification datetime NOT NULL default '0000-00-00 00:00:00',
- 		parent_id INT UNSIGNED NOT NULL,
-		qualificator_id INT UNSIGNED NOT NULL,
+ 		parent_id INT UNSIGNED NOT NULL DEFAULT 0,
+		qualificator_id INT UNSIGNED NOT NULL DEFAULT 0,
 		session_id INT UNSIGNED NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";

@@ -201,7 +201,9 @@ function delete_all_values_for_item($course_id, $tool_id, $ref_id) {
  * @return  string  One-letter code, upper-case
  */
 function get_specific_field_code_from_name($name) {
-	$list = array('A','B','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','U','V','W','X','Y'); //Z is used internally by Xapian and we already use C,T & O for tool_id, course_id and normal tags
+    // Z is used internally by Xapian
+    // O & C already used by tool_id and course_id
+    $list = array('A','B','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y');
     $table_sf     = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $sql = "SELECT code FROM $table_sf ORDER BY code";
     $res = api_sql_query($sql,__FILE__,__LINE__);

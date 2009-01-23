@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 17865 2009-01-20 16:33:17Z juliomontoya $
+<?php // $Id: settings.php 17968 2009-01-23 17:13:50Z marvil07 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -75,7 +75,7 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 $tool_name = get_lang('DokeosConfigSettings');
 
 // Build the form
-if (!empty($_GET['category']) and $_GET['category'] <> "Plugins" and $_GET['category'] <> "stylesheets" )
+if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search')))
 {
 	$form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
 	$renderer = & $form->defaultRenderer();
@@ -291,12 +291,13 @@ $action_images['tuning'] 		= 'tuning.gif';
 $action_images['plugins'] 		= 'plugin.gif';
 $action_images['stylesheets'] 	= 'theme.gif';
 $action_images['templates'] 	= 'template.gif';
+$action_images['search']        = 'search.gif';
 
 
 // grabbing the categories
 //$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
 //$resultcategories = api_sql_query($selectcategories, __FILE__, __LINE__);
-$resultcategories = api_get_settings_categories(array('stylesheets','Plugins', 'Templates'));
+$resultcategories = api_get_settings_categories(array('stylesheets','Plugins', 'Templates', 'Search'));
 echo "\n<div class=\"actions\">";
 //while ($row = mysql_fetch_array($resultcategories))
 foreach($resultcategories as $row)
@@ -306,6 +307,7 @@ foreach($resultcategories as $row)
 echo "\n\t<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], ucfirst(get_lang('Plugins'))).ucfirst(get_lang('Plugins'))."</a>";
 echo "\n\t<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], ucfirst(get_lang('Stylesheets'))).ucfirst(get_lang('Stylesheets'))."</a>";
 echo "\n\t<a href=\"".api_get_self()."?category=Templates\">".Display::return_icon($action_images['templates'], ucfirst(get_lang('Templates'))).ucfirst(get_lang('Templates'))."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], ucfirst(get_lang('Search'))).ucfirst(get_lang('Search'))."</a>";
 echo "\n</div>";
 
 if (isset ($_GET['category']))
@@ -321,6 +323,9 @@ if (isset ($_GET['category']))
 		case 'stylesheets' :
 			handle_stylesheets();
 			break;
+        case 'Search' :
+            handle_search();
+            break;
 		default :
 			$form->display();
 	}
@@ -757,4 +762,73 @@ function is_style($style)
 	}
 	return false;
 }
+
+/**
+ * Search options
+ * TODO: support for multiple site. aka $_configuration['access_url'] == 1
+ * @author Marco Villegas <marvil07@gmail.com>
+ */
+function handle_search() {
+    global $SettingsStored, $_configuration;
+
+    $search_enabled = api_get_setting('search_enabled');
+    $settings = api_get_settings('Search');
+
+    if ($search_enabled !== 'true' || count($settings) < 1) {
+        Display::display_error_message(get_lang('SearchFeatureNotEnabledComment'));
+        return;
+    }
+
+    require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
+
+    $form = new FormValidator('search-options', 'post', api_get_self().'?category=Search');
+    $renderer = & $form->defaultRenderer();
+    $renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
+    $renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
+
+    //search_show_unlinked_results
+    $form->addElement('header', null, get_lang('SearchShowUnlinkedResultsTitle'));
+    $form->addElement('label', null, get_lang('SearchShowUnlinkedResultsComment'));
+    $values = get_settings_options('search_show_unlinked_results');
+    $group = array ();
+    foreach ($values as $key => $value) {
+        $element = & $form->createElement('radio', 'search_show_unlinked_results', '', get_lang($value['display_text']), $value['value']);
+        $group[] = $element;
+    }
+    $form->addGroup($group, 'search_show_unlinked_results', get_lang('SearchShowUnlinkedResultsComment'), '<br />', false);
+    $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
+
+    //search_prefilter_prefix
+    $form->addElement('header', null, get_lang('SearchPrefilterPrefix'));
+    $form->addElement('label', null, get_lang('SearchPrefilterPrefixComment'));
+    $specific_fields = get_specific_field_list();
+    $sf_values = array();
+    foreach ($specific_fields as $sf) {
+       $sf_values[$sf['code']] = $sf['name'];
+    }
+    $group = array ();
+    $form->addElement('select', 'search_prefilter_prefix', get_lang('SearchPrefilterPrefix'), $sf_values, '');
+    $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
+
+    //$form->addRule('search_show_unlinked_results', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addElement('submit', 'search-options-save', get_lang('Ok'));
+    $form->setDefaults($default_values);
+
+    if( $form->validate()) {
+        $formvalues = $form->exportValues();
+        $r = api_set_settings_category('Search','false',$_configuration['access_url']);
+        // Save the settings
+        foreach ($formvalues as $key => $value)
+        {
+                $result = api_set_setting($key,$value,null,null);
+        }
+
+        Display :: display_normal_message($SettingsStored);
+    } else {
+        echo '<div id="search-options-form">';
+        $form->display();
+        echo '</div>';
+    }
+}
+
 ?>

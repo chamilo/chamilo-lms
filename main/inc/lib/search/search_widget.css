@@ -13,7 +13,7 @@
     font-size: 130%;
 }
 #submit {
-    background-image: url(\'../img/search-lense.gif\');
+    background-image: url('/main/img/search-lense.gif');
     background-repeat: no-repeat;
     background-position: 0px -1px;
     padding-left:18px;

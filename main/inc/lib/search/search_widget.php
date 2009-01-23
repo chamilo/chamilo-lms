@@ -251,7 +251,7 @@ function display_search_form($action, $show_thesaurus, $sf_terms, $op) {
     $type = (!empty($_REQUEST['type'])? htmlentities($_REQUEST['type']): 'normal');
     switch ($type) {
     case 'prefilter':
-        $prefilter_prefix = 'E'; //TODO: should be api_get_setting('search_prefilter_prefix')
+        $prefilter_prefix = api_get_setting('search_prefilter_prefix');
         $form = search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, $prefilter_prefix);
         break;
     case 'normal':

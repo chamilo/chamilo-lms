@@ -2,7 +2,8 @@ INSERT INTO settings_current
 (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext)
 VALUES
 ('search_enabled',NULL,'radio','Tools','false','EnableSearchTitle','EnableSearchComment',NULL,NULL),
-('search_show_unlinked_results',NULL,'radio','Tools','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL);
+('search_prefilter_prefix',NULL, NULL,'Search','','SearchPrefilterPrefix','SearchPrefilterPrefixComment',NULL,NULL),
+('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL);
 
 INSERT INTO settings_options 
 (variable, value, display_text)

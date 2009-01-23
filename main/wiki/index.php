@@ -229,21 +229,30 @@ if (!empty($return_message))
 }
 
 
-// check last version hack by Juan Carlos RaÃ±a
+// check last version
 if ($_GET['view'])
 {
-
-	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id DESC';
+	$sql='SELECT * FROM '.$tbl_wiki.'WHERE id="'.$_GET['view'].'"'; //current view
 		$result=api_sql_query($sql,__LINE__,__FILE__);
-		$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
+		$current_row=Database::fetch_array($result);
+	
+	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id DESC'; //last version
+		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$last_row=Database::fetch_array($result);
 		
-		if ($_GET['view']<$row['id'])
+		if ($_GET['view']<$last_row['id'])
 		{
-		   $message= get_lang('NoAreSeeingTheLastVersion');
+		   $message= '(<a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$current_row['reflink'].'&view='.$_GET['view'].'&group_id='.$current_row['group_id'].'" title="'.get_lang('CurrentVersion').'">'.$current_row['version'].'</a> / <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'" title="'.get_lang('LastVersion').'">'.$last_row['version'].'</a>) '.get_lang('NoAreSeeingTheLastVersion').'<br>'.get_lang("ConvertToLastVersion").': <a href="index.php?cidReq='.$_course[id].'&action=restorepage&amp;title='.$last_row['reflink'].'&view='.$_GET['view'].'">'.get_lang("Restore").'</a>';
+		   
 		   Display::display_warning_message($message,false);
 		} 
-			
+	   if ($_GET['action']=='restorepage')
+	   {
+			Display::display_confirmation_message(restore_wikipage($current_row['reflink'], $current_row['title'], $current_row['content'], $current_row['group_id'], $current_row['assignment'], $current_row['comment'], $current_row['progress'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'">'.$last_row['title'].'</a>',false);
+						
+       }			
 }
+
 
 if ($_GET['action']=='deletewiki'){
 	
@@ -2223,8 +2232,32 @@ function save_wiki()
 }
 
 /**
+* This function restore a wikipage
+* @author Juan Carlos Raña <herodoto@telefonica.net>
+**/
+function restore_wikipage($r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_comment, $r_progress, $r_version, $r_linksto)
+{
+
+	global $tbl_wiki;
+	
+	$r_user_id= api_get_user_id();
+	$r_dtime = date( "Y-m-d H:i:s" );
+	$r_version = $r_version+1;
+	
+	$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".$_SERVER['REMOTE_ADDR']."')";
+	
+	$result=api_sql_query($sql);	
+    $Id = Database::insert_id();		
+	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
+	
+	check_emailcue($r_reflink, 'P', $r_dtime, $r_user_id);
+	
+	return get_lang('PageRestored');
+}
+
+/**
 * This function delete a wiki
-* @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+* @author Juan Carlos Raña <herodoto@telefonica.net>
 **/
 
 function delete_wiki()

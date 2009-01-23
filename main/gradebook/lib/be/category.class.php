@@ -574,6 +574,8 @@ class Category implements GradebookItem
                 $sql .= " AND course_code  = '".Database::escape_string($course_code)."'";
                 if (!empty($session_id)) {
                     $sql .= " AND session_id = ".(int)$session_id;
+                } else {
+                	$sql .="AND session_id IS NULL OR session_id=0";
                 }
             } else {
     			$sql .= ' AND course_code in'
@@ -592,6 +594,7 @@ class Category implements GradebookItem
         	
         	
         }
+        error_log($sql);
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$cats = Category::create_category_objects_from_sql_result($result);
 

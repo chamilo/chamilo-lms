@@ -2332,7 +2332,7 @@ function store_edit_post($values) {
 	global $table_posts;
 	global $origin;
 	// first we check if the change affects the thread and if so we commit the changes (sticky and post_title=thread_title are relevant)
-	if (array_key_exists('is_first_post_of_thread',$values) AND $values['is_first_post_of_thread']=='1') {
+	//if (array_key_exists('is_first_post_of_thread',$values)  AND $values['is_first_post_of_thread']=='1') {
 		$sql="UPDATE $table_threads SET thread_title='".Database::escape_string($values['post_title'])."',
 					thread_sticky='".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."'," .
 					"thread_title_qualify='".Database::escape_string($values['calification_notebook_title'])."'," .
@@ -2341,7 +2341,7 @@ function store_edit_post($values) {
 					" WHERE thread_id='".Database::escape_string($values['thread_id'])."'";
 		
 		api_sql_query($sql,__FILE__, __LINE__);
-	}
+	//}
 
 	// update the post_title and the post_text
 	$sql="UPDATE $table_posts SET post_title='".Database::escape_string($values['post_title'])."',

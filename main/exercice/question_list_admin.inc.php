@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 17948 2009-01-22 21:39:22Z juliomontoya $
+<?php // $Id: question_list_admin.inc.php 17972 2009-01-23 20:11:22Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 17948 2009-01-22 21:39:22Z juliomontoya $
+* 	@version $Id: question_list_admin.inc.php 17972 2009-01-23 20:11:22Z juliomontoya $
 */
 
 
@@ -100,58 +100,48 @@ echo '</div></div>';
 	</tr>
 
 <?php
-if($nbrQuestions)
-	{
+if($nbrQuestions) {
 	$questionList=$objExercise->selectQuestionList();
-
 	$i=1;
-	foreach($questionList as $id)
-	{
-
-		$objQuestionTmp = Question :: read($id);
-		//showQuestion($id);
-
-?>
-
-<tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
-  <td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td>
-  <td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
-  <td align="center"><?php echo $objQuestionTmp->selectLevel(); ?></td>
-  <td align="center"><a href="<?php echo api_get_self(); ?>?action=exportqti2&questionId=<?php echo $id; ?>"><img src="../img/export.png" border="0" align="absmiddle" alt="IMS/QTI" /></a></td>
-  <td> <a href="<?php echo api_get_self(); ?>?myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo api_get_self(); ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a>
-
-	<?php
-		if($i != 1)
-		{
-    ?>
-
-	<a href="<?php echo api_get_self(); ?>?moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveUp'); ?>"></a>
-
-    <?php
-    if($i == $nbrQuestions) echo '<img src="../img/down_na.gif" align="absmiddle">';
-    
+	if (is_array($questionList)) {
+		foreach($questionList as $id) {
+			$objQuestionTmp = Question :: read($id);
+			//showQuestion($id);
+		?>
+	
+			<tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
+				<td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td>
+				<td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
+			  	<td align="center"><?php echo $objQuestionTmp->selectLevel(); ?></td>
+			  	<td align="center"><a href="<?php echo api_get_self(); ?>?action=exportqti2&questionId=<?php echo $id; ?>"><img src="../img/export.png" border="0" align="absmiddle" alt="IMS/QTI" /></a></td>
+			  	<td> <a href="<?php echo api_get_self(); ?>?myid=1&ed
+					itQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo api_get_self(); ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a>
+				<?php
+				if($i != 1) {
+				    ?>		
+					<a href="<?php echo api_get_self(); ?>?moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveUp'); ?>"></a>		
+				    <?php
+			    	if($i == $nbrQuestions) 
+			    		echo '<img src="../img/down_na.gif" align="absmiddle">';		    
+				}		
+				
+				if($i != $nbrQuestions) {
+					if($i == 1) 
+						echo '<img src="../img/up_na.gif" align="absmiddle">';
+			    	?>				
+					<a href="<?php echo api_get_self(); ?>?moveDown=<?php echo $id; ?>"><img src="../img/down.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveDown'); ?>"></a>
+				
+				    <?php
+				}
+				?>			    
+			    </td>		
+			    <?php
+				$i++;
+				unset($objQuestionTmp);
+			    ?>
+			</tr>
+				<?php 
 		}
-
-		if($i != $nbrQuestions)
-		{
-			if($i == 1) echo '<img src="../img/up_na.gif" align="absmiddle">';
-    ?>
-		
-	<a href="<?php echo api_get_self(); ?>?moveDown=<?php echo $id; ?>"><img src="../img/down.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveDown'); ?>"></a>
-
-    <?php
-		}
-    ?>
-    
-    </td>
-
-    <?php
-		$i++;
-
-		unset($objQuestionTmp);
-    ?>
-    </tr>
-	<?php 
 	}
 }
 ?>

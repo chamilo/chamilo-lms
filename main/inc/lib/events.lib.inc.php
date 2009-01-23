@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 17484 2008-12-30 21:47:26Z cfasanando $
+<?php // $Id: events.lib.inc.php 17972 2009-01-23 20:11:22Z juliomontoya $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -172,7 +172,7 @@ function event_access_course()
 	                    SET access_date = FROM_UNIXTIME($reallyNow)
 						WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool IS NULL AND access_session_id=".$id_session;
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if (mysql_affected_rows() == 0)
+	if (Database::affected_rows() == 0)
 	{
 		$sql = "	INSERT INTO $TABLETRACK_LASTACCESS
 		                	    (access_user_id,access_cours_code,access_date, access_session_id)
@@ -250,7 +250,7 @@ function event_access_tool($tool, $id_session=0)
 						SET access_date = FROM_UNIXTIME($reallyNow)
 						WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool = '".htmlspecialchars($tool, ENT_QUOTES)."' AND access_session_id=".$id_session;
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if (mysql_affected_rows() == 0)
+	if (Database::affected_rows() == 0)
 	{
 		$sql = "INSERT INTO $TABLETRACK_LASTACCESS
 							(access_user_id,access_cours_code,access_tool, access_date, access_session_id)
@@ -417,14 +417,15 @@ function event_link($link_id)
  * @param exo_id ( id in courseDb exercices table )
  * @param result ( score @ exercice )
  * @param weighting ( higher score )
+ * @param duration ( duration of the attempt, in seconds )
  * @param session_id
  * @param learnpath_id (id of the learnpath)
  * @param learnpath_item_id (id of the learnpath_item)
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
- * @author Julio Montoya <gugli100@gmail.com>
+ * @author Julio Montoya Armas <gugli100@gmail.com>
  * @desc Record result of user when an exercice was done
 */
-function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$learnpath_id=0,$learnpath_item_id=0)
+function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$learnpath_id=0,$learnpath_item_id=0, $duration)
 {
 	if ($exeid!='')
 	{
@@ -436,7 +437,8 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 				   exe_weighting = '".$weighting."',
 				   session_id		= '".$session_id."',
 				   orig_lp_id = '".$learnpath_id."',		
-				   orig_lp_item_id = '".$learnpath_item_id."',		
+				   orig_lp_item_id = '".$learnpath_item_id."',
+				   exe_duration = '".$duration."',
 				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date ='".$_SESSION['exercice_start_date']."'
 				 WHERE exe_id = '".$exeid."'";
 		$res = @api_sql_query($sql,__FILE__,__LINE__);
@@ -475,7 +477,7 @@ function create_event_exercice($exo_id)
 				'status = '."'incomplete'".' AND '.
 				'session_id = '."'".api_get_session_id()."'";
 		$sql = api_sql_query('SELECT exe_id FROM '.$TABLETRACK_EXERCICES.$condition,__FILE__,__LINE__);
-		$row = mysql_fetch_array($sql);
+		$row = Database::fetch_array($sql);
 		return $row['exe_id'];
 	}
 

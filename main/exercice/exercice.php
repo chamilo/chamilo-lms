@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17909 2009-01-21 21:06:39Z cfasanando $
+<?php // $Id: exercice.php 17972 2009-01-23 20:11:22Z juliomontoya $
 
 /*
 ==============================================================================
@@ -985,7 +985,7 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 			}
 
 			$sql="SELECT CONCAT(lastname,' ',firstname) as users, ce.title, te.exe_result ,
-						 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email,UNIX_TIMESTAMP(te.start_date),steps_counter,user_id
+						 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email, UNIX_TIMESTAMP(te.start_date), steps_counter,user_id,te.exe_duration
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
 				  WHERE  te.exe_exo_id = ce.id AND te.status != 'incomplete' AND user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
 				  AND user.status<>1 $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 
@@ -1002,7 +1002,7 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 				$user_id_and = ' AND te.exe_user_id = ' . Database::escape_string ( api_get_user_id() ).' ';
 
 				$sql="SELECT CONCAT(lastname,' ',firstname) as users,ce.title, te.exe_result ,
-						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id,email,UNIX_TIMESTAMP(te.start_date),steps_counter,user_id
+						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id,email,UNIX_TIMESTAMP(te.start_date),steps_counter,user_id,te.exe_duration
 				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
 				  WHERE  te.exe_exo_id = ce.id AND te.status != 'incomplete' AND user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
 				  AND user.status<>1 $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 
@@ -1016,7 +1016,7 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 
 		}
 
-		$results=getManyResultsXCol($sql,10);
+		$results=getManyResultsXCol($sql,11);
 		$hpresults=getManyResultsXCol($hpsql,5);
 
 		$NoTestRes = 0;
@@ -1063,6 +1063,7 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 				$test = $results[$i][1];
 				$dt = strftime($dateTimeFormatLong,$results[$i][4]);
 				$res = $results[$i][2];
+				$duration = intval($results[$i][11]);
 				echo '<tr';
 				if ($i%2==0) {
 					echo 'class="row_odd"';
@@ -1090,6 +1091,7 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 				echo '</td>';
 
 				echo '<td>'.$add_start_date.format_locale_date('%b %d, %Y %H:%M',$results[$i][4]).'</td>';//get_lang('dateTimeFormatLong')
+				echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
 		  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100).'% ('.$res.' / '.$results[$i][3].')</td>';
 				echo '<td>'.(($is_allowedToEdit||$is_tutor)?
 							"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".

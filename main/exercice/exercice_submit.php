@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 17944 2009-01-22 20:41:25Z juliomontoya $
+<?php // $Id: exercice_submit.php 17972 2009-01-23 20:11:22Z juliomontoya $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 17944 2009-01-22 20:41:25Z juliomontoya $
+* 	@version $Id: exercice_submit.php 17972 2009-01-23 20:11:22Z juliomontoya $
 */
 
 
@@ -98,7 +98,7 @@ if ( empty ( $learnpath_item_id ) ) {
     $learnpath_item_id  = Database::escape_string($_REQUEST['learnpath_item_id']);
 }
 if ( empty ( $formSent ) ) {
-    $formSent       = $_REQUEST['formSent'];
+    $formSent = $_REQUEST['formSent'];
 }
 if ( empty ( $exerciseResult ) ) {
     $exerciseResult = $_REQUEST['exerciseResult'];
@@ -950,8 +950,10 @@ if(!isset($_SESSION['questionList']) || $origin == 'learnpath')
 }
 if(!isset($objExcercise) && isset($_SESSION['objExercise'])){
 	$questionList = $_SESSION['questionList'];
-	
 }
+
+$quizStartTime = time();
+api_session_register('quizStartTime');
 
 $nbrQuestions=sizeof($questionList);
 

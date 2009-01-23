@@ -357,7 +357,7 @@ class learnpath {
      * @param string $description
      * @return int
      */
-    function add_item($parent, $previous, $type = 'dokeos_chapter', $id, $title, $description, $prerequisites=0)
+    function add_item($parent, $previous, $type = 'dokeos_chapter', $id, $title, $description, $prerequisites=0, $maxTimeAllowed=0)
     {
     	global $charset;
     	
@@ -367,7 +367,8 @@ class learnpath {
     	$parent = intval($parent);
     	$previous = intval($previous);
     	$type = $this->escape_string($type);
-    	$id = intval($id);
+    	$id = intval($id);    	
+    	$maxTimeAllowed= $this->escape_string(htmlentities($maxTimeAllowed));
     	
     	$title = $this->escape_string(mb_convert_encoding($title,$this->encoding,$charset));
     	$description = $this->escape_string(mb_convert_encoding($description,$this->encoding,$charset)); 
@@ -384,10 +385,8 @@ class learnpath {
    		
    		$num = $row['num'];
    		
-   		if($num > 0)
-   		{
-	    	if($previous == 0)
-	    	{
+   		if($num > 0) {
+	    	if($previous == 0) {
 	    		$sql = "
 	   				SELECT
 	   					id,
@@ -405,11 +404,8 @@ class learnpath {
 	   			$tmp_previous = 0;
 	   			$next = $row['id'];
 	   			$display_order = 0;
-	    	}
-	    	else
-	    	{
-	   			$previous = (int) $previous;
-	   			
+	    	} else {
+	   			$previous = (int) $previous;	   			
 	   			$sql = "
 	   				SELECT
 	   					id,
@@ -429,9 +425,7 @@ class learnpath {
 	   			
 	   			$display_order = $row['display_order'];
 	    	}
-   		}
-   		else
-    	{
+   		} else {
    			$tmp_previous = 0;
    			$next = 0;
    			$display_order = 0;
@@ -440,8 +434,7 @@ class learnpath {
     	$new_item_id = -1;
     	$id = $this->escape_string($id);
     	
-    	if($type == 'quiz')
-    	{  
+    	if($type == 'quiz') {  
     		$sql = 'SELECT SUM(ponderation) 
 					FROM '.Database :: get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
 					INNER JOIN  '.Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
@@ -449,14 +442,11 @@ class learnpath {
 					AND quiz_rel_question.exercice_id = '.$id;					
 			$rsQuiz = api_sql_query($sql, __FILE__, __LINE__);			
 			$max_score = Database::result($rsQuiz, 0, 0);
-    	}
-    	else
-    	{
+    	} else {
     		$max_score = 100;    		
     	}
 		
-		if($prerequisites!=0)
-		{
+		if($prerequisites!=0) {
 			$sql_ins = "
 	    		INSERT INTO " . $tbl_lp_item . " (
 	    			lp_id,
@@ -470,7 +460,8 @@ class learnpath {
 	    			previous_item_id,
 	    			next_item_id,
 	    			display_order,	    			 
-					prerequisite
+					prerequisite,
+					max_time_allowed
 							
 	    		) VALUES (
 	    			" . $this->get_id() . ",
@@ -484,11 +475,10 @@ class learnpath {
 	    			" . $previous . ",
 	    			" . $next . ",
 	    			" . ($display_order + 1) . ",	    				    			
-	    			" . $prerequisites . "
+	    			" . $prerequisites . ",
+	    			" . $maxTimeAllowed . "
 	    		)";
-		}		
-		else
-		{
+		} else {
 	    	//insert new item
 	    	$sql_ins = "
 	    		INSERT INTO " . $tbl_lp_item . " (
@@ -502,7 +492,8 @@ class learnpath {
 	    			parent_item_id,
 	    			previous_item_id,
 	    			next_item_id,	    				
-	    			display_order
+	    			display_order,
+	    			max_time_allowed
 	    		) VALUES (
 	    			" . $this->get_id() . ",
 	    			'" . $type . "',
@@ -514,7 +505,8 @@ class learnpath {
 	    			" . $parent . ",
 	    			" . $previous . ",
 	    			" . $next . ",
-	    			" . ($display_order + 1) . "
+	    			" . ($display_order + 1) . ",
+	    			" . $maxTimeAllowed . "	    			
 	    		)";
 		}
     	
@@ -565,14 +557,12 @@ class learnpath {
     	}
     	
 		// upload audio
-		if (!empty($_FILES['mp3']['name']))
-		{
+		if (!empty($_FILES['mp3']['name'])) {
 			// create the audio folder if it does not exist yet
 			global $_course;
 			$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
 						
-			if(!is_dir($filepath.'audio'))
-			{
+			if(!is_dir($filepath.'audio')) {
 				$perm = api_get_setting('permissions_for_new_directories');
 				$perm = octdec(!empty($perm)?$perm:'0770');
 				mkdir($filepath.'audio',$perm);
@@ -592,8 +582,7 @@ class learnpath {
 			// store the mp3 file in the lp_item table
 			$sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' WHERE id = '".Database::escape_string($new_item_id)."'";
 			api_sql_query($sql_insert_audio, __FILE__, __LINE__);
-		}		
-
+		}
     	return $new_item_id;
     }
    
@@ -962,7 +951,7 @@ class learnpath {
      * @param   array   The array resulting of the $_FILES[mp3] element
      * @return	boolean	True on success, false on error
      */
-    function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0, $audio=NULL) {
+    function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0, $audio=NULL, $maxTimeAllowed=0) {
     	if($this->debug > 0){error_log('New LP - In learnpath::edit_item()', 0);}
 
     	if(empty($id) or ($id != strval(intval($id))) or empty($title)){ return false; }
@@ -996,23 +985,25 @@ class learnpath {
     	if($same_parent && $same_previous)
     	{
     		//only update title and description
-    		$sql_update = "
-    			UPDATE " . $tbl_lp_item . "
-    			SET
+    		echo $sql_update = "
+    			UPDATE " . $tbl_lp_item . " 
+    			SET 
     				title = '" . $this->escape_string(htmlentities($title)) . "',
 					prerequisite = '".$prerequisites."',
     				description = '" . $this->escape_string(htmlentities($description)) . "'
-                    ". $audio_update_sql . "
+                    ". $audio_update_sql . ",
+                    max_time_allowed = '" . $this->escape_string(htmlentities($maxTimeAllowed)) . "'
     			WHERE id = " . $id;
     		$res_update = api_sql_query($sql_update, __FILE__, __LINE__);
     	}
     	else
     	{
-    		$old_parent		 = $row_select['parent_item_id'];
-    		$old_previous	 = $row_select['previous_item_id'];
-    		$old_next		 = $row_select['next_item_id'];
-    		$old_order		 = $row_select['display_order'];
-    		$old_prerequisite= $row_select['prerequisite'];
+    		$old_parent		 	= $row_select['parent_item_id'];
+    		$old_previous	 	= $row_select['previous_item_id'];
+    		$old_next		 	= $row_select['next_item_id'];
+    		$old_order		 	= $row_select['display_order'];
+    		$old_prerequisite	= $row_select['prerequisite'];
+    		$old_maxTimeAllowed	= $row_select['max_time_allowed'];
     		
     		/* BEGIN -- virtually remove the current item id */
     		/* for the next and previous item it is like the current item doesn't exist anymore */
@@ -1085,8 +1076,7 @@ class learnpath {
 		    	//echo 'New next_item_id of current item: ' . $new_next . '<br />';
 		    	//echo 'New previous_item_id of current item: ' . $previous . '<br />';
 		    	//echo 'New display_order of current item: ' . $new_order . '<br />';
-	    		
-		    	
+	
     		}
     		else
     		{
@@ -1154,6 +1144,15 @@ class learnpath {
 		    		WHERE id = " . $id;
 		    	$res_update_next = api_sql_query($sql_update_next, __FILE__, __LINE__);
     		}
+    		
+    		if($old_maxTimeAllowed!=$maxTimeAllowed){
+    			$sql_update_maxTimeAllowed = "
+		    		UPDATE " . $tbl_lp_item . "
+		    		SET max_time_allowed = " . $maxTimeAllowed . "
+		    		WHERE id = " . $id;
+		    	$res_update_maxTimeAllowed = api_sql_query($sql_update_maxTimeAllowed, __FILE__, __LINE__);
+    		}
+
     		
     		//update all the items with the same or a bigger display_order than 
     		//the current item
@@ -5098,7 +5097,8 @@ class learnpath {
                     'max_score' => $row['max_score'],
                     'min_score' => $row['min_score'],
                     'mastery_score' => $row['mastery_score'],
-					'prerequisite' => $row['prerequisite']);
+					'prerequisite' => $row['prerequisite'],
+					'max_time_allowed' => $row['max_time_allowed']);
 			}
 			
 			$this->tree_array($arrLP);
@@ -5257,10 +5257,13 @@ class learnpath {
 							}
 							
 							$return .= "</select></td>";
-						
+
 						$return .= "\t\t" . '</tr>' . "\n";
 						
 						$return .= "\t\t" . '<tr>' . "\n";
+						
+						$return .= "\t\t\t" . '<td class="label"><label for="maxTimeAllowed">'.get_lang('MaxTimeAllowed').'&nbsp;:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="input"><input name="maxTimeAllowed" id="maxTimeAllowed" value="' . $extra_info['max_time_allowed'] . '" /></td>';
 							
 							//Remove temporaly the test description
 							//$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
@@ -5376,7 +5379,8 @@ class learnpath {
                     'max_score' => $row['max_score'],
                     'min_score' => $row['min_score'],
                     'mastery_score' => $row['mastery_score'],
-					'prerequisite' => $row['prerequisite']);
+					'prerequisite' => $row['prerequisite'],
+					'max_time_allowed' => $row['max_time_allowed']);
 			}
 
 			$this->tree_array($arrLP);

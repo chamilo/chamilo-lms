@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 17969 2009-01-23 19:20:33Z cvargas1 $
+<?php // $Id: question.class.php 17972 2009-01-23 20:11:22Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 17969 2009-01-23 19:20:33Z cvargas1 $
+* 	@version $Id: question.class.php 17972 2009-01-23 20:11:22Z juliomontoya $
 */
 
 
@@ -993,7 +993,8 @@ abstract class Question
 		$form->addElement('hidden','answerType',$_REQUEST['answerType']);
 
 		// question level
-		$form->addElement('text','questionLevel',get_lang('Level'));
+		$select_level = array (0,1,2,3,4,5,6); 
+		$form->addElement('select','questionLevel',get_lang('Level'),$select_level);		
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
 
 		// html editor

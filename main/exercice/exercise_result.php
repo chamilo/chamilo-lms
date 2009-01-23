@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 17605 2009-01-08 22:29:28Z cfasanando $
+* 	@version $Id: exercise_result.php 17972 2009-01-23 20:11:22Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -138,8 +138,8 @@ if($_configuration['live_exercise_tracking'] == true && $exerciseType == 1){
 $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
 $main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 $courseName = $_SESSION['_course']['name'];
-$query = "select user_id from $main_admin_table";
-$admin_id = mysql_result(api_sql_query($query),0,"user_id");
+$query = "SELECT user_id FROM $main_admin_table";
+$admin_id = Database::result(api_sql_query($query),0,"user_id");
 $uinfo = api_get_user_info($admin_id);
 $from = $uinfo['mail'];
 $from_name = $uinfo['firstname'].' '.$uinfo['lastname'];
@@ -1016,26 +1016,24 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					$val=strip_tags($val);
 					$sql = "select position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
 					$res = api_sql_query($sql, __FILE__, __LINE__);
-					$answer = mysql_result($res,0,"position");				
+					$answer = Database::result($res,0,"position");				
 					
 					exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
 
 				}
 			}
-			elseif ($answerType==FREE_ANSWER)
-			{
+			elseif ($answerType==FREE_ANSWER) {
 				$answer = $choice;
 				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
 			}
-			elseif ($answerType==UNIQUE_ANSWER)
-			{
-				$sql = "select id from $table_ans where question_id='".Database::escape_string($questionId)."' and position='".Database::escape_string($choice)."'";
+			elseif ($answerType==UNIQUE_ANSWER) {
+				$sql = "SELECT id FROM $table_ans WHERE question_id='".Database::escape_string($questionId)."' and position='".Database::escape_string($choice)."'";
 				$res = api_sql_query($sql, __FILE__, __LINE__);
-				$answer = mysql_result($res,0,"id");
-				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
-			}
-			else
-			{
+				if (Database::num_rows($res)>0) {			
+					$answer = Database::result($res,0,"id");
+					exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
+				}
+			} else {
 				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
 			}
 		}
@@ -1079,117 +1077,110 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 ==============================================================================
 */
 
-if($_configuration['tracking_enabled'])
-{
+if($_configuration['tracking_enabled']) {
 	//	Updates the empty exercise  
 	$safe_lp_id = $learnpath_id==''?0:(int)$learnpath_id;
 	$safe_lp_item_id = $learnpath_item_id==''?0:(int)$learnpath_item_id;
-	update_event_exercice($exeId, $objExercise->selectId(),$totalScore,$totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id);
+	$quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
+	update_event_exercice($exeId, $objExercise->selectId(),$totalScore,$totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$quizDuration);
 }
 
-if($objExercise->results_disabled)
-{
+if($objExercise->results_disabled) {
 	ob_end_clean();
 	Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><a href="exercice.php" />'.get_lang('Back').'</a>',false);
 }
 
-if ($origin != 'learnpath')
-{
+if ($origin != 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();
-}else{
+} else {
 	//record the results in the learning path, using the SCORM interface (API)
 	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 	echo '</body></html>';
 }
 
-if(count($arrques)>0)
-{
-$mycharset = api_get_setting('platform_charset');
-$msg = '<html><head>
-	<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
-	<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type">';
-$msg .= '</head>
-<body><br />
-<p>'.get_lang('OpenQuestionsAttempted').' : 
-</p>
-<p>'.get_lang('AttemptDetails').' : ><br />
-</p>
-<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-					<tr>
-    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
-    <td width="469" valign="top"><h2>#course#</h2></td>
-  </tr>
-  <tr>
-    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
-    <td width="469" valign="top" class="outerframe">#exercise#</td>
-  </tr>
-  <tr>
-    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-    <td valign="top" >#firstName# #lastName#</td>
-  </tr>
-  <tr>
-    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
-    <td valign="top"> #mail#</td>
-</tr></table>
-<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
- <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
-  for($i=0;$i<sizeof($arrques);$i++)
-  {
-	  $msg.='
-		<tr>
-	    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
-	    <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
-	  	</tr>
-	  	<tr>
-	    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
-	    <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
-	  	</tr>';
-	
-		$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
-		$msg= str_replace("#firstName#",$firstName,$msg1);
-		$msg1= str_replace("#lastName#",$lastName,$msg);
-		$msg= str_replace("#mail#",$mail,$msg1);
-		$msg1= str_replace("#questionName#",$arrques[$i],$msg);
-		$msg= str_replace("#answer#",$arrans[$i],$msg1);
-		$msg1= str_replace("#i#",$i,$msg);
-		$msg= str_replace("#course#",$courseName,$msg1);
+if(count($arrques)>0) {
+	$mycharset = api_get_setting('platform_charset');
+	$msg = '<html><head>
+		<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
+		<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type">';
+	$msg .= '</head>
+	<body><br />
+	<p>'.get_lang('OpenQuestionsAttempted').' : 
+	</p>
+	<p>'.get_lang('AttemptDetails').' : ><br />
+	</p>
+	<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
+						<tr>
+	    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
+	    <td width="469" valign="top"><h2>#course#</h2></td>
+	  </tr>
+	  <tr>
+	    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
+	    <td width="469" valign="top" class="outerframe">#exercise#</td>
+	  </tr>
+	  <tr>
+	    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
+	    <td valign="top" >#firstName# #lastName#</td>
+	  </tr>
+	  <tr>
+	    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
+	    <td valign="top"> #mail#</td>
+	</tr></table>
+	<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
+	 <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+	for($i=0;$i<sizeof($arrques);$i++) {
+		  $msg.='
+			<tr>
+		    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
+		    <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
+		  	</tr>
+		  	<tr>
+		    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
+		    <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
+		  	</tr>';
+		
+			$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
+			$msg= str_replace("#firstName#",$firstName,$msg1);
+			$msg1= str_replace("#lastName#",$lastName,$msg);
+			$msg= str_replace("#mail#",$mail,$msg1);
+			$msg1= str_replace("#questionName#",$arrques[$i],$msg);
+			$msg= str_replace("#answer#",$arrans[$i],$msg1);
+			$msg1= str_replace("#i#",$i,$msg);
+			$msg= str_replace("#course#",$courseName,$msg1);
 	}
-	$msg.='</table><br>
- 	<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-<a href="#url#">#url#</a></span></body></html>';
-
-	$msg1= str_replace("#url#",$url,$msg);
-	$mail_content = stripslashes($msg1);
-	$student_name = $_SESSION['_user']['firstName'].' '.$_SESSION['_user']['lastName'];
-	$subject = get_lang('OpenQuestionsAttempted');
+		$msg.='</table><br>
+	 	<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
+	<a href="#url#">#url#</a></span></body></html>';
 	
-	$from = api_get_setting('noreply_email_address');
-	if($from == ''){
-		if(isset($_SESSION['id_session']) && $_SESSION['id_session'] != ''){
-			$sql = 'SELECT user.email,user.lastname,user.firstname FROM '.TABLE_MAIN_SESSION.' as session, '.TABLE_MAIN_USER.' as user 
-					WHERE session.id_coach = user.user_id
-					AND session.id = "'.Database::escape_string($_SESSION['id_session']).'"
-					';
-			$result=api_sql_query($sql,__FILE__,__LINE__);
-			$from = mysql_result($result,0,'email');
-			$from_name = mysql_result($result,0,'firstname').' '.mysql_result($result,0,'lastname');
-		}
-		else{
-			$array = explode(' ',$_SESSION['_course']['titular']);
-			$firstname = $array[1];
-			$lastname = $array[0];
-			$sql = 'SELECT email,lastname,firstname FROM '.TABLE_MAIN_USER.'
-					WHERE firstname = "'.Database::escape_string($firstname).'"
-					AND lastname = "'.Database::escape_string($lastname).'"
-			';
-			$result=api_sql_query($sql,__FILE__,__LINE__);
-			$from = mysql_result($result,0,'email');
-			$from_name = mysql_result($result,0,'firstname').' '.mysql_result($result,0,'lastname');
-		}
-	}
-	
+		$msg1= str_replace("#url#",$url,$msg);
+		$mail_content = stripslashes($msg1);
+		$student_name = $_SESSION['_user']['firstName'].' '.$_SESSION['_user']['lastName'];
+		$subject = get_lang('OpenQuestionsAttempted');
+		
+		$from = api_get_setting('noreply_email_address');
+		if($from == '') {
+			if(isset($_SESSION['id_session']) && $_SESSION['id_session'] != ''){
+				$sql = 'SELECT user.email,user.lastname,user.firstname FROM '.TABLE_MAIN_SESSION.' as session, '.TABLE_MAIN_USER.' as user 
+						WHERE session.id_coach = user.user_id
+						AND session.id = "'.Database::escape_string($_SESSION['id_session']).'"
+						';
+				$result=api_sql_query($sql,__FILE__,__LINE__);
+				$from = Database::result($result,0,'email');
+				$from_name = Database::result($result,0,'firstname').' '.Database::result($result,0,'lastname');
+			} else {
+				$array = explode(' ',$_SESSION['_course']['titular']);
+				$firstname = $array[1];
+				$lastname = $array[0];
+				$sql = 'SELECT email,lastname,firstname FROM '.TABLE_MAIN_USER.'
+						WHERE firstname = "'.Database::escape_string($firstname).'"
+						AND lastname = "'.Database::escape_string($lastname).'"
+				';
+				$result=api_sql_query($sql,__FILE__,__LINE__);
+				$from = Database::result($result,0,'email');
+				$from_name = Database::result($result,0,'firstname').' '.Database::result($result,0,'lastname');
+			}
+		}	
 	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from, array('encoding'=>$mycharset,'charset'=>$mycharset));
 }
 ?>
-

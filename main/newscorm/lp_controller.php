@@ -192,41 +192,31 @@ switch($action)
 		
 		if($debug > 0) error_log('New LP - add item action triggered', 0);
 		
-		if(!$lp_found)
-		{	//check if the learnpath ID was defined, otherwise send back to list
+		if(!$lp_found){	
+			//check if the learnpath ID was defined, otherwise send back to list
 			error_log('New LP - No learnpath given for add item', 0); 
 			require('lp_list.php'); 
-		}
-		else
-		{
+		} else {
 			$_SESSION['refresh'] = 1;
 			
-			if(isset($_POST['submit_button']) && !empty($_POST['title']))
-			{	//if a title was sumbitted 				
-				if(isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time'])
-				{	//check post_time to ensure ??? (counter-hacking measure?)
+			if(isset($_POST['submit_button']) && !empty($_POST['title'])) {	
+				//if a title was sumbitted 				
+				if(isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time']) {
+					//check post_time to ensure ??? (counter-hacking measure?)
 					require('lp_add_item.php');
-				}
-				else
-				{
+				} else {
 					$_SESSION['post_time'] = $_POST['post_time'];
 					
-					if($_POST['type'] == TOOL_DOCUMENT)
-					{
-						if(isset($_POST['path']) && $_GET['edit'] != 'true')
-						{
+					if($_POST['type'] == TOOL_DOCUMENT) {
+						if(isset($_POST['path']) && $_GET['edit'] != 'true') {
 							$document_id = $_POST['path'];
-						}
-						else
-						{
+						} else {
 							$document_id = $_SESSION['oLP']->create_document($_course);
-						}
-								
+						}								
 						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $document_id, $_POST['title'], $_POST['description'], $_POST['prerequisites']);
-					}
-					else
-					{	//for all other item types than documents, load the item using the item type and path rather than its ID
-						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
+					} else {	
+						//for all other item types than documents, load the item using the item type and path rather than its ID
+						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites'],$_POST['maxTimeAllowed']);
 					}
 					//display 					
 					require('lp_add_item.php');
@@ -364,15 +354,14 @@ switch($action)
 		{
 			$_SESSION['refresh'] = 1;
 			
-			if(isset($_POST['submit_button']) && !empty($_POST['title']))
-			{
-				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
+			if(isset($_POST['submit_button']) && !empty($_POST['title'])) { 
+				//$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
+				//todo mp3 edit  
+				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'],'', $_POST['maxTimeAllowed']);
 				
-				if(isset($_POST['content_lp']))
-				{
+				if(isset($_POST['content_lp'])) {
 					$_SESSION['oLP']->edit_document($_course);
-				}
-				
+				}				
 				$is_success = true;
 			}
 			

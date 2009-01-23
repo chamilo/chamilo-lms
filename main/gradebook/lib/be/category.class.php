@@ -594,7 +594,6 @@ class Category implements GradebookItem
         	
         	
         }
-        error_log($sql);
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$cats = Category::create_category_objects_from_sql_result($result);
 

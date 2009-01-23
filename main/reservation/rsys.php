@@ -179,7 +179,7 @@ class Rsys {
 	 *  @return -   boolean         True or False
 	 */
 	function check_category($name, $id=0) {
-		$sql = "SELECT name FROM ".Rsys :: getTable("category")." WHERE LCASE(name)='".strtolower($name)."' AND id<>'".$id."'";
+		$sql = "SELECT name FROM ".Rsys :: getTable("category")." WHERE LCASE(name)='".strtolower($name)."' AND id<>".Database::escape_string($id)."";
 		$Result = api_sql_query($sql, __FILE__, __LINE__);
 		return (Database::num_rows($Result) == 0);
 	}
@@ -192,7 +192,7 @@ class Rsys {
 	 */
 	function edit_category($id, $name) {
 		if (Rsys :: check_category($name, $id)) {
-			$sql = "UPDATE ".Rsys :: getTable("category")." SET name = '".Database::escape_string($name)."' WHERE id ='".$id."'";
+			$sql = "UPDATE ".Rsys :: getTable("category")." SET name = '".Database::escape_string($name)."' WHERE id =".Database::escape_string($id)."";
 			api_sql_query($sql, __FILE__, __LINE__);
 			return $id;
 		}
@@ -205,10 +205,10 @@ class Rsys {
 	 *  @param  -   int     $id     The id
 	 */
 	function delete_category($id) {
-		$sql = "SELECT id FROM ".Rsys :: getTable("item")." WHERE category_id='".$id."'";
+		$sql = "SELECT id FROM ".Rsys :: getTable("item")." WHERE category_id=".Database::escape_string($id)."";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($result) == 0) {
-			$sql2 = "DELETE FROM ".Rsys :: getTable("category")." WHERE id ='".$id."'";
+			$sql2 = "DELETE FROM ".Rsys :: getTable("category")." WHERE id =".Database::escape_string($id)."";
 			api_sql_query($sql2, __FILE__, __LINE__);
 			return 0;
 		} else {
@@ -227,7 +227,7 @@ class Rsys {
 	function get_category($id = null, $orderby = "name ASC") {
 		$sql = "SELECT * FROM ".Rsys :: getTable("category");
 		if (!empty ($id))
-			$sql .= " WHERE id = '".$id."'";
+			$sql .= " WHERE id = ".Database::escape_string($id)."";
 		else
 			$sql .= " ORDER BY ".$orderby;
 		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
@@ -287,7 +287,7 @@ class Rsys {
 		$sql = "SELECT id AS col0, name as col1, id AS col2 FROM ".Rsys :: getTable("category");
 		if (isset ($_GET['keyword'])) {
 			$keyword = Database::escape_string($_GET['keyword']);
-			$sql .= " WHERE name LIKE '%".$keyword."%' OR id LIKE '%".$keyword."%'";
+			$sql .= " WHERE name LIKE '%".Database::escape_string($keyword)."%' OR id LIKE '%".Database::escape_string($keyword)."%'";
 		}
 		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -305,7 +305,7 @@ class Rsys {
 		$sql = "SELECT COUNT(id) FROM ".Rsys :: getTable("category");
 		if (isset ($_GET['keyword'])) {
 			$keyword = Database::escape_string($_GET['keyword']);
-			$sql .= " WHERE name LIKE '%".$keyword."%' OR id LIKE '%".$keyword."%'";
+			$sql .= " WHERE name LIKE '%".Database::escape_string($keyword)."%' OR id LIKE '%".Database::escape_string($keyword)."%'";
 		}
 		return @ Database::result(api_sql_query($sql, __FILE__, __LINE__), 0, 0);
 	}
@@ -327,9 +327,9 @@ class Rsys {
 	 */
 	function check_item($item, $category, $id=0) {
 		$sql = "SELECT name FROM ".Rsys :: getTable("item")." 
-							WHERE LCASE(name)='".strtolower($item)."' 
-							AND category_id='".$category."'
-							AND id<>'".$id."'";
+							WHERE LCASE(name)='".strtolower(Database::escape_string($item))."' 
+							AND category_id=".Database::escape_string($category)."
+							AND id<>".Database::escape_string($id)."";
 		$Result = api_sql_query($sql, __FILE__, __LINE__);
 		return (Database::num_rows($Result) == 0);
 	}
@@ -366,7 +366,8 @@ class Rsys {
 			return false;
 		if (!Rsys :: check_item($name, $category, $id))
 			return false;
-		$sql = "UPDATE ".Rsys :: getTable("item")." SET category_id='".Database::escape_string($category)."',course_code='".Database::escape_string($course)."',name='".Database::escape_string($name)."',description='".Database::escape_string($description)."' WHERE id ='".$id."'";
+		$sql = "UPDATE ".Rsys :: getTable("item")." SET category_id='".Database::escape_string($category)."',course_code='".Database::escape_string($course)."',name='".Database::escape_string($name)."',description='".Database::escape_string($description)."' " .
+			   "WHERE id =".Database::escape_string($id)."";
 		api_sql_query($sql, __FILE__, __LINE__);
 		return $id;
 	}
@@ -379,18 +380,18 @@ class Rsys {
 	function delete_item($id) {
 		if (!Rsys :: item_allow($id, 'delete'))
 			return false;
-		$sql = "SELECT id,end_at FROM".Rsys :: getTable('reservation')." WHERE item_id='".$id."'";
+		$sql = "SELECT id,end_at FROM".Rsys :: getTable('reservation')." WHERE item_id=".Database::escape_string($id)."";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($array = Database::fetch_array($result)) {
 			if (Rsys :: mysql_datetime_to_timestamp(date('Y-m-d H:i:s')) <= Rsys :: mysql_datetime_to_timestamp($array[1]))
 				$checked = true;
 		}
 		if (!$checked) {
-			$sql = "DELETE FROM ".Rsys :: getTable("item")." WHERE id ='".$id."'";
+			$sql = "DELETE FROM ".Rsys :: getTable("item")." WHERE id =".Database::escape_string($id)."";
 			api_sql_query($sql, __FILE__, __LINE__);
-			$sql = "DELETE FROM ".Rsys :: getTable("item_rights")." WHERE item_id ='".$id."'";
+			$sql = "DELETE FROM ".Rsys :: getTable("item_rights")." WHERE item_id =".Database::escape_string($id)."";
 			api_sql_query($sql, __FILE__, __LINE__);
-			$sql = "DELETE FROM ".Rsys :: getTable("reservation")." WHERE item_id ='".$id."'";
+			$sql = "DELETE FROM ".Rsys :: getTable("reservation")." WHERE item_id =".Database::escape_string($id)."";
 			api_sql_query($sql, __FILE__, __LINE__);
 			return '0';
 		} else {
@@ -419,7 +420,7 @@ class Rsys {
 				break;
 		}
 		$sql = "SELECT i.id FROM ".Rsys :: getTable("item")." i  
-		                LEFT JOIN ".Rsys :: getTable("item_rights")." ir ON ir.item_id=i.id 
+		        		LEFT JOIN ".Rsys :: getTable("item_rights")." ir ON ir.item_id=i.id 
 		                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = i.id 
 		                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
 		                WHERE i.id='".$item_id."' AND (". (!empty ($x) ? "(cu.user_id='".api_get_user_id()."' AND ".$x.") OR " : '')." i.creator='".api_get_user_id()."'  OR 1=". (api_is_platform_admin() ? 1 : 0).")";
@@ -456,7 +457,7 @@ class Rsys {
 	 */
 	function is_blackout($itemid) {
 		$sql = "SELECT id FROM ".Rsys :: getTable("item");
-		$sql .= " WHERE id = '".$itemid."' AND blackout=1";
+		$sql .= " WHERE id = ".Database::escape_string($itemid)." AND blackout=1";
 		return Database::num_rows(api_sql_query($sql, __FILE__, __LINE__)) == 1;
 	}
 
@@ -468,7 +469,7 @@ class Rsys {
 	 *  @return -   Array               The returned rows
 	 */
 	function get_category_items($id, $orderby = "name ASC") {
-		$sql = "SELECT * FROM ".Rsys :: getTable("item")." WHERE category_id = '".$id."' ORDER BY ".$orderby;
+		$sql = "SELECT * FROM ".Rsys :: getTable("item")." WHERE category_id = ".Database::escape_string($id)." ORDER BY ".$orderby;
 		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
 		return $arr;
 	}
@@ -481,7 +482,7 @@ class Rsys {
 	 *  @return -   Array               The returned rows
 	 */
 	function get_course_items($id, $orderby = "name ASC") {
-		$sql = "SELECT * FROM ".Rsys :: getTable("item")." WHERE course_id = '".$id."' ORDER BY ".$orderby;
+		$sql = "SELECT * FROM ".Rsys :: getTable("item")." WHERE course_id = ".Database::escape_string($id)." ORDER BY ".$orderby;
 		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
 		return $arr;
 	}
@@ -560,12 +561,12 @@ class Rsys {
 	 */
 	function get_table_itemrights($from, $per_page, $column, $direction) {
 		$itemid = $_GET['item_id'];
-		$sql = "SELECT id,name FROM ".Database :: get_main_table(TABLE_MAIN_CLASS);
+		$sql = "SELECT id, name FROM ".Database :: get_main_table(TABLE_MAIN_CLASS);
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($array = Database::fetch_array($result, 'NUM')) {
 			$arr[] = $array;
 		}
-		$sql = "SELECT item_id,class_id,edit_right,delete_right,m_reservation,view_right
+		$sql = "SELECT item_id, class_id,edit_right,delete_right,m_reservation,view_right
 								FROM ".Rsys :: getTable("item_rights")." WHERE item_id=".$itemid;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($array = Database::fetch_array($result, 'NUM')) {

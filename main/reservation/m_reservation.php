@@ -344,7 +344,7 @@ switch ($_GET['action']) {
 					Display :: display_normal_message(get_lang('BookingPeriodTimePickerLimitation'),false);
 					break;
 				case 5:
-					Display :: display_normal_meGotossage(get_lang('BookingPeriodTimePickerError1'),false);
+					Display :: display_normal_message(get_lang('BookingPeriodTimePickerError1'),false);
 					break;
 				case 6:
 					Display :: display_normal_message(get_lang('BookingPeriodTimePickerError2'),false);

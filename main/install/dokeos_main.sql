@@ -804,9 +804,7 @@ VALUES
 ('advanced_filemanager','true','Yes'),
 ('advanced_filemanager','false','No'),
 ('allow_reservation', 'true', 'Yes'),
-('allow_reservation', 'false', 'No'),
-('allow_message_tool', 'true', 'Yes'),
-('allow_message_tool', 'false', 'No');
+('allow_reservation', 'false', 'No');
 
 UNLOCK TABLES;
 

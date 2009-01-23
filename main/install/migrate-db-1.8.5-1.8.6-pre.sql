@@ -75,7 +75,6 @@ ALTER TABLE message ADD INDEX idx_message_user_sender(user_sender_id);
 ALTER TABLE message ADD INDEX idx_message_user_receiver(user_receiver_id);
 ALTER TABLE message ADD INDEX idx_message_user_sender_user_receiver(user_sender_id,user_receiver_id);
 ALTER TABLE message ADD INDEX idx_message_msg_status(msg_status);
-
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='Institution';
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='InstitutionUrl';
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='siteName';
@@ -91,6 +90,7 @@ UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs'
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_agenda';
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_profile';
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_gradebook';
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('advanced_filemanager',NULL,'radio','Platform','false','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL, 0);
  
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';

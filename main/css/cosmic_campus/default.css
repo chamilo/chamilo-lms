@@ -471,7 +471,7 @@ form span.form_error {
 	border-bottom:1px solid #7171b7;
 	border-top:1px solid #7171b7;
 	background-color:#efefef;
-	height:64px;
+	height:100%;
 	padding:2px;
 	margin-bottom: 5px;
 	vertical-align:middle;

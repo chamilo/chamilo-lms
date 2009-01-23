@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 17954 2009-01-22 22:55:56Z cfasanando $
+<?php // $Id: question.class.php 17969 2009-01-23 19:20:33Z cvargas1 $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 17954 2009-01-22 22:55:56Z cfasanando $
+* 	@version $Id: question.class.php 17969 2009-01-23 19:20:33Z cvargas1 $
 */
 
 
@@ -1070,7 +1070,7 @@ abstract class Question
 	static function display_type_menu ()
 	{
 		global $exerciseId;
-		//echo '<strong>'.get_lang('AddQ').' :</strong> <div>';
+		echo '<div >';
 		foreach(self::$questionTypes as $i=>$a_type)
 		{
 			
@@ -1081,30 +1081,30 @@ abstract class Question
 			eval('$img = '.$a_type[1].'::$typePicture;');
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
 
-			//echo '<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">';
+			echo '<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">';
 			echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">';
-			//echo '<div>';
+			echo '<div>';
 			Display::display_icon($img, $explanation, array('align'=>'middle'));
-			//echo '</div>';
-			//echo '<div>';
+			echo '</div>';
+			echo '<div>';
 			echo $explanation;
-			//echo '</div>';
+			echo '</div>';
 			echo '</a>';
-			//echo '</div>';
+			echo '</div>';
 			
 		}
-		//echo '<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">';
+		echo '<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">';
 		echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">';
-		//echo '<div>';
+		echo '<div>';
 		Display::display_icon('database.gif', get_lang('GetExistingQuestion'), array('align'=>'middle'));
-		//echo '</div>';
-		//echo '<div>';
+		echo '</div>';
+		echo '<div>';
 		echo get_lang('GetExistingQuestion');
-		//echo '</div>';
+		echo '</div>';
 		echo '</a>';
-		//echo '</div>';
-		//echo '</div>';
-		//echo '<div style="clear:both"></div>';
+		echo '</div>';
+		echo '</div>';
+		echo '<div style="clear:both"></div>';
 
 	}
 }

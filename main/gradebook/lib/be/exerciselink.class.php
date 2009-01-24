@@ -113,39 +113,33 @@ class ExerciseLink extends AbstractLink
 	 */
     public function calc_score($stud_id = null) {
     	$tbl_stats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    	$tbl_stats_e_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);  
-		// for 1 student
-    	if (isset($stud_id)) {    			
-    		$sql = "SELECT DISTINCT  e.exe_id, exe_result, exe_weighting, exe_user_id
-					FROM $tbl_stats  as e INNER JOIN 
-					$tbl_stats_e_attempt_recording as r
-					ON (e.exe_id =r.exe_id)
-					WHERE e.exe_cours_id = '".$this->get_course_code()."'AND					
-					author != ''  AND exe_user_id = '$stud_id' ORDER BY  e.exe_id DESC ";
-			$scores = api_sql_query($sql, __FILE__, __LINE__);
-    		if ($data=Database::fetch_array($scores)) {	
+    	$tbl_stats_e_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+
+		$sql = 'SELECT * FROM '.$tbl_stats.' WHERE exe_exo_id = '.$this->get_ref_id().' AND orig_lp_id = 0 AND orig_lp_item_id = 0';
+		
+		if (isset($stud_id)){
+    		$sql .= ' AND exe_user_id = '."'".$stud_id."'";
+    	}
+		
+		$sql .= ' ORDER BY exe_id DESC';
+		$scores = api_sql_query($sql, __FILE__, __LINE__);
+		
+    	if (isset($stud_id)) {
+    		// for 1 student    			
+
+    		if ($data=Database::fetch_array($scores)) {	    			
     			return array ($data['exe_result'], $data['exe_weighting']);
        		} else {
        			 return null;
        		}
 
     	} else {// all students -> get average
-    		// normal way of getting the info
-		
-			$sql = "SELECT DISTINCT  e.exe_id, exe_result, exe_weighting, exe_user_id
-				FROM $tbl_stats  as e INNER JOIN 
-				$tbl_stats_e_attempt_recording as r
-				ON (e.exe_id =r.exe_id)
-				WHERE e.exe_cours_id = '".$this->get_course_code()."'AND					
-				e.exe_exo_id = '".$this->get_ref_id()."'  AND author != ''  ORDER BY  e.exe_id DESC ";
-				    						
-	    	$scores = api_sql_query($sql, __FILE__, __LINE__);
+    		// normal way of getting the info			
 
     		$students=array();  // user list, needed to make sure we only
     							// take first attempts into account
 			$rescount = 0;
-			$sum = 0;
-
+			$sum = 0;			
 			while ($data=Database::fetch_array($scores)) {
 				if (!(array_key_exists($data['exe_user_id'],$students))) {
 					if ($data['exe_weighting'] != 0) {

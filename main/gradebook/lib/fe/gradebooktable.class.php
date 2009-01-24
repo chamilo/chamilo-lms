@@ -172,7 +172,7 @@ class GradebookTable extends SortableTable
 					$item_value = number_format($item_value, 2, '.', ' ');	
 					$cattotal = Category :: load($id);
 					$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
-					$scoretotal_display = (isset($scoretotal)? $scoretotal[0].'/'.$scoretotal[1].'('.round(($scoretotal[0] / $scoretotal[1]) * 100) . ' %)': get_lang('NoResultsAvailable'));										
+					$scoretotal_display = (isset($scoretotal)? $scoretotal[0].'/'.$scoretotal[1].'('.round(($scoretotal[0] / $scoretotal[1]) * 100) . ' %)': '-');										
 					$row[] = $item_value;
 				} else {
 			   		$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;	
@@ -200,7 +200,7 @@ class GradebookTable extends SortableTable
 					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
 						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/index.php?export_certificate=yes&cat_id='.$id.'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display; 	
 					} else {
-						$certificates = get_lang('NoResultsAvailable');	
+						$certificates = '-';	
 					}					
 				$row[] = $certificates;
 				}												

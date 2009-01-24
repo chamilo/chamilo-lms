@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 17332 2008-12-16 20:10:35Z cfasanando $
+<?php //$Id: announcements.inc.php 17983 2009-01-24 01:13:39Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -102,6 +102,7 @@ function show_to_form($to_already_selected)
 	
 	// the form containing all the groups and all the users of the course
 	echo "\t\t<td>\n";
+	echo "<strong>".get_lang('UsersList')."</strong><br />";
 	construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
 	echo "\t\t</td>\n";
 	
@@ -120,6 +121,7 @@ function show_to_form($to_already_selected)
 	echo "\n\t\t<td>\n";
 	
 	// the form containing the selected groups and users
+	echo "<strong>".get_lang('DestinationUsersList')."</strong><br />";
 	construct_selected_select_form($group_list,$user_list,$to_already_selected);
 	echo "\t\t</td>\n";
 	echo "\t</tr>\n";
@@ -431,13 +433,22 @@ function to_javascript()
 
 
 	function selectAll(cbList,bSelect,showwarning)
-	{
-		if (cbList.length <	1) {
-			alert(\"".get_lang('Send2All')."\");
-			return;
-		}
-		for	(var i=0; i<cbList.length; i++)
-			cbList[i].selected = cbList[i].checked = bSelect
+	{	
+			
+		if (document.getElementById('emailTitle').value==''){
+			document.getElementById('msg_error').innerHTML='".get_lang('FieldRequired')."';
+			document.getElementById('msg_error').style.display='block';
+		}else {
+			if (cbList.length <	1) {
+				if (!confirm(\"".get_lang('Send2All')."\")) {
+					return false;		
+				} 			
+			} 	
+			for	(var i=0; i<cbList.length; i++)
+			cbList[i].selected = cbList[i].checked = bSelect;					
+			document.f1.submit();	
+		}				
+															
 	}
 
 	function reverseAll(cbList)

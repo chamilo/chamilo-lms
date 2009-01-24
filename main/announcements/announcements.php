@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 17787 2009-01-17 00:41:06Z ivantcholakov $
+<?php //$Id: announcements.php 17983 2009-01-24 01:13:39Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1127,7 +1127,8 @@ if(!empty($error_message))
 			echo	get_lang('EmailAddress').": <input type=\"text\" name=\"emailsAdd\" value=\"".$emails_add."\" size=\"52\">(Comma separated for multiple)<br>";
 			echo	get_lang('OnlyThoseAddresses').": <input type=\"checkbox\" name=\"onlyThoseMails\"><br>";
 		}
-		echo	get_lang('EmailTitle').": <input type=\"text\" name=\"emailTitle\" value=\"".$title_to_modify."\" size=\"52\"><br />";
+		echo "<div id='msg_error' style='display:none;color:red'></div>";						
+		echo	"<label style='color:red;font-size:14pt'>*</label>&nbsp;".get_lang('EmailTitle').": <input type=\"text\" id=\"emailTitle\" name=\"emailTitle\" value=\"".$title_to_modify."\" size=\"52\" onfocus=\"document.getElementById('msg_error').style.display='none';\"><br />";
 
 				unset($title_to_modify);
 		    	$title_to_modify = null;
@@ -1165,10 +1166,12 @@ if(!empty($error_message))
 		echo $oFCKeditor->CreateHtml();
 
 		if(empty($_SESSION['toolgroup'])){
-            echo '<br /><input type="Submit" name="submitAnnouncement" value="'.'  '.get_lang('Ok').'  '.'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
+			echo '<input type="hidden" name="submitAnnouncement" value="OK">';
+            echo '<br /><input type="button"  value="'.'  '.get_lang('Ok').'  '.'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
 		}
 		else{
-			echo '<br /><input type="Submit" name="submitAnnouncement" value="'.'  '.get_lang('Ok').'  '.'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
+			echo '<input type="hidden" name="submitAnnouncement" value="OK">';
+			echo '<br /><input type="button"  value="'.'  '.get_lang('Ok').'  '.'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
 		}
 		echo '</form><br />';
 

@@ -538,7 +538,7 @@ foreach ($list as $my_item_id) {
 					$my_url_suffix = '&course=' . api_get_course_id() . '&student_id=' . api_get_user_id() . '&lp_id=' . Security::remove_XSS($row['mylpid']);
 					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC ';
 				} else {
-					$my_url_suffix = '&course=' . $_GET['course'] . '&student_id=' . Security::remove_XSS($_GET['student_id']) . '&lp_id=' . Security::remove_XSS($row['mylpid']);									
+					$my_url_suffix = '&course=' . $_GET['course'] . '&student_id=' . Security::remove_XSS($_GET['student_id']) . '&lp_id=' . Security::remove_XSS($row['mylpid']).'&origin=' . Security::remove_XSS($_GET['origin']);									
 					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . Database :: escape_string($_GET['student_id']) . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete"  ORDER BY exe_date DESC ';
 				}
 

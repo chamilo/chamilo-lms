@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 17909 2009-01-21 21:06:39Z cfasanando $
+<?php //$Id: myStudents.php 17987 2009-01-24 01:59:15Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -226,20 +226,19 @@ if(!empty($_GET['student']))
 		$a_courses[$row['course_code']] = $row['course_code'];
 	}
 		
-	foreach ($a_courses as $key=>$course_code)
+	
+	if(!CourseManager::is_user_subscribed_in_course($a_infosUser['user_id'], $_GET['course'], true))
 	{
-		if(!CourseManager::is_user_subscribed_in_course($a_infosUser['user_id'], $course_code, true))
-		{
-			unset($a_courses[$key]);
-		}
-		else
-		{
-			$nb_courses++;
-			$avg_student_progress += Tracking :: get_avg_student_progress($a_infosUser['user_id'],$course_code);
-			//the score inside the Reporting table
-			$avg_student_score += Tracking :: get_avg_student_score($a_infosUser['user_id'],$course_code);			
-		}
-	}	
+		unset($a_courses[$key]);
+	}
+	else
+	{
+		$nb_courses++;
+		$avg_student_progress = Tracking :: get_avg_student_progress($a_infosUser['user_id'],$_GET['course']);
+		//the score inside the Reporting table
+		$avg_student_score = Tracking :: get_avg_student_score($a_infosUser['user_id'],$_GET['course']);			
+	}
+
 	$avg_student_progress = round($avg_student_progress,2);
 	$avg_student_score = round($avg_student_score,2);
 	

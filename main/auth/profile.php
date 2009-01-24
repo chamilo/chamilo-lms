@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 17906 2009-01-21 20:27:37Z juliomontoya $
+<?php // $Id: profile.php 17981 2009-01-24 00:55:51Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -162,7 +162,7 @@ else
 //THEME
 if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true')
 {
-	$form->addElement('select_theme', 'theme', get_lang('Theme'));
+	$form->addElement('select_theme', get_lang('Theme'),'theme');
 	if (api_get_setting('profile', 'theme') !== 'true')
 		$form->freeze('theme');
 	$form->applyFilter('theme', 'trim');

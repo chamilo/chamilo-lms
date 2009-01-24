@@ -240,17 +240,83 @@ if ($_GET['view'])
 		$result=api_sql_query($sql,__LINE__,__FILE__);
 		$last_row=Database::fetch_array($result);
 		
-		if ($_GET['view']<$last_row['id'])
-		{
-		   $message= '(<a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$current_row['reflink'].'&view='.$_GET['view'].'&group_id='.$current_row['group_id'].'" title="'.get_lang('CurrentVersion').'">'.$current_row['version'].'</a> / <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'" title="'.get_lang('LastVersion').'">'.$last_row['version'].'</a>) '.get_lang('NoAreSeeingTheLastVersion').'<br>'.get_lang("ConvertToLastVersion").': <a href="index.php?cidReq='.$_course[id].'&action=restorepage&amp;title='.$last_row['reflink'].'&view='.$_GET['view'].'">'.get_lang("Restore").'</a>';
-		   
-		   Display::display_warning_message($message,false);
-		} 
-	   if ($_GET['action']=='restorepage')
-	   {
-			Display::display_confirmation_message(restore_wikipage($current_row['reflink'], $current_row['title'], $current_row['content'], $current_row['group_id'], $current_row['assignment'], $current_row['comment'], $current_row['progress'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'">'.$last_row['title'].'</a>',false);
-						
-       }			
+	if ($_GET['view']<$last_row['id'])
+	{
+	   $message= '(<a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$current_row['reflink'].'&view='.$_GET['view'].'&group_id='.$current_row['group_id'].'" title="'.get_lang('CurrentVersion').'">'.$current_row['version'].'</a> / <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'" title="'.get_lang('LastVersion').'">'.$last_row['version'].'</a>) '.get_lang('NoAreSeeingTheLastVersion').'<br>'.get_lang("ConvertToLastVersion").': <a href="index.php?cidReq='.$_course[id].'&action=restorepage&amp;title='.$last_row['reflink'].'&view='.$_GET['view'].'">'.get_lang("Restore").'</a>';
+	   
+	   Display::display_warning_message($message,false);
+	}
+		
+	///restore page 
+	if ($_GET['action']=='restorepage')
+	{	    
+		//Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher
+		if(($current_row['reflink']=='index' || $current_row['reflink']=='' || $current_row['assignment']==1) && (!api_is_allowed_to_edit()))
+		{	  
+			Display::display_normal_message(get_lang('OnlyEditPagesCourseManager'));	  
+		}
+		else
+		{	
+			$PassEdit=false;		
+	   
+			//check if is a wiki group
+			if($current_row['group_id']!=0)
+			{
+				//Only teacher, platform admin and group members can edit a wiki group
+				if(api_is_allowed_to_edit() || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid']))
+				{				
+					$PassEdit=true;			  
+				}
+				else
+				{
+					Display::display_normal_message(get_lang('OnlyEditPagesGroupMembers'));
+				}
+			}
+			else
+			{
+				$PassEdit=true;
+			}
+		 
+			// check if is a assignment
+			if(stripslashes($current_row['assignment'])==1)
+			{
+				Display::display_normal_message(get_lang('EditAssignmentWarning'));
+				$icon_assignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
+			}
+			elseif(stripslashes($current_row['assignment'])==2)
+			{			
+				$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
+				if((api_get_user_id()==$current_row['user_id'])==false)
+				{
+					if(api_is_allowed_to_edit() || api_is_platform_admin())
+					{
+						$PassEdit=true;
+					}
+					else
+					{
+						Display::display_warning_message(get_lang('LockByTeacher'));
+						$PassEdit=false;
+					}
+				}
+				else
+				{
+					$PassEdit=true;				
+				}			
+			}		 	 
+		 
+			if($PassEdit) //show editor if edit is allowed
+			{
+				if (check_protect_page() && (api_is_allowed_to_edit()==false || api_is_platform_admin()==false))
+				{ 
+					   Display::display_normal_message(get_lang('PageLockedExtra'));
+				}
+				else
+				{
+					Display::display_confirmation_message(restore_wikipage($current_row['reflink'], $current_row['title'], $current_row['content'], $current_row['group_id'], $current_row['assignment'], $current_row['comment'], $current_row['progress'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'">'.$last_row['title'].'</a>',false);
+				}						
+			}
+		}
+	}			
 }
 
 
@@ -731,7 +797,7 @@ if ($_GET['action']=='wanted')
 	{
 		if(!in_array($v, $pages))
 		{	
-			if (trim($v)!=="")
+			if (trim($v)!="")
 			{	
 				echo   '<li><a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq=&action=addnew&title='.urlencode(str_replace('_',' ',$v)).'&group_id='.Security::remove_XSS($_GET['group_id']).'" class="new_wiki_link">'.str_replace('_',' ',$v).'</a></li>';					
 			}					
@@ -1180,7 +1246,7 @@ if ($_GET['action']=='edit')
 		$PassEdit=false;		
        
 	    //check if is a wiki group
-		if($_clean['group_id']!==0)
+		if($_clean['group_id']!=0)
 		{
 			//Only teacher, platform admin and group members can edit a wiki group
 			if(api_is_allowed_to_edit() || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid']))
@@ -2009,7 +2075,7 @@ function links_to($input)
 		if ($input_array[$key-1]=='[[' AND $input_array[$key+1]==']]')
 		{
 		
-		    if (strpos($value, "|") !== false)
+		    if (strpos($value, "|") != false)
 			{
 			 	$full_link_array=explode("|", $value);			
 				$link=trim($full_link_array[0]);
@@ -2145,7 +2211,7 @@ function make_wiki_link_clickable($input)
 		    }	
 					
 			//now full wikilink
-			if (strpos($value, "|") !== false)
+			if (strpos($value, "|") != false)
 			 {
 			 	$full_link_array=explode("|", $value);			
 				$link=trim($full_link_array[0]);

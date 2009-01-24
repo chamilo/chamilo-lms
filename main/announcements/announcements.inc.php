@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 17983 2009-01-24 01:13:39Z cfasanando $
+<?php //$Id: announcements.inc.php 17985 2009-01-24 01:35:16Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -102,7 +102,7 @@ function show_to_form($to_already_selected)
 	
 	// the form containing all the groups and all the users of the course
 	echo "\t\t<td>\n";
-	echo "<strong>".get_lang('UsersList')."</strong><br />";
+	echo "<strong>".get_lang('Users')."</strong><br />";
 	construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
 	echo "\t\t</td>\n";
 	
@@ -121,7 +121,7 @@ function show_to_form($to_already_selected)
 	echo "\n\t\t<td>\n";
 	
 	// the form containing the selected groups and users
-	echo "<strong>".get_lang('DestinationUsersList')."</strong><br />";
+	echo "<strong>".get_lang('DestinationUsers')."</strong><br />";
 	construct_selected_select_form($group_list,$user_list,$to_already_selected);
 	echo "\t\t</td>\n";
 	echo "\t</tr>\n";

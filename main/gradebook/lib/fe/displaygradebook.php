@@ -190,7 +190,7 @@ class DisplayGradebook
 
 		$course_id=$objdat->get_course_by_category($selectcat);
 		$message_resource=$objcat->show_message_resource_delete($course_id);
-		if (!$is_course_admin) {
+		if (!$is_course_admin || !api_is_course_tutor()) {
 			$user_id = api_get_user_id();
 			$user= get_user_info_from_id($user_id);
 
@@ -280,7 +280,7 @@ class DisplayGradebook
 
 		// for course admin & platform admin add item buttons are added to the header
 		$header .= '<div class="actions">';
-		if (($is_course_admin) && (!isset ($_GET['search']))) {
+		if (api_is_course_tutor() && ($is_course_admin) && (!isset ($_GET['search']))) {
 			if ($selectcat == '0') {
                 if ($show_add_qualification === true) {
 				   // $header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=0"><img src="../img/folder_new.gif" alt="' . get_lang('NewCategory') . '" /> ' . get_lang('NewCategory') . '</a></td>';

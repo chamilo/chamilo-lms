@@ -137,8 +137,7 @@ $result = api_sql_query($sql,__FILE__,__LINE__);
 
 		$tempsql = api_sql_query('SELECT * FROM '.get_table_type_course($row['type'],$row['course_code']).' WHERE '.$table_evaluated[$row['type']][2].' = '.$row['ref_id']);
 		$resource_name = Database ::fetch_array($tempsql);	
-	
-		$output.= '<tr><td> [ '.$table_evaluated[$row['type']][3].' ] '.$resource_name[$table_evaluated[$row['type']][1]].'</td><td><input size="10" type="text" name="link['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';	
+		$output.= '<tr><td> [ '.$table_evaluated[$row['type']][3].' ] '.$resource_name[1].'</td><td><input size="10" type="text" name="link['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';	
 	}
 
 	$sql = api_sql_query('SELECT * FROM '.$table_evaluation.' WHERE category_id = '.$category_id,__FILE__,__LINE__);

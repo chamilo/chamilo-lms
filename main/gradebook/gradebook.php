@@ -573,7 +573,7 @@ if (isset ($_GET['studentoverview'])) {
 }
 
 $gradebooktable= new GradebookTable($cats[0], $allcat, $alleval, $alllink, $addparams);
-if ((empty ($allcat)) && (empty ($alleval)) && (empty ($alllink)) && (!$is_platform_admin) && ($is_course_admin) && (!isset ($_GET['selectcat']))) {
+if (((empty ($allcat)) && (empty ($alleval)) && (empty ($alllink)) && (!$is_platform_admin) && ($is_course_admin) && (!isset ($_GET['selectcat']))) && api_is_course_tutor()) {
 	Display :: display_normal_message(get_lang('GradebookWelcomeMessage') . '<br /><br /><form name="createcat" method="post" action="' . api_get_self() . '?createallcategories=1"><input type="submit" value="' . get_lang('CreateAllCat') . '"></form>',false);
 }
 //here we are in a sub category

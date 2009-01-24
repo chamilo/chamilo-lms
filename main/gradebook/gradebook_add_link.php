@@ -97,7 +97,6 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		
 		//update view_properties
 		$work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);	
-		
 		if ( isset($_GET['typeselected']) && 5==$_GET['typeselected'] && (isset($addvalues['select_link']) && $addvalues['select_link']<>"")) {
 			$sql1='SELECT thread_title from '.$tbl_forum_thread.' where thread_id='.$addvalues['select_link'].';';
 			$res1=api_sql_query($sql1);
@@ -115,9 +114,8 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 				api_sql_query($sql_l);
 			}
 			
-		} else {
-			$link->add();
-		}
+		} 
+		$link->add();
 		$addvalue_result=!empty($addvalues['addresult'])?$addvalues['addresult']:array();
 		if ($addvalue_result == 1) {
 			header('Location: gradebook_add_result.php?selecteval=' . $link->get_ref_id());

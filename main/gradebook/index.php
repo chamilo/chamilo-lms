@@ -702,7 +702,7 @@ $gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addpa
 $no_qualification = false;
 if (( count($allcat) == 0) && ( count($alleval) == 0 ) && ( count($alllink) == 0 )) {
     $no_qualification = true;
-    if (($is_course_admin) && (!isset ($_GET['selectcat']))) {
+    if ((($is_course_admin) && (!isset ($_GET['selectcat']))) && api_is_course_tutor()) {
 	   Display :: display_normal_message(get_lang('GradebookWelcomeMessage') . '<br /><br /><form name="createcat" method="post" action="' . api_get_self() . '?createallcategories=1"><input type="submit" value="' . get_lang('CreateAllCat') . '"></form>',false);
     }
 } 
@@ -723,7 +723,7 @@ if ($category != '0') {
 	//DisplayGradebook :: display_header_gradebook($cats[0], 0, 0, $is_course_admin, $is_platform_admin, $simple_search_form, false, false);
 }
 
-if (api_is_platform_admin() || api_is_allowed_to_create_course()) {
+if (api_is_platform_admin() || api_is_allowed_to_create_course() && api_is_course_tutor()) {
 
 	if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0) ) {
 	//

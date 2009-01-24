@@ -49,13 +49,13 @@ class GradebookTable extends SortableTable
 			$this->set_additional_parameters($addparams);
 		}
 		$column= 0;
-		if (api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
+		if (api_is_course_tutor() && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++,'','','width="25px"');
 		}	
 		$this->set_header($column++, get_lang('Type'),'','width="35px"');
 		$this->set_header($column++, get_lang('Name'));
 		$this->set_header($column++, get_lang('Description'));
-		if (api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
+		if (api_is_course_tutor() && api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++, get_lang('Weight'),'','width="50px"');	
 		} else {
 			if (empty($_GET['selectcat'])) {	
@@ -68,7 +68,7 @@ class GradebookTable extends SortableTable
 		}		 					
 		$this->set_header($column++, get_lang('Date'),true, 'width="100px"');				
 		//admins get an edit column
-		if (api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
+		if (api_is_course_tutor() && api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++, get_lang('Modify'), false, 'width="100"');
 			//actions on multiple selected documents
 			$this->set_form_actions(array (
@@ -141,14 +141,14 @@ class GradebookTable extends SortableTable
 			$invisibility_span_open = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
 			$invisibility_span_close = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '</span>' : '';
 						
-			if (api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
+			if (api_is_course_tutor() && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 				$row[] = $this->build_id_column ($item);
 			}
 			
 			$row[] = $this->build_type_column ($item);
 			$row[] = $invisibility_span_open . $this->build_name_link ($item) . $invisibility_span_close;
 			$row[] = $invisibility_span_open . $data[2] . $invisibility_span_close;
-			if (api_is_allowed_to_create_course()) {
+			if (api_is_course_tutor() && api_is_allowed_to_create_course()) {
 			$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;	
 			} else {
 				
@@ -181,7 +181,7 @@ class GradebookTable extends SortableTable
 			$row[] = $invisibility_span_open . str_replace(' ','&nbsp;',$data[4]) . $invisibility_span_close;
 			
 			//admins get an edit column
-			if (api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false'))) {
+			if (api_is_course_tutor() && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false'))) {
 				$cat=new Category();
 				$show_message=$cat->show_message_resource_delete($item->get_course_code());
 				

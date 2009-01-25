@@ -262,4 +262,16 @@ $FilterExercices = "Filtra gli esercizi";
 $FilterByNotRevised = "Solo non valutati";
 $FilterByRevised = "Solo valutati";
 $Duration = "Durata";
+$TryAgain = "Tenta di nuovo";
+$SeeTheory = "Vedi la teoria";
+$EndActivity = "Fine dell\'attività";
+$GoToQuestion = "Vai al quesito";
+$NoFeedback = "Esame (senza feedback)";
+$DirectFeedback = "Autovalutazione (feedback immediato)";
+$FeedbackType = "Valutazione:";
+$Scenario = "Scenario";
+$VisitUrl = "Visita questo collegamento";
+$ExitTest = "Esci dal test";
+$DurationFormat = "%1$d secondi";
+$MaxTimeAllowed = "Tempo a disposizione (minuti)";
 ?>

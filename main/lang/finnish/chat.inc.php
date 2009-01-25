@@ -33,4 +33,10 @@ $langChat_reset_by = "tyhjennä chatti";
 $OrFile = "Tai tiedosto";
 $langCallSent = "Chatti kutsu on lähetetty. Odottaa kumppanisi hyväksyntää.";
 $langChatDenied = "Kumppanisi on hylännyt kutsusi.";
+$Send = "Lähetä";
+$Connected = "Keskustelussa";
+$Think = "Miettii";
+$BigGrin = "Iso virnistys";
+$AskPermissionSpeak = "Pyydä puhevuoro";
+$GiveTheFloorTo = "Anna puheenvuoro";
 ?>

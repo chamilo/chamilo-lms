@@ -689,7 +689,6 @@ $AllowReservationTitle = "Povoli&#357; rezerva&#269;ný systém";
 $AllowReservationComment = "Toto umožní používa&#357; rezerva&#269;ný systém";
 $URLAdded = "URL adresa bola pridaná";
 $URLAlreadyAdded = "URL adresa je už pridaná, prosím vyberte inú URL ";
-$SaveSettings = "Uloži&#357; nastavenia";
 $AreYouSureYouWantToSetThisLanguageAsThePortalDefault = "Naozaj chcete nastavi&#357; tento jazyk ako štandardný jazyk portálu?";
 $EditUsersToURL = "Upravi&#357; používate&#318;ov a URL adresy";
 $AddUsersToURL = "Prida&#357; používate&#318;ov k URL";

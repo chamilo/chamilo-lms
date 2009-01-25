@@ -866,7 +866,6 @@ $ConfigureResourceType = "Configurer le type de ressource";
 $ConfigureMultipleAccessURLs = "Configurer l\'accès via URLs différents (branding)";
 $URLAdded = "L\'URL a été ajouté";
 $URLAlreadyAdded = "Cet URL existe déjà, veuillez en sélectionner un autre";
-$SaveSettings = "Sauver les paramètres";
 $AreYouSureYouWantToSetThisLanguageAsThePortalDefault = "Êtes-vous certain de vouloir configurer cette langue comme langue par défaut du portail?";
 $CurrentLanguagesPortal = "Langue actuelle du portail";
 $EditUsersToURL = "Éditer les liens utilisateurs-URL";

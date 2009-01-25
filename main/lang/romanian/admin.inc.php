@@ -849,4 +849,5 @@ $YesWillDeletePermanently = "Da (fisierele vor fi sterse definitiv si nu vor put
 $NoWillDeletePermanently = "Nu (fisierele vor fi sterse din aplicatie si vor putea fi recuperate manual de catre administratorul dvs)";
 $SelectAResponsible = "Selectati un manager";
 $ThereIsNotStillAResponsible = "Nu este disponibil nici un HR manager";
+$AdvancedFileManagerComment = "Activa&#355;i managerul avansat fi&#351;iere pentru editorul WYSIWYG? Aceasta op&#355;iune va ad&#259;uga o mul&#355;ime de op&#355;iuni in plus la managerul de fi&#351;iere care se deschide într-o fereastra pop-up atunci când se încarc&#259; fi&#351;iere pe server.";
 ?>

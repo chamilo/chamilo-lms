@@ -262,4 +262,14 @@ $FilterExercices = "Filtriraj vaje/teste";
 $FilterByNotRevised = "Filter po nepregledanih";
 $FilterByRevised = "Filter po pregledanih";
 $Duration = "Trajanje";
+$TryAgain = "Poskusi ponovno";
+$SeeTheory = "Povezava na teoretične vsebine";
+$EndActivity = "Konec aktivnosti";
+$GoToQuestion = "Pojdi na vprašanje";
+$NoFeedback = "Test (brez povratnih informacij)";
+$DirectFeedback = "Samo-evalvacija (takojšna povratna informacija";
+$FeedbackType = "Evaluacija :";
+$Scenario = "Scenarij";
+$VisitUrl = "Obišči povezavo";
+$ExitTest = "Zapusti test/vajo";
 ?>

@@ -104,4 +104,12 @@ $OpenBooking = "Réservation ouverte";
 $DeleteResource = "Supprimer la ressource";
 $DeleteSelectedResources = "Supprimer les ressources sélectionnées";
 $ResourceExist = "La resource existe déjà";
+$AcceptUsers = "Ouvert aux utilisateurs";
+$UnacceptedUsers = "Fermé aux utilisateurs";
+$DeleteSubscriptions = "Effacement des inscriptions";
+$ManageResources = "Gérer les ressources";
+$NoItems = "Pas encore d\'objet";
+$ItemNotDeleted = "Certains objets n\'ont pas été supprimés parce qu\'ils font toujours l\'objet de réservations";
+$ItemHasReservations = "L\'objet fait encore l\'objet de #NUM# réservation(s) active(s)";
+$NoItemsReservation = "Il n\'y a pas d\'objet disponible pour vous dans cette ressource";
 ?>

@@ -658,6 +658,7 @@ $Any = "Poljuben";
 $SpecificSearchFields = "Specifično iskalno polje";
 $SpecificSearchFieldsIntro = "Tu lahko določite polja, ki jih boste uporabili za indeksiranje vsebine. Pri indeksiranju posameznega elementa lahko dodate enega ali več izrazov ločenih z vejico v vsako izmed polj.";
 $AddSpecificSearchField = "Dodaj specifično iskalno polje";
+$SaveSettings = "Shrani nastavitve";
 $Subscribers = "Vpisani";
 $Accept = "Sprejmi";
 $Reserved = "Rezervirano";

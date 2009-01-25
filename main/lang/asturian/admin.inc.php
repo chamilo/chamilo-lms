@@ -866,7 +866,6 @@ $ConfigureResourceType = "Configurar el tipu de recursu";
 $ConfigureMultipleAccessURLs = "Configurar la entrada a múltiples URLs";
 $URLAdded = "URL amestada";
 $URLAlreadyAdded = "Esta URL ta yá rexistrada, escriba otra URL";
-$SaveSettings = "Guardar configuración";
 $AreYouSureYouWantToSetThisLanguageAsThePortalDefault = "¿ Ta serguru de querer qu\'esti idioma seya la llingua de la plataforma ?";
 $CurrentLanguagesPortal = "Llingua actual del portal";
 $EditUsersToURL = "Editar usuarios y URLs";

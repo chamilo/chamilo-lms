@@ -257,4 +257,5 @@ $ExeStartTime = "Data de inceput";
 $ExeEndTime = "Data de sfarsit";
 $Value = "Valoare";
 $DeleteAttempt = "Sterge incercare?";
+$Duration = "Durata";
 ?>

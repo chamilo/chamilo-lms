@@ -35,4 +35,7 @@ $langCallSent = "Convite para Chat foi enviado. Esperando aprovação do destinatá
 $langChatDenied = "O convite foi negado.";
 $Send = "Enviar";
 $Connected = "Conectado";
+$Think = "Pensar.";
+$Amazing = "Fantástico.";
+$Surprised = "Surpreendido.";
 ?>

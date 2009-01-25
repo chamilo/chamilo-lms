@@ -99,4 +99,5 @@ $ExampleForum = "Example Forum";
 $ExampleThread = "Example Thread";
 $ExampleThreadContent = "Example content";
 $IntroductionWiki = "The word Wiki is short for WikiWikiWeb. Wikiwiki is a word from Hawaiian, meaning fast or speed. In a wiki, people can write pages together. If one person writes something wrong, then the next person can correct it. The next person can also add something new to the page. Because of this, the page gets better whenever someone changes it.";
+$langCreate = "Create";
 ?>

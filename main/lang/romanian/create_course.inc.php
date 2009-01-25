@@ -99,4 +99,5 @@ $ExampleForum = "Exemplu de forum";
 $ExampleThread = "Exemplu de cale";
 $ExampleThreadContent = "Exemplu de continut";
 $IntroductionWiki = "Cuvantul Wiki este prescurtarea de la WikiWikiWeb. Wikiwiki este un cuvant in hawaiana ce inseamna rapid sau viteza. Intr-un wiki, utilizatorii pot scrie paginile impreuna. Daca o persoana scrie ceva gresit, o alta persoana o poate corecta. Urmatoarea persoana poate adauga ceva nou. De aceea, pagina devine din ce in ce mai buna pe masura ce este modificata.";
+$langCreate = "Creeaz&#259; ";
 ?>

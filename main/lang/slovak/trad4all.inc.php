@@ -616,5 +616,6 @@ $Notebook = "Zápisník";
 $FieldRequired = "Povinné pole";
 $BookingSystem = "Systém rezervácií";
 $Any = "Nejaký";
+$SaveSettings = "Uloži&#357; nastavenia";
 $Accept = "Akceptova&#357;";
 ?>

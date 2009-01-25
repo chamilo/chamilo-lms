@@ -658,9 +658,17 @@ $Any = "Qualunque";
 $SpecificSearchFields = "Campi specifici di ricerca";
 $SpecificSearchFieldsIntro = "Qui si possono definire i campi usati per indicizzare il contenuto. Se un elemento viene indicizzato, puoi aggregare uno o più termini di ogni campo separandoli da virgola";
 $AddSpecificSearchField = "Aggiungi un campo specifico di ricerca";
+$SaveSettings = "Salva la configurazione";
 $Subscribers = "Richiedenti";
 $Accept = "Accettare";
 $Reserved = "Prenotato";
 $SharedDocumentsDirectory = "Documenti condivisi";
 $Gallery = "Galleria";
+$Audio = "Audio";
+$Level = "Livello";
+$Duration = "Durata";
+$SearchPrefilterPrefix = "Campo specifico per pre-filtrare";
+$SearchPrefilterPrefixComment = "L\'opzione ti permette di specificare un campo per pre-filtrare il possibile ambito delle ricerche";
+$Class = "Classe";
+$Select = "Seleziona";
 ?>

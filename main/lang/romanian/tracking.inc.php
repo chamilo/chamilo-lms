@@ -144,4 +144,5 @@ $Administrators = "Administratori";
 $Tracks = "Urme";
 $Success = "Succes";
 $ExcelFormat = "Format Excel";
+$Time = "Timp";
 ?>

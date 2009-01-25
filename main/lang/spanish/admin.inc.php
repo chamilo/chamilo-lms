@@ -866,7 +866,6 @@ $ConfigureResourceType = "Configurar tipo de recurso";
 $ConfigureMultipleAccessURLs = "Configurar acceso a multiple URLs";
 $URLAdded = "URL agregada";
 $URLAlreadyAdded = "La URL ya se encuentra registrada, ingrese otra URL";
-$SaveSettings = "Guardar configuración";
 $AreYouSureYouWantToSetThisLanguageAsThePortalDefault = "¿Esta seguro que desea establecer este idioma como el idioma de la plataforma?";
 $CurrentLanguagesPortal = "Idioma actual del portal";
 $EditUsersToURL = "Editar usuarios y URLs";

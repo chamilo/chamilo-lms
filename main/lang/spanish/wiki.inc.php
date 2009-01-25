@@ -147,4 +147,9 @@ $Contributions = "contribuciones";
 $UserContributions = "Contribuciones del usuario";
 $MostActiveUsers = "Usuarios más activos";
 $WarningDeleteMainPage = "No se recomienda la eliminación de la Página principal del Wiki, ya que es el principal acceso a su estructura jerárquica.<br> Si de todas formas necesita borrarla, no olvide volver a crear esta Página principal pues hasta que no lo haga otros usuarios no podrán añadir nuevas páginas al Wiki.";
+$ConvertToLastVersion = "Para convertir esta versión en la última haga clic en";
+$Restore = "Restaurar";
+$CurrentVersion = "Versión actual";
+$LastVersion = "Última versión";
+$PageRestored = "La página ha sido restaurada. Puede verla haciendo clic en";
 ?>

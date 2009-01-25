@@ -272,4 +272,6 @@ $FeedbackType = "Évaluation :";
 $Scenario = "Scénario";
 $VisitUrl = "Suivre ce lien";
 $ExitTest = "Sortir du test";
+$DurationFormat = "%1$d secondes";
+$MaxTimeAllowed = "Temps maximum autorisé (minutes)";
 ?>

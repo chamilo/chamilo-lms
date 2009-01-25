@@ -147,4 +147,9 @@ $Contributions = "contributions";
 $UserContributions = "User contributions";
 $MostActiveUsers = "Most active users";
 $WarningDeleteMainPage = "It isn\'t recommended erasing the Home Page of the Wiki as it\'s the main access to the hierarchical structure of it.<br />If, however, you need to do it, do not forget to recreate this Home Page. Until you do, other users will not be able to add new pages.";
+$ConvertToLastVersion = "To make this version in the last make click in";
+$Restore = "Restore";
+$CurrentVersion = "Current version";
+$LastVersion = "Latest version";
+$PageRestored = "The page has been restored. You can view it by clicking";
 ?>

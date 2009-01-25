@@ -658,10 +658,17 @@ $Any = "Any";
 $SpecificSearchFields = "Specific search fields";
 $SpecificSearchFieldsIntro = "Here you can define the fields you want to use for indexing content. When you are indexing one element you should add one or many terms on each field separated by comas.";
 $AddSpecificSearchField = "Add a specific search field";
+$SaveSettings = "Save settings";
 $Subscribers = "Subscribers";
 $Accept = "Accept";
 $Reserved = "Reserved";
 $SharedDocumentsDirectory = "Shared documents directory";
 $Gallery = "Gallery";
 $Audio = "Audio";
+$Level = "Level";
+$Duration = "Duration";
+$SearchPrefilterPrefix = "Specific Field for prefilter";
+$SearchPrefilterPrefixComment = "This option let you choose the Specific field to use on prefilter search type.";
+$Class = "Class";
+$Select = "Select";
 ?>

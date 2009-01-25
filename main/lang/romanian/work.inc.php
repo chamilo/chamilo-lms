@@ -47,4 +47,6 @@ $AdvancedParameters = "Parametri avansati";
 $ExpiryDateToSendWorkIs = "Data limita pentru trimiterea temelor";
 $EnableExpiryDate = "Activare data limita";
 $EnableEndDate = "Activare data de final";
+$IsNotPosibleSaveTheDocument = "Documentul nu a putut fi salvat";
+$SelectAFilter = "Selecteaz&#259; un filtru";
 ?>

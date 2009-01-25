@@ -866,7 +866,6 @@ $ConfigureResourceType = "Nastavi tipe resursov";
 $ConfigureMultipleAccessURLs = "Nastavi URL-je za dostop prek večih URL-jev";
 $URLAdded = "URL je bil dodan";
 $URLAlreadyAdded = "URL je že dodan. Izberite drug URL.";
-$SaveSettings = "Shrani nastavitve";
 $AreYouSureYouWantToSetThisLanguageAsThePortalDefault = "Ste prepričani, da želite nastaviti ta jezik kot privzeti jezik portala?";
 $CurrentLanguagesPortal = "Trenutni jezik portala";
 $EditUsersToURL = "Uredi uporabnike in URL-je";

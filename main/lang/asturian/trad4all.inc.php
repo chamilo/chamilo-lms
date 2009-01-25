@@ -650,4 +650,5 @@ $SearchCombineSearchWith = "Combinar palabres clave con";
 $SearchFeatureNotEnabledComment = "La busca full-text nun ta activada nesti portal. Por favor, póngase en contautu col so alministrador.";
 $Top = "Entamu";
 $YourTextHere = "Ponga\'l so testu equí";
+$SaveSettings = "Guardar configuración";
 ?>

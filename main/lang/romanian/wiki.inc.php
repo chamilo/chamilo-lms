@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Wiki = "Wiki";
+$AddedBy = "ad&#259;ugat de";
 $EmailWikiChangesExt_2 = "Daca doriti sa nu mai primiti notificari cu privire la modificarile din Wiki, selectati taburile <strong> Recent Changes</ strong>, <strong>Current page</ strong>, <strong>Talk</ strong> si apoi apasati butonul";
 $Visits = "Vizite";
 $OrphanedPages = "Pagini orfane";

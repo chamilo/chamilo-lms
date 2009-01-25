@@ -658,10 +658,17 @@ $Any = "N\'importe lequel";
 $SpecificSearchFields = "Champs de recherche spécifiques";
 $SpecificSearchFieldsIntro = "Vous êtes invité à définir ici les champs que vous désirez utiliser pour indexer le contenu de vos documents. Lorsque vous indexez un élément, vous devriez ajouter un ou plusieurs termes dans chacun des champs, séparés par des virgules.";
 $AddSpecificSearchField = "Ajouter un champ de recherche spécifique";
+$SaveSettings = "Sauver les paramètres";
 $Subscribers = "Inscrits";
 $Accept = "Accepter";
 $Reserved = "Réservé";
 $SharedDocumentsDirectory = "Répertoire de documents partagé";
 $Gallery = "Galerie";
 $Audio = "Audio";
+$Level = "Niveau";
+$Duration = "Durée";
+$SearchPrefilterPrefix = "Champ spécifique de pré-filtre";
+$SearchPrefilterPrefixComment = "Cette option vous permet de choisir le champ spécifique à utiliser dans la recherche de type pré-filtre, où le premier champ permet de déterminer dynamiquement le contenu des champs suivants.";
+$Class = "Classe";
+$Select = "Sélectionnez";
 ?>

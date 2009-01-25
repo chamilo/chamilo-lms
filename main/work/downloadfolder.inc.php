@@ -1,9 +1,10 @@
-<?php // $Id: $
+<?php // $Id: downloadfolder.inc.php 17989 2009-01-25 05:51:54Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	Functions and main code for the download folder feature
 *
-*	@package dokeos.studentpublications
+*	@package dokeos.work
 ==============================================================================
 */
 

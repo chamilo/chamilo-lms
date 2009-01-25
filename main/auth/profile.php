@@ -1,27 +1,5 @@
-<?php // $Id: profile.php 17981 2009-01-24 00:55:51Z cfasanando $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php // $Id: profile.php 17990 2009-01-25 06:06:00Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 * This file displays the user's profile,
@@ -32,12 +10,9 @@
 * @package dokeos.auth
 ==============================================================================
 */
-
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/**
+ * Init section
+ */
 // name of the language file that needs to be included
 $language_file = array('registration','messages');
 $cidReset = true;
@@ -147,12 +122,12 @@ $form = new FormValidator('profile', 'post', api_get_self()."?".str_replace('&fe
  * Otherwise, if a user has productions and presses ENTER to submit, he will
  * attempt to delete the first production in the list. */
 if (is_profile_editable())
-	$form->addElement('submit', null, get_lang('Ok'), array('style' => 'visibility:hidden;'));
+	$form->addElement('submit', null, get_lang('SaveSettings'), array('style' => 'visibility:hidden;'));
 
 //	SUBMIT (visible)
 if (is_profile_editable())
 {
-	$form->addElement('submit', 'apply_change', get_lang('Ok'));
+	$form->addElement('submit', 'apply_change', get_lang('SaveSettings'));
 }
 else
 {
@@ -407,7 +382,7 @@ foreach($extra as $id => $field_details)
 //	SUBMIT
 if (is_profile_editable())
 {
-	$form->addElement('submit', 'apply_change', get_lang('Ok'));
+	$form->addElement('submit', 'apply_change', get_lang('SaveSettings'));
 }
 else
 {

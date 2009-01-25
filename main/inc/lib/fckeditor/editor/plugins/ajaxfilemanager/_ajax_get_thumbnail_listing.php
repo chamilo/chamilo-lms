@@ -17,12 +17,12 @@
 				$group_folder='_groupdocs';
 				
 				
-				//show group's directory only if I'm member
+				//show group's directory only if I'm member. Or I'm a teacher
 				$show_doc_group=true;								
 				if(ereg($group_folder, $file['path']))
 				{
 					$show_doc_group=false;
-					if($is_user_in_group)
+					if($is_user_in_group ||( $to_group_id!=0 && api_is_allowed_to_edit()))
 					{
 						$show_doc_group=true;					
 					}

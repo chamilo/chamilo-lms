@@ -232,7 +232,7 @@ if (!empty($return_message))
 // check last version
 if ($_GET['view'])
 {
-	$sql='SELECT * FROM '.$tbl_wiki.'WHERE id="'.$_GET['view'].'"'; //current view
+	$sql='SELECT * FROM '.$tbl_wiki.'WHERE id="'.Database::escape_string($_GET['view']).'"'; //current view
 		$result=api_sql_query($sql,__LINE__,__FILE__);
 		$current_row=Database::fetch_array($result);
 	
@@ -242,7 +242,7 @@ if ($_GET['view'])
 		
 	if ($_GET['view']<$last_row['id'])
 	{
-	   $message= '(<a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$current_row['reflink'].'&view='.$_GET['view'].'&group_id='.$current_row['group_id'].'" title="'.get_lang('CurrentVersion').'">'.$current_row['version'].'</a> / <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'" title="'.get_lang('LastVersion').'">'.$last_row['version'].'</a>) '.get_lang('NoAreSeeingTheLastVersion').'<br>'.get_lang("ConvertToLastVersion").': <a href="index.php?cidReq='.$_course[id].'&action=restorepage&amp;title='.$last_row['reflink'].'&view='.$_GET['view'].'">'.get_lang("Restore").'</a>';
+	   $message= '(<a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$current_row['reflink'].'&view='.Security::remove_XSS($_GET['view']).'&group_id='.$current_row['group_id'].'" title="'.get_lang('CurrentVersion').'">'.$current_row['version'].'</a> / <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'" title="'.get_lang('LastVersion').'">'.$last_row['version'].'</a>) '.get_lang('NoAreSeeingTheLastVersion').'<br />'.get_lang("ConvertToLastVersion").': <a href="index.php?cidReq='.$_course[id].'&action=restorepage&amp;title='.$last_row['reflink'].'&view='.Security::remove_XSS($_GET['view']).'">'.get_lang("Restore").'</a>';
 	   
 	   Display::display_warning_message($message,false);
 	}
@@ -440,12 +440,12 @@ echo '</ul></div>';
 echo "<div id='mainwiki'>";
 
 
-/////////////////////// more options /////////////////////// Juan Carlos RaÃ±a Trabado
+/////////////////////// more options /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='more')
 {
-	echo '<br>'; 
-	echo '<b>'.get_lang('More').'</b><br>'; 
+	echo '<br />'; 
+	echo '<b>'.get_lang('More').'</b><br />'; 
     echo '<hr>';
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
@@ -519,12 +519,12 @@ if ($_GET['action']=='more')
 
 }
 
-/////////////////////// Most active users /////////////////////// Juan Carlos RaÃ±a Trabado
+/////////////////////// Most active users /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='mactiveusers')
 {
-	echo '<br>';
-	echo '<b>'.get_lang('MostActiveUsers').'</b><br>'; 
+	echo '<br />';
+	echo '<b>'.get_lang('MostActiveUsers').'</b><br />'; 
 	echo '<hr>';	
 	
 	$sql='SELECT *, COUNT(*) AS NUM_EDIT FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY user_id';
@@ -553,13 +553,13 @@ if ($_GET['action']=='mactiveusers')
 }
 
 
-/////////////////////// User contributions /////////////////////// Juan Carlos RaÃ±a Trabado
+/////////////////////// User contributions /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='usercontrib')
 {
 	$userinfo=Database::get_user_info_from_id(Security::remove_XSS($_GET['user_id']));
-	echo '<br>';
-	echo '<b>'.get_lang('UserContributions').': <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'"></a></b><br>';	
+	echo '<br />';
+	echo '<b>'.get_lang('UserContributions').': <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a><a href="'.$_SERVER['PHP_SELF'].'?cidReq='.$_course[id].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'"></a></b><br />';	
 	echo '<hr>';	
 		
 	
@@ -643,12 +643,12 @@ if ($_GET['action']=='usercontrib')
 	}	
 }
 
-/////////////////////// Most changed pages /////////////////////// Juan Carlos RaÃ±a Trabado
+/////////////////////// Most changed pages /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='mostchanged')
 {
-	echo '<br>';
-	echo '<b>'.get_lang('MostChangedPages').'</b><br>'; 
+	echo '<br />';
+	echo '<b>'.get_lang('MostChangedPages').'</b><br />'; 
 	echo '<hr>';
 	
 	
@@ -700,12 +700,12 @@ if ($_GET['action']=='mostchanged')
 		
 }
 
-/////////////////////// Most visited pages /////////////////////// Juan Carlos RaÃ±a Trabado
+/////////////////////// Most visited pages /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='mvisited')
 {
-	echo '<br>';
-	echo '<b>'.get_lang('MostVisitedPages').'</b><br>'; 
+	echo '<br />';
+	echo '<b>'.get_lang('MostVisitedPages').'</b><br />'; 
 	echo '<hr>';	
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
@@ -755,12 +755,12 @@ if ($_GET['action']=='mvisited')
 	}	
 }
 
-/////////////////////// Wanted pages /////////////////////// Juan Carlos RaÃ±a Trabado
+/////////////////////// Wanted pages /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='wanted')
 {
-	echo  '<br>';
-	echo '<b>'.get_lang('WantedPages').'</b><br>'; 
+	echo  '<br />';
+	echo '<b>'.get_lang('WantedPages').'</b><br />'; 
 	echo  '<hr>';
 	$pages = array();
 	$refs = array();	
@@ -806,12 +806,12 @@ if ($_GET['action']=='wanted')
 	echo '</ul>';
 }
 
-/////////////////////// Orphaned pages /////////////////////// Juan Carlos RaÃ±a Trabado
+/////////////////////// Orphaned pages /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='orphaned')
 {
-	echo '<br>';
-	echo '<b>'.get_lang('OrphanedPages').'</b><br>'; 
+	echo '<br />';
+	echo '<b>'.get_lang('OrphanedPages').'</b><br />'; 
 	echo '<hr>';	
 		
 	$pages = array();
@@ -889,14 +889,14 @@ if ($_GET['action']=='orphaned')
 	
 }
 
-/////////////////////// delete current page /////////////////////// Juan Carlos RaÃ±a Trabado
+/////////////////////// delete current page /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='delete')
 {
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{
-	    echo '<br>'; 
+	    echo '<br />'; 
 	    echo '<b>'.get_lang('DeletePageHistory').'</b>'; 
 	    echo '<hr>';
 		   
@@ -935,22 +935,22 @@ if ($_GET['action']=='delete')
 }
 
 
-/////////////////////// delete all wiki /////////////////////// Juan Carlos RaÃ±a Trabado
+/////////////////////// delete all wiki /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='deletewiki')
 {
-	    echo '<br>'; 
+	    echo '<br />'; 
 	    echo '<b>'.get_lang('DeleteWiki').'</b>'; 
 	    echo '<hr>';
 }
 
 
-/////////////////////// search pages /////////////////////// Juan Carlos RaÃ±a Trabado
+/////////////////////// search pages /////////////////////// Juan Carlos Raña Trabado
 //// 1 Searchpages: input search
 
 if ($_GET['action']=='searchpages')
 {
-    echo '<br>'; 
+    echo '<br />'; 
     echo '<b>'.$SearchPages.'</b>'; 
     echo '<hr>';
 		
@@ -968,7 +968,7 @@ if ($_GET['action']=='searchpages')
 
 if ($_GET['action']=='showsearchpages')
 {
-	echo '<br>'; 
+	echo '<br />'; 
     echo '<b>'.$Search.'</b>: '.$_POST['Skeyword']; //TODO: post is lost when a table has some pages
     echo '<hr>';
 	
@@ -1052,11 +1052,11 @@ if ($_GET['action']=='showsearchpages')
 } 	
 
 
-///////////////////////  What links here. Show pages that have linked this page /////////////////////// Juan Carlos RaÃ±a Trabado
+///////////////////////  What links here. Show pages that have linked this page /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='links')
 {
-    echo '<br>'; 
+    echo '<br />'; 
     echo '<b>'.$LinksPages.'</b>';
     echo '<hr>';
 	
@@ -1193,7 +1193,7 @@ if ($_GET['action']=='addnew')
 	{  
 		if(api_is_allowed_to_edit() || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid']) || Security::remove_XSS($_GET['group_id'])==0)
 		{					
-			echo '<br>'; 
+			echo '<br />'; 
 			echo '<b>'.get_lang('AddNew').'</b>'; 
 			echo '<hr>'; 
 			display_new_wiki_form();		
@@ -1500,7 +1500,7 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 				echo '</div>'; 					
 				echo '</div>';
 				
-				echo '<br>'; 
+				echo '<br />'; 
 				echo '<strong>'.get_lang('Legend').'</strong><div class="diff">' . "\n"; 
 				echo '<table><tr>'; 
 				echo  '<td>';
@@ -1528,7 +1528,7 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 				echo '</div>'; 					
 				echo '</div>';
 				
-				echo '<br>'; 
+				echo '<br />'; 
 				echo '<strong>'.get_lang('Legend').'</strong><div class="diff">' . "\n"; 
 				echo '<table><tr>'; 
 				echo  '<td>';
@@ -1563,8 +1563,8 @@ if ($_GET['action']=='recentchanges')
 		$notify_all= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('FullCancelNotifyByEmail').'" alt="'.get_lang('FullCancelNotifyByEmail').'" /><font style="font-weight: normal; background-color:#FFCC00"">'.get_lang('NotifyChanges').'</font>';
 	}	
 		
-	echo '<br>'; 
-	echo '<b>'.get_lang('RecentChanges').'</b> <a href="index.php?action=recentchanges&amp;actionpage=notify_all&amp;title='.$page.'">'.$notify_all.'</a><br>'; 
+	echo '<br />'; 
+	echo '<b>'.get_lang('RecentChanges').'</b> <a href="index.php?action=recentchanges&amp;actionpage=notify_all&amp;title='.$page.'">'.$notify_all.'</a><br />'; 
     echo '<hr>';	
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
@@ -1636,7 +1636,7 @@ if ($_GET['action']=='recentchanges')
 
 if ($_GET['action']=='allpages')
 {	
-	echo '<br>';
+	echo '<br />';
 	echo '<b>'.get_lang('AllPages').'</b>'; 
    	echo '<hr>';
 	
@@ -2029,7 +2029,7 @@ function createreflink($testvalue)
 	while (!checktitle($testvalue.$counter))
 	{
 		$counter++; 
-		echo $counter."-".$testvalue.$counter."<br>"; 
+		echo $counter."-".$testvalue.$counter."<br />"; 
 	
 	}
 			// the reflink has not been found yet, so it is OK
@@ -2061,7 +2061,7 @@ function checktitle($paramwk)
 
 
 /**
-* @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+* @author Juan Carlos Raña <herodoto@telefonica.net>
 * check wikilinks that has a page
 **/
 function links_to($input)
@@ -2102,7 +2102,7 @@ function links_to($input)
 
 /*
 detect and add style to external links
-author Juan Carlos RaÃ±a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_external_link($input)
 {
@@ -2114,7 +2114,7 @@ function detect_external_link($input)
 
 /*
 detect and add style to anchor links
-author Juan Carlos RaÃ±a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_anchor_link($input)
 {
@@ -2126,7 +2126,7 @@ function detect_anchor_link($input)
 
 /*
 detect and add style to mail links
-author Juan Carlos RaÃ±a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_mail_link($input)
 {
@@ -2138,7 +2138,7 @@ function detect_mail_link($input)
 
 /*
 detect and add style to ftp links
-author Juan Carlos RaÃ±a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_ftp_link($input)
 {
@@ -2150,7 +2150,7 @@ function detect_ftp_link($input)
 
 /*
 detect and add style to news links
-author Juan Carlos RaÃ±a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_news_link($input)
 {
@@ -2162,7 +2162,7 @@ function detect_news_link($input)
 
 /*
 detect and add style to irc links
-author Juan Carlos RaÃ±a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_irc_link($input)
 {
@@ -2178,8 +2178,8 @@ function detect_irc_link($input)
 * It is true that the adding of links is probably the most anoying part of Wiki for the people
 * who know something about the wiki syntax.
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-* Improvements [[]] and [[ | ]]by Juan Carlos RaÃ±a
-* Improvements internal wiki style and mark group by Juan Carlos RaÃ±a
+* Improvements [[]] and [[ | ]]by Juan Carlos Raña
+* Improvements internal wiki style and mark group by Juan Carlos Raña
 **/
 function make_wiki_link_clickable($input)
 {
@@ -2286,7 +2286,7 @@ function save_wiki()
  	   	$_clean['group_id']=Database::escape_string($_GET['group_id']);
     }
 	
-	$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
+	$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
 	
 	$result=api_sql_query($sql);	
     $Id = Database::insert_id();		
@@ -2310,7 +2310,7 @@ function restore_wikipage($r_reflink, $r_title, $r_content, $r_group_id, $r_assi
 	$r_dtime = date( "Y-m-d H:i:s" );
 	$r_version = $r_version+1;
 	
-	$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".$_SERVER['REMOTE_ADDR']."')";
+	$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
 	
 	$result=api_sql_query($sql);	
     $Id = Database::insert_id();		
@@ -2429,7 +2429,7 @@ function save_new_wiki()
 		{ 	
 			$dtime = date( "Y-m-d H:i:s" );
 			 
-			$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".$_SERVER['REMOTE_ADDR']."')";
+			$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
 			   
 		   $result=api_sql_query($sql,__LINE__,__FILE__);
 		   $Id = Database::insert_id();	
@@ -2481,10 +2481,10 @@ function display_new_wiki_form()
 			//echo'<div style="border:groove">';			
 			//echo '&nbsp;'.get_lang('StartDate').': <INPUT TYPE="text" NAME="startdate_assig" VALUE="0000-00-00 00:00:00">(yyyy-mm-dd hh:mm:ss)'; //by now turned off
 			//echo '&nbsp;'.get_lang('EndDate').': <INPUT TYPE="text" NAME="enddate_assig" VALUE="0000-00-00 00:00:00">(yyyy-mm-dd hh:mm:ss)'; //by now turned off				
-		    //echo '<br>&nbsp;'.get_lang('AllowLaterSends').'&nbsp;<INPUT TYPE="checkbox" NAME="delayedsubmit" VALUE="0">'; //by now turned off		
+		    //echo '<br />&nbsp;'.get_lang('AllowLaterSends').'&nbsp;<INPUT TYPE="checkbox" NAME="delayedsubmit" VALUE="0">'; //by now turned off		
 			//echo'</div>';			
 	}
-	echo '<br></div>';
+	echo '<br /></div>';
 	echo '<div id="wikicontent">';
 	api_disp_html_area('content','','300px'); 	
 	echo '<br/>';
@@ -2802,7 +2802,7 @@ function is_active_navigation_tab($paramwk)
 
 /**
  * Lock add pages
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 
 function check_addnewpagelock() 
@@ -2853,7 +2853,7 @@ function check_addnewpagelock()
 
 /**
  * Protect page
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_protect_page() 
 {
@@ -2908,7 +2908,7 @@ function check_protect_page()
 
 /**
  * Visibility page
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_visibility_page() 
 {
@@ -2963,7 +2963,7 @@ function check_visibility_page()
 
 /**
  * Visibility discussion
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_visibility_discuss() 
 {
@@ -3019,7 +3019,7 @@ function check_visibility_discuss()
 
 /**
  * Lock add discussion
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_addlock_discuss() 
 {
@@ -3074,7 +3074,7 @@ function check_addlock_discuss()
 
 /**
  * Lock rating discussion
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_ratinglock_discuss() 
 {
@@ -3129,7 +3129,7 @@ function check_ratinglock_discuss()
 
 /**
  * Notify page changes
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
  
 function check_notify_page($reflink)
@@ -3195,7 +3195,7 @@ function check_notify_page($reflink)
 
 /**
  * Notify discussion changes
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_notify_discuss($reflink)
 {
@@ -3276,7 +3276,7 @@ function check_notify_discuss($reflink)
 
 /**
  * Notify all changes
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
  
 function check_notify_all()
@@ -3335,7 +3335,7 @@ function check_notify_all()
 
 /**
  * Function check emailcue and send email when a page change
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
  
 function check_emailcue($id_or_ref, $type, $lastime, $lastuser)
@@ -3512,12 +3512,12 @@ function check_emailcue($id_or_ref, $type, $lastime, $lastuser)
 			$sender_name=get_setting('emailAdministrator');
 			$sender_email=get_setting('emailAdministrator');
 			$email_subject = get_lang('EmailWikiChanges').' - '.$_course['official_code'];
-			$email_body= get_lang('DearUser').' '.$userinfo['firstname'].' '.$userinfo['lastname'].',<br><br>';
-			$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br><br><br>';						
-			$email_body .= $email_user_author.' ('.$email_date_changes.')<br><br><br>';		
-			$email_body .= $email_assignment.'<br><br><br>';					
-			$email_body .= '<font size="-2">'.get_lang('EmailWikiChangesExt_1').': <strong>'.get_lang('NotifyChanges').'</strong><br>';
-			$email_body .= get_lang('EmailWikiChangesExt_2').': <strong>'.get_lang('NotNotifyChanges').'</strong></font><br>';
+			$email_body= get_lang('DearUser').' '.$userinfo['firstname'].' '.$userinfo['lastname'].',<br /><br />';
+			$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br /><br /><br />';						
+			$email_body .= $email_user_author.' ('.$email_date_changes.')<br /><br /><br />';		
+			$email_body .= $email_assignment.'<br /><br /><br />';					
+			$email_body .= '<font size="-2">'.get_lang('EmailWikiChangesExt_1').': <strong>'.get_lang('NotifyChanges').'</strong><br />';
+			$email_body .= get_lang('EmailWikiChangesExt_2').': <strong>'.get_lang('NotNotifyChanges').'</strong></font><br />';
 			api_mail_html($name_to, $email_to, $email_subject, $email_body, $sender_name, $sender_email, $headers);
 		}	
 	}
@@ -3526,7 +3526,7 @@ function check_emailcue($id_or_ref, $type, $lastime, $lastuser)
 
 /**
  * Function export last wiki page version to document area
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function export2doc($wikiTitle, $wikiContents, $groupId)
 {
@@ -3560,7 +3560,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 
 /**
  * Function wizard individual assignment
- * @author Juan Carlos RaÃ±a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function auto_add_page_users($assignment_type)
 {

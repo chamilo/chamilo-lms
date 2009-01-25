@@ -104,6 +104,7 @@ FCKConfig.Plugins.Add('flvPlayer','en') ;
 FCKConfig.Plugins.Add('fckEmbedMovies');
 
 // added by Juan Carlos Raña
+FCKConfig.Plugins.Add("mimetex", "en", sOtherPluginPath ) ;
 FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ; // support to english, spanish
 FCKConfig.Plugins.Add("imgmap", "en,es", sOtherPluginPath );
 FCKConfig.Plugins.Add("googlemaps", "en,es", sOtherPluginPath ) ;

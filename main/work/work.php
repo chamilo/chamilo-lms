@@ -27,7 +27,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17970 2009-01-23 19:38:23Z cvargas1 $
+*  	@version $Id: work.php 17988 2009-01-25 05:36:04Z yannoo $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -85,10 +85,10 @@
 
 // name of the language file that needs to be included
 $language_file = array (
+    'exercice',
 	'work',
 	'document',
 	'admin',
-	'exercice'
 );
 require("../inc/global.inc.php");
 // @todo why is this needed?

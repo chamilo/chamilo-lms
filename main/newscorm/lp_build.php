@@ -189,78 +189,42 @@ function confirmation(name)
 	DISPLAY SECTION
 -----------------------------------------------------------
 */
-echo '<div class="actions">';
-echo '<span>'.Display::return_icon('learnpath_build.gif', get_lang('Build')).' '.get_lang('Build').'</span>';
-echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.Display::return_icon('learnpath_organize.gif', get_lang("BasicOverview")).' '.get_lang("BasicOverview").'</a>';
-echo '<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.Display::return_icon('learnpath_view.gif', get_lang("Display")).' '.get_lang("Display").'</a>';
-echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
-echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
-echo '</div>';
-
+echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-
-	echo '<tr>';
-			
-		echo '<td class="tree">';
-		
+	echo '<tr>';			
+		echo '<td class="tree">';		
 			//links for adding a module, chapter or step
-			echo '<div class="lp_actions">';
-				
-				echo '<p class="lp_action">';
-				
-					
-						
+			echo '<div class="lp_actions">';				
+				echo '<p class="lp_action">';	
 				echo '</p>';
 				echo '<p class="lp_action">';
-				
-					
-				
-				echo '</p>';
-				
-			echo '</div>';
-			
-			echo '<div class="lp_tree">';
-					
+				echo '</p>';				
+			echo '</div>';			
+			echo '<div class="lp_tree">';					
 				//build the tree with the menu items in it
-				echo $_SESSION['oLP']->build_tree();
-			
-			echo '</div>';
-					
+				echo $_SESSION['oLP']->build_tree();			
+			echo '</div>';					
 		echo '</td>';
 		echo '<td class="workspace">';
 		
-			if(isset($is_success) && $is_success === true)
-			{
-				echo '<div class="confirmation-message">';
-			
-					echo get_lang("ItemRemoved");
-			
+			if(isset($is_success) && $is_success === true) {
+				echo '<div class="confirmation-message">';			
+				echo get_lang("ItemRemoved");			
 				echo '</div>';
-			}
-			else
-			{
-				if($is_new)
-				{
-					echo '<div class="confirmation-message">';
-				
-						echo get_lang("LearnPathAdded");
-				
+			} else {
+				if($is_new) {
+					echo '<div class="confirmation-message">';				
+						echo get_lang("LearnPathAdded");				
 					echo '</div>';
-				}
-				
-				if($is_new){
+				}				
+				if($is_new) {
 					Display::display_normal_message(get_lang("LPCreatedToContinue"));
-				}
-				else{
+				} else {
 					Display::display_normal_message(get_lang('LPCreatedAddChapterStep'));
-				}
-								
-			}
-		
-		echo '</td>';
-			
-	echo '</tr>';
-		
+				}								
+			}		
+		echo '</td>';			
+	echo '</tr>';		
 echo '</table>';
 
 /*

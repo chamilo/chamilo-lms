@@ -199,31 +199,33 @@ switch($action)
 		} else {
 			$_SESSION['refresh'] = 1;
 			
-			if(isset($_POST['submit_button']) && !empty($_POST['title'])) {	
-				//if a title was sumbitted 				
+			if(isset($_POST['submit_button']) && !empty($_POST['title'])) {
+				//if a title was sumbitted
+				 				
 				if(isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time']) {
-					//check post_time to ensure ??? (counter-hacking measure?)
-					require('lp_add_item.php');
-				} else {
+					//check post_time to ensure ??? (counter-hacking measure?)										
+					require('lp_add_item.php');					
+				} else { 
+					
 					$_SESSION['post_time'] = $_POST['post_time'];
 					
-					if($_POST['type'] == TOOL_DOCUMENT) {
+					if($_POST['type'] == TOOL_DOCUMENT) {						
 						if(isset($_POST['path']) && $_GET['edit'] != 'true') {
-							$document_id = $_POST['path'];
-						} else {
+							$document_id = $_POST['path'];							
+						} else {													
 							$document_id = $_SESSION['oLP']->create_document($_course);
+							
 						}								
 						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $document_id, $_POST['title'], $_POST['description'], $_POST['prerequisites']);
 					} else {	
 						//for all other item types than documents, load the item using the item type and path rather than its ID
 						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites'],$_POST['maxTimeAllowed']);
 					}
+					
 					//display 					
 					require('lp_add_item.php');
 				}
-			}
-			else
-			{
+			} else {				
 				require('lp_add_item.php');
 			}
 		}
@@ -434,19 +436,15 @@ switch($action)
 		
 		break;
 		
-	case 'view_item':
-	
+	case 'view_item':	
 		if(!api_is_allowed_to_edit()){
 			api_not_allowed(true);
-		}		
-		
-		if($debug>0) error_log('New LP - view_item action triggered', 0);
-		
-		if(!$lp_found){ error_log('New LP - No learnpath given for view item', 0); require('lp_list.php'); }
-		else
-		{
-			$_SESSION['refresh'] = 1;
-			
+		}			
+		if($debug>0) error_log('New LP - view_item action triggered', 0);		
+		if(!$lp_found){ 
+			error_log('New LP - No learnpath given for view item', 0); require('lp_list.php'); 
+		} else	{
+			$_SESSION['refresh'] = 1;			
 			require('lp_view_item.php');
 		}
 		

@@ -175,59 +175,26 @@ function confirmation(name)
 	DISPLAY SECTION
 -----------------------------------------------------------
 */
+echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-
-	echo '<tr>';
-			
+	echo '<tr>';			
 		echo '<td class="tree">';
-		
-			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;">'.get_lang("Build").'&nbsp;&#124;&nbsp;<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("BasicOverview").'</a>&nbsp;&#124;&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.get_lang("Display").'</a></p>';
-			
-			//links for adding a module, chapter or step
-			echo '<div class="lp_actions">';
-
-				echo '<p class="lp_action">';
-				
-					echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img align="left" alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
-						
-				echo '</p>';
-				echo '<p class="lp_action">';
-				
-					echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img align="left" alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
-				
-				echo '</p>';
-				
-			echo '</div>';
-			
-			echo '<div class="lp_tree">';
-					
+			echo '<div class="lp_tree">';					
 				//build the tree with the menu items in it
-				echo $_SESSION['oLP']->build_tree();
-			
-			echo '</div>';
-					
+				echo $_SESSION['oLP']->build_tree();			
+			echo '</div>';					
 		echo '</td>';
 		echo '<td class="workspace">';
-			
-			if(isset($is_success) && $is_success === true)
-			{
-				$msg = '<div class="lp_message" style="margin-bottom:10px;">';
-			
-					$msg .= 'The item has been moved.';
-			
-				$msg .= '</div>';
-				
+			if(isset($is_success) && $is_success === true) {
+				$msg = '<div class="lp_message" style="margin-bottom:10px;">';			
+					$msg .= 'The item has been moved.';			
+				$msg .= '</div>';				
 				echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
-			}
-			else
-			{
+			} else {
 				echo $_SESSION['oLP']->display_move_item($_GET['id']);
-			}
-		
-		echo '</td>';
-			
-	echo '</tr>';
-		
+			}		
+		echo '</td>';			
+	echo '</tr>';		
 echo '</table>';
 
 /*

@@ -1548,23 +1548,18 @@ function export_exercise($item_id)
 
 	$i = 0;
 
-	foreach ($questionList as $questionId)
-	{
+	foreach ($questionList as $questionId) {
 		$i ++;
 
 		// for sequential exercises
-		if ($exerciseType == 2)
-		{
+		if ($exerciseType == 2) {
 			// if it is not the right question, goes to the next loop iteration
 			if ($questionNum != $i)
 			{
 				continue;
-			}
-			else
-			{
+			} else {
 				// if the user has already answered this question
-				if (isset ($exerciseResult[$questionId]))
-				{
+				if (isset ($exerciseResult[$questionId])) {
 					// construction of the Question object
 					$objQuestionTmp = new Question();
 
@@ -1583,30 +1578,18 @@ function export_exercise($item_id)
 			}
 		}
 
-		$s = "<tr bgcolor='#e6e6e6'><td valign='top' colspan='2'>".$langQuestion." ";
-		$s .= $i;
-		if ($exerciseType == 2)
-			$s .= ' / '.$nbrQuestions;
-		$s .= '</td></tr>';
-
-		$test .= $s;
-
+		echo $s = "<tr bgcolor='#e6e6e6'><td valign='top' colspan='2'>".$langQuestion." ";
 		//Call the showQuestion() function from exercise.lib.php. This basically displays the question in a table
-		$test .= showQuestion($questionId, false, 'export');
+		$test .= showQuestion($questionId, false, 'export', $i, $nbrQuestions);
 
 	} // end foreach()
 
 	$s = "</table></td></tr><tr><td><br/><input type='button' value='".$langOk."' onClick=\"javascript:evaluate();alert('Evaluated.');\">";
-
 	$s .= "</td></tr></form></table>";
 	$s .= "<script type='text/javascript'> loadPage(); </script>";
-
 	$b = 2;
-
 	$test .= $s;
-
 	return ($test);
-
 }
 
 /**
@@ -1623,7 +1606,6 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 {
 
 	global $circle1_files, $expdir, $_course, $_SESSION, $GLOBALS;
-
 	global $timeNoSecFormat, $dateFormatLong, $language_interface, $langPubl, $langDone, $langThisCourseDescriptionIsEmpty, $lang_course_description, $lang_introduction_text, $_cid, $langHotPotatoesFinished, $lang_author, $lang_date, $lang_groups, $lang_users, $lang_ass, $lang_dropbox, $test, $langQuestion;
 
 	//	$_course=$_SESSION['course'];

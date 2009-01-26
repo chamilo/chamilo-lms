@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 17948 2009-01-22 21:39:22Z juliomontoya $
+<?php // $Id: question_pool.php 18002 2009-01-26 16:33:20Z juliomontoya $
  
 /*
 ==============================================================================
@@ -30,7 +30,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 17948 2009-01-22 21:39:22Z juliomontoya $
+* 	@version $Id: question_pool.php 18002 2009-01-26 16:33:20Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -162,8 +162,6 @@ if($is_allowedToEdit)
 	<form method="get" action="<?php echo api_get_self(); ?>" style="display:inline;">
 	<input type="hidden" name="fromExercise" value="<?php echo $fromExercise; ?>">
 	
-	
-
 	<?php echo get_lang('Filter'); ?> : 
 	<select name="exerciseId">
 	<option value="0">-- <?php echo get_lang('AllExercises'); ?> --</option>
@@ -183,7 +181,7 @@ if($is_allowedToEdit)
 	?> 
     </select>
     
-    <?php echo get_lang('Level'); ?> : <select name="exerciseLevel">
+    <?php echo get_lang('Difficulty'); ?> : <select name="exerciseLevel">
 	<option value="-1">-- <?php echo get_lang('AllExercises'); ?> --</option>
 	<?php 
 		$sqlMaxLevel = "SELECT MAX(level) FROM $TBL_QUESTIONS";

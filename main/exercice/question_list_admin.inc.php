@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 17972 2009-01-23 20:11:22Z juliomontoya $
+<?php // $Id: question_list_admin.inc.php 18002 2009-01-26 16:33:20Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 17972 2009-01-23 20:11:22Z juliomontoya $
+* 	@version $Id: question_list_admin.inc.php 18002 2009-01-26 16:33:20Z juliomontoya $
 */
 
 
@@ -94,7 +94,7 @@ echo '</div></div>';
 	<tr class="row_odd">
 		<th><?php echo get_lang('Question'); ?></th>
 		<th><?php echo get_lang('Type');?></th>
-		<th><?php echo get_lang('Level'); ?></th>
+		<th><?php echo get_lang('Difficulty'); ?></th>
 		<th><?php echo get_lang('Export'); ?></th>
 		<th><?php echo get_lang('Modify'); ?></th>
 	</tr>

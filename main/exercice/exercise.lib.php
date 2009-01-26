@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 17944 2009-01-22 20:41:25Z juliomontoya $
+<?php // $Id: exercise.lib.php 18002 2009-01-26 16:33:20Z juliomontoya $
  
 /*
 ==============================================================================
@@ -29,12 +29,18 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 17944 2009-01-22 20:41:25Z juliomontoya $
+* 	@version $Id: exercise.lib.php 18002 2009-01-26 16:33:20Z juliomontoya $
 */
 
-
+/**
+ * @param int question id
+ * @param boolean only answers 
+ * @param boolean origin i.e = learnpath 
+ * @param int current item from the list of questions
+ * @param int number of total questions 
+ * */
 require("../inc/lib/fckeditor/fckeditor.php") ;
-function showQuestion($questionId, $onlyAnswers=false, $origin=false)
+function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_item, $total_item)
 {
 	echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
 	echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
@@ -48,17 +54,26 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 
 	$answerType=$objQuestionTmp->selectType();
 	$pictureName=$objQuestionTmp->selectPicture();
-
+	
 	if ($answerType != HOT_SPOT) // Question is not of type hotspot
 	{
-
-		if(!$onlyAnswers)
-		{
+		if(!$onlyAnswers) {
 			$questionName=$objQuestionTmp->selectTitle();
 			$questionDescription=$objQuestionTmp->selectDescription();
 
 			$questionName=api_parse_tex($questionName);
-			$s.=$questionName.'</div>';
+			
+			$s="<div id=\"question_title\" class=\"sectiontitle\">
+				".get_lang('Question').' ';
+					
+			$s.=$current_item;
+			
+			if($answerType == 2)
+				$s.=' / '.$total_item;			
+			echo $s;
+			echo ': ';		
+			
+			$s =$questionName.'</div>';
 			$s.="<table class='exercise_questions'>
 			<tr>
 			  <td valign='top' colspan='2'>
@@ -185,24 +200,19 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			// fill in blanks
 			elseif($answerType == FILL_IN_BLANKS)
 			{
-			$s.="<tr><td colspan='2'>$answer</td></tr>";
-
+				$s.="<tr><td colspan='2'>$answer</td></tr>";
 			}
 			// free answer
 
 			// matching
-			else
-			{
-				if(!$answerCorrect)
-				{
+			else {
+				if(!$answerCorrect) {
 					// options (A, B, C, ...) that will be put into the list-box
 					$Select[$answerId]['Lettre']=$cpt1++;
 					// answers that will be shown at the right side
 					$answer = api_parse_tex($answer);
 					$Select[$answerId]['Reponse']=$answer;
-				}
-				else
-				{
+				} else {
 					$s.="
 					<tr>
 					  <td colspan='2'>
@@ -214,17 +224,16 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 							<option value='0'>--</option>";
 
 		            // fills the list-box
-		            foreach($Select as $key=>$val)
-		            {
-
+		            foreach($Select as $key=>$val) {
 						$s.="<option value='".$key."'>".$val['Lettre']."</option>";
-
 					}  // end foreach()
 
 					$s.="</select>&nbsp;&nbsp;</td>
 						  <td width='40%' valign='top'>";
-					if(isset($Select[$cpt2])) $s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
-						else $s.='&nbsp;';
+					if(isset($Select[$cpt2])) 
+						$s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
+					else 
+						$s.='&nbsp;';
 					$s.="
 					</td>
 						</tr>
@@ -238,10 +247,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 					if($answerId == $nbrAnswers)
 					{
 						// if it remains answers to shown at the right side
-						while(isset($Select[$cpt2]))
-						{
-
-
+						while(isset($Select[$cpt2])) {
 							$s.="<tr>
 							  <td colspan='2'>
 								<table border='0' cellpadding='0' cellspacing='0' width='100%'>
@@ -297,7 +303,18 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 
 		if(!$onlyAnswers)
 		{
-			$s=$questionName.'</div>';
+			$s="<div id=\"question_title\" class=\"sectiontitle\">
+				".get_lang('Question').' ';
+					
+			$s.=$current_item;
+			
+			if($answerType == 2)
+				$s.=' / '.$total_item;			
+			echo $s;
+			echo ': ';		
+			
+			$s =$questionName.'</div>';
+			
 			$s.="<table class='exercise_questions'>
 			<tr>
 			  <td valign='top' colspan='2'>

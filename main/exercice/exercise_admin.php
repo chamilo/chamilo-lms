@@ -1,22 +1,24 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+==============================================================================
+	Dokeos - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+	Copyright (c) 2004-2009 Dokeos SPRL
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+		For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
 */
-
 
 /**
 *	Exercise administration
@@ -30,32 +32,42 @@
 // name of the language file that needs to be included
 $language_file='exercice';
 
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
-
-
-
 include('../inc/global.inc.php');
 include('exercise.lib.php');
 $this_section=SECTION_COURSES;
 
-if(!api_is_allowed_to_edit())
-{
+if(!api_is_allowed_to_edit()) {
 	api_not_allowed(true);
 }
 
 $htmlHeadXtra[] = '<script>
-			function advanced_parameters() {
-				if(document.getElementById(\'options\').style.display == \'none\') {
-					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-				} else {
+		
+		function advanced_parameters() {
+			if(document.getElementById(\'options\').style.display == \'none\') {
+				document.getElementById(\'options\').style.display = \'block\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			} else {
 				document.getElementById(\'options\').style.display = \'none\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-				}	
-			}
+			}	
+		}
+		
+		function feedbackselection() 
+		{
+			var index = document.exercise_admin.exerciseFeedbackType.selectedIndex;
+			
+			if (index == \'1\') {
+					
+				document.exercise_admin.exerciseType[1].checked=true;
+				document.exercise_admin.exerciseType[0].disabled=true;					
+								
+			} else { 					
+				document.exercise_admin.exerciseType[0].disabled=false;	
+			}			
+		}
 		</script>';
 		
 /*********************
@@ -69,13 +81,11 @@ $objExercise = new Exercise();
 /*********************
  * INIT FORM
  *********************/
-if(isset($_GET['exerciseId']))
-{
+if(isset($_GET['exerciseId'])) {
 	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?exerciseId='.$_GET['exerciseId']);
 	$objExercise -> read (intval($_GET['exerciseId']));
 	$form -> addElement ('hidden','edit','true');
-}else
-{
+} else {
 	$form = new FormValidator('exercise_admin');
 	$form -> addElement ('hidden','edit','false');
 }
@@ -85,30 +95,20 @@ $objExercise -> createForm ($form);
 /*********************
  * VALIDATE FORM
  *********************/
-if($form -> validate())
-{
+if($form -> validate()) {
 	$objExercise -> processCreation($form);
-	if($form -> getSubmitValue('edit') == 'true')
-	{
+	if($form -> getSubmitValue('edit') == 'true') {
 		header('Location:exercice.php?message=ExerciseEdited');
-	}
-	else
-	{
+	} else {
 		header('Location:admin.php?message=ExerciseStored&exerciseId='.$objExercise->id);
 	}
-}
-else
-{
+} else {
 	/*********************
 	 * DISPLAY FORM
 	 *********************/
 	$nameTools=get_lang('ExerciseManagement');
 	$interbreadcrumb[] = array ("url"=>"exercice.php", "name"=> get_lang('Exercices'));
-
 	Display::display_header($nameTools,"Exercise");
-
 	$form -> display ();
 }
-
 Display::display_footer();
-

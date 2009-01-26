@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 17944 2009-01-22 20:41:25Z juliomontoya $
+* 	@version $Id: exercise.class.php 18002 2009-01-26 16:33:20Z juliomontoya $
 */
 
 
@@ -807,30 +807,35 @@ class Exercise
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
 	function createForm ($form)
-	{				
-		
+	{		
 		// title
-		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName').' : ','class="input_titles"');
-
+		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName'),'class="input_titles"');
 		// fck editor
 		global $fck_attribute;
 		$fck_attribute = array();
-		$fck_attribute['Height'] = '250px';
-		$fck_attribute['Width'] = '50%'; 
-		$fck_attribute['ToolbarSet'] = 'NewTest'; 
+		$fck_attribute['Height'] 	= '200px';
+		$fck_attribute['Width'] 	= '50%'; 
+		$fck_attribute['ToolbarSet'] = 'NewTest';		  
 		
 		$fck_attribute['Config']['InDocument'] = false;		
 		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';		
 		//$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
 
-		$form -> addElement ('html_editor', 'exerciseDescription', get_lang('ExerciseDescription').' : ');
-
-		// type
+		$form -> addElement ('html_editor', 'exerciseDescription', get_lang('ExerciseDescription'));		
+		
+		// feedback type			
+		$feedback_option[0]=get_lang('Feedback');
+		$feedback_option[1]=get_lang('DirectFeedback');
+		$feedback_option[2]=get_lang('NoFeedback');
+		
+		$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"'); 
+		
+		// test type
 		$radios = array();
 		$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
 		$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
-		$form -> addGroup($radios, null, get_lang('ExerciseType').' : ', '<br />');
-		
+		$form -> addGroup($radios, null, get_lang('ExerciseType'), '<br />');
+						
 		$form -> addElement('html','<div class="row">
 			<div class="label">&nbsp;</div>
 			<div class="formw">
@@ -847,24 +852,17 @@ class Exercise
 		$option = range(0,$max);
 		$option[0]=get_lang('DoNotRandomize');
 
+		$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option);
 		$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
-		$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option); 
+ 
 		
 		//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
-		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');
-		
-			
-		$feedback_option[0]=get_lang('Feedback');
-		$feedback_option[1]=get_lang('DirectFeedback');
-		$feedback_option[2]=get_lang('NoFeedback');
-		
-		$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType').' : ',$feedback_option); 
-		
+		$form -> addGroup($random,null,get_lang('RandomQuestions'),'<br />');		
 		
 		$attempt_option=range(0,10);
         $attempt_option[0]=get_lang('Infinite');
         
-        $form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts').' : ',$attempt_option);
+        $form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option);
 
         $form -> addElement('checkbox', 'enabletimelimit',null ,get_lang('EnableTimeLimits'));
         //$form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
@@ -879,8 +877,7 @@ class Exercise
 
         $defaults = array();
 
-        if (api_get_setting('search_enabled') === 'true')
-        {
+        if (api_get_setting('search_enabled') === 'true') {
             require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 
             $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
@@ -903,9 +900,7 @@ class Exercise
                     $defaults[$specific_field['code']] = implode(', ', $arr_str_values);
                 }
             }
-
             $form -> addElement ('html','</div>');
-
         }
 		
 		// submit
@@ -920,14 +915,10 @@ class Exercise
         
 
 		// defaults
-		if($this -> id > 0)
-		{
-			if ($this -> random > $this->selectNbrQuestions())
-			{
+		if($this -> id > 0) {
+			if ($this -> random > $this->selectNbrQuestions()) {
 				$defaults['randomQuestions'] =  $this->selectNbrQuestions();
-			}
-			else
-			{			
+			} else {			
 				$defaults['randomQuestions'] = $this -> random;
 			}
 			

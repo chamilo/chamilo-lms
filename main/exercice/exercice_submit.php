@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 17972 2009-01-23 20:11:22Z juliomontoya $
+<?php // $Id: exercice_submit.php 18002 2009-01-26 16:33:20Z juliomontoya $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 17972 2009-01-23 20:11:22Z juliomontoya $
+* 	@version $Id: exercice_submit.php 18002 2009-01-26 16:33:20Z juliomontoya $
 */
 
 
@@ -1286,17 +1286,8 @@ else
 			".get_lang('Question')." ";
 		*/
 		
-		$s="<div id=\"question_title\" class=\"sectiontitle\">
-			".get_lang('Question').' ';
-				
-		$s.=$i;
-		
-		if($exerciseType == 2)
-			$s.=' / '.$nbrQuestions;			
-		echo $s;
-		echo ': ';		
 		// shows the question and its answers		
-		showQuestion($questionId, false, $origin);
+		showQuestion($questionId, false, $origin,$i,$nbrQuestions);
 		// for sequential exercises
 		if($exerciseType == 2) {
 			// quits the loop
@@ -1307,7 +1298,7 @@ else
 	
 	echo "	  	
 		 <!-- <input type='submit' name='buttonCancel' value=".get_lang('Cancel')." />
-	   &nbsp;&nbsp; //-->";
+	   &nbsp;&nbsp; //--><br />";
 		$submit_btn="<input type='submit' name='submit' value='";
 		//	$submit_btn.=get_lang('ValidateAnswer'); 
 		if ($objExercise->selectFeedbackType()==1 && $_SESSION['objExercise']->selectType()==2) {						

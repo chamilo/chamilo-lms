@@ -114,18 +114,19 @@ class UserTable extends SortableTable
 		// generate the data to display
 		$sortable_data = array();
 		foreach ($data_array as $data) {
-			$row = array ();
-			$row[] = $this->build_type_column ($data[0]);
-			$row[] = $this->build_name_link ($data[0]);
-			$row[] = $data[2];
-			$row[] = $data[3];
-			$row[] = $data[4];
-			$row[] = $data[5];
-			if ($scoredisplay->is_custom())
-				$row[] = $data[6];
-			$sortable_data[] = $row;
+			if ($data[2]!="") {//filter by course removed
+				$row = array ();
+				$row[] = $this->build_type_column ($data[0]);
+				$row[] = $this->build_name_link ($data[0]);
+				$row[] = $data[2];
+				$row[] = $data[3];
+				$row[] = $data[4];
+				$row[] = $data[5];
+				if ($scoredisplay->is_custom())
+					$row[] = $data[6];
+				$sortable_data[] = $row;
+			}
 		}
-		
 		return $sortable_data;
 	}
 

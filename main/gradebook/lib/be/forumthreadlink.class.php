@@ -122,56 +122,58 @@ class ForumThreadLink extends AbstractLink
     }
 
   public function calc_score($stud_id = null) {
-    	$course_info = Database :: get_course_info($this->get_course_code());
-		$database_name = (empty($course_info['db_name']))?$course_info['dbName']:$course_info['db_name'];
-		$thread_qualify = Database :: get_course_table('forum_thread_qualify', $database_name);
-
-  		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD, $database_name)." WHERE thread_id = '".$this->get_ref_id()."'";
-		$query = api_sql_query($sql,__FILE__,__LINE__);
-		$assignment = Database::fetch_array($query);
-  	
-  	    $sql = 'SELECT * FROM '.$thread_qualify.' WHERE thread_id = '.$this->get_ref_id();
-    	
-    	if (isset($stud_id)){
-    		$sql .= ' AND user_id = '."'".$stud_id."'";
-    	}
-    		
-    	// order by id, that way the student's first attempt is accessed first
-		$sql .= ' ORDER BY qualify_time DESC';
-		 
-    	$scores = api_sql_query($sql, __FILE__, __LINE__);
-
-		// for 1 student
-    	if (isset($stud_id))
-    	{
-    		if ($data=Database::fetch_array($scores)) {
-    			return array ($data['qualify'], $assignment['thread_qualify_max']);    			
-    		} else {
-      			return null;  			
-    		}
-    	} else {// all students -> get average
-    		$students=array();  // user list, needed to make sure we only
-    							// take first attempts into account
-			$rescount = 0;
-			$sum = 0;
-
-			while ($data=Database::fetch_array($scores)) {
-				if (!(array_key_exists($data['user_id'],$students))) {
-					if ($assignment['thread_qualify_max'] != 0) {
-						$students[$data['user_id']] = $data['qualify'];
-						$rescount++;
-						$sum += ($data['qualify'] / $assignment['thread_qualify_max']);
-					}
+	    	$course_info = Database :: get_course_info($this->get_course_code());
+			$database_name = (empty($course_info['db_name']))?$course_info['dbName']:$course_info['db_name'];
+			if ($database_name!="") {
+			$thread_qualify = Database :: get_course_table('forum_thread_qualify', $database_name);
+			
+	  		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD, $database_name)." WHERE thread_id = '".$this->get_ref_id()."'";
+			$query = api_sql_query($sql,__FILE__,__LINE__);
+			$assignment = Database::fetch_array($query);
+	  	
+	  	    $sql = 'SELECT * FROM '.$thread_qualify.' WHERE thread_id = '.$this->get_ref_id();
+	    	
+	    	if (isset($stud_id)){
+	    		$sql .= ' AND user_id = '."'".$stud_id."'";
+	    	}
+	    		
+	    	// order by id, that way the student's first attempt is accessed first
+			$sql .= ' ORDER BY qualify_time DESC';
+			 
+	    	$scores = api_sql_query($sql, __FILE__, __LINE__);
+	
+			// for 1 student
+	    	if (isset($stud_id))
+	    	{
+	    		if ($data=Database::fetch_array($scores)) {
+	    			return array ($data['qualify'], $assignment['thread_qualify_max']);    			
+	    		} else {
+	      			return null;  			
+	    		}
+	    	} else {// all students -> get average
+	    		$students=array();  // user list, needed to make sure we only
+	    							// take first attempts into account
+				$rescount = 0;
+				$sum = 0;
+	
+				while ($data=Database::fetch_array($scores)) {
+					if (!(array_key_exists($data['user_id'],$students))) {
+						if ($assignment['thread_qualify_max'] != 0) {
+							$students[$data['user_id']] = $data['qualify'];
+							$rescount++;
+							$sum += ($data['qualify'] / $assignment['thread_qualify_max']);
+						}
+					 }
 				 }
-			 }
-
-			if ($rescount == 0) {
-				return null;				
-			  } else {
-				return array ($sum , $rescount);				
-			 }
-
-    	}
+	
+				if ($rescount == 0) {
+					return null;				
+				  } else {
+					return array ($sum , $rescount);				
+				 }
+	
+	    	}
+		}
     }
       
 // INTERNAL FUNCTIONS
@@ -248,6 +250,7 @@ class ForumThreadLink extends AbstractLink
     public function get_link() {
     	//it was extracts the forum id
    		$tbl_name=$this->get_forum_thread_table();
+   		if ($tbl_name!="") {
     	$sql = 'SELECT * FROM '.$this->get_forum_thread_table()." WHERE thread_id = '".$this->get_ref_id()."'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		$row    = Database::fetch_array($result,'ASSOC');
@@ -256,6 +259,7 @@ class ForumThreadLink extends AbstractLink
     	$url = api_get_path(WEB_PATH)
 		.'main/forum/viewthread.php?cidReq='.$this->get_course_code().'&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
 		return $url;
+   		}
 	}
 	private function get_exercise_data() {
 		$tbl_name=$this->get_forum_thread_table();

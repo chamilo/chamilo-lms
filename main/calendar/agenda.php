@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 17787 2009-01-17 00:41:06Z ivantcholakov $
+<?php //$Id: agenda.php 18016 2009-01-26 22:00:07Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -274,13 +274,13 @@ if (empty($select_year) && empty($select_month))
 	$select_month = $today['mon'];
 }
 
-echo '<div class="actions" style="float:left">';
+echo '<div class="actions">';
 display_student_links();
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 {
 	display_courseadmin_links();
 }
-echo '</div><br /><br />';
+echo '</div><br />';
 
 
 echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">'

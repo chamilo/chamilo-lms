@@ -1,4 +1,4 @@
-<?php // $Id: group.php 17818 2009-01-19 12:44:20Z pcool $
+<?php // $Id: group.php 18016 2009-01-26 22:00:07Z juliomontoya $
  
 /*
 ==============================================================================
@@ -194,22 +194,19 @@ if (api_is_allowed_to_edit(false,true))
 echo '<div class="actions">';
 if (api_is_allowed_to_edit(false,true))
 {	
-	if (get_setting('allow_group_categories') == 'true')
-	{
-		echo Display::return_icon('folder_new.gif', get_lang('AddCategory')) . '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;';
+	echo Display::return_icon('group_add.gif', get_lang('NewGroupCreate')) . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>&nbsp;';	
+	if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0) {
+		//echo '<a href="group_overview.php?'.api_get_cidreq().'">'.Display::return_icon('group_view.gif').'&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
+		echo Display::return_icon('group.gif', get_lang('GroupOverview')) .'<a href="group_overview.php?'.api_get_cidreq().'">'.get_lang('GroupOverview').'</a>&nbsp;';
 	}
-	else
-	{
+	
+	if (get_setting('allow_group_categories') == 'true') {
+		echo Display::return_icon('folder_new.gif', get_lang('AddCategory')) . '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;';
+	} else {
 		//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
 		echo Display::return_icon('settings.gif', get_lang('PropModify')) . '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.get_lang('PropModify').'</a>&nbsp;';
 	}
 	//echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang('NewGroupCreate').'</a>&nbsp;';
-	echo Display::return_icon('group_add.gif', get_lang('NewGroupCreate')) . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>&nbsp;';
-	if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0)
-	{
-		//echo '<a href="group_overview.php?'.api_get_cidreq().'">'.Display::return_icon('group_view.gif').'&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
-		echo Display::return_icon('group.gif', get_lang('GroupOverview')) .'<a href="group_overview.php?'.api_get_cidreq().'">'.get_lang('GroupOverview').'</a>&nbsp;';
-	}
 }
 $group_cats = GroupManager :: get_categories();
 if (get_setting('allow_group_categories') == 'true' && count($group_cats) > 1)
@@ -260,7 +257,7 @@ foreach ($group_cats as $index => $category)
 		$group_list = GroupManager :: get_group_list();
 		$in_category = true;
 	}
-	echo '<div style="margin: 0px;margin-left: 50px;">';
+
 	//if (count($group_list) > 0 && $in_category)
 	if ($in_category)
 	{
@@ -418,7 +415,6 @@ foreach ($group_cats as $index => $category)
 		echo get_lang('NoGroupsAvailable');
 	}
 	*/
-	echo '</div>';
 }
 /*
 ==============================================================================

@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 17976 2009-01-23 21:21:13Z juliomontoya $
+<?php // $Id: exercice.php 18005 2009-01-26 18:00:46Z juliomontoya $
 
 /*
 ==============================================================================
@@ -750,46 +750,51 @@ $myorigin = (empty($origin)?'':'&origin='.$origin);
 $mylpid = (empty($learnpath_id)?'':'&learnpath_id='.$learnpath_id);
 $mylpitemid = (empty($learnpath_item_id)?'':'&learnpath_item_id='.$learnpath_item_id);
 while($row=Database::fetch_array($result)) {
-	if($i%2==0) $s_class="row_odd"; else $s_class="row_even";
-
+	if($i%2==0) 
+		$s_class="row_odd"; 
+	else 
+		$s_class="row_even";
 	// prof only
 	if ($is_allowedToEdit) {
-	echo '<tr class="'.$s_class.'">'."\n";
-				?>
-		  <td width="30" align="left"><?php Display::display_icon('quiz.gif', get_lang('Exercice'))?></td>
-		  <td width="15" valign="left"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
-		      <?php $row['title']=api_parse_tex($row['title']); ?>
-		  <td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&amp;exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a></td>
-		  <td> <?php
-		  $exid = $row['id'];
-		  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '".Database::escape_string($exid)."'";
-		  $sqlresult =api_sql_query($sqlquery);
-		  $rowi = Database::result($sqlresult,0);
-		  echo $rowi.' '.strtolower(get_lang(($rowi>1?'Questions':'Question'))).'</td>';
-  		  echo '<td><a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a></td>';
-  		  ?>
-	       <td>
-	       <a href="exercise_admin.php?modifyExercise=yes&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
-	       <a href="admin.php?exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" /></a>
-	       <a href="exercice.php?choice=delete&exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
-	    <?php
-				// if active
-if ($row['active']) {
-					?>
-      <a href="exercice.php?choice=disable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/visible.gif" border="0" alt="<?php echo htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset); ?>" /></a>
-    <?php
-				} else {// else if not active
-					?>
-      <a href="exercice.php?choice=enable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/invisible.gif" border="0" alt="<?php echo htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
-    <?php
-}
-if($row['results_disabled']) {
-echo '<a href="exercice.php?choice=enable_results&page='.$page.'&exerciseId='.$row['id'].'" title="'.get_lang('EnableResults').'" alt="'.get_lang('EnableResults').'"><img src="../img/lp_quiz_na.gif" border="0" alt="'.htmlentities(get_lang('EnableResults'),ENT_QUOTES,$charset).'" /></a>';
-} else {
-echo '<a href="exercice.php?choice=disable_results&page='.$page.'&exerciseId='.$row['id'].'" title="'.get_lang('DisableResults').'" alt="'.get_lang('DisableResults').'"><img src="../img/lp_quiz.gif" border="0" alt="'.htmlentities(get_lang('DisableResults'),ENT_QUOTES,$charset).'" /></a>';
-}
-echo "</td>";
-echo "</tr>\n";
+		echo '<tr class="'.$s_class.'">'."\n";
+		?>
+		<td width="30" align="left"><?php Display::display_icon('quiz.gif', get_lang('Exercice'))?></td>
+		<td width="15" valign="left"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
+			<?php $row['title']=api_parse_tex($row['title']); ?>
+		<td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&amp;exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a></td>
+		<td> <?php
+		$exid = $row['id'];
+		$sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '".Database::escape_string($exid)."'";
+		$sqlresult =api_sql_query($sqlquery);
+		$rowi = Database::result($sqlresult,0);
+		echo $rowi.' '.strtolower(get_lang(($rowi>1?'Questions':'Question'))).'</td>';
+  		echo '<td><a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a></td>';
+  		?>
+	    <td>
+	    <a href="admin.php?exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" /></a>	      
+		<?php	
+		if($row['results_disabled']) {
+			echo '<a href="exercice.php?choice=enable_results&page='.$page.'&exerciseId='.$row['id'].'" title="'.get_lang('EnableResults').'" alt="'.get_lang('EnableResults').'"><img src="../img/lp_quiz_na.gif" border="0" alt="'.htmlentities(get_lang('EnableResults'),ENT_QUOTES,$charset).'" /></a>';
+		} else {
+			echo '<a href="exercice.php?choice=disable_results&page='.$page.'&exerciseId='.$row['id'].'" title="'.get_lang('DisableResults').'" alt="'.get_lang('DisableResults').'"><img src="../img/lp_quiz.gif" border="0" alt="'.htmlentities(get_lang('DisableResults'),ENT_QUOTES,$charset).'" /></a>';
+		}				
+		?>
+		<a href="exercise_admin.php?modifyExercise=yes&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>	    
+		<a href="exercice.php?choice=delete&exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>					
+		<?php		
+		//if active
+		if ($row['active']) {
+			?>
+      		<a href="exercice.php?choice=disable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/visible.gif" border="0" alt="<?php echo htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset); ?>" /></a>
+    		<?php
+		} else {
+			// else if not active
+			?>
+      		<a href="exercice.php?choice=enable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/invisible.gif" border="0" alt="<?php echo htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
+    		<?php
+		}		
+		echo "</td>";
+		echo "</tr>\n";
 } else {// student only
 				?>
           <tr>

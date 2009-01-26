@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 18002 2009-01-26 16:33:20Z juliomontoya $
+<?php // $Id: question_pool.php 18005 2009-01-26 18:00:46Z juliomontoya $
  
 /*
 ==============================================================================
@@ -30,7 +30,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 18002 2009-01-26 16:33:20Z juliomontoya $
+* 	@version $Id: question_pool.php 18005 2009-01-26 18:00:46Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -184,21 +184,17 @@ if($is_allowedToEdit)
     <?php echo get_lang('Difficulty'); ?> : <select name="exerciseLevel">
 	<option value="-1">-- <?php echo get_lang('AllExercises'); ?> --</option>
 	<?php 
-		$sqlMaxLevel = "SELECT MAX(level) FROM $TBL_QUESTIONS";
-		$resultMaxLevel = api_sql_query($sqlMaxLevel,__FILE__,__LINE__);
-		if ($result0MaxLevel = Database::fetch_array($resultMaxLevel)) 
-		{
-			$maxLevel = $result0MaxLevel[0];
-		}
-		else
-		{
+		$sql = "SELECT MAX(level) FROM $TBL_QUESTIONS";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		if ($row = Database::fetch_array($result)) {
+			$maxLevel = $row[0];
+		} else {
 			$maxLevel = -1;
 		}
-		for ($level = 0; $level <= $maxLevel; $level++)
-		{
-	?>	
-		<option value="<?php echo $level; ?>" <?php if($exerciseLevel == $level) echo 'selected="selected"'; ?>><?php echo $level; ?></option>	
-	<?php
+		for ($level = 0; $level <= $maxLevel; $level++) {
+		?>	
+			<option value="<?php echo $level; ?>" <?php if($exerciseLevel == $level) echo 'selected="selected"'; ?>><?php echo $level; ?></option>	
+		<?php
 		}
 	?> 
 

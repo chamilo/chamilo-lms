@@ -75,7 +75,8 @@ class MultipleAnswer extends Question {
 		
 		$fck_attribute['Config']['InDocument'] = false;		
 		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-		
+		$fck_attribute['Config']['ToolbarStartExpanded']='false';
+			
 
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -119,13 +120,11 @@ class MultipleAnswer extends Question {
 			}
 		}
 
-		$form -> addElement('hidden', 'nb_answers');
-		
+		$form -> addElement('hidden', 'nb_answers');		
 		$boxes_names = array();
 
 		for($i = 1 ; $i <= $nb_answers ; ++$i)
-		{
-			
+		{			
 			if(is_object($answer))
 			{
 				$defaults['answer['.$i.']'] = $answer -> answer[$i];
@@ -138,7 +137,7 @@ class MultipleAnswer extends Question {
 			$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
 			
 			$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
-			$answer_number->freeze();
+			$answer_number->freeze(); 
 			
 			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
 			$boxes_names[] = 'correct['.$i.']';

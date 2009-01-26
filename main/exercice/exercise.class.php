@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 18002 2009-01-26 16:33:20Z juliomontoya $
+* 	@version $Id: exercise.class.php 18005 2009-01-26 18:00:46Z juliomontoya $
 */
 
 
@@ -806,8 +806,12 @@ class Exercise
 	 * Creates the form to create / edit an exercise
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
-	function createForm ($form)
-	{		
+	function createForm ($form, $type='full')
+	{			
+		if(empty($type)){
+			$type='full';
+		}
+		
 		// title
 		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName'),'class="input_titles"');
 		// fck editor
@@ -823,132 +827,139 @@ class Exercise
 
 		$form -> addElement ('html_editor', 'exerciseDescription', get_lang('ExerciseDescription'));		
 		
-		// feedback type			
-		$feedback_option[0]=get_lang('Feedback');
-		$feedback_option[1]=get_lang('DirectFeedback');
-		$feedback_option[2]=get_lang('NoFeedback');
-		
-		$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"'); 
-		
-		// test type
-		$radios = array();
-		$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
-		$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
-		$form -> addGroup($radios, null, get_lang('ExerciseType'), '<br />');
-						
-		$form -> addElement('html','<div class="row">
-			<div class="label">&nbsp;</div>
-			<div class="formw">
-				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>
-			</div>
-			</div>');
+		if($type=='full') {									
+			// feedback type			
+			$feedback_option[0]=get_lang('Feedback');
+			$feedback_option[1]=get_lang('DirectFeedback');
+			$feedback_option[2]=get_lang('NoFeedback');
 			
-		// Random questions
-		$form -> addElement('html','<div id="options" style="display: none;">');
+			$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"'); 
+			
+			// test type
+			$radios = array();
+			$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
+			$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
+			$form -> addGroup($radios, null, get_lang('ExerciseType'), '<br />');
+							
+			$form -> addElement('html','<div class="row">
+				<div class="label">&nbsp;</div>
+				<div class="formw">
+					<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>
+				</div>
+				</div>');
+				
+			// Random questions
+			$form -> addElement('html','<div id="options" style="display: none;">');
+		
+			$random = array();	
+			$option=array();
+			$max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
+			$option = range(0,$max);
+			$option[0]=get_lang('DoNotRandomize');
 	
-		$random = array();	
-		$option=array();
-		$max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
-		$option = range(0,$max);
-		$option[0]=get_lang('DoNotRandomize');
-
-		$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option);
-		$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
- 
-		
-		//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
-		$form -> addGroup($random,null,get_lang('RandomQuestions'),'<br />');		
-		
-		$attempt_option=range(0,10);
-        $attempt_option[0]=get_lang('Infinite');
-        
-        $form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option);
-
-        $form -> addElement('checkbox', 'enabletimelimit',null ,get_lang('EnableTimeLimits'));
-        //$form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
-        //$form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));
-        $form->addElement('datepicker', 'start_time', get_lang('ExeStartTime'), array('form_name'=>'exercise_admin'));
-		$form->addElement('datepicker', 'end_time', get_lang('ExeEndTime'), array('form_name'=>'exercise_admin'));
-
-		// Exercise attempts
-		//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));		
-		
-		$form -> addElement('html','</div>');
-
-        $defaults = array();
-
-        if (api_get_setting('search_enabled') === 'true') {
-            require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
-
-            $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
-            $form -> addElement ('html','<br /><div class="row">');
-            $form -> addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
-            $form -> addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
-            $form -> addElement ('html','</div><div class="sub-form">');
-
-            $specific_fields = get_specific_field_list();
-            foreach ($specific_fields as $specific_field) {
-                $form -> addElement ('text', $specific_field['code'], $specific_field['name']);
-
-                $filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $this->id, 'tool_id' => '\''. TOOL_QUIZ .'\'');
-                $values = get_specific_field_values_list($filter, array('value'));
-                if ( !empty($values) ) {
-                    $arr_str_values = array();
-                    foreach ($values as $value) {
-                        $arr_str_values[] = $value['value'];
-                    }
-                    $defaults[$specific_field['code']] = implode(', ', $arr_str_values);
-                }
-            }
-            $form -> addElement ('html','</div>');
-        }
+			$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option);
+			$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
+	 
+			
+			//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
+			$form -> addGroup($random,null,get_lang('RandomQuestions'),'<br />');		
+			
+			$attempt_option=range(0,10);
+	        $attempt_option[0]=get_lang('Infinite');
+	        
+	        $form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option);
+	
+	        $form -> addElement('checkbox', 'enabletimelimit',null ,get_lang('EnableTimeLimits'));
+	        //$form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
+	        //$form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));
+	        $form->addElement('datepicker', 'start_time', get_lang('ExeStartTime'), array('form_name'=>'exercise_admin'));
+			$form->addElement('datepicker', 'end_time', get_lang('ExeEndTime'), array('form_name'=>'exercise_admin'));
+	
+			// Exercise attempts
+			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));		
+			
+			$form -> addElement('html','</div>');
+	
+	        $defaults = array();
+	
+	        if (api_get_setting('search_enabled') === 'true') {
+	            require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+	
+	            $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
+	            $form -> addElement ('html','<br /><div class="row">');
+	            $form -> addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
+	            $form -> addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
+	            $form -> addElement ('html','</div><div class="sub-form">');
+	
+	            $specific_fields = get_specific_field_list();
+	            foreach ($specific_fields as $specific_field) {
+	                $form -> addElement ('text', $specific_field['code'], $specific_field['name']);	
+	                $filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $this->id, 'tool_id' => '\''. TOOL_QUIZ .'\'');
+	                $values = get_specific_field_values_list($filter, array('value'));
+	                if ( !empty($values) ) {
+	                    $arr_str_values = array();
+	                    foreach ($values as $value) {
+	                        $arr_str_values[] = $value['value'];
+	                    }
+	                    $defaults[$specific_field['code']] = implode(', ', $arr_str_values);
+	                }
+	            }
+	            $form -> addElement ('html','</div>');
+	        }
+		}
 		
 		// submit
 		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));
-
-		// rules
-		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');
-		$form -> addRule ('exerciseAttempts', get_lang('Numeric'), 'numeric');
-		$form -> addRule ('start_time', get_lang('DateNotValid'), 'date');
-        $form -> addRule ('end_time', get_lang('DateNotValid'), 'date');
-        $form->addRule(array ('start_time', 'end_time'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
-        
+		
+		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');			
+		if($type=='full') {
+			// rules			
+			$form -> addRule ('exerciseAttempts', get_lang('Numeric'), 'numeric');
+			$form -> addRule ('start_time', get_lang('DateNotValid'), 'date');
+	        $form -> addRule ('end_time', get_lang('DateNotValid'), 'date');
+	        $form -> addRule(array ('start_time', 'end_time'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
+		}        
 
 		// defaults
-		if($this -> id > 0) {
-			if ($this -> random > $this->selectNbrQuestions()) {
-				$defaults['randomQuestions'] =  $this->selectNbrQuestions();
-			} else {			
-				$defaults['randomQuestions'] = $this -> random;
+		if($type=='full') {
+			if($this -> id > 0) {
+				if ($this -> random > $this->selectNbrQuestions()) {
+					$defaults['randomQuestions'] =  $this->selectNbrQuestions();
+				} else {			
+					$defaults['randomQuestions'] = $this -> random;
+				}
+				
+				$defaults['exerciseType'] = $this -> selectType();
+				$defaults['exerciseTitle'] = $this -> selectTitle();
+				$defaults['exerciseDescription'] = $this -> selectDescription();
+				$defaults['exerciseAttempts'] = $this->selectAttempts();
+				$defaults['exerciseFeedbackType'] = $this->selectFeedbackType(); 
+				
+	  			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
+	            	$defaults['enabletimelimit'] = 1;
+			    
+			    $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00')? $this -> start_time : date('Y-m-d 12:00:00');
+	            $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00');
+	            
+	            if (api_get_setting('search_enabled') === 'true') {
+            		$defaults['index_document'] = 'checked="checked"';
+        }					
 			}
-			
-			$defaults['exerciseType'] = $this -> selectType();
+			else
+			{
+				$defaults['exerciseType'] = 1;
+				$defaults['exerciseAttempts'] = 0;
+				$defaults['randomQuestions'] = 0;
+				$defaults['exerciseDescription'] = '';
+				$defaults['exerciseFeedbackType'] = 0;
+				
+				$defaults['start_time'] = date('Y-m-d 12:00:00');
+				$defaults['end_time'] = date('Y-m-d 12:00:00');
+			}
+		} else {
 			$defaults['exerciseTitle'] = $this -> selectTitle();
-			$defaults['exerciseDescription'] = $this -> selectDescription();
-			$defaults['exerciseAttempts'] = $this->selectAttempts();
-			$defaults['exerciseFeedbackType'] = $this->selectFeedbackType(); 
-			
-  			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
-            	$defaults['enabletimelimit'] = 1;
-		    
-		    $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00')? $this -> start_time : date('Y-m-d 12:00:00');
-            $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00');					
-		}
-		else
-		{
-			$defaults['exerciseType'] = 1;
-			$defaults['exerciseAttempts'] = 0;
-			$defaults['randomQuestions'] = 0;
-			$defaults['exerciseDescription'] = '';
-			$defaults['exerciseFeedbackType'] = 0;
-			
-			$defaults['start_time'] = date('Y-m-d 12:00:00');
-			$defaults['end_time'] = date('Y-m-d 12:00:00');
-		}
-
-        if (api_get_setting('search_enabled') === 'true') {
-            $defaults['index_document'] = 'checked="checked"';
-        }
+			$defaults['exerciseDescription'] = $this -> selectDescription();				
+		}       
 
 		$form -> setDefaults($defaults);
 	}

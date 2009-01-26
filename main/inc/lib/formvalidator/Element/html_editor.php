@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 17581 2009-01-08 09:53:36Z ivantcholakov $
+// $Id: html_editor.php 18005 2009-01-26 18:00:46Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -46,8 +46,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$this->_persistantFreeze = true;
 		$this->_type = 'html_editor';
 		$this->fullPage = false;
-		
-		
+						
 		@ $editor_lang = Database :: get_language_isocode($language_interface);
 		$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
 		if (empty ($editor_lang) || !file_exists($language_file))
@@ -65,46 +64,39 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		
 		//We get the optionnals config parameters in $fck_attribute array
 		$this -> fck_editor->Config = !empty($fck_attribute['Config']) ? $fck_attribute['Config'] : array();
-		
-		
+		// we should set the $fck_attribute['ToolbarStartExpanded']= false to hide the toolbar by default we show the toolbar
+		if($fck_attribute['ToolbarStartExpanded']=='false'){
+			$this ->fck_editor->Config['ToolbarStartExpanded']=false;
+		}
+								
 		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 		
 		//We are in a course
-		if(isset($_SESSION["_course"]["language"]))
-		{
+		if(isset($_SESSION["_course"]["language"])) {
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
-		}
-		
-		//Else, we get the current session language
-		elseif(isset($_SESSION["_user"]["language"]))
-		{
+		} elseif(isset($_SESSION["_user"]["language"])) {
+			//Else, we get the current session language
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-		}		
-		//Else we get the default platform language
-		else
-		{
+		} else  {
+			//Else we get the default platform language
 			$platform_language=api_get_setting("platformLanguage");
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='$platform_language'";
 		}
 		
 		$result_sql=api_sql_query($sql);
 		$isocode_language=mysql_result($result_sql,0,0);
-		$this -> fck_editor->Config['DefaultLanguage'] = $isocode_language;
-		
+		$this -> fck_editor->Config['DefaultLanguage'] = $isocode_language;		
 		$this -> fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'] ;
-
 		// css should be dokeos ones
 		$this -> fck_editor->Config['EditorAreaCSS'] = $this -> fck_editor->Config['ToolbarComboPreviewCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
 
 		// FCKeditor Configuration for documents
-
 		// If we don't find the CreateDocumentWebDir set we change it with the absolute path http://www.dok..
 		if (empty($this -> fck_editor->Config['CreateDocumentWebDir'])) {			
 			$this -> fck_editor->Config['CreateDocumentWebDir']=api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';							
 		};
 
-		if (api_get_setting('advanced_filemanager') == 'true')
-		{
+		if (api_get_setting('advanced_filemanager') == 'true') {
 			// Let javascripts "know" which file manager has been chosen.
 			$this -> fck_editor->Config['AdvancedFileManager'] = true;
 
@@ -112,7 +104,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 			$this -> fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
 
 			// For images
-			$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';		
+			$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';	
 
 			// For flash
 			$this -> fck_editor->Config['FlashBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
@@ -128,9 +120,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 
 			// For flv Player (Videos)
 			$this -> fck_editor->Config['MediaBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-		}
-		else
-		{
+		} else {
 			// Passing the file manager setting to javascripts too.
 			$this -> fck_editor->Config['AdvancedFileManager'] = false;
 
@@ -167,6 +157,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 			$this -> fck_editor->Config['MediaBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 			$this -> fck_editor->Config['MediaUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
 		}
+		
 	}
 	
 	/**

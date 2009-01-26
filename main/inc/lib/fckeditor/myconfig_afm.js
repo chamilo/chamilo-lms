@@ -19,7 +19,7 @@ FCKConfig.ToolbarSets["Question"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Middle"] = [
-	['Source','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Unlink','Table','-','Image','Flash']
+	['FontSize','Bold','Italic','Underline','StrikeThrough','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Unlink','Table','-','Image','Flash','Source']
 ] ;
 
 FCKConfig.ToolbarSets["Agenda"] = [
@@ -57,11 +57,11 @@ FCKConfig.ToolbarSets["ForumLight"] = [
 ] ;
 
 FCKConfig.ToolbarSets["NewTest"] = [
-	['Source','Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','Flash','MP3','OrderedList','UnorderedList','Table']
+	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','Flash','MP3','OrderedList','UnorderedList','Table','Source']
 ] ;
 
 FCKConfig.ToolbarSets["TestComment"] = [
-	['Source','FontName','FontSize','TextColor','BGColor'],['Bold','Italic','Underline','StrikeThrough','Subscript', 'Superscript','Link','Unlink','Image','Flash','MP3','OrderedList','UnorderedList','Table']
+	['FontName','FontSize','TextColor','BGColor'],['Bold','Italic','Underline','StrikeThrough','Subscript', 'Superscript','Link','Unlink','Image','Flash','MP3','OrderedList','UnorderedList','Table','Source']
 ] ;
 
 FCKConfig.ToolbarSets["Test"] = [
@@ -103,7 +103,7 @@ FCKConfig.Plugins.Add('flvPlayer','en') ;
 //FCKConfig.Plugins.Add("Flash", "en");
 FCKConfig.Plugins.Add('fckEmbedMovies');
 
-// added by Juan Carlos Raña
+// added by Juan Carlos Raï¿½a
 FCKConfig.Plugins.Add("mimetex", "en", sOtherPluginPath ) ;
 FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ; // support to english, spanish
 FCKConfig.Plugins.Add("imgmap", "en,es", sOtherPluginPath );
@@ -120,7 +120,7 @@ FCKConfig.Plugins.Add( 'youtube', 'en' ) ;
 FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
 
 //////////////////////////////////////////////moved from fckconfig.js
-// added by Juan Carlos Raña 
+// added by Juan Carlos Raï¿½a 
 
 FCKConfig.LinkBrowser = true ;
 FCKConfig.LinkBrowserURL =FCKConfig.PluginsPath +'ajaxfilemanager/ajaxfilemanager.php';

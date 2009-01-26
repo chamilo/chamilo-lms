@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 16865 2008-11-21 23:24:21Z herodoto $
+<?php // $Id: admin.php 18005 2009-01-26 18:00:46Z juliomontoya $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 16865 2008-11-21 23:24:21Z herodoto $
+* 	@version $Id: admin.php 18005 2009-01-26 18:00:46Z juliomontoya $
 */
 
 
@@ -447,7 +447,11 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 }
 // -->
 </script>";
-Display::display_header($nameTools,"Exercise");
+Display::display_header($nameTools,'Exercise');
+
+echo '<div class="actions">';
+echo Display::return_icon('search.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
+echo '</div>';
 
 if(isset($_GET['message']))
 {
@@ -457,17 +461,14 @@ if(isset($_GET['message']))
 	}
 }
 
+/*		
 $description = $objExercise->selectDescription();
 echo '<div class="sectiontitle">'.$objExercise->selectTitle().'</div>';
 if(!empty($description))
 {
 	echo '<div class="sectioncomment">'.stripslashes($description).'</div>';
 }
-
-
-echo '<div class="actions">';
-echo Display::return_icon('search.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
-echo '</div>';
+*/
 
 if($newQuestion || $editQuestion)
 {
@@ -484,10 +485,21 @@ if(isset($_GET['hotspotadmin']))
 }
 if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin']))
 {
+	include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?exerciseId='.$_GET['exerciseId']);
+	$form -> addElement ('hidden','edit','true');
+	$objExercise -> createForm ($form,'simple');
+	
+	if($form -> validate()) {
+		$objExercise -> processCreation($form);
+		if($form -> getSubmitValue('edit') == 'true')
+			Display::display_confirmation_message(get_lang('ExerciseEdited'));
+	}		
+	$form -> display (); 
+	echo '<br />';	
 	// question list management
 	include('question_list_admin.inc.php');
 }
-
 
 api_session_register('objExercise');
 api_session_register('objQuestion');

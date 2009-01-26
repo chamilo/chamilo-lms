@@ -63,7 +63,6 @@ class UniqueAnswer extends Question {
 		// multiple 
 		global $fck_attribute;
 
-
 		$fck_attribute = array();
 		$fck_attribute['Width'] = '50%';
 		$fck_attribute['Height'] = '125px';
@@ -73,6 +72,8 @@ class UniqueAnswer extends Question {
 		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
 		$fck_attribute['Config']['InDocument'] = false;		
 		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+		// we collapse the fckeditor toolbar
+		$fck_attribute['Config']['ToolbarStartExpanded']='false';		
 		
 		//this line define how many question by default appear when creating a choice question
 		$nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 4;
@@ -88,10 +89,9 @@ class UniqueAnswer extends Question {
 		$feedback_title='';
 		$comment_title='';
 		
-		if ($obj_ex->selectFeedbackType()==0)
-			$comment_title = '<th>'.get_lang('Comment').'</th>';
-		elseif ($obj_ex->selectFeedbackType()==1)
-		{						
+		if ($obj_ex->selectFeedbackType()==0) {
+			$comment_title = '<th>'.get_lang('Comment').'</th>';			
+		} elseif ($obj_ex->selectFeedbackType()==1) {						
 			$fck_attribute['Width'] = '250px';
 			$fck_attribute['Height'] = '110px';			
 			$comment_title = '<th width="'.$fck_attribute['Width'].'" >'.get_lang('Comment').'</th>';
@@ -126,8 +126,7 @@ class UniqueAnswer extends Question {
 
 		$defaults = array();
 		$correct = 0;
-		if(!empty($this -> id))
-		{
+		if(!empty($this -> id)) {
 			$answer = new Answer($this -> id);
 			$answer -> read();
 			if(count($answer->nbrAnswers)>0 && !$form->isSubmitted())
@@ -239,18 +238,13 @@ class UniqueAnswer extends Question {
 			{								
 				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"');
 				//Adding extra feedback fields  
-				$group = array(); 
-				
-				$group['try'.$i] =&$form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );
-								
-				$group['lp'.$i] =&$form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);
-				
-				$group['destination'.$i]=&$form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);
-								
+				$group = array(); 				
+				$group['try'.$i] =&$form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );								
+				$group['lp'.$i] =&$form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);				
+				$group['destination'.$i]=&$form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);								
 				$group['url'.$i] =&$form->createElement('text', 'url'.$i,get_lang('Other').': ',array('size'=>'25px'));
-											
-				$form -> addGroup($group, 'scenario', 'scenario');
-							
+															
+				$form -> addGroup($group, 'scenario', 'scenario');							
 				$renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>','scenario');								
 			}
 			

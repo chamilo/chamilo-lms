@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 18002 2009-01-26 16:33:20Z juliomontoya $
+<?php // $Id: question_list_admin.inc.php 18005 2009-01-26 18:00:46Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 18002 2009-01-26 16:33:20Z juliomontoya $
+* 	@version $Id: question_list_admin.inc.php 18005 2009-01-26 18:00:46Z juliomontoya $
 */
 
 
@@ -49,7 +49,6 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 {
 	exit();
 }
-
 
 // moves a question up in the list
 if(isset($_GET['moveUp']))
@@ -107,8 +106,7 @@ if($nbrQuestions) {
 		foreach($questionList as $id) {
 			$objQuestionTmp = Question :: read($id);
 			//showQuestion($id);
-		?>
-	
+		?>	
 			<tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
 				<td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td>
 				<td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
@@ -147,18 +145,13 @@ if($nbrQuestions) {
 ?>
 </table>
 <table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
-
 <?php
-if(!$i)
-{
-?>
-
-<tr>
-  <td><?php echo get_lang('NoQuestion'); ?></td>
-</tr>
-
+if(!$i) {
+	?>
+	<tr>
+  	<td><?php echo get_lang('NoQuestion'); ?></td>
+	</tr>
 <?php
 }
 ?>
-
 </table>

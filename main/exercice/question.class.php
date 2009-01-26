@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 18002 2009-01-26 16:33:20Z juliomontoya $
+<?php // $Id: question.class.php 18005 2009-01-26 18:00:46Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 18002 2009-01-26 16:33:20Z juliomontoya $
+* 	@version $Id: question.class.php 18005 2009-01-26 18:00:46Z juliomontoya $
 */
 
 
@@ -1008,9 +1008,7 @@ abstract class Question
 		
 		$fck_attribute['Config']['InDocument'] = false;		
 		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-		
-		
-		
+				 
 		
 		if(is_array($fck_config)){
 			$fck_attribute = array_merge($fck_attribute,$fck_config);

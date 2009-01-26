@@ -236,11 +236,10 @@ class Evaluation implements GradebookItem
 			if (isset($this->category)) {
 				 $sql .= ','.$this->get_category_id();
 			}
-			if (isset($this->eval_date)) {
-				 $sql .= ','.$this->get_date();
-			}
+			//if (isset($this->eval_date)) {
+				 $sql .= ','.strtotime(date('Y-m-d H:i:s',time()));
+			//}
 			$sql .= ")";
-
 			api_sql_query($sql, __FILE__, __LINE__);
 			$this->set_id(Database::insert_id());
 		}
@@ -255,7 +254,8 @@ class Evaluation implements GradebookItem
 		$eval=new Evaluation();
 		$dateobject=$eval->load ($idevaluation,null,null,null,null);
 		$arreval=get_object_vars($dateobject[0]);
-		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".$arreval['id']."','".$arreval['name']."','".$arreval['description']."','".$arreval['eval_date']."','".$arreval['weight']."','".$arreval['visible']."','evaluation',".api_get_user_id().")";
+		$current_date=strtotime(date('Y-m-d H:i:s',time()));
+		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".$arreval['id']."','".$arreval['name']."','".$arreval['description']."','".$current_date."','".$arreval['weight']."','".$arreval['visible']."','evaluation',".api_get_user_id().")";
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
 	/**
@@ -284,12 +284,12 @@ class Evaluation implements GradebookItem
 		} else {
 			$sql .= 'null';			
 		}
-		$sql .= ', date = ';
-		if (isset($this->eval_date)) {
+		//$sql .= ', date = ';
+		/*if (isset($this->eval_date)) {
 			$sql .= $this->get_date();		
 		} else {
 			$sql .= 'null';		
-		}
+		}*/
 		$sql .= ', weight = '.$this->get_weight()
 				.', max = '.$this->get_max()
 				.', visible = '.$this->is_visible()

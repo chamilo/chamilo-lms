@@ -332,7 +332,7 @@ class EvalForm extends FormValidator
 				'maxlength' => '4'
 			));
 		}
-		$this->add_datepicker('date', get_lang('DateEval'));
+		/*$this->add_datepicker('date', get_lang('DateEval'));*/
 		$this->addElement('textarea', 'description', get_lang('Description'), array (
 			'rows' => '3',
 			'cols' => '34'

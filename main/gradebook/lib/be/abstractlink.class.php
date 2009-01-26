@@ -238,7 +238,7 @@ abstract class AbstractLink implements GradebookItem
 						.','.$this->get_category_id()
 						.','.$this->get_weight()
 						.','.$this->is_visible();
-				if (isset($this->link_date)) {$sql .= ','.$this->get_date();} 
+				if (isset($this->link_date)) {$sql .= ','.'"'.$date_current=strtotime(date('Y-m-d H:i:s',time())).'"';} 
 			$sql .= ")";
 			api_sql_query($sql, __FILE__, __LINE__);
 			$this->set_id(Database::insert_id());
@@ -260,13 +260,13 @@ abstract class AbstractLink implements GradebookItem
 				.', ref_id = '.$this->get_ref_id()
 				.', user_id = '.$this->get_user_id()
 				.", course_code = '".$this->get_course_code()."'"
-				.', category_id = '.$this->get_category_id()
-				.', date = ';
-		if (isset($this->link_date)) {
+				.', category_id = '.$this->get_category_id();
+				//.', date = ';
+		/*if (isset($this->link_date)) {
 			$sql .= $this->get_date();		
 		} else {
 			$sql .= 'null';			
-		}
+		}*/
 		$sql .= ', weight = '.$this->get_weight()
 				.', visible = '.$this->is_visible()
 				.' WHERE id = '.$this->id;
@@ -277,9 +277,10 @@ abstract class AbstractLink implements GradebookItem
 	public function add_link_log($idevaluation) {
 		$tbl_grade_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 		$dateobject=AbstractLink::load ($idevaluation,null,null,null,null);
+		$current_date_server=strtotime(date('Y-m-d H:i:s',time()));
 		$arreval=get_object_vars($dateobject[0]);
 		$description_log=isset($arreval['description'])?$arreval['description']:'';
-		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".$arreval['id']."','".$arreval['course_code']."','".$description_log."','".$arreval['link_date']."','".$arreval['weight']."','".$arreval['visible']."','Link',".api_get_user_id().")";
+		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".$arreval['id']."','".$arreval['course_code']."','".$description_log."','".$current_date_server."','".$arreval['weight']."','".$arreval['visible']."','Link',".api_get_user_id().")";
 		api_sql_query($sql,__FILE__,__LINE__);
 	
 	}	

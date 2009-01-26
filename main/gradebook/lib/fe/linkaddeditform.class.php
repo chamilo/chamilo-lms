@@ -109,8 +109,8 @@ class LinkAddEditForm extends FormValidator
 		}
 		
 		// ELEMENT: date
-		$this->add_datepicker('date',get_lang('Date'));
-		$defaults['date'] = ($form_type == self :: TYPE_EDIT ? $link->get_date() : time());
+		//$this->add_datepicker('date',get_lang('Date'));
+		//$defaults['date'] = ($form_type == self :: TYPE_EDIT ? $link->get_date() : time());
 		
 		
 		// ELEMENT: description

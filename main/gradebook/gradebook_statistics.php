@@ -40,7 +40,6 @@ if ($eval[0]->get_category_id() < 0) {
 	$currentcat= Category :: load($eval[0]->get_category_id());
 }
 
-
 $interbreadcrumb[]= array (
 	'url' => $_SESSION['gradebook_dest'].'?selectcat=' . $currentcat[0]->get_id(), 'name' => get_lang('Gradebook'));
 
@@ -55,10 +54,8 @@ $displayscore= ScoreDisplay :: instance();
 Display :: display_header(get_lang('EvaluationStatistics'));
 DisplayGradebook :: display_header_result($eval[0], $currentcat[0]->get_id(), 0, 0);
 
-
-
 if (!$displayscore->is_custom()) {
-	Display :: display_error_message(get_lang('PleaseEnableScoringSystem'),false);
+	//Display :: display_error_message(get_lang('PleaseEnableScoringSystem'),false);
 } else {
 	$displays= $displayscore->get_custom_score_display_settings();
 	$allresults = Result :: load(null,null,$eval[0]->get_id());

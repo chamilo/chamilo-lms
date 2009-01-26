@@ -140,7 +140,9 @@ class ResultTable extends SortableTable
 // Other functions
 
 	private function build_edit_column ($item) {
-		$edit_column = '<a href="' . api_get_self() . '?editres=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
+		if (api_is_course_tutor()) {//api_is_course_admin()
+			$edit_column = '<a href="' . api_get_self() . '?editres=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
+		}
 		if ($this->evaluation->get_course_code() == null) {
 			$edit_column.= '&nbsp;<a href="' . api_get_self() . '?resultdelete=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '" onclick="return confirmationuser();"><img src="../img/delete.gif" border="0" title="' . get_lang('Delete') . '" alt="" /></a>';
 		$edit_column.= '&nbsp;<a href="user_stats.php?userid=' . $item['id'] . '&selecteval=' . $this->evaluation->get_id() . '"><img src="../img/statistics.gif" width="17px" border="0" title="' . get_lang('Statistics') . '" alt="" /></a>';

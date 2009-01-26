@@ -32,7 +32,7 @@ class DisplayGradebook
 	* @param $forpdf only output for pdf file
 	*/
 	function display_header_result($evalobj, $selectcat, $shownavbar) {
-		if ($shownavbar == '1') {
+		if ($shownavbar == '1' && api_is_course_tutor()) {
 			$header= '<table border="0" cellpadding="5"><tr><td>';
 			$header .= '<a href="'.$_SESSION['gradebook_dest'].'?selectcat=' . $selectcat . '"><img src="../img/lp_leftarrow.gif" alt="' . get_lang('BackToOverview') . '" align="absmiddle"/> ' . get_lang('BackToOverview') . '</a></td>';
 			if ($evalobj->get_course_code() == null) {

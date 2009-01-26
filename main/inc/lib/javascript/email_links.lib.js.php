@@ -61,7 +61,6 @@ function loadEmailEditor(e)
 	}
 	//el is now my link object, so I can get el.href here to load the new window
 	var link = el.href.replace('mailto:','');
-	//document.location = "/ecoles-ccifc/claroline/messaging/email_editor.php?dest=" + el.href;
 	document.location = "<?php echo api_get_path(WEB_CODE_PATH);?>messaging/email_editor.php?dest=" + link;
 	//cancel default link action
 	if(window.event && window.event.returnValue){

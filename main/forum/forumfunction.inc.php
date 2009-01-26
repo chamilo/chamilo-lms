@@ -515,7 +515,7 @@ function store_forum($values) {
 	$session_id = isset($_SESSION['id_session']) ? $_SESSION['id_session'] : 0;
 	
 	$clean_title=Security::remove_XSS(Database::escape_string(htmlspecialchars($values['forum_title'])));
-	
+
 	// forum images
 	
 	$image_moved=false;
@@ -3023,12 +3023,13 @@ function prepare4display($input='') {
 				$counter++;
 			}
 		}
-		return stripslashes($input);
+		return html_entity_decode(stripslashes($input));
 	} else {
 		/*foreach ($input as $key=>$value)
 		{
 			$returnarray[$key]=stripslashes($value);
 		}*/
+		$returnarray=array_walk($input, 'html_entity_decode');
 		$returnarray=array_walk($input, 'stripslashes');
 		return $returnarray;
 	}

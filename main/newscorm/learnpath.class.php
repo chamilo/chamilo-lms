@@ -357,7 +357,7 @@ class learnpath {
      * @param string $description
      * @return int
      */
-    function add_item($parent, $previous, $type = 'dokeos_chapter', $id, $title, $description, $prerequisites=0, $maxTimeAllowed=0)
+    function add_item($parent, $previous, $type = 'dokeos_chapter', $id, $title, $description, $prerequisites=0, $max_time_allowed=0)
     {
     	global $charset;
     	
@@ -368,7 +368,8 @@ class learnpath {
     	$previous = intval($previous);
     	$type = $this->escape_string($type);
     	$id = intval($id);    	
-    	$maxTimeAllowed= $this->escape_string(htmlentities($maxTimeAllowed));
+    	$max_time_allowed = $this->escape_string(htmlentities($max_time_allowed));
+        if (empty($max_time_allowed)) { $max_time_allowed = 0; }
     	
     	$title = $this->escape_string(mb_convert_encoding($title,$this->encoding,$charset));
     	$description = $this->escape_string(mb_convert_encoding($description,$this->encoding,$charset)); 
@@ -476,7 +477,7 @@ class learnpath {
 	    			" . $next . ",
 	    			" . ($display_order + 1) . ",	    				    			
 	    			" . $prerequisites . ",
-	    			" . $maxTimeAllowed . "
+	    			" . $max_time_allowed . "
 	    		)";
 		} else {
 	    	//insert new item
@@ -506,7 +507,7 @@ class learnpath {
 	    			" . $previous . ",
 	    			" . $next . ",
 	    			" . ($display_order + 1) . ",
-	    			" . $maxTimeAllowed . "	    			
+	    			" . $max_time_allowed . "	    			
 	    		)";
 		}
     	
@@ -951,8 +952,9 @@ class learnpath {
      * @param   array   The array resulting of the $_FILES[mp3] element
      * @return	boolean	True on success, false on error
      */
-    function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0, $audio=NULL, $maxTimeAllowed=0) {
+    function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0, $audio=NULL, $max_time_allowed=0) {
     	if($this->debug > 0){error_log('New LP - In learnpath::edit_item()', 0);}
+        if(empty($max_time_allowed)) { $max_time_allowed = 0;}
 
     	if(empty($id) or ($id != strval(intval($id))) or empty($title)){ return false; }
     	
@@ -985,14 +987,14 @@ class learnpath {
     	if($same_parent && $same_previous)
     	{
     		//only update title and description
-    		echo $sql_update = "
+    		$sql_update = "
     			UPDATE " . $tbl_lp_item . " 
     			SET 
     				title = '" . $this->escape_string(htmlentities($title)) . "',
 					prerequisite = '".$prerequisites."',
     				description = '" . $this->escape_string(htmlentities($description)) . "'
                     ". $audio_update_sql . ",
-                    max_time_allowed = '" . $this->escape_string(htmlentities($maxTimeAllowed)) . "'
+                    max_time_allowed = '" . $this->escape_string(htmlentities($max_time_allowed)) . "'
     			WHERE id = " . $id;
     		$res_update = api_sql_query($sql_update, __FILE__, __LINE__);
     	}
@@ -1003,7 +1005,7 @@ class learnpath {
     		$old_next		 	= $row_select['next_item_id'];
     		$old_order		 	= $row_select['display_order'];
     		$old_prerequisite	= $row_select['prerequisite'];
-    		$old_maxTimeAllowed	= $row_select['max_time_allowed'];
+    		$old_max_time_allowed	= $row_select['max_time_allowed'];
     		
     		/* BEGIN -- virtually remove the current item id */
     		/* for the next and previous item it is like the current item doesn't exist anymore */
@@ -1145,12 +1147,12 @@ class learnpath {
 		    	$res_update_next = api_sql_query($sql_update_next, __FILE__, __LINE__);
     		}
     		
-    		if($old_maxTimeAllowed!=$maxTimeAllowed){
-    			$sql_update_maxTimeAllowed = "
+    		if($old_max_time_allowed!=$max_time_allowed){
+    			$sql_update_max_time_allowed = "
 		    		UPDATE " . $tbl_lp_item . "
-		    		SET max_time_allowed = " . $maxTimeAllowed . "
+		    		SET max_time_allowed = " . $max_time_allowed . "
 		    		WHERE id = " . $id;
-		    	$res_update_maxTimeAllowed = api_sql_query($sql_update_maxTimeAllowed, __FILE__, __LINE__);
+		    	$res_update_max_time_allowed = api_sql_query($sql_update_max_time_allowed, __FILE__, __LINE__);
     		}
 
     		

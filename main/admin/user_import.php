@@ -1,4 +1,4 @@
-<?php // $Id: user_import.php 17754 2009-01-15 22:58:39Z cfasanando $
+<?php // $Id: user_import.php 18011 2009-01-26 21:15:19Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -150,34 +150,38 @@ function save_data($users)
 	require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$sendMail = $_POST['sendMail'] ? 1 : 0;
-	foreach ($users as $index => $user)
-	{
-		$user = complete_missing_data($user);
-		
-		$user['Status'] = api_status_key($user['Status']);
-		
-		$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '', $user['AuthSource']);
-		foreach ($user['Courses'] as $index => $course)
-		{
-			if(CourseManager :: course_exists($course))
-				CourseManager :: subscribe_user($user_id, $course,$user['Status']);
-		}
-		if (strlen($user['ClassName']) > 0)
-		{
-			$class_id = ClassManager :: get_class_id($user['ClassName']);
-			ClassManager :: add_user($user_id, $class_id);
-		}
-		if ($sendMail)
-		{			
-			$recipient_name = $user['FirstName'].' '.$user['LastName'];
-			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');			
-			$emailbody = get_lang('Dear').$user['FirstName'].' '.$user['LastName'].",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";						
-			$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-		    $email_admin = get_setting('emailAdministrator');			
-			@api_mail($recipient_name, $user['Email'], $emailsubject, $emailbody, $sender_name,$email_admin);
-		}
-
-	}
+	if (is_array($users)) {
+        foreach ($users as $index => $user)
+    	{
+    		$user = complete_missing_data($user);
+    		
+    		$user['Status'] = api_status_key($user['Status']);
+    		
+    		$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '', $user['AuthSource']);
+            if (is_array($user['Courses'])) {
+        		foreach ($user['Courses'] as $index => $course)
+        		{
+        			if(CourseManager :: course_exists($course))
+        				CourseManager :: subscribe_user($user_id, $course,$user['Status']);
+        		}
+            }
+    		if (strlen($user['ClassName']) > 0)
+    		{
+    			$class_id = ClassManager :: get_class_id($user['ClassName']);
+    			ClassManager :: add_user($user_id, $class_id);
+    		}
+    		if ($sendMail)
+    		{			
+    			$recipient_name = $user['FirstName'].' '.$user['LastName'];
+    			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');			
+    			$emailbody = get_lang('Dear').$user['FirstName'].' '.$user['LastName'].",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";						
+    			$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+    		    $email_admin = get_setting('emailAdministrator');			
+    			@api_mail($recipient_name, $user['Email'], $emailsubject, $emailbody, $sender_name,$email_admin);
+    		}
+    
+    	}
+    }
 }
 /**
  * Read the CSV-file 

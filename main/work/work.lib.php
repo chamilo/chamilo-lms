@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 17989 2009-01-25 05:51:54Z yannoo $
+<?php //$Id: work.lib.php 18007 2009-01-26 19:36:45Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 17989 2009-01-25 05:51:54Z yannoo $
+* 	@version $Id: work.lib.php 18007 2009-01-26 19:36:45Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -19,7 +19,6 @@
 require_once '../document/document.inc.php';
 require_once '../inc/lib/fileDisplay.lib.php';
 
-
 function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)  
 {
 	echo '<div class="actions">';
@@ -29,20 +28,18 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		$parent_dir = dirname($cur_dir_path);
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif', get_lang('Up')).' '.get_lang('Up').'</a>&nbsp&nbsp';
 	}
-	
-	if (! $always_show_upload_form ) {
-		$user_info = api_get_user_info();
-		$user_status = $user_info['status']; 
-		if ($user_status != 1) {
-			$display_output .= "&nbsp&nbsp<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".$origin."\">".Display::return_icon('submit_file.gif', get_lang("UploadADocument"))." ". get_lang("UploadADocument") .'</a>&nbsp&nbsp&nbsp&nbsp';	
-		}					
-	}
-	
+
 	if (! $always_show_tool_options && api_is_allowed_to_edit()) {
 		// Create dir		
 		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.$_GET['toolgroup'].'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateDir').'" title ="'.get_lang('CreateDir').'" /> '.get_lang('CreateDir').' </a>&nbsp&nbsp';
 		// Options
 		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>&nbsp&nbsp";							
+	}
+	
+	if (! $always_show_upload_form ) {
+		
+			$display_output .= "&nbsp&nbsp<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".$origin."\">".Display::return_icon('submit_file.gif', get_lang("UploadADocument"))." ". get_lang("UploadADocument") .'</a>&nbsp&nbsp&nbsp&nbsp';	
+							
 	}
 
 	if ($display_output != "") 

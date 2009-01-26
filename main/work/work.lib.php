@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18008 2009-01-26 19:45:00Z cfasanando $
+<?php //$Id: work.lib.php 18010 2009-01-26 21:10:38Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18008 2009-01-26 19:45:00Z cfasanando $
+* 	@version $Id: work.lib.php 18010 2009-01-26 21:10:38Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -1218,20 +1218,21 @@ function to_javascript_work() {
 							}			 				   	
 				 	}
 				 					
-					document.form1.action = "work.php?origin=<?php echo $origin ?>";
-					document.form1.submit();
-							
+					document.form1.action = "work.php?origin='.Security::remove_XSS($_REQUEST['origin']).'";
+					document.form1.submit();							
 				}					
 				
 						
 			}		
 			</script>';
 }
+
 /**
  * Gets the id of a student publication with a given path
  * @param string $path
  * @return true if is found / false if not found
  */
+ 
 function get_work_id($path) {
 	$TBL_STUDENT_PUBLICATION = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 	$TBL_PROP_TABLE = Database::get_course_table(TABLE_ITEM_PROPERTY);

@@ -1,4 +1,4 @@
-<?php //$Id: work.php 17989 2009-01-25 05:51:54Z yannoo $
+<?php //$Id: work.php 18008 2009-01-26 19:45:00Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 17989 2009-01-25 05:51:54Z yannoo $
+*  	@version $Id: work.php 18008 2009-01-26 19:45:00Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1175,20 +1175,7 @@ function draw_date_picker($prefix,$default='') {
 	list($d_year,$d_month,$d_day) = split('-',$parts[0]);
 	list($d_hour,$d_minute) = split(':',$parts[1]);
 	
-	$month_list = array(
-	1=>'Enero',
-	2=>'Febrero',
-	3=>'Marzo',
-	4=>'Abril',
-	5=>'Mayo',
-	6=>'Junio',
-	7=>'Julio',
-	8=>'Agosto',
-	9=>'Septiembre',
-	10=>'Octubre',
-	11=>'Noviembre',
-	12=>'Diciembre'
-	);
+	$month_list = array(get_lang('JanuaryLong'),get_lang('FebruaryLong'),get_lang('MarchLong'),get_lang('AprilLong'),get_lang('MayLong'),get_lang('JuneLong'),get_lang('JulyLong'),get_lang('AugustLong'),get_lang('SeptemberLong'),get_lang('OctoberLong'),get_lang('NovemberLong'),get_lang('DecemberLong'));
 
 	$minute = range(10,59);
 	array_unshift($minute,'00','01','02','03','04','05','06','07','08','09');

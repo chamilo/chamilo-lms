@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18007 2009-01-26 19:36:45Z cfasanando $
+<?php //$Id: work.lib.php 18008 2009-01-26 19:45:00Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18007 2009-01-26 19:36:45Z cfasanando $
+* 	@version $Id: work.lib.php 18008 2009-01-26 19:45:00Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -204,7 +204,7 @@ function create_group_date_select($prefix='')
 	$d_year=date('Y');
 	array_unshift($minute,'00','01','02','03','04','05','06','07','08','09');
 	$group_name[] = FormValidator :: createElement('select',$prefix.'day','',array_combine(range(1,31),range(1,31)));
-	$group_name[] = FormValidator :: createElement('select',$prefix.'month','',array_combine(range(1,12),array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre')));
+	$group_name[] = FormValidator :: createElement('select',$prefix.'month','',array_combine(range(1,12),array(get_lang('JanuaryLong'),get_lang('FebruaryLong'),get_lang('MarchLong'),get_lang('AprilLong'),get_lang('MayLong'),get_lang('JuneLong'),get_lang('JulyLong'),get_lang('AugustLong'),get_lang('SeptemberLong'),get_lang('OctoberLong'),get_lang('NovemberLong'),get_lang('DecemberLong'))));
 	$group_name[] = FormValidator :: createElement('select',$prefix.'year','',array($d_year=>$d_year,$d_year+1=>$d_year+1));		
 	$group_name[] = FormValidator :: createElement('select',$prefix.'hour','',array_combine(range(1,24),range(1,24)));
 	$group_name[] = FormValidator :: createElement('select',$prefix.'minute','',$minute);

@@ -194,3 +194,13 @@
 	padding-left: 17px;
 	padding-top: 4px;
 }
+
+.scorm_title_text {
+	margin-left: 10px;
+	font-weight: bold;
+	background:#ccc;
+	font-size: 14px;
+	color: #444;	
+	width: 90%;	
+	margin-left:17px;	
+}

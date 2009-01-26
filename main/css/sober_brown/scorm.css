@@ -97,10 +97,6 @@ height: 100%;
 	font-size: 12px;
 	color: #fff;	
 }
-.inner_lp_toc .scorm_title_text
-{
-	margin-left: 10px;
-}
 
 .inner_lp_toc .scorm_status_img
 {
@@ -177,4 +173,14 @@ height: 100%;
 {	
 	text-align: right;
 	margin-right: 5px;
+}
+
+.scorm_title_text {
+	margin-left: 10px;
+	font-weight: bold;
+	background:#ccc;
+	font-size: 14px;
+	color: #444;	
+	width: 90%;	
+	margin-left:17px;	
 }

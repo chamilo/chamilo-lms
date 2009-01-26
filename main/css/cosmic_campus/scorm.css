@@ -101,19 +101,12 @@
 	font-size: 12px;
 	color: #fff;	
 }
-.inner_lp_toc .scorm_title_text
-{
-	margin-left: 10px;
-}
 
 .inner_lp_toc .scorm_status_img{
 	margin:0px;
 	margin-left: -10px;
 	width:10px;
 }
-
-
-
 
 .lp_navigation{
 	overflow: auto;
@@ -183,4 +176,14 @@
 	text-align: right;
 	margin-right: 5px;
 	padding-left: 15px;	 
+}
+
+.scorm_title_text {
+	margin-left: 10px;
+	font-weight: bold;
+	background:#ccc;
+	font-size: 14px;
+	color: #444;	
+	width: 90%;	
+	margin-left:17px;	
 }

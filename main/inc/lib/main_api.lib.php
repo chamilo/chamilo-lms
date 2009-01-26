@@ -2988,3 +2988,16 @@ function api_get_current_access_url_id()
 		return $access_url_id;	
 	}
 }
+/**
+ * @author florespaz@bidsoftperu.com
+ * @param integer $user_id
+ * @param string $course_code
+ * @return integer status
+ */
+function api_get_status_of_user_in_course ($user_id,$course_code) {
+	$tbl_rel_course_user=Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$sql='SELECT status FROM '.$tbl_rel_course_user.' WHERE user_id='.$user_id.' AND course_code="'.$course_code.'";';
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$row_status=Database::fetch_array($result,'ASSOC');
+	return $row_status['status'];
+}

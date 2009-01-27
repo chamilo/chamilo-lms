@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17997 2009-01-25 21:34:46Z herodoto $
+<?php // $Id: index.php 18033 2009-01-27 21:08:58Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -129,11 +129,11 @@ if(api_is_platform_admin()) {
 	</li>
 	<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
 	<li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
-	<li><a href="course_import.php"><?php echo get_lang('AddCourse').' CSV'; ?></a></li>
+	<li><a href="course_import.php"><?php echo get_lang('ImportCourses').' CSV'; ?></a></li>
 	<!--<li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses') ?></a></li>-->
 	<li><a href="course_category.php"><?php echo get_lang("AdminCategories"); ?></a></li>
 	<li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
-	<li><a href="course_user_import.php"><?php echo get_lang('AddUsersToACourse').' CSV'; ?></a></li>
+	<li><a href="course_user_import.php"><?php echo get_lang('ImportUsersToACourse').' CSV'; ?></a></li>
 	<?php if (api_get_setting('search_enabled')=='true') { ?>
 	  <li><a href="specific_fields.php"><?php echo get_lang('SpecificSearchFields'); ?></a></li>
 	<?php } ?>

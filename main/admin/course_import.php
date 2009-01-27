@@ -152,7 +152,7 @@ if (is_array($extAuthSource))
 	$defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 
-$tool_name = get_lang('AddCourse').' CSV';
+$tool_name = get_lang('ImportCourses').' CSV';
 
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 

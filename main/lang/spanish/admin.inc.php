@@ -880,4 +880,6 @@ $UsersBelongURL = "Usuarios fueron editados";
 $NoParticipation = "No hay participantes";
 $LPTestScore = "Calificación en las pruebas de Lecciones";
 $ScormAndLPTestTotalAverage = "Promedio total de pruebas de SCORM y lecciones";
+$ImportUsersToACourse = "Importar usuarios a un curso desde un fichero";
+$ImportCourses = "Importar cursos desde un fichero";
 ?>

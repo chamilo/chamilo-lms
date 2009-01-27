@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langProfessors = "Profesores";
-$langExplanation = "Una vez que haya pulsado Aceptar se creará el sitio web de un curso, que contará con diversas herramientas: un gestor de documentos, un creador de lecciones en formato SCORM, un visualizador de lecciones; la posibilidad de realizar test y enviar trabajos, discutir en foros y chat, enviar anuncios y mensajes, disponer de una agenda, videoconferencia y pizarra digital, herramientas para el trabajo en grupo,  realizar encuestas y seguimiento de los alumnos, etc.Su identificación como creador de este sitio le permitirá modificarlo según sus necesidades.";
+$langExplanation = "Una vez que haya pulsado Aceptar se creará el sitio web de un curso, que contará con diversas herramientas: un gestor de documentos, un creador de lecciones en formato SCORM, un visualizador de lecciones; la posibilidad de realizar test y enviar trabajos, discutir en foros y chat, enviar anuncios y mensajes, disponer de una agenda, videoconferencia y pizarra digital, herramientas para el trabajo en grupo,  realizar encuestas y seguimiento de los alumnos, etc. Su identificación como creador de este sitio le permitirá modificarlo según sus necesidades.";
 $langEmpty = "No ha rellenado todos los campos.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.<br>Si no conoce el código de su curso, consulte el programa del curso";
 $langCodeTaken = "Este código de curso ya es utilizado por otro curso.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.";
 $langFormula = "Atentamente";

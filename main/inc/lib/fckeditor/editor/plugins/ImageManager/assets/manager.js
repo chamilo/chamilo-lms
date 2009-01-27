@@ -87,11 +87,17 @@
 		// pass data back to the calling window
 		var fields = ["f_url", "f_alt", "f_align", "f_border", "f_horiz", "f_vert", "f_height", "f_width","f_file"];
 		var param = new Object();
+
+		// Added by Ivan Tcholakov
+		var FCK = window.opener.FCK;
+
 		for (var i in fields) 
 		{
 			var id = fields[i];
 			var el = document.getElementById(id);
 			
+			// A modification by Ivan Tcholakov
+			/*
 			if(id == "f_url" && el.value.indexOf('://') < 0 )
 			{
 				param[id] = makeURL(base_url_alt,el.value);				
@@ -108,10 +114,52 @@
 			{
 				param[id] = el.value;
 			}
+			*/
+			if (id == "f_url")
+			{
+				str = el.value.toString();
+				if ( str.indexOf('://') < 0 )
+				{
+					if ( !isSemiAbsoluteUrl(str) )
+					{
+						str = makeURL(base_url_alt, str);
+						if (str.charAt(0) == '/')
+						{
+							str = str.substring(1);
+						}
+					}
+					else if (str.charAt(0) == '/')
+					{
+						str = str.substring(1);
+					}
+				}
+				param["f_url"] = FCK.GetSelectedUrl(str);
+				param['f_url_alt'] = param["f_url"];
+			}
+			else 
+			{
+				param[id] = el.value;
+			}
+
 		}
 		__dlg_close(param);
 		return false;
 	};
+
+	// Added by Ivan Tcholakov
+	function isSemiAbsoluteUrl(string)
+	{
+        if (string.indexOf('/') == -1) return false;
+
+        base = base_url;
+		if (base_url.indexOf('://') == -1) {
+			base = string.replace('https://'+server_name,'');
+			base = string.replace('http://'+server_name,'');
+		}
+
+        if (string.indexOf(base) == 0) return true;
+        return false;
+	}
 
 	//similar to the Files::makeFile() in Files.php
 	function makeURL(pathA, pathB) 

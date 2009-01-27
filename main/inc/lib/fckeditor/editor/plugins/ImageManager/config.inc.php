@@ -32,30 +32,46 @@ include ('../../../../../../inc/global.inc.php');
 // Initialization of the repositories.
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repositories_config.php';
 
-//The user is in a course
-if(isset($_SESSION["_course"]["sysCode"]))
+// Choosing the repository to be used.
+if (api_is_in_course())
 {
-	if(api_is_allowed_to_edit())
+	if (!api_is_in_group())
 	{
-		$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).$_SESSION["_course"]["path"]."/document/images/";
-		$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).$_SESSION["_course"]["path"]."/document/images/";
-	}
-	elseif(isset($_GET['uploadPath']) && $_GET['uploadPath']!="")
-	{
-		$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).$_SESSION["_course"]["path"]."/".$_GET['uploadPath'];
-		$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).$_SESSION["_course"]["path"]."/".$_GET['uploadPath'];
+		// 1. We are inside a course and not in a group.
+		if (api_is_allowed_to_edit())
+		{
+			// 1.1. Teacher
+			$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/';
+			$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/';
+		}
+		else
+		{
+			// 1.2. Student
+			$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+			$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+		}
 	}
 	else
 	{
-		$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).$_SESSION["_course"]["path"]."/upload/";
-		$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).$_SESSION["_course"]["path"]."/upload/";
+		// 2. Inside a course and inside a group.
+		$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
+		$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
 	}
 }
-//Out of any course (admin)
 else
 {
-	$IMConfig['base_dir'] = $_configuration['root_sys'].'main/default_course_document/images/';
-	$IMConfig['base_url'] = $_configuration['root_web'].'main/default_course_document/images/';
+	if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin')
+	{
+		// 3. Platform administration activities.
+		$IMConfig['base_dir'] = $_configuration['root_sys'].'main/default_course_document/';
+		$IMConfig['base_url'] = $_configuration['root_web'].'main/default_course_document/';
+	}
+	else
+	{
+		// 4. The user is outside courses.
+		$IMConfig['base_dir'] = $_configuration['root_sys'].'main/upload/users/'.api_get_user_id().'/my_files/';
+		$IMConfig['base_url'] = $_configuration['root_web'].'main/upload/users/'.api_get_user_id().'/my_files/';
+	}
 }
 
 $IMConfig['server_name'] = $_SERVER['SERVER_NAME'];
@@ -128,7 +144,7 @@ $IMConfig['thumbnail_dir'] = '.thumbs';
  NOTE: If $IMConfig['safe_mode'] = true, this parameter
        is ignored, you can not create directories
 */
-$IMConfig['allow_new_dir'] = false;
+$IMConfig['allow_new_dir'] = true;
 
 /*
   Possible values: true, false

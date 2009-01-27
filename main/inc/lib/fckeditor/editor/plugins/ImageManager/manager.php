@@ -33,7 +33,10 @@
 
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getBaseURL(); ?>";
-	var base_url_alt= "<?php echo $_GET['base_url_alt'].'images'; ?>";  	  	
+
+	//var base_url_alt= "<?php echo $_GET['base_url_alt'].'images'; ?>";
+	var base_url_alt= "<?php echo $_GET['base_url_alt']; ?>";
+
 	var server_name = "<?php echo $IMConfig['server_name']; ?>";
 
 	window.resizeTo(700, 500);

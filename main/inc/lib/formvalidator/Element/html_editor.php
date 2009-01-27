@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 18005 2009-01-26 18:00:46Z juliomontoya $
+// $Id: html_editor.php 18026 2009-01-27 15:07:11Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -90,13 +90,164 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		// css should be dokeos ones
 		$this -> fck_editor->Config['EditorAreaCSS'] = $this -> fck_editor->Config['ToolbarComboPreviewCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
 
-		// FCKeditor Configuration for documents
-		// If we don't find the CreateDocumentWebDir set we change it with the absolute path http://www.dok..
-		if (empty($this -> fck_editor->Config['CreateDocumentWebDir'])) {			
-			$this -> fck_editor->Config['CreateDocumentWebDir']=api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';							
-		};
+		// Default configuration settings for document repositories.
+		// These default settings do not cover all possible cases.
 
-		if (api_get_setting('advanced_filemanager') == 'true') {
+		// Preliminary calculations for assembling required paths.
+		$script_name = substr($_SERVER['PHP_SELF'], strlen(api_get_path(REL_PATH)));
+		$script_path = explode('/', $script_name);
+		$script_path[count($script_path) - 1] = '';
+		if (api_is_in_course())
+		{
+			$relative_path_prefix = str_repeat('../', count($script_path) - 1);
+		}
+		else
+		{
+			$relative_path_prefix = str_repeat('../', count($script_path) - 2);
+		}
+		$script_path = implode('/', $script_path);
+		$script_path = api_get_path(WEB_PATH).$script_path;
+
+		$use_advanced_filemanager = api_get_setting('advanced_filemanager') == 'true';
+
+		if (api_is_in_course())
+		{
+			if (!api_is_in_group())
+			{
+				// 1. We are inside a course and not in a group.
+
+				if (api_is_allowed_to_edit())
+				{
+					// 1.1. Teacher (tutor and coach are not authorized to change anything in the "content creation" tools)
+
+					if (empty($this -> fck_editor->Config['CreateDocumentWebDir']))
+					{
+						$this -> fck_editor->Config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/';
+					}
+
+					if (is_null($this -> fck_editor->Config['CreateDocumentDir']))
+					{
+						$this -> fck_editor->Config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/';
+					}
+
+					if (empty($this -> fck_editor->Config['BaseHref']))
+					{
+						$this -> fck_editor->Config['BaseHref'] = $script_path;
+					}
+
+					if (!$use_advanced_filemanager)
+					{
+						$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
+					}
+				}
+				else
+				{
+					// 1.2. Student
+
+					if (empty($this -> fck_editor->Config['CreateDocumentWebDir']))
+					{
+						$this -> fck_editor->Config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+					}
+
+					if (is_null($this -> fck_editor->Config['CreateDocumentDir']))
+					{
+						$this -> fck_editor->Config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+					}
+
+					if (empty($this -> fck_editor->Config['BaseHref']))
+					{
+						$this -> fck_editor->Config['BaseHref'] = $script_path;
+					}
+
+					if (!$use_advanced_filemanager)
+					{
+						$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+					}
+				}
+			}
+			else
+			{
+				// 2. Inside a course and inside a group.
+
+				global $group_properties;
+
+				if (empty($this -> fck_editor->Config['CreateDocumentWebDir']))
+				{
+					$this -> fck_editor->Config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
+				}
+
+				if (is_null($this -> fck_editor->Config['CreateDocumentDir']))
+				{
+					$this -> fck_editor->Config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document'.$group_properties['directory'].'/';
+				}
+
+				if (empty($this -> fck_editor->Config['BaseHref']))
+				{
+					$this -> fck_editor->Config['BaseHref'] = $script_path;
+				}
+
+				if (!$use_advanced_filemanager)
+				{
+					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
+				}
+			}
+		}
+		else
+		{
+			if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin')
+			{
+				// 3. Platform administration activities.
+
+				if (empty($this -> fck_editor->Config['CreateDocumentWebDir']))
+				{
+					$this -> fck_editor->Config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'main/default_course_document/';
+				}
+
+				if (is_null($this -> fck_editor->Config['CreateDocumentDir']))
+				{
+					$this -> fck_editor->Config['CreateDocumentDir'] = api_get_path(WEB_PATH).'main/default_course_document/'; // This works, but it should be revised again.
+				}
+
+				if (empty($this -> fck_editor->Config['BaseHref']))
+				{
+					$this -> fck_editor->Config['BaseHref'] = api_get_path(WEB_PATH).'main/default_course_document/';
+				}
+
+				if (!$use_advanced_filemanager)
+				{
+					$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
+				}
+			}
+			else
+			{
+				// 4. The user is outside courses.
+
+				if (empty($this -> fck_editor->Config['CreateDocumentWebDir']))
+				{
+					$this -> fck_editor->Config['CreateDocumentWebDir'] = api_get_path('WEB_PATH').'main/upload/users/'.api_get_user_id().'/my_files/';
+				}
+
+				if (is_null($this -> fck_editor->Config['CreateDocumentDir']))
+				{
+					$this -> fck_editor->Config['CreateDocumentDir'] = $relative_path_prefix.'upload/users/'.api_get_user_id().'/my_files/';
+				}
+
+				if (empty($this -> fck_editor->Config['BaseHref']))
+				{
+					$this -> fck_editor->Config['BaseHref'] = $script_path;
+				}
+
+				if (!$use_advanced_filemanager)
+				{
+					$upload_path = api_get_path(REL_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
+				}
+			}
+		}
+
+		// Setting hyperlinks used to call file managers.
+
+		if ($use_advanced_filemanager)
+		{
 			// Let javascripts "know" which file manager has been chosen.
 			$this -> fck_editor->Config['AdvancedFileManager'] = true;
 
@@ -127,13 +278,6 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 			// Configuration path when simple file manager is used.
 			$this -> fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 
-			// FCKeditor Configuration for documents (only for FCKeditor simple mode).	
-			if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!='') {		
-				$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
-        	} else {
-				$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
-			}		 
-	
 			// For images
 			$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 			$this -> fck_editor->Config['ImageUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
@@ -157,7 +301,6 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 			$this -> fck_editor->Config['MediaBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 			$this -> fck_editor->Config['MediaUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
 		}
-		
 	}
 	
 	/**
@@ -182,6 +325,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		{
 			if (strlen(trim($value)) == 0)
 			{
+				// TODO: To be considered whether here to be added DOCTYPE, language and character set declarations.
 				$value = '<html><head><title></title><style type="text/css" media="screen, projection">/*<![CDATA[*/body{font-family: arial, verdana, helvetica, sans-serif;font-size: 12px;}/*]]>*/</style></head><body></body></html>';
 				$this->setValue($value);
 			}

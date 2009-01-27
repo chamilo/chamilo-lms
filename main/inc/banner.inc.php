@@ -22,7 +22,6 @@
 	           echo '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
 			}
 			?>
-
 		</div>
 <?php
 /*
@@ -72,7 +71,6 @@ echo '		<div class="clear">&nbsp;</div>';
 -----------------------------------------------------------------------------
 */
 api_plugin('header');
-
 $web_course_path = api_get_path(WEB_COURSE_PATH);
 
 /*
@@ -92,10 +90,7 @@ if (isset($_course['extLink']) && $_course['extLink']['name'] != "") {
 		
 }
 ?>
-
 	</div>
-
-
 	<div id="header2">
 		<div id="Header2Right">
 			<ul>
@@ -113,11 +108,12 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 	} else {
 		$number_online_in_course = 0;
 	}
- 		echo "<li>".get_lang('UsersOnline').": ";
-
+	
+ 	echo "<li>";
 	// Display the who's online of the platform
 	if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id'])) {
-		echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top">'.$number.'</a>';
+		//echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top">'.$number.'</a>';
+		echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top">'.get_lang('UsersOnline').': '.$number.'</a>';
 	}
 
 	// Display the who's online for the course
@@ -256,8 +252,7 @@ foreach($navigation as $section => $navigation_info) {
 ?>
 		</ul>
 		<div style="clear: both;" class="clear"> </div>
-	</div>
-	
+	</div>	
 
 	<div id="header4">
 			<?php

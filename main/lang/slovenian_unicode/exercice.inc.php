@@ -272,4 +272,6 @@ $FeedbackType = "Evaluacija :";
 $Scenario = "Scenarij";
 $VisitUrl = "Obišči povezavo";
 $ExitTest = "Zapusti test/vajo";
+$DurationFormat = "%1$d sekund";
+$MaxTimeAllowed = "Najdaljši dovoljen čas (min)";
 ?>

@@ -118,4 +118,14 @@ $OnlyNumbers = "Namás númberos";
 $IncorrectData = "Datu incorreutu";
 $Resource = "Recursu";
 $PleaseEnableScoringSystem = "Por favor, active\'l sistema de notes ";
+$AllResultDeleted = "Tolos resultaos esborrárense";
+$ImportNoFile = "Nun s\'importó nengún archivu";
+$ProblemUploadingFile = "Hubo un erru de la que se mandaba\'l so archivu. Nun se mandó nada";
+$AllResultsEdited = "Tolos resultaos modificárense";
+$UserInfoDoesNotMatch = "Nun coincide cola información del usuariu";
+$ScoreDoesNotMatch = "La puntuación nun taxa / coincide";
+$FileUploadComplete = "Cargóse bien l\'archivu";
+$NoResultsAvailable = "Nun hai resultaos a disposición";
+$CannotChangeTheMaxNote = "Nun se pue cambiar la nota más alta";
+$GradebookWeightUpdated = "Pesu(os) modificáu(os) correutamente";
 ?>

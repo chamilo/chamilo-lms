@@ -210,4 +210,11 @@ $UplAlreadyExists = "Yá esiste";
 $UnknownPackageFormat = "Formatu desconocíu de paquete";
 $UplUnableToSaveFile = "Nun se pue guardar l\'archivu";
 $UnknownPackageFormat = "El formatu d\'esti paquete ye desconocíu. Por favor, compruebe que ye un paquete válidu.";
+$EditLPSettings = "Cambiar parámetros de la lleición";
+$SaveLPSettings = "Guardar parámetros de la lleición";
+$ShowAllAttempts = "Amosar tolos intentos";
+$HideAllAttempts = "Esconder tolos intentos";
+$ShowAllAttemptsByExercise = "Amosar tolos intentos pa cáun los exercicios";
+$ShowAttempt = "Amosar intentu";
+$ShowAndQualifyAttempt = "Amosar y poner nota al intentu";
 ?>

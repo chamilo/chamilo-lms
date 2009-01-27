@@ -665,4 +665,10 @@ $Reserved = "Rezervirano";
 $SharedDocumentsDirectory = "Mapa skupnih dokumentov";
 $Gallery = "Galerija";
 $Audio = "Avdio";
+$Level = "Nivo";
+$Duration = "Trajanje";
+$SearchPrefilterPrefix = "Posebno polje za predfilter";
+$SearchPrefilterPrefixComment = "Ta možnost omogoča izbiro posebnega polja, katerega vrednost služi kot pred-filter za iskanje";
+$Class = "Razred";
+$Select = "Izberi";
 ?>

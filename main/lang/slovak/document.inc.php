@@ -134,6 +134,7 @@ $TemplateTitleIntroductionDescription = "Vloži&#357; úvodný text";
 $TemplateTitlePlan = "Plán";
 $TemplateTitleTeacher = "Váš inštruktor";
 $TemplateTitleTeacherDescription = "Dialóg s lektorom v dolnej &#269;asti";
+$TemplateTitleProduction = "Práca";
 $TemplateTitleAnalyze = "Analýza";
 $TemplateTitleAnalyzeDescription = "Popis analýzy";
 $TemplateTitleSynthetize = "Syntéza";

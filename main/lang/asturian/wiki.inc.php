@@ -147,4 +147,9 @@ $Contributions = "contribuciones";
 $UserContributions = "Contribuciones del usuariu ";
 $MostActiveUsers = "Usuarios más activos";
 $WarningDeleteMainPage = "Nun se recomienda esborrar la Páxina d\'entamu del Wiki porque ye la entrada primera a la estructura xerárquica.<br>Si, así y too, tien de la esborrar, nun escaeza volver crear esta Páxina d\'entamu. Hasta que nun lo faiga los demás usuarios nun van poder amestar páxines nueves al Wiki.";
+$ConvertToLastVersion = "Pa convertir esta versión na última calque en ";
+$Restore = "Restaurar";
+$CurrentVersion = "Versión actual";
+$LastVersion = "Última versión";
+$PageRestored = "La páxina restauróse. Pue vela calcando en ";
 ?>

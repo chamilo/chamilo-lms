@@ -168,6 +168,7 @@ $LimitDate = "Hrani&#269;ný dátum";
 $SentDate = "Dátum odoslania";
 $Annotate = "Oznamova&#357;";
 $DayOfDelay = "De&#328; odkladu";
+$NoProduction = "Žiadna práca";
 $NoComment = "Žiadny komentár";
 $LatestLogin = "Posledné pripojenie";
 $TimeSpentOnThePlatform = "&#268;as strávený na platforme";

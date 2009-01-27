@@ -272,4 +272,6 @@ $FeedbackType = "Tipu d\'evaluación";
 $Scenario = "Escenariu";
 $VisitUrl = "Visitar esta direición";
 $ExitTest = "Salir del esame";
+$DurationFormat = "%1$d segundos";
+$MaxTimeAllowed = "Tiempu másimu permitíu (min)";
 ?>

@@ -226,4 +226,11 @@ $TotalExercisesScoreObtained = "Puntos totales del exerciciu";
 $TotalExercisesScorePossible = "Másimos puntos totales posibles";
 $TotalExercisesAnswered = "Cantidá d\'exercicios contestaos";
 $TotalExercisesScorePercentage = "Porcentaxe total de los puntos de los exercicios";
+$ForumForumsNumber = "Númberu de foros";
+$ForumThreadsNumber = "Númberu de temes";
+$ForumPostsNumber = "Númberu de mensaxes";
+$ChatConnectionsDuringLastXDays = "Conesiones al chat nos últimos %s díes";
+$ChatLastConnection = "Última conesión al chat";
+$CourseInformation = "Información del Cursu";
+$NoAdditionalFieldsWillBeExported = "Los campos adicionales nun se van esportar";
 ?>

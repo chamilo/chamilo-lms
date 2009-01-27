@@ -30,6 +30,11 @@ $langAddLink = "Prida&#357; odkaz";
 $langDelList = "Zmaza&#357; zoznam";
 $langModifyLink = "Zmeni&#357; odkaz";
 $langCsvImport = "Importova&#357; zo súboru CSV";
+$langCsvFileNotFound = "Importovaný súbor CSV nemôže by&#357; otvorený (napr. je prázdny alebo príliš ve&#318;ký)";
+$langCsvFileNoSeps = "Importovaný CSV súbor musí ako odde&#318;ova&#269; zoznamu použi&#357; , alebo ;";
+$langCsvFileNoURL = "Importovaný CSV súbor musí ma&#357; aspo&#328; st&#314;pec pre URL a názov";
+$langCsvFileLine1 = "... - riadok 1 =";
+$langCsvLinesFailed = "odkaz z riadku(riadkov) nebol importovaný (žiadna URL alebo názov)";
 $langCsvLinesOld = "existujúci odkaz aktualizovaný (rovnaká URL a kategória).";
 $langCsvLinesNew = "nový odkaz vytvorený.";
 $langLinkUpdated = "Odkaz bol aktualizovaný";
@@ -37,4 +42,5 @@ $langAll_Link_Deleted = "Odkaz bol zmazaný";
 $langOnHomepage = "Zobrazi&#357; tento odkaz na domovskej stránke";
 $langShowLinkOnHomepage = "Zobrazi&#357; tento odkaz ako ikonu na domovskej stránke kurzu";
 $langCsvImport = "importova&#357; zo súboru CSV";
+$General = "Všeobecný";
 ?>

@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Zdroj pridaný. Teraz môžete ís&#357; spä&#357; do osnovy a prida&#357; &#271;alšie zdroje.";
 $LearningPath = "U&#269;ebná osnova";
+$LevelUp = "úrove&#328; vyššie";
 $AddIt = "Prida&#357;";
 $MainCategory = "hlavná kategória";
 $lang_delete_added_resources = "Zmaza&#357; pridané zdroje";
@@ -33,6 +34,8 @@ $Modify = "zmeni&#357;";
 $Chapter = "Kapitola";
 $NoAgendaItems = "Nie sú žiadne položky agendy";
 $AgendaAdd = "Prida&#357; položku agendy";
+$AgendaSortChronologicallyUp = "Usporiada&#357; agendu chronologicky (vzostupne) ";
+$ShowCurrent = "Ukáza&#357; aktuálne položky agendy";
 $ModifyCalendarItem = "Zmeni&#357; položku agendy";
 $ItemTitle = "Názov";
 $Detail = "Podrobnosti";

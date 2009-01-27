@@ -50,4 +50,5 @@ $NoAnnouncements = "Ilmoituksia ei ole";
 $SelectEverybody = "Valitse kaikki";
 $SelectedUsersGroups = "valitut käyttäjä ryhmät";
 $LearnerMessage = "Viesti opiskelijalta";
+$TitleIsRequired = "Otsikko täytyy olla";
 ?>

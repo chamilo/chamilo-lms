@@ -21,4 +21,10 @@ $InvalidMessageId = "El id del mensaxe que se quier retrucar nun val.";
 $ErrorSendingMessage = "Hubo un erru de la que s\'unviaba\'l mensaxe";
 $SureYouWantToDeleteSelectedMessages = "¿ Ta seguru de que quier esborrar los mensaxes seleicionaos ?";
 $SelectedMessagesDeleted = "Esborrárense los mensaxes seleicionaos";
+$EnterTitle = "Escriba un títulu";
+$TypeYourMessage = "Escriba\'l so mensaxe";
+$MessageDeleted = "Esborróse\'l mensaxe";
+$ConfirmDeleteMessage = "¿ Ta seguru de que quier esborrar esti mensaxe ?";
+$DeleteMessage = "Esborrar mensaxe";
+$ReadMessage = "Lleer";
 ?>

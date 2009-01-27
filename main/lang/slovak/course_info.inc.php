@@ -79,6 +79,7 @@ $langCourseVisibilityClosed = "Kompletne zatvorený; kurz je dostupný len pre adm
 $CourseVisibilityClosed = "Zatvorený - kurz je dostupný len pre administrátorov a ich asistentov";
 $CourseVisibilityModified = "Upravené (detailnejšie nastavenia urobte cez systém rolí a práv)";
 $AllowUserEditAgenda = "Povoli&#357; používate&#318;om upravi&#357; agendu kurzu";
+$AllowUserEditAnnouncement = "Povoli&#357; používate&#318;om úpravu oznamov kurzu";
 $CourseRegistrationPassword = "Heslo na registráciu do kurzu";
 $AllowUserImageForum = "Obrázok používate&#318;a vo fóre";
 $AllowUserImageForumActivate = "Zobrazi&#357; obrázky používate&#318;ov vo fóre";

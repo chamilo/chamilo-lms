@@ -67,4 +67,5 @@ $RepeatedEventViewOriginalEvent = "View original event";
 $ICalFileImport = "Import iCal/ics file";
 $AllUsersOfThePlatform = "All users of the platform";
 $GlobalEvent = "Global event";
+$EndDateCannotBeBeforeTheStartDate = "The end date cannot be before the start date";
 ?>

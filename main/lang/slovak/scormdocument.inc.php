@@ -3,9 +3,13 @@ for more information: see languages.txt in the lang folder.
 */
 $langChapter = "Kapitola";
 $langDocumentList = "Zoznam dokumentov";
+$langOrganisationList = "Zoznam organizácií";
 $langEditTOC = "Upravi&#357; TOC";
 $langEditDocument = "Upravi&#357; dokument";
 $langCreateDocument = "Vytvori&#357; dokument";
+$langMissingImagesDetected = "Objavené chýbajúce obrázky";
+$langDownloadAndZipEnd = "Zip súbor na&#269;ítaný a rozbalený";
+$langZipNoPhp = "Zip súbor nemôže obsahova&#357; .PHP súbory";
 $langGroupForumLink = "Skupinové fórum";
 $langGroupSpace = "Skupinový priestor";
 $langNoText = "Prosím napíšte Váš text / HTML obsah";
@@ -47,6 +51,7 @@ $lang_title = "názov";
 $langScormBuilder = "Tvorca u&#269;ebnej osnovy";
 $langCreateDoc = "Vytvori&#357; dokument";
 $langOrganiseDocuments = "Usporiada&#357; dokumenty";
+$langUncompress = "Rozbali&#357;";
 $ExportShort = "Exportova&#357; ako SCORM";
 $progress = "Pokroky";
 ?>

@@ -48,4 +48,10 @@ $ExpiryDateToSendWorkIs = "Fecha d\'acabu pa unviar trabayos";
 $EnableExpiryDate = "Activar fecha d\'acabu";
 $EnableEndDate = "Activar fecha d\'acabu";
 $IsNotPosibleSaveTheDocument = "Nun se pudo guardar el documentu";
+$EndDateCannotBeBeforeTheExpireDate = "La fecha d\'acabu nun pue ser anterior a la fecha de vencimientu";
+$SelectAFilter = "Escoyer filtru";
+$FilterByNotExpired = "Filtrar por nun vencíes";
+$FilterAssignments = "Filtrar tarees";
+$WeightNecessary = "Pesu necesariu";
+$QualificationOver = "Nota sobre";
 ?>

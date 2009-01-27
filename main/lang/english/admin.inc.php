@@ -880,4 +880,6 @@ $UsersBelongURL = "The user accounts are now attached to the URL";
 $NoParticipation = "There are no participants";
 $LPTestScore = "Scores of learning paths\' tests";
 $ScormAndLPTestTotalAverage = "Average total of tests from SCORM and learning paths";
+$ImportUsersToACourse = "Import users to a course from a file";
+$ImportCourses = "Import courses from a file";
 ?>

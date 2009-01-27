@@ -1,5 +1,5 @@
 <?php
-// $Id: languages.php 17830 2009-01-19 17:50:59Z cvargas1 $
+// $Id: languages.php 18035 2009-01-27 21:36:44Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -185,12 +185,12 @@ while ($row = Database::fetch_array($result_select)) {
 	if ($row['english_name'] == $row_lang['selected_value']){
 		$setplatformlanguage = Display::return_icon('links.gif', get_lang('CurrentLanguagesPortal'));
 	} else {		
-		$setplatformlanguage = "<a href=\"javascript:if (confirm('".get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault')."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('link_na.gif')."</a>";
+		$setplatformlanguage = "<a href=\"javascript:if (confirm('".get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault')."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('link_na.gif',get_lang('Languages'))."</a>";
 	}		
 	if ($row['available'] == 1) {
-		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif')."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage;
+		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage;
 	} else {
-		$row_td[] = "<a href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.gif')."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage;
+		$row_td[] = "<a href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.gif', get_lang('MakeAvailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage;
 	}
 	$language_data[] = $row_td;
 }

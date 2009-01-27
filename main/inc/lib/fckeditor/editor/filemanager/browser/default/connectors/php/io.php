@@ -95,7 +95,6 @@ function ServerMapFolder( $resourceType, $folderPath, $sCommand )
 	// Ensure that the directory exists.
 	// Modified by Ivan Tcholakov.
 	//CreateServerFolder( $sResourceTypePath ) ;
-	// TODO: To be checked if/when it is necessary.
 	if ( $resourceType != 'file' )
 	{
 		CreateServerFolder( $sResourceTypePath ) ;
@@ -159,6 +158,26 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 			$oldumask = umask(0) ;
 			mkdir( $folderPath, $permissions ) ;
 			umask( $oldumask ) ;
+		}
+
+		// While we are in a course: Registering the newly created folder in the course's database.
+		if (api_is_in_course())
+		{
+			global $_course, $_user;
+			$repository_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
+			$to_group_id = 0;
+
+			if (api_is_in_group())
+			{
+				global $group_properties;
+				$to_group_id = $group_properties['id'];
+			}
+
+			$folder_path = substr($folderPath, strpos($folderPath, $repository_path) + strlen($repository_path) - 1);
+			$folder_name = explode('/', $folder_path);
+			$folder_name = $folder_name[count($folder_name) - 1];
+			$doc_id = add_document($_course, $folder_path, 'folder', 0, $folder_name);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id'], $to_group_id);
 		}
 
 		$sErrorMsg = $php_errormsg ;

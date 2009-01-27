@@ -1,4 +1,4 @@
-<?php // $Id: user.php 17787 2009-01-17 00:41:06Z ivantcholakov $
+<?php // $Id: user.php 18038 2009-01-27 23:16:42Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -449,7 +449,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	if (!empty($_SESSION["id_session"])) {		
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session'], $limit, $order_by);
 	} else {		
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, 0, $limit, $order_by);
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], false, 0, $limit, $order_by);
 	}
 	
 	foreach ($a_course_users as $user_id=>$o_course_user) {

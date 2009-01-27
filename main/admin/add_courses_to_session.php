@@ -102,12 +102,14 @@ function search_courses($needle)
 				OR course.title LIKE "'.$needle.'%"';
 				
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		
+		$course_list = array();
 		while($course = Database :: fetch_array($rs))
-		{
+		{	
+			$course_list[] = $course['code'];					
 			$return .= '<a href="#" onclick="add_course_to_session(\''.$course['code'].'\',\''.$course['title'].' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
 		}
 	}
+	$_SESSION['course_list'] = $course_list;
 	$xajax_response -> addAssign('ajax_list_courses','innerHTML',utf8_encode($return));
 	return $xajax_response;
 }
@@ -122,11 +124,17 @@ function add_course_to_session (code, content) {
 	document.getElementById("ajax_list_courses").innerHTML = "";
 	
 	destination = document.getElementById("destination");
-	destination.options[destination.length] = new Option(content,code);
+	
+	for (i=0;i<destination.length;i++) {
+		if(destination.options[i].text == content) {
+				return false;
+		} 
+	}			
+			
+	destination.options[destination.length] = new Option(content,code);	
 	
 	destination.selectedIndex = -1;
-	sortOptions(destination.options);
-	
+	sortOptions(destination.options);	
 }
 function remove_item(origin)
 {
@@ -145,7 +153,6 @@ $errorMsg=$firstLetterCourse=$firstLetterSession='';
 $CourseList=$SessionList=array();
 $courses=$sessions=array();
 $noPHP_SELF=true;
-
 
 
 
@@ -235,25 +242,21 @@ if($_POST['formSent'])
 Display::display_header($tool_name);
 
 api_display_tool_title($tool_name);
-
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_course;
 $rs = api_sql_query($sql, __FILE__, __LINE__);
 $count_courses = mysql_result($rs, 0, 0);*/
 
 $ajax_search = $add_type == 'unique' ? true : false;
-
 $nosessionCourses = $sessionCourses = array();
-
 if($ajax_search)
 {
-
+	
 	$sql="SELECT code, title, visual_code, id_session
 			FROM $tbl_course course
 			INNER JOIN $tbl_session_rel_course session_rel_course
 				ON course.code = session_rel_course.course_code
 				AND session_rel_course.id_session = ".intval($id_session)."
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";			
-
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
 	$Courses=api_store_result($result);
 	
@@ -274,7 +277,6 @@ else
 
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
 	$Courses=api_store_result($result);
-	
 	foreach($Courses as $course)
 	{
 		if($course['id_session'] == $id_session)
@@ -286,7 +288,8 @@ else
 			$nosessionCourses[$course['code']] = $course ;
 		}
 	}	
-}			
+}		
+
 unset($Courses);
 
 if($add_type == 'multiple'){
@@ -380,14 +383,12 @@ unset($nosessionCourses);
 
 <?php
 foreach($sessionCourses as $enreg)
-{
-?>
-
+{	
+?>	
 	<option value="<?php echo $enreg['code']; ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
 
-<?php
+<?php 
 }
-
 unset($sessionCourses);
 ?>
 
@@ -409,20 +410,25 @@ function moveItem(origin , destination){
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
+	
 
 }
 
 function sortOptions(options) {
 
 	newOptions = new Array();
-	for (i = 0 ; i<options.length ; i++)
-		newOptions[i] = options[i];
+	
+	for (i = 0 ; i<options.length ; i++) {
+		newOptions[i] = options[i];							
+	}
 
 	newOptions = newOptions.sort(mysort);
 	options.length = 0;
-	for(i = 0 ; i < newOptions.length ; i++)
-		options[i] = newOptions[i];
 
+	for(i = 0 ; i < newOptions.length ; i++){		
+		options[i] = newOptions[i];			
+	}
+	
 }
 
 function mysort(a, b){

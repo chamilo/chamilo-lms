@@ -130,6 +130,13 @@ function add_user_to_session (code, content) {
 	document.getElementById("ajax_list_users").innerHTML = "";
 	
 	destination = document.getElementById("destination_users");
+			
+	for (i=0;i<destination.length;i++) {
+		if(destination.options[i].text == content) {
+				return false;
+		} 
+	}		
+			
 	destination.options[destination.length] = new Option(content,code);
 	
 	destination.selectedIndex = -1;
@@ -262,15 +269,16 @@ if($ajax_search)
 }
 else
 {
-	$sql="SELECT user_id, lastname, firstname, username, id_session
+	
+	$sql="SELECT  user_id, lastname, firstname, username, id_session
 			FROM $tbl_user
 			LEFT JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = $tbl_user.user_id
+				ON $tbl_session_rel_user.id_user = $tbl_user.user_id AND id_session = '$id_session' 
 			ORDER BY lastname,firstname,username";
 	
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
 	$Users=api_store_result($result);
-	
+	//var_dump($_REQUEST['id_session']);
 	foreach($Users as $user)
 	{
 		if($user['id_session'] == $id_session)
@@ -341,44 +349,19 @@ if(!empty($errorMsg))
 		{
 		?>
 
-			<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
+			<option value="<?php echo $enreg['user_id']; ?>" <?php if(in_array($enreg['user_id'],$UserList)) echo 'selected="selected"'; ?>><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
 
-$xajax -> processRequests();
 
-$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
-function add_user_to_session (code, content) {
-
-	document.getElementById("user_to_add").value = "";
-	document.getElementById("ajax_list_users").innerHTML = "";
-	
-	destination = document.getElementById("destination_users");
-	destination.options[destination.length] = new Option(content,code);
-	
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
-	
-}
-function remove_item(origin)
-{
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-}
-</script>';
 		<?php
 		}
 
-		unset($nosessionUsersList);
+		
 		?>
 
 	  </select>
 	<?php
   	  }
+  	  unset($nosessionUsersList);
   	 ?>
   </div>
   </td>

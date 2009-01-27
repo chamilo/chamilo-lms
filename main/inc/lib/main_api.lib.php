@@ -3001,3 +3001,49 @@ function api_get_status_of_user_in_course ($user_id,$course_code) {
 	$row_status=Database::fetch_array($result,'ASSOC');
 	return $row_status['status'];
 }
+
+/**
+ * Checks whether the curent user is in a course or not.
+ * 
+ * @param	string	The course code - optional (takes it from session if not given)
+ * @return	boolean
+ * @author	Yannick Warnier <yannick.warnier@dokeos.com>
+ */
+function api_is_in_course($course_code = null) {
+	if (isset($_SESSION['_course']['sysCode'])) {
+		if (!empty($course_code)) {
+			if ($course_code == $_SESSION['_course']['sysCode']) return true; else return false;
+		} else {
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * Checks whether the curent user is in a group or not.
+ * 
+ * @param	string	The group id - optional (takes it from session if not given)
+ * @param	string	The course code - optional (no additional check by course if course code is not given)
+ * @return	boolean	
+ * @author	Ivan Tcholakov
+ */
+function api_is_in_group($group_id = null, $course_code = null) {
+
+	if (!empty($course_code)) {
+		if (isset($_SESSION['_course']['sysCode'])) {
+			if ($course_code != $_SESSION['_course']['sysCode']) return false;
+		} else {
+			return false;
+		}
+	}
+
+	if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
+		if (!empty($group_id)) {
+			if ($group_id == $_SESSION['_gid']) return true; else return false;
+		} else {
+			return true;
+		}
+	}
+	return false;
+}

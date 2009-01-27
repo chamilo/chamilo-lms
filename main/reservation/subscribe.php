@@ -37,14 +37,12 @@ if (!empty($_GET['cat']) && !empty($_GET['item'] )) {
 	$cat = (int)$_GET['cat'];
 	$item = (int)$_GET['item'];
 	$interbreadcrumb[] = array ('url' => "reservation.php?cat=$cat&item=$item", 'name' => get_lang('Booking'));
-}
-else {
+} else {
 	$interbreadcrumb[] = array ('url' => 'reservation.php', 'name' => get_lang('Booking'));	
 }
 
 
 $tool_name = get_lang('BookIt');
-
 Display :: display_header($tool_name);
 api_display_tool_title($tool_name);
 
@@ -52,9 +50,7 @@ $reservationid = $_GET['rid'];
 $reservation = Rsys :: get_reservation($reservationid);
 $item = Rsys :: get_item($reservation[0][2]);
 if ($reservation[0][9] < $reservation[0][4]) {
-
-	ob_start();
-	
+	ob_start();	
 	$form = new FormValidator('reservation', 'post', 'subscribe.php?rid='.$_GET['rid']);
 	$form->addElement('hidden', 'timepicker', $reservation[0][11]);
 	$form->addElement('hidden', 'accepted', $reservation[0][3]);
@@ -69,18 +65,13 @@ if ($reservation[0][9] < $reservation[0][4]) {
 		$min_timepicker_show = $min_timepicker_hour."h".$min_timepicker_min."m";
 		$max_timepicker_show = $max_timepicker_hour."h".$max_timepicker_min."m";
 		
-		if (!($min_timepicker == 0 && $max_timepicker == 0)){
-			if($min_timepicker_show == $max_timepicker_show)
-			{
+		if (!($min_timepicker == 0 && $max_timepicker == 0)) {
+			if($min_timepicker_show == $max_timepicker_show) {
 				$from_till = "van ".$min_timepicker_show;
-			}
-			else
-			{
+			} else {
 				$from_till = "van ".$min_timepicker_show." tot ".$max_timepicker_show;
 			}
-		}
-		else
-		{
+		} else {
 			$from_till = "";
 			$min_timepicker = 1;
 			//een reservatieperiode moet toch wel minimum 1 minuut zijn
@@ -89,20 +80,17 @@ if ($reservation[0][9] < $reservation[0][4]) {
 		$res_start_at = $reservation[0][5];
 		$res_end_at = $reservation[0][6];
 		//echo time()."-".$res_start_at;
-		if (time() > Rsys :: mysql_datetime_to_timestamp($res_start_at))
-		{
+		if (time() > Rsys :: mysql_datetime_to_timestamp($res_start_at)) {
 			$time_start = time();
-		}
-		else
-		{
+		} else {
 			$time_start = Rsys :: mysql_datetime_to_timestamp($res_start_at);
 		}
 		
 		$sql = "SELECT start_at, end_at FROM ".Rsys :: getTable('subscription')." WHERE reservation_id='".$reservationid."' and end_at > NOW() ORDER BY start_at";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		if (mysql_num_rows($result) != 0){
+		if (Database::num_rows($result) != 0){
 			$start_end = "<ul>";
-			while ($array = mysql_fetch_array($result)) {
+			while ($array = Database::fetch_array($result)) {
 				//print_r($array);
 				if (time() < Rsys :: mysql_datetime_to_timestamp($array["start_at"]))
 				{ 

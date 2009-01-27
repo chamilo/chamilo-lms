@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 18005 2009-01-26 18:00:46Z juliomontoya $
+<?php // $Id: exercice.php 18031 2009-01-27 18:08:08Z iflorespaz $
 
 /*
 ==============================================================================
@@ -68,7 +68,8 @@ include_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 */
 $is_allowedToEdit = api_is_allowed_to_edit();
 $is_tutor = api_is_allowed_to_edit(true);
-
+$is_tutor_course=api_is_course_tutor();
+$tbl_course_rel_user    = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_DOCUMENT          	= Database::get_course_table(TABLE_DOCUMENT);
 $TBL_ITEM_PROPERTY      = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -984,40 +985,38 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 				$user_id_and = " AND user_id = '" . Database::escape_string ( (int)$_POST['filter_by_user'] )."' ";
 				}
 			}
-
 			if($_GET['gradebook']=='view') {
 				$exercise_where_query = 'te.exe_exo_id =ce.id AND ';
 			}
 
 			$sql="SELECT CONCAT(lastname,' ',firstname) as users, ce.title, te.exe_result ,
-						 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email, UNIX_TIMESTAMP(te.start_date), steps_counter,user_id,te.exe_duration
-				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
-				  WHERE  te.exe_exo_id = ce.id AND te.status != 'incomplete' AND user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
-				  AND user.status<>1 $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 
-				  ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
-
+						 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email, UNIX_TIMESTAMP(te.start_date), steps_counter,cuser.user_id,te.exe_duration
+				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
+				  WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
+				  AND cuser.status<>1 $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 
+				  AND cuser.course_code=te.exe_cours_id ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
 			$hpsql="SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name,
 						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date)
 					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
 					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".Database::escape_string($_cid)." $user_id_and '
 					ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
+			
 			} else {
 				// get only this user's results
 				$user_id_and = ' AND te.exe_user_id = ' . Database::escape_string ( api_get_user_id() ).' ';
 
-				$sql="SELECT CONCAT(lastname,' ',firstname) as users,ce.title, te.exe_result ,
-						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id,email,UNIX_TIMESTAMP(te.start_date),steps_counter,user_id,te.exe_duration
-				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
-				  WHERE  te.exe_exo_id = ce.id AND te.status != 'incomplete' AND user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
-				  AND user.status<>1 $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 
-				  ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
+			$sql="SELECT CONCAT(lastname,' ',firstname) as users, ce.title, te.exe_result ,
+						 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email, UNIX_TIMESTAMP(te.start_date), steps_counter,cuser.user_id,te.exe_duration
+				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
+				  WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='".Database::escape_string($_cid)."'
+				  AND cuser.status<>1 $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 
+				  AND cuser.course_code=te.exe_cours_id ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
 				$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
 					FROM $TBL_TRACK_HOTPOTATOES
 					WHERE exe_user_id = '".$_user['user_id']."' AND exe_cours_id = '".Database::escape_string($_cid)."'
 					ORDER BY exe_cours_id ASC, exe_date DESC";
-					//error_log($hpsql);
 		}
 
 		$results=getManyResultsXCol($sql,11);

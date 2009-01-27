@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 17768 2009-01-16 04:05:43Z ivantcholakov $
+<?php // $Id: create_document.php 18028 2009-01-27 15:13:17Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -179,6 +179,12 @@ $dir = isset($_GET['dir']) ? $_GET['dir'] : $_POST['dir']; // please do not modi
 		MAIN CODE
 ==============================================================================
 */
+
+if (api_is_in_group())
+{
+	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
+}
+
 if (strstr($dir, '..'))
 {
 	$dir = '/';
@@ -202,6 +208,11 @@ if ($dir[strlen($dir) - 1] != '/')
 // Configuration for the FCKEDITOR
 $doc_tree= explode('/', $dir);
 $count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
+// Level correction for group documents.
+if (!empty($group_properties['directory']))
+{
+	$count_dir = $count_dir > 0 ? $count_dir - 1 : 0;
+}
 $relative_url='';
 
 for($i=0;$i<($count_dir);$i++)
@@ -216,7 +227,14 @@ if ($relative_url== '')
 }
 $fck_attribute['Config']['InDocument'] = true;
 $fck_attribute['Config']['CreateDocumentDir'] = $relative_url;
-$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+if (empty($group_properties['directory']))
+{
+	$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+}
+else
+{
+	$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document'.$group_properties['directory'].'/';
+}
 $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir;
 
 $filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document'.$dir;

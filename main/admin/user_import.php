@@ -1,4 +1,4 @@
-<?php // $Id: user_import.php 18011 2009-01-26 21:15:19Z yannoo $
+<?php // $Id: user_import.php 18020 2009-01-27 00:02:33Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -330,7 +330,7 @@ if (count($errors) != 0)
 	foreach ($errors as $index => $error_user)
 	{
 		$error_message .= '<li><b>'.$error_user['error'].'</b>: ';
-		$error_message .= $error_user['FirstName'].' '.$error_user['LastName'];
+		$error_message .= $error_user['UserName'].'&nbsp;('.$error_user['FirstName'].' '.$error_user['LastName'].')';
 		$error_message .= '</li>';
 	}
 	$error_message .= '</ul>';

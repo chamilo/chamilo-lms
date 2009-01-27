@@ -1,5 +1,5 @@
 <?php
-// $Id: user_export.php 13180 2007-09-21 17:50:47Z yannoo $
+// $Id: user_export.php 18020 2009-01-27 00:02:33Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,8 +76,7 @@ if ($form->validate())
 					u.lastname 	AS LastName,
 					u.firstname 	AS FirstName,
 					u.email 		AS Email,
-					u.username	AS UserName,
-					u.password	AS Password,
+					u.username	AS UserName,					
 					u.auth_source	AS AuthSource,
 					u.status		AS Status,
 					u.official_code	AS OfficialCode,
@@ -95,7 +94,7 @@ if ($form->validate())
 	$data = array();
 	if ($export['addcsvheader']=='1' AND $export['file_type']=='csv')
 	{
-		$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName', 'Password', 'AuthSource', 'Status', 'OfficialCode', 'Phone');
+		$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName','AuthSource', 'Status', 'OfficialCode', 'Phone');
 	}
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 

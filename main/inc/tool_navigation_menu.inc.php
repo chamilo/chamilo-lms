@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 17115 2008-12-08 19:05:18Z herodoto $
+// $Id: tool_navigation_menu.inc.php 18029 2009-01-27 15:43:22Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -131,6 +131,7 @@ function get_navigation_items($include_admin_tools = false)
 function show_navigation_menu()
 {
 	$navigation_items = get_navigation_items(true);
+	$course_id = api_get_course_id();
 	if(api_get_setting('show_navigation_menu') == 'icons')
 	{
 		echo '<div style="float:right;width: 40px;position:absolute;right:10px;top:10px;">';
@@ -199,7 +200,7 @@ function show_navigation_menu()
 			$url_item = parse_url($navigation_item['link']);
 			$url_current = parse_url($_SERVER['REQUEST_URI']);
 			
-			if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
+			if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window',$course_id)==true)
 			{
 				echo '<a href="#" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
 			}			
@@ -221,8 +222,8 @@ function show_navigation_menu()
 				echo '<img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/>';
 			}
 			if (api_get_setting('show_navigation_menu') != 'icons')
-			{
-				echo $navigation_item['name'];
+			{				
+				echo $navigation_item['name'];				
 			}
 			echo '</a>';
 			echo '</dd>';

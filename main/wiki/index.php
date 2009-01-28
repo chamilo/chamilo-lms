@@ -312,7 +312,7 @@ if ($_GET['view'])
 				}
 				else
 				{
-					Display::display_confirmation_message(restore_wikipage($current_row['reflink'], $current_row['title'], $current_row['content'], $current_row['group_id'], $current_row['assignment'], $current_row['comment'], $current_row['progress'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'">'.$last_row['title'].'</a>',false);
+					Display::display_confirmation_message(restore_wikipage($current_row['reflink'], $current_row['title'], $current_row['content'], $current_row['group_id'], $current_row['assignment'], $current_row['progress'], $current_row['version'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'">'.$last_row['title'].'</a>',false);
 				}						
 			}
 		}
@@ -1344,7 +1344,7 @@ if ($_GET['action']=='edit')
 				</select> %';	
 				echo '<br/><br/>'; 
 				echo '<input type="hidden" NAME="SaveWikiChange" value="'.get_lang('langSave').'">'; //for save icon
-				//echo '<input type="submit" name="SaveWikiChange" value="'.get_lang('langSave').'">';//for save button
+				echo '<input type="submit" name="SaveWikiChange" value="'.get_lang('langSave').'">';//for save button
 				echo '</form>';				
 				echo '</div>';			
 			} 	
@@ -2301,7 +2301,7 @@ function save_wiki()
 * This function restore a wikipage
 * @author Juan Carlos Raña <herodoto@telefonica.net>
 **/
-function restore_wikipage($r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_comment, $r_progress, $r_version, $r_linksto)
+function restore_wikipage($r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_progress, $c_version, $r_version, $r_linksto)
 {
 
 	global $tbl_wiki;
@@ -2309,6 +2309,7 @@ function restore_wikipage($r_reflink, $r_title, $r_content, $r_group_id, $r_assi
 	$r_user_id= api_get_user_id();
 	$r_dtime = date( "Y-m-d H:i:s" );
 	$r_version = $r_version+1;
+	$r_comment = get_lang('RestoredFromVersion').': '.$c_version;
 	
 	$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
 	
@@ -2505,7 +2506,7 @@ function display_new_wiki_form()
 	   </select>&nbsp;%';
 	echo '<br/><br/>'; 
 	echo '<input type="hidden" name="SaveWikiNew" value="'.get_lang('langSave').'">'; //for save icon
-	//echo '<input type="submit" name="SaveWikiNew" value="'.get_lang('langSave').'" onClick="return Send(this.form)">'; 	//for button icon
+	echo '<input type="submit" name="SaveWikiNew" value="'.get_lang('langSave').'" onClick="return Send(this.form)">'; 	//for button icon
 	echo '</div>';
 	echo '</form>';
 }

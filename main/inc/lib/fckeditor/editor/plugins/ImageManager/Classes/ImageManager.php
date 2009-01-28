@@ -107,17 +107,32 @@ class ImageManager
 
 		$d = @dir($base);
 		
+		$in_group = api_is_in_group();
+		if ($in_group)
+		{
+			$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
+			$group_directory = explode('/', $group_properties['directory']);
+			$group_directory = $group_directory[count($group_directory) - 1];
+		}
+
 		while (false !== ($entry = $d->read())) 
 		{
 			//If it is a directory, and it doesn't start with
 			// a dot, and if is it not the thumbnail directory
 			if(is_dir($base.$entry) 
 				&& substr($entry,0,1) != '.'
-				&& !strpos( $entry, '_DELETED_')
+				&& strpos($entry, '_DELETED_') === false
+				&& ($in_group || (!$in_group && strpos($entry, '_groupdocs') === false))
 				&& $this->isThumbDir($entry) == false) 
 			{
 				$relative = Files::fixPath($path.$entry);
 				$fullpath = Files::fixPath($base.$entry);
+
+				if ($in_group && strpos($fullpath, '_groupdocs') !== false && strpos($fullpath, $group_directory) === false)
+				{
+					continue;
+				}
+
 				$dirs[$relative] = $fullpath;
 				$dirs = array_merge($dirs, $this->_dirs($fullpath, $relative));
 			}
@@ -153,10 +168,13 @@ class ImageManager
 
 		$d = @dir($fullpath);
 		
+		$in_group = api_is_in_group();
+
 		while (false !== ($entry = $d->read())) 
 		{
-			if (substr($entry,0,1) != '.' &&     //not a dot file or directory
-				!strpos( $entry, '_DELETED_' ))
+			if (substr($entry,0,1) != '.'          //not a dot file or directory
+				&& !strpos($entry, '_DELETED_')
+				&& ($in_group || (!$in_group && strpos($entry, '_groupdocs') === false)))
 			{
 				if(is_dir($fullpath.$entry)
 					&& $this->isThumbDir($entry) == false)

@@ -34,13 +34,16 @@ function GetFolders( $resourceType, $currentFolder )
 
 	$oCurrentFolder = opendir( $sServerDir ) ;
 
+	$in_group = api_is_in_group();
+
 	while ( $sFile = readdir( $oCurrentFolder ) )
 	{
-		if ( $sFile != '.' && $sFile != '..' &&
-			!strpos( $sFile, '_DELETED_' ) &&
-			$sFile != '.thumbs' &&
-			$sFile != '.svn' &&
-			is_dir( $sServerDir . $sFile ) )
+		if ( $sFile != '.' && $sFile != '..'
+			&& strpos( $sFile, '_DELETED_' ) === false
+			&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
+			&& $sFile != '.thumbs'
+			&& $sFile != '.svn'
+			&& is_dir( $sServerDir . $sFile ) )
 			$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;
 	}
 
@@ -68,12 +71,15 @@ function GetFoldersAndFiles( $resourceType, $currentFolder )
 
 	$oCurrentFolder = opendir( $sServerDir ) ;
 
+	$in_group = api_is_in_group();
+
 	while ( $sFile = readdir( $oCurrentFolder ) )
 	{
-		if ( $sFile != '.' && $sFile != '..' &&
-			!strpos( $sFile, '_DELETED_' ) &&
-			$sFile != '.thumbs' &&
-			$sFile != '.svn')
+		if ( $sFile != '.' && $sFile != '..'
+			&& strpos( $sFile, '_DELETED_' ) === false
+			&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
+			&& $sFile != '.thumbs'
+			&& $sFile != '.svn' )
 		{
 			if ( is_dir( $sServerDir . $sFile ) )
 				$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;

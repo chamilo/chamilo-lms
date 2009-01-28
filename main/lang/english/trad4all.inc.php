@@ -671,4 +671,7 @@ $SearchPrefilterPrefix = "Specific Field for prefilter";
 $SearchPrefilterPrefixComment = "This option let you choose the Specific field to use on prefilter search type.";
 $Class = "Class";
 $Select = "Select";
+$Booking = "Booking";
+$ManageReservations = "Manage reservations";
+$DestinationUsers = "Destination users";
 ?>

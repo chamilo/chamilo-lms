@@ -671,4 +671,6 @@ $SearchPrefilterPrefix = "Posebno polje za predfilter";
 $SearchPrefilterPrefixComment = "Ta možnost omogoča izbiro posebnega polja, katerega vrednost služi kot pred-filter za iskanje";
 $Class = "Razred";
 $Select = "Izberi";
+$Booking = "Rezervacije";
+$ManageReservations = "Upravljaj rezervacije";
 ?>

@@ -6,7 +6,7 @@ $BookingSystem = "Sistema de reservas";
 $BookingPeriodList = "Lista de periodos de reserva ";
 $BookingListView = "Lista de reservas";
 $BookingCalendarView = "Vista de calendario";
-$BookingPeriods = "Booking periods";
+$BookingPeriods = "Periodos de reserva";
 $ResourceList = "Lista de recursos";
 $GoToCalendarView = "Ir a la vista de calendario";
 $GoToListView = "Ir a la lista";
@@ -120,4 +120,5 @@ $ReservationCancelled = "Reservación cancelada #NAME# no está disponible tempora
 $ReservationActive = "Reservación nuevamente activada, #NAME# esta habilitada otra vez";
 $ReservationUnavailable = "Estimado/a Señor(a),\\n\\n#NAME# no esta disponible temporalmente, por lo que su reservación de  #BEGIN# hasta #END# ha sido cancelada.\\nUsted recibirá un correo electrónico cuando este disponible nuevamente, disculpenos por los inconvenientes.";
 $ReservationAvailable = "Estimado/a Señor(a), \\n\\nQueremos informarle que #NAME# está disponible otra vez por lo que su reserva de #BEGIN# hasta #END# está de nuevamente activa.";
+$Resources = "Recursos";
 ?>

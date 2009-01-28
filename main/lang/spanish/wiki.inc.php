@@ -152,4 +152,5 @@ $Restore = "Restaurar";
 $CurrentVersion = "Versión actual";
 $LastVersion = "Última versión";
 $PageRestored = "La página ha sido restaurada. Puede verla haciendo clic en";
+$RestoredFromVersion = "Página restaurada desde la versión";
 ?>

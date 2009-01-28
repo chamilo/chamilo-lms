@@ -880,4 +880,6 @@ $UsersBelongURL = "Uporabniki so bili ažurirani";
 $NoParticipation = "Tu ni udeležencev";
 $LPTestScore = "Rezultati testov učnih poti";
 $ScormAndLPTestTotalAverage = "Povprečje skupnih rezultatov iz SCORM in učnih poti";
+$ImportUsersToACourse = "Uvozi uporabnike v tečaj iz datoteke";
+$ImportCourses = "Uvozi tečaje iz datoteke";
 ?>

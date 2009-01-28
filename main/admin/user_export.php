@@ -1,5 +1,5 @@
 <?php
-// $Id: user_export.php 18020 2009-01-27 00:02:33Z cfasanando $
+// $Id: user_export.php 18050 2009-01-28 18:54:19Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -67,8 +67,10 @@ $form->addElement('checkbox', 'addcsvheader', get_lang('AddCSVHeader'), get_lang
 $form->addElement('select', 'course_code', get_lang('OnlyUsersFromCourse'), $courses);
 $form->addElement('submit', 'submit', get_lang('Ok'));
 $form->setDefaults(array('file_type'=>'csv'));
+
 if ($form->validate())
 {
+	global $userPasswordCrypted;
 	$export = $form->exportValues();
 	$file_type = $export['file_type'];
 	$course_code = $export['course_code'];
@@ -76,7 +78,8 @@ if ($form->validate())
 					u.lastname 	AS LastName,
 					u.firstname 	AS FirstName,
 					u.email 		AS Email,
-					u.username	AS UserName,					
+					u.username	AS UserName,
+					".(($userPasswordCrypted)?" ":"u.password AS Password, ")."
 					u.auth_source	AS AuthSource,
 					u.status		AS Status,
 					u.official_code	AS OfficialCode,
@@ -94,14 +97,18 @@ if ($form->validate())
 	$data = array();
 	if ($export['addcsvheader']=='1' AND $export['file_type']=='csv')
 	{
-		$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName','AuthSource', 'Status', 'OfficialCode', 'Phone');
+		if($userPasswordCrypted){
+		$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName', 'AuthSource', 'Status', 'OfficialCode', 'Phone');
+		} else {
+		$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName','Password',  'AuthSource', 'Status', 'OfficialCode', 'Phone');	
+		}
 	}
-	$res = api_sql_query($sql,__FILE__,__LINE__);
-
+	$res = api_sql_query($sql,__FILE__,__LINE__);	
 	while($user = mysql_fetch_array($res,MYSQL_ASSOC))
-	{
-		$data[] = $user	;
+	{		
+		$data[] = $user	;							
 	}
+	
 	switch($file_type)
 	{
 		case 'xml':

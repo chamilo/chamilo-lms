@@ -4,6 +4,9 @@
  * @version $Id: manager.js 26 2004-03-31 02:35:21Z Wei Zhuo $
  * @package ImageManager
  */
+
+	// Added by Ivan Tcholakov
+	var FCK = window.opener.FCK ;
 	
 	//Translation
 	function i18n(str) {
@@ -88,9 +91,6 @@
 		var fields = ["f_url", "f_alt", "f_align", "f_border", "f_horiz", "f_vert", "f_height", "f_width","f_file"];
 		var param = new Object();
 
-		// Added by Ivan Tcholakov
-		var FCK = window.opener.FCK;
-
 		for (var i in fields) 
 		{
 			var id = fields[i];
@@ -117,16 +117,12 @@
 			*/
 			if (id == "f_url")
 			{
-				str = el.value.toString();
+				str = el.value.toString().Trim();
 				if ( str.indexOf('://') < 0 )
 				{
-					if ( !isSemiAbsoluteUrl(str) )
+					if ( !isSemiAbsoluteUrl( str ) ) // A semi-absolute URL could be entered manually.
 					{
-						str = makeURL(base_url_alt, str);
-						if (str.charAt(0) == '/')
-						{
-							str = str.substring(1);
-						}
+						str = makeURL( base_url, str ); // Converting temporarily the URL to be absolute.
 					}
 					else if (str.charAt(0) == '/')
 					{
@@ -134,7 +130,7 @@
 					}
 				}
 				param["f_url"] = FCK.GetSelectedUrl(str);
-				param['f_url_alt'] = param["f_url"];
+				param['f_url_alt'] = FCK.GetSelectedUrl( str ); // Accepting the URL with conversion to a relative one if it is applicable.
 			}
 			else 
 			{
@@ -146,19 +142,30 @@
 		return false;
 	};
 
-	// Added by Ivan Tcholakov
-	function isSemiAbsoluteUrl(string)
+	// A special check: This function tries to distinguish semi-absolute URLs.
+	// Reason to introduce: The Image manager is designed to use relative URLs with '/' at their beginning.
+	function isSemiAbsoluteUrl( url )
 	{
-        if (string.indexOf('/') == -1) return false;
+        if ( url.indexOf( '/' ) == -1 ) return false;
 
         base = base_url;
-		if (base_url.indexOf('://') == -1) {
-			base = string.replace('https://'+server_name,'');
-			base = string.replace('http://'+server_name,'');
+		if ( base_url.indexOf( '://' ) == -1 )
+		{
+			var serverBase = FCK.GetServerBase() ;
+			if ( serverBase == FCK.GetServerBase( base ) )
+			{
+				base = '/' + base.substr( serverBase.length ) ;
+			}
 		}
 
-        if (string.indexOf(base) == 0) return true;
+        if ( url.indexOf( base ) == 0 ) return true ;
         return false;
+	}
+
+	// This method has been taken from the FCKEditor's source.
+	String.prototype.Trim = function()
+	{
+		return this.replace( /(^[ \t\n\r]*)|([ \t\n\r]*$)/g, '' ) ;
 	}
 
 	//similar to the Files::makeFile() in Files.php

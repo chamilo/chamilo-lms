@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17838 2009-01-19 20:10:21Z iflorespaz $
+<?php // $Id: index.php 18062 2009-01-28 23:13:34Z herodoto $
 
 /*
 ==============================================================================
@@ -148,22 +148,29 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		if (!empty($description_id)) {
 		$sql = "SELECT * FROM $tbl_course_description WHERE id='$description_id'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		if ($description = mysql_fetch_array($result)) {
-			$default_description_titles[$description_id] = $description['title'];
-			$description_content = $description['content'];
-
-		} else {
-			$current_title = $default_description_titles[$description_id];				
-		}
+			if ($description = mysql_fetch_array($result)) {
+				$default_description_titles[$description_id] = $description['title'];
+				$description_content = $description['content'];
+	
+			} else {
+				$current_title = $default_description_titles[$description_id];				
+			}
 		
-		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '225';
-		$fck_attribute['ToolbarSet'] = 'Middle';  
-		
-		
-		$fck_attribute['Config']['InDocument'] = false;
-		$fck_attribute['Config']['CreateDocumentDir'] = '../../'; 
-		$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+			if (api_get_setting('advanced_filemanager'))
+			{
+				$fck_attribute['Width'] = '100%';
+				$fck_attribute['Height'] = '225';		
+				$fck_attribute['ToolbarSet'] = 'CourseDescription';
+			}
+			else
+			{
+				$fck_attribute['Width'] = '100%';
+				$fck_attribute['Height'] = '225';		
+				$fck_attribute['ToolbarSet'] = 'Middle';		
+				$fck_attribute['Config']['InDocument'] = false;
+				$fck_attribute['Config']['CreateDocumentDir'] = '../../'; 
+				$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+			}
 
 		} else {
 			$sql = "SELECT MAX(id) as MAX FROM $tbl_course_description ";
@@ -209,7 +216,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		} else {
 			$form->add_html_editor('contentDescription', get_lang('Content'));
 		}
-		$form->addElement('submit', null, get_lang('Ok'));
+		$form->addElement('submit', null, get_lang('Save'));
 		// Set some default values
 		$default['title'] = $default_description_titles[$description_id];
 		$default['contentDescription'] = $description_content;

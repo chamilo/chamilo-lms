@@ -2477,7 +2477,7 @@ class Blog
 	function display_new_comment_form($blog_id, $post_id, $title)
 	{
 		echo '<form name="add_post" enctype="multipart/form-data" method="post" action="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '">
-				<div class="form_header">'.(isset($_GET['task_id']) ? get_lang('ExecuteThisTask') : get_lang('NewComment')) . '</div>
+				<div class="form_header">'.(isset($_GET['task_id']) ? get_lang('ExecuteThisTask') : get_lang('AddNewComment')) . '</div>
 					<table width="100%" border="0" cellspacing="2" cellpadding="0" class="new_comment">
 						<tr>
 					   <td width="100" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>

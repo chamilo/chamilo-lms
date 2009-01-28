@@ -1,4 +1,4 @@
-<?php // $Id: group.php 18016 2009-01-26 22:00:07Z juliomontoya $
+<?php // $Id: group.php 18055 2009-01-28 20:17:16Z cfasanando $
  
 /*
 ==============================================================================
@@ -379,7 +379,7 @@ foreach ($group_cats as $index => $category)
 		{
 			$paging_options = array ();
 		}
-		$table = new SortableTableFromArray($group_data, 1);
+		$table = new SortableTableFromArrayConfig($group_data, 1);
 		isset($_GET['category'])?$my_cat = $_GET['category']: $my_cat = null; 
 		$table->set_additional_parameters(array('category'=>$my_cat));
 		$column = 0;

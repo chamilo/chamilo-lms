@@ -1,5 +1,5 @@
 <?php
-// $Id: languages.php 18035 2009-01-27 21:36:44Z herodoto $
+// $Id: languages.php 18055 2009-01-28 20:17:16Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -195,7 +195,7 @@ while ($row = Database::fetch_array($result_select)) {
 	$language_data[] = $row_td;
 }
 
-$table = new SortableTableFromArray($language_data, 1, count($language_data));
+$table = new SortableTableFromArrayConfig($language_data, 1, count($language_data));
 $table->set_header(0, '');
 $table->set_header(1, get_lang('OriginalName'));
 $table->set_header(2, get_lang('EnglishName'));

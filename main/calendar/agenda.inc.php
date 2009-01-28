@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 17746 2009-01-15 20:33:37Z cvargas1 $
+<?php //$Id: agenda.inc.php 18047 2009-01-28 17:07:28Z cvargas1 $
 
 /*
 ==============================================================================
@@ -763,6 +763,7 @@ echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
 	echo "\t<tr>\n";
 	// the form containing all the groups and all the users of the course
 	echo "\t\t<td>\n";
+	echo "<strong>".get_lang('Users')."</strong><br />";
 		construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
 	echo "\t\t</td>\n";
 	// the buttons for adding or removing groups/users
@@ -778,6 +779,7 @@ echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
 				"value=\"   &lt;&lt;   \" />";
 	echo "\t\t</td>\n";
 	echo "\n\t\t<td>\n";
+	echo "<strong>".get_lang('DestinationUsers')."</strong><br />";
 		construct_selected_select_form($group_list,$user_list,$to_already_selected);
 	echo "\t\t</td>\n";
 	echo "\t</tr>\n";

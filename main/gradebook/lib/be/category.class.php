@@ -634,7 +634,6 @@ class Category implements GradebookItem
 				.' (SELECT course_code'
 				.' FROM '.$main_course_user_table
 				.' WHERE user_id = '.$user_id
-				.' AND status = '.COURSEMANAGER
 				.')';
         }
 		$result = api_sql_query($sql, __FILE__, __LINE__);

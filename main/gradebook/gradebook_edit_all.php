@@ -161,8 +161,8 @@ if ($my_api_cidreq=='') {
 	$my_api_cidreq='cidReq='.$my_category['course_code'];
 }
 ?>
-<a href="<?php echo $_SESSION['gradebook_dest'].'?'.$my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?></a>
-<form method="post" action="gradebook_edit_all.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $category_id?>">
+<a href="<?php echo $_SESSION['gradebook_dest'].'?id_session='.$_SESSION['id_session'].'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?></a>
+<form method="post" action="gradebook_edit_all.php?id_session=<?php echo $_SESSION['id_session'].'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id?>">
 <table class="data_table">
 		 <tr class="row_odd">
 		  <th><?php echo get_lang('Resource'); ?></th>

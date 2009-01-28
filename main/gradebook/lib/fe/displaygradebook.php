@@ -280,7 +280,11 @@ class DisplayGradebook
 
 		// for course admin & platform admin add item buttons are added to the header
 		$header .= '<div class="actions">';
-		if (api_is_course_tutor() && ($is_course_admin) && (!isset ($_GET['search']))) {
+		$my_category=$catobj->shows_all_information_an_category($catobj->get_id());
+		$user_id=api_get_user_id();
+		$course_code=$my_category['course_code'];
+		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
+		if ($status_user==1 && ($is_course_admin) && (!isset ($_GET['search']))) {
 			if ($selectcat == '0') {
                 if ($show_add_qualification === true) {
 				   // $header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=0"><img src="../img/folder_new.gif" alt="' . get_lang('NewCategory') . '" /> ' . get_lang('NewCategory') . '</a></td>';
@@ -313,9 +317,9 @@ class DisplayGradebook
                  	$header .= '<td><a href="gradebook_edit_all.php?id_session='.$_SESSION['id_session'].'&amp;'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('quiz.gif', get_lang('EditAllWeights')).' ' . get_lang('EditAllWeights') . '</a>';
                 	$my_course_id=api_get_course_id();
                 	$my_file= substr($_SESSION['gradebook_dest'],0,5);
-                	if ($my_file!='index') {
+                	if ($my_file!='index' && $status_user==1) {
 	                	$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats_access.gif', get_lang('FlatView')).' ' . get_lang('FlatView') . '</a>';
-						if ($is_course_admin && $message_resource===false) {
+						if ($is_course_admin && $message_resource===false && $status_user==1) {
 							$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('acces_tool.gif', get_lang('ScoreEdit')).' ' . get_lang('ScoreEdit') . '</a>';
 						}
 					}

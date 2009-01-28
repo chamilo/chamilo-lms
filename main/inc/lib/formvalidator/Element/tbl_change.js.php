@@ -1,5 +1,5 @@
 <?php
-// $Id: tbl_change.js.php 9662 2006-10-24 09:44:41Z bmol $
+// $Id: tbl_change.js.php 18057 2009-01-28 21:07:19Z cfasanando $
 require ('../../../global.inc.php');
 ?>
 var day;
@@ -144,7 +144,7 @@ function initCalendar() {
         } else {
             style = '';
         }
-        str += "<td" + style + "><a href=\"javascript:returnDate(" + i +","+month+","+year + ");\">" + i + "</a></td>"
+        str += "<td" + style + "><a href=\"javascript:returnDate(" + i +","+month+","+year + ");\" >" + i + "</a></td>"
         dayInWeek++;
     }
     for (i = dayInWeek; i < 7; i++) {
@@ -153,7 +153,7 @@ function initCalendar() {
 
     str += "</tr></table>";
 
-    cnt.innerHTML = str;
+    cnt.innerHTML = str;    
 }
 
 /**
@@ -171,6 +171,7 @@ function returnDate(d,m,y) {
 		var regex = new RegExp(window.opener.fieldName, "i");
 		if (regex.test(forminputs[i].getAttribute('name'))) {
 			datevalues[dateindex++] = forminputs[i];
+			window.close();
 		}
 	}
 	datevalues[0].selectedIndex = (d-1) ;

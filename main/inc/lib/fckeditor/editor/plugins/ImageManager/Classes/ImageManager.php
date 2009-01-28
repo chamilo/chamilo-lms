@@ -113,6 +113,7 @@ class ImageManager
 			// a dot, and if is it not the thumbnail directory
 			if(is_dir($base.$entry) 
 				&& substr($entry,0,1) != '.'
+				&& !strpos( $entry, '_DELETED_')
 				&& $this->isThumbDir($entry) == false) 
 			{
 				$relative = Files::fixPath($path.$entry);
@@ -154,8 +155,8 @@ class ImageManager
 		
 		while (false !== ($entry = $d->read())) 
 		{
-			//not a dot file or directory
-			if(substr($entry,0,1) != '.')
+			if (substr($entry,0,1) != '.' &&     //not a dot file or directory
+				!strpos( $entry, '_DELETED_' ))
 			{
 				if(is_dir($fullpath.$entry)
 					&& $this->isThumbDir($entry) == false)

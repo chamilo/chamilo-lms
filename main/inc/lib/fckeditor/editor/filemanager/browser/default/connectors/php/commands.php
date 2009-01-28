@@ -36,7 +36,11 @@ function GetFolders( $resourceType, $currentFolder )
 
 	while ( $sFile = readdir( $oCurrentFolder ) )
 	{
-		if ( $sFile != '.' && $sFile != '..' && $sFile != '.thumbs' && $sFile != '.svn' && is_dir( $sServerDir . $sFile ) )
+		if ( $sFile != '.' && $sFile != '..' &&
+			!strpos( $sFile, '_DELETED_' ) &&
+			$sFile != '.thumbs' &&
+			$sFile != '.svn' &&
+			is_dir( $sServerDir . $sFile ) )
 			$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;
 	}
 
@@ -66,7 +70,10 @@ function GetFoldersAndFiles( $resourceType, $currentFolder )
 
 	while ( $sFile = readdir( $oCurrentFolder ) )
 	{
-		if ( $sFile != '.' && $sFile != '..' && $sFile != '.thumbs' && $sFile != '.svn')
+		if ( $sFile != '.' && $sFile != '..' &&
+			!strpos( $sFile, '_DELETED_' ) &&
+			$sFile != '.thumbs' &&
+			$sFile != '.svn')
 		{
 			if ( is_dir( $sServerDir . $sFile ) )
 				$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;

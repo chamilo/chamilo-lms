@@ -32,8 +32,8 @@ FCKConfig.ToolbarSets["Small"] = [
 
 FCKConfig.ToolbarSets["Profil"] = [
 	['FitWindow','PasteWord','Undo','Redo'],
-	['Link','Image','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
-	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','ShowBlocks']
+	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
+	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','Source']
 ] ;
 
 FCKConfig.ToolbarSets["Blog"] = [
@@ -80,7 +80,7 @@ FCKConfig.ToolbarSets["Wiki"] = [
 	['FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough'],
 	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
-	['ShowBlocks']	
+	['Source']
 ] ;
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;

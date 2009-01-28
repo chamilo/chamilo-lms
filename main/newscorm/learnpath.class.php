@@ -7710,7 +7710,7 @@ class learnpath {
 		while ($row_hot = Database::fetch_array($res_hot)) {
 			$return .= '<div class="lp_resource_element">';
 			//display quizhotpotatoes
-			$return .= '<img alt="" src="../img/jqz.jpg" style="margin-right:5px;" title="" />';
+			$return .= '<img alt="" src="../img/jqz.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_hot['title'] . '</a>';
 			//$return .= $row_quiz['title'];
 			$return .= '</div>';

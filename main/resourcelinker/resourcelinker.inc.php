@@ -1,4 +1,4 @@
-<?php // $Id: resourcelinker.inc.php 13927 2007-12-05 03:41:30Z yannoo $
+<?php // $Id: resourcelinker.inc.php 18048 2009-01-28 17:08:23Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -629,7 +629,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if ($name=='') { echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true); }
 
 			if ($icon == 'nolink') { return(shorten($name,$length)); }
-			if ($icon == 'icon') { echo "<img src='../img/jqz.jpg' align=\"absmiddle\" alt='hot potatoes'>"; }
+			if ($icon == 'icon') { echo "<img src='../img/jqz.gif' align=\"absmiddle\" alt='hot potatoes'>"; }
 
 			$cid = $_course['official_code'];
 

@@ -902,7 +902,7 @@ if (($content == "Exercise") or ($content == "HotPotatoes"))
 		while ($myrow = mysql_fetch_array($result))
 		{
 			$path = $myrow["path"];
-			echo "<img src='../img/jqz.jpg'>".GetQuizName($path, $documentPath)."<br>";
+			echo "<img src='../img/jqz.gif'>".GetQuizName($path, $documentPath)."<br>";
 			showorhide_addresourcelink("HotPotatoes", $myrow["id"]);
 			echo "<br><br>";
 

@@ -330,13 +330,14 @@ function display_image_matrix($permission_array, $tool, $permission,$inherited_p
 */
 function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $permission,$inherited_permissions=array(), $course_admin=false, $editable=true)
 {
+
 	if($course_admin==true)
 	{
 		echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
 	}
 	else 
 	{
-		if(in_array($permission,$inherited_permissions[$tool]))
+		if(!empty($inherited_permissions) and in_array($permission,$inherited_permissions[$tool]))
 		{
 			echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
 		}

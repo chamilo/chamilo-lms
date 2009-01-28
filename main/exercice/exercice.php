@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 18031 2009-01-27 18:08:08Z iflorespaz $
+<?php // $Id: exercice.php 18044 2009-01-28 16:53:27Z herodoto $
 
 /*
 ==============================================================================
@@ -590,8 +590,8 @@ echo '<div class="actions">';
 	if (($is_allowedToEdit) and ($origin != 'learnpath'))
 	{
 		echo '<a href="exercise_admin.php?'.api_get_cidreq().'">'.Display::return_icon('new_test.gif',get_lang('NewEx')).get_lang('NewEx').'</a>';
-		echo '<a href="hotpotatoes.php">'.Display::return_icon('jqz.jpg',get_lang('ImportHotPotatoesQuiz')).get_lang('ImportHotPotatoesQuiz').'</a>';
-		echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.Display::return_icon('show_test_results.gif',get_lang('ImportHotPotatoesQuiz')).get_lang("Results").'</a>';
+		echo '<a href="hotpotatoes.php">'.Display::return_icon('jqz.gif',get_lang('ImportHotPotatoesQuiz')).get_lang('ImportHotPotatoesQuiz').'</a>';
+		echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.Display::return_icon('show_test_results.gif',get_lang('Results')).get_lang("Results").'</a>';
 
 		// the actions for the statistics
 		if($show == 'result')
@@ -612,7 +612,7 @@ echo '<div class="actions">';
 				echo '<a href="#" onclick="document.form1a.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
 				echo '<a href="#" onclick="document.form1b.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsXLS')).get_lang('ExportAsXLS').'</a>';
 				echo '<a href="#" onclick="document.form1c.submit();">'.Display::return_icon('synthese_view.gif',$alt).$alt.'</a>';			
-				echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=test').'">'.Display::return_icon('quiz.gif').get_lang('BackToExercisesList').'</a>';
+				echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=test').'">'.Display::return_icon('quiz.gif',get_lang('BackToExercisesList')).get_lang('BackToExercisesList').'</a>';
 				echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
 				echo '<input type="hidden" name="export_report" value="export_report">';
 				echo '<input type="hidden" name="export_format" value="csv">';
@@ -893,7 +893,7 @@ $i++;
 					?>
   
     <tr>
-      <td><img src="../img/jqz.jpg" alt="HotPotatoes" /></td>
+      <td><img src="../img/jqz.gif" alt="HotPotatoes" /></td>
 	   <td><?php echo ($ind+($page*$limitExPage)).'.'; ?></td>
        <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>    
   <td></td><td></td>

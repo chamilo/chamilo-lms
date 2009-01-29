@@ -165,6 +165,7 @@ $fck_attribute['Config']['FullPage'] = true;
 $fck_attribute['Config']['InDocument'] = false;
 $fck_attribute['Config']['CreateDocumentDir'] = '/'; // this means that fck editor will add the mp3, video files like this audio/fil.mp3 and not the absolute path
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
 
 if(isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true')
 {

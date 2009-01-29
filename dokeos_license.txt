@@ -19,3 +19,5 @@
 	Contact address: Dokeos, Rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ===============================================================================
+This license is referenced throughout the code using the following header line:
+/* For licensing terms, see /dokeos_license.txt */

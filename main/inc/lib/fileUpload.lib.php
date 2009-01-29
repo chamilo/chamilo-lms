@@ -86,8 +86,10 @@ function api_replace_parameter($upload_path, $buffer, $param_name="src")
  * @return	string	The escaped string, not absolutely correct but satisfying
  */
 function replace_accents($string){
-	$string = htmlentities($string,ENT_QUOTES);
-	return preg_replace("/&([a-z])[a-z]+;/i","$1",$string);
+	global $charset;
+	$string = htmlentities($string,ENT_QUOTES,$charset);
+	$res = preg_replace("/&([a-z])[a-z]+;/i","$1",$string);
+	return $res;
 }
 
 //------------------------------------------------------------------------------

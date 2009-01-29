@@ -1,4 +1,4 @@
-<?php // $Id: document.php 17868 2009-01-20 17:26:33Z cvargas1 $
+<?php // $Id: document.php 18077 2009-01-29 17:19:10Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -500,6 +500,9 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		{
 			$added_slash = ($curdirpath=='/')?'':'/';
 			$dir_name = $curdirpath.$added_slash.replace_dangerous_char($post_dir_name);
+			$clean_val=disable_dangerous_file($dir_name);
+			$clean_val=replace_accents($dir_name);
+			$dir_name=$clean_val;
 			$dir_check=$base_work_dir.''.$dir_name;
 			
 			if(!is_dir($dir_check))

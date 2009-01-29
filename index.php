@@ -1,10 +1,10 @@
-<?php // $Id: index.php 17648 2009-01-11 23:08:49Z iflorespaz $
+<?php // $Id: index.php 18084 2009-01-29 21:51:47Z juliomontoya $
  
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 17648 2009-01-11 23:08:49Z iflorespaz $
+* 	@version $Id: index.php 18084 2009-01-29 21:51:47Z juliomontoya $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -454,9 +454,9 @@ function handle_login_failed() {
 	} else {
 		switch ($_GET['error']) {
 			case '':
-				$message = get_lang("InvalidId");
+				$message = get_lang('InvalidId');
 				if (api_is_self_registration_allowed()) {
-					$message = get_lang("InvalidForSelfRegistration");
+					$message = get_lang('InvalidForSelfRegistration');
 				}
 				break;
 			case 'account_expired':
@@ -468,6 +468,9 @@ function handle_login_failed() {
 			case 'user_password_incorrect':
 				$message=get_lang('InvalidId');
 				break;
+			case 'access_url_inactive':
+				$message=get_lang('AccountURLInactive');
+				break;
 		}
 	}
 	echo "<div id=\"login_fail\">".$message."</div>";
@@ -477,7 +480,8 @@ function handle_login_failed() {
 *	Adds a form to let users login
 *	@version 1.1
 */
-function display_login_form() {
+function display_login_form() 
+{
 	$form = new FormValidator('formLogin');
 	$form->addElement('text','login',get_lang('UserName'),array('size'=>15));
 	$form->addElement('password','password',get_lang('Pass'),array('size'=>15));

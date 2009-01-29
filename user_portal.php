@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 18037 2009-01-27 22:06:25Z herodoto $
+<?php // $Id: user_portal.php 18084 2009-01-29 21:51:47Z juliomontoya $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -399,22 +399,23 @@ function get_logged_user_course_html($my_course) {
 	$course_access_settings = CourseManager :: get_access_settings($course_system_code);
 	$course_id = isset($course_info['course_id'])?$course_info['course_id']:null;
 	$course_visibility = $course_access_settings['visibility'];
-	$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_system_code);
 	
+	$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_system_code);
+		
 	//function logic - act on the data
 	$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['k']);
-	if ($is_virtual_course) {
+	if ($is_virtual_course) { 
 		// If the current user is also subscribed in the real course to which this
 		// virtual course is linked, we don't need to display the virtual course entry in
 		// the course list - it is combined with the real course entry.
-		$target_course_code = CourseManager :: get_target_of_linked_course($course_system_code);
+		$target_course_code = CourseManager :: get_target_of_linked_course($course_system_code);		
 		$is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
-		if ($is_subscribed_in_target_course) {
+		if ($is_subscribed_in_target_course) {			
 			return; //do not display this course entry
 		}
 	}
 	$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_system_code, api_get_user_id());
-	if ($has_virtual_courses) {
+	if ($has_virtual_courses) { 
 		$return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
 		$course_display_title = $return_result['title'];
 		$course_display_code = $return_result['code'];
@@ -695,7 +696,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 	   --------------------------------------*/
 
 	$list = '';
-
+	// this is the main function to get the course list
 	$personal_course_list = UserManager::get_personal_session_course_list($_user['user_id']);
 
 	foreach ($personal_course_list as $my_course) {

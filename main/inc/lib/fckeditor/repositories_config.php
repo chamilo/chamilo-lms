@@ -42,7 +42,7 @@ if (api_is_platform_admin())
 }
 
 // Creation in the course document repository of a shared folder if it does not exist.
-if ($_course['id'])
+if (api_is_in_course())
 {
 	$course_shared_folder = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/';
 
@@ -52,6 +52,18 @@ if ($_course['id'])
 		$doc_id = add_document($_course, '/shared_folder', 'folder', 0, 'shared_folder');
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'visible', api_get_user_id());
+	}
+
+	// Added by Ivan Tcholakov.
+	// When the current user is inside a course, his/her own hidden folder is created (if it does not exist) under shared_folder.
+	// This new folder is to be used by the online editor when the user is not in group-specific context.
+	// The name of the newly created folder is the user_id, the title is created from user names (first name and last name).
+	if (!file_exists($course_shared_folder.'/'.api_get_user_id()))
+	{
+		@mkdir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/'.api_get_user_id(), 0777);
+		$doc_id = add_document($_course, '/shared_folder/'.api_get_user_id(), 'folder', 0, $_user['firstName'].' '.$_user['lastName']);
+		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
+		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
 	}
 }
 

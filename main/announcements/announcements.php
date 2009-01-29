@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 17983 2009-01-24 01:13:39Z cfasanando $
+<?php //$Id: announcements.php 18087 2009-01-29 22:36:20Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1152,7 +1152,15 @@ if(!empty($error_message))
 		$oFCKeditor->Height		= '250';
 		$oFCKeditor->Width		= '100%';
 		$oFCKeditor->Value		= $content_to_modify;
-		$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+        if(api_get_setting('advanced_filemanager'))
+        {
+        	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
+        }
+        else
+        {
+        	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+        }		
+        
 		$oFCKeditor->ToolbarSet = "Announcements";
 
 		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
@@ -1161,7 +1169,7 @@ if(!empty($error_message))
 		$isocode_language=Database::result($result_sql,0,0);
 		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 
-		$oFCKeditor->Config['AdvancedFileManager'] = api_get_setting('advanced_filemanager') == 'true' ? true : false;
+		
 
 		echo $oFCKeditor->CreateHtml();
 

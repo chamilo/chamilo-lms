@@ -574,6 +574,21 @@ class Display {
 		}
 		return $result;
 	}
+	
+	function get_numeric_options($min,$max, $selected_num = 0)
+	{
+		$result = '';
+		for ($i = $min; $i <= $max; $i ++) {			
+			$result .= '<option value="'.$i.'"';
+			if (is_int($selected_num))
+				if ($selected_num == $i) {
+					$result .= ' selected="selected"';
+				}
+			$result .= '>'.$i.'</option>';
+		}
+		return $result;
+	}
+	
 	/**
 	* Show the so-called "left" menu for navigating
 	*/

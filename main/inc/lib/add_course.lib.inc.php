@@ -2373,7 +2373,15 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 		}
-	
+		//
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']==true) {
+			require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+			$url_id=1;				
+			if (api_get_current_access_url_id()!=-1)
+				$url_id=api_get_current_access_url_id();											
+			UrlManager::add_course_to_url($courseSysCode,$url_id);			
+		}
 	}
 
 	return 0;

@@ -54,8 +54,13 @@ if( $form->validate()) {
 		if ($url_id!='') {
 			//we can't change the status of the url with id=1
 			if ($url_id==1)
-				$active=1;
-			UrlManager::udpate($url_id, $url, $description, $active);				
+				$active=1;								
+			//checking url
+			if (substr($url,strlen($url)-1, strlen($url))=='/') {
+				UrlManager::udpate($url_id, $url, $description, $active);				
+			} else {					
+				UrlManager::udpate($url_id, $url.'/', $description, $active);					
+			}						
 			$url_to_go='access_urls.php';
 			$message=get_lang('URLEdited');
 		} else {			
@@ -63,13 +68,12 @@ if( $form->validate()) {
 			if ($num == 0) {
 				//checking url
 				if (substr($url,strlen($url)-1, strlen($url))=='/') {
-					UrlManager::add($url.'/', $description, $active);				
-					$message = get_lang('URLAdded');
+					UrlManager::add($url, $description, $active);					
 				} else {					
 					//create		
-					UrlManager::add($url, $description, $active);
-					$message = get_lang('URLAdded');	
+					UrlManager::add($url.'/', $description, $active);						
 				}
+				$message = get_lang('URLAdded');
 				$url_to_go='access_urls.php';		
 			} else {
 				$url_to_go='access_url_edit.php';
@@ -115,7 +119,7 @@ if (isset($_GET['url_id']))
 	}
 	$url_data = UrlManager::get_url_data_from_id($url_id);	
 	$form->addElement('hidden','id',$url_data['id']);
-	$form->setDefaults($url_data);	
+	$form->setDefaults($url_data);
 	$submit_name = get_lang('Edit'); 
 }
 

@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 17842 2009-01-19 21:39:37Z herodoto $
+<?php // $Id: usermanager.lib.php 18083 2009-01-29 21:51:19Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -114,29 +114,27 @@ class UserManager
 									hr_dept_id = '".Database::escape_string($hr_dept_id)."',
 									active = '".Database::escape_string($active)."'";
 		$result = api_sql_query($sql);
-		if ($result)
-		{
+		if ($result) {
 			//echo "id returned";			
 			$return=Database::get_last_insert_id();
 			global $_configuration;
-			if (api_is_platform_admin(true) && $_configuration['multiple_access_urls']==true) {				
-				require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');			
+			require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+			if ($_configuration['multiple_access_urls']==true) {											
 				if (api_get_current_access_url_id()!=-1)
 					UrlManager::add_user_to_url($return, api_get_current_access_url_id());
 				else
 					UrlManager::add_user_to_url($return, 1);					
-			}
-		}
-		else
-		{
+			} else {
+				UrlManager::add_user_to_url($return, 1);
+			}			
+		} else {
 			//echo "false - failed" ;
 			$return=false;
 		}
-		if(is_array($extra) AND count($extra)>0)
-		{
+		
+		if(is_array($extra) AND count($extra)>0) {
 			$res = true;
-			foreach($extra as $fname => $fvalue)
-			{
+			foreach($extra as $fname => $fvalue) {
 				$res = $res && UserManager::update_extra_field($return,$fname,$fvalue);
 			}
 		}
@@ -247,6 +245,15 @@ class UserManager
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
 		$resv = api_sql_query($sqlv,__FILE__,__LINE__);
+		
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']) {
+			require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+			$url_id=1;				
+			if (api_get_current_access_url_id()!=-1)
+				$url_id=api_get_current_access_url_id();											
+			UrlManager::delete_url_rel_user($user_id,$url_id);	
+		}
 		
 		return true;
 	}
@@ -1363,8 +1370,7 @@ class UserManager
 		// all the options of the field
 		$sql = "SELECT * FROM $table_field_options WHERE field_id='".Database::escape_string($field_id)."' ORDER BY option_order ASC";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
-		while ($row = Database::fetch_array($result))
-		{
+		while ($row = Database::fetch_array($result)) {
 			$return['options'][$row['id']] = $row;
 		}		
 		return $return;
@@ -1380,7 +1386,7 @@ class UserManager
 	function get_personal_session_course_list($user_id)
 	{
 		// Database Table Definitions
-		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 		$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 		$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -1388,6 +1394,18 @@ class UserManager
 		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		
+		//we filter the courses from the URL
+		$join_access_url=$where_access_url='';		
+		global $_configuration;		
+		if ($_configuration['multiple_access_urls']==true) {
+			$access_url_id = api_get_current_access_url_id();
+			if($access_url_id!=-1) {
+				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);		
+				$join_access_url= "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.course_code= course.code";
+				$where_access_url=" AND access_url_id = $access_url_id ";
+			}
+		}
 	
 		// variable initialisation
 		$personal_course_list_sql = '';
@@ -1410,13 +1428,13 @@ class UserManager
 										ON course.code = course_rel_user.course_code
 										LEFT JOIN ".$tbl_user_course_category." user_course_category
 										ON course_rel_user.user_course_cat = user_course_category.id
-										WHERE  course_rel_user.user_id = '".$user_id."'
+										$join_access_url
+										WHERE  course_rel_user.user_id = '".$user_id."'  $where_access_url
 										ORDER BY user_course_category.sort, course_rel_user.sort ASC, i";
 		
 		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 		
-		while ($result_row = Database::fetch_array($course_list_sql_result))
-		{
+		while ($result_row = Database::fetch_array($course_list_sql_result)) {
 			$personal_course_list[] = $result_row;
 		}
 	
@@ -1464,10 +1482,8 @@ class UserManager
 		$sessions = array_merge($sessions , api_store_result($result));
 	
 	
-		if(api_is_allowed_to_create_course())
-		{
-			foreach($sessions as $enreg)
-			{
+		if(api_is_allowed_to_create_course()) {
+			foreach($sessions as $enreg) {
 				$id_session = $enreg['id'];
 				$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name
 											 FROM $tbl_session_course as session_course
@@ -1483,8 +1499,7 @@ class UserManager
 	
 				$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 	
-				while ($result_row = Database::fetch_array($course_list_sql_result))
-				{
+				while ($result_row = Database::fetch_array($course_list_sql_result)) {
 					$result_row['s'] = 2;
 					$key = $result_row['id_session'].' - '.$result_row['k'];
 					$personal_course_list[$key] = $result_row;
@@ -1493,8 +1508,7 @@ class UserManager
 	
 		}
 	
-		foreach($sessions as $enreg)
-		{
+		foreach($sessions as $enreg) {
 			$id_session = $enreg['id'];
 			$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = ".$user_id.",'2', '5')
 										 FROM $tbl_session_course as session_course
@@ -1512,13 +1526,11 @@ class UserManager
 	
 			$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 	
-			while ($result_row = Database::fetch_array($course_list_sql_result))
-			{
+			while ($result_row = Database::fetch_array($course_list_sql_result)) {
 				$key = $result_row['id_session'].' - '.$result_row['k'];
 				$result_row['s'] = $result_row['14'];
 	
-				if(!isset($personal_course_list[$key]))
-				{
+				if(!isset($personal_course_list[$key])) {
 					$personal_course_list[$key] = $result_row;
 				}
 			}

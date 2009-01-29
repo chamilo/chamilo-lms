@@ -45,16 +45,19 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 require_once (api_get_path(LIBRARY_PATH).'security.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 
+$current_access_url_id = api_get_current_access_url_id();
+$my_user_url_list = api_get_access_url_from_user(api_get_user_id());
+$url_list = UrlManager::get_url_data();
+
 // Actions
-if (isset ($_GET['action'])) {
-	
+if (isset ($_GET['action'])) {	
 	if ($_GET['action'] == 'show_message')
-		Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
+		Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));	
 		
 	$check = Security::check_token('get');		
 	if ($check) {
 		$url_id=Database::escape_string($_GET['url_id']);
-		
+	
 		switch ($_GET['action']) {		
 			case 'delete_url' :		
 				$result = UrlManager::delete($url_id);					
@@ -71,23 +74,63 @@ if (isset ($_GET['action'])) {
 			case 'unlock';
 				UrlManager::set_url_status('unlock',$url_id);
 				Display :: display_normal_message(get_lang('URLActivate'));
+				break;			
+			case 'register';			
+				// we are going to register the admin
+				if(api_is_platform_admin()) {					
+					if($current_access_url_id!=-1) {
+						$url_str = '';
+						foreach($url_list as $my_url) {	
+							if (!in_array($my_url['id'],$my_user_url_list)){								
+								UrlManager::add_user_to_url(api_get_user_id(),$my_url['id']);	
+									$url_str.=$my_url['url'].' '; 
+							}
+						}						
+						Display :: display_normal_message(get_lang('AdminUserRegisteredToThisURL').': '.$url_str.'<br />',false);
+					}
+				}						
 				break;	
 			}
+			
 		}
 		Security::clear_token();
 }
 
-echo '<div class="actions">';
+$parameters['sec_token'] = Security::get_token();
+
+
+// checking if the admin is registered in all sites
+
+$url_string='';
+foreach($url_list as $my_url) {	
+	if (!in_array($my_url['id'],$my_user_url_list)){
+		$url_string.=$my_url['url'].' ';		
+	}	
+}
+if(!empty($url_string)) {
+	Display :: display_warning_message(get_lang('AdminShouldBeRegisterInSite').':<br />'.$url_string,false);
+}
+
+// checking the current installation
+if ($current_access_url_id==-1) {	
+	Display :: display_warning_message(get_lang('URLNotConfiguredPleaseChangedTo').': '.api_get_path(WEB_PATH));	
+} elseif(api_is_platform_admin()) {			
+	$quant= UrlManager::relation_url_user_exist(api_get_user_id(),$current_access_url_id);
+	if ($quant==0) {
+		Display :: display_warning_message('<a href="'.api_get_self().'?action=register&sec_token='.$parameters['sec_token'].'">'.get_lang('ClickToRegisterAdmin').'</a>',false);	
+	} 
+}
+
+// action menu
+echo '<div class="actions" style="height:22px;">';
 echo '<div style="float:right;">
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUrl'),'').get_lang('AddUrl').'</a>&nbsp;&nbsp;
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php">'.Display::return_icon('add_user_big.gif',get_lang('AddUserToURL'),'').get_lang('AddUsersToURL').'</a>
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('del_user_big.gif',get_lang('EditUsersToURL'),'').get_lang('EditUsersToURL').'</a>															
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php">'.Display::return_icon('members.gif',get_lang('AddUserToURL'),'').get_lang('ManageUsers').'</a>															
+	    <a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php">'.Display::return_icon('courses.gif',get_lang('AddUsersToCourse'),'').get_lang('ManageCourses').'</a>
 	  </div><br />';		  
 echo '</div>';		  
 
 $table = new SortableTable('urls', 'url_count_mask', 'get_url_data_mask',2); 
-
-$parameters['sec_token'] = Security::get_token();	
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
 

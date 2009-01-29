@@ -281,11 +281,11 @@ class CourseManager
 	*/
 	function get_user_in_course_status($user_id, $course_code)
 	{
-		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		$sql_query = "SELECT * FROM $course_user_table WHERE `course_code` = '$course_code' AND `user_id` = '$user_id'";
+		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);		
+		$sql_query = "SELECT * FROM $course_user_table WHERE course_code = '$course_code' AND user_id = $user_id";	
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
-		return $result["status"];
+		return $result['status'];
 	}
 
 
@@ -350,10 +350,9 @@ class CourseManager
 								 		
 			$update_user_session = "UPDATE $tbl_session set nbr_users = '$count' WHERE id = '".$_SESSION["id_session"]."'" ;  	
 			$result = api_sql_query($update_user_session,__FILE__,__LINE__);
-		}	
-		else {
-		$sql = "DELETE FROM $table_course_user WHERE user_id IN (".$user_ids.") AND course_code = '".$course_code."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		} else {
+			$sql = "DELETE FROM $table_course_user WHERE user_id IN (".$user_ids.") AND course_code = '".$course_code."'";
+			api_sql_query($sql, __FILE__, __LINE__);
 		}
 	}
 
@@ -923,7 +922,7 @@ class CourseManager
 	* @return true if the real course has virtual courses that the user is subscribed to, false otherwise
 	*/
 	function has_virtual_courses_from_code($real_course_code, $user_id)
-	{
+	{		
 		$user_subscribed_virtual_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code);
 		$number_of_virtual_courses = count($user_subscribed_virtual_course_list);
 
@@ -998,12 +997,11 @@ class CourseManager
 		
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
-		$sql_query = "SELECT * FROM $table WHERE `user_id` = '$user_id' AND `course_code` = '$course_code'";
+		$sql_query = "SELECT * FROM $table WHERE user_id = $user_id AND course_code = '$course_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
-
-		if (!isset ($result) || empty ($result))
-		{
+		
+		if (!isset ($result) || empty ($result)) {
 			if($in_a_session)
 			{
 				$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
@@ -1033,7 +1031,7 @@ class CourseManager
                     }
 				}
 			}
-			else
+			else 
 				return false; //user is not registered in course
 		}
 		else
@@ -1671,7 +1669,17 @@ class CourseManager
 			api_sql_query($sql,__FILE__,__LINE__);
 			$sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$code."'";
 			api_sql_query($sql,__FILE__,__LINE__);
-		}				
+		}
+		
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']==true) {
+			require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+			$url_id=1;				
+			if (api_get_current_access_url_id()!=-1)
+				$url_id=api_get_current_access_url_id();											
+			UrlManager::delete_url_rel_course($code,$url_id);			
+		}
+			
 		// Delete the course from the database
 		$sql = "DELETE FROM $table_course WHERE code='".$code."'";
 		api_sql_query($sql, __FILE__, __LINE__);

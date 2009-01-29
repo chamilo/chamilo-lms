@@ -38,7 +38,7 @@ require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 require_once ('../inc/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
 //$xajax->debugOn();
-$xajax -> registerFunction ('search_users');
+$xajax -> registerFunction ('search_courses');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -50,12 +50,12 @@ if (!$_configuration['multiple_access_urls'])
 
 
 // Database Table Definitions
-$tbl_user				 = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$tbl_access_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+$tbl_course 			 = Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_access_url 		 = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 
 // setting breadcrumbs
-$tool_name = get_lang('EditUsersToURL');
+$tool_name = get_lang('EditCoursesToURL');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
@@ -69,9 +69,9 @@ if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
 	$access_url_id = $_REQUEST['access_url_id']; 
 }
 
-function search_users($needle, $id)
+function search_courses($needle, $id)
 {
-	global $tbl_user, $tbl_access_url_rel_user;	
+	global $tbl_course;	
 	$xajax_response = new XajaxResponse();
 	$return = '';
 				
@@ -79,27 +79,25 @@ function search_users($needle, $id)
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
-		// search users where username or firstname or lastname begins likes $needle
-		$sql = 'SELECT u.user_id, username, lastname, firstname FROM '.$tbl_user.' u 
-				WHERE (username LIKE "'.$needle.'%"
-				OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%") 
-				ORDER BY lastname, firstname, username
-				LIMIT 11';
-				
+		// search courses where username or firstname or lastname begins likes $needle
+		$sql = 'SELECT code, title FROM '.$tbl_course.' u 
+				WHERE (title LIKE "'.$needle.'%"
+				OR code LIKE "'.$needle.'%"
+				) 
+				ORDER BY title, code
+				LIMIT 11';				
 		$rs = api_sql_query($sql, __FILE__, __LINE__);		
-        $i=0;
-        
-		while ($user = Database :: fetch_array($rs)) {
+        $i=0;        
+		while ($course = Database :: fetch_array($rs)) {
 			$i++;
             if ($i<=10) {
-			     $return .= '<a href="#" onclick="add_user_to_url(\''.addslashes($user['user_id']).'\',\''.addslashes($user['lastname']).' '.addslashes($user['firstname']).' ('.addslashes($user['username']).')'.'\')">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</a><br />';
+			     $return .= '<a href="#" onclick="add_user_to_url(\''.addslashes($course['code']).'\',\''.addslashes($course['title']).' ('.addslashes($course['code']).')'.'\')">'.$course['title'].' ('.$course['code'].')</a><br />';
             } else {
             	$return .= '...<br />';
             }
 		}
 	}
-	$xajax_response -> addAssign('ajax_list_users','innerHTML',utf8_encode($return));
+	$xajax_response -> addAssign('ajax_list_courses','innerHTML',utf8_encode($return));
 	return $xajax_response;
 }
 
@@ -109,8 +107,8 @@ $htmlHeadXtra[] = '
 <script type="text/javascript">
 function add_user_to_url(code, content) {
 
-	document.getElementById("user_to_add").value = "";
-	document.getElementById("ajax_list_users").innerHTML = "";
+	document.getElementById("course_to_add").value = "";
+	document.getElementById("ajax_list_courses").innerHTML = "";
 	
 	destination = document.getElementById("destination_users");
 	destination.options[destination.length] = new Option(content,code);
@@ -146,17 +144,19 @@ $users=$sessions=array();
 
 if($_POST['form_sent']) {	
 	$form_sent=$_POST['form_sent'];
-	$UserList=$_POST['sessionUsersList'];	
-	if(!is_array($UserList)) {
-		$UserList=array();
+	$course_list=$_POST['course_list'];	
+	
+	if(!is_array($course_list)) {
+		$course_list=array();
 	}
+	
 	if($form_sent == 1) { 
 		if ($access_url_id==0) {						
 			header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
 		}
-		elseif(is_array($UserList) ) {						
-			UrlManager::update_urls_rel_user($UserList,$access_url_id);
-			header('Location: access_urls.php?action=show_message&message='.get_lang('UsersWereEdited'));
+		elseif(is_array($course_list) ) {									
+			UrlManager::update_urls_rel_course($course_list,$access_url_id);
+			header('Location: access_urls.php?action=show_message&message='.get_lang('CoursesWereEdited'));
 		}		
 	}
 }
@@ -165,7 +165,7 @@ Display::display_header($tool_name);
 
 echo '<div class="actions" style="height:22px;">';
 echo '<div style="float:right;">		
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php">'.Display::return_icon('add_user_big.gif',get_lang('AddUserToURL'),'').get_lang('AddUsersToURL').'</a>												
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php">'.Display::return_icon('course_add.gif',get_lang('AddUserToURL'),'').get_lang('AddCoursesToURL').'</a>												
 	  </div><br />';		  
 echo '</div>';	
 
@@ -174,30 +174,33 @@ api_display_tool_title($tool_name);
 if ($_GET['action'] == 'show_message')
 	Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
 
-$nosessionUsersList = $sessionUsersList = array();
+$no_course_list = $course_list = array();
 $ajax_search = $add_type == 'unique' ? true : false;
 
 if($ajax_search) {		
-	$Users=UrlManager::get_url_rel_user_data($access_url_id);
-	foreach($Users as $user) {
-		$sessionUsersList[$user['user_id']] = $user ;
+	$courses=UrlManager::get_url_rel_course_data($access_url_id);
+	foreach($courses as $course) {
+		$course_list[$course['code']] = $course ;
 	}	
 } else {	
-	$Users=UrlManager::get_url_rel_user_data();	
-	foreach($Users as $user) {
-		if($user['access_url_id'] == $access_url_id) {
-			$sessionUsersList[$user['user_id']] = $user ;
+	$courses=UrlManager::get_url_rel_course_data();
+		
+	foreach($courses as $course) {
+		if($course['access_url_id'] == $access_url_id) {
+			$course_list[$course['course_code']] = $course ;
 		}
-	}	
-	$sql="SELECT u.user_id, lastname, firstname, username
-	  	  	FROM $tbl_user u	
-			ORDER BY lastname,firstname,username";	
+	}
+		
+	$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+	$sql="SELECT code, title
+	  	  	FROM $tbl_course u	
+			ORDER BY title, code";	
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
-	$Users=api_store_result($result);
-	$user_list_leys = array_keys($sessionUsersList);
-	foreach($Users as $user) {	
-		if (!in_array($user['user_id'],$user_list_leys))
-			$nosessionUsersList[$user['user_id']] = $user ;
+	$courses=api_store_result($result);
+	$course_list_leys = array_keys($course_list);
+	foreach($courses as $course) {	
+		if (!in_array($course['code'],$course_list_leys))
+			$no_course_list[$course['code']] = $course ;
 	}	
 }
 
@@ -226,7 +229,7 @@ $url_list = UrlManager::get_url_data();
 	foreach ($url_list as $url_obj) {
 		$checked = '';
 		if (!empty($access_url_id)) {
-			if ($url_obj['id']==$access_url_id) {
+			if ($url_obj[0]==$access_url_id) {
 			$checked = 'selected=true';		
 			}
 		}				
@@ -250,10 +253,10 @@ if(!empty($errorMsg)) {
 
 <!-- Users -->
 <tr>
-  <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b>
+  <td align="center"><b><?php echo get_lang('CourseListInPlatform') ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('UserListInURL') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('CourseListInURL') ?> :</b></td>
 </tr>
 
 <tr>
@@ -262,16 +265,16 @@ if(!empty($errorMsg)) {
   	  <?php
   	  if($ajax_search) {
   	  	?>
-		<input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
-		<div id="ajax_list_users"></div>
+		<input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
+		<div id="ajax_list_courses"></div>
 		<?php
   	  } else {
   	  ?>  	  
-	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:300px;">
+	  <select id="origin_users" name="no_course_list[]" multiple="multiple" size="15" style="width:300px;">
 		<?php
-		foreach($nosessionUsersList as $enreg) {
+		foreach($no_course_list as $no_course) {
 		?>
-			<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
+			<option value="<?php echo $no_course['code']; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
 
 $xajax -> processRequests();
 
@@ -280,8 +283,8 @@ $htmlHeadXtra[] = '
 <script type="text/javascript">
 function add_user_to_url (code, content) {
 
-	document.getElementById("user_to_add").value = "";
-	document.getElementById("ajax_list_users").innerHTML = "";
+	document.getElementById("course_to_add").value = "";
+	document.getElementById("ajax_list_courses").innerHTML = "";
 	
 	destination = document.getElementById("destination_users");
 	destination.options[destination.length] = new Option(content,code);
@@ -302,7 +305,7 @@ function remove_item(origin)
 </script>';
 		<?php
 		}
-		unset($nosessionUsersList);
+		unset($no_course_list);
 		?>
 
 	  </select>
@@ -328,16 +331,17 @@ function remove_item(origin)
 	<br /><br /><br /><br /><br /><br />
   </td>
   <td align="center">
-  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:300px;">
+  <select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:300px;">
 
 <?php
-foreach($sessionUsersList as $enreg) {
+
+foreach($course_list as $course) {
 ?>
-	<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
+	<option value="<?php echo $course['course_code']; ?>"><?php echo $course['title'].' ('.$course['course_code'].')'; ?></option>
 
 <?php
 }
-unset($sessionUsersList);
+unset($course_list);
 ?>
 
   </select></td>
@@ -348,9 +352,9 @@ unset($sessionUsersList);
 		<br />
 		<?php
 		if(isset($_GET['add']))
-			echo '<input type="button" value="'.get_lang('EditUsers').'" onclick="valide()" />';
+			echo '<input type="button" value="'.get_lang('EditCourses').'" onclick="valide()" />';
 		else
-			echo '<input type="button" value="'.get_lang('EditUsers').'" onclick="valide()" />';
+			echo '<input type="button" value="'.get_lang('EditCourses').'" onclick="valide()" />';
 		?>
 	</td>
 </tr>

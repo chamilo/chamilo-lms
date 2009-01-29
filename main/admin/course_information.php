@@ -1,32 +1,9 @@
-<?php
-// $Id: course_information.php 16954 2008-11-26 14:41:35Z pcool $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php // $Id: course_information.php 18070 2009-01-29 02:01:33Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
 /**
-============================================================================== 
-	@author Bart Mollet
-*	@package dokeos.admin
-============================================================================== 
+ * This script gives information about a course
+ * @author Bart Mollet
+ * @package dokeos.admin
 */
 /*
 ==============================================================================
@@ -48,6 +25,7 @@ api_protect_admin_script();
 function get_course_usage($course_code)
 {
 	$table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $course_code = Database::escape_string($course_code);
 	$sql = "SELECT * FROM $table WHERE code='".$course_code."'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$course = mysql_fetch_object($res);
@@ -85,11 +63,11 @@ if (!isset ($_GET['code']))
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'course_list.php', "name" => get_lang('Courses'));
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$code = $_GET['code'];
+$code = Database::escape_string($_GET['code']);
 $sql = "SELECT * FROM $table_course WHERE code = '".$code."'";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 $course = mysql_fetch_object($res);
-$tool_name = $course->title.' ('.$course->code.')';
+$tool_name = $course->title.' ('.$course->visual_code.')';
 Display::display_header($tool_name);
 //api_display_tool_title($tool_name);
 ?>
@@ -123,7 +101,7 @@ echo '<h4>'.get_lang('Users').'</h4>';
 echo '<blockquote>';
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$sql = 'SELECT *,cu.status as course_status FROM '.$table_course_user.' cu, '.$table_user." u WHERE cu.user_id = u.user_id AND cu.course_code = '".$code."' ";
+$sql = "SELECT *,cu.status as course_status FROM $table_course_user cu, $table_user u WHERE cu.user_id = u.user_id AND cu.course_code = '".$code."'";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 if (mysql_num_rows($res) > 0)
 {
@@ -136,11 +114,11 @@ if (mysql_num_rows($res) > 0)
 		$user[] = $obj->lastname;
 		$user[] = Display :: encrypted_mailto_link($obj->email, $obj->email);
 		$user[] = $obj->course_status == 5 ? get_lang('Student') : get_lang('Teacher');
-		$user[] = '<a href="user_information.php?user_id='.$obj->user_id.'">'.Display::return_icon('synthese_view.gif').'</a>';
+		$user[] = '<a href="user_information.php?user_id='.$obj->user_id.'">'.Display::return_icon('synthese_view.gif',get_lang('UserInfo')).'</a>';
 		$users[] = $user;
 	}
 	$table = new SortableTableFromArray($users,0,20,'user_table');
-	$table->set_additional_parameters(array ('code' => $_GET['code']));
+	$table->set_additional_parameters(array ('code' => $code));
 	$table->set_other_tables(array('usage_table','class_table'));
 	$table->set_header(0,get_lang('OfficialCode'), true);
 	$table->set_header(1,get_lang('FirstName'), true);
@@ -160,7 +138,7 @@ echo '</blockquote>';
  */
 $table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 $table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
-$sql = 'SELECT * FROM '.$table_course_class.' cc, '.$table_class.' c WHERE cc.class_id = c.id AND cc.course_code = '."'".$_GET['code']."'";
+$sql = "SELECT * FROM $table_course_class cc, $table_class c WHERE cc.class_id = c.id AND cc.course_code = '".$code."'";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 if (mysql_num_rows($res) > 0)
 {

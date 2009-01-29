@@ -275,7 +275,7 @@ class GradeBookResult
 		for ($i=0;$i<$cant_students;$i++) {
 			$column = 0;
 			foreach ($data[1][$i] as $col_name) {		
-				$worksheet->write($line,$column,$col_name);
+				$worksheet->write($line,$column,strip_tags($col_name));
 				$column++;
 				
 			}

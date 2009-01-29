@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 17985 2009-01-24 01:35:16Z cfasanando $
+<?php //$Id: announcements.inc.php 18080 2009-01-29 20:33:19Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -220,7 +220,35 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 				}
 			}
 		}
-	}
+	} else {
+			if($to_already_selected=='everyone'){						
+				// adding the groups to the select form
+				if (is_array($ref_array_groups))
+				{
+					foreach($ref_array_groups as $this_group)
+					{
+						//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
+						if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
+							{
+							echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+								"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
+								"</option>\n";
+						}
+					}					
+				}
+			
+				// adding the individual users to the select form
+				foreach($ref_array_users as $this_user)
+				{					
+					if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
+					{
+						echo	"\t\t<option value=\"USER:",$this_user['user_id'],"\">",
+							"",$this_user['lastName']," ",$this_user['firstName'],
+							"</option>\n";
+					}
+				}
+			}			
+		}
 	echo "</select>\n";
 }
 

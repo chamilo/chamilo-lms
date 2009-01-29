@@ -72,6 +72,7 @@ FCKConfig.ToolbarSets["Survey"] = [
 	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Unlink','Table','-','Image','Source']
 ] ;
 
+
 FCKConfig.ToolbarSets["CourseDescription"] = [
 	['NewPage','Templates','Save','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Link','Unlink','Anchor'],
@@ -116,7 +117,7 @@ FCKConfig.Plugins.Add('fckEmbedMovies');
 
 // added by Juan Carlos Ra�a
 FCKConfig.Plugins.Add("mimetex", "en", sOtherPluginPath ) ;
-FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ; // support to english, spanish
+FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ;
 FCKConfig.Plugins.Add("imgmap", "en,es", sOtherPluginPath );
 FCKConfig.Plugins.Add("googlemaps", "en,es", sOtherPluginPath ) ;
 // This key is for http://localhost. You must get one for each server where you want to use the plugin,

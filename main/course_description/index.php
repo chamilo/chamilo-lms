@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18062 2009-01-28 23:13:34Z herodoto $
+<?php // $Id: index.php 18079 2009-01-29 17:56:50Z herodoto $
 
 /*
 ==============================================================================
@@ -156,21 +156,9 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 				$current_title = $default_description_titles[$description_id];				
 			}
 		
-			if (api_get_setting('advanced_filemanager'))
-			{
-				$fck_attribute['Width'] = '100%';
-				$fck_attribute['Height'] = '225';		
-				$fck_attribute['ToolbarSet'] = 'CourseDescription';
-			}
-			else
-			{
-				$fck_attribute['Width'] = '100%';
-				$fck_attribute['Height'] = '225';		
-				$fck_attribute['ToolbarSet'] = 'Middle';		
-				$fck_attribute['Config']['InDocument'] = false;
-				$fck_attribute['Config']['CreateDocumentDir'] = '../../'; 
-				$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
-			}
+			$fck_attribute['Width'] = '100%';
+			$fck_attribute['Height'] = '225';		
+			$fck_attribute['ToolbarSet'] = 'CourseDescription';		
 
 		} else {
 			$sql = "SELECT MAX(id) as MAX FROM $tbl_course_description ";

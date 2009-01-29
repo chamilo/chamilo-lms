@@ -449,7 +449,7 @@ FCKToolbarItems.GetItem = function( itemName )
 
 	switch ( itemName )
 	{
-		case 'Source'			: oItem = new FCKToolbarButton( 'Source'	, FCKLang.Source, null, FCK_TOOLBARITEM_ICONTEXT, true, true, 1 ) ; break ;
+		case 'Source'			: oItem = new FCKToolbarButton( 'Source'	, FCKLang.Source, null,null, true, true, 1 ) ; break ;
 		case 'DocProps'			: oItem = new FCKToolbarButton( 'DocProps'	, FCKLang.DocProps, null, null, null, null, 2 ) ; break ;
 		case 'Save'				: oItem = new FCKToolbarButton( 'Save'		, FCKLang.Save, null, null, true, null, 3 ) ; break ;
 		case 'NewPage'			: oItem = new FCKToolbarButton( 'NewPage'	, FCKLang.NewPage, null, null, true, null, 4  ) ; break ;

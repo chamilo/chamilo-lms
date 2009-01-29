@@ -1,33 +1,10 @@
-<?php // $Id: course_list.php 17506 2009-01-02 20:07:08Z iflorespaz $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php // $Id: course_list.php 18067 2009-01-29 01:30:37Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-============================================================================== 
-*/
+ * This script shows a list of courses and allows searching for courses codes
+ * and names
+ * @package dokeos.admin
+ */
 /*
 ==============================================================================
 		INIT SECTION
@@ -56,7 +33,7 @@ function get_number_of_courses()
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = Database::escape_string($_GET['keyword']);
-		$sql .= " WHERE title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%'";
+		$sql .= " WHERE title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%'";
 	}
 	elseif (isset ($_GET['keyword_code']))
 	{
@@ -67,7 +44,7 @@ function get_number_of_courses()
 		$keyword_visibility = Database::escape_string($_GET['keyword_visibility']);
 		$keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
 		$keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
-		$sql .= " WHERE code LIKE '%".$keyword_code."%' AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
+		$sql .= " WHERE (code LIKE '%".$keyword_code."%' OR visual_code LIKE '%".$keyword_code."%') AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
 	}
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$obj = Database::fetch_object($res);
@@ -86,7 +63,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = Database::escape_string($_GET['keyword']);
-		$sql .= " WHERE title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%'";
+		$sql .= " WHERE title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%'";
 	}
 	elseif (isset ($_GET['keyword_code']))
 	{
@@ -97,7 +74,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 		$keyword_visibility = Database::escape_string($_GET['keyword_visibility']);
 		$keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
 		$keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
-		$sql .= " WHERE code LIKE '%".$keyword_code."%' AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
+		$sql .= " WHERE (code LIKE '%".$keyword_code."%' OR visual_code LIKE '%".$keyword_code."%') AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
 	}
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";

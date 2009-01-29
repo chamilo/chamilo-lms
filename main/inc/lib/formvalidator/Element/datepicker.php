@@ -1,5 +1,5 @@
 <?php
-// $Id: datepicker.php 16033 2008-08-20 21:21:44Z yannoo $
+// $Id: datepicker.php 18078 2009-01-29 17:21:11Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -110,6 +110,13 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 		$datetime = $y.'-'.$m.'-'.$d.' '.$h.':'.$i.':00';
 		$result[$this->getName()]= $datetime;
 		return $result;
+	}
+		/**
+	 * Sets an option to a value
+	 */
+	function setLocalOption($name,$value)
+	{
+		$this->_options[$name] = $value;
 	}
 }
 ?>

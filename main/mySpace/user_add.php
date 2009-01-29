@@ -222,10 +222,15 @@ foreach($extra as $id => $field_details)
 		case USER_FIELD_TYPE_DATE:
 			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3]);
 			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
+			$form -> setDefaults($defaults);
 			$form->applyFilter('theme', 'trim');
 			break;
 		case USER_FIELD_TYPE_DATETIME:
 			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3]);
+			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
+			$form -> setDefaults($defaults);
 			$form->applyFilter('theme', 'trim');
 			break;
 	}

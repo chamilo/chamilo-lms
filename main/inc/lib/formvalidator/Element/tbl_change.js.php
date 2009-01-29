@@ -1,5 +1,5 @@
 <?php
-// $Id: tbl_change.js.php 18057 2009-01-28 21:07:19Z cfasanando $
+// $Id: tbl_change.js.php 18078 2009-01-29 17:21:11Z cfasanando $
 require ('../../../global.inc.php');
 ?>
 var day;
@@ -177,7 +177,7 @@ function returnDate(d,m,y) {
 	datevalues[0].selectedIndex = (d-1) ;
 	datevalues[1].selectedIndex = m;
 	date = new Date();
-	year = date.getFullYear()-1;
+	year = 1900;
 	datevalues[2].selectedIndex = (y-year);
 
 	for(i = 0; i<= 3; i++)

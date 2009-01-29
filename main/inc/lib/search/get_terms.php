@@ -27,11 +27,10 @@ function get_usual_sf_terms($filter, $specific_fields) {
     $dkterms = dokeos_query_simple_query('', 0, 1000, $filter);
 
     if (is_array($dkterms) && is_array($dkterms[1])) {
-        // 
         foreach ($specific_fields as $specific_field) {
             foreach($dkterms[1] as $obj) {
                 foreach ($obj['sf-'.$specific_field['code']] as $raw_term) {
-                    if (count($raw_term) > 1) {
+                    if (count($raw_term['name']) > 1) {
                         $normal_term = substr($raw_term['name'], 1);
                         $sf_terms[$specific_field['code']][$normal_term] = $normal_term;
                     }
@@ -70,8 +69,10 @@ if ( ($cid=api_get_course_id()) != -1) { // with cid
     } else { // no cid and all/any terms
         foreach ($specific_fields as $specific_field) {
             foreach(xapian_get_all_terms(1000, $specific_field['code']) as $raw_term) {
-                $normal_term = substr($raw_term['name'], 1);
-                $sf_terms[$specific_field['code']][$normal_term] = $normal_term;
+                if (count($raw_term['name']) > 1) {
+                    $normal_term = substr($raw_term['name'], 1);
+                    $sf_terms[$specific_field['code']][$normal_term] = $normal_term;
+                }
             }
         }
     }

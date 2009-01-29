@@ -310,8 +310,8 @@ function update_Db_course($courseDbName)
 	$TABLETOOLFORUMMAILCUE 		= $courseDbName . 'forum_mailcue';
 	$TABLETOOLFORUMATTACHMENT	= $courseDbName . 'forum_attachment';
 	$TABLETOOLFORUMNOTIFICATION = $courseDbName . 'forum_notification';
-	$TABLETOOLFORUMQUALIFY      = $courseDbName.'forum_thread_qualify';
-	$TABLETOOLFORUMQUALIFYLOG	= $courseDbName.'forum_thread_qualify_log';
+	$TABLETOOLFORUMQUALIFY      = $courseDbName . 'forum_thread_qualify';
+	$TABLETOOLFORUMQUALIFYLOG	= $courseDbName . 'forum_thread_qualify_log';
 
 	// Link
 	$TABLETOOLLINK 				= $courseDbName . 'link';
@@ -519,9 +519,9 @@ function update_Db_course($courseDbName)
 		 locked int NOT NULL default 0,
   		 session_id int unsigned default NULL,
          thread_title_qualify varchar(255) default '',
-         thread_qualify_max int unsigned default 0,
+         thread_qualify_max float(6,2) UNSIGNED NOT NULL default 0,
          thread_close_date datetime default '0000-00-00 00:00:00',
-         thread_weight smallint default 0,
+         thread_weight float(6,2) UNSIGNED NOT NULL default 0,
 		 PRIMARY KEY (thread_id)
 		) TYPE=MyISAM";
 
@@ -593,7 +593,7 @@ function update_Db_course($courseDbName)
 			id int unsigned PRIMARY KEY AUTO_INCREMENT,
 			user_id int unsigned NOT NULL,
   			thread_id int NOT NULL,
-  			qualify int default NULL,
+  			qualify float(6,2) NOT NULL default 0,
  			qualify_user_id int  default NULL,
  			qualify_time datetime default '0000-00-00 00:00:00',
  			session_id int  default NULL
@@ -607,7 +607,7 @@ function update_Db_course($courseDbName)
 			id int unsigned PRIMARY KEY AUTO_INCREMENT,
 			user_id int unsigned NOT NULL,
   			thread_id int NOT NULL,
-  			qualify int default NULL,
+  			qualify float(6,2) NOT NULL default 0,
  			qualify_user_id int default NULL,
  			qualify_time datetime default '0000-00-00 00:00:00',
  			session_id int default NULL
@@ -646,7 +646,7 @@ function update_Db_course($courseDbName)
 		id mediumint unsigned NOT NULL auto_increment,
 		question varchar(200) NOT NULL,
 		description text default NULL,
-		ponderation smallint unsigned default NULL,
+		ponderation float(6,2) NOT NULL default 0,
 		position mediumint unsigned NOT NULL default 1,
 		type tinyint unsigned NOT NULL default 2,
 		picture varchar(50) default NULL,
@@ -665,7 +665,7 @@ function update_Db_course($courseDbName)
 		answer text NOT NULL,
 		correct mediumint unsigned default NULL,
 		comment text default NULL,
-		ponderation smallint default NULL,
+		ponderation float(6,2) NOT NULL default 0,
 		position mediumint unsigned NOT NULL default 1,
 	    hotspot_coordinates text,
 	    hotspot_type enum('square','circle','poly','delineation') default NULL,
@@ -806,7 +806,7 @@ function update_Db_course($courseDbName)
 		filetype set('file','folder') NOT NULL default 'file',
 		has_properties int UNSIGNED NOT NULL DEFAULT 0,
 		view_properties tinyint NULL,
-		qualification INT UNSIGNED NOT NULL DEFAULT 0,
+		qualification float(6,2) UNSIGNED NOT NULL DEFAULT 0,
  		date_of_qualification datetime NOT NULL default '0000-00-00 00:00:00',
  		parent_id INT UNSIGNED NOT NULL DEFAULT 0,
 		qualificator_id INT UNSIGNED NOT NULL DEFAULT 0,
@@ -1568,7 +1568,8 @@ function update_Db_course($courseDbName)
 			  invitation_code varchar(250) NOT NULL,
 			  invitation_date datetime NOT NULL,
 			  reminder_date datetime NOT NULL,
-			  answered int NOT NULL default '0',
+			  answered int NOT NULL default 0,
+			  session_id SMALLINT(5) UNSIGNED NOT NULL default 0,
 			  PRIMARY KEY  (survey_invitation_id)
 			)";
 	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
@@ -2372,7 +2373,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 		}
-
+	
 	}
 
 	return 0;

@@ -1027,29 +1027,6 @@ CREATE TABLE user_field_values(
 	PRIMARY KEY(id)
 );
 
-DROP TABLE IF EXISTS access_url;
-CREATE TABLE access_url(
-	id	int	unsigned NOT NULL auto_increment,
-	url	varchar(255) NOT NULL,
-	description text,
-	active	int unsigned not null default 0,
-	created_by	int	not null,
-	tms TIMESTAMP,
-	PRIMARY KEY (id)
-);
-
-INSERT INTO access_url(url, description, active, created_by) VALUES ('http://localhost/',' ',1,1);
-
-DROP TABLE IF EXISTS access_url_rel_user;
-CREATE TABLE access_url_rel_user (
-  access_url_id int unsigned NOT NULL,
-  user_id int unsigned NOT NULL,  
-  PRIMARY KEY (access_url_id, user_id)
-);
-
-ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_user (user_id);
-ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url(access_url_id);
-ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url_user (user_id,access_url_id);
 
 ALTER TABLE gradebook_category ADD session_id int DEFAULT NULL;
 
@@ -1077,6 +1054,45 @@ CREATE TABLE gradebook_linkeval_log (
 	user_id_log int NOT NULL,
 	PRIMARY KEY  (id)
 );
+
+--
+-- --------------------------------------------------------
+--
+-- Tables for the access URL feature
+--
+
+DROP TABLE IF EXISTS access_url;
+CREATE TABLE access_url(
+	id	int	unsigned NOT NULL auto_increment,
+	url	varchar(255) NOT NULL,
+	description text,
+	active	int unsigned not null default 0,
+	created_by	int	not null,
+	tms TIMESTAMP,
+	PRIMARY KEY (id)
+);
+
+INSERT INTO access_url(url, description, active, created_by) VALUES ('http://localhost/',' ',1,1);
+
+DROP TABLE IF EXISTS access_url_rel_user;
+CREATE TABLE access_url_rel_user (
+  access_url_id int unsigned NOT NULL,
+  user_id int unsigned NOT NULL,  
+  PRIMARY KEY (access_url_id, user_id)
+);
+
+ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_user (user_id);
+ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url(access_url_id);
+ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url_user (user_id,access_url_id);
+
+DROP TABLE IF EXISTS access_url_rel_course;
+CREATE TABLE access_url_rel_course (
+  access_url_id int unsigned NOT NULL, 
+  course_code char(40) NOT NULL, 
+  PRIMARY KEY (access_url_id, course_code)
+);
+
+-----------------
 
 CREATE TABLE  sys_calendar (
   id int unsigned NOT NULL auto_increment,

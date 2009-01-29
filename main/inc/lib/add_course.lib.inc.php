@@ -80,8 +80,12 @@ function generate_course_code($course_title)
  *	Defines the four needed keys to create a course based on several parameters.
  *	@return array with the needed keys ["currentCourseCode"], ["currentCourseId"], ["currentCourseDbName"], ["currentCourseRepository"]
  *
- * @param	$wantedCode the code you want for this course
- * @param	string prefix // prefix added for ALL keys
+ * @param	string    The code you want for this course
+ * @param	string    Prefix added for ALL keys
+ * @param   string    Prefix added for databases only
+ * @param   string    Prefix added for paths only
+ * @param   boolean   Add unique prefix
+ * @param   boolean   Use code-independent keys
  * @todo	eliminate globals
  */
 function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = "", $prefix4path = "", $addUniquePrefix = false, $useCodeInDepedentKeys = true)

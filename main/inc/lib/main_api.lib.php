@@ -2973,21 +2973,44 @@ function api_create_include_path_setting()
 	// The include_path setting is empty, low probability is here.
 	return api_get_path(LIBRARY_PATH).'pear';
 }
-/**
- * */
+
+/** Gets the current access_url id of the Dokeos Platform
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @return int access_url_id of the current Dokeos Installation 
+ */
 function api_get_current_access_url_id()
 {
 	$access_url_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 	$path = api_get_path(WEB_PATH);  
 	$sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
 	$result = api_sql_query($sql); 
-	$access_url_id = Database::result($result, 0, 0);
-	if (empty($access_url_id)){
-		return -1;
+	if (Database::num_rows($result)>0) {
+		$access_url_id = Database::result($result, 0, 0);
+		return $access_url_id;
 	} else {
-		return $access_url_id;	
-	}
+		return -1;
+	}	
 }
+
+/** Gets the registered urls from a given user id
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @return int user id  
+ */
+function api_get_access_url_from_user($user_id) {
+	$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+	$table_url	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);		
+	$sql = "SELECT access_url_id FROM $table_url_rel_user url_rel_user INNER JOIN $table_url u 
+		    ON (url_rel_user.access_url_id = u.id)
+		    WHERE user_id = ".Database::escape_string($user_id);
+	$result = api_sql_query($sql,  __FILE__, __LINE__);
+	$url_list=array();
+	while ($row = Database::fetch_array($result,'ASSOC')) {
+		$url_list[] = $row['access_url_id'];
+	}			
+	return $url_list;		
+}	
+
+
 /**
  * @author florespaz@bidsoftperu.com
  * @param integer $user_id

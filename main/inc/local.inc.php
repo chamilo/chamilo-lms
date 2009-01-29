@@ -3,12 +3,13 @@
 ============================================================================== 
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003-2005 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Hugues Peeters
 	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
 	Copyright (c) Patrick Cool
+	Copyright (c) Julio Montoya Armas
 	
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -190,17 +191,16 @@ $login = isset($_POST["login"]) ? $_POST["login"] : '';
 ==============================================================================
 */
 
-if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout))
-{
+if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
     // uid is in session => login already done, continue with this value
     $_user['user_id'] = $_SESSION['_user']['user_id'];
-}
-else
-{
-	if (isset($_user['user_id'])){	unset($_user['user_id']); }
+} else {
+	if (isset($_user['user_id'])) {	
+		unset($_user['user_id']); 
+	}
 
-    if(isset($_POST['login']) && isset($_POST['password'])) // $login && $password are given to log in
-    {
+    if(isset($_POST['login']) && isset($_POST['password'])) {
+    	// $login && $password are given to log in
 		$login = $_POST['login'];
 		$password = $_POST['password'];
 
@@ -209,15 +209,13 @@ else
         $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
                 FROM $user_table
                 WHERE username = '".trim(addslashes($login))."'";
-
+					
         $result = api_sql_query($sql,__FILE__,__LINE__);
 
-        if (mysql_num_rows($result) > 0)
-        {
-            $uData = mysql_fetch_array($result);
+        if (Database::num_rows($result) > 0) {
+            $uData = Database::fetch_array($result);
 
-            if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE)
-            {
+            if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
                 //the authentification of this user is managed by Dokeos itself
 
                 $password = trim(stripslashes($password));
@@ -225,62 +223,79 @@ else
                 // determine if the password needs to be encrypted before checking
                 // $userPasswordCrypted is set in an external configuration file
 
-                if ($userPasswordCrypted)
-                {
+                if ($userPasswordCrypted) {
                 	$password = md5($password);
-                }
-                
+                }               
                 
                 // check the user's password
-                if ($password == $uData['password'] AND (trim($login) == $uData['username']))
-                {
+                if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
                 	// check if the account is active (not locked)
-                	if ($uData['active']=='1')
-                	{
+                	if ($uData['active']=='1') {
                 		// check if the expiration date has not been reached
-                		if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00')
-                		{
-                			
-							$_user['user_id'] = $uData['user_id'];
-							api_session_register('_user');
-							if(!function_exists('event_login')){
-								include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
-								event_login();
-							}
-                		}
-                		else
-                		{
+                		if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
+                			global $_configuration;
+                			if ($_configuration['multiple_access_urls']==true) {
+								//check the access_url configuration setting if the user is registered in the access_url_rel_user table
+								//getting the current access_url_id of the platform                  						 
+                				$current_access_url_id = api_get_current_access_url_id();
+                				// my user is subscribed in these sites => $my_url_list   
+                				$my_url_list = api_get_access_url_from_user($uData['user_id']);
+                				                				
+                				if(is_array($my_url_list) && count($my_url_list)>0 ){
+                					// the user have the permissions to enter at this site
+                					if (in_array($current_access_url_id, $my_url_list)) {                						
+                						$_user['user_id'] = $uData['user_id'];
+										api_session_register('_user');
+										if(!function_exists('event_login')){
+											include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+											event_login();
+										}                						
+                					} else {
+	                					$loginFailed = true;
+										api_session_unregister('_uid');
+										header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+										exit;
+                					}                				
+                				} else {
+                					$loginFailed = true;
+									api_session_unregister('_uid');
+									header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+									exit;                					
+                				}
+                			} else {           				
+                				$_user['user_id'] = $uData['user_id'];
+								api_session_register('_user');
+								if(!function_exists('event_login')){
+									include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+									event_login();
+								}							
+                			}
+                		} else {
 							$loginFailed = true;
 							api_session_unregister('_uid');
 							header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
 							exit;
                 		}
-                	}
-                	else
-                	{
+                	} else {
 						$loginFailed = true;
 						api_session_unregister('_uid');
 						header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
 						exit;
                 	}
-                }
-                else // login failed: username or password incorrect
-                {
+                } else {
+                	// login failed: username or password incorrect
                     $loginFailed = true;
                     api_session_unregister('_uid');
                     header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
                     exit;
                 }
 
-                if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id'])
-                {
+                if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id']) {
                     //first login for a not self registred
                     //e.g. registered by a teacher
                     //do nothing (code may be added later)
                 }
-            }
-            elseif(!empty($extAuthSource[$uData['auth_source']]['login']) && file_exists($extAuthSource[$uData['auth_source']]['login']))
-            {
+            } elseif(!empty($extAuthSource[$uData['auth_source']]['login']) && file_exists($extAuthSource[$uData['auth_source']]['login'])) {
                  /*
                   * Process external authentication
                   * on the basis of the given login name
@@ -292,34 +307,26 @@ else
 				// see configuration.php to define these
                 include_once($extAuthSource[$key]['login']);
                 /* >>>>>>>> External authentication modules <<<<<<<<< */
-            }
-            else // no standard Dokeos login - try external authentification
+            } else // no standard Dokeos login - try external authentification
             {
             	//huh... nothing to do... we shouldn't get here
             	error_log('Dokeos Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
             }
             
-    	    if(!empty($_SESSION['request_uri']))
-    	    {
+    	    if(!empty($_SESSION['request_uri'])) {
       	        $req = $_SESSION['request_uri'];
       	        unset($_SESSION['request_uri']);
       	        header('location: '.$req);
-    	    }
-    	    else
-    	    {
-    	    	if (isset($param))
-    	    	{    	    	
+    	    } else {
+    	    	if (isset($param)) {    	    	
     	    		header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login').$param);
-    	    	}
-    	    	else
-    	    	{
+    	    	} else {
     	    		header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login'));
     	    	}
     	    	
     	    }
-        }
-        else // login failed, mysql_num_rows($result) <= 0
-        {
+        } else {
+        	// login failed, mysql_num_rows($result) <= 0
             $loginFailed = true;  // Default initialisation. It could
                                   // change after the external authentication
 
@@ -340,38 +347,28 @@ else
              * to provide this $_user['user_id'].
              */
 
-            if (isset($extAuthSource) && is_array($extAuthSource))
-            {
-                foreach($extAuthSource as $thisAuthSource)
-                {
-                	if(!empty($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser']))
-                	{
+            if (isset($extAuthSource) && is_array($extAuthSource)) {
+                foreach($extAuthSource as $thisAuthSource) {
+                	if(!empty($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
                     	include_once($thisAuthSource['newUser']);
-                	}
-                	else
-                	{
+                	} else {
 		            	error_log('Dokeos Authentication file '. $thisAuthSource['newUser']. ' could not be found - this might prevent your system from using the authentication process in the user creation process',0);
                 	}
                 }
             } //end if is_array($extAuthSource)
 
         } //end else login failed
-    }
-    elseif(api_get_setting('openid_authentication')=='true')
-    {
-		if(!empty($_POST['openid_url']))
-		{
+    } elseif(api_get_setting('openid_authentication')=='true') {
+		if(!empty($_POST['openid_url'])) {
 	    	include('main/auth/openid/login.php');
 	    	openid_begin(trim($_POST['openid_url']),api_get_path(WEB_PATH).'index.php');
 	    	//this last function should trigger a redirect, so we can die here safely
 	    	die('Openid login redirection should be in progress');
-		}
-		elseif(!empty($_GET['openid_identity']))
+		} elseif(!empty($_GET['openid_identity']))
     	{	//it's usual for PHP to replace '.' (dot) by '_' (underscore) in URL parameters
 	    	include('main/auth/openid/login.php');
 	    	$res = openid_complete($_GET);
-	    	if($res['status'] == 'success')
-	    	{
+	    	if($res['status'] == 'success') {
 	    		$id1 = Database::escape_string($res['openid.identity']);
 	    		//have another id with or without the final '/'
 	    		$id2 = (substr($id1,-1,1)=='/'?substr($id1,0,-1):$id1.'/');
@@ -382,10 +379,8 @@ else
 		                WHERE openid = '$id1'
 		                OR openid = '$id2' ";
 		        $result = api_sql_query($sql);
-		        if($result !== false)
-		        {
-		        	if(Database::num_rows($result)>0)
-		        	{
+		        if($result !== false) {
+		        	if(Database::num_rows($result)>0) {
 		        		//$row = Database::fetch_array($res);
 			            $uData = Database::fetch_array($result);
 			
@@ -529,11 +524,11 @@ $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
         $result = api_sql_query($sql,__FILE__,__LINE__);
 
-        if (mysql_num_rows($result) > 0)
+        if (Database::num_rows($result) > 0)
         {
 			// Extracting the user data
 
-            $uData = mysql_fetch_array($result);
+            $uData = Database::fetch_array($result);
 
             $_user ['firstName'] = $uData ['firstname' ];
             $_user ['lastName' ] = $uData ['lastname'  ];
@@ -593,9 +588,9 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 
         $result = api_sql_query($sql,__FILE__,__LINE__);
 
-        if (mysql_num_rows($result)>0)
+        if (Database::num_rows($result)>0)
         {
-            $cData = mysql_fetch_array($result);
+            $cData = Database::fetch_array($result);
 
             $_cid                            = $cData['code'             ];
 			$_course = array();
@@ -647,7 +642,7 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 					$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
 					$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.$_SESSION['id_session'] . '"';
 					$rs = api_sql_query($sql,__FILE__,__LINE__);
-					list($_SESSION['session_name']) = mysql_fetch_array($rs);
+					list($_SESSION['session_name']) = Database::fetch_array($rs);
 				}
 				else
 				{
@@ -691,7 +686,7 @@ else // continue with the previous values
 			$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
 			$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.$_SESSION['id_session'] . '"';
 			$rs = api_sql_query($sql,__FILE__,__LINE__);
-			list($_SESSION['session_name']) = mysql_fetch_array($rs);
+			list($_SESSION['session_name']) = Database::fetch_array($rs);
 		}
 
 		if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']))
@@ -703,7 +698,7 @@ else // continue with the previous values
 	   		$result=api_sql_query($sql,__FILE__,__LINE__);
 	   		if(Database::num_rows($result)>0)
 	   		{
-		   		$i_course_access_id = mysql_result($result,0,0);
+		   		$i_course_access_id = Database::result($result,0,0);
 		
 		   		//We update the course tracking table
 		   		$sql="UPDATE $course_tracking_table " .
@@ -744,9 +739,9 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 
 	        $result = api_sql_query($sql,__FILE__,__LINE__);
 
-	        if (mysql_num_rows($result) > 0) // this  user have a recorded state for this course
+	        if (Database::num_rows($result) > 0) // this  user have a recorded state for this course
 	        {
-	            $cuData = mysql_fetch_array($result);
+	            $cuData = Database::fetch_array($result);
 
 	            $is_courseMember     = true;
 	            $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
@@ -776,9 +771,9 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 
 	        $result = api_sql_query($sql,__FILE__,__LINE__);
 
-	        if (mysql_num_rows($result) > 0) // this  user have a recorded state for this course
+	        if (Database::num_rows($result) > 0) // this  user have a recorded state for this course
 	        {
-	            $cuData = mysql_fetch_array($result);
+	            $cuData = Database::fetch_array($result);
 
 	            $_courseUser['role'] = $cuData['role'  ];
 	            $is_courseMember     = true;
@@ -838,7 +833,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 							WHERE session_rel_course.course_code='$_cid'
 							AND session_rel_course.id_coach = '".$_user['user_id']."'";
 			        $result = api_sql_query($sql,__FILE__,__LINE__);
-			        if($row = mysql_fetch_array($result))
+			        if($row = Database::fetch_array($result))
 			        {
 			        	$_courseUser['role'] = 'Professor';
 			            $is_courseMember     = true;
@@ -866,9 +861,9 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	
 				        $result = api_sql_query($sql,__FILE__,__LINE__);
 	
-				        if (mysql_num_rows($result) > 0) // this  user have a recorded state for this course
+				        if (Database::num_rows($result) > 0) // this  user have a recorded state for this course
 				        {
-				        	while($row = mysql_fetch_array($result)){
+				        	while($row = Database::fetch_array($result)){
 					            $is_courseMember     = true;
 					            $is_courseTutor      = false;
 					            $is_courseAdmin      = false;
@@ -950,9 +945,9 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) // sessi
     	$group_table = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT * FROM $group_table WHERE `id` = '$gidReq'";
         $result = api_sql_query($sql,__FILE__,__LINE__);
-        if (mysql_num_rows($result) > 0) // This group has recorded status related to this course
+        if (Database::num_rows($result) > 0) // This group has recorded status related to this course
         {
-            $gpData = mysql_fetch_array($result);
+            $gpData = Database::fetch_array($result);
             $_gid                   = $gpData ['id'             ];
             api_session_register('_gid');
         }

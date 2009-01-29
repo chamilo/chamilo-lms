@@ -35,16 +35,21 @@ function GetFolders( $resourceType, $currentFolder )
 	$oCurrentFolder = opendir( $sServerDir ) ;
 
 	$in_group = api_is_in_group();
+	$in_shared_folder = $currentFolder == '/shared_folder/';
+	$user_id = api_get_user_id();
 
 	while ( $sFile = readdir( $oCurrentFolder ) )
 	{
 		if ( $sFile != '.' && $sFile != '..'
 			&& strpos( $sFile, '_DELETED_' ) === false
 			&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
+			&& (!$in_shared_folder || ($in_shared_folder && $sFile == $user_id))
 			&& $sFile != '.thumbs'
 			&& $sFile != '.svn'
 			&& is_dir( $sServerDir . $sFile ) )
+		{
 			$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;
+		}
 	}
 
 	closedir( $oCurrentFolder ) ;
@@ -72,16 +77,20 @@ function GetFoldersAndFiles( $resourceType, $currentFolder )
 	$oCurrentFolder = opendir( $sServerDir ) ;
 
 	$in_group = api_is_in_group();
+	$in_shared_folder = $currentFolder == '/shared_folder/';
+	$user_id = api_get_user_id();
 
 	while ( $sFile = readdir( $oCurrentFolder ) )
 	{
+		$is_dir = @is_dir( $sServerDir . $sFile );
 		if ( $sFile != '.' && $sFile != '..'
 			&& strpos( $sFile, '_DELETED_' ) === false
 			&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
+			&& (!$in_shared_folder || ($in_shared_folder && (!$is_dir || ($is_dir && $sFile == $user_id))))
 			&& $sFile != '.thumbs'
 			&& $sFile != '.svn' )
 		{
-			if ( is_dir( $sServerDir . $sFile ) )
+			if ( $is_dir )
 				$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;
 			else
 			{

@@ -115,6 +115,8 @@ class ImageManager
 			$group_directory = $group_directory[count($group_directory) - 1];
 		}
 
+		$user_id = api_get_user_id();
+
 		while (false !== ($entry = $d->read())) 
 		{
 			//If it is a directory, and it doesn't start with
@@ -131,6 +133,17 @@ class ImageManager
 				if ($in_group && strpos($fullpath, '_groupdocs') !== false && strpos($fullpath, $group_directory) === false)
 				{
 					continue;
+				}
+
+				if (strpos($fullpath, '/shared_folder/') !== false)
+				{
+					if (!preg_match('/.*\/shared_folder\/$/', $fullpath))
+					{
+						if (strpos($fullpath, '/shared_folder/'.$user_id.'/') === false)
+						{
+							continue;
+						}
+					}
 				}
 
 				$dirs[$relative] = $fullpath;
@@ -169,6 +182,7 @@ class ImageManager
 		$d = @dir($fullpath);
 		
 		$in_group = api_is_in_group();
+		$user_id = api_get_user_id();
 
 		while (false !== ($entry = $d->read())) 
 		{
@@ -176,8 +190,24 @@ class ImageManager
 				&& !strpos($entry, '_DELETED_')
 				&& ($in_group || (!$in_group && strpos($entry, '_groupdocs') === false)))
 			{
-				if(is_dir($fullpath.$entry)
-					&& $this->isThumbDir($entry) == false)
+				$is_dir = is_dir($fullpath.$entry);
+
+				if ($is_dir)
+				{
+					$dir_entry = Files::fixPath($fullpath.$entry);
+					if (strpos($dir_entry, '/shared_folder/') !== false)
+					{
+						if (!preg_match('/.*\/shared_folder\/$/', $dir_entry))
+						{
+							if (strpos($dir_entry, '/shared_folder/'.$user_id.'/') === false)
+							{
+								continue;
+							}
+						}
+					}
+				}
+
+				if($is_dir && $this->isThumbDir($entry) == false)
 				{
 					$relative = Files::fixPath($path.$entry);
 					$full = Files::fixPath($fullpath.$entry);

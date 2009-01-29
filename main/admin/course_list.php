@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 18067 2009-01-29 01:30:37Z yannoo $
+<?php // $Id: course_list.php 18068 2009-01-29 01:38:37Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -83,7 +83,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	while ($course = Database::fetch_row($res))
 	{
 		//place colour icons in front of courses
-		$course[1] = get_course_visibility_icon($course[10]).$course[1];
+		$course[1] = get_course_visibility_icon($course[10]).'<a href="../course_home/course_home.php?cidReq='.$course[0].'">'.$course[1].'</a>';
 		$course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[7] = CourseManager :: is_virtual_course_from_system_code($course[7]) ? get_lang('Yes') : get_lang('No');

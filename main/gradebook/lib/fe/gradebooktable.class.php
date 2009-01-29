@@ -198,7 +198,7 @@ class GradebookTable extends SortableTable
 				
 				if (empty($_GET['selectcat'])) {
 					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
-						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/index.php?export_certificate=yes&cat_id='.$id.'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display; 	
+						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$id.'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display; 	
 					} else {
 						$certificates = '-';	
 					}					
@@ -266,7 +266,7 @@ private function build_id_column ($item) {
 				if (api_is_allowed_to_create_course() && $show_message===false) {
 					
 					return '&nbsp;'
-						. '<a href="gradebook_view_result.php?selecteval=' . $item->get_id() . '">'
+						. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
 						. $item->get_name()
 						. '</a>&nbsp;['.get_lang('Evaluation').']';
 				} elseif (ScoreDisplay :: instance()->is_custom() && $show_message===false) {

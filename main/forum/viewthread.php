@@ -108,7 +108,7 @@ if (!empty($_SESSION['toolgroup'])) {
 } else {
 	if (!empty($_GET['gradebook'])) {
 			$interbreadcrumb[]= array (
-				'url' => '../gradebook/index.php',
+				'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 				'name' => get_lang('Gradebook')
 			);
 	}

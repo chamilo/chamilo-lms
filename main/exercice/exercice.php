@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 18044 2009-01-28 16:53:27Z herodoto $
+<?php // $Id: exercice.php 18076 2009-01-29 16:51:02Z iflorespaz $
 
 /*
 ==============================================================================
@@ -289,7 +289,7 @@ if (in_array($origin, array('tracking_course','user_course'))){
 }
 if ($_GET['gradebook'] && $_GET['exerciseId']) {
 	$interbreadcrumb[]= array (
-			'url' => '../gradebook/index.php',
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
 		);
 }

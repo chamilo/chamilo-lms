@@ -25,7 +25,8 @@ class document_processor extends search_processor {
                   if ($search_show_unlinked_results) {
 	                  if (!$course_visible_for_user) {
 		                  $url = '';
-	                  }
+                      }
+                  }
 	                  $results[] = array(
 		                  'toolid' => TOOL_DOCUMENT,
 						  'score' => $row_val['score'],
@@ -35,7 +36,6 @@ class document_processor extends search_processor {
 						  'title' => $name,
 						  'author' => $author,
 	                  );
-                  }
             }
           }
         }

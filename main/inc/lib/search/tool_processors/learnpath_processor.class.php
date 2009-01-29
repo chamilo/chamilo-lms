@@ -47,6 +47,7 @@ class learnpath_processor extends search_processor {
                       if (!$course_visible_for_user) {
                           $url = '';
                       }
+                  }
                       $results[] = array(
                           'toolid' => TOOL_LEARNPATH,
                           'score' => $lp['total_score']/(count($lp)-1), // not count total_score array item
@@ -56,7 +57,6 @@ class learnpath_processor extends search_processor {
                           'title' => $name,
                           'author' => $author,
                       );
-                  }
               }
             }
           }

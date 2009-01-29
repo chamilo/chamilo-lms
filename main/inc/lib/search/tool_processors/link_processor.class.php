@@ -48,6 +48,7 @@ class link_processor extends search_processor {
                             if (!$course_visible_for_user) {
                                 $url = '';
                             }
+                        }
                             $result = array(
 	                            'toolid' => TOOL_LINK,
 								'score' => $one_course_links['total_score']/(count($one_course_links)-1), // not count total_score array item
@@ -57,7 +58,6 @@ class link_processor extends search_processor {
 								'title' => $name,
 								'author' => $author,
                             );
-                        }
 				        break;
 			        }	          	
 		        }

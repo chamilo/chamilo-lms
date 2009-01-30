@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18010 2009-01-26 21:10:38Z cfasanando $
+<?php //$Id: work.lib.php 18095 2009-01-30 21:23:55Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18010 2009-01-26 21:10:38Z cfasanando $
+* 	@version $Id: work.lib.php 18095 2009-01-30 21:23:55Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -513,9 +513,17 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$class = '';										
 		$row[] = '<img src="../img/folder_document.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Folder').'" title="'.get_lang('Folder').'" />'; //image
 		$a_count_directory=count_dir($work_dir.'/'.$dir,false);
+		$cant_files=0;
+		if(api_is_allowed_to_edit()) {
 		$cant_files=$a_count_directory[0];
-		$cant_dir=$a_count_directory[1];
-
+		} else {
+		$sql = "SELECT count(*) FROM $work_table s, $iprop_table p WHERE s.id = p.ref AND lastedit_user_id='".(int)api_get_user_id()."' AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$r = Database::fetch_row($res);
+		$cant_files = $r[0];	
+		}
+		$cant_dir=$a_count_directory[1];				
+				
 		$text_file=get_lang('FilesUpload');
 		$text_dir=get_lang('Directories');
 				

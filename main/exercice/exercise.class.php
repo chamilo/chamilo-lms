@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 18063 2009-01-29 00:07:20Z marvil07 $
+* 	@version $Id: exercise.class.php 18098 2009-01-30 23:12:27Z cvargas1 $
 */
 
 
@@ -807,7 +807,8 @@ class Exercise
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
 	function createForm ($form, $type='full')
-	{			
+	{	
+		global $id;		
 		if(empty($type)){
 			$type='full';
 		}
@@ -849,7 +850,7 @@ class Exercise
 				</div>');
 				
 			// Random questions
-			$form -> addElement('html','<div id="options" style="display: none;">');
+			$form -> addElement('html','<div id="options" style="display:none">');
 		
 			$random = array();	
 			$option=array();
@@ -868,16 +869,20 @@ class Exercise
 	        $attempt_option[0]=get_lang('Infinite');
 	        
 	        $form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option);
+	        
+	        $form -> addElement('html','</div>');
+	             
+	        $form -> addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');	  	
+			$var= Exercise::selectTimeLimit();
+		
+			$form -> addElement('html','<div id="options2" style="display:'.$state.'">');	        
 	
-	        $form -> addElement('checkbox', 'enabletimelimit',null ,get_lang('EnableTimeLimits'));
 	        //$form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
 	        //$form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));
 	        $form->addElement('datepicker', 'start_time', get_lang('ExeStartTime'), array('form_name'=>'exercise_admin'));
 			$form->addElement('datepicker', 'end_time', get_lang('ExeEndTime'), array('form_name'=>'exercise_admin'));
-	
-			// Exercise attempts
-			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));		
 			
+			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));		
 			$form -> addElement('html','</div>');
 	
 	        $defaults = array();
@@ -915,8 +920,8 @@ class Exercise
 		if($type=='full') {
 			// rules			
 			$form -> addRule ('exerciseAttempts', get_lang('Numeric'), 'numeric');
-			$form -> addRule ('start_time', get_lang('DateNotValid'), 'date');
-	        $form -> addRule ('end_time', get_lang('DateNotValid'), 'date');
+			$form -> addRule ('start_time', get_lang('InvalidDate'), 'date');
+	        $form -> addRule ('end_time', get_lang('InvalidDate'), 'date');
 	        $form -> addRule(array ('start_time', 'end_time'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
 		}        
 
@@ -941,9 +946,7 @@ class Exercise
 			    $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00')? $this -> start_time : date('Y-m-d 12:00:00');
 	            $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00');
 	            
-			}
-			else
-			{
+			} else {
 				$defaults['exerciseType'] = 1;
 				$defaults['exerciseAttempts'] = 0;
 				$defaults['randomQuestions'] = 0;

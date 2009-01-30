@@ -54,6 +54,16 @@ $htmlHeadXtra[] = '<script>
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 			}	
 		}
+
+		function timelimit() {
+			if(document.getElementById(\'options2\').style.display == \'none\') {
+				document.getElementById(\'options2\').style.display = \'block\';
+				document.getElementById(\'img_plus_and_minus2\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			} else {
+				document.getElementById(\'options2\').style.display = \'none\';
+				document.getElementById(\'img_plus_and_minus2\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			}	
+		}
 		
 		function feedbackselection() 
 		{

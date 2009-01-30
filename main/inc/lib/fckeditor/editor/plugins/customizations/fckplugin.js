@@ -105,6 +105,14 @@ if ( !FCKConfig.BaseHref || FCKConfig.BaseHref.toString().length == 0 )
 	}
 }
 
+if ( !FCKConfig.BaseHref )
+{
+	if ( typeof ( FCKConfig.BaseHref ) != 'string' )
+	{
+		FCKConfig.BaseHref = FCKConfig.CreateDocumentWebDir ;
+	}
+}
+
 FCKConfig.BaseHref = FCKConfig.BaseHref.toString();
 
 if ( FCKConfig.BaseHref.length > 0 )

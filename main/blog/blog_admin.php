@@ -109,7 +109,7 @@ if (api_is_allowed_to_edit())
 		}
 	
 		echo '<div class="actions">';
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>",Display::return_icon('blog_new.gif'),get_lang('AddBlog')."</a>";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>",Display::return_icon('blog_new.gif',get_lang('AddBlog')),get_lang('AddBlog')."</a>";
 		echo '</div>';
 		echo "<table width=\"100%\" border=\"0\" cellspacing=\"2\" class='data_table'>";
 		echo	"<tr>",

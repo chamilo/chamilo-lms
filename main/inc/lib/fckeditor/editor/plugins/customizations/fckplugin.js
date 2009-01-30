@@ -53,14 +53,25 @@
  **************************************************************************************
  */
 
-// A flag to thell which tells whether simple or advanced file manager is to be used.
+// Reading a setting which tells whether simple or advanced file manager is to be used.
+FCKConfig.AdvancedFileManager = null ;
 if ( FCKConfig.AdvancedFileManager )
 {
 	FCKConfig.AdvancedFileManager = FCKConfig.AdvancedFileManager.toString().toLowerCase() == 'true' ? true : false ;
 }
 else
 {
+	// If this setting has been omited, let us try to detect it indirectly.
 	FCKConfig.AdvancedFileManager = false ;
+	if ( ( FCKConfig.ImageBrowserURL && FCKConfig.ImageBrowserURL.toString().indexOf( 'ajaxfilemanager' ) != -1 )
+		|| ( FCKConfig.FlashBrowserURL && FCKConfig.FlashBrowserURL.toString().indexOf( 'ajaxfilemanager' ) != -1 )
+		|| ( FCKConfig.MP3BrowserURL && FCKConfig.MP3BrowserURL.toString().indexOf( 'ajaxfilemanager' ) != -1 )
+		|| ( FCKConfig.VideoBrowserURL && FCKConfig.VideoBrowserURL.toString().indexOf( 'ajaxfilemanager' ) != -1 )
+		|| ( FCKConfig.LinkBrowserURL && FCKConfig.LinkBrowserURL.toString().indexOf( 'ajaxfilemanager' ) != -1 )
+		|| ( FCKConfig.MediaBrowserURL && FCKConfig.MediaBrowserURL.toString().indexOf( 'ajaxfilemanager' ) != -1 ) )
+	{
+		FCKConfig.AdvancedFileManager = true ;
+	}
 }
 
 // A flag to see whether a course documents repository is to be used.
@@ -910,10 +921,8 @@ FCK.ContextMenu.RegisterListener( {
 		{
 			// Grouping all image-related commands at the bottom.
 			menu.AddSeparator();
-			// If an existing image has been selected, then Image Manager actually activates the Image Properties dialog.
-			// These two dialogs are united under single button.
 			//menu.AddItem( 'Image', FCKLang.ImageProperties, 37 ) ;
-			menu.AddItem( 'ImageManager', FCKLang.ImageProperties, FCKConfig.ImagesIcon ) ;
+			menu.AddItem( 'Image', FCKLang.ImageProperties, FCKConfig.ImagesIcon ) ;
 			// The "imgmap" plugin should add its own icon here.
 		}
 	} }
@@ -977,6 +986,18 @@ FCK.ContextMenu.RegisterListener( {
  * Double click support
  **************************************************************************************
  */
+
+// Image properties command.
+FCK.RegisterDoubleClickHandler(
+		function ( tag )
+		{
+			if ( FCK.IsRealImage( tag ) )
+			{
+				var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
+				command.Execute() ;
+			}
+		}, 'IMG'
+	) ;
 
 // Flash command.
 FCK.RegisterDoubleClickHandler(

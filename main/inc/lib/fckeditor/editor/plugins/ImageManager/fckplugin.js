@@ -46,18 +46,6 @@
 		ImageManager_click(FCK, null)
 	}
 
-    // Open the Image properties dialog on double click.
-    function ImageManager_doubleClick (img) {
-
-		if ( FCK.IsRealImage( img ) )
-		{
-			var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
-			command.Execute() ;
-		}
-	}
-
-	FCK.RegisterDoubleClickHandler( ImageManager_doubleClick, 'IMG' ) ;
-
 	function ImageManager_click(editor, sender) {
 
 		// If an existing image has been selected let us use the original Image Properties dialog.

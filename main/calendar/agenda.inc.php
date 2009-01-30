@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 18086 2009-01-29 22:03:00Z herodoto $
+<?php //$Id: agenda.inc.php 18096 2009-01-30 22:18:45Z herodoto $
 
 /*
 ==============================================================================
@@ -2084,7 +2084,8 @@ function display_agenda_items()
 	    		echo Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
 
     			echo '<a href="'.$mylink.'&amp;action=announce" title="'.get_lang("AddAnnouncement").'">';
-    			echo Display::return_icon('announce_add.gif', get_lang('AddAnnouncement'))."</a> ";
+    			echo Display::return_icon('announce_add.gif', get_lang('AddAnnouncement'), array ('style' => 'width:16px; height:16px;'))."</a> ";
+
 	    		if ($myrow['visibility']==1)
 	    		{
 	    			$image_visibility="visible.gif";
@@ -2649,7 +2650,7 @@ function show_add_form($id = '')
 													echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 												} ?>
 					</select>
-					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
+					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>
 					</td>
 					<td>					
 							&nbsp;<?php echo get_lang('StartTime').": \n"; ?>&nbsp;
@@ -2739,7 +2740,7 @@ function show_add_form($id = '')
 									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
-						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
+						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>
 					</td>
 					<td >
 							&nbsp;<?php echo get_lang('EndTime').": \n"; ?>&nbsp;
@@ -3022,7 +3023,7 @@ function show_add_form($id = '')
 			                        echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 			                    } ?>
 			            </select>
-			            <a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif'); ?></a>
+			            <a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>
 								    </td>
 				    </tr>
 			    </table>

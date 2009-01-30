@@ -43,20 +43,23 @@ class learnpath_processor extends search_processor {
                   list($thumbnail, $image, $name, $author) = $this->get_information($courseid, $lp_id, $lp['has_document_id']);
                   $url = api_get_path(WEB_PATH) . 'main/newscorm/lp_controller.php?cidReq=%s&action=view&lp_id=%s';
                   $url = sprintf($url, $courseid, $lp_id);
-                  if ($search_show_unlinked_results) {
-                      if (!$course_visible_for_user) {
-                          $url = '';
+                  $result = array(
+                      'toolid' => TOOL_LEARNPATH,
+                      'score' => $lp['total_score']/(count($lp)-1), // not count total_score array item
+                      'url' => $url,
+                      'thumbnail' => $thumbnail,
+                      'image' => $image,
+                      'title' => $name,
+                      'author' => $author,
+                  );
+                  if ($course_visible_for_user) {
+                      $results[] = $result;
+                  } else { // course not visible for user
+                      if ($search_show_unlinked_results) {
+                          $result['url'] = '';
+                          $results[] = $result;
                       }
                   }
-                      $results[] = array(
-                          'toolid' => TOOL_LEARNPATH,
-                          'score' => $lp['total_score']/(count($lp)-1), // not count total_score array item
-                          'url' => $url,
-                          'thumbnail' => $thumbnail,
-                          'image' => $image,
-                          'title' => $name,
-                          'author' => $author,
-                      );
               }
             }
           }

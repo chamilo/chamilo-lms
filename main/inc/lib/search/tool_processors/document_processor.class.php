@@ -22,20 +22,23 @@ class document_processor extends search_processor {
             $visibility = api_get_item_visibility(api_get_course_info($row_val['courseid']), TOOL_DOCUMENT, $row_val['xapian_data'][SE_DATA]['doc_id']);
             if ($visibility) {
                   list($thumbnail, $image, $name, $author, $url) = $this->get_information($row_val['courseid'], $row_val['xapian_data'][SE_DATA]['doc_id']);
-                  if ($search_show_unlinked_results) {
-	                  if (!$course_visible_for_user) {
-		                  $url = '';
+                  $result = array(
+                      'toolid' => TOOL_DOCUMENT,
+                      'score' => $row_val['score'],
+                      'url' => $url,
+                      'thumbnail' => $thumbnail,
+                      'image' => $image,
+                      'title' => $name,
+                      'author' => $author,
+                  );
+                  if ($course_visible_for_user) {
+                      $results[] = $result;
+                  } else { // course not visible for user
+                      if ($search_show_unlinked_results) {
+                          $result['url'] = '';
+                          $results[] = $result;
                       }
                   }
-	                  $results[] = array(
-		                  'toolid' => TOOL_DOCUMENT,
-						  'score' => $row_val['score'],
-						  'url' => $url,
-						  'thumbnail' => $thumbnail,
-						  'image' => $image,
-						  'title' => $name,
-						  'author' => $author,
-	                  );
             }
           }
         }

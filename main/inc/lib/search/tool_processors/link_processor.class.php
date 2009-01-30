@@ -43,28 +43,32 @@ class link_processor extends search_processor {
 			        if ($visibility) {
 			        	// if one is visible let show the result for a course
 			        	// also asume all data of this item like the data of the whole group of links(Ex. author) 
-				        list($thumbnail, $image, $name, $author, $url) = $this->get_information($courseid, $one_link['link_id']);
-                        if ($search_show_unlinked_results) {
-                            if (!$course_visible_for_user) {
-                                $url = '';
+                        list($thumbnail, $image, $name, $author, $url) = $this->get_information($courseid, $one_link['link_id']);
+                        $result_tmp = array(
+                            'toolid' => TOOL_LINK,
+                            'score' => $one_course_links['total_score']/(count($one_course_links)-1), // not count total_score array item
+                            'url' => $url,
+                            'thumbnail' => $thumbnail,
+                            'image' => $image,
+                            'title' => $name,
+                            'author' => $author,
+                        );
+                        if ($course_visible_for_user) {
+                            $result = $result_tmp;
+                        } else { // course not visible for user
+                            if ($search_show_unlinked_results) {
+                                $result_tmp['url'] = '';
+                                $result = $result_tmp;
                             }
                         }
-                            $result = array(
-	                            'toolid' => TOOL_LINK,
-								'score' => $one_course_links['total_score']/(count($one_course_links)-1), // not count total_score array item
-								'url' => $url,
-								'thumbnail' => $thumbnail,
-								'image' => $image,
-								'title' => $name,
-								'author' => $author,
-                            );
-				        break;
-			        }	          	
-		        }
-		        if (!is_null($result)) {
-		        	$results[] = $result;
-		        }
-	        }
+                        break;
+                    }
+                }
+                if (!is_null($result)) {
+                    // if there is at least one link item found show link to course Links tool page
+                    $results[] = $result;
+                }
+            }
         }
 
         // get information to sort

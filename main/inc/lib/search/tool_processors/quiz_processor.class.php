@@ -51,29 +51,33 @@ class quiz_processor extends search_processor {
         $results = array();
         foreach ($this->exercises as $courseid => $exercises) {
             $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
-            $course_visible_for_user = api_is_course_visible_for_user(NULL, $row_val['courseid']);
+            $course_visible_for_user = api_is_course_visible_for_user(NULL, $courseid);
 	        // can view course?
 	        if ($course_visible_for_user || $search_show_unlinked_results) {
 		        foreach ($exercises as $exercise_id => $exercise) {
 			        // is visible?
 			        $visibility = api_get_item_visibility(api_get_course_info($courseid), TOOL_QUIZ, $exercise_id);
-			        if ($visibility) {
+			        if($visibility) {
 				        list($thumbnail, $image, $name, $author) = $this->get_information($courseid, $exercise_id);
-                        $url = api_get_path(WEB_PATH) . 'main/exercice/exercice_submit.php?cidReq=%s&exerciseId=%s';
-                        if ($search_show_unlinked_results) {
-                            if (!$course_visible_for_user) {
-                                $url = '';
+				        $url = api_get_path(WEB_PATH) . 'main/exercice/exercice_submit.php?cidReq=%s&exerciseId=%s';
+                        $url = sprintf($url, $courseid, $exercise_id);
+                        $result = array(
+                            'toolid' => TOOL_QUIZ,
+                            'score' => $exercise['total_score']/(count($exercise)-1), // not count total_score array item
+                            'url' => $url,
+                            'thumbnail' => $thumbnail,
+                            'image' => $image,
+                            'title' => $name,
+                            'author' => $author,
+                        );
+                        if ($course_visible_for_user) {
+                            $results[] = $result;
+                        } else { // course not visible for user
+                            if ($search_show_unlinked_results) {
+                                $result['url'] = '';
+                                $results[] = $result;
                             }
                         }
-				        $results[] = array(
-					        'toolid' => TOOL_QUIZ,
-							'score' => $exercise['total_score']/(count($exercise)-1), // not count total_score array item
-							'url' => sprintf($url, $courseid, $exercise_id),
-							'thumbnail' => $thumbnail,
-							'image' => $image,
-							'title' => $name,
-							'author' => $author,
-				        );
 			        }
 		        }
 	        }

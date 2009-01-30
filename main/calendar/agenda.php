@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 18016 2009-01-26 22:00:07Z juliomontoya $
+<?php //$Id: agenda.php 18093 2009-01-30 20:23:45Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,7 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array('agenda','resourcelinker','group');
+$language_file = array('agenda','group');
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;

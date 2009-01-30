@@ -39,7 +39,7 @@
 ==============================================================================
 */
 // name of the language file that needs to be included 
-$language_file = 'resourcelinker';
+//$language_file = 'resourcelinker';// TODO: Repeated deleting and moving the rest of this lang file to trad4all
 include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 

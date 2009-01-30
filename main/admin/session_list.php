@@ -121,25 +121,25 @@ else {
 	 
 	?>	
 	<div id="main">
-			
+	<div class="actions">		
 	<?php
 	
 	if(isset($_GET['action'])) {
 		Display::display_normal_message(Security::remove_XSS($_GET['message']), false);
 	}
+	
 	echo '<div style="float:right;">
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>									
-	  </div>';	  
+	 </div>';	  
 	?>  
 	<form method="POST" action="session_list.php">
 		<input type="text" name="keyword" value="<?php echo Security::remove_XSS($_GET['keyword']); ?>"/>
 		<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 		<a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a>
 		</form>
-	<form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
+	<form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">	
 	<div align="left">	
-	<?php
-	
+	<?php	
 	if(count($Sessions)==0 && isset($_POST['keyword'])) {
 		echo get_lang('NoSearchResults');
 	} else {
@@ -150,26 +150,19 @@ else {
 		} else {
 			echo get_lang('Previous');
 		}
-		?>
-	
-		|
-	
+		?>	
+		|	
 		<?php
-		if($nbr_results > $limit)
-		{
-		?>
-	
-		<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Next'); ?></a>
-	
-		<?php
-		}
-		else
-		{
+		if($nbr_results > $limit) {
+			?>	
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Next'); ?></a>	
+			<?php
+		} else {
 			echo get_lang('Next');
 		}
-		?>
-	
-		</div>
+		?>	
+	</div>	
+	 </div>
 	
 		<br>
 	

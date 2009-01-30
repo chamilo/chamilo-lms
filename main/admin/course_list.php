@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 18068 2009-01-29 01:38:37Z yannoo $
+<?php // $Id: course_list.php 18094 2009-01-30 20:44:08Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -202,14 +202,18 @@ else
 		
 	}
 	// Create a search-box
-	$form = new FormValidator('search_simple','get','','',null,false);
+	$form = new FormValidator('search_simple','get','','','width=200px',false);
 	$renderer =& $form->defaultRenderer();
 	$renderer->setElementTemplate('<span>{element}</span> ');
 	$form->addElement('text','keyword',get_lang('keyword'));
 	$form->addElement('submit','submit',get_lang('Search'));
 	$form->addElement('static','search_advanced_link',null,'<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
-	echo '<div class="actions">';
-	$form->display();
+	echo '<div style="float:right;">
+			  <a href="'.api_get_path(WEB_CODE_PATH).'admin/course_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddCourse').'</a>									
+		 </div>';
+		 
+	echo '<div class="actions">';		
+		$form->display();				
 	echo '</div>';
 	// Create a sortable table with the course data
 	$table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data',2);

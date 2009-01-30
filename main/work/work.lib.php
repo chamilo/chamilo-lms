@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18095 2009-01-30 21:23:55Z cfasanando $
+<?php //$Id: work.lib.php 18097 2009-01-30 23:07:49Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18095 2009-01-30 21:23:55Z cfasanando $
+* 	@version $Id: work.lib.php 18097 2009-01-30 23:07:49Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -369,6 +369,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$sql_select_directory.=" AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $session_condition";												   
 		$result=api_sql_query($sql_select_directory,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
+
 		
 		 if(!$row) { 
 			 // the folder belongs to another session
@@ -909,6 +910,9 @@ function update_work_url($id,$new_path)
 		$row = Database::fetch_array($res);
 		$filename = basename($row['url']);
 		$new_url = $new_path.$filename;
+		
+		
+		
 		$sql2 = "UPDATE $table SET url = '$new_url' WHERE id=$id";
 		$res2 = api_sql_query($sql2);
 		return $res2;
@@ -946,8 +950,11 @@ function update_dir_name($path, $new_name)
 	
 	while($work = Database :: fetch_array($rs)) {		 				 
 		$new_dir=$work['url'];		
-		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));				
-		$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];		
+		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));
+		$pre_directory=$path_to_dir.$new_name.replace_dangerous_char($name_with_directory);
+		$new_directory=replace_accents($pre_directory);
+					
+		$sql = 'UPDATE '.$table.' SET url="work/'.$new_directory.'" WHERE id= '.$work['id'];		
 		api_sql_query($sql, __FILE__, __LINE__);		
 	}
 
@@ -957,8 +964,11 @@ function update_dir_name($path, $new_name)
 	$work_len=strlen('/'.$path);	
 	while($work = Database :: fetch_array($rs)) {		
 		$new_dir=$work['url'];
-		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));	
-		$sql = 'UPDATE '.$table.' SET url="/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];		
+		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));
+		$pre_directory=$path_to_dir.$new_name.replace_dangerous_char($name_with_directory);
+		$new_directory=replace_accents($pre_directory);
+			
+		$sql = 'UPDATE '.$table.' SET url="/'.$new_directory.'" WHERE id= '.$work['id'];		
 		api_sql_query($sql, __FILE__, __LINE__);		
 	}	
 }

@@ -1,11 +1,9 @@
 /*
  *	Dokeos - elearning and course management software
  *
- *	Copyright (c) 2004-2008 Dokeos S.A.
- *	Copyright (c) 2003 Ghent University (UGent)
- *	Copyright (c) 2001 Universite catholique de Louvain (UCL)
- *	Copyright (c) 2008 Julio Montoya
- *	Copyright (c) 2008 Ivan Tcholakov
+ *	Copyright (c) 2008-2009 Dokeos SPRL
+ *	Copyright (c) 2008-2009 Julio Montoya Armas <gugli100@gmail.com>
+ *	Copyright (c) 2008-2009 Ivan Tcholakov <ivantcholakov@gmail.com>
  *
  *	For a full list of contributors, see "credits.txt".
  *	The full license can be read in "license.txt".
@@ -17,17 +15,17 @@
  *
  *	See the GNU General Public License for more details.
  *
- *	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
- *	Mail: info@dokeos.com
+ * Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+ * Mail: info@dokeos.com
  */
 
 
 /*
  * This plugin uses also fragments of the original source code of
- * FCKeditor version 2.6.4 SVN, Build 21065 (nightly, 06-DEC-2008).
+ * FCKeditor version 2.6.4.
  * 
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *

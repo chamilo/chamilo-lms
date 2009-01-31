@@ -503,23 +503,23 @@ $user_table = Database::get_main_table(TABLE_MAIN_USER);
 $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
         if ($_configuration['tracking_enabled'])
         {
-            $sql = "SELECT `user`.*, `a`.`user_id` `is_admin`,
-                            UNIX_TIMESTAMP(`login`.`login_date`) `login_date`
+            $sql = "SELECT user.*, a.user_id is_admin,
+                            UNIX_TIMESTAMP(login.login_date) login_date
                      FROM $user_table
-                     LEFT JOIN $admin_table `a`
-                     ON `user`.`user_id` = `a`.`user_id`
-                     LEFT JOIN `".$_configuration['statistics_database']."`.`track_e_login` `login`
-                     ON `user`.`user_id`  = `login`.`login_user_id`
-                     WHERE `user`.`user_id` = '".$_user['user_id']."'
-                     ORDER BY `login`.`login_date` DESC LIMIT 1";
+                     LEFT JOIN $admin_table a
+                     ON user.user_id = a.user_id
+                     LEFT JOIN ".$_configuration['statistics_database'].".track_e_login login
+                     ON user.user_id  = login.login_user_id
+                     WHERE user.user_id = '".$_user['user_id']."'
+                     ORDER BY login.login_date DESC LIMIT 1";
         }
         else
         {
-            $sql = "SELECT `user`.*, `a`.`user_id` `is_admin`
+            $sql = "SELECT user.*, a.user_id is_admin
                     FROM $user_table
-                    LEFT JOIN $admin_table `a`
-                    ON `user`.`user_id` = `a`.`user_id`
-                    WHERE `user`.`user_id` = '".$_user['user_id']."'";
+                    LEFT JOIN $admin_table a
+                    ON user.user_id = a.user_id
+                    WHERE user.user_id = '".$_user['user_id']."'";
         }
 
         $result = api_sql_query($sql,__FILE__,__LINE__);
@@ -580,11 +580,11 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
     {
     	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     	$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql =    "SELECT `course`.*, `course_category`.`code` `faCode`, `course_category`.`name` `faName`
+        $sql =    "SELECT course.*, course_category.code faCode, course_category.name faName
                  FROM $course_table
                  LEFT JOIN $course_cat_table
-                 ON `course`.`category_code` =  `course_category`.`code`
-                 WHERE `course`.`code` = '$cidReq'";
+                 ON course.category_code = course_category.code
+                 WHERE course.code = '$cidReq'";
 
         $result = api_sql_query($sql,__FILE__,__LINE__);
 
@@ -734,8 +734,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 
 	    	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	        $sql = "SELECT * FROM $course_user_table
-	               WHERE `user_id`  = '".$_user['user_id']."'
-	               AND `course_code` = '$cidReq'";
+	               WHERE user_id  = '".$_user['user_id']."'
+	               AND course_code = '$cidReq'";
 
 	        $result = api_sql_query($sql,__FILE__,__LINE__);
 
@@ -766,8 +766,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 			$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 						
  			$sql = "SELECT * FROM ".$tbl_course_user."
-               WHERE `user_id`  = '".$_user['user_id']."'
-               AND `course_code` = '$cidReq'";
+               WHERE user_id  = '".$_user['user_id']."'
+               AND course_code = '$cidReq'";
 
 	        $result = api_sql_query($sql,__FILE__,__LINE__);
 
@@ -856,8 +856,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 			        {
 		        		// Check if the user is a student is this session
 				        $sql = "SELECT * FROM ".$tbl_session_course_user." 
-				        		WHERE `id_user`  = '".$_user['user_id']."'
-								AND `course_code` = '$cidReq'";
+				        		WHERE id_user  = '".$_user['user_id']."'
+								AND course_code = '$cidReq'";
 	
 				        $result = api_sql_query($sql,__FILE__,__LINE__);
 	
@@ -943,7 +943,7 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) // sessi
     if ($gidReq && $_cid ) // have keys to search data
     {
     	$group_table = Database::get_course_table(TABLE_GROUP);
-        $sql = "SELECT * FROM $group_table WHERE `id` = '$gidReq'";
+        $sql = "SELECT * FROM $group_table WHERE id = '$gidReq'";
         $result = api_sql_query($sql,__FILE__,__LINE__);
         if (Database::num_rows($result) > 0) // This group has recorded status related to this course
         {

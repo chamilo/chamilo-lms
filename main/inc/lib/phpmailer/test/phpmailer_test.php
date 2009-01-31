@@ -4,8 +4,10 @@
   Type: phpmailer class
 ********************/
 
+$INCLUDE_DIR = "../";
+
 require("phpunit.php");
-require("../class.phpmailer.php");
+require($INCLUDE_DIR . "class.phpmailer.php");
 error_reporting(E_ALL);
 
 /**
@@ -61,10 +63,10 @@ class phpmailerTest extends TestCase
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = "8bit";
         $this->Mail->CharSet = "iso-8859-1";
-        $this->Mail->From = "Frederik PHPMAILER";
-        $this->Mail->FromName = "Frederik PHP";
+        $this->Mail->From = "unit_test@phpmailer.sf.net";
+        $this->Mail->FromName = "Unit Tester";
         $this->Mail->Sender = "";
-        $this->Mail->Subject = "AMAI";
+        $this->Mail->Subject = "Unit Test";
         $this->Mail->Body = "";
         $this->Mail->AltBody = "";
         $this->Mail->WordWrap = 0;
@@ -75,8 +77,8 @@ class phpmailerTest extends TestCase
         $this->Mail->Username = "";
         $this->Mail->Password = "";
         $this->Mail->PluginDir = $INCLUDE_DIR;
-		$this->Mail->AddReplyTo("no_reply@derakkers.be", "NIET REPLYEN");
-        $this->Mail->Sender = "nobody@example.com";
+		$this->Mail->AddReplyTo("no_reply@phpmailer.sf.net", "Reply Guy");
+        $this->Mail->Sender = "unit_test@phpmailer.sf.net";
 
         if(strlen($this->Mail->Host) > 0)
             $this->Mail->Mailer = "smtp";
@@ -130,7 +132,7 @@ class phpmailerTest extends TestCase
         $ReportBody = "";
         
         $ReportBody .= "---------------------" . $eol;
-        $ReportBody .= "Unit Test Frederik   " . $eol;
+        $ReportBody .= "Unit Test Information" . $eol;
         $ReportBody .= "---------------------" . $eol;
         $ReportBody .= "phpmailer version: " . $this->Mail->Version . $eol;
         $ReportBody .= "Content Type: " . $this->Mail->ContentType . $eol;
@@ -297,7 +299,7 @@ class phpmailerTest extends TestCase
         $this->Mail->Body = "Here is the text body";
         $this->Mail->Subject .= ": Plain + Multiple FileAttachments";
 
-        if(!$this->Mail->AddAttachment("rocks.png"))
+        if(!$this->Mail->AddAttachment("test.png"))
         {
             $this->assert(false, $this->Mail->ErrorInfo);
             return;
@@ -390,7 +392,7 @@ class phpmailerTest extends TestCase
         $this->Mail->Subject .= ": Embedded Image";
         $this->Mail->IsHTML(true);
         
-        if(!$this->Mail->AddEmbeddedImage("rocks.png", "my-attach", "rocks.png",
+        if(!$this->Mail->AddEmbeddedImage("test.png", "my-attach", "test.png",
                                           "base64", "image/png"))
         {
             $this->assert(false, $this->Mail->ErrorInfo);
@@ -411,7 +413,7 @@ class phpmailerTest extends TestCase
         $this->Mail->Subject .= ": Embedded Image + Attachment";
         $this->Mail->IsHTML(true);
         
-        if(!$this->Mail->AddEmbeddedImage("rocks.png", "my-attach", "rocks.png",
+        if(!$this->Mail->AddEmbeddedImage("test.png", "my-attach", "test.png",
                                           "base64", "image/png"))
         {
             $this->assert(false, $this->Mail->ErrorInfo);
@@ -493,6 +495,18 @@ class phpmailerTest extends TestCase
         $this->Mail->Subject = $subject . ": SMTP keep-alive 2";
         $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
         $this->Mail->SmtpClose();
+    }
+    
+    /**
+     * Tests this denial of service attack: 
+     *    http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
+     */
+    function test_DenialOfServiceAttack() {
+        $this->Mail->Body = "This should no longer cause a denial of service.";
+        $this->BuildBody();
+       
+        $this->Mail->Subject = str_repeat("A", 998);
+        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
     
     function test_Error() {

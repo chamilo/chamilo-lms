@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 18087 2009-01-29 22:36:20Z herodoto $
+<?php //$Id: announcements.php 18101 2009-01-31 21:22:15Z derrj $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -750,7 +750,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
                                     // signature of email: sender name and course URL after -- line
                                     $mail_body .= "<br />-- <br />";
                                     $mail_body .= $_user['firstName'].' '.$_user['lastName']." \n";
-                                    $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_COURSE_PATH).$_course['official_code']."\">";
+                                    $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_COURSE_PATH).$_course['id']."\">";
                                     $mail_body .= $_course['official_code'].' '.$_course['name'] . "</a>";
 
 									//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)

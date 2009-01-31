@@ -46,7 +46,7 @@ while ($row = mysql_fetch_array ($result))
 
     $mail->Body    = $body;
     $mail->AltBody = $text_body;
-    $mail->AddAddress($row["email"], $row["full_name");
+    $mail->AddAddress($row["email"], $row["full_name"]);
     $mail->AddStringAttachment($row["photo"], "YourPhoto.jpg");
 
     if(!$mail->Send())

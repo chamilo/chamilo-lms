@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 17720 2009-01-14 17:07:43Z herodoto $
+<?php // $Id: slideshow.php 18105 2009-01-31 23:36:09Z herodoto $
 
 /*
 ==============================================================================
@@ -35,25 +35,16 @@ Ghent University
 Mai 2004
 http://icto.UGent.be
 
-Please bear in mind that this is only an alpha release. 
-I wrote this quite quick and didn't think too much about it in advance. 
-It is not perfect at all but it is workable and usefull (I think)
-Do not consider this as a powerpoint replacement, although it has
-the same starting point. 
+==============================================================================
+*/
+/*
+==============================================================================
+Improve by Juan Carlos Raña Trabado
+herodoto@telefonica.net
+January 2008
 ==============================================================================
 */
 
-/*
-==============================================================================
-Description:
-	This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
-	files (since these are the files that can be viewed in a browser) and creates
-	a slideshow with it by allowing to go to the next/previous image.
-	You can also have a quick overview (thumbnail view) of all the images in 
-	that particular folder.
-	Each slideshow is folder based. Only the images of the chosen folder are shown. 
-==============================================================================
-*/
 // including the language file
 
 // name of the language file that needs to be included 
@@ -165,6 +156,7 @@ if (isset ($_POST['Submit'])) // we come from slideshowoptions.php
 	}
 } // if ($submit)
 
+
 // The target height and width depends if we choose resizing or no resizing
 if ($_SESSION["image_resizing"] == "resizing")
 {
@@ -185,16 +177,18 @@ $image_tag = array ();
 if ($slide_id == "all")
 {
 	$thumbnail_width = 100;
-	$thumbnail_height = 100;
+	$thumbnail_height = 100;	
+
 	$row_items = 4;
 
 	foreach ($image_files_only as $one_image_file)
 	{
 		$image = $sys_course_path.$_course['path']."/document/".$folder.$one_image_file;
 		$image_height_width = resize_image($image, $thumbnail_width, $thumbnail_height, 1);
-
+		
 		$image_height = $image_height_width[0];
-		$image_width = $image_height_width[1];
+		$image_width = $image_height_width[1];		
+		
 		if ($path and $path !== "/")
 		{
 			$doc_url = $path."/".$one_image_file;
@@ -203,12 +197,13 @@ if ($slide_id == "all")
 		{
 			$doc_url = $path.$one_image_file;
 		}
-		$image_tag[] = "<img src='download.php?doc_url=".$doc_url."' border='0' width='".$image_width."' height='".$image_height."'>";
+
+		$image_tag[] = "<img src='download.php?doc_url=".$doc_url."' border='0' width='".$image_width."' height='".$image_height."' title='".$one_image_file."'>";
 	} // foreach ($image_files_only as $one_image_file)
 } // if ($slide_id=="all")
 
 // creating the table
-echo "\n<table align='center'>";
+echo "\n<table align='center' cellspacing='10'>";
 $i = 0;
 foreach ($image_tag as $image_tag_item)
 {
@@ -216,9 +211,12 @@ foreach ($image_tag as $image_tag_item)
 	if ($i == 0)
 	{
 		echo "\n<tr>\n";
+		$i ++;				
 	}
-	echo "\t<td style=\"border:solid\"><a href='slideshow.php?slide_id=".$i."&curdirpath=".$pathurl."'>".$image_tag_item."</a></td>\n";
-	if ($i % 6 == 0 and $i !== 0) // 6 cols +1
+	
+		echo "\t<td align='center' style='display:block; position:relative; top: -3px; left:-3px; padding:5px; background:#FFFFFF; border:1px solid; border-color: #CCCCCC #666666 #666666 #CCCCCC;'><a href='slideshow.php?slide_id=".$i."&curdirpath=".$pathurl."'>".$image_tag_item."</a></td>\n";
+	
+	if ($i % 6 == 0 and $i !== 0) // 6 cols
 	{
 		echo "</tr>\n<tr>\n";
 	}
@@ -240,8 +238,14 @@ if ($slide_id !== "all")
 
 	if ($_SESSION["image_resizing"] == "resizing")
 	{
-		$height_width_tags = "width='$image_width' height='$image_height'";
+		$height_width_tags = 'width="'.$image_width.'" height="'.$image_height.'"';
+		
+		//adjust proportions. Juan Carlos Raña Trabado TODO: replace resize_image function ?	
+		$size = @ getimagesize($image);
+		$height_width_tags = (($size[1] > $image_width) ? 'width="'.$image_width.'"' : '');
+		$height_width_tags = (($size[1] > $image_height) ? 'height="'.$image_height.'"' : '');		
 	}
+	
 
 	// showing the comment of the image, Patrick Cool, 8 april 2005
 	// this is done really quickly and should be cleaned up a little bit using the API functions
@@ -261,7 +265,7 @@ if ($slide_id !== "all")
 	echo '<table align="center" border="0">';
 	echo '<tr>';
 	echo '<td align="center">';
-	echo "<img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0' $height_width_tags>";
+	echo "<img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags.">";
 	echo '</td>';
 	echo '</tr>';
 	echo '<tr>';

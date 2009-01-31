@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 18102 2009-01-31 21:25:07Z ivantcholakov $
+<?php // $Id: configure_homepage.php 18104 2009-01-31 23:10:14Z ivantcholakov $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -773,7 +773,7 @@ switch($action){
 		$renderer =& $form->defaultRenderer();
 		$renderer->setHeaderTemplate('');
 		$renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
-		$renderer->setElementTemplate('<tr><td>{element}<td/></tr>');
+		$renderer->setElementTemplate('<tr><td>{element}</td></tr>');
 		$renderer->setRequiredNoteTemplate('');
 		$form->addElement('hidden', 'formSent', '1');
 		$form->addElement('submit', null, get_lang('Save'));
@@ -790,7 +790,7 @@ switch($action){
 					$html .= '<option value="'.$english_name.'">'.$value.'</option>';
 				}
 			}
-			$html .= '</select><td/></tr>';
+			$html .= '</select></td></tr>';
 			$form->addElement('html', $html);
 		}
 		if (api_get_setting('wcag_anysurfer_public_pages')=='true')
@@ -800,7 +800,7 @@ switch($action){
 			$html = '<tr><td>';
 			//$html .= '<script type="text/javascript" src="'.api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/plugins/ImageManagerStandalone/generic_dialog_common.js'.'" />';
 			$html .= WCAG_Rendering::create_xhtml($open);
-			$html .= '<td/></tr>';
+			$html .= '</td></tr>';
 			$form->addElement('html', $html);
 		} else {
 			$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);

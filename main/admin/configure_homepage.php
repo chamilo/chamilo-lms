@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 17633 2009-01-10 23:25:22Z ivantcholakov $
+<?php // $Id: configure_homepage.php 18102 2009-01-31 21:25:07Z ivantcholakov $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -36,7 +36,7 @@ $_SESSION['this_section']=$this_section;
 api_protect_admin_script();
 require_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
 require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php');
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
 
 $action=Security::remove_XSS($_GET['action']);
@@ -666,130 +666,84 @@ switch($action){
 		break;
 	case 'insert_link':
 	case 'edit_link':
-		?>
-		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
-		<input type="hidden" name="formSent" value="1"/>
-		<input type="hidden" name="link_index" value="<?php if($action == 'edit_link') echo $link_index; else echo '0'; ?>"/>
-		<input type="hidden" name="filename" value="<?php if($action == 'edit_link') echo $filename; else echo ''; ?>"/>
 
-		<table border="0" cellpadding="5" cellspacing="0">
-		<?php
 		if(!empty($errorMsg))
 		{
-			echo '<tr><td colspan="2">';
 			Display::display_normal_message($errorMsg); //main API
-			echo '</td></tr>';
 		}
-		?>
-		<tr>
-		  <td nowrap="nowrap"><?php echo get_lang('LinkName'); ?> :</td>
-		  <td><input type="text" name="link_name" size="30" maxlength="50" value="<?php echo htmlentities($link_name,ENT_QUOTES,$charset); ?>" style="width: 350px;"/></td>
-		</tr>
-		<tr>
-		  <td nowrap="nowrap"><?php echo get_lang('LinkURL'); ?> (<?php echo get_lang('Optional'); ?>) :</td>
-		  <td><input type="text" name="link_url" size="30" maxlength="100" value="<?php if(empty($link_url)) echo 'http://'; else echo htmlentities($link_url,ENT_QUOTES,$charset); ?>" style="width: 350px;"/></td>
-		</tr>
 
-		<?php
+		$fck_attribute['ToolbarSet'] = "Small";
+		$fck_attribute['Width'] = '100%';
+		$fck_attribute['Height'] = '400';
+
+		$default = array();
+		$form = new FormValidator('configure_homepage_'.$action, 'post', api_get_self().'?action='.$action, '', array('style' => 'margin: 0px;'));
+		$renderer =& $form->defaultRenderer();
+		$renderer->setHeaderTemplate('');
+		$renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
+		$renderer->setElementTemplate('{element}');
+		$renderer->setRequiredNoteTemplate('');
+		$form->addElement('hidden', 'formSent', '1');
+		$form->addElement('hidden', 'link_index', $action == 'edit_link' ? $link_index : '0');
+		$form->addElement('hidden', 'filename', $action == 'edit_link' ? $filename : '');
+
+		$form->addElement('html', '<tr><td nowrap="nowrap" style="width: 15%;">'.get_lang('LinkName').' :</td><td>');
+		$default['link_name'] = htmlentities($link_name, ENT_QUOTES, $charset);
+		$form->addElement('text', 'link_name', get_lang('LinkName'), array('size' => '30', 'maxlength' => '50'));
+		$form->addElement('html', '</td></tr>');
+		
+		$form->addElement('html', '<tr><td nowrap="nowrap">'.get_lang('LinkURL').' ('.get_lang('Optional').') :</td><td>');
+		$default['link_url'] = empty($link_url) ? 'http://' : htmlentities($link_url, ENT_QUOTES, $charset); 
+		$form->addElement('text', 'link_url', get_lang('LinkName'), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
+		$form->addElement('html', '</td></tr>');
+		
 		if($action == 'insert_link')
 		{
-		?>
-			<tr>
-			  <td nowrap="nowrap"><?php echo get_lang('InsertThisLink'); ?> :</td>
-			  <td><select name="insert_where">
-			  <option value="-1"><?php echo get_lang('FirstPlace'); ?></option>
-
-			<?php
+			$form->addElement('html', '<tr><td nowrap="nowrap">'.get_lang('InsertThisLink').' :</td>');
+			$form->addElement('html', '<td><select name="insert_where"><option value="-1">'.get_lang('FirstPlace').'</option>');
 			foreach($home_menu as $key=>$enreg)
 			{
-			?>
-
-			  <option value="<?php echo $key; ?>" <?php if($formSent && $insert_where == $key) echo 'selected="selected"'; ?> ><?php echo get_lang('After'); ?> &quot;<?php echo trim(strip_tags($enreg)); ?>&quot;</option>
-
-			<?php
+				$form->addElement('html', '<option value="'.$key.'" '.($formSent && $insert_where == $key ? 'selected="selected"' : '').' >'.get_lang('After').' &quot;'.trim(strip_tags($enreg)).'&quot;</option>');
 			}
-			?>
-
-			  </select></td>
-			</tr>
-		<?php
+			$form->addElement('html', '</select></td></tr>');
 		}
-		?>
 
-		<tr>
-		  <td nowrap="nowrap"><?php echo get_lang('OpenInNewWindow'); ?> ?</td>
-		  <td><input class="checkbox" type="checkbox" name="target_blank" value="1" <?php if($target_blank) echo 'checked="checked"'; ?> /> <?php echo get_lang('Yes'); ?></td>
-		</tr>
+		$form->addElement('html', '<tr><td nowrap="nowrap">'.get_lang('OpenInNewWindow').'</td><td>');
+		$target_blank_checkbox = & $form->addElement('checkbox', 'target_blank', '', '&nbsp;'.get_lang('Yes'), 1);
+		if ($target_blank) $target_blank_checkbox->setChecked(true);
+		$form->addElement('html', '</td></tr>');
 
-		<?php
-		if($action == 'edit_link' && empty($link_url))
+		//if($action == 'edit_link' && empty($link_url))
+		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://'))
 		{
-		?>
-			</table>
-			<table border="0" cellpadding="5" cellspacing="0" width="100%">
-			<tr>
-			  <td>
-
-			<?php
-			    //api_disp_html_area('link_html',isset($_POST['link_html'])?$_POST['link_html']:$link_html,'400px');
-				if (api_get_setting('wcag_anysurfer_public_pages')=='true')
-				{
-					echo WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html);
-				}
-				else
-				{
-					$oFCKeditor = new FCKeditor('link_html') ;
-					$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-					$oFCKeditor->Height		= '400';
-					$oFCKeditor->Width		= '100%';
-					$oFCKeditor->Value		= isset($_POST['link_html'])?$_POST['link_html']:$link_html;
-
-					$oFCKeditor->ToolbarSet = "Small";
-
-					$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-					$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-					$result_sql=api_sql_query($sql,__FILE__,__LINE__);
-					$isocode_language=Database::result($result_sql,0,0);
-					$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-
-					if (api_get_setting('advanced_filemanager') == 'true')
-					{
-						$oFCKeditor->Config['AdvancedFileManager'] = true;
-
-						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
-					}
-					else
-					{
-						$oFCKeditor->Config['AdvancedFileManager'] = false;
-
-						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-					}
-
-					echo $oFCKeditor->CreateHtml();
-				}
-
-			?>
-
-			  </td>
-			</tr>
-			<tr>
-			  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
-			</tr>
-		<?php
+			$form->addElement('html', '</table><table border="0" cellpadding="5" cellspacing="0" width="100%"><tr><td>');
+			$form->addElement('submit', null, get_lang('Save'));
+			$form->addElement('html', '</td></tr><tr><td>');
+			if (api_get_setting('wcag_anysurfer_public_pages')=='true')
+			{
+				$form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html));
+			}
+			else
+			{
+				$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
+				$form->add_html_editor('link_html');
+			}
+			$form->addElement('html', '</td></tr><tr><td>');
+			$form->addElement('submit', null, get_lang('Save'));
+			$form->addElement('html', '</td></tr>');
 		}
 		else
 		{
-			echo '<tr>' .
-					'<td>&nbsp;</td>' .
-					'<td><input type="submit" value="'.get_lang('Ok').'"/></td>' .
-				'</tr>';
+			$form->addElement('html', '<tr><td>&nbsp;</td><td>');
+			$form->addElement('submit', null, get_lang('Save'));
+			$form->addElement('html', '</td></tr>');
 		}
-		?>
 
-		</table>
-		</form>
+		$form->setDefaults($default);
+		$form->display();
 
-		<?php
+		$fck_attribute = null;
+
 		break;
 	case 'edit_top':
 	case 'edit_news':
@@ -804,140 +758,60 @@ switch($action){
 			$open=@file_get_contents($homep.$newsf.'_'.$lang.$ext);
 
 		}
-		// print form header + important formSent attribute
-		echo '<form action="'.api_get_self().'?action='.$action.'" method="post" style="margin:0px;">';
-		echo '<input type="hidden" name="formSent" value="1"/>';
 
 		if(!empty($errorMsg))
 		{
 			Display::display_normal_message($errorMsg); //main API
 		}
 
+		$fck_attribute['ToolbarSet'] = "Full";
+		$fck_attribute['Width'] = '100%';
+		$fck_attribute['Height'] = '400';
+
+		$default = array();
+		$form = new FormValidator('configure_homepage_'.$action, 'post', api_get_self().'?action='.$action, '', array('style' => 'margin: 0px;'));
+		$renderer =& $form->defaultRenderer();
+		$renderer->setHeaderTemplate('');
+		$renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
+		$renderer->setElementTemplate('<tr><td>{element}<td/></tr>');
+		$renderer->setRequiredNoteTemplate('');
+		$form->addElement('hidden', 'formSent', '1');
+		$form->addElement('submit', null, get_lang('Save'));
 		if($action == 'edit_news'){
 			$_languages=api_get_languages();
-			echo get_lang("ChooseNewsLanguage")." : <select name='news_languages'><option value='all'>".get_lang("AllLanguages")."</option>";
-			foreach($_languages["name"] as $key => $value){
-				$english_name=$_languages["folder"][$key];
+			$html = '<tr><td>'.get_lang('ChooseNewsLanguage').' : ';
+			$html .= '<select name="news_languages">';
+			$html .= '<option value="all">'.get_lang('AllLanguages').'</option>';
+			foreach ($_languages['name'] as $key => $value) {
+				$english_name = $_languages['folder'][$key];
 				if($language==$english_name){
-					echo "<option value='$english_name' selected=selected>$value</option>";
-				}
-				else{
-					echo "<option value='$english_name'>$value</option>";
+					$html .= '<option value="'.$english_name.'" selected="selected">'.$value.'</option>';
+				} else {
+					$html .= '<option value="'.$english_name.'">'.$value.'</option>';
 				}
 			}
-			echo "</select>";
+			$html .= '</select><td/></tr>';
+			$form->addElement('html', $html);
 		}
-		?>
-
-		<table border="0" cellpadding="5" cellspacing="0" width="100%">
-		<tr>
-		  <td>
-
-		<?php
 		if (api_get_setting('wcag_anysurfer_public_pages')=='true')
 		{
 			//TODO: review these lines
 			// Print WCAG-specific HTML editor
-			echo '<script type="text/javascript" src="'.api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/plugins/ImageManagerStandalone/generic_dialog_common.js'.'" />';
-			echo WCAG_Rendering::create_xhtml($open);
-
+			$html = '<tr><td>';
+			//$html .= '<script type="text/javascript" src="'.api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/plugins/ImageManagerStandalone/generic_dialog_common.js'.'" />';
+			$html .= WCAG_Rendering::create_xhtml($open);
+			$html .= '<td/></tr>';
+			$form->addElement('html', $html);
+		} else {
+			$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
+			$form->add_html_editor($name);
 		}
-		else
-		{
-			$open=str_replace('{rel_path}',api_get_path(REL_PATH),$open);
-			$oFCKeditor = new FCKeditor($name) ;
-			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-			$oFCKeditor->Height		= '400';
-			$oFCKeditor->Width		= '100%';
-			$oFCKeditor->Value		= $open;
+		$form->addElement('submit', null, get_lang('Save'));
+		$form->setDefaults($default);
+		$form->display();
 
-			$oFCKeditor->ToolbarSet = "Full";
+		$fck_attribute = null;
 
-			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-			$result_sql=api_sql_query($sql,__FILE__,__LINE__);
-			$isocode_language=Database::result($result_sql,0,0);
-			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-
-			if (api_get_setting('advanced_filemanager') == 'true')
-			{
-				$oFCKeditor->Config['AdvancedFileManager'] = true;
-
-				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
-			}
-			else
-			{
-				$oFCKeditor->Config['AdvancedFileManager'] = false;
-
-				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-			}
-
-			//FCKeditor Configuration for the default_course_document
-			if(api_get_setting('advanced_filemanager')!='true')
-			{
-				$default_course_path= api_get_path(REL_PATH).'main/default_course_document/'; //TODO: Review this line for simple
-				$upload_path = api_get_path(REL_PATH).'main/default_course_document/'; //TODO: Review this line for simple
-			}
-
-			$oFCKeditor->Config['CreateDocumentDir'] = $upload_path;
-			$oFCKeditor->Config['CreateDocumentWebDir'] = $upload_path;
-
-			if(api_get_setting('advanced_filemanager') == 'true')
-			{
-				// For images
-				$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-
-				// For flash
-				$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-
-				// For MP3
-				$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-
-				// For video
-				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-
-				// For flv Player (Videos)
-				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-			}
-			else
-			{
-				$oFCKeditor->Config['CreateDocumentDir'] = api_get_path(WEB_PATH)."main/default_course_document/";
-				$oFCKeditor->Config['CreateDocumentWebDir'] = api_get_path(WEB_PATH)."main/default_course_document/";
-				$oFCKeditor->Config['BaseHref'] = api_get_path(WEB_PATH)."main/default_course_document/";
-
-				// For images
-				$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
-				$oFCKeditor->Config['ImageUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
-
-				// For flash
-				$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
-				$oFCKeditor->Config['FlashUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-
-				// For MP3
-				$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
-				$oFCKeditor->Config['MP3UploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
-
-				// For video
-				$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
-				$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
-
-				// For flv Player (Videos)
-				$oFCKeditor->Config['MediaBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$default_course_path";
-				$oFCKeditor->Config['MediaUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
-			}
-
-			echo $oFCKeditor->CreateHtml();
-		}
-		?>
-		  </td>
-		</tr>
-		<tr>
-		  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
-		</tr>
-		</table>
-		</form>
-
-		<?php
 		break;
 	default: // When no action applies, default page to update campus homepage
 		?>

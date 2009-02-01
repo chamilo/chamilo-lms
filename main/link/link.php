@@ -1,4 +1,4 @@
-<?php // $Id: link.php 18113 2009-02-01 11:25:38Z ivantcholakov $
+<?php // $Id: link.php 18126 2009-02-01 19:55:12Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -331,7 +331,7 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	echo '<div class="actions">';
 	if(is_allowed_to_edit())
 	{
-		echo Display::return_icon('file_html_new.gif',get_lang('LinkAdd'))." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addlink&amp;category=".(!empty($category)?$category:'')."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
+		echo Display::return_icon('linksnew.gif',get_lang('LinkAdd'))." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addlink&amp;category=".(!empty($category)?$category:'')."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
 		echo Display::return_icon('folder_new.gif', get_lang("CategoryAdd"))." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
 		   /* "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
 	}

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 18120 2009-02-01 17:01:13Z herodoto $
+<?php //$Id: agenda.inc.php 18123 2009-02-01 19:30:34Z herodoto $
 
 /*
 ==============================================================================
@@ -1558,7 +1558,7 @@ function store_edited_agenda_item($id_attach,$file_comment)
 
 	// return the message;
 	echo '<br />';
-	Display::display_normal_message(get_lang("EditSuccess"));
+	Display::display_confirmation_message(get_lang("EditSuccess"));
 
 }
 
@@ -1637,7 +1637,7 @@ function delete_agenda_item($id)
 
 			// displaying the result message in the yellow box
 			echo '<br />';
-			Display::display_normal_message(get_lang("AgendaDeleteSuccess"));
+			Display::display_confirmation_message(get_lang("AgendaDeleteSuccess"));
 		}	  // if (isset($id)&&$id&&isset($action)&&$action=="delete")
 	} // if ($is_allowed_to_edit)
 
@@ -1662,7 +1662,7 @@ function showhide_agenda_item($id)
 			$id=(int)addslashes($_GET['id']);
 			change_visibility($nameTools,$id);
 			echo '<br />';
-			Display::display_normal_message(get_lang("VisibilityChanged"));
+			Display::display_confirmation_message(get_lang("VisibilityChanged"));
 		}
 	}
 }
@@ -2089,13 +2089,15 @@ function display_agenda_items()
 	    		if ($myrow['visibility']==1)
 	    		{
 	    			$image_visibility="visible.gif";
+				$text_visibility=get_lang("Hide");
 	    		}
 	    		else
 	    		{
 	    			$image_visibility="invisible.gif";
+				$text_visibility=get_lang("Show");
 	    		}
-    			echo 	'<a href="'.$mylink.'&amp;action=showhide" title="'.get_lang("langVisible").'">',
-    					Display::return_icon($image_visibility, get_lang('Visible')),'</a> ';
+    			echo 	'<a href="'.$mylink.'&amp;action=showhide" title="'.$text_visibility.'">',
+    					Display::return_icon($image_visibility, $text_visibility),'</a> ';
 			}
 
     	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
@@ -4431,7 +4433,7 @@ function delete_attachment_file($id_attach) {
 	api_item_property_update($_course, 'calendar_event_attachment', $id_attach ,'AgendaAttachmentDeleted', api_get_user_id());
 	if (!empty($result)) {
 	echo '<br />';	
-	Display::display_normal_message(get_lang("AttachmentFileDeleteSuccess"));
+	Display::display_confirmation_message(get_lang("AttachmentFileDeleteSuccess"));
 	}
 }
 

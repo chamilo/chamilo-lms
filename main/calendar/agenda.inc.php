@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 18096 2009-01-30 22:18:45Z herodoto $
+<?php //$Id: agenda.inc.php 18120 2009-02-01 17:01:13Z herodoto $
 
 /*
 ==============================================================================
@@ -1413,7 +1413,7 @@ function display_student_links()
 	// showing the link to show all items or only those of the current month
 	if ($_SESSION['show']=="showcurrent")
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showall&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_select.gif', get_lang("ShowAll")).' '.get_lang("ShowAll")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showall&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_select.gif', get_lang("ShowAllEvents")).' '.get_lang("ShowAllEvents")."</a> ";
 	}
 	else
 	{

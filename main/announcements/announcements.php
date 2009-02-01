@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 18113 2009-02-01 11:25:38Z ivantcholakov $
+<?php //$Id: announcements.php 18122 2009-02-01 19:15:31Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -975,8 +975,8 @@ if(!$surveyid)
 		}
 		if (api_is_allowed_to_edit() && $announcement_number > 1)
 		{
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('valves_delete.gif',get_lang('AnnouncementDeleteAll')).get_lang('AnnouncementDeleteAll')."</a>\n";
-		}	// if announcementNumber > 1
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('valves_delete.gif',get_lang('AnnouncementDeleteAll'), array ('style' => 'width:22px; height:22px;')).get_lang('AnnouncementDeleteAll')."</a>\n";
+		}	// if announcementNumber > 1		
 }
 echo '</div>';
 
@@ -1085,13 +1085,15 @@ if(!empty($error_message))
 			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),$since);
 			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));
 			
+			/*
 			//echo '&nbsp;<script type="text/javascript">document.onload = "document.getElementById(\'recipient_list\').style.display=\'block\'";</script>';
+			*/
 		}
 		else{
 			echo get_lang("Everybody");
 		}
-		echo "</td><td>";
-		echo '<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</span>';
+		echo "</td><td>";		
+		echo Display::return_icon('group.gif', get_lang('Group')).'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</span>';
 		echo "</td></tr></table>";
 		show_to_form($to);
 
@@ -1163,18 +1165,18 @@ if(!empty($error_message))
 		$result_sql=api_sql_query($sql, __FILE__, __LINE__);
 		$isocode_language=Database::result($result_sql,0,0);
 		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-
 		
 
 		echo $oFCKeditor->CreateHtml();
-
+        
+		echo'<br />';
 		if(empty($_SESSION['toolgroup'])){
 			echo '<input type="hidden" name="submitAnnouncement" value="OK">';
-            echo '<br /><input type="button"  value="'.'  '.get_lang('Ok').'  '.'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
+            echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
 		}
 		else{
 			echo '<input type="hidden" name="submitAnnouncement" value="OK">';
-			echo '<br /><input type="button"  value="'.'  '.get_lang('Ok').'  '.'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
+			echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
 		}
 		echo '</form><br />';
 
@@ -1406,12 +1408,12 @@ if(!empty($error_message))
 				// User or group icon
 				if ($myrow['to_group_id']!== '0' and $myrow['to_group_id']!== 'NULL')
 				{
-					echo "\t\t\t\t\t\t".Display::return_icon('group.gif', $alt_ug)."\n";
+					echo "\t\t\t\t\t\t".Display::return_icon('group.gif', get_lang('Group'))."\n";
 				}
 				// the email icon
 				if ($myrow['email_sent'] == '1')
 				{
-					echo "\t\t\t\t\t\t".Display::return_icon('email.gif', $alt_mail)."\n";
+					echo "\t\t\t\t\t\t".Display::return_icon('email.gif', get_lang('Email'))."\n";
 				}
 				echo "\t\t\t\t\t</th>\n";
 				/*==================================================================
@@ -1496,7 +1498,7 @@ if(!empty($error_message))
 							if ($myrow['visibility']==1)
 							{
 									$image_visibility="visible";
-									$alt_visibility=get_lang('Invisible');
+									$alt_visibility=get_lang('Hide');
 							}
 							else
 							{

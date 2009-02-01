@@ -308,11 +308,11 @@ DlgTableCellSpace	: "מרווח תא",
 DlgTableCellPad		: "ריפוד תא",
 DlgTableCaption		: "כיתוב",
 DlgTableSummary		: "סיכום",
-DlgTableHeaders		: "Headers",	//MISSING
-DlgTableHeadersNone		: "None",	//MISSING
-DlgTableHeadersColumn	: "First column",	//MISSING
-DlgTableHeadersRow		: "First Row",	//MISSING
-DlgTableHeadersBoth		: "Both",	//MISSING
+DlgTableHeaders		: "כותרות",
+DlgTableHeadersNone		: "אין",
+DlgTableHeadersColumn	: "עמודה ראשונה",
+DlgTableHeadersRow		: "שורה ראשונה",
+DlgTableHeadersBoth		: "שניהם",
 
 // Table Cell Dialog
 DlgCellTitle		: "תכונות תא",
@@ -335,9 +335,9 @@ DlgCellVerAlignTop	: "למעלה",
 DlgCellVerAlignMiddle	: "לאמצע",
 DlgCellVerAlignBottom	: "לתחתית",
 DlgCellVerAlignBaseline	: "קו תחתית",
-DlgCellType		: "Cell Type",	//MISSING
-DlgCellTypeData		: "Data",	//MISSING
-DlgCellTypeHeader	: "Header",	//MISSING
+DlgCellType		: "סוג תא",
+DlgCellTypeData		: "סוג",
+DlgCellTypeHeader	: "כותרת",
 DlgCellRowSpan		: "טווח שורות",
 DlgCellCollSpan		: "טווח עמודות",
 DlgCellBackColor	: "צבע רקע",

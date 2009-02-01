@@ -132,7 +132,7 @@ function onLoad()
 	clearErrorUsermessage() ;
 	var _errorMessage = 'The SpellChecker Service is currently unavailable.' ;
 	if ( 'undefined' != typeof( oEditor.FCK.Config.WSChLoaderScript ) )
-	    _errorMessage = '<div>The SpellChecker Service is currently unavailable.</div><p>Error application loading<br>service host: ' + oEditor.FCK.Config.WSChLoaderScript + '</p>';
+	    _errorMessage = '<div>The SpellChecker Service is currently unavailable.</div><p>Error loading application<br>service host: ' + oEditor.FCK.Config.WSChLoaderScript + '</p>';
 
 	var burnSpelling = function( oName, _eMessage )
 	{
@@ -142,15 +142,16 @@ function onLoad()
 		{
 			if ( typeof( window[oName] ) == 'function' )
 				initAndSpell() ;
-			else if ( i++ == 30 )
+			else if ( i++ == 180 )
 				_cancelOnError( _eMessage ) ;
 		}
 	}
 
-	gInterval = window.setInterval( burnSpelling( 'doSpell', _errorMessage ), 100 ) ;
+	gInterval = window.setInterval( burnSpelling( 'doSpell', _errorMessage ), 250 ) ;
 
 	// WSC CORE init section
-	var baseUrl = "http://loader.spellchecker.net/sproxy_fck/sproxy.php" ;
+	var protocol = document.location.protocol || 'http:' ;
+	var baseUrl = protocol + '//loader.spellchecker.net/sproxy_fck/sproxy.php' ;
 	var plugin = "fck2" ;
 	var customerid = oEditor.FCK.Config.WSCnCustomerId
 		|| "1:ua3xw1-2XyGJ3-GWruD3-6OFNT1-oXcuB1-nR6Bp4-hgQHc-EcYng3-sdRXG3-NOfFk" ;

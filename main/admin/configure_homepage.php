@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 18104 2009-01-31 23:10:14Z ivantcholakov $
+<?php // $Id: configure_homepage.php 18117 2009-02-01 15:24:40Z ivantcholakov $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -726,7 +726,7 @@ switch($action){
 			else
 			{
 				$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
-				$form->add_html_editor('link_html');
+				$form->add_html_editor('link_html', '');
 			}
 			$form->addElement('html', '</td></tr><tr><td>');
 			$form->addElement('submit', null, get_lang('Save'));
@@ -804,7 +804,7 @@ switch($action){
 			$form->addElement('html', $html);
 		} else {
 			$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
-			$form->add_html_editor($name);
+			$form->add_html_editor($name, '');
 		}
 		$form->addElement('submit', null, get_lang('Save'));
 		$form->setDefaults($default);

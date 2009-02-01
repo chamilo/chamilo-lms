@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18097 2009-01-30 23:07:49Z cvargas1 $
+<?php //$Id: work.php 18113 2009-02-01 11:25:38Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18097 2009-01-30 23:07:49Z cvargas1 $
+*  	@version $Id: work.php 18113 2009-02-01 11:25:38Z ivantcholakov $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -373,11 +373,6 @@ if (!empty ($_POST['changeProperties'])) {
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Full';
-
-$fck_attribute['Config']['InDocument'] = false;
-$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
-$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
 
 Display :: display_introduction_section(TOOL_STUDENTPUBLICATION,'left');
 

@@ -1,4 +1,4 @@
-<?php // $Id: survey_list.php 17787 2009-01-17 00:41:06Z ivantcholakov $
+<?php // $Id: survey_list.php 18113 2009-02-01 11:25:38Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey_list.php 17787 2009-01-17 00:41:06Z ivantcholakov $
+* 	@version $Id: survey_list.php 18113 2009-02-01 11:25:38Z ivantcholakov $
 *
 * 	@todo use quickforms for the forms
 */
@@ -84,11 +84,6 @@ Display :: display_header($tool_name,'Survey');
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Full';
-
-$fck_attribute['Config']['InDocument'] = false;
-$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
-$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
 
 Display::display_introduction_section('survey', 'left');
 

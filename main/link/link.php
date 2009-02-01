@@ -1,4 +1,4 @@
-<?php // $Id: link.php 17787 2009-01-17 00:41:06Z ivantcholakov $
+<?php // $Id: link.php 18113 2009-02-01 11:25:38Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -189,11 +189,6 @@ if(isset($_GET['action']))
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Full';
-
-$fck_attribute['Config']['InDocument'] = false;
-$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
-$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
 
 Display::display_introduction_section(TOOL_LINK,'left');
 

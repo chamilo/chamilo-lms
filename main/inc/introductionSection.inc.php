@@ -64,12 +64,11 @@ $intro_cmdAdd= (empty($_GET['intro_cmdAdd'])?'':$_GET['intro_cmdAdd']);
 
 $form = new FormValidator('introduction_text');
 $renderer =& $form->defaultRenderer();
-$renderer->setElementTemplate('<div style="width: 80%; margin: 0px auto;">{element}</div>');
+$renderer->setElementTemplate('<div style="width: 80%; margin: 0px auto; padding-bottom: 10px; ">{element}</div>');
 
+$form->addElement('submit', 'intro_cmdUpdate', get_lang('Save'));
 $form->add_html_editor('intro_content',null,null,false);
-$form->addElement('html', '<br />');
-//$form->addElement('submit','intro_cmdUpdate',get_lang('Ok'));
-$form->addElement('submit','intro_cmdUpdate','    '.get_lang('Save').'    ');
+$form->addElement('submit', 'intro_cmdUpdate', get_lang('Save'));
 
 /*=========================================================
   INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED)

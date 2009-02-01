@@ -583,9 +583,9 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 			if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
 	            //We add a new record in the course tracking table
 	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);        
-				
+				$time = api_get_datetime();
 		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
-							"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
+							"VALUES('".$_course['official_code']."', '".$_user['user_id']."', '$time', '$time', '1')";
 		
 				api_sql_query($sql,__FILE__,__LINE__);
 			}
@@ -636,8 +636,8 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 		}
 
 		if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
-	   		$course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-	
+       	    $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $time = api_get_datetime();
 	   		//We select the last record for the current course in the course tracking table
 	   		$sql="SELECT course_access_id FROM $course_tracking_table WHERE user_id=".intval($_user ['user_id'])." ORDER BY login_course_date DESC LIMIT 0,1";
 	   		$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -646,14 +646,14 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 		
 		   		//We update the course tracking table
 		   		$sql="UPDATE $course_tracking_table " .
-		   				"SET logout_course_date = NOW(), " .
+		   				"SET logout_course_date = '$time', " .
 		   					"counter = counter+1 " .
 						"WHERE course_access_id=".intval($i_course_access_id);
 				
 				api_sql_query($sql,__FILE__,__LINE__);
 	   		} else {
 	            $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
-						"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
+						"VALUES('".$_course['official_code']."', '".$_user['user_id']."', '$time', '$time', '1')";
 				api_sql_query($sql,__FILE__,__LINE__);	
 	   		}		
 		}
@@ -895,6 +895,7 @@ if (api_get_setting('student_view_enabled') == "true") {
 
 if (isset($_cid)) {
 	$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-	$sql="UPDATE $tbl_course SET last_visit= NOW() WHERE code='$_cid'";
+    $time = api_get_datetime();
+	$sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
 	api_sql_query($sql,__FILE__,__LINE__);
 }

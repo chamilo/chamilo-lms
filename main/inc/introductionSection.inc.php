@@ -62,7 +62,14 @@ $intro_cmdUpdate = (empty($_POST['intro_cmdUpdate'])?'':$_POST['intro_cmdUpdate'
 $intro_cmdDel= (empty($_GET['intro_cmdDel'])?'':$_GET['intro_cmdDel']);
 $intro_cmdAdd= (empty($_GET['intro_cmdAdd'])?'':$_GET['intro_cmdAdd']);
 
-$form = new FormValidator('introduction_text');
+if (!empty ($GLOBALS["_cid"]))
+{
+	$form = new FormValidator('introduction_text', 'post', api_get_self()."?".api_get_cidreq());
+}
+else
+{
+	$form = new FormValidator('introduction_text');
+}
 $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<div style="width: 80%; margin: 0px auto; padding-bottom: 10px; ">{element}</div>');
 
@@ -173,16 +180,31 @@ if ($intro_dispCommand)
 {
 	if( empty($intro_content) ) // displays "Add intro" Commands
 	{
-		echo	"<div id=\"courseintro\"><p>\n",
-				"<a href=\"".api_get_self()."?intro_cmdAdd=1\">\n",get_lang('AddIntro'),"</a>\n",
-				"</p>\n</div>";
+		echo "<div id=\"courseintro\"><p>\n";
+		if (!empty ($GLOBALS["_cid"]))
+		{
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>\n";
+		}
+		else
+		{
+			echo "<a href=\"".api_get_self()."?intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>\n";
+		}
+		echo "</p>\n</div>";
 	}
 	else // displays "edit intro && delete intro" Commands
 	{
-		echo	"<div id=\"courseintro_icons\"><p>\n",
-				"<a href=\"".api_get_self()."?intro_cmdEdit=1\"><img src=\"" . api_get_path(WEB_CODE_PATH) . "img/edit.gif\" alt=\"",get_lang('Modify'),"\" border=\"0\" /></a>\n",
-				"<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"" . api_get_path(WEB_CODE_PATH) . "img/delete.gif\" alt=\"",get_lang('Delete'),"\" border=\"0\" /></a>\n",
-				"</p>\n</div>";
+		echo "<div id=\"courseintro_icons\"><p>\n";
+		if (!empty ($GLOBALS["_cid"]))
+		{
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdEdit=1\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/edit.gif\" alt=\"".get_lang('Modify')."\" border=\"0\" /></a>\n";
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/delete.gif\" alt=\"".get_lang('Delete')."\" border=\"0\" /></a>\n";
+		}
+		else
+		{
+			echo "<a href=\"".api_get_self()."?intro_cmdEdit=1\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/edit.gif\" alt=\"".get_lang('Modify')."\" border=\"0\" /></a>\n";
+			echo "<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/delete.gif\" alt=\"".get_lang('Delete')."\" border=\"0\" /></a>\n";
+		}
+		echo "</p>\n</div>";
 	}
 }
 ?>

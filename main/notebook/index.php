@@ -33,7 +33,14 @@ $tool = TOOL_NOTEBOOK;
 Display::display_header(get_lang(ucfirst($tool)));
 
 // tool introduction
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Full';
+
 Display::display_introduction_section(TOOL_NOTEBOOK,'left');
+
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 // action links
 echo '<div class="actions">';

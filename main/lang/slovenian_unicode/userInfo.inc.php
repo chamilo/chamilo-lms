@@ -26,7 +26,6 @@ $langTaken = "je že v uporabi. Izberite drugo";
 $langTutor = "Tutor";
 $langUnreg = "Izpiši";
 $langGroupUserManagement = "Upravljanje skupine";
-$langUserInfo = "informacije o uporabniku";
 $langUnregister = "Izpiši";
 $langAddAUser = "Dodaj uporabnike";
 $UsersUnsubscribed = "Izbrani uporabniki so bili izpisani iz tečaja";

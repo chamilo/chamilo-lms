@@ -180,6 +180,7 @@ $langNameOfLang['swedish'] = "瑞典语";
 $langNameOfLang['thai'] = "泰语";
 $langNameOfLang['turkce'] = "土耳其语";
 $langNameOfLang['vietnamese'] = "越南语";
+$UserInfo = "用户信息";
 $langNameOfLang = "语言名称";
 $langCheckAll = "全部选定";
 $langNbAnnoucement = "通知";

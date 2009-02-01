@@ -182,6 +182,7 @@ $langNameOfLang['swedish'] = "suecu";
 $langNameOfLang['thai'] = "tailandés";
 $langNameOfLang['turkce'] = "turcu";
 $langNameOfLang['vietnamese'] = "vietnamita";
+$UserInfo = "información del usuariu";
 $langNameOfLang = "Nome de la llingua";
 $langCheckAll = "comprobar";
 $langNbAnnoucement = "Anuncies";
@@ -669,6 +670,7 @@ $Level = "Nivel";
 $Duration = "Duración";
 $SearchPrefilterPrefix = "Campu específicu pa prefiltráu";
 $SearchPrefilterPrefixComment = "Esta opción permite qu\'escueya un campu específicu que va usase nel tipu de busca perefiltráu.";
+$MaxTimeAllowed = "Tiempu másimu permitíu (min)";
 $Class = "Clase";
 $Select = "Escoyer";
 ?>

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Pridėti naują darbotvarkės įrašą";
-$ShowAll = "Rodyti viską";
+$ShowAllEvents = "Rodyti viską";
 $ShowCurrent = "Rodyti šio mėnesio darbotvarkės įrašus";
 $AddCalendarItem = "Pridėti naują darbotvarkės įrašą";
 $Day = "Diena";

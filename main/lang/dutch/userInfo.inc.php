@@ -26,7 +26,6 @@ $langTaken = "is al in gebruik. Kies een andere naam.";
 $langTutor = "Begeleider (groepen)";
 $langUnreg = "Uitschrijven";
 $langGroupUserManagement = "Groepenbeheer";
-$langUserInfo = "gebruikersinformatie";
 $langUnregister = "Uitschrijven";
 $langAddAUser = "gebruikers toevoegen";
 $UsersUnsubscribed = "De geselecteerde gebruikers zijn uitgeschreven uit de cursus";

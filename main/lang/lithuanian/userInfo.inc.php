@@ -26,7 +26,6 @@ $langTaken = "jau naudojamas. Prašome pasirinkti kitą ";
 $langTutor = "Kuratorius";
 $langUnreg = "Atsisakyti";
 $langGroupUserManagement = "Grupės valdymas";
-$langUserInfo = "vartotojo informacija";
 $langUnregister = "Išregistruoti";
 $langAddAUser = "Pridėti vartotojus";
 $UsersUnsubscribed = "The selected users have been unsubscribed from the course";

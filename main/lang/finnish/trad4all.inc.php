@@ -149,6 +149,7 @@ $WithSelected = "Valittujen kanssa";
 $langOnLine = "Kirjautuneena";
 $langUsers = "Käyttäjät";
 $langPlatformAdmin = "Alustan ylläpito";
+$UserInfo = "tietoja käyttäjästä";
 $langNameOfLang = "Kielen nimi";
 $langCheckAll = "Valitse kaikki";
 $langNbAnnoucement = "Ilmoitus";

@@ -117,8 +117,8 @@ $ReservationDenied = "Your reservation for #ITEM# is denied";
 $ReservationForItemAccepted = "Dear Sir/Madam,\\n\\nYour reservation for #ITEM# from #BEGIN till #END has been accepted";
 $ReservationForItemDenied = "Dear Sir/Madam,\\n\\nYour reservation for #ITEM# from #BEGIN till #END has been rejected";
 $ReservationCancelled = "Reservation cancelled, #NAME# is temporary unavailable";
-$ReservationActive = "Reservation back active, #NAME# is back available";
-$ReservationUnavailable = "Dear Sir/Madam,\\n\\nItem #NAME# is temporary unavailable so your reservation from #BEGIN# till #END# has been cancelled.\\n You will get an email when its back available, we excuse us for the inconvenience. ";
-$ReservationAvailable = "Dear Sir/Madam,\\n\\nWe wish to inform you that #NAME# is back available so your reservation from #BEGIN# till #END# is again active.";
+$ReservationActive = "Reservation is active again, #NAME# is available again";
+$ReservationUnavailable = "Dear Sir/Madam,\\n\\nItem #NAME# is temporary unavailable so your reservation from #BEGIN# till #END# has been cancelled.\\nYou will get an email when its available again, we excuse us for the inconvenience. ";
+$ReservationAvailable = "Dear Sir/Madam,\\n\\nWe wish to inform you that #NAME# is available again so your reservation from #BEGIN# till #END# is active again.";
 $Resources = "Resources";
 ?>

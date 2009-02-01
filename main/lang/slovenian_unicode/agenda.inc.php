@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Dodaj nov dogodek";
-$ShowAll = "Prikaži vse";
+$ShowAllEvents = "Prikaži vse";
 $ShowCurrent = "Prikaži dogodke tekočega meseca";
 $AddCalendarItem = "Dodaj nov dogodek";
 $Day = "Dan";
@@ -68,4 +68,6 @@ $ICalFileImport = "Uvozi iCal/ics datoteko";
 $AllUsersOfThePlatform = "Vsi uporabniki platforme";
 $GlobalEvent = "Globalni dogodek";
 $EndDateCannotBeBeforeTheStartDate = "Končni datum ne more biti pred začetnim datumom";
+$AgendaSortChronologicallyUp = "Razvrsti zapise agende kronološko (naraščajoče)";
+$AgendaSortChronologicallyDown = "Razvrsti zapise agende kronološko (padajoče)";
 ?>

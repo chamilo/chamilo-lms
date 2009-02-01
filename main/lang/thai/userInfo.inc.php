@@ -26,7 +26,6 @@ $langTaken = "กำลังใช้งานอยู่ โปรดเลือกอย่างอื่น";
 $langTutor = "ผู้ช่วยสอน";
 $langUnreg = "ถอนการสมัคร";
 $langGroupUserManagement = "การบริหารจัดการกลุ่ม";
-$langUserInfo = "ข้อมูลของผู้ใช้";
 $langUnregister = "ไม่ได้ลงทะเบียน";
 $langAddAUser = "เพิ่มผู้ใช้";
 ?>

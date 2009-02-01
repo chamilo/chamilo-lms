@@ -180,6 +180,7 @@ $langNameOfLang['swedish'] = "švédsky";
 $langNameOfLang['thai'] = "thajsky";
 $langNameOfLang['turkce'] = "turecky";
 $langNameOfLang['vietnamese'] = "vietnamsky";
+$UserInfo = "informácie o používate&#318;ovi";
 $langNameOfLang = "Názov jazyka";
 $langCheckAll = "zaškrtni všetko";
 $langNbAnnoucement = "Oznam";
@@ -630,6 +631,9 @@ $Gallery = "Galéria";
 $Audio = "Audio";
 $Level = "Úrove&#328;";
 $Duration = "Trvanie";
+$MaxTimeAllowed = "Maximálny povolený &#269;as (min)";
 $Class = "Trieda";
 $Select = "Vybra&#357;";
+$Booking = "Rezervovanie";
+$ManageReservations = "Riadi&#357; rezervácie";
 ?>

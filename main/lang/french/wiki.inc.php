@@ -147,4 +147,10 @@ $Contributions = "contributions";
 $UserContributions = "Contributions utilisateurs";
 $MostActiveUsers = "Utilisateurs les plus actifs";
 $WarningDeleteMainPage = "Il n\'est pas recommandé de supprimer la page d\'accueil du wiki car il s\'agit de l\'accès principal à sa structure hiérarchique.<br />Si toutefois vous avec besoin de le faire, n\'oubliez pas de recréer cette page d\'accueil. Tant que vous ne l\'aurez pas fait, les autres utilisateurs ne pourront pas ajouter de nouvelles pages.";
+$ConvertToLastVersion = "Pour faire de cette version la dernière version, cliquez sur";
+$Restore = "Restaurer";
+$CurrentVersion = "Version actuelle";
+$LastVersion = "Dernière version";
+$PageRestored = "Cette page a été restaurée. Vous pouvez la visualiser en cliquant sur";
+$RestoredFromVersion = "Restauré depuis la version";
 ?>

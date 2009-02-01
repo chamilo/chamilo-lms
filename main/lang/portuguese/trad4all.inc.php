@@ -182,6 +182,7 @@ $langNameOfLang['swedish'] = "sueco";
 $langNameOfLang['thai'] = "tailandês";
 $langNameOfLang['turkce'] = "turco";
 $langNameOfLang['vietnamese'] = "vietnamita";
+$UserInfo = "Informação do Utilizador";
 $langNameOfLang = "Nome da língua";
 $langCheckAll = "Marcar todos";
 $langNbAnnoucement = "Número de anúncios";

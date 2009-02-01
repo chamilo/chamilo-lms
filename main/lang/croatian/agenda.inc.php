@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Dodaj novi element u raspored";
-$ShowAll = "Prikaži sve elemente rasporeda";
+$ShowAllEvents = "Prikaži sve elemente rasporeda";
 $ShowCurrent = "Prikaži elemente rasporeda u teku&#263;em mjesecu";
 $AddCalendarItem = "Dodaj novi element u raspored";
 $Day = "Dan";

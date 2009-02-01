@@ -26,7 +26,6 @@ $langTaken = "on jo käytössä. Ole hyvä ja valitse joku muu";
 $langTutor = "Tutor";
 $langUnreg = "Peruuta";
 $langGroupUserManagement = "Ryhmän hallinta";
-$langUserInfo = "tietoja käyttäjästä";
 $langUnregister = "Poista";
 $langAddAUser = "Lisää käyttäjä";
 ?>

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Ajouter un événement";
-$ShowAll = "Tous les utilisateurs";
+$ShowAllEvents = "Tous les utilisateurs";
 $ShowCurrent = "Afficher les événements du mois";
 $AddCalendarItem = "Ajouter un événement";
 $Day = "Jour";
@@ -67,4 +67,7 @@ $RepeatedEventViewOriginalEvent = "Voir l\'évènement initial";
 $ICalFileImport = "Importer un fichier iCal/ics";
 $AllUsersOfThePlatform = "Tous les utilisateurs de la plateforme";
 $GlobalEvent = "Événement global";
+$EndDateCannotBeBeforeTheStartDate = "La date de fin ne peut pas être avant la date de début";
+$AgendaSortChronologicallyUp = "Trier l\'agenda chronologiquement (ascendant)";
+$AgendaSortChronologicallyDown = "Trier l\'agenda chronologiquement (descendant)";
 ?>

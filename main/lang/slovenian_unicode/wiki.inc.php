@@ -152,4 +152,5 @@ $Restore = "Restavriraj";
 $CurrentVersion = "Trenutna različica";
 $LastVersion = "Zadnja različica";
 $PageRestored = "Stran je bila restavrirana. Vpogled lahko izvršite s klikom na";
+$RestoredFromVersion = "Obnovljeno iz različice";
 ?>

@@ -131,6 +131,7 @@ $langNameOfLang['swedish'] = "swedisch";
 $langNameOfLang['thai'] = "thai";
 $langNameOfLang['turkce'] = "turkish";
 $langNameOfLang['vietnamese'] = "vietnamese";
+$UserInfo = "&#50976;&#51200; &#51221;&#48372;";
 $langNameOfLang = "&#50616;&#50612;";
 $langNbAnnoucement = "&#44277;&#51648;&#49324;&#54637;";
 $lang_no_access_here = "&#51217;&#44540;&#44428;&#54620;&#51060; &#50630;&#49845;&#45768;&#45796;";

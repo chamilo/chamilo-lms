@@ -2,8 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Añadir un evento ";
-$ShowAll = "Mostrar todos los eventos";
-$ShowCurrent = "Mostrar todos los eventos del mes";
+$ShowAllEvents = "Mostrar todos los eventos";
+$ShowCurrent = "Eventos del mes";
 $AddCalendarItem = "Añadir un nuevo evento a la agenda";
 $Day = "Día";
 $Month = "Mes";
@@ -68,4 +68,6 @@ $ICalFileImport = "Importar un fichero iCal/ics";
 $AllUsersOfThePlatform = "Todos los usuarios de la Plataforma";
 $GlobalEvent = "Evento global";
 $EndDateCannotBeBeforeTheStartDate = "Fecha final no deberá ser menor que la fecha de inicio";
+$AgendaSortChronologicallyUp = "Ordenar eventos (antiguos / recientes)";
+$AgendaSortChronologicallyDown = "Ordenar eventos (recientes / antiguos)";
 ?>

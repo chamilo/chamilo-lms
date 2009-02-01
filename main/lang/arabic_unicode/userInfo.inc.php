@@ -26,7 +26,6 @@ $langTaken = "مستخدم مسبقا , فضلا اختر واحدا آخر ";
 $langTutor = "مدرس ";
 $langUnreg = "إلغاء التسجيل";
 $langGroupUserManagement = "إدراة المجموعة";
-$langUserInfo = "معلومات المستخدم";
 $langUnregister = "إلغاء التسجيل";
 $langAddAUser = "أضف مستخدم";
 $UsersUnsubscribed = "لقد تم إلغاء تسجيل المستخدمين المحددين من المقرر ";

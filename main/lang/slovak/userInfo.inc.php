@@ -26,7 +26,6 @@ $langTaken = "je už použité. Vyberte si iné";
 $langTutor = "Tútor";
 $langUnreg = "Odhlási&#357;";
 $langGroupUserManagement = "Správa skupín";
-$langUserInfo = "informácie o používate&#318;ovi";
 $langUnregister = "Zruši&#357; registráciu";
 $langAddAUser = "Prida&#357; používate&#318;a";
 $UsersUnsubscribed = "Vybraný používate&#318; bol odhlásený z kurzu.";

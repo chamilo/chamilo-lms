@@ -257,6 +257,7 @@ $ExeStartTime = "Data iniziale";
 $ExeEndTime = "Data finale";
 $Value = "Valore";
 $DeleteAttempt = "Eliminare il tentativo?";
+$WithoutComment = "Senza commento";
 $QuantityQuestions = "Numero di quesiti";
 $FilterExercices = "Filtra gli esercizi";
 $FilterByNotRevised = "Solo non valutati";
@@ -273,5 +274,7 @@ $Scenario = "Scenario";
 $VisitUrl = "Visita questo collegamento";
 $ExitTest = "Esci dal test";
 $DurationFormat = "%1$d secondi";
-$MaxTimeAllowed = "Tempo a disposizione (minuti)";
+$Difficulty = "Difficoltà";
+$NewScore = "Nuovo punteggio";
+$NewComment = "Nuovo commento";
 ?>

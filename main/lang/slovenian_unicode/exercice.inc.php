@@ -257,6 +257,7 @@ $ExeStartTime = "Začetni datum";
 $ExeEndTime = "Končni datum";
 $Value = "Vrednost";
 $DeleteAttempt = "Izbrišem poskus ?";
+$WithoutComment = "Brez komentarja";
 $QuantityQuestions = "Količinska vprašanja";
 $FilterExercices = "Filtriraj vaje/teste";
 $FilterByNotRevised = "Filter po nepregledanih";
@@ -273,5 +274,7 @@ $Scenario = "Scenarij";
 $VisitUrl = "Obišči povezavo";
 $ExitTest = "Zapusti test/vajo";
 $DurationFormat = "%1$d sekund";
-$MaxTimeAllowed = "Najdaljši dovoljen čas (min)";
+$Difficulty = "Težavnost";
+$NewScore = "Nov rezultat";
+$NewComment = "Nov komentar";
 ?>

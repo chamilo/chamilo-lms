@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Dodaj nowy element agendy";
-$ShowAll = "Poka&#380; wszystkie elementy agendy";
+$ShowAllEvents = "Poka&#380; wszystkie elementy agendy";
 $ShowCurrent = "Poka&#380; elementy agendy w bie&#380;&#261;cym miesi&#261;cu";
 $AddCalendarItem = "Dodaj nowy element agendy";
 $Day = "Dzie&#324;";

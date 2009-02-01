@@ -81,4 +81,5 @@ $EditBlog = "Upravi&#357; názov a podtitul";
 $DeleteBlog = "Zmaza&#357; tento blog";
 $NoTasks = "Žiadne úlohy";
 $Shared = "Zdie&#318;aný";
+$PermissionGrantedByGroupOrRole = "Prístup povolený pod&#318;a skupiny alebo funkcie";
 ?>

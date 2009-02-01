@@ -141,4 +141,5 @@ $Restore = "Obnovi&#357;";
 $CurrentVersion = "Aktuálna verzia";
 $LastVersion = "Posledná verzia";
 $PageRestored = "Stránka bola obnovená. Kliknutím si ju môžete prezrie&#357;";
+$RestoredFromVersion = "Obnovené z verzie";
 ?>

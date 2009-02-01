@@ -157,6 +157,7 @@ $langPlatformAdmin = "Platformbeheer";
 $langNameOfLang['malay'] = "Malaysisch";
 $langNameOfLang['slovenian'] = "Sloveens";
 $langNameOfLang['spanish_latin'] = "Latijns-Amerikaans";
+$UserInfo = "gebruikersinformatie";
 $langNameOfLang = "naam van de taal";
 $langCheckAll = "Controleer alles";
 $langNbAnnoucement = "Mededeling";

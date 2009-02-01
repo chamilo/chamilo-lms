@@ -147,6 +147,7 @@ $WithSelected = "Su išrinktu";
 $langOnLine = "Prisijungęs";
 $langUsers = "Vartotojai";
 $langPlatformAdmin = "Sistemos administravimas";
+$UserInfo = "vartotojo informacija";
 $langNameOfLang = "Kalbos pavadinimas";
 $langCheckAll = "Tikrinti viską";
 $langNbAnnoucement = "Skelbimas";

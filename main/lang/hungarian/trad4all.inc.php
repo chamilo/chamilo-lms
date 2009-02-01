@@ -182,6 +182,7 @@ $langNameOfLang['swedish'] = "svéd";
 $langNameOfLang['thai'] = "thai";
 $langNameOfLang['turkce'] = "török";
 $langNameOfLang['vietnamese'] = "vietnámi";
+$UserInfo = "Felhasználói információ";
 $langNameOfLang = "Nyelv";
 $langCheckAll = "Összes ellen&#337;rzése";
 $langNbAnnoucement = "Bejelentés";

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Acrescentar novo item";
-$ShowAll = "Mostrar todos os itens";
+$ShowAllEvents = "Mostrar todos os itens";
 $ShowCurrent = "Mostrar itens do mês em curso";
 $AddCalendarItem = "Acrescentar novo item";
 $Day = "Dia";

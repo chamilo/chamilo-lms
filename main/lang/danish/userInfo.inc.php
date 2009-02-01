@@ -26,7 +26,6 @@ $langTaken = "er allerede i brug. Benyt venligst et andet";
 $langTutor = "Instruktor";
 $langUnreg = "Afmeld";
 $langGroupUserManagement = "Gruppehåndtering";
-$langUserInfo = "brugerinformation";
 $langUnregister = "Slet konto";
 $langAddAUser = "Tilføj deltagere";
 $UsersUnsubscribed = "De valgte deltagere er blevet afmeldt kursussiden";

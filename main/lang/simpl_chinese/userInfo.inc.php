@@ -26,7 +26,6 @@ $langTaken = "正在使用. 请选择另外一个";
 $langTutor = "指导教师";
 $langUnreg = "注销";
 $langGroupUserManagement = "小组管理";
-$langUserInfo = "用户信息";
 $langUnregister = "注销";
 $langAddAUser = "添加用户";
 $UsersUnsubscribed = "&#29992;&#25143;&#24050;&#32463;&#27880;&#38144;";

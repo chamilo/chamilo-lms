@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Aldoni Novan Agenderon";
-$ShowAll = "Montri &#265;iujn agenderojn ";
+$ShowAllEvents = "Montri &#265;iujn agenderojn ";
 $ShowCurrent = "Montri agenderojn &#265;i-monatajn";
 $AddCalendarItem = "Aldoni novan agenderon ";
 $Day = "Tago ";

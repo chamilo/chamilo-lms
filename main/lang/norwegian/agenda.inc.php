@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Legg til ny oppføring i kalender";
-$ShowAll = "Vis alle oppføringer i kalender";
+$ShowAllEvents = "Vis alle oppføringer i kalender";
 $ShowCurrent = "Vis oppføringer i kalender for inneværende måned";
 $AddCalendarItem = "Legg til ett nytt oppføring i kalender";
 $Day = "Dag";

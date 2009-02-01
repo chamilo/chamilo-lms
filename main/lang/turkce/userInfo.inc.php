@@ -26,7 +26,6 @@ $langTaken = "sistemde kullan&#305;mdad&#305;r.Lütfen farkl&#305; bir tane seçin
 $langTutor = "Sorumlu";
 $langUnreg = "Kay&#305;t sil";
 $langGroupUserManagement = "Grup yönetimi";
-$langUserInfo = "kullan&#305;c&#305; bilgisi";
 $langUnregister = "Kay&#305;t &#304;ptal Et";
 $langAddAUser = "Kullan&#305;c&#305; ekle";
 ?>

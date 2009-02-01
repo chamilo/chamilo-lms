@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Lis‰‰ uusi merkint‰";
-$ShowAll = "N‰yt‰ kaikki kalenterimerkinn‰t";
+$ShowAllEvents = "N‰yt‰ kaikki kalenterimerkinn‰t";
 $ShowCurrent = "N‰yt‰ t‰m‰n kuun kalenterimerkinn‰t";
 $AddCalendarItem = "Lis‰‰ uusi merkint‰";
 $Day = "P‰iv‰";

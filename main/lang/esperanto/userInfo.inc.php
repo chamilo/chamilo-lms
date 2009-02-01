@@ -26,7 +26,6 @@ $langTaken = "estas jam uzata. Elektu alian. ";
 $langTutor = "Kondukanto (grupa) ";
 $langUnreg = "Malali&#285;i ";
 $langGroupUserManagement = "Grupa mastrumado ";
-$langUserInfo = "uzulaj informoj";
 $langUnregister = "Malali&#285;i";
 $langAddAUser = "aldoni uzulojn";
 ?>

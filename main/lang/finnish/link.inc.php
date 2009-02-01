@@ -31,9 +31,17 @@ $langDelList = "Poista koko lista";
 $langModifyLink = "Muokkaa linkki‰";
 $langCsvImport = "Tuo CSV-tiedosto";
 $langCsvFileNotFound = "CVS liitetiedostoa ei voida avata (tyhj‰ tai liian iso)";
+$langCsvFileNoSeps = "CSV tiedostossa v‰limerkkin‰ t‰ytyy olla , tai ;";
+$langCsvFileNoURL = "CSV tiedostossa pit‰‰ v‰hint‰‰n olla sarakkeet URL ja title";
+$langCsvFileLine1 = "... - rivi 1 = ";
+$langCsvLinesFailed = "rivi(‰) ei voitu tuoda linkki‰ (ei URL tai otsikkoa)";
+$langCsvLinesOld = "aiempaa linkki(‰) p‰ivitetty (sama URL tai luokka)";
+$langCsvLinesNew = "uutta linkki‰ luotu.";
+$langCsvExplain = "Tiedoston sis‰llˆn tulisi olla: <blockquote><pre> <b>URL</b>;category;<b>title</b>;description; <b>http://www.aaa.org/...</b>;T‰rke‰t linkit;<b>Nimi 1</b>;Kuvaus 1; <b>http://www.bbb.net/...</b>;;<b>Nimi 2</b>;\"Kuvaus 2\"; </pre></blockquote> Jos URL ja luokka vastaavat jo olemassa olevaa linkki‰ otsikko ja kuvaus p‰ivitet‰‰n.  Muussa tapauksessa tehd‰‰n uusi linkki.<br><br> Lihavoitu = pakollinen. Sarakkeet voi olla miss‰ tahansa j‰rjestyksess‰, nimet pienell‰ tai isolla kirjoitettuna. Ylim‰‰r‰iset kent‰t lis‰t‰‰n kuvaukseen. V‰limerkkin‰: pilkku tai puolipiste (, ;). ";
 $langLinkUpdated = "Linkki on p‰ivitetty";
 $langAll_Link_Deleted = "Linkki on poistettu";
 $langOnHomepage = "N‰yt‰ linkki kotisivulla";
 $langShowLinkOnHomepage = "N‰yt‰ t‰m‰ linkki kuvakkeena kurssin etusivulla";
+$langCsvImport = "CSV tiedoston tuonti";
 $General = "Yleinen";
 ?>

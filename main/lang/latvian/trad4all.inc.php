@@ -178,6 +178,7 @@ $langNameOfLang['swedish'] = "zviedru";
 $langNameOfLang['thai'] = "taizemiešu";
 $langNameOfLang['turkce'] = "turku";
 $langNameOfLang['vietnamese'] = "vjetnamiešu";
+$UserInfo = "lietot&#257;ja inform&#257;cija";
 $langNameOfLang = "Valodas nosaukums";
 $langCheckAll = "Atz&#299;m&#275;t visus";
 $langNbAnnoucement = "Pazi&#326;ojums";

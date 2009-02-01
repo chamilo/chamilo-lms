@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "P&#345;idat novou polo&#382;ku do agendy";
-$ShowAll = "Zobraz v&#353;echny polo&#382;ky agendy";
+$ShowAllEvents = "Zobraz v&#353;echny polo&#382;ky agendy";
 $ShowCurrent = "Zobraz polo&#382;ky agendy pro tento m&#283;síc";
 $AddCalendarItem = "P&#345;idej novou polo&#382;ku do agendy";
 $Day = "Den";

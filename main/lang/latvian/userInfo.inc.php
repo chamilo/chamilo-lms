@@ -26,7 +26,6 @@ $langTaken = "jau tiek izmantots! L&#363;dzu, izv&#275;lieties un nor&#257;diet 
 $langTutor = "Metodi&#311;e/-is";
 $langUnreg = "Atteikties";
 $langGroupUserManagement = "Grupu administr&#275;šana";
-$langUserInfo = "lietot&#257;ja inform&#257;cija";
 $langUnregister = "Atre&#291;istr&#275;t";
 $langAddAUser = "Pievienot lietot&#257;jus";
 ?>

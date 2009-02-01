@@ -8,6 +8,7 @@ $langEditTOC = "Upravi&#357; TOC";
 $langEditDocument = "Upravi&#357; dokument";
 $langCreateDocument = "Vytvori&#357; dokument";
 $langMissingImagesDetected = "Objavené chýbajúce obrázky";
+$langPublish = "Zverejni&#357;";
 $langDownloadAndZipEnd = "Zip súbor na&#269;ítaný a rozbalený";
 $langZipNoPhp = "Zip súbor nemôže obsahova&#357; .PHP súbory";
 $langGroupForumLink = "Skupinové fórum";

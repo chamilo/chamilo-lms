@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Ierakst&#299;t jaunu notikumu pl&#257;not&#257;j&#257;";
-$ShowAll = "Par&#257;d&#299;t visus notikumus";
+$ShowAllEvents = "Par&#257;d&#299;t visus notikumus";
 $ShowCurrent = "Par&#257;d&#299;t š&#299; m&#275;neša notikumus";
 $AddCalendarItem = "Ierakst&#299;t jaunu notikumu pl&#257;not&#257;j&#257;";
 $Day = "Diena";

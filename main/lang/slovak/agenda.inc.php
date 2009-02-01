@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Prida&#357; novú položku agendy";
-$ShowAll = "Zobrazi&#357; všetky položky agendy";
+$ShowAllEvents = "Zobrazi&#357; všetky položky agendy";
 $ShowCurrent = "Zobrazi&#357; položky agendy z tohto mesiaca";
 $AddCalendarItem = "Prida&#357; novú položku agendy";
 $Day = "De&#328;";
@@ -66,4 +66,8 @@ $RepeatEnd = "Opakova&#357; dátum ukon&#269;enia";
 $RepeatedEventViewOriginalEvent = "Pozrie&#357; pôvodnú udalos&#357;";
 $ICalFileImport = "Importova&#357; iCal/ics súbor";
 $AllUsersOfThePlatform = "Všetci používatelia platformy";
+$GlobalEvent = "Globálna udalos&#357;";
+$EndDateCannotBeBeforeTheStartDate = "Dátum ukon&#269;enia nemôže by&#357; skôr ako dátum za&#269;iatku";
+$AgendaSortChronologicallyUp = "Zoradi&#357; agendu chronologicky (vzostupne)";
+$AgendaSortChronologicallyDown = "Zoradi&#357; agendu chronologicky (zostupne)";
 ?>

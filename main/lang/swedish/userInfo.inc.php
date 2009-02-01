@@ -26,7 +26,6 @@ $langTaken = "är redan använt. Var vänlig välj ett annat.";
 $langTutor = "Lärare";
 $langUnreg = "Avsluta prenumeration";
 $langGroupUserManagement = "Grupphantering";
-$langUserInfo = "användarinformation";
 $langUnregister = "Avregistrera";
 $langAddAUser = "Lägg till användare";
 $UsersUnsubscribed = "Den valda användaren har avregistrerats från kursen";

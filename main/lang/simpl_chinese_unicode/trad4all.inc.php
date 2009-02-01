@@ -71,6 +71,7 @@ $langPage = "页";
 $langOnLine = "在线";
 $langUsers = "用户";
 $langPlatformAdmin = "系统管理";
+$UserInfo = "用户信息";
 $langNameOfLang = "语言名称";
 $langCheckAll = "全部选定";
 $langNbAnnoucement = "通知";

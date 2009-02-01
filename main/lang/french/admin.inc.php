@@ -880,4 +880,6 @@ $UsersBelongURL = "Les comptes utilisateur ont été rattachés à l\'URL";
 $NoParticipation = "Il n\'y a aucun participant";
 $LPTestScore = "Scores des exercices des parcours d\'apprentissage";
 $ScormAndLPTestTotalAverage = "Total des moyennes aux exercices des parcours d\'apprentissage";
+$ImportUsersToACourse = "Importer des utilisateurs dans un cours depuis un fichier";
+$ImportCourses = "Importer des cours depuis un fichier";
 ?>

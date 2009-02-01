@@ -150,6 +150,7 @@ $langNameOfLang['swedish'] = "švedski";
 $langNameOfLang['thai'] = "tajlandski";
 $langNameOfLang['turkce'] = "turski";
 $langNameOfLang['vietnamese'] = "vijetnamski";
+$UserInfo = "informacija o korisniku";
 $langNameOfLang = "Ime jezika";
 $langCheckAll = "Proveri sve";
 $langNbAnnoucement = "Obaveštenje";

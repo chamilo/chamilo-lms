@@ -26,7 +26,6 @@ $langTaken = "est déjà utilisé.";
 $langTutor = "Tuteur";
 $langUnreg = "Désinscrire";
 $langGroupUserManagement = "Gestion des groupes";
-$langUserInfo = "Fiche utilisateur";
 $langUnregister = "Non enregistré";
 $langAddAUser = "Ajouter des utilisateurs";
 $UsersUnsubscribed = "Les utilisateurs sélectionnés ont été désinscrits du cours";

@@ -274,7 +274,6 @@ $Scenario = "Scenario";
 $VisitUrl = "Visit this link";
 $ExitTest = "Exit test";
 $DurationFormat = "%1$d seconds";
-$MaxTimeAllowed = "Maximum time allowed (min)";
 $Difficulty = "Difficulty";
 $NewScore = "New score";
 $NewComment = "New comment";

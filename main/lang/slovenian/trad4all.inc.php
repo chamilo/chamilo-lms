@@ -182,6 +182,7 @@ $langNameOfLang['swedish'] = "swedisch";
 $langNameOfLang['thai'] = "thai";
 $langNameOfLang['turkce'] = "turkish";
 $langNameOfLang['vietnamese'] = " vietnamese";
+$UserInfo = "informacije o uporabniku";
 $langNameOfLang = "Ime jezika";
 $langCheckAll = "Izberi vse";
 $langNbAnnoucement = "Obvestilo";

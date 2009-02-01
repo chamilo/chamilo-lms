@@ -230,7 +230,7 @@ $ForumForumsNumber = "Número de foros";
 $ForumThreadsNumber = "Número de temas";
 $ForumPostsNumber = "Número de mensajes";
 $ChatConnectionsDuringLastXDays = "Conecciones al chat en los últimos %s días";
-$ChatLastConnection = "Última conección al chat";
-$CourseInformation = "Información del Curso";
+$ChatLastConnection = "Última conexión al chat";
+$CourseInformation = "Información del curso";
 $NoAdditionalFieldsWillBeExported = "Campos adicionales no serán exportados";
 ?>

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Afegir una nova activitat a l\'agenda";
-$ShowAll = "Veure totes les activitats";
+$ShowAllEvents = "Veure totes les activitats";
 $ShowCurrent = "Veure les activitats d\'aquest mes";
 $AddCalendarItem = "Afegir una nova anotació a l\'agenda ";
 $Day = "Dia";

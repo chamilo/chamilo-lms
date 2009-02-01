@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $dropbox_lang["help"]  = "Pomoc";
+$dropbox_lang["aliensNotAllowed"]  = "Schránku na dokumenty môžu používa&#357; len &#269;lenovia kurzu. Vy nie ste &#269;lenom tohto kurzu.";
 $dropbox_lang["dropbox"]  = "Schránka na dokumenty";
 $dropbox_lang["generalError"]  = "Objavila sa chyba. Prosím, kontaktujte svojho systémového administrátora.";
 $dropbox_lang["noUserSelected"]  = "Prosím vyberte používate&#318;a, ktorému chcete súbor posla&#357; .";
@@ -15,7 +16,9 @@ $dropbox_lang["description"]  = "Opis dokumentu";
 $dropbox_lang["sendTo"]  = "Posla&#357; komu";
 $dropbox_lang["receivedTitle"]  = "Prijaté súbory";
 $dropbox_lang["sentTitle"]  = "Odoslané súbory";
+$dropbox_lang["confirmDelete"]  = "Toto odstráni záznam len z vášho zoznamu";
 $dropbox_lang["all"]  = "všetky dokumenty";
+$dropbox_lang["workDelete"]  = "Odstráni&#357; záznam zo zoznamu";
 $dropbox_lang["sentBy"]  = "Odoslané od";
 $dropbox_lang["sentTo"]  = "Odoslané komu";
 $dropbox_lang["anonymous"]  = "neznámy";

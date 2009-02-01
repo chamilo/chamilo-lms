@@ -112,4 +112,13 @@ $NoItems = "Pas encore d\'objet";
 $ItemNotDeleted = "Certains objets n\'ont pas été supprimés parce qu\'ils font toujours l\'objet de réservations";
 $ItemHasReservations = "L\'objet fait encore l\'objet de #NUM# réservation(s) active(s)";
 $NoItemsReservation = "Il n\'y a pas d\'objet disponible pour vous dans cette ressource";
+$ReservationAccepted = "Votre réservation pour #ITEM# a été acceptée";
+$ReservationDenied = "Votre réservation pour #ITEM# a été refusée";
+$ReservationForItemAccepted = "Madame, Monsieur,\\n\\nVotre réservation pour #ITEM# du #BEGIN au #END a été acceptée";
+$ReservationForItemDenied = "Madame, Monsieur,\\n\\nVotre réservation pour #ITEM# du #BEGIN au #END a été refusée";
+$ReservationCancelled = "Réservation annulée. #NAME# est temporairement indisponible";
+$ReservationActive = "Réservation réactivée, #NAME# est à nouveau disponible";
+$ReservationUnavailable = "Madame, Monsieur,\\n\\nL\'élément #NAME# est temporairement indisponible. Votre réservation du #BEGIN# au #END# a donc été annulée.\\nVous recevrez un e-mail lorsqu\'il est disponible à nouveau. Veuillez nous excuser pour cet inconvénient.";
+$ReservationAvailable = "Madame, Monsieur,\\n\\nNous avons le plaisir de vous informer que #NAME# est à nouveau disponible et que, par conséquent, votre réservation du #BEGIN# au #END# a été réactivée.";
+$Resources = "Ressources";
 ?>

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Προσθήκη ενός γεγονότος";
-$ShowAll = "Προβολή όλων των γεγονότων";
+$ShowAllEvents = "Προβολή όλων των γεγονότων";
 $ShowCurrent = "Προβολή γεγονότων αυτού του μήνα";
 $AddCalendarItem = "Προσθήκη ενός γεγονότος";
 $Day = "Μέρα";

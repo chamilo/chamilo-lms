@@ -26,7 +26,6 @@ $langTaken = "er allerede i bruk.  Velg en annen";
 $langTutor = "Mentor";
 $langUnreg = "Avmeld";
 $langGroupUserManagement = "Gruppehåndtering";
-$langUserInfo = "Brukerinformasjon";
 $langUnregister = "Avregistrer";
 $langAddAUser = "Legg til brukere";
 ?>

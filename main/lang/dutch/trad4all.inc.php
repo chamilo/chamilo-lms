@@ -182,6 +182,7 @@ $langNameOfLang['swedish'] = "Zweeds";
 $langNameOfLang['thai'] = "Thais";
 $langNameOfLang['turkce'] = "Turks";
 $langNameOfLang['vietnamese'] = "Vietnamees";
+$UserInfo = "gebruikersinformatie";
 $langNameOfLang = "naam van de taal";
 $langCheckAll = "Controleer alles";
 $langNbAnnoucement = "Mededeling";

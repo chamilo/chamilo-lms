@@ -26,7 +26,6 @@ $langTaken = "já esta sendo usado. Por favor selecione um diferente";
 $langTutor = "Tutor";
 $langUnreg = "Desinscrever-se";
 $langGroupUserManagement = "Administração de Grupo";
-$langUserInfo = "informações do usuário";
 $langUnregister = "Descadastrar-se";
 $langAddAUser = "Adicionar Usuários";
 $UsersUnsubscribed = "Usuários não inscritos";

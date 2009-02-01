@@ -26,7 +26,6 @@ $langTaken = "már használatban van. Kérem, válasszon egy másik";
 $langTutor = "Oktató";
 $langUnreg = "Leiratkozás";
 $langGroupUserManagement = "Csoportfelhasználók kezelése";
-$langUserInfo = "Felhasználói információ";
 $langUnregister = "Regisztráció törlése";
 $langAddAUser = "Felhasználók hozzáadása";
 $UsersUnsubscribed = "A kiválasztott felhasználók kiiratásra kerülte a kurzusból.";

@@ -182,6 +182,7 @@ $langNameOfLang['swedish'] = "svenska";
 $langNameOfLang['thai'] = "thailändska";
 $langNameOfLang['turkce'] = "turkiska";
 $langNameOfLang['vietnamese'] = "vietnamesiska";
+$UserInfo = "användarinformation";
 $langNameOfLang = "Språkets namn";
 $langCheckAll = "Markera allt";
 $langNbAnnoucement = "Tillkännagivande";

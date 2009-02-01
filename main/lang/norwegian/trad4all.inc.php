@@ -147,6 +147,7 @@ $langNameOfLang['swedish'] = "Svensk";
 $langNameOfLang['thai'] = "thailandsk";
 $langNameOfLang['turkce'] = "tyrkisk";
 $langNameOfLang['vietnamese'] = "vietnamesisk";
+$UserInfo = "Brukerinformasjon";
 $langNameOfLang = "Navn på språk";
 $langCheckAll = "Velg alle";
 $langNbAnnoucement = "Annonsering";

@@ -145,6 +145,7 @@ $langNameOfLang['swedish'] = "swedisch";
 $langNameOfLang['thai'] = "thai";
 $langNameOfLang['turkce'] = "Türkçe";
 $langNameOfLang['vietnamese'] = "vietnamese";
+$UserInfo = "kullan&#305;c&#305; bilgisi";
 $langNameOfLang = "Lisan ismi";
 $langCheckAll = "Hepsini seç";
 $langNbAnnoucement = "Duyuru";

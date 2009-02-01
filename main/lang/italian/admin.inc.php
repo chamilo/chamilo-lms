@@ -862,7 +862,7 @@ $HideCampusFromPublicDokeosPlatformsList = "Non mostrare il mio Campus nell\'ele
 $EnableVersionCheck = "Abilita il controllo di versione";
 $AllowReservationTitle = "Abilita il servizio di prenotazione";
 $AllowReservationComment = "L\'opzione permette di utilizzare il sistema di prenotazione";
-$ConfigureResourceType = "Configura il tipo di risorsa";
+$ConfigureResourceType = "Tipi di risorsa";
 $ConfigureMultipleAccessURLs = "Configura gli URL per l\'accesso multiplo";
 $URLAdded = "URL aggiunto";
 $URLAlreadyAdded = "URL già in uso, seleziona un URL diverso";
@@ -880,4 +880,6 @@ $UsersBelongURL = "Utenti modoficati";
 $NoParticipation = "Non ci sono partecipanti";
 $LPTestScore = "Punti nei test delle lezioni";
 $ScormAndLPTestTotalAverage = "Media complessiva dei punteggi dei test SCORM e lezioni";
+$ImportUsersToACourse = "Importa utenti in un corso da un file";
+$ImportCourses = "Importa corsi da un file";
 ?>

@@ -133,6 +133,7 @@ $WithSelected = "用已選的";
 $langOnLine = "線上";
 $langUsers = "用戶";
 $langPlatformAdmin = "系統管理";
+$UserInfo = "用戶訊息";
 $langNameOfLang = "語言名稱";
 $langCheckAll = "全部選定";
 $langNbAnnoucement = "通知";

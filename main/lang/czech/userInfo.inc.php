@@ -26,7 +26,6 @@ $langTaken = "je již používáno. Zvolte prosím jiné";
 $langTutor = "Tutor (studijní vedoucí)";
 $langUnreg = "Odhlásit";
 $langGroupUserManagement = "Správa skupin";
-$langUserInfo = "informace o uživateli";
 $langUnregister = "Neregistrovaný";
 $langAddAUser = "P&#345;idat uživatele";
 ?>

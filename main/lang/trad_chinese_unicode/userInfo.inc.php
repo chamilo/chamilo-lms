@@ -26,7 +26,6 @@ $langTaken = "正在使用. 請選擇另外一個";
 $langTutor = "指導員";
 $langUnreg = "註銷";
 $langGroupUserManagement = "小組管理";
-$langUserInfo = "用戶訊息";
 $langUnregister = "註銷";
 $langAddAUser = "添加用戶";
 $UsersUnsubscribed = "已把選定的使用者從本課程中取消";

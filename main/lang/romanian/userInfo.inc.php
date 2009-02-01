@@ -26,7 +26,6 @@ $langTaken = "este deja utilizat. Va rugam selectati alt ";
 $langTutor = "Indrumator";
 $langUnreg = "Renunta";
 $langGroupUserManagement = "Administrare grup";
-$langUserInfo = "informatii despre utilizator";
 $langUnregister = "Neinregistrat";
 $langAddAUser = "Adauga utilizator";
 ?>

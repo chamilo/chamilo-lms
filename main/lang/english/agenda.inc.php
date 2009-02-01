@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Add new Agenda Item";
-$ShowAll = "Show All Agenda Items";
+$ShowAllEvents = "Show All Agenda Items";
 $ShowCurrent = "Show Agenda Items of current month";
 $AddCalendarItem = "Add a new Agenda item";
 $Day = "Day";
@@ -68,4 +68,6 @@ $ICalFileImport = "Import iCal/ics file";
 $AllUsersOfThePlatform = "All users of the platform";
 $GlobalEvent = "Global event";
 $EndDateCannotBeBeforeTheStartDate = "The end date cannot be before the start date";
+$AgendaSortChronologicallyUp = "Sort Agenda chronologically (up)";
+$AgendaSortChronologicallyDown = "Sort Agenda chronologically (down)";
 ?>

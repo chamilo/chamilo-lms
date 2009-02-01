@@ -26,7 +26,6 @@ $langTaken = "bereits belegt";
 $langTutor = "Tutor";
 $langUnreg = "abmelden";
 $langGroupUserManagement = "Gruppen Verwaltung";
-$langUserInfo = "Benutzer Information";
 $langUnregister = "Abmeldung";
 $langAddAUser = "Nutzer hinzufügen";
 $UsersUnsubscribed = "Die ausgewählten Benutzer wurden aus dem Kurs abgemeldet";

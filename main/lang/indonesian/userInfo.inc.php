@@ -26,7 +26,6 @@ $langTaken = "sedang digunkan. Silahkan pilih lainnya";
 $langTutor = "Tutor";
 $langUnreg = "Undur diri";
 $langGroupUserManagement = "Manajemen Group";
-$langUserInfo = "informasi user";
 $langUnregister = "Mengundurkan diri";
 $langAddAUser = "Tambah user";
 ?>

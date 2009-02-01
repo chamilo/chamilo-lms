@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $AgendaAdd = "Új naptár-bejegyzés hozzáadása";
-$ShowAll = "Az összes naptár bejegyzés megmutatása";
+$ShowAllEvents = "Az összes naptár bejegyzés megmutatása";
 $ShowCurrent = "Az ehavi naptár bejegyzések megmutatása";
 $AddCalendarItem = "Új naptárbejegyzés hozzáadása";
 $Day = "Nap";

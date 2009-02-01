@@ -506,10 +506,10 @@ if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']) && isset
 	
 	$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
 	
-	$q_last_connection=mysql_query($sql_last_connection);
-	if(mysql_num_rows($q_last_connection) > 0)
+	$q_last_connection=api_sql_query($sql_last_connection);
+	if(Database::num_rows($q_last_connection) > 0)
 	{
-		$i_id_last_connection=mysql_result($q_last_connection,0,"login_id");
+		$i_id_last_connection=Database::result($q_last_connection,0,"login_id");
 		$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 		api_sql_query($s_sql_update_logout_date);
 	}

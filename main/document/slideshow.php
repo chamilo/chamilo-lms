@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 18105 2009-01-31 23:36:09Z herodoto $
+<?php // $Id: slideshow.php 18106 2009-02-01 00:37:15Z herodoto $
 
 /*
 ==============================================================================
@@ -207,14 +207,16 @@ echo "\n<table align='center' cellspacing='10'>";
 $i = 0;
 foreach ($image_tag as $image_tag_item)
 {
+	$link=$i;
 	// starting new table row
 	if ($i == 0)
 	{
 		echo "\n<tr>\n";
-		$i ++;				
+		$i ++;
+					
 	}
-	
-		echo "\t<td align='center' style='display:block; position:relative; top: -3px; left:-3px; padding:5px; background:#FFFFFF; border:1px solid; border-color: #CCCCCC #666666 #666666 #CCCCCC;'><a href='slideshow.php?slide_id=".$i."&curdirpath=".$pathurl."'>".$image_tag_item."</a></td>\n";
+	$link=$i-1;
+		echo "\t<td align='center' style='display:block; position:relative; top: -3px; left:-3px; padding:5px; background:#FFFFFF; border:1px solid; border-color: #CCCCCC #666666 #666666 #CCCCCC;'><a href='slideshow.php?slide_id=".$link."&curdirpath=".$pathurl."'>".$image_tag_item."</a></td>\n";
 	
 	if ($i % 6 == 0 and $i !== 0) // 6 cols
 	{

@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 18026 2009-01-27 15:07:11Z ivantcholakov $
+// $Id: html_editor.php 18118 2009-02-01 16:18:02Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -200,22 +200,22 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 
 				if (empty($this -> fck_editor->Config['CreateDocumentWebDir']))
 				{
-					$this -> fck_editor->Config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'main/default_course_document/';
+					$this -> fck_editor->Config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'home/default_platform_document/';
 				}
 
 				if (is_null($this -> fck_editor->Config['CreateDocumentDir']))
 				{
-					$this -> fck_editor->Config['CreateDocumentDir'] = api_get_path(WEB_PATH).'main/default_course_document/'; // This works, but it should be revised again.
+					$this -> fck_editor->Config['CreateDocumentDir'] = api_get_path(WEB_PATH).'home/default_platform_document/'; // A side-effect is in use here.
 				}
 
 				if (empty($this -> fck_editor->Config['BaseHref']))
 				{
-					$this -> fck_editor->Config['BaseHref'] = api_get_path(WEB_PATH).'main/default_course_document/';
+					$this -> fck_editor->Config['BaseHref'] = api_get_path(WEB_PATH).'home/default_platform_document/';
 				}
 
 				if (!$use_advanced_filemanager)
 				{
-					$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
+					$upload_path = api_get_path(REL_PATH).'home/default_platform_document/';
 				}
 			}
 			else

@@ -64,10 +64,7 @@ function GetResourceTypeDirectory( $resourceType, $sCommand )
 */
 function GetUrlFromPath( $resourceType, $folderPath, $sCommand )
 {
-	global $currentCourseRepositoryWeb;	
-	//return CombinePaths( GetResourceTypePath( $resourceType, $sCommand ), $folderPath ) ;
 	$resourceType =strtolower($resourceType); 
-		//return $GLOBALS["UserFilesPath"] . $resourceType . $folderPath ;
 	return $resourceType . $folderPath;
 }
 

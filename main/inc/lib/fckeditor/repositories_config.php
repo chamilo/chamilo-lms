@@ -8,6 +8,12 @@
 
 require_once api_get_path(LIBRARY_PATH).'/fileUpload.lib.php';
 
+$permissions_for_new_directories = api_get_setting('permissions_for_new_directories');
+$permissions_for_new_directories = octdec(!empty($permissions_for_new_directories) ? $permissions_for_new_directories : '0777');
+
+$permissions_for_new_files = api_get_setting('permissions_for_new_files');
+$permissions_for_new_files = octdec(!empty($permissions_for_new_files) ? $permissions_for_new_files : '0777');
+
 if (!empty($_course['path']))
 {
 	require_once api_get_path(LIBRARY_PATH).'/document.lib.php';

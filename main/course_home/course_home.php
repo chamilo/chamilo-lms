@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 17787 2009-01-17 00:41:06Z ivantcholakov $
+<?php // $Id: course_home.php 18115 2009-02-01 11:56:07Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -183,11 +183,10 @@ $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Full';
 
-$fck_attribute['Config']['InDocument'] = false;
+// A special case, some default settings do not fit. These settings should stay.
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
 $fck_attribute['Config']['CreateDocumentDir'] = 'document/';
 $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
-
 
 Display::display_introduction_section(TOOL_COURSE_HOMEPAGE);
 

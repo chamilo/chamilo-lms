@@ -197,6 +197,7 @@ $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Full';
 
+// TODO: These settings to be checked when it is possible.
 $fck_attribute['Config']['InDocument'] = false;
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
 $fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';

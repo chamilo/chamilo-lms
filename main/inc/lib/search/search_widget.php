@@ -315,6 +315,7 @@ function search_widget_show($action='index.php') {
     echo '<h2>'.get_lang('Search').'</h2>';
 
     // introduction section
+    // TODO: Settings for the FCKEditor to be added for the introduction section.
     if (api_get_course_id() !== -1)
     if (!empty($_SESSION['_gid'])) {
         Display::display_introduction_section(TOOL_SEARCH.$_SESSION['_gid'],'left');

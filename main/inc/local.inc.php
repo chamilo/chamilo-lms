@@ -199,7 +199,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		unset($_user['user_id']); 
 	}
 
-    if(isset($_POST['login']) && isset($_POST['password'])) {
+    if (isset($_POST['login']) && isset($_POST['password'])) {
     	// $login && $password are given to log in
 		$login = $_POST['login'];
 		$password = $_POST['password'];
@@ -241,12 +241,12 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 				// my user is subscribed in these sites => $my_url_list   
                 				$my_url_list = api_get_access_url_from_user($uData['user_id']);
                 				                				
-                				if(is_array($my_url_list) && count($my_url_list)>0 ){
+                				if (is_array($my_url_list) && count($my_url_list)>0 ){
                 					// the user have the permissions to enter at this site
                 					if (in_array($current_access_url_id, $my_url_list)) {                						
                 						$_user['user_id'] = $uData['user_id'];
 										api_session_register('_user');
-										if(!function_exists('event_login')){
+										if (!function_exists('event_login')){
 											include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
 											event_login();
 										}                						
@@ -265,7 +265,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 			} else {           				
                 				$_user['user_id'] = $uData['user_id'];
 								api_session_register('_user');
-								if(!function_exists('event_login')){
+								if (!function_exists('event_login')){
 									include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
 									event_login();
 								}							
@@ -295,7 +295,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                     //e.g. registered by a teacher
                     //do nothing (code may be added later)
                 }
-            } elseif(!empty($extAuthSource[$uData['auth_source']]['login']) && file_exists($extAuthSource[$uData['auth_source']]['login'])) {
+            } elseif (!empty($extAuthSource[$uData['auth_source']]['login']) && file_exists($extAuthSource[$uData['auth_source']]['login'])) {
                  /*
                   * Process external authentication
                   * on the basis of the given login name
@@ -313,7 +313,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
             	error_log('Dokeos Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
             }
             
-    	    if(!empty($_SESSION['request_uri'])) {
+    	    if (!empty($_SESSION['request_uri'])) {
       	        $req = $_SESSION['request_uri'];
       	        unset($_SESSION['request_uri']);
       	        header('location: '.$req);
@@ -349,7 +349,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
             if (isset($extAuthSource) && is_array($extAuthSource)) {
                 foreach($extAuthSource as $thisAuthSource) {
-                	if(!empty($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
+                	if (!empty($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
                     	include_once($thisAuthSource['newUser']);
                 	} else {
 		            	error_log('Dokeos Authentication file '. $thisAuthSource['newUser']. ' could not be found - this might prevent your system from using the authentication process in the user creation process',0);
@@ -358,17 +358,17 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
             } //end if is_array($extAuthSource)
 
         } //end else login failed
-    } elseif(api_get_setting('openid_authentication')=='true') {
-		if(!empty($_POST['openid_url'])) {
+    } elseif (api_get_setting('openid_authentication')=='true') {
+		if (!empty($_POST['openid_url'])) {
 	    	include('main/auth/openid/login.php');
 	    	openid_begin(trim($_POST['openid_url']),api_get_path(WEB_PATH).'index.php');
 	    	//this last function should trigger a redirect, so we can die here safely
 	    	die('Openid login redirection should be in progress');
-		} elseif(!empty($_GET['openid_identity']))
+		} elseif (!empty($_GET['openid_identity']))
     	{	//it's usual for PHP to replace '.' (dot) by '_' (underscore) in URL parameters
 	    	include('main/auth/openid/login.php');
 	    	$res = openid_complete($_GET);
-	    	if($res['status'] == 'success') {
+	    	if ($res['status'] == 'success') {
 	    		$id1 = Database::escape_string($res['openid.identity']);
 	    		//have another id with or without the final '/'
 	    		$id2 = (substr($id1,-1,1)=='/'?substr($id1,0,-1):$id1.'/');
@@ -379,39 +379,31 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		                WHERE openid = '$id1'
 		                OR openid = '$id2' ";
 		        $result = api_sql_query($sql);
-		        if($result !== false) {
-		        	if(Database::num_rows($result)>0) {
+		        if ($result !== false) {
+		        	if (Database::num_rows($result)>0) {
 		        		//$row = Database::fetch_array($res);
 			            $uData = Database::fetch_array($result);
 			
-			            if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE)
-			            {
+			            if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
 			                //the authentification of this user is managed by Dokeos itself
 			
 		                	// check if the account is active (not locked)
-		                	if ($uData['active']=='1')
-		                	{
+		                	if ($uData['active']=='1') {
 		                		// check if the expiration date has not been reached
-		                		if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00')
-		                		{
-		                			
+		                		if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
 									$_user['user_id'] = $uData['user_id'];
 									api_session_register('_user');
-									if(!function_exists('event_login')){
+									if (!function_exists('event_login')){
 										include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
 										event_login();
 									}
-		                		}
-		                		else
-		                		{
+		                		} else {
 									$loginFailed = true;
 									api_session_unregister('_uid');
 									header('Location: index.php?loginFailed=1&error=account_expired');
 									exit;
 		                		}
-		                	}
-		                	else
-		                	{
+		                	} else {
 								$loginFailed = true;
 								api_session_unregister('_uid');
 								header('Location: index.php?loginFailed=1&error=account_inactive');
@@ -425,21 +417,15 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 			                    //do nothing (code may be added later)
 			                }
 			            }
-		        	}
-		        	else
-		        	{
+		        	} else {
 		        		//Redirect to the subscription form
 		        		header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?username='.$res['openid.sreg.nickname'].'&email='.$res['openid.sreg.email'].'&openid='.$res['openid.identity'].'&openid_msg=idnotfound');
 		        		//$loginFailed = true;
 		        	}
-		        }
-		        else
-		        {
+		        } else {
 		        	$loginFailed = true;
 		        }
-	    	}
-	    	else
-    		{
+	    	} else {
     			$loginFailed = true;
     		}
     	}
@@ -453,14 +439,11 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 }
 
 //Now check for anonymous user mode
-if(isset($use_anonymous) && $use_anonymous == true)
-{
+if (isset($use_anonymous) && $use_anonymous == true) {
 	//if anonymous mode is set, then try to set the current user as anonymous
 	//if he doesn't have a login yet
 	api_set_anonymous();
-}
-else
-{
+} else {
 	//if anonymous mode is not set, then check if this user is anonymous. If it
 	//is, clean it from being anonymous (make him a nobody :-))
 	api_clear_anonymous();
@@ -475,16 +458,14 @@ if (!empty($cDir)) {
 
 // if the requested course is different from the course in session
 
-if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid'])))
-{
+if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid']))) {
     $cidReset = true;
     $gidReset = true;    // As groups depend from courses, group id is reset
 }
 
 // if the requested group is different from the group in session
 $gid = isset($_SESSION['_gid'])?$_SESSION['_gid']:'';
-if ($gidReq && $gidReq != $gid)
-{
+if ($gidReq && $gidReq != $gid) {
     $gidReset = true;
 }
 
@@ -499,10 +480,9 @@ if (isset($uidReset) && $uidReset) // session data refresh requested
 
     if (isset($_user['user_id']) && $_user['user_id']) // a uid is given (log in succeeded)
     {
-$user_table = Database::get_main_table(TABLE_MAIN_USER);
-$admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-        if ($_configuration['tracking_enabled'])
-        {
+        $user_table = Database::get_main_table(TABLE_MAIN_USER);
+        $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
+        if ($_configuration['tracking_enabled']) {
             $sql = "SELECT user.*, a.user_id is_admin,
                             UNIX_TIMESTAMP(login.login_date) login_date
                      FROM $user_table
@@ -512,9 +492,7 @@ $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
                      ON user.user_id  = login.login_user_id
                      WHERE user.user_id = '".$_user['user_id']."'
                      ORDER BY login.login_date DESC LIMIT 1";
-        }
-        else
-        {
+        } else {
             $sql = "SELECT user.*, a.user_id is_admin
                     FROM $user_table
                     LEFT JOIN $admin_table a
@@ -524,8 +502,7 @@ $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
         $result = api_sql_query($sql,__FILE__,__LINE__);
 
-        if (Database::num_rows($result) > 0)
-        {
+        if (Database::num_rows($result) > 0) {
 			// Extracting the user data
 
             $uData = Database::fetch_array($result);
@@ -546,24 +523,18 @@ $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
             $is_allowedCreateCourse  = (bool) ($uData ['status'] == 1);
 
             api_session_register('_user');
-        }
-        else
-        {
+        } else {
         	header('location:'.api_get_path(WEB_PATH));
             //exit("WARNING UNDEFINED UID !! ");
         }
-    }
-    else // no uid => logout or Anonymous
-    {
+    } else { // no uid => logout or Anonymous
         api_session_unregister('_user');
         api_session_unregister('_uid');
     }
 
 	api_session_register('is_platformAdmin');
 	api_session_register('is_allowedCreateCourse');
-}
-else // continue with the previous values
-{
+} else { // continue with the previous values
     $_user = $_SESSION['_user'];
     $is_platformAdmin = $_SESSION['is_platformAdmin'];
     $is_allowedCreateCourse = $_SESSION['is_allowedCreateCourse'];
@@ -573,11 +544,8 @@ else // continue with the previous values
 // COURSE INIT
 //////////////////////////////////////////////////////////////////////////////
 
-if (isset($cidReset) && $cidReset) // course session data refresh requested or empty data
-{
-	
-    if ($cidReq)
-    {
+if (isset($cidReset) && $cidReset) { // course session data refresh requested or empty data
+    if ($cidReq) {
     	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     	$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql =    "SELECT course.*, course_category.code faCode, course_category.name faName
@@ -585,13 +553,10 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
                  LEFT JOIN $course_cat_table
                  ON course.category_code = course_category.code
                  WHERE course.code = '$cidReq'";
-
         $result = api_sql_query($sql,__FILE__,__LINE__);
 
-        if (Database::num_rows($result)>0)
-        {
+        if (Database::num_rows($result)>0) {
             $cData = Database::fetch_array($result);
-
             $_cid                            = $cData['code'             ];
 			$_course = array();
 			$_course['id'          ]         = $cData['code'             ]; //auto-assigned integer
@@ -615,8 +580,7 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
             api_session_register('_cid');
             api_session_register('_course');
 			
-			if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']))
-			{
+			if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
 	            //We add a new record in the course tracking table
 	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);        
 				
@@ -626,62 +590,44 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 				api_sql_query($sql,__FILE__,__LINE__);
 			}
 			
-			
-			
 			// if a session id has been given in url, we store the session
-			if(api_get_setting('use_session_mode')=='true') 
-			{
+			if (api_get_setting('use_session_mode')=='true') {
 				// Database Table Definitions
 				$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 				$tbl_user 					= Database::get_main_table(TABLE_MAIN_USER);
 				$tbl_session_course 		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 				$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 				
-				if(!empty($_GET['id_session']))
-				{
+				if (!empty($_GET['id_session'])) {
 					$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
 					$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.$_SESSION['id_session'] . '"';
 					$rs = api_sql_query($sql,__FILE__,__LINE__);
 					list($_SESSION['session_name']) = Database::fetch_array($rs);
-				}
-				else
-				{
+				} else {
 					api_session_unregister('session_name');
 					api_session_unregister('id_session');
-				}
-					
+				}		
 			}
-
-        }
-        else
-        {
+        } else {
             //exit("WARNING UNDEFINED CID !! ");
             header('location:'.api_get_path(WEB_PATH));
         }
-    }
-    else
-    {
+    } else {
         api_session_unregister('_cid');
         api_session_unregister('_course');
 
     }
-}
-else // continue with the previous values
-{
-	if(empty($_SESSION['_course']) OR empty($_SESSION['_cid']))
-	{ //no previous values...
+} else { // continue with the previous values
+	if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
 		$_cid = -1;		//set default values that will be caracteristic of being unset
 		$_course = -1;
-	}
-	else
-	{
+	} else {
 		$_cid 		= $_SESSION['_cid'   ];
    		$_course    = $_SESSION['_course'];
    		
    		// these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
    		// Moreover, if we want to track a course with another session it can be usefull
-		if(!empty($_GET['id_session']))
-		{
+		if (!empty($_GET['id_session'])) {
 			$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 			$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
 			$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.$_SESSION['id_session'] . '"';
@@ -689,15 +635,13 @@ else // continue with the previous values
 			list($_SESSION['session_name']) = Database::fetch_array($rs);
 		}
 
-		if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']))
-		{
+		if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
 	   		$course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 	
 	   		//We select the last record for the current course in the course tracking table
 	   		$sql="SELECT course_access_id FROM $course_tracking_table WHERE user_id=".intval($_user ['user_id'])." ORDER BY login_course_date DESC LIMIT 0,1";
 	   		$result=api_sql_query($sql,__FILE__,__LINE__);
-	   		if(Database::num_rows($result)>0)
-	   		{
+	   		if (Database::num_rows($result)>0) {
 		   		$i_course_access_id = Database::result($result,0,0);
 		
 		   		//We update the course tracking table
@@ -707,16 +651,12 @@ else // continue with the previous values
 						"WHERE course_access_id=".intval($i_course_access_id);
 				
 				api_sql_query($sql,__FILE__,__LINE__);
-	   		}
-	   		else
-	   		{
+	   		} else {
 	            $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
 						"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
 				api_sql_query($sql,__FILE__,__LINE__);	
 	   		}		
 		}
-
-
 	}
 }
 
@@ -724,13 +664,9 @@ else // continue with the previous values
 // COURSE / USER REL. INIT
 //////////////////////////////////////////////////////////////////////////////
 
-if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // session data refresh requested
-{
-    if (isset($_user['user_id']) && $_user['user_id'] && isset($_cid) && $_cid) // have keys to search data
-    {
-
-    	if(api_get_setting('use_session_mode') != 'true')
-    	{
+if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
+    if (isset($_user['user_id']) && $_user['user_id'] && isset($_cid) && $_cid) { // have keys to search data
+    	if (api_get_setting('use_session_mode') != 'true') {
 
 	    	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	        $sql = "SELECT * FROM $course_user_table
@@ -739,8 +675,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 
 	        $result = api_sql_query($sql,__FILE__,__LINE__);
 
-	        if (Database::num_rows($result) > 0) // this  user have a recorded state for this course
-	        {
+	        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
 	            $cuData = Database::fetch_array($result);
 
 	            $is_courseMember     = true;
@@ -748,9 +683,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	            $is_courseAdmin      = (bool) ($cuData['status'] == 1 );
 
 	            api_session_register('_courseUser');
-	        }
-	        else // this user has no status related to this course
-	        {
+	        } else { // this user has no status related to this course
 	            $is_courseMember = false;
 	            $is_courseAdmin  = false;
 	            $is_courseTutor  = false;
@@ -758,10 +691,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 
 	        $is_courseAdmin = (bool) ($is_courseAdmin || $is_platformAdmin);
 
-    	}
-
-    	else
-    	{
+    	} else {
 
 			$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 						
@@ -771,8 +701,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 
 	        $result = api_sql_query($sql,__FILE__,__LINE__);
 
-	        if (Database::num_rows($result) > 0) // this  user have a recorded state for this course
-	        {
+	        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
 	            $cuData = Database::fetch_array($result);
 
 	            $_courseUser['role'] = $cuData['role'  ];
@@ -782,8 +711,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 				
 	            api_session_register('_courseUser');
 	        }
-	        if (empty($is_courseAdmin)) // this user has no status related to this course
-		        {
+	        if (empty($is_courseAdmin)) { // this user has no status related to this course
 		    	// is it the session coach or the session admin ?
 		    	
 		    	$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -799,61 +727,49 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 		        $result = api_sql_query($sql,__FILE__,__LINE__);
 		        $row = api_store_result($result);
 		        
-		        if($row[0]['id_coach']==$_user['user_id']){
+		        if ($row[0]['id_coach']==$_user['user_id']) {
 		        	$_courseUser['role'] = 'Professor';
 		            $is_courseMember     = true;
 		            $is_courseTutor      = true;
 		            $is_courseCoach      = true;
 		            $is_sessionAdmin     = false;
 		            
-		            if(api_get_setting('extend_rights_for_coach')=='true')
-		            {
+		            if (api_get_setting('extend_rights_for_coach')=='true') {
 		            	$is_courseAdmin = true;
-		            }
-		            else
-		            {
+		            } else {
 		            	$is_courseAdmin = false;
 		            }
 	
 		            api_session_register('_courseUser');
-		        }
-		        else if($row[0]['session_admin_id']==$_user['user_id']){
+		        } elseif ($row[0]['session_admin_id']==$_user['user_id']) {
 		        	$_courseUser['role'] = 'Professor';
 		            $is_courseMember     = false;
 		            $is_courseTutor      = false;
 		            $is_courseAdmin      = false;
 		            $is_courseCoach      = false;
 		            $is_sessionAdmin     = true;
-		        }
-	        	else
-	        	{
+		        } else {
 		        	// Check if the current user is the course coach
 		        	$sql = "SELECT 1
 							FROM ".$tbl_session_course."
 							WHERE session_rel_course.course_code='$_cid'
 							AND session_rel_course.id_coach = '".$_user['user_id']."'";
 			        $result = api_sql_query($sql,__FILE__,__LINE__);
-			        if($row = Database::fetch_array($result))
-			        {
+			        if ($row = Database::fetch_array($result)) {
 			        	$_courseUser['role'] = 'Professor';
 			            $is_courseMember     = true;
 			            $is_courseTutor      = true;
 			            $is_courseCoach      = true;
 			            $is_sessionAdmin     = false;
 			            
-			            if(api_get_setting('extend_rights_for_coach')=='true')
-			            {
+			            if (api_get_setting('extend_rights_for_coach')=='true') {
 			            	$is_courseAdmin = true;
-			            }
-			            else
-			            {
+			            } else {
 			            	$is_courseAdmin = false;
 			            }
 			                 
 			            api_session_register('_courseUser');
-			        }
-			        else
-			        {
+			        } else {
 		        		// Check if the user is a student is this session
 				        $sql = "SELECT * FROM ".$tbl_session_course_user." 
 				        		WHERE id_user  = '".$_user['user_id']."'
@@ -861,8 +777,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	
 				        $result = api_sql_query($sql,__FILE__,__LINE__);
 	
-				        if (Database::num_rows($result) > 0) // this  user have a recorded state for this course
-				        {
+				        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
 				        	while($row = Database::fetch_array($result)){
 					            $is_courseMember     = true;
 					            $is_courseTutor      = false;
@@ -877,9 +792,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	        	}
 	        }
     	}
-    }
-    else // keys missing => not anymore in the course - user relation
-    {
+    } else { // keys missing => not anymore in the course - user relation
         //// course
         $is_courseMember = false;
         $is_courseAdmin  = false;
@@ -894,8 +807,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
     //$is_courseAllowed=($_cid && ($_course['visibility'] || $is_courseMember || $is_platformAdmin))?true:false;
 
 	//NEW
-	if (isset($_course))
-	{
+	if (isset($_course)) {
     	if ($_course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)
     		$is_allowed_in_course = true;
     	elseif ($_course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && isset($_user['user_id']) && !api_is_anonymous($_user['user_id']))
@@ -916,11 +828,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	api_session_register('is_allowed_in_course'); //new permission var
 	api_session_register('is_courseCoach');
 	api_session_register('is_sessionAdmin');
-}
-else // continue with the previous values
-{
-	if (isset($_SESSION ['_courseUser']))
-	{
+} else { // continue with the previous values
+	if (isset($_SESSION ['_courseUser'])) {
     	$_courseUser          = $_SESSION ['_courseUser'];
 	}
     	
@@ -938,76 +847,54 @@ else // continue with the previous values
 //////////////////////////////////////////////////////////////////////////////
 
 
-if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) // session data refresh requested
-{
-    if ($gidReq && $_cid ) // have keys to search data
-    {
+if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
+    if ($gidReq && $_cid ) { // have keys to search data
     	$group_table = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT * FROM $group_table WHERE id = '$gidReq'";
         $result = api_sql_query($sql,__FILE__,__LINE__);
-        if (Database::num_rows($result) > 0) // This group has recorded status related to this course
-        {
+        if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
             $gpData = Database::fetch_array($result);
             $_gid                   = $gpData ['id'             ];
             api_session_register('_gid');
-        }
-        else
-        {
+        } else {
             exit("WARNING UNDEFINED GID !! ");
         }
-    }
-    elseif(isset($_SESSION['_gid']) or isset($_gid))  // Keys missing => not anymore in the group - course relation
-    {
+    } elseif (isset($_SESSION['_gid']) or isset($_gid)) { // Keys missing => not anymore in the group - course relation
         api_session_unregister('_gid');
     }
-}
-elseif(isset($_SESSION['_gid'])) // continue with the previous values
-{
+} elseif (isset($_SESSION['_gid'])) { // continue with the previous values
     $_gid             = $_SESSION ['_gid'            ];
-}
-else
-{ //if no previous value, assign caracteristic undefined value
+} else { //if no previous value, assign caracteristic undefined value
 	$_gid = -1;
 }
 //set variable according to student_view_enabled choices
-if (api_get_setting('student_view_enabled') == "true")
-{	
-	if (isset($_GET['isStudentView']))
-	{
-		if ($_GET['isStudentView'] == 'true') 
-		{
-			if (isset($_SESSION['studentview']))
-			{
-				if (!empty($_SESSION['studentview']))
+if (api_get_setting('student_view_enabled') == "true") {	
+	if (isset($_GET['isStudentView'])) {
+		if ($_GET['isStudentView'] == 'true') {
+			if (isset($_SESSION['studentview'])) {
+				if (!empty($_SESSION['studentview'])) {
 					// switching to studentview
 					$_SESSION['studentview'] = 'studentview';
+                }
 			}
-
-		}
-		elseif ($_GET['isStudentView'] == 'false')
-		{
-			if (isset($_SESSION['studentview']))
-			{
-				if (!empty($_SESSION['studentview']))
+		} elseif ($_GET['isStudentView'] == 'false') {
+			if (isset($_SESSION['studentview'])) {
+				if (!empty($_SESSION['studentview'])) {
 					// switching to teacherview
 					$_SESSION['studentview'] = 'teacherview';
+                }
 			}		
 		}		
-	}
-	elseif (!empty($_SESSION['studentview']))
-	{
+	} elseif (!empty($_SESSION['studentview'])) {
 		//all is fine, no change to that, obviously
-	}
-	elseif (empty($_SESSION['studentview']))
-	{
+	} elseif (empty($_SESSION['studentview'])) {
 		// We are in teacherview here
 		$_SESSION['studentview'] = 'teacherview';
 	}	
 }
 
-if(isset($_cid))
-{
+if (isset($_cid)) {
 	$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-	$sql="UPDATE $tbl_course SET last_visit=NOW() WHERE code='$_cid'";
+	$sql="UPDATE $tbl_course SET last_visit= NOW() WHERE code='$_cid'";
 	api_sql_query($sql,__FILE__,__LINE__);
 }

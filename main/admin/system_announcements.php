@@ -1,4 +1,4 @@
-<?php // $Id: system_announcements.php 16954 2008-11-26 14:41:35Z pcool $
+<?php // $Id: system_announcements.php 18119 2009-02-01 16:24:32Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -177,10 +177,6 @@ if ($action_todo)
 	$fck_attribute['Height'] = '400';
 	$fck_attribute['ToolbarSet'] = 'Middle'; 
 	
-	$fck_attribute['Config']['CreateDocumentDir'] = api_get_path(REL_PATH).'main/default_course_document/';
-	$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path(REL_PATH).'main/default_course_document/';
-	
-
 	$form->addElement('select', 'lang',get_lang('Language'),$language_list_with_keys);
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 		$form->addElement('textarea', 'content', get_lang('Content'));

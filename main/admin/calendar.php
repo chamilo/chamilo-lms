@@ -29,7 +29,7 @@
 // name of the language file that needs to be included
 $language_file[] = 'admin';
 $language_file[] = 'agenda';
-$language_file[] = 'resourcelinker';
+
 // resetting the course id
 $cidReset=true;
 // including some necessary dokeos files

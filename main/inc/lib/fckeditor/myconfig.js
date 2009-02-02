@@ -161,6 +161,8 @@ FCKConfig.ImageUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _Qui
 FCKConfig.ImageUploadAllowedExtensions	= ".(jpg|gif|jpeg|png|bmp)$" ;		// empty for all
 FCKConfig.ImageUploadDeniedExtensions	= "" ;							// empty for no one
 
+FCKConfig.FlashUpload = true ;
+
 FCKConfig.MP3Upload = true ;
 FCKConfig.MP3UploadAllowedExtensions	= ".(mp3)$" ;		// empty for all
 FCKConfig.MP3UploadDeniedExtensions	= "" ;					// empty for no one

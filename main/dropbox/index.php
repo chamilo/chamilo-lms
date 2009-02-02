@@ -166,7 +166,7 @@ if ($_GET['action']=="add") {
 if ($_POST['submitWork']) {
 	$check = Security::check_token();
 	if ($check) {
-		Display :: display_normal_message(store_add_dropbox());
+		Display :: display_confirmation_message(store_add_dropbox());
 		//include_once('dropbox_submit.php');
 	}
 }
@@ -186,7 +186,7 @@ if ($_GET['action']=='editcategory' and isset($_GET['id'])) {
 
 // *** storing a new or edited category ***
 if ($_POST['StoreCategory']) {
-	Display :: display_normal_message(store_addcategory());
+	Display :: display_confirmation_message(store_addcategory());
 }
 
 // *** Move a File ***
@@ -194,7 +194,7 @@ if (($_GET['action']=='movesent' OR $_GET['action']=='movereceived') AND isset($
 	display_move_form(str_replace('move','',$_GET['action']), $_GET['move_id'], get_dropbox_categories(str_replace('move','',$_GET['action'])));
 }
 if ($_POST['do_move']) {
-	Display :: display_normal_message(store_move($_POST['id'], $_POST['move_target'], $_POST['part']));
+	Display :: display_confirmation_message(store_move($_POST['id'], $_POST['move_target'], $_POST['part']));
 }
 
 // *** Delete a file ***
@@ -208,7 +208,7 @@ if (($_GET['action']=='deletereceivedfile' OR $_GET['action']=='deletesentfile')
 		$dropboxfile->deleteSentWork($_GET['id']);
 		$message=get_lang('SentFileDeleted');
 	}
-	Display :: display_normal_message($message);
+	Display :: display_confirmation_message($message);
 }
 
 // *** Delete a category ***
@@ -290,7 +290,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	echo '<div class="actions">';
 	if ($view_dropbox_category_received<>0) {
 		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
-		echo '<img src="../img/folder_up.gif" alt="'.get_lang('up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
+		echo '<img src="../img/folder_up.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
         $movelist[0] = 'Root'; // move_received selectbox content
 	} else {
 	    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory"><img src="../img/folder_new.gif" align=\"absmiddle\"/> '.get_lang('AddNewCategory').'</a>';		
@@ -363,7 +363,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 			
 			
 			$dropbox_file_data[]=build_document_icon_tag('file',$dropbox_file->title);
-			$dropbox_file_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download"><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'"/></a><a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a>'.$new_icon.'<br>'.$dropbox_file->description;
+			$dropbox_file_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download"><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Download').'"/></a><a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a>'.$new_icon.'<br>'.$dropbox_file->description;
 			$dropbox_file_data[]=ceil(($dropbox_file->filesize)/1024).' '.get_lang('kB');
 			$dropbox_file_data[]=$dropbox_file->author;
 			//$dropbox_file_data[]=$dropbox_file->description;

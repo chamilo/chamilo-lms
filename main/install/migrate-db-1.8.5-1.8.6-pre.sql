@@ -63,6 +63,8 @@ CREATE TABLE access_url_rel_user (access_url_id int unsigned NOT NULL, user_id i
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_user (user_id);
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url(access_url_id);
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url_user (user_id,access_url_id);
+CREATE TABLE access_url_rel_session (access_url_id int unsigned NOT NULL, session_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, session_id));
+
 CREATE TABLE user_friend(id bigint unsigned not null auto_increment,user_id int unsigned not null,friend_user_id int unsigned not null,relation_type int not null default 0,PRIMARY KEY(id));
 ALTER TABLE user_friend ADD INDEX idx_user_friend_user(user_id);
 ALTER TABLE user_friend ADD INDEX idx_user_friend_friend_user(friend_user_id);

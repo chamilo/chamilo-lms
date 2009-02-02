@@ -1092,6 +1092,15 @@ CREATE TABLE access_url_rel_course (
   PRIMARY KEY (access_url_id, course_code)
 );
 
+
+DROP TABLE IF EXISTS access_url_rel_session;
+CREATE TABLE access_url_rel_session (
+  access_url_id int unsigned NOT NULL, 
+  session_id int unsigned NOT NULL,
+  PRIMARY KEY (access_url_id, session_id)
+);
+
+
 -----------------
 
 CREATE TABLE  sys_calendar (

@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 17968 2009-01-23 17:13:50Z marvil07 $
+<?php // $Id: settings.php 18160 2009-02-02 17:39:54Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -280,7 +280,7 @@ if (!empty($_GET['action']) && $_GET['action'] == "stored")
 
 // the action images
 $action_images['platform'] 		= 'dokeos.gif';
-$action_images['course'] 		= 'lp_dokeos_module.gif';
+$action_images['course'] 		= 'course.gif';
 $action_images['tools'] 		= 'reference.gif';
 $action_images['user'] 			= 'students.gif';
 $action_images['gradebook']		= 'gradebook_eval_not_empty.gif';

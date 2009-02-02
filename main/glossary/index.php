@@ -466,7 +466,7 @@ function actions_filter($glossary_id,$url_params,$row)
 	
 	if ($row[0] > 1)
 	{
-		$return .= '<a href="'.api_get_self().'?action=moveup&amp;glossary_id='.$row[5].'">'.Display::return_icon('up.gif').'</a>';
+		$return .= '<a href="'.api_get_self().'?action=moveup&amp;glossary_id='.$row[5].'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
 	}
 	else
 	{
@@ -475,15 +475,15 @@ function actions_filter($glossary_id,$url_params,$row)
 	}
 	if ($row[0] < $_SESSION['max_glossary_display'])
 	{
-		$return .= '<a href="'.api_get_self().'?action=movedown&amp;glossary_id='.$row[5].'">'.Display::return_icon('down.gif').'</a>';
+		$return .= '<a href="'.api_get_self().'?action=movedown&amp;glossary_id='.$row[5].'">'.Display::return_icon('down.gif',get_lang('Down')).'</a>';
 	}
 	else
 	{
 		$return .= Display::return_icon('blanco.png');
 		
 	}	
-	$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'">'.Display::return_icon('edit.gif').'</a>';
-	$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$row[5].'" onclick="return confirmation(\''.$row[1].'\');">'.Display::return_icon('delete.gif').'</a>';
+	$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
+	$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$row[5].'" onclick="return confirmation(\''.$row[1].'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	return $return;
 }
 

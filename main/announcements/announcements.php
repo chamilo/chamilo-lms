@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 18155 2009-02-02 16:58:00Z herodoto $
+<?php //$Id: announcements.php 18157 2009-02-02 17:13:58Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1093,7 +1093,7 @@ if(!empty($error_message))
 			echo get_lang("Everybody");
 		}
 		echo "</td><td>";		
-		echo Display::return_icon('group.gif', get_lang('Group')).'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</span>';
+		echo Display::return_icon('group.gif', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle')).'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</span>';
 		echo "</td></tr></table>";
 		show_to_form($to);
 

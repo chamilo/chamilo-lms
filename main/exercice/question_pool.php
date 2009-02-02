@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 18005 2009-01-26 18:00:46Z juliomontoya $
+<?php // $Id: question_pool.php 18159 2009-02-02 17:30:00Z herodoto $
  
 /*
 ==============================================================================
@@ -30,7 +30,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 18005 2009-01-26 18:00:46Z juliomontoya $
+* 	@version $Id: question_pool.php 18159 2009-02-02 17:30:00Z herodoto $
 */
 
 // name of the language file that needs to be included
@@ -151,7 +151,7 @@ if($is_allowedToEdit)
 	<?php
 	if(!empty($fromExercise))
 	{
-		echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('quiz.gif'),get_lang('GoBackToEx'),'</a>';
+		echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('quiz.gif', get_lang('GoBackToEx')),get_lang('GoBackToEx'),'</a>';
 	}
 	else
 	{

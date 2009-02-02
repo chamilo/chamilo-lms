@@ -1,4 +1,4 @@
-<?php // $Id: group_overview.php 16728 2008-11-12 15:49:54Z pcool $
+<?php // $Id: group_overview.php 18162 2009-02-02 18:07:20Z herodoto $
  
 /*
 ==============================================================================
@@ -110,8 +110,8 @@ else
 
 // action links
 echo '<div class="actions">';
-echo Display::return_icon('csv.gif').'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
-echo Display::return_icon('excel.gif').' <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';
+echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
+echo Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';
 echo '</div>';
 
 $categories = GroupManager::get_categories();

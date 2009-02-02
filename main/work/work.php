@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18113 2009-02-01 11:25:38Z ivantcholakov $
+<?php //$Id: work.php 18170 2009-02-02 22:13:45Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18113 2009-02-01 11:25:38Z ivantcholakov $
+*  	@version $Id: work.php 18170 2009-02-02 22:13:45Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -487,8 +487,7 @@ if (api_is_allowed_to_edit(false,true)) {
 			$added_slash = (substr($cur_dir_path, -1, 1) == '/') ? '' : '/';	
 				
 			$directory =replace_accents($_POST['new_dir']);
-			$dir_name = $cur_dir_path . $added_slash . replace_dangerous_char($directory);
-				
+			$dir_name = $cur_dir_path . $added_slash . replace_dangerous_char($directory);				
 			$created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);
 			
 			// we insert here the directory in the table $work_table		
@@ -627,9 +626,14 @@ if (api_is_allowed_to_edit(false,true)) {
 	 
 	/* ----------------------
 	 * Move file form request
-	 ----------------------- */
-	if (!empty ($_REQUEST['move'])) {
-		$folders = get_subdirs_list($base_work_dir, 1);		
+	 ----------------------- */	 
+	if (!empty ($_REQUEST['move'])) {		 
+		$folders = array();
+		$sql = "SELECT url FROM $work_table  WHERE url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:$_SESSION['toolgroup'])."'";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		while($folder = Database::fetch_array($res)) {			
+		$folders[] = substr($folder['url'],1,(strlen($folder['url'])-1));
+		}	
 		Display :: display_normal_message(build_work_move_to_selector($folders, $cur_dir_path, $_REQUEST['move']), false);
 	}
 	/* ------------------

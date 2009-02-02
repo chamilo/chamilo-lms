@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18152 2009-02-02 16:25:28Z cfasanando $
+<?php //$Id: work.lib.php 18170 2009-02-02 22:13:45Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18152 2009-02-02 16:25:28Z cfasanando $
+* 	@version $Id: work.lib.php 18170 2009-02-02 22:13:45Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -752,11 +752,17 @@ function build_work_directory_selector($folders,$curdirpath,$group_dir='')
  * @return string html form
  */
 function build_work_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
-{
+{	
+	//gets file title
+	$tbl_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+	$sql = "SELECT title FROM $tbl_work WHERE id ='".(int)$move_file."'";
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$title = Database::fetch_row($result);
+	
 	$form = '<form name="move_to" action="'.api_get_self().'" method="POST">'."\n";
-	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />'."\n";
-	$form .= get_lang('MoveTo').' <select name="move_to">'."\n";
-
+	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />'."\n";	
+	$form .= sprintf(get_lang('MoveXTo'),$title[0]).' <select name="move_to">'."\n";
+	
 	//group documents cannot be uploaded in the root
 	if($group_dir=='') {
 		if($curdirpath!='/') {

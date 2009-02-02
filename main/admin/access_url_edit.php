@@ -97,7 +97,6 @@ else
 }
 
 $form->addElement('text','url',get_lang('URL'),array('size'=>'30'));
-$form->addElement('static', null, null, get_lang('MustHaveSlash'));
 $form->addRule('url', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('url', '', 'maxlength',254);
 $form->addElement('textarea','description',get_lang('Description'));

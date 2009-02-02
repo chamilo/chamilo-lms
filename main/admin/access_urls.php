@@ -45,8 +45,8 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 require_once (api_get_path(LIBRARY_PATH).'security.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 
-$current_access_url_id = api_get_current_access_url_id();
 $my_user_url_list = api_get_access_url_from_user(api_get_user_id());
+$current_access_url_id = api_get_current_access_url_id();
 $url_list = UrlManager::get_url_data();
 
 // Actions
@@ -98,10 +98,10 @@ if (isset ($_GET['action'])) {
 
 $parameters['sec_token'] = Security::get_token();
 
-
 // checking if the admin is registered in all sites
 
 $url_string='';
+$my_user_url_list = api_get_access_url_from_user(api_get_user_id());
 foreach($url_list as $my_url) {	
 	if (!in_array($my_url['id'],$my_user_url_list)){
 		$url_string.=$my_url['url'].' ';		

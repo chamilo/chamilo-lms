@@ -234,10 +234,12 @@ $url_list = UrlManager::get_url_data();
 			$checked = 'selected=true';
 			$url_selected=$url_obj[1];
 			}
-		}				
-	?>
-		<option <?php echo $checked;?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?></option>
-	<?php
+		}
+		if ($url_obj['active']==1) {						
+			?>
+				<option <?php echo $checked;?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?></option>
+			<?php
+		}
 	}
 	?>		
 </select>

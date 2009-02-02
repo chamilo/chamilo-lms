@@ -135,7 +135,7 @@ $result = api_sql_query($sql, __FILE__, __LINE__);
 $db_users = api_store_result($result);
 unset($result);
 
-$sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url";
+$sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url"; 
 $result = api_sql_query($sql, __FILE__, __LINE__);
 $db_urls = api_store_result($result);
 unset($result);

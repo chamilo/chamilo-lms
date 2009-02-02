@@ -45,5 +45,6 @@ $ToolIntro = "Predstavenie nástroja";
 $UploadError = "Na&#269;ítanie neúspešné. Prosím skontrolujte obmedzenia maximálnej ve&#318;kosti súboru a práva zložky.";
 $DocumentsWillBeAddedToo = "Dokumenty budú tiež pridané";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Ak chcete exportova&#357; u&#269;ebnú osnovu obsahujúcu test, musíte sa presved&#269;i&#357;, že príslušné testy sú zahrnuté v exporte. To znamená, že ich musíte ozna&#269;i&#357; v zozname testov.";
+$ArchivesDirectoryNotWriteableContactAdmin = "Archívny katalóg používaný týmto nástrojom nie je možné prepísa&#357;. Kontaktujte prosím svojho administrátora platformy.";
 $DestinationCourse = "Cie&#318;ový kurz";
 ?>

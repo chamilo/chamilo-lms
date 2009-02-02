@@ -676,4 +676,5 @@ $Select = "Seleziona";
 $Booking = "Prenotazione";
 $ManageReservations = "Gestisci le prenotazioni";
 $DestinationUsers = "Utenti destinatari";
+$AttachmentFileDeleteSuccess = "Il file allegato è stato eliminato";
 ?>

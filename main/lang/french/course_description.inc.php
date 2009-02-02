@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langCourseProgram  = "Description de l\'espace de cours";
+$langCourseProgram  = "Description de la formation";
 $langThisCourseDescriptionIsEmpty  = "La description est vide";
 $langEditCourseProgram  = "Créer et modifier une description";
 $QuestionPlan  = "Questions pour le responsable";

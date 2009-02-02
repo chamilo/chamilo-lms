@@ -568,7 +568,7 @@ $BackToPreviousPage = "Volver a la página anterior";
 $ListView = "Mostrar como lista";
 $NoOfficialCode = "No Código oficial";
 $Owner = "Propietario";
-$DisplayOrder = "Ordenación";
+$DisplayOrder = "Orden";
 $SearchFeatureDoIndexDocument = "¿ Indexar el contenido del documento ?";
 $SearchFeatureDocumentLanguage = "Idioma del documento para la indexación";
 $With = "con";
@@ -676,4 +676,5 @@ $Select = "Seleccionar";
 $Booking = "Reservas";
 $ManageReservations = "Gestionar reservas";
 $DestinationUsers = "Usuarios destinatarios";
+$AttachmentFileDeleteSuccess = "El archivo adjunto ha sido eliminado";
 ?>

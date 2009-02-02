@@ -676,4 +676,5 @@ $Select = "Select";
 $Booking = "Booking";
 $ManageReservations = "Manage reservations";
 $DestinationUsers = "Destination users";
+$AttachmentFileDeleteSuccess = "The attached file has been deleted";
 ?>

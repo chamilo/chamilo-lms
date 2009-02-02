@@ -226,4 +226,7 @@ $TotalExercisesScoreObtained = "Skupen dosežen rezultat vaj/testov";
 $TotalExercisesScorePossible = "Skupen možen rezultat vaj/testov";
 $TotalExercisesAnswered = "Število reševanih vaj/testov";
 $TotalExercisesScorePercentage = "Skupen rezultat vaj/testov [%]";
+$ForumForumsNumber = "Številka foruma";
+$ForumThreadsNumber = "Številka niti";
+$ForumPostsNumber = "Številka objave";
 ?>

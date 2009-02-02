@@ -502,6 +502,7 @@ $CannotShowField = "Nie je možné polia zvidite&#318;ni&#357;";
 $FieldHidden = "Pole bolo skryté";
 $CannotHideField = "Pole nie je možné skry&#357;";
 $Folder = "Zložka";
+$CloseOtherSession = "Pokec nie je dostupný pretože na inej stránke je otvorený iný kurz. Aby ste tomu predišli, preverte si, &#269;i ste po&#269;as stretnutia v Pokece zostali v tom istom kurze. Ak sa chcete znova pripoji&#357; k stretnutiu na Pokeci, opätovne spustite Pokec z domovskej stránky kurzu.";
 $FileUploadSucces = "Súbor je úspešne na&#269;ítaný";
 $Yesterday = "V&#269;era";
 $Submit = "Odosla&#357;";
@@ -636,4 +637,5 @@ $Class = "Trieda";
 $Select = "Vybra&#357;";
 $Booking = "Rezervovanie";
 $ManageReservations = "Riadi&#357; rezervácie";
+$AttachmentFileDeleteSuccess = "Pripojený súbor bol zmazaný";
 ?>

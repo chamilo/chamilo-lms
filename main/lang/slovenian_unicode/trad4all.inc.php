@@ -676,4 +676,5 @@ $Select = "Izberi";
 $Booking = "Rezervacije";
 $ManageReservations = "Upravljaj rezervacije";
 $DestinationUsers = "Ciljni uporabniki";
+$AttachmentFileDeleteSuccess = "Pripeta datoteka je bila odstranjena";
 ?>

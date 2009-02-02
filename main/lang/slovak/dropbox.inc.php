@@ -45,6 +45,7 @@ $dropbox_lang["mailingFileIsFor"]  = "je pre";
 $dropbox_lang["mailingFileSentTo"]  = "odoslané komu";
 $dropbox_lang["mailingFileNotRegistered"]  = "(neregistrovaný na tento kurz)";
 $dropbox_lang["mailingNothingFor"]  = "Ni&#269; pre";
+$dropbox_lang["justUploadInList"]  = "Na&#269;ítal";
 $dropbox_lang["giveFeedback"] = "Da&#357; / Upravi&#357; spätnú väzbu";
 $dropbox_lang["showFeedback"] = "Ukáza&#357; spätnú väzbu";
 $dropbox_lang["filingSelected"] = "Prijatý/Poslaný (pôvodná zložka)";

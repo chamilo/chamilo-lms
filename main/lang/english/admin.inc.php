@@ -882,4 +882,17 @@ $LPTestScore = "Scores of learning paths\' tests";
 $ScormAndLPTestTotalAverage = "Average total of tests from SCORM and learning paths";
 $ImportUsersToACourse = "Import users to a course from a file";
 $ImportCourses = "Import courses from a file";
+$ManageUsers = "Manage users";
+$ManageCourses = "Manage courses";
+$UserListIn = "Users of ";
+$URLInactive = "The URL has been inactive";
+$URLActive = "The URL has been active";
+$EditUsers = "Edit users";
+$EditCourses = "Edit courses";
+$CourseListIn = "Courses of";
+$AddCoursesToURL = "Add courses to an URL";
+$EditCoursesToURL = "Edit courses of an URL";
+$AddCoursesToThatURL = "Add courses to that URL";
+$EnablePlugins = "Enable the selected plugins";
+$AtLeastOneCourseAndOneURL = "At least one course and one URL";
 ?>

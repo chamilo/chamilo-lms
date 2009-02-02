@@ -16,7 +16,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -222,12 +222,14 @@ $url_list = UrlManager::get_url_data();
 <?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
 <option value="0"> <?php echo get_lang('SelectUrl')?></option>
-	<?php		
+	<?php	
+	$url_selected='';	
 	foreach ($url_list as $url_obj) {
 		$checked = '';
 		if (!empty($access_url_id)) {
 			if ($url_obj['id']==$access_url_id) {
-			$checked = 'selected=true';		
+			$checked = 'selected=true';
+			$url_selected=	$url_obj[1];
 			}
 		}				
 	?>
@@ -253,7 +255,7 @@ if(!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('UserListInURL') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('UserListIn').' '.$url_selected; ?> :</b></td>
 </tr>
 
 <tr>
@@ -379,7 +381,7 @@ function sortOptions(options) {
 	newOptions = new Array();
 	for (i = 0 ; i<options.length ; i++)
 		newOptions[i] = options[i];
-
+url_list
 	newOptions = newOptions.sort(mysort);
 	options.length = 0;
 	for(i = 0 ; i < newOptions.length ; i++)

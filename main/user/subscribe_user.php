@@ -1,9 +1,9 @@
-<?php // $Id: subscribe_user.php 17013 2008-11-28 15:55:13Z iflorespaz $
+<?php // $Id: subscribe_user.php 18156 2009-02-02 17:02:08Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -57,6 +57,11 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 */
 
 $tool_name = get_lang("SubscribeUserToCourse");
+if ($_REQUEST['type']=='teacher') {
+	$tool_name = get_lang("SubscribeUserToCourseAsTeacher");
+}
+
+
 //extra entries in breadcrumb
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
 Display :: display_header($tool_name, "User");
@@ -73,7 +78,7 @@ $list_register_user='';
 $list_not_register_user='';
 
 if (isset ($_REQUEST['register'])) {
-	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {		
+	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 		$result_simple_sub=CourseManager :: subscribe_user(Database::escape_string($_REQUEST['user_id']), $_course['sysCode'],COURSEMANAGER);	
 	} else {		
 		$result_simple_sub=CourseManager :: subscribe_user(Database::escape_string($_REQUEST['user_id']), $_course['sysCode']);
@@ -181,16 +186,51 @@ function get_number_of_users() {
 	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 		$sql = "SELECT 	u.user_id  
-							FROM $user_table u
-							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-							WHERE cu.user_id IS NULL
-							";
+						FROM $user_table u
+						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+						WHERE cu.user_id IS NULL";
+						
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']==true) {
+			$url_access_id = api_get_current_access_url_id();
+			if ($url_access_id !=-1) {
+				$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+						
+				$sql = "SELECT 
+					u.user_id  
+					FROM $user_table u
+					LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+					INNER JOIN  $tbl_url_rel_user as url_rel_user 
+					ON (url_rel_user.user_id = u.user_id) 
+					WHERE cu.user_id IS NULL AND access_url_id= $url_access_id ";				
+			}		
+		}
+				
 	} else {
 		$sql = "SELECT 	u.user_id  
-							FROM $user_table u
-							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-							WHERE cu.user_id IS NULL
-							";
+						FROM $user_table u
+						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+						WHERE cu.user_id IS NULL";
+						
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']==true) {
+			$url_access_id = api_get_current_access_url_id();
+			if ($url_access_id !=-1) {
+				$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+						
+				$sql = "SELECT 
+					u.user_id  
+					FROM $user_table u
+					LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+					INNER JOIN  $tbl_url_rel_user as url_rel_user 
+					ON (url_rel_user.user_id = u.user_id) 
+					WHERE cu.user_id IS NULL AND access_url_id= $url_access_id ";				
+			}		
+		}
+		
+		
+		
+		
 	}
 	
 	if (isset ($_REQUEST['keyword'])) {
@@ -210,20 +250,19 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 		if (!empty($_SESSION["id_session"])) {
-		$sql = "SELECT 
-					u.user_id AS col0,
-					u.official_code   AS col1, 
-					u.lastname  AS col2, 
-					u.firstname AS col3, 
-					u.email 	AS col4,
-					u.active 	AS col5,
-					u.user_id   AS col6
-				FROM $user_table u
-				LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."'
-				WHERE cu.id_user IS NULL
-				";	
+			$sql = "SELECT 
+						u.user_id AS col0,
+						u.official_code   AS col1, 
+						u.lastname  AS col2, 
+						u.firstname AS col3, 
+						u.email 	AS col4,
+						u.active 	AS col5,
+						u.user_id   AS col6
+					FROM $user_table u
+					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."'
+					WHERE cu.id_user IS NULL";	
 		} else {	
-		$sql = "SELECT 
+			$sql = "SELECT 
 					u.user_id AS col0,
 					u.official_code   AS col1, 
 					u.lastname  AS col2, 
@@ -233,8 +272,32 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					u.user_id   AS col6
 				FROM $user_table u
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-				WHERE cu.user_id IS NULL
-				";
+				WHERE cu.user_id IS NULL";
+				//showing only the courses of the current Dokeos access_url_id
+				
+				global $_configuration;
+				if ($_configuration['multiple_access_urls']==true) {
+					$url_access_id = api_get_current_access_url_id();
+					if ($url_access_id !=-1) {
+						$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+								
+						$sql = "SELECT 
+						u.user_id AS col0,
+						u.official_code   AS col1, 
+						u.lastname  AS col2, 
+						u.firstname AS col3, 
+						u.email 	AS col4,
+						u.active 	AS col5,
+						u.user_id   AS col6
+						FROM $user_table u
+						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+						INNER JOIN  $tbl_url_rel_user as url_rel_user 
+						ON (url_rel_user.user_id = u.user_id) 
+						WHERE cu.user_id IS NULL AND access_url_id= $url_access_id ";				
+					}		
+				}
+			
+				
 		}
 	} else {
 		if (!empty($_SESSION["id_session"])) {
@@ -251,7 +314,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				WHERE cu.id_user IS NULL
 				";
 		} else {
-		$sql = "SELECT 
+			$sql = "SELECT 
 					u.user_id AS col0,
 					u.official_code   AS col1, 
 					u.lastname  AS col2, 
@@ -261,9 +324,30 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					u.user_id   AS col6 
 				FROM $user_table u
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-				WHERE cu.user_id IS NULL
-				";
-		}
+				WHERE cu.user_id IS NULL";
+			//showing only the courses of the current Dokeos access_url_id
+			global $_configuration;
+			if ($_configuration['multiple_access_urls']==true) {
+				$url_access_id = api_get_current_access_url_id();
+				if ($url_access_id !=-1) {
+					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+							
+					$sql = "SELECT 
+					u.user_id AS col0,
+					u.official_code   AS col1, 
+					u.lastname  AS col2, 
+					u.firstname AS col3, 
+					u.email 	AS col4,
+					u.active 	AS col5,
+					u.user_id   AS col6
+					FROM $user_table u
+					LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+					INNER JOIN  $tbl_url_rel_user as url_rel_user 
+					ON (url_rel_user.user_id = u.user_id) 
+					WHERE cu.user_id IS NULL AND access_url_id= $url_access_id ";				
+				}		
+			}
+		}	
 	}
 	if (isset ($_REQUEST['keyword'])) {
 		$keyword = Database::escape_string($_REQUEST['keyword']);

@@ -1,6 +1,25 @@
 <?php
-$language_file='admin';
+/*
+==============================================================================
+	Dokeos - elearning and course management software
 
+	Copyright (c) 2009 Dokeos SPRL
+	
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
+==============================================================================
+*/
+
+$language_file='admin';
 $cidReset=true;
 
 include('../inc/global.inc.php');
@@ -19,23 +38,17 @@ $action=$_REQUEST['action'];
 $sort=in_array($_GET['sort'],array('name','nbr_courses','date_start','date_end'))?$_GET['sort']:'name';
 $idChecked = $_REQUEST['idChecked'];
 
-if($action == 'delete')
-{
-	if(is_array($idChecked))
-	{
+if ($action == 'delete') {
+	if(is_array($idChecked)) {
 		$idChecked=Database::escape_string(implode(',',$idChecked));
-	}
-	else
-	{
+	} else {
 		$idChecked=intval($idChecked);
 	}
 	
-	if(!api_is_platform_admin())
-	{
+	if (!api_is_platform_admin()) {
 		$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$idChecked;
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
-		if(mysql_result($rs,0,0)!=$_user['user_id'])
-		{
+		if (Database::result($rs,0,0)!=$_user['user_id']) {
 			api_not_allowed(true);
 		}
 	}
@@ -71,15 +84,13 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	$form->setDefaults($defaults);
 	$form->display();
 	
-}
-else {
+} else {
 	
 	$limit=20;
 	$from=$page * $limit;
 	
 	//if user is crfp admin only list its sessions
-	if(!api_is_platform_admin())
-	{
+	if(!api_is_platform_admin()) {
 		$where = 'WHERE session_admin_id='.intval($_user['user_id']);
 		$where .= (empty($_REQUEST['keyword']) ? " " : " AND name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
 	}
@@ -89,33 +100,44 @@ else {
 	
 	if(trim($where) == ''){
 		$and=" WHERE id_coach=user_id";
-	}
-	else{
+	} else {
 		$and=" AND id_coach=user_id";
 	}
 	
-	if(isset($_REQUEST['active']) && !isset($_REQUEST['inactive']) ){
+	if (isset($_REQUEST['active']) && !isset($_REQUEST['inactive']) ){
 		$and .= ' AND ( (session.date_start <= CURDATE() AND session.date_end >= CURDATE()) OR session.date_start="0000-00-00" ) ';
 	}
-	if(!isset($_REQUEST['active']) && isset($_REQUEST['inactive']) ){
+	if (!isset($_REQUEST['active']) && isset($_REQUEST['inactive']) ){
 		$and .= ' AND ( (session.date_start > CURDATE() OR session.date_end < CURDATE()) AND session.date_start<>"0000-00-00" ) ';
 	}
 	
-	$result=api_sql_query("SELECT id,name,nbr_courses,date_start,date_end, firstname, lastname 
-							FROM $tbl_session, $tbl_user 
-							$where
-							$and
-							ORDER BY $sort 
-							LIMIT $from,".($limit+1),__FILE__,__LINE__);
-	
-	$Sessions=api_store_result($result);
-	
-	$nbr_results=sizeof($Sessions);
-	
-	$tool_name = get_lang('SessionList');
-	
-	Display::display_header($tool_name);
-	
+	$query= "SELECT id,name,nbr_courses,date_start,date_end, firstname, lastname 
+			FROM $tbl_session, $tbl_user
+			$where
+			$and
+			ORDER BY $sort 
+			LIMIT $from,".($limit+1);
+	//filtering the session list by access_url
+	if ($_configuration['multiple_access_urls']==true){
+		$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+		$access_url_id = api_get_current_access_url_id();
+		if ($access_url_id != -1) {				
+			$and.= " AND access_url_id = $access_url_id AND $table_access_url_rel_session.session_id = $tbl_session.id";
+			$query= "SELECT id,name,nbr_courses,date_start,date_end, firstname, lastname 
+				FROM $tbl_session, $tbl_user, $table_access_url_rel_session
+				$where
+				$and
+				ORDER BY $sort 
+				LIMIT $from,".($limit+1);
+				
+		}	
+	}
+			
+	$result=api_sql_query($query,__FILE__,__LINE__);	
+	$Sessions=api_store_result($result);	
+	$nbr_results=sizeof($Sessions);	
+	$tool_name = get_lang('SessionList');	
+	Display::display_header($tool_name);	
 	api_display_tool_title($tool_name);
 	
 	 
@@ -180,10 +202,8 @@ else {
 		<?php
 		$i=0;
 	
-		foreach($Sessions as $key=>$enreg)
-		{
-			if($key == $limit)
-			{
+		foreach ($Sessions as $key=>$enreg) {
+			if($key == $limit) {
 				break;
 			}
 			$sql = 'SELECT COUNT(course_code) FROM '.$tbl_session_rel_course.' WHERE id_session='.intval($enreg['id']);

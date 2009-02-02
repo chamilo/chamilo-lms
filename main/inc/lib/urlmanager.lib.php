@@ -119,7 +119,7 @@ class UrlManager
 	}	
 	
 	/**
-	 * This function get the quantity of URL 
+	 * This function get the quantity of URLs 
 	 * @author Julio Montoya
 	 * @return int count of urls
 	 * */
@@ -269,7 +269,25 @@ class UrlManager
 		$result = api_sql_query($sql,  __FILE__, __LINE__);
 		$num = Database::num_rows($result);				
 		return $num;
+	}
+	
+	
+	/**
+	* Checks the relationship between an URL and a Session (return the num_rows)  
+	* @author Julio Montoya
+	* @param int user id
+	* @param int url id
+	* @return boolean true if success
+	* */
+	function relation_url_session_exist($session_id, $url_id)
+	{
+		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);					
+		$sql= "SELECT session_id FROM $table_url_rel_session WHERE access_url_id = ".Database::escape_string($url_id)." AND session_id = ".Database::escape_string($session_id);
+		$result = api_sql_query($sql,  __FILE__, __LINE__);
+		$num = Database::num_rows($result);				
+		return $num;
 	}	
+		
 	
 	/**
 	 * Add a group of users into a group of URLs
@@ -361,6 +379,20 @@ class UrlManager
 		if (empty($count)) {					
 			$sql = "INSERT INTO $table_url_rel_course
            			SET course_code = '".Database::escape_string($course_code)."', access_url_id = ".Database::escape_string($url_id);
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+		}
+		return $result; 		
+	}
+	
+	
+	function add_session_to_url($session_id, $url_id=1)
+	{		
+		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+		if (empty($url_id)) $url_id=1;		
+		$count = UrlManager::relation_url_session_exist($session_id,$url_id);
+		if (empty($count)) {					
+			$sql = "INSERT INTO $table_url_rel_session
+           			SET session_id = ".Database::escape_string($session_id).", access_url_id = ".Database::escape_string($url_id);
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 		}
 		return $result; 		

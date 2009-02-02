@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -18,7 +18,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -60,7 +60,6 @@ $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
 $tool_name= get_lang('SubscribeCoursesToSession');
-
 $id_session=intval($_GET['id_session']);
 
 $add_type = 'unique';
@@ -72,13 +71,11 @@ if(!api_is_platform_admin())
 {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
-	if(mysql_result($rs,0,0)!=$_user['user_id'])
+	if(Database::result($rs,0,0)!=$_user['user_id'])
 	{
 		api_not_allowed(true);
 	}
 }
-
-
 
 function search_courses($needle)
 {
@@ -86,8 +83,7 @@ function search_courses($needle)
 	
 	$xajax_response = new XajaxResponse();
 	$return = '';
-	if(!empty($needle))
-	{
+	if(!empty($needle)) {
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
@@ -101,10 +97,25 @@ function search_courses($needle)
 				WHERE course.visual_code LIKE "'.$needle.'%"
 				OR course.title LIKE "'.$needle.'%"';
 				
+		global $_configuration;	
+		if ($_configuration['multiple_access_urls']==true) {		
+			$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){
+				$sql = 'SELECT course.code, course.visual_code, course.title, session_rel_course.id_session
+					FROM '.$tbl_course.' course
+					LEFT JOIN '.$tbl_session_rel_course.' session_rel_course
+						ON course.code = session_rel_course.course_code
+						AND session_rel_course.id_session = '.intval($id_session).' 	
+					INNER JOIN '.$tbl_course_rel_access_url.' url_course ON (url_course.course_code=course.code)					
+					WHERE access_url_id = '.$access_url_id.' AND (course.visual_code LIKE "'.$needle.'%"
+					OR course.title LIKE "'.$needle.'%" )';				
+			}
+		}
+					
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		$course_list = array();
-		while($course = Database :: fetch_array($rs))
-		{	
+		while($course = Database :: fetch_array($rs)) {	
 			$course_list[] = $course['code'];					
 			$return .= '<a href="#" onclick="add_course_to_session(\''.$course['code'].'\',\''.$course['title'].' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
 		}
@@ -135,7 +146,7 @@ function add_course_to_session (code, content) {
 	
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);	
-}
+}		
 function remove_item(origin)
 {
 	for(var i = 0 ; i<origin.options.length ; i++) {
@@ -154,24 +165,19 @@ $CourseList=$SessionList=array();
 $courses=$sessions=array();
 $noPHP_SELF=true;
 
-
-
-
-if($_POST['formSent'])
-{
+if ($_POST['formSent']) {
 		
 	$formSent=$_POST['formSent'];
 	$firstLetterCourse=$_POST['firstLetterCourse'];
 	$firstLetterSession=$_POST['firstLetterSession'];
 	$CourseList=$_POST['SessionCoursesList'];
-	if(!is_array($CourseList))
-	{
+	if (!is_array($CourseList)) {
 		$CourseList=array();
 	}
 	$nbr_courses=0;
 
 	$id_coach = api_sql_query("SELECT id_coach FROM $tbl_session WHERE id=$id_session");
-	$id_coach = mysql_fetch_array($id_coach);
+	$id_coach = Database::fetch_array($id_coach);
 	$id_coach = $id_coach[0];
 
 	$rs = api_sql_query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
@@ -181,35 +187,27 @@ if($_POST['formSent'])
 		FROM $tbl_session_rel_user
 		WHERE id_session = $id_session";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-
 	$UserList=api_store_result($result);
 
 
-	foreach($CourseList as $enreg_course)
-	{
+	foreach($CourseList as $enreg_course) {
 		$exists = false;
-		foreach($existingCourses as $existingCourse)
-		{
-			if($enreg_course == $existingCourse['course_code'])
-			{
+		foreach($existingCourses as $existingCourse) {
+			if($enreg_course == $existingCourse['course_code']) {
 				$exists=true;
 			}
 		}
-		if(!$exists)
-		{
+		if(!$exists) {
 			api_sql_query("INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')",__FILE__,__LINE__);
 			
 			//We add in the existing courses table the current course, to not try to add another time the current course
 			$existingCourses[]=array('course_code'=>$enreg_course);
 
 			$nbr_users=0;
-			foreach($UserList as $enreg_user)
-			{
+			foreach ($UserList as $enreg_user) {
 				$enreg_user = $enreg_user['id_user'];
 				api_sql_query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
-
-				if(mysql_affected_rows())
-				{
+				if(Database::affected_rows()) {
 					$nbr_users++;
 				}
 			}
@@ -233,14 +231,9 @@ if($_POST['formSent'])
 	else
 		header('Location: resume_session.php?id_session='.$id_session);
 		//header('Location: '.$_GET['page'].'?id_session='.$id_session);
-
-
-
-
 }
 
 Display::display_header($tool_name);
-
 api_display_tool_title($tool_name);
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_course;
 $rs = api_sql_query($sql, __FILE__, __LINE__);
@@ -248,43 +241,68 @@ $count_courses = mysql_result($rs, 0, 0);*/
 
 $ajax_search = $add_type == 'unique' ? true : false;
 $nosessionCourses = $sessionCourses = array();
-if($ajax_search)
-{
+if ($ajax_search) {
 	
 	$sql="SELECT code, title, visual_code, id_session
 			FROM $tbl_course course
 			INNER JOIN $tbl_session_rel_course session_rel_course
 				ON course.code = session_rel_course.course_code
 				AND session_rel_course.id_session = ".intval($id_session)."
-			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";			
+			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
+	
+	global $_configuration;
+	if ($_configuration['multiple_access_urls']==true) {		
+		$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+		$access_url_id = api_get_current_access_url_id();
+		if ($access_url_id != -1){
+			$sql="SELECT code, title, visual_code, id_session
+			FROM $tbl_course course
+			INNER JOIN $tbl_session_rel_course session_rel_course
+				ON course.code = session_rel_course.course_code
+				AND session_rel_course.id_session = ".intval($id_session)." 
+				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.course_code=course.code)
+				WHERE access_url_id = $access_url_id
+			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
+						
+		}	
+	}
+							
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
-	$Courses=api_store_result($result);
+	$Courses=api_store_result($result);	
 	
-	
-	foreach($Courses as $course)
-	{
+	foreach($Courses as $course) {
 		$sessionCourses[$course['code']] = $course ;
 	}
-}
-else
-{
+} else {
 	$sql="SELECT code, title, visual_code, id_session
 			FROM $tbl_course course
 			LEFT JOIN $tbl_session_rel_course session_rel_course
 				ON course.code = session_rel_course.course_code
 				AND session_rel_course.id_session = ".intval($id_session)."
-			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";			
+			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
+						
+	global $_configuration;
+	if ($_configuration['multiple_access_urls']==true) {		
+		$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+		$access_url_id = api_get_current_access_url_id();
+		if ($access_url_id != -1){
+			$sql="SELECT code, title, visual_code, id_session
+				FROM $tbl_course course
+				LEFT JOIN $tbl_session_rel_course session_rel_course
+					ON course.code = session_rel_course.course_code
+					AND session_rel_course.id_session = ".intval($id_session)."
+				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.course_code=course.code)
+				WHERE access_url_id = $access_url_id 
+				ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
+		}	
+	}
 
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
 	$Courses=api_store_result($result);
-	foreach($Courses as $course)
-	{
-		if($course['id_session'] == $id_session)
-		{
+	foreach($Courses as $course) {
+		if ($course['id_session'] == $id_session) {
 			$sessionCourses[$course['code']] = $course ;
-		}
-		else
-		{
+		} else {
 			$nosessionCourses[$course['code']] = $course ;
 		}
 	}	
@@ -292,11 +310,10 @@ else
 
 unset($Courses);
 
-if($add_type == 'multiple'){
+if($add_type == 'multiple') {
 	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$_GET['add'].'&add_type=unique">'.get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
-}
-else{
+} else {
 	$link_add_type_unique = get_lang('SessionAddTypeUnique');
 	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$_GET['add'].'&add_type=multiple">'.get_lang('SessionAddTypeMultiple').'</a>';
 }

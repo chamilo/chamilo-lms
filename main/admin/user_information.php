@@ -1,10 +1,10 @@
 <?php
-// $Id: user_information.php 16958 2008-11-26 15:07:00Z pcool $
+// $Id: user_information.php 18156 2009-02-02 17:02:08Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -19,7 +19,7 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -52,10 +52,8 @@ $tool_name = $user['firstName'].' '.$user['lastName'].(empty($user['official_cod
 Display::display_header($tool_name);
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-if( isset($_GET['action']) )
-{
-	switch($_GET['action'])
-	{
+if( isset($_GET['action']) ) {
+	switch($_GET['action']) {
 		case 'unsubscribe':
 			if( CourseManager::get_user_in_course_status($_GET['user_id'],$_GET['course_code']) == STUDENT)
 			{
@@ -146,7 +144,7 @@ if(count($sessions)>0){
 	
 		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 	
-		while ($result_row = mysql_fetch_array($course_list_sql_result)){
+		while ($result_row = Database::_fetch_array($course_list_sql_result)){
 			$key = $result_row['id_session'].' - '.$result_row['k'];
 			$result_row['s'] = $result_row['14'];
 	
@@ -193,7 +191,7 @@ echo '</blockquote>';
  */
 $sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c WHERE cu.user_id = '.$user['user_id'].' AND cu.course_code = c.code';
 $res = api_sql_query($sql,__FILE__,__LINE__);
-if (mysql_num_rows($res) > 0)
+if (Database::num_rows($res) > 0)
 {
 	$header=array();
 	$header[] = array (get_lang('Code'), true);
@@ -235,7 +233,7 @@ $table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 $table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 $sql = 'SELECT * FROM '.$table_class_user.' cu, '.$table_class.' c WHERE cu.user_id = '.$user['user_id'].' AND cu.class_id = c.id';
 $res = api_sql_query($sql,__FILE__,__LINE__);
-if (mysql_num_rows($res) > 0)
+if (Database::num_rows($res) > 0)
 {
 	$header = array();
 	$header[] = array (get_lang('ClassName'), true);
@@ -257,6 +255,33 @@ else
 {
 	echo '<p>'.get_lang('NoClassesForThisUser').'</p>';
 }
+
+
+/**
+ * Show the URL in which this user is subscribed
+ */
+global $_configuration;
+if ($_configuration['multiple_access_urls']==true) {
+	require_once(api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+	$url_list= UrlManager::get_access_url_from_user($user['user_id']);	
+	if (count($url_list) > 0) {
+		$header = array();
+		$header[] = array (get_lang('UrlName'), true);
+		$data = array ();
+		foreach ($url_list as $url) {
+			$row = array();
+			$row[] = $url['url'];			
+			$data[] = $row;
+		}
+		echo '<p><b>'.get_lang('UrlList').'</b></p>';
+		echo '<blockquote>';
+		Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => $_GET['user_id']));
+		echo '</blockquote>';
+	} else {
+		echo '<p>'.get_lang('NoUrlForThisUser').'</p>';
+	}
+}
+
 /*
 ==============================================================================
 		FOOTER 

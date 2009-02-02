@@ -1,9 +1,27 @@
 <?php
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2009 Dokeos SPRL
+	
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
+==============================================================================
+*/
+
 // name of the language file that needs to be included
 $language_file ='admin';
-
 $cidReset=true;
-
 include('../inc/global.inc.php');
 
 // setting the section (for the tabs)
@@ -28,25 +46,20 @@ $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('Session
 
 $result=api_sql_query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
 
-if(!$infos=mysql_fetch_array($result))
-{
+if (!$infos=mysql_fetch_array($result)) {
 	header('Location: session_list.php');
 	exit();
 }
 list($year_start,$month_start,$day_start)=explode('-',$infos['date_start']);
 list($year_end,$month_end,$day_end)=explode('-',$infos['date_end']);
 
-if(!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id'])
-{
+if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id']) {
 	api_not_allowed(true);
 }
 
-if($_POST['formSent'])
-{
+if ($_POST['formSent']) {
 	$formSent=1;
-
 	$name=trim(stripslashes($_POST['name']));
-
 	$year_start=intval($_POST['year_start']);
 	$month_start=intval($_POST['month_start']);
 	$day_start=intval($_POST['day_start']);
@@ -57,11 +70,10 @@ if($_POST['formSent'])
 	$nb_days_access_before = intval($_POST['nb_days_access_before']);
 	$nb_days_access_after = intval($_POST['nb_days_access_after']);
 	
-	if(empty($_POST['nolimit'])){
+	if (empty($_POST['nolimit'])) {
 		$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
 		$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
-	}
-	else {
+	} else {
 		$date_start="000-00-00";
 		$date_end="000-00-00";
 	}
@@ -69,18 +81,16 @@ if($_POST['formSent'])
 	elseif(empty($_POST['nolimit']) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) $errorMsg=get_lang('InvalidStartDate');
 	elseif(empty($_POST['nolimit']) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) $errorMsg=get_lang('InvalidEndDate');
 	elseif(empty($_POST['nolimit']) && $date_start >= $date_end) $errorMsg=get_lang('StartDateShouldBeBeforeEndDate');
-	else
-	{		
+	else {		
 		$rs = api_sql_query("SELECT id FROM $tbl_session WHERE name='".addslashes($name)."'");
 		$exists = false;
-		while($row = mysql_fetch_array($rs)){
+		while($row = mysql_fetch_array($rs)) {
 			if($row['id']!=$id)
 				$exists = true;
 		}
-		if($exists){
+		if ($exists) {
 			$errorMsg = get_lang('SessionNameSoonExists');
-		}
-		else {
+		} else {
 			api_sql_query("UPDATE $tbl_session
 					   SET name='".addslashes($name)."',
 						   date_start='$date_start',
@@ -101,13 +111,23 @@ if($_POST['formSent'])
 
 $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";
 
+if ($_configuration['multiple_access_urls']==true){
+	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+	$access_url_id = api_get_current_access_url_id();
+	if ($access_url_id != -1) {
+		$sql="SELECT DISTINCT u.user_id,lastname,firstname,username FROM $tbl_user u INNER JOIN $table_access_url_rel_user url_rel_user
+			ON (url_rel_user.user_id = u.user_id)
+			WHERE status='1' AND access_url_id = $access_url_id
+			ORDER BY lastname,firstname,username";
+	}
+}		
+			
 $result=api_sql_query($sql,__FILE__,__LINE__);
 
 $Coaches=api_store_result($result);
 $thisYear=date('Y');
 
 Display::display_header($tool_name);
-
 api_display_tool_title($tool_name);
 ?>
 
@@ -117,8 +137,7 @@ api_display_tool_title($tool_name);
 <table border="0" cellpadding="5" cellspacing="0" width="550">
 
 <?php
-if(!empty($errorMsg))
-{
+if(!empty($errorMsg)) {
 ?>
 
 <tr>
@@ -145,8 +164,7 @@ if(!empty($errorMsg))
 	<option value="0">----- <?php echo get_lang('Choose') ?> -----</option>
 
 <?php
-foreach($Coaches as $enreg)
-{
+foreach($Coaches as $enreg) {
 ?>
 
 	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>

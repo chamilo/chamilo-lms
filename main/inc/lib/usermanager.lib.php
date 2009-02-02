@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 18083 2009-01-29 21:51:19Z juliomontoya $
+<?php // $Id: usermanager.lib.php 18156 2009-02-02 17:02:08Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -125,7 +125,8 @@ class UserManager
 				else
 					UrlManager::add_user_to_url($return, 1);					
 			} else {
-				UrlManager::add_user_to_url($return, 1);
+				//we are adding by default the access_url_user table with access_url_id = 1
+				UrlManager::add_user_to_url($return, 1);				
 			}			
 		} else {
 			//echo "false - failed" ;

@@ -16,8 +16,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -159,7 +158,7 @@ unset($result);
     </td>    
         <td width="20%">&nbsp;</td>
     <td width="40%" align="center">
-     <b><?php echo get_lang('url_list'); ?> :</b>     
+     <b><?php echo get_lang('URLList'); ?> :</b>     
     </td>    
    </tr>
    <tr>

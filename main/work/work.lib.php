@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18097 2009-01-30 23:07:49Z cvargas1 $
+<?php //$Id: work.lib.php 18152 2009-02-02 16:25:28Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18097 2009-01-30 23:07:49Z cvargas1 $
+* 	@version $Id: work.lib.php 18152 2009-02-02 16:25:28Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -346,7 +346,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	
 	$column_order[]=6;
 	
-	$table_data = array();
+	$table_data = array();	
 	$dirs_list = get_subdirs_list($work_dir);
 	
 	$my_sub_dir = str_replace('work/','',$sub_course_dir);
@@ -500,10 +500,11 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 					
 					
 					$values = $form_folder -> exportValues();
-					$values = $values['my_group'];					
-					update_dir_name($mydir,$values['dir_name']);
-					$mydir = $my_sub_dir.$values['dir_name'];
-					$dir = $values['dir_name'];
+					$values = $values['my_group'];			
+					$dir_name = replace_accents($values['dir_name']);		
+					update_dir_name($mydir,$dir_name);
+					$mydir = $my_sub_dir.$dir_name;
+					$dir = $dir_name;
 					$display_edit_form=false;
 				}
 			}
@@ -688,6 +689,7 @@ function get_subdirs_list($basedir='',$recurse=0){
 	$dirs_list = array();
 	$dh = opendir($basedir);
 	while($entry = readdir($dh)) {
+		$entry = replace_accents($entry);
 		if(is_dir($basedir.$entry) && $entry!='..' && $entry!='.') { 
 			$dirs_list[] = $entry;
 			if($recurse==1) {
@@ -910,9 +912,6 @@ function update_work_url($id,$new_path)
 		$row = Database::fetch_array($res);
 		$filename = basename($row['url']);
 		$new_url = $new_path.$filename;
-		
-		
-		
 		$sql2 = "UPDATE $table SET url = '$new_url' WHERE id=$id";
 		$res2 = api_sql_query($sql2);
 		return $res2;
@@ -939,6 +938,8 @@ function update_dir_name($path, $new_name)
 		$path_to_dir .= '/';
 	}
 	
+	$new_name=replace_accents($new_name);
+	
 	my_rename($base_work_dir.'/'.$path,$new_name);			
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
@@ -950,11 +951,8 @@ function update_dir_name($path, $new_name)
 	
 	while($work = Database :: fetch_array($rs)) {		 				 
 		$new_dir=$work['url'];		
-		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));
-		$pre_directory=$path_to_dir.$new_name.replace_dangerous_char($name_with_directory);
-		$new_directory=replace_accents($pre_directory);
-					
-		$sql = 'UPDATE '.$table.' SET url="work/'.$new_directory.'" WHERE id= '.$work['id'];		
+		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));				
+		$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];		
 		api_sql_query($sql, __FILE__, __LINE__);		
 	}
 
@@ -964,11 +962,8 @@ function update_dir_name($path, $new_name)
 	$work_len=strlen('/'.$path);	
 	while($work = Database :: fetch_array($rs)) {		
 		$new_dir=$work['url'];
-		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));
-		$pre_directory=$path_to_dir.$new_name.replace_dangerous_char($name_with_directory);
-		$new_directory=replace_accents($pre_directory);
-			
-		$sql = 'UPDATE '.$table.' SET url="/'.$new_directory.'" WHERE id= '.$work['id'];		
+		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));	
+		$sql = 'UPDATE '.$table.' SET url="/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];		
 		api_sql_query($sql, __FILE__, __LINE__);		
 	}	
 }

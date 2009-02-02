@@ -649,8 +649,10 @@ VALUES
 ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary', 0),
 ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook', 0),
 ('advanced_filemanager',NULL,'radio','Platform','false','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL, 0),
-('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL, 0);
-
+('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL, 0),
+('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0),
+('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,0),
+('allow_social_tool', NULL, 'radio', 'Tools', 'false', 'AllowSocialToolTitle', 'AllowSocialToolComment', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -804,8 +806,11 @@ VALUES
 ('advanced_filemanager','true','Yes'),
 ('advanced_filemanager','false','No'),
 ('allow_reservation', 'true', 'Yes'),
-('allow_reservation', 'false', 'No');
-
+('allow_reservation', 'false', 'No'),
+('allow_message_tool', 'true', 'Yes'),
+('allow_message_tool', 'false', 'No'),
+('allow_social_tool', 'true', 'Yes'),
+('allow_social_tool', 'false', 'No');
 UNLOCK TABLES;
 
 /*!40000 ALTER TABLE settings_options ENABLE KEYS */;

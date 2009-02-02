@@ -94,7 +94,13 @@ UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs'
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_gradebook';
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('advanced_filemanager',NULL,'radio','Platform','false','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL);
 CREATE TABLE access_url_rel_course (access_url_id int unsigned NOT NULL, course_code char(40) NOT NULL, PRIMARY KEY (access_url_id, course_code));
- 
+INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'false', 'No');
+INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_social_tool', NULL, 'radio', 'Tools', 'false', 'AllowSocialToolTitle', 'AllowSocialToolComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_social_tool', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_social_tool', 'false', 'No');
+
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
 ALTER TABLE track_e_exercices ADD data_tracking text NOT NULL default '';

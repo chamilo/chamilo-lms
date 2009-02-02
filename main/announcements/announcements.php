@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 18122 2009-02-01 19:15:31Z herodoto $
+<?php //$Id: announcements.php 18155 2009-02-02 16:58:00Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1408,12 +1408,12 @@ if(!empty($error_message))
 				// User or group icon
 				if ($myrow['to_group_id']!== '0' and $myrow['to_group_id']!== 'NULL')
 				{
-					echo "\t\t\t\t\t\t".Display::return_icon('group.gif', get_lang('Group'))."\n";
+					echo "\t\t\t\t\t\t".Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'))."\n";
 				}
 				// the email icon
 				if ($myrow['email_sent'] == '1')
 				{
-					echo "\t\t\t\t\t\t".Display::return_icon('email.gif', get_lang('Email'))."\n";
+					echo "\t\t\t\t\t\t".Display::return_icon('email.gif', get_lang('AnnounceSentByEmail'))."\n";
 				}
 				echo "\t\t\t\t\t</th>\n";
 				/*==================================================================

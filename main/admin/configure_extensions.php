@@ -289,7 +289,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td>
-						<?php Display::display_icon('screenshot_conf.jpg'); ?>
+						<?php Display::display_icon('screenshot_conf.jpg', get_lang('Visioconf')); ?>
 					</td>
 					<td align="center" width="50%">
 						<?php 
@@ -344,7 +344,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td width="50%" valign="top">
-						<?php Display::display_icon('screenshot_ppt2lp.jpg'); ?>
+						<?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Ppt2lp')); ?>
 					</td>
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
@@ -445,8 +445,8 @@ Display::display_header($nameTool);
 										<TABLE style="WIDTH: 85%" cellSpacing="0" cellPadding="0" border="0">
 										<TBODY>
 											<TR>
-												<TD width="50">
-													&nbsp; 
+												<TD width="50">&nbsp;
+													 
 												</TD>
 												<TD>
 													<P>
@@ -483,7 +483,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td width="50%">
-						<?php Display::display_icon('screenshot_search.jpg'); ?>
+						<?php Display::display_icon('screenshot_search.jpg', get_lang('SearchEngine')); ?>
 					</td>
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
@@ -506,7 +506,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td width="50%">
-						<?php Display::display_icon('screenshot_serverstats.jpg'); ?>
+						<?php Display::display_icon('screenshot_serverstats.jpg', get_lang('ServerStatistics')); ?>
 					</td>
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
@@ -529,7 +529,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td width="50%">
-						<?php Display::display_icon('screenshot_bandwidth.jpg'); ?>
+						<?php Display::display_icon('screenshot_bandwidth.jpg', get_lang('BandWidthStatistics')); ?>
 					</td>
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">

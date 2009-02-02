@@ -1418,7 +1418,7 @@ function show_add_form($id = '')
 													echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 												} ?>
 					</select>
-					<a href="javascript:openCalendar('new_calendar_item','f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
+					<a href="javascript:openCalendar('new_calendar_item','f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>
 					</td>
 					<td>					
 							&nbsp;<?php echo get_lang('StartTime').": \n"; ?>&nbsp;
@@ -1508,7 +1508,7 @@ function show_add_form($id = '')
 									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
-						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif'); ?></a>
+						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif',get_lang('Select')); ?></a>
 					</td>
 					<td >
 							&nbsp;<?php echo get_lang('EndTime').": \n"; ?>&nbsp;

@@ -154,7 +154,7 @@ class Statistics
 			echo '<tr class="row_'.($i%2 == 0 ? 'odd' : 'even').'">
 								<td width="150">'.$subtitle.'</td>
 								<td width="550">
-						 			'.Display::return_icon('bar_1u.gif', '',array('width' => $data[$subtitle], 'height' => '10')).'
+						 			'.Display::return_icon('bar_1u.gif', get_lang('Statistics') ,array('width' => $data[$subtitle], 'height' => '10')).'
 								</td>
 								<td align="right">'.$number_label.'</td>';
 			if($show_total)

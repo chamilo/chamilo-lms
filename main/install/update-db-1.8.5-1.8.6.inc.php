@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 17943 2009-01-22 19:56:26Z yannoo $
+<?php // $Id: update-db-1.8.5-1.8.6.inc.php 18146 2009-02-02 15:22:10Z juliomontoya $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -162,11 +162,19 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		// Filling the access_url_rel_user table with access_url_id by default = 1	
 		$query = "SELECT user_id FROM $dbNameForm.user";
 		$result = mysql_query($query);
-		while ($row= mysql_fetch_array($result,MYSQL_NUM))
-		{			
+		while ($row= mysql_fetch_array($result,MYSQL_NUM)) {			
 			$sql="INSERT INTO $dbNameForm.access_url_rel_user SET user_id=".$row[0].", access_url_id=1";					
 			$res = mysql_query($sql);
 		}
+		
+		// Filling the access_url_rel_session table with access_url_id by default = 1
+		$query = "SELECT id FROM $dbNameForm.session";
+		$result = mysql_query($query);
+		while ($row= mysql_fetch_array($result,MYSQL_NUM)) {			
+			$sql="INSERT INTO $dbNameForm.access_url_rel_session SET session_id=".$row[0].", access_url_id=1";			
+			$res = mysql_query($sql);
+		} 		
+		
         // Check if course_module exists, as it was not installed in Dokeos 1.8.5 because of a broken query, and insert it if necessary
         $query = "SELECT * FROM $dbNameForm.course_module";
         $result = mysql_query($query);

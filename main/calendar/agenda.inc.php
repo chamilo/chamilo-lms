@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 18123 2009-02-01 19:30:34Z herodoto $
+<?php //$Id: agenda.inc.php 18169 2009-02-02 22:07:38Z herodoto $
 
 /*
 ==============================================================================
@@ -2801,7 +2801,7 @@ function show_add_form($id = '')
 			$oFCKeditor->Height		= '175';
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Value		= $content;
-			if (api_get_setting('advanced_filemanager'))
+			if (api_get_setting('advanced_filemanager') == 'true')
 			{
 				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
 			}
@@ -2822,7 +2822,7 @@ function show_add_form($id = '')
 
 			//FCKeditor Configuration for documents
 
-			if (api_get_setting('advanced_filemanager'))
+			if (api_get_setting('advanced_filemanager') == 'true')
 			{
 				// For images
 				$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";

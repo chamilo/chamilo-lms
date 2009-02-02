@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 18157 2009-02-02 17:13:58Z herodoto $
+<?php //$Id: announcements.php 18169 2009-02-02 22:07:38Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1149,7 +1149,8 @@ if(!empty($error_message))
 		$oFCKeditor->Height		= '250';
 		$oFCKeditor->Width		= '100%';
 		$oFCKeditor->Value		= $content_to_modify;
-        if(api_get_setting('advanced_filemanager'))
+       
+		if (api_get_setting('advanced_filemanager') == 'true')
         {
         	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
         }

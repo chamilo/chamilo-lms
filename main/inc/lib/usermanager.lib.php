@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 18156 2009-02-02 17:02:08Z juliomontoya $
+<?php // $Id: usermanager.lib.php 18174 2009-02-02 23:36:04Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1560,12 +1560,14 @@ class UserManager
      * @param   int     Optional user id (defaults to the result of api_get_user_id())
      * @result  array   Non-indexed array containing the list of API keys for this user, or FALSE on error
      */
-    function get_api_keys($user_id=null) {
+    function get_api_keys($user_id=null,$api_service='dokeos') {
     	if ($user_id != strval(intval($user_id))) return false;
         if (empty($user_id)) { $user_id = api_get_user_id(); }
         if ($user_id === false) return false;
-        $t_api = Database::get_main_table('TABLE_MAIN_USER_API_KEY');
-        $sql = "SELECT id, api_key FROM $t_api WHERE user_id = ".$user_id;
+        $service_name=Database::escape_string($api_service);
+        if (is_string($service_name)===false) { return false;}
+        $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
+        $sql = "SELECT id, api_key FROM $t_api WHERE user_id = ".$user_id." AND api_service='".$api_service."';";
         $res = api_sql_query($sql,__FILE__,__LINE__);
         if ($res === false) return false; //error during query
         $num = Database::num_rows($res);
@@ -1581,13 +1583,15 @@ class UserManager
      * @param   int     Optional user ID (defaults to the results of api_get_user_id())
      * @return  boolean True on success, false on failure
      */
-    function add_api_key($user_id=null) {
+    function add_api_key($user_id=null,$api_service='dokeos') {
         if ($user_id != strval(intval($user_id))) return false;
         if (empty($user_id)) { $user_id = api_get_user_id(); }
         if ($user_id === false) return false;
-        $t_api = Database::get_main_table('TABLE_MAIN_USER_API_KEY');
-        $md5 = md5((time()+($user_id*5))-rand(10000)); //generate some kind of random key
-        $sql = "INSERT INTO $t_api (user_id, api_key) VALUES ($user_id,'$md5')";
+        $service_name=Database::escape_string($api_service);
+        if (is_string($service_name)===false) { return false;}
+        $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
+        $md5 = md5((time()+($user_id*5))-rand(10000,10000)); //generate some kind of random key
+        $sql = "INSERT INTO $t_api (user_id, api_key,api_service) VALUES ($user_id,'$md5','$service_name')";
         $res = api_sql_query($sql,__FILE__,__LINE__);
         if ($res === false) return false; //error during query
         $num = Database::insert_id();
@@ -1602,7 +1606,7 @@ class UserManager
     function delete_api_key($key_id) {
         if ($key_id != strval(intval($key_id))) return false;
         if ($key_id === false) return false;
-        $t_api = Database::get_main_table('TABLE_MAIN_USER_API_KEY');
+        $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $sql = "SELECT * FROM $t_api WHERE id = ".$key_id;
         $res = api_sql_query($sql,__FILE__,__LINE__);
         if ($res === false) return false; //error during query
@@ -1612,5 +1616,45 @@ class UserManager
         $res = api_sql_query($sql,__FILE__,__LINE__);
         if ($res === false) return false; //error during query
         return true;        
+    }
+    /**
+     * Regenerate an API key from the user's account
+     * @param   int     API key's internal ID
+     * @param   string  
+     * @return  int
+     */
+    function update_api_key($user_id,$api_service) {
+    	if ($user_id != strval(intval($user_id))) return false;
+    	if ($user_id === false) return false;
+        $service_name=Database::escape_string($api_service);
+        if (is_string($service_name)===false) { return false;}
+        $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
+        $sql="SELECT id FROM $t_api WHERE user_id=".$user_id." AND api_service='".$api_service."'";
+        $res=api_sql_query($sql,__FILE__,__LINE__);
+        $num = Database::num_rows($res);
+        if ($num==1) {
+        	$id_key=Database::fetch_array($res,'ASSOC');
+        	self::delete_api_key($id_key['id']);
+        	$num=self::add_api_key($user_id,$api_service);
+        } elseif ($num==0) {
+        	$num=self::add_api_key($user_id);
+        }
+        return $num;
+    }
+    /**
+     * @param   int     API key's internal ID
+     * @param   string  
+     * @return  int
+     */
+    function get_api_key_id($user_id,$api_service) {
+    	if ($user_id != strval(intval($user_id))) return false;
+    	if ($user_id === false) return false;
+        $service_name=Database::escape_string($api_service);
+        if (is_string($service_name)===false) { return false;}
+        $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
+        $sql="SELECT id FROM $t_api WHERE user_id=".$user_id." AND api_service='".$api_service."'";
+        $res=api_sql_query($sql,__FILE__,__LINE__);
+        $row=Database::fetch_array($res,'ASSOC');
+        return $row['id'];
     }
 }

@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 18117 2009-02-01 15:24:40Z ivantcholakov $
+<?php // $Id: configure_homepage.php 18149 2009-02-02 16:04:18Z herodoto $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -824,7 +824,7 @@ switch($action){
 		  </td>
 		  <td width="20%">
 		  	<div class="actions">
-			<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('insert_row.png'); ?></a> <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('insert_row.png', get_lang('InsertLink')); ?></a> <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
 			</div>
 		  </td>
 		</tr>

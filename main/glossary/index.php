@@ -192,6 +192,7 @@ function save_glossary($values)
 			//insert into item_property
 			api_item_property_update(api_get_course_info(),TOOL_GLOSSARY,$id,'GlossaryAdded',api_get_user_id());
 		}
+		$_SESSION['max_glossary_display'] = get_max_glossary_item();	
 		// display the feedback message
 		Display::display_confirmation_message(get_lang('TermAdded'));	
 	}
@@ -327,7 +328,7 @@ function delete_glossary($glossary_id)
 	
 	// reorder the remaining terms
 	reorder_glossary();
-	
+	$_SESSION['max_glossary_display'] = get_max_glossary_item();
 	Display::display_confirmation_message(get_lang('TermDeleted'));	
 }
 
@@ -463,25 +464,26 @@ function actions_filter($glossary_id,$url_params,$row)
 	}
 
 	$return = '';
-	
-	if ($row[0] > 1)
-	{
-		$return .= '<a href="'.api_get_self().'?action=moveup&amp;glossary_id='.$row[5].'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
+	if (empty($_GET['glossary_column'])) {
+		if ($row[0] > 1)
+		{
+			$return .= '<a href="'.api_get_self().'?action=moveup&amp;glossary_id='.$row[5].'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
+		}
+		else
+		{
+			$return .= Display::return_icon('blanco.png');
+			
+		}
+		if ($row[0] < $_SESSION['max_glossary_display'])
+		{
+			$return .= '<a href="'.api_get_self().'?action=movedown&amp;glossary_id='.$row[5].'">'.Display::return_icon('down.gif',get_lang('Down')).'</a>';
+		}
+		else
+		{
+			$return .= Display::return_icon('blanco.png');
+			
+		}	
 	}
-	else
-	{
-		$return .= Display::return_icon('blanco.png');
-		
-	}
-	if ($row[0] < $_SESSION['max_glossary_display'])
-	{
-		$return .= '<a href="'.api_get_self().'?action=movedown&amp;glossary_id='.$row[5].'">'.Display::return_icon('down.gif',get_lang('Down')).'</a>';
-	}
-	else
-	{
-		$return .= Display::return_icon('blanco.png');
-		
-	}	
 	$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
 	$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$row[5].'" onclick="return confirmation(\''.$row[1].'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	return $return;

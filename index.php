@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18084 2009-01-29 21:51:47Z juliomontoya $
+<?php // $Id: index.php 18164 2009-02-02 19:56:21Z herodoto $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 18084 2009-01-29 21:51:47Z juliomontoya $
+* 	@version $Id: index.php 18164 2009-02-02 19:56:21Z herodoto $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -485,7 +485,7 @@ function display_login_form()
 	$form = new FormValidator('formLogin');
 	$form->addElement('text','login',get_lang('UserName'),array('size'=>15));
 	$form->addElement('password','password',get_lang('Pass'),array('size'=>15));
-	$form->addElement('submit','submitAuth',get_lang('Ok'));
+	$form->addElement('submit','submitAuth',get_lang('langEnter'));
 	$renderer =& $form->defaultRenderer();
 	$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
 	$form->display();

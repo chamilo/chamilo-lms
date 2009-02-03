@@ -110,13 +110,13 @@ FCKConfig.Plugins.Add("Attachment", "en", sOtherPluginPath ) ;*/
 FCKConfig.Plugins.Add("MP3", "en", sOtherPluginPath ) ;
 FCKConfig.Plugins.Add('ImageManager','en') ;
 FCKConfig.Plugins.Add('flvPlayer','en') ;
-
 //FCKConfig.Plugins.Add("Flash", "en");
-
 FCKConfig.Plugins.Add('fckEmbedMovies');
-FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ; // support to english, spanish
-FCKConfig.Plugins.Add("imgmap", "en,es", sOtherPluginPath );
 
+// added by Juan Carlos Ra�a
+FCKConfig.Plugins.Add("mimetex", "en", sOtherPluginPath ) ;
+FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ;
+FCKConfig.Plugins.Add("imgmap", "en,es", sOtherPluginPath );
 FCKConfig.Plugins.Add("googlemaps", "en,es", sOtherPluginPath ) ;
 // This key is for http://localhost. You must get one for each server where you want to use the plugin,
 // just get the key for free here after agreeing to the Terms of Use of the GoogleMaps API:

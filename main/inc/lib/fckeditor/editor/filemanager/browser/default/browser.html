@@ -90,13 +90,10 @@ if ( sServerPath.length > 0 )
 
 oConnector.ResourceType		= GetUrlParam( 'Type' ) ;
 
-// Modified by Ivan Tcholakov.
-//oConnector.ShowAllTypes		= ( oConnector.ResourceType.length == 0 ) ;
-oConnector.ShowAllTypes = true ;
+oConnector.ShowAllTypes		= ( oConnector.ResourceType.length == 0 ) ;
 
-// Disabled by Ivan Tcholakov.
-//if ( oConnector.ShowAllTypes )
-//	oConnector.ResourceType = 'File' ;
+if ( oConnector.ShowAllTypes )
+	oConnector.ResourceType = 'File' ;
 
 oConnector.SendCommand = function( command, params, callBackFunction )
 {

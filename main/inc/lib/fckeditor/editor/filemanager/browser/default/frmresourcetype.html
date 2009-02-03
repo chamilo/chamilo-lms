@@ -36,10 +36,8 @@ function SetResourceType( type )
 
 var aTypes = [
 
-    // Modified by Ivan Tcholakov.
-	//['File','File'],
 	['File','All files'],
-
+	['Audio','Audio'],
 	['Images','Images'],
 	['Flash','Flash'],
 	['Video','Video'],
@@ -50,19 +48,24 @@ window.onload = function()
 {
 	var oCombo = document.getElementById('cmbType') ;
 	oCombo.innerHTML = '' ;
-	for ( var i = 0 ; i < aTypes.length ; i++ )
+	if ( oConnector.ShowAllTypes )
 	{
-		if ( oConnector.ShowAllTypes || aTypes[i][0] == oConnector.ResourceType )
+		AddSelectOption( oCombo, aTypes[0][1], aTypes[0][0], true ) ;
+
+		for ( var i = 1 ; i < aTypes.length ; i++ )
 		{
-			// Modified by Ivan Tcholakov.
-			//AddSelectOption( oCombo, aTypes[i][1], aTypes[i][0] ) ;
+			AddSelectOption( oCombo, aTypes[i][1], aTypes[i][0] ) ;
+		}
+	}
+	else
+	{
+		AddSelectOption( oCombo, aTypes[0][1], aTypes[0][0] ) ;
+
+		for ( var i = 1 ; i < aTypes.length ; i++ )
+		{
 			if ( aTypes[i][0] == oConnector.ResourceType )
 			{
 				AddSelectOption( oCombo, aTypes[i][1], aTypes[i][0], true ) ;
-			}
-			else
-			{
-				AddSelectOption( oCombo, aTypes[i][1], aTypes[i][0] ) ;
 			}
 		}
 	}

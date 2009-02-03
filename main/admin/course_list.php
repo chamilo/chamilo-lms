@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 18094 2009-01-30 20:44:08Z juliomontoya $
+<?php // $Id: course_list.php 18215 2009-02-03 22:41:05Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -25,11 +25,18 @@ require_once '../gradebook/lib/be/gradebookitem.class.php';
 require_once '../gradebook/lib/be/category.class.php';
 /**
  * Get the number of courses which will be displayed
- */
+ */ 
 function get_number_of_courses()
 {
 	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table";
+	
+	global $_configuration;
+    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    	$access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+    	$sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";    		
+    }
+    
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = Database::escape_string($_GET['keyword']);
@@ -46,6 +53,12 @@ function get_number_of_courses()
 		$keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
 		$sql .= " WHERE (code LIKE '%".$keyword_code."%' OR visual_code LIKE '%".$keyword_code."%') AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
 	}
+	
+	 // adding the filter to see the user's only of the current access_url
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {		
+    		$sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();   	  
+    }
+    
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
@@ -60,6 +73,13 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	$course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	
 	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9, visibility AS col10 FROM $course_table";
+	
+	global $_configuration;
+    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    	$access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+    	$sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";    		
+    }    
+    
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = Database::escape_string($_GET['keyword']);
@@ -76,6 +96,12 @@ function get_course_data($from, $number_of_items, $column, $direction)
 		$keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
 		$sql .= " WHERE (code LIKE '%".$keyword_code."%' OR visual_code LIKE '%".$keyword_code."%') AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
 	}
+	
+	 // adding the filter to see the user's only of the current access_url
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {		
+    		$sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();   	  
+    }
+
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 	$res = api_sql_query($sql, __FILE__, __LINE__);

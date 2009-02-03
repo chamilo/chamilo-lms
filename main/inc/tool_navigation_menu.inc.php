@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 18029 2009-01-27 15:43:22Z cfasanando $
+// $Id: tool_navigation_menu.inc.php 18206 2009-02-03 20:19:12Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -206,7 +206,7 @@ function show_navigation_menu()
 			}			
 			else
 			{
-				echo '<a href="'.$navigation_item['link'].'"';		
+				echo '<a href="'.$navigation_item['link'].'" target="_top" ';		
 			}			
 			
 			if (stristr($url_item['path'],$url_current['path']))

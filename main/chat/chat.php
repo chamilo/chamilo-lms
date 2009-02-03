@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 17220 2008-12-10 22:40:05Z herodoto $
+<?php // $Id: chat.php 18206 2009-02-03 20:19:12Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -83,51 +83,62 @@ if (!empty($mycourseid) && $mycourseid != -1)
 	}
 	$open_chat_window=api_get_course_setting('allow_open_chat_window');
 }
-
-switch($my_style){
-	case 'dokeos_classic' : 
-		$footer_size = 48;
-		break;
-	case 'academica' : 
-		$footer_size = 140;
-		break;
-	case 'silver_line' : 
-		$footer_size = 60;
-		break;
-	case 'baby_orange' : 
-		$footer_size = 120;
-		break;
-	case 'public_admin' : 
-		$footer_size = 90;
-		break;
-	default : 
-		$footer_size = 48;
-		break;
+if (api_get_setting('show_navigation_menu')!='false') {
+	$footer_size = 20;
+} else {
+	switch($my_style){
+		case 'dokeos_classic' : 
+			$footer_size = 48;
+			break;
+		case 'academica' : 
+			$footer_size = 140;
+			break;
+		case 'silver_line' : 
+			$footer_size = 60;
+			break;
+		case 'baby_orange' : 
+			$footer_size = 120;
+			break;
+		case 'public_admin' : 
+			$footer_size =90;
+			break;
+		default : 
+			$footer_size = 48;
+			break;
+	}
 }
 $cidreq=$_GET['cidReq'];
 
 echo '<html>';
 echo'<HEAD><TITLE>'.get_lang('Chat').' - '.$mycourseid.' - '.api_get_setting('siteName').'</TITLE>';
 
-if ($open_chat_window==false)
+if (empty($open_chat_window))
 {
 	echo'<frameset rows="135,*,'.$footer_size.'" border="0" frameborder="0" framespacing="1">';
 	echo '<frame src="chat_banner.php?cidReq='.$cidreq.'" name="chat_banner" scrolling="no">';
 }
+
+if (api_get_setting('show_navigation_menu') == 'false' || !empty($open_chat_window)) {
 echo '<frameset cols="165,*,0" border="1" frameborder="1" framespacing="1">';
+} else {
+echo '<frameset cols="165,*,200" border="1" frameborder="1" framespacing="1">';	
+}
 echo '<frame src="chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="auto">';
 echo'<frameset rows="25,15" border="1" frameborder="1" framespacing="1">';
 echo '<frame src="chat_chat.php?origin='.$_GET["origin"].'&target='.$_GET["target"].'&amp;cidReq='.$cidreq.'" name="chat_chat" scrolling="auto">';
 echo '<frame src="chat_message.php?cidReq='.$cidreq.'" name="chat_message" scrolling="no">';
 echo '</frameset>';
-echo '<frame src="chat_hidden.php?cidReq='.$cidreq.'" name="chat_hidden" scrolling="no">';
+echo '<frame src="chat_hidden.php?cidReq='.$cidreq.'" name="chat_hidden" >';
 echo'</frameset>';
 
-if ($open_chat_window==false)
-{
-	echo '<frame src="chat_footer.php?cidReq='.$cidreq.'" name="chat_footer" scrolling="no">';
-	echo '</frameset>';
+if (api_get_setting('show_navigation_menu')=='false') {
+	if (empty($open_chat_window))
+	{
+		echo '<frame src="chat_footer.php?cidReq='.$cidreq.'" name="chat_footer" scrolling="no">';
+		echo '</frameset>';
+	}
 }
 echo'<noframes></noframes>';
 echo '</html>';
+
 ?>

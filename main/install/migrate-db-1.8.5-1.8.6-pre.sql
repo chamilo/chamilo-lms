@@ -63,7 +63,9 @@ CREATE TABLE access_url_rel_user (access_url_id int unsigned NOT NULL, user_id i
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_user (user_id);
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url(access_url_id);
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url_user (user_id,access_url_id);
+CREATE TABLE access_url_rel_course (access_url_id int unsigned NOT NULL, course_code char(40) NOT NULL, PRIMARY KEY (access_url_id, course_code));
 CREATE TABLE access_url_rel_session (access_url_id int unsigned NOT NULL, session_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, session_id));
+ALTER TABLE settings_current DROP INDEX unique_setting, ADD UNIQUE unique_setting (variable, subkey, category, access_url);
 
 CREATE TABLE user_friend(id bigint unsigned not null auto_increment,user_id int unsigned not null,friend_user_id int unsigned not null,relation_type int not null default 0,PRIMARY KEY(id));
 ALTER TABLE user_friend ADD INDEX idx_user_friend_user(user_id);
@@ -92,14 +94,18 @@ UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs'
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_agenda';
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_profile';
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_tabs' AND subkey='my_gradebook';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='administratorTelephone';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_email_addresses';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_different_course_language';
+UPDATE settings_current SET access_url_changeable = 1 WHERE variable='display_categories_on_homepage';
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('advanced_filemanager',NULL,'radio','Platform','false','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL);
-CREATE TABLE access_url_rel_course (access_url_id int unsigned NOT NULL, course_code char(40) NOT NULL, PRIMARY KEY (access_url_id, course_code));
 INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'false', 'No');
 INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_social_tool', NULL, 'radio', 'Tools', 'false', 'AllowSocialToolTitle', 'AllowSocialToolComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_social_tool', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_social_tool', 'false', 'No');
+
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';

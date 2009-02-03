@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php //$Id: agenda.inc.php 18213 2009-02-03 22:07:37Z herodoto $
 
 /*
 ==============================================================================
@@ -2024,7 +2024,7 @@ function display_agenda_items()
     	Display::display_icon('agenda.gif', get_lang('Agenda'));
     	if ($myrow['to_group_id']!=='0')
     	{
-    		echo Display::return_icon('group.gif', get_lang('Group'));
+    		echo Display::return_icon('group.gif', get_lang('ItemForUserSelection'));
     	}
     	echo " ".$myrow['title']."\n";
     	echo "\t\t</th>\n";
@@ -2568,7 +2568,7 @@ function show_add_form($id = '')
 				if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id'])){
 					echo get_lang("Everybody").'&nbsp;';
 				}
-				echo '<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
+				echo '<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.Display::return_icon('group.gif', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle')).' '.get_lang('ModifyRecipientList').'</a>';
 				show_to_form($to);
 				if (isset($_GET['id']) && $to!='everyone') {
 					echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';

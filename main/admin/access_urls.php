@@ -125,9 +125,9 @@ if ($current_access_url_id==-1) {
 echo '<div class="actions" style="height:22px;">';
 echo '<div style="float:right;">
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUrl'),'').get_lang('AddUrl').'</a>&nbsp;&nbsp;
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('members.gif',get_lang('AddUserToURL'),'').get_lang('ManageUsers').'</a>															
-	    <a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php">'.Display::return_icon('courses.gif',get_lang('AddUsersToCourse'),'').get_lang('ManageCourses').'</a>
-	    <a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_sessions_to_url.php">'.Display::return_icon('courses.gif',get_lang('AddUsersToCourse'),'').get_lang('ManageSessions').'</a>
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('members.gif',get_lang('ManageUsers'),'').get_lang('ManageUsers').'</a>															
+	    <a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php">'.Display::return_icon('courses.gif',get_lang('ManageCourses'),'').get_lang('ManageCourses').'</a>
+	    <a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_sessions_to_url.php">'.Display::return_icon('sessions.gif',get_lang('ManageSessions'),'').get_lang('ManageSessions').'</a>
 	  </div><br />';		  
 echo '</div>';		  
 

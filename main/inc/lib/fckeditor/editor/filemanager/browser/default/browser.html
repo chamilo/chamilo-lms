@@ -88,7 +88,8 @@ var sServerPath = GetUrlParam( 'ServerPath' ) ;
 if ( sServerPath.length > 0 )
 	oConnector.ConnectorUrl += 'ServerPath=' + encodeURIComponent( sServerPath ) + '&' ;
 
-oConnector.ResourceType		= GetUrlParam( 'Type' ) ;
+//oConnector.ResourceType		= GetUrlParam( 'Type' ) ;
+oConnector.ResourceType		= GetUrlParam( 'Type' ) != 'MP3' ? GetUrlParam( 'Type' ) : 'Audio' ;
 
 oConnector.ShowAllTypes		= ( oConnector.ResourceType.length == 0 ) ;
 

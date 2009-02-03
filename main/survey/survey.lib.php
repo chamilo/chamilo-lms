@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 18176 2009-02-03 00:06:07Z cfasanando $
+* 	@version $Id: survey.lib.php 18205 2009-02-03 20:05:19Z cfasanando $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1948,6 +1948,7 @@ class multipleresponse extends question
 		echo '<div class="survey_question_options">';
 		echo $this->html;
 		echo '</div>';
+		echo '</div>';
 	}
 }
 
@@ -2023,6 +2024,7 @@ class dropdown extends question
 		echo $this->html;
 		echo '</select>';
 		echo '</div>';
+		echo '</div>';
 		/*
     		<option value="test">test</option>
 		*/
@@ -2068,6 +2070,7 @@ class open extends question
 			$content = $answers;
 		}
 		echo '<label for="question'.$form_content['question_id'].'"></label><textarea name="question'.$form_content['question_id'].'" id="textarea" style="width: 400px; height: 130px;">'.$content.'</textarea>';
+		echo '</div>';
 		echo '</div>';
 	}
 }
@@ -2152,6 +2155,7 @@ class percentage extends question
 		echo $this->html;
 		echo '</select>';
 		echo '</div>';
+		echo '</div>';
 	}
 }
 
@@ -2235,6 +2239,7 @@ class score extends question
 		//echo '<select name="question'.$form_content['question_id'].'" id="select">';
 		echo $this->html;
 		//echo '</select>';
+		echo '</div>';
 		echo '</div>';
 	}
 }

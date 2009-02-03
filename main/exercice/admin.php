@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 18005 2009-01-26 18:00:46Z juliomontoya $
+<?php // $Id: admin.php 18209 2009-02-03 21:26:14Z herodoto $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 18005 2009-01-26 18:00:46Z juliomontoya $
+* 	@version $Id: admin.php 18209 2009-02-03 21:26:14Z herodoto $
 */
 
 
@@ -450,7 +450,7 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 Display::display_header($nameTools,'Exercise');
 
 echo '<div class="actions">';
-echo Display::return_icon('search.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
+echo Display::return_icon('preview.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
 echo '</div>';
 
 if(isset($_GET['message']))

@@ -677,4 +677,5 @@ $Booking = "Rezervacije";
 $ManageReservations = "Upravljaj rezervacije";
 $DestinationUsers = "Ciljni uporabniki";
 $AttachmentFileDeleteSuccess = "Pripeta datoteka je bila odstranjena";
+$AccountURLInactive = "Uporabniški račun je neaktiven za ta URL";
 ?>

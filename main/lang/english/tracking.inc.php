@@ -233,4 +233,5 @@ $ChatConnectionsDuringLastXDays = "Connections to the chat during last %s days";
 $ChatLastConnection = "Chat last connection";
 $CourseInformation = "Course Information";
 $NoAdditionalFieldsWillBeExported = "No additional fields will be exported";
+$langSendNotification = "Send notifications";
 ?>

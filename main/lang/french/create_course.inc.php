@@ -1,11 +1,11 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langProfessors = "Responsables";
-$langExplanation = "Une fois que vous aurez validé, une formation contenant Tests, Documents, Cours... sera créée. Grâce à votre login de responsable de la formation vous pourrez en modifier le contenu";
+$langProfessors = "Formateurs";
+$langExplanation = "Une fois que vous aurez validé, une formation contenant Tests, Documents, Cours... sera créée. Grâce à votre login de formateur vous pourrez en modifier le contenu";
 $langEmpty = "Vous n\'avez pas rempli tous les champs.<br>Utilisez le bouton de retour en arrière de votre navigateur et recommencez.<br>Si vous ne connaissez pas le code de votre formation, consultez le catalogue des formations";
 $langCodeTaken = "Ce code est déjà pris.<br>Utilisez le bouton de retour en arrière de votre navigateur et recommencez";
-$langFormula = "Cordialement, le responsable système";
+$langFormula = "Cordialement, le responsable du portail";
 $langMessage = "Lorsque vous supprimerez le forum \"Forum exemple, cela supprimera également le présent sujet qui ne contient que ce seul message";
 $langExerciceEx = "Exemple de test";
 $langAntique = "L\'ironie";
@@ -32,9 +32,9 @@ $langAgendaText = "Organisation des groupes. Prise de contact.";
 $langMicro = "Micro-trottoir";
 $langGoogle = "Moteur de recherche généraliste performant";
 $langIntroductionText = "Bienvenue dans cette formation";
-$langIntroductionTwo = "Cette page est un espace de publication. Elle permet à chaque membre ou groupe de membres d\'envoyer un document (Word, Excel, HTML... ) afin de le rendre accessible aux autres membres ainsi qu\'au responsable.Si vous passez par votre espace de groupe pour publier le document (option publier), l\'outil Travaux fera un simple lien vers le document là où il se trouve dans votre répertoire de groupe sans le déplacer.";
+$langIntroductionTwo = "Ceci est un espace de publication. Il permet à chaque membre ou groupe de membres d\'envoyer un document (Word, Excel, PDF... ) afin de le rendre accessible aux autres membres ainsi qu\'au formateur.Si vous passez par votre espace de groupe pour publier le document (option publier), l\'outil Travaux fera un simple lien vers le document là où il se trouve dans votre répertoire de groupe sans le déplacer.";
 $langCourseDescription = "Ecrivez ici la description qui apparaîtra dans le catalogue des formations (Le contenu de ce champ ne s\'affiche actuellement nulle part et ne se trouve ici qu\'en préparation à une version prochaine de Dokeos).";
-$langProfessor = "Formateurs";
+$langProfessor = "Formateur";
 $langAnnouncementEx = "Ceci est un exemple d\'annonce.";
 $langJustCreated = "Vous venez de créer la formation";
 $langEnter = "Retourner à votre liste de formations";
@@ -50,7 +50,7 @@ $langFac = "Catégorie";
 $langTargetFac = "Il s\'agit du département ou de toute autre structure de votre organisation";
 $langMax = "max. 20 caractères, p. ex. <i>INNOV001</i>";
 $langDoubt = "En cas de doute sur l\'intitulé ou le code de la formation, consultez le";
-$langProgram = "Catalogue des cours</a>. Si le cours que vous voulez créer ne correspond pas à un code cours existant, vous pouvez en inventer un. Par exemple <i>INNOV001</i> s\'il s\'agit d\'un programme de gestion de l\'innovation";
+$langProgram = "Catalogue des formations</a>. Si la formation que vous voulez créer ne correspond pas à un code existant, vous pouvez en inventer un. Par exemple <i>INNOV001</i> s\'il s\'agit d\'un programme de gestion de l\'innovation";
 $langScormtool = "Cours";
 $langScormbuildertool = "Construire un cours";
 $langPathbuildertool = "Outil auteur";
@@ -58,7 +58,7 @@ $langOnlineConference = "Conférence";
 $langAgendaCreationTitle = "Création de cette formation";
 $langAgendaCreationContenu = "La formation a été créée à cette date";
 $langOnlineDescription = "Ceci est un exemple de description pour l\'outil de Conférence";
-$langDropbox  = "Partage de documents";
+$langDropbox  = "Partage";
 $langOnly  = "Seulement";
 $langRandomLanguage  = "Sélection aléatoire parmis toutes les langues";
 $langImages = "Images";

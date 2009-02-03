@@ -45,4 +45,6 @@ $langShowLinkOnHomepage = "Show this link as an icon on the course homepage";
 $langCsvImport = "CSV import";
 $General = "General";
 $SearchFeatureDoIndexLink = "Index link title and description? ";
+$langSaveLink = "Save link";
+$langSaveCategory = "Save category";
 ?>

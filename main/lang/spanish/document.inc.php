@@ -210,4 +210,5 @@ $TemplateTitleStopAndThinkDescription = "Invitación a pararse y a reflexionar";
 $SaveDocument = "Guardar documento";
 $CreateTheDocument = "Guardar documento";
 $SharedFolder = "Carpeta compartida";
+$CreateFolder = "Crear el directorio";
 ?>

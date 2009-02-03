@@ -217,4 +217,5 @@ $HideAllAttempts = "Skrij vse poskuse";
 $ShowAllAttemptsByExercise = "Prikaže vse poskuse (po vajah/testih)";
 $ShowAttempt = "Prikži poskus";
 $ShowAndQualifyAttempt = "Prikaži in oceni poskus";
+$langAddEdit = "Dodaj / Uredi";
 ?>

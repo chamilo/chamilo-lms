@@ -895,4 +895,10 @@ $EditCoursesToURL = "Edit courses of an URL";
 $AddCoursesToThatURL = "Add courses to that URL";
 $EnablePlugins = "Enable the selected plugins";
 $AtLeastOneCourseAndOneURL = "At least one course and one URL";
+$ClickToRegisterAdmin = "Click here to register the admin into all sites";
+$AdminShouldBeRegisterInSite = "Admin user should be register here";
+$URLNotConfiguredPleaseChangedTo: = "URL not configured yet, please add this URL : ";
+$AdminUserRegisteredToThisURL = "Admin user add to this URL";
+$CoursesWereEdited = "Coures were edited";
+$URLEdited = "The URL has been edited";
 ?>

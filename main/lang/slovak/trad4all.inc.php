@@ -638,4 +638,5 @@ $Select = "Vybra&#357;";
 $Booking = "Rezervovanie";
 $ManageReservations = "Riadi&#357; rezervácie";
 $AttachmentFileDeleteSuccess = "Pripojený súbor bol zmazaný";
+$AccountURLInactive = "Konto neaktívne pre túto URL";
 ?>

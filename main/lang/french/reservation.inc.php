@@ -4,12 +4,12 @@ for more information: see languages.txt in the lang folder.
 $ReservationPeriodToSmall = "La période de réservation est trop courte.";
 $BookingSystem = "Système de réservations";
 $BookingPeriodList = "Liste des périodes de réservations";
-$BookingListView = "Vue liste des réservations";
+$BookingListView = "Liste réservations";
 $BookingCalendarView = "Vue calendrier des réservations";
 $BookingPeriods = "Périodes de réservations";
 $ResourceList = "Liste des ressources";
 $GoToCalendarView = "Vue calendrier";
-$GoToListView = "Vue liste";
+$GoToListView = "Liste";
 $ManageResources = "Gérer les ressources";
 $EditResource = "Éditer la ressource";
 $BookIt = "Réserver!";

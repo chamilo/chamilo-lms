@@ -52,7 +52,7 @@ $AddCalendarItem = "Ajouter un nouvel événement";
 $AddAnn = "Ajouter une annonce";
 $ForumAddNewTopic = "Forum: ajouter un nouveau message";
 $ForumEditTopic = "Forum: modifier le message";
-$ExerciseAnswers = "Exercice: Réponses";
+$ExerciseAnswers = "Test: Réponses";
 $ForumReply = "Forum: répondre";
 $AgendaSortChronologicallyDown = "Afficher les événements (du plus récent au plus ancien)";
 ?>

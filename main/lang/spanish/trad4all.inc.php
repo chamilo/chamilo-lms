@@ -677,4 +677,5 @@ $Booking = "Reservas";
 $ManageReservations = "Gestionar reservas";
 $DestinationUsers = "Usuarios destinatarios";
 $AttachmentFileDeleteSuccess = "El archivo adjunto ha sido eliminado";
+$AccountURLInactive = "Cuenta no activada en esta URL";
 ?>

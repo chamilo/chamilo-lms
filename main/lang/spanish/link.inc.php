@@ -45,4 +45,6 @@ $langShowLinkOnHomepage = "Mostrar este enlace como un icono en la página princi
 $langCsvImport = "Importar CSV";
 $General = "General";
 $SearchFeatureDoIndexLink = "¿Indexar título y descripción?";
+$langSaveLink = "Guardar el enlace";
+$langSaveCategory = "Guardar la categoría";
 ?>

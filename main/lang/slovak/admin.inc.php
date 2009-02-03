@@ -765,4 +765,16 @@ $NoParticipation = "Nie sú žiadni ú&#269;astníci";
 $LPTestScore = "Skóre testov u&#269;ebnej osnovy";
 $ImportUsersToACourse = "Importova&#357; používate&#318;ov na kurz zo súboru";
 $ImportCourses = "Importova&#357; kurzy zo súboru";
+$ManageUsers = "Spravova&#357; používate&#318;ov";
+$ManageCourses = "Spravova&#357; kurzy";
+$URLInactive = "URL bola deaktivovaná";
+$URLActive = "URL bola aktivovaná";
+$EditUsers = "Upravi&#357; používate&#318;ov";
+$EditCourses = "Upravi&#357; kurzy";
+$AddCoursesToURL = "Prida&#357; kurzy k URL";
+$EditCoursesToURL = "Upravi&#357; kurzy URL";
+$AddCoursesToThatURL = "Prida&#357; kurzy k tejto URL";
+$EnablePlugins = "Aktivova&#357; vybrané pluginy";
+$AtLeastOneCourseAndOneURL = "Najmenej jeden kurz a jednu URL";
+$ClickToRegisterAdmin = "Pre zaregistrovanie administrátora do všetkých sietí kliknite sem";
 ?>

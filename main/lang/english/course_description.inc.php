@@ -15,4 +15,5 @@ $langBackAndForget  = "Back and forget";
 $CourseDescriptionUpdated = "Course description has been updated";
 $CourseDescriptionDeleted = "Course description has been deleted";
 $CourseDescriptionIntro = "To create a course description, click on a heading and fill the correct form field.<br><br> Click then OK and fill another heading.";
+$langSaveDescription = "Save description";
 ?>

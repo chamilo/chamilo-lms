@@ -233,4 +233,5 @@ $ChatConnectionsDuringLastXDays = "Povezave na klepet v zadnjih %s dneh";
 $ChatLastConnection = "Zadnja povezava klepeta";
 $CourseInformation = "Informacije o tečaju";
 $NoAdditionalFieldsWillBeExported = "Nobena dodatna polja ne bodo izvožena";
+$langSendNotification = "Pošlji opozorila";
 ?>

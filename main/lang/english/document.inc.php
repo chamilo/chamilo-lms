@@ -210,4 +210,5 @@ $TemplateTitleStopAndThinkDescription = "Layout encouraging to stop and think";
 $SaveDocument = "Save document";
 $CreateTheDocument = "Create document";
 $SharedFolder = "Shared folder";
+$CreateFolder = "Create the folder";
 ?>

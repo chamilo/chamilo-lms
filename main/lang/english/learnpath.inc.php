@@ -210,6 +210,7 @@ $UplAlreadyExists = "File already exists";
 $UnknownPackageFormat = "Unknown package format";
 $UplUnableToSaveFile = "Unable to save file";
 $UnknownPackageFormat = "The format of this package could not be recognized. Please check this is a valid package.";
+$MoveDocument = "Move document";
 $EditLPSettings = "Edit learning path settings";
 $SaveLPSettings = "Save learning path settings";
 $ShowAllAttempts = "Show all attempts";
@@ -217,4 +218,6 @@ $HideAllAttempts = "Hide all attempts";
 $ShowAllAttemptsByExercise = "Show all attempts by exercise";
 $ShowAttempt = "Show attempt";
 $ShowAndQualifyAttempt = "Show and qualify attempt";
+$langAddEdit = "Add / Edit";
+$ModifyPrerequisities = "Modify Prerequisities";
 ?>

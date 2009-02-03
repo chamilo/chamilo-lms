@@ -124,5 +124,7 @@ $NoFilesHere = "No files here";
 $NoFilesHere = "No files here";
 $NewDropboxFileUploaded = "A new file has been sent in the documents sharing tool";
 $NewDropboxFileUploadedContent = "A new file has been sent in the documents sharing tool of your course";
+$langAddEdit = "Add / Edit";
 $ErrorNoFilesInFolder = "This folder is empty";
+$dropbox_lang["upload"] = "Upload";
 ?>

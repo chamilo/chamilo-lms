@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 17831 2009-01-19 17:54:00Z juliomontoya $
+<?php // $Id: user_list.php 18199 2009-02-03 17:21:58Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -310,23 +310,19 @@ function get_user_data($from, $number_of_items, $column, $direction)
                  u.status				AS col6,
                  u.active				AS col7,
                  u.user_id				AS col8
-             FROM
-                 $user_table u ";
+             FROM $user_table u ";
                  
-    // adding the filter to see  
+    // adding the filter to see the user's only of the current access_url 
     global $_configuration;
-    if (api_is_session_admin() && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";    		
     }
                  
-	if (isset ($_GET['keyword']))
-	{
+	if (isset ($_GET['keyword'])) {
 		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " WHERE u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%'";
-	}
-	elseif (isset ($_GET['keyword_firstname']))
-	{
+	} elseif (isset ($_GET['keyword_firstname'])) {
 		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
 		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
@@ -336,8 +332,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		$query_admin_table = '';
 		$keyword_admin = '';
 		
-		if($keyword_status == SESSIONADMIN)
-		{
+		if ($keyword_status == SESSIONADMIN) {
 			$keyword_status = '%';
 			$query_admin_table = " , $admin_table a ";
 			$keyword_admin = ' AND a.user_id = u.user_id ';
@@ -352,26 +347,24 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				"AND u.status LIKE '".$keyword_status."'" .
 				$keyword_admin;
 
-		if($keyword_active && !$keyword_inactive)
-		{
+		if ($keyword_active && !$keyword_inactive) {
 			$sql .= " AND u.active='1'";
-		}
-		elseif($keyword_inactive && !$keyword_active)
-		{
+		} elseif($keyword_inactive && !$keyword_active) {
 			$sql .= " AND u.active='0'";
 		}
 	}
 	
-	if (api_is_session_admin() && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {		
+    // adding the filter to see the user's only of the current access_url
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {		
     		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();   	  
     }
+    
 	$sql .= " ORDER BY col$column $direction ";
-	$sql .= " LIMIT $from,$number_of_items";
+	$sql .= " LIMIT $from,$number_of_items";	
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 		
 	$users = array ();
-	while ($user = Database::fetch_row($res))
-	{
+	while ($user = Database::fetch_row($res)) {
 		$users[] = $user;
 	}
 	return $users;

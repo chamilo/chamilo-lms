@@ -127,6 +127,7 @@ echo '<div style="float:right;">
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUrl'),'').get_lang('AddUrl').'</a>&nbsp;&nbsp;
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('members.gif',get_lang('AddUserToURL'),'').get_lang('ManageUsers').'</a>															
 	    <a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php">'.Display::return_icon('courses.gif',get_lang('AddUsersToCourse'),'').get_lang('ManageCourses').'</a>
+	    <a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_sessions_to_url.php">'.Display::return_icon('courses.gif',get_lang('AddUsersToCourse'),'').get_lang('ManageSessions').'</a>
 	  </div><br />';		  
 echo '</div>';		  
 

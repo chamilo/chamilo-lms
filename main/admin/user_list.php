@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 18199 2009-02-03 17:21:58Z juliomontoya $
+<?php // $Id: user_list.php 18214 2009-02-03 22:22:29Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -248,6 +248,14 @@ function get_number_of_users()
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT COUNT(u.user_id) AS total_number_of_items FROM $user_table u";
+	
+	// adding the filter to see the user's only of the current access_url 
+    global $_configuration;
+    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";    		
+    }
+    
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = Database::escape_string($_GET['keyword']);
@@ -288,6 +296,12 @@ function get_number_of_users()
 			$sql .= " AND u.active='0'";
 		}
 	}
+	
+	  // adding the filter to see the user's only of the current access_url
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {		
+    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();   	  
+    }
+    
 
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$obj = Database::fetch_object($res);

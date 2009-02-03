@@ -22,7 +22,7 @@
 *	Code for Hotpotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.php 18203 2009-02-03 18:02:16Z ndieschburg $
+* 	@version $Id: hotpotatoes.php 18210 2009-02-03 21:43:48Z herodoto $
 */
 
 
@@ -99,7 +99,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 			//if the size is not defined, it's probably because there has been an error or no file was submitted
 			if(!$_FILES['userFile']['size'])
 			{
-				$dialogBox .= get_lang('FileError').'<br />'.get_lang('Notice').' : '.get_lang('MaxFileSize').' '.ini_get('upload_max_filesize');
+				$dialogBox .= get_lang('SendFileError').'<br />'.get_lang('Notice').' : '.get_lang('MaxFileSize').' '.ini_get('upload_max_filesize');
 			}
 			else
 			{

@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: settings.php 18208 2009-02-03 20:35:26Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -197,25 +197,28 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 				$default_values[$row['variable']] = $row['selected_value'];
 				break;
 			case 'checkbox';
-				//be default we chose the access_url 1 otherwise we will get parameters from all urls				
-				if ($row['access_url_changeable']==1) {
-					//current access_url
-					$access_url = $_configuration['access_url'];
-					if (empty($access_url)) 
-						$access_url = 1; 
-															
-					$sql = "SELECT * FROM settings_current WHERE variable='".$row['variable']."' AND access_url =  $access_url";											
-				} else {
-					$sql = "SELECT * FROM settings_current WHERE variable='".$row['variable']."' AND access_url =  1";
-				}
-								
+				//1. we collect all the options of this variable
+				$sql = "SELECT * FROM settings_current WHERE variable='".$row['variable']."' AND access_url =  1";
+				
 				$result = api_sql_query($sql, __FILE__, __LINE__);
 				$group = array ();	
 				while ($rowkeys = Database::fetch_array($result)) {
 					$element = & $form->createElement('checkbox', $rowkeys['subkey'], '', get_lang($rowkeys['subkeytext']));
-					if ($rowkeys['selected_value'] == 'true' && ! $form->isSubmitted()) {
-						$element->setChecked(true); 
-					}
+					if ($row['access_url_changeable']==1) {						
+						//2. we look into the DB if there is a setting for a specific access_url
+						$access_url = $_configuration['access_url'];
+						if(empty($access_url )) $access_url =1;
+						$sql = "SELECT selected_value FROM settings_current WHERE variable='".$rowkeys['variable']."' AND subkey='".$rowkeys['subkey']."'  AND  subkeytext='".$rowkeys['subkeytext']."' AND access_url =  $access_url";						
+						$result_access = api_sql_query($sql, __FILE__, __LINE__);
+						$row_access = Database::fetch_array($result_access);
+						if ($row_access['selected_value'] == 'true' && ! $form->isSubmitted()) {
+							$element->setChecked(true); 
+						}
+					} else {											
+						if ($rowkeys['selected_value'] == 'true' && ! $form->isSubmitted()) {
+							$element->setChecked(true); 
+						}
+					}					
 					if ($hide_element) {
 						$element->freeze();
 					}

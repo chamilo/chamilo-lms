@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 17927 2009-01-22 09:06:25Z pcool $
+* 	@version $Id: survey.lib.php 18176 2009-02-03 00:06:07Z cfasanando $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1626,8 +1626,7 @@ class yesno extends question
 	{
 		foreach ($form_content['options'] as $key=>$value)
 		{
-			$this->html .= '<label><input name="question'.$form_content['question_id'].'" type="radio" value="'.$key.'"';
-			
+			$this->html .= '<label><input name="question'.$form_content['question_id'].'" type="radio" value="'.$key.'"';			
 			if (is_array($answers))
 			{
 				if (in_array($key,$answers))
@@ -1635,12 +1634,14 @@ class yesno extends question
 					$this->html .= 'checked="checked"';
 				}
 			}
-			
-			$this->html .= '/>'.$value.'</label>';
-			if ($form_content['display'] == 'vertical')
-			{
-				$this->html .= '<br />';
-			}
+			if (substr_count($value,"<p>")==1) {
+				$this->html .= '/>'.substr($value,3,(strlen($value)-7)).'</label>';
+				if ($form_content['display'] == 'vertical') {
+					$this->html .= '<br />';
+				}
+			} else {
+				$this->html .= '/>'.$value.'</label>';	
+			}						
 		}
 		echo '<div class="survey_question_wrapper">';
 		echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
@@ -1823,10 +1824,7 @@ class personality extends question
 			$this->html .= '	</tr>';
 			$count++;
 		}
-		
-	
-			
-		
+
 		// The buttons for adding or removing
 		//$this->html .= parent :: add_remove_buttons($form_content);
 	}
@@ -1936,10 +1934,13 @@ class multipleresponse extends question
 					$this->html .= 'checked="checked"';
 				}
 			}
-			$this->html .= ' />'.$value.'</label>';
-			if ($form_content['display'] == 'vertical')
-			{
-				$this->html .= '<br />';
+			if (substr_count($value,"<p>")==1) {
+				$this->html .= '/>'.substr($value,3,(strlen($value)-7)).'</label>';
+				if ($form_content['display'] == 'vertical') {
+					$this->html .= '<br />';
+				}
+			} else {
+				$this->html .= '/>'.$value.'</label>';	
 			}
 		}
 		echo '<div class="survey_question_wrapper">';

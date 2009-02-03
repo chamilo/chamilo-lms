@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 16249 2008-09-05 15:46:31Z elixir_inter $
+* 	@version $Id: question.php 18176 2009-02-03 00:06:07Z cfasanando $
 */
 
 // name of the language file that needs to be included
@@ -150,7 +150,7 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
 	// We are editing a question
 	if (isset($_GET['question_id']) AND !empty($_GET['question_id']))
 	{
-		echo "aqui".$form_content = survey_manager::get_question($_GET['question_id']);
+		$form_content = survey_manager::get_question($_GET['question_id']);		
 	}
 
 	// an action has been performed (for instance adding a possible answer, moving an answer, ...)

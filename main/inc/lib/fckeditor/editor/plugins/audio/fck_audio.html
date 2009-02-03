@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+ *	Dokeos - elearning and course management software
+ *
+ *	Copyright (c) 2008-2009 Dokeos SPRL
+ *	Copyright (c) 2008-2009 Ivan Tcholakov <ivantcholakov@gmail.com>
+ *
+ *	For a full list of contributors, see "credits.txt".
+ *	The full license can be read in "license.txt".
+ *
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either version 2
+ *	of the License, or (at your option) any later version.
+ *
+ *	See the GNU General Public License for more details.
+ *
+ * Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+ * Mail: info@dokeos.com
+
+ * This plugin uses as a template some original source code of the
+ * FCKeditor 2.6.4, see for example the flash dialog or the image
+ * properties dialog.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Audio Properties</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
+	<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
+	<script src="fck_audio.js" type="text/javascript"></script>
+		<script type="text/javascript">
+
+document.write( FCKTools.GetStyleHtml( GetCommonDialogCss() ) ) ;
+
+		</script>
+	</head>
+<body scroll="no" style="overflow: hidden">
+	<div id="divInfo">
+		<table cellspacing="1" cellpadding="1" border="0" width="100%" height="100%">
+			<tr>
+				<td>
+					<table cellspacing="0" cellpadding="0" width="100%" border="0">
+						<tr>
+							<td width="100%">
+								<span fcklang="Info">URL</span>
+							</td>
+							<td id="tdBrowse" style="display: none" nowrap="nowrap" rowspan="2">
+								&nbsp;
+								<input id="btnBrowse" onclick="javascript: BrowseServer();" type="button" value="Browse Server"
+									fcklang="DlgBtnBrowseServer" />
+							</td>
+						</tr>
+						<tr>
+							<td valign="top">
+								<input id="txtUrl" style="width: 100%" type="text" onblur="javascript: UpdatePreview();" />
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+			            <input type="checkbox" class="CheckBox" checked id="chkAutoplay">
+						<span fckLang="DlgAudioAutoplay">Autoplay</span>
+				</td>
+			</tr>
+			<tr height="100%">
+				<td valign="top">
+					<table cellspacing="0" cellpadding="0" width="100%" border="0" height="100%">
+						<tr>
+							<td width="100%" valign="top">
+								<table cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed">
+									<tr>
+										<td>
+											<span fcklang="DlgAudioPlayback">Playback</span></td>
+									</tr>
+									<tr>
+										<td valign="top">
+											<iframe class="ImagePreviewArea" style="height: 100px;" src="fck_audio_playback.html" frameborder="0"
+												marginheight="0" marginwidth="0"></iframe>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+		<div id="divUpload" style="display: none">
+			<form id="frmUpload" method="post" target="UploadWindow" enctype="multipart/form-data" action="" onsubmit="javascript: return CheckUpload();">
+				<span fckLang="DlgLnkUpload">Upload</span><br />
+				<input id="txtUploadFile" style="width: 100%" type="file" size="40" name="NewFile" /><br />
+				<br />
+				<input id="btnUpload" type="submit" value="Send it to the Server" fckLang="DlgLnkBtnUpload" />
+				<script type="text/javascript">
+					document.write( '<iframe name="UploadWindow" style="display: none" src="' + FCKTools.GetVoidUrl() + '"><\/iframe>' ) ;
+				</script>
+			</form>
+		</div>
+</body>
+</html>

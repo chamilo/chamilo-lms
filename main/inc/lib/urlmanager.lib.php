@@ -191,7 +191,7 @@ class UrlManager
 	}
 	
 	
-	 /** Gets the inner join of users and courses table
+	 /** Gets the inner join of access_url and the course table
 	 * @author Julio Montoya
 	 * @return int  access url id
 	 * @return array   api_store_result of the result
@@ -216,6 +216,33 @@ class UrlManager
 		$courses=api_store_result($result);
 		return $courses;		
 	}	
+	
+	/** Gets the inner join of access_url and the session table
+	 * @author Julio Montoya
+	 * @return int  access url id
+	 * @return array   api_store_result of the result
+	 * */
+	function get_url_rel_session_data($access_url_id='')
+	{
+		$where ='';
+		$table_url_rel_session	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+		$tbl_session 			= Database :: get_main_table(TABLE_MAIN_SESSION);
+		
+		if (!empty($access_url_id))
+			$where ="WHERE $table_url_rel_session.access_url_id = ".Database::escape_string($access_url_id);
+			
+		$sql="SELECT id, name, access_url_id
+				FROM $tbl_session u 
+				INNER JOIN $table_url_rel_session
+				ON $table_url_rel_session.session_id = id
+				$where
+				ORDER BY name, id";
+	
+		$result=api_sql_query($sql,__FILE__,__LINE__);	
+		$sessions=api_store_result($result);
+		return $sessions;		
+	}	
+	
 	
 	
 	/**
@@ -352,6 +379,38 @@ class UrlManager
 	
 	
 	/**
+	 * Add a group of sessions into a group of URLs
+	 * @author Julio Montoya
+	 * @param  array of session ids
+	 * @param  array of url_ids
+	 * */
+	function add_sessions_to_urls($session_list,$url_list)
+	{		
+		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+		$result_array=array();
+				
+		if (is_array($session_list) && is_array($url_list)){
+			foreach ($url_list as $url_id) {				
+				foreach ($session_list as $session_id) {					
+					$count = UrlManager::relation_url_session_exist($session_id,$url_id);															
+					if ($count==0) {
+						$sql = "INSERT INTO $table_url_rel_session
+		               			SET session_id = ".Database::escape_string($session_id).", access_url_id = ".Database::escape_string($url_id);
+						$result = api_sql_query($sql, __FILE__, __LINE__);
+						if($result) 
+							$result_array[$url_id][$session_id]=1;
+						else
+							$result_array[$url_id][$session_id]=0;
+					}						
+				}
+			}
+		}
+		return 	$result_array;
+	}
+	
+	
+	
+	/**
 	 * Add a user into a url
 	 * @author Julio Montoya
 	 * @param  user_id
@@ -430,7 +489,23 @@ class UrlManager
 	}
 	
 	/**
-	 * Updates the url_rel_user table  with a given user list
+	* Deletes an url and session relationship
+	* @author Julio Montoya
+	* @param  char  course code
+	* @param  int url id
+	* @return boolean true if success
+	* */
+	function delete_url_rel_session($session_id, $url_id)
+	{
+		$table_url_rel_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);					
+		$sql= "DELETE FROM $table_url_rel_session WHERE session_id = ".Database::escape_string($session_id)." AND access_url_id=".Database::escape_string($url_id)."  ";
+		$result = api_sql_query($sql,  __FILE__, __LINE__);
+		return $result;
+	}
+	
+	
+	/**
+	 * Updates the access_url_rel_user table  with a given user list
 	 * @author Julio Montoya
 	 * @param array user list
 	 * @param int access_url_id  
@@ -463,18 +538,18 @@ class UrlManager
 	}
 	
 	
-		/**
-	 * Updates the url_rel_user table  with a given user list
+	/**
+	 * Updates the access_url_rel_course table  with a given user list
 	 * @author Julio Montoya
 	 * @param array user list
 	 * @param int access_url_id  
 	 * */
 	function update_urls_rel_course($course_list,$access_url_id)
 	{
-		$table_course	= Database :: get_main_table(TABLE_MAIN_COURSE);
-		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);		
+		$table_course			= Database :: get_main_table(TABLE_MAIN_COURSE);
+		$table_url_rel_course	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);		
 			
-		$sql = "SELECT course_code FROM $table_url_rel_user WHERE access_url_id=".Database::escape_string($access_url_id);
+		$sql = "SELECT course_code FROM $table_url_rel_course WHERE access_url_id=".Database::escape_string($access_url_id);
 		$result = api_sql_query($sql,__FILE__,__LINE__ );
 		$existing_courses = array(); 
 		
@@ -482,20 +557,55 @@ class UrlManager
 			$existing_courses[] = $row['course_code'];
 		}			
 		
-		//adding users
+		//adding courses
 		foreach($course_list as $course) {
 			if(!in_array($course, $existing_courses)) {
 				UrlManager::add_course_to_url($course,$access_url_id);								
 			}
 		}
 		
-		//deleting old users					
+		//deleting old courses					
 		foreach($existing_courses as $existing_course) {
 			if(!in_array($existing_course, $course_list)) {
 				UrlManager::delete_url_rel_course($existing_course,$access_url_id);		
 			}
 		}		
 	}
+	
+	/**
+	 * Updates the access_url_rel_session table with a given user list
+	 * @author Julio Montoya
+	 * @param array user list
+	 * @param int access_url_id  
+	 * */
+	function update_urls_rel_session($session_list,$access_url_id)
+	{
+		$table_session	= Database :: get_main_table(TABLE_MAIN_SESSION);
+		$table_url_rel_session	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);		
+			
+		$sql = "SELECT session_id FROM $table_url_rel_session WHERE access_url_id=".Database::escape_string($access_url_id);
+		$result = api_sql_query($sql,__FILE__,__LINE__ );
+		$existing_sessions = array(); 
+		
+		while($row = Database::fetch_array($result)){
+			$existing_sessions[] = $row['session_id'];
+		}			
+		
+		//adding users
+		foreach($session_list as $session) {
+			if(!in_array($session, $existing_sessions)) {
+				UrlManager::add_session_to_url($session,$access_url_id);								
+			}
+		}
+		
+		//deleting old users					
+		foreach($existing_sessions as $existing_session) {
+			if(!in_array($existing_session, $session_list)) {
+				UrlManager::delete_url_rel_session($existing_session,$access_url_id);		
+			}
+		}		
+	}
+	
 	
 	function get_access_url_from_user($user_id) {
 		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);

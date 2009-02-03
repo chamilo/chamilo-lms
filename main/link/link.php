@@ -1,4 +1,4 @@
-<?php // $Id: link.php 18126 2009-02-01 19:55:12Z herodoto $
+<?php // $Id: link.php 18203 2009-02-03 18:02:16Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -59,8 +59,8 @@ api_protect_course_script();
 
 // @todo change the $_REQUEST into $_POST or $_GET
 // @todo remove this code
-$link_submitted = (!empty($_POST['submitLink'])?$_POST['submitLink']:'');
-$category_submitted = (!empty($_POST['submitCategory'])?$_POST['submitCategory']:'');
+$link_submitted = (isset($_POST['submitLink'])?true:false);
+$category_submitted = (isset($_POST['submitCategory'])?true:false);
 $urlview = (!empty($_GET['urlview'])?$_GET['urlview']:'');
 $submitImport = (!empty($_POST['submitImport'])?$_POST['submitImport']:'');
 $down = (!empty($_GET['down'])?$_GET['down']:'');
@@ -72,13 +72,11 @@ $urllink = (!empty($_REQUEST['urllink'])?$_REQUEST['urllink']:'');
 $title = (!empty($_REQUEST['title'])?$_REQUEST['title']:'');
 $description = (!empty($_REQUEST['description'])?$_REQUEST['description']:'');
 $selectcategory = (!empty($_REQUEST['selectcategory'])?$_REQUEST['selectcategory']:'');
-$submitLink = (!empty($_REQUEST['submitLink'])?$_REQUEST['submitLink']:'');
+$submitLink = (isset($_REQUEST['submitLink'])?true : false);
 $action = (!empty($_REQUEST['action'])?$_REQUEST['action']:'');
 $category_title = (!empty($_REQUEST['category_title'])?$_REQUEST['category_title']:'');
-$submitCategory = (!empty($_REQUEST['submitCategory'])?$_REQUEST['submitCategory']:'');
-
+$submitCategory = isset($_POST['submitCategory'])?true:false;
 $nameTools = get_lang('Links');
-
 	if (isset($_GET['action']) && $_GET['action']=='addlink')
 	{
 		$nameTools = '';
@@ -100,8 +98,7 @@ $nameTools = get_lang('Links');
 		$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditLink'));
 	}	 	
 	
-		
-		
+				
 // Database Table definitions
 $tbl_link = Database::get_course_table(TABLE_LINK);
 $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
@@ -271,8 +268,9 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 				echo sprintf($sf_textbox, $specific_field['name'], $specific_field['code'], $default_values);
 			}
 		}
-
-		echo "<tr><td></td><td><input type=\"Submit\" name=\"submitLink\" value=\"".get_lang("Ok")."\" /></td></tr>",
+	// echo "<tr><td></td><td><input type=\"submit\" name=\"submitLink\"value=\"".get_lang('Ok')."\" /></td></tr>",
+	   echo "<tr><td></td><td><button class=\"save\" type=\"Submit\" name=\"submitLink\">".get_lang('SaveLink')." </button></td></tr>",
+	
 			"</table>",
 			"</form>";
 	}
@@ -295,7 +293,8 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 			"</tr>",
 			"<tr><td align=\"right\" valign=\"top\">".get_lang("Description")." :</td>",
 			"<td><textarea rows=\"3\" cols=\"50\" name=\"description\">",htmlentities($description,ENT_QUOTES,$charset)."</textarea></td></tr>",
-			"<tr><td></td><td><input type=\"Submit\" name=\"submitCategory\" value=\"".get_lang("Ok")."\" /></td></tr>",
+			//"<tr><td></td><td><input type=\"Submit\" name=\"submitCategory\"value=\"".get_lang("Ok")."\"/></td></tr>",
+			"<tr><td></td><td><button class=\"save\" type=\"submit\" name=\"submitCategory\">".get_lang('Save')." </button></td></tr>",
 			"</table>",
 			"</form>";
 	}
@@ -444,7 +443,6 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	echo '</table>';
 	////////////////////////////////////////////////////////////////////////////
 }		
-		
 		
 
 

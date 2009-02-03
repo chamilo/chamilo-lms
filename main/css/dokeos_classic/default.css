@@ -1857,7 +1857,6 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	vertical-align:middle;
 }
 
-
 /**********************************************
  *  MESSAGE TOOL                           *
  **********************************************/
@@ -1924,72 +1923,126 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
    }
    
    
-   
-/**********************************************
- *  EXERCISE TOOL                           *
- **********************************************/
-.exercice_form {
-	width: 300px;
-}
-#validationButton{
-	text-decoration: none;
-	margin: 5px;
-	/*border:1px solid #999999;*/
-	/*background:#F0F0F0;  */
-	padding: 3px; 
-	padding-left:10px;
-	padding-right:10px;
-	font-weight:bold;
-	color:#666;
-}
-.rounded{
-	background:#ccc;
-	padding: 3px;
-	width: 200px;
-	margin-left:10px;
-}
-.rounded_inner{
-	background:#FFF;
-	padding-top: 10px;
-	padding-bottom: 10px;		
-}
-.rounded_inner:hover{
-	color:#C802A5;
-	background:#F0F0F0;
-}
-.exercise_scenario_label{
+ /*****************************************************
+ *  BUTTONS	                                         *
+ *****************************************************/
+/* BUTTONS */
+button {
+/*display:block;
+    float:left;*/
+    margin:0 8px 0 0;
+    background-color:#f5f5f5;
+    border:2px solid #909090;
+    border-top:2px solid #eee;
+    border-left:2px solid #eee;
+    -moz-border-radius-topright : 10px;
+    -moz-border-radius-topleft : 10px;
+    -moz-border-radius-bottomright : 10px;
+    -moz-border-radius-bottomleft : 10px;
 
+    font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+    font-size:100%;
+    line-height:130%;
+    text-decoration:none;
+    font-weight:bold;
+    color:#565656;
+    outline:none;
+    cursor:pointer;
+    padding:3px 5px 3px 5px; /* Links */
 }
-.exercise_scenario_element{
+button:hover{
+    background-color:#e0e0e0;
+    color:#545454; 
+    border-top:2px solid #eee;
+    border-left:2px solid #eee;
+}
+button:active{
+	background-color:#909090;
+   border:2px solid #909090;
+   color:#fff;
+   outline:none;
+}
+button img{
+    margin:0 10px -3px -3px !important;
+    padding:0;
+    border:none;
+    width:16px;
+    height:16px;
+}
+/* NEGATIVE */
 
+button.negative, .cancel{
+    color:#680000;
+    border-bottom:2px inset #800000;
+    border-right:2px inset #800000;
+    outline:none;
 }
-span.checkbox {
-	width: 19px;
-	height: 25px;
-	padding: 0 5px 0 0;
-	background: url(images/checkbox.gif) no-repeat;
-	display: block;
-	clear: left;
-	float: left;
+button.negative, .cancel:hover{
+    background:#f5f5f5;
+    color:#d12f19;
+    border-top:2px solid #eee;
+    border-left:2px solid #eee;
 }
-span.radio {
-	width: 19px;
-	height: 25px;
-	padding: 0 5px 0 0;
-	background: url(images/radio.gif) no-repeat;
-	display: block;
-	clear: left;
-	float: left;
+button.negative:active{
+    background-color:#380000;
+    border:2px solid #380000;
+    color:#fff;
+    outline:none;
 }
-#question_title{
+/*including "cross" image*/
+button.cancel{
+	 margin:0 10px -3px -3px !important;
+    padding:3px 1px 1px 23px;
+    /*text-decoration:none;
+    text-align:right;*/
+    width:auto;
+    height:100%;
+    background-position:3%;
+    background-image:url(/main/img/delete.gif);
+    background-repeat:no-repeat;
+}
+/* POSITIVE */
 
+button.positive, .save, .add{
+    color:#529214;
+    border-bottom:2px inset #529220;
+    border-right:2px inset #52922;
+    outline:none;
 }
-#exercise_close_link{
-	background: url(images/close.gif) no-repeat;
-	padding-left: 20px; 
+button.positive, .save:hover,.add:hover{
+    background-color:#E6EFC2;
+    color:#529214;
+    border-top:2px solid #eee;
+    border-left:2px solid #eee;
 }
-#exercise_close_link:hover{
-	background: url(images/close_highlight.gif) no-repeat;
-	padding-left: 20px; 
-} 
+button.positive:active{
+    background-color:#698B22;
+    border:2px solid #556b2f;
+    color:#fff;
+    outline:none;
+}
+/*including "save" image*/
+button.save{
+	 margin:0 10px -3px -3px !important;
+    padding:3px 1px 1px 23px;
+    /*text-decoration:none;
+    text-align:right;*/
+    width:auto;
+    height:100%;
+    background-position:3%;
+    background-image:url(/main/img/accept.png);
+    background-repeat:no-repeat;
+}
+/*including "add" image*/
+button.add{
+	 margin:0 10px -3px -3px !important;
+    padding:3px 1px 1px 23px;
+    /*text-decoration:none;
+    text-align:right;*/
+    width:auto;
+    height:100%;
+    background-position:3%;
+    background-image:url(/main/img/addd.gif);
+    background-repeat:no-repeat;
+}
    

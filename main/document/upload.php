@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 17608 2009-01-08 23:26:20Z marvil07 $
+<?php // $Id: upload.php 18203 2009-02-03 18:02:16Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -516,7 +516,7 @@ if(isset($_GET['createdir']))
 	$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$path.'"/>';
 	$new_folder_text .= get_lang('NewDir') .' ';
 	$new_folder_text .= '<input type="text" name="dirname"/>';
-	$new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'"/>';
+	$new_folder_text .= '<button type="submit" class="save" name="create_dir">'.get_lang('CreateFolder').'</button>';
 	$new_folder_text .= '</form>';
 	//show the form
 	Display::display_normal_message($new_folder_text, false);
@@ -576,7 +576,7 @@ $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lan
 $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
 $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
 
-$form->addElement('submit', 'submitDocument', get_lang('Ok'));
+$form->addElement('style_submit_button', 'submitDocument', get_lang('Ok'),'class="save"');
 
 $form->add_real_progress_bar('DocumentUpload','user_upload');
 

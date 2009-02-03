@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18033 2009-01-27 21:08:58Z herodoto $
+<?php // $Id: index.php 18203 2009-02-03 18:02:16Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -87,7 +87,8 @@ if (api_is_platform_admin()) {
 	<ul>
 		<li style="list-style-type:none"><form method="get" action="user_list.php">	
 			<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-			<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
+			<button type="submit"> <?php echo get_lang('Search');?>
+			</button>
 			</form>
 		</li>
 		<li><a href="user_list.php?search=advanced"><?php echo ucfirst(get_lang('AdvancedSearch')); ?></a></li>
@@ -121,7 +122,8 @@ if(api_is_platform_admin()) {
 	<h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo ucfirst(get_lang('Courses')); ?></h4>
 		<ul><li style="list-style-type:none"><form method="get" action="course_list.php">	
 		<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-		<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
+		<button type="submit"> <?php echo get_lang('Search');?>
+			</button>
 		</form></li>
 		<li>
 		<a href="course_list.php?search=advanced"><?php echo ucfirst(get_lang('AdvancedSearch')); ?></a>
@@ -178,7 +180,8 @@ if(api_get_setting('use_session_mode')=='true')
  <ul>
  <li style="list-style-type:none"><form method="POST" action="session_list.php">
 	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
+	<button type="submit"> <?php echo get_lang('Search');?>
+			</button>
 	</form>
 </li>
   <li><a href="session_list.php"><?php echo get_lang('ListSession') ?></a></li>

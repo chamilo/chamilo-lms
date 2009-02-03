@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 18113 2009-02-01 11:25:38Z ivantcholakov $
+<?php //$Id: agenda.php 18203 2009-02-03 18:02:16Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -324,7 +324,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	switch ($_GET['action'])
 	{
 		case "add":			
-            if(!empty($_POST['ical_submit']))
+            if(isset($_POST['ical_submit']))
             {
                 $course_info = api_get_course_info();
                 agenda_import_ical($course_info,$_FILES['ical_import']);

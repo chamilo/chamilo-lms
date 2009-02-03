@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 18169 2009-02-02 22:07:38Z herodoto $
+<?php //$Id: agenda.inc.php 18203 2009-02-03 18:02:16Z ndieschburg $
 
 /*
 ==============================================================================
@@ -2537,7 +2537,7 @@ function show_add_form($id = '')
 		</td>
         <td colspan="2" align="right">
         <label for="ical_import"><?php echo get_lang('ICalFileImport');?></label>
-        <input type="file" name="ical_import"/><input type="submit" name="ical_submit" value="<?php echo get_lang('Ok');?>"/>
+        <input type="file" name="ical_import"/><button class="save" type="submit" name="ical_submit"><?php echo get_lang('Import');?></button>
         </td>
 	</tr>
 

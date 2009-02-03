@@ -454,7 +454,7 @@ if($_GET['studentlist'] == 'false') {
 	$form = new FormValidator('reminder_form','get',api_get_path(REL_CODE_PATH).'announcements/announcements.php');
 	
 	$renderer = $form->defaultRenderer();
-	$renderer->setElementTemplate('<span>{label} {element}</span>&nbsp;<input type="submit" value="'.get_lang('Ok').'"','since');
+	$renderer->setElementTemplate('<span>{label} {element}</span>&nbsp;<button class="save" type="submit">'.get_lang('SendNotification').'</button>','since');
 	
 	$options = array(
 				2 => '2 '.get_lang('Days'),

@@ -253,7 +253,7 @@ $group_members_element->setElementTemplate('
 $form->addFormRule('check_group_members');
 
 // submit button
-$form->addElement('submit', 'submit', get_lang('Ok'));
+$form->addElement('style_submit_button', 'submit', get_lang('PropModify'), 'class="save"');
 
 if ($form->validate()) {
 	$values = $form->exportValues();

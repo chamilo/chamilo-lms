@@ -1,4 +1,4 @@
-<?php // $Id: document.php 18113 2009-02-01 11:25:38Z ivantcholakov $
+<?php // $Id: document.php 18203 2009-02-03 18:02:16Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -531,7 +531,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'" />';
 		$new_folder_text .= get_lang('NewDir') .' ';
 		$new_folder_text .= '<input type="text" name="dirname" />';
-		$new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'" />';
+		$new_folder_text .= '<button type="submit" name="create_dir">'.get_lang('CreateFolder').'</button>';
 		$new_folder_text .= '</form>';
 		//show the form
 		Display::display_normal_message($new_folder_text,false);
@@ -593,7 +593,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$new_folder_text .= '<td><input type="text" name="template_title" /></td></tr>';
 		$new_folder_text .= '<tr><td>'.get_lang('TemplateDescription').' : </td>';
 		$new_folder_text .= '<td><textarea name="template_description"></textarea></td></tr></table>';
-		$new_folder_text .= '<input type="submit" name="create_template" value="'.get_lang('Ok').'" />';
+		$new_folder_text .= '<button type="submit" name="create_template">'.get_lang('Ok').'</button>';
 		$new_folder_text .= '</form>';
 		//show the form
 		Display::display_normal_message($new_folder_text,false);		

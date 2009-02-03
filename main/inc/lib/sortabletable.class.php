@@ -258,7 +258,7 @@ class SortableTable extends HTML_Table
 					$html .= '<option value="'.$action.'">'.$label.'</option>';
 				}
 				$html .= '</select>';
-				$html .= '<input type="submit" value="'.get_lang('Ok').'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;"/>';
+				$html .= '<button type="submit" class="save" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang('Ok').'</button>';
 			}
 			else
 			{
@@ -351,7 +351,7 @@ class SortableTable extends HTML_Table
 		}
 		$result[] = '</select>';
 		$result[] = '<noscript>';
-		$result[] = '<input type="submit" value="'.get_lang('Ok').'"/>';
+		$result[] = '<button class="save" type="submit">'.get_lang('Save').'</button>';
 		$result[] = '</noscript>';
 		$result[] = '</form>';
 		$result = implode("\n", $result);

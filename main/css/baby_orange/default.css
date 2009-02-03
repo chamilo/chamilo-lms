@@ -1467,3 +1467,127 @@ span.radio {
 	padding-left: 20px; 
 } 
    
+   
+/*****************************************************
+ *  BUTTONS	                                         *
+ *****************************************************/
+/* BUTTONS */
+button {
+/*display:block;
+    float:left;*/
+    margin:0 8px 0 0;
+    background-color:#f5f5f5;
+    border:2px solid #909090;
+    border-top:2px solid #eee;
+    border-left:2px solid #eee;
+    -moz-border-radius-topright : 10px;
+    -moz-border-radius-topleft : 10px;
+    -moz-border-radius-bottomright : 10px;
+    -moz-border-radius-bottomleft : 10px;
+
+    font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+    font-size:100%;
+    line-height:130%;
+    text-decoration:none;
+    font-weight:bold;
+    color:#565656;
+    outline:none;
+    cursor:pointer;
+    padding:3px 5px 3px 5px; /* Links */
+}
+button:hover{
+    background-color:#e0e0e0;
+    color:#545454; 
+    border-top:2px solid #eee;
+    border-left:2px solid #eee;
+}
+button:active{
+	background-color:#909090;
+   border:2px solid #909090;
+   color:#fff;
+   outline:none;
+}
+button img{
+    margin:0 10px -3px -3px !important;
+    padding:0;
+    border:none;
+    width:16px;
+    height:16px;
+}
+/* NEGATIVE */
+
+button.negative, .cancel{
+    color:#680000;
+    border-bottom:2px inset #800000;
+    border-right:2px inset #800000;
+    outline:none;
+}
+button.negative, .cancel:hover{
+    background:#f5f5f5;
+    color:#d12f19;
+    border-top:2px solid #eee;
+    border-left:2px solid #eee;
+}
+button.negative:active{
+    background-color:#380000;
+    border:2px solid #380000;
+    color:#fff;
+    outline:none;
+}
+/*including "cross" image*/
+button.cancel{
+	 margin:0 10px -3px -3px !important;
+    padding:3px 1px 1px 23px;
+    /*text-decoration:none;
+    text-align:right;*/
+    width:auto;
+    height:100%;
+    background-position:3%;
+    background-image:url(/main/img/delete.gif);
+    background-repeat:no-repeat;
+}
+/* POSITIVE */
+
+button.positive, .save, .add{
+    color:#529214;
+    border-bottom:2px inset #529220;
+    border-right:2px inset #52922;
+    outline:none;
+}
+button.positive, .save:hover,.add:hover{
+    background-color:#E6EFC2;
+    color:#529214;
+    border-top:2px solid #eee;
+    border-left:2px solid #eee;
+}
+button.positive:active{
+    background-color:#698B22;
+    border:2px solid #556b2f;
+    color:#fff;
+    outline:none;
+}
+/*including "save" image*/
+button.save{
+	 margin:0 10px -3px -3px !important;
+    padding:3px 1px 1px 23px;
+    /*text-decoration:none;
+    text-align:right;*/
+    width:auto;
+    height:100%;
+    background-position:3%;
+    background-image:url(/main/img/accept.png);
+    background-repeat:no-repeat;
+}
+/*including "add" image*/
+button.add{
+	 margin:0 10px -3px -3px !important;
+    padding:3px 1px 1px 23px;
+    /*text-decoration:none;
+    text-align:right;*/
+    width:auto;
+    height:100%;
+    background-position:3%;
+    background-image:url(/main/img/addd.gif);
+    background-repeat:no-repeat;
+}
+   

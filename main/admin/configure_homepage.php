@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 18149 2009-02-02 16:04:18Z herodoto $
+<?php // $Id: configure_homepage.php 18203 2009-02-03 18:02:16Z ndieschburg $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -717,7 +717,7 @@ switch($action){
 		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://'))
 		{
 			$form->addElement('html', '</table><table border="0" cellpadding="5" cellspacing="0" width="100%"><tr><td>');
-			$form->addElement('submit', null, get_lang('Save'));
+			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 			$form->addElement('html', '</td></tr><tr><td>');
 			if (api_get_setting('wcag_anysurfer_public_pages')=='true')
 			{
@@ -729,13 +729,13 @@ switch($action){
 				$form->add_html_editor('link_html', '');
 			}
 			$form->addElement('html', '</td></tr><tr><td>');
-			$form->addElement('submit', null, get_lang('Save'));
+			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 			$form->addElement('html', '</td></tr>');
 		}
 		else
 		{
 			$form->addElement('html', '<tr><td>&nbsp;</td><td>');
-			$form->addElement('submit', null, get_lang('Save'));
+			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 			$form->addElement('html', '</td></tr>');
 		}
 
@@ -776,7 +776,7 @@ switch($action){
 		$renderer->setElementTemplate('<tr><td>{element}</td></tr>');
 		$renderer->setRequiredNoteTemplate('');
 		$form->addElement('hidden', 'formSent', '1');
-		$form->addElement('submit', null, get_lang('Save'));
+		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		if($action == 'edit_news'){
 			$_languages=api_get_languages();
 			$html = '<tr><td>'.get_lang('ChooseNewsLanguage').' : ';
@@ -806,7 +806,7 @@ switch($action){
 			$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
 			$form->add_html_editor($name, '');
 		}
-		$form->addElement('submit', null, get_lang('Save'));
+		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		$form->setDefaults($default);
 		$form->display();
 

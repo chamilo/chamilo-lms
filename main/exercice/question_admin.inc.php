@@ -27,7 +27,7 @@
 * 	It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_admin.inc.php 18002 2009-01-26 16:33:20Z juliomontoya $
+* 	@version $Id: question_admin.inc.php 18203 2009-02-03 18:02:16Z ndieschburg $
 */
 
 /*
@@ -94,7 +94,7 @@ if(is_object($objQuestion))
 
 	$objQuestion -> createAnswersForm ($form);
 
-	$form->addElement('submit','submitQuestion',get_lang('Ok'));
+	$form->addElement('style_submit_button','submitQuestion',get_lang('CreateModif'), 'class="save"');
 	$renderer = $form->defaultRenderer();
 	$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','submitQuestion');
 

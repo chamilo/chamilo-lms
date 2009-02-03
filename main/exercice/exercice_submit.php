@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 18002 2009-01-26 16:33:20Z juliomontoya $
+<?php // $Id: exercice_submit.php 18203 2009-02-03 18:02:16Z ndieschburg $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 18002 2009-01-26 16:33:20Z juliomontoya $
+* 	@version $Id: exercice_submit.php 18203 2009-02-03 18:02:16Z ndieschburg $
 */
 
 
@@ -1297,9 +1297,9 @@ else
 	// end foreach()
 	
 	echo "	  	
-		 <!-- <input type='submit' name='buttonCancel' value=".get_lang('Cancel')." />
+		 <!-- <button type='submit' name='buttonCancel' class='cancel'>".get_lang('Cancel')."</button>
 	   &nbsp;&nbsp; //--><br />";
-		$submit_btn="<input type='submit' name='submit' value='";
+		$submit_btn="<button class=\"save\" type='submit' name='submit'>";
 		//	$submit_btn.=get_lang('ValidateAnswer'); 
 		if ($objExercise->selectFeedbackType()==1 && $_SESSION['objExercise']->selectType()==2) {						
 			$submit_btn='';
@@ -1322,7 +1322,7 @@ else
 			{
 				$submit_btn.=get_lang('Next').' &gt;';
 			}
-			$submit_btn.= '\' />'; 
+			$submit_btn.= "</button>"; 
 		}			
 	echo $submit_btn;	 
 	echo "</form>";	

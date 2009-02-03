@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18078 2009-01-29 17:21:11Z cfasanando $
+<?php // $Id: profile.php 18203 2009-02-03 18:02:16Z ndieschburg $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -121,18 +121,18 @@ $form = new FormValidator('profile', 'post', api_get_self()."?".str_replace('&fe
 /* Make sure this is the first submit on the form, even though it is hidden!
  * Otherwise, if a user has productions and presses ENTER to submit, he will
  * attempt to delete the first production in the list. */
-if (is_profile_editable())
-	$form->addElement('submit', null, get_lang('SaveSettings'), array('style' => 'visibility:hidden;'));
+//if (is_profile_editable())
+//	$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"', array('style' => 'visibility:hidden;'));
 
 //	SUBMIT (visible)
-if (is_profile_editable())
+/*if (is_profile_editable())
 {
-	$form->addElement('submit', 'apply_change', get_lang('SaveSettings'));
+	$form->addElement('style_submit_button', 'apply_change', get_lang('SaveSettings'), 'class="save"');
 }
 else
 {
 	$form->freeze();
-}
+}*/
 
 //THEME
 if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true')
@@ -387,7 +387,7 @@ foreach($extra as $id => $field_details)
 //	SUBMIT
 if (is_profile_editable())
 {
-	$form->addElement('submit', 'apply_change', get_lang('SaveSettings'));
+	$form->addElement('style_submit_button', 'apply_change', get_lang('SaveSettings'), 'class="save"');
 }
 else
 {

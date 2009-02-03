@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 18028 2009-01-27 15:13:17Z ivantcholakov $
+<?php // $Id: create_document.php 18203 2009-02-03 18:02:16Z ndieschburg $
 
 /*
 ==============================================================================
@@ -366,14 +366,14 @@ else
 	));		
 }
 
-$form->addElement('submit', 'submit', get_lang('SaveDocument'));
+//$form->addElement('style_submit_button', 'submit', get_lang('SaveDocument'), 'class="save"');
 
 // HTML-editor
 $form->add_html_editor('content','', false, false);
 // Comment-field
 
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
-$form->addElement('submit', 'submit', get_lang('CreateTheDocument'));
+$form->addElement('style_submit_button', 'submit', get_lang('langCreateDoc'), 'class="save"');
 $form->setDefaults($default);
 
 // HTML

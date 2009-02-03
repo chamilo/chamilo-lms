@@ -1,5 +1,5 @@
 <?php
-// $Id: group_category.php 16962 2008-11-26 20:40:18Z yannoo $
+// $Id: group_category.php 18203 2009-02-03 18:02:16Z ndieschburg $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -183,7 +183,7 @@ $form->addElement('radio', 'wiki_state', null, get_lang('Public'), TOOL_PUBLIC);
 $form->addElement('radio', 'wiki_state', null, get_lang('Private'), TOOL_PRIVATE);
 
 // Submit
-$form->addElement('submit', 'submit', get_lang('Ok'));
+$form->addElement('style_submit_button', 'submit', get_lang('PropModify'), 'class="save"');
 // If form validates -> save data
 if ($form->validate())
 {

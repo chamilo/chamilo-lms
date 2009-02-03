@@ -53,13 +53,16 @@ class FormValidator extends HTML_QuickForm
 	{
 		$this->HTML_QuickForm($form_name, $method,$action, $target, $attributes, $trackSubmit);
 		// Load some custom elements and rules
-		$dir = dirname(__FILE__).'/';
+		$dir = dirname(__FILE__).'/';	
 		$this->registerElementType('html_editor', $dir.'Element/html_editor.php', 'HTML_QuickForm_html_editor');
 		$this->registerElementType('datepicker', $dir.'Element/datepicker.php', 'HTML_QuickForm_datepicker');
 		$this->registerElementType('datepickerdate', $dir.'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
 		$this->registerElementType('receivers', $dir.'Element/receivers.php', 'HTML_QuickForm_receivers');
 		$this->registerElementType('select_language', $dir.'Element/select_language.php', 'HTML_QuickForm_Select_Language');
 		$this->registerElementType('select_theme', $dir.'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');
+		$this->registerElementType('style_button', $dir.'Element/style_button.php', 'HTML_QuickForm_stylebutton');
+		$this->registerElementType('style_submit_button', $dir.'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
+		$this->registerElementType('style_reset_button', $dir.'Element/style_reset_button.php', 'HTML_QuickForm_styleresetbutton');
 		$this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir.'Rule/Date.php');
 		$this->registerRule('date_compare', null, 'HTML_QuickForm_Rule_DateCompare', $dir.'Rule/DateCompare.php');
 		$this->registerRule('html',null,'HTML_QuickForm_Rule_HTML',$dir.'Rule/HTML.php');

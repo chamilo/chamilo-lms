@@ -256,8 +256,8 @@ class UniqueAnswer extends Question {
 		
 		$form -> addElement ('html', '</table>');
 
-		$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'));
-		$form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'));
+		$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'));
+		$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'));
 		
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}','moreAnswers');

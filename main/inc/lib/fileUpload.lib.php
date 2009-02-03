@@ -1839,8 +1839,8 @@ function build_missing_files_form($missing_files,$upload_path,$file_name)
 					   ."</tr>\n";
 				}
 				$form .= "</table>\n"
-						."<input type=\"submit\" name=\"cancel_submit_image\" value=\"".get_lang('Cancel')."\"/>\n"
-						."<input type=\"submit\" name=\"submit_image\" value=\"".get_lang('Ok')."\"/><br/>"
+						."<button class=\"cancel\" type=\"submit\" name=\"cancel_submit_image\">".get_lang('Cancel')."<\button>\n"
+						."<button class=\"save\" type=\"submit\" name=\"submit_image\">".get_lang('Ok')."<\button><br/>"
 						."</form>\n";
 				return $form;
 }

@@ -163,7 +163,7 @@ if ($_GET['action']=="add") {
 	display_add_form();
 }
 
-if ($_POST['submitWork']) {
+if (isset($_POST['submitWork'])) {
 	$check = Security::check_token();
 	if ($check) {
 		Display :: display_confirmation_message(store_add_dropbox());
@@ -185,7 +185,7 @@ if ($_GET['action']=='editcategory' and isset($_GET['id'])) {
 }
 
 // *** storing a new or edited category ***
-if ($_POST['StoreCategory']) {
+if (isset($_POST['StoreCategory'])) {
 	Display :: display_confirmation_message(store_addcategory());
 }
 

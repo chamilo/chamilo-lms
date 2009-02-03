@@ -473,7 +473,7 @@ function display_addcategory_form($category_name='', $id='')
 	echo "\t<td valign=\"top\">\n";
 	echo "\t</td>\n";
 	echo "\t<td>\n";
-	echo "<input type=\"submit\" name=\"StoreCategory\" value=\"".get_lang('Ok')."\">";
+	echo "<button class=\"save\"type=\"submit\" name=\"StoreCategory\"> ".get_lang('AddEdit')."</button>";
 	echo "\t</td>\n";
 	echo "\t</tr>\n";
 	echo "</table>\n";
@@ -641,7 +641,7 @@ function display_add_form()
 	echo "</select>",
 		"</td></tr>",
 		"<tr><td></td>",
-		"<td><input type=\"Submit\" name=\"submitWork\" value=\"".dropbox_lang("ok", "noDLTT")."\" />",
+		"<td><button type=\"Submit\" name=\"submitWork\">".dropbox_lang("upload", "noDLTT")." </button>",
 		"</td></tr>",
 		"</table>",
 		"</form>";

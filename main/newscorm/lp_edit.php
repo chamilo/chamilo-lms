@@ -139,7 +139,8 @@ $defaults['lp_name']=$_SESSION['oLP']->get_name();
 $defaults['lp_author']=$_SESSION['oLP']->get_author();
 
 //Submit button
-$form->addElement('submit', 'Submit', get_lang('SaveLPSettings'));
+$form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');
+//'<img src="'.api_get_path(WEB_IMG_PATH).'accept.png'.'" alt=""/>'
 
 //Hidden fields
 $form->addElement('hidden', 'action', 'update_lp');

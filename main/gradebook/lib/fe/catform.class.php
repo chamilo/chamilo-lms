@@ -149,7 +149,7 @@ class CatForm extends FormValidator {
    		$this->addElement('hidden','hid_parent_id');
 		$this->addElement('textarea', 'description', get_lang('Description'),array('rows'=>'3','cols' => '34'));
 		$this->addElement('checkbox', 'visible',get_lang('Visible'));
-		$this->addElement('submit', null, get_lang('Ok'));
+		$this->addElement('style_submit_button', null, get_lang('EditCategory'), 'class="save"');
 		$this->addRule('weight',get_lang('OnlyNumbers'),'numeric');
 		$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');
 		$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');

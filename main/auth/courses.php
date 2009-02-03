@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 17747 2009-01-15 21:03:02Z cfasanando $
+<?php // $Id: courses.php 18203 2009-02-03 18:02:16Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -455,7 +455,7 @@ function display_search_courses()
 					'<input type="hidden" name="sec_token" value="'.$stok.'">',
 					"<input type=\"hidden\" name=\"search_course\" value=\"1\" />",
 					"<input type=\"text\" name=\"search_term\" value=\"".(empty($_POST['search_term'])?'':$_POST['search_term'])."\" />",
-					"&nbsp;<input type=\"submit\" value=\"",get_lang("_search"),"\" />",
+					"&nbsp;<button type=\"submit\">",get_lang("_search")," </button>",
 					"</form>";
 	if (isset($_POST['search_course']))
 	{
@@ -618,7 +618,7 @@ function display_create_course_category_form()
 	echo "<form name=\"create_course_category\" method=\"post\" action=\"".api_get_self()."?action=sortmycourses\">\n";
 	echo '<input type="hidden" name="sec_token" value="'.$stok.'">';
 	echo "<input type=\"text\" name=\"title_course_category\" />\n";
-	echo "<input type=\"submit\" name=\"create_course_category\" value=\"".get_lang("Ok")."\" />\n";
+	echo "<button type=\"submit\" name=\"create_course_category\">".get_lang('Ok')." </button>\n";
 	echo "</form>\n";
 
 	echo get_lang("ExistingCourseCategories");
@@ -1076,7 +1076,7 @@ function display_change_course_category_form($edit_course)
 	while ($row=Database::fetch_array($result))
 		{$output.="\t\t<option value=\"".$row['id']."\">".$row['title']."</option>";}
 	$output.="\t</select>\n";
-	$output.="\t<input type=\"submit\" name=\"submit_change_course_category\" value=\"".get_lang("Ok")."\" />\n";
+	$output.="\t<button type=\"submit\" name=\"submit_change_course_category\">".get_lang("Ok")." </button>\n";
 	$output.="</form>";
 	return $output;
 }
@@ -1207,7 +1207,7 @@ function display_edit_course_category_form($edit_course_category)
 	echo '<input type="hidden" name="sec_token" value="'.$stok.'">';
 	$info_this_user_course_category=get_user_course_category($edit_course_category);
 	echo "\t<input type=\"text\" name=\"title_course_category\" value=\"".$info_this_user_course_category['title']."\" />";
-	echo "\t<input type=\"submit\" name=\"submit_edit_course_category\" value=\"".get_lang("Ok")."\" />\n";
+	echo "\t<button type=\"submit\" name=\"submit_edit_course_category\">".get_lang("Ok")." </button>\n";
 	echo "</form>";
 }
 

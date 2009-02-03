@@ -217,7 +217,7 @@ if(get_setting('use_document_title')=='true')
 </tr>
 </table>
 
-<input type="submit" value="<?php echo(get_lang('Ok'));?>">
+<input type="submit" value="<?php echo(get_lang('Oki'));?>">
 </form>
 <!-- end upload form -->
 

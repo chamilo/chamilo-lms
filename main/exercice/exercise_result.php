@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 17972 2009-01-23 20:11:22Z juliomontoya $
+* 	@version $Id: exercise_result.php 18203 2009-02-03 18:02:16Z ndieschburg $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -1057,7 +1057,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			<?php
 			if ($origin != 'learnpath') {
 			?>
-			<input type="submit" value="<?php echo get_lang('Finish'); ?>" />
+			<button type="submit" class="save"><?php echo get_lang('Finish');?></button>
 			<?php
 			} else {							
 			?>							

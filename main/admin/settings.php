@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 18160 2009-02-02 17:39:54Z herodoto $
+<?php // $Id: settings.php 18203 2009-02-03 18:02:16Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -58,7 +58,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 // Submit Stylesheets
-if (!empty($_POST['submit_stylesheets']))
+if (isset($_POST['submit_stylesheets']))
 {
 	$message = store_stylesheets();
 	header("Location: ".api_get_self()."?category=stylesheets");
@@ -130,7 +130,7 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 		if ($i % 10 == 0 and $i<$b){
 			if ($_GET['category'] <> "Languages"){
 				$form->addElement('html','<div align="right">');
-				$form->addElement('submit', null,get_lang('SaveSettings'));
+				$form->addElement('style_submit_button', null,get_lang('SaveSettings'), 'class="save"');
 				$form->addElement('html','</div>');
 			}		
 		}
@@ -229,7 +229,7 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 	}
 	if ($_GET['category'] <> "Languages"){
 		$form->addElement('html','<div align="right">');
-		$form->addElement('submit', null,get_lang('SaveSettings'));
+		$form->addElement('style_submit_button', null,get_lang('SaveSettings'), 'class="save"');
 		$form->addElement('html','</div>');
 	}
 	$form->setDefaults($default_values);
@@ -373,7 +373,7 @@ function handle_plugins()
 	$userplugins = array();
 	$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
-	if (!empty($_POST['submit_plugins']))
+	if (isset($_POST['submit_plugins']))
 	{
 		store_plugins();
 		Display :: display_normal_message($SettingsStored);
@@ -491,7 +491,7 @@ function handle_plugins()
 				}
 	echo '</table>';
 
-	echo '<input type="submit" name="submit_plugins" value="'.get_lang('Ok').'" /></form>';
+	echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
 			}
 
 
@@ -548,7 +548,7 @@ function handle_stylesheets()
 	$allowed_file_types = array ('css');
 	$form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
 	$form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
-	$form->addElement('submit', 'stylesheet_upload', get_lang('Ok'));
+	$form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Ok'));
 	if( $form->validate() AND is_writable(api_get_path(SYS_CODE_PATH).'css/'))
 	{
 		$values = $form->exportValues();
@@ -636,7 +636,7 @@ function handle_stylesheets()
 	}
 	if ($is_style_changeable)
 	{	
-		echo '<input type="submit" name="submit_stylesheets" value="'.get_lang('Ok').'" /></form>';
+		echo '<button class="save" type="submit" name="submit_stylesheets"> '.get_lang('SaveSettings').' </button></form>';
 	}
 }
 
@@ -811,7 +811,7 @@ function handle_search() {
     $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
 
     //$form->addRule('search_show_unlinked_results', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('submit', 'search-options-save', get_lang('Ok'));
+    $form->addElement('style_submit_button', 'search-options-save', get_lang('Ok'));
     $form->setDefaults($default_values);
 
     if( $form->validate()) {

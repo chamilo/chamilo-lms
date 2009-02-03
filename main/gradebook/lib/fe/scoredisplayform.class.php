@@ -138,7 +138,7 @@ class ScoreDisplayForm extends FormValidator
 		}
 		$this->setDefaults(array (
 		'enablescore' => $displayscore->is_custom(), 'includeupperlimit' => $displayscore->is_upperlimit_included()));
-		$this->addElement('submit', 'submit', get_lang('Ok'));
+		$this->addElement('style_submit_button', 'submit', get_lang('Ok'));
 	}
 	function validate() {
 		return parent :: validate();

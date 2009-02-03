@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 18169 2009-02-02 22:07:38Z herodoto $
+<?php //$Id: announcements.php 18203 2009-02-03 18:02:16Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1173,11 +1173,15 @@ if(!empty($error_message))
 		echo'<br />';
 		if(empty($_SESSION['toolgroup'])){
 			echo '<input type="hidden" name="submitAnnouncement" value="OK">';
-            echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
+            //echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
+            echo '<br /><button class="save"type="submit"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" >'.get_lang('Send').'</button><br /><br />';
+            
 		}
 		else{
 			echo '<input type="hidden" name="submitAnnouncement" value="OK">';
-			echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
+			//echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
+		    echo '<br /><button class="save"type="submit"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" >'.get_lang('Send').'</button><br /><br />';
+			
 		}
 		echo '</form><br />';
 

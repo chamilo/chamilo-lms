@@ -242,17 +242,16 @@ if($_POST['formSent']) {
 		api_sql_query($update_sql,__FILE__,__LINE__);
 		
 		//adding the session to the access_url_rel_session table
-		global $_configuration;	
+		global $_configuration;
+		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');	
 		if ($_configuration['multiple_access_urls']==true) {			
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
 			$access_url_id = api_get_current_access_url_id();			
-			require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 			UrlManager::add_session_to_url($id_session,$access_url_id);			
 		} else {
 			// we are filling by default the access_url_rel_session table 
 			UrlManager::add_session_to_url($id_session,1);
 		}
-
 		//if(empty($_GET['add']))
 			//header('Location: '.$_GET['page'].'?id_session='.$id_session);
 		//else

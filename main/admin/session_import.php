@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 17754 2009-01-15 22:58:39Z cfasanando $
+<?php // $Id: session_import.php 18197 2009-02-03 16:13:09Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -29,8 +29,7 @@
 $language_file = array('admin','registration');
 $cidReset=true;
 require('../inc/global.inc.php');
-if(empty($charset))
-{
+if (empty($charset)) {
 	$charset = 'ISO-8859-15';
 }
 api_protect_admin_script(true);
@@ -56,10 +55,8 @@ $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Administration
 
 set_time_limit(0);
 
-if($_POST['formSent'])
-{
-	if(isset($_FILES['import_file']['tmp_name']))
-	{
+if ($_POST['formSent']) {
+	if (isset($_FILES['import_file']['tmp_name'])) {
 
 		$formSent=$_POST['formSent'];
 		$file_type=$_POST['file_type'];
@@ -74,12 +71,10 @@ if($_POST['formSent'])
 		
 		$countSessions = 0;
 		
-		if($file_type == 'xml')
-		{
+		if ($file_type == 'xml') {
 
 			$racine = simplexml_load_file($_FILES['import_file']['tmp_name']);
-			if(is_object($racine))
-			{
+			if (is_object($racine)) {
 				foreach($racine->Users->User as $userNode)
 				{
 					$username = mb_convert_encoding($userNode->Username,$charset,'utf-8');
@@ -94,7 +89,7 @@ if($_POST['formSent'])
 					$sql = "SELECT 1 FROM $tbl_user WHERE username='".addslashes($username)."'";
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
 
-					if(mysql_affected_rows()==0)
+					if(Database::affected_rows()==0)
 					{
 						if($isCut)
 						{
@@ -110,14 +105,11 @@ if($_POST['formSent'])
 						$official_code = mb_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
 						$phone = mb_convert_encoding($userNode->Phone,$charset,'utf-8');
 						$status = mb_convert_encoding($userNode->Status,$charset,'utf-8');
-						switch($status)
-						{
+						switch($status) {
 							case 'student' : $status = 5; break;
 							case 'teacher' : $status = 1; break;
 							default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
 						}
-
-
 
 						$sql = "INSERT INTO $tbl_user SET
 								username = '".Database::escape_string($username)."',
@@ -128,11 +120,23 @@ if($_POST['formSent'])
 								official_code = '".Database::escape_string($official_code)."',
 								phone = '".Database::escape_string($phone)."',
 								status = '".Database::escape_string($status)."'";
-
+						
+						//if available adding also the access_url rel user relationship
 						api_sql_query($sql, __FILE__, __LINE__);
+						$return=Database::get_last_insert_id();						
+						global $_configuration;
+						require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+						if ($_configuration['multiple_access_urls']==true) {										
+							if (api_get_current_access_url_id()!=-1)
+								UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+							else
+								UrlManager::add_user_to_url($return, 1);
+						} else {
+							//we are adding by default the access_url_user table with access_url_id = 1
+							UrlManager::add_user_to_url($return, 1);				
+						}						
 
-						if(mysql_affected_rows()>0 && $sendMail)
-						{														
+						if(Database::affected_rows()>0 && $sendMail) {														
 							$recipient_name = $firstname.' '.$lastname;
 							$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');			
 							$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');						
@@ -140,9 +144,7 @@ if($_POST['formSent'])
 						    $email_admin = get_setting('emailAdministrator');							
 							@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
 						}
-					}
-					else
-					{
+					} else {
 						$lastname = mb_convert_encoding($userNode->Lastname,$charset,'utf-8');
 						$firstname = mb_convert_encoding($userNode->Firstname,$charset,'utf-8');
 						$password = mb_convert_encoding($userNode->Password,$charset,'utf-8');
@@ -150,15 +152,12 @@ if($_POST['formSent'])
 						$official_code = mb_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
 						$phone = mb_convert_encoding($userNode->Phone,$charset,'utf-8');
 						$status = mb_convert_encoding($userNode->Status,$charset,'utf-8');
-						switch($status)
-						{
+						switch($status) {
 							case 'student' : $status = 5; break;
 							case 'teacher' : $status = 1; break;
 							default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
 						}
-
-
-
+						
 						$sql = "UPDATE $tbl_user SET
 									lastname = '".Database::escape_string($lastname)."',
 									firstname = '".Database::escape_string($firstname)."',
@@ -169,13 +168,11 @@ if($_POST['formSent'])
 									status = '".Database::escape_string($status)."'
 								WHERE username = '".Database::escape_string($username)."'";
 
-						api_sql_query($sql, __FILE__, __LINE__);
-						
+						api_sql_query($sql, __FILE__, __LINE__);						
 					}
-
 				}
-				foreach($racine->Courses->Course as $courseNode)
-				{
+				
+				foreach($racine->Courses->Course as $courseNode) {
 					$course_code = mb_convert_encoding($courseNode->CourseCode,$charset,'utf-8');
 					$title = mb_convert_encoding($courseNode->CourseTitle,$charset,'utf-8');
 					$description = mb_convert_encoding($courseNode->CourseDescription,$charset,'utf-8');
@@ -185,11 +182,10 @@ if($_POST['formSent'])
 					$sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
 
-					list($user_id, $lastname, $firstname) = mysql_fetch_array($rs);
+					list($user_id, $lastname, $firstname) = Database::fetch_array($rs);
 					$keys = define_course_keys($course_code, "", $dbNamePrefix);
 
-					if (sizeof($keys))
-					{
+					if (sizeof($keys)) {
 
 						$currentCourseCode = $keys['visual_code'];
 						$currentCourseId = $keys["currentCourseId"];
@@ -198,10 +194,8 @@ if($_POST['formSent'])
 						$currentCourseDbName = $keys["currentCourseDbName"];
 						$currentCourseRepository = $keys["currentCourseRepository"];
 
-						if($currentCourseId == strtoupper($course_code))
-						{
-							if (empty ($title))
-							{
+						if($currentCourseId == strtoupper($course_code)) {
+							if (empty ($title)) {
 								$title = $keys["currentCourseCode"];
 							}
 							prepare_course_repository($currentCourseRepository, $currentCourseId);
@@ -244,7 +238,7 @@ if($_POST['formSent'])
 					}
 				}
 				
-				foreach ($racine->Session as $sessionNode){ // foreach session
+				foreach ($racine->Session as $sessionNode) { // foreach session
 					
 					$countCourses = 0;
 					$countUsers = 0;
@@ -252,10 +246,10 @@ if($_POST['formSent'])
 					$SessionName = mb_convert_encoding($sessionNode->SessionName,$charset,'utf-8');
 					$Coach = mb_convert_encoding($sessionNode->Coach,$charset,'utf-8');
 
-					if(!empty($Coach)){
+					if (!empty($Coach)) {
 						$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
 						$rsCoach = api_sql_query($sqlCoach);
-						list($CoachId) = (mysql_fetch_array($rsCoach));
+						list($CoachId) = (Database::fetch_array($rsCoach));
 						if(empty($CoachId))
 						{
 							$errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
@@ -263,35 +257,26 @@ if($_POST['formSent'])
 					}
 
 					$DateStart = $sessionNode->DateStart;
-					if(!empty($DateStart))
-					{
+					if(!empty($DateStart)) {
 						list($YearStart,$MonthStart, $DayStart) = explode('-',$DateStart);
-						if(empty($YearStart) || empty($MonthStart) || empty($DayStart))
-						{
+						if(empty($YearStart) || empty($MonthStart) || empty($DayStart)) {
 							$errorMsg .= get_lang('WrongDate').' : '.$DateStart.'<br />';
 							break;
-						}
-						else
-						{
+						} else {
 							$timeStart = mktime(0,0,0,$MonthStart,$DayStart,$YearStart);
 						}
 
 						$DateEnd = $sessionNode->DateEnd;
-						if(!empty($DateStart))
-						{
+						if(!empty($DateStart)) {
 							list($YearEnd,$MonthEnd, $DayEnd) = explode('-',$DateEnd);
-							if(empty($YearEnd) || empty($MonthEnd) || empty($DayEnd))
-							{
+							if(empty($YearEnd) || empty($MonthEnd) || empty($DayEnd)) {
 								$errorMsg .= get_lang('WrongDate').' : '.$DateEnd.'<br />';
 								break;
-							}
-							else
-							{
+							} else {
 								$timeEnd = mktime(0,0,0,$MonthEnd,$DayEnd,$YearEnd);
 							}
 						}
-						if($timeEnd - $timeStart < 0)
-						{
+						if($timeEnd - $timeStart < 0) {
 							$errorMsg .= get_lang('StartDateShouldBeBeforeEndDate').' : '.$DateEnd.'<br />';
 						}
 					}
@@ -305,7 +290,7 @@ if($_POST['formSent'])
 						$sql = 'SELECT 1 FROM '.$tbl_session.' WHERE name="'.Database::escape_string($SessionName.$suffix).'"';
 						$rs = api_sql_query($sql, __FILE__, __LINE__);
 
-						if(mysql_result($rs,0,0))
+						if(Database::result($rs,0,0))
 						{
 							$i++;
 						}
@@ -323,21 +308,32 @@ if($_POST['formSent'])
 									date_end = '$DateEnd',
 									session_admin_id=".intval($_user['user_id']);
 					$rsSession = api_sql_query($sqlSession, __FILE__, __LINE__);
-					$session_id = mysql_insert_id();
-					
+					$session_id = Database::get_last_insert_id();					
 					$countSessions++;
+					
+					//adding the session to an access_url 
+					global $_configuration;	
+					if ($_configuration['multiple_access_urls']==true) {			
+						$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+						$access_url_id = api_get_current_access_url_id();			
+						require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+						UrlManager::add_session_to_url($session_id,$access_url_id);			
+					} else {
+						// we are filling by default the access_url_rel_session table 
+						UrlManager::add_session_to_url($session_id,1);
+					}
 
 					foreach ($sessionNode->User as $userNode){
 						$username = mb_convert_encoding(substr($userNode->nodeValue,0,20),$charset,'utf-8');
 						$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".Database::escape_string($username)."'";
 						$rsUser = api_sql_query($sqlUser);
-						list($user_id) = (mysql_fetch_array($rsUser));
+						list($user_id) = (Database::fetch_array($rsUser));
 						if(!empty($user_id)){
 							$sql = "INSERT INTO $tbl_session_user SET
 									id_user='$user_id',
 									id_session = '$session_id'";
 							$rsUser = api_sql_query($sql,__FILE__,__LINE__);
-							if(mysql_affected_rows()){
+							if(Database::affected_rows()){
 								$countUsers++;
 							}
 						}
@@ -348,16 +344,16 @@ if($_POST['formSent'])
 						$CourseCode = $courseNode->CourseCode;
 
 						// verify that the course pointed by the course code node exists
-						$sql = 'SELECT 1 FROM '.$tbl_course.' WHERE code="'.mysql_escape_string($CourseCode).'"';
+						$sql = 'SELECT 1 FROM '.$tbl_course.' WHERE code="'.Database::escape_string($CourseCode).'"';
 						$rs = api_sql_query($sql, __FILE__, __LINE__);
-						if(mysql_num_rows($rs)>0)
+						if(Database::num_rows($rs)>0)
 						{ // if the course exists we continue
 
 							$Coach = substr($courseNode->Coach,0,20);
 							if(!empty($Coach)){
 								$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
 								$rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
-								list($CoachId) = (mysql_fetch_array($rsCoach));
+								list($CoachId) = (Database::fetch_array($rsCoach));
 								if(empty($CoachId))
 								{
 									$errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
@@ -372,7 +368,7 @@ if($_POST['formSent'])
 										  id_coach='$CoachId',
 										  id_session='$session_id'";
 							$rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
-							if(mysql_affected_rows()){
+							if(Database::affected_rows()){
 								$countCourses++;
 
 								$countUsersCourses = 0;
@@ -380,14 +376,14 @@ if($_POST['formSent'])
 									$username = substr($userNode,0,20);
 									$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$username."'";
 									$rsUser = api_sql_query($sqlUser);
-									list($user_id) = (mysql_fetch_array($rsUser));
+									list($user_id) = (Database::fetch_array($rsUser));
 									if(!empty($user_id))
 									{
 										$sql = "INSERT IGNORE INTO $tbl_session_user SET
 											id_user='$user_id',
 											id_session = '$session_id'";
 
-										if(mysql_affected_rows())
+										if(Database::affected_rows())
 											$countUsers++;
 										$rsUser = api_sql_query($sql,__FILE__,__LINE__);
 
@@ -396,7 +392,7 @@ if($_POST['formSent'])
 												course_code='$CourseCode',
 												id_session = '$session_id'";
 										$rsUsers = api_sql_query($sql,__FILE__,__LINE__);
-										if(mysql_affected_rows())
+										if(Database::affected_rows())
 											$countUsersCourses++;
 									}
 									else
@@ -433,10 +429,7 @@ if($_POST['formSent'])
 			if(!strstr($content[0],';'))
 			{
 				$errorMsg=get_lang('NotCSV');
-			}
-			else
-			{
-
+			} else {
 				$tag_names=array();
 
 				foreach($content as $key=>$enreg)
@@ -474,9 +467,8 @@ if($_POST['formSent'])
 					if(!empty($enreg['Coach'])){
 						$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='".$enreg['Coach']."'";
 						$rsCoach = api_sql_query($sqlCoach);
-						list($Coach) = (mysql_fetch_array($rsCoach));
-					}
-					else {
+						list($Coach) = (Database::fetch_array($rsCoach));
+					} else {
 						$Coach = '';
 					}
 
@@ -487,7 +479,7 @@ if($_POST['formSent'])
 								date_end = '$DateEnd'";
 					$rsSession = api_sql_query($sqlSession, __FILE__, __LINE__);
 					$update = false;
-					if(!mysql_affected_rows($rsSession)){
+					if(!Database::affected_rows($rsSession)){
 						$update = true;
 						$sqlSession = "UPDATE $tbl_session SET
 										id_coach = '$Coach',
@@ -497,13 +489,12 @@ if($_POST['formSent'])
 						$rsSession = api_sql_query($sqlSession, __FILE__, __LINE__);
 
 						$session_id = api_sql_query("SELECT id FROM $tbl_session WHERE name='$SessionName'",__FILE__,__LINE__);
-						list($session_id) = mysql_fetch_array($session_id);
+						list($session_id) = Database::fetch_array($session_id);
 
 						api_sql_query("DELETE FROM $tbl_session_user WHERE id_session='$session_id'",__FILE__,__LINE__);
 						api_sql_query("DELETE FROM $tbl_session_course WHERE id_session='$session_id'",__FILE__,__LINE__);
 						api_sql_query("DELETE FROM $tbl_session_course_user WHERE id_session='$session_id'",__FILE__,__LINE__);
-					}
-					else {
+					} else {
 						$session_id = mysql_insert_id($rsSession);
 					}
 					
@@ -513,13 +504,13 @@ if($_POST['formSent'])
 					foreach ($users as $user){
 						$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$user."'";
 						$rsUser = api_sql_query($sqlUser);
-						list($user_id) = (mysql_fetch_array($rsUser));
+						list($user_id) = (Database::fetch_array($rsUser));
 						$sql = "INSERT INTO $tbl_session_user SET
 								id_user='$user_id',
 								id_session = '$session_id'";
 
 						$rsUser = api_sql_query($sql,__FILE__,__LINE__);
-						if(mysql_affected_rows()){
+						if(Database::affected_rows()){
 							$countUsers++;
 						}
 					}
@@ -534,9 +525,8 @@ if($_POST['formSent'])
 						if(!empty($Coach)){
 							$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
 							$rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
-							list($Coach) = (mysql_fetch_array($rsCoach));
-						}
-						else {
+							list($Coach) = (Database::fetch_array($rsCoach));
+						} else {
 							$Coach = '';
 						}
 
@@ -546,22 +536,21 @@ if($_POST['formSent'])
 									  id_session='$session_id'";
 
 						$rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
-						if(mysql_affected_rows()){
+						if(Database::affected_rows()){
 							$countCourses++;
-
 							$users = substr($course , strpos($course,'[',1)+1 , strpos($course,']',1));
 							$users = explode('|',$enreg['Users']);
 							$countUsersCourses = 0;
 							foreach ($users as $user){
 								$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$user."'";
 								$rsUser = api_sql_query($sqlUser);
-								list($user_id) = (mysql_fetch_array($rsUser));
+								list($user_id) = (Database::fetch_array($rsUser));
 								$sql = "INSERT INTO $tbl_session_course_user SET
 										id_user='$user_id',
 										course_code='$CourseCode',
 										id_session = '$session_id'";
 								$rsUsers = api_sql_query($sql,__FILE__,__LINE__);
-								if(mysql_affected_rows())
+								if(Database::affected_rows())
 									$countUsersCourses++;
 							}
 							api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);
@@ -572,23 +561,19 @@ if($_POST['formSent'])
 				}
 			}
 		}
-		if(!empty($errorMsg))
-		{
+		if(!empty($errorMsg)) {
 			$errorMsg = get_lang('ButProblemsOccured').' :<br />'.$errorMsg;
 		}
 
-		if($countSessions == 1){
+		if($countSessions == 1) {
 			header('Location: resume_session.php?id_session='.$session_id);
 			exit;
-		}
-		else{
+		} else {
 			header('Location: session_list.php?action=show_message&message='.urlencode(get_lang('FileImported').' '.$errorMsg));
 			exit;
 		}
-	}
-	else
-	{
-	$errorMsg = get_lang('NoInputFile');
+	} else {
+		$errorMsg = get_lang('NoInputFile');
 	}
 }
 
@@ -601,8 +586,7 @@ api_display_tool_title($tool_name);
 <table border="0" cellpadding="5" cellspacing="0">
 
 <?php
-if(!empty($errorMsg))
-{
+if(!empty($errorMsg)) {
 ?>
 <tr>
   <td colspan="2">

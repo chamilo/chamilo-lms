@@ -1,4 +1,24 @@
 <?php
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2004-2009 Dokeos SPRL	
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
+==============================================================================
+*/
+
 // name of the language file that needs to be included
 $language_file='admin';
 
@@ -43,12 +63,28 @@ function search_coachs($needle)
 				OR lastname LIKE "'.$needle.'%")
 				AND status=1
 				ORDER BY lastname, firstname, username
-				LIMIT 10';
-				
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+				LIMIT 10'; 
 		
-		while($user = Database :: fetch_array($rs))
-		{
+		global $_configuration;	
+		if ($_configuration['multiple_access_urls']==true) {		
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){			
+				
+				$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
+				INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+				WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
+				OR firstname LIKE "'.$needle.'%"
+				OR lastname LIKE "'.$needle.'%")
+				AND status=1
+				ORDER BY lastname, firstname, username
+				LIMIT 10';			
+				
+			}
+		}		
+				
+		$rs = api_sql_query($sql, __FILE__, __LINE__);		
+		while ($user = Database :: fetch_array($rs)) {
 			$return .= '<a href="#" onclick="fill_coach_field(\''.$user['username'].'\')">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</a><br />';
 		}
 	}
@@ -77,8 +113,7 @@ $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('Session
 $nb_days_acess_before = 0;
 $nb_days_acess_after = 0;
 
-if($_POST['formSent'])
-{
+if ($_POST['formSent']) {
 	$formSent=1;
 
 	$name=trim(stripslashes($_POST['name']));
@@ -93,13 +128,12 @@ if($_POST['formSent'])
 	
 	$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($_POST['coach_username']).'"';
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
-	$id_coach = mysql_result($rs,0,'user_id');
+	$id_coach = Database::result($rs,0,'user_id');
 
-	if(empty($_POST['nolimit'])){
+	if (empty($_POST['nolimit'])){
 		$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
 		$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
-	}
-	else {
+	} else {
 		$date_start="000-00-00";
 		$date_end="000-00-00";
 	}
@@ -111,13 +145,11 @@ if($_POST['formSent'])
 	else
 	{
 		$rs = api_sql_query("SELECT 1 FROM $tbl_session WHERE name='".addslashes($name)."'");
-		if(mysql_num_rows($rs)){
+		if(Database::num_rows($rs)){
 			$errorMsg = get_lang('SessionNameSoonExists');
-		}
-		else {
+		} else {
 			api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")",__FILE__,__LINE__);
-			$id_session=mysql_insert_id();
-
+			$id_session=Database::get_last_insert_id();
 			header('Location: add_courses_to_session.php?id_session='.$id_session.'&add=true');
 			exit();
 		}
@@ -130,7 +162,6 @@ $thisMonth=date('m');
 $thisDay=date('d');
 
 Display::display_header($tool_name);
-
 api_display_tool_title($tool_name);
 ?>
 
@@ -166,13 +197,25 @@ if(!empty($errorMsg))
   <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
   <td width="70%">
 <?php
+
 $sql = 'SELECT COUNT(1) FROM '.$tbl_user.' WHERE status=1';
 $rs = api_sql_query($sql, __FILE__, __LINE__);
-$count_users = mysql_result($rs, 0, 0);
+$count_users = Database::result($rs, 0, 0);
 
-if(intval($count_users)<50)
-{
-	$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";
+if (intval($count_users)<50) {	
+	$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";	
+	global $_configuration;	
+	if ($_configuration['multiple_access_urls']==true) {		
+		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+		$access_url_id = api_get_current_access_url_id();
+		if ($access_url_id != -1){					
+			$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
+			INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+			WHERE access_url_id = '.$access_url_id.'  AND status=1
+			ORDER BY lastname, firstname, username';			
+		}
+	}	
+	
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$Coaches=api_store_result($result);
 	?>
@@ -183,9 +226,7 @@ if(intval($count_users)<50)
 		<?php endforeach; ?>
 	</select>
 	<?php
-}
-else
-{
+} else {
 	?>
 	<input type="text" name="coach_username" id="coach_username" onkeyup="xajax_search_coachs(document.getElementById('coach_username').value)" /><div id="ajax_list_coachs"></div>
 	<?php
@@ -255,12 +296,9 @@ else
   <select name="year_start">
 
 <?php
-for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
-{
+for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 ?>
-
 	<option value="<?php echo $i; ?>" <?php if((!$formSent && $thisYear == $i) || ($formSent && $year_start == $i)) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
-
 <?php
 }
 ?>
@@ -323,16 +361,12 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
   <select name="year_end">
 
 <?php
-for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
-{
+for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 ?>
-
 	<option value="<?php echo $i; ?>" <?php if((!$formSent && ($thisYear+1) == $i) || ($formSent && $year_end == $i)) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
-
 <?php
 }
 ?>
-
   </select>
   </td>
 </tr>
@@ -360,8 +394,7 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 </form>
 <script type="text/javascript">
 
-function setDisable(select){
-
+function setDisable(select) {
 	document.form.day_start.disabled = (select.checked) ? true : false;
 	document.form.month_start.disabled = (select.checked) ? true : false;
 	document.form.year_start.disabled = (select.checked) ? true : false;
@@ -369,7 +402,6 @@ function setDisable(select){
 	document.form.day_end.disabled = (select.checked) ? true : false;
 	document.form.month_end.disabled = (select.checked) ? true : false;
 	document.form.year_end.disabled = (select.checked) ? true : false;
-
 
 }
 </script>

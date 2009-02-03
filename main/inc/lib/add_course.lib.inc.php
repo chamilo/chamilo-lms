@@ -2358,10 +2358,8 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					user_course_cat='0'";
 		api_sql_query($sql, __FILE__, __LINE__);
 
-		if(count($teachers)>0)
-		{
-			foreach($teachers as $key)
-			{
+		if(count($teachers)>0) {
+			foreach($teachers as $key) {
 				$sql = "INSERT INTO ".$TABLECOURSUSER . " SET
 					course_code = '".Database::escape_string($courseSysCode) . "',
 					user_id = '".Database::escape_string($key) . "',
@@ -2373,17 +2371,18 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 		}
-		//
+		//adding the course to an URL
 		global $_configuration;
-		if ($_configuration['multiple_access_urls']==true) {
-			require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+		if ($_configuration['multiple_access_urls']==true) {			
 			$url_id=1;				
 			if (api_get_current_access_url_id()!=-1)
 				$url_id=api_get_current_access_url_id();											
 			UrlManager::add_course_to_url($courseSysCode,$url_id);			
+		} else {
+			UrlManager::add_course_to_url($courseSysCode,1);
 		}
 	}
-
 	return 0;
 }
 

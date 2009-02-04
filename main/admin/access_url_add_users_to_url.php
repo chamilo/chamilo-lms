@@ -77,7 +77,7 @@ Display :: display_header($tool_name);
 
 echo '<div class="actions" style="height:22px;">';
 echo '<div style="float:right;">		
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('del_user_big.gif',get_lang('EditUsersToURL'),'').get_lang('EditUsersToURL').'</a>													
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('edit.gif',get_lang('EditUsersToURL'),'').get_lang('EditUsersToURL').'</a>													
 	  </div><br />';		  
 echo '</div>';	
 

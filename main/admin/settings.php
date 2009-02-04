@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 18208 2009-02-03 20:35:26Z juliomontoya $
+<?php // $Id: settings.php 18227 2009-02-04 15:09:06Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -125,7 +125,7 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 	//$resultsettings = api_sql_query($sqlsettings, __FILE__, __LINE__);
 	//while ($row = mysql_fetch_array($resultsettings))
 	$default_values = array();
-	foreach($settings as $row) {		
+	foreach($settings as $row) {			
 		($countsetting['0']%10) < 5 ?$b=$countsetting['0']-10:$b=$countsetting['0'];		
 		if ($i % 10 == 0 and $i<$b){
 			if ($_GET['category'] <> "Languages"){
@@ -134,9 +134,14 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 				$form->addElement('html','</div>');
 			}		
 		}
-		$i++;	
+		$i++;
 
 		$form->addElement('header', null, get_lang($row['title']));
+		
+		if ($row['access_url_changeable']=='1') {
+			$form->addElement('html', '<div style="float:right;">'.Display::return_icon('shared_setting.png',get_lang('SharedSettingIconComment')).'</div>');						
+		}	
+		
 		$hideme=array();
 		$hide_element=false;
 		if ($_configuration['access_url']!=1)

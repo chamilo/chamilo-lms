@@ -77,7 +77,7 @@ Display :: display_header($tool_name);
 
 echo '<div class="actions" style="height:22px;">';
 echo '<div style="float:right;">		
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php">'.Display::return_icon('course_del.gif',get_lang('AddUserToURL'),'').get_lang('EditCoursesToURL').'</a>												
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php">'.Display::return_icon('edit.gif',get_lang('AddUserToURL'),'').get_lang('EditCoursesToURL').'</a>												
 	  </div><br />';		  
 echo '</div>';
 

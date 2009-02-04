@@ -48,7 +48,7 @@ window.onload = function()
 {
 	var oCombo = document.getElementById('cmbType') ;
 	oCombo.innerHTML = '' ;
-	if ( oConnector.ShowAllTypes )
+	if ( oConnector.ShowAllTypes || oConnector.ResourceType == 'File' )
 	{
 		AddSelectOption( oCombo, aTypes[0][1], aTypes[0][0], true ) ;
 

@@ -69,7 +69,20 @@ if($_POST['formSent'] )
 	$session_id=$_POST['session_id'];
 	if(empty($session_id))
 	{
-		$result=api_sql_query("SELECT id,name,id_coach,date_start,date_end FROM $tbl_session ORDER BY id",__FILE__,__LINE__);
+		$sql = "SELECT id,name,id_coach,date_start,date_end FROM $tbl_session ORDER BY id";		
+		global $_configuration;	
+		if ($_configuration['multiple_access_urls']==true) {	
+			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){
+			$sql = "SELECT id, name,id_coach,date_start,date_end FROM $tbl_session s INNER JOIN $tbl_session_rel_access_url as session_rel_url 		
+				ON (s.id= session_rel_url.session_id)		
+				WHERE access_url_id = $access_url_id
+				ORDER BY id";		
+			}
+		} 
+
+		$result=api_sql_query($sql,__FILE__,__LINE__);
 	}
 	else
 	{
@@ -83,7 +96,7 @@ if($_POST['formSent'] )
 
 	}
 
-	if(mysql_num_rows($result))
+	if(Database::num_rows($result))
 	{
 		if(!file_exists($archivePath))
 		{
@@ -118,7 +131,7 @@ if($_POST['formSent'] )
 			fputs($fp,"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<Sessions>\n");
 		}
 
-		while($row=mysql_fetch_array($result))
+		while($row=Database::fetch_array($result))
 		{
 
 
@@ -146,7 +159,7 @@ if($_POST['formSent'] )
 
 			$rsUsers = api_sql_query($sql,__FILE__,__LINE__);
 			$users = '';
-			while($rowUsers = mysql_fetch_array($rsUsers)){
+			while($rowUsers = Database::fetch_array($rsUsers)){
 				if($cvs){
 					$users .= str_replace(';',',',$rowUsers['username']).'|';
 				}
@@ -175,7 +188,7 @@ if($_POST['formSent'] )
 			$rsCourses = api_sql_query($sql,__FILE__,__LINE__);
 
 			$courses = '';
-			while($rowCourses = mysql_fetch_array($rsCourses)){
+			while($rowCourses = Database::fetch_array($rsCourses)){
 
 				if($cvs){
 					$courses .= str_replace(';',',',$rowCourses['code']);
@@ -196,7 +209,7 @@ if($_POST['formSent'] )
 							AND id_session='".$row['id']."'";
 
 				$rsUsersCourse = api_sql_query($sql,__FILE__,__LINE__);
-				while($rowUsersCourse = mysql_fetch_array($rsUsersCourse)){
+				while($rowUsersCourse = Database::fetch_array($rsUsersCourse)){
 					if($cvs){
 						$userscourse .= str_replace(';',',',$rowUsersCourse['username']).',';
 					}
@@ -241,6 +254,18 @@ api_display_tool_title($tool_name);
 
 //select of sessions
 $sql = "SELECT id, name FROM $tbl_session ORDER BY name";
+global $_configuration;	
+if ($_configuration['multiple_access_urls']==true) {		
+	$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+	$access_url_id = api_get_current_access_url_id();
+	if ($access_url_id != -1){
+	$sql = "SELECT id, name FROM $tbl_session s INNER JOIN $tbl_session_rel_access_url as session_rel_url 		
+		ON (s.id= session_rel_url.session_id)		
+		WHERE access_url_id = $access_url_id
+		ORDER BY name";		
+	}
+} 
+
 
 $result=api_sql_query($sql,__FILE__,__LINE__);
 

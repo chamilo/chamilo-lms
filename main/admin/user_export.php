@@ -1,5 +1,5 @@
 <?php
-// $Id: user_export.php 18050 2009-01-28 18:54:19Z cfasanando $
+// $Id: user_export.php 18237 2009-02-04 19:13:09Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -55,6 +55,18 @@ set_time_limit(0);
 $courses = array ();
 $courses[''] = '--';
 $sql = "SELECT code,visual_code,title FROM $course_table ORDER BY visual_code";
+
+global $_configuration;	
+if ($_configuration['multiple_access_urls']==true) {		
+	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+	$access_url_id = api_get_current_access_url_id();
+	if ($access_url_id != -1){
+	$sql = "SELECT code,visual_code,title FROM $course_table as c INNER JOIN $tbl_course_rel_access_url as course_rel_url 		
+		ON (c.code = course_rel_url.course_code)		
+		WHERE access_url_id = $access_url_id
+		ORDER BY visual_code";		
+	}
+}
 $result = api_sql_query($sql, __FILE__, __LINE__);
 while ($course = mysql_fetch_object($result))
 {
@@ -84,14 +96,25 @@ if ($form->validate())
 					u.status		AS Status,
 					u.official_code	AS OfficialCode,
 					u.phone		AS Phone";
-	if (strlen($course_code) > 0)
-	{
+	if (strlen($course_code) > 0) {
 		$sql .= " FROM $user_table u, $course_user_table cu WHERE u.user_id = cu.user_id AND course_code = '$course_code' ORDER BY lastname,firstname";
 		$filename = 'export_users_'.$course_code.'_'.date('Y-m-d_H-i-s');
-	}
-	else
-	{
-		$sql .= " FROM $user_table u ORDER BY lastname,firstname";
+	} else {
+		
+		global $_configuration;	
+		if ($_configuration['multiple_access_urls']==true) {		
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){
+			$sql.= " FROM $user_table u INNER JOIN $tbl_user_rel_access_url as user_rel_url 		
+				ON (u.user_id= user_rel_url.user_id)		
+				WHERE access_url_id = $access_url_id
+				ORDER BY lastname,firstname";		
+			}
+		} else {
+			$sql .= " FROM $user_table u ORDER BY lastname,firstname";
+		}	
+		
 		$filename = 'export_users_'.date('Y-m-d_H-i-s');
 	}
 	$data = array();

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: index.php 18231 2009-02-04 16:20:38Z juliomontoya $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 18203 2009-02-03 18:02:16Z ndieschburg $
+* 	@version $Id: index.php 18231 2009-02-04 16:20:38Z juliomontoya $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -528,6 +528,19 @@ function display_anonymous_course_list() {
 	$sql_get_course_list = "SELECT * FROM $main_course_table cours
 								WHERE category_code = '".Database::escape_string($_GET["category"])."'
 								ORDER BY title, UPPER(visual_code)";
+								
+	//showing only the courses of the current access_url_id								
+	global $_configuration;
+	if ($_configuration['multiple_access_urls']==true) {
+		$url_access_id = api_get_current_access_url_id();
+		if ($url_access_id !=-1) {
+			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);			
+			$sql_get_course_list="SELECT * FROM $main_course_table as course INNER JOIN $tbl_url_rel_course as url_rel_course 
+					ON (url_rel_course.course_code=course.code)
+					WHERE access_url_id = $url_access_id AND category_code = '".mysql_real_escape_string($_GET["category"])."' ORDER BY title, UPPER(visual_code)";
+		}
+	}
+	
 	//removed: AND cours.visibility='".COURSE_VISIBILITY_OPEN_WORLD."'
 	$sql_result_courses = api_sql_query($sql_get_course_list, __FILE__, __LINE__);
 
@@ -557,6 +570,26 @@ function display_anonymous_course_list() {
 				LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code $platform_visible_courses)
 				WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
 				GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
+				
+					
+	//showing only the category of courses of the current access_url_id								
+	global $_configuration;
+	if ($_configuration['multiple_access_urls']==true) {
+		$url_access_id = api_get_current_access_url_id();
+		if ($url_access_id !=-1) {
+			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+			$sqlGetSubCatList = "
+				SELECT t1.name,t1.code,t1.parent_id,t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
+				FROM $main_category_table t1
+				LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
+				LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code $platform_visible_courses)
+				INNER JOIN $tbl_url_rel_course as url_rel_course 
+					ON (url_rel_course.course_code=t3.code)
+				WHERE access_url_id = $url_access_id AND t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."				
+				GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
+		}
+	}
+	
 	$resCats = api_sql_query($sqlGetSubCatList, __FILE__, __LINE__);
 	$thereIsSubCat = false;
 	if (Database::num_rows($resCats) > 0) {

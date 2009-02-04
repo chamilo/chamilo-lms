@@ -15,4 +15,5 @@ $langBackAndForget  = "Annulla";
 $CourseDescriptionUpdated = "Descrizione del corso aggiornata";
 $CourseDescriptionDeleted = "Descrizione del corso eliminata";
 $CourseDescriptionIntro = "Clicca sulla voce e compila il modulo per creare una descrizione.<br><br>Clicca Conferma per salvare.";
+$langSaveDescription = "Salva la descrizione";
 ?>

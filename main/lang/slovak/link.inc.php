@@ -37,10 +37,13 @@ $langCsvFileLine1 = "... - riadok 1 =";
 $langCsvLinesFailed = "odkaz z riadku(riadkov) nebol importovaný (žiadna URL alebo názov)";
 $langCsvLinesOld = "existujúci odkaz aktualizovaný (rovnaká URL a kategória).";
 $langCsvLinesNew = "nový odkaz vytvorený.";
+$langCsvExplain = "Súbor by mal vyzera&#357; takto: <blockquote><pre> <b>URL</b>;Kategória;<b>názov</b>;popis; <b>http://www.aaa.org/...</b>;Dôležité odkazy;<b>Názov 1</b>;Popis 1; <b>http://www.bbb.net/...</b>;;<b>Názov 2</b>;\"Popis 2\"; </pre></blockquote> Ak URL a kategória sú rovnaké ako tie v existujúcom odkaze, jej názov a popis sú  aktualizované. V ostatných prípadoch sa vytvorí nový odkaz.<br><br> tu&#269;ný = povinný. Polia môžu by&#357; v akomko&#318;vek poradí, názvy malými alebo ve&#318;kými písmenami. &#270;alšie polia sú pridané k popisu. Odde&#318;ova&#269;: &#269;iarka alebo bodko&#269;iarka. Hodnoty môžu by&#357; citované, nie však názvy polí. Niektoré [b]HTML tagy[/b] môžu by&#357; do popisného po&#318;a importované.";
 $langLinkUpdated = "Odkaz bol aktualizovaný";
 $langAll_Link_Deleted = "Odkaz bol zmazaný";
 $langOnHomepage = "Zobrazi&#357; tento odkaz na domovskej stránke";
 $langShowLinkOnHomepage = "Zobrazi&#357; tento odkaz ako ikonu na domovskej stránke kurzu";
 $langCsvImport = "importova&#357; zo súboru CSV";
 $General = "Všeobecný";
+$langSaveLink = "Uloži&#357; odkaz";
+$langSaveCategory = "Uloži&#357; kategóriu";
 ?>

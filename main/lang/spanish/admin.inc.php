@@ -897,8 +897,14 @@ $EnablePlugins = "Habilitar los plugins seleccionados";
 $AtLeastOneCourseAndOneURL = "Debe escoger por lo menos un curso y una URL";
 $ClickToRegisterAdmin = "Haga click para registrar al usuario Admin en todas las URLs";
 $AdminShouldBeRegisterInSite = "El usuario administrador deberia estar registrado en: ";
-$URLNotConfiguredPleaseChangedTo: = "URL no configurada favor de agregar la siguiente URL";
+$URLNotConfiguredPleaseChangedTo = "URL no configurada favor de agregar la siguiente URL";
 $AdminUserRegisteredToThisURL = "Usuario registrado a esta URL";
 $CoursesWereEdited = "Los cursos fueron editados";
 $URLEdited = "La URL ha sido modificada";
+$AddSessionToURL  = "Agregar una sesión a una URL";
+$FirstLetterSession = "Primera letra del nombre de la sessión";
+$EditSessionToURL  = "Editar una sesión";
+$AddSessionsToThatURL = "Agregar sesiones a esta URL";
+$SessionBelongURL = "Las sesiones fueron registradas";
+$ManageSessions = "Administrar sesiones";
 ?>

@@ -54,4 +54,6 @@ $FilterByNotExpired = "Filtrar por no vencidas";
 $FilterAssignments = "Filtrar tareas";
 $WeightNecessary = "Peso necesario";
 $QualificationOver = "Calificación sobre";
+$ExpiryDateAlreadyPassed = "Fecha de vencimiento ya ha pasado";
+$EndDateAlreadyPassed = "Fecha final ya ha pasado";
 ?>

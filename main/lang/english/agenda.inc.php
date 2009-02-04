@@ -70,4 +70,5 @@ $GlobalEvent = "Global event";
 $EndDateCannotBeBeforeTheStartDate = "The end date cannot be before the start date";
 $AgendaSortChronologicallyUp = "Sort Agenda chronologically (up)";
 $AgendaSortChronologicallyDown = "Sort Agenda chronologically (down)";
+$ItemForUserSelection = "Users selection list";
 ?>

@@ -123,7 +123,7 @@ $langMyStats = "Ver mis estadísticas";
 $langLogout = "Salir";
 $langMyAgenda = "Mi agenda";
 $langCourseHomepage = "Página principal del curso";
-$langCourseManagerview = "Ir a vista de profesor";
+$langCourseManagerview = "Vista de profesor";
 $langStudentView = "Vista de estudiante";
 $AddResource = "Añadir recurso";
 $AddedResources = "Recursos añadidos";
@@ -678,4 +678,7 @@ $ManageReservations = "Gestionar reservas";
 $DestinationUsers = "Usuarios destinatarios";
 $AttachmentFileDeleteSuccess = "El archivo adjunto ha sido eliminado";
 $AccountURLInactive = "Cuenta no activada en esta URL";
+$MaxFileSize = "Tamaño de archivo máximo";
+$SendFileError = "Error al enviar el archivo";
+$Expired = "Vencido";
 ?>

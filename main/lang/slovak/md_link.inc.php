@@ -15,6 +15,7 @@ $langKeyword = "K&#318;ú&#269;ové slová";
 $langKeywordTip = "oddeli&#357; &#269;iarkami (písmená, &#269;íslice, -.)";
 $langCoverage = "Kategória";
 $langKwNote = "Ke&#271; meníte jazyk popisu, nepridávajte v rovnakom &#269;ase k&#318;ú&#269;ové slová.";
+$langClickKw = "Pre ozna&#269;enie alebo zrušenie výberu k&#318;ú&#269;ového slova na&#328; kliknite v štruktúre.";
 $langLocation = "URL/URI";
 $langLocationTip = "klikom otvoríte predmet";
 $langStore = "Uloži&#357;";
@@ -30,4 +31,5 @@ $langRemainingFor = "zastarané záznamy odstránené z kategórie";
 $langMainMD = "Otvori&#357; hlavné MDE";
 $langOrElse = "Vybra&#357; kategóriu odkazov";
 $langWarningDups = "- duplicitné mená kategórií boli odstránené zo zoznamu! ";
+$langSLC = "Pracova&#357; s kategóriou odkazov nazvanou";
 ?>

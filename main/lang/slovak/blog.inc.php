@@ -37,6 +37,7 @@ $AssignTask = "Prideli&#357; úlohu";
 $AssignTasks = "Prideli&#357; úlohy";
 $EditTask = "Upravi&#357; túto úlohu";
 $DeleteTask = "Zmaza&#357; túto úlohu";
+$DeleteSystemTask = "Toto je prednastavená úloha. Nemôžete ju zmaza&#357;.";
 $SelectUser = "Používate&#318;";
 $SelectTask = "Úloha";
 $SelectTargetDate = "Dátum";

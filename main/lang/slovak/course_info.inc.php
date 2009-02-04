@@ -92,6 +92,7 @@ $AllowUserEditAnnouncementActivate = "Aktivova&#357; úpravu používate&#318;om ";
 $AllowUserEditAnnouncementDeactivate = "Deaktivova&#357; úpravu používate&#318;om ";
 $OrInTime = "Alebo o";
 $CourseRegistrationPassword = "Heslo na registráciu do kurzu";
+$langDescriptionDeleteCourse = "Kliknite na tento odkaz, aby ste eliminovali sledovanie kurzu na serveri.<br><br> S touto funkcionalitou musíte zaobchádza&#357; ve&#318;mi opatrne! ";
 $langDescriptionCopyCourse = "Skopírova&#357; priestor kurzu alebo jeho &#269;as&#357; do priestoru iného kurzu. Pre použitie tohto nástroja potrebujete minimálne 2 kurzy.";
 $DescriptionRecycleCourse = "Tento nástroj vyprázdni kurz. Odstráni dokumenty, fóra, odkazy. A umožní vám vybra&#357;, ktoré &#269;asti chcete odstráni&#357; alebo rozhodnú&#357; o odstránení celého kurzu.";
 $QuizEmailAlert = "Upozornenie e-mailom o novom predloženom kvíze";

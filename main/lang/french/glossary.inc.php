@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$TermAddNew = "Ajouter un nouveau terme";
+$TermAddNew = "Nouveau terme";
 $TermName = "Terme";
 $TermDefinition = "Définition";
 $TermDeleted = "Terme supprimé";
@@ -12,11 +12,11 @@ $TermUpdateButton = "Enregistrer les modifications";
 $TermEditAction = "Éditer le terme";
 $TermDeleteAction = "Supprimer ce terme";
 $OrderBy = "Trier par";
-$CreationDate = "Date de création";
-$UpdateDate = "Date de modification";
+$CreationDate = "Date création";
+$UpdateDate = "Date modification";
 $PreSelectedOrder = "Prédéfini";
 $TermAdded = "Terme ajouté";
 $YouMustEnterATermName = "Veuillez entrer un terme";
 $YouMustEnterATermDefinition = "Veuillez entrer la définition du terme";
-$TableView = "Vue tableau";
+$TableView = "Tableau";
 ?>

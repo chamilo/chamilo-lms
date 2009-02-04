@@ -678,4 +678,7 @@ $ManageReservations = "Manage reservations";
 $DestinationUsers = "Destination users";
 $AttachmentFileDeleteSuccess = "The attached file has been deleted";
 $AccountURLInactive = "Account inactive for this URL";
+$MaxFileSize = "Maximum file size";
+$SendFileError = "An error has been detected while receiving your file. Please check your file is not corrupt and try again.";
+$Expired = "Expired";
 ?>

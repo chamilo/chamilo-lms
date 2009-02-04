@@ -51,6 +51,6 @@ $SelectEverybody = "Select Everybody";
 $SelectedUsersGroups = "selected user groups";
 $LearnerMessage = "Message from a learner";
 $TitleIsRequired = "Title is required";
-$AnnounceSentByEmail = "Announce sent by email";
-$AnnounceSentToUserSelection = "Announce sent to an user selection";
+$AnnounceSentByEmail = "Announcement sent by email";
+$AnnounceSentToUserSelection = "Announcement sent to the selected users";
 ?>

@@ -4,7 +4,9 @@ for more information: see languages.txt in the lang folder.
 $dropbox_lang["help"]  = "Pomoc";
 $dropbox_lang["aliensNotAllowed"]  = "Schránku na dokumenty môžu používa&#357; len &#269;lenovia kurzu. Vy nie ste &#269;lenom tohto kurzu.";
 $dropbox_lang["dropbox"]  = "Schránka na dokumenty";
+$dropbox_lang["queryError"]  = "Chyba v databázovom vyh&#318;adávaní. Kontaktujte prosím svojho systémového administrátora.";
 $dropbox_lang["generalError"]  = "Objavila sa chyba. Prosím, kontaktujte svojho systémového administrátora.";
+$dropbox_lang["badFormData"]  = "Odovzdanie neúspešné: dáta v nesprávnom formáte. Kontaktujte prosím svojho systémového administrátora.";
 $dropbox_lang["noUserSelected"]  = "Prosím vyberte používate&#318;a, ktorému chcete súbor posla&#357; .";
 $dropbox_lang["noFileSpecified"]  = "Neur&#269;ili ste súbor na na&#269;ítanie.";
 $dropbox_lang["tooBig"]  = "Bu&#271; ste súbor nevybrali, alebo je ve&#318;mi ve&#318;ký.";
@@ -107,5 +109,7 @@ $NoFilesHere = "Nie sú tu žiadne súbory";
 $NoFilesHere = "Nie sú tu žiadne súbory";
 $NewDropboxFileUploaded = "Nový súbor bol poslaný do schránky na dokumenty";
 $NewDropboxFileUploadedContent = "Nový súbor bol poslaný do schránky na dokumenty Vášho kurzu";
+$langAddEdit = "Prida&#357; / Upravi&#357;";
 $ErrorNoFilesInFolder = "Tento prie&#269;inok je prázdny";
+$dropbox_lang["upload"] = "Na&#269;íta&#357;";
 ?>

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langSelectOptionForBackup = "Veuillez sélectionner une option de sauvegarde.";
-$langLetMeSelectItems = "Me laisser sélectionner les sections de cet espace de cours.";
+$langLetMeSelectItems = "Me laisser sélectionner des sections";
 $langCreateFullBackup = "Faire un sauvegarde complète de cet espace de cours";
 $langCreateBackup = "Créer une sauvegarde";
 $langBackupCreated  = "La sauvegarde (backup) a été effectuée. Le téléchargement de ce fichier démarrera dans quelques instants. Si rien ne se produit, veuillez cliquer sur le lien suivant.";
@@ -15,7 +15,7 @@ $langAnnouncements = "Annonces";
 $langDocuments  = "Documents";
 $langTests = "Tests";
 $langLearnpaths = "Cours";
-$langCopyCourse = "Copier un espace de cours";
+$langCopyCourse = "Copier une formation";
 $langSelectItemsToCopy = "Sélectionnez les sections à copier";
 $langCopyFinished = "Copie terminée";
 $langFullRecycle = "Vider toutes les sections";
@@ -28,7 +28,7 @@ $langSameFilenameRename = "Renommer les documents (ex: fichier.pdf devient fichi
 $langSameFilenameOverwrite = "Écraser les documents";
 $langSelectDestinationCourse = "Sélectionnez un espace de cours de destination";
 $langFullCopy  = "Copier toutes les sections de cet espace";
-$langCourseDescription = "Description de l\'espace de cours";
+$langCourseDescription = "Description de la formation";
 $langNoResourcesToBackup = "Aucune section n\'est disponible pour une sauvegarde";
 $langNoResourcesInBackupFile = "Aucune section disponible dans ce fichier de sauvegarde";
 $langSelectResources = "Sélectionnez la section désirée";
@@ -37,7 +37,7 @@ $langIncludeQuestionPool = "Inclure toutes les questions disponibles";
 $langLocalFile = "Importer un fichier depuis votre ordinateur";
 $langServerFile = "Utiliser un fichier de sauvegarde qui se trouve sur le serveur";
 $langNoBackupsAvailable = "Aucun fichier de sauvegarde n\'est disponible sur le serveur";
-$langNoDestinationCoursesAvailable = "Il n\'y a pas d\'autre espace de cours dont vous soyez le responsable. Vous ne pouvez donc pas copier de contenu vers un autre espace.";
+$langNoDestinationCoursesAvailable = "Il n\'y a pas d\'autre formation dans laquelle vous êtes formateur. Vous ne pouvez donc pas copier de contenu vers une autre formation.";
 $langBackup = "Sauvegarde";
 $langImportBackupInfo = "Importer un espace de cours existant. Vous pouvez importer un fichier de sauvegarde depuis votre ordinateur ou choisir un des fichiers de sauvegarde qui se trouve sur le serveur.";
 $langCreateBackupInfo = "Créer un fichier de sauvegarde de cet espace. Vous pouvez sélectionner les sections que vous voulez sauver dans ce fichier.";

@@ -11,6 +11,7 @@ $TermAddButton = "Prida&#357; tento výraz";
 $TermUpdateButton = "Aktualizova&#357; výraz";
 $TermEditAction = "Upravi&#357; výraz";
 $TermDeleteAction = "Zmaza&#357; výraz";
+$OrderBy = "Usporiada&#357; pod&#318;a";
 $CreationDate = "Dátum vytvorenia";
 $UpdateDate = "Dátum aktualizácie";
 $TermAdded = "Výraz pridaný";

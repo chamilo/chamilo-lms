@@ -94,5 +94,5 @@ $ExampleForumCategory = "Esimerkki keskustelualueen luokka";
 $ExampleForum = "Esimerkki keskustelualue";
 $ExampleThread = "Esimerkki keskustelu";
 $ExampleThreadContent = "Esimerkki sisältö";
-$langCreate = "Luo";
+$Create = "Luo";
 ?>

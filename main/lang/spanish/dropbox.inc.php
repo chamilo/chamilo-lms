@@ -124,5 +124,7 @@ $NoFilesHere = "Aquí no hay archivos";
 $NoFilesHere = "Aquí no hay archivos";
 $NewDropboxFileUploaded = "Un nuevo archivo ha sido enviado en Compartir Documentos";
 $NewDropboxFileUploadedContent = "En su curso, un nuevo archivo ha sido enviado en Compartir Documentos";
+$langAddEdit = "Añadir / Editar";
 $ErrorNoFilesInFolder = "Este directorio está vacío";
+$dropbox_lang["upload"] = "Enviar";
 ?>

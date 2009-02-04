@@ -124,5 +124,7 @@ $NoFilesHere = "Non ci sono file in questa sezione";
 $NoFilesHere = "Non ci sono file in questa sezione";
 $NewDropboxFileUploaded = "Un nuovo file è stato aggiunto nella sezione scambio file";
 $NewDropboxFileUploadedContent = "Un nuovo file è stato aggiunto nella sezione scambio file del corso";
+$langAddEdit = "Aggiungi / Modifica";
 $ErrorNoFilesInFolder = "Seleziona almeno un file";
+$dropbox_lang["upload"] = "Carica";
 ?>

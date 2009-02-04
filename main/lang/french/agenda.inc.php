@@ -64,10 +64,11 @@ $RepeatMonthlyByDayR = "Chaque mois, par jour, restreint";
 $RepeatYearly = "Chaque année";
 $RepeatEnd = "Fin de la répétition";
 $RepeatedEventViewOriginalEvent = "Evénement initial";
-$ICalFileImport = "Importer iCal/ics (Outlook)";
+$ICalFileImport = "Import iCal";
 $AllUsersOfThePlatform = "Tous les utilisateurs du portail";
 $GlobalEvent = "Événement global";
 $EndDateCannotBeBeforeTheStartDate = "La fin ne peut pas être avant le début";
 $AgendaSortChronologicallyUp = "Ascendant";
 $AgendaSortChronologicallyDown = "Descendant";
+$ItemForUserSelection = "Liste de sélection des utilisateurs";
 ?>

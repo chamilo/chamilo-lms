@@ -12,6 +12,8 @@ $langAntique = "Irónia";
 $langSocraticIrony = "Sokratovská irónia je...";
 $langManyAnswers = "(správna môže by&#357; viac ako jedna odpove&#271;)";
 $langNoPsychology = "Nie. Sokratovská irónia nie je vecou psychológie, týka sa argumentácie.";
+$langNoSeduction = "Nie. Sokratovská irónia nie je stratégie zvádzania alebo metóda založená na príkladoch. ";
+$langIndeed = "Naozaj. Sokratovská irónia je opytovacia metóda. Grécke \"eirotao\" znamená \"klás&#357; otázky\" ";
 $langAgenda = "Agenda";
 $langVideo = "Video";
 $langCourseProgram = "Program kurzu";
@@ -91,5 +93,5 @@ $ExampleForum = "Príklad fóra";
 $ExampleThread = "Vzorová téma";
 $ExampleThreadContent = "Príklad obsahu";
 $IntroductionWiki = "Slovo Wiki je skratka pre WikiWikiWeb. Wikiwiki je havajské slovo, ktoré znamená rýchlo alebo rýchlos&#357;. Vo wiki môžu &#318;udia spolupracova&#357; pri písaní stránok. Ke&#271; jedna osoba napíše nie&#269;o nesprávne, &#271;alšia to môže napravi&#357;. &#270;alšia osoba tiež môže prida&#357; na stránku nie&#269;o nové. Práve preto sa stránka zlepšuje kedyko&#318;vek ju niekto zmení. ";
-$langCreate = "Vytvori&#357;";
+$Create = "Vytvori&#357;";
 ?>

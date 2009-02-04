@@ -50,4 +50,6 @@ $SelectEverybody = "Vybra&#357; všetkých";
 $SelectedUsersGroups = "vybrané skupiny používate&#318;ov";
 $LearnerMessage = "Správa od študenta";
 $TitleIsRequired = "Názov je povinný";
+$AnnounceSentByEmail = "Oznam poslaný e-mailom";
+$AnnounceSentToUserSelection = "Oznam poslaný vybraným používate&#318;om";
 ?>

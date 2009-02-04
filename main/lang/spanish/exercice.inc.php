@@ -263,6 +263,7 @@ $FilterExercices = "Filtrar ejercicios";
 $FilterByNotRevised = "Filtrar por No revisado";
 $FilterByRevised = "Filtrar por Revisado";
 $Duration = "Duración";
+$ReachedTimeLimit = "Ha llegado al limite de tiempo";
 $TryAgain = "Intenta otra vez";
 $SeeTheory = "Revisar la teoría";
 $EndActivity = "Fin de la actividad";

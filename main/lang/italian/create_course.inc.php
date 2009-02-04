@@ -99,5 +99,5 @@ $ExampleForum = "Esempio di Forum";
 $ExampleThread = "Esempio di Argomento";
 $ExampleThreadContent = "Esempio di Messaggio";
 $IntroductionWiki = "Il termine Wiki è un\'abbreviazione di WikiWikiWeb. WikiWiki significa \"rapido\", in hawaiano. Un Wiki permette la scrittura collaborativa di pagine. Se qualcuno ha scritto qualcosa di sbagliato o incompleto, qualcun altro può correggere o modificare il testo. Chiunque può aggiungere informazioni migliorando il contenuto, mentre delle versioni precedenti resta traccia nella cronologia della pagina.";
-$langCreate = "Crea";
+$Create = "Crea";
 ?>

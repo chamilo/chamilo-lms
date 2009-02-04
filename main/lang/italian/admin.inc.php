@@ -897,8 +897,13 @@ $EnablePlugins = "Attiva le estensioni selezionate";
 $AtLeastOneCourseAndOneURL = "Almeno un corso ed un URL";
 $ClickToRegisterAdmin = "Clicca per iscrivere l\'amministratore a tutti i corsi";
 $AdminShouldBeRegisterInSite = "Qui l\'amministratore deve ancora essere registrato";
-$URLNotConfiguredPleaseChangedTo: = "URL non ancora configurato, aggiungilo :";
+$URLNotConfiguredPleaseChangedTo = "URL non ancora configurato, aggiungilo :";
 $AdminUserRegisteredToThisURL = "Amministratore iscritto all\'URL";
 $CoursesWereEdited = "Corsi modificati";
 $URLEdited = "URL modificato";
+$AddSessionToURL  = "Associa una sessione ad un URL";
+$FirstLetterSession = "Lettera iniziale della sessione";
+$EditSessionToURL  = "Modifica la sessione";
+$AddSessionsToThatURL = "Associa la sessione all\'URL";
+$SessionBelongURL = "Sessione modificata";
 ?>

@@ -210,6 +210,7 @@ $UplAlreadyExists = "Ya existe";
 $UnknownPackageFormat = "Formato desconocido de paquete";
 $UplUnableToSaveFile = "Imposible de guardar el archivo";
 $UnknownPackageFormat = "El formato de este paquete no ha sido reconocido. Por favor, compruebe este es un paquete válido.";
+$MoveDocument = "Mover el documento";
 $EditLPSettings = "Cambiar parámetros de lección";
 $SaveLPSettings = "Guardar parámetros de lección";
 $ShowAllAttempts = "Mostrar todos los intentos";
@@ -217,4 +218,6 @@ $HideAllAttempts = "Ocultar todos los intentos";
 $ShowAllAttemptsByExercise = "Mostrar todos los intentos por ejercicio";
 $ShowAttempt = "Mostrar intento";
 $ShowAndQualifyAttempt = "Mostrar y calificar intento";
+$langAddEdit = "Añadir / Editar";
+$ModifyPrerequisities = "Modificar los prerrequisitos";
 ?>

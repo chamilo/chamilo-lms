@@ -14,6 +14,7 @@ $langDescriptionTip = "popis alebo komentár a jazyk použitý pre popis tohto vyu&
 $langKeyword = "K&#318;ú&#269;ové slová";
 $langKeywordTip = "rozdeli&#357; &#269;iarkami (písmená, &#269;íslice, -.)";
 $langKwNote = "Ke&#271; zmeníte jazyk popisu, nepridávajte sú&#269;asne k&#318;ú&#269;ové slová.";
+$langClickKw = "Pre ozna&#269;enie alebo zrušenie výberu k&#318;ú&#269;ového slova kliknite na&#328; v štruktúre.  ";
 $langRights = "Používate&#318;ské práva";
 $langRightsTip = "opísa&#357; slovami";
 $langVersion = "Verzia";

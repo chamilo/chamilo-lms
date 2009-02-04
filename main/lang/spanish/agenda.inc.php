@@ -70,4 +70,5 @@ $GlobalEvent = "Evento global";
 $EndDateCannotBeBeforeTheStartDate = "Fecha final no deberá ser menor que la fecha de inicio";
 $AgendaSortChronologicallyUp = "Ordenar eventos (antiguos / recientes)";
 $AgendaSortChronologicallyDown = "Ordenar eventos (recientes / antiguos)";
+$ItemForUserSelection = "Evento dirigido a una selección de usuarios";
 ?>

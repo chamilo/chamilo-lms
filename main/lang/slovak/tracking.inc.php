@@ -227,4 +227,5 @@ $ChatConnectionsDuringLastXDays = "Pripojenia k Pokecu po&#269;as posledných # d
 $ChatLastConnection = "Posledné prihlásenie do Pokecu";
 $CourseInformation = "Informácie o kurze";
 $NoAdditionalFieldsWillBeExported = "Žiadne &#271;alšie polia nebudú exportované";
+$langSendNotification = "Posla&#357; oznámenia";
 ?>

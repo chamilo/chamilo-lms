@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Camera = "Kamera";
 $Microphone = "Mikrofón";
 $Name = "Meno";
+$DeleteStream = "Zmaza&#357; stream";
 $Progress = "Pokroky";
 $Play = "Prehra&#357;";
 $Stop = "Stop";

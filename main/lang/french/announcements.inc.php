@@ -18,7 +18,7 @@ $langRegUser = "utilisateurs inscrits";
 $langUnvalid = "n\'ont pas d\'adresse mail valide";
 $langModifAnn = "Modifier cette annonce";
 $langModify    = "Modifier";
-$langDelete    = "supprimer";
+$langDelete    = "Supprimer";
 $langTitle     = "Sujet";
 $langHelp      = "Aide";
 $langOk        = "Valider";
@@ -51,4 +51,6 @@ $SelectEverybody = "Sélectionner tous";
 $SelectedUsersGroups = "utilisateurs des groupes sélectionnés";
 $LearnerMessage = "Message d\'un apprenant";
 $TitleIsRequired = "Le titre est obligatoire";
+$AnnounceSentByEmail = "Annonce envoyée par e-mail";
+$AnnounceSentToUserSelection = "Annonce envoyée aux utilisateurs sélectionnés";
 ?>

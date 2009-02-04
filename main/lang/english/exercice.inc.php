@@ -263,6 +263,7 @@ $FilterExercices = "Filter exercices";
 $FilterByNotRevised = "Only unqualified";
 $FilterByRevised = "Only qualified";
 $Duration = "Duration";
+$ReachedTimeLimit = "Time limit reached";
 $TryAgain = "Try again";
 $SeeTheory = "Theory link";
 $EndActivity = "End of activity";

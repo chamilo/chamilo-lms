@@ -64,9 +64,14 @@ class Files
 		if (!copy($source, $destination_dir.$filename))
 			return FILE_ERROR_COPY_FAILED;
 		
+		global $permissions_for_new_files;
+
 		//verify that it copied, new file must exists
 		if (is_file($destination_dir.$filename))
+		{
+			@chmod($destination_dir.$filename, $permissions_for_new_files);
 			Return $filename;
+		}
 		else
 			return FILE_ERROR_COPY_FAILED;
 	}
@@ -78,8 +83,13 @@ class Files
 	 */
 	function createFolder($newFolder) 
 	{
-		mkdir ($newFolder, 0777);
-		return chmod($newFolder, 0777);
+		//mkdir ($newFolder, 0777);
+		//return chmod($newFolder, 0777);
+
+		global $permissions_for_new_directories;
+
+		mkdir ($newFolder, $permissions_for_new_directories);
+		return @chmod($newFolder, $permissions_for_new_directories);
 	}
 
 

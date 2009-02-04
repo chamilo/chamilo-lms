@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 18118 2009-02-01 16:18:02Z ivantcholakov $
+// $Id: html_editor.php 18226 2009-02-04 14:55:54Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -135,10 +135,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 						$this -> fck_editor->Config['BaseHref'] = $script_path;
 					}
 
-					if (!$use_advanced_filemanager)
-					{
-						$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
-					}
+					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
 				}
 				else
 				{
@@ -159,10 +156,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 						$this -> fck_editor->Config['BaseHref'] = $script_path;
 					}
 
-					if (!$use_advanced_filemanager)
-					{
-						$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
-					}
+					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
 				}
 			}
 			else
@@ -186,10 +180,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 					$this -> fck_editor->Config['BaseHref'] = $script_path;
 				}
 
-				if (!$use_advanced_filemanager)
-				{
-					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
-				}
+				$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
 			}
 		}
 		else
@@ -213,10 +204,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 					$this -> fck_editor->Config['BaseHref'] = api_get_path(WEB_PATH).'home/default_platform_document/';
 				}
 
-				if (!$use_advanced_filemanager)
-				{
-					$upload_path = api_get_path(REL_PATH).'home/default_platform_document/';
-				}
+				$upload_path = api_get_path(REL_PATH).'home/default_platform_document/';
 			}
 			else
 			{
@@ -237,10 +225,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 					$this -> fck_editor->Config['BaseHref'] = $script_path;
 				}
 
-				if (!$use_advanced_filemanager)
-				{
-					$upload_path = api_get_path(REL_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
-				}
+				$upload_path = api_get_path(REL_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
 			}
 		}
 
@@ -254,53 +239,75 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 			// Configuration path when advanced file manager is used.
 			$this -> fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
 
-			// For images
+			// URLs for opening the file browser for different resource types (file types):
+
+			// for images
 			$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';	
 
-			// For flash
+			// for flash
 			$this -> fck_editor->Config['FlashBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 
-			// For MP3
+			// for audio files (mp3)
 			$this -> fck_editor->Config['MP3BrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 
-			// For Videos
+			// for videos
 			$this -> fck_editor->Config['VideoBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 
-			// Links
-			$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-
-			// For flv Player (Videos)
+			// for videos (flv)
 			$this -> fck_editor->Config['MediaBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-		} else {
+
+			// for links (any resource type)
+			$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+		}
+		else
+		{
 			// Passing the file manager setting to javascripts too.
 			$this -> fck_editor->Config['AdvancedFileManager'] = false;
 
 			// Configuration path when simple file manager is used.
 			$this -> fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 
-			// For images
+			// URLs for opening the file browser for different resource types (file types):
+
+			// for images
 			$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-			$this -> fck_editor->Config['ImageUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
 
-			// For flash
+			// for flash
 			$this -> fck_editor->Config['FlashBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-			$this -> fck_editor->Config['FlashUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;	
 
-			// For MP3
+			// for audio files (mp3)
 			$this -> fck_editor->Config['MP3BrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-			$this -> fck_editor->Config['MP3UploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
 
-			// For Videos
+			// for videos
 			$this -> fck_editor->Config['VideoBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-			$this -> fck_editor->Config['VideoUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
 
-			// Links
-			$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-		
-			// For flv Player (Videos)
+			// for videos (flv)
 			$this -> fck_editor->Config['MediaBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-			$this -> fck_editor->Config['MediaUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
+
+			// for links (any resource type)
+			$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=File&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 		}
+
+		// URLs for making quick uplods for different resource types (file types).
+		// These URLs are used by the dialogs' quick upload tabs:
+
+		// for images
+		$this -> fck_editor->Config['ImageUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
+
+		// for flash
+		$this -> fck_editor->Config['FlashUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
+	
+		// for audio files (mp3)
+		$this -> fck_editor->Config['MP3UploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
+
+		// for videos
+		$this -> fck_editor->Config['VideoUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
+
+		// for videos (flv)
+		$this -> fck_editor->Config['MediaUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
+
+		// for links (any resource type)
+		$this -> fck_editor->Config['LinkUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=File&ServerPath=$upload_path" ;
 	}
 	
 	/**

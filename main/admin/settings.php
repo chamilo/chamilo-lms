@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 18227 2009-02-04 15:09:06Z juliomontoya $
+<?php // $Id: settings.php 18228 2009-02-04 15:17:38Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -138,7 +138,7 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 
 		$form->addElement('header', null, get_lang($row['title']));
 		
-		if ($row['access_url_changeable']=='1') {
+		if ($row['access_url_changeable']=='1' && $_configuration['multiple_access_urls']==true) {
 			$form->addElement('html', '<div style="float:right;">'.Display::return_icon('shared_setting.png',get_lang('SharedSettingIconComment')).'</div>');						
 		}	
 		

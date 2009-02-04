@@ -147,7 +147,7 @@ if ($sType == 'audio')
 	check_and_create_resource_directory($sServerDir, '/audio', get_lang('Audio'));
 	$sServerDir = $sServerDir.'audio/';
 	$sserverWebath = $sserverWebath.'audio/';
-	$path = "/audio/";
+	$path = '/audio/';
 }
 elseif ($sType == 'mp3')
 {
@@ -155,28 +155,28 @@ elseif ($sType == 'mp3')
 	check_and_create_resource_directory($sServerDir, '/audio', get_lang('Audio'));
 	$sServerDir = $sServerDir.'audio/';
 	$sserverWebath = $sserverWebath.'audio/';
-	$path = "/audio/";
+	$path = '/audio/';
 }
 elseif ($sType == 'flash')
 {
 	check_and_create_resource_directory($sServerDir, '/flash', get_lang('Flash'));
 	$sServerDir = $sServerDir.'flash/';
 	$sserverWebath = $sserverWebath.'flash/';
-	$path = "/flash/";
+	$path = '/flash/';
 }
 elseif ($sType == 'images')
 {
 	check_and_create_resource_directory($sServerDir, '/images', get_lang('Images'));
 	$sServerDir = $sServerDir.'images/';
 	$sserverWebath = $sserverWebath.'images/';
-	$path = "/images/";
+	$path = '/images/';
 }
 elseif ($sType == 'video')
 {
 	check_and_create_resource_directory($sServerDir, '/video', get_lang('Video'));
 	$sServerDir = $sServerDir.'video/';
 	$sserverWebath = $sserverWebath.'video/';
-	$path = "/video/";
+	$path = '/video/';
 }
 elseif ($sType == 'video/flv')
 {
@@ -184,7 +184,11 @@ elseif ($sType == 'video/flv')
 	check_and_create_resource_directory($sServerDir, '/video/flv', 'flv');
 	$sServerDir = $sServerDir.'video/flv/';
 	$sserverWebath = $sserverWebath.'video/flv/';
-	$path = "/video/flv/";
+	$path = '/video/flv/';
+}
+else
+{
+	$path = '/';
 }
 
 // Try to add an extension to the file if it has'nt one

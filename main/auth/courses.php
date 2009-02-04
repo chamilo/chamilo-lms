@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 18229 2009-02-04 15:26:57Z juliomontoya $
+<?php // $Id: courses.php 18232 2009-02-04 16:20:59Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -547,14 +547,21 @@ function display_subscribe_to_courses($courses)
 function search_courses($search_term)
 {
 	$TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
-
 	$search_term_safe=Database::escape_string($search_term);
-
 	$sql_find="SELECT * FROM $TABLECOURS WHERE code LIKE '%".$search_term_safe."%' OR title LIKE '%".$search_term_safe."%' OR tutor_name LIKE '%".$search_term_safe."%' ORDER BY title, visual_code ASC";
+	
+	global $_configuration;
+	if ($_configuration['multiple_access_urls']==true) {
+		$url_access_id = api_get_current_access_url_id();
+		if ($url_access_id !=-1) {
+			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+			$sql_find="SELECT * FROM $TABLECOURS as course INNER JOIN $tbl_url_rel_course as url_rel_course 
+					ON (url_rel_course.course_code=course.code)
+					WHERE access_url_id = $url_access_id AND  (code LIKE '%".$search_term_safe."%' OR title LIKE '%".$search_term_safe."%' OR tutor_name LIKE '%".$search_term_safe."%' ) ORDER BY title, visual_code ASC "; 
+		}		
+	}	
 	$result_find=api_sql_query($sql_find,__FILE__,__LINE__);
-
-	while ($row=Database::fetch_array($result_find))
-	{
+	while ($row=Database::fetch_array($result_find)) {
 		$courses[]=array("code" => $row['code'], "directory" => $row['directory'], "db"=> $row['db_name'], "visual_code" => $row['visual_code'], "title" => $row['title'], "tutor" => $row['tutor_name'], "subscribe" => $row['subscribe'], "unsubscribe" => $row['unsubscribe']);
 	}
 	return $courses;

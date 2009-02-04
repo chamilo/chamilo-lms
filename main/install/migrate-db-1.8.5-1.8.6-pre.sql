@@ -12,7 +12,7 @@
 --
 -- This first part is for the main database
 -- xxMAINxx
-ALTER TABLE settings_current ADD UNIQUE unique_setting (variable,subkey,category);
+ALTER TABLE settings_current ADD UNIQUE unique_setting (variable, subkey, category, access_url);
 ALTER TABLE settings_options ADD UNIQUE unique_setting_option (variable,value);
 INSERT INTO settings_current (variable, subkey,type,category,selected_value,title,comment,scope,subkeytext)VALUES ('registration', 'phone', 'textfield', 'User', 'false', 'RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment', NULL, 'Phone');
 ALTER TABLE php_session CHANGE session_value session_value MEDIUMTEXT NOT NULL;
@@ -65,7 +65,6 @@ ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url(acc
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url_user (user_id,access_url_id);
 CREATE TABLE access_url_rel_course (access_url_id int unsigned NOT NULL, course_code char(40) NOT NULL, PRIMARY KEY (access_url_id, course_code));
 CREATE TABLE access_url_rel_session (access_url_id int unsigned NOT NULL, session_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, session_id));
-ALTER TABLE settings_current DROP INDEX unique_setting, ADD UNIQUE unique_setting (variable, subkey, category, access_url);
 
 CREATE TABLE user_friend(id bigint unsigned not null auto_increment,user_id int unsigned not null,friend_user_id int unsigned not null,relation_type int not null default 0,PRIMARY KEY(id));
 ALTER TABLE user_friend ADD INDEX idx_user_friend_user(user_id);

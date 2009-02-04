@@ -1105,10 +1105,10 @@ CREATE TABLE access_url_rel_session (
   PRIMARY KEY (access_url_id, session_id)
 );
 
-
------------------
-
-CREATE TABLE  sys_calendar (
+-- 
+-- Table structure for table sys_calendar
+-- 
+CREATE TABLE IF NOT EXISTS sys_calendar (
   id int unsigned NOT NULL auto_increment,
   title varchar(200) NOT NULL,
   content text,

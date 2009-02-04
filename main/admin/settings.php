@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 18228 2009-02-04 15:17:38Z juliomontoya $
+<?php // $Id: settings.php 18238 2009-02-04 19:26:59Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -670,7 +670,7 @@ function upload_stylesheet($values,$picture)
 		{
 			$perm = api_get_setting('permissions_for_new_directories');
 			$perm = octdec(!empty($perm)?$perm:'0770');
-			chmod(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/');
+			chmod(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/', $perm);
 		}		
 	}
 	

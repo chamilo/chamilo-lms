@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 18203 2009-02-03 18:02:16Z ndieschburg $
+* 	@version $Id: exercise.class.php 18235 2009-02-04 16:34:55Z juliomontoya $
 */
 
 
@@ -874,8 +874,12 @@ class Exercise
 	             
 	        $form -> addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');	  	
 			$var= Exercise::selectTimeLimit();
-		
-			$form -> addElement('html','<div id="options2" style="display:'.$state.'">');	        
+			
+			
+			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))            	
+				$form -> addElement('html','<div id="options2" style="display:block;">');
+			else
+				$form -> addElement('html','<div id="options2" style="display:none;">');	        
 	
 	        //$form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
 	        //$form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));

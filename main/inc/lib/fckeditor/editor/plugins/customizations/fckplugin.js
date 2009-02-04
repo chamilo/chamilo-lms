@@ -646,7 +646,7 @@ FCKCommands.GetCommand = function( commandName )
 
 		case 'DocProps'		: oCommand = new FCKDialogCommand( 'DocProps'	, FCKLang.DocProps				, 'dialog/fck_docprops.html'	, 540, 380, FCKCommands.GetFullPageState ) ; break ;
 		case 'Templates'	: oCommand = new FCKDialogCommand( 'Templates'	, FCKLang.DlgTemplatesTitle		, 'dialog/fck_template.html'	, 380, 450 ) ; break ;
-		case 'Link'			: oCommand = new FCKDialogCommand( 'Link'		, FCKLang.DlgLnkWindowTitle		, 'dialog/fck_link.html'		, 540, 300 ) ; break ;
+		case 'Link'			: oCommand = new FCKDialogCommand( 'Link'		, FCKLang.DlgLnkWindowTitle		, 'dialog/fck_link.html'		, 600, 300 ) ; break ;
 		case 'Unlink'		: oCommand = new FCKUnlinkCommand() ; break ;
 		case 'VisitLink'	: oCommand = new FCKVisitLinkCommand() ; break ;
 		case 'Anchor'		: oCommand = new FCKDialogCommand( 'Anchor'		, FCKLang.DlgAnchorTitle		, 'dialog/fck_anchor.html'		, 420, 180 ) ; break ;

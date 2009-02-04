@@ -799,6 +799,9 @@ function BrowseServer()
 
 function SetUrl( url )
 {
+	url = FCK.GetSelectedUrl ( url ) ;
+	GetE('cmbLinkProtocol').value = '' ;
+
 	GetE('txtUrl').value = url ;
 	OnUrlChange() ;
 	dialog.SetSelectedTab( 'Info' ) ;

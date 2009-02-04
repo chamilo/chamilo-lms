@@ -180,7 +180,7 @@ $ajax_search = $add_type == 'unique' ? true : false;
 if($ajax_search) {		
 	$courses=UrlManager::get_url_rel_course_data($access_url_id);
 	foreach($courses as $course) {
-		$course_list[$course['code']] = $course ;
+		$course_list[$course['course_code']] = $course ;
 	}	
 } else {	
 	$courses=UrlManager::get_url_rel_course_data();

@@ -1,9 +1,9 @@
-<?php // $Id: courses.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: courses.php 18229 2009-02-04 15:26:57Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -362,8 +362,20 @@ function browse_courses()
 */
 function count_courses_in_category($category)
 {
-	$tbl_course         = Database::get_main_table(TABLE_MAIN_COURSE);
-	$sql="SELECT * FROM $tbl_course WHERE category_code".(empty($category)?" IS NULL":"='".$category."'");
+	$tbl_course         = Database::get_main_table(TABLE_MAIN_COURSE);	
+	$sql="SELECT * FROM $tbl_course WHERE category_code".(empty($category)?" IS NULL":"='".$category."'");	
+	
+	//showing only the courses of the current Dokeos access_url_id
+	global $_configuration;
+	if ($_configuration['multiple_access_urls']==true) {
+		$url_access_id = api_get_current_access_url_id();
+		if ($url_access_id !=-1) {
+			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);		
+			$sql="SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course 
+					ON (url_rel_course.course_code=course.code)
+					WHERE access_url_id = $url_access_id AND category_code".(empty($category)?" IS NULL":"='".$category."'");
+		}		
+	}	
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	return Database::num_rows($result);
 }
@@ -377,36 +389,30 @@ function count_courses_in_category($category)
 function browse_course_categories()
 {
 	global $stok;
-	$tbl_courses_nodes      = Database::get_main_table(TABLE_MAIN_CATEGORY);
+	$tbl_courses_nodes   = Database::get_main_table(TABLE_MAIN_CATEGORY);
 	$category = Database::escape_string($_GET['category']);
 	$safe_url_categ = Security::remove_XSS($_GET['category']);
 	
 	echo "<p><b>".get_lang('CourseCategories')."</b>";
 
 	$sql= "SELECT * FROM $tbl_courses_nodes WHERE parent_id ".(empty($category)?"IS NULL":"='".$category."'")." GROUP BY code, parent_id  ORDER BY tree_pos ASC";
+	
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	echo "<ul>";
-	while ($row=Database::fetch_array($result))
-	{
+	while ($row=Database::fetch_array($result))	{
 		$count_courses_in_categ = count_courses_in_category($row['code']);
-		if ($row['children_count'] > 0 OR $count_courses_in_categ>0)
-		{
+		if ($row['children_count'] > 0 OR $count_courses_in_categ>0) {
 			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$safe_url_categ."&amp;sec_token=".$stok."\">".$row['name']."</a>".
 				" (".$count_courses_in_categ.")</li>";
-		}
-		elseif ($row['nbChilds'] > 0)
-		{
+		} elseif ($row['nbChilds'] > 0) {
 			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$safe_url_categ."&amp;sec_token=".$stok."\">".$row['name']."</a></li>";
-		}
-		else
-		{
+		} else {
 			echo "<li>".$row['name']."</li>";
 		}
 
 	}
 	echo "</ul>";
-	if ($_GET['category'])
-	{
+	if ($_GET['category']) {
 		echo "<a href=\"".api_get_self()."?action=subscribe&amp;category=".Security::remove_XSS($_GET['up'])."&amp;sec_token=".$stok."\">&lt; ".get_lang('UpOneCategory')."</a>";
 	}
 }
@@ -424,20 +430,30 @@ function browse_courses_in_category()
 
 	echo "<p><b>".get_lang('CoursesInCategory')."</b>";
 	$my_category = (empty($category)?" IS NULL":"='".$category."'");
+	
 	$sql="SELECT * FROM $tbl_course WHERE category_code".$my_category.' ORDER BY title, visual_code';
+
+	//showing only the courses of the current Dokeos access_url_id 
+	global $_configuration;
+	if ($_configuration['multiple_access_urls']==true) {
+		$url_access_id = api_get_current_access_url_id();
+		if ($url_access_id !=-1) {
+			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);		
+			$sql="SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course 
+					ON (url_rel_course.course_code=course.code)
+					WHERE access_url_id = $url_access_id AND category_code".$my_category.' ORDER BY title, visual_code';
+		}		
+	}
+	
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	while ($row=Database::fetch_array($result))
-	{
-		if ($row['registration_code']=='')
-		{
+	while ($row=Database::fetch_array($result)) {
+		if ($row['registration_code']=='') {
 			$registration_code=false;
-		}
-		else
-		{
+		} else {
 			$registration_code=true;
 		}
 		$courses[]=array("code" => $row['code'], "directory" => $row['directory'], "db"=> $row['db_name'], "visual_code" => $row['visual_code'], "title" => $row['title'], "tutor" => $row['tutor_name'], "subscribe" => $row['subscribe'], "unsubscribe" => $row['unsubscribe'], 'registration_code'=> $registration_code);
-	}
+	}	
 	display_subscribe_to_courses($courses);
 }
 
@@ -478,32 +494,26 @@ function display_subscribe_to_courses($courses)
 	$user_coursecodes=array();
 
 	// we need only the course codes as these will be used to match against the courses of the category
-	if ($user_courses<>"")
-	{
-		foreach ($user_courses as $key=>$value)
-		{
+	if ($user_courses<>"") {
+		foreach ($user_courses as $key=>$value) {
 			$user_coursecodes[]=$value['code'];
 		}
 	}
 
-	if ($courses==0)
-		{
+	if ($courses==0) {
 			return false;
-		}
+	}
 
 	echo "<table cellpadding=\"4\">\n";
-	foreach ($courses as $key=>$course)
-	{
+	foreach ($courses as $key=>$course) {
 		// displaying the course title, visual code and teacher/teaching staff
 		echo "\t<tr>\n";
 		echo "\t\t<td>\n";
 		echo "<b>".$course['title']."</b><br />";
-		if (get_setting("display_coursecode_in_courselist") == "true")
-		{
+		if (get_setting("display_coursecode_in_courselist") == "true") {
 			echo $course['visual_code'];
 		}
-		if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true")
-		{
+		if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true") {
 			echo " - ";
 		}
 		if (get_setting("display_teacher_in_courselist") == "true")
@@ -1192,7 +1202,7 @@ function display_info_text($text)
 {
 	//echo "<font color=\"#808080\">" . $text . "</font>\n";
 	echo $text;
-}
+} 
 
 /**
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University

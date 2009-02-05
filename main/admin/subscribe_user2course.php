@@ -1,10 +1,10 @@
 <?php
-// $Id: subscribe_user2course.php 12487 2007-05-27 06:00:33Z yannoo $
+// $Id: subscribe_user2course.php 18262 2009-02-05 20:57:35Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 	
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -19,7 +19,7 @@
 	
 	See the GNU General Public License for more details.
 	
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
@@ -137,13 +137,54 @@ if(empty($first_letter_user))
 	unset($result);
 }
 $sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE lastname LIKE '".$first_letter_user."%' ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." lastname";
+global $_configuration;	
+if ($_configuration['multiple_access_urls']==true) {	
+	$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+	$access_url_id = api_get_current_access_url_id();
+	if ($access_url_id != -1){		
+		$sql = "SELECT u.user_id,lastname,firstname,username  FROM ".$tbl_user ." u 			
+		INNER JOIN $tbl_user_rel_access_url user_rel_url 
+		ON (user_rel_url.user_id = u.user_id)						
+		WHERE access_url_id =  $access_url_id AND (lastname LIKE '".$first_letter_user."%' ) ORDER BY ". (count($users) > 0 ? "(u.user_id IN(".implode(',', $users).")) DESC," : "")." lastname";			
+	}
+}	
 $result = api_sql_query($sql, __FILE__, __LINE__);
 $db_users = api_store_result($result);
 unset($result);
+
 $sql = "SELECT code,visual_code,title FROM $tbl_course WHERE visual_code LIKE '".$first_letter_course."%' ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
+if ($_configuration['multiple_access_urls']==true) {	
+	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+	$access_url_id = api_get_current_access_url_id();
+	if ($access_url_id != -1){			
+		$sql = "SELECT code, visual_code, title 
+				FROM $tbl_course as course			
+		  		INNER JOIN $tbl_course_rel_access_url course_rel_url
+				ON (course_rel_url.course_code= course.code)	  	
+		  		WHERE access_url_id =  $access_url_id  AND (visual_code LIKE '".$first_letter_course."%' ) ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";		  				  			
+	}
+}
+	
 $result = api_sql_query($sql, __FILE__, __LINE__);
 $db_courses = api_store_result($result);
 unset($result);
+
+if ($_configuration['multiple_access_urls']==true) {	
+	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+	$access_url_id = api_get_current_access_url_id();
+	if ($access_url_id != -1){			
+		$sqlNbCours = "	SELECT course_rel_user.course_code, course.title
+			FROM $tbl_course_user as course_rel_user
+			INNER JOIN $tbl_course as course
+			ON course.code = course_rel_user.course_code
+		  	INNER JOIN $tbl_course_rel_access_url course_rel_url
+			ON (course_rel_url.course_code= course.code)	  	
+		  	WHERE access_url_id =  $access_url_id  AND course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
+		  	ORDER BY course.title";		  			
+	}
+}
+
+	
 ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">

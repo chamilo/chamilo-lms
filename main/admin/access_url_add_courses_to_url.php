@@ -127,7 +127,7 @@ if(empty($first_letter_user))
 }
 $sql = "SELECT code, title FROM $tbl_course
 		WHERE title LIKE '".$first_letter_course."%' OR title LIKE '".strtolower($first_letter_course)."%'
-		ORDER BY title DESC ";
+		ORDER BY title, code DESC ";
 		
 $result = api_sql_query($sql, __FILE__, __LINE__);
 $db_courses = api_store_result($result);

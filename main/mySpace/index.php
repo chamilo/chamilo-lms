@@ -3,8 +3,9 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) various contributors
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -16,7 +17,8 @@
 
 	See the GNU General Public License for more details.
 
-	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
+	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
 ==============================================================================
 */
 
@@ -104,18 +106,35 @@ $isPlatformAdmin = api_is_platform_admin();
 $view = isset($_GET['view']) ? $_GET['view'] : 'teacher';
 
 $menu_items = array();
+global $_configuration;
 
-if(api_is_allowed_to_create_course())
-{
-	
+if(api_is_allowed_to_create_course()) { 	
 	$sqlNbCours = "	SELECT course_rel_user.course_code, course.title
 					FROM $tbl_course_user as course_rel_user
 					INNER JOIN $tbl_course as course
 						ON course.code = course_rel_user.course_code
 				  	WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
 				  	ORDER BY course.title";
-	$resultNbCours = api_sql_query($sqlNbCours, __FILE__, __LINE__);
+				  	
+		
+	if ($_configuration['multiple_access_urls']==true) {	
+		$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+		$access_url_id = api_get_current_access_url_id();
+		if ($access_url_id != -1){			
+			$sqlNbCours = "	SELECT course_rel_user.course_code, course.title
+				FROM $tbl_course_user as course_rel_user
+				INNER JOIN $tbl_course as course
+				ON course.code = course_rel_user.course_code
+			  	INNER JOIN $tbl_course_rel_access_url course_rel_url
+				ON (course_rel_url.course_code= course.code)	  	
+			  	WHERE access_url_id =  $access_url_id  AND course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
+			  	ORDER BY course.title";			  			
+		}
+	}
+	
+	$resultNbCours = api_sql_query($sqlNbCours, __FILE__, __LINE__);	
 	$a_courses = api_store_result($resultNbCours);
+	
 	$nb_teacher_courses = count($a_courses);
 	if($nb_teacher_courses)
 	{
@@ -204,8 +223,7 @@ if($_user['status']==DRH && $view=='drh')
 if($isCoach && $view=='coach')
 {
 	$a_students = Tracking :: get_student_followed_by_coach($_user['user_id']);
-	$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
-	
+	$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);	
 }
 
 if($view=='coach' || $view=='drh')
@@ -652,6 +670,19 @@ if(api_is_platform_admin() && $view=='admin')
 					WHERE id_coach=user_id AND login_user_id=user_id
 					GROUP BY user_id " ;
 				//	ORDER BY login_date ".$tracking_direction;
+				
+	
+	if ($_configuration['multiple_access_urls']==true) {	
+		$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+		$access_url_id = api_get_current_access_url_id();
+		if ($access_url_id != -1){			
+			$sqlCoachs = "	SELECT DISTINCT id_coach, user_id, lastname, firstname, MAX(login_date) as login_date 
+							FROM $tbl_user, $tbl_session_course, $tbl_track_login , $tbl_session_rel_access_url session_rel_url
+							WHERE id_coach=user_id AND login_user_id=user_id AND access_url_id = $access_url_id AND session_rel_url.session_id=id_session
+							GROUP BY user_id " ;			  			
+		}
+	}	
+	
 	if(!empty($order[$tracking_column]))
 	{
 		$sqlCoachs .= "ORDER BY ".$order[$tracking_column]." ".$tracking_direction;
@@ -670,6 +701,19 @@ if(api_is_platform_admin() && $view=='admin')
 							WHERE id_coach=user_id AND login_user_id=user_id
 							GROUP BY user_id
 							ORDER BY login_date '.$tracking_direction;
+		
+	if ($_configuration['multiple_access_urls']==true) {	
+		$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+		$access_url_id = api_get_current_access_url_id();
+		if ($access_url_id != -1){			
+			$sql_session_coach = 'SELECT session.id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
+							FROM '.$tbl_user.','.$tbl_sessions.' as session,'.$tbl_track_login.' , '.$tbl_session_rel_access_url.' as session_rel_url
+							WHERE id_coach=user_id AND login_user_id=user_id  AND access_url_id = '.$access_url_id.' AND  session_rel_url.session_id=session.id
+							GROUP BY user_id
+							ORDER BY login_date '.$tracking_direction;				  			
+		}
+	}
+	
 	$result_sessions_coach=api_sql_query($sql_session_coach, __FILE__, __LINE__);
 	$total_no_coachs += Database::num_rows($result_sessions_coach);
 	while($a_coach=Database::fetch_array($result_sessions_coach)){

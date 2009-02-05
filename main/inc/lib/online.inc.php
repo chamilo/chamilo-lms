@@ -92,7 +92,20 @@ function WhoIsOnline($uid=0,$statistics_database='',$valid)
 	$valid = (int) $valid;
 	$current_date=date('Y-m-d H:i:s',time());
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";	
+	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
+	
+	global $_configuration;	
+	if ($_configuration['multiple_access_urls']==true) {	
+		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+		$access_url_id = api_get_current_access_url_id();
+		if ($access_url_id != -1){
+			$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track 			
+			INNER JOIN $tbl_user_rel_access_url user_rel_url
+			ON (user_rel_url.user_id = track.login_user_id)						
+			WHERE access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";			
+		}
+	}	
+		
 	$result = @api_sql_query($query,__FILE__,__LINE__);						
 	if (count($result)>0)
 	{

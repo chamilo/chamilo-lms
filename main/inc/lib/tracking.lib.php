@@ -478,6 +478,19 @@ class Tracking {
 		// At first, courses where $coach_id is coach of the course //
 		//////////////////////////////////////////////////////////////
 		$sql = 'SELECT id_session, course_code FROM ' . $tbl_session_course . ' WHERE id_coach=' . $coach_id;
+		
+		global $_configuration;	
+		if ($_configuration['multiple_access_urls']==true) {	
+			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){			
+				$sql = 'SELECT id_session, course_code 
+						FROM ' . $tbl_session_course . ' session_course INNER JOIN '.$tbl_session_rel_access_url.'  session_rel_url
+						ON (session_course.id_session=session_rel_url.session_id) 
+						WHERE id_coach=' . $coach_id.' AND access_url_id = '.$access_url_id;				  			
+			}
+		}
+		
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 
 		while ($a_courses = Database::fetch_array($result)) {
@@ -507,6 +520,23 @@ class Tracking {
 						INNER JOIN ' . $tbl_session . ' as session
 							ON session.id = session_course.id_session
 							AND session.id_coach = ' . $coach_id;
+		if ($_configuration['multiple_access_urls']==true) {	
+			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){				
+				$sql = 'SELECT session_course_user.id_user 
+				FROM ' . $tbl_session_course_user . ' as session_course_user
+				INNER JOIN ' . $tbl_session_course . ' as session_course
+					ON session_course.course_code = session_course_user.course_code
+					AND session_course_user.id_session = session_course.id_session
+				INNER JOIN ' . $tbl_session . ' as session
+					ON session.id = session_course.id_session
+					AND session.id_coach = ' . $coach_id.' 
+				INNER JOIN '.$tbl_session_rel_access_url.'  session_rel_url
+					ON session.id = session_rel_url.session_id WHERE access_url_id = '.$access_url_id;											  			
+			}
+		}
+		
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 
 		while ($row = Database::fetch_array($result)) {
@@ -622,6 +652,18 @@ class Tracking {
 		// At first, courses where $coach_id is coach of the course //
 		//////////////////////////////////////////////////////////////
 		$sql = 'SELECT DISTINCT course_code FROM ' . $tbl_session_course . ' WHERE id_coach=' . $coach_id;
+		
+		global $_configuration;	 
+		if ($_configuration['multiple_access_urls']==true) {			
+			$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){
+				$sql = 'SELECT DISTINCT session_course.course_code FROM ' . $tbl_session_course . ' session_course INNER JOIN '.$tbl_course_rel_access_url.' course_rel_url
+						ON (session_course.course_code = course_rel_url.course_code)
+						WHERE id_coach=' . $coach_id.' AND access_url_id = '.$access_url_id;	
+			}
+		}
+		
 		if (!empty ($id_session))
 			$sql .= ' AND id_session=' . $id_session;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -639,8 +681,30 @@ class Tracking {
 							AND session.id_coach = ' . $coach_id . '
 						INNER JOIN ' . $tbl_course . ' as course
 							ON course.code = session_course.course_code';
-		if (!empty ($id_session))
+		
+		if ($_configuration['multiple_access_urls']==true) {			
+			$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){
+				$sql = 'SELECT DISTINCT session_course.course_code
+						FROM ' . $tbl_session_course . ' as session_course
+						INNER JOIN ' . $tbl_session . ' as session
+							ON session.id = session_course.id_session
+							AND session.id_coach = ' . $coach_id . '
+						INNER JOIN ' . $tbl_course . ' as course
+							ON course.code = session_course.course_code
+						 INNER JOIN '.$tbl_course_rel_access_url.' course_rel_url 
+						ON (session_course.course_code = course_rel_url.course_code)';
+			}
+		}
+		
+		if (!empty ($id_session)) {
 			$sql .= ' WHERE session_course.id_session=' . $id_session;
+			$sql .=  ' AND access_url_id = '.$access_url_id;
+		}  else {
+			$sql .=  ' WHERE access_url_id = '.$access_url_id;
+		}
+		
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		while ($row = Database::fetch_array($result)) {
@@ -662,6 +726,18 @@ class Tracking {
 		$sql = 'SELECT DISTINCT id, name, date_start, date_end
 						FROM ' . $tbl_session . ' 
 						WHERE id_coach=' . $coach_id;
+						
+		global $_configuration;	 
+		if ($_configuration['multiple_access_urls']==true) {			
+			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){
+				$sql = 'SELECT DISTINCT id, name, date_start, date_end
+						FROM ' . $tbl_session . ' session INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
+						ON (session.id = session_rel_url.session_id)
+						WHERE id_coach=' . $coach_id.' AND access_url_id = '.$access_url_id;
+			}
+		}
 
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		
@@ -676,6 +752,22 @@ class Tracking {
 						INNER JOIN ' . $tbl_session_course . ' as session_course
 							ON session.id = session_course.id_session
 							AND session_course.id_coach=' . $coach_id;
+		
+		global $_configuration;	 
+		if ($_configuration['multiple_access_urls']==true) {			
+			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){
+				$sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
+						FROM ' . $tbl_session . ' as session
+						INNER JOIN ' . $tbl_session_course . ' as session_course 
+							ON session.id = session_course.id_session AND session_course.id_coach=' . $coach_id.'  
+						INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url							
+						ON (session.id = session_rel_url.session_id) 
+						WHERE access_url_id = '.$access_url_id;
+			}
+		}
+		
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
 
 		while ($row = Database::fetch_array($rs)) 

@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18170 2009-02-02 22:13:45Z cfasanando $
+<?php //$Id: work.lib.php 18261 2009-02-05 20:56:30Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18170 2009-02-02 22:13:45Z cfasanando $
+* 	@version $Id: work.lib.php 18261 2009-02-05 20:56:30Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -225,6 +225,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	// Database table names
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$work_assigment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 	$is_allowed_to_edit = api_is_allowed_to_edit();
 	$user_id = api_get_user_id();
 	$publications_list = array();
@@ -388,7 +389,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			// form edit directory				
 			if(isset($clean_edit_dir) && $clean_edit_dir==$mydir) {	
 				if(!empty($row['has_properties'])) {
-					$sql = api_sql_query('SELECT * FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).' WHERE id = '."'".$row['has_properties']."'".' LIMIT 1',__FILE__,__LINE__);
+					$sql = api_sql_query('SELECT * FROM '.$work_assigment.' WHERE id = '."'".$row['has_properties']."'".' LIMIT 1',__FILE__,__LINE__);
 					$homework = mysql_fetch_array($sql);					
 				}
 			
@@ -469,33 +470,34 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				$display_edit_form=true;		
 					
 				if($form_folder -> validate()) {
+					$TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);					
 					if($there_is_a_end_date == true || $there_is_a_expire_date == true) {		
 						if($row['view_properties']=='1') {
-								$sql_add_publication = "UPDATE ".Database :: get_course_table(TABLE_STUDENT_PUBLICATION)." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+								$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
 								api_sql_query($sql_add_publication, __FILE__, __LINE__);
 								$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'".',';
 								$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
-								api_sql_query('UPDATE '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+								api_sql_query('UPDATE '.$work_assigment.$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
 						} else if($row['view_properties']=='0') {								
 								if ($_POST['enableExpiryDate']=='1') {								
 									$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'";
 									//$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";							
-									api_sql_query('UPDATE '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).$expires_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
-									$sql_add_publication = "UPDATE ".Database :: get_course_table(TABLE_STUDENT_PUBLICATION)." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+									api_sql_query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
 									api_sql_query($sql_add_publication, __FILE__, __LINE__);
 								}
 								if ($_POST['enableEndDate']=='1') {								
 									//$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'".',';
 									$ends_query =   ' SET ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";							
-									api_sql_query('UPDATE '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
-									$sql_add_publication = "UPDATE ".Database :: get_course_table(TABLE_STUDENT_PUBLICATION)." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+									api_sql_query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
 									api_sql_query($sql_add_publication, __FILE__, __LINE__);
 								}
 						}
 					
 					}
 					//if($_POST['qualification']['qualification']!='')
-						api_sql_query('UPDATE '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION).' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
+						api_sql_query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
 						//api_sql_query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'',__FILE__,__LINE__);		
 					
 					
@@ -506,6 +508,22 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 					$mydir = $my_sub_dir.$dir_name;
 					$dir = $dir_name;
 					$display_edit_form=false;
+										
+					// gets calendar_id from student_publication_assigment
+					$sql = "SELECT add_to_calendar FROM $work_assigment WHERE publication_id ='".$row['id']."'";
+					$res = api_sql_query($sql,__FILE__,__LINE__);
+					$calendar_id = Database::fetch_row($res);				
+					// update from agenda if it exists 
+					if (!empty($calendar_id[0])) {					
+					$sql = "UPDATE ".$TABLEAGENDA."
+							SET title='".$dir_name."',
+								content = '".$dir_name."',									
+								end_date='".get_date_from_group('ends')."'
+							WHERE id='".$calendar_id[0]."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+					}
+					
+					
 				}
 			}
 		}
@@ -1203,13 +1221,11 @@ function to_javascript_work() {
 					msg_id1.innerHTML="'.get_lang('FieldRequired').'";
 					msg_id2.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";		
 				}
-				else if(expires_date > ends_date)
-				{
-					 
-					msg_id2.style.display ="block";
-					msg_id2.innerHTML="'.get_lang('EndDateCannotBeBeforeTheExpireDate').'";
-					msg_id1.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";												
-				}
+				else if(document.form1.type1.checked==true && document.form1.type2.checked==true && expires_date > ends_date) {								 
+						msg_id2.style.display ="block";
+						msg_id2.innerHTML="'.get_lang('EndDateCannotBeBeforeTheExpireDate').'";
+						msg_id1.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";												
+				}			
 				else if (checkDate(expires_month,expires_day,expires_year) == false)
 				{		 
 					msg_id3.style.display ="block";

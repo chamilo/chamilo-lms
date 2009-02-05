@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18170 2009-02-02 22:13:45Z cfasanando $
+<?php //$Id: work.php 18261 2009-02-05 20:56:30Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18170 2009-02-02 22:13:45Z cfasanando $
+*  	@version $Id: work.php 18261 2009-02-05 20:56:30Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -103,8 +103,9 @@ $htmlHeadXtra[] = to_javascript_work();
 */
 $main_course_table 	= Database :: get_main_table(TABLE_MAIN_COURSE);
 $work_table 		= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-$student_pub_ass 	= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 $iprop_table 		= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+$TSTDPUBASG			= Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+$t_gradebook_link 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 /*
 -----------------------------------------------------------
 	Constants and variables
@@ -500,7 +501,16 @@ if (api_is_allowed_to_edit(false,true)) {
 					} else {
 						$dir_name_sql = '/'.$created_dir;			
 					}
-		
+					
+					//----------------inser into agenda----------------------//
+				 	$agenda_id = 0;
+				 	if(!empty($_POST['type2']) && isset($_POST['add_to_calendar']) && $_POST['add_to_calendar']==1):
+						include_once('../calendar/agenda.inc.php');
+						include_once('../resourcelinker/resourcelinker.inc.php');						
+						isset($course_info)?$course=$course_info:$course=null;							
+						$agenda_id = agenda_add_item($course,$_POST['new_dir'],$_POST['new_dir'],date('Y-m-d H:i:s'),get_date_from_select('ends'),0,$user_id);						 
+					endif;
+										
 					$sql_add_publication = "INSERT INTO " . $work_table . " SET " .			
 										   "url         = '". $dir_name_sql ."',
 									       title        = '',
@@ -520,7 +530,7 @@ if (api_is_allowed_to_edit(false,true)) {
 					api_sql_query($sql_add_publication, __FILE__, __LINE__);
 					
 					// add the directory	
-					$id = mysql_insert_id();
+					$id = Database::insert_id();
 					//Folder created
 					api_item_property_update($_course, 'work', $id, 'DirectoryCreated', $user_id);		
 					Display :: display_normal_message('<span title="' . $created_dir . '">' . get_lang('DirectoryCreated') . '</span>', false);	
@@ -531,37 +541,32 @@ if (api_is_allowed_to_edit(false,true)) {
 					//return something like this: 2008-02-45 00:00:00			
 					
 					if(!empty($_POST['type1']) || !empty($_POST['type2'])) {
-									
-									$TSTDPUBASG=Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-									
+																											
 										isset($_POST['enable_calification'])?$enable_calification = (int)$_POST['enable_calification']:$enable_calification=null;
-										$sql_add_homework = "INSERT INTO ".$TSTDPUBASG." SET " .			
+										$sql_add_homework = "INSERT INTO $TSTDPUBASG SET " .			
 														   "expires_on         = '".((isset($_POST['type1']) && $_POST['type1']==1) ? get_date_from_select('expires') : '0000-00-00 00:00:00'). "',
 													        ends_on        = '".((isset($_POST['type2']) && $_POST['type2']==1) ? get_date_from_select('ends') : '0000-00-00 00:00:00')."',
-										                    add_to_calendar  = '".(isset($_POST['add_to_calendar'])?(int)$_POST['add_to_calendar']:'')."',
+										                    add_to_calendar  = '$agenda_id',
 										                    enable_qualification = '".$enable_calification."',
 										                    publication_id = '".$id."'";
 										api_sql_query($sql_add_homework, __FILE__, __LINE__);		
 									    //api_sql_query($sql_add_publication, __FILE__, __LINE__);
 										
-										$sql_add_publication = "UPDATE ".$work_table." SET "."has_properties  = ".mysql_insert_id().", view_properties = 1 ".' where id = '.$id;
+										$sql_add_publication = "UPDATE ".$work_table." SET "."has_properties  = ".Database::insert_id().", view_properties = 1 ".' where id = '.$id;
 										api_sql_query($sql_add_publication, __FILE__, __LINE__);
 								
 					} else {
-		
-									$TSTDPUBASG=Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-									
-										
-										$sql_add_homework = "INSERT INTO ".$TSTDPUBASG." SET " .			
+			
+										$sql_add_homework = "INSERT INTO $TSTDPUBASG SET " .			
 														   "expires_on         = '0000-00-00 00:00:00',
 													        ends_on        = '0000-00-00 00:00:00',
-										                    add_to_calendar  = '".(isset($_POST['add_to_calendar'])?(int)$_POST['add_to_calendar']:'')."',
+										                    add_to_calendar  = '$agenda_id',
 										                    enable_qualification = '".(isset($_POST['enable_calification'])?(int)$_POST['enable_calification']:'')."',
 										                    publication_id = '".$id."'";
 										api_sql_query($sql_add_homework, __FILE__, __LINE__);		
 									    //api_sql_query($sql_add_publication, __FILE__, __LINE__);
 										
-										$sql_add_publication = "UPDATE ".$work_table." SET "."has_properties  = ".mysql_insert_id().", view_properties = 0 ".' where id = '.$id;
+										$sql_add_publication = "UPDATE ".$work_table." SET "."has_properties  = ".Database::insert_id().", view_properties = 0 ".' where id = '.$id;
 										api_sql_query($sql_add_publication, __FILE__, __LINE__);
 								
 					}
@@ -577,15 +582,7 @@ if (api_is_allowed_to_edit(false,true)) {
 					 	add_resource_to_course_gradebook(api_get_course_id(), 3, $id, Database::escape_string($resource_name),$_POST['weight'], $_POST['qualification_value'], Database::escape_string($_POST['description']),time(), 1,api_get_session_id());
 		
 					 	
-				 	}
-				 	//----------------inser into agenda----------------------//
-				 	
-				 	if(!empty($_POST['type1']) && isset($_POST['add_to_calendar']) && $_POST['add_to_calendar']==1):
-						include_once('../calendar/agenda.inc.php');
-						include_once('../resourcelinker/resourcelinker.inc.php');						
-						isset($course_info)?$course=$course_info:$course=null;							
-						agenda_add_item($course,$_POST['new_dir'],$_POST['new_dir'],date('Y-m-d H:i:s'),get_date_from_select('expires'),0,$user_id);
-					endif;
+				 	}				 	
 					
 					//-----------------end features---------------------------//		
 					
@@ -617,10 +614,19 @@ if (api_is_allowed_to_edit(false,true)) {
 	}
 	if (!empty ($_REQUEST['delete2'])) {		
 		$delete_2=$_REQUEST['delete2'];
-		$sql2="DELETE FROM ". Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT)." WHERE publication_id ='".$delete_2."'";
-		$result2 = api_sql_query($sql2, __FILE__, __LINE__);
-		//Display :: display_normal_message($delete_directory . ' ' . get_lang('DirDeleted'));
-		$sql3="DELETE FROM ".Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK)." WHERE course_code='".$course_code."' AND ref_id='".$delete_2."'";
+		// gets calendar_id from student_publication_assigment
+		$sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE publication_id ='$delete_2'";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$calendar_id = Database::fetch_row($res);				
+		// delete from agenda if it exists
+		if (!empty($calendar_id[0])) {
+		$t_agenda   = Database::get_course_table(TABLE_AGENDA);
+		$sql = "DELETE FROM $t_agenda WHERE id ='".$calendar_id[0]."'";
+		api_sql_query($sql,__FILE__,__LINE__);
+		}
+		$sql2="DELETE FROM $TSTDPUBASG WHERE publication_id ='$delete_2'";
+		$result2 = api_sql_query($sql2, __FILE__, __LINE__);		
+		$sql3="DELETE FROM $t_gradebook_link WHERE course_code='$course_code' AND ref_id='$delete_2'";
 		$result3 = api_sql_query($sql3, __FILE__, __LINE__);
 	}
 	 
@@ -818,7 +824,7 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 	
 				api_sql_query($sql_add_publication, __FILE__, __LINE__);
 	
-				$Id = mysql_insert_id();
+				$Id = Database::insert_id();
 				api_item_property_update($_course, 'work', $Id, 'DocumentAdded', $user_id);
 				$succeed = true;
 				
@@ -911,12 +917,8 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 					            ".$add_to_update."
 					        WHERE id    = '$id'";
 				api_sql_query($sql, __FILE__, __LINE__);				
-				}
-	
-				
-				$t_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);																
-							        
-				//api_sql_query($sql2, __FILE__, __LINE__);
+				}																									
+							        			
 				$insertId = $id;			
 				api_item_property_update($_course, 'work', $insertId, 'DocumentUpdated', $user_id);
 				$succeed = true;			
@@ -1020,7 +1022,7 @@ if($is_special > 0):
 	$is_special = true;
 	define('IS_ASSIGNMENT',1);
 	$publication = mysql_fetch_array($sql);
-	$sql = api_sql_query('SELECT * FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT).' WHERE publication_id = '.(string)$publication['id'].' LIMIT 1',__FILE__,__LINE__);
+	$sql = api_sql_query('SELECT * FROM '.$TSTDPUBASG.' WHERE publication_id = '.(string)$publication['id'].' LIMIT 1',__FILE__,__LINE__);
 	$homework = mysql_fetch_array($sql);
 	
 	if($homework['expires_on']!='0000-00-00 00:00:00' || $homework['ends_on']!='0000-00-00 00:00:00'):
@@ -1177,8 +1179,21 @@ function draw_date_picker($prefix,$default='') {
 	list($d_year,$d_month,$d_day) = split('-',$parts[0]);
 	list($d_hour,$d_minute) = split(':',$parts[1]);
 	
-	$month_list = array(get_lang('JanuaryLong'),get_lang('FebruaryLong'),get_lang('MarchLong'),get_lang('AprilLong'),get_lang('MayLong'),get_lang('JuneLong'),get_lang('JulyLong'),get_lang('AugustLong'),get_lang('SeptemberLong'),get_lang('OctoberLong'),get_lang('NovemberLong'),get_lang('DecemberLong'));
-
+	$month_list = array(
+	1=>get_lang('JanuaryLong'),
+	2=>get_lang('FebruaryLong'),
+	3=>get_lang('MarchLong'),
+	4=>get_lang('AprilLong'),
+	5=>get_lang('MayLong'),
+	6=>get_lang('JuneLong'),
+	7=>get_lang('JulyLong'),
+	8=>get_lang('AugustLong'),
+	9=>get_lang('SeptemberLong'),
+	10=>get_lang('OctoberLong'),
+	11=>get_lang('NovemberLong'),
+	12=>get_lang('DecemberLong')
+	);
+		
 	$minute = range(10,59);
 	array_unshift($minute,'00','01','02','03','04','05','06','07','08','09');
 	$date_form = make_select($prefix.'_day', array_combine(range(1,31),range(1,31)), $d_day);
@@ -1226,12 +1241,12 @@ function draw_date_picker($prefix,$default='') {
 		$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error2" style="display:none;color:red"></div>';		
 		$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error3" style="display:none;color:red"></div>';
 		$addtext .= '<div style="padding:4px"><input type="checkbox" value="1" name="type1" />';		
-		$addtext .= draw_date_picker('expires').'</div>';
-		$addtext .= make_checkbox('add_to_calendar').get_lang('AddToCalendar').'<br />';		
+		$addtext .= draw_date_picker('expires').'</div>';				
 		$addtext .= '<br />* '.get_lang('EndsAt').'<br />';
 		$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error4" style="display:none;color:red"></div>';
 		$addtext .= '<div style="padding:4px"><input type="checkbox" value="1" name="type2" />';
 		$addtext .= draw_date_picker('ends').'</div>';
+		$addtext .= '&nbsp;'.make_checkbox('add_to_calendar').get_lang('AddToCalendar').'<br />';
 		$addtext .= '</fieldset>';				
 		$addtext .= '</div>';
 		$addtext .= '</div>';		

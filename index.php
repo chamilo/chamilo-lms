@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18231 2009-02-04 16:20:38Z juliomontoya $
+<?php // $Id: index.php 18255 2009-02-05 15:50:24Z cfasanando $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 18231 2009-02-04 16:20:38Z juliomontoya $
+* 	@version $Id: index.php 18255 2009-02-05 15:50:24Z cfasanando $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -346,6 +346,7 @@ function display_anonymous_right_menu() {
 		display_login_form();
 
 		if ($loginFailed) {
+			echo '<br />';
 			handle_login_failed();
 		}
 		if (api_get_setting('allow_lostpassword') == 'true' OR api_get_setting('allow_registration') == 'true') {

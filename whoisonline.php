@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 17479 2008-12-29 20:24:11Z cfasanando $
+<?php // $Id: whoisonline.php 18268 2009-02-05 21:56:06Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,7 +36,7 @@ $language_file = array('index','registration');
 require_once('./main/inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-
+require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -49,7 +49,16 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 	}
 					
 </script>';
-
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+$(document).ready(function (){
+	$("input#id_btn_send_invitation").bind("click", function(){
+		if (confirm("'.get_lang('SendMessageInvitation').'")) {
+			$("#form_register_friend").submit();
+		}
+	}); 
+});
+</script>';
 if ($_GET['chatid'] != '')
 {
 	//send out call request
@@ -92,6 +101,11 @@ function display_user_list($user_list, $_plugins)
                      
 			$table_row[] = '<a href="'.$url.'">'.$user_info['firstName'].'</a>';
 			$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
+			if (api_get_setting('allow_social_tool')=='true') {
+				if ($user_info['user_id']<>api_get_user_id()) {
+					$table_row[] = get_lang('Invitation').' :<input  type="checkbox" name="id_name_chek[]" id="id_name_chek" value="'.$user_info['user_id'].'"/>';
+				}
+			}
 			if (api_get_setting("show_email_addresses") == "true")
 			{
 				$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
@@ -105,6 +119,9 @@ function display_user_list($user_list, $_plugins)
 		$table_header[] = array(get_lang('UserPicture'),true,'width="50"');
 		$table_header[] = array(get_lang('FirstName'),true);
 		$table_header[] = array(get_lang('LastName'),true);
+		if (api_get_setting('allow_social_tool')=='true') {
+			$table_header[] = array(get_lang('Friends'),true,'width="100"');
+		}
 		if (api_get_setting("show_email_addresses") == "true")
 		{
 			$table_header[] = array(get_lang('Email'),true);
@@ -114,7 +131,17 @@ function display_user_list($user_list, $_plugins)
 			$table_header[] = array(get_lang('SendMessage'),true);
 		}
 		$sorting_options['column'] = (isset ($_GET['column']) ? (int)$_GET['column'] : 2);
+		if (api_get_setting('allow_social_tool')=='true') {
+			send_invitation_friend_user();
+			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInvitation').'"/></div>';
+			echo '<form action="whoisonline.php" name="form_register_friend" id="form_register_friend" method="post">';
+		}
+		
 		Display::display_sortable_table($table_header,$table_data,$sorting_options,array('per_page_default'=>count($table_data)),$extra_params);
+		
+		if (api_get_setting('allow_social_tool')=='true') {
+			echo '</form>';
+		}
 	}
 }
 /**
@@ -247,7 +274,39 @@ function display_productions($user_id)
 		echo '</ul></dd>';
 	}
 }
+/**
+ * @author Isaac Flores Paz <isaac.flores.paz@gmail.com>
+ * @param void
+ * @return string message invitation
+ */
+function send_invitation_friend_user() {
+	$id_user_friend=array();
+	$count_is_true=false;
+	$count_number_is_true=0;
+	$count_number_chek=count($_POST['id_name_chek']);
+	if ($count_number_chek>0) {
+		$user_info=array();
+		$user_id=api_get_user_id();
+		$user_info=api_get_user_info($user_id);
+		$message_title=get_lang('Invitation');
+		$message_content=get_lang('ReceivedInvitation').' : '.$user_info['firstName'].' '.$user_info['lastName'];
+		$id_user_friend=$_POST['id_name_chek'];
+		for ($i=0;$i<$count_number_chek;$i++) {
+			$count_is_true=UserFriend::send_invitation_friend($user_id,$id_user_friend[$i],$message_title,$message_content);
+			if ($count_is_true===true) {
+				$count_number_is_true++;
+			}
+		}
+	if (api_get_setting('allow_social_tool')=='true') {
+		if ($count_number_is_true>0) {
+			echo '<div align="center">'.Display::display_normal_message(get_lang('RequestSend').' : '.$count_number_is_true.' '.get_lang('UsersFriend')).'</div>';
+		}else {
+			echo '<div align="center">'.Display::display_error_message(get_lang('NoRequestSend')).' : '.'</div>';	
+		}
+	}
 
+	}
+}
 
 
 // This if statement prevents users accessing the who's online feature when it has been disabled.

@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 18238 2009-02-04 19:26:59Z ivantcholakov $
+<?php // $Id: settings.php 18264 2009-02-05 21:23:18Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -190,14 +190,15 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 			case 'radio' :
 				$values = get_settings_options($row['variable']);
 				$group = array ();
-				foreach ($values as $key => $value) {
-					$element = & $form->createElement('radio', $row['variable'], '', get_lang($value['display_text']), $value['value']);
-					if ($hide_element) {
-						$element->freeze();
+				if (is_array($values )) {
+					foreach ($values as $key => $value) {
+						$element = & $form->createElement('radio', $row['variable'], '', get_lang($value['display_text']), $value['value']);
+						if ($hide_element) {
+							$element->freeze();
+						}
+						$group[] = $element; 
 					}
-					$group[] = $element; 
 				}
-				
 				$form->addGroup($group, $row['variable'], get_lang($row['comment']), '<br />', false);
 				$default_values[$row['variable']] = $row['selected_value'];
 				break;

@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 18232 2009-02-04 16:20:59Z juliomontoya $
+<?php // $Id: courses.php 18264 2009-02-05 21:23:18Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,10 +36,7 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array (
-'courses',
-'registration'
-);
+$language_file = array ('courses','registration');
 
 //delete the globals["_cid"] we don't need it here 
 $cidReset = true; // Flag forcing the 'current course' reset
@@ -53,6 +50,11 @@ $this_section=SECTION_COURSES;
 // acces rights: anonymous users can't do anything usefull here
 api_block_anonymous_users();
 
+if (!(api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course())) {
+	if (api_get_setting('allow_students_to_browse_courses')=='false') {	
+		api_not_allowed();		
+	}			
+}
 // include additional libraries
 include_once(api_get_path(LIBRARY_PATH) . 'debug.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
@@ -66,19 +68,18 @@ $tbl_courses_nodes      = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tbl_courseUser         = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
 
+
 //filter
 $safe = array();
 $safe['action'] = '';
 $actions = array('sortmycourses','createcoursecategory','subscribe','deletecoursecategory','unsubscribe');
 
-if(in_array(htmlentities($_GET['action']),$actions))
-{
+if(in_array(htmlentities($_GET['action']),$actions)) {
 	$safe['action'] = htmlentities($_GET['action']);
 }
 
 // title of the page
-if ($safe['action'] == 'sortmycourses' OR !isset($safe['action']))
-{
+if ($safe['action'] == 'sortmycourses' OR !isset($safe['action'])) {
 	$nameTools = get_lang('SortMyCourses');
 }
 if ($safe['action'] == 'createcoursecategory')
@@ -90,11 +91,9 @@ if ($safe['action'] == 'subscribe')
 	$nameTools = get_lang('SubscribeToCourse');
 }
 
-
 // breadcrumbs
 $interbreadcrumb[] = array('url'=>api_get_path(WEB_PATH).'user_portal.php', 'name'=> get_lang('MyCourses'));
-if (empty($nameTools))
-{
+if (empty($nameTools)) {
 	$nameTools=get_lang('CourseManagement');
 }
 else

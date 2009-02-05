@@ -1,4 +1,4 @@
-<?php // $Id: document.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: document.php 18270 2009-02-05 22:07:04Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -467,11 +467,17 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 					}
 				}
 			
-				foreach($_POST['path'] as $index => $path)
+				foreach($_POST['path'] as $index => $path)				
 				{
-					DocumentManager::delete_document($_course,$path,$base_work_dir);
+					if (strcmp($path,'/audio')===0 or strcmp($path,'/flash')===0 or strcmp($path,'/images')===0 or strcmp($path,'/shared_folder')===0 or strcmp($path,'/video')===0) {
+						continue;
+					} else {
+					$delete_document = DocumentManager::delete_document($_course,$path,$base_work_dir);
+					}
 				}
+				if (!empty($delete_document)) {
 				Display::display_confirmation_message(get_lang('DocDeleted'));
+				}
 				break;
 		}
 	}

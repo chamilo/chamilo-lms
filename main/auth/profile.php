@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: profile.php 18272 2009-02-05 22:12:50Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -16,24 +16,26 @@
 // name of the language file that needs to be included
 $language_file = array('registration','messages');
 $cidReset = true;
-
 require ('../inc/global.inc.php');
+if (!isset($_GET['show'])) {
+	 if (api_get_setting('allow_social_tool')=='true') {
+		header('Location:../social/index.php');
+		exit;
+	}
+}
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $this_section = SECTION_MYPROFILE;
- 
 $_SESSION['this_section']=$this_section;
-
 api_block_anonymous_users();
 
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
-function confirmation(name)
-{
+function confirmation(name) {
 	if (confirm("'.get_lang('AreYouSureToDelete').' " + name + " ?"))
 		{return true;}
 	else
 		{return false;}
 }
-		
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
 	height = parseInt(height) + 20;			
@@ -41,23 +43,36 @@ function show_image(image,width,height) {
 		
 }			
 </script>';
-
 if (api_get_setting('allow_message_tool')=='true') {
-	$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 	$htmlHeadXtra[] ='<script type="text/javascript">
 	$(document).ready(function(){
 		$(".message-content .message-delete").click(function(){
 			$(this).parents(".message-content").animate({ opacity: "hide" }, "slow");
-			
 			$(".message-view").animate({ opacity: "show" }, "slow");
 		});				
-		//$("message-content-internal").load("../messages/index.php");
-		//$("message-content-internal").show();
 		
 	});
 	</script>';	
 }
-
+$htmlHeadXtra[] ='<script type="text/javascript">
+function generate_open_id_form() {
+	$.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {
+		/*$("#div_api_key").html("Loading...");*/ },
+		type: "POST",
+		url: "../auth/generate_api_key.inc.php",
+		data: "num_key_id="+"",
+		success: function(datos) {
+		 $("#div_api_key").html(datos);
+		},
+	});
+}
+</script>';
+$interbreadcrumb[]= array (
+	'url' => '#',
+	'name' => get_lang('ModifyProfile')
+);
 if (!empty ($_GET['coursePath']))
 {
 	$course_url = api_get_path(WEB_COURSE_PATH).htmlentities(strip_tags($_GET['coursePath'])).'/index.php';
@@ -85,7 +100,7 @@ include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-
+require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
 if (is_profile_editable())
 	$tool_name = get_lang('ModifProfile');
 else
@@ -102,6 +117,11 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
  * Get initial values for all fields.
  */
 $user_data = UserManager::get_user_info_by_id(api_get_user_id());
+$array_list_key=UserManager::get_api_keys(api_get_user_id());
+$id_temp_key=UserManager::get_api_key_id(api_get_user_id(),'dokeos');
+$value_array=$array_list_key[$id_temp_key];
+$user_data['api_key_generate']=$value_array;
+
 if ($user_data !== false)
 {
 	if (is_null($user_data['language']))
@@ -383,7 +403,12 @@ foreach($extra as $id => $field_details)
 			break;
 	}
 }
-
+if (api_get_setting('profile', 'apikeys') == 'true') {
+	$form->addElement('html','<div id="div_api_key">');
+	$form->addElement('text', 'api_key_generate', get_lang('MyApiKeyGenerate'), array('size' => 40,'id' => 'id_api_key_generate'));
+	$form->addElement('html','</div>');
+	$form->addElement('button', 'generate_api_key', get_lang('GenerateApiKey'),array('id' => 'id_generate_api_key','onclick' => 'generate_open_id_form()'));//generate_open_id_form()
+}
 //	SUBMIT
 if (is_profile_editable())
 {
@@ -653,7 +678,7 @@ elseif ($form->validate())
 	$extras = array();
 	// build SQL query
 	$sql = "UPDATE $table_user SET";
-
+	unset($user_data['api_key_generate']);
 	foreach($user_data as $key => $value)
 	{
 		if(substr($key,0,6)=='extra_') //an extra field
@@ -684,7 +709,6 @@ elseif ($form->validate())
 
 	$sql .= " WHERE user_id  = '".$_user['user_id']."'";		
 	api_sql_query($sql, __FILE__, __LINE__);
-
 	//update the extra fields
 	foreach($extras as $key=>$value)
 	{
@@ -699,13 +723,19 @@ elseif ($form->validate())
 	exit;
 }
 
+if (isset($_GET['show'])) {
+	$interbreadcrumb[]= array (
+		'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-1',
+		'name' => get_lang('SocialNetwork')
+	);
+}
+
 /*
 ==============================================================================
 		MAIN DISPLAY SECTION
 ==============================================================================
 */
-Display :: display_header(get_lang('ModifyProfile'));
-
+Display :: display_header('');
 if (!empty($file_deleted))
 {
 	Display :: display_confirmation_message(get_lang('FileDeleted'),false);
@@ -759,17 +789,16 @@ if ($image=='unknown.jpg') {
 } else {
 	echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 }
-
 if (api_get_setting('allow_message_tool')=='true') {
 	
 	include (api_get_path(LIBRARY_PATH).'message.lib.php');
-	$number_of_new_messages = get_new_messages();
+	$number_of_new_messages = MessageManager::get_new_messages();
 	$cant_msg = ' ('.$number_of_new_messages.')';
 	if($number_of_new_messages==0) {		
 		$cant_msg= ''; 
 	}
 	
-	//$number_of_new_messages=2;
+	$number_of_new_messages_of_friend=UserFriend::get_message_number_invitation_by_user_id(api_get_user_id());
 	//echo '<div class="message-view" style="display:none;">'.get_lang('ViewMessages').'</div>';
 	echo '<div class="message-content">
 			<h2 class="message-title">'.get_lang('Message').'</h2>
@@ -778,16 +807,15 @@ if (api_get_setting('allow_message_tool')=='true') {
 				<a href="../messages/new_message.php" class="message-body">'.get_lang('Compose').'</a><br />' .
 			'</p>';		
 	
-	/*	 
-	 if ($number_of_new_messages>0) {
+		 
+	 if ($number_of_new_messages_of_friend>0) {
 		echo '<div class="message-content-internal">';		
-		echo Display::return_icon('message_new.png',get_lang('NewMessage'));	
-		echo '<a href="inbox.php" style="color:#000000" >'.get_lang('YouHaveNewMessage').'</a>';
-		echo '&nbsp;</div><br/>';		    
+		echo '<a href="select_friend.php" style="color:#000000">'. Display::return_icon('info3.gif',get_lang('NewMessage'),'align="absmiddle"').'&nbsp;'.get_lang('Invitation ').'('.$number_of_new_messages_of_friend.')'.'</a>';
+		echo '</div><br/>';		    
 	}			
-	*/
+	
 	echo '<img src="../img/delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
-	if ($count_message>0) {
+	if ($number_of_new_messages_of_friend>0) {
 		echo '<br/>';
 	}
 echo '</div>';

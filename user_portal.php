@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 18084 2009-01-29 21:51:47Z juliomontoya $
+<?php // $Id: user_portal.php 18265 2009-02-05 21:24:50Z juliomontoya $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -932,7 +932,15 @@ if ($display_add_course_link) {
 		display_create_course_link();
 	}
 }
-display_edit_course_list_links();
+
+if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
+	display_edit_course_list_links();	
+} else {	
+	if (api_get_setting('allow_students_to_browse_courses')=='true') {	
+		display_edit_course_list_links();	
+	}	
+}
+
 if (isset($toolsList) and is_array($toolsList) and isset($digest)) {
 	display_digest($toolsList, $digest, $orderKey, $courses);
 }

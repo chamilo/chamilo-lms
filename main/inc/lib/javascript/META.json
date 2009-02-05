@@ -1,0 +1,29 @@
+{
+	"name": "jQuery-Tabs",
+	"version": 2.7,
+	"author": [
+		"Klaus Hartl <klaus.hartl@stilbuero.de>"
+	],
+	"abstract": "jQuery plugin for accessible, unobtrusive tabs.",
+	"license": "mit, gpl",
+	"distribution_type": "plugin",
+	"requires": {
+		"jQuery": ">= 1.0.3, < 1.2"
+	},
+	"provides": {
+		"jQuery.Tabs": {
+			"version": 2.7,
+			"file": "jquery.tabs.js"
+		}
+	},
+	"keywords": [
+		"tabs",
+		"widget"
+	],
+	"stability": "Official",
+	"meta-spec": {
+		"version": 1.3,
+		"url": "http://module-build.sourceforge.net/META-spec-v1.3.html"
+	},
+	"generated_by": "Yehuda Katz"
+}

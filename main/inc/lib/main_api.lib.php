@@ -3121,3 +3121,10 @@ if ( !function_exists('sys_get_temp_dir') )
         }
     }
 }
+function api_is_xml_http_request() {
+	if ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') {
+		return true;
+	} else {
+		return false;
+	}
+}

@@ -24,6 +24,7 @@
 require_once "HTML/Table.php"; //See http://pear.php.net/package/HTML_Table
 require_once "Pager/Pager.php"; //See http://pear.php.net/package/Pager
 require_once 'tablesort.lib.php';
+require_once 'main_api.lib.php';
 /**
  * This class allows you to display a sortable data-table. It is possible to
  * split the data in several pages.
@@ -201,7 +202,13 @@ class SortableTable extends HTML_Table
 		{
 			$cols = $this->getColCount();
 			$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
-			$this->setCellContents(1, 0, get_lang('TheListIsEmpty'));
+			if (api_is_xml_http_request()===true) {
+				$message_empty=utf8_encode(get_lang('TheListIsEmpty'));
+			} else {
+				$message_empty=get_lang('TheListIsEmpty');
+			}
+			$this->setCellContents(1, 0,$message_empty);
+			
 			$empty_table = true;
 		}
 		$html='';

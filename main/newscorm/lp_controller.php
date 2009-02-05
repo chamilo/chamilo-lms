@@ -157,15 +157,11 @@ if($debug>0) error_log('New LP - Passed oLP creation check',0);
 $_SESSION['oLP']->update_queue = array(); //reinitialises array used by javascript to update items in the TOC
 $_SESSION['oLP']->message = ''; //should use ->clear_message() method but doesn't work
 
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '950';
+// Some common default settings for the online editor. Other settings are calculated in formvalidator module.
+// For editing document type lp-items specific settings are set/calculated, see learnpath.class.php
 $fck_attribute['ToolbarSet'] = 'Full';
-$fck_attribute['Config']['FullPage'] = true;
-
-$fck_attribute['Config']['InDocument'] = false;
-$fck_attribute['Config']['CreateDocumentDir'] = '/'; // this means that fck editor will add the mp3, video files like this audio/fil.mp3 and not the absolute path
-$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
-$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
 
 if(isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true')
 {

@@ -6558,6 +6558,39 @@ class learnpath {
 						
 						if(!$no_display_edit_textarea)
 						{
+							// We need to claculate here some specific settings for the online editor.
+							// The calculated settings work for documents in the Documents tool
+							// (on the root or in subfolders).
+							// For documents in native scorm packages it is unclear whether the
+							// online editor should be activated or not.
+							global $fck_attribute;
+							$fck_attribute['Width'] = '100%';
+							$fck_attribute['Height'] = '950';
+							$fck_attribute['ToolbarSet'] = 'Full';
+							$fck_attribute['Config']['FullPage'] = true;
+							$relative_path = $extra_info['dir'];
+							if ($relative_path == 'n/')
+							{
+								// A new document, it is in the root of the repository.
+								$relative_path = '';
+								$relative_prefix = '';
+							}
+							else
+							{
+								// The document already exists. Whe have to determine its relative path towards the repository root.
+								$relative_path = explode('/', $relative_path);
+								$relative_prefix = str_repeat('../', count($relative_path) - 2);
+								$relative_path = array_slice($relative_path, 1, count($relative_path) - 2);
+								$relative_path = implode('/', $relative_path);
+								if (strlen($relative_path) > 0)
+								{
+									$relative_path = $relative_path.'/';
+								}
+							}
+							$fck_attribute['Config']['CreateDocumentDir'] = $relative_prefix;
+							$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
+							$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/'.$relative_path;
+
 							$form->addElement('style_submit_button', 'submit_button', get_lang('Ok'));
 							$renderer = $form->defaultRenderer();
 							$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');

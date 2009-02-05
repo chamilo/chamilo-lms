@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 18156 2009-02-02 17:02:08Z juliomontoya $
+// $Id: user_information.php 18256 2009-02-05 16:16:03Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -266,14 +266,14 @@ if ($_configuration['multiple_access_urls']==true) {
 	$url_list= UrlManager::get_access_url_from_user($user['user_id']);	
 	if (count($url_list) > 0) {
 		$header = array();
-		$header[] = array (get_lang('UrlName'), true);
+		$header[] = array (get_lang('URL'), true);
 		$data = array ();
 		foreach ($url_list as $url) {
 			$row = array();
 			$row[] = $url['url'];			
 			$data[] = $row;
 		}
-		echo '<p><b>'.get_lang('UrlList').'</b></p>';
+		echo '<p><b>'.get_lang('URLList').'</b></p>';
 		echo '<blockquote>';
 		Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => $_GET['user_id']));
 		echo '</blockquote>';

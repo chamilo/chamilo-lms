@@ -1290,3 +1290,11 @@ ALTER TABLE message ADD INDEX idx_message_user_sender(user_sender_id);
 ALTER TABLE message ADD INDEX idx_message_user_receiver(user_receiver_id);
 ALTER TABLE message ADD INDEX idx_message_user_sender_user_receiver(user_sender_id,user_receiver_id);
 ALTER TABLE message ADD INDEX idx_message_msg_status(msg_status);
+INSERT INTO user_friend_relation_type (id,title)
+VALUES
+(1,'Unknow'),
+(2,'Parent'),
+(3,'Friend'),
+(4,'GoodFriend'),
+(5,'Enemy'),
+(6,'Deleted');

@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 18226 2009-02-04 14:55:54Z ivantcholakov $
+// $Id: html_editor.php 18257 2009-02-05 19:11:10Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -365,7 +365,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 			return parent::toHTML();
 		}
 		$this -> fck_editor->Value = $this->getValue();
-		$result .=$this -> fck_editor->CreateHtml();
+		$result .= $this -> fck_editor->CreateHtml(true);
 
 		//Add a link to open the allowed html tags window 
 		//$result .= '<small><a href="#" onclick="MyWindow=window.open('."'".api_get_path(WEB_CODE_PATH)."help/allowed_html_tags.php?fullpage=". ($this->fullPage ? '1' : '0')."','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=500,height=600,left=200,top=20'".'); return false;">'.get_lang('AllowedHTMLTags').'</a></small>';

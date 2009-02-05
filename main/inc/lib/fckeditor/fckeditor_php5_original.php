@@ -19,7 +19,7 @@
  *
  * == END LICENSE ==
  *
- * This is the integration file for PHP 4.
+ * This is the integration file for PHP 5.
  *
  * It defines the FCKeditor class that can be used to create editor
  * instances in PHP pages on server side.
@@ -79,39 +79,39 @@ class FCKeditor
 	 * @access protected
 	 * @var string
 	 */
-	var $InstanceName ;
+	public $InstanceName ;
 	/**
 	 * Path to FCKeditor relative to the document root.
 	 *
 	 * @var string
 	 */
-	var $BasePath ;
+	public $BasePath ;
 	/**
 	 * Width of the FCKeditor.
 	 * Examples: 100%, 600
 	 *
 	 * @var mixed
 	 */
-	var $Width ;
+	public $Width ;
 	/**
 	 * Height of the FCKeditor.
 	 * Examples: 400, 50%
 	 *
 	 * @var mixed
 	 */
-	var $Height ;
+	public $Height ;
 	/**
 	 * Name of the toolbar to load.
 	 *
 	 * @var string
 	 */
-	var $ToolbarSet ;
+	public $ToolbarSet ;
 	/**
 	 * Initial value.
 	 *
 	 * @var string
 	 */
-	var $Value ;
+	public $Value ;
 	/**
 	 * This is where additional configuration can be passed.
 	 * Example:
@@ -119,7 +119,7 @@ class FCKeditor
 	 *
 	 * @var array
 	 */
-	var $Config ;
+	public $Config ;
 
 	/**
 	 * Main Constructor.
@@ -127,8 +127,8 @@ class FCKeditor
 	 *
 	 * @param string $instanceName
 	 */
-	function FCKeditor( $instanceName )
-	{
+	public function __construct( $instanceName )
+ 	{
 		$this->InstanceName	= $instanceName ;
 		$this->BasePath		= '/fckeditor/' ;
 		$this->Width		= '100%' ;
@@ -143,9 +143,9 @@ class FCKeditor
 	 * Display FCKeditor.
 	 *
 	 */
-	function Create($called_by_formvalidator = false)
+	public function Create()
 	{
-		echo $this->CreateHtml($called_by_formvalidator) ;
+		echo $this->CreateHtml() ;
 	}
 
 	/**
@@ -153,16 +153,11 @@ class FCKeditor
 	 *
 	 * @return string
 	 */
-	function CreateHtml($called_by_formvalidator = false)
+	public function CreateHtml()
 	{
 		$HtmlValue = htmlspecialchars( $this->Value ) ;
 
 		$Html = '' ;
-
-		if ( !isset( $_GET ) ) {
-			global $HTTP_GET_VARS ;
-			$_GET = $HTTP_GET_VARS ;
-		}
 
 		if ( $this->IsCompatible() )
 		{
@@ -208,7 +203,7 @@ class FCKeditor
 	 *
 	 * @return boolean
 	 */
-	function IsCompatible()
+	public function IsCompatible()
 	{
 		return FCKeditor_IsCompatibleBrowser() ;
 	}
@@ -219,7 +214,7 @@ class FCKeditor
 	 * @access protected
 	 * @return string
 	 */
-	function GetConfigFieldString()
+	public function GetConfigFieldString()
 	{
 		$sParams = '' ;
 		$bFirst = true ;
@@ -250,7 +245,7 @@ class FCKeditor
 	 * @param string $valueToEncode
 	 * @return string
 	 */
-	function EncodeConfig( $valueToEncode )
+	public function EncodeConfig( $valueToEncode )
 	{
 		$chars = array(
 			'&' => '%26',

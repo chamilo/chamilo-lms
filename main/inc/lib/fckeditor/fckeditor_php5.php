@@ -25,6 +25,8 @@
  * instances in PHP pages on server side.
  */
 
+// Code to adapt the editor to the Dokeos LMS has been added by Ivan Tcholakov, FEB-2009.
+
 /**
  * Check if browser is compatible with FCKeditor.
  * Return true if is compatible.
@@ -143,9 +145,9 @@ class FCKeditor
 	 * Display FCKeditor.
 	 *
 	 */
-	public function Create()
+	public function Create($called_by_formvalidator = false)
 	{
-		echo $this->CreateHtml() ;
+		echo $this->CreateHtml($called_by_formvalidator) ;
 	}
 
 	/**
@@ -153,8 +155,270 @@ class FCKeditor
 	 *
 	 * @return string
 	 */
-	public function CreateHtml()
+	public function CreateHtml($called_by_formvalidator = false)
 	{
+		// Adaptation for the Dokeos LMS.
+
+		// Default configuration settings will be calculated when the editor
+		// is (still) created directly, without using the formvalidator module.
+		// These default settings might not cover all possible cases.
+
+		if (!$called_by_formvalidator)
+		{
+			global $language_interface;
+
+			$this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
+
+			@ $editor_lang = Database :: get_language_isocode($language_interface);
+			$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
+			if (empty ($editor_lang) || !file_exists($language_file))
+			{
+				//if there was no valid iso-code, use the english one
+				$editor_lang = 'en';
+			}
+
+			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+
+			// We are in a course
+			if (isset($_SESSION["_course"]["language"])) {
+				$sql = "SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+			} elseif (isset($_SESSION["_user"]["language"])) {
+				//Else, we get the current session language
+				$sql = "SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
+			} else  {
+				//Else we get the default platform language
+				$platform_language = api_get_setting("platformLanguage");
+				$sql = "SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='$platform_language'";
+			}
+
+			$result_sql = api_sql_query($sql, __FILE__, __LINE__);
+			$isocode_language = Database::result($result_sql, 0, 0);
+			$this->Config['DefaultLanguage'] = $isocode_language;
+
+			// css should be dokeos ones
+			$this->Config['EditorAreaCSS'] = $this->Config['ToolbarComboPreviewCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
+
+			// Default configuration settings for document repositories.
+
+			// Preliminary calculations for assembling required paths.
+			$script_name = substr($_SERVER['PHP_SELF'], strlen(api_get_path(REL_PATH)));
+			$script_path = explode('/', $script_name);
+			$script_path[count($script_path) - 1] = '';
+			if (api_is_in_course())
+			{
+				$relative_path_prefix = str_repeat('../', count($script_path) - 1);
+			}
+			else
+			{
+				$relative_path_prefix = str_repeat('../', count($script_path) - 2);
+			}
+			$script_path = implode('/', $script_path);
+			$script_path = api_get_path(WEB_PATH).$script_path;
+
+			$use_advanced_filemanager = api_get_setting('advanced_filemanager') == 'true';
+
+			if (api_is_in_course())
+			{
+				if (!api_is_in_group())
+				{
+					// 1. We are inside a course and not in a group.
+
+					if (api_is_allowed_to_edit())
+					{
+						// 1.1. Teacher (tutor and coach are not authorized to change anything in the "content creation" tools)
+
+						if (empty($this->Config['CreateDocumentWebDir']))
+						{
+							$this->Config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/';
+						}
+
+						if (is_null($this->Config['CreateDocumentDir']))
+						{
+							$this->Config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/';
+						}
+
+						if (empty($this->Config['BaseHref']))
+						{
+							$this->Config['BaseHref'] = $script_path;
+						}
+
+						$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
+					}
+					else
+					{
+						// 1.2. Student
+
+						if (empty($this->Config['CreateDocumentWebDir']))
+						{
+							$this->Config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+						}
+
+						if (is_null($this->Config['CreateDocumentDir']))
+						{
+							$this->Config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+						}
+
+						if (empty($this->Config['BaseHref']))
+						{
+							$this->Config['BaseHref'] = $script_path;
+						}
+
+						$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+					}
+				}
+				else
+				{
+					// 2. Inside a course and inside a group.
+
+					global $group_properties;
+
+					if (empty($this->Config['CreateDocumentWebDir']))
+					{
+						$this->Config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
+					}
+
+					if (is_null($this->Config['CreateDocumentDir']))
+					{
+						$this->Config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document'.$group_properties['directory'].'/';
+					}
+
+					if (empty($this->Config['BaseHref']))
+					{
+						$this->Config['BaseHref'] = $script_path;
+					}
+
+					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
+				}
+			}
+			else
+			{
+				if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin')
+				{
+					// 3. Platform administration activities.
+
+					if (empty($this->Config['CreateDocumentWebDir']))
+					{
+						$this->Config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'home/default_platform_document/';
+					}
+
+					if (is_null($this->Config['CreateDocumentDir']))
+					{
+						$this->Config['CreateDocumentDir'] = api_get_path(WEB_PATH).'home/default_platform_document/'; // A side-effect is in use here.
+					}
+
+					if (empty($this->Config['BaseHref']))
+					{
+						$this->Config['BaseHref'] = api_get_path(WEB_PATH).'home/default_platform_document/';
+					}
+
+					$upload_path = api_get_path(REL_PATH).'home/default_platform_document/';
+				}
+				else
+				{
+					// 4. The user is outside courses.
+
+					if (empty($this->Config['CreateDocumentWebDir']))
+					{
+						$this->Config['CreateDocumentWebDir'] = api_get_path('WEB_PATH').'main/upload/users/'.api_get_user_id().'/my_files/';
+					}
+
+					if (is_null($this->Config['CreateDocumentDir']))
+					{
+						$this->Config['CreateDocumentDir'] = $relative_path_prefix.'upload/users/'.api_get_user_id().'/my_files/';
+					}
+
+					if (empty($this->Config['BaseHref']))
+					{
+						$this->Config['BaseHref'] = $script_path;
+					}
+
+					$upload_path = api_get_path(REL_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
+				}
+			}
+
+			// Setting hyperlinks used to call file managers.
+
+			if ($use_advanced_filemanager)
+			{
+				// Let javascripts "know" which file manager has been chosen.
+				$this->Config['AdvancedFileManager'] = true;
+
+				// Configuration path when advanced file manager is used.
+				$this->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
+
+				// URLs for opening the file browser for different resource types (file types):
+
+				// for images
+				$this->Config['ImageBrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+
+				// for flash
+				$this->Config['FlashBrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+
+				// for audio files (mp3)
+				$this->Config['MP3BrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+
+				// for videos
+				$this->Config['VideoBrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+
+				// for videos (flv)
+				$this->Config['MediaBrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+
+				// for links (any resource type)
+				$this->Config['LinkBrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			}
+			else
+			{
+				// Passing the file manager setting to javascripts too.
+				$this->Config['AdvancedFileManager'] = false;
+
+				// Configuration path when simple file manager is used.
+				$this->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+
+				// URLs for opening the file browser for different resource types (file types):
+
+				// for images
+				$this->Config['ImageBrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+				// for flash
+				$this->Config['FlashBrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+	
+				// for audio files (mp3)
+				$this->Config['MP3BrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+				// for videos
+				$this->Config['VideoBrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+				// for videos (flv)
+				$this->Config['MediaBrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+				// for links (any resource type)
+				$this->Config['LinkBrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=File&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			}
+
+			// URLs for making quick uplods for different resource types (file types).
+			// These URLs are used by the dialogs' quick upload tabs:
+
+			// for images
+			$this->Config['ImageUploadURL'] = $this->BasePath . "editor/filemanager/upload/php/upload.php?Type=Images&ServerPath=$upload_path" ;
+
+			// for flash
+			$this->Config['FlashUploadURL'] = $this->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
+	
+			// for audio files (mp3)
+			$this->Config['MP3UploadURL'] = $this->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
+
+			// for videos
+			$this->Config['VideoUploadURL'] = $this->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
+
+			// for videos (flv)
+			$this->Config['MediaUploadURL'] = $this->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video/flv&ServerPath=$upload_path" ;
+
+			// for links (any resource type)
+			$this->Config['LinkUploadURL'] = $this->BasePath . "editor/filemanager/upload/php/upload.php?Type=File&ServerPath=$upload_path" ;
+		}
+
+		// The original code starts from here.
+
 		$HtmlValue = htmlspecialchars( $this->Value ) ;
 
 		$Html = '' ;

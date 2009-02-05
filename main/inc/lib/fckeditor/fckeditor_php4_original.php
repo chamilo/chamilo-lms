@@ -143,9 +143,9 @@ class FCKeditor
 	 * Display FCKeditor.
 	 *
 	 */
-	function Create($called_by_formvalidator = false)
+	function Create()
 	{
-		echo $this->CreateHtml($called_by_formvalidator) ;
+		echo $this->CreateHtml() ;
 	}
 
 	/**
@@ -153,7 +153,7 @@ class FCKeditor
 	 *
 	 * @return string
 	 */
-	function CreateHtml($called_by_formvalidator = false)
+	function CreateHtml()
 	{
 		$HtmlValue = htmlspecialchars( $this->Value ) ;
 

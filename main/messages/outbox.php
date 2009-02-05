@@ -31,12 +31,14 @@
 $language_file= 'messages';
 $cidReset=true;
 include_once ('../inc/global.inc.php');
-require_once '../messages/message.class.php';
-include_once(api_get_path(LIBRARY_PATH).'/message.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'message.lib.php');
 api_block_anonymous_users();
+
 if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
+
+
 $htmlHeadXtra[]='<script language="javascript">
 <!--
 function enviar(miforma) 
@@ -69,40 +71,43 @@ function deselect_all(formita)
 		MAIN CODE
 ==============================================================================
 */
+
 $nameTools = get_lang('Messages');
 $request=api_is_xml_http_request();
 if ($request===false) {
-	Display::display_header($nameTools,get_lang('Inbox'));
-	$link_ref="new_message.php";	
-} else {
-	$link_ref="../messages/new_message.php?rs=1";
+	Display::display_header($nameTools,get_lang('Outbox'));
 }
-api_display_tool_title(get_lang('Inbox'));
+api_display_tool_title(get_lang('Outbox'));
 
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 
 echo '<div class=actions>';
-echo '<a href="'.$link_ref.'">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
+echo get_lang('ReadMessageComment');
 echo '</div>';
 
-if (!isset($_GET['del_msg'])) {
-	inbox_display();
+$user_sender_id=api_get_user_id();
+$id=Security::remove_XSS($_GET['id']);
+
+if (isset($_GET['action']) && $_GET['action']=='deleteone') {
+	MessageManager::delete_message_by_user_sender($user_sender_id,$id);
+}
+if (!isset($_GET[del_msg])) {
+	outbox_display();
 } else {
 	$num_msg = $_POST['total'];
 	for ($i=0;$i<$num_msg;$i++) {
 		if($_POST[$i]) {
 			//the user_id was necesarry to delete a message??
-			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);			
+			delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);			
 		}
 	}
 	inbox_display();
 }
-
 /*
 ==============================================================================
 		FOOTER 
 ==============================================================================
-*/ 
+*/
 if ($request===false) {
 	Display::display_footer();
 }

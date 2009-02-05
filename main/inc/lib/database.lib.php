@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 18156 2009-02-02 17:02:08Z juliomontoya $
+<?php // $Id: database.lib.php 18274 2009-02-05 22:34:52Z iflorespaz $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -77,6 +77,8 @@ define('TABLE_MAIN_USER_FRIEND','user_friend');
 define('TABLE_MAIN_USER_FRIEND_RELATION_TYPE','user_friend_relation_type');
 //Web services
 define('TABLE_MAIN_USER_API_KEY','user_api_key');
+//Message
+define('TABLE_MAIN_MESSAGE','message');
 
 //statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');

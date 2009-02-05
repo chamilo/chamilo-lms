@@ -1562,31 +1562,11 @@ function show_add_form($id = '')
 			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 
 			$oFCKeditor = new FCKeditor('content') ;
-			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+
+			$oFCKeditor->ToolbarSet = 'Agenda';
 			$oFCKeditor->Height		= '175';
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Value		= $content;
-
-			if(api_get_setting('advanced_filemanager')=='true')
-			{
-				$oFCKeditor->Config['AdvancedFileManager'] = true;
-
-				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
-			}
-			else
-			{
-				$oFCKeditor->Config['AdvancedFileManager'] = false;
-
-				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-			}
-			
-			$oFCKeditor->ToolbarSet = 'Agenda';
-
-			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION['_user']['language']."'";
-			$result_sql=api_sql_query($sql);
-			$isocode_language=Database::result($result_sql,0,0);
-			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 
 			$return =	$oFCKeditor->CreateHtml();
 

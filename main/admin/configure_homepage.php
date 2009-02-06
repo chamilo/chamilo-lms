@@ -1,9 +1,9 @@
-<?php // $Id: configure_homepage.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: configure_homepage.php 18298 2009-02-06 20:54:11Z juliomontoya $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -40,9 +40,7 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
 
 $action=Security::remove_XSS($_GET['action']);
-
 $tbl_category=Database::get_main_table(TABLE_MAIN_CATEGORY);
-
 $tool_name=get_lang('ConfigureHomePage');
 
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
@@ -87,36 +85,66 @@ if(!empty($action)){
 // global.inc.php, the variables used for language purposes below are considered safe.
 
 $lang = ''; //el for "Edit Language"
-if(!empty($_SESSION['user_language_choice']))
-{
+if(!empty($_SESSION['user_language_choice'])) {
 	$lang=$_SESSION['user_language_choice'];
-}
-elseif(!empty($_SESSION['_user']['language']))
-{
+} elseif(!empty($_SESSION['_user']['language'])) {
 	$lang=$_SESSION['_user']['language'];
-}
-else
-{
+} else {
 	$lang=get_setting('platformLanguage');
 }
 
 // ----- Ensuring availability of main files in the corresponding language -----
-$homep = '../../home/'; //homep for Home Path
-$menuf = 'home_menu'; //menuf for Menu File
-$newsf = 'home_news'; //newsf for News File
-$topf = 'home_top'; //topf for Top File
+
+if ($_configuration['multiple_access_urls']==true) {
+	$access_url_id = api_get_current_access_url_id();										 
+	if ($access_url_id != -1){						
+		$url_info = api_get_access_url($access_url_id);
+		// "http://" and the final "/" replaced						
+		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);						
+		$clean_url = replace_dangerous_char($url);
+		$clean_url = str_replace('/','-',$clean_url);
+		$clean_url = $clean_url.'/';
+		
+		$homep = '../../home/'; //homep for Home Path			
+		$homep_new = '../../home/'.$clean_url; //homep for Home Path added the url				
+		$new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
+		//we create the new dir for the new sites
+		if (!is_dir($new_url_dir)){		
+			umask(0);
+			$perm = api_get_setting('permissions_for_new_directories');
+			$perm = octdec(!empty($perm)?$perm:'0755');
+			mkdir($new_url_dir, $perm);
+		}							
+	}
+} else {			
+	$homep_new ='';		
+	$homep = '../../home/'; //homep for Home Path
+}
+
+
+$menuf	 = 'home_menu'; //menuf for Menu File
+$newsf	 = 'home_news'; //newsf for News File
+$topf 	 = 'home_top'; //topf for Top File
 $noticef = 'home_notice'; //noticef for Notice File
-$ext = '.html'; //ext for HTML Extension - when used frequently, variables are
+$ext 	 = '.html'; //ext for HTML Extension - when used frequently, variables are
 				// faster than hardcoded strings
 $homef = array($menuf,$newsf,$topf,$noticef);
 
 // If language-specific file does not exist, create it by copying default file
 foreach($homef as $my_file)
 {
-	if(!file_exists($homep.$my_file.'_'.$lang.$ext))
-	{
-		copy($homep.$my_file.$ext,$homep.$my_file.'_'.$lang.$ext);
+	if ($_configuration['multiple_access_urls']==true) {
+		if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
+			copy($homep.$my_file.$ext,$homep_new.$my_file.'_'.$lang.$ext);
+		}		
+	} else {	
+		if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
+			copy($homep.$my_file.$ext,$homep.$my_file.'_'.$lang.$ext);
+		}
 	}
+}
+if ($_configuration['multiple_access_urls']==true) {
+	$homep = $homep_new; 
 }
 
 // Check WCAG settings and prepare edition using WCAG
@@ -138,16 +166,16 @@ if(!empty($_GET['link']))
 	}
 }
 
+global $_configuration;
+
 // Start analysing requested actions
 if(!empty($action))
 {
-	if($_POST['formSent'])
-	{
+	if($_POST['formSent']) {
 		//variables used are $homep for home path, $menuf for menu file, $newsf
 		// for news file, $topf for top file, $noticef for noticefile,
 		// $ext for '.html'
-		switch($action)
-		{
+		switch($action) {
 			case 'edit_top':
 				// Filter
 				$home_top='';
@@ -155,27 +183,24 @@ if(!empty($action))
 					$home_top=WCAG_Rendering::prepareXHTML();
 				} else {
 					$home_top=trim(stripslashes($_POST['home_top']));
-				}
+				}				
+					
 				// Write
-				if(file_exists($homep.$topf.'_'.$lang.$ext))
-				{
-					if(is_writable($homep.$topf.'_'.$lang.$ext))
-					{
+				if (file_exists($homep.$topf.'_'.$lang.$ext)) {
+					if(is_writable($homep.$topf.'_'.$lang.$ext)) {						
 						$fp=fopen($homep.$topf.'_'.$lang.$ext,"w");
 						fputs($fp,$home_top);
 						fclose($fp);
-					}
-					else
-					{
+					} else {
 						$errorMsg=get_lang('HomePageFilesNotWritable');
 					}
-				}
-				else //File does not exist
-				{
+				} else {
+					//File does not exist					
 					$fp=fopen($homep.$topf.'_'.$lang.$ext,"w");
 					fputs($fp,$home_top);
 					fclose($fp);
-				}
+				}				
+				
 				break;
 			case 'edit_notice':
 				// Filter
@@ -193,26 +218,20 @@ if(!empty($action))
 					$errorMsg=get_lang('NoticeWillBeNotDisplayed');
 				}
 				// Write
-				if(file_exists($homep.$noticef.'_'.$lang.$ext))
-				{
-					if(is_writable($homep.$noticef.'_'.$lang.$ext))
-					{
+				if(file_exists($homep.$noticef.'_'.$lang.$ext)) {
+					if(is_writable($homep.$noticef.'_'.$lang.$ext)) {
 						$fp=fopen($homep.$noticef.'_'.$lang.$ext,"w");
 						if($errorMsg==''){
 							fputs($fp,"<b>$notice_title</b><br />\n$notice_text");
-						}
-						else{
+						} else {
 							fputs($fp,"");
 						}
 						fclose($fp);
-					}
-					else
-					{
+					} else {
 						$errorMsg.="<br/>\n".get_lang('HomePageFilesNotWritable');
 					}
-				}
-				else //File does not exist
-				{
+				} else {
+					//File does not exist
 					$fp=fopen($homep.$noticef.'_'.$lang.$ext,"w");
 					fputs($fp,"<b>$notice_title</b><br />\n$notice_text");
 					fclose($fp);
@@ -423,11 +442,9 @@ if(!empty($action))
 			header('Location: '.api_get_self());
 			exit();
 		}
-	}
-	else //if POST[formSent] is not set
-	{
-		switch($action)
-		{
+	} else {
+		//if POST[formSent] is not set
+		switch($action) {
 			case 'open_link':
 				// Previously, filtering of GET['link'] was done here but it left
 				// a security threat. Filtering has now been moved outside conditions
@@ -450,13 +467,10 @@ if(!empty($action))
 						$home_menu[$key]=trim($enreg);
 					}
 				}
-
+				
 				$home_menu=implode("\n",$home_menu);
-
 				$fp=fopen($homep.$menuf.'_'.$lang.$ext,'w');
-
 				fputs($fp,$home_menu);
-
 				fclose($fp);
 
 				header('Location: '.api_get_self());
@@ -464,21 +478,14 @@ if(!empty($action))
 				break;
 			case 'edit_top':
 				// This request is only the preparation for the update of the home_top
-				$home_top = '';
-				if(is_file($homep.$topf.'_'.$lang.$ext)
-					&& is_readable($homep.$topf.'_'.$lang.$ext))
-				{
+				$home_top = '';			
+				if(is_file($homep.$topf.'_'.$lang.$ext) && is_readable($homep.$topf.'_'.$lang.$ext)) {
 					$home_top=file_get_contents($homep.$topf.'_'.$lang.$ext);
-				}
-				elseif(is_file($homep.$topf.$lang.$ext)
-					&& is_readable($homep.$topf.$lang.$ext))
-				{
+				} elseif(is_file($homep.$topf.$lang.$ext) && is_readable($homep.$topf.$lang.$ext)) {
 					$home_top=file_get_contents($homep.$topf.$lang.$ext);
-				}
-				else
-				{
+				} else {
 					$errorMsg=get_lang('HomePageFilesNotReadable');
-				}
+				}		
 				break;
 			case 'edit_notice':
 				// This request is only the preparation for the update of the home_notice
@@ -815,32 +822,22 @@ switch($action){
 		break;
 	default: // When no action applies, default page to update campus homepage
 		?>
-		<table border="0" cellpadding="5" cellspacing="0" width="100%">
-		<tr>
-		  <td width="80%" colspan="2">
-		  	<div class="actions">
-			<a href="<?php echo api_get_self(); ?>?action=edit_top"><?php Display::display_icon('edit.gif', get_lang('EditHomePage')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
-		  	</div>
-		  </td>
-		  <td width="20%">
-		  	<div class="actions">
-			<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('insert_row.png', get_lang('InsertLink')); ?></a> <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
-			</div>
-		  </td>
-		</tr>
+		<table border="0" cellpadding="5" cellspacing="0" width="100%">	
 		<tr>
 		  <td width="80%" colspan="2" valign="top">
+		  	<div class="actions">
+			<a href="<?php echo api_get_self(); ?>?action=edit_top"><?php Display::display_icon('edit.gif', get_lang('EditHomePage')); ?></a>
+			<a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
+		  	</div>
+		  	
 			<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
 			  <td colspan="2">
 				<?php
 					//print home_top contents
-					if(file_exists($homep.$topf.'_'.$lang.$ext))
-					{
+					if(file_exists($homep.$topf.'_'.$lang.$ext)) {
 						$home_top_temp=file_get_contents($homep.$topf.'_'.$lang.$ext);
-					}
-					else
-					{
+					} else {
 						$home_top_temp=file_get_contents($homep.$topf.$ext);
 					}
 					$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
@@ -849,49 +846,50 @@ switch($action){
 			  </td>
 			</tr>
 			<tr>
-			  <td width="50%">
-				<div class="actions">
-				<a href="course_category.php"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="course_category.php"><?php echo get_lang('EditCategories'); ?></a>
-				</div>
-			  </td>
-			  <td width="50%">
-				<br />
-				<!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>-->
-			  </td>
-			</tr>
-			<tr>
-			  <td width="50%" valign="top">
-				<table border="0" cellpadding="5" cellspacing="0" width="100%">
-				<?php
-				if(sizeof($Categories))
-				{
-					foreach($Categories as $enreg)
-					{
-						echo '<tr><td>'.Display::return_icon('folder_document.gif', $enreg['name']).'&nbsp;'.$enreg['name'].'</td></tr>';
+			<?php 
+			$access_url_id =1;
+			// we only show the category options for the main Dokeos installation
+			if ($_configuration['multiple_access_urls']==true) {					
+				$access_url_id = api_get_current_access_url_id();					
+			}			
+			echo '<td width="50%">';				
+			if ($access_url_id ==1) {
+				echo '<div class="actions">';
+				echo '<a href="course_category.php">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a>
+					  <a href="course_category.php">'.get_lang('EditCategories').'</a>';
+				echo '</div>';
+			}			
+			echo '</td>
+				  <td width="50%">
+				  <br />';								
+			/* <!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>--> */
+			echo '</td></tr>
+				<tr>
+				<td width="50%" valign="top">				  	
+				<table border="0" cellpadding="5" cellspacing="0" width="100%">';
+				if ($access_url_id ==1) {
+					if(sizeof($Categories)) {
+						foreach($Categories as $enreg) {
+							echo '<tr><td>'.Display::return_icon('folder_document.gif', $enreg['name']).'&nbsp;'.$enreg['name'].'</td></tr>';
+						}
+						unset($Categories);
+					} else {
+						echo get_lang('NoCategories');
 					}
-					unset($Categories);
-				}
-				else
-				{
-					echo get_lang('NoCategories');
-				}
+				}				
+				
+				echo '</table>';
 				?>
-
-				</table>
 			  </td>
 			  <!--<td width="50%" valign="top">
-				<?php
-
-				if(file_exists($homep.$newsf.'_'.$lang.$ext))
-				{
+				<?php				
+				if(file_exists($homep.$newsf.'_'.$lang.$ext)) {
 					include ($homep.$newsf.'_'.$lang.$ext);
-				}
-				else
-				{
+				} else {
 					include ($homep.$newsf.$ext);
 				}
+				
 			?>
-
 			  </td>-->
 			</tr>
 			</table>
@@ -921,6 +919,12 @@ switch($action){
 				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo ucfirst(get_lang('LostPassword')); ?></span></li>
 				</ul>
 			</div>
+			
+			
+			<br />
+			<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('insert_row.png', get_lang('InsertLink')); ?></a>
+			<a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
+			
 			<div class="menusection">
 				<span class="menusectioncaption"><?php echo ucfirst(get_lang('General')); ?></span>
 				<ul class="menulist">

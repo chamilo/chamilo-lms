@@ -12,6 +12,10 @@ body {
 	background-color: #ffffff;
 }
 
+input[type="text"]:focus,input[type="password"]:focus,textarea:focus{
+background-image:url(images/shadow.gif);
+}
+
 #outerframe {
 	position: relative;  /* do not remove, fixes a bug in IE */
 	background-color: #fff;	

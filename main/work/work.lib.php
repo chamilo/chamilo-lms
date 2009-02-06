@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18261 2009-02-05 20:56:30Z cfasanando $
+<?php //$Id: work.lib.php 18312 2009-02-06 22:46:17Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18261 2009-02-05 20:56:30Z cfasanando $
+* 	@version $Id: work.lib.php 18312 2009-02-06 22:46:17Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -221,7 +221,7 @@ function create_group_date_select($prefix='')
 */
 function display_student_publications_list($work_dir,$sub_course_dir,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_in_where_query='')
 {
-	global $charset;
+	global $charset,$timeNoSecFormat,$dateFormatShort;
 	// Database table names
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -588,7 +588,9 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		}	
 	
 		if ($direc_date!='' && $direc_date!='0000-00-00 00:00:00') {
-			$row[]= date_to_str_ago($direc_date).'<br><span class="dropbox_date">'.$direc_date.'</span>';
+			$my_direc_date = ucfirst(format_locale_date($dateFormatShort,strtotime($direc_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
+			$my_direc_date .= ucfirst(strftime($timeNoSecFormat,strtotime($direc_date)));	
+			$row[]= date_to_str_ago($direc_date).'<br><span class="dropbox_date">'.$my_direc_date.'</span>';
 		} else {
 			$row[]='';			
 		}	
@@ -644,8 +646,10 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			//$full_file_name = 'download.php?file='.$realname;			
 			$row[]= build_document_icon_tag('file',$work->url);
 			$row[]= '<a href="download.php?file='.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
-			$row[]= display_user_link($row2['insert_user_id'],$work->author).$qualification_string;// $work->author;			
-			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$work->sent_date.'</span>';
+			$row[]= display_user_link($row2['insert_user_id'],$work->author).$qualification_string;// $work->author;
+			$sent_date = ucfirst(format_locale_date($dateFormatShort,strtotime($work->sent_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
+			$sent_date .= ucfirst(strftime($timeNoSecFormat,strtotime($work->sent_date)));			
+			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$sent_date.'</span>';
 			
 			if( $is_allowed_to_edit) {
 				

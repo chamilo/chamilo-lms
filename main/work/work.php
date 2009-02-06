@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18307 2009-02-06 21:38:07Z herodoto $
+<?php //$Id: work.php 18312 2009-02-06 22:46:17Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18307 2009-02-06 21:38:07Z herodoto $
+*  	@version $Id: work.php 18312 2009-02-06 22:46:17Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -90,6 +90,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.ph
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
+require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
 $ctok = $_SESSION['sec_token'];
@@ -1025,7 +1026,7 @@ if($is_special > 0):
 	$sql = api_sql_query('SELECT * FROM '.$TSTDPUBASG.' WHERE publication_id = '.(string)$publication['id'].' LIMIT 1',__FILE__,__LINE__);
 	$homework = mysql_fetch_array($sql);
 	
-	if($homework['expires_on']!='0000-00-00 00:00:00' || $homework['ends_on']!='0000-00-00 00:00:00'):
+	if($homework['expires_on']!='0000-00-00 00:00:00' || $homework['ends_on']!='0000-00-00 00:00:00'):		
 		$time_now = convert_date_to_number(date('Y-m-d H:i:s'));	
 		$time_expires = convert_date_to_number($homework['expires_on']);
 		$time_ends = convert_date_to_number($homework['ends_on']);
@@ -1033,21 +1034,28 @@ if($is_special > 0):
 		$difference2 = $time_ends - $time_now;
 		if($homework['expires_on']!='0000-00-00 00:00:00' && $difference < 0) $has_expired = true;
 		if($homework['ends_on']!='0000-00-00 00:00:00' && $difference2 < 0) $has_ended = true;
-		
-		define('ASSIGNMENT_EXPIRES',$time_expires);
-	
+		if($homework['expires_on']=='0000-00-00 00:00:00'){ $not_ends_on=true; }
+		if (!$not_ends_on) {
+			define('ASSIGNMENT_EXPIRES',$time_expires);
+		}
 		if(!empty($publication['description'])){
 			Display :: display_normal_message($publication['description']);
 		}
-		
+						
+		$ends_on = ucfirst(format_locale_date($dateFormatLong,strtotime($homework['ends_on']))).' ';
+		$ends_on .= ucfirst(strftime($timeNoSecFormat,strtotime($homework['ends_on'])));
+		$expires_on = ucfirst(format_locale_date($dateFormatLong,strtotime($homework['expires_on']))).' ';
+		$expires_on .= ucfirst(strftime($timeNoSecFormat,strtotime($homework['expires_on'])));		
 		if($has_ended) {
-			Display :: display_error_message(get_lang('EndDateAlreadyPassed').' '.$homework['ends_on']);	
+			Display :: display_error_message(get_lang('EndDateAlreadyPassed').' '.$ends_on);	
 			display_action_links($cur_dir_path, $always_show_tool_options,true);
 		} elseif($has_expired) {
-			Display :: display_warning_message(get_lang('ExpiryDateAlreadyPassed').' '.$homework['expires_on']);	
+			Display :: display_warning_message(get_lang('ExpiryDateAlreadyPassed').' '.$expires_on);	
 			display_action_links($cur_dir_path, $always_show_tool_options,$always_show_upload_form);
 		} else {
-			Display :: display_normal_message(get_lang('ExpiryDateToSendWorkIs').' '.$homework['expires_on']);
+			if (!$not_ends_on) {
+			Display :: display_normal_message(get_lang('ExpiryDateToSendWorkIs').' '.$expires_on);
+			}			
 			display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form);
 		}
 	else:

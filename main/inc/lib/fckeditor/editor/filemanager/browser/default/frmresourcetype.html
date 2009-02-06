@@ -29,6 +29,44 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript">
 
+// Initialization of some language variables.
+var FCKLang = [];
+
+if ( window.parent.opener )
+{
+	FCKLang = window.parent.opener.FCKLang ;
+}
+
+if ( !FCKLang )
+{
+	FCKLang = [] ;
+}
+
+if ( !FCKLang['ResourceTypeRoot'] )
+{
+	FCKLang['ResourceTypeRoot'] = 'Root' ;
+}
+
+if ( !FCKLang['ResourceTypeAudio'] )
+{
+	FCKLang['ResourceTypeAudio'] = 'Audio' ;
+}
+
+if ( !FCKLang['ResourceTypeImages'] )
+{
+	FCKLang['ResourceTypeImages'] = 'Images' ;
+}
+
+if ( !FCKLang['ResourceTypeFlash'] )
+{
+	FCKLang['ResourceTypeFlash'] = 'Flash' ;
+}
+
+if ( !FCKLang['ResourceTypeVideo'] )
+{
+	FCKLang['ResourceTypeVideo'] = 'Video' ;
+}
+
 function SetResourceType( type )
 {
 	window.parent.frames["frmFolders"].SetResourceType( type ) ;
@@ -36,12 +74,12 @@ function SetResourceType( type )
 
 var aTypes = [
 
-	['File','All files'],
-	['Audio','Audio'],
-	['Images','Images'],
-	['Flash','Flash'],
-	['Video','Video'],
-	['Video/flv','Video (flv)']
+	[ 'File', FCKLang['ResourceTypeRoot'] ],
+	[ 'Audio', FCKLang['ResourceTypeAudio'] ],
+	[ 'Images', FCKLang['ResourceTypeImages'] ],
+	[ 'Flash', FCKLang['ResourceTypeFlash'] ],
+	[ 'Video', FCKLang['ResourceTypeVideo'] ],
+	[ 'Video/flv', FCKLang['ResourceTypeVideo'] + ' (flv)' ]
 ] ;
 
 window.onload = function()
@@ -77,7 +115,7 @@ window.onload = function()
 		<table class="fullHeight" cellSpacing="0" cellPadding="0" width="100%" border="0">
 			<tr>
 				<td nowrap>
-					Resource Type<BR>
+					Resource Type<br />
 					<select id="cmbType" style="WIDTH: 100%" onchange="SetResourceType(this.value);">
 						<option>&nbsp;
 					</select>

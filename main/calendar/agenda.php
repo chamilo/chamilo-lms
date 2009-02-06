@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 18291 2009-02-06 17:26:58Z cfasanando $
+<?php //$Id: agenda.php 18304 2009-02-06 21:29:37Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -236,7 +236,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false,true) OR (api_get_course_sett
 
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['ToolbarSet'] = 'Introduction';
 
 Display::display_introduction_section(TOOL_CALENDAR_EVENT);
 

@@ -58,9 +58,6 @@ $lib_path = api_get_path(LIBRARY_PATH);
 require_once ($lib_path.'/display.lib.php');
 require_once ($lib_path.'/text.lib.php');
 require_once ($lib_path.'/blog.lib.php');
-
-// Replaced with the actual and updated file.
-//require_once ($lib_path.'/fckeditor.lib.php'); // This file is old, from the previous integration of the FCKEditor.
 require_once ($lib_path.'/fckeditor/fckeditor.php');
 
 $blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);

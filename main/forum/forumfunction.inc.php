@@ -1876,14 +1876,17 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	
 	if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ){
 		// thread qualify
-
-		$form->addElement('static','Group','<a href="javascript://" onclick="if(document.getElementById(\'id_qualify\').style.display==\'none\'){ document.getElementById(\'id_qualify\').style.display=\'block\'; } else { document.getElementById(\'id_qualify\').style.display=\'none\'; }" ><br /><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</a>');
+			
+		$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>');
 		$form->addElement('html','<div id="id_qualify" style="display:none">');
 		$form->addElement('static','Group', '<br /><strong>'.get_lang('AlterQualifyThread').'</strong>');
-		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'));
-		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
-		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'Style="width:40px"');
 		$form->addElement('text', 'numeric_calification', get_lang('QualifyNumeric'),'Style="width:40px"');
+		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+
+		$form -> addElement('html','<div id="options_field" style="display:none">');
+		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
+		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="this.select();"');
+		$form->addElement('html','</div>'); 
 	
 		$form->addElement('html','</div>');
 	}
@@ -1925,7 +1928,11 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	if( $form->validate() ) {
 		$check = Security::check_token('post');	
 		if ($check) {
-	   		$values = $form->exportValues();
+	   		$values = $form->exportValues();	   		
+	   		if($values['thread_qualify_gradebook']=='1' && empty($values['weight_calification'])){
+				Display::display_error_message(get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.back()">'.get_lang('Back').'</a>',false);
+	   			return false;	   		   						   				
+	   		}	   		
 	   		Security::clear_token();
 	   		return $values;
 		}
@@ -1958,7 +1965,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 function store_theme_qualify($user_id,$thread_id,$thread_qualify=0,$qualify_user_id=0,$qualify_time,$session_id=null) {
 	$table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY,'');
  	$table_threads		   =Database::get_course_table(TABLE_FORUM_THREAD,'');
-		if ($user_id==strval(intval($user_id)) && $thread_id==strval(intval($thread_id)) && $thread_qualify==strval(intval($thread_qualify))) {
+		if ($user_id==strval(intval($user_id)) && $thread_id==strval(intval($thread_id)) && $thread_qualify==strval(floatval($thread_qualify))) {
 			
 		//testing
 		
@@ -1974,7 +1981,7 @@ function store_theme_qualify($user_id,$thread_id,$thread_qualify=0,$qualify_user
 			if ($row[0]==0) {
 				$sql="INSERT INTO $table_threads_qualify (user_id," .
 					"thread_id,qualify,qualify_user_id,qualify_time,session_id)" .
-					"VALUES('".$user_id."','".$thread_id."','".$thread_qualify."'," .
+					"VALUES('".$user_id."','".$thread_id."',".(float)$thread_qualify."," .
 					"'".$qualify_user_id."','".$qualify_time."','".$session_id."')";
 				$res=api_sql_query($sql,__FILE__,__LINE__);
 			
@@ -2086,7 +2093,7 @@ function store_qualify_historical($option,$couser_id,$forum_id,$user_id,$thread_
 		//insert thread_historical
 		$sql1="INSERT INTO $table_threads_qualify_log (user_id," .
 				"thread_id,qualify,qualify_user_id,qualify_time,session_id)" .
-				"VALUES('".$user_id."','".$thread_id."','".$row[0]."'," .
+				"VALUES('".$user_id."','".$thread_id."',".(float)$row[0]."," .
 				"'".$qualify_user_id."','".$row[1]."','')";
 		api_sql_query($sql1,__FILE__,__LINE__);
 				
@@ -2258,14 +2265,22 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
 	if (!isset($_GET['edit'])) {
 		
-		$form->addElement('static','Group','<a href="javascript://" onclick="if(document.getElementById(\'id_qualify\').style.display==\'none\'){ document.getElementById(\'id_qualify\').style.display=\'block\'; } else { document.getElementById(\'id_qualify\').style.display=\'none\'; }" ><br /><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</a>');
+		$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>');
 		$form->addElement('html','<div id="id_qualify" style="display:none">');
 		$form->addElement('static','Group','<strong>'.get_lang('AlterQualifyThread').'</strong>');
-		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'));
-		$defaults['thread_qualify_gradebook']=is_resource_in_course_gradebook(api_get_course_id(),5,$_GET['thread'],api_get_session_id());
-		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'),'value="'.$current_thread['thread_title_qualify'].'"');
-		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="'.$current_thread['thread_weight'].'" Style="width:40px"');
 		$form->addElement('text', 'numeric_calification', get_lang('QualifyNumeric'),'value="'.$current_thread['thread_qualify_max'].'" Style="width:40px"');
+		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');		
+		$defaults['thread_qualify_gradebook']=is_resource_in_course_gradebook(api_get_course_id(),5,$_GET['thread'],api_get_session_id());
+				
+		if (!empty($defaults['thread_qualify_gradebook'])) {
+		$form -> addElement('html','<div id="options_field" style="display:block">');
+		} else {
+			$form -> addElement('html','<div id="options_field" style="display:none">');
+		}						
+		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'),'value="'.$current_thread['thread_title_qualify'].'"');
+		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="'.$current_thread['thread_weight'].'" Style="width:40px"');		
+		$form->addElement('html','</div>');
+		
 		$form->addElement('html','</div>');
 		//add gradebook
 	}
@@ -2312,6 +2327,10 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	// The validation or display
 	if( $form->validate() ) {
 	   $values = $form->exportValues();
+	   if($values['thread_qualify_gradebook']=='1' && empty($values['weight_calification'])){
+				Display::display_error_message(get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.back()">'.get_lang('Back').'</a>',false);
+	   			return false;	   		   						   				
+	   }	
 	   return $values;
 	} else {
 		$form->display();

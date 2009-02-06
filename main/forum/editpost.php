@@ -103,6 +103,20 @@ $nameTools=get_lang('Forum');
 include('forumconfig.inc.php');
 include('forumfunction.inc.php');
 
+// javascript
+$htmlHeadXtra[] = '<script>
+		
+		function advanced_parameters() {
+			if(document.getElementById(\'id_qualify\').style.display == \'none\') {
+				document.getElementById(\'id_qualify\').style.display = \'block\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			} else {
+				document.getElementById(\'id_qualify\').style.display = \'none\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			}	
+		}
+</script>';	
+
 /*
 ==============================================================================
 		MAIN DISPLAY SECTION

@@ -63,7 +63,7 @@ $output .= '
         <tr>
             <td width="40%" class="forum-thread-header"><div align="left">'.get_lang('Qualification').'&nbsp;:</div></td >
             <td  width="60%" class="forum-thread-body"><div align="left">
-            	<input type="text" maxlength="4" id="idtextqualify" style="width:40px;" name="idtextqualify" value="'.$my_idtextqualify.'" />&nbsp;&nbsp;'.get_lang('MaxScore').'&nbsp;: '.$max_qualify.'</div>
+            	<input type="text" maxlength="8" id="idtextqualify" style="width:60px;" name="idtextqualify" value="'.$my_idtextqualify.'" />&nbsp;&nbsp;'.get_lang('MaxScore').'&nbsp;: '.$max_qualify.'</div>
             </td>
         </tr>
     	<tr>

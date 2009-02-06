@@ -1280,7 +1280,7 @@ CREATE TABLE message(
 	id bigint unsigned not null auto_increment,
 	user_sender_id int unsigned not null,
 	user_receiver_id int unsigned not null,
-	msg_status tinyint unsigned not null default 0, -- 0 read, 1 unread, 5 pending invitation, 6 accepted invitation, 7 invitation denied
+	msg_status tinyint unsigned not null default 0, -- 0 read, 1 unread, 3 deleted, 5 pending invitation, 6 accepted invitation, 7 invitation denied
 	send_date datetime not null default '0000-00-00 00:00:00',
 	title varchar(255) not null,
 	content text not null,

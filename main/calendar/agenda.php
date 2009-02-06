@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php //$Id: agenda.php 18291 2009-02-06 17:26:58Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -326,8 +326,12 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		case "add":			
             if(isset($_POST['ical_submit']))
             {
-                $course_info = api_get_course_info();
+                $course_info = api_get_course_info();                
+                if ($_FILES['ical_import']['type']=='text/calendar') {
                 agenda_import_ical($course_info,$_FILES['ical_import']);
+                } else {
+                	Display::display_error_message(get_lang('IsNotiCalFormatFile'));
+                }
                 if (api_get_setting('display_upcoming_events') == 'true') {
 					display_upcoming_events();
 				}

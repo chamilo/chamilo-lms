@@ -1,4 +1,4 @@
-<?php // $Id: link.php 18306 2009-02-06 21:33:15Z herodoto $
+<?php // $Id: link.php 18310 2009-02-06 22:33:12Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -267,9 +267,9 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 				$sf_textbox = '<tr><td align="right">%s</td><td><input name="%s" type="text" value="%s"/>';
 				echo sprintf($sf_textbox, $specific_field['name'], $specific_field['code'], $default_values);
 			}
-		}
-	// echo "<tr><td></td><td><input type=\"submit\" name=\"submitLink\"value=\"".get_lang('Ok')."\" /></td></tr>",
-	   echo "<tr><td></td><td><button class=\"save\" type=\"Submit\" name=\"submitLink\">".get_lang('SaveLink')." </button></td></tr>",
+		}	
+		
+		echo "<tr><td></td><td><button class=\"save\" type=\"Submit\" name=\"submitLink\" value=\"OK\">".get_lang('SaveLink')." </button></td></tr>",
 	
 			"</table>",
 			"</form>";

@@ -93,7 +93,7 @@ class MessageManager {
 	 */
 	public static function get_number_of_messages () {
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
-		$sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE msg_status IN (0,1) AND user_receiver_id=".api_get_user_id();
+		$sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE msg_status IN (0,1,3) AND user_receiver_id=".api_get_user_id();
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 		$result = Database::fetch_array($sql_result);
 		return $result['number_messages'];
@@ -109,7 +109,7 @@ class MessageManager {
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		$request=api_is_xml_http_request();
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3 FROM $table_message " .
-					 "WHERE user_receiver_id=".api_get_user_id()." AND msg_status IN (0,1)" .
+					 "WHERE user_receiver_id=".api_get_user_id()." AND msg_status IN (0,1,3)" .
 					 "ORDER BY col$column $direction LIMIT $from,$number_of_items";
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 		$i = 0;
@@ -152,10 +152,17 @@ class MessageManager {
 		$result = api_sql_query($query,__FILE__,__LINE__);
 		return $result;	
 	}
+	/**
+	 * Set status deleted 
+	 * @author Isaac FLores Paz <isaac.flores@dokeos.com>
+	 * @param  integer
+	 * @param  integer
+	 * @return array
+	 */
 	public static function delete_message_by_user_sender ($user_sender_id,$id) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		$query = "UPDATE $table_message " .
-				 "SET msg_status=8 WHERE user_sender_id=".Database::escape_string($user_sender_id)." AND id=".Database::escape_string($id);
+				 "SET msg_status=3 WHERE user_sender_id=".Database::escape_string($user_sender_id)." AND id=".Database::escape_string($id);
 		$result = api_sql_query($query,__FILE__,__LINE__);
 		return $result;		
 	}
@@ -171,7 +178,13 @@ class MessageManager {
 		$result = api_sql_query($query,__FILE__,__LINE__);
 		return $row = Database::fetch_array($result);
 	}
-	
+	/**
+	 * Gets information about if exist messages
+	 * @author Isaac FLores Paz <isaac.flores@dokeos.com>
+	 * @param  integer
+	 * @param  integer
+	 * @return boolean
+	 */
 	 public static function exist_message ($user_id, $id) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		$query = "SELECT id FROM $table_message WHERE user_receiver_id=".Database::escape_string($user_id)." AND id='".Database::escape_string($id)."'";
@@ -182,7 +195,15 @@ class MessageManager {
 		else
 			return false;	
 	}
-	 public static function get_message_data_send ($from, $number_of_items, $column, $direction) {
+	/**
+	 * Gets information about messages sent
+	 * @author Isaac FLores Paz <isaac.flores@dokeos.com>
+	 * @param  integer
+	 * @param  integer
+	 * @param  string
+	 * @return array
+	 */
+	 public static function get_message_data_sent ($from, $number_of_items, $column, $direction) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		$request=api_is_xml_http_request();
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3 FROM $table_message " .
@@ -210,7 +231,13 @@ class MessageManager {
 		}
 		return $message_list;
 	}
-	 public static function get_number_of_messages_send () {
+	/**
+	 * Gets information about number messages sent
+	 * @author Isaac FLores Paz <isaac.flores@dokeos.com>
+	 * @param void
+	 * @return integer
+	 */
+	 public static function get_number_of_messages_sent () {
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		$sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE msg_status IN (0,1) AND user_sender_id=".api_get_user_id();
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
@@ -253,7 +280,7 @@ class MessageManager {
 		                    <TR> <h1>'.$row[5].'</h1></TR>
 		              </TD>              		
 		              <TR>                       
-		              	<TD>'.get_lang('From').'&nbsp;<b>'.GetFullUserName($row[1],$mysqlMainDb).'</b> '.strtolower(get_lang('To')).'&nbsp;  <b>'.GetFullUserName($row[2],$mysqlMainDb).'</b> </TD>
+		              	<TD>'.get_lang('From').'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.strtolower(get_lang('To')).'&nbsp;  <b>'.GetFullUserName($row[2]).'</b> </TD>
 		              </TR>                    
 		              <TR>
 		              <TD >'.get_lang('Date').'&nbsp; '.$row[4].'</TD>                      

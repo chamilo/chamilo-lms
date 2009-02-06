@@ -1,4 +1,4 @@
-<?php // $Id: view_message.php 18274 2009-02-05 22:34:52Z iflorespaz $
+<?php // $Id: view_message.php 18292 2009-02-06 19:08:47Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,20 +37,26 @@ if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
 require_once(api_get_path(LIBRARY_PATH).'message.lib.php');
-$interbreadcrumb[]=array('url' => '#','name' => get_lang('Inbox'));
-if (isset($_GET['id_send'])) {
+$nameTools = get_lang('Messages');
+if (isset($_GET['id_send']) || isset($_GET['id'])) {
 	if (isset($_GET['rs'])) {
 		$interbreadcrumb[]= array (
 			'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-2',
 			'name' => get_lang('SocialNetwork')
 		);
-	}	
-} else {
-	if (isset($_GET['rs'])) {
-		$interbreadcrumb[]= array (
-			'url' => '../social/'.$_SESSION['social_dest'],
-			'name' => get_lang('SocialNetwork')
-		);
+	} else {
+	$interbreadcrumb[]= array (
+		'url' => '#',
+		'name' => get_lang($nameTools)
+	);
+	$interbreadcrumb[]= array (
+		'url' => 'inbox.php',
+		'name' => get_lang('Inbox')
+	);
+	$interbreadcrumb[]= array (
+		'url' => 'outbox.php',
+		'name' => get_lang('Outbox')
+	);
 	}	
 }
 /*

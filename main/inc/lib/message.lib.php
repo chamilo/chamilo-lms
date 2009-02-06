@@ -111,9 +111,9 @@ $table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')))
 	$table->display();
 }
 function get_number_of_messages_send_mask() {
-	return MessageManager::get_number_of_messages_send();
+	return MessageManager::get_number_of_messages_sent();
 }
 function get_message_data_send_mask($from, $number_of_items, $column, $direction) {
-	return MessageManager::get_message_data_send($from, $number_of_items, $column, $direction);
+	return MessageManager::get_message_data_sent($from, $number_of_items, $column, $direction);
 }
 ?>

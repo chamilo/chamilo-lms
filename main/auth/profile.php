@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18272 2009-02-05 22:12:50Z iflorespaz $
+<?php // $Id: profile.php 18292 2009-02-06 19:08:47Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -793,19 +793,18 @@ if (api_get_setting('allow_message_tool')=='true') {
 	
 	include (api_get_path(LIBRARY_PATH).'message.lib.php');
 	$number_of_new_messages = MessageManager::get_new_messages();
+	$number_of_outbox_message=MessageManager::get_number_of_messages_sent();
+	$cant_out_box=' ('.$number_of_outbox_message.')';
 	$cant_msg = ' ('.$number_of_new_messages.')';
-	if($number_of_new_messages==0) {		
-		$cant_msg= ''; 
-	}
-	
 	$number_of_new_messages_of_friend=UserFriend::get_message_number_invitation_by_user_id(api_get_user_id());
 	//echo '<div class="message-view" style="display:none;">'.get_lang('ViewMessages').'</div>';
 	echo '<div class="message-content">
 			<h2 class="message-title">'.get_lang('Message').'</h2>
 			<p>
 				<a href="../messages/inbox.php" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />
-				<a href="../messages/new_message.php" class="message-body">'.get_lang('Compose').'</a><br />' .
-			'</p>';		
+				<a href="../messages/outbox.php" class="message-body">'.get_lang('OutBox').$cant_out_box.'</a><br />
+				<a href="../messages/new_message.php" class="message-body">'.get_lang('Compose').'</a><br />
+			</p>';		
 	
 		 
 	 if ($number_of_new_messages_of_friend>0) {

@@ -31,6 +31,7 @@
 $language_file= 'messages';
 $cidReset=true;
 include_once ('../inc/global.inc.php');
+require_once '../messages/message.class.php';
 require_once (api_get_path(LIBRARY_PATH).'message.lib.php');
 api_block_anonymous_users();
 
@@ -75,33 +76,39 @@ function deselect_all(formita)
 $nameTools = get_lang('Messages');
 $request=api_is_xml_http_request();
 if ($request===false) {
-	Display::display_header($nameTools,get_lang('Outbox'));
+	$interbreadcrumb[]= array (
+		'url' => '#',
+		'name' => get_lang($nameTools)
+	);
+	$interbreadcrumb[]= array (
+		'url' => 'inbox.php',
+		'name' => get_lang('Inbox')
+	);
+	$interbreadcrumb[]= array (
+		'url' => 'outbox.php',
+		'name' => get_lang('Outbox')
+	);
+	Display::display_header('');
 }
 api_display_tool_title(get_lang('Outbox'));
 
 $table_message = Database::get_main_table(TABLE_MESSAGE);
-
 echo '<div class=actions>';
 echo get_lang('ReadMessageComment');
 echo '</div>';
 
 $user_sender_id=api_get_user_id();
 $id=Security::remove_XSS($_GET['id']);
-
-if (isset($_GET['action']) && $_GET['action']=='deleteone') {
-	MessageManager::delete_message_by_user_sender($user_sender_id,$id);
-}
-if (!isset($_GET[del_msg])) {
+if ($_REQUEST['action']!='delete') {
 	outbox_display();
 } else {
-	$num_msg = $_POST['total'];
-	for ($i=0;$i<$num_msg;$i++) {
-		if($_POST[$i]) {
-			//the user_id was necesarry to delete a message??
-			delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);			
-		}
+	$delete_list_id=array();
+	$delete_list_id=$_POST['id'];
+	for ($i=0;$i<count($delete_list_id);$i++) {
+		//the user_id was necesarry to delete a message??
+		MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);		
 	}
-	inbox_display();
+	outbox_display();
 }
 /*
 ==============================================================================

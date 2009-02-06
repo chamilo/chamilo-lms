@@ -72,12 +72,24 @@ function deselect_all(formita)
 $nameTools = get_lang('Messages');
 $request=api_is_xml_http_request();
 if ($request===false) {
-	Display::display_header($nameTools,get_lang('Inbox'));
+	$interbreadcrumb[]= array (
+		'url' => '#',
+		'name' => get_lang($nameTools)
+	);
+	$interbreadcrumb[]= array (
+		'url' => 'outbox.php',
+		'name' => get_lang('Outbox')
+	);
+	$interbreadcrumb[]= array (
+		'url' => 'inbox.php',
+		'name' => get_lang('Inbox')
+	);
+	Display::display_header('');
 	$link_ref="new_message.php";	
 } else {
 	$link_ref="../messages/new_message.php?rs=1";
 }
-api_display_tool_title(get_lang('Inbox'));
+api_display_tool_title('');
 
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 

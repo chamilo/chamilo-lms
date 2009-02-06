@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 18274 2009-02-05 22:34:52Z iflorespaz $
+<?php // $Id: new_message.php 18292 2009-02-06 19:08:47Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -7,7 +7,7 @@
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
 	Copyright (c) Facultad de Matematicas, UADY (México)
 	Copyright (c) Evie, Free University of Brussels (Belgium)		
-
+	Copyright (c) 2009 Isaac Flores Paz <isaac.flores.paz@gmail.com>
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
 
@@ -50,6 +50,7 @@ if (api_get_setting('allow_message_tool')!='true'){
 require_once'../messages/message.class.php';
 require_once(api_get_path(LIBRARY_PATH).'/text.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php');
+$nameTools= get_lang('Messages');
 /*
 -----------------------------------------------------------
 	Constants and variables
@@ -98,6 +99,9 @@ $(document).ready(function (){
 });
 	</script>';	
 $nameTools = get_lang('ComposeMessage');
+$fck_attribute['Height'] = "150";
+$fck_attribute['Width'] = "95%";
+$fck_attribute['ToolbarSet'] = "Profil";
 /*
 ==============================================================================
 		FUNCTIONS
@@ -141,7 +145,8 @@ function manage_form ($default, $select_from_user_list = null) {
 	
 	$form = new FormValidator('compose_message');
 	if (isset($select_from_user_list)) {
-		$form->addElement('text','id_text_name',get_lang('SendMessageTo'),array('size' => 40,'id'=>'id_text_name'));
+		$form->add_textfield('id_text_name',get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name'));
+		$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
 		$form->addElement('html','<div id="id_div_search" class="message-search">&nbsp;</div>');
 		$form->addElement('hidden','user_list','',array('id'=>'user_list'));
 		//$form->addElement('select','user_list',get_lang('SendMessageTo'),$select_from_user_list);
@@ -177,6 +182,16 @@ if (isset($_GET['rs'])) {
 		'url' => '../social/'.$_SESSION['social_dest'],
 		'name' => get_lang('SocialNetwork')
 	);
+} else {
+	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('Messages'));
+	$interbreadcrumb[]= array (
+		'url' => 'outbox.php',
+		'name' => get_lang('Outbox')
+	);
+	$interbreadcrumb[]= array (
+		'url' => 'inbox.php',
+		'name' => get_lang('Inbox')
+	);
 }
 	$interbreadcrumb[]= array (
 		'url' => '#',
@@ -195,8 +210,9 @@ if (!isset($_POST['compose'])) {
 		show_compose_to_any($_user['user_id']);
   	}
 } else {
-	if(api_get_user_id() && isset($_POST['user_list']) && isset($_POST['content']))	{
+	if(api_get_user_id() && isset($_POST['user_list']) && isset($_POST['content']) && isset($_POST['id_text_name']))	{
 		$default['title'] = $_POST['title'];
+		$default['id_text_name'] = $_POST['id_text_name'];
 		$default['user_list'] = $_POST['user_list'];
 		manage_form($default);
 	} else {

@@ -89,8 +89,8 @@ Display::display_header($nameTools,"Path");
 */
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['Height'] = '300';
+$fck_attribute['ToolbarSet'] = 'Introduction';
 
 // These settings should stay here.
 // TODO: Here a calculation mechanism has to be added in order the editor to work

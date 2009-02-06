@@ -24,11 +24,32 @@
 -->
 <html>
 	<head>
-		<title>FCKeditor - Resources Browser</title>
+		<title>Browse Server</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link href="browser.css" type="text/css" rel="stylesheet">
 		<script type="text/javascript" src="js/fckxml.js"></script>
 		<script type="text/javascript">
+
+//Initialization of some language variables.
+var FCKLang = [];
+
+if ( window.opener )
+{
+	FCKLang = window.opener.FCKLang ;
+}
+
+if ( !FCKLang )
+{
+	FCKLang = [] ;
+}
+
+if ( !FCKLang['DlgBtnBrowseServer'] )
+{
+	FCKLang['DlgBtnBrowseServer'] = 'Browse Server' ;
+}
+
+document.title = FCKLang['DlgBtnBrowseServer'] ;
+
 // Automatically detect the correct document.domain (#1919).
 (function()
 {

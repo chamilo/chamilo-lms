@@ -1,4 +1,4 @@
-<?php // $Id: document.php 18270 2009-02-05 22:07:04Z cfasanando $
+<?php // $Id: document.php 18306 2009-02-06 21:33:15Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -341,7 +341,7 @@ if($to_group_id !=0) //add group name after for group documents
 
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['ToolbarSet'] = 'Introduction';
 
 if(!empty($_SESSION['_gid']))
 {

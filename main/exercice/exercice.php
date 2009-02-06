@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: exercice.php 18306 2009-02-06 21:33:15Z herodoto $
 
 /*
 ==============================================================================
@@ -389,7 +389,7 @@ event_access_tool(TOOL_QUIZ);
 
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['ToolbarSet'] = 'Introduction';
 
 Display::display_introduction_section(TOOL_QUIZ);
 

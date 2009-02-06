@@ -1,4 +1,4 @@
-<?php // $Id: group.php 18113 2009-02-01 11:25:38Z ivantcholakov $
+<?php // $Id: group.php 18306 2009-02-06 21:33:15Z herodoto $
  
 /*
 ==============================================================================
@@ -91,7 +91,7 @@ Display::display_header(get_lang('Groups'));
 
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['ToolbarSet'] = 'Introduction';
 
 Display::display_introduction_section(TOOL_GROUP,'left');
 

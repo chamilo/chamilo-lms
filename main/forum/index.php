@@ -129,7 +129,7 @@ api_display_tool_title($nameTools);
 
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['ToolbarSet'] = 'Introduction';
 
 Display::display_introduction_section(TOOL_FORUM,'left');
 

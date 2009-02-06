@@ -60,6 +60,7 @@ $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 
+
 if (isset($_GET['isStudentView'])) {
 	if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
 		$interbreadcrumb[]= array (
@@ -71,6 +72,13 @@ if (isset($_GET['isStudentView'])) {
 
 if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
 	Display :: display_header(get_lang('Details'));
+	//Introduction tool: student view
+	$fck_attribute['Width'] = '100%';
+	$fck_attribute['Height'] = '300';
+	$fck_attribute['ToolbarSet'] = 'Introduction';
+	Display::display_introduction_section(TOOL_GRADEBOOK);
+	$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.	
+	//	
 	$category= $_GET['selectcat'];
 	$stud_id=api_get_user_id();
 	$course_code=api_get_course_id();
@@ -87,6 +95,13 @@ if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['st
 } else {
 	if ( !isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
 		Display :: display_header(get_lang('Gradebook'));
+		//Introduction tool: student view
+		$fck_attribute['Width'] = '100%';
+		$fck_attribute['Height'] = '300';
+		$fck_attribute['ToolbarSet'] = 'Introduction';
+		Display::display_introduction_section(TOOL_GRADEBOOK);
+		$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.	
+		//	
 		$stud_id=api_get_user_id();
 		$course_code=api_get_course_id();
 		$session_id=api_get_session_id();
@@ -724,6 +739,22 @@ if ($category != '0') {
 }
 
 if (api_is_platform_admin() || api_is_allowed_to_create_course() && api_is_course_tutor()) {
+/*
+-----------------------------------------------------------
+	Introduction section (teacher edit)
+-----------------------------------------------------------
+*/
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '300';
+$fck_attribute['ToolbarSet'] = 'Introduction';
+
+Display::display_introduction_section(TOOL_GRADEBOOK);
+
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+
+//
+
 
 	if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0) ) {
 	//

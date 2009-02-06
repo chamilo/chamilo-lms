@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: index.php 18311 2009-02-06 22:41:30Z herodoto $
 
 /*
 ==============================================================================
@@ -80,6 +80,20 @@ Display :: display_header('');
 -----------------------------------------------------------
 */
 $nameTools = get_lang(TOOL_COURSE_DESCRIPTION);
+
+/*
+-----------------------------------------------------------
+	Introduction section
+-----------------------------------------------------------
+*/
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '300';
+$fck_attribute['ToolbarSet'] = 'Introduction';
+
+Display::display_introduction_section(TOOL_COURSE_DESCRIPTION);
+
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 $show_description_list = true;

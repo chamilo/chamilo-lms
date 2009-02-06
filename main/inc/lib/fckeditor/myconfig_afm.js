@@ -30,12 +30,6 @@ FCKConfig.ToolbarSets["Small"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','Flash','OrderedList','UnorderedList','Table']
 ] ;
 
-FCKConfig.ToolbarSets["Profil"] = [
-	['FitWindow','PasteWord','Undo','Redo'],
-	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
-	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','Source']
-] ;
-
 FCKConfig.ToolbarSets["Blog"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','OrderedList','UnorderedList','Table']
 ] ;
@@ -49,10 +43,6 @@ FCKConfig.ToolbarSets["Full"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Comment"] = [
-	['Bold','Italic','Underline','StrikeThrough']
-] ;
-
-FCKConfig.ToolbarSets["ForumLight"] = [
 	['Bold','Italic','Underline','StrikeThrough']
 ] ;
 
@@ -73,6 +63,29 @@ FCKConfig.ToolbarSets["Survey"] = [
 ] ;
 
 
+FCKConfig.ToolbarSets["Profil"] = [
+	['FitWindow','PasteWord','Undo','Redo'],
+	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
+	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','Source']
+] ;
+
+FCKConfig.ToolbarSets["Messages"] = [
+	['FitWindow','PasteWord','Undo','Redo'],
+	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
+	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','Source']
+] ;
+
+FCKConfig.ToolbarSets["Introduction"] = [
+	['NewPage','Templates','Save','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Source']
+] ;
+
 FCKConfig.ToolbarSets["CourseDescription"] = [
 	['NewPage','Templates','Save','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Link','Unlink','Anchor'],
@@ -81,6 +94,21 @@ FCKConfig.ToolbarSets["CourseDescription"] = [
 	['FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough'],
 	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Source']
+] ;
+
+FCKConfig.ToolbarSets["ForumLight"] = [
+	['Bold','Italic','Underline','StrikeThrough']
+] ;
+
+FCKConfig.ToolbarSets["Forum"] = [
+	['NewPage','FitWindow','-','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','Smiley','SpecialChar','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','-','TextColor','BGColor'],
 	['Source']
 ] ;
 

@@ -2070,15 +2070,3 @@ button.search {
 button.login {
     background-image:url(/main/img/button_login.gif);
 }
-/*including "add" image*/
-button.add{
-	 margin:0 10px -3px -3px !important;
-    padding:3px 1px 1px 23px;
-    /*text-decoration:none;
-    text-align:right;*/
-    width:auto;
-    height:100%;
-    background-position:3%;
-    background-image:url(/main/img/addd.gif);
-    background-repeat:no-repeat;
-}

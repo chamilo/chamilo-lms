@@ -45,7 +45,7 @@ require('../inc/global.inc.php');
 $course=api_get_course_id();
 
 /////
-// Juan Carlos Raña insert smileys and self-closing window
+// Juan Carlos Raï¿½a insert smileys and self-closing window
 ////
 ?>
 <script language="javascript" type="text/javascript">

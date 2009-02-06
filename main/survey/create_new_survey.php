@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 17666 2009-01-12 21:18:36Z cfasanando $
+* 	@version $Id: create_new_survey.php 18287 2009-02-06 16:23:12Z ndieschburg $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -261,7 +261,7 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($_GET['surve
  	
 }
 $form -> addElement('html','</div><br />');
-$form->addElement('submit', 'submit_survey', get_lang('Ok'));
+$form->addElement('style_submit_button', 'submit_survey', get_lang('Ok'), 'class="save"');
 
 // setting the rules
 if ($_GET['action'] == 'add')

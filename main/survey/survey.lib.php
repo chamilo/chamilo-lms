@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 18212 2009-02-03 22:05:55Z cfasanando $
+* 	@version $Id: survey.lib.php 18287 2009-02-06 16:23:12Z ndieschburg $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1398,7 +1398,7 @@ class question
 	{
 		$this->html .= '	<tr>';
 		$this->html .= '		<td>&nbsp;</td>';
-		$this->html .= '		<td>  <input type="submit" name="save_question" value="'.get_lang('SaveQuestion').'" /></td>';
+		$this->html .= '		<td><button class="save"type="submit" name="save_question">'.get_lang('Save').'</button></td>';
 		$this->html .= '		<td>&nbsp;</td>';
 		$this->html .= '	</tr>';
 		$this->html .= '</table>';
@@ -1447,20 +1447,20 @@ class question
 		}
 
 		// adding an answer
-		if ($_POST['add_answer'])
+		if(isset($_POST['add_answer']))
 		{
 			$form_content['answers'][]='';
 		}
 
 		// removing an answer
-		if ($_POST['remove_answer'])
+		if(isset($_POST['remove_answer']))
 		{
 			$max_answer = count($form_content['answers']);
 			unset($form_content['answers'][$max_answer-1]);
 		}
 
 		// saving a question
-		if ($_POST['save_question'])
+		if (isset($_POST['save_question']))
 		{					
 			$message = survey_manager::save_question($form_content);
 									
@@ -1536,8 +1536,8 @@ class question
 		$return .= '	<tr>';
 		$return .= '		<td align="right">&nbsp;</td>';
 		$return .= '		<td colspan="2">';
-		$return .= '			<input type="submit" name="remove_answer" value="'.get_lang('RemoveAnswer').'" '.$remove_answer_attribute.' />';
-		$return .= '			<input type="submit" name="add_answer" value="'.get_lang('AddAnswer').'" />';
+		$return .= '			<button class="cancel" type="submit" name="remove_answer" "'.$remove_answer_attribute.'">'.get_lang('RemoveAnswer').' </button>';
+		$return .= '			<button class="add" type="submit" name="add_answer">'.get_lang('AddAnswer').'</button>';
 		$return .= '		</td>';
 		$return .= '	</tr>';
 		return $return;
@@ -2953,7 +2953,7 @@ class SurveyUtil {
 		{
 			echo '			<input type="submit" name="reset_question_filter" value="'.get_lang('ResetQuestionFilter').'" />';
 		}
-		echo '			<input type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter').'" />';
+		echo '			<input type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter').'"/';
 		echo '</th>';
 		
 		$display_extra_user_fields = false;
@@ -3714,7 +3714,7 @@ class SurveyUtil {
 			}
 		}
 		echo '</select><br /><br />';
-		echo '<input type="submit" name="Submit" value="Submit" />';
+		echo '<button class="save" type="submit" name="Submit" value="Submit">'.get_lang('Ok').'</button>';
 		echo '</form>';
 	
 		// getting all the information of the x axis
@@ -4279,7 +4279,7 @@ class SurveyUtil {
 				</tr>
 				<tr>
 					<td>&nbsp;<input type="hidden" name="cidReq" value="'.api_get_course_id().'"/></td>
-					<td><input type="submit" name="do_search" value="'.get_lang('Ok').'"/></td>
+					<td><button class="search" type="submit" name="do_search">'.get_lang('Search').'</button></td>
 				</tr>
 			</table>
 		</form>';
@@ -4330,7 +4330,7 @@ class SurveyUtil {
 	{
 		$parameters = array();
 		$parameters['cidReq']=api_get_course_id();
-		if ($_GET['do_search'])
+		if(isset($_GET['do_search']))
 		{
 			$message = get_lang('DisplaySearchResults').'<br />';
 			$message .= '<a href="'.api_get_self().'?'.api_get_cidreq().'">'.get_lang('DisplayAll').'</a>';
@@ -4435,7 +4435,7 @@ class SurveyUtil {
 	 */
 	function survey_search_restriction()
 	{
-		if ($_GET['do_search'])
+		if(isset($_GET['do_search']))
 		{
 			if ($_GET['keyword_title']<>'')
 			{

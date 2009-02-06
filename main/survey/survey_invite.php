@@ -139,7 +139,7 @@ $form->addElement('checkbox', 'send_mail', '', get_lang('SendMail'));
 // allow resending to all selected users
 $form->addElement('checkbox', 'resend_to_all', '', get_lang('ReminderResendToAllUsers'));
 // submit button
-$form->addElement('submit', 'submit', get_lang('Ok'));
+$form->addElement('style_submit_button', 'submit', get_lang('Send'), 'class="save"');
 // The rules (required fields)
 $form->addRule('mail_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');

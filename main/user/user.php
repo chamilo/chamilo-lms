@@ -1,4 +1,4 @@
-<?php // $Id: user.php 18113 2009-02-01 11:25:38Z ivantcholakov $
+<?php // $Id: user.php 18287 2009-02-06 16:23:12Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -353,7 +353,7 @@ if ( api_is_allowed_to_edit()) {
 	$renderer = & $form->defaultRenderer();
 	$renderer->setElementTemplate('<span>{element}</span> ');
 	$form->add_textfield('keyword', '', false);
-	$form->addElement('submit', 'submit', get_lang('SearchButton'));
+	$form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
 	$form->addElement('static','additionalactions',null,$actions);
 	$form->display();
 	echo '</div>';

@@ -76,7 +76,7 @@ FCKConfig.ToolbarSets["Messages"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Introduction"] = [
-	['NewPage','Templates','Save','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['NewPage','Templates','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Link','Unlink','Anchor'],
 	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
 	['Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],

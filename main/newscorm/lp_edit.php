@@ -147,9 +147,9 @@ $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
 
 $form->setDefaults($defaults);
-echo '<table><tr><td>';
+echo '<table><tr><td width="500px">';
 	$form -> display();
-echo '</td><td valign="top"><img src="../img/CourseSettingsPageLayout.png" /></td></tr></table>';
+echo '</td><td valign="top"><img src="../img/course_setting_layout.png" /></td></tr></table>';
 
 Display::display_footer();
 ?>

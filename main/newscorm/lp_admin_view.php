@@ -198,7 +198,7 @@ switch($_GET['action'])
 }
 
 // POST action handling (uploading mp3, deleting mp3)
-if ($_POST['save_audio'])
+if (isset($_POST['save_audio']))
 {
 	// deleting the audio fragments
 	foreach ($_POST as $key=>$value)

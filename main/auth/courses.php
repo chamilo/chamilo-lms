@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 18264 2009-02-05 21:23:18Z juliomontoya $
+<?php // $Id: courses.php 18277 2009-02-06 00:30:06Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1223,7 +1223,7 @@ function display_edit_course_category_form($edit_course_category)
 	echo '<input type="hidden" name="sec_token" value="'.$stok.'">';
 	$info_this_user_course_category=get_user_course_category($edit_course_category);
 	echo "\t<input type=\"text\" name=\"title_course_category\" value=\"".$info_this_user_course_category['title']."\" />";
-	echo "\t<button type=\"submit\" name=\"submit_edit_course_category\">".get_lang("Ok")." </button>\n";
+	echo "\t<button class=\"save\" type=\"submit\" name=\"submit_edit_course_category\">".get_lang("Ok")." </button>\n";
 	echo "</form>";
 }
 

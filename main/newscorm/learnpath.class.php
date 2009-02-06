@@ -5503,7 +5503,7 @@ class learnpath {
 
 					$return .= "\t\t" . '<tr>' . "\n";
 
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok1').'" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok').'" /></td>' . "\n";
 
 					$return .= "\t\t" . '</tr>' . "\n";
 
@@ -5752,7 +5752,7 @@ class learnpath {
 					}
 					
 					$return .= "\t\t" . '<tr>' . "\n";						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok2').'" /></td>' . "\n";					
+						$return .= "\t\t\t" . '<td colspan="2"><button class="save" name="submit_button" type="submit"> '.get_lang('Ok').' </button></td>' . "\n";					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
 				$return .= "\t" . '</table>' . "\n";	
@@ -6017,7 +6017,7 @@ class learnpath {
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok3').'" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok').'" /></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -6621,7 +6621,7 @@ class learnpath {
 			}
 			if(is_numeric($extra_info))
 			{
-				$form->addElement('style_submit_button', 'submit_button', get_lang('AddEdit'), 'class="save"');
+				$form->addElement('style_submit_button', 'submit_button', get_lang('AddEdit'), 'value="submit_button", class="save"');
 				$form->addElement('hidden', 'path', $extra_info);
 			}
 			elseif(is_array($extra_info))
@@ -6870,7 +6870,7 @@ class learnpath {
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td>&nbsp;</td><td><input class="button" name="submit_button" type="submit" value="'.get_lang("Ok4").'" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">'.get_lang("Ok").'</button></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -7122,7 +7122,7 @@ class learnpath {
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td>&nbsp</td><td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang("Ok5").'" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td>&nbsp</td><td colspan="2"><button class="save" name="submit_button" type="submit">'.get_lang("Ok").'</button></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				

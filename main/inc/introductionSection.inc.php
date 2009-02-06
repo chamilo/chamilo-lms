@@ -58,7 +58,7 @@ $intro_editAllowed = $is_allowed_to_edit;
 
 global $charset;
 $intro_cmdEdit = (empty($_GET['intro_cmdEdit'])?'':$_GET['intro_cmdEdit']);
-$intro_cmdUpdate = (empty($_POST['intro_cmdUpdate'])?'':$_POST['intro_cmdUpdate']);
+$intro_cmdUpdate = isset($_POST['intro_cmdUpdate'])?true:false;
 $intro_cmdDel= (empty($_GET['intro_cmdDel'])?'':$_GET['intro_cmdDel']);
 $intro_cmdAdd= (empty($_GET['intro_cmdAdd'])?'':$_GET['intro_cmdAdd']);
 

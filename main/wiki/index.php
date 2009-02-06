@@ -188,7 +188,7 @@ if(!api_is_allowed_to_edit())
 */
 
 // saving a change
-if ($_POST['SaveWikiChange'] AND $_POST['title']<>'')
+if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'')
 {
 	if(empty($_POST['title']))
 	{ 		
@@ -201,7 +201,7 @@ if ($_POST['SaveWikiChange'] AND $_POST['title']<>'')
 }
 
 //saving a new wiki entry
-if ($_POST['SaveWikiNew'])
+if (isset($_POST['SaveWikiNew']))
 {
 	if(empty($_POST['title']))
 	{
@@ -440,7 +440,7 @@ echo '</ul></div>';
 echo "<div id='mainwiki'>";
 
 
-/////////////////////// more options /////////////////////// Juan Carlos Raña Trabado
+/////////////////////// more options /////////////////////// Juan Carlos Raï¿½a Trabado
 
 if ($_GET['action']=='more')
 {
@@ -519,7 +519,7 @@ if ($_GET['action']=='more')
 
 }
 
-/////////////////////// Most active users /////////////////////// Juan Carlos Raña Trabado
+/////////////////////// Most active users /////////////////////// Juan Carlos Raï¿½a Trabado
 
 if ($_GET['action']=='mactiveusers')
 {
@@ -553,7 +553,7 @@ if ($_GET['action']=='mactiveusers')
 }
 
 
-/////////////////////// User contributions /////////////////////// Juan Carlos Raña Trabado
+/////////////////////// User contributions /////////////////////// Juan Carlos Raï¿½a Trabado
 
 if ($_GET['action']=='usercontrib')
 {
@@ -643,7 +643,7 @@ if ($_GET['action']=='usercontrib')
 	}	
 }
 
-/////////////////////// Most changed pages /////////////////////// Juan Carlos Raña Trabado
+/////////////////////// Most changed pages /////////////////////// Juan Carlos Raï¿½a Trabado
 
 if ($_GET['action']=='mostchanged')
 {
@@ -700,7 +700,7 @@ if ($_GET['action']=='mostchanged')
 		
 }
 
-/////////////////////// Most visited pages /////////////////////// Juan Carlos Raña Trabado
+/////////////////////// Most visited pages /////////////////////// Juan Carlos Raï¿½a Trabado
 
 if ($_GET['action']=='mvisited')
 {
@@ -755,7 +755,7 @@ if ($_GET['action']=='mvisited')
 	}	
 }
 
-/////////////////////// Wanted pages /////////////////////// Juan Carlos Raña Trabado
+/////////////////////// Wanted pages /////////////////////// Juan Carlos Raï¿½a Trabado
 
 if ($_GET['action']=='wanted')
 {
@@ -806,7 +806,7 @@ if ($_GET['action']=='wanted')
 	echo '</ul>';
 }
 
-/////////////////////// Orphaned pages /////////////////////// Juan Carlos Raña Trabado
+/////////////////////// Orphaned pages /////////////////////// Juan Carlos Raï¿½a Trabado
 
 if ($_GET['action']=='orphaned')
 {
@@ -889,7 +889,7 @@ if ($_GET['action']=='orphaned')
 	
 }
 
-/////////////////////// delete current page /////////////////////// Juan Carlos Raña Trabado
+/////////////////////// delete current page /////////////////////// Juan Carlos Raï¿½a Trabado
 
 if ($_GET['action']=='delete')
 {
@@ -935,7 +935,7 @@ if ($_GET['action']=='delete')
 }
 
 
-/////////////////////// delete all wiki /////////////////////// Juan Carlos Raña Trabado
+/////////////////////// delete all wiki /////////////////////// Juan Carlos Raï¿½a Trabado
 
 if ($_GET['action']=='deletewiki')
 {
@@ -945,7 +945,7 @@ if ($_GET['action']=='deletewiki')
 }
 
 
-/////////////////////// search pages /////////////////////// Juan Carlos Raña Trabado
+/////////////////////// search pages /////////////////////// Juan Carlos Raï¿½a Trabado
 //// 1 Searchpages: input search
 
 if ($_GET['action']=='searchpages')
@@ -958,7 +958,7 @@ if ($_GET['action']=='searchpages')
 	{	
 		echo '<form id="fsearch" method="POST" action="index.php?action=showsearchpages">';		
 		echo '<input type="text" name="Skeyword" >';
-		echo '<input type="submit" value="'.get_lang('Search').'"/></br></br>';	
+		echo '<button class="search" type="submit">'.get_lang('Search').'</button></br></br>';	
 		echo '<input type="checkbox" name="Scontent" value="1"> '.get_lang('AlsoSearchContent');
 		echo '</form>';		
 	}
@@ -1052,7 +1052,7 @@ if ($_GET['action']=='showsearchpages')
 } 	
 
 
-///////////////////////  What links here. Show pages that have linked this page /////////////////////// Juan Carlos Raña Trabado
+///////////////////////  What links here. Show pages that have linked this page /////////////////////// Juan Carlos Raï¿½a Trabado
 
 if ($_GET['action']=='links')
 {
@@ -1344,7 +1344,7 @@ if ($_GET['action']=='edit')
 				</select> %';	
 				echo '<br/><br/>'; 
 				echo '<input type="hidden" NAME="SaveWikiChange" value="'.get_lang('langSave').'">'; //for save icon
-				echo '<input type="submit" name="SaveWikiChange" value="'.get_lang('langSave').'">';//for save button
+				echo '<button class="save" type="submit" name="SaveWikiChange">'.get_lang('langSave').'</button>';//for save button
 				echo '</form>';				
 				echo '</div>';			
 			} 	
@@ -1405,8 +1405,8 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 			
 			echo '<ul style="list-style-type: none;">';
 			echo '<br/>';
-			echo '<input type="submit" name="HistoryDifferences" value="'.get_lang('ShowDifferences').' '.get_lang('LinesDiff').'" />';
-			echo '<input type="submit" name="HistoryDifferences2" value="'.get_lang('ShowDifferences').' '.get_lang('WordsDiff').'" />';
+			echo '<button class="search" type="submit" name="HistoryDifferences" value="HistoryDifferences">'.get_lang('ShowDifferences').' '.get_lang('LinesDiff').'</button>';
+			echo '<button class="search" type="submit" name="HistoryDifferences2" value="HistoryDifferences2">'.get_lang('ShowDifferences').' '.get_lang('WordsDiff').'</button>';
 			echo '<br/><br/>';
 	
 			$counter=0;
@@ -1462,8 +1462,8 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 			   
 				$counter++;		
 			} //end while
-			echo '<input type="submit" name="HistoryDifferences" value="'.get_lang('ShowDifferences').' '.get_lang('LinesDiff').'" />';
-			echo '<input type="submit" name="HistoryDifferences2" value="'.get_lang('ShowDifferences').' '.get_lang('WordsDiff').'" />';
+			echo '<button class="search" type="submit" name="HistoryDifferences" value="HistoryDifferences">'.get_lang('ShowDifferences').' '.get_lang('LinesDiff').'</button>';
+			echo '<button class="search" type="submit" name="HistoryDifferences2" value="HistoryDifferences2">'.get_lang('ShowDifferences').' '.get_lang('WordsDiff').'</button>';
 			echo '</ul></div></form>';	
 		}	
 		// We show the differences between two versions
@@ -1478,13 +1478,13 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 			$result_new=api_sql_query($sql_new,__LINE__,__FILE__);
 			$version_new=Database::fetch_array($result_new);	
 		
-		    if($_POST['HistoryDifferences'])
+		    if(isset($_POST['HistoryDifferences']))
 			{
 				include('diff.inc.php');
 				//title
 				echo '<div id="wikititle">'.stripslashes($version_new['title']).' <font size="-2"><i>('.get_lang('DifferencesNew').'</i> <font style="background-color:#aaaaaa">'.stripslashes($version_new['dtime']).'</font> <i>'.get_lang('DifferencesOld').'</i> <font style="background-color:#aaaaaa">'.stripslashes($version_old['dtime']).'</font>) '.get_lang('Legend').':  <span class="diffAdded" >'.get_lang(WikiDiffAddedLine).'</span> <span class="diffDeleted" >'.get_lang(WikiDiffDeletedLine).'</span> <span class="diffMoved" >'.get_lang(WikiDiffMovedLine).'</span></font></div>'; 	
 			}
-			if($_POST['HistoryDifferences2'])
+			if(isset($_POST['HistoryDifferences2']))
 			{			
 				require_once 'Text/Diff.php';
    				require_once 'Text/Diff/Renderer/inline.php';
@@ -1494,7 +1494,7 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 				
 			echo '<div class="diff"><br /><br />';	
 			
-			if($_POST['HistoryDifferences'])
+			if(isset($_POST['HistoryDifferences']))
 			{				
 				echo '<table>'.diff( stripslashes($version_old['content']), stripslashes($version_new['content']), true, 'format_table_line' ).'</table>'; // format_line mode is better for words
 				echo '</div>'; 					
@@ -1514,7 +1514,7 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 							
 			}
 							
-	        if($_POST['HistoryDifferences2'])
+	        if(isset($_POST['HistoryDifferences2']))
 			{
 					
 				$lines1 = array(strip_tags($version_old['content'])); //without <> tags
@@ -1848,13 +1848,13 @@ if ($_GET['action']=='discuss')
 					</tr>
 					<tr>
 			        <td>&nbsp;</td>      
-					<td> <?php  echo '<input type="submit" name="Submit" value="'.get_lang('Send').'">'; ?></td>
+					<td> <?php  echo '<button class="save" type="submit" name="Submit"> '.get_lang('Send').'</button>'; ?></td>
 				  	</tr>
 				</table>
 				</form>
                 
 				<?php
-				if ($_POST['Submit'])
+				if (isset($_POST['Submit']))
 				{
 					$dtime = date( "Y-m-d H:i:s" );
 					$message_author=api_get_user_id();
@@ -2061,7 +2061,7 @@ function checktitle($paramwk)
 
 
 /**
-* @author Juan Carlos Raña <herodoto@telefonica.net>
+* @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
 * check wikilinks that has a page
 **/
 function links_to($input)
@@ -2102,7 +2102,7 @@ function links_to($input)
 
 /*
 detect and add style to external links
-author Juan Carlos Raña Trabado
+author Juan Carlos Raï¿½a Trabado
 **/
 function detect_external_link($input)
 {
@@ -2114,7 +2114,7 @@ function detect_external_link($input)
 
 /*
 detect and add style to anchor links
-author Juan Carlos Raña Trabado
+author Juan Carlos Raï¿½a Trabado
 **/
 function detect_anchor_link($input)
 {
@@ -2126,7 +2126,7 @@ function detect_anchor_link($input)
 
 /*
 detect and add style to mail links
-author Juan Carlos Raña Trabado
+author Juan Carlos Raï¿½a Trabado
 **/
 function detect_mail_link($input)
 {
@@ -2138,7 +2138,7 @@ function detect_mail_link($input)
 
 /*
 detect and add style to ftp links
-author Juan Carlos Raña Trabado
+author Juan Carlos Raï¿½a Trabado
 **/
 function detect_ftp_link($input)
 {
@@ -2150,7 +2150,7 @@ function detect_ftp_link($input)
 
 /*
 detect and add style to news links
-author Juan Carlos Raña Trabado
+author Juan Carlos Raï¿½a Trabado
 **/
 function detect_news_link($input)
 {
@@ -2162,7 +2162,7 @@ function detect_news_link($input)
 
 /*
 detect and add style to irc links
-author Juan Carlos Raña Trabado
+author Juan Carlos Raï¿½a Trabado
 **/
 function detect_irc_link($input)
 {
@@ -2178,8 +2178,8 @@ function detect_irc_link($input)
 * It is true that the adding of links is probably the most anoying part of Wiki for the people
 * who know something about the wiki syntax.
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-* Improvements [[]] and [[ | ]]by Juan Carlos Raña
-* Improvements internal wiki style and mark group by Juan Carlos Raña
+* Improvements [[]] and [[ | ]]by Juan Carlos Raï¿½a
+* Improvements internal wiki style and mark group by Juan Carlos Raï¿½a
 **/
 function make_wiki_link_clickable($input)
 {
@@ -2299,7 +2299,7 @@ function save_wiki()
 
 /**
 * This function restore a wikipage
-* @author Juan Carlos Raña <herodoto@telefonica.net>
+* @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
 **/
 function restore_wikipage($r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_progress, $c_version, $r_version, $r_linksto)
 {
@@ -2324,7 +2324,7 @@ function restore_wikipage($r_reflink, $r_title, $r_content, $r_group_id, $r_assi
 
 /**
 * This function delete a wiki
-* @author Juan Carlos Raña <herodoto@telefonica.net>
+* @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
 **/
 
 function delete_wiki()
@@ -2506,7 +2506,7 @@ function display_new_wiki_form()
 	   </select>&nbsp;%';
 	echo '<br/><br/>'; 
 	echo '<input type="hidden" name="SaveWikiNew" value="'.get_lang('langSave').'">'; //for save icon
-	echo '<input type="submit" name="SaveWikiNew" value="'.get_lang('langSave').'" onClick="return Send(this.form)">'; 	//for button icon
+	echo '<button class="save" type="submit" name="SaveWikiNew" " onClick="return Send(this.form)">'.get_lang('langSave').'</button>'; 	//for button icon
 	echo '</div>';
 	echo '</form>';
 }
@@ -2803,7 +2803,7 @@ function is_active_navigation_tab($paramwk)
 
 /**
  * Lock add pages
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
 
 function check_addnewpagelock() 
@@ -2854,7 +2854,7 @@ function check_addnewpagelock()
 
 /**
  * Protect page
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
 function check_protect_page() 
 {
@@ -2909,7 +2909,7 @@ function check_protect_page()
 
 /**
  * Visibility page
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
 function check_visibility_page() 
 {
@@ -2964,7 +2964,7 @@ function check_visibility_page()
 
 /**
  * Visibility discussion
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
 function check_visibility_discuss() 
 {
@@ -3020,7 +3020,7 @@ function check_visibility_discuss()
 
 /**
  * Lock add discussion
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
 function check_addlock_discuss() 
 {
@@ -3075,7 +3075,7 @@ function check_addlock_discuss()
 
 /**
  * Lock rating discussion
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
 function check_ratinglock_discuss() 
 {
@@ -3130,7 +3130,7 @@ function check_ratinglock_discuss()
 
 /**
  * Notify page changes
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
  
 function check_notify_page($reflink)
@@ -3196,7 +3196,7 @@ function check_notify_page($reflink)
 
 /**
  * Notify discussion changes
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
 function check_notify_discuss($reflink)
 {
@@ -3277,7 +3277,7 @@ function check_notify_discuss($reflink)
 
 /**
  * Notify all changes
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
  
 function check_notify_all()
@@ -3336,7 +3336,7 @@ function check_notify_all()
 
 /**
  * Function check emailcue and send email when a page change
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
  
 function check_emailcue($id_or_ref, $type, $lastime, $lastuser)
@@ -3527,7 +3527,7 @@ function check_emailcue($id_or_ref, $type, $lastime, $lastuser)
 
 /**
  * Function export last wiki page version to document area
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
 function export2doc($wikiTitle, $wikiContents, $groupId)
 {
@@ -3561,7 +3561,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 
 /**
  * Function wizard individual assignment
- * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Juan Carlos Raï¿½a <herodoto@telefonica.net>
  */
 function auto_add_page_users($assignment_type)
 {

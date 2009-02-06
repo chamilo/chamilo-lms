@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: index.php 18277 2009-02-06 00:30:06Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -87,7 +87,7 @@ if (api_is_platform_admin()) {
 	<ul>
 		<li style="list-style-type:none"><form method="get" action="user_list.php">	
 			<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-			<button type="submit"> <?php echo get_lang('Search');?>
+			<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
 			</form>
 		</li>
@@ -122,7 +122,7 @@ if(api_is_platform_admin()) {
 	<h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo ucfirst(get_lang('Courses')); ?></h4>
 		<ul><li style="list-style-type:none"><form method="get" action="course_list.php">	
 		<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-		<button type="submit"> <?php echo get_lang('Search');?>
+		<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
 		</form></li>
 		<li>
@@ -180,7 +180,7 @@ if(api_get_setting('use_session_mode')=='true')
  <ul>
  <li style="list-style-type:none"><form method="POST" action="session_list.php">
 	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-	<button type="submit"> <?php echo get_lang('Search');?>
+	<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
 	</form>
 </li>
@@ -204,7 +204,7 @@ else if(api_is_platform_admin())
 <li style="list-style-type:none"><form method="get" action="class_list.php">
 
 	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
+	<input class="search" type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form>
 </li>
 <li><a href="class_list.php"><?php echo get_lang('ClassList'); ?></a></li>

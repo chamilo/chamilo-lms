@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18292 2009-02-06 19:08:47Z iflorespaz $
+<?php // $Id: profile.php 18300 2009-02-06 21:06:34Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -806,13 +806,13 @@ if (api_get_setting('allow_message_tool')=='true') {
 				<a href="../messages/new_message.php" class="message-body">'.get_lang('Compose').'</a><br />
 			</p>';		
 	
-		 
-	 if ($number_of_new_messages_of_friend>0) {
-		echo '<div class="message-content-internal">';		
-		echo '<a href="select_friend.php" style="color:#000000">'. Display::return_icon('info3.gif',get_lang('NewMessage'),'align="absmiddle"').'&nbsp;'.get_lang('Invitation ').'('.$number_of_new_messages_of_friend.')'.'</a>';
-		echo '</div><br/>';		    
-	}			
-	
+	 if (api_get_setting('allow_social_tool')=='true') {		 
+		 if ($number_of_new_messages_of_friend>0) {
+			echo '<div class="message-content-internal">';		
+			echo '<a href="../social/index.php#remote-tab-4" style="color:#000000">'. Display::return_icon('info3.gif',get_lang('NewMessage'),'align="absmiddle"').'&nbsp;'.get_lang('Invitation ').'('.$number_of_new_messages_of_friend.')'.'</a>';
+			echo '</div><br/>';		    
+		 }			
+	 }
 	echo '<img src="../img/delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
 	if ($number_of_new_messages_of_friend>0) {
 		echo '<br/>';

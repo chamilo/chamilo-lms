@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 18268 2009-02-05 21:56:06Z iflorespaz $
+<?php // $Id: whoisonline.php 18300 2009-02-06 21:06:34Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -133,7 +133,7 @@ function display_user_list($user_list, $_plugins)
 		$sorting_options['column'] = (isset ($_GET['column']) ? (int)$_GET['column'] : 2);
 		if (api_get_setting('allow_social_tool')=='true') {
 			send_invitation_friend_user();
-			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInvitation').'"/></div>';
+			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInvitationToFriends').'"/></div>';
 			echo '<form action="whoisonline.php" name="form_register_friend" id="form_register_friend" method="post">';
 		}
 		
@@ -275,6 +275,7 @@ function display_productions($user_id)
 	}
 }
 /**
+ * Send invitation a your friends
  * @author Isaac Flores Paz <isaac.flores.paz@gmail.com>
  * @param void
  * @return string message invitation
@@ -289,7 +290,7 @@ function send_invitation_friend_user() {
 		$user_id=api_get_user_id();
 		$user_info=api_get_user_info($user_id);
 		$message_title=get_lang('Invitation');
-		$message_content=get_lang('ReceivedInvitation').' : '.$user_info['firstName'].' '.$user_info['lastName'];
+		$message_content=get_lang('InvitationSentBy').' : '.$user_info['firstName'].' '.$user_info['lastName'];
 		$id_user_friend=$_POST['id_name_chek'];
 		for ($i=0;$i<$count_number_chek;$i++) {
 			$count_is_true=UserFriend::send_invitation_friend($user_id,$id_user_friend[$i],$message_title,$message_content);
@@ -299,9 +300,9 @@ function send_invitation_friend_user() {
 		}
 	if (api_get_setting('allow_social_tool')=='true') {
 		if ($count_number_is_true>0) {
-			echo '<div align="center">'.Display::display_normal_message(get_lang('RequestSend').' : '.$count_number_is_true.' '.get_lang('UsersFriend')).'</div>';
+			echo '<div align="center">'.Display::display_normal_message(get_lang('InvitationHasBeenSent').' : '.$count_number_is_true.' '.get_lang('Invitations')).'</div>';
 		}else {
-			echo '<div align="center">'.Display::display_error_message(get_lang('NoRequestSend')).' : '.'</div>';	
+			echo '<div align="center">'.Display::display_error_message(get_lang('InvitationHasBeenNotSent')).' : '.'</div>';	
 		}
 	}
 

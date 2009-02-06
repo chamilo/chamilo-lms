@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18277 2009-02-06 00:30:06Z ndieschburg $
+<?php // $Id: index.php 18299 2009-02-06 20:56:44Z juliomontoya $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 18277 2009-02-06 00:30:06Z ndieschburg $
+* 	@version $Id: index.php 18299 2009-02-06 20:56:44Z juliomontoya $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -102,6 +102,10 @@ if (isset ($_user['user_id'])) {
 	$nameTools = api_get_setting('siteName');
 }
 
+
+
+
+
 /*
 ==============================================================================
 		LOGIN
@@ -170,10 +174,26 @@ if (!api_get_user_id()) {
 	api_plugin('campushomepage_main');
 }
 
+$home= 'home/';
+if ($_configuration['multiple_access_urls']==true) {
+	$access_url_id = api_get_current_access_url_id();										 
+	if ($access_url_id != -1){						
+		$url_info = api_get_access_url($access_url_id);
+		// "http://" and the final "/" replaced						
+		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);						
+		$clean_url = replace_dangerous_char($url);
+		$clean_url = str_replace('/','-',$clean_url);
+		$clean_url = $clean_url.'/';
+		$home_old  = 'home/'; 
+		$home= 'home/'.$clean_url;
+	}
+}
+
 // Including the page for the news
 $page_included = false;
+
 if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['include'])) {
-	include ('./home/'.$_GET['include']);
+	include ('./'.$home.$_GET['include']);
 	$page_included = true;
 } else {
 	
@@ -185,16 +205,20 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 		$user_selected_language=get_setting('platformLanguage');
 	}
 	
-	if(!file_exists('home/home_news_'.$user_selected_language.'.html')) {
-		$home_top_temp=file('home/home_top.html');
+	if(!file_exists($home.'home_news_'.$user_selected_language.'.html')) {
+		if (file_exists($home.'home_top.html'))
+			$home_top_temp=file($home.'home_top.html');
+		else {
+			$home_top_temp=file($home_old.'home_top.html');
+		} 
 		$home_top_temp=implode('',$home_top_temp);
 		$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
 		echo $open;
 	} else {
-		if(file_exists('home/home_top_'.$user_selected_language.'.html')) {
-			$home_top_temp = file_get_contents('home/home_top_'.$user_selected_language.'.html');
+		if(file_exists($home.'home_top_'.$user_selected_language.'.html')) {
+			$home_top_temp = file_get_contents($home.'home_top_'.$user_selected_language.'.html');
 		} else {
-			$home_top_temp = file_get_contents('home/home_top.html');
+			$home_top_temp = file_get_contents($home.'home_top.html');
 		}
 		$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
 		echo $open;
@@ -287,7 +311,7 @@ function logout() {
 	}
 	exit_of_chat($uid);
 	api_session_destroy();
-header("Location: index.php$query_string");
+	header("Location: index.php$query_string");
 	exit();
 }
 
@@ -371,12 +395,17 @@ function display_anonymous_right_menu() {
 	 echo "<ul class=\"menulist\">";
 
 	$user_selected_language = api_get_interface_language();
+	global $home, $home_old;
 	if (!isset ($user_selected_language))
-		$user_selected_language = $platformLanguage;
-	if (!file_exists('home/home_menu_'.$user_selected_language.'.html')) {
-		include ('home/home_menu.html');
+		$user_selected_language = $platformLanguage; 
+	if (!file_exists($home.'home_menu_'.$user_selected_language.'.html')) {
+		if (file_exists($home.'home_menu.html'))
+			include ($home.'home_menu.html');
+		else {
+			include ($home_old.'home_menu.html');
+		}		
 	} else {
-		include('home/home_menu_'.$user_selected_language.'.html');
+		include($home.'home_menu_'.$user_selected_language.'.html');
 	}
 	echo '</ul>';
 	echo '</div>';
@@ -428,15 +457,20 @@ function display_anonymous_right_menu() {
 
 	
 	// includes for any files to be displayed below anonymous right menu
-	if (!file_exists('home/home_notice_'.$user_selected_language.'.html') && file_get_contents('home/home_notice.html')!='') {
+	if (!file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_exists($home.'home_notice.html')) {
 		echo '<div class="note">';
-		include ('home/home_notice.html');
+		if (file_exists($home.'home_notice.html'))			
+			include ($home.'home_notice.html');
+		else {
+			include ($home_old.'home_notice.html');
+		}		
 		echo '</div>';
-	} elseif(file_exists('home/home_notice_'.$user_selected_language.'.html') && file_get_contents('home/home_notice_'.$user_selected_language.'.html')!='') {
+	} elseif(file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_exists($home.'home_notice_'.$user_selected_language.'.html')) {
 		echo '<div class="note">';
-		include('home/home_notice_'.$user_selected_language.'.html');
+		include($home.'home_notice_'.$user_selected_language.'.html');
 		echo '</div>';
 	}
+	
 }
 
 /**
@@ -538,7 +572,7 @@ function display_anonymous_course_list() {
 			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);			
 			$sql_get_course_list="SELECT * FROM $main_course_table as course INNER JOIN $tbl_url_rel_course as url_rel_course 
 					ON (url_rel_course.course_code=course.code)
-					WHERE access_url_id = $url_access_id AND category_code = '".mysql_real_escape_string($_GET["category"])."' ORDER BY title, UPPER(visual_code)";
+					WHERE access_url_id = $url_access_id AND category_code = '".Database::escape_string($_GET["category"])."' ORDER BY title, UPPER(visual_code)";
 		}
 	}
 	

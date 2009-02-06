@@ -1,12 +1,8 @@
-/*
- * For FCKeditor 2.3
- * 
- * 
- * File Name: en.js
- * 	English language file for the youtube plugin.
- * 
- * File Authors:
- * 		Uprush (uprushworld@yahoo.co.jp) 2007/10/30
+﻿/*
+ * Please, use UTF-8 encoding.
+ *
+ * Basque language file.
+ * Euskara hizkuntza fitxategia.
  */
 
 FCKLang['YouTubeTip']			= 'Insert/Edit YouTube' ;

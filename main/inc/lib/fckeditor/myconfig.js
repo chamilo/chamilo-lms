@@ -144,7 +144,7 @@ FCKConfig.Plugins.Add("googlemaps", "en,es", sOtherPluginPath ) ;
 FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSy5hTGQdsosYD3dz6faZHVrO-02A';
 
 //Added by Ivan Tcholakov, 19-DEC-2008.
-FCKConfig.Plugins.Add( 'youtube', 'en' ) ;
+FCKConfig.Plugins.Add('youtube', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
 
 // reduce format list
 FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;

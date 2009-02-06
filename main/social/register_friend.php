@@ -19,7 +19,7 @@ $my_denied_current_friend= $_POST['denied_friend_id'];
 $my_delete_friend        = $_POST['delete_friend_id'];
 $friend_id_qualify       = $_POST['user_id_friend_q'];
 $type_friend_qualify     = $_POST['type_friend_q'];
-$relation_type='4';//is my friend
+$relation_type='3';//is my friend
 if (isset($my_current_friend)) {
 	UserFriend::register_friend ($the_current_user_id,$my_current_friend,$relation_type);
 	UserFriend::register_friend ($my_current_friend,$the_current_user_id,$relation_type);	
@@ -35,6 +35,6 @@ if (isset($my_delete_friend)) {
 }
 if(isset($friend_id_qualify) && isset($type_friend_qualify)) {
 	UserFriend::qualify_friend($friend_id_qualify,$type_friend_qualify);
-	echo get_lang('QualifySuccesfuly');
+	echo get_lang('UserGroupingSuccesfuly');
 }
 ?>

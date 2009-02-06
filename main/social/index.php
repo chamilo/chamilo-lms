@@ -193,7 +193,7 @@ Display :: display_header('');
         ?>
         <li><a href="select_friend_response.php"><span><?php echo get_lang('Invitation') ?></span></a></li>
         <li><a href="contacts.inc.php"><span><?php echo get_lang('Contacts') ?></span></a></li>
-        <li><a href="group_contact.inc.php"><span><?php echo get_lang('Groups') ?></span></a></li>
+        <li><a href="group_contact.inc.php"><span><?php echo get_lang('ContactsGroups') ?></span></a></li>
         <?php
   	 	}
         ?>    

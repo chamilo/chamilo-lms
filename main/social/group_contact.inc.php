@@ -16,7 +16,7 @@ $list_path_friends=array();
 $list_groups=array();
 ?>
 <div id="id" class="actions">
-<?php echo get_lang('MessageInformationGroupsContacts') ?>
+<?php echo '&nbsp;&nbsp;'.get_lang('MessageInformationGroupsContacts') ?>
 </div>
 <?php
 $user_id=api_get_user_id();
@@ -74,7 +74,7 @@ if (count($list_path_friends)!=0) {
 	echo $friend_html; 
 }  else {
 	$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFC" style="border-left:1px #B8C8DC solid;border-bottom:1px #B8C8DC solid;border-right:1px #B8C8DC solid;">';		
-	$friend_html.='<tr><td valign="top">&nbsp;&nbsp;&nbsp;'.get_lang('Message');
+	$friend_html.='<tr><td valign="top">&nbsp;&nbsp;&nbsp;'.get_lang('NoHaveContactsInThisGroup');
 	$friend_html.='</td></tr>';
 	$friend_html.='<br/></table>';
 	echo $friend_html;

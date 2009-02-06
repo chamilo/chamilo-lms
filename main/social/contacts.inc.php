@@ -85,7 +85,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
         <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ECE9D8">
           <tr>
             <td width="280" height="180" valign="top">
-            <div align="center" class="social-qualify"><?php echo get_lang('QualifyContactsPersonal') ?><input type="hidden" class="" name="user_cod_qualify" id="user_cod_qualify" value="0" /></div>
+            <div align="center" class="social-qualify"><?php echo get_lang('GroupingMyContactsPersonal') ?><input type="hidden" class="" name="user_cod_qualify" id="user_cod_qualify" value="0" /></div>
             <div align="center" class="social-qualify-display" id="div_info_user"></div>
             <div id="div_qualify">
             <?php 

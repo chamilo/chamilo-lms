@@ -17,7 +17,7 @@ for ($k=0;$k<$number_list;$k++) {
 ?>
 		    <tr height="20">
 		        <td width="20"><input type="radio" class="radio" name="list_type_friend"  value="<?php echo $list_of_options[$k]['id']; ?>" /></td>
-		        <td width="260"><?php echo  $list_of_options[$k]['title']; ?></td>
+		        <td width="260"><?php echo  get_lang($list_of_options[$k]['title']); ?></td>
 		    </tr>
 <?php
 }
@@ -26,6 +26,6 @@ for ($k=0;$k<$number_list;$k++) {
         </td>
     </tr>
 	    <tr>
-        <td><input type="button" value="QualifyContact" onclick="set_qualify_friend()"/></td>
+        <td><input type="button" value="<?php echo get_lang('GroupContact') ?>" onclick="set_qualify_friend()"/></td>
     </tr>
 </table>

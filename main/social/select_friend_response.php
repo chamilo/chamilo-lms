@@ -21,7 +21,7 @@ $list_get_invitation=UserFriend::get_list_invitation_of_friends_by_user_id($user
 $list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id($user_id);
 $number_loop=count($list_get_invitation);
 if ($number_loop==0) {
-	echo Display::display_normal_message(get_lang('NoHaveInvitation'));
+	echo Display::display_normal_message(get_lang('YouNotHaveInvitations '));
 	
 }
 for ($i=0;$i<$number_loop;$i++) {

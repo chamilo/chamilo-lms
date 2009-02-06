@@ -10,7 +10,7 @@ $_SESSION['this_section']=$this_section;
 api_block_anonymous_users();
 ?>
 <div class="actions">
-Desde aqui puede ver sus invitaciones
+<?php echo get_lang('ShowMessageInvitation'); ?>
 </div>
 <div id="id_response" align="center"></div>
 <?php
@@ -21,7 +21,7 @@ $list_get_invitation=UserFriend::get_list_invitation_of_friends_by_user_id($user
 $list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id($user_id);
 $number_loop=count($list_get_invitation);
 if ($number_loop==0) {
-	echo Display::display_normal_message('No tiene invitaciones actualmente');
+	echo Display::display_normal_message(get_lang('NoHaveInvitation'));
 	
 }
 for ($i=0;$i<$number_loop;$i++) {
@@ -32,8 +32,7 @@ for ($i=0;$i<$number_loop;$i++) {
     <td width="600" height="20" valign="top"><table width="100%" border="0"
 cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
       <tr>
-        <td width="600" height="20" valign="top"><div align="left">Dokeos -
-Solicitud de Amigos </div></td>
+        <td width="600" height="20" valign="top"><div align="left"><?php echo get_lang('RequestFriend'); ?></div></td>
         </tr>
     </table></td>
   </tr>
@@ -95,7 +94,7 @@ border="0" cellpadding="0" cellspacing="0">
                           <tr>
                             <td height="61" valign="top"><?php
                             $date=$list_get_invitation[$i]['send_date'];
-                            echo 'Fecha de envio : '.$date;
+                            echo get_lang('DateSent').' : '.$date;
                             ?></td>
                           </tr>
                       </table></td>
@@ -107,8 +106,8 @@ border="0" cellpadding="0" cellspacing="0">
 cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
               <tr>
                 <td width="600" height="25" valign="top"><div align="right">
-                  <input type="submit" name="btn_accepted" id="<?php echo "btn_accepted_".$user_id ?>" value="Aceptar" onclick="javascript:register_friend(this)"  />
-                  <input type="submit" name="btn_denied" id="<?php echo "btn_deniedst_".$user_id ?>" value="Denegar" onclick="javascript:denied_friend(this)" />
+                  <input type="submit" name="btn_accepted" id="<?php echo "btn_accepted_".$user_id ?>" value="<?php echo get_lang('Accept'); ?>" onclick="javascript:register_friend(this)"  />
+                  <input type="submit" name="btn_denied" id="<?php echo "btn_deniedst_".$user_id ?>" value="<?php echo get_lang('Deny'); ?>" onclick="javascript:denied_friend(this)" />
                   </div></td>
                     </tr>
             </table></td>

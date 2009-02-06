@@ -36,7 +36,7 @@ Display::display_header(get_lang(ucfirst($tool)));
 
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['ToolbarSet'] = 'Introduction';
 
 Display::display_introduction_section(TOOL_NOTEBOOK,'left');
 

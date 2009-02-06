@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 18258 2009-02-05 19:12:08Z ivantcholakov $
+<?php //$Id: announcements.php 18303 2009-02-06 21:27:04Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -853,7 +853,7 @@ if($_REQUEST['publish_survey'])
 
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['ToolbarSet'] = 'Introduction';
 
 if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 {

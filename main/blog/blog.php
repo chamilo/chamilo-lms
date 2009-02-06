@@ -43,6 +43,7 @@ $blog_id = intval($_GET['blog_id']);
 include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
+
 /* ------------	ACCESS RIGHTS ------------ */
 // notice for unauthorized people.
 api_protect_course_script(true);
@@ -233,6 +234,20 @@ switch ($current_page)
 		$nameTools = Blog :: get_blog_title($blog_id);
 		Display :: display_header($nameTools, 'Blogs');
 }
+/*
+-----------------------------------------------------------
+	Introduction section
+-----------------------------------------------------------
+*/
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '300';
+$fck_attribute['ToolbarSet'] = 'Introduction';
+
+Display::display_introduction_section(TOOL_BLOG);
+
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+//
 
 //Display::display_header($nameTools,'Blogs');
 ?>

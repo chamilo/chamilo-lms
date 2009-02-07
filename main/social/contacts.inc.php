@@ -20,7 +20,7 @@ $user_id=api_get_user_id();
 $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,true);
 ?>
 <div align="center" >
-<table width="750" border="0" cellpadding="0" cellspacing="0" style="border-top:1px #9DACBF solid; border-left:1px #9DACBF solid;border-right:1px #9DACBF solid; border-bottom:1px #9DACBF solid">
+<table width="750" border="0" cellpadding="0" cellspacing="0" class="social-content-table">
   <tr>
     <td width="750" height="20" valign="top">
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-title">
@@ -48,7 +48,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
               
               <tr>
                 <td width="100" height="110" valign="top">
-                <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-content-body">
                   
                   <tr>
                     <td width="100" height="110" valign="top">
@@ -82,9 +82,9 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
             </tr>
         </table></td>
         <td width="430" valign="top">
-        <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ECE9D8" class="social-align-box">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-content-description">
           <tr>
-            <td width="430" height="180" valign="top" >
+            <td width="430" height="180" valign="top" class="social-align-box">
             <div align="center" class="social-qualify"><?php echo get_lang('GroupingMyContactsPersonal') ?><input type="hidden" class="" name="user_cod_qualify" id="user_cod_qualify" value="0" /></div>
             <div align="center" class="social-qualify-display" id="div_info_user"></div>
             <div id="div_qualify">

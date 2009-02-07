@@ -1543,6 +1543,22 @@ span.radio {
     border-top:1px #9DACBF solid;
     border-bottom:1px #9DACBF solid;
 }
+.social-align-box {
+	text-align:left;
+	float:left;
+}
+.social-content-description {
+	background:#ECE9D8;	
+}
+.social-content-body{
+	background:#ffffff;		
+}
+.social-content-table{
+	border-top:1px #9DACBF solid; 
+	border-left:1px #9DACBF solid;
+	border-right:1px #9DACBF solid; 
+	border-bottom:1px #9DACBF solid;
+}
 /*****************************************************
  *  BUTTONS	                                         *
  *****************************************************/

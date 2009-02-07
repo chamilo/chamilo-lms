@@ -29,6 +29,38 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript">
 
+// Initialization of some language variables.
+var FCKLang = [];
+
+if ( window.parent.opener )
+{
+	try
+	{
+		FCKLang = window.parent.opener.FCKLang ;
+	}
+	catch ( ex ) { }
+}
+
+if ( !FCKLang )
+{
+	FCKLang = [] ;
+}
+
+if ( !FCKLang['UploadFile'] )
+{
+	FCKLang['UploadFile'] = 'Upload a file' ;
+}
+
+if ( !FCKLang['Upload'] )
+{
+	FCKLang['Upload'] = 'Upload' ;
+}
+
+if ( !FCKLang['UploadSelectFileFirst'] )
+{
+	FCKLang['UploadSelectFileFirst'] = 'Please, select a file before pressing the upload button.' ;
+}
+
 function SetCurrentFolder( resourceType, folderPath )
 {
 	var sUrl = oConnector.ConnectorUrl + 'Command=FileUpload' ;
@@ -42,7 +74,7 @@ function OnSubmit()
 {
 	if ( document.getElementById('NewFile').value.length == 0 )
 	{
-		alert( 'Please select a file from your computer' ) ;
+		alert( FCKLang['UploadSelectFileFirst'] ) ;
 		return false ;
 	}
 
@@ -91,6 +123,9 @@ function OnUploadCompleted( errorNumber, data )
 
 window.onload = function()
 {
+	document.getElementById('eUploadMessage').innerHTML = FCKLang['UploadFile'] ;
+	document.getElementById('btnUpload').value = FCKLang['Upload'] ;
+
 	window.top.IsLoadedUpload = true ;
 }
 		</script>
@@ -103,7 +138,7 @@ window.onload = function()
 						<span id="eUploadMessage">Upload a new file in this folder</span><br>
 						<table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
-								<td width="100%"><input id="NewFile" name="NewFile" style="WIDTH: 100%" type="file"></td>
+								<td width="100%"><input id="NewFile" name="NewFile" style="width: 100%" type="file"></td>
 								<td nowrap="nowrap">&nbsp;<input id="btnUpload" type="submit" value="Upload"></td>
 							</tr>
 						</table>

@@ -29,6 +29,33 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript">
 
+// Initialization of some language variables.
+var FCKLang = [];
+
+if ( window.parent.opener )
+{
+	try
+	{
+		FCKLang = window.parent.opener.FCKLang ;
+	}
+	catch ( ex ) { }
+}
+
+if ( !FCKLang )
+{
+	FCKLang = [] ;
+}
+
+if ( !FCKLang['CreateNewFolder'] )
+{
+	FCKLang['CreateNewFolder'] = 'Create a folder' ;
+}
+
+if ( !FCKLang['UploadFile'] )
+{
+	FCKLang['UploadFile'] = 'Upload a file' ;
+}
+
 function SetCurrentFolder( resourceType, folderPath )
 {
 	oConnector.ResourceType = resourceType ;
@@ -90,6 +117,8 @@ function CreateFolderCallBack( fckXml )
 
 window.onload = function()
 {
+	document.getElementById('lblCreateFolder').innerHTML = FCKLang['CreateNewFolder'] ;
+
 	window.top.IsLoadedCreateFolder = true ;
 }
 		</script>
@@ -98,12 +127,12 @@ window.onload = function()
 		<table class="fullHeight" cellSpacing="0" cellPadding="0" width="100%" border="0">
 			<tr>
 				<td>
-					<button type="button" style="WIDTH: 100%" onclick="CreateFolder();">
+					<button type="button" style="width: 100%" onclick="CreateFolder();">
 						<table cellSpacing="0" cellPadding="0" border="0">
 							<tr>
 								<td><img height="16" alt="" src="images/Folder.gif" width="16"></td>
 								<td>&nbsp;</td>
-								<td nowrap>Create New Folder</td>
+								<td nowrap><span id="lblCreateFolder">Create New Folder</span></td>
 							</tr>
 						</table>
 					</button>

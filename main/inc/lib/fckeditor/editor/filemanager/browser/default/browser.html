@@ -35,7 +35,11 @@ var FCKLang = [];
 
 if ( window.opener )
 {
-	FCKLang = window.opener.FCKLang ;
+	try
+	{
+		FCKLang = window.opener.FCKLang ;
+	}
+	catch ( ex ) { }
 }
 
 if ( !FCKLang )

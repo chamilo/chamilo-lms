@@ -1314,54 +1314,16 @@ class Blog
 							<tr>
 						   <td valign="top">' . get_lang('PostFullText') . ':&nbsp;&nbsp;</td>
 						   <td>';
+
 									$oFCKeditor = new FCKeditor('post_full_text') ;
-									$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+
+									$oFCKeditor->ToolbarSet = 'Blog';
 									$oFCKeditor->Height		= '350';
 									$oFCKeditor->Width		= '98%';
 									$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
 									
-									if (api_get_setting('advanced_filemanager') == 'true')
-									{
-										$oFCKeditor->Config['AdvancedFileManager'] = true;
-										$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
-										// For images
-										$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-										// For flash
-										$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-						
-										// For MP3
-										$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-						
-										// For video
-										$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-						
-										// For flv Player (Videos)
-										$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-
-									}
-									else
-									{
-										$oFCKeditor->Config['AdvancedFileManager'] = false;
-										$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-										$oFCKeditor->Config['IMUploadPath'] = "upload/blog/";
-									}
-									
-									
-									$oFCKeditor->ToolbarSet = "Blog";
-
-									$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-									$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".mysql_real_escape_string($_SESSION["_course"]["language"])."'";
-									$result_sql=api_sql_query($sql);
-									$isocode_language=mysql_result($result_sql,0,0);
-									$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-									
-									$oFCKeditor->Config['InDocument'] = false;		
-									$oFCKeditor->Config['AdvancedFileManager'] = api_get_setting('advanced_filemanager') == 'true' ? true : false;
-									$oFCKeditor->Config['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-		 
-		
-
 									$oFCKeditor->Create() ;
+
 			echo '			 <br /></td>
 							</tr> 
 							<tr><td><b>'.get_lang('AddAnAttachment').'</b></td></tr>	
@@ -1420,53 +1382,16 @@ class Blog
 						<tr>
 					   <td valign="top">' . get_lang('PostFullText') . ':&nbsp;&nbsp;</td>
 					   <td>';
+
 								$oFCKeditor = new FCKeditor('post_full_text') ;
-								$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+
+								$oFCKeditor->ToolbarSet = 'Blog';
 								$oFCKeditor->Height		= '350';
 								$oFCKeditor->Width		= '98%';
 								$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
 								
-								if (api_get_setting('advanced_filemanager') == 'true')
-								{
-									$oFCKeditor->Config['AdvancedFileManager'] = true;
-									$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
-									// For images
-									$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-									// For flash
-									$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-					
-									// For MP3
-									$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-					
-									// For video
-									$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-					
-									// For flv Player (Videos)
-									$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-
-								}
-								else
-								{
-									$oFCKeditor->Config['AdvancedFileManager'] = false;
-									$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-									$oFCKeditor->Config['IMUploadPath'] = "upload/blog/";
-								}
-							
-								$oFCKeditor->ToolbarSet = "Blog";
-
-								$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-								$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".mysql_real_escape_string($_SESSION["_course"]["language"])."'";
-								$result_sql=api_sql_query($sql);
-								$isocode_language=mysql_result($result_sql,0,0);
-								$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-								
-								$oFCKeditor->Config['InDocument'] = false;		
-								$oFCKeditor->Config['AdvancedFileManager'] = api_get_setting('advanced_filemanager') == 'true' ? true : false;
-								$oFCKeditor->Config['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-		
-		
-
 								$oFCKeditor->Create() ;
+
 		echo '			 <br /></td>
 						</tr>
 						<tr>
@@ -2486,50 +2411,16 @@ class Blog
 						<tr>
 					   <td valign="top">' . get_lang('Comment') . ':&nbsp;&nbsp;</td>
 					   <td>';
+
 									$oFCKeditor = new FCKeditor('comment_text') ;
-									$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+
+									$oFCKeditor->ToolbarSet = 'Blog';
 									$oFCKeditor->Height		= '200';
 									$oFCKeditor->Width		= '97%';
 									$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
 									
-									if (api_get_setting('advanced_filemanager') == 'true')
-									{
-										$oFCKeditor->Config['AdvancedFileManager'] = true;
-										$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
-										// For images
-										$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-										// For flash
-										$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-						
-										// For MP3
-										$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-						
-										// For video
-										$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-						
-										// For flv Player (Videos)
-										$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
-
-									}
-									else
-									{
-										$oFCKeditor->Config['AdvancedFileManager'] = false;
-										$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-										$oFCKeditor->Config['IMUploadPath'] = "upload/blog/";
-										$oFCKeditor->Config['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-									}
-									
-									$oFCKeditor->ToolbarSet = "Blog";
-
-									$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-									$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".mysql_real_escape_string($_SESSION["_course"]["language"])."'";
-									$result_sql=api_sql_query($sql);
-									$isocode_language=mysql_result($result_sql,0,0);
-									$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-									
-									$oFCKeditor->Config['InDocument'] = false;
-									
 									$oFCKeditor->Create() ;
+
 		echo '			 <br /></td>
 						</tr>
 							 

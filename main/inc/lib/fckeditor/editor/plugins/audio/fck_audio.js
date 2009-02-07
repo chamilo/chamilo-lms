@@ -59,10 +59,6 @@ lib_path = FCK.GetUrl( lib_path, FCK.SEMI_ABSOLUTE_URL ) ;
 // This is the semi-absolute URL of the audio player.
 var player = lib_path + 'mediaplayer/player.swf' ;
 
-var sAgent = navigator.userAgent.toLowerCase() ;
-var is_ie = (sAgent.indexOf("msie") != -1); // FCKBrowserInfo.IsIE
-var is_gecko = !is_ie; // FCKBrowserInfo.IsGecko
-
 
 // Get the selected audio (if available).
 var oFakeImage = dialog.Selection.GetSelectedElement() ;

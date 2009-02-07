@@ -457,7 +457,7 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 	switch ( errorNumber )
 	{
 		case 0 :	// No errors
-			alert( 'Your file has been successfully uploaded' ) ;
+			//alert( 'Your file has been successfully uploaded' ) ;
 			break ;
 		case 1 :	// Custom error
 			alert( customMsg ) ;

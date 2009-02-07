@@ -38,6 +38,7 @@
 
 var dialog	= window.parent ;
 var oEditor = dialog.InnerDialogLoaded() ;
+var FCK		= oEditor.FCK ;
 
 window.onload = function ()
 {
@@ -49,6 +50,9 @@ window.onload = function ()
 
 function InsertSmiley( url )
 {
+	// Semi-absolute URLs are to be recorded.
+	url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
+
 	oEditor.FCKUndo.SaveUndoStep() ;
 
 	var oImg = oEditor.FCK.InsertElement( 'img' ) ;

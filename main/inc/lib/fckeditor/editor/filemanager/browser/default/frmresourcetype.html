@@ -34,12 +34,21 @@ var FCKLang = [];
 
 if ( window.parent.opener )
 {
-	FCKLang = window.parent.opener.FCKLang ;
+	try
+	{
+		FCKLang = window.parent.opener.FCKLang ;
+	}
+	catch ( ex ) { }
 }
 
 if ( !FCKLang )
 {
 	FCKLang = [] ;
+}
+
+if ( !FCKLang['Folder'] )
+{
+	FCKLang['Folder'] = 'Folder' ;
 }
 
 if ( !FCKLang['ResourceTypeRoot'] )
@@ -84,6 +93,8 @@ var aTypes = [
 
 window.onload = function()
 {
+	document.getElementById('lblFolder').innerHTML = FCKLang['Folder'] ;
+
 	var oCombo = document.getElementById('cmbType') ;
 	oCombo.innerHTML = '' ;
 	if ( oConnector.ShowAllTypes || oConnector.ResourceType == 'File' )
@@ -114,9 +125,8 @@ window.onload = function()
 	<body>
 		<table class="fullHeight" cellSpacing="0" cellPadding="0" width="100%" border="0">
 			<tr>
-				<td nowrap>
-					Resource Type<br />
-					<select id="cmbType" style="WIDTH: 100%" onchange="SetResourceType(this.value);">
+				<td nowrap><span id="lblFolder">Folder</span><br />
+					<select id="cmbType" style="width: 100%" onchange="SetResourceType(this.value);">
 						<option>&nbsp;
 					</select>
 				</td>

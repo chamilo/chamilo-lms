@@ -25,7 +25,7 @@ for ($p=0;$p<count($list_groups);$p++) {
 	$list_path_friends=UserFriend::get_list_path_web_by_user_id ($user_id,$list_groups[$p]['id']);
 ?>
 <div align="center" id="<?php echo 'div_group_'.$list_groups[$p]['id']; ?>" >
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
   <tr>
     <td width="100%" height="20" valign="top">
 

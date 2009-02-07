@@ -30,7 +30,7 @@ function register_friend(element_input) {
 		success: function(datos) {
 		 $("div#"+name_div_id).hide("slow");
 		 $("#id_response").html(datos);
-		},
+		}
 	});		
 }
 function denied_friend (element_input) {
@@ -48,7 +48,7 @@ function denied_friend (element_input) {
 		success: function(datos) {
 		 $("div#"+name_div_id).hide("slow");
 		 $("#id_response").html(datos);
-		},
+		}
 	});
 	
 }
@@ -67,7 +67,7 @@ function delete_friend (element_div) {
 			//alert(datos);
 			 $("div#"+"div_"+user_id[1]).hide("slow");
 			 $("div#"+"div_"+user_id[1]).html("");
-			},
+			}
 		});
 	}
 }
@@ -103,7 +103,7 @@ function set_qualify_friend() {
 			data: "user_id_friend_q="+user_id_friend+"&type_friend_q="+type_friend,
 			success: function(datos) {
 			alert(datos);
-			},
+			}
 		});
 	}
 }
@@ -119,7 +119,7 @@ function hide_icon_delete(element_html)  {
 	elem_id=$(element_html).attr("id");
 	id_elem=elem_id.split("_");
 	ident="#img_"+id_elem[1];
-	$(ident).attr("src","");
+	$(ident).attr("src","../img/blank.gif");
 	$(ident).attr("alt","");
 	$(ident).attr("title","");
 }
@@ -134,7 +134,7 @@ function search_image_social(element_html)  {
 		data: "search_name_q="+name_search,
 		success: function(datos) {
 			$("div#div_content_table").html(datos);
-		},
+		}
 	});
 }
 </script>';

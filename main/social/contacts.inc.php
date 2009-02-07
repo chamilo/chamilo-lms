@@ -37,7 +37,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
   </tr>
   <tr>
     <td height="180" valign="top">
-    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" >
       
       <tr>
         <td width="320" height="180" valign="top">
@@ -57,7 +57,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
                   
                 </table></td>
                     <td width="220" valign="top">
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
                       <tr>
                         <td width="220" height="110" valign="top">&nbsp;</td>
                         </tr>
@@ -68,9 +68,9 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
               </tr>
           <tr>
             <td height="70" valign="top">
-            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-info">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
               <tr>
-                <td width="320" height="70" valign="top">
+                <td width="320" height="70" valign="top" class="social-info">
                 <?php
                 $info_user=api_get_user_info($user_id);
                  echo '<br/>&nbsp;&nbsp;&nbsp;&nbsp;'.$info_user['mail'].'<br/>';
@@ -81,10 +81,10 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
             </table></td>
             </tr>
         </table></td>
-        <td width="280" valign="top">
-        <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ECE9D8">
+        <td width="430" valign="top">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ECE9D8" class="social-align-box">
           <tr>
-            <td width="280" height="180" valign="top">
+            <td width="430" height="180" valign="top" >
             <div align="center" class="social-qualify"><?php echo get_lang('GroupingMyContactsPersonal') ?><input type="hidden" class="" name="user_cod_qualify" id="user_cod_qualify" value="0" /></div>
             <div align="center" class="social-qualify-display" id="div_info_user"></div>
             <div id="div_qualify">
@@ -104,7 +104,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
     <td height="25" valign="top">
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-subtitle-search">
       <tr>
-        <td width="750" height="25" valign="top">&nbsp;&nbsp;<?php echo get_lang('Search').'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?><input class="social-search-image" type="text" class="search-image" id="id_search_image" name="id_search_image" value="" onkeyup="search_image_social(this)" /></td>
+        <td width="750" height="25" valign="top" class="social-align-box">&nbsp;&nbsp;<?php echo get_lang('Search').'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?><input class="social-search-image" type="text" class="search-image" id="id_search_image" name="id_search_image" value="" onkeyup="search_image_social(this)" /></td>
       </tr>
     </table></td>
   </tr>
@@ -113,9 +113,9 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
     <table width="100%" border="0" cellpadding="0" cellspacing="0" >
       <tr>
         <td width="750" height="22" valign="top">
-        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-title">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
           <tr>
-            <td width="750" height="22" valign="top">&nbsp;&nbsp;<?php echo get_lang('ListContacts'); ?></td>
+            <td width="750" height="22" valign="top" class="social-title">&nbsp;&nbsp;<?php echo get_lang('ListContacts'); ?></td>
               </tr>
         </table></td>
         </tr>

@@ -598,7 +598,7 @@ this lets the navigation menu appear to the left:
 * html #toolnav { margin-right: 0px;}
 * html #center { height: 1%; margin-left: 0; }
  /* End hide from IE5/mac */
-*/
+
 
 /*****************************************************
  *  LOGIN AND LANGUAGE FORM                          *
@@ -1894,7 +1894,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
  	cellspacing:0;
  	cellpadding:0; 	
  	background-color:#dbeaf5;
- 	border=0;
+ 	border:0;
   	border-collapse: collapse;
 	width: 100%;	
 }
@@ -2099,6 +2099,10 @@ span.radio {
 	background:#ffffff;
 	border-top:1px #9DACBF solid;
 	border-bottom:1px #9DACBF solid;
+}
+.social-align-box {
+text-align:left;
+float:left;
 }
 /*****************************************************
  *  BUTTONS	                                         *

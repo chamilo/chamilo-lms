@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 18300 2009-02-06 21:06:34Z iflorespaz $
+<?php // $Id: whoisonline.php 18324 2009-02-07 16:20:34Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,7 +49,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 	}
 					
 </script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="./main/inc/lib/javascript/jquery.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){
 	$("input#id_btn_send_invitation").bind("click", function(){

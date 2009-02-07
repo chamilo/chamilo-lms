@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 18292 2009-02-06 19:08:47Z iflorespaz $
+<?php // $Id: new_message.php 18324 2009-02-07 16:20:34Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,7 +79,7 @@ $(document).ready(function (){
 		$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {
-				/*$("#id_div_search").html("buscando...");*/ },
+				/*$("#id_div_search").html("Searching...");*/ },
 				type: "POST",
 				url: "../social/select_options.php",
 				data: "search="+name,
@@ -93,7 +93,7 @@ $(document).ready(function (){
 					 $("#id_div_search").html("");
 					 cont++;
 				 });
-				},	
+				}
 		});
       });  
 });

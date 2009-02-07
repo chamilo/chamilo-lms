@@ -65,7 +65,6 @@ var is_gecko = !is_ie; // FCKBrowserInfo.IsGecko
 
 
 // Get the selected audio (if available).
-var oAudio = null;
 var oFakeImage = dialog.Selection.GetSelectedElement() ;
 var oEmbed ;
 

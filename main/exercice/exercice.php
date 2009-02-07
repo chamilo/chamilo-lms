@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 18306 2009-02-06 21:33:15Z herodoto $
+<?php // $Id: exercice.php 18319 2009-02-07 00:03:42Z herodoto $
 
 /*
 ==============================================================================
@@ -388,7 +388,7 @@ include_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 event_access_tool(TOOL_QUIZ);
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
+$fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
 
 Display::display_introduction_section(TOOL_QUIZ);

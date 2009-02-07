@@ -1,4 +1,4 @@
-<?php // $Id: link.php 18310 2009-02-06 22:33:12Z cfasanando $
+<?php // $Id: link.php 18319 2009-02-07 00:03:42Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -184,7 +184,7 @@ if(isset($_GET['action']))
 */
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
+$fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
 
 Display::display_introduction_section(TOOL_LINK,'left');

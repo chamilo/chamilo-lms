@@ -1,4 +1,4 @@
-<?php // $Id: user.php 18307 2009-02-06 21:38:07Z herodoto $
+<?php // $Id: user.php 18319 2009-02-07 00:03:42Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -329,7 +329,7 @@ $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) && $_configuration['
 // introduction section
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
+$fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
 
 Display::display_introduction_section(TOOL_USER, 'left');

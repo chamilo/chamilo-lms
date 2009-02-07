@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 18305 2009-02-06 21:30:19Z herodoto $
+<?php // $Id: course_home.php 18319 2009-02-07 00:03:42Z herodoto $
 
 /*
 ==============================================================================
@@ -180,7 +180,7 @@ $reqdate="&reqdate=$temps";
 */
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
+$fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
 
 // A special case, some default settings do not fit. These settings should stay.

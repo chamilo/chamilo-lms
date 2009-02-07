@@ -145,7 +145,7 @@ $dropbox_unid = md5( uniqid( rand( ), true));
 // introduction section
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
+$fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
 
 Display::display_introduction_section(TOOL_DROPBOX,'left');

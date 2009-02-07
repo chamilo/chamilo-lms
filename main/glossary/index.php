@@ -33,7 +33,7 @@ Display::display_header(get_lang(ucfirst($tool)));
 // tool introduction
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
+$fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
 
 Display::display_introduction_section(TOOL_GLOSSARY,'left');

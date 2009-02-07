@@ -122,6 +122,12 @@ FCKConfig.ToolbarSets["Wiki"] = [
 	['Source']
 ] ;
 
+// At this moment of loading editor's scripts the setting FCKConfig.AdvancedFileManager
+// has not been read yet from the php-integration file. 
+// However we are able to detect which file manager will be used in another way.
+// The following variable is pure boolean type: true/false.
+var UseAdvancedFileManager = FCKConfig.PageConfig.AdvancedFileManager ;
+
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;
 
 // Plugins

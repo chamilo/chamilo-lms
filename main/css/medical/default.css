@@ -1907,8 +1907,20 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
     position:relative;
 	margin-top:115px;
 	margin-right:-100px;
-   }
-   
+}
+.message-content-table {
+	background-color:white;
+	border:1px solid black;
+	position:absolute;
+	width:200px;
+	height:60px;
+	z-index:3;
+	visibility:hidden;
+	top:85px;
+	left:10px;
+	margin: 0px;
+	padding: 0px;
+}
    
    
 /**********************************************

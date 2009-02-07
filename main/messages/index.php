@@ -1,4 +1,4 @@
-<?php // $Id: index.php 17903 2009-01-21 19:50:57Z juliomontoya $
+<?php // $Id: index.php 18330 2009-02-07 17:57:59Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -44,7 +44,7 @@ if(api_get_user_id()!=0) {
 	if($number_of_new_messages > 0)
 	{
 	?>
-		<div id="box" style="background-color:white;border:1px solid black;position:absolute;width:200px;height:60px;z-index:3;visibility:hidden;top:85px;left:10px;margin: 0px;padding: 0px;">
+		<div id="box" class="message-content-table">
 		  <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="2" id="table" class="content">
 		    <tr>
 		      <td width="28%" height="16" class="content" id="ref"><a style="color:red;font-size:10px" href="javascript:;" onclick="ocultar_aviso()"><?php echo get_lang('Close');?></a></td>

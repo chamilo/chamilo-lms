@@ -1,0 +1,987 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  
+  
+  <title>Guia de Instalación de Dokeos 1.8.6</title>
+  <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
+
+  
+  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+
+  
+  <style type="text/css">
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		pre { font-family: "Courier New", monospace }
+		p { margin-bottom: 0.21cm }
+		.code {margin: 1em 1em 1em 2em; padding: 0.5em; background-color: rgb(229, 229, 229); vertical-align: top; border: 1px solid #999999;}
+	--></style>
+</head>
+
+<body>
+
+
+<div id="header1">
+<h1>Guía de Instalación de Dokeos 1.8.6</h1>
+
+</div>
+
+<a href="index.html">Documentación</a> &gt; Guia de Instalación
+<div id="outerframe">
+<div id="main">
+<p></p>
+
+
+<p>Gracias por descargar Dokeos, la suite de aprendizaje de código abierto profesional.</p>
+
+
+<ul>
+
+  <li>Vista rapida de las <a href="http://www.dokeos.com/en/node/58">Características de Dokeos&nbsp;</a></li>
+
+  <li>Prueba Dokeos en <a href="http://campus.dokeos.com">Free Campus</a></li>
+
+</ul>
+
+
+<p>Esta guía explica como instalar la Gestión de Aprendizaje de Dokeos. Explica como instalar la conversión a PowerPoint Dokeos Oogie
+y la videoconferencia de Dokeos sin embargo estos paquetes
+no son requeridos para usar Dokeos LMS. &nbsp;Por favor lea completamente este documento antes de proceder con la instalación. </p>
+
+
+Si desea ahorrar tiempo, problemas y dinero, alternativamente puede tener su Portal de Dokeos <a href="http://www.dokeos.com/en/node/6">desplegado</a> o <a href="http://www.dokeos.com/en/node/32">instalado</a> por Dokeos o alguno de sus socios.<br />
+
+
+<h2><b>Contenidos</b></h2>
+
+<ol>
+
+  <li><a href="#1._Pre-requisites">Pre-requisitos</a></li>
+
+  <li><a href="#2._Installation_of_Dokeos_LMS">Instalación de Dokeos LMS</a></li>
+
+  <li><a href="#3._Upgrade_from_a_previous_version_of">Actualizar desde una versión previa de Dokeos</a></li>
+
+  <li><a href="#4._Troubleshooting">Solución de Problemas</a></li>
+
+  <li><a href="#5._Administration_section">Sección de administración</a></li>
+
+  <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
+
+  <li><a href="#7._Oogie_PowerPoint__Impress_conversion">Conversión Oogie PowerPoint / Impress</a></li>
+
+  <li><a href="#8._Videoconferencing_and_audio-recorder">Grabador de videoconferencia y audio</a></li>
+
+  <li><a href="#9._Mathematical_formulas">Formulas Matemáticas con LaTeX</a></li>
+
+</ol>
+
+
+<br />
+
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="1._Pre-requisites"></a>1. Pre-requisitos</h2>
+
+
+Dokeos
+puede ser instalado indiferentemente en servidores Windows, Linux, Mac OS X y UNIX. 
+Sin embargo, nosotros recomendamos el uso de un servidor Linux para una óptima flexibilidad, 
+control remoto y escalabilidad. <br />
+
+<br />
+
+Dokeos es principalmente un LMS que se ejecuta con <span style="font-weight: bold;">Apache</span>, <span style="font-weight: bold;">MySQL</span> y <span style="font-weight: bold;">PHP5</span> (tambien llamada la trilogía <span style="font-weight: bold;">AMP</span>). <br />
+
+<br />
+
+
+Puede ser enriquecida con conversión a &nbsp;PowerPoint (característica llamada Dokeos
+Oogie) mediante el uso de <span style="font-weight: bold;">OpenOffice.org</span> + Java. Quizas usted también desee agregar el plugin de Videoconferencia de Dokeos mediante el uso de <span style="font-weight: bold;">RED5</span>
+servidor de codigo abierto de Flash. <br />
+
+
+<br />
+
+Todo este software es software de código abierto y está disponible libremente. <br />
+
+<br />
+
+Para ejecutar Dokeos <span style="font-weight: bold;">LMS</span> en su servidor, usted necesita instalar WAMP, LAMP o MAMP: 
+<ul>
+
+  <li>Para instalar <span style="font-weight: bold;">WAMP</span> (AMP en Windows), nosotros recomendamos el instalador <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> .exe<a href="http://www.apachefriends.org/en/xampp.html"></a></li>
+
+  <li>Para instalar <span style="font-weight: bold;">LAMP</span>
+(AMP en Linux), use el administrador de paquetes de su distribución favorita (Synaptic, RPMFinder etc.).
+Por ejemplo, en un servidor Ubuntu,&nbsp;use Shell o Synaptic siguiendo la
+    <a href="http://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">Ubuntuguide on Apache</a> y las secciones siguientes.</li>
+
+  <li>Para instalar <span style="font-weight: bold;">MAMP</span> (AMP en Mac OS X), referirse al sitio web dedicado a <a href="http://www.mamp.info/en/index.php">MAMP</a><a href="http://www.mamp.info/en/index.php"></a></li>
+
+</ul>
+
+
+<br />
+
+
+<h3><span style="font-weight: bold;">Servidor de Base de Datos MySQL</span></h3>
+
+Usted necesitará una cuenta de acceso y una contraseña que le permita administrar y crear
+al menos una base de datos. De manera predeterminada, Dokeos creará una nueva base de datos
+para cada curso creado. Esto significa que su proveedor debera permitirle crear y
+administrar varias bases de datos. Usted también puede instalar Dokeos y usar
+sólo una base de datos, en ese caso, usted tiene que seleccionar esta opción durante
+la instalación.
+<br />
+
+
+<br />
+
+Para aprovechar la ventaja de la conversión <span style="font-weight: bold;">Oogie</span> de PowerPoint / Impress, usted necesita: <br />
+
+
+<ul>
+
+  <li><a href="http://www.openoffice.org/">OpenOffice.org</a><a href="http://www.openoffice.org/"></a></li>
+
+  <li><a href="http://www.java.com/en/download/manual.jsp">Java Runtime Environment</a><a href="../*%20http://www.java.com/en/download/manual.jsp"></a></li>
+
+</ul>
+
+
+<br />
+
+Para aprovechar la ventaja de la <span style="font-weight: bold;">Videoconferencia</span> de Dokeos, usted necesita:<br />
+
+
+<ul>
+
+  <li><a href="http://osflash.org/red5">Servidor de Flash de Codigo Abierto RED5</a><a href="http://osflash.org/red5"></a></li>
+
+</ul>
+
+
+<span style="font-weight: bold;"><br />
+
+</span>
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="2._Installation_of_Dokeos_LMS"></a><span style="font-weight: bold;">2. Instalación de Dokeos LMS</span></h2>
+
+<a href="http://www.dokeos.com/download.php"></a> 
+<ul>
+
+  <li><a href="http://www.dokeos.com/node/33">Descargar Dokeos LMS</a></li>
+
+  <li>Descomprimirlo</li>
+
+  <li>Copiar el directorio de dokeos en su directorio web de Apache. Este puede ser 
+    <span style="font-weight: bold;">C:\xampp\htdocs\</span> en un servidor Windows o <span style="font-weight: bold;">/var/www/html/</span> en un servidor Linux</li>
+
+  <li>Abrir su navegador web (Internet Explorer, Firefox...) y escribir
+    <span style="font-weight: bold;">http://localhost/dokeos/</span> si se instala de manera local o
+    <span style="font-weight: bold;">http://www.domain.com/dokeos/</span> si se instala remotamente</li>
+
+  <li>Seguir el proceso de instalación web. Usted puede aceptar todos los valores
+predeterminados. Considere cambiar la contraseña de administrador y recuerdela.&nbsp;</li>
+
+</ul>
+
+
+<br />
+
+Los siguientes directorios necesitan tener permisos de lectura, escritura y ejecución para todos:
+<ul>
+
+  <li>dokeos/main/inc/conf/</li>
+
+  <li>dokeos/main/garbage/</li>
+
+  <li>dokeos/main/upload/users/</li>
+
+  <li>dokeos/main/default_course_document/</li>
+
+  <li>dokeos/archive/</li>
+
+  <li>dokeos/courses/</li>
+
+  <li>dokeos/home/</li>
+
+</ul>
+
+(donde 'dokeos' es el directorio en el cual usted instaló Dokeos)
+<p>En Linux, Mac OS X y sistemas operativos BSD usted puede usar el comando CHMOD
+777 para esto (aunque nosotros recomendamos que busque asistencia de un
+administrador de sistemas con experiencia).
+En Windows, es probable que usted necesite revisar las propiedades de las carpetas (mediante el uso
+del clic derecho en ellas).
+</p>
+
+<p>
+2.5. Los siguientes archivos necesitan tener permisos de lectura y escritura 
+para el navegador web, solo durante la instalación de Dokeos:
+</p>
+
+<ul>
+
+  <li>dokeos/main/inc/conf/configuration.php (si esta presente)</li>
+
+</ul>
+
+
+<p>En Linux, Mac OS X y sistemas operativos BSD usted puede usar el comando CHMOD
+666 para esto (aunque nosotros recomendamos que busque asistencia de un
+administrador de sistemas con experiencia).
+En Windows, es probable que usted necesite revisar las propiedades de las carpetas (mediante el uso
+del clic derecho en ellas).
+
+</p>
+
+
+
+
+<p>
+<b>NOTAS:</b><br />
+
+No modifique los archivos home_*.html directamente. En vez de ello,
+seleccione "Configurar la pagina de inicio" en la sección de administración de Dokeos.</p>
+
+<p><span style="font-weight: bold;">Windows</span> : con paquetes combinados como XAMPP, disponibles por todo lado, la cuenta de acceso y contraseña
+   para MySQL probablemente permanecera vacia.</p>
+
+<p></p>
+
+
+<h3><strong> Configuración y seguridad despues de la instalación</strong></h3>
+
+<ul>
+
+  <li><strong>Proteger su archivo de configuración: </strong>
+asegurarse que nadie pueda sobreescribirlo. Usted puede encontrar el archivo de configuración en la <em>(carpeta de dokeos)</em>/main/inc/conf/configuration.php.
+Hacerla de solo lectura (windows/xwindows: clic derecho en el archivo para editar las propiedades. 
+linux/bsd/macosx: usar el comando chmod 444). El archivo de 
+configuración es creado por Apache, por lo tanto usted necesita ser adminitrador para cambiar sus
+permisos.</li>
+
+  <li><strong>Proteger su carpeta de instalación: </strong>
+si la <em>(carpeta de dokeos)</em>carpeta /main/install
+es aun accesible, alguien podria instalar de nuevo sobre su versión existente
+(usted puede perder sus datos de esta manera). Mover la carpeta a algún lugar 
+fuera de los directorios web para que no se encuentre accesible, cambiar su nombre, o 
+editar sus propiedades para que nadie pueda leerlo o ejecutarlo.</li>
+
+  <li><strong>Para mayor seguridad: </strong>
+hacer que los archivos posean permisos de escritura por todos ayudaria a instalar, y resolveria varias
+dudas a las personas sin mucha experiencia en administracion. Sin embargo, es mas seguro
+hacer al propietario del proceso de apache (usualmente llamado apache
+o www-data) tambien propietario de todos los archivos y carpetas de dokeos. De esta manera,
+estos archivos solo tendrian permisos de lectura y escritura por el propietario
+del proceso Apache, y ya no permiso a todo el mundo.</li>
+
+  <li><strong>Configurar su instalación de Dokeos: </strong>
+en la sección de administración de Dokeos, usted puede usar las Opciones de Configuración de Dokeos para ajustar el comportamiento de su instalación.</li>
+
+  <li><strong>Configurar correo de Dokeos: </strong>
+por lo general Dokeos usa las configuraciones de correo del archivo php.ini. Sin embargo,
+la herramienta de anuncios usa phpMailer (otro proyecto de software libre)
+y las configuraciones para esta herramienta pueden ser ajustadas en <em>(la carpeta de dokeos)</em>/main/inc/conf/mail.conf.php.</li>
+
+
+</ul>
+
+<br />
+
+
+<h3>Configuración PHP</h3>
+
+
+Para obtener lo mejor de Dokeos, usted necesita afinar las configuraciones de PHP. Considerar: <br />
+
+<ul>
+
+  <li>Editar el archivo php.ini (en windows puede ser ubicado en <span style="font-weight: bold;">C:\xampp\php\php.ini</span>, en Ubuntu Linux : <span style="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
+
+  <li>buscar la palabra "max" y incrementar los valores para optimizar el servidor</li>
+
+  <li>quizas usted desee terminar; con los siguiente valores: </li>
+
+</ul>
+
+<br />
+
+<div class="code">
+			  max_execution_time = 300&nbsp;&nbsp;&nbsp; ; Maximo tiempo de ejecucion para cada script, en segundos<br />
+
+			  max_input_time = 600 ; Maxima cantidad de tiempo para cada script que pueda gastar analizando datos solicitados<br />
+
+			  memory_limit = 256M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; Maxima cantidad de memoria que un script puede consumir (128MB)<br />
+
+			  post_max_size = 64M<br />
+
+			  upload_max_filesize = 100M
+</div>
+
+<br />
+
+<p>
+Algunos usuarios pueden encontrar problemas si en sus configuraciones de PHP no
+encajan las siguientes:</p>
+
+<ul>
+
+  <li>short_open_tag       = On</li>
+
+  <li>safe_mode            = Off</li>
+
+  <li>magic_quotes_gpc     = On</li>
+
+  <li>magic_quotes_runtime = Off</li>
+
+</ul>
+
+
+
+<p>
+En versiones de Dokeos anteriores se requería que register_globals estuviera configurada en On. Esto ya no
+necesario, puede estar configurado en Off y Dokeos funcionará bien.
+</p>
+
+
+<p><strong>Usuarios BSD:</strong> estas bibliotecas de php tienen que ser incluidas durante la instalación de php:</p>
+
+
+<ul>
+
+  <li>php-mysql La extensión compartida de mysql para php</li>
+
+  <li>php-pcre La extensión compartida de pcre para php</li>
+
+  <li>php-session La extensión compartida de sesión para php</li>
+
+  <li>php-zlib La extensión compartida de zlib para php</li>
+
+  <li>(opcional) php-ldap si se desea habilitar el uso de la autenticación de LDAP</li>
+
+</ul>
+
+
+<p><a href="http://dev.mysql.com/doc/mysql/en/index.html"></a><br />
+
+
+</p>
+
+
+<hr />
+<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Actualizar desde una versión previa de Dokeos</h2>
+Antes de actualizar, nosotros recomendamos <b>seriamente</b> hacer una copia de seguridad de los directorios
+previos de Dokeos y las bases de datos. Si no esta seguro de como hacer esto, por favor solicite 
+asistencia a su proveedor de servicios de almacenamiento.<br />
+
+<p></p>
+
+
+<h3>3.1 Actualizar desde Dokeos 1.8.x</h3>
+
+
+<em>Si usted actualiza desde Dokeos 1.8.x</em> :&nbsp;
+<ul>
+  <li> revisar que usted no haya dejado alguna hoja de estilo personalizada o imagen*</li>
+  <li> descargar el paquete de instalación de Dokeos 1.8.6 desde la <a href="http://www.dokeos.com/en/node/33">pagina de descarga de Dokeos</a></li>
+  <li> descomprimir los nuevos archivos de Dokeos 1.8.6 sobre los archivos de la version anterior</li>
+  <li> apunte su navegador a su portal URL + main/install/</li>
+  <li> escoja su idioma y clic en&nbsp;<span style="font-style: italic;">Actualizar desde 1.8.x</span></li>
+</ul>
+
+<br />
+
+<font size="-1">* Los estilos e imagenes están ubicados en el directorio main/css o main/img.
+ Usted aun puede recuperarlos desde la copia de seguridad si es que usted la hizo.
+ Cualquier estilo o imagen modificada que use el nombre predeterminado style/image sera
+ sobreescrita en el siguiente paso. Para evitar perder cualquier personalizacion, siempre
+ asegurese de copiar styles/images bajo un nuevo nombre y use y modifique la copia, 
+ no el original. El original siempre sera sobreescrito por nuevas versiones.
+ En Dokeos 1.8.5, hemos cambiado el nombre de varios temas CSS.
+ La compatibilidad hacia atras esta asegurada por el hecho de que una actualizacion solo agrega
+ los nuevos temas, sin embargo usted debe tratar y usar estos nuevos temas en lugar de quedarse con los
+ antiguos que estaran obsoletos dentro de poco (sin mantenimiento).</font>
+<br />
+
+<p></p>
+
+<h3>3.2 Actualizar desde Dokeos 1.6.x</h3>
+
+
+<em>Si usted actualiza desde una version anterior a Dokeos (1.6.x)</em>, lo primero 
+y mas importante por hacer es *mover* su directorio actual hacia otro
+lugar.<br />
+Una manera simple de hacer esto es crear un subdirectorio llamado "version_antigua"
+en su directorio actual de Dokeos y luego mover todo dentro de este, usando un
+sencillo comando "mover" (ejem. en Linux: mkdir version_antigua; mv *
+version_antigua/), luego dar permisos de escritura al directorio version_antigua para el servidor web
+para que los directorios courses/ y upload/ puedan moverse desde la antigua instalacion a la nueva.<br />
+<br />
+El proceso completo es como sigue:
+<ul>
+  <li> mover los contenidos del directorio de Dokeos a un subdirectorio llamado 
+    <em>version_antigua</em> y darle permisos de escritura por el servidor web. Esto 
+es importante para permitir mover los directorios courses/ y upload/
+a la nueva instalacion</li>
+  <li> descargar el paquete de instalacion de Dokeos 1.8.6 desde la 
+    <a href="http://www.dokeos.com/en/node/33">pagina de descarga de Dokeos</a></li>
+  <li> descomprimir los nuevos archivos de Dokeos 1.8.6 en el directorio principal de Dokeos. El nuevo 
+directorio <em>principal</em> debe estar ubicado directamente dentro de su 
+carpeta raiz de Dokeos</li>
+  <li> apuntar su navegador a la URL de su portal</li>
+  <li> escoja su idioma y clic en&nbsp;<span style="font-style: italic;">Actualizar desde 1.6.x</span> y confirmar el
+directorio actual de la version antigua</li>
+</ul>
+
+<br />
+
+<em> NOTA: </em> La actualizacion desde 1.6.x a 1.8.x implica una revision de 
+los graficos y estilos personalizados. La nueva version usa un nuevo conjunto completo
+de iconos y estilos, lo cual significa que aquellos provenientes de la version 1.6 no pueden ser
+simplemente reusados. La buena noticia es que la version 1.8.x le permite crear
+su propio estilo en una carpeta css separada, la cual se puede reusar en 
+todas las versiones 1.8.x
+<br />
+
+<p></p>
+
+<p>
+<b>ADVERTENCIA:</b><br />
+
+No elimine el directorio de instalacion previo de Dokeos antes de instalar
+el nuevo. Usted puede remover la ruta antigua, cuando la actualizacion sea finalizada satisfactoriamente. 
+</p>
+
+
+<p>
+<b>NOTA:</b><br />
+
+No modifique los archivos de home_*.html directamente. En lugar de ello, 
+seleccione "Configurar la pagina de inicio" en la sección de administración de Dokeos.
+</p>
+
+<p>
+</p>
+<h3>3.3 En ambos casos</h3>
+
+Los siguientes directorios necesitan permisos de lectura, escritura y ejecución para el servidor web:
+<ul>
+  <li>dokeos/main/inc/conf/</li>
+  <li>dokeos/main/garbage/</li>
+  <li>dokeos/main/upload/users/</li>
+  <li>dokeos/main/default_course_document/</li>
+  <li>dokeos/archive/</li>
+  <li>dokeos/courses/</li>
+  <li>dokeos/home/</li>
+</ul>
+
+En Linux, Mac OS X y sistemas operativos BSD se puede arreglar rapidamente esto, mediante el uso
+del comando CHMOD 777, sin embargo si usted esta inseguro, nosotros le recomandamos que busque
+asistencia para su propio SO en <a href="http://www.dokeos.com/en/node/66">nuestro foro</a>.
+En Windows, quizas usted necesite revisar las propiedades de las carpetas.
+<p>
+</p>
+<h3>3.4 Guia de Actualizacion Rapida desde 1.6.x para Linux</h3>
+
+
+La siguiente guia de actualizacion rapida asume lo siguiente:
+<ul>
+  <li>el nombre de usuario de la base de datos de Dokeos (para MySQL) es "dokeos_db_user" y su acceso es "dokeos_user"</li>
+  <li>actualmente la instalacion de Dokeos esta en /var/www/dokeos/ y tiene permisos 777</li>
+  <li>la URL de su portal es http://www.portalurl.com/</li>
+</ul>
+
+<br />
+
+
+Escribir en la linea de comandos:
+<ul>
+  <li>cd /tmp</li>
+  <li>mysqldump -u dokeos_db_user -p --all-databases --result-file=/home/dokeos_user/dokeos_old.sql</li>
+  <li>cp -ra /var/www/dokeos /home/dokeos_user/backup_dokeos</li>
+  <li>mkdir /var/www/dokeos/version_antigua</li>
+  <li>mv /var/www/dokeos/* /var/www/dokeos/version_antigua/</li>
+  <li>chmod -R 0777 /var/www/dokeos/version_antigua/</li>
+  <li>wget http://www.dokeos.com/download/dokeos-1.8.6.tar.gz</li>
+  <li>tar zxvf dokeos-1.8.6.tar.gz</li>
+  <li>sudo cp -ra dokeos-1.8.6/* /var/www/dokeos/</li>
+  <li>rm dokeos-1.8.6.tar.gz</li>
+  <li>sudo rm -r dokeos-1.8.6/</li>
+</ul>
+
+<br />
+
+Luego:
+<ul>
+  <li>Direccionar su navegador web hacia http://www.portalurl.com/main/install/</li>
+  <li>Proceder con la instalación</li>
+  <li>Revisar los permisos de los directorios</li>
+</ul>
+
+<p></p>
+
+<p></p>
+
+
+<hr style="width: 100%; height: 2px;" />
+
+<h2><a name="4._Troubleshooting"></a>4. Solución de problemas</h2>
+
+
+<p>Si usted tiene problemas, ir al <a href="http://www.dokeos.com">Sitio Web de Dokeos</a> y haga una pregunta en el 
+<a href="http://www.dokeos.com/en/node/66">foro de soporte</a>. Por favor primero lea los mensajes previos para ver si existe ya
+una respuesta a su pregunta. Nosotros tambien mantenemos una lista de 
+<a href="http://www.dokeos.com/wiki/index.php/FAQ">Preguntas Frecuentes</a>.
+</p>
+
+
+<h2></h2>
+
+
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="5._Administration_section"></a>5. Sección de Administración</h2>
+
+<p>Para acceder a la sección de administracion de Dokeos, abra el navegador,
+dirijase a su direccion de Dokeos y acceda a el con el usuario admin.
+Luego usted vera un enlace a la "Seccion de administracion de la plataforma" en la parte superior
+de la pagina web. En ese lugar usted puede administrar usuarios, cursos, secciones, apariencia del portal
+contenido de la pagina principal, categorias de cursos, entre otros.</p>
+
+<p>
+</p>
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="6._LDAP"></a>6. LDAP</h2>
+
+<p>
+<i>Esta parte es opcional, solamente organizaciones con un servidor LDAP necesitan leer esto.</i><br />
+
+Un modulo LDAP esta ya provisto en Dokeos, pero tiene que ser configurado para hacerlo funcionar.
+</p>
+
+
+<h3><b>Compilar</b></h3>
+
+<p>
+Servidores Linux: Es posible que se requiera recompilar php con soporte ldap.
+Distribuciones nuevas tambien permiten descargar rpms para los paquetes adicionales.
+</p>
+
+
+<h3><b>Activar LDAP en Dokeos</b></h3>
+
+
+<p>
+En (la carpeta de dokeos)/main/inc/conf/configuration.php, aproximadamente en la line 90, se puede ver<br />
+
+//for new login module<br />
+
+//uncomment these to activate ldap<br />
+
+//$extAuthSource['ldap']['login'] = "./main/auth/ldap/login.php";<br />
+
+//$extAuthSource['ldap']['newUser'] = "./main/auth/ldap/newUser.php";<br />
+
+<br />
+
+remover // de las dos ultimas lineas para activar LDAP.<br />
+
+</p>
+
+
+<h3><b>Configuraciones</b></h3>
+
+<p>
+Solicitar al administrador del servidor LDAP los siguientes datos:
+</p>
+
+<ul>
+
+  <li>nombre del servidor ldap</li>
+
+  <li>puerto del servidor ldap (usualmente 389)</li>
+
+  <li>dc del ldap</li>
+
+</ul>
+Desde 1.8.5, usted tiene que cambiar las configuraciones de LDAP dentro del panel
+"Administración del Portal", bajo "Opciones de configuración de Dokeos", sección
+"LDAP".
+<br />
+
+Como ejemplo, usted debe encontrar tipos de valores como los siguientes:<br />
+
+Dirección principal del servidor LDAP: "miservidorldap.com";  // su servidor ldap<br />
+
+Puerto principal del servidor LDAP: 389;                 // su numero de puerto de su servidor ldap<br />
+
+dominio LDAP: "dc=xx, dc=yy, dc=zz"; //dominio<br />
+
+<br />
+
+
+<h3><b>Estado Profesor/Estudiante</b></h3>
+
+<p>
+De manera predeterminada, Dokeos revisará si el campo "employeenumber" tiene un valor. Si lo tiene, entonces Dokeos
+considerara que este usuario es profesor.<br />
+
+Si usted desea cambiar este comportamiento, usted puede editar main/auth/ldap/authldap.php, la función ldap_put_user_info_locally(),
+y cambiar la condición <em>if (empty($info_array[$tutor_field]))</em> a lo que encaje para usted.<br />
+
+Adicionalmente usted puede remover esta revisión, eliminando la condicion y dejando solamente la linea <em>$status = STUDENT;</em>
+</p>
+
+
+<h3><b>Servidores LDAP protegidos</b></h3>
+
+
+<p>
+Algunos servidores LDAP no permiten usos anonimos de los servicios del directorio.<br />
+En este caso, usted debe rellenar los campos apropiados en el 
+panel de administracion (ejm. "manager" y "mypassword") y Dokeos tratará
+de autenticarse usando esto, o volver al modo anonimo antes de darse por vencido.</p>
+
+
+<h3>Importar LDAP en sesiones</h3>
+
+<p>Existe un nuevo grupo de scripts que permiten ahora insertar usuarios
+desde LDAP directamente a una sesion de Dokeos. Sin embargo, esto se basa en un 
+conjunto de opciones estaticas en los atributos de contacto de LDAP.<br />
+
+Los campos usados intensivamente por el modulo de Dokeos son:<br />
+
+</p>
+
+<ul>
+
+	<li>uid, el cual encaja con el username en Dokeos</li>
+
+	<li>userPassword, el cual encaja con la contraseña del usuario, aunque
+esta parte solamente funcionara con contraseñas no encriptadas por ahora, pero no seria
+necesario si se usa el servidor LDAP para autenticación.</li>
+
+	<li>ou debe terminar con el año de registro de la persona o cualquier
+criterio que usted use para filtrar a los usuarios, de manera que ellos puedan ser obtenidos
+con ese criterio</li>
+
+	<li>sn es usadl como el campo lastname en Dokeos</li>
+
+	<li>givenName es usado como el campo firstname en Dokeos</li>
+
+	<li>mail es usado como el campo email en Dokeos</li>
+
+</ul>
+
+
+<hr style="width: 100%; height: 2px;" />
+
+<h2><a name="7._Oogie_PowerPoint__Impress_conversion"></a>7. Conversión Oogie PowerPoint / Impress</h2>
+
+<i>Esta parte es opcional, solamente organizaciones que esperan convertir documentos Office para metodos de aprendizaje, quizas deseen leer esta parte.</i><br />
+
+Oogie convierte sus presentaciones provenientes de Ms-Office y OpenOffice.org en e-courses SCORM estandarizados o&nbsp;<span style="font-style: italic;">metodos de aprendizaje</span>.
+Esta caracteristica necesita OpenOffice.org para convertir las diapositivas y RED5 (opcional)
+para grabar su voz sobre las diapositivas usando un grabador de audio basado en Flash.<br />
+
+
+<br />
+
+
+<h3>7.1. Conversión PowerPoint / Impress </h3>
+
+
+<ul>
+
+  <li>Instalar OpenOffice.org</li>
+
+  <li>Editar el archivo Setup.xcu de OpenOffice.org </li>
+
+</ul>
+
+
+<div class="code">En algunas computadoras Windows, se localizan en: <span style="font-weight: bold;">C:\Archivos de Programa\OpenOffice.org 2.2\share\registry\data\org\openoffice\Setup.xcu</span><br />
+
+En algunas computadoras Linux, se localizan en: <span style="font-weight: bold;">/usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu</span>
+</div>
+
+
+<br />
+
+Y agregar el siguiente codigo <br />
+
+<div class="code">&lt;prop oor:name="ooSetupConnectionURL"&gt;<br />
+
+&lt;value&gt;<br />
+
+socket,host=localhost,port=2002;urp;StarOffice.ServiceManager<br />
+
+&lt;/value&gt;<br />
+
+&lt;/prop&gt;
+</div>
+
+<br />
+
+
+... exactamente debajo de estas lineas<br />
+
+
+&nbsp;<br />
+
+
+<div class="code">&lt;prop oor:name="ooSetupInstCompleted"&gt;<br />
+
+&lt;value&gt;false&lt;/value&gt;<br />
+
+&lt;/prop&gt;</div>
+
+Ingrese a su portal de Dokeos en la web &gt; <span style="font-style: italic;">Sección administración &gt;&nbsp; Configuracion de Servicios &gt; Oogie </span>y escribir :<br />
+ 
+<div class="code">
+<span style="font-weight: bold;">Host : </span>localhost<br /><span style="font-weight: bold;">Port</span> : 2002<br /><span style="font-weight: bold;">Username</span> : (dejar vacio si OpenOffice.org se ejecuta en una maquina servidor web)<br /><span style="font-weight: bold;">FTP password</span> : (dejar vacio si OpenOffice.org se ejecuta en una maquina servidor web)<br />
+
+      <span style="font-weight: bold;">Path to LZX Files</span>: /main/webrooms/recorder.swf<br /><span style="font-weight: bold;">Size of the slides </span>: 800x600 
+(tan grande como sus clientes usen, por lo general una resolución de pantalla de 1024x768)<br /></div>
+
+
+<ul>
+
+  <li>Iniciar OpenOffice.org. La conversión solo funciona si este software esta iniciado y ejecutandose. Revisar la pagina wiki&nbsp;<a href="http://www.dokeos.com/wiki/index.php/MakeOOOListening">MakeOOOListening</a> para iniciar OpenOffice.org como un servicio.</li>
+
+  <li>Probar la conversión : crear un curso &gt; entrar al curso &gt;
+Modos de Aprendizaje &gt; conversión PowerPoint. Si las diapositivas estan convertidas,
+entonces OpenOffice.org esta atendiendo a Dokeos.&nbsp;</li>
+
+</ul>
+
+
+<span style="font-weight: bold;">NOTA</span> : durante la conversión,
+usted debe ver una barra de progreso con un porcentaje. Si usted solamente ve 
+una animacion GIF predeterminada de una barra de progreso sin porcentaje, entonces
+deberia instalar la biblioteca PECL para PHP. <br />
+<br />
+<span style="font-weight: bold;">NOTA</span> : En servidores Linux, probablemente quiera hacer un <span style="font-weight: bold;">$ sudo apt-get install msttcorefonts</span> para instalar los tipos de letras de Microsoft. Esto dara a la conversión PowerPoint un mejor renderizado. <br />
+
+<br />
+
+<span style="font-weight: bold;"><br />
+</span>
+		  
+<h3>7.2.&nbsp;Grabador de Audio</h3>
+Ver debajo : Videoconferencia<br />
+<br />
+
+		  
+<hr style="width: 100%; height: 2px;" />
+
+<h2><a name="8._Videoconferencing_and_audio-recorder"></a>8. Videoconferencia y grabador de audio</h2>
+
+<i>Esta parte es opcional, solamente las organizaciones que deseen usar la caracteristica de videoconferencia quedran leer esto.</i><br />
+
+Nosotros ahora instalaremos y configuraremos RED5 Servidor de Flash de Codigo Abierto : la aplicación web RED5 de Dokeos. Esto proveera ambos <br />
+<ul>
+  <li>Videoconferencia y</li>
+  <li>Grabador de audio para Oogie</li>
+</ul>
+
+Oogie permite convertir diapositivas, pero tambien <br />
+
+<ul>
+
+  <li>agrega pruebas, paginas y actividades entre las diapositivas, gracias al constructor de metodos de aprendizaje</li>
+
+  <li>obtener reportes SCORM gracias a la herramienta de metodos de aprendizaje</li>
+
+  <li>agregar audio sobre las diapositivas gracias al grabador de audio en linea</li>
+
+</ul>
+<span style="font-weight: bold;">NOTA</span>&nbsp;: los procesos
+de instalación previos para esta parte eran muy complejos. La configuración entera
+ha sido considerablemente simplificada. Por favor ignorar cualquier documentación previa
+del mismo tema.
+ <br />
+<br />
+<br />
+Quizas usted desee usar las ventajas del grabador de audio y de la videoconferencia. Para esto :<br />
+
+
+<ul>
+
+  <li>Descargar e instalar <a href="http://osflash.org/red5"> el servidor Flash de codigo abierto RED5 versión 0.6.x</a> (usted encontrará paquetes para Linux y un instalador para Windows en el sitio web de RED 5)</li>
+
+  <li>Descargar <a href="http://www.dokeos.com/maven/repository/com/dokeos/dokeos-recorder/2.0.0-M2/dokeos-recorder-2.0.0-M2.war">la aplicación Dokeos-recorder RED5</a></li>
+
+  <li>Renombrarla a "dokeos-recorder.war" y copiarla dentro del directorio <span style="font-style: italic;">webapps</span> de su instalación de RED5.&nbsp;Windows : Directorio objetivo puede ser C:/Archivos de programa/Red5/webapps/ .
+Linux con Nautilus o a traves de una consola de comandos : cp dokeos-recorder.war /usr/lib/red5/webapps (cuando RED5 es instalado median el uso del paquete de Debian)</li>
+  <li>Tambien descargar <a href="http://www.dokeos.com/maven/repository/com/dokeos/dokeos-videoconf/2.0.0-M2/dokeos-videoconf-2.0.0-M2.war">la aplicación Dokeos-videoconf RED5</a></li> 	 
+	  	 
+  <li>Renombrarla a "dokeos-videoconf.war" y copiarla dentro del directorio <span style="font-style: italic;">webapps</span> de su instalación de RED5.&nbsp;Windows : Directorio objetivo puede ser C:/Archivos de programa/Red5/webapps/ . 	 
+	 Linux con Nautilus o a traves de una consola de comandos : cp dokeos-videoconf.war /usr/lib/red5/webapps</li>
+	 
+  <li>Crear un archivo de configuración XML para Red5 (ejm. Linux: sudo
+mkdir /etc/dokeos/; sudo gedit /etc/dokeos/videoconference-config.xml)</li>
+
+  <li>Insertar la configuración de la siguiente manera:</li>
+
+</ul>
+
+  
+<div class="code">
+<pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br />  &lt;videoconference-config&gt;<br />    &lt;server-keys&gt;<br />      &lt;server-key host="dokeos.domain.com_" key="PaSSw0rd" /&gt;<br />      &lt;server-key host="www.domain.com_dokeos_" key="p4ssWoRD" /&gt;<br />    &lt;/server-keys&gt;<br />    &lt;moderator-check-on-whiteboard&gt;false&lt;/moderator-check-on-whiteboard&gt;<br />    &lt;video-streams-dir&gt;/opt/dokeos/recorded-streams&lt;/video-streams-dir&gt;<br />    &lt;vod-streams-dir&gt;/opt/dokeos/vod-streams&lt;/vod-streams-dir&gt;<br />  &lt;/videoconference-config&gt;</pre>
+</div>
+En este archivo, usted al menos necesitara poner una linea de llave de servidor por portal.
+En el ejemplo siguiente nosotros autorizamos portales instalados en las URLs:
+
+<ul>
+  <li>http://dokeos.domain.com/</li>
+  <li>http://www.domain.com/dokeos/</li>
+</ul>
+
+
+El caracter "_" al final de cada URL es importante, usted no debe olvidarlo.<br />
+
+<h4>Recargar Red5</h4>
+
+
+Reiniciar Red5 para recargar el archivo de configuración y la nueva aplicación mediante el uso, en Ubuntu o Debian:
+<div class="code">
+/etc/init.d/red5 restart
+</div>
+
+	
+<h4>Mayor información de RED5 + Dokeos</h4>
+
+	Por favor visite esta página : <a href="http://www.dokeos.com/wiki/index.php/Installing_videoconference_2.0">http://www.dokeos.com/wiki/index.php/Installing_videoconference_2.0</a><br />
+<br />
+
+
+<h4>Configuración de su plugin de Videoconferencia de dokeos</h4>
+
+La configuraciñón del plugin de videoconferencia se realiza mediante las paginas de administración de 
+la configuración de Dokeos en la sección de administración de la plataforma Dokeos, "Configurar los servicios",
+"Videoconferencia"<br />
+<br />
+
+Se le solicitaran 4 cosas
+	
+<ul>
+
+		<li>el nombre del host o la dirección IP de su servidor Red5 (ejm. red5.miservidor.com)</li>
+
+		<li>el puerto (el puerto predeterminado es 1935 y nosotros le recomendamos que lo deje como tal)</li>
+
+		<li>la contraseña (la cual fue configurada en el archivo de configuración de red5)</li>
+
+		<li>si usted usa rtmpt o no (util para pasar a traves de cortafuegos pero lento). Para usar esta opción, usted tendra que configurar red5 para que pueda escucharse en el puerto 80. Ver <a href="http://www.dokeos.com/wiki/index.php/Installing_videoconference_2.0">http://www.dokeos.com/wiki/index.php/Installing_videoconference_2.0</a></li>
+
+	
+</ul>
+
+<br />
+Eso es todo! Clic en "Reconfigurar extensión" y sus cursos estarán equipados
+con dos enlaces adicionales hacia sus salas de videoconferencia...<br />
+
+
+
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="9._Mathematical_formulas"></a>9. Formulas Matemáticas con LaTeX</h2>
+		  
+<i>Esta parte es opcional, solo las organizaciones que deseen usar formulas matemáticas dentro del editor en linea podran querer leer esto.</i><br />
+
+Usted puede habilitar la escritura de ecuaciones matemáticas dentro del editor en linea de Dokeos (FCKEditor) aplicando los siguientes pasos:
+<ul>
+
+	<li>1. Configurar su instalación de Apache para agregar un directorio cgi-bin que contenga un enlace simbólico a mimetex.cgi en <i>dokeos/main/inc/lib/mimetex/</i>(*ver debajo)</li>
+
+	<li>2. Recargar su configuración de Apache</li>
+
+	<li>3. Editar <i>dokeos/main/inc/lib/fckeditor/myconfig.js</i> y
+		
+    <ul>
+
+			<li>3.1. Agregar <b>FCKConfig.Plugins.Add("mimetex", "en", sOtherPluginPath ) ;</b> al final del archivo</li>
+
+			<li>3.2. Agregar <b>'mimetex'</b> al final de las lineas
+FCKConfig.ToolbarSets donde usted desee que el icono de LaTeX aparezca
+(existe un FCKConfig.ToolbarSets por herramienta). Por ejemplo:
+        <div class="code">FCKConfig.ToolbarSets["Test"] = [<br />
+['Bold','Italic','Underline','StrikeThrough','Subscript','Superscript','Link','Unlink','ImageManager','MP3','OrderedList','UnorderedList','Table','mimetex']<br />
+
+] ;</div>
+
+				Usted puede agregarlo a todas las herramientas, o solamente a las herramientas de documentos y pruebas, por ejemplo<br />
+        <br />
+
+			</li>
+
+		
+    </ul>
+
+		</li>
+
+	<li>4. Para servidores Windows solamente, actualizar <i>dokeos/main/inc/lib/fckeditor/editor/plugins/mimetex/mimetex.html</i> para reemplazar <b>mimetex.cgi</b> por <b>mimetex.exe</b></li>
+
+	<li>5. Limpiar la cache de su navegador para probarlo (muy importante). Esto se puede hacer mediante el uso de la página de configuraciones de su navegador</li>
+
+</ul>
+
+<i>Agregar el directorio cgi-bin correspondiente a su configuración de Apache puede ser lograda de esta manera, en Apache 2:</i>
+	
+<div class="code">
+		  ScriptAlias /cgi-bin/ /var/www/cgi-bin/<br />
+
+  &lt;Directory "/var/www/cgi-bin"&gt;<br />
+
+        &nbsp;&nbsp;AllowOverride None<br />
+
+        &nbsp;&nbsp;Options ExecCGI -MultiViews +SymLinksIfOwnerMatch<br />
+
+        &nbsp;&nbsp;Order allow,deny<br />
+
+        &nbsp;&nbsp;Allow from all<br />
+
+  &lt;/Directory&gt;<br />
+
+	</div>
+
+
+<i>Agregar un enlace simbólico bajo Windows, puede ser logrado mediante la creación de un 
+acceso directo al archivo mimetex.exe desde el directorio cgi-bin, o bajo
+Linux usando el siguiente comando:</i>
+	
+<div class="code">ln -s /var/www/dokeos/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</div>
+Este procedimiento creará un nuevo icono disponible en su editor en linea de Dokeos
+, el cual hara posible la inserción de formulas matemáticas en sus documentos.<br />
+<br />
+
+
+				  
+<br />
+<br />
+
+Dirección de Contacto: Dokeos, Rue du Corbeau, 108, B-1030 Brussels, Belgium<br />
+
+Correo: info@dokeos.com<br />
+
+Tel. +32 (0)2 669 69 55<br />
+<br />
+
+<hr />
+</div>
+
+</div>
+
+<hr />
+    <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
+	<a href="http://jigsaw.w3.org/css-validator/">
+		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
+	</a>
+</body>
+</html>

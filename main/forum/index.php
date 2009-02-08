@@ -74,6 +74,7 @@ $this_section=SECTION_COURSES;
 api_protect_course_script(true);
 
 // including additional library scripts
+require_once(api_get_path(LIBRARY_PATH).'/text.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 $nameTools=get_lang('Forums');
@@ -145,6 +146,8 @@ $form_count=0;
 */
 $get_actions=isset($_GET['action']) ? $_GET['action'] : '';
 if (api_is_allowed_to_edit(false,true)) {
+	$fck_attribute['Width'] = '98%';
+	$fck_attribute['Height'] = '200';
 	$fck_attribute['ToolbarSet'] = 'ForumLight';
 	handle_forum_and_forumcategories();
 }

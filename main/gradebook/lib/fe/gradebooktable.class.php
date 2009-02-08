@@ -51,10 +51,11 @@ class GradebookTable extends SortableTable
 		$column= 0;
 		if (api_is_course_tutor() && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++,'','','width="25px"');
-		}	
+		}
 		$this->set_header($column++, get_lang('Type'),'','width="35px"');
 		$this->set_header($column++, get_lang('Name'));
 		$this->set_header($column++, get_lang('Description'));
+		
 		if (api_is_course_tutor() && api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++, get_lang('Weight'),'','width="50px"');	
 		} else {
@@ -127,7 +128,12 @@ class GradebookTable extends SortableTable
 		} else {
 			$sorting |= GradebookDataGenerator :: GDG_SORT_ASC;
 		}
-		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);		
+		//status de user in course
+	    $user_id=api_get_user_id();
+		$course_code=api_get_course_id();
+		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
+		
+		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);	
 		// generate the data to display
 		$sortable_data = array();
 		foreach ($data_array as $data) {
@@ -191,7 +197,7 @@ class GradebookTable extends SortableTable
 				
 			} else {
 			//students get the results and certificates columns
-				if (count($this->evals_links)>0) {
+				if (count($this->evals_links)>0 || $status_user!=1) {
 					$value_data=isset($data[5]) ? $data[5] : null;
 					$row[] = $value_data;
 				}

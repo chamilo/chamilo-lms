@@ -100,6 +100,10 @@ class GradebookDataGenerator
 		}
 		// get selected items
 		$visibleitems = array_slice($allitems, $start, $count);
+		//status de user in course
+	    $user_id=api_get_user_id();
+		$course_code=api_get_course_id();
+		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
 		// generate the data to display
 		$data = array();
 		foreach ($visibleitems as $item) {
@@ -111,7 +115,7 @@ class GradebookDataGenerator
 			$row[] = $this->build_date_column ($item);
 			
 			if(count($this->evals_links)>0)
-				if (!api_is_allowed_to_create_course())
+				if (!api_is_allowed_to_create_course() || $status_user!=1)
 					$row[] = $this->build_result_column ($item, $ignore_score_color);
 					//$row[] = $this->get_certificate_link ($item);
 					$data[] = $row;

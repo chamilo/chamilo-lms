@@ -2,6 +2,9 @@
  *	Dokeos - elearning and course management software
  *
  *	Copyright (c) 2008-2009 Dokeos SPRL
+ *	Copyright (c) 2008-2009 Julio Montoya
+ *	Copyright (c) 2008-2009 Juan Carlos Raña
+ *	Copyright (c) 2008-2009 Ivan Tcholakov
  *
  *	For a full list of contributors, see "credits.txt".
  *	The full license can be read in "license.txt".
@@ -17,10 +20,10 @@
  * Mail: info@dokeos.com
  */
 
-FCKConfig.IMUploadPath = '';
-FCKConfig.FlashUploadPath = '' ;
-FCKConfig.AudioUploadPath = '' ;
-FCKConfig.UserStatus = 'teacher' ;
+
+/*
+ * Editor's toolbar definitions.
+ */
 
 FCKConfig.ToolbarSets["Question"] = [
 	['Source','DocProps','-','NewPage','Preview','-'],
@@ -122,83 +125,224 @@ FCKConfig.ToolbarSets["Wiki"] = [
 	['Source']
 ] ;
 
-// At this moment of loading editor's scripts the setting FCKConfig.AdvancedFileManager
-// has not been read yet from the php-integration file. 
-// However we are able to detect which file manager will be used in another way.
-// The following property has pure boolean type: true/false.
+
+/*
+ * Toolbar drop-down lists customizations.
+ */
+
+// Reduction of the format list.
+FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
+
+
+/*
+ * Helper variables.
+ */
+
+// At this moment of loading editor's javascripts, the setting FCKConfig.AdvancedFileManager
+// has not been read yet from the php-integration file. We are able to detect which file manager
+// will be used in another way. The following property has pure boolean type: true/false.
 FCK.AdvancedFileManager = FCKConfig.PageConfig.AdvancedFileManager ;
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;
 
-// Plugins
 
-//Added by Ivan Tcholakov, 18-DEC-2008.
+/*
+ * Plugins.
+ * If you want to add a non-existing language code in some of the pligin
+ * declarations, it is mandatory a corresponding language file to be opened
+ * in the plugin's "lang" directory.
+ */
+
+// The "customizations" plugin modifies some internal functionalities of the editor.
+// It should be loaded before the other plugins.
 FCKConfig.Plugins.Add('customizations', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
+
+// These plugins improve table-operations.
 FCKConfig.Plugins.Add('dragresizetable') ;
 FCKConfig.Plugins.Add('tablecommands') ;
 
-/*
-FCKConfig.Plugins.Add("Video", "en", sOtherPluginPath ) ;
-FCKConfig.Plugins.Add("Attachment", "en", sOtherPluginPath ) ;*/
+// Insertion of audio files.
+FCKConfig.Plugins.Add('MP3', 'en', sOtherPluginPath ) ;
 
-// added by Julio Montoya
-FCKConfig.Plugins.Add("MP3", "en", sOtherPluginPath ) ;
+// Another dialog for insertion audio files.
+// If you wish to use it, disable the "MP3" plugin first.
 //FCKConfig.Plugins.Add('audio', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
-FCKConfig.Plugins.Add('ImageManager','en') ;
-FCKConfig.Plugins.Add('flvPlayer','en') ;
-//FCKConfig.Plugins.Add("Flash", "en");
-FCKConfig.Plugins.Add('fckEmbedMovies');
 
-// added by Juan Carlos Raï¿½a
-FCKConfig.Plugins.Add("mimetex", "en", sOtherPluginPath ) ;
-FCKConfig.Plugins.Add("wikilink", "en,es", sOtherPluginPath ) ;
-FCKConfig.Plugins.Add("imgmap", "en,es", sOtherPluginPath );
-FCKConfig.Plugins.Add("googlemaps", "en,es", sOtherPluginPath ) ;
+// A specialised browser/editor for images.
+if (!FCK.AdvancedFileManager)
+{
+	// It is not needed in advanced file manager mode.
+	FCKConfig.Plugins.Add('ImageManager','en,de,fr,nl,no,pl,ru,sv') ;
+}
+
+// This is the old flash plugin. Now the editor has built-in flash dialog.
+//FCKConfig.Plugins.Add('Flash', 'en');
+
+// Embeding of video files.
+FCKConfig.Plugins.Add('fckEmbedMovies', 'en');
+
+// Insertion of flv video.
+FCKConfig.Plugins.Add('flvPlayer', 'en,br,de,fi,fr,ru,sv') ;
+
+// Insertion of video streams, YouTube service.
+FCKConfig.Plugins.Add('youtube', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
+
+// Insertion of digital maps, GoogleMaps service.
+FCKConfig.Plugins.Add('googlemaps', 'en,de,es,fr,it,nl') ;
 // This key is for http://localhost. You must get one for each server where you want to use the plugin,
 // just get the key for free here after agreeing to the Terms of Use of the GoogleMaps API:
 // http://www.google.com/apis/maps/signup.html. // If you leave an empty string then the toolbar icon won't be shown.
 FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSy5hTGQdsosYD3dz6faZHVrO-02A';
 
-//Added by Ivan Tcholakov, 19-DEC-2008.
-FCKConfig.Plugins.Add('youtube', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
+// Insertion of mathematical formulas.
+// Before enabling the "mimetex" plugin, preliminary changes in server
+// configuration have to be done. See the installation guide.
+FCKConfig.Plugins.Add('mimetex', 'en,de,es,fr') ;
 
-// reduce format list
-FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
+// Insertion of wiki-formated links.
+FCKConfig.Plugins.Add('wikilink', 'en,es') ;
 
-/////////////////////////////////////////////////////////////////////// moved from fckconfig.js
+// A dialog for assigning hyperlinks to specified image areas.
+FCKConfig.Plugins.Add('imgmap', 'en,es');
 
+
+/*
+ * Settings for browsing the server.
+ */
+
+// For all acceptable types of resources (files).
+
+// true/false to enable/disable the browser.
 FCKConfig.LinkBrowser = true ;
-FCKConfig.LinkBrowserWindowWidth	= 782;
-FCKConfig.LinkBrowserWindowHeight	= 490;
 
+// Browser window sizes.
+FCKConfig.LinkBrowserWindowWidth	= 782 ;
+FCKConfig.LinkBrowserWindowHeight	= 490 ;
+
+// For images.
+
+// true/false to enable/disable the browser.
 FCKConfig.ImageBrowser = true ;
-FCKConfig.ImageBrowserWindowWidth  = 782;
-FCKConfig.ImageBrowserWindowHeight = 490;
 
+// Browser window sizes.
+FCKConfig.ImageBrowserWindowWidth   = 782 ;
+FCKConfig.ImageBrowserWindowHeight  = 490 ;
+
+// Upload path for the Image manager. Leave it empty.
+FCKConfig.IMUploadPath = '' ;
+
+// For flash objects.
+
+// true/false to enable/disable the browser.
 FCKConfig.FlashBrowser = true ;
-FCKConfig.FlashBrowserWindowWidth  = 782;
-FCKConfig.FlashBrowserWindowHeight = 490;
 
-FCKConfig.MediaBrowser = true ;
-FCKConfig.MediaBrowserWindowWidth = 782;
-FCKConfig.MediaBrowserWindowHeight= 490;
+// Browser window sizes.
+FCKConfig.FlashBrowserWindowWidth   = 782 ;
+FCKConfig.FlashBrowserWindowHeight  = 490 ;
 
+// For audio files.
+
+// true/false to enable/disable the browser.
 FCKConfig.MP3Browser = true ;
-FCKConfig.MP3BrowserWindowWidth  = 782;
-FCKConfig.MP3BrowserWindowHeight = 490;
 
+// Browser window sizes.
+FCKConfig.MP3BrowserWindowWidth     = 782 ;
+FCKConfig.MP3BrowserWindowHeight    = 490 ;
+
+// For video files.
+
+// true/false to enable/disable the browser.
+FCKConfig.VideoBrowser = true ;
+
+// Browser window sizes.
+FCKConfig.VideoBrowserWindowWidth   = 782 ;
+FCKConfig.VideoBrowserWindowHeight  = 490 ;
+
+// For video (flv) files.
+
+// true/false to enable/disable the browser.
+FCKConfig.MediaBrowser = true ;
+
+// Browser window sizes.
+FCKConfig.MediaBrowserWindowWidth   = 782 ;
+FCKConfig.MediaBrowserWindowHeight  = 490 ;
+
+
+/*
+ * Settings for direct uploads on the server, without using browsers.
+ * Some of the editor's dialogs have quick-upload tabs for this purpose.
+ */
+
+// For all acceptable types of resources (files).
+
+// true/false to enable/disable the quick-upload tab.
 FCKConfig.LinkUpload = true ;
-FCKConfig.LinkUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension ;
+
+// To be moved in the php-integration file.
 FCKConfig.LinkUploadAllowedExtensions	= ".(7z|aiff|asf|avi|bmp|csv|doc|fla|flv|gif|gz|gzip|jpeg|jpg|mid|mov|mp3|mp4|mpc|mpeg|mpg|ods|odt|pdf|png|ppt|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|sdc|sitd|swf|sxc|sxw|tar|tgz|tif|tiff|txt|vsd|wav|wma|wmv|xls|xml|zip)$" ;			// empty for all
-FCKConfig.LinkUploadDeniedExtensions	= "" ;	// empty for no one
+FCKConfig.LinkUploadDeniedExtensions	= "" ;
 
+// For images.
+
+// true/false to enable/disable the quick-upload tab.
 FCKConfig.ImageUpload = true ;
-FCKConfig.ImageUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension + '?Type=Image' ;
-FCKConfig.ImageUploadAllowedExtensions	= ".(jpg|gif|jpeg|png|bmp)$" ;		// empty for all
-FCKConfig.ImageUploadDeniedExtensions	= "" ;							// empty for no one
 
+// To be moved in the php-integration file.
+FCKConfig.ImageUploadAllowedExtensions	= ".(jpg|gif|jpeg|png|bmp)$" ;
+FCKConfig.ImageUploadDeniedExtensions	= "" ;
+
+// For flash objects.
+
+// true/false to enable/disable the quick-upload tab.
 FCKConfig.FlashUpload = true ;
 
+// To be moved in the php-integration file.
+FCKConfig.FlashUploadAllowedExtensions	= ".(swf)$" ;
+FCKConfig.FlashUploadDeniedExtensions	= "" ;
+
+// For audio files.
+
+// true/false to enable/disable the quick-upload tab.
 FCKConfig.MP3Upload = true ;
-FCKConfig.MP3UploadAllowedExtensions	= ".(mp3)$" ;		// empty for all
-FCKConfig.MP3UploadDeniedExtensions	= "" ;					// empty for no one
+
+// To be moved in the php-integration file.
+FCKConfig.MP3UploadAllowedExtensions	= ".(mp3)$" ;
+FCKConfig.MP3UploadDeniedExtensions	= "" ;
+
+// For video files.
+
+// true/false to enable/disable the quick-upload tab.
+FCKConfig.VideoUpload = true ;
+
+// To be moved in the php-integration file.
+FCKConfig.VideoUploadAllowedExtensions	= ".(mpg|mpeg|mp4|avi|wmv|mov|asf)$" ;
+FCKConfig.VideoUploadDeniedExtensions	= "" ;
+
+// For video (flv) files.
+
+// true/false to enable/disable the quick-upload tab.
+FCKConfig.MediaUpload = true ;
+
+// To be moved in the php-integration file.
+FCKConfig.MediaUploadAllowedExtensions	= ".(flv)$" ;
+FCKConfig.MediaUploadDeniedExtensions	= "" ;
+
+
+/*
+ * Alternative settings for the advanced file manager mode.
+ */
+
+// If you wish to alter some of the settings above and to make them
+// specific for the advanced file manager mode, you may do this within
+// the following "if" block.
+if (FCK.AdvancedFileManager)
+{
+
+}
+
+
+/*
+ * Other settings.
+ */
+
+FCKConfig.UserStatus = 'teacher' ;

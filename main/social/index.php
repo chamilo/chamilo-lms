@@ -103,6 +103,7 @@ function set_qualify_friend() {
 			data: "user_id_friend_q="+user_id_friend+"&type_friend_q="+type_friend,
 			success: function(datos) {
 			alert(datos);
+			clear_form();
 			}
 		});
 	}
@@ -136,6 +137,11 @@ function search_image_social(element_html)  {
 			$("div#div_content_table").html(datos);
 		}
 	});
+}
+function clear_form () {
+$("input[@type=radio]").attr("checked", false);
+$("div#div_qualify_image").html("");
+$("div#div_info_user").html("");
 }
 </script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';

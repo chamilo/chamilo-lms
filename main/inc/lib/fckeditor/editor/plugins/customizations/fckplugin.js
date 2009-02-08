@@ -1068,11 +1068,12 @@ FCK.IsRealImage = function ( tag )
 		return false ;
 	}
 
-	return ( tag.nodeName.IEquals( 'img' ) &&
-		!tag.getAttribute( '_fckfakelement' ) &&
-		!tag.getAttribute( '_fckflash' ) &&
-		!tag.getAttribute( '_fckmp3' ) &&
-		!tag.getAttribute( '_fckvideo' )
+	return ( tag.nodeName.IEquals( 'img' )
+		&& !tag.getAttribute( '_fckfakelement' )
+		&& !tag.getAttribute( '_fckflash' )
+		&& !tag.getAttribute( '_fckmp3' )
+		&& !tag.getAttribute( '_fckvideo' )
+		&& !tag.getAttribute( 'MapNumber' )
 		) ? true : false ;
 } ;
 

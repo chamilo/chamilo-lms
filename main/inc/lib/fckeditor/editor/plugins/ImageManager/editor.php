@@ -19,7 +19,7 @@ $editor = new ImageEditor($manager, $IMConfig);
 
 <html>
 <head>
-<title>edit image</title>
+<title>Edit image</title>
 <link href="assets/editor.css" rel="stylesheet" type="text/css" />	
 
 <script type="text/javascript">
@@ -187,13 +187,13 @@ $editor = new ImageEditor($manager, $IMConfig);
 	<div id="tools_rotate" style="display:none;">
 		<div id="tool_inputs">
 			<select id="flip" name="flip" style="margin-left: 10px; vertical-align: middle;">
-              <option selected>Flip Image</option>
+              <option selected="selected">Flip Image</option>
               <option>-----------------</option>
               <option value="hoz">Flip Horizontal</option>
-              <option value="ver">Flip Virtical</option>
+              <option value="ver">Flip Vertical</option>
          </select>
 			<select name="rotate" onchange="rotatePreset(this)" style="margin-left: 20px; vertical-align: middle;">
-              <option selected>Rotate Image</option>
+              <option selected="selected">Rotate Image</option>
               <option>-----------------</option>
 
               <option value="180">Rotate 180 &deg;</option>
@@ -298,7 +298,7 @@ $editor = new ImageEditor($manager, $IMConfig);
 	</div>
 </div>
 <div id="contents">
-<div id="messages" style="display: none;"><span id="message"></span><img SRC="img/dots.gif" width="22" height="12" alt="..." /></div>
+<div id="messages" style="display: none;"><span id="message"></span><img src="img/dots.gif" width="22" height="12" alt="..." /></div>
 <iframe src="editorFrame.php?img=<?php if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>" name="editor" id="editor" scrolling="auto" title="Image Editor" frameborder="0"></iframe>
 </div>
 <div id="bottom"></div>

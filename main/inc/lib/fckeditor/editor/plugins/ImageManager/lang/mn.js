@@ -1,8 +1,9 @@
+﻿// Please, use UTF-8 encoding.
+
 // I18N constants
 
-// LANG: "sv", ENCODING: UTF-8
-// Author: Erik Dalén, <dalen@jpl.se>
-// Updated for FCKeditor by: Paul Moers, http://www.saulmade.nl/FCKeditor/FCKPlugins.php
+// LANG: "mn", ENCODING: UTF-8
+// Author:
 
 // FOR TRANSLATORS:
 //
@@ -13,10 +14,10 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-if (!this.ImageManager)
+if ( !this.ImageManager )
 {
-	ImageManager = new Object();
-};
+	ImageManager = new Object() ;
+} ;
 
 ImageManager.I18N = {
 
@@ -25,7 +26,7 @@ ImageManager.I18N = {
 	"Demo"                        : "Demo",
 	"Replace"                     : "Replace",
 	"Watermark"                   : "Watermark",
-	"Image Manager"               : "Bildbehandlare",
+	"Image Manager"               : "Image Manager",
 	"Insert Image"                : "Insert Image",
 	"Directory"                   : "Directory",
 	"Directory Up"                : "Directory Up",
@@ -44,7 +45,7 @@ ImageManager.I18N = {
 	"H Space"                     : "H Space",
 	"Refresh"                     : "Refresh",
 	"Uploading..."                : "Uploading...",
-	"Crop"                        : "Beskjär",
+	"Crop"                        : "Crop",
 	"Resize"                      : "Resize",
 	"Rotate"                      : "Rotate",
 	"Measure"                     : "Measure",

@@ -100,5 +100,23 @@ ImageManager.I18N = {
 	"Invalid folder name, please choose another folder name."									: "Foutieve foldernaam, kies a.u.b. een andere foldernaam.",
 	"GIF format is not supported, image editing not supported."								: "GIF formaat wordt niet ondersteund, afbeelding bewerken wordt niet ondersteund.",
 	"Please do not close the window while uploading a new image! If you do, the original image gets deleted!" : "Sluit het venster a.u.b. niet af tijdens het uploaden! Wanneer u toch het venster sluit zal de originele afbeelding verwijderd worden.",
-	"Error: Couldn't update editor window.\nAny image that was edited and saved will still be visible as the old version!\nPlease save and reload the editor content." : "Fout: Kon het editor scherm niet up-to-date brengen.\nElke bewerkte afbeelding zal nog steeds getoond worden als de oude versie!\nBewaar a.u.b. de editor inhoud en herlaadt."
+	"Error: Couldn't update editor window.\nAny image that was edited and saved will still be visible as the old version!\nPlease save and reload the editor content." : "Fout: Kon het editor scherm niet up-to-date brengen.\nElke bewerkte afbeelding zal nog steeds getoond worden als de oude versie!\nBewaar a.u.b. de editor inhoud en herlaadt.",
+
+	"Edit image"                  : "Edit image",
+	"Alt"                         : "Alt",
+	"Align"                       : "Align",
+	"Not Set"                     : "Not Set",
+	"Left"                        : "Left",
+	"Right"                       : "Right",
+	"Texttop"                     : "Text Top",
+	"Absmiddle"                   : "Abs Middle",
+	"Baseline"                    : "Baseline",
+	"Absbottom"                   : "Abs Bottom",
+	"Bottom"                      : "Bottom",
+	"Middle"                      : "Middle",
+	"Top"                         : "Top",
+
+	"OK"                          : "OK",
+	"Cancel"                      : "Cancel"
+ 
 };

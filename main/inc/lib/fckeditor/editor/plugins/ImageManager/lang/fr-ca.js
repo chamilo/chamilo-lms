@@ -1,6 +1,6 @@
 // I18N constants
 
-// LANG: "fr", ENCODING: UTF-8
+// LANG: "fr-ca", ENCODING: UTF-8
 // Author: Thierry Bothorel (update)
 // $Id: fr.js,v 1.2 2006/12/17 11:46:48 thierrybo Exp $
 // Updated for FCKeditor by: Paul Moers, http://www.saulmade.nl/FCKeditor/FCKPlugins.php

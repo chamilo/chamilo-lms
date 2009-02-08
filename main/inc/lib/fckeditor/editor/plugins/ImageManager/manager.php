@@ -41,7 +41,7 @@
 
 	var server_name = "<?php echo $IMConfig['server_name']; ?>";
 
-	window.resizeTo(700, 500);
+	window.resizeTo(800, 500);
 
 	if(window.opener.ImageManager && window.opener.ImageManager.I18N)
 	{

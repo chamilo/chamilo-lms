@@ -15,8 +15,36 @@
 
 // ==============       config settings       ===========
 
+	// This is for supporting old javascript versions.
+	if ( !Array.indexOf )
+	{
+		Array.prototype.indexOf = function( value )
+		{
+			for ( var i = 0 ; i < this.length ; i++ )
+			{
+				if ( this[i] == value )
+					return i ;
+			}
+			return -1 ;
+		}
+	}
+
 // plugin's language
-	var _editor_lang = "en"; // TODO: To be revised for other languages support.
+	var _editor_lang = "en" ;
+
+	// We have to determine which language file to be loaded
+	// using information that is provided by the FCKEditor.
+	var _available_langs = 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh' ;
+	_available_langs = _available_langs.split( ',' ) ;
+
+	if ( FCKConfig.DefaultLanguage )
+	{
+		if ( _available_langs.indexOf( FCKConfig.DefaultLanguage ) >= 0 )
+		{
+			_editor_lang = FCKConfig.DefaultLanguage ;
+		}
+	}
+
 // show image manager or show immediately the image editor
 // false = use manager, standard behavior
 // true = no manager, only editing the image

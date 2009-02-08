@@ -26,8 +26,12 @@ imgmapCommand_GetState = function() {
 }
 
 
+/*
 FCKCommands.RegisterCommand( 'imgmapPopup', 
 	new FCKDialogCommand( FCKLang.imgmapDlgName, FCKLang.imgmapDlgTitle, FCKPlugins.Items['imgmap'].Path + 'popup.html', 700, 620, imgmapCommand_GetState ) ) ;
+*/
+FCKCommands.RegisterCommand( 'imgmapPopup', 
+		new FCKDialogCommand( FCKLang.imgmapDlgName, FCKLang.imgmapDlgTitle, FCKPlugins.Items['imgmap'].Path + 'popup.html', 750, 580, imgmapCommand_GetState ) ) ;
 
 
 // create imgmap toolbar button.

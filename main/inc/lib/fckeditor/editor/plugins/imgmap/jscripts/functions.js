@@ -9,6 +9,7 @@ window.$ = function( id )
 } ;
 
 var oEditor = window.parent.InnerDialogLoaded();
+var FCK = oEditor.FCK ;
 var FCKConfig	= oEditor.FCKConfig ;
 var FCKLang = oEditor.FCKLang ;
 
@@ -368,6 +369,9 @@ function BrowseServer()
 
 function SetUrl( url, width, height, alt )
 {
+	// Added by Ivan Tcholakov.
+	url = FCK.GetSelectedUrl ( url ) ;
+
 	GetE('txtUrl').value = url ;
 
 	if ( alt )

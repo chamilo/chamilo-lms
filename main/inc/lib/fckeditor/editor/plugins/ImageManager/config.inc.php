@@ -205,12 +205,15 @@ $IMConfig['allow_overwrite'] = false;
   Specify the paths of the watermarks to use (relative to $IMConfig['base_dir']).
   Specifying none will hide watermarking functionality.
 */
+/*
 $IMConfig['watermarks'] = array	(
 													"imageManager.png",
 													"imageManager.jpg",
 													"devshed.png",
 													"natureWatermark.png"
 												);
+*/
+$IMConfig['watermarks'] = array	();
 
 /*
 	To limit the width and height for uploaded files, specify the maximum pixeldimensions.

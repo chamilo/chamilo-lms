@@ -783,6 +783,7 @@ function update_Db_course($courseDbName)
 			filetype set('file','folder') NOT NULL default 'file',
 			size int NOT NULL default 0,
 			readonly TINYINT UNSIGNED NOT NULL,
+			session_id int UNSIGNED NOT NULL,
 			PRIMARY KEY (`id`)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -1140,8 +1141,8 @@ function update_Db_course($courseDbName)
 		"debug 			tinyint		unsigned not null default 0," . //stores the default behaviour regarding items re-initialisation when viewed a second time after success
 		"theme 		varchar(255)    not null default '', " . //stores the theme of the LP 
 		"preview_image	varchar(255)    not null default '', " . //stores the theme of the LP
-		"author 		varchar(255)    not null default '' " . //stores the theme of the LP
-					
+		"author 		varchar(255)    not null default '', " . //stores the theme of the LP
+		"session_id  	int	unsigned not null  " . //the session_id		
 		")";
 	if(!api_sql_query($sql, __FILE__, __LINE__))
 	{

@@ -1521,10 +1521,12 @@ function api_is_allowed($tool, $action, $task_id = 0) {
 	// the session that contains all the permissions already exists for this course
 	// so there is no need to requery everything.
 	//my_print_r($_SESSION['total_permissions'][$_course['code']][$tool]);
-	if (in_array($action, $_SESSION['total_permissions'][$_course['code']][$tool])) {
-		return true;
-	} else {
-		return false;
+	if (is_array($_SESSION['total_permissions'][$_course['code']][$tool])) {
+		if (in_array($action, $_SESSION['total_permissions'][$_course['code']][$tool])) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 

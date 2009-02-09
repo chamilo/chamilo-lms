@@ -75,78 +75,82 @@ $current_page = $_GET['action'];
 	PROCESSING
 ==============================================================================
 */
-if ($_POST['new_post_submit'])
+if (!empty($_POST['new_post_submit']))
 {	
 	Blog :: create_post($_POST['post_title'], $_POST['post_full_text'], $_POST['post_file_comment'],$blog_id);
 }
-if ($_POST['edit_post_submit'])
+if (!empty($_POST['edit_post_submit']))
 {
 	Blog :: edit_post($_POST['post_id'], $_POST['post_title'], $_POST['post_full_text'], $blog_id);
 }
-if ($_POST['new_comment_submit'])
+if (!empty($_POST['new_comment_submit']))
 {
 	Blog :: create_comment($_POST['comment_title'], $_POST['comment_text'], $_POST['post_file_comment'],$blog_id, (int)$_GET['post_id'], $_POST['comment_parent_id']);
 }
 
-if ($_POST['new_task_submit'])
+if (!empty($_POST['new_task_submit']))
 {
 	Blog :: create_task($blog_id, $_POST['task_name'], $_POST['task_description'], $_POST['chkArticleDelete'], $_POST['chkArticleEdit'], $_POST['chkCommentsDelete'], $_POST['task_color']);
 }
-if ($_POST['edit_task_submit'])
+if (!empty($_POST['edit_task_submit']))
 {
 	Blog :: edit_task($_POST['blog_id'], $_POST['task_id'], $_POST['task_name'], $_POST['task_description'], $_POST['chkArticleDelete'], $_POST['chkArticleEdit'],$_POST['chkCommentsDelete'], $_POST['task_color']);
 }
-if ($_POST['assign_task_submit'])
+if (!empty($_POST['assign_task_submit']))
 {
 	Blog :: assign_task($blog_id, $_POST['task_user_id'], $_POST['task_task_id'], $_POST['task_year']."-".$_POST['task_month']."-".$_POST['task_day']);
 }
 
-if ($_POST['assign_task_edit_submit'])
+if (!empty($_POST['assign_task_edit_submit']))
 {
 	Blog :: edit_assigned_task($blog_id, $_POST['task_user_id'], $_POST['task_task_id'], $_POST['task_year']."-".$_POST['task_month']."-".$_POST['task_day'], $_POST['old_user_id'], $_POST['old_task_id'], $_POST['old_target_date']);
 }
-if ($_POST['new_task_execution_submit'])
+if (!empty($_POST['new_task_execution_submit']))
 {
 	Blog :: create_comment($_POST['comment_title'], $_POST['comment_text'], $blog_id, (int)$_GET['post_id'], $_POST['comment_parent_id'], $_POST['task_id']);
 }
-if ($_POST['register'])
-{
-	foreach ($_POST['user'] as $index => $user_id)
-	{
-		Blog :: set_user_subscribed((int)$_GET['blog_id'], $user_id);
+if (!empty($_POST['register']))
+{	
+	if (is_array($_POST['user'])) {
+		foreach ($_POST['user'] as $index => $user_id)
+		{
+			Blog :: set_user_subscribed((int)$_GET['blog_id'], $user_id);
+		}
 	}
 }
-if ($_POST['unregister'])
-{
-	foreach ($_POST['user'] as $index => $user_id)
-	{
-		Blog :: set_user_unsubscribed((int)$_GET['blog_id'], $user_id);
+if (!empty($_POST['unregister']))
+{	
+	if (is_array($_POST['user'])) {
+		foreach ($_POST['user'] as $index => $user_id)
+		{
+			Blog :: set_user_unsubscribed((int)$_GET['blog_id'], $user_id);
+		}
 	}
 }
-if ($_GET['register'])
+if (!empty($_GET['register']))
 {
 	Blog :: set_user_subscribed((int)$_GET['blog_id'], (int)$_GET['user_id']);
 	$flag = 1;
 }
-if ($_GET['unregister'])
+if (!empty($_GET['unregister']))
 {
 	Blog :: set_user_unsubscribed((int)$_GET['blog_id'], (int)$_GET['user_id']);
 }
 
-if ($_GET['action'] == 'manage_tasks')
+if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks')
 {
-	if ($_GET['do'] == 'delete')
+	if (isset($_GET['do']) && $_GET['do'] == 'delete')
 		Blog :: delete_task($blog_id, (int)$_GET['task_id']);
 
-	if ($_GET['do'] == 'delete_assignment')
+	if (isset($_GET['do']) && $_GET['do'] == 'delete_assignment')
 		Blog :: delete_assigned_task($blog_id, (int)$_GET['assignment_id']);
 }
 
-if ($_GET['action'] == 'view_post')
+if (isset($_GET['action']) && $_GET['action'] == 'view_post')
 {
 	$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
-	if ($_GET['do'] == 'delete_comment')
+	if (isset($_GET['do']) && $_GET['do'] == 'delete_comment')
 	{
 		if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id))
 		{		
@@ -159,7 +163,7 @@ if ($_GET['action'] == 'view_post')
 		}
 	}
 
-	if ($_GET['do'] == 'delete_article')
+	if (isset($_GET['do']) && $_GET['do'] == 'delete_article')
 	{
 		if (api_is_allowed('BLOG_'.$blog_id, 'article_delete', $task_id))
 		{
@@ -172,16 +176,16 @@ if ($_GET['action'] == 'view_post')
 			$message = get_lang('ActionNotAllowed');
 		}
 	}
-	if ($_GET['do'] == 'rate')
+	if (isset($_GET['do']) && $_GET['do'] == 'rate')
 	{
-		if ($_GET['type'] == 'post')
+		if (isset($_GET['type']) && $_GET['type'] == 'post')
 		{
 			if (api_is_allowed('BLOG_'.$blog_id, 'article_rate'))
 			{
 				Blog :: add_rating('post', $blog_id, (int)$_GET['post_id'], (int)$_GET['rating']);
 			}
 		}
-		if ($_GET['type'] == 'comment')
+		if (isset($_GET['type']) && $_GET['type'] == 'comment')
 		{
 			if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_add'))
 			{
@@ -417,19 +421,19 @@ switch ($current_page)
 	case 'manage_tasks' :
 		if (api_is_allowed('BLOG_'.$blog_id, 'task_management'))
 		{
-			if ($_GET['do'] == 'add')
+			if (isset($_GET['do']) && $_GET['do'] == 'add')
 			{
 				Blog :: display_new_task_form($blog_id);
 			}
-			if ($_GET['do'] == 'assign')
+			if (isset($_GET['do']) && $_GET['do'] == 'assign')
 			{
 				Blog :: display_assign_task_form($blog_id);
 			}
-			if ($_GET['do'] == 'edit')
+			if (isset($_GET['do']) && $_GET['do'] == 'edit')
 			{
 				Blog :: display_edit_task_form($blog_id, Database::escape_string($_GET['task_id']));
 			}
-			if ($_GET['do'] == 'edit_assignment')
+			if (isset($_GET['do']) && $_GET['do'] == 'edit_assignment')
 			{
 				Blog :: display_edit_assigned_task_form($blog_id, Database::escape_string((int)$_GET['assignment_id']));
 			}

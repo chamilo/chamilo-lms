@@ -72,21 +72,21 @@ if (api_is_allowed_to_edit())
 		PROCESSING..
 	==============================================================================
 	*/
-	if ($_POST['new_blog_submit'])
+	if (!empty($_POST['new_blog_submit']))
 	{
 		Blog::create_blog($_POST['blog_name'],$_POST['blog_subtitle']);
 	}
-	if ($_POST['edit_blog_submit'])
+	if (!empty($_POST['edit_blog_submit']))
 	{
 		Blog::edit_blog($_POST['blog_id'],$_POST['blog_name'],$_POST['blog_subtitle']);
 	}
-	if ($_GET['action'] == 'visibility')
+	if (isset($_GET['action']) && $_GET['action'] == 'visibility')
 	{
-		Blog::change_blog_visibility(mysql_real_escape_string((int)$_GET['blog_id']));
+		Blog::change_blog_visibility(Database::scape_string((int)$_GET['blog_id']));
 	}
-	if ($_GET['action'] == 'delete')
+	if (isset($_GET['action']) && $_GET['action'] == 'delete')
 	{
-		Blog::delete_blog(mysql_real_escape_string((int)$_GET['blog_id']));
+		Blog::delete_blog(Database::scape_string((int)$_GET['blog_id']));
 	}
 	
 	
@@ -99,11 +99,11 @@ if (api_is_allowed_to_edit())
 	//api_introductionsection(TOOL_BLOG);
 	
 	
-		if ($_GET['action'] == 'add')
+		if (isset($_GET['action']) && $_GET['action'] == 'add')
 		{
 			Blog::display_new_blog_form();
 		}
-		if ($_GET['action'] == 'edit')
+		if (isset($_GET['action']) && $_GET['action'] == 'edit')
 		{
 			Blog::display_edit_blog_form(Database::escape_string((int)$_GET['blog_id']));
 		}

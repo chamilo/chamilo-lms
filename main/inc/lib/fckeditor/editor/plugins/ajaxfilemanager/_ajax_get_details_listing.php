@@ -1,4 +1,3 @@
-
 <div id="content">
 
 <table class="tableList" id="tableList" cellpadding="0" cellspacing="0" border="0">
@@ -27,9 +26,10 @@
 								///First step for hidden some type of Dokeos files and folders 
 								//Juan Carlos Raña
 								
-									//hidden files and folders deleted by Dokeos. Hidde folders css
+									//hidden files and folders deleted by Dokeos. Hidde folders css, hotpotatoes
 									$deleted_by_dokeos='_DELETED_';
 									$css_folder_dokeos='css';
+									$hotpotatoes_folder_dokeos='HotPotatoes_files';
 									
 									//hidden directory of the group if the user is not a member of the group					
 									$group_folder='_groupdocs';
@@ -53,7 +53,7 @@
 								///Second step: hiding as the case
 								//Juan Carlos Raña
 								
-								if((!ereg($deleted_by_dokeos, $file['name']) || !ereg($deleted_by_dokeos, $file['path'])) && !ereg($css_folder_dokeos, $file['path']) && $show_doc_group==true && $file['name'][0]!='.')
+								if((!ereg($deleted_by_dokeos, $file['name']) || !ereg($deleted_by_dokeos, $file['path'])) && !ereg($css_folder_dokeos, $file['path']) && !ereg($hotpotatoes_folder_dokeos, $file['path']) && $show_doc_group==true && $file['name'][0]!='.')
 								{
 									if($file['type'] == 'file')
 									{		

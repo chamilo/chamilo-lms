@@ -101,7 +101,7 @@ ImageManager.I18N = {
 	"Invalid folder name, please choose another folder name."									: "Nom de répertoire invalide, veuillez choisir un autre nom",
 	"GIF format is not supported, image editing not supported."								: "Format GIF non supporté, édition d'image non supportée",
 	"Please do not close the window while uploading a new image! If you do, the original image gets deleted!" : "Ne FERMEZ PAS CETTE FENETRE pendant l'envoi d'une nouvelle image sinon l'image originale sera quand même supprimée !",
-	"Error: Couldn't update editor window.\nAny image that was edited and saved will still be visible as the old version!\nPlease save and reload the editor content." : "Erreur: Impossible d'actualiser la fenêtre de l'éditeur.\nL'image qui a été éditée et sauvegardée apparaitra toujours comme non modifiée !\nVeuillez sauvegarder et recharger le contenu de l'éditeur."
+	"Error: Couldn't update editor window.\nAny image that was edited and saved will still be visible as the old version!\nPlease save and reload the editor content." : "Erreur: Impossible d'actualiser la fenêtre de l'éditeur.\nL'image qui a été éditée et sauvegardée apparaitra toujours comme non modifiée !\nVeuillez sauvegarder et recharger le contenu de l'éditeur.",
 
 	"Edit image"                  : "Edit image",
 	"Alt"                         : "Alt",

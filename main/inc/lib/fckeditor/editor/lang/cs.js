@@ -530,11 +530,5 @@ DlgAboutInfo		: "Více informací získáte na",
 DlgDivGeneralTab	: "Obecné",
 DlgDivAdvancedTab	: "Rozšířené",
 DlgDivStyle		: "Styl",
-DlgDivInlineStyle	: "Vložený styl",
-
-// MP3 Dialog
-DlgMP3Title     : "Import MP3",
-DlgMP3Upload    : "From my Computer",
-DlgMP3Tab       : "From course"
-
+DlgDivInlineStyle	: "Vložený styl"
 };

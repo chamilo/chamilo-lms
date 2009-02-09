@@ -530,11 +530,5 @@ DlgAboutInfo		: "より詳しい情報はこちらで",
 DlgDivGeneralTab	: "全般",
 DlgDivAdvancedTab	: "高度な設定",
 DlgDivStyle		: "スタイル",
-DlgDivInlineStyle	: "インラインスタイル",
-
-// MP3 Dialog
-DlgMP3Title     : "Import MP3",
-DlgMP3Upload    : "From my Computer",
-DlgMP3Tab       : "From course"
-
+DlgDivInlineStyle	: "インラインスタイル"
 };

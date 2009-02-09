@@ -530,11 +530,5 @@ DlgAboutInfo		: "想獲得更多資訊請至 ",
 DlgDivGeneralTab	: "一般",
 DlgDivAdvancedTab	: "進階",
 DlgDivStyle		: "樣式",
-DlgDivInlineStyle	: "CSS 樣式",
-
-// MP3 Dialog
-DlgMP3Title     : "Import MP3",
-DlgMP3Upload    : "From my Computer",
-DlgMP3Tab       : "From course"
-
+DlgDivInlineStyle	: "CSS 樣式"
 };

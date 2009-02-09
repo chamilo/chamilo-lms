@@ -530,12 +530,5 @@ DlgAboutInfo		: "Nánari upplýsinar, sjá:",
 DlgDivGeneralTab	: "Almennt",
 DlgDivAdvancedTab	: "Sérhæft",
 DlgDivStyle		: "Stíll",
-DlgDivInlineStyle	: "Línulægur stíll",
-
-// MP3 Dialog
-DlgMP3Title     : "Import MP3",
-DlgMP3Upload    : "From my Computer",
-DlgMP3Tab       : "From course"
-
+DlgDivInlineStyle	: "Línulægur stíll"
 };
-

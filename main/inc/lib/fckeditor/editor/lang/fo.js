@@ -530,11 +530,5 @@ DlgAboutInfo		: "Fyri fleiri upplýsingar, far til",
 DlgDivGeneralTab	: "Generelt",
 DlgDivAdvancedTab	: "Fjølbroytt",
 DlgDivStyle		: "Typografi",
-DlgDivInlineStyle	: "Inline typografi",
-
-// MP3 Dialog
-DlgMP3Title     : "Import MP3",
-DlgMP3Upload    : "From my Computer",
-DlgMP3Tab       : "From course"
-
+DlgDivInlineStyle	: "Inline typografi"
 };

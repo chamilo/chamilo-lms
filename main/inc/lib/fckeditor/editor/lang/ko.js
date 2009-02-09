@@ -530,11 +530,5 @@ DlgAboutInfo		: "더 많은 정보를 보시려면 다음 사이트로 가십시
 DlgDivGeneralTab	: "General",	//MISSING
 DlgDivAdvancedTab	: "Advanced",	//MISSING
 DlgDivStyle		: "Style",	//MISSING
-DlgDivInlineStyle	: "Inline Style",	//MISSING
-
-// MP3 Dialog
-DlgMP3Title     : "Import MP3",
-DlgMP3Upload    : "From my Computer",
-DlgMP3Tab       : "From course"
-
+DlgDivInlineStyle	: "Inline Style"	//MISSING
 };

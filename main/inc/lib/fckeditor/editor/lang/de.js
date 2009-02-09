@@ -530,11 +530,5 @@ DlgAboutInfo		: "Für weitere Informationen siehe",
 DlgDivGeneralTab	: "Allgemein",
 DlgDivAdvancedTab	: "Erweitert",
 DlgDivStyle		: "Style",
-DlgDivInlineStyle	: "Inline Style",
-
-// MP3 Dialog
-DlgMP3Title     : "Import MP3",
-DlgMP3Upload    : "From my Computer",
-DlgMP3Tab       : "From course"
-
+DlgDivInlineStyle	: "Inline Style"
 };

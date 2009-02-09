@@ -530,11 +530,5 @@ DlgAboutInfo		: "要获得更多信息请访问 ",
 DlgDivGeneralTab	: "常规",
 DlgDivAdvancedTab	: "高级",
 DlgDivStyle		: "样式",
-DlgDivInlineStyle	: "CSS 样式",
-
-// MP3 Dialog
-DlgMP3Title     : "Import MP3",
-DlgMP3Upload    : "From my Computer",
-DlgMP3Tab       : "From course"
-
+DlgDivInlineStyle	: "CSS 样式"
 };

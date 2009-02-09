@@ -530,11 +530,5 @@ DlgAboutInfo		: "अधिक जानकारी के लिये यह�
 DlgDivGeneralTab	: "सामान्य",
 DlgDivAdvancedTab	: "एड्वान्स्ड",
 DlgDivStyle		: "स्टाइल",
-DlgDivInlineStyle	: "इनलाइन स्टाइल",
-
-// MP3 Dialog
-DlgMP3Title     : "Import MP3",
-DlgMP3Upload    : "From my Computer",
-DlgMP3Tab       : "From course"
-
+DlgDivInlineStyle	: "इनलाइन स्टाइल"
 };

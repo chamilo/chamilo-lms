@@ -531,11 +531,5 @@ DlgAboutInfo		: "Informazio gehiago eskuratzeko hona joan",
 DlgDivGeneralTab	: "Orokorra",
 DlgDivAdvancedTab	: "Aurreratua",
 DlgDivStyle		: "Estiloa",
-DlgDivInlineStyle	: "Inline Estiloa",
-
-// MP3 Dialog
-DlgMP3Title     : "Import MP3",
-DlgMP3Upload    : "From my Computer",
-DlgMP3Tab       : "From course"
-
+DlgDivInlineStyle	: "Inline Estiloa"
 };

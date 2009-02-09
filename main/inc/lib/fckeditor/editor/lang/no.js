@@ -530,11 +530,5 @@ DlgAboutInfo		: "For mer informasjon, se",
 DlgDivGeneralTab	: "Generelt",
 DlgDivAdvancedTab	: "Avansert",
 DlgDivStyle		: "Stil",
-DlgDivInlineStyle	: "Inline Style",	//MISSING
-
-// MP3 Dialog
-DlgMP3Title     : "Import MP3",
-DlgMP3Upload    : "From my Computer",
-DlgMP3Tab       : "From course"
-
+DlgDivInlineStyle	: "Inline Style"	//MISSING
 };

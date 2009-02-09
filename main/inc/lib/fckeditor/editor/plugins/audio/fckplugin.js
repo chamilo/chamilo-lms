@@ -1,10 +1,10 @@
-// Register the related commands.
-var dialogPath = FCKConfig.PluginsPath + 'audio/fck_audio.html' ;
-var flashDialogCmd = new FCKDialogCommand( FCKLang["DlgAudioTitle"], FCKLang["DlgAudioTitle"] + ' (mp3)', dialogPath, 600, 300 ) ;
-FCKCommands.RegisterCommand( 'MP3', flashDialogCmd ) ;
+// Register the command.
+FCKCommands.RegisterCommand( 'MP3',
+	new FCKDialogCommand( FCKLang['DlgAudioTitle'], FCKLang['DlgAudioTitle'] + ' (mp3)',
+	FCKConfig.PluginsPath + 'audio/fck_audio.html', 600, 300 )
+) ;
 
-// Create the Audio toolbar button.
-var oFlashItem		= new FCKToolbarButton( 'MP3', FCKLang["DlgAudioTitle"] + ' (mp3)') ;
-oFlashItem.IconPath	= FCKConfig.PluginsPath + 'audio/audio.gif' ;
-
-FCKToolbarItems.RegisterItem( 'MP3', oFlashItem ) ;
+// Create and register the Audio toolbar button.
+var oAudioItem = new FCKToolbarButton( 'MP3', FCKLang['DlgAudioTitle'] + ' (mp3)' ) ;
+oAudioItem.IconPath	= FCKConfig.PluginsPath + 'audio/audio.gif' ;
+FCKToolbarItems.RegisterItem( 'MP3', oAudioItem ) ;

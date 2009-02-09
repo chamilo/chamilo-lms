@@ -952,8 +952,8 @@ FCK.ContextMenu.RegisterListener( {
 FCK.ContextMenu.RegisterListener( {
 	AddItems : function ( menu, tag, tagName )
 	{
-		var AudioTitle = 'Insert audio / Audio properties' ;
-		var AudioIcon = FCKConfig.PluginsPath + 'MP3/button.flash.gif' ;
+		var AudioTitle = 'Import MP3' ;
+		var AudioIcon = FCKConfig.PluginsPath + 'MP3/mp3.gif' ;
 
 		if ( FCKLang.DlgAudioTitle )
 		{

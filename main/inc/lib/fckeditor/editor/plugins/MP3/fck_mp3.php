@@ -6,13 +6,14 @@ include('../../../../../../inc/global.inc.php');
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 	<head>
-		<title>Audio Properties</title>
+		<title>Import MP3</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta content="noindex, nofollow" name="robots">
 		<script type="text/javascript">
 		/*<![CDATA[*/		
 		var rel_path = "<?php  echo api_get_path(REL_CODE_PATH); ?>";
-		var tab_to_select = '<?php echo !empty($_SERVER['QUERY_STRING']) ? 'Info' : 'Upload'; ?>';
+		//var tab_to_select = '<?php echo !empty($_SERVER['QUERY_STRING']) ? 'Info' : 'Upload'; ?>';
+		var tab_to_select = 'Info' ;
 		/*]]>*/
 		</script>
 		<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
@@ -21,7 +22,7 @@ include('../../../../../../inc/global.inc.php');
 	</head>
 	<body> <!--scroll="no" style="overflow: hidden"-->
 		<div id="divInfo">
-		  <div id="divExtra1" style="display: none">
+		  <div id="divExtra1"style="display: none">
 			<table cellspacing="1" cellpadding="1" border="0" width="100%">
 				<tr>
 					<td>
@@ -46,10 +47,10 @@ include('../../../../../../inc/global.inc.php');
 		        <td>
 		  <?php
 		  $sType = "MP3";
-		  if(isset($_course["sysCode"]) || api_is_platform_admin())
-		  {
+		  //if (api_is_in_course() || api_is_platform_admin())
+		  //{
 		 	 include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
-		  }		  
+		  //}		  
 		  ?>
 		        </td>
 		      </tr>

@@ -162,7 +162,7 @@ FCKConfig.Plugins.Add('dragresizetable') ;
 FCKConfig.Plugins.Add('tablecommands') ;
 
 // Audio files insertion.
-FCKConfig.Plugins.Add('MP3', 'en', sOtherPluginPath ) ;
+FCKConfig.Plugins.Add('MP3', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
 
 // Another dialog for insertion audio files.
 // If you wish to use it, disable the "MP3" plugin first.
@@ -171,11 +171,11 @@ FCKConfig.Plugins.Add('MP3', 'en', sOtherPluginPath ) ;
 // A specialised browser/editor for images.
 if (!FCK.AdvancedFileManager)
 {
-	// It is not needed in advanced file manager mode.
+	// It is not needed in the advanced file manager mode.
 	FCKConfig.Plugins.Add('ImageManager','en,de,fr,nl,no,pl,ru,sv') ;
 }
 
-// This is the old flash plugin. Now the editor has built-in flash dialog.
+// This is the old flash plugin. Now the editor has a built-in flash dialog.
 //FCKConfig.Plugins.Add('Flash', 'en');
 
 // Embeding video files.

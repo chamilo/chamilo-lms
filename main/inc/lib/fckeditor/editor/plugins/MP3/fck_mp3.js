@@ -10,9 +10,8 @@ var mp3_url="";
 window.document.dir = oEditor.FCKLang.Dir ;
 
 // Set the dialog tabs.
-window.parent.AddTab( 'Upload', FCKLang.DlgMP3Upload ) ;
-
 window.parent.AddTab( 'Info', FCKLang.DlgMP3Tab ) ;
+window.parent.AddTab( 'Upload', FCKLang.DlgMP3Upload ) ;
 
 function OnDialogTabChange( tabCode )
 {
@@ -38,18 +37,19 @@ if ( oFakeImage )
 		oFakeImage = null ;
 }
 
-function window_onload(tab_to_elect)
+function window_onload(tab_to_select)
 {
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
 
-	if (!tab_to_elect)
+	if (!tab_to_select)
 	{
-		window.parent.SetSelectedTab( 'Upload' ) ;
+		window.parent.SetSelectedTab( 'Info' ) ;
+		//window.parent.SetSelectedTab( 'Upload' ) ;
 	}
 	else
 	{
-		window.parent.SetSelectedTab( tab_to_elect ) ;
+		window.parent.SetSelectedTab( tab_to_select ) ;
 	}
 
 	// Load the selected element information (if any).
@@ -230,7 +230,7 @@ function BrowseServer()
 function SetUrl( url )
 {
 	document.getElementById('mpUrl').value = url ;	 
-	updatePreview(); 
+	//updatePreview(); 
 	Ok();
 	window.parent.Cancel();
 }

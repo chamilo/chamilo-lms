@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 18078 2009-01-29 17:21:11Z cfasanando $
+<?php // $Id: user_edit.php 18376 2009-02-09 20:25:27Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -437,7 +437,20 @@ if( $form->validate())
 		$recipient_name = $firstname.' '.$lastname;
 		$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');												
 		$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-	    $email_admin = get_setting('emailAdministrator');		
+	    $email_admin = get_setting('emailAdministrator');
+	    
+	    if ($_configuration['multiple_access_urls']==true) {
+			$access_url_id = api_get_current_access_url_id();				
+			if ($access_url_id != -1 ){
+				$url = api_get_access_url($access_url_id);					
+				$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
+			}		
+		}
+		else {
+			$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
+		}
+			
+					
 		$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username;
 		// Send password by e-mail if it has been modified, even if encrypted in DB (it doesn't make sense to send an e-mail with login info without the password, even if the password is encrypted)
 		if($reset_password > 0)

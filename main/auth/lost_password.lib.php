@@ -1,5 +1,5 @@
 <?php
-// $Id: lost_password.lib.php 17754 2009-01-15 22:58:39Z cfasanando $
+// $Id: lost_password.lib.php 18376 2009-02-09 20:25:27Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -52,12 +52,21 @@ function get_email_headers()
 function get_user_account_list($user, $reset = false)
 {
 	global $_configuration;
-	foreach ($user as $thisUser)
-	{
+	$portal_url = $_configuration['root_web'];
+	if ($_configuration['multiple_access_urls']==true) {
+		$access_url_id = api_get_current_access_url_id();				
+		if ($access_url_id != -1 ){
+			$url = api_get_access_url($access_url_id);
+			$portal_url = $url['url'];
+		}
+	}	
+			
+	foreach ($user as $thisUser) {
 		$secretword = get_secret_word($thisUser["email"]);
-		if ($reset)
-		{
-			$reset_link = $_configuration['root_web']."main/auth/lostPassword.php?reset=".$secretword."&id=".$thisUser['uid'];
+		if ($reset)	{
+								
+			$reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secretword."&id=".$thisUser['uid'];
+			
 		}
 		else
 		{
@@ -84,7 +93,16 @@ function send_password_to_user($user)
 	$emailHeaders = get_email_headers(); // Email Headers
 	$emailSubject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 	$userAccountList = get_user_account_list($user); // BODY
-	$emailBody = get_lang('YourAccountParam')." ".$_configuration['root_web']."\n\n$userAccountList";
+	$portal_url = $_configuration['root_web'];
+	if ($_configuration['multiple_access_urls']==true) {
+		$access_url_id = api_get_current_access_url_id();				
+		if ($access_url_id != -1 ){
+			$url = api_get_access_url($access_url_id);
+			$portal_url = $url['url'];
+		}
+	}
+						
+	$emailBody = get_lang('YourAccountParam')." ".$portal_url."\n\n$userAccountList";
 	// SEND MESSAGE
 	$emailTo = $user[0]["email"];			
 	$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');

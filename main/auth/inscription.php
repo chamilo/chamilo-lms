@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 18078 2009-01-29 17:21:11Z cfasanando $
+// $Id: inscription.php 18376 2009-02-09 20:25:27Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -331,7 +331,7 @@ if ($form->validate()) {
 			$sql_set[] = "diplomas = '".Database::escape_string($values['diplomas'])."'";
 			$store_extended = true;
 		}
-		if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
+		if (api_get_setting('extended_profile') =$portal_url= 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
 		{
 			$sql_set[] = "teach = '".Database::escape_string($values['teach'])."'";
 			$store_extended = true;
@@ -434,8 +434,16 @@ if ($form->validate()) {
 			$emailsubject = "[".get_setting('siteName')."] ".get_lang('YourReg')." ".get_setting('siteName');
 
 			// The body can be as long as you wish, and any combination of text and variables
-
-			$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ".get_setting('siteName')." ".get_lang('Settings')." ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is')." : ".$_configuration['root_web']."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n".get_lang('Manager')." ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n".get_lang('Email')." : ".get_setting('emailAdministrator');
+			$portal_url = $_configuration['root_web'];
+			if ($_configuration['multiple_access_urls']==true) {
+				$access_url_id = api_get_current_access_url_id();				
+				if ($access_url_id != -1 ){
+					$url = api_get_access_url($access_url_id);
+					$portal_url = $url['url'];
+				}
+			} 
+	
+			$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ".get_setting('siteName')." ".get_lang('Settings')." ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is')." : ".$portal_url."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n".get_lang('Manager')." ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n".get_lang('Email')." : ".get_setting('emailAdministrator');
 			
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last			

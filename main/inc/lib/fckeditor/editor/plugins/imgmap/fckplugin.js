@@ -14,6 +14,11 @@ imgmapCommand_GetState = function() {
 	var oImage = FCK.Selection.GetSelectedElement() ;
 	if ( oImage && oImage.tagName == 'IMG'  )
 	{
+		if ( !FCK.IsRealImage( oImage ) )
+		{
+			return FCK_TRISTATE_DISABLED ;
+		}
+
 		// Does it has an assigned map?
 		if (oImage.getAttribute( 'usemap' ))
 			return FCK_TRISTATE_ON; 
@@ -48,11 +53,7 @@ FCKToolbarItems.RegisterItem('imgmapPopup', imgmapButton);
 FCK.ContextMenu.RegisterListener({
 	AddItems : function( menu, tag, tagName ) {
 		// under what circumstances do we display this option
-		if ( tagName == 'IMG' &&
-			!tag.getAttribute( '_fckfakelement' ) &&
-			!tag.getAttribute( '_fckflash' ) &&
-			!tag.getAttribute( '_fckmp3' ) &&
-			!tag.getAttribute( '_fckvideo' ) )
+		if ( FCK.IsRealImage( tag ) )
 		{
 			// when the option is displayed, show a separator  the command
 			//menu.AddSeparator();

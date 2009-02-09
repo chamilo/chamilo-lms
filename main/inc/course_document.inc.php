@@ -250,6 +250,12 @@ if($docs_and_folders)
 	$sortable_data = array();
 	while (list ($key, $id) = each($docs_and_folders))
 	{
+		// Skip directories.
+		if ($id['filetype'] != 'file')
+		{
+			continue;
+		}
+
 		$row = array ();
 
 		//if the item is invisible, wrap it in a span with class invisible

@@ -843,10 +843,11 @@ function getRootPath() {
 		*/
 		function hideFileName($fileName)
 		{
-			//hidden files and folders deleted by Dokeos. Hidde folders css
+			//hidden files and folders deleted by Dokeos. Hidde folders css, hotpotatoes, chat
 			$deleted_by_dokeos='_DELETED_';
 			$css_folder_dokeos='css';
 			$hotpotatoes_folder_dokeos='HotPotatoes_files';
+			$chat_files_dokeos='chat_files';
 			
 			//hidden directory of the group if the user is not a member of the group					
 			$group_folder='_groupdocs';
@@ -862,7 +863,7 @@ function getRootPath() {
 				}
 			}		
 			
-			if(!ereg($deleted_by_dokeos, $fileName) && !ereg($css_folder_dokeos, $fileName) && !ereg($hotpotatoes_folder_dokeos, $fileName) && $show_doc_group==true)
+			if(!ereg($deleted_by_dokeos, $fileName) && !ereg($css_folder_dokeos, $fileName) && !ereg($hotpotatoes_folder_dokeos, $fileName) && !ereg($chat_files_dokeos, $fileName) && $show_doc_group==true)
 			{			
 				return substr($fileName,strpos($fileName, '-'),strlen($fileName)); //hide the firsts numbers
 			}

@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: exercice_submit.php 18387 2009-02-09 22:05:17Z juliomontoya $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 18203 2009-02-03 18:02:16Z ndieschburg $
+* 	@version $Id: exercice_submit.php 18387 2009-02-09 22:05:17Z juliomontoya $
 */
 
 
@@ -886,8 +886,11 @@ if ($formSent) {
         if ($exerciseType == 1) {
     	   	header("Location: exercise_result.php?exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
 	    } else {
-        	//clean incomplete
-        	api_sql_query('UPDATE '.$stat_table.' SET '."status = '', data_tracking='', exe_date = '".date('Y-m-d H:i:s')."'".' WHERE exe_id = '.$exe_id,__FILE__,__LINE__);
+	    	if ($exe_id!='') {
+	        	//clean incomplete
+    	    	$update_query = 'UPDATE '.$stat_table.' SET '."status = '', data_tracking='', exe_date = '".date('Y-m-d H:i:s')."'".' WHERE exe_id = '.$exe_id;
+        		api_sql_query($update_query,__FILE__,__LINE__);
+	    	}
         	header("Location: exercise_show.php?id=$exeId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
         }
         exit();

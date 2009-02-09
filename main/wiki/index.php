@@ -175,10 +175,16 @@ $fck_attribute = null; // Clearing this global variable immediatelly after it ha
 */
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['ToolbarSet'] = 'Wiki';
+$fck_attribute['Height'] = '400';
+
 if(!api_is_allowed_to_edit())
 {
 	$fck_attribute['Config']['UserStatus'] = 'student';
+	$fck_attribute['ToolbarSet'] = 'Wiki_Student';
+}
+else
+{
+	$fck_attribute['ToolbarSet'] = 'Wiki';
 }
 
 /*

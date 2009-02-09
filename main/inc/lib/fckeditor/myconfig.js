@@ -146,6 +146,16 @@ FCKConfig.ToolbarSets["Wiki"] = [
 	['Source']
 ] ;
 
+FCKConfig.ToolbarSets["Wiki_Student"] = [
+	['NewPage','Save','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Wikilink','Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],
+	['FontFormat','FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['ShowBlocks']
+] ;
 
 /*
  * Toolbar drop-down lists customizations.

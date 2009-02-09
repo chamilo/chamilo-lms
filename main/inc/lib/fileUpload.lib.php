@@ -678,6 +678,7 @@ function add_ext_on_mime($fileName,$fileType)
 		$mimeType[] = "audio/x-pn-realaudio-plugin";    $extension[] =".rpm";
 		$mimeType[] = "audio/x-wav";                    $extension[] =".wav";
 		$mimeType[] = "video/mpeg";                     $extension[] =".mpg";
+		$mimeType[] = "video/mpeg4-generic";            $extension[] =".mp4";
 		$mimeType[] = "video/quicktime";                $extension[] =".mov";
 		$mimeType[] = "video/x-msvideo";                $extension[] =".avi";
 		//test on PC (files with no extension get application/octet-stream)

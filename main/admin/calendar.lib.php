@@ -1669,12 +1669,21 @@ function get_agendaitems($month, $year)
 	}*/
 
 	//$mycourse = api_get_course_info();
+	$portal_url = $_configuration['root_web'];
+	if ($_configuration['multiple_access_urls']==true) {
+		$access_url_id = api_get_current_access_url_id();				
+		if ($access_url_id != -1 ){
+			$url = api_get_access_url($access_url_id);
+			$portal_url = $url['url'];
+		}
+	}
+			
     $result = api_sql_query($sqlquery, __FILE__, __LINE__);
 	while ($item = Database::fetch_array($result))
 	{
 		$agendaday = date('j',strtotime($item['start_date']));
-		$time= date('H:i',strtotime($item['start_date']));
-		$URL = $_configuration['root_web'].'main/admin/agenda.php?day='.$agendaday."&amp;month=".$month."&amp;year=".$year; // RH  //Patrick Cool: to highlight the relevant agenda item
+		$time= date('H:i',strtotime($item['start_date']));		
+		$URL = $portal_url.'main/admin/agenda.php?day='.$agendaday."&amp;month=".$month."&amp;year=".$year; // RH  //Patrick Cool: to highlight the relevant agenda item
 		$items[$agendaday][$item['start_time']] .= '<i>'.$time.'</i> <a href="'.$URL.'" title="'.$item['title'].'<br />';
 	}
 		
@@ -1980,6 +1989,15 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		//echo "abc";
 		//echo $sqlquery;
 		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+		$portal_url = $_configuration['root_web'];
+		if ($_configuration['multiple_access_urls']==true) {
+			$access_url_id = api_get_current_access_url_id();				
+			if ($access_url_id != -1 ){
+				$url = api_get_access_url($access_url_id);
+				$portal_url = $url['url'];
+			}
+		} 
+			
 		//echo Database::num_rows($result);
 		while ($item = Database::fetch_array($result))
 		{
@@ -2006,7 +2024,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 			}			
 			
 			//$URL = $_configuration['root_web'].$mycours["dir"]."/";
-			$URL = $_configuration['root_web'].'main/admin/agenda.php?cidReq='."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL = $portal_url.'main/admin/agenda.php?cidReq='."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$items[$halfhour][] .= "<i>".$hours.":".$minutes."</i> <a href=\"$URL\" title=\"".$array_course_info['name']."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}
 	}
@@ -2082,6 +2100,16 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		//				AND (MONTH(day)>='$start_month' AND MONTH(day)<='$end_month')
 		//				AND (YEAR(day)>='$start_year' AND YEAR(day)<='$end_year')";
 		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+		
+		$portal_url = $_configuration['root_web'];
+		if ($_configuration['multiple_access_urls']==true) {
+			$access_url_id = api_get_current_access_url_id();				
+			if ($access_url_id != -1 ){
+				$url = api_get_access_url($access_url_id);
+				$portal_url = $url['url'];
+			}
+		} 
+			
 		while ($item = Database::fetch_array($result))
 		{
 			$agendaday = date("j",strtotime($item['start_date']));
@@ -2095,9 +2123,9 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 			else 
 			{
 				$agenda_link = Display::return_icon('course_home.gif');
-			}			
+			}			 
 			
-			$URL = $_configuration['root_web']."main/admin/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL = $portal_url."main/admin/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$items[$agendaday][$item['start_time']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}
 	}

@@ -952,10 +952,23 @@ FCK.ContextMenu.RegisterListener( {
 FCK.ContextMenu.RegisterListener( {
 	AddItems : function ( menu, tag, tagName )
 	{
+		var AudioTitle = 'Insert audio / Audio properties' ;
+		var AudioIcon = FCKConfig.PluginsPath + 'MP3/button.flash.gif' ;
+
+		if ( FCKLang.DlgAudioTitle )
+		{
+			AudioTitle = FCKLang.DlgAudioTitle ;
+			AudioIcon = FCKConfig.PluginsPath + 'audio/audio.gif' ;
+		}
+		else if ( FCKLang.DlgMP3Title )
+		{
+			AudioTitle = FCKLang.DlgMP3Title ;
+		}
+
 		if ( tagName == 'IMG' && tag.getAttribute( '_fckmp3' ) )
 		{
 			menu.AddSeparator() ;
-			menu.AddItem( 'MP3', FCKLang.DlgMP3Title, FCKConfig.PluginsPath + 'MP3/button.flash.gif' ) ;
+			menu.AddItem( 'MP3', AudioTitle, AudioIcon ) ;
 		}
 	} }
 ) ;

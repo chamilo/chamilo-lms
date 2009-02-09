@@ -1,4 +1,4 @@
-﻿// English language file.
+﻿// Polish language file.
 // MP3 Dialog.
 // Please, use UTF-8 encoding.
 

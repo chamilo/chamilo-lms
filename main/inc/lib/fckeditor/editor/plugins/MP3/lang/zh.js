@@ -1,4 +1,4 @@
-﻿// English language file.
+﻿// Chinese Traditional language file.
 // MP3 Dialog.
 // Please, use UTF-8 encoding.
 

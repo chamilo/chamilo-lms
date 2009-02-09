@@ -1,4 +1,5 @@
-﻿// Polish language file.// Video Dialog.
+﻿// Polish language file.
+// Video Dialog.
 // Please, use UTF-8 encoding.
 
 FCKLang["DlgEmbedMoviesTitle"]  = "Insert video / Video properties" ;

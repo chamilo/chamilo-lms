@@ -1,5 +1,5 @@
 // Bulgarian language file.
-﻿// Video Dialog.
+// Video Dialog.
 // Please, use UTF-8 encoding.
 
 FCKLang["DlgEmbedMoviesTitle"]  = "Добавяне/Редактиране на видео файл" ;

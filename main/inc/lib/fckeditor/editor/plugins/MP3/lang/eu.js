@@ -1,4 +1,5 @@
-﻿// English language file.
+﻿// Basque language file.
+// Euskara hizkuntza fitxategia.
 // MP3 Dialog.
 // Please, use UTF-8 encoding.
 

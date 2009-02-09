@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18312 2009-02-06 22:46:17Z cfasanando $
+<?php //$Id: work.lib.php 18365 2009-02-09 16:39:01Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18312 2009-02-06 22:46:17Z cfasanando $
+* 	@version $Id: work.lib.php 18365 2009-02-09 16:39:01Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -884,7 +884,7 @@ function create_unexisting_work_directory($base_work_dir,$desired_dir_name)
  * @param	string	The directory name as the bit after "work/", without trailing slash
  * @return	integer	-1 on error
  */
-function del_dir($base_work_dir,$dir)
+function del_dir($base_work_dir,$dir,$id)
 {
 	if(empty($dir) or $dir=='/') {
 		return -1;
@@ -902,7 +902,9 @@ function del_dir($base_work_dir,$dir)
 	$res = api_sql_query($sql,__FILE__,__LINE__);	
 		
 	require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
-	my_delete($base_work_dir.$dir);
+	//my_delete($base_work_dir.$dir);	
+	$new_dir= $dir.'_DELETED_'.$id;
+	rename($base_work_dir.$dir, $base_work_dir.$new_dir);
 }
 
 /**

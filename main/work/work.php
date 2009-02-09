@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18319 2009-02-07 00:03:42Z herodoto $
+<?php //$Id: work.php 18365 2009-02-09 16:39:01Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18319 2009-02-07 00:03:42Z herodoto $
+*  	@version $Id: work.php 18365 2009-02-09 16:39:01Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -610,7 +610,8 @@ if (api_is_allowed_to_edit(false,true)) {
 	 --------------------*/
 	if (!empty ($_REQUEST['delete_dir'])) {		
 		$delete_directory=$_REQUEST['delete_dir'];
-		del_dir($base_work_dir . '/', $delete_directory);		
+		$id=$_REQUEST['delete2'];
+		del_dir($base_work_dir . '/', $delete_directory,$id);		
 		Display :: display_normal_message($delete_directory . ' ' . get_lang('DirDeleted'));
 	}
 	if (!empty ($_REQUEST['delete2'])) {		

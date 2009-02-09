@@ -1038,7 +1038,7 @@ class DocumentManager
         //note the extra / at the end of doc_path to match every path in the
         // document table that is part of the document path
         $sql = "SELECT path FROM $docTable d, $propTable ip " .
-                "where d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND visibility=0 AND ".
+                "where d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND d.filetype='file' AND visibility=0 AND ".
                 "locate(concat(path,'/'),'".$doc_path."/')=1";
         $result = api_sql_query($sql,__FILE__,__LINE__);
         if (Database::num_rows($result) > 0){

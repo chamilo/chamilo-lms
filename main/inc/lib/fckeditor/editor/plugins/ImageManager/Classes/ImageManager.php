@@ -124,6 +124,7 @@ class ImageManager
 			if(is_dir($base.$entry) 
 				&& substr($entry,0,1) != '.'
 				&& strpos($entry, '_DELETED_') === false
+				&& strpos($entry, 'chat_files') === false
 				&& strpos($entry, 'HotPotatoes_files') === false
 				&& ($in_group || (!$in_group && strpos($entry, '_groupdocs') === false))
 				&& $this->isThumbDir($entry) == false) 
@@ -189,6 +190,7 @@ class ImageManager
 		{
 			if (substr($entry,0,1) != '.'          //not a dot file or directory
 				&& strpos($entry, '_DELETED_') === false
+				&& strpos($entry, 'chat_files') === false
 				&& strpos($entry, 'HotPotatoes_files') === false
 				&& ($in_group || (!$in_group && strpos($entry, '_groupdocs') === false)))
 			{

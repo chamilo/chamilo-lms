@@ -42,6 +42,7 @@ function GetFolders( $resourceType, $currentFolder )
 	{
 		if ( $sFile != '.' && $sFile != '..'
 			&& strpos( $sFile, '_DELETED_' ) === false
+			&& strpos( $sFile, 'chat_files' ) === false
 			&& strpos( $sFile, 'HotPotatoes_files' ) === false
 			&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
 			&& (!$in_shared_folder || ($in_shared_folder && $sFile == $user_id))
@@ -86,6 +87,7 @@ function GetFoldersAndFiles( $resourceType, $currentFolder )
 		$is_dir = @is_dir( $sServerDir . $sFile );
 		if ( $sFile != '.' && $sFile != '..'
 			&& strpos( $sFile, '_DELETED_' ) === false
+			&& strpos( $sFile, 'chat_files' ) === false
 			&& strpos( $sFile, 'HotPotatoes_files' ) === false
 			&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
 			&& (!$in_shared_folder || ($in_shared_folder && (!$is_dir || ($is_dir && $sFile == $user_id))))

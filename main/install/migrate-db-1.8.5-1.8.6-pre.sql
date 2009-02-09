@@ -220,5 +220,5 @@ INSERT INTO user_friend_relation_type(id,title)VALUES(3,'Friend');
 INSERT INTO user_friend_relation_type(id,title)VALUES(4,'GoodFriend');
 INSERT INTO user_friend_relation_type(id,title)VALUES(5,'Enemy');
 INSERT INTO user_friend_relation_type(id,title)VALUES(6,'Deleted');
-ALTER TABLE lp ADD session_id session_id int unsigned not null;
-ALTER TABLE document ADD session_id session_id int unsigned not null;
+ALTER TABLE lp ADD session_id int unsigned not null;
+ALTER TABLE document ADD session_id int unsigned not null;

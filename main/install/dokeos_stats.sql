@@ -97,8 +97,8 @@ CREATE TABLE track_e_exercices (
   exe_date datetime NOT NULL default '0000-00-00 00:00:00',
   exe_cours_id varchar(40) NOT NULL default '',
   exe_exo_id mediumint unsigned NOT NULL default 0,
-  exe_result smallint NOT NULL default 0,
-  exe_weighting smallint NOT NULL default 0,
+  exe_result float(6,2) NOT NULL default 0,
+  exe_weighting float(6,2) NOT NULL default 0,
   PRIMARY KEY  (exe_id),
   KEY exe_user_id (exe_user_id),
   KEY exe_cours_id (exe_cours_id)
@@ -121,7 +121,7 @@ CREATE TABLE track_e_attempt (
   question_id int NOT NULL default 0,
   answer text NOT NULL,
   teacher_comment text NOT NULL,
-  marks int NOT NULL default 0,
+  marks float(6,2) NOT NULL default 0,
   course_code varchar(40) NOT NULL default '',
   position int default 0,
   tms datetime NOT NULL default '0000-00-00 00:00:00'

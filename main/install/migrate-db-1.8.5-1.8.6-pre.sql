@@ -121,7 +121,9 @@ ALTER TABLE track_e_hotspot CHANGE hotspot_coordinate hotspot_coordinate text NO
 ALTER TABLE track_e_exercices ADD orig_lp_id int  NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD orig_lp_item_id int  NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD exe_duration int UNSIGNED NOT NULL default 0;
-
+ALTER TABLE track_e_exercices CHANGE exe_result exe_result FLOAT( 6, 2 ) NOT NULL DEFAULT 0;
+ALTER TABLE track_e_exercices CHANGE exe_weighting exe_weighting FLOAT( 6, 2 ) NOT NULL DEFAULT 0;
+ALTER TABLE track_e_attempt CHANGE marks marks FLOAT( 6, 2 ) NOT NULL DEFAULT 0;
 -- xxUSERxx
 
 -- xxCOURSExx

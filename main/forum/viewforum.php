@@ -228,7 +228,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 		$table_list.= '<th height="24">'.get_lang('NamesAndLastNames').'</th>';
 	
 		if ($_GET['list']=='qualify') {		
-			$table_list.= '<th>'.get_lang('Qualify').'</th>';
+			$table_list.= '<th>'.get_lang('Qualification').'</th>';
 		}		
 		if ($userinf['status']=='1') {
 			$table_list.= '<th>'.get_lang('Qualify').'</th>';

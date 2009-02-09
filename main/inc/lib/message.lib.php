@@ -27,6 +27,33 @@ require_once '../messages/message.class.php';
 function inbox_display() {
 	$table_message = Database::get_main_table(TABLE_MESSAGE); 
 	$request=api_is_xml_http_request();
+	if ($_SESSION['social_exist']===true) {
+		$redirect="#remote-tab-2";	
+		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
+			$success= get_lang('SelectedMessagesDeleted').
+			"&nbsp
+			<br><a href=\"".
+			"../social/index.php$redirect\">".
+			get_lang('BackToInbox').
+			"</a>";
+		}else {
+			$success= get_lang('SelectedMessagesDeleted').
+			"&nbsp
+			<br><a href=\"".
+			"../social/index.php$redirect\">".
+			get_lang('BackToInbox').
+			"</a>";				
+		}
+			
+	} else {
+		$success= get_lang('SelectedMessagesDeleted').
+			"&nbsp
+			</b>".
+			"<br><a href=\"".
+			"inbox.php\">".
+			get_lang('BackToOutbox').
+			"</a>";
+	}
 	
 	if (isset ($_REQUEST['action'])) {
 		switch ($_REQUEST['action']) {
@@ -35,11 +62,11 @@ function inbox_display() {
 			foreach ($_POST['id'] as $index => $message_id) {
 				MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);	
 			}
-			Display::display_normal_message(get_lang('SelectedMessagesDeleted'));
+			Display::display_normal_message($success,false);
 			break;
 			case 'deleteone' :
 			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
-			Display::display_confirmation_message(get_lang('MessageDeleted'));
+			Display::display_confirmation_message($success,false);
 			echo '<br/>';	
 			break;
 		}
@@ -73,7 +100,33 @@ function get_message_data_mask($from, $number_of_items, $column, $direction) {
 function outbox_display() {
 	$table_message = Database::get_main_table(TABLE_MESSAGE); 
 	$request=api_is_xml_http_request();
-
+	if ($_SESSION['social_exist']===true) {
+		$redirect="#remote-tab-3";	
+		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
+			$success= get_lang('SelectedMessagesDeleted').
+			"&nbsp
+			<br><a href=\"".
+			"../social/index.php$redirect\">".
+			get_lang('BackToOutbox').
+			"</a>";
+		}else {
+			$success= get_lang('SelectedMessagesDeleted').
+			"&nbsp
+			<br><a href=\"".
+			"../social/index.php$redirect\">".
+			get_lang('BackToOutbox').
+			"</a>";				
+		}
+			
+	} else {
+		$success= get_lang('SelectedMessagesDeleted').
+			"&nbsp
+			</b>".
+			"<br><a href=\"".
+			"outbox.php\">".
+			get_lang('BackToOutbox').
+			"</a>";
+	}
 if (isset ($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 'delete' :
@@ -82,12 +135,12 @@ if (isset ($_REQUEST['action'])) {
 			foreach ($_POST['id'] as $index => $message_id) {
 				MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);	
 			}
-		}
-		Display::display_normal_message(get_lang('SelectedMessagesDeleted'));
+		}		
+		Display::display_normal_message($success,false);
 		break;
 		case 'deleteone' :
 		MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
-		Display::display_confirmation_message(get_lang('MessageDeleted'));
+		Display::display_confirmation_message($success,false);
 		echo '<br/>';	
 		break;
 	}

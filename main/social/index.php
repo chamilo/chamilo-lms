@@ -67,6 +67,7 @@ function delete_friend (element_div) {
 			//alert(datos);
 			 $("div#"+"div_"+user_id[1]).hide("slow");
 			 $("div#"+"div_"+user_id[1]).html("");
+			 clear_form ();
 			}
 		});
 	}
@@ -175,6 +176,7 @@ code {
     font-family: "Courier New", Courier, monospace;
 }
 </style>';
+$_SESSION['social_exist']=true;
 $_SESSION['social_dest'] = 'index.php';
 $interbreadcrumb[]= array (
 	'url' => '#',

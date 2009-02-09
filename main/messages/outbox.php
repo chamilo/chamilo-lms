@@ -98,17 +98,20 @@ echo get_lang('ShowMessageOutbox');
 echo '</div>';
 
 $user_sender_id=api_get_user_id();
-$id=Security::remove_XSS($_GET['id']);
-if ($_REQUEST['action']!='delete') {
-	outbox_display();
-} else {
+if ($_REQUEST['action']=='delete') {
 	$delete_list_id=array();
 	$delete_list_id=$_POST['id'];
 	for ($i=0;$i<count($delete_list_id);$i++) {
-		//the user_id was necesarry to delete a message??
 		MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);		
 	}
-	outbox_display();
+	outbox_display();		
+} elseif ($_REQUEST['action']=='deleteone') {
+	$delete_list_id=array();
+	$id=Security::remove_XSS($_GET['id']);
+	MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);		
+	outbox_display();	
+}else {
+	outbox_display();	
 }
 /*
 ==============================================================================

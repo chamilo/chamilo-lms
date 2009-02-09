@@ -1,4 +1,4 @@
-<?php // $Id: view_message.php 18292 2009-02-06 19:08:47Z iflorespaz $
+<?php // $Id: view_message.php 18385 2009-02-09 21:56:23Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -7,7 +7,7 @@
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
 	Copyright (c) Facultad de Matematicas, UADY (México)
 	Copyright (c) Evie, Free University of Brussels (Belgium)	
-
+	Copyright (c) 2009 Isaac Flores Paz <isaac.flores.paz@gmail.com>
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
 
@@ -41,8 +41,20 @@ $nameTools = get_lang('Messages');
 if (isset($_GET['id_send']) || isset($_GET['id'])) {
 	if (isset($_GET['rs'])) {
 		$interbreadcrumb[]= array (
-			'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-2',
-			'name' => get_lang('SocialNetwork')
+			'url' => '#',
+			'name' => get_lang($nameTools)
+		);
+		$interbreadcrumb[]= array (
+				'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-2',
+				'name' => get_lang('SocialNetwork')
+		);	
+		$interbreadcrumb[]= array (
+			'url' => 'inbox.php',
+			'name' => get_lang('Inbox')
+		);
+		$interbreadcrumb[]= array (
+			'url' => 'outbox.php',
+			'name' => get_lang('Outbox')
 		);
 	} else {
 	$interbreadcrumb[]= array (

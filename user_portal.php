@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 18265 2009-02-05 21:24:50Z juliomontoya $
+<?php // $Id: user_portal.php 18379 2009-02-09 20:42:34Z juliomontoya $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -920,33 +920,47 @@ if (!empty($menu_navigation)) {
 }
 
 // api_display_language_form(); // moved to the profile page.
-echo '<div class="menusection">';
-echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
-echo '<ul class="menulist">';
+
+$show_menu=false;
+$show_create_link=false;
+$show_course_link=false;
+$show_digest_link=false;
 
 $display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION["studentview"] != "studentenview");
 if ($display_add_course_link) {
-	if ( api_get_setting('allow_users_to_create_courses')=='false' && !api_is_platform_admin()) {
-		//echo get_lang('NotHavePermissionToCreateCourses');
-	} else {
-		display_create_course_link();
-	}
+	$show_menu=true;
+	$show_create_link=true;	
 }
-
+	
 if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
-	display_edit_course_list_links();	
+	$show_menu=true;
+	$show_course_link=true;	
 } else {	
 	if (api_get_setting('allow_students_to_browse_courses')=='true') {	
-		display_edit_course_list_links();	
+		$show_menu=true;
+		$show_course_link=true;			
 	}	
 }
 
-if (isset($toolsList) and is_array($toolsList) and isset($digest)) {
-	display_digest($toolsList, $digest, $orderKey, $courses);
+if(isset($toolsList) and is_array($toolsList) and isset($digest)) {
+	$show_digest_link=true;
+	$show_menu=true;	
 }
 
-echo '</ul>';
-echo '</div>';
+if ($show_menu){
+	echo '<div class="menusection">';
+	echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
+	echo '<ul class="menulist">';
+	if ($show_create_link)
+		display_create_course_link();
+	if ($show_course_link)
+		display_edit_course_list_links();
+	if ($show_digest_link)
+		display_digest($toolsList, $digest, $orderKey, $courses);			
+	echo '</ul>';
+	echo '</div>';
+}	
+
 
 // plugins for the my courses menu
 if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu'])) {

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18299 2009-02-06 20:56:44Z juliomontoya $
+<?php // $Id: index.php 18379 2009-02-09 20:42:34Z juliomontoya $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 18299 2009-02-06 20:56:44Z juliomontoya $
+* 	@version $Id: index.php 18379 2009-02-09 20:42:34Z juliomontoya $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -436,22 +436,38 @@ function display_anonymous_right_menu() {
 			echo '</div>';
 		}
 
-		echo "<div class=\"menusection\">";
-		echo "<span class=\"menusectioncaption\">".get_lang("MenuUser")."</span>";
-		echo "<ul class=\"menulist\">";
-
+		$show_menu=false;
+		$show_create_link=false;
+		$show_course_link=false;	
+		
 		$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION["studentview"] != "studentenview");
+		
 		if ($display_add_course_link) {
-			if (api_get_setting('allow_users_to_create_courses')=='false' && !api_is_platform_admin()) {
-				//echo get_lang('NotHavePermissionToCreateCourses');
-			} else {
-			display_create_course_link();
-		    }
-	   }
-		display_edit_course_list_links();
-
-		echo "</ul>";
-		echo "</div>";
+			//display_create_course_link();
+			$show_menu=true;
+			$show_create_link=true;			
+		}			
+		if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
+				$show_menu=true;
+				$show_course_link=true;		
+		} else {	
+			if (api_get_setting('allow_students_to_browse_courses')=='true') {			
+				$show_menu=true;
+				$show_course_link=true;				
+			}	
+		}
+				
+		if ($show_menu){
+			echo "<div class=\"menusection\">";
+			echo "<span class=\"menusectioncaption\">".get_lang("MenuUser")."</span>";
+			echo "<ul class=\"menulist\">";
+			if ($show_create_link)
+				display_create_course_link();
+			if ($show_course_link)
+				display_edit_course_list_links();			
+			echo "</ul>";
+			echo "</div>";			
+		}
 	}
 
 

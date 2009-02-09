@@ -262,7 +262,7 @@ class ScoreDisplay
 
 	private function display_as_percent ($score) {
 		$score_denom=($score[1]==0) ? 1 : $score[1];
-		return round(($score[0] / $score_denom) * 100) . ' %';
+		return round(($score[0] / $score_denom) * 100,2) . ' %';
 	}
 
 	private function display_as_div ($score) {

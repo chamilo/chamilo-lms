@@ -97,7 +97,7 @@ if (!$displayscore->is_custom()) {
 		$stattable .= '<td width="150">' . $key . '</td>';
 		$stattable .= '<td width="550"><img src="../img/bar_1u.gif" width="' . $bar . '%" height="10"/></td>';
 		$stattable .= '<td align="right">' . $nr_items[$key] . '</td>';
-		$stattable .= '<td align="right"> ' . round( ($nr_items[$key] / $resultcount) * 100 ) . '%</td>';
+		$stattable .= '<td align="right"> ' . round(($nr_items[$key] / $resultcount) * 100,2) . '%</td>';
 		$counter++;
 	}
 	$stattable .= '</tr></table>';

@@ -265,7 +265,7 @@ if ($export_result_form->validate()) {
 		if (($eval[0]->has_results())) {
 			$score= $eval[0]->calc_score();
 			if ($score != null) {
-				$average= get_lang('Average') . ' : ' . round(100 * ($score[0] / $score[1])) . ' %';				
+				$average= get_lang('Average') . ' : ' . round(100 * ($score[0] / $score[1]),2) . ' %';				
 			}
 		}
 		if ($eval[0]->get_course_code() == null) {

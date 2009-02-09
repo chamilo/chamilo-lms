@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 18319 2009-02-07 00:03:42Z herodoto $
+<?php // $Id: exercice.php 18366 2009-02-09 16:43:18Z iflorespaz $
 
 /*
 ==============================================================================
@@ -1013,7 +1013,6 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 					WHERE exe_user_id = '".$_user['user_id']."' AND exe_cours_id = '".Database::escape_string($_cid)."'
 					ORDER BY exe_cours_id ASC, exe_date DESC";
 		}
-
 		$results=getManyResultsXCol($sql,11);
 		$hpresults=getManyResultsXCol($hpsql,5);
 
@@ -1093,7 +1092,7 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 				
 				// there are already a duration test period calculated??
 				//echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
-		  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100).'% ('.$res.' / '.$results[$i][3].')</td>';
+		  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100,2).'% ('.$res.' / '.$results[$i][3].')</td>';
 				echo '<td>'.(($is_allowedToEdit||$is_tutor)?
 							"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".
 							(($revised)?get_lang('Edit'):get_lang('Qualify'))."</a>".
@@ -1119,7 +1118,7 @@ if ($_configuration['tracking_enabled'] AND ($show == 'result') )
 				}
 				echo '<td class="content">'.$title.'</td>';
 				echo '<td class="content">'.strftime($dateTimeFormatLong,$hpresults[$i][4]).'</td>';
-				echo '<td class="content">'.round(($hpresults[$i][2]/($hpresults[$i][3]!=0?$hpresults[$i][3]:1))*100).'% ('.$hpresults[$i][2].' / '.$hpresults[$i][3].')</td>';
+				echo '<td class="content">'.round(($hpresults[$i][2]/($hpresults[$i][3]!=0?$hpresults[$i][3]:1))*100,2).'% ('.$hpresults[$i][2].' / '.$hpresults[$i][3].')</td>';
 				echo '<td></td>'; //there is no possibility to edit the results of a Hotpotatoes test
 				echo '</tr>';
 			}

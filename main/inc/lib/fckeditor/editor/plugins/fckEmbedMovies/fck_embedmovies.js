@@ -1,16 +1,34 @@
 var dialog			= window.parent ;
-var oEditor			= window.parent.InnerDialogLoaded(); 
+var oEditor		= dialog.InnerDialogLoaded() ;
 var FCK				= oEditor.FCK; 
 var FCKLang			= oEditor.FCKLang ;
 var FCKConfig		= oEditor.FCKConfig ;
+var FCKTools	= oEditor.FCKTools ;
 
-window.document.dir = oEditor.FCKLang.Dir ;
+// Set the language direction.
+window.document.dir = FCKLang.Dir ;
 
-// <object><param><embed> alternative (not working properly for reasons only 
-//                                     microsoft can know)
+//#### Dialog Tabs
+
+// Set the dialog tabs.
+dialog.AddTab( 'Info', FCKLang.DlgInfoTab ) ;
+
+if ( FCKConfig.VideoUpload )
+	dialog.AddTab( 'Upload', FCKLang.DlgLnkUpload ) ;
+
+
+// Function called when a dialog tag is selected.
+function OnDialogTabChange( tabCode )
+{
+	ShowE('divInfo'		, ( tabCode == 'Info' ) ) ;
+	ShowE('divUpload'	, ( tabCode == 'Upload' ) ) ;
+}
+
+// <object><param><embed> alternative not working properly
+// for reasons only microsoft can know)
 var EmbedInObject = false; 
 
-// get the selected embedded movie and its container div (if available)
+// Get the selected embedded movie and its container div (if available).
 var oMovie = null;
 var oContainerDiv = FCK.Selection.GetSelectedElement();
 
@@ -18,10 +36,6 @@ var oContainerDiv = FCK.Selection.GetSelectedElement();
 // Get the selected video embed (if available).
 var oFakeImage = dialog.Selection.GetSelectedElement() ;
 var oEmbed ;
-
-var sAgent = navigator.userAgent.toLowerCase() ;
-var is_ie = (sAgent.indexOf("msie") != -1); // FCKBrowserInfo.IsIE
-var is_gecko = !is_ie; // FCKBrowserInfo.IsGecko
 
 if ( oFakeImage )
 {
@@ -79,16 +93,16 @@ function GetParam(e, pname, defvalue)
 
 window.onload = function ()	
 {
-	// First of all, translates the dialog box texts.
+	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document);
 	
-	// read settings from existing embedded movie or set to default		
+	// Read settings from existing embedded movie or set to default.
 
 	GetE('txtUrl').value = GetParam( oMovie, ( EmbedInObject ? 'url' : 'src' ), '' ) ;
 
 	GetE('chkAutosize').checked      = GetParam(oMovie,  'autosize',     true);
-	GetE('txtWidth').value           = GetParam(oMovie,  'width',        250  );
-	GetE('txtHeight').value          = GetParam(oMovie,  'height',       250  );
+	GetE('txtWidth').value           = GetParam(oMovie,  'width',        320  );
+	GetE('txtHeight').value          = GetParam(oMovie,  'height',       240  );
 	GetE('chkAutostart').checked     = GetParam(oMovie, 'autostart',     false);
 	GetE('chkShowgotobar').checked   = GetParam(oMovie, 'showgotobar',   false);
 	GetE('chkShowstatusbar').checked = GetParam(oMovie, 'showstatusbar', false);
@@ -97,30 +111,25 @@ window.onload = function ()
 	GetE('chkShowaudiocontrols').checked    = GetParam(oMovie, 'showaudiocontrols',    true);
 	GetE('chkShowpositioncontrols').checked = GetParam(oMovie, 'showpositioncontrols', true);
 
-	// Show/Hide according to settings
+	// Show/Hide according to settings.
 	ShowE('divSize',  !GetE('chkAutosize').checked);
 	ShowE('tdBrowse', FCKConfig.LinkBrowser);
 	ShowE('divControlsettings', GetE('chkShowcontrols').checked)
 
-	// Show Ok button
-	window.parent.SetOkButton( true );
+	// Show/Hide the "Browse Server" button.
+	GetE('tdBrowse').style.display = FCKConfig.VideoBrowser ? '' : 'none' ;
+
+	// Set the actual uploader URL.
+	if ( FCKConfig.VideoUpload )
+		GetE('frmUpload').action = FCKConfig.VideoUploadURL ;
+
+	dialog.SetAutoSize( true ) ;
+
+	// Activate the "OK" button.
+	dialog.SetOkButton( true ) ;
+
+	SelectField( 'txtUrl' ) ;
 } 
-
-function BrowseServer()
-{
-	OpenFileBrowser(
-		FCKConfig.VideoBrowserURL,
-		FCKConfig.ScreenWidth * 0.7 ,
-		FCKConfig.ScreenHeight * 0.7);
-}
-
-function SetUrl( url )
-{
-	// Added by Ivan Tcholakov.
-	url = FCK.GetSelectedUrl( url );
-
-	GetE('txtUrl').value = url;
-}
 
 function CreateEmbeddedMovie(e, url)
 {
@@ -206,13 +215,16 @@ function CreateEmbeddedMovie(e, url)
 	}
 }
 
-function Ok() 
+//#### The OK button was hit.
+function Ok()
 {
 	if ( GetE('txtUrl').value.length == 0 )
 	{
-		window.parent.SetSelectedTab( 'Info' ) ;
+		dialog.SetSelectedTab( 'Info' ) ;
 		GetE('txtUrl').focus() ;
-		alert( FCKLang.DlgEmbedMoviesAlertUrl ) ;
+
+		alert( FCKLang.DlgAlertUrl ) ;
+
 		return false ;
 	}
 
@@ -221,28 +233,107 @@ function Ok()
 	//{
 	//	oContainerDiv = FCK.CreateElement('DIV');
 	//}
-	
-	// code that makes posible the fake image
+
 	if ( !oEmbed )
 	{
-		oEmbed		= FCK.EditorDocument.createElement( 'embed' ) ;		
+		oEmbed		= FCK.EditorDocument.createElement( 'EMBED' ) ;		
 		oFakeImage  = null ;
 	}
-	
+
 	url = GetE( 'txtUrl' ).value ; 
 
 	if ( !oFakeImage )
 	{	
 		oFakeImage	= oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', oEmbed ) ;
-		oFakeImage.setAttribute( '_fckvideo', 'true', 0 ) ; 
+		oFakeImage.setAttribute( '_fckvideo', 'true', 0 ) ;
 		//oFakeImage	= FCK.InsertElement( oFakeImage ) ;
-	}	
+	}
+
 	oEditor.FCKEmbedAndObjectProcessor.RefreshView( oFakeImage, oEmbed ) ;	
-	// ---------------------------------
+
 	html = CreateEmbeddedMovie(oContainerDiv, url )	
 	FCK.InsertHtml(html) ;
-		
+
 	oEditor.FCKUndo.SaveUndoStep();
 
 	return true;
+}
+
+function BrowseServer()
+{
+	OpenFileBrowser( FCKConfig.VideoBrowserURL, FCKConfig.VideoBrowserWindowWidth, FCKConfig.VideoBrowserWindowHeight ) ;
+}
+
+function SetUrl( url )
+{
+	url = FCK.GetSelectedUrl( url ) ;
+
+	GetE('txtUrl').value = url;
+
+	dialog.SetSelectedTab( 'Info' ) ;
+}
+
+function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
+{
+	// Remove animation
+	window.parent.Throbber.Hide() ;
+	GetE( 'divUpload' ).style.display  = '' ;
+
+	switch ( errorNumber )
+	{
+		case 0 :	// No errors
+			//alert( 'Your file has been successfully uploaded' ) ;
+			break ;
+		case 1 :	// Custom error
+			alert( customMsg ) ;
+			return ;
+		case 101 :	// Custom warning
+			alert( customMsg ) ;
+			break ;
+		case 201 :
+			alert( 'A file with the same name is already available. The uploaded file has been renamed to "' + fileName + '"' ) ;
+			break ;
+		case 202 :
+			alert( 'Invalid file type' ) ;
+			return ;
+		case 203 :
+			alert( "Security error. You probably don't have enough permissions to upload. Please check your server." ) ;
+			return ;
+		case 500 :
+			alert( 'The connector is disabled' ) ;
+			break ;
+		default :
+			alert( 'Error on file upload. Error number: ' + errorNumber ) ;
+			return ;
+	}
+	
+	SetUrl( fileUrl ) ;
+	GetE('frmUpload').reset() ;
+}
+
+var oUploadAllowedExtRegex	= new RegExp( FCKConfig.VideoUploadAllowedExtensions, 'i' ) ;
+var oUploadDeniedExtRegex	= new RegExp( FCKConfig.VideoUploadDeniedExtensions, 'i' ) ;
+
+function CheckUpload()
+{
+	var sFile = GetE('txtUploadFile').value ;
+
+	if ( sFile.length == 0 )
+	{
+		alert( 'Please select a file to upload' ) ;
+		return false ;
+	}
+	
+	if ( ( FCKConfig.VideoUploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
+		( FCKConfig.VideoUploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
+	{
+		OnUploadCompleted( 202 ) ;
+		return false ;
+	}
+
+	// Show animation
+	window.parent.Throbber.Show( 100 ) ;
+	GetE( 'divUpload' ).style.display  = 'none' ;
+
+	return true ;
 }

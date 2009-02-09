@@ -983,7 +983,7 @@ FCK.ContextMenu.RegisterListener( {
 			{
 				case 'embedded_video' :
 					menu.AddSeparator() ;
-					menu.AddItem( 'EmbedMovies', FCKLang.DlgEmbedMoviesTooltip, FCKConfig.PluginsPath + 'fckEmbedMovies/embedmovies.gif' ) ;
+					menu.AddItem( 'EmbedMovies', FCKLang.DlgEmbedMoviesTitle, FCKConfig.PluginsPath + 'fckEmbedMovies/embedmovies.gif' ) ;
 					break ;
 				case 'youtube' :
 					menu.AddSeparator() ;

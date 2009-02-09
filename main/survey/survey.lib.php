@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 18287 2009-02-06 16:23:12Z ndieschburg $
+* 	@version $Id: survey.lib.php 18382 2009-02-09 21:16:39Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -480,8 +480,13 @@ class survey_manager
 		$table_survey = Database :: get_course_table(TABLE_SURVEY);
 		
 		$datas = survey_manager::get_survey($survey_id);
-
-		$sql = 'DELETE FROM '.$table_survey_invitation.' WHERE survey_code = "'.Database::escape_string($datas['code']).'"';
+		$session_where='';
+		if (api_get_session_id()!=0)
+		{
+			$session_where = ' AND session_id = "'.api_get_session_id().'" ';
+		}
+		
+		$sql = 'DELETE FROM '.$table_survey_invitation.' WHERE survey_code = "'.Database::escape_string($datas['code']).'" '.$session_where.' ';
 		api_sql_query($sql, __FILE__, __LINE__);
 		
 		$sql = 'DELETE FROM '.$table_survey_answer.' WHERE survey_id='.intval($survey_id);
@@ -519,7 +524,7 @@ class survey_manager
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		// storing that the user has finished the survey.
-		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE user='".Database::escape_string($user)."' AND survey_code='".Database::escape_string($survey_code)."'";
+		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE session_id='".api_get_session_id()."' AND user='".Database::escape_string($user)."' AND survey_code='".Database::escape_string($survey_code)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 	}
 
@@ -3960,7 +3965,7 @@ class SurveyUtil {
 					'' as col4
 					FROM $table_survey_invitation survey_invitation
 			LEFT JOIN $table_user user ON  survey_invitation.user = user.user_id
-			WHERE survey_invitation.survey_id = '".Database::escape_string($_GET['survey_id'])."'";
+			WHERE survey_invitation.survey_id = '".Database::escape_string($_GET['survey_id'])."' AND session_id='".api_get_session_id()."'  ";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = Database::fetch_array($res))
 		{
@@ -3984,7 +3989,7 @@ class SurveyUtil {
 		// Database table definition
 		$table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION);
 	
-		$sql = "SELECT count(user) AS total FROM $table_survey_invitation WHERE survey_id='".Database::escape_string($_GET['survey_id'])."'";
+		$sql = "SELECT count(user) AS total FROM $table_survey_invitation WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' AND session_id='".api_get_session_id()."' ";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$row = Database::fetch_array($res,'ASSOC');
 		return $row['total'];
@@ -4091,8 +4096,17 @@ class SurveyUtil {
 								$result = api_sql_query($sql, __FILE__, __LINE__);
 							}
 						}
+						$portal_url = $_configuration['root_web'];
+						if ($_configuration['multiple_access_urls']==true) {
+							$access_url_id = api_get_current_access_url_id();				
+							if ($access_url_id != -1 ){
+								$url = api_get_access_url($access_url_id);
+								$portal_url = $url['url'];
+							}
+						}
+
 						// replacing the **link** part with a valid link for the user
-						$survey_link = $_configuration['root_web'].$_configuration['code_append'].'survey/'.'fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$invitation_code;
+						$survey_link = $portal_url.$_configuration['code_append'].'survey/'.'fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$invitation_code;
 						$text_link = '<a href="'.$survey_link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n".get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$survey_link;
 						
 						$replace_count = 0;

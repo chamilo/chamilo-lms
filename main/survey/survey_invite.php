@@ -143,8 +143,18 @@ $form->addElement('style_submit_button', 'submit', get_lang('Send'), 'class="sav
 // The rules (required fields)
 $form->addRule('mail_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
+
+$portal_url = $_configuration['root_web'];
+if ($_configuration['multiple_access_urls']==true) {
+	$access_url_id = api_get_current_access_url_id();				
+	if ($access_url_id != -1 ){
+		$url = api_get_access_url($access_url_id);
+		$portal_url = $url['url'];
+	}
+}	
+		  
 // show the URL that can be used by users to fill a survey without invitation
-$auto_survey_link = $_configuration['root_web'].$_configuration['code_append'].
+$auto_survey_link = $portal_url.$_configuration['code_append'].
             'survey/'.'fillsurvey.php?course='.$_course['sysCode'].
             '&invitationcode=auto&scode='.$survey_data['survey_code'];
 $form->addElement('static',null, null, '<br \><br \>' . get_lang('AutoInviteLink'));
@@ -192,8 +202,4 @@ else
 
 // Footer
 Display :: display_footer();
-
-
-
-
 ?>

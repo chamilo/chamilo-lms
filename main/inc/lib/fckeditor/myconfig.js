@@ -227,7 +227,7 @@ FCKConfig.Plugins.Add('flvPlayer', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca
 FCKConfig.Plugins.Add('youtube', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
 
 // Digital maps insertion, GoogleMaps service.
-FCKConfig.Plugins.Add('googlemaps', 'en,de,es,fr,it,nl') ;
+FCKConfig.Plugins.Add('googlemaps', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
 // This key is for http://localhost. You must get one for each server where you want to use the plugin,
 // just get the key for free here after agreeing to the Terms of Use of the GoogleMaps API:
 // http://www.google.com/apis/maps/signup.html. // If you leave an empty string then the toolbar icon won't be shown.

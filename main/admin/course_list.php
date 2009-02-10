@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 18215 2009-02-03 22:41:05Z juliomontoya $
+<?php // $Id: course_list.php 18428 2009-02-10 23:07:44Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -109,7 +109,10 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	while ($course = Database::fetch_row($res))
 	{
 		//place colour icons in front of courses
-		$course[1] = get_course_visibility_icon($course[10]).'<a href="../course_home/course_home.php?cidReq='.$course[0].'">'.$course[1].'</a>';
+
+		//$course[1] = get_course_visibility_icon($course[10]).'<a href="../course_home/course_home.php?cidReq='.$course[0].'">'.$course[1].'</a>'; // This is not the preferable way to go to the homepage.
+		$course[1] = get_course_visibility_icon($course[10]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[0].'/index.php">'.$course[1].'</a>';
+
 		$course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[7] = CourseManager :: is_virtual_course_from_system_code($course[7]) ? get_lang('Yes') : get_lang('No');
@@ -126,7 +129,10 @@ function modify_filter($code)
 	global $charset;
 	return
 		'<a href="course_information.php?code='.$code.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;'.
-		'<a href="../course_home/course_home.php?cidReq='.$code.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'.
+
+		//'<a href="../course_home/course_home.php?cidReq='.$code.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'. // This is not the preferable way to go to the homepage.
+		'<a href="'.api_get_path(WEB_COURSE_PATH).$code.'/index.php">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'.
+
 		'<a href="../tracking/courseLog.php?cidReq='.$code.'">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;'.
 		'<a href="course_edit.php?course_code='.$code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;'.
 		'<a href="course_list.php?delete_course='.$code.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';

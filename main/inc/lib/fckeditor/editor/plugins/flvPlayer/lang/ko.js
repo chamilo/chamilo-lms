@@ -1,4 +1,4 @@
-﻿// Swedish language file.
+﻿// Korean language file.
 // Video (flv) Dialog.
 // Please, use UTF-8 encoding.
 

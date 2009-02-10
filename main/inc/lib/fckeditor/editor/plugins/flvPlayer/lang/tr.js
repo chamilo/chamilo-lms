@@ -1,4 +1,4 @@
-﻿// Swedish language file.
+﻿// Turkish language file.
 // Video (flv) Dialog.
 // Please, use UTF-8 encoding.
 

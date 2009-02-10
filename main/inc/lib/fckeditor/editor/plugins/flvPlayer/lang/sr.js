@@ -1,4 +1,4 @@
-﻿// Swedish language file.
+﻿// Serbian (Cyrillic) language file.
 // Video (flv) Dialog.
 // Please, use UTF-8 encoding.
 

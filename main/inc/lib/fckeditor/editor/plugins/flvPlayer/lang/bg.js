@@ -1,8 +1,8 @@
-﻿// Swedish language file.
+// Bulgarian language file.
 // Video (flv) Dialog.
 // Please, use UTF-8 encoding.
 
-FCKLang["DlgFLVPlayerTitle"]          = "FLV Media Player" ;
+FCKLang["DlgFLVPlayerTitle"]          = "Добавяне/Редактиране на видео файл (flv)" ;
 FCKLang["DlgFLVPlayerURL"]            = "Movie/Media File" ;
 FCKLang["DlgFLVPlayerBtnBrowse"]      = "Browse..." ;
 FCKLang["DlgFLVPlayerImgURL"]         = "Preview Image" ;

@@ -1,4 +1,5 @@
-﻿// Swedish language file.
+﻿// Basque language file.
+// Euskara hizkuntza fitxategia.
 // Video (flv) Dialog.
 // Please, use UTF-8 encoding.
 

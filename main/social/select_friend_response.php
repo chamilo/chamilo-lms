@@ -10,7 +10,7 @@ $_SESSION['this_section']=$this_section;
 api_block_anonymous_users();
 ?>
 <div class="actions">
-<?php echo get_lang('ShowMessageInvitation'); ?>
+<?php echo get_lang('SocialInvitesComment'); ?>
 </div>
 <div id="id_response" align="center"></div>
 <?php
@@ -21,7 +21,7 @@ $list_get_invitation=UserFriend::get_list_invitation_of_friends_by_user_id($user
 $list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id($user_id);
 $number_loop=count($list_get_invitation);
 if ($number_loop==0) {
-	echo Display::display_normal_message(get_lang('YouNotHaveInvitations '));
+	echo Display::display_normal_message(get_lang('YouDontHaveInvites '));
 	
 }
 for ($i=0;$i<$number_loop;$i++) {
@@ -32,7 +32,7 @@ for ($i=0;$i<$number_loop;$i++) {
     <td width="600" height="20" valign="top"><table width="100%" border="0"
 cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
       <tr>
-        <td width="600" height="20" valign="top"><div align="left"><?php echo get_lang('RequestFriend'); ?></div></td>
+        <td width="600" height="20" valign="top"><div align="left"><?php echo get_lang('RequestContact'); ?></div></td>
         </tr>
     </table></td>
   </tr>
@@ -94,7 +94,7 @@ border="0" cellpadding="0" cellspacing="0">
                           <tr>
                             <td height="61" valign="top"><?php
                             $date=$list_get_invitation[$i]['send_date'];
-                            echo get_lang('DateSent').' : '.$date;
+                            echo get_lang('DateSend').' : '.$date;
                             ?></td>
                           </tr>
                       </table></td>

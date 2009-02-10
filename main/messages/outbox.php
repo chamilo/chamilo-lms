@@ -94,7 +94,7 @@ api_display_tool_title(get_lang('Outbox'));
 
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 echo '<div class=actions>';
-echo get_lang('ShowMessageOutbox');
+echo get_lang('MessageOutboxComment');
 echo '</div>';
 
 $user_sender_id=api_get_user_id();

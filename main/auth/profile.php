@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18300 2009-02-06 21:06:34Z iflorespaz $
+<?php // $Id: profile.php 18425 2009-02-10 22:29:20Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -405,7 +405,7 @@ foreach($extra as $id => $field_details)
 }
 if (api_get_setting('profile', 'apikeys') == 'true') {
 	$form->addElement('html','<div id="div_api_key">');
-	$form->addElement('text', 'api_key_generate', get_lang('MyApiKeyGenerate'), array('size' => 40,'id' => 'id_api_key_generate'));
+	$form->addElement('text', 'api_key_generate', get_lang('MyApiKey'), array('size' => 40,'id' => 'id_api_key_generate'));
 	$form->addElement('html','</div>');
 	$form->addElement('button', 'generate_api_key', get_lang('GenerateApiKey'),array('id' => 'id_generate_api_key','onclick' => 'generate_open_id_form()'));//generate_open_id_form()
 }

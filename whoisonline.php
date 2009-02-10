@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 18324 2009-02-07 16:20:34Z iflorespaz $
+<?php // $Id: whoisonline.php 18425 2009-02-10 22:29:20Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -133,7 +133,7 @@ function display_user_list($user_list, $_plugins)
 		$sorting_options['column'] = (isset ($_GET['column']) ? (int)$_GET['column'] : 2);
 		if (api_get_setting('allow_social_tool')=='true') {
 			send_invitation_friend_user();
-			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInvitationToFriends').'"/></div>';
+			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInviteMessage').'"/></div>';
 			echo '<form action="whoisonline.php" name="form_register_friend" id="form_register_friend" method="post">';
 		}
 		

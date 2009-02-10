@@ -26,6 +26,6 @@ for ($k=0;$k<$number_list;$k++) {
         </td>
     </tr>
 	    <tr>
-        <td><input type="button" value="<?php echo get_lang('GroupContact') ?>" onclick="set_qualify_friend()"/></td>
+        <td><input type="button" value="<?php echo get_lang('AttachToGroup') ?>" onclick="set_qualify_friend()"/></td>
     </tr>
 </table>

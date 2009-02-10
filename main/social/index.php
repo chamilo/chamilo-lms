@@ -87,14 +87,14 @@ function set_qualify_friend() {
 	user_id_friend = $("#user_cod_qualify").attr("value");
 	type_friend    = $("input[@name=list_type_friend]:checked").val();
 	if (user_id_friend==0) {
-		alert("'.get_lang('SelectedOneOption').'");
+		alert("'.get_lang('SelectOneContact').'");
 		return false;
 	}
 	if (type_friend==null) {
-		alert("'.get_lang('SelectedOneOption').'");
+		alert("'.get_lang('SelectOneGroup').'");
 		return false;		
 	}	
-	if (confirm("'.get_lang('QualifyContactsPersonal').'")) {
+	if (confirm("'.get_lang('AttachContactsPersonal').' ?")) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
@@ -175,7 +175,7 @@ function submit_form (path_submit) {
 		   		$("#form_send").submit();
 		   }	
 		} else {
-			alert("'.get_lang('SelectedCheckbox').'");
+			alert("'.get_lang('SelectTheCheckbox').'");
 		}
 
 	} else {
@@ -250,13 +250,13 @@ $interbreadcrumb[]= array (
 );
 $interbreadcrumb[]= array (
 	'url' => $_SESSION['social_dest'],
-	'name' => get_lang('Social')
+	'name' => get_lang('SocialNetwork')
 );
 Display :: display_header('');
 ?>
 <div id="container-9">
     <ul>
-        <li><a href="data_personal.inc.php"><span><?php echo get_lang('DataPersonals') ?></span></a></li>
+        <li><a href="data_personal.inc.php"><span><?php echo get_lang('PersonalData') ?></span></a></li>
         <?php 
        	if (api_get_setting('allow_message_tool')=='true') { 
        	?>        
@@ -265,7 +265,7 @@ Display :: display_header('');
         <?php }
   	 	if (api_get_setting('allow_social_tool')=='true') {      
         ?>
-        <li><a href="select_friend_response.php"><span><?php echo get_lang('Invitation') ?></span></a></li>
+        <li><a href="select_friend_response.php"><span><?php echo get_lang('Invites') ?></span></a></li>
         <li><a href="contacts.inc.php"><span><?php echo get_lang('Contacts') ?></span></a></li>
         <li><a href="group_contact.inc.php"><span><?php echo get_lang('ContactsGroups') ?></span></a></li>
         <?php

@@ -13,7 +13,7 @@ require_once '../inc/lib/social.lib.php';
 //$list_path_friends=array();
 ?>
 <div id="id" class="actions">
-<?php echo get_lang('MessageInformationContacts') ?>
+<?php echo get_lang('SocialInformationComment') ?>
 </div>
 <?php
 $user_id=api_get_user_id();
@@ -85,7 +85,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-content-description">
           <tr>
             <td width="430" height="180" valign="top" class="social-align-box">
-            <div align="center" class="social-qualify"><?php echo get_lang('GroupingMyContactsPersonal') ?><input type="hidden" class="" name="user_cod_qualify" id="user_cod_qualify" value="0" /></div>
+            <div align="center" class="social-qualify"><?php echo get_lang('AttachContactsToGroup') ?><input type="hidden" class="" name="user_cod_qualify" id="user_cod_qualify" value="0" /></div>
             <div align="center" class="social-qualify-display" id="div_info_user"></div>
             <div id="div_qualify">
             <?php 
@@ -115,7 +115,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
         <td width="750" height="22" valign="top">
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
           <tr>
-            <td width="750" height="22" valign="top" class="social-title">&nbsp;&nbsp;<?php echo get_lang('ListContacts'); ?></td>
+            <td width="750" height="22" valign="top" class="social-title">&nbsp;&nbsp;<?php echo get_lang('ContactsList'); ?></td>
               </tr>
         </table></td>
         </tr>

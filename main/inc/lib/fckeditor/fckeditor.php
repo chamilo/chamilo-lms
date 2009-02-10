@@ -195,6 +195,7 @@ class FCKeditor
 		$isocode_language = Database::result($result_sql, 0, 0);
 		$this->Config['DefaultLanguage'] = $isocode_language;
 */
+		$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
 		$this->Config['DefaultLanguage'] = $editor_lang;
 
 		// css should be dokeos ones

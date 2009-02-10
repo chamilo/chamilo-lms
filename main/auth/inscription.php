@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 18376 2009-02-09 20:25:27Z juliomontoya $
+// $Id: inscription.php 18418 2009-02-10 20:07:37Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -331,7 +331,7 @@ if ($form->validate()) {
 			$sql_set[] = "diplomas = '".Database::escape_string($values['diplomas'])."'";
 			$store_extended = true;
 		}
-		if (api_get_setting('extended_profile') =$portal_url= 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
+		if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
 		{
 			$sql_set[] = "teach = '".Database::escape_string($values['teach'])."'";
 			$store_extended = true;

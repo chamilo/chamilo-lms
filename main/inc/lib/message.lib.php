@@ -88,8 +88,20 @@ function inbox_display() {
 	$table->set_header(2,$title,$param);
 	$table->set_header(3, get_lang('Date'),$param);
 	$table->set_header(4,$action,$param);
-	$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
-	$table->display();
+	if ($request===true) {
+		echo '<form name="form_send" id="form_send" action="" method="post">';
+		echo '<input type="hidden" name="action" value="delete" />';
+		$table->display();
+		echo '</form>';
+		if (get_number_of_messages_mask() > 0) {
+			echo '<a href="javascript:void(0)" onclick="selectall_cheks()">'.get_lang('SelectAll').'</a>&nbsp;&nbsp;&nbsp;';
+			echo '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.get_lang('UnSelectAll').'</a>&nbsp;&nbsp;&nbsp;';
+			echo '<input name="delete" type="button" value="'.get_lang('DeleteSelectedMessages').'" onclick="submit_form(\'inbox\')"/>';
+		}
+	} else {
+		$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
+		$table->display();
+	}
 }
 function get_number_of_messages_mask() {
 	return MessageManager::get_number_of_messages();
@@ -160,8 +172,20 @@ $table->set_header(1, get_lang('From'));
 $table->set_header(2, $title);
 $table->set_header(3, get_lang('Date'));
 $table->set_header(4,$action, false);
-$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
-	$table->display();
+	if ($request===true) {
+		echo '<form name="form_send_out" id="form_send_out" action="" method="post">';
+		echo '<input type="hidden" name="action" value="delete" />';
+		$table->display();
+		echo '</form>';
+		if (get_number_of_messages_send_mask() > 0) {
+			echo '<a href="javascript:void(0)" onclick="selectall_cheks()">'.get_lang('SelectAll').'</a>&nbsp;&nbsp;&nbsp;';
+			echo '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.get_lang('UnSelectAll').'</a>&nbsp;&nbsp;&nbsp;';
+			echo '<input name="delete" type="button" value="'.get_lang('DeleteSelectedMessages').'" onclick="submit_form(\'outbox\')"/>';
+		}
+	} else {
+		$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
+		$table->display();
+	}
 }
 function get_number_of_messages_send_mask() {
 	return MessageManager::get_number_of_messages_sent();

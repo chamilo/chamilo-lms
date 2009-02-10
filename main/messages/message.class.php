@@ -140,7 +140,11 @@ class MessageManager {
 		$i = 0;
 		$message_list = array ();
 		while ($result = Database::fetch_row($sql_result)) {
-			$message[0] = ($result[0]);
+			if ($request===true) {
+				$message[0] = '<input type="checkbox" value='.$result[0].' name="id[]">';		
+			 } else {
+				$message[0] = ($result[0]);	 	
+			 }
 			if ($request===true) {
 				$message[1] = utf8_encode(GetFullUserName(($result[1])));
 				$message[2] = '<a href="../messages/view_message.php?rs=1&amp;id='.$result[0].'">'.utf8_encode($result[2]).'</a>';
@@ -253,7 +257,11 @@ class MessageManager {
 		$i = 0;
 		$message_list = array ();
 		while ($result = Database::fetch_row($sql_result)) {
-			$message[0] = $result[0];
+			if ($request===true) {
+				$message[0] = '<input type="checkbox" value='.$result[0].' name="out[]">';		
+			 } else {
+				$message[0] = ($result[0]);	 	
+			 }
 			if ($request===true) {
 				$message[1] = utf8_encode(GetFullUserName($result[1]));
 				$message[2] = '<a href="../messages/view_message.php?rs=1&amp;id_send='.$result[0].'">'.utf8_encode($result[2]).'</a>';

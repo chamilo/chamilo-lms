@@ -161,6 +161,55 @@ function toogle_function (element_html){
 	}
 
 }
+function selectall_cheks() {
+	$("input[@type=checkbox]").attr("checked", true);
+}
+function unselectall_cheks() {
+	$("input[@type=checkbox]").attr("checked", false);
+}
+function submit_form (path_submit) {
+	if (path_submit=="inbox") {
+		if (count_checkbox("inbox") > 0) {
+		   document.getElementById(\'form_send\').action="../messages/inbox.php";		
+		   if (confirm("'.get_lang('ConfirmYourChoice').'")) {
+		   		$("#form_send").submit();
+		   }	
+		} else {
+			alert("'.get_lang('SelectedCheckbox').'");
+		}
+
+	} else {
+		if (count_checkbox("outbox") > 0) {
+			document.getElementById(\'form_send_out\').action="../messages/outbox.php";		
+		   if (confirm("'.get_lang('ConfirmYourChoice').'")) {			
+				$("#form_send_out").submit();
+		   }
+		} else {
+			alert("'.get_lang('SelectedMoreOptions').'");
+		}			
+	}
+}
+function count_checkbox(status_type) {
+	if (status_type=="inbox") {
+		var checkboxes = document.getElementsByName("id[]");
+		var cont = 0;
+		for (var x=0; x < checkboxes.length; x++) {
+		   if (checkboxes[x].checked) {
+		       cont = cont + 1;
+		    }
+		}
+		return cont;	
+	} else {
+		var checkboxes = document.getElementsByName("out[]");
+		var cont = 0;
+		for (var x=0; x < checkboxes.length; x++) {
+		   if (checkboxes[x].checked) {
+		       cont = cont + 1;
+		    }
+		}
+		return cont;	
+	}
+}
 </script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';
 $htmlHeadXtra[] = '

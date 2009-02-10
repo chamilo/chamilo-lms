@@ -100,15 +100,22 @@ echo '</div>';
 $user_sender_id=api_get_user_id();
 if ($_REQUEST['action']=='delete') {
 	$delete_list_id=array();
-	$delete_list_id=$_POST['id'];
+	if (isset($_POST['out'])) {
+		$delete_list_id=$_POST['out'];	
+	}
+	if (isset($_POST['id'])) {
+		$delete_list_id=$_POST['id'];			
+	}
 	for ($i=0;$i<count($delete_list_id);$i++) {
 		MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);		
 	}
+	$delete_list_id=array();
 	outbox_display();		
 } elseif ($_REQUEST['action']=='deleteone') {
 	$delete_list_id=array();
 	$id=Security::remove_XSS($_GET['id']);
-	MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);		
+	MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
+	$delete_list_id=array();		
 	outbox_display();	
 }else {
 	outbox_display();	

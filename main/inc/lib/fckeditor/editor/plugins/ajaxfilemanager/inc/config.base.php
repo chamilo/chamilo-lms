@@ -222,38 +222,35 @@
 	}	
 	*/
 
-	@ $editor_lang = Database :: get_language_isocode($language_interface);
+	@ $langajaxfilemanager = Database :: get_language_isocode($language_interface);
 
 	// Some code translations are needed.
-	$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
-	if (empty ($editor_lang))
+	$langajaxfilemanager = strtolower(str_replace('_', '-', $langajaxfilemanager));
+	if (empty ($langajaxfilemanager))
 	{
-		$editor_lang = 'en';
+		$langajaxfilemanager = 'en';
 	}
-	switch ($editor_lang)
+	switch ($langajaxfilemanager)
 	{
 		case 'uk':
-			$editor_lang = 'ukr';
+			$langajaxfilemanager = 'ukr';
 			break;
 		case 'pt':
-			$editor_lang = 'pt_pt';
+			$langajaxfilemanager = 'pt_pt';
 			break;
 		case 'pt-br':
-			$editor_lang = 'pt_br';
+			$langajaxfilemanager = 'pt_br';
 			break;
 		// Code here other noticed exceptions.
 	}
 
-	// Checking for availability of a corresponding language file.
-	$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/langs/'.$editor_lang.'.php';
 
-	if (!file_exists($language_file))
+	// Checking for availability of a corresponding language file.
+	if (!file_exists(api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/langs/'.$langajaxfilemanager.'.php'))
 	{
 		// If there was no language file, use the english one.
-		$editor_lang = 'en';
+		$langajaxfilemanager = 'en';
 	}
-
-	$langajaxfilemanager = $editor_lang;
 
 	define('CONFIG_LANG_INDEX', 'language'); //the index in the session
 	define('CONFIG_LANG_DEFAULT', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['language']) && file_exists(DIR_LANG . secureFileName($_GET['language']) . '.php')?secureFileName($_GET['language']):$langajaxfilemanager)); //change it to be your language file base name, such en

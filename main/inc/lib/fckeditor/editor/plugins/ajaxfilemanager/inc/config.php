@@ -67,8 +67,15 @@
 	}
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . $configBaseFileName);
 
-	
+	// Loading the selected language file.
 	require_once(DIR_AJAX_LANGS . CONFIG_LANG_DEFAULT . ".php");
+	// In order the manager not to look ugly in cases of incompleted translations,
+	// we will initialize undefined language constants with English strings.
+	if (CONFIG_LANG_DEFAULT != "en")
+	{
+		require_once(DIR_AJAX_LANGS . "en.php");
+	}
+
 	require_once(DIR_AJAX_INC . "function.base.php");	
 	
 	require_once(dirname(__FILE__) .  DIRECTORY_SEPARATOR . "class.session.php");

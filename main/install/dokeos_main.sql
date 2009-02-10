@@ -1013,6 +1013,7 @@ CREATE TABLE user_field (
 	field_order int,
 	field_visible tinyint default 0,
 	field_changeable tinyint default 0,
+	field_filter tinyint default 0,
 	tms	TIMESTAMP,	
 	PRIMARY KEY(id)
 );

@@ -107,6 +107,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_soci
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_students_to_browse_courses', NULL, 'radio', 'Platform', 'true', 'AllowStudentsToBrowseCoursesTitle', 'AllowStudentsToBrowseCoursesComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_browse_courses', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_browse_courses', 'false', 'No');
+ALTER TABLE user_field ADD field_filter tinyint default 0;
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
@@ -222,3 +223,4 @@ INSERT INTO user_friend_relation_type(id,title)VALUES(5,'Enemy');
 INSERT INTO user_friend_relation_type(id,title)VALUES(6,'Deleted');
 ALTER TABLE lp ADD session_id int unsigned not null default 0;
 ALTER TABLE document ADD session_id int unsigned not null default 0;
+

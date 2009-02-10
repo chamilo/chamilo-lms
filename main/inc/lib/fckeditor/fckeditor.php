@@ -350,7 +350,8 @@ class FCKeditor
 			$this->Config['AdvancedFileManager'] = true;
 
 			// Configuration path when advanced file manager is used.
-			$this->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
+			$this->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+			//$this->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
 
 			// URLs for opening the file browser for different resource types (file types):
 

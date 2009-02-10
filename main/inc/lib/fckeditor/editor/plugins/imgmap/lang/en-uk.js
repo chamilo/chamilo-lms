@@ -1,4 +1,4 @@
-﻿// English language file.
+// English (United Kingdom) language file.
 // Image Map Editor.
 // Please, use UTF-8 encoding.
 
@@ -24,6 +24,7 @@ FCKLang.imgmapPointer       = 'Pointer' ;
 FCKLang.imgmapRectangle     = 'Rectangle' ;
 FCKLang.imgmapCircle        = 'Circle' ;
 FCKLang.imgmapPolygon       = 'Polygon' ;
+
 var imgmapStrings = {
 
 READY                   : 'Ready',

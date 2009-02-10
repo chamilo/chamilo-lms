@@ -1,4 +1,5 @@
-﻿// English language file.
+﻿// Basque language file.
+// Euskara hizkuntza fitxategia.
 // Image Map Editor.
 // Please, use UTF-8 encoding.
 
@@ -24,6 +25,7 @@ FCKLang.imgmapPointer       = 'Pointer' ;
 FCKLang.imgmapRectangle     = 'Rectangle' ;
 FCKLang.imgmapCircle        = 'Circle' ;
 FCKLang.imgmapPolygon       = 'Polygon' ;
+
 var imgmapStrings = {
 
 READY                   : 'Ready',

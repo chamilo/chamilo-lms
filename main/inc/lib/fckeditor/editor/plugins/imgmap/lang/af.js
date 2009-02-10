@@ -1,4 +1,4 @@
-﻿// English language file.
+﻿// Afrikaans language file.
 // Image Map Editor.
 // Please, use UTF-8 encoding.
 

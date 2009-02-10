@@ -147,7 +147,11 @@ this.loadScript(this.config.baseroot+"excanvas.js");
 if(this.config.lang==""){
 this.config.lang="en";
 }
-this.loadScript(this.config.baseroot+"lang_"+this.config.lang+".js");
+
+// Modified by Ivan Tcholakov.
+//this.loadScript(this.config.baseroot+"lang_"+this.config.lang+".js");
+this.loadScript(this.config.baseroot.toString().substring(0, this.config.baseroot.toString().length - 9) + "lang/" + this.config.lang + ".js");
+
 if(!this.config.imgroot){
 this.config.imgroot=this.config.baseroot;
 }

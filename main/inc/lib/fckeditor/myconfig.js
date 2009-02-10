@@ -242,7 +242,7 @@ FCKConfig.Plugins.Add('mimetex', 'en,de,es,fr') ;
 FCKConfig.Plugins.Add('wikilink', 'en,es') ;
 
 // A dialog for assigning hyperlinks to specified image areas.
-FCKConfig.Plugins.Add('imgmap', 'en,es');
+FCKConfig.Plugins.Add('imgmap', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh');
 
 
 /*

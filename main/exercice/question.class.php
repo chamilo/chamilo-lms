@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 18005 2009-01-26 18:00:46Z juliomontoya $
+<?php // $Id: question.class.php 18411 2009-02-10 17:59:08Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 18005 2009-01-26 18:00:46Z juliomontoya $
+* 	@version $Id: question.class.php 18411 2009-02-10 17:59:08Z juliomontoya $
 */
 
 
@@ -798,18 +798,12 @@ abstract class Question
 	function addToList($exerciseId, $fromSave=FALSE)
 	{
 		global $TBL_EXERCICE_QUESTION;
-
 		$id=$this->id;
-
-		// checks if the exercise ID is not in the list
-		if(!in_array($exerciseId,$this->exerciseList))
-		{
+		// checks if the exercise ID is not in the list		
+		if(!in_array($exerciseId,$this->exerciseList)) {
 			$this->exerciseList[]=$exerciseId;
-
-			$sql="INSERT INTO $TBL_EXERCICE_QUESTION(question_id,exercice_id) VALUES('".Database::escape_string($id)."','".Database::escape_string($exerciseId)."')";
-
+			$sql="INSERT INTO $TBL_EXERCICE_QUESTION (question_id, exercice_id) VALUES('".Database::escape_string($id)."','".Database::escape_string($exerciseId)."')";
 			api_sql_query($sql,__FILE__,__LINE__);
-
             // we do not want to reindex if we had just saved adnd indexed the question
             if (!$fromSave) {
             	$this->search_engine_edit($exerciseId, TRUE);
@@ -1066,16 +1060,22 @@ abstract class Question
 	/**
 	 * Displays the menu of question types
 	 */
-	static function display_type_menu ()
+	static function display_type_menu ($feedbacktype = 0)
 	{
 		global $exerciseId;
-		echo '<div >';
-		foreach(self::$questionTypes as $i=>$a_type)
-		{
-			
+		echo '<div>';
+		// 1. by default we show all the question types
+		$question_type_custom_list = self::$questionTypes;
+				
+		if (!isset($feedbacktype)) $feedbacktype=0;
+		if ($feedbacktype==1) {
+			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
+			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]); 
+		}
+				
+		foreach ($question_type_custom_list as $i=>$a_type) {			
 			// include the class of the type
-			include_once($a_type[0]); 
-			
+			include_once($a_type[0]);			
 			 // get the picture of the type and the langvar which describes it
 			eval('$img = '.$a_type[1].'::$typePicture;');
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
@@ -1089,11 +1089,16 @@ abstract class Question
 			echo $explanation;
 			echo '</div>';
 			echo '</a>';
-			echo '</div>';
-			
+			echo '</div>';			
 		}
+			
 		echo '<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">';
-		echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">';
+		if ($feedbacktype==1)
+			echo '<a href="question_pool.php?type=1&fromExercise='.$exerciseId.'">';
+		else
+			echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">';
+			
+		
 		echo '<div>';
 		Display::display_icon('database.gif', get_lang('GetExistingQuestion'), array('align'=>'middle'));
 		echo '</div>';
@@ -1104,7 +1109,6 @@ abstract class Question
 		echo '</div>';
 		echo '</div>';
 		echo '<div style="clear:both"></div>';
-
 	}
 }
 endif;

@@ -48,6 +48,8 @@ class UniqueAnswer extends Question {
 	 * Constructor
 	 */
 	function UniqueAnswer(){
+		//this is highly important
+		parent::question();
 		$this -> type = UNIQUE_ANSWER;
 	}
 
@@ -57,7 +59,6 @@ class UniqueAnswer extends Question {
 	 * @param the answers number to display
 	 */
 	function createAnswersForm ($form) {
-
 		// getting the exercise list	
 		$obj_ex =$_SESSION['objExercise'];
 		// multiple 
@@ -144,8 +145,7 @@ class UniqueAnswer extends Question {
 		require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 		
 		
-		foreach ($question_list as $key=>$questionid)
-		{				
+		foreach ($question_list as $key=>$questionid) {				
 			$question = Question::read($questionid);			
 			$select_question[$questionid]='Q'.$key.' :'.cut($question->selectTitle(),20);						
 		}		

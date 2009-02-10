@@ -174,32 +174,19 @@ class FCKeditor
 		// Making a compatible code in order it to be accepted by the editor.
 		$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
 
-		$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
-		if (empty ($editor_lang) || !file_exists($language_file))
+		if (empty ($editor_lang))
 		{
-			// If there was no valid iso-code, use the english one.
 			$editor_lang = 'en';
 		}
-/*
-		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 
-		// We are in a course
-		if (isset($_SESSION["_course"]["language"])) {
-			$sql = "SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
-		} elseif (isset($_SESSION["_user"]["language"])) {
-			//Else, we get the current session language
-			$sql = "SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-		} else {
-			//Else we get the default platform language
-			$platform_language = api_get_setting("platformLanguage");
-			$sql = "SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='$platform_language'";
+		// Checking for availability of a corresponding language file.
+		$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
+		if (!file_exists($language_file))
+		{
+			// If there was no language file, use the english one.
+			$editor_lang = 'en';
 		}
 
-		$result_sql = api_sql_query($sql, __FILE__, __LINE__);
-		$isocode_language = Database::result($result_sql, 0, 0);
-		$this->Config['DefaultLanguage'] = $isocode_language;
-*/
-		$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
 		$this->Config['DefaultLanguage'] = $editor_lang;
 
 		// css should be dokeos ones

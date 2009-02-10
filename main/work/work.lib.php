@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18407 2009-02-10 16:03:50Z cfasanando $
+<?php //$Id: work.lib.php 18419 2009-02-10 20:14:56Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18407 2009-02-10 16:03:50Z cfasanando $
+* 	@version $Id: work.lib.php 18419 2009-02-10 20:14:56Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -785,7 +785,7 @@ function build_work_move_to_selector($folders,$curdirpath,$move_file,$group_dir=
 	
 	$form = '<form name="move_to" action="'.api_get_self().'" method="POST">'."\n";
 	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />'."\n";	
-	$form .= sprintf(get_lang('MoveXTo'),$title[0]).' <select name="move_to">'."\n";
+	$form .= sprintf(get_lang('MoveTo'),$title[0]).' <select name="move_to">'."\n";
 	
 	//group documents cannot be uploaded in the root
 	if($group_dir=='') {

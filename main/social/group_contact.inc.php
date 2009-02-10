@@ -24,19 +24,20 @@ $list_groups=UserFriend::show_list_type_friends();
 for ($p=0;$p<count($list_groups);$p++) {
 	$list_path_friends=UserFriend::get_list_path_web_by_user_id ($user_id,$list_groups[$p]['id']);
 ?>
-<div align="center" id="<?php echo 'div_group_'.$list_groups[$p]['id']; ?>" >
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
   <tr>
     <td width="100%" height="20" valign="top">
 
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-title">
           <tr>
-            <td width="100%" height="22" valign="top">&nbsp;&nbsp;<?php echo $list_groups[$p]['title']; ?></td>
+            <td width="100%" height="22" valign="top">&nbsp;&nbsp;<?php echo $list_groups[$p]['title']; ?>
+            <img id="<?php echo 'btn_'.$list_groups[$p]['id']; ?>" style="float:right;margin-top:-15px" src="../img/visible.gif" onclick="toogle_function(this)"/><input type="hidden" class="hidden" id="id_hd_dame" name="hd_dame" value="0" /></td>
               </tr>
         </table></td>
         </tr>
       <tr>
 	<td valign="top">
+<div align="center" id="<?php echo 'div_group_'.$list_groups[$p]['id']; ?>" >
 <?php
 $friend_html='';
 $number_of_images=10;
@@ -53,7 +54,7 @@ if (count($list_path_friends)!=0) {
 	$number_friends= count($list_friends_dir);
 	$number_loop   = ($number_friends/$number_of_images);
 	$loop_friends  = ceil($number_loop);
-	$j=0;
+	$j=0;//<div id="div_groupid_"'.$list_groups[$p]['id'].'">
 	$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFC" style="border-left:1px #B8C8DC solid;border-bottom:1px #B8C8DC solid;border-right:1px #B8C8DC solid;">';		
 	for ($k=0;$k<$loop_friends;$k++) {
 		$friend_html.='<tr><td valign="top">';
@@ -70,17 +71,18 @@ if (count($list_path_friends)!=0) {
 		}
 		$friend_html.='</td></tr>';
 	}
-	$friend_html.='<br/></table>';
+	$friend_html.='<br/></table>&nbsp;';
 	echo $friend_html; 
 }  else {
 	$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFC" style="border-left:1px #B8C8DC solid;border-bottom:1px #B8C8DC solid;border-right:1px #B8C8DC solid;">';		
 	$friend_html.='<tr><td valign="top">&nbsp;&nbsp;&nbsp;'.get_lang('NoHaveContactsInThisGroup');
-	$friend_html.='</td></tr>';
-	$friend_html.='<br/></table>';
+	$friend_html.='<br/><br/></td></tr>';
+	$friend_html.='</table>&nbsp;';//</div>
 	echo $friend_html;
+	echo '</br>';
 }
 ?>
-        </td>
+        </td><br/>
         </tr>
     </table></td>
   </tr>

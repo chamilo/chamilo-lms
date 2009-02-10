@@ -140,9 +140,26 @@ function search_image_social(element_html)  {
 	});
 }
 function clear_form () {
-$("input[@type=radio]").attr("checked", false);
-$("div#div_qualify_image").html("");
-$("div#div_info_user").html("");
+	$("input[@type=radio]").attr("checked", false);
+	$("div#div_qualify_image").html("");
+	$("div#div_info_user").html("");
+}
+function toogle_function (element_html){
+	elem_id=$(element_html).attr("id");
+	id_elem=elem_id.split("_");
+	ident="div#div_group_"+id_elem[1];
+	id_button="#btn_"+id_elem[1];
+	elem_src=$(id_button).attr("src");
+	image_show=elem_src.split("/");
+	my_image=image_show[2];
+	if (my_image=="visible.gif") {
+		$(ident).hide("slow");	
+		$(id_button).attr("src","../img/invisible_na.gif");
+	} else {
+		$(ident).show("slow");	
+		$(id_button).attr("src","../img/visible.gif");
+	}
+
 }
 </script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';

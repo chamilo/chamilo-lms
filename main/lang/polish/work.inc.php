@@ -33,6 +33,7 @@ $SendMailBody = "U&#380;ytkownik opublikowa&#322; dokument w Publikacjach dla tw
 $DirDelete = "Usu&#324; katalog";
 $ValidateChanges = "Sprawd&#378; zmiany";
 $FolderUpdated = "Folder zosta&#322; zauktualizowany";
+$EndsAt = "Ko&#324;czy si&#281; (zamkni&#281;cie)";
 $DatesAvailables = "Dost&#281;pne daty";
 $ExpiresAt = "Wygasa";
 $AddToCalendar = "Dodaj do kalendarza";

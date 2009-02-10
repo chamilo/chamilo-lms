@@ -5,7 +5,7 @@ $Announcement = "Og&#322;oszenia";
 $langAnnEmpty = "Lista og³oszeñ zosta³a wyczyszczona";
 $AnnouncementModified = "Og³oszenie zosta³o zmodyfikowane";
 $AnnouncementAdded = "Og&#322;oszenie zosta&#322;o dodane";
-$AnnouncementDeleted = "Og³oszenie zosta³o usuniête";
+$AnnouncementDeleted = "Og&#322;oszenie zosta&#322;o usuni&#281;te";
 $AnnouncementPublishedOn = "Opublikowane";
 $AddAnnouncement = "Dodaj og&#322;oszenie";
 $langContent = "Zawarto&#347;&#263;";
@@ -51,4 +51,6 @@ $SelectEverybody = "Zaznacz wszystkich";
 $SelectedUsersGroups = "wybrane grupy u&#380;ytkowników";
 $LearnerMessage = "Wiadomo&#347;&#263; od studenta";
 $TitleIsRequired = "Tytu&#322; jest wymagany";
+$AnnounceSentByEmail = "Og&#322;oszenie wys&#322;ane przez e-mail";
+$AnnounceSentToUserSelection = "Og&#322;oszenie wys&#322;ane do wybranych u&#380;ytkowników";
 ?>

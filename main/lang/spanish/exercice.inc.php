@@ -189,7 +189,7 @@ $Addlimits = "Añadir límites";
 $AreYouSure = "Está seguro";
 $StudentScore = "Puntuación de los alumnos";
 $backtoTesthome = "Volver a la página principal del ejercicio";
-$Feedback = "Retroalimentación";
+$Feedback = "Feedback";
 $MarkIsUpdated = "La nota ha sido actualizada";
 $MarkInserted = "Nota insertada";
 $PleaseGiveAMark = "Por favor, proporcione una nota";
@@ -278,4 +278,6 @@ $DurationFormat = "%1$d segundos";
 $Difficulty = "Dificultad";
 $NewScore = "Nueva puntuación";
 $NewComment = "Nuevo comentario";
+$ExerciseNoStartedYet = "El ejercicio aun no se ha iniciado";
+$ExerciseNoStartedAdmin = "El administrador no ha iniciado el ejercicio";
 ?>

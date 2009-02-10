@@ -27,4 +27,5 @@ $MessageDeleted = "Messaggio eliminato";
 $ConfirmDeleteMessage = "Sei sicuro di voler eliminare il messaggio?";
 $DeleteMessage = "Elimina il messaggio";
 $ReadMessage = "Leggi il messaggio";
+$Outbox = "Messaggi in uscita";
 ?>

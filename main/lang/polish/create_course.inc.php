@@ -98,4 +98,7 @@ $ExampleForum = "Przyk&#322;adowe forum";
 $ExampleThread = "Przyk&#322;adowy w&#261;tek ";
 $ExampleThreadContent = "Przyk&#322;adowa zawarto&#347;&#263;.";
 $IntroductionWiki = "S&#322;owo Wiki to skrót od WikiWikiWeb. WikiWiki to hawajskie s&#322;owo oznaczaj&#261;ce szybko&#347;&#263; lub pr&#281;dko&#347;&#263;. Wiki umo&#380;liwia wspólne tworzenie stron. Je&#380;eli jedna osoba napisze co&#347; &#378;le, nast&#281;pna mo&#380;e to poprawi&#263;. Kolejna osoba mo&#380;e tak&#380;e doda&#263; nowe informacje. Z tego powodu strony s&#261; coraz lepsze je&#380;eli s&#261; zmieniane. ";
+$CreateCourseArea = "Utwórz obszar kursu";
+$CreateCourse = "Utwórz kurs";
+$Create = "Utwórz";
 ?>

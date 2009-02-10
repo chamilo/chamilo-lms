@@ -54,4 +54,6 @@ $FilterByNotExpired = "Entro i termini";
 $FilterAssignments = "Filtra gli elaborati";
 $WeightNecessary = "Assegnazione del peso necessaria";
 $QualificationOver = "Voto massimo";
+$ExpiryDateAlreadyPassed = "Data di scadenza superata";
+$EndDateAlreadyPassed = "Il caricamento è stato chiuso";
 ?>

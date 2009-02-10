@@ -81,4 +81,5 @@ $ConfigSettingsInfo = "Urmatoarele valori vor fi scrise in fisierul de configura
 $InstallDokeos = "Instaleaza Dokeos";
 $GoToYourNewlyCreatedPortal = "Mergeti la portalul proaspat creat.";
 $FirstUseTip = "Cand intrati in campus pt prima oara, cea mai buna metoda de a-l intelege este sa va inregistrati cu optiunea \"Creaza aria cursului\" si apoi urmati calea.";
+$Back = "Inapoi";
 ?>

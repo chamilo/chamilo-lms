@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langSelectOptionForBackup = "Veuillez sélectionner une option de sauvegarde.";
 $langLetMeSelectItems = "Me laisser sélectionner des sections";
-$langCreateFullBackup = "Faire un sauvegarde complète de cet espace de cours";
+$langCreateFullBackup = "Sauvegarder cette formation";
 $langCreateBackup = "Créer une sauvegarde";
 $langBackupCreated  = "La sauvegarde (backup) a été effectuée. Le téléchargement de ce fichier démarrera dans quelques instants. Si rien ne se produit, veuillez cliquer sur le lien suivant.";
 $langSelectBackupFile = "Sélectionnez un fichier de sauvegarde";
@@ -26,7 +26,7 @@ $langSameFilename = "Que faire des documents importés qui ont le même nom que de
 $langSameFilenameSkip = "Sauter les documents";
 $langSameFilenameRename = "Renommer les documents (ex: fichier.pdf devient fichier_1.pdf)";
 $langSameFilenameOverwrite = "Écraser les documents";
-$langSelectDestinationCourse = "Sélectionnez un espace de cours de destination";
+$langSelectDestinationCourse = "Sélectionnez une formation de destination";
 $langFullCopy  = "Copier toutes les sections de cet espace";
 $langCourseDescription = "Description de la formation";
 $langNoResourcesToBackup = "Aucune section n\'est disponible pour une sauvegarde";
@@ -39,7 +39,7 @@ $langServerFile = "Utiliser un fichier de sauvegarde qui se trouve sur le serveu
 $langNoBackupsAvailable = "Aucun fichier de sauvegarde n\'est disponible sur le serveur";
 $langNoDestinationCoursesAvailable = "Il n\'y a pas d\'autre formation dans laquelle vous êtes formateur. Vous ne pouvez donc pas copier de contenu vers une autre formation.";
 $langBackup = "Sauvegarde";
-$langImportBackupInfo = "Importer un espace de cours existant. Vous pouvez importer un fichier de sauvegarde depuis votre ordinateur ou choisir un des fichiers de sauvegarde qui se trouve sur le serveur.";
+$langImportBackupInfo = "Importer une formation existante. Vous pouvez importer un fichier de sauvegarde depuis votre ordinateur ou choisir un des fichiers de sauvegarde qui se trouve sur le serveur.";
 $langCreateBackupInfo = "Créer un fichier de sauvegarde de cet espace. Vous pouvez sélectionner les sections que vous voulez sauver dans ce fichier.";
 $ToolIntro = "Introduction";
 $UploadError = "l\'import n\'a pas fonctionné, veuillez vérifier les limites de taille de fichiers autorisée et les permissions de vos dossiers.";

@@ -681,4 +681,6 @@ $AccountURLInactive = "Cuenta no activada en esta URL";
 $MaxFileSize = "Tamaño de archivo máximo";
 $SendFileError = "Error al enviar el archivo";
 $Expired = "Vencido";
+$InvitationHasBeenSent = "La invitación ha sido enviada";
+$InvitationHasBeenNotSent = "La invitación no ha sido enviada";
 ?>

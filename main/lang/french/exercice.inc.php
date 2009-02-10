@@ -15,7 +15,7 @@ $langResult = "Résultat";
 $langNoResult = "Il n\'y a pas encore de résultats";
 $langYourResults = "Vos résultats";
 $langStudentResults = "Résultats de vos apprenants";
-$langExerciseType = "Type de test";
+$langExerciseType = "Séquençage";
 $langExerciseName = "Nom du test";
 $langExerciseDescription = "Médias associés";
 $langSimpleExercise = "Questions sur une seule page";
@@ -278,4 +278,6 @@ $DurationFormat = "%1$d secondes";
 $Difficulty = "Difficulté";
 $NewScore = "Nouveau score";
 $NewComment = "Nouveau commentaire";
+$ExerciseNoStartedYet = "L\'exercice n\'a pas encore commencé";
+$ExerciseNoStartedAdmin = "Le responsable n\'a pas encore démarré cet exercice";
 ?>

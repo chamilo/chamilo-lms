@@ -147,4 +147,6 @@ $langNoDocuments = "Nu sunt documente";
 $langNoExercisesAvailable = "Niciun exercitiu disponibil";
 $langNoLinksAvailable = "Nici o legatura disponibila";
 $langNoItemsInLp = "Nu exista obiecte in calea de invatare in acest moment. Apasati pe \"Avansat\" pentru a crea obiectele caii de invatare.";
+$NewExercise = "Test Nou";
+$SaveAudio = "Salveaz&#259; ";
 ?>

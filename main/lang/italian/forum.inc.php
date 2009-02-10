@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $ForumDeleted = "Forum eliminato";
-$ForumCategoryDeleted = "Categoria di forum eliminata";
+$ForumCategoryDeleted = "Categoria eliminata";
 $ForumLocked = "Forum bloccato";
 $Forum = "Forum";
 $AddForumCategory = "Aggiungi una categoria di forum";
@@ -26,7 +26,7 @@ $Private = "Visibile ai soli membri del gruppo";
 $NewPostStored = "Il tuo messaggio è stato salvato";
 $ReturnTo = "Puoi ritornare al";
 $Or = "oppure";
-$ReplyToThread = "Rispondi all\'argomento";
+$ReplyToThread = "Intervieni nella discussione";
 $ReplyToMessage = "Rispondi al messaggio";
 $QuoteMessage = "Cita questo messaggio";
 $NewTopic = "Nuovo argomento";
@@ -55,7 +55,7 @@ $NewThreadStored = "Il nuovo argomento è stato aggiunto";
 $Approval = "Approvazione";
 $Direct = "Pubblicazione automatica";
 $ForGroup = "Per il gruppo";
-$ThreadLocked = "L\'argomento è bloccato";
+$ThreadLocked = "La discussione è bloccata";
 $NotAllowedHere = "Non hai i permessi di accesso";
 $ReplyAdded = "La risposta è stata aggiunta";
 $EditPost = "Modifica il messaggio";
@@ -79,7 +79,7 @@ $PostDeleted = "Messaggio eliminato";
 $MakeInvisible = "Rendi non visibile";
 $ThreadCanBeFoundHere = "I messaggi sull\'argomento si trovano qui";
 $MakeVisible = "Rendi visibile";
-$DeleteCompleteThread = "Eliminare completamente l\'argomento (thread)?";
+$DeleteCompleteThread = "Eliminare completamente la discussione?";
 $PostDeletedSpecial = "Messaggio speciale eliminato";
 $ThreadDeleted = "Argomento eliminato";
 $NextMessage = "Messaggio successivo";
@@ -125,6 +125,6 @@ $TitleColumnGradebook = "Intestazione di colonna del registro";
 $QualifyThreadGradebook = "Assegna il voto sull\'argomento nel registro";
 $QualifyWeight = "Peso della valutazione";
 $QualifyNumeric = "Punteggio massimo";
-$AlterQualifyThread = "Modifica la qualifica della discussione";
+$AlterQualifyThread = "Modifica la valutazione della discussione";
 $ForumMoved = "Il forum è stato spostato";
 ?>

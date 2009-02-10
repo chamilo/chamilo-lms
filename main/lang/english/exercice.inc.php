@@ -278,4 +278,6 @@ $DurationFormat = "%1$d seconds";
 $Difficulty = "Difficulty";
 $NewScore = "New score";
 $NewComment = "New comment";
+$ExerciseNoStartedYet = "The exercise didn\'t start yet";
+$ExerciseNoStartedAdmin = "The admin didn\'t start the exercise yet";
 ?>

@@ -71,4 +71,6 @@ $EndDateCannotBeBeforeTheStartDate = "Fecha final no deberá ser menor que la fec
 $AgendaSortChronologicallyUp = "Ordenar eventos (antiguos / recientes)";
 $AgendaSortChronologicallyDown = "Ordenar eventos (recientes / antiguos)";
 $ItemForUserSelection = "Evento dirigido a una selección de usuarios";
+$IsNotiCalFormatFile = "No es un archivo de formato iCal";
+$ThereIsNotQualifiedLearners = "No hay estudiantes calificados";
 ?>

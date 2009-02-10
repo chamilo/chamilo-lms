@@ -41,4 +41,10 @@ $langNoDestinationCoursesAvailable = "Nie znaleziono kursu docelowego";
 $langBackup = "Kopia zapasowa";
 $langImportBackupInfo = "Importuj kopi&#281; zapasow&#261;. Mo&#380;esz wykorzysta&#263; plik na swoim komputerze lub plik na serwerze.";
 $langCreateBackupInfo = "Utwórz kopi&#281; zapasow&#261; tego kursu. Mo&#380;esz wybra&#263; elementy kursu jakie zostan&#261; zawarte w kopii zapasowej.";
+$ToolIntro = "Wprowadzenie do narz&#281;dzia";
+$UploadError = "B&#322;&#261;d wgrywania pliku, prosz&#281; sprawdzi&#263; maksymalny rozmiar pliku i uprawnienia folderu.";
+$DocumentsWillBeAddedToo = "Dokumenty zostan&#261; dodane";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Je&#347;li chcesz wyeksportowa&#263; &#347;cie&#380;ki nauczania zawieraj&#261;ce test, upewnij si&#281;, &#380;e odpowiednie testy zosta&#322;y w&#322;&#261;czone do eksportu. Nale&#380;y je wybra&#263; z listy testów.";
+$ArchivesDirectoryNotWriteableContactAdmin = "Archiwa katalogu wykorzystywane przez to narz&#281;dzie, nie posiadaj&#261; prawa zapisu. Skontaktuj si&#281; z administratorem platformy.";
+$DestinationCourse = "Kurs docelowy";
 ?>

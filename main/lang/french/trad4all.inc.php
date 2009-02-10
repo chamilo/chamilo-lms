@@ -681,4 +681,6 @@ $AccountURLInactive = "Compte désactivé pour cet URL";
 $MaxFileSize = "Taille maximum du fichier";
 $SendFileError = "Une erreur a été détectée lors de l\'envoi du fichier. Veuillez vérifier que le fichier n\'est pas endommagé et essayer à nouveau.";
 $Expired = "Expiré";
+$InvitationHasBeenSent = "L\'invitation a été envoyée";
+$InvitationHasBeenNotSent = "L\'invitation n\'a pas été envoyée";
 ?>

@@ -71,4 +71,6 @@ $EndDateCannotBeBeforeTheStartDate = "The end date cannot be before the start da
 $AgendaSortChronologicallyUp = "Sort Agenda chronologically (up)";
 $AgendaSortChronologicallyDown = "Sort Agenda chronologically (down)";
 $ItemForUserSelection = "Users selection list";
+$IsNotiCalFormatFile = "This file is not in iCal format";
+$ThereIsNotQualifiedLearners = "There are no qualified learners";
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 18324 2009-02-07 16:20:34Z iflorespaz $
+<?php // $Id: new_message.php 18412 2009-02-10 18:00:32Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -210,13 +210,24 @@ if (!isset($_POST['compose'])) {
 		show_compose_to_any($_user['user_id']);
   	}
 } else {
-	if(api_get_user_id() && isset($_POST['user_list']) && isset($_POST['content']) && isset($_POST['id_text_name']))	{
+	$restrict=isset($_POST['id_text_name']) ? $_POST['id_text_name'] : false;
+	if ($restrict===false && isset($_GET['re_id'])) {
+		
+	}
+	if (isset($_GET['re_id'])) {
 		$default['title'] = $_POST['title'];
-		$default['id_text_name'] = $_POST['id_text_name'];
+		$default['content'] = $_POST['content'];
 		$default['user_list'] = $_POST['user_list'];
-		manage_form($default);
+		manage_form($default);	
 	} else {
-		Display::display_error_message(get_lang('ErrorSendingMessage'));
+		if ($restrict) {
+			$default['title'] = $_POST['title'];
+			$default['id_text_name'] = $_POST['id_text_name'];
+			$default['user_list'] = $_POST['user_list'];
+			manage_form($default);
+		} else {
+			Display::display_error_message(get_lang('ErrorSendingMessage'));		
+		}	
 	}
 }
 /*

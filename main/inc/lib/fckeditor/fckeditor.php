@@ -173,10 +173,10 @@ class FCKeditor
 		$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
 		if (empty ($editor_lang) || !file_exists($language_file))
 		{
-			//if there was no valid iso-code, use the english one
+			// If there was no valid iso-code, use the english one.
 			$editor_lang = 'en';
 		}
-
+/*
 		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 
 		// We are in a course
@@ -194,6 +194,8 @@ class FCKeditor
 		$result_sql = api_sql_query($sql, __FILE__, __LINE__);
 		$isocode_language = Database::result($result_sql, 0, 0);
 		$this->Config['DefaultLanguage'] = $isocode_language;
+*/
+		$this->Config['DefaultLanguage'] = $editor_lang;
 
 		// css should be dokeos ones
 		$this->Config['EditorAreaCSS'] = $this->Config['ToolbarComboPreviewCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';

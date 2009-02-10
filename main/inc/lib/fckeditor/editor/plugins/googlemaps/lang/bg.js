@@ -19,9 +19,9 @@
  * Bulgarian language file.
  */
 
-FCKLang.DlgGMapsTitle = 'Добавяне/Редактиране на цифрова карта (Google Maps)' ;
-FCKLang.GMapsBtn		  = 'Добавяне/Редактиране на цифрова карта (Google Maps)' ;
-FCKLang.GMapsBtnTooltip	= 'Добавяне/Редактиране на цифрова карта (Google Maps)' ;
+FCKLang.DlgGMapsTitle = 'Географска карта (Google Maps)' ;
+FCKLang.GMapsBtn		  = 'Географска карта (Google Maps)' ;
+FCKLang.GMapsBtnTooltip	= 'Географска карта (Google Maps)' ;
 FCKLang.GMapsMap			= 'Карта' ;
 FCKLang.GMapsZoomLevel	= 'Мащаб' ;
 FCKLang.txtLatitude	  = 'Ширина' ;
@@ -32,8 +32,8 @@ FCKLang.GMapsSearch		= 'Търсене' ;
 FCKLang.GMapsNotFound = 'Мястото %s не е намерено.' ;
 FCKLang.GMapsMarkerText	= 'Текст' ;
 FCKLang.GMapsMarkerDefaultText	= 'Въведете текста.' ;
-FCKLang.GMapsLine = 'Линия' ;
-FCKLang.GMapsLineInstructions = 'Щракнете върху картата за да добавите първата точка, с още щраквания ще добавяте точки.<br>Можете да премествате точките или да ги изтривате чрез бутона ""Del"' ;
+FCKLang.GMapsLine = 'Маршрут' ;
+FCKLang.GMapsLineInstructions = 'Щракнете върху картата за да добавите първия пункт, с още щраквания ще добавяте следващите пунктове.<br>Можете да премествате пунктовете или да ги изтривате чрез бутона ""Del"' ;
 
 FCKLang.GMapsHelpFile	= 'install.html' ;
 FCKLang.GMapsUserHelpFile = 'users.html' ;

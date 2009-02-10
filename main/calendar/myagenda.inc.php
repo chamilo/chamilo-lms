@@ -420,7 +420,7 @@ function show_new_personal_item_form($id = "")
 	}
 	echo "</select>";
 	echo "<a title=\"Kalender\" href=\"javascript:openCalendar('newedit_form', 'frm_')\">".Display::return_icon('calendar_select.gif')."</a>";
-	echo "</td><td width=\"50%\">";
+	echo "&nbsp;&nbsp;";
 	// ********** The form containing the hours  (00->23) ********** \\
 	echo "<!-- time: hour -->\n";
 	echo get_lang("Time").": \n";
@@ -655,9 +655,9 @@ function show_personal_agenda()
 		$month = $today['mon'];
 		$day = $today['mday'];
 	}
-	$export_icon = api_get_path('WEB_IMG_PATH').'export.png';
-	$export_icon_low = api_get_path('WEB_IMG_PATH').'export_low_fade.png';
-	$export_icon_high = api_get_path('WEB_IMG_PATH').'export_high_fade.png';
+	$export_icon = 'export.png';
+	$export_icon_low = 'export_low_fade.png';
+	$export_icon_high = 'export_high_fade.png';
 
 	// starting the table output
 	echo "<table class=\"data_table\">\n";

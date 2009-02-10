@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 18235 2009-02-04 16:34:55Z juliomontoya $
+* 	@version $Id: exercise.class.php 18422 2009-02-10 20:54:53Z juliomontoya $
 */
 
 
@@ -833,15 +833,31 @@ class Exercise
 			$feedback_option[0]=get_lang('Feedback');
 			$feedback_option[1]=get_lang('DirectFeedback');
 			$feedback_option[2]=get_lang('NoFeedback');
-			
-			$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"'); 
-			
-			// test type
-			$radios = array();
-			$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
-			$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
-			$form -> addGroup($radios, null, get_lang('ExerciseType'), '<br />');
-							
+						
+			//Can't modify a DirectFeedback question						
+			if ($this->selectFeedbackType() != 1 ) {
+				$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
+				// test type
+				$radios = array();
+				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
+				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
+				$form -> addGroup($radios, null, get_lang('ExerciseType'), '<br />');							
+			} else {
+				// if is Directfeedback but has not questions we can allow to modify the question type
+				if ($this->selectNbrQuestions()== 0) {
+					$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
+					// test type
+					$radios = array();
+					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
+					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
+					$form -> addGroup($radios, null, get_lang('ExerciseType'), '<br />');					
+				} else {
+					//we force the options to the DirectFeedback exercisetype
+					$form -> addElement('hidden', 'exerciseFeedbackType','1');
+					$form -> addElement('hidden', 'exerciseType','2');
+				}				
+			}
+										
 			$form -> addElement('html','<div class="row">
 				<div class="label">&nbsp;</div>
 				<div class="formw">

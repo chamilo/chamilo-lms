@@ -5,7 +5,7 @@
 
 	Copyright (c) 2004-2009 Dokeos SPRL
 
-		For a full list of contributors, see "credits.txt".
+	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
 
 	This program is free software; you can redistribute it and/or
@@ -99,6 +99,7 @@ if(isset($_GET['exerciseId'])) {
 	$form = new FormValidator('exercise_admin');
 	$form -> addElement ('hidden','edit','false');
 }
+
 $objExercise -> createForm ($form);
 
 
@@ -118,7 +119,9 @@ if($form -> validate()) {
 	 *********************/
 	$nameTools=get_lang('ExerciseManagement');
 	$interbreadcrumb[] = array ("url"=>"exercice.php", "name"=> get_lang('Exercices'));
-	Display::display_header($nameTools,"Exercise");
+	Display::display_header($nameTools,"Exercise");	
+	if ($objExercise->feedbacktype==1)
+		Display::display_normal_message(get_lang("DirectFeedbackCantModifyTypeQuestion"));
 	$form -> display ();
 }
 Display::display_footer();

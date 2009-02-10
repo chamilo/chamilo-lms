@@ -170,6 +170,10 @@ class FCKeditor
 		$this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
 
 		@ $editor_lang = Database :: get_language_isocode($language_interface);
+
+		// Making a compatible code in order it to be accepted by the editor.
+		$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
+
 		$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
 		if (empty ($editor_lang) || !file_exists($language_file))
 		{

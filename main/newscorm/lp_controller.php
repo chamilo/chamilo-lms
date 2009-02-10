@@ -819,7 +819,8 @@ switch($action)
             $list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
             $user_id = api_get_user_id();
             $stats_charset = $_SESSION['oLP']->encoding;
-            header('location: ../course_home/course_home.php?'.api_get_cidreq());
+            //header('location: ../course_home/course_home.php?'.api_get_cidreq()); // This is not the preferable way to go to the homepage.
+            header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php');
         }
         break;        
     case 'search':

@@ -1,5 +1,5 @@
 <?php
-// $Id: languages.php 18055 2009-01-28 20:17:16Z cfasanando $
+// $Id: languages.php 18413 2009-02-10 18:51:52Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -185,7 +185,7 @@ while ($row = Database::fetch_array($result_select)) {
 	if ($row['english_name'] == $row_lang['selected_value']){
 		$setplatformlanguage = Display::return_icon('links.gif', get_lang('CurrentLanguagesPortal'));
 	} else {		
-		$setplatformlanguage = "<a href=\"javascript:if (confirm('".get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault')."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('link_na.gif',get_lang('Languages'))."</a>";
+		$setplatformlanguage = "<a href=\"javascript:if (confirm('".get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault')."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('link_na.gif',get_lang('SetLanguageAsDefault'))."</a>";
 	}		
 	if ($row['available'] == 1) {
 		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage;

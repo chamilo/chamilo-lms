@@ -1,4 +1,4 @@
-<?php // $Id: import_backup.php 15430 2008-05-26 20:46:31Z yannoo $
+<?php // $Id: import_backup.php 18429 2009-02-10 23:41:38Z ivantcholakov $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -121,23 +121,24 @@ if(  (isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (
 		$cr->set_file_option($_POST['same_file_name_option']);
 		$cr->restore();
 		Display::display_normal_message(get_lang('ImportFinished').
-                '<a class="bottom-link" href="../course_home/course_home.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('CourseHomepage').'</a>',false);
+                //'<a class="bottom-link" href="../course_home/course_home.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('CourseHomepage').'</a>',false); // This is not the preferable way to go to the course homepage.
+                '<a class="bottom-link" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">&lt;&lt; '.get_lang('CourseHomepage').'</a>',false);
 	}
 	else
 	{
 		if(!$error){
 			Display::display_warning_message(get_lang('NoResourcesInBackupFile').
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('TryAgain').'</a>',false);
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
 		}
 		elseif ($filename === false)
         {
             Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin').
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('TryAgain').'</a>',false);
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
         }
         else
         {
 			Display::display_error_message(ucfirst(get_lang('UploadError')).
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('TryAgain').'</a>',false);
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
 		}
 	}
 	CourseArchiver::clean_backup_dir();
@@ -162,12 +163,12 @@ elseif (isset($_POST['import_option']) && $_POST['import_option'] == 'select_ite
     elseif ($filename === false)
     {
     	Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin').
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('TryAgain').'</a>',false);
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
     }
 	else
 	{
 		Display::display_warning_message(get_lang('NoResourcesInBackupFile').	
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('TryAgain').'</a>',false);
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
 	}
 }
 else

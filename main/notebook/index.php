@@ -13,9 +13,11 @@ $language_file = array('notebook');
 
 // including the global dokeos file
 require_once('../inc/global.inc.php');
+include('../inc/lib/events.lib.inc.php');
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
+
 
 // notice for unauthorized people.
 api_protect_course_script(true);
@@ -28,6 +30,9 @@ $htmlHeadXtra[] = javascript_notebook();
 
 // setting the tool constants
 $tool = TOOL_NOTEBOOK;
+
+// tracking
+event_access_tool(TOOL_NOTEBOOK);
 
 // displaying the header
 Display::display_header(get_lang(ucfirst($tool)));

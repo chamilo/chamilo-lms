@@ -11,6 +11,7 @@ $language_file = array('glossary');
 
 // including the global dokeos file
 require_once('../inc/global.inc.php');
+include('../inc/lib/events.lib.inc.php');
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
@@ -26,6 +27,9 @@ $htmlHeadXtra[] = javascript_glossary();
 
 // setting the tool constants
 $tool = TOOL_GLOSSARY;
+
+// tracking
+event_access_tool(TOOL_GLOSSARY);
 
 // displaying the header
 Display::display_header(get_lang(ucfirst($tool)));

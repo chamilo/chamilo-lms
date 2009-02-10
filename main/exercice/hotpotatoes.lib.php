@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.lib.php 13384 2007-10-04 09:08:37Z elixir_inter $
+* 	@version $Id: hotpotatoes.lib.php 18415 2009-02-10 18:58:55Z cfasanando $
 */
 
 
@@ -152,13 +152,14 @@ function GetFileName($fname)
  */
 function ReadFileCont($full_file_path)
 {
+  if(is_file($full_file_path)) {
 	if (!($fp = fopen(urldecode($full_file_path), "r"))) {
-//	if (!($fp = fopen($full_file_path, "r"))) {
 		return "";
 	}
 	$contents = fread($fp, filesize($full_file_path));
 	fclose($fp);
 	return $contents;
+  }
 }
 
 /**

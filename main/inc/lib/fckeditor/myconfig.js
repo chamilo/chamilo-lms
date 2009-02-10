@@ -50,12 +50,6 @@ FCKConfig.ToolbarSets["Small"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','Flash','OrderedList','UnorderedList','Table']
 ] ;
 
-FCKConfig.ToolbarSets["Profil"] = [
-	['FitWindow','PasteWord','Undo','Redo'],
-	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
-	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','Source']
-] ;
-
 FCKConfig.ToolbarSets["Blog"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','OrderedList','UnorderedList','Table']
 ] ;
@@ -88,6 +82,18 @@ FCKConfig.ToolbarSets["Survey"] = [
 	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Unlink','Table','-','Image','Source']
 ] ;
 
+FCKConfig.ToolbarSets["Profil"] = [
+	['FitWindow','PasteWord','Undo','Redo'],
+	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
+	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','Source']
+] ;
+
+FCKConfig.ToolbarSets["Messages"] = [
+	['FitWindow','PasteWord','Undo','Redo'],
+	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
+	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','Source']
+] ;
+
 FCKConfig.ToolbarSets["Introduction"] = [
 	['NewPage','Templates','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Link','Unlink','Anchor'],
@@ -109,6 +115,7 @@ FCKConfig.ToolbarSets["CourseDescription"] = [
 	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
 	['Source']
 ] ;
+
 FCKConfig.ToolbarSets["ForumLight"] = [
 	['Bold','Italic','Underline','StrikeThrough']
 ] ;
@@ -156,6 +163,7 @@ FCKConfig.ToolbarSets["Wiki_Student"] = [
 	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
 	['ShowBlocks']
 ] ;
+
 
 /*
  * Toolbar drop-down lists customizations.

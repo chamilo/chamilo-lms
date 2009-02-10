@@ -210,6 +210,7 @@
 	
 	//General Option Declarations
 	//LANGAUGAE DECLARATIONNS
+	/*
 	$langdoktoajaxfile= api_get_language_isocode(); //from dokeos. return, en, es... 
 	if ($langdoktoajaxfile=='en' || $langdoktoajaxfile=='zh' || $langdoktoajaxfile=='es') // ajaxfilemanager full translations (only with all variables translated).
 	{
@@ -219,7 +220,41 @@
 	{
 		$langajaxfilemanager='en';//default
 	}	
-	
+	*/
+
+	@ $editor_lang = Database :: get_language_isocode($language_interface);
+
+	// Some code translations are needed.
+	$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
+	if (empty ($editor_lang))
+	{
+		$editor_lang = 'en';
+	}
+	switch ($editor_lang)
+	{
+		case 'uk':
+			$editor_lang = 'ukr';
+			break;
+		case 'pt':
+			$editor_lang = 'pt_pt';
+			break;
+		case 'pt-br':
+			$editor_lang = 'pt_br';
+			break;
+		// Code here other noticed exceptions.
+	}
+
+	// Checking for availability of a corresponding language file.
+	$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/langs/'.$editor_lang.'.php';
+
+	if (!file_exists($language_file))
+	{
+		// If there was no language file, use the english one.
+		$editor_lang = 'en';
+	}
+
+	$langajaxfilemanager = $editor_lang;
+
 	define('CONFIG_LANG_INDEX', 'language'); //the index in the session
 	define('CONFIG_LANG_DEFAULT', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['language']) && file_exists(DIR_LANG . secureFileName($_GET['language']) . '.php')?secureFileName($_GET['language']):$langajaxfilemanager)); //change it to be your language file base name, such en
 ?>

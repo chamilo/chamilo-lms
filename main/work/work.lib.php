@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18365 2009-02-09 16:39:01Z cvargas1 $
+<?php //$Id: work.lib.php 18407 2009-02-10 16:03:50Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18365 2009-02-09 16:39:01Z cvargas1 $
+* 	@version $Id: work.lib.php 18407 2009-02-10 16:03:50Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -421,7 +421,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						$form_folder -> addElement('html','<div class="row">
 	 	                         <div class="label">&nbsp;</div>
  	  	                         <div class="formw">
- 	  	                                 <a href="javascript://" onclick="if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</a>
+ 	  	                                 <a href="javascript://" onclick=" return plus();" ><span id="plus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
  	  	                         </div>
 	  	                         </div>	');
 	  	                         
@@ -437,16 +437,18 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 									if($homework['expires_on']='0000-00-00 00:00:00') {
 										$homework['expires_on']=date("Y-m-d H:i:s");		
 										$there_is_a_expire_date = true;
-										$form_folder -> addElement('checkbox', 'enableExpiryDate', null, get_lang('EnableExpiryDate'),'1');
+										$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'),'onclick="javascript:if(this.checked==true){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
+										$form_folder -> addElement('html','<div id=\'option1\' style="display:none">');
 										$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('ExpiresAt'));
-										
+										$form_folder -> addElement('html','</div>');
 									}
 									if($homework['ends_on']='0000-00-00 00:00:00') {	
 										$homework['ends_on']=date("Y-m-d H:i:s");		
 										$there_is_a_end_date = true;
-										$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'),'1');
+										$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'),'onclick="javascript:if(this.checked==true){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
+										$form_folder -> addElement('html','<div id=\'option2\' style="display:none">');
 										$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
-										
+										$form_folder -> addElement('html','</div>');
 									}	
 									$form_folder -> addRule (array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');		
 						

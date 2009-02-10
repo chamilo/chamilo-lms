@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18365 2009-02-09 16:39:01Z cvargas1 $
+<?php //$Id: work.php 18407 2009-02-10 16:03:50Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18365 2009-02-09 16:39:01Z cvargas1 $
+*  	@version $Id: work.php 18407 2009-02-10 16:03:50Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -509,7 +509,7 @@ if (api_is_allowed_to_edit(false,true)) {
 						include_once('../calendar/agenda.inc.php');
 						include_once('../resourcelinker/resourcelinker.inc.php');						
 						isset($course_info)?$course=$course_info:$course=null;							
-						$agenda_id = agenda_add_item($course,$_POST['new_dir'],$_POST['new_dir'],date('Y-m-d H:i:s'),get_date_from_select('ends'),0,$user_id);						 
+						$agenda_id = agenda_add_item($course,$_POST['new_dir'],$_POST['new_dir'],date('Y-m-d H:i:s'),get_date_from_select('ends'),null,0);						 
 					endif;
 										
 					$sql_add_publication = "INSERT INTO " . $work_table . " SET " .			
@@ -1221,7 +1221,7 @@ function draw_date_picker($prefix,$default='') {
 		$new_folder_text .= '<input type="hidden" name="sec_token" value="'.$stok.'" />';
 		$new_folder_text .= '<div id="msg_error1" style="display:none;color:red"></div>';
 		$new_folder_text .= get_lang('NewDir') . ' ';		
-		$new_folder_text .= '<input type="text" name="new_dir"/>';
+		$new_folder_text .= '<input type="text" name="new_dir" onfocus="document.getElementById(\'msg_error1\').style.display=\'none\';"/>';
 		$new_folder_text .= '<input type="button" name="create_dir" onClick="validate();" value="' . get_lang('Ok') . '"/>';
 		//new additional fields inside the "if condition" just to agroup
 		if(true):
@@ -1236,26 +1236,28 @@ function draw_date_picker($prefix,$default='') {
 
 
 		$addtext .= '<div style="padding:10px">';		
-		$addtext .= '<fieldset style="padding:5px"><legend>'.get_lang('QualificationOfAssignment').'</legend>';
-		$addtext .= make_checkbox('make_calification').get_lang('MakeQualifiable').'<br />';
+		$addtext .= '<fieldset style="padding:5px"><legend>'.get_lang('QualificationOfAssignment').'</legend>';				
 		$addtext .= '<table cellspacing="0" cellpading="0" border="0"><tr>';
-		$addtext .= '<td colspan="2">'.get_lang('WeightInTheGradebook').'</td><td>';
+		$addtext .= '<td colspan="2">&nbsp;&nbsp;'.get_lang('QualificationNumberOver').'&nbsp;';		
+		$addtext .= '<input type="text" name="qualification_value" value="" size="5"/></td><tr><td colspan="2">';		
+		$addtext .= '<input type="checkbox" value="1" name="make_calification" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>'.get_lang('MakeQualifiable').'</td></tr><tr>';								
+		$addtext .= '<td colspan="2"><div id="option1" style="display:none">';
 		$addtext .= '<div id="msg_error_weight" style="display:none;color:red"></div>';
-		$addtext .= '<input type="text" name="weight" value="" size="5"/></td></tr>';
-		$addtext .= '<td colspan="2">'.get_lang('QualificationNumberOver').'</td><td>';
-		$addtext .= '<input type="text" name="qualification_value" value="" size="5"/></td></tr></table>';		
+		$addtext .=	'&nbsp;&nbsp;'.get_lang('WeightInTheGradebook').'&nbsp;';				
+		$addtext .= '<input type="text" name="weight" value="" size="5" onfocus="document.getElementById(\'msg_error_weight\').style.display=\'none\';"/></div></td></tr>';
+		$addtext .= '</tr></table>';				
 		$addtext .= '</fieldset><br />';		
 		$addtext .= '<fieldset style="padding:5px"><legend>'.get_lang('DatesAvailables').'</legend>';
-		$addtext .= '* '.get_lang('ExpiresAt').'';
-		$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error2" style="display:none;color:red"></div>';		
-		$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error3" style="display:none;color:red"></div>';
-		$addtext .= '<div style="padding:4px"><input type="checkbox" value="1" name="type1" />';		
+		$addtext .= '* <input type="checkbox" value="1" name="type1" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>'.get_lang('EnableExpiryDate').'';		
+		$addtext .= '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';		
+		$addtext .= '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';	
+		$addtext .= '<div id="option2" style="padding:4px;display:none">&nbsp;&nbsp;';			
 		$addtext .= draw_date_picker('expires').'</div>';				
-		$addtext .= '<br />* '.get_lang('EndsAt').'<br />';
+		$addtext .= '<br />* <input type="checkbox" value="1" name="type2" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>'.get_lang('EnableEndDate').'';		
+		$addtext .= '<div id="option3" style="padding:4px;display:none">';
 		$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error4" style="display:none;color:red"></div>';
-		$addtext .= '<div style="padding:4px"><input type="checkbox" value="1" name="type2" />';
-		$addtext .= draw_date_picker('ends').'</div>';
-		$addtext .= '&nbsp;'.make_checkbox('add_to_calendar').get_lang('AddToCalendar').'<br />';
+		$addtext .= draw_date_picker('ends').'<br />';
+		$addtext .= '&nbsp;&nbsp;'.make_checkbox('add_to_calendar').get_lang('AddToCalendar').'</div>';
 		$addtext .= '</fieldset>';				
 		$addtext .= '</div>';
 		$addtext .= '</div>';		

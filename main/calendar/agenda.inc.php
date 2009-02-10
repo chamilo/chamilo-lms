@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 18260 2009-02-05 20:12:36Z ivantcholakov $
+<?php //$Id: agenda.inc.php 18407 2009-02-10 16:03:50Z cfasanando $
 
 /*
 ==============================================================================
@@ -2270,13 +2270,13 @@ function display_one_agenda_item($agenda_id)
 	  --------------------------------------------------*/
 	if ($number_items==0)
 	{
-		echo "<table id=\"data_table\" ><tr><td>".get_lang("NoAgendaItems")."</td></tr></table>";
+		echo "<table id=\"data_table\" class=\"data_table\"><tr><td>".get_lang("NoAgendaItems")."</td></tr></table>";
 	}
 
 	/*--------------------------------------------------
 			DISPLAY: THE ITEMS
 	  --------------------------------------------------*/
-	echo "<table id=\"data_table\">\n";
+	echo "<table id=\"data_table\" class=\"data_table\">\n";
 
 	/*--------------------------------------------------
 	 DISPLAY : the icon, title, destinees of the item
@@ -2308,7 +2308,7 @@ function display_one_agenda_item($agenda_id)
 	}
 
 
-	echo "\t\t<td class=\"".$style."\">\n";
+	echo "\t\t<th>\n";
 
 	// adding an internal anchor
 	echo "\t\t\t<a name=\"".(int)date("d",strtotime($myrow["start_date"]))."\"></a>";
@@ -2322,19 +2322,25 @@ function display_one_agenda_item($agenda_id)
 		echo Display::return_icon('group.gif');
 	}
 	echo " ".$myrow['title']."\n";
-	echo "\t\t</td>\n";
+	echo "\t\t</th>\n";
 
 	// the message has been sent to
-	echo "\t\t<td class=\"".$stylenotbold."\">".get_lang("SentTo").": ";
+	echo "\t\t<th>".get_lang("SentTo").": ";
 	$sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
 	$sent_to_form=sent_to_form($sent_to);
 	echo $sent_to_form;
-	echo "</td>\n\t</tr>\n";
-
+	echo "</th>";
+	if (api_is_allowed_to_edit())	{
+		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) )
+				{ // a coach can only delete an element belonging to his session
+		    		echo '<th>'.get_lang('Modify');
+		    		echo '</th></tr>';
+				}
+	}
 	/*--------------------------------------------------
 	 			DISPLAY: the title
 	  --------------------------------------------------*/
-	echo "\t<tr class=\"".$stylenotbold."\">\n";
+	echo "\t<tr class='row_odd'>\n";
 	echo "\t\t<td>".get_lang("StartTime").": ";
 	echo ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
 	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
@@ -2343,14 +2349,44 @@ function display_one_agenda_item($agenda_id)
 	echo ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
 	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
 	echo "</td>\n";
-	echo "\n\t</tr>\n";
 
+	/*--------------------------------------------------
+		DISPLAY: edit delete button (course admin only)
+	  --------------------------------------------------*/
+	$export_icon = '../img/export.png';
+    $export_icon_low = '../img/export_low_fade.png';
+    $export_icon_high = '../img/export_high_fade.png';
+    if (api_is_allowed_to_edit())	{
+		echo '<td colspan="2">';
+		if (!$repeat && api_is_allowed_to_edit(false,true))	{
+			// edit
+			$mylink = api_get_self()."?".api_get_cidreq()."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;id=".$myrow['id'];
+			echo 	"<a href=\"".$mylink."&amp;action=edit\">",
+					Display::return_icon('edit.gif', get_lang('ModifyCalendarItem')), "</a>",
+					"<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
+					Display::return_icon('delete.gif', get_lang('Delete')),"</a>";
+			if ($myrow['visibility']==1) {
+				$image_visibility="visible";
+			} else {
+				$image_visibility="invisible";
+			}
+			echo 	'<a href="'.$mylink.'&amp;action=showhide">',Display::return_icon($image_visibility, get_lang('Visible')),'</a>';
+		}
+	   	$mylink = 'ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'];
+	    echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
+	    	echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
+	    	echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
+	    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';
+		echo "</td></tr>";
+	    if($repeat) {
+	    	echo '<tr>';
+	    	echo '<td colspan="2">',get_lang('RepeatedEvent'),'<a href="',api_get_self(),'?',api_get_cidreq(),'&amp;agenda_id=',$repeat_id,'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a></td>';
+	        echo '</tr>';
+	    }
+    }
 	/*--------------------------------------------------
 	 			DISPLAY: the content
 	  --------------------------------------------------*/
-    $export_icon = '../img/export.png';
-    $export_icon_low = '../img/export_low_fade.png';
-    $export_icon_high = '../img/export_high_fade.png';
 
 	$content = $myrow['content'];
 	$content = make_clickable($content);
@@ -2359,16 +2395,15 @@ function display_one_agenda_item($agenda_id)
 	//echo $content;
 	//echo "</td></tr>";
     echo "<tr class='row_even'>";
-    echo '<td colspan="2">';
+    echo '<td '.(api_is_allowed_to_edit()?'colspan="3"':'colspan="2"'). '>';
     echo $content;
     echo '</td></tr>';
 
 	/*--------------------------------------------------
 	 			DISPLAY: the added resources
 	  --------------------------------------------------*/
-	if (check_added_resources("Agenda", $myrow["id"]))
-		{
-		echo "<tr><td colspan='2'>";
+	if (check_added_resources("Agenda", $myrow["id"])) {
+		echo "<tr><td colspan='3'>";
 		echo "<i>".get_lang("AddedResources")."</i><br/>";
 		if ($myrow['visibility']==0)
 		{
@@ -2376,38 +2411,7 @@ function display_one_agenda_item($agenda_id)
 		}
 		display_added_resources("Agenda", $myrow["id"], $addedresource_style);
 		echo "</td></tr>";
-		}
-
-	/*--------------------------------------------------
-		DISPLAY: edit delete button (course admin only)
-	  --------------------------------------------------*/
-	echo '<tr><td colspan="2">';
-	if (!$repeat && api_is_allowed_to_edit(false,true))	{
-		// edit
-		$mylink = api_get_self()."?".api_get_cidreq()."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;id=".$myrow['id'];
-		echo 	"<a href=\"".$mylink."&amp;action=edit\">",
-				Display::return_icon('edit.gif', get_lang('ModifyCalendarItem')), "</a>",
-				"<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
-				Display::return_icon('delete.gif', get_lang('Delete')),"</a>";
-		if ($myrow['visibility']==1) {
-			$image_visibility="visible";
-		} else {
-			$image_visibility="invisible";
-		}
-		echo 	'<a href="'.$mylink.'&amp;action=showhide">',Display::return_icon($image_visibility, get_lang('Visible')),'</a><br /><br />';
 	}
-   	$mylink = 'ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'];
-    echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
-    	echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
-    	echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
-    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';
-	echo "</td>";
-    if($repeat) {
-    	echo '<tr>';
-    	echo '<td colspan="2">',get_lang('RepeatedEvent'),'<a href="',api_get_self(),'?',api_get_cidreq(),'&amp;agenda_id=',$repeat_id,'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a></td>';
-        echo '</tr>';
-    }
-	echo "</table>";
 
 	// closing the layout table
 	echo "</td>",

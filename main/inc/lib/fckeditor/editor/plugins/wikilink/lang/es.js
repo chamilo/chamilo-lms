@@ -26,6 +26,6 @@
 FCKLang.WikilinkBtn			    = 'Insertar/Editar Enlace wiki' ;
 FCKLang.WikilinkDlgTitle	    = 'Enlace wiki' ;
 FCKLang.WikilinkDlgName		    = 'Nombre del enlace wiki' ;
-FCKLang.WikilinkErrNoName	    = 'Introduzca el nombre del enlace wiki que desea insertar' ;
-FCKLang.PlaceholderErrNameInUse	= ' ';
+FCKLang.WikilinkErrNoName	    = 'Introduzca el nombre del enlace wiki que desea insertar.' ;
+FCKLang.WikilinkErrNameInUse	= 'El nombre especificado ya esta en uso.';
 FCKLang.WikilinkHelp            = 'SUGERENCIA: también puede crear enlaces wiki sin usar este botón. Para crear una nueva página o para crear un enlace a una existente empleando enlaces wiki, edite una página y añada a su contenido [[título de la página]] o [[texto del enlace | título de la página]] .';

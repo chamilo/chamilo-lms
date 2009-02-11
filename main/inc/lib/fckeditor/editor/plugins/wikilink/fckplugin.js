@@ -22,7 +22,7 @@
  */
 
 // Register the related command.
-FCKCommands.RegisterCommand( 'Wikilink', new FCKDialogCommand( 'Wikilink', FCKLang.WikilinkDlgTitle, FCKPlugins.Items['wikilink'].Path + 'fck_wikilink.html', 340, 200 ) ) ;
+FCKCommands.RegisterCommand( 'Wikilink', new FCKDialogCommand( 'Wikilink', FCKLang.WikilinkDlgTitle, FCKPlugins.Items['wikilink'].Path + 'fck_wikilink.html', 350, 250 ) ) ;
 
 // Create the "Plaholder" toolbar button.
 var oPlaceholderItem = new FCKToolbarButton( 'Wikilink', FCKLang.WikilinkBtn ) ;
@@ -73,6 +73,25 @@ FCKPlaceholders._SetupClickListener = function()
 
 	FCK.EditorDocument.addEventListener( 'click', FCKPlaceholders._ClickListener, true ) ;
 }
+
+// Context menu support.
+// Added by Ivan Tcholakov.
+FCK.ContextMenu.RegisterListener( {
+	AddItems : function ( menu, tag, tagName )
+	{
+		if ( !tag )
+		{
+			return ;
+		}
+
+		if ( tag.nodeName.IEquals( 'span' ) && tag._fckplaceholder )
+		{
+			menu.AddSeparator() ;
+			menu.AddItem( 'Wikilink', FCKLang.WikilinkDlgTitle, FCKConfig.PluginsPath + 'wikilink/wikilink.gif' ) ;
+		}
+	} }
+) ;
+
 
 // Open the Placeholder dialog on double click.
 FCKPlaceholders.OnDoubleClick = function( span )

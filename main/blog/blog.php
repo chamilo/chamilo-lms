@@ -92,7 +92,8 @@ if (!empty($_POST['new_task_submit']))
 {
 	Blog :: create_task($blog_id, $_POST['task_name'], $_POST['task_description'], $_POST['chkArticleDelete'], $_POST['chkArticleEdit'], $_POST['chkCommentsDelete'], $_POST['task_color']);
 }
-if (!empty($_POST['edit_task_submit']))
+
+if (isset($_POST['edit_task_submit']))
 {
 	Blog :: edit_task($_POST['blog_id'], $_POST['task_id'], $_POST['task_name'], $_POST['task_description'], $_POST['chkArticleDelete'], $_POST['chkArticleEdit'],$_POST['chkCommentsDelete'], $_POST['task_color']);
 }
@@ -101,9 +102,9 @@ if (!empty($_POST['assign_task_submit']))
 	Blog :: assign_task($blog_id, $_POST['task_user_id'], $_POST['task_task_id'], $_POST['task_year']."-".$_POST['task_month']."-".$_POST['task_day']);
 }
 
-if (!empty($_POST['assign_task_edit_submit']))
+if (isset($_POST['assign_task_edit_submit']))
 {
-	Blog :: edit_assigned_task($blog_id, $_POST['task_user_id'], $_POST['task_task_id'], $_POST['task_year']."-".$_POST['task_month']."-".$_POST['task_day'], $_POST['old_user_id'], $_POST['old_task_id'], $_POST['old_target_date']);
+    Blog :: edit_assigned_task($blog_id, $_POST['task_user_id'], $_POST['task_task_id'], $_POST['task_year']."-".$_POST['task_month']."-".$_POST['task_day'], $_POST['old_user_id'], $_POST['old_task_id'], $_POST['old_target_date']);
 }
 if (!empty($_POST['new_task_execution_submit']))
 {
@@ -143,7 +144,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks')
 		Blog :: delete_task($blog_id, (int)$_GET['task_id']);
 
 	if (isset($_GET['do']) && $_GET['do'] == 'delete_assignment')
-		Blog :: delete_assigned_task($blog_id, (int)$_GET['assignment_id']);
+		Blog :: delete_assigned_task($blog_id, Database::escape_string((int)$_GET['task_id']), Database::escape_string((int)$_GET['user_id']));
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'view_post')
@@ -293,7 +294,7 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 					<form action="blog.php" method="get" enctype="multipart/form-data">
 						<input type="hidden" name="blog_id" value="<?php echo $blog_id ?>" />
 						<input type="hidden" name="action" value="view_search_result" />
-						<input type="text" size="20" name="q" value="<?php echo (isset($_GET['q']) ? $_GET['q'] : ''); ?>" /><input type="submit" value="<?php echo get_lang('Search'); ?>" />
+						<input type="text" size="20" name="q" value="<?php echo (isset($_GET['q']) ? $_GET['q'] : ''); ?>" /><button class="search" type="submit"><?php echo get_lang('Search'); ?></button>
 					</form>
 				</td>
 			</tr>
@@ -435,7 +436,7 @@ switch ($current_page)
 			}
 			if (isset($_GET['do']) && $_GET['do'] == 'edit_assignment')
 			{
-				Blog :: display_edit_assigned_task_form($blog_id, Database::escape_string((int)$_GET['assignment_id']));
+				Blog :: display_edit_assigned_task_form($blog_id, Database::escape_string((int)$_GET['task_id']), Database::escape_string((int)$_GET['user_id']));
 			}
 			Blog :: display_task_list($blog_id);
 			echo '<br /><br />';

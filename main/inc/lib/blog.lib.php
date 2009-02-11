@@ -683,14 +683,10 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param Integer $assignment_id
 	 */
-	function delete_assigned_task($blog_id, $assignment_id)
+	function delete_assigned_task($blog_id, $task_id,$user_id)
 	{
 		// Init
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
-		$parameters = explode('|',$assignment_id);
-		$task_id = $parameters[0];
-		$user_id = $parameters[1];
-
 		// Delete posts
 		$sql = "DELETE FROM $tbl_blogs_tasks_rel_user WHERE `blog_id` = '".(int)$blog_id."' AND `task_id` = '".(int)$task_id."' AND `user_id` = '".(int)$user_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
@@ -1336,7 +1332,7 @@ class Blog
 								<td>
 								 <input type="hidden" name="action" value="" />
 								 <input type="hidden" name="new_post_submit" value="true" />
-								 <input type="submit" name="Submit" value="' . get_lang('Ok') . '" />
+								 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
 								</td>
 							</tr>
 						</table>
@@ -1400,7 +1396,7 @@ class Blog
 							 <input type="hidden" name="action" value="" />
 							 <input type="hidden" name="edit_post_submit" value="true" />
 							 <input type="hidden" name="post_id" value="' . (int)$_GET['post_id'] . '" />
-							 <input type="submit" name="Submit" value="' . get_lang('Ok') . '" />
+							 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
 							</td>
 						</tr>
 					</table>
@@ -1534,10 +1530,10 @@ class Blog
 						 '<td>'.stripslashes($assignment['description']) . '</td>',
 						 '<td>' . $assignment['target_date'] . '</td>',
 						 '<td width="50">',
-						 	'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=edit_assignment&amp;assignment_id=' . $assignment['task_id'] . '|' . $assignment['user_id'] . '">',
+						 	'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=edit_assignment&amp;task_id=' . $assignment['task_id'] . '&amp;user_id=' . $assignment['user_id'] . '">',
 							'<img src="../img/edit.gif" border="0" title="' . get_lang('EditTask') . '" />',
 							"</a>\n",
-							'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=delete_assignment&amp;assignment_id=' . $assignment['task_id'] . '|' . $assignment['user_id'] . '" ',
+							'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=delete_assignment&amp;task_id=' . $assignment['task_id'] . '&amp;user_id=' . $assignment['user_id'] . '" ',
 							'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"',
 							'<img src="../img/' . $delete_icon . '" border="0" title="' . $delete_title . '" />',
 							"</a>\n",
@@ -1610,7 +1606,7 @@ class Blog
 							<td align="right">&nbsp;</td>
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="new_task_submit" value="true" />
-							<td><br /><input type="submit" name="Submit" value="' . get_lang('Ok') . '" /></td>
+							<td><br /><button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button></td>
 						</tr>
 					</table>
 				</form>';
@@ -1703,7 +1699,7 @@ class Blog
 							<input type="hidden" name="edit_task_submit" value="true" />
 							<input type="hidden" name="task_id" value="' . $task['task_id'] . '" />
 							<input type="hidden" name="blog_id" value="' . $task['blog_id'] . '" />
-							<input type="submit" name="Submit" value="' . get_lang('Ok') . '" /></td>
+							<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button></td>
 						</tr>
 					</table>
 				</form>';
@@ -1821,7 +1817,7 @@ class Blog
 							<td align="right">&nbsp;</td>
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="assign_task_submit" value="true" />
-							<td><br /><input type="submit" name="Submit" value="' . get_lang('Ok') . '" /></td>
+							<td><br /><button class="save" type="submit" name="Submit">' . get_lang('Ok') . '</button></td>
 						</tr>
 					</table>
 				</form>';
@@ -1832,11 +1828,11 @@ class Blog
 	 * @author Toon Keppens
 	 *
 	 */
-	function display_edit_assigned_task_form($blog_id, $assignment_id)
+	function display_edit_assigned_task_form($blog_id, $task_id, $user_id)
 	{
-		$parameters = explode('|', $assignment_id);
-		$task_id = $parameters[0];
-		$user_id = $parameters[1];
+		//$parameters = explode('_', $assignment_id);
+		//$task_id = $parameters[0];
+		//$user_id = $parameters[1];
 
 		/* ------------- */
 		// Init
@@ -1986,7 +1982,7 @@ class Blog
 						<input type="hidden" name="old_user_id" value="' . $user_id . '" />
 						<input type="hidden" name="old_target_date" value="' . $old_date . '" />
 						<input type="hidden" name="assign_task_edit_submit" value="true" />
-						<td><br /><input type="submit" name="Submit" value="' . get_lang('Ok') . '" /></td>
+						<td><br /><button class="save type="submit" name="Submit">' . get_lang('Ok') . '</button></td>
 					</tr>
 				</table>
 			</form>';
@@ -2066,7 +2062,7 @@ class Blog
 					`task_id` = " . (int)$old_task_id . " AND
 					`target_date` = '" . mysql_real_escape_string($old_target_date) . "'
 			";
-
+			
 			$result = @api_sql_query($sql, __FILE__, __LINE__);
 		}
 	}
@@ -2265,7 +2261,7 @@ class Blog
 			echo '<option value="select_subscribe">' . get_lang('Register') . '</option>';
 			echo '</select>';
 			echo '<input type="hidden" name="register" value="true" />';
-			echo '<input type="submit" value="' . get_lang('Ok') . '"/>';
+			echo '<button class="save" type="submit">' . get_lang('Ok') . '</button>';
 		echo '</form>';
 	}
 
@@ -2371,7 +2367,7 @@ class Blog
 		echo '<option value="select_unsubscribe">' . get_lang('UnRegister') . '</option>';
 		echo '</select>';
 		echo '<input type="hidden" name="unregister" value="true" />';
-		echo '<input type="submit" value="' . get_lang('Ok') . '"/>';
+		echo '<button class="save" type="submit">' . get_lang('Ok') . '</button>';
 		echo '</form>';
 	}
 
@@ -2447,7 +2443,7 @@ class Blog
 									{
 										echo ' <input type="hidden" name="new_comment_submit" value="true" />';
 									}
-		echo '					<input type="submit" name="Submit" value="' . get_lang('Ok') . '" />
+		echo '					<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
 							</td>
 						</tr>
 					</table>
@@ -2646,7 +2642,7 @@ class Blog
 							<td align="right">&nbsp;</td>
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="new_blog_submit" value="true" />
-							<td><br /><input type="submit" name="Submit" value="' . get_lang('Ok') . '" /></td>
+							<td><br /><button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button></td>
 						</tr>
 					</table>
 				</form>';
@@ -2684,7 +2680,7 @@ class Blog
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="edit_blog_submit" value="true" />
 							<input type="hidden" name="blog_id" value="' . $blog['blog_id'] . '" />
-							<td><br /><input type="submit" name="Submit" value="' . get_lang('Ok') . '" /></td>
+							<td><br /><button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button></td>
 						</tr>
 					</table>
 				</form>';

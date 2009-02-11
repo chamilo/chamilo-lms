@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 18319 2009-02-07 00:03:42Z herodoto $
+<?php //$Id: announcements.php 18447 2009-02-11 20:49:45Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1146,10 +1146,19 @@ if(!empty($error_message))
 		require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 
 	    $oFCKeditor = new FCKeditor('newContent') ;
-
-		$oFCKeditor->ToolbarSet = "Announcements";
-		$oFCKeditor->Height		= '250';
+		
 		$oFCKeditor->Width		= '100%';
+		$oFCKeditor->Height		= '300';
+		
+		if(!api_is_allowed_to_edit())
+		{
+			$oFCKeditor->ToolbarSet = "Announcements_Student";
+		}
+		else
+		{
+			$oFCKeditor->ToolbarSet = "Announcements";
+		}		
+		
 		$oFCKeditor->Value		= $content_to_modify;
        
 		echo $oFCKeditor->CreateHtml();

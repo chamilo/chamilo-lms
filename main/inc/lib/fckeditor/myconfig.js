@@ -50,10 +50,6 @@ FCKConfig.ToolbarSets["Blog"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','OrderedList','UnorderedList','Table']
 ] ;
 
-FCKConfig.ToolbarSets["Announcements"] = [
-	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','OrderedList','UnorderedList','Table']
-] ;
-
 FCKConfig.ToolbarSets["Full"] = [
 	['FitWindow','PasteWord','Link','Unlink','Anchor','-','Image','flvPlayer','Flash','EmbedMovies','MP3','YouTube','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontFormat','Style','FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
 ] ;
@@ -120,6 +116,28 @@ FCKConfig.ToolbarSets["Agenda_Student"] = [
 	['FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough'],
 	['OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['ShowBlocks']
+] ;
+
+FCKConfig.ToolbarSets["Announcements"] = [
+	['NewPage','Preview','FitWindow','-','PasteText','-','Undo','Redo','-','SelectAll','RemoveFormat'],
+	['Link','Unlink','Anchor'],
+	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','Smiley','SpecialChar'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['Source']
+] ;
+
+FCKConfig.ToolbarSets["Announcements_Student"] = [
+	['NewPage','Preview','FitWindow','-','PasteText','-','Undo','Redo','-','SelectAll','RemoveFormat'],
+	['Link','Unlink','Anchor'],
+	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','Smiley','SpecialChar'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
 	['ShowBlocks']
 ] ;
 

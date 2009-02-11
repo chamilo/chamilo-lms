@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: create_document.php 18430 2009-02-11 00:05:53Z herodoto $
 
 /*
 ==============================================================================
@@ -164,9 +164,19 @@ include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $nameTools = get_lang('CreateDocument');
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '950';
-$fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['Height'] = '600';
+
 $fck_attribute['Config']['FullPage'] = true;
+if(!api_is_allowed_to_edit())
+{
+	$fck_attribute['Config']['UserStatus'] = 'student';
+	$fck_attribute['ToolbarSet'] = 'Documents_Student';
+}
+else
+{
+	$fck_attribute['ToolbarSet'] = 'Documents';
+}
+
 
 /*
 -----------------------------------------------------------

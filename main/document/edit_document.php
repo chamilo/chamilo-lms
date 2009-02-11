@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 18203 2009-02-03 18:02:16Z ndieschburg $
+<?php // $Id: edit_document.php 18430 2009-02-11 00:05:53Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -89,10 +89,19 @@ include_once(api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '950';
-$fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['Height'] = '600';
+
 $fck_attribute['Config']['FullPage'] = true;
 
+if(!api_is_allowed_to_edit())
+{
+	$fck_attribute['Config']['UserStatus'] = 'student';
+	$fck_attribute['ToolbarSet'] = 'Documents_Student';
+}
+else
+{
+	$fck_attribute['ToolbarSet'] = 'Documents';
+}
 
 
 /*
@@ -616,7 +625,6 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 	{
 		if (empty($readonly) && $readonly==0)
 		{	
-			$form->addElement('style_submit_button','submit',get_lang('SaveDocument'), 'class="save"');	
 			$_SESSION['showedit']=1;
 			$form->add_html_editor('texte','',false,true);
 		}			

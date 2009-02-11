@@ -116,6 +116,28 @@ FCKConfig.ToolbarSets["CourseDescription"] = [
 	['Source']
 ] ;
 
+FCKConfig.ToolbarSets["Documents"] = [
+	['NewPage','Templates','Save','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],
+	['FontFormat','FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Source']
+] ;
+
+FCKConfig.ToolbarSets["Documents_Student"] = [
+	['NewPage','Save','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],
+	['FontFormat','FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['ShowBlocks']
+] ;
+
 FCKConfig.ToolbarSets["ForumLight"] = [
 	['Bold','Italic','Underline','StrikeThrough']
 ] ;
@@ -140,6 +162,17 @@ FCKConfig.ToolbarSets["Forum_Student"] = [
 	['Bold','Italic','Underline','StrikeThrough'],
 	['Subscript','Superscript','-','OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','-','TextColor','BGColor'],
 	['ShowBlocks']
+] ;
+
+FCKConfig.ToolbarSets["Glossary"] = [
+	['NewPage','Save','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','SpecialChar','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Source']
 ] ;
 
 FCKConfig.ToolbarSets["Wiki"] = [
@@ -376,7 +409,9 @@ FCKConfig.MediaUploadDeniedExtensions	= "" ;
 // the following "if" block.
 if (FCK.AdvancedFileManager)
 {
-
+	FCKConfig.LinkUpload = false ;
+	FCKConfig.ImageUpload = false ;
+	FCKConfig.MP3Upload = false ;
 }
 
 

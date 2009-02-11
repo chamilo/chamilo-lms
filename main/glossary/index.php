@@ -44,6 +44,13 @@ Display::display_introduction_section(TOOL_GLOSSARY,'left');
 
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
+// Glossary FckEditor setting
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Glossary';
+
+
 // action links
 echo '<div class="actions">';
 if (api_is_allowed_to_edit())

@@ -110,14 +110,14 @@ if(1)
 					break;
 				case 'filter_on' :
 					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_filter'=>'1'))) {
-						Display :: display_confirmation_message(get_lang('FieldShown'));
+						Display :: display_confirmation_message(get_lang('FieldFilterSetOn'));
 					} else {
 						Display :: display_error_message(get_lang('CannotShowField'));
 					}
 					break;
 				case 'filter_off' :
 					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_filter'=>'0'))) {
-						Display :: display_confirmation_message(get_lang('FieldShown'));
+						Display :: display_confirmation_message(get_lang('FieldFilterSetOff'));
 					} else {
 						Display :: display_error_message(get_lang('CannotShowField'));
 					}

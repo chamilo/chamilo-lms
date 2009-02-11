@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 18449 2009-02-11 21:16:29Z juliomontoya $
+<?php // $Id: usermanager.lib.php 18452 2009-02-11 21:36:58Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -965,7 +965,7 @@ class UserManager
 		$table_field_options= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 		
 		// First check wether the login already exists
-		if (! UserManager::is_extra_field_available($fieldvarname))
+		if (UserManager::is_extra_field_available($fieldvarname)) 
 			return api_set_failure('login-pass already taken');
 		$sql = "SELECT MAX(field_order) FROM $table_field";
 		$res = api_sql_query($sql,__FILE__,__LINE__);

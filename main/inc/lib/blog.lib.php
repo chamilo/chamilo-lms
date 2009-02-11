@@ -1312,10 +1312,20 @@ class Blog
 						   <td>';
 
 									$oFCKeditor = new FCKeditor('post_full_text') ;
-
-									$oFCKeditor->ToolbarSet = 'Blog';
-									$oFCKeditor->Height		= '350';
-									$oFCKeditor->Width		= '98%';
+									
+									$oFCKeditor->Width		= '100%';
+									$oFCKeditor->Height		= '400';
+									
+									if(!api_is_allowed_to_edit())
+									{
+										
+										$oFCKeditor->ToolbarSet = 'Blog_Student';
+									}
+									else
+									{
+										$oFCKeditor->ToolbarSet = 'Blog';
+									}	
+									
 									$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
 									
 									$oFCKeditor->Create() ;
@@ -1381,9 +1391,19 @@ class Blog
 
 								$oFCKeditor = new FCKeditor('post_full_text') ;
 
-								$oFCKeditor->ToolbarSet = 'Blog';
-								$oFCKeditor->Height		= '350';
-								$oFCKeditor->Width		= '98%';
+								$oFCKeditor->Width		= '100%';
+								$oFCKeditor->Height		= '400';
+								
+								if(!api_is_allowed_to_edit())
+								{
+									
+									$oFCKeditor->ToolbarSet = 'Blog_Student';
+								}
+								else
+								{
+									$oFCKeditor->ToolbarSet = 'Blog';
+								}								
+								
 								$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
 								
 								$oFCKeditor->Create() ;
@@ -2408,11 +2428,21 @@ class Blog
 					   <td valign="top">' . get_lang('Comment') . ':&nbsp;&nbsp;</td>
 					   <td>';
 
-									$oFCKeditor = new FCKeditor('comment_text') ;
-
-									$oFCKeditor->ToolbarSet = 'Blog';
-									$oFCKeditor->Height		= '200';
-									$oFCKeditor->Width		= '97%';
+									$oFCKeditor = new FCKeditor('comment_text') ;													
+									
+									$oFCKeditor->Width		= '100%';
+									$oFCKeditor->Height		= '300';
+																
+									if(!api_is_allowed_to_edit())
+									{
+										
+										$oFCKeditor->ToolbarSet = 'BlogComment_Student';
+									}
+									else
+									{
+										$oFCKeditor->ToolbarSet = 'BlogComment';
+									}		
+									
 									$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
 									
 									$oFCKeditor->Create() ;

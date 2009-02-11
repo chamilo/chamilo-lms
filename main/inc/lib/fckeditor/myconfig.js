@@ -46,10 +46,6 @@ FCKConfig.ToolbarSets["Small"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','Flash','OrderedList','UnorderedList','Table']
 ] ;
 
-FCKConfig.ToolbarSets["Blog"] = [
-	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','OrderedList','UnorderedList','Table']
-] ;
-
 FCKConfig.ToolbarSets["Full"] = [
 	['FitWindow','PasteWord','Link','Unlink','Anchor','-','Image','flvPlayer','Flash','EmbedMovies','MP3','YouTube','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontFormat','Style','FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
 ] ;
@@ -138,6 +134,48 @@ FCKConfig.ToolbarSets["Announcements_Student"] = [
 	['FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough'],
 	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['ShowBlocks']
+] ;
+
+FCKConfig.ToolbarSets["Blog"] = [
+	['FitWindow','-','PasteWord','-','Undo','Redo','-','RemoveFormat'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['Source']
+] ;
+
+FCKConfig.ToolbarSets["Blog_Student"] = [
+	['FitWindow','-','PasteWord','-','Undo','Redo','-','RemoveFormat'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['ShowBlocks']
+] ;
+
+FCKConfig.ToolbarSets["BlogComment"] = [
+	['FitWindow','-','PasteWord','-','Undo','Redo','-','RemoveFormat'],
+	['Link','Unlink'],
+	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','googlemaps'],
+	['Bold','Italic','Underline'],
+	['JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['Source']
+] ;
+
+FCKConfig.ToolbarSets["BlogComment_Student"] = [
+	['FitWindow','-','PasteWord','-','Undo','Redo','-','RemoveFormat'],
+	['Link','Unlink'],
+	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','googlemaps'],
+	['Bold','Italic','Underline'],
+	['JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
 	['ShowBlocks']
 ] ;
 

@@ -47,6 +47,23 @@ Display::display_introduction_section(TOOL_NOTEBOOK,'left');
 
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
+
+// config notebook FckEditor buttons bar
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+
+if(!api_is_allowed_to_edit())
+{
+	$fck_attribute['Config']['UserStatus'] = 'student';
+	$fck_attribute['ToolbarSet'] = 'Notebook_Student';
+}
+else
+{
+	$fck_attribute['ToolbarSet'] = 'Notebook';
+}
+
+
 // action links
 echo '<div class="actions">';
 //if (api_is_allowed_to_edit())

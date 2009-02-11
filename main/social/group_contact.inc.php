@@ -1,22 +1,19 @@
 <?php
-$language_file = 'registration';
-$cidReset = true;
-
+$language_file = array('registration','messages','userInfo','admin');
 require ('../inc/global.inc.php');
-$this_section = SECTION_MYPROFILE;
-$_SESSION['this_section']=$this_section;
-$language_file = array('registration','messages');
 require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
 include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once '../inc/lib/social.lib.php';
+$this_section = SECTION_MYPROFILE;
+$_SESSION['this_section']=$this_section;
 $list_path_friends=array();
 $list_groups=array();
 ?>
 <div id="id" class="actions">
-<?php echo '&nbsp;&nbsp;'.get_lang('ContactsGroupsComment') ?>
+<?php echo '&nbsp;&nbsp;'.utf8_encode(get_lang('ContactsGroupsComment')); ?>
 </div>
 <?php
 $user_id=api_get_user_id();
@@ -30,7 +27,7 @@ for ($p=0;$p<count($list_groups);$p++) {
 
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-title">
           <tr>
-            <td width="100%" height="22" valign="top">&nbsp;&nbsp;<?php echo $list_groups[$p]['title']; ?>
+            <td width="100%" height="22" valign="top">&nbsp;&nbsp;<?php echo get_lang($list_groups[$p]['title']); ?>
             <img id="<?php echo 'btn_'.$list_groups[$p]['id']; ?>" style="float:right;margin-top:-15px" src="../img/visible.gif" onclick="toogle_function(this)"/><input type="hidden" class="hidden" id="id_hd_dame" name="hd_dame" value="0" /></td>
               </tr>
         </table></td>
@@ -75,7 +72,7 @@ if (count($list_path_friends)!=0) {
 	echo $friend_html; 
 }  else {
 	$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFC" style="border-left:1px #B8C8DC solid;border-bottom:1px #B8C8DC solid;border-right:1px #B8C8DC solid;">';		
-	$friend_html.='<tr><td valign="top">&nbsp;&nbsp;&nbsp;'.get_lang('YouDontHaveContactsInThisGroup');
+	$friend_html.='<tr><td valign="top">&nbsp;&nbsp;&nbsp;'.utf8_encode(get_lang('YouDontHaveContactsInThisGroup'));
 	$friend_html.='<br/><br/></td></tr>';
 	$friend_html.='</table>&nbsp;';//</div>
 	echo $friend_html;

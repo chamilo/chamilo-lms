@@ -6,9 +6,7 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
  // name of the language file that needs to be included
-$language_file = 'registration';
-$cidReset = true;
-
+$language_file = array('registration','messages','userInfo','admin');
 require '../inc/global.inc.php';
 include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');

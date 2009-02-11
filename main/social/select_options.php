@@ -1,7 +1,6 @@
 <?php
-$language_file = 'registration';
+$language_file = array('registration','messages','userInfo','admin');
 $cidReset = true;
-
 require '../inc/global.inc.php';
 $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 $tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);

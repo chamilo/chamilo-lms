@@ -28,7 +28,7 @@
 ==============================================================================
 */ 
 // name of the language file that needs to be included 
-$language_file= 'messages';
+$language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 include_once ('../inc/global.inc.php');
 require_once '../messages/message.class.php';
@@ -38,8 +38,6 @@ api_block_anonymous_users();
 if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
-
-
 $htmlHeadXtra[]='<script language="javascript">
 <!--
 function enviar(miforma) 
@@ -94,7 +92,8 @@ api_display_tool_title(get_lang('Outbox'));
 
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 echo '<div class=actions>';
-echo get_lang('MessageOutboxComment');
+$language_variable=($request===true) ? utf8_encode(get_lang('MessageOutboxComment')) : get_lang('MessageOutboxComment');
+echo $language_variable;	
 echo '</div>';
 
 $user_sender_id=api_get_user_id();

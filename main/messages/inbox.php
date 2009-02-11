@@ -28,7 +28,7 @@
 ==============================================================================
 */ 
 // name of the language file that needs to be included 
-$language_file= 'messages';
+$language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 include_once ('../inc/global.inc.php');
 require_once '../messages/message.class.php';

@@ -1,7 +1,7 @@
 <?php
 $cidReset = true;
 require '../inc/global.inc.php';
-$language_file = array('registration','messages');
+$language_file = array('registration','messages','userInfo','admin');
 require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
 include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');

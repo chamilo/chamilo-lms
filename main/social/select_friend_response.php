@@ -1,6 +1,5 @@
 <?php
-$language_file = array('registration','messages');
-$cidReset = true;
+$language_file = array('registration','messages','userInfo','admin');
 require '../inc/global.inc.php';
 include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
@@ -8,9 +7,13 @@ require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
 api_block_anonymous_users();
+$request=api_is_xml_http_request();
 ?>
 <div class="actions">
-<?php echo get_lang('SocialInvitesComment'); ?>
+<?php
+$language_variable=($request===true) ? utf8_encode(get_lang('SocialInvitesComment')) : get_lang('SocialInvitesComment');
+echo $language_variable;	
+ ?>
 </div>
 <div id="id_response" align="center"></div>
 <?php
@@ -21,7 +24,7 @@ $list_get_invitation=UserFriend::get_list_invitation_of_friends_by_user_id($user
 $list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id($user_id);
 $number_loop=count($list_get_invitation);
 if ($number_loop==0) {
-	echo Display::display_normal_message(get_lang('YouDontHaveInvites '));
+	Display::display_normal_message(get_lang('YouDontHaveInvites'));
 	
 }
 for ($i=0;$i<$number_loop;$i++) {

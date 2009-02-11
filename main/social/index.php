@@ -1,6 +1,5 @@
 <?php
-$language_file = array('registration','messages');
-$cidReset = true;
+$language_file = array('registration','messages','userInfo');//$cidReset = true;
 
 require '../inc/global.inc.php';
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');

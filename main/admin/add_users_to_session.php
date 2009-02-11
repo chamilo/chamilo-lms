@@ -374,7 +374,7 @@ if ($ajax_search) {
 		$sql="SELECT  user_id, lastname, firstname, username, id_session
 			FROM $tbl_user u
 			LEFT JOIN $tbl_session_rel_user
-			ON $tbl_session_rel_user.id_user = $tbl_user.user_id AND id_session = '$id_session'
+			ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
 			$where_filter
 			ORDER BY lastname,firstname,username";
 			
@@ -382,7 +382,7 @@ if ($ajax_search) {
 		$sql="SELECT  user_id, lastname, firstname, username, id_session
 			FROM $tbl_user u
 			LEFT JOIN $tbl_session_rel_user
-			ON $tbl_session_rel_user.id_user = $tbl_user.user_id AND id_session = '$id_session' 
+			ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session' 
 			ORDER BY lastname,firstname,username";
 	}			
 	

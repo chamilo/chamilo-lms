@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 18174 2009-02-02 23:36:04Z iflorespaz $
+<?php // $Id: usermanager.lib.php 18449 2009-02-11 21:16:29Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -705,18 +705,16 @@ class UserManager
 	 * @param	array	Database columns and their new value
 	 * @return	boolean	true if field updated, false otherwise
 	 */
-	function update_extra_field($fid,$columns)
+	function update_extra_field($fid,$columns) 
 	{
 		//TODO check that values added are values proposed for enumerated field types
-		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-		$fid = Database::escape_string($fid);
+		$t_uf 	= Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$fid 	= Database::escape_string($fid);
 		$sqluf = "UPDATE $t_uf SET ";
-		$known_fields = array('id','field_variable','field_type','field_display_text','field_default_value','field_order','field_visible','field_changeable');
+		$known_fields = array('id','field_variable','field_type','field_display_text','field_default_value','field_order','field_visible','field_changeable','field_filter');
 		$safecolumns = array(); 
-		foreach($columns as $index => $newval)
-		{
-			if(in_array($index,$known_fields))
-			{			
+		foreach ($columns as $index => $newval) {
+			if (in_array($index,$known_fields)) {			
 				$safecolumns[$index] = Database::escape_string($newval);
 				$sqluf .= $index." = '".$safecolumns[$index]."', ";
 			}
@@ -861,29 +859,25 @@ class UserManager
 	{
 		$fields = array();
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
-		$t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-		$columns = array('id','field_variable','field_type','field_display_text','field_default_value','field_order','tms');
+		$t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);		
+		$columns = array('id','field_variable','field_type','field_display_text','field_default_value','field_order','field_filter','tms');
+		
 		$sort_direction = '';
-		if(in_array(strtoupper($direction),array('ASC','DESC')))
-		{
+		if (in_array(strtoupper($direction),array('ASC','DESC'))) {
 			$sort_direction = strtoupper($direction);
 		}
 		$sqlf = "SELECT * FROM $t_uf ";
-		if($all_visibility==false)
-		{
+		if ($all_visibility==false) {
 			$sqlf .= " WHERE field_visible = 1 ";
 		}
 		$sqlf .= " ORDER BY ".$columns[$column]." $sort_direction " ;
-		if($number_of_items != 0)
-		{
+		if ($number_of_items != 0) {
 			$sqlf .= " LIMIT ".Database::escape_string($from).','.Database::escape_string($number_of_items);
-		}
+		}		
+		
 		$resf = api_sql_query($sqlf,__FILE__,__LINE__);
-		if(Database::num_rows($resf)>0)
-		{
-			while($rowf = Database::fetch_array($resf))
-			{
-				
+		if(Database::num_rows($resf)>0) {
+			while($rowf = Database::fetch_array($resf)) {				
 				$fields[$rowf['id']] = array(
 					0=>$rowf['id'],
 					1=>$rowf['field_variable'],
@@ -895,15 +889,15 @@ class UserManager
 					5=>$rowf['field_order'],
 					6=>$rowf['field_visible'],
 					7=>$rowf['field_changeable'],
-					8=>array()
-				);
+					8=>$rowf['field_filter'],
+					9=>array()
+				);			
+				
 				$sqlo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowf['id']." ORDER BY option_order ASC";
 				$reso = api_sql_query($sqlo,__FILE__,__LINE__);
-				if(Database::num_rows($reso)>0)
-				{
-					while($rowo = Database::fetch_array($reso))
-					{
-						$fields[$rowf['id']][8][$rowo['id']] = array(
+				if (Database::num_rows($reso)>0) {
+					while ($rowo = Database::fetch_array($reso)) {
+						$fields[$rowf['id']][9][$rowo['id']] = array(
 							0=>$rowo['id'],
 							1=>$rowo['option_value'],
 							//2=>(empty($rowo['option_display_text'])?'':get_lang($rowo['option_display_text'],'')),
@@ -1181,7 +1175,7 @@ class UserManager
 	
 	/**
 	 * Check if a field is available
-	 * @param	string	the wanted username
+	 * @param	string	the wanted fieldname
 	 * @return	boolean	true if the wanted username is available
 	 */
 	function is_extra_field_available($fieldname)
@@ -1189,7 +1183,7 @@ class UserManager
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
 		$sql = "SELECT * FROM $t_uf WHERE field_variable = '".Database::escape_string($fieldname)."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		return Database::num_rows($res) <= 0;
+		return Database::num_rows($res) > 0;
 	}
 	/**
 	 * Gets user extra fields data
@@ -1315,10 +1309,7 @@ class UserManager
 		}		
 		return $extra_data;
 	}
-	
-	
-	
-	
+		
 	/**
 	 * Get all the extra field information of a certain field (also the options)
 	 *
@@ -1376,6 +1367,49 @@ class UserManager
 		}		
 		return $return;
 	}
+	
+	
+	function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true)
+	{
+		$extra_data = array();		
+		$table_user_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$table_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		$table_user_field_options= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+		$where='';
+		/*
+		if (is_array($field_variable_array) && is_array($field_value_array)) {
+			if (count($field_variable_array) == count($field_value_array)) {
+				$field_var_count = count($field_variable_array);
+				for ($i = 0; $i<$field_var_count ; $i++) {
+					if ($i!=0 && $i!=$field_var_count){
+						$where.= ' AND ';
+					}					
+					$where.= "field_variable='".Database::escape_string($field_variable_array[$i])."' AND user_field_options.id='".Database::escape_string($field_value_array[$i])."'";	
+				}	
+			}
+				
+		}*/		
+		$where= "field_variable='".Database::escape_string($field_variable)."' AND field_value='".Database::escape_string($field_value)."'";
+		
+		$sql = "SELECT user_id FROM $table_user_field user_field INNER JOIN $table_user_field_values user_field_values
+				ON (user_field.id = user_field_values.field_id)								  
+				WHERE $where";
+
+		if($all_visibility == true) {
+			$sql .= " AND user_field.field_visible = 1 ";
+		} else {
+			$sql .= " AND user_field.field_visible = 0 ";
+		}			
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$result_data = array();
+		if (Database::num_rows($res)>0) {
+			while ($row = Database::fetch_array($res)) {
+				$result_data[]=$row['user_id'];
+			}
+		}		
+		return $result_data;
+	}
+	
 	
 	
 	

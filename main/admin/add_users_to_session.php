@@ -49,7 +49,7 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
+$interbreadcrumb[]=array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 // Database Table Definitions
 $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -68,8 +68,8 @@ $tool_name=get_lang('SubscribeUsersToSession');
 $id_session=intval($_GET['id_session']);
 
 $add_type = 'unique';
-if(isset($_GET['add_type']) && $_GET['add_type']!=''){
-	$add_type = $_GET['add_type'];
+if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+	$add_type = $_REQUEST['add_type'];
 }
 
 if(!api_is_platform_admin()) {
@@ -80,6 +80,19 @@ if(!api_is_platform_admin()) {
 	}
 }
 
+//checking for extra field with filter on
+include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+$extra_field_list= UserManager::get_extra_fields();
+$new_field_list = array();
+if (is_array($extra_field_list)) {
+	foreach ($extra_field_list as $extra_field) {
+		//if is enabled to filter and is a "<select>" field type
+		if ($extra_field[8]==1 && $extra_field[2]==4 ) {
+			$new_field_list[] = array('name'=> $extra_field[1], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
+		}
+	}
+}	
+	
 
 function search_users($needle)
 {
@@ -165,17 +178,28 @@ function remove_item(origin)
 		}
 	}
 }
+
+function validate_filter() {
+	
+		document.formulaire.add_type.value = \''.$add_type.'\';
+		document.formulaire.form_sent.value=0;				
+		document.formulaire.submit();
+		
+}
+			
+
+	
 </script>';
 
 
-$formSent=0;
+$form_sent=0;
 $errorMsg=$firstLetterUser=$firstLetterSession='';
 $UserList=$SessionList=array();
 $users=$sessions=array();
 $noPHP_SELF=true;
 
-if($_POST['formSent']) {
-	$formSent=$_POST['formSent'];
+if($_POST['form_sent']) {
+	$form_sent=$_POST['form_sent'];
 	$firstLetterUser=$_POST['firstLetterUser'];
 	$firstLetterSession=$_POST['firstLetterSession'];
 	$UserList=$_POST['sessionUsersList'];
@@ -184,7 +208,7 @@ if($_POST['formSent']) {
 		$UserList=array();
 	}
 
-	if ($formSent == 1) {
+	if ($form_sent == 1) {
 		$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		$existingUsers = array();
@@ -256,7 +280,6 @@ if($_POST['formSent']) {
 			//header('Location: '.$_GET['page'].'?id_session='.$id_session);
 		//else
 		header('Location: resume_session.php?id_session='.$id_session);
-
 	}
 }
 
@@ -268,6 +291,7 @@ $nosessionUsersList = $sessionUsersList = array();
 $rs = api_sql_query($sql, __FILE__, __LINE__);
 $count_courses = Database::result($rs, 0, 0);*/
 $ajax_search = $add_type == 'unique' ? true : false;
+global $_configuration;	
 
 if ($ajax_search) {
 	$sql="SELECT user_id, lastname, firstname, username, id_session
@@ -276,8 +300,7 @@ if ($ajax_search) {
 				ON $tbl_session_rel_user.id_user = $tbl_user.user_id
 				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
 			ORDER BY lastname,firstname,username";
-			
-	global $_configuration;	
+	
 	if ($_configuration['multiple_access_urls']==true) {		
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
 		$access_url_id = api_get_current_access_url_id();
@@ -291,23 +314,78 @@ if ($ajax_search) {
 				WHERE access_url_id = $access_url_id  
 				ORDER BY lastname,firstname,username";
 		}
-	}	
-	
+	}		
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
-	$Users=api_store_result($result);
-	
-	foreach($Users as $user) {
+	$Users=api_store_result($result);	
+	foreach ($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
 	}
 } else {
+		$use_extra_fields = false;		
+		if (is_array($extra_field_list)) {
+			if (is_array($new_field_list) && count($new_field_list)>0 ) {			
+				$result_list=array();
+				foreach ($new_field_list as $new_field) {
+					$varname = 'field_'.$new_field['variable'];				
+					if (Usermanager::is_extra_field_available($new_field['variable'])) {
+						if (isset($_POST[$varname]) && $_POST[$varname]!='0') {		
+							$use_extra_fields = true;																	
+							$extra_field_result[]= Usermanager::get_extra_user_data_by_value($new_field['variable'], $_POST[$varname]);
+						}								
+					}
+				}									
+			}
+		}	
+		
+		if ($use_extra_fields) {
+			$final_result = array();
+			if (count($extra_field_result)>1) {
+				for($i=0;$i<count($extra_field_result)-1;$i++) {
+					if (is_array($extra_field_result[$i+1])) {
+						$final_result  = array_intersect($extra_field_result[$i],$extra_field_result[$i+1]);				
+					}
+				}
+			} else {				
+				$final_result = $extra_field_result[0];
+			}
+					
+			$where_filter ='';
+			if ($_configuration['multiple_access_urls']==true) {
+				if (is_array($final_result) && count($final_result)>0) {
+					$where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
+				} else {
+					//no results
+					$where_filter = " AND u.user_id  = -1"; 
+				}
+			} else {			
+				if (is_array($final_result) && count($final_result)>0) {
+					$where_filter = " WHERE u.user_id IN  ('".implode("','",$final_result)."') ";
+				} else {
+					//no results
+					$where_filter = " WHERE u.user_id  = -1"; 
+				}
+			}		
+		}
 	
-	$sql="SELECT  user_id, lastname, firstname, username, id_session
-			FROM $tbl_user
+	$table_user_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+	$table_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		
+	if ($use_extra_fields) {		
+		$sql="SELECT  user_id, lastname, firstname, username, id_session
+			FROM $tbl_user u
 			LEFT JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = $tbl_user.user_id AND id_session = '$id_session' 
+			ON $tbl_session_rel_user.id_user = $tbl_user.user_id AND id_session = '$id_session'
+			$where_filter
 			ORDER BY lastname,firstname,username";
 			
-	global $_configuration;	
+	} else {
+		$sql="SELECT  user_id, lastname, firstname, username, id_session
+			FROM $tbl_user u
+			LEFT JOIN $tbl_session_rel_user
+			ON $tbl_session_rel_user.id_user = $tbl_user.user_id AND id_session = '$id_session' 
+			ORDER BY lastname,firstname,username";
+	}			
+	
 	if ($_configuration['multiple_access_urls']==true) {		
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
 		$access_url_id = api_get_current_access_url_id();
@@ -317,11 +395,11 @@ if ($ajax_search) {
 			LEFT JOIN $tbl_session_rel_user
 				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'			 
 			INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id) 
-			WHERE access_url_id = $access_url_id 
+			WHERE access_url_id = $access_url_id  $where_filter
 			ORDER BY lastname,firstname,username";			
 		}
 	}
-
+		
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
 	$Users=api_store_result($result);
 	//var_dump($_REQUEST['id_session']);
@@ -332,7 +410,6 @@ if ($ajax_search) {
 			$nosessionUsersList[$user['user_id']] = $user ;
 	}
 }
-
 
 if ($add_type == 'multiple') {
 	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$_GET['add'].'&add_type=unique">'.get_lang('SessionAddTypeUnique').'</a>';
@@ -351,7 +428,37 @@ if ($add_type == 'multiple') {
 <br><br>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
-<input type="hidden" name="formSent" value="1" />
+
+<?php
+if ($add_type=='multiple') { 
+	if (is_array($extra_field_list)) {
+		if (is_array($new_field_list) && count($new_field_list)>0 ) {
+			foreach ($new_field_list as $new_field) {
+				echo $new_field['name'];
+				$varname = 'field_'.$new_field['variable'];						
+				echo '&nbsp;<select name="'.$varname.'">';
+				echo '<option value="0">--'.get_lang('Select').'--</option>';	
+				foreach	($new_field['data'] as $option) {
+					$checked='';
+					if (isset($_POST[$varname])) {
+						if ($_POST[$varname]==$option[1]) {
+							$checked = 'selected="true"'; 
+						}
+					}							
+					echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';		
+				}
+				echo '</select>';	
+				echo '&nbsp;&nbsp;';
+			}
+			echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
+			echo '<br /><br />';
+		}	
+	}
+}
+?>
+
+<input type="hidden" name="form_sent" value="1" />
+<input type="hidden" name="add_type"  />
 
 <?php
 if(!empty($errorMsg)) {
@@ -360,8 +467,6 @@ if(!empty($errorMsg)) {
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
-
-
 <!-- Users -->
 <tr>
   <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b>
@@ -380,10 +485,8 @@ if(!empty($errorMsg)) {
 		<div id="ajax_list_users"></div>
 		<?php
   	  } else {
-  	  ?>
-  	  
+  	  ?>  	  
 	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:300px;">
-
 		<?php
 		foreach($nosessionUsersList as $enreg) {
 		?>

@@ -57,88 +57,77 @@ if(1)
 	if (isset ($_GET['action']))
 	{
 		$check = Security::check_token('get');
-		if($check)
-		{
-			switch ($_GET['action'])
-			{
+		if($check) {
+			switch ($_GET['action']) {
 				case 'show_message' :
 					Display :: display_normal_message($_GET['message']);
-					break;
+					break;			
 				case 'show_field' :
-					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_visible'=>'1')))
-					{
+					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_visible'=>'1'))) {
 						Display :: display_confirmation_message(get_lang('FieldShown'));
-					}
-					else
-					{
+					} else {
 						Display :: display_error_message(get_lang('CannotShowField'));
 					}
 					break;
 				case 'hide_field' :
-					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_visible'=>'0')))
-					{
+					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_visible'=>'0'))) {
 						Display :: display_confirmation_message(get_lang('FieldHidden'));
-					}
-					else
-					{
+					} else {
 						Display :: display_error_message(get_lang('CannotHideField'));
 					}
 					break;	
 				case 'thaw_field' :
-					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_changeable'=>'1')))
-					{
+					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_changeable'=>'1'))) {
 						Display :: display_confirmation_message(get_lang('FieldMadeChangeable'));
-					}
-					else
-					{
+					} else {
 						Display :: display_error_message(get_lang('CannotMakeFieldChangeable'));
 					}
 					break;	
 				case 'freeze_field' :
-					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_changeable'=>'0')))
-					{
+					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_changeable'=>'0'))) {
 						Display :: display_confirmation_message(get_lang('FieldMadeUnchangeable'));
-					}
-					else
-					{
+					} else {
 						Display :: display_error_message(get_lang('CannotMakeFieldUnchangeable'));
 					}
 					break;
 				case 'moveup' :
-					if (api_is_platform_admin() && !empty($_GET['field_id']))
-					{
-						if (move_user_field('moveup', $_GET['field_id']))
-						{
+					if (api_is_platform_admin() && !empty($_GET['field_id'])) {
+						if (move_user_field('moveup', $_GET['field_id'])) {
 							Display :: display_confirmation_message(get_lang('FieldMovedUp'));
-						}
-						else 
-						{
+						} else {
 							Display :: display_error_message(get_lang('CannotMoveField'));
 						}
 					}
 					break;
 				case 'movedown' :
-					if (api_is_platform_admin() && !empty($_GET['field_id']))
-					{					
-						if (move_user_field('movedown', $_GET['field_id']))
-						{
+					if (api_is_platform_admin() && !empty($_GET['field_id'])) {					
+						if (move_user_field('movedown', $_GET['field_id'])) {
 							Display :: display_confirmation_message(get_lang('FieldMovedDown'));
-						}
-						else 
-						{
+						} else {
 							Display :: display_error_message(get_lang('CannotMoveField'));
 						}					
 					}				
 					break;
+				case 'filter_on' :
+					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_filter'=>'1'))) {
+						Display :: display_confirmation_message(get_lang('FieldShown'));
+					} else {
+						Display :: display_error_message(get_lang('CannotShowField'));
+					}
+					break;
+				case 'filter_off' :
+					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_filter'=>'0'))) {
+						Display :: display_confirmation_message(get_lang('FieldShown'));
+					} else {
+						Display :: display_error_message(get_lang('CannotShowField'));
+					}
+					break;
+							
 				case 'delete':
-					if (api_is_platform_admin() && !empty($_GET['field_id']))
-					{
-						if (delete_user_fields($_GET['field_id']))
-						{
+					if (api_is_platform_admin() && !empty($_GET['field_id'])) {
+						if (delete_user_fields($_GET['field_id'])) {
 							Display :: display_confirmation_message(get_lang('FieldDeleted'));
-						}
-						else 
-						{
+						} else {
 							Display :: display_error_message(get_lang('CannotDeleteField'));
 						}
 					}
@@ -147,13 +136,10 @@ if(1)
 			Security::clear_token();
 		}
 	}
-	if (isset ($_POST['action']))
-	{
+	if (isset ($_POST['action'])) {
 		$check = Security::check_token('get');
-		if($check)
-		{
-			switch ($_POST['action'])
-			{
+		if($check) {
+			switch ($_POST['action']) {
 				default:
 					break;
 			}
@@ -177,11 +163,11 @@ if(1)
 
 	// Create a sortable table with user-data
 	$parameters['sec_token'] = Security::get_token();
-	$column_show = array(1,1,1,1,1,1,1,1,0,0);
-	$column_order = array(1,2,3,4,5,6,7,8,9,10);
+	$column_show  = array(1,1,1,1,1,1,1,1,1,0,0);
+	$column_order = array(1,2,3,4,5,6,7,8,9,10,11);
 	$extra_fields = UserManager::get_extra_fields(0,100,5,'ASC');
+	
 	$number_of_extra_fields = count($extra_fields);
-
  
 	$table = new SortableTableFromArrayConfig($extra_fields, 5, 50, '', $column_show, $column_order, 'ASC');
 	$table->set_additional_parameters($parameters);
@@ -193,11 +179,13 @@ if(1)
 	$table->set_header(5, get_lang('FieldOrder'));
 	$table->set_header(6, get_lang('FieldVisibility'));
 	$table->set_header(7, get_lang('FieldChangeability'));
-	$table->set_header(8, get_lang('Modify'));
+	$table->set_header(8, get_lang('FieldFilter'));	
+	$table->set_header(9, get_lang('Modify'));
 	$table->set_column_filter(5, 'order_filter');
 	$table->set_column_filter(6, 'modify_visibility');
 	$table->set_column_filter(7, 'modify_changeability');
-	$table->set_column_filter(8, 'edit_filter');
+	$table->set_column_filter(8, 'modify_field_filter');
+	$table->set_column_filter(9, 'edit_filter');
 	$table->set_column_filter(2, 'type_filter');
 	$table->display();
 }
@@ -300,6 +288,12 @@ function modify_visibility($visibility,$url_params,$row)
 function modify_changeability($changeability,$url_params,$row)
 {
 	return ($changeability?'<a href="'.api_get_self().'?action=freeze_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('right.gif', get_lang('MakeUnchangeable')).'</a>':'<a href="'.api_get_self().'?action=thaw_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('wrong.gif', get_lang('MakeChangeable')).'</a>');
+}
+
+function modify_field_filter ($changeability,$url_params,$row)
+{
+	return ($changeability?'<a href="'.api_get_self().'?action=filter_off&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('right.gif', get_lang('FilterOff')).'</a>':'' .
+						   '<a href="'.api_get_self().'?action=filter_on&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('wrong.gif', get_lang('FilterOn')).'</a>');
 }
 
 function edit_filter($id,$url_params,$row)

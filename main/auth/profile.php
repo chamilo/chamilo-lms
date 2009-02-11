@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18425 2009-02-10 22:29:20Z iflorespaz $
+<?php // $Id: profile.php 18449 2009-02-11 21:16:29Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -316,7 +316,7 @@ foreach($extra as $id => $field_details)
 			break;
 		case USER_FIELD_TYPE_RADIO:
 			$group = array();
-			foreach($field_details[8] as $option_id => $option_details)
+			foreach($field_details[9] as $option_id => $option_details)
 			{
 				$options[$option_details[1]] = $option_details[2];
 				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
@@ -326,7 +326,7 @@ foreach($extra as $id => $field_details)
 			break;
 		case USER_FIELD_TYPE_SELECT:
 			$options = array();
-			foreach($field_details[8] as $option_id => $option_details)
+			foreach($field_details[9] as $option_id => $option_details)
 			{
 				$options[$option_details[1]] = $option_details[2];
 			}
@@ -335,7 +335,7 @@ foreach($extra as $id => $field_details)
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();
-			foreach($field_details[8] as $option_id => $option_details)
+			foreach($field_details[9] as $option_id => $option_details)
 			{
 				$options[$option_details[1]] = $option_details[2];
 			}
@@ -359,7 +359,7 @@ foreach($extra as $id => $field_details)
 			$form -> setDefaults($defaults);
 			break;
 		case USER_FIELD_TYPE_DOUBLE_SELECT:
-			foreach ($field_details[8] as $key=>$element)
+			foreach ($field_details[9] as $key=>$element)
 			{
 				if ($element[2][0] == '*')
 				{

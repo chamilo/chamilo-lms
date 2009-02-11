@@ -11,7 +11,7 @@ $language_file = array('glossary');
 
 // including the global dokeos file
 require_once('../inc/global.inc.php');
-include('../inc/lib/events.lib.inc.php');
+require_once('../inc/lib/events.lib.inc.php');
 
 // the section (tabs)
 $this_section=SECTION_COURSES;

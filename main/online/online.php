@@ -1,4 +1,4 @@
-<?php // $Id: online.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: online.php 18433 2009-02-11 14:58:51Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -35,7 +35,7 @@ api_protect_course_script();
 /* ============================================================================== 
   			TRACKING
 ==============================================================================  */
-include('../inc/lib/events.lib.inc.php');
+require_once('../inc/lib/events.lib.inc.php');
 event_access_tool(TOOL_CONFERENCE);
 
 ?>

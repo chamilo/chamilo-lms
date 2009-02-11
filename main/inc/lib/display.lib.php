@@ -32,10 +32,10 @@
 ==============================================================================
 *	This is a display library for Dokeos.
 *
-*	Include/require it in your code to use its functionality.
-*	There are also several display functions in the main api library.
+*	Include/require it in your code to use its public functionality.
+*	There are also several display public functions in the main api library.
 *
-*	All functions static functions inside a class called Display,
+*	All public functions static public functions inside a class called Display,
 *	so you use them like this: e.g.
 *	Display::display_normal_message($message)
 *
@@ -55,15 +55,15 @@
 //no other libraries needed at the moment
 /*
 ==============================================================================
-		FUNCTIONS
+		public functionS
 ==============================================================================
 */
-//all functions are stored inside the Display class
+//all public functions are stored inside the Display class
 /*
 ==============================================================================
 		CLASS Display
 
-		functions inside
+		public functions inside
 		----------------
 		Display::display_localised_html_file($full_file_name)
 		Display::display_table_header()
@@ -78,7 +78,7 @@
 */
 /**
 *	Display class
-*	contains several functions dealing with the display of
+*	contains several public functions dealing with the display of
 *	table data, messages, help topics, ...
 *
 *	@version 1.0.4
@@ -93,7 +93,7 @@ class Display {
 	* @param string $tool These are the constants that are used for indicating the tools
 	* @return html code for adding an introduction
 	*/
-	function display_introduction_section($tool)
+	public function display_introduction_section($tool)
 	{
 		$is_allowed_to_edit = api_is_allowed_to_edit();
 		$moduleId = $tool;
@@ -109,11 +109,11 @@ class Display {
 	*	tries to show the file "$full_file_name"."_".$language_interface.".html"
 	*	and if this does not exist, shows the file "$full_file_name".".html"
 	*
-	*	warning this function defines a global
+	*	warning this public function defines a global
 	*
 	*	@param $full_file_name, the (path) name of the file, without .html
 	*/
-	function display_localised_html_file($full_file_name)
+	public function display_localised_html_file($full_file_name)
 	{
 		global $language_interface;
 		$localised_file_name = $full_file_name."_".$language_interface.".html";
@@ -131,7 +131,7 @@ class Display {
 	/**
 	*	Display simple html header of table.
 	*/
-	function display_table_header()
+	public function display_table_header()
 	{
 		$bgcolor = "bgcolor='white'";
 		echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"4\" width=\"85%\"><tbody>";
@@ -151,7 +151,7 @@ class Display {
 	*	@author Roan Embrechts
 	*	@version 1.01
 	*/
-	function display_complex_table_header($properties, $column_header)
+	public function display_complex_table_header($properties, $column_header)
 	{
 		$width = $properties["width"];
 		if (!isset ($width))
@@ -187,7 +187,7 @@ class Display {
 	*	@param $table_row an array with the row elements
 	*	@param $is_alternating true: the row colours alternate, false otherwise
 	*/
-	function display_table_row($bgcolor, $table_row, $is_alternating = true)
+	public function display_table_row($bgcolor, $table_row, $is_alternating = true)
 	{
 		echo "<tr $bgcolor>";
 		foreach ($table_row as $table_element)
@@ -214,7 +214,7 @@ class Display {
 
 	/**
 	*	Displays a table row.
-	*	This function has more options and is easier to extend than display_table_row()
+	*	This public function has more options and is easier to extend than display_table_row()
 	*
 	*	@param $properties, array with properties:
 	*	["bgcolor"] - the background colour for the table
@@ -222,7 +222,7 @@ class Display {
 	*	["align_row"] - an array with, per cell, left|center|right
 	*	@todo add valign property
 	*/
-	function display_complex_table_row($properties, $table_row)
+	public function display_complex_table_row($properties, $table_row)
 	{
 		$bgcolor = $properties["bgcolor"];
 		$is_alternating = $properties["is_alternating"];
@@ -250,7 +250,7 @@ class Display {
 	/**
 	*	display html footer of table
 	*/
-	function display_table_footer()
+	public function display_table_footer()
 	{
 		echo "</tbody></table>";
 	}
@@ -276,7 +276,7 @@ class Display {
 	 * @param array $query_vars Additional variables to add in the query-string
 	 * @author bart.mollet@hogent.be
 	 */
-	function display_sortable_table($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $form_actions=array())
+	public function display_sortable_table($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $form_actions=array())
 	{
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
@@ -323,7 +323,7 @@ class Display {
 	 * @author Julio Montoya
 	 */
 	 
-	function display_sortable_config_table($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $column_show=array(),$column_order=array(),$form_actions=array())
+	public function display_sortable_config_table($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $column_show=array(),$column_order=array(),$form_actions=array())
 	{
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
@@ -355,7 +355,7 @@ class Display {
 	
 		
 	/**
-	* Displays a normal message. It is recommended to use this function
+	* Displays a normal message. It is recommended to use this public function
 	* to display any normal information messages.
 	*
 	* @author Roan Embrechts
@@ -364,7 +364,7 @@ class Display {
 	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	function display_normal_message($message,$filter=true)
+	public function display_normal_message($message,$filter=true)
 	{
 		global $charset;
 		if($filter)
@@ -395,7 +395,7 @@ class Display {
 	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	function display_warning_message($message,$filter=true)
+	public function display_warning_message($message,$filter=true)
 	{
 		global $charset;
 		if($filter){
@@ -424,7 +424,7 @@ class Display {
 	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	function display_confirmation_message($message,$filter=true)
+	public function display_confirmation_message($message,$filter=true)
 	{
 		global $charset;
 		if($filter){
@@ -446,7 +446,7 @@ class Display {
 	}
 
 	/**
-	* Displays an error message. It is recommended to use this function if an error occurs
+	* Displays an error message. It is recommended to use this public function if an error occurs
 	*
 	* @author Hugues Peeters
 	* @author Roan Embrechts
@@ -456,7 +456,7 @@ class Display {
 	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	function display_error_message($message,$filter=true)
+	public function display_error_message($message,$filter=true)
 	{
 		global $charset;
 		if($filter){
@@ -485,7 +485,7 @@ class Display {
 	 * @param - $style_class (string) - optional, class from stylesheet
 	 * @return - encrypted mailto hyperlink
 	 */
-	function encrypted_mailto_link($email, $clickable_text = null, $style_class = '')
+	public function encrypted_mailto_link($email, $clickable_text = null, $style_class = '')
 	{
 		global $charset;		
 		if (is_null($clickable_text))
@@ -526,7 +526,7 @@ class Display {
 	*	@param string $name, the visible name of the hyperlink, default is sitename
 	*	@return string with html code for hyperlink
 	*/
-	function get_platform_home_link_html($name = '')
+	public function get_platform_home_link_html($name = '')
 	{
 		if ($name == '')
 		{
@@ -539,7 +539,7 @@ class Display {
 	 * @param string The name of the page (will be showed in the page title)
 	 * @param string Optional help file name
 	 */
-	function display_header($tool_name, $help = NULL)
+	public function display_header($tool_name, $help = NULL)
 	{
 		$nameTools = $tool_name;
 		global $_plugins,$lp_theme_css,$mycoursetheme,$user_theme,$platform_theme;
@@ -550,7 +550,7 @@ class Display {
 	/**
 	 * Display the page footer
 	 */
-	function display_footer()
+	public function display_footer()
 	{
 		global $dokeos_version; //necessary to have the value accessible in the footer
 		global $_plugins;
@@ -561,7 +561,7 @@ class Display {
 	 * Print an <option>-list with all letters (A-Z).
 	 * @param char $selected_letter The letter that should be selected
 	 */
-	function get_alphabet_options($selected_letter = '')
+	public function get_alphabet_options($selected_letter = '')
 	{
 		$result = '';
 		for ($i = 65; $i <= 90; $i ++) {
@@ -575,7 +575,7 @@ class Display {
 		return $result;
 	}
 	
-	function get_numeric_options($min,$max, $selected_num = 0)
+	public function get_numeric_options($min,$max, $selected_num = 0)
 	{
 		$result = '';
 		for ($i = $min; $i <= $max; $i ++) {			
@@ -592,7 +592,7 @@ class Display {
 	/**
 	* Show the so-called "left" menu for navigating
 	*/
-	function show_course_navigation_menu($isHidden = false)
+	public function show_course_navigation_menu($isHidden = false)
 	{
 		global $output_string_menu;
 		global $_setting;
@@ -646,17 +646,17 @@ class Display {
 	}
 
 	/**
-	 * This function displays an icon
+	 * This public function displays an icon
 	 * @param string $image the filename of the file (in the main/img/ folder
 	 * @param string $alt_text the alt text (probably a language variable)
 	 * @param array additional attributes (for instance height, width, onclick, ...)
 	*/
-	function display_icon($image, $alt_text = '', $additional_attributes = array ()) {
+	public function display_icon($image, $alt_text = '', $additional_attributes = array ()) {
 		echo Display::return_icon($image,$alt_text,$additional_attributes);
 	}
 
 	/**
-	 * This function returns the htmlcode for an icon
+	 * This public function returns the htmlcode for an icon
 	 *
 	 * @param string $image the filename of the file (in the main/img/ folder
 	 * @param string $alt_text the alt text (probably a language variable)
@@ -665,7 +665,7 @@ class Display {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version October 2006
 	*/
-	function return_icon($image,$alt_text='',$additional_attributes=array())
+	public function return_icon($image,$alt_text='',$additional_attributes=array())
 	{
 		$attribute_list = '';
 		// alt text = the image if there is none provided (for XHTML compliance)
@@ -685,7 +685,29 @@ class Display {
 		}
 		return '<img src="'.api_get_path(WEB_IMG_PATH).$image.'" alt="'.$alt_text.'"  title="'.$alt_text.'" '.$attribute_list.'  />';
 	}
-
+	
+	/**
+	 * Display name and lastname in a specific order
+	 * @param string Firstname 
+	 * @param string Lastname
+	 * @param string Title in the destination language (Dr, Mr, Miss, Sr, Sra, etc)
+	 * @param string Optional format string (e.g. '%t. %l, %f')
+	 * @author Carlos Vargas <carlos.vargas@dokeos.com>
+	 */
+	 public function user_name($fname,$lname,$title='',$format=null) {
+		 if (empty($format)){	 	
+			 	if (empty($fname) or empty($lname)) {
+			 		$user_name = $fname.$lname;
+			 	} else {
+				 	$user_name= $fname.' '.$lname; 		
+			 	}
+		 } 	else {
+		 	$find = array('%t','%f','%l');
+			$repl = array($title,$fname,$lname);
+			$user_name = str_replace($find,$repl,$format);
+		 }
+	 	 return $user_name;
+	 }
 
 } //end class Display
 ?>

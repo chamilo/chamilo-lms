@@ -42,10 +42,6 @@ FCKConfig.ToolbarSets["Middle"] = [
 	['FontSize','Bold','Italic','Underline','StrikeThrough','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Unlink','Table','-','Image','Flash','Source']
 ] ;
 
-FCKConfig.ToolbarSets["Agenda"] = [
-	['FontSize','Bold','Italic','Underline','StrikeThrough','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Unlink','Table','-','Image']
-] ;
-
 FCKConfig.ToolbarSets["Small"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','Flash','OrderedList','UnorderedList','Table']
 ] ;
@@ -103,6 +99,28 @@ FCKConfig.ToolbarSets["Introduction"] = [
 	['Bold','Italic','Underline','StrikeThrough'],
 	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
 	['Source']
+] ;
+
+FCKConfig.ToolbarSets["Agenda"] = [
+	['FitWindow','-','PasteWord','-','Undo','Redo','RemoveFormat'],
+	['Link','Unlink'],
+	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','SpecialChar','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['Source']
+] ;
+
+FCKConfig.ToolbarSets["Agenda_Student"] = [
+	['FitWindow','-','PasteWord','-','Undo','Redo','RemoveFormat'],
+	['Link','Unlink'],
+	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','SpecialChar','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['ShowBlocks']
 ] ;
 
 FCKConfig.ToolbarSets["CourseDescription"] = [

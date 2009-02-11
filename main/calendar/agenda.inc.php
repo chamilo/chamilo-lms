@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 18407 2009-02-10 16:03:50Z cfasanando $
+<?php //$Id: agenda.inc.php 18440 2009-02-11 18:39:40Z herodoto $
 
 /*
 ==============================================================================
@@ -2802,9 +2802,18 @@ function show_add_form($id = '')
 
 			$oFCKeditor = new FCKeditor('content') ;
 
-			$oFCKeditor->ToolbarSet = 'Agenda';
 			$oFCKeditor->Width		= '100%';
-			$oFCKeditor->Height		= '175';
+			$oFCKeditor->Height		= '200';
+
+			if(!api_is_allowed_to_edit())
+			{
+				$oFCKeditor->ToolbarSet = 'Agenda_Student';
+			}
+			else
+			{
+				$oFCKeditor->ToolbarSet = 'Agenda';
+			}
+		
 			$oFCKeditor->Value		= $content;
 
 			$return =	$oFCKeditor->CreateHtml();

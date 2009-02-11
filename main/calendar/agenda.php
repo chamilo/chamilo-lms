@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 18319 2009-02-07 00:03:42Z herodoto $
+<?php //$Id: agenda.php 18440 2009-02-11 18:39:40Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -299,10 +299,7 @@ if (empty($_GET['origin']) or $_GET['origin']!='learnpath')
 	echo '<td width="20" background="../img/verticalruler.gif">&nbsp;</td>';
 }
 
-$fck_attribute['Width'] = '600';
-$fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'Middle';
-
+//TODO: meet this fckeditor code and agenda.inc.php fckeditor code
 $fck_attribute['Config']['CreateDocumentDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
 
@@ -312,7 +309,7 @@ if(isset($_SESSION['_course']) && $_SESSION['_course']['path']!='')
 }
 else
 {
-	$upload_path = api_get_path(REL_PATH).'main/default_course_document/';
+	$upload_path = api_get_path(REL_PATH).'main/default_course_document/'; //TODO: check if this is correct or better main/upload/num_user/my_files
 }
 
 // THE RIGHT PART

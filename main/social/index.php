@@ -1,6 +1,5 @@
 <?php
-$language_file = array('registration','messages','userInfo');//$cidReset = true;
-
+$language_file = array('registration','messages','userInfo','admin');
 require '../inc/global.inc.php';
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $this_section = SECTION_MYPROFILE;
@@ -255,18 +254,18 @@ Display :: display_header('');
 ?>
 <div id="container-9">
     <ul>
-        <li><a href="data_personal.inc.php"><span><?php echo get_lang('PersonalData') ?></span></a></li>
+        <li><a href="data_personal.inc.php"><span><?php echo get_lang('PersonalData'); ?></span></a></li>
         <?php 
        	if (api_get_setting('allow_message_tool')=='true') { 
        	?>        
-        <li><a href="../messages/inbox.php"><span><?php echo get_lang('Inbox') ?></span></a></li>
-        <li><a href="../messages/outbox.php"><span><?php echo get_lang('Outbox') ?></span></a></li>
+        <li><a href="../messages/inbox.php"><span><?php echo get_lang('Inbox'); ?></span></a></li>
+        <li><a href="../messages/outbox.php"><span><?php echo get_lang('Outbox'); ?></span></a></li>
         <?php }
   	 	if (api_get_setting('allow_social_tool')=='true') {      
         ?>
-        <li><a href="select_friend_response.php"><span><?php echo get_lang('Invites') ?></span></a></li>
-        <li><a href="contacts.inc.php"><span><?php echo get_lang('Contacts') ?></span></a></li>
-        <li><a href="group_contact.inc.php"><span><?php echo get_lang('ContactsGroups') ?></span></a></li>
+        <li><a href="select_friend_response.php"><span><?php echo get_lang('Invites'); ?></span></a></li>
+        <li><a href="contacts.inc.php"><span><?php echo get_lang('Contacts'); ?></span></a></li>
+        <li><a href="group_contact.inc.php"><span><?php echo get_lang('ContactsGroups'); ?></span></a></li>
         <?php
   	 	}
         ?>    

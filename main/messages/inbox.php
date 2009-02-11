@@ -89,7 +89,7 @@ if ($request===false) {
 } else {
 	$link_ref="../messages/new_message.php?rs=1";
 }
-api_display_tool_title('');
+api_display_tool_title(get_lang('Inbox'));
 
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 

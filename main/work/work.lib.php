@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18420 2009-02-10 20:19:02Z cvargas1 $
+<?php //$Id: work.lib.php 18437 2009-02-11 16:34:36Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18420 2009-02-10 20:19:02Z cvargas1 $
+* 	@version $Id: work.lib.php 18437 2009-02-11 16:34:36Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -99,8 +99,8 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 	}
 	echo "</td></tr>";
 	display_default_visibility_form($uploadvisibledisabled);
-	echo '</table>';
-	echo '<div>'.get_lang("ValidateChanges").' : <input type="submit" name="changeProperties" value="'.get_lang("Ok").'" /></div></form>';
+	echo '</table>';	
+	echo '<div>'.get_lang("ValidateChanges").' : <button type="submit" name="changeProperties" value="'.get_lang('Ok').'">'.get_lang('Ok').'</button></div></form>';
 
 }
 
@@ -534,18 +534,35 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$row = array();
 		$class = '';										
 		$row[] = '<img src="../img/folder_document.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Folder').'" title="'.get_lang('Folder').'" />'; //image
-		$a_count_directory=count_dir($work_dir.'/'.$dir,false);
+		//$a_count_directory=count_dir($work_dir.'/'.$dir,false);
+		
 		$cant_files=0;
+		$cant_dir = 0;						
 		if(api_is_allowed_to_edit()) {
-		$cant_files=$a_count_directory[0];
+		$sql_document = "SELECT count(*) FROM $work_table WHERE  url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";			
 		} else {
-		$sql = "SELECT count(*) FROM $work_table s, $iprop_table p WHERE s.id = p.ref AND lastedit_user_id='".(int)api_get_user_id()."' AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$r = Database::fetch_row($res);
-		$cant_files = $r[0];	
+			// gets admin_course		
+			$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+			$table_user = Database :: get_main_table(TABLE_MAIN_USER);	
+			$sql = "SELECT course_user.user_id FROM $table_user user, $table_course_user course_user
+					  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
+			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$admin_course = '';
+			while($row_admin = Database::fetch_row($res)) {
+				$admin_course .='\''.$row_admin[0].'\','; 	
+			}					
+		$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p WHERE s.id = p.ref AND p.tool='work' AND lastedit_user_id IN(".$admin_course.'\''.api_get_user_id().'\''.") AND s.accepted='1' AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";		
 		}
-		$cant_dir=$a_count_directory[1];				
-				
+		//count documents
+		$res_document = api_sql_query($sql_document,__FILE__,__LINE__);
+		$count_document = Database::fetch_row($res_document);
+		$cant_files = $count_document[0];		
+		//count directories				
+		$sql_directory = "SELECT count(*) FROM $work_table s WHERE  url NOT LIKE '/".$mydir."/%/%' AND url LIKE '/".$mydir."/%'";
+		$res_directory = api_sql_query($sql_directory,__FILE__,__LINE__);
+		$count_directory = Database::fetch_row($res_directory);					
+		$cant_dir = $count_directory[0];
+							
 		$text_file=get_lang('FilesUpload');
 		$text_dir=get_lang('Directories');
 				
@@ -608,7 +625,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$table_data[] = $row;
 	}
 	
-	while( $work = mysql_fetch_object($sql_result)) {
+	while( $work = Database::fetch_object($sql_result)) {
 		//Get the author ID for that document from the item_property table
 		$is_author = false;
 		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND ref=".$work->id;

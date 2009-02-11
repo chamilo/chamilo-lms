@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18407 2009-02-10 16:03:50Z cfasanando $
+<?php //$Id: work.php 18437 2009-02-11 16:34:36Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18407 2009-02-10 16:03:50Z cfasanando $
+*  	@version $Id: work.php 18437 2009-02-11 16:34:36Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -107,6 +107,10 @@ $work_table 		= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 $iprop_table 		= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $TSTDPUBASG			= Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 $t_gradebook_link 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+$table_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+$table_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 /*
 -----------------------------------------------------------
 	Constants and variables
@@ -809,15 +813,14 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 				if(Database::num_rows($sql) > 0 ) {
 					$dir_row = Database::fetch_array($sql);
 					$parent_id = $dir_row['id'];
-				}
-							
+				}				
 				$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
 										       "url         = '" . $url . "',
 										       title       = '" . $title . "',
 							                   description = '" . $description . "',
 							                   author      = '" . $authors . "',
 											   active		= '" . $active . "',
-											   accepted		= '" . (!$uploadvisibledisabled) . "',
+											   accepted		= '" . (api_is_allowed_to_edit()?$uploadvisibledisabled:(!$uploadvisibledisabled)) . "',
 											   post_group_id = '" . $post_group_id . "',
 											   sent_date	=  '".$current_date ."',
 											   parent_id 	=  '".$parent_id ."' ,
@@ -936,11 +939,7 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 	$send = api_get_course_setting('email_alert_manager_on_new_doc');
 	
 	if ($send > 0) {
-		// Lets predefine some variables. Be sure to change the from address!
-		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-		$table_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-		$table_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+		// Lets predefine some variables. Be sure to change the from address!		
 
 		$emailto = array ();
 		if (empty ($id_session)) {
@@ -1296,9 +1295,16 @@ if ($cur_dir_path == '/') {
 }
 
 if (!$display_upload_form && !$display_tool_options) {
-	$add_query = '';
+	$add_query = '';	
+	$sql = "SELECT concat(user.firstname,' ',user.lastname) FROM $table_user user, $table_course_user course_user
+			  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$admin_course = '';
+	while($row = Database::fetch_row($res)) {
+		$admin_course .='\''.$row[0].'\','; 	
+	}
 	if(!$is_allowed_to_edit && $is_special==true) { 
-		$add_query = ' AND author = '."'".$_user['firstName'].' '.$_user['lastName']."' ";
+		$add_query = ' AND author IN('.$admin_course.'\''.$_user['firstName'].' '.$_user['lastName'].'\')';
 	}
 	if($is_allowed_to_edit && $is_special==true) { 	
 	

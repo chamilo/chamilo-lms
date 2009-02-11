@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18437 2009-02-11 16:34:36Z cfasanando $
+<?php //$Id: work.php 18439 2009-02-11 17:24:28Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18437 2009-02-11 16:34:36Z cfasanando $
+*  	@version $Id: work.php 18439 2009-02-11 17:24:28Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -213,7 +213,6 @@ if (!empty($_POST['submitWork']) || !empty($submitGroupWorkUrl)) {
 	include_once (api_get_path(INCLUDE_PATH) . "lib/fileUpload.lib.php");
 	include_once (api_get_path(INCLUDE_PATH) . "lib/fileDisplay.lib.php"); // need format_url function
 }
-
 // If the POST's size exceeds 8M (default value in php.ini) the $_POST array is emptied
 // If that case happens, we set $submitWork to 1 to allow displaying of the error message
 // The redirection with header() is needed to avoid apache to show an error page on the next request
@@ -492,6 +491,7 @@ if (api_is_allowed_to_edit(false,true)) {
 			include_once (api_get_path(LIBRARY_PATH) . "fileUpload.lib.php");
 			$added_slash = (substr($cur_dir_path, -1, 1) == '/') ? '' : '/';	
 				
+			$directory =disable_dangerous_file($_POST['new_dir']);
 			$directory =replace_accents($_POST['new_dir']);
 			$dir_name = $cur_dir_path . $added_slash . replace_dangerous_char($directory);				
 			$created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);

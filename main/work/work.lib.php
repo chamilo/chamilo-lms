@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18437 2009-02-11 16:34:36Z cfasanando $
+<?php //$Id: work.lib.php 18439 2009-02-11 17:24:28Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18437 2009-02-11 16:34:36Z cfasanando $
+* 	@version $Id: work.lib.php 18439 2009-02-11 17:24:28Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -505,7 +505,9 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 					
 					$values = $form_folder -> exportValues();
 					$values = $values['my_group'];			
-					$dir_name = replace_accents($values['dir_name']);		
+					$dir_name = disable_dangerous_file($values['dir_name']);		
+					$dir_name = replace_accents($values['dir_name']);
+					$dir_name = replace_dangerous_char($values['dir_name']);
 					update_dir_name($mydir,$dir_name);
 					$mydir = $my_sub_dir.$dir_name;
 					$dir = $dir_name;
@@ -731,6 +733,8 @@ function get_subdirs_list($basedir='',$recurse=0){
 	$dh = opendir($basedir);
 	while($entry = readdir($dh)) {
 		$entry = replace_accents($entry);
+		$entry = disable_dangerous_file($entry);
+		$entry = replace_dangerous_char($entry);
 		if(is_dir($basedir.$entry) && $entry!='..' && $entry!='.') { 
 			$dirs_list[] = $entry;
 			if($recurse==1) {
@@ -987,7 +991,10 @@ function update_dir_name($path, $new_name)
 		$path_to_dir .= '/';
 	}
 	
+	
 	$new_name=replace_accents($new_name);
+	$new_name=disable_dangerous_file($new_name);
+	$new_name=replace_dangerous_char($new_name);
 	
 	my_rename($base_work_dir.'/'.$path,$new_name);			
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);

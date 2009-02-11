@@ -175,6 +175,28 @@ FCKConfig.ToolbarSets["Glossary"] = [
 	['Source']
 ] ;
 
+FCKConfig.ToolbarSets["Notebook"] = [
+	['NewPage','Save','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','SpecialChar','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Source']
+] ;
+
+FCKConfig.ToolbarSets["Notebook_Student"] = [
+	['NewPage','Save','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','SpecialChar','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['ShowBlocks']
+] ;
+
 FCKConfig.ToolbarSets["Wiki"] = [
 	['NewPage','Templates','Save','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Wikilink','Link','Unlink','Anchor'],
@@ -412,6 +434,7 @@ if (FCK.AdvancedFileManager)
 	FCKConfig.LinkUpload = false ;
 	FCKConfig.ImageUpload = false ;
 	FCKConfig.MP3Upload = false ;
+	//FCKConfig.FlashUpload = false ; //See plugin
 }
 
 

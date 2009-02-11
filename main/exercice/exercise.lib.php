@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 18002 2009-01-26 16:33:20Z juliomontoya $
+<?php // $Id: exercise.lib.php 18455 2009-02-11 22:33:46Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 18002 2009-01-26 16:33:20Z juliomontoya $
+* 	@version $Id: exercise.lib.php 18455 2009-02-11 22:33:46Z ivantcholakov $
 */
 
 /**
@@ -116,23 +116,12 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 	        #$comment = $objAnswerTmp->selectComment(1);
 	        //
 
-			$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
 			$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
-			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-			$oFCKeditor->Config['IMUploadPath'] = 'upload/test/';
+
 			$oFCKeditor->ToolbarSet = "Test";
 			$oFCKeditor->Width  = '80%';
 			$oFCKeditor->Height = '300';
 			$oFCKeditor->Value	= '' ;
-
-			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".Database::escape_string($_SESSION["_course"]["language"])."'";
-			$result_sql=api_sql_query($sql);
-			$isocode_language=mysql_result($result_sql,0,0);
-			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-		
-			$oFCKeditor->Config['AdvancedFileManager'] = api_get_setting('advanced_filemanager') == 'true' ? true : false;
 
 			$s .= "<tr><td colspan='2'>".$oFCKeditor->CreateHtml()."</td></tr>";
 			//$s.="<tr><td colspan='2'><textarea cols='80' rows='10' name='choice[".$questionId."]'>$answer</textarea></td></tr>";

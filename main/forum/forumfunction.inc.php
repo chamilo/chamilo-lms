@@ -1509,11 +1509,14 @@ function get_thread_information($thread_id) {
 function get_thread_users_details($thread_id, $db_name = null) {
 	$t_posts = Database :: get_course_table(TABLE_FORUM_POST, (empty($db_name)?null:$db_name));
 	$t_users = Database :: get_main_table(TABLE_MAIN_USER);
-	$sql = "SELECT DISTINCT user_id, lastname, firstname, thread_id
-			  FROM $t_posts , $t_users
-			  WHERE poster_id = user_id
+	$t_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, thread_id
+			  FROM $t_posts , $t_users user, $t_course_user course_user
+			  WHERE poster_id = user.user_id
+			  AND user.user_id = course_user.user_id		
 			  AND thread_id = '".Database::escape_string($thread_id)."' 
-			  AND status not in('1')";
+			  AND course_user.status NOT IN('1')
+			  AND course_code = '".api_get_course_id()."'";
 
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	return $result;
@@ -1532,17 +1535,20 @@ function get_thread_users_qualify($thread_id, $db_name = null) {
 	$t_posts = Database :: get_course_table(TABLE_FORUM_POST, (empty($db_name)?null:$db_name));
 	$t_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY, (empty($db_name)?null:$db_name));
 	$t_users = Database :: get_main_table(TABLE_MAIN_USER);
-	  
+	$t_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);  
 			  				  
   $sql = "SELECT post.poster_id, user.lastname, user.firstname, post.thread_id,user.user_id,qualify.qualify
 						FROM $t_posts post, 
 						     $t_qualify qualify,
-						     $t_users user
+						     $t_users user,
+						     $t_course_user course_user		
 						WHERE 
 						     post.poster_id = user.user_id
-						     AND post.poster_id = qualify.user_id						     	
+						     AND post.poster_id = qualify.user_id
+						     AND user.user_id = course_user.user_id								     	
 						     AND qualify.thread_id = '".Database::escape_string($thread_id)."'
-						     AND user.status not in('1')
+						     AND course_user.status not in('1')
+						     AND course_code = '".api_get_course_id()."'		
 						GROUP BY post.poster_id ";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	return $result;
@@ -1561,6 +1567,7 @@ function get_thread_users_not_qualify($thread_id, $db_name = null) {
 	$t_posts = Database :: get_course_table(TABLE_FORUM_POST, (empty($db_name)?null:$db_name));
 	$t_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY, (empty($db_name)?null:$db_name));
 	$t_users = Database :: get_main_table(TABLE_MAIN_USER);
+	$t_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);  
 				  
   	$sql1 = "select user_id FROM  $t_qualify WHERE thread_id = '".$thread_id."'";
 	$result1 = api_sql_query($sql1,__FILE__,__LINE__);    
@@ -1574,11 +1581,13 @@ function get_thread_users_not_qualify($thread_id, $db_name = null) {
     	$cad=substr($cad,0,strlen($cad)-1);
     }
 	$sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, post.thread_id
-			  FROM $t_posts post, $t_users user
+			  FROM $t_posts post, $t_users user,$t_course_user course_user
 			  WHERE post.poster_id = user.user_id
 			  AND user.user_id NOT IN (".$cad.")
+			  AND user.user_id = course_user.user_id		
 			  AND post.thread_id = '".Database::escape_string($thread_id)."'
-			  AND user.status not in('1')";
+			  AND course_user.status not in('1')
+			  AND course_code = '".api_get_course_id()."'";
 	
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	return $result;

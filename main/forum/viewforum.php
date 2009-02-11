@@ -190,7 +190,7 @@ if ($my_action == 'notify' AND isset($_GET['content']) AND isset($_GET['id'])) {
 
 // student list 
 
-if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) AND $userinf['status']=='1') {
+if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit()) {
 	
 	switch($_GET['list']) {	
 		case "qualify":
@@ -230,7 +230,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 		if ($_GET['list']=='qualify') {		
 			$table_list.= '<th>'.get_lang('Qualification').'</th>';
 		}		
-		if ($userinf['status']=='1') {
+		if (api_is_allowed_to_edit()) {
 			$table_list.= '<th>'.get_lang('Qualify').'</th>';
 		}	
 		$table_list.= '</tr>';
@@ -249,7 +249,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 				if ($_GET['list']=='qualify') {
 					$table_list.= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
 				}
-				if ($userinf['status']=='1') {
+				if (api_is_allowed_to_edit()) {
 					$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$my_forum,$row_student_list['user_id'],$_GET['id']);					
 					$table_list.= '<td><a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($_GET['id']).'&user='.$row_student_list['user_id'].'&user_id='.$row_student_list['user_id'].'&idtextqualify='.$current_qualify_thread.'&origin='.$origin.'">'.icon('../img/'.$icon_qualify,get_lang('Qualify')).'</a></td></tr>';
 				}
@@ -434,7 +434,7 @@ if(is_array($threads)) {
 			}
 			$icon_liststd = 'group.gif';
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&origin=".$origin."&amp;action=notify&amp;content=thread&amp;gidReq=".$_SESSION['toolgroup']."&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
-			if ($userinf['status']=='1') {
+			if (api_is_allowed_to_edit()) {
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&origin='.$origin.'&amp;action=liststd&amp;content=thread&amp;gidReq='.$_SESSION['toolgroup'].'&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';			
 			}
 			echo "</td>\n";

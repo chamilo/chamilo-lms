@@ -877,7 +877,6 @@ $UserListInURL = "Usuarios rexistraos nesta URL";
 $UsersWereEdited = "Los usuarios quedaren modificaos";
 $AtLeastOneUserAndOneURL = "Escueya polo menos un usuariu y una URL";
 $UsersBelongURL = "Editárense los usuarios";
-$NoParticipation = "Nun hai participantes";
 $LPTestScore = "Nota nes pruebes de les Lleiciones";
 $ScormAndLPTestTotalAverage = "Promediu total de pruebes SCORM y lleiciones";
 ?>

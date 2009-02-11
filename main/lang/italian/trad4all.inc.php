@@ -660,6 +660,7 @@ $SpecificSearchFields = "Campi specifici di ricerca";
 $SpecificSearchFieldsIntro = "Qui si possono definire i campi usati per indicizzare il contenuto. Se un elemento viene indicizzato, puoi aggregare uno o più termini di ogni campo separandoli da virgola";
 $AddSpecificSearchField = "Aggiungi un campo specifico di ricerca";
 $SaveSettings = "Salva la configurazione";
+$NoParticipation = "Non ci sono partecipanti";
 $Subscribers = "Richiedenti";
 $Accept = "Accettare";
 $Reserved = "Prenotato";
@@ -683,4 +684,7 @@ $SendFileError = "C\'è stato un errore nella ricezione del file. Prova a control
 $Expired = "Scaduto";
 $InvitationHasBeenSent = "L\'invito è stato trasmesso";
 $InvitationHasBeenNotSent = "L\'invito non è stato trasmesso";
+$Overview = "Vista d\'insieme";
+$ApiKeys = "API key";
+$Deny = "Non consentire";
 ?>

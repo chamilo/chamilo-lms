@@ -19,4 +19,5 @@ $TermAdded = "Termine aggiunto";
 $YouMustEnterATermName = "Devi immettere il termine da definire";
 $YouMustEnterATermDefinition = "Devi immettere la definizione del termine";
 $TableView = "Vista tabella";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Termine del glossario già definito: cambia il nome";
 ?>

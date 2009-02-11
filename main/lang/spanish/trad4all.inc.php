@@ -660,6 +660,7 @@ $SpecificSearchFields = "Campos específicos de búsqueda";
 $SpecificSearchFieldsIntro = "Aquí usted puede definir los campos que quiere usar para indexar el contenido. Cuando esté indexando un elemento podrá agregar uno o más términos en cada campo separados por comas.";
 $AddSpecificSearchField = "Agregar un campo espefífico de búsqueda";
 $SaveSettings = "Guardar configuración";
+$NoParticipation = "No hay participantes";
 $Subscribers = "Suscriptores";
 $Accept = "Aceptar";
 $Reserved = "Reservado";
@@ -683,4 +684,7 @@ $SendFileError = "Error al enviar el archivo";
 $Expired = "Vencido";
 $InvitationHasBeenSent = "La invitación ha sido enviada";
 $InvitationHasBeenNotSent = "La invitación no ha sido enviada";
+$Overview = "Vista global";
+$Deny = "Denegar";
+$ThereIsNotUnqualifiedLearners = "No hay estudiantes sin calificar";
 ?>

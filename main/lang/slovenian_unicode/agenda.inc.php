@@ -70,4 +70,6 @@ $GlobalEvent = "Globalni dogodek";
 $EndDateCannotBeBeforeTheStartDate = "Končni datum ne more biti pred začetnim datumom";
 $AgendaSortChronologicallyUp = "Razvrsti zapise agende kronološko (naraščajoče)";
 $AgendaSortChronologicallyDown = "Razvrsti zapise agende kronološko (padajoče)";
+$ItemForUserSelection = "Izbira uporabnikov";
+$IsNotiCalFormatFile = "Datoteka ni v iCal obliki";
 ?>

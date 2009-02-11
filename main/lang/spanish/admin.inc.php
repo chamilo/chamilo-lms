@@ -881,7 +881,6 @@ $UserListInURL = "Usuarios registrados en esta URL";
 $UsersWereEdited = "Los usuarios fueron modificados";
 $AtLeastOneUserAndOneURL = "Seleccione por lo menos un usuario y una URL";
 $UsersBelongURL = "Usuarios fueron editados";
-$NoParticipation = "No hay participantes";
 $LPTestScore = "Calificación en las pruebas de Lecciones";
 $ScormAndLPTestTotalAverage = "Promedio total de pruebas de SCORM y lecciones";
 $ImportUsersToACourse = "Importar usuarios a un curso desde un fichero";
@@ -914,4 +913,7 @@ $ManageSessions = "Administrar sesiones";
 $AllowMessageToolComment = "Esta opción habilitará la herramienta de mensajes";
 $AllowSocialToolTitle = "Habilita la herramienta de red social";
 $AllowSocialToolComment = "Esta opción habilitará la herramienta de red social";
+$SetLanguageAsDefault = "Definir como idioma por defecto";
+$GenerateApiKey = "Generar API key";
+$MyApiKey = "Mi API key";
 ?>

@@ -660,6 +660,7 @@ $SpecificSearchFields = "Campos específicos de busca";
 $SpecificSearchFieldsIntro = "Equí pue definir los campos que quier usar pa facer un índiz del conteníu. De la indicializa un elementu va poder amestar ún o más términos en caún los campos separtaos por comes.";
 $AddSpecificSearchField = "Amestar un campu específicu de busca";
 $SaveSettings = "Guardar configuración";
+$NoParticipation = "Nun hai participantes";
 $Subscribers = "Soscriptores";
 $Accept = "Aceutar";
 $Reserved = "Reserváu";

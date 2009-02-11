@@ -278,4 +278,6 @@ $DurationFormat = "%1$d secondi";
 $Difficulty = "Difficoltà";
 $NewScore = "Nuovo punteggio";
 $NewComment = "Nuovo commento";
+$ExerciseNoStartedYet = "Test non ancora iniziato";
+$ExerciseNoStartedAdmin = "Il docente non ha ancora aperto l\'accesso";
 ?>

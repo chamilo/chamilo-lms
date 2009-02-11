@@ -877,7 +877,6 @@ $UserListInURL = "Uporabniki, vpisani preko tega URL";
 $UsersWereEdited = "Uporabniki so bili ažurirani";
 $AtLeastOneUserAndOneURL = "Izbrati morate vsaj enega uporanika in vsaj en URL";
 $UsersBelongURL = "Uporabniki so bili ažurirani";
-$NoParticipation = "Tu ni udeležencev";
 $LPTestScore = "Rezultati testov učnih poti";
 $ScormAndLPTestTotalAverage = "Povprečje skupnih rezultatov iz SCORM in učnih poti";
 $ImportUsersToACourse = "Uvozi uporabnike v tečaj iz datoteke";
@@ -901,4 +900,6 @@ $URLNotConfiguredPleaseChangedTo = "URL še ni nastavljen, dodajte ta URL:";
 $AdminUserRegisteredToThisURL = "Uporabnik-upravitelj dodan k temu URL";
 $CoursesWereEdited = "Tečaji so bili ažurirani";
 $URLEdited = "URL je bil ažuriran";
+$GenerateApiKey = "Generiraj API ključ";
+$MyApiKey = "Moj API ključ";
 ?>

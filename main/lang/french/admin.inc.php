@@ -881,7 +881,6 @@ $UserListInURL = "Utilisateurs attachés à cet URL";
 $UsersWereEdited = "Les comptes utilisateurs ont été mis à jour";
 $AtLeastOneUserAndOneURL = "Vous devez sélectionner au moins un utilisateur et un URL";
 $UsersBelongURL = "Les comptes utilisateur ont été rattachés à l\'URL";
-$NoParticipation = "Il n\'y a aucun participant";
 $LPTestScore = "Scores des tests dans les cours";
 $ScormAndLPTestTotalAverage = "Moyennes aux tests dans les cours";
 $ImportUsersToACourse = "Inscrire des utilisateurs par";

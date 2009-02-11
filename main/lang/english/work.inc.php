@@ -56,4 +56,5 @@ $WeightNecessary = "Weight necessary";
 $QualificationOver = "Qualification over";
 $ExpiryDateAlreadyPassed = "Expiry date already passed";
 $EndDateAlreadyPassed = "End date already passed";
+$MoveXTo = "Move %s To";
 ?>

@@ -19,4 +19,5 @@ $TermAdded = "Término añadido";
 $YouMustEnterATermName = "Debe introducir un término";
 $YouMustEnterATermDefinition = "Debe introducir la definición del término";
 $TableView = "Ver como tabla";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Este termino del glosario ya existe, por favor cambielo por otro nombre";
 ?>

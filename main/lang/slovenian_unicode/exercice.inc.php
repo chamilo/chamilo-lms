@@ -263,6 +263,7 @@ $FilterExercices = "Filtriraj vaje/teste";
 $FilterByNotRevised = "Filter po nepregledanih";
 $FilterByRevised = "Filter po pregledanih";
 $Duration = "Trajanje";
+$ReachedTimeLimit = "Časovna omejitev je dosežena";
 $TryAgain = "Poskusi ponovno";
 $SeeTheory = "Povezava na teoretične vsebine";
 $EndActivity = "Konec aktivnosti";
@@ -277,4 +278,6 @@ $DurationFormat = "%1$d sekund";
 $Difficulty = "Težavnost";
 $NewScore = "Nov rezultat";
 $NewComment = "Nov komentar";
+$ExerciseNoStartedYet = "Začetek izvajanja vaje/testa še ni omogočen";
+$ExerciseNoStartedAdmin = "Upravitelj še ni omogočil začetka izvajanja vaje/testa";
 ?>

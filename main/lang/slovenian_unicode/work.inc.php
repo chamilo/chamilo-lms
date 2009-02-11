@@ -54,4 +54,6 @@ $FilterByNotExpired = "Filtriraj nepotečene";
 $FilterAssignments = "Filtriraj naloge/zadolžitve";
 $WeightNecessary = "Uteži potrebne";
 $QualificationOver = "Kvalifikacije preko";
+$ExpiryDateAlreadyPassed = "Datum poteka je že presežen";
+$EndDateAlreadyPassed = "Končni datum je že presežen";
 ?>

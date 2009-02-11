@@ -71,4 +71,5 @@ $EndDateCannotBeBeforeTheStartDate = "La data finale non può precedere quella in
 $AgendaSortChronologicallyUp = "Prima Eventi meno recenti ";
 $AgendaSortChronologicallyDown = "Prima Eventi più recenti ";
 $ItemForUserSelection = "Elenco selezione utenti";
+$IsNotiCalFormatFile = "Il file non è in formato iCal";
 ?>

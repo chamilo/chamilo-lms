@@ -660,6 +660,7 @@ $SpecificSearchFields = "Specific search fields";
 $SpecificSearchFieldsIntro = "Here you can define the fields you want to use for indexing content. When you are indexing one element you should add one or many terms on each field separated by comas.";
 $AddSpecificSearchField = "Add a specific search field";
 $SaveSettings = "Save settings";
+$NoParticipation = "There are no participants";
 $Subscribers = "Subscribers";
 $Accept = "Accept";
 $Reserved = "Reserved";
@@ -683,4 +684,8 @@ $SendFileError = "An error has been detected while receiving your file. Please c
 $Expired = "Expired";
 $InvitationHasBeenSent = "The invitation has been sent";
 $InvitationHasBeenNotSent = "The invitation hasn\'t been sent";
+$Overview = "Overview";
+$ApiKeys = "API keys";
+$Deny = "Deny";
+$ThereIsNotUnqualifiedLearners = "There Is Not Unqualified Learners";
 ?>

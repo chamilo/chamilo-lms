@@ -17,4 +17,5 @@ $lang_new_dropbox_file = "prejeta nova datoteka";
 $lang_update_dropbox_file = "datoteka v vašem nabiralniku je bila ažurirana";
 $ForumCategoryAdded = "Kategorija foruma je bila dodana";
 $LearnpathAdded = "Učna pot je bila dodana";
+$GlossaryAdded = "V besednjak je bil dodan nov termin.";
 ?>

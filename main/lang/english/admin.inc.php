@@ -881,7 +881,6 @@ $UserListInURL = "Users subscribed to this URL";
 $UsersWereEdited = "The user accounts have been updated";
 $AtLeastOneUserAndOneURL = "You must select at least one user and one URL";
 $UsersBelongURL = "The user accounts are now attached to the URL";
-$NoParticipation = "There are no participants";
 $LPTestScore = "Scores of learning paths\' tests";
 $ScormAndLPTestTotalAverage = "Average total of tests from SCORM and learning paths";
 $ImportUsersToACourse = "Import users to a course from a file";
@@ -914,4 +913,7 @@ $ManageSessions = "Manage sessions";
 $AllowMessageToolComment = "Enabling the internal messaging tool allows users to send messages to other users of the platform and to have a messaging inbox.";
 $AllowSocialToolTitle = "Social network tool";
 $AllowSocialToolComment = "The social network tool allows users to define relations with other users and, by doing so, to define groups of friends. Combined with the internal messaging tool, this tool allows tight communication with friends, inside the portal environment.";
+$SetLanguageAsDefault = "Set language as default";
+$GenerateApiKey = "Generate API key";
+$MyApiKey = "My API key";
 ?>

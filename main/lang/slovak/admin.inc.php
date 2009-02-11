@@ -788,7 +788,6 @@ $UserListInURL = "Používatelia prihlásení na tejto URL adrese";
 $UsersWereEdited = "Používatelia boli upravení ";
 $AtLeastOneUserAndOneURL = "Musíte ozna&#269;i&#357; aspo&#328; jedného používate&#318;a a jednu URL";
 $UsersBelongURL = "Používatelia boli upravení";
-$NoParticipation = "Nie sú žiadni ú&#269;astníci";
 $LPTestScore = "Skóre testov u&#269;ebnej osnovy";
 $ImportUsersToACourse = "Importova&#357; používate&#318;ov na kurz zo súboru";
 $ImportCourses = "Importova&#357; kurzy zo súboru";

@@ -72,5 +72,4 @@ $AgendaSortChronologicallyUp = "Sort Agenda chronologically (up)";
 $AgendaSortChronologicallyDown = "Sort Agenda chronologically (down)";
 $ItemForUserSelection = "Users selection list";
 $IsNotiCalFormatFile = "This file is not in iCal format";
-$ThereIsNotQualifiedLearners = "There are no qualified learners";
 ?>

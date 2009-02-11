@@ -19,4 +19,5 @@ $TermAdded = "Term added";
 $YouMustEnterATermName = "You must enter a term name";
 $YouMustEnterATermDefinition = "You must enter a term definition";
 $TableView = "Table view";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "This glossary term already exists. Please change the term name.";
 ?>

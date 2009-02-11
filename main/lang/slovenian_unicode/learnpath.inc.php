@@ -210,6 +210,7 @@ $UplAlreadyExists = "Datoteka že obstaja";
 $UnknownPackageFormat = "Neznan format paketa";
 $UplUnableToSaveFile = "Ne morem shraniti datoteke";
 $UnknownPackageFormat = "Format tega paketa ni bil prepoznan. Preverite, če je paket dejansko veljaven paket.";
+$MoveDocument = "Premakni dokument";
 $EditLPSettings = "Uredi nastavitve učne poti";
 $SaveLPSettings = "Shrani nastavitve učne poti";
 $ShowAllAttempts = "Prikaži vse poskuse";
@@ -218,4 +219,5 @@ $ShowAllAttemptsByExercise = "Prikaže vse poskuse (po vajah/testih)";
 $ShowAttempt = "Prikži poskus";
 $ShowAndQualifyAttempt = "Prikaži in oceni poskus";
 $langAddEdit = "Dodaj / Uredi";
+$ModifyPrerequisities = "Spremeni predzahteve";
 ?>

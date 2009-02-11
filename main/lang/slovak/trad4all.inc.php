@@ -629,6 +629,7 @@ $SpecificSearchFields = "Špecifické polia vyh&#318;adávania";
 $SpecificSearchFieldsIntro = "Tu môžete definova&#357; polia, ktoré chcete použi&#357; pre indexáciu obsahu. Ak chcete rozdeli&#357; jednu &#269;as&#357;, mali by ste prida&#357; jeden alebo viac výrazov oddelených &#269;iarkami do každého po&#318;a.";
 $AddSpecificSearchField = "Prida&#357; špecifické pole vyh&#318;adávania";
 $SaveSettings = "Uloži&#357; nastavenia";
+$NoParticipation = "Nie sú žiadni ú&#269;astníci";
 $Subscribers = "Prihlásení";
 $Accept = "Akceptova&#357;";
 $Reserved = "Rezervovaný";

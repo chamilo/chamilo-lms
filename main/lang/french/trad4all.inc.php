@@ -660,6 +660,7 @@ $SpecificSearchFields = "Champs de recherche spécifiques";
 $SpecificSearchFieldsIntro = "Vous êtes invité à définir ici les champs que vous désirez utiliser pour indexer le contenu de vos documents. Lorsque vous indexez un élément, vous devriez ajouter un ou plusieurs termes dans chacun des champs, séparés par des virgules.";
 $AddSpecificSearchField = "Ajouter un champ de recherche";
 $SaveSettings = "Enregistrer les paramètres";
+$NoParticipation = "Il n\'y a aucun participant";
 $Subscribers = "Inscrits";
 $Accept = "Accepter";
 $Reserved = "Réservé";
@@ -683,4 +684,5 @@ $SendFileError = "Une erreur a été détectée lors de l\'envoi du fichier. Veuille
 $Expired = "Expiré";
 $InvitationHasBeenSent = "L\'invitation a été envoyée";
 $InvitationHasBeenNotSent = "L\'invitation n\'a pas été envoyée";
+$ApiKeys = "Clefs API";
 ?>

@@ -913,4 +913,7 @@ $ManageSessions = "Gestion des sessions";
 $AllowMessageToolComment = "Activer l\'outil de messagerie interne permet aux utilisateurs de s\'envoyer des messages entre eux et de disposer d\'une boîte de réception de messages.";
 $AllowSocialToolTitle = "Outil de réseau social";
 $AllowSocialToolComment = "L\'outil de réseau social permet aux utilisateurs de définir des relations vis à vis d\'autres utilisateurs, et ainsi de former des groupes d\'amis. Combiné à l\'outil de messagerie, cet outil permet de communiquer de cette façon avec ses amis au sein du portail.";
+$SetLanguageAsDefault = "Utiliser cette langue par défaut";
+$GenerateApiKey = "Générer une nouvelle clef API";
+$MyApiKey = "Ma clef API";
 ?>

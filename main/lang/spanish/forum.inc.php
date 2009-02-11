@@ -127,6 +127,5 @@ $QualifyWeight = "Peso de la calificación";
 $QualifyNumeric = "Calificación numérica sobre";
 $AlterQualifyThread = "Editar la calificación del tema";
 $ForumMoved = "El foro se ha movido";
-$ThereIsNotQualifiedLearners = "No hay estudiantes calificados";
 $YouMustAssignWeightOfQualification = "Debe asignar el peso de la cualificación";
 ?>

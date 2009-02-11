@@ -57,4 +57,11 @@ $SocialGoodFriend = "Mis mejores amigos";
 $SocialEnemy = "Mis enemigos";
 $SocialDeleted = "Contacto eliminado";
 $MessageOutboxComment = "Desde aquí usted puede ver los mensajes ques usted envió";
+$MyPersonalData = "Desde aquí puede ver y modificar sus datos personales";
+$AlterPersonalData = "Modifique sus datos personales desde aquí";
+$SocialNetwork = "Red social";
+$YouDontHaveInvites  = "Usted no tiene invitaciones";
+$Invites = "Mis invitados";
+$ContactsGroups = "Mis grupos de contactos";
+$BackToOutbox = "Volver a la bandeja de salida";
 ?>

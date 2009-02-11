@@ -916,4 +916,9 @@ $AllowSocialToolComment = "Esta opción habilitará la herramienta de red social";
 $SetLanguageAsDefault = "Definir como idioma por defecto";
 $GenerateApiKey = "Generar API key";
 $MyApiKey = "Mi API key";
+$FieldFilter = "Filtro ";
+$FilterOn = "Habilitar filtro";
+$FilterOff = "Deshabilitar filtro";
+$FieldFilterSetOn = "Puede utilizar este campo como filtro ";
+$FieldFilterSetOff = "Filtro deshabilitado";
 ?>

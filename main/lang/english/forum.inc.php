@@ -127,6 +127,5 @@ $QualifyWeight = "Weight of qualification";
 $QualifyNumeric = "Maximum score";
 $AlterQualifyThread = "Alter qualify thread";
 $ForumMoved = "The forum has moved";
-$ThereIsNotQualifiedLearners = "There Is Not Qualified Learners";
 $YouMustAssignWeightOfQualification = "You Must Assign Weight Of Qualification";
 ?>

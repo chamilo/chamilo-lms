@@ -916,4 +916,9 @@ $AllowSocialToolComment = "The social network tool allows users to define relati
 $SetLanguageAsDefault = "Set language as default";
 $GenerateApiKey = "Generate API key";
 $MyApiKey = "My API key";
+$FieldFilter = "Field filter";
+$FilterOn = "Filter on";
+$FilterOff = "Filter off";
+$FieldFilterSetOn = "You can use now this field as a filter ";
+$FieldFilterSetOff = "You can\'t use this field as a filter ";
 ?>

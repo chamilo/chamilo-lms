@@ -28,4 +28,5 @@ $ConfirmDeleteMessage = "Êtes-vous certain de vouloir supprimer le message sélec
 $DeleteMessage = "Supprimer le message";
 $ReadMessage = "Lire";
 $Outbox = "Envoyés";
+$SendInviteMessage = "Envoyer invitation";
 ?>

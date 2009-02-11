@@ -56,4 +56,5 @@ $WeightNecessary = "Minimum requis";
 $QualificationOver = "Cotation sur";
 $ExpiryDateAlreadyPassed = "La date d\'expiration est déjà passée";
 $EndDateAlreadyPassed = "La date de fin est déjà passée";
+$MoveXTo = "Déplacer %s vers";
 ?>

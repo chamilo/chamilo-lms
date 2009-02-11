@@ -127,4 +127,5 @@ $QualifyWeight = "Pondération de la note";
 $QualifyNumeric = "Score maximum";
 $AlterQualifyThread = "Changer la cotation du fil de discussion";
 $ForumMoved = "Le forum a été déplacé";
+$YouMustAssignWeightOfQualification = "Veuillez assigner un poids de qualification";
 ?>

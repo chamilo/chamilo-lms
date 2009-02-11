@@ -687,5 +687,6 @@ $InvitationHasBeenNotSent = "The invitation hasn\'t been sent";
 $Overview = "Overview";
 $ApiKeys = "API keys";
 $Deny = "Deny";
-$ThereIsNotUnqualifiedLearners = "There Is Not Unqualified Learners";
+$ThereIsNotQualifiedLearners = "There are no qualified learners";
+$ThereIsNotUnqualifiedLearners = "There are no unqualified learners";
 ?>

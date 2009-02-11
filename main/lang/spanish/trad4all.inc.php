@@ -685,6 +685,8 @@ $Expired = "Vencido";
 $InvitationHasBeenSent = "La invitación ha sido enviada";
 $InvitationHasBeenNotSent = "La invitación no ha sido enviada";
 $Overview = "Vista global";
+$ApiKeys = "Llaves API";
 $Deny = "Denegar";
+$ThereIsNotQualifiedLearners = "No hay estudiantes calificados";
 $ThereIsNotUnqualifiedLearners = "No hay estudiantes sin calificar";
 ?>

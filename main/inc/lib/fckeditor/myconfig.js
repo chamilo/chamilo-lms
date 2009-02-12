@@ -66,10 +66,6 @@ FCKConfig.ToolbarSets["Test"] = [
 	['Bold','Italic','Underline','StrikeThrough','Subscript','Superscript','Link','Unlink','Image','MP3','OrderedList','UnorderedList','Table']
 ] ;
 
-FCKConfig.ToolbarSets["Survey"] = [
-	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Unlink','Table','-','Image','Source']
-] ;
-
 FCKConfig.ToolbarSets["Profil"] = [
 	['FitWindow','PasteWord','Undo','Redo'],
 	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
@@ -269,6 +265,17 @@ FCKConfig.ToolbarSets["Notebook_Student"] = [
 	['Bold','Italic','Underline','StrikeThrough'],
 	['Subscript','Superscript','-','JustifyLeft','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
 	['ShowBlocks']
+] ;
+
+FCKConfig.ToolbarSets["Survey"] = [
+	['FitWindow'],
+	['Link','Unlink'],
+	['Image'],
+	['Table','Rule'],
+	['FontSize'],
+	['Bold','Italic'],
+	['OrderedList','UnorderedList','-','TextColor'],
+	['Source']
 ] ;
 
 FCKConfig.ToolbarSets["Wiki"] = [

@@ -236,6 +236,10 @@ FCKConfig.ToolbarSets["LearnPath"] = [
 	['Source']
 ] ;//save, FitWindow don't run well here
 
+FCKConfig.ToolbarSets["CommentLearningPath"] = [
+	['FitWindow','Link','Unlink','Image','flvPlayer','Table','Bold','Italic','TextColor','BGColor','Source']
+] ;
+
 //Notebook
 FCKConfig.ToolbarSets["Notebook"] = [
 	['NewPage','Save','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],

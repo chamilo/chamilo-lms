@@ -22,7 +22,7 @@ echo '<h4>'.get_lang('EditLPSettings').'</h4>';
 
 $fck_attribute['Width'] = '400px';
 $fck_attribute['Height'] = '150px';
-$fck_attribute['ToolbarSet'] = 'Comment';
+$fck_attribute['ToolbarSet'] = 'CommentLearningPath';
 
 $defaults=array();
 $form = new FormValidator('form1', 'post', 'lp_controller.php');

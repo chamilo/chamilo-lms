@@ -16,4 +16,19 @@
  * File Authors:
  * 		Juan Carlos Raña Trabado
  */
-FCKLang.DlgMimeTeX		= 'Editor mimeTeX' ;
+
+FCKLang["DlgMimeTeX"]             = 'Editor mimeTeX' ;
+FCKLang["DlgMimeTeXManual"]       = "Manual" ;
+FCKLang["DlgMimeTeXFormula"]      = "Formula:" ;
+FCKLang["DlgMimeTeXPreview"]      = "Preview:" ;
+FCKLang["DlgMimeTeXHelpers"]      = "Helpers:" ;
+FCKLang["DlgMimeTeXSymbols"]      = "Symbols" ;
+FCKLang["DlgMimeTeXCalendar"]     = "Calendar" ;
+FCKLang["DlgMimeTeXNumeric"]      = "Numeric" ;
+FCKLang["DlgMimeTeXLowerGreeks"]  = "Lower Greeks" ;
+FCKLang["DlgMimeTeXUpperGreeks"]  = "Upper Greeks" ;
+FCKLang["DlgMimeTeXOperators"]    = "Operators" ;
+FCKLang["DlgMimeTeXFunctions"]    = "Functions" ;
+FCKLang["DlgMimeTeXTrigonometry"] = "Trigonometry" ;
+FCKLang["DlgMimeTeXAnalysis"]     = "Analysis" ;
+FCKLang["DlgMimeTeXMoreSamples"]  = "More samples" ;

@@ -11,12 +11,25 @@
  * "Support Open Source software. What about a donation today?"
  * 
  * File Name: en.js
- * 	Placholder English language file.
+ * mimeTeX English language file.
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ * 		Ivan Tcholakov (ivantcholakov@gmail.com)
  */
-FCKLang.mimetexBtn			= 'Insert/Edit Placeholder' ;
-FCKLang.mimetexDlgTitle		= 'Placeholder Properties' ;
-FCKLang.mimetexDlgName		= 'Placeholder Name' ;
-FCKLang.DlgMimeTeX			= 'mimeTeX Editor' ;
+
+FCKLang["DlgMimeTeX"]             = 'mimeTeX Editor' ;
+FCKLang["DlgMimeTeXManual"]       = "Manual" ;
+FCKLang["DlgMimeTeXFormula"]      = "Formula:" ;
+FCKLang["DlgMimeTeXPreview"]      = "Preview:" ;
+FCKLang["DlgMimeTeXHelpers"]      = "Helpers:" ;
+FCKLang["DlgMimeTeXSymbols"]      = "Symbols" ;
+FCKLang["DlgMimeTeXCalendar"]     = "Calendar" ;
+FCKLang["DlgMimeTeXNumeric"]      = "Numeric" ;
+FCKLang["DlgMimeTeXLowerGreeks"]  = "Lower Greeks" ;
+FCKLang["DlgMimeTeXUpperGreeks"]  = "Upper Greeks" ;
+FCKLang["DlgMimeTeXOperators"]    = "Operators" ;
+FCKLang["DlgMimeTeXFunctions"]    = "Functions" ;
+FCKLang["DlgMimeTeXTrigonometry"] = "Trigonometry" ;
+FCKLang["DlgMimeTeXAnalysis"]     = "Analysis" ;
+FCKLang["DlgMimeTeXMoreSamples"]  = "More samples" ;

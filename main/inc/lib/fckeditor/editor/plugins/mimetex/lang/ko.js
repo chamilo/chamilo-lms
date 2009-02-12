@@ -1,7 +1,4 @@
 ﻿/*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2006 Frederico Caldeira Knabben
- * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
  * 
@@ -10,11 +7,13 @@
  * 
  * "Support Open Source software. What about a donation today?"
  * 
- * File Name: fr.js
- * mimeTeX French language file.
+ * File Name: ko.js
+ * mimeTeX Editor.
+ * Korean language file.
+ * Please, use UTF-8 encoding.
  * 
  * File Authors:
- * 		Yannick Warnier (yannick.warnier@dokeos.com)
+ * 		
  */
 
 FCKLang["DlgMimeTeX"]             = 'mimeTeX Editor' ;

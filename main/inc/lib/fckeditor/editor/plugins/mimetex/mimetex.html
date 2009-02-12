@@ -131,7 +131,7 @@ function addHelper( id, title )
 $(function () {
 
 		////jc
-		addHelper( "symbols1", "Symbols 1" ) ;
+		addHelper( "symbols1", FCKLang["DlgMimeTeXSymbols"] + " 1" ) ;
 		//appendHelper( "\\-", "-" ) ; //jc
 		appendHelper( "\-", "-" ) ;
 		appendHelper( "\\cdot",  "cdot" ) ;
@@ -238,7 +238,7 @@ $(function () {
 		appendHelper( "\\spadesuit", "spadesuit" ) ;       
 		
 		
-		addHelper( "symbols2", "Symbols 2" ) ;
+		addHelper( "symbols2", FCKLang["DlgMimeTeXSymbols"] + " 2" ) ;
 		appendHelper( "\\leftharpoonup", "leftharpoonup" ) ;
 		appendHelper( "\\leftharpoondo",  "leftharpoondo" ) ;
 		appendHelper( "\\rightharpoonup", "rightharpoonup" ) ;
@@ -276,8 +276,8 @@ $(function () {
 		//appendHelper( "\\cyr a", "cyr a" ) ;		
 		//appendHelper( "\\cyr Dj", "cyr Dj" ) ;
 		//appendHelper( "\\cyr Zh", "cyr Zh" ) ;
-		addHelper( "calendar", "Calendar" ) ;
-		
+
+		addHelper( "calendar", FCKLang["DlgMimeTeXCalendar"] ) ;
 		appendHelper( "\\blue\\normalsize\\calendar", "" ) ;
     	appendHelper( "\\reverse\\opaque\\red\\normalsize\\calendar[2008,9,11]", "" ) ;		
 		appendHelper( "\\today",  "" ) ;
@@ -286,7 +286,7 @@ $(function () {
 						
 		////jc end	  		
 		
-		addHelper( "numeric", "Numeric" ) ;
+		addHelper( "numeric", FCKLang["DlgMimeTeXNumeric"] ) ;
 		var al_l = "abcdefghijklmnopqrstuvwxyz" ;
 		var al_u = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ;
 		var num  = "0123456789" ;
@@ -306,7 +306,7 @@ $(function () {
 			appendHelper( "\\mathfrak{" + alnum[i] + "}", "math frak " + alnum[i] ) ;
 		}
 
-		addHelper( "lowergreek", "Lower Greeks" ) ;
+		addHelper( "lowergreek", FCKLang["DlgMimeTeXLowerGreeks"] ) ;
 		appendHelper( "\\alpha", "lower alpha" ) ;
 		appendHelper( "\\beta",  "lower beta" ) ;
 		appendHelper( "\\delta", "lower delta" ) ;
@@ -331,7 +331,7 @@ $(function () {
 		appendHelper( "\\xi", "lower xi" ) ;
 		appendHelper( "\\zeta", "lower zeta" ) ;
 
-		addHelper( "uppergreek", "Upper Greeks" ) ;
+		addHelper( "uppergreek", FCKLang["DlgMimeTeXUpperGreeks"] ) ;
 		appendHelper( "\\Delta", "upper delta" ) ;
 		appendHelper( "\\Gamma", "upper gamma" ) ;
 		appendHelper( "\\Lambda", "upper lambda" ) ;
@@ -344,7 +344,7 @@ $(function () {
 		appendHelper( "\\Xi", "upper xi" ) ;
 		appendHelper( "\\Upsilon", "upper upsilon" ) ;
 
-		addHelper( "operators", "Operators" ) ;
+		addHelper( "operators", FCKLang["DlgMimeTeXOperators"] ) ;
 		appendHelper( "\\frac{x}{y}", "" ) ;
 		appendHelper( "x^{n}", "" ) ;
 		appendHelper( "x_{n}", "" ) ;
@@ -353,7 +353,7 @@ $(function () {
 		appendHelper( "\\sqrt[4]{x}", "" ) ;
 		appendHelper( "\\vec {x}", "" ) ;
 
-		addHelper( "functions", "Functions" ) ;
+		addHelper( "functions", FCKLang["DlgMimeTeXFunctions"] ) ;
 		appendHelper( "\\ln", "ln" ) ;
 		appendHelper( "\\log", "log" ) ;
 		appendHelper( "\\exp", "exp" ) ;
@@ -361,7 +361,7 @@ $(function () {
 		appendHelper( "\\Re", "Re" ) ;
 		appendHelper( "\\Im", "Im" ) ;
 
-		addHelper( "trigonometry", "Trigonometry" ) ;
+		addHelper( "trigonometry", FCKLang["DlgMimeTeXTrigonometry"] ) ;
 		appendHelper( "\\sin", "sin" ) ;
 		appendHelper( "\\cos", "cos" ) ;
 		appendHelper( "\\tan", "tan" ) ;
@@ -374,7 +374,7 @@ $(function () {
 		appendHelper( "\\tanh", "tanh" ) ;
 		appendHelper( "\\coth", "coth" ) ;
 
-		addHelper( "analysis", "Analysis" ) ;
+		addHelper( "analysis", FCKLang["DlgMimeTeXAnalysis"] ) ;
 		appendHelper( "\\int _{-\\infty}^{x}\\mathrm{d}t", "integral dt from -infinite to x" ) ;
 		appendHelper( "\\sum_{k=1}^{+\\infty}", "sum from k=1 to +infinite" ) ;
 		appendHelper("\\frac{\\mathrm{d} f(x,y)}{\\mathrm{d}x}", "" ) ;
@@ -382,7 +382,7 @@ $(function () {
 		appendHelper( "\\lim _{\\small{x\\to +\\infty}}", "" ) ;
 
 		////jc
-		addHelper( "moresamples", "More samples" ) ;		
+		addHelper( "moresamples", FCKLang["DlgMimeTeXMoreSamples"] ) ;		
 
 		appendHelper( "\\\large\\begin{array}{c.c|c}       a_1&a_2&a_3\\\\\\hdash b_1&b_2&b_3\\\\\\hline c_1&c_2&c_3\\end{array}", "" ) ;
 		appendHelper( "\\large e^x=\\sum_{n=0}^\\infty\\frac{x^n}{n!}", "" ) ;
@@ -513,18 +513,18 @@ li.helpers
 	<body>
 		<div id="content">
 			<div class="helpers">
-				<b>Helpers:</b>
+				<b><span fckLang="DlgMimeTeXHelpers">Helpers:</span></b>
 				<div id="helpers">
 				</div>
 			</div>
 			<div class="formula">
-				<b>Formula:</b>
+				<b><span fckLang="DlgMimeTeXFormula">Formula:</span></b>
 				<form name="pastemath" id="pastemath">
 					<textarea id="formula" name="formula" cols="60" rows="8" onKeyUp="formulaPreview()"></textarea>
 				</form>
-				<div align="right"><a href="http://www.forkosh.com/mimetex.html" title="Manual" target="_blank" style="left:auto">Manual</a></div>
+				<div align="right"><a href="http://www.forkosh.com/mimetex.html" title="Manual" target="_blank" style="left:auto"><span fckLang="DlgMimeTeXManual">Manual</span></a></div>
 				<div id="preview" class=off>
-					<b>Preview:</b>
+					<b><span fckLang="DlgMimeTeXPreview">Preview:</span></b>
 					<br />
 					<img src="" alt="Image" name="formula_preview" id="formula_preview" align="middle"/>
 				</div>

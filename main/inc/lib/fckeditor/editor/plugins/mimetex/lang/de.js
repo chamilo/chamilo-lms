@@ -11,9 +11,24 @@
  * "Support Open Source software. What about a donation today?"
  * 
  * File Name: de.js
- * 	Placholder German language file.
+ * mimeTeX German language file.
  * 
  * File Authors:
  * 		José Fontanil
  */
-FCKLang.DlgMimeTeX		= 'mimeTeX Editor' ;
+
+FCKLang["DlgMimeTeX"]             = 'mimeTeX Editor' ;
+FCKLang["DlgMimeTeXManual"]       = "Manual" ;
+FCKLang["DlgMimeTeXFormula"]      = "Formula:" ;
+FCKLang["DlgMimeTeXPreview"]      = "Preview:" ;
+FCKLang["DlgMimeTeXHelpers"]      = "Helpers:" ;
+FCKLang["DlgMimeTeXSymbols"]      = "Symbols" ;
+FCKLang["DlgMimeTeXCalendar"]     = "Calendar" ;
+FCKLang["DlgMimeTeXNumeric"]      = "Numeric" ;
+FCKLang["DlgMimeTeXLowerGreeks"]  = "Lower Greeks" ;
+FCKLang["DlgMimeTeXUpperGreeks"]  = "Upper Greeks" ;
+FCKLang["DlgMimeTeXOperators"]    = "Operators" ;
+FCKLang["DlgMimeTeXFunctions"]    = "Functions" ;
+FCKLang["DlgMimeTeXTrigonometry"] = "Trigonometry" ;
+FCKLang["DlgMimeTeXAnalysis"]     = "Analysis" ;
+FCKLang["DlgMimeTeXMoreSamples"]  = "More samples" ;

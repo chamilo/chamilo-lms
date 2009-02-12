@@ -358,7 +358,9 @@ FCKConfig.Plugins.Add('MP3', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk
 if (!FCK.AdvancedFileManager)
 {
 	// It is not needed in the advanced file manager mode.
-	FCKConfig.Plugins.Add('ImageManager', 'en,de,fr,nl,no,pl,ru,sv') ;
+	// The laanguage sub-system of the Image Manager is different.
+	// There is no need available languages to be enumerated.
+	FCKConfig.Plugins.Add('ImageManager') ;
 }
 
 // This is the old flash plugin. Now the editor has a built-in flash dialog.

@@ -37,10 +37,6 @@ FCKConfig.ToolbarSets["Small"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','Flash','OrderedList','UnorderedList','Table']
 ] ;
 
-FCKConfig.ToolbarSets["Comment"] = [
-	['Bold','Italic','Underline','StrikeThrough']
-] ;
-
 FCKConfig.ToolbarSets["Profil"] = [
 	['FitWindow','PasteWord','Undo','Redo'],
 	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
@@ -300,6 +296,10 @@ FCKConfig.ToolbarSets["QuestionDescription"] = [
 
 FCKConfig.ToolbarSets["Answer"] = [
 	['FitWindow','Link','Unlink','Image','flvPlayer','Table','Bold','Italic','TextColor','Source']
+] ;
+
+FCKConfig.ToolbarSets["CommentAnswers"] = [
+	['FitWindow','Link','Unlink','Image','flvPlayer','Table','Bold','Italic','TextColor','BGColor','Source']
 ] ;
 
 //Wiki

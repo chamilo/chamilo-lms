@@ -426,7 +426,10 @@ class FCKeditor
 		{
 			$os = php_uname();
 		}
-		$this->Config['IsWindowsServer'] = (strtoupper(substr($os, 0, 3 )) === 'WIN') ? true : false;
+		if (strtoupper(substr($os, 0, 3 )) === 'WIN')
+		{
+			$this->Config['IsWindowsServer'] = true ;
+		}
 
 		/*
 		 * The original code starts from here.

@@ -11,7 +11,31 @@ FCKCommands.RegisterCommand(
         FCKLang['DlgMimeTeX'],
         FCKConfig.PluginsPath + 'mimetex/mimetex.html', 750, 500));
 // Create the "mimeTeX" toolbar button.
-var oFindItem = new FCKToolbarButton('mimetex', FCKLang['DlgMimeTeX']);
-oFindItem.IconPath = FCKConfig.PluginsPath + 'mimetex/mimetex.gif' ;
+var oMimeTeXItem = new FCKToolbarButton('mimetex', FCKLang['DlgMimeTeX']);
+oMimeTeXItem.IconPath = FCKConfig.PluginsPath + 'mimetex/mimetex.gif' ;
 // 'mimetex' is the name used in the Toolbar config.
-FCKToolbarItems.RegisterItem( 'mimetex', oFindItem ) ;
+FCKToolbarItems.RegisterItem( 'mimetex', oMimeTeXItem ) ;
+
+// Context menu support.
+FCK.ContextMenu.RegisterListener( {
+	AddItems : function( menu, tag, tagName )
+	{
+		if ( tagName == 'IMG' && tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( '/cgi-bin/mimetex' ) >= 0 )
+		{
+			menu.AddSeparator() ;
+			menu.AddItem( 'mimetex', FCKLang['DlgMimeTeX'], oMimeTeXItem.IconPath ) ;
+		}
+	}}
+);
+
+// Double-click support.
+FCK.RegisterDoubleClickHandler(
+	function ( tag )
+	{
+		if ( tag.nodeName.IEquals( 'img' ) && tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( '/cgi-bin/mimetex' ) >= 0 )
+		{
+			FCKCommands.GetCommand( 'mimetex' ).Execute() ;
+		}
+	}, 'IMG'
+) ;	
+

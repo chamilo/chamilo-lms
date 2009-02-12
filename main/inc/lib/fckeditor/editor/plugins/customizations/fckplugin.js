@@ -1087,6 +1087,7 @@ FCK.IsRealImage = function ( tag )
 		&& !tag.getAttribute( '_fckmp3' )
 		&& !tag.getAttribute( '_fckvideo' )
 		&& !tag.getAttribute( 'MapNumber' )
+		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( '/cgi-bin/mimetex' ) >= 0 )
 		) ? true : false ;
 } ;
 

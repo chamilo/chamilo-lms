@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 18176 2009-02-03 00:06:07Z cfasanando $
+* 	@version $Id: question.php 18472 2009-02-12 18:00:38Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -37,8 +37,7 @@ require ('../inc/global.inc.php');
 require_once('survey.lib.php');
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
-if (!api_is_allowed_to_edit(false,true))
-{
+if (!api_is_allowed_to_edit(false,true)) {
 	Display :: display_header();
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
@@ -53,18 +52,14 @@ $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUEST
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
-
-
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
 $urlname = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
-if (strlen(strip_tags($survey_data['title'])) > 40)
-{
+if (strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
 }
 
-if($survey_data['survey_type']==1)
-{
+if($survey_data['survey_type']==1) {
 	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).' WHERE survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($rs)===0) {
@@ -78,12 +73,10 @@ $interbreadcrumb[] = array ("url" => 'survey_list.php', 'name' => get_lang('Surv
 $interbreadcrumb[] = array ("url" => 'survey.php?survey_id='.$_GET['survey_id'], 'name' => $urlname);
 
 // Tool name
-if ($_GET['action'] == 'add')
-{
+if ($_GET['action'] == 'add') {
 	$tool_name = get_lang('AddQuestion');
 }
-if ($_GET['action'] == 'edit')
-{
+if ($_GET['action'] == 'edit') {
 	$tool_name = get_lang('EditQuestion');
 }
 
@@ -93,47 +86,41 @@ $possible_types = array('personality','yesno', 'multiplechoice', 'multiplerespon
 // checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types))
 {
-	Display::display_header($tool_name,'Survey');
+	Display :: display_header($tool_name,'Survey');
 	Display :: display_error_message(get_lang('TypeDoesNotExist'), false);
 	Display :: display_footer();
 }
 
 // displaying the form for adding or editing the question
-if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
-{
-	
-	// Displaying the header
-	Display::display_header($tool_name,'Survey');
-	
-	$error_message='';	
-	// Displys message if exists					
-	if (isset($_SESSION['temp_sys_message']))
-	{	
-		$error_message=$_SESSION['temp_sys_message'];
-		unset($_SESSION['temp_sys_message']);				
-		if ($error_message=='PleaseEnterAQuestion' || $error_message=='PleasFillAllAnswer'|| $error_message=='PleaseChooseACondition'|| $error_message=='ChooseDifferentCategories')
-		{
-			Display::display_error_message(get_lang($error_message), true);			
-		} 		
+if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types)) {
+	if (!isset($_POST['save_question'])) {
+		// Displaying the header
+		Display::display_header($tool_name,'Survey');	
+		$error_message='';	
+		// Displys message if exists					
+		if (isset($_SESSION['temp_sys_message'])) {	
+			$error_message=$_SESSION['temp_sys_message'];
+			unset($_SESSION['temp_sys_message']);				
+			if ($error_message=='PleaseEnterAQuestion' || $error_message=='PleasFillAllAnswer'|| $error_message=='PleaseChooseACondition'|| $error_message=='ChooseDifferentCategories') {
+				Display::display_error_message(get_lang($error_message), true);			
+			} 		
+		}
+		  
+		echo '<img src="../img/'.survey_manager::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" /><br />';
+		echo get_lang(ucfirst($_GET['type']));
 	}
-	  
-	echo '<img src="../img/'.survey_manager::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" /><br />';
-	echo get_lang(ucfirst($_GET['type']));
-
 	$form = new $_GET['type'];
 
 	// The defaults values for the form
 	$form_content['horizontalvertical'] = 'vertical2';
 	$form_content['answers'] = array('', '');
 	
-	if ($_GET['type'] == 'yesno')
-	{
+	if ($_GET['type'] == 'yesno') {
 		$form_content['answers'][0]=get_lang('Yes');
 		$form_content['answers'][1]=get_lang('No');
 	}
 	
-	if ($_GET['type'] == 'personality')
-	{
+	if ($_GET['type'] == 'personality') {
 		$form_content['answers'][0]=get_lang('1');
 		$form_content['answers'][1]=get_lang('2');
 		$form_content['answers'][2]=get_lang('3');
@@ -148,20 +135,17 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
 	}
 		
 	// We are editing a question
-	if (isset($_GET['question_id']) AND !empty($_GET['question_id']))
-	{
+	if (isset($_GET['question_id']) AND !empty($_GET['question_id'])) {
 		$form_content = survey_manager::get_question($_GET['question_id']);		
 	}
 
 	// an action has been performed (for instance adding a possible answer, moving an answer, ...)
-	if ($_POST)
-	{	
+	if ($_POST) {	
 		$form_content = $_POST;
 		$form_content = $form->handle_action($form_content);
 	}
 	
-	if ($error_message!='')
-	{						
+	if ($error_message!='') {						
 		$form_content['question']=$_SESSION['temp_user_message'];
 		$form_content['answers']=$_SESSION['temp_answers'];
 		$form_content['values']=$_SESSION['temp_values'];
@@ -173,9 +157,7 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types))
 	
 	$form->create_form($form_content);
 	$form->render_form();	 
-}
-else
-{	
+} else {	
 	$form_content = $_POST;	
 	$form = new question();
 	$form->handle_action($form_content);

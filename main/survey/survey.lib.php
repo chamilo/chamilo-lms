@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 18382 2009-02-09 21:16:39Z juliomontoya $
+* 	@version $Id: survey.lib.php 18472 2009-02-12 18:00:38Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1465,37 +1465,28 @@ class question
 		}
 
 		// saving a question
-		if (isset($_POST['save_question']))
-		{					
+		if (isset($_POST['save_question'])) {					
 			$message = survey_manager::save_question($form_content);
-									
-			if ($message == 'QuestionAdded' || $message == 'QuestionUpdated' ) 
-			{
-				
+			
+			if ($message == 'QuestionAdded' || $message == 'QuestionUpdated' ) {				
 				$sql='SELECT COUNT(*) FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION).' WHERE survey_id = '.(int)$_GET['survey_id'];
 				$res = Database :: fetch_array (api_sql_query($sql, __FILE__, __LINE__));				
 				
-				if ($config['survey']['debug'])
-				{								
+				if ($config['survey']['debug']) {				
 					Display :: display_header();
 					Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="survey.php?survey_id='.$_GET['survey_id'].'">'.get_lang('Survey').'</a>', false);					
+				} else {					
+					header('Location:survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'&message='.$message);
+					exit();
 				}
-				else			
-				{					
-					header('location:survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'&message='.$message);
-				}
-			}
-			else 
-			{			
-				if ($message == 'PleaseEnterAQuestion' || $message=='PleasFillAllAnswer'|| $message=='PleaseChooseACondition'|| $message=='ChooseDifferentCategories')
-				{							
+			} else {			
+				if ($message == 'PleaseEnterAQuestion' || $message=='PleasFillAllAnswer'|| $message=='PleaseChooseACondition'|| $message=='ChooseDifferentCategories') {							
 					$_SESSION['temp_user_message']=$form_content['question'];
 					$_SESSION['temp_sys_message']=$message;
 					$_SESSION['temp_answers']=$form_content['answers'];
 					$_SESSION['temp_values']=$form_content['values'];																								
 					header('location:question.php?'.api_get_cidreq().'&question_id='.Security::remove_XSS($_GET['question_id']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'');																  										
-				}
-				
+				}				
 			}					
 		}
 

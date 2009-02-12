@@ -6565,8 +6565,8 @@ class learnpath {
 							// online editor should be activated or not.
 							global $fck_attribute;
 							$fck_attribute['Width'] = '100%';
-							$fck_attribute['Height'] = '950';
-							$fck_attribute['ToolbarSet'] = 'Full';
+							$fck_attribute['Height'] = '700';
+							$fck_attribute['ToolbarSet'] = 'LearnPath';
 							$fck_attribute['Config']['FullPage'] = true;
 							$relative_path = $extra_info['dir'];
 							if ($relative_path == 'n/')

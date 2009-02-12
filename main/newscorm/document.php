@@ -192,7 +192,7 @@ api_display_tool_title($nameTools);
 	(editable by course admins)
 -----------------------------------------------------------
 */
-
+//TODO: check see if we need, it seems not working here
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Full';

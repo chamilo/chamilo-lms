@@ -245,6 +245,17 @@ FCKConfig.ToolbarSets["Glossary"] = [
 	['Source']
 ] ;
 
+FCKConfig.ToolbarSets["LearnPath"] = [
+	['NewPage','Templates','PageBreak','Preview','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],
+	['FontFormat','FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Source']
+] ;//save, FitWindow don't run well here
+
 FCKConfig.ToolbarSets["Notebook"] = [
 	['NewPage','Save','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Link','Unlink','Anchor'],

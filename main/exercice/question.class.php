@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 18411 2009-02-10 17:59:08Z juliomontoya $
+<?php // $Id: question.class.php 18476 2009-02-12 20:44:00Z herodoto $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 18411 2009-02-10 17:59:08Z juliomontoya $
+* 	@version $Id: question.class.php 18476 2009-02-12 20:44:00Z herodoto $
 */
 
 
@@ -996,7 +996,7 @@ abstract class Question
 		$fck_attribute = array();
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '300';
-		$fck_attribute['ToolbarSet'] = 'TestComment';
+		$fck_attribute['ToolbarSet'] = 'QuestionDescription';
 		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
 		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
 		

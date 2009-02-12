@@ -25,17 +25,8 @@
  * Editor's toolbar definitions.
  */
 
-FCKConfig.ToolbarSets["Question"] = [
-	['Source','DocProps','-','NewPage','Preview','-'],
-	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-	['OrderedList','UnorderedList','-','Outdent','Indent'],
-	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Link','Unlink','Anchor'],
-	['Image','Flash','MP3','Table','Rule','Smiley','SpecialChar','UniversalKey'],
-	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField'],
-	'/',
-	['Style','FontFormat','FontName','FontSize'],['Attachment']
+FCKConfig.ToolbarSets["Full"] = [
+	['FitWindow','PasteWord','Link','Unlink','Anchor','-','Image','flvPlayer','Flash','EmbedMovies','MP3','YouTube','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontFormat','Style','FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
 ] ;
 
 FCKConfig.ToolbarSets["Middle"] = [
@@ -46,24 +37,8 @@ FCKConfig.ToolbarSets["Small"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','Flash','OrderedList','UnorderedList','Table']
 ] ;
 
-FCKConfig.ToolbarSets["Full"] = [
-	['FitWindow','PasteWord','Link','Unlink','Anchor','-','Image','flvPlayer','Flash','EmbedMovies','MP3','YouTube','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontFormat','Style','FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
-] ;
-
 FCKConfig.ToolbarSets["Comment"] = [
 	['Bold','Italic','Underline','StrikeThrough']
-] ;
-
-FCKConfig.ToolbarSets["NewTest"] = [
-	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','Flash','MP3','OrderedList','UnorderedList','Table','Source']
-] ;
-
-FCKConfig.ToolbarSets["TestComment"] = [
-	['FontName','FontSize','TextColor','BGColor'],['Bold','Italic','Underline','StrikeThrough','Subscript', 'Superscript','Link','Unlink','Image','Flash','MP3','OrderedList','UnorderedList','Table','Source']
-] ;
-
-FCKConfig.ToolbarSets["Test"] = [
-	['Bold','Italic','Underline','StrikeThrough','Subscript','Superscript','Link','Unlink','Image','MP3','OrderedList','UnorderedList','Table']
 ] ;
 
 FCKConfig.ToolbarSets["Profil"] = [
@@ -78,6 +53,7 @@ FCKConfig.ToolbarSets["Messages"] = [
 	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','Source']
 ] ;
 
+//Course introduction
 FCKConfig.ToolbarSets["Introduction"] = [
 	['NewPage','Templates','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Link','Unlink','Anchor'],
@@ -89,6 +65,7 @@ FCKConfig.ToolbarSets["Introduction"] = [
 	['Source']
 ] ;
 
+//Agenda
 FCKConfig.ToolbarSets["Agenda"] = [
 	['FitWindow','-','PasteWord','-','Undo','Redo','RemoveFormat'],
 	['Link','Unlink'],
@@ -111,6 +88,7 @@ FCKConfig.ToolbarSets["Agenda_Student"] = [
 	['ShowBlocks']
 ] ;
 
+//Announcements
 FCKConfig.ToolbarSets["Announcements"] = [
 	['NewPage','Preview','FitWindow','-','PasteText','-','Undo','Redo','-','SelectAll','RemoveFormat'],
 	['Link','Unlink','Anchor'],
@@ -133,6 +111,7 @@ FCKConfig.ToolbarSets["Announcements_Student"] = [
 	['ShowBlocks']
 ] ;
 
+//Blog
 FCKConfig.ToolbarSets["Blog"] = [
 	['FitWindow','-','PasteWord','-','Undo','Redo','-','RemoveFormat'],
 	['Link','Unlink','Anchor'],
@@ -175,6 +154,7 @@ FCKConfig.ToolbarSets["BlogComment_Student"] = [
 	['ShowBlocks']
 ] ;
 
+//Course Description
 FCKConfig.ToolbarSets["CourseDescription"] = [
 	['NewPage','Templates','Save','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Link','Unlink','Anchor'],
@@ -186,6 +166,7 @@ FCKConfig.ToolbarSets["CourseDescription"] = [
 	['Source']
 ] ;
 
+//Documents
 FCKConfig.ToolbarSets["Documents"] = [
 	['NewPage','Templates','Save','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Link','Unlink','Anchor'],
@@ -208,6 +189,7 @@ FCKConfig.ToolbarSets["Documents_Student"] = [
 	['ShowBlocks']
 ] ;
 
+//Forum
 FCKConfig.ToolbarSets["ForumLight"] = [
 	['Bold','Italic','Underline','StrikeThrough']
 ] ;
@@ -234,6 +216,7 @@ FCKConfig.ToolbarSets["Forum_Student"] = [
 	['ShowBlocks']
 ] ;
 
+//Glossary
 FCKConfig.ToolbarSets["Glossary"] = [
 	['NewPage','Save','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Link','Unlink','Anchor'],
@@ -245,6 +228,7 @@ FCKConfig.ToolbarSets["Glossary"] = [
 	['Source']
 ] ;
 
+//Learning Path
 FCKConfig.ToolbarSets["LearnPath"] = [
 	['NewPage','Templates','PageBreak','Preview','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Link','Unlink','Anchor'],
@@ -256,6 +240,7 @@ FCKConfig.ToolbarSets["LearnPath"] = [
 	['Source']
 ] ;//save, FitWindow don't run well here
 
+//Notebook
 FCKConfig.ToolbarSets["Notebook"] = [
 	['NewPage','Save','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Link','Unlink','Anchor'],
@@ -278,6 +263,7 @@ FCKConfig.ToolbarSets["Notebook_Student"] = [
 	['ShowBlocks']
 ] ;
 
+//Survey
 FCKConfig.ToolbarSets["Survey"] = [
 	['FitWindow'],
 	['Link','Unlink'],
@@ -289,6 +275,34 @@ FCKConfig.ToolbarSets["Survey"] = [
 	['Source']
 ] ;
 
+//Test
+FCKConfig.ToolbarSets["TestDescription"] = [
+	['NewPage','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat'],
+	['Link','Unlink'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','Smiley','SpecialChar','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Source']
+] ;
+
+FCKConfig.ToolbarSets["QuestionDescription"] = [
+	['NewPage','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat'],
+	['Link','Unlink'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','Smiley','SpecialChar','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Source']
+] ;
+
+FCKConfig.ToolbarSets["Answer"] = [
+	['FitWindow','Link','Unlink','Image','flvPlayer','Table','Bold','Italic','TextColor','Source']
+] ;
+
+//Wiki
 FCKConfig.ToolbarSets["Wiki"] = [
 	['NewPage','Templates','Save','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
 	['Wikilink','Link','Unlink','Anchor'],

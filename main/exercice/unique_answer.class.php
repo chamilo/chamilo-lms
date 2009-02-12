@@ -68,7 +68,7 @@ class UniqueAnswer extends Question {
 		$fck_attribute['Width'] = '50%';
 		$fck_attribute['Height'] = '125px';
 		
-		$fck_attribute['ToolbarSet'] = 'Test';
+		$fck_attribute['ToolbarSet'] = 'Answer';
 		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
 		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
 		$fck_attribute['Config']['InDocument'] = false;		

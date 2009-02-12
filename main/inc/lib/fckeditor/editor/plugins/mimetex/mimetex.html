@@ -10,11 +10,11 @@ var FCKLang = oEditor.FCKLang ;
 var FCK = oEditor.FCK ;
 var FCKConfig = oEditor.FCKConfig ;
 
-// Choosing mimetex_url according to the server's operating system.
-var mimetex_url = "/cgi-bin/mimetex.cgi" ; // Linux
-if ( FCKConfig.IsWindowsServer )
+// Choosing the rigiht mimetex_url.
+var mimetex_url = "/cgi-bin/mimetex.cgi" ;
+if ( FCKConfig.MimetexOption )
 {
-	mimetex_url = "/cgi-bin/mimetex.exe" ; // Windows
+	mimetex_url = "/cgi-bin/mimetex.exe" ;
 }
 
 var mimetex_cgi = mimetex_url + "? \\Large " ;

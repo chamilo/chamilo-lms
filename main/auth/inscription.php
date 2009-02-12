@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 18418 2009-02-10 20:07:37Z cvargas1 $
+// $Id: inscription.php 18465 2009-02-12 14:17:29Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -181,7 +181,7 @@ foreach ($extra as $id => $field_details) {
 			break;
 		case USER_FIELD_TYPE_RADIO:
 			$group = array();
-			foreach ($field_details[8] as $option_id => $option_details) {
+			foreach ($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
 			}
@@ -190,7 +190,7 @@ foreach ($extra as $id => $field_details) {
 			break;
 		case USER_FIELD_TYPE_SELECT:
 			$options = array();
-			foreach($field_details[8] as $option_id => $option_details) {
+			foreach($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
 			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');	
@@ -198,7 +198,7 @@ foreach ($extra as $id => $field_details) {
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();
-			foreach ($field_details[8] as $option_id => $option_details) {
+			foreach ($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
 			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
@@ -221,7 +221,7 @@ foreach ($extra as $id => $field_details) {
 			$form->applyFilter('theme', 'trim');
 			break;
 		case USER_FIELD_TYPE_DOUBLE_SELECT:
-			foreach ($field_details[8] as $key=>$element) {
+			foreach ($field_details[9] as $key=>$element) {
 				if ($element[2][0] == '*') {
 					$values['*'][$element[0]] = str_replace('*','',$element[2]);
 				} else {

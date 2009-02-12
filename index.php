@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18379 2009-02-09 20:42:34Z juliomontoya $
+<?php // $Id: index.php 18470 2009-02-12 15:33:51Z juliomontoya $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 18379 2009-02-09 20:42:34Z juliomontoya $
+* 	@version $Id: index.php 18470 2009-02-12 15:33:51Z juliomontoya $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -238,7 +238,6 @@ if (isset($_user['user_id'])) {
 
 // Display courses and category list
 if (!$page_included) {
-
 	if (api_get_setting('display_categories_on_homepage') == 'true') {
 		echo '<div class="home_cats">';
 		display_anonymous_course_list();
@@ -264,7 +263,8 @@ Display :: display_footer();
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function logout() {
+function logout() 
+{
 	global $_configuration, $extAuthSource;
 	// variable initialisation
 	$query_string='';
@@ -446,7 +446,8 @@ function display_anonymous_right_menu() {
 			//display_create_course_link();
 			$show_menu=true;
 			$show_create_link=true;			
-		}			
+		}
+				
 		if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
 				$show_menu=true;
 				$show_course_link=true;		
@@ -469,24 +470,21 @@ function display_anonymous_right_menu() {
 			echo "</div>";			
 		}
 	}
-
-
-	
+		
 	// includes for any files to be displayed below anonymous right menu
-	if (!file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_exists($home.'home_notice.html')) {
+	if (!file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_get_contents($home.'home_notice.html')!='') {
 		echo '<div class="note">';
 		if (file_exists($home.'home_notice.html'))			
 			include ($home.'home_notice.html');
 		else {
 			include ($home_old.'home_notice.html');
-		}		
+		}
 		echo '</div>';
-	} elseif(file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_exists($home.'home_notice_'.$user_selected_language.'.html')) {
+	} elseif(file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_get_contents($home.'home_notice_'.$user_selected_language.'.html')!='') {
 		echo '<div class="note">';
-		include($home.'home_notice_'.$user_selected_language.'.html');
+		include($home.'home_notice_'.$user_selected_language.'.html'); 
 		echo '</div>';
-	}
-	
+	}	
 }
 
 /**

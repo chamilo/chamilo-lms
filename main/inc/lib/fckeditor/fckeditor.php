@@ -417,6 +417,16 @@ class FCKeditor
 		// for links (any resource type)
 		$this->Config['LinkUploadURL'] = $this->BasePath . "editor/filemanager/upload/php/upload.php?Type=File&ServerPath=$upload_path" ;
 
+		// The mimetex plugin needs the following information about server's OS.
+		if (defined('PHP_OS'))
+		{
+			$os = PHP_OS;
+		}
+		else
+		{
+			$os = php_uname();
+		}
+		$this->Config['IsWindowsServer'] = (strtoupper(substr($os, 0, 3 )) === 'WIN') ? true : false;
 
 		/*
 		 * The original code starts from here.

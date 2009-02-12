@@ -5,21 +5,24 @@
 		<script type="text/javascript" src="jquery.js"></script>
 		<script type="text/javascript">
 
-// Choose mimetex_url according to your operating system.
-// TODO: This could be done authomatiacally.
+var oEditor = window.parent.InnerDialogLoaded() ;
+var FCKLang = oEditor.FCKLang ;
+var FCK = oEditor.FCK ;
+var FCKConfig = oEditor.FCKConfig ;
+
+// Choosing mimetex_url according to the server's operating system.
 var mimetex_url = "/cgi-bin/mimetex.cgi" ; // Linux
-//var mimetex_url = "/cgi-bin/mimetex.exe" ; // Windows
+if ( FCKConfig.IsWindowsServer )
+{
+	mimetex_url = "/cgi-bin/mimetex.exe" ; // Windows
+}
 
 var mimetex_cgi = mimetex_url + "? \\Large " ;
 var preview_cgi = mimetex_cgi + "\\nocach " ;
 var result_cgi  = mimetex_cgi ;
-var img_tag = true;
+var img_tag = true ;
 
 // FCKEditor
-
-var oEditor = window.parent.InnerDialogLoaded() ;
-var FCKLang = oEditor.FCKLang ;
-var FCK = oEditor.FCK ;
 
 // look for a MATH-tag
 var eSelected = FCK.Selection.MoveToAncestorNode( 'MATH' ) ;

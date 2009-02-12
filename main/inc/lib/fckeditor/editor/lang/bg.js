@@ -167,7 +167,7 @@ VisitLinkBlocked	: "Не може да се отвори нов прозорец
 DlgBtnOK			: "Добре (ОК)",
 DlgBtnCancel		: "Отказ",
 DlgBtnClose			: "Затваряне",
-DlgBtnBrowseServer	: "Разгледаждане на сървъра",
+DlgBtnBrowseServer	: "Разглеждане на сървъра",
 DlgAdvancedTag		: "Подробности...",
 DlgOpOther			: "<Друго>",
 DlgInfoTab			: "Информация",

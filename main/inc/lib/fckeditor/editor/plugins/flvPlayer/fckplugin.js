@@ -1,6 +1,6 @@
 ﻿// Register the related commands.
 var dialogPath = FCKConfig.PluginsPath + 'flvPlayer/flvPlayer.html';
-var flvPlayerDialogCmd = new FCKDialogCommand( FCKLang["DlgFLVPlayerTitle"], FCKLang["DlgFLVPlayerTitle"], dialogPath, 680, 560 );
+var flvPlayerDialogCmd = new FCKDialogCommand( FCKLang["DlgFLVPlayerTitle"], FCKLang["DlgFLVPlayerTitle"], dialogPath, 800, 560 );
 FCKCommands.RegisterCommand( 'flvPlayer', flvPlayerDialogCmd ) ;
 
 // Create the Flash toolbar button.

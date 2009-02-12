@@ -139,8 +139,10 @@ function LoadSelection()
 	GetE('txtPlaylist').value   = oMedia.purl;
 	GetE('txtImgURL').value    	= oMedia.iurl;
 	GetE('txtWMURL').value    	= oMedia.wmurl;
-	GetE('txtWidth').value		= oMedia.width;
-	GetE('txtHeight').value		= oMedia.height;
+	//GetE('txtWidth').value		= oMedia.width;
+	//GetE('txtHeight').value		= oMedia.height;
+	GetE('txtWidth').value = oMedia.width.toString().length > 0 ? oMedia.width : 320 ;
+	GetE('txtHeight').value = oMedia.height.toString().length > 0 ? oMedia.height : 240 ;
 	GetE('chkLoop').checked		= oMedia.loop;
 	GetE('chkAutoplay').checked	= oMedia.play;
 	GetE('chkDownload').checked 	= oMedia.downloadable;
@@ -344,7 +346,9 @@ function SetUrl( url ) {
 
 	if ( sActualBrowser == 'flv' ) {
 		document.getElementById('txtURL').value = url ;
-		GetE('txtHeight').value = GetE('txtWidth').value = '' ;
+		//GetE('txtHeight').value = GetE('txtWidth').value = '' ;
+		GetE('txtWidth').value = 320 ;
+		GetE('txtHeight').value = 240 ;
 	} else if ( sActualBrowser == 'link' ) {
 		document.getElementById('txtPlaylist').value = url ;
 	} else if ( sActualBrowser == 'link2' ) {

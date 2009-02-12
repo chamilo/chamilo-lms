@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 17709 2009-01-13 21:16:03Z iflorespaz $
+<?php // $Id: user_fields_add.php 18466 2009-02-12 14:25:22Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -136,6 +136,7 @@ if( $form->validate())
 		$fieldtitle = $field['fieldtitle'];
 		$fielddefault = $field['fielddefaultvalue'];
 		$fieldoptions = $field['fieldoptions']; //comma-separated list of options
+		
 		if (is_numeric($field['fieldid']) AND !empty($field['fieldid']))
 		{
 			UserManager:: save_extra_field_changes($field['fieldid'],$fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
@@ -143,7 +144,7 @@ if( $form->validate())
 		}
 		else 
 		{
-		$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
+			$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
 			$message = get_lang('FieldAdded');
 		}
 		Security::clear_token();

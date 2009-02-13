@@ -197,7 +197,7 @@ class GradebookTable extends SortableTable
 				
 			} else {
 			//students get the results and certificates columns
-				if (count($this->evals_links)>0 || $status_user!=1) {
+				if (count($this->evals_links)>0 && $status_user!=1) {
 					$value_data=isset($data[5]) ? $data[5] : null;
 					$row[] = $value_data;
 				}

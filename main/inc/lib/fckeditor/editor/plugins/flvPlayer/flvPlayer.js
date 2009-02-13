@@ -1,21 +1,68 @@
-var oEditor = window.parent.InnerDialogLoaded() ;
-var FCK		= oEditor.FCK ;
+var dialog		= window.parent ;
+var oEditor		= dialog.InnerDialogLoaded() ;
+var FCK			= oEditor.FCK ;
+var FCKLang		= oEditor.FCKLang ;
+var FCKConfig	= oEditor.FCKConfig ;
+var FCKTools	= oEditor.FCKTools ;
 
 // Set the language direction.
-window.document.dir = oEditor.FCKLang.Dir ;
+window.document.dir = FCKLang.Dir ;
 
-// Set the Skin CSS.
-document.write( '<link href="' + oEditor.FCKConfig.SkinPath + 'fck_dialog.css" type="text/css" rel="stylesheet">' ) ;
+//#### Dialog Tabs
 
-var sAgent = navigator.userAgent.toLowerCase() ;
+// Set the dialog tabs.
+dialog.AddTab( 'Info', FCKLang.DlgInfoTab ) ;
 
-var is_ie = (sAgent.indexOf("msie") != -1); // FCKBrowserInfo.IsIE
-var is_gecko = !is_ie; // FCKBrowserInfo.IsGecko
+if ( FCKConfig.MediaUpload )
+{
+	dialog.AddTab( 'Upload', FCKLang.DlgLnkUpload ) ;
+}
+
+// This function is called when a dialog tag has been selected.
+function OnDialogTabChange( tabCode )
+{
+	ShowE('divInfo'		, ( tabCode == 'Info' ) ) ;
+	ShowE('divUpload'	, ( tabCode == 'Upload' ) ) ;
+}
+
+function OnDialogModeChange( mode )
+{
+	if ( mode == 'single')
+	{
+		btnBrowse.disabled = false ;
+		btnImgBrowse.disabled = false ;
+		btnLnkBrowse.disabled = true ;
+		txtURL.disabled = false ;
+		txtImgURL.disabled = false ;
+		txtPlaylist.disabled = true ;
+		txtPlaylist.value = '' ;
+		txtURL.style.background = '#ffffff' ;
+		txtImgURL.style.background = '#ffffff' ;
+		txtPlaylist.style.background = 'transparent' ;
+		selDispPlaylist.disabled = true ;
+	}
+	else
+	{
+		btnBrowse.disabled = true ;
+		btnImgBrowse.disabled = true ;
+		btnLnkBrowse.disabled = false ;
+		txtURL.disabled = true ;
+		txtImgURL.disabled = true ;
+		txtPlaylist.disabled = false ;
+		txtURL.value = '' ;
+		txtImgURL.value = '' ;
+		txtURL.style.background = 'transparent' ;
+		txtImgURL.style.background = 'transparent' ;
+		txtPlaylist.style.background = '#ffffff' ;
+		selDispPlaylist.disabled = false ;
+	}
+}
+
 
 var oMedia = null;
 var is_new_flvplayer = true;
 
-function window_onload()
+window.onload = function()
 {
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
@@ -24,12 +71,17 @@ function window_onload()
 	LoadSelection() ;
 
 	// Show/Hide the "Browse Server" button.
-	GetE('tdBrowse').style.display = oEditor.FCKConfig.FlashBrowser ? '' : 'none' ;
+	GetE('tdBrowse').style.display = FCKConfig.MediaBrowser ? '' : 'none' ;
+
+	// Set the actual uploader URL.
+	if ( FCKConfig.MediaUpload )
+		GetE('frmUpload').action = FCKConfig.MediaUploadURL ;
+
+	dialog.SetAutoSize( true ) ;
 
 	// Activate the "OK" button.
-	window.parent.SetOkButton( true ) ;
+	dialog.SetOkButton( true ) ;
 }
-
 
 function getSelectedMovie(){
 /*
@@ -139,8 +191,6 @@ function LoadSelection()
 	GetE('txtPlaylist').value   = oMedia.purl;
 	GetE('txtImgURL').value    	= oMedia.iurl;
 	GetE('txtWMURL').value    	= oMedia.wmurl;
-	//GetE('txtWidth').value		= oMedia.width;
-	//GetE('txtHeight').value		= oMedia.height;
 	GetE('txtWidth').value = oMedia.width.toString().length > 0 ? oMedia.width : 320 ;
 	GetE('txtHeight').value = oMedia.height.toString().length > 0 ? oMedia.height : 240 ;
 	GetE('chkLoop').checked		= oMedia.loop;
@@ -158,8 +208,6 @@ function LoadSelection()
 	GetE('txtRURL').value = oMedia.rurl;
 	GetE('txtPLDim').value = oMedia.playlistDim;
 	GetE('chkPLThumbs').checked = oMedia.playlistThumbs;
-
-	//updatePreview();
 }
 
 //#### The OK button was hit.
@@ -173,7 +221,7 @@ function Ok()
 	if ( rbFileTypeVal == "single") {
 		if ( GetE('txtURL').value.length == 0 )
 		{
-			GetE('txtURL').focus() ;	
+			GetE('txtURL').focus() ;
 
 			alert( oEditor.FCKLang.DlgFLVPlayerAlertUrl ) ;
 			return false ;
@@ -210,22 +258,10 @@ function Ok()
 
 	var e = (oMedia || new Media()) ;
 
-	updateMovie(e) ;
+	UpdateMovie(e) ;
 
 	// Replace or insert?
 	if (!is_new_flvplayer) {
-/*
-		// Find parent..
-	        oSel = FCK.Selection.GetParentElement();
-		while (oSel != null && !oSel.id.match(/^player[0-9]*-parent$/)) {
-			oSel=oSel.parentNode;
-		}
-		// Found - So replace
-		if (oSel != null) {
-			oSel.parentNode.removeChild(oSel);
-			FCK.InsertHtml(e.getInnerHTML());
-		}
-*/
 		var oFakeImage = FCK.Selection.GetSelectedElement() ;
 		var oSel = null ;
 		oMedia = new Media() ;
@@ -249,16 +285,12 @@ function Ok()
 	return true ;
 }
 
-function updateMovie(e)
+function UpdateMovie(e)
 {
 	e.fileType = GetE('rbFileType').value;
-	
 	e.url = GetE('txtURL').value;
-	
 	e.purl = GetE('txtPlaylist').value;
-
 	e.iurl = GetE('txtImgURL').value;
-
 	e.wmurl = GetE('txtWMURL').value;
 
 	e.bgcolor = GetE('txtBgColor').value;
@@ -282,53 +314,30 @@ function updateMovie(e)
 	e.playlistThumbs = (GetE('chkPLThumbs').checked) ? 'true' : 'false';
 }
 
-
 function BrowseServer()
 {
-	OpenServerBrowser(
-		'flv',
-		oEditor.FCKConfig.MediaBrowserURL,
-		oEditor.FCKConfig.MediaBrowserWindowWidth,
-		oEditor.FCKConfig.MediaBrowserWindowHeight ) ;
+	OpenServerBrowser( 'flv', FCKConfig.MediaBrowserURL, FCKConfig.MediaBrowserWindowWidth, FCKConfig.MediaBrowserWindowHeight ) ;
 }
-
 
 function LnkBrowseServer()
 {
-	OpenServerBrowser(
-		'link',
-		oEditor.FCKConfig.LinkBrowserURL,
-		oEditor.FCKConfig.LinkBrowserWindowWidth,
-		oEditor.FCKConfig.LinkBrowserWindowHeight ) ;
+	OpenServerBrowser( 'link', FCKConfig.LinkBrowserURL, FCKConfig.LinkBrowserWindowWidth, FCKConfig.LinkBrowserWindowHeight ) ;
 }
 
 function Lnk2BrowseServer()
 {
-	OpenServerBrowser(
-		'link2',
-		oEditor.FCKConfig.LinkBrowserURL,
-		oEditor.FCKConfig.LinkBrowserWindowWidth,
-		oEditor.FCKConfig.LinkBrowserWindowHeight ) ;
+	OpenServerBrowser( 'link2', FCKConfig.LinkBrowserURL, FCKConfig.LinkBrowserWindowWidth, FCKConfig.LinkBrowserWindowHeight ) ;
 }
 
 function img1BrowseServer()
 {
-	OpenServerBrowser(
-		'img1',
-		oEditor.FCKConfig.ImageBrowserURL,
-		oEditor.FCKConfig.ImageBrowserWindowWidth,
-		oEditor.FCKConfig.ImageBrowserWindowHeight ) ;
+	OpenServerBrowser( 'img1', FCKConfig.ImageBrowserURL, FCKConfig.ImageBrowserWindowWidth, FCKConfig.ImageBrowserWindowHeight ) ;
 }
 
 function img2BrowseServer()
 {
-	OpenServerBrowser(
-		'img2',
-		oEditor.FCKConfig.ImageBrowserURL,
-		oEditor.FCKConfig.ImageBrowserWindowWidth,
-		oEditor.FCKConfig.ImageBrowserWindowHeight ) ;
+	OpenServerBrowser( 'img2', FCKConfig.ImageBrowserURL, FCKConfig.ImageBrowserWindowWidth, FCKConfig.ImageBrowserWindowHeight ) ;
 }
-
 
 function OpenServerBrowser( type, url, width, height )
 {
@@ -341,12 +350,10 @@ var sActualBrowser ;
 
 function SetUrl( url ) {
 
-	// Added by Ivan Tcholakov.
 	url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
 
 	if ( sActualBrowser == 'flv' ) {
 		document.getElementById('txtURL').value = url ;
-		//GetE('txtHeight').value = GetE('txtWidth').value = '' ;
 		GetE('txtWidth').value = 320 ;
 		GetE('txtHeight').value = 240 ;
 	} else if ( sActualBrowser == 'link' ) {
@@ -358,6 +365,8 @@ function SetUrl( url ) {
 	} else if ( sActualBrowser == 'img2' ) {
 		document.getElementById('txtWMURL').value = url ;
 	}
+	
+	dialog.SetSelectedTab( 'Info' ) ;
 }
 
 
@@ -602,7 +611,6 @@ function SelectBackColor( color )
 {
 	if ( color && color.length > 0 ) {
 		GetE('txtBgColor').value = color ;
-		//updatePreview()
 	}
 }
 
@@ -610,7 +618,6 @@ function SelectToolColor( color )
 {
 	if ( color && color.length > 0 ) {
 		GetE('txtToolbarColor').value = color ;
-		//updatePreview()
 	}
 }
 
@@ -618,7 +625,6 @@ function SelectToolTextColor( color )
 {
 	if ( color && color.length > 0 ) {
 		GetE('txtToolbarTxtColor').value = color ;
-		//updatePreview()
 	}
 }
 
@@ -626,6 +632,72 @@ function SelectToolTextRColor( color )
 {
 	if ( color && color.length > 0 ) {
 		GetE('txtToolbarTxtRColor').value = color ;
-		//updatePreview()
 	}
+}
+
+function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
+{
+	// Remove animation
+	window.parent.Throbber.Hide() ;
+	GetE( 'divUpload' ).style.display  = '' ;
+
+	switch ( errorNumber )
+	{
+		case 0 :	// No errors
+			//alert( 'Your file has been successfully uploaded' ) ;
+			break ;
+		case 1 :	// Custom error
+			alert( customMsg ) ;
+			return ;
+		case 101 :	// Custom warning
+			alert( customMsg ) ;
+			break ;
+		case 201 :
+			alert( 'A file with the same name is already available. The uploaded file has been renamed to "' + fileName + '"' ) ;
+			break ;
+		case 202 :
+			alert( 'Invalid file type' ) ;
+			return ;
+		case 203 :
+			alert( "Security error. You probably don't have enough permissions to upload. Please check your server." ) ;
+			return ;
+		case 500 :
+			alert( 'The connector is disabled' ) ;
+			break ;
+		default :
+			alert( 'Error on file upload. Error number: ' + errorNumber ) ;
+			return ;
+	}
+
+	OnDialogModeChange( 'single' ) ;
+	sActualBrowser = 'flv' ;
+	SetUrl( fileUrl ) ;
+	GetE('frmUpload').reset() ;
+}
+
+var oUploadAllowedExtRegex	= new RegExp( FCKConfig.MediaUploadAllowedExtensions, 'i' ) ;
+var oUploadDeniedExtRegex	= new RegExp( FCKConfig.MediaUploadDeniedExtensions, 'i' ) ;
+
+function CheckUpload()
+{
+	var sFile = GetE('txtUploadFile').value ;
+
+	if ( sFile.length == 0 )
+	{
+		alert( 'Please select a file to upload' ) ;
+		return false ;
+	}
+	
+	if ( ( FCKConfig.MediaUploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
+		( FCKConfig.MediaUploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
+	{
+		OnUploadCompleted( 202 ) ;
+		return false ;
+	}
+
+	// Show animation
+	window.parent.Throbber.Show( 100 ) ;
+	GetE( 'divUpload' ).style.display  = 'none' ;
+
+	return true ;
 }

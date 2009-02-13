@@ -1,12 +1,10 @@
-﻿// Register the related commands.
-var dialogPath = FCKConfig.PluginsPath + 'flvPlayer/flvPlayer.html';
-var flvPlayerDialogCmd = new FCKDialogCommand( FCKLang["DlgFLVPlayerTitle"], FCKLang["DlgFLVPlayerTitle"], dialogPath, 800, 560 );
-FCKCommands.RegisterCommand( 'flvPlayer', flvPlayerDialogCmd ) ;
+// Register the command.
+FCKCommands.RegisterCommand( 'flvPlayer',
+	new FCKDialogCommand( FCKLang['DlgFLVPlayerTitle'], FCKLang['DlgFLVPlayerTitle'],
+	FCKConfig.PluginsPath + 'flvPlayer/flvPlayer.html', 800, 570 )
+) ;
 
-// Create the Flash toolbar button.
-var oFlvPlayerItem		= new FCKToolbarButton( 'flvPlayer', FCKLang["DlgFLVPlayerTitle"]) ;
+// Create and register the toolbar button.
+var oFlvPlayerItem		= new FCKToolbarButton( 'flvPlayer', FCKLang['DlgFLVPlayerTitle']) ;
 oFlvPlayerItem.IconPath	= FCKPlugins.Items['flvPlayer'].Path + 'flvPlayer.gif' ;
-
 FCKToolbarItems.RegisterItem( 'flvPlayer', oFlvPlayerItem ) ;			
-// 'Flash' is the name used in the Toolbar config.
-

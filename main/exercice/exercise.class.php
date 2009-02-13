@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 18476 2009-02-12 20:44:00Z herodoto $
+* 	@version $Id: exercise.class.php 18487 2009-02-13 04:02:46Z ivantcholakov $
 */
 
 
@@ -821,10 +821,6 @@ class Exercise
 		$fck_attribute['Width'] 	= '100%'; 
 		$fck_attribute['Height'] 	= '200px';
 		$fck_attribute['ToolbarSet'] = 'TestDescription';		  
-		
-		$fck_attribute['Config']['InDocument'] = false;		
-		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';		
-		//$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
 
 		$form -> addElement ('html_editor', 'exerciseDescription', get_lang('ExerciseDescription'));		
 		

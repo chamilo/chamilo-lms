@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 18476 2009-02-12 20:44:00Z herodoto $
+<?php // $Id: question.class.php 18487 2009-02-13 04:02:46Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 18476 2009-02-12 20:44:00Z herodoto $
+* 	@version $Id: question.class.php 18487 2009-02-13 04:02:46Z ivantcholakov $
 */
 
 
@@ -997,12 +997,6 @@ abstract class Question
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '300';
 		$fck_attribute['ToolbarSet'] = 'QuestionDescription';
-		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
-		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
-		
-		$fck_attribute['Config']['InDocument'] = false;		
-		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-				 
 		
 		if(is_array($fck_config)){
 			$fck_attribute = array_merge($fck_attribute,$fck_config);

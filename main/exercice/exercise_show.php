@@ -905,9 +905,6 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 								$fck_attribute['Width'] = '400';
 								$fck_attribute['Height'] = '150';
 								$fck_attribute['ToolbarSet'] = 'CommentAnswers';
-								$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
-								$fck_attribute['Config']['InDocument'] = false;		
-								$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
 		
 								$$questionId = new FormValidator('frmcomments'.$questionId,'post','');
 								$renderer =& $$questionId->defaultRenderer();

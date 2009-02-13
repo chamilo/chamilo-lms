@@ -70,11 +70,6 @@ class MultipleAnswer extends Question {
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '100px';
 		$fck_attribute['ToolbarSet'] = 'Answer';
-		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
-		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
-		
-		$fck_attribute['Config']['InDocument'] = false;		
-		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
 		$fck_attribute['Config']['ToolbarStartExpanded']='false';
 			
 

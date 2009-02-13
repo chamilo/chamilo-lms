@@ -69,10 +69,7 @@ class UniqueAnswer extends Question {
 		$fck_attribute['Height'] = '125px';
 		
 		$fck_attribute['ToolbarSet'] = 'Answer';
-		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
-		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
-		$fck_attribute['Config']['InDocument'] = false;		
-		$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
+
 		// we collapse the fckeditor toolbar
 		$fck_attribute['Config']['ToolbarStartExpanded']='false';		
 		

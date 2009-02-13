@@ -417,6 +417,10 @@ class FCKeditor
 		// for links (any resource type)
 		$this->Config['LinkUploadURL'] = $this->BasePath . "editor/filemanager/upload/php/upload.php?Type=File&ServerPath=$upload_path" ;
 
+		// Passing user status related data to the editor.
+		$this->Config['UserIsCourseAdmin'] = api_is_allowed_to_edit() ? true : false;
+		$this->Config['UserIsPlatformAdmin'] = api_is_platform_admin() ? true : false;
+
 		// The mimetex plugin needs server OS dependent information.
 		if (defined('PHP_OS'))
 		{

@@ -1090,6 +1090,7 @@ FCK.IsRealImage = function ( tag )
 		&& !tag.getAttribute( '_fckvideo' )
 		&& !tag.getAttribute( 'MapNumber' )
 		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( '/cgi-bin/mimetex' ) >= 0 )
+		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( '/cgi-bin/mathtex' ) >= 0 )
 		) ? true : false ;
 } ;
 

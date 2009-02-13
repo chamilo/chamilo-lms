@@ -35,7 +35,36 @@ FCKConfig.ToolbarSets["Middle"] = [
 
 FCKConfig.ToolbarSets["Small"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','Flash','OrderedList','UnorderedList','Table']
+] ;//used by test ?
+////
+
+///// admin tools /////
+
+//Edit platform home page
+FCKConfig.ToolbarSets["EditHomePage"] = [
+	['NewPage','Templates','Save','Print','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],
+	['FontFormat','FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Source']
 ] ;
+
+//Insert or Edit a page link in platform home page
+FCKConfig.ToolbarSets["LinksHomePage"] = [
+	['NewPage','Templates','Save','Print','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],
+	['FontFormat','FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Source']
+] ;
+
+///// users tools /////
 
 FCKConfig.ToolbarSets["Profil"] = [
 	['FitWindow','PasteWord','Undo','Redo'],
@@ -48,6 +77,8 @@ FCKConfig.ToolbarSets["Messages"] = [
 	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
 	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','Source']
 ] ;
+
+///// course tools /////
 
 //Course introduction
 FCKConfig.ToolbarSets["Introduction"] = [

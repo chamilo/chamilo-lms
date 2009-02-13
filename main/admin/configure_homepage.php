@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 18298 2009-02-06 20:54:11Z juliomontoya $
+<?php // $Id: configure_homepage.php 18495 2009-02-13 19:03:28Z herodoto $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -679,7 +679,7 @@ switch($action){
 			Display::display_normal_message($errorMsg); //main API
 		}
 
-		$fck_attribute['ToolbarSet'] = "Small";
+		$fck_attribute['ToolbarSet'] = "LinksHomePage";
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '400';
 
@@ -724,7 +724,6 @@ switch($action){
 		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://'))
 		{
 			$form->addElement('html', '</table><table border="0" cellpadding="5" cellspacing="0" width="100%"><tr><td>');
-			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 			$form->addElement('html', '</td></tr><tr><td>');
 			if (api_get_setting('wcag_anysurfer_public_pages')=='true')
 			{
@@ -771,7 +770,7 @@ switch($action){
 			Display::display_normal_message($errorMsg); //main API
 		}
 
-		$fck_attribute['ToolbarSet'] = "Full";
+		$fck_attribute['ToolbarSet'] = "EditHomePage";
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '400';
 
@@ -783,7 +782,7 @@ switch($action){
 		$renderer->setElementTemplate('<tr><td>{element}</td></tr>');
 		$renderer->setRequiredNoteTemplate('');
 		$form->addElement('hidden', 'formSent', '1');
-		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+		
 		if($action == 'edit_news'){
 			$_languages=api_get_languages();
 			$html = '<tr><td>'.get_lang('ChooseNewsLanguage').' : ';

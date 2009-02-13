@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18449 2009-02-11 21:16:29Z juliomontoya $
+<?php // $Id: profile.php 18499 2009-02-13 20:57:29Z herodoto $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -129,8 +129,9 @@ if ($user_data !== false)
 }
 
 $user_image = UserManager::get_user_picture_path_by_id(api_get_user_id(),'none');
-$fck_attribute['Height'] = "150";
+
 $fck_attribute['Width'] = "100%";
+$fck_attribute['Height'] = "150";
 $fck_attribute['ToolbarSet'] = "Profil";
 
 /*

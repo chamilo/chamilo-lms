@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 18412 2009-02-10 18:00:32Z iflorespaz $
+<?php // $Id: new_message.php 18499 2009-02-13 20:57:29Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -99,9 +99,10 @@ $(document).ready(function (){
 });
 	</script>';	
 $nameTools = get_lang('ComposeMessage');
+
+$fck_attribute['Width'] = "100%";
 $fck_attribute['Height'] = "150";
-$fck_attribute['Width'] = "95%";
-$fck_attribute['ToolbarSet'] = "Profil";
+$fck_attribute['ToolbarSet'] = "Messages";
 /*
 ==============================================================================
 		FUNCTIONS

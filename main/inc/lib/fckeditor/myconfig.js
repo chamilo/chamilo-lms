@@ -90,16 +90,27 @@ FCKConfig.ToolbarSets["GlobalAgenda"] = [
 
 ///// users tools /////
 
+//My Profile (Optional fields)
 FCKConfig.ToolbarSets["Profil"] = [
-	['FitWindow','PasteWord','Undo','Redo'],
-	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
-	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','Source']
+	['FitWindow','-','PasteWord','-','Undo','Redo','-','RemoveFormat'],							   
+	['Link','Unlink','Anchor'],
+	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','Smiley'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline'],
+	['JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['Source']
 ] ;
 
+//Messages
 FCKConfig.ToolbarSets["Messages"] = [
-	['FitWindow','PasteWord','Undo','Redo'],
-	['Link','Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','Table','googlemaps'],
-	['Bold','Italic','Underline','OrderedList','UnorderedList','TextColor','-','Source']
+	['FitWindow','PasteText','Undo','Redo'],
+	['Link','Unlink'],
+	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','Smiley','googlemaps'],
+	['Bold','Italic','Underline'],
+	['OrderedList','UnorderedList','-','Blockquote','-','TextColor'],
+	['ShowBlocks']
 ] ;
 
 ///// course tools /////

@@ -79,9 +79,9 @@ echo '</div>';
 if (isset($_GET['action']) && $_GET['action'] == 'addnote') 
 {
 	// initiate the object
+	api_display_tool_title(get_lang('NoteAddNew'));	
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
-	// settting the form elements
-	$form->addElement('header', '', get_lang('NoteAddNew'));
+	// settting the form elements	
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'));
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('Save'), 'class="save"');	
@@ -97,6 +97,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 		{
 	   		$values = $form->exportValues();
 	   		save_note($values);
+	   		display_notes();
 		}
 		Security::clear_token();
 	} 
@@ -110,12 +111,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 }
 
 // Action handling: Editing a note
-if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET['notebook_id'])) 
+else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET['notebook_id'])) 
 {
+	api_display_tool_title(get_lang('NoteEdit'));	
 	// initiate the object
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.Security::remove_XSS($_GET['notebook_id']));
-	// settting the form elements
-	$form->addElement('header', '', get_lang('NoteEdit'));
+	// settting the form elements	
 	$form->addElement('hidden', 'notebook_id');
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'));
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
@@ -135,7 +136,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET[
 		if ($check) 
 		{
 	   		$values = $form->exportValues();
-	   		update_note($values);
+	   		update_note($values);	
+	   		display_notes();   			   		
 		}
 		Security::clear_token();
 	} 
@@ -149,18 +151,21 @@ if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET[
 }
 
 // Action handling: deleting a note
-if (isset($_GET['action']) && $_GET['action'] == 'deletenote' && is_numeric($_GET['notebook_id'])) 
+else if (isset($_GET['action']) && $_GET['action'] == 'deletenote' && is_numeric($_GET['notebook_id'])) 
 {
 	delete_note(Security::remove_XSS($_GET['notebook_id']));
+	display_notes();
 }
 
 // Action handling: changing the view (sorting order)
-if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('creation_date','update_date', 'title')))
+else if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('creation_date','update_date', 'title')))
 {
 	$_SESSION['notebook_view'] = $_GET['view']; 
+	display_notes();
+} else {
+	display_notes();
 }
 
-display_notes();
 
 // footer
 Display::display_footer();
@@ -286,10 +291,10 @@ function display_notes()
 	while ($row = Database::fetch_array($result))
 	{
 		echo '<div class="sectiontitle">';
-		echo '<span style="float: right;"> ('.get_lang('CreationDate').': '.$row['creation_date'];
+		echo '<span style="float: right;"> ('.get_lang('CreationDate').': '.date_to_str_ago($row['creation_date']).'&nbsp;&nbsp;<span class="dropbox_date">'.$row['creation_date'].'</span>';
 		if ($row['update_date'] <> '0000-00-00 00:00:00')
 		{
-			echo ', '.get_lang('UpdateDate').': '.$row['update_date'];
+			echo ', '.get_lang('UpdateDate').': '.date_to_str_ago($row['update_date']).'&nbsp;&nbsp;<span class="dropbox_date">'.$row['update_date'].'</span>';
 		}
 		echo ')</span>';
 		echo $row['title'];

@@ -61,16 +61,20 @@ echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.Dis
 echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.Display::return_icon('view_table.gif',get_lang('TableView')).get_lang('TableView').'</a>';
 echo '</div>';
 
+if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('list','table')))
+{
+	$_SESSION['glossary_view'] = $_GET['view']; 
+}
 
 if (api_is_allowed_to_edit())
 {
 	// Adding a glossary
 	if (isset($_GET['action']) && $_GET['action'] == 'addglossary') 
 	{
+		api_display_tool_title(get_lang('TermAddNew'));
 		// initiate the object
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
-		// settting the form elements
-		$form->addElement('header', '', get_lang('TermAddNew'));
+		// settting the form elements		
 		$form->addElement('text', 'glossary_title', get_lang('TermName'));
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="add"');	
@@ -86,6 +90,7 @@ if (api_is_allowed_to_edit())
 			{
 		   		$values = $form->exportValues();
 		   		save_glossary($values);
+		   		display_glossary();
 			}
 			Security::clear_token();
 		} 
@@ -99,12 +104,12 @@ if (api_is_allowed_to_edit())
 	}
 	
 	// Editing a glossary
-	if (isset($_GET['action']) && $_GET['action'] == 'edit_glossary' && is_numeric($_GET['glossary_id'])) 
+	else if (isset($_GET['action']) && $_GET['action'] == 'edit_glossary' && is_numeric($_GET['glossary_id'])) 
 	{
+		api_display_tool_title(get_lang('TermEdit'));
 		// initiate the object
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&glossary_id='.Security::remove_XSS($_GET['glossary_id']));
-		// settting the form elements
-		$form->addElement('header', '', get_lang('TermEdit'));
+		// settting the form elements		
 		$form->addElement('hidden', 'glossary_id');
 		$form->addElement('text', 'glossary_title', get_lang('TermName'));
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
@@ -125,6 +130,7 @@ if (api_is_allowed_to_edit())
 			{
 		   		$values = $form->exportValues();
 		   		update_glossary($values);
+		   		display_glossary();
 			}
 			Security::clear_token();
 		} 
@@ -138,31 +144,30 @@ if (api_is_allowed_to_edit())
 	}
 
 	// deleting a glossary
-	if (isset($_GET['action']) && $_GET['action'] == 'delete_glossary' && is_numeric($_GET['glossary_id'])) 
+	else if (isset($_GET['action']) && $_GET['action'] == 'delete_glossary' && is_numeric($_GET['glossary_id'])) 
 	{
 		delete_glossary(Security::remove_XSS($_GET['glossary_id']));
+		display_glossary();
 	}
 	
 	// moving a glossary term up
-	if (isset($_GET['action']) && $_GET['action'] == 'moveup' && is_numeric($_GET['glossary_id'])) 
+	else if (isset($_GET['action']) && $_GET['action'] == 'moveup' && is_numeric($_GET['glossary_id'])) 
 	{
 		move_glossary('up',$_GET['glossary_id']);
+		display_glossary();
 	}
 	// moving a glossary term up
-	if (isset($_GET['action']) && $_GET['action'] == 'movedown' && is_numeric($_GET['glossary_id'])) 
+	else if (isset($_GET['action']) && $_GET['action'] == 'movedown' && is_numeric($_GET['glossary_id'])) 
 	{
 		move_glossary('down',$_GET['glossary_id']);
+		display_glossary();
+	} else {
+		display_glossary();
 	}	
+} else {
+	display_glossary();
 }
 
-if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('list','table')))
-{
-	$_SESSION['glossary_view'] = $_GET['view']; 
-}
-
-
-
-display_glossary();
 
 // footer
 Display::display_footer();
@@ -482,7 +487,7 @@ function actions_filter($glossary_id,$url_params,$row)
 		}
 		else
 		{
-			$return .= Display::return_icon('blanco.png');
+			$return .= Display::return_icon('up_na.gif');
 			
 		}
 		if ($row[0] < $_SESSION['max_glossary_display'])
@@ -491,7 +496,7 @@ function actions_filter($glossary_id,$url_params,$row)
 		}
 		else
 		{
-			$return .= Display::return_icon('blanco.png');
+			$return .= Display::return_icon('down_na.gif');
 			
 		}	
 	}

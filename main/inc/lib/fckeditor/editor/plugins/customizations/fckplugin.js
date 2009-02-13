@@ -544,7 +544,9 @@ FCKToolbarItems.GetItem = function( itemName )
 		case 'ShowBlocks'		: oItem = new FCKToolbarButton( 'ShowBlocks'	, FCKLang.ShowBlocks, null, null, null, true, 72 ) ; break ;
 
 		default:
-			alert( FCKLang.UnknownToolbarItem.replace( /%1/g, itemName ) ) ;
+			// Customization: We want to suppress this alarm in order to be
+			// able to turn off plugins without need to modify defined toolbars.
+			//alert( FCKLang.UnknownToolbarItem.replace( /%1/g, itemName ) ) ;
 			return null ;
 	}
 

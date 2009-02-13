@@ -608,7 +608,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 			@chmod('../garbage',$perm);
 		}
 
-		if(!is_writable('../upload'))
+		if(!is_writable('../upload/users'))
 		{
 			$notwritable[] = realpath($curdir.'/../upload/users');
 			@chmod('../upload/users', $perm);

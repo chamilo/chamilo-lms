@@ -256,10 +256,10 @@ if (empty($_GET['origin']) or $_GET['origin']!='learnpath')
 	echo '<td width="20" background="../img/verticalruler.gif">&nbsp;</td>';
 }
 
-
-$fck_attribute['Width'] = '600';
-$fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'Middle';
+//TODO: check for delete this code
+//$fck_attribute['Width'] = '600';
+//$fck_attribute['Height'] = '400';
+//$fck_attribute['ToolbarSet'] = 'Middle';
 
 
 // THE RIGHT PART

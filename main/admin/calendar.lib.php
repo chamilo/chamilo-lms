@@ -1563,9 +1563,9 @@ function show_add_form($id = '')
 
 			$oFCKeditor = new FCKeditor('content') ;
 
-			$oFCKeditor->ToolbarSet = 'Agenda';
-			$oFCKeditor->Height		= '175';
+			$oFCKeditor->ToolbarSet = 'GlobalAgenda';		
 			$oFCKeditor->Width		= '100%';
+			$oFCKeditor->Height		= '175';
 			$oFCKeditor->Value		= $content;
 
 			$return =	$oFCKeditor->CreateHtml();

@@ -76,6 +76,18 @@ FCKConfig.ToolbarSets["SystemAnnouncements"] = [
 	['Source']
 ] ;
 
+//Global Agenda
+FCKConfig.ToolbarSets["GlobalAgenda"] = [
+	['FitWindow','-','PasteWord','-','Undo','Redo','RemoveFormat'],
+	['Link','Unlink'],
+	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','SpecialChar','googlemaps'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['Source']
+] ;
+
 ///// users tools /////
 
 FCKConfig.ToolbarSets["Profil"] = [

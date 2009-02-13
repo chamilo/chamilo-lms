@@ -64,6 +64,18 @@ FCKConfig.ToolbarSets["LinksHomePage"] = [
 	['Source']
 ] ;
 
+//System Announcements
+FCKConfig.ToolbarSets["SystemAnnouncements"] = [
+	['NewPage','Preview','FitWindow','-','PasteText','-','Undo','Redo','-','SelectAll','RemoveFormat'],
+	['Link','Unlink','Anchor'],
+	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','Rule','Smiley','SpecialChar'],
+	['FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['Source']
+] ;
+
 ///// users tools /////
 
 FCKConfig.ToolbarSets["Profil"] = [

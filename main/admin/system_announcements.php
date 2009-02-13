@@ -1,4 +1,4 @@
-<?php // $Id: system_announcements.php 18119 2009-02-01 16:24:32Z ivantcholakov $
+<?php // $Id: system_announcements.php 18496 2009-02-13 19:26:51Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -173,9 +173,9 @@ if ($action_todo)
 		$language_list_with_keys[$language_list['folder'][$i]] = $language_list['name'][$i];
 	}
 
-	$fck_attribute['Width'] = '600';
+	$fck_attribute['Width'] = '100%';
 	$fck_attribute['Height'] = '400';
-	$fck_attribute['ToolbarSet'] = 'Middle'; 
+	$fck_attribute['ToolbarSet'] = 'SystemAnnouncements';
 	
 	$form->addElement('select', 'lang',get_lang('Language'),$language_list_with_keys);
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {

@@ -72,21 +72,18 @@ foreach ($rows as $row) {
 	
 	$userinf=api_get_user_info($row['user_id']);
 	$user_status=api_get_status_of_user_in_course($row['user_id'],api_get_course_id());
-	if (api_is_course_tutor() && api_is_course_admin()) {// (api_is_course_tutor() && !api_is_course_admin() )
-			$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$row['poster_id'],$_GET['thread']);
-			if( isset($_GET['gradebook'])){
-				if ($increment>0 && $user_status!=1 ) {
-					$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-					echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".$_GET['gradebook']."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
-				 }
-			} else {
-				if ($increment>0 && $user_status!=1 ) {
-					echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";				
-				}
-			}		
-	}
+	$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$row['poster_id'],$_GET['thread']);
+	if( isset($_GET['gradebook'])){
+		if ($increment>0 && $user_status!=1 ) {
+			$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".$_GET['gradebook']."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
+		 }
+	} else {
+		if ($increment>0 && $user_status!=1 ) {
+			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";				
+		}
+	}		
 	echo '<br /><br />';
-	//if (($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0) OR api_is_allowed_to_edit())
 	if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
 			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$row['post_id'].'&amp;action=replymessage&origin='.$origin.'">'.get_lang('ReplyToMessage').'</a><br />';

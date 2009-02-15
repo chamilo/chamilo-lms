@@ -193,6 +193,23 @@ oIcons.GetIcon = function( fileName )
 {
 	var sExtension = fileName.substr( fileName.lastIndexOf('.') + 1 ).toLowerCase() ;
 
+	switch ( sExtension )
+	{
+		case 'flv' :
+		case 'mpg' :
+		case 'mpeg' :
+		case 'mp4' :
+		case 'mov' :
+		case 'wmv' :
+		case 'asf' :
+			sExtension = 'avi' ;
+			break ;
+
+		case 'jpeg' :
+			sExtension = 'jpg' ;
+			break ;
+	}
+
 	if ( this.AvailableIcons[ sExtension ] == true )
 		return sExtension ;
 	else

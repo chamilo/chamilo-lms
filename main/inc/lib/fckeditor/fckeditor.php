@@ -421,7 +421,16 @@ class FCKeditor
 		$this->Config['UserIsCourseAdmin'] = api_is_allowed_to_edit() ? true : false;
 		$this->Config['UserIsPlatformAdmin'] = api_is_platform_admin() ? true : false;
 
-		// The mimetex plugin needs server OS dependent information.
+
+		// The MimeTeX plugin support.
+
+		$check_mimetex_installed = true; // Change to false in case of unexpected problems.
+		//---------------------------------------------------------------------------------
+
+    static $is_mimetex_installed = null;
+		$server_base = explode('/', api_get_path(WEB_PATH));
+		//$server_base = $server_base[0].'/'.$server_base[1].'/'.$server_base[2].'/'; // Problematic on Windows Vista.
+		$server_base = $server_base[0].'/'.$server_base[1].'/127.0.0.1/';
 		if (defined('PHP_OS'))
 		{
 			$os = PHP_OS;
@@ -432,8 +441,29 @@ class FCKeditor
 		}
 		if (strtoupper(substr($os, 0, 3 )) === 'WIN')
 		{
-			$this->Config['MimetexOption'] = true ;
+			$this->Config['MimetexUrl'] = $server_base.'cgi-bin/mimetex.exe';
 		}
+		else
+		{
+			$this->Config['MimetexUrl'] = $server_base.'cgi-bin/mimetex.cgi';
+		}
+		if ($check_mimetex_installed)
+		{
+			if (!isset($is_mimetex_installed))
+			{
+				$this->Config['IsMimetexInstalled'] = $this->url_exists($this->Config['MimetexUrl'].'?'.rand(), 0.05);
+			}
+			else
+			{
+				$this->Config['IsMimetexInstalled'] = $is_mimetex_installed;
+			}
+		}
+		else
+		{
+			$this->Config['IsMimetexInstalled'] = true;
+		}
+		$is_mimetex_installed = $this->Config['IsMimetexInstalled'];
+
 
 		/*
 		 * The original code starts from here.
@@ -519,6 +549,45 @@ class FCKeditor
 		}
 
 		return $sParams ;
+	}
+
+	/*
+	 * Checks whether a given url exists.
+	 * 
+	 * @url string
+	 * @return boolean
+	 * 
+	 * @author Ivan Tcholakov, FEB-2009
+	 */
+
+	private function url_exists($url, $timeout = 30)
+	{
+		$parsed = parse_url($url);
+		$scheme = isset($parsed['scheme']) ? $parsed['scheme'] : 'http';
+		$host = $parsed['host'];
+		$port = isset($parsed['port']) ? $parsed['port'] : ($scheme == 'http' ? 80 : ($scheme == 'https' ? 443 : -1 ));
+
+		$file_exists = false;
+		$fp = @fsockopen($host, $port, $errno, $errstr, $timeout);
+		if ($fp)
+		{
+			$request = "HEAD ".$url." / HTTP/1.1\r\n";
+			$request .= "Host: ".$host."\r\n";
+			$request .= "Connection: Close\r\n\r\n";
+
+			@fwrite($fp, $request);
+			while (!@feof($fp))
+			{
+				$header = @fgets($fp, 128);
+				if(@preg_match('#HTTP/1.1 200 OK#', $header))
+				{
+					$file_exists = true;
+					break;
+				}
+			}
+		}
+		@fclose($fp);
+		return $file_exists;
 	}
 
 	/**

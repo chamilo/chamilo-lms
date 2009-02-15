@@ -1,7 +1,11 @@
-<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Author Dirk Datzert 2007
-	Patches and improvements by Juan Carlos Raña Trabado 2008 -->
+	Patches and improvements by Juan Carlos Raña Trabado 2008 and Ivan Tcholakov 2009 -->
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="robots" content="noindex, nofollow" />
+		<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
 		<script type="text/javascript" src="jquery.js"></script>
 		<script type="text/javascript">
 
@@ -9,20 +13,54 @@ var oEditor = window.parent.InnerDialogLoaded() ;
 var FCKLang = oEditor.FCKLang ;
 var FCK = oEditor.FCK ;
 var FCKConfig = oEditor.FCKConfig ;
+var FCKTools = oEditor.FCKTools ;
+var FCKBrowserInfo = oEditor.FCKBrowserInfo ;
 
-// Choosing the rigiht mimetex_url.
-var mimetex_url = "/cgi-bin/mimetex.cgi" ;
-if ( FCKConfig.MimetexOption )
-{
-	mimetex_url = "/cgi-bin/mimetex.exe" ;
-}
+//Set the language direction.
+window.document.dir = FCKLang.Dir ;
 
+// Initialization of the URLs to be used.
+var mimetex_url = FCKConfig.MimetexUrl ;
 var mimetex_cgi = mimetex_url + "? \\Large " ;
 var preview_cgi = mimetex_cgi + "\\nocach " ;
 var result_cgi  = mimetex_cgi ;
 var img_tag = true ;
 
 // FCKEditor
+
+// We have to avoid javascript errors if some language variables have not been defined. 
+FCKLang['DlgMimeTeXSymbols'] = FCKLang['DlgMimeTeXSymbols'] ? FCKLang['DlgMimeTeXSymbols'] : 'Symbols' ;
+FCKLang['DlgMimeTeXCalendar'] = FCKLang['DlgMimeTeXCalendar'] ? FCKLang['DlgMimeTeXCalendar'] : 'Calendar' ;
+FCKLang['DlgMimeTeXNumeric'] = FCKLang['DlgMimeTeXNumeric'] ? FCKLang['DlgMimeTeXNumeric'] : 'Numeric' ;
+FCKLang['DlgMimeTeXLowerGreeks'] = FCKLang['DlgMimeTeXLowerGreeks'] ? FCKLang['DlgMimeTeXLowerGreeks'] : 'Lower Greeks' ;
+FCKLang['DlgMimeTeXUpperGreeks'] = FCKLang['DlgMimeTeXUpperGreeks'] ? FCKLang['DlgMimeTeXUpperGreeks'] : 'Upper Greeks' ;
+FCKLang['DlgMimeTeXOperators'] = FCKLang['DlgMimeTeXOperators'] ? FCKLang['DlgMimeTeXOperators'] : 'Operators' ;
+FCKLang['DlgMimeTeXFunctions'] = FCKLang['DlgMimeTeXFunctions'] ? FCKLang['DlgMimeTeXFunctions'] : 'Functions' ;
+FCKLang['DlgMimeTeXTrigonometry'] = FCKLang['DlgMimeTeXTrigonometry'] ? FCKLang['DlgMimeTeXTrigonometry'] : 'Trigonometry' ;
+FCKLang['DlgMimeTeXAnalysis'] = FCKLang['DlgMimeTeXAnalysis'] ? FCKLang['DlgMimeTeXAnalysis'] : 'Analysis' ;
+FCKLang['DlgMimeTeXMoreSamples'] = FCKLang['DlgMimeTeXMoreSamples'] ? FCKLang['DlgMimeTeXMoreSamples'] : 'More Samples' ;
+
+switch ( oEditor.FCKLanguageManager.DefaultLanguage )
+{
+	case 'es' :
+		istallation_file_name = 'installation_guide_es_ES.html' ;
+		break ;
+	default :
+		istallation_file_name = 'installation_guide.html' ;
+		break ;
+}
+
+FCKLang['DlgMimeTeXSeeInstallationManual'] = FCKLang['DlgMimeTeXSeeInstallationManual'] 
+	? FCKLang['DlgMimeTeXSeeInstallationManual'] : 'To resolve the problem, see the Dokeos LMS %1installation guide%2.' ;
+if ( FCKConfig['UserIsPlatformAdmin'] || FCKConfig['UserIsCourseAdmin'] )
+{
+	FCKLang['DlgMimeTeXSeeInstallationManual'] = FCKLang['DlgMimeTeXSeeInstallationManual'].replace( /%1/g,
+		'<a href="../../../../../../../documentation/' + istallation_file_name + '#9._Mathematical_formulas" target="_blank">' ).replace( /%2/g, '<\/a>' ) ;
+}
+else
+{
+	FCKLang['DlgMimeTeXSeeInstallationManual'] = FCKLang['DlgMimeTeXSeeInstallationManual'].replace( /%1/g, '' ).replace( /%2/g, '' ) ;
+}
 
 // look for a MATH-tag
 var eSelected = FCK.Selection.MoveToAncestorNode( 'MATH' ) ;
@@ -117,7 +155,7 @@ function appendHelper( expr, alt )
 	add_expr = expr.replace( /\\/g, "\\\\" ) ;
 	src_expr = mimetex_cgi + expr ;
 
-	$( "#helpers/div:last/p:last" ).append( "<img class=helper title='" + alt + "' alt='" + alt + "' onMouseOver='cursorHand(this)' onMouseOut='cursorDefault(this)' onClick='javascript: addFormula( \"" + add_expr + "\" ) ;' src='" + src_expr + "'>" ) ;
+	$( "#helpers/div:last/p:last" ).append( "<img class=helper title='" + alt + "' alt='" + alt + "' onMouseOver='javascript: cursorHand(this);' onMouseOut='javascript: cursorDefault(this);' onClick='javascript: addFormula( \"" + add_expr + "\" ) ;' src='" + src_expr + "'>" ) ;
 }
 
 function htmlHelper( html )
@@ -132,6 +170,22 @@ function addHelper( id, title )
 
 // Init helper on document ready
 $(function () {
+
+		// FCKEditor
+
+		// First of all, translate the dialog box texts
+		oEditor.FCKLanguageManager.TranslatePage( document ) ;
+
+		if ( !FCKConfig.IsMimetexInstalled )
+		{
+			ShowE( 'content', false ) ;
+			ShowE( 'mimetex_error_message', true ) ;
+			return ;
+		}
+
+		ShowE( 'content', true ) ;
+
+		// End FCKEditor
 
 		////jc
 		addHelper( "symbols1", FCKLang["DlgMimeTeXSymbols"] + " 1" ) ;
@@ -158,10 +212,10 @@ $(function () {
 		appendHelper( "\\supseteq", "supseteq" ) ;
 		appendHelper( "\\leq", "leq" ) ;
 		appendHelper( "\\geq", "geq" ) ;
-		appendHelper( "\\preceq", "preceq" ) ;		
+		appendHelper( "\\preceq", "preceq" ) ;
 		appendHelper( "\\succeq", "succeq" ) ;
 		appendHelper( "\\sim", "sim" ) ;
-		appendHelper( "\\approx", "approx" ) ;		
+		appendHelper( "\\approx", "approx" ) ;
 		appendHelper( "\\subset", "subset" ) ;
 		appendHelper( "\\supset", "supset" ) ;
 		appendHelper( "\\ll", "ll" ) ;
@@ -294,19 +348,20 @@ $(function () {
 		var al_u = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ;
 		var num  = "0123456789" ;
 		var alnum = al_u + num ;
-		for ( var i in alnum ) 
+
+		for ( var i = 0, n = alnum.length ; i < n ; i++ ) 
 		{
-			appendHelper( "\\mathbb{" + alnum[i] + "}", "math bold " + alnum[i] ) ;
+			appendHelper( "\\mathbb{" + alnum.substr( i, 1 ) + "}", "math bold " + alnum.substr( i, 1 ) ) ;
 		}
 		htmlHelper( "<br />" ) ;
-		for ( var i in al_u ) 
+		for ( var i = 0, n = al_u.length ; i < n ; i++ ) 
 		{
-			appendHelper( "\\mathcal{" + alnum[i] + "}", "math cal " + alnum[i] ) ;
+			appendHelper( "\\mathcal{" + al_u.substr( i, 1 ) + "}", "math cal " + al_u.substr( i, 1 ) ) ;
 		}
 		htmlHelper( "<br />" ) ;
-		for ( var i in al_u ) 
+		for ( var i = 0, n = al_u.length ; i < n ; i++ ) 
 		{
-			appendHelper( "\\mathfrak{" + alnum[i] + "}", "math frak " + alnum[i] ) ;
+			appendHelper( "\\mathfrak{" + al_u.substr( i, 1 ) + "}", "math frak " + al_u.substr( i, 1 ) ) ;
 		}
 
 		addHelper( "lowergreek", FCKLang["DlgMimeTeXLowerGreeks"] ) ;
@@ -410,17 +465,16 @@ $(function () {
 				$(this).find('p').fadeOut('fast' ) ;
 			} ) ;
 
-		// FCKEditor 
-
-		// First of all, translate the dialog box texts
-		oEditor.FCKLanguageManager.TranslatePage( document ) ;
+		// FCKEditor
 
 		LoadSelected() ;
 
 		// Show the "Ok" button.
 		window.parent.SetOkButton( true ) ;
 
-		// End FCKEditor 
+		SelectField( 'formula' ) ;
+
+		// End FCKEditor
     } ) ;
 
 
@@ -458,7 +512,7 @@ function Ok()
 		FCK.Focus() ;
 		if ( eSelected )
 		{
-				FCK.Selection.SelectNode( eSelected ) ;
+			FCK.Selection.SelectNode( eSelected ) ;
 		}
 
 		if ( img_tag )
@@ -479,13 +533,18 @@ function Ok()
 // End FCKEditor
 
 		</script>
+
+		<script type="text/javascript">
+document.write( FCKTools.GetStyleHtml( GetCommonDialogCss() ) ) ;
+		</script>
+
 		<!--solved a problem with iexplorer 7 by jc -->
 		<style type="text/css">
 div.helpers
 {
 	position: absolute;
-	max-width: 290px; 
-	width:expression(document.body.clientWidth > 290? "290px": "auto" );
+	max-width: 360px; 
+	width:expression(document.body.clientWidth > 360? "360px": "auto" );
 	overflow:auto;
 }
 li.helpers 
@@ -509,29 +568,46 @@ li.helpers
 .formula
 {
 	position: absolute;
-	left: 300px;
+	left: 375px;
+}
+#mimetex_error_message
+{
+	font-size: 13px;
 }
 		</style>
 	</head>
 	<body>
-		<div id="content">
+		<div id="content" style="display: none;">
 			<div class="helpers">
 				<b><span fckLang="DlgMimeTeXHelpers">Helpers:</span></b>
 				<div id="helpers">
 				</div>
 			</div>
 			<div class="formula">
+				<div style="margin-top: 0px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px; padding: 0px;">
 				<b><span fckLang="DlgMimeTeXFormula">Formula:</span></b>
+				</div>
+				<div  style="margin: 0px; padding: 0px;">
 				<form name="pastemath" id="pastemath">
-					<textarea id="formula" name="formula" cols="60" rows="8" onKeyUp="formulaPreview()"></textarea>
+					<textarea id="formula" name="formula" cols="60" rows="8" onKeyUp="javascript: formulaPreview();" style="width: 370px;"></textarea>
 				</form>
-				<div align="right"><a href="http://www.forkosh.com/mimetex.html" title="Manual" target="_blank" style="left:auto"><span fckLang="DlgMimeTeXManual">Manual</span></a></div>
+				</div>
+				<div align="right"><a href="http://www.forkosh.com/mimetex.html" target="_blank" style="left:auto"><span fckLang="DlgMimeTeXManual">Manual</span></a></div>
 				<div id="preview" class=off>
+					<div style="margin-top: 0px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px; padding: 0px;">
 					<b><span fckLang="DlgMimeTeXPreview">Preview:</span></b>
-					<br />
+					</div>
+					<div style="margin: 0px; padding: 0px;">
 					<img src="" alt="Image" name="formula_preview" id="formula_preview" align="middle"/>
+					</div>
 				</div>
 			</div>
+		</div>
+		<div id="mimetex_error_message" style="display: none; text-align: center; padding-top: 100px;">
+			<p><span fckLang="DlgMimeTeXEditorNotAvailable">The math formula editor is not available.</span></p>
+			<p><span fckLang="DlgMimeTeXNotInstalled">A software service (MimeTeX) has not been installed on your server or it is not accessible.</span></p>
+			<p><span fckLang="DlgMimeTeXSeeInstallationManual">To resolve the problem, see the Dokeos LMS installation guide.</span></p>
+			<p><a href="http://www.forkosh.com/mimetex.html" target="_blank"><span fckLang="DlgMimeTeXManual">Manual</span></a></p>
 		</div>
 	</body>
 </html>

@@ -23,7 +23,7 @@ FCKLang["DlgMimeTeXPreview"]      = "Преглед на формулата:" ;
 FCKLang["DlgMimeTeXHelpers"]      = "Примери:" ;
 FCKLang["DlgMimeTeXSymbols"]      = "Символи" ;
 FCKLang["DlgMimeTeXCalendar"]     = "Календар" ;
-FCKLang["DlgMimeTeXNumeric"]      = "Числа" ;
+FCKLang["DlgMimeTeXNumeric"]      = "Множества" ;
 FCKLang["DlgMimeTeXLowerGreeks"]  = "Малки гръцки букви" ;
 FCKLang["DlgMimeTeXUpperGreeks"]  = "Главни гръцки букви" ;
 FCKLang["DlgMimeTeXOperators"]    = "Оператори" ;
@@ -31,4 +31,7 @@ FCKLang["DlgMimeTeXFunctions"]    = "Функции" ;
 FCKLang["DlgMimeTeXTrigonometry"] = "Тригонометрия" ;
 FCKLang["DlgMimeTeXAnalysis"]     = "Математически анализ" ;
 FCKLang["DlgMimeTeXMoreSamples"]  = "Други примери" ;
+FCKLang["DlgMimeTeXEditorNotAvailable"] = "Редакторът за математически формули не може да се използва." ;
+FCKLang["DlgMimeTeXNotInstalled"] = "Софтуерната услуга MimeTeX не е инсталирана на сървъра или не работи." ;
+FCKLang["DlgMimeTeXSeeInstallationManual"] = "За да решите проблема, вижте %1ръководството за инсталиране%2 на системата Dokeos." ;
 

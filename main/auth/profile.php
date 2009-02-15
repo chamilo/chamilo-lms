@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18499 2009-02-13 20:57:29Z herodoto $
+<?php // $Id: profile.php 18508 2009-02-15 04:37:02Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -65,7 +65,7 @@ function generate_open_id_form() {
 		data: "num_key_id="+"",
 		success: function(datos) {
 		 $("#div_api_key").html(datos);
-		},
+		}
 	});
 }
 </script>';

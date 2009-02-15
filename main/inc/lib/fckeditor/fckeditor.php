@@ -424,13 +424,14 @@ class FCKeditor
 
 		// The MimeTeX plugin support.
 
-		$check_mimetex_installed = true; // Change to false in case of unexpected problems.
-		//---------------------------------------------------------------------------------
+		$check_mimetex_installed = true; // Change to false in case of unexpected problems. The installed state will be assumed.
+		$check_mimetex_timeout = 0.05; // In seconds. Keep this value as low as possible on Windows servers.
+		//----------------------------------------------------------------------------------------------------------------------
 
     static $is_mimetex_installed = null;
 		$server_base = explode('/', api_get_path(WEB_PATH));
-		//$server_base = $server_base[0].'/'.$server_base[1].'/'.$server_base[2].'/'; // Problematic on Windows Vista.
-		$server_base = $server_base[0].'/'.$server_base[1].'/127.0.0.1/';
+		$server_base_ip = $server_base[0].'/'.$server_base[1].'/127.0.0.1/'; // To avoid problems on Windows Vista.
+		$server_base = $server_base[0].'/'.$server_base[1].'/'.$server_base[2].'/';
 		if (defined('PHP_OS'))
 		{
 			$os = PHP_OS;
@@ -442,16 +443,18 @@ class FCKeditor
 		if (strtoupper(substr($os, 0, 3 )) === 'WIN')
 		{
 			$this->Config['MimetexUrl'] = $server_base.'cgi-bin/mimetex.exe';
+			$check_mimetex_url = $server_base_ip.'cgi-bin/mimetex.exe';
 		}
 		else
 		{
 			$this->Config['MimetexUrl'] = $server_base.'cgi-bin/mimetex.cgi';
+			$check_mimetex_url = $server_base_ip.'cgi-bin/mimetex.cgi';
 		}
 		if ($check_mimetex_installed)
 		{
 			if (!isset($is_mimetex_installed))
 			{
-				$this->Config['IsMimetexInstalled'] = $this->url_exists($this->Config['MimetexUrl'].'?'.rand(), 0.05);
+				$this->Config['IsMimetexInstalled'] = $this->url_exists($check_mimetex_url.'?'.rand(), $check_mimetex_timeout);
 			}
 			else
 			{

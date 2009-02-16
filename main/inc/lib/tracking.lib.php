@@ -308,10 +308,7 @@ class Tracking {
 		$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		
 		$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		$tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-		
-
-		
+		$tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);	
 		
 		$course = CourseManager :: get_course_information($course_code);
 		if(!empty($course['db_name']))
@@ -444,9 +441,9 @@ class Tracking {
 			$totalScore = $lp_scorm_score_total;
 	
 			$pourcentageScore = 0;
-			if($lp_scorm_weighting_total>0)
-			{
-				$pourcentageScore = round(($totalScore * 100) / $lp_scorm_weighting_total);
+			if($lp_scorm_weighting_total>0) {
+				//i.e 10.52
+				$pourcentageScore = round( (($totalScore * 100) / $lp_scorm_weighting_total),2);
 				return $pourcentageScore;
 			}	
 			else

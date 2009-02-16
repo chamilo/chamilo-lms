@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 17987 2009-01-24 01:59:15Z cfasanando $
+<?php //$Id: myStudents.php 18520 2009-02-16 17:14:35Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -775,9 +775,9 @@ if(!empty($_GET['student']))
 							$exe_id = $a_score['exe_id'];
 						}
 						$pourcentageScore = 0;
-						if($weighting!=0)
-						{
-							$pourcentageScore = round(($score*100)/$weighting,1);
+						if($weighting!=0) {
+							//i.e 10.50 
+							$pourcentageScore = round(($score*100)/$weighting,2);
 						}
 		
 						$weighting = 0;

@@ -336,9 +336,9 @@ foreach($Courses as $enreg)
 								$exe_id = $a_score['exe_id'];
 							}					
 							
-							if  ($weighting>0)
-							{							
-								$pourcentageScore = round(($score*100)/$weighting,1);
+							if  ($weighting>0) {
+								// i.e 10.50%							
+								$pourcentageScore = round(($score*100)/$weighting,2);
 							}
 							else
 							{

@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 18425 2009-02-10 22:29:20Z iflorespaz $
+<?php // $Id: whoisonline.php 18526 2009-02-16 21:29:54Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -30,7 +30,7 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array('index','registration');
+$language_file = array('index','registration','messages');
 
 // including necessary files
 require_once('./main/inc/global.inc.php');

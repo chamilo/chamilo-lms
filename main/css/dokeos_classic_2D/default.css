@@ -2733,36 +2733,25 @@ button.cancel:hover {
     border-color: #F4E1D0;    
     background-color: #FFE3DE;
 }
+
 /*including "save" image*/
 button.save {
-    background-image:url(/main/img/button_accept.gif);
+    background-image:url(images/button_accept.gif);
 }
 /*including "add" image*/
 button.add {
-    background-image:url(/main/img/button_add.gif);
+    background-image:url(images/button_add.gif);
 }
 
 /*including "cancel" image*/
 button.cancel {
-    background-image:url(/main/img/button_delete.gif);
+    background-image:url(images/button_delete.gif);
 }
 /*including "search" image*/
 button.search {
-    background-image:url(/main/img/button_search.gif);
+    background-image:url(images/button_search.gif);
 }
 /*including "login" image*/
 button.login {
-    background-image:url(/main/img/button_login.gif);
-}
-/*including "add" image*/
-button.add{
-	 margin:0 10px -3px -3px !important;
-    padding:3px 1px 1px 23px;
-    /*text-decoration:none;
-    text-align:right;*/
-    width:auto;
-    height:100%;
-    background-position:3%;
-    background-image:url(/main/img/addd.gif);
-    background-repeat:no-repeat;
+    background-image:url(images/button_login.gif);
 }

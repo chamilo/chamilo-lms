@@ -19,6 +19,11 @@ body {
 	margin: 0;
 	padding: 0;
 }
+
+input[type="text"]:focus,input[type="password"]:focus,textarea:focus{
+background-image:url(images/shadow.gif);
+}
+
 img {
 	border: none;
 }
@@ -1624,22 +1629,22 @@ button.cancel:hover {
 }
 /*including "save" image*/
 button.save {
-    background-image:url(/main/img/button_accept.gif);
+    background-image:url(images/button_accept.gif);
 }
 /*including "add" image*/
 button.add {
-    background-image:url(/main/img/button_add.gif);
+    background-image:url(images/button_add.gif);
 }
 
 /*including "cancel" image*/
 button.cancel {
-    background-image:url(/main/img/button_delete.gif);
+    background-image:url(images/button_delete.gif);
 }
 /*including "search" image*/
 button.search {
-    background-image:url(/main/img/button_search.gif);
+    background-image:url(images/button_search.gif);
 }
 /*including "login" image*/
 button.login {
-    background-image:url(/main/img/button_login.gif);
+    background-image:url(images/button_login.gif);
 }

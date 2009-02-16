@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 18478 2009-02-12 21:27:18Z herodoto $
+<?php // $Id: exercise.lib.php 18522 2009-02-16 20:20:29Z juliomontoya $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 18478 2009-02-12 21:27:18Z herodoto $
+* 	@version $Id: exercise.lib.php 18522 2009-02-16 20:20:29Z juliomontoya $
 */
 
 /**
@@ -66,12 +66,12 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			$s="<div id=\"question_title\" class=\"sectiontitle\">
 				".get_lang('Question').' ';
 					
-			$s.=$current_item;
-			
-			if($answerType == 2)
-				$s.=' / '.$total_item;			
+			$s.=$current_item;		
+			//@todo I need the get the feedback type	
+			//if($answerType != 1)
+			//$s.=' / '.$total_item;			
 			echo $s;
-			echo ': ';		
+			echo ' : ';		
 			
 			$s =$questionName.'</div>';
 			$s.="<table class='exercise_questions'>
@@ -92,7 +92,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				</tr>";
 			}
 
-		}  // end if(!$onlyAnswers)
+		}  
 		$s.= '</table>';
 		$s.="<script>$(document).ready( function(){
 			  $('.rounded').corners();
@@ -296,9 +296,9 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				".get_lang('Question').' ';
 					
 			$s.=$current_item;
-			
-			if($answerType == 2)
-				$s.=' / '.$total_item;			
+			//@todo I need to the get the feedback type
+			//if($answerType == 2)
+			//	$s.=' / '.$total_item;			
 			echo $s;
 			echo ': ';		
 			

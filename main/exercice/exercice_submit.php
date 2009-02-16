@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 18387 2009-02-09 22:05:17Z juliomontoya $
+<?php // $Id: exercice_submit.php 18522 2009-02-16 20:20:29Z juliomontoya $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 18387 2009-02-09 22:05:17Z juliomontoya $
+* 	@version $Id: exercice_submit.php 18522 2009-02-16 20:20:29Z juliomontoya $
 */
 
 
@@ -254,11 +254,8 @@ if ($formSent) {
 						$counter++;
 						// gets the student choice for this question
 						$choice=$exerciseResult[$questionId];
-				
-						//print_r($choice); echo "<br>";
-				
-						// creates a temporary Question object
-				
+								
+						// creates a temporary Question object				
 						$objQuestionTmp = Question :: read($questionId);
 				
 						$questionName=$objQuestionTmp->selectTitle();
@@ -525,10 +522,13 @@ if ($formSent) {
 									}
 									$val=addslashes($val);
 									$val=strip_tags($val);
-									$sql = "select position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
+									$sql = "SELECT position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
 									$res = api_sql_query($sql, __FILE__, __LINE__);
-									$answer = mysql_result($res,0,"position");
-				
+									if (Database::num_rows($res)>0) {
+										$answer = Database::result($res,0,"position");
+									} else {
+										$answer = '';
+									}													
 									exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
 				
 								}
@@ -561,11 +561,8 @@ if ($formSent) {
 						$counter++;
 						// gets the student choice for this question
 						$choice=$exerciseResult[$questionId];
-				
-						//print_r($choice); echo "<br>";
-				
-						// creates a temporary Question object
-				
+						
+						// creates a temporary Question object				
 						$objQuestionTmp = Question :: read($questionId);
 				
 						$questionName=$objQuestionTmp->selectTitle();
@@ -835,8 +832,11 @@ if ($formSent) {
 									$val=strip_tags($val);
 									$sql = "select position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
 									$res = api_sql_query($sql, __FILE__, __LINE__);
-									$answer = mysql_result($res,0,"position");
-				
+									if (Database::num_rows($res)>0) {
+										$answer = Database::result($res,0,"position");
+									} else {
+										$answer = '';
+									}
 									exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
 				
 								}
@@ -901,11 +901,13 @@ if ($formSent) {
 }
 
 // if the object is not in the session
-if (!isset($_SESSION['objExercise']) || $origin == 'learnpath' || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
-	
+
+//why destroying the exercise when a LP is loaded ?
+//if (!isset($_SESSION['objExercise']) || $origin == 'learnpath' || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
+if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {	
     if ($debug>0) {
     	echo str_repeat('&nbsp;',0).'$_SESSION[objExercise] was unset'."<br />\n";
-    }
+    }    
     // construction of Exercise
     $objExercise=new Exercise();
     unset($_SESSION['questionList']);
@@ -942,34 +944,29 @@ $exerciseSound=$objExercise->selectSound();
 $randomQuestions=$objExercise->isRandom();
 $exerciseType=$objExercise->selectType();
 
-if(!isset($_SESSION['questionList']) || $origin == 'learnpath')
-{
-    if($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[questionList] was unset'."<br />\n";}
+//if (!isset($_SESSION['questionList']) || $origin == 'learnpath') {
+//in LP's is enabled the "remember question" feature?
+if (!isset($_SESSION['questionList'])) {
+    if ($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[questionList] was unset'."<br />\n";}
     // selects the list of question ID
     $questionList = ($randomQuestions?$objExercise->selectRandomList():$objExercise->selectQuestionList());
     // saves the question list into the session
     api_session_register('questionList');
-    if($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[questionList] was unset - set now - end'."<br />\n";}
+    if ($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[questionList] was unset - set now - end'."<br />\n";}
 }
-if(!isset($objExcercise) && isset($_SESSION['objExercise'])){
+if(!isset($objExcercise) && isset($_SESSION['objExercise'])) {
 	$questionList = $_SESSION['questionList'];
 }
 
 $quizStartTime = time();
 api_session_register('quizStartTime');
-
 $nbrQuestions=sizeof($questionList);
-
 // if questionNum comes from POST and not from GET
-if(!$questionNum || $_POST['questionNum'])
-{
+if(!$questionNum || $_POST['questionNum']) {
     // only used for sequential exercises (see $exerciseType)
-    if(!$questionNum)
-    {
+    if(!$questionNum) {
         $questionNum=1;
-    }
-    else
-    {
+    } else {
         $questionNum++;
     }
 }
@@ -1132,7 +1129,7 @@ else
 <?php
 }
 
- $exerciseTitle=api_parse_tex($exerciseTitle);
+$exerciseTitle=api_parse_tex($exerciseTitle);
 
 echo "<h3>".$exerciseTitle."</h3>";
 
@@ -1151,23 +1148,24 @@ if( $exerciseAttempts > 0){
 
     if ( $attempt[0] >= $exerciseAttempts ) {
     	if (!api_is_allowed_to_edit()) {
-	    	Display::display_warning_message(sprintf(get_lang('ReachedMaxAttempts'),$exerciseTitle,$exerciseAttempts));
+	    	Display::display_warning_message(sprintf(get_lang('ReachedMaxAttempts'),$exerciseTitle,$exerciseAttempts),false);
+	    	if ($origin != 'learnpath')
 	 	  	Display::display_footer();
 	 	  	exit;
 	    } else {
-	        Display::display_warning_message(sprintf(get_lang('ReachedMaxAttemptsAdmin'),$exerciseTitle,$exerciseAttempts));
+	        Display::display_warning_message(sprintf(get_lang('ReachedMaxAttemptsAdmin'),$exerciseTitle,$exerciseAttempts),false);
 		}
 	}
 }
 
 if (!function_exists('convert_date_to_number')) {
-function convert_date_to_number($default){
-	// 2008-10-12 00:00:00 ---to--> 12345672218 (timestamp)
-	$parts = split(' ',$default);
-	list($d_year,$d_month,$d_day) = split('-',$parts[0]);
-	list($d_hour,$d_minute,$d_second) = split(':',$parts[1]);
-	return mktime($d_hour, $d_minute, $d_second, $d_month, $d_day, $d_year);
-}
+	function convert_date_to_number($default){
+		// 2008-10-12 00:00:00 ---to--> 12345672218 (timestamp)
+		$parts = split(' ',$default);
+		list($d_year,$d_month,$d_day) = split('-',$parts[0]);
+		list($d_hour,$d_minute,$d_second) = split(':',$parts[1]);
+		return mktime($d_hour, $d_minute, $d_second, $d_month, $d_day, $d_year);
+	}
 }
 
 $limit_time_exists = (($Exe_starttime!='0000-00-00 00:00:00')||($Exe_endtime!='0000-00-00 00:00:00'))? true : false;
@@ -1245,6 +1243,7 @@ else
 	if($exerciseType==2){
 		$s2 = "&exerciseId=".$exerciseId;
 	}
+	
 	$s.=" <form method='post' action='".api_get_self()."?autocomplete=off".$s2."' name='frm_exercise' $onsubmit>
 	 <input type='hidden' name='formSent' value='1' />
 	 <input type='hidden' name='exerciseType' value='".$exerciseType."' />
@@ -1254,57 +1253,52 @@ else
 	 <input type='hidden' name='origin' value='".$origin."' />
 	 <input type='hidden' name='learnpath_id' value='".$learnpath_id."' />
 	 <input type='hidden' name='learnpath_item_id' value='".$learnpath_item_id."' />
-	<table width='100%' border='0' cellpadding='1' cellspacing='0'>
-	 <tr>
-	  <td>
-	  <table width='100%' cellpadding='3' cellspacing='0' border='0'>";
-	echo $s;
-	$i=0;	
-	foreach($questionList as $questionId) {
-		$i++;		
-		// for sequential exercises
-		if($exerciseType == 2) {
-			// if it is not the right question, goes to the next loop iteration			
-			if($questionNum != $i){
-				continue;
-			} else {			
-				if ($exerciseFeedbackType!=1) {
-					// if the user has already answered this question
-					if(isset($exerciseResult[$questionId])) {
-						// construction of the Question object
-						$objQuestionTmp = Question::read($questionId);				
-						$questionName=$objQuestionTmp->selectTitle();
-						// destruction of the Question object
-						unset($objQuestionTmp);
-						echo '<tr><td>'.get_lang('AlreadyAnswered').' &quot;'.$questionName.'&quot;</td></tr>';	
-						break;
+	 <table width='100%' border='0' cellpadding='1' cellspacing='0'>
+		<tr>
+	 		<td>
+	  			<table width='100%' cellpadding='3' cellspacing='0' border='0'>";
+				echo $s;										
+				$i=1;						 
+				foreach($questionList as $questionId) {		
+					// for sequential exercises
+					if($exerciseType == 2) {
+						// if it is not the right question, goes to the next loop iteration			
+						if ($questionNum != $i ) {
+							$i++;							
+							continue;							
+						} else {			
+							if ($exerciseFeedbackType != 1) {
+								// if the user has already answered this question
+								if (isset($exerciseResult[$questionId])) {
+									// construction of the Question object
+									$objQuestionTmp = Question::read($questionId);				
+									$questionName=$objQuestionTmp->selectTitle();
+									// destruction of the Question object
+									unset($objQuestionTmp);
+									Display::display_normal_message(get_lang('AlreadyAnswered'));
+									$i++;
+									//echo '<tr><td>'.get_lang('AlreadyAnswered').' &quot;'.$questionName.'&quot;</td></tr>';	
+									break;
+								}
+							}
+						}
 					}
+					// shows the question and its answers		
+					showQuestion($questionId, false, $origin,$i,$nbrQuestions);
+					$i++;
+					// for sequential exercises
+					if($exerciseType == 2) {
+						// quits the loop
+						break;
+					}					
 				}
-			}
-		}
-			/*
-		$s="<tr>
-		 <td width='3%' bgcolor='#e6e6e6'><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\"></td>
-		 <td valign='middle' bgcolor='#e6e6e6'>
-			".get_lang('Question')." ";
-		*/
-		
-		// shows the question and its answers		
-		showQuestion($questionId, false, $origin,$i,$nbrQuestions);
-		// for sequential exercises
-		if($exerciseType == 2) {
-			// quits the loop
-			break;
-		}
-	}
-	// end foreach()
-	
+				// end foreach()
 	echo "	  	
 		 <!-- <button type='submit' name='buttonCancel' class='cancel'>".get_lang('Cancel')."</button>
 	   &nbsp;&nbsp; //--><br />";
 		$submit_btn="<button class=\"save\" type='submit' name='submit'>";
 		//	$submit_btn.=get_lang('ValidateAnswer'); 
-		if ($objExercise->selectFeedbackType()==1 && $_SESSION['objExercise']->selectType()==2) {						
+		if ($objExercise->selectFeedbackType()==1 && $_SESSION['objExercise']->selectType()==2) {				
 			$submit_btn='';
 			echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript"></script>';						
 			echo '<style type="text/css" media="all">@import "'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css";</style>';
@@ -1315,7 +1309,12 @@ else
 					  $('.rounded_inner').corners();
 					});</script>";
 			//echo '<br /><span class="rounded" style="width: 300px; margin-top: 10px; padding: 3px; background-color:#ccc;"><span style="width: 300px" class="rounded_inner" ><a href="exercise_submit_modal.php?hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&exerciseId='.$exerciseId.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox" id="validationButton">'.get_lang('ValidateAnswer').'</a></span></span><br /><br /><br />';
-			echo '<br /><div class="rounded" style="text-align: center;"><div class="rounded_inner"><a href="exercise_submit_modal.php?hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&exerciseId='.$exerciseId.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox" id="validationButton">'.get_lang('ValidateAnswer').'</a></div></div><br /><br /><br />';				
+			echo '<br />
+					<div class="rounded" style="text-align: center;">
+				  		<div class="rounded_inner">
+				  			<a href="exercise_submit_modal.php?hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&exerciseId='.$exerciseId.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox" id="validationButton">'.get_lang('ValidateAnswer').'</a>
+				  		</div>
+				  	</div><br /><br /><br />';				
 		} else {
 			if ($exerciseType == 1 || $nbrQuestions == $questionNum)
 			{
@@ -1326,9 +1325,13 @@ else
 				$submit_btn.=get_lang('Next').' &gt;';
 			}
 			$submit_btn.= "</button>"; 
-		}			
+		}	
+		
 	echo $submit_btn;	 
-	echo "</form>";	
+	echo "</table>
+		</td>
+		</tr>
+		</table></form>";	
 	$b=2;
 }
 
@@ -1345,6 +1348,7 @@ else
 		}
     }
 
-if ($origin != 'learnpath') { //so we are not in learnpath tool
+if ($origin != 'learnpath') { 
+	//so we are not in learnpath tool
     Display::display_footer();
 }

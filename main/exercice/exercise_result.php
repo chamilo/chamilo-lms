@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 18203 2009-02-03 18:02:16Z ndieschburg $
+* 	@version $Id: exercise_result.php 18522 2009-02-16 20:20:29Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -472,11 +472,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		$counter++;
 		// gets the student choice for this question
 		$choice=$exerciseResult[$questionId];
-		
-		//print_r($choice); echo "<br>";
-		
 		// creates a temporary Question object
-
 		$objQuestionTmp = Question :: read($questionId);
 
 		$questionName=$objQuestionTmp->selectTitle();
@@ -997,29 +993,25 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 						$ans = $reply[$i];
 						exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
 					}
-				}
-				else
-				{
+				} else {
 					exercise_attempt($questionScore, 0 ,$quesId,$exeId,0);
 				}
-			}
-			elseif ($answerType==MATCHING)
-			{
+			} elseif ($answerType==MATCHING) {
 				$j=sizeof($matching)+1;
-
-				for ($i=0;$i<sizeof($choice);$i++,$j++)
-				{
+				for ($i=0;$i<sizeof($choice);$i++,$j++) {
 					$val = $choice[$j];
 					if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
 						$val = $arr1[1][0];
 					$val=addslashes($val);
 					$val=strip_tags($val);
-					$sql = "select position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
+					$sql = "SELECT position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
 					$res = api_sql_query($sql, __FILE__, __LINE__);
-					$answer = Database::result($res,0,"position");				
-					
+					if (Database::num_rows($res)>0) {
+						$answer = Database::result($res,0,"position");
+					} else {
+						$answer = '';
+					}					
 					exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
-
 				}
 			}
 			elseif ($answerType==FREE_ANSWER) {
@@ -1087,7 +1079,11 @@ if($_configuration['tracking_enabled']) {
 
 if($objExercise->results_disabled) {
 	ob_end_clean();
-	Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><a href="exercice.php" />'.get_lang('Back').'</a>',false);
+	if ($origin != 'learnpath') {
+		Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><a href="exercice.php" />'.get_lang('Back').'</a>',false);
+	} else {
+		Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><br />',false);
+	}
 }
 
 if ($origin != 'learnpath') {

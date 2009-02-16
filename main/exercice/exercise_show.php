@@ -198,7 +198,7 @@ function get_comments($id,$question_id)
 	//$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id and question_id)."' = '".Database::escape_string($question_id)."' order by question_id";
 	$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' order by question_id";
 	$sqlres = api_sql_query($sql, __FILE__, __LINE__);
-	$comm = mysql_result($sqlres,0,"teacher_comment");
+	$comm = Database::result($sqlres,0,"teacher_comment");
 	return $comm;
 	}
 /**
@@ -343,25 +343,41 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
   <tr>
     <td colspan="2">
 	<?php
-		$sql_test_name='SELECT title, description FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
+		$sql_test_name='SELECT title, description, results_disabled FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
 		$result=api_sql_query($sql_test_name);
-		$test=Database::result($result,0,0);
-		$exerciseTitle=api_parse_tex($test);
-		$exerciseDexcription=Database::result($result,0,1);
-
-$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($_user['user_id'])." ";
-$query = "select attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as attempts  
-						INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 
-						INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
-						INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id    
-					WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
-					GROUP BY quizz_rel_questions.question_order, attempts.question_id"; 
-					//GROUP BY questions.position, attempts.question_id";
+		$show_results = true;
+		// Avoiding the "Score 0/0" message  when the exe_id is not set 	
+		if (Database::num_rows($result)>0 && isset($id)) {
+			$test=Database::result($result,0,0);		
+			$exerciseTitle=api_parse_tex($test);
+			$exerciseDexcription=Database::result($result,0,1);
 			
-$result =api_sql_query($query, __FILE__, __LINE__);
-
-?> 
-	
+			// if the results_disabled of the Quiz is 1 when block the script	
+			$result_disabled=Database::result($result,0,2);
+			if (!(api_is_platform_admin() || api_is_course_admin()) ) {			
+				if ($result_disabled==1) {
+					api_not_allowed();
+				}
+			}				
+			$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($_user['user_id'])." ";
+			$query = "SELECT attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as attempts  
+							INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 
+							INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
+							INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id    
+						WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
+						GROUP BY quizz_rel_questions.question_order, attempts.question_id"; 
+						//GROUP BY questions.position, attempts.question_id";
+			$result =api_sql_query($query, __FILE__, __LINE__);							
+		} else {
+			Display::display_warning_message(get_lang('CantViewResults'));
+			$show_results = false;
+			echo '</td>
+			</tr>
+			</table>';
+		}		
+		$show_results = true;
+		
+?>	
 	<table>
 		<tr>
 			<td style="font-weight:bold"><?php echo get_lang('CourseTitle')?> : </td>
@@ -384,54 +400,51 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 	 <br />
   <?php
 
-
 	$i=$totalScore=$totalWeighting=0;
- if($debug>0){echo "ExerciseResult: "; var_dump($exerciseResult); echo "QuestionList: ";var_dump($questionList);}
-
-	// for each question
-	$questionList = array();
-	$exerciseResult = array();
-	$k=0;
-	$counter=0;
-	while ($row = mysql_fetch_array($result))
-			{
+	if($debug>0){echo "ExerciseResult: "; var_dump($exerciseResult); echo "QuestionList: ";var_dump($questionList);}
+	
+		// for each question
+		$questionList = array();
+		$exerciseResult = array();
+		$k=0;
+		$counter=0;
+		while ($row = Database::fetch_array($result)) {
 			$questionList[] = $row['question_id'];
 			$exerciseResult[] = $row['answer'];
-			}
+		}
 		//echo '<pre>';print_R($questionList);
-		foreach($questionList as $questionId)
+		if ($show_results)
+		foreach($questionList as $questionId) {
+			
+			$counter++;
+			$k++;
+			$choice=$exerciseResult[$questionId];
+			// creates a temporary Question object
+			$objQuestionTmp = Question::read($questionId);
+			$questionName=$objQuestionTmp->selectTitle();
+			$questionDescription=$objQuestionTmp->selectDescription();
+			$questionWeighting=$objQuestionTmp->selectWeighting();
+			$answerType=$objQuestionTmp->selectType();
+			$quesId =$objQuestionTmp->selectId(); //added by priya saini
+	
+			// destruction of the Question object
+			unset($objQuestionTmp);
+	
+			if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 			{
-				$counter++;
-				$k++;
-				$choice=$exerciseResult[$questionId];
-				// creates a temporary Question object
-				$objQuestionTmp = Question::read($questionId);
-				$questionName=$objQuestionTmp->selectTitle();
-				$questionDescription=$objQuestionTmp->selectDescription();
-				$questionWeighting=$objQuestionTmp->selectWeighting();
-				$answerType=$objQuestionTmp->selectType();
-				$quesId =$objQuestionTmp->selectId(); //added by priya saini
+				$colspan=2;
+			}
+			if($answerType == MATCHING || $answerType == FREE_ANSWER)
+			{
+				$colspan=2;
+			}
+			else
+			{
+				$colspan=2;
+			}?>
 
-				// destruction of the Question object
-				unset($objQuestionTmp);
-
-
-
-				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-				{
-					$colspan=2;
-				}
-				if($answerType == MATCHING || $answerType == FREE_ANSWER)
-				{
-					$colspan=2;
-				}
-				else
-				{
-					$colspan=2;
-				}?>
-
-  <tr bgcolor="#E6E6E6">
-    <td colspan="2" > <?php echo get_lang("Question").' '.($counter).' : '.$questionName; ?> </td>
+  <tr>  
+    <td colspan="2" height="24px"><div id="question_title" class="sectiontitle"><?php echo get_lang("Question").' '.($counter).' : '.$questionName; ?> </div></td>
   </tr>
    <tr>
     <td colspan="2"><?php echo $questionDescription; ?> </td>
@@ -460,25 +473,22 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				$objAnswerTmp=new Answer($questionId);
 				$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 				$questionScore=0;
-				for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-					{
-						$answer=$objAnswerTmp->selectAnswer($answerId);
-						$answerComment=$objAnswerTmp->selectComment($answerId);
-						$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-						$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-						$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-						$resultans = api_sql_query($queryans, __FILE__, __LINE__);
-						while ($row = mysql_fetch_array($resultans))
-								{
-								$ind = $row['answer'];
-								$choice[$ind] = 1;
-								}
-						$studentChoice=$choice[$answerId];
-						if($studentChoice)
-							{
-							$questionScore+=$answerWeighting;
-							$totalScore+=$answerWeighting;
-							}
+				for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+					$answer=$objAnswerTmp->selectAnswer($answerId);
+					$answerComment=$objAnswerTmp->selectComment($answerId);
+					$answerCorrect=$objAnswerTmp->isCorrect($answerId);
+					$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+					$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+					$resultans = api_sql_query($queryans, __FILE__, __LINE__);
+					while ($row = Database::fetch_array($resultans)) {
+						$ind = $row['answer'];
+						$choice[$ind] = 1;
+					}
+					$studentChoice=$choice[$answerId];
+					if($studentChoice) {
+						$questionScore+=$answerWeighting;
+						$totalScore+=$answerWeighting;
+					}
 
 				?>
 			<tr>
@@ -495,7 +505,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		 }?>
 			</table>
 	<?php }
-		else if ($answerType == UNIQUE_ANSWER)
+		elseif ($answerType == UNIQUE_ANSWER)
 		{?>
 		<table width="355" border="0">
 			<tr>
@@ -521,7 +531,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 				$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 				$resultans = api_sql_query($queryans, __FILE__, __LINE__);
-				$choice = mysql_result($resultans,0,"answer");
+				$choice = Database::result($resultans,0,"answer");
 				$studentChoice=($choice == $answerId)?1:0;
 				if($studentChoice)
 					{
@@ -629,7 +639,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						
 						$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 						$resfill = api_sql_query($queryfill, __FILE__, __LINE__);
-						$str=mysql_result($resfill,0,"answer");
+						$str=Database::result($resfill,0,"answer");
 						preg_match_all ('#\[([^[/]*)/#', $str, $arr);
 													
 						$choice = $arr[1];
@@ -678,7 +688,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 
 						$queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 						$resfill = api_sql_query($queryfill, __FILE__, __LINE__);
-						$str=mysql_result($resfill,0,"answer");
+						$str=Database::result($resfill,0,"answer");
 						preg_match_all ('#\[([^[/]*)/#', $str, $arr);
 						$choice = $arr[1];
 						
@@ -733,8 +743,8 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$questionScore=0;
 			$query = "select answer, marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 			$resq=api_sql_query($query);
-			$choice = mysql_result($resq,0,"answer");
-			$questionScore = mysql_result($resq,0,"marks");
+			$choice = Database::result($resq,0,"answer");
+			$questionScore = Database::result($resq,0,"marks");
 			if($questionScore==-1){
 				$totalScore+=0;
 			}
@@ -759,7 +769,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		$res_answer = api_sql_query($sql_answer, __FILE__, __LINE__);
 		// getting the real answer
 		$real_list =array();		
-		while($real_answer = mysql_fetch_array($res_answer))
+		while($real_answer = Database::fetch_array($res_answer))
 		{			
 			$real_list[$real_answer['position']]= $real_answer['answer'];
 		}	
@@ -776,7 +786,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		
 		$questionScore=0;
 		
-		while($a_answers = mysql_fetch_array($res_answers))
+		while($a_answers = Database::fetch_array($res_answers))
 		{			
 			$i_answer_id = $a_answers['id']; //3
 			$s_answer_label = $a_answers['answer'];  // your dady - you mother
@@ -798,7 +808,10 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			
 			
 			$res_user_answer = api_sql_query($sql_user_answer, __FILE__, __LINE__);
-			$s_user_answer = mysql_result($res_user_answer,0,0); //  rich - good looking
+			if (Database::num_rows($res_user_answer)>0 )
+				$s_user_answer = Database::result($res_user_answer,0,0); //  rich - good looking
+			else 
+				$s_user_answer = '';
 			
 			//$s_correct_answer = $s_answer_label; // your ddady - your mother
 			$s_correct_answer = $real_list[$i_answer_correct_answer];
@@ -856,14 +869,14 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						$TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 						$query = "select hotspot_correct from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".Database::escape_string($id)."' and hotspot_question_id= '".Database::escape_string($questionId)."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
 						$resq=api_sql_query($query);
-						$choice = mysql_result($resq,0,"hotspot_correct");
+						$choice = Database::result($resq,0,"hotspot_correct");
 						display_hotspot_answer($answerId,$answer,$choice,$answerComment);
 		
 						$i++;
 				 	}
 				 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 					$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
-					$questionScore= mysql_result($resfree,0,"marks");
+					$questionScore= Database::result($resfree,0,"marks");
 					$totalScore+=$questionScore;
 		 			?>
 		 			</table>
@@ -972,18 +985,17 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 								 	$arrmarks[] = $questionId;
 								 	echo '<div id="'.$marksname.'" style="visibility:hidden"><form name="marksform_'.$questionId.'" method="post" action=""><select name="marks" id="marks" style="display:none;"><option>'.$questionScore.'</option></select></form></div>';
 								 }
-						}
-						else{
-							if($questionScore==-1){
+						} else {
+							if($questionScore==-1) {
 								  	$questionScore=0;
 						}
 						}?>
 
   </td><tr><td align="left"><b><?php echo get_lang('Score')." : $questionScore/$questionWeighting"; ?></b><br /><br /></td>
   </tr>
-	<?php  unset($objAnswerTmp);
+		<?php  unset($objAnswerTmp);
 		$i++;
-$totalWeighting+=$questionWeighting;
+		$totalWeighting+=$questionWeighting;
 		}
 ?>
 <tr><td align="left"><b><?php
@@ -1042,13 +1054,19 @@ $totalWeighting+=$questionWeighting;
 		</tr>
 </table>
 <?php
-if ($origin != 'learnpath')
-{
+if ($origin != 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();
-}else{
+} else {
 	//record the results in the learning path, using the SCORM interface (API)
 	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 	echo '</body></html>';
 }
+//destroying the session 
+api_session_unregister('questionList');
+unset ($questionList);
+
+api_session_unregister('exerciseResult');
+unset ($exerciseResult);
+
 ?>

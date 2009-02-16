@@ -141,11 +141,12 @@ class UniqueAnswer extends Question {
 		require_once('../newscorm/learnpathList.class.php');		
 		require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 		
-		
-		foreach ($question_list as $key=>$questionid) {				
-			$question = Question::read($questionid);			
-			$select_question[$questionid]='Q'.$key.' :'.cut($question->selectTitle(),20);						
-		}		
+		if (is_array($question_list)) {
+			foreach ($question_list as $key=>$questionid) {				
+				$question = Question::read($questionid);			
+				$select_question[$questionid]='Q'.$key.' :'.cut($question->selectTitle(),20);						
+			}
+		}
 		$select_question[-1]=get_lang('ExitTest');		
 			
 		//LP SELECT

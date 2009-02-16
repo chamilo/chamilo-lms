@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 18411 2009-02-10 17:59:08Z juliomontoya $
+<?php // $Id: question_list_admin.inc.php 18522 2009-02-16 20:20:29Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 18411 2009-02-10 17:59:08Z juliomontoya $
+* 	@version $Id: question_list_admin.inc.php 18522 2009-02-16 20:20:29Z juliomontoya $
 */
 
 
@@ -86,9 +86,8 @@ if($deleteQuestion)
 echo '<div class="actionsbig">';
 //we filter the type of questions we can add
 Question :: display_type_menu ($objExercise->feedbacktype);
-echo '</div></div>';
+echo '</div>';
 ?>
-
 
 <table class="data_table">
 	<tr class="row_odd">
@@ -156,3 +155,4 @@ if(!$i) {
 }
 ?>
 </table>
+</div>

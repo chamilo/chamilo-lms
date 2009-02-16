@@ -1,6 +1,6 @@
 <?php
 // name of the language file that needs to be included
-$language_file = array('registration','tracking','exercice');
+$language_file = array('registration','tracking','exercice','admin');
 
 $cidReset = true;
 
@@ -67,7 +67,10 @@ $now=date('Y-m-d');
   <th><?php echo get_lang('Course'); ?></th>
   <th><?php echo get_lang('Time'); ?></th>
   <th><?php echo get_lang('Progress'); ?></th>
-  <th><?php echo get_lang('Score'); ?></th>
+  <th><?php 
+  echo get_lang('Score');
+  Display :: display_icon('info3.gif',get_lang('ScormAndLPTestTotalAverage') , array ('style' => 'margin-bottom:-3px;')); 
+  ?></th>
   <th><?php echo get_lang('LastConnexion'); ?></th>
   <th><?php echo get_lang('Details'); ?></th>
 </tr>
@@ -106,8 +109,8 @@ foreach($Courses as $enreg)
 		<?php echo $pourcentageScore.'%'; ?>
   	</td>
 
-  	<td align='center'>
-		<?php echo $lastConnexion; ?>
+  	<td align='center' >
+		<?php echo $lastConnexion ?>
   	</td>
 
   	<td align='center'>
@@ -213,14 +216,10 @@ foreach($Courses as $enreg)
 
 				$resultLearnpath = api_sql_query($sqlLearnpath);
 
-				if(Database::num_rows($resultLearnpath)>0)
-				{
-					while($a_learnpath = Database::fetch_array($resultLearnpath))
-					{
-
+				if(Database::num_rows($resultLearnpath)>0) {
+					while($a_learnpath = Database::fetch_array($resultLearnpath)) {
 
 						$progress = learnpath :: get_db_progress($a_learnpath['id'],$_user['user_id'], '%',$a_infosCours['db_name']);
-
 
 						// calculates last connection time
 						$sql = 'SELECT MAX(start_time)
@@ -248,7 +247,7 @@ foreach($Courses as $enreg)
 							 ";
 						echo 		stripslashes($a_learnpath['name']);
 						echo "	</td>
-								<td>
+								<td align='center'>
 							 ";
 						echo api_time_to_hms($total_time);
 						echo "	</td>
@@ -256,7 +255,7 @@ foreach($Courses as $enreg)
 							 ";
 						echo		$progress;
 						echo "	</td>
-								<td align='center'>
+								<td align='center' width=180px >
 							 ";
 						if($start_time!=''){
 							echo format_locale_date(get_lang('dateFormatLong'),$start_time);
@@ -294,19 +293,15 @@ foreach($Courses as $enreg)
 				
 				$sql='SELECT visibility FROM '.$a_infosCours['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
 				$resultVisibilityTests = api_sql_query($sql);
-				
-				if(Database::result($resultVisibilityTests,0,'visibility')==1){
-				
-					$sqlExercices = "	SELECT quiz.title,id
+								
+				if (Database::result($resultVisibilityTests,0,'visibility')==1) {				
+					$sqlExercices = "	SELECT quiz.title,id, results_disabled
 									FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
-									WHERE active='1'
-									";
-	
+									WHERE active='1'";	
 	
 					$resuktExercices = api_sql_query($sqlExercices);
-					if(Database::num_rows($resuktExercices)>0){
-						while($a_exercices = Database::fetch_array($resuktExercices))
-						{
+					if (Database::num_rows($resuktExercices)>0) {						
+						while ($a_exercices = Database::fetch_array($resuktExercices)) {								
 							$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
 											FROM $tbl_stats_exercices AS ex
 											WHERE ex.exe_user_id='".$_user['user_id']."' AND ex.exe_cours_id = '".$a_infosCours['code']."'
@@ -320,17 +315,15 @@ foreach($Courses as $enreg)
 							$sqlScore = "SELECT exe_id , exe_result,exe_weighting
 										 FROM $tbl_stats_exercices
 										 WHERE exe_user_id = ".$_user['user_id']."
-										 AND exe_cours_id = '".$a_infosCours['code']."'
-										 AND exe_exo_id = ".$a_exercices['id']."
-										 AND orig_lp_id = 0
-										 AND orig_lp_item_id = 0			
-										ORDER BY exe_date DESC LIMIT 1"
-											;
+											 AND exe_cours_id = '".$a_infosCours['code']."'
+											 AND exe_exo_id = ".$a_exercices['id']."
+											 AND orig_lp_id = 0
+											 AND orig_lp_item_id = 0			
+										ORDER BY exe_date DESC LIMIT 1";
 		
 							$resultScore = api_sql_query($sqlScore);
 							$score = 0;
-							while($a_score = Database::fetch_array($resultScore))
-							{
+							while($a_score = Database::fetch_array($resultScore)) {
 								$score = $score + $a_score['exe_result'];
 								$weighting = $weighting + $a_score['exe_weighting'];
 								$exe_id = $a_score['exe_id'];
@@ -339,39 +332,44 @@ foreach($Courses as $enreg)
 							if  ($weighting>0) {
 								// i.e 10.50%							
 								$pourcentageScore = round(($score*100)/$weighting,2);
-							}
-							else
-							{
+							} else {
 								$pourcentageScore=0;			
 							}
 		
 							$weighting = 0;
 		
-							echo "<tr>
-									<td>
-								 ";
-							echo 		$a_exercices['title'];
-							echo "	</td>
-								 ";
-							echo "	<td align='center'>
-								  ";
-							echo $pourcentageScore.'%';
-							echo "	</td>
-		
-									<td align='center'>
-								 ";
-							echo 		$a_essais['essais'];
-							echo '	</td>
-									<td align="center" width="25">
-								 ';
-							if($a_essais['essais']>0)
-								echo '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
-							echo "	</td>
-								  </tr>
-								 ";
+							echo '<tr>
+									<td>';
+							echo $a_exercices['title'];
+							echo '</td>';								 
+																						
+							if ($a_exercices['results_disabled']==0) {								
+								echo '<td align="center">';							 
+								echo $pourcentageScore.'%';
+								echo '</td>';								
+								echo '<td align="center">';
+								echo  $a_essais['essais'];
+								echo '</td>
+										<td align="center" width="25">';
+								if($a_essais['essais']>0)
+									echo '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
+								echo '</td>';
+							} else {
+								// we show or not the results if the teacher wants to									
+								echo '<td align="center">';							 
+								echo get_lang('CantShowResults');
+								echo '</td>';								
+								echo '<td align="center">';
+								echo ' -- ';
+								echo '</td>
+										<td align="center" width="25">';
+								echo ' -- ';
+								echo '</td>';
+								
+							}
+							echo '</tr>';
 						}
-					}
-					else{
+					} else {
 						echo '<tr><td colspan="4">'.get_lang('NoEx').'</td></tr>';
 					}
 				}

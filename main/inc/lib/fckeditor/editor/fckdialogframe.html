@@ -60,8 +60,8 @@
 	}
 })() ;
 */
-var E=window.parent.InnerDialogLoaded() ;
-var F=E
+var E = window.parent.InnerDialogLoaded() ;
+var F = E ;
 //var E = frameElement._DialogArguments.Editor ;
 
 // It seems referencing to frameElement._DialogArguments directly would lead to memory leaks in IE.
@@ -72,7 +72,7 @@ function Args()
 	//return frameElement._DialogArguments ;
 }
 
-E=E.Editor;
+E = E.Editor ;
 var FCK				= E.FCK ;
 var FCKTools		= E.FCKTools ;
 var FCKDomTools		= E.FCKDomTools ;
@@ -84,7 +84,7 @@ var FCKConfig		= E.FCKConfig ;
 window.focus() ;
 
 // Dialog's size
-var WindowSize= '870px'; //850
+var WindowSize= '455px';
 
 // Sets the language direction.
 var langDir = document.documentElement.dir = E.FCKLang.Dir ;
@@ -150,7 +150,7 @@ document.write( '<link href="' + FCKConfig.SkinPath + 'fck_dialog.css" type="tex
 	<body onload="Init();" class="PopupBody">
 		<table height="100%" cellspacing="0" cellpadding="0" width="100%" border="0">
 			<tr>
-				<td id="TitleArea" class="PopupTitleSimple">
+				<td id="TitleArea" class="PopupTitleSimple"  style="padding-right: 63px;">
 					<script type="text/javascript">
 						document.write( Args().Title ) ;
 					</script>
@@ -158,7 +158,7 @@ document.write( '<link href="' + FCKConfig.SkinPath + 'fck_dialog.css" type="tex
 			</tr>	
 			<tr>
 				<td id="FrameCell" height="100%" valign="top">				
-					<iframe id="frmMain" src="fckblank.html" name="frmMain" frameborder="0" height="850px" width="100%" scrolling="no">
+					<iframe id="frmMain" src="fckblank.html" name="frmMain" frameborder="0" height="470px" width="100%" scrolling="no">
 					</iframe>
 				</td>
 			</tr>

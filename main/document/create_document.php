@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 18430 2009-02-11 00:05:53Z herodoto $
+<?php // $Id: create_document.php 18513 2009-02-16 03:14:45Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -69,7 +69,7 @@ function InnerDialogLoaded()
 	function FCKeditor_OnComplete( editorInstance )
 	{
 		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
-		document.getElementById(\'frmModel\').innerHTML = "<iframe height=950px; width=97%; id=\"template_iframe\" frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
+		document.getElementById(\'frmModel\').innerHTML = "<iframe height=505px; width=240px; id=\"template_iframe\" frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 	}
 
 	function check_for_title()
@@ -387,7 +387,7 @@ $form->addElement('style_submit_button', 'submit', get_lang('langCreateDoc'), 'c
 $form->setDefaults($default);
 
 // HTML
-$form->addElement('html','<div id="frmModel" style="display:block; height:950px;width:20%; position:absolute; top:135px; left:1px;"></div>');
+$form->addElement('html','<div id="frmModel" style="display:block; height:515px; width:250px; position:absolute; top:135px; left:1px;"></div>');
 
 // If form validates -> save the new document
 if ($form->validate())

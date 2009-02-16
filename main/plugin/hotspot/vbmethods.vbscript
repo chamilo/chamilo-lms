@@ -1,3 +1,4 @@
+
 Function VBGetSwfVer(i)
   on error resume next
   Dim swControl, swVersion
@@ -9,3 +10,4 @@ Function VBGetSwfVer(i)
   end if
   VBGetSwfVer = swVersion
 End Function
+

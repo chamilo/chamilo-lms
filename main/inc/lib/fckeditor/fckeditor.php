@@ -428,7 +428,7 @@ class FCKeditor
 		$check_mimetex_timeout = 0.05; // In seconds. Keep this value as low as possible on Windows servers.
 		//----------------------------------------------------------------------------------------------------------------------
 
-    static $is_mimetex_installed = null;
+    	static $is_mimetex_installed = null;
 		$server_base = explode('/', api_get_path(WEB_PATH));
 		$server_base_ip = $server_base[0].'/'.$server_base[1].'/127.0.0.1/'; // To avoid problems on Windows Vista.
 		$server_base = $server_base[0].'/'.$server_base[1].'/'.$server_base[2].'/';

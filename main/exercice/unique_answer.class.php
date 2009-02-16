@@ -248,11 +248,12 @@ class UniqueAnswer extends Question {
 			
 			//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 						
-			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0"');
+			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="2" value="0"');
 			$form -> addElement ('html', '</tr>');
 		}
 		
 		$form -> addElement ('html', '</table>');
+		$form -> addElement ('html', '<br />');
 
 		$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'));
 		$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'));

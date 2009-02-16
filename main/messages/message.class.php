@@ -60,7 +60,7 @@ class MessageManager {
 				GetFullUserName($uid).
 				"</b>".
 				"<br><a href=\"".
-				"inbox.php\">".
+				"../social/index.php$redirect\">".
 				get_lang('BackToInbox').
 				"</a>";				
 			}
@@ -147,14 +147,14 @@ class MessageManager {
 			 }
 			if ($request===true) {
 				$message[1] = utf8_encode(GetFullUserName(($result[1])));
-				$message[2] = '<a href="../messages/view_message.php?rs=1&amp;id='.$result[0].'">'.utf8_encode($result[2]).'</a>';
-				$message[4] = '<a href="../messages/new_message.php?rs=1&amp;re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
-						  '&nbsp;&nbsp;<a href="../messages/inbox.php?rs=1&amp;action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+				$message[2] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.utf8_encode($result[2]).'</a>';
+				$message[4] = '<a onclick="reply_to_messages(\'show\','.$result[0].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
+						  '&nbsp;&nbsp;<a onclick="delete_one_message('.$result[0].')" href="#../messages/inbox.php?rs=1&amp;action=deleteone&id='.$result[0].'"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
 				$message[1] = GetFullUserName(($result[1]));
 				$message[2] = '<a href="view_message.php?id='.$result[0].'">'.$result[2].'</a>';
 				$message[4] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
-						  '&nbsp;&nbsp;<a href="inbox.php?action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';	
+						  '&nbsp;&nbsp;<a delete_one_message('.$result[0].') href="#inbox.php?action=deleteone&id='.$result[0].'">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';	
 			}
 			$message[3] = ($result[3]); //date stays the same
 			$message_list[] = $message;
@@ -264,12 +264,11 @@ class MessageManager {
 			 }
 			if ($request===true) {
 				$message[1] = utf8_encode(GetFullUserName($result[1]));
-				$message[2] = '<a href="../messages/view_message.php?rs=1&amp;id_send='.$result[0].'">'.utf8_encode($result[2]).'</a>';
-				$message[4] = '<a href="../messages/new_message.php?rs=1&amp;re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
-						  '&nbsp;&nbsp;<a href="../messages/outbox.php?rs=1&amp;action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.utf8_encode($result[2]).'</a>';
+				$message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
 				$message[1] = GetFullUserName($result[1]);
-				$message[2] = '<a href="../messages/view_message.php?id_send='.$result[0].'">'.$result[2].'</a>';
+				$message[2] = '<a onclick="show_sent_message ('.$result[0].')" href="#../messages/view_message.php?id_send='.$result[0].'">'.$result[2].'</a>';
 				$message[4] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a href="outbox.php?action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			}
@@ -313,11 +312,12 @@ class MessageManager {
 			if ($row[1]==$user_con[$i])
 				$band=1;	
 		if ($band==1 && !isset($_GET['id_send'])) {
-			$reply = '<a href="new_message.php?re_id='.$_GET['id'].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).get_lang('ReplyToMessage').'</a>';
+			$reply = '<a onclick="reply_to_messages(\'show\','.$_GET['id'].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).get_lang('ReplyToMessage').'</a>';
 		}
 		echo '<div class=actions>';
+		echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',get_lang('BackToInbox')).get_lang('BackToInbox').'</a>';
 		echo $reply; 
-		echo '<a href="'.$path.'?action=deleteone&id='.$row[0].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('Delete').'</a>';
+		echo '<a onclick="delete_one_message('.$row[0].')" href="#'.$path.'?action=deleteone&id='.$row[0].'"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('Delete').'</a>';
 		echo '</div><br />';
 		echo '
 		<table class="message_view_table" >
@@ -327,10 +327,10 @@ class MessageManager {
 		      	<TABLE>      
 		            <TR>
 		              <TD width="100%">                              
-		                    <TR> <h1>'.$row[5].'</h1></TR>
+		                    <TR> <h1>'.utf8_encode($row[5]).'</h1></TR>
 		              </TD>              		
 		              <TR>                       
-		              	<TD>'.get_lang('From').'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.strtolower(get_lang('To')).'&nbsp;  <b>'.GetFullUserName($row[2]).'</b> </TD>
+		              	<TD>'.utf8_encode(get_lang('From')).'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.utf8_encode(strtolower(get_lang('To'))).'&nbsp;  <b>'.utf8_encode(GetFullUserName($row[2])).'</b> </TD>
 		              </TR>                    
 		              <TR>
 		              <TD >'.get_lang('Date').'&nbsp; '.$row[4].'</TD>                      
@@ -341,7 +341,55 @@ class MessageManager {
 		        <TABLE height=209 width="100%" bgColor=#ffffff>
 		          <TBODY>
 		            <TR>
-		              <TD vAlign=top>'.$row[6].'</TD>
+		              <TD vAlign=top>'.utf8_encode($row[6]).'</TD>
+		            </TR>
+		          </TBODY>
+		        </TABLE>
+		        <DIV class=HT style="PADDING-BOTTOM: 5px"> </DIV></TD>
+		      <TD width=10>&nbsp;</TD>
+		    </TR>
+		</TABLE>';
+	}
+	public static function show_message_box_sent () {
+		$table_message = Database::get_main_table(TABLE_MESSAGE);
+		$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".$_GET['id_send']." AND msg_status=4;";
+		$result = api_sql_query($query,__FILE__,__LINE__);
+		$path='outbox.php';
+		
+		$row = Database::fetch_array($result);
+		$user_con = self::users_connected_by_id();
+		$band=0;
+		$reply='';
+		for ($i=0;$i<count($user_con);$i++)
+			if ($row[1]==$user_con[$i])
+				$band=1;	
+		echo '<div class=actions>';
+		echo '<a onclick="close_and_open_outbox()" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',get_lang('BackToOutbox')).get_lang('BackToOutbox').'</a>';
+		echo '<a onclick="delete_one_message_outbox('.$row[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('Delete').'</a>';
+		echo '</div><br />';
+		echo '
+		<table class="message_view_table" >
+		    <TR>
+		      <TD width=10>&nbsp; </TD>
+		      <TD vAlign=top width="100%">
+		      	<TABLE>      
+		            <TR>
+		              <TD width="100%">                              
+		                    <TR> <h1>'.utf8_encode($row[5]).'</h1></TR>
+		              </TD>              		
+		              <TR>                       
+		              	<TD>'.utf8_encode(get_lang('From')).'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.utf8_encode(strtolower(get_lang('To'))).'&nbsp;  <b>'.utf8_encode(GetFullUserName($row[2])).'</b> </TD>
+		              </TR>                    
+		              <TR>
+		              <TD >'.get_lang('Date').'&nbsp; '.$row[4].'</TD>                      
+		              </TR>              
+		            </TR>          
+		        </TABLE>	      		
+		        <br />
+		        <TABLE height=209 width="100%" bgColor=#ffffff>
+		          <TBODY>
+		            <TR>
+		              <TD vAlign=top>'.utf8_encode($row[6]).'</TD>
 		            </TR>
 		          </TBODY>
 		        </TABLE>

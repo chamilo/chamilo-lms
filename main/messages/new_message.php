@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 18499 2009-02-13 20:57:29Z herodoto $
+<?php // $Id: new_message.php 18511 2009-02-16 02:22:11Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -99,10 +99,9 @@ $(document).ready(function (){
 });
 	</script>';	
 $nameTools = get_lang('ComposeMessage');
-
-$fck_attribute['Width'] = "100%";
 $fck_attribute['Height'] = "150";
-$fck_attribute['ToolbarSet'] = "Messages";
+$fck_attribute['Width'] = "95%";
+$fck_attribute['ToolbarSet'] = "Profil";
 /*
 ==============================================================================
 		FUNCTIONS
@@ -114,7 +113,8 @@ $fck_attribute['ToolbarSet'] = "Messages";
 */
 function show_compose_to_any ($user_id) {
 	$online_user_list = MessageManager::get_online_user_list($user_id);
-	$default['user_list'] = $user_id;
+	$default['user_list'] = 0;
+	$online_user_list=null;
 	manage_form($default, $online_user_list);
 }
 
@@ -129,37 +129,46 @@ function show_compose_reply_to_message ($message_id, $receiver_id) {
 		die();
 	}
 	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($row[1]).'</strong>';
-	$default['title'] =get_lang('EnterTitle');
+	$default['title'] =utf8_encode(get_lang('EnterTitle'));
 	$default['user_list'] = $row[1];
 	manage_form($default);
 }
 
 function show_compose_to_user ($receiver_id) {
 	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($receiver_id).'</strong>';
-	$default['title'] = get_lang('EnterTitle');
+	$default['title'] = utf8_encode(get_lang('EnterTitle'));
 	$default['user_list'] = $receiver_id;
 	manage_form($default);
 }
 
 function manage_form ($default, $select_from_user_list = null) {
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
-	
-	$form = new FormValidator('compose_message');
+	$request=api_is_xml_http_request();
+	if ($request===true) {
+		$form = new FormValidator('compose_message','post','index.php?sendform=true#remote-tab-2');
+	} else {
+		$form = new FormValidator('compose_message');
+	}
 	if (isset($select_from_user_list)) {
-		$form->add_textfield('id_text_name',get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name'));
+		$form->add_textfield('id_text_name',get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()'));
 		$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
 		$form->addElement('html','<div id="id_div_search" class="message-search">&nbsp;</div>');
-		$form->addElement('hidden','user_list','',array('id'=>'user_list'));
-		//$form->addElement('select','user_list',get_lang('SendMessageTo'),$select_from_user_list);
+		$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 	} else {
-		//$form->addElement('hidden','user_list');
-		$form->addElement('hidden','user_list','',array('id'=>'user_list'));
+		if ($default['user_list']==0) {
+			$form->add_textfield('id_text_name',get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()'));
+			$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
+			$form->addElement('html','<div id="id_div_search" class="message-search">&nbsp;</div>');
+		}
+		$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 	}
-	$form->add_textfield('title', get_lang('Title'));
+	$form->add_textfield('title', utf8_encode(get_lang('Title')));
 	$form->add_html_editor('content', '',false,false);
+	if (isset($_GET['re_id'])) {
+		$form->addElement('hidden','re_id',$_GET['re_id']);
+	}
 	$form->addElement('submit', 'compose', get_lang('Send'));
 	$form->setDefaults($default);
-
 	if ($form->validate()) {
 		$values = $form->exportValues();
 		$receiver_user_id = $values['user_list'];
@@ -198,8 +207,15 @@ if (isset($_GET['rs'])) {
 		'url' => '#',
 		'name' => get_lang('ComposeMessage')
 	);
-Display::display_header('');
+$request=api_is_xml_http_request();
+if ($request===false) {
+	Display::display_header('');	
+}
+
 api_display_tool_title($nameTools);
+echo '<div class=actions>';
+echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',get_lang('BackToInbox')).get_lang('BackToInbox').'</a>';
+echo '</div>';
 if (!isset($_POST['compose'])) {
 	if(isset($_GET['re_id'])) {
 		$message_id = $_GET['re_id'];
@@ -216,14 +232,14 @@ if (!isset($_POST['compose'])) {
 		
 	}
 	if (isset($_GET['re_id'])) {
-		$default['title'] = $_POST['title'];
-		$default['content'] = $_POST['content'];
-		$default['user_list'] = $_POST['user_list'];
+		$default['title'] = utf8_encode($_POST['title']);
+		$default['content'] = utf8_encode($_POST['content']);
+		//$default['user_list'] = $_POST['user_list'];
 		manage_form($default);	
 	} else {
 		if ($restrict) {
-			$default['title'] = $_POST['title'];
-			$default['id_text_name'] = $_POST['id_text_name'];
+			$default['title'] = utf8_encode($_POST['title']);
+			$default['id_text_name'] = utf8_encode($_POST['id_text_name']);
 			$default['user_list'] = $_POST['user_list'];
 			manage_form($default);
 		} else {
@@ -236,5 +252,7 @@ if (!isset($_POST['compose'])) {
 		FOOTER
 ==============================================================================
 */
-Display::display_footer();
+if ($request===false) {
+	Display::display_footer();
+}
 ?>

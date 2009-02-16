@@ -71,6 +71,46 @@ function deselect_all(formita)
 */
 $nameTools = get_lang('Messages');
 $request=api_is_xml_http_request();
+/***********************************************/
+$info_reply=array();
+$info_delete=array();
+/***********************************************/
+$info_reply=explode(',',$_GET['form_reply']);
+$count_reply=count($info_reply);
+/***********************************************/
+$info_delete=explode(',',$_GET['form_delete']);
+$count_delete=(count($info_delete)-1);
+/***********************************************/
+if ( trim($info_reply[4])=='Enviar' ) {
+	$title     = utf8_decode($info_reply[0]);
+	$content   = utf8_decode($info_reply[1]);
+	$user_reply= $info_reply[2];
+	if (isset($info_reply[2]) && $info_reply[2]>0) {
+		MessageManager::send_message($user_reply, $title, $content);
+		MessageManager::display_success_message($user_reply);
+		exit;
+	} elseif($info_reply[2]==0) {
+		$message_box=get_lang('ErrorMessageSend').
+			'&nbsp
+			<br><a href="../social/index.php#remote-tab-2">'.
+			get_lang('BackToInbox').
+			'</a>';
+		Display::display_error_message($message_box,false);
+		exit;
+	}
+} elseif ( trim($info_delete[0])=='delete' ) {
+	for ($i=1;$i<=$count_delete;$i++) {
+		MessageManager::delete_message_by_user_receiver(api_get_user_id(), $info_delete[$i]);	
+	}
+		$message_box=get_lang('SelectedMessagesDeleted').
+			'&nbsp
+			<br><a href="../social/index.php#remote-tab-2">'.
+			get_lang('BackToInbox').
+			'</a>';
+		Display::display_normal_message($message_box,false);
+	    exit;
+}
+
 if ($request===false) {
 	$interbreadcrumb[]= array (
 		'url' => '#',
@@ -89,14 +129,13 @@ if ($request===false) {
 } else {
 	$link_ref="../messages/new_message.php?rs=1";
 }
-api_display_tool_title(get_lang('Inbox'));
-
 $table_message = Database::get_main_table(TABLE_MESSAGE);
-
+echo '<div id="div_content_messages">&nbsp;&nbsp;';
+api_display_tool_title(utf8_encode(get_lang('Inbox')));
 echo '<div class=actions>';
-echo '<a href="'.$link_ref.'">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
+echo '<a onclick="compose_and_show_message(\'show\',\'1\')" href="javascript:void(0)">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
 echo '</div>';
-
+echo '</div>';
 if (!isset($_GET['del_msg'])) {
 	inbox_display();
 } else {

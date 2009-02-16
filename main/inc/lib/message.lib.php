@@ -78,16 +78,15 @@ function inbox_display() {
 	if ($request===true) {
 		$title= utf8_encode(get_lang('Title'));
 		$action=utf8_encode(get_lang('Actions'));
-		$param=true;
 	} else {
 		$title= get_lang('Title');
-		$action=get_lang('Actions');
-		$param=true;		
+		$action=get_lang('Actions');		
 	}
-	$table->set_header(1, get_lang('From'),$param);
-	$table->set_header(2,$title,$param);
-	$table->set_header(3, get_lang('Date'),$param);
-	$table->set_header(4,$action,$param);
+	$table->set_header(1, get_lang('From'),false);
+	$table->set_header(2,$title,false);
+	$table->set_header(3, get_lang('Date'),false);
+	$table->set_header(4,$action,false);
+echo '<div id="div_content_table_data">';
 	if ($request===true) {
 		echo '<form name="form_send" id="form_send" action="" method="post">';
 		echo '<input type="hidden" name="action" value="delete" />';
@@ -102,6 +101,7 @@ function inbox_display() {
 		$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
 		$table->display();
 	}
+echo '</div>';
 }
 function get_number_of_messages_mask() {
 	return MessageManager::get_number_of_messages();
@@ -168,10 +168,11 @@ if ($request===true) {
 	$action=get_lang('Actions');		
 }
 $table->set_header(0, '', false);
-$table->set_header(1, get_lang('From'));
-$table->set_header(2, $title);
-$table->set_header(3, get_lang('Date'));
+$table->set_header(1, get_lang('From'),false);
+$table->set_header(2, $title,false);
+$table->set_header(3, get_lang('Date'),false);
 $table->set_header(4,$action, false);
+echo '<div id="div_content_table_data_sent">';
 	if ($request===true) {
 		echo '<form name="form_send_out" id="form_send_out" action="" method="post">';
 		echo '<input type="hidden" name="action" value="delete" />';
@@ -186,6 +187,7 @@ $table->set_header(4,$action, false);
 		$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
 		$table->display();
 	}
+echo '</div>';
 }
 function get_number_of_messages_send_mask() {
 	return MessageManager::get_number_of_messages_sent();

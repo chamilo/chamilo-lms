@@ -88,14 +88,32 @@ if ($request===false) {
 	);
 	Display::display_header('');
 }
-api_display_tool_title(get_lang('Outbox'));
-
+/**************************************************************/
+$info_delete_outbox=array();
+$info_delete_outbox=explode(',',$_GET['form_delete_outbox']);
+$count_delete_outbox=(count($info_delete_outbox)-1);
+/**************************************************************/
+if( trim($info_delete_outbox[0])=='delete' ) {
+	for ($i=1;$i<=$count_delete_outbox;$i++) {
+		MessageManager::delete_message_by_user_sender(api_get_user_id(),$info_delete_outbox[$i]);	
+	}
+		$message_box=get_lang('SelectedMessagesDeleted').
+			'&nbsp
+			<br><a href="../social/index.php#remote-tab-3">'.
+			get_lang('BackToOutbox').
+			'</a>';
+		Display::display_normal_message($message_box,false);
+	    exit;	
+}
+/**************************************************************/
 $table_message = Database::get_main_table(TABLE_MESSAGE);
+echo '<div id="div_content_messages_sent">&nbsp;&nbsp;';
+api_display_tool_title(utf8_encode(get_lang('Outbox')));
 echo '<div class=actions>';
 $language_variable=($request===true) ? utf8_encode(get_lang('MessageOutboxComment')) : get_lang('MessageOutboxComment');
 echo $language_variable;	
 echo '</div>';
-
+echo '</div>';
 $user_sender_id=api_get_user_id();
 if ($_REQUEST['action']=='delete') {
 	$delete_list_id=array();

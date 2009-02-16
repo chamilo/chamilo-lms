@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18508 2009-02-15 04:37:02Z ivantcholakov $
+<?php // $Id: profile.php 18511 2009-02-16 02:22:11Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -18,7 +18,7 @@ $language_file = array('registration','messages');
 $cidReset = true;
 require ('../inc/global.inc.php');
 if (!isset($_GET['show'])) {
-	 if (api_get_setting('allow_social_tool')=='true') {
+	 if (api_get_setting('allow_social_tool')=='true' || api_get_setting('allow_message_tool')=='true') {
 		header('Location:../social/index.php');
 		exit;
 	}

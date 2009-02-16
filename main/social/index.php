@@ -21,7 +21,7 @@ function register_friend(element_input) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("#id_response").html("Cargando..."); },
+		$("#id_response").html("'.get_lang('Loading').'"); },
 		type: "POST",
 		url: "../social/register_friend.php",
 		data: "friend_id="+user_friend_id,
@@ -168,7 +168,7 @@ function unselectall_cheks() {
 function submit_form (path_submit) {
 	if (path_submit=="inbox") {
 		if (count_checkbox("inbox") > 0) {
-		   document.getElementById(\'form_send\').action="../messages/inbox.php";		
+		   document.getElementById(\'form_send\').action="../social/index.php?inbox=true#remote-tab-2";		
 		   if (confirm("'.get_lang('ConfirmYourChoice').'")) {
 		   		$("#form_send").submit();
 		   }	
@@ -178,7 +178,7 @@ function submit_form (path_submit) {
 
 	} else {
 		if (count_checkbox("outbox") > 0) {
-			document.getElementById(\'form_send_out\').action="../messages/outbox.php";		
+			document.getElementById(\'form_send_out\').action="../social/index.php?outbox=true#remote-tab-3";		
 		   if (confirm("'.get_lang('ConfirmYourChoice').'")) {			
 				$("#form_send_out").submit();
 		   }
@@ -208,6 +208,155 @@ function count_checkbox(status_type) {
 		return cont;	
 	}
 }
+function get_action_url_and_show_messages (name_rs,name_id) {
+		 $.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+			$("#id_response").html("'.get_lang('Loading').'"); },
+			type: "GET",
+			url: "../messages/view_message.php",
+			data: "rs="+name_rs+"&id="+name_id,
+			success: function(datos) {
+			 $("div#div_content_messages").html(datos);
+			 $("div#div_content_table_data").html(" ");	
+			}
+		});
+}
+function close_div_show (my_div) {
+	$("div#"+my_div).html("");
+		 $.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+			$("#id_response").html("'.get_lang('Loading').'"); },
+			type: "POST",
+			url: "../messages/inbox.php",
+			data:"",
+			success: function(datos) {
+			 $("div#div_content_table_data").html(datos);	
+			}
+		});
+}
+function reply_to_messages (my_action,name_rs,name_id) {
+	if(my_action=="show") {
+		$("div#div_content_messages").html("");
+		$("div#div_content_table_data").html("");
+		 $.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+			$("#id_response").html("'.get_lang('Loading').'"); },
+			type: "GET",
+			url: "../messages/new_message.php",
+			data:"re_id="+name_rs+"&id="+name_id,
+			success: function(datos) {
+			 $("div#div_content_messages").html(datos);	
+			}
+		});
+	}
+}
+function compose_and_show_message (my_action,name_rs) {
+	if(my_action=="show") {
+		$("div#div_content_messages").html("");
+		$("div#div_content_table_data").html("");
+			$.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+			$("#id_response").html("'.get_lang('Loading').'"); },
+			type: "GET",
+			url: "../messages/new_message.php",
+			data:"rs="+name_rs,
+			success: function(datos) {
+			 $("div#div_content_messages").html(datos);	
+			}
+		});		
+	}		
+}
+function send_request_and_search() {
+	cont=0;
+      $("#id_text_name").bind("keyup", function(){
+      	name=$("#id_text_name").get(0).value;
+		$.ajax({
+				contentType: "application/x-www-form-urlencoded",
+				beforeSend: function(objeto) {
+				/*$("#id_div_search").html("Searching...");*/ },
+				type: "POST",
+				url: "../social/select_options.php",
+				data: "search="+name,
+				success: function(datos){
+				$("#id_div_search").html(datos)
+				$("#id_search_name").bind("click", function(){
+					name_option=$("select#id_search_name option:selected").text();
+					code_option=$("select#id_search_name option:selected").val();
+					 $("#user_list").attr("value", code_option);
+					 $("#id_text_name").attr("value", name_option);
+					 $("#id_div_search").html("");
+					 cont++;
+				 });
+				}
+		});
+      }); 
+}
+function delete_one_message (num_id) {
+		$("div#div_content_messages").html("");
+		$("div#div_content_table_data").html("");	
+			$.ajax({
+				contentType: "application/x-www-form-urlencoded",
+				beforeSend: function(objeto) {
+				/*$("#id_div_search").html("Searching...");*/ },
+				type: "GET",
+				url: "../messages/inbox.php",
+				data: "action="+"deleteone"+"&id="+num_id,
+				success: function(datos){
+				$("#div_content_table_data").html(datos)
+				}
+		});
+}
+function show_sent_message (id_sent) {
+		$("div#div_content_messages_sent").html("");
+		$("div#div_content_table_data_sent").html("");
+			$.ajax({
+				contentType: "application/x-www-form-urlencoded",
+				beforeSend: function(objeto) {
+				/*$("#id_div_search").html("Searching...");*/ },
+				type: "GET",
+				url: "../messages/view_message.php",
+				data: "rs="+"1"+"&id_send="+id_sent,
+				success: function(datos){
+				$("#div_content_table_data_sent").html(datos)
+				}
+		});
+}
+function close_and_open_outbox() {
+		$("div#div_content_messages_sent").html("");
+		$("div#div_content_table_data_sent").html("");
+		 $.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+			$("#id_response").html("'.get_lang('Loading').'"); },
+			type: "POST",
+			url: "../messages/outbox.php",
+			data:"",
+			success: function(datos) {
+			 $("div#div_content_table_data_sent").html(datos);	
+			}
+		});
+}
+function delete_one_message_outbox (num_id) {
+		$("div#div_content_messages_sent").html("");
+		$("div#div_content_table_data_sent").html("");	
+			$.ajax({
+				contentType: "application/x-www-form-urlencoded",
+				beforeSend: function(objeto) {
+				/*$("#id_div_search").html("Searching...");*/ },
+				type: "GET",
+				url: "../messages/outbox.php",
+				data: "action="+"deleteone"+"&id="+num_id,
+				success: function(datos){
+				$("#div_content_table_data_sent").html(datos)
+				}
+		});
+}
+
+
 </script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';
 $htmlHeadXtra[] = '
@@ -240,6 +389,7 @@ code {
     font-family: "Courier New", Courier, monospace;
 }
 </style>';
+/*onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;"*/
 $_SESSION['social_exist']=true;
 $_SESSION['social_dest'] = 'index.php';
 $interbreadcrumb[]= array (
@@ -251,6 +401,33 @@ $interbreadcrumb[]= array (
 	'name' => get_lang('SocialNetwork')
 );
 Display :: display_header('');
+if (isset($_GET['sendform'])) {
+	$form_reply=array();
+	$params_url='?'.$_SERVER['argv'][0];
+	$form_reply[]=utf8_encode($_POST['title']);
+	$form_reply[]=utf8_encode($_POST['content']);
+	$form_reply[]=$_POST['user_list'];
+	$form_reply[]=$_POST['re_id'];
+	$form_reply[]=$_POST['compose'];
+	$form_info=implode(',',$form_reply);
+	$form_send_data_message="?form_reply=$form_info";
+} elseif (isset($_GET['inbox'])) {
+	$form_delete=array();
+	$form_delete[]=$_POST['action'];
+	for ($i=0;$i<count($_POST['id']);$i++) {
+		$form_delete[]=$_POST['id'][$i];
+	}
+	$form_info=implode(',',$form_delete);
+	$form_send_data_message="?form_delete=$form_info";
+} elseif (isset($_GET['outbox'])) {
+	$form_delete_outbox=array();
+	$form_delete_outbox[]=$_POST['action'];
+	for ($i=0;$i<count($_POST['out']);$i++) {
+		$form_delete_outbox[]=$_POST['out'][$i];
+	}
+	$form_info_outbox=implode(',',$form_delete_outbox);
+	$form_send_data_message="?form_delete_outbox=$form_info_outbox";	
+}
 ?>
 <div id="container-9">
     <ul>
@@ -258,8 +435,8 @@ Display :: display_header('');
         <?php 
        	if (api_get_setting('allow_message_tool')=='true') { 
        	?>        
-        <li><a href="../messages/inbox.php"><span><?php echo get_lang('Inbox'); ?></span></a></li>
-        <li><a href="../messages/outbox.php"><span><?php echo get_lang('Outbox'); ?></span></a></li>
+        <li><a href="../messages/inbox.php<?php echo $form_send_data_message; ?>"><span><?php echo get_lang('Inbox'); ?></span></a></li>
+        <li><a href="../messages/outbox.php<?php echo $form_send_data_message; ?>"><span><?php echo get_lang('Outbox'); ?></span></a></li>
         <?php }
   	 	if (api_get_setting('allow_social_tool')=='true') {      
         ?>

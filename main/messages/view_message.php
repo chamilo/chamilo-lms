@@ -1,4 +1,4 @@
-<?php // $Id: view_message.php 18385 2009-02-09 21:56:23Z iflorespaz $
+<?php // $Id: view_message.php 18511 2009-02-16 02:22:11Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,13 +76,22 @@ if (isset($_GET['id_send']) || isset($_GET['id'])) {
 		HEADER
 ==============================================================================
 */
-Display::display_header('');
-api_display_tool_title(get_lang('ReadMessage'));
-MessageManager::show_message_box();
+$request=api_is_xml_http_request();
+if ($request===false) {
+	Display::display_header('');
+}
+api_display_tool_title(utf8_encode(get_lang('ReadMessage')));
+if (isset($_GET['id_send'])) {
+	MessageManager::show_message_box_sent();
+} else {
+	MessageManager::show_message_box();
+}
 /*
 ==============================================================================
 		FOOTER
 ==============================================================================
 */
-Display::display_footer();
+if ($request===false) {
+	Display::display_footer();
+}
 ?>

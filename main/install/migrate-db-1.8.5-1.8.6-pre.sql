@@ -110,6 +110,12 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_stud
 ALTER TABLE user_field ADD field_filter tinyint default 0;
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.18412','DokeosDatabaseVersion','',NULL,NULL,1,0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0);
+INSERT INTO user_friend_relation_type(id,title)VALUES(1,'SocialUnknow');
+INSERT INTO user_friend_relation_type(id,title)VALUES(2,'SocialParent');
+INSERT INTO user_friend_relation_type(id,title)VALUES(3,'SocialFriend');
+INSERT INTO user_friend_relation_type(id,title)VALUES(4,'SocialGoodFriend');
+INSERT INTO user_friend_relation_type(id,title)VALUES(5,'SocialEnemy');
+INSERT INTO user_friend_relation_type(id,title)VALUES(6,'SocialDeleted');
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
@@ -217,12 +223,5 @@ ALTER TABLE quiz_question ADD level int UNSIGNED NOT NULL default 0;
 ALTER TABLE survey_invitation ADD COLUMN session_id SMALLINT(5) UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE quiz_answer   CHANGE ponderation ponderation float(6,2) NOT NULL DEFAULT 0;
 ALTER TABLE quiz_question CHANGE ponderation ponderation float(6,2) NOT NULL DEFAULT 0;
-INSERT INTO user_friend_relation_type(id,title)VALUES(1,'SocialUnknow');
-INSERT INTO user_friend_relation_type(id,title)VALUES(2,'SocialParent');
-INSERT INTO user_friend_relation_type(id,title)VALUES(3,'SocialFriend');
-INSERT INTO user_friend_relation_type(id,title)VALUES(4,'SocialGoodFriend');
-INSERT INTO user_friend_relation_type(id,title)VALUES(5,'SocialEnemy');
-INSERT INTO user_friend_relation_type(id,title)VALUES(6,'SocialDeleted');
 ALTER TABLE lp ADD session_id int unsigned not null default 0;
 ALTER TABLE document ADD session_id int unsigned not null default 0;
-

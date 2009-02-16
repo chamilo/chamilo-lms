@@ -88,7 +88,7 @@ if (is_array($extra_field_list)) {
 	foreach ($extra_field_list as $extra_field) {
 		//if is enabled to filter and is a "<select>" field type
 		if ($extra_field[8]==1 && $extra_field[2]==4 ) {
-			$new_field_list[] = array('name'=> $extra_field[1], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
+			$new_field_list[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
 		}
 	}
 }	
@@ -321,6 +321,7 @@ if ($ajax_search) {
 		$sessionUsersList[$user['user_id']] = $user ;
 	}
 } else {
+		//Filter by Extra Fields
 		$use_extra_fields = false;		
 		if (is_array($extra_field_list)) {
 			if (is_array($new_field_list) && count($new_field_list)>0 ) {			
@@ -366,49 +367,73 @@ if ($ajax_search) {
 				}
 			}		
 		}
-	
-	$table_user_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-	$table_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		
-	if ($use_extra_fields) {		
-		$sql="SELECT  user_id, lastname, firstname, username, id_session
-			FROM $tbl_user u
-			LEFT JOIN $tbl_session_rel_user
-			ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
-			$where_filter
-			ORDER BY lastname,firstname,username";
-			
-	} else {
+		if ($use_extra_fields) {		
+			$sql="SELECT  user_id, lastname, firstname, username, id_session
+				FROM $tbl_user u
+				LEFT JOIN $tbl_session_rel_user
+				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
+				$where_filter
+				ORDER BY lastname,firstname,username";
+				
+		} else {
+			$sql="SELECT  user_id, lastname, firstname, username, id_session
+				FROM $tbl_user u
+				LEFT JOIN $tbl_session_rel_user
+				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session' 
+				ORDER BY lastname,firstname,username";
+		}			
+		
+		if ($_configuration['multiple_access_urls']==true) {		
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){				
+				$sql="SELECT  u.user_id, lastname, firstname, username, id_session
+				FROM $tbl_user u
+				LEFT JOIN $tbl_session_rel_user
+					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'			 
+				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id) 
+				WHERE access_url_id = $access_url_id  $where_filter
+				ORDER BY lastname,firstname,username";			
+			}
+		}
+		
+		$result=api_sql_query($sql,__FILE__,__LINE__);	
+		$Users=api_store_result($result);
+		//var_dump($_REQUEST['id_session']);
+		foreach ($Users as $user) {
+			if($user['id_session'] != $id_session)			
+				$nosessionUsersList[$user['user_id']] = $user ;
+		}
+		
+		//filling the correct users in list
 		$sql="SELECT  user_id, lastname, firstname, username, id_session
 			FROM $tbl_user u
 			LEFT JOIN $tbl_session_rel_user
 			ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session' 
 			ORDER BY lastname,firstname,username";
-	}			
-	
-	if ($_configuration['multiple_access_urls']==true) {		
-		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
-		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1){				
-			$sql="SELECT  u.user_id, lastname, firstname, username, id_session
-			FROM $tbl_user u
-			LEFT JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'			 
-			INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id) 
-			WHERE access_url_id = $access_url_id  $where_filter
-			ORDER BY lastname,firstname,username";			
-		}
-	}
 		
-	$result=api_sql_query($sql,__FILE__,__LINE__);	
-	$Users=api_store_result($result);
-	//var_dump($_REQUEST['id_session']);
-	foreach ($Users as $user) {
-		if($user['id_session'] == $id_session)
-			$sessionUsersList[$user['user_id']] = $user ;
-		else
-			$nosessionUsersList[$user['user_id']] = $user ;
-	}
+		if ($_configuration['multiple_access_urls']==true) {		
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1){				
+				$sql="SELECT  u.user_id, lastname, firstname, username, id_session
+				FROM $tbl_user u
+				LEFT JOIN $tbl_session_rel_user
+					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'			 
+				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id) 
+				WHERE access_url_id = $access_url_id
+				ORDER BY lastname,firstname,username";			
+			}
+		}		
+		$result=api_sql_query($sql,__FILE__,__LINE__);	
+		$Users=api_store_result($result);
+		//var_dump($_REQUEST['id_session']);
+		foreach ($Users as $user) {
+			if($user['id_session'] == $id_session)
+				$sessionUsersList[$user['user_id']] = $user ;		
+		}
+		
 }
 
 if ($add_type == 'multiple') {
@@ -432,6 +457,8 @@ if ($add_type == 'multiple') {
 <?php
 if ($add_type=='multiple') { 
 	if (is_array($extra_field_list)) {
+		echo '<h3>'.get_lang('FilterUsers').'</h3>';
+		
 		if (is_array($new_field_list) && count($new_field_list)>0 ) {
 			foreach ($new_field_list as $new_field) {
 				echo $new_field['name'];

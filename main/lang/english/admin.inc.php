@@ -881,8 +881,8 @@ $UserListInURL = "Users subscribed to this URL";
 $UsersWereEdited = "The user accounts have been updated";
 $AtLeastOneUserAndOneURL = "You must select at least one user and one URL";
 $UsersBelongURL = "The user accounts are now attached to the URL";
-$LPTestScore = "Scores of learning paths\' tests";
-$ScormAndLPTestTotalAverage = "Average total of tests from SCORM and learning paths";
+$LPTestScore = "Scores of learning path\'s tests";
+$ScormAndLPTestTotalAverage = "Total average of tests from SCORM and learning paths";
 $ImportUsersToACourse = "Import users to a course from a file";
 $ImportCourses = "Import courses from a file";
 $ManageUsers = "Manage users";
@@ -921,4 +921,5 @@ $FilterOn = "Filter on";
 $FilterOff = "Filter off";
 $FieldFilterSetOn = "You can use now this field as a filter ";
 $FieldFilterSetOff = "You can\'t use this field as a filter ";
+$buttonAddUserField = "Add user field";
 ?>

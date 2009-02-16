@@ -916,4 +916,10 @@ $AllowSocialToolComment = "I Contatti consentono agli utenti di definire le rela
 $SetLanguageAsDefault = "Definisci come lingua di default";
 $GenerateApiKey = "Genera un\'API key";
 $MyApiKey = "API key personale";
+$FieldFilter = "Filtro";
+$FilterOn = "Filtra!";
+$FilterOff = "Non filtrare!";
+$FieldFilterSetOn = "Puoi usare il campo come filtro";
+$FieldFilterSetOff = "Non puoi usare il campo come filtro";
+$buttonAddUserField = "Aggiungi un campo utente";
 ?>

@@ -69,4 +69,7 @@ $SubmitRegistrationCode = "Enviar el código de registro";
 $CourseCategoryDeleted = "La categoría fue eliminada";
 $CategorySortingDone = "Ordenación de categorías realizada";
 $CourseCategoryEditStored = "Categoría actualizada";
+$buttonCreateCourseCategory = "Crear una categoría de cursos";
+$buttonSaveCategory = "Guardar categoría";
+$buttonChangeCategory = "Cambiar categoría";
 ?>

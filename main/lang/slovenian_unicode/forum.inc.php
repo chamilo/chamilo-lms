@@ -127,4 +127,5 @@ $QualifyWeight = "Utež za kvalifikacijo";
 $QualifyNumeric = "Numerična kvalifikacija";
 $AlterQualifyThread = "Spremeni kvalifikajsko nit";
 $ForumMoved = "Forum je bil prestavljen";
+$YouMustAssignWeightOfQualification = "Dodeliti je potrebno utež kvalifikaciji";
 ?>

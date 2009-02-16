@@ -37,7 +37,7 @@ $langCsvFileLine1 = "... - vrstica 1 =";
 $langCsvLinesFailed = "vrstic je povzroèilo napako pri uvozu povezave (ni URL-ja ali ni naslova)";
 $langCsvLinesOld = "obstojeèih povezav ažuriranih (enak URL in kategorija).";
 $langCsvLinesNew = "novih povezav ustvarjenih.";
-$langCsvExplain = "Vsebina datoteke mora biti videti kot: <blockquote><pre> <b>URL</b>;kategorija;<b>naslov</b>;opis; <b>http://www.aaa.org/...</b>;Pomembne povezave;<b>Naziv 1</b>;Opis 1; <b>http://www.bbb.net/...</b>;;<b>Ime 2</b>;\"Opis 2\"; </pre></blockquote> V primeru, da sta URL in kategorija enaka tistim pri obstojeèih povezavah, se ime in opis ažurirata z novimi vrednostmi. V vseh ostalih primerih se ustvari nova povezava.<br><br> Mastno = obvezno. Polja so lahko v poljubnem vrstnem redu, podana z velikimi ali malimi èrkami. Dodatna polja so dodana k opisu. Loèilec med polji: vejica ali podpièje. Vrednosti so lahko zajete med narekovaje, razen samih imen polj. Nekatere [b]HTML oznake[/b] lahko importirate v opisu.";
+$langCsvExplain = "Vsebina datoteke mora biti videti kot: <blockquote><pre><b>URL</b>;kategorija;<b>naslov</b>;opis; <br /><b>http://www.aaa.org/...</b>;Pomembne povezave;<b>Naziv 1</b>;Opis 1; <br /><b>http://www.bbb.net/...</b>;;<b>Ime 2</b>;\"Opis 2\"; </pre></blockquote> V primeru, da sta URL in kategorija enaka tistim pri obstojeèih povezavah, se ime in opis ažurirata z novimi vrednostmi. V vseh ostalih primerih se ustvari nova povezava.<br><br> Mastno = obvezno. Polja so lahko v poljubnem vrstnem redu, podana z velikimi ali malimi èrkami. Dodatna polja so dodana k opisu. Loèilec med polji: vejica ali podpièje. Vrednosti so lahko zajete med narekovaje, razen samih imen polj. Nekatere [b]HTML oznake[/b] lahko importirate v opisu.";
 $langLinkUpdated = "Povezava je bila ažurirana";
 $langAll_Link_Deleted = "Povezava je bila odstranjena";
 $langOnHomepage = "Na domaèi strani";
@@ -45,4 +45,6 @@ $langShowLinkOnHomepage = "Prikaži to povezavo kot ikono na domaèi strani";
 $langCsvImport = "CSV uvoz";
 $General = "Splošno";
 $SearchFeatureDoIndexLink = "Indeksiram naziv in opis povezave ? ";
+$langSaveLink = "Shrani povezavo";
+$langSaveCategory = "Shrani kategorijo";
 ?>

@@ -92,4 +92,5 @@ $ForumSearchResults = "Resultados da pesquisa do fórum";
 $ForumSearchInformation = "Pode pesquisar múltiplas palavras usando o sinal + entre elas";
 $YouWillBeNotifiedOfNewPosts = "Será notificado por email sobre novas mensagens.";
 $YouWillNoLongerBeNotifiedOfNewPosts = "Não será mais notificado por email sobre novas mensagens.";
+$NotifyMe = "Notifique-me";
 ?>

@@ -210,4 +210,5 @@ $TemplateTitleStopAndThinkDescription = "Predloga vzpodbude k zaustavitvi in raz
 $SaveDocument = "Shrani dokument";
 $CreateTheDocument = "Shrani dokument";
 $SharedFolder = "Mapa v skupni rabi";
+$CreateFolder = "Ustvari mapo";
 ?>

@@ -99,5 +99,7 @@ $ExampleForum = "Primer foruma";
 $ExampleThread = "Primer niti";
 $ExampleThreadContent = "Primer vsebine";
 $IntroductionWiki = "Besedica Wiki je okrajšava za WikiWikiWeb. WikiWiki je beseda iz havajskega jezika in pomeni hitro oz. hitrost. V okviru orodja Wiki, uporabniki lahko skupaj kreirajo/pišejo besedila. V primeru, da prvi napiše nekaj narobe, to drugi lahko popravi. Naslednji uporabnik lahko npr. doda nekaj novega. Zaradi tega strani (dokumenti) postajajo boljše z vsako vneseno spremembo.";
+$CreateCourseArea = "Ustvari podroèje teèaja";
+$CreateCourse = "Ustvari teèaj";
 $Create = "Ustvari";
 ?>

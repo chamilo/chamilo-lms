@@ -280,4 +280,7 @@ $NewScore = "Nov rezultat";
 $NewComment = "Nov komentar";
 $ExerciseNoStartedYet = "Začetek izvajanja vaje/testa še ni omogočen";
 $ExerciseNoStartedAdmin = "Upravitelj še ni omogočil začetka izvajanja vaje/testa";
+$SelectTargetLP = "Izberi ciljno učno pot";
+$SelectTargetQuestion = "Izberi ciljno vprašanje";
+$DirectFeedbackCantModifyTypeQuestion = "Vrsta ocenjevanja ne more biti spremenjena, ker je postavljena kot Samoocenjevanje";
 ?>

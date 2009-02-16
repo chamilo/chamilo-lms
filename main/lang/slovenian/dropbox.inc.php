@@ -124,5 +124,7 @@ $NoFilesHere = "Tu trenutno ni nobenih datotek";
 $NoFilesHere = "Tu ni nobenih datotek";
 $NewDropboxFileUploaded = "V nabiralnik je bila poslana nova datoteka";
 $NewDropboxFileUploadedContent = "V nabiralnik tvojega teèaja je bila poslana nova datoteka";
+$langAddEdit = "Dodaj/Uredi";
 $ErrorNoFilesInFolder = "Ta mapa je prazna";
+$dropbox_lang["upload"] = "Naloži";
 ?>

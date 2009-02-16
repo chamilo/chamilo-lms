@@ -127,4 +127,5 @@ $QualifyWeight = "Peso della valutazione";
 $QualifyNumeric = "Punteggio massimo";
 $AlterQualifyThread = "Modifica la valutazione della discussione";
 $ForumMoved = "Il forum è stato spostato";
+$YouMustAssignWeightOfQualification = "Devi indicare un peso per la valutazione";
 ?>

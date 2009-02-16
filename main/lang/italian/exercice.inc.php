@@ -280,4 +280,8 @@ $NewScore = "Nuovo punteggio";
 $NewComment = "Nuovo commento";
 $ExerciseNoStartedYet = "Test non ancora iniziato";
 $ExerciseNoStartedAdmin = "Il docente non ha ancora aperto l\'accesso";
+$SelectTargetLP = "Deleziona il modulo didattico cui puntare";
+$SelectTargetQuestion = "Seleziona il test di destinazione";
+$DirectFeedbackCantModifyTypeQuestion = "Il tipo di valutazione non può essere modificato, in quanto identificato come auto-valutazione";
+$CantShowResults = "Non disponibile";
 ?>

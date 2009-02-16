@@ -687,4 +687,6 @@ $InvitationHasBeenNotSent = "Vabilo ni bilo odposlano";
 $Overview = "Pregled";
 $ApiKeys = "API ključi";
 $Deny = "Onemogoči";
+$ThereIsNotQualifiedLearners = "Tu ni kvalificiranih učečih se uporabnikov";
+$ThereIsNotUnqualifiedLearners = "Tu ni nekvalificiranih učečih se uporabnikov";
 ?>

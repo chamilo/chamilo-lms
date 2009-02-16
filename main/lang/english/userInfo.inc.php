@@ -55,13 +55,13 @@ $SocialParent = "My parents";
 $SocialFriend = "My friends";
 $SocialGoodFriend = "My real friends";
 $SocialEnemy = "My enemies";
-$SocialDeleted = "Deleted contact";
+$SocialDeleted = "Contact deleted";
 $MessageOutboxComment = "This screen shows the messages you sent";
 $MyPersonalData = "My personal data";
 $AlterPersonalData = "Alter personal data";
 $SocialNetwork = "Social network";
-$YouDontHaveInvites  = "You dont have invites";
-$Invites = "My invites";
-$ContactsGroups = "Contcats Groups";
+$YouDontHaveInvites  = "You don\'t have pending invitations";
+$Invites = "My invitations";
+$ContactsGroups = "Group contacts";
 $BackToOutbox = "Back to outbox";
 ?>

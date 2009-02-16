@@ -66,4 +66,10 @@ $RepeatEnd = "Datum konca ponovitev";
 $RepeatedEventViewOriginalEvent = "Poglej zaèetni dogodek";
 $ICalFileImport = "Uvozi iCal/ics datoteko";
 $AllUsersOfThePlatform = "Vsi uporabniki platforme";
+$GlobalEvent = "Globalni dogodek";
+$EndDateCannotBeBeforeTheStartDate = "Konèni datum ne more biti pred zaèetnim datumom";
+$AgendaSortChronologicallyUp = "Razvrsti agendo kronološko (narašèajoèe)";
+$AgendaSortChronologicallyDown = "Razvrsti agendo kronološko (padajoèe)";
+$ItemForUserSelection = "Izbira uporabnikov";
+$IsNotiCalFormatFile = "Datoteka ni v iCal obliki";
 ?>

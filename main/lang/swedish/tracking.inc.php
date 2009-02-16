@@ -137,6 +137,7 @@ $Trainers = "Lärare";
 $Administrators = "Administratörer";
 $ExcelFormat = "Excel-format";
 $Time = "Tid";
+$LastConnexion = "Senast aktiv";
 $Attempts = "Försök";
 $LimitDate = "Datumbegränsning";
 $NoComment = "Ingen kommentar";

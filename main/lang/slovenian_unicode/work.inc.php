@@ -56,4 +56,5 @@ $WeightNecessary = "Uteži potrebne";
 $QualificationOver = "Kvalifikacije preko";
 $ExpiryDateAlreadyPassed = "Datum poteka je že presežen";
 $EndDateAlreadyPassed = "Končni datum je že presežen";
+$MoveXTo = "Premakni %s v";
 ?>

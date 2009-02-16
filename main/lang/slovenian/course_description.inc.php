@@ -15,4 +15,5 @@ $langBackAndForget  = "Preklièi";
 $CourseDescriptionUpdated = "Opis teèaja je bil ažuriran";
 $CourseDescriptionDeleted = "Opis teèaja je bil odstranjen";
 $CourseDescriptionIntro = "Da bi opisali teèaj, kliknite na ustrezen naslov in vnesite želene podatke v vnosna polja.<br /><br />Zakljuèite s klikom na OK, nato ponovite za naslednji želen naslov.";
+$langSaveDescription = "Shrani opis";
 ?>

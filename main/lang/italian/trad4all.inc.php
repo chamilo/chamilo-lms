@@ -687,4 +687,6 @@ $InvitationHasBeenNotSent = "L\'invito non è stato trasmesso";
 $Overview = "Vista d\'insieme";
 $ApiKeys = "API key";
 $Deny = "Non consentire";
+$ThereIsNotQualifiedLearners = "Non ci sono corsisti con valutazioni";
+$ThereIsNotUnqualifiedLearners = "Non ci sono corsisti senza valutazione";
 ?>

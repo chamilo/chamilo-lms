@@ -240,7 +240,7 @@ $DisableResults = "Do not show results to learners";
 $EnableResults = "Show results to learners";
 $ValidateAnswer = "Validate answers";
 $FillInBlankSwitchable = "Allow answers order switches";
-$ReachedMaxAttempts = "You cannot take test \'%s because\' you have already reached the maximum of %s attempts.";
+$ReachedMaxAttempts = "You cannot take test <b>%s</b> because you have already reached the maximum of %s attempts.";
 $AdvancedParameters = "Advanced parameters";
 $RandomQuestionsToDisplay = "Number of random questions to display ";
 $RandomQuestionsHelp = "Number of random questions to display; let 0 to have all questions in the right order";
@@ -280,4 +280,8 @@ $NewScore = "New score";
 $NewComment = "New comment";
 $ExerciseNoStartedYet = "The exercise didn\'t start yet";
 $ExerciseNoStartedAdmin = "The admin didn\'t start the exercise yet";
+$SelectTargetLP = "Select target learning path";
+$SelectTargetQuestion = "Select target question";
+$DirectFeedbackCantModifyTypeQuestion = "The type of evaluation can\'t be modified, since it was set to Self evaluation";
+$CantShowResults = "Not disponible";
 ?>

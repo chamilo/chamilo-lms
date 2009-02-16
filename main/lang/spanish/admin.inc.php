@@ -921,4 +921,5 @@ $FilterOn = "Habilitar filtro";
 $FilterOff = "Deshabilitar filtro";
 $FieldFilterSetOn = "Puede utilizar este campo como filtro ";
 $FieldFilterSetOff = "Filtro deshabilitado";
+$buttonAddUserField = "Añadir campo de usuario";
 ?>

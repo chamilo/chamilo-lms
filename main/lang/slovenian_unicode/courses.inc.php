@@ -70,4 +70,7 @@ $SubmitRegistrationCode = "Izroči registracijsk kodo";
 $CourseCategoryDeleted = "Kategorija tečaja je bila odstranjena";
 $CategorySortingDone = "Razvrščanje kategorije je končano";
 $CourseCategoryEditStored = "Kategorija je bila ažurirana";
+$buttonCreateCourseCategory = "Ustvari kategorijo tečajev";
+$buttonSaveCategory = "Shrani kategorijo";
+$buttonChangeCategory = "Zamenjaj kategorijo";
 ?>

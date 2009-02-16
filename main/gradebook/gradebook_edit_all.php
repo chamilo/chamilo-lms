@@ -128,10 +128,10 @@ $result = api_sql_query($sql,__FILE__,__LINE__);
 	while($row = Database ::fetch_array($result)){
 		//update only if value changed
 		if(isset($_POST['link'][$row['id']]) && $_POST['link'][$row['id']] != $row['weight']) {
+			AbstractLink::add_link_log($row['id']);
 			api_sql_query('UPDATE '.$table_link.' SET weight = '."'".trim($_POST['link'][$row['id']])."'".' WHERE id = '.$row['id'],__FILE__,__LINE__);
 			$sql='UPDATE '.$table_forum_thread.' SET thread_weight='.$_POST['link'][$row['id']].' WHERE thread_id='.$row['ref_id'];
 			api_sql_query($sql);
-			AbstractLink::add_link_log($row['id']);
 			$row['weight'] = trim($_POST['link'][$row['id']]);
 		}
 
@@ -145,8 +145,8 @@ $result = api_sql_query($sql,__FILE__,__LINE__);
 	
 		//update only if value changed
 		if(isset($_POST['evaluation'][$row['id']]) && $_POST['evaluation'][$row['id']] != $row['weight']) {
+			Evaluation::add_evaluation_log($row['id']);
 			api_sql_query('UPDATE '.$table_evaluation.' SET weight = '."'".trim($_POST['evaluation'][$row['id']])."'".' WHERE id = '.$row['id'],__FILE__,__LINE__);
-			AbstractLink::add_link_log($row['id']);
 			$row['weight'] = trim($_POST['evaluation'][$row['id']]);
 		}
 	$type_evaluated = isset($row['type']) ? $table_evaluated[$type_evaluated][3] : null;

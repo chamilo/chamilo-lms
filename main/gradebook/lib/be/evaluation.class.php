@@ -249,13 +249,16 @@ class Evaluation implements GradebookItem
 	}
 
 	public function add_evaluation_log($idevaluation){
-	
+		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$tbl_grade_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 		$eval=new Evaluation();
 		$dateobject=$eval->load ($idevaluation,null,null,null,null);
 		$arreval=get_object_vars($dateobject[0]);
+		$sql_eval='SELECT weight from '.$tbl_grade_evaluations.' WHERE id='.$arreval['id'];
+		$rs=api_sql_query($sql_eval,__FILE__,__LINE__);
+		$row_old_weight=Database::fetch_array($rs,'ASSOC');
 		$current_date=strtotime(date('Y-m-d H:i:s',time()));
-		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".$arreval['id']."','".$arreval['name']."','".$arreval['description']."','".$current_date."','".$arreval['weight']."','".$arreval['visible']."','evaluation',".api_get_user_id().")";
+		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".$arreval['id']."','".$arreval['name']."','".$arreval['description']."','".$current_date."','".$row_old_weight['weight']."','".$arreval['visible']."','evaluation',".api_get_user_id().")";
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
 	/**

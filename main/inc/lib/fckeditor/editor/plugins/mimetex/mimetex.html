@@ -496,7 +496,24 @@ function LoadSelected()
 	else if ( eSelected.tagName == 'IMG' )
 	{
 		img_tag = true ;
-		document.pastemath.formula.value = eSelected.alt ;
+		// We will read the formula from the url, because the back slash is escaped with %5C,
+		// so the re is no risk the formula to be damaged by the php stripslashes(...) function.
+		//document.pastemath.formula.value = eSelected.alt ;
+		var formula = '' ;
+		var src = eSelected.src.toString() ;
+		var formula_start = src.indexOf( '?' ) ;
+		if ( formula_start != -1 )
+		{
+			formula = src.substr( formula_start + 1 ).replace(/%5C/gi,'\\').replace(/%20/g,' ') ;
+			formula = formula.Trim() ;
+			if ( formula.indexOf( '\\Large' ) == 0 )
+			{
+				formula = formula.substr( 6 ) ; 
+			}
+			formula = formula.Trim() ;
+		}
+		document.pastemath.formula.value = formula ;
+		//
 		formulaPreview() ;
 	}
 	else

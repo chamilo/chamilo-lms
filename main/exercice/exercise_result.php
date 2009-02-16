@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 18522 2009-02-16 20:20:29Z juliomontoya $
+* 	@version $Id: exercise_result.php 18527 2009-02-16 21:31:16Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -977,19 +977,14 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 		$totalWeighting+=$questionWeighting;
 		//added by priya saini
-		if($_configuration['tracking_enabled'])
-		{
+		if($_configuration['tracking_enabled']) {
 			if(empty($choice)){
 				$choice = 0;
 			}
-			if ($answerType==MULTIPLE_ANSWER )
-			{				
-				if ($choice != 0)
-				{
-					$reply = array_keys($choice);
-							
-					for ($i=0;$i<sizeof($reply);$i++)
-					{
+			if ($answerType==MULTIPLE_ANSWER ) {				
+				if ($choice != 0) {					
+					$reply = array_keys($choice);																									
+					for ($i=0;$i<sizeof($reply);$i++) {
 						$ans = $reply[$i];
 						exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
 					}
@@ -1009,7 +1004,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					if (Database::num_rows($res)>0) {
 						$answer = Database::result($res,0,"position");
 					} else {
-						$answer = '';
+						$answer = 0;
 					}					
 					exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
 				}
@@ -1024,6 +1019,8 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				if (Database::num_rows($res)>0) {			
 					$answer = Database::result($res,0,"id");
 					exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
+				} else {
+					exercise_attempt($questionScore,0 ,$quesId,$exeId,0);
 				}
 			} else {
 				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);

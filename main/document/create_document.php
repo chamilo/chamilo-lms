@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 18513 2009-02-16 03:14:45Z ivantcholakov $
+<?php // $Id: create_document.php 18521 2009-02-16 18:28:44Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -65,11 +65,11 @@ function InnerDialogLoaded()
 		//document.getElementById(\'content___Frame\').width=\'70%\'; 		
 		//window.frames[0].FCKToolbarItems.GetItem("Template").Click;
 	}
-	
+
 	function FCKeditor_OnComplete( editorInstance )
 	{
 		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
-		document.getElementById(\'frmModel\').innerHTML = "<iframe height=505px; width=240px; id=\"template_iframe\" frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
+		document.getElementById(\'frmModel\').innerHTML = "<iframe height=525px; width=240px; scrolling=\'no\' id=\"template_iframe\" frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 	}
 
 	function check_for_title()
@@ -387,7 +387,7 @@ $form->addElement('style_submit_button', 'submit', get_lang('langCreateDoc'), 'c
 $form->setDefaults($default);
 
 // HTML
-$form->addElement('html','<div id="frmModel" style="display:block; height:515px; width:250px; position:absolute; top:135px; left:1px;"></div>');
+$form->addElement('html','<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
 
 // If form validates -> save the new document
 if ($form->validate())

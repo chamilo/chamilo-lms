@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 18513 2009-02-16 03:14:45Z ivantcholakov $
+<?php // $Id: edit_document.php 18521 2009-02-16 18:28:44Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -71,7 +71,7 @@ function InnerDialogLoaded()
 		
 function FCKeditor_OnComplete( editorInstance )
 {
-	document.getElementById(\'frmModel\').innerHTML = "<iframe height=505px; width=240px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
+	document.getElementById(\'frmModel\').innerHTML = "<iframe height=525px; width=240px; scrolling=\'no\' frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
 }
 		
 
@@ -660,7 +660,7 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 	
 	$form->setDefaults($defaults);
 	// show templates
-	$form->addElement('html','<div id="frmModel" style="display:block; height:515px; width:250px; position:absolute; top:135px; left:1px;"></div>');			
+	$form->addElement('html','<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');			
 	$form->display();			
 
 	//Display::display_error_message(get_lang('ReadOnlyFile')); //main API

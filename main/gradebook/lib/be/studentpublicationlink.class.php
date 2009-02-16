@@ -160,7 +160,7 @@ class StudentPublicationLink extends AbstractLink
     	} else { 
     		 $v_assigment_id = $assignment['id'];
     	}
-    	$sql = 'SELECT * FROM '.$tbl_stats.' WHERE parent_id = '.$v_assigment_id;
+    	$sql = 'SELECT * FROM '.$tbl_stats.' WHERE parent_id ="'.$v_assigment_id.'"';
     	if (isset($stud_id)){
     		$sql1='SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER)." WHERE user_id = '".$stud_id."'";
      		$query = api_sql_query($sql1,__FILE__,__LINE__);

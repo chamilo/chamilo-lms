@@ -79,6 +79,7 @@ echo '</div>';
 if (isset($_GET['action']) && $_GET['action'] == 'addnote') 
 {
 	// initiate the object
+	$_SESSION['notebook_view'] = 'creation_date';
 	api_display_tool_title(get_lang('NoteAddNew'));	
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 	// settting the form elements	
@@ -285,8 +286,10 @@ function display_notes()
 	} else {
 		$order_by = " ORDER BY ".$_SESSION['notebook_view']." ASC ";
 	}
-	
-	$sql = "SELECT * FROM $t_notebook WHERE user_id = '".Database::escape_string(api_get_user_id())."' $order_by";
+		
+	$cond_extra = ($_SESSION['notebook_view']== 'update_date')?" AND update_date <> '0000-00-00 00:00:00'":" ";
+		
+	$sql = "SELECT * FROM $t_notebook WHERE user_id = '".Database::escape_string(api_get_user_id())."' $cond_extra $order_by";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result))
 	{

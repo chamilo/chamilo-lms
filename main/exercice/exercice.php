@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 18522 2009-02-16 20:20:29Z juliomontoya $
+<?php // $Id: exercice.php 18542 2009-02-17 14:58:33Z cfasanando $
 
 /*
 ==============================================================================
@@ -277,10 +277,10 @@ if (in_array($origin, array('tracking_course','user_course'))){
 			$lp_item_view_id = $_REQUEST['lp_item_view_id'];
 			$student_id = $_REQUEST['student_id'];
 			if ($lp_item_id == strval(intval($lp_item_id)) && $lp_item_view_id == strval(intval($lp_item_view_id)) && $student_id == strval(intval($student_id))) {
-    			$score = Database::escape_string($_REQUEST['total_score']);			
-    			$sql = "UPDATE $TBL_LP_ITEM_VIEW SET score = '$score' WHERE lp_item_id = '$lp_item_id'
-    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '$student_id' and lp_id='$lp_item_view_id')";
-    			api_sql_query($sql,__FILE__,__LINE__);	    			
+    			$score = (float)$_REQUEST['total_score']; 			
+    			$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score WHERE lp_item_id = '".(int)$lp_item_view_id."'
+    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '".(int)$student_id."' and lp_id='".(int)$lp_item_id."')";
+    			api_sql_query($sql_update_score,__FILE__,__LINE__);	    			    			
             }
 		}						
 		//Redirect to the reporting		

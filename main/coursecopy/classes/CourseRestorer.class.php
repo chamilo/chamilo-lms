@@ -1,4 +1,4 @@
-<?php // $Id: CourseRestorer.class.php 17440 2008-12-23 20:21:04Z iflorespaz $
+<?php // $Id: CourseRestorer.class.php 18549 2009-02-17 18:08:58Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -632,7 +632,7 @@ class CourseRestorer
 			}
 			$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION, $this->course->destination_db);
 			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER, $this->course->destination_db);
-			$sql = "INSERT INTO ".$table_que." SET question = '".addslashes($question->question)."', description = '".addslashes($question->description)."', ponderation = '".addslashes($question->ponderation)."', position = '".addslashes($question->position)."', type='".addslashes($question->quiz_type)."', picture='".addslashes($question->picture)."'";
+			$sql = "INSERT INTO ".$table_que." SET question = '".addslashes($question->question)."', description = '".addslashes($question->description)."', ponderation = '".addslashes($question->ponderation)."', position = '".addslashes($question->position)."', type='".addslashes($question->quiz_type)."', picture='".addslashes($question->picture)."', level='".addslashes($question->level)."'";
 			api_sql_query($sql, __FILE__, __LINE__);
 			$new_id = Database::get_last_insert_id();
 			foreach ($question->answers as $index => $answer)
@@ -751,7 +751,7 @@ class CourseRestorer
 							// getting the information of the survey (used for when the survey is shared)
 							require_once(api_get_path(SYS_CODE_PATH).'survey/survey.lib.php');
 							
-							$sql_select_existing_survey = "SELECT * FROM $table_sur WHERE survey_id='".Database::escape_string(mysql_result($result_check,0,0))."'";
+							$sql_select_existing_survey = "SELECT * FROM $table_sur WHERE survey_id='".Database::escape_string(Database::result($result_check,0,0))."'";
 							$result = api_sql_query($sql_select_existing_survey, __FILE__, __LINE__);
 							$survey_data = Database::fetch_array($result,'ASSOC');
 							

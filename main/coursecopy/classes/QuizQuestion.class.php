@@ -1,4 +1,4 @@
-<?php // $Id: QuizQuestion.class.php 13306 2007-09-27 07:16:52Z yannoo $
+<?php // $Id: QuizQuestion.class.php 18549 2009-02-17 18:08:58Z cfasanando $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -51,6 +51,10 @@ class QuizQuestion extends Resource
 	 */
 	var $position;
 	/**
+	 * Level
+	 */
+	var $level;
+	/**
 	 * Answers
 	 */
 	var $answers;
@@ -62,7 +66,7 @@ class QuizQuestion extends Resource
 	 * @param int $type
 	 * @param int $position
 	 */
-	function QuizQuestion($id,$question,$description,$ponderation,$type,$position,$picture)
+	function QuizQuestion($id,$question,$description,$ponderation,$type,$position,$picture,$level)
 	{
 		parent::Resource($id,RESOURCE_QUIZQUESTION);
 		$this->question = $question;
@@ -71,6 +75,7 @@ class QuizQuestion extends Resource
 		$this->quiz_type = $type;
 		$this->position = $position;
 		$this->picture = $picture;
+		$this->level = $level;
 		$this->answers = array();
 	}
 	/**

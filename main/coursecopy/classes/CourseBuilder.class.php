@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 17726 2009-01-14 21:42:50Z juliomontoya $
+<?php // $Id: CourseBuilder.class.php 18549 2009-02-17 18:08:58Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -290,7 +290,7 @@ class CourseBuilder
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
-			$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture);
+			$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level);
 			$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
 			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
 			while ($obj2 = Database::fetch_object($db_result2))

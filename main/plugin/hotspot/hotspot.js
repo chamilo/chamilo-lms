@@ -29,74 +29,52 @@ function updateFlashVar()
 	flashVar++;
 }
 
-function getForm()
-{
-	form = document.create;
-	if (form == null)
-		form = document.update;
-	if (form == null)
-		form = document.vervangmij;
-
-	return form;
-}
-
 function saveHotspot(question_id, hotspot_id, answer, hotspot_x, hotspot_y)
 {
-	form = getForm();
 	newHotspot = document.createElement("input");
 	newHotspot.type = "hidden";
 	newHotspot.name = "hotspot["+question_id+"]["+hotspot_id+"]";
 	newHotspot.value = hotspot_x + ";" + hotspot_y;	
-	form.appendChild(newHotspot);
+	document.frm_exercise.appendChild(newHotspot);
 	
 	newHotspot = document.createElement("input");
 	newHotspot.type = "hidden";
 	newHotspot.name = "choice["+question_id+"]["+hotspot_id+"]";
 	newHotspot.value = answer;	
-	form.appendChild(newHotspot);
+	document.frm_exercise.appendChild(newHotspot);
 }
 
 function saveDelineationUserAnswer(question_id, hotspot_id, answer, coordinates)
 {
-	form = getForm();
 	newHotspot = document.createElement("input");
 	newHotspot.type = "hidden";
 	newHotspot.name = "hotspot["+question_id+"]["+hotspot_id+"]";
 	newHotspot.value = coordinates;	
-	form.appendChild(newHotspot);
+	document.frm_exercise.appendChild(newHotspot);
 	
 	newHotspot = document.createElement("input");
 	newHotspot.type = "hidden";
 	newHotspot.name = "choice["+question_id+"]["+hotspot_id+"]";
 	newHotspot.value = answer;	
-	form.appendChild(newHotspot);
+	document.frm_exercise.appendChild(newHotspot);
 }
 
 function saveShapeHotspot(question_id, hotspot_id, type, x, y, w, h)
 {
-	form = getForm();
-	control = "coordinates[" + (hotspot_id - 1) + "]";
-	form[control].value = x + ";" + y + "|" + w + "|" + h;
-	control = "type[" + (hotspot_id - 1) + "]";
-	form[control].value = type;
+	document.frm_exercise["hotspot_coordinates["+hotspot_id+"]"].value = x + ";" + y + "|" + w + "|" + h;
+	document.frm_exercise["hotspot_type["+hotspot_id+"]"].value = type;
 }
 
 function savePolyHotspot(question_id, hotspot_id, coordinates)
 {
-	form = getForm();
-	control = "coordinates[" + (hotspot_id - 1) + "]";
-	form[control].value = coordinates;
-	control = "type[" + (hotspot_id - 1) + "]";
-	form[control].value = "poly";
+	document.frm_exercise["hotspot_coordinates["+hotspot_id+"]"].value = coordinates;
+	document.frm_exercise["hotspot_type["+hotspot_id+"]"].value = "poly";
 }
 
 function saveDelineationHotspot(question_id, hotspot_id, coordinates)
 {
-	form = getForm();
-	control = "coordinates[" + (hotspot_id - 1) + "]";
-	form[control].value = coordinates;
-	control = "type[" + (hotspot_id - 1) + "]";
-	form[control].value = "delineation";
+	document.frm_exercise["hotspot_coordinates["+hotspot_id+"]"].value = coordinates;
+	document.frm_exercise["hotspot_type["+hotspot_id+"]"].value = "delineation";
 }
 function jsdebug(debug_string)
 {

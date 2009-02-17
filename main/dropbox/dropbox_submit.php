@@ -1,26 +1,6 @@
-<?php // $Id: dropbox_submit.php,v 1.27 2005/05/17 08:02:03 renehaentjens Exp $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 
-	Copyright (c) 2006 Dokeos S.A.
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
 
 /*
  * ========================================
@@ -353,7 +333,10 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
         {
 			// string result = error message, array result = [user_id, lastname, firstname]
 
-	    	global $var, $sel; unset($students);
+	    	global $var, $sel; 
+            if (isset($students)) {
+                unset($students);
+            }
 
 	        $result = api_sql_query($sel . $thisRecip . "'",__FILE__,__LINE__);
 	        while ( ($res = mysql_fetch_array($result))) {$students[] = $res;}

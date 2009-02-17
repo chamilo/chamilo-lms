@@ -1,26 +1,5 @@
-<?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
 * This file contains additional dropbox functions. Initially there were some 
@@ -488,10 +467,7 @@ function display_addcategory_form($category_name='', $id='')
 */
 function display_add_form()
 {
-	global $_user;
-	global $is_courseAdmin;
-	global $is_courseTutor;
-	global $course_info; // this
+	global $_user, $is_courseAdmin, $is_courseTutor, $course_info, $origin, $dropbox_unid;
 
 	$token = Security::get_token();
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
@@ -505,8 +481,8 @@ function display_add_form()
 			<td>
 				<input type="hidden" name="MAX_FILE_SIZE" value='<?php echo dropbox_cnf("maxFilesize")?>' />
 				<input type="file" name="file" size="20" <?php if (dropbox_cnf("allowOverwrite")) echo 'onChange="checkfile(this.value)"'; ?> />
-				<input type="hidden" name="dropbox_unid" value="<?php echo $dropbox_unid?>" />
-				<input type="hidden" name="sec_token" value="<?php echo $token?>" />
+				<input type="hidden" name="dropbox_unid" value="<?php echo $dropbox_unid ?>" />
+				<input type="hidden" name="sec_token" value="<?php echo $token ?>" />
 				<?php
 				if ($origin=='learnpath')
 				{
@@ -621,7 +597,7 @@ function display_add_form()
 			{
 				if ($current_group['number_of_members'] > 0)
 				{
-					echo '<option value="group_'.$current_group['id'].'">G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.$langUsers.'</option>';
+					echo '<option value="group_'.$current_group['id'].'">G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.api_get_lang('Users').'</option>';
 				}
 			}
 		}
@@ -1193,7 +1169,8 @@ function zip_download ($array)
 	}
 
 	// create the zip file
-	$temp_zip_file=$temp_zip_dir.'/dropboxdownload-'.$_user['user_id'].'-'.mktime().'.zip';
+    $name = 'dropboxdownload-'.$_user['user_id'].'-'.mktime().'.zip';
+	$temp_zip_file=$temp_zip_dir.'/'.$name;
 	$zip_folder=new PclZip($temp_zip_file);
 
 	foreach ($files as $key=>$value)
@@ -1279,7 +1256,7 @@ function zip_download_alternative($files)
 	$zip_folder->add($overview_file,PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path']."/temp");
 
 	// Step 5: send the file for download;
-	DocumentManager::file_send_for_download($temp_zip_file,true,$name);
+	DocumentManager::file_send_for_download($temp_zip_file,true);
 
 	// Step 6: remove the files in the temp dir
 	foreach ($files as $key=>$value)

@@ -1,27 +1,5 @@
-<?php // $Id: index.php,v 1.46 2005/09/26 10:20:25 pcool Exp $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006-2008 Dokeos S.A.
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
  * @desc The dropbox is a personal (peer to peer) file exchange module that allows
@@ -30,7 +8,7 @@
  * @version 1.3
  *
  * @author Jan Bols <jan@ivpv.UGent.be>, main programmer, initial version
- * @author Ren� Haentjens <rene.haentjens@UGent.be>, several contributions  (see RH)
+ * @author René Haentjens <rene.haentjens@UGent.be>, several contributions  (see RH)
  * @author Roan Embrechts, virtual course support
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (see history version 1.3)
  *

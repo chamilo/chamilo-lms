@@ -1,26 +1,5 @@
-<?php 
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006 Dokeos S.A.
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
  * Dropbox module for Dokeos
@@ -64,18 +43,18 @@
   *	@package dokeos.dropbox
  **/
 class Dropbox_Work {
-	var $id;
-	var $uploader_id;
-	var $uploaderName;
-	var $filename;
-	var $filesize;
-	var $title;
-	var $description;
-	var $author;
-	var $upload_date;
-	var $last_upload_date;
-	var $isOldWork;
-	var $feedback_date, $feedback;  // RH: Feedback
+	public $id;
+	public $uploader_id;
+	public $uploaderName;
+	public $filename;
+	public $filesize;
+	public $title;
+	public $description;
+	public $author;
+	public $upload_date;
+	public $last_upload_date;
+	public $isOldWork;
+	public $feedback_date, $feedback;  // RH: Feedback
 	
 	/**
 		* Constructor calls private functions to create a new work or retreive an existing work from DB
@@ -247,7 +226,7 @@ class Dropbox_Work {
 
 class Dropbox_SentWork extends Dropbox_Work
 {
-	var $recipients;	//array of ["id"]["name"] arrays
+	public $recipients;	//array of ["id"]["name"] arrays
 	
 	/**
 		* Constructor calls private functions to create a new work or retreive an existing work from DB
@@ -371,12 +350,12 @@ class Dropbox_SentWork extends Dropbox_Work
 
 class Dropbox_Person
 {
-	var $receivedWork;	//array of Dropbox_Work objects
-	var $sentWork;		//array of Dropbox_SentWork objects
-	var $userId = 0;
-	var $isCourseAdmin = FALSE;
-	var $isCourseTutor = FALSE;
-	var $_orderBy = '';	//private property that determines by which field 
+	public $receivedWork;	//array of Dropbox_Work objects
+	public $sentWork;		//array of Dropbox_SentWork objects
+	public $userId = 0;
+	public $isCourseAdmin = FALSE;
+	public $isCourseTutor = FALSE;
+	public $_orderBy = '';	//private property that determines by which field 
 						//the receivedWork and the sentWork arrays are sorted
 
 	/**

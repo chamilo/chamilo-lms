@@ -1,36 +1,16 @@
-<?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 
-	Copyright (c) 2006 Dokeos S.A.
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
 /**
  * --------------------------------------
- *       DEBUGGING VARS
+ *  DEBUGGING VARS
  * --------------------------------------
  */
 $DEBUG = TRUE;
 
 /**
  * --------------------------------------
- *       DATABASE TABLE VARIABLES
+ *  DATABASE TABLE VARIABLES
  * --------------------------------------
  */
 $dropbox_cnf['tbl_post'] 		= Database::get_course_table(TABLE_DROPBOX_POST);
@@ -44,7 +24,7 @@ $dropbox_cnf['tbl_feedback'] 	= Database::get_course_table(TABLE_DROPBOX_FEEDBAC
 
 /**
  * --------------------------------------
- *       INITIALISE OTHER VARIABLES & CONSTANTS
+ *  INITIALISE OTHER VARIABLES & CONSTANTS
  * --------------------------------------
  */
 $dropbox_cnf["courseId"] 				= $_cid;
@@ -59,7 +39,7 @@ $dropbox_cnf["allowGroup"] 				= string_2_boolean(api_get_setting("dropbox_allow
 
 /**
  * --------------------------------------
- * RH:   INITIALISE MAILING VARIABLES
+ * RH: INITIALISE MAILING VARIABLES
  * --------------------------------------
  */
 $dropbox_cnf["allowMailing"] = string_2_boolean(api_get_setting("dropbox_allow_mailing"));  // false = no mailing functionality
@@ -73,8 +53,3 @@ $dropbox_cnf["mailingWhereLOGINNAME"] = "username";
 $dropbox_cnf["mailingFileRegexp"] = '/^(.+)\.\w{1,4}$/';
 
 $dropbox_cnf['sent_received_tabs']=true;
-
-
-
-
-?>

@@ -1,4 +1,4 @@
-<?php // $Id: quota.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: quota.php 18552 2009-02-17 20:03:24Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -69,7 +69,7 @@ $maxFilledSpace = DEFAULT_DOCUMENT_QUOTA;
 -----------------------------------------------------------
 */ 
 
-$interbreadcrumb[]=array("url" => "document.php","name" => get_lang("Doc"));
+$interbreadcrumb[]=array("url" => "document.php","name" => get_lang('Document'));
 
 $nameTools = get_lang("DocumentQuota"); // title of the page
 

@@ -46,6 +46,7 @@ if ( !FCKLang )
 	FCKLang = [] ;
 }
 
+// We have to avoid javascript errors if some language variables have not been defined. 
 if ( !FCKLang['UploadFile'] )
 {
 	FCKLang['UploadFile'] = 'Upload a file' ;
@@ -60,6 +61,13 @@ if ( !FCKLang['UploadSelectFileFirst'] )
 {
 	FCKLang['UploadSelectFileFirst'] = 'Please, select a file before pressing the upload button.' ;
 }
+
+FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
+FCKLang['InvalidFileType'] = FCKLang['InvalidFileType'] ? FCKLang['InvalidFileType'] : 'Invalid file type.' ;
+FCKLang['UploadError'] = FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Error on file upload. Error number: ' ;
+FCKLang['UploadInProgress'] = FCKLang['UploadInProgress'] ? FCKLang['UploadInProgress'] : '(Upload in progress, please wait...)' ;
+FCKLang['UploadInProgress'] = '(Upload in progress, please wait...)' ;
+
 
 function SetCurrentFolder( resourceType, folderPath )
 {
@@ -79,7 +87,7 @@ function OnSubmit()
 	}
 
 	// Set the interface elements.
-	document.getElementById('eUploadMessage').innerHTML = 'Upload a new file in this folder (Upload in progress, please wait...)' ;
+	document.getElementById('eUploadMessage').innerHTML = FCKLang['UploadFile'] + ' ' + FCKLang['UploadInProgress'] ;
 	document.getElementById('btnUpload').disabled = true ;
 
 	return true ;
@@ -92,12 +100,12 @@ function OnUploadCompleted( errorNumber, data )
 
 	// Reset the upload form (On IE we must do a little trick to avoid problems).
 	if ( document.all )
-		document.getElementById('NewFile').outerHTML = '<input id="NewFile" name="NewFile" style="WIDTH: 100%" type="file">' ;
+		document.getElementById('NewFile').outerHTML = '<input id="NewFile" name="NewFile" style="width: 100%" type="file">' ;
 	else
 		document.getElementById('frmUpload').reset() ;
 
 	// Reset the interface elements.
-	document.getElementById('eUploadMessage').innerHTML = 'Upload a new file in this folder' ;
+	document.getElementById('eUploadMessage').innerHTML = FCKLang['UploadFile'] ;
 	document.getElementById('btnUpload').disabled = false ;
 
 	switch ( errorNumber )
@@ -110,13 +118,13 @@ function OnUploadCompleted( errorNumber, data )
 			break ;
 		case 201 :
 			window.parent.frames['frmResourcesList'].Refresh() ;
-			alert( 'A file with the same name is already available. The uploaded file has been renamed to "' + data + '"' ) ;
+			alert( FCKLang['FileRenamed'] + ' "' + data + '".' ) ;
 			break ;
 		case 202 :
-			alert( 'Invalid file' ) ;
+			alert( FCKLang['InvalidFileType'] ) ;
 			break ;
 		default :
-			alert( 'Error on file upload. Error number: ' + errorNumber ) ;
+			alert( FCKLang['UploadError'] + errorNumber ) ;
 			break ;
 	}
 }

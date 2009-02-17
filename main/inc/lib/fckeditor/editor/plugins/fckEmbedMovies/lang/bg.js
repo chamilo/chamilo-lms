@@ -10,5 +10,5 @@ FCKLang["DlgEmbedMoviesControls"] = "Показване на контролит�
 FCKLang["DlgEmbedMoviesPositionControls"] = "Бутони за позициониране" ;
 FCKLang["DlgEmbedMoviesTracker"] = "Плъзгач за промяна на позицията" ;
 FCKLang["DlgEmbedMoviesAudioControls"] = "Управление на звука" ;
-FCKLang["DlgEmbedMoviesExtensionSupported"] = "Поддържат се mpg, mpeg, mp4, avi, wmv, mov и asf файлови типове." ;
+FCKLang["DlgEmbedMoviesExtensionSupported"] = "Поддържат се само mpg, mpeg, mp4, avi, wmv, mov и asf файлови типове." ;
 

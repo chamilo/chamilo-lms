@@ -51,10 +51,12 @@ if ( !FCKLang['CreateNewFolder'] )
 	FCKLang['CreateNewFolder'] = 'Create a folder' ;
 }
 
-if ( !FCKLang['UploadFile'] )
-{
-	FCKLang['UploadFile'] = 'Upload a file' ;
-}
+FCKLang['NewFoderName'] = FCKLang['NewFoderName'] ? FCKLang['NewFoderName'] : 'Type the name of the new folder:' ;
+FCKLang['NewFoderNameRequest'] = FCKLang['NewFoderNameRequest'] ? FCKLang['NewFoderNameRequest'] : 'Please, type the folder name.' ;
+FCKLang['FolderAlreadyExists'] = FCKLang['FolderAlreadyExists'] ? FCKLang['FolderAlreadyExists'] : 'Folder already exists.' ;
+FCKLang['NoPermissionsToCreateFolder'] = FCKLang['NoPermissionsToCreateFolder'] ? FCKLang['NoPermissionsToCreateFolder'] : 'You have no permissions to create the folder.' ;
+FCKLang['UnknownErrorCreatingFolder'] = FCKLang['UnknownErrorCreatingFolder'] ? FCKLang['UnknownErrorCreatingFolder'] : 'Unknown error creating folder.' ;
+FCKLang['ErrorCreatingFolder'] = FCKLang['ErrorCreatingFolder'] ? FCKLang['ErrorCreatingFolder'] : 'Error creating folder. Error number: ' ;
 
 function SetCurrentFolder( resourceType, folderPath )
 {
@@ -68,12 +70,12 @@ function CreateFolder()
 
 	while ( true )
 	{
-		sFolderName = prompt( 'Type the name of the new folder:', '' ) ;
+		sFolderName = prompt( FCKLang['NewFoderName'], '' ) ;
 
 		if ( sFolderName == null )
 			return ;
 		else if ( sFolderName.length == 0 )
-			alert( 'Please type the folder name' ) ;
+			alert( FCKLang['NewFoderNameRequest'] ) ;
 		else
 			break ;
 	}
@@ -97,19 +99,19 @@ function CreateFolderCallBack( fckXml )
 			window.parent.frames['frmResourcesList'].Refresh() ;
 			break ;
 		case 101 :
-			alert( 'Folder already exists' ) ;
+			alert( FCKLang['FolderAlreadyExists'] ) ;
 			break ;
 		case 102 :
 			alert( 'Invalid folder name' ) ;
 			break ;
 		case 103 :
-			alert( 'You have no permissions to create the folder' ) ;
+			alert( FCKLang['NoPermissionsToCreateFolder'] ) ;
 			break ;
 		case 110 :
-			alert( 'Unknown error creating folder' ) ;
+			alert( FCKLang['UnknownErrorCreatingFolder'] ) ;
 			break ;
 		default :
-			alert( 'Error creating folder. Error number: ' + iErrorNumber ) ;
+			alert( FCKLang['ErrorCreatingFolder'] + iErrorNumber ) ;
 			break ;
 	}
 	*/

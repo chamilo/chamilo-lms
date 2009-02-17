@@ -52,6 +52,12 @@ if ( !FCKLang['BrowseServer'] )
 	FCKLang['BrowseServer'] = 'Browse Server' ;
 }
 
+FCKLang['FolderAlreadyExists'] = FCKLang['FolderAlreadyExists'] ? FCKLang['FolderAlreadyExists'] : 'Folder already exists.' ;
+FCKLang['InvalidFolderName'] = FCKLang['InvalidFolderName'] ? FCKLang['InvalidFolderName'] : 'Invalid folder name.' ;
+FCKLang['NoPermissionsToCreateFolder'] = FCKLang['NoPermissionsToCreateFolder'] ? FCKLang['NoPermissionsToCreateFolder'] : 'You have no permissions to create the folder.' ;
+FCKLang['UnknownErrorCreatingFolder'] = FCKLang['UnknownErrorCreatingFolder'] ? FCKLang['UnknownErrorCreatingFolder'] : 'Unknown error creating folder.' ;
+FCKLang['ErrorCreatingFolder'] = FCKLang['ErrorCreatingFolder'] ? FCKLang['ErrorCreatingFolder'] : 'Error creating folder. Error number: ' ;
+
 document.title = FCKLang['BrowseServer'] ;
 
 // Automatically detect the correct document.domain (#1919).
@@ -159,19 +165,19 @@ oConnector.CheckError = function( responseXml )
 				alert( oErrorNode.attributes.getNamedItem('text').value ) ;
 				break ;
 			case 101 :
-				alert( 'Folder already exists' ) ;
+				alert( FCKLang['FolderAlreadyExists'] ) ;
 				break ;
 			case 102 :
-				alert( 'Invalid folder name' ) ;
+				alert( FCKLang['InvalidFolderName'] ) ;
 				break ;
 			case 103 :
-				alert( 'You have no permissions to create the folder' ) ;
+				alert( FCKLang['NoPermissionsToCreateFolder'] ) ;
 				break ;
 			case 110 :
-				alert( 'Unknown error creating folder' ) ;
+				alert( FCKLang['UnknownErrorCreatingFolder'] ) ;
 				break ;
 			default :
-				alert( 'Error on your request. Error number: ' + iErrorNumber ) ;
+				alert( FCKLang['ErrorCreatingFolder'] + iErrorNumber ) ;
 				break ;
 		}
 	}

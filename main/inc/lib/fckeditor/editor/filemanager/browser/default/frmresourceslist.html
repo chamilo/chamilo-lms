@@ -29,6 +29,25 @@
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 
+// Initialization of some language variables.
+var FCKLang = [];
+
+if ( window.parent.opener )
+{
+	try
+	{
+		FCKLang = window.parent.opener.FCKLang ;
+	}
+	catch ( ex ) { }
+}
+
+if ( !FCKLang )
+{
+	FCKLang = [] ;
+}
+
+FCKLang['ServerDidNotReturnProperXmlData'] = FCKLang['ServerDidNotReturnProperXmlData'] ? FCKLang['ServerDidNotReturnProperXmlData'] : 'The server didn\'t reply with a proper XML data. Please check your configuration.' ;
+
 var oListManager = new Object() ;
 
 oListManager.Clear = function()
@@ -116,7 +135,7 @@ function GetFoldersAndFilesCallBack( fckXml )
 	var oFolderNode = fckXml.SelectSingleNode( 'Connector/CurrentFolder' ) ;
 	if ( oFolderNode == null )
 	{
-		alert( 'The server didn\'t reply with a proper XML data. Please check your configuration.' ) ;
+		alert( FCKLang['ServerDidNotReturnProperXmlData'] ) ;
 		return ;
 	}
 	var sCurrentFolderPath	= oFolderNode.attributes.getNamedItem('path').value ;

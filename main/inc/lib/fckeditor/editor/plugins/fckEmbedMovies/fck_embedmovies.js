@@ -147,7 +147,7 @@ function CreateEmbeddedMovie(e, url)
 
 	if (sExt ==null)
 	{
-		alert('We only support these extensions mpg, mpeg, mp4, avi, wmv, mov and asf. ')
+		alert( FCKLang["DlgEmbedMoviesExtensionSupported"] )
 		return false;
 	}
 	else

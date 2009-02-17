@@ -22,7 +22,7 @@
 *	This script allows to manage answers. It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer_admin.inc.php 18203 2009-02-03 18:02:16Z ndieschburg $
+* 	@version $Id: answer_admin.inc.php 18543 2009-02-17 15:04:15Z cfasanando $
 */
 
 
@@ -1160,7 +1160,7 @@ if($modifyAnswers)
 			?>
 			&nbsp; &nbsp; &nbsp;
 			<?php
-			echo $desc = mysql_result($res,0,'description');
+			echo $desc = Database::result($res,0,'description');
 			 ?>
 
 			<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?modifyAnswers=<?php echo $modifyAnswers; ?>">

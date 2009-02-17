@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 18487 2009-02-13 04:02:46Z ivantcholakov $
+<?php // $Id: question.class.php 18543 2009-02-17 15:04:15Z cfasanando $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 18487 2009-02-13 04:02:46Z ivantcholakov $
+* 	@version $Id: question.class.php 18543 2009-02-17 15:04:15Z cfasanando $
 */
 
 
@@ -622,7 +622,7 @@ abstract class Question
 		{
 			$sql="SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question WHERE question.id=test_question.question_id AND test_question.exercice_id='".Database::escape_string($exerciseId)."'";
 			$result=api_sql_query($sql);
-			$current_position=mysql_result($result,0,0);
+			$current_position=Database::result($result,0,0);
 			$this -> updatePosition($current_position+1);
 			$position = $this -> position;
 			

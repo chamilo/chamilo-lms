@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 18504 2009-02-14 01:09:21Z yannoo $
+<?php // $Id: database.lib.php 18543 2009-02-17 15:04:15Z cfasanando $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -755,14 +755,16 @@ class Database
 	 */
 	function result($resource,$row,$field='')
 	{
-		if(!empty($field))
-		{
-			return mysql_result($resource,$row,$field);
-		}
-		else
-		{
-			return mysql_result($resource,$row);
-		}
+	 	if (mysql_num_rows($resource) > 0) {
+			if(!empty($field))
+			{
+				return mysql_result($resource,$row,$field);
+			}
+			else
+			{
+				return mysql_result($resource,$row);
+			}
+	 	}
 	}
 	/**
 	 * Recovers the last ID of any insert query executed over this SQL connection

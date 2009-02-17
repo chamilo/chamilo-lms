@@ -84,6 +84,7 @@ class ImageManager
 		{
 			$dirs = $this->_dirs($this->getBaseDir(),'/');
 			ksort($dirs);
+			
 			$this->dirs = $dirs;
 		}
 		return $this->dirs;
@@ -115,8 +116,7 @@ class ImageManager
 			$group_directory = $group_directory[count($group_directory) - 1];
 		}
 
-		$user_id = api_get_user_id();
-
+		$user_id = api_get_user_id();		
 		while (false !== ($entry = $d->read())) 
 		{
 			//If it is a directory, and it doesn't start with
@@ -135,19 +135,22 @@ class ImageManager
 				if ($in_group && strpos($fullpath, '_groupdocs') !== false && strpos($fullpath, $group_directory) === false)
 				{
 					continue;
-				}
-
+				}				
+				//$document_path = substr($fullpath, strpos($fullpath,'/document/')+9, strlen($fullpath));
+				//@todo check the visibility 	
+				//echo DocumentManager::file_visible_to_user($_course['dbName'],$document_path);
+				
 				if (strpos($fullpath, '/shared_folder/') !== false)
 				{
 					if (!preg_match('/.*\/shared_folder\/$/', $fullpath))
 					{
-						if (strpos($fullpath, '/shared_folder/'.$user_id.'/') === false)
-						{
+						//all students can see the shared_folder
+						if (strpos($fullpath, '/shared_folder/'.$user_id.'/') === true) {
 							continue;
 						}
 					}
 				}
-
+				
 				$dirs[$relative] = $fullpath;
 				$dirs = array_merge($dirs, $this->_dirs($fullpath, $relative));
 			}
@@ -203,7 +206,8 @@ class ImageManager
 					{
 						if (!preg_match('/.*\/shared_folder\/$/', $dir_entry))
 						{
-							if (strpos($dir_entry, '/shared_folder/'.$user_id.'/') === false)
+							//all students can see the shared_folder
+							if (strpos($dir_entry, '/shared_folder/'.$user_id.'/') === true)
 							{
 								continue;
 							}
@@ -513,12 +517,26 @@ class ImageManager
 		}
 
 		//now copy the file
-		$path = Files::makePath($this->getBaseDir(),$relative);
+		$path = Files::makePath($this->getBaseDir(),$relative);		
 		$result = Files::copyFile($file['tmp_name'], $path, $file['name']);
 
 		//no copy error
-       if(!is_int($result))
-       {
+       if (!is_int($result)) {	
+      	 	//adding the document to the DB
+       		global $_course, $to_group_id;
+       		
+       		// looking for the /document/ folder
+       		$document_path = substr($path, strpos($path,'/document/')+9, strlen($path)); //   /shared_folder/4/name
+       		$document_path.= $result;
+       		
+			$dokeosFile = $file['name'];	
+			$dokeosFileSize = $file['size'];
+			if(!empty($group_properties['directory'])) {
+				$dokeosFolder=$group_properties['directory'].$dokeosFolder;//get Dokeos
+			}
+			$doc_id = add_document($_course, $document_path,'file', $dokeosFileSize , $dokeosFile); //get Dokeos																								
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id);//get Dokeos						
+		
 		   $dimensionsIndex = isset($_REQUEST['uploadSize']) ? $_REQUEST['uploadSize'] : 0;
 		   // If maximum size is specified, constrain image to it.
            if ($this->config['maxWidth'][$dimensionsIndex] > 0 && $this->config['maxHeight'][$dimensionsIndex] > 0)
@@ -661,7 +679,6 @@ class ImageManager
 	function _delFile($relative) 
 	{
 		$fullpath = Files::makeFile($this->getBaseDir(),$relative);
-		
 		//check that the file is an image
 		if($this->config['validate_images'] == true)
 		{
@@ -671,8 +688,13 @@ class ImageManager
 
 		$thumbnail = $this->getThumbName($fullpath);
 
-		if(Files::delFile($fullpath))
+		if(Files::delFile($fullpath)){
+			//deleting from the DB
+			global $_course;
+			$document_path = substr($fullpath, strpos($fullpath,'/document/')+9, strlen($fullpath)); //   /shared_folder/4/name
+			DocumentManager::delete_document($_course,$document_path,$fullpath);
 			Return Files::delFile($thumbnail);
+		}
 		else
 			Return false;
 	}
@@ -685,10 +707,20 @@ class ImageManager
 	function _delDir($relative) 
 	{
 		$fullpath = Files::makePath($this->getBaseDir(),$relative);
-		if($this->countFiles($fullpath) <= 0)
-			return Files::delFolder($fullpath,true); //delete recursively.
+		//we can delete recursively	even if there are images in the dir
+		 
+		//if($this->countFiles($fullpath) <= 0) {
+		// now we use the default delete_document function
+		//return Files::delFolder($fullpath,true); //delete recursively.
+		global $_course;
+		$path_dir = substr($fullpath, strpos($fullpath,'/document/')+9,-1); //		
+		$base_dir  = substr($fullpath, 0, strlen($fullpath) - strlen($path_dir)); //
+		return DocumentManager::delete_document($_course,$path_dir,$base_dir);
+		/*	
+		}
 		else
 			Return false;
+		*/
 	}
 
 	/**
@@ -697,7 +729,7 @@ class ImageManager
 	 * @return boolean true if created, false otherwise.
 	 */
 	function processNewDir() 
-	{
+	{		
 		if($this->config['safe_mode'] == true)
 			Return false;
 
@@ -705,12 +737,20 @@ class ImageManager
 		{
 			$newDir = rawurldecode($_GET['newDir']);
 			$dir = rawurldecode($_GET['dir']);
-			$path = Files::makePath($this->getBaseDir(),$dir);
+			$path = Files::makePath($this->getBaseDir(),$dir);			
 			$fullpath = Files::makePath($path, Files::escape($newDir));
-			if(is_dir($fullpath))
+			if(is_dir($fullpath)) {
 				Return false;
-
-			Return Files::createFolder($fullpath);
+			} else {
+				//adding to the DB
+				// now the create_unexisting_directory will create the folder
+				//$result = Files::createFolder($fullpath);							
+				global $_course;
+				$base_dir = substr($path, 0, strpos($path,'/document/')+9); //  				
+				$new_dir  = substr($fullpath, strlen($base_dir),-1); //  			
+				$created_dir = create_unexisting_directory($_course, api_get_user_id(),0,0, $base_dir, $new_dir,$newDir);
+				return true;				
+			}
 		}
 	}
 

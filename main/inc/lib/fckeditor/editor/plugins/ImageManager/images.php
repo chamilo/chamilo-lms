@@ -154,6 +154,7 @@ function drawErrorBase(&$manager)
 	if($refreshDir) 
 	{ 
 		$dirs = $manager->getDirs();
+		
 ?>
 		var selection = topDoc.getElementById('dirPath');
 		var currentDir = selection.options[selection.selectedIndex].text;

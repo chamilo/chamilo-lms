@@ -6,7 +6,7 @@
  * @package ImageManager
  */
 
-	require_once('config.inc.php');
+	require_once('config.inc.php'); 
 	require_once('Classes/ImageManager.php');
 	
 	$manager = new ImageManager($IMConfig);
@@ -19,8 +19,6 @@
 		$IMConfig['allow_upload']=false;
 	}	
 	*/
-	
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 

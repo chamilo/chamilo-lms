@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 18520 2009-02-16 17:14:35Z juliomontoya $
+<?php //$Id: myStudents.php 18547 2009-02-17 16:16:55Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -644,7 +644,9 @@ if(!empty($_GET['student']))
 					
 					//QUIZZ IN LP
 					$score = Tracking::get_avg_student_score(intval($_GET['student']), Database::escape_string($_GET['course']), array($a_learnpath['id']));				
-					
+					if (empty($score)) {
+						$score = 0;
+					}
 					if($i%2==0){
 						$s_css_class="row_odd";
 					}

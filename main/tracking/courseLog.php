@@ -211,7 +211,7 @@ if($_GET['studentlist'] == 'false') {
 	 ***************************/
 	 echo '<div class="admin_section">
 				<h4>
-					<img src="../img/quiz.gif" align="absbottom">&nbsp;'.get_lang('AverageResultsToTheExercices').' <a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a>
+					<img src="../img/quiz.gif" align="absbottom">&nbsp;'.get_lang('AverageResultsToTheExercices').' &nbsp;-&nbsp;<a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a>
 				</h4>
 			<table class="data_table">';
 			
@@ -226,6 +226,16 @@ if($_GET['studentlist'] == 'false') {
     }
 	
 	if (Database::num_rows($rs)>0) {
+		// gets course actual administrators 
+		$sql = "SELECT user.user_id FROM $table_user user, $TABLECOURSUSER course_user
+		  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$admin_course = '';
+		while($row = Database::fetch_row($res)) {
+			$admin_course .='\''.$row[0].'\','; 	
+		}
+		$admin_course = substr($admin_course,0,(strlen($admin_course)-1));
+		$cond_user = (!empty($admin_course)?' AND exe_user_id NOT IN('.$admin_course.')':' ');
 		while($quiz = Database::fetch_array($rs)) {
 			$quiz_avg_score = 0;
 			
@@ -233,6 +243,7 @@ if($_GET['studentlist'] == 'false') {
 			$sql = 'SELECT exe_result , exe_weighting
 					FROM '.$TABLETRACK_EXERCISES.'
 					WHERE exe_exo_id = '.$quiz['id'].'
+					'.$cond_user.'		
 					AND orig_lp_id = 0
 					AND orig_lp_item_id = 0		
 					ORDER BY exe_date DESC';
@@ -248,7 +259,7 @@ if($_GET['studentlist'] == 'false') {
 			if($nb_attempts>0) {
 				$quiz_avg_score = $quiz_avg_score / $nb_attempts;
             }
-			echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.round($quiz_avg_score,1).' %</td></tr>';
+			echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.round($quiz_avg_score,2).' %</td></tr>';
 			if ($export_csv) {
 				$temp=array($quiz['title'],$quiz_avg_score);
 				$csv_content[] = $temp;
@@ -271,7 +282,7 @@ if($_GET['studentlist'] == 'false') {
 	 
 	 echo '<div class="admin_section">
 				<h4>
-					<img src="../img/forum.gif" align="absbottom">&nbsp;'.get_lang('Forum').' <a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a>
+					<img src="../img/forum.gif" align="absbottom">&nbsp;'.get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a>
 				</h4>
 			<table class="data_table">';
 	$count_number_of_posts_by_course = Tracking :: count_number_of_posts_by_course($_course['id']);

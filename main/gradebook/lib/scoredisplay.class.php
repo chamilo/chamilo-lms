@@ -266,7 +266,12 @@ class ScoreDisplay
 	}
 
 	private function display_as_div ($score) {
-		return $score[0] . ' / ' . $score[1];
+		if ($score==1) {
+			return '0/0';
+		} else {
+			return  $score[0] . ' / ' . $score[1];	
+		}
+		
 	}
 
 	private function display_custom ($score) {

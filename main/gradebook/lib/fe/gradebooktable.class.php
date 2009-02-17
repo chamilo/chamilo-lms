@@ -178,7 +178,7 @@ class GradebookTable extends SortableTable
 					$item_value = number_format($item_value, 2, '.', ' ');	
 					$cattotal = Category :: load($id);
 					$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
-					$scoretotal_display = (isset($scoretotal)? $scoretotal[0].'/'.$scoretotal[1].'('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');										
+					$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).'('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');										
 					$row[] = $item_value;
 				} else {
 			   		$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;	

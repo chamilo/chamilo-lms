@@ -260,13 +260,15 @@ if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_f
 }
 $userinf=api_get_user_info($rows[$display_post_id]['user_id']);
 $user_status=api_get_status_of_user_in_course($rows[$display_post_id]['user_id'],api_get_course_id());
-if($post_id>$post_minor )
-{
-	if($user_status!=1)
-	{			
-		$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$rows[$display_post_id]['user_id'],$_GET['thread']);
-		echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$rows[$display_post_id]['post_id']."&amp;user=".$rows[$display_post_id]['user_id']."&user_id=".$rows[$display_post_id]['user_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
-	}	
+if (api_is_allowed_to_edit()) {
+	if($post_id>$post_minor )
+	{
+		if($user_status!=1)
+		{			
+			$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$rows[$display_post_id]['user_id'],$_GET['thread']);
+			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$rows[$display_post_id]['post_id']."&amp;user=".$rows[$display_post_id]['user_id']."&user_id=".$rows[$display_post_id]['user_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
+		}	
+	}
 }
 echo '<br /><br />';
 //if (($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0) OR api_is_allowed_to_edit())

@@ -73,14 +73,16 @@ foreach ($rows as $row) {
 	$userinf=api_get_user_info($row['user_id']);
 	$user_status=api_get_status_of_user_in_course($row['user_id'],api_get_course_id());
 	$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$row['poster_id'],$_GET['thread']);
-	if( isset($_GET['gradebook'])){
-		if ($increment>0 && $user_status!=1 ) {
-			$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".$_GET['gradebook']."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
-		 }
-	} else {
-		if ($increment>0 && $user_status!=1 ) {
-			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";				
+	if (api_is_allowed_to_edit()) {
+		if( isset($_GET['gradebook'])){
+			if ($increment>0 && $user_status!=1 ) {
+				$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+				echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".$_GET['gradebook']."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
+			 }
+		} else {
+			if ($increment>0 && $user_status!=1 ) {
+				echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";				
+			}
 		}
 	}		
 	echo '<br /><br />';

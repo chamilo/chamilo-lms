@@ -654,7 +654,7 @@ VALUES
 ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,0),
 ('allow_social_tool', NULL, 'radio', 'Tools', 'false', 'AllowSocialToolTitle', 'AllowSocialToolComment', NULL, NULL, 0),
 ('allow_students_to_browse_courses',NULL,'radio','Platform','true','AllowStudentsToBrowseCoursesTitle','AllowStudentsToBrowseCoursesComment',NULL,NULL, 1),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.18412','DokeosDatabaseVersion','',NULL,NULL,0); 
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.18555','DokeosDatabaseVersion','',NULL,NULL,0); 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 

@@ -135,10 +135,16 @@ class ImageManager
 				if ($in_group && strpos($fullpath, '_groupdocs') !== false && strpos($fullpath, $group_directory) === false)
 				{
 					continue;
+				}
+				
+				$base_dir = substr($fullpath, 0, strpos($fullpath,'/document/')+9); //				  				
+				$new_dir  = substr($fullpath, strlen($base_dir),-1); //
+				global $_course;	
+				$doc_id = DocumentManager::get_document_id($_course, $new_dir );
+				$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);				
+				if ($visible_status=='0' || $visible_status=='-1') {					 
+					continue;					
 				}				
-				//$document_path = substr($fullpath, strpos($fullpath,'/document/')+9, strlen($fullpath));
-				//@todo check the visibility 	
-				//echo DocumentManager::file_visible_to_user($_course['dbName'],$document_path);
 				
 				if (strpos($fullpath, '/shared_folder/') !== false)
 				{
@@ -214,9 +220,20 @@ class ImageManager
 						}
 					}
 				}
+								
 
-				if($is_dir && $this->isThumbDir($entry) == false)
-				{
+								
+
+				if($is_dir && $this->isThumbDir($entry) == false) {			
+									//checking visibility		
+					$base_dir = substr($dir_entry, 0, strpos($dir_entry,'/document/')+9); 
+					$new_dir  = substr($dir_entry, strlen($base_dir),-1); //
+					global $_course;	
+					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
+					$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);							
+					if ($visible_status=='0' || $visible_status=='-1') {					 
+						continue;					
+					}				
 					$relative = Files::fixPath($path.$entry);
 					$full = Files::fixPath($fullpath.$entry);
 					$count = $this->countFiles($full);
@@ -228,7 +245,16 @@ class ImageManager
 
 					if(!(!is_array($img)&&$this->config['validate_images']))
 					{
-						$file['url'] = Files::makePath($this->config['base_url'],$path).$entry;
+										//checking visibility
+						$base_dir = substr($fullpath.$entry, 0, strpos($fullpath.$entry,'/document/')+9); 
+						$new_dir  = substr($fullpath.$entry, strlen($base_dir));
+						global $_course;	
+						$doc_id = DocumentManager::get_document_id($_course, $new_dir );
+						$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);										
+						if ($visible_status=='0' || $visible_status=='-1') {					 
+							continue;					
+						}
+						$file['url'] = Files::makePath($this->config['base_url'],$path).$entry;	
 						$file['relative'] = $path.$entry;
 						$file['fullpath'] = $fullpath.$entry;
 						$file['image'] = $img;
@@ -535,8 +561,13 @@ class ImageManager
 				$dokeosFolder=$group_properties['directory'].$dokeosFolder;//get Dokeos
 			}
 			$doc_id = add_document($_course, $document_path,'file', $dokeosFileSize , $dokeosFile); //get Dokeos																								
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id);//get Dokeos						
-		
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id);//get Dokeos
+			/*
+			if (!(api_is_platform_admin() || api_is_course_admin())) {
+				//setting invisible by default for the students
+				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());					
+			}										
+			*/
 		   $dimensionsIndex = isset($_REQUEST['uploadSize']) ? $_REQUEST['uploadSize'] : 0;
 		   // If maximum size is specified, constrain image to it.
            if ($this->config['maxWidth'][$dimensionsIndex] > 0 && $this->config['maxHeight'][$dimensionsIndex] > 0)
@@ -746,9 +777,16 @@ class ImageManager
 				// now the create_unexisting_directory will create the folder
 				//$result = Files::createFolder($fullpath);							
 				global $_course;
+				//@todo make this str to functions
 				$base_dir = substr($path, 0, strpos($path,'/document/')+9); //  				
 				$new_dir  = substr($fullpath, strlen($base_dir),-1); //  			
-				$created_dir = create_unexisting_directory($_course, api_get_user_id(),0,0, $base_dir, $new_dir,$newDir);
+				$created_dir = create_unexisting_directory($_course, api_get_user_id(),0,0, $base_dir, $new_dir,$newDir);				
+				$doc_id = DocumentManager::get_document_id($_course, $new_dir );
+				/*				
+				if (!(api_is_platform_admin() || api_is_course_admin())) {
+					//setting invisible by default					
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
+				}*/
 				return true;				
 			}
 		}

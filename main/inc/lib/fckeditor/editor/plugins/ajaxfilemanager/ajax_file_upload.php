@@ -81,7 +81,14 @@
 									{
 										$dokeosFolder=$group_properties['directory'].$dokeosFolder;//get Dokeos
 									}
-									$doc_id = add_document($_course, $dokeosFolder,'file', $dokeosFileSize , $dokeosFile); //get Dokeos																								
+									if(api_is_allowed_to_edit())
+									{
+										$doc_id = add_document($_course, $dokeosFolder,'file', $dokeosFileSize , $dokeosFile); //get Dokeos																								
+									}
+									else
+									{
+										$doc_id = add_document($_course, '/shared_folder/'.$dokeosFolder,'file', $dokeosFileSize , $dokeosFile); //get Dokeos
+									}
 									api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id);//get Dokeos
 								}
 								

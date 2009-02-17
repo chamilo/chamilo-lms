@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 18530 2009-02-16 22:09:02Z cfasanando $
+<?php // $Id: exercice_submit.php 18541 2009-02-17 14:48:55Z cfasanando $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 18530 2009-02-16 22:09:02Z cfasanando $
+* 	@version $Id: exercice_submit.php 18541 2009-02-17 14:48:55Z cfasanando $
 */
 
 
@@ -116,6 +116,9 @@ if ( empty ( $exerciseId ) ) {
 }
 if ( empty ( $choice ) ) {
     $choice = $_REQUEST['choice'];
+}
+if (empty($_REQUEST['choice'])) {
+	$choice = $_REQUEST['choice2'];
 }
 if ( empty ( $questionNum ) ) {
     $questionNum    = Database::escape_string($_REQUEST['questionNum']);
@@ -540,7 +543,7 @@ if ($formSent) {
 							} elseif ($answerType==UNIQUE_ANSWER) {
 								$sql = "select id from $table_ans where question_id='".Database::escape_string($questionId)."' and position='".Database::escape_string($choice)."'";
 								$res = api_sql_query($sql, __FILE__, __LINE__);
-								$answer = mysql_result($res,0,"id");
+								$answer = Database::result($res,0,"id");
 								exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
 							} else {
 								exercise_attempt($questionScore,$answer,$quesId,$exeId,0);

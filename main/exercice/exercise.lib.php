@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 18522 2009-02-16 20:20:29Z juliomontoya $
+<?php // $Id: exercise.lib.php 18541 2009-02-17 14:48:55Z cfasanando $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 18522 2009-02-16 20:20:29Z juliomontoya $
+* 	@version $Id: exercise.lib.php 18541 2009-02-17 14:48:55Z cfasanando $
 */
 
 /**
@@ -162,7 +162,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			// unique answer
 			if($answerType == UNIQUE_ANSWER)
 			{
-			$s.="
+			$s.="<input type='hidden' name='choice2[".$questionId."]' value='0'>
 			<tr>
 			  <td  width=\"50\">
 				<input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'>
@@ -177,7 +177,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			elseif($answerType == MULTIPLE_ANSWER)
 			{
 			$s.="<tr>
-			  <td width=\"50\">
+			  <td width=\"50\"><input type='hidden' name='choice2[".$questionId."][0]' value='0'>
 			<input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
 			  </td>
 			  <td>";

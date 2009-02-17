@@ -9,6 +9,15 @@ var mp3_url="";
 // Set the language direction.
 window.document.dir = oEditor.FCKLang.Dir ;
 
+// We have to avoid javascript errors if some language variables have not been defined. 
+FCKLang['UploadSelectFileFirst'] = FCKLang['UploadSelectFileFirst'] ? FCKLang['UploadSelectFileFirst'] : 'Please, select a file before pressing the upload button.' ;
+FCKLang['FileSuccessfullyUploaded'] = FCKLang['FileSuccessfullyUploaded'] ? FCKLang['FileSuccessfullyUploaded'] : 'Your file has been successfully uploaded.' ;
+FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
+FCKLang['InvalidFileType'] = FCKLang['InvalidFileType'] ? FCKLang['InvalidFileType'] : 'Invalid file type.' ;
+FCKLang['SecurityError'] = FCKLang['SecurityError'] ? FCKLang['SecurityError'] : 'Security error. You probably don\'t have enough permissions to upload. Please check your server.' ;
+FCKLang['ConnectorDisabled'] = FCKLang['ConnectorDisabled'] ? FCKLang['ConnectorDisabled'] : 'The upload feature (connector) is disabled.' ;
+FCKLang['UploadError'] = FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Error on file upload. Error number: ' ;
+
 // Set the dialog tabs.
 window.parent.AddTab( 'Info', FCKLang.DlgMP3Tab ) ;
 window.parent.AddTab( 'Upload', FCKLang.DlgMP3Upload ) ;
@@ -316,7 +325,7 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 	switch ( errorNumber )
 	{
 		case 0 :	// No errors
-			//alert( 'Your file has been successfully uploaded' ) ;
+			//alert( FCKLang['FileSuccessfullyUploaded'] ) ;
 			break ;
 		case 1 :	// Custom error
 			alert( customMsg ) ;
@@ -325,18 +334,22 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 			alert( customMsg ) ;
 			break ;
 		case 201 :
-			alert( 'A file with the same name is already available. The uploaded file has been renamed to "' + fileName + '"' ) ;
+			alert( FCKLang['FileRenamed'] + ' "' + fileName + '".' ) ;
 			break ;
 		case 202 :
-			alert( 'Invalid file type' ) ;
+			alert( FCKLang['InvalidFileType'] ) ;
 			window.location.href=FCKConfig.PluginsPath + 'MP3/fck_mp3.php';
 			return ;
 		case 203 :
-			alert( "Security error. You probably don't have enough permissions to upload. Please check your server." ) ;
+			alert( FCKLang['SecurityError'] ) ;
+			window.location.href=FCKConfig.PluginsPath + 'MP3/fck_mp3.php';
+			return ;
+		case 500 :
+			alert( FCKLang['ConnectorDisabled'] ) ;
 			window.location.href=FCKConfig.PluginsPath + 'MP3/fck_mp3.php';
 			return ;
 		default :
-			alert( 'Error on file upload. Error number: ' + errorNumber ) ;
+			alert( FCKLang['UploadError'] + errorNumber ) ;
 			window.location.href=FCKConfig.PluginsPath + 'MP3/fck_mp3.php';
 			return ;
 	}
@@ -357,9 +370,10 @@ var oUploadDeniedExtRegex	= new RegExp( FCKConfig.MP3UploadDeniedExtensions, 'i'
 function CheckUpload()
 {
 	var sFile = GetE('txtUploadFile').value ;
+
 	if ( sFile.length == 0 )
 	{
-		alert( 'Please select a file to upload' ) ;
+		alert( FCKLang['UploadSelectFileFirst'] ) ;
 		return false ;
 	}
 	

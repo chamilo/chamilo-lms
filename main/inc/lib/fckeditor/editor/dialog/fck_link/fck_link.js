@@ -30,6 +30,18 @@ var FCKConfig	= oEditor.FCKConfig ;
 var FCKRegexLib	= oEditor.FCKRegexLib ;
 var FCKTools	= oEditor.FCKTools ;
 
+// Set the language direction.
+window.document.dir = FCKLang.Dir ;
+
+// We have to avoid javascript errors if some language variables have not been defined. 
+FCKLang['UploadSelectFileFirst'] = FCKLang['UploadSelectFileFirst'] ? FCKLang['UploadSelectFileFirst'] : 'Please, select a file before pressing the upload button.' ;
+FCKLang['FileSuccessfullyUploaded'] = FCKLang['FileSuccessfullyUploaded'] ? FCKLang['FileSuccessfullyUploaded'] : 'Your file has been successfully uploaded.' ;
+FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
+FCKLang['InvalidFileType'] = FCKLang['InvalidFileType'] ? FCKLang['InvalidFileType'] : 'Invalid file type.' ;
+FCKLang['SecurityError'] = FCKLang['SecurityError'] ? FCKLang['SecurityError'] : 'Security error. You probably don\'t have enough permissions to upload. Please check your server.' ;
+FCKLang['ConnectorDisabled'] = FCKLang['ConnectorDisabled'] ? FCKLang['ConnectorDisabled'] : 'The upload feature (connector) is disabled.' ;
+FCKLang['UploadError'] = FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Error on file upload. Error number: ' ;
+
 //#### Dialog Tabs
 
 // Set the dialog tabs.
@@ -816,7 +828,7 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 	switch ( errorNumber )
 	{
 		case 0 :	// No errors
-			//alert( 'Your file has been successfully uploaded' ) ;
+			//alert( FCKLang['FileSuccessfullyUploaded'] ) ;
 			break ;
 		case 1 :	// Custom error
 			alert( customMsg ) ;
@@ -825,19 +837,19 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 			alert( customMsg ) ;
 			break ;
 		case 201 :
-			alert( 'A file with the same name is already available. The uploaded file has been renamed to "' + fileName + '"' ) ;
+			alert( FCKLang['FileRenamed'] + ' "' + fileName + '".' ) ;
 			break ;
 		case 202 :
-			alert( 'Invalid file type' ) ;
+			alert( FCKLang['InvalidFileType'] ) ;
 			return ;
 		case 203 :
-			alert( "Security error. You probably don't have enough permissions to upload. Please check your server." ) ;
+			alert( FCKLang['SecurityError'] ) ;
 			return ;
 		case 500 :
-			alert( 'The connector is disabled' ) ;
+			alert( FCKLang['ConnectorDisabled'] ) ;
 			break ;
 		default :
-			alert( 'Error on file upload. Error number: ' + errorNumber ) ;
+			alert( FCKLang['UploadError'] + errorNumber ) ;
 			return ;
 	}
 
@@ -854,7 +866,7 @@ function CheckUpload()
 
 	if ( sFile.length == 0 )
 	{
-		alert( 'Please select a file to upload' ) ;
+		alert( FCKLang['UploadSelectFileFirst'] ) ;
 		return false ;
 	}
 

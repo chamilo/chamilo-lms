@@ -19,3 +19,10 @@ FCKLang['ResourceTypeFlash']  = 'Флаш-анимации' ;
 FCKLang['ResourceTypeImages'] = 'Изображения' ;
 FCKLang['ResourceTypeVideo']  = 'Видео' ;
 
+FCKLang['FileSuccessfullyUploaded'] = 'Файлът е качен на сървъра успешно.' ;
+FCKLang['FileRenamed'] = 'Файл със същото име съществува на сървъра. Каченият файл е преименуван на ' ;
+FCKLang['InvalidFileType'] = 'Невалиден или неприемлив тип на файла.' ;
+FCKLang['SecurityError'] = 'Нямате права да качвате файлове. Потърсете администратора на системата.' ;
+FCKLang['ConnectorDisabled'] = 'Качването на файлове не е разрешено. Конекторът, който извършва това не е активиран.' ;
+FCKLang['UploadError'] = 'Грешка при качването на файл. Номер на грешката: ' ;
+

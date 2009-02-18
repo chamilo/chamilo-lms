@@ -90,17 +90,17 @@ class ImsAnswerMultipleChoice extends Answer
 		$this->answerList = $this->getAnswersList();
         $out  = '    <choiceInteraction responseIdentifier="' . $questionIdent . '" >' . "\n";
         $out .= '      <prompt> ' . $questionStatment . ' </prompt>'. "\n";
-
-        foreach ($this->answerList as $current_answer)
-        {
-            $out .= '      <simpleChoice identifier="answer_' . $current_answer['id'] . '" fixed="false">' . $current_answer['answer'];
-            if (isset($current_answer['comment']) && $current_answer['comment'] != '')
-            {
-                $out .= '<feedbackInline identifier="answer_' . $current_answer['id'] . '">' . $current_answer['comment'] . '</feedbackInline>';
-            }
-            $out .= '</simpleChoice>'. "\n";
-        }
-
+		if (is_array($this->answerList)) {
+	        foreach ($this->answerList as $current_answer)
+	        {
+	            $out .= '      <simpleChoice identifier="answer_' . $current_answer['id'] . '" fixed="false">' . $current_answer['answer'];
+	            if (isset($current_answer['comment']) && $current_answer['comment'] != '')
+	            {
+	                $out .= '<feedbackInline identifier="answer_' . $current_answer['id'] . '">' . $current_answer['comment'] . '</feedbackInline>';
+	            }
+	            $out .= '</simpleChoice>'. "\n";
+	        }
+		}
         $out .= '    </choiceInteraction>'. "\n"; 
         return $out;
     }
@@ -120,27 +120,29 @@ class ImsAnswerMultipleChoice extends Answer
         //Match the correct answers
 
         $out .= '    <correctResponse>'. "\n";
-
-        foreach($this->answerList as $current_answer)
-        {
-            if ($current_answer['correct'])
-            {
-                $out .= '      <value>answer_'. $current_answer['id'] .'</value>'. "\n";
-            }
-        }
+		if (is_array($this->answerList)) {
+	        foreach($this->answerList as $current_answer)
+	        {
+	            if ($current_answer['correct'])
+	            {
+	                $out .= '      <value>answer_'. $current_answer['id'] .'</value>'. "\n";
+	            }
+	        }
+		}
         $out .= '    </correctResponse>'. "\n";
 
         //Add the grading
 
         $out .= '    <mapping>'. "\n";
-
-        foreach($this->answerList as $current_answer)
-        {
-            if (isset($current_answer['grade']))
-            {
-                $out .= '      <mapEntry mapKey="answer_'. $current_answer['id'] .'" mappedValue="'.$current_answer['grade'].'" />'. "\n";
-            }
-        }
+		if (is_array($this->answerList)) {
+	        foreach($this->answerList as $current_answer)
+	        {
+	            if (isset($current_answer['grade']))
+	            {
+	                $out .= '      <mapEntry mapKey="answer_'. $current_answer['id'] .'" mappedValue="'.$current_answer['grade'].'" />'. "\n";
+	            }
+	        }
+		}
         $out .= '    </mapping>'. "\n";
 
         $out .= '  </responseDeclaration>'. "\n";
@@ -167,14 +169,15 @@ class ImsAnswerFillInBlanks extends Answer
         //    {
         		$text = '';
                 $text .= $this->answerText;
-
-                foreach ($this->answerList as $key=>$answer)
-                {
-                	$key = $answer['id'];
-                	$answer = $answer['answer'];
-                	$len = strlen($answer);
-                    $text = str_replace('['.$answer.']','<textEntryInteraction responseIdentifier="fill_'.$key.'" expectedLength="'.strlen($answer).'"/>', $text);
-                }
+				if (is_array($this->answerList)) {
+	                foreach ($this->answerList as $key=>$answer)
+	                {
+	                	$key = $answer['id'];
+	                	$answer = $answer['answer'];
+	                	$len = strlen($answer);
+	                    $text = str_replace('['.$answer.']','<textEntryInteraction responseIdentifier="fill_'.$key.'" expectedLength="'.strlen($answer).'"/>', $text);
+	                }
+				}
                 $out = $text;
         //    }
         //    break;
@@ -234,43 +237,44 @@ class ImsAnswerFillInBlanks extends Answer
 		$this->answerList = $this->getAnswersList();
 		$this->gradeList = $this->getGradesList();
         $out = '';
-
-        foreach ($this->answerList as $answerKey=>$answer)
-        {
-        	$answerKey = $answer['id'];
-        	$answer = $answer['answer'];
-            $out .= '  <responseDeclaration identifier="fill_' . $answerKey . '" cardinality="single" baseType="identifier">' . "\n";
-            $out .= '    <correctResponse>'. "\n";
-
-            //if ($this->type==TEXTFIELD_FILL)
-            //{
-                $out .= '      <value>'.$answer.'</value>'. "\n";
-            //}
-            /*
-            else
-            {
-                //find correct answer key to apply in manifest and output it
-               
-                foreach ($this->answerList as $choiceKey=>$correctAnswer)
-                {
-                    if ($correctAnswer==$answer)
-                    {
-                        $out .= '      <value>choice_c_'.$answerKey.'_'.$choiceKey.'</value>'. "\n";
-                    }
-                }
-            }
-            */
-            $out .= '    </correctResponse>'. "\n";
-    
-            if (isset($this->gradeList[$answerKey]))
-            {
-                $out .= '    <mapping>'. "\n";
-                $out .= '      <mapEntry mapKey="'.$answer.'" mappedValue="'.$this->gradeList[$answerKey].'"/>'. "\n";
-                $out .= '    </mapping>'. "\n";
-            }
-
-            $out .= '  </responseDeclaration>'. "\n";
-        }
+		if (is_array($this->answerList)) {
+	        foreach ($this->answerList as $answerKey=>$answer)
+	        {
+	        	$answerKey = $answer['id'];
+	        	$answer = $answer['answer'];
+	            $out .= '  <responseDeclaration identifier="fill_' . $answerKey . '" cardinality="single" baseType="identifier">' . "\n";
+	            $out .= '    <correctResponse>'. "\n";
+	
+	            //if ($this->type==TEXTFIELD_FILL)
+	            //{
+	                $out .= '      <value>'.$answer.'</value>'. "\n";
+	            //}
+	            /*
+	            else
+	            {
+	                //find correct answer key to apply in manifest and output it
+	               
+	                foreach ($this->answerList as $choiceKey=>$correctAnswer)
+	                {
+	                    if ($correctAnswer==$answer)
+	                    {
+	                        $out .= '      <value>choice_c_'.$answerKey.'_'.$choiceKey.'</value>'. "\n";
+	                    }
+	                }
+	            }
+	            */
+	            $out .= '    </correctResponse>'. "\n";
+	    
+	            if (isset($this->gradeList[$answerKey]))
+	            {
+	                $out .= '    <mapping>'. "\n";
+	                $out .= '      <mapEntry mapKey="'.$answer.'" mappedValue="'.$this->gradeList[$answerKey].'"/>'. "\n";
+	                $out .= '    </mapping>'. "\n";
+	            }
+	
+	            $out .= '  </responseDeclaration>'. "\n";
+	        }
+		}
 
        return $out;
     }
@@ -294,12 +298,13 @@ class ImsAnswerMatching extends Answer
         //add left column
 
         $out .= '  <simpleMatchSet>'. "\n";
-
-        foreach ($this->leftList as $leftKey=>$leftElement)
-        {
-            $out .= '    <simpleAssociableChoice identifier="left_'.$leftKey.'" >'. $leftElement['answer'] .'</simpleAssociableChoice>'. "\n";
-        }
-
+		if (is_array($this->leftList)) {
+	        foreach ($this->leftList as $leftKey=>$leftElement)
+	        {
+	            $out .= '    <simpleAssociableChoice identifier="left_'.$leftKey.'" >'. $leftElement['answer'] .'</simpleAssociableChoice>'. "\n";
+	        }
+    	}
+        
         $out .= '  </simpleMatchSet>'. "\n";
 
         //add right column
@@ -308,12 +313,13 @@ class ImsAnswerMatching extends Answer
 
         $i = 0;
 
-        foreach($this->rightList as $rightKey=>$rightElement)
-        {
-            $out .= '    <simpleAssociableChoice identifier="right_'.$i.'" >'. $rightElement['answer'] .'</simpleAssociableChoice>'. "\n";
-            $i++;
-        }
-
+		if (is_array($this->rightList)) {
+	        foreach($this->rightList as $rightKey=>$rightElement)
+	        {
+	            $out .= '    <simpleAssociableChoice identifier="right_'.$i.'" >'. $rightElement['answer'] .'</simpleAssociableChoice>'. "\n";
+	            $i++;
+	        }
+		}
         $out .= '  </simpleMatchSet>'. "\n";
 
         $out .= '</matchInteraction>'. "\n";
@@ -331,26 +337,29 @@ class ImsAnswerMatching extends Answer
         $out .= '    <correctResponse>' . "\n";
 
         $gradeArray = array();
-
-        foreach ($this->leftList as $leftKey=>$leftElement)
-        {
-            $i=0;
-            foreach ($this->rightList as $rightKey=>$rightElement)
-            {
-                if( ($leftElement['match'] == $rightElement['code']))
-                {
-                    $out .= '      <value>left_' . $leftKey . ' right_'.$i.'</value>'. "\n";
-
-                    $gradeArray['left_' . $leftKey . ' right_'.$i] = $leftElement['grade'];
-                }
-                $i++;
-            }
-        }
+		if (is_array($this->leftList)) {
+	        foreach ($this->leftList as $leftKey=>$leftElement)
+	        {
+	            $i=0;
+	            foreach ($this->rightList as $rightKey=>$rightElement)
+	            {
+	                if( ($leftElement['match'] == $rightElement['code']))
+	                {
+	                    $out .= '      <value>left_' . $leftKey . ' right_'.$i.'</value>'. "\n";
+	
+	                    $gradeArray['left_' . $leftKey . ' right_'.$i] = $leftElement['grade'];
+	                }
+	                $i++;
+	            }
+	        }
+		}
         $out .= '    </correctResponse>'. "\n";
         $out .= '    <mapping>' . "\n";
-        foreach ($gradeArray as $gradeKey=>$grade)
-        {
-            $out .= '          <mapEntry mapKey="'.$gradeKey.'" mappedValue="'.$grade.'"/>' . "\n";
+        if (is_array($gradeArray)) {
+	        foreach ($gradeArray as $gradeKey=>$grade)
+	        {
+	            $out .= '          <mapEntry mapKey="'.$gradeKey.'" mappedValue="'.$grade.'"/>' . "\n";
+	        }
         }
         $out .= '    </mapping>' . "\n";
         $out .= '  </responseDeclaration>'. "\n";
@@ -380,37 +389,39 @@ class ImsAnswerHotspot extends Answer
 		$text .= '      <graphicOrderInteraction responseIdentifier="hotspot_'.$questionIdent.'">'."\n";
 		$text .= '        <prompt>'.$questionDesc.'</prompt>'."\n";
 		$text .= '        <object type="'.$mimetype.'" width="250" height="230" data="'.$questionMedia.'">-</object>'."\n";
-        foreach ($this->answerList as $key=>$answer)
-        {
-        	$key = $answer['id'];
-        	$answerTxt = $answer['answer'];
-        	$len = strlen($answerTxt);
-        	//coords are transformed according to QTIv2 rules here: http://www.imsproject.org/question/qtiv2p1pd/imsqti_infov2p1pd.html#element10663
-        	$coords = '';
-        	$type = 'default';
-        	switch($answer['hotspot_type']){
-        		case 'square':
-        			$type = 'rect';
-					$res = array();
-					$coords = preg_match('/^\s*(\d+);(\d+)\|(\d+)\|(\d+)\s*$/',$answer['hotspot_coord'],$res);
-					$coords = $res[1].','.$res[2].','.((int)$res[1]+(int)$res[3]).",".((int)$res[2]+(int)$res[4]);        			
-        			break;
-        		case 'circle':
-        			$type = 'circle';
-		 			$res = array();
-					$coords = preg_match('/^\s*(\d+);(\d+)\|(\d+)\|(\d+)\s*$/',$answer['hotspot_coord'],$res);
-					$coords = $res[1].','.$res[2].','.sqrt(pow(($res[1]-$res[3]),2)+pow(($res[2]-$res[4])));
-        			break;
-        		case 'poly':
-        			$type = 'poly';
-					$coords = str_replace(array(';','|'),array(',',','),$answer['hotspot_coord']);
-        			break;
-        		 case 'delineation' :
-        			$type = 'delineation';
-					$coords = str_replace(array(';','|'),array(',',','),$answer['hotspot_coord']);
-        			break;
-        	}
-            $text .= '        <hotspotChoice shape="'.$type.'" coords="'.$coords.'" identifier="'.$key.'"/>'."\n";
+        if (is_array($this->answerList)) {
+	        foreach ($this->answerList as $key=>$answer)
+	        {
+	        	$key = $answer['id'];
+	        	$answerTxt = $answer['answer'];
+	        	$len = strlen($answerTxt);
+	        	//coords are transformed according to QTIv2 rules here: http://www.imsproject.org/question/qtiv2p1pd/imsqti_infov2p1pd.html#element10663
+	        	$coords = '';
+	        	$type = 'default';
+	        	switch($answer['hotspot_type']){
+	        		case 'square':
+	        			$type = 'rect';
+						$res = array();
+						$coords = preg_match('/^\s*(\d+);(\d+)\|(\d+)\|(\d+)\s*$/',$answer['hotspot_coord'],$res);
+						$coords = $res[1].','.$res[2].','.((int)$res[1]+(int)$res[3]).",".((int)$res[2]+(int)$res[4]);        			
+	        			break;
+	        		case 'circle':
+	        			$type = 'circle';
+			 			$res = array();
+						$coords = preg_match('/^\s*(\d+);(\d+)\|(\d+)\|(\d+)\s*$/',$answer['hotspot_coord'],$res);
+						$coords = $res[1].','.$res[2].','.sqrt(pow(($res[1]-$res[3]),2)+pow(($res[2]-$res[4])));
+	        			break;
+	        		case 'poly':
+	        			$type = 'poly';
+						$coords = str_replace(array(';','|'),array(',',','),$answer['hotspot_coord']);
+	        			break;
+	        		 case 'delineation' :
+	        			$type = 'delineation';
+						$coords = str_replace(array(';','|'),array(',',','),$answer['hotspot_coord']);
+	        			break;
+	        	}
+	            $text .= '        <hotspotChoice shape="'.$type.'" coords="'.$coords.'" identifier="'.$key.'"/>'."\n";
+	        }
         }
         $text .= '      </graphicOrderInteraction>'."\n";
         $out = $text;
@@ -431,14 +442,16 @@ class ImsAnswerHotspot extends Answer
         $out = '';
         $out .= '  <responseDeclaration identifier="hotspot_'.$questionIdent.'" cardinality="ordered" baseType="identifier">' . "\n";
         $out .= '    <correctResponse>'. "\n";
-
-        foreach ($this->answerList as $answerKey=>$answer)
-        {
-        	$answerKey = $answer['id'];
-        	$answer = $answer['answer'];
-            $out .= '      <value>'.$answerKey.'</value>'. "\n";
-
-        }
+		
+		if (is_array($this->answerList)) {
+	        foreach ($this->answerList as $answerKey=>$answer)
+	        {
+	        	$answerKey = $answer['id'];
+	        	$answer = $answer['answer'];
+	            $out .= '      <value>'.$answerKey.'</value>'. "\n";
+	
+	        }
+		}
         $out .= '    </correctResponse>'. "\n";
         $out .= '  </responseDeclaration>'. "\n";
 

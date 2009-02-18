@@ -813,12 +813,16 @@ class DocumentManager
 					while ($row = Database::fetch_array($what_to_delete_result))
 					{
 						//query to delete from item_property table
-						$remove_from_item_property_sql = "DELETE FROM ".$TABLE_ITEMPROPERTY." WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
+						//avoid wrong behavior
+												
+						//$remove_from_item_property_sql = "DELETE FROM ".$TABLE_ITEMPROPERTY." WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
+						api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'delete', api_get_user_id());
+																								
 						//query to delete from document table
 						$remove_from_document_sql = "DELETE FROM ".$TABLE_DOCUMENT." WHERE id = ".$row['id']."";
 
 						//echo($remove_from_item_property_sql.'<br>');
-						api_sql_query($remove_from_item_property_sql, __FILE__, __LINE__);
+						//api_sql_query($remove_from_item_property_sql, __FILE__, __LINE__);
 						//echo($remove_from_document_sql.'<br>');
 						api_sql_query($remove_from_document_sql, __FILE__, __LINE__);
 

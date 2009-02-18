@@ -1,9 +1,8 @@
-<<<<<<< .mine
 <?php
 
 /**
  * Aditional system config settings for document repositories, the Dokeos LMS
- * @author Juan Carlos Raña
+ * @author Juan Carlos Raï¿½a
  * @since 31/December/2008
  */
 
@@ -73,10 +72,6 @@ if (api_is_in_course())
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
 	}
 }
-
-?>
-=======
-<?php
 
 /**
  * Aditional system config settings for document repositories, the Dokeos LMS

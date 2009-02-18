@@ -75,6 +75,10 @@ if(isset($_GET['origin']))
     $origin =  Security::remove_XSS($_GET['origin']);
 }
 
+//delete attachment file
+if ((isset($_GET['action']) && $_GET['action']=='delete_attach') && isset($_GET['id_attach'])) {	
+	delete_attachment(0,$_GET['id_attach']);
+}
 // --------------------------------------
 // 		Displaying the thread (structure)
 // --------------------------------------
@@ -230,11 +234,15 @@ else
 if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($rows[$display_post_id]['user_id'],$name, $origin).'<br />';	}
 echo display_user_link($rows[$display_post_id]['user_id'], $name, $origin).'<br />';
 echo $rows[$display_post_id]['post_date'].'<br /><br />';
+// get attach id
+$attachment_list=get_attachment($display_post_id);
+$id_attach = !empty($attachment_list)?$attachment_list['id']:'';
+
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 // The course admin him/herself can do this off course always
 if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))
 {
-	echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;origin=".$origin."&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
+	echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;origin=".$origin."&amp;post=".$rows[$display_post_id]['post_id']."&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
 }
 if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))
 {
@@ -331,7 +339,10 @@ if (!empty($attachment_list))
 	echo '<a href="download.php?file=';		
 	echo $realname;
 	echo ' "> '.$user_filename.' </a>';
-	echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span><br />';	
+	echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+	if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
+		echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
+	}	
 	echo '</td></tr>';		
 }
 

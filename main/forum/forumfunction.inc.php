@@ -636,8 +636,16 @@ function store_forum($values) {
 function delete_forum_forumcategory_thread($content, $id) {
 	global $_course;
 	$table_forums = Database::get_course_table(TABLE_FORUM);
+	$table_forums_post = Database::get_course_table(TABLE_FORUM_POST);
 	$table_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
-
+		
+	// delete all attachment file about this tread id	
+	$sql = "SELECT post_id FROM $table_forums_post WHERE thread_id = '".(int)$id."' ";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	while ($poster_id = Database::fetch_row($res)) {
+		delete_attachment($poster_id[0]);	
+	}	
+			
 	if ($content=='forumcategory') {
 		$tool_constant=TOOL_FORUM_CATEGORY;
 		$return_message=get_lang('ForumCategoryDeleted');
@@ -671,7 +679,6 @@ function delete_forum_forumcategory_thread($content, $id) {
 		$return_message=get_lang('ThreadDeleted');
 	}
 	api_item_property_update($_course,$tool_constant,$id,'delete',api_get_user_id()); // note: check if this returns a true and if so => return $return_message, if not => return false;
-	//delete_attachment($post_id);
 	return $return_message;
 }
 
@@ -695,8 +702,9 @@ function delete_post($post_id) {
 	$sql="DELETE FROM $table_posts WHERE post_id='".Database::escape_string($post_id)."'"; // note: this has to be a recursive function that deletes all of the posts in this block.
 	api_sql_query($sql,__FILE__,__LINE__);
 	
-	delete_attachment($post_id);
-	
+	//delete attachment file about this post id
+	delete_attachment($post_id);	
+		
 	$last_post_of_thread=check_if_last_post_of_thread(strval(intval($_GET['thread'])));
 	
 	if (is_array($last_post_of_thread)) {
@@ -1774,22 +1782,10 @@ function store_thread($values) {
 			if (!filter_extension($new_file_name))  {
 				Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));				
 			} else {
-				$new_file_name = uniqid('');						
-				$new_path=$updir.'/'.$new_file_name;
-				$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-				$comment=$values['file_comment'];				
-								
-				// Storing the attachments if any
-				if ($result) {					
-					$sql='INSERT INTO '.$forum_table_attachment.'(filename,comment, path, post_id,size) '.
-						 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".$_FILES['user_upload']['size']."' )";						
-					$result=api_sql_query($sql, __LINE__, __FILE__);					
-					$message.=' / '.get_lang('FileUploadSucces').'<br />';
-					
-					$last_id=Database::insert_id();
-					api_item_property_update($_course, TOOL_FORUM_ATTACH, $last_id ,'ForumAttachmentAdded', api_get_user_id());
-								
-				}			
+				if ($result) {
+					$comment = Database::escape_string($comment);				
+					add_forum_attachment_file($comment,$last_post_id);
+				}										
 			}			 
 		} else {
 			$message.='<br />';
@@ -1860,6 +1856,20 @@ function show_add_post_form($action='', $id='', $form_values='') {
 
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
+	$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>');
+	$form->addElement('html','<div id="id_qualify" style="display:none">');
+	if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ){
+		// thread qualify
+		
+		$form->addElement('static','Group', '<br /><strong>'.get_lang('AlterQualifyThread').'</strong>');
+		$form->addElement('text', 'numeric_calification', get_lang('QualifyNumeric'),'Style="width:40px"');
+		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+
+		$form -> addElement('html','<div id="options_field" style="display:none">');
+		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
+		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="this.select();"');
+		$form->addElement('html','</div>'); 
+	}
 
 	if ($forum_setting['allow_post_notificiation'] AND isset($_user['user_id'])) {
 		$form->addElement('checkbox', 'post_notification', '', get_lang('NotifyByEmail').' ('.$_user['mail'].')');
@@ -1878,27 +1888,10 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$form->addElement('html','<br /><b><div class="row"><div class="label">'.get_lang('AddAnAttachment').'</div></div></b><br /><br />');
 	$form->addElement('file','user_upload',get_lang('FileName'),'');		
 	$form->addElement('textarea','file_comment',get_lang('FileComment'),array ('rows' => 4, 'cols' => 34));
-	
+	$form->addElement('html','</div>');
 	$userid  =api_get_user_id();
 	$info    =api_get_user_info($userid);
-	$courseid=api_get_course_id();
-	
-	if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ){
-		// thread qualify
-			
-		$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>');
-		$form->addElement('html','<div id="id_qualify" style="display:none">');
-		$form->addElement('static','Group', '<br /><strong>'.get_lang('AlterQualifyThread').'</strong>');
-		$form->addElement('text', 'numeric_calification', get_lang('QualifyNumeric'),'Style="width:40px"');
-		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
-
-		$form -> addElement('html','<div id="options_field" style="display:none">');
-		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
-		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="this.select();"');
-		$form->addElement('html','</div>'); 
-	
-		$form->addElement('html','</div>');
-	}
+	$courseid=api_get_course_id();		
 		
 	$form->addElement('submit', 'SubmitPost', get_lang('Ok'));	
 	$form->add_real_progress_bar('DocumentUpload','user_upload');
@@ -2256,7 +2249,7 @@ function store_reply($values) {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
 */
-function show_edit_post_form($current_post, $current_thread, $current_forum, $form_values='') {
+function show_edit_post_form($current_post, $current_thread, $current_forum, $form_values='',$id_attach=0) {
 	global $forum_setting;
 	global $_user;
 	global $origin;
@@ -2267,15 +2260,17 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	// settting the form elements
 	$form->addElement('hidden', 'post_id', $current_post['post_id']);
 	$form->addElement('hidden', 'thread_id', $current_thread['thread_id']);
+	$form->addElement('hidden', 'id_attach', $id_attach);
 	if ($current_post['post_parent_id']==0) {
 		$form->addElement('hidden', 'is_first_post_of_thread', '1');
 	}
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
-	if (!isset($_GET['edit'])) {
-		
-		$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>');
-		$form->addElement('html','<div id="id_qualify" style="display:none">');
+	
+	$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>');
+	$form->addElement('html','<div id="id_qualify" style="display:none">');
+	
+	if (!isset($_GET['edit'])) {				
 		$form->addElement('static','Group','<strong>'.get_lang('AlterQualifyThread').'</strong>');
 		$form->addElement('text', 'numeric_calification', get_lang('QualifyNumeric'),'value="'.$current_thread['thread_qualify_max'].'" Style="width:40px"');
 		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');		
@@ -2288,9 +2283,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 		}						
 		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'),'value="'.$current_thread['thread_title_qualify'].'"');
 		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="'.$current_thread['thread_weight'].'" Style="width:40px"');		
-		$form->addElement('html','</div>');
-		
-		$form->addElement('html','</div>');
+		$form->addElement('html','</div>');				
 		//add gradebook
 	}
 	
@@ -2303,6 +2296,12 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 			$defaults['thread_sticky']=true;
 		}
 	}
+	
+	// user upload
+	$form->addElement('html','<br /><b><div class="row"><div class="label">'.get_lang('AddAnAttachment').'</div></div></b><br /><br />');
+	$form->addElement('file','user_upload',get_lang('FileName'),'');		
+	$form->addElement('textarea','file_comment',get_lang('FileComment'),array ('rows' => 4, 'cols' => 34));		
+	$form->addElement('html','</div><br /><br />');
 	if ($current_forum['allow_attachments']=='1' OR api_is_allowed_to_edit()) {
 		if (empty($form_values) AND !isset($_POST['SubmitPost'])) {
 			//edit_added_resources('forum_post',$current_post['post_id']);
@@ -2378,6 +2377,12 @@ function store_edit_post($values) {
 				WHERE post_id='".Database::escape_string($values['post_id'])."'";
 				//error_log($sql);
 	api_sql_query($sql,__FILE__, __LINE__);
+
+	if (empty($values['id_attach'])) {
+		add_forum_attachment_file($values['file_comment'],$values['post_id']);
+	} else {
+		edit_forum_attachment_file($values['file_comment'],$values['post_id'],$values['id_attach']);
+	}
 
     if (api_is_course_admin()==true) {
         $ccode = api_get_course_id();
@@ -3193,6 +3198,105 @@ function search_link() {
 	}
 	return $return;
 }
+/**
+ * This function add a attachment file into forum
+ * @param string  a comment about file
+ * @param int last id from forum_post table
+ *
+ */
+function add_forum_attachment_file($file_comment,$last_id) {
+
+	global $_course;
+	$agenda_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+	// Storing the attachments
+
+    if(!empty($_FILES['user_upload']['name'])) {
+		$upload_ok = process_uploaded_file($_FILES['user_upload']);
+	}
+
+	if (!empty($upload_ok)) {
+			$courseDir   = $_course['path'].'/upload/forum';
+			$sys_course_path = api_get_path(SYS_COURSE_PATH);
+			$updir = $sys_course_path.$courseDir;
+
+			// Try to add an extension to the file if it hasn't one
+			$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+			// user's file name
+			$file_name =$_FILES['user_upload']['name'];
+
+			if (!filter_extension($new_file_name))  {
+				Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+			} else {
+				$new_file_name = uniqid('');
+				$new_path=$updir.'/'.$new_file_name;
+				$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
+				$safe_file_comment= Database::escape_string($file_comment);
+				$safe_file_name = Database::escape_string($file_name);
+				$safe_new_file_name = Database::escape_string($new_file_name);
+				// Storing the attachments if any
+				if ($result) {
+					$sql="INSERT INTO $agenda_forum_attachment(filename,comment, path,post_id,size) 
+						  VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$last_id', '".$_FILES['user_upload']['size']."' )";
+					$result=api_sql_query($sql, __LINE__, __FILE__);
+					$message.=' / '.get_lang('FileUploadSucces').'<br />';
+
+					$last_id_file=Database::insert_id();
+					api_item_property_update($_course, TOOL_FORUM_ATTACH, $last_id_file ,'ForumAttachmentAdded', api_get_user_id());
+
+				}
+			}
+		}
+}
+
+/**
+ * This function edit a attachment file into forum
+ * @param string  a comment about file
+ * @param int Post Id
+ *  @param int attachment file Id
+ */
+function edit_forum_attachment_file($file_comment,$post_id,$id_attach) {
+
+	global $_course;
+	$table_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+	// Storing the attachments
+
+    if(!empty($_FILES['user_upload']['name'])) {
+		$upload_ok = process_uploaded_file($_FILES['user_upload']);
+	}
+
+	if (!empty($upload_ok)) {
+			$courseDir   = $_course['path'].'/upload/forum';
+			$sys_course_path = api_get_path(SYS_COURSE_PATH);
+			$updir = $sys_course_path.$courseDir;
+
+			// Try to add an extension to the file if it hasn't one
+			$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+			// user's file name
+			$file_name =$_FILES['user_upload']['name'];
+
+			if (!filter_extension($new_file_name))  {
+				Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+			} else {
+				$new_file_name = uniqid('');
+				$new_path=$updir.'/'.$new_file_name;
+				$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
+				$safe_file_comment= Database::escape_string($file_comment);
+				$safe_file_name = Database::escape_string($file_name);
+				$safe_new_file_name = Database::escape_string($new_file_name);
+				$safe_post_id = (int)$post_id;
+				$safe_id_attach = (int)$id_attach;
+				// Storing the attachments if any
+				if ($result) {
+					$sql="UPDATE $table_forum_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', post_id = '$safe_post_id', size ='".$_FILES['user_upload']['size']."'
+						   WHERE id = '$safe_id_attach'";
+					$result=api_sql_query($sql, __LINE__, __FILE__);
+
+					api_item_property_update($_course, TOOL_FORUM_ATTACH, $safe_id_attach ,'ForumAttachmentUpdated', api_get_user_id());
+
+				}
+			}
+		}
+}
 
 /**
  * Show a list with all the attachments according to the post's id
@@ -3205,7 +3309,7 @@ function search_link() {
 function get_attachment($post_id) {	
 	global $forum_table_attachment;
 	$row=array();	
-	$sql = 'SELECT path, filename,comment FROM '. $forum_table_attachment.' WHERE post_id ="'.$post_id.'"';
+	$sql = 'SELECT id, path, filename,comment FROM '. $forum_table_attachment.' WHERE post_id ="'.$post_id.'"';
 	$result=api_sql_query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result)!=0) {
 		$row=Database::fetch_array($result);
@@ -3213,28 +3317,37 @@ function get_attachment($post_id) {
 	return $row;	
 }
 /**
- * Delete the all the attachments from the DB and the file according to the post's id
+ * Delete the all the attachments from the DB and the file according to the post's id or attach id(optional)
  * @param post id
+ * @param attach id (optional)
  * @author Julio Montoya Dokeos
  * @version avril 2008, dokeos 1.8.5
  */ 
 
-function delete_attachment($id) {	
-	global $forum_table_attachment;
+function delete_attachment($post_id,$id_attach=0) {		
 	global $_course;
+	$forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 	
-	$attach_list=get_attachment($id);
-	$sql = 'DELETE FROM '. $forum_table_attachment.' WHERE post_id ="'.$id.'"';
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$cond = (!empty($id_attach))?" id = ".(int)$id_attach."" : " post_id = ".(int)$post_id."";
+	
+	$sql="DELETE FROM $forum_table_attachment WHERE $cond ";	
+	
+	$result=api_sql_query($sql, __LINE__, __FILE__);
+	$last_id_file=Database::insert_id();
+	// update item_property
+	api_item_property_update($_course, TOOL_FORUM_ATTACH, $id_attach ,'ForumAttachmentDelete', api_get_user_id());
+	
+	if (!empty($result) && !empty($id_attach)) {	
+	$message=get_lang(get_lang('AttachmentFileDeleteSuccess'));			
+	Display::display_confirmation_message($message);
+	}
 	
 	$courseDir       = $_course['path'].'/upload/forum';
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);		
 	$updir           = $sys_course_path.$courseDir;
 	$my_path         =isset($attach_list['path']) ? $attach_list['path'] : null;
 	$file            =$updir.'/'.$my_path;
-	
-	api_item_property_update($_course, TOOL_FORUM_ATTACH, $id ,'ForumAttachmentDelete', api_get_user_id());
-												
+			
 	if (Security::check_abs_path($file,$updir) ) {			
 		@ unlink($file);
 	}		

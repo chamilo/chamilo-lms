@@ -238,7 +238,7 @@ if ($action_forums!='add') {
 	echo "<table class=\"data_table\" width='100%'>\n";
 	$my_session=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : null;
 	$forum_categories_list='';
-	echo "\t<tr>\n\t\t<th align=\"left\" colspan=\"5\">";
+	echo "\t<tr>\n\t\t<th align=\"left\" ".(api_is_allowed_to_edit()?"colspan='5'":"colspan='6'").">";
 	echo '<span class="forum_title">'.prepare4display($forum_category['cat_title']).'</span><br />';
 	echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 	echo "</th>\n";

@@ -235,7 +235,7 @@ function show_add_forum_form($inputvalues=array()) {
 				document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/nolines_plus.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
 				}*/
 			
-		$form->addElement('static','Group','<div id="plus"><a href="javascript://" onclick="advanced_parameters()" ><br /><span id="plus_minus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a></div>');
+		$form->addElement('static','Group','','<div id="plus"><a href="javascript://" onclick="advanced_parameters()" ><br /><span id="plus_minus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a></div>');
 		$form->addElement('html','<div id="options" style="display:none">');
 	
 	$group='';
@@ -1856,7 +1856,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
-	$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>');
+	$form->addElement('static','Group','','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>');
 	$form->addElement('html','<div id="id_qualify" style="display:none">');
 	if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ){
 		// thread qualify
@@ -2267,7 +2267,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
 	
-	$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>');
+	$form->addElement('static','Group','','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>');
 	$form->addElement('html','<div id="id_qualify" style="display:none">');
 	
 	if (!isset($_GET['edit'])) {				
@@ -2296,9 +2296,16 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 			$defaults['thread_sticky']=true;
 		}
 	}
-	
+		
+	$attachment_list=get_attachment($current_post['post_id']);
+	$message=get_lang('AddAnAttachment');
+	if (!empty($attachment_list)) {
+		$message=get_lang('EditAnAttachment');
+		$form->addElement('static','Group','','<br />'.Display::return_icon('attachment.gif',get_lang('Attachment')).'&nbsp;'.$attachment_list['filename'].(!empty($attachment_list['comment'])?'('.$attachment_list['comment'].')':''));
+		$form->addElement('checkbox', 'remove_attach', null, get_lang('DeleteAttachmentFile'));
+	}
 	// user upload
-	$form->addElement('html','<br /><b><div class="row"><div class="label">'.get_lang('AddAnAttachment').'</div></div></b><br /><br />');
+	$form->addElement('html','<br /><b><div class="row"><div class="label">'.$message.'</div></div></b><br /><br />');
 	$form->addElement('file','user_upload',get_lang('FileName'),'');		
 	$form->addElement('textarea','file_comment',get_lang('FileComment'),array ('rows' => 4, 'cols' => 34));		
 	$form->addElement('html','</div><br /><br />');
@@ -2377,7 +2384,11 @@ function store_edit_post($values) {
 				WHERE post_id='".Database::escape_string($values['post_id'])."'";
 				//error_log($sql);
 	api_sql_query($sql,__FILE__, __LINE__);
-
+	
+	if (!empty($values['remove_attach'])) {
+		delete_attachment($values['post_id']);
+	}
+	
 	if (empty($values['id_attach'])) {
 		add_forum_attachment_file($values['file_comment'],$values['post_id']);
 	} else {
@@ -3329,7 +3340,21 @@ function delete_attachment($post_id,$id_attach=0) {
 	$forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 	
 	$cond = (!empty($id_attach))?" id = ".(int)$id_attach."" : " post_id = ".(int)$post_id."";
+		
+	$sql="SELECT path FROM $forum_table_attachment WHERE $cond";
+	$res=api_sql_query($sql,__FILE__,__LINE__);
+	$row=Database::fetch_array($res);
 	
+	$courseDir       = $_course['path'].'/upload/forum';
+	$sys_course_path = api_get_path(SYS_COURSE_PATH);		
+	$updir           = $sys_course_path.$courseDir;
+	$my_path         =isset($row['path']) ? $row['path'] : null;
+	$file            =$updir.'/'.$my_path;		
+	if (Security::check_abs_path($file,$updir) ) {			
+		@unlink($file);
+	}		
+		
+	//Delete from forum_attachment table
 	$sql="DELETE FROM $forum_table_attachment WHERE $cond ";	
 	
 	$result=api_sql_query($sql, __LINE__, __FILE__);
@@ -3342,15 +3367,7 @@ function delete_attachment($post_id,$id_attach=0) {
 	Display::display_confirmation_message($message);
 	}
 	
-	$courseDir       = $_course['path'].'/upload/forum';
-	$sys_course_path = api_get_path(SYS_COURSE_PATH);		
-	$updir           = $sys_course_path.$courseDir;
-	$my_path         =isset($attach_list['path']) ? $attach_list['path'] : null;
-	$file            =$updir.'/'.$my_path;
-			
-	if (Security::check_abs_path($file,$updir) ) {			
-		@ unlink($file);
-	}		
+	
 }
 /**
  * This function gets all the forum information of the all the forum of the group

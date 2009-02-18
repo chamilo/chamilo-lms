@@ -121,7 +121,7 @@ Display::display_normal_message(get_lang('AddLpIntro'),false);
 echo '<p>'.get_lang('AddLpToStart').' :</p>';
 echo '<form method="post">';
 	echo '<label for="idTitle">'.get_lang('Title').' : </label><input id="idTitle" name="learnpath_name" type="text" /> ';
-	echo '<button class="save"type="submit"/>'.get_lang('CreateCourse').'</button>';
+	echo '<button class="save"type="submit"/>'.get_lang('CreateLearning').'</button>';
 					echo '<input name="post_time" type="hidden" value="' . time() . '" />';
 echo '</form>';
 

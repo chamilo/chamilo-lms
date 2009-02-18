@@ -38,7 +38,7 @@ div.lp_resource_elements_end{background:#FAFAFA; border:1px solid #999999; borde
 div.lp_resource_elements div{padding:3px;}
 
 div.lp_tree{
-height:400px; padding:3px 10px 3px 0; overflow-x : auto; overflow-y : scroll; width:230px;
+height:100%; padding:3px 10px 3px 0; overflow-x : auto; overflow-y : scroll; width:230px;
 }
 
 

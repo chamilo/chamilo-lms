@@ -55,7 +55,7 @@ $fck_attribute['ToolbarSet'] = 'Glossary';
 echo '<div class="actions">';
 if (api_is_allowed_to_edit())
 {
-	echo '<a href="index.php?'.api_get_cidreq().'&action=addglossary">'.Display::return_icon('filenew.gif',get_lang('TermAddNew')).get_lang('TermAddNew').'</a>';
+	echo '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add">'.Display::return_icon('filenew.gif',get_lang('TermAddNew')).get_lang('TermAddNew').'</a>';
 }
 echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.Display::return_icon('view_list.gif',get_lang('ListView')).get_lang('ListView').'</a>';
 echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.Display::return_icon('view_table.gif',get_lang('TableView')).get_lang('TableView').'</a>';
@@ -71,7 +71,9 @@ if (api_is_allowed_to_edit())
 	// Adding a glossary
 	if (isset($_GET['action']) && $_GET['action'] == 'addglossary') 
 	{
-		api_display_tool_title(get_lang('TermAddNew'));
+		if (isset($_GET['msg']) && $_GET['msg'] == 'add') {
+			api_display_tool_title(get_lang('TermAddNew'));
+		}
 		// initiate the object
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 		// settting the form elements		
@@ -106,7 +108,9 @@ if (api_is_allowed_to_edit())
 	// Editing a glossary
 	else if (isset($_GET['action']) && $_GET['action'] == 'edit_glossary' && is_numeric($_GET['glossary_id'])) 
 	{
-		api_display_tool_title(get_lang('TermEdit'));
+		if (isset($_GET['msg']) && $_GET['msg'] == 'edit') {
+			api_display_tool_title(get_lang('TermEdit'));
+		}		
 		// initiate the object
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&glossary_id='.Security::remove_XSS($_GET['glossary_id']));
 		// settting the form elements		
@@ -362,8 +366,8 @@ function display_glossary()
 		$table->set_header(0, get_lang('DisplayOrder'), true);
 		$table->set_header(1, get_lang('TermName'), true);
 		$table->set_header(2, get_lang('TermDefinition'), true);
-		$table->set_header(3, get_lang('CreationDate'), true);
-		$table->set_header(4, get_lang('UpdateDate'), true);
+		$table->set_header(3, get_lang('CreationDate'), false);
+		$table->set_header(4, get_lang('UpdateDate'), false);
 		if (api_is_allowed_to_edit()) {
 		$table->set_header(5, get_lang('Actions'), false);		
 		$table->set_column_filter(5, 'actions_filter');
@@ -500,7 +504,7 @@ function actions_filter($glossary_id,$url_params,$row)
 			
 		}	
 	}
-	$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
+	$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'&msg=edit">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
 	$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$row[5].'" onclick="return confirmation(\''.$row[1].'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	return $return;
 }

@@ -68,7 +68,7 @@ else
 echo '<div class="actions">';
 //if (api_is_allowed_to_edit())
 //{
-	echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
+	echo '<a href="index.php?'.api_get_cidreq().'&action=addnote&msg=add">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
 //}
 echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date">'.Display::return_icon('calendar_select.gif',get_lang('OrderByCreationDate')).get_lang('OrderByCreationDate').'</a>';
 echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=update_date">'.Display::return_icon('calendar_select.gif',get_lang('OrderByModificationDate')).get_lang('OrderByModificationDate').'</a>';
@@ -80,7 +80,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 {
 	// initiate the object
 	$_SESSION['notebook_view'] = 'creation_date';
-	api_display_tool_title(get_lang('NoteAddNew'));	
+	if (isset($_GET['msg']) && $_GET['msg'] == 'add') {
+		api_display_tool_title(get_lang('NoteAddNew'));
+	}
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 	// settting the form elements	
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'));
@@ -114,7 +116,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 // Action handling: Editing a note
 else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET['notebook_id'])) 
 {
-	api_display_tool_title(get_lang('NoteEdit'));	
+	if (isset($_GET['msg']) && $_GET['msg'] == 'edit') {
+		api_display_tool_title(get_lang('NoteEdit'));
+	}
+
 	// initiate the object
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.Security::remove_XSS($_GET['notebook_id']));
 	// settting the form elements	
@@ -304,7 +309,7 @@ function display_notes()
 		echo '</div>';
 		echo '<div class="sectioncomment">'.$row['description'].'</div>';
 		echo '<div>';
-		echo '<a href="'.api_get_self().'?action=editnote&amp;notebook_id='.$row['notebook_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+		echo '<a href="'.api_get_self().'?action=editnote&amp;notebook_id='.$row['notebook_id'].'&msg=edit">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 		echo '<a href="'.api_get_self().'?action=deletenote&amp;notebook_id='.$row['notebook_id'].'" onclick="return confirmation(\''.$row['title'].'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 		echo '</div>';
 	}

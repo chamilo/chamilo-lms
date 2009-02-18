@@ -260,7 +260,7 @@ switch ($_GET['action']) {
 			// 1h after now
 			$date_defaults_start = array(
 		        'd' => date('d'),        
-		        'M' => date('n'),
+		        'F' => date('n'),
 		        'Y' => date('Y'),
 		        'H' => date('H',time()+60*60),
 		        'i' => '00'
@@ -269,7 +269,7 @@ switch ($_GET['action']) {
 		    //2h after now
 		    $date_defaults_end = array(
 		        'd' => date('d'),        
-		        'M' => date('n'),
+		        'F' => date('n'),
 		        'Y' => date('Y'),
 		        'H' => date('H',time()+60*60*2),
 		        'i' => '00'
@@ -279,7 +279,7 @@ switch ($_GET['action']) {
 		    	// 1h after now
 			$date_defaults_start_sub = array(
 		        'd' => date('d'),        
-		        'M' => date('n'),
+		        'F' => date('n'),
 		        'Y' => date('Y'),
 		        'H' => date('H',time()-60*60),
 		        'i' => '00'
@@ -288,7 +288,7 @@ switch ($_GET['action']) {
 		    //2h after now
 		    $date_defaults_end_sub = array(
 		        'd' => date('d'),        
-		        'M' => date('n'),
+		        'F' => date('n'),
 		        'Y' => date('Y'),
 		        'H' => date('H',time()),
 		        'i' => '00'

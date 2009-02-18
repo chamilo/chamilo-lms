@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 18543 2009-02-17 15:04:15Z cfasanando $
+<?php // $Id: database.lib.php 18559 2009-02-18 02:57:03Z ivantcholakov $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -430,7 +430,13 @@ class Database
 		return Database::format_table_name($database, $short_table_name);
 	}
 	/**
-	*	Returns the isocode corresponding to the language directory given.
+	 * Returns the isocode corresponding to the language directory given.
+	 * Returned codes are according to the following standards (in order of preference):
+	 * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
+	 * -  RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
+	 *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
+	 * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
+	 * @return	string	The isocode
 	*/
 	function get_language_isocode($lang_folder)
 	{

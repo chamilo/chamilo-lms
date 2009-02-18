@@ -1910,8 +1910,13 @@ function api_get_languages() {
 	return $language_list;
 }
 /**
- * Get language isocode column from the language table, taking the current language as a query
- * @return	string	The isocode (two-letters code or 5 letters code, fr or fr-BE) or null if error
+ * Gets language isocode column from the language table, taking the current language as a query parameter.
+ * Returned codes are according to the following standards (in order of preference):
+ * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
+ * -  RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
+ *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
+ * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
+ * @return	string	The isocode or null if error
  */
 function api_get_language_isocode() {
 	$tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);

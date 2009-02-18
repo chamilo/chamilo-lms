@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 18526 2009-02-16 21:29:54Z iflorespaz $
+<?php // $Id: whoisonline.php 18577 2009-02-18 21:17:16Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -85,61 +85,63 @@ function display_user_list($user_list, $_plugins)
 	{
 		$extra_params = array();
 		$course_url = '';
-		if(strlen($_GET['cidReq']) > 0)
-		{
+		if(strlen($_GET['cidReq']) > 0) {
 			$extra_params['cidReq'] = Database::escape_string($_GET['cidReq']);
 			$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
-		}
-		foreach($user_list as $user)
-		{
+		}		
+		foreach($user_list as $user) {
 			$uid=$user[0];
 			$user_info = api_get_user_info($uid);
 			$table_row = array();
 			$url = '?id='.$uid.$course_url;
-            $image_array=UserManager::get_user_picture_path_by_id($uid,'web',false,true);                      
-            $table_row[] = '<a href="'.$url.'"><img src="'.$image_array['dir'].$image_array['file'].'" border="1" height="100"></a>';
-                     
+            $image_array=UserManager::get_user_picture_path_by_id($uid,'web',false,true);
+                                              
+            $table_row[] = '<a href="'.$url.'"><img src="'.$image_array['dir'].$image_array['file'].'" border="1" height="100"></a>';                     
 			$table_row[] = '<a href="'.$url.'">'.$user_info['firstName'].'</a>';
 			$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
-			if (api_get_setting('allow_social_tool')=='true') {
-				if ($user_info['user_id']<>api_get_user_id()) {
-					$table_row[] = get_lang('Invitation').' :<input  type="checkbox" name="id_name_chek[]" id="id_name_chek" value="'.$user_info['user_id'].'"/>';
-				}
-			}
-			if (api_get_setting("show_email_addresses") == "true")
-			{
+			
+			if (api_get_setting('show_email_addresses') == 'true') {
 				$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
 			}
-			if ( api_is_plugin_installed($_plugins, 'messages') && isset($_SESSION['_user']) )
-			{
+						
+			if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {
+				if ($user_info['user_id'] != api_get_user_id()) {
+					$table_row[] = get_lang('Invitation').' :<input  type="checkbox" name="id_name_chek[]" id="id_name_chek" value="'.$user_info['user_id'].'"/>';
+				}
+			}			
+			//this feature is deprecated
+			/*
+			if ( api_get_setting('allow_message_tool')=='true'  && isset($_SESSION['_user']) ) {
 				$table_row[] = '<a href="' . api_get_path(WEB_PLUGIN_PATH).'messages/new_message.php?send_to_user=' . $uid. '"><img src="./main/img/forum.gif" alt="'.get_lang("ComposeMessage").'" align="middle"></img></a>';
 			}
+			*/
 			$table_data[] = $table_row;
 		}
 		$table_header[] = array(get_lang('UserPicture'),true,'width="50"');
 		$table_header[] = array(get_lang('FirstName'),true);
 		$table_header[] = array(get_lang('LastName'),true);
-		if (api_get_setting('allow_social_tool')=='true') {
-			$table_header[] = array(get_lang('Friends'),true,'width="100"');
-		}
-		if (api_get_setting("show_email_addresses") == "true")
-		{
+		
+		if (api_get_setting('show_email_addresses') == 'true') {
 			$table_header[] = array(get_lang('Email'),true);
 		}
-		if ( api_is_plugin_installed($_plugins, 'messages') && isset($_SESSION['_user']))
-		{
+		
+		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
+			$table_header[] = array(get_lang('Friends'),true,'width="100"');
+		}		
+		/*this feature is deprecated
+		if ( api_get_setting('allow_message_tool')=='true' && isset($_SESSION['_user'])) {
 			$table_header[] = array(get_lang('SendMessage'),true);
 		}
+		*/
 		$sorting_options['column'] = (isset ($_GET['column']) ? (int)$_GET['column'] : 2);
-		if (api_get_setting('allow_social_tool')=='true') {
+		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {			
 			send_invitation_friend_user();
-			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInviteMessage').'"/></div>';
+			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInviteMessage').'"/></div>';			
 			echo '<form action="whoisonline.php" name="form_register_friend" id="form_register_friend" method="post">';
 		}
 		
-		Display::display_sortable_table($table_header,$table_data,$sorting_options,array('per_page_default'=>count($table_data)),$extra_params);
-		
-		if (api_get_setting('allow_social_tool')=='true') {
+		Display::display_sortable_table($table_header,$table_data,$sorting_options,array('per_page_default'=>count($table_data)),$extra_params);		
+		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {
 			echo '</form>';
 		}
 	}
@@ -168,9 +170,8 @@ function display_individual_user($user_id)
 		Display::display_header($alt);
 		api_display_tool_title($alt);
 		echo '<div style="text-align: center">';
-		if (strlen(trim($user_object->picture_uri)) > 0)
-		{
-			$sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id,'system');
+		if (strlen(trim($user_object->picture_uri)) > 0) {
+			$sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id,'system');			
 			$sysdir = $sysdir_array['dir'];
 			$webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id,'web');
 			$webdir = $webdir_array['dir'];
@@ -186,11 +187,13 @@ function display_individual_user($user_id)
 			$big_image_size = @getimagesize($big_image);
 			$big_image_width= $big_image_size[0];
 			$big_image_height= $big_image_size[1];
-			$url_big_image = $big_image.'?rnd='.time();
-						
-			echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';
-						
+			$url_big_image = $big_image.'?rnd='.time();						
+			echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';						
+		} else {			
+			echo Display::return_icon('unknown.jpg',get_lang('Unknown'));
+			echo '<br />';
 		}
+		
 		if (api_get_setting("show_email_addresses") == "true")
 		{
 			echo Display::encrypted_mailto_link($user_object->email,$user_object->email).'<br />';
@@ -233,7 +236,7 @@ function display_productions($user_id)
 	global $clarolineRepositoryWeb, $disabled_output;
 	$sysdir_array = UserManager::get_user_picture_path_by_id($user_id,'system');
 	$sysdir = $sysdir_array['dir'].$user_id.'/';
-	$webdir_array = UserManager::get_user_picture_path_by_id($user_id,'web');
+	$webdir_array = UserManager::get_user_picture_path_by_id($user_id,'web');	
 	$webdir = $webdir_array['dir'].$user_id.'/';
 	if( !is_dir($sysdir))
 	{
@@ -365,7 +368,13 @@ else
 	Display::display_error_message(get_lang('AccessNotAllowed'));
 }
 $referer = empty($_GET['referer'])?'index.php':htmlentities(strip_tags($_GET['referer']),ENT_QUOTES,$charset);
-echo '<a href="'.(Security::remove_XSS($_GET['id'])?'javascript:window.history.back();':$referer).'">&lt; '.get_lang('Back').'</a>';
+
+if (isset($_GET['id'])) {
+	echo '<a href="whoisonline.php">&lt; '.get_lang('Back').'</a>';	
+} else {
+	echo '<a href="'.$referer.'">&lt; '.get_lang('Back').'</a>';	
+} 
+
 
 /*
 ==============================================================================

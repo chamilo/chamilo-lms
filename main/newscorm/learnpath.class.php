@@ -6579,8 +6579,8 @@ class learnpath {
 							{
 								// The document already exists. Whe have to determine its relative path towards the repository root.
 								$relative_path = explode('/', $relative_path);
-								$relative_prefix = str_repeat('../', count($relative_path) - 2);
-								$relative_path = array_slice($relative_path, 1, count($relative_path) - 2);
+								$relative_prefix = str_repeat('../', count($relative_path) /*-2*/);
+								$relative_path = array_slice($relative_path, 1, count($relative_path) -2);
 								$relative_path = implode('/', $relative_path);
 								if (strlen($relative_path) > 0)
 								{

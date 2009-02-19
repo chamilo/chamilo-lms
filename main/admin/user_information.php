@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 18256 2009-02-05 16:16:03Z juliomontoya $
+// $Id: user_information.php 18594 2009-02-19 20:17:05Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -41,6 +41,8 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
 if( ! isset($_GET['user_id']))
@@ -69,10 +71,22 @@ if( isset($_GET['action']) ) {
 }
 api_display_tool_title($tool_name);
 echo '<div align="right" style="margin-right:4em;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$_GET['user_id'].'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.gif').'</a></div>'."\n";
-if ($user['picture_uri'] != '')
-{
-	echo '<p><img src="'.api_get_path(WEB_CODE_PATH).'upload/users/'.$user['picture_uri'].'" style="width:150px;"/></p>';
-}
+//getting the user image
+
+$sysdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'system');
+$sysdir = $sysdir_array['dir'];
+$webdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'web');
+$webdir = $webdir_array['dir'];
+$fullurl=$webdir.$user['picture_uri'];
+$system_image_path=$sysdir.$user['picture_uri'];
+list($width, $height, $type, $attr) = getimagesize($system_image_path);
+$resizing = (($height > 200) ? 'height="200"' : '');
+$height += 30;
+$width += 30;
+$window_name = 'window'.uniqid('');
+$onclick = $window_name."=window.open('".$fullurl."','".$window_name."','alwaysRaised=yes, alwaysLowered=no,alwaysOnTop=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=".$width.",height=".$height.",left=200,top=20'); return false;";
+echo '<a href="#" onclick="'.$onclick.'" ><img src="'.$fullurl.'" '.$resizing.' alt="'.$alt.'"/></a><br />';
+
 echo '<p>'. ($user['status'] == 1 ? get_lang('Teacher') : get_lang('Student')).'</p>';
 echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>';
 
@@ -144,7 +158,7 @@ if(count($sessions)>0){
 	
 		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 	
-		while ($result_row = Database::_fetch_array($course_list_sql_result)){
+		while ($result_row = Database::fetch_array($course_list_sql_result)){
 			$key = $result_row['id_session'].' - '.$result_row['k'];
 			$result_row['s'] = $result_row['14'];
 	

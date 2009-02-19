@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 18270 2009-02-05 22:07:04Z cfasanando $
+<?php // $Id: document.inc.php 18585 2009-02-19 02:09:38Z herodoto $
 
 /*
 ==============================================================================
@@ -224,10 +224,14 @@ function build_document_icon_tag($type, $path)
 		if($basename =='shared_folder')
 		{
 			$icon = 'shared_folder.gif';
-			$basename = get_lang('SharedFolder');
+			$basename = get_lang('HelpSharedFolder');
 		}
 		else
-		{		
+		{	
+		    if($basename =='audio' || $basename =='flash' || $basename =='images' || $basename =='video')
+			{
+				$basename = get_lang('HelpDefaultDirDocuments');				
+			}				
 			$icon = 'folder_document.gif';
 		}
 	}

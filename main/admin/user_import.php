@@ -1,9 +1,9 @@
-<?php // $Id: user_import.php 18020 2009-01-27 00:02:33Z cfasanando $
+<?php // $Id: user_import.php 18595 2009-02-19 21:17:17Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -170,6 +170,19 @@ function save_data($users)
     			$class_id = ClassManager :: get_class_id($user['ClassName']);
     			ClassManager :: add_user($user_id, $class_id);
     		}
+    		
+    		//saving extra fields
+			global $extra_fields;
+			//print_R($user);	
+			//we are sure the extra field exist
+			foreach($extra_fields as $extras) {			
+				if (isset($user[$extras[1]])) {
+						$key 	= $extras[1];					 
+						$value 	= $user[$extras[1]];
+						UserManager::update_extra_field_value($user_id,$key,$value);	
+				}
+			}
+		
     		if ($sendMail)
     		{			
     			$recipient_name = $user['FirstName'].' '.$user['LastName'];
@@ -296,6 +309,7 @@ $tool_name = get_lang('ImportUserListXMLCSV');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
+$extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC',false);
 
 if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0)
 {
@@ -351,13 +365,30 @@ $defaults['formSent'] = 1;
 $defaults['file_type'] = 'xml';
 $form->setDefaults($defaults);
 $form->display();
+
+$list=array();
+$list_reponse=array();
+$result_xml = '' ;
+$i=0;
+$count_fields = count($extra_fields);
+if ($count_fields > 0) {
+	foreach($extra_fields as $extra) {
+		$list[] = $extra[1];
+		$list_reponse[]='xxx';				
+		$spaces = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		$result_xml.=$spaces.'&lt;'.$extra[1].'&gt;xxx&lt;/'.$extra[1].'&gt;';	
+		if ($i!=$count_fields-1)
+			$result_xml.='<br/>';
+		$i++;	
+	}
+}
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 
 <blockquote>
 <pre>
-<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;Courses;ClassName
-<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/',$defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;xxx1|xxx2|xxx3;xxx
+<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;<font style="color:red;"><?php if(count($list)>0) echo implode(';', $list).';';?></font>Courses;ClassName;
+<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/',$defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;<font style="color:red;"><?php if(count($list_reponse)>0) echo implode(';', $list_reponse).';';?></font>xxx1|xxx2|xxx3;xxx;<br />
 </pre>
 </blockquote>
 
@@ -376,9 +407,9 @@ $form->display();
         <b>&lt;Email&gt;xxx&lt;/Email&gt;</b>
         &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
         &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
-        &lt;Status&gt;user/teacher/drh&lt;/Status&gt;
+        &lt;Status&gt;user/teacher/drh&lt;/Status&gt;         <?php if ($result_xml!='') { echo '<br /><font style="color:red;">',$result_xml;echo '</font>';} ?>        
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
-        &lt;ClassName&gt;class 1&lt;/ClassName&gt;
+        &lt;ClassName&gt;class 1&lt;/ClassName&gt;        
     &lt;/Contact&gt;
 &lt;/Contacts&gt;
 </pre>

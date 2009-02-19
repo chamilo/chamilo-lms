@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 18452 2009-02-11 21:36:58Z juliomontoya $
+<?php // $Id: usermanager.lib.php 18596 2009-02-19 21:31:00Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1330,10 +1330,9 @@ class UserManager
 		$return = Database::fetch_array($result);
 		
 		// all the options of the field
-		$sql = "SELECT * FROM $table_field_options WHERE field_variable='".Database::escape_string($field_variable)."' ORDER BY option_order ASC";
+		$sql = "SELECT * FROM $table_field_options WHERE field_id='".Database::escape_string($return['id'])."' ORDER BY option_order ASC";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
-		while ($row = Database::fetch_array($result))
-		{
+		while ($row = Database::fetch_array($result)) {
 			$return['options'][$row['id']] = $row;
 		}		
 		return $return;

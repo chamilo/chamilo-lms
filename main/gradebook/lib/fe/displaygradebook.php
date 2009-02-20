@@ -33,22 +33,23 @@ class DisplayGradebook
 	*/
 	function display_header_result($evalobj, $selectcat, $shownavbar) {
 		if ($shownavbar == '1' && api_is_course_tutor()) {
-			$header= '<table border="0" cellpadding="5"><tr><td>';
-			$header .= '<a href="'.$_SESSION['gradebook_dest'].'?selectcat=' . $selectcat . '"><img src="../img/lp_leftarrow.gif" alt="' . get_lang('BackToOverview') . '" align="absmiddle"/> ' . get_lang('BackToOverview') . '</a></td>';
+			$header = '<div class="actions">';			
+			$header .= '<a href="'.$_SESSION['gradebook_dest'].'?selectcat=' . $selectcat . '"> &#60;&#60; ' . get_lang('BackToOverview') . '</a>';
 			if ($evalobj->get_course_code() == null) {
-				$header .= '<td><a href="gradebook_add_user.php?selecteval=' . $evalobj->get_id() . '"><img src="../img/add_user_big.gif" alt="' . get_lang('AddStudent') . '" align="absmiddle" /> ' . get_lang('AddStudent') . '</a></td>';
+				$header .= '<a href="gradebook_add_user.php?selecteval=' . $evalobj->get_id() . '"><img src="../img/add_user_big.gif" alt="' . get_lang('AddStudent') . '" align="absmiddle" /> ' . get_lang('AddStudent') . '</a>';
 			}
 			elseif (!$evalobj->has_results()) {
-				$header .= '<td><a href="gradebook_add_result.php?selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '"><img src="../img/filenew.gif" alt="' . get_lang('AddResult') . '" align="absmiddle"/> ' . get_lang('AddResult') . '</a></td>';
+				$header .= '<a href="gradebook_add_result.php?selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '"><img src="../img/filenew.gif" alt="' . get_lang('AddResult') . '" align="absmiddle"/> ' . get_lang('AddResult') . '</a>';
 			}
-			$header .= '<td><a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&import="><img src="../img/calendar_down.gif" border="0" alt="" />' . ' ' . get_lang('ImportResult') . '</a></td>';
+			$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&import="><img src="../img/calendar_down.gif" border="0" alt="" />' . ' ' . get_lang('ImportResult') . '</a>';
 			if ($evalobj->has_results()) {
-				$header .= '<td><a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&export="><img src="../img/calendar_up.gif" border="0" alt="" />' . ' ' . get_lang('ExportResult') . '</a></td>';
-				$header .= '<td><a href="gradebook_edit_result.php?selecteval=' . $evalobj->get_id() .'"><img src="../img/works.gif" alt="' . get_lang('EditResult') . '" align="absmiddle" /> ' . get_lang('EditResult') . '</a></td>';
-				$header .= '<td><a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&deleteall=" onclick="return confirmationall();"><img src="../img/delete.gif" border="0" alt="" />' . ' ' . get_lang('DeleteResult') . '</a></td>';
+				$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&export="><img src="../img/calendar_up.gif" border="0" alt="" />' . ' ' . get_lang('ExportResult') . '</a>';
+				$header .= '<a href="gradebook_edit_result.php?selecteval=' . $evalobj->get_id() .'"><img src="../img/works.gif" alt="' . get_lang('EditResult') . '" align="absmiddle" /> ' . get_lang('EditResult') . '</a>';
+				$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&deleteall=" onclick="return confirmationall();"><img src="../img/delete.gif" border="0" alt="" />' . ' ' . get_lang('DeleteResult') . '</a>';
 			}
-			$header .= '<td><a href="' . api_get_self() . '?print=&selecteval=' . $evalobj->get_id() . '" target="_blank"><img src="../img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
-			$header .= '</td></tr></table>';
+			$header .= '<a href="' . api_get_self() . '?print=&selecteval=' . $evalobj->get_id() . '" target="_blank"><img src="../img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+			
+			$header .= '</div>';
 		}
 		if ($evalobj->is_visible() == '1') {
 			$visible= get_lang('Yes');

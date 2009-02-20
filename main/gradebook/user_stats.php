@@ -94,12 +94,11 @@ if (isset ($_GET['exportpdf'])) {
 	$pdf->ezStream();
 	exit;
 }
+$actions = '<div class="actions">';
+
 if (isset ($_GET['selectcat'])) {
-	$interbreadcrumb[]= array (
-		'url' => 'gradebook_flatview.php?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-		'name' => get_lang('FlatView'
-	));
-	$backto= '<a href=gradebook_flatview.php?selectcat=' .Security::remove_XSS($_GET['selectcat']) . '><img src=../img/lp_leftarrow.gif alt=' . get_lang('BackToOverview') . ' align=absmiddle/> ' . get_lang('BackToOverview') . '</a>&nbsp&nbsp';
+	$interbreadcrumb[]= array ('url' => 'gradebook_flatview.php?selectcat=' . Security::remove_XSS($_GET['selectcat']), 'name' => get_lang('FlatView'));
+	$actions.= '<a href=gradebook_flatview.php?selectcat=' .Security::remove_XSS($_GET['selectcat']) . '> &#60;&#60; ' . get_lang('BackToOverview') . '</a>&nbsp&nbsp';
 
 }
 if (isset ($_GET['selecteval'])) {
@@ -107,11 +106,12 @@ if (isset ($_GET['selecteval'])) {
 		'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),
 		'name' => get_lang('ViewResult'
 	));
-	$backto= '<a href=gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '><img src=../img/lp_leftarrow.gif alt=' . get_lang('BackToEvaluation') . ' align=absmiddle/> ' . get_lang('BackToEvaluation') . '</a>&nbsp&nbsp';
+	$actions.= '<a href=gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '><img src=../img/lp_leftarrow.gif alt=' . get_lang('BackToEvaluation') . ' align=absmiddle/> ' . get_lang('BackToEvaluation') . '</a>&nbsp&nbsp';
 }
-$backto .= '<a href="' . api_get_self() . '?exportpdf=&userid='.Security::remove_XSS($_GET['userid']).'&selectcat=' . $category[0]->get_id() . '" target="_blank"><img src=../img/calendar_up.gif alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
+$actions.= '<a href="' . api_get_self() . '?exportpdf=&userid='.Security::remove_XSS($_GET['userid']).'&selectcat=' . $category[0]->get_id() . '" target="_blank"><img src=../img/calendar_up.gif alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
+$actions.='</div>';
 
 Display :: display_header(get_lang('ResultsPerUser'));
 DisplayGradebook :: display_header_user($_GET['userid']);
-echo $backto;
+echo $actions;
 $user_table->display();

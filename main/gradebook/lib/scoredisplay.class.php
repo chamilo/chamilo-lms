@@ -229,8 +229,9 @@ class ScoreDisplay
 				elseif ($what == SCORE_ONLY_CUSTOM) {
 					$display = $this->display_custom ($my_score);				
 				} else {
-					$display = $this->display_default ($my_score, $type2)
-							.' ('.$this->display_custom ($my_score).')';				
+					$display = $this->display_default ($my_score, $type2);
+					if ($this->display_custom ($my_score)!='')
+						$display.= ' ('.$this->display_custom ($my_score).')';				
 			}
 
 		} else {

@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 18541 2009-02-17 14:48:55Z cfasanando $
+<?php // $Id: exercice_submit.php 18619 2009-02-20 15:33:59Z cfasanando $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 18541 2009-02-17 14:48:55Z cfasanando $
+* 	@version $Id: exercice_submit.php 18619 2009-02-20 15:33:59Z cfasanando $
 */
 
 
@@ -788,8 +788,7 @@ $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/Java
 						}
 					}
 					// -->
-					</script>";
-	$htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../inc/lib/javascript/custom-form-elements.js\"></script>";
+					</script>";	
 	Display::display_header($nameTools,"Exercise");
 }
 else

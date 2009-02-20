@@ -51,7 +51,7 @@ if (api_is_in_course()) {
 		@mkdir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/', 0777);
 		$doc_id = add_document($_course, '/shared_folder', 'folder', 0, 'shared_folder');
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'visible', api_get_user_id());
+		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
 	}
 
 	// Added by Ivan Tcholakov.
@@ -65,7 +65,7 @@ if (api_is_in_course()) {
 		chmod($new_user_dir,$permissions_for_new_directories);		
 		$doc_id = add_document($_course, '/shared_folder/'.api_get_user_id(), 'folder', 0, $_user['firstName'].' '.$_user['lastName']);
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
-		//api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
+		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
 	}
 }
 ?>

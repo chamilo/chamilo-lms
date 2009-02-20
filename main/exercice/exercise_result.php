@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 18527 2009-02-16 21:31:16Z juliomontoya $
+* 	@version $Id: exercise_result.php 18623 2009-02-20 17:49:23Z cfasanando $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -312,7 +312,7 @@ else
 
 <body>
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css'; ?>" />
-
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'; ?>" />
 <?php
 }
 
@@ -1050,7 +1050,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			<?php
 			} else {							
 			?>							
-				<input type="button" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>'" value="<?php echo get_lang('Finish'); ?>" />
+				<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>'" value="<?php echo get_lang('Finish'); ?>"><?php echo get_lang('Finish');?></button>				
 			<?php }?>
 		</td>
 		</tr>

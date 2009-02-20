@@ -151,6 +151,7 @@ $id 	   = $_REQUEST['id'];
 
 -->
 </style>
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'; ?>" />
 <script language="javascript">
 function showfck(sid,marksid)
 {
@@ -1041,14 +1042,15 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 					
 					if ($origin!='learnpath' && $origin!='student_progress') {
 				?>					
-					 <input type="submit" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"/>
+					 <button type="submit" class="save" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"><?php echo get_lang('Ok'); ?></button>					 
 					 </form>
 				<?php }
 		 	}  		
-			if ($origin=='learnpath' || $origin=='student_progress') {?>							
-				<input type="button" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>'" value="<?php echo get_lang('Finish'); ?>" />
+			if ($origin=='learnpath' || $origin=='student_progress') {?>	
+				
+				<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>										
 			<?php } else if($origin=='myprogress') {?>
-				<input type="button" onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" />
+				<button type="button" class="save" onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>				
 			<?php }?>	
 		</td>
 		</tr>

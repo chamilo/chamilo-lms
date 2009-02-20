@@ -28,6 +28,9 @@ if ( empty ( $exerciseResult ) ) {
 if ( empty ( $exerciseResultCoordinates ) ) {
     $exerciseResultCoordinates = $_REQUEST['exerciseResultCoordinates'];
 }
+if ( empty ( $origin ) ) {
+    $origin = $_REQUEST['origin'];
+}
 
 $_SESSION['hotspot_coord']=array();
 $newquestionList=$_SESSION['newquestionList'];
@@ -92,7 +95,7 @@ if (empty($choice_value) )
 		//alert(choice_js);						
 								
 	";		
-	echo 'window.location.href = "exercise_submit_modal.php?hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'";</script>';
+	echo 'window.location.href = "exercise_submit_modal.php?hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'";</script>';
 }
 
 $choice=array();
@@ -515,12 +518,12 @@ echo '<script> function SendEx(num)
 	  { 		  
 	  	if (num==-1)
 	  	{	  	
-	  		self.parent.window.location.href = "exercise_result.php"; 	
+	  		self.parent.window.location.href = "exercise_result.php?origin='.$origin.'"; 	
 	   		self.parent.tb_remove();  	
 	  	}
 	  	else
 	  	{
-	  		self.parent.window.location.href = "exercice_submit.php?tryagain=1&exerciseId='.$exerciseId.'&questionNum="+num+"&exerciseType='.$exerciseType.'"; 	
+	  		self.parent.window.location.href = "exercice_submit.php?tryagain=1&exerciseId='.$exerciseId.'&questionNum="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'"; 	
 	   		self.parent.tb_remove();
 	  	}
 	  }
@@ -560,7 +563,7 @@ else
 
 	$questionNum++;
 	echo '<script>
-			self.parent.window.location.href = "exercice_submit.php?exerciseId='.$exerciseId.'&questionNum='.$questionNum.'&exerciseType='.$exerciseType.'";	  		 	
+			self.parent.window.location.href = "exercice_submit.php?exerciseId='.$exerciseId.'&questionNum='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'";	  		 	
    			//self.parent.tb_remove();	  	
  	 	</script>';
 	

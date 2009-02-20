@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 18619 2009-02-20 15:33:59Z cfasanando $
+<?php // $Id: exercice_submit.php 18623 2009-02-20 17:49:23Z cfasanando $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 18619 2009-02-20 15:33:59Z cfasanando $
+* 	@version $Id: exercice_submit.php 18623 2009-02-20 17:49:23Z cfasanando $
 */
 
 
@@ -821,6 +821,7 @@ else
 
 <body>
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css'; ?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'; ?>" />
 
 <?php
 }
@@ -1008,7 +1009,7 @@ else
 			echo '<br />
 					<div class="rounded" style="text-align: center;">
 				  		<div class="rounded_inner">
-				  			<a href="exercise_submit_modal.php?hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&exerciseId='.$exerciseId.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox" id="validationButton">'.get_lang('ValidateAnswer').'</a>
+				  			<a href="exercise_submit_modal.php?hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&exerciseId='.$exerciseId.'&origin='.$origin.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox" id="validationButton">'.get_lang('ValidateAnswer').'</a>
 				  		</div>
 				  	</div><br /><br /><br />';				
 		} else {

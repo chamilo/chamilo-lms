@@ -101,7 +101,7 @@
 			}
 			else
 			{					
-				$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder/'.api_get_user_id().'/';					
+				$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder/sf_user_'.api_get_user_id().'/';					
 			}		   
 		}
 	}

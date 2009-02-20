@@ -45,7 +45,7 @@ function GetFolders( $resourceType, $currentFolder )
 			&& strpos( $sFile, 'chat_files' ) === false
 			&& strpos( $sFile, 'HotPotatoes_files' ) === false
 			&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
-			&& (!$in_shared_folder || ($in_shared_folder && $sFile == $user_id))
+			&& (!$in_shared_folder || ($in_shared_folder && $sFile == 'sf_user_'.$user_id))
 			&& $sFile != '.thumbs'
 			&& $sFile != '.svn'
 			&& is_dir( $sServerDir . $sFile ) )

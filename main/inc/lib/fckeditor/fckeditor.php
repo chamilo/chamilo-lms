@@ -250,12 +250,12 @@ class FCKeditor
 
 					if (empty($this->Config['CreateDocumentWebDir']))
 					{
-						$this->Config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+						$this->Config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 					}
 
 					if (is_null($this->Config['CreateDocumentDir']))
 					{
-						$this->Config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+						$this->Config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 					}
 
 					if (empty($this->Config['BaseHref']))
@@ -263,7 +263,7 @@ class FCKeditor
 						$this->Config['BaseHref'] = $script_path;
 					}
 
-					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 				}
 			}
 			else

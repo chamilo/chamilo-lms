@@ -1,4 +1,4 @@
-<?php // $Id: document.php 18319 2009-02-07 00:03:42Z herodoto $
+<?php // $Id: document.php 18624 2009-02-20 18:31:55Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -307,6 +307,16 @@ if ($array_len >1)
 $dir_acum='';
 for ($i=0; $i<$array_len;$i++)
 { 
+	if($dir_array[$i] =='shared_folder')
+	{
+		$dir_array[$i]=get_lang('SharedFolder');
+	}
+	elseif(strstr($dir_array[$i], 'sf_user_'))
+	{
+		$userinfo=Database::get_user_info_from_id(substr($dir_array[$i], 8));		
+		$dir_array[$i]=$userinfo['lastname'].', '.$userinfo['firstname'];
+	}
+
 	$url_dir='document.php?&curdirpath='.$dir_acum.$dir_array[$i]; 
 	$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> $dir_array[$i]);
 	$dir_acum.=$dir_array[$i].'/';
@@ -692,7 +702,18 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		if ($use_document_title=='true' AND $id['title']<>'') {
 			$document_name=$id['title'];
 		} else {
-			$document_name=basename($id['path']);
+		   $document_name=basename($id['path']);
+			//Juan Carlos Raña get lastname and firstname when folder is in shared_folder
+			//TODO: check if is also necessary (above else)
+			if(strstr($document_name, 'sf_user_'))
+			{
+				$userinfo=Database::get_user_info_from_id(substr($document_name, 8));
+				$document_name=$userinfo['lastname'].', '.$userinfo['firstname'];
+			}
+			elseif(strstr($document_name, 'shared_folder'))
+			{
+				$document_name=get_lang('SharedFolder');
+			}
 		}
 		//data for checkbox
 		if (($is_allowed_to_edit || $group_member_with_upload_rights) AND count($docs_and_folders)>1) {

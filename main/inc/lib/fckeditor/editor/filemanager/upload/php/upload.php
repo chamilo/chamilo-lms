@@ -114,8 +114,8 @@ if (api_is_in_course())
 		else
 		{
 			// 1.2. Student
-			$sServerDir = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
-			$sserverWebath = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/'.api_get_user_id().'/';
+			$sServerDir = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+			$sserverWebath = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 		}
 	}
 	else

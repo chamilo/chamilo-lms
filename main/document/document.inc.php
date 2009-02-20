@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 18585 2009-02-19 02:09:38Z herodoto $
+<?php // $Id: document.inc.php 18624 2009-02-20 18:31:55Z herodoto $
 
 /*
 ==============================================================================
@@ -94,6 +94,17 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 			{
 				$selected = ($curdirpath==$folder)?' selected="selected"':'';
 				$path_parts = explode('/',$folder);
+				
+				if($folder_titles[$folder]=='shared_folder')
+				{
+					$folder_titles[$folder]=get_lang('SharedFolder');
+				}
+				elseif(strstr($folder_titles[$folder], 'sf_user_'))
+				{			
+						$userinfo=Database::get_user_info_from_id(substr($folder_titles[$folder],8));
+						$folder_titles[$folder]=$userinfo['lastname'].', '.$userinfo['firstname'];				
+				}				
+				
 				$label = str_repeat('&nbsp;&nbsp;&nbsp;',count($path_parts)-2).' &mdash; '.$folder_titles[$folder];
 				$parent_select -> addOption($label,$folder);
 				if($selected!='') $parent_select->setSelected($folder);
@@ -192,15 +203,29 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 	//$tooltip_title = str_replace('?cidReq='.$_GET['cidReq'],'',basename($path));
 	$tooltip_title = explode('?', basename($path));
 	$tooltip_title = $tooltip_title[0];
+	
+	if($tooltip_title=='shared_folder')
+	{
+		$tooltip_title_alt=get_lang('SharedFolder');
+	}
+	elseif(strstr($tooltip_title, 'sf_user_'))
+	{
+		$userinfo=Database::get_user_info_from_id(substr($tooltip_title,8));
+		$tooltip_title_alt=$userinfo['lastname'].', '.$userinfo['firstname'];
+	}
+	else
+	{
+		$tooltip_title_alt=$tooltip_title;
+	}
 
 	if (!$show_as_icon)
 	{
 		$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'),array('height'=>'16', 'width' => '16')).'</a>';
-		return '<a href="'.$url.'" title="'.$tooltip_title.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html;
+		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html;
 	}
 	else
 	{
-		return '<a href="'.$url.'" title="'.$tooltip_title.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $tooltip_title).'</a>';
+		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $tooltip_title).'</a>';
 	}
 }
 
@@ -226,6 +251,21 @@ function build_document_icon_tag($type, $path)
 			$icon = 'shared_folder.gif';
 			$basename = get_lang('HelpSharedFolder');
 		}
+		elseif(strstr($basename, 'sf_user_'))
+		{
+			$userinfo=Database::get_user_info_from_id(substr($basename,8));	
+			$image_path = UserManager::get_user_picture_path_by_id(substr($basename,8),'web',false, true);										
+		
+			if($image_path['file']=='unknown.jpg')
+			{		
+				$icon = $image_path['file'];
+			}
+			else
+			{
+				$icon = '../upload/users/'.substr($basename,8).'/'.$image_path['file'];
+			}
+			$basename = $userinfo['lastname'].', '.$userinfo['firstname'];			
+		}
 		else
 		{	
 		    if($basename =='audio' || $basename =='flash' || $basename =='images' || $basename =='video')
@@ -236,7 +276,7 @@ function build_document_icon_tag($type, $path)
 		}
 	}
 
-	return Display::return_icon($icon, $basename, array('hspace'=>'5', 'align' => 'middle'));
+	return Display::return_icon($icon, $basename, array('hspace'=>'5', 'align' => 'middle', 'height'=> 22, 'width' => 22));
 }
 
 /**

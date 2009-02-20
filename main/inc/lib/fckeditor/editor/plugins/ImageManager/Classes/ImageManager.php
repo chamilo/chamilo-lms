@@ -151,7 +151,7 @@ class ImageManager
 					if (!preg_match('/.*\/shared_folder\/$/', $fullpath))
 					{
 						//all students can see the shared_folder
-						if (strpos($fullpath, '/shared_folder/'.$user_id.'/') === true) {
+						if (strpos($fullpath, '/shared_folder/sf_user_'.$user_id.'/') === true) {
 							continue;
 						}
 					}
@@ -213,7 +213,7 @@ class ImageManager
 						if (!preg_match('/.*\/shared_folder\/$/', $dir_entry))
 						{
 							//all students can see the shared_folder
-							if (strpos($dir_entry, '/shared_folder/'.$user_id.'/') === true)
+							if (strpos($dir_entry, '/shared_folder/sf_user_'.$user_id.'/') === true)
 							{
 								continue;
 							}

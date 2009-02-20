@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 18214 2009-02-03 22:22:29Z juliomontoya $
+<?php // $Id: user_list.php 18618 2009-02-20 15:11:58Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -198,7 +198,7 @@ function login_user($user_id)
 
             //Delog the current user
 			 
-			LoginDelete($_SESSION["_user"]["user_id"], $_configuration['statistics_database']);
+			LoginDelete($_SESSION["_user"]["user_id"]);
 
 			// Cleaning session variables
 			unset($_SESSION['_user']);

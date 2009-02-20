@@ -103,16 +103,25 @@ if ($origin=='learnpath') {
 		// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
 		Display :: display_header('');
 		api_display_tool_title($nameTools);
+	} else if (isset($_GET['gradebook']) and $_GET['gradebook']=='view'){
+		
+		$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
+		$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook'));
+		$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;gradebook=view","name" => prepare4display($current_thread['thread_title']));
+		$interbreadcrumb[]=array("url" => "#","name" => prepare4display($current_forum['forum_title']));
+		Display :: display_header('');
+		api_display_tool_title($nameTools);			
+		
 	} else {
+		
+		$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
 		$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
 		$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
-		if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
-			$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-			$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$info_thread['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));	
-		} else {
-			$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
-		}
-	
+
+		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
+		
 		if ($message<>'PostDeletedSpecial') {
 			if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
 				$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
@@ -282,14 +291,18 @@ if ($allowed_to_edit) {
 	$counter= count($qualify_historic);
 	$act_qualify = $_REQUEST['idtextqualify'];	
 	if ($counter>0) {
+		if (isset($_GET['gradebook'])){
+			$view_gradebook='&gradebook=view';
+		}
 		echo '<h4>'.get_lang('QualificationChangesHistory').'</h4>';	
 		if ($_GET['type'] == 'false') {
-			echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.$threadid.'&user='.Security::remove_XSS($_GET['user']).'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=true&idtextqualify='.$act_qualify.'#history">'.get_lang('MoreRecent').'</a>&nbsp;|
+			
+			echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.$threadid.'&user='.Security::remove_XSS($_GET['user']).'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=true&idtextqualify='.$act_qualify.$view_gradebook.'#history">'.get_lang('MoreRecent').'</a>&nbsp;|
 					'.get_lang('Older').'
 				  </div>';
 		} else {
 			echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:'.get_lang('MoreRecent').' |
-					<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.$threadid.'&user='.Security::remove_XSS($_GET['user']).'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=false&idtextqualify='.$act_qualify.'#history">'.get_lang('Older').'</a>&nbsp;
+					<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.$threadid.'&user='.Security::remove_XSS($_GET['user']).'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=false&idtextqualify='.$act_qualify.$view_gradebook.'#history">'.get_lang('Older').'</a>&nbsp;
 				  </div>';
 		}				
 		$table_list.= '<a name="history" /><br /><br /><table class="data_table" style="width:100%">';	

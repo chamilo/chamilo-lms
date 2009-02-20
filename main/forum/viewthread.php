@@ -105,13 +105,18 @@ if (!empty($_SESSION['toolgroup'])) {
 	Display :: display_header('');
 	api_display_tool_title($nameTools);
 	
-} else {
-	if (!empty($_GET['gradebook'])) {
+} elseif (!empty($_GET['gradebook'])){
+	
 			$interbreadcrumb[]= array (
 				'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-				'name' => get_lang('Gradebook')
-			);
-	}
+				'name' => get_lang('Gradebook'));
+			$interbreadcrumb[] = array("url" => "#","name" => prepare4display($current_thread['thread_title']));
+	
+	Display :: display_header('');
+	api_display_tool_title($nameTools);
+	
+} else {
+
 	$my_search=isset($_GET['search']) ? $_GET['search'] : '';
 	
 	

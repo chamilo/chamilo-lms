@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18439 2009-02-11 17:24:28Z cvargas1 $
+<?php //$Id: work.php 18625 2009-02-20 20:18:56Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18439 2009-02-11 17:24:28Z cvargas1 $
+*  	@version $Id: work.php 18625 2009-02-20 20:18:56Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -247,6 +247,7 @@ if(isset($_GET['action']) && $_GET['action']=="downloadfolder")
 	Header
 -----------------------------------------------------------
 */
+isset($_GET['gradebook'])?$gradebook=$_GET['gradebook']:$gradebook='';
 	
 if (!empty($_SESSION['toolgroup'])){
 	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
@@ -300,6 +301,12 @@ if (!empty($_SESSION['toolgroup'])){
 
 
 	if (isset($origin) && $origin != 'learnpath') {
+		
+		if (isset($_GET['gradebook']) and $_GET['gradebook']=='view'){
+			$interbreadcrumb[]= array (
+				'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+				'name' => get_lang('Gradebook'));
+		}		
 		$url_dir ='';
 		$interbreadcrumb[] = array ('url' => $url_dir,'name' => get_lang('StudentPublications'));
 	
@@ -1083,7 +1090,7 @@ if ($is_course_member) {
 		//require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
 		require_once (api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php');
 
-		$form = new FormValidator('form', 'POST', api_get_self() . "?curdirpath=" . rtrim(Security :: remove_XSS($cur_dir_path),'/') . "&origin=$origin", '', 'enctype="multipart/form-data"');
+		$form = new FormValidator('form', 'POST', api_get_self() . "?curdirpath=" . rtrim(Security :: remove_XSS($cur_dir_path),'/') . "&gradebook=".$_GET['gradebook']."&origin=$origin", '', 'enctype="multipart/form-data"');
 
 		if (!empty ($error_message)) {
 			Display :: display_error_message($error_message);

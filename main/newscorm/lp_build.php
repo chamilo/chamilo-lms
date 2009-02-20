@@ -142,7 +142,13 @@ $therow=Database::fetch_array($result);
 
 /*==================================================
 	prerequisites setting end
- ==================================================*/		  
+ ==================================================*/	
+ 
+if (isset($_GET['gradebook']) and $_GET['gradebook']=='view'){
+	$interbreadcrumb[]= array (
+		'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+		'name' => get_lang('Gradebook'));
+}	  
 
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
 

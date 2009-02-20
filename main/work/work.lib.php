@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18439 2009-02-11 17:24:28Z cvargas1 $
+<?php //$Id: work.lib.php 18625 2009-02-20 20:18:56Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18439 2009-02-11 17:24:28Z cvargas1 $
+* 	@version $Id: work.lib.php 18625 2009-02-20 20:18:56Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -598,7 +598,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			
 			$show_as_icon = get_work_id($mydir); //true or false
 			if ($show_as_icon) {
-				$row[] = '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&action=downloadfolder&path=/'.$mydir.'"><img src="../img/zip_save.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" width="17" height="17"/></a><a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
+				$row[] = '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&action=downloadfolder&path=/'.$mydir.'"><img src="../img/zip_save.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" width="17" height="17"/></a><a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$_GET['gradebook'].'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
 			} else {
 				$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;	
 			}									
@@ -618,7 +618,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		
 		if( $is_allowed_to_edit) {
 			$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
-				'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';						
+				'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$_GET['gradebook'].'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';						
 			$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&delete_dir='.$mydir.'&delete2='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'" title="'.get_lang('DirDelete').'"></a>';
 			$row[] = $action;
 		} else {
@@ -675,7 +675,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			if( $is_allowed_to_edit) {
 				
 				$action = '';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'&gradebook='.$_GET['gradebook'].'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'" ><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'" title="'.get_lang('WorkDelete').'"></a>';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;move='.$work->id.'" title="'.get_lang('Move').'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="'.get_lang('Move').'" /></a>';
 				if($work->accepted == '1') {
@@ -687,7 +687,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				$row[] = $action;
 			} elseif($is_author) {
 				$action = '';				
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif"  alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&gradebook='.$_GET['gradebook'].'&amp;origin='.$origin.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif"  alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'"  ><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'" title="'.get_lang('WorkDelete').'" ></a>';
 
 				$row[] = $action;

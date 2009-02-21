@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18625 2009-02-20 20:18:56Z cvargas1 $
+<?php //$Id: work.php 18626 2009-02-21 14:15:42Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18625 2009-02-20 20:18:56Z cvargas1 $
+*  	@version $Id: work.php 18626 2009-02-21 14:15:42Z ivantcholakov $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -67,7 +67,7 @@ $language_file = array (
     'exercice',
 	'work',
 	'document',
-	'admin',
+	'admin'
 );
 require("../inc/global.inc.php");
 // @todo why is this needed?

@@ -355,7 +355,9 @@ function delete_one_message_outbox (num_id) {
 				}
 		});
 }
-
+function list_search_hide () {
+	$("div#id_div_search").html("");	
+}
 
 </script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';

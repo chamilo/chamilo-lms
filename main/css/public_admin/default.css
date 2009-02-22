@@ -1905,11 +1905,11 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 }
 .message-select-box{
 	float:left;
-    width:300px;
+    width:350px;
 	display:inline;
     position:absolute;
-	margin-top:26px;
-	margin-left:30px;
+	margin-top:20px;
+	margin-left:20px;
 }
 /* styles from the my.profile.php file */
 .message-content {

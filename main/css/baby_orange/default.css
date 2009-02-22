@@ -1358,7 +1358,14 @@ div.system_announcement {
   	border: 1px  solid gray;
   	background-color: #f0f0f0;
 }
-
+.message-select-box{
+	float:left;
+    width:350px;
+	display:inline;
+    position:absolute;
+	margin-top:20px;
+	margin-left:20px;
+}
 /* styles from the my.profile.php file */
 .message-content {
 	float:right;

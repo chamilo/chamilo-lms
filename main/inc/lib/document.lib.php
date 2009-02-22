@@ -793,7 +793,6 @@ class DocumentManager
 		//first, delete the actual document...
 		$document_id = DocumentManager :: get_document_id($_course, $path);
 		$new_path = $path.'_DELETED_'.$document_id;
-
 		if ($document_id)
 		{
 			if (get_setting('permanently_remove_deleted_files') == 'true') //deleted files are *really* deleted
@@ -820,7 +819,7 @@ class DocumentManager
 																								
 						//query to delete from document table
 						$remove_from_document_sql = "DELETE FROM ".$TABLE_DOCUMENT." WHERE id = ".$row['id']."";
-
+ 						DocumentManager::unset_document_as_template($row['id'],$_course, api_get_user_id());
 						//echo($remove_from_item_property_sql.'<br>');
 						//api_sql_query($remove_from_item_property_sql, __FILE__, __LINE__);
 						//echo($remove_from_document_sql.'<br>');
@@ -832,7 +831,6 @@ class DocumentManager
 						$mdStore->mds_delete_offspring($eid);
 
 					}
-
 					DocumentManager::delete_document_from_search_engine(api_get_course_id(), $document_id);
 					//delete documents, do it like this so metadata get's deleted too
 					//update_db_info('delete', $path);
@@ -854,9 +852,9 @@ class DocumentManager
 					if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path) )
                     {
                         if(rename($base_work_dir.$path, $base_work_dir.$new_path))
-    					{	
+    					{
+    						 DocumentManager::unset_document_as_template($document_id, api_get_course_id(), api_get_user_id());	
     						 $sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE id='".$document_id."'";
-    						
     						if (api_sql_query($sql, __FILE__, __LINE__))
     						{
     							//if it is a folder it can contain files
@@ -879,14 +877,14 @@ class DocumentManager
     									echo "<br>";echo "<br>";
 										rename($base_work_dir.$old_item_path, $base_work_dir.$new_item_path);
 										*/
-    									
+    									DocumentManager::unset_document_as_template($deleted_items['id'], api_get_course_id(), api_get_user_id());
     									$sql = "UPDATE $TABLE_DOCUMENT set path = '".$new_item_path."' WHERE id = ".$deleted_items['id'];
-    									api_sql_query($sql, __FILE__, __LINE__);
+	
+    									api_sql_query($sql, __FILE__, __LINE__);  									
     								}
     							}
-
+    							
                                 DocumentManager::delete_document_from_search_engine(api_get_course_id(), $document_id);
-
     							return true;
     						}
     					}
@@ -912,6 +910,7 @@ class DocumentManager
                         {
                         	$sqlipd = "DELETE FROM $TABLE_ITEMPROPERTY WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
                             $resipd = Database::query($sqlipd,__FILE__,__LINE__);
+                            DocumentManager::unset_document_as_template($row['id'],api_get_course_id(), api_get_user_id());
                             $sqldd = "DELETE FROM $TABLE_DOCUMENT WHERE id = ".$row['id'];
                             $resdd = Database::query($sqldd,__FILE__,__LINE__); 
                         }
@@ -942,7 +941,7 @@ class DocumentManager
 				require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
 				$di = new DokeosIndexer();
 				$di->remove_document((int)$row2['search_did']);
-			}
+			}     						
 			$sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 			$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_DOCUMENT, $document_id);
 			api_sql_query($sql, __FILE__, __LINE__);

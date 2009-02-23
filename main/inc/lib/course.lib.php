@@ -1826,10 +1826,15 @@ class CourseManager
 	/**
 	 * check if course exists
 	 * @param string course_code
+     * @param string whether to accept virtual course codes or not
 	 * @return true if exists, false else
 	 */
-	function course_exists($course_code) {
-		$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_COURSE).' WHERE code="'.Database::escape_string($course_code).'"';
+	function course_exists($course_code, $accept_virtual=false) {
+		if ($accept_virtual === true) {
+            $sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_COURSE).' WHERE code="'.Database::escape_string($course_code).'" OR visual_code="'.Database::escape_string($course_code).'"';
+		} else {
+            $sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_COURSE).' WHERE code="'.Database::escape_string($course_code).'"';
+        }
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		return Database::num_rows($rs);
 	}	

@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 18618 2009-02-20 15:11:58Z juliomontoya $
+<?php // $Id: user_list.php 18639 2009-02-23 22:37:10Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -43,6 +43,13 @@ $xajax = new xajax();
 $xajax->registerFunction('courses_of_user');
 //$xajax->registerFunction('empty_courses_of_user');
 $xajax->processRequests();
+
+
+/**
+ * Get a formatted list of courses for given user
+ * @param   int     User ID
+ * @return  resource    XAJAX response
+ */
 function courses_of_user($arg)
 {
 	// do some stuff based on $arg like query data from a database and
@@ -77,6 +84,11 @@ function courses_of_user($arg)
 	//return the  xajaxResponse object
 	return $objResponse;
 }
+/**
+ * Empties the XAJAX object representing the courses list
+ * @param   int     User ID
+ * @return  resource    XAJAX object
+ */
 function empty_courses_of_user($arg)
 {
 	// do some stuff based on $arg like query data from a database and
@@ -130,10 +142,11 @@ api_protect_admin_script(true);
 *	because it does NOT check password!
 *
 *	This function defines globals.
+*   @param  int     User ID
+*   @return bool    False on failure, redirection on success
 *	@author Roan Embrechts
 */
-function login_user($user_id)
-{	
+function login_user($user_id) {	
 	//init ---------------------------------------------------------------------
     //Load $_user to be sure we clean it before logging in
 	global $uidReset, $loginFailed, $_configuration, $_user;
@@ -149,6 +162,9 @@ function login_user($user_id)
 		$uidReset = true;
 		return;
 	}
+    if ($user_id != strval(intval($user_id))) {
+    	return false;
+    }
 
 	$sql_query = "SELECT * FROM $main_user_table WHERE user_id='$user_id'";
 	$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
@@ -256,13 +272,10 @@ function get_number_of_users()
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";    		
     }
     
-	if (isset ($_GET['keyword']))
-	{
+	if ( isset ($_GET['keyword'])) {
 		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " WHERE u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.email LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%'";
-	}
-	elseif (isset ($_GET['keyword_firstname']))
-	{
+	} elseif (isset ($_GET['keyword_firstname'])) {
 		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
 		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
@@ -271,8 +284,7 @@ function get_number_of_users()
 		$keyword_status = Database::escape_string($_GET['keyword_status']);
 		$query_admin_table = '';
 		$keyword_admin = '';
-		if($keyword_status == SESSIONADMIN)
-		{
+		if ($keyword_status == SESSIONADMIN) {
 			$keyword_status = '%';
 			$query_admin_table = " , $admin_table a ";
 			$keyword_admin = ' AND a.user_id = u.user_id ';
@@ -287,28 +299,28 @@ function get_number_of_users()
 				//"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
 				"AND u.status LIKE '".$keyword_status."'" .
 				$keyword_admin;
-		if($keyword_active && !$keyword_inactive)
-		{
+		if($keyword_active && !$keyword_inactive) {
 			$sql .= " AND u.active='1'";
-		}
-		elseif($keyword_inactive && !$keyword_active)
-		{
+		} elseif($keyword_inactive && !$keyword_active) {
 			$sql .= " AND u.active='0'";
 		}
 	}
 	
-	  // adding the filter to see the user's only of the current access_url
+    // adding the filter to see the user's only of the current access_url
 	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {		
     		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();   	  
     }
-    
 
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
 }
 /**
- * Get the users to display on the current page.
+ * Get the users to display on the current page (fill the sortable-table)
+ * @param   int     offset of first user to recover
+ * @param   int     Number of users to get
+ * @param   int     Column to sort on
+ * @param   string  Order (ASC,DESC)
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction)
@@ -394,8 +406,9 @@ function email_filter($email)
 }
 /**
  * Build the modify-column of the table
- * @param int $user_id The user id
- * @param string $url_params
+ * @param   int     The user id
+ * @param   string  URL params to add to table links
+ * @param   array   Row of elements to alter
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($user_id,$url_params,$row)
@@ -468,7 +481,7 @@ function active_filter($active, $url_params, $row)
 }
 
 /**
- * lock or unlock a user
+ * Lock or unlock a user
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @param int $status, do we want to lock the user ($status=lock) or unlock it ($status=unlock)
  * @param int $user_id The user id
@@ -501,7 +514,7 @@ function lock_unlock_user($status,$user_id)
 }
 
 /**
- * instead of displaying the integer of the status, we give a translation for the status
+ * Instead of displaying the integer of the status, we give a translation for the status
  *
  * @param integer $status
  * @return string translation

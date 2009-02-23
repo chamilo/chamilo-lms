@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18627 2009-02-22 16:28:59Z iflorespaz $
+<?php //$Id: work.php 18636 2009-02-23 18:44:54Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18627 2009-02-22 16:28:59Z iflorespaz $
+*  	@version $Id: work.php 18636 2009-02-23 18:44:54Z yannoo $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1214,7 +1214,7 @@ function draw_date_picker($prefix,$default='') {
 	$date_form = make_select($prefix.'_day', array_combine(range(1,31),range(1,31)), $d_day);
 	$date_form .= make_select($prefix.'_month', $month_list, $d_month);
 	$date_form .= make_select($prefix.'_year', array( $d_year=> $d_year, $d_year+1=>$d_year+1), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
-	$date_form .= make_select($prefix.'_hour', array_combine(range(1,23),range(1,23)), $d_hour).' : ';
+	$date_form .= make_select($prefix.'_hour', array_combine(range(0,23),range(0,23)), $d_hour).' : ';
 	$date_form .= make_select($prefix.'_minute', $minute, $d_minute);
 	return $date_form;
 }

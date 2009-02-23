@@ -8,13 +8,12 @@
 require_once api_get_path(LIBRARY_PATH).'/fileUpload.lib.php';
 
 $permissions_for_new_directories = api_get_setting('permissions_for_new_directories');
-$permissions_for_new_directories = octdec(!empty($permissions_for_new_directories) ? $permissions_for_new_directories : '0777');
+$permissions_for_new_directories = octdec(!empty($permissions_for_new_directories) ? $permissions_for_new_directories : octdec(0777));
 
 $permissions_for_new_files = api_get_setting('permissions_for_new_files');
-$permissions_for_new_files = octdec(!empty($permissions_for_new_files) ? $permissions_for_new_files : '0777');
+$permissions_for_new_files = octdec(!empty($permissions_for_new_files) ? $permissions_for_new_files : octdec(0777));
 
-if (!empty($_course['path']))
-{
+if (!empty($_course['path'])) {
 	require_once api_get_path(LIBRARY_PATH).'/document.lib.php';
 	require_once api_get_path(LIBRARY_PATH).'/groupmanager.lib.php';
 
@@ -31,24 +30,25 @@ $user_folder = api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/m
 // Creation of a user owned folder if it does not exist.
 if (!file_exists($user_folder)) {
 	// A recursive call of mkdir function.
-	@mkdir(api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/my_files/', 0777, true);
+	@mkdir($user_folder, 0777, true);
+	chmod($user_folder, $permissions_for_new_directories);
 }
 
 // Creation of repository used by paltform administrators if it does not exist.
 if (api_is_platform_admin()) {
 	$homepage_folder = api_get_path(SYS_PATH).'home/default_platform_document/';
-
-	if (!file_exists($homepage_folder)) {
-		@mkdir(api_get_path(SYS_PATH).'home/default_platform_document/', 0777);
+	if (!file_exists($homepage_folder)) {		 
+		@mkdir($homepage_folder);		
+		chmod($homepage_folder, $permissions_for_new_directories);
 	}
 }
 
 // Creation in the course document repository of a shared folder if it does not exist.
 if (api_is_in_course()) {
 	$course_shared_folder = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/';
-
-	if (!file_exists($course_shared_folder)) { 
-		@mkdir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/', 0777);
+	if (!file_exists($course_shared_folder)) {		 
+		@mkdir($course_shared_folder);		
+		chmod($course_shared_folder, $permissions_for_new_directories);
 		$doc_id = add_document($_course, '/shared_folder', 'folder', 0, 'shared_folder');
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
@@ -56,7 +56,6 @@ if (api_is_in_course()) {
 
 	// Added by Ivan Tcholakov.
 	// When the current user is inside a course, his/her own hidden folder is created (if it does not exist) under shared_folder.
-
 	if (!file_exists($course_shared_folder.'sf_user_'.api_get_user_id())) {
 		//@todo call the create_unexisting_directory function and replace this code Julio Montoya
 		$new_user_dir = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/sf_user_'.api_get_user_id().'/';				

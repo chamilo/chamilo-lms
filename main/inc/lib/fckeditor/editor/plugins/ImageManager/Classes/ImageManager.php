@@ -146,17 +146,15 @@ class ImageManager
 					continue;					
 				}				
 				
-				if (strpos($fullpath, '/shared_folder/') !== false)
-				{
-					if (!preg_match('/.*\/shared_folder\/$/', $fullpath))
-					{
+				/* if (strpos($fullpath, '/shared_folder/') !== false) {
+					if (!preg_match('/.*\/shared_folder\/$/', $fullpath)) {
 						//all students can see the shared_folder
-						if (strpos($fullpath, '/shared_folder/sf_user_'.$user_id.'/') === true) {
+						if (strpos($fullpath, '/shared_folder/sf_user_'.$user_id.'/') !== false) {
 							continue;
 						}
 					}
-				}
-				
+				}	
+				*/		
 				$dirs[$relative] = $fullpath;
 				$dirs = array_merge($dirs, $this->_dirs($fullpath, $relative));
 			}

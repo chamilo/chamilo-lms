@@ -112,4 +112,5 @@ $ExtensionMySQLNotAvailable = "Extensión MySQL non dispoñible";
 $DokeosArtLicense = "As imaxes e as galerías de medios de Dokeos utilizan imaxes e iconas de Nuvola, Crystal Clear e Tango. Outras imaxes e medios, como diagramas e animacións flash, tomáronse prestadas de Wikimedia e dos cursos de Ali Pakdel e de Denis Hoa co seu consentimento e publicadas baixo licenza BY-SA Creative Commons. Pode atopar os detalles da licenza en <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">a web de CC</a>, onde un enlace ao pé da páxina daralle acceso ao texto completo da licenza.";
 $PleasGoBackToStep1 = "Por favor, volte para a etapa 1";
 $OptionalParameters = "Parámetros opcionais";
+$FailedConectionDatabase = "A conexión coa base de datos fallou. Poida que o nome de usuario, a contraseña ou o prefixo da base de datos sexan incorrectos. Por favor, revise estes datos e volva intentalo.";
 ?>

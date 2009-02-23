@@ -128,4 +128,6 @@ $QualifyNumeric = "Score maximum";
 $AlterQualifyThread = "Changer la cotation du fil de discussion";
 $ForumMoved = "Le forum a été déplacé";
 $YouMustAssignWeightOfQualification = "Veuillez assigner un poids de qualification";
+$DeleteAttachmentFile = "Supprimer le fichier joint";
+$EditAnAttachment = "Éditer un fichier joint";
 ?>

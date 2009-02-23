@@ -211,4 +211,6 @@ $SaveDocument = "Enregistrer la page";
 $CreateTheDocument = "Enregistrer le document";
 $SharedFolder = "Répertoire partagé";
 $CreateFolder = "Créer le dossier";
+$HelpDefaultDirDocuments = "Ce répertoire contient les fichiers par défaut. Vous pouvez supprimer des fichiers ou en ajouter de nouveaux, mais si un fichier invisible est inséré dans un document web, les apprenants ne pourront pas voir ce fichier dans le document. Lorsque vous insérez un fichier dans un document, assurez-vous qu\'il soit visible. Les répertoires, eux, peuvent rester invisibles.";
+$HelpSharedFolder = "Ce répertoire contient les fichiers que d\'autres apprenants (ou vous-même) ont envoyé dans un cours au travers de l\'éditeur en ligne (à l\'exception de l\'outil de groupe). Par défaut, ils seront visibles par tous les enseignants, mais resteront invisibles pour les autres apprenants (sauf par accès direct au fichier). Si vous rendez un répertoire apprenant visible, les autres apprenants pourront voir l\'ensemble de son contenu.";
 ?>

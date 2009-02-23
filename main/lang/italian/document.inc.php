@@ -28,7 +28,7 @@ $langZipNoPhp = "L\'archivio .ZIP non può contenere documenti in formato PHP";
 $langUncompress = "Estrai l\'archivio compresso (.ZIP)";
 $langDownloadAndZipEnd = " L\'archivio .ZIP è stato caricato e scompattato";
 $langRoot = "root";
-$langCreateDoc = "Crea il documento";
+$langCreateDoc = "Crea un documento";
 $langDown = "Scendi";
 $langFileError = "Il documento da caricare non è valido.";
 $langMaxFileSize = "La dimensione massima del documento è";
@@ -211,4 +211,6 @@ $SaveDocument = "Salva il documento";
 $CreateTheDocument = "Salva il documento";
 $SharedFolder = "Cartella condivisa";
 $CreateFolder = "Crea una cartella";
+$HelpDefaultDirDocuments = "Questa cartella contiene per default l\'archivio dei file. Puoi aggiungere altri file. Se i file sono marcati come invisibili, continueranno a non essere visibili anche se inseriti in una pagina web. Per usare un file in una pagina devi quindi prima rendere visibile il file, anche se la cartella - marcata invisibile - continuerà a non essere accessibile.";
+$HelpSharedFolder = "La cartella contiene i documenti caricati da te e dai corsisti nel corso della creazione di un nuovo documento attraverso l\'editor. Fanno eccezione i documenti creati nei gruppi. Per default le cartelle individuali risultano visibili ai docenti ma non ai corsisti se non attraverso i documenti stessi; rendendo visibile una cartella, essa sarà visibile da chiunque.";
 ?>

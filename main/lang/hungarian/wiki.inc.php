@@ -25,7 +25,6 @@ $Differences = "Különbségek";
 $MostRecentVersion = "A legutóbbi kijelölt verzió megtekintése";
 $Legend = "Jelmagyarázat";
 $ShowDifferences = "Kijelölt verziók összehasonlítása";
-$GroupSpace = "Csoport terület";
 $SearchPages = "Oldalak keresése";
 $Discuss = "Megvitatás";
 $History = "Történelem";

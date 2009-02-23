@@ -543,6 +543,7 @@ $ImageFile = "Súbor obrázkov";
 $ConstrainProportions = "Obmedzi&#357; rozmery";
 $InsertImage = "Vloži&#357; obrázok";
 $AccountActive = "Konto je akívne";
+$GroupSpace = "Priestor skupiny";
 $GroupWiki = "Wiki";
 $ExportToPDF = "Exportova&#357; do PDF";
 $CommentAdded = "Váš komentár je pridaný";

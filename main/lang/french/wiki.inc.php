@@ -25,7 +25,6 @@ $Differences = "Différences";
 $MostRecentVersion = "Voir la dernière version sélectionnée";
 $Legend = "Légende";
 $ShowDifferences = "Comparer les versions sélectionnées";
-$GroupSpace = "Espace de groupe";
 $SearchPages = "Rechercher dans les pages";
 $Discuss = "Argumenter";
 $History = "Historique";

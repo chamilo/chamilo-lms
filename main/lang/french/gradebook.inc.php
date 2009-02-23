@@ -128,4 +128,5 @@ $FileUploadComplete = "L\'envoi du fichier s\'est bien déroulé";
 $NoResultsAvailable = "Aucun résultat disponible";
 $CannotChangeTheMaxNote = "Vous ne pouvez pas modifier le score maximum";
 $GradebookWeightUpdated = "Pondération mise à jour";
+$ChooseItem = "Sélectionner élément";
 ?>

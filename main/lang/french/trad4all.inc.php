@@ -561,6 +561,7 @@ $ImageFile = "Fichier";
 $ConstrainProportions = "Conserver les proportions";
 $InsertImage = "Inserer une image";
 $AccountActive = "Compte actif";
+$GroupSpace = "Espace de groupe";
 $GroupWiki = "Wiki";
 $ExportToPDF = "Export PDF";
 $CommentAdded = "Votre commentaire a été ajouté";
@@ -689,4 +690,5 @@ $ApiKeys = "Clefs API";
 $Deny = "Refuser";
 $ThereIsNotQualifiedLearners = "Il n\'y a pas d\'apprenant coté";
 $ThereIsNotUnqualifiedLearners = "Il n\'y a pas d\'apprenant à coter";
+$Invitation = "Invitation";
 ?>

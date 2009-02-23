@@ -60,7 +60,6 @@ $MessageOutboxComment = "Ta zaslon prikazuje tvoja odposlana sporočila";
 $MyPersonalData = "Moji osebni podatki";
 $AlterPersonalData = "Spremeni osebne podatke";
 $SocialNetwork = "Socialno omrežje";
-$YouDontHaveInvites  = "Nimaš čakajočih vabil";
 $Invites = "Moja vabila";
 $ContactsGroups = "Kontakti skupine";
 $BackToOutbox = "Nazaj k odposlanim sporočilom";

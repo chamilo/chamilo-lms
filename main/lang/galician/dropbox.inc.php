@@ -124,4 +124,6 @@ $NoFilesHere = "Aquí non hai ficheiros";
 $NoFilesHere = " 	Aquí non hai arquivos";
 $NewDropboxFileUploaded = "Enviouse un novo arquivo ó buzón de ficheiros";
 $NewDropboxFileUploadedContent = "Enviouse un novo arquivo ó buzón de ficheiros do teu curso";
+$langAddEdit = "Engadir / Editar";
+$dropbox_lang["upload"] = "Enviar";
 ?>

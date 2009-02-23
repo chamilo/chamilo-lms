@@ -57,4 +57,5 @@ $QualificationOver = "Voto massimo";
 $ExpiryDateAlreadyPassed = "Data di scadenza superata";
 $EndDateAlreadyPassed = "Il caricamento è stato chiuso";
 $MoveXTo = "Sposta %s verso";
+$QualificationMustNotBeMoreThanQualificationOver = "Il voto non può superare il valore massimo stabilito";
 ?>

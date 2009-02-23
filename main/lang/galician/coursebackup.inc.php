@@ -46,4 +46,5 @@ $UploadError = "Fallou o envío. Comprobe os límites de tamaño de ficheiro e os p
 $DocumentsWillBeAddedToo = "Tamén se engadirán os documentos";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Se quere exportar un itinerario de aprendizaxe que conteña exercicios, terá que asegurarse de que estes exercicios foron incluídos na exportación; para iso terá que telos seleccionado na lista de exercicios.";
 $ArchivesDirectoryNotWriteableContactAdmin = "O directorio \"archive\" utilizado por esta ferramenta non ten habilitado os permisos de escritura. Contacte co administrador da plataforma.";
+$DestinationCourse = "Curso de destino";
 ?>

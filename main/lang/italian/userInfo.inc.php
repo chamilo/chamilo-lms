@@ -60,7 +60,6 @@ $MessageOutboxComment = "Vedi i messaggi inviati";
 $MyPersonalData = "Dati personali";
 $AlterPersonalData = "Modifica i dati personali";
 $SocialNetwork = "Rete di contatti";
-$YouDontHaveInvites  = "Non hai inviti";
 $Invites = "I miei inviti";
 $ContactsGroups = "Gruppi di contatti";
 $BackToOutbox = "Ritorna ai messaggi in uscita";

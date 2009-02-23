@@ -919,7 +919,7 @@ $MyApiKey = "My API key";
 $FieldFilter = "Field filter";
 $FilterOn = "Filter on";
 $FilterOff = "Filter off";
-$FieldFilterSetOn = "You can use now this field as a filter ";
+$FieldFilterSetOn = "You can now use this field as a filter ";
 $FieldFilterSetOff = "You can\'t use this field as a filter ";
 $buttonAddUserField = "Add user field";
 ?>

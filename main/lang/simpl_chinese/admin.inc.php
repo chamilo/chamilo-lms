@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$AdminBy  = "管理员";
+$AdminBy  = "&#31649;&#29702;&#21592;";
 $AdministrationTools  = "系统管理员";
 $State  = "系统状态";
 $Statistiques  = "统计信息";
@@ -281,6 +281,8 @@ $AllowRegistrationComment = "可以注册新用户吗?用户可以创建帐号吗? ";
 $AllowRegistrationAsTeacherTitle = "注册为教师";
 $AllowRegistrationAsTeacherComment = "用户可以注册为教师(创建课程)吗? ";
 $PlatformLanguage = "平台语言";
+$Tuning = "&#35843;&#25972;";
+$SplitUsersUploadDirectory = "&#20998;&#31163;&#29992;&#25143;&#30340;&#19978;&#20256;&#25991;&#20214;&#22841;";
 $CourseQuota = "课程数量限制";
 $EditNotice = "编辑通知";
 $General = "普通";
@@ -608,4 +610,5 @@ $Whitelist = "&#30333;&#21517;&#21333;";
 $UploadExtensionsBlacklist = "&#40657;&#21517;&#21333;-&#35774;&#32622;";
 $UploadExtensionsWhitelist = "&#30333;&#21517;&#21333;-&#35774;&#32622;";
 $UploadExtensionsBlacklistComment = "&#40657;&#21517;&#21333;&#26159;&#29992;&#26469;&#36890;&#36807;&#21024;&#38500;&#27963;&#30528;&#37325;&#21629;&#21517;&#30340;&#26041;&#24335;&#26469;&#36807;&#28388;&#25991;&#20214;&#25193;&#23637;&#30340;&#12290;";
+$Flat = "平面";
 ?>

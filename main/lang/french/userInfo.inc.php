@@ -57,4 +57,10 @@ $SocialGoodFriend = "Mes vrais amis";
 $SocialEnemy = "Mes ennemis";
 $SocialDeleted = "Contact supprimé";
 $MessageOutboxComment = "Cet écran vous permet de visualiser les messages que vous avez envoyés";
+$MyPersonalData = "Fiche perso";
+$AlterPersonalData = "Éditer détails";
+$SocialNetwork = "Réseau social";
+$Invites = "Mes invitations";
+$ContactsGroups = "Groupes de contacts";
+$BackToOutbox = "Retour aux messages envoyés";
 ?>

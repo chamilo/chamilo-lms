@@ -57,4 +57,5 @@ $QualificationOver = "Qualification over";
 $ExpiryDateAlreadyPassed = "Expiry date already passed";
 $EndDateAlreadyPassed = "End date already passed";
 $MoveXTo = "Move %s to";
+$QualificationMustNotBeMoreThanQualificationOver = "The qualification must not be more than qualification max";
 ?>

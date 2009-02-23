@@ -33,4 +33,6 @@ $SendMailBody = "Un usuario publicou un documento na ferramenta traballos do seu
 $DirDelete = "Borrar o directorio";
 $ValidateChanges = "Confirmar os cambios";
 $FolderUpdated = "Cartafol actualizado";
+$EndDateAlreadyPassed = "A data final xa pasou";
+$MoveXTo = "Mover %s A";
 ?>

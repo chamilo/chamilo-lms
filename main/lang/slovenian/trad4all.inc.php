@@ -561,6 +561,7 @@ $ImageFile = "Datoteka s sliko";
 $ConstrainProportions = "Ohrani razmerja";
 $InsertImage = "Vstavi sliko";
 $AccountActive = "Uporabniški ra&#269;un je aktiven";
+$GroupSpace = "Podroèje celotne skupine";
 $GroupWiki = "Wiki";
 $ExportToPDF = "Izvozi v PDF";
 $CommentAdded = "Tvoj komentar je bil dodan";

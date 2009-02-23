@@ -557,6 +557,7 @@ $ImageFile = "Kép állomány";
 $ConstrainProportions = "Arányok meg&#337;rzése";
 $InsertImage = "Kép beillesztése";
 $AccountActive = "A felhasználói fiók aktív";
+$GroupSpace = "Csoport terület";
 $GroupWiki = "Wiki";
 $ExportToPDF = "Mentés PDF-ként";
 $CommentAdded = "A hozzászólását a rendszer elmentette";

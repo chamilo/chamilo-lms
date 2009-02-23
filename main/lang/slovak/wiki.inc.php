@@ -25,7 +25,6 @@ $Differences = "Rozdiely";
 $MostRecentVersion = "Prezrie&#357; naposledy vybranú verziu";
 $Legend = "Legenda";
 $ShowDifferences = "Porovna&#357; vybrané verzie";
-$GroupSpace = "Priestor skupiny";
 $SearchPages = "H&#318;ada&#357; stránky";
 $Discuss = "Diskutova&#357;";
 $History = "História";

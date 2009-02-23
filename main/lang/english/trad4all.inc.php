@@ -561,6 +561,7 @@ $ImageFile = "Image File";
 $ConstrainProportions = "Constrain proportions";
 $InsertImage = "Insert image";
 $AccountActive = "Account active ";
+$GroupSpace = "Group area";
 $GroupWiki = "Wiki";
 $ExportToPDF = "Export to PDF";
 $CommentAdded = "You comment has been added";
@@ -689,4 +690,5 @@ $ApiKeys = "API keys";
 $Deny = "Deny";
 $ThereIsNotQualifiedLearners = "There are no qualified learners";
 $ThereIsNotUnqualifiedLearners = "There are no unqualified learners";
+$Invitation = "Invitation";
 ?>

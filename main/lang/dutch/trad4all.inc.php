@@ -561,6 +561,7 @@ $ImageFile = "Afbeeldingsbestand";
 $ConstrainProportions = "Verhoudingen vasthouden";
 $InsertImage = "Afbeelding toevoegen";
 $AccountActive = "Account is actief";
+$GroupSpace = "Groepsruimte";
 $GroupWiki = "Groupswiki";
 $ExportToPDF = "Exporteer naar PDF";
 $CommentAdded = "Uw commentaar is toegevoegd.";

@@ -561,6 +561,7 @@ $ImageFile = "Imaxe";
 $ConstrainProportions = "Caltener proporciones";
 $InsertImage = "Importar imaxe";
 $AccountActive = "Cuenta activa";
+$GroupSpace = "Área del grupu";
 $GroupWiki = "Wiki";
 $ExportToPDF = "Esportar a PDF";
 $CommentAdded = "Comentariu agregáu";

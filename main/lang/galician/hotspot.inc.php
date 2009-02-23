@@ -18,4 +18,6 @@ $labelPolyMenu = " 	Pechar polígono";
 $triesleft = "Intentos restantes";
 $exeFinished = "Identificáronse todas as respostas. Agora pode reasignar as súas respostas ou pulsar para enviar.";
 $nextAnswer = "Agora faga clic en: &done=done";
+$delineation = "Delimitación";
+$labelDelineationMenu = "Cerrar delimitación";
 ?>

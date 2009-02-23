@@ -561,6 +561,7 @@ $ImageFile = "Slika";
 $ConstrainProportions = "Ohrani razmerja";
 $InsertImage = "Vstavi sliko";
 $AccountActive = "Uporabniški račun je aktiven";
+$GroupSpace = "Področje skupine";
 $GroupWiki = "Wiki";
 $ExportToPDF = "Izvozi v PDF";
 $CommentAdded = "Tvoj komentar je bil dodan";
@@ -689,4 +690,5 @@ $ApiKeys = "API ključi";
 $Deny = "Onemogoči";
 $ThereIsNotQualifiedLearners = "Tu ni kvalificiranih učečih se uporabnikov";
 $ThereIsNotUnqualifiedLearners = "Tu ni nekvalificiranih učečih se uporabnikov";
+$Invitation = "Povabilo";
 ?>

@@ -25,7 +25,6 @@ $Differences = "Spremembe";
 $MostRecentVersion = "Pogled zadnje izbrane različice";
 $Legend = "Legenda";
 $ShowDifferences = "Primerjaj izbrane različice";
-$GroupSpace = "Področje skupine";
 $SearchPages = "Iskane strani";
 $Discuss = "Diskutiraj";
 $History = "Zgodovina";

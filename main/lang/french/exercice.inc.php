@@ -280,4 +280,8 @@ $NewScore = "Nouveau score";
 $NewComment = "Nouveau commentaire";
 $ExerciseNoStartedYet = "L\'exercice n\'a pas encore commencé";
 $ExerciseNoStartedAdmin = "Le responsable n\'a pas encore démarré cet exercice";
+$SelectTargetLP = "Parcours cible";
+$SelectTargetQuestion = "Question cible";
+$DirectFeedbackCantModifyTypeQuestion = "Le type d\'exercice ne peut pas être modifié car il a été enregistré comme auto-évaluation. L\'auto-évaluation vous donne la possibilité de donner une rétro-alimentation immédiate à l\'apprenant, mais ce type n\'est pas compatible avec tous les types de questions et, pour cette même raison, le type de ces exercices ne peut pas être modifié ultérieurement.";
+$CantShowResults = "Non disponible";
 ?>

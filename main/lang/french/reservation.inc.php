@@ -121,4 +121,5 @@ $ReservationActive = "Réservation réactivée, #NAME# est à nouveau disponible";
 $ReservationUnavailable = "Madame, Monsieur,\\n\\nL\'élément #NAME# est temporairement indisponible. Votre réservation du #BEGIN# au #END# a donc été annulée.\\nVous recevrez un e-mail lorsqu\'il est disponible à nouveau. Veuillez nous excuser pour cet inconvénient.";
 $ReservationAvailable = "Madame, Monsieur,\\n\\nNous avons le plaisir de vous informer que #NAME# est à nouveau disponible et que, par conséquent, votre réservation du #BEGIN# au #END# a été réactivée.";
 $Resources = "Ressources";
+$EditBookingPeriod = "Editer période de réservation";
 ?>

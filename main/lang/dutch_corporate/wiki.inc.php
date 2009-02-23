@@ -25,7 +25,6 @@ $Differences = "Verschillen";
 $MostRecentVersion = "Laatst geselecteerde versie";
 $Legend = "Legenda";
 $ShowDifferences = "Vergelijk geselecteerde versies";
-$GroupSpace = "Groepsruimte";
 $SearchPages = "zoek paginas";
 $Discuss = "Becommentarieer";
 $History = "Vorige versies";

@@ -220,4 +220,5 @@ $ShowAttempt = "Prikži poskus";
 $ShowAndQualifyAttempt = "Prikaži in oceni poskus";
 $langAddEdit = "Dodaj / Uredi";
 $ModifyPrerequisities = "Spremeni predzahteve";
+$CreateLearningPath = "Ustvari učno pot";
 ?>

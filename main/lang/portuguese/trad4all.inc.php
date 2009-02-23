@@ -561,6 +561,7 @@ $ImageFile = "Imagem";
 $ConstrainProportions = "Manter proporções";
 $InsertImage = "Inserir imagem";
 $AccountActive = "Conta activa";
+$GroupSpace = "Área de Grupo";
 $GroupWiki = "Wiki";
 $ExportToPDF = "Exportar para PDF";
 $CommentAdded = "O comentário foi acrescentado";

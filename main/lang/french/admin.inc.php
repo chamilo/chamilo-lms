@@ -916,5 +916,10 @@ $AllowSocialToolComment = "L\'outil de réseau social permet aux utilisateurs de 
 $SetLanguageAsDefault = "Utiliser cette langue par défaut";
 $GenerateApiKey = "Générer une nouvelle clef API";
 $MyApiKey = "Ma clef API";
+$FieldFilter = "Filtre de champ";
+$FilterOn = "Filtre actif";
+$FilterOff = "Filtre inactif";
+$FieldFilterSetOn = "Vous pouvez désormais utiliser ce champ comme un filtre";
+$FieldFilterSetOff = "Vous ne pouvez pas utiliser ce champ comme un filtre";
 $buttonAddUserField = "Ajouter un champ de profil";
 ?>

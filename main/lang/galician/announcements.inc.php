@@ -50,4 +50,7 @@ $NoAnnouncements = "Non hai anuncios";
 $SelectEverybody = "Seleccionar Todos";
 $SelectedUsersGroups = "usuarios dos grupos seleccionados";
 $LearnerMessage = "Mensaxe dun alumno";
+$TitleIsRequired = "O título é obrigatorio";
+$AnnounceSentByEmail = "Anuncio enviado por correo electrónico ";
+$AnnounceSentToUserSelection = "Anuncio enviado a unha selección de usuarios";
 ?>

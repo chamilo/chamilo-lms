@@ -128,4 +128,6 @@ $QualifyNumeric = "Maximum score";
 $AlterQualifyThread = "Alter qualify thread";
 $ForumMoved = "The forum has moved";
 $YouMustAssignWeightOfQualification = "You Must Assign Weight Of Qualification";
+$DeleteAttachmentFile = "Delete attachment file";
+$EditAnAttachment = "Edit an attachment";
 ?>

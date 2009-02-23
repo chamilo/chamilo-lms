@@ -128,4 +128,6 @@ $QualifyNumeric = "Punteggio massimo";
 $AlterQualifyThread = "Modifica la valutazione della discussione";
 $ForumMoved = "Il forum è stato spostato";
 $YouMustAssignWeightOfQualification = "Devi indicare un peso per la valutazione";
+$DeleteAttachmentFile = "Elimina l\'allegato";
+$EditAnAttachment = "Modifica l\'allegato";
 ?>

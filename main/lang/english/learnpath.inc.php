@@ -220,4 +220,5 @@ $ShowAttempt = "Show attempt";
 $ShowAndQualifyAttempt = "Show and qualify attempt";
 $langAddEdit = "Add / Edit";
 $ModifyPrerequisities = "Modify Prerequisities";
+$CreateLearningPath = "Create learning path";
 ?>

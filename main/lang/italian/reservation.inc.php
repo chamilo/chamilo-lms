@@ -121,4 +121,5 @@ $ReservationActive = "Prenotazione ripristinata, #NAME# è di nuovo disponibile";
 $ReservationUnavailable = "Cara/o Utente,\\n\\n l\'elemento #NAME#  non è temporaneamente disponibile, per cui la prenotazione dal #BEGIN al #END non è stata accolta.\\n Riceverai un\'email quando l\'elemento sarà nuovamente disponibile, ci scusiamo per l\'inconveniente.";
 $ReservationAvailable = "Cara/o Utente,\\n\\n l\'elemento #NAME#  è ora nuovamente disponibile, per cui la prenotazione dal #BEGIN al #END è ora attiva, grazie.";
 $Resources = "Risorse";
+$EditBookingPeriod = "Modifica il periodo di prenotazione";
 ?>

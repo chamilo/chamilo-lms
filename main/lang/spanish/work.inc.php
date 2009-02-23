@@ -57,4 +57,5 @@ $QualificationOver = "Calificación sobre";
 $ExpiryDateAlreadyPassed = "Fecha de vencimiento ya ha pasado";
 $EndDateAlreadyPassed = "Fecha final ya ha pasado";
 $MoveXTo = "Mover %s A";
+$QualificationMustNotBeMoreThanQualificationOver = "La calificación no puede ser superior a la calificacion máxima";
 ?>

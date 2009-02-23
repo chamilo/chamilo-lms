@@ -128,4 +128,5 @@ $FileUploadComplete = "File upload successfull";
 $NoResultsAvailable = "No results available";
 $CannotChangeTheMaxNote = "Cannot change the max note";
 $GradebookWeightUpdated = "Weights updated successfully";
+$ChooseItem = "Choose item";
 ?>

@@ -282,6 +282,6 @@ $ExerciseNoStartedYet = "The exercise didn\'t start yet";
 $ExerciseNoStartedAdmin = "The admin didn\'t start the exercise yet";
 $SelectTargetLP = "Select target learning path";
 $SelectTargetQuestion = "Select target question";
-$DirectFeedbackCantModifyTypeQuestion = "The type of evaluation can\'t be modified, since it was set to Self evaluation";
-$CantShowResults = "Not disponible";
+$DirectFeedbackCantModifyTypeQuestion = "The quiz type cannot be modified since it was set to self evaluation. Self evaluation gives you the possibility to give direct feedback to the user, but this is not compatible with all question types and, as such, the type of such quiz cannot be changed afterwards.";
+$CantShowResults = "Not available";
 ?>

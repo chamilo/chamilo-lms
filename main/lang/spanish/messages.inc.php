@@ -29,4 +29,5 @@ $DeleteMessage = " Borrar mensaje";
 $ReadMessage = " Leer";
 $Outbox = "Bandeja de salida";
 $SendInviteMessage = "Enviar mensaje de invitación";
+$SendMessageInvitation = "¿ Está seguro que desea enviar las invitaciones a los usuarios seleccionados ?";
 ?>

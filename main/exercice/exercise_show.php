@@ -105,6 +105,10 @@ if ( empty ( $questionList ) ) {
 if ( empty ( $objExercise ) ) {
     $objExercise = $_SESSION['objExercise'];
 }
+if ( empty ( $exeId ) ) {
+    $exeId = $_REQUEST['id'];
+}
+
 $is_allowedToEdit=api_is_allowed_to_edit() || $is_courseTutor;
 $nameTools=get_lang('CorrectTest');
 
@@ -1034,6 +1038,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 						<input type = "hidden" name="lp_item_view_id" value="<?php echo Security::remove_XSS($_GET['my_lp_id']); ?>">
 						<input type = "hidden" name="student_id" value="<?php echo Security::remove_XSS($_GET['student']);?>">
 						<input type = "hidden" name="total_score" value="<?php echo $totalScore; ?>">
+						<input type = "hidden" name="total_time" value="<?php echo Security::remove_XSS($_GET['total_time']);?>">
 				<?php		
 						}
 					} else {
@@ -1048,7 +1053,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		 	}  		
 			if ($origin=='learnpath' || $origin=='student_progress') {?>	
 				
-				<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>										
+				<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>										
 			<?php } else if($origin=='myprogress') {?>
 				<button type="button" class="save" onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>				
 			<?php }?>	

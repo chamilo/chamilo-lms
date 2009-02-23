@@ -33,6 +33,7 @@ require_once('learnpath.class.php');
 require_once ('resourcelinker.inc.php');
 require_once ('../inc/lib/tracking.lib.php');
 require_once ('../inc/lib/course.lib.php');
+require_once ('../reservation/rsys.php');
 
 
 if(empty($_SESSION['_course']['id']) && isset($_GET['course']))
@@ -360,13 +361,19 @@ foreach ($list as $my_item_id) {
 					$my_maxscore = $row_attempts['exe_weighting'];
 					$my_exe_id	= $row_attempts['exe_id'];
 					$my_orig_lp = $row_attempts['orig_lp_id'];
-					$my_orig_lp_item = $row_attempts['orig_lp_item_id'];					
+					$my_orig_lp_item = $row_attempts['orig_lp_item_id'];
+					$rsys = new Rsys();
+					$mktime_start_date = $rsys->mysql_datetime_to_timestamp($row_attempts['start_date']);
+					$mktime_exe_date = $rsys->mysql_datetime_to_timestamp($row_attempts['exe_date']);
+					$mytime = ((int)$mktime_start_date-(int)$mktime_start_date); 
+					$time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
+					$time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);								
 					$output .= '<tr class="'.$oddclass.'"><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $n . '</td>'				
-				 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . ($my_score == 0 ? '-' : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore)) . '</div></td><td colspan="2"><div class="mystatus">' . $time . '</div></td>';
+				 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore)) . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
 				 	if ($origin != 'tracking') {
 				 		$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAttempt').'"></a></td>';						
 					} else {
-						$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';							
+						$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '&total_time='.$mytime.'" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';							
 					}		 				 	        
 				 	$output .= '</tr>';
 					$n++;	

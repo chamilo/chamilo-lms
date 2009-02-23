@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 18542 2009-02-17 14:58:33Z cfasanando $
+<?php // $Id: exercice.php 18637 2009-02-23 21:29:20Z cfasanando $
 
 /*
 ==============================================================================
@@ -272,13 +272,14 @@ api_mail_html($emailid, $emailid, $subject, $mess, $from_name, $from);
 
 if (in_array($origin, array('tracking_course','user_course'))){
 		// update score  when you qualify the exercises in Learning path detail
-		if (isset($_REQUEST['lp_item_id']) && isset($_REQUEST['lp_item_view_id']) && isset($_REQUEST['student_id']) && isset($_REQUEST['total_score'])) {
+		if (isset($_REQUEST['lp_item_id']) && isset($_REQUEST['lp_item_view_id']) && isset($_REQUEST['student_id']) && isset($_REQUEST['total_score']) && isset($_REQUEST['total_time'])) {
 			$lp_item_id = $_REQUEST['lp_item_id'];
 			$lp_item_view_id = $_REQUEST['lp_item_view_id'];
 			$student_id = $_REQUEST['student_id'];
 			if ($lp_item_id == strval(intval($lp_item_id)) && $lp_item_view_id == strval(intval($lp_item_view_id)) && $student_id == strval(intval($student_id))) {
-    			$score = (float)$_REQUEST['total_score']; 			
-    			$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score WHERE lp_item_id = '".(int)$lp_item_view_id."'
+    			$score = (float)$_REQUEST['total_score'];
+    			$total_time = (int)$_REQUEST['total_time']; 			
+    			$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score,total_time = $total_time WHERE lp_item_id = '".(int)$lp_item_view_id."'
     					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '".(int)$student_id."' and lp_id='".(int)$lp_item_id."')";
     			api_sql_query($sql_update_score,__FILE__,__LINE__);	    			    			
             }

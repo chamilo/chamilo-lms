@@ -365,7 +365,7 @@ foreach ($list as $my_item_id) {
 					$rsys = new Rsys();
 					$mktime_start_date = $rsys->mysql_datetime_to_timestamp($row_attempts['start_date']);
 					$mktime_exe_date = $rsys->mysql_datetime_to_timestamp($row_attempts['exe_date']);
-					$mytime = ((int)$mktime_start_date-(int)$mktime_start_date); 
+					$mytime = ((int)$mktime_exe_date-(int)$mktime_start_date);					 
 					$time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
 					$time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);								
 					$output .= '<tr class="'.$oddclass.'"><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $n . '</td>'				

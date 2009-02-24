@@ -1,27 +1,5 @@
-<?php // $Id: user_import.php 18641 2009-02-24 00:49:03Z yannoo $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) 2005 Bart Mollet <bart.mollet@hogent.be>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php // $Id: user_import.php 18645 2009-02-24 02:00:35Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *   This tool allows platform admins to add users by uploading a CSV or XML file
@@ -343,18 +321,17 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0)
 	{
         $inserted_in_course = array();
 		save_data($users);
-        $msg = ' (';
+        $msg2 = '';
         if (count($inserted_in_course)>1) {
-        	$msg .= get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').':';
+        	$msg2 .= get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').':';
             foreach ($inserted_in_course as $course) {
-            	$msg .= ' '.$course.',';
+            	$msg2 .= ' '.$course.',';
             }
-            $msg = substr($msg,0,-1);
-            $msg .=')';
+            $msg2 = substr($msg2,0,-1);
         }
         Security::clear_token();
         $tok = Security::get_token();       
-		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported').$msg).'&sec_token='.$tok);
+		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported')).'&warn='.urlencode($msg2).'&sec_token='.$tok);
 		exit ();
 	}
 }

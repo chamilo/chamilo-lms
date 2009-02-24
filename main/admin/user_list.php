@@ -1,26 +1,5 @@
-<?php // $Id: user_list.php 18639 2009-02-23 22:37:10Z yannoo $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php // $Id: user_list.php 18645 2009-02-24 02:00:35Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 	@author Bart Mollet
@@ -592,7 +571,12 @@ else
 		if($check) {
 			switch ($_GET['action']) {
 				case 'show_message' :
-					Display :: display_normal_message(stripslashes($_GET['message']));
+                    if (!empty($_GET['warn'])) {
+                    	Display::display_warning_message(urldecode($_GET['warn']));
+                    }
+                    if (!empty($_GET['message'])) {
+                        Display :: display_normal_message(stripslashes($_GET['message']));                    	
+                    }
 					break;
 				case 'delete_user' :
 					if (api_is_platform_admin()) {						

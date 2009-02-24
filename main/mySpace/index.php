@@ -288,26 +288,27 @@ if($view=='coach' || $view=='drh')
 		$avgResultsToExercises += $avgStudentScore;
 		
 	}
-	// average progress
-	$avgTotalProgress = $avgTotalProgress/$nbStudents;
+	$avgTotalProgress = 0;
+	$avgResultsToExercises = 0;
+	$avgCoursesPerStudent = 0;
+	$avgTimeSpent = 0;
+	$nb_assignments = 0;
+	$nb_posts = 0;
 	
-	// average results to the tests
-	$avgResultsToExercises = $avgResultsToExercises/$nbStudents;
-	
-	// average courses by student
-	$avgCoursesPerStudent = round($totalCourses / $nbStudents,2);
-	
-	// average time spent on the platform
-	$avgTimeSpent = $totalTimeSpent / $nbStudents;
-	
-	// average assignments
-	$nb_assignments = $nb_assignments / $nbStudents;
-	
-	// average posts
-	$nb_posts = $nb_posts / $nbStudents;
-	
-	
-	 
+	if ($nbStudents > 0) {
+		// average progress
+		$avgTotalProgress = $avgTotalProgress/$nbStudents;
+		// average results to the tests	
+		$avgResultsToExercises = $avgResultsToExercises/$nbStudents;		
+		// average courses by student
+		$avgCoursesPerStudent = round($totalCourses / $nbStudents,2);		
+		// average time spent on the platform
+		$avgTimeSpent = $totalTimeSpent / $nbStudents;		
+		// average assignments
+		$nb_assignments = $nb_assignments / $nbStudents;		
+		// average posts
+		$nb_posts = $nb_posts / $nbStudents;					
+	} 
 	 //csv part
 	 if($export_csv)
 	 {

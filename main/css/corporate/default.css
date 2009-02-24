@@ -1381,9 +1381,7 @@ span.radio {
     border:2px solid #EBCA4F;
     padding:10px;
     width:200px;
-    position:relative;
-	margin-top:115px;
-	margin-right:-100px;
+    position:relative;	
 }
 .message-content .message-delete {
     position: absolute;
@@ -1590,6 +1588,24 @@ span.radio {
 	border-right:1px #9DACBF solid; 
 	border-bottom:1px #9DACBF solid;
 }
+.social-profile-info {
+	width:300px;
+}
+.social-profile-info dt {
+	text-align:left;
+	clear:left;
+	color:#808080;
+	float:left;
+	width:100px;
+}
+.social-profile-info dd {	
+	text-align:right;
+	padding:1px 0px 3px 0px;	
+	float:left;
+	margin:0;
+	padding-left:10px;
+}
+
 /*****************************************************
  *  BUTTONS	                                         *
  *****************************************************/

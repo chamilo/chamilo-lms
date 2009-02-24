@@ -97,11 +97,12 @@ function validate_data($courses) {
 
 /**
  * Save the imported data
+ * @param   array   List of courses info
  */
 function save_data($courses)
 {
 	global $_configuration, $firstExpirationDelay;
-	
+	$msg = '';
 	foreach($courses as $index => $course)
 	{
 		$keys = define_course_keys($course['Code'], "", $_configuration['db_prefix']);
@@ -117,10 +118,13 @@ function save_data($courses)
 		prepare_course_repository($directory, $code);
 		update_Db_course($db_name);
 		fill_course_repository($directory);
-		fill_Db_course($db_name, $directory, api_get_setting('platformLanguage'));
+		fill_Db_course($db_name, $directory, api_get_setting('platformLanguage'),array());
 		register_course($code, $visual_code, $directory, $db_name, $teacher->name, $course['CourseCategory'], $course['Title'], api_get_setting('platformLanguage'), $teacher->user_id, $expiration_date);
-		echo $code.' CREATED<br />';
+		$msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$directory.'/">'.$code.'</a> '.get_lang('Created').'<br />';
 	}
+    if (!empty($msg)) {
+        Display::display_normal_message($msg,false);    	
+    }
 }
 /**
  * Read the CSV-file

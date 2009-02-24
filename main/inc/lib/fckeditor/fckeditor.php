@@ -430,7 +430,7 @@ class FCKeditor
 
     	static $is_mimetex_installed = null;
 		$server_base = explode('/', api_get_path(WEB_PATH));
-		$server_base_ip = $server_base[0].'/'.$server_base[1].'/127.0.0.1/'; // To avoid problems on Windows Vista.
+        $server_base_ip = $server_base[0].'/'.$server_base[1].'/127.0.0.1/'; // To avoid problems on Windows Vista.
 		$server_base = $server_base[0].'/'.$server_base[1].'/'.$server_base[2].'/';
 		if (defined('PHP_OS'))
 		{
@@ -447,14 +447,14 @@ class FCKeditor
 		}
 		else
 		{
-			$this->Config['MimetexUrl'] = $server_base.'cgi-bin/mimetex.cgi';
-			$check_mimetex_url = $server_base_ip.'cgi-bin/mimetex.cgi';
+            $this->Config['MimetexUrl'] = $server_base.'cgi-bin/mimetex.cgi';
+			$check_mimetex_url = $server_base.'cgi-bin/mimetex.cgi';
 		}
 		if ($check_mimetex_installed)
 		{
 			if (!isset($is_mimetex_installed))
 			{
-				$this->Config['IsMimetexInstalled'] = $this->url_exists($check_mimetex_url.'?'.rand(), $check_mimetex_timeout);
+                $this->Config['IsMimetexInstalled'] = $this->url_exists($check_mimetex_url.'?'.rand(), $check_mimetex_timeout);
 			}
 			else
 			{

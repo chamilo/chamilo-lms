@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18511 2009-02-16 02:22:11Z iflorespaz $
+<?php // $Id: profile.php 18664 2009-02-24 17:06:30Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -43,6 +43,7 @@ function show_image(image,width,height) {
 		
 }			
 </script>';
+
 if (api_get_setting('allow_message_tool')=='true') {
 	$htmlHeadXtra[] ='<script type="text/javascript">
 	$(document).ready(function(){
@@ -73,14 +74,12 @@ $interbreadcrumb[]= array (
 	'url' => '#',
 	'name' => get_lang('ModifyProfile')
 );
-if (!empty ($_GET['coursePath']))
-{
+if (!empty ($_GET['coursePath'])) {
 	$course_url = api_get_path(WEB_COURSE_PATH).htmlentities(strip_tags($_GET['coursePath'])).'/index.php';
 	$interbreadcrumb[] = array ('url' => $course_url, 'name' => Security::remove_XSS($_GET['courseCode']));
 }
 $warning_msg = '';
-if(!empty($_GET['fe']))
-{
+if(!empty($_GET['fe'])) {
 	$warning_msg .= get_lang('UplUnableToSaveFileFilteredExtension');
 	$_GET['fe'] = null;
 }
@@ -101,6 +100,7 @@ include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
+
 if (is_profile_editable())
 	$tool_name = get_lang('ModifProfile');
 else
@@ -116,23 +116,23 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 /*
  * Get initial values for all fields.
  */
+
 $user_data = UserManager::get_user_info_by_id(api_get_user_id());
 $array_list_key=UserManager::get_api_keys(api_get_user_id());
 $id_temp_key=UserManager::get_api_key_id(api_get_user_id(),'dokeos');
 $value_array=$array_list_key[$id_temp_key];
 $user_data['api_key_generate']=$value_array;
 
-if ($user_data !== false)
-{
+if ($user_data !== false) {
 	if (is_null($user_data['language']))
 		$user_data['language'] = api_get_setting('platformLanguage');
 }
 
-$user_image = UserManager::get_user_picture_path_by_id(api_get_user_id(),'none');
-
 $fck_attribute['Width'] = "100%";
-$fck_attribute['Height'] = "150";
+$fck_attribute['Height'] = "130";
 $fck_attribute['ToolbarSet'] = "Profil";
+// hiding the toolbar of fckeditor
+$fck_attribute['Config']['ToolbarStartExpanded']='false';
 
 /*
  * Initialize the form.
@@ -156,8 +156,7 @@ else
 }*/
 
 //THEME
-if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true')
-{
+if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
 	$form->addElement('select_theme', get_lang('Theme'),'theme');
 	if (api_get_setting('profile', 'theme') !== 'true')
 		$form->freeze('theme');
@@ -187,10 +186,8 @@ $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('username', get_lang('UsernameWrong'), 'username');
 $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 
-
 //	OFFICIAL CODE
-if (CONFVAL_ASK_FOR_OFFICIAL_CODE)
-{
+if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
 	$form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
 	if (api_get_setting('profile', 'officialcode') !== 'true')
 		$form->freeze('official_code');
@@ -211,8 +208,7 @@ if (api_get_setting('registration', 'email') == 'true')
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 
 // OPENID URL
-if(is_profile_editable() && api_get_setting('openid_authentication')=='true')
-{
+if(is_profile_editable() && api_get_setting('openid_authentication')=='true') {
 	$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
 	if (api_get_setting('profile', 'openid') !== 'true')
 		$form->freeze('openid');
@@ -231,14 +227,11 @@ $form->applyFilter('phone', 'trim');
 	$form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('phone', get_lang('EmailWrong'), 'email');*/
 
-
 //	PICTURE
-if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true')
-{
-	$form->addElement('file', 'picture', ($user_image != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
+if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
+	$form->addElement('file', 'picture', ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
 	$form->add_progress_bar();
-	if( strlen($user_data['picture_uri']) > 0)
-	{
+	if( strlen($user_data['picture_uri']) > 0) {
 		$form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 	}
 	$form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png','image/pjpeg'));
@@ -249,42 +242,38 @@ $form->addElement('select_language', 'language', get_lang('Language'));
 if (api_get_setting('profile', 'language') !== 'true')
 	$form->freeze('language');
 
-//	EXTENDED PROFILE
-if (api_get_setting('extended_profile') == 'true')
-{
-	$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
 
-	//	MY COMPETENCES
-	$form->add_html_editor('competences', get_lang('MyCompetences'), false);
-
-	//	MY DIPLOMAS
-	$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false);
-
-	//	WHAT I AM ABLE TO TEACH
-	$form->add_html_editor('teach', get_lang('MyTeach'), false);
-
-	//	MY PRODUCTIONS
-	$form->addElement('file', 'production', get_lang('MyProductions'));
-	if ($production_list = UserManager::build_production_list($_user['user_id'],'',true))
-	{
-			$form->addElement('static', 'productions_list', null, $production_list);
+//	EXTENDED PROFILE  this make the page very slow!
+if (api_get_setting('extended_profile') == 'true') {
+	if ($_GET['type']=='extended') {
+		//$form->addElement('html', '<a href="#" onclick="javascript:show_extend();"> show_extend_profile</a>');
+			
+		$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
+	
+		//	MY COMPETENCES
+		$form->add_html_editor('competences', get_lang('MyCompetences'), false);
+		//	MY DIPLOMAS
+		$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false);
+		//	WHAT I AM ABLE TO TEACH
+		$form->add_html_editor('teach', get_lang('MyTeach'), false);
+	
+		//	MY PRODUCTIONS
+		$form->addElement('file', 'production', get_lang('MyProductions'));
+		if ($production_list = UserManager::build_production_list($_user['user_id'],'',true)) {
+				$form->addElement('static', 'productions_list', null, $production_list);
+		}
+		//	MY PERSONAL OPEN AREA
+		$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false);
+		$form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
+		$form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim'); // openarea is untrimmed for maximum openness
 	}
-
-	//	MY PERSONAL OPEN AREA
-	$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false);
-
-	$form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
-	$form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim'); // openarea is untrimmed for maximum openness
 }
 
 //	PASSWORD
-if (is_profile_editable() && api_get_setting('profile', 'password') == 'true')
-{
+if (is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
 	$form->addElement('static', null, null, '<em>'.get_lang('Enter2passToChange').'</em>');
-
 	$form->addElement('password', 'password1', get_lang('Pass'),         array('size' => 40));
 	$form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));
-
 	//	user must enter identical password twice so we can prevent some user errors
 	$form->addRule(array('password1', 'password2'), get_lang('PassTwo'), 'compare');
 	if (CHECK_PASS_EASY_TO_FIND)
@@ -294,14 +283,11 @@ if (is_profile_editable() && api_get_setting('profile', 'password') == 'true')
 // EXTRA FIELDS
 $extra = UserManager::get_extra_fields(0,50,5,'ASC');
 $extra_data = UserManager::get_extra_user_data(api_get_user_id(),true);
-foreach($extra as $id => $field_details)
-{
-	if($field_details[6] == 0)
-	{
+foreach($extra as $id => $field_details) {
+	if($field_details[6] == 0) {
 		continue;
 	}
-	switch($field_details[2])
-	{
+	switch($field_details[2]) {
 		case USER_FIELD_TYPE_TEXT:
 			$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
 			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
@@ -317,8 +303,7 @@ foreach($extra as $id => $field_details)
 			break;
 		case USER_FIELD_TYPE_RADIO:
 			$group = array();
-			foreach($field_details[9] as $option_id => $option_details)
-			{
+			foreach($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
 			}
@@ -327,8 +312,7 @@ foreach($extra as $id => $field_details)
 			break;
 		case USER_FIELD_TYPE_SELECT:
 			$options = array();
-			foreach($field_details[9] as $option_id => $option_details)
-			{
+			foreach($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
 			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');	
@@ -336,8 +320,7 @@ foreach($extra as $id => $field_details)
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();
-			foreach($field_details[9] as $option_id => $option_details)
-			{
+			foreach($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
 			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
@@ -360,14 +343,10 @@ foreach($extra as $id => $field_details)
 			$form -> setDefaults($defaults);
 			break;
 		case USER_FIELD_TYPE_DOUBLE_SELECT:
-			foreach ($field_details[9] as $key=>$element)
-			{
-				if ($element[2][0] == '*')
-				{
+			foreach ($field_details[9] as $key=>$element) {
+				if ($element[2][0] == '*') {
 					$values['*'][$element[0]] = str_replace('*','',$element[2]);
-				}
-				else 
-				{
+				} else {
 					$values[0][$element[0]] = $element[2];
 				}
 			}
@@ -411,12 +390,9 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
 	$form->addElement('button', 'generate_api_key', get_lang('GenerateApiKey'),array('id' => 'id_generate_api_key','onclick' => 'generate_open_id_form()'));//generate_open_id_form()
 }
 //	SUBMIT
-if (is_profile_editable())
-{
+if (is_profile_editable()) {
 	$form->addElement('style_submit_button', 'apply_change', get_lang('SaveSettings'), 'class="save"');
-}
-else
-{
+} else {
 	$form->freeze();
 }
 
@@ -492,17 +468,18 @@ function upload_user_image($user_id)
 		$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? $user_id.'_' : '').uniqid('').'.'.$file_extension;
 	}
 
-	// get the picture and resize it 200x200
-	$temp = new image($_FILES['picture']['tmp_name']);
-	
+	// get the picture and resize it 200x200 only if the picture is bigger than 200px (width) 
+	$temp = new image($_FILES['picture']['tmp_name']);	
 	$picture_infos=getimagesize($_FILES['picture']['tmp_name']);
-	$thumbwidth = 200;
-	if (empty($thumbwidth) or $thumbwidth==0) {
-		$thumbwidth=200;
+	$max_size_for_picture = 200; // in pixels
+	if ($picture_infos[0]>$max_size_for_picture) {		
+		$thumbwidth = $max_size_for_picture;
+		if (empty($thumbwidth) or $thumbwidth==0) {
+			$thumbwidth=$max_size_for_picture;
+		}
+		$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+		$temp->resize($thumbwidth,$new_height,0);
 	}
-	$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
-
-	$temp->resize($thumbwidth,$new_height,0);
 	$type=$picture_infos[2];
 	
 	// original picture
@@ -608,11 +585,7 @@ if (!empty($_SESSION['production_uploaded']))
 {
 	$upload_production_success = ($_SESSION['production_uploaded'] == 'success');
 	unset($_SESSION['production_uploaded']);
-}
-
-
-elseif (isset($_POST['remove_production']))
-{
+} elseif (isset($_POST['remove_production'])) {
 	foreach (array_keys($_POST['remove_production']) as $production)
 	{
 		UserManager::remove_user_production($_user['user_id'], urldecode($production));
@@ -624,9 +597,7 @@ elseif (isset($_POST['remove_production']))
 	$form->removeElement('productions_list');
 
 	$file_deleted = true;
-}
-elseif ($form->validate())
-{
+} elseif ($form->validate()) {
 	$user_data = $form->exportValues();
 
 	// set password if a new one was provided
@@ -737,20 +708,26 @@ if (isset($_GET['show'])) {
 ==============================================================================
 */
 Display :: display_header('');
-if (!empty($file_deleted))
-{
+
+if (api_get_setting('extended_profile') == 'true') {	
+	echo '<div class="actions">';
+	if ($_GET['type']=='extended') {
+		echo '<a href="profile.php?type=reduced&show=1">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditNormalProfile').'</a>';			
+	} else {
+		echo '<a href="profile.php?type=extended&show=1">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditExtendProfile').'</a>';
+	}	
+	echo '</div>';
+} 
+
+if (!empty($file_deleted)) {
 	Display :: display_confirmation_message(get_lang('FileDeleted'),false);
-}
-elseif (!empty($update_success))
-{
+} elseif (!empty($update_success)) {
 	$message=get_lang('ProfileReg');	
-	if ($upload_picture_success == true) 
-	{
+	if ($upload_picture_success == true) {
 		$message.='<br /> '.get_lang('PictureUploaded');
 	}
 	
-	if ($upload_production_success == true) 
-	{
+	if ($upload_production_success == true) {
 		$message.='<br />'.get_lang('ProductionUploaded');
 	}
 		
@@ -761,18 +738,20 @@ if(!empty($warning_msg))
 {
 	Display :: display_warning_message($warning_msg,false);
 }
+
 //User picture size is calculated from SYSTEM path
-$image_syspath = UserManager::get_user_picture_path_by_id($userid,'system',false,true);
+$image_syspath = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system',false,true);
+$image_syspath['dir'].$image_syspath['file'];
 $image_size = getimagesize($image_syspath['dir'].$image_syspath['file']);
+
 //Web path
-$image_path = UserManager::get_user_picture_path_by_id($_user['user_id'],'web',false,true);
+$image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',false,true);
 $image_dir = $image_path['dir'];
 $image = $image_path['file'];
 $image_file = $image_dir.$image;
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
 	.'alt="'.$user_data['lastname'].' '.$user_data['firstname'].'" '
-	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
-
+	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; margin-top:0px;padding:5px;" ';
 if ($image_size[0] > 300) {
 	//limit display width to 300px
 	$img_attributes .= 'width="300" ';	
@@ -785,13 +764,14 @@ $big_image_width= $big_image_size[0];
 $big_image_height= $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
 
+echo '<div id="image-message-container" style="float:right;padding:5px;width:250px;" >';
 if ($image=='unknown.jpg') {
 	echo '<img '.$img_attributes.' />';
 } else {
 	echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 }
-if (api_get_setting('allow_message_tool')=='true') {
-	
+
+if (api_get_setting('allow_message_tool')=='true') {	
 	include (api_get_path(LIBRARY_PATH).'message.lib.php');
 	$number_of_new_messages = MessageManager::get_new_messages();
 	$number_of_outbox_message=MessageManager::get_number_of_messages_sent();
@@ -818,9 +798,10 @@ if (api_get_setting('allow_message_tool')=='true') {
 	if ($number_of_new_messages_of_friend>0) {
 		echo '<br/>';
 	}
-echo '</div>';
+	echo '</div>';
 }
 
+echo '</div>';
 
 $form->display();
 Display :: display_footer();

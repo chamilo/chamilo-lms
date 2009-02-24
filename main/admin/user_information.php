@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 18594 2009-02-19 20:17:05Z juliomontoya $
+// $Id: user_information.php 18640 2009-02-24 00:02:48Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,12 +73,12 @@ api_display_tool_title($tool_name);
 echo '<div align="right" style="margin-right:4em;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$_GET['user_id'].'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.gif').'</a></div>'."\n";
 //getting the user image
 
-$sysdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'system');
+$sysdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'system',false,true);
 $sysdir = $sysdir_array['dir'];
-$webdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'web');
+$webdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'web',false,true);
 $webdir = $webdir_array['dir'];
-$fullurl=$webdir.$user['picture_uri'];
-$system_image_path=$sysdir.$user['picture_uri'];
+$fullurl=$webdir.$webdir_array['file'];
+$system_image_path=$sysdir.$webdir_array['file'];
 list($width, $height, $type, $attr) = getimagesize($system_image_path);
 $resizing = (($height > 200) ? 'height="200"' : '');
 $height += 30;

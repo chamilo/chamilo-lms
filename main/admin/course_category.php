@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 18290 2009-02-06 17:10:11Z juliomontoya $
+<?php // $Id: course_category.php 18668 2009-02-24 19:12:46Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -199,13 +199,15 @@ if(!empty($category) && empty($action))
 	$result=api_sql_query($myquery,__FILE__,__LINE__);
 	$parent_id = 0;
 	if(Database::num_rows($result)>0){
-		$parent_id=Database::fetch_row($result);
+		$parent_id=Database::fetch_array($result);
 	}
+	
+	$parent_id['parent_id']?$link=' ('.$parent_id['parent_id'].')':$link='';
 	?>
 
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($parent_id); ?>"><?php echo Display::return_icon('folder_up.gif').get_lang("Back"); if(!empty($parent_id)) echo ' ('.$parent_id.')'; ?></a>
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo $parent_id['parent_id']; ?>"><?php echo Display::return_icon('folder_up.gif').get_lang("Back"); if(!empty($parent_id)) echo $link ?></a>
 
-	<?php
+	<?php 
 }
 ?>
 <a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=add"><?php echo Display::return_icon('folder_new.gif').get_lang("AddACategory"); if(!empty($category)) echo ' '.get_lang('Into').' '.Security::remove_XSS($category); ?></a>

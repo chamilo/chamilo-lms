@@ -203,9 +203,9 @@ class ImageManager
 			{
 				$is_dir = is_dir($fullpath.$entry);
 
-				if ($is_dir)
-				{
+				if ($is_dir) {
 					$dir_entry = Files::fixPath($fullpath.$entry);
+					/*
 					if (strpos($dir_entry, '/shared_folder/') !== false)
 					{
 						if (!preg_match('/.*\/shared_folder\/$/', $dir_entry))
@@ -217,6 +217,7 @@ class ImageManager
 							}
 						}
 					}
+					*/
 				}
 								
 

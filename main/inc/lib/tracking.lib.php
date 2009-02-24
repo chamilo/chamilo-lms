@@ -697,9 +697,11 @@ class Tracking {
 		
 		if (!empty ($id_session)) {
 			$sql .= ' WHERE session_course.id_session=' . $id_session;
-			$sql .=  ' AND access_url_id = '.$access_url_id;
+			if ($_configuration['multiple_access_urls']==true)
+				$sql .=  ' AND access_url_id = '.$access_url_id;
 		}  else {
-			$sql .=  ' WHERE access_url_id = '.$access_url_id;
+			if ($_configuration['multiple_access_urls']==true)
+				$sql .=  ' WHERE access_url_id = '.$access_url_id;
 		}
 		
 		$result = api_sql_query($sql, __FILE__, __LINE__);

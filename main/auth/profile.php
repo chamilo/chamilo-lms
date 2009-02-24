@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18664 2009-02-24 17:06:30Z juliomontoya $
+<?php // $Id: profile.php 18670 2009-02-24 20:49:13Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -780,11 +780,11 @@ if (api_get_setting('allow_message_tool')=='true') {
 	$number_of_new_messages_of_friend=UserFriend::get_message_number_invitation_by_user_id(api_get_user_id());
 	//echo '<div class="message-view" style="display:none;">'.get_lang('ViewMessages').'</div>';
 	echo '<div class="message-content">
-			<h2 class="message-title">'.get_lang('Message').'</h2>
+			<h2 class="message-title">'.get_lang('Messages').'</h2>
 			<p>
 				<a href="../messages/inbox.php" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />
 				<a href="../messages/outbox.php" class="message-body">'.get_lang('OutBox').$cant_out_box.'</a><br />
-				<a href="../messages/new_message.php" class="message-body">'.get_lang('Compose').'</a><br />
+				<a href="../messages/new_message.php" class="message-body">'.get_lang('ComposeMessage').'</a><br />
 			</p>';		
 	
 	 if (api_get_setting('allow_social_tool')=='true') {		 

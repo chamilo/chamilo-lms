@@ -5,7 +5,7 @@
 
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) Facultad de Matematicas, UADY (México)
+	Copyright (c) Facultad de Matematicas, UADY (Mï¿½xico)
 	Copyright (c) Evie, Free University of Brussels (Belgium)		
 
 	For a full list of contributors, see "credits.txt".
@@ -114,7 +114,7 @@ if ( trim($info_reply[4])=='Enviar' ) {
 if ($request===false) {
 	$interbreadcrumb[]= array (
 		'url' => '#',
-		'name' => get_lang($nameTools)
+		'name' => get_lang('Messages')
 	);
 	$interbreadcrumb[]= array (
 		'url' => 'outbox.php',

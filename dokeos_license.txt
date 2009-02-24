@@ -1,13 +1,13 @@
 ===============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2003-2008 Dokeos SPRL
 	Copyright (c) 2003-2007 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) 2003-2008 Vrije Universiteit Brussel (VUB)
 	Copyright (c) 2004-2008 Hoogeschool Gent (HoGent)
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+	For a full list of contributors, see "documentation/credits.html".
+	The full license can be read in "documentation/license.html".
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License

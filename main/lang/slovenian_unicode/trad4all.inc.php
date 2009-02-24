@@ -690,5 +690,6 @@ $ApiKeys = "API ključi";
 $Deny = "Onemogoči";
 $ThereIsNotQualifiedLearners = "Tu ni kvalificiranih učečih se uporabnikov";
 $ThereIsNotUnqualifiedLearners = "Tu ni nekvalificiranih učečih se uporabnikov";
+$SocialNetwork = "Socialno omrežje";
 $Invitation = "Povabilo";
 ?>

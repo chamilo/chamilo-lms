@@ -690,5 +690,6 @@ $ApiKeys = "API key";
 $Deny = "Non consentire";
 $ThereIsNotQualifiedLearners = "Non ci sono corsisti con valutazioni";
 $ThereIsNotUnqualifiedLearners = "Non ci sono corsisti senza valutazione";
+$SocialNetwork = "Rete di contatti";
 $Invitation = "Invito";
 ?>

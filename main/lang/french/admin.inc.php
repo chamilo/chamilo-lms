@@ -922,4 +922,8 @@ $FilterOff = "Filtre inactif";
 $FieldFilterSetOn = "Vous pouvez désormais utiliser ce champ comme un filtre";
 $FieldFilterSetOff = "Vous ne pouvez pas utiliser ce champ comme un filtre";
 $buttonAddUserField = "Ajouter un champ de profil";
+$UsersSubscribedToFollowingCoursesBecauseOfVirtualCourses = "Les utilisateurs ont été inscrits à plusieurs cours car plusieurs cours partagent le même code visuel";
+$TheFollowingCoursesAlreadyUseThisVisualCode = "Les cours suivants utilisent déjà ce code";
+$UsersSubscribedToBecauseVisualCode = "Les utilisateurs ont été inscrits à plusieurs cours car plusieurs cours partagent le même code visuel";
+$UsersUnsubscribedFromBecauseVisualCode = "Les utilisateurs ont été désinscrits de plusieurs cours car plusieurs cours partagent le même code visuel";
 ?>

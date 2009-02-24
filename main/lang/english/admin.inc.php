@@ -922,4 +922,8 @@ $FilterOff = "Filter off";
 $FieldFilterSetOn = "You can now use this field as a filter ";
 $FieldFilterSetOff = "You can\'t use this field as a filter ";
 $buttonAddUserField = "Add user field";
+$UsersSubscribedToFollowingCoursesBecauseOfVirtualCourses = "The users have been subscribed to the following courses because several courses share the same visual code";
+$TheFollowingCoursesAlreadyUseThisVisualCode = "The following courses already use this code";
+$UsersSubscribedToBecauseVisualCode = "The users have been subscribed to the following courses because several courses share the same visual code";
+$UsersUnsubscribedFromBecauseVisualCode = "The users have been unsubscribed from the following courses because several courses share the same visual code";
 ?>

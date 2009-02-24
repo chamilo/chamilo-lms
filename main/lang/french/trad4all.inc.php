@@ -690,5 +690,6 @@ $ApiKeys = "Clefs API";
 $Deny = "Refuser";
 $ThereIsNotQualifiedLearners = "Il n\'y a pas d\'apprenant coté";
 $ThereIsNotUnqualifiedLearners = "Il n\'y a pas d\'apprenant à coter";
+$SocialNetwork = "Réseau social";
 $Invitation = "Invitation";
 ?>

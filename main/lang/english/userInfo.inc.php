@@ -59,7 +59,6 @@ $SocialDeleted = "Contact deleted";
 $MessageOutboxComment = "This screen shows the messages you sent";
 $MyPersonalData = "My personal data";
 $AlterPersonalData = "Alter personal data";
-$SocialNetwork = "Social network";
 $Invites = "My invitations";
 $ContactsGroups = "Group contacts";
 $BackToOutbox = "Back to outbox";

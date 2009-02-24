@@ -59,7 +59,6 @@ $SocialDeleted = "Kontakt je bil odstranjen";
 $MessageOutboxComment = "Ta zaslon prikazuje tvoja odposlana sporočila";
 $MyPersonalData = "Moji osebni podatki";
 $AlterPersonalData = "Spremeni osebne podatke";
-$SocialNetwork = "Socialno omrežje";
 $Invites = "Moja vabila";
 $ContactsGroups = "Kontakti skupine";
 $BackToOutbox = "Nazaj k odposlanim sporočilom";

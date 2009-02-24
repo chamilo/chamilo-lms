@@ -690,5 +690,6 @@ $ApiKeys = "Llaves API";
 $Deny = "Denegar";
 $ThereIsNotQualifiedLearners = "No hay estudiantes calificados";
 $ThereIsNotUnqualifiedLearners = "No hay estudiantes sin calificar";
+$SocialNetwork = "Red social";
 $Invitation = "Invitación";
 ?>

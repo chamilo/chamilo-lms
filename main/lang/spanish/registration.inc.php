@@ -166,4 +166,7 @@ $UserImportFileMessage = "Si en el archivo XML/CVS los nombres de usuarios (user
 $UserAlreadyRegisteredByOtherCreator = "El usuario ya ha sido registrado por otro coach ";
 $NewUserInTheCourse = "Nuevo Usuario registrado en el curso";
 $MessageNewUserInTheCourse = "Este es un mensaje para informarle que se ha suscrito un nuevo usuario en el curso";
+$EditNormalProfile = "Edición de perfil normal";
+$EditExtendProfile = "Ampliar edición de perfil";
+$EditInformation = "Editar información";
 ?>

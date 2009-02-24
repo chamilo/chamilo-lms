@@ -926,4 +926,5 @@ $UsersSubscribedToFollowingCoursesBecauseOfVirtualCourses = "The users have been
 $TheFollowingCoursesAlreadyUseThisVisualCode = "The following courses already use this code";
 $UsersSubscribedToBecauseVisualCode = "The users have been subscribed to the following courses because several courses share the same visual code";
 $UsersUnsubscribedFromBecauseVisualCode = "The users have been unsubscribed from the following courses because several courses share the same visual code";
+$FilterUsers = "Filter users";
 ?>

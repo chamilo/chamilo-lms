@@ -1907,5 +1907,22 @@ class CourseManager
         $row = Database::fetch_array($res);
         return $row['code'];
     }
+    /**
+     * Get course code(s) from visual code
+     * @param   string  Visual code
+     * @return  array   List of codes for the given visual code
+     */
+    function get_courses_info_from_visual_code ($code) {
+    	$table = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $code = Database::escape_string($code);
+        $sql_query = "SELECT * FROM $table WHERE visual_code = '$code'";
+        $sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+        $result = array ();
+        while ($virtual_course = Database::fetch_array($sql_result))
+        {
+            $result[] = $virtual_course;
+        }
+        return $result;
+    }
 	
 } //end class CourseManager

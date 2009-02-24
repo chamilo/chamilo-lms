@@ -1,4 +1,4 @@
-<?php // $Id: user_import.php 18595 2009-02-19 21:17:17Z juliomontoya $
+<?php // $Id: user_import.php 18641 2009-02-24 00:49:03Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -144,29 +144,49 @@ function complete_missing_data($user)
 }
 /**
  * Save the imported data
+ * @param   array   List of users
+ * @return  void
+ * @uses global variable $inserted_in_course, which returns the list of courses the user was inserted in
  */
-function save_data($users)
-{
+function save_data($users) {
+    global $inserted_in_course;
+    // not all scripts declare the $inserted_in_course array (although they should)
+    if (!isset($inserted_in_course)) { $inserted_in_course = array(); }
 	require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$sendMail = $_POST['sendMail'] ? 1 : 0;
 	if (is_array($users)) {
-        foreach ($users as $index => $user)
-    	{
+        foreach ($users as $index => $user)	{
     		$user = complete_missing_data($user);
     		
     		$user['Status'] = api_status_key($user['Status']);
     		
     		$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '', $user['AuthSource']);
+            if (!is_array($user['Courses']) && !empty($user['Courses'])) {
+            	$user['Courses'] = array($user['Courses']);
+            }
             if (is_array($user['Courses'])) {
-        		foreach ($user['Courses'] as $index => $course)
-        		{
-        			if(CourseManager :: course_exists($course))
+        		foreach ($user['Courses'] as $index => $course) {
+        			if(CourseManager :: course_exists($course)) {
         				CourseManager :: subscribe_user($user_id, $course,$user['Status']);
+                        $c_info = CourseManager::get_course_information($course); 
+                        $inserted_in_course[$course] = $c_info['title'];
+                    } 
+                    if (CourseManager :: course_exists($course,true)) {
+                    	// also subscribe to virtual courses through check on visual code
+                        $list = CourseManager :: get_courses_info_from_visual_code($course);
+                        foreach ($list as $vcourse) {
+                        	if ($vcourse['code'] == $course) {
+                        		//ignore, this has already been inserted
+                        	} else {
+                                CourseManager :: subscribe_user($user_id, $vcourse['code'],$user['Status']);                		
+                                $inserted_in_course[$vcourse['code']] = $vcourse['title'];
+                        	}
+                        }
+                    }
         		}
             }
-    		if (strlen($user['ClassName']) > 0)
-    		{
+    		if (strlen($user['ClassName']) > 0) {
     			$class_id = ClassManager :: get_class_id($user['ClassName']);
     			ClassManager :: add_user($user_id, $class_id);
     		}
@@ -183,8 +203,7 @@ function save_data($users)
 				}
 			}
 		
-    		if ($sendMail)
-    		{			
+    		if ($sendMail) {			
     			$recipient_name = $user['FirstName'].' '.$user['LastName'];
     			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');			
     			$emailbody = get_lang('Dear').$user['FirstName'].' '.$user['LastName'].",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";						
@@ -201,13 +220,10 @@ function save_data($users)
  * @param string $file Path to the CSV-file
  * @return array All userinformation read from the file
  */
-function parse_csv_data($file)
-{
+function parse_csv_data($file) {
 	$users = Import :: csv_to_array($file);
-	foreach ($users as $index => $user)
-	{
-		if (isset ($user['Courses']))
-		{
+	foreach ($users as $index => $user) {
+		if (isset ($user['Courses'])) {
 			$user['Courses'] = explode('|', trim($user['Courses']));
 		}
 		$users[$index] = $user;
@@ -325,8 +341,20 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0)
 	$errors = validate_data($users);
 	if (count($errors) == 0)
 	{
+        $inserted_in_course = array();
 		save_data($users);
-		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported')));
+        $msg = ' (';
+        if (count($inserted_in_course)>1) {
+        	$msg .= get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').':';
+            foreach ($inserted_in_course as $course) {
+            	$msg .= ' '.$course.',';
+            }
+            $msg = substr($msg,0,-1);
+            $msg .=')';
+        }
+        Security::clear_token();
+        $tok = Security::get_token();       
+		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported').$msg).'&sec_token='.$tok);
 		exit ();
 	}
 }

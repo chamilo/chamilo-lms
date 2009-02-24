@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 18428 2009-02-10 23:07:44Z ivantcholakov $
+<?php // $Id: course_list.php 18647 2009-02-24 02:29:20Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -223,6 +223,20 @@ else
 	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 	$tool_name = get_lang('CourseList');
 	Display :: display_header($tool_name);
+    if (isset($_GET['action'])) {
+        switch ($_GET['action']) {
+            case 'show_msg':
+                if (!empty($_GET['warn'])) {
+                    Display::display_warning_message(urldecode($_GET['warn']));
+                }
+                if (!empty($_GET['msg'])) {
+                	Display::display_normal_message(urldecode($_GET['msg']));
+                }
+                break;
+            default:
+                break;
+        }
+    }
 	//api_display_tool_title($tool_name);
 	if (isset ($_GET['delete_course']))
 	{

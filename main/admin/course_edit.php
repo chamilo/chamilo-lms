@@ -1,30 +1,5 @@
-<?php
-
-// $Id: course_edit.php 15245 2008-05-08 16:53:52Z juliomontoya $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php // $Id: course_edit.php 18647 2009-02-24 02:29:20Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	@package dokeos.admin
@@ -184,6 +159,22 @@ if( $form->validate())
 	$dbName = $_POST['dbName'];
 	$course_code = $course['code'];
 	$visual_code = $course['visual_code'];
+    
+    // Check if the visual code is already used by *another* course
+    $visual_code_is_used = false;
+    error_log($visual_code);
+    $warn = get_lang('TheFollowingCoursesAlreadyUseThisVisualCode').':';
+    if (!empty($visual_code)) {
+        $list = CourseManager::get_courses_info_from_visual_code($visual_code);
+        foreach ($list as $course_temp) {
+            error_log($course_temp['code']);
+        	if ($course_temp['code'] != $course_code) {
+        	   $visual_code_is_used = true;
+               $warn .= ' '.$course_temp['title'].' ('.$course_temp['code'].'),';
+            }
+        }
+        $warn = substr($warn,0,-1);
+    }
 	
 	$tutor_id = $course['tutor_name'];
 	$tutor_name=$platform_teachers[$tutor_id];
@@ -258,7 +249,11 @@ if( $form->validate())
 	
 	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE,$course_db_name);
 	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."'";
-	header('Location: course_list.php');
+	if ($visual_code_is_used == true) {
+	    header('Location: course_list.php?action=show_msg&warn='.urlencode($warn));	
+	} else {
+        header('Location: course_list.php');
+	}
 	exit ();
 }
 Display::display_header($tool_name);

@@ -1,26 +1,5 @@
-<?php // $Id: session_import.php 18197 2009-02-03 16:13:09Z juliomontoya $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php // $Id: session_import.php 18650 2009-02-24 07:58:52Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	@package dokeos.admin
@@ -38,6 +17,7 @@ require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require(api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
 require_once(api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
 require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
+require_once(api_get_path(INCLUDE_PATH).'lib/course.lib.php');
 $formSent=0;
 $errorMsg='';
 
@@ -54,6 +34,7 @@ $tool_name=get_lang('ImportSessionListXMLCSV');
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('AdministrationTools'));
 
 set_time_limit(0);
+$inserted_in_course = array();
 
 if ($_POST['formSent']) {
 	if (isset($_FILES['import_file']['tmp_name'])) {
@@ -188,15 +169,15 @@ if ($_POST['formSent']) {
 					if (sizeof($keys)) {
 
 						$currentCourseCode = $keys['visual_code'];
-						$currentCourseId = $keys["currentCourseId"];
+						$currentCourseId = $keys['currentCourseId'];
 						if(empty($currentCourseCode))
 							$currentCourseCode = $currentCourseId;
-						$currentCourseDbName = $keys["currentCourseDbName"];
-						$currentCourseRepository = $keys["currentCourseRepository"];
+						$currentCourseDbName = $keys['currentCourseDbName'];
+						$currentCourseRepository = $keys['currentCourseRepository'];
 
 						if($currentCourseId == strtoupper($course_code)) {
 							if (empty ($title)) {
-								$title = $keys["currentCourseCode"];
+								$title = $keys['currentCourseCode'];
 							}
 							prepare_course_repository($currentCourseRepository, $currentCourseId);
 							update_Db_course($currentCourseDbName);
@@ -338,17 +319,14 @@ if ($_POST['formSent']) {
 							}
 						}
 					}
-
-					foreach($sessionNode->Course as $courseNode){
+					foreach ($sessionNode->Course as $courseNode){
 
 						$CourseCode = $courseNode->CourseCode;
 
-						// verify that the course pointed by the course code node exists
-						$sql = 'SELECT 1 FROM '.$tbl_course.' WHERE code="'.Database::escape_string($CourseCode).'"';
-						$rs = api_sql_query($sql, __FILE__, __LINE__);
-						if(Database::num_rows($rs)>0)
-						{ // if the course exists we continue
-
+						// Verify that the course pointed by the course code node exists
+                        if (CourseManager::course_exists($CourseCode)) {
+						    // If the course exists we continue
+                            $c_info = CourseManager::get_course_information($CourseCode);
 							$Coach = substr($courseNode->Coach,0,20);
 							if(!empty($Coach)){
 								$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
@@ -368,6 +346,7 @@ if ($_POST['formSent']) {
 										  id_coach='$CoachId',
 										  id_session='$session_id'";
 							$rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
+                            
 							if(Database::affected_rows()){
 								$countCourses++;
 
@@ -377,14 +356,14 @@ if ($_POST['formSent']) {
 									$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$username."'";
 									$rsUser = api_sql_query($sqlUser);
 									list($user_id) = (Database::fetch_array($rsUser));
-									if(!empty($user_id))
-									{
+									if (!empty($user_id)) {
 										$sql = "INSERT IGNORE INTO $tbl_session_user SET
 											id_user='$user_id',
 											id_session = '$session_id'";
 
-										if(Database::affected_rows())
+										if(Database::affected_rows()) {
 											$countUsers++;
+                                        }
 										$rsUser = api_sql_query($sql,__FILE__,__LINE__);
 
 										$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
@@ -392,19 +371,83 @@ if ($_POST['formSent']) {
 												course_code='$CourseCode',
 												id_session = '$session_id'";
 										$rsUsers = api_sql_query($sql,__FILE__,__LINE__);
-										if(Database::affected_rows())
+										if (Database::affected_rows()) {
 											$countUsersCourses++;
-									}
-									else
-									{
+                                        }
+									} else {
 										$errorMsg .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
 									}
 								}
 								api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);
+                                $inserted_in_course[$CourseCode] = $c_info['title'];
 							}
-						}
-						else
-						{ // if the course does not exists
+						} elseif (CourseManager::course_exists($CourseCode,true)) {
+                            // if the course exists we continue
+                            // also subscribe to virtual courses through check on visual code
+                            $list = CourseManager :: get_courses_info_from_visual_code($CourseCode);
+                            foreach ($list as $vcourse) {
+                                if ($vcourse['code'] == $CourseCode) {
+                                    //ignore, this has already been inserted
+                                } else {
+                                    $Coach = substr($courseNode->Coach,0,20);
+                                    if(!empty($Coach)){
+                                        $sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
+                                        $rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
+                                        list($CoachId) = (Database::fetch_array($rsCoach));
+                                        if(empty($CoachId))
+                                        {
+                                            $errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
+                                        }
+                                    }
+                                    else {
+                                        $Coach = '';
+                                    }
+        
+                                    $sqlCourse = "INSERT INTO $tbl_session_course SET
+                                                  course_code = '".$vcourse['code']."',
+                                                  id_coach='$CoachId',
+                                                  id_session='$session_id'";
+                                    $rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
+                                    if(Database::affected_rows()){
+                                        $countCourses++;
+        
+                                        $countUsersCourses = 0;
+                                        foreach ($courseNode->User as $userNode){
+                                            $username = substr($userNode,0,20);
+                                            $sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$username."'";
+                                            $rsUser = api_sql_query($sqlUser);
+                                            list($user_id) = (Database::fetch_array($rsUser));
+                                            if(!empty($user_id))
+                                            {
+                                                $sql = "INSERT IGNORE INTO $tbl_session_user SET
+                                                    id_user='$user_id',
+                                                    id_session = '$session_id'";
+        
+                                                if(Database::affected_rows())
+                                                    $countUsers++;
+                                                $rsUser = api_sql_query($sql,__FILE__,__LINE__);
+        
+                                                $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
+                                                        id_user='$user_id',
+                                                        course_code='".$vcourse['code']."',
+                                                        id_session = '$session_id'";
+                                                $rsUsers = api_sql_query($sql,__FILE__,__LINE__);
+                                                if(Database::affected_rows())
+                                                    $countUsersCourses++;
+                                            }
+                                            else
+                                            {
+                                                $errorMsg .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
+                                            }
+                                        }
+                                        api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);
+                                    }                            
+                                    
+                                }
+                                $inserted_in_course[$vcourse['code']] = $vcourse['title'];
+                            }
+                            
+                        } else { // if the course does not exists
 							$errorMsg .= get_lang('CourseDoesNotExist').' : '.$CourseCode.'<br />';
 						}
 					}
@@ -478,8 +521,8 @@ if ($_POST['formSent']) {
 								date_start = '$DateStart',
 								date_end = '$DateEnd'";
 					$rsSession = api_sql_query($sqlSession, __FILE__, __LINE__);
-					$update = false;
-					if(!Database::affected_rows($rsSession)){
+                    $update = false;
+					if($rSession === false){
 						$update = true;
 						$sqlSession = "UPDATE $tbl_session SET
 										id_coach = '$Coach',
@@ -495,7 +538,7 @@ if ($_POST['formSent']) {
 						api_sql_query("DELETE FROM $tbl_session_course WHERE id_session='$session_id'",__FILE__,__LINE__);
 						api_sql_query("DELETE FROM $tbl_session_course_user WHERE id_session='$session_id'",__FILE__,__LINE__);
 					} else {
-						$session_id = mysql_insert_id($rsSession);
+						$session_id = mysql_insert_id();
 					}
 					
 					$countSessions++;
@@ -505,10 +548,9 @@ if ($_POST['formSent']) {
 						$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$user."'";
 						$rsUser = api_sql_query($sqlUser);
 						list($user_id) = (Database::fetch_array($rsUser));
-						$sql = "INSERT INTO $tbl_session_user SET
+						$sql = "INSERT IGNORE INTO $tbl_session_user SET
 								id_user='$user_id',
 								id_session = '$session_id'";
-
 						$rsUser = api_sql_query($sql,__FILE__,__LINE__);
 						if(Database::affected_rows()){
 							$countUsers++;
@@ -516,45 +558,98 @@ if ($_POST['formSent']) {
 					}
 
 					$courses = explode('|',$enreg['Courses']);
+
 					foreach($courses as $course){
-						$CourseCode = substr($course,0,strpos($course,'['));
+                        $CourseCode = $course;
+                        if (CourseManager::course_exists($CourseCode)) {
+                            // If the course exists we continue
+                            $c_info = CourseManager::get_course_information($CourseCode);
 
-						$Coach = strstr($course,'[');
-						$Coach = substr($Coach,1,strpos($Coach,']')-1);
-
-						if(!empty($Coach)){
-							$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
-							$rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
-							list($Coach) = (Database::fetch_array($rsCoach));
-						} else {
-							$Coach = '';
-						}
-
-						$sqlCourse = "INSERT INTO $tbl_session_course SET
-									  course_code = '$CourseCode',
-									  id_coach='$Coach',
-									  id_session='$session_id'";
-
-						$rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
-						if(Database::affected_rows()){
-							$countCourses++;
-							$users = substr($course , strpos($course,'[',1)+1 , strpos($course,']',1));
-							$users = explode('|',$enreg['Users']);
-							$countUsersCourses = 0;
-							foreach ($users as $user){
-								$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$user."'";
-								$rsUser = api_sql_query($sqlUser);
-								list($user_id) = (Database::fetch_array($rsUser));
-								$sql = "INSERT INTO $tbl_session_course_user SET
-										id_user='$user_id',
-										course_code='$CourseCode',
-										id_session = '$session_id'";
-								$rsUsers = api_sql_query($sql,__FILE__,__LINE__);
-								if(Database::affected_rows())
-									$countUsersCourses++;
-							}
-							api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);
-						}
+    						$Coach = strstr($course,'[');
+    						$Coach = substr($Coach,1,strpos($Coach,']')-1);
+    
+    						if(!empty($Coach)){
+    							$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
+    							$rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
+    							list($Coach) = (Database::fetch_array($rsCoach));
+    						} else {
+    							$Coach = '';
+    						}
+    
+    						$sqlCourse = "INSERT INTO $tbl_session_course SET
+    									  course_code = '$CourseCode',
+    									  id_coach='$Coach',
+    									  id_session='$session_id'";
+    
+    						$rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
+    						if(Database::affected_rows()){
+    							$countCourses++;
+    							$users = substr($course , strpos($course,'[',1)+1 , strpos($course,']',1));
+    							$users = explode('|',$enreg['Users']);
+    							$countUsersCourses = 0;
+    							foreach ($users as $user){
+    								$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$user."'";
+    								$rsUser = api_sql_query($sqlUser);
+    								list($user_id) = (Database::fetch_array($rsUser));
+    								$sql = "INSERT INTO $tbl_session_course_user SET
+    										id_user='$user_id',
+    										course_code='$CourseCode',
+    										id_session = '$session_id'";
+    								$rsUsers = api_sql_query($sql,__FILE__,__LINE__);
+    								if(Database::affected_rows())
+    									$countUsersCourses++;
+    							}
+    							api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);
+    						}
+                            $c_info = CourseManager::get_course_information($CourseCode);
+                            $inserted_in_course[$CourseCode] = $c_info['title'];                        
+                        }
+                        if (CourseManager::course_exists($CourseCode,true)) {
+                            $list = CourseManager :: get_courses_info_from_visual_code($CourseCode);
+                            foreach ($list as $vcourse) {
+                                if ($vcourse['code'] == $CourseCode) {
+                                    //ignore, this has already been inserted
+                                } else {
+                                    $Coach = strstr($course,'[');
+                                    $Coach = substr($Coach,1,strpos($Coach,']')-1);
+            
+                                    if(!empty($Coach)){
+                                        $sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
+                                        $rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
+                                        list($Coach) = (Database::fetch_array($rsCoach));
+                                    } else {
+                                        $Coach = '';
+                                    }
+            
+                                    $sqlCourse = "INSERT INTO $tbl_session_course SET
+                                                  course_code = '".$vcourse['code']."',
+                                                  id_coach='$Coach',
+                                                  id_session='$session_id'";
+            
+                                    $rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
+                                    if(Database::affected_rows()){
+                                        $countCourses++;
+                                        $users = substr($course , strpos($course,'[',1)+1 , strpos($course,']',1));
+                                        $users = explode('|',$enreg['Users']);
+                                        $countUsersCourses = 0;
+                                        foreach ($users as $user){
+                                            $sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$user."'";
+                                            $rsUser = api_sql_query($sqlUser);
+                                            list($user_id) = (Database::fetch_array($rsUser));
+                                            $sql = "INSERT INTO $tbl_session_course_user SET
+                                                    id_user='$user_id',
+                                                    course_code='".$vcourse['code']."',
+                                                    id_session = '$session_id'";
+                                            $rsUsers = api_sql_query($sql,__FILE__,__LINE__);
+                                            if(Database::affected_rows())
+                                                $countUsersCourses++;
+                                        }
+                                        api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='".$vcourse['code']."'",__FILE__,__LINE__);
+                                    }
+                                }
+                            }
+                            $inserted_in_course[$vcourse['code']] = $vcourse['title'];                        
+                        }
 					}
 					api_sql_query("UPDATE $tbl_session SET nbr_users='$countUsers', nbr_courses='$countCourses' WHERE id='$session_id'",__FILE__,__LINE__);
 
@@ -565,11 +660,18 @@ if ($_POST['formSent']) {
 			$errorMsg = get_lang('ButProblemsOccured').' :<br />'.$errorMsg;
 		}
 
+        if (count($inserted_in_course)>1) {
+        	$warn = get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').': ';
+            foreach ($inserted_in_course as $code => $title) {
+            	$warn .= ' '.$title.' ('.$code.'),';
+            }
+            $warn .= substr($warn,0,-1);
+        }
 		if($countSessions == 1) {
-			header('Location: resume_session.php?id_session='.$session_id);
+			header('Location: resume_session.php?id_session='.$session_id.'&warn='.urlencode($warn));
 			exit;
 		} else {
-			header('Location: session_list.php?action=show_message&message='.urlencode(get_lang('FileImported').' '.$errorMsg));
+			header('Location: session_list.php?action=show_message&message='.urlencode(get_lang('FileImported').' '.$errorMsg.'&warn='.urlencode($warn)));
 			exit;
 		}
 	} else {
@@ -579,6 +681,14 @@ if ($_POST['formSent']) {
 
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
+if (count($inserted_in_course) > 1) {
+	$msg = get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').': ';
+    foreach ($inserted_in_course as $code => $title) {
+    	$msg .= ' '.$title.' ('.$title.'),';
+    }
+    $msg = substr($msg,0,-1);
+    Display::display_warning_message($msg);
+}
 ?>
 
 <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin:0px;">

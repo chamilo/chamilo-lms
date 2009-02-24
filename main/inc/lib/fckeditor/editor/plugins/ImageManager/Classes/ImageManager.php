@@ -226,9 +226,13 @@ class ImageManager
 									//checking visibility		
 					$base_dir = substr($dir_entry, 0, strpos($dir_entry,'/document/')+9); 
 					$new_dir  = substr($dir_entry, strlen($base_dir),-1); //
-					global $_course;	
-					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
-					$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);							
+					global $_course;
+					if (isset($_course['dbName']) && $_course<>'-1') {
+						$doc_id = DocumentManager::get_document_id($_course, $new_dir );
+						$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);		
+					}	
+						
+					
 					if ($visible_status=='0' || $visible_status=='-1') {					 
 						continue;					
 					}				
@@ -247,8 +251,10 @@ class ImageManager
 						$base_dir = substr($fullpath.$entry, 0, strpos($fullpath.$entry,'/document/')+9); 
 						$new_dir  = substr($fullpath.$entry, strlen($base_dir));
 						global $_course;	
-						$doc_id = DocumentManager::get_document_id($_course, $new_dir );
-						$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);										
+						if (isset($_course['dbName']) && $_course<>'-1') {
+							$doc_id = DocumentManager::get_document_id($_course, $new_dir );
+							$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);										
+						}
 						if ($visible_status=='0' || $visible_status=='-1') {					 
 							continue;					
 						}
@@ -558,8 +564,11 @@ class ImageManager
 			if(!empty($group_properties['directory'])) {
 				$dokeosFolder=$group_properties['directory'].$dokeosFolder;//get Dokeos
 			}
-			$doc_id = add_document($_course, $document_path,'file', $dokeosFileSize , $dokeosFile); //get Dokeos																								
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id);//get Dokeos
+			if (isset($_course['dbName']) && $_course<>'-1') {
+				$doc_id = add_document($_course, $document_path,'file', $dokeosFileSize , $dokeosFile); //get Dokeos																								
+				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id);//get Dokeos	
+			}
+
 			/*
 			if (!(api_is_platform_admin() || api_is_course_admin())) {
 				//setting invisible by default for the students
@@ -721,7 +730,9 @@ class ImageManager
 			//deleting from the DB
 			global $_course;
 			$document_path = substr($fullpath, strpos($fullpath,'/document/')+9, strlen($fullpath)); //   /shared_folder/4/name
-			DocumentManager::delete_document($_course,$document_path,$fullpath);
+			if (isset($_course['dbName']) && $_course<>'-1') {
+				DocumentManager::delete_document($_course,$document_path,$fullpath);
+			}
 			Return Files::delFile($thumbnail);
 		}
 		else

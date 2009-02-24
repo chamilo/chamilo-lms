@@ -1,4 +1,4 @@
-<?php // $Id: user_import.php 18645 2009-02-24 02:00:35Z yannoo $
+<?php // $Id: user_import.php 18648 2009-02-24 05:35:43Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -10,70 +10,56 @@
 /**
  * validate the imported data
  */
-function validate_data($users)
-{
+function validate_data($users) {
 	global $defined_auth_sources;
 	$errors = array ();
 	$usernames = array ();
-	foreach ($users as $index => $user)
-	{
+	foreach ($users as $index => $user) {
 		//1. check if mandatory fields are set	
 		$mandatory_fields = array ('LastName', 'FirstName');
-		if (api_get_setting('registration', 'email') == 'true')
-		{
+		if (api_get_setting('registration', 'email') == 'true') {
 			$mandatory_fields[] = 'Email';	
 		}
-		foreach ($mandatory_fields as $key => $field)
-		{
-			if (!isset ($user[$field]) || strlen($user[$field]) == 0)
-			{
+		foreach ($mandatory_fields as $key => $field) {
+			if (!isset ($user[$field]) || strlen($user[$field]) == 0) {
 				$user['error'] = get_lang($field.'Mandatory');
 				$errors[] = $user;
 			}
 		}
 		//2. check username
-		if (isset ($user['UserName']) && strlen($user['UserName']) != 0)
-		{
+		if (isset ($user['UserName']) && strlen($user['UserName']) != 0) {
 			//2.1. check if no username was used twice in import file
-			if (isset ($usernames[$user['UserName']]))
-			{
+			if (isset ($usernames[$user['UserName']])) {
 				$user['error'] = get_lang('UserNameUsedTwice');
 				$errors[] = $user;
 			}
 			$usernames[$user['UserName']] = 1;
 			//2.2. check if username isn't allready in use in database
-			if (!UserManager :: is_username_available($user['UserName']))
-			{
+			if (!UserManager :: is_username_available($user['UserName'])) {
 				$user['error'] = get_lang('UserNameNotAvailable');
 				$errors[] = $user;
 			}
 			//2.3. check if username isn't longer than the 20 allowed characters
-			if (strlen($user['UserName']) > 20)
-			{
+			if (strlen($user['UserName']) > 20) {
 				$user['error'] = get_lang('UserNameTooLong');
 				$errors[] = $user;
 			}
 		}
 		//3. check status
-		if (isset ($user['Status']) && !api_status_exists($user['Status']))
-		{
+		if (isset ($user['Status']) && !api_status_exists($user['Status'])) {
 			$user['error'] = get_lang('WrongStatus');
 			$errors[] = $user;
 		}
 		//4. Check classname
-		if (isset ($user['ClassName']) && strlen($user['ClassName']) != 0)
-		{
-			if (!ClassManager :: class_name_exists($user['ClassName']))
-			{
+		if (isset ($user['ClassName']) && strlen($user['ClassName']) != 0) {
+			if (!ClassManager :: class_name_exists($user['ClassName'])) {
 				$user['error'] = get_lang('ClassNameNotAvailable');
 				$errors[] = $user;
 			}
 		}
 		//5. Check authentication source
-		if (isset ($user['AuthSource']) && strlen($user['AuthSource']) != 0)
-		{
-			if (!in_array($user['AuthSource'], $defined_auth_sources))
-			{
+		if (isset ($user['AuthSource']) && strlen($user['AuthSource']) != 0) {
+			if (!in_array($user['AuthSource'], $defined_auth_sources)) {
 				$user['error'] = get_lang('AuthSourceNotAvailable');
 				$errors[] = $user;
 			}
@@ -85,18 +71,14 @@ function validate_data($users)
  * Add missing user-information (which isn't required, like password, username
  * etc)
  */
-function complete_missing_data($user)
-{
+function complete_missing_data($user) {
 	//1. Create a username if necessary
-	if (!isset ($user['UserName']) || strlen($user['UserName']) == 0)
-	{
+	if (!isset ($user['UserName']) || strlen($user['UserName']) == 0) {
 		$username = strtolower(ereg_replace('[^a-zA-Z]', '', substr($user['FirstName'], 0, 3).' '.substr($user['LastName'], 0, 4)));
-		if (!UserManager :: is_username_available($username))
-		{
+		if (!UserManager :: is_username_available($username)) {
 			$i = 0;
 			$temp_username = $username.$i;
-			while (!UserManager :: is_username_available($temp_username))
-			{
+			while (!UserManager :: is_username_available($temp_username)) {
 				$temp_username = $username.++$i;
 			}
 			$username = $temp_username;
@@ -104,18 +86,15 @@ function complete_missing_data($user)
 		$user['UserName'] = $username;
 	}
 	//2. generate a password if necessary
-	if (!isset ($user['Password']) || strlen($user['Password']) == 0)
-	{
+	if (!isset ($user['Password']) || strlen($user['Password']) == 0) {
 		$user['Password'] = api_generate_password();
 	}
 	//3. set status if not allready set
-	if (!isset ($user['Status']) || strlen($user['Status']) == 0)
-	{
+	if (!isset ($user['Status']) || strlen($user['Status']) == 0) {
 		$user['Status'] = 'user';
 	}
 	//4. set authsource if not allready set
-	if (!isset ($user['AuthSource']) || strlen($user['AuthSource']) == 0)
-	{
+	if (!isset ($user['AuthSource']) || strlen($user['AuthSource']) == 0) {
 		$user['AuthSource'] = PLATFORM_AUTH_SOURCE;
 	}
 	return $user;
@@ -145,7 +124,7 @@ function save_data($users) {
             }
             if (is_array($user['Courses'])) {
         		foreach ($user['Courses'] as $index => $course) {
-        			if(CourseManager :: course_exists($course)) {
+        			if (CourseManager :: course_exists($course)) {
         				CourseManager :: subscribe_user($user_id, $course,$user['Status']);
                         $c_info = CourseManager::get_course_information($course); 
                         $inserted_in_course[$course] = $c_info['title'];
@@ -211,12 +190,10 @@ function parse_csv_data($file) {
 /**
  * XML-parser: handle start of element
  */
-function element_start($parser, $data)
-{
+function element_start($parser, $data) {
 	global $user;
 	global $current_tag;
-	switch ($data)
-	{
+	switch ($data) {
 		case 'Contact' :
 			$user = array ();
 			break;
@@ -227,8 +204,7 @@ function element_start($parser, $data)
 /**
  * XML-parser: handle end of element
  */
-function element_end($parser, $data)
-{
+function element_end($parser, $data) {
 	global $user;
 	global $users;
 	global $current_value;
@@ -253,8 +229,7 @@ function element_end($parser, $data)
 /**
  * XML-parser: handle character data
  */
-function character_data($parser, $data)
-{
+function character_data($parser, $data) {
 	global $current_value;
 	$current_value = $data;
 }
@@ -263,8 +238,7 @@ function character_data($parser, $data)
  * @param string $file Path to the XML-file
  * @return array All userinformation read from the file
  */
-function parse_xml_data($file)
-{
+function parse_xml_data($file) {
 	global $current_tag;
 	global $current_value;
 	global $user;
@@ -293,8 +267,7 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 $formSent = 0;
 $errorMsg = '';
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
-if (is_array($extAuthSource))
-{
+if (is_array($extAuthSource)) {
 	$defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 
@@ -305,20 +278,15 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 set_time_limit(0);
 $extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC',false);
 
-if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0)
-{
+if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
-	if ($file_type == 'csv')
-	{
+	if ($file_type == 'csv') {
 		$users = parse_csv_data($_FILES['import_file']['tmp_name']);
-	}
-	else
-	{
+	} else {
 		$users = parse_xml_data($_FILES['import_file']['tmp_name']);
 	}
 	$errors = validate_data($users);
-	if (count($errors) == 0)
-	{
+	if (count($errors) == 0) {
         $inserted_in_course = array();
 		save_data($users);
         $msg2 = '';
@@ -338,16 +306,13 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0)
 Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 
-if($_FILES['import_file']['size'] == 0 AND $_POST)
-{
+if($_FILES['import_file']['size'] == 0 AND $_POST) {
 	Display::display_error_message(get_lang('ThisFieldIsRequired'));
 }
 
-if (count($errors) != 0)
-{
+if (count($errors) != 0) {
 	$error_message = '<ul>';
-	foreach ($errors as $index => $error_user)
-	{
+	foreach ($errors as $index => $error_user) {
 		$error_message .= '<li><b>'.$error_user['error'].'</b>: ';
 		$error_message .= $error_user['UserName'].'&nbsp;('.$error_user['FirstName'].' '.$error_user['LastName'].')';
 		$error_message .= '</li>';
@@ -429,4 +394,3 @@ if ($count_fields > 0) {
 ==============================================================================
 */
 Display :: display_footer();
-?>

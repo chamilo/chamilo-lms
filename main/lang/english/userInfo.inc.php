@@ -61,5 +61,5 @@ $MyPersonalData = "My personal data";
 $AlterPersonalData = "Alter personal data";
 $Invites = "My invitations";
 $ContactsGroups = "Group contacts";
-$BackToOutbox = "Back to outbox";
+$ErrorMessageSend = "Error the message send";
 ?>

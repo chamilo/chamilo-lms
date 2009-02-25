@@ -27,7 +27,6 @@ $MessageDeleted = "The message has been deleted";
 $ConfirmDeleteMessage = "Are you sure you want to delete the selected message? ";
 $DeleteMessage = "Delete message";
 $ReadMessage = "Read message";
-$Outbox = "Outbox";
 $SendInviteMessage = "Send invite message";
 $SendMessageInvitation = "Are you sure that you wish to send these invitations ?";
 ?>

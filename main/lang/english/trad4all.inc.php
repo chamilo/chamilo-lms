@@ -685,11 +685,13 @@ $SendFileError = "An error has been detected while receiving your file. Please c
 $Expired = "Expired";
 $InvitationHasBeenSent = "The invitation has been sent";
 $InvitationHasBeenNotSent = "The invitation hasn\'t been sent";
+$Outbox = "Outbox";
 $Overview = "Overview";
 $ApiKeys = "API keys";
 $Deny = "Deny";
 $ThereIsNotQualifiedLearners = "There are no qualified learners";
 $ThereIsNotUnqualifiedLearners = "There are no unqualified learners";
 $SocialNetwork = "Social network";
+$BackToOutbox = "Back to outbox";
 $Invitation = "Invitation";
 ?>

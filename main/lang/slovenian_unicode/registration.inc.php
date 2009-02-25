@@ -169,4 +169,7 @@ $UserImportFileMessage = "Če v XML/CVS datoteki manjkajo uporabniška imena, se
 $UserAlreadyRegisteredByOtherCreator = "Uporabnik je že vpisan s strani drugega inštruktorja.";
 $NewUserInTheCourse = "Nov uporabnik v tečaju";
 $MessageNewUserInTheCourse = "To je sporočilo, ki vas obvešča, da je v tečaju nov uporabnik";
+$EditNormalProfile = "Uredi običajen profil";
+$EditExtendProfile = "Uredi razširjen profil";
+$EditInformation = "Uredi informacije";
 ?>

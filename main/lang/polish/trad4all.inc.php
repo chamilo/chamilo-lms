@@ -484,4 +484,5 @@ $ForumThreads = "W&#261;tki forum";
 $GradebookVisible = "Widoczny";
 $GradebookInvisible = "Niewidoczny";
 $Phone = "Telefon";
+$BackToOutbox = "Powrót do wys&#322;anych";
 ?>

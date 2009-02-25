@@ -61,5 +61,5 @@ $MyPersonalData = "Moji osebni podatki";
 $AlterPersonalData = "Spremeni osebne podatke";
 $Invites = "Moja vabila";
 $ContactsGroups = "Kontakti skupine";
-$BackToOutbox = "Nazaj k odposlanim sporočilom";
+$ErrorMessageSend = "Napaka pri pošiljanju sporočila";
 ?>

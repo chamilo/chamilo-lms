@@ -2,13 +2,13 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langCourseProgram  = "Course description";
-$langThisCourseDescriptionIsEmpty  = "This course is presently not described.";
-$langEditCourseProgram  = "Create and edit a course description";
-$QuestionPlan  = "Question to teacher";
+$langThisCourseDescriptionIsEmpty  = "No course description available.";
+$langEditCourseProgram  = "Create and edit course description.";
+$QuestionPlan  = "Content Suggestion:";
 $langInfo2Say  = "Information to give to users";
 $langOuAutreTitre  = "Title";
 $langNewBloc  = "Other";
-$langAddCat  = "add a category";
+$langAddCat  = "Add a category.";
 $langAdd  = "Add";
 $langValid  = "Valid";
 $langBackAndForget  = "Back and forget";

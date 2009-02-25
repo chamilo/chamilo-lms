@@ -61,5 +61,5 @@ $MyPersonalData = "Desde aquí puede ver y modificar sus datos personales";
 $AlterPersonalData = "Modifique sus datos personales desde aquí";
 $Invites = "Mis invitados";
 $ContactsGroups = "Mis grupos de contactos";
-$BackToOutbox = "Volver a la bandeja de salida";
+$ErrorMessageSend = "Error al enviar el mensaje";
 ?>

@@ -685,11 +685,13 @@ $SendFileError = "Une erreur a été détectée lors de l\'envoi du fichier. Veuille
 $Expired = "Expiré";
 $InvitationHasBeenSent = "L\'invitation a été envoyée";
 $InvitationHasBeenNotSent = "L\'invitation n\'a pas été envoyée";
+$Outbox = "Envoyés";
 $Overview = "Vue globale";
 $ApiKeys = "Clefs API";
 $Deny = "Refuser";
 $ThereIsNotQualifiedLearners = "Il n\'y a pas d\'apprenant coté";
 $ThereIsNotUnqualifiedLearners = "Il n\'y a pas d\'apprenant à coter";
 $SocialNetwork = "Réseau social";
+$BackToOutbox = "Retour aux messages envoyés";
 $Invitation = "Invitation";
 ?>

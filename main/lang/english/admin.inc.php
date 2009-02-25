@@ -927,4 +927,5 @@ $TheFollowingCoursesAlreadyUseThisVisualCode = "The following courses already us
 $UsersSubscribedToBecauseVisualCode = "The users have been subscribed to the following courses because several courses share the same visual code";
 $UsersUnsubscribedFromBecauseVisualCode = "The users have been unsubscribed from the following courses because several courses share the same visual code";
 $FilterUsers = "Filter users";
+$SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Several courses were subscribed to the session because of a duplicate course code";
 ?>

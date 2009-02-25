@@ -61,5 +61,4 @@ $MyPersonalData = "Fiche perso";
 $AlterPersonalData = "Éditer détails";
 $Invites = "Mes invitations";
 $ContactsGroups = "Groupes de contacts";
-$BackToOutbox = "Retour aux messages envoyés";
 ?>

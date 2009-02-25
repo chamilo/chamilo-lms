@@ -685,11 +685,13 @@ $SendFileError = "Pojavila se je napaka med prejemom vaše datoteke. Preverite, 
 $Expired = "Poteklo";
 $InvitationHasBeenSent = "Vabilo je bilo odposlano";
 $InvitationHasBeenNotSent = "Vabilo ni bilo odposlano";
+$Outbox = "Poslana sporočila";
 $Overview = "Pregled";
 $ApiKeys = "API ključi";
 $Deny = "Onemogoči";
 $ThereIsNotQualifiedLearners = "Tu ni kvalificiranih učečih se uporabnikov";
 $ThereIsNotUnqualifiedLearners = "Tu ni nekvalificiranih učečih se uporabnikov";
 $SocialNetwork = "Socialno omrežje";
+$BackToOutbox = "Nazaj k odposlanim sporočilom";
 $Invitation = "Povabilo";
 ?>

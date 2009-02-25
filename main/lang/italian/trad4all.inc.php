@@ -685,11 +685,13 @@ $SendFileError = "C\'è stato un errore nella ricezione del file. Prova a control
 $Expired = "Scaduto";
 $InvitationHasBeenSent = "L\'invito è stato trasmesso";
 $InvitationHasBeenNotSent = "L\'invito non è stato trasmesso";
+$Outbox = "In uscita";
 $Overview = "Vista d\'insieme";
 $ApiKeys = "API key";
 $Deny = "Non consentire";
 $ThereIsNotQualifiedLearners = "Non ci sono corsisti con valutazioni";
 $ThereIsNotUnqualifiedLearners = "Non ci sono corsisti senza valutazione";
 $SocialNetwork = "Rete di contatti";
+$BackToOutbox = "Ritorna ai messaggi in uscita";
 $Invitation = "Invito";
 ?>

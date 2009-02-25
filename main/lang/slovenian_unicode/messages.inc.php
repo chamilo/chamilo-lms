@@ -27,6 +27,6 @@ $MessageDeleted = "Sporočilo je bilo odstranjeno";
 $ConfirmDeleteMessage = "Ste prepričani, da želite odstraniti sporočilo?";
 $DeleteMessage = "Odstrani sporočilo";
 $ReadMessage = "Preberi sporočilo";
-$Outbox = "Poslana sporočila";
 $SendInviteMessage = "Pošlji pozdravno sporočilo z vabilom";
+$SendMessageInvitation = "Ste prepričani, da želite odposlati ta vabila ?";
 ?>

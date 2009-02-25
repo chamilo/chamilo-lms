@@ -48,5 +48,4 @@ $SocialParent = "Moi rodzice";
 $SocialFriend = "Moi znajomi";
 $SocialGoodFriend = "Moi przyjaciele";
 $SocialEnemy = "Moi wrogowie";
-$BackToOutbox = "Powrót do wys&#322;anych";
 ?>

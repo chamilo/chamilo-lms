@@ -926,4 +926,5 @@ $UsersSubscribedToFollowingCoursesBecauseOfVirtualCourses = "Les utilisateurs on
 $TheFollowingCoursesAlreadyUseThisVisualCode = "Les cours suivants utilisent déjà ce code";
 $UsersSubscribedToBecauseVisualCode = "Les utilisateurs ont été inscrits à plusieurs cours car plusieurs cours partagent le même code visuel";
 $UsersUnsubscribedFromBecauseVisualCode = "Les utilisateurs ont été désinscrits de plusieurs cours car plusieurs cours partagent le même code visuel";
+$SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Plusieurs cours ont été inscrits dans la session à cause d\'un code cours dupliqué";
 ?>

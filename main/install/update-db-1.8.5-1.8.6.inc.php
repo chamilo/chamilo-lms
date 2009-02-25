@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 18146 2009-02-02 15:22:10Z juliomontoya $
+<?php // $Id: update-db-1.8.5-1.8.6.inc.php 18697 2009-02-25 16:55:11Z cfasanando $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -17,7 +17,7 @@
 
 //load helper functions
 require_once("install_upgrade.lib.php");
-
+require_once('../inc/lib/image.lib.php');
 $old_file_version = '1.8.5';
 $new_file_version = '1.8.6';
 
@@ -159,14 +159,69 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			}
 		}
 		
-		// Filling the access_url_rel_user table with access_url_id by default = 1	
+		// Filling the access_url_rel_user table with access_url_id by default = 1			
 		$query = "SELECT user_id FROM $dbNameForm.user";
-		$result = mysql_query($query);
-		while ($row= mysql_fetch_array($result,MYSQL_NUM)) {			
-			$sql="INSERT INTO $dbNameForm.access_url_rel_user SET user_id=".$row[0].", access_url_id=1";					
-			$res = mysql_query($sql);
-		}
 		
+		$result_users = mysql_query($query);		
+		while ($row= mysql_fetch_array($result_users,MYSQL_NUM)) {		
+			$user_id = $row[0];	
+			$sql="INSERT INTO $dbNameForm.access_url_rel_user SET user_id=$user_id, access_url_id=1";					
+			$res = mysql_query($sql);
+			//Updating user image
+			$query = "SELECT picture_uri FROM $dbNameForm.user WHERE user_id=$user_id";
+			$res = mysql_query($query);		
+			$picture_uri = mysql_fetch_array($res,MYSQL_NUM);
+			$file =  $picture_uri[0];
+			$dir = api_get_path(SYS_CODE_PATH).'upload/users/';
+			$image_repository = file_exists($dir.$file)? $dir.$file:$dir.$user_id.'/'.$file;
+			
+			if (!is_dir($dir.$user_id)) {
+					$perm = octdec(!empty($perm)?$perm:'0777');							
+					@mkdir($dir.$user_id, $perm);					
+			}						
+						
+			if (file_exists($image_repository)) {								
+				chmod($image_repository, 0777);
+				chmod($dir.$user_id, 0777);
+				if (is_dir($dir.$user_id)) {
+					$picture_location = $dir.$user_id.'/'.$file;
+					$big_picture_location = $dir.$user_id.'/big_'.$file;
+					
+					$temp = new image($image_repository);						
+					
+					$picture_infos=getimagesize($image_repository);
+
+					$thumbwidth = 150;
+					if (empty($thumbwidth) or $thumbwidth==0) {
+						$thumbwidth=150;
+					}
+
+					$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+		
+					$temp->resize($thumbwidth,$new_height,0);
+
+					$type=$picture_infos[2];
+					
+					// original picture
+					$big_temp = new image($image_repository);
+		
+					    switch (!empty($type)) {
+						    case 2 : $temp->send_image('JPG',$picture_location);
+						    		 $big_temp->send_image('JPG',$big_picture_location);
+						    		 break;
+						    case 3 : $temp->send_image('PNG',$picture_location);
+						    		 $big_temp->send_image('JPG',$big_picture_location);
+						    		 break;
+						    case 1 : $temp->send_image('GIF',$picture_location);
+						    		 $big_temp->send_image('JPG',$big_picture_location);
+						    		 break;
+					    }	
+					if ($image_repository == $dir.$file) {				
+					   @unlink($image_repository);	
+					}
+				} 				
+			} 						
+		}
 		// Filling the access_url_rel_session table with access_url_id by default = 1
 		$query = "SELECT id FROM $dbNameForm.session";
 		$result = mysql_query($query);

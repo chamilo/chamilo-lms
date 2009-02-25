@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18670 2009-02-24 20:49:13Z cvargas1 $
+<?php // $Id: profile.php 18693 2009-02-25 15:43:24Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -783,7 +783,7 @@ if (api_get_setting('allow_message_tool')=='true') {
 			<h2 class="message-title">'.get_lang('Messages').'</h2>
 			<p>
 				<a href="../messages/inbox.php" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />
-				<a href="../messages/outbox.php" class="message-body">'.get_lang('OutBox').$cant_out_box.'</a><br />
+				<a href="../messages/outbox.php" class="message-body">'.get_lang('Outbox').$cant_out_box.'</a><br />
 				<a href="../messages/new_message.php" class="message-body">'.get_lang('ComposeMessage').'</a><br />
 			</p>';		
 	

@@ -9,7 +9,7 @@ $user_info= UserManager::get_user_info_by_id(api_get_user_id());
 $img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);
 
 echo '<div id="actions">';
-	echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif').'&nbsp;'.utf8_encode(get_lang('EditInformation')).'</a>';
+	echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>';
 echo '</div">';
 
 echo '<div id="profile_container" style="width:500px;">';
@@ -18,12 +18,12 @@ echo '<div id="profile_container" style="width:500px;">';
 	echo '</div>';	
 	echo '<div class="social-profile-info">';
 		echo '<dl>';
-		echo '<dt>'.get_lang('UserName').'</dt>		<dd>'. $user_info['username'].'	</dd>';
-		echo '<dt>'.get_lang('FirstName').'</dt>	<dd>'. $user_info['firstname'].'</dd>';
-		echo '<dt>'.get_lang('LastName').'</dt>		<dd>'. $user_info['lastname'].'</dd>';
-		echo '<dt>'.get_lang('OfficialCode').'</dt>	<dd>'. $user_info['official_code'].'</dd>';
-		echo '<dt>'.get_lang('Email').'</dt>		<dd>'. $user_info['email'].'</dd>';
-		echo '<dt>'.get_lang('Phone').'</dt>		<dd>'. $user_info['phone'].'</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('UserName'),'UTF-8',$charset).'</dt>		<dd>'. mb_convert_encoding($user_info['username'],'UTF-8',$charset).'	</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('FirstName'),'UTF-8',$charset).'</dt>	<dd>'. mb_convert_encoding($user_info['firstname'],'UTF-8',$charset).'</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('LastName'),'UTF-8',$charset).'</dt>		<dd>'. mb_convert_encoding($user_info['lastname'],'UTF-8',$charset).'</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('OfficialCode'),'UTF-8',$charset).'</dt>	<dd>'. mb_convert_encoding($user_info['official_code'],'UTF-8',$charset).'</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('Email'),'UTF-8',$charset).'</dt>		<dd>'. mb_convert_encoding($user_info['email'],'UTF-8',$charset).'</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('Phone'),'UTF-8',$charset).'</dt>		<dd>'. mb_convert_encoding($user_info['phone'],'UTF-8',$charset).'</dd>';
 		echo '</dl>';
 	echo '</div>';
 echo '</div>';

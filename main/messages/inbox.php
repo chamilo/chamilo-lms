@@ -5,8 +5,9 @@
 
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) Facultad de Matematicas, UADY (Mï¿½xico)
-	Copyright (c) Evie, Free University of Brussels (Belgium)		
+	Copyright (c) Facultad de Matematicas, UADY (México)
+	Copyright (c) Evie, Free University of Brussels (Belgium)	
+	Copyright (c) 2009 Isaac Flores Paz <isaac.flores@dokeos.com>	
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -82,8 +83,8 @@ $info_delete=explode(',',$_GET['form_delete']);
 $count_delete=(count($info_delete)-1);
 /***********************************************/
 if ( trim($info_reply[4])=='Enviar' ) {
-	$title     = utf8_decode($info_reply[0]);
-	$content   = utf8_decode($info_reply[1]);
+	$title     = $info_reply[0];
+	$content   = $info_reply[1];
 	$user_reply= $info_reply[2];
 	if (isset($info_reply[2]) && $info_reply[2]>0) {
 		MessageManager::send_message($user_reply, $title, $content);

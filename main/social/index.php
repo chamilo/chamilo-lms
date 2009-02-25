@@ -406,8 +406,8 @@ Display :: display_header('');
 if (isset($_GET['sendform'])) {
 	$form_reply=array();
 	$params_url='?'.$_SERVER['argv'][0];
-	$form_reply[]=utf8_encode($_POST['title']);
-	$form_reply[]=utf8_encode($_POST['content']);
+	$form_reply[]=$_POST['title'];
+	$form_reply[]=$_POST['content'];
 	$form_reply[]=$_POST['user_list'];
 	$form_reply[]=$_POST['re_id'];
 	$form_reply[]=$_POST['compose'];

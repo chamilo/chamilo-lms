@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 18673 2009-02-25 04:53:55Z yannoo $
+<?php // $Id: session_import.php 18675 2009-02-25 05:37:35Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -70,23 +70,22 @@ if ($_POST['formSent']) {
 					$sql = "SELECT 1 FROM $tbl_user WHERE username='".addslashes($username)."'";
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
 
-					if(Database::affected_rows()==0)
-					{
-						if($isCut)
-						{
+					if (Database::affected_rows()==0) {
+						if ($isCut) {
 							$errorMsg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$user_name_dist.' '.get_lang('To').' '.$username.' <br />';
 						}
 
 						$lastname = mb_convert_encoding($userNode->Lastname,$charset,'utf-8');
 						$firstname = mb_convert_encoding($userNode->Firstname,$charset,'utf-8');
 						$password = mb_convert_encoding($userNode->Password,$charset,'utf-8');
-						if(empty($password))
+						if(empty($password)) {
 							$password = base64_encode(rand(1000,10000));
+                        }
 						$email = mb_convert_encoding($userNode->Email,$charset,'utf-8');
 						$official_code = mb_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
 						$phone = mb_convert_encoding($userNode->Phone,$charset,'utf-8');
 						$status = mb_convert_encoding($userNode->Status,$charset,'utf-8');
-						switch($status) {
+						switch ($status) {
 							case 'student' : $status = 5; break;
 							case 'teacher' : $status = 1; break;
 							default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
@@ -152,7 +151,6 @@ if ($_POST['formSent']) {
 						api_sql_query($sql, __FILE__, __LINE__);						
 					}
 				}
-				
 				foreach($racine->Courses->Course as $courseNode) {
 					$course_code = mb_convert_encoding($courseNode->CourseCode,$charset,'utf-8');
 					$title = mb_convert_encoding($courseNode->CourseTitle,$charset,'utf-8');
@@ -217,7 +215,7 @@ if ($_POST['formSent']) {
 						}
 
 					}
-				}
+				}                    
 				
 				foreach ($racine->Session as $sessionNode) { // foreach session
 					
@@ -294,10 +292,10 @@ if ($_POST['formSent']) {
 					
 					//adding the session to an access_url 
 					global $_configuration;	
+                    require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 					if ($_configuration['multiple_access_urls']==true) {			
 						$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
 						$access_url_id = api_get_current_access_url_id();			
-						require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 						UrlManager::add_session_to_url($session_id,$access_url_id);			
 					} else {
 						// we are filling by default the access_url_rel_session table 
@@ -321,7 +319,7 @@ if ($_POST['formSent']) {
 					}
 					foreach ($sessionNode->Course as $courseNode){
 
-						$CourseCode = $courseNode->CourseCode;
+						$CourseCode = Database::escape_string($courseNode->CourseCode);
 
 						// Verify that the course pointed by the course code node exists
                         if (CourseManager::course_exists($CourseCode)) {
@@ -332,12 +330,10 @@ if ($_POST['formSent']) {
 								$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
 								$rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
 								list($CoachId) = (Database::fetch_array($rsCoach));
-								if(empty($CoachId))
-								{
+								if(empty($CoachId)) {
 									$errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
 								}
-							}
-							else {
+							} else {
 								$Coach = '';
 							}
 
@@ -347,11 +343,11 @@ if ($_POST['formSent']) {
 										  id_session='$session_id'";
 							$rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
                             
-							if(Database::affected_rows()){
+							if (Database::affected_rows()) {
 								$countCourses++;
 
 								$countUsersCourses = 0;
-								foreach ($courseNode->User as $userNode){
+								foreach ($courseNode->User as $userNode) {
 									$username = substr($userNode,0,20);
 									$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$username."'";
 									$rsUser = api_sql_query($sqlUser);
@@ -361,7 +357,7 @@ if ($_POST['formSent']) {
 											id_user='$user_id',
 											id_session = '$session_id'";
 
-										if(Database::affected_rows()) {
+										if (Database::affected_rows()) {
 											$countUsers++;
                                         }
 										$rsUser = api_sql_query($sql,__FILE__,__LINE__);
@@ -381,7 +377,8 @@ if ($_POST['formSent']) {
 								api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);
                                 $inserted_in_course[$CourseCode] = $c_info['title'];
 							}
-						} elseif (CourseManager::course_exists($CourseCode,true)) {
+						}
+                        if (CourseManager::course_exists($CourseCode,true)) {
                             // if the course exists we continue
                             // also subscribe to virtual courses through check on visual code
                             $list = CourseManager :: get_courses_info_from_visual_code($CourseCode);
@@ -394,12 +391,10 @@ if ($_POST['formSent']) {
                                         $sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
                                         $rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
                                         list($CoachId) = (Database::fetch_array($rsCoach));
-                                        if(empty($CoachId))
-                                        {
+                                        if(empty($CoachId)) {
                                             $errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         $Coach = '';
                                     }
         
@@ -408,25 +403,24 @@ if ($_POST['formSent']) {
                                                   id_coach='$CoachId',
                                                   id_session='$session_id'";
                                     $rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
-                                    if(Database::affected_rows()){
+                                    if (Database::affected_rows()) {
                                         $countCourses++;
         
                                         $countUsersCourses = 0;
-                                        foreach ($courseNode->User as $userNode){
+                                        foreach ($courseNode->User as $userNode) {
                                             $username = substr($userNode,0,20);
                                             $sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$username."'";
                                             $rsUser = api_sql_query($sqlUser);
                                             list($user_id) = (Database::fetch_array($rsUser));
-                                            if(!empty($user_id))
-                                            {
+                                            if (!empty($user_id)) {
                                                 $sql = "INSERT IGNORE INTO $tbl_session_user SET
                                                     id_user='$user_id',
                                                     id_session = '$session_id'";
-        
-                                                if(Database::affected_rows())
-                                                    $countUsers++;
                                                 $rsUser = api_sql_query($sql,__FILE__,__LINE__);
-        
+                                                if (Database::affected_rows()) {
+                                                    $countUsers++;
+                                                }
+                                                
                                                 $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                                         id_user='$user_id',
                                                         course_code='".$vcourse['code']."',
@@ -454,7 +448,6 @@ if ($_POST['formSent']) {
 					api_sql_query("UPDATE $tbl_session SET nbr_users='$countUsers', nbr_courses='$countCourses' WHERE id='$session_id'",__FILE__,__LINE__);
 
 				}
-
 			}
 			else
 			{

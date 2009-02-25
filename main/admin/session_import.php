@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 18650 2009-02-24 07:58:52Z yannoo $
+<?php // $Id: session_import.php 18673 2009-02-25 04:53:55Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -661,17 +661,17 @@ if ($_POST['formSent']) {
 		}
 
         if (count($inserted_in_course)>1) {
-        	$warn = get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').': ';
+        	$warn = get_lang('SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode').': ';
             foreach ($inserted_in_course as $code => $title) {
             	$warn .= ' '.$title.' ('.$code.'),';
             }
-            $warn .= substr($warn,0,-1);
+            $warn = substr($warn,0,-1);
         }
 		if($countSessions == 1) {
 			header('Location: resume_session.php?id_session='.$session_id.'&warn='.urlencode($warn));
 			exit;
 		} else {
-			header('Location: session_list.php?action=show_message&message='.urlencode(get_lang('FileImported').' '.$errorMsg.'&warn='.urlencode($warn)));
+			header('Location: session_list.php?action=show_message&message='.urlencode(get_lang('FileImported').' '.$errorMsg).'&warn='.urlencode($warn));
 			exit;
 		}
 	} else {
@@ -682,7 +682,7 @@ if ($_POST['formSent']) {
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 if (count($inserted_in_course) > 1) {
-	$msg = get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').': ';
+	$msg = get_lang('SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode').': ';
     foreach ($inserted_in_course as $code => $title) {
     	$msg .= ' '.$title.' ('.$title.'),';
     }

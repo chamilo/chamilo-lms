@@ -1,4 +1,4 @@
-<?php // $Id: resume_session.php 17532 2009-01-04 20:33:49Z yannoo $
+<?php // $Id: resume_session.php 18673 2009-02-25 04:53:55Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -93,8 +93,10 @@ if($_GET['action'] == 'delete')
 
 
 
-
 Display::display_header($tool_name);
+if (!empty($_GET['warn'])) {
+    Display::display_warning_message(urldecode($_GET['warn']));    
+}
 
 api_display_tool_title($tool_name);
 ?>

@@ -139,17 +139,18 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	$tool_name = get_lang('SessionList');	
 	Display::display_header($tool_name);	
 	api_display_tool_title($tool_name);
-	
-	 
-	?>	
+    
+    if (!empty($_GET['warn'])) {
+        Display::display_warning_message(urldecode($_GET['warn']));
+    }
+    if(isset($_GET['action'])) {
+        Display::display_normal_message($_GET['message']);
+    }
+    ?>	
 	<div id="main">
 	<div class="actions">		
 	<?php
-	
-	if(isset($_GET['action'])) {
-		Display::display_normal_message(Security::remove_XSS($_GET['message']), false);
-	}
-	
+		
 	echo '<div style="float:right;">
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>									
 	 </div>';	  

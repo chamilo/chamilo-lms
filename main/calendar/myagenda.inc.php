@@ -564,6 +564,17 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 	//echo "week:".$week."/";
 	//echo $type."<p>";
 	//echo "<pre>".$sql."</pre>";
+	
+	global $_configuration;
+   	$root_url = $_configuration['root_web'];
+	if ($_configuration['multiple_access_urls']==true) {
+		$access_url_id = api_get_current_access_url_id();				
+		if ($access_url_id != -1 ){
+			$url = api_get_access_url($access_url_id); 				
+			$root_url = $url['url'];
+		}		
+	}
+	
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($item = Database::fetch_array($result))
 	{
@@ -584,7 +595,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 		// if the student has specified a course we a add a link to that course
 		if ($item['course'] <> "")
 		{
-			$url = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($item['course'])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$url = $root_url."main/calendar/agenda.php?cidReq=".urlencode($item['course'])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$course_link = "<a href=\"$url\" title=\"".$item['course']."\">".$item['course']."</a>";
 		}
 		else

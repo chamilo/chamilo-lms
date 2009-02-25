@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 18440 2009-02-11 18:39:40Z herodoto $
+<?php //$Id: agenda.inc.php 18692 2009-02-25 15:27:48Z juliomontoya $
 
 /*
 ==============================================================================
@@ -3044,11 +3044,21 @@ function get_agendaitems($month, $year)
 
 	$mycourse = api_get_course_info();
     $result = api_sql_query($sqlquery, __FILE__, __LINE__);
+    global $_configuration;
+   	$root_url = $_configuration['root_web'];
+	if ($_configuration['multiple_access_urls']==true) {
+		$access_url_id = api_get_current_access_url_id();				
+		if ($access_url_id != -1 ){
+			$url = api_get_access_url($access_url_id); 				
+			$root_url = $url['url'];
+		}		
+	}
+		
 	while ($item = Database::fetch_array($result))
 	{
 		$agendaday = date('j',strtotime($item['start_date']));
 		$time= date('H:i',strtotime($item['start_date']));
-		$URL = $_configuration['root_web'].'main/calendar/agenda.php?cidReq='.$mycourse['id']."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+		$URL = $root_url.'main/calendar/agenda.php?cidReq='.$mycourse['id']."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 		$items[$agendaday][$item['start_time']] .= '<i>'.$time.'</i> <a href="'.$URL.'" title="'.$mycourse['name'].'">'.$mycourse['official_code'].'</a> '.$item['title'].'<br />';
 	}
 

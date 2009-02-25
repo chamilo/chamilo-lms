@@ -131,6 +131,7 @@ class MessageManager {
 	 * @param string $direction
 	 */
 	public static function get_message_data ($from, $number_of_items, $column, $direction) {
+		global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		$request=api_is_xml_http_request();
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3 FROM $table_message " .
@@ -146,8 +147,8 @@ class MessageManager {
 				$message[0] = ($result[0]);	 	
 			 }
 			if ($request===true) {
-				$message[1] = utf8_encode(GetFullUserName(($result[1])));
-				$message[2] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.utf8_encode($result[2]).'</a>';
+				$message[1] = mb_convert_encoding(GetFullUserName($result[1]),'UTF-8',$charset);
+				$message[2] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.mb_convert_encoding($result[2],'UTF-8',$charset).'</a>';
 				$message[4] = '<a onclick="reply_to_messages(\'show\','.$result[0].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a onclick="delete_one_message('.$result[0].')" href="#../messages/inbox.php?rs=1&amp;action=deleteone&id='.$result[0].'"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
@@ -248,6 +249,7 @@ class MessageManager {
 	 * @return array
 	 */
 	 public static function get_message_data_sent ($from, $number_of_items, $column, $direction) {
+	 	global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		$request=api_is_xml_http_request();
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3 FROM $table_message " .
@@ -263,8 +265,8 @@ class MessageManager {
 				$message[0] = ($result[0]);	 	
 			 }
 			if ($request===true) {
-				$message[1] = utf8_encode(GetFullUserName($result[1]));
-				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.utf8_encode($result[2]).'</a>';
+				$message[1] = mb_convert_encoding(GetFullUserName($result[1]),'UTF-8',$charset);
+				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.mb_convert_encoding($result[2],'UTF-8',$charset).'</a>';
 				$message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
 				$message[1] = GetFullUserName($result[1]);
@@ -292,6 +294,7 @@ class MessageManager {
 		return $result['number_messages'];
 	}
 	public static function show_message_box () {
+		global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		if (isset($_GET['id_send'])) {
 			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".$_GET['id_send']." AND msg_status=4;";
@@ -327,10 +330,10 @@ class MessageManager {
 		      	<TABLE>      
 		            <TR>
 		              <TD width="100%">                              
-		                    <TR> <h1>'.utf8_encode($row[5]).'</h1></TR>
+		                    <TR> <h1>'.mb_convert_encoding($row[5],'UTF-8',$charset).'</h1></TR>
 		              </TD>              		
 		              <TR>                       
-		              	<TD>'.utf8_encode(get_lang('From')).'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.utf8_encode(strtolower(get_lang('To'))).'&nbsp;  <b>'.utf8_encode(GetFullUserName($row[2])).'</b> </TD>
+		              	<TD>'.mb_convert_encoding(get_lang('From'),'UTF-8',$charset).'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.mb_convert_encoding(strtolower(get_lang('To')),'UTF-8',$charset).'&nbsp;  <b>'.mb_convert_encoding(GetFullUserName($row[2]),'UTF-8',$charset).'</b> </TD>
 		              </TR>                    
 		              <TR>
 		              <TD >'.get_lang('Date').'&nbsp; '.$row[4].'</TD>                      
@@ -341,7 +344,7 @@ class MessageManager {
 		        <TABLE height=209 width="100%" bgColor=#ffffff>
 		          <TBODY>
 		            <TR>
-		              <TD vAlign=top>'.utf8_encode($row[6]).'</TD>
+		              <TD vAlign=top>'.mb_convert_encoding($row[6],'UTF-8',$charset).'</TD>
 		            </TR>
 		          </TBODY>
 		        </TABLE>
@@ -351,6 +354,7 @@ class MessageManager {
 		</TABLE>';
 	}
 	public static function show_message_box_sent () {
+		global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".$_GET['id_send']." AND msg_status=4;";
 		$result = api_sql_query($query,__FILE__,__LINE__);
@@ -375,10 +379,10 @@ class MessageManager {
 		      	<TABLE>      
 		            <TR>
 		              <TD width="100%">                              
-		                    <TR> <h1>'.utf8_encode($row[5]).'</h1></TR>
+		                    <TR> <h1>'.mb_convert_encoding($row[5],'UTF-8',$charset).'</h1></TR>
 		              </TD>              		
 		              <TR>                       
-		              	<TD>'.utf8_encode(get_lang('From')).'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.utf8_encode(strtolower(get_lang('To'))).'&nbsp;  <b>'.utf8_encode(GetFullUserName($row[2])).'</b> </TD>
+		              	<TD>'.mb_convert_encoding(get_lang('From'),'UTF-8',$charset).'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.mb_convert_encoding(strtolower(get_lang('To')),'UTF-8',$charset).'&nbsp;  <b>'.mb_convert_encoding(GetFullUserName($row[2]),'UTF-8',$charset).'</b> </TD>
 		              </TR>                    
 		              <TR>
 		              <TD >'.get_lang('Date').'&nbsp; '.$row[4].'</TD>                      
@@ -389,7 +393,7 @@ class MessageManager {
 		        <TABLE height=209 width="100%" bgColor=#ffffff>
 		          <TBODY>
 		            <TR>
-		              <TD vAlign=top>'.utf8_encode($row[6]).'</TD>
+		              <TD vAlign=top>'.mb_convert_encoding($row[6],'UTF-8',$charset).'</TD>
 		            </TR>
 		          </TBODY>
 		        </TABLE>

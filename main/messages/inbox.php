@@ -5,7 +5,7 @@
 
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) Facultad de Matematicas, UADY (México)
+	Copyright (c) Facultad de Matematicas, UADY (Mï¿½xico)
 	Copyright (c) Evie, Free University of Brussels (Belgium)	
 	Copyright (c) 2009 Isaac Flores Paz <isaac.flores@dokeos.com>	
 
@@ -132,7 +132,7 @@ if ($request===false) {
 }
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 echo '<div id="div_content_messages">&nbsp;&nbsp;';
-api_display_tool_title(utf8_encode(get_lang('Inbox')));
+api_display_tool_title(mb_convert_encoding(get_lang('Inbox'),'UTF-8',$charset));
 echo '<div class=actions>';
 echo '<a onclick="compose_and_show_message(\'show\',\'1\')" href="javascript:void(0)">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
 echo '</div>';

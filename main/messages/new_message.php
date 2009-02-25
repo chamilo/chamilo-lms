@@ -1,11 +1,11 @@
-<?php // $Id: new_message.php 18511 2009-02-16 02:22:11Z iflorespaz $
+<?php // $Id: new_message.php 18698 2009-02-25 18:13:46Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) Facultad de Matematicas, UADY (México)
+	Copyright (c) Facultad de Matematicas, UADY (Mï¿½xico)
 	Copyright (c) Evie, Free University of Brussels (Belgium)		
 	Copyright (c) 2009 Isaac Flores Paz <isaac.flores.paz@gmail.com>
 	For a full list of contributors, see "credits.txt".
@@ -119,6 +119,7 @@ function show_compose_to_any ($user_id) {
 }
 
 function show_compose_reply_to_message ($message_id, $receiver_id) {
+	global $charset;
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	$query = "SELECT * FROM $table_message WHERE user_receiver_id=".$receiver_id." AND id='".$message_id."';";
 	$result = api_sql_query($query,__FILE__,__LINE__);
@@ -129,19 +130,21 @@ function show_compose_reply_to_message ($message_id, $receiver_id) {
 		die();
 	}
 	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($row[1]).'</strong>';
-	$default['title'] =utf8_encode(get_lang('EnterTitle'));
+	$default['title'] =mb_convert_encoding(get_lang('EnterTitle'),'UTF-8',$charset);
 	$default['user_list'] = $row[1];
 	manage_form($default);
 }
 
 function show_compose_to_user ($receiver_id) {
+	global $charset;
 	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($receiver_id).'</strong>';
-	$default['title'] = utf8_encode(get_lang('EnterTitle'));
+	$default['title'] = mb_convert_encoding(get_lang('EnterTitle'),'UTF-8',$charset);
 	$default['user_list'] = $receiver_id;
 	manage_form($default);
 }
 
 function manage_form ($default, $select_from_user_list = null) {
+	global $charset;
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	$request=api_is_xml_http_request();
 	if ($request===true) {
@@ -162,7 +165,7 @@ function manage_form ($default, $select_from_user_list = null) {
 		}
 		$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 	}
-	$form->add_textfield('title', utf8_encode(get_lang('Title')));
+	$form->add_textfield('title', mb_convert_encoding(get_lang('Title'),'UTF-8',$charset));
 	$form->add_html_editor('content', '',false,false);
 	if (isset($_GET['re_id'])) {
 		$form->addElement('hidden','re_id',$_GET['re_id']);
@@ -232,14 +235,14 @@ if (!isset($_POST['compose'])) {
 		
 	}
 	if (isset($_GET['re_id'])) {
-		$default['title'] = utf8_encode($_POST['title']);
-		$default['content'] = utf8_encode($_POST['content']);
+		$default['title'] = mb_convert_encoding($_POST['title'],'UTF-8',$charset);
+		$default['content'] = mb_convert_encoding($_POST['content'],'UTF-8',$charset);
 		//$default['user_list'] = $_POST['user_list'];
 		manage_form($default);	
 	} else {
 		if ($restrict) {
-			$default['title'] = utf8_encode($_POST['title']);
-			$default['id_text_name'] = utf8_encode($_POST['id_text_name']);
+			$default['title'] = mb_convert_encoding($_POST['title'],'UTF-8',$charset);
+			$default['id_text_name'] = mb_convert_encoding($_POST['id_text_name'],'UTF-8',$charset); 
 			$default['user_list'] = $_POST['user_list'];
 			manage_form($default);
 		} else {

@@ -1,4 +1,4 @@
-<?php // $Id: view_message.php 18670 2009-02-24 20:49:13Z cvargas1 $
+<?php // $Id: view_message.php 18698 2009-02-25 18:13:46Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -59,7 +59,7 @@ if (isset($_GET['id_send']) || isset($_GET['id'])) {
 	} else {
 	$interbreadcrumb[]= array (
 		'url' => '#',
-		'name' => get_lang($nameTools)
+		'name' => get_lang('Messages')
 	);
 	$interbreadcrumb[]= array (
 		'url' => 'inbox.php',
@@ -80,7 +80,7 @@ $request=api_is_xml_http_request();
 if ($request===false) {
 	Display::display_header('');
 }
-api_display_tool_title(utf8_encode(get_lang('ReadMessage')));
+api_display_tool_title(mb_convert_encoding(get_lang('ReadMessage'),'UTF-8',$charset));
 if (isset($_GET['id_send'])) {
 	MessageManager::show_message_box_sent();
 } else {

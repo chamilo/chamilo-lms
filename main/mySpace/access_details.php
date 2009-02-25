@@ -43,10 +43,15 @@ function get_connections_to_course($user_id, $course_code) {
     $course_code = Database::escape_string($course_code);
     
     $tbl_track_course = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    
+    $tbl_main=Database::get_main_table(TABLE_MAIN_COURSE);
+    $sql_query='SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.$course_code.'";';
+    $result=api_sql_query($sql_query,__FILE__,__LINE__);
+    $row_query=Database::fetch_array($result,'ASSOC');
+    $course_true=isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
+
     $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . ' 
     				WHERE user_id = ' . intval($user_id) . '
-    				AND course_code="' . $course_code . '"ORDER BY login_course_date';
+    				AND course_code="' . $course_true . '" ORDER BY login_course_date';
     
     $rs = api_sql_query($sql);
     $connections  = array();

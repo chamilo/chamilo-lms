@@ -97,6 +97,9 @@ function calculHours($seconds)
 /* MAIN */
 //Print headers
 $nameTools= get_lang('AccessDetails');
+$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$_GET['course'], "name" => get_lang("Users"));
+$interbreadcrumb[] = array ("url" => "myStudents.php?cidReq=".$_GET['course']."&student=".$_GET['student']."&details=true&origin=user_course", "name" => get_lang('DetailsStudentInCourse'));
+
 Display :: display_header($nameTools);
 
 $user_id = (int)$_REQUEST['student'];

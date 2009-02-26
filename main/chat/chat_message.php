@@ -110,13 +110,13 @@ if (!empty($course) && !empty($_user['user_id']))
 	$query="SELECT lastname, firstname, username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 	$result=api_sql_query($query,__FILE__,__LINE__);
 	
-	list($pseudoUser)=mysql_fetch_row($result);
+	list($pseudoUser)=Database::fetch_row($result);
 	
 	$isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 	$isMaster=$is_courseAdmin?true:false;
 	
-	$firstname=mysql_result($result,0,'firstname');
-	$lastname=mysql_result($result,0,'lastname');
+	$firstname=Database::result($result,0,'firstname');
+	$lastname=Database::result($result,0,'lastname');
 	
 	$dateNow=date('Y-m-d');
 	
@@ -124,27 +124,20 @@ if (!empty($course) && !empty($_user['user_id']))
 	$chatPath=$documentPath.'chat_files/';
 	$TABLEITEMPROPERTY= Database::get_course_table(TABLE_ITEM_PROPERTY);
 	
-	if(!is_dir($chatPath))
-	{
-		if(is_file($chatPath))
-		{
+	if(!is_dir($chatPath)) {
+		if(is_file($chatPath)) {
 			@unlink($chatPath);
-		}
-	
+		}	
 		$perm = api_get_setting('permissions_for_new_directories');
 		$perm = octdec(!empty($perm)?$perm:'0770');
 		@mkdir($chatPath,$perm);
-		@chmod($chatPath,$perm);
-	
+		@chmod($chatPath,$perm);	
 		$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
-	
-		api_sql_query("INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)");
-		
+		$sql_insert = "INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)";
+		api_sql_query($sql_insert ,__FILE__,__LINE__);		
 	}
-
-	
-	include('header_frame.inc.php');
-	
+		
+	include('header_frame.inc.php');	
 	$chat_size=0;
 	
 	//define emoticons
@@ -253,13 +246,13 @@ if (!empty($course) && !empty($_user['user_id']))
 			if($isMaster)
 			{
 				$photo= '<img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif" alt="'.get_lang('Teacher').'"  width="11" height="11" align="top"  title="'.get_lang('Teacher').'"  />';				
-				fputs($fp,'<span style="color:#CCCCCC; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <span id="chat_login_name"><b>'.$firstname.' '.$lastname.'</b></span> : <i>'.$message.'</i><br>'."\n");	 		
+				fputs($fp,'<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <span id="chat_login_name"><b>'.$firstname.' '.$lastname.'</b></span> : <i>'.$message.'</i><br>'."\n");	 		
 				
 			}
 			else
 			{
 				$photo= '<img src="'.api_get_path(WEB_IMG_PATH).'students.gif" alt="'.get_lang('Student').'"  width="11" height="11" align="top"  title="'.get_lang('Student').'"  />';
-				 fputs($fp,'<span style="color:#CCCCCC; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <b>'.$firstname.' '.$lastname.'</b> : <i>'.$message.'</i><br>'."\n");
+				 fputs($fp,'<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <b>'.$firstname.' '.$lastname.'</b> : <i>'.$message.'</i><br>'."\n");
 			}
 	
 			fclose($fp);

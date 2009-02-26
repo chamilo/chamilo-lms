@@ -1,4 +1,4 @@
-<?php // $Id: document.php 18624 2009-02-20 18:31:55Z herodoto $
+<?php // $Id: document.php 18706 2009-02-26 15:53:50Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -623,7 +623,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$course_code = api_get_course_id();
 		$user_id = api_get_user_id();
 		
-		if(!is_file(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'))
+		if(!is_dir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'))
 		{
 			mkdir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/',0777);
 		}
@@ -703,7 +703,7 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 			$document_name=$id['title'];
 		} else {
 		   $document_name=basename($id['path']);
-			//Juan Carlos Raña get lastname and firstname when folder is in shared_folder
+			//Juan Carlos Raï¿½a get lastname and firstname when folder is in shared_folder
 			//TODO: check if is also necessary (above else)
 			if(strstr($document_name, 'sf_user_'))
 			{

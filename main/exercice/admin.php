@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 18209 2009-02-03 21:26:14Z herodoto $
+<?php // $Id: admin.php 18712 2009-02-26 21:16:53Z cvargas1 $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 18209 2009-02-03 21:26:14Z herodoto $
+* 	@version $Id: admin.php 18712 2009-02-26 21:16:53Z cvargas1 $
 */
 
 
@@ -491,7 +491,7 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 	$objExercise -> createForm ($form,'simple');
 	
 	if($form -> validate()) {
-		$objExercise -> processCreation($form);
+		$objExercise -> processCreation($form,'simple');
 		if($form -> getSubmitValue('edit') == 'true')
 			Display::display_confirmation_message(get_lang('ExerciseEdited'));
 	}		

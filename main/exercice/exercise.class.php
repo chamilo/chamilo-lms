@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 18522 2009-02-16 20:20:29Z juliomontoya $
+* 	@version $Id: exercise.class.php 18712 2009-02-26 21:16:53Z cvargas1 $
 */
 
 
@@ -486,7 +486,7 @@ class Exercise
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function save()
+	function save($type_e='')
 	{
 		global $_course,$_user;
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -509,17 +509,21 @@ class Exercise
 		if($id)
 		{
 			$sql="UPDATE $TBL_EXERCICES SET 
-						start_time='$start_time',end_time='$end_time', 
 						title='".Database::escape_string($exercise)."',
-						description='".Database::escape_string($description)."',
-						sound='".Database::escape_string($sound)."',
+						description='".Database::escape_string($description)."'";
+				if ($type_e != 'simple') {					
+						$sql .= ", sound='".Database::escape_string($sound)."',
 						type='".Database::escape_string($type)."',
 						random='".Database::escape_string($random)."',
 						active='".Database::escape_string($active)."',
 						feedback_type='".Database::escape_string($feedbacktype)."',
+						start_time='$start_time',end_time='$end_time',
 						max_attempt='".Database::escape_string($attempts)."', " .
-						"results_disabled='".Database::escape_string($results_disabled)."'
-					WHERE id='".Database::escape_string($id)."'";
+						"results_disabled='".Database::escape_string($results_disabled)."'";
+				}				
+			$sql .= " WHERE id='".Database::escape_string($id)."'";
+			
+		//	echo $sql;
 			api_sql_query($sql,__FILE__,__LINE__);
 			
 			// update into the item_property table	
@@ -991,12 +995,13 @@ class Exercise
 	 * function which process the creation of exercises
 	 * @param FormValidator $form the formvalidator instance
 	 */
-	function processCreation($form)
-	{
+	function processCreation($form,$type='')
+	{		
+
+		$this -> updateTitle($form -> getSubmitValue('exerciseTitle'));
+		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));	
 		$this -> updateAttempts($form -> getSubmitValue('exerciseAttempts'));
 		$this -> updateFeedbackType($form -> getSubmitValue('exerciseFeedbackType'));
-		$this -> updateTitle($form -> getSubmitValue('exerciseTitle'));
-		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
 		$this -> updateType($form -> getSubmitValue('exerciseType'));
 		$this -> setRandom($form -> getSubmitValue('randomQuestions'));
 
@@ -1013,7 +1018,7 @@ class Exercise
            $this->end_time = '0000-00-00 00:00:00';
         }
         //echo $end_time;exit;
-        $this -> save();
+        $this -> save($type);
 	}
 
     function search_engine_save() {

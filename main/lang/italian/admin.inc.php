@@ -922,4 +922,10 @@ $FilterOff = "Non filtrare!";
 $FieldFilterSetOn = "Puoi usare il campo come filtro";
 $FieldFilterSetOff = "Non puoi usare il campo come filtro";
 $buttonAddUserField = "Aggiungi un campo utente";
+$UsersSubscribedToFollowingCoursesBecauseOfVirtualCourses = "Gli utenti sono stati iscritti ai seguenti corsi (diversi corsi condividono il titolo)";
+$TheFollowingCoursesAlreadyUseThisVisualCode = "I seguenti corsi usano già questo titolo";
+$UsersSubscribedToBecauseVisualCode = "Gli utenti sono stati iscritti ai seguenti corsi (diversi corsi condividono il titolo)";
+$UsersUnsubscribedFromBecauseVisualCode = "Gli utenti sono stati cancellati dai seguenti corsi (diversi corsi condividono il titolo)";
+$FilterUsers = "Filtro sugli utenti";
+$SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Diversi corsi sono stati associati alla sessione (i corsi condividono il titolo)";
 ?>

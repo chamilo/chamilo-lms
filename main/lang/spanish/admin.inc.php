@@ -924,5 +924,8 @@ $FieldFilterSetOff = "Filtro deshabilitado";
 $buttonAddUserField = "Añadir campo de usuario";
 $UsersSubscribedToFollowingCoursesBecauseOfVirtualCourses = "Los usuarios han sido registrados a los siguientes cursos porque varios cursos comparten el mismo código visual";
 $TheFollowingCoursesAlreadyUseThisVisualCode = "Los siguientes cursos ya utilizan este código";
+$UsersSubscribedToBecauseVisualCode = "Los usuarios han sido suscritos a los siguientes cursos, porque muchos cursos comparten el mismo codigo visual";
+$UsersUnsubscribedFromBecauseVisualCode = "los usuarios desuscritos de los  siguientes cursos, porque muchos cursos comparten el mismo codigo visual";
 $FilterUsers = "Filtro de usuarios";
+$SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Varios cursos se suscribieron a la sesión a causa de un código duplicado de curso";
 ?>

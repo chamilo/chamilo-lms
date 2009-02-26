@@ -284,4 +284,5 @@ $SelectTargetLP = "Deleziona il modulo didattico cui puntare";
 $SelectTargetQuestion = "Seleziona il test di destinazione";
 $DirectFeedbackCantModifyTypeQuestion = "Il tipo di valutazione non può essere modificato, in quanto identificato come auto-valutazione";
 $CantShowResults = "Non disponibile";
+$CantViewResults = "Il risultato non può essere visto";
 ?>

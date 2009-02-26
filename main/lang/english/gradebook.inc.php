@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $FlatView = "Flat view";
-$ScoreEdit = "Score rules edition";
+$ScoreEdit = "Score rules editing";
 $ScoreColor = "Score color";
 $ScoringSystem = "Scoring system";
 $EnableScoreColor = "Enable score colouring";
@@ -13,7 +13,7 @@ $IncludeUpperLimit = "Include upper limit";
 $ScoreInfo = "Score info";
 $Between = "between";
 $CurrentCategory = "Current category";
-$RootCat = "Root category";
+$RootCat = "Main category";
 $NewCategory = "New category";
 $NewEvaluation = "New evaluation";
 $Weight = "Weight";

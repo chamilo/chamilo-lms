@@ -284,4 +284,5 @@ $SelectTargetLP = "Seleccionar lección de destino";
 $SelectTargetQuestion = "Seleccionar pregunta de destino";
 $DirectFeedbackCantModifyTypeQuestion = "El tipo de evaluación no puede ser modificado ya que fue seleccionado para Autoevaluación";
 $CantShowResults = "No disponible";
+$CantViewResults = "No se puede ver los resultados";
 ?>

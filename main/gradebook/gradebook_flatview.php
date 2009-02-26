@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
+	Copyright (c) 2009 Dokeos Latinoamerica SAC
 	Copyright (c) 2006 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 	Copyright (c) various contributors
@@ -22,6 +22,11 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
+function func1() {
+	echo 'Hello from 1';
+	exit;
+}
+
 $language_file= 'gradebook';
 //$cidReset= true;
 require_once ('../inc/global.inc.php');
@@ -44,10 +49,32 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
 	exit;
 }
 
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script language="JavaScript">
+	/*
+	jQuery(function($) {  
+ 		$("#contentArea").load("test.php");  
+ 	});
+ 		  
+	$().ajaxSend(function(r,s){  
+ 		$("#contentLoading").show();  
+ 	});
+ 			  
+	$().ajaxStop(function(r,s){  
+ 		$("#contentLoading").fadeOut("fast");  
+	});  
+ 			
+  	$.get("gradebook_flatview.php",{\'func\':\'1\'},function(data){
+  		alert(data); 			
+	});
+	*/	 
+</script>';
+ 
 $interbreadcrumb[]= array (
 	'url' => $_SESSION['gradebook_dest'],
 	'name' => get_lang('Gradebook'
 ));
+
 $showeval= (isset ($_POST['showeval']) ? '1' : '0');
 $showlink= (isset ($_POST['showlink']) ? '1' : '0');
 if (($showlink == '0') && ($showeval == '0')) {
@@ -73,6 +100,8 @@ if ($showlink) {
 } else {
 	$alllinks=null;
 }
+
+
 
 if (isset ($export_flatview_form) && (!$file_type == 'pdf')) {
 	Display :: display_normal_message($export_flatview_form->toHtml(),false);
@@ -120,9 +149,7 @@ if (isset ($_GET['exportpdf']))	{
 		export_pdf($pdf,$printable_data[1],$printable_data[0],$format);
 		exit;		
 	}
-
 }
-
 
 if (isset ($_GET['print']))	{
 	$printable_data = get_printable_data ($users,$alleval, $alllinks);	
@@ -180,9 +207,20 @@ if (isset($_GET['exportpdf'])) {
 if (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
 		DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);
 		$flatviewtable->display();	
-} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview']=='teacherview')) {
-		DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);
+} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview']=='teacherview')) {	
+		DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);				
+		/*echo '<div id="contentLoading" class="contentLoading">';  
+		echo Display::display_icon('loader.gif'); 		  
+		echo '</div>';*/
+		
+		// main graph		  
+		//@todo load images in with jquery 
+		echo '<div id="contentArea" style="text-align:center;" >';
+		$image_file = $flatviewtable->display_graph();
+		echo '<img  src="'.$image_file.'">';	
 		$flatviewtable->display();		
+		$flatviewtable->display_graph_by_resource();
+		echo '</div>';						
 }
 Display :: display_footer();
 

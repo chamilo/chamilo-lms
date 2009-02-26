@@ -32,15 +32,17 @@
  */
 
  /* pCache class definition */
+require_once dirname(__FILE__) . '/../../global.inc.php';
+//the cache default folder was changed
  class pCache
   {
    var $HashKey     = "";
-   var $CacheFolder = "Cache/";
+   var $CacheFolder = "";
 
    /* Create the pCache object */
    function pCache($CacheFolder="Cache/")
     {
-     $this->CacheFolder = $CacheFolder;
+     $this->CacheFolder = api_get_path(GARBAGE_PATH);
     }
 
    /* This function is clearing the cache folder */

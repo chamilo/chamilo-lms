@@ -164,9 +164,84 @@ class FlatViewDataGenerator
 			unset($score);
 			$data[] = $row;
 		}
-
 		return $data;
-
+	}
+	
+	
+	public function get_data_to_graph () {
+		// do some checks on users/items counts, redefine if invalid values
+		$usertable = array ();
+		foreach ($this->users as $user) {
+			$usertable[] = $user;			
+		}
+		// sort users array
+		usort($usertable, array ('FlatViewDataGenerator','sort_by_first_name'));			
+		
+		// generate actual data array
+		$scoredisplay = ScoreDisplay :: instance();		
+		$data= array ();
+		$displaytype = SCORE_DIV;		
+		$selected_users = $usertable;
+		foreach ($selected_users as $user) {
+			$row = array ();
+			$row[] = $user[0];	// user id			
+			$item_value=0;
+			$item_total=0;
+			
+			for ($count=0;$count < count($this->evals_links); $count++) {
+				$item = $this->evals_links [$count];
+				$score = $item->calc_score($user[0]);
+				$divide=( ($score[1])==0 ) ? 1 : $score[1];
+				$item_value+=round($score[0]/$divide*$item->get_weight(),2);
+				$item_total+=$item->get_weight();									
+				$score_denom=($score[1]==0) ? 1 : $score[1];
+				$score_final = round(($score[0] / $score_denom) * 100,2);		
+				$row[] = $score_final;								
+			}	
+			$total_score=array($item_value,$item_total);			
+			$score_final = round(($item_value / $item_total) * 100,2);				
+			$row[] = $score_final;		
+			$data[] = $row;
+		}
+		return $data;
+	}
+	
+	public function get_data_to_graph2 () {
+		// do some checks on users/items counts, redefine if invalid values
+		$usertable = array ();
+		foreach ($this->users as $user) {
+			$usertable[] = $user;			
+		}
+		// sort users array
+		usort($usertable, array ('FlatViewDataGenerator','sort_by_first_name'));			
+		
+		// generate actual data array
+		$scoredisplay = ScoreDisplay :: instance();		
+		$data= array ();
+		$displaytype = SCORE_DIV;		
+		$selected_users = $usertable;
+		foreach ($selected_users as $user) {
+			$row = array ();
+			$row[] = $user[0];	// user id			
+			$item_value=0;
+			$item_total=0;
+			
+			for ($count=0;$count < count($this->evals_links); $count++) {
+				$item = $this->evals_links [$count];
+				$score = $item->calc_score($user[0]);
+				$divide=( ($score[1])==0 ) ? 1 : $score[1];
+				$item_value+=round($score[0]/$divide*$item->get_weight(),2);
+				$item_total+=$item->get_weight();									
+				$score_denom=($score[1]==0) ? 1 : $score[1];
+				$score_final = round(($score[0] / $score_denom) * 100,2);		
+				$row[] = array ($score_final, $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_CUSTOM));								
+			}	
+			$total_score=array($item_value,$item_total);			
+			$score_final = round(($item_value / $item_total) * 100,2);				
+			$row[] = $score_final;		
+			$data[] = $row;
+		}
+		return $data;
 	}
 	// Sort functions - used internally
 

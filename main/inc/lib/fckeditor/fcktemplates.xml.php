@@ -70,8 +70,8 @@ $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
 		//echo '<Template title="'.htmlentities($a_template['title']).'" image="'.api_get_path(REL_CODE_PATH).'upload/template_thumbnails/'.$a_template['id'].'.jpg">';
 		echo '<Template title="'.s2($a_template['title']).'" >';
 			echo '<Description>'.s2($a_template['description']).'</Description>';
-			echo '<Html>';		 	
-			echo htmlentities(file_get_contents(api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$document_path));			
+			echo '<Html>';
+			echo htmlspecialchars(file_get_contents(api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$document_path),ENT_COMPAT);			
 			echo '</Html>';
 		echo '</Template>';			
 	}	

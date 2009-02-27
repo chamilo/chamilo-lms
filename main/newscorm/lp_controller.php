@@ -356,8 +356,10 @@ switch($action)
 			
 			if(isset($_POST['submit_button']) && !empty($_POST['title'])) { 
 				//$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
-				//todo mp3 edit  
-				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'],'', $_POST['maxTimeAllowed']);
+				//todo mp3 edit
+				$audio = array();
+				if (isset($_FILES['mp3'])) $audio = $_FILES['mp3'];
+				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'],$audio, $_POST['maxTimeAllowed']);
 				
 				if(isset($_POST['content_lp'])) {
 					$_SESSION['oLP']->edit_document($_course);
@@ -720,12 +722,12 @@ switch($action)
 			require('lp_list.php');
 		}
 		else
-		{
+		{			
 			if($debug > 0){error_log('New LP - Trying to set current item to ' . $_REQUEST['item_id'], 0);}
 			if ( !empty($_REQUEST['item_id']) )
             {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
-            }
+            }            
 			require('lp_view.php');
 		}
 		break;		

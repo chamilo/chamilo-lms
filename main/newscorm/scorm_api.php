@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 17337 2008-12-16 21:29:29Z yannoo $ 
+<?php // $Id: scorm_api.php 18737 2009-02-27 15:40:32Z juliomontoya $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -1019,13 +1019,12 @@ function switch_item(current_item, next_item){
 	if(lms_lp_type==1 || lms_item_type=='asset'){
 		xajax_start_timer();
 	}	
-	
-	//(4) refresh the audiorecorder if needed
-	if(frames['audiorecorder_name']){
-		frames['audiorecorder_name'].location.reload();
+		
+	//(4) refresh the audio player if needed	
+	if(frames['nav_name']){
+		frames['nav_name'].location.reload();
 	}
-	
-	
+
 	return true;
 }
 /**

@@ -22,11 +22,6 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-function func1() {
-	echo 'Hello from 1';
-	exit;
-}
-
 $language_file= 'gradebook';
 //$cidReset= true;
 require_once ('../inc/global.inc.php');
@@ -50,25 +45,6 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
 }
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script language="JavaScript">
-	/*
-	jQuery(function($) {  
- 		$("#contentArea").load("test.php");  
- 	});
- 		  
-	$().ajaxSend(function(r,s){  
- 		$("#contentLoading").show();  
- 	});
- 			  
-	$().ajaxStop(function(r,s){  
- 		$("#contentLoading").fadeOut("fast");  
-	});  
- 			
-  	$.get("gradebook_flatview.php",{\'func\':\'1\'},function(data){
-  		alert(data); 			
-	});
-	*/	 
-</script>';
  
 $interbreadcrumb[]= array (
 	'url' => $_SESSION['gradebook_dest'],
@@ -214,27 +190,23 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
 		echo '</div>';*/
 		
 		// main graph		  
-		//@todo load images in with jquery 
+		//@todo load images with jquery
 		echo '<div id="contentArea" style="text-align:center;" >';
-		$image_file = $flatviewtable->display_graph();
-		echo '<img  src="'.$image_file.'">';	
-		$flatviewtable->display();		
-		$flatviewtable->display_graph_by_resource();
+			$image_file = $flatviewtable->display_graph();
+			echo '<img  src="'.$image_file.'">';	
+			$flatviewtable->display();		
+			$flatviewtable->display_graph_by_resource();
 		echo '</div>';						
 }
 Display :: display_footer();
 
 function get_printable_data($users,$alleval, $alllinks) {
 	$datagen = new FlatViewDataGenerator ($users,$alleval, $alllinks);
-
 	$offset = (isset($_GET['offset'])?$_GET['offset']:'0');
-
 	$count = (($offset+10) > $datagen->get_total_items_count()) ?
   		 	 ($datagen->get_total_items_count()-$offset) : 10;
-
 	$header_names = $datagen->get_header_names($offset,$count);
-	$data_array = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME,0,null,$offset,$count,true);	
-
+	$data_array = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME,0,null,$offset,$count,true);
 	$newarray = array();
 	foreach ($data_array as $data) {
 		$newarray[] = array_slice($data, 1);		

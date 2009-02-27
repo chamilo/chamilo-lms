@@ -561,8 +561,7 @@ class learnpath {
 		if (!empty($_FILES['mp3']['name'])) {
 			// create the audio folder if it does not exist yet
 			global $_course;
-			$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
-						
+			$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';			
 			if(!is_dir($filepath.'audio')) {
 				$perm = api_get_setting('permissions_for_new_directories');
 				$perm = octdec(!empty($perm)?$perm:'0770');
@@ -572,8 +571,7 @@ class learnpath {
 			}
 			
 			// upload the file in the documents tool			
-			include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-			
+			include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');			
 			$file_path = handle_uploaded_document($_course, $_FILES['mp3'],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);			
 			
 			// getting the filename only
@@ -815,7 +813,7 @@ class learnpath {
     	$sql_del_view = "DELETE FROM $lp_view WHERE lp_id = ".$this->lp_id;
     	//if($this->debug>2){error_log('New LP - Deleting views bound to lp '.$this->lp_id.': '.$sql_del_view,0);}
     	$res_del_view = api_sql_query($sql_del_view, __FILE__, __LINE__);
-	$this->toggle_publish($this->lp_id,'i');
+		$this->toggle_publish($this->lp_id,'i');
     	//if($this->debug>2){error_log('New LP - Deleting lp '.$this->lp_id.' of type '.$this->type,0);}
     	if($this->type == 2 OR $this->type==3){
     		//this is a scorm learning path, delete the files as well
@@ -955,20 +953,25 @@ class learnpath {
     function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0, $audio=NULL, $max_time_allowed=0) {
     	if($this->debug > 0){error_log('New LP - In learnpath::edit_item()', 0);}
         if(empty($max_time_allowed)) { $max_time_allowed = 0;}
-
     	if(empty($id) or ($id != strval(intval($id))) or empty($title)){ return false; }
     	
-    	$tbl_lp_item = Database::get_course_table('lp_item');
-    	
-    	$sql_select = "
-    		SELECT *
-    		FROM " . $tbl_lp_item . "
-    		WHERE id = " . $id;
+    	$tbl_lp_item = Database::get_course_table('lp_item');    	
+    	$sql_select = "SELECT * FROM " . $tbl_lp_item . " WHERE id = " . $id;
     	$res_select = api_sql_query($sql_select, __FILE__, __LINE__);
     	$row_select = Database::fetch_array($res_select);
-    	
-        $audio_update_sql = '';
-        if (is_array($audio) && !empty($audio['tmp_name']) && $audio['error']===0) {
+        $audio_update_sql = '';        
+        if (is_array($audio) && !empty($audio['tmp_name']) && $audio['error']===0) {        	
+        	// create the audio folder if it does not exist yet
+			global $_course;
+			$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';			
+			if(!is_dir($filepath.'audio')) {
+				$perm = api_get_setting('permissions_for_new_directories');
+				$perm = octdec(!empty($perm)?$perm:'0770');
+				mkdir($filepath.'audio',$perm);
+				$audio_id=add_document($_course,'/audio','folder',0,'audio');
+				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id());				
+			}
+			
             //upload file in documents
             $pi = pathinfo($audio['name']);
             if ($pi['extension'] == 'mp3') {
@@ -978,14 +981,13 @@ class learnpath {
                 $path = substr($path,7);
                 //update reference in lp_item - audio path is the path from inside de document/audio/ dir
             	$audio_update_sql = ", audio = '".Database::escape_string($path)."' ";
-          }
+          	}
         }
 
     	$same_parent	= ($row_select['parent_item_id'] == $parent) ? true : false;
     	$same_previous	= ($row_select['previous_item_id'] == $previous) ? true : false;
     	
-    	if($same_parent && $same_previous)
-    	{
+    	if($same_parent && $same_previous) {
     		//only update title and description
     		$sql_update = "
     			UPDATE " . $tbl_lp_item . " 

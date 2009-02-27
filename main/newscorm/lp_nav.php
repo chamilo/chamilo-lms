@@ -18,27 +18,20 @@ require_once('back_compat.inc.php');
 require_once('learnpath.class.php');
 require_once('scorm.class.php');
 require_once('aicc.class.php');
-
 //error_log('New LP - Loaded lp_nav: '.$_SERVER['REQUEST_URI'],0);
-
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 	  var dokeos_xajax_handler = window.parent.oxajax;
 	</script>';
-
 $progress_bar = '';
 $navigation_bar = '';
 $display_mode = '';
 
-if(isset($_SESSION['lpobject']))
-{
+if(isset($_SESSION['lpobject'])) {
 	//if($debug>0) //error_log('New LP - in lp_nav.php - SESSION[lpobject] is defined',0);
 	$oLP = unserialize($_SESSION['lpobject']);
-	if(is_object($oLP))
-	{
+	if(is_object($oLP)) {
 		$_SESSION['oLP'] = $oLP;
-	}
-	else
-	{
+	} else {
 		//error_log('New LP - in lp_nav.php - SESSION[lpobject] is not object - dying',0);
 		die('Could not instanciate lp object');
 	}	
@@ -49,35 +42,28 @@ if(isset($_SESSION['lpobject']))
 	//Setting up the CSS theme if exists	
 	include_once('../inc/reduced_header.inc.php');	
 	
-	if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1 )	
-	{
+	if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1 ) {
 		global $lp_theme_css;			
-	}
-	else 
-	{
+	} else {
 		$lp_theme_css=$my_style;
-	} 
-	
+	}	
 	//$progress_bar = $_SESSION['oLP']->get_progress_bar(); 
-	$progress_bar = $_SESSION['oLP']->get_progress_bar('',-1,'',true);
-	
-	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();	
+	$progress_bar = $_SESSION['oLP']->get_progress_bar('',-1,'',true);	
+	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();	
 	$mediaplayer = $_SESSION['oLP']->get_mediaplayer();
 }
 session_write_close();
 ?>
-<body>
-
-	
+<body>	
 	<div class="lp_navigation_elem">
 		<table>
+			<tr>
+				<td colspan="2"><?php echo $mediaplayer; ?></td>
+			</tr>			
 			<tr valign="middle">
 				<td><?php echo $progress_bar; ?></td>
 				<td><?php echo $navigation_bar; ?></td>
-			</tr>
-			<tr>
-				<td colspan="2"><?php echo $mediaplayer; ?></td>
-			</tr>
+			</tr>		
 		</table>
 	</div>
 </body>

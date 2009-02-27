@@ -172,6 +172,12 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 else
 {	
 	include_once('../inc/reduced_header.inc.php');
+	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
+	$_SESSION['loaded_lp_view'] = true;	
+	
+	/*
+	 * Audio recorder funcionality deprecated
+	 * 
 	$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
 	//check if audio recorder needs to be in studentview
 	$course_id=$_SESSION["_course"]["id"];
@@ -183,8 +189,7 @@ else
 	{
 		$audio_recorder_studentview = false;
 	}
-	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
-	$_SESSION['loaded_lp_view'] = true;	
+	
 	$audio_record_width='';	
 	$show_audioplayer=false;
 	if ($displayAudioRecorder) 
@@ -200,7 +205,7 @@ else
 			$show_audioplayer=true; 
 		}
 	}
-
+	*/
 	?>
 	<frameset cols="270,*">
 		<frameset rows="60,270,105,30,480,20">

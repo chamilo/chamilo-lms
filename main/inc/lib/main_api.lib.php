@@ -936,8 +936,8 @@ function get_status_from_code($status_code)
         return get_lang('Teacher');
         case COUSEMANAGER:
         return get_lang('Manager');
-        case ADMINCRFP:
-        return get_lang('AdminCrfp');
+        case SESSIONMANAGER:
+        return get_lang('SessionsAdmin');
         case DRH:
         return get_lang('Drh');
 

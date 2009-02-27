@@ -98,6 +98,8 @@ UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_email
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='show_different_course_language';
 UPDATE settings_current SET access_url_changeable = 1 WHERE variable='display_categories_on_homepage';
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('advanced_filemanager',NULL,'radio','Platform','false','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('advanced_filemanager','true','Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('advanced_filemanager','false','No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'false', 'No');
@@ -108,7 +110,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_browse_courses', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_browse_courses', 'false', 'No');
 ALTER TABLE user_field ADD field_filter tinyint default 0;
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.18555','DokeosDatabaseVersion','',NULL,NULL,1,0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.18715','DokeosDatabaseVersion','',NULL,NULL,1,0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0);
 INSERT INTO user_friend_relation_type(id,title)VALUES(1,'SocialUnknow');
 INSERT INTO user_friend_relation_type(id,title)VALUES(2,'SocialParent');

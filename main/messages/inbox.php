@@ -91,9 +91,9 @@ if ( trim($info_reply[4])=='Enviar' ) {
 		MessageManager::display_success_message($user_reply);
 		exit;
 	} elseif($info_reply[2]==0) {
-		$message_box=get_lang('ErrorMessageSend').
-			'&nbsp
-			<br><a href="../social/index.php#remote-tab-2">'.
+		$message_box=get_lang('ErrorSendingMessage').
+			'&nbsp;
+			<br /><a href="../social/index.php#remote-tab-2">'.
 			get_lang('BackToInbox').
 			'</a>';
 		Display::display_error_message($message_box,false);
@@ -104,8 +104,8 @@ if ( trim($info_reply[4])=='Enviar' ) {
 		MessageManager::delete_message_by_user_receiver(api_get_user_id(), $info_delete[$i]);	
 	}
 		$message_box=get_lang('SelectedMessagesDeleted').
-			'&nbsp
-			<br><a href="../social/index.php#remote-tab-2">'.
+			'&nbsp;
+			<br /><a href="../social/index.php#remote-tab-2">'.
 			get_lang('BackToInbox').
 			'</a>';
 		Display::display_normal_message($message_box,false);

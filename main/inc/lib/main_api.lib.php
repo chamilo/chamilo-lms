@@ -922,6 +922,32 @@ function domesticate($input) {
 	return ($input);
 }
 
+/**
+* Returns the status string corresponding to the status code
+* @author Noel Dieschburg
+* @param the int status code
+*/
+function get_status_from_code($status_code)
+{
+        switch ($status_code) {
+        case STUDENT:
+        return get_lang('Student');
+        case TEACHER:
+        return get_lang('Teacher');
+        case COUSEMANAGER:
+        return get_lang('Manager');
+        case ADMINCRFP:
+        return get_lang('AdminCrfp');
+        case DRH:
+        return get_lang('Drh');
+
+        }
+
+}
+
+
+
+
 /*
 ==============================================================================
 		FAILURE MANAGEMENT

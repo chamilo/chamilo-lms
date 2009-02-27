@@ -174,150 +174,152 @@ class FlatViewTable extends SortableTable
 		$total_users = $this->datagen->get_total_users_count();
 		$img_file = '';
 		
-		if ($this->datagen->get_total_items_count()>0 && $total_users > 0 ) 
-		{						
+		if ($this->datagen->get_total_items_count()>0 && $total_users > 0 ) {						
 			array_shift($header_name); 
 			array_shift($header_name);
 			array_pop($header_name);						
-			$user_results = ($this->datagen->get_data_to_graph2());
-							
-			$pre_result = $new_result = array();			
-			//print_r($user_results);			
-			$DataSet = new pData;
-			//filling the Dataset			
-			foreach($user_results as $result) {
-				//print_r($result);				
-				for($i=0; $i< count($header_name); $i++) {					
-					$pre_result[$i+3][]=$result[$i+1];
-					$pre_result_pie[$i+3][] = $result[$i+1][0]; 				
-				}			
-			}			
+			
 			$displayscore= ScoreDisplay :: instance();
 			$customdisplays = $displayscore->get_custom_score_display_settings();
-			/*$display_list = array();
-			foreach( $customdisplays as $display) {
-				$display_list[] = $display['display'];
-			}	*/		
-			
-			$i=0;			
-			$show_draw = false;
-			$resource_list = array();			 
-			$pre_result2 = array();
-			foreach($pre_result as $key=>$res_array) {
-				rsort($res_array);			
-				$pre_result2[] = $res_array;
-			}			
-			//print_r($pre_result2); 
-					
-			if ($total_users>0) {
-				foreach($pre_result2 as $key=>$res_array) {					
-					//$resource_list 			 
-					//$total =  $res / ($total_users*100);				
-					// mayor a menor					
-					$key_list = array();								
-					foreach($res_array as $user_result) {												
-						$resource_list[$key][$user_result[1]]+=1;
-						$key_list[] = $user_result[1];						
-					}
-					//@todo when a display custom does not exist the order of the color does not match					
-					//filling all the answer that are not responded with 0
-					foreach($customdisplays as $display) {						
-						if (!in_array($display['display'], $key_list))
-							$resource_list[$key][$display['display']]=0;
-					}
-					$i++; 	
-				}
-			}			
-			//print_r($customdisplays);		
-			//print_r($resource_list); exit;
-			$i = 1;
-			$j = 0;
-			// here-----------------------------------			
-			foreach($resource_list as $key=>$resource) {
-				$new_resource_list = $new_resource_list_name = array();				
-				$DataSet = new pData;				
-				foreach($resource as $name=>$cant) {					
-					//$new_resource_list[]=$cant;
-					//$new_resource_list_name[]=$name;					
-					$DataSet->AddPoint($cant,"Serie".$j);
-					$DataSet->SetSerieName($name,"Serie".$j);
-					$j++;
-				}								  			
-				//print_r($pre_result); print_r($header_name);			
-				// Dataset definition   		  
-				$DataSet->AddAllSeries();  
-				$DataSet->SetAbsciseLabelSerie();
-				$show_draw = true;
-				// Cache definition   
-				$Cache = new pCache();
-				// the graph id
-				$gradebook_id = Security::remove_XSS($_GET['selectcat']);			
-				$graph_id = api_get_user_id().'ByResource'.$gradebook_id.api_get_course_id();
-									
-				if ($show_draw) {			
-					if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
-					//if (0) {
-						//if we already created the img we get the img file id 
-						//echo 'in cache';
-						$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());			
-					} else  {	  
-						// if the image does not exist in the main/garbage/ folder						
-						// Initialise the graph						
-						$chart_size_w= 480;
-						$chart_size_h= 250;  
-						
-						$Test = new pChart($chart_size_w,$chart_size_h); 
-					
-						// Adding the color schemma
-						$Test->loadColorPalette(api_get_path(LIBRARY_PATH)."pchart/palette/hard_blue.txt");
-						
-						// set font of the axes 
-						$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",8);
-						$area_graph_w = $chart_size_w-130;  
-						$Test->setGraphArea(50,30,$area_graph_w ,$chart_size_h-50);
-						  
-						$Test->drawFilledRoundedRectangle(5,5,$chart_size_w-1,$chart_size_h-20,5,240,240,240);  
-						//$Test->drawRoundedRectangle(5,5,790,330,5,230,230,230);
-						
-						//background color area & stripe or not					
-						$Test->drawGraphArea(255,255,255,TRUE);
-						//print_r($DataSet->GetData());						
-						$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,1, FALSE);
-						
-						//background grid     
-						$Test->drawGrid(4,TRUE,230,230,230,50);  
-						 
-						// Draw the 0 line  
-						//$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",6);  
-						//$Test->drawTreshold(0,143,55,72,TRUE,TRUE);  
-						 
-						// Draw the bar graph  
-						$Test->drawBarGraph($DataSet->GetData(),$DataSet->GetDataDescription(),TRUE);  
-						 
-						//Set legend properties: width, height and text color and font
-						$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",9);  
-						$Test->drawLegend($area_graph_w+10, 70,$DataSet->GetDataDescription(),255,255,255);
-						
-						//Set title properties  
-						$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",10);  
-						$Test->drawTitle(50,22,$header_name[$i-1],50,50,80,$chart_size_w-50);
-						
-						//------------------						
-						//echo 'not in cache';			
-						$Cache->WriteToCache($graph_id,$DataSet->GetData(),$Test);						
-						ob_start();
-						$Test->Stroke();
-						ob_end_clean();				
-						$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());
-					}
-					echo '<img src="'.api_get_path(WEB_CODE_PATH).'garbage/'.$img_file.'" >';					
-					if ($i % 2 == 0 && $i!=0) {
-						echo '<br>';
-					}
-					$i++;					
-				}
-			} //end foreach
+			if (is_array($customdisplays) && count(($customdisplays))) { 
 				
+				$user_results = ($this->datagen->get_data_to_graph2());							
+				$pre_result = $new_result = array();			
+				//print_r($user_results);			
+				$DataSet = new pData;
+				//filling the Dataset			
+				foreach($user_results as $result) {
+					//print_r($result);				
+					for($i=0; $i< count($header_name); $i++) {					
+						$pre_result[$i+3][]=$result[$i+1];
+						$pre_result_pie[$i+3][] = $result[$i+1][0]; 				
+					}			
+				}			
+				
+				/*$display_list = array();
+				foreach( $customdisplays as $display) {
+					$display_list[] = $display['display'];
+				}	*/		
+				
+				$i=0;			
+				$show_draw = false;
+				$resource_list = array();			 
+				$pre_result2 = array();
+				foreach($pre_result as $key=>$res_array) {
+					rsort($res_array);			
+					$pre_result2[] = $res_array;
+				}			
+				//print_r($pre_result2); 
+						
+				if ($total_users>0) {
+					foreach($pre_result2 as $key=>$res_array) {					
+						//$resource_list 			 
+						//$total =  $res / ($total_users*100);				
+						// mayor a menor					
+						$key_list = array();								
+						foreach($res_array as $user_result) {												
+							$resource_list[$key][$user_result[1]]+=1;
+							$key_list[] = $user_result[1];						
+						}
+						//@todo when a display custom does not exist the order of the color does not match					
+						//filling all the answer that are not responded with 0
+						foreach($customdisplays as $display) {						
+							if (!in_array($display['display'], $key_list))
+								$resource_list[$key][$display['display']]=0;
+						}
+						$i++; 	
+					}
+				}			
+				//print_r($customdisplays);		
+				//print_r($resource_list); exit;
+				$i = 1;
+				$j = 0;
+				// here-----------------------------------			
+				foreach($resource_list as $key=>$resource) {
+					$new_resource_list = $new_resource_list_name = array();				
+					$DataSet = new pData;				
+					foreach($resource as $name=>$cant) {					
+						//$new_resource_list[]=$cant;
+						//$new_resource_list_name[]=$name;					
+						$DataSet->AddPoint($cant,"Serie".$j);
+						$DataSet->SetSerieName($name,"Serie".$j);
+						$j++;
+					}								  			
+					//print_r($pre_result); print_r($header_name);			
+					// Dataset definition   		  
+					$DataSet->AddAllSeries();  
+					$DataSet->SetAbsciseLabelSerie();
+					$show_draw = true;
+					// Cache definition   
+					$Cache = new pCache();
+					// the graph id
+					$gradebook_id = Security::remove_XSS($_GET['selectcat']);			
+					$graph_id = api_get_user_id().'ByResource'.$gradebook_id.api_get_course_id();
+										
+					if ($show_draw) {			
+						if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
+						//if (0) {
+							//if we already created the img we get the img file id 
+							//echo 'in cache';
+							$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());			
+						} else  {	  
+							// if the image does not exist in the main/garbage/ folder						
+							// Initialise the graph						
+							$chart_size_w= 480;
+							$chart_size_h= 250;  
+							
+							$Test = new pChart($chart_size_w,$chart_size_h); 
+						
+							// Adding the color schemma
+							$Test->loadColorPalette(api_get_path(LIBRARY_PATH)."pchart/palette/hard_blue.txt");
+							
+							// set font of the axes 
+							$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",8);
+							$area_graph_w = $chart_size_w-130;  
+							$Test->setGraphArea(50,30,$area_graph_w ,$chart_size_h-50);
+							  
+							$Test->drawFilledRoundedRectangle(5,5,$chart_size_w-1,$chart_size_h-20,5,240,240,240);  
+							//$Test->drawRoundedRectangle(5,5,790,330,5,230,230,230);
+							
+							//background color area & stripe or not					
+							$Test->drawGraphArea(255,255,255,TRUE);
+							//print_r($DataSet->GetData());						
+							$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,1, FALSE);
+							
+							//background grid     
+							$Test->drawGrid(4,TRUE,230,230,230,50);  
+							 
+							// Draw the 0 line  
+							//$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",6);  
+							//$Test->drawTreshold(0,143,55,72,TRUE,TRUE);  
+							 
+							// Draw the bar graph  
+							$Test->drawBarGraph($DataSet->GetData(),$DataSet->GetDataDescription(),TRUE);  
+							 
+							//Set legend properties: width, height and text color and font
+							$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",9);  
+							$Test->drawLegend($area_graph_w+10, 70,$DataSet->GetDataDescription(),255,255,255);
+							
+							//Set title properties  
+							$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",10);  
+							$Test->drawTitle(50,22,$header_name[$i-1],50,50,80,$chart_size_w-50);
+							
+							//------------------						
+							//echo 'not in cache';			
+							$Cache->WriteToCache($graph_id,$DataSet->GetData(),$Test);						
+							ob_start();
+							$Test->Stroke();
+							ob_end_clean();				
+							$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());
+						}
+						echo '<img src="'.api_get_path(WEB_CODE_PATH).'garbage/'.$img_file.'" >';					
+						if ($i % 2 == 0 && $i!=0) {
+							echo '<br>';
+						}
+						$i++;					
+					}
+				} //end foreach
+			}
 			// Pie charts
 			/*	
 			$show_draw = false;

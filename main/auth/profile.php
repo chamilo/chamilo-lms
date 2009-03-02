@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18693 2009-02-25 15:43:24Z cvargas1 $
+<?php // $Id: profile.php 18770 2009-03-02 22:11:24Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -711,10 +711,15 @@ Display :: display_header('');
 
 if (api_get_setting('extended_profile') == 'true') {	
 	echo '<div class="actions">';
-	if ($_GET['type']=='extended') {
-		echo '<a href="profile.php?type=reduced&show=1">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditNormalProfile').'</a>';			
+	if (isset($_GET['show'])) {
+		$show='&amp;show='.$_GET['show'];
 	} else {
-		echo '<a href="profile.php?type=extended&show=1">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditExtendProfile').'</a>';
+		$show='';
+	}
+	if ($_GET['type']=='extended') {
+		echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditNormalProfile').'</a>';			
+	} else {
+		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditExtendProfile').'</a>';
 	}	
 	echo '</div>';
 } 

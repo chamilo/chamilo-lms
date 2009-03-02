@@ -2470,7 +2470,7 @@ input.forms	{
 	display:inline;
     position:absolute;
 	margin-top:20px;
-	margin-left:20px;
+    margin-left:32px;
 }
 /* styles from the my.profile.php file */
 .message-content {

@@ -1873,7 +1873,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	display:inline;
     position:absolute;
 	margin-top:20px;
-	margin-left:20px;
+    margin-left:32px;
 }
 /* styles from the my.profile.php file */
 .message-content {

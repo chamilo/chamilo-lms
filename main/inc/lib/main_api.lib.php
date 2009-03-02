@@ -934,9 +934,9 @@ function get_status_from_code($status_code)
         return get_lang('Student');
         case TEACHER:
         return get_lang('Teacher');
-        case COUSEMANAGER:
+        case COURSEMANAGER:
         return get_lang('Manager');
-        case SESSIONMANAGER:
+        case SESSIONADMIN:
         return get_lang('SessionsAdmin');
         case DRH:
         return get_lang('Drh');
@@ -944,7 +944,6 @@ function get_status_from_code($status_code)
         }
 
 }
-
 
 
 

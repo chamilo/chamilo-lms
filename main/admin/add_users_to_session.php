@@ -455,7 +455,7 @@ if ($add_type == 'multiple') {
 </div>
 <br><br>
 
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 
 <?php
 if ($add_type=='multiple') { 
@@ -567,10 +567,12 @@ unset($sessionUsersList);
 	<td colspan="3" align="center">
 		<br />
 		<?php
-		if(isset($_GET['add']))
+		if(isset($_GET['add'])) {
 			echo '<input type="button" value="'.get_lang("FinishSessionCreation").'" onclick="valide()" />';
-		else
+        } else {
+            //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
 			echo '<input type="button" value="'.get_lang('Ok').'" onclick="valide()" />';
+        }
 		?>
 	</td>
 </tr>
@@ -620,11 +622,6 @@ function valide(){
 	var options = document.getElementById('destination_users').options;
 	for (i = 0 ; i<options.length ; i++)
 		options[i].selected = true;
-	/*
-	var options = document.getElementById('destination_classes').options;
-	for (i = 0 ; i<options.length ; i++)
-		options[i].selected = true;
-		*/
 	document.forms.formulaire.submit();
 }
 

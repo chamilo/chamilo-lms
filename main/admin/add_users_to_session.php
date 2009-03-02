@@ -226,8 +226,10 @@ if($_POST['form_sent']) {
 
 		foreach ($CourseList as $enreg_course) {
 			$nbr_users=0;
+            $enreg_course = Database::escape_string($enreg_course);
 			foreach ($UserList as $enreg_user) {
 				if(!in_array($enreg_user, $existingUsers)) {
+                    $enreg_user = Database::escape_string($enreg_user);
 					$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
 					api_sql_query($insert_sql,__FILE__,__LINE__);
 
@@ -256,6 +258,7 @@ if($_POST['form_sent']) {
 		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session",__FILE__,__LINE__);
 		$nbr_users = 0;
 		foreach ($UserList as $enreg_user) {
+            $enreg_user = Database::escape_string($enreg_user);
 			$nbr_users++;
 			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')";
 			api_sql_query($insert_sql,__FILE__,__LINE__);
@@ -277,7 +280,7 @@ if($_POST['form_sent']) {
 			UrlManager::add_session_to_url($id_session,1);
 		}
 		//if(empty($_GET['add']))
-			//header('Location: '.$_GET['page'].'?id_session='.$id_session);
+			//header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
 		//else
 		header('Location: resume_session.php?id_session='.$id_session);
 	}
@@ -437,11 +440,11 @@ if ($ajax_search) {
 }
 
 if ($add_type == 'multiple') {
-	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$_GET['add'].'&add_type=unique">'.get_lang('SessionAddTypeUnique').'</a>';
+	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
 } else {
 	$link_add_type_unique = get_lang('SessionAddTypeUnique');
-	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$_GET['add'].'&add_type=multiple">'.get_lang('SessionAddTypeMultiple').'</a>';
+	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 
@@ -452,7 +455,7 @@ if ($add_type == 'multiple') {
 </div>
 <br><br>
 
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
 
 <?php
 if ($add_type=='multiple') { 

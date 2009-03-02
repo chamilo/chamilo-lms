@@ -82,7 +82,7 @@ $count_reply=count($info_reply);
 $info_delete=explode(',',$_GET['form_delete']);
 $count_delete=(count($info_delete)-1);
 /***********************************************/
-if ( trim($info_reply[4])=='Enviar' ) {
+if ( isset($info_reply[4])) {
 	$title     = $info_reply[0];
 	$content   = $info_reply[1];
 	$user_reply= $info_reply[2];

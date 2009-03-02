@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 18466 2009-02-12 14:25:22Z juliomontoya $
+<?php // $Id: user_fields_add.php 18769 2009-03-02 22:07:40Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -38,7 +38,51 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 // user permissions
 api_protect_admin_script();
-
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function change_image_user_field (image_value) {
+	if (image_value==1) {
+		$("div#id_image_user_field").html("&nbsp;");
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_text.png', get_lang('AddUserFields'))."'".');
+			
+	} else if (image_value==2) {
+		$("div#id_image_user_field").html("&nbsp;");
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_text_area.png', get_lang('AddUserFields'))."'".');
+				
+	} else if (image_value==3) {
+		$("div#id_image_user_field").html("&nbsp;");
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'))."'".');
+				
+	} else if (image_value==4) {
+		$("div#id_image_user_field").html("&nbsp;");
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_drop_down.png', get_lang('AddUserFields'))."'".');
+				
+	} else if (image_value==5) {
+		$("div#id_image_user_field").html("&nbsp;");
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_multidropdown.png', get_lang('AddUserFields'))."'".');
+				
+	} else if (image_value==6) {
+		$("div#id_image_user_field").html("&nbsp;");
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_data.png', get_lang('AddUserFields'))."'".');
+				
+	} else if (image_value==7) {
+		$("div#id_image_user_field").html("&nbsp;");
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_date_time.png', get_lang('AddUserFields'))."'".');
+				
+	} else if (image_value==8) {
+		$("div#id_image_user_field").html("&nbsp;");
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'))."'".');
+				
+	} else if (image_value==9) {
+		$("div#id_image_user_field").html("&nbsp;");
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_divider.png', get_lang('AddUserFields'))."'".');
+				
+	}
+}		
+	
+		
+		
+</script>';
 // Database table definitions
 $table_admin	= Database :: get_main_table(TABLE_MAIN_ADMIN);
 $table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
@@ -78,7 +122,7 @@ $types[USER_FIELD_TYPE_DATE] = get_lang('FieldTypeDate');
 $types[USER_FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
 $types[USER_FIELD_TYPE_DOUBLE_SELECT] 	= get_lang('FieldTypeDoubleSelect');
 $types[USER_FIELD_TYPE_DIVIDER] 		= get_lang('FieldTypeDivider');
-$form->addElement('select','fieldtype',get_lang('FieldType'),$types);
+$form->addElement('select','fieldtype',get_lang('FieldType'),$types,array('onchange'=>'change_image_user_field(this.value)'));
 $form->addRule('fieldtype', get_lang('ThisFieldIsRequired'), 'required');
 // Field display name
 $form->addElement('text','fieldtitle',get_lang('FieldTitle'));
@@ -171,7 +215,9 @@ if(!empty($_GET['message']))
 	//Display::display_normal_message(get_lang('UserFieldsAddHelp'),false);
 //}
 $form->display();
-echo '<br />'.Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'));
+echo '<div id="id_image_user_field">';
+echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));
+echo '</div>';
 
 // footer
 Display::display_footer();

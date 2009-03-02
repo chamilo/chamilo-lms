@@ -191,22 +191,23 @@ if ($_POST['formSent']) {
 
 
 	foreach($CourseList as $enreg_course) {
+		$enreg_course = Database::escape_string($enreg_course);
 		$exists = false;
 		foreach($existingCourses as $existingCourse) {
 			if($enreg_course == $existingCourse['course_code']) {
 				$exists=true;
 			}
 		}
-		if(!$exists) {
-			api_sql_query("INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')",__FILE__,__LINE__);
-			
+		if(!$exists) {			
+			$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')";
+			api_sql_query($sql_insert_rel_course ,__FILE__,__LINE__);			
 			//We add in the existing courses table the current course, to not try to add another time the current course
 			$existingCourses[]=array('course_code'=>$enreg_course);
-
 			$nbr_users=0;
-			foreach ($UserList as $enreg_user) {
-				$enreg_user = $enreg_user['id_user'];
-				api_sql_query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
+			foreach ($UserList as $enreg_user) {				
+				$enreg_user = Database::escape_string($enreg_user['id_user']);
+				$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
+				api_sql_query($sql_insert,__FILE__,__LINE__);
 				if(Database::affected_rows()) {
 					$nbr_users++;
 				}
@@ -311,11 +312,11 @@ if ($ajax_search) {
 unset($Courses);
 
 if($add_type == 'multiple') {
-	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$_GET['add'].'&add_type=unique">'.get_lang('SessionAddTypeUnique').'</a>';
+	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
 } else {
 	$link_add_type_unique = get_lang('SessionAddTypeUnique');
-	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$_GET['add'].'&add_type=multiple">'.get_lang('SessionAddTypeMultiple').'</a>';
+	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 ?>

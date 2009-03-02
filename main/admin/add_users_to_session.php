@@ -104,6 +104,7 @@ function search_users($needle)
 		
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
+		$needle = Database::escape_string($needle);
 		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
 		
 		// search users where username or firstname or lastname begins likes $needle

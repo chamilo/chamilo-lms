@@ -125,6 +125,8 @@ if(empty($first_letter_user))
 	}
 	unset($result);
 }
+
+$first_letter_course = Database::escape_string($first_letter_course);
 $sql = "SELECT code, title FROM $tbl_course
 		WHERE title LIKE '".$first_letter_course."%' OR title LIKE '".strtolower($first_letter_course)."%'
 		ORDER BY title, code DESC ";

@@ -136,7 +136,7 @@ class MessageManager {
 		$request=api_is_xml_http_request();
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3 FROM $table_message " .
 					 "WHERE user_receiver_id=".api_get_user_id()." AND msg_status IN (0,1)" .
-					 "ORDER BY col$column $direction LIMIT $from,$number_of_items";
+					 "ORDER BY send_date desc, col$column $direction LIMIT $from,$number_of_items";
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 		$i = 0;
 		$message_list = array ();
@@ -148,9 +148,9 @@ class MessageManager {
 			 }
 			if ($request===true) {
 				$message[1] = mb_convert_encoding(GetFullUserName($result[1]),'UTF-8',$charset);
-				$message[2] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.mb_convert_encoding($result[2],'UTF-8',$charset).'</a>';
+				$message[2] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",mb_convert_encoding($result[2],'UTF-8',$charset)).'</a>';
 				$message[4] = '<a onclick="reply_to_messages(\'show\','.$result[0].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
-						  '&nbsp;&nbsp;<a onclick="delete_one_message('.$result[0].')" href="#../messages/inbox.php?rs=1&amp;action=deleteone&id='.$result[0].'"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+						  '&nbsp;&nbsp;<a onclick="delete_one_message('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
 				$message[1] = GetFullUserName(($result[1]));
 				$message[2] = '<a href="view_message.php?id='.$result[0].'">'.$result[2].'</a>';
@@ -266,7 +266,7 @@ class MessageManager {
 			 }
 			if ($request===true) {
 				$message[1] = mb_convert_encoding(GetFullUserName($result[1]),'UTF-8',$charset);
-				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.mb_convert_encoding($result[2],'UTF-8',$charset).'</a>';
+				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",mb_convert_encoding($result[2],'UTF-8',$charset)).'</a>';
 				$message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
 				$message[1] = GetFullUserName($result[1]);
@@ -330,7 +330,7 @@ class MessageManager {
 		      	<TABLE>      
 		            <TR>
 		              <TD width="100%">                              
-		                    <TR> <h1>'.mb_convert_encoding($row[5],'UTF-8',$charset).'</h1></TR>
+		                    <TR> <h1>'.str_replace("\\","",mb_convert_encoding($row[5],'UTF-8',$charset)).'</h1></TR>
 		              </TD>              		
 		              <TR>                       
 		              	<TD>'.mb_convert_encoding(get_lang('From'),'UTF-8',$charset).'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.mb_convert_encoding(strtolower(get_lang('To')),'UTF-8',$charset).'&nbsp;  <b>'.mb_convert_encoding(GetFullUserName($row[2]),'UTF-8',$charset).'</b> </TD>
@@ -379,7 +379,7 @@ class MessageManager {
 		      	<TABLE>      
 		            <TR>
 		              <TD width="100%">                              
-		                    <TR> <h1>'.mb_convert_encoding($row[5],'UTF-8',$charset).'</h1></TR>
+		                    <TR> <h1>'.str_replace("\\","",mb_convert_encoding($row[5],'UTF-8',$charset)).'</h1></TR>
 		              </TD>              		
 		              <TR>                       
 		              	<TD>'.mb_convert_encoding(get_lang('From'),'UTF-8',$charset).'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.mb_convert_encoding(strtolower(get_lang('To')),'UTF-8',$charset).'&nbsp;  <b>'.mb_convert_encoding(GetFullUserName($row[2]),'UTF-8',$charset).'</b> </TD>

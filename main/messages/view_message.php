@@ -1,11 +1,11 @@
-<?php // $Id: view_message.php 18698 2009-02-25 18:13:46Z cvargas1 $
+<?php // $Id: view_message.php 18784 2009-03-03 21:02:25Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) Facultad de Matematicas, UADY (M�xico)
+	Copyright (c) Facultad de Matematicas, UADY (México)
 	Copyright (c) Evie, Free University of Brussels (Belgium)	
 	Copyright (c) 2009 Isaac Flores Paz <isaac.flores.paz@gmail.com>
 	For a full list of contributors, see "credits.txt".

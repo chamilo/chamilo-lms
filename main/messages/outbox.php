@@ -5,7 +5,8 @@
 
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) Facultad de Matematicas, UADY (M�xico)
+	Copyright (c) 2009 Isaac Flores Paz <florespaz@bidsoftperu.com>
+	Copyright (c) Facultad de Matematicas, UADY (México)
 	Copyright (c) Evie, Free University of Brussels (Belgium)		
 
 	For a full list of contributors, see "credits.txt".
@@ -99,7 +100,7 @@ if( trim($info_delete_outbox[0])=='delete' ) {
 	}
 		$message_box=get_lang('SelectedMessagesDeleted').
 			'&nbsp
-			<br><a href="../social/index.php#remote-tab-3">'.
+			<br><a href="../social/index.php?#remote-tab-3">'.
 			get_lang('BackToOutbox').
 			'</a>';
 		Display::display_normal_message($message_box,false);

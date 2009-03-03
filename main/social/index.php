@@ -391,7 +391,6 @@ code {
     font-family: "Courier New", Courier, monospace;
 }
 </style>';
-/*onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;"*/
 $_SESSION['social_exist']=true;
 $_SESSION['social_dest'] = 'index.php';
 $interbreadcrumb[]= array (
@@ -405,14 +404,13 @@ $interbreadcrumb[]= array (
 Display :: display_header('');
 if (isset($_GET['sendform'])) {
 	$form_reply=array();
-	$params_url='?'.$_SERVER['argv'][0];
-	$form_reply[]=$_POST['title'];
-	$form_reply[]=$_POST['content'];
+	$form_reply[]=urlencode($_POST['title']);
+	$form_reply[]=urlencode($_POST['content']);
 	$form_reply[]=$_POST['user_list'];
 	$form_reply[]=$_POST['re_id'];
-	$form_reply[]=$_POST['compose'];
+	$form_reply[]=urlencode($_POST['compose']);
 	$form_info=implode(',',$form_reply);
-	$form_send_data_message="?form_reply=$form_info";
+	$form_send_data_message='?form_reply='.$form_info;
 } elseif (isset($_GET['inbox'])) {
 	$form_delete=array();
 	$form_delete[]=$_POST['action'];
@@ -420,7 +418,7 @@ if (isset($_GET['sendform'])) {
 		$form_delete[]=$_POST['id'][$i];
 	}
 	$form_info=implode(',',$form_delete);
-	$form_send_data_message="?form_delete=$form_info";
+	$form_send_data_message='?form_delete='.($form_info);
 } elseif (isset($_GET['outbox'])) {
 	$form_delete_outbox=array();
 	$form_delete_outbox[]=$_POST['action'];
@@ -428,8 +426,9 @@ if (isset($_GET['sendform'])) {
 		$form_delete_outbox[]=$_POST['out'][$i];
 	}
 	$form_info_outbox=implode(',',$form_delete_outbox);
-	$form_send_data_message="?form_delete_outbox=$form_info_outbox";	
+	$form_send_data_message='?form_delete_outbox='.($form_info_outbox);	
 }
+$form_url_send=isset($form_send_data_message) ? $form_send_data_message :'';
 ?>
 <div id="container-9">
     <ul>
@@ -437,8 +436,8 @@ if (isset($_GET['sendform'])) {
         <?php 
        	if (api_get_setting('allow_message_tool')=='true') { 
        	?>        
-        <li><a href="../messages/inbox.php<?php echo $form_send_data_message; ?>"><span><?php echo get_lang('Inbox'); ?></span></a></li>
-        <li><a href="../messages/outbox.php<?php echo $form_send_data_message; ?>"><span><?php echo get_lang('Outbox'); ?></span></a></li>
+        <li><a href="../messages/inbox.php<?php echo $form_url_send; ?>"><span><?php echo get_lang('Inbox'); ?></span></a></li>
+        <li><a href="../messages/outbox.php<?php echo $form_url_send; ?>"><span><?php echo get_lang('Outbox'); ?></span></a></li>
         <?php }
   	 	if (api_get_setting('allow_social_tool')=='true') {      
         ?>

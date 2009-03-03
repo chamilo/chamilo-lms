@@ -33,14 +33,14 @@ function inbox_display() {
 			$success= get_lang('SelectedMessagesDeleted').
 			"&nbsp
 			<br><a href=\"".
-			"../social/index.php$redirect\">".
+			"../social/index.php?$redirect\">".
 			get_lang('BackToInbox').
 			"</a>";
-		}else {
+		} else {
 			$success= get_lang('SelectedMessagesDeleted').
 			"&nbsp
 			<br><a href=\"".
-			"../social/index.php$redirect\">".
+			"../social/index.php?$redirect\">".
 			get_lang('BackToInbox').
 			"</a>";				
 		}
@@ -118,14 +118,14 @@ function outbox_display() {
 			$success= get_lang('SelectedMessagesDeleted').
 			"&nbsp
 			<br><a href=\"".
-			"../social/index.php$redirect\">".
+			"../social/index.php?$redirect\">".
 			get_lang('BackToOutbox').
 			"</a>";
 		}else {
 			$success= get_lang('SelectedMessagesDeleted').
 			"&nbsp
 			<br><a href=\"".
-			"../social/index.php$redirect\">".
+			"../social/index.php?$redirect\">".
 			get_lang('BackToOutbox').
 			"</a>";				
 		}

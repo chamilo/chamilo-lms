@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 18521 2009-02-16 18:28:44Z ivantcholakov $
+<?php // $Id: create_document.php 18772 2009-03-03 02:31:56Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -50,7 +50,37 @@ $htmlHeadXtra[]='<script>
 	
 function InnerDialogLoaded()
 {
+	/*
 	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
+	return B.ClickFrame();
+	*/
+
+	var isIE  = (navigator.appVersion.indexOf(\'MSIE\') != -1) ? true : false ;
+	var EditorFrame = null ;
+
+	if ( !isIE )
+	{
+		EditorFrame = window.frames[0] ;
+	}
+	else
+	{
+		// For this dynamic page window.frames[0] enumerates frames in a different order in IE.
+		// We need a sure method to locate the frame that contains the online editor.
+		for ( var i = 0, n = window.frames.length ; i < n ; i++ )
+		{
+			if ( window.frames[i].location.toString().indexOf(\'InstanceName=content\') != -1 )
+			{
+				EditorFrame = window.frames[i] ;
+			}
+		}
+	}
+
+	if ( !EditorFrame )
+	{
+		return null ;
+	}
+
+	var B = new EditorFrame.FCKToolbarButton(\'Templates\', EditorFrame.FCKLang.Templates);		
 	return B.ClickFrame();
 };	
 
@@ -69,7 +99,7 @@ function InnerDialogLoaded()
 	function FCKeditor_OnComplete( editorInstance )
 	{
 		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
-		document.getElementById(\'frmModel\').innerHTML = "<iframe height=525px; width=240px; scrolling=\'no\' id=\"template_iframe\" frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
+		document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 	}
 
 	function check_for_title()
@@ -302,6 +332,9 @@ if (isset ($group))
 
 // Create a new form
 $form = new FormValidator('create_document');
+
+$renderer = & $form->defaultRenderer();
+
 // Hidden element with current directory
 $form->addElement('hidden', 'dir');
 $default['dir'] = $dir;
@@ -320,7 +353,9 @@ function document_exists($filename)
 }
 
 // Change the default renderer for the filename-field to display the dir and extension
+/*
 $renderer = & $form->defaultRenderer();
+*/
 //$filename_template = str_replace('{element}', "<tt>$display_dir</tt> {element} <tt>.html</tt>", $renderer->_elementTemplate);
 $filename_template = str_replace('{element}', "{element}", $renderer->_elementTemplate);
 $renderer->setElementTemplate($filename_template, 'filename');
@@ -379,6 +414,7 @@ else
 //$form->addElement('style_submit_button', 'submit', get_lang('SaveDocument'), 'class="save"');
 
 // HTML-editor
+$renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div>', 'content');
 $form->add_html_editor('content','', false, false);
 // Comment-field
 
@@ -387,7 +423,9 @@ $form->addElement('style_submit_button', 'submit', get_lang('langCreateDoc'), 'c
 $form->setDefaults($default);
 
 // HTML
+/*
 $form->addElement('html','<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
+*/
 
 // If form validates -> save the new document
 if ($form->validate())

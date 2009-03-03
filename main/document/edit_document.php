@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 18521 2009-02-16 18:28:44Z ivantcholakov $
+<?php // $Id: edit_document.php 18772 2009-03-03 02:31:56Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -65,13 +65,43 @@ $htmlHeadXtra[] = '
 
 function InnerDialogLoaded()
 {	
+	/*
 	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);	
+	return B.ClickFrame();
+	*/
+
+	var isIE  = (navigator.appVersion.indexOf(\'MSIE\') != -1) ? true : false ;
+	var EditorFrame = null ;
+
+	if ( !isIE )
+	{
+		EditorFrame = window.frames[0] ;
+	}
+	else
+	{
+		// For this dynamic page window.frames[0] enumerates frames in a different order in IE.
+		// We need a sure method to locate the frame that contains the online editor.
+		for ( var i = 0, n = window.frames.length ; i < n ; i++ )
+		{
+			if ( window.frames[i].location.toString().indexOf(\'InstanceName=texte\') != -1 )
+			{
+				EditorFrame = window.frames[i] ;
+			}
+		}
+	}
+
+	if ( !EditorFrame )
+	{
+		return null ;
+	}
+
+	var B = new EditorFrame.FCKToolbarButton(\'Templates\', EditorFrame.FCKLang.Templates);		
 	return B.ClickFrame();
 };	
 		
 function FCKeditor_OnComplete( editorInstance )
 {
-	document.getElementById(\'frmModel\').innerHTML = "<iframe height=525px; width=240px; scrolling=\'no\' frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
+	document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
 }
 		
 
@@ -595,6 +625,9 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 	
 	$action =  api_get_self().'?sourceFile='.urlencode($file_name).'&curdirpath='.urlencode($_GET['curdirpath']).'&file='.urlencode($_GET['file']).'&doc='.urlencode($doc);
 	$form = new FormValidator('formEdit','post',$action);
+
+	$renderer = $form->defaultRenderer();
+
 	$form->addElement('hidden','filename');
 	$form->addElement('hidden','extension'); 
 	$form->addElement('hidden','file_path');
@@ -626,6 +659,7 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 		if (empty($readonly) && $readonly==0)
 		{	
 			$_SESSION['showedit']=1;
+			$renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div>', 'texte');
 			$form->add_html_editor('texte','',false,true);
 		}			
 	}
@@ -637,9 +671,9 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 	}
 			
 	$form->addElement('textarea','newComment',get_lang('Comment'),'rows="3" style="width:300px;"');
-			
+	/*
 	$renderer = $form->defaultRenderer();
-	
+	*/
 	if ($owner_id == $_user['user_id'] || api_is_platform_admin())	
 	{
 		$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
@@ -660,7 +694,9 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 	
 	$form->setDefaults($defaults);
 	// show templates
+	/*
 	$form->addElement('html','<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');			
+	*/
 	$form->display();			
 
 	//Display::display_error_message(get_lang('ReadOnlyFile')); //main API

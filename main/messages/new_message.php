@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 18698 2009-02-25 18:13:46Z cvargas1 $
+<?php // $Id: new_message.php 18785 2009-03-03 23:09:24Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -153,13 +153,13 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form = new FormValidator('compose_message');
 	}
 	if (isset($select_from_user_list)) {
-		$form->add_textfield('id_text_name',get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()'));
+		$form->add_textfield('id_text_name',get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()'));
 		$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
 		$form->addElement('html','<div id="id_div_search" class="message-search">&nbsp;</div>');
 		$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 	} else {
 		if ($default['user_list']==0) {
-			$form->add_textfield('id_text_name',get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()'));
+			$form->add_textfield('id_text_name',get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()'));
 			$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
 			$form->addElement('html','<div id="id_div_search" class="message-search">&nbsp;</div>');
 		}

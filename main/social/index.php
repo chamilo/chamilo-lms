@@ -283,11 +283,12 @@ function send_request_and_search() {
 				data: "search="+name,
 				success: function(datos){
 				$("#id_div_search").html(datos)
-				$("#id_search_name").bind("click", function(){
+				$("#id_search_name").bind("click", function() {
 					name_option=$("select#id_search_name option:selected").text();
 					code_option=$("select#id_search_name option:selected").val();
 					 $("#user_list").attr("value", code_option);
 					 $("#id_text_name").attr("value", name_option);
+					 
 					 $("#id_div_search").html("");
 					 cont++;
 				 });
@@ -356,9 +357,11 @@ function delete_one_message_outbox (num_id) {
 		});
 }
 function list_search_hide () {
-	$("div#id_div_search").html("");	
+		setTimeout("hide_search_list()",1500);
 }
-
+function hide_search_list () {
+	$("div#id_div_search").html("");
+}
 </script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';
 $htmlHeadXtra[] = '

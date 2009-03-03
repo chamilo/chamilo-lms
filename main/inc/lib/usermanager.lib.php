@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 18596 2009-02-19 21:31:00Z juliomontoya $
+<?php // $Id: usermanager.lib.php 18783 2009-03-03 18:10:15Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1689,5 +1689,92 @@ class UserManager
         $res=api_sql_query($sql,__FILE__,__LINE__);
         $row=Database::fetch_array($res,'ASSOC');
         return $row['id'];
+    }
+    /**
+     * Subscribes users to the given session and optionally (default) unsubscribes previous users
+     * @param	int		Session ID
+     * @param	array	List of user IDs
+     * @param	bool	Whether to unsubscribe existing users (true, default) or not (false)
+     * @return	void	Nothing, or false on error  
+     */
+    function suscribe_users_to_session($id_session,$UserList,$empty_users=true){
+    	
+    	if ($id_session!= strval(intval($id_session))) return false;
+    	foreach($UserList as $intUser){
+    		if ($intUser!= strval(intval($intUser))) return false;
+    	}
+    	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    	$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
+    	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$existingUsers = array();
+		while($row = Database::fetch_array($result)){
+			$existingUsers[] = $row['id_user'];
+		}
+		$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+
+		$CourseList=array();
+
+		while($row=Database::fetch_array($result)) {
+			$CourseList[]=$row['course_code'];
+		}
+
+		foreach ($CourseList as $enreg_course) {
+			// for each course in the session
+			$nbr_users=0;
+            $enreg_course = Database::escape_string($enreg_course);
+			// delete existing users
+			if ($empty_users!==false) {
+				foreach ($existingUsers as $existing_user) {
+					if(!in_array($existing_user, $UserList)) {
+						$sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user'";
+						api_sql_query($sql,__FILE__,__LINE__);
+	
+						if(Database::affected_rows()) {
+							$nbr_users--;
+						}
+					}
+				}
+			}
+			// insert new users into session_rel_course_rel_user and ignore if they already exist
+			foreach ($UserList as $enreg_user) {
+				if(!in_array($enreg_user, $existingUsers)) {
+                    $enreg_user = Database::escape_string($enreg_user);
+					$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
+					api_sql_query($insert_sql,__FILE__,__LINE__);
+
+					if(Database::affected_rows()) {
+						$nbr_users++;
+					}
+				}
+			}
+			// count users in this session-course relation
+			$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			list($nbr_users) = Database::fetch_array($rs);
+			// update the session-course relation to add the users total
+			$update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
+			api_sql_query($update_sql,__FILE__,__LINE__);
+		}
+		// delete users from the session
+		if ($empty_users!==false){
+			api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session",__FILE__,__LINE__);
+		}
+		// insert missing users into session
+		$nbr_users = 0;
+		foreach ($UserList as $enreg_user) {
+            $enreg_user = Database::escape_string($enreg_user);
+			$nbr_users++;
+			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')";
+			api_sql_query($insert_sql,__FILE__,__LINE__);
+
+		}
+		// update number of users in the session
+		$nbr_users = count($UserList);
+		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
+		api_sql_query($update_sql,__FILE__,__LINE__);
     }
 }

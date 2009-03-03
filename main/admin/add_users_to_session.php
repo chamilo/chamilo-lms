@@ -210,64 +210,8 @@ if($_POST['form_sent']) {
 	}
 
 	if ($form_sent == 1) {
-		$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
-		$existingUsers = array();
-		while($row = Database::fetch_array($result)){
-			$existingUsers[] = $row['id_user'];
-		}
-		$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
-
-		$CourseList=array();
-
-		while($row=Database::fetch_array($result)) {
-			$CourseList[]=$row['course_code'];
-		}
-
-		foreach ($CourseList as $enreg_course) {
-			$nbr_users=0;
-            $enreg_course = Database::escape_string($enreg_course);
-			foreach ($UserList as $enreg_user) {
-				if(!in_array($enreg_user, $existingUsers)) {
-                    $enreg_user = Database::escape_string($enreg_user);
-					$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
-					api_sql_query($insert_sql,__FILE__,__LINE__);
-
-					if(Database::affected_rows()) {
-						$nbr_users++;
-					}
-				}
-			}
-			foreach ($existingUsers as $existing_user) {
-				if(!in_array($existing_user, $UserList)) {
-					$sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user'";
-					api_sql_query($sql,__FILE__,__LINE__);
-
-					if(Database::affected_rows()) {
-						$nbr_users--;
-					}
-				}
-			}
-			$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
-			list($nbr_users) = Database::fetch_array($rs);
-			$update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			api_sql_query($update_sql,__FILE__,__LINE__);
-		}
-
-		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session",__FILE__,__LINE__);
-		$nbr_users = 0;
-		foreach ($UserList as $enreg_user) {
-            $enreg_user = Database::escape_string($enreg_user);
-			$nbr_users++;
-			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')";
-			api_sql_query($insert_sql,__FILE__,__LINE__);
-
-		}
-		$nbr_users = count($UserList);
-		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
-		api_sql_query($update_sql,__FILE__,__LINE__);
+		
+		UserManager::suscribe_users_to_session($id_session,$UserList,true);
 		
 		//adding the session to the access_url_rel_session table
 		global $_configuration;

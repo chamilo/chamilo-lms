@@ -386,7 +386,7 @@ if( $form->validate())
 				}
 			}			
 			$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ".$portal_url."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-			//@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+			@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 		}
 		Security::clear_token();
 		if(isset($user['submit_plus']))

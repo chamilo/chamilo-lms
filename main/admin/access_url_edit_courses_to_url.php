@@ -59,7 +59,7 @@ $tool_name = get_lang('EditCoursesToURL');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
-$add_type = 'unique';
+$add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = $_REQUEST['add_type'];
 }
@@ -221,7 +221,7 @@ $url_list = UrlManager::get_url_data();
 	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
 </div>
 <br /><br />
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?> >
 <?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
 <option value="0"> <?php echo get_lang('SelectUrl')?></option>

@@ -67,7 +67,7 @@ $tool_name=get_lang('SubscribeUsersToSession');
 
 $id_session=intval($_GET['id_session']);
 
-$add_type = 'unique';
+$add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = $_REQUEST['add_type'];
 }

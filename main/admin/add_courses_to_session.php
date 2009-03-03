@@ -62,7 +62,7 @@ $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name= get_lang('SubscribeCoursesToSession');
 $id_session=intval($_GET['id_session']);
 
-$add_type = 'unique';
+$add_type = 'multiple';
 if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 	$add_type = $_GET['add_type'];
 }

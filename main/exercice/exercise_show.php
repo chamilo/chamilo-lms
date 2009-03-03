@@ -1031,7 +1031,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		
 				<?php
 					if (in_array($origin, array('tracking_course','user_course'))) {
-						echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'&origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].'" method="post">';
+						echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.urlencode($test).'&emailid='.$emailId.'&origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].'" method="post">';
 						if (isset($_GET['myid']) && isset($_GET['my_lp_id']) && isset($_GET['student'])) {
 				?>
 						<input type = "hidden" name="lp_item_id" value="<?php echo Security::remove_XSS($_GET['myid']); ?>">

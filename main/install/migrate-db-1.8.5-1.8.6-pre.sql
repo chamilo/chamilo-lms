@@ -118,6 +118,10 @@ INSERT INTO user_friend_relation_type(id,title)VALUES(3,'SocialFriend');
 INSERT INTO user_friend_relation_type(id,title)VALUES(4,'SocialGoodFriend');
 INSERT INTO user_friend_relation_type(id,title)VALUES(5,'SocialEnemy');
 INSERT INTO user_friend_relation_type(id,title)VALUES(6,'SocialDeleted');
+CREATE TABLE course_field (id int NOT NULL auto_increment, field_type int NOT NULL DEFAULT 1, field_variable varchar(64) NOT NULL, field_display_text varchar(64), field_default_value text, field_order int, field_visible tinyint default 0, field_changeable tinyint default 0, field_filter tinyint default 0, tms TIMESTAMP, PRIMARY KEY(id));
+CREATE TABLE course_field_values (id int NOT NULL auto_increment, course_code varchar(40) NOT NULL, field_id int NOT NULL, field_value text, tms TIMESTAMP, PRIMARY KEY(id));
+CREATE TABLE session_field (id int NOT NULL auto_increment, field_type int NOT NULL DEFAULT 1, field_variable varchar(64) NOT NULL, field_display_text varchar(64), field_default_value text, field_order int, field_visible tinyint default 0, field_changeable tinyint default 0, field_filter tinyint default 0, tms TIMESTAMP, PRIMARY KEY(id));
+CREATE TABLE session_field_values(id int NOT NULL auto_increment, session_id int NOT NULL, field_id int NOT NULL, field_value text, tms TIMESTAMP, PRIMARY KEY(id));
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';

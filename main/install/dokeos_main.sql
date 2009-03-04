@@ -201,6 +201,40 @@ UNLOCK TABLES;
 /*!40000 ALTER TABLE course_category ENABLE KEYS */;
 
 --
+-- Table structure for table course_field
+--
+
+DROP TABLE IF EXISTS course_field;
+CREATE TABLE course_field (
+    id  int NOT NULL auto_increment,
+    field_type int NOT NULL default 1,
+    field_variable  varchar(64) NOT NULL,
+    field_display_text  varchar(64),
+    field_default_value text,
+    field_order int,
+    field_visible tinyint default 0,
+    field_changeable tinyint default 0,
+    field_filter tinyint default 0,
+    tms TIMESTAMP,  
+    PRIMARY KEY(id)
+);
+
+--
+-- Table structure for table course_field_values
+--
+
+DROP TABLE IF EXISTS course_field_values;
+CREATE TABLE course_field_values(
+    id  int NOT NULL auto_increment,
+    course_code varchar(40) NOT NULL,
+    field_id int NOT NULL,
+    field_value text,
+    tms TIMESTAMP,
+    PRIMARY KEY(id)
+);
+
+
+--
 -- Table structure for table course_module
 --
 
@@ -458,6 +492,31 @@ CREATE TABLE session_rel_user (
   PRIMARY KEY  (id_session,id_user)
 );
 
+
+DROP TABLE IF EXISTS session_field;
+CREATE TABLE session_field (
+    id  int NOT NULL auto_increment,
+    field_type int NOT NULL default 1,
+    field_variable  varchar(64) NOT NULL,
+    field_display_text  varchar(64),
+    field_default_value text,
+    field_order int,
+    field_visible tinyint default 0,
+    field_changeable tinyint default 0,
+    field_filter tinyint default 0,
+    tms TIMESTAMP,  
+    PRIMARY KEY(id)
+);
+
+DROP TABLE IF EXISTS session_field_values;
+CREATE TABLE session_field_values(
+    id  int NOT NULL auto_increment,
+    session_id int NOT NULL,
+    field_id int NOT NULL,
+    field_value text,
+    tms TIMESTAMP,
+    PRIMARY KEY(id)
+);
 
 --
 -- Table structure for table settings_current

@@ -1,10 +1,18 @@
 <?php
-class UserFriend extends UserManager {
+class UserFriend extends UserManager {	
 	
-	function UserFriend() {
+	const SOCIALUNKNOW = 1;
+	const SOCIALPARENT = 2;
+	const SOCIALFRIEND = 3;
+	const SOCIALGOODFRIEND = 4;
+	const SOCIALENEMY = 5;
+	const SOCIALDELETED = 6;
+	
+	function __construct() {
 		
 	}
 	/**
+	 * allow to register contact to social network
 	 *@author isaac flores paz <isaac.flores@dokeos.com>
 	 *@param integer
 	 *@return void
@@ -29,6 +37,7 @@ class UserFriend extends UserManager {
 	}
 	
 	/**
+	 * allow to delete contact to social network
 	 *@author isaac flores paz <isaac.flores@dokeos.com>
 	 *@param integer
 	 *@return void
@@ -47,30 +56,8 @@ class UserFriend extends UserManager {
 			api_sql_query($sql_j, __FILE__, __LINE__);
 		}
 	}
-	
 	/**
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param int
-	 * @param array
-	 * @param array
-	 * @return array
-	 */
-	public function active_friends ($friend_id) {
-		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
-		$user_id=api_get_user_id();
-		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type<>6 AND friend_user_id='.$friend_id;
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		$row = Database :: fetch_array($rs, 'ASSOC');
-		$name_relation=self::get_relation_name($user_id,$friend_id);
-		if ($row['count'] == 1) {
-			$result = '<center><img src="../img/kaddressbook.png" border="0" style="vertical-align: middle;" alt="' . get_lang($name_relation) . '" title="' . get_lang($name_relation) . '"/></center>';
-		} else {
-			$result = '<center><img src="../img/nokaddressbook.png" border="0" style="vertical-align: middle;" alt="' . get_lang($name_relation) . '" title="' . get_lang($name_relation) . '"/></center>';
-		}
-		return $result;
-		
-	}
-	/**
+	 * allow to see contacts list
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @return array
 	 */
@@ -92,6 +79,7 @@ class UserFriend extends UserManager {
 		
 	}
 	/**
+	 * get relation type contact by name
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @param string
 	 * @return integer
@@ -106,30 +94,27 @@ class UserFriend extends UserManager {
 		}	
 	}
 	/**
+	 * get the kind of relation between contacts
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @param int
 	 * @param int
 	 * @param string
 	 */
-	public function get_relation_name ($user_id,$user_friend) {
+	public function get_relation_between_contacts ($user_id,$user_friend) {
 		$tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
-		$list_info=array();
-		$sql= 'SELECT rt.title FROM '.$tbl_my_friend_relation_type.' rt ' .
+		$sql= 'SELECT rt.id FROM '.$tbl_my_friend_relation_type.' rt ' .
 			  'WHERE rt.id=(SELECT uf.relation_type FROM '.$tbl_my_friend.' uf WHERE  user_id='.$user_id.' AND friend_user_id='.$user_friend.')';
 		$res=api_sql_query($sql,__FILE__,__LINE__);
-		if ($row=Database::fetch_array($res,'ASSOC')) {
-			$list_info[]=$row;
-		}
-		$count_row=count($list_info);
-		if ($count_row==0) {
-			return get_lang('UnKnow');
+		$row=Database::fetch_array($res,'ASSOC');
+		if (count($row)==0) {
+			return self::SOCIALUNKNOW;
 		} else {
-			return get_lang($row['title']);	
+			return $row['id'];	
 		}
-
 	}
 	/**
+	 * get contacts id list
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @param int
 	 * @return array
@@ -152,6 +137,7 @@ class UserFriend extends UserManager {
 		return $list_ids_friends;
 	}
 	/**
+	 * get list web path of contacts by user id
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @param int
 	 * @param array
@@ -168,6 +154,7 @@ class UserFriend extends UserManager {
 		return $combine_friend;
 	}
 	/**
+	 * get web path of user invitate
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @param int
 	 * @param array
@@ -182,6 +169,7 @@ class UserFriend extends UserManager {
 		return $list_path_image_friend;
 	}	
 	/**
+	 * allow to sent an invitation to my contacts
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @param int
 	 * @param int
@@ -218,6 +206,7 @@ class UserFriend extends UserManager {
 
 	}
 	/**
+	 * get number messages of inbox
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @param int
 	 * @return int
@@ -231,6 +220,7 @@ class UserFriend extends UserManager {
 		return $row['count_message_in_box'];
 	}
 	/**
+	 * get invitation list by user id
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @param int
 	 * @return array()
@@ -245,28 +235,45 @@ class UserFriend extends UserManager {
 		}
 		return $list_friend_invitation;
 	}
+	/**
+	 * allow accept invitation
+	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @param int
+	 * @param int
+	 * @return void()
+	 */
 	public function invitation_accepted ($user_send_id,$user_receiver_id) {
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$msg_status=6;// friend accepted
 		$sql='UPDATE '.$tbl_message.' SET msg_status='.$msg_status.' WHERE user_sender_id='.$user_send_id.' AND user_receiver_id='.$user_receiver_id.';';
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
+	/**
+	 * allow deny invitation
+	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @param int
+	 * @param int
+	 * @return void()
+	 */
 	public function invitation_denied($user_send_id,$user_receiver_id) {
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$msg_status=7;
 		$sql='UPDATE '.$tbl_message.' SET msg_status='.$msg_status.' WHERE user_sender_id='.$user_send_id.' AND user_receiver_id='.$user_receiver_id.';';
 		api_sql_query($sql,__FILE__,__LINE__);		
 	}
+	/**
+	 * allow attach to group
+	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @param int
+	 * @param int
+	 * @return void()
+	 */
 	public function qualify_friend($id_friend_qualify,$type_qualify) {
 		$tbl_user_friend=Database::get_main_table(TABLE_MAIN_USER_FRIEND);
 		$user_id=api_get_user_id();
 		$sql='UPDATE '.$tbl_user_friend.' SET relation_type='.$type_qualify.' WHERE user_id='.$user_id.' AND friend_user_id='.$id_friend_qualify.';';
 		api_sql_query($sql,__FILE__,__LINE__);		
 	}
-	public function get_list_of_groups() {
-		
-	}
-	
 	
 }
 ?>

@@ -5,6 +5,7 @@ define(SOCIALFRIEND,3);
 define(SOCIALGOODFRIEND,4);
 define(SOCIALENEMY,5);
 define(SOCIALDELETED,6);
+
 class UserFriend extends UserManager {	
 	
 	function __construct() {
@@ -111,7 +112,7 @@ class UserFriend extends UserManager {
 		if (Database::num_rows($res)>0) {
 			return $row['id'];	
 		} else {
-			return self::SOCIALUNKNOW;
+			return SOCIALUNKNOW;
 		}
 	}
 	/**
@@ -145,16 +146,19 @@ class UserFriend extends UserManager {
 	 * @param int user id
 	 * @param int group id
 	 * @param string name to search
-	 * @param array
+	 * @param array 
 	 */
 	public function get_list_path_web_by_user_id ($user_id,$id_group=null,$search_name=null) {
 		$list_paths=array();
 		$list_path_friend=array();
 		$array_path_user=array();
+		$combine_friend = array(); 
 		$list_ids = self::get_list_id_friends_by_user_id ($user_id,$id_group,$search_name);
-		foreach ($list_ids as $values_ids) {
-			$list_path_image_friend[] = UserManager::get_user_picture_path_by_id($values_ids['friend_user_id'],'web',false,true);
-			$combine_friend=array('id_friend'=>$list_ids,'path_friend'=>$list_path_image_friend);
+		if (is_array($list_ids)) {
+			foreach ($list_ids as $values_ids) {
+				$list_path_image_friend[] = UserManager::get_user_picture_path_by_id($values_ids['friend_user_id'],'web',false,true);
+				$combine_friend=array('id_friend'=>$list_ids,'path_friend'=>$list_path_image_friend);
+			}
 		}
 		return $combine_friend;
 	}

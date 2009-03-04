@@ -59,21 +59,23 @@ if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id']) {
 }
 
 if ($_POST['formSent']) {
-	$formSent=1;
-	$name=trim(stripslashes($_POST['name']));
-	$year_start=intval($_POST['year_start']);
-	$month_start=intval($_POST['month_start']);
-	$day_start=intval($_POST['day_start']);
-	$year_end=intval($_POST['year_end']);
-	$month_end=intval($_POST['month_end']);
-	$day_end=intval($_POST['day_end']);
-	$id_coach=intval($_POST['id_coach']);
-	$nb_days_acess_before = intval($_POST['nb_days_access_before']);
-	$nb_days_acess_after = intval($_POST['nb_days_access_after']);
-	
-	SessionManager::EditSession($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach,$id);
-	header('Location: resume_session.php?id_session='.$id);
-	exit();
+	$formSent=1;	
+	$name= $_POST['name'];
+	$year_start= $_POST['year_start']; 
+	$month_start=$_POST['month_start']; 
+	$day_start=$_POST['day_start']; 
+	$year_end=$_POST['year_end']; 
+	$month_end=$_POST['month_end']; 
+	$day_end=$_POST['day_end']; 
+	$nb_days_acess_before = $_POST['nb_days_acess_before']; 
+	$nb_days_acess_after = $_POST['nb_days_acess_after']; 
+	$nolimit=$_POST['nolimit'];
+	$id_coach=$_POST['id_coach'];
+	$return = SessionManager::EditSession($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach,$id);
+	if ($return == strval(intval($return))) {
+		header('Location: resume_session.php?id_session='.$return);
+		exit();
+	}
 }
 
 $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";
@@ -96,6 +98,9 @@ $thisYear=date('Y');
 
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
+if (!empty($return)) {
+	Display::display_error_message($return,false);
+}
 ?>
 
 <form method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id=<?php echo $id; ?>" style="margin:0px;">
@@ -110,7 +115,7 @@ api_display_tool_title($tool_name);
 <tr>
   <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
   <td width="70%"><select name="id_coach" style="width:250px;">
-	<option value="0">----- <?php echo get_lang('Choose') ?> -----</option>
+	<option value="">----- <?php echo get_lang('Choose') ?> -----</option>
 
 <?php
 foreach($Coaches as $enreg) {

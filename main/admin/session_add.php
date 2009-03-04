@@ -39,7 +39,6 @@ api_protect_admin_script(true);
 $formSent=0;
 $errorMsg='';
 
-$tool_name = get_lang('AddSession');
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
 
@@ -112,25 +111,24 @@ function fill_coach_field (username) {
 
 if ($_POST['formSent']) {
 	$formSent=1;
-	$name= trim($_POST['name']);
-	$year_start= intval($_POST['year_start']); 
-	$month_start=intval($_POST['month_start']); 
-	$day_start=intval($_POST['day_start']); 
-	$year_end=intval($_POST['year_end']); 
-	$month_end=intval($_POST['month_end']); 
-	$day_end=intval($_POST['day_end']); 
-	$nb_days_acess_before = intval($_POST['nb_days_acess_before']); 
-	$nb_days_acess_after = intval($_POST['nb_days_acess_after']); 
+	$name= $_POST['name'];
+	$year_start= $_POST['year_start']; 
+	$month_start=$_POST['month_start']; 
+	$day_start=$_POST['day_start']; 
+	$year_end=$_POST['year_end']; 
+	$month_end=$_POST['month_end']; 
+	$day_end=$_POST['day_end']; 
+	$nb_days_acess_before = $_POST['nb_days_acess_before']; 
+	$nb_days_acess_after = $_POST['nb_days_acess_after']; 
 	$nolimit=$_POST['nolimit'];
 	$coach_username=$_POST['coach_username'];
-	
-	$id_session=SessionManager::AddSession($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username);
-	header('Location: add_courses_to_session.php?id_session='.$id_session.'&add=true');
-	exit();
+	$return = SessionManager::CreateSession($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username);
+	if ($return == strval(intval($return))) {
+		// integer => no error on session creation
+		header('Location: add_courses_to_session.php?id_session='.$return.'&add=true&msg=');
+		exit();
+	}
 }
-
-Display::display_header($tool_name);
-api_display_tool_title($tool_name);
 
 $nb_days_acess_before = 0;
 $nb_days_acess_after = 0;
@@ -138,6 +136,14 @@ $nb_days_acess_after = 0;
 $thisYear=date('Y');
 $thisMonth=date('m');
 $thisDay=date('d');
+
+
+$tool_name = get_lang('AddSession');
+Display::display_header($tool_name);
+api_display_tool_title($tool_name);
+if (!empty($return)) {
+	Display::display_error_message($return,false);
+}
 ?>
 <form method="post" name="form" action="<?php echo api_get_self(); ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">

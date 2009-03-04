@@ -1,20 +1,21 @@
 <?php
+define(SOCIALUNKNOW,1);
+define(SOCIALPARENT,2);
+define(SOCIALFRIEND,3);
+define(SOCIALGOODFRIEND,4);
+define(SOCIALENEMY,5);
+define(SOCIALDELETED,6);
 class UserFriend extends UserManager {	
-	
-	const SOCIALUNKNOW = 1;
-	const SOCIALPARENT = 2;
-	const SOCIALFRIEND = 3;
-	const SOCIALGOODFRIEND = 4;
-	const SOCIALENEMY = 5;
-	const SOCIALDELETED = 6;
 	
 	function __construct() {
 		
 	}
 	/**
-	 * allow to register contact to social network
+	 * Allow to register contact to social network
 	 *@author isaac flores paz <isaac.flores@dokeos.com>
-	 *@param integer
+	 *@param int user friend id
+	 *@param int user id
+	 *@param int kind of relation between users
 	 *@return void
 	 */
 	public function register_friend ($friend_id,$my_user_id,$relation_type) {
@@ -37,9 +38,9 @@ class UserFriend extends UserManager {
 	}
 	
 	/**
-	 * allow to delete contact to social network
+	 * Allow to delete contact to social network
 	 *@author isaac flores paz <isaac.flores@dokeos.com>
-	 *@param integer
+	 *@param int user friend id
 	 *@return void
 	 */
 	public function removed_friend ($friend_id) {
@@ -57,7 +58,7 @@ class UserFriend extends UserManager {
 		}
 	}
 	/**
-	 * allow to see contacts list
+	 * Allow to see contacts list
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @return array
 	 */
@@ -79,10 +80,10 @@ class UserFriend extends UserManager {
 		
 	}
 	/**
-	 * get relation type contact by name
+	 * Get relation type contact by name
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param string
-	 * @return integer
+	 * @param string names of the kind of relation 
+	 * @return int
 	 */
 	public function get_relation_type_by_name ($relation_type_name) {
 		$list_type_friend=array();
@@ -94,10 +95,10 @@ class UserFriend extends UserManager {
 		}	
 	}
 	/**
-	 * get the kind of relation between contacts
+	 * Get the kind of relation between contacts
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param int
-	 * @param int
+	 * @param int user id
+	 * @param int user friend id
 	 * @param string
 	 */
 	public function get_relation_between_contacts ($user_id,$user_friend) {
@@ -107,16 +108,18 @@ class UserFriend extends UserManager {
 			  'WHERE rt.id=(SELECT uf.relation_type FROM '.$tbl_my_friend.' uf WHERE  user_id='.$user_id.' AND friend_user_id='.$user_friend.')';
 		$res=api_sql_query($sql,__FILE__,__LINE__);
 		$row=Database::fetch_array($res,'ASSOC');
-		if (count($row)==0) {
-			return self::SOCIALUNKNOW;
-		} else {
+		if (Database::num_rows($res)>0) {
 			return $row['id'];	
+		} else {
+			return self::SOCIALUNKNOW;
 		}
 	}
 	/**
 	 * get contacts id list
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param int
+	 * @param int  user id
+	 * @param int group id
+	 * @param string name to search
 	 * @return array
 	 */
 	public function get_list_id_friends_by_user_id ($user_id,$id_group=null,$search_name=null) {
@@ -139,7 +142,9 @@ class UserFriend extends UserManager {
 	/**
 	 * get list web path of contacts by user id
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param int
+	 * @param int user id
+	 * @param int group id
+	 * @param string name to search
 	 * @param array
 	 */
 	public function get_list_path_web_by_user_id ($user_id,$id_group=null,$search_name=null) {
@@ -156,7 +161,7 @@ class UserFriend extends UserManager {
 	/**
 	 * get web path of user invitate
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param int
+	 * @param int user id
 	 * @param array
 	 */
 	public function get_list_web_path_user_invitation_by_user_id ($user_id) {
@@ -171,10 +176,10 @@ class UserFriend extends UserManager {
 	/**
 	 * allow to sent an invitation to my contacts
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param int
-	 * @param int
-	 * @param string
-	 * @param string
+	 * @param int user id
+	 * @param int user friend id
+	 * @param string title of the message
+	 * @param string content of the message
 	 * @return boolean
 	 */
 	public function send_invitation_friend ($user_id,$friend_id,$message_title,$message_content) {
@@ -206,9 +211,9 @@ class UserFriend extends UserManager {
 
 	}
 	/**
-	 * get number messages of inbox
+	 * Get number messages of the inbox
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param int
+	 * @param int user receiver id
 	 * @return int
 	 */
 	public function get_message_number_invitation_by_user_id ($user_receiver_id) {
@@ -222,7 +227,7 @@ class UserFriend extends UserManager {
 	/**
 	 * get invitation list by user id
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param int
+	 * @param int user id
 	 * @return array()
 	 */
 	public function get_list_invitation_of_friends_by_user_id ($user_id) {
@@ -238,8 +243,8 @@ class UserFriend extends UserManager {
 	/**
 	 * allow accept invitation
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param int
-	 * @param int
+	 * @param int user sender id
+	 * @param int user receiver id
 	 * @return void()
 	 */
 	public function invitation_accepted ($user_send_id,$user_receiver_id) {
@@ -251,8 +256,8 @@ class UserFriend extends UserManager {
 	/**
 	 * allow deny invitation
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param int
-	 * @param int
+	 * @param int user sender id
+	 * @param int user receiver id
 	 * @return void()
 	 */
 	public function invitation_denied($user_send_id,$user_receiver_id) {
@@ -264,8 +269,8 @@ class UserFriend extends UserManager {
 	/**
 	 * allow attach to group
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @param int
-	 * @param int
+	 * @param int user to qualify
+	 * @param int kind of rating
 	 * @return void()
 	 */
 	public function qualify_friend($id_friend_qualify,$type_qualify) {

@@ -24,9 +24,9 @@ $language_file='admin';
 
 $cidReset=true;
 
-include('../inc/global.inc.php');
-
-require_once ('../inc/lib/xajax/xajax.inc.php');
+require_once('../inc/global.inc.php');
+require_once(api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
+require_once('../inc/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_coachs');
@@ -38,6 +38,10 @@ api_protect_admin_script(true);
 
 $formSent=0;
 $errorMsg='';
+
+$tool_name = get_lang('AddSession');
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
 
 // Database Table Definitions
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
@@ -105,90 +109,40 @@ function fill_coach_field (username) {
 }
 </script>';
 
-$tool_name = get_lang('AddSession');
 
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
+if ($_POST['formSent']) {
+	$formSent=1;
+	$name= trim($_POST['name']);
+	$year_start= intval($_POST['year_start']); 
+	$month_start=intval($_POST['month_start']); 
+	$day_start=intval($_POST['day_start']); 
+	$year_end=intval($_POST['year_end']); 
+	$month_end=intval($_POST['month_end']); 
+	$day_end=intval($_POST['day_end']); 
+	$nb_days_acess_before = intval($_POST['nb_days_acess_before']); 
+	$nb_days_acess_after = intval($_POST['nb_days_acess_after']); 
+	$nolimit=$_POST['nolimit'];
+	$coach_username=$_POST['coach_username'];
+	
+	$id_session=SessionManager::AddSession($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username);
+	header('Location: add_courses_to_session.php?id_session='.$id_session.'&add=true');
+	exit();
+}
+
+Display::display_header($tool_name);
+api_display_tool_title($tool_name);
 
 $nb_days_acess_before = 0;
 $nb_days_acess_after = 0;
 
-if ($_POST['formSent']) {
-	$formSent=1;
-
-	$name=trim(stripslashes($_POST['name']));
-	$year_start=intval($_POST['year_start']);
-	$month_start=intval($_POST['month_start']);
-	$day_start=intval($_POST['day_start']);
-	$year_end=intval($_POST['year_end']);
-	$month_end=intval($_POST['month_end']);
-	$day_end=intval($_POST['day_end']);
-	$nb_days_acess_before = intval($_POST['nb_days_acess_before']);
-	$nb_days_acess_after = intval($_POST['nb_days_acess_after']);
-	
-	$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($_POST['coach_username']).'"';
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
-	$id_coach = Database::result($rs,0,'user_id');
-
-	if (empty($_POST['nolimit'])){
-		$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-		$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
-	} else {
-		$date_start="000-00-00";
-		$date_end="000-00-00";
-	}
-	
-	if(empty($name)) $errorMsg=get_lang('SessionNameIsRequired');
-	elseif(empty($_POST['nolimit']) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) $errorMsg=get_lang('InvalidStartDate');
-	elseif(empty($_POST['nolimit']) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) $errorMsg=get_lang('InvalidEndDate');
-	elseif(empty($_POST['nolimit']) && $date_start >= $date_end) $errorMsg=get_lang('StartDateShouldBeBeforeEndDate');
-	else
-	{
-		$rs = api_sql_query("SELECT 1 FROM $tbl_session WHERE name='".addslashes($name)."'");
-		if(Database::num_rows($rs)){
-			$errorMsg = get_lang('SessionNameSoonExists');
-		} else {
-			api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")",__FILE__,__LINE__);
-			$id_session=Database::get_last_insert_id();
-			header('Location: add_courses_to_session.php?id_session='.$id_session.'&add=true');
-			exit();
-		}
-	}
-}
-
-
 $thisYear=date('Y');
 $thisMonth=date('m');
 $thisDay=date('d');
-
-Display::display_header($tool_name);
-api_display_tool_title($tool_name);
 ?>
-
 <form method="post" name="form" action="<?php echo api_get_self(); ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 
 <table border="0" cellpadding="5" cellspacing="0" width="550">
-
-<?php
-if(!empty($errorMsg))
-{
-?>
-
-<tr>
-  <td colspan="2">
-
-<?php
-	Display::display_normal_message($errorMsg);
-?>
-
-  </td>
-</tr>
-
-<?php
-}
-?>
-
 <tr>
   <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
   <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo htmlentities($name,ENT_QUOTES,$charset); ?>"></td>

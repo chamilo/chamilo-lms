@@ -82,6 +82,7 @@ if(!api_is_platform_admin()) {
 
 //checking for extra field with filter on
 include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+include_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
 $extra_field_list= UserManager::get_extra_fields();
 $new_field_list = array();
 if (is_array($extra_field_list)) {
@@ -211,7 +212,7 @@ if($_POST['form_sent']) {
 
 	if ($form_sent == 1) {
 		
-		UserManager::suscribe_users_to_session($id_session,$UserList,true);
+		SessionManager::suscribe_users_to_session($id_session,$UserList,true);
 		
 		//adding the session to the access_url_rel_session table
 		global $_configuration;

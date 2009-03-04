@@ -24,6 +24,7 @@ $cidReset=true;
 
 include('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
 
 api_protect_admin_script(true);
 
@@ -39,33 +40,14 @@ $sort=in_array($_GET['sort'],array('name','nbr_courses','date_start','date_end')
 $idChecked = $_REQUEST['idChecked'];
 
 if ($action == 'delete') {
-	if(is_array($idChecked)) {
-		$idChecked=Database::escape_string(implode(',',$idChecked));
-	} else {
-		$idChecked=intval($idChecked);
-	}
-	
-	if (!api_is_platform_admin()) {
-		$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$idChecked;
-		$rs = api_sql_query($sql,__FILE__,__LINE__);
-		if (Database::result($rs,0,0)!=$_user['user_id']) {
-			api_not_allowed(true);
-		}
-	}
-
-	api_sql_query("DELETE FROM $tbl_session WHERE id IN($idChecked)",__FILE__,__LINE__);
-	api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session IN($idChecked)",__FILE__,__LINE__);
-	api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($idChecked)",__FILE__,__LINE__);	
-	api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session IN($idChecked)",__FILE__,__LINE__);
-
+	SessionManager::DeleteSession($idChecked);
 	header('Location: '.api_get_self().'?sort='.$sort);
 	exit();
 }
 
 $interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 
-if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
-{
+if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	
 	$interbreadcrumb[] = array ("url" => 'session_list.php', "name" => get_lang('SessionList'));
 	$tool_name = get_lang('SearchASession');

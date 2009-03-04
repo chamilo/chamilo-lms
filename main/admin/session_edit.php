@@ -23,6 +23,7 @@
 $language_file ='admin';
 $cidReset=true;
 include('../inc/global.inc.php');
+require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -67,46 +68,12 @@ if ($_POST['formSent']) {
 	$month_end=intval($_POST['month_end']);
 	$day_end=intval($_POST['day_end']);
 	$id_coach=intval($_POST['id_coach']);
-	$nb_days_access_before = intval($_POST['nb_days_access_before']);
-	$nb_days_access_after = intval($_POST['nb_days_access_after']);
+	$nb_days_acess_before = intval($_POST['nb_days_access_before']);
+	$nb_days_acess_after = intval($_POST['nb_days_access_after']);
 	
-	if (empty($_POST['nolimit'])) {
-		$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-		$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
-	} else {
-		$date_start="000-00-00";
-		$date_end="000-00-00";
-	}
-	if(empty($name)) $errorMsg=get_lang('SessionNameIsRequired');
-	elseif(empty($_POST['nolimit']) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) $errorMsg=get_lang('InvalidStartDate');
-	elseif(empty($_POST['nolimit']) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) $errorMsg=get_lang('InvalidEndDate');
-	elseif(empty($_POST['nolimit']) && $date_start >= $date_end) $errorMsg=get_lang('StartDateShouldBeBeforeEndDate');
-	else {		
-		$rs = api_sql_query("SELECT id FROM $tbl_session WHERE name='".addslashes($name)."'");
-		$exists = false;
-		while($row = mysql_fetch_array($rs)) {
-			if($row['id']!=$id)
-				$exists = true;
-		}
-		if ($exists) {
-			$errorMsg = get_lang('SessionNameSoonExists');
-		} else {
-			api_sql_query("UPDATE $tbl_session
-					   SET name='".addslashes($name)."',
-						   date_start='$date_start',
-						   date_end='$date_end',
-						   id_coach='$id_coach',
-						   nb_days_access_before_beginning = ".$nb_days_access_before.",
-						   nb_days_access_after_end = ".$nb_days_access_after." 
-					   WHERE id='$id'",__FILE__,__LINE__);
-			$sqlu = "UPDATE $tbl_session_rel_course
-					   SET id_coach='$id_coach'						   
-					   WHERE id_session='$id'";
-			api_sql_query($sqlu,__FILE__,__LINE__);
-			header('Location: resume_session.php?id_session='.$id);
-			exit();
-		}
-	}
+	SessionManager::EditSession($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach,$id);
+	header('Location: resume_session.php?id_session='.$id);
+	exit();
 }
 
 $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";
@@ -135,24 +102,6 @@ api_display_tool_title($tool_name);
 <input type="hidden" name="formSent" value="1">
 
 <table border="0" cellpadding="5" cellspacing="0" width="550">
-
-<?php
-if(!empty($errorMsg)) {
-?>
-
-<tr>
-  <td colspan="2">
-
-<?php
-	Display::display_normal_message($errorMsg);
-?>
-
-  </td>
-</tr>
-
-<?php
-}
-?>
 
 <tr>
   <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>

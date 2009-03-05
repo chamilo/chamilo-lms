@@ -51,4 +51,6 @@ $SelectEverybody = "Izberi vse";
 $SelectedUsersGroups = "izbrani uporabniki, skupine";
 $LearnerMessage = "Sporoèilo teèajnika";
 $TitleIsRequired = "Naslov je zahtevan vnos";
+$AnnounceSentByEmail = "Obvestila poslana preko e-pošte";
+$AnnounceSentToUserSelection = "Obvestila poslana izbranim uporabnikom";
 ?>

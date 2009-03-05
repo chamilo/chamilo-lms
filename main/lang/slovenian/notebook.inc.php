@@ -10,4 +10,15 @@ $YouMustWriteANote = "Prosim, vpišite vsebino beležke";
 $WriteYourNoteHere = "Prosim, zapišite vsebino beležke tukaj";
 $SaveNote = "Shrani beležko";
 $WriteYourNoteHere = "Kliknite tukaj za zapis nove beležke";
+$SearchByTitle = "Išèi po naslovu";
+$WriteTheTitleHere = "Tule dodaj naslov";
+$UpdateDate = "Zadnja sprememba";
+$NoteAddNew = "Dodaj novo";
+$OrderByCreationDate = "Po datumu nastanka";
+$OrderByModificationDate = "Po datumu spremembe";
+$OrderByTitle = "Po naslovu";
+$NoteTitle = "Naslov beležke";
+$NoteComment = "Podrobnosti beležke";
+$NoteAdded = "Beležka je bila dodana";
+$NoteConfirmDelete = "Ste preprièani, da želite odstraniti beležko?";
 ?>

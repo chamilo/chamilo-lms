@@ -169,4 +169,7 @@ $UserImportFileMessage = "V primeru, da v XML/CVS datoteki manjkajo uporabniška 
 $UserAlreadyRegisteredByOtherCreator = "Uporabnik je že vpisan s strani drugega coach-a.";
 $NewUserInTheCourse = "Nov uporabnik v teèaju";
 $MessageNewUserInTheCourse = "To je sporoèilo, ki vas obvešèa, da je v teèaju nov uporabnik ";
+$EditNormalProfile = "Uredi obièajen profil";
+$EditExtendProfile = "Uredi razširjen profil";
+$EditInformation = "Uredi informacije";
 ?>

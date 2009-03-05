@@ -61,5 +61,5 @@ $MyPersonalData = "Desde aquí puede ver y modificar sus datos personales";
 $AlterPersonalData = "Modifique sus datos personales desde aquí";
 $Invites = "Mis invitados";
 $ContactsGroups = "Mis grupos de contactos";
-$ErrorMessageSend = "Error al enviar el mensaje";
+$ErrorSendingMessage = "Error al enviar el mensaje";
 ?>

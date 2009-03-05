@@ -21,4 +21,12 @@ $InvalidMessageId = "Identiteta sporoèila, na katerega želite odgovoriti, ni vel
 $ErrorSendingMessage = "Napaka pri poskusu pošiljanja sporoèila.";
 $SureYouWantToDeleteSelectedMessages = "Ste preprièani, da želite odstranite izbrana sporoèila ?";
 $SelectedMessagesDeleted = "Izbrana sporoèila so bila odstranjena";
+$EnterTitle = "Vstavite naslov sporoèila";
+$TypeYourMessage = "Vnesite besedilo sporoèila";
+$MessageDeleted = "Sporoèilo je bilo odstranjeno";
+$ConfirmDeleteMessage = "Ste preprièani, da želite odstraniti izbrana sporoèila?";
+$DeleteMessage = "Odstrani sporoèilo";
+$ReadMessage = "Preberi sporoèilo";
+$SendInviteMessage = "Pošlji sporoèilo z vabilom";
+$SendMessageInvitation = "Ste preprièani, da želite odposlati ta vabila?";
 ?>

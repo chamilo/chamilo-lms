@@ -928,4 +928,5 @@ $UsersSubscribedToBecauseVisualCode = "Gli utenti sono stati iscritti ai seguent
 $UsersUnsubscribedFromBecauseVisualCode = "Gli utenti sono stati cancellati dai seguenti corsi (diversi corsi condividono il titolo)";
 $FilterUsers = "Filtro sugli utenti";
 $SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Diversi corsi sono stati associati alla sessione (i corsi condividono il titolo)";
+$CoachIsRequired = "Devi selezionare un tutor";
 ?>

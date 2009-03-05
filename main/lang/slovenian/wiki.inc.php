@@ -146,4 +146,10 @@ $Contributions = "prispevki";
 $UserContributions = "Prispevki uporabnika";
 $MostActiveUsers = "Najaktivnejši uporabniki";
 $WarningDeleteMainPage = "Brisanje osnovne strani Wiki ni priporoèljivo. Ta stran je namreè osnovna dostopna stran v hierarhiji vseh ostalih podstrani.<br />V primeru, da jo že morate odstrani, je ne pozabite ponovno ustvari. Do kreiranja nove osnovne strani uporabniki ne bodo mogli dodajati novih strani !";
+$ConvertToLastVersion = "Oznaèite to razlièico kot zadnjo s klikom na";
+$Restore = "Obnovi";
+$CurrentVersion = "Trenutna razlièica";
+$LastVersion = "Zadnja razlièica";
+$PageRestored = "Stran je bila obnovljena. Njeno vsebino lahko pogledate s klikom na";
+$RestoredFromVersion = "Obnovljeno iz razlièice";
 ?>

@@ -211,4 +211,6 @@ $SaveDocument = "Shrani dokument";
 $CreateTheDocument = "Shrani dokument";
 $SharedFolder = "Mapa v skupni rabi";
 $CreateFolder = "Ustvari mapo";
+$HelpDefaultDirDocuments = "Ta mapa vsebuje privzeti arhiv. Vsebino lahko odstranite ali pa dodate novo. V primeru, da so datoteke oznaèene kot skrite in kot take vstavljene v spletni dokument, jih teèajniki ne bodo videli v svojem podroèju dokumentov. Ko vstavljate datoteko v spletni dokument, se najprej preprièajte, da je viden. Mape v splošnem lahko ostanejo skrite.";
+$HelpSharedFolder = "Ta mapa vsebuje datoteke, ki jih teèajniki (ali vi sami) prenesete v podroèje teèaja preko urejevalnika (èe jih niso/niste prenesli preko orodij skupine). Privzeto bodo vidne vsem uèiteljem in skrite teèajnikom (razen v primeru direktnega dostopa do datoteke). V primeru, da naredite eno od map teèajnikom vidno, bo celotna njena vsebina vidna vsem teèajnikom.";
 ?>

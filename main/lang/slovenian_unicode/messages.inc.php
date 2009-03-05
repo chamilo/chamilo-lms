@@ -24,9 +24,9 @@ $SelectedMessagesDeleted = "Izbrana sporočila so bila odstranjena";
 $EnterTitle = "Vstavite naslov sporočila";
 $TypeYourMessage = "Vnesite besedilo sporočila";
 $MessageDeleted = "Sporočilo je bilo odstranjeno";
-$ConfirmDeleteMessage = "Ste prepričani, da želite odstraniti sporočilo?";
+$ConfirmDeleteMessage = "Ste prepričani, da želite odstraniti izbrana sporočila?";
 $DeleteMessage = "Odstrani sporočilo";
 $ReadMessage = "Preberi sporočilo";
-$SendInviteMessage = "Pošlji pozdravno sporočilo z vabilom";
+$SendInviteMessage = "Pošlji sporočilo z vabilom";
 $SendMessageInvitation = "Ste prepričani, da želite odposlati ta vabila ?";
 ?>

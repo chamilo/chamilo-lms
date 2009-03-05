@@ -61,5 +61,5 @@ $MyPersonalData = "My personal data";
 $AlterPersonalData = "Alter personal data";
 $Invites = "My invitations";
 $ContactsGroups = "Group contacts";
-$ErrorMessageSend = "Error the message send";
+$ErrorSendingMessage = "Error the message send";
 ?>

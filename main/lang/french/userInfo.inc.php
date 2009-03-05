@@ -61,4 +61,5 @@ $MyPersonalData = "Fiche perso";
 $AlterPersonalData = "Éditer détails";
 $Invites = "Mes invitations";
 $ContactsGroups = "Groupes de contacts";
+$ErrorSendingMessage = "Une erreur est survenue lors de l\'envoi du message";
 ?>

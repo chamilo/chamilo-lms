@@ -284,4 +284,5 @@ $SelectTargetLP = "Izberi ciljno učno pot";
 $SelectTargetQuestion = "Izberi ciljno vprašanje";
 $DirectFeedbackCantModifyTypeQuestion = "Vrsta ocenjevanja ne more biti spremenjena, ker je postavljena kot Samoocenjevanje";
 $CantShowResults = "Ni na voljo";
+$CantViewResults = "Ne morem izvršiti pogleda v rezultate";
 ?>

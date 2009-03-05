@@ -164,4 +164,7 @@ $UserImportFileMessage = "Si des noms d\'utilisateurs ont été oubliés dans le fi
 $UserAlreadyRegisteredByOtherCreator = "Cet utilisateur a déjà été enregistré par un autre coach.";
 $NewUserInTheCourse = "Nouvel utilisateur inscrit au cours";
 $MessageNewUserInTheCourse = "Ce message est destiné à vous informer de l\'inscription d\'un nouvel utilisateur dans le cours";
+$EditNormalProfile = "Éditer le profil normal";
+$EditExtendProfile = "Éditer le profil étendu";
+$EditInformation = "Éditer information";
 ?>

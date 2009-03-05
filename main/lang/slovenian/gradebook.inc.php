@@ -118,4 +118,15 @@ $OnlyNumbers = "Zgolj števila";
 $IncorrectData = "Napaèni podatki";
 $Resource = "Vir";
 $PleaseEnableScoringSystem = "Omogoèite sistem ocenjevanja";
+$AllResultDeleted = "Vsi rezultati so bili odstranjeni";
+$ImportNoFile = "Ni nobene datoteke za uvoz";
+$ProblemUploadingFile = "Prišlo je do problemov pri prenosu tvoje datoteke. Datoteka se ni prenesla.";
+$AllResultsEdited = "Vsi rezultati so bili urejeni";
+$UserInfoDoesNotMatch = "Informacije o uporabniku se ne ujemajo.";
+$ScoreDoesNotMatch = "Rezultat se ne ujema";
+$FileUploadComplete = "Nalaganje datoteke je bilu uspešno";
+$NoResultsAvailable = "Rezultati niso na voljo";
+$CannotChangeTheMaxNote = "Ne morem spremeniti vrednosti max";
+$GradebookWeightUpdated = "Uteži so bile uspešno ažurirane";
+$ChooseItem = "Izberi element";
 ?>

@@ -58,12 +58,6 @@ api_protect_course_script(true);
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 
-$fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
-$fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
-
-$fck_attribute['Config']['InDocument'] = false;		
-$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-
 if(!api_is_allowed_to_edit(false,true)) {
 	$fck_attribute['Config']['UserStatus'] = 'student';
 	$fck_attribute['ToolbarSet'] = 'Forum_Student';

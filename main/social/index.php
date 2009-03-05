@@ -9,6 +9,9 @@ $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/java
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery-1.1.3.1.pack.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.history_remote.pack.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.tabs.pack.js" type="text/javascript"></script>';
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
+//$htmlHeadXtra[] = '<style rel="stylesheet" href="../inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
+$htmlHeadXtra[]='<style type="text/css" media="all">@import "'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css";</style>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(function() {
 	$("#container-9").tabs({ remote: true});	     
@@ -102,7 +105,7 @@ function set_qualify_friend() {
 			data: "user_id_friend_q="+user_id_friend+"&type_friend_q="+type_friend,
 			success: function(datos) {
 			alert(datos);
-			clear_form();
+			//clear_form();
 			}
 		});
 	}
@@ -362,6 +365,7 @@ function list_search_hide () {
 function hide_search_list () {
 	$("div#id_div_search").html("");
 }
+
 </script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';
 $htmlHeadXtra[] = '
@@ -394,6 +398,11 @@ code {
     font-family: "Courier New", Courier, monospace;
 }
 </style>';
+$htmlHeadXtra[] = '
+
+		
+		
+';
 $_SESSION['social_exist']=true;
 $_SESSION['social_dest'] = 'index.php';
 $interbreadcrumb[]= array (

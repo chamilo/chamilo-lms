@@ -19,12 +19,12 @@ $user_id=api_get_user_id();
 $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,true);
 ?>
 <div align="center" >
-<table width="750" border="0" cellpadding="0" cellspacing="0" class="social-content-table">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-content-table">
   <tr>
-    <td width="750" height="20" valign="top">
+    <td width="100%" height="20" valign="top">
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-title">
       <tr>
-        <td width="750" height="20" valign="top"><?php
+        <td width="100%" height="20" valign="top"><?php
         echo '&nbsp;&nbsp;Dokeos&nbsp;&nbsp;-&nbsp;&nbsp;';
         $user_id=api_get_user_id();
         $user_info=api_get_user_info($user_id);
@@ -35,75 +35,10 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
     </td>
   </tr>
   <tr>
-    <td height="180" valign="top">
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" >
-      
-      <tr>
-        <td width="320" height="180" valign="top">
-        <table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td width="320" height="110" valign="top">
-            <table width="100%" border="0" cellpadding="0" cellspacing="0">
-              
-              <tr>
-                <td width="100" height="110" valign="top">
-                <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-content-body">
-                  
-                  <tr>
-                    <td width="100" height="110" valign="top">
-                    <img src="<?php echo $image_path['dir']."/".$image_path['file']; ?>" width="90" height="100" style="margin-left:5px ;margin-rigth:5px;margin-top:5px;margin-bottom:5px;" /></td>
-                   </tr>
-                  
-                </table></td>
-                    <td width="220" valign="top">
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
-                      <tr>
-                        <td width="220" height="110" valign="top">&nbsp;</td>
-                        </tr>
-                      
-                    </table></td>
-                    </tr>
-            </table></td>
-              </tr>
-          <tr>
-            <td height="70" valign="top">
-            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
-              <tr>
-                <td width="320" height="70" valign="top" class="social-info">
-                <?php
-                $info_user=api_get_user_info($user_id);
-                 echo '<br/>&nbsp;&nbsp;&nbsp;&nbsp;'.$info_user['mail'].'<br/>';
-                 echo '&nbsp;&nbsp;&nbsp;&nbsp;'.$info_user['username'].PHP_EOL;
-                 ?>
-                </td>
-                </tr>
-            </table></td>
-            </tr>
-        </table></td>
-        <td width="430" valign="top">
-        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-content-description">
-          <tr>
-            <td width="430" height="180" valign="top" class="social-align-box">
-            <div align="center" class="social-qualify"><?php echo utf8_encode(get_lang('AttachContactsToGroup')) ?><input type="hidden" class="" name="user_cod_qualify" id="user_cod_qualify" value="0" /></div>
-            <div align="center" class="social-qualify-display" id="div_info_user"></div>
-            <div id="div_qualify">
-            <?php 
-            	require_once 'qualify_contact.inc.php';
-            ?>
-            <div id="div_qualify_image" class="social-display-image"></div>
-            </div>
-            </td>
-              </tr>
-          
-        </table></td>
-        </tr>
-    </table></td>
-  </tr>
-  <tr>
     <td height="25" valign="top">
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-subtitle-search">
       <tr>
-        <td width="750" height="25" valign="top" class="social-align-box">&nbsp;&nbsp;<?php echo get_lang('Search').'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?><input class="social-search-image" type="text" class="search-image" id="id_search_image" name="id_search_image" value="" onkeyup="search_image_social(this)" /></td>
+        <td width="100%" height="25" valign="top" class="social-align-box">&nbsp;&nbsp;<?php echo get_lang('Search').'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?><input class="social-search-image" type="text" class="search-image" id="id_search_image" name="id_search_image" value="" onkeyup="search_image_social(this)" /></td>
       </tr>
     </table></td>
   </tr>
@@ -111,10 +46,10 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
     <td height="175" valign="top">
     <table width="100%" border="0" cellpadding="0" cellspacing="0" >
       <tr>
-        <td width="750" height="22" valign="top">
+        <td width="100%" height="22" valign="top">
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
           <tr>
-            <td width="750" height="22" valign="top" class="social-title">&nbsp;&nbsp;<?php echo utf8_encode(get_lang('ContactsList')); ?></td>
+            <td width="100%" height="22" valign="top" class="social-title">&nbsp;&nbsp;<?php echo utf8_encode(get_lang('ContactsList')); ?></td>
               </tr>
         </table></td>
         </tr>

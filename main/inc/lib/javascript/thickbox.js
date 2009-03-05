@@ -15,7 +15,13 @@ $(document).ready(function(){
 	imgLoader = new Image();// preload image
 	imgLoader.src = tb_pathToImage;
 });
-
+//
+function load_thick (hrefinfo,textinfo) {
+    imgLoader = new Image();// preload image
+    imgLoader.src = tb_pathToImage;	
+	name_user=textinfo.replace(/\+/g," ");
+    tb_show(name_user,hrefinfo, '');
+}
 //add thickbox to href & area elements that have a class of .thickbox
 function tb_init(domChunk){
 	$(domChunk).click(function(){

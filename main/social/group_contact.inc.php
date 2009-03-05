@@ -23,12 +23,12 @@ for ($p=0;$p<count($list_groups);$p++) {
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
   <tr>
-    <td width="100%" height="20" valign="top">
+    <td id="<?php echo 'td_'.$list_groups[$p]['id']; ?>" width="100%" height="20" valign="top" onclick="toogle_function(this)">
 
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-title">
           <tr>
-            <td width="100%" height="22" valign="top">&nbsp;&nbsp;<?php echo get_lang($list_groups[$p]['title']); ?>
-            <img id="<?php echo 'btn_'.$list_groups[$p]['id']; ?>" style="float:right;margin-top:-15px" src="../img/visible.gif" onclick="toogle_function(this)"/><input type="hidden" class="hidden" id="id_hd_dame" name="hd_dame" value="0" /></td>
+            <td width="100%" height="22" valign="top" style="cursor:pointer">&nbsp;&nbsp;<?php echo get_lang($list_groups[$p]['title']); ?>
+            <img id="<?php echo 'btn_'.$list_groups[$p]['id']; ?>" style="float:right;margin-top:-15px" src="../img/visible.gif" /><input type="hidden" class="hidden" id="id_hd_dame" name="hd_dame" value="0" /></td>
               </tr>
         </table></td>
         </tr>
@@ -62,7 +62,7 @@ if (count($list_path_friends)!=0) {
 			if ($list_friends_file[$j]<>"") {
 				$user_info=api_get_user_info($list_friends_id[$j]);
 				$name_user=$user_info['firstName'].' '.$user_info['lastName'];
-				$friend_html.='&nbsp;<div class="image-social-content" id=div_'.$list_friends_id[$j].' style="float:left" ><img src="'.$list_friends_dir[$j]."/".$list_friends_file[$j].'" width="90" height="110" style="margin-left:3px ;margin-rigth:3px;margin-top:10px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" onclick="qualify_friend(this)"/></div>&nbsp;';	
+				$friend_html.='&nbsp;<div class="image-social-content" id=div_'.$list_friends_id[$j].' style="float:left" ><a href="javascript:void(0)" onclick=load_thick("'.$list_friends_dir[$j].$list_friends_file[$j].'","'.urlencode($name_user).'") title="" class="thickbox"><img src="'.$list_friends_dir[$j].$list_friends_file[$j].'" width="90" height="110" style="margin-left:3px ;margin-rigth:3px;margin-top:10px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" /></a></div>&nbsp;';	
 			}
 			$j++;
 		}

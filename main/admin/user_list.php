@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 18645 2009-02-24 02:00:35Z yannoo $
+<?php // $Id: user_list.php 18815 2009-03-05 21:51:42Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -402,7 +402,9 @@ function modify_filter($user_id,$url_params,$row)
 				<span id="user'.$user_id.'" style="margin-left: -100px; border:1px solid black; width: 200px; background-color:white; z-index:99; padding: 3px; display: none; margin-right:inherit;">
 				<div style="text-align:center;">'.Display::return_icon('anim-loader.gif', '', array('height' => '20')).'</div>
 				</span></a></span></span>&nbsp;&nbsp';
-	$result .= '<a href="user_information.php?user_id='.$user_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
+	if (api_is_platform_admin()) {
+		$result .= '<a href="user_information.php?user_id='.$user_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
+	}
 	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
 
 	$statusname = api_get_status_langvars();

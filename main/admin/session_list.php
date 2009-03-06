@@ -40,7 +40,7 @@ $sort=in_array($_GET['sort'],array('name','nbr_courses','date_start','date_end')
 $idChecked = $_REQUEST['idChecked'];
 
 if ($action == 'delete') {
-	SessionManager::DeleteSession($idChecked);
+	SessionManager::delete_session($idChecked);
 	header('Location: '.api_get_self().'?sort='.$sort);
 	exit();
 }
@@ -110,12 +110,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 				$where
 				$and
 				ORDER BY $sort 
-				LIMIT $from,".($limit+1);
-				
+				LIMIT $from,".($limit+1);			
 		}	
-	}
-			
+	}			
 	$result=api_sql_query($query,__FILE__,__LINE__);	
+	$num=Database::count_rows($tbl_session);
 	$Sessions=api_store_result($result);	
 	$nbr_results=sizeof($Sessions);	
 	$tool_name = get_lang('SessionList');	
@@ -148,22 +147,24 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	if(count($Sessions)==0 && isset($_POST['keyword'])) {
 		echo get_lang('NoSearchResults');
 	} else {
-		if($page) {
-		?>	
-		<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Previous'); ?></a>	
-		<?php
-		} else {
-			echo get_lang('Previous');
-		}
-		?>	
-		|	
-		<?php
-		if($nbr_results > $limit) {
+		if($num>$limit){
+			if($page) {
 			?>	
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Next'); ?></a>	
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Previous'); ?></a>	
 			<?php
-		} else {
-			echo get_lang('Next');
+			} else {
+				echo get_lang('Previous');
+			}
+			?>	
+			|	
+			<?php
+			if($nbr_results > $limit) {
+				?>	
+				<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Next'); ?></a>	
+				<?php
+			} else {
+				echo get_lang('Next');
+			}
 		}
 		?>	
 	</div>	
@@ -226,34 +227,37 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		<div align="left">
 	
 		<?php
+		
+		if($num>$limit) {
 		if($page)
-		{
-		?>
-	
-		<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Previous'); ?></a>
-	
-		<?php
-		}
-		else
-		{
-			echo get_lang('Previous');
-		}
-		?>
-	
-		|
-	
-		<?php
-		if($nbr_results > $limit)
-		{
-		?>
-	
-		<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Next'); ?></a>
-	
-		<?php
-		}
-		else
-		{
-			echo get_lang('Next');
+			{
+			?>
+		
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Previous'); ?></a>
+		
+			<?php
+			}
+			else
+			{
+				echo get_lang('Previous');
+			}
+			?>
+		
+			|
+		
+			<?php
+			if($nbr_results > $limit)
+			{
+			?>
+		
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Next'); ?></a>
+		
+			<?php
+			}
+			else
+			{
+				echo get_lang('Next');
+			}
 		}
 		?>
 	

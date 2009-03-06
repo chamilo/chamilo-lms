@@ -67,11 +67,11 @@ if ($_POST['formSent']) {
 	$year_end=$_POST['year_end']; 
 	$month_end=$_POST['month_end']; 
 	$day_end=$_POST['day_end']; 
-	$nb_days_acess_before = $_POST['nb_days_acess_before']; 
-	$nb_days_acess_after = $_POST['nb_days_acess_after']; 
+	$nb_days_acess_before = $_POST['nb_days_access_before']; 
+	$nb_days_acess_after = $_POST['nb_days_access_after']; 
 	$nolimit=$_POST['nolimit'];
 	$id_coach=$_POST['id_coach'];
-	$return = SessionManager::EditSession($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach,$id);
+	$return = SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach);
 	if ($return == strval(intval($return))) {
 		header('Location: resume_session.php?id_session='.$return);
 		exit();

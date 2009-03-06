@@ -122,7 +122,7 @@ if ($_POST['formSent']) {
 	$nb_days_acess_after = $_POST['nb_days_acess_after']; 
 	$nolimit=$_POST['nolimit'];
 	$coach_username=$_POST['coach_username'];
-	$return = SessionManager::CreateSession($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username);
+	$return = SessionManager::create_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username);
 	if ($return == strval(intval($return))) {
 		// integer => no error on session creation
 		header('Location: add_courses_to_session.php?id_session='.$return.'&add=true&msg=');

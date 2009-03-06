@@ -1,43 +1,33 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
-*	This library provides functions for user management.
-*	Include/require it in your code to use its functionality.
+*	This class provides methods for sessions management.
+*	Include/require it in your code to use its features.
 *
 *	@package dokeos.library
 ==============================================================================
 */
 require_once('display.lib.php');
-class SessionManager{
-	
-	 /** Create a session 
-	  * @author Carlos Vargas <carlos.vargas@dokeos.com>,
-	  * @param	array	name, year_start,month_start, day_start,year_end,month_end,day_end,nb_days_acess_before,nb_days_acess_after
+class SessionManager {
+	 /** 
+	  * Create a session 
+	  * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
+	  * @param	string 		name
+	  * @param 	integer		year_start
+	  * @param 	integer		month_start
+	  * @param 	integer		day_start
+	  * @param 	integer		year_end
+	  * @param 	integer		month_end
+	  * @param 	integer		day_end
+	  * @param 	integer		nb_days_acess_before
+	  * @param 	integer		nb_days_acess_after
+	  * @param 	integer		nolimit
+	  * @param 	string		coach_username
+	  * @return $id_session;
 	  **/
-	function CreateSession($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username) {
+	function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username) {
+		global $_user;
 		$name= trim($sname);
 		$year_start= intval($syear_start); 
 		$month_start=intval($smonth_start); 
@@ -50,20 +40,19 @@ class SessionManager{
 		
 		$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
-		global $_user;	
 		
 		$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($coach_username).'"';
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		$id_coach = Database::result($rs,0,'user_id');
 	
-		if (empty($nolimit)){
+		if (empty($nolimit)) {
 			$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
 			$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
 		} else {
 			$date_start="000-00-00";
 			$date_end="000-00-00";
 		}
-		if(empty($name)) {
+		if (empty($name)) {
 			$msg=get_lang('SessionNameIsRequired');
 			return $msg;
 		} elseif (empty($coach_username))   {
@@ -81,37 +70,50 @@ class SessionManager{
 		} else {
 			$rs = api_sql_query("SELECT 1 FROM $tbl_session WHERE name='".addslashes($name)."'");
 			if(Database::num_rows($rs)) {
-				$msg=get_lang('SessionNameSoonExists');
+				$msg=get_lang('SessionNameAlreadyExists');
 				return $msg;
 			} else {
-				api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")",__FILE__,__LINE__);
+				api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".Database::escape_string($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")",__FILE__,__LINE__);
 				$id_session=Database::get_last_insert_id();	
 				return $id_session; 
 			}
 		}
 	}	
-	/** Edit a session 
-	 * @author Carlos Vargas <carlos.vargas@dokeos.com>,
-	 * @param	array	name, year_start,month_start, day_start,year_end,month_end,day_end,nb_days_acess_before,nb_days_acess_after,id
+	/** 
+	 * Edit a session 
+	 * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
+	 * @param	integer		id
+	 * @param	string 		name
+	 * @param 	integer		year_start
+	 * @param 	integer		month_start
+	 * @param 	integer		day_start
+	 * @param 	integer		year_end
+	 * @param 	integer		month_end
+	 * @param 	integer		day_end
+	 * @param 	integer		nb_days_acess_before
+	 * @param 	integer		nb_days_acess_after
+	 * @param 	integer		nolimit
+	 * @param 	integer		id_coach
+	 * @return $id;
 	 * The parameter id is a primary key
 	**/
-	function EditSession($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$snolimit,$sid_coach,$id) {
-			
-		$name=trim(stripslashes($sname));
-		$year_start=intval($syear_start);
-		$month_start=intval($smonth_start);
-		$day_start=intval($sday_start);
-		$year_end=intval($syear_end);
-		$month_end=intval($smonth_end);
-		$day_end=intval($$sday_end);
-		$id_coach= intval($sid_coach);
-		$nb_days_acess_before=intval($snb_days_acess_before);
-		$nb_days_acess_after = intval($snb_days_acess_after);
+	function edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach) {
+		global $_user;
+		$name=trim(stripslashes($name));
+		$year_start=intval($year_start);
+		$month_start=intval($month_start);
+		$day_start=intval($day_start);
+		$year_end=intval($year_end);
+		$month_end=intval($month_end);
+		$day_end=intval($day_end);
+		$id_coach= intval($id_coach);
+		$nb_days_acess_before= intval($nb_days_acess_before);
+		$nb_days_acess_after = intval($nb_days_acess_after);
 		 
 		$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-		global $_user;
+
 			
 		if (empty($nolimit)) {
 			$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
@@ -120,34 +122,34 @@ class SessionManager{
 			$date_start="000-00-00";
 			$date_end="000-00-00";
 		}
-		if(empty($name)){
+		if (empty($name)) {
 			$msg=get_lang('SessionNameIsRequired');
 			return $msg;
 		} elseif (empty($id_coach))   {
 			$msg=get_lang('CoachIsRequired');
 			return $msg;
-		} elseif(!empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) {
+		} elseif (empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) {
 			$msg=get_lang('InvalidStartDate');
 			return $msg;
-		} elseif(!empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) {
+		} elseif (empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) {
 			$msg=get_lang('InvalidEndDate');
 			return $msg;
-		} elseif(!empty($nolimit) && $date_start >= $date_end) {
+		} elseif (empty($nolimit) && $date_start >= $date_end) {
 			$msg=get_lang('StartDateShouldBeBeforeEndDate');
 			return $msg;
 		} else {		
-			$rs = api_sql_query("SELECT id FROM $tbl_session WHERE name='".addslashes($name)."'");
+			$rs = api_sql_query("SELECT id FROM $tbl_session WHERE name='".Database::escape_string($name)."'");
 			$exists = false;
-			while($row = mysql_fetch_array($rs)) {
+			while ($row = Database::fetch_array($rs)) {
 				if($row['id']!=$id)
 					$exists = true;
 			}
 			if ($exists) {
-				$msg=get_lang('SessionNameSoonExists');
+				$msg=get_lang('SessionNameAlreadyExists');
 				return $msg;
 			} else {
 				$sql="UPDATE $tbl_session " .
-					"SET name='".addslashes($name)."',
+					"SET name='".Database::escape_string($name)."',
 						date_start='".$date_start."',
 						date_end='".$date_end."',
 						id_coach='".$id_coach."',
@@ -163,50 +165,50 @@ class SessionManager{
 			}
 		}
 	}
-	  /** Delete session 
-	  * @author Carlos Vargas <carlos.vargas@dokeos.com>,
-	  * @param	array	idChecked
-	  * The parameters is a array to delete sessions 
-	  **/
-	
-	function DeleteSession($idChecked) {
-		$tbl_session=Database::get_main_table(TABLE_MAIN_SESSION);
-		$tbl_session_rel_course=Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-		$tbl_session_rel_course_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		$tbl_session_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_USER);
-		$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+	/** 
+	 * Delete session 
+	 * @author Carlos Vargas <carlos.vargas@dokeos.com>, from existing code
+	 * @param	array	id_checked
+     * @return	void	Nothing, or false on error 
+	 * The parameters is a array to delete sessions 
+	 **/
+	function delete_session($id_checked) {
+		$tbl_session=						Database::get_main_table(TABLE_MAIN_SESSION);
+		$tbl_session_rel_course=			Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$tbl_session_rel_course_rel_user=	Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$tbl_session_rel_user=				Database::get_main_table(TABLE_MAIN_SESSION_USER);
+		$tbl_user = 						Database::get_main_table(TABLE_MAIN_USER);
 		global $_user;
-		if(is_array($idChecked)) {
-			$idChecked=Database::escape_string(implode(',',$idChecked));
+		if(is_array($id_checked)) {
+			$id_checked=Database::escape_string(implode(',',$id_checked));
 		} else {
-			$idChecked=intval($idChecked);
+			$id_checked=intval($id_checked);
 		}
 		
 		if (!api_is_platform_admin()) {
-			$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$idChecked;
+			$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_checked;
 			$rs = api_sql_query($sql,__FILE__,__LINE__);
 			if (Database::result($rs,0,0)!=$_user['user_id']) {
 				api_not_allowed(true);
 			}
 		}
-	
-		api_sql_query("DELETE FROM $tbl_session WHERE id IN($idChecked)",__FILE__,__LINE__);
-		api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session IN($idChecked)",__FILE__,__LINE__);
-		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($idChecked)",__FILE__,__LINE__);	
-		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session IN($idChecked)",__FILE__,__LINE__);
+		api_sql_query("DELETE FROM $tbl_session WHERE id IN($id_checked)",__FILE__,__LINE__);
+		api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session IN($id_checked)",__FILE__,__LINE__);
+		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($id_checked)",__FILE__,__LINE__);	
+		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session IN($id_checked)",__FILE__,__LINE__);
 	}	
-	
-	 /**Subscribes users to the given session and optionally (default) unsubscribes previous users
-	 * @author Carlos Vargas <carlos.vargas@dokeos.com>,
-     * @param	int		Session ID
-     * @param	array	List of user IDs
-     * @param	bool	Whether to unsubscribe existing users (true, default) or not (false)
-     * @return	void	Nothing, or false on error  
-     */
-	function suscribe_users_to_session($id_session,$UserList,$empty_users=true){
+	 /**
+	  * Subscribes users to the given session and optionally (default) unsubscribes previous users
+	  * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
+	  * @param	integer		Session ID
+	  * @param	array		List of user IDs
+	  * @param	bool		Whether to unsubscribe existing users (true, default) or not (false)
+	  * @return	void		Nothing, or false on error
+	  **/
+	function suscribe_users_to_session($id_session,$user_list,$empty_users=true){
 	 	
 	  	if ($id_session!= strval(intval($id_session))) return false;
-	   	foreach($UserList as $intUser){
+	   	foreach($user_list as $intUser){
 	   		if ($intUser!= strval(intval($intUser))) return false;
 	   	}
 	   	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -222,20 +224,20 @@ class SessionManager{
 		}
 		$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$CourseList=array();
+		$course_list=array();
 	
 		while($row=Database::fetch_array($result)) {
-			$CourseList[]=$row['course_code'];
+			$course_list[]=$row['course_code'];
 		}
 	
-		foreach ($CourseList as $enreg_course) {
+		foreach ($course_list as $enreg_course) {
 			// for each course in the session
 			$nbr_users=0;
 	        $enreg_course = Database::escape_string($enreg_course);
 				// delete existing users
 			if ($empty_users!==false) {
 				foreach ($existingUsers as $existing_user) {
-					if(!in_array($existing_user, $UserList)) {
+					if(!in_array($existing_user, $user_list)) {
 						$sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user'";
 						api_sql_query($sql,__FILE__,__LINE__);
 	
@@ -246,12 +248,12 @@ class SessionManager{
 				}
 			}
 			// insert new users into session_rel_course_rel_user and ignore if they already exist
-			foreach ($UserList as $enreg_user) {
+			foreach ($user_list as $enreg_user) {
 				if(!in_array($enreg_user, $existingUsers)) {
-	                   $enreg_user = Database::escape_string($enreg_user);
+	                $enreg_user = Database::escape_string($enreg_user);
 					$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
 					api_sql_query($insert_sql,__FILE__,__LINE__);
-						if(Database::affected_rows()) {
+					if(Database::affected_rows()) {
 						$nbr_users++;
 					}
 				}
@@ -263,94 +265,101 @@ class SessionManager{
 			// update the session-course relation to add the users total
 			$update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
 			api_sql_query($update_sql,__FILE__,__LINE__);
-			}
-			// delete users from the session
-		if ($empty_users!==false){
+		}
+		// delete users from the session
+		if ($empty_users===true){
 			api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session",__FILE__,__LINE__);
 		}
 			// insert missing users into session
 		$nbr_users = 0;
-		foreach ($UserList as $enreg_user) {
+		foreach ($user_list as $enreg_user) {
 	        $enreg_user = Database::escape_string($enreg_user);
 			$nbr_users++;
 			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')";
 			api_sql_query($insert_sql,__FILE__,__LINE__);
 		}
 		// update number of users in the session
-		$nbr_users = count($UserList);
+		$nbr_users = count($user_list);
 		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
 		api_sql_query($update_sql,__FILE__,__LINE__);
 	}
-	 /**Subscribes courses to the given session and optionally (default) unsubscribes previous users
-	 * @author Carlos Vargas <carlos.vargas@dokeos.com>,
+	 /** Subscribes courses to the given session and optionally (default) unsubscribes previous users
+	 * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
      * @param	int		Session ID
      * @param	array	List of courses IDs
      * @param	bool	Whether to unsubscribe existing users (true, default) or not (false)
      * @return	void	Nothing, or false on error  
-     */
-     function add_courses_to_session($id_session, $CourseList, $empty_courses=true){
-     	
-     	if ($id_session!= strval(intval($id_session))) return false;
-	   	foreach($CourseList as $intCourse){
-	   		if ($intCourse!= strval(intval($intCourse))) return false;
+     **/
+     function add_courses_to_session($id_session, $course_list, $empty_courses=true){
+     	// security checks
+     	if ($id_session!= strval(intval($id_session))) { return false; }
+	   	foreach($course_list as $intCourse){
+	   		if ($intCourse!= strval(intval($intCourse))) { return false; }
 	   	}
+	   	// initialisation
 		$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
-     	
+     	// get general coach ID
 		$id_coach = api_sql_query("SELECT id_coach FROM $tbl_session WHERE id=$id_session");
 		$id_coach = Database::fetch_array($id_coach);
 		$id_coach = $id_coach[0];
-	
+		// get list of courses subscribed to this session
 		$rs = api_sql_query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
 		$existingCourses = api_store_result($rs);
-	
+		$nbr_courses=count($existingCourses);
+		// get list of users subscribed to this session
 		$sql="SELECT id_user
 			FROM $tbl_session_rel_user
 			WHERE id_session = $id_session";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$UserList=api_store_result($result);
-	
-	
-		foreach($CourseList as $enreg_course) {
-			$enreg_course = Database::escape_string($enreg_course);
-			$exists = false;
-			foreach($existingCourses as $existingCourse) {
-				if($enreg_course == $existingCourse['course_code']) {
-					$exists=true;
-				}
-			}
-			if(!$exists) {			
-				$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')";
-				api_sql_query($sql_insert_rel_course ,__FILE__,__LINE__);			
-				//We add in the existing courses table the current course, to not try to add another time the current course
-				$existingCourses[]=array('course_code'=>$enreg_course);
-				$nbr_users=0;
-				foreach ($UserList as $enreg_user) {				
-					$enreg_user = Database::escape_string($enreg_user['id_user']);
-					$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
-					api_sql_query($sql_insert,__FILE__,__LINE__);
-					if(Database::affected_rows()) {
-						$nbr_users++;
-					}
-				}
-				api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
-			}
-	
-		}
-		if ($empty_courses!==false) {
-			foreach($existingCourses as $existingCourse) {
-				if(!in_array($existingCourse['course_code'], $CourseList)){
+		$user_list=api_store_result($result);
+
+		// remove existing courses from the session
+		if ($empty_courses===true) {
+			foreach ($existingCourses as $existingCourse) {
+				if (!in_array($existingCourse['course_code'], $course_list)){
 					api_sql_query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
 					api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
 		
 				}
 			}
+			$nbr_courses=0;
 		}
-		$nbr_courses=count($CourseList);
+	
+		// Pass through the courses list we want to add to the session
+		foreach ($course_list as $enreg_course) {
+			$enreg_course = Database::escape_string($enreg_course);
+			$exists = false;
+			// check if the course we want to add is already subscribed 
+			foreach ($existingCourses as $existingCourse) {
+				if ($enreg_course == $existingCourse['course_code']) {
+					$exists=true;
+				}
+			}
+			if (!$exists) {
+				//if the course isn't subscribed yet			
+				$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session,course_code, id_coach) VALUES ('$id_session','$enreg_course','$id_coach')";
+				api_sql_query($sql_insert_rel_course ,__FILE__,__LINE__);			
+				//We add the current course in the existing courses array, to avoid adding another time the current course
+				$existingCourses[]=array('course_code'=>$enreg_course);
+				$nbr_courses++;
+				
+				// subscribe all the users from the session to this course inside the session 
+				$nbr_users=0;
+				foreach ($user_list as $enreg_user) {				
+					$enreg_user_id = Database::escape_string($enreg_user['id_user']);
+					$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (id_session,course_code,id_user) VALUES ('$id_session','$enreg_course','$enreg_user_id')";
+					api_sql_query($sql_insert,__FILE__,__LINE__);
+					if (Database::affected_rows()) {
+						$nbr_users++;
+					}
+				}
+				api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
+			}
+		}
 		api_sql_query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'",__FILE__,__LINE__);
      }
 }
-?>

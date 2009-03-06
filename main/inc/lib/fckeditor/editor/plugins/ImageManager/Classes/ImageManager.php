@@ -141,10 +141,14 @@ class ImageManager
 				$new_dir  = substr($fullpath, strlen($base_dir),-1); //
 				global $_course;	
 				$doc_id = DocumentManager::get_document_id($_course, $new_dir );
-				$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);				
+				$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);
+				
+				//Teachers can access to hidden files and directories as they can in the tool documents
+			    /*				
 				if ($visible_status=='0' || $visible_status=='-1') {					 
-					continue;					
+					continue;				
 				}				
+				*/
 				
 				/* if (strpos($fullpath, '/shared_folder/') !== false) {
 					if (!preg_match('/.*\/shared_folder\/$/', $fullpath)) {
@@ -233,10 +237,12 @@ class ImageManager
 						$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);		
 					}	
 						
-					
+					//Teachers can access to hidden files and directories as they can in the tool documents
+					/*
 					if ($visible_status=='0' || $visible_status=='-1') {					 
-						continue;					
-					}				
+						continue;			
+					}
+					*/				
 					$relative = Files::fixPath($path.$entry);
 					$full = Files::fixPath($fullpath.$entry);
 					$count = $this->countFiles($full);
@@ -256,9 +262,14 @@ class ImageManager
 							$doc_id = DocumentManager::get_document_id($_course, $new_dir );
 							$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);										
 						}
+						
+						//Teachers can access to hidden files and directories as they can in the tool documents
+					    /*
 						if ($visible_status=='0' || $visible_status=='-1') {					 
-							continue;					
+							continue;		
 						}
+						*/
+						
 						$file['url'] = Files::makePath($this->config['base_url'],$path).$entry;	
 						$file['relative'] = $path.$entry;
 						$file['fullpath'] = $fullpath.$entry;

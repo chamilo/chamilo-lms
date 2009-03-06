@@ -848,6 +848,7 @@ function getRootPath() {
 			$css_folder_dokeos='css';
 			$hotpotatoes_folder_dokeos='HotPotatoes_files';
 			$chat_files_dokeos='chat_files';
+			$thumbs_folder='.thumbs';
 			
 			//hidden directory of the group if the user is not a member of the group					
 			$group_folder='_groupdocs';
@@ -863,7 +864,7 @@ function getRootPath() {
 				}
 			}		
 			
-			if(!ereg($deleted_by_dokeos, $fileName) && !ereg($css_folder_dokeos, $fileName) && !ereg($hotpotatoes_folder_dokeos, $fileName) && !ereg($chat_files_dokeos, $fileName) && $show_doc_group==true)
+			if(!ereg($deleted_by_dokeos, $fileName) && !ereg($css_folder_dokeos, $fileName) && !ereg($hotpotatoes_folder_dokeos, $fileName) && !ereg($chat_files_dokeos, $fileName) && !ereg($thumbs_folder, $fileName) && $show_doc_group==true)
 			{			
 				return substr($fileName,strpos($fileName, '-'),strlen($fileName)); //hide the firsts numbers
 			}

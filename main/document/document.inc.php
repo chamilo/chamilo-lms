@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 18835 2009-03-06 20:58:59Z herodoto $
+<?php // $Id: document.inc.php 18836 2009-03-06 21:07:50Z herodoto $
 
 /*
 ==============================================================================
@@ -275,9 +275,9 @@ function build_document_icon_tag($type, $path)
 		}
 		else
 		{	
-		    if($basename =='audio' || $basename =='flash' || $basename =='images' || $basename =='video')
-			{
-				$basename = get_lang('HelpDefaultDirDocuments');				
+		    if(($basename =='audio' || $basename =='flash' || $basename =='images' || $basename =='video') && api_is_allowed_to_edit()==true)
+			{			  
+					$basename = get_lang('HelpDefaultDirDocuments');				
 			}				
 			$icon = 'folder_document.gif';
 		}

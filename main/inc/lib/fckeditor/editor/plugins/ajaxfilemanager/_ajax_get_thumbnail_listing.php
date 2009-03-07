@@ -78,7 +78,7 @@
 					
 					</dt>
 					<dd id="dd<?php echo $count; ?>" class="thumbnailListing_info"><span id="flag<?php echo $count; ?>" class="<?php echo $file['flag']; ?>">&nbsp;</span><input id="cb<?php echo $count; ?>" type="checkbox" name="check[]" <?php echo ($file['is_writable']?'':'disabled'); ?> class="radio" value="<?php echo $file['path']; ?>" />
-					<a <?php echo ($file['cssClass']== 'filePicture'?'rel="orgImg"':''); ?> href="<?php echo "../".$file['path']; ?>" title="<?php echo $file['name']; ?>" id="a<?php echo $count; ?>"><?php echo shortenFileName($file['name']); ?></a></dd><!-- Juan Carlos Raña Fix for Dokeos: On the path I put a directory up echo "../".$ file [ 'path'], what makes good show when pressed next on window preview, don't only one image -->
+					<a <?php echo ($file['cssClass']== 'filePicture'?'rel="orgImg"':''); ?> href="<?php echo "../".$file['path']; ?>" title="<?php echo str_replace('_',' ',$file['name']); ?>" id="a<?php echo $count; ?>"><?php echo shortenFileName(str_replace('_',' ',$file['name'])); ?></a></dd><!-- Juan Carlos Raña Fix for Dokeos: On the path I put a directory up echo "../".$ file [ 'path'], what makes good show when pressed next on window preview, don't only one image -->
 					
 				</dl>
 				<?php

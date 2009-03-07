@@ -63,7 +63,8 @@
 									<tr class="<?php echo $css; ?>" id="row<?php echo $count; ?>"  >
 										<td align="center" id="tdz<?php echo $count; ?>"><span id="flag<?php echo $count; ?>" class="<?php echo $file['flag']; ?>">&nbsp;</span><input type="checkbox"  name="check[]" id="cb<?php echo $count; ?>" value="<?php echo $file['path']; ?>" <?php echo $strDisabled; ?> /></td>
 										<td align="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;<a id="a<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><span class="<?php echo $file['cssClass']; ?>">&nbsp;</span></a></td><!-- Juan Carlos Raña Fix for Dokeos: On the path I put a directory up echo "../".$ file [ 'path'], what makes good show when pressed next on window preview, don't only one image -->
-										<td class="<?php echo $strClass; ?> docName"  id="tdnd<?php echo $count; ?>"><a id="aa<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo $file['name']; ?></a></td>
+										<td class="<?php echo $strClass; ?> docName"  id="tdnd<?php echo $count; ?>"><a id="aa<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo str_replace('_',' ',$file['name']); ?></a></td>                            
+                                        
 										<td class="docInfo" id="tdrd<?php echo $count; ?>"><?php echo transformFileSize($file['size']); ?></td>
 										<td class="docInfo" id="tdth<?php echo $count; ?>"><?php echo @date(DATE_TIME_FORMAT,$file['mtime']); ?></td>
 									</tr>
@@ -94,7 +95,7 @@
                                             ?>
                                             
                                             
-											<td class="<?php echo $strClass; ?> docName" id="tdnd<?php echo $count; ?>"><a id="aa<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo $file['name']; ?></a></td>
+											<td class="<?php echo $strClass; ?> docName" id="tdnd<?php echo $count; ?>"><a id="aa<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo str_replace('_',' ',$file['name']); ?></a></td>
 											<td class="docInfo" id="tdrd<?php echo $count; ?>">&nbsp;</td>
 											<td class="docInfo" id="tdth<?php echo $count; ?>"><?php echo @date(DATE_TIME_FORMAT,$file['mtime']); ?></td>
 										</tr>

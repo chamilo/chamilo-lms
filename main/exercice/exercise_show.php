@@ -1,31 +1,10 @@
-<?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
-
-
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 *
 *	@package dokeos.exercise
-* 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@author Julio Montoya Armas Added switchable fill in blank option added
+* 	@version $Id: exercise_show.php 18840 2009-03-08 22:52:35Z yannoo $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -114,17 +93,17 @@ $nameTools=get_lang('CorrectTest');
 
 if($origin=='user_course')
 {
-	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$_GET['course'], "name" => get_lang("Users"));
-	$interbreadcrumb[] = array("url" => "../mySpace/myStudents.php?student=".$_GET['student']."&course=".$_course['id']."&details=true&origin=".$_GET['origin'] , "name" => get_lang("DetailsStudentInCourse"));
+	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".Security::remove_XSS($_GET['course']), "name" => get_lang("Users"));
+	$interbreadcrumb[] = array("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student'])."&course=".$_course['id']."&details=true&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("DetailsStudentInCourse"));
 }
 else if($origin=='tracking_course')
 {
 	$interbreadcrumb[] = array ("url" => "../mySpace/index.php", "name" => get_lang('MySpace'));
- 	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".$_GET['student'].'&details=true&origin='.$origin.'&course='.$_GET['cidReq'], "name" => get_lang("DetailsStudentInCourse"));
+ 	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student']).'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
 }
 else if($origin=='student_progress')
 {
-	$interbreadcrumb[] = array ("url" => "../auth/my_progress.php?id_session".$_GET['id_session']."&course=".$_cid, "name" => get_lang('MyProgress'));
+	$interbreadcrumb[] = array ("url" => "../auth/my_progress.php?id_session".Security::remove_XSS($_GET['id_session'])."&course=".$_cid, "name" => get_lang('MyProgress'));
 	unset($_cid);
 }
 else {
@@ -135,7 +114,7 @@ else {
 if ($origin != 'learnpath') {
 	Display::display_header($nameTools,"Exercise");
 }
-$emailId = $_REQUEST['email'];
+$emailId   = $_REQUEST['email'];
 $user_name = $_REQUEST['user'];
 $test 	   = $_REQUEST['test'];
 $dt	 	   = $_REQUEST['dt'];
@@ -198,27 +177,28 @@ function getFCK(vals,marksid){
  * @return str the comment
  */
 function get_comments($id,$question_id)
-	{
+{
 	global $TBL_TRACK_ATTEMPT;
 	//$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id and question_id)."' = '".Database::escape_string($question_id)."' order by question_id";
 	$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' order by question_id";
 	$sqlres = api_sql_query($sql, __FILE__, __LINE__);
 	$comm = Database::result($sqlres,0,"teacher_comment");
 	return $comm;
-	}
+}
 /**
- * Enter description here...
+ * Display the answers to a multiple choice question
  *
- * @param unknown_type $answerType
- * @param unknown_type $studentChoice
- * @param unknown_type $answer
- * @param unknown_type $answerComment
- * @param unknown_type $answerCorrect
- * @param unknown_type $id
- * @param unknown_type $questionId
- * @param unknown_type $ans
+ * @param integer Answer type
+ * @param integer Student choice
+ * @param string  Textual answer
+ * @param string  Comment on answer
+ * @param string  Correct answer comment
+ * @param integer Exercise ID
+ * @param integer Question ID
+ * @param boolean Whether to show the answer comment or not 
+ * @return void
  */
-function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$ans)
+function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans)
 {
 	?>
 	<tr valign="top">
@@ -235,10 +215,11 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		$answer=api_parse_tex($answer);
 		echo $answer; ?><hr  style="border-top: 0.5px solid #4171B5;">
 	</td>
-	<?php if($ans==1)
-	{$comm = get_comments($id,$questionId);
-	//echo $comm;
-	}?>
+	<?php 
+    if ($ans==1) {
+        $comm = get_comments($id,$questionId);
+	}
+    ?>
 	</tr>
 	<?php
 }
@@ -249,9 +230,7 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
  * @param int       Question ID
  * @return void
  */
-function display_fill_in_blanks_answer($answer,$id,$questionId)
-{
-
+function display_fill_in_blanks_answer($answer,$id,$questionId) {
 	?>
 		<tr>
 		<td>
@@ -274,26 +253,21 @@ function display_fill_in_blanks_answer($answer,$id,$questionId)
  * @param int       Question ID
  * @return void
  */
-function display_free_answer($answer,$id,$questionId)
-{
+function display_free_answer($answer,$id,$questionId) {
 	?>
 		<tr>
 		<td>
 			<?php echo nl2br(stripslashes($answer)); ?>
 		</td> <?php if(!api_is_allowed_to_edit()) {?>
-   <td>
+        <td>
+        <?php
+        
+        $comm = get_comments($id,$questionId);
+        ?>
+        </td> 
+    <?php }?>
+    </tr>
     <?php
-
-	$comm = get_comments($id,$questionId);
-	/*if ($comm!='')
-	echo $comm;
-	else
-	echo  get_lang('notCorrectedYet');
-	*/?>
-
-   </td> <?php }?>
-		</tr>
-	<?php
 }
 /**
  * Displays the answer to a hotspot question
@@ -303,8 +277,7 @@ function display_free_answer($answer,$id,$questionId)
  * @param string $studentChoice
  * @param string $answerComment
  */
-function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment)
-{
+function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment) {
 	//global $hotspot_colors;
 	$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
             						"#4271B5",

@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18770 2009-03-02 22:11:24Z iflorespaz $
+<?php // $Id: profile.php 18839 2009-03-08 22:23:45Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -95,9 +95,9 @@ require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
 	Libraries
 -----------------------------------------------------------
 */
-include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
 
@@ -712,7 +712,7 @@ Display :: display_header('');
 if (api_get_setting('extended_profile') == 'true') {	
 	echo '<div class="actions">';
 	if (isset($_GET['show'])) {
-		$show='&amp;show='.$_GET['show'];
+		$show='&amp;show='.Security::remove_XSS($_GET['show']);
 	} else {
 		$show='';
 	}

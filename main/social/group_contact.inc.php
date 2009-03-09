@@ -18,6 +18,7 @@ $list_groups=array();
 <?php
 $user_id=api_get_user_id();
 $list_groups=UserFriend::show_list_type_friends();
+
 for ($p=0;$p<count($list_groups);$p++) {
 	$list_path_friends=UserFriend::get_list_path_web_by_user_id ($user_id,$list_groups[$p]['id']);
 ?>
@@ -60,14 +61,15 @@ if (count($list_path_friends)!=0) {
 		}
 		while ($j<$number_of_images) {
 			if ($list_friends_file[$j]<>"") {
-				$user_info=api_get_user_info($list_friends_id[$j]);
-				$name_user=$user_info['firstName'].' '.$user_info['lastName'];
+				$user_info=api_get_user_info($list_friends_id[$j]);				
+				$user_name=mb_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset) ;
 				if($list_friends_file[$j]==='unknown.jpg') {
 					$big='';
 				} else {
 					$big='big_';
 				}
-				$friend_html.='&nbsp;<div class="image-social-content" id=div_'.$list_friends_id[$j].' style="float:left" ><a href="javascript:void(0)" onclick=load_thick("'.$list_friends_dir[$j].$big.$list_friends_file[$j].'","'.urlencode($name_user).'") title="" class="thickbox"><img src="'.$list_friends_dir[$j].$list_friends_file[$j].'" width="90" height="110" style="margin-left:3px ;margin-rigth:3px;margin-top:10px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" /></a></div>&nbsp;';	
+				$friend_html.='&nbsp;<div class="image-social-content" id=div_'.$list_friends_id[$j].' style="float:left;height:150px;" ><a href="javascript:void(0)" onclick=load_thick("'.$list_friends_dir[$j].$big.$list_friends_file[$j].'","") title="" class="thickbox">' .
+							  '<img src="'.$list_friends_dir[$j].$list_friends_file[$j].'" width="90" height="110" style="margin-left:3px ;margin-rigth:3px;margin-top:10px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$user_name.'" />'.$user_name.'</a></div>&nbsp;';
 			}
 			$j++;
 		}

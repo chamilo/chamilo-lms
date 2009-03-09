@@ -28,7 +28,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
         echo '&nbsp;&nbsp;Dokeos&nbsp;&nbsp;-&nbsp;&nbsp;';
         $user_id=api_get_user_id();
         $user_info=api_get_user_info($user_id);
-        echo $user_info['firstName'].'&nbsp;&nbsp;'.$user_info['lastName'];
+        echo $name_user=mb_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset) ; 
          ?></td>
         </tr>
     </table>

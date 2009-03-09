@@ -405,10 +405,18 @@ $interbreadcrumb[]= array (
 	'url' => '#',
 	'name' => get_lang('ModifyProfile')
 );
-$interbreadcrumb[]= array (
+if ((api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') ||(api_get_setting('allow_social_tool')=='true') && api_get_user_id()<>2 && api_get_user_id()<>0) {
+	$interbreadcrumb[]= array (
 	'url' => 'index.php?#remote-tab-1',
 	'name' => get_lang('SocialNetwork')
-);
+	);
+} elseif ((api_get_setting('allow_social_tool')=='false' && api_get_setting('allow_message_tool')=='true')) {
+	$interbreadcrumb[]= array (
+	'url' => 'index.php?#remote-tab-1',
+	'name' => get_lang('MessageTool')
+	);	
+}
+
 Display :: display_header('');
 if (isset($_GET['sendform'])) {
 	$form_reply=array();

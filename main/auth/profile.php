@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18843 2009-03-09 00:55:20Z iflorespaz $
+<?php // $Id: profile.php 18884 2009-03-09 18:15:49Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -696,10 +696,17 @@ if (!empty($_SESSION['production_uploaded']))
 }
 
 if (isset($_GET['show'])) {
-	$interbreadcrumb[]= array (
+	if ((api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') ||(api_get_setting('allow_social_tool')=='true') && api_get_user_id()<>2 && api_get_user_id()<>0) {
+		$interbreadcrumb[]= array (
 		'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-1',
 		'name' => get_lang('SocialNetwork')
-	);
+		);
+	} elseif ((api_get_setting('allow_social_tool')=='false' && api_get_setting('allow_message_tool')=='true')) {
+		$interbreadcrumb[]= array (
+		'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-1',
+		'name' => get_lang('MessageTool')
+		);	
+	}
 }
 
 /*

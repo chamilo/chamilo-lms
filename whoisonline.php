@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 18878 2009-03-09 16:58:15Z iflorespaz $
+<?php // $Id: whoisonline.php 18884 2009-03-09 18:15:49Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -68,7 +68,7 @@ function change_panel (mypanel_id,myuser_id) {
 			beforeSend: function(objeto) {
 			$("#id_content_panel").html("'.get_lang('Loading').'"); },
 			type: "POST",
-			url: "./main/messages/send_message.php",
+			url: "main/messages/send_message.php",
 			data: "panel_id="+mypanel_id+"&user_id="+myuser_id,
 			success: function(datos) {
 			 $("div#id_content_panel_init").html(datos);
@@ -94,7 +94,7 @@ function action_database_panel(option_id,myuser_id) {
 		beforeSend: function(objeto) {
 		$("#display_response_id").html("'.get_lang('Loading').'"); },
 		type: "POST",
-		url: "./main/messages/send_message.php",
+		url: "main/messages/send_message.php",
 		data: "panel_id="+option_id+"&user_id="+myuser_id+"&txt_subject="+my_txt_subject+"&txt_content="+my_txt_content,
 		success: function(datos) {
 		 $("#display_response_id").html(datos);
@@ -162,7 +162,7 @@ function display_user_list($user_list, $_plugins)
 				$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
 			}
 			
-			if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
+			if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
 				if ($user_info['user_id'] != api_get_user_id()) {
 					$user_relation=UserFriend::get_relation_between_contacts(api_get_user_id(),$user_info['user_id']);
 					if ($user_relation==0 || $user_relation==6) {
@@ -189,7 +189,7 @@ function display_user_list($user_list, $_plugins)
 			$table_header[] = array(get_lang('Email'),true);
 		}
 
-		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
+		if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
 			$table_header[] = array(get_lang('Friends'),true,'width="100"');
 		}		
 		/*this feature is deprecated

@@ -183,6 +183,25 @@ function hide_display_message () {
 		$("#txt_area_invite").val("");
 	}
 }	
+function register_friend(element_input) {
+ if(confirm("'.get_lang('AddToContacts').'")) {
+		name_button=$(element_input).attr("id");
+		name_div_id="id_"+name_button.substring(13);
+		user_id=name_div_id.split("_");
+		user_friend_id=user_id[1];
+		 $.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+			$("#id_response").html("'.get_lang('Loading').'"); },
+			type: "POST",
+			url: "../social/register_friend.php",
+			data: "friend_id="+user_friend_id,
+			success: function(datos) {
+			 $("div#id_response").html(datos);
+			}
+		});
+ }
+}
 </script>';
 $interbreadcrumb[]= array ('url' => '#','name' => get_lang('ModifyProfile') );
 $interbreadcrumb[]= array (
@@ -500,8 +519,8 @@ echo '<div id="social-profile-wrapper">';
 			$list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id($user_id);
 			$count_pending_invitations = count($pending_invitations);
 			echo '<div class="clear"></div><br />';		
-				
-			echo '<div id="social-profile-invitations" style="width:240px;" >';
+				//javascript:register_friend(this)
+			/*echo '<div id="social-profile-invitations" style="width:240px;" >';
 			if ($count_pending_invitations > 0) {
 			
 				api_display_tool_title(get_lang('PendingInvitations'));
@@ -514,13 +533,14 @@ echo '<div id="social-profile-wrapper">';
 						echo '<div style="padding-left:70px;">';
 							echo ' '.substr($pending_invitations[$i]['content'],19);
 							echo '<br />';
-							echo '<a href="">'.get_lang('AddToFriends').'</a>';
+							echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('AddToFriends').'</a>';
+							echo '<div id="id_response">&nbsp;</div>';
 						echo '</div>';
 					echo '</div>';
 					echo '<div class="clear"></div>';
 				}
 			}
-			echo '</div>';			
+			echo '</div>';	*/		
 			echo '<div class="clear"></div><br />';			
 			
 			//--Productions			

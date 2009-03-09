@@ -509,16 +509,22 @@ echo '<div id="social-profile-wrapper">';
 					}				
 				}
 				//$friend_html.='</div>'; // close the div friend-container
+			} else {
+					$friend_html.= '<div id="friend-container">';				
+					$friend_html .= api_display_tool_title(get_lang('Friends'));				
+					$friend_html.= '<div id="friend-header">';
+					$friend_html.= '<div style="float:left;">0 '.get_lang('Friends').'</div>';
+					$friend_html.= '<div style="float:right;">'.get_lang('SeeAll').'</div>';
+					$friend_html.= '</div><br/><br/>'; // close div friend-header					
 			}
 			$friend_html.= '</div>';		
-			echo $friend_html; 
-				
+			echo $friend_html; 				
 			
 			//Pending invitations		
 			$pending_invitations = UserFriend::get_list_invitation_of_friends_by_user_id($user_id);
 			$list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id($user_id);
 			$count_pending_invitations = count($pending_invitations);
-			echo '<div class="clear"></div><br />';		
+			//echo '<div class="clear"></div><br />';		
 				//javascript:register_friend(this)
 			/*echo '<div id="social-profile-invitations" style="width:240px;" >';
 			if ($count_pending_invitations > 0) {
@@ -541,11 +547,12 @@ echo '<div id="social-profile-wrapper">';
 				}
 			}
 			echo '</div>';	*/		
-			echo '<div class="clear"></div><br />';			
+						
 			
 			//--Productions			
 			$production_list =  UserManager::build_production_list($user_id);
 			if (!empty($production_list )) {
+				echo '<div class="clear"></div><br />';
 				api_display_tool_title(get_lang('Productions'));
 				echo '<div class="rounded1">';
 				echo $production_list;
@@ -594,25 +601,28 @@ echo '<div id="social-profile-container">';
     	  	}*/
     	  	
     	  	if ($show_full_profile) {    	  		
-				//-- Extra Data
-				api_display_tool_title(get_lang('ExtraInformation'));			
+				//-- Extra Data							
 				$extra_user_data = UserManager::get_extra_user_data($user_id);
-				echo '<div class="rounded left-side">';
-					foreach($extra_user_data as $key=>$data) {
-						echo ucfirst($key).': '.$data;
-						echo '<br />';
-					}
-				echo '</div>';			
-				echo '<br /><br />';
-				
+				if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
+					api_display_tool_title(get_lang('ExtraInformation'));
+					echo '<div class="rounded left-side">';
+						foreach($extra_user_data as $key=>$data) {
+							echo ucfirst($key).': '.$data;
+							echo '<br />';
+						}
+					echo '</div>';			
+					echo '<br /><br />';
+				}
 				// ---- My Agenda Items
-				api_display_tool_title(get_lang('MyAgenda'));
-				$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
-				
-				echo '<div class="rounded left-side">';	
-					echo show_simple_personal_agenda($user_id);
-				echo '</div>';
-				echo '<br /><br />';
+				$my_agenda_items = show_simple_personal_agenda($user_id);
+				if (!empty($my_agenda_items)) {					
+					api_display_tool_title(get_lang('MyAgenda'));
+					$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+					echo '<div class="rounded left-side">';	
+					echo $my_agenda_items; 
+					echo '</div>';
+					echo '<br /><br />';
+				}
 					
 				//-----Announcements
 				api_display_tool_title(get_lang('Announcements'));		
@@ -632,28 +642,33 @@ echo '<div id="social-profile-container">';
 			api_display_tool_title(get_lang('Information'));  //class="social-profile-info"
 			
 			if ($show_full_profile) {		 
-				echo '<div class="social-profile-info" >';
-					echo '<dl>';					
-					echo '<dt>'.mb_convert_encoding(get_lang('UserName'),'UTF-8',$charset).'</dt>		<dd>'. mb_convert_encoding($user_info['username'],'UTF-8',$charset).'	</dd>';
+				echo '<div class="social-profile-info" >';					
+					echo '<dt>'.get_lang('UserName').'</dt>
+						  <dd>'. $user_info['username'].'	</dd>';
 					
 					if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
-						echo '<dt>'.mb_convert_encoding(get_lang('Name'),'UTF-8',$charset).'</dt>		<dd>'. mb_convert_encoding($user_info['firstname'].' '.$user_info['lastname'],'UTF-8',$charset).'</dd>';
+						echo '<dt>'.get_lang('Name').'</dt>		
+						  	  <dd>'. $user_info['firstname'].' '.$user_info['lastname'].'</dd>';
 					
 					if (!empty($user_info['official_code']))					
-						echo '<dt>'.mb_convert_encoding(get_lang('OfficialCode'),'UTF-8',$charset).'</dt>	<dd>'. mb_convert_encoding($user_info['official_code'],'UTF-8',$charset).'</dd>';
+						echo '<dt>'.get_lang('OfficialCode').'</dt>	
+						  <dd>'.$user_info['official_code'].'</dd>';
 					if (!empty($user_info['email']))
 						if (api_get_setting('show_email_addresses')=='true')
-							echo '<dt>'.mb_convert_encoding(get_lang('Email'),'UTF-8',$charset).'</dt>			<dd>'. mb_convert_encoding($user_info['email'],'UTF-8',$charset).'</dd>';
+							echo '<dt>'.get_lang('Email').'</dt>			
+						  <dd>'.$user_info['email'].'</dd>';
 					if (!empty($user_info['phone']))
-						echo '<dt>'.mb_convert_encoding(get_lang('Phone'),'UTF-8',$charset).'</dt>			<dd>'. mb_convert_encoding($user_info['phone'],'UTF-8',$charset).'</dd>';
+						echo '<dt>'.get_lang('Phone').'</dt>			
+						  <dd>'. $user_info['phone'].'</dd>';
 					echo '</dl>';
 				echo '</div>';			
 			} else {
 				echo '<div class="social-profile-info" >';
 					echo '<dl>';
 					if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
-						echo '<dt>'.mb_convert_encoding(get_lang('Name'),'UTF-8',$charset).'</dt>		<dd>'. mb_convert_encoding($user_info['firstname'].' '.$user_info['lastname'],'UTF-8',$charset).'</dd>';
-					echo '</dl>';
+						echo '<dt>'.mb_convert_encoding(get_lang('Name'),'UTF-8',$charset).'</dt>		
+						  <dd>'. mb_convert_encoding($user_info['firstname'].' '.$user_info['lastname'],'UTF-8',$charset).'</dd>';
+					
 				echo '</div>';
 			}
 			

@@ -2181,7 +2181,7 @@ float:left;
 }
 
 .social-profile-info {
-	width:300px;
+	width:500px;
 }
 .social-profile-info dt {
 	text-align:left;
@@ -2225,7 +2225,7 @@ float:left;
 }
 	
 #social-profile-right {
-	float:right; width:280px		
+	float:right; width:290px		
 }
 
 .social-profile-post {

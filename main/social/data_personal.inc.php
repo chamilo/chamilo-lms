@@ -91,12 +91,13 @@ if (isset($_POST['load_ajax'])) {
 		echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>&nbsp;&nbsp;';
 		echo '<a href="../social/profile.php">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('ViewSharedProfile'),'UTF-8',$charset).'</a>';
 	echo '</div>';
-	echo '<div id="profile_container" style="width:500px;">';
+	
+	echo '<div id="profile_container" style="width:550px;display:block;">';
 		echo '<div id="picture" style="width:200px;float:right;position:relative;">'; 
 			echo '<img src='.$img_array['dir'].$img_array['file'].' />';
 		echo '</div>';	
 		echo '<div class="social-profile-info">';
-			echo '<dl>';
+			
 			echo '<dt>'.mb_convert_encoding(get_lang('UserName'),'UTF-8',$charset).'</dt>
 			<dd>'. mb_convert_encoding($user_info['username'],'UTF-8',$charset).'	</dd>';
 			echo '<dt>'.mb_convert_encoding(get_lang('FirstName'),'UTF-8',$charset).'</dt>
@@ -109,7 +110,7 @@ if (isset($_POST['load_ajax'])) {
 			<dd>'. mb_convert_encoding($user_info['email'],'UTF-8',$charset).'</dd>';
 			echo '<dt>'.mb_convert_encoding(get_lang('Phone'),'UTF-8',$charset).'</dt>
 			<dd>'. mb_convert_encoding($user_info['phone'],'UTF-8',$charset).'</dd>';
-			echo '</dl>';
+			
 		echo '</div>';
 	echo '</div>';	
 }

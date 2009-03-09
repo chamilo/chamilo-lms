@@ -1030,7 +1030,7 @@ class DocumentManager
 		
 	}
 	/**
-	 * return true if the documentpath and all parent folders have visibility=1 as item_property
+	 * return true if the documentpath have visibility=1 as item_property
 	 *
 	 * @param string $document_path the relative complete path of the document
      * @param array  $course the _course array info of the document's course
@@ -1049,7 +1049,12 @@ class DocumentManager
             //echo "$row[0] not visible";
             return false;
         }
-        return true; // ok, document is visible
+		
+		//improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:	access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
+		if ($_SESSION ['is_allowed_in_course'] || api_is_platform_admin())
+        {	
+        	return true; // ok, document is visible
+		}
     }
 
 }

@@ -771,7 +771,7 @@ function show_simple_personal_agenda($user_id)
 	$export_icon = 'export.png';
 	$export_icon_low = 'export_low_fade.png';
 	$export_icon_high = 'export_high_fade.png';
-
+	$content = '';
 	// starting the table output
 	if (Database::num_rows($result) > 0) {
 		while ($myrow = Database::fetch_array($result)) {
@@ -780,7 +780,7 @@ function show_simple_personal_agenda($user_id)
 			  --------------------------------------------------*/
 			if ($month_bar != date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]))) {
 				$month_bar = date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]));
-				echo $MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]));
+				$content.= $MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]));
 			}
 			// highlight: if a date in the small calendar is clicked we highlight the relevant items
 			$db_date = (int) date("d", strtotime($myrow["date"])).date("n", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]));
@@ -795,26 +795,27 @@ function show_simple_personal_agenda($user_id)
 			 			display: date and time
 			  --------------------------------------------------*/					
 			// adding an internal anchor			
-			echo date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
-			echo ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
+			$content.= date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
+			$content.= ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
 			
 			/*--------------------------------------------------
 			 			display: the title
 			  --------------------------------------------------*/
-			echo '<br />';						
-			echo $myrow['title'];
-			echo '<br />';
+			$content.= '<br />';						
+			$content.= $myrow['title'];
+			$content.= '<br />';
 			
 			/*--------------------------------------------------
 			 			display: the content
 			  --------------------------------------------------*/
-			$content = $myrow['text'];
+			  /*
+			$content = $myrow['title'];
 			$content = make_clickable($content);
-			$content = text_filter($content);		
-			echo $content;						
+			$content = text_filter($content);*/		
+			return $content;						
 		}
 	} else {
-		echo get_lang('NoAgendaItems');
+		return $content;
 	}
 	
 }

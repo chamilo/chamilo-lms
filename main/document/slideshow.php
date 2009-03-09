@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 18106 2009-02-01 00:37:15Z herodoto $
+<?php // $Id: slideshow.php 18899 2009-03-09 21:37:00Z herodoto $
 
 /*
 ==============================================================================
@@ -296,7 +296,7 @@ if ($slide_id !== "all")
 	// divider
 	if ($slide_id <> "all")
 	{
-		echo ' '.$next_slide.'/'.$total_slides.' ';
+		echo ' [ '.$next_slide.'/'.$total_slides.' ] ';
 	}		
 	// next slide
 	if ($slide < $total_slides -1 and $slide_id <> "all")

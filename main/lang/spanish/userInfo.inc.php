@@ -62,4 +62,13 @@ $AlterPersonalData = "Modifique sus datos personales desde aquí";
 $Invites = "Mis invitados";
 $ContactsGroups = "Mis grupos de contactos";
 $ErrorSendingMessage = "Error al enviar el mensaje";
+$PendingInvitations = "Invitaciones pendientes";
+$MyInbox = "Bandeja de entrada";
+$ViewSharedProfile = "Ver perfil compartido";
+$SeeAll = "Ver todos";
+$ImagesUploaded = "Mis imágenes";
+$ExtraInformation = "Infomación extra";
+$SearchContacts = "Desde aquí puede añadir contactos a su red social";
+$SocialSeeContacts = "Ver mi red de contactos";
+$SocialUserInformationAttach = "Escriba un mensaje antes de  enviar la solicitud de acceso.";
 ?>

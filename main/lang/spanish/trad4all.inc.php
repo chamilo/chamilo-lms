@@ -694,4 +694,5 @@ $ThereIsNotUnqualifiedLearners = "No hay estudiantes sin calificar";
 $SocialNetwork = "Red social";
 $BackToOutbox = "Volver a la bandeja de salida";
 $Invitation = "Invitación";
+$SeeMoreOptions = "Ver más opciones";
 ?>

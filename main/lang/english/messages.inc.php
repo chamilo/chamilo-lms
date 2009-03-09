@@ -29,4 +29,7 @@ $DeleteMessage = "Delete message";
 $ReadMessage = "Read message";
 $SendInviteMessage = "Send invite message";
 $SendMessageInvitation = "Are you sure that you wish to send these invitations ?";
+$MessageTool = "Messages tool";
+$SendMessage = "Send messages";
+$WriteToMessage = "Write to message";
 ?>

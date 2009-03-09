@@ -31,6 +31,7 @@ $Englin = "Ingles simi";
 $langInvalidForSelfRegistration = "Mana  kayman haykunachu. Sichus manaraq  suti qelqakunkiraqchu  chayqa hunt\'achiy kayta <a href=claroline/auth/inscription.php>formulario nisqa suti qelqanapaq</a>";
 $langSubCat = "Ukhu mitakuna";
 $langMenuGeneral = "Tukuy Ajllachiq";
+$langMenuUser = "Haykuqkuna";
 $langMenuAdmin = "Plataforma nisqamanta kamachiq";
 $langUsersOnLineList = "Llipin haykuqkuna kaypi";
 $langTotalOnLine = "Llapan se\'qepi";

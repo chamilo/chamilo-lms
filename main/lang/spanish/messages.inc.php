@@ -29,4 +29,7 @@ $DeleteMessage = " Borrar mensaje";
 $ReadMessage = " Leer";
 $SendInviteMessage = "Enviar mensaje de invitación";
 $SendMessageInvitation = "¿ Está seguro que desea enviar las invitaciones a los usuarios seleccionados ?";
+$MessageTool = "Herramienta mensajes";
+$SendMessage = "Enviar mensajes";
+$WriteToMessage = "Escribir un mensaje";
 ?>

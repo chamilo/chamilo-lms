@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langToolName = "Reporting";
+$langToolName = "Reports";
 $TrackingDisabled = "Reporting has been disabled by system administrator.";
 $InactivesStudents = "Inactive users";
 $AverageTimeSpentOnThePlatform = "Average time spent on portal";

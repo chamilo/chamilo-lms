@@ -168,5 +168,5 @@ $NewUserInTheCourse = "New user in the course";
 $MessageNewUserInTheCourse = "This is a message to make know than there is a new user in the course";
 $EditNormalProfile = "Edit normal profile";
 $EditExtendProfile = "Edit extend profile";
-$EditInformation = "Edit information";
+$EditInformation = "Edit profile";
 ?>

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $TermAddNew = "Añadir un término";
-$TermName = "Denominación";
+$TermName = "Término";
 $TermDefinition = "Definición";
 $TermDeleted = "Término eliminado";
 $TermUpdated = "Término actualizado";

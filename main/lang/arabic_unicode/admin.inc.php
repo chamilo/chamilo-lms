@@ -559,7 +559,7 @@ $Ajax_course_tracking_refresh_comment = " الخيار لحساب في الزم�
 $EditLink = " تحرير رابط";
 $FinishSessionCreation = " إنتهاء من إنشاء جلسة";
 $VisioRTMPPort = "منفذ بروتوكول الاتصال المرئيRTMP";
-$SessionNameSoonExists = " سيتم ايجاد اسم جلسة قريبا";
+$SessionNameAlreadyExists = " سيتم ايجاد اسم جلسة قريبا";
 $NoClassesHaveBeenCreated = " لم يتم إنشاء أية صفوف";
 $ThisFieldShouldBeNumeric = " يجب أن يكون هذا الحقل رقما";
 $UserLocked = " مستخدم مغلق";

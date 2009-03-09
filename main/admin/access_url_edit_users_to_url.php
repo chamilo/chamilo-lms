@@ -61,12 +61,12 @@ $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('Mult
 
 $add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
-	$add_type = $_REQUEST['add_type'];
+	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 $access_url_id=1;
 if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
-	$access_url_id = $_REQUEST['access_url_id']; 
+	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']); 
 }
 
 function search_users($needle, $id)

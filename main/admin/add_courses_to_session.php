@@ -65,15 +65,13 @@ $id_session=intval($_GET['id_session']);
 
 $add_type = 'multiple';
 if(isset($_GET['add_type']) && $_GET['add_type']!=''){
-	$add_type = $_GET['add_type'];
+	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-if(!api_is_platform_admin())
-{
+if (!api_is_platform_admin()) {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
 	$rs = api_sql_query($sql,__FILE__,__LINE__);
-	if(Database::result($rs,0,0)!=$_user['user_id'])
-	{
+	if (Database::result($rs,0,0)!=$_user['user_id']) {
 		api_not_allowed(true);
 	}
 }

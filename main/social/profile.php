@@ -457,7 +457,7 @@ echo '<div id="social-profile-wrapper">';
 				$loop_friends  = ceil($number_loop);
 				$j=0;
 				$friend_html.= '<div id="friend-container">';				
-				api_display_tool_title(get_lang('Friends'));				
+				//$friend_html .= api_display_tool_title(get_lang('Friends'));				
 					$friend_html.= '<div id="friend-header">';
 							//$friend_html.=  $friends_count.' '.get_lang('Friends');
 						if ($friends_count == 1)
@@ -481,7 +481,7 @@ echo '<div id="social-profile-wrapper">';
 							$margin_top = 10;
 							if ($k==0) $margin_top = 0;
 							$friend_html.='<a href="profile.php?u='.$list_friends_id[$j].'">';
-								$friend_html.='<img src="'.$list_friends_dir[$j]."/".$list_friends_file[$j].'" width="90" height="110" style="margin-left:3px;margin-rigth:3px;margin-top:'.$margin_top.'px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" "/>';
+								$friend_html.='<img src="'.$list_friends_dir[$j]."/".$list_friends_file[$j].'" width="90px" height="110px" style="margin-left:3px;margin-right:3px;margin-top:'.$margin_top.'px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" />';
 								$friend_html.= '<br />'.$my_user_info['firstName'].'<br />'.$my_user_info['lastName'];
 							$friend_html.= '</a>';
 							$friend_html.= '</div>&nbsp;';				
@@ -499,9 +499,11 @@ echo '<div id="social-profile-wrapper">';
 			$pending_invitations = UserFriend::get_list_invitation_of_friends_by_user_id($user_id);
 			$list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id($user_id);
 			$count_pending_invitations = count($pending_invitations);
-			echo '<br/><br/>';
-			//echo '<div>';
+			echo '<div class="clear"></div><br />';		
+				
+			echo '<div id="social-profile-invitations" style="width:240px;" >';
 			if ($count_pending_invitations > 0) {
+			
 				api_display_tool_title(get_lang('PendingInvitations'));
 				for ($i=0;$i<$count_pending_invitations;$i++) {
 					//var_dump($invitations);
@@ -515,11 +517,11 @@ echo '<div id="social-profile-wrapper">';
 							echo '<a href="">'.get_lang('AddToFriends').'</a>';
 						echo '</div>';
 					echo '</div>';
-					//echo '<div class="clear"></div><br />';
+					echo '<div class="clear"></div>';
 				}
 			}
-			//echo '</div>';			
-			//echo '<div class="clear"></div><br />';			
+			echo '</div>';			
+			echo '<div class="clear"></div><br />';			
 			
 			//--Productions			
 			$production_list =  UserManager::build_production_list($user_id);

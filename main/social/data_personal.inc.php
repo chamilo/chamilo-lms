@@ -50,28 +50,33 @@ if (isset($_POST['load_ajax'])) {
 			$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_db);
 			$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 			
+			//------Forum messages
 			echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;" >';			
 			get_all_post_from_user($user_id, $course_db);
 			echo '</div>';	
 			echo '<br />';			
 			
 			//------Blog posts				
-			api_display_tool_title(get_lang('BlogPosts'));				
-			echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';		
-			get_blog_post_from_user($course_db, $user_id);
-			echo '</div>';
-			echo '<br />';
+					
+			$result = get_blog_post_from_user($course_db, $user_id); 
+			if (!empty($result)) {
+				api_display_tool_title(get_lang('BlogPosts'));				
+				echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
+				echo $result;
+				echo '</div>';
+				echo '<br />';				
+			}
 			
-			//------Blog comments				
-			api_display_tool_title(get_lang('BlogComments'));
-			echo '<div class="rounded social-profile-post " style="background:#FAF9F6; padding:0px;" >';			
-				get_blog_comment_from_user($course_db, $user_id);
-			echo '</div>';
-			echo '<br />';
-			
-
-								
-		break;
+			//------Blog comments			
+			$result = get_blog_comment_from_user($course_db, $user_id); 
+			if (!empty($result)) {
+				api_display_tool_title(get_lang('BlogComments'));							
+				echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
+				echo $result;
+				echo '</div>';
+				echo '<br />';				
+			}
+			break;
 		case 'unload_course' :
 			//echo 'load2';
 		break;
@@ -106,8 +111,6 @@ if (isset($_POST['load_ajax'])) {
 			<dd>'. mb_convert_encoding($user_info['phone'],'UTF-8',$charset).'</dd>';
 			echo '</dl>';
 		echo '</div>';
-	echo '</div>';
-	
-	
+	echo '</div>';	
 }
 ?>

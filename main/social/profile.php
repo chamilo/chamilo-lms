@@ -410,9 +410,9 @@ echo $s="<script>$(document).ready( function(){
 		  $('.rounded').corners();		  
 		});</script>";
 			
-echo '<div id="actions">';
+//echo '<div id="actions">';
 	//echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>';
-echo '</div>';
+//echo '</div>';
 
 //Setting some course info 
 $personal_course_list = UserManager::get_personal_session_course_list($_user['user_id']);
@@ -457,16 +457,17 @@ echo '<div id="social-profile-wrapper">';
 				$loop_friends  = ceil($number_loop);
 				$j=0;
 				$friend_html.= '<div id="friend-container">';				
-				api_display_tool_title(get_lang('Friends'));
-				
-				$friend_html.= '<div id="friend-header">';
-					//$friend_html.=  $friends_count.' '.get_lang('Friends');
-				if ($friends_count == 1)
-					$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friend').'</div>';
-				else $friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
-					$friend_html.= '<div style="float:right;">'.get_lang('SeeAll').'</div>';
-				$friend_html.= '</div><br/>';				
-							
+				api_display_tool_title(get_lang('Friends'));				
+					$friend_html.= '<div id="friend-header">';
+							//$friend_html.=  $friends_count.' '.get_lang('Friends');
+						if ($friends_count == 1)
+							$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friend').'</div>';
+						else 
+							$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
+						$friend_html.= '<div style="float:right;">'.get_lang('SeeAll').'</div>';
+					$friend_html.= '</div><br/>'; // close div friend-header
+						
+								
 				for ($k=0;$k<$loop_friends;$k++) {				
 					if ($j==$number_of_images) {
 						$number_of_images=$number_of_images*2;
@@ -476,7 +477,7 @@ echo '<div id="social-profile-wrapper">';
 							$my_user_info=api_get_user_info($list_friends_id[$j]);
 							$name_user=$my_user_info['firstName'].' '.$my_user_info['lastName'];
 							//class="image-social-content"
-							$friend_html.='&nbsp;<div id=div_'.$list_friends_id[$j].' style="float:left" >';
+							$friend_html.='&nbsp;<div id=div_'.$list_friends_id[$j].' style="float:left;" >';
 							$margin_top = 10;
 							if ($k==0) $margin_top = 0;
 							$friend_html.='<a href="profile.php?u='.$list_friends_id[$j].'">';
@@ -488,49 +489,63 @@ echo '<div id="social-profile-wrapper">';
 						$j++; 
 					}				
 				}
-				$friend_html.='</div>';
+				//$friend_html.='</div>'; // close the div friend-container
 			}
+			$friend_html.= '</div>';		
 			echo $friend_html; 
-			echo '<div class="clear"></div><br />';
+				
 			
-			api_display_tool_title(get_lang('PendingInvitations'));
 			//Pending invitations		
 			$pending_invitations = UserFriend::get_list_invitation_of_friends_by_user_id($user_id);
 			$list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id($user_id);
 			$count_pending_invitations = count($pending_invitations);
-			
+			echo '<br/><br/>';
+			//echo '<div>';
 			if ($count_pending_invitations > 0) {
+				api_display_tool_title(get_lang('PendingInvitations'));
 				for ($i=0;$i<$count_pending_invitations;$i++) {
 					//var_dump($invitations);
-					
-					echo '<img src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
-					//echo $pending_invitations[$i]['user_sender_id'];
-					echo $pending_invitations[$i]['content'];
-					echo '<br />';
+					echo '<div style="width:240px;">'; 
+						echo '<div style="float:left;width:60px;" >';
+							echo '<img src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
+						echo '</div>';
+						echo '<div style="padding-left:70px;">';
+							echo ' '.substr($pending_invitations[$i]['content'],19);
+							echo '<br />';
+							echo '<a href="">'.get_lang('AddToFriends').'</a>';
+						echo '</div>';
+					echo '</div>';
+					//echo '<div class="clear"></div><br />';
 				}
 			}
-		
-			echo '<br />';
-			//--Productions
-			api_display_tool_title(get_lang('Productions'));
-			echo '<div class="rounded1">';
-			echo UserManager::build_production_list($user_id);
-			echo '</div>';
+			//echo '</div>';			
+			//echo '<div class="clear"></div><br />';			
 			
-			// Images uploaded by course
-			api_display_tool_title(get_lang('ImagesUploaded'));
-			echo '<div class="rounded2">';
+			//--Productions			
+			$production_list =  UserManager::build_production_list($user_id);
+			if (!empty($production_list )) {
+				api_display_tool_title(get_lang('Productions'));
+				echo '<div class="rounded1">';
+				echo $production_list;
+				echo '</div>';	
+			}			
+			
+			// Images uploaded by course			
+			$file_list = '';
 			foreach ($course_list_code as $course) { 
-				echo UserManager::get_user_upload_files_by_course($user_id,$course['code']);
+				$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code']);
 			}
-			echo '</div>';
+			if (!empty($file_list)) {
+				api_display_tool_title(get_lang('ImagesUploaded'));
+				echo '<div class="rounded2">';
+				echo $file_list;
+				echo '</div>';		
+			}			
 		}
 		
-		
-	
-		
 	echo '</div>'; // end of content section
-		
+//	echo '</div>'; 
+			
 		
 echo '<div id="social-profile-container">';
 	// LEFT COLUMN

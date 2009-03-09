@@ -62,7 +62,7 @@ if (count($list_path_friends)!=0) {
 			if ($list_friends_file[$j]<>"") {
 				$user_info=api_get_user_info($list_friends_id[$j]);
 				$name_user=$user_info['firstName'].' '.$user_info['lastName'];
-				$friend_html.='&nbsp;<div class="image-social-content" id=div_'.$list_friends_id[$j].' style="float:left" ><a href="javascript:void(0)" onclick=load_thick("'.$list_friends_dir[$j].$list_friends_file[$j].'","'.urlencode($name_user).'") title="" class="thickbox"><img src="'.$list_friends_dir[$j].$list_friends_file[$j].'" width="90" height="110" style="margin-left:3px ;margin-rigth:3px;margin-top:10px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" /></a></div>&nbsp;';	
+				$friend_html.='&nbsp;<div class="image-social-content" id=div_'.$list_friends_id[$j].' style="float:left" ><a href="javascript:void(0)" onclick=load_thick("'.$list_friends_dir[$j].'big_'.$list_friends_file[$j].'","'.urlencode($name_user).'") title="" class="thickbox"><img src="'.$list_friends_dir[$j].$list_friends_file[$j].'" width="90" height="110" style="margin-left:3px ;margin-rigth:3px;margin-top:10px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" /></a></div>&nbsp;';	
 			}
 			$j++;
 		}

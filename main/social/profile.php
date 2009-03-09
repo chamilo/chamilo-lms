@@ -29,6 +29,7 @@
 
 
 $language_file = array('registration','messages','userInfo','admin');
+$cidReset = true;	
 require '../inc/global.inc.php';
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
@@ -40,7 +41,6 @@ define(SOCIALGOODFRIEND,4);
 define(SOCIALENEMY,5);
 define(SOCIALDELETED,6);
 */
-
 $user_id = api_get_user_id();
 $show_full_profile = true;
 
@@ -86,7 +86,8 @@ api_block_anonymous_users();
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.corners.min.js" type="text/javascript" language="javascript"></script>'; //jQuery corner
-
+$htmlHeadXtra[] = '<script type="text/javascript" src="../inc/lib/javascript/thickbox.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function toogle_function (element_html, course_code){
@@ -120,9 +121,93 @@ function toogle_function (element_html, course_code){
 	});		
 }
 </script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+$(document).ready(function (){
+	$("input#id_btn_send_invitation").bind("click", function(){
+		if (confirm("'.get_lang('SendMessageInvitation').'")) {
+			$("#form_register_friend").submit();
+		}
+	}); 
+});
+function change_panel (mypanel_id,myuser_id) {
+		$.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+			$("#id_content_panel").html("'.get_lang('Loading').'"); },
+			type: "POST",
+			url: "../messages/send_message.php",
+			data: "panel_id="+mypanel_id+"&user_id="+myuser_id,
+			success: function(datos) {
+			 $("div#id_content_panel_init").html(datos);
+			 $("div#display_response_id").html("");
+			}
+		});	
+}
+function action_database_panel(option_id,myuser_id) {
+	
+	if (option_id==5) {
+		my_txt_subject=$("#txt_subject_id").val();
+	} else {
+		my_txt_subject="clear";
+	}
+		my_txt_content=$("#txt_area_invite").val();
+	if (my_txt_content.length==0 || my_txt_subject.length==0) {
+		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageInformationBySendMessage').'");
+		setTimeout("message_information_display()",3000);
+		return false;
+	}
+	$.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {
+		$("#display_response_id").html("'.get_lang('Loading').'"); },
+		type: "POST",
+		url: "../messages/send_message.php",
+		data: "panel_id="+option_id+"&user_id="+myuser_id+"&txt_subject="+my_txt_subject+"&txt_content="+my_txt_content,
+		success: function(datos) {
+		 $("#display_response_id").html(datos);
+		}
+	});	
+}	
+function display_hide () {
+		setTimeout("hide_display_message()",3000);
+}
+function message_information_display() {
+	$("#display_response_id").html("");
+}
+function hide_display_message () {
+	$("div#display_response_id").html("");
+	try {
+		$("#txt_subject_id").val("");
+		$("#txt_area_invite").val("");
+	}catch(e) {
+		$("#txt_area_invite").val("");
+	}
+}	
+</script>';
+$interbreadcrumb[]= array ('url' => '#','name' => get_lang('ModifyProfile') );
+$interbreadcrumb[]= array (
+	'url' => '../social/index.php?#remote-tab-1',
+	'name' => get_lang('ViewSharedProfile')
+);
+if (isset($_GET['u'])) {
+	$info_user=api_get_user_info(api_get_user_id());
+	$interbreadcrumb[]= array (
+		'url' => '../social/profile.php'.$param_user,
+		'name' => $info_user['firstName'].' '.$info_user['lastName']
+	);	
+}
+if (isset($_GET['u'])) {
+	$info_user=api_get_user_info(Security::remove_XSS($_GET['u']));	
+	$param_user='?u='.Security::remove_XSS($_GET['u']);
+}else {
+	$info_user=api_get_user_info(api_get_user_id());
+	$param_user='';	
+}
 
-$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile') );
-
+$interbreadcrumb[]= array (
+	'url' => '../social/profile.php'.$param_user,
+	'name' => $info_user['firstName'].' '.$info_user['lastName']
+);
 $_SESSION['social_user_id'] = $user_id;
 
 function get_logged_user_course_html($my_course, $count) {
@@ -456,23 +541,20 @@ echo '<div id="social-profile-container">';
     	  	if (api_get_user_id() == $user_id) {
     	  		// if i'm me
     	  		echo Display::return_icon('email.gif');
-    	  		echo '&nbsp;&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('MyInbox').'</a><br />'; 
+    	  		echo '&nbsp;&nbsp;<a href="../social/index.php#remote-tab-2">'.get_lang('MyInbox').'</a><br />'; 
     	  		echo Display::return_icon('edit.gif');
     	  		echo '&nbsp;&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>';
     	  			
     	  	} else {
-    	  		echo Display::return_icon('message_new.png');
-    	  		echo '&nbsp;&nbsp;<a href="#">'.get_lang('SendMessage').'</a>';	
+    	  		echo '&nbsp;&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />'; 
+    	  		//echo '&nbsp;&nbsp;<a href="#">'.get_lang('SendMessage').'</a>';	
     	  	}
     	  	echo '<br /><br />';
     	  	
     	  	// Send message or Add to friend links
-    	  	if (!$show_full_profile) {
-	    	  	echo Display::return_icon('message_new.png');
-	    	  	echo '&nbsp;&nbsp;<a href="#">';
-	    	  		echo get_lang('AddToFriends');
-	    	  	echo '</a>';		
-    	  	}
+    	  	/*if (!$show_full_profile) {
+    	  		echo '&nbsp;&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />'; 		
+    	  	}*/
     	  	
     	  	if ($show_full_profile) {    	  		
 				//-- Extra Data

@@ -49,7 +49,13 @@ if (api_get_setting('allow_message_tool')!='true'){
         <td><div class="message-top-title">
         <table width="600" border="0" height="20">
         <td width="450"><?php echo get_lang('SocialNetwork');?></td>
+<?php 
+			if (!isset($_REQUEST['view'])) {
+?>
         <td width="150"><a href="javascript:void(0)" onclick="change_panel('3','<?php echo $userfriend_id; ?>')" ><?php echo Display::return_icon('folder_up.gif',get_lang('MoreOptions')).'&nbsp;&nbsp;'.get_lang('MoreOptions')?></a></td>
+<?php
+			}
+?>
         </table>
         </div></td>
     </tr>
@@ -66,9 +72,21 @@ if (api_get_setting('allow_message_tool')!='true'){
 <div class="message-conten-body-right">
 <div id="id_content_panel_init"><!--init content changed -->
 			<dl>
+<?php 
+			if (!isset($_REQUEST['view'])) {
+?>
 				<dd><a href="javascript:void(0)" onclick="change_panel('2','<?php echo $userfriend_id; ?>')"><?php echo get_lang('SocialAddToContact')?></a></dd>
+<?php
+			}
+?>
 				<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $userfriend_id; ?>')"><?php echo get_lang('SocialSendMessage');?></a></dd>
+<?php
+			if (!isset($_REQUEST['view'])) {
+?>
 				<dd><a href="main/social/index.php#remote-tab-5"><?php echo get_lang('SocialSeeContacts'); ?></a></dd>
+<?php
+			}
+?>
 			</dl>
 			
 </div><!-- end content changed-->

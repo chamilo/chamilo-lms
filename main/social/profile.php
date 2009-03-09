@@ -211,37 +211,25 @@ if (isset($_GET['shared'])) {
 	$link_shared='';
 }
 $interbreadcrumb[]= array ('url' =>$my_link,'name' => get_lang('ModifyProfile') );
-if (isset($_GET['shared'])) {
-	$interbreadcrumb[]= array (
-		'url' => '#',
-		'name' => get_lang('ViewSharedProfile')
-	);
-} else {
-	$interbreadcrumb[]= array (
-		'url' => '../social/index.php?'.$link_shared.'#remote-tab-1',
-		'name' => get_lang('ViewSharedProfile')
-	);
-}
+
+$interbreadcrumb[]= array (
+	'url' => '../social/profile.php?'.$link_shared.'#remote-tab-1',
+	'name' => get_lang('ViewSharedProfile')
+);
 
 if (isset($_GET['u'])) {
-	$info_user=api_get_user_info(api_get_user_id());
+	$info_user=api_get_user_info(Security::remove_XSS($_GET['u']));	
 	$interbreadcrumb[]= array (
-		'url' => '../social/profile.php?'.$link_shared.'&amp;'.$param_user,
+		'url' => '#',
 		'name' => $info_user['firstName'].' '.$info_user['lastName']
 	);	
 }
 if (isset($_GET['u'])) {
-	$info_user=api_get_user_info(Security::remove_XSS($_GET['u']));	
 	$param_user='u='.Security::remove_XSS($_GET['u']);
 }else {
 	$info_user=api_get_user_info(api_get_user_id());
 	$param_user='';	
 }
-
-$interbreadcrumb[]= array (
-	'url' => '../social/profile.php?'.$param_user.'&amp;'.$link_shared,
-	'name' => $info_user['firstName'].' '.$info_user['lastName']
-);
 $_SESSION['social_user_id'] = $user_id;
 
 function get_logged_user_course_html($my_course, $count) {

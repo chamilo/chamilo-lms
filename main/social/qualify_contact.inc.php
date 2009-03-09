@@ -26,7 +26,6 @@ require_once '../inc/global.inc.php';
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once '../inc/lib/social.lib.php';
 $user_friend=$_POST['user_friend'];
-$user_info=api_get_user_info($user_friend);
 $list_of_options=array();
 $img_user=array();
 $img_info_user=array();
@@ -37,6 +36,7 @@ $number_list=count($list_of_options);
 $user_id  =urldecode($_GET['id_user']);
 $user_id  =str_replace("\\","",$user_id);
 $user_friend=str_replace('"',"",$user_id);
+$user_info=api_get_user_info($user_friend);
 $user_friend_relation=UserFriend::get_relation_between_contacts(api_get_user_id(),$user_friend);
 ?>
 <input type="hidden"  name="user_cod_qualify" id="user_cod_qualify" value="<?php echo $user_friend; ?>"/>

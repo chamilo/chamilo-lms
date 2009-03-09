@@ -125,7 +125,8 @@ function set_qualify_friend() {
 			url: "../social/register_friend.php",
 			data: "user_id_friend_q="+user_id_friend+"&type_friend_q="+type_friend,
 			success: function(datos) {
-			alert(datos);
+			//alert(datos);
+			tb_remove();
 			//clear_form();
 			}
 		});

@@ -48,11 +48,11 @@ if (api_get_setting('allow_message_tool')<>'true' && api_get_setting('allow_soci
     <tr height="20">
         <td><div class="message-top-title">
         <table width="600" border="0" height="20">
-        <td width="450"><?php echo get_lang('SocialNetwork');?></td>
+        <td width="450"><?php echo mb_convert_encoding(get_lang('SocialNetwork'),'UTF-8',$charset);?></td>
 <?php 
 			if (!isset($_REQUEST['view'])) {
 ?>
-        <td width="150"><a href="javascript:void(0)" onclick="change_panel('3','<?php echo $userfriend_id; ?>')" ><?php echo Display::return_icon('folder_up.gif',get_lang('SeeMoreOptions')).'&nbsp;&nbsp;'.get_lang('MoreOptions')?></a></td>
+        <td width="150"><a href="javascript:void(0)" onclick="change_panel('3','<?php echo $userfriend_id; ?>')" ><?php echo Display::return_icon('folder_up.gif',mb_convert_encoding(get_lang('SeeMoreOptions'),'UTF-8',$charset)).'&nbsp;&nbsp;'.mb_convert_encoding(get_lang('SeeMoreOptions'),'UTF-8',$charset);?></a></td>
 <?php
 			}
 ?>
@@ -65,8 +65,8 @@ if (api_get_setting('allow_message_tool')<>'true' && api_get_setting('allow_soci
         <div class="message-content-body-left">
 			<img class="message-image-info" src="<?php echo $info_path_friend['dir'].$info_path_friend['file']; ?>"/>
 			<dl>
-				<dd><?php echo get_lang('FirstName').' : '.$info_user_friend['firstName'] ?></dd>
-				<dd><?php echo get_lang('LastName').' : '.$info_user_friend['lastName'] ?></dd>
+				<dd><?php echo mb_convert_encoding(get_lang('FirstName'),'UTF-8',$charset).' : '.mb_convert_encoding($info_user_friend['firstName'],'UTF-8',$charset); ?></dd>
+				<dd><?php echo mb_convert_encoding(get_lang('LastName'),'UTF-8',$charset).' : '.mb_convert_encoding($info_user_friend['lastName'],'UTF-8',$charset); ?></dd>
 			</dl>
 		</div>
 <div class="message-conten-body-right">
@@ -75,21 +75,21 @@ if (api_get_setting('allow_message_tool')<>'true' && api_get_setting('allow_soci
 <?php 
 			if (!isset($_REQUEST['view'])) {
 ?>
-				<dd><a href="javascript:void(0)" onclick="change_panel('2','<?php echo $userfriend_id; ?>')"><?php echo get_lang('SendInviteMessage')?></a></dd>
+				<dd><a href="javascript:void(0)" onclick="change_panel('2','<?php echo $userfriend_id; ?>')"><?php echo mb_convert_encoding(get_lang('SendInviteMessage'),'UTF-8',$charset);?></a></dd>
 <?php
 			}
 ?>
 <?php       
 			if (api_get_setting('allow_message_tool')=='true') {
 ?>
-				<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $userfriend_id; ?>')"><?php echo get_lang('SendMessage');?></a></dd>
+				<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $userfriend_id; ?>')"><?php echo mb_convert_encoding(get_lang('SendMessage'),'UTF-8',$charset);?></a></dd>
 <?php
 			}
 ?>
 <?php
 			if (!isset($_REQUEST['view'])) {
+				//<dd><a href="main/social/index.php#remote-tab-5"> echo get_lang('SocialSeeContacts'); </a></dd>
 ?>
-				<dd><a href="main/social/index.php#remote-tab-5"><?php echo get_lang('SocialSeeContacts'); ?></a></dd>
 <?php
 			}
 ?>
@@ -102,6 +102,6 @@ if (api_get_setting('allow_message_tool')<>'true' && api_get_setting('allow_soci
     <tr height="22">
         <td>
 <div id="display_response_id" style="position:relative"></div>
-<div class="message-bottom-title">&nbsp;Dokeos</div></td>
+<div class="message-bottom-title">&nbsp;</div></td>
     </tr>
 </table>

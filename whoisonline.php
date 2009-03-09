@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 18842 2009-03-09 00:44:08Z iflorespaz $
+<?php // $Id: whoisonline.php 18867 2009-03-09 14:59:20Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -31,7 +31,9 @@
 */
 // name of the language file that needs to be included
 $language_file = array('index','registration','messages','userInfo');
-
+if (!isset($_GET['cidReq'])) {
+	$cidReset = true;	
+}
 // including necessary files
 require_once('./main/inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');

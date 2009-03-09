@@ -1421,7 +1421,59 @@ div.system_announcement {
 	margin: 0px;
 	padding: 0px;
 } 
-
+.message-top-title {
+	float:left;
+	margin-top:1px;
+	margin-bottom:1px;
+	background-color:#F2F2F2;
+	width:600px;
+	border-bottom:1px solid #CCCCCC;
+	margin:left:5px;
+}
+.message-bottom-title {
+	height:22px;
+	float:left;
+	margin-top:1px;
+	margin-bottom:1px;
+	background-color:#F2F2F2;
+	width:600px;
+	border-bottom:1px solid #CCCCCC;
+}
+.message-content-body-left{
+    float:left;
+	width:55%;  
+}
+.message-conten-body-right {
+	float:right;   
+	text-align:left;
+    width:45%;   
+}
+.message-body-title{
+	float:right;
+    margin-top:1px;
+    margin-bottom:5px;
+	border-bottom:1px solid #CCCCCC;	
+	border-collapse:collapse;   
+}
+.message-image-info {
+	width:35%;
+    float:left;
+	margin-top:10px;
+	margin-bottom:10px;	
+	margin-left:10px;
+	text-align:left;
+	margin-right:20px;
+}
+.message-conten-body-right dd {
+	color:#333399;
+    border-bottom:1px solid #CCCCCC;
+	height:20px;
+	text-decoration:none;
+	outline-style:none;
+	background:#ffffff;
+}
+.message-conten-body-right:hover {
+}
 /**********************************************
  *  EXERCISE TOOL                           *
  **********************************************/

@@ -625,14 +625,24 @@ echo '<div id="social-profile-container">';
 				}
 					
 				//-----Announcements
-				api_display_tool_title(get_lang('Announcements'));		
-	    	  	foreach ($course_list_code as $course) {	  
-	    	  		echo '<h2>'.$course['title'].'</h2>';
-					echo '<div class="rounded left-side">';							
-						get_all_annoucement_by_user_course($course['dbName'],$user_id);
-					echo '</div>';
-					echo '<br/>';
-	    	  	}			
+				
+				
+				$announcement_content = '';		
+		    	foreach ($course_list_code as $course) {
+	    			$content = get_all_annoucement_by_user_course($course['dbName'],$user_id);	    			
+	    	  		if (!empty($content)) {	 		    	  			  
+		    	  		$announcement_content.= '<h2>'.$course['title'].'</h2>';
+						$announcement_content.= '<div class="rounded left-side">';							
+						$announcement_content.= $content;	
+						$announcement_content.= '</div>';
+						$announcement_content.= '<br/>';
+	    	  		}
+	    	  	}
+	    	  	
+	    	  	if(!empty($announcement_content)) {
+	    	  		api_display_tool_title(get_lang('Announcements'));
+	    	  		echo $announcement_content;
+	    	  	}					
     	  	}
     echo '</div>';
     
@@ -675,11 +685,11 @@ echo '<div id="social-profile-container">';
 			echo '<div class="clear"></div><br />';
 			
 			// COURSES LIST
-			if ($show_full_profile) {			
-				api_display_tool_title(ucfirst(get_lang('Courses')));			
+			if ($show_full_profile) {							
 				//print_r($personal_course_list);		
 				//echo '<pre>';
 				if ( is_array($list) ) {
+					api_display_tool_title(ucfirst(get_lang('Courses')));
 					//Courses whithout sessions
 					$old_user_category = 0;
 					$i=1;

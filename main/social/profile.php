@@ -654,12 +654,10 @@ echo '<div id="social-profile-container">';
 			if ($show_full_profile) {		 
 				echo '<div class="social-profile-info" >';					
 					echo '<dt>'.get_lang('UserName').'</dt>
-						  <dd>'. $user_info['username'].'	</dd>';
-					
+						  <dd>'. $user_info['username'].'	</dd>';					
 					if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
 						echo '<dt>'.get_lang('Name').'</dt>		
-						  	  <dd>'. $user_info['firstname'].' '.$user_info['lastname'].'</dd>';
-					
+						  	  <dd>'. $user_info['firstname'].' '.$user_info['lastname'].'</dd>';					
 					if (!empty($user_info['official_code']))					
 						echo '<dt>'.get_lang('OfficialCode').'</dt>	
 						  <dd>'.$user_info['official_code'].'</dd>';
@@ -676,14 +674,11 @@ echo '<div id="social-profile-container">';
 				echo '<div class="social-profile-info" >';
 					echo '<dl>';
 					if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
-						echo '<dt>'.mb_convert_encoding(get_lang('Name'),'UTF-8',$charset).'</dt>		
-						  <dd>'. mb_convert_encoding($user_info['firstname'].' '.$user_info['lastname'],'UTF-8',$charset).'</dd>';
-					
+						echo '<dt>'.get_lang('Name').'</dt>		
+						  <dd>'. $user_info['firstname'].' '.$user_info['lastname'].'</dd>';					
 				echo '</div>';
-			}
-			
-			echo '<div class="clear"></div><br />';
-			
+			}			
+			echo '<div class="clear"></div><br />';			
 			// COURSES LIST
 			if ($show_full_profile) {							
 				//print_r($personal_course_list);		

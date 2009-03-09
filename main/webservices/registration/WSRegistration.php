@@ -3,7 +3,7 @@ require ('../../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
 require_once($libpath.'nusoap/nusoap.php');
 require_once ($libpath.'fileManage.lib.php');
-include_once ($libpath.'usermanager.lib.php');
+require_once ($libpath.'usermanager.lib.php');
 require_once ($libpath.'fileUpload.lib.php');
 require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 require_once ($libpath.'add_course.lib.inc.php');
@@ -57,7 +57,7 @@ function DokeosWebServiceCreateUser($params) {
 	
 	$secret_key = $params['secret_key'];
 
-	if ( $secret_key != $_configuration['security_key']) {
+	if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    		return -1; // secret key is incorrect
    	}
 			
@@ -224,7 +224,7 @@ function DokeosWebServiceEditUser($params)
 	
 	$secret_key = $params['secret_key'];
 	
-	if ( $secret_key != $_configuration['security_key']) {
+    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    		return -1; // secret key is incorrect
    	}
 	
@@ -334,7 +334,7 @@ function DokeosWebServiceDeleteUser($params)
 	
 	$secret_key = $params['secret_key'];
 	
-	if ( $secret_key != $_configuration['security_key'] ) {
+    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    		return -1;
    	}
    	$original_user_id_name = $params['original_user_id_name'];
@@ -406,7 +406,7 @@ function DokeosWebServiceCreateCourse($params) {
 	
 	$secret_key = $params['secret_key'];
 	
-	if ( $secret_key != $_configuration['security_key']) {
+    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    		return -1; //secret key is incorrect
    	}
 	
@@ -563,7 +563,7 @@ function DokeosWebServiceEditCourse($params){
 	
 	$secret_key = $params['secret_key'];
 	
-	if ( $secret_key != $_configuration['security_key']) {
+    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    		return -1; // secret key is incorrect
    	} 
 	
@@ -662,7 +662,7 @@ function DokeosWebServiceDeleteCourse($params) {
 		
 		$secret_key = $params['secret_key'];
 				
-		if ( $secret_key != $_configuration['security_key']) {
+        if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    			return -1; // secret key is incorrect
    		}
 		
@@ -741,7 +741,7 @@ function DokeosWebServiceCreateSession($params) {
 	
 	$secret_key = $params['secret_key'];
 	
-	if ( $secret_key != $_configuration['security_key'] ) {
+    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    		return -1;
    	}
 		
@@ -877,7 +877,7 @@ function DokeosWebServiceEditSession($params) {
 	
 	$secret_key = $params['secret_key'];	
 	
-	if ( $secret_key != $_configuration['security_key']) {
+    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    		return -1;
    	}
 		
@@ -975,7 +975,7 @@ function DokeosWebServiceDeleteSession($params) {
 	
 	$secret_key = $params['secret_key'];	
 	
-	if ( $secret_key != $_configuration['security_key'] ) {
+    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    		return -1;
    	}	
 	
@@ -1056,7 +1056,7 @@ function DokeosWebServiceSubscribeUserToCourse($params) {
     
     $secret_key = $params['secret_key'];
     
-    if ( $secret_key != $_configuration['security_key']) {
+    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    		return -1;
    	}
     
@@ -1235,7 +1235,7 @@ function DokeosWebServiceUnsubscribeUserFromCourse($params)
 	global $_configuration;
 	$secret_key = $params['secret_key'];
 	
-	if ( $secret_key != $_configuration['security_key']) {
+    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    		return -1;
    	}
 	
@@ -1349,7 +1349,7 @@ function DokeosWebServiceSuscribeUsersToSession($params){
  	
  	$secret_key = $params['secret_key'];
  	
- 	if ( $secret_key != $_configuration['security_key']) {
+    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
    		return -1;
    	}
    	 
@@ -1486,4 +1486,3 @@ function DokeosWebServiceSuscribeUsersToSession($params){
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 $server->service($HTTP_RAW_POST_DATA);
-?>

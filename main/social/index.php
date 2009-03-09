@@ -51,7 +51,6 @@ function denied_friend (element_input) {
 		 $("#id_response").html(datos);
 		}
 	});
-	
 }
 function delete_friend (element_div) {
 	id_image=$(element_div).attr("id");
@@ -152,7 +151,11 @@ function toogle_function (element_html){
 	id_button="#btn_"+id_elem[1];
 	elem_src=$(id_button).attr("src");
 	image_show=elem_src.split("/");
-	my_image=image_show[2];
+	for (i=0;i<image_show.length;i++) {
+		if (image_show[i]=="visible.gif" || image_show[i]=="invisible_na.gif") {
+			my_image=image_show[i];
+		}
+	}
 	if (my_image=="visible.gif") {
 		$(ident).hide("slow");	
 		$(id_button).attr("src","../img/invisible_na.gif");
@@ -160,7 +163,6 @@ function toogle_function (element_html){
 		$(ident).show("slow");	
 		$(id_button).attr("src","../img/visible.gif");
 	}
-
 }
 function selectall_cheks() {
 	$("input[@type=checkbox]").attr("checked", true);
@@ -365,7 +367,6 @@ function list_search_hide () {
 function hide_search_list () {
 	$("div#id_div_search").html("");
 }
-
 </script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';
 $htmlHeadXtra[] = '
@@ -398,11 +399,6 @@ code {
     font-family: "Courier New", Courier, monospace;
 }
 </style>';
-$htmlHeadXtra[] = '
-
-		
-		
-';
 $_SESSION['social_exist']=true;
 $_SESSION['social_dest'] = 'index.php';
 $interbreadcrumb[]= array (
@@ -410,7 +406,7 @@ $interbreadcrumb[]= array (
 	'name' => get_lang('ModifyProfile')
 );
 $interbreadcrumb[]= array (
-	'url' => $_SESSION['social_dest'],
+	'url' => 'index.php?#remote-tab-1',
 	'name' => get_lang('SocialNetwork')
 );
 Display :: display_header('');

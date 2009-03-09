@@ -71,7 +71,7 @@ if (count($list_path_friends)!=0) {
 	$friend_html.='<br/></table>&nbsp;';
 	echo $friend_html; 
 }  else {
-	$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFC" style="border-left:1px #B8C8DC solid;border-bottom:1px #B8C8DC solid;border-right:1px #B8C8DC solid;">';		
+	$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFC" style="border-left:1px #B8C8DC solid;border-bottom:1px #B8C8DC solid;border-right:1px #B8C8DC solid;text-align:left">';		
 	$friend_html.='<tr><td valign="top">&nbsp;&nbsp;&nbsp;'.utf8_encode(get_lang('YouDontHaveContactsInThisGroup'));
 	$friend_html.='<br/><br/></td></tr>';
 	$friend_html.='</table>&nbsp;';//</div>

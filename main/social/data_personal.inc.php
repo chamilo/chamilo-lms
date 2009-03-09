@@ -18,12 +18,18 @@ echo '<div id="profile_container" style="width:500px;">';
 	echo '</div>';	
 	echo '<div class="social-profile-info">';
 		echo '<dl>';
-		echo '<dt>'.mb_convert_encoding(get_lang('UserName'),'UTF-8',$charset).'</dt>		<dd>'. mb_convert_encoding($user_info['username'],'UTF-8',$charset).'	</dd>';
-		echo '<dt>'.mb_convert_encoding(get_lang('FirstName'),'UTF-8',$charset).'</dt>	<dd>'. mb_convert_encoding($user_info['firstname'],'UTF-8',$charset).'</dd>';
-		echo '<dt>'.mb_convert_encoding(get_lang('LastName'),'UTF-8',$charset).'</dt>		<dd>'. mb_convert_encoding($user_info['lastname'],'UTF-8',$charset).'</dd>';
-		echo '<dt>'.mb_convert_encoding(get_lang('OfficialCode'),'UTF-8',$charset).'</dt>	<dd>'. mb_convert_encoding($user_info['official_code'],'UTF-8',$charset).'</dd>';
-		echo '<dt>'.mb_convert_encoding(get_lang('Email'),'UTF-8',$charset).'</dt>		<dd>'. mb_convert_encoding($user_info['email'],'UTF-8',$charset).'</dd>';
-		echo '<dt>'.mb_convert_encoding(get_lang('Phone'),'UTF-8',$charset).'</dt>		<dd>'. mb_convert_encoding($user_info['phone'],'UTF-8',$charset).'</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('UserName'),'UTF-8',$charset).'</dt>
+		<dd>'. mb_convert_encoding($user_info['username'],'UTF-8',$charset).'	</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('FirstName'),'UTF-8',$charset).'</dt>
+		<dd>'. mb_convert_encoding($user_info['firstname'],'UTF-8',$charset).'</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('LastName'),'UTF-8',$charset).'</dt>
+		<dd>'. mb_convert_encoding($user_info['lastname'],'UTF-8',$charset).'</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('OfficialCode'),'UTF-8',$charset).'</dt>	
+		<dd>'. mb_convert_encoding($user_info['official_code'],'UTF-8',$charset).'</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('Email'),'UTF-8',$charset).'</dt>
+		<dd>'. mb_convert_encoding($user_info['email'],'UTF-8',$charset).'</dd>';
+		echo '<dt>'.mb_convert_encoding(get_lang('Phone'),'UTF-8',$charset).'</dt>
+		<dd>'. mb_convert_encoding($user_info['phone'],'UTF-8',$charset).'</dd>';
 		echo '</dl>';
 	echo '</div>';
 echo '</div>';

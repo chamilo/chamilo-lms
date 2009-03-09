@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18839 2009-03-08 22:23:45Z yannoo $
+<?php // $Id: profile.php 18843 2009-03-09 00:55:20Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -716,7 +716,7 @@ if (api_get_setting('extended_profile') == 'true') {
 	} else {
 		$show='';
 	}
-	if ($_GET['type']=='extended') {
+	if (isset($_GET['type']) && $_GET['type']=='extended') {
 		echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditNormalProfile').'</a>';			
 	} else {
 		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditExtendProfile').'</a>';
@@ -775,7 +775,6 @@ if ($image=='unknown.jpg') {
 } else {
 	echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 }
-
 if (api_get_setting('allow_message_tool')=='true') {	
 	include (api_get_path(LIBRARY_PATH).'message.lib.php');
 	$number_of_new_messages = MessageManager::get_new_messages();
@@ -787,27 +786,24 @@ if (api_get_setting('allow_message_tool')=='true') {
 	echo '<div class="message-content">
 			<h2 class="message-title">'.get_lang('Messages').'</h2>
 			<p>
-				<a href="../messages/inbox.php" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />
-				<a href="../messages/outbox.php" class="message-body">'.get_lang('Outbox').$cant_out_box.'</a><br />
-				<a href="../messages/new_message.php" class="message-body">'.get_lang('ComposeMessage').'</a><br />
+				<a href="../social/index.php#remote-tab-2" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />
+				<a href="../social/index.php#remote-tab-3" class="message-body">'.get_lang('Outbox').$cant_out_box.'</a><br />
 			</p>';		
 	
-	 if (api_get_setting('allow_social_tool')=='true') {		 
+	/* if (api_get_setting('allow_social_tool')=='true') {		 
 		 if ($number_of_new_messages_of_friend>0) {
 			echo '<div class="message-content-internal">';		
 			echo '<a href="../social/index.php#remote-tab-4" style="color:#000000">'. Display::return_icon('info3.gif',get_lang('NewMessage'),'align="absmiddle"').'&nbsp;'.get_lang('Invitation ').'('.$number_of_new_messages_of_friend.')'.'</a>';
 			echo '</div><br/>';		    
 		 }			
-	 }
+	 }*/
 	echo '<img src="../img/delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
 	if ($number_of_new_messages_of_friend>0) {
 		echo '<br/>';
 	}
 	echo '</div>';
 }
-
 echo '</div>';
-
 $form->display();
 Display :: display_footer();
 ?>

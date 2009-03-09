@@ -203,28 +203,43 @@ function register_friend(element_input) {
  }
 }
 </script>';
-$interbreadcrumb[]= array ('url' => '#','name' => get_lang('ModifyProfile') );
-$interbreadcrumb[]= array (
-	'url' => '../social/index.php?#remote-tab-1',
-	'name' => get_lang('ViewSharedProfile')
-);
+if (isset($_GET['shared'])) {
+	$my_link='../social/index.php';
+	$link_shared='shared='.Security::remove_XSS($_GET['shared']);
+} else {
+	$my_link='../auth/profile.php';
+	$link_shared='';
+}
+$interbreadcrumb[]= array ('url' =>$my_link,'name' => get_lang('ModifyProfile') );
+if (isset($_GET['shared'])) {
+	$interbreadcrumb[]= array (
+		'url' => '#',
+		'name' => get_lang('ViewSharedProfile')
+	);
+} else {
+	$interbreadcrumb[]= array (
+		'url' => '../social/index.php?'.$link_shared.'#remote-tab-1',
+		'name' => get_lang('ViewSharedProfile')
+	);
+}
+
 if (isset($_GET['u'])) {
 	$info_user=api_get_user_info(api_get_user_id());
 	$interbreadcrumb[]= array (
-		'url' => '../social/profile.php'.$param_user,
+		'url' => '../social/profile.php?'.$link_shared.'&amp;'.$param_user,
 		'name' => $info_user['firstName'].' '.$info_user['lastName']
 	);	
 }
 if (isset($_GET['u'])) {
 	$info_user=api_get_user_info(Security::remove_XSS($_GET['u']));	
-	$param_user='?u='.Security::remove_XSS($_GET['u']);
+	$param_user='u='.Security::remove_XSS($_GET['u']);
 }else {
 	$info_user=api_get_user_info(api_get_user_id());
 	$param_user='';	
 }
 
 $interbreadcrumb[]= array (
-	'url' => '../social/profile.php'.$param_user,
+	'url' => '../social/profile.php?'.$param_user.'&amp;'.$link_shared,
 	'name' => $info_user['firstName'].' '.$info_user['lastName']
 );
 $_SESSION['social_user_id'] = $user_id;
@@ -499,7 +514,7 @@ echo '<div id="social-profile-wrapper">';
 							$friend_html.='&nbsp;<div id=div_'.$list_friends_id[$j].' style="float:left;" >';
 							$margin_top = 10;
 							if ($k==0) $margin_top = 0;
-							$friend_html.='<a href="profile.php?u='.$list_friends_id[$j].'">';
+							$friend_html.='<a href="profile.php?u='.$list_friends_id[$j].'&amp;'.$link_shared.'">';
 								$friend_html.='<img src="'.$list_friends_dir[$j]."/".$list_friends_file[$j].'" width="90px" height="110px" style="margin-left:3px;margin-right:3px;margin-top:'.$margin_top.'px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" />';
 								$friend_html.= '<br />'.$my_user_info['firstName'].'<br />'.$my_user_info['lastName'];
 							$friend_html.= '</a>';

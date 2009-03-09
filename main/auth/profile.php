@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18893 2009-03-09 20:41:05Z juliomontoya $
+<?php // $Id: profile.php 18900 2009-03-09 21:51:41Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -71,7 +71,7 @@ function generate_open_id_form() {
 }
 </script>';
 $interbreadcrumb[]= array (
-	'url' => '#',
+	'url' => '../auth/profile.php',
 	'name' => get_lang('ModifyProfile')
 );
 if (!empty ($_GET['coursePath'])) {
@@ -697,12 +697,12 @@ if (isset($_GET['show'])) {
 	
 	if ((api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') ||(api_get_setting('allow_social_tool')=='true')) {
 		$interbreadcrumb[]= array (
-		'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-1',
+		'url' => '#',
 		'name' => get_lang('SocialNetwork')
 		);
 	} elseif ((api_get_setting('allow_social_tool')=='false' && api_get_setting('allow_message_tool')=='true')) {
 		$interbreadcrumb[]= array (
-		'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-1',
+		'url' => '#',
 		'name' => get_lang('MessageTool')
 		);	
 	}

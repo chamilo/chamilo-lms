@@ -40,8 +40,8 @@ $user_info=api_get_user_info($user_id);
 <?php
 if ($panel_id==2) {
 ?>
-    <td height="20"><?php echo mb_convert_encoding(get_lang('Info'),'UTF-8',$charset).' :'; ?></td>
-    <td height="20"><?php echo mb_convert_encoding(get_lang('SocialUserInformationAttach'),'UTF-8',$charset); ?></td>
+    <td height="20"><?php //echo mb_convert_encoding(get_lang('Info'),'UTF-8',$charset).' :'; ?></td>
+    <td height="20"><?php //echo mb_convert_encoding(get_lang('SocialUserInformationAttach'),'UTF-8',$charset); ?></td>
     <td height="20"><?php echo mb_convert_encoding(get_lang('WriteToMessage'),'UTF-8',$charset);  ?> :<br/><textarea id="txt_area_invite" rows="3" cols="25"></textarea></td>
     <td height="20"><input type="button" value="<?php echo mb_convert_encoding(get_lang('SendInviteMessage'),'UTF-8',$charset); ?>" onclick="action_database_panel('4','<?php echo $user_id;?>')" /></td>
 <?php

@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18884 2009-03-09 18:15:49Z iflorespaz $
+<?php // $Id: profile.php 18893 2009-03-09 20:41:05Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -14,7 +14,7 @@
  * Init section
  */
 // name of the language file that needs to be included
-$language_file = array('registration','messages');
+$language_file = array('registration','messages','userInfo');
 $cidReset = true;
 require ('../inc/global.inc.php');
 if (!isset($_GET['show'])) {
@@ -246,10 +246,8 @@ if (api_get_setting('profile', 'language') !== 'true')
 //	EXTENDED PROFILE  this make the page very slow!
 if (api_get_setting('extended_profile') == 'true') {
 	if ($_GET['type']=='extended') {
-		//$form->addElement('html', '<a href="#" onclick="javascript:show_extend();"> show_extend_profile</a>');
-			
-		$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
-	
+		//$form->addElement('html', '<a href="#" onclick="javascript:show_extend();"> show_extend_profile</a>');			
+		$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');	
 		//	MY COMPETENCES
 		$form->add_html_editor('competences', get_lang('MyCompetences'), false);
 		//	MY DIPLOMAS
@@ -696,7 +694,8 @@ if (!empty($_SESSION['production_uploaded']))
 }
 
 if (isset($_GET['show'])) {
-	if ((api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') ||(api_get_setting('allow_social_tool')=='true') && api_get_user_id()<>2 && api_get_user_id()<>0) {
+	
+	if ((api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') ||(api_get_setting('allow_social_tool')=='true')) {
 		$interbreadcrumb[]= array (
 		'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-1',
 		'name' => get_lang('SocialNetwork')
@@ -727,7 +726,10 @@ if (api_get_setting('extended_profile') == 'true') {
 		echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditNormalProfile').'</a>';			
 	} else {
 		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditExtendProfile').'</a>';
-	}	
+	}
+	if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') { 
+		echo '<a href="../social/profile.php">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('ViewSharedProfile'),'UTF-8',$charset).'</a>';
+	}
 	echo '</div>';
 } 
 

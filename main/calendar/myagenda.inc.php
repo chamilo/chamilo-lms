@@ -745,6 +745,80 @@ function show_personal_agenda()
 	}
 	echo "</table>\n";
 }
+
+/**
+ * This function retrieves all the personal agenda items of the given user_id and shows
+ * these items in one list (ordered by date and grouped by month (the month_bar)
+ * @param int user id
+ */
+function show_simple_personal_agenda($user_id)
+{
+	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+	global $MonthsLong, $charset;
+	
+	// The SQL statement that retrieves all the personal agenda items of this user
+	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' ORDER BY date DESC";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	// variable initialisation
+	$month_bar = "";
+	// setting the default day, month and year
+	if (!$_GET['day'] AND !$_GET['month'] AND !$_GET['year']) {
+		$today = getdate();
+		$year = $today['year'];
+		$month = $today['mon'];
+		$day = $today['mday'];
+	}
+	$export_icon = 'export.png';
+	$export_icon_low = 'export_low_fade.png';
+	$export_icon_high = 'export_high_fade.png';
+
+	// starting the table output
+	if (Database::num_rows($result) > 0) {
+		while ($myrow = Database::fetch_array($result)) {
+			/*--------------------------------------------------
+					display: the month bar
+			  --------------------------------------------------*/
+			if ($month_bar != date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]))) {
+				$month_bar = date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]));
+				echo $MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]));
+			}
+			// highlight: if a date in the small calendar is clicked we highlight the relevant items
+			$db_date = (int) date("d", strtotime($myrow["date"])).date("n", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]));
+			if ($_GET["day"].$_GET["month"].$_GET["year"] <> $db_date) {
+				$style = "data";
+				$text_style = "text";
+			} else {
+				$style = "datanow";
+				$text_style = "text";
+			}
+			/*--------------------------------------------------
+			 			display: date and time
+			  --------------------------------------------------*/					
+			// adding an internal anchor			
+			echo date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
+			echo ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
+			
+			/*--------------------------------------------------
+			 			display: the title
+			  --------------------------------------------------*/
+			echo '<br />';						
+			echo $myrow['title'];
+			echo '<br />';
+			
+			/*--------------------------------------------------
+			 			display: the content
+			  --------------------------------------------------*/
+			$content = $myrow['text'];
+			$content = make_clickable($content);
+			$content = text_filter($content);		
+			echo $content;						
+		}
+	} else {
+		echo get_lang('NoAgendaItems');
+	}
+	
+}
+
 /**
  * This function deletes a personal agenda item
  * There is an additional check to make sure that one cannot delete an item that

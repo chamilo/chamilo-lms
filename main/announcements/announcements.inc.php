@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 18080 2009-01-29 20:33:19Z cfasanando $
+<?php //$Id: announcements.inc.php 18868 2009-03-09 15:10:42Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -664,7 +664,7 @@ function sent_to($tool, $id)
 * using the visibility field in 'item_property'
 * values: 0 = invisibility for
 */
-function change_visibility($tool,$id)
+function change_visibility_announcement($tool,$id)
 {
 	global $_course;
 	global $tbl_item_property;
@@ -883,4 +883,29 @@ function update_mail_sent($insert_id)
 	// store the modifications in the table tbl_annoucement
 	$sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE id='$insert_id'";
 	api_sql_query($sql,__FILE__,__LINE__);
+}
+
+function get_all_annoucement_by_user_course($course_db, $user_id)
+{	
+	$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db);
+	$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
+
+	$sql="SELECT announcement.*, toolitemproperties.*
+					FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+					WHERE announcement.id = toolitemproperties.ref
+					AND toolitemproperties.tool='announcement'
+					AND (toolitemproperties.to_user_id='".$user_id."' OR toolitemproperties.to_group_id='0')
+					AND toolitemproperties.visibility='1'
+					AND announcement.session_id  = 0
+					ORDER BY display_order DESC";
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$num_rows = Database::num_rows($result);
+	if (Database::num_rows($result)>0) {
+		while ($myrow = Database::fetch_array($result)) {			
+			echo $title		 = '<strong>'.$myrow['title'].'</strong><br /><br />';
+			echo $content	 = $myrow['content'];
+		}
+	} else {
+		return false;
+	}
 }

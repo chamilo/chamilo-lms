@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 18447 2009-02-11 20:49:45Z herodoto $
+<?php //$Id: announcements.php 18868 2009-03-09 15:10:42Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -344,7 +344,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			$id=intval(addslashes($_GET['id']));
 			if(!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id))
 			{
-				change_visibility(TOOL_ANNOUNCEMENT,$id);
+				change_visibility_announcement(TOOL_ANNOUNCEMENT,$id);
 				$message = get_lang("VisibilityChanged");
 			}
 		}
@@ -1312,7 +1312,7 @@ if(!empty($error_message))
 		{
 			if ($_user['user_id'])
 			{
-				$sql="SELECT
+				$sql="SELECT 
 					announcement.*, toolitemproperties.*
 					FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 					WHERE announcement.id = toolitemproperties.ref

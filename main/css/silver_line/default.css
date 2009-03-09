@@ -2262,6 +2262,55 @@ span.radio {
 	padding-left:10px;
 }
 
+#social-profile-container {
+	width: 700px;
+}
+
+#social-profile-left {
+	float:left;
+	width:220px;
+}
+
+.left-side { 
+	min-width: 198px;
+	margin: 0px;
+}
+	
+#social-profile-content { 
+	float:right;
+	width:480px;	
+}
+	
+#social-profile-right {
+	float:right; width:280px		
+}
+
+.social-profile-post {
+	width: 450px;
+	background : #EFEFEF;
+}
+
+.maincourse {
+	width: 100%;	 margin-left:0px;
+}
+
+.social-profile-rounded {
+	background : #eee;
+}
+					
+#social-profile-forum {	
+	padding-left:0px;
+}			
+			
+#social-profile-thread {	
+	padding-left:20px;	
+}			
+			
+#social-post{	
+	padding-left:30px;	
+}
+
+
 /*****************************************************
  *  BUTTONS	                                         *
  *****************************************************/

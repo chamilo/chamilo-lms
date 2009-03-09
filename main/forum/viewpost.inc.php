@@ -22,7 +22,9 @@
 /**
 * 	@package dokeos.forum
 */
-$rows = get_thread_user_post($current_thread['thread_id'], $_GET['user']);
+$course = api_get_course_info();
+$rows = get_thread_user_post($course['dbName'], $current_thread['thread_id'], $_GET['user']);
+
 $sw = true;
 
 if(isset($rows)){

@@ -71,9 +71,11 @@
  * 							-- Patrick Cool <patrick.cool@UGent.be>
  **************************************************************************
 */ 
-require_once(api_get_path(INCLUDE_PATH).'/lib/mail.lib.inc.php');
+require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
+require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
-require_once(api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 get_notifications_of_user();
 /**
 * This function handles all the forum and forumcategories actions. This is a wrapper for the
@@ -1143,7 +1145,7 @@ function get_forums_in_category($cat_id)
 * @version february 2006, dokeos 1.8
 */
 function get_forums($id='') {
-	global $table_forums;
+	global $table_forums;	
 	global $table_threads;
 	global $table_posts;
 	global $table_item_property;
@@ -1363,7 +1365,7 @@ function get_threads($forum_id) {
 			INNER JOIN $table_item_property item_properties
 				ON thread.thread_id=item_properties.ref
 				AND item_properties.visibility='1'
-				AND item_properties.tool='".TOOL_FORUM_THREAD."'
+				AND item_properties.tool='".TABLE_FORUM_THREAD."'
 			LEFT JOIN $table_users users
 				ON thread.thread_poster_id=users.user_id
 			LEFT JOIN $table_posts post
@@ -1383,7 +1385,7 @@ function get_threads($forum_id) {
 				INNER JOIN $table_item_property item_properties
 					ON thread.thread_id=item_properties.ref
 					AND item_properties.visibility<>2
-					AND item_properties.tool='".TOOL_FORUM_THREAD."'
+					AND item_properties.tool='".TABLE_FORUM_THREAD."'
 				LEFT JOIN $table_users users
 					ON thread.thread_poster_id=users.user_id
 				LEFT JOIN $table_posts post
@@ -1392,7 +1394,7 @@ function get_threads($forum_id) {
 					ON post.poster_id= last_poster_users.user_id
 				WHERE thread.forum_id='".Database::escape_string($forum_id)."'
 				ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
-	}
+	}	
 	$result=api_sql_query($sql, __FILE__, __LINE__);
 	while ( $row=Database::fetch_array($result,'ASSOC') ) {
 		$thread_list[]=$row;
@@ -3714,15 +3716,17 @@ function get_statistical_information($thread_id, $user_id, $course_id) {
 }
 
 /**
-* This function counts the number of post inside a thread
+* This function return the posts inside a thread from a given user
+* @param 	course code
 * @param 	int Thread ID
 * @param 	int User ID    
 * @return	int the number of post inside a thread
 * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>, 
 * @version octubre 2008, dokeos 1.8
 */
-function get_thread_user_post($thread_id, $user_id ) {
-	global $table_posts;
+function get_thread_user_post($course_db, $thread_id, $user_id )
+{	
+	$table_posts =  Database::get_course_table(TABLE_FORUM_POST, $course_db);
 	global $table_users;
 	
 	$sql = "SELECT * FROM $table_posts posts
@@ -3733,7 +3737,7 @@ function get_thread_user_post($thread_id, $user_id ) {
 						ORDER BY posts.post_id ASC";
 	
 	$result=api_sql_query($sql, __FILE__, __LINE__);
-		
+	
 	while ($row=Database::fetch_array($result)) {
 		$row['status'] = '1';
 		$post_list[]=$row;	
@@ -3741,7 +3745,7 @@ function get_thread_user_post($thread_id, $user_id ) {
 					LEFT JOIN  $table_users users
 						ON posts.poster_id=users.user_id
 					WHERE posts.thread_id='".Database::escape_string($thread_id)."'
-						AND posts.post_parent_id='".$row['post_id']."'
+						AND posts.post_parent_id='".$row['post_id']."'  
 					ORDER BY posts.post_id ASC";
 		$result2=api_sql_query($sql, __FILE__, __LINE__);
 		while ($row2=Database::fetch_array($result2))
@@ -3766,11 +3770,11 @@ function get_thread_user_post($thread_id, $user_id ) {
 	return $row[0];	
  }
  
- /* This function get the name of an thread by id
- * @param thread_id int
- * return String
+ /** This function get the name of an thread by id
+ * @param int thread_id
+ * @return String
  * @author Christian Fasanando
- */
+ **/
  function get_name_thread_by_id($thread_id) {
 	$t_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD,'');
 	$sql ="SELECT thread_title FROM ".$t_forum_thread." WHERE thread_id = '".$thread_id."' ";	
@@ -3778,3 +3782,64 @@ function get_thread_user_post($thread_id, $user_id ) {
 	$row = Database::fetch_array($result);
 	return $row[0];	
  }
+ 
+ /** This function gets all the post written by an user 
+ * @param int user id
+ * @param string db course name
+ * @return string 
+ * @author Christian Fasanando
+ **/
+ 
+ function get_all_post_from_user($user_id, $course_db) 
+ { 	
+	$forums = get_forums();	
+ 	foreach($forums as $forum) {		
+ 		$threads = get_threads($forum['forum_id']);
+ 		echo '<div id="social-forum">';
+ 		echo Display::return_icon('forum.gif'); 		
+ 		echo $forum['forum_title'];
+ 		echo '<br / >';	echo '<br / >';
+ 		foreach($threads as $thread) {
+ 			echo '<div id="social-thread">';
+ 				echo Display::return_icon('forumthread.gif'); 	
+ 				echo $thread['thread_title'].' ';
+ 			/*	echo '<br / >'; 				echo '<br / >'; 				
+ 				echo '<strong>'.$thread['post_title'].'</strong>'; echo '<br / >';
+ 				echo cut($thread['post_text'], 150);
+ 				echo '<br / >';
+ 				*/
+ 				$post_list = get_thread_user_post_limit($course_db, $thread['thread_id'], $user_id, 1);
+ 				foreach($post_list as $posts) {
+ 					echo '<div id="social-post">';
+ 					echo '<strong>'.$posts['post_title'].'</strong>'; echo '<br / >';
+ 					echo cut($posts['post_text'], 150); 					
+ 					echo '</div>';	
+ 					echo '<br / >';
+ 				}
+ 				
+ 			echo '</div>';	
+ 		}
+ 		echo '</div>'; 		
+ 	}	
+ 	//$list = get_thread_user_post($course['dbName'],$thread_id, $user_id);
+ }
+ 
+function get_thread_user_post_limit($course_db, $thread_id, $user_id, $limit=10)
+{	
+	$table_posts =  Database::get_course_table(TABLE_FORUM_POST, $course_db);
+	global $table_users;
+	
+	$sql = "SELECT * FROM $table_posts posts
+						LEFT JOIN  $table_users users
+							ON posts.poster_id=users.user_id
+						WHERE posts.thread_id='".Database::escape_string($thread_id)."'
+							AND posts.poster_id='".Database::escape_string($user_id)."'					
+						ORDER BY posts.post_id DESC LIMIT $limit ";
+	$result=api_sql_query($sql, __FILE__, __LINE__);
+	
+	while ($row=Database::fetch_array($result)) {
+		$row['status'] = '1';
+		$post_list[]=$row;
+	}
+	return $post_list;
+}

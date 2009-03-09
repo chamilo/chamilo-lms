@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 18869 2009-03-09 15:13:00Z juliomontoya $
+<?php // $Id: usermanager.lib.php 18875 2009-03-09 16:13:34Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -641,19 +641,17 @@ class UserManager
 		$production_dir = $production_path['dir'].$user_id.'/';
 		$del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
 		$del_text = get_lang('Delete');
-	
-		$production_list = '<ul id="productions">';
-	
-		foreach ($productions as $file)
-		{
-			$production_list .= '<li><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
-			if ($showdelete)
-			{
-				$production_list .= '<input type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="return confirmation(\''.htmlentities($file).'\');" /></li>';
-			}
-		}
-	
-		$production_list .= '</ul>';
+		$production_list = '';
+		if (count($productions)>0) {
+			$production_list = '<ul id="productions">';	
+			foreach ($productions as $file) {
+				$production_list .= '<li><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
+				if ($showdelete) {
+					$production_list .= '<input type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="return confirmation(\''.htmlentities($file).'\');" /></li>';
+				}
+			}		
+			$production_list .= '</ul>';
+		} 
 	
 		return $production_list;
 	}

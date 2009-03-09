@@ -2862,15 +2862,22 @@ function get_blog_post_from_user($course_db_name, $user_id) {
 				WHERE author_id =  $user_id AND visibility = 1 
 				ORDER BY post.date_creation DESC ";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$return_data = '';
 		if (Database::num_rows($result)!=0) {
 			while ($row=Database::fetch_array($result)) {
-				echo '<strong>'.$row['title'].'</strong>'; echo '<br>';
-				echo $row['full_text'];
-				echo '<br /><br />';				
+				$return_data.= '<strong>'.$row['title'].'</strong>'; echo '<br>';
+				$return_data.= $row['full_text'];
+				$return_data.= '<br /><br />';				
 			}
 		}
+		return $return_data;
 }
 
+/**
+ * Gets all the post comments from a given user id
+ * @param string db course name 
+ * @param int user id
+ */
 function get_blog_comment_from_user($course_db_name, $user_id) {
 	
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS,$course_db_name);
@@ -2881,15 +2888,15 @@ function get_blog_comment_from_user($course_db_name, $user_id) {
 				WHERE author_id =  $user_id AND visibility = 1 
 				ORDER BY blog_name";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		if (Database::num_rows($result)>0) {
+		$return_data = '';
+		if (Database::num_rows($result)!=0) {
 			while ($row=Database::fetch_array($result)) {				
-				echo '<strong>'.$row['title'].'</strong>'; echo '<br>';
-				echo $row['comment'];
-				echo '<br />';
+				$return_data.=  '<strong>'.$row['title'].'</strong>'; echo '<br>';
+				$return_data.=  $row['comment'];
+				$return_data.=  '<br />';
 			}
-		} else {
-			return false;
 		}
+		return $return_data; 
 }
 
 ?>

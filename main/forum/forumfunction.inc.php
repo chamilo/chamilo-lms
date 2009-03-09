@@ -3792,32 +3792,35 @@ function get_thread_user_post($course_db, $thread_id, $user_id )
  
  function get_all_post_from_user($user_id, $course_db) 
  { 	
-	$forums = get_forums();	
+	$forums = get_forums();
  	foreach($forums as $forum) {		
- 		$threads = get_threads($forum['forum_id']);
- 		echo '<div id="social-forum">';
- 		echo Display::return_icon('forum.gif'); 		
- 		echo $forum['forum_title'];
- 		echo '<br / >';	echo '<br / >';
- 		foreach($threads as $thread) {
- 			echo '<div id="social-thread">';
- 				echo Display::return_icon('forumthread.gif'); 	
- 				echo $thread['thread_title'].' ';
- 			/*	echo '<br / >'; 				echo '<br / >'; 				
- 				echo '<strong>'.$thread['post_title'].'</strong>'; echo '<br / >';
- 				echo cut($thread['post_text'], 150);
- 				echo '<br / >';
- 				*/
- 				$post_list = get_thread_user_post_limit($course_db, $thread['thread_id'], $user_id, 1);
- 				foreach($post_list as $posts) {
- 					echo '<div id="social-post">';
- 					echo '<strong>'.$posts['post_title'].'</strong>'; echo '<br / >';
- 					echo cut($posts['post_text'], 150); 					
- 					echo '</div>';	
- 					echo '<br / >';
- 				}
- 				
- 			echo '</div>';	
+ 		$threads = get_threads($forum['forum_id']); 		
+ 		if (is_array($threads)) { 			
+ 			echo '<div id="social-forum">';
+ 			echo Display::return_icon('forum.gif'); 		
+ 			echo $forum['forum_title'];
+ 			echo '<br / >';	echo '<br / >'; 			
+	 		foreach($threads as $thread) {	 		
+	 				$post_list = get_thread_user_post_limit($course_db, $thread['thread_id'], $user_id, 1);
+	 				if (is_array($post_list) && count($post_list)>0) {
+	 					echo '<div id="social-thread">';
+		 				echo Display::return_icon('forumthread.gif'); 	
+		 				echo $thread['thread_title'].' ';
+		 			/*	echo '<br / >'; 				echo '<br / >'; 				
+		 				echo '<strong>'.$thread['post_title'].'</strong>'; echo '<br / >';
+		 				echo cut($thread['post_text'], 150);
+		 				echo '<br / >';
+		 				*/	 					
+		 				foreach($post_list as $posts) {
+		 					echo '<div id="social-post">';
+		 					echo '<strong>'.$posts['post_title'].'</strong>'; echo '<br / >';
+		 					echo cut($posts['post_text'], 150); 					
+		 					echo '</div>';	
+		 					echo '<br / >';
+		 				}
+	 				}
+	 			echo '</div>';	
+	 		}
  		}
  		echo '</div>'; 		
  	}	

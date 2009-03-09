@@ -52,7 +52,7 @@ if (api_get_setting('allow_message_tool')<>'true' && api_get_setting('allow_soci
 <?php 
 			if (!isset($_REQUEST['view'])) {
 ?>
-        <td width="150"><a href="javascript:void(0)" onclick="change_panel('3','<?php echo $userfriend_id; ?>')" ><?php echo Display::return_icon('folder_up.gif',get_lang('MoreOptions')).'&nbsp;&nbsp;'.get_lang('MoreOptions')?></a></td>
+        <td width="150"><a href="javascript:void(0)" onclick="change_panel('3','<?php echo $userfriend_id; ?>')" ><?php echo Display::return_icon('folder_up.gif',get_lang('SeeMoreOptions')).'&nbsp;&nbsp;'.get_lang('MoreOptions')?></a></td>
 <?php
 			}
 ?>
@@ -75,14 +75,14 @@ if (api_get_setting('allow_message_tool')<>'true' && api_get_setting('allow_soci
 <?php 
 			if (!isset($_REQUEST['view'])) {
 ?>
-				<dd><a href="javascript:void(0)" onclick="change_panel('2','<?php echo $userfriend_id; ?>')"><?php echo get_lang('SocialAddToContact')?></a></dd>
+				<dd><a href="javascript:void(0)" onclick="change_panel('2','<?php echo $userfriend_id; ?>')"><?php echo get_lang('SendInviteMessage')?></a></dd>
 <?php
 			}
 ?>
 <?php       
 			if (api_get_setting('allow_message_tool')=='true') {
 ?>
-				<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $userfriend_id; ?>')"><?php echo get_lang('SocialSendMessage');?></a></dd>
+				<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $userfriend_id; ?>')"><?php echo get_lang('SendMessage');?></a></dd>
 <?php
 			}
 ?>

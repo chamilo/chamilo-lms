@@ -40,9 +40,9 @@ $user_info=api_get_user_info($user_id);
 <?php
 if ($panel_id==2) {
 ?>
-    <td height="20"><?php echo $user_info['firstName'].' '.get_lang('UserInformation'); ?></td>
-    <td height="20"><?php echo get_lang('Info'); ?></td>
-    <td height="20"><?php echo get_lang('Message') ?> :<br/><textarea id="txt_area_invite" rows="3" cols="25"></textarea></td>
+    <td height="20"><?php echo get_lang('Info').' :'; ?></td>
+    <td height="20"><?php echo get_lang('SocialUserInformationAttach'); ?></td>
+    <td height="20"><?php echo get_lang('WriteToMessage') ?> :<br/><textarea id="txt_area_invite" rows="3" cols="25"></textarea></td>
     <td height="20"><input type="button" value="<?php echo get_lang('SendInviteMessage'); ?>" onclick="action_database_panel('4','<?php echo $user_id;?>')" /></td>
 <?php
 } 
@@ -53,7 +53,7 @@ if ($panel_id==1) {
     <td height="20"><?php echo get_lang('To'); ?> &nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $user_info['firstName']; ?></td>
     <td height="20"><?php echo get_lang('subject'); ?> :<br/><input id="txt_subject_id" type="text" style="width:200px;"></td>
     <td height="20"><?php echo get_lang('Message'); ?> :<br/><textarea id="txt_area_invite" rows="3" cols="25"></textarea></td>
-    <td height="20"><input type="button" value="<?php echo get_lang('NewMessage'); ?>" onclick=" hide_display_message()" />&nbsp;&nbsp;&nbsp;<input type="button" value="<?php echo get_lang('SendMessage'); ?>" onclick="action_database_panel('5','<?php echo $user_id;?>')" /></td>
+    <td height="20"><input type="button" value="<?php echo get_lang('NewMessage'); ?>" onclick="hide_display_message()" />&nbsp;&nbsp;&nbsp; <input type="button" value="<?php echo get_lang('SendMessage'); ?>" onclick="action_database_panel('5','<?php echo $user_id;?>')" /></td>
 <?php
 } 
 ?>
@@ -61,8 +61,8 @@ if ($panel_id==1) {
 if ($panel_id==3) {
 ?>
 <dl>
-	<dd><a href="javascript:void(0)" onclick="change_panel('2','<?php echo $user_id; ?>')"><?php echo get_lang('SocialAddToContact')?></a></dd>
-	<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $user_id; ?>')"><?php echo get_lang('SocialSendMessage');?></a></dd>
+	<dd><a href="javascript:void(0)" onclick="change_panel('2','<?php echo $user_id; ?>')"><?php echo get_lang('SendInviteMessage')?></a></dd>
+	<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $user_id; ?>')"><?php echo get_lang('SendMessage');?></a></dd>
 	<dd><a href="main/social/index.php#remote-tab-5"><?php echo get_lang('SocialSeeContacts'); ?></a></dd>
 </dl>
 <?php

@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 18783 2009-03-03 18:10:15Z cvargas1 $
+<?php // $Id: usermanager.lib.php 18869 2009-03-09 15:13:00Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1587,6 +1587,34 @@ class UserManager
 		if (Database::num_rows($res)!==1) { return false; }
 		$row = Database::fetch_array($res);
 		return $row['user_id'];
+	}
+	
+	/**
+	 * Get the users files upload from his share_folder
+	 * @param	string	Username
+	 * @return	int		User ID (or false if not found)
+	 */
+	function get_user_upload_files_by_course($user_id, $course, $column=2)
+	{
+		$path = api_get_path(SYS_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
+		$web_path = api_get_path(WEB_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';    	    	
+		$file_list= array();	
+		$return = '';
+		if (is_dir($path)) {
+			$handle = opendir($path);	
+			while ($file = readdir($handle)) {
+				if ($file == '.' || $file == '..' || $file == '.htaccess' || is_dir($path.$file))
+					continue; // skip current/parent directory and .htaccess	
+				$file_list[] = $file;
+			}			
+			$return = $course;
+			$return .= '<ul>';	
+			foreach ($file_list as $file) {
+				$return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';			
+			}	
+			$return .= '</ul>';		
+		}		
+		return $return;
 	}
     /**
      * Gets the API key (or keys) and return them into an array

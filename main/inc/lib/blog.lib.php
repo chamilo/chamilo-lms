@@ -2845,8 +2845,51 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 		}		
 	}	
 	$sql = 'DELETE FROM '. $blog_table_attachment.' WHERE blog_id ="'.$blog_id.'"  '.$where;	
-	api_sql_query($sql, __FILE__, __LINE__);		
+	api_sql_query($sql, __FILE__, __LINE__);
+}
+/**
+ * Gets all the post from a given user id
+ * @param string db course name 
+ * @param int user id
+ */
+function get_blog_post_from_user($course_db_name, $user_id) {
+	
+		$tbl_blogs = Database::get_course_table(TABLE_BLOGS,$course_db_name);
+		$tbl_blog_post = Database::get_course_table(TABLE_BLOGS_POSTS,$course_db_name);
+		$sql = "SELECT DISTINCT blog.blog_id, post_id, title, full_text, post.date_creation
+				FROM $tbl_blogs blog INNER JOIN  $tbl_blog_post post 
+				ON (blog.blog_id = post.blog_id)
+				WHERE author_id =  $user_id AND visibility = 1 
+				ORDER BY post.date_creation DESC ";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($result)!=0) {
+			while ($row=Database::fetch_array($result)) {
+				echo '<strong>'.$row['title'].'</strong>'; echo '<br>';
+				echo $row['full_text'];
+				echo '<br /><br />';				
+			}
+		}
 }
 
+function get_blog_comment_from_user($course_db_name, $user_id) {
+	
+		$tbl_blogs = Database::get_course_table(TABLE_BLOGS,$course_db_name);
+		$tbl_blog_comment = Database::get_course_table(TABLE_BLOGS_COMMENTS,$course_db_name);
+		$sql = "SELECT DISTINCT blog.blog_id, comment_id, title, comment, comment.date_creation
+				FROM $tbl_blogs blog INNER JOIN  $tbl_blog_comment comment 
+				ON (blog.blog_id = comment.blog_id)
+				WHERE author_id =  $user_id AND visibility = 1 
+				ORDER BY blog_name";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($result)>0) {
+			while ($row=Database::fetch_array($result)) {				
+				echo '<strong>'.$row['title'].'</strong>'; echo '<br>';
+				echo $row['comment'];
+				echo '<br />';
+			}
+		} else {
+			return false;
+		}
+}
 
 ?>

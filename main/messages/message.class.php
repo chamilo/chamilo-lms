@@ -320,7 +320,7 @@ class MessageManager {
 		echo '<div class=actions>';
 		echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',get_lang('BackToInbox')).get_lang('BackToInbox').'</a>';
 		echo $reply; 
-		echo '<a onclick="delete_one_message('.$row[0].')" href="#'.$path.'?action=deleteone&id='.$row[0].'"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('Delete').'</a>';
+		echo '<a onclick="delete_one_message('.$row[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('Delete').'</a>';
 		echo '</div><br />';
 		echo '
 		<table class="message_view_table" >

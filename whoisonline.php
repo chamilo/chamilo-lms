@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 18577 2009-02-18 21:17:16Z juliomontoya $
+<?php // $Id: whoisonline.php 18842 2009-03-09 00:44:08Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -30,7 +30,7 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array('index','registration','messages');
+$language_file = array('index','registration','messages','userInfo');
 
 // including necessary files
 require_once('./main/inc/global.inc.php');
@@ -50,6 +50,8 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 					
 </script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="./main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="./main/inc/lib/javascript/thickbox.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="./main/inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){
 	$("input#id_btn_send_invitation").bind("click", function(){
@@ -58,6 +60,60 @@ $(document).ready(function (){
 		}
 	}); 
 });
+function change_panel (mypanel_id,myuser_id) {
+		$.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+			$("#id_content_panel").html("'.get_lang('Loading').'"); },
+			type: "POST",
+			url: "./main/messages/send_message.php",
+			data: "panel_id="+mypanel_id+"&user_id="+myuser_id,
+			success: function(datos) {
+			 $("div#id_content_panel_init").html(datos);
+			 $("div#display_response_id").html("");
+			}
+		});	
+}
+function action_database_panel(option_id,myuser_id) {
+	
+	if (option_id==5) {
+		my_txt_subject=$("#txt_subject_id").val();
+	} else {
+		my_txt_subject="clear";
+	}
+		my_txt_content=$("#txt_area_invite").val();
+	if (my_txt_content.length==0 || my_txt_subject.length==0) {
+		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageInformationBySendMessage').'");
+		setTimeout("message_information_display()",3000);
+		return false;
+	}
+	$.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {
+		$("#display_response_id").html("'.get_lang('Loading').'"); },
+		type: "POST",
+		url: "./main/messages/send_message.php",
+		data: "panel_id="+option_id+"&user_id="+myuser_id+"&txt_subject="+my_txt_subject+"&txt_content="+my_txt_content,
+		success: function(datos) {
+		 $("#display_response_id").html(datos);
+		}
+	});	
+}	
+function display_hide () {
+		setTimeout("hide_display_message()",3000);
+}
+function message_information_display() {
+	$("#display_response_id").html("");
+}
+function hide_display_message () {
+	$("div#display_response_id").html("");
+	try {
+		$("#txt_subject_id").val("");
+		$("#txt_area_invite").val("");
+	}catch(e) {
+		$("#txt_area_invite").val("");
+	}
+}	
 </script>';
 if ($_GET['chatid'] != '')
 {
@@ -103,10 +159,16 @@ function display_user_list($user_list, $_plugins)
 			if (api_get_setting('show_email_addresses') == 'true') {
 				$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
 			}
-						
-			if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {
+			
+			if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
 				if ($user_info['user_id'] != api_get_user_id()) {
-					$table_row[] = get_lang('Invitation').' :<input  type="checkbox" name="id_name_chek[]" id="id_name_chek" value="'.$user_info['user_id'].'"/>';
+					$user_relation=UserFriend::get_relation_between_contacts(api_get_user_id(),$user_info['user_id']);
+					if ($user_relation==0 || $user_relation==6) {
+						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="Add users"><img src="main/img/addd.gif"></a>';	
+					} else {
+						$table_row[] = '<img src="main/img/add_na.gif">';
+					}
+				
 				}
 			}			
 			//this feature is deprecated
@@ -124,8 +186,8 @@ function display_user_list($user_list, $_plugins)
 		if (api_get_setting('show_email_addresses') == 'true') {
 			$table_header[] = array(get_lang('Email'),true);
 		}
-		
-		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
+
+		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
 			$table_header[] = array(get_lang('Friends'),true,'width="100"');
 		}		
 		/*this feature is deprecated
@@ -134,16 +196,16 @@ function display_user_list($user_list, $_plugins)
 		}
 		*/
 		$sorting_options['column'] = (isset ($_GET['column']) ? (int)$_GET['column'] : 2);
-		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {			
-			send_invitation_friend_user();
+		/*if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {			
+			//send_invitation_friend_user();
 			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInviteMessage').'"/></div>';			
 			echo '<form action="whoisonline.php" name="form_register_friend" id="form_register_friend" method="post">';
-		}
+		}*/
 		
 		Display::display_sortable_table($table_header,$table_data,$sorting_options,array('per_page_default'=>count($table_data)),$extra_params);		
-		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {
+		/*if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {
 			echo '</form>';
-		}
+		}*/
 	}
 }
 /**
@@ -277,41 +339,6 @@ function display_productions($user_id)
 		echo '</ul></dd>';
 	}
 }
-/**
- * Send invitation a your friends
- * @author Isaac Flores Paz <isaac.flores.paz@gmail.com>
- * @param void
- * @return string message invitation
- */
-function send_invitation_friend_user() {
-	$id_user_friend=array();
-	$count_is_true=false;
-	$count_number_is_true=0;
-	$count_number_chek=count($_POST['id_name_chek']);
-	if ($count_number_chek>0) {
-		$user_info=array();
-		$user_id=api_get_user_id();
-		$user_info=api_get_user_info($user_id);
-		$message_title=get_lang('Invitation');
-		$message_content=get_lang('InvitationSentBy').' : '.$user_info['firstName'].' '.$user_info['lastName'];
-		$id_user_friend=$_POST['id_name_chek'];
-		for ($i=0;$i<$count_number_chek;$i++) {
-			$count_is_true=UserFriend::send_invitation_friend($user_id,$id_user_friend[$i],$message_title,$message_content);
-			if ($count_is_true===true) {
-				$count_number_is_true++;
-			}
-		}
-	if (api_get_setting('allow_social_tool')=='true') {
-		if ($count_number_is_true>0) {
-			echo '<div align="center">'.Display::display_normal_message(get_lang('InvitationHasBeenSent').' : '.$count_number_is_true.' '.get_lang('Invitations')).'</div>';
-		}else {
-			echo '<div align="center">'.Display::display_error_message(get_lang('InvitationHasBeenNotSent')).' : '.'</div>';	
-		}
-	}
-
-	}
-}
-
 
 // This if statement prevents users accessing the who's online feature when it has been disabled.
 if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR ((api_get_setting('showonline','users') == 'true' OR api_get_setting('showonline','course') == 'true') AND $_user['user_id']))
@@ -381,5 +408,6 @@ if (isset($_GET['id'])) {
 		FOOTER
 ==============================================================================
 */
+/*echo '<div align="center"><a href="http://main.svndokeos.net/main/upload/users/4/4_49aeb3bb8bba5.jpg" class="thickbox">hola</a></div>';*/
 Display::display_footer();
 ?>

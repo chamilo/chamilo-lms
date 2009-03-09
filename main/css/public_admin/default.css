@@ -2181,7 +2181,7 @@ float:left;
 }
 
 .social-profile-info {
-	width:500px;
+	width:350px;
 }
 .social-profile-info dt {
 	text-align:left;
@@ -2191,11 +2191,13 @@ float:left;
 	width:100px;
 }
 .social-profile-info dd {	
-	text-align:right;
+	
 	padding:1px 0px 3px 0px;	
 	float:left;
 	margin:0;
+	display : block;
 	padding-left:10px;
+	width:200px;
 }
 
 

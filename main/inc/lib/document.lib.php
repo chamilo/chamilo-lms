@@ -1055,6 +1055,10 @@ class DocumentManager
         {	
         	return true; // ok, document is visible
 		}
+		else
+		{
+			return false;
+		}
     }
 
 }

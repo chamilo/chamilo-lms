@@ -29,4 +29,7 @@ $DeleteMessage = "Odstrani sporočilo";
 $ReadMessage = "Preberi sporočilo";
 $SendInviteMessage = "Pošlji sporočilo z vabilom";
 $SendMessageInvitation = "Ste prepričani, da želite odposlati ta vabila ?";
+$MessageTool = "Sporočila";
+$SendMessage = "Pošlji sporočilo";
+$WriteToMessage = "Sestavi sporočilo";
 ?>

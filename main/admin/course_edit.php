@@ -1,4 +1,4 @@
-<?php // $Id: course_edit.php 18647 2009-02-24 02:29:20Z yannoo $
+<?php // $Id: course_edit.php 18934 2009-03-10 14:45:35Z ndieschburg $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -208,15 +208,19 @@ if( $form->validate())
 							WHERE code='".Database::escape_string($course_code)."'";
 	api_sql_query($sql, __FILE__, __LINE__);
 	
-	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"';
+	//Delete only teacher relations that doesn't match the selected teachers
+	$cond='';
+	if(count($teachers)>0){
+		foreach($teachers as $key) $cond.=" AND user_id<>'".$key."'";
+	}	
+	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
 	api_sql_query($sql, __FILE__, __LINE__);
 	
 	if(count($teachers)>0){
-		
 		foreach($teachers as $key){
 			
-			//We check if the teacher is already subscribed as student in this course 
-			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" AND status<>"1"';
+			//We check if the teacher is already subscribed in this course 
+			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'"';
 			$result = api_sql_query($sql_select_teacher, __FILE__, __LINE__);
 			
 			if(Database::num_rows($result) == 1){
@@ -233,6 +237,7 @@ if( $form->validate())
 					user_course_cat='0'";
 			}
 			api_sql_query($sql, __FILE__, __LINE__);
+			
 		}
 		
 	}

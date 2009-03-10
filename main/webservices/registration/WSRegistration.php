@@ -1324,7 +1324,7 @@ $server->wsdl->addComplexType(
 	array(
 		'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
 		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string'),
-		'original_user_id_values' => array('name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'),
+		'original_user_id_values' => array('name' => 'original_user_id_values', 'type' => 'xsd:string'),
 		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),		
 		'empty_users' => array('name' => 'empty_users', 'type' => 'xsd:boolean'),
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')	

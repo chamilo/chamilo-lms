@@ -1,0 +1,107 @@
+<HTML>
+<head profile="http://dublincore.org/documents/dcq-html/">
+    <title></title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+    <link href="http://purl.org/dc/elements/1.1/" rel="schema.DC" />
+    <meta content="" name="DC.title" />
+    <meta content="" name="DC.subject" />
+    <meta content="" name="DC.description" />
+    <meta content="" name="DC.creator" />
+    <meta content="" name="DC.date" />
+    <meta content="" name="DC.language" />
+    <style media="all" type="text/css">
+      body {font-family:'Times New Roman',serif;font-size:16.0px}
+      p.PreformattedText {margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;border:none;padding:0;font-family:'Times New Roman';font-size:13.333334px}
+    </style>
+  </head>
+<BODY>
+<h1>XML example for certificate importation</h1>
+This is an example file and this data can't be imported on your platform. The user id must correspond to users existing on your platform.</br>
+
+The date and offical_code fiels aren't mandatory and can be omitted without any error. If you want to overwrite the scores, you must choose the "Overwrite score" option.</br>
+
+<h2>Complete XML score importation file</h2>
+<p class="PreformattedText">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;</p>
+    <p class="PreformattedText"> &lt;XMLResults&gt;</p>
+    <p class="PreformattedText">&lt;Result&gt;</p>
+    <p class="PreformattedText">  &lt;user_id&gt;1&lt;/user_id&gt;</p>
+    <p class="PreformattedText">  &lt;official_code&gt;bgate&lt;/official_code&gt;</p>
+    <p class="PreformattedText">  &lt;lastname&gt;Gate&lt;/lastname&gt;</p>
+    <p class="PreformattedText">  &lt;firstname&gt;Bill&lt;/firstname&gt;</p>
+    <p class="PreformattedText">  &lt;score&gt;2&lt;/score&gt;</p>
+    <p class="PreformattedText">  &lt;date&gt;2009-2-25 12:28&lt;/date&gt;</p>
+    <p class="PreformattedText"> &lt;/Result&gt;</p>
+    <p class="PreformattedText">&lt;Result&gt;</p>
+    <p class="PreformattedText">  &lt;user_id&gt;2&lt;/user_id&gt;</p>
+    <p class="PreformattedText">  &lt;official_code&gt;ltorvald&lt;/official_code&gt;</p>
+    <p class="PreformattedText">  &lt;lastname&gt;Torvald&lt;/lastname&gt;</p>
+    <p class="PreformattedText">  &lt;firstname&gt;Linus&lt;/firstname&gt;</p>
+    <p class="PreformattedText">  &lt;score&gt;10&lt;/score&gt;</p>
+    <p class="PreformattedText">  &lt;date&gt;2009-2-25 12:28&lt;/date&gt;</p>
+    <p class="PreformattedText"> &lt;/Result&gt;</p>
+    <p class="PreformattedText">&lt;Result&gt;</p>
+    <p class="PreformattedText">  &lt;user_id&gt;3&lt;/user_id&gt;</p>
+    <p class="PreformattedText">  &lt;official_code&gt;&lt;/official_code&gt;</p>
+    <p class="PreformattedText">  &lt;lastname&gt;Smith&lt;/lastname&gt;</p>
+    <p class="PreformattedText">  &lt;firstname&gt;John&lt;/firstname&gt;</p>
+    <p class="PreformattedText">  &lt;score&gt;3&lt;/score&gt;</p>
+    <p class="PreformattedText">  &lt;date&gt;&lt;/date&gt;</p>
+    <p class="PreformattedText"> &lt;/Result&gt;</p>
+    <p class="PreformattedText">&lt;/XMLResults&gt;</p>
+
+<h2>Minimal XML score importation file</h2> 
+This is possible to use a minimal file if you choose the "Ingnore error option" : 
+</br></br>
+<p class="PreformattedText">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;</p>
+    <p class="PreformattedText"> &lt;XMLResults&gt;</p>
+    <p class="PreformattedText">&lt;Result&gt;</p>
+    <p class="PreformattedText">  &lt;user_id&gt;1&lt;/user_id&gt;</p>
+    <p class="PreformattedText">  &lt;score&gt;2&lt;/score&gt;</p>
+    <p class="PreformattedText"> &lt;/Result&gt;</p>
+    <p class="PreformattedText">&lt;Result&gt;</p>
+    <p class="PreformattedText">  &lt;user_id&gt;2&lt;/user_id&gt;</p>
+    <p class="PreformattedText">  &lt;score&gt;10&lt;/score&gt;</p>
+    <p class="PreformattedText"> &lt;/Result&gt;</p>
+    <p class="PreformattedText">&lt;Result&gt;</p>
+    <p class="PreformattedText">  &lt;user_id&gt;27&lt;/user_id&gt;</p>
+    <p class="PreformattedText">  &lt;score&gt;3&lt;/score&gt;</p>
+    <p class="PreformattedText"> &lt;/Result&gt;</p>
+    <p class="PreformattedText">&lt;/XMLResults&gt;</p>
+
+<h2>Complete XML presence importation file</h2>
+For the presence this is the same file except the score fied which is "0" for absent and "1" for present : 
+</br></br>
+<p class="PreformattedText">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;</p>
+    <p class="PreformattedText"> &lt;XMLResults&gt;</p>
+    <p class="PreformattedText">&lt;Result&gt;</p>
+    <p class="PreformattedText">  &lt;user_id&gt;1&lt;/user_id&gt;</p>
+    <p class="PreformattedText">  &lt;official_code&gt;bgate&lt;/official_code&gt;</p>
+    <p class="PreformattedText">  &lt;lastname&gt;Gate&lt;/lastname&gt;</p>
+    <p class="PreformattedText">  &lt;firstname&gt;Bill&lt;/firstname&gt;</p>
+    <p class="PreformattedText">  &lt;score&gt;0&lt;/score&gt;</p>
+    <p class="PreformattedText">  &lt;date&gt;2009-2-25 12:28&lt;/date&gt;</p>
+    <p class="PreformattedText"> &lt;/Result&gt;</p>
+    <p class="PreformattedText">&lt;Result&gt;</p>
+    <p class="PreformattedText">  &lt;user_id&gt;2&lt;/user_id&gt;</p>
+    <p class="PreformattedText">  &lt;official_code&gt;ltorvald&lt;/official_code&gt;</p>
+    <p class="PreformattedText">  &lt;lastname&gt;Torvald&lt;/lastname&gt;</p>
+    <p class="PreformattedText">  &lt;firstname&gt;Linus&lt;/firstname&gt;</p>
+    <p class="PreformattedText">  &lt;score&gt;1&lt;/score&gt;</p>
+    <p class="PreformattedText">  &lt;date&gt;2009-2-25 12:28&lt;/date&gt;</p>
+    <p class="PreformattedText"> &lt;/Result&gt;</p>
+    <p class="PreformattedText">&lt;Result&gt;</p>
+    <p class="PreformattedText">  &lt;user_id&gt;3&lt;/user_id&gt;</p>
+    <p class="PreformattedText">  &lt;official_code&gt;&lt;/official_code&gt;</p>
+    <p class="PreformattedText">  &lt;lastname&gt;Smith&lt;/lastname&gt;</p>
+    <p class="PreformattedText">  &lt;firstname&gt;John&lt;/firstname&gt;</p>
+    <p class="PreformattedText">  &lt;score&gt;0&lt;/score&gt;</p>
+    <p class="PreformattedText">  &lt;date&gt;&lt;/date&gt;</p>
+    <p class="PreformattedText"> &lt;/Result&gt;</p>
+    <p class="PreformattedText">&lt;/XMLResults&gt;</p>
+
+</br></br>
+You could also use a minimal XML file for the presence.
+</BODY>
+

@@ -1,0 +1,38 @@
+<HTML>
+<HEAD>
+<TITLE>CSV file example</TITLE>
+</HEAD>
+<BODY>
+<h1>CSV example for certificate importation</h1>
+This is an example file and this data can't be imported on your platform. The user id must correspond to users existing on your platform.</br>
+
+The mandatory fields are emphasized. The other fields can be omitted. The separator is always the ";". If you want to overwrite the scores, you must choose the "Overwrite score" option.</br>
+
+<h2>Complete CSV  score importation file</h2>
+<b>user_id</b>;official_code;<b>lastname</b>;<b>firstname</b>;<b>score</b>;date</br>
+<b>1</b>;bgate;Gate;Bill;<b>2</b>;02/25/09 12:24 PM</br>
+<b>2</b>;ltorvald;Torvald;Linus;<b>10</b>;02/25/09 12:24 PM</br>
+<b>3</b>;;<b>Smith</b>;<b>John</b>;<b>3</b>;</br>
+</br></br>
+
+
+<h2>Minimal CSV score importation file</h2> 
+This is possible to use a minimal file if you choose the "Ingnore error option" : 
+</br></br>
+user_id;score</br>
+1;2</br>
+2;10</br>
+3;3</br>
+
+<h2>Presence score importation file</h2>
+For the presence this is the same file except the score fied which is "0" for absent and "1" for present : 
+</br></br>
+<b>user_id</b>;official_code;<b>lastname</b>;<b>firstname</b>;<b>score</b>;date</br>
+<b>1</b>;bgate;Gate;Bill;<b>0</b>;02/25/09 12:24 PM</br>
+<b>2</b>;ltorvald;Torvald;Linus;<b>1</b>;02/25/09 12:24 PM</br>
+<b>3</b>;;<b>Smith</b>;<b>John</b>;<b>0</b>;</br>
+
+
+
+</BODY>
+

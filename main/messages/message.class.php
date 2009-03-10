@@ -134,7 +134,7 @@ class MessageManager {
 		global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		$request=api_is_xml_http_request();
-		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3 FROM $table_message " .
+		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, msg_status as col4 FROM $table_message " .
 					 "WHERE user_receiver_id=".api_get_user_id()." AND msg_status IN (0,1)" .
 					 "ORDER BY send_date desc, col$column $direction LIMIT $from,$number_of_items";
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
@@ -146,18 +146,28 @@ class MessageManager {
 			 } else {
 				$message[0] = ($result[0]);	 	
 			 }
+			 
 			if ($request===true) {
-				$message[1] = mb_convert_encoding(GetFullUserName($result[1]),'UTF-8',$charset);
-				$message[2] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",mb_convert_encoding($result[2],'UTF-8',$charset)).'</a>';
-				$message[4] = '<a onclick="reply_to_messages(\'show\','.$result[0].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
+				if($result[4]==0)
+            	{ 
+					$message[1] = Display::return_icon('mail_open.png',get_lang('AlreadyReadMessage'));//Message already read
+				}
+				else
+				{
+					$message[1] = Display::return_icon('mail.png',get_lang('UnReadMessage'));//Message without reading 
+				}
+						
+				$message[2] = mb_convert_encoding(GetFullUserName($result[1]),'UTF-8',$charset);
+				$message[3] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",mb_convert_encoding($result[2],'UTF-8',$charset)).'</a>';
+				$message[5] = '<a onclick="reply_to_messages(\'show\','.$result[0].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a onclick="delete_one_message('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
-				$message[1] = GetFullUserName(($result[1]));
-				$message[2] = '<a href="view_message.php?id='.$result[0].'">'.$result[2].'</a>';
-				$message[4] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
+				$message[2] = GetFullUserName(($result[1]));
+				$message[3] = '<a href="view_message.php?id='.$result[0].'">'.$result[2].'</a>';
+				$message[5] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a delete_one_message('.$result[0].') href="#inbox.php?action=deleteone&id='.$result[0].'">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';	
 			}
-			$message[3] = ($result[3]); //date stays the same
+			$message[4] = ($result[3]); //date stays the same
 			$message_list[] = $message;
 			
 			$i++;
@@ -252,7 +262,7 @@ class MessageManager {
 	 	global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		$request=api_is_xml_http_request();
-		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3 FROM $table_message " .
+		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, user_receiver_id as col4, msg_status as col5 FROM $table_message " .
 					 "WHERE user_sender_id=".api_get_user_id()." AND msg_status=4 " .
 					 "ORDER BY col$column $direction LIMIT $from,$number_of_items";
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
@@ -264,17 +274,22 @@ class MessageManager {
 			 } else {
 				$message[0] = ($result[0]);	 	
 			 }
+			 
 			if ($request===true) {
-				$message[1] = mb_convert_encoding(GetFullUserName($result[1]),'UTF-8',$charset);
-				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",mb_convert_encoding($result[2],'UTF-8',$charset)).'</a>';
-				$message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+			   if ($result[5]==4)
+			   {
+			   		$message[1] = Display::return_icon('mail_send.png',get_lang('MessageSent'));//Message Sent
+			   }
+				$message[2] = mb_convert_encoding(GetFullUserName($result[4]),'UTF-8',$charset);
+				$message[3] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",mb_convert_encoding($result[2],'UTF-8',$charset)).'</a>';
+				$message[5] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
-				$message[1] = GetFullUserName($result[1]);
-				$message[2] = '<a onclick="show_sent_message ('.$result[0].')" href="#../messages/view_message.php?id_send='.$result[0].'">'.$result[2].'</a>';
-				$message[4] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
+				$message[2] = GetFullUserName($result[4]);
+				$message[3] = '<a onclick="show_sent_message ('.$result[0].')" href="#../messages/view_message.php?id_send='.$result[0].'">'.$result[2].'</a>';
+				$message[5] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a href="outbox.php?action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			}
-			$message[3] = $result[3]; //date stays the same
+			$message[4] = $result[3]; //date stays the same
 			$message_list[] = $message;
 			$i++;
 		}

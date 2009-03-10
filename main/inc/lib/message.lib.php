@@ -74,7 +74,7 @@ function inbox_display() {
 	
 	// display sortable table with messages of the current user
 	$table = new SortableTable('messages', 'get_number_of_messages_mask', 'get_message_data_mask', 1);
-	$table->set_header(0, '', false);
+	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
 	if ($request===true) {
 		$title= utf8_encode(get_lang('Title'));
 		$action=utf8_encode(get_lang('Actions'));
@@ -82,10 +82,12 @@ function inbox_display() {
 		$title= get_lang('Title');
 		$action=get_lang('Actions');		
 	}
-	$table->set_header(1, get_lang('From'),false);
-	$table->set_header(2,$title,false);
-	$table->set_header(3, get_lang('Date'),false);
-	$table->set_header(4,$action,false);
+	
+	$table->set_header(1, get_lang('Status'),false,array ('style' => 'width:30px;'));
+	$table->set_header(2, get_lang('From'),false);
+	$table->set_header(3,$title,false);
+	$table->set_header(4, get_lang('Date'),false,array ('style' => 'width:150px;'));
+	$table->set_header(5,$action,false,array ('style' => 'width:100px;'));
 echo '<div id="div_content_table_data">';
 	if ($request===true) {
 		echo '<form name="form_send" id="form_send" action="" method="post">';
@@ -167,11 +169,12 @@ if ($request===true) {
 	$title= get_lang('Title');
 	$action=get_lang('Actions');		
 }
-$table->set_header(0, '', false);
-$table->set_header(1, get_lang('From'),false);
-$table->set_header(2, $title,false);
-$table->set_header(3, get_lang('Date'),false);
-$table->set_header(4,$action, false);
+$table->set_header(0, '', false,array ('style' => 'width:20px;'));
+$table->set_header(1, get_lang('Status'),false,array ('style' => 'width:30px;'));
+$table->set_header(2, get_lang('To'),false);
+$table->set_header(3, $title,false);
+$table->set_header(4, get_lang('Date'),false,array ('style' => 'width:150px;'));
+$table->set_header(5,$action, false,array ('style' => 'width:100px;'));
 echo '<div id="div_content_table_data_sent">';
 	if ($request===true) {
 		echo '<form name="form_send_out" id="form_send_out" action="" method="post">';

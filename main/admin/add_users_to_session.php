@@ -375,14 +375,18 @@ if ($ajax_search) {
 				ORDER BY lastname,firstname,username";			
 			}
 		}		
-		$result=api_sql_query($sql,__FILE__,__LINE__);	
-		$Users=api_store_result($result);
-		//var_dump($_REQUEST['id_session']);
-		foreach ($Users as $user) {
-			if($user['id_session'] == $id_session)
-				$sessionUsersList[$user['user_id']] = $user ;		
+	$result=api_sql_query($sql,__FILE__,__LINE__);	
+	$Users=api_store_result($result);
+	//var_dump($_REQUEST['id_session']);
+	foreach ($Users as $user) {
+		if($user['id_session'] == $id_session){
+			$sessionUsersList[$user['user_id']] = $user;
+			if (array_key_exists($user['user_id'],$nosessionUsersList))
+                unset($nosessionUsersList[$user['user_id']]);
 		}
-		
+		else if ( $sessionUsersList[$user['user_id']]['id_session']!=$id_session )
+			$nosessionUsersList[$user['user_id']] = $user ;
+	}
 }
 
 if ($add_type == 'multiple') {

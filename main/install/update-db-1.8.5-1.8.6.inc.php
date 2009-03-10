@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 18697 2009-02-25 16:55:11Z cfasanando $
+<?php // $Id: update-db-1.8.5-1.8.6.inc.php 18939 2009-03-10 22:29:24Z cfasanando $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -180,8 +180,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					@mkdir($dir.$user_id, $perm);					
 			}						
 						
-			if (file_exists($image_repository)) {								
-				chmod($image_repository, 0777);
+			if (file_exists($image_repository)) {												
 				chmod($dir.$user_id, 0777);
 				if (is_dir($dir.$user_id)) {
 					$picture_location = $dir.$user_id.'/'.$file;
@@ -196,7 +195,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						$thumbwidth=150;
 					}
 
-					$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+					$new_height = ($picture_infos[0] > 0)?round(($thumbwidth/$picture_infos[0])*$picture_infos[1]) : 0;
 		
 					$temp->resize($thumbwidth,$new_height,0);
 

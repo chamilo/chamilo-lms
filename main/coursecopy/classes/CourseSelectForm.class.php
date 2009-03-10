@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 17054 2008-12-03 13:38:03Z pcool $
+// $Id: CourseSelectForm.class.php 18925 2009-03-10 14:09:33Z ndieschburg $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -156,7 +156,7 @@ class CourseSelectForm
 				echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
 			}
 		}
-		echo '<br /><input type="submit" value="'.get_lang('Ok').'" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')"/>';
+		echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.get_lang('Ok').'</button>';
 		
 		CourseSelectForm :: display_hidden_quiz_questions($course);
 		CourseSelectForm :: display_hidden_scorm_directories($course);

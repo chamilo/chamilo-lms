@@ -89,8 +89,8 @@ get_notifications_of_user();
 */
 function handle_forum_and_forumcategories() {
 	$action_forum_cat = isset($_GET['action']) ? $_GET['action'] : '';
-	$post_submit_cat= isset($_POST['SubmitForumCategory']) ? $_POST['SubmitForumCategory'] : '';
-	$post_submit_forum= isset($_POST['SubmitForum']) ? $_POST['SubmitForum'] : '';
+	$post_submit_cat= isset($_POST['SubmitForumCategory']) ?  true : false;
+	$post_submit_forum= isset($_POST['SubmitForum']) ? true : false;
 	$get_id=isset($_GET['id']) ? $_GET['id'] : '';
 	// Adding a forum category
 	if (($action_forum_cat=='add' && $_GET['content']=='forumcategory') || $post_submit_cat ) {
@@ -106,7 +106,7 @@ function handle_forum_and_forumcategories() {
 		show_add_forum_form($inputvalues);
 	}
 	// Edit a forum category
-	if (($action_forum_cat=='edit' && $_GET['content']=='forumcategory' && isset($_GET['id'])) || $_POST['SubmitEditForumCategory'] )
+	if (($action_forum_cat=='edit' && $_GET['content']=='forumcategory' && isset($_GET['id'])) || (isset($_POST['SubmitEditForumCategory'])) ? true : false )
 	{
 		$forum_category=get_forum_categories(strval(intval($_GET['id']))); // note: this has to be cleaned first
 		show_edit_forumcategory_form($forum_category);
@@ -158,7 +158,7 @@ function show_add_forumcategory_form($inputvalues=array()) {
 	$form->addElement('header', '', get_lang('AddForumCategory'));
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
-	$form->addElement('submit', 'SubmitForumCategory', get_lang('Ok'));
+	$form->addElement('style_submit_button', 'SubmitForumCategory', get_lang('Ok'), 'class="save"');
 
 	// setting the rules
 	$form->addRule('forum_category_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
@@ -327,7 +327,7 @@ function show_add_forum_form($inputvalues=array()) {
 	 $form->addElement('html','</div>');
 
 	// The OK button
-	$form->addElement('submit', 'SubmitForum', get_lang('Ok'));
+	$form->addElement('style_submit_button', 'SubmitForum', get_lang('Ok'), 'class="save"');
 	// setting the rules
 	$form->addRule('forum_title', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addRule('forum_category', get_lang('ThisFieldIsRequired'), 'required');
@@ -425,7 +425,7 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 	$form->addElement('hidden', 'forum_category_id');
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
-	$form->addElement('submit', 'SubmitEditForumCategory',get_lang('Ok'));
+	$form->addElement('style_submit_button', 'SubmitEditForumCategory',get_lang('Ok'), 'class="save"');
 	global $charset;
 	// setting the default values
 	$defaultvalues['forum_category_id']=$inputvalues['cat_id'];
@@ -1895,7 +1895,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$info    =api_get_user_info($userid);
 	$courseid=api_get_course_id();		
 		
-	$form->addElement('submit', 'SubmitPost', get_lang('Ok'));	
+	$form->addElement('style_submit_button', 'SubmitPost', get_lang('Ok'), 'class="save"');	
 	$form->add_real_progress_bar('DocumentUpload','user_upload');
 
 	if ( !empty($form_values) ) {
@@ -2319,7 +2319,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 		$values = $form->exportValues();
 	}
 
-	$form->addElement('submit', 'SubmitPost', get_lang('Ok'));
+	$form->addElement('style_submit_button', 'SubmitPost', get_lang('Ok'), 'class="save"');
 	global $charset;
 	// setting the default values for the form elements
 	$defaults['post_title']=prepare4display(html_entity_decode($current_post['post_title'],ENT_QUOTES,$charset));

@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 18466 2009-02-12 14:25:22Z juliomontoya $
+<?php // $Id: user_add.php 18925 2009-03-10 14:09:33Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -310,9 +310,8 @@ $defaults['status'] = STUDENT;
 $defaults = array_merge($defaults,$extra_data);
 $form->setDefaults($defaults);
 // Submit button
-$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
+$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"') ;
 $form->addElement('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
-	
 // Validate form
 if( $form->validate())
 {

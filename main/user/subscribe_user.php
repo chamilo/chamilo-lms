@@ -1,4 +1,4 @@
-<?php // $Id: subscribe_user.php 18156 2009-02-02 17:02:08Z juliomontoya $
+<?php // $Id: subscribe_user.php 18925 2009-03-10 14:09:33Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -129,12 +129,13 @@ if (isset ($_POST['action'])) {
 			
 			$list_register_user='';
 			
-			if ($$is_suscribe_counter!=1) {			
+			//if ($$is_suscribe_counter!=1) {			
 				for ($i=0; $i<$$is_suscribe_counter;$i++) {
 					for ($j=0; $j<count($user_id_temp);$j++) {
 						if ($is_suscribe_user_id[$i]==$user_id_temp[$j]) {
 								if ($is_suscribe[$i]) {										
-									$list_register_user.=" - ".$user_name_temp[$j].'<br/>';								
+									$list_register_user.=" - ".$user_name_temp[$j].'<br/>';
+									$temp_unique_user=$user_name_temp[$j];								
 									$counter++;
 								} else {
 									$list_not_register_user.=" - ".$user_name_temp[$j].'<br/>';							
@@ -142,13 +143,13 @@ if (isset ($_POST['action'])) {
 						}
 					}
 				}
-			} else {			
-				$list_register_user=$user_name_temp[0]; // only 1 user register 
-			}
+			//} else {			
+				//$list_register_user=$temp_unique_user; // only 1 user register 
+			//}
 				
 			if (!empty($list_register_user)) {					
 				if ($$is_suscribe_counter==1) {	
-					$register_user_message=$list_register_user.' '.get_lang('langAddedToCourse');
+					$register_user_message=$temp_unique_user.' '.get_lang('langAddedToCourse');
 					Display::display_confirmation_message($register_user_message,false);				
 				} else {										
 					$register_user_message='<br />'.get_lang('UsersRegistered').'<br/><br />'.$list_register_user;
@@ -419,7 +420,7 @@ $form = new FormValidator('search_user', 'POST',api_get_self().'?type='.$_REQUES
 $renderer = & $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->add_textfield('keyword', '', false);
-$form->addElement('submit', 'submit', get_lang('SearchButton'));
+$form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
 $form->display();
 echo '</div>';
 

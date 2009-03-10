@@ -1,5 +1,5 @@
 <?php
-// $Id: create_backup.php 18429 2009-02-10 23:41:38Z ivantcholakov $
+// $Id: create_backup.php 18925 2009-03-10 14:09:33Z ndieschburg $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -128,7 +128,7 @@ else
 		$form->addElement('radio', 'backup_option', '', get_lang('CreateFullBackup'), 'full_backup');
 		$form->addElement('radio', 'backup_option', '',  get_lang('LetMeSelectItems'), 'select_items');
 		$form->addElement('html','<br />');
-		$form->addElement('submit', null, get_lang('CreateBackup'));
+		$form->addElement('style_submit_button', null, get_lang('CreateBackup'), 'class="save"');
 		
 		$form->add_progress_bar();
 		

@@ -93,7 +93,7 @@ else
 	}
 
 	// displaying the survey thanks message
-	if ($_POST['finish_survey'])
+	if(isset($_POST['finish_survey']))
 	{
 		echo '<div id="survey_content" class="survey_content"><strong>'.get_lang('SurveyFinished').' </strong>'.$survey_data['survey_thanks'].'</div>';
 		Display :: display_footer();
@@ -186,11 +186,11 @@ else
 	if (($show < $numberofpages) OR !$_GET['show'])
 	{
 		//echo '<a href="'.api_get_self().'?survey_id='.$_GET['survey_id'].'&amp;show='.$limit.'">NEXT</a>';
-		echo '<br /><input type="submit" name="next_survey_page" value="'.get_lang('Next').' >> " />';
+		echo '<br /><button type="submit" name="next_survey_page">'.get_lang('Next').' >>  </button>';
 	}
 	if ($show >= $numberofpages AND $_GET['show'])
 	{
-		echo '<input type="submit" name="finish_survey" value="'.get_lang('FinishSurvey').' >> " />';
+		echo '<button type="submit" name="finish_survey">'.get_lang('FinishSurvey').' >> </button>';
 	}
 	echo '</form>';
 }

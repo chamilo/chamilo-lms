@@ -1,4 +1,4 @@
-<?php // $Id: recycle_course.php 12219 2007-05-01 18:46:59Z yannoo $
+<?php // $Id: recycle_course.php 18925 2009-03-10 14:09:33Z ndieschburg $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -107,7 +107,7 @@ else
 	<label for="recycle_option_2"><?php echo get_lang('LetMeSelectItems') ?></label>
 	<br/>
 	<br/>
-	<input type="submit" value="<?php echo get_lang('RecycleCourse') ?>"/>
+	<button class="save" type="submit"><?php echo get_lang('RecycleCourse') ?></button>
 	</form>
 	<?php	
 	}

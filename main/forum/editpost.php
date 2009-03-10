@@ -233,24 +233,25 @@ echo "\t</tr>\n";
 echo '</table>';
 
 // the form for the reply
-$id_attach = isset($_GET['id_attach'])?(int)$_GET['id_attach']:0;
-$values=show_edit_post_form($current_post, $current_thread, $current_forum, isset($_SESSION['formelements'])?$_SESSION['formelements']:'',$id_attach);
-if (!empty($values) and $_POST['SubmitPost']) {					
+$values=show_edit_post_form($current_post, $current_thread, $current_forum, isset($_SESSION['formelements'])?$_SESSION['formelements']:'');
+if (!empty($values) and isset($_POST['SubmitPost'])) {
 	store_edit_post($values);
+
 	$option_chek=isset($values['thread_qualify_gradebook'])?$values['thread_qualify_gradebook']:null;// values 1 or 0
-	if ( 1== $option_chek ) {
-		$id=$values['thread_id'];
-		$title_gradebook=$values['calification_notebook_title'];
-		$value_calification=$values['numeric_calification'];
-		$weight_calification=$values['weight_calification'];
-		$description="";
-		$session_id=api_get_session_id();
-		$link_id=is_resource_in_course_gradebook(api_get_course_id(),5,$id,$session_id);
-		if ( $link_id==false ) {
-			add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,api_get_session_id());	
-		} else {
-			api_sql_query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
-		}				
+		if ( 1== $option_chek ) {
+			$id=$values['thread_id'];
+			$title_gradebook=$values['calification_notebook_title'];
+			$value_calification=$values['numeric_calification'];
+			$weight_calification=$values['weight_calification'];
+			$description="";
+			$session_id=api_get_session_id();
+			$link_id=is_resource_in_course_gradebook(api_get_course_id(),5,$id,$session_id);
+			if ( $link_id==false ) {
+				add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,api_get_session_id());	
+			} else {
+				api_sql_query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
+			}
+				
 	}
 	
 }

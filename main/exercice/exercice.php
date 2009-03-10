@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 18637 2009-02-23 21:29:20Z cfasanando $
+<?php // $Id: exercice.php 18925 2009-03-10 14:09:33Z ndieschburg $
 
 /*
 ==============================================================================
@@ -681,7 +681,7 @@ echo '<div class="actions">';
 				}
 				$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
 				$form_filter .= make_select('filter',array(1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised')),$filter);
-				$form_filter .= '<button type="submit">'.get_lang('FilterExercices').'</button></form>';
+				$form_filter .= '<button class="save" type="submit">'.get_lang('FilterExercices').'</button></form>';
 				echo $form_filter;
 			}
 		}

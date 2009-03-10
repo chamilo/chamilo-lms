@@ -1,4 +1,4 @@
-<?php // $Id: import_backup.php 18429 2009-02-10 23:41:38Z ivantcholakov $
+<?php // $Id: import_backup.php 18925 2009-03-10 14:09:33Z ndieschburg $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -220,7 +220,7 @@ else
 	$form->addElement('radio', 'same_file_name_option', '', get_lang('SameFilenameOverwrite'), FILE_OVERWRITE, 'id="same_file_name_option_3" class="checkbox"');
 	
 	$form->addElement('html', '<br />');
-	$form->addElement('submit', null, get_lang('ImportBackup'));
+	$form->addElement('style_submit_button', null, get_lang('ImportBackup'), 'class="save"');
 	
 	$values['backup_type'] = 'local';
 	$values['import_option'] = 'full_backup';

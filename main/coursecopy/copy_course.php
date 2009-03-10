@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 15909 2008-08-05 08:42:48Z elixir_julian $
+// $Id: copy_course.php 18925 2009-03-10 14:09:33Z ndieschburg $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -147,7 +147,7 @@ else
 	<label for="same_file_name_option_3"><?php echo get_lang('SameFilenameOverwrite') ?></label>
 	</blockquote>
 	<br/>
-	<input type="submit" value="<?php echo get_lang('CopyCourse') ?>"/>
+	<button class="save" type="submit"><?php echo get_lang('CopyCourse') ?></button>
 	</form>
 	<?php
 	}

@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 18769 2009-03-02 22:07:40Z iflorespaz $
+<?php // $Id: user_fields_add.php 18925 2009-03-10 14:09:33Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -167,7 +167,7 @@ if (is_numeric($_GET['field_id']))
 }
 $form->setDefaults($defaults);
 // Submit button
-$form->addElement('submit', 'submit', get_lang('Add'));
+$form->addElement('style_submit_button', 'submit', get_lang('buttonAddUserField'), "class='add'");
 // Validate form
 if( $form->validate())
 {

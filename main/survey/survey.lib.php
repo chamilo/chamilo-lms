@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 18472 2009-02-12 18:00:38Z juliomontoya $
+* 	@version $Id: survey.lib.php 18925 2009-03-10 14:09:33Z ndieschburg $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2947,9 +2947,9 @@ class SurveyUtil {
 		echo '		<th>';
 		if ($_POST['submit_question_filter'] OR $_POST['export_report'])
 		{
-			echo '			<input type="submit" name="reset_question_filter" value="'.get_lang('ResetQuestionFilter').'" />';
+			echo '			<button class="save" type="submit" name="reset_question_filter" value="'.get_lang('ResetQuestionFilter').'">'.get_lang('ResetQuestionFilter').'</button>';
 		}
-		echo '			<input type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter').'"/';
+		echo '			<button class="save" type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter').'">'.get_lang('SubmitQuestionFilter').'</button>';
 		echo '</th>';
 		
 		$display_extra_user_fields = false;

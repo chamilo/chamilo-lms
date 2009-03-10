@@ -77,6 +77,18 @@ if($urlForm[strlen($urlForm)-1] != '/')
 	$urlForm=$urlForm.'/';
 }
 
+switch ($encryptPassForm) {
+	case 'md5' :
+	$passToStore=md5($passForm);
+	break;
+	case 'sha1' : 
+	$passToStore=sha1($passForm);
+	break;
+	case 'none' :
+	$passToStore=($passForm); 
+	break;
+}
+/*
 if($encryptPassForm)
 {
 	$passToStore=md5($passForm);
@@ -84,7 +96,7 @@ if($encryptPassForm)
 else
 {
 	$passToStore=($passForm);
-}
+}*/
 
 $dbPrefixForm=eregi_replace('[^a-z0-9_-]','',$dbPrefixForm);
 
@@ -204,6 +216,7 @@ $installation_settings['{ADMINEMAIL}'] = $emailForm;
 $installation_settings['{ADMINPHONE}'] = $adminPhoneForm;
 $installation_settings['{PLATFORM_AUTH_SOURCE}'] = PLATFORM_AUTH_SOURCE;
 $installation_settings['{ADMINLANGUAGE}'] = $languageForm;
+$installation_settings['{HASHFUNCTIONMODE}'] = $encryptPassForm;
 load_main_database($installation_settings);
 
 /**

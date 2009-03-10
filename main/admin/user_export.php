@@ -1,5 +1,5 @@
 <?php
-// $Id: user_export.php 18595 2009-02-19 21:17:17Z juliomontoya $
+// $Id: user_export.php 18942 2009-03-10 23:42:21Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -83,15 +83,17 @@ $form->setDefaults(array('file_type'=>'csv'));
 if ($form->validate())
 {
 	global $userPasswordCrypted;
+	
 	$export = $form->exportValues();
 	$file_type = $export['file_type'];
-	$course_code = $export['course_code'];
+	$course_code = $export['course_code'];	
+	$userPasswordCrypted =
 	$sql = "SELECT  u.user_id 	AS UserId,
 					u.lastname 	AS LastName,
 					u.firstname 	AS FirstName,
 					u.email 		AS Email,
 					u.username	AS UserName,
-					".(($userPasswordCrypted)?" ":"u.password AS Password, ")."
+					".(($userPasswordCrypted!='none')?" ":"u.password AS Password, ")."
 					u.auth_source	AS AuthSource,
 					u.status		AS Status,
 					u.official_code	AS OfficialCode,
@@ -120,7 +122,7 @@ if ($form->validate())
 	$extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC',false);
 	if ($export['addcsvheader']=='1' AND $export['file_type']=='csv')
 	{
-		if($userPasswordCrypted) {
+		if($userPasswordCrypted!='none') {
 			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName', 'AuthSource', 'Status', 'OfficialCode', 'Phone');
 		} else {
 			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName','Password',  'AuthSource', 'Status', 'OfficialCode', 'Phone');	

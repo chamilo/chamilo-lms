@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18900 2009-03-09 21:51:41Z iflorespaz $
+<?php // $Id: profile.php 18942 2009-03-10 23:42:21Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -663,14 +663,8 @@ if (!empty($_SESSION['production_uploaded']))
 
 	if (isset($password))
 	{
-		if ($userPasswordCrypted)
-		{
-			$sql .= " password = MD5('".Database::escape_string($password)."')";
-		}
-		else
-		{
-			$sql .= " password = '".Database::escape_string($password)."'";
-		}
+		$password = api_get_encrypted_password($password);
+		$sql .= " password = '".Database::escape_string($password)."'";  		
 	}
 	else // remove trailing , from the query we have so far
 	{

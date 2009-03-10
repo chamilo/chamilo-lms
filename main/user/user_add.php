@@ -140,9 +140,9 @@ if($register)
 		if ($_cid) $platformStatus = STUDENT;          // course registrartion context...
 		else       $platformStatus = $platformStatus; // admin section of the platform context...
 
-		if ($userPasswordCrypted) $pw = md5($password_form);
-		else                      $pw = $password_form;
-
+		//if ($userPasswordCrypted) $pw = md5($password_form);		
+		//else                      $pw = $password_form;
+		$pw = api_get_encrypted_password($password_form);
 		$result = api_sql_query("INSERT INTO $tbl_user
 		                       SET lastname       = '$lastname_form',
 		                           firstname    = '$firstname_form',

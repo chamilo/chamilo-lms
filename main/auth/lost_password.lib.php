@@ -1,5 +1,5 @@
 <?php
-// $Id: lost_password.lib.php 18376 2009-02-09 20:25:27Z juliomontoya $
+// $Id: lost_password.lib.php 18942 2009-03-10 23:42:21Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -184,10 +184,11 @@ function reset_password($secret, $id)
 	{
 		$user[0]["password"] = api_generate_password();
 		$crypted = $user[0]["password"];
-		if( $userPasswordCrypted)
+		$crypted = api_get_encrypted_password($crypted);
+		/*if( $userPasswordCrypted)
 		{
 			$crypted = md5($crypted);
-		}
+		}*/
 		api_sql_query("UPDATE ".$tbl_user." SET password='$crypted' WHERE user_id=$id");
 		return send_password_to_user($user, $your_password_has_been_reset);
 	}

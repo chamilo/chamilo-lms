@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 18675 2009-02-25 05:37:35Z yannoo $
+<?php // $Id: session_import.php 18942 2009-03-10 23:42:21Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -95,7 +95,7 @@ if ($_POST['formSent']) {
 								username = '".Database::escape_string($username)."',
 								lastname = '".Database::escape_string($lastname)."',
 								firstname = '".Database::escape_string($firstname)."',
-								password = '".($userPasswordCrypted==true ? md5($password) : $password)."',
+								password = '".(api_get_encrypted_password($password))."',
 								email = '".Database::escape_string($email)."',
 								official_code = '".Database::escape_string($official_code)."',
 								phone = '".Database::escape_string($phone)."',
@@ -141,7 +141,7 @@ if ($_POST['formSent']) {
 						$sql = "UPDATE $tbl_user SET
 									lastname = '".Database::escape_string($lastname)."',
 									firstname = '".Database::escape_string($firstname)."',
-									".(empty($password) ? "" : "password = '".($userPasswordCrypted==true ? md5($password) : $password)."',")."
+									".(empty($password) ? "" : "password = '".(api_get_encrypted_password($password))."',")."
 									email = '".Database::escape_string($email)."',
 									official_code = '".Database::escape_string($official_code)."',
 									phone = '".Database::escape_string($phone)."',

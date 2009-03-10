@@ -1021,7 +1021,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 
 	//Second parameter: Dokeos URL
 	echo "<tr>\n";
-	echo '<td>'.get_lang('DokeosURL').' (<font color="#cc0033">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>\n";
+	echo '<td>'.get_lang('DokeosURL').' (<font color="red">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>\n";
 	
 	if($installType == 'update') echo '<td>'.htmlentities($urlForm)."</td>\n";
 	else echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.htmlentities($urlForm).'" />'."</td>\n";
@@ -1055,9 +1055,10 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 
 	//Parameter 11: institute (short) name
 	display_configuration_parameter($installType, get_lang("InstituteURL"), "institutionUrlForm", $institutionUrlForm);
-
-	?>
-	<tr>
+	
+	/*
+	 //old method
+	  	<tr>
 	  <td><?php echo get_lang("EncryptUserPass"); ?> :</td>
 
 	  <?php if($installType == 'update'): ?>
@@ -1068,8 +1069,29 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 		<input class="checkbox" type="radio" name="encryptPassForm" value="0" id="encryptPass0" <?php echo $encryptPassForm?'':'checked="checked" '; ?>/> <label for="encryptPass0"><?php echo get_lang("No"); ?></label>
 	  </td>
 	  <?php endif; ?>
-
 	</tr>
+	
+	 */
+	
+	?>
+	<tr>
+	  <td><?php echo get_lang("EncryptMethodUserPass"); ?> :</td>
+ 
+	  <?php if($installType == 'update'): ?>
+	  <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php  echo $encryptPassForm; ?></td>
+	  <?php else: ?>
+	  <td>
+		<input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm?'checked="checked" ':''; ?>/> <label for="encryptPass0"><?php echo "md5"; ?></label>
+		<input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo $encryptPassForm?'':'checked="checked" '; ?>/> <label for="encryptPass1"><?php echo "sha1"; ?></label>
+		<input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm?'':'checked="checked" '; ?>/> <label for="encryptPass2"><?php echo get_lang("None"); ?></label>
+	  </td>
+	  <?php endif; ?>
+	</tr>
+	
+
+	
+	
+	
 	<tr>
 	  <td><?php echo get_lang("AllowSelfReg"); ?> :</td>
 

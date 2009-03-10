@@ -223,9 +223,10 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 // determine if the password needs to be encrypted before checking
                 // $userPasswordCrypted is set in an external configuration file
 
-                if ($userPasswordCrypted) {
+                /*if ($userPasswordCrypted) {
                 	$password = md5($password);
-                }               
+                } */
+                $password = api_get_encrypted_password($password);                
                 
                 // check the user's password
                 if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {

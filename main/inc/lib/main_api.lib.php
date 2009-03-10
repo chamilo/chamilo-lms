@@ -3038,7 +3038,8 @@ function api_get_current_access_url_id()
  * @author Julio Montoya <gugli100@gmail.com>
  * @return int user id  
  */
-function api_get_access_url_from_user($user_id) {
+function api_get_access_url_from_user($user_id) 
+{
 	$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$table_url	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);		
 	$sql = "SELECT access_url_id FROM $table_url_rel_user url_rel_user INNER JOIN $table_url u 
@@ -3158,5 +3159,27 @@ function api_is_xml_http_request() {
 		return true;
 	} else {
 		return false;
+	}
+}
+/**
+ * This function gets the hash in md5 or sha1 (it depends in the platform config) of a given password
+ * @param  string password
+ * @return string password with the applied hash 
+ * */
+function api_get_encrypted_password($password) 
+{
+	global $userPasswordCrypted;
+	switch ($userPasswordCrypted){
+		case 'md5':
+		return md5($password);
+		break;
+		case 'sha1':
+		return sha1($password);
+		break;
+		case 'none':
+		return $password;
+		break;
+		default:
+		return md5($password); 
 	}
 }

@@ -269,7 +269,7 @@ if(!isset($_GET['running']))
 	$allowSelfRegProf=1;
 	$enableTrackingForm=1;
 	$singleDbForm=0;
-	$encryptPassForm=1;
+	$encryptPassForm='md5';
 	$session_lifetime=360000;
 }
 else
@@ -336,6 +336,12 @@ elseif (!empty($_POST['step5']))
 }
 
 
+// Managing the $encryptPassForm 
+if ($encryptPassForm=='1' ) {
+	$encryptPassForm = 'md5'; 
+} elseif ($encryptPassForm=='0') {	  	
+	$encryptPassForm = 'none';
+}
 
 ?>
 <!DOCTYPE html
@@ -504,6 +510,13 @@ elseif($_POST['step4'])
 		{   //for version 1.6
 			$urlForm = get_config_param('rootWeb');
 			$encryptPassForm = get_config_param('userPasswordCrypted');
+			// Managing the $encryptPassForm 
+			if ($encryptPassForm=='1' ) {
+				$encryptPassForm = 'md5'; 
+			} elseif ($encryptPassForm=='0') {	  	
+				$encryptPassForm = 'none';
+			}
+			
 			$allowSelfReg = get_config_param('allowSelfReg');
 			$allowSelfRegProf = get_config_param('allowSelfRegProf');
 		}
@@ -511,6 +524,13 @@ elseif($_POST['step4'])
 		{   //for version 1.8
 			$urlForm = $_configuration['root_web'];
 			$encryptPassForm = get_config_param('userPasswordCrypted');
+			// Managing the $encryptPassForm 
+			if ($encryptPassForm=='1' ) {
+				$encryptPassForm = 'md5'; 
+			} elseif ($encryptPassForm=='0') {	  	
+				$encryptPassForm = 'none';
+			}
+			
 			$allowSelfReg = false;
 			$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'allow_registration');
 			if(!empty($tmp)) $allowSelfReg = $tmp;
@@ -570,7 +590,9 @@ elseif($_POST['step5'])
 	<?php echo get_lang('SingleDb').' : '.($singleDbForm?$langOne:$langSeveral); ?><br /><br />
 
 	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg?$langYes:$langNo); ?><br />
-	<?php echo get_lang('EncryptUserPass').' : '.($encryptPassForm?$langYes:$langNo); ?><br /><br/>
+	<?php echo get_lang('EncryptMethodUserPass').' : ';
+  	echo $encryptPassForm;
+	?><br /><br/>
 
 	<?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
 	<?php echo get_lang('AdminLastName').' : '.$adminLastName; ?><br />
@@ -618,6 +640,13 @@ elseif($_POST['step6'])
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
         error_log('Starting migration process from '.$my_old_version.' ('.time().')',0);
+        
+    	if ($userPasswordCrypted=='1' ) {
+			$userPasswordCrypted = 'md5'; 
+		} elseif ($userPasswordCrypted=='0') {	  	
+			$userPasswordCrypted = 'none'; 
+		} 
+			
 		switch($my_old_version)
 		{
 			case '1.6':

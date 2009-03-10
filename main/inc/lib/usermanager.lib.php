@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 18875 2009-03-09 16:13:34Z juliomontoya $
+<?php // $Id: usermanager.lib.php 18942 2009-03-10 23:42:21Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -95,7 +95,8 @@ class UserManager
 		if (! UserManager::is_username_available($loginName))
 			return api_set_failure('login-pass already taken');
 		//$password = "PLACEHOLDER";
-		$password = ($userPasswordCrypted ? md5($password) : $password);
+		$password = api_get_encrypted_password($password); 
+		//$password = ($userPasswordCrypted ? md5($password) : $password);
 		$sql = "INSERT INTO $table_user
 					                SET lastname = '".Database::escape_string(trim($lastName))."',
 					                firstname = '".Database::escape_string(trim($firstName))."',
@@ -301,7 +302,8 @@ class UserManager
 				username='".Database::escape_string($username)."',";
 		if(!is_null($password))
 		{
-			$password = $userPasswordCrypted ? md5($password) : $password;
+			//$password = $userPasswordCrypted ? md5($password) : $password;			
+			$password = api_get_encrypted_password($password);  
 			$sql .= " password='".Database::escape_string($password)."',";
 		}
 		if(!is_null($auth_source))

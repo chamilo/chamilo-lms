@@ -97,7 +97,7 @@ function fill_current_settings_table($current_settings_table, $installation_sett
 	$allowSelfReg = $installation_settings['allow_self_registration'];
 	$allowSelfRegProf = $installation_settings['allow_teacher_self_registration'];
 	$adminPhoneForm = $installation_settings['admin_phone_form'];
-
+	
 	$file_path = dirname(__FILE__).'/'.SETTING_CURRENT_DATA_FILENAME;
 	$add_setting_current_sql = "LOAD DATA INFILE '".mysql_real_escape_string($file_path)."' INTO TABLE $current_settings_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
 	@ mysql_query($add_setting_current_sql);
@@ -203,7 +203,8 @@ function write_dokeos_config_file($path)
 	$config['{GARBAGE_DIR}'] = str_replace("\\", '/', $garbageDir);
 	$config['{PLATFORM_LANGUAGE}'] = $languageForm;
 	$config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
-	$config['ENCRYPT_PASSWORD'] = trueFalse($encryptPassForm);
+	$config['{ENCRYPT_PASSWORD}'] = $encryptPassForm; 
+	
 	$config['SESSION_LIFETIME'] = $session_lifetime;
 	$config['{NEW_VERSION}'] = $new_version;
 	$config['NEW_VERSION_STABLE'] = trueFalse($new_version_stable);
@@ -211,6 +212,7 @@ function write_dokeos_config_file($path)
 	{
 		$content = str_replace($key, $value, $content);
 	}
+	
 	$fp = @ fopen($path, 'w');
 
 	if (!$fp)

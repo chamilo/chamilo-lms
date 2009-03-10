@@ -39,6 +39,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			$found_stable = true;
 			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n";
 		}
+		elseif(stristr($line,'$userPasswordCrypted'))
+		{			
+			$line = '$userPasswordCrypted 									= \''.($userPasswordCrypted).'\';'."\r\n";
+		}
 		elseif(stristr($line,'?>'))
 		{
 			//ignore the line

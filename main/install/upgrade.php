@@ -889,7 +889,12 @@ if( isset($values['old_version_path']) && $values['old_version_path'] != '/var/w
 	$defaults['encrypt_password'] = 1;
 	$defaults['organization_name'] = get_config_param('institution["name"]',$path);
 	$defaults['organization_url'] = get_config_param('institution["url"]',$path);
-	$defaults['encrypt_password'] = get_config_param('userPasswordCrypted',$path);
+	if (get_config_param('userPasswordCrypted',$path)==1) {
+		$defaults['encrypt_password'] = 'md5';
+	} elseif (get_config_param('userPasswordCrypted',$path)==0){
+		$defaults['encrypt_password'] = 'none';
+	}	
+	//$defaults['encrypt_password'] = get_config_param('userPasswordCrypted',$path);
 	$defaults['self_reg'] = get_config_param('allowSelfReg',$path);
 }
 else

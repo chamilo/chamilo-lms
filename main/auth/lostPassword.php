@@ -1,6 +1,6 @@
 <?php
 
-// $Id: lostPassword.php 17747 2009-01-15 21:03:02Z cfasanando $
+// $Id: lostPassword.php 18942 2009-03-10 23:42:21Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -84,7 +84,7 @@ else
 			{
 				$user[] = $data;
 			}
-			if ($userPasswordCrypted)
+			if ($userPasswordCrypted!='none')
 			{
 				$msg = handle_encrypted_password($user);
 			}

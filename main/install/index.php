@@ -88,7 +88,7 @@ define('MAX_COURSE_TRANSFER',100);
 define('INSTALL_TYPE_UPDATE', 'update');
 define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
-define('MAX_FORM_FIELD_LENGTH', 50);
+define('MAX_FORM_FIELD_LENGTH', 80);
 define('DEFAULT_LANGUAGE', 'english');
 
 // setting the error reporting

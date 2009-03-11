@@ -694,4 +694,5 @@ $ThereIsNotUnqualifiedLearners = "Tukaj ni neocenjenih uèeèih se uporabnikov";
 $SocialNetwork = "Socialno omrežje";
 $BackToOutbox = "Nazaj na odposlana sporoèila";
 $Invitation = "Vabilo";
+$SeeMoreOptions = "Poglej veè možnosti";
 ?>

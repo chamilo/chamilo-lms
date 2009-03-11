@@ -929,4 +929,5 @@ $UsersUnsubscribedFromBecauseVisualCode = "Uporabniki so bili izpisani iz nasled
 $FilterUsers = "Filtriraj uporabnike";
 $SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Več tečajev je bilo registrirano/vpisano v sejo, ker si jih več deli skupno kodo tečaja";
 $CoachIsRequired = "Izbrati morate inštruktorja";
+$EncryptMethodUserPass = "Način kriptiranja";
 ?>

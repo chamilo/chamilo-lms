@@ -929,4 +929,5 @@ $UsersUnsubscribedFromBecauseVisualCode = "The users have been unsubscribed from
 $FilterUsers = "Filter users";
 $SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Several courses were subscribed to the session because of a duplicate course code";
 $CoachIsRequired = "You must select a coach";
+$EncryptMethodUserPass = "Encryption method";
 ?>

@@ -113,5 +113,5 @@ $DokeosArtLicense = "The images and media galleries of Dokeos use images from Nu
 $PleasGoBackToStep1 = "Please go back to step 1";
 $OptionalParameters = "Optional parameters";
 $FailedConectionDatabase = "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.";
-$EncryptMethodUserPass = "Encryption method"; 
+$EncryptMethodUserPass = "Encryption method";
 ?>

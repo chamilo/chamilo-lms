@@ -15,7 +15,7 @@ $MessageSentTo = "El mensaje ha sido enviado a";
 $SendMessageTo = "Enviar a";
 $Myself = "Yo mismo";
 $From = "De";
-$To = "para";
+$To = "Para";
 $Date = "Fecha";
 $InvalidMessageId = "El id del mensaje a contestar no es válido.";
 $ErrorSendingMessage = "Se ha producido un error mientras se intentaba enviar el mensaje.";
@@ -32,4 +32,7 @@ $SendMessageInvitation = "¿ Está seguro que desea enviar las invitaciones a los 
 $MessageTool = "Herramienta mensajes";
 $SendMessage = "Enviar mensajes";
 $WriteToMessage = "Escribir un mensaje";
+$AlreadyReadMessage = "Mensaje leído";
+$UnReadMessage = "Mensaje sin leer";
+$MessageSent = "Mensaje enviado";
 ?>

@@ -62,4 +62,13 @@ $AlterPersonalData = "Modifica i dati personali";
 $Invites = "I miei inviti";
 $ContactsGroups = "Gruppi di contatti";
 $ErrorSendingMessage = "Errore nell\'inviare il messaggio";
+$PendingInvitations = "Inviti in attesa";
+$MyInbox = "I miei messaggi";
+$ViewSharedProfile = "Profilo condiviso";
+$SeeAll = "Vedi tutto";
+$ImagesUploaded = "Immagini caricate";
+$ExtraInformation = "Informazioni supplementari";
+$SearchContacts = "Cerca tra i contatti";
+$SocialSeeContacts = "Vedi i contatti";
+$SocialUserInformationAttach = "Prima di spedire un messaggio devi scriverlo";
 ?>

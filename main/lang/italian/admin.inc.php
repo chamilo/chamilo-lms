@@ -929,4 +929,5 @@ $UsersUnsubscribedFromBecauseVisualCode = "Gli utenti sono stati cancellati dai 
 $FilterUsers = "Filtro sugli utenti";
 $SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Diversi corsi sono stati associati alla sessione (i corsi condividono il titolo)";
 $CoachIsRequired = "Devi selezionare un tutor";
+$EncryptMethodUserPass = "Sistema crittografico";
 ?>

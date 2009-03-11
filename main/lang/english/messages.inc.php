@@ -32,4 +32,7 @@ $SendMessageInvitation = "Are you sure that you wish to send these invitations ?
 $MessageTool = "Messages tool";
 $SendMessage = "Send messages";
 $WriteToMessage = "Write to message";
+$AlreadyReadMessage = "Message already read";
+$UnReadMessage = "Message without reading";
+$MessageSent = "Message Sent";
 ?>

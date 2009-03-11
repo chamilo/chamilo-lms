@@ -113,4 +113,5 @@ $DokeosArtLicense = "Le immagini e le gallerie multimediali di Dokeos utilizzano
 $PleasGoBackToStep1 = "Ritorna al passo 1";
 $OptionalParameters = "Parametri opzionali e nomi database";
 $FailedConectionDatabase = "La connessione al database è fallita. In genere c\'è un errore nell\'username o nella password o ancora nel prefisso selezionato. Controlla questi valori e riprova.";
+$EncryptMethodUserPass = "Sistema crittografico";
 ?>

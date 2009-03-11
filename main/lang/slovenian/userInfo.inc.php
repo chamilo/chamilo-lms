@@ -62,4 +62,11 @@ $AlterPersonalData = "Spremeni osebne podatke";
 $Invites = "Moja vabila";
 $ContactsGroups = "Kontakti skupine";
 $ErrorSendingMessage = "Napaka pri pošiljanju sporoèila";
+$PendingInvitations = "Èakajoèa povabila";
+$MyInbox = "Moja prihajajoèa sporoèila";
+$SeeAll = "Poglej vse";
+$ImagesUploaded = "Naložene slike";
+$ExtraInformation = "Dodatne informacije";
+$SearchContacts = "Išèi kontakte";
+$SocialSeeContacts = "Poglej kontakte";
 ?>

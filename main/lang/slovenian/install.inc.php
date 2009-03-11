@@ -113,4 +113,5 @@ $DokeosArtLicense = "Galeriji slik in drugih medijskih datotek Dokeos-a vsebujej
 $PleasGoBackToStep1 = "Prosim, pojdite nazaj na korak 1";
 $OptionalParameters = "Opcijski parametri";
 $FailedConectionDatabase = "Povezava s podatkovno bazo ni uspela. V splošnem se ta napaka pojavi zaradi napaènega uporabniškega imena, gesla, imena podatkovne baze ali njene predpone. Preverite nastavitve in poskusite ponovno.";
+$EncryptMethodUserPass = "Naèin kriptiranja";
 ?>

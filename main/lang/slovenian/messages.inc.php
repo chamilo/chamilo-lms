@@ -29,4 +29,10 @@ $DeleteMessage = "Odstrani sporoèilo";
 $ReadMessage = "Preberi sporoèilo";
 $SendInviteMessage = "Pošlji sporoèilo z vabilom";
 $SendMessageInvitation = "Ste preprièani, da želite odposlati ta vabila?";
+$MessageTool = "Sporoèila";
+$SendMessage = "Pošlji sporoèilo";
+$WriteToMessage = "Sestavi sporoèilo";
+$AlreadyReadMessage = "Sporoèilo je že bilo prebrano";
+$UnReadMessage = "Neprebrano sporoèilo";
+$MessageSent = "Sporoèilo je bilo poslano";
 ?>

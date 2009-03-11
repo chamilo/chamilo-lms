@@ -32,4 +32,7 @@ $SendMessageInvitation = "Ste prepričani, da želite odposlati ta vabila ?";
 $MessageTool = "Sporočila";
 $SendMessage = "Pošlji sporočilo";
 $WriteToMessage = "Sestavi sporočilo";
+$AlreadyReadMessage = "Sporočilo je že bilo prebrano";
+$UnReadMessage = "Neprebrana sporočila";
+$MessageSent = "Sporočilo je bilo poslano";
 ?>

@@ -929,4 +929,5 @@ $UsersUnsubscribedFromBecauseVisualCode = "los usuarios desuscritos de los  sigu
 $FilterUsers = "Filtro de usuarios";
 $SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Varios cursos se suscribieron a la sesión a causa de un código duplicado de curso";
 $CoachIsRequired = "Debe seleccionar un tutor";
+$EncryptMethodUserPass = "Método de encriptación";
 ?>

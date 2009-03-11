@@ -129,4 +129,5 @@ $NoResultsAvailable = "Rezultati niso na voljo";
 $CannotChangeTheMaxNote = "Ne morem spremeniti vrednosti max";
 $GradebookWeightUpdated = "Uteži so bile uspešno ažurirane";
 $ChooseItem = "Izberi element";
+$AverageResultsVSResource = "Povpreèen rezultat / vir";
 ?>

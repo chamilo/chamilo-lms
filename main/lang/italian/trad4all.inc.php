@@ -694,4 +694,5 @@ $ThereIsNotUnqualifiedLearners = "Non ci sono corsisti senza valutazione";
 $SocialNetwork = "Rete di contatti";
 $BackToOutbox = "Ritorna ai messaggi in uscita";
 $Invitation = "Invito";
+$SeeMoreOptions = "Altre opzioni";
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: document.php 18969 2009-03-11 18:03:02Z aportugal $
+<?php // $Id: document.php 18976 2009-03-11 22:17:03Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -631,7 +631,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		{
 			$perm = api_get_setting('permissions_for_new_directories');
 			$perm = octdec(!empty($perm)?$perm:'0770');
-			mkdir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/',$perm);
+			$res = @mkdir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/',$perm);
 		}
 		
 		// upload the file

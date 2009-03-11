@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 18815 2009-03-05 21:51:42Z juliomontoya $
+<?php // $Id: user_list.php 18964 2009-03-11 17:20:00Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -16,7 +16,42 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 require_once (api_get_path(LIBRARY_PATH).'security.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+function load_course_list (div_course,my_user_id) {
+	 $.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {
+		$("div#"+div_course).html("../img/anim-loader.gif"); },
+		type: "POST",
+		url: "course_user_list.php",
+		data: "user_id="+my_user_id,
+		success: function(datos) {
+			$("div#"+div_course).html(datos);
+			$("div#div_"+my_user_id).attr("class","blackboard_show");
+			$("div#div_"+my_user_id).attr("style","");
+		}
+	});		
+}
+function clear_course_list (div_course) {
+	$("div#"+div_course).html("&nbsp;");
+	$("div#"+div_course).hide("slow");	
+}
+</script>';
+$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
+.blackboard_show {
+	float:left;
+	position:absolute;
+	border:1px solid black;
+	width: 200px;
+	background-color:white;
+	z-index:99; padding: 3px;
+	display: inline;
+}
+.blackboard_hide {
+	display: none;
+}	
+';
 // xajax
 $xajax = new xajax();
 $xajax->registerFunction('courses_of_user');
@@ -86,32 +121,14 @@ function empty_courses_of_user($arg)
 
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '		<style>
-		.tooltipLinkInner { 
-			position:relative;
-			float:left;
-			color:blue;
-			text-decoration:none;												
-		}
-		
-		/* fix for ie6 */
-		#tooltip .toolbox a:hover {
-			background:transparent;
-		}
-		
-		#tooltip .toolbox a:hover span {
-		 /* display: block! important;*/
-		  color: black;
-		  position: absolute;
-		}
-		
-		.tooltipInner {
-			margin:7px;
-			font-size:8pt;
-			float:right;
-		}
-		
-		</style>';
+$htmlHeadXtra[] = '<style>
+.tooltipLinkInner { 
+	position:relative;
+	float:left;
+	color:blue;
+	text-decoration:none;												
+}
+</style>';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);	
@@ -395,13 +412,11 @@ function modify_filter($user_id,$url_params,$row)
 	global $charset;
 	global $_user;
 
-	$result .= '<span id="tooltip">
-				<span class="toolbox">
-				<a class="tooltipLinkInner" href="#">
-				<img src="../img/course.gif" id="coursesofuser'.$user_id.'" onmouseout="document.getElementById(\'user'.$user_id.'\').style.display=\'none\';return false;" onclick="xajax_courses_of_user('.$user_id.');return false;" style="vertical-align:middle;"/>
-				<span id="user'.$user_id.'" style="margin-left: -100px; border:1px solid black; width: 200px; background-color:white; z-index:99; padding: 3px; display: none; margin-right:inherit;">
-				<div style="text-align:center;">'.Display::return_icon('anim-loader.gif', '', array('height' => '20')).'</div>
-				</span></a></span></span>&nbsp;&nbsp';
+	$result .= '<a  href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')">
+				<img onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" onmouseout="clear_course_list (\'div_'.$user_id.'\')" src="../img/course.gif" />
+				<div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
+				</a>&nbsp;&nbsp;';
+				
 	if (api_is_platform_admin()) {
 		$result .= '<a href="user_information.php?user_id='.$user_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
 	}

@@ -1883,7 +1883,7 @@ class CourseManager
 		$course_list=array();
 		$tbl_course			 = Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-		$sql='SELECT c.code,c.db_name FROM '.$tbl_course.' c inner join '.$tbl_course_rel_user.' cru on c.code=cru.course_code  WHERE cru.user_id='.$user_id;
+		$sql='SELECT c.code,c.db_name,c.title FROM '.$tbl_course.' c inner join '.$tbl_course_rel_user.' cru on c.code=cru.course_code  WHERE cru.user_id='.$user_id;
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 		while ($row=Database::fetch_array($result,'ASSOC')) {
 			$course_list[]=$row;			

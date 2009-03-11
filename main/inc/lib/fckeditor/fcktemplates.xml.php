@@ -86,16 +86,19 @@ function s2($var)
  * @version March 2009
  * @since Dokeos 1.8.6
  */
-function load_platform_templates()
-{
+function load_platform_templates() {
 	// Database table definition
 	$table_template = Database::get_main_table('system_template');	
 	
 	$sql = "SELECT * FROM $table_template";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	while ($row = Database::fetch_array($result))
-	{
-		echo '	<Template title="'.$row['title'].'" image="'.api_get_path(WEB_PATH).'home/default_platform_document/'.$row['image'].'">
+	while ($row = Database::fetch_array($result)) {
+        if (!empty($row['image'])) {
+            $image = api_get_path(WEB_PATH).'home/default_platform_document/'.$row['image'];
+        } else {
+            $image = api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/noimage.gif';
+        }
+		echo '	<Template title="'.$row['title'].'" image="'.$image.'">
 					<Description>'.$row['Description'].'</Description>
 					<Html>
 						<![CDATA[
@@ -116,8 +119,7 @@ function load_platform_templates()
  * @version March 2009
  * @since Dokeos 1.8.6 The code already existed but not in a function and a lot less performant. 
  */
-function load_personal_templates($user_id=0)
-{
+function load_personal_templates($user_id=0) {
 	global $_course; 
 
 	// the templates that the user has defined are only available inside the course itself

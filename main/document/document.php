@@ -1,4 +1,4 @@
-<?php // $Id: document.php 18961 2009-03-11 14:05:12Z pcool $
+<?php // $Id: document.php 18968 2009-03-11 17:59:58Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -899,7 +899,7 @@ $table->set_header($column++,get_lang('Date'));
 //admins get an edit column
 if ($is_allowed_to_edit || $group_member_with_upload_rights)
 {
-	$table->set_header($column++,'',false);
+	$table->set_header($column++,get_lang('Modify'),false);
 }
 
 //actions on multiple selected documents

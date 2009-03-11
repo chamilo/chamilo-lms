@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 18964 2009-03-11 17:20:00Z iflorespaz $
+<?php // $Id: user_list.php 18965 2009-03-11 17:38:46Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -35,7 +35,7 @@ function load_course_list (div_course,my_user_id) {
 }
 function clear_course_list (div_course) {
 	$("div#"+div_course).html("&nbsp;");
-	$("div#"+div_course).hide("slow");	
+	$("div#"+div_course).hide("");	
 }
 </script>';
 $htmlHeadXtra[] = '<style type="text/css" media="screen, projection">

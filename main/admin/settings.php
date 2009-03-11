@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 18264 2009-02-05 21:23:18Z juliomontoya $
+<?php // $Id: settings.php 18955 2009-03-11 10:45:48Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -335,6 +335,9 @@ if (isset ($_GET['category']))
         case 'Search' :
             handle_search();
             break;
+		case 'Templates' :
+			handle_templates();
+			break;            
 		default :
 			$form->display();
 	}
@@ -557,7 +560,7 @@ function handle_stylesheets()
 	$allowed_file_types = array ('css');
 	$form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
 	$form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
-	$form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Ok'));
+	$form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Ok'), array('class'=>'save'));
 	if( $form->validate() AND is_writable(api_get_path(SYS_CODE_PATH).'css/'))
 	{
 		$values = $form->exportValues();
@@ -840,4 +843,284 @@ function handle_search() {
     }
 }
 
+/**
+ * wrapper for the templates
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version August 2008
+ * @since Dokeos 1.8.6
+ */
+function handle_templates()
+{
+	if ($_GET['action'] == 'add' OR ( $_GET['action'] == 'edit' AND is_numeric($_GET['id'])))
+	{
+		add_edit_template();
+	}
+	else 
+	{
+		if ($_GET['action'] == 'delete' and is_numeric($_GET['id']))
+		{
+			delete_template($_GET['id']);
+		}
+		echo '<a href="settings.php?category=Templates&amp;action=add">'.get_lang('AddTemplate').'</a>';
+		display_templates();
+	}
+}
+
+/**
+ * Display a sortable table with all the templates that the platform administrator has defined.
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version August 2008
+ * @since Dokeos 1.8.6
+ */
+function display_templates()
+{
+	$table = new SortableTable('templates', 'get_number_of_templates', 'get_template_data',1);
+	$table->set_additional_parameters(array('category'=>$_GET['category']));
+	$table->set_header(0, get_lang('Image'));
+	$table->set_header(1, get_lang('Title'));
+	$table->set_header(2, get_lang('Actions'));	
+	$table->set_column_filter(2,'actions_filter');
+	$table->set_column_filter(0,'image_filter');
+	$table->display();	
+}
+
+/**
+ * Get the number of templates that are defined by the platform admin. 
+ *
+ * @return integer 
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version August 2008
+ * @since Dokeos 1.8.6
+ */
+function get_number_of_templates()
+{
+	// Database table definition
+	$table_system_template = Database :: get_main_table('system_template');
+	
+	// The sql statement
+	$sql = "SELECT COUNT(id) AS total FROM $table_system_template";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$row = Database::fetch_array($result);
+	
+	// returning the number of templates
+	return $row['total'];
+}
+
+/**
+ * Get all the template data for the sortable table
+ *
+ * @param integer $from the start of the limit statement
+ * @param integer $number_of_items the number of elements that have to be retrieved from the database
+ * @param integer $column the column that is 
+ * @param string $direction the sorting direction (ASC or DESCà
+ * @return array 
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version August 2008
+ * @since Dokeos 1.8.6
+ */
+function get_template_data($from, $number_of_items, $column, $direction)
+{
+	// Database table definition
+	$table_system_template = Database :: get_main_table('system_template');
+	
+	// the sql statement
+	$sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
+	$sql .= " ORDER BY col$column $direction ";
+	$sql .= " LIMIT $from,$number_of_items";	
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	while ($row = Database::fetch_array($result))
+	{
+		$return[]=$row;
+	}
+	
+	// returning all the information for the sortable table
+	return $return;
+}
+
+/**
+ * display the edit and delete icons in the sortable table
+ *
+ * @param integer $id the id of the template
+ * @return html code for the link to edit and delete the template
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version August 2008
+ * @since Dokeos 1.8.6
+ */
+function actions_filter($id)
+{
+	$return .= '<a href="settings.php?category=Templates&amp;action=edit&amp;id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.gif').'</a>';
+	$return .= '<a href="settings.php?category=Templates&amp;action=delete&amp;id='.Security::remove_XSS($id).'" onclick="javascript:if(!confirm('."'".get_lang("ConfirmYourChoice")."'".')) return false;">'.Display::return_icon('delete.gif').'</a>';
+	return $return;
+}
+
+/**
+ * Display the image of the template in the sortable table
+ *
+ * @param string $image the image
+ * @return html code for the image
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version August 2008
+ * @since Dokeos 1.8.6
+ */
+function image_filter($image)
+{
+	return '<img src="'.api_get_path(WEB_PATH).'home/'.$image.'" alt="'.$image.'"/>';
+}
+
+/**
+ * Add (or edit) a template. This function displays the form and also takes care of uploading the image and storing the information in the database
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version August 2008
+ * @since Dokeos 1.8.6
+ */
+function add_edit_template()
+{
+	// initiate the object
+	$form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.$_GET['action'].'&id='.$_GET['id']);
+	
+	// settting the form elements: the header
+	if ($_GET['action'] == 'add')
+	{
+		$title = get_lang('AddTemplate');
+	}
+	else 
+	{
+		$title = get_lang('EditTemplate');
+	}
+	$form->addElement('header', '', $title);
+	
+	// settting the form elements: the title of the template
+	$form->add_textfield('title', get_lang('Title'), false);
+	
+	// settting the form elements: the content of the template (wysiwyg editor)
+	$form->addElement('html_editor', 'template_text', get_lang('Text'));
+	
+	// settting the form elements: the form to upload an image to be used with the template
+	$form->addElement('file','template_image',get_lang('Image'),'');
+	
+	// settting the form elements: a little bit information about the template image
+	$form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
+	
+	// getting all the information of the template when editing a template 
+	if ($_GET['action'] == 'edit')
+	{
+		// Database table definition		
+		$table_system_template = Database :: get_main_table('system_template');
+		$sql = "SELECT * FROM $table_system_template WHERE id = '".Database::escape_string($_GET['id'])."'";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$row = Database::fetch_array($result);
+		
+		$defaults['template_id'] 	= $_GET['id'];
+		$defaults['template_text'] 	= $row['content'];
+		$defaults['title'] 			= $row['title'];
+		
+		// adding an extra field: a hidden field with the id of the template we are editing
+		$form->addElement('hidden','template_id');
+		
+		// adding an extrra field: a preview of the image that is currently used
+		$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/'.$row['image'].'" alt="'.$row['image'].'"/>');
+		
+		// setting the information of the template that we are editing 
+		$form->setDefaults($defaults);
+	}	
+		// settting the form elements: the submit button
+	$form->addElement('submit', 'submit', get_lang('Ok'));
+	
+	// setting the rules: the required fields
+	$form->addRule('title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
+	$form->addRule('template_text', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
+	
+	// if the form validates (complies to all rules) we save the information, else we display the form again (with error message if needed)
+	if( $form->validate() )
+	{
+		// exporting the values
+		$values = $form->exportValues();
+		
+		// upload the file
+		if (!empty($_FILES['template_image']['name']))
+		{
+			include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+			$upload_ok = process_uploaded_file($_FILES['template_image']);
+			
+			if ($upload_ok)
+			{
+				// Try to add an extension to the file if it hasn't one
+				$new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);	
+				
+				// upload dir
+				$upload_dir = api_get_path(SYS_PATH).'home/';
+				
+				// move the uploaded file to the home folder
+				$result= @move_uploaded_file($_FILES['template_image']['tmp_name'], $upload_dir.$new_file_name);
+			}
+	   }
+	   
+	   // store the information in the database (as insert or as update)
+	   $table_system_template = Database :: get_main_table('system_template');
+	   if ($_GET['action'] == 'add')
+	   {
+		   	$sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".Database::escape_string($values['template_text'])."','".Database::escape_string($new_file_name)."')";
+		   	$result = api_sql_query($sql, __FILE__, __LINE__);
+		   	
+		   	// display a feedback message
+		   	Display::display_confirmation_message('TemplateAdded');
+	   }
+	   else 
+	   {
+		   	$sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."',
+											   		  content = '".Database::escape_string($values['template_text'])."'";
+		   	if (!empty($new_file_name))
+		   	{
+		   		$sql .= ", image = '".Database::escape_string($new_file_name)."'";
+		   	}
+		   	$sql .= " WHERE id='".Database::escape_string($_GET['id'])."'";
+		   	$result = api_sql_query($sql, __FILE__, __LINE__);
+		   	
+		   	// display a feedback message
+		   	Display::display_confirmation_message('TemplateEdited');		   	
+	   }
+	   display_templates();
+	}
+	else 
+	{
+		// display the form
+		$form->display();		
+	}
+}
+
+/**
+ * Delete a template
+ *
+ * @param integer $id the id of the template that has to be deleted
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @version August 2008
+ * @since Dokeos 1.8.6
+ */
+function delete_template($id)
+{
+	// first we remove the image
+	$table_system_template = Database :: get_main_table('system_template');
+	$sql = "SELECT * FROM $table_system_template WHERE id = '".Database::escape_string($id)."'";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$row = Database::fetch_array($result);	
+	if (!empty($row['image']))
+	{
+		unlink(api_get_path(SYS_PATH).'home/'.$row['image']);
+	}
+	
+	// now we remove it from the database
+	$sql = "DELETE FROM $table_system_template WHERE id = '".Database::escape_string($id)."'";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	
+	// display a feedback message
+	Display::display_confirmation_message('TemplateDeleted');
+}
 ?>

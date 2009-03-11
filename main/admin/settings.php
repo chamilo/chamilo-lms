@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 18974 2009-03-11 20:54:14Z herodoto $
+<?php // $Id: settings.php 18977 2009-03-11 22:18:44Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -921,7 +921,7 @@ function get_number_of_templates()
  * @param integer $from the start of the limit statement
  * @param integer $number_of_items the number of elements that have to be retrieved from the database
  * @param integer $column the column that is 
- * @param string $direction the sorting direction (ASC or DESCà
+ * @param string $direction the sorting direction (ASC or DESCï¿½
  * @return array 
  * 
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
@@ -1062,7 +1062,12 @@ function add_edit_template()
 				
 				// upload dir
 				$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/';
-				
+				// create dir if not exists
+                if (!is_dir($upload_dir)) {
+                    $perm = api_get_setting('permissions_for_new_directories');
+                    $perm = octdec(!empty($perm)?$perm:'0770');
+                	$res = @mkdir($upload_dir,$perm);
+                }
 				// move the uploaded file to the home folder
 				$result= @move_uploaded_file($_FILES['template_image']['tmp_name'], $upload_dir.$new_file_name);
 			}

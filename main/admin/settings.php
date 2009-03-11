@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 18977 2009-03-11 22:18:44Z yannoo $
+<?php // $Id: settings.php 18981 2009-03-11 23:42:46Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -884,9 +884,9 @@ function display_templates()
 {
 	$table = new SortableTable('templates', 'get_number_of_templates', 'get_template_data',1);
 	$table->set_additional_parameters(array('category'=>$_GET['category']));
-	$table->set_header(0, get_lang('Image'));
+	$table->set_header(0, get_lang('Image'), true, array ('style' => 'width:101px;'));
 	$table->set_header(1, get_lang('Title'));
-	$table->set_header(2, get_lang('Actions'));	
+	$table->set_header(2, get_lang('Actions'), false, array ('style' => 'width:30px;'));	
 	$table->set_column_filter(2,'actions_filter');
 	$table->set_column_filter(0,'image_filter');
 	$table->display();	
@@ -1062,14 +1062,43 @@ function add_edit_template()
 				
 				// upload dir
 				$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/';
+				
 				// create dir if not exists
                 if (!is_dir($upload_dir)) {
                     $perm = api_get_setting('permissions_for_new_directories');
                     $perm = octdec(!empty($perm)?$perm:'0770');
                 	$res = @mkdir($upload_dir,$perm);
                 }
-				// move the uploaded file to the home folder
-				$result= @move_uploaded_file($_FILES['template_image']['tmp_name'], $upload_dir.$new_file_name);
+				
+				// resize image to max default and upload
+				require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
+				$temp = new image($_FILES['template_image']['tmp_name']);	
+				$picture_infos=getimagesize($_FILES['template_image']['tmp_name']);
+				
+				$max_width_for_picture = 100;
+				
+				if ($picture_infos[0]>$max_width_for_picture)
+				{		
+					$thumbwidth = $max_width_for_picture;
+					if (empty($thumbwidth) or $thumbwidth==0) {
+					  $thumbwidth=$max_width_for_picture;
+					}
+					$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+					
+					$temp->resize($thumbwidth,$new_height,0);
+				}
+				
+				$type=$picture_infos[2];
+						  
+				switch (!empty($type))
+				{
+					case 2 : $temp->send_image('JPG',$upload_dir.$new_file_name);							 
+							 break;
+					case 3 : $temp->send_image('PNG',$upload_dir.$new_file_name);							
+							 break;
+					case 1 : $temp->send_image('GIF',$upload_dir.$new_file_name);							 
+							 break;
+				}
 			}
 	   }
 	   

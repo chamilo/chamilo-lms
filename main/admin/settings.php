@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 18955 2009-03-11 10:45:48Z pcool $
+<?php // $Id: settings.php 18974 2009-03-11 20:54:14Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -53,6 +53,7 @@ require_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
+$_SESSION['this_section'] = $this_section;
 
 // Access restrictions
 api_protect_admin_script();
@@ -73,6 +74,11 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 
 // setting the name of the tool
 $tool_name = get_lang('DokeosConfigSettings');
+
+// setting for templates
+$fck_attribute['ToolbarSet'] = "AdminTemplates";
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
 
 // Build the form
 if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search')))
@@ -953,8 +959,8 @@ function get_template_data($from, $number_of_items, $column, $direction)
  */
 function actions_filter($id)
 {
-	$return .= '<a href="settings.php?category=Templates&amp;action=edit&amp;id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.gif').'</a>';
-	$return .= '<a href="settings.php?category=Templates&amp;action=delete&amp;id='.Security::remove_XSS($id).'" onclick="javascript:if(!confirm('."'".get_lang("ConfirmYourChoice")."'".')) return false;">'.Display::return_icon('delete.gif').'</a>';
+	$return .= '<a href="settings.php?category=Templates&amp;action=edit&amp;id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+	$return .= '<a href="settings.php?category=Templates&amp;action=delete&amp;id='.Security::remove_XSS($id).'" onclick="javascript:if(!confirm('."'".get_lang("ConfirmYourChoice")."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	return $return;
 }
 
@@ -970,7 +976,7 @@ function actions_filter($id)
  */
 function image_filter($image)
 {
-	return '<img src="'.api_get_path(WEB_PATH).'home/'.$image.'" alt="'.$image.'"/>';
+	return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/'.$image.'" alt="'.$image.'"/>';
 }
 
 /**
@@ -1025,7 +1031,7 @@ function add_edit_template()
 		$form->addElement('hidden','template_id');
 		
 		// adding an extrra field: a preview of the image that is currently used
-		$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/'.$row['image'].'" alt="'.$row['image'].'"/>');
+		$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/'.$row['image'].'" alt="'.$row['image'].'"/>');
 		
 		// setting the information of the template that we are editing 
 		$form->setDefaults($defaults);
@@ -1055,7 +1061,7 @@ function add_edit_template()
 				$new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);	
 				
 				// upload dir
-				$upload_dir = api_get_path(SYS_PATH).'home/';
+				$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/';
 				
 				// move the uploaded file to the home folder
 				$result= @move_uploaded_file($_FILES['template_image']['tmp_name'], $upload_dir.$new_file_name);
@@ -1113,7 +1119,7 @@ function delete_template($id)
 	$row = Database::fetch_array($result);	
 	if (!empty($row['image']))
 	{
-		unlink(api_get_path(SYS_PATH).'home/'.$row['image']);
+		unlink(api_get_path(SYS_PATH).'home/default_platform_document/'.$row['image']);
 	}
 	
 	// now we remove it from the database

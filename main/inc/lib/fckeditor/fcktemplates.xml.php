@@ -95,7 +95,7 @@ function load_platform_templates()
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result))
 	{
-		echo '	<Template title="'.$row['title'].'" image="'.api_get_path(WEB_PATH).'home/'.$row['image'].'">
+		echo '	<Template title="'.$row['title'].'" image="'.api_get_path(WEB_PATH).'home/default_platform_document/'.$row['image'].'">
 					<Description>'.$row['Description'].'</Description>
 					<Html>
 						<![CDATA[

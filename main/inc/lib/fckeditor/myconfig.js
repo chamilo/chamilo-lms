@@ -88,6 +88,18 @@ FCKConfig.ToolbarSets["GlobalAgenda"] = [
 	['Source']
 ] ;
 
+//Admin Templates
+FCKConfig.ToolbarSets["AdminTemplates"] = [
+	['NewPage','Templates','Save','Print','PageBreak','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
+	['Link','Unlink','Anchor'],
+	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+	['Table','CreateDiv','Rule','Smiley','SpecialChar','googlemaps'],
+	['FontFormat','FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Source']
+] ;
+
 //FAQ
 FCKConfig.ToolbarSets["FAQ"] = [
 	['FitWindow','Link','Image','Flash','Rule','FontSize','Bold','Italic','OrderedList','UnorderedList','TextColor','Source']

@@ -1811,8 +1811,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 	$row_item = Database::fetch_array($res_item);
 	
 	$type = strtolower($row_item['item_type']);
-	$id = $row_item['path'];
-	
+	$id = (strcmp($row_item['path'],'')==0) ? '0' : $row_item['path'];
 	$origin='learnpath';
 	$main_dir_path = api_get_path(WEB_CODE_PATH);
 	$main_course_path = api_get_path(WEB_COURSE_PATH).$_course['directory'].'/';

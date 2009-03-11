@@ -1,4 +1,4 @@
-<?php // $Id: document.php 18706 2009-02-26 15:53:50Z cfasanando $
+<?php // $Id: document.php 18961 2009-03-11 14:05:12Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -602,17 +602,20 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$document_id_for_template = intval($_GET['add_as_template']);
 		
 		//create the form that asks for the directory name
-		$new_folder_text = '<form name="set_document_as_new_template" action="'.api_get_self().'?add_as_template='.$document_id_for_template.'" method="post">';
-		$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'" />';
-		$new_folder_text .= '<table><tr><td>';
-		$new_folder_text .= get_lang('TemplateName').' : </td>';
-		$new_folder_text .= '<td><input type="text" name="template_title" /></td></tr>';
-		$new_folder_text .= '<tr><td>'.get_lang('TemplateDescription').' : </td>';
-		$new_folder_text .= '<td><textarea name="template_description"></textarea></td></tr></table>';
-		$new_folder_text .= '<button type="submit" name="create_template">'.get_lang('Ok').'</button>';
-		$new_folder_text .= '</form>';
+		$template_text = '<form name="set_document_as_new_template" enctype="multipart/form-data" action="'.api_get_self().'?add_as_template='.$document_id_for_template.'" method="post">';
+		$template_text .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'" />';
+		$template_text .= '<table><tr><td>';
+		$template_text .= get_lang('TemplateName').' : </td>';
+		$template_text .= '<td><input type="text" name="template_title" /></td></tr>';
+		$template_text .= '<tr><td>'.get_lang('TemplateDescription').' : </td>';
+		$template_text .= '<td><textarea name="template_description"></textarea></td></tr>';
+		$template_text .= '<tr><td>'.get_lang('TemplateImage').' : </td>';
+		$template_text .= '<td><input type="file" name="template_image" id="template_image" /></td></tr>';
+		$template_text .= '</table>';
+		$template_text .= '<button type="submit" name="create_template">'.get_lang('Ok').'</button>';
+		$template_text .= '</form>';
 		//show the form
-		Display::display_normal_message($new_folder_text,false);		
+		Display::display_normal_message($template_text,false);		
 	}	
 	elseif(isset($_GET['add_as_template']) && isset($_POST['create_template']))
 	{		
@@ -623,12 +626,33 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$course_code = api_get_course_id();
 		$user_id = api_get_user_id();
 		
-		if(!is_dir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'))
+		// create the template_thumbnails folder in the upload folder (if needed)
+		if(!is_file(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'))
 		{
 			mkdir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/',0777);
 		}
 		
-		DocumentManager::set_document_as_template($title, $description, $document_id_for_template, $course_code, $user_id);		
+		// upload the file
+		if (!empty($_FILES['template_image']['name']))
+		{
+			echo 'uploading';
+			include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+			$upload_ok = process_uploaded_file($_FILES['template_image']);
+			
+			if ($upload_ok)
+			{
+				// Try to add an extension to the file if it hasn't one
+				$new_file_name = $_course['sysCode'].'-'.add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);	
+				
+				// upload dir
+				$upload_dir = api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/';
+				
+				// move the uploaded file to the home folder
+				$result= @move_uploaded_file($_FILES['template_image']['tmp_name'], $upload_dir.$new_file_name);
+			}
+	   }	
+		
+		DocumentManager::set_document_as_template($title, $description, $document_id_for_template, $course_code, $user_id, $new_file_name);		
 		Display::display_confirmation_message(get_lang('DocumentSetAsTemplate'));		
 	}
 		

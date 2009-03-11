@@ -988,21 +988,24 @@ class DocumentManager
 	 * @param string $couse_code
 	 * @param int $user_id
 	 */
-	function set_document_as_template($title, $description, $document_id_for_template, $couse_code, $user_id){
-		
+	function set_document_as_template($title, $description, $document_id_for_template, $couse_code, $user_id, $image)
+	{
+		// Database table definition
 		$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
 		
-		$title = Database::escape_string($title);
-		$description = Database::escape_string($description);
-		$document_id_for_template = Database::escape_string($document_id_for_template);
-		$couse_code = Database::escape_string($couse_code);
-		$user_id = Database::escape_string($user_id);
-		
-		$sql = 'INSERT INTO '.$table_template.'(title, description, course_code, user_id, ref_doc)
-				VALUES ("'.$title.'", "'.$description.'", "'.$couse_code.'", "'.$user_id.'", "'.$document_id_for_template.'")';
-		
+		// creating the sql statement	
+		$sql = "INSERT INTO ".$table_template."
+					(title, description, course_code, user_id, ref_doc, image)
+				VALUES (
+					'".Database::escape_string($title)."',
+					'".Database::escape_string($description)."',
+					'".Database::escape_string($couse_code)."',
+					'".Database::escape_string($user_id)."',
+					'".Database::escape_string($document_id_for_template)."',
+					'".Database::escape_string($image)."')";		
 		api_sql_query($sql);
 		
+		return true;
 	}
 	
 	

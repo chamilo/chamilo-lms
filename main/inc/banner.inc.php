@@ -135,7 +135,7 @@ if ( api_is_allowed_to_edit() ) {
 	// Show help
 	?>
 	<li>|
-	<a href="#" onclick="MyWindow=window.open('<?php echo api_get_path(WEB_CODE_PATH)."help/help.php"; ?>?open=<?php echo $help; ?>','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=500,height=600,left=200,top=20'); return false;">
+	<a href="#" onclick="MyWindow=window.open('<?php echo api_get_path(WEB_CODE_PATH)."help/help.php"; ?>?open=<?php echo $help; ?>','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=620,height=600,left=200,top=20'); return false;">
 	<img src="<?php echo api_get_path(WEB_CODE_PATH); ?>img/khelpcenter.gif" style="vertical-align: middle;" alt="<?php echo get_lang("Help") ?>"/>&nbsp;<?php echo get_lang("Help") ?></li></a>
 
 	<?php

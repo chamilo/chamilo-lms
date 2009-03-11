@@ -88,6 +88,11 @@ FCKConfig.ToolbarSets["GlobalAgenda"] = [
 	['Source']
 ] ;
 
+//FAQ
+FCKConfig.ToolbarSets["FAQ"] = [
+	['FitWindow','Link','Image','Flash','Rule','FontSize','Bold','Italic','OrderedList','UnorderedList','TextColor','Source']
+];
+
 ///// users tools /////
 
 //My Profile (Optional fields)

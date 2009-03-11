@@ -69,6 +69,18 @@ if(api_get_setting('stylesheets')<>'')
 <h4>
 <?php 
 echo get_lang('Faq'); 
+
+/*
+-----------------------------------------------------------
+	FAQ configuration settings
+-----------------------------------------------------------
+*/
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '300';
+$fck_attribute['ToolbarSet'] = 'FAQ';
+//
+
 if(api_is_platform_admin())
 {
 	echo '&nbsp;<a href="faq.php?edit=true"><img src="'.api_get_path(WEB_IMG_PATH).'edit.gif" /></a>';

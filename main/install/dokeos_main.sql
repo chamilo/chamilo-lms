@@ -979,6 +979,7 @@ CREATE TABLE templates (
   course_code varchar(40) NOT NULL,
   user_id int NOT NULL,
   ref_doc int NOT NULL,
+  image varchar(250) NOT NULL,
   PRIMARY KEY  (id)
 );
 

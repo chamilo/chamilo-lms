@@ -106,9 +106,12 @@ class FlatViewTable extends SortableTable
 			// the graph id
 			$gradebook_id = Security::remove_XSS($_GET['selectcat']);			
 			$graph_id = api_get_user_id().'AverageResultsVsResource'.$gradebook_id.api_get_course_id();
-				
+			$data = $DataSet->GetData();
+		
+			
 			if ($show_draw) {				
 				if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
+				//if (0) {
 					//if we already created the img
 					//echo 'in cache';
 					$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());			
@@ -118,8 +121,14 @@ class FlatViewTable extends SortableTable
 					// Initialise the graph  
 					$Test = new pChart(760,360); 
 				
+					//which schema of color will be used
+					$quant_resources = count($data[0])-1;					
 					// Adding the color schemma
-					$Test->loadColorPalette(api_get_path(LIBRARY_PATH)."pchart/palette/default.txt");
+					if ($quant_resources < 8) {
+						$Test->loadColorPalette(api_get_path(LIBRARY_PATH)."pchart/palette/reduced.txt");	
+					} else {
+						$Test->loadColorPalette(api_get_path(LIBRARY_PATH)."pchart/palette/default.txt");
+					}					
 					
 					// set font of the axes 
 					$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",8);  
@@ -319,6 +328,8 @@ class FlatViewTable extends SortableTable
 						$i++;					
 					}
 				} //end foreach
+			} else {
+				echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
 			}
 			// Pie charts
 			/*	

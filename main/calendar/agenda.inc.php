@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 18692 2009-02-25 15:27:48Z juliomontoya $
+<?php //$Id: agenda.inc.php 18979 2009-03-11 22:43:40Z cfasanando $
 
 /*
 ==============================================================================
@@ -2527,6 +2527,16 @@ function show_add_form($id = '')
 ?>
 
 <!-- START OF THE FORM  -->
+
+
+<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="frm_import_ical">
+<input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
+<div style="text-align:right;width:80%">
+<label for="ical_import"><?php echo get_lang('ICalFileImport');?></label>
+<input type="file" name="ical_import"/><button class="save" type="submit" name="ical_submit" value="<?php echo get_lang('Import');?>"><?php echo get_lang('Import');?></button>
+</div>
+</form>
+
 <form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
 <input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
 <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
@@ -2538,11 +2548,7 @@ function show_add_form($id = '')
 	<tr class="title">
 		<td colspan="2" align="left">
 		<span style="font-weight: bold;"><?php echo (isset($id) AND $id<>'')?get_lang('ModifyCalendarItem'):get_lang("AddCalendarItem"); ?></span>
-		</td>
-        <td colspan="2" align="right">
-        <label for="ical_import"><?php echo get_lang('ICalFileImport');?></label>
-        <input type="file" name="ical_import"/><button class="save" type="submit" name="ical_submit"><?php echo get_lang('Import');?></button>
-        </td>
+		</td>        
 	</tr>
 
 	<!--  the select specific users / send to all form -->

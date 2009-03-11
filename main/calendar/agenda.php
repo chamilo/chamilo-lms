@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 18457 2009-02-11 23:13:18Z herodoto $
+<?php //$Id: agenda.php 18979 2009-03-11 22:43:40Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -310,8 +310,11 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		case "add":			
             if(isset($_POST['ical_submit']))
             {
-                $course_info = api_get_course_info();                
-                if ($_FILES['ical_import']['type']=='text/calendar') {
+                $course_info = api_get_course_info(); 
+                $ical_name = $_FILES['ical_import']['name'];
+                $ical_type = $_FILES['ical_import']['type'];
+                $ext = substr($ical_name,(strrpos($ical_name,".")+1));                              
+                if ($ical_type === 'text/calendar' || $ext === 'ics') {
                 agenda_import_ical($course_info,$_FILES['ical_import']);
                 } else {
                 	Display::display_error_message(get_lang('IsNotiCalFormatFile'));

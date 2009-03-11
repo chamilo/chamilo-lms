@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 18965 2009-03-11 17:38:46Z iflorespaz $
+<?php // $Id: user_list.php 18966 2009-03-11 17:51:22Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -22,7 +22,7 @@ function load_course_list (div_course,my_user_id) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("div#"+div_course).html("../img/anim-loader.gif"); },
+		$("div#"+div_course).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
 		url: "course_user_list.php",
 		data: "user_id="+my_user_id,

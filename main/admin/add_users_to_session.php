@@ -112,7 +112,7 @@ function search_users($needle)
 		$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
 				WHERE (username LIKE "'.$needle.'%"
 				OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%")
+				OR lastname LIKE "'.$needle.'%") AND user_id<>2 
 				ORDER BY lastname, firstname, username
 				LIMIT 11';
 				
@@ -125,7 +125,7 @@ function search_users($needle)
 				INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 				WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
 				OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%")
+				OR lastname LIKE "'.$needle.'%") AND user_id<>2 
 				ORDER BY lastname, firstname, username
 				LIMIT 11';				
 				
@@ -249,7 +249,7 @@ if ($ajax_search) {
 				ON $tbl_session_rel_user.id_user = $tbl_user.user_id
 				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
 			ORDER BY lastname,firstname,username";
-	
+
 	if ($_configuration['multiple_access_urls']==true) {		
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
 		$access_url_id = api_get_current_access_url_id();
@@ -269,6 +269,7 @@ if ($ajax_search) {
 	foreach ($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
 	}
+
 } else {
 		//Filter by Extra Fields
 		$use_extra_fields = false;		
@@ -286,7 +287,6 @@ if ($ajax_search) {
 				}									
 			}
 		}	
-		
 		if ($use_extra_fields) {
 			$final_result = array();
 			if (count($extra_field_result)>1) {
@@ -332,7 +332,6 @@ if ($ajax_search) {
 				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session' 
 				ORDER BY lastname,firstname,username";
 		}			
-		
 		if ($_configuration['multiple_access_urls']==true) {		
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
 			$access_url_id = api_get_current_access_url_id();
@@ -354,7 +353,11 @@ if ($ajax_search) {
 			if($user['id_session'] != $id_session)			
 				$nosessionUsersList[$user['user_id']] = $user ;
 		}
-		
+		foreach($nosessionUsersList as $key_user_list =>$value_user_list) {
+			if ($nosessionUsersList[$key_user_list]['user_id']==2) {
+				unset($nosessionUsersList[$key_user_list]);
+			}
+		}
 		//filling the correct users in list
 		$sql="SELECT  user_id, lastname, firstname, username, id_session
 			FROM $tbl_user u
@@ -377,7 +380,13 @@ if ($ajax_search) {
 		}		
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
 	$Users=api_store_result($result);
-	//var_dump($_REQUEST['id_session']);
+
+	foreach($Users as $key_user_list =>$value_user_list) {
+		if ($Users[$key_user_list]['user_id']==2) {
+			unset($Users[$key_user_list]);
+			}
+		}
+		
 	foreach ($Users as $user) {
 		if($user['id_session'] == $id_session){
 			$sessionUsersList[$user['user_id']] = $user;

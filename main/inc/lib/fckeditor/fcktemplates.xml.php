@@ -182,7 +182,7 @@ function load_hardcoded_templates()
 ?>
 
         	
-	<Template title="<?php echo s('TemplateTitleCourseTitle'); ?>" >
+	<Template title="<?php echo s('TemplateTitleCourseTitle'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/coursetitle.gif'; ?>">
     <Description><?php echo s('TemplateTitleCourseTitleDescription'); ?></Description>
     <Html>
         <![CDATA[
@@ -224,7 +224,7 @@ function load_hardcoded_templates()
     </Html>
 	</Template>	
      
-	<Template title="<?php echo s('TemplateTitleCheckList'); ?>" >
+	<Template title="<?php echo s('TemplateTitleCheckList'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/checklist.gif'; ?>">
 	<Description><?php echo s('TemplateTitleCheckListDescription'); ?></Description>
 	<Html>
 	    <![CDATA[
@@ -274,7 +274,7 @@ function load_hardcoded_templates()
 	    ]]>
 	</Html>
 	</Template>
-    <Template title="<?php echo s('TemplateTitleTeacher'); ?>" >
+    <Template title="<?php echo s('TemplateTitleTeacher'); ?>"  image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/yourinstructor.gif'; ?>">
 	<Description><?php echo s('TemplateTitleTeacherDescription'); ?></Description>
 	<Html>
 		<![CDATA[
@@ -315,7 +315,7 @@ function load_hardcoded_templates()
 	</Html>
 </Template>
      
-	<Template title="<?php echo s('TemplateTitleLeftList'); ?>" >
+	<Template title="<?php echo s('TemplateTitleLeftList'); ?>"   image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/leftlist.gif'; ?>">
 	<Description><?php echo s('TemplateTitleListLeftListDescription'); ?></Description>
 	<Html>
 	<![CDATA[
@@ -357,7 +357,7 @@ function load_hardcoded_templates()
 	</Html>
 	</Template>
 	
-	<Template title="<?php echo s('TemplateTitleLeftRightList'); ?>" >
+	<Template title="<?php echo s('TemplateTitleLeftRightList'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/leftrightlist.gif'; ?>" >
 	<Description><?php echo s('TemplateTitleLeftRightListDescription'); ?></Description>
 	<Html>
 	<![CDATA[
@@ -410,7 +410,7 @@ function load_hardcoded_templates()
 	</Html>
 	</Template>
 	
-	<Template title="<?php echo s('TemplateTitleRightList'); ?>" >
+	<Template title="<?php echo s('TemplateTitleRightList'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/rightlist.gif'; ?>" >
 	<Description><?php echo s('TemplateTitleRightListDescription'); ?></Description>
 	<Html>
 	<![CDATA[
@@ -453,7 +453,7 @@ function load_hardcoded_templates()
 	</Html>
 	</Template>
     
-	<Template title="<?php echo s('TemplateTitleComparison'); ?>" >
+	<Template title="<?php echo s('TemplateTitleComparison'); ?>"  image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/compare.gif'; ?>">
 	<Description><?php echo s('TemplateTitleComparisonDescription'); ?></Description>
 	<Html>
 		<![CDATA[
@@ -483,7 +483,7 @@ function load_hardcoded_templates()
 </Template>
 	
 	
-	<Template title="<?php echo s('TemplateTitleDiagram'); ?>" >
+	<Template title="<?php echo s('TemplateTitleDiagram'); ?>"  image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/diagram.gif'; ?>">
 		<Description><?php echo s('TemplateTitleDiagramDescription'); ?></Description>
 		<Html>
 			<![CDATA[
@@ -521,7 +521,7 @@ function load_hardcoded_templates()
 	</Template>
 	
 	
-	<Template title="<?php echo s('TemplateTitleDesc'); ?>">
+	<Template title="<?php echo s('TemplateTitleDesc'); ?>"  image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/description.gif'; ?>">
 		<Description><?php echo s('TemplateTitleDescDescription'); ?></Description>
 		<Html>
 			<![CDATA[
@@ -553,7 +553,7 @@ function load_hardcoded_templates()
 	</Template>
 	
 	
-	<Template title="<?php echo s('TemplateTitleObjectives'); ?>">
+	<Template title="<?php echo s('TemplateTitleObjectives'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/courseobjectives.gif'; ?>">
 		<Description><?php echo s('TemplateTitleObjectivesDescription'); ?></Description>
 		<Html>
 			<![CDATA[
@@ -596,7 +596,7 @@ function load_hardcoded_templates()
 		</Html>
 	</Template>
 	
-	<Template title="<?php echo s('TemplateTitleCycle'); ?>">
+	<Template title="<?php echo s('TemplateTitleCycle'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/cyclechart.gif'; ?>">
 		<Description><?php echo s('TemplateTitleCycleDescription'); ?></Description>
 		<Html>
 			<![CDATA[
@@ -665,7 +665,7 @@ function load_hardcoded_templates()
 		</Html>
 	</Template>
 
-	<Template title="<?php echo s('TemplateTitleLearnerWonder'); ?>">
+	<Template title="<?php echo s('TemplateTitleLearnerWonder'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/learnerwonder.gif'; ?>">
 	<Description><?php echo s('TemplateTitleLearnerWonderDescription'); ?></Description>
 	<Html>
 		<![CDATA[
@@ -715,7 +715,7 @@ function load_hardcoded_templates()
 
 
 
-	<Template title="<?php echo s('TemplateTitleTimeline'); ?>">
+	<Template title="<?php echo s('TemplateTitleTimeline'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/phasetimeline.gif'; ?>">
 	<Description><?php echo s('TemplateTitleTimelineDescription'); ?></Description>
 	<Html>
 		<![CDATA[
@@ -786,7 +786,7 @@ function load_hardcoded_templates()
 
 
 
-	<Template title="<?php echo s('TemplateTitleStopAndThink'); ?>">
+	<Template title="<?php echo s('TemplateTitleStopAndThink'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/stopthink.gif'; ?>">
 	<Description><?php echo s('TemplateTitleStopAndThinkDescription'); ?></Description>
 	<Html>
 		<![CDATA[
@@ -825,7 +825,7 @@ function load_hardcoded_templates()
 
 
 
-<Template title="<?php echo s('TemplateTitleTable'); ?>" >
+<Template title="<?php echo s('TemplateTitleTable'); ?>"  image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/table.gif'; ?>">
 	<Description><?php echo s('TemplateTitleTableDescription'); ?></Description>
 	<Html>
 		<![CDATA[
@@ -897,7 +897,7 @@ function load_hardcoded_templates()
 
 
 
-<Template title="<?php echo s('TemplateTitleAudio'); ?>" >
+<Template title="<?php echo s('TemplateTitleAudio'); ?>"  image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/audiocomment.gif'; ?>">
 	<Description><?php echo s('TemplateTitleAudioDescription'); ?></Description>
 	<Html>
 		<![CDATA[
@@ -935,7 +935,7 @@ function load_hardcoded_templates()
 	</Html>
 </Template>
 
-<Template title="<?php echo s('TemplateTitleVideo'); ?>">
+<Template title="<?php echo s('TemplateTitleVideo'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/video.gif'; ?>">
 	<Description><?php echo s('TemplateTitleVideoDescription'); ?></Description>
 	<Html>
 		<![CDATA[
@@ -1008,7 +1008,7 @@ s1.addVariable("repeat","false");
 		]]>
 	</Html>
 </Template>
-<Template title="<?php echo s('TemplateTitleFlash'); ?>">
+<Template title="<?php echo s('TemplateTitleFlash'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/flash.gif'; ?>">
 	<Description><?php echo s('TemplateTitleFlashDescription'); ?></Description>
 	<Html>
 		<![CDATA[
@@ -1040,7 +1040,7 @@ s1.addVariable("repeat","false");
 function load_empty_template()
 {
 	?>
-<Template title="<?php echo s('Empty'); ?>" >
+<Template title="<?php echo s('Empty'); ?>" image="<?php echo api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/empty.gif'; ?>">
     <Description></Description>
     <Html>
         <![CDATA[

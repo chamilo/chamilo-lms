@@ -525,10 +525,8 @@ if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($u
 	if ($form->validate()) 
 	{
 		$user_data = $form->exportValues();
-		if (is_array($user_data))
-		{
-			if (count($user_data)>0)
-			{
+		if (is_array($user_data)) {
+			if (count($user_data)>0) {
 				$extras = array ();
 				// build SQL query
 				$sql = "UPDATE $table_user SET";
@@ -546,8 +544,10 @@ if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($u
 				$sql .= " WHERE user_id  = '" . $user_id . "'";
 				api_sql_query($sql, __FILE__, __LINE__);
 				//update the extra fields
-				foreach ($extras as $key => $value) {
-					$myres = UserManager :: update_extra_field_value($user_id, $key, $value);
+				if (is_array($extras)) {
+					foreach ($extras as $key => $value) {
+						$myres = UserManager :: update_extra_field_value($user_id, $key, $value);
+					}
 				}
 				echo '<div id="survey_content" class="survey_content">' . get_lang('InformationUpdated') . ' ' . get_lang('PleaseFillSurvey') . '</div>';
 			}

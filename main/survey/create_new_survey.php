@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 18287 2009-02-06 16:23:12Z ndieschburg $
+* 	@version $Id: create_new_survey.php 19000 2009-03-12 15:48:07Z juliomontoya $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -136,7 +136,7 @@ else
 }
 
 // initiate the object
-$form = new FormValidator('survey', 'post', api_get_self().'?action='.$_GET['action'].'&survey_id='.$_GET['survey_id']);
+$form = new FormValidator('survey', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']));
 
 // settting the form elements
 if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET['survey_id']))
@@ -151,9 +151,11 @@ if ($_GET['action'] == 'edit') {
 } 
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '100';
+$fck_attribute['Height'] = '120';
 $fck_attribute['ToolbarSet'] = 'Survey';
 $form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'));
+$fck_attribute['Config']['ToolbarStartExpanded']='false';
+$fck_attribute['Height'] = '100';
 $form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'));
 $lang_array = api_get_languages();
 foreach ($lang_array['name'] as $key=>$value)
@@ -169,7 +171,7 @@ $form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form
 /** TODO maybe it is better to change this into false instead see line 95 in survey.lib.php */
 //$group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('No'),0);
 
-$fck_attribute['Height'] = '200';
+$fck_attribute['Height'] = '150';
 //$form->addGroup($group, 'survey_share', get_lang('ShareSurvey'), '&nbsp;');
 $form->addElement('checkbox', 'anonymous', get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'));

@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 18887 2009-03-09 19:58:32Z iflorespaz $
+<?php // $Id: whoisonline.php 19007 2009-03-12 19:29:05Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -163,7 +163,7 @@ function display_user_list($user_list, $_plugins)
 			}
 			
 			if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
-				if ($user_info['user_id'] != api_get_user_id()) {
+				if ($user_info['user_id'] != api_get_user_id() && !api_is_anonymous($user_info['user_id'])) {
 					$user_relation=UserFriend::get_relation_between_contacts(api_get_user_id(),$user_info['user_id']);
 					if ($user_relation==0 || $user_relation==6) {
 						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SearchContacts').'"><img src="main/img/addd.gif"></a>';	

@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 18925 2009-03-10 14:09:33Z ndieschburg $
+* 	@version $Id: survey.lib.php 19004 2009-03-12 18:04:08Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -64,29 +64,34 @@ class survey_manager
 
 		$sql = "SELECT * FROM $table_survey WHERE survey_id='".Database::escape_string($survey_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$return = Database::fetch_array($result,'ASSOC');
-
-		// we do this (temporarily) to have the array match the quickform elements immediately
-		// idealiter the fields in the db match the quickform fields
-		$return['survey_code'] 			= $return['code'];
-		$return['survey_title'] 		= $return['title'];
-		$return['survey_subtitle'] 		= $return['subtitle'];
-		$return['survey_language'] 		= $return['lang'];
-		$return['start_date'] 			= $return['avail_from'];
-		$return['end_date'] 			= $return['avail_till'];
-		$return['survey_share'] 		= $return['is_shared'];
-		$return['survey_introduction'] 	= $return['intro'];
-		$return['survey_thanks'] 		= $return['surveythanks'];
-		$return['survey_type'] 		    = $return['survey_type'];
-		$return['one_question_per_page']= $return['one_question_per_page'];
+		$return = array();
 		
-		$return['show_form_profile']	= $return['show_form_profile'];
-		$return['input_name_list']		= $return['input_name_list'];
-		
-		$return['shuffle'] 		= $return['shuffle'];
-		$return['parent_id'] 		= $return['parent_id'];
-		$return['survey_version'] 		= $return['survey_version'];
-		return $return;
+		if (Database::num_rows($result)> 0) {
+			$return = Database::fetch_array($result,'ASSOC');
+			// we do this (temporarily) to have the array match the quickform elements immediately
+			// idealiter the fields in the db match the quickform fields
+			$return['survey_code'] 			= $return['code'];
+			$return['survey_title'] 		= $return['title'];
+			$return['survey_subtitle'] 		= $return['subtitle'];
+			$return['survey_language'] 		= $return['lang'];
+			$return['start_date'] 			= $return['avail_from'];
+			$return['end_date'] 			= $return['avail_till'];
+			$return['survey_share'] 		= $return['is_shared'];
+			$return['survey_introduction'] 	= $return['intro'];
+			$return['survey_thanks'] 		= $return['surveythanks'];
+			$return['survey_type'] 		    = $return['survey_type'];
+			$return['one_question_per_page']= $return['one_question_per_page'];
+			
+			$return['show_form_profile']	= $return['show_form_profile'];
+			$return['input_name_list']		= $return['input_name_list'];
+			
+			$return['shuffle'] 		= $return['shuffle'];
+			$return['parent_id'] 		= $return['parent_id'];
+			$return['survey_version'] 		= $return['survey_version'];
+			return $return;
+		} else {
+			return $return;
+		}
 	}
 
 	/**

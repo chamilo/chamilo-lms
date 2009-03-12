@@ -55,24 +55,41 @@ $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION);
 
+$tool_name = get_lang('SurveyInvitations');
+
+
 // getting the survey information
-$survey_data = survey_manager::get_survey($_GET['survey_id']);
-$urlname =substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
-if (strlen(strip_tags($survey_data['title'])) > 40)
+// We exit here if ther is no valid $_GET parameter
+if (!isset($_GET['survey_id']) OR !is_numeric($_GET['survey_id']))
 {
+	Display :: display_header($tool_name);
+	Display :: display_error_message(get_lang('InvallidSurvey'), false);
+	Display :: display_footer();
+	exit;
+}
+$survey_id = Security::remove_XSS($_GET['survey_id']);
+$survey_data = survey_manager::get_survey($survey_id);
+if (empty($survey_data)) {
+	Display :: display_header($tool_name);
+	Display :: display_error_message(get_lang('InvallidSurvey'), false);
+	Display :: display_footer();
+	exit;
+}
+$urlname =strip_tags(substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
+if (strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
 }
 
-// breadcrumbs
+//breadcrumbs
 $interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$_GET['survey_id'], 'name' => $urlname);
-$tool_name = get_lang('SurveyInvitations');
+$interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$survey_id, 'name' => $urlname);
+
 
 // Displaying the header
 Display::display_header($tool_name);
 
 // Checking the parameters
-if (!is_numeric($_GET['survey_id']))
+if (!is_numeric($survey_id))
 {
 	Display::display_error_message(get_lang('Error'), false);
 	Display::display_footer();
@@ -80,7 +97,7 @@ if (!is_numeric($_GET['survey_id']))
 }
 
 // Getting all the people who have filled this survey
-$answered_data = survey_manager::get_people_who_filled_survey($_GET['survey_id']);
+$answered_data = survey_manager::get_people_who_filled_survey($survey_id);
 if ($survey_data['anonymous'] == 1)
 {
 	Display::display_normal_message(get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count($answered_data).' '.get_lang('PeopleAnswered'));
@@ -94,7 +111,7 @@ if (!isset($_GET['view']) OR $_GET['view'] == 'invited')
 }
 else
 {
-	echo '	<a href="'.api_get_self().'?survey_id='.(int)$_GET['survey_id'].'&amp;view=invited">'.get_lang('ViewInvited').'</a> |';
+	echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=invited">'.get_lang('ViewInvited').'</a> |';
 }
 if ($_GET['view'] == 'answered')
 {
@@ -102,7 +119,7 @@ if ($_GET['view'] == 'answered')
 }
 else
 {
-	echo '	<a href="'.api_get_self().'?survey_id='.(int)$_GET['survey_id'].'&amp;view=answered">'.get_lang('ViewAnswered').'</a> |';
+	echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=answered">'.get_lang('ViewAnswered').'</a> |';
 }
 if ($_GET['view'] == 'unanswered')
 {
@@ -110,7 +127,7 @@ if ($_GET['view'] == 'unanswered')
 }
 else
 {
-	echo '	<a href="'.api_get_self().'?survey_id='.(int)$_GET['survey_id'].'&amp;view=unanswered">'.get_lang('ViewUnanswered').'</a>';
+	echo '	<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;view=unanswered">'.get_lang('ViewUnanswered').'</a>';
 }
 
 // table header
@@ -142,7 +159,7 @@ while ($row = mysql_fetch_assoc($res))
 		echo '	<td>';
 		if (in_array($row['user'], $answered_data))
 		{
-			echo '<a href="reporting.php?action=userreport&amp;survey_id='.$_GET['survey_id'].'&amp;user='.$row['user'].'">'.get_lang('ViewAnswers').'</a>';
+			echo '<a href="reporting.php?action=userreport&amp;survey_id='.$survey_id.'&amp;user='.$row['user'].'">'.get_lang('ViewAnswers').'</a>';
 		}
 		else
 		{

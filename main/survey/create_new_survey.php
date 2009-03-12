@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 19000 2009-03-12 15:48:07Z juliomontoya $
+* 	@version $Id: create_new_survey.php 19004 2009-03-12 18:04:08Z juliomontoya $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -82,11 +82,11 @@ if (!api_is_allowed_to_edit())
 }
 
 // getting the survey information
-$survey_data = survey_manager::get_survey($_GET['survey_id']);
-$urlname =substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
+$survey_id  = Security::remove_XSS($_GET['survey_id']);
+$survey_data = survey_manager::get_survey($survey_id);
 
-if (strlen(strip_tags($survey_data['title'])) > 40)
-{
+$urlname =strip_tags(substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
+if (strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
 }
 
@@ -96,18 +96,18 @@ if ($_GET['action'] == 'add')
 	$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
 	$tool_name = get_lang('CreateNewSurvey');
 }
-if ($_GET['action'] == 'edit' && is_numeric($_GET['survey_id']))
+if ($_GET['action'] == 'edit' && is_numeric($survey_id))
 {
 	$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
-	$interbreadcrumb[] = array ("url" => "survey.php?survey_id=".$_GET['survey_id'], "name" => $urlname);
+	$interbreadcrumb[] = array ("url" => "survey.php?survey_id=".$survey_id, "name" => strip_tags($urlname));
 	$tool_name = get_lang('EditSurvey');
 }
 
 // getting the default values
-if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET['survey_id']))
+if ($_GET['action'] == 'edit' AND isset($survey_id) AND is_numeric($survey_id))
 {
 	$defaults = $survey_data;
-	$defaults['survey_id'] = $_GET['survey_id'];
+	$defaults['survey_id'] = $survey_id;
 	/*
 	$defaults['survey_share'] = array();
 	$defaults['survey_share']['survey_share'] = $survey_data['survey_share'];
@@ -136,10 +136,10 @@ else
 }
 
 // initiate the object
-$form = new FormValidator('survey', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']));
+$form = new FormValidator('survey', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id);
 
 // settting the form elements
-if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET['survey_id']))
+if ($_GET['action'] == 'edit' AND isset($survey_id) AND is_numeric($survey_id))
 {
 	$form->addElement('hidden', 'survey_id');
 }
@@ -151,7 +151,7 @@ if ($_GET['action'] == 'edit') {
 } 
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '120';
+$fck_attribute['Height'] = '200';
 $fck_attribute['ToolbarSet'] = 'Survey';
 $form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'));
 $fck_attribute['Config']['ToolbarStartExpanded']='false';
@@ -171,7 +171,7 @@ $form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form
 /** TODO maybe it is better to change this into false instead see line 95 in survey.lib.php */
 //$group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('No'),0);
 
-$fck_attribute['Height'] = '150';
+$fck_attribute['Height'] = '130';
 //$form->addGroup($group, 'survey_share', get_lang('ShareSurvey'), '&nbsp;');
 $form->addElement('checkbox', 'anonymous', get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'));
@@ -210,7 +210,7 @@ if ($survey_data['survey_type']==1 || $_GET['action'] == 'add' )
 	$form->addElement('checkbox', 'shuffle', get_lang('ActivateShuffle'));
 }
 
-if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($_GET['survey_id']) )
+if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id) )
 {	
 	if ($survey_data['anonymous']==0  ) {
 		// Aditional Parameters
@@ -312,25 +312,18 @@ if( $form->validate() )
 	{
 		// displaying a feedback message
    		Display::display_confirmation_message($return['message'], false);
-	}
-	else
-	{
+	} else {
    		// redirecting to the survey page (whilst showing the return message
    		header('location:survey.php?survey_id='.$return['id'].'&message='.$return['message']);
 	}
-}
-else
-{
+} else {
 	// Displaying the header
 	Display::display_header($tool_name);
-
 	// Displaying the tool title
 	//api_display_tool_title($tool_name);
-
 	// display the form
 	$form->display();
 }
-
 // Footer
 Display :: display_footer();
 ?>

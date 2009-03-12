@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2008 Dokeos SPRL
+	Copyright (c) 2009 Dokeos SPRL
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-*   @author Julio Montoya Dokeos: cleanup, refactoring
+*   @author Julio Montoya Dokeos: cleanup, refactoring, security improvements
 * 	@version $Id: survey_invite.php 10680 2007-01-11 21:26:23Z pcool $
 *
 * 	@todo checking if the additional emails are valid (or add a rule for this)
@@ -62,8 +62,17 @@ $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 
 // getting the survey information
-$survey_data = survey_manager::get_survey($_GET['survey_id']);
-$urlname =substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
+$survey_id = Security::remove_XSS($_GET['survey_id']);
+$survey_data = survey_manager::get_survey($survey_id);
+if (empty($survey_data)) {
+	Display :: display_header(get_lang('Survey'));
+	Display :: display_error_message(get_lang('InvallidSurvey'), false);
+	Display :: display_footer();
+	exit;
+}
+
+
+$urlname =strip_tags(substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
 if (strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$urlname .= '...';
@@ -72,9 +81,9 @@ if (strlen(strip_tags($survey_data['title'])) > 40)
 // breadcrumbs
 $interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
 if (api_is_course_admin()) {
-    $interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$_GET['survey_id'], 'name' => $urlname);
+    $interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$survey_id, 'name' => $urlname);
 } else {
-    $interbreadcrumb[] = array ('url' => 'survey_invite.php?survey_id='.$_GET['survey_id'], 'name' => $urlname);    
+    $interbreadcrumb[] = array ('url' => 'survey_invite.php?survey_id='.$survey_id, 'name' => $urlname);    
 }
 $tool_name = get_lang('SurveyPublication');
 
@@ -101,7 +110,7 @@ if ($survey_data['invited'] > 0)
 }
 
 // building the form for publishing the survey
-$form = new FormValidator('publish_form','post', api_get_self().'?survey_id='.$_GET['survey_id']);
+$form = new FormValidator('publish_form','post', api_get_self().'?survey_id='.$survey_id);
 // Course users
 $complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session'], '', 'ORDER BY lastname');
 $possible_users = array ();
@@ -196,7 +205,6 @@ else
 	$defaults['mail_title'] = $survey_data['mail_subject'];
 	$defaults['send_mail'] = 1;	
 	$form->setDefaults($defaults);
-
 	$form->display();
 }
 

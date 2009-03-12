@@ -1,4 +1,4 @@
-<?php // $Id: reporting.php 17927 2009-01-22 09:06:25Z pcool $
+<?php // $Id: reporting.php 19004 2009-03-12 18:04:08Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,7 +26,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 17927 2009-01-22 09:06:25Z pcool $
+* 	@version $Id: reporting.php 19004 2009-03-12 18:04:08Z juliomontoya $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -38,6 +38,9 @@ $language_file = 'survey';
 require ('../inc/global.inc.php');
 require_once('survey.lib.php');
 
+$survey_id = Security::remove_XSS($_GET['survey_id']);
+
+
 // export
 /**
  * @todo use export_table_csv($data, $filename = 'export')
@@ -47,17 +50,17 @@ if ($_POST['export_report'])
 	switch($_POST['export_format'])
 	{
 		case 'xls':
-			$survey_data = survey_manager::get_survey($_GET['survey_id']);
-			$filename = 'survey_results_'.$_GET['survey_id'].'.xls';
+			$survey_data = survey_manager::get_survey($survey_id);
+			$filename = 'survey_results_'.$survey_id.'.xls';
 			$data = SurveyUtil::export_complete_report_xls($filename, $_GET['user_id']);
 			exit;
 			break;
 		case 'csv':
 		default:
-			$survey_data = survey_manager::get_survey($_GET['survey_id']);
+			$survey_data = survey_manager::get_survey($survey_id);
 			$data = SurveyUtil::export_complete_report($_GET['user_id']);
 			//$filename = 'fileexport.csv';
-			$filename = 'survey_results_'.$_GET['survey_id'].'.csv';
+			$filename = 'survey_results_'.$survey_id.'.csv';
 
 			header('Content-type: application/octet-stream');
 			header('Content-Type: application/force-download');
@@ -78,7 +81,6 @@ if ($_POST['export_report'])
 			}
 			header('Content-Description: '.$filename);
 			header('Content-transfer-encoding: binary');
-
 			echo $data;
 			exit;
 			break;
@@ -110,8 +112,15 @@ $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 
 // getting the survey information
-$survey_data = survey_manager::get_survey($_GET['survey_id']);
-$urlname = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
+
+$survey_data = survey_manager::get_survey($survey_id);
+if (empty($survey_data)) {
+	Display :: display_header(get_lang('Survey'));
+	Display :: display_error_message(get_lang('InvallidSurvey'), false);
+	Display :: display_footer();
+	exit;
+}
+$urlname = strip_tags(substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
 if (strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$urlname .= '...';
@@ -119,14 +128,14 @@ if (strlen(strip_tags($survey_data['title'])) > 40)
 
 // breadcrumbs
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
-$interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$_GET['survey_id'], 'name' => $urlname);
+$interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$survey_id, 'name' => $urlname);
 if (!$_GET['action'] OR $_GET['action'] == 'overview')
 {
 	$tool_name = get_lang('Reporting');
 }
 else
 {
-	$interbreadcrumb[] = array ("url" => "reporting.php?survey_id=".$_GET['survey_id'], "name" => get_lang('Reporting'));
+	$interbreadcrumb[] = array ("url" => "reporting.php?survey_id=".$survey_id, "name" => get_lang('Reporting'));
 	switch ($_GET['action'])
 	{
 		case 'questionreport':
@@ -149,9 +158,8 @@ Display::display_header($tool_name,'Survey');
 
 // Action handling
 SurveyUtil::handle_reporting_actions();
-if (!$_GET['action'] OR $_GET['action'] == 'overview')
-{
-	$myweb_survey_id = Security::remove_XSS($_GET['survey_id']);
+if (!$_GET['action'] OR $_GET['action'] == 'overview') {
+	$myweb_survey_id = $survey_id;
 	echo '<div class="sectiontitle"><a href="reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('DetailedReportByQuestion').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByQuestionDetail').' </div>';
 	echo '<div class="sectiontitle"><a href="reporting.php?action=userreport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('DetailedReportByUser').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByUserDetail').'.</div>';
 	echo '<div class="sectiontitle"><a href="reporting.php?action=comparativereport&amp;survey_id='.$myweb_survey_id.'">'.get_lang('ComparativeReport').'</a></div><div class="sectioncomment">'.get_lang('ComparativeReportDetail').'.</div>';

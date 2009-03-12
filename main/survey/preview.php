@@ -47,31 +47,38 @@ $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
 // We exit here if ther is no valid $_GET parameter
-if (!isset($_GET['survey_id']) OR !is_numeric($_GET['survey_id']))
-{
-	Display :: display_header();
+if (!isset($_GET['survey_id']) OR !is_numeric($_GET['survey_id'])){
+	Display :: display_header(get_lang('SurveyPreview'));
 	Display :: display_error_message(get_lang('InvallidSurvey'), false);
 	Display :: display_footer();
 	exit;
 }
 
+
 // getting the survey information
-$survey_data = survey_manager::get_survey($_GET['survey_id']);
-$urlname = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
-if (strlen(strip_tags($survey_data['title'])) > 40)
-{
+$survey_id = Security::remove_XSS($_GET['survey_id']);
+$survey_data = survey_manager::get_survey($survey_id);
+if (empty($survey_data)) {
+	Display :: display_header(get_lang('SurveyPreview'));
+	Display :: display_error_message(get_lang('InvallidSurvey'), false);
+	Display :: display_footer();
+	exit;
+}
+
+$urlname = strip_tags(substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
+if (strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
 }
 
 // breadcrumbs
 $interbreadcrumb[] = array ("url" => 'survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array ("url" => "survey.php?survey_id=".$_GET['survey_id'], "name" => $urlname);
+$interbreadcrumb[] = array ("url" => "survey.php?survey_id=".$survey_id, "name" => $urlname);
 
 // Header
 Display :: display_header(get_lang('SurveyPreview'));
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
-SurveyUtil::check_first_last_question($_GET['survey_id'], false);
+SurveyUtil::check_first_last_question($survey_id, false);
 
 // only a course admin is allowed to preview a survey: you are NOT a course admin => error message
 if (!api_is_allowed_to_edit(false,true))
@@ -107,7 +114,7 @@ else
 		$questions_displayed = array();
 		$counter = 0;
 		$sql = "SELECT * FROM $table_survey_question
-				WHERE survey_id = '".Database::escape_string($_GET['survey_id'])."'
+			WHERE survey_id = '".Database::escape_string($survey_id)."'
 				ORDER BY sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
@@ -130,7 +137,7 @@ else
 					FROM $table_survey_question survey_question
 					LEFT JOIN $table_survey_question_option survey_question_option
 					ON survey_question.question_id = survey_question_option.question_id
-					WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
+					WHERE survey_question.survey_id = '".Database::escape_string($survey_id)."'
 					AND survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).")
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
@@ -162,7 +169,7 @@ else
 		}
 	}
 	// selecting the maximum number of pages
-	$sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($_GET['survey_id'])."'";
+	$sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($survey_id)."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$numberofpages = Database::num_rows($result) + 1;
 	// Displaying the form with the questions
@@ -174,7 +181,7 @@ else
 	{
 		$show = 0;
 	}
-	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.Security::remove_XSS($_GET['survey_id']).'&show='.$show.'">';
+	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.Security::remove_XSS($survey_id).'&show='.$show.'">';
 	if(is_array($questions) && count($questions)>0)
 	{
 		foreach ($questions as $key=>$question)
@@ -185,7 +192,7 @@ else
 	}
 	if (($show < $numberofpages) OR !$_GET['show'])
 	{
-		//echo '<a href="'.api_get_self().'?survey_id='.$_GET['survey_id'].'&amp;show='.$limit.'">NEXT</a>';
+		//echo '<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;show='.$limit.'">NEXT</a>';
 		echo '<br /><button type="submit" name="next_survey_page">'.get_lang('Next').' >>  </button>';
 	}
 	if ($show >= $numberofpages AND $_GET['show'])

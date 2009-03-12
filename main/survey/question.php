@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 18472 2009-02-12 18:00:38Z juliomontoya $
+* 	@version $Id: question.php 19004 2009-03-12 18:04:08Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -45,7 +45,6 @@ if (!api_is_allowed_to_edit(false,true)) {
 }
 
 // Database table definitions
-/** @todo use database constants for the survey tables */
 $table_survey 					= Database :: get_course_table(TABLE_SURVEY);
 $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -54,6 +53,14 @@ $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
+if (empty($survey_data)) {
+	Display :: display_header(get_lang('Survey'));
+	Display :: display_error_message(get_lang('InvallidSurvey'), false);
+	Display :: display_footer();
+	exit;
+}
+
+
 $urlname = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
 if (strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
@@ -70,7 +77,7 @@ if($survey_data['survey_type']==1) {
 
 // breadcrumbs
 $interbreadcrumb[] = array ("url" => 'survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array ("url" => 'survey.php?survey_id='.$_GET['survey_id'], 'name' => $urlname);
+$interbreadcrumb[] = array ("url" => 'survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']), 'name' => strip_tags($urlname));
 
 // Tool name
 if ($_GET['action'] == 'add') {

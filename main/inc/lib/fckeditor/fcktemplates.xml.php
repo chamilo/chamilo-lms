@@ -24,6 +24,9 @@ $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
 // start the templates node
 echo '<Templates imagesBasePath="">';
 
+// load empty template
+load_empty_template();
+
 // load the templates that were defined by the platform admin
 load_platform_templates();
 
@@ -178,18 +181,8 @@ function load_hardcoded_templates()
 	global $default_course_dir;
 ?>
 
-<Template title="<?php echo s('Empty'); ?>" >
-    <Description></Description>
-    <Html>
-        <![CDATA[
-        	<head>
-            	<?php echo $css ?>
-            </head>
-        ]]>    
-    </Html>
-</Template>
         	
-<Template title="<?php echo s('TemplateTitleCourseTitle'); ?>" >
+	<Template title="<?php echo s('TemplateTitleCourseTitle'); ?>" >
     <Description><?php echo s('TemplateTitleCourseTitleDescription'); ?></Description>
     <Html>
         <![CDATA[
@@ -229,7 +222,7 @@ function load_hardcoded_templates()
 			</body>
         ]]>
     </Html>
-</Template>
+	</Template>	
      
 	<Template title="<?php echo s('TemplateTitleCheckList'); ?>" >
 	<Description><?php echo s('TemplateTitleCheckListDescription'); ?></Description>
@@ -1042,6 +1035,21 @@ s1.addVariable("repeat","false");
 		]]>
 	</Html>
 </Template>	
+<?php
+}
+function load_empty_template()
+{
+	?>
+<Template title="<?php echo s('Empty'); ?>" >
+    <Description></Description>
+    <Html>
+        <![CDATA[
+        	<head>
+            	<?php echo $css ?>
+            </head>
+        ]]>    
+    </Html>
+</Template>
 <?php
 }
 ?>

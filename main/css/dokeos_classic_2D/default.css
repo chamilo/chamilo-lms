@@ -2487,7 +2487,16 @@ input.forms	{
 	padding:2px;
 	margin-bottom: 5px;
 	vertical-align:middle;
+	float:left;
+	width:100%;
 }
+.actionsbig a  { 
+	float:left; 
+	padding-left:12px;
+	padding-right:12px; 
+	text-align:center;	
+}
+
 .actions img {
 	vertical-align:middle;
 }

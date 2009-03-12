@@ -70,5 +70,5 @@ $ImagesUploaded = "Uploaded images";
 $ExtraInformation = "Extra information";
 $SearchContacts = "Search contacts";
 $SocialSeeContacts = "See contacts";
-$SocialUserInformationAttach = "Write to message before to send request";
+$SocialUserInformationAttach = "Please write a message before sending the request";
 ?>

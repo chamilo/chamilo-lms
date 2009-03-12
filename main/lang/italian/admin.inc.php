@@ -930,4 +930,7 @@ $FilterUsers = "Filtro sugli utenti";
 $SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Diversi corsi sono stati associati alla sessione (i corsi condividono il titolo)";
 $CoachIsRequired = "Devi selezionare un tutor";
 $EncryptMethodUserPass = "Sistema crittografico";
+$AddTemplate = "Aggiungi un modello";
+$TemplateImageComment100x70 = "L\'immagine raffigura il modello nell\'elenco dei modelli. La dimensione massima dev\'essere 100x70 pixel";
+$TemplateAdded = "Modello aggiunto";
 ?>

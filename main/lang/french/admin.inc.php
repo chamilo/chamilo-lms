@@ -928,4 +928,11 @@ $UsersSubscribedToBecauseVisualCode = "Les utilisateurs ont été inscrits à plusi
 $UsersUnsubscribedFromBecauseVisualCode = "Les utilisateurs ont été désinscrits de plusieurs cours car plusieurs cours partagent le même code visuel";
 $FilterUsers = "Filtrer utilisateurs";
 $SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Plusieurs cours ont été inscrits dans la session à cause d\'un code cours dupliqué";
+$CoachIsRequired = "Veuillez sélectionner un coach";
+$EncryptMethodUserPass = "Méthode d\'encryption";
+$AddTemplate = "Ajouter un modèle";
+$TemplateImageComment100x70 = "Cette image représentera le modèle dans la liste de modèles. Elle ne devrait pas dépasser les 100x70 pixels";
+$TemplateAdded = "Modèle ajouté";
+$TemplateDeleted = "Modèle supprimé";
+$EditTemplate = "Édition du modèle";
 ?>

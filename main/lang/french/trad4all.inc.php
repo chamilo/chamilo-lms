@@ -694,4 +694,5 @@ $ThereIsNotUnqualifiedLearners = "Il n\'y a pas d\'apprenant à coter";
 $SocialNetwork = "Réseau social";
 $BackToOutbox = "Retour aux messages envoyés";
 $Invitation = "Invitation";
+$SeeMoreOptions = "Voir plus d\'options";
 ?>

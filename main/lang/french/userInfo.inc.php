@@ -62,4 +62,13 @@ $AlterPersonalData = "Éditer détails";
 $Invites = "Mes invitations";
 $ContactsGroups = "Groupes de contacts";
 $ErrorSendingMessage = "Une erreur est survenue lors de l\'envoi du message";
+$PendingInvitations = "Invitations en attente";
+$MyInbox = "Boîte de réception";
+$ViewSharedProfile = "Voir profil partagé";
+$SeeAll = "Voir tous";
+$ImagesUploaded = "Images envoyées";
+$ExtraInformation = "Information extra";
+$SearchContacts = "Rechercher parmi les contacts";
+$SocialSeeContacts = "Voir les contacts";
+$SocialUserInformationAttach = "Veuillez écrire un message avant d\'envoyer la requête";
 ?>

@@ -113,4 +113,5 @@ $DokeosArtLicense = "Les images et galeries de média dans Dokeos utilisent des i
 $PleasGoBackToStep1 = "Veuillez retourner à l\'étape 1";
 $OptionalParameters = "Paramètres optionnels ";
 $FailedConectionDatabase = "La connexion à la base de données a échoué. Ceci est généralement dû à une mauvaise configuration de l\'utilisateur, du mot de passe ou du préfixe de base de données indiqués ci-dessus. Veuillez les réviser attentivement et essayer à nouveau.";
+$EncryptMethodUserPass = "Méthode d\'encryption";
 ?>

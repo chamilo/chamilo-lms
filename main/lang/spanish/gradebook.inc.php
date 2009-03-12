@@ -130,4 +130,5 @@ $CannotChangeTheMaxNote = "No se puede cambiar la nota máxima";
 $GradebookWeightUpdated = "Peso(s) modificado(s) correctamente";
 $ChooseItem = "Seleccione un item";
 $AverageResultsVSResource = "Promedio de resultados contra recursos";
+$ToViewGraphScoreRuleMustBeEnabled = "La vista de regla de puntuacion grafica debe estar habilitada";
 ?>

@@ -29,4 +29,10 @@ $DeleteMessage = "Supprimer le message";
 $ReadMessage = "Lire";
 $SendInviteMessage = "Envoyer invitation";
 $SendMessageInvitation = "Êtes-vous sûr de vouloir envoyer ces invitations ?";
+$MessageTool = "Outil de messagerie";
+$SendMessage = "Envoyer des messages";
+$WriteAMessage = "Écrire un message";
+$AlreadyReadMessage = "Message déjà lu";
+$UnReadMessage = "Message non lu";
+$MessageSent = "Message envoyé";
 ?>

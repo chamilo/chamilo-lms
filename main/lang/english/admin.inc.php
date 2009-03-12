@@ -930,4 +930,9 @@ $FilterUsers = "Filter users";
 $SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Several courses were subscribed to the session because of a duplicate course code";
 $CoachIsRequired = "You must select a coach";
 $EncryptMethodUserPass = "Encryption method";
+$AddTemplate = "Add a template";
+$TemplateImageComment100x70 = "This image will represent the template in the templates list. It should be no larger than 100x70 pixels";
+$TemplateAdded = "Template added";
+$TemplateDeleted = "Template deleted";
+$EditTemplate = "Template edition";
 ?>

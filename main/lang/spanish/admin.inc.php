@@ -930,4 +930,9 @@ $FilterUsers = "Filtro de usuarios";
 $SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Varios cursos se suscribieron a la sesión a causa de un código duplicado de curso";
 $CoachIsRequired = "Debe seleccionar un tutor";
 $EncryptMethodUserPass = "Método de encriptación";
+$AddTemplate = "Añadir una plantilla";
+$TemplateImageComment100x70 = "Este imagen representará su plantilla en la lista de plantillas. No debería ser más grande que 100x70 píxeles";
+$TemplateAdded = "Plantilla añadida";
+$TemplateDeleted = "Plantilla borrada";
+$EditTemplate = "Edición de plantilla";
 ?>

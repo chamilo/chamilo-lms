@@ -160,10 +160,8 @@ function load_personal_templates($user_id=0) {
 		if (!empty($row['image']))
 		{
 			$image = api_get_path(WEB_CODE_PATH).'upload/template_thumbnails/'.$row['image'];
-		}
-		else 
-		{
-			$image = api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/dialog/fck_template/images/noimage.gif';
+		} else {			
+			$image = api_get_path(WEB_PATH).'home/default_platform_document/empty.gif';
 		}
 		
 		

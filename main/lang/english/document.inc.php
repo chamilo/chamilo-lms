@@ -213,4 +213,5 @@ $SharedFolder = "Shared folder";
 $CreateFolder = "Create the folder";
 $HelpDefaultDirDocuments = "This directory contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The directories can remain hidden.";
 $HelpSharedFolder = "This directory contains the files that other learners (or yourself) sent into a course through the editor (if they didn\'t do it from the groups tool). By default, they will be visible by any teacher, but will be hidden from other learners (unless they access the files directly). If you make one student directory visible, other students will see all its content.";
+$TemplateImage = "Template\'s imag";
 ?>

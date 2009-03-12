@@ -129,5 +129,6 @@ $NoResultsAvailable = "Nessun risultato disponibile";
 $CannotChangeTheMaxNote = "Non si può modificare il valore massimo del voto";
 $GradebookWeightUpdated = "I pesi sono stati aggiornati";
 $ChooseItem = "Scegli un elemento";
-$AverageResultsVSResource = "Punteggio medio per risorsa";
+$AverageResultsVsResource = "Punteggio medio per risorsa";
+$ToViewGraphScoreRuleMustBeEnabled = "Per vedere il grafico devono essere attivate le regole sul punteggio";
 ?>

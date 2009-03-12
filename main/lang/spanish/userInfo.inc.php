@@ -71,4 +71,5 @@ $ExtraInformation = "Infomación extra";
 $SearchContacts = "Desde aquí puede añadir contactos a su red social";
 $SocialSeeContacts = "Ver mi red de contactos";
 $SocialUserInformationAttach = "Escriba un mensaje antes de  enviar la solicitud de acceso.";
+$MessageInformationBySendMessage = "Su mensaje de invitación no ha sido enviado";
 ?>

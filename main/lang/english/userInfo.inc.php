@@ -71,4 +71,5 @@ $ExtraInformation = "Extra information";
 $SearchContacts = "Search contacts";
 $SocialSeeContacts = "See contacts";
 $SocialUserInformationAttach = "Please write a message before sending the request";
+$MessageInformationBySendMessage = "your invitation message has not been sent";
 ?>

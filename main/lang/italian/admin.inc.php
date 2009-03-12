@@ -931,4 +931,6 @@ $EncryptMethodUserPass = "Sistema crittografico";
 $AddTemplate = "Aggiungi un modello";
 $TemplateImageComment100x70 = "L\'immagine raffigura il modello nell\'elenco dei modelli. La dimensione massima dev\'essere 100x70 pixel";
 $TemplateAdded = "Modello aggiunto";
+$TemplateDeleted = "Modello eliminato";
+$EditTemplate = "Modifica il modello";
 ?>

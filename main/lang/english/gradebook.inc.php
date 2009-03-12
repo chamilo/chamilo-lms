@@ -129,6 +129,6 @@ $NoResultsAvailable = "No results available";
 $CannotChangeTheMaxNote = "Cannot change the max note";
 $GradebookWeightUpdated = "Weights updated successfully";
 $ChooseItem = "Choose item";
-$AverageResultsVSResource = "Average results vs resource";
+$AverageResultsVsResource = "Average results vs resource";
 $ToViewGraphScoreRuleMustBeEnabled = "To view graph score rule must be enabled";
 ?>

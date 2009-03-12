@@ -213,4 +213,5 @@ $SharedFolder = "Carpeta compartida";
 $CreateFolder = "Crear el directorio";
 $HelpDefaultDirDocuments = "Este directorio contiene los archivos suministrados por defecto. Puede eliminar o añadir otros archivos, pero si un archivo está oculto cuando es insertado en un documento web los estudiantes tampoco podrán verlo aquí. Cuando inserte un archivo en un documento web hágalo visible previamente. Los directorios pueden seguir ocultos.";
 $HelpSharedFolder = "Este directorio contiene los archivos que los estudiantes (y Vd.) envían a un curso a través del editor si no lo hacen desde la herramienta grupos. Por defecto serán visibles por cualquier profesor, pero estarán ocultos para otros estudiantes salvo que accedan a ellos mediante un acceso directo. Si hace visible el directorio de un estudiante otros estudiantes podrán ver todo lo que contenga.";
+$TemplateImage = "Imagen de la plantilla";
 ?>

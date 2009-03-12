@@ -1354,9 +1354,17 @@ function search_img_from_html($htmlFile)
 	$fp = fopen($htmlFile, "r") or die('<center>can not open file</center>');
 
 	// search and store occurences of the <IMG> tag in an array
-
-	$buffer = fread( $fp, filesize($htmlFile) ) or die('<center>can not read file</center>');;
-
+	$size_file=(filesize($htmlFile)===0) ? 1 : filesize($htmlFile);
+	if (isset($fp) && !($fp===false)) {
+		$buffer = fread( $fp, $size_file );
+		if (strlen($buffer)>=0 && !($buffer===false)) {
+			//
+		} else {
+			die('<center>can not read file</center>');
+		}
+	} else {
+		die('<center>can not read file</center>');
+	}
 	$matches = array();
 	if ( preg_match_all('~<[[:space:]]*img[^>]*>~i', $buffer, $matches) )
 	{

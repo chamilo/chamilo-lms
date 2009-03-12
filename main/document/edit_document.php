@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 18772 2009-03-03 02:31:56Z ivantcholakov $
+<?php // $Id: edit_document.php 19014 2009-03-12 21:38:24Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -490,13 +490,16 @@ if($is_allowedToEdit)
 							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
 							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
 						}
-			
+						
 						if(!is_file($filepath.'css/frames.css'))
 						{
-							copy(api_get_path(SYS_CODE_PATH).'css/frames.css',$filepath.'css/frames.css');
-							$doc_id=add_document($_course,$dir.'css/frames.css','file',filesize($filepath.'css/frames.css'),'frames.css');
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
+							$platform_theme= api_get_setting('stylesheets');
+							if (file_exists(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css')) {
+								copy(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css',$filepath.'css/frames.css');
+								$doc_id=add_document($_course,$dir.'css/frames.css','file',filesize($filepath.'css/frames.css'),'frames.css');
+								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
+								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);								
+							}
 						}
 								
 						// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)

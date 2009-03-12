@@ -110,7 +110,6 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_browse_courses', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_browse_courses', 'false', 'No');
 ALTER TABLE user_field ADD field_filter tinyint default 0;
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.18942','DokeosDatabaseVersion','',NULL,NULL,1,0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0);
 INSERT INTO user_friend_relation_type(id,title)VALUES(1,'SocialUnknow');
 INSERT INTO user_friend_relation_type(id,title)VALUES(2,'SocialParent');
@@ -123,6 +122,7 @@ CREATE TABLE course_field_values (id int NOT NULL auto_increment, course_code va
 CREATE TABLE session_field (id int NOT NULL auto_increment, field_type int NOT NULL DEFAULT 1, field_variable varchar(64) NOT NULL, field_display_text varchar(64), field_default_value text, field_order int, field_visible tinyint default 0, field_changeable tinyint default 0, field_filter tinyint default 0, tms TIMESTAMP, PRIMARY KEY(id));
 CREATE TABLE session_field_values(id int NOT NULL auto_increment, session_id int NOT NULL, field_id int NOT NULL, field_value text, tms TIMESTAMP, PRIMARY KEY(id));
 ALTER TABLE templates ADD image VARCHAR( 250 ) NOT NULL ;
+INSERT IGNORE INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.18983','DokeosDatabaseVersion','',NULL,NULL,1,0);
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';

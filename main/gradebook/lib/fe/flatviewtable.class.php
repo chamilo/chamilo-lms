@@ -139,7 +139,7 @@ class FlatViewTable extends SortableTable
 					
 					//background color area & stripe or not					
 					$Test->drawGraphArea(255,255,255,TRUE);		
-					$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,1, FALSE);
+					$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_START0,150,150,150,TRUE,0,1, FALSE);
 					
 					//background grid     
 					$Test->drawGrid(4,TRUE,230,230,230,50);  
@@ -293,7 +293,7 @@ class FlatViewTable extends SortableTable
 							//background color area & stripe or not					
 							$Test->drawGraphArea(255,255,255,TRUE);
 							//print_r($DataSet->GetData());						
-							$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,1, FALSE);
+							$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_START0,150,150,150,TRUE,0,1, FALSE);
 							
 							//background grid     
 							$Test->drawGrid(4,TRUE,230,230,230,50);  

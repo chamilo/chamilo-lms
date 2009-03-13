@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 18942 2009-03-10 23:42:21Z juliomontoya $
+<?php // $Id: usermanager.lib.php 19041 2009-03-13 21:15:04Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -292,14 +292,15 @@ class UserManager
 	 * @param	array	A series of additional fields to add to this user as extra fields (optional, defaults to null)
 	 * @return boolean true if the user information was updated
 	 */
-	function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id= null, $hr_dept_id=0, $extra=null)
+	function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id= null, $hr_dept_id=0, $extra=null,$language='english')
 	{
 		global $userPasswordCrypted;
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "UPDATE $table_user SET
 				lastname='".Database::escape_string($lastname)."',
 				firstname='".Database::escape_string($firstname)."',
-				username='".Database::escape_string($username)."',";
+				username='".Database::escape_string($username)."',
+				language='".Database::escape_string($language)."',";
 		if(!is_null($password))
 		{
 			//$password = $userPasswordCrypted ? md5($password) : $password;			

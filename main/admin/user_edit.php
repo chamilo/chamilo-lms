@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 18466 2009-02-12 14:25:22Z juliomontoya $
+<?php // $Id: user_edit.php 19041 2009-03-13 21:15:04Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -168,6 +168,9 @@ $form->addGroup($group, 'password', null, '',false);
 // Status
 $status = api_get_status_langvars();
 $form->addElement('select','status',get_lang('Status'),$status,'id="status_select" onchange="display_drh_list()"');
+
+//Language
+$form->addElement('select_language', 'language', get_lang('Language'));
 
 $display = $user_data['status'] == STUDENT || $_POST['status'] == STUDENT ? 'block' : 'none';
 $form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
@@ -374,6 +377,7 @@ if( $form->validate())
 	$send_mail = intval($user['send_mail']);
 	$reset_password = intval($user['reset_password']);
 	$hr_dept_id = intval($user['hr_dept_id']);
+	$language=$user['language'];
 	if ($user['radio_expiration_date']=='1' && ! $user_data['platform_admin'] )
 	{
 		$expiration_date=$user['expiration_date'];
@@ -404,7 +408,7 @@ if( $form->validate())
 		$password = $user['password'];
 		$auth_source = $user['auth_source'];		
 	}
-	UserManager::update_user($user_id,$firstname,$lastname,$username,$password,$auth_source,$email,$status,$official_code,$phone,$picture_uri,$expiration_date, $active, null, $hr_dept_id);
+	UserManager::update_user($user_id,$firstname,$lastname,$username,$password,$auth_source,$email,$status,$official_code,$phone,$picture_uri,$expiration_date, $active, null, $hr_dept_id,null,$language);
 	if(api_get_setting('openid_authentication')=='true' && !empty($user['openid']))
 	{
 		$up = UserManager::update_openid($user_id,$user['openid']);

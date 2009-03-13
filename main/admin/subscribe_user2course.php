@@ -1,5 +1,5 @@
 <?php
-// $Id: subscribe_user2course.php 18519 2009-02-16 15:38:49Z juliomontoya $
+// $Id: subscribe_user2course.php 19038 2009-03-13 15:16:02Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -208,7 +208,7 @@ if ($use_extra_fields) {
 
 $sql = "SELECT user_id,lastname,firstname,username
 		FROM $tbl_user
-		WHERE lastname LIKE '".$first_letter_user."%' $where_filter
+		WHERE user_id<>2 AND lastname LIKE '".$first_letter_user."%' $where_filter
 		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." lastname";
 
 global $_configuration;	
@@ -219,7 +219,7 @@ if ($_configuration['multiple_access_urls']==true) {
 		$sql = "SELECT u.user_id,lastname,firstname,username  FROM ".$tbl_user ." u 			
 		INNER JOIN $tbl_user_rel_access_url user_rel_url 
 		ON (user_rel_url.user_id = u.user_id)						
-		WHERE access_url_id =  $access_url_id AND (lastname LIKE '".$first_letter_user."%' )  $where_filter
+		WHERE u.user_id<>2 AND access_url_id =  $access_url_id AND (lastname LIKE '".$first_letter_user."%' )  $where_filter
 		ORDER BY ". (count($users) > 0 ? "(u.user_id IN(".implode(',', $users).")) DESC," : "")." lastname";			
 	}
 }

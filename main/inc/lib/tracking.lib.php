@@ -431,7 +431,7 @@ class Tracking {
 								$total_score = Database::result($rsScores, 0, 0);
 								//echo $total_weighting += $item['max_score'];
 								$total_weighting += $maxscore;								
-								if($total_weighting>0) {
+								if($total_weighting>0 && $maxscore>0) {
 									//echo $total_score.' -  '.$maxscore; echo '<br>';
 									//echo $lp_scorm_score_total += ($total_score/$total_weighting)*100;
 									$lp_scorm_score_total += ($total_score/$maxscore)*100; 										

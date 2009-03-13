@@ -351,8 +351,8 @@ foreach ($list as $my_item_id) {
 				
 			$res_attempts = api_sql_query($sql_attempts,__FILE__,__LINE__);
 			$num_attempts = Database :: num_rows($res_attempts);				
-			
-			if ($row['item_type'] != 'dokeos_chapter') {						
+									
+			if ($row['item_type'] === 'quiz') {									
 				if ($num_attempts > 0) {					
 					$n=1;										
 					while ($row_attempts = Database :: fetch_array($res_attempts)) {

@@ -2246,14 +2246,14 @@ function get_terms()
 	     				$total_time = ' ';	     				 
 	     				if (!empty($_REQUEST['exeId'])) {
 						$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-						require_once ('../reservation/rsys.php');
+						
 						$safe_exe_id = Database::escape_string($_REQUEST['exeId']);
 	     				$sql = 'SELECT start_date,exe_date FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.(int)$safe_exe_id;
 						$res = api_sql_query($sql,__FILE__,__LINE__);
 						$row_dates = Database::fetch_array($res);		
-						$rsys = new Rsys();
-						$time_start_date = $rsys->mysql_datetime_to_timestamp($row_dates['start_date']);
-						$time_exe_date = $rsys->mysql_datetime_to_timestamp($row_dates['exe_date']);
+
+						$time_start_date = convert_mysql_date($row_dates['start_date']);
+						$time_exe_date 	 = convert_mysql_date($row_dates['exe_date']);
 						$mytime = ((int)$time_exe_date-(int)$time_start_date);
 						$total_time =" total_time = ".$mytime.", ";
 	     				}

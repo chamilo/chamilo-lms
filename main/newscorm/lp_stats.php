@@ -33,7 +33,6 @@ require_once('learnpath.class.php');
 require_once ('resourcelinker.inc.php');
 require_once ('../inc/lib/tracking.lib.php');
 require_once ('../inc/lib/course.lib.php');
-require_once ('../reservation/rsys.php');
 
 
 if(empty($_SESSION['_course']['id']) && isset($_GET['course']))
@@ -362,9 +361,9 @@ foreach ($list as $my_item_id) {
 					$my_exe_id	= $row_attempts['exe_id'];
 					$my_orig_lp = $row_attempts['orig_lp_id'];
 					$my_orig_lp_item = $row_attempts['orig_lp_item_id'];
-					$rsys = new Rsys();
-					$mktime_start_date = $rsys->mysql_datetime_to_timestamp($row_attempts['start_date']);
-					$mktime_exe_date = $rsys->mysql_datetime_to_timestamp($row_attempts['exe_date']);
+										
+					$mktime_start_date = convert_mysql_date($row_attempts['start_date']);
+					$mktime_exe_date = convert_mysql_date($row_attempts['exe_date']);
 					$mytime = ((int)$mktime_exe_date-(int)$mktime_start_date);					 
 					$time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
 					$time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);								

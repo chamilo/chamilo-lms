@@ -54,12 +54,12 @@ if (!api_is_allowed_to_edit(false,true))
 }
 
 // Database table definitions
-$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
-$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+$table_survey 			= Database::get_course_table(TABLE_SURVEY);
+$table_survey_question 		= Database::get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option 	= Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course 			= Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user 			= Database::get_main_table(TABLE_MAIN_USER);
+$user_info 			= Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 
 // getting the survey information
 $survey_id = Security::remove_XSS($_GET['survey_id']);
@@ -145,6 +145,10 @@ $form->addElement('html_editor', 'mail_text', get_lang('MailText'));
 // some explanation of the mail
 $form->addElement('static', null, null, get_lang('UseLinkSyntax'));
 $form->addElement('checkbox', 'send_mail', '', get_lang('SendMail'));
+// you cab send a reminder to unanswered people if the survey is not anonymous
+if ($survey_data['anonymous'] != 1) {
+    $form->addElement('checkbox', 'remindUnAnswered', '', get_lang('remindUnAnswered'));
+}
 // allow resending to all selected users
 $form->addElement('checkbox', 'resend_to_all', '', get_lang('ReminderResendToAllUsers'));
 // submit button
@@ -174,7 +178,8 @@ if ($form->validate())
 	// save the invitation mail
 	SurveyUtil::save_invite_mail($values['mail_text'], $values['mail_title'], !empty($survey_data['invite_mail']));
 	// saving the invitations for the course users
-	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'], $values['mail_text'], $values['resend_to_all'], $values['send_mail']);
+	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'], 
+                $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
 	// saving the invitations for the additional users
 	$values['additional_users'] = $values['additional_users'].';'; 	// this is for the case when you enter only one email
 	$temp = str_replace(',',';',$values['additional_users']);		// this is to allow , and ; as email separators
@@ -183,7 +188,8 @@ if ($form->validate())
 	{
 		$additional_users[$i] = trim($additional_users[$i]);
 	}
-	$counter_additional_users = SurveyUtil::save_invitations($additional_users, $values['mail_title'], $values['mail_text'], $values['resend_to_all'], $values['send_mail']);
+	$counter_additional_users = SurveyUtil::save_invitations($additional_users, $values['mail_title'], 
+            $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
 	// updating the invited field in the survey table
 	SurveyUtil::update_count_invited($survey_data['code']);
 	$total_count = $count_course_users + $counter_additional_users;
@@ -203,7 +209,7 @@ else
 		$defaults['mail_text'] = $survey_data['invite_mail'];
 	}
 	$defaults['mail_title'] = $survey_data['mail_subject'];
-	$defaults['send_mail'] = 1;	
+	$defaults['send_mail'] = 1;
 	$form->setDefaults($defaults);
 	$form->display();
 }

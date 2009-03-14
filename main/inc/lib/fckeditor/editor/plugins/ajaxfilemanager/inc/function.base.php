@@ -837,11 +837,11 @@ function getRootPath() {
 
 		/**
 		* check if a folder is allowed to shown on the search 'look in' list
-		* @param string $fileName
+		* @param string $folderName
 		* @return string
 		* @author Juan Carlos Raña Trabado
 		*/
-		function hideFileName($fileName)
+		function hideFolderName($folderName)
 		{
 			//hidden files and folders deleted by Dokeos. Hidde folders css, hotpotatoes, chat
 			$deleted_by_dokeos='_DELETED_';
@@ -855,7 +855,7 @@ function getRootPath() {
 			
 			//show group's directory only if I'm member
 			$show_doc_group=true;								
-			if(ereg($group_folder, $fileName))
+			if(ereg($group_folder, $folderName))
 			{
 				$show_doc_group=false;
 				if($is_user_in_group)
@@ -864,9 +864,9 @@ function getRootPath() {
 				}
 			}		
 			
-			if(!ereg($deleted_by_dokeos, $fileName) && !ereg($css_folder_dokeos, $fileName) && !ereg($hotpotatoes_folder_dokeos, $fileName) && !ereg($chat_files_dokeos, $fileName) && !ereg($thumbs_folder, $fileName) && $show_doc_group==true)
+			if(!ereg($deleted_by_dokeos, $folderName) && !ereg($css_folder_dokeos, $folderName) && !ereg($hotpotatoes_folder_dokeos, $folderName) && !ereg($chat_files_dokeos, $folderName) && !ereg($thumbs_folder, $folderName) && $show_doc_group==true)
 			{			
-				return substr($fileName,strpos($fileName, '-'),strlen($fileName)); //hide the firsts numbers
+				return substr($folderName,strpos($folderName, '-'),strlen($folderName)); //hide the firsts numbers
 			}
 		
 		}

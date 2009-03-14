@@ -27,7 +27,7 @@
 								//Juan Carlos Raña
 								
 									//hidden files and folders deleted by Dokeos. Hidde folders css, hotpotatoes, chat_files
-									$deleted_by_dokeos='_DELETED_';
+									$deleted_by_dokeos=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php	
 									$css_folder_dokeos='css';
 									$hotpotatoes_folder_dokeos='HotPotatoes_files';
 									$chat_files_dokeos='chat_files';
@@ -49,7 +49,7 @@
 									}
 									
 									//show icon sharedfolder
-									$shared_folder='shared_folder';								
+									$shared_folder='shared folder';	 //'shared folder' not 'shared_folder' because  in $file['name'] _ is replaced with blank see class.manager.php						
 								
 								///Second step: hiding as the case
 								//Juan Carlos Raña

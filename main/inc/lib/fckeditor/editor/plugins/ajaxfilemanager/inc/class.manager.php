@@ -90,7 +90,17 @@ class manager
 			$folderInfo = $file->getFileInfo();
 			if(sizeof($folderInfo))
 			{
-				$this->currentFolderInfo['name']=str_replace('_',' ',basename($this->currentFolderPath));////for Dokeos. Prevent long directory name				
+			    //for Dokeos in a name folder, replace num user by lastname and firstname 
+				
+				if(ereg('sf_user_', basename($this->currentFolderPath)))
+				{
+					$userinfo=Database::get_user_info_from_id(substr(basename($this->currentFolderPath), 8));		
+					$this->currentFolderInfo['name']=$userinfo['lastname'].', '.$userinfo['firstname'];
+				}
+				else
+				{			
+					$this->currentFolderInfo['name']=str_replace('_',' ',basename($this->currentFolderPath));//for Dokeos. Prevent long directory name								
+				}
 				$this->currentFolderInfo['subdir']=0;
 				$this->currentFolderInfo['file']=0;
 				$this->currentFolderInfo['ctime']=$folderInfo['ctime'];

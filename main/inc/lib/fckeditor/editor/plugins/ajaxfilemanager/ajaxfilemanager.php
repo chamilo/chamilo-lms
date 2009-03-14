@@ -451,11 +451,11 @@ $(document).ready(
 		            		
 					foreach(getFolderListing(CONFIG_SYS_ROOT_PATH) as $k=>$v)
 					{
-                              	if(hideFilename($k))
+                              	if(hideFolderName($k))
 						{
 						//shows only those permitted by Dokeos
 						?>
-		                  		<option value="<?php echo $v; ?>" <?php echo (removeTrailingSlash(backslashToSlash(($folderInfo['path']))) == removeTrailingSlash(backslashToSlash(($v)))?' selected="selected"':''); ?>><?php echo hideFileName(shortenFileName($k, 30)); // shows only those permitted by Dokeos
+		                  		<option value="<?php echo $v; ?>" <?php echo (removeTrailingSlash(backslashToSlash(($folderInfo['path']))) == removeTrailingSlash(backslashToSlash(($v)))?' selected="selected"':''); ?>><?php echo hideFolderName(shortenFileName($k, 30)); // shows only those permitted by Dokeos
 ?></option>
 		                  	<?php
 						} 

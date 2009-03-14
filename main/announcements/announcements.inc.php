@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 18891 2009-03-09 20:14:19Z juliomontoya $
+<?php //$Id: announcements.inc.php 19047 2009-03-14 14:31:28Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -901,10 +901,16 @@ function get_all_annoucement_by_user_course($course_db, $user_id)
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	$num_rows = Database::num_rows($result);
 	$content = '';
+	$i=0;
 	if (Database::num_rows($result)>0) {
-		while ($myrow = Database::fetch_array($result)) {			
-			$content.= '<strong>'.$myrow['title'].'</strong><br /><br />';
-			$content.= $myrow['content'];
+		while ($myrow = Database::fetch_array($result)) {
+			if ($i<=4) {
+				$content.= '<strong>'.$myrow['title'].'</strong><br /><br />';
+				$content.= $myrow['content'];
+			} else {
+				break;
+			}
+			$i++;
 		}
 		return $content;
 	} else {

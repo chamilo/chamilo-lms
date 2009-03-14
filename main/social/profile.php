@@ -5,7 +5,7 @@
 
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) Julio Montoya Armas 
-
+	Copyright (c) Isaac Flores Paz 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
 
@@ -24,6 +24,7 @@
 ==============================================================================
 * This is the profile social main page
 * @author Julio Montoya <gugli100@gmail.com>
+* @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
 =============================================================================
 */
 
@@ -513,10 +514,10 @@ echo '<div id="social-profile-wrapper">';
 				}
 				//$friend_html.='</div>'; // close the div friend-container
 			} else {
-					$friend_html.= '<div id="friend-container">';				
-					$friend_html .= api_display_tool_title(get_lang('Friends'));				
+					$friend_html.= '<div id="friend-container">';	
+					$friend_html .= '<div class="actions">'.api_display_tool_title(get_lang('Friends')).'</div>';				
 					$friend_html.= '<div id="friend-header">';
-					$friend_html.= '<div style="float:left;">0 '.get_lang('Friends').'</div>';
+					$friend_html.= '<div style="float:left;">'.get_lang('Friends').'</div>';
 					$friend_html.= '<div style="float:right;">'.get_lang('SeeAll').'</div>';
 					$friend_html.= '</div><br/><br/>'; // close div friend-header					
 			}
@@ -556,7 +557,9 @@ echo '<div id="social-profile-wrapper">';
 			$production_list =  UserManager::build_production_list($user_id);
 			if (!empty($production_list )) {
 				echo '<div class="clear"></div><br />';
+				echo '<div class="actions">';
 				api_display_tool_title(get_lang('Productions'));
+				echo '</div>';
 				echo '<div class="rounded1">';
 				echo $production_list;
 				echo '</div>';	
@@ -568,8 +571,11 @@ echo '<div id="social-profile-wrapper">';
 				$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code']);
 			}
 			if (!empty($file_list)) {
+				echo '<div class="clear"></div><br />';
+				echo '<div class="actions">';
 				api_display_tool_title(get_lang('ImagesUploaded'));
-				echo '<div class="rounded2">';
+				echo '</div>';
+				echo '</br><div class="rounded2">';
 				echo $file_list;
 				echo '</div>';		
 			}			
@@ -607,7 +613,9 @@ echo '<div id="social-profile-container">';
 				//-- Extra Data							
 				$extra_user_data = UserManager::get_extra_user_data($user_id);
 				if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
+					echo '<div class="actions">';
 					api_display_tool_title(get_lang('ExtraInformation'));
+					echo '</div>';
 					echo '<div class="rounded left-side">';
 						foreach($extra_user_data as $key=>$data) {
 							echo ucfirst($key).': '.$data;
@@ -618,8 +626,10 @@ echo '<div id="social-profile-container">';
 				}
 				// ---- My Agenda Items
 				$my_agenda_items = show_simple_personal_agenda($user_id);
-				if (!empty($my_agenda_items)) {					
+				if (!empty($my_agenda_items)) {
+					echo '<div class="actions">';					
 					api_display_tool_title(get_lang('MyAgenda'));
+					echo '</div>';
 					$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 					echo '<div class="rounded left-side">';	
 					echo $my_agenda_items; 
@@ -632,9 +642,9 @@ echo '<div id="social-profile-container">';
 				
 				$announcement_content = '';		
 		    	foreach ($course_list_code as $course) {
-	    			$content = get_all_annoucement_by_user_course($course['dbName'],$user_id);	    			
+	    			$content = get_all_annoucement_by_user_course($course['dbName'],$user_id);	 			
 	    	  		if (!empty($content)) {	 		    	  			  
-		    	  		$announcement_content.= '<h2>'.$course['title'].'</h2>';
+		    	  		$announcement_content.= '<h3>'.$course['title'].'</h3>';
 						$announcement_content.= '<div class="rounded left-side">';							
 						$announcement_content.= $content;	
 						$announcement_content.= '</div>';
@@ -643,7 +653,9 @@ echo '<div id="social-profile-container">';
 	    	  	}
 	    	  	
 	    	  	if(!empty($announcement_content)) {
+	    	  		echo '<div class="actions">';
 	    	  		api_display_tool_title(get_lang('Announcements'));
+	    	  		echo '</div>';
 	    	  		echo $announcement_content;
 	    	  	}					
     	  	}
@@ -651,9 +663,10 @@ echo '<div id="social-profile-container">';
     
   	// CENTER COLUMN
 	echo '<div id="social-profile-content">';
-		    //--- Basic Information			
+		    //--- Basic Information	
+		    echo '<div class="actions">';		
 			api_display_tool_title(get_lang('Information'));  //class="social-profile-info"
-			
+			echo '</div>';
 			if ($show_full_profile) {		 
 				echo '<div class="social-profile-info" >';					
 					echo '<dt>'.get_lang('UserName').'</dt>
@@ -687,7 +700,9 @@ echo '<div id="social-profile-container">';
 				//print_r($personal_course_list);		
 				//echo '<pre>';
 				if ( is_array($list) ) {
+					echo '<div class="actions">';
 					api_display_tool_title(ucfirst(get_lang('Courses')));
+					echo '</div>';
 					//Courses whithout sessions
 					$old_user_category = 0;
 					$i=1;

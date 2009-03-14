@@ -144,7 +144,7 @@ function change_panel (mypanel_id,myuser_id) {
 			}
 		});	
 }
-function action_database_panel(option_id,myuser_id) {
+function action_database_panel (option_id,myuser_id) {
 	
 	if (option_id==5) {
 		my_txt_subject=$("#txt_subject_id").val();
@@ -185,7 +185,7 @@ function hide_display_message () {
 	}
 }	
 function register_friend(element_input) {
- if(confirm("'.get_lang('AddToContacts').'")) {
+ if(confirm("'.get_lang('AddToFriends').'")) {
 		name_button=$(element_input).attr("id");
 		name_div_id="id_"+name_button.substring(13);
 		user_id=name_div_id.split("_");
@@ -196,13 +196,15 @@ function register_friend(element_input) {
 			$("#id_response").html("'.get_lang('Loading').'"); },
 			type: "POST",
 			url: "../social/register_friend.php",
-			data: "friend_id="+user_friend_id,
+			data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
 			success: function(datos) {
-			 $("div#id_response").html(datos);
+			// $("div#dpending_"+user_friend_id).html(datos);
+			 $("#id_reload").submit();
 			}
 		});
  }
 }
+
 </script>';
 if (isset($_GET['shared'])) {
 	$my_link='../social/index.php';
@@ -524,34 +526,38 @@ echo '<div id="social-profile-wrapper">';
 			$friend_html.= '</div>';		
 			echo $friend_html; 				
 			
-			//Pending invitations		
-			$pending_invitations = UserFriend::get_list_invitation_of_friends_by_user_id($user_id);
-			$list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id($user_id);
+			//Pending invitations	
+			if (!isset($_GET['u'])) {
+			$pending_invitations = UserFriend::get_list_invitation_of_friends_by_user_id(api_get_user_id());
+			$list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
 			$count_pending_invitations = count($pending_invitations);
 			//echo '<div class="clear"></div><br />';		
 				//javascript:register_friend(this)
-			/*echo '<div id="social-profile-invitations" style="width:240px;" >';
+				//var_dump($pending_invitations);
+			echo '<div class="clear"></div><br />';
+			echo '<div id="social-profile-invitations" >';
 			if ($count_pending_invitations > 0) {
-			
+				echo '<div class="actions">';
 				api_display_tool_title(get_lang('PendingInvitations'));
+				echo '</div>';
 				for ($i=0;$i<$count_pending_invitations;$i++) {
 					//var_dump($invitations);
-					echo '<div style="width:240px;">'; 
+					echo '<div id="dpending_'.$pending_invitations[$i]['user_sender_id'].'">'; 
 						echo '<div style="float:left;width:60px;" >';
-							echo '<img src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
+							echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
 						echo '</div>';
 						echo '<div style="padding-left:70px;">';
-							echo ' '.substr($pending_invitations[$i]['content'],19);
+							echo ' '.substr($pending_invitations[$i]['content'],0,50);
 							echo '<br />';
-							echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('AddToFriends').'</a>';
+							echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
 							echo '<div id="id_response">&nbsp;</div>';
 						echo '</div>';
 					echo '</div>';
 					echo '<div class="clear"></div>';
 				}
 			}
-			echo '</div>';	*/		
-						
+			echo '</div>';
+			}
 			
 			//--Productions			
 			$production_list =  UserManager::build_production_list($user_id);
@@ -830,5 +836,6 @@ echo '</div>';
 
 
 echo '</div>'; //from the main
+echo '<form id="id_reload" action="#"></form>';
 Display :: display_footer();
 ?>

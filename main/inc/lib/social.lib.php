@@ -308,7 +308,7 @@ class UserFriend extends UserManager {
 				$user_id=api_get_user_id();
 				$user_info=api_get_user_info($user_id);
 				$message_title=get_lang('Invitation');
-				$message_content=$user_info['firstName'].' '.$user_info['lastName'].' :'.$content_message;
+				$message_content=$content_message;
 				$count_is_true=self::send_invitation_friend(Database::escape_string($user_id),Database::escape_string($userfriend_id),Database::escape_string($message_title),Database::escape_string($message_content));
 				if ($count_is_true) {
 					echo Display::display_normal_message(get_lang('InvitationHasBeenSent'));

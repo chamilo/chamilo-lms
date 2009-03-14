@@ -17,12 +17,24 @@ $my_denied_current_friend= $_POST['denied_friend_id'];
 $my_delete_friend        = $_POST['delete_friend_id'];
 $friend_id_qualify       = $_POST['user_id_friend_q'];
 $type_friend_qualify     = $_POST['type_friend_q'];
-$relation_type='1';//Contact unknow
+$is_my_friend            = $_POST['is_my_friend'];
+if (isset($is_my_friend)) {
+	$relation_type='3';//my friend
+} else {
+	$relation_type='1';//Contact unknow	
+}
+
+
 if (isset($my_current_friend)) {
 	UserFriend::register_friend ($the_current_user_id,$my_current_friend,$relation_type);
 	UserFriend::register_friend ($my_current_friend,$the_current_user_id,$relation_type);	
 	UserFriend::invitation_accepted ($my_current_friend,$the_current_user_id);
-	Display::display_normal_message(get_lang('AddedContactToList'));
+	if (isset($is_my_friend)) {
+		echo get_lang('AddedContactToList');
+	} else {
+		Display::display_normal_message(get_lang('AddedContactToList'));
+	}
+
 }
 if (isset($my_denied_current_friend)) {
 	UserFriend::invitation_denied($my_denied_current_friend,$the_current_user_id);

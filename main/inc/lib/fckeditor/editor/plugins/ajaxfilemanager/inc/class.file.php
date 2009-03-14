@@ -34,13 +34,13 @@
 					$this->fileInfo['ctime'] = $this->fileStat[10];	
 					$this->fileInfo['mtime'] = $this->fileStat[9];
 					$this->fileInfo['path'] = $path;
-					$this->fileInfo['name'] = basename($path);	
+					$this->fileInfo['name'] = str_replace('_',' ',basename($path));	//for Dokeos. Prevent long file name
 					$this->fileInfo['is_writable'] = $this->isWritable();
 					$this->fileInfo['is_readable'] = $this->isReadable();
 				}elseif(is_dir($this->filePath))
 				{
 					$this->fileStat = @stat($path);
-					$this->fileInfo['name'] = basename($path);
+					$this->fileInfo['name'] = str_replace('_',' ',basename($path));	//for Dokeos. Prevent long file name
 					$this->fileInfo['path'] = $path;
 					$this->fileInfo['atime'] = $this->fileStat[8];
 					$this->fileInfo['ctime'] = $this->fileStat[10];	

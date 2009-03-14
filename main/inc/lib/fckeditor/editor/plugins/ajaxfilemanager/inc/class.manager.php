@@ -90,7 +90,7 @@ class manager
 			$folderInfo = $file->getFileInfo();
 			if(sizeof($folderInfo))
 			{
-				$this->currentFolderInfo['name']=basename($this->currentFolderPath);
+				$this->currentFolderInfo['name']=str_replace('_',' ',basename($this->currentFolderPath));////for Dokeos. Prevent long directory name				
 				$this->currentFolderInfo['subdir']=0;
 				$this->currentFolderInfo['file']=0;
 				$this->currentFolderInfo['ctime']=$folderInfo['ctime'];

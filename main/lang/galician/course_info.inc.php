@@ -104,4 +104,12 @@ $AllowUserImageForumDeactivate = "Oculta as imaxes dos usuarios no foro";
 $AllowLearningPathTheme = "Permitir temas en Itinerarios de aprendizaxe";
 $AllowLearningPathThemeAllow = "Permitido";
 $AllowLearningPathThemeDisallow = "Non permitido";
+$ConfigChat = "Configuración do chat";
+$AllowOpenchatWindow = "Abrir o chat nunha nova fiestra";
+$AllowOpenChatWindowActivate = "Activar para abrir o chat nunha nova fiestra";
+$AllowOpenChatWindowDeactivate = "Desactivar para abrir o chat nunha nova fiestra";
+$NewUserEmailAlert = "Avisar por correo electronico a autosuscripcion dun novo usuario.";
+$NewUserEmailAlertEnable = "Activar o aviso por correo electrónico ao profesor do curso da autosuscripción dun novo usuario. ";
+$NewUserEmailAlertToTeacharAndTutor = "Activar o aviso por correo electrónico ao profesor e aos titores do curso da autosuscripción dun novo usuario.";
+$NewUserEmailAlertDisable = "Desactivar o aviso por correo electrónico da autosuscripción dun novo usuario no curso. ";
 ?>

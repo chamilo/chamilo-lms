@@ -44,4 +44,7 @@ $langOnHomepage = "Amosar ligazón na páxina de inicio";
 $langShowLinkOnHomepage = "Amosar a ligazón como unha icona na páxina inicial do curso";
 $langCsvImport = "Importación de arquivo CSV";
 $General = "Xeneral";
+$SearchFeatureDoIndexLink = "Indexar título e descrición?";
+$langSaveLink = "Gardar a ligazón";
+$langSaveCategory = "Gardar a categoría";
 ?>

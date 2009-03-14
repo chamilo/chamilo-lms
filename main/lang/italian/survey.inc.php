@@ -206,4 +206,5 @@ $NoLogOfDuration = "Nessuno storico della durata";
 $AutoInviteLink = "Questo collegamento permette a utenti senza invito di accedere al questionario:";
 $CompleteTheSurveysQuestions = "Completa i quesiti del questionario";
 $SurveysDeleted = "Questionari eliminati";
+$remindUnAnswered = "Sollecita solo chi non ha risposto";
 ?>

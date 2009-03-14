@@ -156,7 +156,7 @@ $Invite = "Nodig uit";
 $MaximumScore = "Maximum score";
 $ViewInvited = "Toon geïnviteerden";
 $ViewAnswered = "Toon beantwoorde personen";
-$ViewUnanswered = "Toon beantwoorde personen";
+$ViewUnanswered = "Toon niet-geantwoorde personen";
 $DeleteSurveyQuestion = "Wilt u deze vraag zeker verwijderen?";
 $YouAlreadyFilledThisSurvey = "U heeft deze enquête reeds ingevuld";
 $ClickHereToAnswerTheSurvey = "Klik hier om de enquete in te vullen";
@@ -178,4 +178,5 @@ $AnonymousSurveyCannotKnowWhoAnswered = "Deze enquete is anoniem. U kunt niet zi
 $IllegalSurveyId = "Onbekend enquête id";
 $SurveyQuestionMoved = "De vraag werd verplaatst. ";
 $AutoInviteLink = "Gebruikers die niet uitgenodigd zijn kunnen deze link gebruiken om de enquete te doen:";
+$remindUnAnswered = "Stuur herinnering alleen naar personen die nog niet geantwoord hebben ";
 ?>

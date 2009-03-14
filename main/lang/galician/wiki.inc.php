@@ -67,4 +67,5 @@ $ShowLinksPages = "Mostra as páxinas que teñen enlaces a esta páxina";
 $MoreWikiOptions = "Máis opcións do Wiki";
 $DefaultTitle = "Páxina inicial";
 $DiscussNotAvailable = "Discusión non dispoñible";
+$LastVersion = "Última versión";
 ?>

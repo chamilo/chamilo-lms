@@ -125,5 +125,6 @@ $NoFilesHere = " 	Aquí non hai arquivos";
 $NewDropboxFileUploaded = "Enviouse un novo arquivo ó buzón de ficheiros";
 $NewDropboxFileUploadedContent = "Enviouse un novo arquivo ó buzón de ficheiros do teu curso";
 $langAddEdit = "Engadir / Editar";
+$ErrorNoFilesInFolder = "Este directorio está baleiro";
 $dropbox_lang["upload"] = "Enviar";
 ?>

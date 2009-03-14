@@ -102,4 +102,5 @@ $TotalUser = "Total por usuario";
 $AverageTotal = "Media total";
 $Evaluation = "Avaliación";
 $EvaluationAverage = "Media da avaliación";
+$Resource = "Recurso";
 ?>

@@ -153,7 +153,7 @@ function action_database_panel (option_id,myuser_id) {
 	}
 		my_txt_content=$("#txt_area_invite").val();
 	if (my_txt_content.length==0 || my_txt_subject.length==0) {
-		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageInformationBySendMessage').'");
+		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageInvitationNotSent').'");
 		setTimeout("message_information_display()",3000);
 		return false;
 	}

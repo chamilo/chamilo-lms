@@ -147,7 +147,7 @@ $form->addElement('static', null, null, get_lang('UseLinkSyntax'));
 $form->addElement('checkbox', 'send_mail', '', get_lang('SendMail'));
 // you cab send a reminder to unanswered people if the survey is not anonymous
 if ($survey_data['anonymous'] != 1) {
-    $form->addElement('checkbox', 'remindUnAnswered', '', get_lang('remindUnAnswered'));
+    $form->addElement('checkbox', 'remindUnAnswered', '', get_lang('RemindUnanswered'));
 }
 // allow resending to all selected users
 $form->addElement('checkbox', 'resend_to_all', '', get_lang('ReminderResendToAllUsers'));

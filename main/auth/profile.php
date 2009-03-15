@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 18942 2009-03-10 23:42:21Z juliomontoya $
+<?php // $Id: profile.php 19053 2009-03-15 21:58:00Z herodoto $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -717,9 +717,9 @@ if (api_get_setting('extended_profile') == 'true') {
 		$show='';
 	}
 	if (isset($_GET['type']) && $_GET['type']=='extended') {
-		echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditNormalProfile').'</a>';			
+		echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif',get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';			
 	} else {
-		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('EditExtendProfile').'</a>';
+		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif',get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
 	}
 	if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') { 
 		echo '<a href="../social/profile.php">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('ViewSharedProfile'),'UTF-8',$charset).'</a>';

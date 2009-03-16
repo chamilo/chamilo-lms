@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 18981 2009-03-11 23:42:46Z herodoto $
+<?php // $Id: settings.php 19083 2009-03-16 21:54:10Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -976,7 +976,14 @@ function actions_filter($id)
  */
 function image_filter($image)
 {
-	return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/'.$image.'" alt="'.$image.'"/>';
+	if (!empty($image))
+	{
+		return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
+	}
+	else
+	{
+		return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
+	}
 }
 
 /**
@@ -1031,7 +1038,14 @@ function add_edit_template()
 		$form->addElement('hidden','template_id');
 		
 		// adding an extrra field: a preview of the image that is currently used
-		$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/'.$row['image'].'" alt="'.$row['image'].'"/>');
+		if (!empty($row['image']))
+		{		
+			$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
+		}
+		else
+		{
+			$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
+		}
 		
 		// setting the information of the template that we are editing 
 		$form->setDefaults($defaults);
@@ -1061,7 +1075,7 @@ function add_edit_template()
 				$new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);	
 				
 				// upload dir
-				$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/';
+				$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/';
 				
 				// create dir if not exists
                 if (!is_dir($upload_dir)) {
@@ -1153,7 +1167,7 @@ function delete_template($id)
 	$row = Database::fetch_array($result);	
 	if (!empty($row['image']))
 	{
-		unlink(api_get_path(SYS_PATH).'home/default_platform_document/'.$row['image']);
+		unlink(api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
 	}
 	
 	// now we remove it from the database

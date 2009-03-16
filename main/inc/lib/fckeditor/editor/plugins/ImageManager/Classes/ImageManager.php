@@ -137,11 +137,10 @@ class ImageManager
 				{
 					continue;
 				}
-				
+				global $_course;
 				if (isset($_course['dbName']) && $_course<>'-1') {
 					$base_dir = substr($fullpath, 0, strpos($fullpath,'/document/')+9); //				  				
-					$new_dir  = substr($fullpath, strlen($base_dir),-1); //
-					global $_course;	
+					$new_dir  = substr($fullpath, strlen($base_dir),-1); //						
 					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
 					$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);
 				}
@@ -229,11 +228,11 @@ class ImageManager
 				}				
 
 				if($is_dir && $this->isThumbDir($entry) == false) {	
+				    global $_course;
 					if (isset($_course['dbName']) && $_course<>'-1') {
 						//checking visibility		
 						$base_dir = substr($dir_entry, 0, strpos($dir_entry,'/document/')+9); 
-						$new_dir  = substr($dir_entry, strlen($base_dir),-1); //
-						global $_course;					
+						$new_dir  = substr($dir_entry, strlen($base_dir),-1); //											
 						$doc_id = DocumentManager::get_document_id($_course, $new_dir );
 						$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);		
 					}	
@@ -255,11 +254,11 @@ class ImageManager
 
 					if(!(!is_array($img)&&$this->config['validate_images']))
 					{
+					    global $_course;
 					    if (isset($_course['dbName']) && $_course<>'-1') {
 							//checking visibility
 							$base_dir = substr($fullpath.$entry, 0, strpos($fullpath.$entry,'/document/')+9); 
-							$new_dir  = substr($fullpath.$entry, strlen($base_dir));
-							global $_course;						
+							$new_dir  = substr($fullpath.$entry, strlen($base_dir));													
 							$doc_id = DocumentManager::get_document_id($_course, $new_dir );
 							$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);										
 						}
@@ -743,8 +742,8 @@ class ImageManager
 		if(Files::delFile($fullpath)){
 			//deleting from the DB
 			global $_course;
-			$document_path = substr($fullpath, strpos($fullpath,'/document/')+9, strlen($fullpath)); //   /shared_folder/4/name
 			if (isset($_course['dbName']) && $_course<>'-1') {
+				$document_path = substr($fullpath, strpos($fullpath,'/document/')+9, strlen($fullpath)); //   /shared_folder/4/name			
 				DocumentManager::delete_document($_course,$document_path,$fullpath);
 			}
 			Return Files::delFile($thumbnail);
@@ -766,8 +765,8 @@ class ImageManager
 		//if($this->countFiles($fullpath) <= 0) {
 		// now we use the default delete_document function
 		//return Files::delFolder($fullpath,true); //delete recursively.
-		if (isset($_course['dbName']) && $_course<>'-1') {
-			global $_course;
+		global $_course;
+		if (isset($_course['dbName']) && $_course<>'-1') {			
 			$path_dir = substr($fullpath, strpos($fullpath,'/document/')+9,-1); //		
 			$base_dir  = substr($fullpath, 0, strlen($fullpath) - strlen($path_dir)); //
 			return DocumentManager::delete_document($_course,$path_dir,$base_dir);
@@ -812,18 +811,15 @@ class ImageManager
 				//adding to the DB
 				// now the create_unexisting_directory will create the folder
 				//$result = Files::createFolder($fullpath);	
-				if (isset($_course['dbName']) && $_course<>'-1') {						
+									
 					global $_course;
+					if (isset($_course['dbName']) && $_course<>'-1') {	
 					//@todo make this str to functions
 					$base_dir = substr($path, 0, strpos($path,'/document/')+9); //  				
 					$new_dir  = substr($fullpath, strlen($base_dir),-1); //  			
 					$created_dir = create_unexisting_directory($_course, api_get_user_id(),0,0, $base_dir, $new_dir,$newDir);				
-					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
-					/*				
-					if (!(api_is_platform_admin() || api_is_course_admin())) {
-						//setting invisible by default					
-						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
-					}*/
+					$doc_id = DocumentManager::get_document_id($_course, $new_dir );								
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
 				}
 				else
 				{

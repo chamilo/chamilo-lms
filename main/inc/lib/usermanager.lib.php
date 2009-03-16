@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 19041 2009-03-13 21:15:04Z iflorespaz $
+<?php // $Id: usermanager.lib.php 19078 2009-03-16 16:28:37Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -352,36 +352,61 @@ class UserManager
 	}
 
 	/**
+    * Get a list of users of which the given conditions match with an = 'cond'
 	* @param array $conditions a list of condition (exemple : status=>STUDENT)
 	* @param array $order_by a list of fields on which sort
 	* @return array An array with all users of the platform.
 	* @todo optional course code parameter, optional sorting parameters...
 	*/
-	function get_user_list($conditions = array(), $order_by = array())
-	{
+	function get_user_list($conditions = array(), $order_by = array()) {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$return_array = array();
 		$sql_query = "SELECT * FROM $user_table";
-		if(count($conditions)>0)
-		{
+		if (count($conditions)>0) {
 			$sql_query .= ' WHERE ';
-			foreach($conditions as $field=>$value)
-			{
+			foreach ($conditions as $field=>$value) {
+                $field = Database::escape_string($field);
+                $value = Database::escape_string($value);
 				$sql_query .= $field.' = '.$value;
 			}
 		}
-		if(count($order_by)>0)
-		{
-			$sql_query .= ' ORDER BY '.implode(',',$order_by);
+		if (count($order_by)>0) {
+			$sql_query .= ' ORDER BY '.Database::escape_string(implode(',',$order_by));
 		}
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
-		while ($result = Database::fetch_array($sql_result))
-		{
+		while ($result = Database::fetch_array($sql_result)) {
 			$return_array[] = $result;
 		}
 		return $return_array;
 	}
-	
+    /**
+    * Get a list of users of which the given conditions match with a LIKE '%cond%'
+    * @param array $conditions a list of condition (exemple : status=>STUDENT)
+    * @param array $order_by a list of fields on which sort
+    * @return array An array with all users of the platform.
+    * @todo optional course code parameter, optional sorting parameters...
+    */
+    function get_user_list_like($conditions = array(), $order_by = array()) {
+        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+        $return_array = array();
+        $sql_query = "SELECT * FROM $user_table";
+        if (count($conditions)>0) {
+            $sql_query .= ' WHERE ';
+            foreach ($conditions as $field=>$value) {
+                $field = Database::escape_string($field);
+                $value = Database::escape_string($value);
+                $sql_query .= $field.' LIKE \'%'.$value.'%\'';
+            }
+        }
+        if (count($order_by)>0) {
+            $sql_query .= ' ORDER BY '.Database::escape_string(implode(',',$order_by));
+        }
+        $sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
+        while ($result = Database::fetch_array($sql_result)) {
+            $return_array[] = $result;
+        }
+        return $return_array;
+    }
 	
 	
 	/**

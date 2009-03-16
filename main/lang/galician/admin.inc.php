@@ -387,7 +387,7 @@ $ExtendedProfileComment = "Se esta función se marca como \"verdadeiro\" un usuar
 $Classes = "Clases";
 $UserUnsubscribed = "O usuario desinscribiuse";
 $CannotUnsubscribeUserFromCourse  = "O usuario non pode desinscribirse do curso. Este usuario é un administrador do curso. ";
-$InvalidStartDate = "Data de comezo invalida";
+$InvalidStartDate = "Data de comezo non válida";
 $InvalidEndDate = "Data de fin inválida";
 $DateFormatLabel = "(d/m/y h:m)";
 $HomePageFilesNotWritable = "¡Os ficheiros das páxinas de inicio non son editables!";
@@ -867,6 +867,7 @@ $FilterOn = "Habilitar filtro";
 $FilterOff = "Deshabilitar filtro";
 $FieldFilterSetOff = "Filtro deshabilitado";
 $FilterUsers = "Filtro de usuarios";
+$TemplateAdded = "Plantilla engadida";
 $TemplateDeleted = "Plantilla borrada";
 $EditTemplate = "Editar plantilla";
 ?>

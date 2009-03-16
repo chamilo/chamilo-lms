@@ -206,4 +206,5 @@ $NoLogOfDuration = "Ningún registro de duración";
 $AutoInviteLink = "Los usuarios que no hayan sido invitados pueden utilizar este enlace para realizar la encuesta:";
 $CompleteTheSurveysQuestions = "Complete las preguntas de la encuesta";
 $SurveysDeleted = "Encuestas borradas";
+$RemindUnanswered = "Recordatorio sólo para los usuarios que no hayan respondido";
 ?>

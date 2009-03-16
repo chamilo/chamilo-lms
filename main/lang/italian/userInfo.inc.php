@@ -72,5 +72,6 @@ $ExtraInformation = "Informazioni supplementari";
 $SearchContacts = "Cerca tra i contatti";
 $SocialSeeContacts = "Vedi i contatti";
 $SocialUserInformationAttach = "Prima di spedire un messaggio devi scriverlo";
-$MessageInformationBySendMessage = "Il tuo messaggio d\'invito non è stato spedito";
+$MessageInvitationNotSent = "Il tuo messaggio d\'invito non è stato spedito";
+$SocialAddToFriends = "Aggiungi ai contatti";
 ?>

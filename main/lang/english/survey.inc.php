@@ -155,8 +155,8 @@ $Shared = "Shared";
 $Invite = "Invite";
 $MaximumScore = "Maximum score";
 $ViewInvited = "View invited";
-$ViewAnswered = "View answered people";
-$ViewUnanswered = "View answered people";
+$ViewAnswered = "View people who answered";
+$ViewUnanswered = "View people who didn\'t answer";
 $DeleteSurveyQuestion = "Are you sure you want to delete the question?";
 $YouAlreadyFilledThisSurvey = "You already filled this survey";
 $ClickHereToAnswerTheSurvey = "Click here to answer the survey";
@@ -206,5 +206,5 @@ $NoLogOfDuration = "No log of duration";
 $AutoInviteLink = "Users who are not invited can use this link to take the survey:";
 $CompleteTheSurveysQuestions = "Complete the survey\'s questions";
 $SurveysDeleted = "Surveys deleted";
-$remindUnAnswered = "Remind unanswered people only";
+$RemindUnanswered = "Remind only users who didn\'t answer";
 ?>

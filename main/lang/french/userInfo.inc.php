@@ -30,6 +30,7 @@ $langUnregister = "Non enregistré";
 $langAddAUser = "Ajouter des utilisateurs";
 $UsersUnsubscribed = "Les utilisateurs sélectionnés ont été désinscrits du cours";
 $ThisStudentIsSubscribeThroughASession = "Cet apprenant est inscrit dans ce cours via une session de formation. Vous ne pouvez pas modifier ses informations";
+$AddToFriends = "Êtes-vous certain de vouloir ajouter ce contact à vos amis?";
 $PersonalData = "Fiche perso";
 $Contacts = "Contacts";
 $SocialInformationComment = "Cet écran vous permet d\'organiser vos contacts";
@@ -71,4 +72,6 @@ $ExtraInformation = "Information extra";
 $SearchContacts = "Rechercher parmi les contacts";
 $SocialSeeContacts = "Voir les contacts";
 $SocialUserInformationAttach = "Veuillez écrire un message avant d\'envoyer la requête";
+$MessageInvitationNotSent = "Votre invitation n\'a pas été envoyée";
+$SocialAddToFriends = "Ajouter à mes contacts";
 ?>

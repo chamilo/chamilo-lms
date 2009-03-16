@@ -928,4 +928,9 @@ $FilterUsers = "Filtriraj uporabnike";
 $SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Več tečajev je bilo registrirano/vpisano v sejo, ker si jih več deli skupno kodo tečaja";
 $CoachIsRequired = "Izbrati morate inštruktorja";
 $EncryptMethodUserPass = "Način kriptiranja";
+$AddTemplate = "Dodaj predlogo";
+$TemplateImageComment100x70 = "Slika bo predstavljala predlogo v seznamu predlog. Naj ne bo večja od 100x70 pik.";
+$TemplateAdded = "Predloga je bila dodana";
+$TemplateDeleted = "Predloga je bila odstranjena";
+$EditTemplate = "Urejanje predloge";
 ?>

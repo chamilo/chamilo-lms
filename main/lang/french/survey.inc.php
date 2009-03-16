@@ -206,4 +206,5 @@ $NoLogOfDuration = "Pas d\'historique de durée";
 $AutoInviteLink = "Les utilisateurs qui ne sont pas invités peuvent utiliser ce lien pour répondre à l\'enquête:";
 $CompleteTheSurveysQuestions = "Compléter les questions de l\'enquête";
 $SurveysDeleted = "Enquêtes supprimées";
+$RemindUnanswered = "Envoyer un rappel uniquement aux utilisateurs qui n\'ont pas répondu";
 ?>

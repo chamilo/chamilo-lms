@@ -178,5 +178,5 @@ $AnonymousSurveyCannotKnowWhoAnswered = "Deze enquete is anoniem. U kunt niet zi
 $IllegalSurveyId = "Onbekend enquête id";
 $SurveyQuestionMoved = "De vraag werd verplaatst. ";
 $AutoInviteLink = "Gebruikers die niet uitgenodigd zijn kunnen deze link gebruiken om de enquete te doen:";
-$remindUnAnswered = "Stuur herinnering alleen naar personen die nog niet geantwoord hebben ";
+$RemindUnanswered = "Stuur herinnering alleen naar personen die nog niet geantwoord hebben ";
 ?>

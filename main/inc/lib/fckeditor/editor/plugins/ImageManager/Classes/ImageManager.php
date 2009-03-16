@@ -125,6 +125,7 @@ class ImageManager
 				&& substr($entry,0,1) != '.'
 				&& strpos($entry, '_DELETED_') === false
 				&& strpos($entry, 'chat_files') === false
+				&& strpos($entry, 'css') === false
 				&& strpos($entry, 'HotPotatoes_files') === false
 				&& ($in_group || (!$in_group && strpos($entry, '_groupdocs') === false))
 				&& $this->isThumbDir($entry) == false) 
@@ -137,12 +138,14 @@ class ImageManager
 					continue;
 				}
 				
-				$base_dir = substr($fullpath, 0, strpos($fullpath,'/document/')+9); //				  				
-				$new_dir  = substr($fullpath, strlen($base_dir),-1); //
-				global $_course;	
-				$doc_id = DocumentManager::get_document_id($_course, $new_dir );
-				$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);
-				
+				if (isset($_course['dbName']) && $_course<>'-1') {
+					$base_dir = substr($fullpath, 0, strpos($fullpath,'/document/')+9); //				  				
+					$new_dir  = substr($fullpath, strlen($base_dir),-1); //
+					global $_course;	
+					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
+					$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);
+				}
+
 				//Teachers can access to hidden files and directories as they can in the tool documents
 			    /*				
 				if ($visible_status=='0' || $visible_status=='-1') {					 
@@ -202,6 +205,7 @@ class ImageManager
 			if (substr($entry,0,1) != '.'          //not a dot file or directory
 				&& strpos($entry, '_DELETED_') === false
 				&& strpos($entry, 'chat_files') === false
+				&& strpos($entry, 'css') === false
 				&& strpos($entry, 'HotPotatoes_files') === false
 				&& ($in_group || (!$in_group && strpos($entry, '_groupdocs') === false)))
 			{
@@ -222,17 +226,14 @@ class ImageManager
 						}
 					}
 					*/
-				}
-								
+				}				
 
-								
-
-				if($is_dir && $this->isThumbDir($entry) == false) {			
-									//checking visibility		
-					$base_dir = substr($dir_entry, 0, strpos($dir_entry,'/document/')+9); 
-					$new_dir  = substr($dir_entry, strlen($base_dir),-1); //
-					global $_course;
+				if($is_dir && $this->isThumbDir($entry) == false) {	
 					if (isset($_course['dbName']) && $_course<>'-1') {
+						//checking visibility		
+						$base_dir = substr($dir_entry, 0, strpos($dir_entry,'/document/')+9); 
+						$new_dir  = substr($dir_entry, strlen($base_dir),-1); //
+						global $_course;					
 						$doc_id = DocumentManager::get_document_id($_course, $new_dir );
 						$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);		
 					}	
@@ -254,11 +255,11 @@ class ImageManager
 
 					if(!(!is_array($img)&&$this->config['validate_images']))
 					{
-										//checking visibility
-						$base_dir = substr($fullpath.$entry, 0, strpos($fullpath.$entry,'/document/')+9); 
-						$new_dir  = substr($fullpath.$entry, strlen($base_dir));
-						global $_course;	
-						if (isset($_course['dbName']) && $_course<>'-1') {
+					    if (isset($_course['dbName']) && $_course<>'-1') {
+							//checking visibility
+							$base_dir = substr($fullpath.$entry, 0, strpos($fullpath.$entry,'/document/')+9); 
+							$new_dir  = substr($fullpath.$entry, strlen($base_dir));
+							global $_course;						
 							$doc_id = DocumentManager::get_document_id($_course, $new_dir );
 							$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);										
 						}
@@ -563,20 +564,21 @@ class ImageManager
 		$result = Files::copyFile($file['tmp_name'], $path, $file['name']);
 
 		//no copy error
-       if (!is_int($result)) {	
-      	 	//adding the document to the DB
-       		global $_course, $to_group_id;
-       		
-       		// looking for the /document/ folder
-       		$document_path = substr($path, strpos($path,'/document/')+9, strlen($path)); //   /shared_folder/4/name
-       		$document_path.= $result;
-       		
-			$dokeosFile = $file['name'];	
-			$dokeosFileSize = $file['size'];
-			if(!empty($group_properties['directory'])) {
-				$dokeosFolder=$group_properties['directory'].$dokeosFolder;//get Dokeos
-			}
-			if (isset($_course['dbName']) && $_course<>'-1') {
+       if (!is_int($result)) {
+	   	    if (isset($_course['dbName']) && $_course<>'-1') {
+				//adding the document to the DB
+				global $_course, $to_group_id;
+				
+				// looking for the /document/ folder
+				$document_path = substr($path, strpos($path,'/document/')+9, strlen($path)); //   /shared_folder/4/name
+				$document_path.= $result;
+				
+				$dokeosFile = $file['name'];	
+				$dokeosFileSize = $file['size'];
+				if(!empty($group_properties['directory'])) {
+					$dokeosFolder=$group_properties['directory'].$dokeosFolder;//get Dokeos
+				}
+			
 				$doc_id = add_document($_course, $document_path,'file', $dokeosFileSize , $dokeosFile); //get Dokeos																								
 				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id);//get Dokeos	
 			}
@@ -764,10 +766,23 @@ class ImageManager
 		//if($this->countFiles($fullpath) <= 0) {
 		// now we use the default delete_document function
 		//return Files::delFolder($fullpath,true); //delete recursively.
-		global $_course;
-		$path_dir = substr($fullpath, strpos($fullpath,'/document/')+9,-1); //		
-		$base_dir  = substr($fullpath, 0, strlen($fullpath) - strlen($path_dir)); //
-		return DocumentManager::delete_document($_course,$path_dir,$base_dir);
+		if (isset($_course['dbName']) && $_course<>'-1') {
+			global $_course;
+			$path_dir = substr($fullpath, strpos($fullpath,'/document/')+9,-1); //		
+			$base_dir  = substr($fullpath, 0, strlen($fullpath) - strlen($path_dir)); //
+			return DocumentManager::delete_document($_course,$path_dir,$base_dir);
+		}
+		else
+		{
+		    if($this->countFiles($fullpath) <= 0) {
+				return Files::delFolder($fullpath,true);
+		    }
+			else
+			{
+				Return false;
+			}
+			 
+		} 
 		/*	
 		}
 		else
@@ -796,18 +811,24 @@ class ImageManager
 			} else {
 				//adding to the DB
 				// now the create_unexisting_directory will create the folder
-				//$result = Files::createFolder($fullpath);							
-				global $_course;
-				//@todo make this str to functions
-				$base_dir = substr($path, 0, strpos($path,'/document/')+9); //  				
-				$new_dir  = substr($fullpath, strlen($base_dir),-1); //  			
-				$created_dir = create_unexisting_directory($_course, api_get_user_id(),0,0, $base_dir, $new_dir,$newDir);				
-				$doc_id = DocumentManager::get_document_id($_course, $new_dir );
-				/*				
-				if (!(api_is_platform_admin() || api_is_course_admin())) {
-					//setting invisible by default					
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
-				}*/
+				//$result = Files::createFolder($fullpath);	
+				if (isset($_course['dbName']) && $_course<>'-1') {						
+					global $_course;
+					//@todo make this str to functions
+					$base_dir = substr($path, 0, strpos($path,'/document/')+9); //  				
+					$new_dir  = substr($fullpath, strlen($base_dir),-1); //  			
+					$created_dir = create_unexisting_directory($_course, api_get_user_id(),0,0, $base_dir, $new_dir,$newDir);				
+					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
+					/*				
+					if (!(api_is_platform_admin() || api_is_course_admin())) {
+						//setting invisible by default					
+						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
+					}*/
+				}
+				else
+				{
+				 	Return Files::createFolder($fullpath);
+				}				
 				return true;				
 			}
 		}

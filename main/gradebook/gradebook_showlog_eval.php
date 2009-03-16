@@ -7,7 +7,7 @@
 	Copyright (c) 2006 Dokeos SPRL
 	Copyright (c) 2006 Ghent University (UGent)
 	Copyright (c) various contributors
-
+	Copyright (c) Isaac Flores Paz <florespaz@bidsoftperu.com>
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
 
@@ -36,6 +36,7 @@ $interbreadcrumb[] = array (
 	'name' => get_lang('Gradebook'
 ));
 Display :: display_header('');
+/*
 $t_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
 $evaledit = Evaluation :: load($_GET['visiblelog']);
@@ -67,5 +68,34 @@ $result=api_sql_query($sql);
 		echo '<td align="center" class="gradebook-table-body">'.$row[6].'</td>';
 	echo '</tr>';
 }
-echo '</table>';
+echo '</table>';*/
+
+
+$t_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
+$t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
+$visible_log=Security::remove_XSS($_GET['visiblelog']);
+$evaledit = Evaluation :: load($visible_log);
+$sql="SELECT le.name,le.description,le.date_log,le.weight,le.visible,le.type,us.username from ".$t_linkeval_log." le inner join ".$t_user." us on le.user_id_log=us.user_id where id_linkeval_log=".$evaledit[0]->get_id()." and type='evaluation';";
+$result=api_sql_query($sql);
+$list_info=array();
+while ($row=Database::fetch_row($result)) {
+	$list_info[]=$row;
+}
+
+foreach($list_info as $key => $info_log) {
+	$list_info[$key][2]=($info_log[2]) ? date('d-m-Y H:i:s',$info_log[2]) : '0000-00-00 00:00:00';
+	$list_info[$key][4]=($info_log[4]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
+}
+
+$parameters=array('visiblelog'=>Security::remove_XSS($_GET['visiblelog']),'selectcat'=>Security::remove_XSS($_GET['selectcat']));
+$table = new SortableTableFromArrayConfig($list_info, 1, count($list_info));
+$table->set_additional_parameters($parameters);
+$table->set_header(0, get_lang('GradebookNameLog'));
+$table->set_header(1, get_lang('GradebookDescriptionLog'));
+$table->set_header(2, get_lang('Date'));
+$table->set_header(3, get_lang('Weight'));
+$table->set_header(4, get_lang('GradebookVisibilityLog'));
+$table->set_header(5, get_lang('ResourceType'));
+$table->set_header(6, get_lang('GradebookWhoChangedItLog'));
+$table->display();
 Display :: display_footer();

@@ -712,10 +712,10 @@ $server->wsdl->addComplexType(
 		'year_end' => array('name' => 'year_end', 'type' => 'xsd:string'),
 		'month_end' => array('name' => 'month_end', 'type' => 'xsd:string'),
 		'day_end' => array('name' => 'day_end', 'type' => 'xsd:string'),
-		'nb_days_acess_before' => array('name' => 'nb_days_acess_before', 'type' => 'xsd:string'),
-		'nb_days_acess_after' => array('name' => 'nb_days_acess_after', 'type' => 'xsd:string'),		
+		'nb_days_access_before' => array('name' => 'nb_days_access_before', 'type' => 'xsd:string'),
+		'nb_days_access_after' => array('name' => 'nb_days_access_after', 'type' => 'xsd:string'),		
 		'nolimit' => array('name' => 'nolimit', 'type' => 'xsd:string'),
-		'coach_username' => array('name' => 'coach_username', 'type' => 'xsd:string'),
+		'user_id' => array('name' => 'user_id', 'type' => 'xsd:string'),
 		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string'),
 		'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
@@ -755,8 +755,8 @@ function DokeosWebServiceCreateSession($params) {
 	$year_end=intval($params['year_end']); 
 	$month_end=intval($params['month_end']); 
 	$day_end=intval($params['day_end']); 
-	$nb_days_acess_before = intval($params['nb_days_acess_before']); 
-	$nb_days_acess_after = intval($params['nb_days_acess_after']);
+	$nb_days_acess_before = intval($params['nb_days_access_before']); 
+	$nb_days_acess_after = intval($params['nb_days_access_after']);
 	$coach_username = $params['coach_username'];
 	$original_session_id_name = $params['original_session_id_name'];
 	$original_session_id_value = $params['original_session_id_value'];	
@@ -771,10 +771,8 @@ function DokeosWebServiceCreateSession($params) {
 	if (!empty($row)) {		
 		return 0;				
 	}
-	
-	$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($coach_username).'"';
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
-	$id_coach = Database::result($rs,0,'user_id');
+
+	$id_coach = $params['user_id'];
 
 	if (empty($params['nolimit'])){
 		$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
@@ -849,10 +847,10 @@ $server->wsdl->addComplexType(
 		'year_end' => array('name' => 'year_end', 'type' => 'xsd:string'),
 		'month_end' => array('name' => 'month_end', 'type' => 'xsd:string'),
 		'day_end' => array('name' => 'day_end', 'type' => 'xsd:string'),
-		'nb_days_acess_before' => array('name' => 'nb_days_acess_before', 'type' => 'xsd:string'),
-		'nb_days_acess_after' => array('name' => 'nb_days_acess_after', 'type' => 'xsd:string'),		
+		'nb_days_access_before' => array('name' => 'nb_days_access_before', 'type' => 'xsd:string'),
+		'nb_days_access_after' => array('name' => 'nb_days_access_after', 'type' => 'xsd:string'),		
 		'nolimit' => array('name' => 'nolimit', 'type' => 'xsd:string'),
-		'coach_username' => array('name' => 'coach_username', 'type' => 'xsd:string'),
+		'user_id' => array('name' => 'user_id', 'type' => 'xsd:string'),
 		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string'),
 		'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
@@ -891,8 +889,8 @@ function DokeosWebServiceEditSession($params) {
 	$year_end=intval($params['year_end']); 
 	$month_end=intval($params['month_end']);
 	$day_end=intval($params['day_end']); 
-	$nb_days_acess_before = intval($params['nb_days_acess_before']); 
-	$nb_days_acess_after = intval($params['nb_days_acess_after']); 
+	$nb_days_acess_before = intval($params['nb_days_access_before']); 
+	$nb_days_acess_after = intval($params['nb_days_access_after']); 
 	$original_session_id_value = $params['original_session_id_value'];
 	$original_session_id_name = $params['original_session_id_name'];
 	$coach_username = $params['coach_username'];
@@ -912,10 +910,11 @@ function DokeosWebServiceEditSession($params) {
 		return 0;
 	}
 	
-	$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($coach_username).'"';
+	/*$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($coach_username).'"';
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
-	$id_coach = Database::result($rs,0,'user_id');
-
+	$id_coach = Database::result($rs,0,'user_id');*/
+	
+	$id_coach = $params['user_id']; 
 	if (empty($params['nolimit'])) {
 		$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
 		$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);

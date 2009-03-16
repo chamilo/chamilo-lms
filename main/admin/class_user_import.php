@@ -55,9 +55,9 @@ function validate_data($user_classes)
 			{
 				//2.1.1 check if code exists in DB
 				$class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
-				$sql = "SELECT * FROM $class_table WHERE name = '".mysql_real_escape_string($user_class['ClassName'])."'";
+				$sql = "SELECT * FROM $class_table WHERE name = '".Database::escape_string($user_class['ClassName'])."'";
 				$res = api_sql_query($sql, __FILE__, __LINE__);
-				if (mysql_num_rows($res) == 0)
+				if (Database::num_rows($res) == 0)
 				{
 					$user_class['error'] = get_lang('CodeDoesNotExists');
 					$errors[] = $user_class;

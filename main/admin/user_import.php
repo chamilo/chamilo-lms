@@ -1,4 +1,4 @@
-<?php // $Id: user_import.php 18648 2009-02-24 05:35:43Z yannoo $
+<?php // $Id: user_import.php 19080 2009-03-16 20:18:03Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -277,16 +277,42 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 
 set_time_limit(0);
 $extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC',false);
-
+$user_id_error=array();
 if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
-	if ($file_type == 'csv') {
+	if (strcmp($file_type,'csv')===0 && strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
 		$users = parse_csv_data($_FILES['import_file']['tmp_name']);
-	} else {
+		$errors = validate_data($users);
+		$error_kind_file=false;
+	} elseif (strcmp($file_type,'xml')===0 && strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
 		$users = parse_xml_data($_FILES['import_file']['tmp_name']);
+		$errors = validate_data($users);
+		$error_kind_file=false;
+	} else {
+		$error_kind_file=true;
 	}
-	$errors = validate_data($users);
-	if (count($errors) == 0) {
+	
+	//list user id whith error
+    if (is_array($errors) && is_array($users)) {
+		foreach ($errors as $my_errors) {
+			$user_id_error[]=$my_errors['UserId'];
+		}
+	
+		foreach ($users as $my_user) {
+			if (!in_array($my_user['UserId'],$user_id_error)) {
+				$users_to_insert[]=$my_user;
+			}
+		}
+    }
+	if ( count($users_to_insert)>0 && $error_kind_file===false ) {
+		$errors=array();
+		$users=$users_to_insert;
+		$see_message_import=get_lang('FileImportedJustUsersThatAreNotRegistered');
+	} else {
+		$see_message_import=get_lang('FileImported');
+	}
+	
+	if ( count($errors) == 0 && $error_kind_file===false ) {
         $inserted_in_course = array();
 		save_data($users);
         $msg2 = '';
@@ -299,7 +325,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
         }
         Security::clear_token();
         $tok = Security::get_token();       
-		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported')).'&warn='.urlencode($msg2).'&sec_token='.$tok);
+		header('Location: user_list.php?action=show_message&message='.urlencode($see_message_import).'&warn='.urlencode($msg2).'&sec_token='.$tok);
 		exit ();
 	}
 }
@@ -319,6 +345,9 @@ if (count($errors) != 0) {
 	}
 	$error_message .= '</ul>';
 	Display :: display_error_message($error_message, false);
+}
+if ($error_kind_file===true) {
+	Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
 }
 $form = new FormValidator('user_import');
 $form->addElement('hidden', 'formSent');

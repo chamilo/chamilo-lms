@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 19078 2009-03-16 16:28:37Z yannoo $
+<?php // $Id: usermanager.lib.php 19080 2009-03-16 20:18:03Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -97,6 +97,7 @@ class UserManager
 		//$password = "PLACEHOLDER";
 		$password = api_get_encrypted_password($password); 
 		//$password = ($userPasswordCrypted ? md5($password) : $password);
+		$current_date=date('Y-m-d H:i:s',time());
 		$sql = "INSERT INTO $table_user
 					                SET lastname = '".Database::escape_string(trim($lastName))."',
 					                firstname = '".Database::escape_string(trim($firstName))."',
@@ -110,7 +111,7 @@ class UserManager
 					                auth_source = '".Database::escape_string($auth_source)."',
 				                    phone = '".Database::escape_string($phone)."',
 				                    language = '".Database::escape_string($language)."', 
-				                    registration_date = now(),
+				                    registration_date = '".$current_date."',
 				                    expiration_date = '".Database::escape_string($expiration_date)."',
 									hr_dept_id = '".Database::escape_string($hr_dept_id)."',
 									active = '".Database::escape_string($active)."'";

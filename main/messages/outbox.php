@@ -37,7 +37,7 @@ require_once (api_get_path(LIBRARY_PATH).'message.lib.php');
 api_block_anonymous_users();
 if (isset($_GET['messages_page_nr'])) {
 	if (api_get_setting('allow_social_tool')=='true' &&  api_get_setting('allow_message_tool')=='true') {
-		header('Location:../social/index.php?pager="'.$_GET['messages_page_nr'].'"&remote=3#remote-tab-3');	
+		header('Location:../social/index.php?pager="'.Security::remove_XSS($_GET['messages_page_nr']).'"&remote=3#remote-tab-3');	
 	}
 }
 if (api_get_setting('allow_message_tool')!='true'){

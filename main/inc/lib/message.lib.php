@@ -32,14 +32,14 @@ function inbox_display() {
 		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
 			$success= get_lang('SelectedMessagesDeleted').
 			"&nbsp
-			<br><a href=\"".
+			<br/><a href=\"".
 			"../social/index.php?$redirect\">".
 			get_lang('BackToInbox').
 			"</a>";
 		} else {
 			$success= get_lang('SelectedMessagesDeleted').
 			"&nbsp
-			<br><a href=\"".
+			<br/><a href=\"".
 			"../social/index.php?$redirect\">".
 			get_lang('BackToInbox').
 			"</a>";				
@@ -48,8 +48,7 @@ function inbox_display() {
 	} else {
 		$success= get_lang('SelectedMessagesDeleted').
 			"&nbsp
-			</b>".
-			"<br><a href=\"".
+			<br/><a href=\"".
 			"inbox.php\">".
 			get_lang('BackToOutbox').
 			"</a>";

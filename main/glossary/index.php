@@ -77,7 +77,7 @@ if (api_is_allowed_to_edit())
 		// initiate the object
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 		// settting the form elements		
-		$form->addElement('text', 'glossary_title', get_lang('TermName'));
+		$form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'100'));
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="add"');	
 		
@@ -115,7 +115,7 @@ if (api_is_allowed_to_edit())
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&glossary_id='.Security::remove_XSS($_GET['glossary_id']));
 		// settting the form elements		
 		$form->addElement('hidden', 'glossary_id');
-		$form->addElement('text', 'glossary_title', get_lang('TermName'));
+		$form->addElement('text', 'glossary_title', get_lang('TermName'),array('size'=>'100'));
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermUpdateButton'), 'class="save"');	
 		

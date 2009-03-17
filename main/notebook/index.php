@@ -85,7 +85,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 	}
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 	// settting the form elements	
-	$form->addElement('text', 'note_title', get_lang('NoteTitle'));
+	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'100'));
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('Save'), 'class="save"');	
 	
@@ -124,7 +124,7 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.Security::remove_XSS($_GET['notebook_id']));
 	// settting the form elements	
 	$form->addElement('hidden', 'notebook_id');
-	$form->addElement('text', 'note_title', get_lang('NoteTitle'));
+	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'100'));
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('Save'), 'class="save"');	
 	

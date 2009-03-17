@@ -107,12 +107,12 @@ function search_users($needle)
 		$charset = api_get_setting('platform_charset');
 		$needle = Database::escape_string($needle);
 		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
-		
+		$user_anonymous=api_get_anonymous_id();
 		// search users where username or firstname or lastname begins likes $needle
 		$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
 				WHERE (username LIKE "'.$needle.'%"
 				OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%") AND user_id<>2 
+				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'" 
 				ORDER BY lastname, firstname, username
 				LIMIT 11';
 				
@@ -125,7 +125,7 @@ function search_users($needle)
 				INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 				WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
 				OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%") AND user_id<>2 
+				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'" 
 				ORDER BY lastname, firstname, username
 				LIMIT 11';				
 				
@@ -353,8 +353,9 @@ if ($ajax_search) {
 			if($user['id_session'] != $id_session)			
 				$nosessionUsersList[$user['user_id']] = $user ;
 		}
+		$user_anonymous=api_get_anonymous_id();
 		foreach($nosessionUsersList as $key_user_list =>$value_user_list) {
-			if ($nosessionUsersList[$key_user_list]['user_id']==2) {
+			if ($nosessionUsersList[$key_user_list]['user_id']==$user_anonymous) {
 				unset($nosessionUsersList[$key_user_list]);
 			}
 		}
@@ -382,7 +383,7 @@ if ($ajax_search) {
 	$Users=api_store_result($result);
 
 	foreach($Users as $key_user_list =>$value_user_list) {
-		if ($Users[$key_user_list]['user_id']==2) {
+		if ($Users[$key_user_list]['user_id']==$user_anonymous) {
 			unset($Users[$key_user_list]);
 			}
 		}

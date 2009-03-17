@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 19083 2009-03-16 21:54:10Z herodoto $
+<?php // $Id: settings.php 19109 2009-03-17 18:17:50Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -978,11 +978,11 @@ function image_filter($image)
 {
 	if (!empty($image))
 	{
-		return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
+		return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
 	}
 	else
 	{
-		return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
+		return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
 	}
 }
 
@@ -1040,11 +1040,11 @@ function add_edit_template()
 		// adding an extrra field: a preview of the image that is currently used
 		if (!empty($row['image']))
 		{		
-			$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
+			$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
 		}
 		else
 		{
-			$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
+			$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
 		}
 		
 		// setting the information of the template that we are editing 
@@ -1075,7 +1075,7 @@ function add_edit_template()
 				$new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);	
 				
 				// upload dir
-				$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/';
+				$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/';
 				
 				// create dir if not exists
                 if (!is_dir($upload_dir)) {
@@ -1167,7 +1167,7 @@ function delete_template($id)
 	$row = Database::fetch_array($result);	
 	if (!empty($row['image']))
 	{
-		unlink(api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
+		unlink(api_get_path(SYS_PATH).'home/default_platform_document/'.$row['image']);
 	}
 	
 	// now we remove it from the database

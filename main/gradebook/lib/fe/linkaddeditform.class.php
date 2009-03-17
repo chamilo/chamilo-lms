@@ -84,6 +84,7 @@ class LinkAddEditForm extends FormValidator
 								'label',
 								get_lang('Name'),
 								$link->get_name().' ['.$link->get_type_name().']');
+			$this->addElement('hidden','name_link',$link->get_name(),array('id'=>'name_link'));
 		}
 			
 		// ELEMENT: weight

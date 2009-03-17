@@ -32,10 +32,10 @@ block_students();
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 //selected name of database
-$my_db_name=get_database_name_by_link_id($_GET['editlink']);
+$my_db_name=get_database_name_by_link_id(Security::remove_XSS($_GET['editlink']));
 $tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
 
-$linkarray = LinkFactory :: load($_GET['editlink']);
+$linkarray = LinkFactory :: load(Security::remove_XSS($_GET['editlink']));
 $link = $linkarray[0];
 $linkcat  = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']):'';
 $linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']):'';
@@ -54,7 +54,7 @@ if ($form->validate()) {
 	$link->set_date(strtotime($values['date']));
 	$link->set_visible(empty ($values['visible']) ? 0 : 1);
 	$link->save();
-	$sql_t='UPDATE '.$tbl_forum_thread.' SET thread_weight='.$values['weight'].' WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.$_GET['editlink'].' and type=5);';
+	$sql_t='UPDATE '.$tbl_forum_thread.' SET thread_weight='.$values['weight'].' WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.Security::remove_XSS($_GET['editlink']).' and type=5);';
 	api_sql_query($sql_t);
 	header('Location: '.$_SESSION['gradebook_dest'].'?linkedited=&selectcat=' . $link->get_category_id());
 	exit;

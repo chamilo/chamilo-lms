@@ -24,7 +24,7 @@
 */
 /**
  * Defines a gradebook Evaluation object
- * @author Bert Steppé, Stijn Konings
+ * @author Bert Steppï¿½, Stijn Konings
  * @package dokeos.gradebook
  */
 class Evaluation implements GradebookItem

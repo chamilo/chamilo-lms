@@ -279,8 +279,17 @@ abstract class AbstractLink implements GradebookItem
 		$dateobject=AbstractLink::load ($idevaluation,null,null,null,null);
 		$current_date_server=strtotime(date('Y-m-d H:i:s',time()));
 		$arreval=get_object_vars($dateobject[0]);
+		//var_dump($arreval);
 		$description_log=isset($arreval['description'])?$arreval['description']:'';
-		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".$arreval['id']."','".$arreval['course_code']."','".$description_log."','".$current_date_server."','".$arreval['weight']."','".$arreval['visible']."','Link',".api_get_user_id().")";
+		if (isset($_POST['name_link'])) {
+			$name_log=isset($_POST['name_link'])?Security::remove_XSS($_POST['name_link']):$arreval['course_code'];	
+		} elseif ($_POST['link_'.$idevaluation]) {
+			$name_log=$_POST['link_'.$idevaluation];
+		} else {
+			$name_log=$arreval['course_code'];
+		}
+		//error_log($name_log);
+		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".$arreval['id']."','".$name_log."','".$description_log."','".$current_date_server."','".$arreval['weight']."','".$arreval['visible']."','Link',".api_get_user_id().")";
 		api_sql_query($sql,__FILE__,__LINE__);
 	
 	}	

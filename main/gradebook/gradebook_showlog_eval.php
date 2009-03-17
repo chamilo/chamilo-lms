@@ -35,7 +35,16 @@ $interbreadcrumb[] = array (
 	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
 	'name' => get_lang('Gradebook'
 ));
+$interbreadcrumb[] = array (
+	'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']),
+	'name' => get_lang('GradebookQualifyLog')
+);
+	
 Display :: display_header('');
+echo '<div class="clear"></div>';
+echo '<div class="actions">';
+api_display_tool_title(get_lang('GradebookQualifyLog'));
+echo '</div>';
 /*
 $t_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
@@ -88,7 +97,7 @@ foreach($list_info as $key => $info_log) {
 }
 
 $parameters=array('visiblelog'=>Security::remove_XSS($_GET['visiblelog']),'selectcat'=>Security::remove_XSS($_GET['selectcat']));
-$table = new SortableTableFromArrayConfig($list_info, 1, count($list_info));
+$table = new SortableTableFromArrayConfig($list_info, 1,20,'gradebookeval');
 $table->set_additional_parameters($parameters);
 $table->set_header(0, get_lang('GradebookNameLog'));
 $table->set_header(1, get_lang('GradebookDescriptionLog'));

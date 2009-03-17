@@ -935,4 +935,6 @@ $TemplateDeleted = "Plantilla borrada";
 $EditTemplate = "Edición de plantilla";
 $FileImportedJustUsersThatAreNotRegistered = "Se importó solo los usuarios que no están registrados en la plataforma";
 $YouMustImportAFileAccordingToSelectedOption = "Debe importar un archivo de acuerdo a la opción seleccionada";
+$ShowEmailOfTeacherOrTutorTitle = "Correo electrónico del profesor o tutor en el pie";
+$ShowEmailOfTeacherOrTutorComent = "¿ Mostrar el correo electrónico del profesor o tutor en el pie de página ?";
 ?>

@@ -107,6 +107,7 @@ $MoreRecent = "novejši";
 $Older = "starejši";
 $OrderBy = "Razvršèeno po";
 $WhoChanged = "Spremenil";
+$NoteChanged = "Vsebina je bila spremenjena";
 $DateChanged = "Datum spremembe";
 $ViewComentPost = "Poglej komentarje objav";
 $AllStudents = "Vsi teèajniki";

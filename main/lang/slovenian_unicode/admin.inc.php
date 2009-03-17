@@ -933,4 +933,6 @@ $TemplateImageComment100x70 = "Slika bo predstavljala predlogo v seznamu predlog
 $TemplateAdded = "Predloga je bila dodana";
 $TemplateDeleted = "Predloga je bila odstranjena";
 $EditTemplate = "Urejanje predloge";
+$FileImportedJustUsersThatAreNotRegistered = "Uporabniki, ki še niso registrirani v platformi, so bili uvoženi";
+$YouMustImportAFileAccordingToSelectedOption = "uvažana datoteka mora biti v skladu z izbrano možnostjo";
 ?>

@@ -697,4 +697,6 @@ $SocialNetwork = "Socialno omrežje";
 $BackToOutbox = "Nazaj k odposlanim sporočilom";
 $Invitation = "Povabilo";
 $SeeMoreOptions = "Poglej več možnosti";
+$TemplatePreview = "Predogled predlog";
+$NoTemplatePreview = "Predogled ni na voljo";
 ?>

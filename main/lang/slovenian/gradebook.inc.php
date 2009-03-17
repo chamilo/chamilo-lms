@@ -130,4 +130,5 @@ $CannotChangeTheMaxNote = "Ne morem spremeniti vrednosti max";
 $GradebookWeightUpdated = "Uteži so bile uspešno ažurirane";
 $ChooseItem = "Izberi element";
 $AverageResultsVsResource = "Povpreèen rezultat / vir";
+$ToViewGraphScoreRuleMustBeEnabled = "Za ogled grafa mora biti pravilo prikaza rezultata omogoèeno ";
 ?>

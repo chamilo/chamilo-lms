@@ -928,4 +928,11 @@ $FilterUsers = "Filtriraj uporabnike";
 $SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Veè teèajev je bilo registrirano/vpisano v sejo, ker si jih veè deli skupno kodo teèaja";
 $CoachIsRequired = "Izbrati morate inštruktorja";
 $EncryptMethodUserPass = "Naèin kriptiranja";
+$AddTemplate = "Dodaj predlogo";
+$TemplateImageComment100x70 = "Slika bo predstavljala predlogo v seznamu predlog. Naj ne bo veèja od 100x70 pik.";
+$TemplateAdded = "Predloga je bila dodana";
+$TemplateDeleted = "Predloga je bila odstranjena";
+$EditTemplate = "Uredi predlogo";
+$FileImportedJustUsersThatAreNotRegistered = "Uporabniki, ki še niso registrirani v platformi, so bili uvoženi";
+$YouMustImportAFileAccordingToSelectedOption = "uvažana datoteka mora biti v skladu z izbrano možnostjo";
 ?>

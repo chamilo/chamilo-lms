@@ -697,4 +697,6 @@ $SocialNetwork = "Red social";
 $BackToOutbox = "Volver a la bandeja de salida";
 $Invitation = "Invitación";
 $SeeMoreOptions = "Ver más opciones";
+$TemplatePreview = "Previsualización de la plantilla";
+$NoTemplatePreview = "Previsualización no disponible";
 ?>

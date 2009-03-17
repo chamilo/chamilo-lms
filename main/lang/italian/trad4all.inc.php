@@ -697,4 +697,6 @@ $SocialNetwork = "Rete di contatti";
 $BackToOutbox = "Ritorna ai messaggi in uscita";
 $Invitation = "Invito";
 $SeeMoreOptions = "Altre opzioni";
+$TemplatePreview = "Anteprima modello";
+$NoTemplatePreview = "Anteprima non disponibile";
 ?>

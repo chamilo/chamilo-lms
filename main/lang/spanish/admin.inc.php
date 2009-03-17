@@ -933,4 +933,6 @@ $TemplateImageComment100x70 = "Este imagen representará su plantilla en la lista
 $TemplateAdded = "Plantilla añadida";
 $TemplateDeleted = "Plantilla borrada";
 $EditTemplate = "Edición de plantilla";
+$FileImportedJustUsersThatAreNotRegistered = "Se importó solo los usuarios que no están registrados en la plataforma";
+$YouMustImportAFileAccordingToSelectedOption = "Debe importar un archivo de acuerdo a la opción seleccionada";
 ?>

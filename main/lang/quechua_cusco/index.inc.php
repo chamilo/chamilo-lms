@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Haykuy mana atikunchu - haykuq sutin utaq qelqa pakasqan mana allinchu";
-$langWelcome = "Urapin yachachinakunaqa qespisqallaÃ�Â±a kashanku. Hoq yachachinakunaqa munankupuni  \'Haykuq sutin-ta\' hinallataq huj paka qelqatapas chay \'Qelqachikuy-pi\'  haykuspa. Yachachiqkunapas kamachinkuman yachachinata  chay \'\'Qelqachikuy\"  nisqanpi, ajllarispa  \"kamachiy yachachinata\"";
+$langWelcome = "Urapin yachachinakunaqa qespisqallaña kashanku. Hoq yachachinakunaqa munankupuni  \'Haykuq sutin-ta\' hinallataq huj paka qelqatapas chay \'Qelqachikuy-pi\'  haykuspa. Yachachiqkunapas kamachinkuman yachachinata  chay \'\'Qelqachikuy\"  nisqanpi, ajllarispa  \"kamachiy yachachinata\"";
 $langPass = "Qelqa pakay";
 $langEnter = "Haykuy";
 $langReg = "Suti qelqa";
@@ -15,7 +15,7 @@ $langSupportForum = "Rimarinakuy yanapanapaq";
 $langCategories  = "Mitakuna";
 $langBackToHomePage  = "Kutiy";
 $lang_No_course_publicly_available  = "Manan kanchu yachachikuna  llapan llaqtakunapaqqa";
-$langLostPassword  = "¿Qonqarankichu qelqa pakaykita?";
+$langLostPassword  = "Qonqarankichu qelqa pakaykita?";
 $lang_edit_my_course_list  = "Hoqmanta qelqay yupasqa yachachinakunata";
 $langAgenda  = "Ruway hamuqkuna";
 $langValvas  = "Qhepa willaykuna";

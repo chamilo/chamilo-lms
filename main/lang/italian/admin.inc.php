@@ -933,4 +933,6 @@ $TemplateImageComment100x70 = "L\'immagine raffigura il modello nell\'elenco dei
 $TemplateAdded = "Modello aggiunto";
 $TemplateDeleted = "Modello eliminato";
 $EditTemplate = "Modifica il modello";
+$FileImportedJustUsersThatAreNotRegistered = "Importati solo gli utenti non registrati presso il Campus";
+$YouMustImportAFileAccordingToSelectedOption = "Devi importare un file seguendo le opzioni selezionate";
 ?>

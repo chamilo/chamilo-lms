@@ -167,5 +167,5 @@ $NewUserInTheCourse = "Nuovo utente iscritto al corso";
 $MessageNewUserInTheCourse = "Questo è il messaggio che ti permette di sapere se un nuovo corsista si è iscritto al corso";
 $EditNormalProfile = "Modifica il profilo normale";
 $EditExtendProfile = "Modifica il profilo esteso";
-$EditInformation = "Modifica l\'informazione";
+$EditInformation = "Modifica le informazioni";
 ?>

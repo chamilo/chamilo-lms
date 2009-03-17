@@ -933,4 +933,6 @@ $TemplateImageComment100x70 = "This image will represent the template in the tem
 $TemplateAdded = "Template added";
 $TemplateDeleted = "Template deleted";
 $EditTemplate = "Template edition";
+$FileImportedJustUsersThatAreNotRegistered = "Users that is not registered into plattform has been imported";
+$YouMustImportAFileAccordingToSelectedOption = "you must import a file according to selected option";
 ?>

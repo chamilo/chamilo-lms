@@ -108,4 +108,5 @@ $DocumentsOverview = "查看文档";
 $ViewSlideshow = "以幻灯片形式查看图像";
 $Options = "选项";
 $ConvertToLP = "&#36716;&#25442;&#20026;&#23398;&#20064;&#36335;&#32447;";
+$TemplateTitleCourseTitle = "&#35838;&#31243;&#26631;&#39064;";
 ?>

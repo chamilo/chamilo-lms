@@ -697,4 +697,6 @@ $SocialNetwork = "Social network";
 $BackToOutbox = "Back to outbox";
 $Invitation = "Invitation";
 $SeeMoreOptions = "See more options";
+$TemplatePreview = "Template preview";
+$NoTemplatePreview = "Preview not available";
 ?>

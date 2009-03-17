@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 18495 2009-02-13 19:03:28Z herodoto $
+<?php // $Id: configure_homepage.php 19111 2009-03-17 20:44:30Z iflorespaz $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -384,7 +384,6 @@ if(!empty($action))
 						if($fp)
 						{
 							fputs($fp,$link_html);
-
 							fclose($fp);
 						}
 					}
@@ -414,16 +413,20 @@ if(!empty($action))
 					// Re-build the file from the home_menu array
 					$home_menu=implode("\n",$home_menu);
 					// Write
-					if(file_exists($homep.$menuf.'_'.$lang.$ext))
-					{
-						if(is_writable($homep.$menuf.'_'.$lang.$ext))
-						{
+					if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
+						if (is_writable($homep.$menuf.'_'.$lang.$ext)) {
 							$fp=fopen($homep.$menuf.'_'.$lang.$ext,"w");
 							fputs($fp,$home_menu);
 							fclose($fp);
-						}
-						else
-						{
+							if (file_exists($homep.$menuf.$ext)) {
+								if (is_writable($homep.$menuf.$ext)) {
+									$fpo=fopen($homep.$menuf.$ext,"w");
+									fputs($fpo,$home_menu);
+									fclose($fpo);
+								}
+							}
+								
+						} else {
 							$errorMsg=get_lang('HomePageFilesNotWritable');
 						}
 					}
@@ -467,12 +470,17 @@ if(!empty($action))
 						$home_menu[$key]=trim($enreg);
 					}
 				}
-				
 				$home_menu=implode("\n",$home_menu);
 				$fp=fopen($homep.$menuf.'_'.$lang.$ext,'w');
 				fputs($fp,$home_menu);
 				fclose($fp);
-
+				if (file_exists($homep.$menuf.$ext)) {
+					if (is_writable($homep.$menuf.$ext)) {
+						$fpo=fopen($homep.$menuf.$ext,'w');
+						fputs($fpo,$home_menu);
+						fclose($fpo);
+						}
+				}
 				header('Location: '.api_get_self());
 				exit();
 				break;

@@ -1,4 +1,4 @@
-<?php // $Id: footer.inc.php 19112 2009-03-17 20:50:08Z cvargas1 $
+<?php // $Id: footer.inc.php 19115 2009-03-17 22:53:09Z cvargas1 $
  
 /*
 ==============================================================================
@@ -34,6 +34,8 @@
 */
 
 /**** display of tool_navigation_menu according to admin setting *****/
+require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+
 if(api_get_setting('show_navigation_menu') != 'false')
 {
 

@@ -1,4 +1,4 @@
-<?php // $Id: footer.inc.php 16728 2008-11-12 15:49:54Z pcool $
+<?php // $Id: footer.inc.php 19112 2009-03-17 20:50:08Z cvargas1 $
  
 /*
 ==============================================================================
@@ -50,7 +50,6 @@ if(api_get_setting('show_navigation_menu') != 'false')
    }
 }
 /***********************************************************************/
-
 ?>
  <div class="clear">&nbsp;</div> <!-- 'clearing' div to make sure that footer stays below the main and right column sections -->
 </div> <!-- end of #main" started at the end of banner.inc.php -->
@@ -70,15 +69,38 @@ if(api_get_setting('show_navigation_menu') != 'false')
 */
 api_plugin('footer');
 ?>
-  <?php
-  if (get_setting('show_administrator_data')=="true")
-  	{
-  	echo get_lang("Manager") ?> : <?php echo Display::encrypted_mailto_link(get_setting('emailAdministrator'),get_setting('administratorName')." ".get_setting('administratorSurname'));
-	}
-  ?>&nbsp;
-  
-
+<?php
+if (get_setting('show_email_of_teacher_or_tutor')=="true"){
+	$id_course=api_get_course_id();
+	$id_session=api_get_session_id();
+	if (isset($id_course)){
+		if ($id_session==0){
+			$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
+			if (count($mail)>1){
+				$bar='&nbsp;|&nbsp;';
+				echo get_lang('Teachers')." : ";
+			} else {
+				$bar='';
+				echo get_lang('Teacher')." : ";
+			}
+			foreach($mail as $value=>$key) {
+				foreach($key as $email=>$name){
+					echo Display::encrypted_mailto_link($email,$name).$bar;		
+				}
+			}
+		} else {
+			$mail=CourseManager::get_email_of_tutor_to_session($id_session);
+			echo get_lang('Tutor')." : ";
+			foreach($mail as $v=>$k) {
+				echo Display::encrypted_mailto_link($v,$k); 
+			}
+		}
+	} 
+} 
+if (get_setting('show_administrator_data')=="true") {
+	  	echo "<br />".get_lang("Manager") ?> : <?php echo Display::encrypted_mailto_link(get_setting('emailAdministrator'),get_setting('administratorName')." ".get_setting('administratorSurname'));
+}
+?>&nbsp;
 </div> <!-- end of #footer -->
-
 </body>
 </html>

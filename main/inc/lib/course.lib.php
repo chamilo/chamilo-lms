@@ -1924,5 +1924,49 @@ class CourseManager
         }
         return $result;
     }
+    /**
+	 * Get emails of tutors to course
+	 * @param string Visual code
+	 * @return array List of emails of tutors to course
+	 * @author @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
+	 * */
+	function get_emails_of_tutors_to_course($code) {
+		$users = Database :: get_main_table(TABLE_MAIN_USER);
+		$course_rel_users = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$code = Database::escape_string($code);        
+		$sql="SELECT user_id FROM $course_rel_users WHERE course_code='$code' AND status=1";
+		$res = api_sql_query($sql,__FILE__,__LINE__); 	
+		$list=array();
+		while ($list_users = Database::fetch_array($res)){
+			$sql_list="SELECT * FROM $users WHERE user_id=".$list_users['user_id'];
+			$result = api_sql_query($sql_list,__FILE__,__LINE__);
+			while ($row_user = Database::fetch_array($result)){
+				$name_teacher=$row_user['firstname'].' '.$row_user['lastname'];
+				$list[]=array($row_user['email']=>$name_teacher);
+			}
+		} 
+		return $list;  	
+	}
+	/**
+	 * Get emails of tutors to course
+	 * @param string session session
+	 * @return string email of tutor to session
+	 * @author @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
+	 * */
+	function get_email_of_tutor_to_session($session) {
+		$users = Database :: get_main_table(TABLE_MAIN_USER);
+		$session_rel_users = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$session = Database::escape_string($session);        
+		$sql_tutor="SELECT * FROM $session_rel_users WHERE id_session='$session'";
+		$res = api_sql_query($sql_tutor,__FILE__,__LINE__);
+		$row_email = Database::fetch_array($res);
+		$sql_list="SELECT * FROM $users WHERE user_id=".$row_email["id_coach"];
+		$result_user = api_sql_query($sql_list,__FILE__,__LINE__);
+		while ($row_emails = Database::fetch_array($result_user)) {
+			$name_tutor=$row_emails["firstname"].' '.$row_emails["lastname"];
+			$mail_tutor=array($row_emails["email"]=>$name_tutor);
+		}
+		return $mail_tutor;		   	
+	}
 	
 } //end class CourseManager

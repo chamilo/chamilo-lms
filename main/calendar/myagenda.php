@@ -1,4 +1,4 @@
-<?php //$Id: myagenda.php 17483 2008-12-30 15:04:12Z cvargas1 $
+<?php //$Id: myagenda.php 19108 2009-03-17 17:35:50Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -183,7 +183,7 @@ if (!empty($_GET['action']) && $_GET['action'] == "delete" AND $_GET['id'])
 if (isset ($_user['user_id']))
 {
 	// getting all the courses that this user is subscribed to
-	$courses_dbs = get_courses_of_user();
+	$courses_dbs = get_all_courses_of_user();
 	if (!is_array($courses_dbs)) // this is for the special case if the user has no courses (otherwise you get an error)
 	{
 		$courses_dbs = array ();

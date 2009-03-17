@@ -499,6 +499,43 @@ function store_personal_item($day, $month, $year, $hour, $minute, $title, $conte
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 }
 /**
+ * This function finds all the courses (also those of sessions) of the user and returns an array containing the
+ * database name of the courses.
+ * Xritten by Noel Dieschburg <noel.dieschburg@dokeos.com>
+ */
+
+function get_all_courses_of_user()
+{
+        global $TABLECOURS;
+        global $TABLECOURSUSER;
+        global $_user;
+        $tbl_session_course     = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session_course_user= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session                    = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $sql_select_courses = "SELECT c.code k, c.visual_code  vc, c.title i, c.tutor_name t, 
+                                      c.db_name db, c.directory dir, '5' as status
+                                FROM $TABLECOURS c, $tbl_session_course_user srcu
+                                WHERE srcu.id_user='".$_user['user_id']."' 
+                                AND c.code=srcu.course_code
+                                UNION 
+                               SELECT c.code k, c.visual_code  vc, c.title i, c.tutor_name t, 
+                                      c.db_name db, c.directory dir, cru.status status
+                                FROM $TABLECOURS c, $TABLECOURSUSER cru
+                                WHERE cru.user_id='".$_user['user_id']."'
+                                AND c.code=cru.course_code";
+        $result = api_sql_query($sql_select_courses);
+        while ($row = Database::fetch_array($result))
+        {
+                // we only need the database name of the course
+                $courses[] = array ("db" => $row['db'], "code" => $row['k'], "visual_code" => $row['vc'], "title" => $row['i'], "directory" => $row['dir'], "status" => $row['status']);
+        }
+        return $courses;
+ }
+
+
+
+
+/**
  * This function finds all the courses of the user and returns an array containing the
  * database name of the courses.
  */

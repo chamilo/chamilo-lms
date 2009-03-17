@@ -57,7 +57,7 @@
 			define('CONFIG_OPTIONS_DELETE', false);
 			define('CONFIG_OPTIONS_CUT', false);
 			define('CONFIG_OPTIONS_COPY', false);
-			define('CONFIG_OPTIONS_NEWFOLDER', false);
+			define('CONFIG_OPTIONS_NEWFOLDER', true);
 			define('CONFIG_OPTIONS_RENAME', false);
 			define('CONFIG_OPTIONS_UPLOAD', true); //
 			define('CONFIG_OPTIONS_EDITABLE', false); //disable image editor and text editor
@@ -68,7 +68,7 @@
 			define('CONFIG_OPTIONS_DELETE', false);
 			define('CONFIG_OPTIONS_CUT', false);
 			define('CONFIG_OPTIONS_COPY', false);
-			define('CONFIG_OPTIONS_NEWFOLDER', false);
+			define('CONFIG_OPTIONS_NEWFOLDER', true);
 			define('CONFIG_OPTIONS_RENAME', false);
 			define('CONFIG_OPTIONS_UPLOAD', true); //
 			define('CONFIG_OPTIONS_EDITABLE', false); //disable image editor and text editor

@@ -85,7 +85,7 @@
 									{
 										if(!api_is_allowed_to_edit())
 										{
-											$dokeosFolder='/shared_folder/'.$dokeosFolder;
+											$dokeosFolder='/shared_folder/sf_user_'.api_get_user_id().$dokeosFolder;
 										}						
 									}
 									

@@ -123,9 +123,6 @@ CREATE TABLE session_field (id int NOT NULL auto_increment, field_type int NOT N
 CREATE TABLE session_field_values(id int NOT NULL auto_increment, session_id int NOT NULL, field_id int NOT NULL, field_value text, tms TIMESTAMP, PRIMARY KEY(id));
 ALTER TABLE templates ADD image VARCHAR( 250 ) NOT NULL ;
 INSERT IGNORE INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.19017','DokeosDatabaseVersion','',NULL,NULL,1,0);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_email_of_teacher_or_tutor', NULL, 'radio', 'Platform','true','ShowEmailOfTeacherOrTutorTitle','ShowEmailOfTeacherOrTutorComent',NULL,NULL,0);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('show_email_of_teacher_or_tutor ', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('show_email_of_teacher_or_tutor ', 'false', 'No');
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';

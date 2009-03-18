@@ -234,7 +234,7 @@ class FlatViewDataGenerator
 				$item_total+=$item->get_weight();									
 				$score_denom=($score[1]==0) ? 1 : $score[1];
 				$score_final = round(($score[0] / $score_denom) * 100,2);		
-				$row[] = array ($score_final, $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_CUSTOM));								
+				$row[] = array ($score_final, strip_tags($scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_CUSTOM)));								
 			}	
 			$total_score=array($item_value,$item_total);			
 			$score_final = round(($item_value / $item_total) * 100,2);				

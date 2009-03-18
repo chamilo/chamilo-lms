@@ -1,4 +1,4 @@
-<?php // $Id: footer.inc.php 19115 2009-03-17 22:53:09Z cvargas1 $
+<?php // $Id: footer.inc.php 19128 2009-03-18 16:16:29Z cvargas1 $
  
 /*
 ==============================================================================
@@ -75,7 +75,7 @@ api_plugin('footer');
 if (get_setting('show_email_of_teacher_or_tutor')=="true"){
 	$id_course=api_get_course_id();
 	$id_session=api_get_session_id();
-	if (isset($id_course)){
+	if (isset($id_course) && $id_course!=-1){
 		if ($id_session==0){
 			$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
 			if (count($mail)>1){

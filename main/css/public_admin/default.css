@@ -2209,8 +2209,6 @@ float:left;
 	padding-left:10px;
 	width:200px;
 }
-
-
 #social-profile-wrapper {	
 		width: 990px;	  
 		text-align:left;
@@ -2264,7 +2262,19 @@ float:left;
 #social-post{	
 	padding-left:30px;	
 }
-	
+.actions-profile {
+    font-size:14px;
+    background:#efefef;
+    border-bottom:1px dotted #999999;
+    border-top:1px dotted #999999;
+    /*height:35px;*/
+    padding:2px;
+    margin-bottom: 2px;
+    /*background:url(images/actions.jpg) repeat-x;*/
+    vertical-align:middle;
+    font-weight:700;
+    margin-right:2px;
+}	
 
 
 /*****************************************************

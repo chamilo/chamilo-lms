@@ -14,7 +14,8 @@ $server = new soap_server();
 // Initialize WSDL support
 $server->configureWSDL('WSRegistration', 'urn:WSRegistration');
 
-/* Register DokeosWebServiceCreateUser function */
+
+/* Register DokeosWSCreateUser function */
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
@@ -40,26 +41,27 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWebServiceCreateUser',		// method name
-	array('createUser' => 'tns:createUser'),		// input parameters
-	array('return' => 'xsd:int'),					// output parameters
-	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWebServiceCreateUser',// soapaction
-	'rpc',											// style
-	'encoded',										// use
-	'This service adds a user from wiener'			// documentation
+$server->register('DokeosWSCreateUser',			// method name
+	array('createUser' => 'tns:createUser'),	// input parameters
+	array('return' => 'xsd:int'),				// output parameters
+	'urn:WSRegistration',						// namespace
+	'urn:WSRegistration#DokeosWSCreateUser',	// soapaction
+	'rpc',										// style
+	'encoded',									// use
+	'This service adds a user from wiener'		// documentation
 );
 
-// Define the method DokeosWebServiceCreateUser
-function DokeosWebServiceCreateUser($params) {
+// Define the method DokeosWSCreateUser
+function DokeosWSCreateUser($params) {
 
 	global $_user, $userPasswordCrypted,$_configuration;
 	
 	$secret_key = $params['secret_key'];
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   		return -1; // secret key is incorrect
-   	}
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
 			
 	$firstName = $params['firstname'];			$lastName = $params['lastname'];
 	$status = $params['status'];				$email = $params['email'];	
@@ -183,7 +185,188 @@ function DokeosWebServiceCreateUser($params) {
 	return $return;		
 }
 
-/* Register DokeosWebServiceEditUser function */
+/* Register DokeosWSCreateUserPasswordCrypted function */
+// Register the data structures used by the service
+
+$server->wsdl->addComplexType(
+	'createUser',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
+		'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
+		'status' => array('name' => 'status', 'type' => 'xsd:string'),
+		'email' => array('name' => 'email', 'type' => 'xsd:string'),
+		'loginname' => array('name' => 'loginname', 'type' => 'xsd:string'),
+		'password' => array('name' => 'password', 'type' => 'xsd:string'),
+		'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),		
+		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),			
+		'language' => array('name' => 'language', 'type' => 'xsd:string'),
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
+		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string')								
+	)
+);
+
+// Register the method to expose
+$server->register('DokeosWSCreateUserPasswordCrypted',			// method name
+	array('createUser' => 'tns:createUser'),					// input parameters
+	array('return' => 'xsd:string'),							// output parameters
+	'urn:WSRegistration',										// namespace
+	'urn:WSRegistration#DokeosWSCreateUserPasswordCrypted',		// soapaction
+	'rpc',														// style
+	'encoded',													// use
+	'This service adds a user to dokeos'						// documentation
+);
+
+// Define the method DokeosWSCreateUserPasswordCrypted
+function DokeosWSCreateUserPasswordCrypted($params) {
+
+	global $_user, $userPasswordCrypted,$_configuration;
+	
+	$secret_key = $params['secret_key'];	
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
+
+  	$password = $params['password'];
+  	$encrypt_method = $params['encrypt_method'];
+  	  	  					
+	if ($userPasswordCrypted === $encrypt_method ) {		
+		if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/',$password)) {
+			return "Encryption $encrypt_method is invalid";
+		} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/',$password)) {
+			return "Encryption $encrypt_method is invalid";
+		}
+	} else {
+		return "This encryption $encrypt_method is not configured into dokeos ";
+	}
+			
+	$firstName = $params['firstname'];			$lastName = $params['lastname'];
+	$status = $params['status'];				$email = $params['email'];	
+	$loginName = $params['loginname'];	
+					
+	$official_code = '';$language='';$phone = '';$picture_uri = '';$auth_source = PLATFORM_AUTH_SOURCE; 
+	$expiration_date = '0000-00-00 00:00:00'; $active = 1; $hr_dept_id=0; $extra=null;
+	$original_user_id_name= $params['original_user_id_name'];
+	$original_user_id_value = $params['original_user_id_value'];
+				
+	if (!empty($params['language'])) { $language=$params['language'];}
+	if (!empty($params['phone'])) { $phone = $params['phone'];}
+	if (!empty($params['expiration_date'])) { $expiration_date = $params['expiration_date'];}			
+	
+	// database table definition
+	$table_user = Database::get_main_table(TABLE_MAIN_USER); 		
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+	
+	// check if exits wiener_user_id into user_field_values table
+	$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$row = Database::fetch_row($res);
+	
+	if (!empty($row)) {		
+		// check if user is not active 		
+		$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$row[1]."' AND active= '0'";
+		$resu = api_sql_query($sql,__FILE__,__LINE__);
+		$r_check_user = Database::fetch_row($resu);	
+		if (!empty($r_check_user)) {			
+			$sql = "UPDATE $table_user SET
+			lastname='".Database::escape_string($lastName)."',
+			firstname='".Database::escape_string($firstName)."',
+			username='".Database::escape_string($loginName)."',";
+						
+			if(!is_null($auth_source))
+			{
+				$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+			}
+			$sql .=	"
+					email='".Database::escape_string($email)."',
+					status='".Database::escape_string($status)."',
+					official_code='".Database::escape_string($official_code)."',
+					phone='".Database::escape_string($phone)."',			
+					expiration_date='".Database::escape_string($expiration_date)."',
+					active='1',
+					hr_dept_id=".intval($hr_dept_id);				
+			$sql .=	" WHERE user_id='".$r_check_user[0]."'";
+			api_sql_query($sql,__FILE__,__LINE__);	
+			return $r_check_user[0]; // 			
+		} else {
+			return 0;	// user id already exits
+		}
+	}
+	 	 	 			
+	// default language
+	if ($language=='')
+	{
+		$language = api_get_setting('platformLanguage');
+	}
+
+	if ($_user['user_id'])
+	{
+		$creator_id = $_user['user_id'];
+	}
+	else
+	{
+		$creator_id = '';
+	}
+	// First check wether the login already exists
+	if (! UserManager::is_username_available($loginName)) {	
+		if(api_set_failure('login-pass already taken')) {
+			$msg = 'Se ha producido un error!!!';		
+		}
+	}
+
+	$sql = "INSERT INTO $table_user
+				                SET lastname = '".Database::escape_string(trim($lastName))."',
+				                firstname = '".Database::escape_string(trim($firstName))."',
+				                username = '".Database::escape_string(trim($loginName))."',
+				                status = '".Database::escape_string($status)."',
+				                password = '".Database::escape_string($password)."',
+				                email = '".Database::escape_string($email)."',
+				                official_code	= '".Database::escape_string($official_code)."',
+				                picture_uri 	= '".Database::escape_string($picture_uri)."',
+				                creator_id  	= '".Database::escape_string($creator_id)."',
+				                auth_source = '".Database::escape_string($auth_source)."',
+			                    phone = '".Database::escape_string($phone)."',
+			                    language = '".Database::escape_string($language)."',
+			                    registration_date = now(),
+			                    expiration_date = '".Database::escape_string($expiration_date)."',
+								hr_dept_id = '".Database::escape_string($hr_dept_id)."',
+								active = '".Database::escape_string($active)."'";
+	$result = api_sql_query($sql);
+	if ($result) {
+		//echo "id returned";		
+		$return=Database::get_last_insert_id();
+		global $_configuration;
+		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+		if ($_configuration['multiple_access_urls']==true) {
+			if (api_get_current_access_url_id()!=-1)
+				UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+			else
+				UrlManager::add_user_to_url($return, 1);
+		} else {
+			//we are adding by default the access_url_user table with access_url_id = 1
+			UrlManager::add_user_to_url($return, 1);
+		}
+		// save new fieldlabel into user_field table
+		$field_id = UserManager::create_extra_field($original_user_id_name,1,$original_user_id_name,'');
+		// save the wiener's id into user_field_value table'	
+		$res = UserManager::update_extra_field_value($return,$original_user_id_name,$original_user_id_value);	
+	} else {				
+		$return=0;
+	}
+					
+	return $return;
+}
+
+
+/* Register DokeosWSEditUser function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'editUser',
@@ -207,26 +390,27 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWebServiceEditUser',		// method name
-	array('editUser' => 'tns:editUser'),			// input parameters
-	array('return' => 'xsd:int'),					// output parameters
-	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWebServiceEditUser',	// soapaction
-	'rpc',											// style
-	'encoded',										// use
-	'This service edits a user from wiener'			// documentation
+$server->register('DokeosWSEditUser',		// method name
+	array('editUser' => 'tns:editUser'),	// input parameters
+	array('return' => 'xsd:int'),			// output parameters
+	'urn:WSRegistration',					// namespace
+	'urn:WSRegistration#DokeosWSEditUser',	// soapaction
+	'rpc',									// style
+	'encoded',								// use
+	'This service edits a user from wiener'	// documentation
 );
 
-// Define the method DokeosWebServiceEditUser
-function DokeosWebServiceEditUser($params)
+// Define the method DokeosWSEditUser
+function DokeosWSEditUser($params)
 {
 	global $userPasswordCrypted,$_configuration;
 	
 	$secret_key = $params['secret_key'];
-	
-    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   		return -1; // secret key is incorrect
-   	}
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
 	
 	$original_user_id_value = $params['original_user_id_value'];
 	$original_user_id_name = $params['original_user_id_name'];	
@@ -303,7 +487,7 @@ function DokeosWebServiceEditUser($params)
 	return $return;	
 }
 
-/* Register DokeosWebServiceDeleteUser function */
+/* Register DokeosWSDeleteUser function */
 $server->wsdl->addComplexType(
 	'deleteUser',
 	'complexType',
@@ -317,26 +501,27 @@ $server->wsdl->addComplexType(
 	)
 );
 
-$server->register('DokeosWebServiceDeleteUser',		// method name
-	array('deleteUser'=>'tns:deleteUser'),			// input parameters
-	array('return' => 'xsd:int'),					// output parameters
-	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWebServiceDeleteUser',// soapaction
-	'rpc',											// style
-	'encoded',										// use
-	'This service deletes a user  '					// documentation
+$server->register('DokeosWSDeleteUser',			// method name
+	array('deleteUser'=>'tns:deleteUser'),		// input parameters
+	array('return' => 'xsd:int'),				// output parameters
+	'urn:WSRegistration',						// namespace
+	'urn:WSRegistration#DokeosWSDeleteUser',	// soapaction
+	'rpc',										// style
+	'encoded',									// use
+	'This service deletes a user  '				// documentation
 );
 
-// Define the method DokeosWebServiceDeleteUser
-function DokeosWebServiceDeleteUser($params)
+// Define the method DokeosWSDeleteUser
+function DokeosWSDeleteUser($params)
 {
 	global $_configuration;
 	
 	$secret_key = $params['secret_key'];
-	
-    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   		return -1;
-   	}
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
    	$original_user_id_name = $params['original_user_id_name'];
    	$original_user_id_value = $params['original_user_id_value'];
    		
@@ -368,7 +553,7 @@ function DokeosWebServiceDeleteUser($params)
 	
 }
 
-/* Register DokeosWebServiceAddCourse function */
+/* Register DokeosWSCreateCourse function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'createCourse',
@@ -389,26 +574,27 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWebServiceCreateCourse',		// method name
-	array('createCourse' => 'tns:createCourse'),			// input parameters
+$server->register('DokeosWSCreateCourse',			// method name
+	array('createCourse' => 'tns:createCourse'),	// input parameters
 	array('return' => 'xsd:string'),				// output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWebServiceCreateCourse',	// soapaction
+	'urn:WSRegistration#DokeosWSCreateCourse',		// soapaction
 	'rpc',											// style
 	'encoded',										// use
 	'This service adds a course into dokeos  '		// documentation
 );
 
-// Define the method DokeosWebServiceCreateCourse
-function DokeosWebServiceCreateCourse($params) {
+// Define the method DokeosWSCreateCourse
+function DokeosWSCreateCourse($params) {
 	
 	global $firstExpirationDelay,$_configuration;
 	
 	$secret_key = $params['secret_key'];
-	
-    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   		return -1; //secret key is incorrect
-   	}
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
 	
 	$title=$params['title'];
 	$category_code=$params['category_code'];
@@ -519,7 +705,175 @@ function DokeosWebServiceCreateCourse($params) {
 		}
 }
 
-/* Register DokeosWebServiceEditCourse function */
+/* Register DokeosWSCreateCourseByTitle function */
+// Register the data structures used by the service
+$server->wsdl->addComplexType(
+	'createCourse',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'title' => array('name' => 'title', 'type' => 'xsd:string'),	
+		'tutor_name' => array('name' => 'tutor_name', 'type' => 'xsd:string'),	
+		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')		
+	)
+);
+
+// Register the method to expose
+$server->register('DokeosWSCreateCourseByTitle',		// method name
+	array('createCourse' => 'tns:createCourse'),		// input parameters
+	array('return' => 'xsd:string'),					// output parameters
+	'urn:WSRegistration',								// namespace
+	'urn:WSRegistration#DokeosWSCreateCourseByTitle',	// soapaction
+	'rpc',												// style
+	'encoded',											// use
+	'This service adds a course by title into dokeos '	// documentation
+);
+
+// Define the method DokeosWSCreateCourseByTitle
+function DokeosWSCreateCourseByTitle($params) {
+	
+	global $firstExpirationDelay,$_configuration;
+	
+	$secret_key = $params['secret_key'];
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
+		
+	$title = $params['title'];	
+	$category_code='LANG';
+	$wanted_code = '';
+	$tutor_firstname = api_get_setting('administratorName');
+	$tutor_lastname = api_get_setting('administratorSurname');
+	$tutor_name = $tutor_firstname.' '.$tutor_lastname;
+	
+	if (!empty($params['tutor_name'])) {
+		$tutor_name = $params['tutor_name'];
+	}
+	$course_language = 'spanish';
+	$original_course_id_name = $params['original_course_id_name'];
+	$original_course_id_value = $params['original_course_id_value'];	
+	
+	$dbnamelength = strlen($_configuration['db_prefix']);
+	//Ensure the database prefix + database name do not get over 40 characters
+	$maxlength = 40 - $dbnamelength;
+	
+	if (empty($wanted_code)) {
+		$wanted_code = generate_course_code(substr($title,0,$maxlength));
+	}
+	
+	$t_cfv 					= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+	$table_field 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+	$table_course_category 	= Database::get_main_table(TABLE_MAIN_CATEGORY);
+	$table_course 			= Database::get_main_table(TABLE_MAIN_COURSE);
+	// check if exits $wiener_course_code into user_field_values table
+	$sql = "SELECT field_value,course_code FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$row = Database::fetch_row($res);
+
+	if (!empty($row[0])) {		
+		// check if user is not active 		
+		$sql = "SELECT code FROM $table_course WHERE code ='".$row[1]."' AND visibility= '0'";
+		$resu = api_sql_query($sql,__FILE__,__LINE__);
+		$r_check_course = Database::fetch_row($resu);	
+		if (!empty($r_check_course[0])) {
+			$sql = "UPDATE $table_course SET course_language='".Database::escape_string($course_language)."',
+								title='".Database::escape_string($title)."',
+								category_code='".Database::escape_string($category_code)."',
+								tutor_name='".Database::escape_string($tutor_name)."',
+								visual_code='".Database::escape_string($wanted_code)."',										
+								visibility = '3'								
+					WHERE code='".Database::escape_string($r_check_course[0])."'";			
+			api_sql_query($sql,__FILE__,__LINE__);	
+			return $r_check_course[0];
+		} else {
+			return 0; // original course id already exits		
+		}
+	}			
+
+	// Set default values
+	if (isset($_user["language"]) && $_user["language"]!="") {
+		$values['course_language'] = $_user["language"];
+	} else {
+		$values['course_language'] = get_setting('platformLanguage');
+	}
+	
+	$values['tutor_name'] = $_user['firstName']." ".$_user['lastName'];				
+						
+	$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
+	
+	$sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
+	$result_check = api_sql_query($sql_check,__FILE__,__LINE__); //I don't know why this api function doesn't work...
+	if ( Database::num_rows($result_check)<1 ) {
+		if (sizeof($keys)) {
+			$visual_code = $keys["currentCourseCode"];
+			$code = $keys["currentCourseId"];
+			$db_name = $keys["currentCourseDbName"];
+			$directory = $keys["currentCourseRepository"];
+			$expiration_date = time() + $firstExpirationDelay;
+			prepare_course_repository($directory, $code);
+			update_Db_course($db_name);
+			$pictures_array=fill_course_repository($directory);
+			fill_Db_course($db_name, $directory, $course_language,$pictures_array);			
+			$return = register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
+
+			$time = time();
+			$sql_field = "SELECT id FROM $table_field WHERE field_variable = '".Database::escape_string($original_course_id_name)."'";
+			$res_field = api_sql_query($sql_field,__FILE__,__LINE__);
+			$r_field = Database::fetch_row($res_field);
+			if (!empty($r_field[0])) {					
+				$field_id = $r_field[0];
+			} else {
+				// save new fieldlabel into course_field table								
+				$sql = "SELECT MAX(field_order) FROM $table_field";
+				$res = api_sql_query($sql,__FILE__,__LINE__);
+				$order = 0;
+				if(Database::num_rows($res)>0)
+				{
+					$row = Database::fetch_array($res);
+					$order = $row[0]+1;
+				}
+				
+				$sql = "INSERT INTO $table_field
+							                SET field_type = '1',
+							                field_variable = '".Database::escape_string($original_course_id_name)."',
+							                field_display_text = '".Database::escape_string($original_course_id_name)."',
+							                field_order = '$order',									                									                							                
+							                tms = FROM_UNIXTIME($time)";
+				$result = api_sql_query($sql,__FILE__,__LINE__);
+				$field_id=Database::get_last_insert_id();	
+			}
+
+			// save the original course id into course_field_value table'							
+			$sqli = "INSERT INTO $t_cfv (course_code,field_id,field_value,tms)
+					VALUES ('$code',$field_id,'$original_course_id_value',FROM_UNIXTIME($time))";
+			$resi = api_sql_query($sqli,__FILE__,__LINE__);						
+		}
+		$result = Database::affected_rows();
+		/*$url_course ='';
+		if($result > 0) {
+			$sql_directory = "SELECT directory FROM $table_course WHERE code = '$code'";
+			$res_directory = api_sql_query($sql_directory,__FILE__,__LINE__);
+			$row_directory = Database::fetch_row($res_directory);
+			
+			if (!empty($row_directory[0])) { 
+			$url_course = api_get_path(WEB_COURSE_PATH).$row_directory[0];
+			}				
+		}*/
+		
+		return $code;
+        
+	} else {
+		return 0;
+	}
+}
+
+/* Register DokeosWSEditCourse function */
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
@@ -546,26 +900,27 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWebServiceEditCourse',		// method name
-	array('editCourse' => 'tns:editCourse'),			// input parameters
-	array('return' => 'xsd:string'),				// output parameters
-	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWebServiceEditCourse',// soapaction
-	'rpc',											// style
-	'encoded',										// use
-	'This service edits a course into dokeos'		// documentation
+$server->register('DokeosWSEditCourse',			// method name
+	array('editCourse' => 'tns:editCourse'),	// input parameters
+	array('return' => 'xsd:string'),			// output parameters
+	'urn:WSRegistration',						// namespace
+	'urn:WSRegistration#DokeosWSEditCourse',	// soapaction
+	'rpc',										// style
+	'encoded',									// use
+	'This service edits a course into dokeos'	// documentation
 );
 
-// Define the method DokeosWebServiceEditCourse
-function DokeosWebServiceEditCourse($params){
+// Define the method DokeosWSEditCourse
+function DokeosWSEditCourse($params){
 	
 	global $_configuration;
 	
 	$secret_key = $params['secret_key'];
-	
-    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   		return -1; // secret key is incorrect
-   	} 
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
 	
 	$tutor_id=$params['tutor_id'];
 	$title=$params['title'];
@@ -629,8 +984,83 @@ function DokeosWebServiceEditCourse($params){
 	}		
 }
 
+/* Register DokeosWSEditCourseDescription function */
+// Register the data structures used by the service
 
-/* Register DokeosWebServiceDeleteCourse function */
+$server->wsdl->addComplexType(
+	'editCourse',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'course_description' => array('name' => 'course_description', 'type' => 'xsd:string'),
+		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),		
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')		
+	)
+);
+
+// Register the method to expose
+$server->register('DokeosWSEditCourseDescription',			// method name
+	array('editCourse' => 'tns:editCourse'),				// input parameters
+	array('return' => 'xsd:string'),						// output parameters
+	'urn:WSRegistration',									// namespace
+	'urn:WSRegistration#DokeosWSEditCourseDescription',		// soapaction
+	'rpc',													// style
+	'encoded',												// use
+	'This service edits a course description into dokeos'	// documentation
+);
+
+// Define the method DokeosWSEditCourseDescription
+function DokeosWSEditCourseDescription($params){
+	
+	global $_configuration;
+	
+	$secret_key = $params['secret_key'];
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
+		
+	$course_description =$params['course_description'];	
+	$original_course_id_name = $params['original_course_id_name'];
+	$original_course_id_value = $params['original_course_id_value'];
+	
+	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);	
+	$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+	$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+	// get course code from id wiener
+	$sql = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$row = Database::fetch_row($res);	
+		
+	$course_code=$row[0];
+
+	if (empty($course_code)) {
+		return 0; // original_course_id_value doesn't exits
+	} else {
+		$sql = "SELECT code FROM $course_table WHERE code ='$course_code' AND visibility = '0'";
+		$resu = api_sql_query($sql,__FILE__,__LINE__);
+		$r_check_code = Database::fetch_row($resu);
+		if (!empty($r_check_code[0])) {
+			return 0; // this code is not active
+		}
+	}
+	
+	$sql = "UPDATE $course_table SET description='".Database::escape_string($course_description)."' WHERE code='".Database::escape_string($course_code)."'";								
+							
+	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$return = Database::affected_rows();
+	
+	return $return;	
+		
+}
+
+/* Register DokeosWSDeleteCourse function */
+// Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'deleteCourse',
 	'complexType',
@@ -644,27 +1074,28 @@ $server->wsdl->addComplexType(
 	)
 );
 
-$server->register('DokeosWebServiceDeleteCourse',		// method name
-	array('deleteCourse' => 'tns:deleteCourse'),		// input parameters
-	array('return' => 'xsd:int'),						// output parameters
-	'urn:WSRegistration',								// namespace
-	'urn:WSRegistration#DokeosWebServiceDeleteCourse',	// soapaction
-	'rpc',												// style
-	'encoded',											// use
-	'This service deletes a course '					// documentation
+$server->register('DokeosWSDeleteCourse',			// method name
+	array('deleteCourse' => 'tns:deleteCourse'),	// input parameters
+	array('return' => 'xsd:int'),					// output parameters
+	'urn:WSRegistration',							// namespace
+	'urn:WSRegistration#DokeosWSDeleteCourse',		// soapaction
+	'rpc',											// style
+	'encoded',										// use
+	'This service deletes a course '				// documentation
 );
 
 
-// define the method DokeosWebServiceDeleteCourse
-function DokeosWebServiceDeleteCourse($params) {
+// define the method DokeosWSDeleteCourse
+function DokeosWSDeleteCourse($params) {
 	
 		global $_configuration;
 		
 		$secret_key = $params['secret_key'];
-				
-        if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   			return -1; // secret key is incorrect
-   		}
+		$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+		if (is_secret_key_invalid($secret_key,$segurity_key)) {
+			return -1; //secret key is incorrect
+		}
 		
 		$original_course_id_value = $params['original_course_id_value'];
 		$original_course_id_name = $params['original_course_id_name'];			
@@ -696,7 +1127,7 @@ function DokeosWebServiceDeleteCourse($params) {
 		
 }
 
-/* Register DokeosWebServiceCreateSession function */
+/* Register DokeosWSCreateSession function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'createSession',
@@ -723,27 +1154,28 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWebServiceCreateSession',			// method name
-	array('createSession' => 'tns:createSession'),			// input parameters
+$server->register('DokeosWSCreateSession',			// method name
+	array('createSession' => 'tns:createSession'),	// input parameters
 	array('return' => 'xsd:int'),					// output parameters
-	'urn:WSRegistration',								// namespace
-	'urn:WSRegistration#DokeosWebServiceCreateSession',	// soapaction
-	'rpc',												// style
-	'encoded',											// use
-	'This service edits a session'						// documentation
+	'urn:WSRegistration',							// namespace
+	'urn:WSRegistration#DokeosWSCreateSession',		// soapaction
+	'rpc',											// style
+	'encoded',										// use
+	'This service edits a session'					// documentation
 );
 
 
-// define the method DokeosWebServiceCreateSession
-function DokeosWebServiceCreateSession($params) {
+// define the method DokeosWSCreateSession
+function DokeosWSCreateSession($params) {
 	
 	global $_user,$_configuration;
 	
 	$secret_key = $params['secret_key'];
-	
-    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   		return -1;
-   	}
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
 		
 	$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 	$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -831,7 +1263,7 @@ function DokeosWebServiceCreateSession($params) {
 	
 }
 
-/* Register DokeosWebServiceEditSession function */
+/* Register DokeosWSEditSession function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'editSession',
@@ -858,26 +1290,27 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWebServiceEditSession',		// method name
-	array('editSession' => 'tns:editSession'),			// input parameters
-	array('return' => 'xsd:int'),						// output parameters
-	'urn:WSRegistration',								// namespace
-	'urn:WSRegistration#DokeosWebServiceEditSession',	// soapaction
-	'rpc',												// style
-	'encoded',											// use
-	'This service edits a session'						// documentation
+$server->register('DokeosWSEditSession',		// method name
+	array('editSession' => 'tns:editSession'),	// input parameters
+	array('return' => 'xsd:int'),				// output parameters
+	'urn:WSRegistration',						// namespace
+	'urn:WSRegistration#DokeosWSEditSession',	// soapaction
+	'rpc',										// style
+	'encoded',									// use
+	'This service edits a session'				// documentation
 );
 
-// define the method DokeosWebServiceEditSession
-function DokeosWebServiceEditSession($params) {
+// define the method DokeosWSEditSession
+function DokeosWSEditSession($params) {
 	
 	global $_user,$_configuration;	
 	
 	$secret_key = $params['secret_key'];	
-	
-    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   		return -1;
-   	}
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
 		
 	$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 	$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -943,7 +1376,7 @@ function DokeosWebServiceEditSession($params) {
 	
 }
 
-/* Register DokeosWebServiceDeleteSession function */
+/* Register DokeosWSDeleteSession function */
 $server->wsdl->addComplexType(
 	'deleteSession',
 	'complexType',
@@ -957,26 +1390,27 @@ $server->wsdl->addComplexType(
 	)
 );
 
-$server->register('DokeosWebServiceDeleteSession',		// method name
-	array('deleteSession' => 'tns:deleteSession'),		// input parameters
-	array('return' => 'xsd:int'),						// output parameters
-	'urn:WSRegistration',								// namespace
-	'urn:WSRegistration#DokeosWebServiceDeleteSession',	// soapaction
-	'rpc',												// style
-	'encoded',											// use
-	'This service deletes a session '					// documentation
+$server->register('DokeosWSDeleteSession',			// method name
+	array('deleteSession' => 'tns:deleteSession'),	// input parameters
+	array('return' => 'xsd:int'),					// output parameters
+	'urn:WSRegistration',							// namespace
+	'urn:WSRegistration#DokeosWSDeleteSession',		// soapaction
+	'rpc',											// style
+	'encoded',										// use
+	'This service deletes a session '				// documentation
 );
 
-// define the method DokeosWebServiceDeleteSession
-function DokeosWebServiceDeleteSession($params) {
+// define the method DokeosWSDeleteSession
+function DokeosWSDeleteSession($params) {
 
 	global $_configuration;
 	
 	$secret_key = $params['secret_key'];	
-	
-    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   		return -1;
-   	}	
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}	
 	
 	$original_session_id_value = $params['original_session_id_value'];
 	$original_session_id_name = $params['original_session_id_name'];
@@ -1019,7 +1453,7 @@ function DokeosWebServiceDeleteSession($params) {
 
 
 
-/* Register DokeosWebServiceSubscribeUserToCourse function */
+/* Register DokeosWSSubscribeUserToCourse function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'subscribeUserToCourse',
@@ -1038,26 +1472,27 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWebServiceSubscribeUserToCourse',			// method name
+$server->register('DokeosWSSubscribeUserToCourse',					// method name
 	array('subscribeUserToCourse' => 'tns:subscribeUserToCourse'),	// input parameters
 	array('return' => 'xsd:int'),									// output parameters
 	'urn:WSRegistration',											// namespace
-	'urn:WSRegistration#DokeosWebServiceSubscribeUserToCourse',		// soapaction
+	'urn:WSRegistration#DokeosWSSubscribeUserToCourse',				// soapaction
 	'rpc',															// style
 	'encoded',														// use
 	'This service subscribes a user to a course' 					// documentation
 );
 
-// define the method DokeosWebServiceSubscribeUserToCourse
-function DokeosWebServiceSubscribeUserToCourse($params) {
+// define the method DokeosWSSubscribeUserToCourse
+function DokeosWSSubscribeUserToCourse($params) {
     
     global $_configuration;
     
     $secret_key = $params['secret_key'];
-    
-    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   		return -1;
-   	}
+    $segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
     
     $original_user_id_value = $params['original_user_id_value'];
     $original_user_id_name = $params['original_user_id_name']; 
@@ -1200,7 +1635,7 @@ function DokeosWebServiceSubscribeUserToCourse($params) {
 	}
 }
 
-/* Register DokeosWebServiceSubscribeUserToCourse function */
+/* Register DokeosWSUnsubscribeUserFromCourse function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'unsuscribeUserFromCourse',
@@ -1218,25 +1653,26 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWebServiceUnsubscribeUserFromCourse',			// method name
+$server->register('DokeosWSUnsubscribeUserFromCourse',					// method name
 	array('unsuscribeUserFromCourse' => 'tns:unsuscribeUserFromCourse'),// input parameters
 	array('return' => 'xsd:int'),										// output parameters
 	'urn:WSRegistration',												// namespace
-	'urn:WSRegistration#DokeosWebServiceUnsubscribeUserToCourse',		// soapaction
+	'urn:WSRegistration#DokeosWSUnsubscribeUserFromCourse',				// soapaction
 	'rpc',																// style
 	'encoded',															// use
 	'This service unsubscribes a user from a course' 					// documentation
 );
 
-// define the method DokeosWebServiceUnsubscribeUserToCourse
-function DokeosWebServiceUnsubscribeUserFromCourse($params)
+// define the method DokeosWSUnsubscribeUserFromCourse
+function DokeosWSUnsubscribeUserFromCourse($params)
 {
 	global $_configuration;
 	$secret_key = $params['secret_key'];
-	
-    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   		return -1;
-   	}
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
 	
 	$original_user_id_value 	= $params['original_user_id_value'];
     $original_user_id_name 		= $params['original_user_id_name']; 
@@ -1302,7 +1738,7 @@ function DokeosWebServiceUnsubscribeUserFromCourse($params)
 	return $return;	
 }
 
-/* Register DokeosWebServiceSuscribeUsersToSession function */
+/* Register DokeosWSSuscribeUsersToSession function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 'originalUsersList',
@@ -1331,26 +1767,27 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWebServiceSuscribeUsersToSession',				// method name
+$server->register('DokeosWSSuscribeUsersToSession',						// method name
 	array('subscribeUsersToSession' => 'tns:subscribeUsersToSession'),	// input parameters
 	array('return' => 'xsd:string'),									// output parameters
 	'urn:WSRegistration',												// namespace
-	'urn:WSRegistration#DokeosWebServiceSuscribeUsersToSession',		// soapaction
+	'urn:WSRegistration#DokeosWSSuscribeUsersToSession',				// soapaction
 	'rpc',																// style
 	'encoded',															// use
 	'This service subscribes a user to a session' 						// documentation
 );
 
-// define the method DokeosWebServiceSuscribeUsersToSession
-function DokeosWebServiceSuscribeUsersToSession($params){
+// define the method DokeosWSSuscribeUsersToSession
+function DokeosWSSuscribeUsersToSession($params){
  	
  	global $_configuration;
  	
  	$secret_key = $params['secret_key'];
- 	
-    if ( $secret_key != sha1($_SERVER['REMOTE_ADDR'].$_configuration['security_key'])) {
-   		return -1;
-   	}
+ 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
    	 
    	$original_session_id_value = $params['original_session_id_value'];
 	$original_session_id_name = $params['original_session_id_name'];
@@ -1481,6 +1918,198 @@ function DokeosWebServiceSuscribeUsersToSession($params){
 	}
 	
 }
+
+/* Register DokeosWSSuscribeCoursesToSession function */
+// Register the data structures used by the service
+
+$server->wsdl->addComplexType(
+	'subscribeCoursesToSession',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
+		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string'),
+		'original_course_id_values' => array('name' => 'original_course_id_values', 'type' => 'xsd:string'),
+		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),		
+		'empty_courses' => array('name' => 'empty_courses', 'type' => 'xsd:boolean'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')	
+	)
+);
+
+// Register the method to expose
+$server->register('DokeosWSSuscribeCoursesToSession',						// method name
+	array('subscribeCoursesToSession' => 'tns:subscribeCoursesToSession'),	// input parameters
+	array('return' => 'xsd:string'),										// output parameters
+	'urn:WSRegistration',													// namespace
+	'urn:WSRegistration#DokeosWSSuscribeCoursesToSession',					// soapaction
+	'rpc',																	// style
+	'encoded',																// use
+	'This service subscribes a course to a session' 						// documentation
+);
+
+// define the method DokeosWSSuscribeCoursesToSession
+function DokeosWSSuscribeCoursesToSession($params) {
+
+	global $_configuration;
+	
+	$secret_key = $params['secret_key'];
+	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		return -1; //secret key is incorrect
+	}
+   	 
+   	$original_session_id_value = $params['original_session_id_value'];
+	$original_session_id_name = $params['original_session_id_name'];
+	$original_course_id_name = $params['original_course_id_name'];
+	$original_course_id_values = explode(",",$params['original_course_id_values']);
+	$empty_courses=$params['empty_courses'];
+	
+   	// initialisation
+	$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
+	$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+	$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
+	$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);		
+	$t_sfv 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+ 	$t_cfv 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+	$t_cf 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+ 	
+ 	// get session id from original session id
+	$sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";		
+	$res_session = api_sql_query($sql_session,__FILE__,__LINE__);
+	$row_session = Database::fetch_row($res_session);	
+ 	 	
+ 	$id_session = $row_session[0];
+ 	
+ 	if (empty($id_session)) {
+		return 0;
+	}
+	     		    
+    // get courses list from row_original_course_id_values
+    $course_list = array();
+ 	foreach ($original_course_id_values as $row_original_course_list) {
+ 		$sql_course = "SELECT course_code FROM $t_cf cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$row_original_course_list'";
+ 		$res_course = api_sql_query($sql_course,__FILE__,__LINE__);
+ 		$row_course = Database::fetch_row($res_course); 		
+ 		if (empty($row_course[0])) {
+	    	continue; // course_code don't exist'
+	    } else {
+			$sql = "SELECT code FROM $tbl_course WHERE code ='".$row_course[0]."' AND visibility = '0'";
+			$resu = api_sql_query($sql,__FILE__,__LINE__);
+			$r_check_course = Database::fetch_row($resu);
+			if (!empty($r_check_course[0])) {
+				continue; // user_id is not active 
+			}
+	    }
+	    $course_list[] = $row_course[0];	     		
+ 	}
+	
+	if (empty($course_list)) {
+		return 0;
+	}
+ 	
+ 	// get general coach ID
+ 	$sql = "SELECT id_coach FROM $tbl_session WHERE id='$id_session'";     	
+	$id_coach = api_sql_query($sql,__FILE__,__LINE__);
+	$id_coach = Database::fetch_array($id_coach);
+	$id_coach = $id_coach[0];
+	
+	// get list of courses subscribed to this session
+	$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";	
+		
+	$rs = api_sql_query($sql,__FILE__,__LINE__);
+	$existingCourses = api_store_result($rs);
+	$nbr_courses=count($existingCourses);
+	
+	// get list of users subscribed to this session
+	$sql="SELECT id_user
+		FROM $tbl_session_rel_user
+		WHERE id_session = '$id_session'";
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$user_list=api_store_result($result);
+			
+	// remove existing courses from the session
+	if ($empty_courses) {			
+		if ($nbr_courses > 0) {				
+			foreach ($existingCourses as $existingCourse) {					
+				if (!in_array($existingCourse['course_code'], $course_list)) {						
+					api_sql_query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session='$id_session'");
+					api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session='$id_session'");			
+				}
+			}
+		}
+		return 1;		
+		$nbr_courses=0;
+	}	    
+	$course_directory= array();
+	// Pass through the courses list we want to add to the session
+	foreach ($course_list as $enreg_course) {
+		$enreg_course = Database::escape_string($enreg_course);
+		$exists = false;
+		// check if the course we want to add is already subscribed
+		 
+		foreach ($existingCourses as $existingCourse) {
+			if ($enreg_course == $existingCourse['course_code']) {
+				$exists=true;
+			}
+		}
+					
+		if (!$exists) {
+			//if the course isn't subscribed yet
+						
+			$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session,course_code, id_coach) VALUES ('$id_session','$enreg_course','$id_coach')";				
+			api_sql_query($sql_insert_rel_course ,__FILE__,__LINE__);			
+			
+			//We add the current course in the existing courses array, to avoid adding another time the current course
+			$existingCourses[]=array('course_code'=>$enreg_course);
+			$nbr_courses++;
+					
+			// subscribe all the users from the session to this course inside the session 
+			$nbr_users=0;
+			
+			foreach ($user_list as $enreg_user) {				
+				$enreg_user_id = Database::escape_string($enreg_user['id_user']);
+				$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (id_session,course_code,id_user) VALUES ('$id_session','$enreg_course','$enreg_user_id')";
+				api_sql_query($sql_insert,__FILE__,__LINE__);
+				if (Database::affected_rows()) {
+					$nbr_users++;
+				}
+			}
+			api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
+			
+			$sql_directory = "SELECT directory FROM $tbl_course WHERE code = '$enreg_course'";
+			$res_directory = api_sql_query($sql_directory,__FILE__,__LINE__);
+			$row_directory = Database::fetch_row($res_directory);
+			$course_directory[] = $row_directory[0];				
+		} 
+	}
+	api_sql_query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'",__FILE__,__LINE__);
+	$course_directory[]=$id_session;
+	$cad_course_directory = implode(",",$course_directory);
+		
+	return $cad_course_directory;
+}
+
+/** Check if a secret key is invalid
+ *  @param string $original_key_secret  - secret key from client
+ *  @param string $security_key - security key from dokeos
+ *  @return boolean - true if secret key is invalid, false otherwise 
+ */
+function is_secret_key_invalid($original_key_secret,$segurity_key) {
+
+	global $_configuration;
+	
+	if ( $original_key_secret != sha1($segurity_key)) {
+	   		return true; //secret key is incorrect
+	} else {
+		return false;
+	}		
+}
+
 
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';

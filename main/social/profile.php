@@ -57,7 +57,7 @@ if (isset($_GET['u'])) {
 			// user does no exist !!
 			api_not_allowed();
 		} else {
-			//checking the relationship between me and my friend			
+			//checking the relationship between me and my friend
 			$my_status= UserFriend::get_relation_between_contacts(api_get_user_id(), $user_id);
 			if (in_array($my_status, array(SOCIALPARENT, SOCIALFRIEND, SOCIALGOODFRIEND))) {	
 				$show_full_profile = true;			
@@ -440,7 +440,8 @@ echo $s="<script>$(document).ready( function(){
 //echo '</div>';
 
 //Setting some course info 
-$personal_course_list = UserManager::get_personal_session_course_list($_user['user_id']);
+$my_user_id=isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
+$personal_course_list = UserManager::get_personal_session_course_list($my_user_id);
 $course_list_code = array();
 $i=1;
 //print_r($personal_course_list);
@@ -481,8 +482,8 @@ echo '<div id="social-profile-wrapper">';
 				$number_loop   = ($number_friends/$number_of_images);
 				$loop_friends  = ceil($number_loop);
 				$j=0;
-				$friend_html.= '<div id="friend-container">';				
-				//$friend_html .= api_display_tool_title(get_lang('Friends'));				
+				$friend_html .= '<div class="actions-profile">'.get_lang('Friends').'</div>';	
+				$friend_html.= '<div id="friend-container">';							
 					$friend_html.= '<div id="friend-header">';
 							//$friend_html.=  $friends_count.' '.get_lang('Friends');
 						if ($friends_count == 1)
@@ -516,8 +517,8 @@ echo '<div id="social-profile-wrapper">';
 				}
 				//$friend_html.='</div>'; // close the div friend-container
 			} else {
-					$friend_html.= '<div id="friend-container">';	
-					$friend_html .= '<div class="actions">'.api_display_tool_title(get_lang('Friends')).'</div>';				
+					$friend_html .= '<div class="actions-profile">'.get_lang('Friends').'</div>';
+					$friend_html.= '<div id="friend-container">';					
 					$friend_html.= '<div id="friend-header">';
 					$friend_html.= '<div style="float:left;">'.get_lang('Friends').'</div>';
 					$friend_html.= '<div style="float:right;">'.get_lang('SeeAll').'</div>';
@@ -525,9 +526,8 @@ echo '<div id="social-profile-wrapper">';
 			}
 			$friend_html.= '</div>';		
 			echo $friend_html; 				
-			
 			//Pending invitations	
-			if (!isset($_GET['u'])) {
+			if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
 			$pending_invitations = UserFriend::get_list_invitation_of_friends_by_user_id(api_get_user_id());
 			$list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
 			$count_pending_invitations = count($pending_invitations);
@@ -537,8 +537,8 @@ echo '<div id="social-profile-wrapper">';
 			echo '<div class="clear"></div><br />';
 			echo '<div id="social-profile-invitations" >';
 			if ($count_pending_invitations > 0) {
-				echo '<div class="actions">';
-				api_display_tool_title(get_lang('PendingInvitations'));
+				echo '<div class="actions-profile">';
+				echo get_lang('PendingInvitations');
 				echo '</div>';
 				for ($i=0;$i<$count_pending_invitations;$i++) {
 					//var_dump($invitations);
@@ -563,8 +563,8 @@ echo '<div id="social-profile-wrapper">';
 			$production_list =  UserManager::build_production_list($user_id);
 			if (!empty($production_list )) {
 				echo '<div class="clear"></div><br />';
-				echo '<div class="actions">';
-				api_display_tool_title(get_lang('Productions'));
+				echo '<div class="actions-profile">';
+				echo get_lang('Productions');
 				echo '</div>';
 				echo '<div class="rounded1">';
 				echo $production_list;
@@ -578,8 +578,8 @@ echo '<div id="social-profile-wrapper">';
 			}
 			if (!empty($file_list)) {
 				echo '<div class="clear"></div><br />';
-				echo '<div class="actions">';
-				api_display_tool_title(get_lang('ImagesUploaded'));
+				echo '<div class="actions-profile">';
+				echo get_lang('ImagesUploaded');
 				echo '</div>';
 				echo '</br><div class="rounded2">';
 				echo $file_list;
@@ -619,8 +619,8 @@ echo '<div id="social-profile-container">';
 				//-- Extra Data							
 				$extra_user_data = UserManager::get_extra_user_data($user_id);
 				if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
-					echo '<div class="actions">';
-					api_display_tool_title(get_lang('ExtraInformation'));
+					echo '<div class="actions-profile">';
+					echo get_lang('ExtraInformation');
 					echo '</div>';
 					echo '<div class="rounded left-side">';
 						foreach($extra_user_data as $key=>$data) {
@@ -633,8 +633,8 @@ echo '<div id="social-profile-container">';
 				// ---- My Agenda Items
 				$my_agenda_items = show_simple_personal_agenda($user_id);
 				if (!empty($my_agenda_items)) {
-					echo '<div class="actions">';					
-					api_display_tool_title(get_lang('MyAgenda'));
+					echo '<div class="actions-profile">';					
+					echo get_lang('MyAgenda');
 					echo '</div>';
 					$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 					echo '<div class="rounded left-side">';	
@@ -644,11 +644,10 @@ echo '<div id="social-profile-container">';
 				}
 					
 				//-----Announcements
-				
-				
 				$announcement_content = '';		
+				$my_announcement_by_user_id=isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
 		    	foreach ($course_list_code as $course) {
-	    			$content = get_all_annoucement_by_user_course($course['dbName'],$user_id);	 			
+	    			$content = get_all_annoucement_by_user_course($course['dbName'],$my_announcement_by_user_id);	 			
 	    	  		if (!empty($content)) {	 		    	  			  
 		    	  		$announcement_content.= '<h3>'.$course['title'].'</h3>';
 						$announcement_content.= '<div class="rounded left-side">';							
@@ -659,8 +658,8 @@ echo '<div id="social-profile-container">';
 	    	  	}
 	    	  	
 	    	  	if(!empty($announcement_content)) {
-	    	  		echo '<div class="actions">';
-	    	  		api_display_tool_title(get_lang('Announcements'));
+	    	  		echo '<div class="actions-profile">';
+	    	  		echo get_lang('Announcements');
 	    	  		echo '</div>';
 	    	  		echo $announcement_content;
 	    	  	}					
@@ -670,8 +669,8 @@ echo '<div id="social-profile-container">';
   	// CENTER COLUMN
 	echo '<div id="social-profile-content">';
 		    //--- Basic Information	
-		    echo '<div class="actions">';		
-			api_display_tool_title(get_lang('Information'));  //class="social-profile-info"
+		    echo '<div class="actions-profile">';		
+			echo get_lang('Information');  //class="social-profile-info"
 			echo '</div>';
 			if ($show_full_profile) {		 
 				echo '<div class="social-profile-info" >';					
@@ -706,8 +705,8 @@ echo '<div id="social-profile-container">';
 				//print_r($personal_course_list);		
 				//echo '<pre>';
 				if ( is_array($list) ) {
-					echo '<div class="actions">';
-					api_display_tool_title(ucfirst(get_lang('Courses')));
+					echo '<div class="actions-profile">';
+					echo ucfirst(get_lang('Courses'));
 					echo '</div>';
 					//Courses whithout sessions
 					$old_user_category = 0;

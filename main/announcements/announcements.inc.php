@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 19047 2009-03-14 14:31:28Z iflorespaz $
+<?php //$Id: announcements.inc.php 19125 2009-03-18 15:16:29Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -894,7 +894,7 @@ function get_all_annoucement_by_user_course($course_db, $user_id)
 					FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 					WHERE announcement.id = toolitemproperties.ref
 					AND toolitemproperties.tool='announcement'
-					AND (toolitemproperties.to_user_id='".$user_id."' OR toolitemproperties.to_group_id='0')
+					AND (toolitemproperties.insert_user_id='".$user_id."' AND toolitemproperties.to_group_id='0')
 					AND toolitemproperties.visibility='1'
 					AND announcement.session_id  = 0
 					ORDER BY display_order DESC";

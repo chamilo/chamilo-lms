@@ -3345,7 +3345,7 @@ function check_notify_all()
  * @author Juan Carlos Ra�a <herodoto@telefonica.net>
  */
  
-function check_emailcue($id_or_ref, $type, $lastime, $lastuser)
+function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 {
 	global $tbl_wiki;
 	global $groupfilter;	

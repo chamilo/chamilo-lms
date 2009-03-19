@@ -65,7 +65,7 @@ class UniqueAnswer extends Question {
 		global $fck_attribute;
 
 		$fck_attribute = array();
-		$fck_attribute['Width'] = '50%';
+		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '125px';
 		
 		$fck_attribute['ToolbarSet'] = 'Answer';
@@ -110,7 +110,7 @@ class UniqueAnswer extends Question {
 						<th width="10px" >
 							'.get_lang('True').'
 						</th>
-						<th width="'.$fck_attribute['Width'].' ">
+						<th width="45%">
 							'.get_lang('Answer').'
 						</th>
 							'.$comment_title.'	

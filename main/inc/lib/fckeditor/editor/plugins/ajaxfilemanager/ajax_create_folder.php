@@ -55,16 +55,11 @@
 					//only inside courses				
 						$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Dokeos
 						$fullPath = $_POST['currentFolderPath'].$_POST['new_folder']; //get Ajaxfilemanager						
-						$dokeosFolder = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
+						$dokeosPath = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
 						$_POST['new_folder']=str_replace('_',' ',$_POST['new_folder']);//Restore for interaction with Dokeos. Because fix long names. See: ajaxfilemanager/inc/class.manager.php
 						$dokeosFile = $_POST['new_folder']; //get Ajaxfilemanager
 						
-						if(!empty($group_properties['directory'])) //get Dokeos
-						{
-							$dokeosFolder=$group_properties['directory'].$dokeosFolder;//get Dokeos
-						}
-						
-						$doc_id = add_document($_course, $dokeosFolder,'folder', 0, $dokeosFile); //get Dokeos	
+						$doc_id = add_document($_course, $dokeosPath,'folder', 0, $dokeosFile); //get Dokeos	
 						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(),$to_group_id);//get Dokeos
 						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),$to_group_id);//get Dokeos
 					}

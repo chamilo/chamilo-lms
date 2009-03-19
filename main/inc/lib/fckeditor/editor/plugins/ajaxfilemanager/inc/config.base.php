@@ -54,7 +54,7 @@
 		if(api_is_allowed_to_edit())
 		{	
 		//api_is_allowed_to_edit() from Dokeos
-			define('CONFIG_OPTIONS_DELETE', false);
+			define('CONFIG_OPTIONS_DELETE', true);
 			define('CONFIG_OPTIONS_CUT', false);
 			define('CONFIG_OPTIONS_COPY', false);
 			define('CONFIG_OPTIONS_NEWFOLDER', true);
@@ -65,7 +65,7 @@
 		}
 		else
 		{		
-			define('CONFIG_OPTIONS_DELETE', false);
+			define('CONFIG_OPTIONS_DELETE', true);
 			define('CONFIG_OPTIONS_CUT', false);
 			define('CONFIG_OPTIONS_COPY', false);
 			define('CONFIG_OPTIONS_NEWFOLDER', true);

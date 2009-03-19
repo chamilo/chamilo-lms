@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 19007 2009-03-12 19:29:05Z iflorespaz $
+<?php // $Id: whoisonline.php 19143 2009-03-19 12:30:45Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -161,8 +161,8 @@ function display_user_list($user_list, $_plugins)
 			if (api_get_setting('show_email_addresses') == 'true') {
 				$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
 			}
-			
-			if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
+			$user_anonymous=api_get_anonymous_id();
+			if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) {
 				if ($user_info['user_id'] != api_get_user_id() && !api_is_anonymous($user_info['user_id'])) {
 					$user_relation=UserFriend::get_relation_between_contacts(api_get_user_id(),$user_info['user_id']);
 					if ($user_relation==0 || $user_relation==6) {
@@ -188,8 +188,8 @@ function display_user_list($user_list, $_plugins)
 		if (api_get_setting('show_email_addresses') == 'true') {
 			$table_header[] = array(get_lang('Email'),true);
 		}
-
-		if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
+		$user_anonymous=api_get_anonymous_id();
+		if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) {
 			$table_header[] = array(get_lang('Friends'),true,'width="100"');
 		}		
 		/*this feature is deprecated
@@ -382,7 +382,7 @@ if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR 
 		}
 		else   //individual user information - also displays header info
 		{
-			display_individual_user($_GET['id']);
+			display_individual_user(Security::remove_XSS($_GET['id']));
 		}
 	}
 	elseif(isset($_GET['id']))

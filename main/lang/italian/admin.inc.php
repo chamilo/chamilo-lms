@@ -935,4 +935,6 @@ $TemplateDeleted = "Modello eliminato";
 $EditTemplate = "Modifica il modello";
 $FileImportedJustUsersThatAreNotRegistered = "Importati solo gli utenti non registrati presso il Campus";
 $YouMustImportAFileAccordingToSelectedOption = "Devi importare un file seguendo le opzioni selezionate";
+$ShowEmailOfTeacherOrTutorTitle = "E-mail del docente o del tutor a piè di pagina";
+$ShowEmailOfTeacherOrTutorComent = "Mostro l\'e-mail del docente o del tutor a piè di pagina?";
 ?>

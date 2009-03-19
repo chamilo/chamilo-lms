@@ -935,4 +935,6 @@ $TemplateDeleted = "Predloga je bila odstranjena";
 $EditTemplate = "Uredi predlogo";
 $FileImportedJustUsersThatAreNotRegistered = "Uporabniki, ki še niso registrirani v platformi, so bili uvoženi";
 $YouMustImportAFileAccordingToSelectedOption = "uvažana datoteka mora biti v skladu z izbrano možnostjo";
+$ShowEmailOfTeacherOrTutorTitle = "Uèiteljev ali tutorjev e-poštni naslov v nogi ";
+$ShowEmailOfTeacherOrTutorComent = "Prikažem uèiteljev oz. tutorjev e-poštni naslov v nogi?";
 ?>

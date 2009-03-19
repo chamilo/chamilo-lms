@@ -463,7 +463,7 @@ $OpenIDURL = "OpenID URL";
 $UplFileTooBig = "The file you uploaded is too big for the current Dokeos settings (%sMB). Please contact the portal administrator to discuss this issue.";
 $UplGenericError = "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal.";
 $MyGradebook = "Assessments";
-$Gradebook = "Gradebook";
+$Gradebook = "Assessment";
 $OpenIDWhatIs = "What is OpenID?";
 $OpenIDDescription = "OpenID eliminates the need for multiple usernames across different websites, simplifying your online experience. You get to choose the OpenID Provider that best meets your needs and most importantly that you trust. At the same time, your OpenID can stay with you, no matter which Provider you move to. And best of all, the OpenID technology is not proprietary and is completely free.For businesses, this means a lower cost of password and account management, while drawing new web traffic. OpenID lowers user frustration by letting users have control of their login.<br /><br /><a href=\"http://openid.net/what/\">Read on...</a>";
 $NoManager = "No manager";

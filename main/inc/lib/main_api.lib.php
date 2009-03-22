@@ -453,20 +453,20 @@ function api_get_user_courses($userid,$fetch_session=true) {
 	return $courses;
 }
 /**
+ * Find all the information about a user. If no paramater is passed you find all the information about the current user.
  * @param $user_id (integer): the id of the user
  * @return $user_info (array): user_id, lastname, firstname, username, email, ...
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version 21 September 2004
- * @desc find all the information about a user. If no paramater is passed you find all the information about the current user.
 */
 function api_get_user_info($user_id = '') {
 	global $tbl_user;
 	if ($user_id == '') {
 		return $GLOBALS["_user"];
 	} else {
-		$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".mysql_real_escape_string($user_id)."'";
+		$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".Database::escape_string($user_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		if(mysql_num_rows($result) > 0) {
+		if(Database::num_rows($result) > 0) {
 			$result_array = mysql_fetch_array($result);
 			// this is done so that it returns the same array-index-names
 			// ideally the names of the fields of the user table are renamed so that they match $_user (or vice versa)
@@ -486,6 +486,37 @@ function api_get_user_info($user_id = '') {
 		}
 		return false;
 	}
+}
+/**
+ * Find all the information about a user from username instead of user id
+ * @param $username (string): the username
+ * @return $user_info (array): user_id, lastname, firstname, username, email, ...
+ * @author Yannick Warnier <yannick.warnier@dokeos.com>
+*/
+function api_get_user_info_from_username($username = '') {
+    if (empty($username)) { return false; }
+    global $tbl_user;
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE username='".Database::escape_string($username)."'";
+    $result = api_sql_query($sql, __FILE__, __LINE__);
+    if (Database::num_rows($result) > 0) {
+        $result_array = mysql_fetch_array($result);
+        // this is done so that it returns the same array-index-names
+        // ideally the names of the fields of the user table are renamed so that they match $_user (or vice versa)
+        // $_user should also contain every field of the user table (except password maybe). This would make the
+        // following lines obsolete (and the code cleaner and slimmer !!!
+        $user_info['firstName'] = $result_array['firstname'];
+        $user_info['lastName'] = $result_array['lastname'];
+        $user_info['mail'] = $result_array['email'];
+        $user_info['picture_uri'] = $result_array['picture_uri'];
+        $user_info['user_id'] = $result_array['user_id'];
+        $user_info['official_code'] = $result_array['official_code'];
+        $user_info['status'] = $result_array['status'];
+        $user_info['auth_source'] = $result_array['auth_source'];
+        $user_info['username'] = $result_array['username'];
+        $user_info['theme'] = $result_array['theme'];
+        return $user_info;
+    }
+    return false;
 }
 /**
  * Returns the current course id (integer)

@@ -18,11 +18,11 @@ $server = new soap_server();
 // Initialize WSDL support
 $server->configureWSDL('WSCourseList', 'urn:WSCourseList');
 
-/* Register DokeosWSCourseList function */
+/* Register DokeosWSCourseListOfUser function */
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
-    'courseList',
+    'courseListOfUser',
     'complexType',
     'struct',
     'all',
@@ -30,40 +30,35 @@ $server->wsdl->addComplexType(
     array(
         'username' => array('name' => 'username', 'type' => 'xsd:string'),          
         'signature' => array('name' => 'signature', 'type' => 'xsd:string'),          
-        'visibilities' => array('name' => 'visibilities', 'type' => 'xsd:string'),
     )
 );
 
 // Register the method to expose
-$server->register('DokeosWSCourseList',         // method name
-    array('courseList' => 'tns:courseList'),    // input parameters
-    array('return' => 'xsd:array'),            // output parameters
+$server->register('DokeosWSCourseListOfUser',       // method name
+    array('courseListOfUser' => 'tns:courseListOfUser'),    // input parameters
+    array('return' => 'xsd:array'),                 // output parameters
     'urn:WSCourseList',                       // namespace
-    'urn:WSCourseList#DokeosWSCourseList',    // soapaction
+    'urn:WSCourseList#DokeosWSCourseListOfUser',    // soapaction
     'rpc',                                      // style
     'encoded',                                  // use
-    'This service returns a list of courses'      // documentation
+    'This service returns a list of courses the given user is subscribed to directly'      // documentation
 );
-
-
 /**
- * Get a list of courses (code, url, title, teacher, language) and return to caller
+ * Get a list of courses (code, url, title, teacher, language) for a specific 
+ * user and return to caller
  * Function registered as service. Returns strings in UTF-8.
  * @param string User name in Dokeos
  * @param string Signature (composed of the sha1(username+apikey)
- * @param mixed  Array or string. Type of visibility of course (public, public-registered, private, closed)
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
-function DokeosWSCourseList($username, $signature, $visibilities='public') {
-	if (empty($username) or empty($signature)) { return -1; }
+function DokeosWSCourseListOfUser($username, $signature) {
+    if (empty($username) or empty($signature)) { return -1; }
 
     require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
     global $_configuration;
     
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
-    if (!UserManager::is_admin($user_id)) { return -1; }
-    
     $list = get_api_keys($user_id,'dokeos');
     $key = $list[0];
     
@@ -73,31 +68,21 @@ function DokeosWSCourseList($username, $signature, $visibilities='public') {
         return -1; //secret key is incorrect
     }
     
-   	
-   	// libraries
-	require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-	$charset = api_get_setting('platform_charset');
-	$vis = array('public'=>'3', 'public-registered'=>'2', 'private'=>'1', 'closed'=>'0');
-	
-	$courses_list = array();
-	
-	if (!is_array($visibilities)) {
-		$tmp = $visibilities;
-		$visibilities = array($tmp);
-	}
-	foreach ($visibilities as $visibility) {
-		if (!in_array($visibility,array_keys($vis))) {
-   			return array('error_msg'=>'Security check failed');
-		}
-		$courses_list_tmp = CourseManager::get_courses_list(null,null,null,null,$vis[$visibility]);
-		foreach ( $courses_list_tmp as $index => $course )
-		{
-			$course_info = CourseManager::get_course_information($course['code']);
-			$courses_list[$course['code']] = array('title'=>mb_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>mb_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
-		}
-	}
-	return $courses_list;
+    
+    // libraries
+    require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+    $charset = api_get_setting('platform_charset');
+    
+    $courses_list = array();
+    $courses_list_tmp = CourseManager::get_courses_list_by_user_id($user_id);
+    foreach ( $courses_list_tmp as $index => $course )
+    {
+        $course_info = CourseManager::get_course_information($course['code']);
+        $courses_list[$course['code']] = array('title'=>mb_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>mb_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
+    }
+    return $courses_list;
 }
+
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 $server->service($HTTP_RAW_POST_DATA);

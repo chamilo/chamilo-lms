@@ -22,16 +22,32 @@ $server->configureWSDL('WSCourseList', 'urn:WSCourseList');
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
+        'courseDetails',
+        'complexType',
+        'struct',
+        'all',
+        '',
+        array(
+          'name'=>'code'  , 'type'=>'xsd:string',
+          'name'=>'title'  , 'type'=>'xsd:string',
+          'name'=>'url'    , 'type'=>'xsd:string',
+          'name'=>'teacher', 'type'=>'xsd:string',
+          'name'=>'language','type'=>'xsd:string',
+        )
+);
+
+$server->wsdl->addComplexType(
     'courseList',
     'complexType',
-    'struct',
-    'all',
+    'array',
     '',
+    'SOAP-ENC:Array',
+    array(),
     array(
-        'username' => array('name' => 'username', 'type' => 'xsd:string'),          
-        'signature' => array('name' => 'signature', 'type' => 'xsd:string'),          
-        'visibilities' => array('name' => 'visibilities', 'type' => 'xsd:string'),
-    )
+        array('ref'=>'SOAP:ENC:arrayType',
+        'wsdl:arrayType'=>'tns:courseDetails[]')
+    ),
+    'tns:courseDetails'
 );
 
 // Register the method to expose
@@ -39,7 +55,7 @@ $server->register('DokeosWSCourseList',         // method name
     array('username' => 'xsd:string',
           'signature' => 'xsd:string',
           'visibilities' => 'xsd:string'),    // input parameters
-    array('return' => 'xsd:array'),            // output parameters
+    array('return' => 'xsd:Array'),            // output parameters
     'urn:WSCourseList',                         // namespace
     'urn:WSCourseList#DokeosWSCourseList',      // soapaction
     'rpc',                                      // style
@@ -92,10 +108,9 @@ function DokeosWSCourseList($username, $signature, $visibilities='public') {
    			return array('error_msg'=>'Security check failed');
 		}
 		$courses_list_tmp = CourseManager::get_courses_list(null,null,null,null,$vis[$visibility]);
-		foreach ( $courses_list_tmp as $index => $course )
-		{
+		foreach ( $courses_list_tmp as $index => $course ) {
 			$course_info = CourseManager::get_course_information($course['code']);
-			$courses_list[$course['code']] = array('title'=>mb_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>mb_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
+			$courses_list[] = array('code'=>$course['code'],'title'=>mb_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>mb_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
 		}
 	}
 	return $courses_list;

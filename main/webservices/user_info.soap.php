@@ -18,32 +18,51 @@ $server = new soap_server();
 // Initialize WSDL support
 $server->configureWSDL('WSUserInfo', 'urn:WSUserInfo');
 
-/* Register DokeosWSCourseListOfUser function */
+/* Register DokeosWSCourseList function */
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
-    'courseListOfUser',
+        'courseDetails',
+        'complexType',
+        'struct',
+        'all',
+        '',
+        array(
+          'name'=>'code'  , 'type'=>'xsd:string',
+          'name'=>'title'  , 'type'=>'xsd:string',
+          'name'=>'url'    , 'type'=>'xsd:string',
+          'name'=>'teacher', 'type'=>'xsd:string',
+          'name'=>'language','type'=>'xsd:string',
+        )
+);
+
+$server->wsdl->addComplexType(
+    'courseList',
     'complexType',
-    'struct',
-    'all',
+    'array',
     '',
+    'SOAP-ENC:Array',
+    array(),
     array(
-        'username' => array('name' => 'username', 'type' => 'xsd:string'),          
-        'signature' => array('name' => 'signature', 'type' => 'xsd:string'),          
-    )
+        array('ref'=>'SOAP:ENC:arrayType',
+        'wsdl:arrayType'=>'tns:courseDetails[]')
+    ),
+    'tns:courseDetails'
 );
 
 // Register the method to expose
-$server->register('DokeosWSCourseListOfUser',       // method name
+$server->register('DokeosWSCourseListOfUser',   // method name
     array('username' => 'xsd:string',
-          'signature' => 'xsd:string'),    // input parameters
-    array('return' => 'xsd:array'),                 // output parameters
-    'urn:WSUserInfo',                       // namespace
-    'urn:WSUserInfo#DokeosWSCourseListOfUser',    // soapaction
+          'signature' => 'xsd:string',
+          'visibilities' => 'xsd:string'),      // input parameters
+    array('return' => 'xsd:Array'),             // output parameters
+    'urn:WSUserInfo',                           // namespace
+    'urn:WSUserInfo#DokeosWSUserInfo',          // soapaction
     'rpc',                                      // style
     'encoded',                                  // use
-    'This service returns a list of courses the given user is subscribed to directly'      // documentation
+    'This service returns a list of courses'    // documentation
 );
+
 /**
  * Get a list of courses (code, url, title, teacher, language) for a specific 
  * user and return to caller
@@ -80,24 +99,39 @@ function DokeosWSCourseListOfUser($username, $signature) {
     foreach ( $courses_list_tmp as $index => $course )
     {
         $course_info = CourseManager::get_course_information($course['code']);
-        $courses_list[$course['code']] = array('title'=>mb_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>mb_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
+        $courses_list[] = array('code'=>$course['code'],'title'=>mb_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>mb_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
     }
     return $courses_list;
 }
 
+/* Register DokeosWSCourseList function */
+// Register the data structures used by the service
 
 $server->wsdl->addComplexType(
-    'agendaEvents',
+        'eventDetails',
+        'complexType',
+        'struct',
+        'all',
+        '',
+        array(
+            'name'=>'date','type'=>'xsd:string',
+            'name'=>'title','type'=>'xsd:string',
+            'name'=>'coursetitle','type'=>'xsd:string',
+        )
+);
+
+$server->wsdl->addComplexType(
+    'eventsList',
     'complexType',
-    'struct',
-    'all',
+    'array',
     '',
+    'SOAP-ENC:Array',
+    array(),
     array(
-        'username' => array('name' => 'username', 'type' => 'xsd:string'),          
-        'signature' => array('name' => 'signature', 'type' => 'xsd:string'),
-        'datestart' => array('name' => 'datestart', 'type' => 'xsd:int'),
-        'dateend' => array('name' => 'dateend', 'type' => 'xsd:int'),                  
-    )
+        array('ref'=>'SOAP:ENC:arrayType',
+        'wsdl:arrayType'=>'tns:eventDetails[]')
+    ),
+    'tns:eventDetails'
 );
 
 // Register the method to expose
@@ -106,12 +140,12 @@ $server->register('DokeosWSEventsList',       // method name
           'signature' => 'xsd:string',
           'datestart' => 'xsd:int',
           'dateend'   => 'xsd:int'),    // input parameters
-    array('return' => 'xsd:array'),                 // output parameters
+    array('return' => 'xsd:Array'),                 // output parameters
     'urn:WSUserInfo',                       // namespace
     'urn:WSUserInfo#DokeosWSEventsList',    // soapaction
     'rpc',                                      // style
     'encoded',                                  // use
-    'This service returns a list of courses the given user is subscribed to directly'      // documentation
+    'This service returns a list of events of the courses the given user is subscribed to'      // documentation
 );
 
 /**
@@ -155,8 +189,11 @@ function DokeosWSEventsList($username,$signature,$datestart=0,$dateend=0) {
     $de = substr($dateend,0,4).'-'.substr($dateend,4,2).'-'.substr($dateend,6,2).' 00:00:00';
     $events_list = get_personal_agenda_items_between_dates($user_id, $ds, $de);
     foreach ( $events_list as $i => $event ) {
-        $events_list[$i]['title'] = mb_convert_encoding($event['title'],'UTF-8',$charset);
-        $events_list[$i]['coursetitle'] = mb_convert_encoding($event['coursetitle'],'UTF-8',$charset);
+        $events_list[] = array(
+            'date'=>$i,
+            'title' => mb_convert_encoding($event['title'],'UTF-8',$charset), 
+            'coursetitle' => mb_convert_encoding($event['coursetitle'],'UTF-8',$charset)
+        );
     }
     return $events_list;
 }

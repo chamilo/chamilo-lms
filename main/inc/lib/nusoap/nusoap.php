@@ -6230,11 +6230,13 @@ class wsdl extends nusoap_base {
 	    	foreach($elements as $n => $e){
 	            // expand each element
 	            $ee = array();
-	            foreach ($e as $k => $v) {
-		            $k = strpos($k,':') ? $this->expandQname($k) : $k;
-		            $v = strpos($v,':') ? $this->expandQname($v) : $v;
-		            $ee[$k] = $v;
-		    	}
+                if (is_array($e)) {
+    	            foreach ($e as $k => $v) {
+    		            $k = strpos($k,':') ? $this->expandQname($k) : $k;
+    		            $v = strpos($v,':') ? $this->expandQname($v) : $v;
+    		            $ee[$k] = $v;
+    		    	}
+                }
 	    		$eElements[$n] = $ee;
 	    	}
 	    	$elements = $eElements;

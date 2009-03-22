@@ -114,11 +114,11 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWSCourseListOfUser',         // method name
+$server->register('DokeosWSCourseListOfUser',       // method name
     array('courseListOfUser' => 'tns:courseListOfUser'),    // input parameters
-    array('return' => 'xsd:array'),            // output parameters
-    'urn:WSCourseListOfUser',                       // namespace
-    'urn:WSCourseListOfUser#DokeosWSCourseListOfUser',    // soapaction
+    array('return' => 'xsd:array'),                 // output parameters
+    'urn:WSCourseList',                       // namespace
+    'urn:WSCourseList#DokeosWSCourseListOfUser',    // soapaction
     'rpc',                                      // style
     'encoded',                                  // use
     'This service returns a list of courses the given user is subscribed to directly'      // documentation
@@ -162,3 +162,7 @@ function DokeosWSCourseListOfUser($username, $signature) {
     }
     return $courses_list;
 }
+
+// Use the request to (try to) invoke the service
+$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
+$server->service($HTTP_RAW_POST_DATA);

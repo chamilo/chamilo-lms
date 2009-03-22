@@ -48,7 +48,7 @@ $server->register('DokeosWSCreateUser',			// method name
 	'urn:WSRegistration#DokeosWSCreateUser',	// soapaction
 	'rpc',										// style
 	'encoded',									// use
-	'This service adds a user from wiener'		// documentation
+	'This service adds a user'		// documentation
 );
 
 // Define the method DokeosWSCreateUser
@@ -80,7 +80,7 @@ function DokeosWSCreateUser($params) {
 	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 	
-	// check if exits wiener_user_id into user_field_values table
+	// check if exits x_user_id into user_field_values table
 	$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_row($res);
@@ -176,7 +176,7 @@ function DokeosWSCreateUser($params) {
 		}
 		// save new fieldlabel into user_field table
 		$field_id = UserManager::create_extra_field($original_user_id_name,1,$original_user_id_name,'');
-		// save the wiener's id into user_field_value table'	
+		// save the external system's id into user_field_value table'	
 		$res = UserManager::update_extra_field_value($return,$original_user_id_name,$original_user_id_value);	
 	} else {				
 		$return=0;
@@ -265,7 +265,7 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 	
-	// check if exits wiener_user_id into user_field_values table
+	// check if exits x_user_id into user_field_values table
 	$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_row($res);
@@ -356,7 +356,7 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 		}
 		// save new fieldlabel into user_field table
 		$field_id = UserManager::create_extra_field($original_user_id_name,1,$original_user_id_name,'');
-		// save the wiener's id into user_field_value table'	
+		// save the remote system's id into user_field_value table'	
 		$res = UserManager::update_extra_field_value($return,$original_user_id_name,$original_user_id_value);	
 	} else {				
 		$return=0;
@@ -397,7 +397,7 @@ $server->register('DokeosWSEditUser',		// method name
 	'urn:WSRegistration#DokeosWSEditUser',	// soapaction
 	'rpc',									// style
 	'encoded',								// use
-	'This service edits a user from wiener'	// documentation
+	'This service edits a user'	// documentation
 );
 
 // Define the method DokeosWSEditUser
@@ -425,7 +425,7 @@ function DokeosWSEditUser($params)
 		
 	if (!empty($params['password'])) { $password = $params['password'];}	
 	
-	// get user id from id wiener
+	// get user id from id of remote system
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
@@ -525,7 +525,7 @@ function DokeosWSDeleteUser($params)
    	$original_user_id_name = $params['original_user_id_name'];
    	$original_user_id_value = $params['original_user_id_value'];
    		
-	// get user id from id wiener
+	// get user id from id of remote system
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
@@ -608,7 +608,7 @@ function DokeosWSCreateCourse($params) {
 	$table_field 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 	$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	// check if exits $wiener_course_code into user_field_values table
+	// check if exits $x_course_code into user_field_values table
 	$sql = "SELECT field_value,course_code FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_row($res);
@@ -771,7 +771,7 @@ function DokeosWSCreateCourseByTitle($params) {
 	$table_field 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 	$table_course_category 	= Database::get_main_table(TABLE_MAIN_CATEGORY);
 	$table_course 			= Database::get_main_table(TABLE_MAIN_COURSE);
-	// check if exits $wiener_course_code into user_field_values table
+	// check if exits $x_course_code into user_field_values table
 	$sql = "SELECT field_value,course_code FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_row($res);
@@ -939,7 +939,7 @@ function DokeosWSEditCourse($params){
 	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);	
 	$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 	$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-	// get course code from id wiener
+	// get course code from id from remote system
 	$sql = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_row($res);	
@@ -1032,7 +1032,7 @@ function DokeosWSEditCourseDescription($params){
 	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);	
 	$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 	$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-	// get course code from id wiener
+	// get course code from id from remote system
 	$sql = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_row($res);	
@@ -1103,7 +1103,7 @@ function DokeosWSDeleteCourse($params) {
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 		$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-		// get course code from id wiener
+		// get course code from id from remote system
 		$sql_course = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res_course = api_sql_query($sql_course,__FILE__,__LINE__);
 		$row_course = Database::fetch_row($res_course);
@@ -1196,7 +1196,7 @@ function DokeosWSCreateSession($params) {
 	$t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);		
 	$t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 	
-	// check if exits wiener session id into session_field_values table
+	// check if exits remote system's session id into session_field_values table
 	$sql = "SELECT field_value	FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_row($res);
@@ -1252,7 +1252,7 @@ function DokeosWSCreateSession($params) {
 				$field_id=Database::get_last_insert_id();
 			}
 								
-			// save the wiener's id into user_field_value table'							
+			// save the remote system's id into user_field_value table'							
 			$sqli = "INSERT INTO $t_sfv (session_id,field_id,field_value,tms)
 					VALUES ('$id_session',$field_id,'$original_session_id_value',FROM_UNIXTIME($time))";
 			$resi = api_sql_query($sqli,__FILE__,__LINE__);		

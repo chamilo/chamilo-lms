@@ -56,11 +56,12 @@ function DokeosWSCourseListOfUser($username, $signature) {
     if (empty($username) or empty($signature)) { return -1; }
 
     require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+    require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
     global $_configuration;
     
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
-    $list = get_api_keys($user_id,'dokeos');
+    $list = UserManager::get_api_keys($user_id,'dokeos');
     $key = $list[0];
     
     $local_key = sha1($username.$key);
@@ -127,11 +128,12 @@ function DokeosWSEventsList($username,$signature,$datestart=0,$dateend=0) {
     if (empty($username) or empty($signature)) { return -1; }
 
     require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+    require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
     global $_configuration;
     
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
-    $list = get_api_keys($user_id,'dokeos');
+    $list = UserManager::get_api_keys($user_id,'dokeos');
     $key = $list[0];
     
     $local_key = sha1($username.$key);

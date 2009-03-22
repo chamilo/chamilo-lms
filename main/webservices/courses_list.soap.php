@@ -67,7 +67,7 @@ function DokeosWSCourseList($username, $signature, $visibilities='public') {
     $user_id = $info['user_id'];
     if (!UserManager::is_admin($user_id)) { return -1; }
     
-    $list = get_api_keys($user_id,'dokeos');
+    $list = UserManager::get_api_keys($user_id,'dokeos');
     $key = $list[0];
     
     $local_key = sha1($username.$key);

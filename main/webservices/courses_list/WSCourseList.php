@@ -49,7 +49,8 @@ $server->register('DokeosWSCourseList',         // method name
 /**
  * Get a list of courses (code, url, title, teacher, language) and return to caller
  * Function registered as service. Returns strings in UTF-8.
- * @param string Security key (the Dokeos install's API key)
+ * @param string User name in Dokeos
+ * @param string Signature (composed of the sha1(username+apikey)
  * @param mixed  Array or string. Type of visibility of course (public, public-registered, private, closed)
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
@@ -96,4 +97,68 @@ function DokeosWSCourseList($username, $signature, $visibilities='public') {
 		}
 	}
 	return $courses_list;
+}
+/* Register DokeosWSCourseListOfUser function */
+// Register the data structures used by the service
+
+$server->wsdl->addComplexType(
+    'courseListOfUser',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'username' => array('name' => 'username', 'type' => 'xsd:string'),          
+        'signature' => array('name' => 'signature', 'type' => 'xsd:string'),          
+    )
+);
+
+// Register the method to expose
+$server->register('DokeosWSCourseListOfUser',         // method name
+    array('courseListOfUser' => 'tns:courseListOfUser'),    // input parameters
+    array('return' => 'xsd:array'),            // output parameters
+    'urn:WSCourseListOfUser',                       // namespace
+    'urn:WSCourseListOfUser#DokeosWSCourseListOfUser',    // soapaction
+    'rpc',                                      // style
+    'encoded',                                  // use
+    'This service returns a list of courses the given user is subscribed to directly'      // documentation
+);
+/**
+ * Get a list of courses (code, url, title, teacher, language) for a specific 
+ * user and return to caller
+ * Function registered as service. Returns strings in UTF-8.
+ * @param string User name in Dokeos
+ * @param string Signature (composed of the sha1(username+apikey)
+ * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
+ */
+function DokeosWSCourseListOfUser($username, $signature) {
+    if (empty($username) or empty($signature)) { return -1; }
+
+    require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+    global $_configuration;
+    
+    $info = api_get_user_info_from_username($username);
+    $user_id = $info['user_id'];
+    $list = get_api_keys($user_id,'dokeos');
+    $key = $list[0];
+    
+    $local_key = sha1($username.$key);
+
+    if (!api_is_valid_secret_key($signature, $local_key)) {
+        return -1; //secret key is incorrect
+    }
+    
+    
+    // libraries
+    require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+    $charset = api_get_setting('platform_charset');
+    
+    $courses_list = array();
+    $courses_list_tmp = CourseManager::get_courses_list_by_user_id($user_id);
+    foreach ( $courses_list_tmp as $index => $course )
+    {
+        $course_info = CourseManager::get_course_information($course['code']);
+        $courses_list[$course['code']] = array('title'=>mb_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>mb_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
+    }
+    return $courses_list;
 }

@@ -14,6 +14,7 @@
 	Copyright (c) Olivier Brouckaert
 	Copyright (c) Toon Van Hoecke
 	Copyright (c) Denes Nagy
+	Copyright (c) Isaac Flores
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -3186,6 +3187,9 @@ if ( !function_exists('sys_get_temp_dir') )
         }
     }
 }
+/**
+ * This function allow know when request sent is XMLHttpRequest
+ */
 function api_is_xml_http_request() {
 	if ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') {
 		return true;
@@ -3229,4 +3233,20 @@ function api_is_valid_secret_key($original_key_secret,$segurity_key) {
     } else {
         return false;
     }       
+}
+
+/**
+ * Check if a user is into course
+ * @param string $course_id - the course id
+ * @param string $user_id - the user id
+ */
+function api_is_user_of_course ($course_id,$user_id) {
+	$tbl_course_rel_user=Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$sql='SELECT user_id FROM '.$tbl_course_rel_user.' WHERE course_code="'.Database::escape_string($course_id).'" AND user_id="'.Database::escape_string($user_id).'"';
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	if (Database::num_rows($result)==1) {
+		return true;
+	} else {
+		return false;
+	}
 }

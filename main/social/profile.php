@@ -99,19 +99,21 @@ function toogle_function (element_html, course_code){
 	id_button="#btn_"+id_elem[1]; 
 	elem_src=$(id_button).attr("src"); 
 	image_show=elem_src.split("/");
-	my_image=image_show[2]; 
-	if (my_image=="nolines_plus.gif") {
-		$(ident).hide("slow");	
-		$(id_button).attr("src","../img/nolines_minus.gif"); var action = "load_course"; 
-	} else {
-		$(ident).show("slow");	
-		$(id_button).attr("src","../img/nolines_plus.gif"); var action = "unload";
-	}
+	my_image=image_show[2];
 	var content = \'social_content\' + id_elem[1]; 
+	if (my_image=="nolines_plus.gif") {
+		$(id_button).attr("src","../img/nolines_minus.gif"); var action = "load_course";
+		$("div#"+content).show("slow");	
+	} else {
+		$("div#"+content).hide("slow");	
+		$(id_button).attr("src","../img/nolines_plus.gif"); var action = "unload";
+		return false;
+	}
+
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("#id_response").html("'.get_lang('Loading').'"); },
+		$("div#"+content).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
 		url: "../social/data_personal.inc.php",
 		data: "load_ajax="+id_elem+"&action="+action+"&course_code="+course_code,
@@ -134,7 +136,7 @@ function change_panel (mypanel_id,myuser_id) {
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_content_panel").html("'.get_lang('Loading').'"); },
+			$("#id_content_panel").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 			type: "POST",
 			url: "../messages/send_message.php",
 			data: "panel_id="+mypanel_id+"&user_id="+myuser_id,
@@ -160,7 +162,7 @@ function action_database_panel (option_id,myuser_id) {
 	$.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("#display_response_id").html("'.get_lang('Loading').'"); },
+		$("#display_response_id").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
 		url: "../messages/send_message.php",
 		data: "panel_id="+option_id+"&user_id="+myuser_id+"&txt_subject="+my_txt_subject+"&txt_content="+my_txt_content,
@@ -193,7 +195,7 @@ function register_friend(element_input) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_response").html("'.get_lang('Loading').'"); },
+			$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 			type: "POST",
 			url: "../social/register_friend.php",
 			data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
@@ -258,6 +260,7 @@ function get_logged_user_course_html($my_course, $count) {
 	$course_teacher = $my_course['t'];
 	$course_teacher_email = isset($my_course['email'])?$my_course['email']:'';
 	$course_info = Database :: get_course_info($course_system_code);
+	//error_log(print_r($course_info,true));
 	$course_access_settings = CourseManager :: get_access_settings($course_system_code);
 	
 	$course_visibility = $course_access_settings['visibility'];
@@ -284,7 +287,6 @@ function get_logged_user_course_html($my_course, $count) {
 		$course_display_title = $course_title;
 		$course_display_code = $course_visual_code;
 	}
-
 	$s_course_status=$my_course['s'];
 	$s_htlm_status_icon="";
 
@@ -306,7 +308,7 @@ function get_logged_user_course_html($my_course, $count) {
 	
 	//show a hyperlink to the course, unless the course is closed and user is not course admin
 	if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
-		$result .= '<a href="#" id="ln_'.$count.'"  onclick=toogle_function(this,\''.$course_database.'\');>&nbsp;'.$course_title.'</a></h2>';
+		$result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_function(this,\''.$course_database.'\');>&nbsp;'.$course_title.'</a></h2>';
 		/*
 		if(api_get_setting('use_session_mode')=='true' && !$nosession) {
 			if(empty($my_course['id_session'])) {
@@ -345,7 +347,6 @@ function get_logged_user_course_html($my_course, $count) {
 	$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
 	// display the what's new icons
 	//	$result .= show_notification($my_course);
-
 	if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0) {
 		reset($digest);
 		$result .= '<ul>';
@@ -420,6 +421,7 @@ function get_logged_user_course_html($my_course, $count) {
 	} else {
 		$output = array ($my_course['user_course_cat'], $result);
 	}	
+	//$my_course['creation_date'];
 	return $output;
 }
 
@@ -446,8 +448,12 @@ $course_list_code = array();
 $i=1;
 //print_r($personal_course_list);
 foreach ($personal_course_list as $my_course) {
-	$list[] = get_logged_user_course_html($my_course,$i);	
-	$course_list_code[] = array('code'=>$my_course['c'],'dbName'=>$my_course['db'], 'title'=>$my_course['i']);
+	if ($i<=10) {
+		$list[] = get_logged_user_course_html($my_course,$i);	
+		$course_list_code[] = array('code'=>$my_course['c'],'dbName'=>$my_course['db'], 'title'=>$my_course['i']);
+	} else {
+		break;
+	}
 	$i++;
 }
 					
@@ -605,7 +611,7 @@ echo '<div id="social-profile-container">';
     	  		echo '&nbsp;&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>';
     	  			
     	  	} else {
-    	  		echo '&nbsp;&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />'; 
+    	  		echo '&nbsp;&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=true" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />'; 
     	  		//echo '&nbsp;&nbsp;<a href="#">'.get_lang('SendMessage').'</a>';	
     	  	}
     	  	echo '<br /><br />';

@@ -3800,8 +3800,12 @@ function get_thread_user_post($course_db, $thread_id, $user_id )
 	 		$threads = get_threads($forum['forum_id']); 		
 	 		if (is_array($threads)) { 		
 	 			echo '<div id="social-forum">';
-	 			echo Display::return_icon('forum.gif'); 		
-	 			echo $forum['forum_title'];
+	 			/*echo Display::return_icon('forum.gif'); 		
+	 			echo $forum['forum_title'];*/
+	 			$my_course_db=explode('_',$course_db);
+	 			$my_course_code=$my_course_db[1];
+	 			echo '<div class="clear"></div><br />';
+	 			echo '<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon('forum.gif').'&nbsp;&nbsp;&nbsp;&nbsp;'.$forum['forum_title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../forum/viewforum.php?cidReq='.$my_course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a></div></div>';
 	 			echo '<br / >';	echo '<br / >'; 
 	 			$i=0;			
 		 		foreach($threads as $thread) {

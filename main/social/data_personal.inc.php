@@ -40,41 +40,53 @@ if (isset($_POST['load_ajax'])) {
 			$course_db =  $_POST['course_code'];
 			// @todo goto the course link							
 			//echo '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.get_lang('GotoCourse').'</a>';
-		
-			//------Forum messages
-			api_display_tool_title(get_lang('Forum'));
-			//print_r($course);
-			$table_forums 			= Database :: get_course_table(TABLE_FORUM,$course_db);
-			$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD,$course_db);
-			$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST,$course_db);
-			$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_db);
-			$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
-			
-			//------Forum messages
-			echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;" >';			
-			get_all_post_from_user($user_id, $course_db);
-			echo '</div>';	
-			echo '<br />';			
-			
-			//------Blog posts				
-					
-			$result = get_blog_post_from_user($course_db, $user_id); 
-			if (!empty($result)) {
-				api_display_tool_title(get_lang('BlogPosts'));				
-				echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
-				echo $result;
-				echo '</div>';
-				echo '<br />';				
-			}
-			
-			//------Blog comments			
-			$result = get_blog_comment_from_user($course_db, $user_id); 
-			if (!empty($result)) {
-				api_display_tool_title(get_lang('BlogComments'));							
-				echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
-				echo $result;
-				echo '</div>';
-				echo '<br />';				
+			$my_course_info_db=explode('_',$course_db);
+			$course_id=$my_course_info_db[1];
+			if (api_is_user_of_course($course_id,api_get_user_id())) {
+				//------Forum messages
+				api_display_tool_title(get_lang('Forum'));
+				//print_r($course);
+				$table_forums 			= Database :: get_course_table(TABLE_FORUM,$course_db);
+				$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD,$course_db);
+				$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST,$course_db);
+				$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_db);
+				$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
+				
+				//------Forum messages
+				echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;" >';			
+				get_all_post_from_user($user_id, $course_db);
+				echo '</div>';	
+				echo '<br />';			
+				
+				//------Blog posts				
+						
+				$result = get_blog_post_from_user($course_db, $user_id); 
+				if (!empty($result)) {
+					echo '<div class="clear"></div><br />';
+					api_display_tool_title(get_lang('BlogPosts'));				
+					echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
+					echo $result;
+					echo '</div>';
+					echo '<br />';				
+				}
+				
+				//------Blog comments			
+				$result = get_blog_comment_from_user($course_db, $user_id); 
+				if (!empty($result)) {
+					api_display_tool_title(get_lang('BlogComments'));							
+					echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
+					echo $result;
+					echo '</div>';
+					echo '<br />';				
+				}
+			} else {
+					echo '<div class="clear"></div><br />';
+					api_display_tool_title(get_lang('Details'));	
+					echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
+					echo get_lang('UserNonRegisteredAtTheCourse');
+					echo '<div class="clear"></div><br />';
+					echo '</div>';
+					echo '<div class="clear"></div><br />';
 			}
 			break;
 		case 'unload_course' :

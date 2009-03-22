@@ -39,7 +39,8 @@ if (api_get_setting('allow_message_tool')<>'true' && api_get_setting('allow_soci
     if ( isset($_REQUEST['user_friend']) ) {
 		$info_user_friend=array();
 		$info_path_friend=array();
-     	$userfriend_id=$_REQUEST['user_friend'];
+     	$userfriend_id=Security::remove_XSS($_REQUEST['user_friend']);
+     	$panel=Security::remove_XSS($_REQUEST['view_panel']);
      	$info_user_friend=api_get_user_info($userfriend_id);
      	$info_path_friend=UserManager::get_user_picture_path_by_id($userfriend_id,'web',false,true);
     }
@@ -81,8 +82,24 @@ if (api_get_setting('allow_message_tool')<>'true' && api_get_setting('allow_soci
 ?>
 <?php       
 			if (api_get_setting('allow_message_tool')=='true') {
+				if  (isset($_REQUEST['view_panel'])) {
 ?>
-				<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $userfriend_id; ?>')"><?php echo mb_convert_encoding(get_lang('SendMessage'),'UTF-8',$charset);?></a></dd>
+<?php 
+			   		$user_info=api_get_user_info($userfriend_id);
+			  		 echo mb_convert_encoding(get_lang('To'),'UTF-8',$charset); ?> &nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;<?php echo mb_convert_encoding($user_info['firstName'],'UTF-8',$charset); ?>
+			 		 <br/><?php echo mb_convert_encoding(get_lang('subject'),'UTF-8',$charset); ?> :<br/><input id="txt_subject_id" type="text" style="width:200px;">
+			   		 <br/><?php echo mb_convert_encoding(get_lang('Message'),'UTF-8',$charset); ?> :<br/><textarea id="txt_area_invite" rows="3" cols="25"></textarea>
+			    	 <input type="button" value="<?php echo mb_convert_encoding(get_lang('NewMessage'),'UTF-8',$charset); ?>" onclick="hide_display_message()" />&nbsp;&nbsp;&nbsp; 
+			   		 <input type="button" value="<?php echo get_lang('SendMessage'); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')" />
+
+<?php
+				} else {
+?>
+	<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $userfriend_id; ?>')"><?php echo mb_convert_encoding(get_lang('SendMessage'),'UTF-8',$charset);?></a></dd>
+<?php					
+				}
+?>
+
 <?php
 			}
 ?>

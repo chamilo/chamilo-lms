@@ -36,13 +36,15 @@ $server->wsdl->addComplexType(
 
 // Register the method to expose
 $server->register('DokeosWSCourseList',         // method name
-    array('courseList' => 'tns:courseList'),    // input parameters
+    array('username' => 'xsd:string',
+          'signature' => 'xsd:string',
+          'visibilities' => 'xsd:string'),    // input parameters
     array('return' => 'xsd:array'),            // output parameters
-    'urn:WSCourseList',                       // namespace
-    'urn:WSCourseList#DokeosWSCourseList',    // soapaction
+    'urn:WSCourseList',                         // namespace
+    'urn:WSCourseList#DokeosWSCourseList',      // soapaction
     'rpc',                                      // style
     'encoded',                                  // use
-    'This service returns a list of courses'      // documentation
+    'This service returns a list of courses'    // documentation
 );
 
 

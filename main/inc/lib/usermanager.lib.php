@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 19177 2009-03-22 01:26:42Z yannoo $
+<?php // $Id: usermanager.lib.php 19178 2009-03-22 01:27:30Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1836,6 +1836,7 @@ class UserManager
      * Checks if a user_id is platform admin
      * @param   int user ID
      * @return  boolean True if is admin, false otherwise
+     * @see main_api.lib.php::api_is_platform_admin() for a context-based check
      */
     function is_admin($user_id) {
         if (empty($user_id) or $user_id != strval(intval($user_id))) { return false; }

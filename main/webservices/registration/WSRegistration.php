@@ -59,7 +59,7 @@ function DokeosWSCreateUser($params) {
 	$secret_key = $params['secret_key'];
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
 			
@@ -230,7 +230,7 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 	$secret_key = $params['secret_key'];	
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
 
@@ -408,7 +408,7 @@ function DokeosWSEditUser($params)
 	$secret_key = $params['secret_key'];
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
 	
@@ -519,7 +519,7 @@ function DokeosWSDeleteUser($params)
 	$secret_key = $params['secret_key'];
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
    	$original_user_id_name = $params['original_user_id_name'];
@@ -592,7 +592,7 @@ function DokeosWSCreateCourse($params) {
 	$secret_key = $params['secret_key'];
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
 	
@@ -741,7 +741,7 @@ function DokeosWSCreateCourseByTitle($params) {
 	$secret_key = $params['secret_key'];
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
 		
@@ -918,7 +918,7 @@ function DokeosWSEditCourse($params){
 	$secret_key = $params['secret_key'];
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
 	
@@ -1020,7 +1020,7 @@ function DokeosWSEditCourseDescription($params){
 	$secret_key = $params['secret_key'];
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
 		
@@ -1093,7 +1093,7 @@ function DokeosWSDeleteCourse($params) {
 		$secret_key = $params['secret_key'];
 		$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-		if (is_secret_key_invalid($secret_key,$segurity_key)) {
+		if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 			return -1; //secret key is incorrect
 		}
 		
@@ -1173,7 +1173,7 @@ function DokeosWSCreateSession($params) {
 	$secret_key = $params['secret_key'];
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
 		
@@ -1308,7 +1308,7 @@ function DokeosWSEditSession($params) {
 	$secret_key = $params['secret_key'];	
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
 		
@@ -1408,7 +1408,7 @@ function DokeosWSDeleteSession($params) {
 	$secret_key = $params['secret_key'];	
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}	
 	
@@ -1490,7 +1490,7 @@ function DokeosWSSubscribeUserToCourse($params) {
     $secret_key = $params['secret_key'];
     $segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
     
@@ -1670,7 +1670,7 @@ function DokeosWSUnsubscribeUserFromCourse($params)
 	$secret_key = $params['secret_key'];
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
 	
@@ -1785,7 +1785,7 @@ function DokeosWSSuscribeUsersToSession($params){
  	$secret_key = $params['secret_key'];
  	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
    	 
@@ -1957,7 +1957,7 @@ function DokeosWSSuscribeCoursesToSession($params) {
 	$secret_key = $params['secret_key'];
 	$segurity_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (is_secret_key_invalid($secret_key,$segurity_key)) {
+	if (api_is_valid_secret_key($secret_key,$segurity_key)) {
 		return -1; //secret key is incorrect
 	}
    	 
@@ -2093,23 +2093,6 @@ function DokeosWSSuscribeCoursesToSession($params) {
 		
 	return $cad_course_directory;
 }
-
-/** Check if a secret key is invalid
- *  @param string $original_key_secret  - secret key from client
- *  @param string $security_key - security key from dokeos
- *  @return boolean - true if secret key is invalid, false otherwise 
- */
-function is_secret_key_invalid($original_key_secret,$segurity_key) {
-
-	global $_configuration;
-	
-	if ( $original_key_secret != sha1($segurity_key)) {
-	   		return true; //secret key is incorrect
-	} else {
-		return false;
-	}		
-}
-
 
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';

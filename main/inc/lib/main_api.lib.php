@@ -3183,3 +3183,18 @@ function api_get_encrypted_password($password)
 		return md5($password); 
 	}
 }
+/** Check if a secret key is valid
+ *  @param string $original_key_secret  - secret key from (webservice) client
+ *  @param string $security_key - security key from dokeos
+ *  @return boolean - true if secret key is valid, false otherwise 
+ */
+function api_is_valid_secret_key($original_key_secret,$segurity_key) {
+
+    global $_configuration;
+    
+    if ( $original_key_secret != sha1($segurity_key)) {
+            return true; //secret key is incorrect
+    } else {
+        return false;
+    }       
+}

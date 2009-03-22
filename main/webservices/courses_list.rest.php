@@ -9,7 +9,7 @@
  * See license terms in /dokeos_license.txt
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  */
-require_once('../../inc/global.inc.php');
+require_once('../inc/global.inc.php');
 /**
  * Get a list of courses (code, url, title, teacher, language) and return to caller
  * Function registered as service. Returns strings in UTF-8.

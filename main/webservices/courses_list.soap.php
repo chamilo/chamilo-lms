@@ -82,8 +82,7 @@ function DokeosWSCourseList($username, $signature, $visibilities='public') {
 	$courses_list = array();
 	
 	if (!is_array($visibilities)) {
-		$tmp = $visibilities;
-		$visibilities = array($tmp);
+		$visibilities = split(',',$visibilities);
 	}
 	foreach ($visibilities as $visibility) {
 		if (!in_array($visibility,array_keys($vis))) {

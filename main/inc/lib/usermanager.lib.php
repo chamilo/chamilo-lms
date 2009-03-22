@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 19080 2009-03-16 20:18:03Z iflorespaz $
+<?php // $Id: usermanager.lib.php 19177 2009-03-22 01:26:42Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1831,5 +1831,20 @@ class UserManager
 		$nbr_users = count($UserList);
 		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
 		api_sql_query($update_sql,__FILE__,__LINE__);
+    }
+    /**
+     * Checks if a user_id is platform admin
+     * @param   int user ID
+     * @return  boolean True if is admin, false otherwise
+     */
+    function is_admin($user_id) {
+        if (empty($user_id) or $user_id != strval(intval($user_id))) { return false; }
+        $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
+        $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) === 1) {
+        	return true;
+        }
+        return false;
     }
 }

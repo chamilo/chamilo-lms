@@ -1241,6 +1241,7 @@ function api_get_interface_language() {
 * Check if current user is a platform administrator
 * @return boolean True if the user has platform admin rights,
 * false otherwise.
+* @see usermanager::is_admin(user_id) for a user-id specific function
 */
 function api_is_platform_admin($allow_sessions_admins = false) {
 	if($_SESSION['is_platformAdmin']) {

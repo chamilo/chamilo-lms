@@ -33,11 +33,9 @@
 									$hotpotatoes_folder_dokeos='HotPotatoes_files';
 									$chat_files_dokeos='chat_files';
 									
-									//hidden directory of the group if the user is not a member of the group					
+									//show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?				
 									$group_folder='_groupdocs';
 									
-									
-									//show group's directory only if I'm member. Or if I'm a teacher
 									$show_doc_group=true;								
 									if(ereg($group_folder, $file['path']))
 									{

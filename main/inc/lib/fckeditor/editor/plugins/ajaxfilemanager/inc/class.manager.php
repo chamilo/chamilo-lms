@@ -5,7 +5,11 @@
 	 * @link www.phpletter.com
 	 * @since 22/April/2007
 	 *
+	 * Modify for Dokeos
+	 * @author Juan Carlos Raña
+	 * @since 31/December/2008
 	 */
+	 
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.file.php");
 class manager
 {
@@ -180,6 +184,31 @@ class manager
 					if(is_dir($path) && isListingDocument($path) )
 					{
 						$this->currentFolderInfo['subdir']++;
+										
+						//fix count left folders for Dokeos				
+						$deleted_by_dokeos_folder='_DELETED_';
+						$css_folder_dokeos='css';
+						$hotpotatoes_folder_dokeos='HotPotatoes_files';
+						$chat_files_dokeos='chat_files';
+						//show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?	
+						$group_folder='_groupdocs';			
+						$hide_doc_group=false;								
+						if(ereg($group_folder, $path))
+						{
+							$hide_doc_group=true;
+							if($is_user_in_group ||( $to_group_id!=0 && api_is_allowed_to_edit()))
+							{
+								$hide_doc_group=false;				
+							}
+							
+						}		
+
+						if(ereg($deleted_by_dokeos_folder, $path)|| ereg($css_folder_dokeos, $path) || ereg($hotpotatoes_folder_dokeos, $path) || ereg($chat_files_dokeos, $path) || $hide_doc_group==true || $file[0]=='.')
+						{
+							$this->currentFolderInfo['subdir']=$this->currentFolderInfo['subdir']-1;
+						}
+						///end fix for Dokeos
+						
 						if(!$this->calculateSubdir)
 						{			
 						}else 
@@ -205,7 +234,16 @@ class manager
 									$tem[$k] = $v;
 								}
 								$this->currentFolderInfo['size'] += $tem['size'];
-								$this->currentFolderInfo['file']++;		
+								$this->currentFolderInfo['file']++;
+									
+								//fix count left files for Dokeos
+								$deleted_by_dokeos_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php							
+								if(ereg($deleted_by_dokeos_file, $tem['name']) || $tem['name'][0]=='.')
+								{
+									$this->currentFolderInfo['file']=$this->currentFolderInfo['file']-1;
+								}
+								///end fix for Dokeos
+								
 								$tem['path'] = backslashToSlash($path);		
 								$tem['type'] = "file";
 								$tem['flag'] = $flag;

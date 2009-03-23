@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 19003 2009-03-12 16:27:49Z cvargas1 $
+// $Id: tool_navigation_menu.inc.php 19217 2009-03-23 21:44:29Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -78,10 +78,19 @@ function get_navigation_items($include_admin_tools = false)
 		while ($row = mysql_fetch_array($sql_result))
 		{
 			$navigation_items[$row['id']] = $row;
+			/*
 			if (!stristr($row['link'], 'http://'))
+			*/
+			if (stripos($row['link'], 'http://') === false && stripos($row['link'], 'https://') === false)
 			{
 				$navigation_items[$row['id']]['link'] = api_get_path(REL_CODE_PATH).$row['link'];
+				/*
 				$navigation_items[$row['id']]['name'] = $row['image'] == 'scormbuilder.gif' ? $navigation_items[$row['id']]['name'] : get_lang(ucfirst($navigation_items[$row['id']]['name']));
+				*/
+				if ($row['image'] != 'scormbuilder.gif' && $row['image'] != 'blog.gif')
+				{
+					$navigation_items[$row['id']]['name'] = get_lang(ucfirst($navigation_items[$row['id']]['name']));
+				}
 			}
 		}
 		/*
@@ -188,7 +197,7 @@ function show_navigation_menu()
 				createCookie('dokeos_menu_state',0,10);
 			}
 		}
-		document.write('<a href="#" id="swap_menu_link" onclick="swap_menu();"><?php echo get_lang('Hide'); ?> &raquo;&raquo;<\/a>');
+		document.write('<a href="javascript: void(0);" id="swap_menu_link" onclick="javascript: swap_menu();"><?php echo get_lang('Hide'); ?> &raquo;&raquo;<\/a>');
 		/* ]]> */
 		</script>
 		<?php
@@ -255,7 +264,10 @@ function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
 				
 		if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
 	    {
+	    	/*
 		  	echo '<a href="#" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
+		  	*/
+		  	echo '<a href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
 	    }
 	    else
 	    {

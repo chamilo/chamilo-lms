@@ -74,4 +74,5 @@ $SocialSeeContacts = "Ver mi red de contactos";
 $SocialUserInformationAttach = "Escriba un mensaje antes de  enviar la solicitud de acceso.";
 $MessageInvitationNotSent = "Su mensaje de invitación no ha sido enviado";
 $SocialAddToFriends = "Añadir a mi red de amigos";
+$UserNonRegisteredAtTheCourse = "Usuario no registrado al curso";
 ?>

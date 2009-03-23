@@ -84,4 +84,7 @@ $Changes = "változások";
 $MostActiveUsers = "Legaktívabb felhasználók";
 $MostActiveUsers = "Legaktívabb felhasználók ";
 $WarningDeleteMainPage = "Nem javasolt törölni a Wiki kezd&#337;oldalát, mivel ez az ugróoldal a hierarchia többi oldalához. <br> Ha mégis törölnie kell, ne felejtse el újra létrehozni. Amíg ezt nem teszi meg, más felhasználók nem tudnak újabb oldalakat hozzáadni a rendszerhez.";
+$Restore = "Visszaállít";
+$CurrentVersion = "Jelenlegi verzió";
+$LastVersion = "Utolsó verzió";
 ?>

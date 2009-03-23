@@ -6,7 +6,6 @@ $langSubTitle = "Doda povezavo iz glavnega menuja domače strani tečaja na polj
 $langAddPage            = "Dodaj stran";
 $langSendPage           = "Stran za prenos";
 $langCouldNot           = "Datoteke ni bilo mogoče prenesti";
-$langOkSentPage         = "Vaša stran je bila prenešena.<p>Povezana je z <a href=\"../..//index.php\">domače strani tečaja</a>";
 $langOkSentLink         = "Vaša povezava je bila prenešena.<p>Dostopna je z <a href=\"../..//index.php\">domače strani tečaja</a>";
 $langTooBig             = "Niste izbrali datoteke za prenos, ali pa je ta prevelika";
 $langExplanation        = "Stran mora biti v HTML obliki (npr. \"my_page.html\"). Povezana bo z domače strani tečaja. Če želite prenesti dokumente, ki niso v HTML obliki (PDF, Word, Power Point, Video, etc.) uporabite orodje <a href=../document/document.php>dokumenti</a>";

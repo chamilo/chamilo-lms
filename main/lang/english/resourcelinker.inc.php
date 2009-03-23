@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
-$LearningPath = "Learning Path";
+$LearningPath = "Courses";
 $LevelUp = "level up";
 $AddIt = "Add it";
 $MainCategory = "main category";
@@ -23,11 +23,11 @@ $AdValvas = "Announcements";
 $Document = "Document";
 $ShowDelete = "Show / Delete";
 $IntroductionText = "Introduction text";
-$CourseDescription = "Course description";
+$CourseDescription = "Training description";
 $Groups = "Groups";
 $Users = "Users";
 $IntroductionTextAdd = "Add a page containing the introduction text to this chapter.";
-$CourseDescriptionAdd = "Add a page containing the course description to this chapter.";
+$CourseDescriptionAdd = "Add a page containing the training description to this chapter.";
 $GroupsAdd = "Add the Groups tool to this chapter.";
 $UsersAdd = "Add the Users tool to this chapter.";
 $ExportableCourseResources = "Exportable course resources";
@@ -37,7 +37,7 @@ $SameWindow = "In the same window";
 $NewWindow = "In a new window";
 $StepDeleted1 = "This ";
 $StepDeleted2 = "item was deleted in that tool.";
-$Modify = "modify";
+$Modify = "Edit";
 $Chapter = "Chapter";
 $NoAgendaItems = "There are no Agenda items";
 $AgendaAdd = "Add an Agenda item";

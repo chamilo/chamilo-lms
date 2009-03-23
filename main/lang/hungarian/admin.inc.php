@@ -653,6 +653,7 @@ $VisioPassword = "Videókonferencia streaming kiszolgáló jelszó";
 $Port = "Portszám";
 $EphorusClickHereForADemoAccount = "Kattintson ide demó hozzáféréshez";
 $ManageUserFields = "Felhasználói mez&#337;k kezelése";
+$FieldType = "Mez&#337; típus";
 $FieldTypeText = "Szöveg";
 $FieldTypeTextarea = "Szövegterület";
 $AddUserFields = "Felhasználói mez&#337;k hozzáadása";

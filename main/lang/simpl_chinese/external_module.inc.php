@@ -6,7 +6,6 @@ $langSubTitle = "为课程主页菜单添加到网站, 网页或者任何的网址的链接. 提示:如果您
 $langAddPage            = "增加一个页面";
 $langSendPage           = "要上传的页面";
 $langCouldNot           = "文件上传失败";
-$langOkSentPage         = "你的页面已上传. <p>现已链接到<a href=\\\"../../\".$_course[\'path\'].\"/index.php\\\">主页</a>";
 $langOkSentLink         = "你的链接已添加. 可从课程<a href=\\\"\".api_get_path(WEB_COURSE_PATH). $_course[\'path\'] . \"/index.php\\\">主页</a>进入";
 $langTooBig             = "你没有选择发送任何文件, 或者文件太大";
 $langExplanation        = "这个页面必须是HTML 格式 (例如: \"my_page.htm\"). 它将在主页上增加一个链接. 假如你要发送一个不是html的文件, 而是其它文档 (PDF, Word, Power Point, Video, 等.) 请使用<a href=../document/document.php>文档工具</a>";

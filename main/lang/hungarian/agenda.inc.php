@@ -65,4 +65,11 @@ $RepeatYearly = "Évente";
 $RepeatEnd = "Ismétl&#337;dés és dátum";
 $RepeatedEventViewOriginalEvent = "Eredeti esemény megtekintése";
 $ICalFileImport = "iCal/ics állomány importálása";
+$AllUsersOfThePlatform = "A rendszer összes felhasználója";
+$GlobalEvent = "Globális esemény";
+$EndDateCannotBeBeforeTheStartDate = "A befejezés dátuma nem lehet korábbi a kezdés dátumánál";
+$AgendaSortChronologicallyUp = "Növekv&#337; sorrend";
+$AgendaSortChronologicallyDown = "Csökken&#337; sorrend";
+$ItemForUserSelection = "Felhasználó kiválasztása lista";
+$IsNotiCalFormatFile = "Ez az állomány nem iCal formátumú";
 ?>

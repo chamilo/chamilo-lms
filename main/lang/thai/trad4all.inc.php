@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $By = "&#3650;&#3604;&#3618;";
-$UsersOnline = "ผู้ใช้ที่กำลังใช้งาน";
+$UsersOnline = "&#3626;&#3617;&#3634;&#3594;&#3636;&#3585;&#3607;&#3637;&#3656;&#3585;&#3635;&#3621;&#3633;&#3591;&#3651;&#3594;&#3657;&#3591;&#3634;&#3609;";
 $Remove = "เอาออก";
 $Description = "คำอธิบาย";
 $Links = "รายการเชื่อมโยง";
@@ -32,7 +32,7 @@ $UserName = "&#3594;&#3639;&#3656;&#3629;&#3612;&#3641;&#3657;&#3651;&#3594;&#36
 $Hide = "&#3595;&#3656;&#3629;&#3609;";
 $iso639_2_code = "th";
 $iso639_1_code = "tha";
-$charset = "iso-8859-1";
+$charset = "utf-8";
 $text_dir = "ltr";
 $left_font_family = "tahoma,MS Sans Serif,verdana, arial, sans-serif";
 $right_font_family = "MS Sans Serif, tahoma, helvetica, arial, geneva, sans-serif";

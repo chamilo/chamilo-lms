@@ -84,6 +84,7 @@ $langScore = "Puntuación";
 $langCorrespondsTo = "Correspondencias con";
 $langExpectedChoice = "Selección correcta";
 $langYourTotalScore = "Su puntuación total es";
+$ReachedMaxAttemptsAdmin = "Ha llegado al número máximo de intentos para este ejercicio. No obstante, como usted es administrador para este curso, puede seguir tomando el ejercicio. Recuerde que sus resultados no aparecerán en la página de resultados.";
 $Build = "Construir";
 $langEvalSet = "Parámetros de evaluación";
 $langActive = "activo";

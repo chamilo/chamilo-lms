@@ -129,6 +129,7 @@ $DetailedReportByUser = "Sapanqa haykuqmasimanta willay";
 $DetailedReportByQuestion = "Sapanqa tapumanta willay";
 $ComparativeReportDetail = "Kay willapiqa iskay taputa kuskachawaq.";
 $DetailedReportByUserDetail = "Kay willapiqa qhawawaq  hoq haykuqmasiq llipin kutichikuyninta.";
+$DetailedReportByQuestionDetail = "Kay willapiqa qhawakun sapanqa tapumanta miraynin. Qhawachikunpaqpas  llanp\'u hamut\'aspalla yupaykunamanta wanki qhawachiqmanta ima.";
 $Multiplechoice = "Askha ajllay";
 $Multiplechoice = "Askha ajllay";
 $Shared = "T\'aqapasqa";

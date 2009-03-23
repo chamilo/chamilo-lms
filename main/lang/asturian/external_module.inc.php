@@ -6,7 +6,6 @@ $langSubTitle = "Amestar enllaz esternu o internu a la páxina d\'entamu del curs
 $langAddPage            = "Amestar páxina";
 $langSendPage           = "Páxina pa unviar";
 $langCouldNot           = "L\'archivu nun se pue unviar";
-$langOkSentPage         = "La páxina unvióse.<p>Agora ta na <a href=\"../..//index.php\">páxina d\'entamu del cursu</a>";
 $langOkSentLink         = "L\'enllaz unvióse. Agora pue usalu dende la <a href=\"../..//index.php\">páxina d\'entamu del cursu</a>";
 $langTooBig             = "Nun escoyó nengún archivu pa unvialu o igual ye que ye más grande de la cuenta.";
 $langExplanation        = "La páxina tien de tener formatu HTML (ex. \\\"lamiopaxina.htm\\\") Va enllazar a la páxina d\'entamu. Si quier unviar documentos que nun seyan HTML (PDF, Word, PowerPoint, Videu, etc.) use la <a href=../document/document.php>ferramienta Documentos</a>";

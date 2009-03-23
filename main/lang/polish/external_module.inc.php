@@ -6,7 +6,6 @@ $langSubTitle = "Dodanie odno&#347;nika do zewn&#281;trzego adresu URL na Stroni
 $langAddPage            = "Dodaj stron&#281;";
 $langSendPage           = "Strona do wys&#322;ania";
 $langCouldNot           = "Plik nie mo¿e byæ przes³any";
-$langOkSentPage         = "Strona zosta&#322;a wys&#322;ana.<p>Jest ona po&#322;&#261;czona ze <a href=\"../../DOKEOSDEV/index.php\">stron&#261; g&#322;ówn&#261; kursu.</a>";
 $langOkSentLink         = "Odno&#347;nik &#380;osta&#322; dodany.<p>Jest on dost&#281;pny ze <a href=\"../../DOKEOSDEV/index.php\">strony g&#322;ównej kursu</a>";
 $langTooBig             = "Nie wybrano &#380;adnego pliku do wys&#322;ania lub jest on za du&#380;y";
 $langExplanation        = "Strona musi byæ plikiem HTML (np. \"my_page.htm\"). B&#281;dzie ona dostêpna jako odno&#347;nik ze strony g&#322;ównej. Je&#347;li chcesz wys&#322;a&#263; dokument w innym formacie (PDF, Word, Power Point, Video, etc.) u&#380;yj <a href=../document/document.php>narz&#281;dzia Dokumentu</a>";

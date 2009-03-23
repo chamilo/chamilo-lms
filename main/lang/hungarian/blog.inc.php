@@ -82,4 +82,5 @@ $EditBlog = "Blog szerkesztése";
 $DeleteBlog = "Blog törlése";
 $NoTasks = "Nincsenek feladatok";
 $Shared = "Megosztott";
+$PermissionGrantedByGroupOrRole = "A hozzáférés engedélyezve csoport vagy szerep szerint";
 ?>

@@ -6,7 +6,6 @@ $langSubTitle = "Dodajte po&#269;etnoj stranici kolegija link, stranicu ili bilo
 $langAddPage            = "Dodaj stranicu";
 $langSendPage           = "Stranica za predaju";
 $langCouldNot           = "Predaja datoteke nije bila mogu&#263;a";
-$langOkSentPage         = "Vaša je stranica predana.<p>Povezana je s <a href=\\\"../../\".$_course[\'path\'].\"/index.php\\\">Po&#269;etna stranica kolegija</a>";
 $langOkSentLink         = "Vaša je poveznica dodana. Dostupna je s <a href=\\\"\".api_get_path(WEB_COURSE_PATH). $_course[\'path\'] . \"/index.php\\\">Po&#269;etna stranica kolegija</a>";
 $langTooBig             = "Niste odabrali datoteku za slanje ili je ona prevelika";
 $langExplanation        = "Stranica mora biti u formatu HTML (npr. \"moja_stranica.htm\"). Bit &#263;e povezana s po&#269;etnom stranicom. Ako želite slati dokumente drugih formata (PDF, Word, Power Point, Video, itd.) upotrijebite <a href=../document/document.php>Dokumenti</a>";

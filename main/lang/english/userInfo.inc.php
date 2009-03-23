@@ -74,4 +74,5 @@ $SocialSeeContacts = "See contacts";
 $SocialUserInformationAttach = "Please write a message before sending the request";
 $MessageInvitationNotSent = "your invitation message has not been sent";
 $SocialAddToFriends = "Add to my contacts";
+$UserNonRegisteredAtTheCourse = "User non registered at the course";
 ?>

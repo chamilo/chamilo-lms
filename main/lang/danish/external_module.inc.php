@@ -6,7 +6,6 @@ $langSubTitle = "Du kan tilføje et link (URL) på din kursusforside.<br> Tip: hvi
 $langAddPage            = "Tilføj et dokument";
 $langSendPage           = "Fil der skal uploades";
 $langCouldNot           = "Filen kunne ikke uploades";
-$langOkSentPage         = "Der er nu oprettet et link fra <a href=\"../..//index.php\">Kursussiden</a>";
 $langOkSentLink         = "Dit link er tilføjet.<p>Der er nu oprettet adgang fra <a href=\"../..//index.php\">Kursussiden</a>";
 $langTooBig             = "Du valgte enten ikke en fil, eller filen er for stor til at blive sendt";
 $langExplanation        = "Dokumentet <b>skal være </b> i HTML format (f.eks. \"min_side.htm\"). Der vil blive linket til dokumentet fra kursussiden. Ønsker du at sende et ikke-HTML dokument (PDF, Word, Power Point, Video, etc.) brug <a href=../document/document.php>Dokumentværktøjet</a>";

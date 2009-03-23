@@ -29,4 +29,5 @@ $langGroupUserManagement = "Csoportfelhasználók kezelése";
 $langUnregister = "Regisztráció törlése";
 $langAddAUser = "Felhasználók hozzáadása";
 $UsersUnsubscribed = "A kiválasztott felhasználók kiiratásra kerülte a kurzusból.";
+$YouDontHaveInvites = "Üres";
 ?>

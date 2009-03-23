@@ -124,4 +124,7 @@ $NoFilesHere = "Nem tartalmaz állományokat.";
 $NoFilesHere = "Nem tartalmaz állományokat";
 $NewDropboxFileUploaded = "Az új állomány el lett küldve a fájl posta segítségével.";
 $NewDropboxFileUploadedContent = "Az új állomány el lett küldve a kurzusába a Fájl posta segítségével.";
+$langAddEdit = "Hozzáad / szerkeszt";
+$ErrorNoFilesInFolder = "Ez a mappa üres";
+$dropbox_lang["upload"] = "Feltölt";
 ?>

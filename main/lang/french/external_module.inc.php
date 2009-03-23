@@ -6,8 +6,7 @@ $langSubTitle = "Ajoute un lien vers une page sur le sommaire de votre cours. Po
 $langAddPage            = "Ajouter une page";
 $langSendPage           = "Page à envoyer";
 $langCouldNot           = "Le fichier ne peut être envoyé";
-$langOkSentPage         = "Votre page a été envoyée. <p>Elle est à présent accessible depuis le <a href=\"../..//index.php\">sommaire du cours</a>";
-$langOkSentLink         = "Votre lien a été ajouté. <p>Il est à présent accessible depuis le <a href=\"../..//index.php\">sommaire du cours</a>";
+$langOkSentLink         = "Votre lien a été ajouté. <p>Il est à présent accessible depuis le <a href=\"%s/index.php\">sommaire du cours</a>";
 $langTooBig             = "Vous n\'avez choisi aucun fichier à envoyer, ou celui-ci est trop gros";
 $langExplanation        = "La page doit être au format HTML (ex. \"ma_page.htm\"). Elle devra pouvoir être accessible depuis le sommaire de votre cours. Si vous souhaitez envoyer un document non HTML (PDF, Word, Power Point, Video, etc.) utilisez <a href=\"../document/document.php\">l\'outil de documents</a>.";
 $langPgTitle            = "Titre de la page";

@@ -130,4 +130,5 @@ $ForumMoved = "El foro se ha movido";
 $YouMustAssignWeightOfQualification = "Debe asignar el peso de la cualificación";
 $DeleteAttachmentFile = "Eliminar archivo adjunto";
 $EditAnAttachment = "Editar un adjunto";
+$SeeForum = "Ver foro";
 ?>

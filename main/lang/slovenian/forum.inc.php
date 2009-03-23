@@ -130,4 +130,5 @@ $ForumMoved = "Forum je bil prestavljen";
 $YouMustAssignWeightOfQualification = "Doloèiti morate utež za oceno";
 $DeleteAttachmentFile = "Odstrani pripeto datoteko";
 $EditAnAttachment = "Uredi priponko";
+$SeeForum = "Glej forum";
 ?>

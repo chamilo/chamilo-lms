@@ -51,4 +51,6 @@ $SelectEverybody = "Mindenkit kiválaszt";
 $SelectedUsersGroups = "kiválasztott felhasználói csoportok";
 $LearnerMessage = "Üzenet egy tanulótól";
 $TitleIsRequired = "A címet kötelez&#337; megadni";
+$AnnounceSentByEmail = "A hirdetmény e-mailben elküldve";
+$AnnounceSentToUserSelection = "A hirdetmény elküldve a kiválasztott felhasználóknak";
 ?>

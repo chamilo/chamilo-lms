@@ -15,4 +15,5 @@ $langBackAndForget  = "Vissza és felejt";
 $CourseDescriptionUpdated = "A kurzus leírása frissítve.";
 $CourseDescriptionDeleted = "A kurzus leírása törölve.";
 $CourseDescriptionIntro = "Kurzusleírás létrehozásához kattintson a címsorra és töltse ki a szükséges mez&#337;t.<br><br> Aztán kattintson az OK gombra, és töltsön ki egy másik címsort.";
+$langSaveDescription = "Leírás mentése";
 ?>

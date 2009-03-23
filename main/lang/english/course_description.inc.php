@@ -1,19 +1,19 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langCourseProgram  = "Course description";
-$langThisCourseDescriptionIsEmpty  = "No course description available.";
-$langEditCourseProgram  = "Create and edit course description.";
-$QuestionPlan  = "Content Suggestion:";
+$langCourseProgram  = "Description";
+$langThisCourseDescriptionIsEmpty  = "Description not available.";
+$langEditCourseProgram  = "Create or edit a description.";
+$QuestionPlan  = "Suggestion:";
 $langInfo2Say  = "Information to give to users";
 $langOuAutreTitre  = "Title";
 $langNewBloc  = "Other";
-$langAddCat  = "Add a category.";
+$langAddCat  = "Add a category";
 $langAdd  = "Add";
 $langValid  = "Valid";
-$langBackAndForget  = "Back and forget";
-$CourseDescriptionUpdated = "Course description has been updated";
-$CourseDescriptionDeleted = "Course description has been deleted";
-$CourseDescriptionIntro = "To create a course description, click on a heading and fill the correct form field.<br><br> Click then OK and fill another heading.";
+$langBackAndForget  = "Cancel";
+$CourseDescriptionUpdated = "The description has been updated";
+$CourseDescriptionDeleted = "Description has been deleted";
+$CourseDescriptionIntro = "To create a description, click on a heading and complete the field.<br><br> Click OK to continue.";
 $langSaveDescription = "Save description";
 ?>

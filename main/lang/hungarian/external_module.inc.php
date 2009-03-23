@@ -6,7 +6,6 @@ $langSubTitle = "Egy linket hozzáad, ami a kurzusának a honlapján lévõ egy oldal
 $langAddPage            = "Oldalt hozzáad";
 $langSendPage           = "Oldalt feltölt";
 $langCouldNot           = "A file-t nem lehet feltölteni";
-$langOkSentPage         = "Az oldal feltöltõdött.<p>Most már ide mutat a <a href=\"../../DOKEOSDEV/index.php\">Honlap</a>";
 $langOkSentLink         = "A link hozzáadva.<p>Most már elérhetõ innen : <a href=\"../../DOKEOSDEV/index.php\">Honlap</a>";
 $langTooBig             = "Nem választott ki elküldeni egy file-t sem vagy túl nagy";
 $langExplanation        = "Az oldal HTML formátumú kell, hogy legyen (pl. \"oldalam.htm\"). A Honlapról elérhetõ lesz. Ha nem HTML dokumentumokat akar küldeni (PDF, Word, Power Point, Video, stb.) használja a <a href=../document/document.php>Dokumentumok eszközt</a>";

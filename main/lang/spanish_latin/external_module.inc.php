@@ -6,7 +6,6 @@ $langSubTitle = "Agregar al Menú Principal de la página de inicio de su curso un
 $langAddPage            = "Agregar una página";
 $langSendPage           = "Página a enviar";
 $langCouldNot           = "El archivo no puede ser enviado";
-$langOkSentPage         = "Su página ha sido enviada.<p>Ahora está enlazada desde la <a href=\"../..//index.php\">Página de inicio del curso</a>";
 $langOkSentLink         = "Su enlace ha sido enviado.<p>Ahora está accesoble desde la  <a href=\"../..//index.php\">Página de inicio del curso</a>";
 $langTooBig             = "No ha seleccionado un archivo para enviar, o éste es demasiado grande";
 $langExplanation        = "La página tiene que estar en formato HTML (p.e. \"mi_pagina.htm\"). Ésta podrá ser enlazada desde la página principal. Si desea enviar documentos que estén en formato HTML (PDF, Word, Power Point, Video, etc.) use las <a href=../document/document.php>Herramientas de documentos</a>";

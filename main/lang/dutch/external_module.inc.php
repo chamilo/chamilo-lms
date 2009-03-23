@@ -6,7 +6,6 @@ $langSubTitle = "Voegt een link toe aan uw cursusstartpagina.";
 $langAddPage            = "Pagina toevoegen";
 $langSendPage           = "Pagina om toe te voegen";
 $langCouldNot           = "Het bestand kon niet verzonden worden.";
-$langOkSentPage         = "De pagina is toegevoegd. Deze is nu toegankelijk via de <a href=\\\"../../\".$_course[\'path\'].\"/index.php\\\">cursusstartpagina</a>.";
 $langOkSentLink         = "De link is toegevoegd. Deze is nu toegankelijk via de <a href=\\\"\".api_get_path(WEB_COURSE_PATH). $_course[\'path\'] . \"/index.php\\\">cursusstartpagina</a>.";
 $langTooBig             = "U hebt geen bestand gekozen op te verzenden, of het bestand is te groot.";
 $langExplanation        = "Deze pagina moet in HTML-formaat zijn (bv. \"mijn_pagina.html\"). Die zal door een link verbonden worden met de cursusstartpagina. Om een niet-HTML-document (PDF, OpenDocument, video...) op te sturen, gebruik de <a href=\"../document/document.php\">documentenmodule</a>.";

@@ -125,4 +125,13 @@ $RemoveAsTemplate = "Sablon eltávolítása";
 $ReadOnly = "Csak olvasható";
 $ReadOnlyFile = "Ez az állomány csak olvasható";
 $FileNotFound = "Az állomány nem található";
+$TemplateTitleFirstPage = "Els&#337; oldal";
+$TemplateTitleFirstPageDescription = "Ez a kurzus kezd&#337;oldala";
+$TemplateTitleIntroduction = "Bevezetés";
+$TemplateTitleBibliography = "Bibliográfia";
+$SaveDocument = "Dokumentum mentése";
+$CreateTheDocument = "Dokumentum létrehozása";
+$SharedFolder = "Megosztott mappa";
+$CreateFolder = "Mappa létrehozása";
+$TemplateImage = "Sablon ikonja";
 ?>

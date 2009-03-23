@@ -99,4 +99,7 @@ $ExampleForum = "Példa fórum";
 $ExampleThread = "Példa szál";
 $ExampleThreadContent = "Példa tartalom";
 $IntroductionWiki = "A Wiki szó a WikiWikiWeb rövidítése. a WikiWiki szó Havaii eredet&#369;, azt jelenti, hogy \"gyorsan\".  A wiki oldalakat az emberek közösen írhatják, szerkeszthetik. Ha valaki valamit rosszul tud, más kijavíthatja. Mások újabb részletekkel egészíthetik azt ki. Ezért az oldal tartalma id&#337;vel egyre jobb és jobb lehet.";
+$CreateCourseArea = "Kurzus terület létrehozása";
+$CreateCourse = "Kurzus létrehozása";
+$Create = "Létrehoz";
 ?>

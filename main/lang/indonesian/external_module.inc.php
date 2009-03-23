@@ -6,7 +6,6 @@ $langSubTitle = "Tambahkan link ke menu utama situs mata kuliah anda. Tip: jika 
 $langAddPage            = "Tambahkan halaman";
 $langSendPage           = "Halaman untuk dikirim";
 $langCouldNot           = "File tidak dapat dikirim";
-$langOkSentPage         = "Halaman anda telah dikirim.<p>Sekarang sudah terhubung ke   <a href=\"../../DOKEOSDEV/index.php\">Situs mata kuliah</a>";
 $langOkSentLink         = "Link anda telah dikirim.<p>Sekarang dapat diakses dari <a href=\"../../DOKEOSDEV/index.php\">Situs mata kuliah</a>";
 $langTooBig             = "Anda tidak memilih file untuk dikirim, atau itu terlalu besar";
 $langExplanation        = "Halaman harus dalam format HTML (e.g. \"my_page.htm\"). Halaman tsb akan di-link ke Homepage. Jika anda ingin mengirim dokumen non HTML (PDF, Word, Power Point, Video, dll.) gunakan <a href=../document/document.php>Tool Dokumen</a>";

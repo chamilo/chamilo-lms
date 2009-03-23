@@ -69,4 +69,7 @@ $SubmitRegistrationCode = "Regisztrációs kód elküldése";
 $CourseCategoryDeleted = "Törölt kurzus kategória ";
 $CategorySortingDone = "Kategóri rendszerezés elvégezve";
 $CourseCategoryEditStored = "Frissített kategória";
+$buttonCreateCourseCategory = "Kurzuskategória létrehozása";
+$buttonSaveCategory = "Kategória mentése";
+$buttonChangeCategory = "Kategória módosítása";
 ?>

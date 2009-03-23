@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Inbox  = "Bandeja de entrada";
 $Messages = "Mensajes instantáneos";
 $SendMessage = "Enviar mensaje instantáneo";
-$NewMessage = "Nuevo mensaje instantáneo";
+$NewMessage = "Nuevo mensaje";
 $ComposeMessage = "Redactar";
 $DeleteSelectedMessages = "Borrar los mensajes seleccionados";
 $SelectAll = "Seleccionar todo";
@@ -35,4 +35,5 @@ $WriteAMessage = "Escribir un mensaje";
 $AlreadyReadMessage = "Mensaje leído";
 $UnReadMessage = "Mensaje sin leer";
 $MessageSent = "Mensaje enviado";
+$WriteToMessage = "Escribir un mensaje";
 ?>

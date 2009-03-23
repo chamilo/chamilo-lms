@@ -104,4 +104,12 @@ $AllowUserImageForumDeactivate = "Felhasználók képeinek elrejtése a fórumban";
 $AllowLearningPathTheme = "Tanösvény téma engedélyezése";
 $AllowLearningPathThemeAllow = "Engedélyezve";
 $AllowLearningPathThemeDisallow = "Letiltva";
+$ConfigChat = "Csevegés beállításai";
+$AllowOpenchatWindow = "Csevegés megnyitása új ablakban";
+$AllowOpenChatWindowActivate = "Csevegés megnyitása új ablakban engedélyezése";
+$AllowOpenChatWindowDeactivate = "Csevegés megnyitása új ablakban kikapcsolása";
+$NewUserEmailAlert = "A kurzus oktatója kapjon email-értesítést új résztvev&#337; automatikus feliratkozásáról";
+$NewUserEmailAlertEnable = "A kurzus oktatójának emailben értesítése új résztvev&#337;r&#337;l funkció bekapcsolása";
+$NewUserEmailAlertToTeacharAndTutor = "A kurzus oktatójának vagy tutorjának emailben értesítése új résztvev&#337;r&#337;l funkció bekapcsolása ";
+$NewUserEmailAlertDisable = "A kurzus oktatójának emailben értesítése új résztvev&#337;r&#337;l funkció kikapcsolása";
 ?>

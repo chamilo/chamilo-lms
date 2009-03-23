@@ -203,6 +203,7 @@ class Upload
 		{
 			$this->fileBaseName = $fileBaseName;
 		}
+		$this->fileBaseName=str_replace(' ','_',$this->fileBaseName);// Juan Carlos Raña Because fix long names. See: ajaxfilemanager/inc/class.manager.php
 		$fileName = $this->fileBaseName . $this->fileExtension;
 		$filePath = $dest . $fileName;
 

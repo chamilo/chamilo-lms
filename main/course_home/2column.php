@@ -158,14 +158,31 @@ function show_tools($course_tool_category)
 			
 			if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
 			{					
+				/*
 				echo  '<a href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) .(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()). '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"'.$class.'>';
+				*/
+				echo  '<a href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']).$qm_or_amp.api_get_cidreq() . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"'.$class.'>';
 			}			
 			else 
 			{
 				echo	'<a href="'. htmlspecialchars($toolsRow['link']).(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()).'" target="' , $toolsRow['target'], '" '.$class.'>';				
 			}
 					
+			/*
 			echo Display::return_icon($toolsRow['image'], get_lang(ucfirst($toolsRow['name']))),'&nbsp;', ($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif" || $toolsRow['image']=="scormbuilder.gif" || $toolsRow['image']=="blog.gif") ? htmlspecialchars( $toolsRow['name'],ENT_QUOTES,$charset) : get_lang(ucfirst($toolsRow['name'])),'</a>';
+			*/
+			if ($toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'file_html_na.gif'
+				|| $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif'
+				|| $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif'
+				|| $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif')
+			{
+				$tool_name = htmlspecialchars($toolsRow['name'], ENT_QUOTES, $charset);
+			}
+			else
+			{
+				$tool_name = get_lang(ucfirst($toolsRow['name']));
+			}
+			echo Display::return_icon($toolsRow['image'], $tool_name),'&nbsp;', $tool_name,'</a>';
 
 			// This part displays the links to hide or remove a tool.
 			// These links are only visible by the course manager.
@@ -235,8 +252,12 @@ function show_tools($course_tool_category)
 			}
 
 			// Allow editing of invisible homepage links (modified external_module)
+			/*
 			if ($toolsRow["added_tool"] == 1 &&
 					api_is_allowed_to_edit() && !$toolsRow["visibility"])
+			*/
+			if ($toolsRow["added_tool"] == 1 && api_is_allowed_to_edit() && !$toolsRow["visibility"]
+				&& $toolsRow['image'] != 'scormbuilder.gif' && $toolsRow['image'] != 'scormbuilder_na.gif')
 				echo	"<a class=\"nobold\" href=\"" . api_get_path(WEB_PATH) .
 						'main/external_module/external_module.php' .
 						"?".api_get_cidreq()."&amp;id=".$toolsRow["id"]."\">". get_lang("Edit"). "</a>";

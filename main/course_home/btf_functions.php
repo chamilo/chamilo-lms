@@ -1,5 +1,5 @@
 <?php
-// $Id: btf_functions.php 17284 2008-12-14 21:30:40Z herodoto $
+// $Id: btf_functions.php 19215 2009-03-23 19:57:33Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -86,7 +86,13 @@ function showtools2($cat)
 	// grabbing all the tools from $course_tool_table
 	while ($tempRow = mysql_fetch_array($result))
 	{
+		/*
 		if ($tempRow['img'] !== "scormbuilder.gif" AND $tempRow['img'] !== "blog.gif")
+		*/
+		if ($tempRow['img'] != 'file_html.gif' && $tempRow['img'] != 'file_html_na.gif'
+			&& $tempRow['img'] != 'scormbuilder.gif' && $tempRow['img'] != 'scormbuilder_na.gif'
+			&& $tempRow['img'] != 'blog.gif' && $tempRow['img'] != 'blog_na.gif'
+			&& $tempRow['img'] != 'external.gif' && $tempRow['img'] != 'external_na.gif')
 		{
 			$tempRow['name_translated'] = get_lang(ucfirst($tempRow['name']));
 		}
@@ -165,11 +171,17 @@ function showtools2($cat)
 		{	
 			if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
 			{					
+				/*
 				$cell_content .= '<a href="#" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"><img src="'.$toolsRow['img'].'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']				
+				*/				
+				$cell_content .= '<a href="javascript: void(0);" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"><img src="'.$toolsRow['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']				
 			}			
 			else 
 			{
+				/*
 				$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'"><img src="'.$toolsRow['img'].'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
+				*/
+				$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'"><img src="'.$toolsRow['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
 			}			
 		}
 		// INVISIBLE
@@ -179,16 +191,25 @@ function showtools2($cat)
 			{
 				if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
 				{					
+					/*
 					$cell_content .= '<a href="#" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
+					*/
+					$cell_content .= '<a href="javascript: void(0);" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
 				}			
 				else 
 				{
+					/*
 					$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n";// don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']				
+					*/
+					$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n";// don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']				
 				}		
 			}
 			else
 			{
+				/*
 				$cell_content .= '<img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']	
+				*/	
+				$cell_content .= '<img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']	
 				$cell_content .= '<span class="invisible">'.$tool_name.'</span>';
 			}
 		}
@@ -236,7 +257,11 @@ function showtools2($cat)
 			}
 
 			// RH: Allow editing of invisible homepage links (modified external_module)
+			/*
 			if ($toolsRow["added_tool"] == 1 && api_is_allowed_to_edit() && !$toolsRow["visibility"])
+			*/
+			if ($toolsRow["added_tool"] == 1 && api_is_allowed_to_edit() && !$toolsRow["visibility"]
+				&& $toolsRow['image'] != 'scormbuilder.gif' && $toolsRow['image'] != 'scormbuilder_na.gif')
 			{
 				$cell_content .= "<a class=\"nobold\" href=\"".api_get_path(WEB_CODE_PATH).'external_module/external_module.php'."?id=".$toolsRow["id"]."\">".get_lang("Edit")."</a>";
 			}

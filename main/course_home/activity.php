@@ -293,24 +293,45 @@ function show_tools_category($course_tool_category)
 			}
 				if(strpos($toolsRow['name'],'visio_')!==false)
 				{
+					/*
 					$toollink = "\t" . '<a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
+					*/
+					$toollink = "\t" . '<a ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 				}
 				if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
 				{
-					
+					/*
 					$toollink = "\t" . '<a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
-					
+					*/
+					$toollink = "\t" . '<a ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 				}			
 				else 
 				{
 					$toollink = "\t" . '<a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
 				}
 				echo $toollink;
+				/*
 				Display::display_icon($toolsRow['image'], get_lang(ucfirst($toolsRow['name'])));
+				*/
+				if ($toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'file_html_na.gif'
+					|| $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif'
+					|| $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif'
+					|| $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif')
+				{
+					$tool_name = stripslashes($toolsRow['name']);
+				}
+				else
+				{
+					$tool_name = get_lang(ucfirst($toolsRow['name']));
+				}
+				Display::display_icon($toolsRow['image'], $tool_name);
 				echo '</a> ';
 					
 				echo $toollink;	
+				/*	
 					echo ($toolsRow['image'] == 'file_html_na.gif' || $toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif' || $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif' || $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif') ? '  '.stripslashes($toolsRow['name']) : '  '.get_lang(ucfirst($toolsRow['name']));
+				*/
+				echo $tool_name;
 				echo "\t" . '</a>';
 				echo '</td>';
 			if($i%2)

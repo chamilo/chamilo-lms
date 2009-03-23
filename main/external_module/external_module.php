@@ -116,7 +116,7 @@ if(!$is_allowedToEdit)
 
 if($linkAdded)
 {
-	echo $toolid ? get_lang('LinkChanged') :get_lang('OkSentLink');
+	echo $toolid ? get_lang('LinkChanged') :sprintf(get_lang('OkSentLink'),api_get_path(WEB_COURSE_PATH).$_course['path']);
 }
 else
 {

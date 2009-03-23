@@ -479,8 +479,9 @@ $(document).ready(
 			<tr>
 				<td>
           	<b><?php echo LBL_SEARCH_RECURSIVELY; ?></b>&nbsp;&nbsp;
-          	<input type="radio" name="search_recursively" value="1" id="search_recursively_1" class="radio" <?php echo (!empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php echo LBL_RECURSIVELY_YES; ?>
-          	<input type="radio" name="search_recursively" value="0" id="search_recursively_0" class="radio" <?php echo (empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php echo LBL_RECURSIVELY_NO; ?>
+		<!--change for Dokeos recursively by default  -->
+          	<input type="radio" name="search_recursively" value="1" id="search_recursively_1" class="radio" <?php echo (empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php echo LBL_RECURSIVELY_YES; ?>
+          	<input type="radio" name="search_recursively" value="0" id="search_recursively_0" class="radio" <?php echo (!empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php echo LBL_RECURSIVELY_NO; ?>
           	</td>
           </tr>	                	
           	</tbody>

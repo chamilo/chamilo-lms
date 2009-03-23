@@ -45,14 +45,14 @@
 		//Folder Information
 	define('LBL_FOLDER_INFO', 'Informaci&oacute;n de la carpeta');
 	define('LBL_FOLDER_PATH', 'Carpeta:');
-	define('LBL_CURRENT_FOLDER_PATH', 'Path actual de la carpeta:');
+	define('LBL_CURRENT_FOLDER_PATH', 'Situaci&oacute;n actual de la carpeta:');
 	define('LBL_FOLDER_CREATED', 'Creada:');
 	define('LBL_FOLDER_MODIFIED', 'Modificada:');
 	define('LBL_FOLDER_SUDDIR', 'Subcarpetas:');
 	define('LBL_FOLDER_FIELS', 'Archivos:');
 	define('LBL_FOLDER_WRITABLE', '&iquest;Escribible?');
 	define('LBL_FOLDER_READABLE', '&iquest;Legible?');
-	define('LBL_FOLDER_ROOT', 'Carpeta ra&iacute;z');
+	define('LBL_FOLDER_ROOT', 'Carpeta principal');
 		//Preview
 	define('LBL_PREVIEW', 'Previsualizar');
 	define('LBL_CLICK_PREVIEW', 'Haga clic aqu&iacute; para previsualizarlo.');
@@ -75,7 +75,7 @@
 	define('PAGINATION_PREVIOUS', 'Anterior');
 	define('PAGINATION_LAST', 'Ultimo');
 	define('PAGINATION_FIRST', 'Primero');
-	define('PAGINATION_ITEMS_PER_PAGE', 'Mostrar %s items por p&aacute;gina');
+	define('PAGINATION_ITEMS_PER_PAGE', 'Mostrar %s elementos por p&aacute;gina');
 	define('PAGINATION_GO_PARENT', 'Ir a la carpeta superior');
 	//System
 	define('SYS_DISABLED', 'Permiso denegado: el sistema est&aacute; deshabilitado.');
@@ -210,7 +210,7 @@
 	define('TIP_DOC_RENAME', 'Doble clic para editar...');
 	define('TIP_FOLDER_GO_UP', 'Un solo clic para ir a la carpeta superior...');
 	define('TIP_SELECT_ALL', 'Seleccionar todo');
-	define('TIP_UNSELECT_ALL', 'Deseleccionar todo');
+	define('TIP_UNSELECT_ALL', 'No seleccionar todo');
 	//WARNING
 	define('WARNING_DELETE', 'Seguro que quiere eliminar los documentos seleccionados?');
 	define('WARNING_IMAGE_EDIT', 'Por favor, seleccione una imagen para su edici&oacute;n.');
@@ -273,7 +273,7 @@
 			define('IMG_LBL_NEW_NAME', 'Nuevo nombre:');
 			define('IMG_LBL_SAVE_AS', 'Formulario guardar como');
 			define('IMG_LBL_SAVE_TO', 'Guardar en:');
-			define('IMG_LBL_ROOT_FOLDER', 'Carpeta ra&iacute;z');
+			define('IMG_LBL_ROOT_FOLDER', 'Carpeta principal');
 		//Editor
 		//Save as 
 		define('IMG_NEW_NAME_COMMENTS', 'Por favor, no incluya la extensi&oacute;n de la imagen.');

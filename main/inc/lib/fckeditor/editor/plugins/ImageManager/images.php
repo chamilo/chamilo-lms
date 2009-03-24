@@ -10,7 +10,7 @@ require_once('config.inc.php');
 require_once('Classes/ImageManager.php');
 
 //default path is /
-$relative = '/';
+$relative = '/images/gallery/';
 $manager = new ImageManager($IMConfig);
 
 //process any file uploads

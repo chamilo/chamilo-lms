@@ -153,7 +153,7 @@ $get_actions=isset($_GET['action']) ? $_GET['action'] : '';
 if (api_is_allowed_to_edit(false,true)) {
 	$fck_attribute['Width'] = '98%';
 	$fck_attribute['Height'] = '200';
-	$fck_attribute['ToolbarSet'] = 'ForumLight';
+	$fck_attribute['ToolbarSet'] = 'Forum';
 	handle_forum_and_forumcategories();
 }
 

@@ -65,7 +65,7 @@ class UniqueAnswer extends Question {
 		global $fck_attribute;
 
 		$fck_attribute = array();
-		$fck_attribute['Width'] = '100%';
+		$fck_attribute['Width'] = '60%';
 		$fck_attribute['Height'] = '125px';
 		
 		$fck_attribute['ToolbarSet'] = 'Answer';
@@ -92,8 +92,8 @@ class UniqueAnswer extends Question {
 		} elseif ($obj_ex->selectFeedbackType()==1) {						
 			$fck_attribute['Width'] = '250px';
 			$fck_attribute['Height'] = '110px';			
-			$comment_title = '<th width="'.$fck_attribute['Width'].'" >'.get_lang('Comment').'</th>';
-			$feedback_title = '<th width="300px" >'.get_lang('Scenario').'</th>';			
+			$comment_title = '<th width="500" >'.get_lang('Comment').'</th>';
+			$feedback_title = '<th width="350px" >'.get_lang('Scenario').'</th>';			
 		} 
 		
 		$html='
@@ -104,7 +104,7 @@ class UniqueAnswer extends Question {
 			<div class="formw">
 				<table class="data_table">
 					<tr style="text-align: center;">
-						<th width="14px">
+						<th width="10px">
 							'.get_lang('Number').'
 						</th>
 						<th width="10px" >

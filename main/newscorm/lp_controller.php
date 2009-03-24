@@ -160,7 +160,7 @@ $_SESSION['oLP']->message = ''; //should use ->clear_message() method but doesn'
 // Some common default settings for the online editor. Other settings are calculated in formvalidator module.
 // For editing document type lp-items specific settings are set/calculated, see learnpath.class.php
 //TODO: check, see if we need, it seems not working here
-$fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['ToolbarSet'] = 'LearnPath';
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 

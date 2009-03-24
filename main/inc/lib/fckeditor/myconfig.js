@@ -138,10 +138,11 @@ FCKConfig.ToolbarSets["Introduction"] = [
 	['Link','Unlink','Anchor'],
 	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
 	['Table','CreateDiv','Rule','SpecialChar'],
+	['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
 	'/',	
 	['Style','FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough'],
-	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Source']
 ] ;
 
@@ -172,24 +173,28 @@ FCKConfig.ToolbarSets["Agenda_Student"] = [
 
 //Announcements
 FCKConfig.ToolbarSets["Announcements"] = [
-	['NewPage','Preview','FitWindow','-','PasteText','-','Undo','Redo','-','SelectAll','RemoveFormat'],
-	['Link','Unlink','Anchor'],
-	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
-	['Table','Rule','Smiley','SpecialChar'],
-	['FontName','FontSize'],
-	['Bold','Italic','Underline','StrikeThrough'],
-	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
-	['Source']
+	['Save','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','RemoveFormat'],
+    ['Link','Unlink','Anchor'],
+    ['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+    ['Table','CreateDiv','Rule','SpecialChar'],
+    ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+    '/',    
+    ['Style','FontFormat','FontName','FontSize'],
+    ['Bold','Italic','Underline','StrikeThrough'],
+    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+    ['Source']
 ] ;
 
 FCKConfig.ToolbarSets["Announcements_Student"] = [
-	['NewPage','Preview','FitWindow','-','PasteText','-','Undo','Redo','-','SelectAll','RemoveFormat'],
-	['Link','Unlink','Anchor'],
-	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
-	['Table','Rule','Smiley','SpecialChar'],
-	['FontName','FontSize'],
-	['Bold','Italic','Underline','StrikeThrough'],
-	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
+	['Save','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','RemoveFormat'],
+    ['Link','Unlink','Anchor'],
+    ['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+    ['Table','CreateDiv','Rule','SpecialChar'],
+    ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+    '/',    
+    ['Style','FontFormat','FontName','FontSize'],
+    ['Bold','Italic','Underline','StrikeThrough'],
+    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['ShowBlocks']
 ] ;
 
@@ -242,10 +247,11 @@ FCKConfig.ToolbarSets["CourseDescription"] = [
 	['Link','Unlink','Anchor'],
 	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
 	['Table','CreateDiv','Rule','SpecialChar'],
+	['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
 	'/',	
 	['Style','FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough'],
-	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Source']
 ] ;
 
@@ -255,10 +261,11 @@ FCKConfig.ToolbarSets["Documents"] = [
 	['Link','Unlink','Anchor'],
 	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
 	['Table','CreateDiv','Rule','SpecialChar'],
+	['Outdent','Indent','-','TextColor','BGColor','-','OrderedList','UnorderedList'],
 	'/',	
 	['Style','FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough'],
-	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Source']
 ] ;
 
@@ -267,10 +274,11 @@ FCKConfig.ToolbarSets["Documents_Student"] = [
 	['Link','Unlink','Anchor'],
 	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
 	['Table','CreateDiv','Rule','SpecialChar'],
+	['Outdent','Indent','-','TextColor','BGColor','-','OrderedList','UnorderedList'],
 	'/',	
-	['FontFormat','FontName','FontSize'],
+	['Style','FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough'],
-	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['ShowBlocks']
 ];
 
@@ -280,24 +288,28 @@ FCKConfig.ToolbarSets["ForumLight"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Forum"] = [
-	['NewPage','FitWindow','-','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
-	['Link','Unlink','Anchor'],
-	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
-	['Table','Rule','Smiley','SpecialChar','googlemaps'],
-	['FontName','FontSize'],
-	['Bold','Italic','Underline','StrikeThrough'],
-	['Subscript','Superscript','-','OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','-','TextColor','BGColor'],
-	['Source']
-] ;
+    ['Save','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','RemoveFormat'],
+    ['Link','Unlink','Anchor'],
+    ['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+    ['Table','CreateDiv','Rule','SpecialChar'],
+    ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+    '/',    
+    ['Style','FontFormat','FontName','FontSize'],
+    ['Bold','Italic','Underline','StrikeThrough'],
+    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+    ['Source']
+];
 
 FCKConfig.ToolbarSets["Forum_Student"] = [
-	['NewPage','FitWindow','-','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
-	['Link','Unlink','Anchor'],
-	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
-	['Table','Rule','Smiley','SpecialChar','googlemaps'],
-	['FontName','FontSize'],
-	['Bold','Italic','Underline','StrikeThrough'],
-	['Subscript','Superscript','-','OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','-','TextColor','BGColor'],
+	['Save','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','RemoveFormat'],
+    ['Link','Unlink','Anchor'],
+    ['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+    ['Table','CreateDiv','Rule','SpecialChar'],
+    ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+    '/',    
+    ['Style','FontFormat','FontName','FontSize'],
+    ['Bold','Italic','Underline','StrikeThrough'],
+    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['ShowBlocks']
 ] ;
 
@@ -307,10 +319,11 @@ FCKConfig.ToolbarSets["Glossary"] = [
     ['Link','Unlink','Anchor'],
     ['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','CreateDiv','Rule','SpecialChar'],
+    ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
     '/',    
     ['Style','FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline','StrikeThrough'],
-    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
     ['Source']
 ] ;
 
@@ -320,10 +333,11 @@ FCKConfig.ToolbarSets["LearnPath"] = [
 	['Link','Unlink','Anchor'],
 	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
 	['Table','CreateDiv','Rule','SpecialChar'],
+	['Outdent','Indent','-','TextColor','BGColor','-','OrderedList','UnorderedList'],
 	'/',	
-	['FontFormat','FontName','FontSize'],
+	['Style','FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough'],
-	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Source']
 ] ;//save, FitWindow don't run well here
 
@@ -333,24 +347,28 @@ FCKConfig.ToolbarSets["CommentLearningPath"] = [
 
 //Notebook
 FCKConfig.ToolbarSets["Notebook"] = [
-	['NewPage','Save','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
-	['Link','Unlink','Anchor'],
-	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
-	['Table','Rule','SpecialChar','googlemaps'],
-	['FontName','FontSize'],
-	['Bold','Italic','Underline','StrikeThrough'],
-	['Subscript','Superscript','-','JustifyLeft','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
-	['Source']
+	['Save','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','RemoveFormat'],
+    ['Link','Unlink','Anchor'],
+    ['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+    ['Table','CreateDiv','Rule','SpecialChar'],
+    ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+    '/',    
+    ['Style','FontFormat','FontName','FontSize'],
+    ['Bold','Italic','Underline','StrikeThrough'],
+    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+    ['Source']
 ] ;
 
 FCKConfig.ToolbarSets["Notebook_Student"] = [
-	['NewPage','Save','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','SelectAll','RemoveFormat','-','Find'],
-	['Link','Unlink','Anchor'],
-	['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
-	['Table','Rule','SpecialChar','googlemaps'],
-	['FontName','FontSize'],
-	['Bold','Italic','Underline','StrikeThrough'],
-	['Subscript','Superscript','-','JustifyLeft','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+	['Save','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','RemoveFormat'],
+    ['Link','Unlink','Anchor'],
+    ['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+    ['Table','CreateDiv','Rule','SpecialChar'],
+    ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+    '/',    
+    ['Style','FontFormat','FontName','FontSize'],
+    ['Bold','Italic','Underline','StrikeThrough'],
+    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],    
 	['ShowBlocks']
 ] ;
 
@@ -372,10 +390,11 @@ FCKConfig.ToolbarSets["TestDescription"] = [
     ['Link','Unlink','Anchor'],
     ['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','CreateDiv','Rule','SpecialChar'],
+    ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
     '/',    
     ['Style','FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline','StrikeThrough'],
-    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
     ['Source']
 ] ;
 
@@ -384,15 +403,16 @@ FCKConfig.ToolbarSets["QuestionDescription"] = [
     ['Link','Unlink','Anchor'],
     ['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','CreateDiv','Rule','SpecialChar'],
+    ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
     '/',    
     ['Style','FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline','StrikeThrough'],
-    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
     ['Source']
 ] ;
 
 FCKConfig.ToolbarSets["Answer"] = [
-	['FitWindow','Link','Unlink','Image','flvPlayer','Table','Bold','Italic','TextColor','Source']
+    ['FitWindow','Bold','Image','Link','PasteWord','MP3','Table','Subscript','Superscript','Source']	
 ] ;
 
 FCKConfig.ToolbarSets["CommentAnswers"] = [
@@ -422,6 +442,19 @@ FCKConfig.ToolbarSets["Wiki_Student"] = [
 	['ShowBlocks']
 ] ;
 
+//Gradebook
+FCKConfig.ToolbarSets["Gradebook"] = [
+    ['Save','Preview','FitWindow','-','PasteText','PasteWord','-','Undo','Redo','-','RemoveFormat'],
+    ['Link','Unlink','Anchor'],
+    ['Image','imgmapPopup','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+    ['Table','CreateDiv','Rule','SpecialChar'],
+    ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
+    '/',    
+    ['Style','FontFormat','FontName','FontSize'],
+    ['Bold','Italic','Underline','StrikeThrough'],
+    ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+    ['Source']
+] ;
 
 /*
  * Toolbar drop-down lists customizations.

@@ -34,8 +34,8 @@
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getBaseURL(); ?>";
 
-	//var base_url_alt= "<?php echo $_GET['base_url_alt'].'images'; ?>";
-	var base_url_alt= "<?php echo $_GET['base_url_alt']; ?>";
+	//var base_url_alt= "<?php echo $_GET['base_url_alt'].'images'; ?>";	
+	var base_url_alt= "<?php echo $_GET['base_url_alt'].'images/gallery/'; ?>";
 
 	var server_name = "<?php echo $IMConfig['server_name']; ?>";
 
@@ -82,8 +82,13 @@
 	<label for="dirPath">Directory</label>
 	<select name="dir" class="dirWidth" id="dirPath" onchange="updateDir(this)" style="width: 400px;">
 	<option value="/">/</option>
-<?php foreach($dirs as $relative=>$fullpath) { ?>
-		<option value="<?php echo rawurlencode($relative); ?>"><?php echo $relative; ?></option>
+<?php 		
+	  foreach($dirs as $relative=>$fullpath) { ?>
+	  	<?php if($relative == '/images/gallery/') {?>	    
+		<option value="<?php echo rawurlencode($relative); ?>" selected="selected"><?php echo $relative; ?></option>
+		<?php } else {?>
+		<option value="<?php echo rawurlencode($relative); ?>"><?php echo $relative; ?></option>	
+		<?php } ?>	
 <?php } ?>
 	</select>
 	<a href="#" onclick="javascript: goUpDir();" title="Directory Up"><img src="img/btnFolderUp.gif" height="15" width="15" alt="Directory Up" />&nbsp;<span>Directory Up</span></a>

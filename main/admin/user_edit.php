@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 19041 2009-03-13 21:15:04Z iflorespaz $
+<?php // $Id: user_edit.php 19252 2009-03-24 21:38:29Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -176,7 +176,13 @@ $display = $user_data['status'] == STUDENT || $_POST['status'] == STUDENT ? 'blo
 $form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
 $drh_select = $form->addElement('select','hr_dept_id',get_lang('Drh'),array(),'id="drh_select"');
 $drh_list = UserManager :: get_user_list(array('status'=>DRH),array('lastname','firstname'));
-$drh_select->addOption('---',0);
+
+if (count($drh_list) == 0) {
+	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible').' -',0);	
+} else {
+	$drh_select->addOption('- '.get_lang('SelectAResponsible').' -',0);
+}
+
 foreach($drh_list as $drh)
 {
 	$drh_select->addOption($drh['lastname'].' '.$drh['firstname'],$drh['user_id']);

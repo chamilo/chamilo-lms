@@ -17,7 +17,6 @@ $langAddComment = "Prida&#357;/upravi&#357; poznámku k ";
 $langDocCopied = "Dokument bol prekopírovaný";
 $langDocDeleted = "Dokument zmazaný";
 $langElRen = "Element je premenovaný";
-$langDirCr = "Zložka vytvorená";
 $langDirMv = "Element je presunutý";
 $langComMod = "Poznámka je upravená";
 $langViMod = "Vidite&#318;nos&#357; je upravená";

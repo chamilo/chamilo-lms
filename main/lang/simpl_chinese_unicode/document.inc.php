@@ -16,7 +16,6 @@ $langAddComment = "添加/修改摘要";
 $langDocCopied = "文件已复制";
 $langDocDeleted = "文件已删除";
 $langElRen = "目录或文件已重命名";
-$langDirCr = "目录已经创建";
 $langDirMv = "文件已经移动";
 $langComMod = "简介已更新";
 $langViMod = "已修改显示/隐藏属性";

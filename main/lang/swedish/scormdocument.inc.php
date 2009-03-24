@@ -33,7 +33,6 @@ $langFileExists = "Omöjligt att utföra.<br>En path med detta namn existerar reda
 $langDocCopied = "Dokument kopierad";
 $langDocDeleted = "Scorm format Learning path raderat";
 $langElRen = "Döp om EI ???";
-$langDirCr = "Skapa mapp";
 $langDirMv = "Min mapp";
 $langComMod = "Kommando läge ?????";
 $langRename = "döp om";

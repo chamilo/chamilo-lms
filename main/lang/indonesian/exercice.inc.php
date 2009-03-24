@@ -150,7 +150,6 @@ $langCreateExercise = "Buat Latihan";
 $langCreateQuestion = "Buat pertanyaan";
 $langCreateAnswers = "Buat jawaban";
 $langModifyExercise = "Ubah Latihan";
-$langModifyQuestion = "Ubah pertanyaan";
 $langModifyAnswers = "ubah jawaban";
 $langForExercise = "untuk latihan";
 $langUseExistantQuestion = "Gunakan pertanyaan yang sudah ada";

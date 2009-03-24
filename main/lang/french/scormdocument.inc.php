@@ -33,7 +33,6 @@ $langFileExists = "Impossible d\'effectuer cette opération.<br>Un fichier portan
 $langDocCopied = "document copié";
 $langDocDeleted = "élément supprimé";
 $langElRen = "Elément renommé";
-$langDirCr = "dossier créé";
 $langDirMv = "élément deplacé";
 $langComMod = "commentaire modifié";
 $langRename = "Renommer";

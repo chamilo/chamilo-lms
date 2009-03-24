@@ -33,7 +33,6 @@ $langFileExists = "Operasi gagal.<br>File bernama sama telah ada lebih dulu.";
 $langDocCopied = "Dokumen dicopy";
 $langDocDeleted = "Dokumen dihapus";
 $langElRen = "Elemen diganti nama";
-$langDirCr = "Direktori dibuat";
 $langDirMv = "Elemen dipindah";
 $langComMod = "Komentar diubah";
 $langRename = "Ganti nama";

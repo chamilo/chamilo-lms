@@ -33,7 +33,6 @@ $langFileExists = "Durchführung nicht möglich.<br>Ein Pfad mit diesem Namen exis
 $langDocCopied = "Dokument kopiert";
 $langDocDeleted = "Scorm-unterstützer Lernpfad gelöscht";
 $langElRen = "EI umbenennen";
-$langDirCr = "Verzeichnis erstellen";
 $langDirMv = "Mein Verzeichnis";
 $langComMod = "Com Mod ????";
 $langRename = "umbenennen";

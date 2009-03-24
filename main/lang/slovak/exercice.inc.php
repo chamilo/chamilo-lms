@@ -151,7 +151,6 @@ $langCreateExercise = "Vytvori&#357; cvi&#269;enie";
 $langCreateQuestion = "Vytvori&#357; otázku";
 $langCreateAnswers = "Vytvori&#357; odpovede";
 $langModifyExercise = "Zmeni&#357; cvi&#269;enie";
-$langModifyQuestion = "Zmeni&#357; otázku";
 $langModifyAnswers = "zmeni&#357; odpovede";
 $langForExercise = "pre cvi&#269;enie";
 $langUseExistantQuestion = "Použi&#357; existujúcu otázku";

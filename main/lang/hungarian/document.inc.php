@@ -17,7 +17,6 @@ $langAddComment = "Hozzáadni/módosítani egy megjegyzést";
 $langDocCopied = "Dokumentum átmásolva";
 $langDocDeleted = "Dokumentum törölve";
 $langElRen = "Elem átnevezve";
-$langDirCr = "Könyvtár létrehozva";
 $langDirMv = "Elem áthelyezve";
 $langComMod = "Megjegyzés módosítva";
 $langViMod = "Láthatóság módosult";

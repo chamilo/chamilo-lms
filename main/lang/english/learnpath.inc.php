@@ -221,4 +221,6 @@ $ShowAndQualifyAttempt = "Show and qualify attempt";
 $langAddEdit = "Add / Edit";
 $ModifyPrerequisities = "Edit prerequisites";
 $CreateLearningPath = "Create course";
+$AddExercise = "Add exercise";
+$AddForum = "Add forum";
 ?>

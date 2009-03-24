@@ -33,7 +33,6 @@ $langFileExists = "Operatie esuata.<br>Calea cu acest nume deja exista.";
 $langDocCopied = "Document copiat";
 $langDocDeleted = "Calea de Invatare in format scorm a fost stearsa";
 $langElRen = "redenumeste EI ???";
-$langDirCr = "Creaza director";
 $langDirMv = "Directorul meu";
 $langComMod = "Modul comanda ???";
 $langRename = "redenumeste";

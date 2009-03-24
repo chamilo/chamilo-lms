@@ -33,7 +33,6 @@ $langFileExists = "العملية غير ممكنة. <br /> هناك مسار  �
 $langDocCopied = "تم نسخ المستند ";
 $langDocDeleted = "تم حذف مسار التّعلم  بتنسيق سكورم ";
 $langElRen = "EI rename ???";
-$langDirCr = "تم إنشاء المجلد بنجاح";
 $langDirMv = "مجلداتي ";
 $langComMod = "Command mode ?????";
 $langRename = "إعادة التسمية ";

@@ -17,7 +17,6 @@ $langAddComment = "Commentaar toevoegen/wijzigen";
 $langDocCopied = "Bestand is gekopieerd.";
 $langDocDeleted = "Map/bestand is verwijderd.";
 $langElRen = "Naam van map/bestand is gewijzigd.";
-$langDirCr = "Map is aangemaakt.";
 $langDirMv = "Map/bestand is verplaatst.";
 $langComMod = "Commentaar is gewijzigd.";
 $langViMod = "Zichtbaarheid is gewijzigd.";

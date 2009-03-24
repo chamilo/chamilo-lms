@@ -17,7 +17,6 @@ $langAddComment = "Добавить/изменить комментарий дл
 $langDocCopied = "Документ скопирован";
 $langDocDeleted = "Документ удален";
 $langElRen = "Элемент переименован";
-$langDirCr = "Папка создана";
 $langDirMv = "Элемент перемещен";
 $langComMod = "Комментарий изменен";
 $langViMod = "Видимость изменена";

@@ -151,7 +151,6 @@ $langCreateExercise = "Crear exercicio";
 $langCreateQuestion = "Crear pregunta";
 $langCreateAnswers = "Crear respostas";
 $langModifyExercise = "Modificar exercicio";
-$langModifyQuestion = "Modificar a pregunta";
 $langModifyAnswers = "modificar respostas";
 $langForExercise = "para o exercicio";
 $langUseExistantQuestion = "Empregar unha pregunta xa existente";

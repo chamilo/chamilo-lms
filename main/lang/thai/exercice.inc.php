@@ -150,7 +150,6 @@ $langCreateExercise = "สร้างแบบฝึกหัด Create Exercise";
 $langCreateQuestion = "ตั้งคำถาม";
 $langCreateAnswers = "ตั้งคำตอบ";
 $langModifyExercise = "แก้ไขแบบฝึกหัด";
-$langModifyQuestion = "ปรับ/แก้ไขคำถาม";
 $langModifyAnswers = "แก้ไขคำตอบ";
 $langForExercise = "สำหรับแบบฝึกหัด for exercise";
 $langUseExistantQuestion = "ใช้คำถามเดิมที่มีอยู่ Use an existing question";

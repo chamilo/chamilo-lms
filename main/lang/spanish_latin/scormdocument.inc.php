@@ -33,7 +33,6 @@ $langFileExists = "Operación imposible.<br>Ya existe un archivo con el mismo nom
 $langDocCopied = "Documento copiado";
 $langDocDeleted = "El documento de Aprendizaje Dirigido en formato SCORM, ha sido borrado ";
 $langElRen = "Elemento renombrado";
-$langDirCr = "Directorio creado";
 $langDirMv = "Elemento movido";
 $langComMod = "Comentario modificado";
 $langRename = "Renombrar";

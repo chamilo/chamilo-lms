@@ -16,7 +16,6 @@ $langAddComment = "次のものにコメントに付加あるいはコメント修正する。";
 $langDocCopied = "文書をコピーしました";
 $langDocDeleted = "文書を削除しました";
 $langElRen = "element renamed";
-$langDirCr = "ディレクトリ作成";
 $langDirMv = "ディレクトリを移動";
 $langComMod = "コメントを修正";
 $langViMod = "可読を修正";

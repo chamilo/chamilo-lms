@@ -145,7 +145,6 @@ $langCreateExercise = "Luo harjoitus";
 $langCreateQuestion = "Luo kysymys";
 $langCreateAnswers = "Luo vastauksia";
 $langModifyExercise = "Muokkaa harjoitusta";
-$langModifyQuestion = "Muokkaa kysymystä";
 $langModifyAnswers = "Muokkaa vastauksia";
 $langUseExistantQuestion = "Käytä valmista kysymystä";
 $freeAnswer = "Avoin kysymys";

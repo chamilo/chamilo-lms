@@ -31,7 +31,6 @@ $langDownloadEnd = "Na&#269;ítavanie je dokon&#269;ené";
 $langFileExists = "Operácia  neuskuto&#269;nite&#318;ná.<br>Osnova s týmto názvom už existuje.";
 $langDocCopied = "Dokument skopírovaný";
 $langDocDeleted = "U&#269;ebná osnova zmazaná";
-$langDirCr = "Vytvori&#357; katalóg";
 $langDirMv = "Môj katalóg";
 $langRename = "premenova&#357;";
 $langCopy = "kopírova&#357;";

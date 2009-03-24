@@ -150,7 +150,6 @@ $langCreateExercise = "Krei ekzercon ";
 $langCreateQuestion = "krei demandon ";
 $langCreateAnswers = "Krei respondojn ";
 $langModifyExercise = "&#348;an&#285;i ekzercon ";
-$langModifyQuestion = "&#348;an&#285;i la demandon ";
 $langModifyAnswers = "&#348;an&#285;i respondojn ";
 $langForExercise = "por ekzerco ";
 $langUseExistantQuestion = "Uzi ekzistantan demandon ";

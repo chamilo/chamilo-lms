@@ -11,6 +11,7 @@ $langCreateDir = "Bina Direktori";
 $Name = "Nama";
 $langComment = "Komen";
 $langVisible = "Papar/Tidak Papar";
+$langDirCr = "Direktori dibina";
 $langGroup = "Kumpulan";
 $langEdit = "Ubahsuai";
 $langGroupForum = "Forum";

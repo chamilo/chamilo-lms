@@ -33,7 +33,6 @@ $langFileExists = "不可操作<br>同名文件已存在。";
 $langDocCopied = "复制文档";
 $langDocDeleted = "Scorm 格式的学习路径已删除";
 $langElRen = "EI 重命名";
-$langDirCr = "创建目录";
 $langDirMv = "我的目录";
 $langComMod = "命令方式";
 $langRename = "重命名";

@@ -17,7 +17,6 @@ $langAddComment = "Yorum ekle/deðiþtir";
 $langDocCopied = "Belge kopyalandý";
 $langDocDeleted = "Belge silindi";
 $langElRen = "Dosya yeniden adlandýrýldý";
-$langDirCr = "Dizin yaratýldý";
 $langDirMv = "Dosya taþýndý";
 $langComMod = "Yorum deðiþtirildi";
 $langViMod = "Görünürlük deðiþtirildi";

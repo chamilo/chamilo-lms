@@ -16,7 +16,6 @@ $langAddComment = "Tambah/ubahsuai komen ke";
 $langDocCopied = "Dokumen disalin";
 $langDocDeleted = "Dokumen dipadam";
 $langElRen = "Dokumen telah ditukar namanya";
-$langDirCr = "Direktori dibina";
 $langDirMv = "Dokumen berjaya dipindahkan";
 $langComMod = "Komen ditambah/ubahsuai";
 $langViMod = "Ubahsuai mod Paparan";

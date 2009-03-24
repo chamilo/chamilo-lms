@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$CreateCategory = "Create category";
 $LinkMoved = "The link has been moved";
 $langLinkName = "Link name";
 $langLinkAdd = "Add a link";

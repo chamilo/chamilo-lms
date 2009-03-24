@@ -33,7 +33,6 @@ $langFileExists = "Darb&#299;ba nav iesp&#275;jama.<br>Pl&#257;ns ar š&#257;du n
 $langDocCopied = "Dokuments tika nokop&#275;ts";
 $langDocDeleted = "<i>Scorm</i> form&#257;ta M&#257;c&#299;bu pl&#257;ns tika izdz&#275;sts";
 $langElRen = "Veikt EI p&#257;rd&#275;v&#275;šanu???";
-$langDirCr = "Izveidot direktoriju";
 $langDirMv = "Mana direktorija";
 $langComMod = "Komandu rindas rež&#299;m&#257; ????";
 $langRename = "p&#257;rsaukt";

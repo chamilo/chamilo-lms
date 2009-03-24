@@ -33,7 +33,6 @@ $langFileExists = "Operación imposible.<br>Yá hai un archivu con esi nome.";
 $langDocCopied = "Documentu copiáu";
 $langDocDeleted = "Documentu esborráu";
 $langElRen = "Elementu cambiáu de nome";
-$langDirCr = "Direutoriu creáu";
 $langDirMv = "Elementu movíu";
 $langComMod = "Comentariu modificáu";
 $langRename = "Cambiar de nome";

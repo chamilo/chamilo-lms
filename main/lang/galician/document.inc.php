@@ -17,7 +17,6 @@ $langAddComment = "Engadir/modificar un comentario a";
 $langDocCopied = "Documento copiado";
 $langDocDeleted = "Documento borrado";
 $langElRen = "Ficheiro renomeado";
-$langDirCr = "Directorio creado";
 $langDirMv = "Elemento movido";
 $langComMod = "Comentario modificado";
 $langViMod = "Visibilidade modificada";

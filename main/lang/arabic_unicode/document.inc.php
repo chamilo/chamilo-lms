@@ -17,7 +17,6 @@ $langAddComment = "أضف / حرر تعليق إلى ";
 $langDocCopied = "تم نسخ المستند بنجاح ";
 $langDocDeleted = "تم حذف المستند بنجاح ";
 $langElRen = "تمت عملية إعادة تسمية العنصر ";
-$langDirCr = "تم إنشاء مجلد ";
 $langDirMv = "تم نقل العنصر ";
 $langComMod = "تم تعديل التعليق ";
 $langViMod = "تم تعديل خاصية الظهور ";

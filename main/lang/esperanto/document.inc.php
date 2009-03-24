@@ -17,7 +17,6 @@ $langAddComment = "Aldoni/ modifi komentarion ";
 $langDocCopied = "La dosiero estas kopiita ";
 $langDocDeleted = "Dosiero/ dosierujo estas forigita. ";
 $langElRen = "Nomo de dosiero/ dosierujo estas &#349;an&#285;ita ";
-$langDirCr = "Dosierujo estas kreita ";
 $langDirMv = "Dosierujo/ dosiero estas translokita ";
 $langComMod = "Komentario estas &#349;an&#285;ita ";
 $langViMod = "La videblo estas &#349;an&#285;ita. ";

@@ -17,7 +17,6 @@ $langAddComment = "Amestar/cambiar un comentariu a";
 $langDocCopied = "Documentu copiáu";
 $langDocDeleted = "Documentu esborráu";
 $langElRen = "Archivu cambiáu de nome";
-$langDirCr = "Direutoriu creau";
 $langDirMv = "Elementu movíu";
 $langComMod = "Comentariu cambiáu";
 $langViMod = "Visibilidá cambiada";

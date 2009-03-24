@@ -151,7 +151,6 @@ $langCreateExercise = "Opret øvelse";
 $langCreateQuestion = "Opret et spørgsmål";
 $langCreateAnswers = "Opret svar";
 $langModifyExercise = "Rediger øvelse";
-$langModifyQuestion = "Rediger spørgsmålet";
 $langModifyAnswers = "rediger svar";
 $langForExercise = "for øvelse";
 $langUseExistantQuestion = "Brug et eksisterende spørgsmål";

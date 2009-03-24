@@ -17,7 +17,6 @@ $langAddComment = "Dodaj/modyfikuj komentarz do";
 $langDocCopied = "Dokument skopiowany";
 $langDocDeleted = "Dokument usuni&#281;ty";
 $langElRen = "Zmieniono nazw&#281; elementu";
-$langDirCr = "Katalog utworzony";
 $langDirMv = "Element przeniesiony";
 $langComMod = "Komentarz zmodyfikowany";
 $langViMod = "Widoczno&#347;&#263; zmodyfikowana";

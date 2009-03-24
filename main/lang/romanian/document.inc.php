@@ -17,7 +17,6 @@ $langAddComment = "Adauga/modifica un comentariu catre";
 $langDocCopied = "Document copiat";
 $langDocDeleted = "Document sters";
 $langElRen = "Element redenumit";
-$langDirCr = "Director creat";
 $langDirMv = "Element mutat";
 $langComMod = "Comentariu modificat";
 $langViMod = "Vizibilitate modificata";

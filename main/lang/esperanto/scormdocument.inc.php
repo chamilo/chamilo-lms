@@ -33,7 +33,6 @@ $langFileExists = "Operacio ne eblas.<br>Jam ekzistas dosiero kun tiu nomo. ";
 $langDocCopied = "Dokumento kopiita ";
 $langDocDeleted = "Dokumento forigita ";
 $langElRen = "Elemento renomita ";
-$langDirCr = "dosierujo kreita ";
 $langDirMv = "Elemento delokita ";
 $langComMod = "Komentario &#349;an&#285;ita ";
 $langRename = "Renomi ";

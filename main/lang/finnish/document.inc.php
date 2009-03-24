@@ -17,7 +17,6 @@ $langAddComment = "Lis‰‰ kommentti:";
 $langDocCopied = "Dokumentti on kopioitu";
 $langDocDeleted = "Dokumentti on poistettu";
 $langElRen = "Elementti on nimetty uudelleen";
-$langDirCr = "Hakemisto on luotu";
 $langDirMv = "Hakemisto on siirretty";
 $langComMod = "Kommenttia on muutettu";
 $langViMod = "N‰kyvyytt‰ on muutettu";

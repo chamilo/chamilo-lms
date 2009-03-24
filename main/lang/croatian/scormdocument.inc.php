@@ -33,7 +33,6 @@ $langFileExists = "Nemogu&#263;a radnja.<br>Put s tim imenom ve&#263; postoji.";
 $langDocCopied = "Dokument preslikan";
 $langDocDeleted = "Put u&#269;enja formata Scorm izbrisan";
 $langElRen = "Preimenuj EI ???";
-$langDirCr = "Izradi mapu";
 $langDirMv = "Moja mapa";
 $langComMod = "Zapovjedni na&#269;in ?????";
 $langRename = "preimenuj";

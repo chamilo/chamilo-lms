@@ -148,7 +148,6 @@ $langCreateExercise = "Sast&#257;d&#299;t Uzdevumu";
 $langCreateQuestion = "Izveidot jaut&#257;jumu";
 $langCreateAnswers = "Izveidot atbildes";
 $langModifyExercise = "Main&#299;t Uzdevumu";
-$langModifyQuestion = "Main&#299;t jaut&#257;jumu";
 $langModifyAnswers = "main&#299;t atbildes";
 $langForExercise = "uzdevumam";
 $langUseExistantQuestion = "Ievietot jau izveidotu jaut&#257;jumu";

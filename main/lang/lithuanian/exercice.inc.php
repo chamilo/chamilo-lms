@@ -151,7 +151,6 @@ $langCreateExercise = "Sukurti pratimą";
 $langCreateQuestion = "Sukurti klausimą";
 $langCreateAnswers = "Sukurti atsakymus";
 $langModifyExercise = "Redaguoti pratimus";
-$langModifyQuestion = "Redaguoti klausimą";
 $langModifyAnswers = "redaguoti atsakymus";
 $langForExercise = "užduočiai";
 $langUseExistantQuestion = "Naudoti esantį klausimą";

@@ -152,7 +152,6 @@ $langCreateExercise = "Crea un test";
 $langCreateQuestion = "Crea un quesito";
 $langCreateAnswers = "Crea le risposte";
 $langModifyExercise = "Conferma il test";
-$langModifyQuestion = "Modifica il quesito";
 $langModifyAnswers = "modifica le risposte";
 $langForExercise = "per il test";
 $langUseExistantQuestion = "Usa un quesito esistente";

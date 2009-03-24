@@ -151,7 +151,6 @@ $langCreateExercise = "Izardi vježbu";
 $langCreateQuestion = "Izradi pitanje";
 $langCreateAnswers = "Izradi odgovore";
 $langModifyExercise = "Izmijeni vježbu";
-$langModifyQuestion = "Izmijeni pitanje";
 $langModifyAnswers = "izmijeni odgovore";
 $langForExercise = "za vježbu";
 $langUseExistantQuestion = "Upotrijebi postoje&#263;e pitanje";

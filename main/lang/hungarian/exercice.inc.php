@@ -151,7 +151,6 @@ $langCreateExercise = "Teszt létrehozása";
 $langCreateQuestion = "Kérdés létrehozása";
 $langCreateAnswers = "Válaszok létrehozása";
 $langModifyExercise = "Teszt módosítása";
-$langModifyQuestion = "Kérdés módosítása";
 $langModifyAnswers = "válaszok módosítása";
 $langForExercise = "a következ&#337; teszthez:";
 $langUseExistantQuestion = "Már létez&#337; kérdés felhasználása";

@@ -150,7 +150,6 @@ $langCreateExercise = "Pravljenje vežbe";
 $langCreateQuestion = "Pravljenje pitanja";
 $langCreateAnswers = "Pravljenje odgovora";
 $langModifyExercise = "Izmena vežbe";
-$langModifyQuestion = "Izmena putanja";
 $langModifyAnswers = "izmena odgovora";
 $langForExercise = "za vežbu";
 $langUseExistantQuestion = "Upotreba postoje&#263;eg pitanja";

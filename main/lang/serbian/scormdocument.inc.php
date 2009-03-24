@@ -33,7 +33,6 @@ $langFileExists = "Operacija je nemogu&#263;a.<br>Putanja sa ovim imenom ve&#263
 $langDocCopied = "Dokument je kopiran";
 $langDocDeleted = "Putanja u Scorm formatu je obrisana";
 $langElRen = "Preimenuj EI ???";
-$langDirCr = "Kreiraj direktorijum";
 $langDirMv = "Moj direktorijum";
 $langComMod = "Komandni mod???";
 $langRename = "preimenuj";

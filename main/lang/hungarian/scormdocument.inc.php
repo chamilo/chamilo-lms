@@ -33,7 +33,6 @@ $langFileExists = "A mûvelet lehetetlen.<br>Már van egy ilyen nevû file.";
 $langDocCopied = "Dokumentum átmásolva";
 $langDocDeleted = "Dokumentum törölve";
 $langElRen = "Elem átnevezve";
-$langDirCr = "Könyvtár létrehozva";
 $langDirMv = "Elem áthelyezve";
 $langComMod = "Megjegyzés módosítva";
 $langRename = "Átnevez";

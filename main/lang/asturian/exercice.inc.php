@@ -151,7 +151,6 @@ $langCreateExercise = "Crear exerciciu";
 $langCreateQuestion = "Crear una entruga";
 $langCreateAnswers = "Crear rempuestes";
 $langModifyExercise = "Modificar exerciciu";
-$langModifyQuestion = "Modificar la entruga";
 $langModifyAnswers = "Modificar les rempuestes";
 $langForExercise = "pal exerciciu";
 $langUseExistantQuestion = "Usar una entruga esistente";

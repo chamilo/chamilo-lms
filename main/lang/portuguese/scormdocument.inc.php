@@ -33,7 +33,6 @@ $langFileExists = "Operação impossível.<br>Já existe um caminho com este nome.";
 $langDocCopied = "Documento copiado";
 $langDocDeleted = "Sequência de Aprendizagem em formato Scorm apagada";
 $langElRen = "renomear EI ???";
-$langDirCr = "Criar directoria";
 $langDirMv = "Minha directoria";
 $langComMod = "Modo comando ?????";
 $langRename = "Renomear";

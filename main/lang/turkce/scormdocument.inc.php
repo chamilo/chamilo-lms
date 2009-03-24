@@ -33,7 +33,6 @@ $langFileExists = "Ayn&#305; isimle bir adres bulundu&#287;undan i&#351;lem yap&
 $langDocCopied = "Belge kopyaland&#305;";
 $langDocDeleted = "Scorm format&#305;ndaki kurs silindi.";
 $langElRen = "EI yeniden isimlendir ???";
-$langDirCr = "Klasör olu&#351;tur";
 $langDirMv = "Klasörüm";
 $langComMod = "Komut modu ????";
 $langRename = "yeniden isimlendir";

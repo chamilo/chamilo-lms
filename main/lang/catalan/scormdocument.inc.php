@@ -33,7 +33,6 @@ $langFileExists = "El Camí d\'impossible.<br>A d\'Operació|Funcionament amb aque
 $langDocCopied = "Document copiat";
 $langDocDeleted = "Camí d\'Aprenentatge|Saber de format Scorm suprimit";
 $langElRen = "EI rebateja ???";
-$langDirCr = "Crear directori";
 $langDirMv = "El meu directori";
 $langComMod = "Comentari modificat????";
 $langRename = "Renombrar";

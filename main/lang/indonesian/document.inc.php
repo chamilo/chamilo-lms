@@ -17,7 +17,6 @@ $langAddComment = "Tambah/ubah komentar";
 $langDocCopied = "Dokumen di-copy";
 $langDocDeleted = "Dokumen dihapus";
 $langElRen = "Elemen diganti nama";
-$langDirCr = "Direktori dibuat";
 $langDirMv = "Elemen dipindah";
 $langComMod = "Komentar diubah";
 $langViMod = "Kenampakan diubah";

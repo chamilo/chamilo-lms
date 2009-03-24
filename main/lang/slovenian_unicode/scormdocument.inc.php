@@ -33,7 +33,6 @@ $langFileExists = "Nemogoča operacija.<br>Datoteka s tem imenom že obstaja.";
 $langDocCopied = "Dokument prepisan";
 $langDocDeleted = "SCORM oblika učne poti je bila odstranjena";
 $langElRen = "Element preimenovan";
-$langDirCr = "Mapa ustvarjena";
 $langDirMv = "Moja mapa";
 $langComMod = "Ukazni način ???";
 $langRename = "Preimenuj";

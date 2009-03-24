@@ -33,7 +33,6 @@ $langFileExists = "Operacja niedozwolona. <br>&#346;cie&#380;ka o tej nazwie ju&
 $langDocCopied = "Dokument skopiowano";
 $langDocDeleted = "&#346;cie&#380;ka nauki w formacie Scorm skasowana";
 $langElRen = "Przemianowa&#263; EI ???";
-$langDirCr = "Utwórz katalog";
 $langDirMv = "Mój katalog";
 $langComMod = "Tryb komend ???";
 $langRename = "przemianuj";

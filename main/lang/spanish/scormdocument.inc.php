@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChapter = "Módulo";
+$langChapter = "Capítulo";
 $langDocumentList = "Lista de todos los documentos";
 $langOrganisationList = "Tabla de contenidos";
 $langEditTOC = "Editar tabla de contenidos";
@@ -33,7 +33,6 @@ $langFileExists = "Operación imposible.<br>Ya existe un archivo con el mismo nom
 $langDocCopied = "Documento copiado";
 $langDocDeleted = "Documento eliminado";
 $langElRen = "Elemento renombrado";
-$langDirCr = "Directorio creado";
 $langDirMv = "Elemento movido";
 $langComMod = "Comentario modificado";
 $langRename = "Renombrar";
@@ -46,10 +45,10 @@ $langBuilder = "Constructor de lecciones";
 $lang_edit_learnpath = "Editar nombre/descripción";
 $lang_add_title_and_desc = "Renombrar y añadir desc.";
 $lang_add_learnpath = "Crear una lección";
-$lang_learnpath_added = "La lección ha sido creada. Ahora puede añadirle módulos. Haga clic sobre su nombre y edítelo.";
+$lang_learnpath_added = "La lección ha sido creada. Ahora puede añadirle capítulos. Haga clic sobre su nombre y edítelo.";
 $lang_delete_learnpath = "Eliminar";
 $lang_learnpath_edited = "La lección ha sido editada";
-$lang_learnpath_deleted = "Esta lección y todos sus módulos han sido eliminados";
+$lang_learnpath_deleted = "Esta lección y todos sus capítulos han sido eliminados";
 $lang_no_publish = "Ocultar a los estudiantes";
 $lang_publish = "Mostrar a los estudiantes";
 $lang_no_published = "ahora está oculto para los estudiantes";

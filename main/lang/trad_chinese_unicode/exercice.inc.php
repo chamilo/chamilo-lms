@@ -151,7 +151,6 @@ $langCreateExercise = "新建練習";
 $langCreateQuestion = "新建題目";
 $langCreateAnswers = "新建答案";
 $langModifyExercise = "修改練習";
-$langModifyQuestion = "修改題目";
 $langModifyAnswers = "修改答案";
 $langForExercise = "做練習";
 $langUseExistantQuestion = "用一個現有題目";

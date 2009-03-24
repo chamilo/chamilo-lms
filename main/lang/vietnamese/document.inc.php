@@ -16,7 +16,6 @@ $langAddComment = "Thêm/Sửa ghi chú";
 $langDocCopied = "Tài liệu đã được sao";
 $langDocDeleted = "Tài liệu đã xoá";
 $langElRen = "Đã đổi tên xong";
-$langDirCr = "Thư mục đã tạo";
 $langDirMv = "Đã di chuyển xong";
 $langComMod = "Đã sửa phần ghi chú";
 $langViMod = "Đã thay đổi tính hiển thị";

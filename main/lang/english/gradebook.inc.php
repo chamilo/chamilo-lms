@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ModifyEvaluation = "Gradebook edit";
+$CreateLink = "Create link";
 $FlatView = "Flat view";
 $ScoreEdit = "Score rules editing";
 $ScoreColor = "Score color";

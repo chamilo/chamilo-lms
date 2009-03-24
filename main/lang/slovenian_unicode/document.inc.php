@@ -17,7 +17,6 @@ $langAddComment = "Dodaj/spremeni komentar";
 $langDocCopied = "Dokument je kopiran";
 $langDocDeleted = "Dokument je odstranjen";
 $langElRen = "Element preimenovan";
-$langDirCr = "Mapa je narejena";
 $langDirMv = "Element je premaknjen";
 $langComMod = "Komentar je spremenjen";
 $langViMod = "Vidnost spremenjena";

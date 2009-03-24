@@ -17,7 +17,6 @@ $langAddComment = "Ajouter/modifier un commentaire à";
 $langDocCopied = "Document copié";
 $langDocDeleted = "Élément supprimé";
 $langElRen = "El�ment renomm�";
-$langDirCr = "Répertoire créé";
 $langDirMv = "Élément déplacé";
 $langComMod = "Commentaire modifié";
 $langViMod = "Visibilit� modifi�e";

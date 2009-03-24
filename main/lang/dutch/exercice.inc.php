@@ -151,7 +151,6 @@ $langCreateExercise = "Maak oefening aan";
 $langCreateQuestion = "Maak vraag aan ";
 $langCreateAnswers = "Maak antwoorden aan";
 $langModifyExercise = "Wijzig oefening";
-$langModifyQuestion = "Wijzig vraag";
 $langModifyAnswers = "Wijzig antwoorden";
 $langForExercise = "voor oefening";
 $langUseExistantQuestion = "Gebruik bestaande vraag";

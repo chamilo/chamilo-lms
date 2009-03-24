@@ -150,7 +150,6 @@ $langCreateExercise = "Al&#305;&#351;t&#305;rma olu&#351;tur";
 $langCreateQuestion = "Soru olu&#351;tur";
 $langCreateAnswers = "Cevaplar&#305; olu&#351;tur";
 $langModifyExercise = "Al&#305;&#351;t&#305;rmay&#305; düzenle";
-$langModifyQuestion = "Soruyu düzenle";
 $langModifyAnswers = "Cevaplar&#305; düzenle";
 $langForExercise = "Al&#305;&#351;t&#305;rma için";
 $langUseExistantQuestion = "Var olan bir soruyu kullan";

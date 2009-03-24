@@ -17,7 +17,6 @@ $langAddComment = "Įrašyti/modifikuoti komentarą ";
 $langDocCopied = "Dokumentas nukopijuotas";
 $langDocDeleted = "Dokumentas ištrintas";
 $langElRen = "Elementas pervadintas";
-$langDirCr = "Katalogas sukurtas";
 $langDirMv = "Elementas perkeltas";
 $langComMod = "Komentaras modifikuotas";
 $langViMod = "Matomumas modifikuotas";

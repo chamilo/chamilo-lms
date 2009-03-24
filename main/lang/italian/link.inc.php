@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$CreateCategory = "Crea una categoria";
 $LinkMoved = "Collegamento spostato";
 $langLinkName = "Nome del collegamento";
 $langLinkAdd = "Aggiungi un collegamento";

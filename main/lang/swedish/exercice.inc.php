@@ -151,7 +151,6 @@ $langCreateExercise = "Skapa prov";
 $langCreateQuestion = "Skapa fråga";
 $langCreateAnswers = "Skapa svar";
 $langModifyExercise = "Ändra test";
-$langModifyQuestion = "Ändra fråga";
 $langModifyAnswers = "Ändra svar";
 $langForExercise = "för prov";
 $langUseExistantQuestion = "Använd en redan existerande fråga";

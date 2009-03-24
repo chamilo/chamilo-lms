@@ -17,7 +17,6 @@ $langAddComment = "Pievienot/labot koment&#257;ru";
 $langDocCopied = "Dokuments nokop&#275;ts";
 $langDocDeleted = "Dokuments izdz&#275;sts";
 $langElRen = "Elements p&#257;rsaukts";
-$langDirCr = "Direktorija izveidota";
 $langDirMv = "Elements p&#257;rvietots";
 $langComMod = "Koment&#257;rs papildin&#257;ts";
 $langViMod = "Pieejam&#299;ba p&#257;rskat&#299;ta";

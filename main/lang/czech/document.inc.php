@@ -17,7 +17,6 @@ $langAddComment = "P&#345;idat/upravit komentá&#345; k";
 $langDocCopied = "Dokument je zkopírovaný";
 $langDocDeleted = "Dokument je vymazaný";
 $langElRen = "Element je p&#345;ejmenovaný";
-$langDirCr = "Složka vytvo&#345;ená";
 $langDirMv = "Element je p&#345;esunutý";
 $langComMod = "Komentá&#345; byl upraven";
 ?>

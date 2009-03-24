@@ -33,7 +33,6 @@ $langFileExists = "Operação impossível.<br>Um arquivo com o mesmo nome já existe
 $langDocCopied = "Documento copiado";
 $langDocDeleted = "Documento deletado";
 $langElRen = "Elemento renomeado";
-$langDirCr = "Diretório criado";
 $langDirMv = "Elemento movido";
 $langComMod = "Comentário modificado";
 $langRename = "Renomear";

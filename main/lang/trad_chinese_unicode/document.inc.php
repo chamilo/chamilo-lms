@@ -17,7 +17,6 @@ $langAddComment = "添加/修改意見";
 $langDocCopied = "檔案已複製";
 $langDocDeleted = "檔案已刪除";
 $langElRen = "目錄或檔案已重命名";
-$langDirCr = "目錄已經創建";
 $langDirMv = "檔案已經移動";
 $langComMod = "已更新意見";
 $langViMod = "已修改顯示/隱藏屬性";

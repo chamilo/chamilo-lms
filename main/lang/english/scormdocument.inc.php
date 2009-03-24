@@ -33,7 +33,6 @@ $langFileExists = "Operation impossible.<br>A Path with this name already exists
 $langDocCopied = "Document copied";
 $langDocDeleted = "Course deleted";
 $langElRen = "EI rename ???";
-$langDirCr = "Create directory";
 $langDirMv = "My directory";
 $langComMod = "Command mode ?????";
 $langRename = "rename";

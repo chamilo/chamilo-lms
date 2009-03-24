@@ -33,7 +33,6 @@ $langFileExists = "Handling ikke mulig.<br>En sti med dette navn findes allerede
 $langDocCopied = "Dokument kopieret";
 $langDocDeleted = "Scorm-formateret læringssti slettet";
 $langElRen = "EI omdøbning ???";
-$langDirCr = "Opret mappe";
 $langDirMv = "Min mappe";
 $langComMod = "Kommando modus ?????";
 $langRename = "omdøb";

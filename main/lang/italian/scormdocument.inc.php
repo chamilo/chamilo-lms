@@ -33,7 +33,6 @@ $langFileExists = "Non &egrave possibile effettuare l\'operazione.<br>Esiste gi&
 $langDocCopied = "Documento copiato";
 $langDocDeleted = "Modulo SCORM eliminato";
 $langElRen = "Elemento rinominato";
-$langDirCr = "Cartella creata";
 $langDirMv = "Elemento spostato";
 $langComMod = "Commento modificato";
 $langRename = "Rinomina";

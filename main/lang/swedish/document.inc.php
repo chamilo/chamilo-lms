@@ -17,7 +17,6 @@ $langAddComment = "lägg till/modifiera kommentar till";
 $langDocCopied = "dokument kopierat";
 $langDocDeleted = "dokument raderat";
 $langElRen = "filen bytte namn";
-$langDirCr = "mapp skapad";
 $langDirMv = "mapp flyttad";
 $langComMod = "kommentar modifierades";
 $langViMod = "Synlighet modifierad";

@@ -151,7 +151,6 @@ $langCreateExercise = "إنشاء تمرين ";
 $langCreateQuestion = "إنشاء سؤال ";
 $langCreateAnswers = "إنشاء أجوبة ";
 $langModifyExercise = "تعديل تمرين ";
-$langModifyQuestion = "تعديل السؤال ";
 $langModifyAnswers = "تعديل أجوبة ";
 $langForExercise = "من أجل التمارين";
 $langUseExistantQuestion = "استخدام أسئلة موجودة مسبقا ";

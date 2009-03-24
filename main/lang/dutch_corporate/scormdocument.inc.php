@@ -33,7 +33,6 @@ $langFileExists = "Operatie is onmogelijk.<br />Er bestaat al een bestand met de
 $langDocCopied = "Document is gekopieerd.";
 $langDocDeleted = "Document is verwijderd.";
 $langElRen = "Element is hernoemd.";
-$langDirCr = "Map is aangemaakt.";
 $langDirMv = "Element is verplaatst.";
 $langComMod = "Commentaar is gewijzigd.";
 $langRename = "Hernoem";

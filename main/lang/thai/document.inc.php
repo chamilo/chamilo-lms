@@ -17,7 +17,6 @@ $langAddComment = "เพิ่ม/ปรับปรุงหมายเหตุที่";
 $langDocCopied = "ย้ายเอกสารแล้ว";
 $langDocDeleted = "ลบเอกสารแล้ว";
 $langElRen = "เปลี่ยนชื่อแล้ว";
-$langDirCr = "สร้างdirectory เรียบร้อย";
 $langDirMv = "ย้ายdirectory เรียบร้อย";
 $langComMod = "แก้ไขข้อคิดเห็นแล้ว";
 $langViMod = "ปรับปรุงการให้เห็นเอกสารแล้ว";

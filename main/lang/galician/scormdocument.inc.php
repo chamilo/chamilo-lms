@@ -33,7 +33,6 @@ $langFileExists = "Operación imposible.<br>Xa existe un Itinerario co mesmo nome
 $langDocCopied = "Documento copiado";
 $langDocDeleted = "Documento borrado";
 $langElRen = "Elemento renomeado";
-$langDirCr = "Carpeta creada";
 $langDirMv = "Elemento movido";
 $langComMod = "Comentario modificado";
 $langRename = "Renomear";

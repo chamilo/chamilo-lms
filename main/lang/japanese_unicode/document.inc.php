@@ -16,7 +16,6 @@ $langAddComment = "肌のものにコメントに烧裁あるいはコメント�
 $langDocCopied = "矢今をコピ〖しました";
 $langDocDeleted = "矢今を猴近しました";
 $langElRen = "element renamed";
-$langDirCr = "ディレクトリ侯喇";
 $langDirMv = "ディレクトリを败瓢";
 $langComMod = "コメントを饯赖";
 $langViMod = "材粕を饯赖";

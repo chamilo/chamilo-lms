@@ -17,7 +17,6 @@ $langAddComment = "Dodaj/izmijeni opasku";
 $langDocCopied = "Dokument preslikan";
 $langDocDeleted = "Dokument izbrisan";
 $langElRen = "Element preimenovan";
-$langDirCr = "Mapa izra&#273;ena";
 $langDirMv = "Element premješten";
 $langComMod = "Opaska izmijenjena";
 $langViMod = "Vidljivost izmijenjena";

@@ -17,7 +17,6 @@ $langAddComment = "Dodaj/modifikuj komentar u";
 $langDocCopied = "Dokument je iskopiran";
 $langDocDeleted = "Dokument je obrisan ";
 $langElRen = "Element je reimenovan";
-$langDirCr = "Direktorijum je kreiran";
 $langDirMv = "Element je preba&#269;en";
 $langComMod = "Komentar je modifikovan";
 $langViMod = "Vidljivost je modifikovana";

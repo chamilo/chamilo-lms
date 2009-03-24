@@ -17,7 +17,6 @@ $langAddComment = "Tilføj/ret kommentar til";
 $langDocCopied = "Dokumentet er kopieret";
 $langDocDeleted = "Dokumentet er slettet";
 $langElRen = "Elementet er omdøbt";
-$langDirCr = "Mappen er oprettet";
 $langDirMv = "Elementet er flyttet";
 $langComMod = "Kommentar er ændret";
 $langViMod = "Synlighed ændret";

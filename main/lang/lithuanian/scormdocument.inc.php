@@ -33,7 +33,6 @@ $langFileExists = "Operacija negalima.<br>Šis pavadinimas jau egzistuoja.";
 $langDocCopied = "Dokumentas nukopijuotas";
 $langDocDeleted = "Scorm format Learning Path deleted";
 $langElRen = "EI rename ???";
-$langDirCr = "Sukurti katalogą";
 $langDirMv = "Mano katalogas";
 $langComMod = "Command mode ?????";
 $langRename = "pervadinti";

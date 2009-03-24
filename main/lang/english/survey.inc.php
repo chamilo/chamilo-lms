@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$PublishSurvey = "Publish survey";
+$CompareQuestions = "Compare questions";
 $SurveyTitle = "Survey title";
 $SurveyIntroduction = "Survey introduction";
 $CreateNewSurvey = "Create survey";
@@ -207,4 +209,7 @@ $AutoInviteLink = "Users who are not invited can use this link to take the surve
 $CompleteTheSurveysQuestions = "Complete the survey\'s questions";
 $SurveysDeleted = "Surveys deleted";
 $RemindUnanswered = "Remind only users who didn\'t answer";
+$ModifySurvey = "Modify survey";
+$CreateQuestionSurvey = "Create question";
+$ModifyQuestionSurvey = "Modify question";
 ?>

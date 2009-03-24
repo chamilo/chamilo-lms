@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 19257 2009-03-24 23:17:44Z aportugal $
+<?php // $Id: user_list.php 19258 2009-03-24 23:21:45Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -413,7 +413,7 @@ function modify_filter($user_id,$url_params,$row)
 	global $_user;
 
 	$result .= '<a  href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')">
-				<img onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" onmouseout="clear_course_list (\'div_'.$user_id.'\')" src="../img/course.gif" />
+				<img onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" onmouseout="clear_course_list (\'div_'.$user_id.'\')" src="../img/course.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
 				<div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
 				</a>&nbsp;&nbsp;';
 				

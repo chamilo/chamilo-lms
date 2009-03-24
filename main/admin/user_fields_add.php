@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 18925 2009-03-10 14:09:33Z ndieschburg $
+<?php // $Id: user_fields_add.php 19250 2009-03-24 21:09:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -148,6 +148,8 @@ if (is_numeric($_GET['field_id']))
 	$defaults['fieldtitle'] = $form_information['field_display_text'];
 	$defaults['fieldlabel'] = $form_information['field_variable'];
 	$defaults['fieldtype'] = $form_information['field_type'];
+	$defaults['fielddefaultvalue'] = $form_information['field_default_value'];									
+	
 	$count = 0;
 	// we have to concatenate the options
 	if (count($form_information['options'])>0) {
@@ -215,9 +217,38 @@ if(!empty($_GET['message']))
 	//Display::display_normal_message(get_lang('UserFieldsAddHelp'),false);
 //}
 $form->display();
+
 echo '<div id="id_image_user_field">';
-echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));
-echo '</div>';
+if(!empty($defaults['fieldtype'])) {
+	$image_value = $defaults['fieldtype'];
+	if ($image_value==1) {
+		echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));					
+	} else if ($image_value==2) {
+		echo '<br />'.Display::return_icon('userfield_text_area.png', get_lang('AddUserFields'));						
+	} else if ($image_value==3) {
+		echo '<br />'.Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'));						
+	} else if ($image_value==4) {
+		echo '<br />'.Display::return_icon('userfield_drop_down.png', get_lang('AddUserFields'));						
+	} else if ($image_value==5) {
+		echo '<br />'.Display::return_icon('userfield_multidropdown.png', get_lang('AddUserFields'));								
+	} else if ($image_value==6) {
+		echo '<br />'.Display::return_icon('userfield_data.png', get_lang('AddUserFields'));						
+	} else if ($image_value==7) {
+		echo '<br />'.Display::return_icon('userfield_date_time.png', get_lang('AddUserFields'));								
+	} else if ($image_value==8) {
+		echo '<br />'.Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'));									
+	} else if ($image_value==9) {
+		echo '<br />'.Display::return_icon('userfield_divider.png', get_lang('AddUserFields'));						
+	}
+} else {
+	echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));	
+}	
+echo '</div>';	
+			
+			
+
+		
+
 
 // footer
 Display::display_footer();

@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 19053 2009-03-15 21:58:00Z herodoto $
+<?php // $Id: profile.php 19225 2009-03-24 01:31:26Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -83,6 +83,11 @@ if(!empty($_GET['fe'])) {
 	$warning_msg .= get_lang('UplUnableToSaveFileFilteredExtension');
 	$_GET['fe'] = null;
 }
+if(!empty($_GET['cp'])) {
+	$warning_msg .= get_lang('CurrentPasswordEmptyOrIncorrect');
+	$_GET['cp'] = null;
+}
+
 /*
 -----------------------------------------------------------
 	Configuration file
@@ -269,13 +274,16 @@ if (api_get_setting('extended_profile') == 'true') {
 
 //	PASSWORD
 if (is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
+	
+	$form->addElement('password', 'password0', get_lang('Pass'), array('size' => 40));
 	$form->addElement('static', null, null, '<em>'.get_lang('Enter2passToChange').'</em>');
-	$form->addElement('password', 'password1', get_lang('Pass'),         array('size' => 40));
+	$form->addElement('password', 'password1', get_lang('NewPass'),         array('size' => 40));
 	$form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));
 	//	user must enter identical password twice so we can prevent some user errors
 	$form->addRule(array('password1', 'password2'), get_lang('PassTwo'), 'compare');
 	if (CHECK_PASS_EASY_TO_FIND)
 		$form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
+		
 }
 
 // EXTRA FIELDS
@@ -556,7 +564,26 @@ function upload_user_production($user_id)
 	}
 	return false; // this should be returned if anything went wrong with the upload
 }
-
+/**
+ * Write old password to change a new password.
+ * @param	int	User id
+ * @param	char	password
+ * @return	bool true o false
+ */
+function check_user_password($password){
+	global $_user;
+	$user_id = $_user['user_id'];
+	if ( $user_id != strval(intval($user_id)) || empty($password) ) { return false; }
+	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$password = api_get_encrypted_password($password);
+	$sql_password="SELECT * FROM $table_user WHERE user_id='".$user_id."' AND password='".$password."'";
+	$result=api_sql_query($sql_password, __FILE__, __LINE__);
+	if (Database::num_rows($result)==0) {
+		return false;
+	} else {
+		return true;
+	}
+}
 /*
 ==============================================================================
 		MAIN CODE
@@ -596,11 +623,22 @@ if (!empty($_SESSION['production_uploaded']))
 
 	$file_deleted = true;
 } elseif ($form->validate()) {
+	$wrong_current_password = false;
 	$user_data = $form->exportValues();
-
+	//
 	// set password if a new one was provided
-	if (!empty($user_data['password1']))
-		$password = $user_data['password1'];
+	if(!empty($user_data['password0'])){
+		$val=check_user_password($user_data['password0']);
+		if ($val==true){
+			if (!empty($user_data['password1']))
+			$password = $user_data['password1'];
+		} else {
+			$wrong_current_password = true;
+		}
+	}
+	if (empty($user_data['password0']) && !empty($user_data['password1'])) {
+			$wrong_current_password = true;		
+	}
 
 	// upload picture if a new one is provided
 	if ($_FILES['picture']['size'])
@@ -635,7 +673,7 @@ if (!empty($_SESSION['production_uploaded']))
 
 	
 	// remove values that shouldn't go in the database
-	unset($user_data['password1'], $user_data['password2'], $user_data['MAX_FILE_SIZE'],
+	unset($user_data['password0'],$user_data['password1'], $user_data['password2'], $user_data['MAX_FILE_SIZE'],
 		$user_data['remove_picture'], $user_data['apply_change']);
 
 	// Following RFC2396 (http://www.faqs.org/rfcs/rfc2396.html), a URI uses ':' as a reserved character
@@ -683,7 +721,7 @@ if (!empty($_SESSION['production_uploaded']))
 	$uidReset = true;
 	include (api_get_path(INCLUDE_PATH).'local.inc.php');
 	$_SESSION['profile_update'] = 'success';
-	header("Location: ".api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strstr($_SERVER['QUERY_STRING'],'&fe=1')===false?'&fe=1':''));
+	header("Location: ".api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strstr($_SERVER['QUERY_STRING'],'&fe=1')===false?'&fe=1':'').($wrong_current_password && strstr($_SERVER['QUERY_STRING'],'&cp=1')===false?'&cp=1':''));
 	exit;
 }
 
@@ -731,6 +769,7 @@ if (!empty($file_deleted)) {
 	Display :: display_confirmation_message(get_lang('FileDeleted'),false);
 } elseif (!empty($update_success)) {
 	$message=get_lang('ProfileReg');	
+
 	if ($upload_picture_success == true) {
 		$message.='<br /> '.get_lang('PictureUploaded');
 	}

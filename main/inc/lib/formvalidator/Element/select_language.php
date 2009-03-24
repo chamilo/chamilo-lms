@@ -1,5 +1,5 @@
 <?php
-// $Id: select_language.php 6693 2005-10-26 08:00:18Z bmol $
+// $Id: select_language.php 19251 2009-03-24 21:23:16Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,7 +39,11 @@ class HTML_QuickForm_Select_Language extends HTML_QuickForm_select
 		$this->_values = array();
 		foreach ($languages['name'] as $index => $name)
 		{
-			$this->addOption($name,$languages['folder'][$index]);
+			if($languages['folder'][$index] == api_get_setting('platformLanguage')) {
+				$this->addOption($name,$languages['folder'][$index],array('selected'=>'selected'));	
+			} else {
+				$this->addOption($name,$languages['folder'][$index]);
+			}			
 		}
 	}
 }

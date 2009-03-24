@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 18925 2009-03-10 14:09:33Z ndieschburg $
+<?php // $Id: user_add.php 19251 2009-03-24 21:23:16Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -149,7 +149,7 @@ $status[DRH] = get_lang('Drh');
 $status[SESSIONADMIN] = get_lang('SessionsAdmin');
 
 $form->addElement('select','status',get_lang('Status'),$status,'id="status_select" onchange="display_drh_list()"');
-
+$form->addElement('select_language', 'language', get_lang('Language'));
 //drh list (display only if student)
 $display = $_POST['status'] == STUDENT || !isset($_POST['status']) ? 'block' : 'none';
 $form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
@@ -332,6 +332,7 @@ if( $form->validate())
 		$phone = $user['phone'];
 		$username = $user['username'];
 		$status = intval($user['status']);
+		$language = $user['language'];
 		$picture = $_FILES['picture'];
 		$platform_admin = intval($user['admin']['platform_admin']);
 		$send_mail = intval($user['mail']['send_mail']);
@@ -356,7 +357,7 @@ if( $form->validate())
 		}
 		$active = intval($user['active']);
 	
-		$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active, $hr_dept_id);
+		$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,$language,$phone,$picture_uri,$auth_source,$expiration_date,$active, $hr_dept_id);
 
 		// picture path
 		$picture_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/';		

@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 18712 2009-02-26 21:16:53Z cvargas1 $
+* 	@version $Id: exercise.class.php 19240 2009-03-24 16:52:39Z cvargas1 $
 */
 
 
@@ -937,7 +937,8 @@ class Exercise
 		}
 		
 		// submit
-		$form -> addElement('style_submit_button', 'submitExercise', get_lang('CreateModif'), 'class="save"');
+		isset($_GET['exerciseId'])?$text=get_lang('ModifyExercise'):$text=get_lang('CreateExercise');
+		$form -> addElement('style_submit_button', 'submitExercise', $text, 'class="save"');
 		
 		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');			
 		if($type=='full') {

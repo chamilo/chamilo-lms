@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 18979 2009-03-11 22:43:40Z cfasanando $
+<?php //$Id: agenda.inc.php 19254 2009-03-24 22:18:53Z cvargas1 $
 
 /*
 ==============================================================================
@@ -2977,7 +2977,16 @@ function show_add_form($id = '')
 	<tr>
 		<td colspan="3">
 		<br />
-			<input type="button"  value="<?php echo get_lang('Ok'); ?>" onclick="selectAll(document.getElementById('selected_form'),true)" />
+		<?php
+		if(isset($_GET['id'])) {
+			$class="save";
+			$text=get_lang('ModifyEvent');
+		} else {
+			$class="add";
+			$text=get_lang('AgendaAdd'); 
+		}
+		?>
+		<button class="<?php echo $class; ?>" type="button" name="name" onclick="selectAll(document.getElementById('selected_form'),true)"><?php echo $text; ?></button>
 		</td>
 	</tr>
 </table>

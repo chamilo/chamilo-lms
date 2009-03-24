@@ -1,4 +1,4 @@
-<?php //$Id: work.php 18636 2009-02-23 18:44:54Z yannoo $
+<?php //$Id: work.php 19254 2009-03-24 22:18:53Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 18636 2009-02-23 18:44:54Z yannoo $
+*  	@version $Id: work.php 19254 2009-03-24 22:18:53Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1152,10 +1152,10 @@ if ($is_course_member) {
 		// fix the Ok button when we see the tool in the learn path
 		if ($origin== 'learnpath') {
 			$form->addElement('html', '<div style="margin-left:137px">');		
-			$form->addElement('submit', 'submitWork', get_lang('Ok'));		
+			$form->addElement('style_submit_button','submit', get_lang('SendFile'),'class="save"');		
 			$form->addElement('html', '</div>');
 		} else {
-			$form->addElement('submit', 'submitWork', get_lang('Ok'));
+			$form->addElement('style_submit_button','submit', get_lang('SendFile'),'class="save"');
 		}
 		
 		if (!empty($_POST['submitWork']) || $edit) {
@@ -1228,7 +1228,7 @@ function draw_date_picker($prefix,$default='') {
 		$new_folder_text .= '<div id="msg_error1" style="display:none;color:red"></div>';
 		$new_folder_text .= get_lang('NewDir') . ' ';		
 		$new_folder_text .= '<input type="text" name="new_dir" onfocus="document.getElementById(\'msg_error1\').style.display=\'none\';"/>';
-		$new_folder_text .= '<input type="button" name="create_dir" onClick="validate();" value="' . get_lang('Ok') . '"/>';
+		$new_folder_text .= '<button type="button" name="create_dir" class="add" onClick="validate();" value="' . get_lang('Ok') . '"/>'.get_lang('CreateDirectory').'</button>';
 		//new additional fields inside the "if condition" just to agroup
 		if(true):
 
@@ -1270,7 +1270,7 @@ function draw_date_picker($prefix,$default='') {
 		$new_folder_text .= $addtext;
 		endif;
 		
-		$new_folder_text .= '<input type="button" name="create_dir" onClick="validate();" value="' . get_lang('Ok') . '"/>';
+		$new_folder_text .= '<button type="button" class="add" name="create_dir" onClick="validate();" value="' . get_lang('CreateDirectory') . '"/>' . get_lang('CreateDirectory') . '</button>';
 		
 		$new_folder_text .= '<br /><br /></form>';
 		//show the form

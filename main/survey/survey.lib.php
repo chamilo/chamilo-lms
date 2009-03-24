@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 19045 2009-03-13 23:33:29Z derrj $
+* 	@version $Id: survey.lib.php 19254 2009-03-24 22:18:53Z cvargas1 $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1406,9 +1406,16 @@ class question
 	 */
 	function render_form()
 	{
+		if(isset($_GET['question_id']) and !empty($_GET['question_id'])) {
+			$class="save";
+			$text=get_lang('ModifyQuestionSurvey');
+		} else {
+			$class="add";
+			$text=get_lang('CreateQuestionSurvey'); 
+		}		
 		$this->html .= '	<tr>';
 		$this->html .= '		<td>&nbsp;</td>';
-		$this->html .= '		<td><button class="save"type="submit" name="save_question">'.get_lang('Save').'</button></td>';
+		$this->html .= '		<td><button class="'.$class.'"type="submit" name="save_question">'.$text.'</button></td>';
 		$this->html .= '		<td>&nbsp;</td>';
 		$this->html .= '	</tr>';
 		$this->html .= '</table>';
@@ -3715,7 +3722,7 @@ class SurveyUtil {
 			}
 		}
 		echo '</select><br /><br />';
-		echo '<button class="save" type="submit" name="Submit" value="Submit">'.get_lang('Ok').'</button>';
+		echo '<button class="save" type="submit" name="Submit" value="Submit">'.get_lang('CompareQuestions').'</button>';
 		echo '</form>';
 	
 		// getting all the information of the x axis

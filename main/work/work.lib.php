@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 18636 2009-02-23 18:44:54Z yannoo $
+<?php //$Id: work.lib.php 19254 2009-03-24 22:18:53Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 18636 2009-02-23 18:44:54Z yannoo $
+* 	@version $Id: work.lib.php 19254 2009-03-24 22:18:53Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -455,7 +455,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						$form_folder -> addElement('html','</div>');  		
 				}
 
-				$form_folder -> addElement('submit','submit_edit_dir',get_lang('Ok'));
+				$form_folder -> addElement('style_submit_button','submit',get_lang('ModifyDirectory'),'class="save"');
 
 				if($there_is_a_end_date == true) {
 					$defaults = array_merge($defaults,convert_date_to_array($homework['ends_on'],'ends'));

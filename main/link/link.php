@@ -1,4 +1,4 @@
-<?php // $Id: link.php 18319 2009-02-07 00:03:42Z herodoto $
+<?php // $Id: link.php 19254 2009-03-24 22:18:53Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -294,7 +294,7 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 			"<tr><td align=\"right\" valign=\"top\">".get_lang("Description")." :</td>",
 			"<td><textarea rows=\"3\" cols=\"50\" name=\"description\">",htmlentities($description,ENT_QUOTES,$charset)."</textarea></td></tr>",
 			//"<tr><td></td><td><input type=\"Submit\" name=\"submitCategory\"value=\"".get_lang("Ok")."\"/></td></tr>",
-			"<tr><td></td><td><button class=\"save\" type=\"submit\" name=\"submitCategory\">".get_lang('Save')." </button></td></tr>",
+			"<tr><td></td><td><button class=\"save\" type=\"submit\" name=\"submitCategory\">".get_lang('CreateCategory')." </button></td></tr>",
 			"</table>",
 			"</form>";
 	}

@@ -1,4 +1,4 @@
-<?php // $Id: userInfo.php 18287 2009-02-06 16:23:12Z ndieschburg $
+<?php // $Id: userInfo.php 19254 2009-03-24 22:18:53Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -415,7 +415,7 @@ elseif ($displayMode == "viewMainInfoEdit")
 
 		}
 
-		echo "<td><button class=\"save\" type=\"submit\" name=\"submit\">Ok</button></td>\n", "</tr>", "</table>", "</form>\n";
+		echo "<td><button class=\"save\" type=\"submit\" name=\"submit\">".get_lang('SaveChanges')."</button></td>\n", "</tr>", "</table>", "</form>\n";
 
 		echo "<p>".Display :: encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
 		

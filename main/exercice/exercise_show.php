@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 18840 2009-03-08 22:52:35Z yannoo $
+* 	@version $Id: exercise_show.php 19254 2009-03-24 22:18:53Z cvargas1 $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -1020,7 +1020,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 					
 					if ($origin!='learnpath' && $origin!='student_progress') {
 				?>					
-					 <button type="submit" class="save" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"><?php echo get_lang('Ok'); ?></button>					 
+					 <button type="submit" class="save" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"><?php echo get_lang('CorrectTest'); ?></button>					 
 					 </form>
 				<?php }
 		 	}  		

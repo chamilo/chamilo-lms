@@ -79,9 +79,9 @@ $web_course_path = api_get_path(WEB_COURSE_PATH);
 -----------------------------------------------------------------------------
 */
 if (isset($_course['extLink']) && $_course['extLink']['name'] != "") {
-	echo " / ";
+	echo "<span class=\"extLinkSeparator\"> / </span>";
 	if ($_course['extLink']['url'] != "") {
-		echo "<a href=\"".$_course['extLink']['url']."\" target=\"_top\">";
+		echo "<a class=\"extLink\" href=\"".$_course['extLink']['url']."\" target=\"_top\">";
 		echo $_course['extLink']['name'];
 		echo "</a>";
 	} else {

@@ -20,7 +20,7 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-$language_file = 'gradebook';
+$language_file = array('gradebook','link');
 //$cidReset = true;
 require_once ('../inc/global.inc.php');
 require_once ('lib/be.inc.php');

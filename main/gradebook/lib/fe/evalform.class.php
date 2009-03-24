@@ -294,7 +294,7 @@ class EvalForm extends FormValidator
 		$id_current=isset($this->id)?$this->id :null;
 		$this->addElement('hidden', 'hid_id',$id_current);
 		$this->build_basic_form(1);
-		$this->addElement('submit', null, get_lang('Edit'));
+		$this->addElement('style_submit_button', 'submit', get_lang('Gradebook_edit'),'class="save"');
 	}
 	/**
 	 * Builds a basic form that is used in add and edit

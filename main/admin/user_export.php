@@ -1,5 +1,5 @@
 <?php
-// $Id: user_export.php 18942 2009-03-10 23:42:21Z juliomontoya $
+// $Id: user_export.php 19257 2009-03-24 23:17:44Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -77,7 +77,7 @@ $form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'XML','xml')
 $form->addElement('radio', 'file_type', null, 'CSV','csv');
 $form->addElement('checkbox', 'addcsvheader', get_lang('AddCSVHeader'), get_lang('YesAddCSVHeader'),'1');
 $form->addElement('select', 'course_code', get_lang('OnlyUsersFromCourse'), $courses);
-$form->addElement('submit', 'submit', get_lang('Ok'));
+$form->addElement('style_submit_button', 'submit',get_lang('Ok'),'class="save"');
 $form->setDefaults(array('file_type'=>'csv'));
 
 if ($form->validate())

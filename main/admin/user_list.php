@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 18966 2009-03-11 17:51:22Z iflorespaz $
+<?php // $Id: user_list.php 19257 2009-03-24 23:17:44Z aportugal $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -564,7 +564,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	$active_group[] = $form->createElement('checkbox','keyword_active','',get_lang('Active'));
 	$active_group[] = $form->createElement('checkbox','keyword_inactive','',get_lang('Inactive'));
 	$form->addGroup($active_group,'',get_lang('ActiveAccount'),'<br/>',false);
-	$form->addElement('submit','submit',get_lang('Ok'));
+	$form->addElement('style_submit_button', 'submit',get_lang('SearchUsers'),'class="search"');
 	$defaults['keyword_active'] = 1;
 	$defaults['keyword_inactive'] = 1;
 	$form->setDefaults($defaults);
@@ -657,7 +657,7 @@ else
 	$renderer =& $form->defaultRenderer();
 	$renderer->setElementTemplate('<span>{element}</span> ');
 	$form->addElement('text','keyword',get_lang('keyword'));
-	$form->addElement('submit','submit',get_lang('Search'));
+	$form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="search"');
 	$form->addElement('static','search_advanced_link',null,'<a href="user_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 	echo '<div class="actions">';
 	$form->display();

@@ -1,4 +1,4 @@
-<?php // $Id: user_import.php 19080 2009-03-16 20:18:03Z iflorespaz $
+<?php // $Id: user_import.php 19257 2009-03-24 23:17:44Z aportugal $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -359,7 +359,7 @@ $form->addElement('radio', 'file_type', get_lang('FileType'), 'XML (<a href="exe
 $form->addElement('radio', 'file_type', null, 'CSV (<a href="exemple.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
 $form->addElement('radio', 'sendMail', get_lang('SendMailToUsers'), get_lang('Yes'), 1);
 $form->addElement('radio', 'sendMail', null, get_lang('No'), 0);
-$form->addElement('submit', 'submit', get_lang('Ok'));
+$form->addElement('style_submit_button', 'submit',get_lang('Ok'),'class="save"');
 $defaults['formSent'] = 1;
 $defaults['file_type'] = 'xml';
 $form->setDefaults($defaults);

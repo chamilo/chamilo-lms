@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 19252 2009-03-24 21:38:29Z cfasanando $
+<?php // $Id: user_edit.php 19257 2009-03-24 23:17:44Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -288,7 +288,8 @@ foreach($extra as $id => $field_details)
 
 
 // Submit button
-$form->addElement('submit', 'submit', 'OK');
+$form->addElement('style_submit_button', 'submit',get_lang('ModifyInformation'),'class="save"');
+
 
 // Set default values
 $expiration_date=$user_data['expiration_date'];

@@ -2297,6 +2297,7 @@ button {
     color: black;
     cursor: pointer;
     padding:5px 15px 5px 15px;
+	vertical-align:middle;
 }
 button:hover {
     background-color:#cbcbcb;

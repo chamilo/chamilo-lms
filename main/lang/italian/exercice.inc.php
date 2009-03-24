@@ -84,6 +84,7 @@ $langScore = "Punteggio";
 $langCorrespondsTo = "Corrisponde a";
 $langExpectedChoice = "Scelta corretta";
 $langYourTotalScore = "Il tuo punteggio totale è";
+$ReachedMaxAttemptsAdmin = "Hai superato il numero di tentativi per l\'esercizio. Poiché sei in gestore del corso puoi effettuare ulteriori tentativi, che però non verranno registrati tra i risultati.";
 $Build = "Componi";
 $langEvalSet = "parametri di valutazione";
 $langActive = "attivo";

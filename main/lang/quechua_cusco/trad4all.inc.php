@@ -286,4 +286,6 @@ $ThereIsNotQualifiedLearners = "Mana kanchu yachaqekuna chaninchasqa";
 $ThereIsNotUnqualifiedLearners = "Mana kanchu yachaqekuna mana chaninchasqa";
 $BackToOutbox = "Kutiy k\'uchu lloqsinaman";
 $Invitation = "Mink\'a";
+$TemplatePreview = "Yupimanta ñaupaq qhawariy";
+$NoTemplatePreview = "Ñaupaq qhawariy mana kashanchu";
 ?>

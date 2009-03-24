@@ -115,8 +115,9 @@ function search_courses($needle)
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		$course_list = array();
 		while($course = Database :: fetch_array($rs)) {	
-			$course_list[] = $course['code'];					
-			$return .= '<a href="#" onclick="add_course_to_session(\''.$course['code'].'\',\''.$course['title'].' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
+			$course_list[] = $course['code'];
+			$course_title=str_replace("'","\'",$course_title);					
+			$return .= '<a href="#" onclick="add_course_to_session(\''.$course['code'].'\',\''.$course_title.' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
 		}
 	}
 	$_SESSION['course_list'] = $course_list;

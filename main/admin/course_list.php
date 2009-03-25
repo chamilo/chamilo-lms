@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 18647 2009-02-24 02:29:20Z yannoo $
+<?php // $Id: course_list.php 19261 2009-03-25 00:10:44Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -12,7 +12,7 @@
 */
 
 // name of the language file that needs to be included 
-$language_file = 'admin';
+$language_file = array('admin','courses');
 $cidReset = true;
 require ('../inc/global.inc.php');
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -210,7 +210,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	$form->addElement('radio', 'keyword_unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
 	$form->addElement('radio', 'keyword_unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 	$form->addElement('radio', 'keyword_unsubscribe', null, get_lang('All'), '%');
-	$form->addElement('submit', 'submit', get_lang('Ok'));
+	$form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'),'class="search"');
 	$defaults['keyword_language'] = '%';
 	$defaults['keyword_visibility'] = '%';
 	$defaults['keyword_subscribe'] = '%';
@@ -252,7 +252,7 @@ else
 	$renderer =& $form->defaultRenderer();
 	$renderer->setElementTemplate('<span>{element}</span> ');
 	$form->addElement('text','keyword',get_lang('keyword'));
-	$form->addElement('submit','submit',get_lang('Search'));
+	$form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'),'class="search"');
 	$form->addElement('static','search_advanced_link',null,'<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 	echo '<div style="float:right;">
 			  <a href="'.api_get_path(WEB_CODE_PATH).'admin/course_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddCourse').'</a>									

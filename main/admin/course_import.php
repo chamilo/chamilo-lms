@@ -201,7 +201,7 @@ if (count($errors) != 0)
 <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin:0px;">
 <input type="file" name="import_file"/>
 <input type="hidden" name="formSent" value="1"/>
-<input type="submit" value="<?php echo get_lang('Ok'); ?>"/>
+<button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
 </form>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 

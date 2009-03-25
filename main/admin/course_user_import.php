@@ -187,7 +187,7 @@ $form = new FormValidator('course_user_import');
 $form->addElement('file','import_file', get_lang('ImportFileLocation'));
 $form->addElement('checkbox','subscribe',get_lang('Action'),get_lang('SubscribeUserIfNotAllreadySubscribed'));
 $form->addElement('checkbox','unsubscribe','',get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
-$form->addElement('submit','submit',get_lang('Ok'));
+$form->addElement('style_submit_button', 'submit',get_lang('Import'),'class="save"');
 if ($form->validate()) {
 	$users_courses = parse_csv_data($_FILES['import_file']['tmp_name']);
 	$errors = validate_data($users_courses);

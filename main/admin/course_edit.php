@@ -1,4 +1,4 @@
-<?php // $Id: course_edit.php 18934 2009-03-10 14:45:35Z ndieschburg $
+<?php // $Id: course_edit.php 19261 2009-03-25 00:10:44Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -146,7 +146,7 @@ $form->addElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscrib
 $form->addElement('text','disk_quota',get_lang('CourseQuota'));
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'),'required');
 $form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');
-$form->addElement('button', null, get_lang('Ok'), 'onclick="valide()"');
+$form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),'onclick="valide()"; class="search"');
 // Set some default values
 
 $course_db_name = $course['db_name'];

@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 18668 2009-02-24 19:12:46Z cvargas1 $
+<?php // $Id: course_category.php 19261 2009-03-25 00:10:44Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -181,7 +181,16 @@ if($action == 'add' || $action == 'edit')
 	</tr>
 	<tr>
 	  <td>&nbsp;</td>
-	  <td><input type="submit" value="<?php echo get_lang("Ok"); ?>" /></td>
+	  <?php
+	  	if(isset($_GET['id']) && !empty($_GET['id'])) {
+			$class="save";
+			$text=get_lang('CategoryMod');
+		} else {
+			$class="add";
+			$text=get_lang('AddCategory'); 
+		}
+	  ?>
+	  <td><button type="submit" class="<?php echo $class; ?>" value="<?php echo $text; ?>" ><?php echo $text; ?></button></td>
 	</tr>
 	</table>
 	</form>

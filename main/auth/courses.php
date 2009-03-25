@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 18277 2009-02-06 00:30:06Z ndieschburg $
+<?php // $Id: courses.php 19319 2009-03-25 19:39:56Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -470,7 +470,7 @@ function display_search_courses()
 					'<input type="hidden" name="sec_token" value="'.$stok.'">',
 					"<input type=\"hidden\" name=\"search_course\" value=\"1\" />",
 					"<input type=\"text\" name=\"search_term\" value=\"".(empty($_POST['search_term'])?'':$_POST['search_term'])."\" />",
-					"&nbsp;<button type=\"submit\">",get_lang("_search")," </button>",
+					"&nbsp;<button class=\"search\" type=\"submit\">",get_lang("_search")," </button>",
 					"</form>";
 	if (isset($_POST['search_course']))
 	{
@@ -634,7 +634,7 @@ function display_create_course_category_form()
 	echo "<form name=\"create_course_category\" method=\"post\" action=\"".api_get_self()."?action=sortmycourses\">\n";
 	echo '<input type="hidden" name="sec_token" value="'.$stok.'">';
 	echo "<input type=\"text\" name=\"title_course_category\" />\n";
-	echo "<button type=\"submit\" name=\"create_course_category\">".get_lang('Ok')." </button>\n";
+	echo "<button type=\"submit\" class=\"save\" name=\"create_course_category\">".get_lang('Ok')." </button>\n";
 	echo "</form>\n";
 
 	echo get_lang("ExistingCourseCategories");
@@ -1092,7 +1092,7 @@ function display_change_course_category_form($edit_course)
 	while ($row=Database::fetch_array($result))
 		{$output.="\t\t<option value=\"".$row['id']."\">".$row['title']."</option>";}
 	$output.="\t</select>\n";
-	$output.="\t<button type=\"submit\" name=\"submit_change_course_category\">".get_lang("Ok")." </button>\n";
+	$output.="\t<button class=\"save\" type=\"submit\" name=\"submit_change_course_category\">".get_lang("Ok")." </button>\n";
 	$output.="</form>";
 	return $output;
 }

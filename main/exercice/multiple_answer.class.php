@@ -147,8 +147,8 @@ class MultipleAnswer extends Question {
 		
 		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
 
-		$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'));
-		$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'));
+		$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="save"');
+		$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="save"');
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}','moreAnswers');
 		$form -> addElement ('html', '</div></div>');

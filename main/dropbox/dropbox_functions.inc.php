@@ -617,7 +617,7 @@ function display_add_form()
 	echo "</select>",
 		"</td></tr>",
 		"<tr><td></td>",
-		"<td><button type=\"Submit\" name=\"submitWork\">".dropbox_lang("upload", "noDLTT")." </button>",
+		"<td><button type=\"Submit\" class=\"save\" name=\"submitWork\">".dropbox_lang("upload", "noDLTT")." </button>",
 		"</td></tr>",
 		"</table>",
 		"</form>";

@@ -1,4 +1,4 @@
-<?php // $Id: system_announcements.php 18496 2009-02-13 19:26:51Z herodoto $
+<?php // $Id: system_announcements.php 19316 2009-03-25 19:23:49Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,6 +48,7 @@ require_once (api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
+$_SESSION['this_section']=$this_section;
 
 // Access restrictions
 api_protect_admin_script(true);

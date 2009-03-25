@@ -13,7 +13,6 @@ $langAllLinksDel = "Hapus semua link pada kategori ini ";
 $langCategoryName = "Nama Kategori";
 $langCategoryAdd = "Tambah kategori";
 $langCategoryAdded = "Kategori telah ditambahkan";
-$langCategoryMod = "Ubah kategori";
 $langCategoryModded = "Kategori telah diubah";
 $langCategoryDel = "Hapus kategori";
 $langCategoryDeleted = "Kategori dan semua linknya telah dihapus";

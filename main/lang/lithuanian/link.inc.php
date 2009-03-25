@@ -14,7 +14,6 @@ $langAllLinksDel = "Ištrinti visas nuorodas kategorijoje ";
 $langCategoryName = "Kategorijos pavadinimas";
 $langCategoryAdd = "Pridėti kategoriją";
 $langCategoryAdded = "Kategorija pridėta.";
-$langCategoryMod = "Redaguoti kategoriją";
 $langCategoryModded = "Kategorija modifikuota.";
 $langCategoryDel = "Ištrinti kategoriją";
 $langCategoryDeleted = "Kategorija su visomis nuorodomis ištrinta.";

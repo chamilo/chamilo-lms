@@ -14,7 +14,6 @@ $langAllLinksDel = "Usuni&#281;cie ca&#322;ej listy odno&#347;ników w kategorii"
 $langCategoryName = "Nazwa kategorii";
 $langCategoryAdd = "Dodaj kategori&#281;";
 $langCategoryAdded = "Kategoria zosta&#322;a dodana";
-$langCategoryMod = "Modyfikuj kategori&#281;";
 $langCategoryModded = "Kategoria zosta&#322;a zmodyfikowana";
 $langCategoryDel = "Usuwanie kategorii";
 $langCategoryDeleted = "Kategoria i wszystkie odno&#347;niki zosta&#322;y usuni&#281;te";

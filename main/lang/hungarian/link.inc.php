@@ -14,7 +14,6 @@ $langAllLinksDel = "Az összes hivatkozás törlése ebben a kategóriában ";
 $langCategoryName = "Kategória neve";
 $langCategoryAdd = "Kategória hozzáadása";
 $langCategoryAdded = "A kategória hozzá lett adva";
-$langCategoryMod = "Kategória módosítása";
 $langCategoryModded = "A kategória módosítva lett";
 $langCategoryDel = "Kategória törlése";
 $langCategoryDeleted = "A kategória törölve lett";

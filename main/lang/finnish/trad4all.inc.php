@@ -33,6 +33,7 @@ $TheListIsEmpty = "Lista on tyhjä";
 $langCourseCreate = "Luo kurssin sivusto";
 $langTodo = "To do";
 $UserName = "Käyttäjä";
+$langCategoryMod = "Muokkaa aihealuetta";
 $Hide = "Piilota";
 $langArchive = "arkisto";
 $langCourseCode = "Kurssikoodi";

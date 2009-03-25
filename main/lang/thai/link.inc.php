@@ -13,7 +13,6 @@ $langAllLinksDel = "ลบการเชื่อมโยงในประเภทนี้ทั้งหมด";
 $langCategoryName = "ชือประเภท";
 $langCategoryAdd = "เพิ่มประเภท";
 $langCategoryAdded = "เพิ่มประเภทแล้ว";
-$langCategoryMod = "แก้ไขประเภท";
 $langCategoryModded = "ได้แก้ไขประเภทแล้ว";
 $langCategoryDel = "ลบประเภท";
 $langCategoryDeleted = "รายการเชื่อมโยงในประเภททั้งหมดถูกลบแล้ว";

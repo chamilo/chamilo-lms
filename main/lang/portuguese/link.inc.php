@@ -14,7 +14,6 @@ $langAllLinksDel = "Apagar todas as ligações desta categoria";
 $langCategoryName = "Nome da categoria";
 $langCategoryAdd = "Acrescentar categoria";
 $langCategoryAdded = "A categoria foi acrescentada";
-$langCategoryMod = "Alterar categoria";
 $langCategoryModded = "A categoria foi alterada";
 $langCategoryDel = "Apagar categoria";
 $langCategoryDeleted = "A categoria e respectivas ligações foram apagadas";

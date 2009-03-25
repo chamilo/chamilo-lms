@@ -13,7 +13,6 @@ $langAllLinksDel = "Forigi &#265;iujn ligilojn en &#265;i-kategorio ";
 $langCategoryName = "Kategoria nomo ";
 $langCategoryAdd = "Aldoni kategorion ";
 $langCategoryAdded = "Kategorio estas aldonita ";
-$langCategoryMod = "&#348;an&#285;i kategorion ";
 $langCategoryModded = "Kategorio estas &#349;an&#285;ita ";
 $langCategoryDel = "Forigi kategorion ";
 $langCategoryDeleted = "Kategorio kaj akompanantaj ligiloj estas forigitaj ";

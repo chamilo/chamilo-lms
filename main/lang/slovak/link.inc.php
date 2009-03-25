@@ -14,7 +14,6 @@ $langAllLinksDel = "Zmaza&#357; všetky odkazy v tejto kategórii";
 $langCategoryName = "Názov kategórie";
 $langCategoryAdd = "Prida&#357; kategóriu";
 $langCategoryAdded = "Kategória bola pridaná.";
-$langCategoryMod = "Zmeni&#357; kategóriu";
 $langCategoryModded = "Kategória bola zmenená.";
 $langCategoryDel = "Zmaza&#357; kategóriu";
 $langCategoryDeleted = "Kategória a všetky jej odkazy boli zmazané.";

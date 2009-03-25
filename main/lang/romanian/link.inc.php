@@ -13,7 +13,6 @@ $langAllLinksDel = "Sterge toate linkurile din aceasta categorie";
 $langCategoryName = "Numele categoriei";
 $langCategoryAdd = "Adauga o categorie";
 $langCategoryAdded = "Categoria a fost adaugata";
-$langCategoryMod = "Modifica categoria";
 $langCategoryModded = "Categoria a fost modificata.";
 $langCategoryDel = "Sterge categoria";
 $langCategoryDeleted = "Categoria si toate linkurile ei au fost sterse.";

@@ -13,7 +13,6 @@ $langAllLinksDel = "Διαγραφή όλων συνδέσμων αυτής της κατηγορίας";
 $langCategoryName = "Όνομα κατηγορίας";
 $langCategoryAdd = "Προσθήκη κατηγορίας";
 $langCategoryAdded = "Η κατηγορία προστέθηκε";
-$langCategoryMod = "Τροποποίηση κατηγορίας";
 $langCategoryModded = "Η κατηγορία τροποποιήθηκε";
 $langCategoryDel = "Διαγραφή κατηγορίας";
 $langCategoryDeleted = "Η κατηγορία και όλοι οι σύνδεσμοι της διαγράφτηκαν";

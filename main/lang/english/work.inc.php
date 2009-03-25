@@ -26,7 +26,7 @@ $langNameDir = "Rename directory";
 $langFileExists = "File already exists";
 $CreateDirectory = "Create directory";
 $langCurrentDir = "current folder";
-$UploadADocument = "Upload a document";
+$UploadADocument = "Upload media";
 $EditToolOptions = "Edit Tool Options";
 $DocumentDeleted = "Document deleted";
 $SendMailBody = "A user posted a document in the assignments tool of your course.";
@@ -58,4 +58,5 @@ $ExpiryDateAlreadyPassed = "Expiry date already passed";
 $EndDateAlreadyPassed = "End date already passed";
 $MoveXTo = "Move %s to";
 $QualificationMustNotBeMoreThanQualificationOver = "The qualification must not be more than qualification max";
+$ModifyDirectory = "Modify directory";
 ?>

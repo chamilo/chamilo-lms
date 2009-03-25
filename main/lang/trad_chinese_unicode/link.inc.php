@@ -14,7 +14,6 @@ $langAllLinksDel = "刪除這個分類中的所有鏈接";
 $langCategoryName = "分類名稱";
 $langCategoryAdd = "添加分類";
 $langCategoryAdded = "分類已添加。";
-$langCategoryMod = "修改分類";
 $langCategoryModded = "分類已修改。";
 $langCategoryDel = "刪除分類";
 $langCategoryDeleted = "分類及其中所有鏈接都已被刪除。";

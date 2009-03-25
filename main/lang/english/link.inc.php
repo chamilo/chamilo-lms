@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$CreateCategory = "Create category";
 $LinkMoved = "The link has been moved";
 $langLinkName = "Link name";
 $langLinkAdd = "Add a link";
@@ -15,7 +14,6 @@ $langAllLinksDel = "Delete all links in this category ";
 $langCategoryName = "Category name";
 $langCategoryAdd = "Add a category";
 $langCategoryAdded = "The category has been added.";
-$langCategoryMod = "Edit Category";
 $langCategoryModded = "The category has been modified.";
 $langCategoryDel = "Delete category";
 $langCategoryDeleted = "The category and all its links have been deleted.";

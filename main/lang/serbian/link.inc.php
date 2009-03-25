@@ -13,7 +13,6 @@ $langAllLinksDel = "Obriši sve linkove iz ove kategorije";
 $langCategoryName = "Ime kategorije";
 $langCategoryAdd = "Dodaj kategoriju";
 $langCategoryAdded = "Kategorija je dodata.";
-$langCategoryMod = "Modifikuj kategoriju";
 $langCategoryModded = "Kategorija je modifikovana.";
 $langCategoryDel = "Obriši kategoriju";
 $langCategoryDeleted = "Kategorija i svi njeni linkovi su obrisani. ";

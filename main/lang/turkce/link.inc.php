@@ -13,7 +13,6 @@ $langAllLinksDel = "Bu kategorideki bütün ba&#287;lant&#305;lar&#305; sil";
 $langCategoryName = "Kategori ismi";
 $langCategoryAdd = "Kategori ekle";
 $langCategoryAdded = "Kategori eklendi.";
-$langCategoryMod = "Kategori düzenle";
 $langCategoryModded = "Kategori düzenlendi.";
 $langCategoryDel = "Kategori sil";
 $langCategoryDeleted = "Bu kategori ve içindeki ba&#287;lant&#305;lar&#305;n hepsi silindi.";

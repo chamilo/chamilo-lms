@@ -14,7 +14,6 @@ $langAllLinksDel = "Radera alla länkar i denna kategori";
 $langCategoryName = "Kategori namn";
 $langCategoryAdd = "Lägg till kategori";
 $langCategoryAdded = "Kategorin har lagts till.";
-$langCategoryMod = "Modifiera kategori";
 $langCategoryModded = "Kategorin har ändrats.";
 $langCategoryDel = "Radera kategori";
 $langCategoryDeleted = "Kategorin och alla länkar har blivit raderade.";

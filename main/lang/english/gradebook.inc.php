@@ -1,9 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$ModifyEvaluation = "Gradebook edit";
+$ModifyEvaluation = "Save evaluation";
 $CreateLink = "Create link";
-$FlatView = "Flat view";
+$FlatView = "List view";
 $ScoreEdit = "Score rules editing";
 $ScoreColor = "Score color";
 $ScoringSystem = "Scoring system";
@@ -39,7 +39,7 @@ $DokeosStudentPublications = "Assignments";
 $DokeosLearningPaths = "Courses";
 $ChooseExercise = "Choose exercise";
 $AddResult = "Add results";
-$BackToOverview = "Back to overview";
+$BackToOverview = "Back to folder view";
 $ExportPDF = "Export to PDF";
 $Print = "Print";
 $ChooseOrientation = "Choose orientation";

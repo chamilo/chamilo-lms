@@ -221,4 +221,6 @@ $ShowAndQualifyAttempt = "Mostra e valuta il tentativo";
 $langAddEdit = "Aggiungi / Modifica";
 $ModifyPrerequisities = "Modifica i prerequisiti";
 $CreateLearningPath = "Crea il modulo didattico";
+$AddExercise = "Aggiungi quesito";
+$AddForum = "Aggiungi forum";
 ?>

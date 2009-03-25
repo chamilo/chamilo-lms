@@ -14,7 +14,6 @@ $langAllLinksDel = "Alle links in deze categorie verwijderen";
 $langCategoryName = "Naam categorie";
 $langCategoryAdd = "Categorie toevoegen";
 $langCategoryAdded = "Categorie is toegevoegd.";
-$langCategoryMod = "Categorie wijzigen";
 $langCategoryModded = "Categorie is gewijzigd.";
 $langCategoryDel = "Categorie verwijderen";
 $langCategoryDeleted = "Categorie en bijhorende links zijn verwijderd.";

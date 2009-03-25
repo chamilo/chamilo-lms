@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$PublishSurvey = "Pubblica il questionario";
+$CompareQuestions = "Confronta le risposte";
 $SurveyTitle = "Titolo del questionario";
 $SurveyIntroduction = "Testo introduttivo al questionario";
 $CreateNewSurvey = "Crea un questionario";
@@ -207,4 +209,7 @@ $AutoInviteLink = "Questo collegamento permette a utenti senza invito di acceder
 $CompleteTheSurveysQuestions = "Completa i quesiti del questionario";
 $SurveysDeleted = "Questionari eliminati";
 $RemindUnanswered = "Sollecita solo chi non ha risposto";
+$ModifySurvey = "Modifica questionario";
+$CreateQuestionSurvey = "Crea item";
+$ModifyQuestionSurvey = "Modifica item";
 ?>

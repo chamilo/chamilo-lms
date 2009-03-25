@@ -14,7 +14,6 @@ $langAllLinksDel = "Poista kaikki linkit t‰st‰ aihealueesta";
 $langCategoryName = "Aihealueen nimi";
 $langCategoryAdd = "Lis‰‰ aihealue";
 $langCategoryAdded = "Aihealue on lis‰tty";
-$langCategoryMod = "Muokkaa aihealuetta";
 $langCategoryModded = "Aihealue on muokattu.";
 $langCategoryDel = "Poista aihealue";
 $langCategoryDeleted = "Aihealue ja kaikki siell‰ olleet linkit on poistettu";

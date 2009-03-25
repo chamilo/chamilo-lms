@@ -29,6 +29,7 @@ $Down = "Urayachiy";
 $Up = "Wichachiy";
 $Theme = "Imamanta";
 $TheListIsEmpty = "Yupaychasqaqa chinmi kashan";
+$CreateCategory = "Kamay mitata";
 $langCourseCreate = "Kamay huj yachachinata";
 $langTodo = "Ima rimariykuna";
 $UserName = "Haykuqmasi";

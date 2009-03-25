@@ -14,7 +14,6 @@ $langAllLinksDel = "Eliminar tots els enllaços d\'aquesta categoria";
 $langCategoryName = "Nom de la categoria";
 $langCategoryAdd = "Afegir una categoria";
 $langCategoryAdded = "La categoria ha estat afegida";
-$langCategoryMod = "Modificar categoria";
 $langCategoryModded = "La categoria ha estat modificada";
 $langCategoryDel = "Eliminar categoria";
 $langCategoryDeleted = "S\'ha eliminat la categoria i tots els seus enllaços";

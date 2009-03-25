@@ -24,7 +24,7 @@ $langMustBeRegisteredUser = "Sólo los usuarios inscritos en este curso pueden en
 $langListDel = "Eliminar lista";
 $langNameDir = "Renombrar carpeta";
 $langFileExists = "El archivo ya existe";
-$CreateDirectory = "Crear carpeta";
+$CreateDirectory = "Crear directorio";
 $langCurrentDir = "carpeta actual";
 $UploadADocument = "Enviar un documento";
 $EditToolOptions = "Modificar las opciones";
@@ -58,4 +58,5 @@ $ExpiryDateAlreadyPassed = "Fecha de vencimiento ya ha pasado";
 $EndDateAlreadyPassed = "Fecha final ya ha pasado";
 $MoveXTo = "Mover %s A";
 $QualificationMustNotBeMoreThanQualificationOver = "La calificación no puede ser superior a la calificacion máxima";
+$ModifyDirectory = "Modificar directorio";
 ?>

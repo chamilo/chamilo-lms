@@ -14,7 +14,6 @@ $langAllLinksDel = "Esborrar tolos enllaces d\'esta categoría";
 $langCategoryName = "Nome de la categoría";
 $langCategoryAdd = "Amestar categoría";
 $langCategoryAdded = "Amestóse la categoría";
-$langCategoryMod = "Modificar categoría";
 $langCategoryModded = "Modificóse la categoría";
 $langCategoryDel = "Esborrar categoría";
 $langCategoryDeleted = "Esborróse la categoría y tolos enllaces";

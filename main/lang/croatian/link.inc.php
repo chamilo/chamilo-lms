@@ -14,7 +14,6 @@ $langAllLinksDel = "Izbriši sve poveznice u kategoriji";
 $langCategoryName = "Naziv kategorije";
 $langCategoryAdd = "Dodaj kategoriju";
 $langCategoryAdded = "Kategorija dodana.";
-$langCategoryMod = "Izmijeni kategoriju";
 $langCategoryModded = "Kategorija izmijenjena.";
 $langCategoryDel = "Izbriši kategoriju";
 $langCategoryDeleted = "Kategorija i sve pridružene poveznice su izbrisane.";

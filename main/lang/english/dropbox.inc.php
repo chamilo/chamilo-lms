@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $dropbox_lang["help"]  = "Help";
-$dropbox_lang["aliensNotAllowed"]  = "Only course members can use the documents sharing tool. You are not a member of this course.";
+$dropbox_lang["aliensNotAllowed"]  = "Only course members can use the dropbox tool. You are not a member of this course.";
 $dropbox_lang["dropbox"]  = "Documents sharing";
 $dropbox_lang["queryError"]  = "Error in database query. Please contact your system administrator.";
 $dropbox_lang["generalError"]  = "An error has occured. Please contact your system administrator.";
@@ -12,7 +12,7 @@ $dropbox_lang["noFileSpecified"]  = "You didn\'t specify a file to upload.";
 $dropbox_lang["tooBig"]  = "You didn\'t choose a file or the file is too big.";
 $dropbox_lang["uploadError"]  = "Error uploading file. Please contact your system administrator.";
 $dropbox_lang["errorCreatingDir"]  = "Can\'t create the directory. Please contact your system administrator.";
-$dropbox_lang["installError"]  = "Can\'t install the necessary tables for the documents sharing tool. Please contact your system administrator.";
+$dropbox_lang["installError"]  = "Can\'t install the necessary tables for the dropbox tool. Please contact your system administrator.";
 $dropbox_lang["uploadFile"]  = "Upload document";
 $dropbox_lang["authors"]  = "Authors";
 $dropbox_lang["description"]  = "Remarks";
@@ -39,7 +39,7 @@ $dropbox_lang["author"]  = "author";
 $dropbox_lang["sender"]  = "sender";
 $dropbox_lang["recipient"]  = "recipient";
 $dropbox_lang["docAdd"]  = "Document has been added successfully";
-$dropbox_lang["fileDeleted"]  = "The selected file has been removed from your documents sharing space.";
+$dropbox_lang["fileDeleted"]  = "The selected file has been removed from your dropbox.";
 $dropbox_lang["mailingAsUsername"]  = "Mailing";
 $dropbox_lang["mailingInSelect"]  = "---Mailing---";
 $dropbox_lang["mailingSelectNoOther"]  = "Mailing cannot be combined with other recipients";

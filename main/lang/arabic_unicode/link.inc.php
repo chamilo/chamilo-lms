@@ -14,7 +14,6 @@ $langAllLinksDel = "حذف جميع الروابط في هذا التصنيف  "
 $langCategoryName = "اسم التصنيف ";
 $langCategoryAdd = "أضف تصنيف";
 $langCategoryAdded = "لقد تم إضافة التصنيف بنجاح ";
-$langCategoryMod = "تعديل التصنيف ";
 $langCategoryModded = "لقد تم تعديل التصنيف بنجاح ";
 $langCategoryDel = "حذف التصنيف ";
 $langCategoryDeleted = "لقد تم حذف التصنيف مع جميع روابطه ";

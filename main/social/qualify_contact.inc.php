@@ -42,7 +42,7 @@ $user_friend_relation=UserFriend::get_relation_between_contacts(api_get_user_id(
 <input type="hidden"  name="user_cod_qualify" id="user_cod_qualify" value="<?php echo $user_friend; ?>"/>
 <table width="600" border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td class="actions"><?php echo mb_convert_encoding(get_lang('SocialAttachUserInformation'),'UTF-8',$charset);?></td>
+<td class="actions"><?php echo mb_convert_encoding(get_lang('ChangeContactGroup'),'UTF-8',$charset);?></td>
 </tr>
 <tr>
 <td>

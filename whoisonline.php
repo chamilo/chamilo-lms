@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 19143 2009-03-19 12:30:45Z iflorespaz $
+<?php // $Id: whoisonline.php 19333 2009-03-25 22:20:36Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -181,7 +181,7 @@ function display_user_list($user_list, $_plugins)
 			*/
 			$table_data[] = $table_row;
 		}
-		$table_header[] = array(get_lang('UserPicture'),true,'width="50"');
+		$table_header[] = array(get_lang('UserPicture'),false,'width="80"');
 		$table_header[] = array(get_lang('FirstName'),true);
 		$table_header[] = array(get_lang('LastName'),true);
 		
@@ -190,7 +190,7 @@ function display_user_list($user_list, $_plugins)
 		}
 		$user_anonymous=api_get_anonymous_id();
 		if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) {
-			$table_header[] = array(get_lang('Friends'),true,'width="100"');
+			$table_header[] = array(get_lang('Friends'),false,'width="100"');
 		}		
 		/*this feature is deprecated
 		if ( api_get_setting('allow_message_tool')=='true' && isset($_SESSION['_user'])) {
@@ -252,7 +252,13 @@ function display_individual_user($user_id)
 			$big_image_width= $big_image_size[0];
 			$big_image_height= $big_image_size[1];
 			$url_big_image = $big_image.'?rnd='.time();						
-			echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';						
+			echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';
+			global $user_anonymous;
+			if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) { 
+				echo '<br />';
+				echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$safe_user_id.'">'.get_lang('ViewSharedProfile').'</a>';	
+				echo '<br />';
+			}									
 		} else {			
 			echo Display::return_icon('unknown.jpg',get_lang('Unknown'));
 			echo '<br />';

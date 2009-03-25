@@ -528,10 +528,11 @@ unset($sessionUsersList);
 		<br />
 		<?php
 		if(isset($_GET['add'])) {
-			echo '<input type="button" value="'.get_lang("FinishSessionCreation").'" onclick="valide()" />';
+			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('FinishSessionCreation').'</button>';
         } else {
             //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
-			echo '<input type="button" value="'.get_lang('Ok').'" onclick="valide()" />';
+			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>'; 
+			
         }
 		?>
 	</td>

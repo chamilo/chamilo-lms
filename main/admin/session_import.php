@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 18942 2009-03-10 23:42:21Z juliomontoya $
+<?php // $Id: session_import.php 19263 2009-03-25 00:15:16Z aportugal $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -720,7 +720,9 @@ if(!empty($errorMsg)) {
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"></td>
+  <td>
+  <button class="save" type="submit" name="name" value="<?php echo get_lang('ImportSession') ?>"><?php echo get_lang('ImportSession') ?></button>
+  </td>
 </tr>
 </table>
 </form>

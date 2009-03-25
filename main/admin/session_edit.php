@@ -303,7 +303,10 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"></td>
+  <td>
+<button class="save" type="submit" name="name" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>
+  
+  </td>
 </tr>
 
 </table>

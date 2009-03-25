@@ -60,7 +60,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$active_group[] = $form->createElement('checkbox','inactive','',get_lang('Inactive'));
 	$form->addGroup($active_group,'',get_lang('ActiveSession'),'<br/>',false);
 	
-	$form->addElement('submit','submit',get_lang('Ok'));
+	$form->addElement('style_submit_button', 'submit',get_lang('SearchUsers'),'class="search"');
 	$defaults['active'] = 1;
 	$defaults['inactive'] = 1;
 	$form->setDefaults($defaults);
@@ -138,7 +138,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	?>  
 	<form method="POST" action="session_list.php">
 		<input type="text" name="keyword" value="<?php echo Security::remove_XSS($_GET['keyword']); ?>"/>
-		<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
+		<button class="search" type="submit" name="name" value="<?php echo get_lang('Search') ?>"><?php echo get_lang('Search') ?></button>
 		<a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a>
 		</form>
 	<form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">	
@@ -268,7 +268,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		<select name="action">
 		<option value="delete"><?php echo get_lang('DeleteSelectedSessions'); ?></option>
 		</select>
-		<input type="submit" value="<?php echo get_lang('Ok'); ?>">
+		<button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
 		<?php } ?>
 	</table>
 	

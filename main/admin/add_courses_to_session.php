@@ -389,11 +389,11 @@ unset($nosessionCourses);
 	<?php
 	if(isset($_GET['add']))
 	{
-		echo '<input type="button" value="'.get_lang('NextStep').'" onclick="valide()" />';
+		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
 	}
 	else
 	{
-		echo '<input type="button" value="'.get_lang('Ok').'" onclick="valide()" />';
+		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeCoursesToSession').'</button>';
 	}
 	?>
   </td>

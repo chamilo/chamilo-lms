@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18311 2009-02-06 22:41:30Z herodoto $
+<?php // $Id: index.php 19325 2009-03-25 20:54:39Z aportugal $
 
 /*
 ==============================================================================
@@ -87,13 +87,15 @@ $nameTools = get_lang(TOOL_COURSE_DESCRIPTION);
 -----------------------------------------------------------
 */
 
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
+
 
 Display::display_introduction_section(TOOL_COURSE_DESCRIPTION);
 
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '300';
+$fck_attribute['ToolbarSet'] = 'CourseDescription';
 
 $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 $show_description_list = true;
@@ -168,11 +170,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 	
 			} else {
 				$current_title = $default_description_titles[$description_id];				
-			}
-		
-			$fck_attribute['Width'] = '100%';
-			$fck_attribute['Height'] = '225';		
-			$fck_attribute['ToolbarSet'] = 'CourseDescription';		
+			}	
 
 		} else {
 			$sql = "SELECT MAX(id) as MAX FROM $tbl_course_description ";
@@ -183,20 +181,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 					$description_id=8;
 			} 			
 		}
-		echo '
-		<style>
-		.row{
-			width:100%;
-		}
-		div.row div.label {
-			width: 60px;
-		}
-		
-		div.row div.formw {
-			width: 100%;
-		}
-		</style>';
-		
+		//Se borro: echo ' <style> .row{} <\style> por que hacia conflicto en apartado personalizado con los estilos propios del formvalidator 		
 		// Build the form
 		$form = new FormValidator('course_description','POST','index.php','','style="width: 100%;"');
 		$form->addElement('hidden', 'description_id');
@@ -209,13 +194,13 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 			$form->addElement('hidden', 'add','1');	
 		}		
 			
-		if (($description_id >= ADD_BLOCK) || $default_description_title_editable[$description_id] || $_GET['action']=='add' || $_POST['add']=='1') {
-			$form->add_textfield('title', get_lang('Title'), true, array('style'=>'width: 350px;'));
+		if (($description_id >= ADD_BLOCK) || $default_description_title_editable[$description_id] || $_GET['action']=='add' || $_POST['add']=='1') {			
+			$form->add_textfield('title', get_lang('Title'), true, array('size'=>'width: 350px;'));
 		}
 		
 		if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 			WCAG_rendering::prepare_admin_form($description_content, $form);
-		} else {
+		} else {			
 			$form->add_html_editor('contentDescription', get_lang('Content'));
 		}
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');

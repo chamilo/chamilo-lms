@@ -169,7 +169,7 @@ class EvalForm extends FormValidator
 			$renderer->setElementTemplate($elementTemplateTwoLabel,'score[' . $result->get_id() . ']');
 		}
 		$this->setDefaults($defaults);
-		$this->addElement('submit', null, get_lang('Ok'));
+		$this->addElement('style_submit_button', 'submit',get_lang('Ok'),'class="save"');
 	}
 	/**
 	 * This function builds a form to move an item to another category
@@ -188,7 +188,7 @@ class EvalForm extends FormValidator
 			$select->addoption($line . ' ' . $cat[1], $cat[0]);
 			$line= '';
 		}
-		$this->addElement('submit', null, get_lang('Ok'));
+		$this->addElement('style_submit_button' , 'submit', get_lang('Ok'),'class="save"');
 	}
 	/**
 	 * Builds a result form containing inputs for all students with a given course_code
@@ -232,7 +232,7 @@ class EvalForm extends FormValidator
 		}
 		$this->addElement('hidden', 'nr_users', $nr_users);
 		$this->addElement('hidden', 'evaluation_id', $this->result_object->get_evaluation_id());
-		$this->addElement('submit', null, get_lang('Ok'));
+		$this->addElement('style_submit_button', 'submit', get_lang('Ok'),'class="save"');
 	}
 	/**
 	 * Builds a form to edit a result
@@ -257,7 +257,7 @@ class EvalForm extends FormValidator
 			'maxlength' => '4',
 			'disabled' => 'disabled'
 		));
-		$this->addElement('submit', null, get_lang('Edit'));
+		$this->addElement('style_submit_button', 'submit', get_lang('Edit'),'class="save"');
 		$this->addElement('hidden', 'minvalue', 0);
 		$this->addElement('hidden', 'hid_user_id', $this->result_object->get_user_id());
 		$this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());

@@ -69,7 +69,7 @@ if(api_get_setting('search_enabled')=='true')
 		$form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
 	}
 }
-$form->addElement('submit', 'submit', get_lang('Send'));
+$form->addElement('style_submit_button','submit', get_lang('Send'),'class="save"');
 
 $form->addElement('html', '<br><br><br>');
 /*$list = get_zip_files_in_garbage();

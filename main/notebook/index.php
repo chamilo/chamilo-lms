@@ -87,7 +87,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 	// settting the form elements	
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'100'));
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
-	$form->addElement('style_submit_button', 'SubmitNote', get_lang('Save'), 'class="save"');	
+	$form->addElement('style_submit_button', 'SubmitNote', get_lang('AddNote'), 'class="add"');	
 	
 	// setting the rules
 	$form->addRule('note_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
@@ -126,7 +126,7 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 	$form->addElement('hidden', 'notebook_id');
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'100'));
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
-	$form->addElement('style_submit_button', 'SubmitNote', get_lang('Save'), 'class="save"');	
+	$form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyNote'), 'class="save"');	
 	
 	// setting the defaults
 	$defaults = get_note_information(Security::remove_XSS($_GET['notebook_id']));

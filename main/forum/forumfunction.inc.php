@@ -1901,8 +1901,19 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$userid  =api_get_user_id();
 	$info    =api_get_user_info($userid);
 	$courseid=api_get_course_id();		
+	
+	if ($_GET['action']=='quote'){
+		$class='save';
+		$text=get_lang('QuoteMessage');
+	}elseif ($_GET['action']=='replymessage'){
+		$class='save';
+		$text=get_lang('ReplyToThread');		
+	}else {
+		$class='add';
+		$text=get_lang('CreateThread');		
+	}
 		
-	$form->addElement('style_submit_button', 'SubmitPost', get_lang('CreateThread'), 'class="add"');	
+	$form->addElement('style_submit_button', 'SubmitPost', $text, 'class="'.$class.'"');	
 	$form->add_real_progress_bar('DocumentUpload','user_upload');
 
 	if ( !empty($form_values) ) {

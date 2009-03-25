@@ -131,4 +131,8 @@ $YouMustAssignWeightOfQualification = "Devi indicare un peso per la valutazione"
 $DeleteAttachmentFile = "Elimina l\'allegato";
 $EditAnAttachment = "Modifica l\'allegato";
 $SeeForum = "Vedi il forum";
+$CreateForum = "Crea un forum";
+$ModifyForum = "Modifica il forum";
+$CreateThread = "Crea un argomento";
+$ModifyThread = "Modifica l\'argomento";
 ?>

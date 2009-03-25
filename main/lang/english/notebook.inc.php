@@ -21,4 +21,6 @@ $NoteTitle = "Note title";
 $NoteComment = "Note details";
 $NoteAdded = "Note added";
 $NoteConfirmDelete = "Are you sure you want to delete this note";
+$AddNote = "Add note";
+$ModifyNote = "Modify note";
 ?>

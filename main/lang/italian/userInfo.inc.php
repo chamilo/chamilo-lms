@@ -75,4 +75,5 @@ $SocialUserInformationAttach = "Prima di spedire un messaggio devi scriverlo";
 $MessageInvitationNotSent = "Il tuo messaggio d\'invito non è stato spedito";
 $SocialAddToFriends = "Aggiungi ai contatti";
 $UserNonRegisteredAtTheCourse = "Utente non iscritto al corso";
+$ChangeContactGroup = "Cambia di gruppo";
 ?>

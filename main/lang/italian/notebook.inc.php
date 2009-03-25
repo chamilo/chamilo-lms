@@ -21,4 +21,6 @@ $NoteTitle = "Titolo dell\'appunto";
 $NoteComment = "Commenti all\'appunto";
 $NoteAdded = "Appunto aggiunto";
 $NoteConfirmDelete = "Vuoi veramente eliminare l\'appunto?";
+$AddNote = "Aggiungi appunto";
+$ModifyNote = "Modifica appunto";
 ?>

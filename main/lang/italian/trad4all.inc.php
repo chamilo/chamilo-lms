@@ -705,4 +705,5 @@ $Invitation = "Invito";
 $SeeMoreOptions = "Altre opzioni";
 $TemplatePreview = "Anteprima modello";
 $NoTemplatePreview = "Anteprima non disponibile";
+$ModifyCategory = "Modifica la categoria";
 ?>

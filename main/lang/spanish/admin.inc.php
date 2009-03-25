@@ -946,4 +946,5 @@ $FileImportedJustUsersThatAreNotRegistered = "Se importó solo los usuarios que n
 $YouMustImportAFileAccordingToSelectedOption = "Debe importar un archivo de acuerdo a la opción seleccionada";
 $ShowEmailOfTeacherOrTutorTitle = "Correo electrónico del profesor o tutor en el pie";
 $ShowEmailOfTeacherOrTutorComent = "¿ Mostrar el correo electrónico del profesor o tutor en el pie de página ?";
+$Created = "Creado";
 ?>

@@ -946,4 +946,5 @@ $FileImportedJustUsersThatAreNotRegistered = "Users that is not registered into 
 $YouMustImportAFileAccordingToSelectedOption = "you must import a file according to selected option";
 $ShowEmailOfTeacherOrTutorTitle = "Teacher or tutor\'s e-mail in footer";
 $ShowEmailOfTeacherOrTutorComent = "Show teacher or tutor\'s e-mail in footer ?";
+$Created = "Created";
 ?>

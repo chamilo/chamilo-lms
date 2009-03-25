@@ -21,4 +21,6 @@ $NoteTitle = "Título de la nota";
 $NoteComment = "Comentarios de la nota";
 $NoteAdded = "Nota añadida";
 $NoteConfirmDelete = "¿ Realmente desea borrar la nota ";
+$AddNote = "Añadir nota";
+$ModifyNote = "Modificar nota";
 ?>

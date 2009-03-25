@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 19225 2009-03-24 01:31:26Z cvargas1 $
+<?php // $Id: profile.php 19315 2009-03-25 19:06:20Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -239,7 +239,8 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
 	if( strlen($user_data['picture_uri']) > 0) {
 		$form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 	}
-	$form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png','image/pjpeg'));
+	$allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+	$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 }
 
 //	LANGUAGE

@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 19240 2009-03-24 16:52:39Z cvargas1 $
+* 	@version $Id: exercise.class.php 19314 2009-03-25 17:25:18Z cvargas1 $
 */
 
 
@@ -502,7 +502,11 @@ class Exercise
 		$feedbacktype=$this->feedbacktype;
 		$random=$this->random;
 		$active=$this->active;
-		$results_disabled = intval($this->results_disabled);
+		if ($feedbacktype==1){
+			$results_disabled = 1;
+		} else {
+			$results_disabled = intval($this->results_disabled);	
+		}
         $start_time = Database::escape_string($this->start_time);
         $end_time = Database::escape_string($this->end_time);
 		// exercise already exists

@@ -1,4 +1,4 @@
-<?php // $Id: CourseRestorer.class.php 18549 2009-02-17 18:08:58Z cfasanando $
+<?php // $Id: CourseRestorer.class.php 19321 2009-03-25 20:15:33Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,6 +37,8 @@ require_once ('Survey.class.php');
 require_once ('SurveyQuestion.class.php');
 require_once ('mkdirr.php');
 require_once ('rmdirr.php');
+include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+
 define('FILE_SKIP', 1);
 define('FILE_RENAME', 2);
 define('FILE_OVERWRITE', 3);
@@ -165,12 +167,30 @@ class CourseRestorer
 		{
 			$table = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
+			$destination_course['dbName']= $this->course->destination_db;
+			
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document)
-			{
+			{	
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 				$perm = api_get_setting('permissions_for_new_directories');
-			        $perm = octdec(!empty($perm)?$perm:'0770');
-				mkdirr(dirname($path.$document->path),$perm);
+			    $perm = octdec(!empty($perm)?$perm:0770);				
+				$dirs = explode('/', dirname($document->path));
+				
+				$my_temp = '';
+				for ($i=1; $i<count($dirs); $i++) {					
+					$my_temp .= $dirs[$i];					
+					if (!is_dir($path.'document/'.$my_temp)) {						
+						$sql = "SELECT id FROM ".$table." WHERE path='/".Database::escape_string($my_temp)."'";
+						$res = api_sql_query($sql, __FILE__, __LINE__);									
+						$num_result = Database::num_rows($res);
+						if ($num_result==0) {							
+							$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document','/'.$my_temp,basename($my_temp));
+						}						
+					}	
+					$my_temp .= '/';																
+				}
+				
+				
 				if ($document->file_type == DOCUMENT)
 				{
 					if (file_exists($path.$document->path))

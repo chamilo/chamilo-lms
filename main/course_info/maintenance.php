@@ -47,10 +47,6 @@ api_display_tool_title($nameTools);
 
 ?>
 
-
-<div class="sectiontitle"><?php Display::display_icon('tool_delete.gif',get_lang("DelCourse")); ?>&nbsp;&nbsp;<a href="../course_info/delete_course.php?<?php echo api_get_cidreq();?>"><?php echo get_lang("DelCourse");?></a></div>
-<div class="sectioncomment"><?php echo get_lang("DescriptionDeleteCourse");	?></div>	
-
 <div class="sectiontitle"><?php Display::display_icon('save_import.gif', get_lang("backup")); ?>&nbsp;&nbsp;<a href="../coursecopy/backup.php?<?php echo api_get_cidreq();?>"><?php echo get_lang("backup");?></a></div>
 <div class="sectioncomment">
 			<ul>
@@ -62,12 +58,15 @@ api_display_tool_title($nameTools);
 			    </li>
 		    </ul>
 </div>
-			
-<div class="sectiontitle"><?php Display::display_icon('empty.gif', get_lang("recycle_course")); ?>&nbsp;&nbsp;<a href="../coursecopy/recycle_course.php?<?php echo api_get_cidreq();?>"><?php echo get_lang("recycle_course");?></a></div>
-<div class="sectioncomment"><?php echo get_lang("DescriptionRecycleCourse");?></div>
 
 <div class="sectiontitle"><?php Display::display_icon('copy.gif', get_lang("CopyCourse")); ?>&nbsp;&nbsp;<a href="../coursecopy/copy_course.php?<?php echo api_get_cidreq();?>"><?php echo get_lang("CopyCourse");?></a></div>
 <div class="sectioncomment"><?php echo get_lang("DescriptionCopyCourse"); ?></div>
+
+<div class="sectiontitle"><?php Display::display_icon('empty.gif', get_lang("recycle_course")); ?>&nbsp;&nbsp;<a href="../coursecopy/recycle_course.php?<?php echo api_get_cidreq();?>"><?php echo get_lang("recycle_course");?></a></div>
+<div class="sectioncomment"><?php echo get_lang("DescriptionRecycleCourse");?></div>
+
+<div class="sectiontitle"><?php Display::display_icon('tool_delete.gif',get_lang("DelCourse")); ?>&nbsp;&nbsp;<a href="../course_info/delete_course.php?<?php echo api_get_cidreq();?>"><?php echo get_lang("DelCourse");?></a></div>
+<div class="sectioncomment"><?php echo get_lang("DescriptionDeleteCourse");	?></div>	
 
 <?php
 // footer

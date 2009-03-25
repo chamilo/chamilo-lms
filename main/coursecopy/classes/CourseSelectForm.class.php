@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 18925 2009-03-10 14:09:33Z ndieschburg $
+// $Id: CourseSelectForm.class.php 19321 2009-03-25 20:15:33Z juliomontoya $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -110,7 +110,7 @@ class CourseSelectForm
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
 		
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
-		echo '<input type="hidden" name="course" value="'.base64_encode(serialize($course)).'"/>';
+
 		foreach ($course->resources as $type => $resources)
 		{
 			if (count($resources) > 0)
@@ -148,6 +148,11 @@ class CourseSelectForm
 				}
 			}
 		}
+		
+		//Documents are avoided due the huge moun of memory that  serialize function eats (when there are directories with hundred of files)
+		$course->resources['document']= null; 
+		echo '<input type="hidden" name="course" value="'.base64_encode(serialize($course)).'"/>';
+		
 		if (is_array($hidden_fields))
 		{
 			foreach ($hidden_fields as $key => $value)
@@ -213,6 +218,32 @@ class CourseSelectForm
 	function get_posted_course()
 	{
 		$course = unserialize(base64_decode($_POST['course']));
+		
+		//Create the resource DOCUMENT objects		
+		//Loading the results from the checkboxes of the javascript
+		$resource = $_POST['resource'][RESOURCE_DOCUMENT];
+		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
+		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);				
+		$resource = array_keys($resource);	
+		foreach	($resource as $resource_item) {			
+				$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND id = '.$resource_item.' ORDER BY path';				
+				$db_result = api_sql_query($sql, __FILE__, __LINE__);
+				while ($obj = Database::fetch_object($db_result)) {
+					$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);									
+					$course->add_resource($doc);
+					
+					// adding item property										
+					$sql = "SELECT * FROM $table_prop WHERE TOOL = '".RESOURCE_DOCUMENT."' AND ref='".$resource_item."'";					
+					$res = api_sql_query($sql,__FILE__,__LINE__);
+					$all_properties = array ();
+					while ($item_property = Database::fetch_array($res,'ASSOC')) {						
+						$all_properties[] = $item_property;
+					}
+					$course->resources[RESOURCE_DOCUMENT][$resource_item]->item_properties = $all_properties;
+				}						
+		} 
+		
+		
 		foreach ($course->resources as $type => $resources)
 		{
 			switch ($type)

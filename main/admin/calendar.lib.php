@@ -1606,7 +1606,17 @@ function show_add_form($id = '')
     ?>
 	<tr>
 		<td colspan="3">
-		<input type="button"  value="<?php echo get_lang('Ok'); ?>" onclick="validate_date()" />
+		<?php 
+		if ($_GET['action']=='edit'){
+			$class='save';
+			$text=get_lang('ModifyEvent');
+			
+		}else{
+			$class='add';
+			$text=get_lang('AddEvent');
+		}
+		?>
+		<button type="button" class="add" value="<?php echo get_lang('Ok'); ?>" onclick="validate_date()" ><?php echo $text;  ?></button>
 		
 		</td>
 	</tr>

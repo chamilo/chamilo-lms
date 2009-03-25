@@ -52,8 +52,8 @@ function get_connections_to_course($user_id, $course_code) {
 
     $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . ' 
     				WHERE user_id = ' . intval($user_id) . '
-    				AND course_code="' . $course_true . '" ORDER BY login_course_date DESC';
-    
+    				AND course_code="' . $course_true . '" ORDER BY login_course_date ASC';
+
     $rs = api_sql_query($sql);
     $connections  = array();
     
@@ -260,6 +260,7 @@ $mainUserInfo = api_get_user_info($user_id, $course_code);
 
 $result_to_print = '';
 $main_date_array = array();
+
 foreach ($connections as $key=>$data) { 
 	$result_to_print .= '&nbsp;&nbsp;'.date('d-m-Y (H:i:s)',$data['login']).' - '.calculHours($data['logout']-$data['login']).'<br />'."\n";	
 }

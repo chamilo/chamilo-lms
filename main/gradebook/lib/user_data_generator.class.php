@@ -3,7 +3,7 @@
 /**
  * Class to select, sort and transform object data into array data,
  * used for a student's general view
- * @author Bert Steppé
+ * @author Bert Steppï¿½
  */
 class UserDataGenerator
 {
@@ -32,7 +32,6 @@ class UserDataGenerator
 
     function UserDataGenerator($userid, $evals = array(), $links = array()) {
 		$this->userid = $userid;
-
 		$evals_filtered = array();
 		foreach ($evals as $eval) {
 			$toadd = true;
@@ -44,11 +43,15 @@ class UserDataGenerator
 				}	
 			}
 			if ($toadd) {
-				$evals_filtered[] = $eval;
+				$evals_filtered_copy = $evals;
 			}
 				
+		}//isset($coursecode) && strcmp($coursecode,api_get_course_id())===0
+		if (count($result) == 0) {
+			$evals_filtered=$evals;
+		} else {
+			$evals_filtered=$evals_filtered_copy;
 		}
-		
 		$this->items = array_merge ($evals_filtered, $links);
 
 

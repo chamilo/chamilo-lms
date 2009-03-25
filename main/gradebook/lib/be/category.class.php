@@ -998,12 +998,12 @@ class Category implements GradebookItem
  		if (isset($stud_id)) {
 			// special case: this is the root
 			if ($this->id == 0) {
-				$evals = Evaluation::get_evaluations_with_result_for_student(0,$stud_id);				
+				$evals = Evaluation::get_evaluations_with_result_for_student(0,$stud_id);			
 			} else {
-					$evals = Evaluation::load(null,null,null,$this->id,
+				//added api_get_course_id()
+					$evals = Evaluation::load(null,null,api_get_course_id(),$this->id,
 					api_is_allowed_to_create_course() ? null : 1);	
 			}
-
 		} else {// all students
 			// course admin
 			if (api_is_allowed_to_create_course() && !api_is_platform_admin()) {
@@ -1013,20 +1013,21 @@ class Category implements GradebookItem
 				}
 				// inside a course
 				elseif (isset($this->course_code) && !empty($this->course_code)) {
-					$evals = Evaluation::load(null, null, $this->course_code, $this->id, null);					
+					$evals = Evaluation::load(null, null, api_get_course_id(), $this->id, null);
+
 				}else { // course independent
 					$evals = Evaluation::load(null, api_get_user_id(), null, $this->id, null);
 				}
 
 			}
-		
-			// platform admin
+					
+			//platform admin
 			elseif (api_is_platform_admin()) {
-				$evals = Evaluation::load(null, null, null, $this->id, null);				
+				$evals = Evaluation::load(null, null, api_get_course_id(), $this->id, null);				
 			}
 
 		}
-		
+
 		if ($recursive) {
 			$subcats = $this->get_subcategories($stud_id);
 			foreach ($subcats as $subcat) {
@@ -1035,7 +1036,6 @@ class Category implements GradebookItem
 				$evals = array_merge($evals, $subevals);
 			}
 		}
-		
 		return $evals;
 
 	}
@@ -1050,11 +1050,11 @@ class Category implements GradebookItem
 		
 		// no links in root or course independent categories
 		if ($this->id == 0) {
-			;		
+			;	
 		}
-		// 1 student
+		// 1 student $stud_id
  		elseif (isset($stud_id)) {
-			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:$this->course_code,$this->id,
+			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:api_get_course_id(),$this->id,
 						api_is_allowed_to_create_course() ? null : 1);
  		}
 		// all students -> only for course/platform admin
@@ -1065,11 +1065,10 @@ class Category implements GradebookItem
 		if ($recursive) {
 			$subcats = $this->get_subcategories($stud_id);
 			foreach ($subcats as $subcat) {
-				$sublinks = $subcat->get_links($stud_id, true);
+				$sublinks = $subcat->get_links($stud_id, false);
 				$links = array_merge($links, $sublinks);
 			}
 		}
-
 		return $links;
 
 	}

@@ -41,26 +41,28 @@ $interbreadcrumb[]= array (
 	'name' => get_lang('Gradebook'
 ));
 $category= Category :: load(0);
-$allevals= $category[0]->get_evaluations($_GET['userid'], true);
-$alllinks= $category[0]->get_links($_GET['userid'], true);
+$my_user_id=Security::remove_XSS($_GET['userid']);
+$allevals= $category[0]->get_evaluations($my_user_id, true);
+$alllinks= $category[0]->get_links($my_user_id, true);
 if ($_GET['selectcat'] != null) {
 	$addparams= array (
-		'userid' => $_GET['userid'],
-		'selectcat' => $_GET['selectcat']
+		'userid' => $my_user_id,
+		'selectcat' => Security::remove_XSS($_GET['selectcat'])
 	);	
 } else {
 	$addparams= array (
-		'userid' => $_GET['userid'],
-		'selecteval' => $_GET['selecteval']
+		'userid' => $my_user_id,
+		'selecteval' => Security::remove_XSS($_GET['selecteval'])
 	);	
 }
-$user_table= new UserTable($_GET['userid'], $allevals, $alllinks, $addparams);
+
+$user_table= new UserTable($my_user_id, $allevals, $alllinks, $addparams);
 if (isset ($_GET['exportpdf'])) {
 	$pdf= new Cezpdf();
 	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 	$pdf->ezSetMargins(30, 30, 50, 30);
 	$pdf->ezSetY(800);
-	$datagen= new UserDataGenerator($_GET['userid'], $allevals,$alllinks);
+	$datagen= new UserDataGenerator($my_user_id, $allevals,$alllinks);
 	$data_array= $datagen->get_data(UserDataGenerator :: UDG_SORT_NAME, 0, null, true);
 	$newarray= array ();
 	$displayscore= Scoredisplay :: instance();
@@ -68,8 +70,9 @@ if (isset ($_GET['exportpdf'])) {
 	foreach ($data_array as $data) {
 		$newarray[] = array_slice($data, 1);	
 	}
+
 	$pdf->ezSetY(810);
-	$userinfo = get_user_info_from_id($_GET['userid']);
+	$userinfo = get_user_info_from_id($my_user_id);
 	$pdf->ezText(get_lang('Results').' : '.$userinfo['lastname']. ' '. $userinfo['firstname'].' ('. date('j/n/Y g:i') .')',12,array('justification'=>'center'));
 	$pdf->line(50,790,550,790);
 	$pdf->line(50,40,550,40);	
@@ -112,6 +115,7 @@ $actions.= '<a href="' . api_get_self() . '?exportpdf=&userid='.Security::remove
 $actions.='</div>';
 
 Display :: display_header(get_lang('ResultsPerUser'));
-DisplayGradebook :: display_header_user($_GET['userid']);
+DisplayGradebook :: display_header_user(Security::remove_XSS($_GET['userid']));
 echo $actions;
 $user_table->display();
+Display :: display_footer();

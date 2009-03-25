@@ -1,5 +1,5 @@
 <?php
-// $Id: subscribe_user2course.php 19038 2009-03-13 15:16:02Z iflorespaz $
+// $Id: subscribe_user2course.php 19311 2009-03-25 15:40:27Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -335,7 +335,7 @@ if (is_array($extra_field_list)) {
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
-    <input type="submit" value="<?php echo get_lang('AddToThatCourse'); ?> &gt;&gt;"/>
+    <button type="submit" class="add" value="<?php echo get_lang('AddToThatCourse'); ?> &gt;&gt;"><?php echo get_lang('AddToThatCourse'); ?></button>
    </td>
    <td width="40%" align="center">
     <select name="CourseList[]" multiple="multiple" size="20" style="width:230px;">

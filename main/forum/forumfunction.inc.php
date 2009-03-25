@@ -158,7 +158,7 @@ function show_add_forumcategory_form($inputvalues=array()) {
 	$form->addElement('header', '', get_lang('AddForumCategory'));
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
-	$form->addElement('style_submit_button', 'SubmitForumCategory', get_lang('Ok'), 'class="save"');
+	$form->addElement('style_submit_button', 'SubmitForumCategory', get_lang('CreateCategory'), 'class="add"');
 
 	// setting the rules
 	$form->addRule('forum_category_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
@@ -327,7 +327,14 @@ function show_add_forum_form($inputvalues=array()) {
 	 $form->addElement('html','</div>');
 
 	// The OK button
-	$form->addElement('style_submit_button', 'SubmitForum', get_lang('Ok'), 'class="save"');
+	if (isset($_GET['id']) && $_GET['action']=='edit'){
+		$class='save';
+		$text=get_lang('ModifyForum');
+	}else{
+		$class='add';
+		$text=get_lang('CreateForum');		
+	}
+	$form->addElement('style_submit_button', 'SubmitForum', $text, 'class="'.$class.'"');
 	// setting the rules
 	$form->addRule('forum_title', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addRule('forum_category', get_lang('ThisFieldIsRequired'), 'required');
@@ -425,7 +432,7 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 	$form->addElement('hidden', 'forum_category_id');
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
-	$form->addElement('style_submit_button', 'SubmitEditForumCategory',get_lang('Ok'), 'class="save"');
+	$form->addElement('style_submit_button', 'SubmitEditForumCategory',get_lang('ModifyCategory'), 'class="save"');
 	global $charset;
 	// setting the default values
 	$defaultvalues['forum_category_id']=$inputvalues['cat_id'];
@@ -1895,7 +1902,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$info    =api_get_user_info($userid);
 	$courseid=api_get_course_id();		
 		
-	$form->addElement('style_submit_button', 'SubmitPost', get_lang('Ok'), 'class="save"');	
+	$form->addElement('style_submit_button', 'SubmitPost', get_lang('CreateThread'), 'class="add"');	
 	$form->add_real_progress_bar('DocumentUpload','user_upload');
 
 	if ( !empty($form_values) ) {
@@ -2319,7 +2326,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 		$values = $form->exportValues();
 	}
 
-	$form->addElement('style_submit_button', 'SubmitPost', get_lang('Ok'), 'class="save"');
+	$form->addElement('style_submit_button', 'SubmitPost', get_lang('ModifyThread'), 'class="save"');
 	global $charset;
 	// setting the default values for the form elements
 	$defaults['post_title']=prepare4display(html_entity_decode($current_post['post_title'],ENT_QUOTES,$charset));
@@ -3096,7 +3103,7 @@ function forum_search() {
 	$form->addElement('header', '', get_lang('ForumSearch'));
 	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles"');
 	$form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation')/*, $dissertation[$_GET['opleidingsonderdeelcode']]['code']*/);
-	$form->addElement('submit', 'SubmitForumCategory', get_lang('Search'));
+	$form->addElement('style_submit_button', 'SubmitForumSearch', get_lang('Search'), 'class="search"');
 
 	// setting the rules
 	$form->addRule('search_term', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');

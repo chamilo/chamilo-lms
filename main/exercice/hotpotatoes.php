@@ -22,7 +22,7 @@
 *	Code for Hotpotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.php 19254 2009-03-24 22:18:53Z cvargas1 $
+* 	@version $Id: hotpotatoes.php 19328 2009-03-25 21:22:36Z aportugal $
 */
 
 
@@ -279,7 +279,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 			echo '<td width="250">';
 			echo '</td>';
 			echo '<td>';
-				echo '<button type="submit" name="submit" value="'.get_lang('Send').'">'.get_lang('SendFile').'</button>';
+				echo '<button type="submit" class="save" name="submit" value="'.get_lang('Send').'">'.get_lang('SendFile').'</button>';
 			echo '</td>';
 		echo '</tr>';
 	echo '</table>';

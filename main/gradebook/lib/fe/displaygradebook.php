@@ -188,7 +188,6 @@ class DisplayGradebook
 		//student
 		$objcat=new Category();
 		$objdat=new Database();
-
 		$course_id=$objdat->get_course_by_category($selectcat);
 		$message_resource=$objcat->show_message_resource_delete($course_id);
 		if (!$is_course_admin || !api_is_course_tutor()) {
@@ -217,7 +216,6 @@ class DisplayGradebook
 			$total_score=array($item_value,$item_total);
 			$scorecourse_display = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);
 			//----------------------
-
 
 			//$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
 			$cattotal = Category :: load(0);
@@ -374,9 +372,39 @@ class DisplayGradebook
 
 
 	function display_header_user($userid) {
- 		$user= get_user_info_from_id($userid);
-        //User picture size is calculated from SYSTEM path
-        $image_syspath = UserManager::get_user_picture_path_by_id($userid,'system',false,true);
+		$select_cat=Security::remove_XSS($_GET['selectcat']);
+		$user_id = $userid;
+		$user= get_user_info_from_id($user_id);
+
+		$catcourse= Category :: load($select_cat);
+		$scoredisplay = ScoreDisplay :: instance();
+		$scorecourse = $catcourse[0]->calc_score($user_id);
+
+		// generating the total score for a course
+		$allevals= $catcourse[0]->get_evaluations($user_id,true);
+		$alllinks= $catcourse[0]->get_links($user_id,true);
+		$evals_links = array_merge($allevals, $alllinks);
+		$item_value=0;
+		$item_total=0;
+		for ($count=0; $count < count($evals_links); $count++) {
+			$item = $evals_links[$count];
+			$score = $item->calc_score($user_id);
+			$my_score_denom=($score[1]==0) ? 1 : $score[1];
+			$item_value+=$score[0]/$my_score_denom*$item->get_weight();
+			$item_total+=$item->get_weight();
+			//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+		}
+		$item_value = number_format($item_value, 2, '.', ' ');
+		$total_score=array($item_value,$item_total);
+		$scorecourse_display = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);
+		//----------------------
+
+		//$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
+		$cattotal = Category :: load(0);
+		$scoretotal= $cattotal[0]->calc_score($user_id);
+		$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
+	//---------------------
+		$image_syspath = UserManager::get_user_picture_path_by_id($userid,'system',false,true);
         $image_size = getimagesize($image_syspath['dir'].$image_syspath['file']);
         //Web path
         $image_path = UserManager::get_user_picture_path_by_id($userid,'web',false,true);
@@ -386,19 +414,19 @@ class DisplayGradebook
 		 //limit display width to 200px
  			$img_attributes .= 'width="200" ';
 		}
-		$cattotal= Category :: load(0);
 		$info = '<table width="100%" border=0 cellpadding=5><tr><td width="80%">';
 		$info.= get_lang('Name') . ' : <b>' . $user['lastname'] . ' ' . $user['firstname'] . '</b> ( <a href="user_info.php?userid=' . $userid . '&selectcat=' . Security::remove_XSS($_GET['selectcat']) . '">' . get_lang('MoreInfo') . '...</a> )<br>';
 		$info.= get_lang('Email') . ' : <b><a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a></b><br><br>';
-		$scoredisplay = ScoreDisplay :: instance();
-		$score_stud= $cattotal[0]->calc_score($userid);
-		$score_stud_display = (isset($score_stud) ? $scoredisplay->display_score($score_stud,SCORE_PERCENT) : get_lang('NoResultsAvailable') );
-		$score_avg= $cattotal[0]->calc_score();
-		$score_avg_display = (isset($score_avg) ? $scoredisplay->display_score($score_avg,SCORE_AVERAGE) : get_lang('NoResultsAvailable') );
-		$info.= get_lang('TotalUser') . ' : <b>' . $score_stud_display . '</b><br>';
-		$info.= get_lang('AverageTotal') . ' : <b>' . $score_avg_display . '</b>';
+		$info.= get_lang('TotalUser') . ' : <b>' . $scorecourse_display . '</b><br>';
 		$info.= '</td><td>';
 		$info.= '<img ' . $img_attributes . '/></td></tr></table>';
-		echo Display :: display_normal_message($info,false);
+		
+		
+	//--------------
+		//$scoreinfo = get_lang('StatsStudent') . ' :<b> '.$user['lastname'].' '.$user['firstname'].'</b><br />';
+		//$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scorecourse_display . '</b>';
+		
+		//$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scoretotal_display . '</b>';
+		Display :: display_normal_message($info,false);
 	}
 }

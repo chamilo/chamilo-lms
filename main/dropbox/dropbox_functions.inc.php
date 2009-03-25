@@ -422,13 +422,19 @@ function display_addcategory_form($category_name='', $id='')
 
 	}
 
-	if ($_GET['action']=='addreceivedcategory')
-	{
+	if ($_GET['action']=='addreceivedcategory') {
 		$target='received';
 	}
-	if ($_GET['action']=='addsentcategory')
-	{
+	if ($_GET['action']=='addsentcategory') {
 		$target='sent';
+	}
+	
+	if ($_GET['action']=='editcategory' and isset($_GET['id'])) {
+		$text=get_lang('ModifyCategory');
+		$class='save';
+	} else if ($_GET['action']=='addreceivedcategory')  {
+		$text=get_lang('CreateCategory');
+		$class='add';
 	}
 
 
@@ -452,7 +458,7 @@ function display_addcategory_form($category_name='', $id='')
 	echo "\t<td valign=\"top\">\n";
 	echo "\t</td>\n";
 	echo "\t<td>\n";
-	echo "<button class=\"save\"type=\"submit\" name=\"StoreCategory\"> ".get_lang('AddEdit')."</button>";
+	echo "<button class=\"$class\"type=\"submit\" name=\"StoreCategory\"> ".$text."</button>";
 	echo "\t</td>\n";
 	echo "\t</tr>\n";
 	echo "</table>\n";

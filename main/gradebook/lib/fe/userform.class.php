@@ -81,7 +81,7 @@ class UserForm extends FormValidator
 		$this->addElement('static', 'email', get_lang('Email'), '<a href="mailto:' . $this->user_info['email'] . '">' . $this->user_info['email'] . '</a>');
 		$this->addElement('static', 'ofcode', get_lang('OfficialCode'), $this->user_info['official_code']);
 		$this->addElement('static', 'phone', get_lang('Phone'), $this->user_info['phone']);
-		$this->addElement('submit', null, get_lang('Back'));
+		$this->addElement('style_submit_button', 'submit', get_lang('Back'),'class="save"');
 	}
 	function display() {
 		parent :: display();

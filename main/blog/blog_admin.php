@@ -34,7 +34,7 @@
 // name of the language file that needs to be included
 $language_file = "blog";
 
-include('../inc/global.inc.php');
+require_once('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
 $blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
@@ -82,11 +82,11 @@ if (api_is_allowed_to_edit())
 	}
 	if (isset($_GET['action']) && $_GET['action'] == 'visibility')
 	{
-		Blog::change_blog_visibility(Database::scape_string((int)$_GET['blog_id']));
+		Blog::change_blog_visibility(Database::escape_string((int)$_GET['blog_id']));
 	}
 	if (isset($_GET['action']) && $_GET['action'] == 'delete')
 	{
-		Blog::delete_blog(Database::scape_string((int)$_GET['blog_id']));
+		Blog::delete_blog(Database::escape_string((int)$_GET['blog_id']));
 	}
 	
 	

@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 18411 2009-02-10 17:59:08Z juliomontoya $
+<?php // $Id: question_pool.php 19329 2009-03-25 21:29:56Z aportugal $
  
 /*
 ==============================================================================
@@ -30,7 +30,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 18411 2009-02-10 17:59:08Z juliomontoya $
+* 	@version $Id: question_pool.php 19329 2009-03-25 21:29:56Z aportugal $
 */
 
 // name of the language file that needs to be included
@@ -206,7 +206,7 @@ if($is_allowedToEdit)
 		}
 		echo '</select> ';
 	?>
-	<input type="submit" value="<?php echo get_lang('Ok'); ?>">
+	<button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
     </form>
 </div>
 

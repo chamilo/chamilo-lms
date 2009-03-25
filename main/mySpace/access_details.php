@@ -137,7 +137,7 @@ if (api_is_xml_http_request()) {
 	$main_year = $main_month_year = $main_day = array();
 	foreach ($connections as $key=>$data) {				
 		//creating the main array		
-		$main_year[date('Y',$data['login'])]+=calculHours($data['logout']-$data['login'])*60;	
+		//$main_year[date('Y',$data['login'])]+=calculHours($data['logout']-$data['login'])*60;	
 		$main_month_year[date('m-Y',$data['login'])]+=calculHours($data['logout']-$data['login'])*60;
 		$main_day[date('d-m-Y',$data['login'])]+=calculHours($data['logout']-$data['login'])*60;
 			
@@ -174,7 +174,7 @@ if (api_is_xml_http_request()) {
 	$DataSet->AddAllSeries();  
 	$DataSet->RemoveSerie('Date');  
 	$DataSet->SetAbsciseLabelSerie('Date');
-	$DataSet->SetYAxisName(get_lang('Minutes'));  
+	$DataSet->SetYAxisName(ucfirst(get_lang('MinMinutes')));  
 	$graph_id = api_get_user_id().'AccessDetails'.api_get_course_id();
 	$DataSet->AddAllSeries();
 	
@@ -272,8 +272,7 @@ echo '<strong>'.get_lang('Course').': ',$course_code,'</strong><br /><br />';
 <div id="container-9">
     <ul>                
         <li><a href="access_details.php?type=day&course=<?php echo $course_code?>&student=<?php echo $user_id?>"><span> <?php echo get_lang('Day'); ?></span></a></li>
-        <li><a href="access_details.php?type=month&course=<?php echo $course_code?>&student=<?php echo $user_id?>"><span><?php echo get_lang('Month'); ?></span></a></li>
-        <li><a href="access_details.php?type=year&course=<?php echo $course_code?>&student=<?php echo $user_id?>"><span> <?php echo get_lang('Year'); ?></span></a></li>
+        <li><a href="access_details.php?type=month&course=<?php echo $course_code?>&student=<?php echo $user_id?>"><span><?php echo ucfirst(get_lang('MinMonth')); ?></span></a></li>
     </ul>
     <?php echo '<div id="show"></div>';?>
 </div>

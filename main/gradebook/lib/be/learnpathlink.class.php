@@ -187,7 +187,6 @@ class LearnpathLink extends AbstractLink
 		{
 			$url .= '&action=build&lp_id='.$this->get_ref_id();
 		}
-		error_log($this->calc_score(api_get_user_id()));
 		return $url;
 	}
     

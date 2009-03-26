@@ -35,18 +35,18 @@ require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/catform.class.php';
 api_block_anonymous_users();
 block_students();
-
+$get_select_cat=Security::remove_XSS($_GET['selectcat']);
 $catadd = new Category();
 $my_user_id = api_get_user_id();
 $catadd->set_user_id($my_user_id);
-$catadd->set_parent_id(Database::escape_string($_GET['selectcat']));
-$catcourse = Category :: load ($_GET['selectcat']);
+$catadd->set_parent_id(Database::escape_string($get_select_cat));
+$catcourse = Category :: load ($get_select_cat);
 if ($_in_course) {
 	$catadd->set_course_code($course_code);
 } else {
 	$catadd->set_course_code($catcourse[0]->get_course_code());
 }
-$form = new CatForm(CatForm :: TYPE_ADD, $catadd, 'add_cat_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']));
+$form = new CatForm(CatForm :: TYPE_ADD, $catadd, 'add_cat_form', null, api_get_self() . '?selectcat='.$get_select_cat);
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$select_course=isset($values['select_course']) ? $values['select_course'] : array();
@@ -80,7 +80,7 @@ if ($form->validate()) {
 
 if ( !$_in_course ) {
 $interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
+	'url' => $_SESSION['gradebook_dest'].'?selectcat='.$get_select_cat,
 	'name' => get_lang('Gradebook')
 	);
 }

@@ -95,7 +95,7 @@ $t_user     = Database :: get_main_table(TABLE_MAIN_USER);
 $t_link_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $visible_link=Security::remove_XSS($_GET['visiblelink']);	
 $evaledit   = EvalLink :: load($visible_link);
-$sql="SELECT lk.name,lk.description,lk.date_log,lk.weight,lk.visible,lk.type,us.username from ".$t_link_log." lk inner join ".$t_user." us on lk.user_id_log=us.user_id where lk.id_linkeval_log=".$evaledit[0]->get_id()." and lk.type='link';";
+$sql="SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.date_log,us.username from ".$t_link_log." lk inner join ".$t_user." us on lk.user_id_log=us.user_id where lk.id_linkeval_log=".$evaledit[0]->get_id()." and lk.type='link';";
 $result=api_sql_query($sql);
 $list_info=array();
 while ($row=Database::fetch_row($result)) {
@@ -103,8 +103,8 @@ while ($row=Database::fetch_row($result)) {
 }
 
 foreach($list_info as $key => $info_log) {
-	$list_info[$key][2]=($info_log[2]) ? date('d-m-Y H:i:s',$info_log[2]) : '0000-00-00 00:00:00';
-	$list_info[$key][4]=($info_log[4]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
+	$list_info[$key][5]=($info_log[5]) ? date('d-m-Y H:i:s',$info_log[5]) : '0000-00-00 00:00:00';
+	$list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
 
 $parameters=array('visiblelink'=>Security::remove_XSS($_GET['visiblelink']),'selectcat'=>Security::remove_XSS($_GET['selectcat']));
@@ -114,10 +114,10 @@ $table = new SortableTableFromArrayConfig($list_info, 1,20,'gradebooklink');
 $table->set_additional_parameters($parameters);
 $table->set_header(0, get_lang('GradebookNameLog'));
 $table->set_header(1, get_lang('GradebookDescriptionLog'));
-$table->set_header(2, get_lang('Date'));
-$table->set_header(3, get_lang('Weight'));
-$table->set_header(4, get_lang('GradebookVisibilityLog'));
-$table->set_header(5, get_lang('ResourceType'));
+$table->set_header(2, get_lang('GradebookPreviousWeight'));
+$table->set_header(3, get_lang('GradebookVisibilityLog'));
+$table->set_header(4, get_lang('ResourceType'));
+$table->set_header(5, get_lang('Date'));
 $table->set_header(6, get_lang('GradebookWhoChangedItLog'));
 $table->display();
 

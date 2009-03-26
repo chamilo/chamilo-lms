@@ -16,7 +16,7 @@ div.lp_manipulate a{padding-right:10px;}
 div.lp_message{background:#FEC880; border:1px solid #E28C15; font-size:12px; padding:10px;}
 
 
-div.lp_resource_header{background:#F0F0F0; border:1px solid #999999; border-bottom:0; font-weight:bold; padding:10px; width:350px;}
+div.lp_resource_header{cursor: pointer; background:#F0F0F0; border:1px solid #999999; font-weight:bold; padding:10px; width:350px;}
 div.lp_resource_header_end{background:#F0F0F0; border:1px solid #999999; font-weight:bold; padding:10px; width:350px;}
 div.lp_resource_elements{background:#FAFAFA; border:1px solid #999999; border-bottom:0; display:none; padding:5px 10px; width:350px;}
 div.lp_resource_elements_end{background:#FAFAFA; border:1px solid #999999; border-top: 0px; display:none; padding:5px 10px; width:350px;}
@@ -36,7 +36,7 @@ p.lp_text{margin-top:0px;}
 
 p.lp_title{
 font-weight:bold; 
-margin-top:0px;
+margin-top:5px;
 padding-left:7px;
 }
 

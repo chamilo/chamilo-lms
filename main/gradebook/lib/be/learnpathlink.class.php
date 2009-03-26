@@ -179,7 +179,7 @@ class LearnpathLink extends AbstractLink
 		$url = api_get_path(WEB_PATH)
 			.'main/newscorm/lp_controller.php?cidReq='.$this->get_course_code().'&gradebook=view';
 		if (!api_is_allowed_to_create_course()
-			&& $this->calc_score(api_get_user_id()) == null)
+			|| $this->calc_score(api_get_user_id()) == null)
 		{
 			$url .= '&action=view&lp_id='.$this->get_ref_id();
 		}
@@ -187,6 +187,7 @@ class LearnpathLink extends AbstractLink
 		{
 			$url .= '&action=build&lp_id='.$this->get_ref_id();
 		}
+		error_log($this->calc_score(api_get_user_id()));
 		return $url;
 	}
     

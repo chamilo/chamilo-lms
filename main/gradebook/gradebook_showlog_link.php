@@ -32,9 +32,14 @@ api_block_anonymous_users();
 block_students();
 
 $interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
+	'url' => $_SESSION['gradebook_dest'].'?',
 	'name' => get_lang('Gradebook'
 ));
+$interbreadcrumb[] = array (
+	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
+	'name' => get_lang('Details'
+));
+
 $interbreadcrumb[] = array (
 	'url' => 'gradebook_showlog_link.php?visiblelink='.Security::remove_XSS($_GET['visiblelink']).'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']),
 	'name' => get_lang('GradebookQualifyLog')

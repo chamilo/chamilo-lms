@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 18319 2009-02-07 00:03:42Z herodoto $
+<?php //$Id: group_space.php 19369 2009-03-26 22:29:27Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -289,7 +289,11 @@ else
 	isset($origin)?$my_origin = $origin:$my_origin='';
 	foreach($tutors as $index => $tutor)
 	{
-		$tutor_info .= "<div style='margin-bottom: 5px;'><a href='../user/userInfo.php?origin=".$my_origin."&amp;uInfo=".$tutor['user_id']."'><img src='../img/coachs.gif' align='absbottom'>&nbsp;".$tutor['firstname']." ".$tutor['lastname']."</a></div>";
+		$image_path = UserManager::get_user_picture_path_by_id($tutor['user_id'],'web',false, true);				
+		$image_repository = $image_path['dir'];
+		$existing_image = $image_path['file'];
+		$photo= '<img src="'.$image_repository.$existing_image.'" align="absbottom" alt="'.$tutor['firstname'].' '.$tutor['lastname'].'"  width="32" height="32" title="'.$tutor['firstname'].' '.$tutor['lastname'].'" />';		
+		$tutor_info .= "<div style='margin-bottom: 5px;'><a href='../user/userInfo.php?origin=".$my_origin."&amp;uInfo=".$tutor['user_id']."'>".$photo."&nbsp;".$tutor['firstname']." ".$tutor['lastname']."</a></div>";
 	}
 }
 echo '<b>'.get_lang("GroupTutors").':</b>';
@@ -451,7 +455,13 @@ function email_filter($email)
 function user_icon_filter($user_id)
 {
 	global $origin;
-	return "<a href='../user/userInfo.php?origin=".$origin."&amp;uInfo=".$user_id."'><img src='../img/members.gif' >";
+	
+	$userinfo=Database::get_user_info_from_id($user_id);
+	$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);				
+	$image_repository = $image_path['dir'];
+	$existing_image = $image_path['file'];
+	$photo= '<center><img src="'.$image_repository.$existing_image.'" alt="'.$userinfo['lastname'].' '.$userinfo['firstname'].'"  width="22" height="22" title="'.$userinfo['lastname'].' '.$userinfo['firstname'].'" /></center>';		
+	return "<a href='../user/userInfo.php?origin=".$origin."&amp;uInfo=".$user_id."'>".$photo;	
 }
 
 // footer

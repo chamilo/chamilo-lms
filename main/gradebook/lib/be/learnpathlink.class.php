@@ -103,6 +103,7 @@ class LearnpathLink extends AbstractLink
      */
     public function has_results()
     {
+    	error_log('demo');
     	$course_info = api_get_course_info($this->get_course_code());
     	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
 		$sql = 'SELECT count(id) AS number FROM '.$tbl_stats
@@ -123,7 +124,7 @@ class LearnpathLink extends AbstractLink
     {
     	$course_info = api_get_course_info($this->get_course_code());
     	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
-    	if (is_null($course_info['db_name'])) {
+    	if (is_null($course_info['dbName'])===true) {
 			return false;
 		}
     	$sql = 'SELECT * FROM '.$tbl_stats
@@ -135,7 +136,6 @@ class LearnpathLink extends AbstractLink
     	// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY view_count DESC';
     	$scores = api_sql_query($sql, __FILE__, __LINE__);
-
 		// for 1 student
     	if (isset($stud_id))
     	{

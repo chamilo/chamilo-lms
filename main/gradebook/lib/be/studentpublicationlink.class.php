@@ -24,7 +24,7 @@
 */
 /**
  * Gradebook link to student publication item
- * @author Bert Stepp�
+ * @author Bert Steppé
  * @package dokeos.gradebook
  */
 class StudentPublicationLink extends AbstractLink
@@ -150,7 +150,7 @@ class StudentPublicationLink extends AbstractLink
     	$course_info = Database :: get_course_info($this->get_course_code());
 		$database_name = (empty($course_info['db_name']))?$course_info['dbName']:$course_info['db_name'];
 		$tbl_stats = Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $database_name);
-		if (is_null($course_info['db_name'])) {
+		if (is_null($database_name)===true) {
 			return false;
 		}
     	$sql = 'SELECT * FROM '.$tbl_stats." WHERE id = '".$this->get_ref_id()."'";

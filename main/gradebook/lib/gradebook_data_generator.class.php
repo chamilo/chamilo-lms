@@ -74,7 +74,8 @@ class GradebookDataGenerator
 	 * 4: date
 	 * 5: student's score (if student logged in)
 	 */
-	public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false) {		
+	public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false) {	
+		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());	
 		// do some checks on count, redefine if invalid value
 		if (!isset($count)) {
 			$count = count ($this->items) - $start;			
@@ -112,10 +113,12 @@ class GradebookDataGenerator
 			$row[] = $item->get_name();
 			$row[] = $item->get_description();
 			$row[] = $item->get_weight();
-			$row[] = $this->build_date_column ($item);
-			
+			if (($status==1 || is_null($status))  && api_is_allowed_to_create_course()) {
+				$row[] = $this->build_date_column ($item);
+			}
 			if(count($this->evals_links)>0)
 				if (!api_is_allowed_to_create_course() || $status_user!=1)
+
 					$row[] = $this->build_result_column ($item, $ignore_score_color);
 					//$row[] = $this->get_certificate_link ($item);
 					$data[] = $row;

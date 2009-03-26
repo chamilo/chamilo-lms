@@ -84,7 +84,6 @@ class UserDataGenerator
 	 * 6: student's score as custom display (only if custom scoring enabled)
 	 */
 	public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false) {
-		
 		// do some checks on count, redefine if invalid value
 		if (!isset($count)) {
 			$count = count ($this->items) - $start;

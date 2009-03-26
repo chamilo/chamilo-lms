@@ -27,7 +27,8 @@ require_once (dirname(__FILE__).'/../be.inc.php');
 /**
  * Table to display categories, evaluations and links
  * @author Stijn Konings
- * @author Bert Stepp� (refactored, optimised)
+ * @author Bert Steppé (refactored, optimised)
+ * @author Isaac flores (refactored, optimised)
  */
 class GradebookTable extends SortableTable
 {
@@ -67,8 +68,12 @@ class GradebookTable extends SortableTable
 			$this->set_header($column++, get_lang('Weight'));	
 			
 			}	
-		}		 					
-		$this->set_header($column++, get_lang('Date'),true, 'width="100px"');				
+		}	
+		if (($status==1 || is_null($status))  && api_is_allowed_to_create_course()) {
+			$this->set_header($column++, get_lang('Date'),true, 'width="100px"');	
+		} elseif (($status<>1)  && !api_is_allowed_to_create_course() && (!isset($_GET['selectcat']) || $_GET['selectcat']==0)) {
+			$this->set_header($column++, get_lang('Date'),true, 'width="100px"');	
+		}	
 		//admins get an edit column
 		if (($status==1 || is_null($status)) && api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++, get_lang('Modify'), false, 'width="100"');
@@ -132,6 +137,7 @@ class GradebookTable extends SortableTable
 		$course_code=api_get_course_id();
 		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
 		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
+		//error_log(print_r($data_array,true));
 		// generate the data to display
 		$sortable_data = array();
 		foreach ($data_array as $data) {
@@ -181,9 +187,9 @@ class GradebookTable extends SortableTable
 				} else {
 			   		$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;	
 			   	}											
-			}	
-			$row[] = $invisibility_span_open . str_replace(' ','&nbsp;',$data[4]) . $invisibility_span_close;
-			
+			}
+				$row[] = $invisibility_span_open . str_replace(' ','&nbsp;',$data[4]) . $invisibility_span_close;
+
 			//admins get an edit column
 			if (($status_user==1 || is_null($status_user)) && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false'))) {
 				$cat=new Category();
@@ -197,9 +203,10 @@ class GradebookTable extends SortableTable
 			//students get the results and certificates columns
 				if (count($this->evals_links)>0 && $status_user!=1 ) {
 					$value_data=isset($data[5]) ? $data[5] : null;
-					$row[] = $value_data;
+					if (!is_null($value_data)) {
+						$row[] = $value_data;
+					}
 				}
-				
 				if (empty($_GET['selectcat'])) {
 					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
 						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$id.'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display; 	
@@ -211,6 +218,7 @@ class GradebookTable extends SortableTable
 			}
 			$sortable_data[] = $row;
 		}	
+
 		return $sortable_data;
 	}
 	
@@ -246,7 +254,7 @@ private function build_id_column ($item) {
 				$prms_uri='?selectcat=' . $item->get_id();
 				if (isset($_GET['isStudentView'])) {
 					if ( isset($is_student) || ( isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
-						$prms_uri=$prms_uri.'&amp;isStudentView='.$_GET['isStudentView'];
+						$prms_uri=$prms_uri.'&amp;isStudentView='.Security::remove_XSS($_GET['isStudentView']);
 					}
 				}
 

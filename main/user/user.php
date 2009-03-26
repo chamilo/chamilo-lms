@@ -1,4 +1,4 @@
-<?php // $Id: user.php 18319 2009-02-07 00:03:42Z herodoto $
+<?php // $Id: user.php 19365 2009-03-26 21:44:32Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -456,6 +456,13 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$temp=array();
 				$temp[] = $user_id;
 				
+				$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);				
+				$image_repository = $image_path['dir'];
+				$existing_image = $image_path['file'];
+				$photo= '<center><img src="'.$image_repository.$existing_image.'" alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'"  width="22" height="22" title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></center>';									
+				$temp[] = $photo;
+
+				
 				$temp[] = $o_course_user['firstname'];
 				$temp[] = $o_course_user['lastname'];	
 							
@@ -480,7 +487,14 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$temp[] = $o_course_user['active'];
 				$temp[] = $user_id;				
 			} else {
-				$temp=array();				
+				$temp=array();
+				
+				$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);				
+				$image_repository = $image_path['dir'];
+				$existing_image = $image_path['file'];
+				$photo= '<center><img src="'.$image_repository.$existing_image.'" alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'"  width="22" height="22" title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></center>';	
+				$temp[] = $photo;			
+								
 				$temp[] = $o_course_user['firstname'];
 				$temp[] = $o_course_user['lastname'];				
 				$temp[] = $o_course_user['role'];
@@ -567,7 +581,7 @@ $header_nr = 0;
 if ( api_is_allowed_to_edit()) {
 	$table->set_header($header_nr++, '', false);
 }			
-
+$table->set_header($header_nr++, get_lang('Photo'),false);
 $table->set_header($header_nr++, get_lang('FirstName'));
 $table->set_header($header_nr++, get_lang('LastName'));
 $table->set_header($header_nr++, get_lang('Description'),false);
@@ -579,7 +593,7 @@ if ( api_is_allowed_to_edit()) {
 	$table->set_header($header_nr++, get_lang('Tutor'),false);
 	$table->set_header($header_nr++, get_lang('CourseManager'),false);
 	$table->set_header($header_nr++, get_lang('Active'),false);
-	$table->set_column_filter(8,'active_filter');
+	$table->set_column_filter(9,'active_filter');
 }
 
 //actions column

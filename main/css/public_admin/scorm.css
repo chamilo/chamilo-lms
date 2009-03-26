@@ -22,15 +22,14 @@
 	overflow: auto;
 	background-color: white;
 	height: 300px; 
-	width: 90%;
-	border-right: 1px #999999 solid;
+	width: 96%;
 	border-left: 15px #FFF solid;
 }
 .inner_lp_toc .scorm_item{
 
 	font-size: 11px;
 	margin-left: 10px;
-	margin-right:20px;
+	margin-right:10px;
 	padding-bottom: 2px;
 	text-decoration: none;
 }
@@ -103,6 +102,7 @@
 .inner_lp_toc .scorm_title_text
 {
 	margin-left: 10px;
+	padding: 2px;
 }
 
 .inner_lp_toc .scorm_status_img{
@@ -134,7 +134,7 @@
 /*.scormpage .menu */
 .lp_navigation_elem .progresstext{
 	margin-top: -20px;
-	margin-left: 4em;
+	margin-left: 40%;
 	font-size: normal;
 }
 
@@ -202,5 +202,6 @@
 	font-size: 14px;
 	color: #444;	
 	width: 90%;	
-	margin-left:17px;	
+	margin-left:17px;
+	padding: 1px 5px 3px 8px;	
 }

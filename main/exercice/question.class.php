@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 18543 2009-02-17 15:04:15Z cfasanando $
+<?php // $Id: question.class.php 19361 2009-03-26 20:10:41Z iflorespaz $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 18543 2009-02-17 15:04:15Z cfasanando $
+* 	@version $Id: question.class.php 19361 2009-03-26 20:10:41Z iflorespaz $
 */
 
 
@@ -637,7 +637,7 @@ abstract class Question
 					)";
 			api_sql_query($sql,__FILE__,__LINE__);
 
-			$this->id=mysql_insert_id();
+			$this->id=Database::get_last_insert_id();
 			
 			api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizQuestionAdded',$_user['user_id']);
 			
@@ -919,8 +919,7 @@ abstract class Question
 	 * @author - Olivier Brouckaert
 	 * @return - integer - ID of the new question
 	 */
-	function duplicate()
-	{
+	function duplicate() {
 		global $TBL_QUESTIONS, $picturePath;
 
 		$question=addslashes($this->question);
@@ -932,8 +931,7 @@ abstract class Question
 		$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type) VALUES('".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."')";
 		api_sql_query($sql,__FILE__,__LINE__);
 
-		$id=mysql_insert_id();
-
+		$id=Database::get_last_insert_id();
 		// duplicates the picture
 		$this->exportPicture($id);
 
@@ -946,22 +944,16 @@ abstract class Question
 	 * @return an instance of a Question subclass (or of Questionc class by default)
 	 */
 	static function getInstance ($type) {
-
-		list($file_name,$class_name) = self::$questionTypes[$type];
-
-		include_once ($file_name);
-
-
-		if(class_exists($class_name))
-		{
-			return new $class_name();
+		if (!is_null($type)) {
+			list($file_name,$class_name) = self::$questionTypes[$type];
+			include_once($file_name);
+			if (class_exists($class_name)) {
+				return new $class_name();
+			} else {
+				echo 'Can\'t instanciate class '.$class_name.' of type '.$type;
+				return null;
+			}	
 		}
-		else
-		{
-			echo 'Can\'t instanciate class '.$class_name.' of type '.$type;
-			return null;
-		}
-
 	}
 
 	/**

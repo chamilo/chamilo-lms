@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 19329 2009-03-25 21:29:56Z aportugal $
+<?php // $Id: question_pool.php 19361 2009-03-26 20:10:41Z iflorespaz $
  
 /*
 ==============================================================================
@@ -30,7 +30,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 19329 2009-03-25 21:29:56Z aportugal $
+* 	@version $Id: question_pool.php 19361 2009-03-26 20:10:41Z iflorespaz $
 */
 
 // name of the language file that needs to be included
@@ -354,7 +354,7 @@ if($is_allowedToEdit)
             echo '  <td><a href="admin.php?',api_get_cidreq(),'&editQuestion=',$row['id'],'&fromExercise=',$fromExercise,'">',$row['question'],'</a></td>';
             echo '  <td>';
 			if (empty($fromExercise)) {
-                echo '<a href="admin.php?',api_get_cidreq(),'?editQuestion=',$row['id'],'"><img src="../img/edit.gif" border="0" alt="',get_lang('Modify'),'"></a>',
+                echo '<a href="admin.php?'.api_get_cidreq().'&amp;editQuestion=',$row['id'],'"><img src="../img/edit.gif" border="0" alt="',get_lang('Modify'),'"></a>',
                     '</td>',
                     '<td align="center">',
                     '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>';

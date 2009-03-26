@@ -97,11 +97,19 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 		$title     = urldecode($info_reply[0]);
 		$content   = urldecode($info_reply[1]);
 		$user_reply= $info_reply[2];
-		if ( isset($user_reply) && $user_reply>0 && strlen($info_reply[0]) >0) {
-			MessageManager::send_message($user_reply, $title, $content);
-			MessageManager::display_success_message($user_reply);
+		$user_email_base=str_replace(')','(',$info_reply[5]);
+		$user_email_prepare=explode('(',$user_email_base);
+		if (count($user_email_prepare)==1) {
+			$user_email=trim($user_email_prepare[0]);
+		} elseif (count($user_email_prepare)==3) {
+			$user_email=trim($user_email_prepare[1]);	
+		}
+		$user_id_by_email=MessageManager::get_user_id_by_email($user_email);
+		if ( isset($user_reply) && !is_null($user_id_by_email) && strlen($info_reply[0]) >0) {
+			MessageManager::send_message($user_id_by_email, $title, $content);
+			MessageManager::display_success_message($user_id_by_email);
 			exit;
-		} elseif ( ($info_reply[2]==0) || strlen($info_reply[0])==0) {
+		} elseif (is_null($user_id_by_email)) {
 			$message_box=get_lang('ErrorSendingMessage').
 			'&nbsp;
 			<br /><a href="../social/index.php?#remote-tab-2">'.

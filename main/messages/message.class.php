@@ -417,5 +417,21 @@ class MessageManager {
 		    </TR>
 		</TABLE>';
 	}
+	/**
+	 * get user id by user email
+	 * @param string $user_email
+	 * @return int user id
+	 */
+	public static function get_user_id_by_email ($user_email) {
+		$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+		$sql='SELECT user_id FROM '.$tbl_user.' WHERE email="'.Database::escape_string($user_email).'";';
+		$rs=api_sql_query($sql,__FILE__,__LINE__);
+		$row=Database::fetch_array($rs,'ASSOC');
+		if (isset($row['user_id'])) {
+			return $row['user_id'];
+		} else {
+			return null;
+		}
+	}
 }
 ?>

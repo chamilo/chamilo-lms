@@ -448,6 +448,7 @@ if (isset($_GET['sendform'])) {
 	$form_reply[]=$_POST['user_list'];
 	$form_reply[]=$_POST['re_id'];
 	$form_reply[]=urlencode($_POST['compose']);
+	$form_reply[]=urlencode($_POST['id_text_name']);
 	$form_info=implode(',',$form_reply);
 	$form_send_data_message='?form_reply='.$form_info;
 } elseif (isset($_GET['inbox'])) {

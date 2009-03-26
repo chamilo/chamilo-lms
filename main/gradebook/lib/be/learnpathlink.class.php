@@ -103,7 +103,6 @@ class LearnpathLink extends AbstractLink
      */
     public function has_results()
     {
-    	error_log('demo');
     	$course_info = api_get_course_info($this->get_course_code());
     	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
 		$sql = 'SELECT count(id) AS number FROM '.$tbl_stats

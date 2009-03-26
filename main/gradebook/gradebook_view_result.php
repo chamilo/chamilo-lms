@@ -45,8 +45,9 @@ $interbreadcrumb[]= array (
 	'name' => get_lang('Gradebook'
 ));
 //load the evaluation & category
+$select_eval=Security::remove_XSS($_GET['selecteval']);
 $displayscore = Scoredisplay :: instance();
-$eval= Evaluation :: load($_GET['selecteval']);
+$eval= Evaluation :: load($select_eval);
 $overwritescore= 0;
 if ($eval[0]->get_category_id() < 0) {
 	// if category id is negative, then the evaluation's origin is a link
@@ -66,7 +67,7 @@ function overwritescore($resid, $importscore, $eval_max) {
 	unset ($result);
 }
 if (isset ($_GET['selecteval'])) {
-	$allresults= Result :: load(null, null, $_GET['selecteval']);
+	$allresults= Result :: load(null,null,$select_eval);
 	$iscourse= $currentcat[0]->get_course_code() == null ? 1 : 0;
 }
 /**
@@ -126,23 +127,26 @@ global $users;
 	return $users;
 }
 if (isset ($_GET['editres'])) {
-	$resultedit= Result :: load($_GET['editres']);
-	$edit_res_form= new EvalForm(EvalForm :: TYPE_RESULT_EDIT, $eval[0], $resultedit[0], 'edit_result_form', null, api_get_self() . '?editres=' . $resultedit[0]->get_id() . '&selecteval=' . $_GET['selecteval']);
+	$edit_res_xml=Security::remove_XSS($_GET['editres']);
+	$select_eval_edit=Security::remove_XSS($_GET['selecteval']);
+	$resultedit= Result :: load($edit_res_xml);
+	$edit_res_form= new EvalForm(EvalForm :: TYPE_RESULT_EDIT, $eval[0], $resultedit[0], 'edit_result_form', null, api_get_self() . '?editres=' . $resultedit[0]->get_id() . '&selecteval=' .$select_eval_edit);
 	if ($edit_res_form->validate()) {
 	
 		$values= $edit_res_form->exportValues();
 		$result= new Result();
 		$resultlog=new Result();
-		$resultlog->add_result__log($values['hid_user_id'],$_GET['selecteval']);
-		$result->set_id($_GET['editres']);
+		$resultlog->add_result__log($values['hid_user_id'],$select_eval_edit);
+		$result->set_id($edit_res_xml);
 		$result->set_user_id($values['hid_user_id']);
-		$result->set_evaluation_id($_GET['selecteval']);
-	if ((!empty ($values['score'])) || ($values['score'] == '0')) {
-		$result->set_score($values['score']);		
+		$result->set_evaluation_id($select_eval_edit);
+		$row_value=isset($values['score']) ? (int)$values['score'] : 0 ;
+	if ((!empty ($row_value)) || ($row_value == 0)) {
+		$result->set_score($row_value);		
 	}
 		$result->save();
 		unset ($result);
-		header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&editresmessage=');
+		header('Location: gradebook_view_result.php?selecteval=' . $select_eval_edit . '&editresmessage=');
 		exit;
 	}
 }

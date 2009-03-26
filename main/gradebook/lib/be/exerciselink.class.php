@@ -118,7 +118,7 @@ class ExerciseLink extends AbstractLink
 		$sql = 'SELECT * FROM '.$tbl_stats.' WHERE exe_exo_id = '.$this->get_ref_id().' AND orig_lp_id = 0 AND orig_lp_item_id = 0';
 		
 		if (isset($stud_id)){
-    		$sql .= ' AND exe_user_id = '."'".$stud_id."'";
+    		$sql .= ' AND exe_cours_id="'.api_get_course_id().'" AND exe_user_id = '."'".$stud_id."'";
     	}
 		
 		$sql .= ' ORDER BY exe_id DESC';

@@ -206,6 +206,7 @@ function build_edit_icons_cat($cat, $selectcat) {
  * @param int $selectcat id of selected category
  */
 function build_edit_icons_eval($eval, $selectcat) {
+	$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 	$eval->get_course_code();
 	$cat=new Category();
 	$message_eval=$cat->show_message_resource_delete($eval->get_course_code());
@@ -216,7 +217,7 @@ function build_edit_icons_eval($eval, $selectcat) {
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deleteeval=' . $eval->get_id() . '&selectcat=' . $selectcat . '" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('Delete') . '" alt="" /></a>';
 		//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?moveeval=' . $eval->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visibleeval=' . $eval->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '"><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="" /></a>';
-		if (api_is_course_tutor()){
+		if ($status==1 || is_null($status)){
 			$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . '"><img src="../img/file_txt_small.gif" border="0" title="' . get_lang('GradebookQualifyLog') . '" alt="" /></a>';
 		}
 		return $modify_icons;

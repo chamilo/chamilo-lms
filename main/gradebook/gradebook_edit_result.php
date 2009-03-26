@@ -32,22 +32,23 @@ require_once ('lib/fe/evalform.class.php');
 require_once ('lib/scoredisplay.class.php');
 api_block_anonymous_users();
 block_students();
-
-$resultedit = Result :: load (null,null,$_GET['selecteval']);
-$evaluation = Evaluation :: load ($_GET['selecteval']);
-$edit_result_form = new EvalForm(EvalForm :: TYPE_ALL_RESULTS_EDIT, $evaluation[0], $resultedit, 'edit_result_form', null, api_get_self() . '?&selecteval=' . $_GET['selecteval']);
+$select_eval=Security::remove_XSS($_GET['selecteval']);
+$resultedit = Result :: load (null,null,$select_eval);
+$evaluation = Evaluation :: load ($select_eval);
+$edit_result_form = new EvalForm(EvalForm :: TYPE_ALL_RESULTS_EDIT, $evaluation[0], $resultedit, 'edit_result_form', null, api_get_self() . '?&selecteval='.$select_eval);
 if ($edit_result_form->validate()) {
 	$values = $edit_result_form->exportValues();
 	$scores = ($values['score']);
 	foreach ($scores as $row) {
 		$resultedit = Result :: load (key($scores));
-		if ((!empty ($row)) || ($row == '0')) {
-			$resultedit[0]->set_score($row);
+		$row_value=(int)$row ;
+		if ((!empty ($row_value)) || ($row_value == 0)) {
+			$resultedit[0]->set_score($row_value);
 		}
 		$resultedit[0]->save();
 		next($scores);
 	}
-	header('Location: gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'&editallresults=');
+	header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&editallresults=');
 	exit;
 }
 $interbreadcrumb[] = array (
@@ -55,7 +56,7 @@ $interbreadcrumb[] = array (
 	'name' => get_lang('Gradebook'
 ));
 $interbreadcrumb[]= array (
-	'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']),
+	'url' => 'gradebook_view_result.php?selecteval='.$select_eval,
 	'name' => get_lang('ViewResult'
 ));
 Display :: display_header(get_lang('EditResult'));

@@ -123,6 +123,9 @@ class LearnpathLink extends AbstractLink
     {
     	$course_info = api_get_course_info($this->get_course_code());
     	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
+    	if (is_null($course_info['db_name'])) {
+			return false;
+		}
     	$sql = 'SELECT * FROM '.$tbl_stats
     			." WHERE lp_id = ".$this->get_ref_id();
     	

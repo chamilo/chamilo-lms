@@ -56,11 +56,9 @@ function confirmation ()
 
 $tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-
+$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
-
-
 if (isset($_GET['isStudentView'])) {
 	if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
 		$interbreadcrumb[]= array (
@@ -94,6 +92,7 @@ if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['st
 	exit;
 } else {
 	if ( !isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
+		//	if ( !isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') && ($status<>1 && !api_is_platform_admin()) || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true' && $status<>1 && !api_is_platform_admin()) ) {
 		Display :: display_header(get_lang('Gradebook'));
 		//Introduction tool: student view
 		$fck_attribute['Width'] = '100%';
@@ -312,9 +311,10 @@ if (isset ($_GET['visiblelink'])) {
 
 if (isset ($_GET['deletelink'])) {
 	block_students();
-	$link= LinkFactory :: load($_GET['deletelink']);
+	$get_delete_link=Security::remove_XSS($_GET['deletelink']);
+	$link= LinkFactory :: load($get_delete_link);
 	if ($link[0] != null) {
-		$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.$_GET['deletelink'].');';
+		$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.$get_delete_link.');';
 		api_sql_query($sql);
 		$link[0]->delete();
 	}
@@ -708,11 +708,10 @@ if (isset ($_GET['studentoverview'])) {
 }
 //$addparams['cidReq']='';
 if (isset($_GET['cidReq']) && $_GET['cidReq']!='') {
-	$addparams['cidReq']=$_GET['cidReq'];
+	$addparams['cidReq']=Security::remove_XSS($_GET['cidReq']);
 } else {
 	$addparams['cidReq']='';
 }
-
 $gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
 $no_qualification = false;
 if (( count($allcat) == 0) && ( count($alleval) == 0 ) && ( count($alllink) == 0 )) {
@@ -730,7 +729,7 @@ if ($category != '0') {
 	$course_id=$dblib->get_course_by_category($category_id);
 	$show_message=$cat->show_message_resource_delete($course_id);
 	if ($show_message=='') {
-		DisplayGradebook :: display_header_gradebook($cats[0], 0, $_GET['selectcat'], $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
+		DisplayGradebook :: display_header_gradebook($cats[0], 0, $category_id, $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
 	}
 
 } else {
@@ -738,7 +737,7 @@ if ($category != '0') {
 	//DisplayGradebook :: display_header_gradebook($cats[0], 0, 0, $is_course_admin, $is_platform_admin, $simple_search_form, false, false);
 }
 
-if (api_is_platform_admin() || api_is_allowed_to_create_course() && api_is_course_tutor()) {
+if (api_is_platform_admin() || api_is_allowed_to_create_course()  || $status==1) {
 /*
 -----------------------------------------------------------
 	Introduction section (teacher edit)
@@ -748,7 +747,6 @@ if (api_is_platform_admin() || api_is_allowed_to_create_course() && api_is_cours
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Gradebook';
-
 Display::display_introduction_section(TOOL_GRADEBOOK);
 
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.

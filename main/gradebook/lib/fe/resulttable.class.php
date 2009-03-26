@@ -28,7 +28,7 @@ require_once (dirname(__FILE__).'/../be.inc.php');
 /**
  * Table to display results for an evaluation
  * @author Stijn Konings
- * @author Bert Stepp�
+ * @author Bert Steppé
  */
 class ResultTable extends SortableTable
 {
@@ -140,7 +140,8 @@ class ResultTable extends SortableTable
 // Other functions
 
 	private function build_edit_column ($item) {
-		if (api_is_course_tutor()) {//api_is_course_admin()
+		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+		if ($status==1) {//api_is_course_admin()
 			$edit_column = '<a href="' . api_get_self() . '?editres=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
 		}
 		if ($this->evaluation->get_course_code() == null) {

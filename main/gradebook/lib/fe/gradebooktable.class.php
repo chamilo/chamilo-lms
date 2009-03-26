@@ -40,26 +40,27 @@ class GradebookTable extends SortableTable
 	 * Constructor
 	 */
     function GradebookTable ($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null) {
+  		
+  		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
     	parent :: SortableTable ('gradebooklist', null, null, (api_is_allowed_to_create_course()?1:0));
 		$this->evals_links = array_merge($evals, $links);
 		$this->currentcat = $currentcat;
-
 		$this->datagen = new GradebookDataGenerator($cats, $evals, $links);
 		if (isset($addparams)) {
 			$this->set_additional_parameters($addparams);
 		}
 		$column= 0;
-		if (api_is_course_tutor() && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
+		if ((($status==1 || is_null($status)) && api_is_allowed_to_create_course()) && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++,'','','width="25px"');
 		}
 		$this->set_header($column++, get_lang('Type'),'','width="35px"');
 		$this->set_header($column++, get_lang('Name'));
 		$this->set_header($column++, get_lang('Description'));
 		
-		if (api_is_course_tutor() && api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
+		if (($status==1 || is_null($status))  && api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++, get_lang('Weight'),'','width="50px"');	
 		} else {
-			if (empty($_GET['selectcat'])) {	
+			if (empty($_GET['selectcat']) ) {	
 				$this->set_header($column++, get_lang('Evaluation'));
 			}
 			else {
@@ -69,7 +70,7 @@ class GradebookTable extends SortableTable
 		}		 					
 		$this->set_header($column++, get_lang('Date'),true, 'width="100px"');				
 		//admins get an edit column
-		if (api_is_course_tutor() && api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
+		if (($status==1 || is_null($status)) && api_is_allowed_to_create_course() && $_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 			$this->set_header($column++, get_lang('Modify'), false, 'width="100"');
 			//actions on multiple selected documents
 			$this->set_form_actions(array (
@@ -77,9 +78,8 @@ class GradebookTable extends SortableTable
 				'setvisible' => get_lang('SetVisible'),
 				'setinvisible' => get_lang('SetInvisible')));
 		} else {
-	            	             
-		 	    if (empty($_GET['selectcat'])) {         
-					$this->set_header($column++, get_lang('Certificates'),false);
+		 	    if (empty($_GET['selectcat']) &&  !api_is_allowed_to_create_course()) {         
+				$this->set_header($column++, get_lang('Certificates'),false);
 		 	    } else {
 		 	    	$evals_links = array_merge($evals, $links); 
 		 	    	if(count($evals_links)>0) {
@@ -102,7 +102,6 @@ class GradebookTable extends SortableTable
 	 * Function used by SortableTable to generate the data to display
 	 */
 	function get_table_data($from = 1) {
-
 		// determine sorting type
 		$col_adjust = (api_is_allowed_to_create_course() ? 1 : 0);
 		switch ($this->column) {
@@ -132,8 +131,7 @@ class GradebookTable extends SortableTable
 	    $user_id=api_get_user_id();
 		$course_code=api_get_course_id();
 		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
-		
-		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);	
+		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
 		// generate the data to display
 		$sortable_data = array();
 		foreach ($data_array as $data) {
@@ -147,14 +145,14 @@ class GradebookTable extends SortableTable
 			$invisibility_span_open = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
 			$invisibility_span_close = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '</span>' : '';
 						
-			if (api_is_course_tutor() && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
+			if (($status_user==1 ||is_null($status_user)) && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 				$row[] = $this->build_id_column ($item);
 			}
 			
 			$row[] = $this->build_type_column ($item);
 			$row[] = $invisibility_span_open . $this->build_name_link ($item) . $invisibility_span_close;
 			$row[] = $invisibility_span_open . $data[2] . $invisibility_span_close;
-			if (api_is_course_tutor() && api_is_allowed_to_create_course()) {
+			if (($status_user==1 || is_null($status_user)) && api_is_allowed_to_create_course()) {
 			$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;	
 			} else {
 				
@@ -163,8 +161,8 @@ class GradebookTable extends SortableTable
 				    $stud_id= api_get_user_id();				      
 					$cats_course = Category :: load ($id, null, null, null, null, null, false);					
 					$alleval_course= $cats_course[0]->get_evaluations($stud_id,true);
-					$alllink_course= $cats_course[0]->get_links($stud_id,true);					
-					$evals_links = array_merge($alleval_course, $alllink_course);				
+					$alllink_course= $cats_course[0]->get_links($stud_id,true);										
+					$evals_links = array_merge($alleval_course, $alllink_course);			
 					$item_value=0;
 					$item_total=0;				
 					for ($count=0; $count < count($evals_links); $count++) {						
@@ -187,7 +185,7 @@ class GradebookTable extends SortableTable
 			$row[] = $invisibility_span_open . str_replace(' ','&nbsp;',$data[4]) . $invisibility_span_close;
 			
 			//admins get an edit column
-			if (api_is_course_tutor() && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false'))) {
+			if (($status_user==1 || is_null($status_user)) && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false'))) {
 				$cat=new Category();
 				$show_message=$cat->show_message_resource_delete($item->get_course_code());
 				
@@ -197,7 +195,7 @@ class GradebookTable extends SortableTable
 				
 			} else {
 			//students get the results and certificates columns
-				if (count($this->evals_links)>0 && $status_user!=1) {
+				if (count($this->evals_links)>0 && $status_user!=1 ) {
 					$value_data=isset($data[5]) ? $data[5] : null;
 					$row[] = $value_data;
 				}
@@ -212,7 +210,7 @@ class GradebookTable extends SortableTable
 				}												
 			}
 			$sortable_data[] = $row;
-		}		
+		}	
 		return $sortable_data;
 	}
 	

@@ -32,7 +32,8 @@ class DisplayGradebook
 	* @param $forpdf only output for pdf file
 	*/
 	function display_header_result($evalobj, $selectcat, $shownavbar) {
-		if ($shownavbar == '1' && api_is_course_tutor()) {
+		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+		if ($shownavbar == '1' && $status==1) {
 			$header = '<div class="actions">';			
 			$header .= '<a href="'.$_SESSION['gradebook_dest'].'?selectcat=' . $selectcat . '"> &#60;&#60; ' . get_lang('BackToOverview') . '</a>';
 			if ($evalobj->get_course_code() == null) {
@@ -186,11 +187,13 @@ class DisplayGradebook
 	 */
 	function display_header_gradebook($catobj, $showtree, $selectcat, $is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true) {
 		//student
+		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		$objcat=new Category();
 		$objdat=new Database();
 		$course_id=$objdat->get_course_by_category($selectcat);
 		$message_resource=$objcat->show_message_resource_delete($course_id);
-		if (!$is_course_admin || !api_is_course_tutor()) {
+		
+		if (!$is_course_admin && $status<>1 && $selectcat<>0) {
 			$user_id = api_get_user_id();
 			$user= get_user_info_from_id($user_id);
 
@@ -216,7 +219,6 @@ class DisplayGradebook
 			$total_score=array($item_value,$item_total);
 			$scorecourse_display = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);
 			//----------------------
-
 			//$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
 			$cattotal = Category :: load(0);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
@@ -311,12 +313,13 @@ class DisplayGradebook
                         $header .= '<td><a href="gradebook_add_link_select_course.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('link.gif', get_lang('MakeLink')).' ' . get_lang('MakeLink') . '</a>&nbsp;';
                     }
                 }
+
                 if ($message_resource===false ) {
                 	$myname=$catobj->shows_all_information_an_category($catobj->get_id());
                  	$header .= '<td><a href="gradebook_edit_all.php?id_session='.$_SESSION['id_session'].'&amp;'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('quiz.gif', get_lang('EditAllWeights')).' ' . get_lang('EditAllWeights') . '</a>';
                 	$my_course_id=api_get_course_id();
                 	$my_file= substr($_SESSION['gradebook_dest'],0,5);
-                	if (($my_file!='index' && $status_user==1) || api_is_platform_admin()) {
+                	if (($my_file!='index' || $status_user==1) || api_is_platform_admin()) {
 	                	$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats_access.gif', get_lang('FlatView')).' ' . get_lang('FlatView') . '</a>';
 						if (($is_course_admin && $message_resource===false && $status_user==1) || api_is_platform_admin()) {
 							$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('acces_tool.gif', get_lang('ScoreEdit')).' ' . get_lang('ScoreEdit') . '</a>';

@@ -338,16 +338,16 @@ form span.form_error {
 /* feedback messages */
 .normal-message {
 	position: relative;
-	margin: 10px auto;
-	margin-left: -250px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
+	margin: 10px auto 10px 10px;
+	//margin-left: -250px;
+	width: 98%;
+	left: 0.1%;
+	//right: 50%;
 	border-width: 1px;
 	border-style: solid;
 	padding: 5px;
 	border: 1px solid #dcdcdc;
-	color: #000; 
+	color: #0055d1;
 	background-color: #E5EDF9;
 	min-height: 30px;	
 }
@@ -368,18 +368,18 @@ form span.form_error {
 }
 .confirmation-message {
 	position: relative;
-	margin: 10px auto;
-	margin-left: -250px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
+	margin: 5px 1px 0 10px;
+	//margin-left: 2px;
+	//margin: 10px auto 10px;
+	width: 98%;
+	//right: 50%;
 	border-width: 1px;
 	border-style: solid;
 	padding: 5px;
 	border: 1px solid #1F8323;
-	color: #000; 
+	color: #1F8323;
 	background-color: #CAF0C7;
-	min-height: 30px;	
+	min-height: 30px;
 }
 .error-message {
 	position: relative;
@@ -405,15 +405,14 @@ form span.form_error {
 /* actions */
 .actions_lp {
 	background:#F8F8F8;
-	/*border-bottom:1px solid #999999; */
-	/*border-top:1px solid #999999; */
+	//border-bottom:1px solid #999999; 
+	//border-top:1px solid #999999; 
 	height:29px;
 	padding-left: -17px;
-	margin-bottom: 1px;
+	margin: 5px 2px 1px 23px;
 	background:url(images/actions.jpg) repeat-x;
 	vertical-align:middle;
 	width: 90%;
-	margin-left:17px;
 }
 .actions_lp img {
 	vertical-align:middle;

@@ -1660,6 +1660,39 @@ class CourseManager
 		// Delete the course from the database
 		$sql = "DELETE FROM $table_course WHERE code='".$code."'";
 		api_sql_query($sql, __FILE__, __LINE__);
+		
+		// delete extra course fields
+		$t_cf 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+		$t_cfv 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+
+		$sql = "SELECT distinct field_id FROM $t_cfv  WHERE course_code = '$code'";
+		$res_field_ids = @api_sql_query($sql,__FILE__,__LINE__);
+
+		while($row_field_id = Database::fetch_row($res_field_ids)){
+			$field_ids[] = $row_field_id[0];
+		}
+
+		//delete from table_course_field_value from a given course_code
+
+		$sql_course_field_value = "DELETE FROM $t_cfv WHERE course_code = '$code'";
+		@api_sql_query($sql_course_field_value,__FILE__,__LINE__);
+
+		$sql = "SELECT distinct field_id FROM $t_cfv";
+		$res_field_all_ids = @api_sql_query($sql,__FILE__,__LINE__);
+
+		while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
+			$field_all_ids[] = $row_field_all_id[0];
+		}
+
+		foreach($field_ids as $field_id) {
+			// check if field id is used into table field value
+			if (in_array($field_id,$field_all_ids)) {
+				continue;
+			} else {
+				$sql_course_field = "DELETE FROM $t_cf WHERE id = '$field_id'";
+				api_sql_query($sql_course_field,__FILE__,__LINE__);
+			}
+		}
 	}
 
 	/**

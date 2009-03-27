@@ -196,7 +196,42 @@ class SessionManager {
 		api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session IN($id_checked)",__FILE__,__LINE__);
 		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($id_checked)",__FILE__,__LINE__);	
 		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session IN($id_checked)",__FILE__,__LINE__);
+		
+		// delete extra session fields
+		$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+		$t_sfv 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+
+		$sql = "SELECT distinct field_id FROM $t_sfv  WHERE session_id = '$id_checked'";
+		$res_field_ids = @api_sql_query($sql,__FILE__,__LINE__);
+
+		while($row_field_id = Database::fetch_row($res_field_ids)){
+			$field_ids[] = $row_field_id[0];
+		}
+
+		//delete from table_session_field_value from a given session id
+
+		$sql_session_field_value = "DELETE FROM $t_sfv WHERE session_id = '$id_checked'";
+		@api_sql_query($sql_session_field_value,__FILE__,__LINE__);
+
+		$sql = "SELECT distinct field_id FROM $t_sfv";
+		$res_field_all_ids = @api_sql_query($sql,__FILE__,__LINE__);
+
+		while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
+			$field_all_ids[] = $row_field_all_id[0];
+		}
+
+		foreach($field_ids as $field_id) {
+			// check if field id is used into table field value
+			if (in_array($field_id,$field_all_ids)) {
+				continue;
+			} else {
+				$sql_session_field = "DELETE FROM $t_sf WHERE id = '$field_id'";
+				api_sql_query($sql_session_field,__FILE__,__LINE__);
+			}
+		}
 	}	
+	
+	
 	 /**
 	  * Subscribes users to the given session and optionally (default) unsubscribes previous users
 	  * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code

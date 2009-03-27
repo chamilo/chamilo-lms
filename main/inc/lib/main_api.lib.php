@@ -3245,7 +3245,7 @@ function api_is_valid_secret_key($original_key_secret,$segurity_key) {
 
     global $_configuration;
     
-    if ( $original_key_secret == '123' /*sha1($segurity_key)*/) {
+    if ( $original_key_secret == sha1($segurity_key)) {
             return true; //secret key is incorrect
     } else {
         return false;

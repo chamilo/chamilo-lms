@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 19385 2009-03-27 20:48:57Z iflorespaz $
+<?php // $Id: upload.php 19397 2009-03-27 22:02:19Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -276,8 +276,9 @@ if($to_group_id !=0) //add group name after for group documents
 	$add_group_to_title = ' ('.$group_properties['name'].')';
 }
 //show the title
-api_display_tool_title($nameTools.$add_group_to_title);
-
+echo '<div class="actions-title">';
+echo $nameTools.$add_group_to_title;
+echo '</div>';
 /*
 -----------------------------------------------------------
 	Here we do all the work

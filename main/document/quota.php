@@ -1,4 +1,4 @@
-<?php // $Id: quota.php 18552 2009-02-17 20:03:24Z cfasanando $
+<?php // $Id: quota.php 19397 2009-03-27 22:02:19Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -135,9 +135,9 @@ function display_quota($course_quota, $already_consumed_space)
 		MAIN CODE
 ==============================================================================
 */ 
-
-api_display_tool_title($nameTools);
-
+echo '<div class="actions-title">';
+echo $nameTools;
+echo '</div>';
 $course_quota = DocumentManager::get_course_quota();
 
 $full_path = $baseWorkDir . $courseDir;

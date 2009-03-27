@@ -196,6 +196,13 @@ class ImageManager
 
 		$d = @dir($fullpath);
 		
+		if(empty($d)) {						
+			$path = Files::fixPath('/');
+			$base = Files::fixPath($this->getBaseDir());
+			$fullpath = Files::makePath($base,$path);	
+			$d = @dir($fullpath);							
+		}
+		
 		$in_group = api_is_in_group();
 		$user_id = api_get_user_id();
 

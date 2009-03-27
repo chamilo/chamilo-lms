@@ -1,4 +1,4 @@
-<?php // $Id: group.php 18319 2009-02-07 00:03:42Z herodoto $
+<?php // $Id: group.php 19386 2009-03-27 20:56:38Z herodoto $
  
 /*
 ==============================================================================
@@ -189,7 +189,7 @@ if (api_is_allowed_to_edit(false,true))
 echo '<div class="actions">';
 if (api_is_allowed_to_edit(false,true))
 {	
-	echo Display::return_icon('group_add.gif', get_lang('NewGroupCreate')) . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>&nbsp;';	
+	echo Display::return_icon('groupadd.gif', get_lang('NewGroupCreate')) . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>&nbsp;';	
 	if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0) {
 		//echo '<a href="group_overview.php?'.api_get_cidreq().'">'.Display::return_icon('group_view.gif').'&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
 		echo Display::return_icon('group.gif', get_lang('GroupOverview')) .'<a href="group_overview.php?'.api_get_cidreq().'">'.get_lang('GroupOverview').'</a>&nbsp;';

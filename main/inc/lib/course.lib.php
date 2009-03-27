@@ -1968,5 +1968,135 @@ class CourseManager
 		}
 		return $mail_tutor;		   	
 	}
-	
+
+/**
+  * Creates a new extra field for a given course
+  * @param	string	Field's internal variable name
+  * @param	int		Field's type
+  * @param	string	Field's language var name 
+  * @return int     new extra field id
+  */
+	function create_course_extra_field($fieldvarname, $fieldtype, $fieldtitle)
+	{		
+		// database table definition		
+		$t_cfv			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+		$t_cf 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);			
+		$fieldvarname 	= Database::escape_string($fieldvarname);
+		$fieldtitle 	= Database::escape_string($fieldtitle);	
+		$fieldtype = (int)$fieldtype;	
+		$time = time();
+		$sql_field = "SELECT id FROM $t_cf WHERE field_variable = '$fieldvarname'";
+		$res_field = api_sql_query($sql_field,__FILE__,__LINE__);
+					
+		$r_field = Database::fetch_row($res_field);
+		
+		if (Database::num_rows($res_field)>0) {					
+			$field_id = $r_field[0];
+		} else {
+			// save new fieldlabel into course_field table								
+			$sql = "SELECT MAX(field_order) FROM $t_cf";
+			$res = api_sql_query($sql,__FILE__,__LINE__);
+			
+			$order = 0;
+			if (Database::num_rows($res)>0) {
+				$row = Database::fetch_row($res);
+				$order = $row[0]+1;
+			}
+			
+			$sql = "INSERT INTO $t_cf
+						                SET field_type = '$fieldtype',
+						                field_variable = '$fieldvarname',
+						                field_display_text = '$fieldtitle',
+						                field_order = '$order',									                									                							                
+						                tms = FROM_UNIXTIME($time)";
+			$result = api_sql_query($sql,__FILE__,__LINE__);
+			
+			$field_id=Database::get_last_insert_id();	
+		}
+		return $field_id;
+	}
+
+/**
+ * Update an extra field value for a given course
+ * @param	integer	Course ID
+ * @param	string	Field variable name
+ * @param	string	Field value
+ * @return	boolean	true if field updated, false otherwise
+ */
+	function update_course_extra_field_value($course_code,$fname,$fvalue='')
+	{
+
+		$t_cfv			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+		$t_cf 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+		$fname = Database::escape_string($fname);
+		$course_code = Database::escape_string($course_code);
+		$fvalues = '';
+		if(is_array($fvalue))
+		{
+			foreach($fvalue as $val)
+			{
+				$fvalues .= Database::escape_string($val).';';
+			}
+			if(!empty($fvalues))
+			{
+				$fvalues = substr($fvalues,0,-1);
+			}
+		}
+		else
+		{
+			$fvalues = Database::escape_string($fvalue);
+		}
+		
+		$sqlcf = "SELECT * FROM $t_cf WHERE field_variable='$fname'";
+		$rescf = api_sql_query($sqlcf,__FILE__,__LINE__);
+		if(Database::num_rows($rescf)==1)
+		{ //ok, the field exists
+			//	Check if enumerated field, if the option is available 
+			$rowcf = Database::fetch_array($rescf);
+			
+			$tms = time();
+			$sqlcfv = "SELECT * FROM $t_cfv WHERE course_code = '$course_code' AND field_id = '".$rowcf['id']."' ORDER BY id";
+			$rescfv = api_sql_query($sqlcfv,__FILE__,__LINE__);
+			$n = Database::num_rows($rescfv);
+			if ($n>1) {
+				//problem, we already have to values for this field and user combination - keep last one
+				while($rowcfv = Database::fetch_array($rescfv))
+				{
+					if($n > 1)
+					{
+						$sqld = "DELETE FROM $t_cfv WHERE id = ".$rowcfv['id'];
+						$resd = api_sql_query($sqld,__FILE__,__LINE__);
+						$n--;
+					}
+					$rowcfv = Database::fetch_array($rescfv);
+					if($rowcfv['field_value'] != $fvalues)
+					{ 
+						$sqlu = "UPDATE $t_cfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowcfv['id'];
+						$resu = api_sql_query($sqlu,__FILE__,__LINE__);
+						return($resu?true:false);					
+					}
+					return true;
+				}
+			} else if ($n==1) {
+				//we need to update the current record
+				$rowcfv = Database::fetch_array($rescfv);
+				if($rowcfv['field_value'] != $fvalues)
+				{
+					$sqlu = "UPDATE $t_cfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowcfv['id'];
+					//error_log('UM::update_extra_field_value: '.$sqlu);
+					$resu = api_sql_query($sqlu,__FILE__,__LINE__);
+					return($resu?true:false);
+				}
+				return true;
+			} else {
+				$sqli = "INSERT INTO $t_cfv (course_code,field_id,field_value,tms) " .
+					"VALUES ('$course_code',".$rowcf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
+				//error_log('UM::update_extra_field_value: '.$sqli);
+				$resi = api_sql_query($sqli,__FILE__,__LINE__);
+				return($resi?true:false);
+			}
+		} else {
+			return false; //field not found
+		}
+	}	
 } //end class CourseManager

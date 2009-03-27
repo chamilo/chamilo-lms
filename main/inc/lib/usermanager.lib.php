@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 19178 2009-03-22 01:27:30Z yannoo $
+<?php // $Id: usermanager.lib.php 19384 2009-03-27 20:37:14Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1634,8 +1634,10 @@ class UserManager
 					continue; // skip current/parent directory and .htaccess	
 				$file_list[] = $file;
 			}			
-			$return = $course;
-			$return .= '<ul>';	
+			if (count($file_list)>0) {
+				$return = $course;
+				$return .= '<ul>';		
+			}
 			foreach ($file_list as $file) {
 				$return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';			
 			}	

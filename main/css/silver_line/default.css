@@ -1370,20 +1370,19 @@ a.specialLink:hover,a.specialLink:focus {
 .confirmation-message,.error-message,.normal-message,.warning-message {
 	border: 1px solid #ddd;
 	margin: 1em auto;
-	padding: 40px .3em .5em .3em;
+	padding: 8px 0 12px 0;
 	position: relative;
-	width: 500px;
+	width: 98%;
 	color: #111;
-	background: transparent url('images/alert.jpg') no-repeat 54px 0px;
+	//This image is wrong size, so is commented until one solution
+	//background: transparent url('images/alert.jpg') no-repeat 10px 5px;
 	font: bold 110% Arial, sans-serif, sans;
-	text-align: left;
+    line-height: 2.5em;
 }
-
 .confirmation-message img,.error-message img,.normal-message img,.warning-message img
 	{
-	position: absolute;
-	top: 0;
-	left: 238px;
+	//position: absolute;
+	margin-left: 10px;
 }
 .confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link
 {
@@ -1391,6 +1390,7 @@ a.specialLink:hover,a.specialLink:focus {
 	bottom: 0.2em;
 	right: 0.5em;
 }
+
 #message {
 	margin: 0 auto;
 	text-align: center;

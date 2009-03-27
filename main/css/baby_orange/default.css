@@ -331,22 +331,21 @@ form span.form_error {
 }
 /* feedback messages */
 .confirmation-message,.error-message,.normal-message,.warning-message {
-	border: 2px solid #EE8003;
+	border: 1px solid #EE8003;
 	margin: 1em auto;
-	padding: 40px .5em .5em .3em;
+	padding: 8px 0 12px 0;
 	position: relative;
-	width: 500px;
+	width: 98%;
 	color: #EE4C03;
-	background: transparent url('images/alert.jpg') no-repeat 54px 0px;
+	//This image is wrong size, so is commented until one solution
+	//background: transparent url('images/alert.jpg') no-repeat 10px 5px;
 	font: bold 110% Arial, sans-serif, sans;
-	text-align: left;
+	line-height: 2.5em;
 }
-
 .confirmation-message img,.error-message img,.normal-message img,.warning-message img
 	{
-	position: absolute;
-	top: 0;
-	left: 238px;
+	//position: absolute;
+	margin-left: 10px;
 }
 .confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link
 {

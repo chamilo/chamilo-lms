@@ -1743,6 +1743,151 @@ function DokeosWSEditCourse($params){
 	
 }
 
+/* Register DokeosWSCourseDescription function */
+// Register the data structures used by the service
+
+$server->wsdl->addComplexType(
+	'courseDescription',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(		
+		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')					
+	)
+);
+
+// Prepare output params, in this case will return an array
+$server->wsdl->addComplexType(
+'fields_course_desc',
+'complexType',
+'struct',
+'all',
+'',
+array(
+		'course_desc_id' => array('name' => 'course_desc_id', 'type' => 'xsd:string'),
+		'course_desc_default_title' => array('name' => 'course_desc_default_title', 'type' => 'xsd:string'),
+		'course_desc_title' => array('name' => 'course_desc_title', 'type' => 'xsd:string'),
+		'course_desc_content' => array('name' => 'course_desc_content', 'type' => 'xsd:string')
+     )
+);
+
+$server->wsdl->addComplexType(
+'fields_course_desc_list',
+'complexType',
+'array',
+'',
+'SOAP-ENC:Array',
+array(),
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:fields_course_desc[]')),'tns:fields_course_desc'
+);
+
+
+// Register the method to expose
+$server->register('DokeosWSCourseDescription',			// method name
+	array('courseDescription' => 'tns:courseDescription'),				// input parameters
+	array('return' => 'tns:fields_course_desc_list'),						// output parameters
+	'urn:WSRegistration',									// namespace
+	'urn:WSRegistration#DokeosWSCourseDescription',		// soapaction
+	'rpc',													// style
+	'encoded',												// use
+	'This service edits a course description into dokeos'	// documentation
+);
+
+// Define the method DokeosWSCourseDescription
+function DokeosWSCourseDescription($params){
+	
+	global $_configuration,$_course;
+	
+	$secret_key = $params['secret_key'];
+	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (!api_is_valid_secret_key($secret_key,$security_key)) {
+		return -1; //secret key is incorrect
+	}
+		
+	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);	
+	$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+	$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+
+	$array_course_desc_id = array();
+	$array_course__desc_default_title = array();
+	$array_course_desc_title = array();
+	$array_course_desc_content = array();
+				
+	$original_course_id_name = $params['original_course_id_name'];
+	$original_course_id_value = $params['original_course_id_value'];
+		
+	// get course code from id from remote system
+	$sql = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$row = Database::fetch_row($res);	
+		
+	$course_code=$row[0];
+    
+	if (Database::num_rows($res) < 1) {
+		return 0;// original_course_id_value doesn't exits
+		//continue;			 
+	} else {
+		$sql = "SELECT code FROM $course_table WHERE code ='$course_code' AND visibility = '0'";
+		$resu = api_sql_query($sql,__FILE__,__LINE__);
+		$r_check_code = Database::fetch_row($resu);
+		if (Database::num_rows($resu) > 0) {
+			return  0; // this code is not active
+			//continue;				
+		}
+	}
+	 
+	$course_ifo = api_get_course_info($course_code);
+	
+	$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION,$course_ifo['dbName']);
+	
+	$sql = "SELECT * FROM $t_course_desc";
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	
+	/*$default_titles = array(
+							get_lang('GeneralDescription'),
+							get_lang('Objectives'),
+							get_lang('Topics'),
+							get_lang('Methodology'),
+							get_lang('CourseMaterial'),
+							get_lang('HumanAndTechnicalResources'),
+							get_lang('Assessment'),
+							get_lang('AddCat'));*/
+	
+	$default_titles = array('Descripcion general','Objetivos','Contenidos','Metodologia','Materiales','Recursos humanos y tecnicos','Evaluacion','Apartado');
+	
+	for ($x = 1;$x < 9; $x++){
+		$array_course_desc_id[$x] = $x;
+		$array_course_desc_default_title[$x] = $default_titles[$x-1];
+		$array_course_desc_title[$x] = '';
+		$array_course_desc_content[$x] = '';
+	}
+					
+	while ($row = Database::fetch_array($result)) {
+		$ind = (int)$row['id'];						
+		$array_course_desc_title[$ind] = $row['title'];
+		$array_course_desc_content[$ind] = $row['content'];			
+	}
+
+	
+	$count_results = count($default_titles);
+	$output = array();
+	for($i = 1; $i <=$count_results; $i++) {
+		$output[] = array(
+							'course_desc_id' =>$array_course_desc_id[$i],
+							'course_desc_default_title' => $array_course_desc_default_title[$i],
+							'course_desc_title' => $array_course_desc_title[$i],
+							'course_desc_content' => $array_course_desc_content[$i]);				
+	}
+	
+	return $output;	
+			
+}
+
 /* Register DokeosWSEditCourseDescription function */
 // Register the data structures used by the service
 
@@ -1752,10 +1897,12 @@ $server->wsdl->addComplexType(
 	'struct',
 	'all',
 	'',
-	array(
-		'course_description' => array('name' => 'course_description', 'type' => 'xsd:string'),
+	array(	
+		'course_desc_id' => array('name' => 'course_desc_id', 'type' => 'xsd:string'),
+		'course_desc_title' => array('name' => 'course_desc_title', 'type' => 'xsd:string'),
+		'course_desc_content' => array('name' => 'course_desc_content', 'type' => 'xsd:string'),
 		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
-		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')					
+		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')							
 	)
 );
 
@@ -1776,10 +1923,11 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'courses' => array('name' => 'courses', 'type' => 'tns:editCourseDescriptionParamsList'),		
+		'course_desc' => array('name' => 'course_desc', 'type' => 'tns:editCourseDescriptionParamsList'),		
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
 	)
 );
+
 
 // Prepare output params, in this case will return an array
 $server->wsdl->addComplexType(
@@ -1819,7 +1967,7 @@ $server->register('DokeosWSEditCourseDescription',			// method name
 // Define the method DokeosWSEditCourseDescription
 function DokeosWSEditCourseDescription($params){
 	
-	global $_configuration;
+	global $_configuration,$_course;
 	
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
@@ -1833,43 +1981,68 @@ function DokeosWSEditCourseDescription($params){
 	$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 	$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 	
-	$courses_params = $params['courses'];
+	$courses_params = $params['course_desc'];
 	$results = array();
 	$orig_course_id_value = array();
-	
+
 	foreach($courses_params as $course_param) {
-		
-		$course_description =$course_param['course_description'];	
+
 		$original_course_id_name = $course_param['original_course_id_name'];
 		$original_course_id_value = $course_param['original_course_id_value'];
-		$orig_course_id_value[] = $original_course_id_value; 	
+		$course_desc_id = $course_param['course_desc_id'];
+		$course_desc_title = $course_param['course_desc_title'];
+		$course_desc_content = $course_param['course_desc_content'];
+		$orig_course_id_value[] = $original_course_id_value;
+			
 		// get course code from id from remote system
 		$sql = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_row($res);	
 			
 		$course_code=$row[0];
-	
+	    
 		if (Database::num_rows($res) < 1) {
-			$results[] = 0; // original_course_id_value doesn't exits
-			continue;			 
+			$results[] = 0;
+			continue;// original_course_id_value doesn't exits						 
 		} else {
 			$sql = "SELECT code FROM $course_table WHERE code ='$course_code' AND visibility = '0'";
 			$resu = api_sql_query($sql,__FILE__,__LINE__);
 			$r_check_code = Database::fetch_row($resu);
 			if (Database::num_rows($resu) > 0) {
-				$results[] = 0; // this code is not active
-				continue;				
+				$results[] = 0;
+				continue;												
 			}
 		}
+				 		 
+		$course_ifo = api_get_course_info($course_code);
 		
-		$sql = "UPDATE $course_table SET description='".Database::escape_string($course_description)."' WHERE code='".Database::escape_string($course_code)."'";								
-								
-		$res = api_sql_query($sql, __FILE__, __LINE__);
-		$return = Database::affected_rows();
-		$results[] = $return;
-		continue;					
-	}
+		$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION,$course_ifo['dbName']);
+		
+		$course_desc_id = Database::escape_string($course_desc_id);
+		$course_desc_title = Database::escape_string($course_desc_title);
+		$course_desc_content = Database::escape_string($course_desc_content);
+		
+		$course_desc_id = (int)$course_desc_id;		
+		if ($course_desc_id > 8 && $course_desc_id < 1) {
+			$results[] = 0; // course_desc_id invalid
+			continue;
+		}
+		
+		//check if data already exits into course_description table
+		$sql_check_id = "SELECT * FROM $t_course_desc WHERE id ='$course_desc_id'";
+		$res_check_id = api_sql_query($sql_check_id,__FILE__,__LINE__);
+		
+		if (Database::num_rows($res_check_id) > 0) {
+			$sql = "UPDATE $t_course_desc SET title='$course_desc_title', content = '$course_desc_content' WHERE id = '".$course_desc_id."'";
+			api_sql_query($sql,__FILE__,__LINE__);	
+		} else {
+			$sql = "INSERT IGNORE INTO $t_course_desc SET id = '".$course_desc_id."', title = '$course_desc_title', content = '$course_desc_content'";				
+			api_sql_query($sql, __FILE__, __LINE__);
+		}
+			
+		$results[] = 1;		
+					
+	}// end principal foreach
 	
 	$count_results = count($results);
 	$output = array();

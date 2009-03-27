@@ -1,4 +1,4 @@
-<?php // $Id: downloadfolder.inc.php 10195 2006-11-25 15:26:00Z pcool $
+<?php // $Id: downloadfolder.inc.php 19385 2009-03-27 20:48:57Z iflorespaz $
 /**
 ==============================================================================
 *	Functions and main code for the download folder feature
@@ -115,7 +115,7 @@ else
 	//2nd: get all folders that are invisible in the given path
 	$query2 = api_sql_query("SELECT path FROM $doc_table AS docs,$prop_table AS props WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `props`.`visibility`<>'1' AND `docs`.`filetype`='folder'",__FILE__,__LINE__);
 	//if we get invisible folders, we have to filter out these results from all visible files we found
-	if(mysql_num_rows($query2)>0)
+	if(Database::num_rows($query2)>0)
 	{
 		//add tem to an array
 		while($invisible_folders = mysql_fetch_assoc($query2))

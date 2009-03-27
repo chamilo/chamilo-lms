@@ -1,4 +1,4 @@
-<?php // $Id: document.php 19016 2009-03-12 21:43:04Z herodoto $
+<?php // $Id: document.php 19385 2009-03-27 20:48:57Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -85,7 +85,7 @@ if(isset($_GET['id_session']))
 $table_course_tool = Database::get_course_table(TABLE_TOOL_LIST, $_course['dbName']);
 $tool_sql = 'SELECT visibility FROM ' . $table_course_tool . ' WHERE name = "'. TOOL_DOCUMENT .'" LIMIT 1';
 $tool_result = api_sql_query($tool_sql,__FILE__,__LINE__);
-$tool_row = mysql_fetch_array($tool_result);
+$tool_row = Database::fetch_array($tool_result);
 $tool_visibility = $tool_row['visibility'];
 if ($tool_visibility == '0' && $to_group_id == '0' && !($is_allowed_to_edit || $group_member_with_upload_rights))
 {
@@ -288,7 +288,7 @@ $image_files_only='';
 -----------------------------------------------------------
 */
 
-$interbreadcrumb[]= array ('url'=>'#', 'name'=> get_lang('Document'));
+$interbreadcrumb[]= array ('url'=>'', 'name'=> get_lang('Document'));
 
 //------interbreadcrumb for the current directory root path
 

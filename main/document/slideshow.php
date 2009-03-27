@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 18899 2009-03-09 21:37:00Z herodoto $
+<?php // $Id: slideshow.php 19385 2009-03-27 20:48:57Z iflorespaz $
 
 /*
 ==============================================================================
@@ -39,7 +39,7 @@ http://icto.UGent.be
 */
 /*
 ==============================================================================
-Improve by Juan Carlos Raña Trabado
+Improve by Juan Carlos Raï¿½a Trabado
 herodoto@telefonica.net
 January 2008
 ==============================================================================
@@ -242,7 +242,7 @@ if ($slide_id !== "all")
 	{
 		$height_width_tags = 'width="'.$image_width.'" height="'.$image_height.'"';
 		
-		//adjust proportions. Juan Carlos Raña Trabado TODO: replace resize_image function ?	
+		//adjust proportions. Juan Carlos Raï¿½a Trabado TODO: replace resize_image function ?	
 		$size = @ getimagesize($image);
 		$height_width_tags = (($size[1] > $image_width) ? 'width="'.$image_width.'"' : '');
 		$height_width_tags = (($size[1] > $image_height) ? 'height="'.$image_height.'"' : '');		
@@ -262,7 +262,7 @@ if ($slide_id !== "all")
 	}
 	$sql = "SELECT * FROM $tbl_documents WHERE path='".$pathpart.$image_files_only[$slide]."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
-	$row = mysql_fetch_array($result);
+	$row = Database::fetch_array($result);
 
 	echo '<table align="center" border="0">';
 	echo '<tr>';

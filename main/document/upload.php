@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 19254 2009-03-24 22:18:53Z cvargas1 $
+<?php // $Id: upload.php 19385 2009-03-27 20:48:57Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -313,8 +313,8 @@ if(isset($_FILES['user_upload']))
       if ( (api_get_setting('search_enabled')=='true') && ($docid = DocumentManager::get_document_id($_course, $new_path))) {
         $table_document = Database::get_course_table(TABLE_DOCUMENT);
         $result = api_sql_query("SELECT * FROM $table_document WHERE id = '$docid' LIMIT 1", __FILE__, __LINE__);
-        if (mysql_num_rows($result) == 1) {
-          $row = mysql_fetch_array($result);
+        if (Database::num_rows($result) == 1) {
+          $row = Database::fetch_array($result);
           $doc_path = api_get_path(SYS_COURSE_PATH) . $courseDir. $row['path'];
           //TODO: mime_content_type is deprecated, fileinfo php extension is enabled by default as of PHP 5.3.0
           // now versions of PHP on Debian testing(5.2.6-5) and Ubuntu(5.2.6-2ubuntu) are lower, so wait for a while

@@ -706,4 +706,5 @@ $SeeMoreOptions = "See more options";
 $TemplatePreview = "Template preview";
 $NoTemplatePreview = "Preview not available";
 $ModifyCategory = "Modify category";
+$Photo = "Photo";
 ?>

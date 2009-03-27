@@ -109,8 +109,8 @@ $EditAllWeights = "Editar todos los pesos";
 $GradebookQualificationTotal = "Total";
 $GradebookEvaluationDeleted = "La evaluación ha sido eliminada";
 $GradebookQualifyLog = "Historial de pesos del cuaderno";
-$GradebookNameLog = "Nombre del cuaderno";
-$GradebookDescriptionLog = "Descripción del cuaderno";
+$GradebookNameLog = "Nombre en el  cuaderno";
+$GradebookDescriptionLog = "Descripción en el cuaderno";
 $GradebookVisibilityLog = "Visibilidad del cuaderno";
 $ResourceType = "Tipo de recurso";
 $GradebookWhoChangedItLog = "Quien lo modificó";
@@ -133,4 +133,5 @@ $GradebookWeightUpdated = "Peso(s) modificado(s) correctamente";
 $ChooseItem = "Seleccione un item";
 $AverageResultsVsResource = "Promedio de resultados contra recursos";
 $ToViewGraphScoreRuleMustBeEnabled = "La vista de regla de puntuación gráfica debe estar habilitada";
+$GradebookPreviousWeight = "Peso anterior del recurso";
 ?>

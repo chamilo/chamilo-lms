@@ -67,6 +67,7 @@ $RepeatedEventViewOriginalEvent = "Poglej začetni dogodek";
 $ICalFileImport = "Uvozi iCal/ics datoteko";
 $AllUsersOfThePlatform = "Vsi uporabniki platforme";
 $GlobalEvent = "Globalni dogodek";
+$ModifyEvent = "Spremeni dogodek";
 $EndDateCannotBeBeforeTheStartDate = "Končni datum ne more biti pred začetnim datumom";
 $AgendaSortChronologicallyUp = "Razvrsti zapise agende kronološko (naraščajoče)";
 $AgendaSortChronologicallyDown = "Razvrsti zapise agende kronološko (padajoče)";

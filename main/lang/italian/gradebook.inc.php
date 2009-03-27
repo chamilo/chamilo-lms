@@ -133,4 +133,5 @@ $GradebookWeightUpdated = "I pesi sono stati aggiornati";
 $ChooseItem = "Scegli un elemento";
 $AverageResultsVsResource = "Punteggio medio per risorsa";
 $ToViewGraphScoreRuleMustBeEnabled = "Per vedere il grafico devono essere attivate le regole sul punteggio";
+$GradebookPreviousWeight = "Peso precedentemente assegnato";
 ?>

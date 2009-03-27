@@ -590,7 +590,48 @@ echo '<div id="social-profile-wrapper">';
 				echo '</br><div class="rounded2">';
 				echo $file_list;
 				echo '</div>';		
-			}			
+			}
+			
+			
+			//loading this information 
+			
+			//-- Competences
+			if (!empty($user_info['competences']) || !empty($user_info['diplomas']) || !empty($user_info['openarea']) || !empty($user_info['teach']) ) {
+				echo '<div class="actions-profile">';
+				echo get_lang('MoreInfo');
+				echo '</div>';
+			}
+			$cut_size = 220;
+			if (!empty($user_info['competences'])) {		
+				echo '<br />';
+				echo get_lang('Competences');
+				echo '<div class="rounded social-profile-post" style="width:268px;">';
+				echo cut($user_info['competences'],$cut_size);
+				echo '<br />';
+				echo '</div>';
+			}
+			
+			if (!empty($user_info['diplomas'])) {	
+				echo get_lang('Diplomas');
+				echo '<div class="rounded social-profile-post" style="width:268px;" >';
+				echo cut($user_info['diplomas'],$cut_size); 
+				echo '<br />';
+				echo '</div>';
+			}
+			if (!empty($user_info['openarea'])) {	
+				echo get_lang('OpenArea');
+				echo '<div class="rounded social-profile-post" style="width:268px;" >';
+				echo cut($user_info['openarea'],$cut_size); 
+				echo '<br />';
+				echo '</div>';
+			}
+			if (!empty($user_info['teach'])) {	
+				echo get_lang('Teach');
+				echo '<div class="rounded social-profile-post" style="width:268px;" >';
+				echo cut($user_info['teach'],$cut_size);
+				echo '<br />';
+				echo '</div>';
+			}				
 		}
 		
 	echo '</div>'; // end of content section
@@ -764,32 +805,7 @@ echo '<div id="social-profile-container">';
 					*/
 				}
 				echo '</ul>';				
-				
-				echo '<br />';
-				/* this should be somewhere
-				//-- Competences
-				api_display_tool_title(get_lang('MoreInfo'));
-				echo '<br />';
-				echo get_lang('Competences');
-				echo '<div class="rounded social-profile-post">';
-				echo $user_info['competences']; echo '<br />';
-				echo '</div>';
-				
-				echo get_lang('Diplomas');
-				echo '<div class="rounded social-profile-post">';
-				echo $user_info['diplomas']; echo '<br />';
-				echo '</div>';
-				
-				echo get_lang('OpenArea');
-				echo '<div class="rounded social-profile-post">';
-				echo $user_info['openarea']; echo '<br />';
-				echo '</div>';
-				
-				echo get_lang('Teach');
-				echo '<div class="rounded social-profile-post">';
-				echo $user_info['teach']; echo '<br />';
-				echo '</div>';
-				*/		            
+				echo '<br />';				            
 		echo '</div>';
 		}
 	echo '</div>';

@@ -108,7 +108,9 @@ if (isset ($_POST['action']))
 $nameTools = get_lang('GroupCreation');
 $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('GroupManagement'));
 Display :: display_header($nameTools, "Group");
-api_display_tool_title($nameTools);
+echo '<div class="actions-title">';
+echo $nameTools;
+echo '</div>';
 if (!is_allowed_to_edit())
 {
 	api_not_allowed();

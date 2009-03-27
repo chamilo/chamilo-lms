@@ -307,7 +307,9 @@ if (isset($_POST['group_members'])) {
 	}
 }
 Display :: display_header($nameTools, "Group");
-api_display_tool_title($nameTools);
+echo '<div class="actions-title">';
+echo $nameTools;
+echo '</div>';
 ?>
 <a href="group_space.php"><?php  echo get_lang('GroupSpace') ?></a>
 <br/>

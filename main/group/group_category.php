@@ -1,5 +1,5 @@
 <?php
-// $Id: group_category.php 18203 2009-02-03 18:02:16Z ndieschburg $
+// $Id: group_category.php 19398 2009-03-27 22:18:21Z iflorespaz $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -214,7 +214,9 @@ if ($form->validate())
 }
 // Else display the form
 Display :: display_header($nameTools, "Group");
-api_display_tool_title($nameTools);
+echo '<div class="actions-title">';
+echo $nameTools;
+echo '</div>';
 $defaults = $category;
 $defaults['action'] = $action;
 if( $defaults['max_student'] == MEMBER_PER_GROUP_NO_LIMIT)

@@ -3,7 +3,7 @@
  *****************************************************/
 body {
         /* hack ignored by non-IE to enable ie to support :hover on button */
-        behavior:url("/main/css/csshover3.htc");
+    behavior:url("/main/css/csshover3.htc");
 	font-family: bold arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	color: #000;
@@ -2266,13 +2266,15 @@ float:left;
     background:#efefef;
     border-bottom:1px dotted #999999;
     border-top:1px dotted #999999;
-    /*height:35px;*/
+	border-left:1px dotted #999999;
+	border-right:1px dotted #999999;
+    /*height:35px;*/		
     padding:2px;
     margin-bottom: 2px;
     /*background:url(images/actions.jpg) repeat-x;*/
     vertical-align:middle;
     font-weight:700;
-    margin-right:2px;
+    margin-right:10px;
 }	
 
 

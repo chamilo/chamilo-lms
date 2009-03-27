@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 19014 2009-03-12 21:38:24Z iflorespaz $
+<?php // $Id: edit_document.php 19387 2009-03-27 21:09:01Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -527,12 +527,13 @@ if($is_allowedToEdit)
 				}
 				else
 				{
-					$file_size = filesize($filepath.$filename.'.'.$extension);
-					$document_id = DocumentManager::get_document_id($_course,$file);
-					if($document_id)
-					{
-						update_existing_document($_course, $document_id,$file_size,$read_only_flag);
-					}					
+					if (is_file($filepath.$filename.'.'.$extension)) {
+						$file_size = filesize($filepath.$filename.'.'.$extension);
+						$document_id = DocumentManager::get_document_id($_course,$file);
+						if ($document_id) {
+							update_existing_document($_course, $document_id,$file_size,$read_only_flag);
+						}							
+					}				
 				}				
 			}
 			else

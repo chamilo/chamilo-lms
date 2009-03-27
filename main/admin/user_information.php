@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 18640 2009-02-24 00:02:48Z yannoo $
+// $Id: user_information.php 19380 2009-03-27 17:02:50Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -70,7 +70,7 @@ if( isset($_GET['action']) ) {
 	}	
 }
 api_display_tool_title($tool_name);
-echo '<div align="right" style="margin-right:4em;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$_GET['user_id'].'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.gif').'</a></div>'."\n";
+echo '<div align="right" style="margin-right:4em;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$_GET['user_id'].'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.gif',get_lang('Reporting')).'</a></div>'."\n";
 //getting the user image
 
 $sysdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'system',false,true);
@@ -175,7 +175,7 @@ if(count($sessions)>0){
 			$row[] = $my_course['i'];
 			$row[] = $my_course['s'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
 			$tools = '<a href="course_information.php?code='.$my_course['k'].'">'.Display::return_icon('synthese_view.gif').'</a>'.
-					'<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif').'</a>' .
+					'<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
 					'<a href="course_edit.php?course_code='.$my_course['k'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 			
 			if( $my_course->status == STUDENT ){
@@ -219,8 +219,8 @@ if (Database::num_rows($res) > 0)
 		$row[] = $course->code;
 		$row[] = $course->title;
 		$row[] = $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher');
-		$tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif').'</a>'.
-				'<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif').'</a>' .
+		$tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif', get_lang('SynthesisView')).'</a>'.
+				'<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
 				'<a href="course_edit.php?course_code='.$course->code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 		if( $course->status == STUDENT )
 		{

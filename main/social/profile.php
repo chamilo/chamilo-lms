@@ -219,7 +219,7 @@ $interbreadcrumb[]= array ('url' =>$my_link,'name' => get_lang('ModifyProfile') 
 
 $interbreadcrumb[]= array (
 	'url' => '../social/profile.php?'.$link_shared.'#remote-tab-1',
-	'name' => get_lang('ViewSharedProfile')
+	'name' => get_lang('ViewMySharedProfile')
 );
 
 if (isset($_GET['u'])) {
@@ -488,7 +488,7 @@ echo '<div id="social-profile-wrapper">';
 				$number_loop   = ($number_friends/$number_of_images);
 				$loop_friends  = ceil($number_loop);
 				$j=0;
-				$friend_html .= '<div class="actions-profile">'.get_lang('Friends').'</div>';	
+				$friend_html .= '<div class="actions-profile">'.get_lang('MyFriends').'</div>';	
 				$friend_html.= '<div id="friend-container">';							
 					$friend_html.= '<div id="friend-header">';
 							//$friend_html.=  $friends_count.' '.get_lang('Friends');
@@ -570,7 +570,7 @@ echo '<div id="social-profile-wrapper">';
 			if (!empty($production_list )) {
 				echo '<div class="clear"></div><br />';
 				echo '<div class="actions-profile">';
-				echo get_lang('Productions');
+				echo get_lang('MyProductions');
 				echo '</div>';
 				echo '<div class="rounded1">';
 				echo $production_list;
@@ -712,7 +712,7 @@ echo '<div id="social-profile-container">';
 				//echo '<pre>';
 				if ( is_array($list) ) {
 					echo '<div class="actions-profile">';
-					echo ucfirst(get_lang('Courses'));
+					echo ucfirst(get_lang('MyCourses'));
 					echo '</div>';
 					//Courses whithout sessions
 					$old_user_category = 0;

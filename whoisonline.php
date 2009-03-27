@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 19333 2009-03-25 22:20:36Z juliomontoya $
+<?php // $Id: whoisonline.php 19389 2009-03-27 21:14:44Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,8 +42,7 @@ require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-				
+$htmlHeadXtra[] = '<script type="text/javascript">				
 	function show_image(image,width,height) {
 		width = parseInt(width) + 20;
 		height = parseInt(height) + 20;			
@@ -117,8 +116,7 @@ function hide_display_message () {
 	}
 }	
 </script>';
-if ($_GET['chatid'] != '')
-{
+if ($_GET['chatid'] != '') {
 	//send out call request
 	$time = time();
 	$time = date("Y-m-d H:i:s", $time);
@@ -139,8 +137,7 @@ if ($_GET['chatid'] != '')
 function display_user_list($user_list, $_plugins)
 {
 	global $charset;
-	if ($_GET["id"]=='')
-	{
+	if ($_GET["id"]=='') {
 		$extra_params = array();
 		$course_url = '';
 		if(strlen($_GET['cidReq']) > 0) {
@@ -154,7 +151,7 @@ function display_user_list($user_list, $_plugins)
 			$url = '?id='.$uid.$course_url;
             $image_array=UserManager::get_user_picture_path_by_id($uid,'web',false,true);
                                               
-            $table_row[] = '<a href="'.$url.'"><img src="'.$image_array['dir'].$image_array['file'].'" border="1" height="100"></a>';                     
+            $table_row[] = '<a href="'.$url.'"><img src="'.$image_array['dir'].$image_array['file'].'" border="1" height="110"></a>';                     
 			$table_row[] = '<a href="'.$url.'">'.$user_info['firstName'].'</a>';
 			$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
 			
@@ -218,14 +215,12 @@ function display_individual_user($user_id)
 {
 	global $interbreadcrumb;
 	$safe_user_id = Database::escape_string($user_id);
-
 	
 	// to prevent a hacking attempt: http://www.dokeos.com/forum/viewtopic.php?t=5363
 	$user_table=Database::get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT * FROM $user_table WHERE user_id='".$safe_user_id."'";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	if (Database::num_rows($result)==1)
-	{
+	if (Database::num_rows($result)==1) {
 		$user_object = Database::fetch_object($result);
 		$name = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;<b>('.get_lang('Me').')</b>' : '' );
 		$alt = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
@@ -409,7 +404,6 @@ if (isset($_GET['id'])) {
 } else {
 	echo '<a href="'.$referer.'">&lt; '.get_lang('Back').'</a>';	
 } 
-
 
 /*
 ==============================================================================

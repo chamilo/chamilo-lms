@@ -43,23 +43,26 @@ if (isset($_POST['load_ajax'])) {
 			$my_course_info_db=explode('_',$course_db);
 			$course_id=$my_course_info_db[1];
 			if (api_is_user_of_course($course_id,api_get_user_id())) {
-				//------Forum messages
-				api_display_tool_title(get_lang('Forum'));
-				//print_r($course);
+				
 				$table_forums 			= Database :: get_course_table(TABLE_FORUM,$course_db);
 				$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD,$course_db);
 				$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST,$course_db);
 				$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_db);
 				$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 				
-				//------Forum messages
-				echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;" >';			
-				get_all_post_from_user($user_id, $course_db);
-				echo '</div>';	
-				echo '<br />';			
+				//------Forum messages							
+				$forum_result = get_all_post_from_user($user_id, $course_db);
+				$all_result_data = 0;
+				if ($forum_result !='') {					
+					api_display_tool_title(get_lang('Forum'));
+					echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;" >';
+					echo $forum_result;
+					echo '</div>';	
+					echo '<br />';
+					$all_result_data++;
+				}							
 				
-				//------Blog posts				
-						
+				//------Blog posts
 				$result = get_blog_post_from_user($course_db, $user_id); 
 				if (!empty($result)) {
 					echo '<div class="clear"></div><br />';
@@ -67,7 +70,8 @@ if (isset($_POST['load_ajax'])) {
 					echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
 					echo $result;
 					echo '</div>';
-					echo '<br />';				
+					echo '<br />';
+					$all_result_data++;				
 				}
 				
 				//------Blog comments			
@@ -77,8 +81,13 @@ if (isset($_POST['load_ajax'])) {
 					echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
 					echo $result;
 					echo '</div>';
-					echo '<br />';				
+					echo '<br />';
+					$all_result_data++;		
 				}
+				if ($all_result_data == 0) {
+					echo get_lang('NoDataAvailable');
+				}
+				
 			} else {
 					echo '<div class="clear"></div><br />';
 					api_display_tool_title(get_lang('Details'));	
@@ -93,26 +102,21 @@ if (isset($_POST['load_ajax'])) {
 			//echo 'load2';
 		break;
 		default:
-			
+					
 	}
-	
-	
 } else {
 	// normal behavior
 	echo '<div id="actions" class="actions">';
 	echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>&nbsp;&nbsp;';
 	if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
-		echo '<a href="../social/profile.php?shared=true">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('ViewSharedProfile'),'UTF-8',$charset).'</a>';	
-		
+		echo '<a href="../social/profile.php?shared=true">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('ViewSharedProfile'),'UTF-8',$charset).'</a>';		
 	}
-	echo '</div>';
-	
+	echo '</div>';	
 	echo '<div id="profile_container" style="width:550px;display:block;">';
 		echo '<div id="picture" style="width:200px;float:right;position:relative;">'; 
 			echo '<img src='.$img_array['dir'].$img_array['file'].' />';
 		echo '</div>';	
-		echo '<div class="social-profile-info">';
-			
+		echo '<div class="social-profile-info">';			
 			echo '<dt>'.mb_convert_encoding(get_lang('UserName'),'UTF-8',$charset).'</dt>
 			<dd>'. mb_convert_encoding($user_info['username'],'UTF-8',$charset).'	</dd>';
 			echo '<dt>'.mb_convert_encoding(get_lang('FirstName'),'UTF-8',$charset).'</dt>
@@ -124,8 +128,7 @@ if (isset($_POST['load_ajax'])) {
 			echo '<dt>'.mb_convert_encoding(get_lang('Email'),'UTF-8',$charset).'</dt>
 			<dd>'. mb_convert_encoding($user_info['email'],'UTF-8',$charset).'</dd>';
 			echo '<dt>'.mb_convert_encoding(get_lang('Phone'),'UTF-8',$charset).'</dt>
-			<dd>'. mb_convert_encoding($user_info['phone'],'UTF-8',$charset).'</dd>';
-			
+			<dd>'. mb_convert_encoding($user_info['phone'],'UTF-8',$charset).'</dd>';			
 		echo '</div>';
 	echo '</div>';	
 }

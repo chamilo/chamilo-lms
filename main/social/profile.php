@@ -763,46 +763,7 @@ echo '<div id="social-profile-container">';
 					}
 					*/
 				}
-				echo '</ul>';	
-				
-			
-				//echo '<pre>';
-				foreach ($course_list_code as $course) {	
-					// course name
-					//echo ucfirst(get_lang('InCourse')).' '.$course['code'].'<br /><br />';				
-					
-					/*
-					//------Blog posts				
-					api_display_tool_title(get_lang('BlogPosts'));
-						
-					echo '<div class="rounded social-profile-post">';		
-					get_blog_post_from_user($course['dbName'], $user_id);
-					echo '</div>';
-					echo '<br />';
-					
-					//------Blog comments				
-					api_display_tool_title(get_lang('BlogComments'));
-					echo '<div class="rounded" social-profile-post >';			
-						get_blog_comment_from_user($course['dbName'], $user_id);
-					echo '</div>';
-					echo '<br />';
-							
-					
-					//------Forum messages
-					api_display_tool_title(get_lang('Forum'));
-					//print_r($course);
-					$table_forums 			= Database :: get_course_table(TABLE_FORUM,$course['dbName']);
-					$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD,$course['dbName']);
-					$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST,$course['dbName']);
-					$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY,$course['dbName']);
-					$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
-					
-					echo '<div class="rounded social-profile-post">';			
-					get_all_post_from_user($user_id);
-					echo '</div>';	
-					echo '<br />';
-					*/
-				}
+				echo '</ul>';				
 				
 				echo '<br />';
 				/* this should be somewhere
@@ -831,14 +792,8 @@ echo '<div id="social-profile-container">';
 				*/		            
 		echo '</div>';
 		}
+	echo '</div>';
 echo '</div>';
-			
-    		
-	
-                    
-           
-echo '</div>';
-
 
 echo '</div>'; //from the main
 echo '<form id="id_reload" action="#"></form>';

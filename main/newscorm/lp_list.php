@@ -178,7 +178,8 @@ echo	'<th>'.get_lang('Name').'</th>'."\n" .
 if (api_is_allowed_to_edit())
 {
   echo '<th>'.get_lang('Description')."</th>\n" .
-  		'<th>'.get_lang('ExportShort')."</th>\n" .
+  		//xport now is inside "Edit"
+  		//'<th>'.get_lang('ExportShort')."</th>\n" .
 		'<th>'.get_lang('Modify')."</th>\n" .
 		'<th>'.get_lang('Move')."</th>\n";
 }
@@ -260,8 +261,9 @@ if (is_array($flat_list))
 		    $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a></td>'."\n";
 
 			/* export */
+			//Export is inside "Edit"
 			//export not available for normal lps yet
-			if($details['lp_type']==1){
+			/*if($details['lp_type']==1){
 				$dsp_export = '<td align="center">' .
 					"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
 					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
@@ -279,7 +281,7 @@ if (is_array($flat_list))
 					"<img src=\"../img/cd_gray.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					//"</a>" .
 					"";
-			}
+			}*/
 			/* edit title and description */
 
 			$dsp_edit = '<td align="center">';
@@ -370,8 +372,28 @@ if (is_array($flat_list))
 							'<img src="../img/bug_gray.gif" border="0" alt="'.get_lang("ShowDebug").'" title="'.get_lang("ShowDebug").'"/>' .
 							'</a>&nbsp;';
 				}
-	    	}
-	    	if($details['lp_display_order'] == 1 && $max != 1)
+		 	}
+		 	/*   Export  */
+	    	if($details['lp_type']==1){
+				$dsp_disk = 
+					"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
+					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
+					"</a>" .
+					"";
+			}elseif($details['lp_type']==2){
+				$dsp_disk = 
+					"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name,'strict').".zip'>" .
+					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
+					"</a>" .
+					"";
+			}else{
+				$dsp_disk = 
+					//"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
+					"<img src=\"../img/cd_gray.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
+					//"</a>" .
+					"";
+			}
+			if($details['lp_display_order'] == 1 && $max != 1)
 	    	{
 	    		$dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">' .
 	    				'<img src="../img/arrow_down_0.gif" border="0" alt="'.get_lang("MoveDown").'" title="'.get_lang("MoveDown").'"/>' .
@@ -398,7 +420,7 @@ if (is_array($flat_list))
 	    	}
 	    }	// end if($is_allowedToEdit)
 	    //echo $dsp_line.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible;
-	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_delete.$dsp_order;
+	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_delete.$dsp_disk.$dsp_order;
 	    //echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_force_commit.$dsp_delete;
 	    echo	"</tr>\n";
 		$current ++; //counter for number of elements treated

@@ -183,7 +183,7 @@ function DokeosWSCreateUser($params) {
 				{
 					$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
 				}
-				$sql .=	"
+				$sql .=	"						
 						email='".Database::escape_string($email)."',
 						status='".Database::escape_string($status)."',
 						official_code='".Database::escape_string($official_code)."',
@@ -466,6 +466,7 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 					$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
 				}
 				$sql .=	"
+						password='".Database::escape_string($password)."',
 						email='".Database::escape_string($email)."',
 						status='".Database::escape_string($status)."',
 						official_code='".Database::escape_string($official_code)."',
@@ -475,6 +476,16 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 						hr_dept_id=".intval($hr_dept_id);				
 				$sql .=	" WHERE user_id='".$r_check_user[0]."'";
 				api_sql_query($sql,__FILE__,__LINE__);
+				
+				if (is_array($extra_list) && count($extra_list) > 0) {
+					foreach ($extra_list as $extra) {					    			
+						$extra_field_name = $extra['field_name'];
+						$extra_field_value = $extra['field_value'];						
+						// save the external system's id into user_field_value table'	
+						$res = UserManager::update_extra_field_value($r_check_user[0],$extra_field_name,$extra_field_value);										
+					}
+				}
+				
 				$results[] = $r_check_user[0];
 				continue;								
 			} else {
@@ -1251,7 +1262,15 @@ function DokeosWSCreateCourse($params) {
 									visual_code='".Database::escape_string($wanted_code)."',										
 									visibility = '3'								
 						WHERE code='".Database::escape_string($r_check_course[0])."'";			
-				api_sql_query($sql,__FILE__,__LINE__);	
+				api_sql_query($sql,__FILE__,__LINE__);
+				if (is_array($extra_list) && count($extra_list) > 0) {
+					foreach ($extra_list as $extra) {					    			
+							$extra_field_name = $extra['field_name'];
+							$extra_field_value = $extra['field_value'];				
+							// save the external system's id into course_field_value table'	
+							$res = CourseManager::update_course_extra_field_value($r_check_course[0],$extra_field_name,$extra_field_value);										
+					}
+				}		
 				$results[] = $r_check_course[0];
 				continue;				
 			} else {
@@ -1668,6 +1687,8 @@ function DokeosWSEditCourse($params){
 		$subscribe=$course_param['subscribe'];
 		$unsubscribe=$course_param['unsubscribe'];
 		$visual_code = $course_param['visual_code'];
+		
+		
 		$original_course_id_name = $course_param['original_course_id_name'];
 		$original_course_id_value = $course_param['original_course_id_value'];
 		$orig_course_id_value[] = $original_course_id_value; 
@@ -1692,11 +1713,18 @@ function DokeosWSEditCourse($params){
 				continue;				 
 			}
 		}
-	
+						
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT concat(lastname,'',firstname) as tutor_name FROM $table_user WHERE status='1' AND user_id = '$tutor_id' ORDER BY lastname,firstname";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$tutor_name = Database::fetch_row($res);
+		
+		$dbnamelength = strlen($_configuration['db_prefix']);
+		$maxlength = 40 - $dbnamelength;
+		
+		if (empty($visual_code)) {
+			$visual_code = generate_course_code(substr($title,0,$maxlength));
+		}
 			
 		$disk_quota = '50000';
 		$tutor_name=$tutor_name[0];

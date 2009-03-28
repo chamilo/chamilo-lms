@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 18623 2009-02-20 17:49:23Z cfasanando $
+<?php // $Id: exercice_submit.php 19404 2009-03-28 01:24:38Z cvargas1 $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 18623 2009-02-20 17:49:23Z cfasanando $
+* 	@version $Id: exercice_submit.php 19404 2009-03-28 01:24:38Z cvargas1 $
 */
 
 
@@ -900,18 +900,27 @@ else
 	$number_of_hotspot_questions = 0;
 	$onsubmit = '';
 	$i=0;
-	
-	foreach($questionList as $questionId)
-	{
-		$i++;
-		$objQuestionTmp = Question :: read($questionId);
-		
-		// for sequential exercises
-		if($exerciseType == 2) {
-			// if it is not the right question, goes to the next loop iteration
-			if($questionNum != $i)
-			{
-				continue;
+	//i have a doubt in this line cvargas
+	var_dump($questionList);
+	if (!strcmp($questionList[0],'')===0) {
+		foreach($questionList as $questionId) {
+			$i++;
+			$objQuestionTmp = Question :: read($questionId);
+			// for sequential exercises
+			if($exerciseType == 2) {
+				// if it is not the right question, goes to the next loop iteration
+				if($questionNum != $i) {
+					continue;
+				}
+				else
+				{
+					if ($objQuestionTmp->selectType() == HOT_SPOT)
+					{
+						$number_of_hotspot_questions++;
+					}
+					
+					break;
+				}
 			}
 			else
 			{
@@ -919,18 +928,9 @@ else
 				{
 					$number_of_hotspot_questions++;
 				}
-				break;
-			}
-		}
-		else
-		{
-			if ($objQuestionTmp->selectType() == HOT_SPOT)
-			{
-				$number_of_hotspot_questions++;
 			}
 		}
 	}
-
 	if($number_of_hotspot_questions > 0)
 	{
 		$onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";

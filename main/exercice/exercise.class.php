@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 19314 2009-03-25 17:25:18Z cvargas1 $
+* 	@version $Id: exercise.class.php 19404 2009-03-28 01:24:38Z cvargas1 $
 */
 
 
@@ -45,8 +45,8 @@ class Exercise
 	var $feedbacktype;
 	var $end_time;
     var $start_time;
-
 	var $questionList;  // array with the list of this exercise's questions
+	var $results_disabled;
 
 	/**
 	 * constructor of the class
@@ -66,6 +66,7 @@ class Exercise
 		$this->timeLimit = 0;
 		$this->end_time = '0000-00-00 00:00:00';
         $this->start_time = '0000-00-00 00:00:00';
+        $this->results_disabled =1;
 	}
 
 	/**
@@ -221,6 +222,17 @@ class Exercise
 	{
 		return $this->type;
 	}
+
+	/**
+	 * tells if questions are selected randomly, and if so returns the draws
+	 *
+	 * @author - Carlos Vargas
+	 * @return - integer - results disabled exercise
+	 */
+	function selectResultsDisabled()
+	{
+		return $this->results_disabled;
+	}	
 
 	/**
 	 * tells if questions are selected randomly, and if so returns the draws
@@ -480,6 +492,15 @@ class Exercise
 	{
 		$this->results_disabled = false;
 	}
+	function updateResultsDisabled($results_disabled)
+	{
+		if ($results_disabled==1){
+			$this->results_disabled = true;
+		} else {
+			$this->results_disabled = false;
+		}
+	}
+	
 
 	/**
 	 * updates the exercise in the data base
@@ -836,19 +857,24 @@ class Exercise
 		$form -> addElement ('html_editor', 'exerciseDescription', get_lang('ExerciseDescription'));		
 		
 		if($type=='full') {									
-			// feedback type			
+			// feedback type	
+			$radios_feedback = array();
+			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('Feedback'),'0');
+			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2');
+			$form -> addGroup($radios_feedback, null, get_lang('Evaluation'));		
+			
 			$feedback_option[0]=get_lang('Feedback');
 			$feedback_option[1]=get_lang('DirectFeedback');
 			$feedback_option[2]=get_lang('NoFeedback');
 						
 			//Can't modify a DirectFeedback question						
 			if ($this->selectFeedbackType() != 1 ) {
-				$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
+			//	$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
 				// test type
 				$radios = array();
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
-				$form -> addGroup($radios, null, get_lang('ExerciseType'), '<br />');							
+				$form -> addGroup($radios, null, get_lang('ExerciseType'));							
 			} else {
 				// if is Directfeedback but has not questions we can allow to modify the question type
 				if ($this->selectNbrQuestions()== 0) {
@@ -857,18 +883,23 @@ class Exercise
 					$radios = array();
 					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
 					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
-					$form -> addGroup($radios, null, get_lang('ExerciseType'), '<br />');					
+					$form -> addGroup($radios, null, get_lang('ExerciseType'));					
 				} else {
 					//we force the options to the DirectFeedback exercisetype
 					$form -> addElement('hidden', 'exerciseFeedbackType','1');
 					$form -> addElement('hidden', 'exerciseType','2');
 				}				
 			}
+			
+			$radios_results_disabled = array();
+			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('ShowResultsToStudents'),'0');
+			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('HideResultsToStudents'),'1');
+			$form -> addGroup($radios_results_disabled, null, get_lang('Results'));	
 										
 			$form -> addElement('html','<div class="row">
 				<div class="label">&nbsp;</div>
 				<div class="formw">
-					<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/nolines_plus.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>
+					<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
 				</div>
 				</div>');
 				
@@ -882,9 +913,7 @@ class Exercise
 			$option[0]=get_lang('DoNotRandomize');
 	
 			$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option);
-			$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
-	 
-			
+			$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');		
 			//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
 			$form -> addGroup($random,null,get_lang('RandomQuestions'),'<br />');		
 			
@@ -892,12 +921,12 @@ class Exercise
 	        $attempt_option[0]=get_lang('Infinite');
 	        
 	        $form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option);
-	        
-	        $form -> addElement('html','</div>');
 	             
-	        $form -> addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');	  	
+	        $form -> addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');
+	        	  	
 			$var= Exercise::selectTimeLimit();
 			
+			$form -> addElement('html','</div>');
 			
 			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))            	
 				$form -> addElement('html','<div id="options2" style="display:block;">');
@@ -941,7 +970,8 @@ class Exercise
 		}
 		
 		// submit
-		isset($_GET['exerciseId'])?$text=get_lang('ModifyExercise'):$text=get_lang('CreateExercise');
+		isset($_GET['exerciseId'])?$text=get_lang('ModifyExercise'):$text=get_lang('ProcedToQuestions');
+		$form -> addElement('html', '<br /><br />');
 		$form -> addElement('style_submit_button', 'submitExercise', $text, 'class="save"');
 		
 		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');			
@@ -967,6 +997,7 @@ class Exercise
 				$defaults['exerciseDescription'] = $this -> selectDescription();
 				$defaults['exerciseAttempts'] = $this->selectAttempts();
 				$defaults['exerciseFeedbackType'] = $this->selectFeedbackType(); 
+				$defaults['results_disabled'] = $this->selectResultsDisabled();
 				
 	  			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
 	            	$defaults['enabletimelimit'] = 1;
@@ -980,6 +1011,7 @@ class Exercise
 				$defaults['randomQuestions'] = 0;
 				$defaults['exerciseDescription'] = '';
 				$defaults['exerciseFeedbackType'] = 0;
+				$defaults['results_disabled'] = 0;
 				
 				$defaults['start_time'] = date('Y-m-d 12:00:00');
 				$defaults['end_time'] = date('Y-m-d 12:00:00');
@@ -1009,6 +1041,7 @@ class Exercise
 		$this -> updateFeedbackType($form -> getSubmitValue('exerciseFeedbackType'));
 		$this -> updateType($form -> getSubmitValue('exerciseType'));
 		$this -> setRandom($form -> getSubmitValue('randomQuestions'));
+		$this -> updateResultsDisabled($form -> getSubmitValue('results_disabled'));
 
 		if($form -> getSubmitValue('enabletimelimit')==1)
         {

@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 18522 2009-02-16 20:20:29Z juliomontoya $
+<?php // $Id: question_list_admin.inc.php 19404 2009-03-28 01:24:38Z cvargas1 $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 18522 2009-02-16 20:20:29Z juliomontoya $
+* 	@version $Id: question_list_admin.inc.php 19404 2009-03-28 01:24:38Z cvargas1 $
 */
 
 
@@ -94,7 +94,7 @@ echo '</div>';
 		<th><?php echo get_lang('Question'); ?></th>
 		<th><?php echo get_lang('Type');?></th>
 		<th><?php echo get_lang('Difficulty'); ?></th>
-		<th><?php echo get_lang('Export'); ?></th>
+		<!--<th><?php //echo get_lang('Export'); ?></th>-->
 		<th><?php echo get_lang('Modify'); ?></th>
 	</tr>
 
@@ -111,7 +111,7 @@ if($nbrQuestions) {
 				<td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td>
 				<td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
 			  	<td align="center"><?php echo $objQuestionTmp->selectLevel(); ?></td>
-			  	<td align="center"><a href="<?php echo api_get_self(); ?>?action=exportqti2&questionId=<?php echo $id; ?>"><img src="../img/export.png" border="0" align="absmiddle" alt="IMS/QTI" /></a></td>
+			  	<!--<td align="center"><a href="<?php echo api_get_self(); ?>?action=exportqti2&questionId=<?php echo $id; ?>"><img src="../img/export.png" border="0" align="absmiddle" alt="IMS/QTI" /></a></td>-->
 			  	<td> <a href="<?php echo api_get_self(); ?>?myid=1&ed
 					itQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo api_get_self(); ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a>
 				<?php

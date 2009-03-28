@@ -74,7 +74,7 @@ class UniqueAnswer extends Question {
 		$fck_attribute['Config']['ToolbarStartExpanded']='false';		
 		
 		//this line define how many question by default appear when creating a choice question
-		$nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 4;
+		$nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 		
 		/*

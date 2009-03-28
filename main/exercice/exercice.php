@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 18925 2009-03-10 14:09:33Z ndieschburg $
+<?php // $Id: exercice.php 19404 2009-03-28 01:24:38Z cvargas1 $
 
 /*
 ==============================================================================
@@ -583,67 +583,24 @@ echo '<div class="actions">';
 		echo '</span>';
 	}
 
-	if (($is_allowedToEdit) and ($origin != 'learnpath'))
-	{
-		echo '<a href="exercise_admin.php?'.api_get_cidreq().'">'.Display::return_icon('new_test.gif',get_lang('NewEx')).get_lang('NewEx').'</a>';
-		echo '<a href="hotpotatoes.php">'.Display::return_icon('jqz.gif',get_lang('ImportHotPotatoesQuiz')).get_lang('ImportHotPotatoesQuiz').'</a>';
-		echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.Display::return_icon('show_test_results.gif',get_lang('Results')).get_lang('Results').'</a>';
 
-		// the actions for the statistics
-		if($show == 'result') {
-			// the form
-			if(api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-				if($_SESSION['export_user_fields']==false) {
-					$alt = get_lang('ExportWithUserFields');
-					$extra_user_fields = '<input type="hidden" name="export_user_fields" value="export_user_fields">';
-				} else {
-					$alt = get_lang('ExportWithoutUserFields');
-					$extra_user_fields =  '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
-				}
-				echo '<a href="#" onclick="document.form1a.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
-				echo '<a href="#" onclick="document.form1b.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsXLS')).get_lang('ExportAsXLS').'</a>';
-				echo '<a href="#" onclick="document.form1c.submit();">'.Display::return_icon('synthese_view.gif',$alt).$alt.'</a>';			
-				echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=test').'">'.Display::return_icon('quiz.gif',get_lang('BackToExercisesList')).get_lang('BackToExercisesList').'</a>';
-				echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
-				echo '<input type="hidden" name="export_report" value="export_report">';
-				echo '<input type="hidden" name="export_format" value="csv">';
-				echo '</form>';
-				echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
-				echo '<input type="hidden" name="export_report" value="export_report">';
-				echo '<input type="hidden" name="export_format" value="xls">';
-				echo '</form>';
-				echo '<form id="form1c" name="form1c" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
-				echo $extra_user_fields;
-				echo '</form>';
-			}
-		}
-	} else {		
-		//the student view
-		echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.Display::return_icon('show_test_results.gif',get_lang('Results')).get_lang('Results').'</a>';
-		if($show == 'result') {
-			echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=test').'">'.Display::return_icon('quiz.gif',get_lang('BackToExercisesList')).get_lang('BackToExercisesList').'</a>';
-		}
-	}
-	
-	if ($_configuration['tracking_enabled']) 
-	{
-		if ($show == 'result') 
-		{
-			if (!function_exists('make_select')) 
+if ($_configuration['tracking_enabled']) {
+		if ($show == 'result') {
+			/*if (!function_exists('make_select')) 
 			{
 				function make_select($name,$values,$checked='')
 				{
 					$output .= '<select name="'.$name.'" >';
  					foreach($values as $key => $value) 
  					{
- 						$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
+ 						//$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
  					}
  					$output .= '</select>';
  				return $output;
 				}
-			}
+			}*/
 
-			if (!function_exists('make_select_users')) 
+			/*if (!function_exists('make_select_users')) 
 			{
 				function make_select_users($name,$values,$checked='')
 				{
@@ -656,20 +613,16 @@ echo '<div class="actions">';
 	 				$output .= '</select>';
 	 				return $output;
 				}
-			}
+			}*/
 
-			if (api_is_allowed_to_edit()) 
-			{
-				if (!$_REQUEST['filter']) 
-				{
+			if (api_is_allowed_to_edit()) {
+				if (!$_REQUEST['filter']) {
 					$filter_by_not_revised = true;
 					$filter=1;
 				}
 				$filter = (int)$_REQUEST['filter'];
-
-
-				switch($filter)
-				{
+				
+				switch($filter) {
 				 case 1:
 						$filter_by_not_revised = true;
 						break;
@@ -679,14 +632,18 @@ echo '<div class="actions">';
 				 default:
 				 		null;
 				}
-				$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
-				$form_filter .= make_select('filter',array(1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised')),$filter);
-				$form_filter .= '<button class="save" type="submit">'.get_lang('FilterExercices').'</button></form>';
-				echo $form_filter;
+				if($_REQUEST['filter']=='1' or !isset($_REQUEST['filter'])) {
+					$view_result = '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result&filter=2'.'" >'.Display::display_icon('checkbox_on.gif', get_lang('ShowCorrectedOnly')).get_lang('ShowCorrectedOnly').'</a>';
+				} else {
+					$view_result = '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result&filter=1'.'" >'.Display::display_icon('checkbox_off.gif', get_lang('ShowUnCorrectedOnly')).get_lang('ShowUnCorrectedOnly').'</a>';
+				}
+				//$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
+				//$form_filter .= make_select('filter',array(1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised')),$filter);
+				//$form_filter .= '<button class="save" type="submit">'.get_lang('FilterExercices').'</button></form>';
+				echo $view_result;
 			}
 		}
-
-		if (api_is_allowed_to_edit()) 
+		/*if (api_is_allowed_to_edit()) 
 		{
 			$user_count = count($user_list_name);
 			if ($user_count >0 ) {
@@ -700,9 +657,57 @@ echo '<div class="actions">';
 				$form_filter .= '<input type="submit" value="'.get_lang('FilterExercicesByUsers').'"></form>';
 				echo $form_filter;
 			}
-		}		
-		
+		}	*/	
 	}	
+
+
+
+	if (($is_allowedToEdit) and ($origin != 'learnpath'))
+	{
+		if ($_GET['show']!='result') {
+			echo '<a href="exercise_admin.php?'.api_get_cidreq().'">'.Display::return_icon('new_test.gif',get_lang('NewEx')).get_lang('NewEx').'</a>';
+			echo '<a href="hotpotatoes.php">'.Display::return_icon('jqz.gif',get_lang('ImportHotPotatoesQuiz')).get_lang('ImportHotPotatoesQuiz').'</a>';
+			echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.Display::return_icon('show_test_results.gif',get_lang('Results')).get_lang('Results').'</a>';	
+		}
+
+		// the actions for the statistics
+		if($show == 'result') {
+			// the form
+			if(api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
+				if($_SESSION['export_user_fields']==true) {
+					$alt = get_lang('ExportWithUserFields');
+					$extra_user_fields = '<input type="hidden" name="export_user_fields" value="export_user_fields">';
+				} else {
+					$alt = get_lang('ExportWithoutUserFields');
+					$extra_user_fields =  '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
+				}
+				//echo '<a href="#" onclick="document.form1a.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
+				echo '<a href="#" onclick="document.form1b.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsXLS')).get_lang('ExportAsXLS').'</a>';
+				//echo '<a href="#" onclick="document.form1c.submit();">'.Display::return_icon('synthese_view.gif',$alt).$alt.'</a>';			
+				echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=test').'">'.Display::return_icon('quiz.gif',get_lang('BackToExercisesList')).get_lang('BackToExercisesList').'</a>';
+				echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+				echo '<input type="hidden" name="export_report" value="export_report">';
+				echo '<input type="hidden" name="export_format" value="csv">';
+				echo '</form>';
+				echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+				echo '<input type="hidden" name="export_report" value="export_report">';
+				echo '<input type="hidden" name="export_format" value="xls">';
+				echo '</form>';
+				//echo '<form id="form1c" name="form1c" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+				//echo $extra_user_fields;
+				//echo '</form>';
+			}
+		}
+	} else {		
+		//the student view
+		if($show == 'result') {
+			echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=test').'">'.Display::return_icon('quiz.gif',get_lang('BackToExercisesList')).get_lang('BackToExercisesList').'</a>';
+		} else {
+			echo '<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.Display::return_icon('show_test_results.gif',get_lang('Results')).get_lang('Results').'</a>';
+		}
+	}
+	
+	
 echo '</div>'; // closing the actions div
 
 
@@ -716,7 +721,7 @@ if ($show == 'test') {
 	  <tr class="row_odd">
 	    <th colspan="3"><?php  echo get_lang('ExerciseName');?></th>
 	     <th><?php echo get_lang('QuantityQuestions');?></th>
-		 <th><?php echo get_lang('Export');?></th>
+		 <!--<th>--><?php //echo get_lang('Export');?><!--</th>-->
 		 <th><?php echo get_lang('Modify');?></th>
 	
 	  </tr>
@@ -764,19 +769,19 @@ if ($origin != 'learnpath') {
 			$sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '".Database::escape_string($exid)."'";
 			$sqlresult =api_sql_query($sqlquery);
 			$rowi = Database::result($sqlresult,0);
-			echo $rowi.' '.strtolower(get_lang(($rowi>1?'Questions':'Question'))).'</td>';
-	  		echo '<td><a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a></td>';
+			//echo $rowi.' '.strtolower(get_lang(($rowi>1?'Questions':'Question'))).'</td>';
+	  		//echo '<td><a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a></td>';
 	  		?>
 		    <td>
-		    <a href="admin.php?exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" /></a>	      
+		    <a href="admin.php?exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" /></a>	      
 			<?php	
 			if($row['results_disabled']) {
-				echo '<a href="exercice.php?choice=enable_results&page='.$page.'&exerciseId='.$row['id'].'" title="'.get_lang('EnableResults').'" alt="'.get_lang('EnableResults').'"><img src="../img/lp_quiz_na.gif" border="0" alt="'.htmlentities(get_lang('EnableResults'),ENT_QUOTES,$charset).'" /></a>';
+				//echo '<a href="exercice.php?choice=enable_results&page='.$page.'&exerciseId='.$row['id'].'" title="'.get_lang('EnableResults').'" alt="'.get_lang('EnableResults').'"><img src="../img/lp_quiz_na.gif" border="0" alt="'.htmlentities(get_lang('EnableResults'),ENT_QUOTES,$charset).'" /></a>';
 			} else {
-				echo '<a href="exercice.php?choice=disable_results&page='.$page.'&exerciseId='.$row['id'].'" title="'.get_lang('DisableResults').'" alt="'.get_lang('DisableResults').'"><img src="../img/lp_quiz.gif" border="0" alt="'.htmlentities(get_lang('DisableResults'),ENT_QUOTES,$charset).'" /></a>';
+				//echo '<a href="exercice.php?choice=disable_results&page='.$page.'&exerciseId='.$row['id'].'" title="'.get_lang('DisableResults').'" alt="'.get_lang('DisableResults').'"><img src="../img/lp_quiz.gif" border="0" alt="'.htmlentities(get_lang('DisableResults'),ENT_QUOTES,$charset).'" /></a>';
 			}				
 			?>
-			<a href="exercise_admin.php?modifyExercise=yes&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>	    
+			<!--<a href="exercise_admin.php?modifyExercise=yes&exerciseId=--><?php// echo $row['id']; ?><!--"> <img src="../img/edit.gif" border="0" title="--><?php //echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?><!--" alt="--><?php //echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?><!--" /></a>-->	    
 			<a href="exercice.php?choice=delete&exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>					
 			<?php		
 			//if active
@@ -904,7 +909,7 @@ $i++;
        <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>    
   <td></td><td></td>
       <td><a href="adminhp.php?hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" alt="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
-       <img src="../img/wizard_gray_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Build'),ENT_QUOTES,$charset); ?>" />
+       <img src="../img/wizard_gray_small.gif" border="0" title="<?php echo htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" />
   <a href="<?php echo $exercicePath; ?>?hpchoice=delete&amp;file=<?php echo $path; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSure'),ENT_QUOTES,$charset).$title."?"); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
     <?php
 					// if active

@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 18712 2009-02-26 21:16:53Z cvargas1 $
+<?php // $Id: admin.php 19404 2009-03-28 01:24:38Z cvargas1 $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 18712 2009-02-26 21:16:53Z cvargas1 $
+* 	@version $Id: admin.php 19404 2009-03-28 01:24:38Z cvargas1 $
 */
 
 
@@ -451,6 +451,8 @@ Display::display_header($nameTools,'Exercise');
 
 echo '<div class="actions">';
 echo Display::return_icon('preview.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
+echo Display::return_icon('lp_quiz.png', get_lang('ModifyExercise')).'<a href="exercise_admin.php?modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+
 echo '</div>';
 
 if(isset($_GET['message']))
@@ -488,7 +490,7 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 	include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?exerciseId='.$_GET['exerciseId']);
 	$form -> addElement ('hidden','edit','true');
-	$objExercise -> createForm ($form,'simple');
+	//$objExercise -> createForm ($form,'simple');
 	
 	if($form -> validate()) {
 		$objExercise -> processCreation($form,'simple');

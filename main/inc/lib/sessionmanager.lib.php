@@ -222,12 +222,14 @@ class SessionManager {
 
 		foreach($field_ids as $field_id) {
 			// check if field id is used into table field value
-			if (in_array($field_id,$field_all_ids)) {
-				continue;
-			} else {
-				$sql_session_field = "DELETE FROM $t_sf WHERE id = '$field_id'";
-				api_sql_query($sql_session_field,__FILE__,__LINE__);
-			}
+			if (is_array($field_all_ids)) {
+				if (in_array($field_id,$field_all_ids)) {
+					continue;
+				} else {
+					$sql_session_field = "DELETE FROM $t_sf WHERE id = '$field_id'";
+					api_sql_query($sql_session_field,__FILE__,__LINE__);
+				}	
+			}			
 		}
 	}	
 	

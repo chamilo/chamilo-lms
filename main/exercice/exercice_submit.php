@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 19404 2009-03-28 01:24:38Z cvargas1 $
+<?php // $Id: exercice_submit.php 19405 2009-03-28 01:28:28Z cvargas1 $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 19404 2009-03-28 01:24:38Z cvargas1 $
+* 	@version $Id: exercice_submit.php 19405 2009-03-28 01:28:28Z cvargas1 $
 */
 
 
@@ -901,7 +901,7 @@ else
 	$onsubmit = '';
 	$i=0;
 	//i have a doubt in this line cvargas
-	var_dump($questionList);
+	//var_dump($questionList);
 	if (!strcmp($questionList[0],'')===0) {
 		foreach($questionList as $questionId) {
 			$i++;

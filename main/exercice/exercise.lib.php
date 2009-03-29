@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 18541 2009-02-17 14:48:55Z cfasanando $
+<?php // $Id: exercise.lib.php 19407 2009-03-29 19:37:05Z herodoto $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 18541 2009-02-17 14:48:55Z cfasanando $
+* 	@version $Id: exercise.lib.php 19407 2009-03-29 19:37:05Z herodoto $
 */
 
 /**
@@ -118,8 +118,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 			$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
 
-			$oFCKeditor->ToolbarSet = "Answer";
-			$oFCKeditor->Width  = '80%';
+			$oFCKeditor->ToolbarSet = "FreeAnswer";
+			$oFCKeditor->Width  = '100%';
 			$oFCKeditor->Height = '300';
 			$oFCKeditor->Value	= '' ;
 

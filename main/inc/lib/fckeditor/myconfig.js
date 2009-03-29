@@ -35,7 +35,7 @@ FCKConfig.ToolbarSets["Middle"] = [
 
 FCKConfig.ToolbarSets["Small"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Unlink','Image','Flash','OrderedList','UnorderedList','Table']
-] ;//used by test ?
+] ;//used by test ? exercice/feedback.php 
 ////
 
 ///// admin tools /////
@@ -413,6 +413,10 @@ FCKConfig.ToolbarSets["QuestionDescription"] = [
 
 FCKConfig.ToolbarSets["Answer"] = [
     ['FitWindow','Bold','Image','Link','PasteWord','MP3','Table','Subscript','Superscript','Source']	
+] ;
+
+FCKConfig.ToolbarSets["FreeAnswer"] = [
+    ['FitWindow','Bold','Image','Link','PasteWord','MP3','Table','Subscript','Superscript','ShowBlocks']	
 ] ;
 
 FCKConfig.ToolbarSets["CommentAnswers"] = [

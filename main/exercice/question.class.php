@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 19428 2009-03-30 19:29:09Z cvargas1 $
+<?php // $Id: question.class.php 19430 2009-03-30 20:28:21Z cvargas1 $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 19428 2009-03-30 19:29:09Z cvargas1 $
+* 	@version $Id: question.class.php 19430 2009-03-30 20:28:21Z cvargas1 $
 */
 
 
@@ -970,22 +970,22 @@ abstract class Question
 		$renderer = $form->defaultRenderer();
 		$form->addElement('html','<div class="form">');
 		// question name
-		//$test=$form->addElement('text','questionName',get_lang('Question'),'size="60"');
-		$radios_results_enabled[] = $form->createElement('static', null, null, null);
-		$test=FormValidator :: createElement ('text', 'questionName');
+		$form->addElement('text','questionName',get_lang('Question'),'size="60"');
+		//$radios_results_enabled[] = $form->createElement('static', null, null, null);
+		//$test=FormValidator :: createElement ('text', 'questionName');
 
-		$radios_results_enabled[]=$test;
+		//$radios_results_enabled[]=$test;
 		// question level
+		
 		$select_level = array (0,1,2,3,4,5); 
-		$radios_results_enabled[] = $form->createElement('static', null, null, get_lang('Difficulty'));	
+		//$radios_results_enabled[] = 	
 		foreach($select_level as $val) {
-			$radios_results_enabled[] = FormValidator :: createElement ('radio', 'questionLevel', null,$val,$val);
+			$radios_results_enabled[] = FormValidator :: createElement ('radio', null, null,$val,$val);
 		}
-		$form->addGroup($radios_results_enabled, 'content', get_lang('Question'));
-		
-		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','content');	
-		
+		$form->addGroup($radios_results_enabled,'questionLevel',get_lang('Difficulty'));
+					
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionName');
+		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
 		// question type

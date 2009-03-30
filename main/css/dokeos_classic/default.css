@@ -2270,3 +2270,11 @@ button.search {
 button.login {
     background-image:url(images/button_login.gif);
 }
+.icon_image_content{
+	width:70px;
+	text-align: center;
+	padding-top: 3px;
+	padding-right: 5x;
+	padding-bottom: 3px;
+	padding-left: 5px;
+}

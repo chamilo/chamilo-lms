@@ -8765,7 +8765,15 @@ EOD;
 	 */
 	function create_path($path){
 		$path_bits = split('/',dirname($path));
-		$path_built = '/';
+
+		if (strpos($path, ':') === false) {
+			// This should be added only when the platform is non-Windows.
+			$path_built = '/';
+		} else {
+			// This is for Windows platforms.
+			$path_built = '';
+		}
+
 		foreach($path_bits as $bit){
 			if(!empty($bit)){
 				$new_path = $path_built.$bit;

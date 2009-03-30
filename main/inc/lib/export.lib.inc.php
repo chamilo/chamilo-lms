@@ -86,11 +86,11 @@ class Export
 	 * @param array $data
 	 * @param string $filename
 	 */
-	function export_table_xml($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null)
+	function export_table_xml($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null, $encoding='ISO-8859-1')
 	{
 		$file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.xml';
 		$handle = fopen($file, 'a+');
-		fwrite($handle, '<?xml version="1.0" encoding="ISO-8859-1"?>'."\n");
+		fwrite($handle, '<?xml version="1.0" encoding="'.$encoding.'"?>'."\n");
 		if (!is_null($wrapper_tagname))
 		{
 			fwrite($handle, "\t".'<'.$wrapper_tagname.'>'."\n");

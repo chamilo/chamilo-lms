@@ -22,6 +22,9 @@ $ThereAreNoVirtualCourses = "Na platformi ni nobenih navideznih teèajev.";
 $ConfigureHomePage = "Nastavitev domaèe strani";
 $CourseCreateActiveToolsTitle = "Moduli, ki bodo aktivni po kreiranju teèaja";
 $CourseCreateActiveToolsComment = "Katera orodja morajo biti aktivirana (vidna) kot prednastavljena, ko je kreiran kov teèaj?";
+$CreateUser = "Ustvari uporabnika";
+$ExportSession = "Izvozi sejo";
+$ImportSession = "Uvozi sejo";
 $langCourseBackup = "Naredi rezervno kopijo tega teèaja";
 $langCourseTitular = "Uèitelj";
 $langCourseTitle = "Naslov teèaja";
@@ -937,4 +940,5 @@ $FileImportedJustUsersThatAreNotRegistered = "Uporabniki, ki še niso registriran
 $YouMustImportAFileAccordingToSelectedOption = "uvažana datoteka mora biti v skladu z izbrano možnostjo";
 $ShowEmailOfTeacherOrTutorTitle = "Uèiteljev ali tutorjev e-poštni naslov v nogi ";
 $ShowEmailOfTeacherOrTutorComent = "Prikažem uèiteljev oz. tutorjev e-poštni naslov v nogi?";
+$Created = "Ustvarjeno";
 ?>

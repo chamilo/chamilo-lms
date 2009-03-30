@@ -30,6 +30,9 @@ $Down = "dol";
 $Up = "gor";
 $Theme = "Tema";
 $TheListIsEmpty = "Seznam je prazen.";
+$CreateCategory = "Ustvari kategorijo";
+$SendFile = "Pošlji datoteko";
+$SaveChanges = "Shrani spremembe";
 $langCourseCreate = "Tvori podroèje teèaja";
 $langTodo = "Predlogi";
 $UserName = "Uporabniško ime";
@@ -702,4 +705,6 @@ $Invitation = "Vabilo";
 $SeeMoreOptions = "Poglej veè možnosti";
 $TemplatePreview = "Pedogled predlog";
 $NoTemplatePreview = "Predogled ni na voljo";
+$ModifyCategory = "Spremeni kategorijo";
+$Photo = "Foto";
 ?>

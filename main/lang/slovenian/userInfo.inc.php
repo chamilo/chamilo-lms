@@ -74,4 +74,5 @@ $SocialSeeContacts = "Poglej kontakte";
 $SocialUserInformationAttach = "Napišite sporoèilo predenj skušate poslati zahtevo";
 $MessageInvitationNotSent = "vaše vabilo ni bilo poslano";
 $SocialAddToFriends = "Dodaj k mojim kontaktom";
+$ChangeContactGroup = "Spremeni skupino kontaktov";
 ?>

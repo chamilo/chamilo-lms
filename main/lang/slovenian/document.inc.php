@@ -60,6 +60,7 @@ $langTocDown  = "Dol";
 $langTocUp  = "Gor";
 $lang_cut_paste_link = "Brez okvirjev";
 $langCreatePath = "Kreiraj pot";
+$SendDocument = "Pošlji dokument";
 $langOogieConversionPowerPoint = "Oogie : PowerPoint pretvorba";
 $langWelcomeOogieSubtitle = "Pretvornik PowerPoint datotek v u&#269;no pot";
 $langAddMetadata = "Poglej/Uredi metapodatke";

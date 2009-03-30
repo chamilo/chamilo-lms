@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChapter = "Chapter";
+$langChapter = "Section";
 $langDocumentList = "Documents list";
 $langOrganisationList = "Organization list";
 $langEditTOC = "Edit TOC";
@@ -39,23 +39,23 @@ $langRename = "rename";
 $langCopy = "copy";
 $langNameDir = "Name of the new directory";
 $langDownloadFile = "Upload AICC or SCORM course ZIP file";
-$learning_path_access = "click \'create learning path\' to delete/modify/show/hide/create/add a learning path";
+$learning_path_access = "Click \'Courses\' to delete/modify/show/hide/create/add a course";
 $langRoot = "root";
 $langBuilder = "Course builder";
 $lang_edit_learnpath = "Edit name/description";
 $lang_add_title_and_desc = "Rename & add desc.";
 $lang_add_learnpath = "Create a Course";
-$lang_learnpath_added = "The new learning path was successfully created. Now you can add modules to it. Click on its name to edit it.";
-$lang_delete_learnpath = "Delete learning path";
-$lang_learnpath_edited = "The learning path was successfully edited";
-$lang_learnpath_deleted = "The learning path and all of its modules are deleted";
+$lang_learnpath_added = "The course was successfully created. Now you can add sections to it. Click on the name to edit it.";
+$lang_delete_learnpath = "Delete the course";
+$lang_learnpath_edited = "The course was successfully edited";
+$lang_learnpath_deleted = "The course and all of its sections have been deleted";
 $lang_no_publish = "Hide from students";
 $lang_publish = "Show for students";
 $lang_no_published = "is now hidden from students";
 $lang_published = "is now accessible for students";
 $lang_description = "description";
 $lang_title = "title";
-$langScormBuilder = "Learning path builder";
+$langScormBuilder = "Course builder";
 $langCreateDoc = "Create document";
 $langOrganiseDocuments = "Organise documents";
 $langUncompress = "Uncompress";

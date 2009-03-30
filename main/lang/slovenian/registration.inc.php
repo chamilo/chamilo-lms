@@ -10,6 +10,8 @@ $langUpdateImage = "Zamenjaj sliko";
 $langImageWrong = "Velikost datoteke mora biti manjša od";
 $langAddImage = "Slika";
 $langCourseManager = "Uèitelj";
+$NewPass = "Novo geslo";
+$CurrentPasswordEmptyOrIncorrect = "Trenutno geslo je prazno ali neustrezno";
 $password_request = "Zahtevali ste ponastavitev vašega gesla.
 Èe to ni bila vaša zahteva, prezrite to sporoèilo.
 

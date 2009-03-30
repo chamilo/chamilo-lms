@@ -131,4 +131,8 @@ $YouMustAssignWeightOfQualification = "Doloèiti morate utež za oceno";
 $DeleteAttachmentFile = "Odstrani pripeto datoteko";
 $EditAnAttachment = "Uredi priponko";
 $SeeForum = "Glej forum";
+$CreateForum = "Ustvari forum";
+$ModifyForum = "Spremeni forum";
+$CreateThread = "Ustvari nit";
+$ModifyThread = "Spremeni nit";
 ?>

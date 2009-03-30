@@ -21,4 +21,6 @@ $NoteTitle = "Naslov beležke";
 $NoteComment = "Podrobnosti beležke";
 $NoteAdded = "Beležka je bila dodana";
 $NoteConfirmDelete = "Ste preprièani, da želite odstraniti beležko?";
+$AddNote = "Dodaj beležko";
+$ModifyNote = "Spremeni beležko";
 ?>

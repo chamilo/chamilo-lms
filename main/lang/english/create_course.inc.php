@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langProfessors = "Teachers";
-$langExplanation = "Once you click OK, a website with Forum, Agenda, Documents manager, SCORM courses importa and authoring etc. will be created. Your login, as creator of the website, allows you to modify it along your own requirements.";
+$langExplanation = "Once you click OK, a training is created with a Tests, Documents, Courses  will be created. Your login as trainer allows you editing privileges.";
 $langEmpty = "You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your course code, see the Course Program";
 $langCodeTaken = "This course code is already in use.  <br>Use the <b>Back</b> button on your browser and try again";
 $langFormula = "Yours sincerely";
@@ -43,7 +43,7 @@ $langCreateCourseGroups = "Groups";
 $langCatagoryMain = "Main";
 $langCatagoryGroup = "Groups forums";
 $langLn = "Language";
-$langCreateSite = "Create a course area";
+$langCreateSite = "Create training";
 $langFieldsRequ = "All fields required";
 $langEx = "e.g. <i>Innovation management</i>";
 $langFac = "Category";
@@ -53,7 +53,7 @@ $langDoubt = "If you doubt on your course code, consult ";
 $langProgram = "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management";
 $langScormtool = "Courses";
 $langScormbuildertool = "Scorm Path builder";
-$langPathbuildertool = "Learning Path builder";
+$langPathbuildertool = "Course builder";
 $langOnlineConference = "Conference";
 $langAgendaCreationTitle = "Course creation";
 $langAgendaCreationContenu = "This course has been created on this moment.";

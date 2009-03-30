@@ -285,4 +285,6 @@ $SelectTargetQuestion = "Seleccionar pregunta de destino";
 $DirectFeedbackCantModifyTypeQuestion = "El tipo de evaluación no puede ser modificado ya que fue seleccionado para Autoevaluación";
 $CantShowResults = "No disponible";
 $CantViewResults = "No se puede ver los resultados";
+$ShowCorrectedOnly = "Mostrar los ejercicios corregidos";
+$ShowUnCorrectedOnly = "Mostrar los ejercicios sin corregir";
 ?>

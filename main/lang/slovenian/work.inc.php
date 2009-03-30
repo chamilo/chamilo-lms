@@ -58,4 +58,5 @@ $ExpiryDateAlreadyPassed = "Datum poteka je že presežen";
 $EndDateAlreadyPassed = "Konèni datum je že presežen";
 $MoveXTo = "Prestavi %s v";
 $QualificationMustNotBeMoreThanQualificationOver = "Ocena ne more prese&#269;i najve&#269;je možne ocene";
+$ModifyDirectory = "Spremeni mapo";
 ?>

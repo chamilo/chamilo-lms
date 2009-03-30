@@ -84,6 +84,7 @@ $langScore = "Rezultat";
 $langCorrespondsTo = "Ustreza";
 $langExpectedChoice = "Pričakovana izbira";
 $langYourTotalScore = "Tvoj skupen rezultat je";
+$ReachedMaxAttemptsAdmin = "Dosegli ste največje dovoljeno število poskusov te vaje/testa. V primeru, da upravljate ta tečaj, lahko še vedno poskušate, vendar pomnite, da nadaljni rezultati ne bodo prikazani na strani rezultatov.";
 $Build = "Zgradi";
 $langEvalSet = "ocenjevalni parametri";
 $langActive = "aktiven";

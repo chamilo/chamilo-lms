@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$PublishSurvey = "Objavi vprašalnik";
+$CompareQuestions = "Primerjaj vprašanja";
 $SurveyTitle = "Naslov vprašalnika";
 $SurveyIntroduction = "Vprašalnik : Uvodno besedilo";
 $CreateNewSurvey = "Ustvari nov evalvacijski vprašalnik";
@@ -207,4 +209,7 @@ $AutoInviteLink = "Uporabniki, ki niso vabljeni, lahko uporabijo to povezavo za 
 $CompleteTheSurveysQuestions = "Zaključi z vprašanji vprašalnika";
 $SurveysDeleted = "Vprašalnik je bil odstranjen";
 $RemindUnanswered = "Opomni le uporabnike, ki niso odgovorili";
+$ModifySurvey = "Spremeni vprašalnik";
+$CreateQuestionSurvey = "Ustvari vprašanje";
+$ModifyQuestionSurvey = "Spremeni vprašanje";
 ?>

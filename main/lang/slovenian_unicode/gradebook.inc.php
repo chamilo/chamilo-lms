@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ModifyEvaluation = "Shrani ocenjevanje";
+$CreateLink = "Ustvari povezavo";
 $FlatView = "Ravninski pogled";
 $ScoreEdit = "Urejanje pravil ocen(jevanja)";
 $ScoreColor = "Barva ocene";
@@ -131,4 +133,5 @@ $GradebookWeightUpdated = "Uteži so bile uspešno ažurirane";
 $ChooseItem = "Izberi element";
 $AverageResultsVsResource = "Povprečen rezultat / vir";
 $ToViewGraphScoreRuleMustBeEnabled = "Za ogled grafa mora biti pravilo prikaza rezultata omogočeno";
+$GradebookPreviousWeight = "Predhodne uteži resursov";
 ?>

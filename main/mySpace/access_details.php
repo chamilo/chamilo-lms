@@ -133,7 +133,7 @@ include_once(api_get_path(LIBRARY_PATH).'pchart/pCache.class.php');
 $connections = get_connections_to_course($user_id, $course_code);
 $i = 0;		
 if (api_is_xml_http_request()) {
-	$type  = $_GET['type'];	
+	$type  = Security::remove_XSS($_GET['type']);	
 	$main_year = $main_month_year = $main_day = array();
 	foreach ($connections as $key=>$data) {				
 		//creating the main array		
@@ -238,8 +238,19 @@ if (api_is_xml_http_request()) {
 }
 
 $nameTools= get_lang('AccessDetails');
-$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$_GET['course'], "name" => get_lang("Users"));
-$interbreadcrumb[] = array ("url" => "myStudents.php?cidReq=".$_GET['course']."&student=".$_GET['student']."&details=true&origin=user_course", "name" => get_lang('DetailsStudentInCourse'));
+
+
+//StudentDetails
+if (isset($_GET['origin']) && strcmp($_GET['origin'],'tracking_course')===0) {
+	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".Security::remove_XSS($_GET['course'])."&amp;studentlist=true&id_session=".api_get_session_id(), "name" => get_lang("Tracking"));
+	$interbreadcrumb[] = array ("url" => "myStudents.php?student=".Security::remove_XSS($_GET['student'])."&details=true&origin=".Security::remove_XSS($_GET['origin'])."&amp;course=".Security::remove_XSS($_GET['course']).'&amp;cidReq='.Security::remove_XSS($_GET['course']), "name" => get_lang('DetailsStudentInCourse'));
+	$interbreadcrumb[] = array ("url" => "#", "name" => get_lang("Details"));
+} elseif (isset($_GET['origin']) && strcmp($_GET['origin'],'user_course')===0) {
+	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".Security::remove_XSS($_GET['course']), "name" => get_lang("Users"));
+	$interbreadcrumb[] = array ("url" => "myStudents.php?student=".Security::remove_XSS($_GET['student'])."&details=true&origin=".Security::remove_XSS($_GET['origin'])."&amp;course=".Security::remove_XSS($_GET['course']).'&amp;cidReq='.Security::remove_XSS($_GET['course']), "name" => get_lang('DetailsStudentInCourse'));
+	$interbreadcrumb[] = array ("url" => "#", "name" => get_lang("Details"));
+}
+
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery-1.1.3.1.pack.js" type="text/javascript"></script>';
@@ -254,7 +265,7 @@ $(function() {
 		
 </script>'  ;
 
-Display :: display_header($nameTools);
+Display :: display_header('');
 $TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
 $mainUserInfo = api_get_user_info($user_id, $course_code);
 
@@ -264,10 +275,10 @@ $main_date_array = array();
 foreach ($connections as $key=>$data) { 
 	$result_to_print .= '&nbsp;&nbsp;'.date('d-m-Y (H:i:s)',$data['login']).' - '.calculHours($data['logout']-$data['login']).'<br />'."\n";	
 }
-
-echo '<strong>',get_lang('User'),': ',$mainUserInfo['firstName'],' ',$mainUserInfo['lastName'],'</strong> <br />';
-echo '<strong>'.get_lang('Course').': ',$course_code,'</strong><br /><br />';
-
+api_display_tool_title(get_lang('DetailsStudentInCourse'));
+echo '<div class="actions">';
+echo '<strong>'.get_lang('User').': '.$mainUserInfo['firstName'].' '.$mainUserInfo['lastName'].'</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>'.get_lang('Course').': '.$course_code.'</strong></div>';
+echo '<br/>';
 ?>
 <div id="container-9">
     <ul>                
@@ -279,7 +290,7 @@ echo '<strong>'.get_lang('Course').': ',$course_code,'</strong><br /><br />';
 <?php
 
 echo '<div id="graph"></div><br />';
-echo '<strong>',get_lang('DateAndTimeOfAccess'),' - ',get_lang('Duration'),'</strong><br /><br />';
+echo '<div class="actions"><strong>',get_lang('DateAndTimeOfAccess'),' - ',get_lang('Duration'),'</strong></div><br />';
 echo $result_to_print;
 
 /* Login time against logout time

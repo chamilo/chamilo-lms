@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 18547 2009-02-17 16:16:55Z cfasanando $
+<?php //$Id: myStudents.php 19432 2009-03-30 22:46:37Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -38,32 +38,32 @@ $this_section = "session_my_space";
 $nameTools=get_lang("StudentDetails");
 //$nameTools=SECTION_PLATFORM_ADMIN;
  
- 
+$get_course_code=Security::remove_XSS($_GET['course']);
 if (isset($_GET['details'])) {
  	if (!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
- 		$course_infos = CourseManager :: get_course_information($_GET['course']);
+ 		$course_infos = CourseManager :: get_course_information($get_course_code);
  		if (empty($cidReq)) {
  			$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
  		}
- 		$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$_GET['course'], "name" => get_lang("Users"));
+ 		$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$get_course_code, "name" => get_lang("Users"));
  	} else if (!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
- 		$course_infos = CourseManager :: get_course_information($_GET['course']);
+ 		$course_infos = CourseManager :: get_course_information($get_course_code);
  		if (empty($cidReq)) {
  			$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
  		}
- 		$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$_GET['course'].'&studentlist=true&id_session='.(empty($_SESSION['id_session'])?'':$_SESSION['id_session']), "name" => get_lang("Tracking"));
+ 		$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$get_course_code.'&studentlist=true&id_session='.(empty($_SESSION['id_session'])?'':$_SESSION['id_session']), "name" => get_lang("Tracking"));
  	} else if (!empty($_GET['origin']) && $_GET['origin'] == 'resume_session') {
 		$interbreadcrumb[]=array('url' => '../admin/index.php',"name" => get_lang('PlatformAdmin'));
 		$interbreadcrumb[]=array('url' => "../admin/session_list.php","name" => get_lang('SessionList'));
-		$interbreadcrumb[]=array('url' => "../admin/resume_session.php?id_session=".$_GET['id_session'],"name" => get_lang('SessionOverview'));
+		$interbreadcrumb[]=array('url' => "../admin/resume_session.php?id_session=".Security::remove_XSS($_GET['id_session']),"name" => get_lang('SessionOverview'));
  	} else {
  		$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
  		if (isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0) {
- 			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach'], "name" => get_lang("CoachStudents"));
- 			$interbreadcrumb[] = array ("url" => "myStudents.php?student=".$_GET['student'].'&id_coach='.$_GET['id_coach'], "name" => get_lang("StudentDetails"));
+ 			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach']), "name" => get_lang("CoachStudents"));
+ 			$interbreadcrumb[] = array ("url" => "myStudents.php?student=".Security::remove_XSS($_GET['student']).'&id_coach='.Security::remove_XSS($_GET['id_coach']), "name" => get_lang("StudentDetails"));
  		} else {
  			$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
- 			$interbreadcrumb[] = array ("url" => "myStudents.php?student=".$_GET['student'], "name" => get_lang("StudentDetails"));
+ 			$interbreadcrumb[] = array ("url" => "myStudents.php?student=".Security::remove_XSS($_GET['student']), "name" => get_lang("StudentDetails"));
  		}	 	
  	}
  	$nameTools=get_lang("DetailsStudentInCourse");
@@ -195,7 +195,8 @@ if(!empty($_GET['student']))
 	  	  
 	// is the user online ?
 	$statistics_database = Database :: get_statistic_database();
-	$a_usersOnline = WhoIsOnline($_GET['student'], $statistics_database, 30);
+	$student_on_line=Security::remove_XSS($_GET['student']);
+	$a_usersOnline = WhoIsOnline($student_on_line, $statistics_database, 30);
 	foreach($a_usersOnline as $a_online)
 	{
 		if(in_array($_GET['student'],$a_online))
@@ -210,7 +211,7 @@ if(!empty($_GET['student']))
 	}
 			
 	$avg_student_progress = $avg_student_score = $nb_courses = 0;
-	$sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.$a_infosUser['user_id'];
+	$sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.Database::escape_string($a_infosUser['user_id']);
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
 	$a_courses = array();
 	while($row = Database :: fetch_array($rs))
@@ -226,17 +227,17 @@ if(!empty($_GET['student']))
 		$a_courses[$row['course_code']] = $row['course_code'];
 	}
 		
-	
-	if(!CourseManager::is_user_subscribed_in_course($a_infosUser['user_id'], $_GET['course'], true))
+	$course_id=Security::remove_XSS($_GET['course']);
+	if(!CourseManager::is_user_subscribed_in_course($a_infosUser['user_id'],$course_id, true))
 	{
 		unset($a_courses[$key]);
 	}
 	else
 	{
 		$nb_courses++;
-		$avg_student_progress = Tracking :: get_avg_student_progress($a_infosUser['user_id'],$_GET['course']);
+		$avg_student_progress = Tracking :: get_avg_student_progress($a_infosUser['user_id'],$course_id);
 		//the score inside the Reporting table
-		$avg_student_score = Tracking :: get_avg_student_score($a_infosUser['user_id'],$_GET['course']);			
+		$avg_student_score = Tracking :: get_avg_student_score($a_infosUser['user_id'],$course_id);			
 	}
 
 	$avg_student_progress = round($avg_student_progress,2);
@@ -252,7 +253,7 @@ if(!empty($_GET['student']))
 		$last_connection_date=get_lang('NoConnexion');
 	}
 	
-	$time_spent_on_the_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $_GET['course']));
+	$time_spent_on_the_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_id));
 	// cvs informations
 	$csv_content[] = array(get_lang('Informations'));
 	$csv_content[] = array(get_lang('Name'), get_lang('Email'), get_lang('Tel'));
@@ -455,7 +456,7 @@ if(!empty($_GET['student']))
                                             {   //only show link to connection details if course and student were defined in the URL
                                                 echo '<tr>';
                                                 echo '<td class="noLink none">';
-							echo '<img src="../img/statistics.gif">&nbsp; <strong> <a href="access_details.php?student='.$_GET['student'].'&course='.$_GET['course'].'">'.get_lang('AccessDetails').'</a> </strong>';
+												echo '<img src="../img/statistics.gif">&nbsp; <strong> <a href="access_details.php?student='.Security::remove_XSS($_GET['student']).'&course='.Security::remove_XSS($_GET['course']).'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;cidReq='.Security::remove_XSS($_GET['course']).'">'.get_lang('AccessDetails').'</a> </strong>';
                                                 echo '</td>';
                                                 echo '</tr>';
                                             }
@@ -472,8 +473,8 @@ if(!empty($_GET['student']))
 <?php
 			if(!empty($_GET['details']))
 			{
-		
-				$a_infosCours = CourseManager :: get_course_information($_GET['course']);
+				$course_code_info=Security::remove_XSS($_GET['course']);
+				$a_infosCours = CourseManager :: get_course_information($course_code_info);
 			
 				//get coach and session_name if there is one and if session_mode is activated
 				if(api_get_setting('use_session_mode')=='true')
@@ -486,7 +487,7 @@ if(!empty($_GET['student']))
 					$sql = 'SELECT id_session 
 							FROM '.$tbl_session_course_user.' session_course_user
 							WHERE session_course_user.id_user = '.intval($a_infosUser['user_id']).'
-							AND session_course_user.course_code = "'.Database::escape_string($_GET['course']).'"
+							AND session_course_user.course_code = "'.Database::escape_string($course_code_info).'"
 							ORDER BY id_session DESC';
 					$rs = api_sql_query($sql,__FILE__,__LINE__);
 					$num_row=Database::num_rows($rs);

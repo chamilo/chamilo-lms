@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 19361 2009-03-26 20:10:41Z iflorespaz $
+<?php // $Id: question.class.php 19428 2009-03-30 19:29:09Z cvargas1 $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 19361 2009-03-26 20:10:41Z iflorespaz $
+* 	@version $Id: question.class.php 19428 2009-03-30 19:29:09Z cvargas1 $
 */
 
 
@@ -967,22 +967,30 @@ abstract class Question
 					div.row div.label{ width: 10%; }
 					div.row div.formw{ width: 89%; }
 				</style>';
-		
-		// question name
-		$test=$form->addElement('text','questionName',get_lang('Question'),'size="60"');
 		$renderer = $form->defaultRenderer();
+		$form->addElement('html','<div class="form">');
+		// question name
+		//$test=$form->addElement('text','questionName',get_lang('Question'),'size="60"');
+		$radios_results_enabled[] = $form->createElement('static', null, null, null);
+		$test=FormValidator :: createElement ('text', 'questionName');
+
+		$radios_results_enabled[]=$test;
+		// question level
+		$select_level = array (0,1,2,3,4,5); 
+		$radios_results_enabled[] = $form->createElement('static', null, null, get_lang('Difficulty'));	
+		foreach($select_level as $val) {
+			$radios_results_enabled[] = FormValidator :: createElement ('radio', 'questionLevel', null,$val,$val);
+		}
+		$form->addGroup($radios_results_enabled, 'content', get_lang('Question'));
+		
+		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','content');	
+		
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionName');
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
 		// question type
 		$answerType= intval($_REQUEST['answerType']);
 		$form->addElement('hidden','answerType',$_REQUEST['answerType']);
-
-		// question level
-		$select_level = array (0,1,2,3,4,5); 
-		$form->addElement('select','questionLevel',get_lang('Difficulty'),$select_level);		
-		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
-
 		// html editor
 		global $fck_attribute;
 		$fck_attribute = array();
@@ -1066,29 +1074,27 @@ abstract class Question
 			eval('$img = '.$a_type[1].'::$typePicture;');
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
 
-			echo '<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">';
+			echo '<div id="answer_type_'.$i.'">';
 			echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">';
-			echo '<div>';
-			Display::display_icon($img, $explanation, array('align'=>'middle'));
+			echo '<div class="icon_image_content">';
+			Display::display_icon($img, $explanation);
 			echo '</div>';
-			echo '<div>';
+			echo '<div class="icon_image_content">';
 			echo $explanation;
 			echo '</div>';
 			echo '</a>';
-			echo '</div>';			
+			echo '</div>';
 		}
 			
-		echo '<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">';
+		echo '<div id="answer_type_'.$i.'" >';
 		if ($feedbacktype==1)
 			echo '<a href="question_pool.php?type=1&fromExercise='.$exerciseId.'">';
 		else
-			echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">';
-			
-		
-		echo '<div>';
+			echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">';	
+		echo '<div id="icon_test"  class="icon_image_content">';
 		Display::display_icon('database.gif', get_lang('GetExistingQuestion'), array('align'=>'middle'));
 		echo '</div>';
-		echo '<div>';
+		echo '<div class="icon_image_content">';
 		echo get_lang('GetExistingQuestion');
 		echo '</div>';
 		echo '</a>';

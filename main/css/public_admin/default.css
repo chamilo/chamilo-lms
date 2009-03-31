@@ -2294,7 +2294,7 @@ float:left;
  *****************************************************/
 /* BUTTONS */
 button {
-    margin:0 5px 3px 3px !important;
+    margin:2px 5px 3px 3px !important;
     background-color: #DFDFDF;
     border-width: 1px;
 /*    -moz-border-radius-topright : 5px;

@@ -119,11 +119,18 @@ echo '</div>';
 Display::display_normal_message(get_lang('AddLpIntro'),false);
 
 echo '<p>'.get_lang('AddLpToStart').' :</p>';
+
+echo '<div style="width:465px;">';
 echo '<form method="post">';
-	echo '<label for="idTitle">'.get_lang('Title').' : </label><input id="idTitle" name="learnpath_name" type="text" /> ';
-	echo '<button class="save"type="submit"/>'.get_lang('CreateLearningPath').'</button>';
-					echo '<input name="post_time" type="hidden" value="' . time() . '" />';
+echo '<div>';
+echo '<label for="idTitle">'.get_lang('Title').' : </label><input id="idTitle" name="learnpath_name" type="text" size="50" /> ';
+echo '</div>';
+echo '<div>';
+echo '<button  class="save" style="width:150px; float: right;" type="submit"/>'.get_lang('CreateLearningPath').'</button>';
+echo '</div>';
+echo '<input name="post_time" type="hidden" value="' . time() . '" />';
 echo '</form>';
+echo '</div>';
 
 // footer
 Display::display_footer();

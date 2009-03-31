@@ -6519,8 +6519,8 @@ class learnpath {
 				//$select_prerequisites->addOption(get_lang("NoPrerequisites"),0);
 
 				// form element for uploading an mp3 file
-				$form->addElement('file','mp3',get_lang('UploadMp3audio'),'id="mp3" size="33"');
-				$form->addRule('file', 'The extension of the Song file should be *.mp3', 'filename', '/^.*\.mp3$/');
+				//$form->addElement('file','mp3',get_lang('UploadMp3audio'),'id="mp3" size="33"');
+				//$form->addRule('file', 'The extension of the Song file should be *.mp3', 'filename', '/^.*\.mp3$/');
 				
                 /* Code deprecated - moved to lp level (not lp-item)
                 if ( api_get_setting('search_enabled') === 'true' )

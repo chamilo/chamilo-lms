@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 18465 2009-02-12 14:17:29Z juliomontoya $
+// $Id: inscription.php 19472 2009-03-31 23:51:28Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -256,7 +256,7 @@ foreach ($extra as $id => $field_details) {
 			break;
 	}
 }
-$form->addElement('submit', 'submit', get_lang('Ok'));
+$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'),'class="save"');
 if(isset($_SESSION["user_language_choice"]) && $_SESSION["user_language_choice"]!=""){
 	$defaults['language'] = $_SESSION["user_language_choice"];
 }
@@ -472,7 +472,7 @@ if ($form->validate()) {
 	}
 	// ?uidReset=true&uidReq=$_user['user_id']
 
-	echo "<form action=\"", $actionUrl, "\"  method=\"post\">\n", "<input type=\"submit\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">\n", "</form><br>\n";
+	echo "<form action=\"", $actionUrl, "\"  method=\"post\">\n", "<button type=\"submit\" class=\"next\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">".get_lang('Next')."</button>\n", "</form><br>\n";
 
 }
 else

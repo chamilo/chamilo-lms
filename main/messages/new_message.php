@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 19471 2009-03-31 23:28:53Z cvargas1 $
+<?php // $Id: new_message.php 19472 2009-03-31 23:51:28Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -170,7 +170,7 @@ function manage_form ($default, $select_from_user_list = null) {
 	if (isset($_GET['re_id'])) {
 		$form->addElement('hidden','re_id',$_GET['re_id']);
 	}
-	$form->addElement('style_submit_button', 'compose', get_lang('Send'),'class="save"');
+	$form->addElement('submit', 'compose', get_lang('Send'));
 	$form->setDefaults($default);
 	if ($form->validate()) {
 		$values = $form->exportValues();

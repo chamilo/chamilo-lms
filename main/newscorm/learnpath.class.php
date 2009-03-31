@@ -2648,7 +2648,7 @@ class learnpath {
 			unset($mych);
     	}
     	
-    	$html.= '<div class="inner_lp_toc">'."\n" ;
+    	$html.= '<div id="inner_lp_toc" class="inner_lp_toc">'."\n" ;
     	//$html.= '<div class="scorm_title"><div class="scorm_title_text">'.mb_convert_encoding($this->get_name(),$this->encoding,$mych).'</div></div>';
     	
     
@@ -2724,11 +2724,25 @@ class learnpath {
 				//$html .= '<a href="'.$url.'" target="content_name" onclick="top.load_item('.$item['id'].',\''.$url.'\');">'.$title.'</a>' ;
 				//$html .= '<a href="" onclick="top.load_item('.$item['id'].',\''.$url.'\');return false;">'.$title.'</a>' ;
 				
-				//<img align="absbottom" width="13" height="13" src="../img/lp_document.png">&nbsp;
-				$html .= '<a href="" onclick="dokeos_xajax_handler.switch_item(' .
-						$mycurrentitemid.',' .
-						$item['id'].');' .
-						'return false;" >'.stripslashes($title).'</a>' ;
+				//<img align="absbottom" width="13" height="13" src="../img/lp_document.png">&nbsp;background:#aaa;							
+				$html .= '<a href="" onclick="';
+				$count_items = 0;
+				foreach($list as $item2)
+    			{
+    				//$html .= 'alert('.$count_items.');';	
+    				if ($count_items%2==0) {
+			    		$html .= 'document.getElementById(\'toc_'.$item2['id'].'\').style.backgroundColor=\'#ddd\';'; 			
+			    	} else {
+			    		$html .= 'document.getElementById(\'toc_'.$item2['id'].'\').style.backgroundColor=\'#eee\';'; 
+			    	}
+    			$count_items++;
+    			}
+    			$html .= 'document.getElementById(\'toc_'.$item['id'].'\').style.backgroundColor=\'#aaa\';';				
+			
+				$html .='dokeos_xajax_handler.switch_item(' .
+					$mycurrentitemid.',' .
+					$item['id'].');' .
+					'return false;" >'.stripslashes($title).'</a>' ;
     		}
     		elseif($item['type']=='dokeos_module' || $item['type']=='dokeos_chapter')
     		{

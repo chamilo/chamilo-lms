@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 18737 2009-02-27 15:40:32Z juliomontoya $ 
+<?php // $Id: scorm_api.php 19463 2009-03-31 17:33:09Z cfasanando $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -1014,7 +1014,8 @@ function switch_item(current_item, next_item){
 	}
 	else
 	{
-		cont_f.src = mysrc;
+		//cont_f.src = mysrc;
+		location.href='lp_controller.php?cidReq=<?php echo api_get_course_id() ?>&action=view&lp_id='+lms_lp_id;
 	}
 	if(lms_lp_type==1 || lms_item_type=='asset'){
 		xajax_start_timer();

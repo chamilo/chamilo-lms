@@ -5212,10 +5212,10 @@ class learnpath {
 								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);								
 							}
 						}
-						
+						/*//comented the prerequisites, only visible in edit (exercise)
 						$return .= "\t\t" . '<tr>' . "\n";							
 						$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+						$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
 							foreach($arrHide as $key => $value){
 								if($key==$s_selected_position && $action == 'add'){
@@ -5229,7 +5229,8 @@ class learnpath {
 								}
 							}
 							
-							$return .= "</select></td>";
+						$return .= "</select></td>";
+						*/
 						$return .= "\t\t" . '</tr>' . "\n";						
 						$return .= "\t\t" . '<tr>' . "\n";						
 						$return .= "\t\t\t" . '<td class="label"><label for="maxTimeAllowed">'.get_lang('MaxTimeAllowed').'</label></td>' . "\n";
@@ -6849,8 +6850,8 @@ class learnpath {
 							}
 						}
 						
-						$return .= "\t\t" . '<tr>' . "\n";
-							
+						/*//comented the prerequisites, only visible in edit (link)
+ 							$return .= "\t\t" . '<tr>' . "\n";
 							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
@@ -6869,7 +6870,7 @@ class learnpath {
 							}
 							
 							$return .= "</select></td>";
-						
+						*/						
 						$return .= "\t\t" . '</tr>' . "\n";
 								
 					}
@@ -7103,8 +7104,9 @@ class learnpath {
 							}
 						}
 						
-						$return .= "\t\t" . '<tr>' . "\n";
-							
+							//comented the prerequisites, only visible in edit (work)
+					/*
+							$return .= "\t\t" . '<tr>' . "\n";
 							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
@@ -7121,7 +7123,7 @@ class learnpath {
 							}
 							
 							$return .= "</select></td>";
-						
+					*/
 						$return .= "\t\t" . '</tr>' . "\n";
 						
 					}

@@ -498,6 +498,7 @@ $CourseDoesNotExist = "Taki kurs nie istnieje";
 $UserDoesNotExist = "Taki u&#380;ytkownik nie istnieje";
 $WrongDate = "Nieprawid&#322;owy format daty (rrrr-mm-dd)";
 $ThisIsAutomaticEmailNoReply = "To jest automatycznie wys&#322;ana wiadomo&#347;&#263;. Prosz&#281; nie odpowiada&#263;";
+$CourseTeachers = "Nauczyciele kursów";
 $ShowDifferentCourseLanguageComment = "Poka&#380; j&#281;zyk ka&#380;dego kursu (po nazwie kursu) na stronie g&#322;ównej.";
 $ShowEmptyCourseCategoriesComment = "Poka&#380; kategori&#281; kursów na stronie g&#322;ównej, nawet je&#380;eli kategorie s&#261; puste";
 $ShowEmptyCourseCategories = "Poka&#380; kategori&#281; pustych kursów";

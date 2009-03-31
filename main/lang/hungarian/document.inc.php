@@ -128,7 +128,6 @@ $TemplateTitleFirstPage = "Els&#337; oldal";
 $TemplateTitleFirstPageDescription = "Ez a kurzus kezd&#337;oldala";
 $TemplateTitleIntroduction = "Bevezetés";
 $TemplateTitleBibliography = "Bibliográfia";
-$SaveDocument = "Dokumentum mentése";
 $CreateTheDocument = "Dokumentum létrehozása";
 $SharedFolder = "Megosztott mappa";
 $CreateFolder = "Mappa létrehozása";

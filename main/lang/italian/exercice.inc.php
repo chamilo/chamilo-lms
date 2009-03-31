@@ -285,4 +285,8 @@ $SelectTargetQuestion = "Seleziona il test di destinazione";
 $DirectFeedbackCantModifyTypeQuestion = "Il tipo di valutazione non può essere modificato, in quanto identificato come auto-valutazione";
 $CantShowResults = "Non disponibile";
 $CantViewResults = "Il risultato non può essere visto";
+$ShowCorrectedOnly = "Mostra i quesiti corretti";
+$ShowUnCorrectedOnly = "Mostra i quesiti non ancora corretti";
+$HideResultsToStudents = "Non mostrare i risultati ai corsisti";
+$ShowResultsToStudents = "Mostra i risultati ai corsisti";
 ?>

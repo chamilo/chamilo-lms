@@ -287,4 +287,6 @@ $CantShowResults = "Not available";
 $CantViewResults = "Can\'t view results";
 $ShowCorrectedOnly = "Show the corrected exercise";
 $ShowUnCorrectedOnly = "show the uncorrected exercise";
+$HideResultsToStudents = "Hide the results to students";
+$ShowResultsToStudents = "Show the results to students";
 ?>

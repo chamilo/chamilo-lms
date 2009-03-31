@@ -544,4 +544,5 @@ $ExportToPDF = "Exporteer naar PDF";
 $CommentAdded = "Uw commentaar is toegevoegd.";
 $BackToPreviousPage = "Terug naar de vorige pagina";
 $ListView = "Als lijst weergeven";
+$SaveDocument = "Document opslaan";
 ?>

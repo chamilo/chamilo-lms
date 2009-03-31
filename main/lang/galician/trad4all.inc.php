@@ -572,5 +572,6 @@ $BackToPreviousPage = "Volver á páxina anterior";
 $ListView = "Mostrar como lista";
 $NoOfficialCode = "No Código oficial";
 $Owner = "Propietario";
+$SaveDocument = "Gardar documento";
 $Wiki = "Wiki";
 ?>

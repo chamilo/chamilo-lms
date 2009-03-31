@@ -577,6 +577,7 @@ $SearchFeatureDoIndexDocument = "¿ Facer índiz del conteníu del documentu ?";
 $SearchFeatureDocumentLanguage = "Idioma del documentu pa facer l\'índiz";
 $With = "con";
 $GeneralCoach = "Tutor xeneral";
+$SaveDocument = "Guardar documentu";
 $CategoryDeleted = "Esborróse la categoría";
 $CategoryAdded = "Amestóse la categoría";
 $IP = "IP";

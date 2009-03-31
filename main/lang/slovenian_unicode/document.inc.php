@@ -207,7 +207,6 @@ $TemplateTitleTimelineDescription = "3 seznami z relacijskimi povezavami";
 $TemplateTitleStopAndThink = "Zaustavi se in premisli";
 $TemplateTitleListLeftListDescription = "Seznam na levi z vodičem";
 $TemplateTitleStopAndThinkDescription = "Prodloga vzpodbude k zaustavitvi in razmisleku";
-$SaveDocument = "Shrani dokument";
 $CreateTheDocument = "Shrani dokument";
 $SharedFolder = "Mapa v skupni rabi";
 $CreateFolder = "Ustvari mapo";

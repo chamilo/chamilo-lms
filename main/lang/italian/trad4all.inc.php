@@ -580,6 +580,7 @@ $SearchFeatureDoIndexDocument = "Indicizzare il testo del documento?";
 $SearchFeatureDocumentLanguage = "Lingua del documento per l\'indicizzazione";
 $With = "con";
 $GeneralCoach = "Tutor globale";
+$SaveDocument = "Salva il documento";
 $CategoryDeleted = "La categoria è stata eliminata";
 $CategoryAdded = "Categoria aggiunta";
 $IP = "IP";

@@ -571,4 +571,5 @@ $CommentAdded = "Uw commentaar is toegevoegd.";
 $BackToPreviousPage = "Terug naar de vorige pagina";
 $ListView = "Als lijst weergeven";
 $DisplayOrder = "Volgorde van weergave";
+$SaveDocument = "Document opslaan";
 ?>

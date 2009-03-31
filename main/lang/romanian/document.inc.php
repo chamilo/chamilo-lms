@@ -206,6 +206,5 @@ $TemplateTitleTimelineDescription = "3 liste cu sageta relationala";
 $TemplateTitleStopAndThink = "Stai si gandeste-te";
 $TemplateTitleListLeftListDescription = "Lista stanga cu un instructor";
 $TemplateTitleStopAndThinkDescription = "Aspectul ce incurajeaza \"stop si gandeste-te\"";
-$SaveDocument = "Salveaza documentul";
 $CreateTheDocument = "Salveaza documentul";
 ?>

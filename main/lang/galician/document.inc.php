@@ -206,7 +206,6 @@ $TemplateTitleTimelineDescription = "3 listas relacionadas con frechas";
 $TemplateTitleStopAndThink = "Detente e reflexiona";
 $TemplateTitleListLeftListDescription = "Lista á esquerda cun instrutor";
 $TemplateTitleStopAndThinkDescription = "Invitación a pararse e a reflexionar";
-$SaveDocument = "Gardar documento";
 $CreateTheDocument = "Gardar documento";
 $SharedFolder = "Cartafol compartido";
 ?>

@@ -198,7 +198,6 @@ $TemplateTitleLearnerWonder = "Údiv študenta";
 $TemplateTitleStopAndThink = "Zastavi&#357; a premýš&#318;a&#357;";
 $TemplateTitleListLeftListDescription = "Zoznam v&#318;avo s inštruktorom";
 $TemplateTitleStopAndThinkDescription = "Schéma vyzýva k zastaveniu a premýš&#318;aniu";
-$SaveDocument = "Uloži&#357; dokument";
 $CreateTheDocument = "Vytvori&#357; dokument";
 $SharedFolder = "Zdie&#318;aná zložka";
 $CreateFolder = "Vytvori&#357; prie&#269;inok";

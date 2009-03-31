@@ -577,6 +577,7 @@ $SearchFeatureDoIndexDocument = "Indexar o conteúdo do documento?";
 $SearchFeatureDocumentLanguage = "Idioma do documento para indexação";
 $With = "com";
 $GeneralCoach = "Tutor geral";
+$SaveDocument = "Guardar documento";
 $CategoryDeleted = "A categoria foi eliminada";
 $CategoryAdded = "Categoria acrescentada";
 $IP = "IP";

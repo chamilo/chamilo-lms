@@ -556,6 +556,7 @@ $NoOfficialCode = "Žiadny oficiálny kód";
 $Owner = "Vlastník";
 $DisplayOrder = "Poradie zobrazenia";
 $With = "s";
+$SaveDocument = "Uloži&#357; dokument";
 $CategoryDeleted = "Kategória je zmazaná";
 $CategoryAdded = "Kategória pridaná";
 $IP = "IP";

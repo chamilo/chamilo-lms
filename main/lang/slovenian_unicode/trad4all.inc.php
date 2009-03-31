@@ -580,6 +580,7 @@ $SearchFeatureDoIndexDocument = "Indeksiram vsebino dokumentov?";
 $SearchFeatureDocumentLanguage = "Jezik dokumenta za indeksiranje";
 $With = "z";
 $GeneralCoach = "Splošen inštruktor";
+$SaveDocument = "Shrani dokument";
 $CategoryDeleted = "Kategorija je bila odstranjena";
 $CategoryAdded = "Kategorija je bila dodana";
 $IP = "IP";

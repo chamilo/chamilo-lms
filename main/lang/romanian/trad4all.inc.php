@@ -378,5 +378,6 @@ $FileUploadSucces = "Fi&#351;ierul a fost înc&#259;rcat cu succes";
 $SelectFile = "Selecteaz&#259; un fi&#351;ier";
 $ListView = "Afiseaza ca lista";
 $DisplayOrder = "Ordinea de afisare";
+$SaveDocument = "Salveaza documentul";
 $NoParticipation = "Nu exista participan&#355;i";
 ?>

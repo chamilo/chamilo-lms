@@ -206,5 +206,4 @@ $TemplateTitleTimelineDescription = "3 listas relacionadas com setas";
 $TemplateTitleStopAndThink = "Pára e reflecte";
 $TemplateTitleListLeftListDescription = "Lista à esquerda com instrutor";
 $TemplateTitleStopAndThinkDescription = "Convite para parar e reflectir";
-$SaveDocument = "Guardar documento";
 ?>

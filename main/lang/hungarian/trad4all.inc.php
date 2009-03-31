@@ -568,5 +568,6 @@ $BackToPreviousPage = "Vissza az el&#337;z&#337; oldalra";
 $ListView = "Megtekintés listaként";
 $Owner = "Tulajdonos";
 $DisplayOrder = "Megjelenés sorrendje";
+$SaveDocument = "Dokumentum mentése";
 $Phone = "Telefon";
 ?>

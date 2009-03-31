@@ -16,7 +16,7 @@ $server = new soap_server();
 $server->configureWSDL('WSRegistration', 'urn:WSRegistration');
 
 
-/* Register DokeosWSCreateUser function */
+/* Register DokeosWSCreateUsers function */
 // Register the data structures used by the service
 
 
@@ -44,7 +44,7 @@ array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:extras[]')),'tn
 );
 
 $server->wsdl->addComplexType(
-	'userParams',
+	'usersParams',
 	'complexType',
 	'struct',
 	'all',
@@ -66,17 +66,17 @@ $server->wsdl->addComplexType(
 );
 
 $server->wsdl->addComplexType(
-'userParamsList',
+'usersParamsList',
 'complexType',
 'array',
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:userParams[]')),'tns:userParams'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:usersParams[]')),'tns:usersParams'
 );
 
 $server->wsdl->addComplexType(
-	'createUser',
+	'createUsers',
 	'complexType',
 	'struct',
 	'all',
@@ -89,7 +89,7 @@ $server->wsdl->addComplexType(
 
 // Prepare output params, in this case will return an array
 $server->wsdl->addComplexType(
-'result_createUser',
+'result_createUsers',
 'complexType',
 'struct',
 'all',
@@ -101,29 +101,29 @@ array(
 );
 
 $server->wsdl->addComplexType(
-'results_createUser',
+'results_createUsers',
 'complexType',
 'array',
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createUser[]')),'tns:result_createUser'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createUsers[]')),'tns:result_createUsers'
 );
 
 // Register the method to expose
-$server->register('DokeosWSCreateUser',				// method name
-	array('createUser' => 'tns:createUser'),		// input parameters
-	array('return' => 'tns:results_createUser'),	// output parameters
+$server->register('DokeosWSCreateUsers',				// method name
+	array('createUsers' => 'tns:createUsers'),		// input parameters
+	array('return' => 'tns:results_createUsers'),	// output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWSCreateUser',		// soapaction
+	'urn:WSRegistration#DokeosWSCreateUsers',		// soapaction
 	'rpc',											// style
 	'encoded',										// use
 	'This service adds a user'						// documentation
 );
 
 
-// Define the method DokeosWSCreateUser
-function DokeosWSCreateUser($params) {
+// Define the method DokeosWSCreateUsers
+function DokeosWSCreateUsers($params) {
 
 	global $_user, $userPasswordCrypted,$_configuration;
 	
@@ -289,14 +289,14 @@ function DokeosWSCreateUser($params) {
 
 }
 
-/* Register DokeosWSCreateUserPasswordCrypted function */
+/* Register DokeosWSCreateUsersPasswordCrypted function */
 // Register the data structures used by the service
 
 //prepare input params
 
 // Input params for editing users 
 $server->wsdl->addComplexType(
-	'createUserPassEncryptParams',
+	'createUsersPassEncryptParams',
 	'complexType',
 	'struct',
 	'all',
@@ -320,32 +320,32 @@ $server->wsdl->addComplexType(
 
 
 $server->wsdl->addComplexType(
-'createUserPassEncryptParamsList',
+'createUsersPassEncryptParamsList',
 'complexType',
 'array',
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:createUserPassEncryptParams[]')),'tns:createUserPassEncryptParams'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:createUsersPassEncryptParams[]')),'tns:createUsersPassEncryptParams'
 );
 
 
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
-	'createUserPasswordCrypted',
+	'createUsersPasswordCrypted',
 	'complexType',
 	'struct',
 	'all',
 	'',
 	array(
-		'users' => array('name' => 'users', 'type' => 'tns:createUserPassEncryptParamsList'),		
+		'users' => array('name' => 'users', 'type' => 'tns:createUsersPassEncryptParamsList'),		
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
 	)
 );
 
 // Prepare output params, in this case will return an array
 $server->wsdl->addComplexType(
-'result_createUserPassEncrypt',
+'result_createUsersPassEncrypt',
 'complexType',
 'struct',
 'all',
@@ -357,28 +357,28 @@ array(
 );
 
 $server->wsdl->addComplexType(
-'results_createUserPassEncrypt',
+'results_createUsersPassEncrypt',
 'complexType',
 'array',
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createUserPassEncrypt[]')),'tns:result_createUserPassEncrypt'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createUsersPassEncrypt[]')),'tns:result_createUsersPassEncrypt'
 );
 
 // Register the method to expose
-$server->register('DokeosWSCreateUserPasswordCrypted',						// method name
-	array('createUserPasswordCrypted' => 'tns:createUserPasswordCrypted'),	// input parameters
-	array('return' => 'tns:results_createUserPassEncrypt'),								// output parameters
+$server->register('DokeosWSCreateUsersPasswordCrypted',						// method name
+	array('createUsersPasswordCrypted' => 'tns:createUsersPasswordCrypted'),	// input parameters
+	array('return' => 'tns:results_createUsersPassEncrypt'),								// output parameters
 	'urn:WSRegistration',													// namespace
-	'urn:WSRegistration#DokeosWSCreateUserPasswordCrypted',					// soapaction
+	'urn:WSRegistration#DokeosWSCreateUsersPasswordCrypted',					// soapaction
 	'rpc',																	// style
 	'encoded',																// use
-	'This service adds a user to dokeos'									// documentation
+	'This service adds users to dokeos'									// documentation
 );
 
-// Define the method DokeosWSCreateUserPasswordCrypted
-function DokeosWSCreateUserPasswordCrypted($params) {
+// Define the method DokeosWSCreateUsersPasswordCrypted
+function DokeosWSCreateUsersPasswordCrypted($params) {
 
 	global $_user, $userPasswordCrypted,$_configuration;
 	
@@ -576,10 +576,225 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 	
 }
 
-/* Register DokeosWSEditUser function */
+/* Register DokeosWSCreateUserPasswordCrypted function */
+// Register the data structures used by the service
+
+//prepare input params
+
+// Input params for editing users 
+$server->wsdl->addComplexType(
+	'createUserPasswordCrypted',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
+		'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
+		'status' => array('name' => 'status', 'type' => 'xsd:string'),
+		'email' => array('name' => 'email', 'type' => 'xsd:string'),
+		'loginname' => array('name' => 'loginname', 'type' => 'xsd:string'),
+		'password' => array('name' => 'password', 'type' => 'xsd:string'),
+		'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),						
+		'language' => array('name' => 'language', 'type' => 'xsd:string'),
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
+		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
+		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),		
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')									
+	)
+);
+
+// Register the method to expose
+$server->register('DokeosWSCreateUserPasswordCrypted',						// method name
+	array('createUserPasswordCrypted' => 'tns:createUserPasswordCrypted'),	// input parameters
+	array('return' => 'xsd:string'),								// output parameters
+	'urn:WSRegistration',													// namespace
+	'urn:WSRegistration#DokeosWSCreateUserPasswordCrypted',					// soapaction
+	'rpc',																	// style
+	'encoded',																// use
+	'This service adds users to dokeos'									// documentation
+);
+
+// Define the method DokeosWSCreateUserPasswordCrypted
+function DokeosWSCreateUserPasswordCrypted($params) {
+
+	global $_user, $userPasswordCrypted,$_configuration;
+	
+	$secret_key = $params['secret_key'];	
+	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (!api_is_valid_secret_key($secret_key,$security_key)) {
+		return -1; //secret key is incorrect
+	}
+
+	// database table definition
+	$table_user = Database::get_main_table(TABLE_MAIN_USER); 		
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+	
+	//$users_params = $params['users'];
+	$results = array();
+	$orig_user_id_value = array();
+
+	$password = $params['password'];
+  	$encrypt_method = $params['encrypt_method'];
+  	 
+  	$firstName = $params['firstname'];			$lastName = $params['lastname'];
+	$status = $params['status'];				$email = $params['email'];	
+	$loginName = $params['loginname'];	
+					
+	$official_code = '';$language='';$phone = '';$picture_uri = '';$auth_source = PLATFORM_AUTH_SOURCE; 
+	$expiration_date = '0000-00-00 00:00:00'; $active = 1; $hr_dept_id=0; $extra=null;
+	$original_user_id_name= $params['original_user_id_name'];
+	$original_user_id_value = $params['original_user_id_value'];
+	$orig_user_id_value[] = $params['original_user_id_value'];
+	$extra_list = $params['extra'];
+	$salt = '';
+							  	  					
+	if ($userPasswordCrypted === $encrypt_method ) {		
+		if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/',$password)) {
+			$msg = "Encryption $encrypt_method is invalid";				
+			return $msg;
+			 				
+		} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/',$password)) {
+			$msg = "Encryption $encrypt_method is invalid";				
+			return $msg;
+			 						
+		}
+	} else {
+		$msg = "This encryption $encrypt_method is not configured into dokeos ";
+		return $msg;
+	}
+									
+										
+	if (!empty($params['language'])) { $language=$params['language'];}
+	if (!empty($params['phone'])) { $phone = $params['phone'];}
+	if (!empty($params['expiration_date'])) { $expiration_date = $params['expiration_date'];}			
+		
+	// check if exits x_user_id into user_field_values table
+	$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$row = Database::fetch_row($res);
+	$count_row = Database::num_rows($res);
+	if ($count_row > 0) {		
+		// check if user is not active 		
+		$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$row[1]."' AND active= '0'";
+		$resu = api_sql_query($sql,__FILE__,__LINE__);
+		$r_check_user = Database::fetch_row($resu);	
+		$count_check_user = Database::num_rows($resu);
+		if ($count_check_user > 0) {			
+			$sql = "UPDATE $table_user SET
+			lastname='".Database::escape_string($lastName)."',
+			firstname='".Database::escape_string($firstName)."',
+			username='".Database::escape_string($loginName)."',";
+						
+			if(!is_null($auth_source))
+			{
+				$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+			}
+			$sql .=	"
+					password='".Database::escape_string($password)."',
+					email='".Database::escape_string($email)."',
+					status='".Database::escape_string($status)."',
+					official_code='".Database::escape_string($official_code)."',
+					phone='".Database::escape_string($phone)."',			
+					expiration_date='".Database::escape_string($expiration_date)."',
+					active='1',
+					hr_dept_id=".intval($hr_dept_id);				
+			$sql .=	" WHERE user_id='".$r_check_user[0]."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			
+			if (is_array($extra_list) && count($extra_list) > 0) {
+				foreach ($extra_list as $extra) {					    			
+					$extra_field_name = $extra['field_name'];
+					$extra_field_value = $extra['field_value'];						
+					// save the external system's id into user_field_value table'	
+					$res = UserManager::update_extra_field_value($r_check_user[0],$extra_field_name,$extra_field_value);										
+				}
+			}
+			
+			return $r_check_user[0];												
+		} else {
+			return 0;				
+		}
+	}
+	 	 	 			
+	// default language
+	if (empty($language)) {
+		$language = api_get_setting('platformLanguage');
+	}
+
+	if (!empty($_user['user_id'])) {
+		$creator_id = $_user['user_id'];
+	} else {
+		$creator_id = '';
+	}
+	// First check wether the login already exists
+	if (! UserManager::is_username_available($loginName)) {	
+		if(api_set_failure('login-pass already taken')) {
+			return 0;						
+		}
+	}
+
+	$sql = "INSERT INTO $table_user
+				                SET lastname = '".Database::escape_string(trim($lastName))."',
+				                firstname = '".Database::escape_string(trim($firstName))."',
+				                username = '".Database::escape_string(trim($loginName))."',
+				                status = '".Database::escape_string($status)."',
+				                password = '".Database::escape_string($password)."',
+				                email = '".Database::escape_string($email)."',
+				                official_code	= '".Database::escape_string($official_code)."',
+				                picture_uri 	= '".Database::escape_string($picture_uri)."',
+				                creator_id  	= '".Database::escape_string($creator_id)."',
+				                auth_source = '".Database::escape_string($auth_source)."',
+			                    phone = '".Database::escape_string($phone)."',
+			                    language = '".Database::escape_string($language)."',
+			                    registration_date = now(),
+			                    expiration_date = '".Database::escape_string($expiration_date)."',
+								hr_dept_id = '".Database::escape_string($hr_dept_id)."',
+								active = '".Database::escape_string($active)."'";
+	$result = api_sql_query($sql);
+	if ($result) {
+		//echo "id returned";		
+		$return=Database::get_last_insert_id();			
+		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+		if ($_configuration['multiple_access_urls']==true) {
+			if (api_get_current_access_url_id()!=-1)
+				UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+			else
+				UrlManager::add_user_to_url($return, 1);
+		} else {
+			//we are adding by default the access_url_user table with access_url_id = 1
+			UrlManager::add_user_to_url($return, 1);
+		}
+		// save new fieldlabel into user_field table
+		$field_id = UserManager::create_extra_field($original_user_id_name,1,$original_user_id_name,'');
+		// save the remote system's id into user_field_value table'	
+		$res = UserManager::update_extra_field_value($return,$original_user_id_name,$original_user_id_value);	
+		
+		if (is_array($extra_list) && count($extra_list) > 0) {
+			foreach ($extra_list as $extra) {					    			
+				$extra_field_name = $extra['field_name'];
+				$extra_field_value = $extra['field_value'];
+				// save new fieldlabel into user_field table 
+				$field_id = UserManager::create_extra_field($extra_field_name,1,$extra_field_name,'');
+				// save the external system's id into user_field_value table'	
+				$res = UserManager::update_extra_field_value($return,$extra_field_name,$extra_field_value);										
+			}
+		}
+	} else {							
+		return 0;			
+	}
+	return  $return;										  		
+	
+}
+
+/* Register DokeosWSEditUsers function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
-	'editUserParams',
+	'editUsersParams',
 	'complexType',
 	'struct',
 	'all',
@@ -600,30 +815,30 @@ $server->wsdl->addComplexType(
 );
 
 $server->wsdl->addComplexType(
-'editUserParamsList',
+'editUsersParamsList',
 'complexType',
 'array',
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:editUserParams[]')),'tns:editUserParams'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:editUsersParams[]')),'tns:editUsersParams'
 );
 
 $server->wsdl->addComplexType(
-	'editUser',
+	'editUsers',
 	'complexType',
 	'struct',
 	'all',
 	'',
 	array(
-		'users' => array('name' => 'users', 'type' => 'tns:editUserParamsList'),		
+		'users' => array('name' => 'users', 'type' => 'tns:editUsersParamsList'),		
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
 	)
 );
 
 // Prepare output params, in this case will return an array
 $server->wsdl->addComplexType(
-'result_editUser',
+'result_editUsers',
 'complexType',
 'struct',
 'all',
@@ -635,28 +850,28 @@ array(
 );
 
 $server->wsdl->addComplexType(
-'results_editUser',
+'results_editUsers',
 'complexType',
 'array',
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_editUser[]')),'tns:result_editUser'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_editUsers[]')),'tns:result_editUsers'
 );
 
 // Register the method to expose
-$server->register('DokeosWSEditUser',		// method name
-	array('editUser' => 'tns:editUser'),			// input parameters
-	array('return' => 'tns:results_editUser'),					// output parameters
+$server->register('DokeosWSEditUsers',		// method name
+	array('editUsers' => 'tns:editUsers'),			// input parameters
+	array('return' => 'tns:results_editUsers'),					// output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWSEditUser',	// soapaction
+	'urn:WSRegistration#DokeosWSEditUsers',	// soapaction
 	'rpc',											// style
 	'encoded',										// use
 	'This service edits a user from wiener'			// documentation
 );
 
-// Define the method DokeosWSEditUser
-function DokeosWSEditUser($params)
+// Define the method DokeosWSEditUsers
+function DokeosWSEditUsers($params)
 {
 	global $userPasswordCrypted,$_configuration;
 	
@@ -776,10 +991,10 @@ function DokeosWSEditUser($params)
 }
 
 
-/* Register DokeosWSEditUserPasswordCrypted function */
+/* Register DokeosWSEditUsersPasswordCrypted function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
-	'editUserPasswordCryptedParams',
+	'editUsersPasswordCryptedParams',
 	'complexType',
 	'struct',
 	'all',
@@ -801,30 +1016,30 @@ $server->wsdl->addComplexType(
 );
 
 $server->wsdl->addComplexType(
-'editUserPasswordCryptedParamsList',
+'editUsersPasswordCryptedParamsList',
 'complexType',
 'array',
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:editUserPasswordCryptedParams[]')),'tns:editUserPasswordCryptedParams'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:editUsersPasswordCryptedParams[]')),'tns:editUsersPasswordCryptedParams'
 );
 
 $server->wsdl->addComplexType(
-	'editUserPasswordCrypted',
+	'editUsersPasswordCrypted',
 	'complexType',
 	'struct',
 	'all',
 	'',
 	array(
-		'users' => array('name' => 'users', 'type' => 'tns:editUserPasswordCryptedParamsList'),		
+		'users' => array('name' => 'users', 'type' => 'tns:editUsersPasswordCryptedParamsList'),		
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
 	)
 );
 
 // Prepare output params, in this case will return an array
 $server->wsdl->addComplexType(
-'result_editUserPasswordCrypted',
+'result_editUsersPasswordCrypted',
 'complexType',
 'struct',
 'all',
@@ -836,28 +1051,28 @@ array(
 );
 
 $server->wsdl->addComplexType(
-'results_editUserPasswordCrypted',
+'results_editUsersPasswordCrypted',
 'complexType',
 'array',
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_editUserPasswordCrypted[]')),'tns:result_editUserPasswordCrypted'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_editUsersPasswordCrypted[]')),'tns:result_editUsersPasswordCrypted'
 );
 
 // Register the method to expose
-$server->register('DokeosWSEditUserPasswordCrypted',					// method name
-	array('editUserPasswordCrypted' => 'tns:editUserPasswordCrypted'),	// input parameters
-	array('return' => 'tns:results_editUserPasswordCrypted'),			// output parameters
+$server->register('DokeosWSEditUsersPasswordCrypted',					// method name
+	array('editUsersPasswordCrypted' => 'tns:editUsersPasswordCrypted'),	// input parameters
+	array('return' => 'tns:results_editUsersPasswordCrypted'),			// output parameters
 	'urn:WSRegistration',												// namespace
-	'urn:WSRegistration#DokeosWSEditUserPasswordCrypted',				// soapaction
+	'urn:WSRegistration#DokeosWSEditUsersPasswordCrypted',				// soapaction
 	'rpc',																// style
 	'encoded',															// use
 	'This service edits a user'											// documentation
 );
 
-// Define the method DokeosWSEditUserPasswordCrypted
-function DokeosWSEditUserPasswordCrypted($params)
+// Define the method DokeosWSEditUsersPasswordCrypted
+function DokeosWSEditUsersPasswordCrypted($params)
 {
 	global $userPasswordCrypted,$_configuration,$userPasswordCrypted;
 	
@@ -1003,9 +1218,171 @@ function DokeosWSEditUserPasswordCrypted($params)
 		
 }
 
-/* Register DokeosWSDeleteUser function */
+/* Register DokeosWSEditUserPasswordCrypted function */
+// Register the data structures used by the service
 $server->wsdl->addComplexType(
-	'deleteUserParam',
+	'editUserPasswordCrypted',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+		'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
+		'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
+		'username' => array('name' => 'username', 'type' => 'xsd:string'),
+		'password' => array('name' => 'password', 'type' => 'xsd:string'),
+		'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),		
+		'email' => array('name' => 'email', 'type' => 'xsd:string'),
+		'status' => array('name' => 'status', 'type' => 'xsd:string'),		
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
+		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),	
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')			
+	)
+);
+
+// Register the method to expose
+$server->register('DokeosWSEditUserPasswordCrypted',					// method name
+	array('editUserPasswordCrypted' => 'tns:editUserPasswordCrypted'),	// input parameters
+	array('return' => 'xsd:string'),			// output parameters
+	'urn:WSRegistration',												// namespace
+	'urn:WSRegistration#DokeosWSEditUserPasswordCrypted',				// soapaction
+	'rpc',																// style
+	'encoded',															// use
+	'This service edits a user'											// documentation
+);
+
+// Define the method DokeosWSEditUserPasswordCrypted
+function DokeosWSEditUserPasswordCrypted($params)
+{
+	global $userPasswordCrypted,$_configuration,$userPasswordCrypted;
+	
+	$secret_key = $params['secret_key'];
+	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (!api_is_valid_secret_key($secret_key,$security_key)) {
+		return -1; //secret key is incorrect
+	}		
+	
+	// get user id from id of remote system
+	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+	
+	
+		
+		$original_user_id_value = $params['original_user_id_value'];
+		$original_user_id_name = $params['original_user_id_name'];			
+		$firstname = $params['firstname']; 
+		$lastname = $params['lastname'];
+		$username = $params['username'];
+		$password = null; $auth_source = null; 
+		$email = $params['email']; $status = $params['status'];
+		$official_code = ''; $phone = $params['phone'];
+		$picture_uri = ''; $expiration_date = $params['expiration_date']; $active = 1; 
+		$creator_id= null; $hr_dept_id=0; $extra=null;
+		$extra_list = $params['extra'];
+			
+		if (!empty($params['password']) && !empty($params['encrypt_method'])) { 
+			
+			$password = $params['password'];
+			$encrypt_method = $params['encrypt_method'];
+			if ($userPasswordCrypted === $encrypt_method ) {		
+				if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/',$password)) {					
+				    $msg = "Encryption $encrypt_method is invalid";
+				    return $msg;
+				} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/',$password)) {
+					$msg = "Encryption $encrypt_method is invalid";
+					return $msg;
+				}
+			} else {
+				$msg = "This encryption $encrypt_method is not configured into dokeos ";
+				return $msg;
+			}		
+		} else if(!empty($params['password']) && empty($params['encrypt_method'])){
+			$msg = "If password is not empty the encrypt_method param is required ";
+			return $msg;
+		} else if(empty($params['password']) && !empty($params['encrypt_method'])){
+			$msg = "If encrypt_method is not empty the password param is required ";
+			return $msg;			
+		}
+	
+		
+		$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$row = Database::fetch_row($res);	
+		$user_id = $row[0];
+	
+		if (empty($user_id)) {
+			return 0;			 
+		} else {
+			$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
+			$resu = api_sql_query($sql,__FILE__,__LINE__);
+			$r_check_user = Database::fetch_row($resu);
+			if (!empty($r_check_user[0])) {
+				return 0;		
+			}
+		}
+		
+		// check if username already exits
+		$sql = "SELECT username FROM $table_user WHERE username ='$username' AND user_id <> '$user_id'";
+		$res_un = api_sql_query($sql,__FILE__,__LINE__);
+		$r_username = Database::fetch_row($res_un);
+		
+		if (!empty($r_username[0])) {
+			return 0;					
+		}
+						
+		$sql = "UPDATE $table_user SET
+				lastname='".Database::escape_string($lastname)."',
+				firstname='".Database::escape_string($firstname)."',
+				username='".Database::escape_string($username)."',";
+		if(!is_null($password))
+		{			
+			$sql .= " password='".Database::escape_string($password)."',";
+		}
+		if(!is_null($auth_source))
+		{
+			$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+		}
+		$sql .=	"
+				email='".Database::escape_string($email)."',
+				status='".Database::escape_string($status)."',
+				official_code='".Database::escape_string($official_code)."',
+				phone='".Database::escape_string($phone)."',
+				picture_uri='".Database::escape_string($picture_uri)."',
+				expiration_date='".Database::escape_string($expiration_date)."',
+				active='".Database::escape_string($active)."',
+				hr_dept_id=".intval($hr_dept_id);
+				
+		if(!is_null($creator_id))
+		{
+			$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
+		}
+		$sql .=	" WHERE user_id='$user_id'";
+		$return = @api_sql_query($sql,__FILE__,__LINE__);	
+		
+		if (is_array($extra_list) && count($extra_list) > 0) {
+			foreach ($extra_list as $extra) {
+					$extra_field_name = $extra['field_name'];
+					$extra_field_value = $extra['field_value'];		
+					// save the external system's id into user_field_value table'
+					$res = UserManager::update_extra_field_value($user_id,$extra_field_name,$extra_field_value);
+			}
+		}
+		
+		return $return;
+		
+	
+	
+		
+}
+
+/* Register DokeosWSDeleteUsers function */
+$server->wsdl->addComplexType(
+	'deleteUsersParam',
 	'complexType',
 	'struct',
 	'all',
@@ -1017,31 +1394,31 @@ $server->wsdl->addComplexType(
 );
 
 $server->wsdl->addComplexType(
-'deleteUserParamList',
+'deleteUsersParamList',
 'complexType',
 'array',
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:deleteUserParam[]')),'tns:deleteUserParam'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:deleteUsersParam[]')),'tns:deleteUsersParam'
 );
 
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
-	'deleteUser',
+	'deleteUsers',
 	'complexType',
 	'struct',
 	'all',
 	'',
 	array(
-		'users' => array('name' => 'users', 'type' => 'tns:deleteUserParamList'),		
+		'users' => array('name' => 'users', 'type' => 'tns:deleteUsersParamList'),		
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
 	)
 );
 
 // Prepare output params, in this case will return an array
 $server->wsdl->addComplexType(
-'result_deleteUser',
+'result_deleteUsers',
 'complexType',
 'struct',
 'all',
@@ -1053,27 +1430,27 @@ array(
 );
 
 $server->wsdl->addComplexType(
-'results_deleteUser',
+'results_deleteUsers',
 'complexType',
 'array',
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_deleteUser[]')),'tns:result_deleteUser'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_deleteUsers[]')),'tns:result_deleteUsers'
 );
 
-$server->register('DokeosWSDeleteUser',			// method name
-	array('deleteUser'=>'tns:deleteUser'),		// input parameters
-	array('return' => 'tns:results_deleteUser'),// output parameters
+$server->register('DokeosWSDeleteUsers',			// method name
+	array('deleteUsers'=>'tns:deleteUsers'),		// input parameters
+	array('return' => 'tns:results_deleteUsers'),// output parameters
 	'urn:WSRegistration',						// namespace
-	'urn:WSRegistration#DokeosWSDeleteUser',	// soapaction
+	'urn:WSRegistration#DokeosWSDeleteUsers',	// soapaction
 	'rpc',										// style
 	'encoded',									// use
 	'This service deletes a user  '				// documentation
 );
 
-// Define the method DokeosWSDeleteUser
-function DokeosWSDeleteUser($params)
+// Define the method DokeosWSDeleteUsers
+function DokeosWSDeleteUsers($params)
 {
 	global $_configuration;
 	

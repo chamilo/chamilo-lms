@@ -89,24 +89,27 @@ if (isset ($_GET['createallcategories'])) {
 }
 //move a category
 $selectcat=isset($_GET['selectcat']) ?  Security::remove_XSS($_GET['selectcat']) : '';
+
 if (isset ($_GET['movecat'])) {
+	$move_cat=Security::remove_XSS($_GET['movecat']);
 	block_students();
-	$cats= Category :: load($_GET['movecat']);
+	$cats= Category :: load($move_cat);
 	if (!isset ($_GET['targetcat'])) {
 		$move_form= new CatForm(CatForm :: TYPE_MOVE,
 								$cats[0],
 								'move_cat_form',
 								null,
-								api_get_self() . '?movecat=' . Security::remove_XSS($_GET['movecat'])
+								api_get_self() . '?movecat=' . $move_cat
 													 . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 		if ($move_form->validate()) {
 			header('Location: ' . api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
-													   . '&movecat=' . Security::remove_XSS($_GET['movecat'])
+													   . '&movecat=' . $move_cat
 													   . '&targetcat=' . $move_form->exportValue('move_cat'));
 			exit;
 		}
 	} else {
-		$targetcat= Category :: load($_GET['targetcat']);
+		$get_target_cat=Security::remove_XSS($_GET['targetcat']);
+		$targetcat= Category :: load($get_target_cat);
 		$course_to_crsind = ($cats[0]->get_course_code() != null && $targetcat[0]->get_course_code() == null);
 
 		if (!($course_to_crsind && !isset($_GET['confirm']))) {
@@ -122,7 +125,8 @@ if (isset ($_GET['movecat'])) {
 //move an evaluation
 if (isset ($_GET['moveeval'])) {
 	block_students();
-	$evals= Evaluation :: load($_GET['moveeval']);
+	$get_move_eval=Security::remove_XSS($_GET['moveeval']);
+	$evals= Evaluation :: load($get_move_eval);
 	if (!isset ($_GET['targetcat'])) {
 
 		$move_form= new EvalForm(EvalForm :: TYPE_MOVE,
@@ -130,17 +134,18 @@ if (isset ($_GET['moveeval'])) {
 								 null,
 								 'move_eval_form',
 								 null,
-								 api_get_self() . '?moveeval=' . Security::remove_XSS($_GET['moveeval'])
+								 api_get_self() . '?moveeval=' . $get_move_eval
 								 					  . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 
 		if ($move_form->validate()) {
 			header('Location: ' .api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
-													   . '&moveeval=' . Security::remove_XSS($_GET['moveeval'])
+													   . '&moveeval=' . $get_move_eval
 													   . '&targetcat=' . $move_form->exportValue('move_cat'));
 			exit;
 		}
 	} else {
-		$targetcat= Category :: load($_GET['targetcat']);
+		$get_target_cat=Security::remove_XSS($_GET['targetcat']);
+		$targetcat= Category :: load($get_target_cat);
 		$course_to_crsind = ($evals[0]->get_course_code() != null && $targetcat[0]->get_course_code() == null);
 
 		if (!($course_to_crsind && !isset($_GET['confirm']))) {
@@ -156,8 +161,9 @@ if (isset ($_GET['moveeval'])) {
 //move a link
 if (isset ($_GET['movelink'])) {
 	block_students();
-	$link= LinkFactory :: load($_GET['movelink']);
-	$move_form= new LinkForm(LinkForm :: TYPE_MOVE, null, $link[0], 'move_link_form', null, api_get_self() . '?movelink=' . $_GET['movelink'] . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
+	$get_move_link=Security::remove_XSS($_GET['movelink']);
+	$link= LinkFactory :: load($get_move_link);
+	$move_form= new LinkForm(LinkForm :: TYPE_MOVE, null, $link[0], 'move_link_form', null, api_get_self() . '?movelink=' . $get_move_link . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 	if ($move_form->validate()) {
 		$targetcat= Category :: load($move_form->exportValue('move_cat'));
 		$link[0]->move_to_cat($targetcat[0]);
@@ -175,7 +181,7 @@ if (isset ($_GET['visiblecat'])) {
 	} else {
 		$visibility_command= 0;		
 	}
-	$cats= Category :: load($_GET['visiblecat']);
+	$cats= Category :: load(Security::remove_XSS($_GET['visiblecat']));
 	$cats[0]->set_visible($visibility_command);
 	$cats[0]->save();
 	$cats[0]->apply_visibility_to_children();
@@ -190,7 +196,7 @@ if (isset ($_GET['visiblecat'])) {
 }
 if (isset ($_GET['deletecat'])) {
 	block_students();
-	$cats= Category :: load($_GET['deletecat']);
+	$cats= Category :: load(Security::remove_XSS($_GET['deletecat']));
 	//delete all categories,subcategories and results
 	if ($cats[0] != null) {
 		if ($cats[0]->get_id() != 0) {
@@ -210,7 +216,7 @@ if (isset ($_GET['visibleeval'])) {
 		$visibility_command= 0;		
 	}
 
-	$eval= Evaluation :: load($_GET['visibleeval']);
+	$eval= Evaluation :: load(Security::remove_XSS($_GET['visibleeval']));
 	$eval[0]->set_visible($visibility_command);
 	$eval[0]->save();
 	unset ($eval);
@@ -224,7 +230,7 @@ if (isset ($_GET['visibleeval'])) {
 }
 if (isset ($_GET['deleteeval'])) {
 	block_students();
-	$eval= Evaluation :: load($_GET['deleteeval']);
+	$eval= Evaluation :: load(Security::remove_XSS($_GET['deleteeval']));
 	if ($eval[0] != null) {
 		$eval[0]->delete_with_results();		
 	}
@@ -239,7 +245,7 @@ if (isset ($_GET['visiblelink'])) {
 	}else {
 		$visibility_command= 0;		
 	}
-	$link= LinkFactory :: load($_GET['visiblelink']);
+	$link= LinkFactory :: load(Security::remove_XSS($_GET['visiblelink']));
 	$link[0]->set_visible($visibility_command);
 	$link[0]->save();
 	unset ($link);
@@ -253,9 +259,9 @@ if (isset ($_GET['visiblelink'])) {
 }
 if (isset ($_GET['deletelink'])) {
 	block_students();
-	$link= LinkFactory :: load($_GET['deletelink']);
+	$link= LinkFactory :: load(Security::remove_XSS($_GET['deletelink']));
 	if ($link[0] != null) {
-		$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.$_GET['deletelink'].');';
+		$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.Security::remove_XSS($_GET['deletelink']).');';
 		api_sql_query($sql);
 		$link[0]->delete();		
 	}
@@ -468,7 +474,7 @@ $is_course_admin= api_is_allowed_to_create_course();
 if (!isset ($_GET['selectcat']) || empty ($_GET['selectcat'])) {
 	$category= 0;
 	} else {
-	$category= $_GET['selectcat'];		
+	$category= Security::remove_XSS($_GET['selectcat']);		
 	}
 // search form
 
@@ -517,7 +523,7 @@ if (!empty($keyword)) {
 	if (!api_is_allowed_to_edit(true,true)) {
 		$user_id = api_get_user_id();
 	}
-	$category = Category :: load ($_GET['cat']);
+	$category = Category :: load (Security::remove_XSS($_GET['cat']));
 	if ($category[0]->is_certificate_available($user_id)) {
 		$user= get_user_info_from_id($user_id);
 		$scoredisplay = ScoreDisplay :: instance();

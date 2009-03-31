@@ -171,8 +171,8 @@ class Matching extends Question {
 
 		$form -> addElement ('html', '</table></div></div>');
 		$group = array();
-		$group[] = FormValidator :: createElement ('style_submit_button', 'lessMatches', get_lang('DelElem'));
-		$group[] = FormValidator :: createElement ('style_submit_button', 'moreMatches', get_lang('AddElem'));
+		$group[] = FormValidator :: createElement ('style_submit_button', 'lessMatches', get_lang('DelElem'),'class="minus"');
+		$group[] = FormValidator :: createElement ('style_submit_button', 'moreMatches', get_lang('AddElem'),'class="plus"');
 		$form -> addGroup($group);
 
 
@@ -216,8 +216,8 @@ class Matching extends Question {
 
 		$form -> addElement ('html', '</table></div></div>');
 		$group = array();
-		$group[] = FormValidator :: createElement ('style_submit_button', 'lessOptions', get_lang('DelElem'));
-		$group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'));
+		$group[] = FormValidator :: createElement ('style_submit_button', 'lessOptions', get_lang('DelElem'),'class="minus"');
+		$group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'),'class="plus"');
 		$form -> addGroup($group);
 
 		$form -> setDefaults($defaults);

@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 19017 2009-03-12 22:40:23Z juliomontoya $
+<?php // $Id: update-db-1.8.5-1.8.6.inc.php 19466 2009-03-31 20:18:12Z cvargas1 $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -44,7 +44,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	{
 		echo '<b>'.get_lang('Error').' !</b> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br><br>
 								'.get_lang('PleasGoBackToStep1').'.
-							    <p><input type="submit" name="step1" value="&lt; '.get_lang('Back').'"></p>
+							    <p><button type="submit" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
 							    </td></tr></table></form></body></html>';
 
 		exit ();

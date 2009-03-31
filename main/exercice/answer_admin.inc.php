@@ -22,7 +22,7 @@
 *	This script allows to manage answers. It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer_admin.inc.php 18543 2009-02-17 15:04:15Z cfasanando $
+* 	@version $Id: answer_admin.inc.php 19466 2009-03-31 20:18:12Z cvargas1 $
 */
 
 
@@ -1298,8 +1298,8 @@ if($modifyAnswers)
 
 <tr>
   <td colspan="4">
-	<input type="submit" name="lessMatches" value="<?php echo get_lang('LessElements'); ?>">
-	&nbsp;&nbsp;<input type="submit" name="moreMatches" value="<?php echo get_lang('MoreElements'); ?>">
+	<button type="submit" class="minus" name="lessMatches" value="<?php echo get_lang('LessElements'); ?>"><?php echo get_lang('LessElements'); ?></button>
+	&nbsp;&nbsp;<button class="plus" type="submit" name="moreMatches" value="<?php echo get_lang('MoreElements'); ?>"><?php echo get_lang('MoreElements'); ?></button>
   </td>
 </tr>
 <tr>
@@ -1322,8 +1322,8 @@ if($modifyAnswers)
 
 <tr>
   <td colspan="4">
-	<input type="submit" name="lessOptions" value="<?php echo get_lang('LessElements'); ?>">
-	&nbsp;&nbsp;<input type="submit" name="moreOptions" value="<?php echo get_lang('MoreElements'); ?>">
+	<button type="submit" class="minus" name="lessOptions" value="<?php echo get_lang('LessElements'); ?>"><?php echo get_lang('LessElements'); ?></button>
+	&nbsp;&nbsp;<button type="submit" class="plus" name="moreOptions" value="<?php echo get_lang('MoreElements'); ?>"><?php echo get_lang('MoreElements'); ?></button>
   </td>
 </tr>
 <tr>

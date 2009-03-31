@@ -363,7 +363,7 @@ function display_language_selection()
 	<p><?php echo get_lang('PleaseSelectInstallationProcessLanguage');?>:</p>
 	<form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
 <?php display_language_selection_box(); ?>
-		<input type="submit" name="step1" value="<?php get_lang('Next');?> &gt;" />
+	<button type="submit" name="step1" class="next" value="<?php get_lang('Next');?> &gt;"><?php echo get_lang('Next');?></button>
 	</form>
 <?php }
 
@@ -576,8 +576,8 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 			</tr>
 			<tr>
 			<td colspan="2" align="center">
-				<input type="submit" name="step1" value="&lt; <?php echo get_lang('Back');?>" />
-				<input type="submit" name="<?php echo (isset($_POST['step2_update_6'])?'step2_update_6':'step2_update_8');?>" value="<?php echo get_lang('Next');?> &gt;" />
+				<button type="submit" class="back" name="step1" value="&lt; <?php echo get_lang('Back');?>" ><?php echo get_lang('Back');?></button>
+				<button type="submit" class="next" name="<?php echo (isset($_POST['step2_update_6'])?'step2_update_6':'step2_update_8');?>" value="<?php echo get_lang('Next');?> &gt;" ><?php echo get_lang('Next');?></button>
 			</td>
 			</tr>
 			</table>
@@ -670,21 +670,21 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 		//and now display the choice buttons (go back or install)
 		?>
 		<p align="center">
-		<input type="submit" name="step1" onclick="window.location='index.php';return false;" value="&lt; <?php echo get_lang('Previous'); ?>"/>
-		<input type="submit" name="step2_install" value="<?php echo get_lang("NewInstallation"); ?>" <?php if($error) echo 'disabled="disabled"'; ?> />
+		<button type="submit" name="step1" class="back" onclick="window.location='index.php';return false;" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
+		<button type="submit" name="step2_install" class="add" value="<?php echo get_lang("NewInstallation"); ?>" <?php if($error) if($error)echo 'disabled="disabled"'; ?> ><?php echo get_lang('NewInstallation'); ?></button>
 
 		<?php
 		//real code
-		echo '<input type="submit" name="step2_update_8" value="Upgrade from Dokeos 1.8.x"';
+		echo '<button type="submit" class="save" name="step2_update_8" value="Upgrade from Dokeos 1.8.x"';
 		if($error) echo ' disabled="disabled"';
 		//temporary code for alpha version, disabling upgrade
 		//echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
 		//echo ' disabled="disabled"';
 		//end temp code
-		echo ' />';
-		echo '<input type="submit" name="step2_update_6" value="Upgrade from Dokeos 1.6.x"';
+		echo ' >Upgrade from Dokeos 1.8.x</button>';
+		echo '<button type="submit" class="save" name="step2_update_6" value="Upgrade from Dokeos 1.6.x"';
 		if($error) echo ' disabled="disabled"';
-		echo ' />';
+		echo ' >Upgrade from Dokeos 1.6.x</button>';
 		echo '</p>';
 	}
 }
@@ -714,8 +714,8 @@ function display_license_agreement()
 			<tr>
 				<td></td>
 				<td align="center">
-					<input type="submit" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" />
-					<input type="submit" name="step3" value="<?php echo get_lang('IAccept'); ?> &gt;" />
+					<button type="submit" class="back" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
+					<button type="submit" class="next" name="step3" value="<?php echo get_lang('IAccept'); ?> &gt;" ><?php echo get_lang('IAccept'); ?></button>
 				</td>
 			</tr>
 		</table>
@@ -908,7 +908,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	</tr>
 	</div>
 	<tr>
-		<td><input type="submit" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" /> </td>
+		<td><button type="submit" class="login" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" ><?php echo get_lang('CheckDatabaseConnection'); ?></button></td>
 		<?php $dbConnect = test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm);
 		if($dbConnect==1): ?>
 		<td colspan="2">
@@ -940,9 +940,9 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 		<?php endif; ?>
 	</tr>
 	<tr>
-	  <td><input type="submit" name="step2" value="&lt; <?php echo get_lang('Previous'); ?>" /></td>
+	  <td><button type="submit" name="step2" class="back" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button></td>
 	  <td>&nbsp;</td>
-	  <td align="right"><input type="submit" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" /></td>
+	  <td align="right"><button type="submit" class="next" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button></td>
 	</tr>
 	</table>
 	<?php
@@ -1119,8 +1119,8 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 
 	</tr>
 	<tr>
-	  <td><input type="submit" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" /></td>
-	  <td align="right"><input type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" /></td>
+	  <td><button type="submit" class="back" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" /><?php echo get_lang('Previous'); ?></button></td>
+	  <td align="right"><button class="next" type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button></td>
 	</tr>
 	</table>
 	<?php

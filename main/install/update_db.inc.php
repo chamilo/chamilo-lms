@@ -55,7 +55,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	{
 		echo '<b>'.get_lang('Error').' !</b> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br><br>
 								'.get_lang('PleasGoBackToStep1').'.
-							    <p><input type="submit" name="step1" value="&lt; '.get_lang('Back').'"></p>
+							    <p><button type="submit" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
 							    </td></tr></table></form></body></html>';
 
 		exit ();

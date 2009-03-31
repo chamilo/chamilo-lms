@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 19254 2009-03-24 22:18:53Z cvargas1 $
+<?php //$Id: work.lib.php 19471 2009-03-31 23:28:53Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 19254 2009-03-24 22:18:53Z cvargas1 $
+* 	@version $Id: work.lib.php 19471 2009-03-31 23:28:53Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -100,7 +100,7 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 	echo "</td></tr>";
 	display_default_visibility_form($uploadvisibledisabled);
 	echo '</table>';	
-	echo '<div>'.get_lang("ValidateChanges").' : <button type="submit" name="changeProperties" value="'.get_lang('Ok').'">'.get_lang('Ok').'</button></div></form>';
+	echo '<div>'.get_lang("ValidateChanges").' : <button type="submit" class="save" name="changeProperties" value="'.get_lang('Ok').'">'.get_lang('Ok').'</button></div></form>';
 
 }
 

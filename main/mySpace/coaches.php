@@ -283,7 +283,7 @@ if(isset($_POST['export'])){
 
 echo "<br /><br />";
 echo "<form method='post' action='coaches.php'>
-		<input type='submit' name='export' value='".get_lang('exportExcel')."'/>
+		<button type='submit' class='save' name='export' value='".get_lang('exportExcel')."'>".get_lang('exportExcel')."</button>
 	  <form>";
 
 /*

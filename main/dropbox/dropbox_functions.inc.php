@@ -173,7 +173,7 @@ function display_move_form($part, $id, $target=array())
 		$message.='<option value="'.$category['cat_id'].'">'.$category['cat_name'].'</option>';
 	}
 	$message.= '</select>';
-	$message.='<input type="submit" name="do_move" value="'.get_lang('Ok').'">';
+	$message.='<button class="save" type="submit" name="do_move" value="'.get_lang('Ok').'">'.get_lang('MoveFile').'</button>';
 	$message.='</form>';
 	Display :: display_normal_message($message,false);
 }
@@ -429,10 +429,10 @@ function display_addcategory_form($category_name='', $id='')
 		$target='sent';
 	}
 	
-	if ($_GET['action']=='editcategory' and isset($_GET['id'])) {
+	if ($_GET['action']=='editcategory') {
 		$text=get_lang('ModifyCategory');
 		$class='save';
-	} else if ($_GET['action']=='addreceivedcategory')  {
+	} else if ($_GET['action']=='addreceivedcategory' or $_GET['action']=='addsentcategory')  {
 		$text=get_lang('CreateCategory');
 		$class='add';
 	}
@@ -1079,8 +1079,8 @@ function feedback_form()
 	$number_users_who_see_file=mysql_num_rows($result);
 	if ($number_users_who_see_file>1)
 	{
-		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><input type="submit" name="store_feedback" value="'.get_lang('Ok').'" 
-			onclick="document.form_tablename.attributes.action.value = document.location;"/>';
+		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><button type="submit" class="add" name="store_feedback" value="'.get_lang('Ok').'" 
+			onclick="document.form_tablename.attributes.action.value = document.location;">'.get_lang('AddComment').'</button>';
 	}
 	else
 	{

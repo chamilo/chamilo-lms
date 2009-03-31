@@ -22,7 +22,7 @@
 *	HotPotatoes administration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: adminhp.php 13476 2007-10-12 11:38:16Z elixir_inter $
+* 	@version $Id: adminhp.php 19471 2009-03-31 23:28:53Z cvargas1 $
 */
 
 
@@ -127,8 +127,8 @@ if($lstrComment=="")
 
 echo $lstrComment;
 echo "\" size=40>&nbsp;";
-echo "<input type=\"submit\" name=\"submit\" value=\"".get_lang('Ok')."\">&nbsp;";
-echo "<input type=\"button\" name=\"cancel\" value=\"".get_lang('Cancel')."\" onclick=\"javascript:document.form1.newName.value='';\">";
+echo "<button type=\"submit\" class=\"save\" name=\"submit\" value=\"".get_lang('Ok')."\">".get_lang('Ok')."</button>";
+echo "<button type=\"button\" class=\"cancel\" name=\"cancel\" value=\"".get_lang('Cancel')."\" onclick=\"javascript:document.form1.newName.value='';\">".get_lang('Cancel')."</button>";
 
 echo "</form>";
 

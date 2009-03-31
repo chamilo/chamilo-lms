@@ -68,7 +68,7 @@ $output .= '
         </tr>
     	<tr>
             <td width="40%"></td>
-            <td width="60%"><div align="left"><input type="button" id="idbutton_qualify" name="idbutton_qualify"  value="'.get_lang('QualifyThisThread').'" onclick="javascript:if(document.getElementById(\'idtextqualify\').value>=0){if(confirm(\''.get_lang('ConfirmUserQualification').'\')){document.getElementById(\'forum-thread-qualify\').submit();}else{return false;};}else{alert(\''.get_lang('InsertQualificationCorrespondingToMaxScore').'\')};" /></div></td>
+            <td width="60%"><div align="left"><button type="button" class="save" id="idbutton_qualify" name="idbutton_qualify"  value="'.get_lang('QualifyThisThread').'" onclick="javascript:if(document.getElementById(\'idtextqualify\').value>=0){if(confirm(\''.get_lang('ConfirmUserQualification').'\')){document.getElementById(\'forum-thread-qualify\').submit();}else{return false;};}else{alert(\''.get_lang('InsertQualificationCorrespondingToMaxScore').'\')};" >'.get_lang('QualifyThisThread').'</button></div></td>
         </tr>
         </form>
     </table>

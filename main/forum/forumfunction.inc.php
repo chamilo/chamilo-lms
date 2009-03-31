@@ -2910,7 +2910,7 @@ function move_thread_form() {
 	$form->addElement('html',$htmlcontent);
 
 	// The OK button
-	$form->addElement('submit', 'SubmitForum',get_lang('Ok'));
+	$form->addElement('style_submit_button', 'SubmitForum',get_lang('MoveThread'),'class="save"');
 
 	// The validation or display
 	if( $form->validate()) {
@@ -2954,7 +2954,7 @@ function move_post_form() {
 
 
 	// The OK button
-	$form->addElement('submit', '',get_lang('Ok'));
+	$form->addElement('style_submit_button', 'submit',get_lang('MovePost'),'class="save"');
 
 	// setting the rules
 	$form->addRule('thread', get_lang('ThisFieldIsRequired'), 'required');

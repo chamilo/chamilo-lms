@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 19254 2009-03-24 22:18:53Z cvargas1 $
+* 	@version $Id: survey.lib.php 19471 2009-03-31 23:28:53Z cvargas1 $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1544,8 +1544,8 @@ class question
 		$return .= '	<tr>';
 		$return .= '		<td align="right">&nbsp;</td>';
 		$return .= '		<td colspan="2">';
-		$return .= '			<button class="cancel" type="submit" name="remove_answer" "'.$remove_answer_attribute.'">'.get_lang('RemoveAnswer').' </button>';
-		$return .= '			<button class="add" type="submit" name="add_answer">'.get_lang('AddAnswer').'</button>';
+		$return .= '			<button class="minus" type="submit" name="remove_answer" "'.$remove_answer_attribute.'">'.get_lang('RemoveAnswer').' </button>';
+		$return .= '			<button class="plus" type="submit" name="add_answer">'.get_lang('AddAnswer').'</button>';
 		$return .= '		</td>';
 		$return .= '	</tr>';
 		return $return;

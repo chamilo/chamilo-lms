@@ -84,7 +84,7 @@ $tbl_admin				= Database :: get_main_table(TABLE_MAIN_ADMIN);
  */
 
 /*
- * liste nominative avec coordonnées et lien vers les cours et
+ * liste nominative avec coordonnï¿½es et lien vers les cours et
 les stagiaires dont il est le
 responsable. 
  */
@@ -176,7 +176,7 @@ if(isset($_POST['export'])){
 
 echo "<br /><br />";
 echo "<form method='post' action='admin.php'>
-		<input type='submit' name='export' value='".get_lang('exportExcel')."'/>
+		<button type='submit' class='save' name='export' value='".get_lang('exportExcel')."'>".get_lang('exportExcel')."</button>
 	  <form>";
 
 /*

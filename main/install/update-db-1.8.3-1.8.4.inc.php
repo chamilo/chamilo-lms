@@ -62,7 +62,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	{
 		echo '<b>'.get_lang('Error').' !</b> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br><br>
 								'.get_lang('PleasGoBackToStep1').'.
-							    <p><input type="submit" name="step1" value="&lt; '.get_lang('Back').'"></p>
+							    <p><button type="submit" class="back" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
 							    </td></tr></table></form></body></html>';
 
 		exit ();
@@ -105,7 +105,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								<b>'.get_lang('DBLogin').'</b> : '.$dbUsernameForm.'<br />
 								<b>'.get_lang('DBPassword').'</b> : '.$dbPassForm.'<br /><br />
 								'.get_lang('PleaseGoBackToStep').' '. (defined('DOKEOS_INSTALL') ? '3' : '1').'.
-							    <p><input type="submit" name="step'. (defined('DOKEOS_INSTALL') ? '3' : '1').'" value="&lt; '.get_lang('Back').'"></p>
+							    <p><button type="submit" class="back" name="step'. (defined('DOKEOS_INSTALL') ? '3' : '1').'" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
 							    </td></tr></table></form></body></html>';
 
 		exit ();

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: lostPassword.php 18942 2009-03-10 23:42:21Z juliomontoya $
+// $Id: lostPassword.php 19471 2009-03-31 23:28:53Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -67,7 +67,7 @@ else
 	$form = new FormValidator('lost_password');
 	$form->add_textfield('email', get_lang('Email'), false, 'size="40"');
 	$form->applyFilter('email','strtolower');
-	$form->addElement('submit', 'submit', get_lang('Ok'));
+	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="save"');
 	if ($form->validate())
 	{
 		$values = $form->exportValues();

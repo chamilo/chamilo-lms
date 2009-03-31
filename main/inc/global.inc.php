@@ -73,7 +73,7 @@ $error_message_not_installed = <<<EOM
 			</div>
 
 			<div style="text-align: center;"><br /><br />
-					<form action="main/install/index.php" method="get"><input type="submit" value="&nbsp;&nbsp; Click to INSTALL DOKEOS &nbsp;&nbsp;" /></form><br />
+					<form action="main/install/index.php" method="get"><button class="save" type="submit" value="&nbsp;&nbsp; Click to INSTALL DOKEOS &nbsp;&nbsp;" >Click to INSTALL DOKEOS</button></form><br />
 					or <a href="documentation/installation_guide.html" target="_blank">read the installation guide</a><br /><br />
 			</div>
 

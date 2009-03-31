@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 18277 2009-02-06 00:30:06Z ndieschburg $
+// $Id: add_course.php 19471 2009-03-31 23:28:53Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -70,7 +70,7 @@ $form->add_textfield('wanted_code', get_lang('Code'),false,array('size'=>'$maxle
 $form->addRule('wanted_code',get_lang('Max'),'maxlength',$maxlength);
 $titular= &$form->add_textfield('tutor_name', get_lang('Professors'),true,array('size'=>'60'));
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
-$form->addElement('style_submit_button', null, get_lang('CreateCourseArea'), 'class="save"');
+$form->addElement('style_submit_button', null, get_lang('CreateCourseArea'), 'class="add"');
 $form->add_progress_bar();
 
 // Set default values

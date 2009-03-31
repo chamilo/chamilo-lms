@@ -175,7 +175,7 @@ if(!empty($msgErr))
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"></td>
+  <td><button type="submit" class="add" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('AddLink'); ?></button></td>
 </tr>
 </table>
 

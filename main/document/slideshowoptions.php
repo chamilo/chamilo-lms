@@ -1,4 +1,4 @@
-<?php // $Id: slideshowoptions.php 11766 2007-03-29 08:39:27Z elixir_julian $ 
+<?php // $Id: slideshowoptions.php 19471 2009-03-31 23:28:53Z cvargas1 $ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -189,7 +189,7 @@ function disableresizing() { //v2.0
     </tr>
     <tr>
       <td valign="top">&nbsp;</td>
-      <td><input type="submit" name="Submit" value="<?php echo get_lang('Ok'); ?>"></td>
+      <td><button type="submit" class="save" name="Submit" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Save'); ?></button></td>
     </tr>
   </table>
 

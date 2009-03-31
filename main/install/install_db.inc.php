@@ -63,7 +63,7 @@ if(mysql_errno() > 0)
 	<b>user</b> : '.$dbUsernameForm.'<br />
 	<b>password</b> : '.str_repeat('*',strlen($dbPassForm)).'<br /><br />
 	Please go back to step 3.
-	<p><input type="submit" name="step3" value="&lt; Back" /></p>
+	<p><button type="submit" class="back" name="step3" value="&lt; Back" >Back</button></p>
 	</td></tr></table></form></body></html>';
 
 	exit();

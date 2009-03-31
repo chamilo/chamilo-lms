@@ -4488,13 +4488,15 @@ class learnpath {
 				$return .= "\t" . '<tr>' . "\n";
 					$return .= "\t\t" . '<td colspan="4">'.get_lang("NoItemsInLp").'</td>' . "\n";
 				$return .= "\t" . '</tr>' . "\n";
-			}		
+			}
+			$return .= '</table>' . "\n";		
 		// we need to close the form when we are updating the mp3 files
+		
 		if ($_GET['updateaudio'] == 'true')
 		{
-			$return .= '<tr><th></th> <th><button class="save" type="submit" name="save_audio" id="save_audio">'.get_lang('SaveAudio').'</button></th><th></th><th></th></tr>';	
+			$return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">'.get_lang('SaveAudio').'</button></div>';
 		}				
-		$return .= '</table>' . "\n";		
+				
 		
 		// we need to close the form when we are updating the mp3 files
 		if ($_GET['updateaudio'] == 'true' AND count($arrLP) <> 0)

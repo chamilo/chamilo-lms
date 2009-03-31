@@ -77,9 +77,9 @@ if(!empty($path_to_lzx)){
 	
 		</script>
 		';
-		
-		echo '<div id="show_audiorecorder_div"><a style="cursor:pointer" onclick="show_audiorecorder()">'.get_lang('ShowAudioRecorder').'</a></div>';
-		echo '<div id="audiorecorder_frame"></div>';
+		//Commented the audio for the version stable
+		//echo '<div id="show_audiorecorder_div"><a style="cursor:pointer" onclick="show_audiorecorder()">'.get_lang('ShowAudioRecorder').'</a></div>';
+		//echo '<div id="audiorecorder_frame"></div>';
 	}
 	else
 	{

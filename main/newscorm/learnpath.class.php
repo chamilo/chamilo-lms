@@ -5734,10 +5734,11 @@ class learnpath {
 								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);								
 							}
 						}
-						
-						$return .= "\t\t" . '<tr>' . "\n";							
-							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+
+					/*	//comented the prerequisites, only visible in edit (forum)
+						$return .= "\t\t" . '<tr>' . "\n";	
+						$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
 							foreach($arrHide as $key => $value) {
 								if($key==$s_selected_position && $action == 'add') {
@@ -5749,7 +5750,8 @@ class learnpath {
 								}
 							}
 							
-							$return .= "</select></td>";						
+							$return .= "</select></td>";
+					*/
 						$return .= "\t\t" . '</tr>' . "\n";						
 					}
 					
@@ -6167,7 +6169,7 @@ class learnpath {
 			
 			if($action != 'move')
 			{
-				$form->addElement('text','title', get_lang('Title'),'id="idTitle" class="learnpath_chapter_form"');
+				$form->addElement('text','title', get_lang('Title'),'id="idTitle" class="learnpath_chapter_form" size="40%"');
 				//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"');
 			}
 			else
@@ -6175,7 +6177,7 @@ class learnpath {
 				$form->addElement('hidden','title');
 			}			
 			
-			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent"), '', 'class="learnpath_chapter_form" id="Parent" onchange="load_cbo(this.value);"');
+			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent"), '', 'class="learnpath_chapter_form" style="width:189px;" id="Parent" onchange="load_cbo(this.value);"');
 
 			foreach($arrHide as $key => $value)
 			{
@@ -6422,7 +6424,7 @@ class learnpath {
 						
 			if($action != 'move')
 			{
-				$form->addElement('text','title', get_lang('Title'),'id="idTitle" class="learnpath_item_form"');
+				$form->addElement('text','title', get_lang('Title'),'id="idTitle" class="learnpath_item_form" size=45%');
 			}			
 						
 			//$arrHide = array($id);
@@ -6451,7 +6453,7 @@ class learnpath {
 					}
 				}
 			}
-			$parent_select = &$form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" onchange="load_cbo(this.value);"');
+			$parent_select = &$form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" style="width:263px;" onchange="load_cbo(this.value);"');
 
 			foreach($arrHide as $key => $value) {
 				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
@@ -6497,9 +6499,9 @@ class learnpath {
 						}
 					}
 				}
-
-				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites'), '', 'id="prerequisites" class="learnpath_item_form"');
-				$select_prerequisites->addOption(get_lang("NoPrerequisites"),0);
+				//comented the prerequisites, only visible in edit (new document)
+				//$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites'),null,'id="prerequisites" class="learnpath_item_form" style="width:263px;"');
+				//$select_prerequisites->addOption(get_lang("NoPrerequisites"),0);
 
 				// form element for uploading an mp3 file
 				$form->addElement('file','mp3',get_lang('UploadMp3audio'),'id="mp3" size="33"');
@@ -6530,7 +6532,7 @@ class learnpath {
 					}
 				}
 				
-				foreach($arrHide as $key => $value){
+			/*	foreach($arrHide as $key => $value){
 					$select_prerequisites->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 					if($key==$s_selected_position && $action == 'add'){
 						$select_prerequisites -> setSelected(0);
@@ -6539,7 +6541,7 @@ class learnpath {
 						$select_prerequisites -> setSelected($id_prerequisite);
 					}
 				}
-				
+				*/
 				if(!$no_display_add)
 				{
 					if(($extra_info == 'new' || $extra_info['item_type'] == TOOL_DOCUMENT || $_GET['edit'] == 'true'))
@@ -6595,7 +6597,7 @@ class learnpath {
 							$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
 							$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/'.$relative_path;
 
-							$form->addElement('style_submit_button', 'submit_button', get_lang('CreateDocument'),'class="save"');
+							$form->addElement('style_submit_button', 'submit_button', get_lang('SaveDocument'),'class="save"');
 							$renderer = $form->defaultRenderer();
 							$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
 
@@ -7171,39 +7173,38 @@ class learnpath {
 		{
 			case 'dokeos_chapter':
 			case 'chapter':
-				
-				$lang = get_lang('TitleManipulateChapter');
+				//comented the message cause should not show it
+				//$lang = get_lang('TitleManipulateChapter');
 				break;
 				
 			case 'dokeos_module':
 			case 'module':
-				
-				$lang = get_lang('TitleManipulateModule');
+				//comented the message cause should not show it
+				//$lang = get_lang('TitleManipulateModule');
 				
 				break;
 				
 			case TOOL_DOCUMENT:
-				
-				$lang = get_lang('TitleManipulateDocument');
-				
+				//comented the message cause should not show it
+				//$lang = get_lang('TitleManipulateDocument');
 				break;
 			
 			case TOOL_LINK:
 			case 'link':
-				
-				$lang = get_lang('TitleManipulateLink');
+				//comented the message cause should not show it
+				//$lang = get_lang('TitleManipulateLink');
 				
 				break;
 			
 			case TOOL_QUIZ:
-				
-				$lang = get_lang('TitleManipulateQuiz');
+				//comented the message cause should not show it
+				//$lang = get_lang('TitleManipulateQuiz');
 				
 				break;
 			
 			case TOOL_STUDENTPUBLICATION:
-				
-				$lang = get_lang('TitleManipulateStudentPublication');
+				//comented the message cause should not show it
+				//$lang = get_lang('TitleManipulateStudentPublication');
 				
 				break;
 		}
@@ -7236,9 +7237,8 @@ class learnpath {
 							s1.write("container");
 						</script>';
 		}
-		
-		$return .= $lang.': '; 
-		
+		//commented ":" for message in step
+		//$return .= $lang.': '; 
 		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang('Edit').'"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="'.get_lang("Edit").'" /> '.get_lang("Edit").'</a>';
 		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="'.get_lang("Move").'" /> '.get_lang("Move").'</a>';
 		// commented for now as prerequisites cannot be added to chapters

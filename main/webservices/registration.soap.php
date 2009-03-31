@@ -289,6 +289,194 @@ function DokeosWSCreateUsers($params) {
 
 }
 
+/* Register DokeosWSCreateUser function */
+// Register the data structures used by the service
+
+
+$server->wsdl->addComplexType(
+	'createUser',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
+		'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
+		'status' => array('name' => 'status', 'type' => 'xsd:string'),
+		'email' => array('name' => 'email', 'type' => 'xsd:string'),
+		'loginname' => array('name' => 'loginname', 'type' => 'xsd:string'),
+		'password' => array('name' => 'password', 'type' => 'xsd:string'),				
+		'language' => array('name' => 'language', 'type' => 'xsd:string'),
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
+		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
+		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')														
+	)
+);
+
+
+// Register the method to expose
+$server->register('DokeosWSCreateUser',				// method name
+	array('createUser' => 'tns:createUser'),		// input parameters
+	array('return' => 'xsd:string'),	// output parameters
+	'urn:WSRegistration',							// namespace
+	'urn:WSRegistration#DokeosWSCreateUser',		// soapaction
+	'rpc',											// style
+	'encoded',										// use
+	'This service adds a user'						// documentation
+);
+
+
+// Define the method DokeosWSCreateUser
+function DokeosWSCreateUser($params) {
+
+	global $_user, $userPasswordCrypted,$_configuration;
+	
+	$secret_key = $params['secret_key'];
+	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+	 	
+	if (!api_is_valid_secret_key($secret_key,$security_key)) {
+		return -1; //secret key is incorrect
+	}
+		
+	// database table definition
+	$table_user = Database::get_main_table(TABLE_MAIN_USER); 		
+	$t_uf 		= Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_ufv 		= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		 	
+	
+	$firstName = $params['firstname'];			$lastName = $params['lastname'];
+	$status = $params['status'];				$email = $params['email'];	
+	$loginName = $params['loginname'];			$password = $params['password'];
+	$official_code = '';$language='';$phone = '';$picture_uri = '';$auth_source = PLATFORM_AUTH_SOURCE; 
+	$expiration_date = '0000-00-00 00:00:00'; $active = 1; $hr_dept_id=0; $extra=null;
+	$original_user_id_name= $params['original_user_id_name'];
+	$original_user_id_value = $params['original_user_id_value'];		
+	$extra_list = $params['extra'];				
+	if (!empty($params['language'])) { $language=$params['language'];}
+	if (!empty($params['phone'])) { $phone = $params['phone'];}
+	if (!empty($params['expiration_date'])) { $expiration_date = $params['expiration_date'];}	
+	
+	// check if exits x_user_id into user_field_values table
+	$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$row = Database::fetch_row($res);
+	$count_row = Database::num_rows($res);
+	if ($count_row > 0) {		
+		// check if user is not active 		
+		$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$row[1]."' AND active= '0'";
+		$resu = api_sql_query($sql,__FILE__,__LINE__);
+		$r_check_user = Database::fetch_row($resu);	
+		$count_user_id = Database::num_rows($resu);
+		if ($count_user_id > 0) {			
+			$sql = "UPDATE $table_user SET
+			lastname='".Database::escape_string($lastName)."',
+			firstname='".Database::escape_string($firstName)."',
+			username='".Database::escape_string($loginName)."',";
+			if(!is_null($password))
+			{
+				$password = $userPasswordCrypted ? md5($password) : $password;
+				$sql .= " password='".Database::escape_string($password)."',";
+			}
+			if(!is_null($auth_source))
+			{
+				$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+			}
+			$sql .=	"						
+					email='".Database::escape_string($email)."',
+					status='".Database::escape_string($status)."',
+					official_code='".Database::escape_string($official_code)."',
+					phone='".Database::escape_string($phone)."',			
+					expiration_date='".Database::escape_string($expiration_date)."',
+					active='1',
+					hr_dept_id=".intval($hr_dept_id);				
+			$sql .=	" WHERE user_id='".$r_check_user[0]."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+				
+			return  $r_check_user[0];
+			 			
+		} else {
+			return 0;
+			//return 0;	// user id already exits
+		}
+	}
+	
+	// default language
+	if (empty($language)) {
+		$language = api_get_setting('platformLanguage');
+	}
+
+	if (!empty($_user['user_id'])) {
+		$creator_id = $_user['user_id'];
+	} else {
+		$creator_id = '';
+	}
+	
+	// First check wether the login already exists
+	if (! UserManager::is_username_available($loginName)) {	
+		if(api_set_failure('login-pass already taken')) {
+			return 0;
+		}
+	}
+	
+	$password = ($userPasswordCrypted ? md5($password) : $password);
+	$sql = "INSERT INTO $table_user
+				                SET lastname = '".Database::escape_string(trim($lastName))."',
+				                firstname = '".Database::escape_string(trim($firstName))."',
+				                username = '".Database::escape_string(trim($loginName))."',
+				                status = '".Database::escape_string($status)."',
+				                password = '".Database::escape_string($password)."',
+				                email = '".Database::escape_string($email)."',
+				                official_code	= '".Database::escape_string($official_code)."',
+				                picture_uri 	= '".Database::escape_string($picture_uri)."',
+				                creator_id  	= '".Database::escape_string($creator_id)."',
+				                auth_source = '".Database::escape_string($auth_source)."',
+			                    phone = '".Database::escape_string($phone)."',
+			                    language = '".Database::escape_string($language)."',
+			                    registration_date = now(),
+			                    expiration_date = '".Database::escape_string($expiration_date)."',
+								hr_dept_id = '".Database::escape_string($hr_dept_id)."',
+								active = '".Database::escape_string($active)."'";
+	$result = api_sql_query($sql);
+	if ($result) {
+		//echo "id returned";		
+		$return=Database::get_last_insert_id();			
+		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+		if ($_configuration['multiple_access_urls']==true) {
+			if (api_get_current_access_url_id()!=-1)
+				UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+			else
+				UrlManager::add_user_to_url($return, 1);
+		} else {
+			//we are adding by default the access_url_user table with access_url_id = 1
+			UrlManager::add_user_to_url($return, 1);
+		}
+		
+		// save new fieldlabel into user_field table
+		$field_id = UserManager::create_extra_field($original_user_id_name,1,$original_user_id_name,'');			
+		// save the external system's id into user_field_value table'	
+		$res = UserManager::update_extra_field_value($return,$original_user_id_name,$original_user_id_value);
+								
+		if (is_array($extra_list) && count($extra_list) > 0) {
+			foreach ($extra_list as $extra) {					    			
+					$extra_field_name = $extra['field_name'];
+					$extra_field_value = $extra['field_value'];
+					// save new fieldlabel into user_field table 
+					$field_id = UserManager::create_extra_field($extra_field_name,1,$extra_field_name,'');
+					// save the external system's id into user_field_value table'	
+					$res = UserManager::update_extra_field_value($return,$extra_field_name,$extra_field_value);										
+			}
+		}
+	} else {			
+		return 0;								
+	}
+					
+	return  $return;
+
+}
+
 /* Register DokeosWSCreateUsersPasswordCrypted function */
 // Register the data structures used by the service
 
@@ -990,6 +1178,140 @@ function DokeosWSEditUsers($params)
 			
 }
 
+/* Register DokeosWSEditUser function */
+// Register the data structures used by the service
+$server->wsdl->addComplexType(
+	'editUser',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+		'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
+		'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
+		'username' => array('name' => 'username', 'type' => 'xsd:string'),
+		'password' => array('name' => 'password', 'type' => 'xsd:string'),		
+		'email' => array('name' => 'email', 'type' => 'xsd:string'),
+		'status' => array('name' => 'status', 'type' => 'xsd:string'),		
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
+		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')				
+	)
+);
+
+// Register the method to expose
+$server->register('DokeosWSEditUser',		// method name
+	array('editUser' => 'tns:editUser'),			// input parameters
+	array('return' => 'xsd:string'),					// output parameters
+	'urn:WSRegistration',							// namespace
+	'urn:WSRegistration#DokeosWSEditUser',	// soapaction
+	'rpc',											// style
+	'encoded',										// use
+	'This service edits a user from wiener'			// documentation
+);
+
+// Define the method DokeosWSEditUser
+function DokeosWSEditUser($params)
+{
+	global $userPasswordCrypted,$_configuration;
+	
+	$secret_key = $params['secret_key'];	
+	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (!api_is_valid_secret_key($secret_key,$security_key)) {
+		return -1; //secret key is incorrect
+	}
+	
+	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		
+	$original_user_id_value = $params['original_user_id_value'];
+	$original_user_id_name = $params['original_user_id_name'];			
+	$firstname = $params['firstname']; 
+	$lastname = $params['lastname'];
+	$username = $params['username'];
+	$password = null; $auth_source = null; 
+	$email = $params['email']; $status = $params['status'];
+	$official_code = ''; $phone = $params['phone'];
+	$picture_uri = ''; $expiration_date = $params['expiration_date']; $active = 1; 
+	$creator_id= null; $hr_dept_id=0; $extra=null;
+	$extra_list = $params['extra'];	
+			
+	if (!empty($params['password'])) { $password = $params['password'];}	
+	
+	// get user id from id wiener
+	
+	$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$row = Database::fetch_row($res);	
+	$user_id = $row[0];
+
+	if (empty($user_id)) {
+		return 0;		
+	} else {
+		$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
+		$resu = api_sql_query($sql,__FILE__,__LINE__);
+		$r_check_user = Database::fetch_row($resu);
+		if (!empty($r_check_user[0])) {
+			return 0;				
+		}
+	}
+	
+	// check if username already exits
+	$sql = "SELECT username FROM $table_user WHERE username = '$username' AND user_id <> '$user_id'";
+	$res_un = api_sql_query($sql,__FILE__,__LINE__);
+	$r_username = Database::fetch_row($res_un);
+	
+	if (!empty($r_username[0])) {
+		return 0;		 
+	}
+					
+	$sql = "UPDATE $table_user SET
+			lastname='".Database::escape_string($lastname)."',
+			firstname='".Database::escape_string($firstname)."',
+			username='".Database::escape_string($username)."',";
+	if(!is_null($password))
+	{
+		$password = $userPasswordCrypted ? md5($password) : $password;
+		$sql .= " password='".Database::escape_string($password)."',";
+	}
+	if(!is_null($auth_source))
+	{
+		$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+	}
+	$sql .=	"
+			email='".Database::escape_string($email)."',
+			status='".Database::escape_string($status)."',
+			official_code='".Database::escape_string($official_code)."',
+			phone='".Database::escape_string($phone)."',
+			picture_uri='".Database::escape_string($picture_uri)."',
+			expiration_date='".Database::escape_string($expiration_date)."',
+			active='".Database::escape_string($active)."',
+			hr_dept_id=".intval($hr_dept_id);
+			
+	if(!is_null($creator_id))
+	{
+		$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
+	}
+	$sql .=	" WHERE user_id='$user_id'";
+	$return = @api_sql_query($sql,__FILE__,__LINE__);	
+	
+	if (is_array($extra_list) && count($extra_list) > 0) {
+		foreach ($extra_list as $extra) {
+				$extra_field_name = $extra['field_name'];
+				$extra_field_value = $extra['field_value'];		
+				// save the external system's id into user_field_value table'
+				$res = UserManager::update_extra_field_value($user_id,$extra_field_name,$extra_field_value);
+		}
+	}
+	
+	return  $return;
+			
+}
 
 /* Register DokeosWSEditUsersPasswordCrypted function */
 // Register the data structures used by the service
@@ -1506,6 +1828,72 @@ function DokeosWSDeleteUsers($params)
 	}
 	
 	return $output;	
+	
+}
+
+/* Register DokeosWSDeleteUser function */
+$server->wsdl->addComplexType(
+	'deleteUser',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),	
+		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+	)
+);
+
+
+$server->register('DokeosWSDeleteUser',			// method name
+	array('deleteUser'=>'tns:deleteUser'),		// input parameters
+	array('return' => 'xsd:string'),// output parameters
+	'urn:WSRegistration',						// namespace
+	'urn:WSRegistration#DokeosWSDeleteUser',	// soapaction
+	'rpc',										// style
+	'encoded',									// use
+	'This service deletes a user  '				// documentation
+);
+
+// Define the method DokeosWSDeleteUser
+function DokeosWSDeleteUser($params)
+{
+	global $_configuration;
+	
+	$secret_key = $params['secret_key'];
+	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (!api_is_valid_secret_key($secret_key,$security_key)) {
+		return -1; //secret key is incorrect
+	}
+	
+	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+			
+	$original_user_id_name = $params['original_user_id_name'];
+   	$original_user_id_value = $params['original_user_id_value'];	   	
+	$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";		
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$row = Database::fetch_row($res);	
+	$user_id = $row[0];
+	
+	if (empty($user_id)) {
+		return 0;			
+	} else {
+		$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
+		$resu = api_sql_query($sql,__FILE__,__LINE__);
+		$r_check_user = Database::fetch_row($resu);
+		if (!empty($r_check_user[0])) {
+			return 0;				
+		}
+	}
+	
+	// update active to 0 	
+	$sql = "UPDATE $table_user SET active='0' WHERE user_id = '$user_id'";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	return 1;
 	
 }
 

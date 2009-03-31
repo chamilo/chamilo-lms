@@ -127,4 +127,5 @@ $NewDropboxFileUploadedContent = "A new file has been sent to the dropbox of you
 $langAddEdit = "Add / Edit";
 $ErrorNoFilesInFolder = "This folder is empty";
 $dropbox_lang["upload"] = "Upload";
+$AddComment  = "Add comment";
 ?>

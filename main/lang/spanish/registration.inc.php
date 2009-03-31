@@ -171,4 +171,5 @@ $MessageNewUserInTheCourse = "Este es un mensaje para informarle que se ha suscr
 $EditNormalProfile = "Edición básica del perfil";
 $EditExtendProfile = "Edición ampliada del perfil";
 $EditInformation = "Editar información";
+$RegisterUser = "Registrar usuario";
 ?>

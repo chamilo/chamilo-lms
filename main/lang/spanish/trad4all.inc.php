@@ -708,4 +708,5 @@ $TemplatePreview = "Previsualización de la plantilla";
 $NoTemplatePreview = "Previsualización no disponible";
 $ModifyCategory = "Modificar categoría";
 $Photo = "Foto";
+$MoveFile = "Mover el archivo";
 ?>

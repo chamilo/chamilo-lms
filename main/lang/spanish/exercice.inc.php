@@ -289,4 +289,5 @@ $ShowCorrectedOnly = "Mostrar ejercicios corregidos";
 $ShowUnCorrectedOnly = "Mostrar ejercicios sin corregir";
 $HideResultsToStudents = "Ocultar los resultados a los estudiantes";
 $ShowResultsToStudents = "Mostrar los resultados a los estudiantes";
+$ProcedToQuestions = "Preparar preguntas";
 ?>

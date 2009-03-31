@@ -2641,9 +2641,15 @@ class learnpath {
     	if(api_is_allowed_to_edit())
     	{
     		$html	.='<div class="actions_lp">';
-    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=build&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_build.gif', get_lang('Build')).' '.mb_convert_encoding(get_lang('Build'),$this->encoding,$mych)."</a>";
-    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=admin_view&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_organize.gif', get_lang('BasicOverview')).' '.mb_convert_encoding(get_lang('BasicOverview'),$this->encoding,$mych)."</a>";
-    		$html 	.= '<span>'.Display::return_icon('learnpath_view.gif', get_lang("Display")).' '.mb_convert_encoding(get_lang("Display"),$this->encoding,$mych).'</span>';
+    		//the icon it was removed in display (build)
+    		//$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=build&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_build.gif', get_lang('Build')).' '.mb_convert_encoding(get_lang('Build'),$this->encoding,$mych)."</a>";
+    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=build&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('', get_lang('')).' '.mb_convert_encoding(get_lang('Build'),$this->encoding,$mych)."</a>";
+    		//the icon it was removed in display (organize)
+    		//$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=admin_view&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_organize.gif', get_lang('BasicOverview')).' '.mb_convert_encoding(get_lang('BasicOverview'),$this->encoding,$mych)."</a>";
+    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=admin_view&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('', get_lang('')).' '.mb_convert_encoding(get_lang('BasicOverview'),$this->encoding,$mych)."</a>";
+    		//the icon it was removed in display (display)
+    		//$html 	.= '<span>'.Display::return_icon('learnpath_view.gif', get_lang("Display")).' '.mb_convert_encoding(get_lang("Display"),$this->encoding,$mych).'</span>';
+    		$html 	.= '<span>'.Display::return_icon('', get_lang("")).' '.mb_convert_encoding(get_lang("Display"),$this->encoding,$mych).'</span>';
     		$html 	.= '</div>';
 			unset($mych);
     	}

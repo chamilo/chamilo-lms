@@ -143,6 +143,18 @@ if (!isset($src))
 	}
 }
 
+// update status from lp_item_view table when you finish the exercises in learning path
+if (isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
+    $TBL_LP_ITEM_VIEW		= Database::get_course_table(TABLE_LP_ITEM_VIEW);
+	$TBL_LP_VIEW			= Database::get_course_table(TABLE_LP_VIEW);	
+	$learnpath_item_id      = Security::remove_XSS($_GET['lp_item_id']);
+    $learnpath_id           = Security::remove_XSS($_GET['lp_id']);   	
+	
+	$sql = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' WHERE lp_item_id = '".Database::escape_string($learnpath_item_id)."'
+			 AND lp_view_id = (SELECT lp_view.id FROM $TBL_LP_VIEW lp_view WHERE user_id = '".Database::escape_string($user_id)."' AND lp_id='".Database::escape_string($learnpath_id)."')";
+	api_sql_query($sql,__FILE__,__LINE__);	
+}
+
 $_SESSION['oLP']->set_previous_item($lp_item_id);
 $nameTools = $_SESSION['oLP']->get_name();
 $save_setting = get_setting("show_navigation_menu");

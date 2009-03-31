@@ -225,6 +225,8 @@ else
 	@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo $my_style;?>/scormfs.css";
 	/*]]>*/
 	</style>
+	<table border="0">
+	<tr><td valign="top">
 	<div id="learningPathLeftZone" style="float: left; width: 300px;">
         <div id="learningPathHeader" style="font-size:14px; padding-left: 17px;">
             <table>
@@ -240,9 +242,9 @@ else
         </div>
 		<?php $image = '../img/lp_author_background.gif'; ?>
         <div id="image_preview">
-            <table style="width: 285px; height:110px; background-image: url('.$image.');">
+            <table style="width: 285px; height:110px; background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat">
                 <tr>
-                    <td align="center">
+                    <td>
                     <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
                         <img alt="" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
                     <?php else:
@@ -255,40 +257,41 @@ else
                 <?php echo $_SESSION['oLP']->get_author(); ?>
             </div>
         </div>
-        <?php if ($show_audioplayer): ?>
-        <div id="audiorecorder">
-        <?php
-        $audio_recorder_studentview = 'true';
-        $audio_recorder_item_id = $_SESSION['oLP']->current;
-        if(api_get_setting('service_visio','active')=='true'){
-            include('audiorecorder.inc.php');
-        }
-        ?>
-        </div>
-		<?php endif; ?>
         <div class="lp_navigation_elem" >
             <table>
+            	<tr>
+				<td colspan="2"><?php 
+				$display_mode = $_SESSION['oLP']->mode;		
+				$scorm_css_header=true;
+				$lp_theme_css=$_SESSION['oLP']->get_theme();
+				echo $_SESSION['oLP']->get_mediaplayer(); ?></td>
+				</tr>
+				<tr><td>&nbsp;</td></tr>
                 <tr valign="middle">
-                    <td>
+                    <td id="progress_text" >
                         <?php echo $_SESSION['oLP']->get_progress_bar('',-1,'',true); ?>
                     </td>
                     <td>
                         <?php echo $_SESSION['oLP']->get_navigation_bar(); ?>
                      </td>
                 </tr>
+                <tr><td>&nbsp;</td></tr>
             </table>
         </div>
         <div id="msg_div_id" class="message">
         <?php echo $error = $_SESSION['oLP']->error; ?>
         </div>
-  		<div id="learningPathToc" class="lp_toc" style="height: 400px;width:285px;overflow-y:auto;overflow-x:hidden;padding:0;margin:0"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
+  		<div id="learningPathToc" class="lp_toc" style="height: 400px;width:285px;overflow-y:auto;overflow-x:hidden;font-size:8pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
         <div id="log_content">
         </div>
         <div style="color: white;" onClick="cleanlog();">.</div>
     </div>
-    <div id="learningPathRightZone" style="height: 600px; margin-left: 300px">
+    </td><td align="left" width="100%">
+    <div id="learningPathRightZone" style="height: 700px;">
         <iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0" style="overflow: 100%; width: 100%"></iframe>
     </div>
+    </td></tr>
+    </table>
     <script language="JavaScript" type="text/javascript">
 	// Need to be called after the <head> to be sure window.oxajax is defined
   	var dokeos_xajax_handler = window.oxajax;

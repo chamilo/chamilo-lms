@@ -248,7 +248,15 @@ switch ($current_page)
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
-
+echo '<div class=actions>';
+?>
+	<a href="<?php echo api_get_self(); ?>?blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('Home') ?>"><?php echo get_lang('Home') ?></a>
+	<?php if(api_is_allowed('BLOG_'.$blog_id, 'article_add')) { ?><a href="<?php echo api_get_self(); ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>"><?php echo get_lang('NewPost') ?></a><?php } ?>
+	<?php if(api_is_allowed('BLOG_'.$blog_id, 'task_management')) { ?><a href="<?php echo api_get_self(); ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>"><?php echo get_lang('TaskManager') ?></a><?php } ?>
+	<?php if(api_is_allowed('BLOG_'.$blog_id, 'member_management')) { ?><a href="<?php echo api_get_self(); ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>"><?php echo get_lang('MemberManager') ?></a><?php } ?>
+<?php	
+echo '</div>';	
+		
 Display::display_introduction_section(TOOL_BLOG);
 
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
@@ -269,21 +277,7 @@ $year = (int)$_GET['year'] ? (int)$_GET['year'] : date('Y');
 Blog :: display_minimonthcalendar($month, $year, $blog_id);
 ?>
 		<br />
-		<table width="100%">
-			<tr>
-				<td class="sectiontitle"><?php echo get_lang('ThisBlog') ?></td>
-			</tr>
-			<tr>
-				<td class="blog_menu">
-					<ul>
-						<li><a href="<?php echo api_get_self(); ?>?blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('Home') ?>"><?php echo get_lang('Home') ?></a></li>
-						<?php if(api_is_allowed('BLOG_'.$blog_id, 'article_add')) { ?><li><a href="<?php echo api_get_self(); ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>"><?php echo get_lang('NewPost') ?></a></li><?php } ?>
-						<?php if(api_is_allowed('BLOG_'.$blog_id, 'task_management')) { ?><li><a href="<?php echo api_get_self(); ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>"><?php echo get_lang('TaskManager') ?></a></li> <?php } ?>
-						<?php if(api_is_allowed('BLOG_'.$blog_id, 'member_management')) { ?><li><a href="<?php echo api_get_self(); ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>"><?php echo get_lang('MemberManager') ?></a></li><?php } ?>
-					</ul>
-				</td>
-			</tr>
-		</table>
+
 		<br />
 		<table width="100%">
 			<tr>

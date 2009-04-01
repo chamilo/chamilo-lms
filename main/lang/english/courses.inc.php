@@ -2,12 +2,12 @@
 for more information: see languages.txt in the lang folder. 
 */
 $lang_already_enrolled                      = "already enrolled";
-$lang_my_personnal_course_list              = "My personal course list";
+$lang_my_personnal_course_list              = "My personal training list";
 $lang_course_enrollment                     = "User trainings";
 $lang_course_not_available                  = "This course is not available or doesn\'t exist.";
 $lang_enroll                                = "Enroll";
 $lang_enroll_to_a_new_course                = "Enroll to a new course";
-$lang_my_present_course_list                = "My present course list";
+$lang_my_present_course_list                = "My trainings";
 $lang_no_course_to_enroll_in_this_category  = "No course to enroll to in this category.";
 $lang_or_search_from_the_course_code        = "Or search by code";
 $lang_search                                = "Search";
@@ -63,7 +63,7 @@ $ExistingCourseCategories = "Existing training categories";
 $YouAreNowUnsubscribed = "You are now unsubscribed from the course";
 $ViewOpenCourses = "View open courses";
 $ErrorContactPlatformAdmin = "There happened an unknown error. Please contact the platform administrator.";
-$CourseRegistrationCodeIncorrect = "The course code is incorrect";
+$CourseRegistrationCodeIncorrect = "The training code is incorrect";
 $CourseRequiresPassword = "Course requires password";
 $SubmitRegistrationCode = "Submit registration code";
 $CourseCategoryDeleted = "The category was deleted";

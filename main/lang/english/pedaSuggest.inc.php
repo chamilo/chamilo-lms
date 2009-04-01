@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $GeneralDescription = "Description";
 $GeneralDescriptionQuestions = "What is the goal of the training? Are there prerequisites? How is this training connected to other trainings?";
-$GeneralDescriptionInformation = "Describe the training (number of hours, official code, location) and trainer (name, office, Tel., e-mail, office hours . . . .).";
+$GeneralDescriptionInformation = "Describe the training (number of hours, sser number, location) and trainer (name, office, Tel., e-mail, office hours . . . .).";
 $Objectives = "Objectives";
 $ObjectivesInformation = "What are the specific objectives of the training (the competencies, aptitudes, outcomes)..";
 $ObjectivesQuestions = "What should the end results be when the user has completed the training? What are the activities performed during the training?";
@@ -17,7 +17,7 @@ $CourseMaterial = "Training material";
 $CourseMaterialQuestions = "Is there a coursebook, a collection of papers, a bibliography, a list of links on the internet?";
 $CourseMaterialInformation = "Short description of the course materials.";
 $HumanAndTechnicalResources = "Resources";
-$HumanAndTechnicalResourcesQuestions = "Consider the teachers, tutors, a technical helpdesk, assistants, and/or materials available?";
+$HumanAndTechnicalResourcesQuestions = "Consider the trainers, tutors, a technical helpdesk, assistants, and/or materials available.";
 $HumanAndTechnicalResourcesInformation = "Identify and describe the different contact persons and technical devices available.";
 $Assessment  = "Evaluation";
 $AssessmentQuestions = "How will users be evaluated? Are there strategies to develop in order to master the topic?";

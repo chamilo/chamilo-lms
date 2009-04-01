@@ -174,4 +174,5 @@ $MessageNewUserInTheCourse = "To je sporoèilo, ki vas obvešèa, da je v teèaju no
 $EditNormalProfile = "Uredi obièajen profil";
 $EditExtendProfile = "Uredi razširjen profil";
 $EditInformation = "Uredi informacije";
+$RegisterUser = "Vpiši uporabnika";
 ?>

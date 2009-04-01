@@ -127,4 +127,5 @@ $NewDropboxFileUploadedContent = "V nabiralnik tvojega teèaja je bila poslana no
 $langAddEdit = "Dodaj/Uredi";
 $ErrorNoFilesInFolder = "Ta mapa je prazna";
 $dropbox_lang["upload"] = "Naloži";
+$AddComment  = "Dodaj komentar";
 ?>

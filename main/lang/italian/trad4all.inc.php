@@ -708,4 +708,5 @@ $TemplatePreview = "Anteprima modello";
 $NoTemplatePreview = "Anteprima non disponibile";
 $ModifyCategory = "Modifica la categoria";
 $Photo = "Fotografia";
+$MoveFile = "Sposta il file";
 ?>

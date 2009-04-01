@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Login failed - incorrect username or password.";
-$langWelcome = "courses are freely available below. Other  courses requirea username and a password, which you can obtain by clicking on \'registration\'. Teacherscan create course areas by clicking on registration too, but selecting then\'Create course areas\'.";
+$langWelcome = "courses are freely available below. Other  courses requirea username and a password, which you can obtain by clicking on \'registration\'. Trainerscan create course areas by clicking on registration too, but selecting then\'Create training areas\'.";
 $langPass = "Password";
 $langEnter = "Enter";
 $langReg = "Registration";

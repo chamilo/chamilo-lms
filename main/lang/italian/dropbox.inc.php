@@ -127,4 +127,5 @@ $NewDropboxFileUploadedContent = "Un nuovo file è stato aggiunto nella sezione s
 $langAddEdit = "Aggiungi / Modifica";
 $ErrorNoFilesInFolder = "Seleziona almeno un file";
 $dropbox_lang["upload"] = "Carica";
+$AddComment  = "Aggiungi commento";
 ?>

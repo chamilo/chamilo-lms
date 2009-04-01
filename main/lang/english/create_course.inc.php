@@ -1,10 +1,10 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langProfessors = "Teachers";
-$langExplanation = "Once you click OK, a training is created with a Tests, Documents, Courses  will be created. Your login as trainer allows you editing privileges.";
-$langEmpty = "You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your course code, see the Course Program";
-$langCodeTaken = "This course code is already in use.  <br>Use the <b>Back</b> button on your browser and try again";
+$langProfessors = "Trainers";
+$langExplanation = "Once you click the \"OK\" button above, a training area is created which will include a section for Tests, Gradebook, Courses, Dropbox, Agenda and much more. Your login as trainer allows you editing privileges to these areas of your training.";
+$langEmpty = "You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your training code, see the Training Program";
+$langCodeTaken = "This training code is already in use.  <br>Use the <b>Back</b> button on your browser and try again";
 $langFormula = "Yours sincerely";
 $langMessage = "When you remove the test forum, it will remove all messages in that forum too.";
 $langExerciceEx = "Sample test";
@@ -34,8 +34,8 @@ $langGoogle = "Quick and powerful search engine";
 $langIntroductionText = "Place your heading and/or introduction to the course here. <br>Click on the pencil icon below to modify.<br>(Trainers only).";
 $langIntroductionTwo = "This page allows users and groups to publish documents.";
 $langCourseDescription = "Write here the description that will appear in the course list.";
-$langProfessor = "Teacher";
-$langAnnouncementEx = "This is an announcement example. Only course teachers are allowed to publish announcements.";
+$langProfessor = "Trainers";
+$langAnnouncementEx = "This is an announcement example. Only trainers are allowed to publish announcements.";
 $langJustCreated = "You just created the course area";
 $langEnter = "Back to training list";
 $langGroups = "Groups";
@@ -49,7 +49,7 @@ $langEx = "e.g. <i>Innovation management</i>";
 $langFac = "Category";
 $langTargetFac = "This is the department or any other category where the course is delivered";
 $langMax = "max. 20 characters, e.g. <i>INNOV21</i>";
-$langDoubt = "If you doubt on your course code, consult ";
+$langDoubt = "If you are unsure of your training code, consult the training details.";
 $langProgram = "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management";
 $langScormtool = "Courses";
 $langScormbuildertool = "Scorm Path builder";
@@ -99,7 +99,7 @@ $ExampleForum = "Example Forum";
 $ExampleThread = "Example Thread";
 $ExampleThreadContent = "Example content";
 $IntroductionWiki = "The word Wiki is short for WikiWikiWeb. Wikiwiki is a word from Hawaiian, meaning fast or speed. In a wiki, people can write pages together. If one person writes something wrong, then the next person can correct it. The next person can also add something new to the page. Because of this, the page gets better whenever someone changes it.";
-$CreateCourseArea = "Create a training";
+$CreateCourseArea = "Create training";
 $CreateCourse = "Create training";
 $Create = "Create";
 ?>

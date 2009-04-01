@@ -488,7 +488,7 @@ echo '<div id="social-profile-wrapper">';
 				$number_loop   = ($number_friends/$number_of_images);
 				$loop_friends  = ceil($number_loop);
 				$j=0;
-				$friend_html .= '<div class="actions-profile">'.get_lang('MyFriends').'</div>';	
+				$friend_html .= '<div class="actions-profile">'.get_lang('SocialFriend').'</div>';	
 				$friend_html.= '<div id="friend-container">';							
 					$friend_html.= '<div id="friend-header">';
 							//$friend_html.=  $friends_count.' '.get_lang('Friends');
@@ -496,7 +496,7 @@ echo '<div id="social-profile-wrapper">';
 							$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friend').'</div>';
 						else 
 							$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
-						$friend_html.= '<div style="float:right;">'.get_lang('SeeAll').'</div>';
+						$friend_html.= '<div style="float:right;"><a href="index.php?#remote-tab-6">'.get_lang('SeeAll').'</a></div>';
 					$friend_html.= '</div><br/>'; // close div friend-header
 						
 								

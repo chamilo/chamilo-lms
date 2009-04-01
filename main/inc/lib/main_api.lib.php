@@ -158,6 +158,10 @@ define('PLATFORM_AUTH_SOURCE', 'platform');
 //CONSTANT defining the default HotPotatoes files directory
 define('DIR_HOTPOTATOES','/HotPotatoes_files');
 
+// This constant is a result of Windows OS detection, it has a boolean value:
+// true whether the server runs on Windows OS, false otherwise.
+define ('IS_WINDOWS_OS', api_is_windows_os());
+
 /*
 ==============================================================================
 		PROTECTION FUNCTIONS
@@ -3266,4 +3270,30 @@ function api_is_user_of_course ($course_id,$user_id) {
 	} else {
 		return false;
 	}
+}
+
+/**
+ * Checks whether the server's operating system is Windows (TM).
+ * @return boolean - true if the operating system is Windows, false otherwise 
+ */
+function api_is_windows_os() {
+	if (function_exists("php_uname")) {
+		// php_uname() exists since PHP 4.0.2., according to the documentation.
+		// We expect that this function will always work for Dokeos 1.8.x.
+		$os = php_uname();
+	}
+	// The following methods are not needed, but let them stay, just in case.
+	elseif (isset($_ENV['OS'])) {
+		// Sometimes $_ENV['OS'] the may not be present (bugs?)
+		$os = $_ENV['OS'];
+	}
+	elseif (defined('PHP_OS')) {
+		// PHP_OS means on which OS PHP was compiled, this is why
+		// using PHP_OS is the last choice for detection.
+		$os = PHP_OS;
+	} else {
+		$os = '';
+	}
+
+	return strtolower(substr($os, 0, 3 )) === 'win' ? true : false;
 }

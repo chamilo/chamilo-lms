@@ -8776,13 +8776,8 @@ EOD;
 	function create_path($path){
 		$path_bits = split('/',dirname($path));
 
-		if (strpos($path, ':') === false) {
-			// This should be added only when the platform is non-Windows.
-			$path_built = '/';
-		} else {
-			// This is for Windows platforms.
-			$path_built = '';
-		}
+		// IS_WINDOWS_OS has been defined in main_api.lib.php
+		$path_built = IS_WINDOWS_OS ? '' : '/';
 
 		foreach($path_bits as $bit){
 			if(!empty($bit)){

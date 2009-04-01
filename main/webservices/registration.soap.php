@@ -2469,15 +2469,7 @@ function DokeosWSEditCourse($params){
 		if (empty($course_code)) {
 			$results[] = 0; // original_course_id_value doesn't exits
 			continue;				 			
-		} else {
-			$sql = "SELECT code FROM $course_table WHERE code ='$course_code' AND visibility = '0'";
-			$resu = api_sql_query($sql,__FILE__,__LINE__);
-			$r_check_code = Database::fetch_row($resu);
-			if (!empty($r_check_code[0])) {
-				$results[] = 0; // this code is not active
-				continue;				 
-			}
-		}
+		} 
 						
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT concat(lastname,'',firstname) as tutor_name FROM $table_user WHERE status='1' AND user_id = '$tutor_id' ORDER BY lastname,firstname";

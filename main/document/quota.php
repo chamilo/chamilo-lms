@@ -1,4 +1,4 @@
-<?php // $Id: quota.php 19397 2009-03-27 22:02:19Z iflorespaz $
+<?php // $Id: quota.php 19485 2009-04-01 20:27:56Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -101,12 +101,12 @@ function display_quota($course_quota, $already_consumed_space)
 	//decide where to place percentage in graph
 	if ($percentage >= 50)
 	{
-		$text_in_filled = "&nbsp;$percentage%".
+		$text_in_filled = "&nbsp;$other_percentage%".
 		$text_in_unfilled = "";
 	}
 	else
 	{
-		$text_in_unfilled = "&nbsp;$percentage%".
+		$text_in_unfilled = "&nbsp;$other_percentage%".
 		$text_in_filled = "";
 	}
 	
@@ -123,8 +123,8 @@ function display_quota($course_quota, $already_consumed_space)
 				get_lang("PercentageQuotaFree") . ": <strong>$other_percentage%</strong>.<br>";
 	
 	$message .= "<br/><table cellpadding=\"\" cellspacing=\"0\" height=\"40\"><tr>
-				<td bgcolor=\"$colour\" width=\"$visual_percentage\">$text_in_filled</td>
-				<td bgcolor=\"Silver\" width=\"$visual_other_percentage\">$text_in_unfilled</td>
+				<td bgcolor=\"$colour\" width=\"$visual_percentage\"></td>
+				<td bgcolor=\"Silver\" width=\"$visual_other_percentage\">&nbsp;$other_percentage%</td>
 				</tr></table>";
 				
 	echo $message;

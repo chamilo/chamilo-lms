@@ -54,17 +54,4 @@ if(isset($_SESSION['lpobject'])) {
 }
 session_write_close();
 ?>
-<body>	
-	<div class="lp_navigation_elem">
-		<table>
-			<tr>
-				<td colspan="2"><?php echo $mediaplayer; ?></td>
-			</tr>			
-			<tr valign="middle">
-				<td><?php echo $progress_bar; ?></td>
-				<td><?php echo $navigation_bar; ?></td>
-			</tr>		
-		</table>
-	</div>
-</body>
-</html>
+<span><?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?></span>

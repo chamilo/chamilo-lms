@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 19463 2009-03-31 17:33:09Z cfasanando $ 
+<?php // $Id: scorm_api.php 19487 2009-04-01 22:07:02Z cfasanando $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -836,10 +836,13 @@ function logit_lms(message,priority){
 function update_toc(update_action,update_id)
 {
 	<?php //if($oLP->mode != 'fullscreen'){ ?>
-		var myframe = frames["toc_name"];
-		var myelem = myframe.document.getElementById("toc_"+update_id);
-		var myelemimg = myframe.document.getElementById("toc_img_"+update_id);
-		logit_lms('update_toc("'+update_action+'",'+update_id+')',2);
+		//var myframe = frames["toc_name"];
+		//var myelem = myframe.document.getElementById("toc_"+update_id);
+		//var myelemimg = myframe.document.getElementById("toc_img_"+update_id);
+		
+		var myelem = $("#toc_"+update_id);		
+		var myelemimg = $("#toc_img_"+update_id);		
+		logit_lms('update_toc("'+update_action+'",'+update_id+')',2);				
 		
 		if(update_id != 0)
 		{
@@ -847,51 +850,51 @@ function update_toc(update_action,update_id)
 			{
 				case 'unhighlight':
 					if (update_id%2==0)
-					{
-						myelem.className = "scorm_item_2";
+					{						
+						myelem.attr('class',"scorm_item_2");
 					}
 					else
-					{
-						myelem.className = "scorm_item_1";
+					{					
+						myelem.attr('class',"scorm_item_1");
 					}
 					break;
-				case 'highlight':
-					myelem.className = "scorm_item_highlight";
+				case 'highlight':					
+					myelem.attr('class',"scorm_item_highlight");
 					break;
-				case 'not attempted':
-					if(myelemimg.src != '../img/notattempted.gif'){
-						myelemimg.src = "../img/notattempted.gif";
-						myelemimg.alt = "n";
+				case 'not attempted':   					
+					if( myelemimg.attr('src') != '../img/notattempted.gif') {
+						myelemimg.attr('src','../img/notattempted.gif');
+						myelemimg.attr('alt','n');						
 					}
 					break;
-				case 'incomplete':
-					if(myelemimg.src != '../img/incomplete.gif'){
-						myelemimg.src = "../img/incomplete.gif";
-						myelemimg.alt = "i";
+				case 'incomplete':					
+					if( myelemimg.attr('src') != '../img/incomplete.gif') {
+						myelemimg.attr('src','../img/incomplete.gif');
+						myelemimg.attr('alt','i');						
 					}
 					break;
-				case 'completed':
-					if(myelemimg.src != '../img/completed.gif'){
-						myelemimg.src = "../img/completed.gif";
-						myelemimg.alt = "c";
+				case 'completed':					
+					if( myelemimg.attr('src') != '../img/completed.gif') {
+						myelemimg.attr('src','../img/completed.gif');
+						myelemimg.attr('alt','c');						
 					}
 					break;
-				case 'failed':
-					if(myelemimg.src != '../img/failed.gif'){
-						myelemimg.src = "../img/failed.gif";
-						myelemimg.alt = "f";
+				case 'failed':					
+					if( myelemimg.attr('src') != '../img/failed.gif') {
+						myelemimg.attr('src','../img/failed.gif');
+						myelemimg.attr('alt','f');						
 					}
 					break;
-				case 'passed':
-					if(myelemimg.src != '../img/completed.gif' && myelemimg.alt != 'passed'){
-						myelemimg.src = "../img/completed.gif";
-						myelemimg.alt = "p";
+				case 'passed':					
+					if( myelemimg.attr('src') != '../img/completed.gif' && myelemimg.attr('alt') != 'passed') {
+						myelemimg.attr('src','../img/completed.gif');
+						myelemimg.attr('alt','p');						
 					}
 					break;
-				case 'browsed':
-					if(myelemimg.src != '../img/completed.gif' && myelemimg.alt != 'browsed'){
-						myelemimg.src = "../img/completed.gif";
-						myelemimg.alt = "b";
+				case 'browsed':					
+					if( myelemimg.attr('src') != '../img/completed.gif' && myelemimg.attr('alt') != 'browsed') {
+						myelemimg.attr('src','../img/completed.gif');
+						myelemimg.attr('alt','b');						
 					}
 					break;
 				default:
@@ -913,32 +916,34 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
 {
 	logit_lms('update_progress_bar('+nbr_complete+','+nbr_total+','+mode+')',2);
 	logit_lms('could update with data: '+lms_lp_id+','+lms_view_id+','+lms_user_id,2);
-	var myframe = frames["nav_name"];
-	if(myframe){
-		if(mode == ''){mode='%';}
-		if(nbr_total == 0){nbr_total=1;}
-		var percentage = (nbr_complete/nbr_total)*100;
-		percentage = Math.round(percentage);
-		var pr_text  = myframe.document.getElementById('progress_text');
-		var pr_full  = myframe.document.getElementById('progress_img_full');
+
+	if(mode == ''){mode='%';}
+	if(nbr_total == 0){nbr_total=1;}
+	var percentage = (nbr_complete/nbr_total)*100;
+	percentage = Math.round(percentage);
+					
+	var pr_text  = $("#progress_text");
+	var pr_full  = $("#progress_img_full");		
+	var pr_empty = $("#progress_img_empty");
 		
-		var pr_empty = myframe.document.getElementById('progress_img_empty');
-		pr_full.width = percentage*1.2;
-		pr_empty.width = (100-percentage)*1.2;
-		var mytext = '';
-		switch(mode){
-			case 'abs':
-				mytext = nbr_complete + '/' + nbr_total;
-				break;
-			case '%':
-			default:
-				mytext = percentage + '%'; 
-				break;
-		}
-		pr_text.innerHTML = mytext;
-	}
+	pr_full.attr('width',percentage*1.2);	
+	pr_empty.attr('width',(100-percentage)*1.2);
+		
+	var mytext = '';
+	switch(mode){
+		case 'abs':
+			mytext = nbr_complete + '/' + nbr_total;
+			break;
+		case '%':
+		default:
+			mytext = percentage + '%'; 
+			break;
+	}	
+	pr_text.html(mytext);
+	
 	return true;
 }
+
 function update_stats_page()
 {
 	var myframe = document.getElementById('content_id');
@@ -957,13 +962,12 @@ function update_stats_page()
  */
 function update_message_frame(msg_msg)
 {
-	if(msg_msg==null){msg_msg='';}
-	var msg_f = frames["message_name"];
-	if(!msg_f.document || !msg_f.document.getElementById('msg_div_id')){
+	if(msg_msg==null){msg_msg='';}	
+	if(!($("#msg_div_id"))){
 		logit_lms('In update_message_frame() - message frame has no document property',0);
 	}else{
 		logit_lms('In update_message_frame() - updating frame',0);
-		msg_f.document.getElementById('msg_div_id').innerHTML= msg_msg;
+		$("#msg_div_id").html(msg_msg);		
 	}
 }
 /**
@@ -1001,9 +1005,9 @@ function switch_item(current_item, next_item){
 			break;
 		default:
 			break;
-	}
-	var mysrc = 'lp_controller.php?action=content&lp_id='+lms_lp_id+'&item_id='+next_item;
-	var cont_f = document.getElementById('content_id');
+	}		
+	var mysrc = 'lp_controller.php?action=content&lp_id='+lms_lp_id+'&item_id='+next_item+'#anchor_'+lms_lp_id;
+	var cont_f = $("#content_id");		
 	if(!cont_f){
 		logit_lms('In switch - content frame not found',0);
 		<?php if($oLP->mode == 'fullscreen'){ ?>
@@ -1011,20 +1015,23 @@ function switch_item(current_item, next_item){
 		<?php } else { ?>
 			return false;
 		<?php } ?>
+	} else {
+			cont_f.attr("src",mysrc);								
 	}
-	else
-	{
-		//cont_f.src = mysrc;
-		location.href='lp_controller.php?cidReq=<?php echo api_get_course_id() ?>&action=view&lp_id='+lms_lp_id;
-	}
+	
 	if(lms_lp_type==1 || lms_item_type=='asset'){
 		xajax_start_timer();
 	}	
-		
-	//(4) refresh the audio player if needed	
-	if(frames['nav_name']){
-		frames['nav_name'].location.reload();
-	}
+
+	//(4) refresh the audio player if needed  
+	$.ajax({									
+		type: "GET",
+		url: "lp_nav.php",
+		data: "",
+		success: function(datos) {
+		 		$("#media").html(datos);							 				
+				}		
+  	});			
 
 	return true;
 }

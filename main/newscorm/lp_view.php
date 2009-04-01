@@ -161,11 +161,7 @@ $save_setting = get_setting("show_navigation_menu");
 global $_setting;
 $_setting['show_navigation_menu'] = 'false';
 
-$interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
-$interbreadcrumb[]= array ("url"=>api_get_self()."?action=view&lp_id=$learnpath_id", "name" => stripslashes($_SESSION['_course']['name']));
-
-
-$scorm_css_header=true;
+$scorm_css_header=true; 	
 $lp_theme_css=$_SESSION['oLP']->get_theme(); //sets the css theme of the LP this call is also use at the frames (toc, nav, message)
  
 if($_SESSION['oLP']->mode == 'fullscreen')
@@ -193,9 +189,8 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 <?php
 }
 else
-{
-	Display::display_header(null,'Path');
-
+{	
+	include_once('../inc/reduced_header.inc.php');
 	$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
 	//check if audio recorder needs to be in studentview
 	$course_id=$_SESSION["_course"]["id"];
@@ -234,73 +229,106 @@ else
 	<style type="text/css" media="screen, projection">
 	/*<![CDATA[*/
 	@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo $my_style;?>/scorm.css";
-	@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo $my_style;?>/scormfs.css";
 	/*]]>*/
 	</style>
-	<table border="0">
+	<table>
 	<tr><td valign="top">
 	<div id="learningPathLeftZone" style="float: left; width: 300px;">
-        <div id="learningPathHeader" style="font-size:14px; padding-left: 17px;">
-            <table>
-                <tr>
-                    <td>
-                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
-                    </td>
-                    <td>
-                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><?php echo get_lang('CourseHomepageLink'); ?></a>
-                    </td>
-                </tr>
-            </table>
+	
+		<div id="header">
+	        <div id="learningPathHeader" style="font-size:14px; padding-left: 17px;">
+	            <table>
+	                <tr>
+	                    <td>
+	                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
+	                    </td>
+	                    <td>
+	                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><?php echo get_lang('CourseHomepageLink'); ?></a>
+	                    </td>
+	                </tr>
+	            </table>
+	        </div>
         </div>
-		<?php $image = '../img/lp_author_background.gif'; ?>
-        <div id="image_preview">
-            <table style="width: 285px; height:110px; background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat">
-                <tr>
-                    <td>
-                    <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-                        <img alt="" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
-                    <?php else:
-                        echo Display::display_icon('unknown_250_100.jpg',' ');
-                    endif; ?>
-                    </td>
-                </tr>
-            </table>
-            <div id="author_name" class="lp_author_image">
-                <?php echo $_SESSION['oLP']->get_author(); ?>
-            </div>
+        
+        <div id="author_image" name="author_image" class="lp_author_image">
+			<?php $image = '../img/lp_author_background.gif'; ?>
+	        <div id="image_preview">
+	            <table style="width: 285px; height:110px; background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat">
+	                <tr>
+	                    <td>
+	                    <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
+	                        <img alt="" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
+	                    <?php else:
+	                        echo Display::display_icon('unknown_250_100.jpg',' ');
+	                    endif; ?>
+	                    </td>
+	                </tr>
+	            </table>
+	            <div id="author_name">
+	                <?php echo $_SESSION['oLP']->get_author(); ?>
+	            </div>
+	        </div>
         </div>
-        <div class="lp_navigation_elem" >
-            <table>
-            	<tr>
-				<td colspan="2"><?php 
+        
+        
+        <div id="nav_id" name="nav_name" class="lp_nav">
+	        
+	        <?php 
 				$display_mode = $_SESSION['oLP']->mode;		
 				$scorm_css_header=true;
-				$lp_theme_css=$_SESSION['oLP']->get_theme();
-				echo $_SESSION['oLP']->get_mediaplayer(); ?></td>
-				</tr>
-				<tr><td>&nbsp;</td></tr>
-                <tr valign="middle">
-                    <td id="progress_text" >
-                        <?php echo $_SESSION['oLP']->get_progress_bar('',-1,'',true); ?>
-                    </td>
-                    <td>
-                        <?php echo $_SESSION['oLP']->get_navigation_bar(); ?>
-                     </td>
-                </tr>
-                <tr><td>&nbsp;</td></tr>
-            </table>
+				$lp_theme_css=$_SESSION['oLP']->get_theme();	
+				
+				//Setting up the CSS theme if exists						
+				
+				if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1 ) {
+					global $lp_theme_css;			
+				} else {
+					$lp_theme_css=$my_style;
+				}		
+							
+				$progress_bar = $_SESSION['oLP']->get_progress_bar('',-1,'',true);	
+				$navigation_bar = $_SESSION['oLP']->get_navigation_bar();	
+				$mediaplayer = $_SESSION['oLP']->get_mediaplayer();	
+													
+			?>
+			<div id="lp_navigation_elem" class="lp_navigation_elem">
+				<table border="0" width="100%">
+					<tr>						
+						<td colspan="2" style="font-size:11.5pt">						
+						<div id="media" ><span><?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?></span></div>
+						</td>
+					</tr>					
+							
+					<tr valign="middle">
+						<td><?php echo $progress_bar; ?></td>
+						<td><?php echo $navigation_bar; ?></td>
+					</tr>		
+				</table>
+			</div>
+				        
         </div>
-        <div id="msg_div_id" class="message">
-        <?php echo $error = $_SESSION['oLP']->error; ?>
+        
+        <div id="message_id" name="message_name" class="message">
+	        <div id="msg_div_id" class="message">
+	        <?php echo $error = $_SESSION['oLP']->error; ?>
+	        </div>
         </div>
-  		<div id="learningPathToc" class="lp_toc" style="height: 400px;width:285px;overflow-y:auto;overflow-x:hidden;font-size:8pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
-        <div id="log_content">
+        
+  		<div id="toc_id" name="toc_name" class="lp_toc" style="padding:0;margin:0">
+  			<div id="learningPathToc" style="width:300px;overflow-y:auto;overflow-x:hidden;font-size:8pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
         </div>
-        <div style="color: white;" onClick="cleanlog();">.</div>
+        
+        <div id="lp_log_id" name="lp_log_name" class="lp_log">
+	        <div id="log_content">
+	        </div>
+	        <div style="color: white;" onClick="cleanlog();">.</div>
+        </div>
+
+        
     </div>
-    </td><td align="left" width="100%">
-    <div id="learningPathRightZone" style="height: 700px;">
-        <iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0" style="overflow: 100%; width: 100%"></iframe>
+    </td><td align="left" width="100%" valign="top">
+    <div id="learningPathRightZone">
+        <iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0" style="height:600px;width: 100%"></iframe>
     </div>
     </td></tr>
     </table>
@@ -357,7 +385,7 @@ else
 	  FOOTER
 	==============================================================================
 	*/
-	Display::display_footer();
+	//Display::display_footer();
 }
 //restore global setting
 $_setting['show_navigation_menu'] = $save_setting;

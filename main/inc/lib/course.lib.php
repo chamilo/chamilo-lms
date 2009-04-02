@@ -1680,21 +1680,21 @@ class CourseManager
 		$sql = "SELECT distinct field_id FROM $t_cfv";
 		$res_field_all_ids = @api_sql_query($sql,__FILE__,__LINE__);
 
-		while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
+		while ($row_field_all_id = Database::fetch_row($res_field_all_ids)){
 			$field_all_ids[] = $row_field_all_id[0];
 		}
-
-		foreach($field_ids as $field_id) {
+		if (count($field_ids)>0) {
+			foreach($field_ids as $field_id) {
 			// check if field id is used into table field value
-			if (is_array($field_all_ids)) {
-				if (in_array($field_id,$field_all_ids)) {
-					continue;
-				} else {
-					$sql_course_field = "DELETE FROM $t_cf WHERE id = '$field_id'";
-					api_sql_query($sql_course_field,__FILE__,__LINE__);
-				}	
+				if (is_array($field_all_ids)) {
+					if (in_array($field_id,$field_all_ids)) {
+						continue;
+					} else {
+						$sql_course_field = "DELETE FROM $t_cf WHERE id = '$field_id'";
+						api_sql_query($sql_course_field,__FILE__,__LINE__);
+					}	
+				}
 			}
-			
 		}
 	}
 

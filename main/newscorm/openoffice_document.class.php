@@ -61,7 +61,7 @@ abstract class OpenofficeDocument extends learnpath {
 
 		$perm = api_get_setting('permissions_for_new_files');
 		
-		
+		/*
 		$classpath = '-cp .:jodconverter-2.2.1.jar:jodconverter-cli-2.2.1.jar';
 		if(isset($_ENV['OS']) && strpos($_ENV['OS'],'Windows') !== false)
 		{
@@ -74,6 +74,20 @@ abstract class OpenofficeDocument extends learnpath {
 		else
 		{
 			$cmd = 'cd '.api_get_path(SYS_PATH).'main/inc/lib/ppt2png && java '.$classpath.' DokeosConverter';
+		}
+		$cmd .=  ' -p '.api_get_setting('service_ppt2lp','port');
+		*/
+		if (IS_WINDOWS_OS) // IS_WINDOWS_OS has been defined in main_api.lib.php
+		{
+			$converter_path = str_replace('/','\\',api_get_path(SYS_PATH).'main/inc/lib/ppt2png'); 
+			$class_path = $converter_path.';'.$converter_path.'/jodconverter-2.2.1.jar;'.$converter_path.'/jodconverter-cli-2.2.1.jar'; 
+			$cmd = 'java -cp "'.$class_path.'" DokeosConverter';
+		}
+		else
+		{
+			$converter_path = api_get_path(SYS_PATH).'main/inc/lib/ppt2png';
+			$class_path = '-cp .:jodconverter-2.2.1.jar:jodconverter-cli-2.2.1.jar';
+			$cmd = 'cd '.$converter_path.' && java '.$class_path.' DokeosConverter';
 		}
 		$cmd .=  ' -p '.api_get_setting('service_ppt2lp','port');		
 		

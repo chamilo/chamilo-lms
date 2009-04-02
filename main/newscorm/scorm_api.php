@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 19487 2009-04-01 22:07:02Z cfasanando $ 
+<?php // $Id: scorm_api.php 19506 2009-04-02 16:43:17Z cfasanando $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -904,7 +904,7 @@ function update_toc(update_action,update_id)
 		}
 		return true;
     <?php //} ?>
-	return true;
+	//return true;
 }
 /**
  * Updates the progress bar with the new status. Prevents the need of a page refresh and flickering
@@ -1006,19 +1006,15 @@ function switch_item(current_item, next_item){
 		default:
 			break;
 	}		
-	var mysrc = 'lp_controller.php?action=content&lp_id='+lms_lp_id+'&item_id='+next_item+'#anchor_'+lms_lp_id;
-	var cont_f = $("#content_id");		
-	if(!cont_f){
-		logit_lms('In switch - content frame not found',0);
-		<?php if($oLP->mode == 'fullscreen'){ ?>
-		cont_f = window.open(''+mysrc,'content_name','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
-		<?php } else { ?>
-			return false;
-		<?php } ?>
-	} else {
-			cont_f.attr("src",mysrc);								
-	}
+	var mysrc = 'lp_controller.php?action=content&lp_id='+lms_lp_id+'&item_id='+next_item;
+	var cont_f = $("#content_id");
 	
+	<?php if($oLP->mode == 'fullscreen'){ ?>
+	cont_f = window.open(''+mysrc,'content_name','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
+	<?php } else { ?>
+		cont_f.attr("src",mysrc);
+	<?php } ?>
+		
 	if(lms_lp_type==1 || lms_item_type=='asset'){
 		xajax_start_timer();
 	}	

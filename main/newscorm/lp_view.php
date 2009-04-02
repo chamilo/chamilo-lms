@@ -172,20 +172,121 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
 	$_SESSION['loaded_lp_view'] = true;
 	?>
-	<frameset cols="270,*">
-		<frameset rows="20,475,95,80,*">
-            <frame id="header" src="lp_header.php"  border="0" frameborder="0" scrolling="no"/>
-			<frame id="toc_id" name="toc_name" class="lp_toc" src="lp_toc.php" border="0" frameborder="0" scrolling="no"/>
-			<frame id="nav_id" name="nav_name" class="lp_nav" src="lp_nav.php" border="0" frameborder="0" />
-			<frame id="message_id" name="message_name" class="message" src="lp_message.php" border="0" frameborder="0" />
-			<frame id="lp_log_id" name="lp_log_name" class="lp_log" src="lp_log.php" border="0" frameborder="0" />
-		</frameset>
-		<frame id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0">
-		</frame>
-	</frameset><noframes></noframes>
-	<noframes>
-	This page relies heavily on frames. If your browser doesn't support frames, please try to find a better one. Some are available for free and run on multiple platforms. We recommend you try <a href="http://www.mozilla.com/firefox/">Firefox</a>. Get it from its official website by clicking the link.
-	</noframes>
+	<div id="learningPathLeftZone" style="float: left; width: 300px;">	
+		<div id="header">
+		        <div id="learningPathHeader" style="font-size:14px; padding-left: 17px;">
+		            <table>
+		                <tr>
+		                    <td>
+		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
+		                    </td>
+		                    <td>
+		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><?php echo get_lang('CourseHomepageLink'); ?></a>
+		                    </td>
+		                </tr>
+		            </table>
+		        </div>
+		</div>
+		<div id="toc_id" name="toc_name" class="lp_toc" style="padding:0;margin:0">
+  			<div id="learningPathToc" style="width:300px;overflow-y:auto;overflow-x:hidden;font-size:8pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
+        </div>
+        <div id="nav_id" name="nav_name" class="lp_nav">
+	        
+	        <?php 
+				$display_mode = $_SESSION['oLP']->mode;		
+				$scorm_css_header=true;
+				$lp_theme_css=$_SESSION['oLP']->get_theme();	
+				
+				//Setting up the CSS theme if exists						
+				
+				if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1 ) {
+					global $lp_theme_css;			
+				} else {
+					$lp_theme_css=$my_style;
+				}		
+							
+				$progress_bar = $_SESSION['oLP']->get_progress_bar('',-1,'',true);	
+				$navigation_bar = $_SESSION['oLP']->get_navigation_bar();	
+				$mediaplayer = $_SESSION['oLP']->get_mediaplayer();	
+													
+			?>
+			<div id="lp_navigation_elem" class="lp_navigation_elem">
+				<table border="0" width="100%" style="text-align:center">
+					<tr>						
+						<td colspan="2" style="font-size:11.5pt">						
+						<div id="media" ><span><?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?></span></div>
+						</td>
+					</tr>					
+							
+					<tr>
+						<td><?php echo $progress_bar; ?></td>
+						<td><?php echo $navigation_bar; ?></td>
+					</tr>		
+				</table>
+			</div>
+				        
+        </div>
+        <div id="message_id" name="message_name" class="message">
+	        <div id="msg_div_id" class="message">
+	        <?php echo $error = $_SESSION['oLP']->error; ?>
+	        </div>
+        </div>
+	</div>
+	<div id="learningPathRightZone">
+        <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0"></iframe>
+    </div>
+	<div id="lp_log_id" name="lp_log_name" class="lp_log">
+	        <div id="log_content">
+	        </div>
+	        <div style="color: white;" onClick="cleanlog();">.</div>
+    </div>
+	<script language="JavaScript" type="text/javascript">
+	// Need to be called after the <head> to be sure window.oxajax is defined
+  	var dokeos_xajax_handler = window.oxajax;
+	</script>
+    <script language="JavaScript" type="text/javascript">
+	<!--
+	var leftZoneHeightOccupied = 0;
+	var rightZoneHeightOccupied = 0;
+	var initialLeftZoneHeight = 0;
+	var initialRightZoneHeight = 0;
+
+	var updateContentHeight = function() {
+		winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
+		newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
+		newRightZoneHeight = winHeight - rightZoneHeightOccupied;
+		if (newLeftZoneHeight <= initialLeftZoneHeight) {
+			newLeftZoneHeight = initialLeftZoneHeight;
+			newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
+		}
+		if (newRightZoneHeight <= initialRightZoneHeight) {
+			newRightZoneHeight = initialRightZoneHeight;
+			newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
+		}
+		document.getElementById('learningPathToc').style.height = newLeftZoneHeight + 'px';
+		document.getElementById('learningPathRightZone').style.height = newRightZoneHeight + 'px';
+		document.getElementById('content_id').style.height = newRightZoneHeight + 'px';
+		if (document.body.clientHeight > winHeight) {
+			document.body.style.overflow = 'auto';
+		} else {
+			document.body.style.overflow = 'hidden';
+		}
+	};
+
+	window.onload = function() {
+		initialLeftZoneHeight = document.getElementById('learningPathToc').offsetHeight;
+		initialRightZoneHeight = document.getElementById('learningPathRightZone').offsetHeight;
+		docHeight = document.body.clientHeight;
+		leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
+		rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
+		document.body.style.overflow = 'hidden';
+		updateContentHeight();
+	}
+
+	window.onresize = updateContentHeight;
+	-->
+	</script>
+
 <?php
 }
 else
@@ -300,8 +401,8 @@ else
 					</tr>					
 							
 					<tr valign="middle">
-						<td><?php echo $progress_bar; ?></td>
-						<td><?php echo $navigation_bar; ?></td>
+						<td width="50%"><?php echo $progress_bar; ?></td>
+						<td width="50%"><?php echo $navigation_bar; ?></td>
 					</tr>		
 				</table>
 			</div>

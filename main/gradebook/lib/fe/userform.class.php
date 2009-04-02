@@ -71,7 +71,7 @@ class UserForm extends FormValidator
 		$renderer =& $this->defaultRenderer();
 		$renderer->setElementTemplate('<span>{element}</span> ');
 		$this->addElement('text','keyword','');
-		$this->addElement('submit','submit',get_lang('Search'));
+		$this->addElement('style_submit_button','submit',get_lang('Search'),'class="search"');
 	}
 	
 	protected function build_user_info_form() {

@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 19404 2009-03-28 01:24:38Z cvargas1 $
+<?php // $Id: admin.php 19500 2009-04-02 15:15:56Z cvargas1 $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 19404 2009-03-28 01:24:38Z cvargas1 $
+* 	@version $Id: admin.php 19500 2009-04-02 15:15:56Z cvargas1 $
 */
 
 
@@ -304,33 +304,23 @@ if($cancelAnswers)
 }
 
 // modifies the query string that is used in the link of tool name
-if($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers)
-{
+if($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
 	$nameTools=get_lang('QuestionManagement');
-}
-else
-{
-	$nameTools=get_lang('ExerciseManagement');
 }
 
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 $interbreadcrumb[]=array("url" => "admin.php?exerciseId=".$objExercise->id,"name" => $objExercise->exercise);
 
 // shows a link to go back to the question pool
-if(!$exerciseId && $nameTools != get_lang('ExerciseManagement'))
-{
+if(!$exerciseId && $nameTools != get_lang('ExerciseManagement')){
 	$interbreadcrumb[]=array("url" => "question_pool.php?fromExercise=$fromExercise","name" => get_lang('QuestionPool'));
 }
 
 // if the question is duplicated, disable the link of tool name
-if($modifyIn == 'thisExercise')
-{
-	if($buttonBack)
-	{
+if($modifyIn == 'thisExercise') {
+	if($buttonBack)	{
 		$modifyIn='allExercises';
-	}
-	else
-	{
+	} else {
 		$noPHP_SELF=true;
 	}
 }

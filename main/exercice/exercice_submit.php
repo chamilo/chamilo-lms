@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 19405 2009-03-28 01:28:28Z cvargas1 $
+<?php // $Id: exercice_submit.php 19500 2009-04-02 15:15:56Z cvargas1 $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 19405 2009-03-28 01:28:28Z cvargas1 $
+* 	@version $Id: exercice_submit.php 19500 2009-04-02 15:15:56Z cvargas1 $
 */
 
 
@@ -1019,7 +1019,7 @@ else
 			}
 			else
 			{
-				$submit_btn.=get_lang('Next').' &gt;';
+				$submit_btn.=get_lang('NextQuestion').' &gt;';
 			}
 			$submit_btn.= "</button>"; 
 		}	

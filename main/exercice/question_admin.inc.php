@@ -27,7 +27,7 @@
 * 	It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_admin.inc.php 19262 2009-03-25 00:12:02Z cvargas1 $
+* 	@version $Id: question_admin.inc.php 19500 2009-04-02 15:15:56Z cvargas1 $
 */
 
 /*
@@ -99,7 +99,7 @@ if(is_object($objQuestion))
 		$text=get_lang('ModifyQuestion');
 	} else {
 		$class="add";
-		$text=get_lang('CreateQuestion'); 
+		$text=get_lang('AddQuestionToExercise'); 
 	}		
 
 	$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');

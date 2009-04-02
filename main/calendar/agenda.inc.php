@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 19254 2009-03-24 22:18:53Z cvargas1 $
+<?php //$Id: agenda.inc.php 19500 2009-04-02 15:15:56Z cvargas1 $
 
 /*
 ==============================================================================
@@ -647,20 +647,27 @@ function selectAll(cbList,bSelect,showwarning)
 function plus_attachment() {
 				if (document.getElementById('options').style.display == 'none') {
 					document.getElementById('options').style.display = 'block';
-					document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/nolines_minus.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+					document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
 				} else {
 				document.getElementById('options').style.display = 'none';
-				document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/nolines_plus.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+				document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
 				}
 }
 
 function plus_repeated_event() {
 				if (document.getElementById('options2').style.display == 'none') {
 					document.getElementById('options2').style.display = 'block';
-					document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/nolines_minus.gif\" alt=\"\" />&nbsp;".get_lang('RepeatedEvent')."';
+					document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('RepeatedEvent')."';
 				} else {
 				document.getElementById('options2').style.display = 'none';
-				document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/nolines_plus.gif\" alt=\"\" />&nbsp;".get_lang('RepeatedEvent')."';
+				document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('RepeatedEvent')."';
+				}
+}
+
+function plus_ical() {
+				if (document.getElementById('icalform').style.display == 'none') {
+					document.getElementById('icalform').style.display = 'block';
+					document.getElementById('plusical').innerHTML='';
 				}
 }
 
@@ -2532,8 +2539,12 @@ function show_add_form($id = '')
 <form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="frm_import_ical">
 <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
 <div style="text-align:right;width:80%">
+
+<a href="javascript://" onclick="return plus_ical();"><span id="plusical"><input type="image" src="../img/ical_icon.gif" alt="<?php echo get_lang('ICalFileImport');?>" title="<?php echo get_lang('ICalFileImport');?>" /></span></a>
+<div id="icalform" style="display: none;">
 <label for="ical_import"><?php echo get_lang('ICalFileImport');?></label>
 <input type="file" name="ical_import"/><button class="save" type="submit" name="ical_submit" value="<?php echo get_lang('Import');?>"><?php echo get_lang('Import');?></button>
+</div>
 </div>
 </form>
 
@@ -2857,7 +2868,7 @@ function show_add_form($id = '')
 				<div class="label">&nbsp;
 				</div>
 				<div class="formw">
-					<a href="javascript://" onclick="return plus_attachment();"><span id="plus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;<?php echo get_lang('AddAnAttachment') ?></span></a>
+					<a href="javascript://" onclick="return plus_attachment();"><span id="plus">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;<?php echo get_lang('AddAnAttachment') ?></span></a>
 				</div>
 			</div>
 
@@ -2894,7 +2905,7 @@ function show_add_form($id = '')
 				<div class="label">&nbsp;
 				</div>
 				<div class="formw">
-					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;<?php echo get_lang('RepeatedEvent') ?></span></a>
+					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;<?php echo get_lang('RepeatedEvent') ?></span></a>
 				</div>
 			</div>
 

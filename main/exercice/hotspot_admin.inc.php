@@ -298,10 +298,18 @@ if($modifyAnswers)
 
 	<tr>
 		<td colspan="2" valign="bottom">
-			<input type="submit" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" />
-			<input type="submit" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />
-			<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" />
-			<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />
+			<button type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" ><?php echo get_lang('LessHotspots'); ?></button>
+			<button type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" /><?php echo get_lang('MoreHotspots'); ?></button>
+			<button type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" ><?php echo get_lang('Cancel'); ?></button>
+			<?php	if(isset($_GET['hotspotadmin'])) {
+						$class="save";
+						$text=get_lang('ModifyQuestion');
+					} else {
+						$class="add";
+						$text=get_lang('AddQuestionToExercise'); 
+					}		
+			?>
+			<button type="submit" class="<?php echo $class;?>" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" /><?php echo $text; ?></button>
 		</td>
 	</tr>
 	<tr>

@@ -1,4 +1,4 @@
-<?php //$Id: work.php 19353 2009-03-26 16:53:19Z cvargas1 $
+<?php //$Id: work.php 19500 2009-04-02 15:15:56Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 19353 2009-03-26 16:53:19Z cvargas1 $
+*  	@version $Id: work.php 19500 2009-04-02 15:15:56Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1229,7 +1229,7 @@ function draw_date_picker($prefix,$default='') {
 		$new_folder_text .= '<div id="msg_error1" style="display:none;color:red"></div>';
 		$new_folder_text .= get_lang('NewDir') . ' ';		
 		$new_folder_text .= '<input type="text" name="new_dir" onfocus="document.getElementById(\'msg_error1\').style.display=\'none\';"/>';
-		$new_folder_text .= '<button type="button" name="create_dir" class="add" onClick="validate();" value="' . get_lang('Ok') . '"/>'.get_lang('CreateDirectory').'</button>';
+		//$new_folder_text .= '<button type="button" name="create_dir" class="add" onClick="validate();" value="' . get_lang('Ok') . '"/>'.get_lang('CreateDirectory').'</button>';
 		//new additional fields inside the "if condition" just to agroup
 		if(true):
 

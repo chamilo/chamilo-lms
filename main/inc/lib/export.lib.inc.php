@@ -83,8 +83,11 @@ class Export
 	}
 	/**
 	 * Export tabular data to XML-file
-	 * @param array $data
-	 * @param string $filename
+	 * @param array  Simple array of data to put in XML
+	 * @param string Name of file to be given to the user
+     * @param string Name of common tag to place each line in
+     * @param string Name of the root element. A root element should always be given.
+     * @param string Encoding in which the data is provided
 	 */
 	function export_table_xml($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null, $encoding='ISO-8859-1')
 	{
@@ -112,6 +115,53 @@ class Export
 		DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
 		exit;
 	}
+
+    /**
+     * Export hierarchical tabular data to XML-file
+     * @param array  Hierarchical array of data to put in XML, each element presenting a 'name' and a 'value' property
+     * @param string Name of file to be given to the user
+     * @param string Name of common tag to place each line in
+     * @param string Name of the root element. A root element should always be given.
+     * @param string Encoding in which the data is provided
+     */
+    function export_complex_table_xml($data, $filename = 'export', $wrapper_tagname, $encoding='ISO-8859-1')
+    {
+        $file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.xml';
+        $handle = fopen($file, 'a+');
+        fwrite($handle, '<?xml version="1.0" encoding="'.$encoding.'"?>'."\n");
+        
+        if (!is_null($wrapper_tagname))
+        {
+            fwrite($handle, '<'.$wrapper_tagname.'>');
+        }
+        $s = Export::_export_complex_table_xml_helper($data);
+        fwrite($handle,$s);
+        if (!is_null($wrapper_tagname))
+        {
+            fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
+        }
+        fclose($handle);
+        DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
+        exit;
+    }
+    /**
+     * Helper for the hierarchical XML exporter
+     */
+    function _export_complex_table_xml_helper($data,$level=1) {
+    	if (count($data)<1) { return '';}
+        $string = '';
+        foreach ($data as $index => $row)
+        {
+            $string .= "\n".str_repeat("\t",$level).'<'.$row['name'].'>';
+            if (is_array($row['value'])) {
+            	$string .= Export::_export_complex_table_xml_helper($row['value'],$level+1)."\n";
+            } else {
+                $string .= $row['value'];
+            }
+            $string .= str_repeat("\t",$level).'</'.$row['name'].'>';
+        }
+        return $string;
+    }
 }
 /*
 ==============================================================================

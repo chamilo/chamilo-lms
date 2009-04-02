@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 19504 2009-04-02 16:12:27Z iflorespaz $
+<?php // $Id: exercise.lib.php 19511 2009-04-02 18:06:07Z iflorespaz $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 19504 2009-04-02 16:12:27Z iflorespaz $
+* 	@version $Id: exercise.lib.php 19511 2009-04-02 18:06:07Z iflorespaz $
 */
 
 /**
@@ -42,8 +42,11 @@
 require("../inc/lib/fckeditor/fckeditor.php") ;
 function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_item, $total_item)
 {
-	//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
-	//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
+	if (!ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) {
+		echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
+		echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';	
+	}
+
 	
 	// reads question informations
 	if(!$objQuestionTmp = Question::read($questionId))
@@ -91,12 +94,17 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 		}  
 		$s.= '</table>';
-		/*$s.="<script>$(document).ready( function(){
-			  $('.rounded').corners();
-			  $('.exercise_options').corners();
-			});</script>";*/
-		//$s.="<div class=\"rounded exercise_questions\" style=\"width: 720px; padding: 3px; background-color:#ccc;\">
-		$s.="<table width=\"720\" class='exercise_options' style=\"width: 720px;margin-left:10px; background-color:#fff;\">";
+		if (!ereg("MSIE",$_SERVER["HTTP_USER_AGENT"])) {
+			$s.="<script>$(document).ready( function(){
+				  $('.rounded').corners();
+				  $('.exercise_options').corners();
+				});</script>";
+			$s.="<div class=\"rounded exercise_questions\" style=\"width: 720px; padding: 3px; background-color:#ccc;\">";
+		
+		} else {
+			$option_ie="margin-left:10px";
+		}
+		$s.="<table width=\"720\" class='exercise_options' style=\"width: 720px;$option_ie background-color:#fff;\">";
 		// construction of the Answer object
 		$objAnswerTmp=new Answer($questionId);
 
@@ -118,7 +126,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 			$oFCKeditor->ToolbarSet = "FreeAnswer";
 			$oFCKeditor->Width  = '100%';
-			$oFCKeditor->Height = '300';
+			$oFCKeditor->Height = '200';
 			$oFCKeditor->Value	= '' ;
 
 			$s .= "<tr><td colspan='2'>".$oFCKeditor->CreateHtml()."</td></tr>";
@@ -255,6 +263,9 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				}
 			}
 		}	// end for()
+		if (!ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) {
+			$s .= '</table>';
+		}
 		$s .= '</div>';
 
 		// destruction of the Answer object

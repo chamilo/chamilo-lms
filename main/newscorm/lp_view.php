@@ -332,7 +332,7 @@ else
 	</style>
 	<table>
 	<tr><td valign="top">
-	<div id="learningPathLeftZone" style="float: left; width: 320px;">
+	<div id="learningPathLeftZone" style="float: left; width: 330px;">
 	
 		<div id="header">
 	        <div id="learningPathHeader" style="font-size:14px; padding-left: 17px;">
@@ -382,27 +382,27 @@ else
 	$mediaplayer = $_SESSION['oLP']->get_mediaplayer();
 ?>
 			<div id="lp_navigation_elem" class="lp_navigation_elem">
-			<div style="float:right; margin-top:184px; margin-right:35px;">
+			<div style="position:relative;float:right; margin-top:184px; margin-right:35px;">
 				<?php echo $progress_bar; ?>
 			</div>	
-				<div style="float:right; margin-top:113px;margin-right:-110px;">
+				<div style="position:relative;float:right; margin-top:113px;margin-right:-110px;">
 				<?php echo $navigation_bar; ?>
 				</div>
 				</div>
 			</div>
 			</div>
-				<div id="media" style="float:right; margin:6px 34px;" >
+				<div id="media" style="float:right; margin:15px 34px;" >
 				<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
 				</div>
 	     	</div>
 	    </div>	
 	<div id="message_id" name="message_name" class="message">
-	        <div id="msg_div_id" class="message">
+	        <div id="msg_div_id" class="message" style="margin:10px 70px;">
 	        <?php echo $error = $_SESSION['oLP']->error; ?>
 	        </div>
      </div>
-        <div id="toc_id" name="toc_name" class="lp_toc" style="padding:0;margin:0">
-  			<div id="learningPathToc" style="width:320px;overflow-y:auto;overflow-x:hidden;font-size:8pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
+        <div id="toc_id" name="toc_name" class="lp_toc" style="padding:8px 0;margin:0;">
+  			<div id="learningPathToc" style="width:330px;overflow-y:auto;overflow-x:hidden;font-size:8pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
         </div>
         
         <div id="lp_log_id" name="lp_log_name" class="lp_log">

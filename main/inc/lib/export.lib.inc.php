@@ -159,10 +159,11 @@ class Export
             $string .= "\n".str_repeat("\t",$level).'<'.$row['name'].'>';
             if (is_array($row['value'])) {
             	$string .= Export::_export_complex_table_xml_helper($row['value'],$level+1)."\n";
+                $string .= str_repeat("\t",$level).'</'.$row['name'].'>';
             } else {
                 $string .= $row['value'];
+                $string .= '</'.$row['name'].'>';
             }
-            $string .= str_repeat("\t",$level).'</'.$row['name'].'>';
         }
         return $string;
     }

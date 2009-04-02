@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 19430 2009-03-30 20:28:21Z cvargas1 $
+<?php // $Id: question.class.php 19517 2009-04-02 21:59:06Z cvargas1 $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 19430 2009-03-30 20:28:21Z cvargas1 $
+* 	@version $Id: question.class.php 19517 2009-04-02 21:59:06Z cvargas1 $
 */
 
 
@@ -645,8 +645,9 @@ abstract class Question
 			if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-				$sql="INSERT INTO $TBL_ANSWERS (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '".Database::escape_string($this->id)."', '', NULL , '', NULL , '1', '0;0|0|0', 'square')";
+				$sql="INSERT INTO $TBL_ANSWERS (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
 				api_sql_query($sql,__FILE__,__LINE__);
+				
             }
 
             if (api_get_setting('search_enabled')=='true') {

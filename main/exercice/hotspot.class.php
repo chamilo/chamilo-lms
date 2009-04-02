@@ -69,11 +69,12 @@ class HotSpot extends Question {
 		if(!empty($file_info['tmp_name']))
 		{
 			$this->uploadPicture($file_info['tmp_name'], $file_info['name']);
-			list($width,$height) = getimagesize($file_info['tmp_name']);
-			if($width>=$height)
-				$this->resizePicture('width',544);
-			else
-				$this->resizePicture('height',408);
+				list($width,$height) = @getimagesize($file_info['tmp_name']);
+				if($width>=$height) {
+					$this->resizePicture('width',544);
+				} else {
+					$this->resizePicture('height',408);
+				}
 			$this->save();
 		}
 	}

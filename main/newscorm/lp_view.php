@@ -191,8 +191,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
   			<div id="learningPathToc" style="width:300px;overflow-y:auto;overflow-x:hidden;font-size:8pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
         </div>
         <div id="nav_id" name="nav_name" class="lp_nav">
-	        
-	        <?php 
+				<?php 
 				$display_mode = $_SESSION['oLP']->mode;		
 				$scorm_css_header=true;
 				$lp_theme_css=$_SESSION['oLP']->get_theme();	
@@ -208,9 +207,8 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 				$progress_bar = $_SESSION['oLP']->get_progress_bar('',-1,'',true);	
 				$navigation_bar = $_SESSION['oLP']->get_navigation_bar();	
 				$mediaplayer = $_SESSION['oLP']->get_mediaplayer();	
-													
-			?>
-			<div id="lp_navigation_elem" class="lp_navigation_elem">
+				?>
+				<div id="lp_navigation_elem" class="lp_navigation_elem">
 				<table border="0" width="100%" style="text-align:center">
 					<tr>						
 						<td colspan="2" style="font-size:11.5pt">						
@@ -334,7 +332,7 @@ else
 	</style>
 	<table>
 	<tr><td valign="top">
-	<div id="learningPathLeftZone" style="float: left; width: 300px;">
+	<div id="learningPathLeftZone" style="float: left; width: 320px;">
 	
 		<div id="header">
 	        <div id="learningPathHeader" style="font-size:14px; padding-left: 17px;">
@@ -350,73 +348,61 @@ else
 	            </table>
 	        </div>
         </div>
-        
-        <div id="author_image" name="author_image" class="lp_author_image">
-			<?php $image = '../img/lp_author_background.gif'; ?>
-	        <div id="image_preview">
-	            <table style="width: 285px; height:110px; background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat">
-	                <tr>
-	                    <td>
-	                    <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-	                        <img alt="" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
-	                    <?php else:
-	                        echo Display::display_icon('unknown_250_100.jpg',' ');
-	                    endif; ?>
-	                    </td>
-	                </tr>
-	            </table>
-	            <div id="author_name">
-	                <?php echo $_SESSION['oLP']->get_author(); ?>
-	            </div>
+   	  	<div id="author_image" name="author_image" class="lp_author_image">
+			<?php $image = '../img/lp_author_background.gif'; ?> 
+	 <div id="image_preview;">
+	 	<div style="width: 310px; height:140px; margin:0 20px; background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat">
+	       <div  style="float:left; margin-top:20px;margin-left:25px;">
+	          <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
+	          <img alt="" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
+	          <?php	
+	else
+		: echo Display :: display_icon('unknown_250_100.jpg', ' ');
+	endif;
+?>
 	        </div>
-        </div>
-        
-        
-        <div id="nav_id" name="nav_name" class="lp_nav">
-	        
-	        <?php 
-				$display_mode = $_SESSION['oLP']->mode;		
-				$scorm_css_header=true;
-				$lp_theme_css=$_SESSION['oLP']->get_theme();	
-				
-				//Setting up the CSS theme if exists						
-				
-				if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1 ) {
-					global $lp_theme_css;			
-				} else {
-					$lp_theme_css=$my_style;
-				}		
-							
-				$progress_bar = $_SESSION['oLP']->get_progress_bar('',-1,'',true);	
-				$navigation_bar = $_SESSION['oLP']->get_navigation_bar();	
-				$mediaplayer = $_SESSION['oLP']->get_mediaplayer();	
-													
-			?>
+	 			<div id="nav_id" name="nav_name" class="lp_nav" style="float:right; margin-top:-95px;">
+	        <?php	
+	
+
+	$display_mode = $_SESSION['oLP']->mode;
+	$scorm_css_header = true;
+	$lp_theme_css = $_SESSION['oLP']->get_theme();
+
+	//Setting up the CSS theme if exists						
+
+	if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
+		global $lp_theme_css;
+	} else {
+		$lp_theme_css = $my_style;
+	}
+
+	$progress_bar = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
+	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
+	$mediaplayer = $_SESSION['oLP']->get_mediaplayer();
+?>
 			<div id="lp_navigation_elem" class="lp_navigation_elem">
-				<table border="0" width="100%">
-					<tr>						
-						<td colspan="2" style="font-size:11.5pt">						
-						<div id="media" ><span><?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?></span></div>
-						</td>
-					</tr>					
-							
-					<tr valign="middle">
-						<td width="50%"><?php echo $progress_bar; ?></td>
-						<td width="50%"><?php echo $navigation_bar; ?></td>
-					</tr>		
-				</table>
+			<div style="float:right; margin-top:184px; margin-right:35px;">
+				<?php echo $progress_bar; ?>
+			</div>	
+				<div style="float:right; margin-top:113px;margin-right:-110px;">
+				<?php echo $navigation_bar; ?>
+				</div>
+				</div>
 			</div>
-				        
-        </div>
-        
-        <div id="message_id" name="message_name" class="message">
+			</div>
+				<div id="media" style="float:right; margin:6px 34px;" >
+				<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
+				</div>
+	     	</div>
+	    </div>	
+	<div id="message_id" name="message_name" class="message">
 	        <div id="msg_div_id" class="message">
 	        <?php echo $error = $_SESSION['oLP']->error; ?>
 	        </div>
-        </div>
-        
-  		<div id="toc_id" name="toc_name" class="lp_toc" style="padding:0;margin:0">
-  			<div id="learningPathToc" style="width:300px;overflow-y:auto;overflow-x:hidden;font-size:8pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
+     </div>
+        <div id="toc_id" name="toc_name" class="lp_toc" style="padding:0;margin:0">
+  			<div id="learningPathToc" style="width:320px;overflow-y:auto;overflow-x:hidden;font-size:8pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
         </div>
         
         <div id="lp_log_id" name="lp_log_name" class="lp_log">
@@ -424,9 +410,7 @@ else
 	        </div>
 	        <div style="color: white;" onClick="cleanlog();">.</div>
         </div>
-
-        
-    </div>
+		</div>
     </td><td align="left" width="100%" valign="top">
     <div id="learningPathRightZone">
         <iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0" style="height:600px;width: 100%"></iframe>

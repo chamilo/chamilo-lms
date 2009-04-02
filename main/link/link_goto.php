@@ -1,4 +1,4 @@
-<?php // $Id: link_goto.php 9246 2006-09-25 13:24:53Z bmol $ 
+<?php // $Id: link_goto.php 19491 2009-04-02 00:15:47Z iflorespaz $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -32,7 +32,7 @@
 * ?link_id=$myrow[0]&link_url=$myrow[1]                           |
 * url is given to avoid a new select          
 *
-* @author Thomas Depraetere, Hugues Peeters, Christophe Gesché - original versions
+* @author Thomas Depraetere, Hugues Peeters, Christophe Geschï¿½ - original versions
 * @package dokeos.link
 ============================================================================== 
 */
@@ -48,8 +48,8 @@ $this_section=SECTION_COURSES;
 
 include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
 
-$link_url = $_GET['link_url'];
-$link_id = $_GET['link_id'];
+$link_url = Security::remove_XSS($_GET['link_url']);
+$link_id = Security::remove_XSS($_GET['link_id']);
 
 // launch event
 event_link($link_id);

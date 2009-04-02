@@ -153,11 +153,11 @@ $rs = api_sql_query($sql, __FILE__, __LINE__);
 $lp_title = Database::result($rs, 0, 0);
 	
 
-echo '<div align="left" style="float:left"><h4>'.$_course['title'].' - '.$lp_title.' - '.$name.'</h4></div>
-	  <div align="right">
+echo '<div class ="actions"><div align="left" style="float:left;margin-top:2px;" ><strong>'.$_course['title'].' - '.$lp_title.' - '.$name.'</strong></div>
+	  <div  align="right">
 			<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 			<a href="'.api_get_self().'?export=csv&'.$_SERVER['QUERY_STRING'].'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-		 </div>
+		 </div></div>
 	<div class="clear"></div>';
 
 $list = learnpath :: get_flat_ordered_items_list($lp_id);

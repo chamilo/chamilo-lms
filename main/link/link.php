@@ -1,4 +1,4 @@
-<?php // $Id: link.php 19254 2009-03-24 22:18:53Z cvargas1 $
+<?php // $Id: link.php 19491 2009-04-02 00:15:47Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -197,16 +197,18 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 	// has been submitted yet, hence !isset($submitLink)
 	if (($_GET['action']=="addlink" or $_GET['action']=="editlink") and empty($_POST['submitLink']))
 	{
+		echo '<div class="actions-title">';
 		if ($_GET['action']=="addlink")
 			{echo '<div class="form_header">'.get_lang("LinkAdd").'</div>';}
 		else
 			{echo '<div class="form_header">'.get_lang("LinkMod").'</div>';}
+		echo '</div>';
 		if ($category=="")
 			{$category=0;}
-		echo "<form method=\"post\" action=\"".api_get_self()."?action=".$_GET['action']."&amp;urlview=".$urlview."\">";
+		echo "<form method=\"post\" action=\"".api_get_self()."?action=".Security::remove_XSS($_GET['action'])."&amp;urlview=".$urlview."\">";
 		if ($_GET['action']=="editlink")
 		{
-			echo "<input type=\"hidden\" name=\"id\" value=\"".$_GET['id']."\" />";
+			echo "<input type=\"hidden\" name=\"id\" value=\"".Security::remove_XSS($_GET['id'])."\" />";
 		}
 
 		echo "<table><tr>"
@@ -224,20 +226,18 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 		$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
 		$resultcategories = api_sql_query($sqlcategories)or die("Error: " . mysql_error());
 
-		if(mysql_num_rows($resultcategories))
-		{
+		if (Database::num_rows($resultcategories)) {
 			echo	"<tr><td align=\"right\">".get_lang("Category")." :</td><td>",
 					"<select name=\"selectcategory\">",
 					"<option value=\"0\">--</option>";
 
-			while ($myrow = mysql_fetch_array($resultcategories))
-			{
+			while ($myrow = Database::fetch_array($resultcategories)) {
 				echo "<option value=\"".$myrow["id"]."\"";
 				if ($myrow["id"]==$category)
 					{echo " selected";}
 				echo ">".$myrow["category_title"]."</option>";
 			}
-			echo "</select></td></tr>";
+			    echo "</select></td></tr>";
 		}
 
 		echo "<tr><td align=\"right\">".get_lang("OnHomepage")." ? </td><td><input class=\"checkbox\" type=\"checkbox\" name=\"onhomepage\" id=\"onhomepage\" value=\"1\" $onhomepage><label for=\"onhomepage\"> ".get_lang("Yes")."</label></td></tr>";
@@ -253,7 +253,7 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 				$default_values = '';
                 if ($_GET['action']=="editlink")
 				{
-					$filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $_GET['id'], 'tool_id' => '\''. TOOL_LINK .'\'');
+					$filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => Security::remove_XSS($_GET['id']), 'tool_id' => '\''. TOOL_LINK .'\'');
 					$values = get_specific_field_values_list($filter, array('value'));
 					if ( !empty($values) ) {
 						$arr_str_values = array();
@@ -276,13 +276,13 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 	}
 	elseif(($_GET['action']=="addcategory" or $_GET['action']=="editcategory") and !$submitCategory)
 	{
-		echo "<h4>";
+		echo "<div class='actions-title'>";
 		if ($_GET['action']=="addcategory")
 			{echo '<div class="form_header">'.get_lang('CategoryAdd').'</div>';}
 		else
 			{echo '<div class="form_header">'.get_lang('CategoryMod').'</div>';}
-		echo "</h4>\n\n";
-		echo "<form method=\"post\" action=\"".api_get_self()."?action=".$_GET['action']."&amp;urlview=".$urlview."\">";
+		echo "</div>\n\n";
+		echo "<form method=\"post\" action=\"".api_get_self()."?action=".Security::remove_XSS($_GET['action'])."&amp;urlview=".$urlview."\">";
 		if ($_GET['action']=="editcategory")
 		{
 			echo "<input type=\"hidden\" name=\"id\" value=\"".$id."\" />";
@@ -338,10 +338,9 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	//number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
 	$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
 	$resultcategories=api_sql_query($sqlcategories);
-	$aantalcategories = @mysql_num_rows($resultcategories);
+	$aantalcategories = Database::num_rows($resultcategories);
 	echo Display::return_icon('remove.gif', $shownone)." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
-	for($j = 1; $j <= $aantalcategories; $j++)
-	{
+	for($j = 1; $j <= $aantalcategories; $j++) {
 		echo "0";
 	}
 	echo "\">$shownone</a>";
@@ -361,7 +360,7 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	// displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
 		$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 or category_id IS NULL";
 		$result = api_sql_query($sqlLinks);
-		$numberofzerocategory=mysql_num_rows($result);
+		$numberofzerocategory=Database::num_rows($result);
 		
 		if ($numberofzerocategory!==0)
 		{
@@ -373,8 +372,8 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	$i=0;
 	$catcounter=1;
 	$view="0";
-	
-	while ($myrow=@mysql_fetch_array($resultcategories))
+
+	while ($myrow=Database::fetch_array($resultcategories))
 	{
 		if (!isset($urlview))
 		{
@@ -447,5 +446,4 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 
 
 Display::display_footer();
-
 ?>

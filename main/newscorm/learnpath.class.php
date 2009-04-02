@@ -2721,7 +2721,7 @@ class learnpath {
     			$title = rl_get_resource_name(api_get_course_id(),$this->get_id(),$item['id']);    			
     		}
     		
-    		$title = html_entity_decode($title,ENT_QUOTES,$this->encoding);	
+    		$title = utf8_decode(html_entity_decode($title,ENT_QUOTES,$this->encoding));	
     	
     		if($item['type']!='dokeos_chapter' and $item['type']!='dir' AND $item['type']!='dokeos_module')
     		{

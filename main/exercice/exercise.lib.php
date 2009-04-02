@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 19407 2009-03-29 19:37:05Z herodoto $
+<?php // $Id: exercise.lib.php 19504 2009-04-02 16:12:27Z iflorespaz $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 19407 2009-03-29 19:37:05Z herodoto $
+* 	@version $Id: exercise.lib.php 19504 2009-04-02 16:12:27Z iflorespaz $
 */
 
 /**
@@ -42,8 +42,8 @@
 require("../inc/lib/fckeditor/fckeditor.php") ;
 function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_item, $total_item)
 {
-	echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
-	echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
+	//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
+	//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
 	
 	// reads question informations
 	if(!$objQuestionTmp = Question::read($questionId))
@@ -73,16 +73,13 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			echo $s;
 			echo ' : ';		
 			
-			$s =$questionName.'</div>';
-			$s.="<table class='exercise_questions'>
-			<tr>
-			  <td valign='top' colspan='2'>
-				";
+			echo $questionName.'</div>';
+			$s='';
+			$s.="<table class='exercise_questions' style='margin:5px;padding:5px;'>
+				<tr><td valign='top' colspan='2'>";
 			$questionDescription=api_parse_tex($questionDescription);
 			$s.=$questionDescription;
-			$s.="
-			  </td>
-			</tr>";
+			$s.="</td></tr></table>";
 	
 			if(!empty($pictureName))
 			{
@@ -94,11 +91,12 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 		}  
 		$s.= '</table>';
-		$s.="<script>$(document).ready( function(){
+		/*$s.="<script>$(document).ready( function(){
 			  $('.rounded').corners();
 			  $('.exercise_options').corners();
-			});</script>";
-		$s.="<div class=\"rounded exercise_questions\" style=\"width: 720px; padding: 3px; background-color:#ccc;\"><table width=\"720\" class='exercise_options' style=\"width: 720px; background-color:#fff;\">";
+			});</script>";*/
+		//$s.="<div class=\"rounded exercise_questions\" style=\"width: 720px; padding: 3px; background-color:#ccc;\">
+		$s.="<table width=\"720\" class='exercise_options' style=\"width: 720px;margin-left:10px; background-color:#fff;\">";
 		// construction of the Answer object
 		$objAnswerTmp=new Answer($questionId);
 
@@ -257,7 +255,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				}
 			}
 		}	// end for()
-		$s .= '</table></div>';
+		$s .= '</div>';
 
 		// destruction of the Answer object
 		unset($objAnswerTmp);

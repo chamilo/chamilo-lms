@@ -216,7 +216,7 @@ if (isset($_POST['save_audio']))
 	{
 		$sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE id IN (".$in.")";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-	}
+	}		
 	
 	// uploading the audio files
 	foreach ($_FILES as $key=>$value)
@@ -237,14 +237,32 @@ if (isset($_POST['save_audio']))
 				$audio_id=add_document($_course,'/audio','folder',0,'audio');
 				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id());				
 			}
-			// upload the file in the documents tool			
-			include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-			$file_path = handle_uploaded_document($_course, $_FILES[$key],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);			
-			
-			// getting the filename only
-			$file_components = explode('/',$file_path);
-			$file = $file_components[count($file_components)-1];
-			
+		
+			// check if file already exits into document/audio/			
+			$file_name = $_FILES[$key]['name'];
+			$file_name=stripslashes($file_name);
+			//add extension to files without one (if possible)
+			$file_name=add_ext_on_mime($file_name,$_FILES[$key]['type']);
+						
+			$clean_name = replace_dangerous_char($file_name);
+			$clean_name = replace_accents($clean_name);
+			//no "dangerous" files
+			$clean_name = disable_dangerous_file($clean_name);			
+
+			$check_file_path = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/audio/'.$clean_name;
+						
+			if (file_exists($check_file_path)) {
+				$file = $clean_name;	
+			} else {
+				// upload the file in the documents tool
+				include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+				$file_path = handle_uploaded_document($_course, $_FILES[$key],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);									
+								
+				// getting the filename only
+				$file_components = explode('/',$file_path);
+				$file = $file_components[count($file_components)-1];	
+			}
+
 			// store the mp3 file in the lp_item table
 			$tbl_lp_item = Database::get_course_table('lp_item');
 			$sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' WHERE id = '".Database::escape_string($lp_item_id)."'";

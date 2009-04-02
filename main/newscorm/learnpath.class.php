@@ -8191,6 +8191,7 @@ class learnpath {
                                 }
 								//$file_path = realpath(api_get_path(SYS_PATH).$doc_info[0]);
 								$file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
+                                $file_path = str_replace('\\','/',$file_path);
                                 $file_path = str_replace('//','/',$file_path);
                                 //error_log(__LINE__.'Abs path: '.$file_path,0);
 								//prepare the current directory path (until just under 'document') with a trailing slash

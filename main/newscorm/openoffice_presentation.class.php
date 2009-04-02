@@ -100,14 +100,18 @@ class OpenofficePresentation extends OpenofficeDocument {
 			// create an html file
 			$html_file = $file_name.'.html';
 			$fp = fopen($this->base_work_dir.$this->created_dir.'/'.$html_file, 'w+');
-			
+
+			$slide_src = api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$this->created_dir.'/'.utf8_encode($file_name);
+			$slide_src = str_replace('//', '/', $slide_src);
 			fwrite($fp,
-					'<html>
-					<head></head>
-					<body>
-						<img src="'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$this->created_dir.'/'.utf8_encode($file_name).'" />
-					</body>
-					</html>');
+'<html>
+	<head>
+	</head>
+	<body>
+		<img src="'.$slide_src.'" />
+	</body>
+</html>');  // This indentation is to make the generated html files to look well.
+
 			fclose($fp);
 			$document_id = add_document($_course,$this->created_dir.'/'.urlencode($html_file),'file',filesize($this->base_work_dir.$this->created_dir.'/'.$html_file),$slide_name);
 			if ($document_id){	

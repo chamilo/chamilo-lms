@@ -123,6 +123,7 @@ class Export
      * @param string Name of common tag to place each line in
      * @param string Name of the root element. A root element should always be given.
      * @param string Encoding in which the data is provided
+     * @return void  Prompts the user for a file download
      */
     function export_complex_table_xml($data, $filename = 'export', $wrapper_tagname, $encoding='ISO-8859-1')
     {
@@ -146,6 +147,9 @@ class Export
     }
     /**
      * Helper for the hierarchical XML exporter
+     * @param   array   Hierarhical array composed of elements of type ('name'=>'xyz','value'=>'...')
+     * @param   int     Level of recursivity. Allows the XML to be finely presented
+     * @return string   The XML string to be inserted into the root element
      */
     function _export_complex_table_xml_helper($data,$level=1) {
     	if (count($data)<1) { return '';}

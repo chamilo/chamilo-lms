@@ -4506,10 +4506,10 @@ class learnpath {
 	{
 		echo '<div class="actions">';
 		echo '<span>'.Display::return_icon('learnpath_build.gif').' '.get_lang('Build').'</span>';
-		echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.Display::return_icon('learnpath_build.gif').' '.get_lang("BasicOverview").'</a>';
-		echo '<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.Display::return_icon('learnpath_organize.gif').' '.get_lang('Display').'</a>';
-		echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
-		echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
+		echo '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.Display::return_icon('learnpath_organize.gif').' '.get_lang("BasicOverview").'</a>';
+		echo '<a href="lp_controller.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.Display::return_icon('learnpath_view.gif').' '.get_lang('Display').'</a>';
+		echo '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
+		echo '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
 		echo '</div>';
 	}
 	

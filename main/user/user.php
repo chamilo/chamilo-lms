@@ -1,4 +1,4 @@
-<?php // $Id: user.php 19365 2009-03-26 21:44:32Z herodoto $
+<?php // $Id: user.php 19524 2009-04-03 13:01:12Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -342,8 +342,8 @@ if ( api_is_allowed_to_edit()) {
 	// the action links
 	$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'&nbsp;'.get_lang('ExportAsCSV').'</a> ';
 	$actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a> ';
-	$actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('add_user_big.gif', get_lang("SubscribeUserToCourseAsTeacher"))."&nbsp;".get_lang("SubscribeUserToCourseAsTeacher")."</a> ";
-	$actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('edit_group.gif', get_lang("GroupUserManagement"))."&nbsp;".get_lang("GroupUserManagement")."</a>";
+	$actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('add_teacher_big.gif', get_lang("SubscribeUserToCourseAsTeacher"))."&nbsp;".get_lang("SubscribeUserToCourseAsTeacher")."</a> ";
+	$actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('group.gif', get_lang("GroupUserManagement"))."&nbsp;".get_lang("GroupUserManagement")."</a>";
 	if (api_get_setting('use_session_mode')=='false') {
 		$actions .= ' <a href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
 	}

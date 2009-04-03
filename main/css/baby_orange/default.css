@@ -198,11 +198,11 @@ a.breadcrumb0 {
 }
 /* main styles */
 #main {
-	padding-left: 30px;
+	//padding-left: 30px;
 	position: relative;
 	min-height: 320px;
 	padding-left: 15px;
-	padding-right: 15px;
+	padding-right: 5px;
 	padding-bottom: 5px;
 }
 /* my courses styles */
@@ -212,7 +212,7 @@ a.breadcrumb0 {
 	min-height: 333px;
 	margin-top:0;
 	float: right;
-	clear: right;	
+	clear: right;
 }
 .coursestatusicons {
 	border: 0px solid #000;
@@ -221,7 +221,7 @@ a.breadcrumb0 {
 	width: auto;
 }
 .courseslist {
-	margin-left: -25px;
+	
 }
 .courses {
 	list-style-type: none;
@@ -332,23 +332,23 @@ form span.form_error {
 /* feedback messages */
 .confirmation-message,.error-message,.normal-message,.warning-message {
 	border: 1px solid #EE8003;
-	margin: 1em auto;
-	padding: 8px 0 12px 0;
+	margin: 6px 6px 10px 10px;
+	padding: 6px;
 	position: relative;
 	width: 98%;
 	color: #EE4C03;
 	//This image is wrong size, so is commented until one solution
 	//background: transparent url('images/alert.jpg') no-repeat 10px 5px;
 	font: bold 110% Arial, sans-serif, sans;
-	line-height: 2.5em;
+	min-height: 30px;
 }
 .confirmation-message img,.error-message img,.normal-message img,.warning-message img
 	{
-	//position: absolute;
-	margin-left: 10px;
+	float:left;
+	//margin-left: 10px;
 }
-.confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link
-{
+ .confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link
+{	
 	position: absolute;
 	bottom: 0.2em;
 	right: 0.5em;

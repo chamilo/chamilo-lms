@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 19389 2009-03-27 21:14:44Z juliomontoya $
+<?php // $Id: whoisonline.php 19531 2009-04-03 17:24:14Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -19,10 +19,6 @@
 	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
-/**
- * @todo use the correct api_get_path instead of $clarolineRepositoryWeb
- */
-
 
 /**
 ==============================================================================
@@ -121,7 +117,7 @@ if ($_GET['chatid'] != '') {
 	$time = time();
 	$time = date("Y-m-d H:i:s", $time);
 	$chatid = addslashes($_GET['chatid']);
-	$sql="update $track_user_table set chatcall_user_id = '".mysql_real_escape_string($_user['user_id'])."', chatcall_date = '".mysql_real_escape_string($time)."', chatcall_text = '' where (user_id = ".mysql_real_escape_string($chatid).")";
+	$sql="update $track_user_table set chatcall_user_id = '".Database::escape_string($_user['user_id'])."', chatcall_date = '".Database::escape_string($time)."', chatcall_text = '' where (user_id = ".Database::escape_string($chatid).")";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 	//redirect caller to chat
@@ -144,16 +140,18 @@ function display_user_list($user_list, $_plugins)
 			$extra_params['cidReq'] = Database::escape_string($_GET['cidReq']);
 			$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
 		}		
-		foreach($user_list as $user) {
+		foreach ($user_list as $user) {
 			$uid=$user[0];
 			$user_info = api_get_user_info($uid);
 			$table_row = array();
 			$url = '?id='.$uid.$course_url;
             $image_array=UserManager::get_user_picture_path_by_id($uid,'web',false,true);
-                                              
-            $table_row[] = '<a href="'.$url.'"><img src="'.$image_array['dir'].$image_array['file'].'" border="1" height="110"></a>';                     
-			$table_row[] = '<a href="'.$url.'">'.$user_info['firstName'].'</a>';
-			$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
+            
+            //reduce image
+            $table_row[] = '<a href="'.$url.'"><img src="'.$image_array['dir'].$image_array['file'].'" border="1" width="130"></a>';
+			$table_row[] = '<a href="'.$url.'">'.$user_info['firstName'].' '.$user_info['lastName'].'</a>';
+			
+			//$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
 			
 			if (api_get_setting('show_email_addresses') == 'true') {
 				$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
@@ -163,31 +161,25 @@ function display_user_list($user_list, $_plugins)
 				if ($user_info['user_id'] != api_get_user_id() && !api_is_anonymous($user_info['user_id'])) {
 					$user_relation=UserFriend::get_relation_between_contacts(api_get_user_id(),$user_info['user_id']);
 					if ($user_relation==0 || $user_relation==6) {
-						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SearchContacts').'"><img src="main/img/addd.gif"></a>';	
+						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SocialAddToFriends').'">'.get_lang('SocialAddToFriends').'</a><br />
+										<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.get_lang('SendAMessage').'</a>';
 					} else {
-						$table_row[] = '<img src="main/img/add_na.gif">';
-					}
-				
+						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.get_lang('SendAMessage').'</a>';
+					}				
 				}
-			}			
-			//this feature is deprecated
-			/*
-			if ( api_get_setting('allow_message_tool')=='true'  && isset($_SESSION['_user']) ) {
-				$table_row[] = '<a href="' . api_get_path(WEB_PLUGIN_PATH).'messages/new_message.php?send_to_user=' . $uid. '"><img src="./main/img/forum.gif" alt="'.get_lang("ComposeMessage").'" align="middle"></img></a>';
 			}
-			*/
 			$table_data[] = $table_row;
 		}
 		$table_header[] = array(get_lang('UserPicture'),false,'width="80"');
-		$table_header[] = array(get_lang('FirstName'),true);
-		$table_header[] = array(get_lang('LastName'),true);
+		$table_header[] = array(get_lang('Name'),false);
+		//$table_header[] = array(get_lang('LastName'),true);
 		
 		if (api_get_setting('show_email_addresses') == 'true') {
 			$table_header[] = array(get_lang('Email'),true);
 		}
 		$user_anonymous=api_get_anonymous_id();
 		if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) {
-			$table_header[] = array(get_lang('Friends'),false,'width="100"');
+			$table_header[] = array(get_lang('Friends'),false,'width="130"');
 		}		
 		/*this feature is deprecated
 		if ( api_get_setting('allow_message_tool')=='true' && isset($_SESSION['_user'])) {
@@ -265,13 +257,11 @@ function display_individual_user($user_id)
 		}
 		echo $status.'<br />';
 		echo '</div>';
-		if ($user_object->competences)
-		{
+		if ($user_object->competences) {
 			echo '<dt><strong>'.get_lang('MyCompetences').'</strong></dt>';
 			echo '<dd>'.$user_object->competences.'</dd>';
 		}
-		if ($user_object->diplomas)
-		{
+		if ($user_object->diplomas) {
 			echo '<dt><strong>'.get_lang('MyDiplomas').'</strong></dt>';
 			echo '<dd>'.$user_object->diplomas.'</dd>';
 		}
@@ -297,41 +287,34 @@ function display_individual_user($user_id)
  * @todo use the correct api_get_path instead of $clarolineRepositoryWeb
  */
 function display_productions($user_id)
-{
-	global $clarolineRepositoryWeb, $disabled_output;
+{	
 	$sysdir_array = UserManager::get_user_picture_path_by_id($user_id,'system');
 	$sysdir = $sysdir_array['dir'].$user_id.'/';
 	$webdir_array = UserManager::get_user_picture_path_by_id($user_id,'web');	
 	$webdir = $webdir_array['dir'].$user_id.'/';
-	if( !is_dir($sysdir))
-	{
+	if( !is_dir($sysdir)) {
 		mkpath($sysdir);
 	}
 	$handle = opendir($sysdir);
 	$productions = array();
-	while ($file = readdir($handle))
-	{
-		if ($file == '.' || $file == '..' || $file == '.htaccess')
-		{
+	while ($file = readdir($handle)) {
+		if ($file == '.' || $file == '..' || $file == '.htaccess') {
 			continue;						// Skip current and parent directories
 		}
 		$productions[] = $file;
 	}
-	if(count($productions) > 0)
-	{
+	if(count($productions) > 0)	{
 		echo '<dt><strong>'.get_lang('Productions').'</strong></dt>';
 		echo '<dd><ul>';
-		foreach($productions as $index => $file)
-		{
+		foreach($productions as $index => $file) {
 			// Only display direct file links to avoid browsing an empty directory
 			if(is_file($sysdir.$file) && $file != $webdir_array['file']){
 				echo '<li><a href="'.$webdir.urlencode($file).'" target=_blank>'.$file.'</a></li>';
 			}
 			// Real productions are under a subdirectory by the User's id
-			if(is_dir($sysdir.$file)){
+			if(is_dir($sysdir.$file)) {
 				$subs = scandir($sysdir.$file);
-				foreach($subs as $my => $sub)
-				{
+				foreach($subs as $my => $sub) {
 					if(substr($sub,0,1) != '.' && is_file($sysdir.$file.'/'.$sub))
 					{
 						echo '<li><a href="'.$webdir.urlencode($file).'/'.urlencode($sub).'" target=_blank>'.$sub.'</a></li>';						
@@ -344,14 +327,10 @@ function display_productions($user_id)
 }
 
 // This if statement prevents users accessing the who's online feature when it has been disabled.
-if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR ((api_get_setting('showonline','users') == 'true' OR api_get_setting('showonline','course') == 'true') AND $_user['user_id']))
-{
-	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0)
-	{
+if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR ((api_get_setting('showonline','users') == 'true' OR api_get_setting('showonline','course') == 'true') AND $_user['user_id'])) {
+	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
 		$user_list = Who_is_online_in_this_course($_user['user_id'],api_get_setting('time_limit_whosonline'),$_GET['cidReq']);
-	}
-	else
-	{
+	} else {
 		$user_list = WhoIsOnline($_user['user_id'],$_configuration['statistics_database'],api_get_setting('time_limit_whosonline'));
 	}
 
@@ -362,12 +341,9 @@ if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR 
 		Display::display_header(get_lang('UsersOnLineList'));
 		api_display_tool_title(get_lang('UsersOnLineList'));
 		echo '<b>'.get_lang('TotalOnLine').' : '.$total.'</b>';
-		if ($_GET['id']=='')
-		{
+		if ($_GET['id']=='') {
 			echo '<p><a href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
-		}
-		else
-		{
+		} else {
 			if(0) // if ($_user['user_id'] && $_GET["id"] != $_user['user_id'])
 			{
 				echo '<a href="'.api_get_self().'?chatid='.Security::remove_XSS($_GET['id']).'">'.get_lang('SendChatRequest').'</a>';

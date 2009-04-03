@@ -31,94 +31,73 @@ include_once(api_get_path(LIBRARY_PATH).'/usermanager.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'/message.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'/social.lib.php');
 api_block_anonymous_users();
+
 if (api_get_setting('allow_message_tool')<>'true' && api_get_setting('allow_social_tool')<>'true'){
 	api_not_allowed();
 }
-?>
-<?php
-    if ( isset($_REQUEST['user_friend']) ) {
-		$info_user_friend=array();
-		$info_path_friend=array();
-     	$userfriend_id=Security::remove_XSS($_REQUEST['user_friend']);
-     	$panel=Security::remove_XSS($_REQUEST['view_panel']);
-     	$info_user_friend=api_get_user_info($userfriend_id);
-     	$info_path_friend=UserManager::get_user_picture_path_by_id($userfriend_id,'web',false,true);
-    }
+
+if ( isset($_REQUEST['user_friend']) ) {
+	$info_user_friend=array();
+	$info_path_friend=array();
+ 	$userfriend_id=Security::remove_XSS($_REQUEST['user_friend']);
+ 	// panel=1  send message
+ 	// panel=2  send invitation
+ 	$panel=Security::remove_XSS($_REQUEST['view_panel']);
+ 	$info_user_friend=api_get_user_info($userfriend_id);
+ 	$info_path_friend=UserManager::get_user_picture_path_by_id($userfriend_id,'web',false,true);
+}
 ?>
 <table width="600" border="0" height="220">
-    <tr height="20">
-        <td><div class="message-top-title">
-        <table width="600" border="0" height="20">
-        <td width="450"><?php echo mb_convert_encoding(get_lang('SocialNetwork'),'UTF-8',$charset);?></td>
-<?php 
-			if (!isset($_REQUEST['view'])) {
-?>
-        <td width="150"><a href="javascript:void(0)" onclick="change_panel('3','<?php echo $userfriend_id; ?>')" ><?php echo Display::return_icon('folder_up.gif',mb_convert_encoding(get_lang('SeeMoreOptions'),'UTF-8',$charset)).'&nbsp;&nbsp;'.mb_convert_encoding(get_lang('SeeMoreOptions'),'UTF-8',$charset);?></a></td>
-<?php
-			}
-?>
-        </table>
-        </div></td>
-    </tr>
     <tr height="180">
-        <td>
-    
+        <td>    
         <div class="message-content-body-left">
 			<img class="message-image-info" src="<?php echo $info_path_friend['dir'].$info_path_friend['file']; ?>"/>
-			<dl>
-				<dd><?php echo mb_convert_encoding(get_lang('FirstName'),'UTF-8',$charset).' : '.mb_convert_encoding($info_user_friend['firstName'],'UTF-8',$charset); ?></dd>
-				<dd><?php echo mb_convert_encoding(get_lang('LastName'),'UTF-8',$charset).' : '.mb_convert_encoding($info_user_friend['lastName'],'UTF-8',$charset); ?></dd>
-			</dl>
+			<?php 
+			if ($panel != 1) {
+				echo '<br /><center>'.mb_convert_encoding($info_user_friend['firstName'].' '.$info_user_friend['lastName'],'UTF-8',$charset).'</center>'; 					
+			}
+			?>
 		</div>
 <div class="message-conten-body-right">
-<div id="id_content_panel_init"><!--init content changed -->
+<div id="id_content_panel_init">
 			<dl>
 <?php 
-			if (!isset($_REQUEST['view'])) {
-?>
-				<dd><a href="javascript:void(0)" onclick="change_panel('2','<?php echo $userfriend_id; ?>')"><?php echo mb_convert_encoding(get_lang('SendInviteMessage'),'UTF-8',$charset);?></a></dd>
+		/*if ($panel == 1) {
+		<dd><a href="javascript:void(0)" onclick="change_panel('2','<?php echo $userfriend_id; ?>')"><?php echo mb_convert_encoding(get_lang('SendInviteMessage'),'UTF-8',$charset);?></a></dd>' .
+		}
+		<input type="button" value="<?php echo mb_convert_encoding(get_lang('NewMessage'),'UTF-8',$charset); ?>" onclick="hide_display_message()" />&nbsp;&nbsp;&nbsp;
+		**/		
+		if (api_get_setting('allow_message_tool')=='true') {
+			if ($panel == 1) {
+		   		 $user_info=api_get_user_info($userfriend_id);
+		  		 echo mb_convert_encoding(get_lang('To'),'UTF-8',$charset); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo mb_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset); ?>
+		  		 <br/>
+		 		 <br/><?php echo mb_convert_encoding(get_lang('Subject'),'UTF-8',$charset); ?> :<br/><input id="txt_subject_id" type="text" style="width:300px;"><br/>
+		   		 <br/><?php echo mb_convert_encoding(get_lang('Message'),'UTF-8',$charset); ?> :<br/><textarea id="txt_area_invite" rows="4" cols="41"></textarea>
+		   		 <br /><br />		    	  
+		   		 <input type="button" value="<?php echo get_lang('SendMessage'); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')" />
 <?php
-			}
-?>
-<?php       
-			if (api_get_setting('allow_message_tool')=='true') {
-				if  (isset($_REQUEST['view_panel'])) {
-?>
-<?php 
-			   		$user_info=api_get_user_info($userfriend_id);
-			  		 echo mb_convert_encoding(get_lang('To'),'UTF-8',$charset); ?> &nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;<?php echo mb_convert_encoding($user_info['firstName'],'UTF-8',$charset); ?>
-			 		 <br/><?php echo mb_convert_encoding(get_lang('subject'),'UTF-8',$charset); ?> :<br/><input id="txt_subject_id" type="text" style="width:200px;">
-			   		 <br/><?php echo mb_convert_encoding(get_lang('Message'),'UTF-8',$charset); ?> :<br/><textarea id="txt_area_invite" rows="3" cols="25"></textarea>
-			    	 <input type="button" value="<?php echo mb_convert_encoding(get_lang('NewMessage'),'UTF-8',$charset); ?>" onclick="hide_display_message()" />&nbsp;&nbsp;&nbsp; 
-			   		 <input type="button" value="<?php echo get_lang('SendMessage'); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')" />
-
-<?php
-				} else {
-?>
-	<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $userfriend_id; ?>')"><?php echo mb_convert_encoding(get_lang('SendMessage'),'UTF-8',$charset);?></a></dd>
+			} else {				
+				echo mb_convert_encoding(get_lang('AddPersonalMessage'),'UTF-8',$charset);  ?> :<br/><br/>
+				<textarea id="txt_area_invite" rows="5" cols="41"></textarea><br /><br />
+						    
+		    	<input type="button" value="<?php echo mb_convert_encoding(get_lang('SocialAddToFriends'),'UTF-8',$charset); ?>" onclick="action_database_panel('4','<?php echo $userfriend_id;?>')" />
 <?php					
 				}
-?>
-
-<?php
 			}
-?>
-<?php
 			if (!isset($_REQUEST['view'])) {
 				//<dd><a href="main/social/index.php#remote-tab-5"> echo get_lang('SocialSeeContacts'); </a></dd>
-?>
-<?php
 			}
 ?>
-			</dl>
-			
-</div><!-- end content changed-->
+			</dl>			
+</div>
         </td>
     </tr>
         </div>
     <tr height="22">
         <td>
-<div id="display_response_id" style="position:relative"></div>
-<div class="message-bottom-title">&nbsp;</div></td>
-    </tr>
+			<div id="display_response_id" style="position:relative"></div>
+			<div class="message-bottom-title">&nbsp;</div>
+		</td>
+	</tr>
 </table>

@@ -517,7 +517,7 @@ echo '<div id="social-profile-wrapper">';
 							if ($k==0) $margin_top = 0;
 							$friend_html.='<a href="profile.php?u='.$list_friends_id[$j].'&amp;'.$link_shared.'">';
 								$friend_html.='<img src="'.$list_friends_dir[$j]."/".$list_friends_file[$j].'" width="90px" height="110px" style="margin-left:3px;margin-right:3px;margin-top:'.$margin_top.'px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" />';
-								$friend_html.= '<br />'.$my_user_info['firstName'].'<br />'.$my_user_info['lastName'];
+								$friend_html.= '<br /><div style="margin-left:10px">'.$my_user_info['firstName'].'<br />'.$my_user_info['lastName'].'</div>';
 							$friend_html.= '</a>';
 							$friend_html.= '</div>&nbsp;';				
 						}
@@ -585,6 +585,7 @@ echo '<div id="social-profile-wrapper">';
 			foreach ($course_list_code as $course) { 
 				$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code']);
 			}
+			
 			if (!empty($file_list)) {
 				echo '<div class="clear"></div><br />';
 				echo '<div class="actions-profile">';
@@ -600,8 +601,9 @@ echo '<div id="social-profile-wrapper">';
 			
 			//-- Competences
 			if (!empty($user_info['competences']) || !empty($user_info['diplomas']) || !empty($user_info['openarea']) || !empty($user_info['teach']) ) {
-				echo '<div class="actions-profile">';
-				echo get_lang('MoreInfo');
+				echo '<div class="clear"></div>';
+				echo '<div class="actions-profile">';				
+				echo get_lang('MoreInformation');
 				echo '</div>';
 			}
 			$cut_size = 220;
@@ -652,10 +654,9 @@ echo '<div id="social-profile-container">';
     	  		echo Display::return_icon('email.gif');
     	  		echo '&nbsp;&nbsp;<a href="../social/index.php#remote-tab-2">'.get_lang('MyInbox').'</a><br />'; 
     	  		echo Display::return_icon('edit.gif');
-    	  		echo '&nbsp;&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>';
-    	  			
+    	  		echo '&nbsp;&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>';    	  			
     	  	} else {
-    	  		echo '&nbsp;&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=true" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />'; 
+    	  		echo '&nbsp;&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendAMessage').'</a><br />'; 
     	  		//echo '&nbsp;&nbsp;<a href="#">'.get_lang('SendMessage').'</a>';	
     	  	}
     	  	echo '<br /><br />';

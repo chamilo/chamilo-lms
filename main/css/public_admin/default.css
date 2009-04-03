@@ -774,18 +774,15 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 /* normal and erro message-box */
 .normal-message {
 	position: relative;
-	margin: 10px auto 10px 10px;
-	//margin-left: -250px;
+	margin: 5px 0 0 10px;
 	width: 98%;
-	left: 0.1%;
-	//right: 50%;
+	min-height: 30px;	
 	border-width: 1px;
 	border-style: solid;
-	padding: 5px;
 	border: 1px solid #dcdcdc;
+	padding: 5px;
 	color: #000080;
 	background-color: #E5EDF9;
-	min-height: 30px;	
 }
 .warning-message {
 	position: relative;
@@ -804,14 +801,11 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 }
 .confirmation-message {
 	position: relative;
-	margin: 5px 1px 0 10px;
-	//margin-left: 2px;
-	//margin: 10px auto 10px;
+	margin: 5px 0 0 10px;
 	width: 98%;
-	//right: 50%;
 	border-width: 1px;
 	border-style: solid;
-	padding: 5px;
+	padding:5px;
 	border: 1px solid #1F8323;
 	color: #2F4F4F;
 	background-color: #CAF0C7;

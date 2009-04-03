@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 19506 2009-04-02 16:43:17Z cfasanando $ 
+<?php // $Id: scorm_api.php 19520 2009-04-03 00:40:36Z cfasanando $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -858,7 +858,9 @@ function update_toc(update_action,update_id)
 						myelem.attr('class',"scorm_item_1");
 					}
 					break;
-				case 'highlight':					
+				case 'highlight':
+					lms_next_item = update_id;
+					lms_previous_item = update_id;						 				
 					myelem.attr('class',"scorm_item_highlight");
 					break;
 				case 'not attempted':   					
@@ -993,8 +995,9 @@ function switch_item(current_item, next_item){
 		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
 	}
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
-	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);
+	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);		
 	
+	//alert(lms_next_item);		
 	//(3) open the new item in the content_id frame
 	switch(next_item){
 		case 'next':

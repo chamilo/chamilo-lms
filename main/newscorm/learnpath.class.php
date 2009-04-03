@@ -1462,6 +1462,22 @@ class learnpath {
 		if($this->debug>2){error_log('New LP - In learnpath::get_current_item_id() - Returning '.$current,0);}
     	return $current;
     }
+    
+    
+     /** Force to get the first learnpath item id
+     * @return	integer	The current learnpath item id
+     */
+    function get_first_item_id()
+    {
+		$current = 0;
+		if (is_array($this->ordered_items)) {
+			$current = $this->ordered_items[0];
+		}
+    	return $current;
+    }
+    
+    
+    
     /**
      * Gets the total number of items available for viewing in this SCORM
      * @return	integer	The total number of items

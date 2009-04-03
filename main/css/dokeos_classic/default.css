@@ -775,12 +775,12 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 }
 .message-content-body-left{
     float:left;
-	width:55%;  
+	/*width:55%;  */
 }
 .message-conten-body-right {
 	float:right;   
 	text-align:left;
-    width:45%;   
+    width:60%;   
 }
 .message-body-title{
 	float:right;
@@ -790,7 +790,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 	border-collapse:collapse;   
 }
 .message-image-info {
-	width:35%;
+	width:80%;
     float:left;
 	margin-top:10px;
 	margin-bottom:10px;	

@@ -4988,7 +4988,7 @@ class learnpath {
 		
 			$return .= '<div class="sectiontitle">'.get_lang('CreateNewStep').'</div>';
 		
-			$return .= '<div class="sectioncomment"><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("NewDocument").'</a></div>';
+			$return .= '<div class="sectioncomment"><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.'<img title="Nuevo documento" src="../img/new_doc.gif" alt="Nuevo documento"/> '.get_lang("NewDocument").'</a></div>';
 		
 			$return .= '<div class="sectiontitle">'.get_lang('UseAnExistingResource').'</div>';
 			

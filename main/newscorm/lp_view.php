@@ -172,6 +172,8 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
 	$_SESSION['loaded_lp_view'] = true;
 	?>
+	<table border="0" style="width:100%">
+	<tr><td width="20%">
 	<div id="learningPathLeftZone" style="float: left; width: 300px;">	
 		<div id="header">
 		        <div id="learningPathHeader" style="font-size:14px; padding-left: 17px;">
@@ -230,14 +232,16 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	        </div>
         </div>
 	</div>
+	</td><td width: "80%">
 	<div id="learningPathRightZone">
-        <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0"></iframe>
+        <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="height:500px;width: 100%"></iframe>
     </div>
 	<div id="lp_log_id" name="lp_log_name" class="lp_log">
 	        <div id="log_content">
 	        </div>
 	        <div style="color: white;" onClick="cleanlog();">.</div>
     </div>
+    </td></tr></table>
 	<script language="JavaScript" type="text/javascript">
 	// Need to be called after the <head> to be sure window.oxajax is defined
   	var dokeos_xajax_handler = window.oxajax;
@@ -353,58 +357,57 @@ else
 	 <div id="image_preview;">
 	 	<div style="width: 310px; height:140px; margin:0 20px; background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat; ">
 	       <div style="width:140px; float:left;">
-	       	<span style="float:right; padding-top:16px; padding-right:10px;">
-	          <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-	          <img src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
-	          <?php 
-	else
-		: echo Display :: display_icon('unknown_250_100.jpg', ' ');
-	endif;
-?>
-			</span>
-	        </div>
-	 			<div id="nav_id" name="nav_name" class="lp_nav" style="float:left; width:155px;">
+		       	<span style="float:right; padding-top:16px; padding-right:10px;">
+		          <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
+		          <img src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
+		          <?php 
+						else
+							: echo Display :: display_icon('unknown_250_100.jpg', ' ');
+						endif;
+					?>
+				</span>
+	       </div>
+	 	   <div id="nav_id" name="nav_name" class="lp_nav" style="float:left; width:155px;">
 	        <?php	
-	
-
-	$display_mode = $_SESSION['oLP']->mode;
-	$scorm_css_header = true;
-	$lp_theme_css = $_SESSION['oLP']->get_theme();
-
-	//Setting up the CSS theme if exists						
-
-	if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
-		global $lp_theme_css;
-	} else {
-		$lp_theme_css = $my_style;
-	}
-
-	$progress_bar = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
-	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-	$mediaplayer = $_SESSION['oLP']->get_mediaplayer();
-?>
-			<div id="lp_navigation_elem" class="lp_navigation_elem">
-				<div style="float:left; padding-top:22px;padding-left:10px;">
-				<?php echo $navigation_bar; ?>
-				</div>
-				<div style="float:left;  padding-top:22px">
-					<?php echo $progress_bar; ?>
+									
+					$display_mode = $_SESSION['oLP']->mode;
+					$scorm_css_header = true;
+					$lp_theme_css = $_SESSION['oLP']->get_theme();
+				
+					//Setting up the CSS theme if exists						
+				
+					if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
+						global $lp_theme_css;
+					} else {
+						$lp_theme_css = $my_style;
+					}
+				
+					$progress_bar = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
+					$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
+					$mediaplayer = $_SESSION['oLP']->get_mediaplayer();
+				?>
+				<div id="lp_navigation_elem" class="lp_navigation_elem">
+					<div style="float:left; padding-top:22px;padding-left:10px;">
+					<?php echo $navigation_bar; ?>
+					</div>
+					<div style="float:left;  padding-top:22px">
+						<?php echo $progress_bar; ?>
+					</div>
 				</div>
 			</div>
+	    </div>
+	    </div>
+			<div id="media" style="margin:15px 34px;font-size:11.5pt" >
+			<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
 			</div>
-			</div>
-				<div id="media" style="float:right; margin:15px 34px;" >
-				<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
-				</div>
-	     	</div>
-	    </div>	
+	     </div>	
 	<div id="message_id" name="message_name" class="message">
-	        <div id="msg_div_id" class="message"style="margin:10px 0;" >
+	        <div id="msg_div_id" class="message"style="float:right; margin:10px 0;" >
 	        <?php echo $error = $_SESSION['oLP']->error; ?>
 	        </div>
      </div>
-        <div id="toc_id" name="toc_name" class="lp_toc" style="padding:0;margin:0;">
-  			<div id="learningPathToc" style="width:320px;overflow-y:auto;overflow-x:hidden;font-size:8pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
+        <div id="toc_id" name="toc_name" class="lp_toc" style="position:relative;top:10px;left:0">
+  			<div id="learningPathToc" style="width:320px;overflow-y:auto;overflow-x:hidden;font-size:9pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
         </div>
         
         <div id="lp_log_id" name="lp_log_name" class="lp_log">

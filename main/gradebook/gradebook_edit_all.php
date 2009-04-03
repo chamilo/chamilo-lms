@@ -39,9 +39,16 @@ api_block_anonymous_users();
 if (!api_is_allowed_to_create_course()) {
 	header('Location: /index.php');
 }
+
+$my_selectcat=isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
+if (empty($my_selectcat)) {
+	api_not_allowed();
+}
+
 // --------------------------------------------------------------------------------
 // -                       DISPLAY HEADERS AND MESSAGES                           -
 // --------------------------------------------------------------------------------
+
 
 if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 	if (isset ($_GET['studentoverview'])) {
@@ -74,7 +81,7 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 //$table_forum_thread=Database::get_course_table(TABLE_FORUM_THREAD);
-$my_selectcat=isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
+
 $my_db_name=get_database_name_by_link_id($my_selectcat);
 $table_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
 /*

@@ -33,6 +33,10 @@ require_once ('lib/scoredisplay.class.php');
 api_block_anonymous_users();
 block_students();
 $select_eval=Security::remove_XSS($_GET['selecteval']);
+if (empty($select_eval)) {
+	api_not_allowed();
+}
+
 $resultedit = Result :: load (null,null,$select_eval);
 $evaluation = Evaluation :: load ($select_eval);
 $edit_result_form = new EvalForm(EvalForm :: TYPE_ALL_RESULTS_EDIT, $evaluation[0], $resultedit, 'edit_result_form', null, api_get_self() . '?&selecteval='.$select_eval);

@@ -46,6 +46,9 @@ $interbreadcrumb[]= array (
 ));
 //load the evaluation & category
 $select_eval=Security::remove_XSS($_GET['selecteval']);
+if (empty($select_eval)) {
+	api_not_allowed();
+}
 $displayscore = Scoredisplay :: instance();
 $eval= Evaluation :: load($select_eval);
 $overwritescore= 0;
@@ -113,18 +116,18 @@ $current_value= $data;
  * @return array All userinformation read from the file
  */
 function parse_xml_data($file) {
-global $current_tag;
-global $current_value;
-global $user;
-global $users;
-	$users= array ();
-	$parser= xml_parser_create();
-	xml_set_element_handler($parser, 'element_start', 'element_end');
-	xml_set_character_data_handler($parser, "character_data");
-	xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-	xml_parse($parser, file_get_contents($file));
-	xml_parser_free($parser);
-	return $users;
+	global $current_tag;
+	global $current_value;
+	global $user;
+	global $users;
+		$users= array ();
+		$parser= xml_parser_create();
+		xml_set_element_handler($parser, 'element_start', 'element_end');
+		xml_set_character_data_handler($parser, "character_data");
+		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
+		xml_parse($parser, file_get_contents($file));
+		xml_parser_free($parser);
+		return $users;
 }
 if (isset ($_GET['editres'])) {
 	$edit_res_xml=Security::remove_XSS($_GET['editres']);

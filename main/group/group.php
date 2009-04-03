@@ -1,4 +1,4 @@
-<?php // $Id: group.php 19386 2009-03-27 20:56:38Z herodoto $
+<?php // $Id: group.php 19529 2009-04-03 16:23:35Z herodoto $
  
 /*
 ==============================================================================
@@ -356,8 +356,8 @@ foreach ($group_cats as $index => $category)
 			{
 				$edit_actions = '<a href="group_edit.php?'.api_get_cidreq().'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'"><img src="../img/edit.gif" alt="'.get_lang('Edit').'"/></a>&nbsp;';
 				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=delete_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;" title="'.get_lang('Delete').'"><img src="../img/delete.gif" alt="'.get_lang('Delete').'"/></a>&nbsp;';
-				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=empty_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;" title="'.get_lang('EmptyGroup').'"><img src="../img/group_delete.gif" alt="'.get_lang('EmptyGroup').'"/></a>&nbsp;';
-				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;" title="'.get_lang('FillGroup').'"><img src="../img/add_user.gif" alt="'.get_lang('FillGroup').'"/></a>';
+				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=empty_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;" title="'.get_lang('EmptyGroup').'"><img src="../img/clean_group.gif" alt="'.get_lang('EmptyGroup').'"/></a>&nbsp;';
+				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;" title="'.get_lang('FillGroup').'"><img src="../img/fill_group.gif" alt="'.get_lang('FillGroup').'"/></a>';
 				$row[] = $edit_actions;
 			}
 			if (!empty($this_group['nbMember'])) {

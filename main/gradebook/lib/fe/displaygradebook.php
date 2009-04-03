@@ -80,7 +80,7 @@ class DisplayGradebook
 			$evalinfo .= '<br /><i>' . get_lang('NoResultsInEvaluation') . '</i>';
 		elseif ($scoredisplay->is_custom() && api_get_self() != '/dokeos/main/gradebook/gradebook_statistics.php')
 			$evalinfo .= '<br /><br /><a href="gradebook_statistics.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '. get_lang('ViewStatistics') . '</a>';
-		$evalinfo .= '</td><td><img style="left:0;position:relative" src="../img/tutorial.gif"></img></td></table>';
+		$evalinfo .= '</td><td><img style="float:right; position:relative;" src="../img/tutorial.gif"></img></td></table>';
 		Display :: display_normal_message($evalinfo,false);
 		echo $header;
 

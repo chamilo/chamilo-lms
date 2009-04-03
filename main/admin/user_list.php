@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 19258 2009-03-24 23:21:45Z cfasanando $
+<?php // $Id: user_list.php 19534 2009-04-03 20:23:32Z aportugal $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -628,13 +628,15 @@ else
 					if (api_is_platform_admin()) {	
 						$number_of_selected_users = count($_POST['id']);
 						$number_of_deleted_users = 0;
-						foreach ($_POST['id'] as $index => $user_id)
-						{
-							if($user_id != $_user['user_id'])
+						if (is_array($_POST['id'])) {
+							foreach ($_POST['id'] as $index => $user_id)
 							{
-								if(UserManager :: delete_user($user_id))
+								if($user_id != $_user['user_id'])
 								{
-									$number_of_deleted_users++;
+									if(UserManager :: delete_user($user_id))
+									{
+										$number_of_deleted_users++;
+									}
 								}
 							}
 						}

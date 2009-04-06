@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 19500 2009-04-02 15:15:56Z cvargas1 $
+<?php // $Id: exercice_submit.php 19574 2009-04-06 20:56:01Z iflorespaz $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 19500 2009-04-02 15:15:56Z cvargas1 $
+* 	@version $Id: exercice_submit.php 19574 2009-04-06 20:56:01Z iflorespaz $
 */
 
 
@@ -640,14 +640,33 @@ $exerciseDescription=stripslashes($exerciseDescription);
 $exerciseSound=$objExercise->selectSound();
 $randomQuestions=$objExercise->isRandom();
 $exerciseType=$objExercise->selectType();
-
+$table_quiz_test= Database :: get_course_table(TABLE_QUIZ_TEST);
 //if (!isset($_SESSION['questionList']) || $origin == 'learnpath') {
 //in LP's is enabled the "remember question" feature?
+$my_exe_id=Security::remove_XSS($_GET['exerciseId']);
 if (!isset($_SESSION['questionList'])) {
     if ($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[questionList] was unset'."<br />\n";}
     // selects the list of question ID
+    $my_question_list=array();
     $questionList = ($randomQuestions?$objExercise->selectRandomList():$objExercise->selectQuestionList());
     // saves the question list into the session
+    $sql='SELECT random FROM '.$table_quiz_test.' WHERE id="'.Database::escape_string($my_exe_id).'";';
+    $rs=api_sql_query($sql,__FILE__,__LINE__);	
+    $row_number=Database::fetch_array($rs);
+    $z=0;
+    
+    if ($row_number['random']<>0) {
+	    foreach ($questionList as $infoquestionList) {
+	    	if ($z<$row_number['random']) {
+	    		$my_question_list[$z]=$infoquestionList;
+	    	} else {
+	    		break;
+	    	}
+			$z++;
+	    }
+	   // $questionList=array();
+	    $questionList=$my_question_list;	
+    }
     api_session_register('questionList');
     if ($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[questionList] was unset - set now - end'."<br />\n";}
 }

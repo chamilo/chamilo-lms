@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 19480 2009-04-01 15:51:23Z cvargas1 $
+* 	@version $Id: exercise.class.php 19574 2009-04-06 20:56:01Z iflorespaz $
 */
 
 
@@ -300,9 +300,15 @@ class Exercise
 	function selectRandomList()
 	{		
 		$nbQuestions = $this->selectNbrQuestions();		
-		$temp_list = $this->questionList;		
-		shuffle($temp_list);		
-		return array_combine(range(1,$nbQuestions),$temp_list);			
+		$temp_list = $this->questionList;
+		//error_log(print_r($temp_list,true));
+		//error_log(count($temp_list));
+		if (count($temp_list)<>0) {
+			shuffle($temp_list);	
+			return array_combine(range(1,$nbQuestions),$temp_list);	
+		}		
+
+		
 		$nbQuestions = $this->selectNbrQuestions();
 		
 		//Not a random exercise, or if there are not at least 2 questions

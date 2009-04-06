@@ -30,10 +30,11 @@ $ReadMessage = " Leer";
 $SendInviteMessage = "Enviar mensaje de invitación";
 $SendMessageInvitation = "¿ Está seguro que desea enviar las invitaciones a los usuarios seleccionados ?";
 $MessageTool = "Herramienta mensajes";
-$SendMessage = "Enviar mensajes";
+$SendMessage = "Enviar mensaje";
 $WriteAMessage = "Escribir un mensaje";
 $AlreadyReadMessage = "Mensaje leído";
 $UnReadMessage = "Mensaje sin leer";
 $MessageSent = "Mensaje enviado";
 $WriteToMessage = "Escribir un mensaje";
+$SendAMessage = "Enviar un mensaje";
 ?>

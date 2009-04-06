@@ -83,4 +83,5 @@ $DeleteBlog = "Odstrani blog";
 $NoTasks = "Ni opravil";
 $Shared = "Skupna raba";
 $PermissionGrantedByGroupOrRole = "Dovoljenje odobreno s skupino ali vlogo ";
+$Reader = "Bralec";
 ?>

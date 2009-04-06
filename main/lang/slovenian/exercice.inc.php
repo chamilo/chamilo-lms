@@ -284,4 +284,5 @@ $SelectTargetQuestion = "Izberi ciljno vprašanje";
 $DirectFeedbackCantModifyTypeQuestion = "Vrsta ocenjevanja ne more biti spremenjena, ker je postavljena kot Samo-ocenjevanje. Samo-ocenjevanje daje možnost direktne povratne informacije uporabniku, vendar ta možnost ni kompatibilna z vsemi tip vprašanj; tako takega tipa testa naknadno ni ve&#269; mogo&#269;e spremeniti.";
 $CantShowResults = "Ni na voljo";
 $CantViewResults = "Ne morem izvršiti pogleda v rezultate";
+$AddQuestionToExercise = "Dodaj vprašanje";
 ?>

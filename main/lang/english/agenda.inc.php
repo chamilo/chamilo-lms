@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Add New Agenda Item";
 $ShowAllEvents = "Show All Agenda Items";
 $ShowCurrent = "Show Current Month";
-$AddCalendarItem = "Add New Agenda Item";
+$AddCalendarItem = "Save";
 $Day = "Day";
 $Month = "Month";
 $Year = "Annual View";

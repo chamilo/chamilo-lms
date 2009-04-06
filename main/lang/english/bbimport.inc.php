@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langViewCourseMaterialImport  = "View course material as it will be imported";
+$langViewCourseMaterialImport  = "View training material as it will be imported";
 $langViewExternalLinksImport  = "View external links as they will be imported";
 $langViewForumImport  = "View forum as it will be imported";
 $langImportCourseMaterial  = "Import course material (Blackboard tool \"Course Material\")";

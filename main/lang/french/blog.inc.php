@@ -53,7 +53,7 @@ $DeleteThisArticle = "Effacer cet article";
 $EditThisPost = "Modifier cet article";
 $DeleteThisComment = "Effacer ce commentaire";
 $NoArticles = "Il n\'y a aucun article dans ce projet. Si vous êtes auteur, cliquez sur le lien \'nouvel article\' pour écrire un nouvel article.";
-$NoTasks = "pas de tâches";
+$NoTasks = "Pas de tâches";
 $Rating = "Valeur";
 $RateThis = "Noter cet article";
 $SelectTaskArticle = "Choisir un article pour cette tâche";
@@ -80,7 +80,7 @@ $EditPost = "Modifier un article";
 $AddBlog = "Créer un nouveau projet";
 $EditBlog = "Modifier le nom et la description";
 $DeleteBlog = "Supprimer ce projet";
-$NoTasks = "pas de tâches";
+$NoTasks = "Pas de tâches";
 $Shared = "Partagé";
 $PermissionGrantedByGroupOrRole = "Permission allouée par groupe ou par rôle";
 ?>

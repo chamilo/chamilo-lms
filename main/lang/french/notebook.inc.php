@@ -7,7 +7,6 @@ $NoteDeleted = "Note supprimée";
 $NoteUpdated = "Note mise à jour";
 $NoteCreated = "Note créée";
 $YouMustWriteANote = "Veuillez écrire une note";
-$WriteYourNoteHere = "Veuillez écrire votre note ici";
 $SaveNote = "Enregistrer cette note";
 $WriteYourNoteHere = "Cliquez ici pour écrire une nouvelle note";
 $SearchByTitle = "Rechercher par titre";
@@ -21,4 +20,5 @@ $NoteTitle = "Note";
 $NoteComment = "Contenu";
 $NoteAdded = "Note ajoutée";
 $NoteConfirmDelete = "Êtes-vous certain de vouloir supprimer cette note";
+$AddNote = "Enregistrer la note";
 ?>

@@ -41,6 +41,6 @@ $langIndex = "Index";
 $langTotalMDEs = "Nombre total d\'entrées de Métadonnées";
 $langMainMD = "Ouvrir le MDE principal";
 $langOrElse = "Sélectionnez une catégorie de liens";
-$langWarningDups = "- les noms de catégories en double seront retirés de la liste !";
-$langSLC = "Travailler avec une catégorie de liens nommée";
+$langWarningDups = "- les noms de dossiers en double seront retirés de la liste !";
+$langSLC = "Travailler avec un dossier de liens nommé";
 ?>

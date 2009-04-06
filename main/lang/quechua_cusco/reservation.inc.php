@@ -24,7 +24,6 @@ $EditNewBookingPeriod = "Ruwapay hoq pacha waqaychanata";
 $BookingPeriodAdded = "Pacha waqaychanaqa haykuchisqaña";
 $ConfirmDeleteBookingPeriod = "Cheqaypaqchu munashanki pacha waqaychanata wiñaypaq wañuchiyta?";
 $DeleteBookingPeriod = "Wañuchiy kay pacha waqaychanata";
-$ResourceList = "Yanapaysinakunaq yupachasqaynin ";
 $Resource = "Yanapaysina";
 $Resources = "Yanapaysikuna";
 ?>

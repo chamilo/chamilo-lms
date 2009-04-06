@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $dropbox_lang["help"]  = "Help";
-$dropbox_lang["aliensNotAllowed"]  = "Only course members can use the dropbox tool. You are not a member of this course.";
+$dropbox_lang["aliensNotAllowed"]  = "Only training members can use the dropbox tool. You are not a member of this training.";
 $dropbox_lang["dropbox"]  = "Drop Box";
 $dropbox_lang["queryError"]  = "Error in database query. Please contact your system administrator.";
 $dropbox_lang["generalError"]  = "An error has occured. Please contact your system administrator.";

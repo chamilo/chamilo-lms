@@ -30,7 +30,9 @@ $langUnregister = "Izpiši";
 $langAddAUser = "Dodaj uporabnike";
 $UsersUnsubscribed = "Izbrani uporabniki so bili izpisani iz teèaja";
 $ThisStudentIsSubscribeThroughASession = "Ta teèajnik je vpisan v ta teèaj preko seje. Njegovih informacij ne morete urejati.";
+$NoDataAvailable = "Podatki niso na voljo";
 $AddToFriends = "Ste preprièani, da èelite dodati kontakt k svojim prijateljem?";
+$Friends = "Prijatelji";
 $PersonalData = "Osebni podatki/profil";
 $Contacts = "Kontakti";
 $SocialInformationComment = "Ta zaslon omogoèa organizacijo tvojih kontaktov";
@@ -75,4 +77,5 @@ $SocialUserInformationAttach = "Napišite sporoèilo predenj skušate poslati zahte
 $MessageInvitationNotSent = "vaše vabilo ni bilo poslano";
 $SocialAddToFriends = "Dodaj k mojim kontaktom";
 $ChangeContactGroup = "Spremeni skupino kontaktov";
+$Friend = "Prijatelj";
 ?>

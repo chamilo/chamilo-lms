@@ -290,4 +290,5 @@ $ShowUnCorrectedOnly = "Mostra i quesiti non ancora corretti";
 $HideResultsToStudents = "Non mostrare i risultati ai corsisti";
 $ShowResultsToStudents = "Mostra i risultati ai corsisti";
 $ProcedToQuestions = "Prepara i quesiti";
+$AddQuestionToExercise = "Aggiungi quesito";
 ?>

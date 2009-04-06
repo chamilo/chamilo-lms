@@ -36,4 +36,5 @@ $AlreadyReadMessage = "Sporočilo je že bilo prebrano";
 $UnReadMessage = "Neprebrana sporočila";
 $MessageSent = "Sporočilo je bilo poslano";
 $WriteToMessage = "Piši sporočilo";
+$SendAMessage = "Pošlji sporočilo";
 ?>

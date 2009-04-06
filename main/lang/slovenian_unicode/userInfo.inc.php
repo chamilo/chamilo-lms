@@ -30,7 +30,10 @@ $langUnregister = "Izpiši";
 $langAddAUser = "Dodaj uporabnike";
 $UsersUnsubscribed = "Izbrani uporabniki so bili izpisani iz tečaja";
 $ThisStudentIsSubscribeThroughASession = "Ta tečajnik je vpisan v ta tečaj preko seje. Njegovih informacij ne morete urejati.";
+$NoDataAvailable = "Podatki niso na voljo";
 $AddToFriends = "Ste prepričani, da želite dodati kontakt k svojim prijateljem?";
+$AddPersonalMessage = "Dodaj osebno sporočilo";
+$Friends = "Prijatelji";
 $PersonalData = "Osebni podatki";
 $Contacts = "Kontakti";
 $SocialInformationComment = "Ta zaslon omogoča organizacijo tvojih kontaktov ";
@@ -76,4 +79,6 @@ $MessageInvitationNotSent = "vaše vabilo ni bilo poslano";
 $SocialAddToFriends = "Dodaj k mojim kontaktom";
 $UserNonRegisteredAtTheCourse = "Uporabnik ni vpisan v tečaj";
 $ChangeContactGroup = "Spremeni skupino kontaktov";
+$Friend = "Prijatelj";
+$ViewMySharedProfile = "Moj skupen profil";
 ?>

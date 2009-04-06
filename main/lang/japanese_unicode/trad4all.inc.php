@@ -40,5 +40,4 @@ $langMyCourses = "极尸のコ〖ス";
 $langModifyProfile = "极尸のプロファイルを饯赖";
 $langLogout = "ログアウト";
 $langPlatform = "iCampus utilise la plate-forme";
-$Language = "&#35328;&#35486;";
 ?>

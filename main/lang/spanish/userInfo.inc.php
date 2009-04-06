@@ -30,7 +30,10 @@ $langUnregister = "Sin registrar";
 $langAddAUser = "Añadir usuarios";
 $UsersUnsubscribed = "Los usuarios seleccionados han sido dados de baja del curso";
 $ThisStudentIsSubscribeThroughASession = "Este estudiante está inscrito en este curso mediante una sesión. No puede editar su información";
+$NoDataAvailable = "Información no disponible";
 $AddToFriends = "¿Esta seguro(a) que desea añadirlo(a) a su red de amigos?";
+$AddPersonalMessage = "Añadir un mensaje personal";
+$Friends = "Amigos";
 $PersonalData = "Datos personales";
 $Contacts = "Contactos";
 $SocialInformationComment = "Aquí puede organizar sus contactos";
@@ -76,4 +79,6 @@ $MessageInvitationNotSent = "Su mensaje de invitación no ha sido enviado";
 $SocialAddToFriends = "Añadir a mi red de amigos";
 $UserNonRegisteredAtTheCourse = "Usuario no registrado al curso";
 $ChangeContactGroup = "Cambiar el grupo de mi contacto";
+$Friend = "Amigo";
+$ViewMySharedProfile = "Mi perfil compartido";
 ?>

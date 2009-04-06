@@ -7,7 +7,6 @@ $NoteDeleted = "Willay wañuchisqa";
 $NoteUpdated = "Willay kunanyachisqa";
 $NoteCreated = "Willay kamarisqa";
 $YouMustWriteANote = "Ama hina kaychu, qelqay hoq willayta";
-$WriteYourNoteHere = "Ama hina kaychu, qelqay hoq willayta kaypi";
 $SaveNote = "Allchay willayta";
 $WriteYourNoteHere = "Qelqay willaykita kaypi";
 $SearchByTitle = "Maskhay suti sutichayninmanta";

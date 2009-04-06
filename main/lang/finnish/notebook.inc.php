@@ -7,7 +7,6 @@ $NoteDeleted = "Muistiinpano poistettu";
 $NoteUpdated = "Muistiinpano päivitetty";
 $NoteCreated = "Muistiinpano tehty";
 $YouMustWriteANote = "Kirjoita muistiinpano";
-$WriteYourNoteHere = "Kirjoita muistiinpanosi tähän";
 $SaveNote = "Tallenna muistiinpano ";
 $WriteYourNoteHere = "Klikkaa kirjoittaaksesi uuden muistiinpanon";
 $SearchByTitle = "Etsi otsikolla";

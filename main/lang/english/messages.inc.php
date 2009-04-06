@@ -27,13 +27,14 @@ $MessageDeleted = "The message has been deleted";
 $ConfirmDeleteMessage = "Are you sure you want to delete the selected message? ";
 $DeleteMessage = "Delete message";
 $ReadMessage = "Read message";
-$SendInviteMessage = "Send invite message";
+$SendInviteMessage = "Send invitation message";
 $SendMessageInvitation = "Are you sure that you wish to send these invitations ?";
 $MessageTool = "Messages tool";
-$SendMessage = "Send messages";
+$SendMessage = "Send message";
 $WriteAMessage = "Write a message";
 $AlreadyReadMessage = "Message already read";
 $UnReadMessage = "Message without reading";
 $MessageSent = "Message Sent";
 $WriteToMessage = "Write to message";
+$SendAMessage = "Send a message";
 ?>

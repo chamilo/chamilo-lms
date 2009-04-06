@@ -30,7 +30,10 @@ $langUnregister = "Cancella l\'iscrizione";
 $langAddAUser = "Aggiungi utenti";
 $UsersUnsubscribed = "Gli utenti selezionati sono stati cancellati dal corso";
 $ThisStudentIsSubscribeThroughASession = "Il corsista è iscritto al corso tramite una sessione. Non si possono modificare queste informazioni";
+$NoDataAvailable = "Informazione non disponibile";
 $AddToFriends = "Sei sicuro di aggiungere il contatto agli amici?";
+$AddPersonalMessage = "Aggiungi un messaggio personale";
+$Friends = "Amici";
 $PersonalData = "Dati personali";
 $Contacts = "Contatti";
 $SocialInformationComment = "Qui puoi organizzare i tuoi contatti";
@@ -76,4 +79,6 @@ $MessageInvitationNotSent = "Il tuo messaggio d\'invito non è stato spedito";
 $SocialAddToFriends = "Aggiungi ai contatti";
 $UserNonRegisteredAtTheCourse = "Utente non iscritto al corso";
 $ChangeContactGroup = "Cambia di gruppo";
+$Friend = "Amica/o";
+$ViewMySharedProfile = "Profilo condiviso";
 ?>

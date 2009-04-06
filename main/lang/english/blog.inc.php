@@ -83,4 +83,5 @@ $DeleteBlog = "Delete this project";
 $NoTasks = "No tasks";
 $Shared = "Shared";
 $PermissionGrantedByGroupOrRole = "Permission granted by group or role";
+$Reader = "Reader";
 ?>

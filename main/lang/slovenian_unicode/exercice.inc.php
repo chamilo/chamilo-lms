@@ -285,4 +285,10 @@ $SelectTargetQuestion = "Izberi ciljno vprašanje";
 $DirectFeedbackCantModifyTypeQuestion = "Vrsta ocenjevanja ne more biti spremenjena, ker je postavljena kot Samoocenjevanje";
 $CantShowResults = "Ni na voljo";
 $CantViewResults = "Ne morem izvršiti pogleda v rezultate";
+$ShowCorrectedOnly = "Prikaži popravljene teste/vaje";
+$ShowUnCorrectedOnly = "Prikaži nepopravljene teste/vaje";
+$HideResultsToStudents = "Skrij rezultate tečajnikom";
+$ShowResultsToStudents = "Prikaži rezultate tečajnikom";
+$ProcedToQuestions = "Nadaljuj k vprašanjem";
+$AddQuestionToExercise = "Dodaj vprašanje";
 ?>

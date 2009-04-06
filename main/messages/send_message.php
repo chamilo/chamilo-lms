@@ -30,6 +30,11 @@ require_once '../messages/message.class.php';
 include_once(api_get_path(LIBRARY_PATH).'/usermanager.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'/message.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'/social.lib.php');
+
+if (api_is_anonymous()) {
+	api_not_allowed();
+}
+
 $user_id=$_POST['user_id'];
 $panel_id=$_POST['panel_id'];
 $content_message=$_POST['txt_content'];

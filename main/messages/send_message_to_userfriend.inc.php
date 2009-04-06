@@ -30,7 +30,9 @@ require_once '../messages/message.class.php';
 include_once(api_get_path(LIBRARY_PATH).'/usermanager.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'/message.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'/social.lib.php');
-api_block_anonymous_users();
+if (api_is_anonymous()) {
+	api_not_allowed();
+}
 
 if (api_get_setting('allow_message_tool')<>'true' && api_get_setting('allow_social_tool')<>'true'){
 	api_not_allowed();

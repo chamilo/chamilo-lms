@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 18868 2009-03-09 15:10:42Z juliomontoya $
+<?php //$Id: announcements.php 19571 2009-04-06 19:34:52Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1044,73 +1044,64 @@ if(!empty($error_message))
 ==================================================================================*/
 
 
-	if ($display_form == true)
-	{
-		
-		$content_to_modify=stripslashes($content_to_modify);
-		$title_to_modify=stripslashes($title_to_modify);
-		
-		// DISPLAY ADD ANNOUNCEMENT COMMAND
+if ($display_form == true) {
+	
+	$content_to_modify=stripslashes($content_to_modify);
+	$title_to_modify=stripslashes($title_to_modify);
+	
+	// DISPLAY ADD ANNOUNCEMENT COMMAND
 
-		echo "<form method=\"post\" name=\"f1\" action=\"".api_get_self()."?publish_survey=$surveyid&id=".$_GET['id']."&db_name=$db_name&cidReq=".$_GET['cidReq']."&action=".$_GET['action']."\" style=\"margin:0px;\">\n";
+	echo "<form method=\"post\" name=\"f1\" action=\"".api_get_self()."?publish_survey=$surveyid&id=".$_GET['id']."&db_name=$db_name&cidReq=".$_GET['cidReq']."&action=".$_GET['action']."\" style=\"margin:0px;\">\n";
 
-		//this variable defines if the course administrator can send a message to a specific user / group
-		// or not
-		//echo "sessiewaarde: ".$_SESSION['select_groupusers'];
-	if(empty($_SESSION['toolgroup'])){
-		
+	//this variable defines if the course administrator can send a message to a specific user / group
+	// or not
+	//echo "sessiewaarde: ".$_SESSION['select_groupusers'];
+	if (empty($_SESSION['toolgroup'])) {	
 		echo "<table><tr><td>";
 		echo get_lang("SentTo").": ";
 		echo "</td><td>";
 		if(isset($_GET['id']) && is_array($to)){
 			echo '&nbsp;';
-		}
-		elseif(isset($_GET['remind_inactive']))
-		{
+		} elseif(isset($_GET['remind_inactive'])) {
 			$email_ann = '1';
 			$_SESSION['select_groupusers']="show";
 			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'), 7);
 			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));
-		}
-		elseif(isset($_GET['remindallinactives']) && $_GET['remindallinactives']=='true')
-		{
+		} elseif(isset($_GET['remindallinactives']) && $_GET['remindallinactives']=='true') {
 			$since = isset($_GET['since']) ? intval($_GET['since']) : 6;
 			$to = Tracking :: get_inactives_students_in_course($_course['id'],$since, $_SESSION['id_session']);
-			foreach($to as &$user)
-			{
+			foreach($to as &$user) {
 				$user = 'USER:'.$user;
 			}
 			$_SESSION['select_groupusers']="show";
 			$email_ann = '1';
 			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),$since);
-			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));
-			
+			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));			
 			/*
 			//echo '&nbsp;<script type="text/javascript">document.onload = "document.getElementById(\'recipient_list\').style.display=\'block\'";</script>';
 			*/
-		}
-		else{
+		} else {
 			echo get_lang("Everybody");
 		}
 		echo "</td><td>";		
 		echo Display::return_icon('group.gif', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle')).'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</span>';
 		echo "</td></tr></table>";
 		show_to_form($to);
-
 		echo "<br /><br />";
-
-		if (!isset($announcement_to_modify) ) $announcement_to_modify ="";
-		if ($announcement_to_modify=='')
-		{
-			($email_ann=='1')?$checked='checked':$checked='';
+		if (!isset($announcement_to_modify) ) 
+			$announcement_to_modify ="";
+		if ($announcement_to_modify=='') {
+			($email_ann=='1')?$checked='checked':$checked='checked'; 
 			echo "<input class=\"checkbox\" type=checkbox value=\"1\" name=\"email_ann\" $checked> ".get_lang('EmailOption')," : ",
 			"<br /><br />";
 		}
-	}else{
-			if (!isset($announcement_to_modify) ) $announcement_to_modify ="";
-			if ($announcement_to_modify=='')
-			{
+	} else {
+			if (!isset($announcement_to_modify) ) 
+				$announcement_to_modify ="";
+			if ($announcement_to_modify=='') {
+				
 				($email_ann=='1' || !empty($surveyid))?$checked='checked':$checked='';
+				
 				echo "<input class=\"checkbox\" type=checkbox value=\"1\" name=\"email_ann\" $checked> ".get_lang('EmailOption')," : ".get_lang('MyGroup'),
 				"<br><br>";
 				echo '<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
@@ -1119,69 +1110,61 @@ if(!empty($error_message))
 				
 				echo '<br><br>';
 			}
-		}
-		if($surveyid){
-			echo	get_lang('EmailAddress').": <input type=\"text\" name=\"emailsAdd\" value=\"".$emails_add."\" size=\"52\">(Comma separated for multiple)<br>";
-			echo	get_lang('OnlyThoseAddresses').": <input type=\"checkbox\" name=\"onlyThoseMails\"><br>";
-		}
-		echo "<div id='msg_error' style='display:none;color:red'></div>";						
-		echo	"<label style='color:red;font-size:14pt'>*</label>&nbsp;".get_lang('EmailTitle').": <input type=\"text\" id=\"emailTitle\" name=\"emailTitle\" value=\"".$title_to_modify."\" size=\"52\" onfocus=\"document.getElementById('msg_error').style.display='none';\"><br />";
+	}
+	if ($surveyid) {
+		echo	get_lang('EmailAddress').": <input type=\"text\" name=\"emailsAdd\" value=\"".$emails_add."\" size=\"52\">(Comma separated for multiple)<br>";
+		echo	get_lang('OnlyThoseAddresses').": <input type=\"checkbox\" name=\"onlyThoseMails\"><br>";
+	}
+	echo "<div id='msg_error' style='display:none;color:red'></div>";						
+	echo	"<label style='color:red;font-size:14pt'>*</label>&nbsp;".get_lang('EmailTitle').": <input type=\"text\" id=\"emailTitle\" name=\"emailTitle\" value=\"".$title_to_modify."\" size=\"52\" onfocus=\"document.getElementById('msg_error').style.display='none';\"><br />";
 
-				unset($title_to_modify);
-		    	$title_to_modify = null;
+	unset($title_to_modify);
+	$title_to_modify = null;
 
-		if (!isset($announcement_to_modify) ) $announcement_to_modify ="";
-		if (!isset($content_to_modify) ) 		$content_to_modify ="";
-		if (!isset($title_to_modify)) 		$title_to_modify = "";
-		
-	    echo	"<br />\n<input type=\"hidden\" name=\"id\" value=\"".$announcement_to_modify."\">";
-		if($surveyid){
-			$content_to_modify='<br /><a href="'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name">'.get_lang('ClickHereToOpenSurvey').'</a><br />
-											'.get_lang('OrCopyPasteUrl').' <br />
-											'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name&nbsp;';
-		}
+	if (!isset($announcement_to_modify) ) $announcement_to_modify ="";
+	if (!isset($content_to_modify) ) 		$content_to_modify ="";
+	if (!isset($title_to_modify)) 		$title_to_modify = "";
+	
+    echo	"<br />\n<input type=\"hidden\" name=\"id\" value=\"".$announcement_to_modify."\">";
+	if ($surveyid) {
+		$content_to_modify='<br /><a href="'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name">'.get_lang('ClickHereToOpenSurvey').'</a><br />
+										'.get_lang('OrCopyPasteUrl').' <br />
+										'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name&nbsp;';
+	}
 
-		//api_disp_html_area('newContent',$content_to_modify,'250px');
-
-		require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
-
-	    $oFCKeditor = new FCKeditor('newContent') ;
-		
-		$oFCKeditor->Width		= '100%';
-		$oFCKeditor->Height		= '300';
-		
-		if(!api_is_allowed_to_edit())
-		{
-			$oFCKeditor->ToolbarSet = "Announcements_Student";
-		}
-		else
-		{
-			$oFCKeditor->ToolbarSet = "Announcements";
-		}		
-		
-		$oFCKeditor->Value		= $content_to_modify;
-       
-		echo $oFCKeditor->CreateHtml();
+	//api_disp_html_area('newContent',$content_to_modify,'250px');
+	require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+    $oFCKeditor = new FCKeditor('newContent') ;		
+	$oFCKeditor->Width		= '100%';
+	$oFCKeditor->Height		= '300';
+	
+	if (!api_is_allowed_to_edit()) {
+		$oFCKeditor->ToolbarSet = "Announcements_Student";
+	} else {
+		$oFCKeditor->ToolbarSet = "Announcements";
+	}		
+	
+	$oFCKeditor->Value		= $content_to_modify;       
+	echo $oFCKeditor->CreateHtml();        
+	echo'<br />';
+	if(empty($_SESSION['toolgroup'])) {
+		echo '<input type="hidden" name="submitAnnouncement" value="OK">';
+        //echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
+        echo '<br /><button class="save"type="submit"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" >'.get_lang('Send').'</button><br /><br />';
         
-		echo'<br />';
-		if(empty($_SESSION['toolgroup'])){
-			echo '<input type="hidden" name="submitAnnouncement" value="OK">';
-            //echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
-            echo '<br /><button class="save"type="submit"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" >'.get_lang('Send').'</button><br /><br />';
-            
-		}
-		else{
-			echo '<input type="hidden" name="submitAnnouncement" value="OK">';
-			//echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
-		    echo '<br /><button class="save"type="submit"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" >'.get_lang('Send').'</button><br /><br />';
-			
-		}
-		echo '</form><br />';
+	} else {
+		echo '<input type="hidden" name="submitAnnouncement" value="OK">';
+		//echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
+	    echo '<br /><button class="save"type="submit"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" >'.get_lang('Send').'</button><br /><br />';
+		
+	}
+	echo '</form><br />';
 
-		if((isset($_GET['action']) && isset($_GET['id']) && is_array($to))||isset($_GET['remindallinactives'])||isset($_GET['remind_inactive'])){
-			echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
-		}
-    } // displayform
+	if((isset($_GET['action']) && isset($_GET['id']) && is_array($to))||isset($_GET['remindallinactives'])||isset($_GET['remind_inactive'])){
+		echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
+	}
+}
+// displayform
 
 
 

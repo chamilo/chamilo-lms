@@ -79,23 +79,9 @@ $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 
 $_SESSION['oLP']->error = '';
 $lp_type = $_SESSION['oLP']->get_type();
-
-if (api_is_anonymous()) {
-		$lp_item_id = $_SESSION['oLP']->get_first_item_id();
-		if ( $lp_item_id != 0)
-			$_SESSION['oLP']->set_current_item($lp_item_id); // already done by lp_controller.php
-		else 
- 			$lp_item_id = $_SESSION['oLP']->get_current_item_id();
-
-	} else {
-		//$lp_item_id = $_SESSION['oLP']->get_current_item_id();
-		$lp_item_id = $_SESSION['oLP']->get_first_item_id();	
-	}
-	
-//$lp_item_id = $_SESSION['oLP']->get_current_item_id();
-
+$lp_item_id = $_SESSION['oLP']->get_current_item_id();
 //$lp_item_id = learnpath::escape_string($_GET['item_id']);
-$_SESSION['oLP']->set_current_item($lp_item_id); // already done by lp_controller.php
+//$_SESSION['oLP']->set_current_item($lp_item_id); // already done by lp_controller.php
 
 //Prepare variables for the test tool (just in case) - honestly, this should disappear later on
 $_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();

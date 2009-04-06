@@ -333,21 +333,22 @@ form span.form_error {
 }
 /* feedback messages */
 .confirmation-message,.error-message,.normal-message,.warning-message {
-	border: 1px solid #4171b5;
-	margin: 1em auto;
-	padding: 8px 0 12px 0;
 	position: relative;
+	border: 1px solid #ddd;
+	margin: 6px 6px 10px 4px;
+	padding: 6px;
 	width: 98%;
-	color: #111;
+	color: #00264F;
 	//This image is wrong size, so is commented until one solution
 	//background: transparent url('images/alert.jpg') no-repeat 10px 5px;
 	font: bold 110% Arial, sans-serif, sans;
-	line-height: 2.5em;
+	min-height: 30px;
 }
 .confirmation-message img,.error-message img,.normal-message img,.warning-message img
 	{
-	//position: absolute;
-	margin-left: 10px;
+	position: realtive;
+	margin: 0 5px 5px 0;
+	float:left;	
 }
 
 .confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link

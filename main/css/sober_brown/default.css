@@ -734,29 +734,23 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 /* normal and erro message-box */
 .normal-message {
 	position: relative;
-	margin: 10px auto 10px 10px;
-	//margin-left: -250px;
+	margin: 6px 6px 10px 6px;
 	width: 98%;
-	left: 0.1%;
-	//right: 50%;
 	border-width: 1px;
 	border-style: solid;
-	padding: 5px;
+	padding: 6px;
 	border: 1px solid #dcdcdc;
-	color: #0055d1;
+	color: #00264F;
 	background-color: #E5EDF9;
 	min-height: 30px;	
 }
 .warning-message {
 	position: relative;
-	margin: 10px auto;
-	margin-left: -250px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
+	margin: 6px 6px 10px 6px;
+	width: 98%;
 	border-width: 1px;
 	border-style: solid;
-	padding: 5px;
+	padding: 6px;
 	border: 1px solid #FFB30F;
 	color: #000;
 	background-color: #FFEFA7;
@@ -764,14 +758,11 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 }
 .confirmation-message {
 	position: relative;
-	margin: 5px 1px 0 10px;
-	//margin-left: 2px;
-	//margin: 10px auto 10px;
+	margin: 6px 6px 10px 6px;
 	width: 98%;
-	//right: 50%;
 	border-width: 1px;
 	border-style: solid;
-	padding: 5px;
+	padding: 6px;
 	border: 1px solid #1F8323;
 	color: #1F8323;
 	background-color: #CAF0C7;
@@ -779,14 +770,11 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 }
 .error-message {
 	position: relative;
-	margin: 10px auto;
-	margin-left: -250px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
+	margin: 6px 6px 10px 6px;
+	width: 98%;
 	border-width: 1px;
 	border-style: solid;
-	padding: 5px;
+	padding: 6px;
 	border: 1px solid #FF0000;
 	color: #000;
 	background-color: #FFD1D1;

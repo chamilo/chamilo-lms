@@ -1,10 +1,10 @@
 <?php
-// $Id: inscription.php 19472 2009-03-31 23:51:28Z cvargas1 $
+// $Id: inscription.php 19565 2009-04-06 14:55:45Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -79,12 +79,14 @@ $form->addRule('email', get_lang('EmailWrong'), 'email');
 if (api_get_setting('openid_authentication')=='true') {
 	$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));	
 }
+/*
 //	OFFICIAL CODE
 if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
 	$form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
 	if (api_get_setting('registration', 'officialcode') == 'true')
 		$form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
 }
+*/
 //	USERNAME
 $form->addElement('text', 'username', get_lang('UserName'), array('size' => 20));
 $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');

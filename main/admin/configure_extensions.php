@@ -406,7 +406,8 @@ Display::display_header($nameTool);
 			</table>
 		</div>
 	</div>
-	
+	<?php 
+	/*
 	<!-- EPHORUS -->
 	<div id="main_ephorus">
 		<div id="extension_header_ephorus" class="accordion_header">
@@ -472,7 +473,8 @@ Display::display_header($nameTool);
 			</table>
 		</div>
 	</div>
-	
+	*/
+	?>
 	<!-- SEARCH -->
 	<div id="main_search">
 		<div id="extension_header_search" class="accordion_header">

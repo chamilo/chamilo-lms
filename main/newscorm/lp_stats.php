@@ -565,7 +565,7 @@ foreach ($list as $my_item_id) {
 				$num = Database :: num_rows($resultLastAttempt);
 				if ($num > 0) {																																							
 					if (isset($_GET['extend_attempt']) && $_GET['extend_attempt'] == 1 && (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)  ) {						
-						$correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&my_ext_lp_id='.$my_id.'#anchor_ext_hidden_'.$my_lp_id.'"><img src="../img/view_less_stats.gif" alt="fold_view" border="0"></a>';
+						$correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&my_ext_lp_id='.$my_id.'#anchor_ext_hidden_'.$my_lp_id.'"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="'.get_lang('HideAllAttempts').'"></a>';
 						$extend_attempt = 1;
 					} else {						
 						$correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_attempt=1'.$my_url_suffix.'&my_lp_id='.$my_id.'#anchor_ext_show_'.$my_lp_id.'"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="'.get_lang('ShowAllAttemptsByExercise').'"></a>';

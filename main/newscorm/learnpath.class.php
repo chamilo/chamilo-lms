@@ -4434,10 +4434,12 @@ class learnpath {
 					}
 					else 
 					{
-						$return .= ' <input type="file" name="mp3file'.$arrLP[$i]['id'].'" id="mp3file" />';
-						if (!empty($arrLP[$i]['audio']))
-						{
-							$return .= '<input type="checkbox" name="removemp3'.$arrLP[$i]['id'].'" id="checkbox'.$arrLP[$i]['id'].'" />'.get_lang('RemoveAudio');
+						if ($arrLP[$i]['item_type']!='dokeos_chapter') {
+							$return .= ' <input type="file" name="mp3file'.$arrLP[$i]['id'].'" id="mp3file" />';
+							if (!empty($arrLP[$i]['audio']))
+							{
+								$return .= '<br /><input type="checkbox" name="removemp3'.$arrLP[$i]['id'].'" id="checkbox'.$arrLP[$i]['id'].'" />'.get_lang('RemoveAudio');
+							}
 						}
 					}
 					$return .= '</td>' . "\n";

@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 19517 2009-04-02 21:59:06Z cvargas1 $
+* 	@version $Id: survey.lib.php 19606 2009-04-07 17:53:13Z iflorespaz $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1585,7 +1585,7 @@ class yesno extends question
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right" valign="top">&nbsp;</td>';
 		$this->html .= '		<td>';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked="cheked" ';
 						if ($form_content['horizontalvertical'] == 'horizontal')
 						{
 							$this->html .= 'checked="checked"';
@@ -1679,7 +1679,7 @@ class multiplechoice extends question
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right" valign="top">&nbsp;</td>';
 		$this->html .= '		<td>';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked="cheked" ';
 						if ($form_content['horizontalvertical'] == 'horizontal')
 						{
 							$this->html .= 'checked="checked"';
@@ -1764,7 +1764,7 @@ class personality extends question
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right" valign="top">&nbsp;</td>';
 		$this->html .= '		<td>';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked="cheked" ';
 		
 		if ($form_content['horizontalvertical'] == 'horizontal')
 		{
@@ -1872,7 +1872,7 @@ class multipleresponse extends question
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right" valign="top">&nbsp;</td>';
 		$this->html .= '		<td>';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked="cheked" ';
 						if ($form_content['horizontalvertical'] == 'horizontal')
 						{
 							$this->html .= 'checked="checked"';

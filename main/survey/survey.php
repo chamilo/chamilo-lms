@@ -1,4 +1,4 @@
-<?php // $Id: survey.php 19004 2009-03-12 18:04:08Z juliomontoya $
+<?php // $Id: survey.php 19606 2009-04-07 17:53:13Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 19004 2009-03-12 18:04:08Z juliomontoya $
+* 	@version $Id: survey.php 19606 2009-04-07 17:53:13Z iflorespaz $
 *
 * 	@todo use quickforms for the forms
 */
@@ -109,32 +109,31 @@ if($is_survey_type_1 && ($_GET['action']=='addgroup')||($_GET['action']=='delete
 Display::display_header($tool_name,'Survey'); 
 
 // Action handling
+$my_action_survey		= Security::remove_XSS($_GET['action']);
+$my_question_id_survey  = Security::remove_XSS($_GET['question_id']);
+$my_survey_id_survey    = Security::remove_XSS($_GET['survey_id']);
+$message_information    = Security::remove_XSS($_GET['message']);
 if (isset($_GET['action'])) {
 	if (($_GET['action'] == 'moveup' OR $_GET['action'] == 'movedown') AND isset($_GET['question_id'])) {
-		survey_manager::move_survey_question($_GET['action'], $_GET['question_id'], $_GET['survey_id']);
-		Display::display_confirmation_message(get_lang('SurveyQuestionMoved'), false);
+		survey_manager::move_survey_question($my_action_survey,$my_question_id_survey,$my_survey_id_survey);
+		Display::display_confirmation_message(get_lang('SurveyQuestionMoved'));
 	}
 	if ($_GET['action'] == 'delete' AND is_numeric($_GET['question_id'])) {
-		survey_manager::delete_survey_question($_GET['survey_id'], $_GET['question_id'], $survey_data['is_shared']);
+		survey_manager::delete_survey_question($my_survey_id_survey, $my_question_id_survey, $survey_data['is_shared']);
 	}
 }
-
-if (isset($_GET['message']))
-{
+if (isset($_GET['message'])) {
 	// we have created the survey or updated the survey
-	if (in_array($_GET['message'], array('SurveyUpdatedSuccesfully','SurveyCreatedSuccesfully')))
-	{
-		Display::display_confirmation_message(get_lang($_GET['message']).'<br />'.get_lang('YouCanNowAddQuestionToYourSurvey'), false);
+	if (in_array($_GET['message'], array('SurveyUpdatedSuccesfully','SurveyCreatedSuccesfully'))) {
+		Display::display_confirmation_message(get_lang($message_information).','.PHP_EOL.strtolower(get_lang('YouCanNowAddQuestionToYourSurvey')));
 	}
 	// we have added a question
-	if (in_array($_GET['message'], array('QuestionAdded','QuestionUpdated')))
-	{
-		Display::display_confirmation_message(get_lang($_GET['message']), false);
+	if (in_array($_GET['message'], array('QuestionAdded','QuestionUpdated'))) {
+		Display::display_confirmation_message(get_lang($message_information));
 	}
 	
-	if (in_array($_GET['message'], array('YouNeedToCreateGroups')))
-	{
-		Display::display_warning_message(get_lang($_GET['message']), false);
+	if (in_array($_GET['message'], array('YouNeedToCreateGroups'))) {
+		Display::display_warning_message(get_lang($message_information), false);
 	}
 }
 if(!empty($survey_data['survey_version'])) echo '<b>'.get_lang('Version').': '.$survey_data['survey_version'].'</b>';

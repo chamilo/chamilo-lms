@@ -94,7 +94,7 @@ Display::display_header($tool_name,'Survey');
 // If this is the case there will be a language choice
 $sql = "SELECT * FROM $table_survey WHERE code='".Database::escape_string($survey_data['code'])."'";
 $result = api_sql_query($sql, __FILE__, __LINE__);
-if (mysql_num_rows($result) > 1)
+if (Database::num_rows($result) > 1)
 {
 	Display::display_warning_message(get_lang('IdenticalSurveycodeWarning'));
 }
@@ -193,7 +193,7 @@ if ($form->validate())
 	// updating the invited field in the survey table
 	SurveyUtil::update_count_invited($survey_data['code']);
 	$total_count = $count_course_users + $counter_additional_users;
-	Display :: display_confirmation_message($total_count.' '.get_lang('InvitationsSend'), false);
+	Display :: display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));
 }
 else
 {

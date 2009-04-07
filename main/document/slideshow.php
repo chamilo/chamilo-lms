@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 19385 2009-03-27 20:48:57Z iflorespaz $
+<?php // $Id: slideshow.php 19617 2009-04-07 23:43:23Z cvargas1 $
 
 /*
 ==============================================================================
@@ -281,14 +281,16 @@ if ($slide_id !== "all")
     echo ' - '.$ext; 	
 	echo '</td>';
 	echo '</tr>';
+	echo '</table>';
+	echo '<table align="center" border="0">';
 	echo '<tr>';
-	echo '<td align="center">';
+	echo '<td align="center" >';
 	// previous slide
 	if ($slide > 0)
 	{
 		echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'">';
 	}
-	echo '&lt;&lt;'.get_lang('_previous_slide');
+	echo '<img src="'.api_get_path(WEB_IMG_PATH).'silde_back.gif" alt="">';
 	if ($slide > 0)
 	{
 		echo "</a> ";
@@ -296,14 +298,14 @@ if ($slide_id !== "all")
 	// divider
 	if ($slide_id <> "all")
 	{
-		echo ' [ '.$next_slide.'/'.$total_slides.' ] ';
+		echo '</td><td valign="middle"> [ '.$next_slide.'/'.$total_slides.' ] </td><td>';
 	}		
 	// next slide
 	if ($slide < $total_slides -1 and $slide_id <> "all")
 	{
 		echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
 	}
-	echo get_lang('_next_slide').'&gt;&gt;';
+	echo '<img src="'.api_get_path(WEB_IMG_PATH).'silde_next.gif" alt="">';
 	if ($slide > 0)
 	{
 		echo '</a>';

@@ -1,4 +1,4 @@
-<?php // $Id: slideshowoptions.php 19471 2009-03-31 23:28:53Z cvargas1 $ 
+<?php // $Id: slideshowoptions.php 19616 2009-04-07 22:29:18Z iflorespaz $ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -64,7 +64,7 @@ $language_file = "slideshow";
 
 include('../inc/global.inc.php');
 
-$path = $_GET['curdirpath'];
+$path = Security::remove_XSS($_GET['curdirpath']);
 $pathurl = urlencode($path);
 
 // breadcrumb navigation
@@ -134,7 +134,7 @@ function disableresizing() { //v2.0
 </script>
 
 <p></p>
-<h2 style="margin-top: 0; margin-bottom: 0"><?php echo get_lang('_slideshow_options'); ?></h2>
+<?php echo '<div class="actions-title">'.ucfirst(get_lang('_slideshow_options')).'</div>'; ?>
 <form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options">
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
@@ -172,10 +172,10 @@ function disableresizing() { //v2.0
 			}
 		else
 			{echo " class=\"disabled_input\""; }
-		?>>        
+		?> >        
         <br>
         <?php echo get_lang('_height');?>: 
-        <input name="height" type="text" id="height"
+        &nbsp;&nbsp;&nbsp;&nbsp;<input name="height" type="text" id="height"
 		<?php 
 		if ($image_resizing=="resizing")
 			{

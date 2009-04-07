@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 19500 2009-04-02 15:15:56Z cvargas1 $
+<?php //$Id: agenda.inc.php 19585 2009-04-07 10:02:10Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -2673,7 +2673,7 @@ function show_add_form($id = '')
 													echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 												} ?>
 					</select>
-					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>
+					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
 					</td>
 					<td>					
 							&nbsp;<?php echo get_lang('StartTime').": \n"; ?>&nbsp;
@@ -2763,7 +2763,7 @@ function show_add_form($id = '')
 									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
-						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>
+						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
 					</td>
 					<td >
 							&nbsp;<?php echo get_lang('EndTime').": \n"; ?>&nbsp;
@@ -2976,7 +2976,7 @@ function show_add_form($id = '')
 			                        echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 			                    } ?>
 			            </select>
-			            <a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>
+			            <a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
 								    </td>
 				    </tr>
 			    </table>

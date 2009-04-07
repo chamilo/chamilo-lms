@@ -419,7 +419,7 @@ function show_new_personal_item_form($id = "")
 		echo "\t<option value=\"".$value."\">".$value."</option>\n";
 	}
 	echo "</select>";
-	echo "<a title=\"Kalender\" href=\"javascript:openCalendar('newedit_form', 'frm_')\">".Display::return_icon('calendar_select.gif')."</a>";
+	echo "<a title=\"Kalender\" href=\"javascript:openCalendar('newedit_form', 'frm_')\">".Display::return_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;'))."</a>";
 	echo "&nbsp;&nbsp;";
 	// ********** The form containing the hours  (00->23) ********** \\
 	echo "<!-- time: hour -->\n";

@@ -296,6 +296,7 @@ function show_tools_category($course_tool_category)
 					/*
 					$toollink = "\t" . '<a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 					*/
+	
 					$toollink = "\t" . '<a ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 				}
 				if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
@@ -307,9 +308,15 @@ function show_tools_category($course_tool_category)
 				}			
 				else 
 				{
-					$toollink = "\t" . '<a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
+					if (count(explode('type=classroom',$toolsRow['link']))==2 || count(explode('type=conference',$toolsRow['link']))==2) {
+						$toollink = "\t" . '<a ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';							
+					} else {
+						$toollink = "\t" . '<a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';	
+					}
+
 				}
 				echo $toollink;
+				//var_dump($toollink);
 				/*
 				Display::display_icon($toolsRow['image'], get_lang(ucfirst($toolsRow['name'])));
 				*/

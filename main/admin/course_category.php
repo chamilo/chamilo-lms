@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 19261 2009-03-25 00:10:44Z cvargas1 $
+<?php // $Id: course_category.php 19597 2009-04-07 14:38:36Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -24,6 +24,7 @@
 /**
 ==============================================================================
 *	@package dokeos.admin
+* 	@todo use formvalidator for the form
 ==============================================================================
 */
 
@@ -34,6 +35,8 @@ $cidReset=true;
 
 require('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;
+
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 api_protect_admin_script();
 $category=$_GET['category'];
@@ -139,7 +142,20 @@ if($action == 'add' || $action == 'edit')
 	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>"><?php echo Display::return_icon('folder_up.gif').get_lang("Back"); if(!empty($category)) echo ' ('.Security::remove_XSS($category).')'; ?></a>
 	</div>	
 	
-	<h3><?php echo ($action == 'add')?get_lang('AddACategory'):get_lang('EditNode'); if(!empty($category)) echo ' '.get_lang('Into').' '.Security::remove_XSS($category); ?></h3>
+	
+
+	<?php 
+	$form_title = ($action == 'add')?get_lang('AddACategory'):get_lang('EditNode'); 
+	if(!empty($category))
+	{
+		$form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category); 
+	}
+	
+	$form = new FormValidator('course_category');
+	$form->addElement('header', '', $form_title);
+	$form->display();
+	
+	?>
 	
 	<form method="post" action="<?php echo api_get_self(); ?>?action=<?php echo Security::remove_XSS($action); ?>&category=<?php echo Security::remove_XSS($category); ?>&amp;id=<?php echo Security::remove_XSS($_GET['id']); ?>">
 	<input type="hidden" name="formSent" value="1" />

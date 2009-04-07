@@ -188,11 +188,8 @@ $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USE
 // permission stuff - also used by loading from global in agenda.inc.php
 $is_allowed_to_edit = is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
 
-/* ==============================================================================
-  			TITLE
-============================================================================== */
 // Displaying the title of the tool
-api_display_tool_title($nameTools);
+// api_display_tool_title($nameTools);
 
 // tool introduction
 //Display::display_introduction_section(TOOL_CALENDAR_EVENT);
@@ -224,7 +221,7 @@ if (empty($select_year) && empty($select_month))
 	$select_month = $today['mon'];
 }
 
-echo '<div class="actions" style="float:left">';
+echo '<div class="actions">';
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 {
 	display_student_links();

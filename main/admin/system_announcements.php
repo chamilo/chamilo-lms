@@ -1,4 +1,4 @@
-<?php // $Id: system_announcements.php 19566 2009-04-06 14:56:19Z juliomontoya $
+<?php // $Id: system_announcements.php 19597 2009-04-07 14:38:36Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,8 +39,10 @@ $language_file = array ('admin', 'agenda');
 // resetting the course id
 $cidReset = true;
 
-// including some necessary dokeos files
+// including the global dokeos files
 include ('../inc/global.inc.php');
+
+// including additional libraries
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 include (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
@@ -63,11 +65,7 @@ if(empty($_GET['lang']))
     $_GET['lang']=$_SESSION['user_language_choice'];
 }
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
+// displaying the header
 Display :: display_header($tool_name);
 
 /*
@@ -165,7 +163,17 @@ if (isset ($_GET['action']) && $_GET['action'] == 'edit')
 
 if ($action_todo)
 {
+	if ($_GET['action'] == 'add')
+	{
+		$form_title = get_lang('AddSystemAnnouncement');
+	}
+	elseif ($_GET['action'] == 'edit')
+	{
+		$form_title = get_lang('EditSystemAnnouncement');
+	}
+	
 	$form = new FormValidator('system_announcement');
+	$form->addElement('header', '', $form_title);
 	$form->add_textfield('title', get_lang('Title'));
 	$language_list = api_get_languages();
 	$language_list_with_keys = array();
@@ -191,9 +199,7 @@ if ($action_todo)
 	$form->addElement('hidden', 'action');
 	$form->addElement('hidden', 'id');
 	$form->addElement('checkbox', 'send_mail', get_lang('SendMail'));
-	
-	$form->addElement('style_submit_button', 'submit', get_lang('Ok'),'class="save"');
-	
+	$form->addElement('submit', 'submit', get_lang('Ok'));
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true')
 	{
 		$values['content'] = WCAG_Rendering::HTML_to_text($values['content']);

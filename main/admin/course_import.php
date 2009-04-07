@@ -148,6 +148,7 @@ require_once (api_get_path(LIBRARY_PATH).'import.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
 require_once (api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $formSent = 0;
 $errorMsg = '';
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
@@ -162,7 +163,11 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 
 set_time_limit(0);
 Display :: display_header($tool_name);
-api_display_tool_title($tool_name);
+
+$form = new FormValidator('update_course');
+$form->addElement('header', '', $tool_name);
+$form->display();
+
 if ($_POST['formSent'])
 {
 	if(empty($_FILES['import_file']['tmp_name']))

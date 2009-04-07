@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 19534 2009-04-03 20:23:32Z aportugal $
+<?php // $Id: user_list.php 19597 2009-04-07 14:38:36Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -549,6 +549,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	Display :: display_header($tool_name);
 	//api_display_tool_title($tool_name);
 	$form = new FormValidator('advanced_search','get');
+	$form->addElement('header', '', $tool_name);
 	$form->add_textfield('keyword_firstname',get_lang('FirstName'),false);
 	$form->add_textfield('keyword_lastname',get_lang('LastName'),false);
 	$form->add_textfield('keyword_username',get_lang('LoginName'),false);

@@ -119,7 +119,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$nbr_results=sizeof($Sessions);	
 	$tool_name = get_lang('SessionList');	
 	Display::display_header($tool_name);	
-	api_display_tool_title($tool_name);
+	//api_display_tool_title($tool_name);
     
     if (!empty($_GET['warn'])) {
         Display::display_warning_message(urldecode($_GET['warn']));

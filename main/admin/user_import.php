@@ -1,4 +1,4 @@
-<?php // $Id: user_import.php 19261 2009-03-25 00:10:44Z cvargas1 $
+<?php // $Id: user_import.php 19597 2009-04-07 14:38:36Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -350,6 +350,7 @@ if ($error_kind_file===true) {
 	Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
 }
 $form = new FormValidator('user_import');
+$form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addRule('import_file', get_lang('ThisFieldIsRequired'), 'required');

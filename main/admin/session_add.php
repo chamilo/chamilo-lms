@@ -19,12 +19,22 @@
 ==============================================================================
 */
 
+/**
+============================================================================== 
+*	@package dokeos.admin
+* 	@todo use formvalidator for the form
+============================================================================== 
+*/
+
 // name of the language file that needs to be included
 $language_file='admin';
 
 $cidReset=true;
 
+// including the global Dokeos file
 require_once('../inc/global.inc.php');
+
+// including additional libraries
 require_once(api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
 require_once('../inc/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
@@ -139,15 +149,21 @@ $thisDay=date('d');
 
 
 $tool_name = get_lang('AddSession');
+
+//display the header
 Display::display_header($tool_name);
-api_display_tool_title($tool_name);
+
+// display the tool title
+// api_display_tool_title($tool_name);
+
+
 if (!empty($return)) {
 	Display::display_error_message($return,false);
 }
 ?>
 <form method="post" name="form" action="<?php echo api_get_self(); ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
-
+<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
 <table border="0" cellpadding="5" cellspacing="0" width="550">
 <tr>
   <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>

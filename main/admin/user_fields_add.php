@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 19261 2009-03-25 00:10:44Z cvargas1 $
+<?php // $Id: user_fields_add.php 19597 2009-04-07 14:38:36Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -102,6 +102,7 @@ else
 }
 // Create the form
 $form = new FormValidator('user_fields_add');
+$form->addElement('header', '', $tool_name);
 // Field variable name
 $form->addElement('hidden','fieldid',(int)$_GET['field_id']);
 $form->addElement('text','fieldlabel',get_lang('FieldLabel'));

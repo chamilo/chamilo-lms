@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 19257 2009-03-24 23:17:44Z aportugal $
+<?php // $Id: user_edit.php 19597 2009-04-07 14:38:36Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -96,6 +96,7 @@ $user_data = array_merge($user_data, Usermanager :: get_extra_user_data($user_id
 
 // Create the form
 $form = new FormValidator('user_add','post','','',array('style' => 'width: 60%; float: '.($text_dir=='rtl'?'right;':'left;')));
+$form->addElement('header', '', $tool_name);
 $form->addElement('hidden','user_id',$user_id);
 
 // Lastname

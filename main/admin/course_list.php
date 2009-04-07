@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 19261 2009-03-25 00:10:44Z cvargas1 $
+<?php // $Id: course_list.php 19597 2009-04-07 14:38:36Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -192,6 +192,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	Display :: display_header($tool_name);
 	//api_display_tool_title($tool_name);
 	$form = new FormValidator('advanced_course_search', 'get');
+	$form->addElement('header', '', $tool_name);
 	$form->add_textfield('keyword_code', get_lang('CourseCode'), false);
 	$form->add_textfield('keyword_title', get_lang('Title'), false);
 	$categories = array();

@@ -168,8 +168,13 @@ $language_file = array ('admin', 'registration');
 
 $cidReset = true;
 
+// including the global Dokeos file
 include ('../inc/global.inc.php');
+
+// protecting the admin section
 api_protect_admin_script();
+
+// including additional libraries
 require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'import.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
@@ -183,7 +188,10 @@ $tool_name = get_lang('AddUsersToACourse').' CSV';
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
+
+// creating the form
 $form = new FormValidator('course_user_import');
+$form->addElement('header', '', $tool_name);
 $form->addElement('file','import_file', get_lang('ImportFileLocation'));
 $form->addElement('checkbox','subscribe',get_lang('Action'),get_lang('SubscribeUserIfNotAllreadySubscribed'));
 $form->addElement('checkbox','unsubscribe','',get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
@@ -214,8 +222,14 @@ if ($form->validate()) {
 		exit ();
 	}
 }
+
+// displaying the header
 Display :: display_header($tool_name);
-api_display_tool_title($tool_name);
+
+// displaying the tool title
+// api_display_tool_title($tool_name);
+
+
 if (count($errors) != 0) {
 	$error_message = '<ul>';
 	foreach ($errors as $index => $error_course) {
@@ -227,6 +241,7 @@ if (count($errors) != 0) {
 	Display :: display_error_message($error_message);
 }
 
+// displaying the form
 $form->display();
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
@@ -243,10 +258,6 @@ echo STUDENT.': '.get_lang('Student').'<br />';
 ?>
 </blockquote>
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+// footer
 Display :: display_footer();
 ?>

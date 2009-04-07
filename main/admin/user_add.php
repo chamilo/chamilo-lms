@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 19251 2009-03-24 21:23:16Z cfasanando $
+<?php // $Id: user_add.php 19597 2009-04-07 14:38:36Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -92,6 +92,7 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 $tool_name = get_lang('AddUsers');
 // Create the form
 $form = new FormValidator('user_add');
+$form->addElement('header', '', $tool_name);
 // Lastname
 $form->addElement('text','lastname',get_lang('LastName'));
 $form->applyFilter('lastname','html_filter');

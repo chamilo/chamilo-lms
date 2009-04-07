@@ -24,6 +24,7 @@
 /**
 ==============================================================================
 *	@package dokeos.admin
+* 	@todo use formvalidator
 ==============================================================================
 */
 
@@ -36,6 +37,7 @@ $cidReset=true;
 // including some necessary dokeos files
 require('../inc/global.inc.php');
 
+// including additonal libraries
 require_once ('../inc/lib/xajax/xajax.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
 $xajax = new xajax();
@@ -234,8 +236,27 @@ if ($_POST['formSent']) {
 		//header('Location: '.$_GET['page'].'?id_session='.$id_session);
 }
 
+// display the dokeos header
 Display::display_header($tool_name);
-api_display_tool_title($tool_name);
+
+// display the tool title
+// api_display_tool_title($tool_name);
+
+if($add_type == 'multiple') {
+	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').' ';
+} else {
+	$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'&nbsp;&nbsp;&nbsp;';
+	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+}
+echo '<div class="actions">';
+echo $link_add_type_unique.$link_add_type_multiple;
+echo '</div>';
+
+// the form header 
+echo '<div class="row"><div class="form_header">'.$tool_name.'</div></div>';
+
+
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_course;
 $rs = api_sql_query($sql, __FILE__, __LINE__);
 $count_courses = mysql_result($rs, 0, 0);*/
@@ -311,20 +332,11 @@ if ($ajax_search) {
 
 unset($Courses);
 
-if($add_type == 'multiple') {
-	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.get_lang('SessionAddTypeUnique').'</a>';
-	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
-} else {
-	$link_add_type_unique = get_lang('SessionAddTypeUnique');
-	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.get_lang('SessionAddTypeMultiple').'</a>';
-}
+
 
 ?>
 
-<div style="text-align: left;">
-	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
-</div>
-<br><br>
+
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <input type="hidden" name="formSent" value="1" />

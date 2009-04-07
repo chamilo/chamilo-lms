@@ -1,5 +1,5 @@
 <?php
-// $Id: subscribe_user2course.php 19311 2009-03-25 15:40:27Z cvargas1 $
+// $Id: subscribe_user2course.php 19597 2009-04-07 14:38:36Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -31,6 +31,7 @@
 *	'Add to this(these) course(s)'.
 *
 *	@package dokeos.admin
+* 	@todo use formvalidator for the form
 ============================================================================== 
 */
 
@@ -47,7 +48,12 @@ $cidReset = true;
 require ('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;
 
+// including additional libraries
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+
+// security
 api_protect_admin_script();
 /*
 -----------------------------------------------------------
@@ -88,8 +94,15 @@ function validate_filter() {
 	
 </script>';
 
+// displaying the header
 Display :: display_header($tool_name);
-api_display_tool_title($tool_name);
+
+// displaying the tool title
+// api_display_tool_title($tool_name);
+
+$form = new FormValidator('subscribe_user2course');
+$form->addElement('header', '', $tool_name);
+$form->display();
 
 /*
 ==============================================================================
@@ -99,7 +112,6 @@ api_display_tool_title($tool_name);
 
 
 //checking for extra field with filter on
-include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $extra_field_list= UserManager::get_extra_fields();
 $new_field_list = array();
 if (is_array($extra_field_list)) {

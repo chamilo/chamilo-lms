@@ -1,5 +1,5 @@
 <?php
-// $Id: user_export.php 19257 2009-03-24 23:17:44Z aportugal $
+// $Id: user_export.php 19597 2009-04-07 14:38:36Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,6 +73,7 @@ while ($course = mysql_fetch_object($result))
 	$courses[$course->code] = $course->visual_code.' - '.$course->title;
 }
 $form = new FormValidator('export_users');
+$form->addElement('header', '', $tool_name);
 $form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'XML','xml');
 $form->addElement('radio', 'file_type', null, 'CSV','csv');
 $form->addElement('checkbox', 'addcsvheader', get_lang('AddCSVHeader'), get_lang('YesAddCSVHeader'),'1');

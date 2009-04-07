@@ -76,7 +76,7 @@ table {
 }
 
 tr,td {
-	padding: .35em;
+	padding: 0;
 	
 }
 
@@ -890,6 +890,7 @@ div.row div.label {
 
 .courseadminview table td {
 	text-align: left;
+	padding:3px;
 }
 
 #courseintro_icons {

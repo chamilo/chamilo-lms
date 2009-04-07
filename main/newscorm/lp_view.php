@@ -176,7 +176,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	<tr><td width="20%">
 	<div id="learningPathLeftZone" style="float: left; width: 300px;">	
 		<div id="header">
-		        <div id="learningPathHeader" style="font-size:14px; padding-left: 17px;">
+		        <div id="learningPathHeader" style="font-size:14px;">
 		            <table>
 		                <tr>
 		                    <td>
@@ -336,10 +336,8 @@ else
 	</style>
 	<table>
 	<tr><td valign="top">
-	<div id="learningPathLeftZone" style="float: left; width: 330px;">
-	
-		<div id="header">
-	        <div id="learningPathHeader" style="font-size:14px; padding-left: 17px;">
+	<div id="header">
+	        <div id="learningPathHeader" style="font-size:14px;  ">
 	            <table>
 	                <tr>
 	                    <td>
@@ -352,6 +350,7 @@ else
 	            </table>
 	        </div>
         </div>
+	<div id="learningPathLeftZone" style="float: left; width: 330px;">
    	  	<div id="author_image" name="author_image" class="lp_author_image">
 			<?php $image = '../img/lp_author_background.gif'; ?> 
 	 <div id="image_preview;">
@@ -391,7 +390,7 @@ else
 					<?php echo $navigation_bar; ?>
 					</div>
 					<div style="float:left;  padding-top:22px">
-						<?php echo $progress_bar; ?>
+					<?php echo $progress_bar; ?>
 					</div>
 				</div>
 			</div>

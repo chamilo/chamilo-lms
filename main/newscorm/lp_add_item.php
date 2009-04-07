@@ -210,7 +210,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			
 		echo '<td class="tree">';								
 			// show the template list 			
-			if ($_GET['type']=='document')
+			if (isset($_GET['type']) && $_GET['type']=='document' && !isset($_GET['file']))
 			{
 				$count_items = count($_SESSION['oLP']->ordered_items);
 				$style = ($count_items > 12)?' style="height:250px;width:230px;overflow-x : auto; overflow-y : scroll;" ':' class="lp_tree" ';

@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 19471 2009-03-31 23:28:53Z cvargas1 $
+// $Id: add_course.php 19613 2009-04-07 20:42:21Z aportugal $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -121,7 +121,7 @@ if ($form->validate()) {
 	} else {
 		Display :: display_error_message(get_lang('CourseCodeAlreadyExists'),false);
 		$form->display();
-		echo '<p>'.get_lang('CourseCodeAlreadyExistExplained').'</p>';
+		//echo '<p>'.get_lang('CourseCodeAlreadyExistExplained').'</p>';
 	}
 		
 } else {

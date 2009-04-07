@@ -60,7 +60,7 @@ if (($showlink == '0') && ($showeval == '0')) {
 $cat= Category :: load($_REQUEST['selectcat']);
 
 if (isset($_GET['userid'])) {
-	$userid=$_GET['userid'];
+	$userid=Security::remove_XSS($_GET['userid']);
 } else {
 	$userid='';
 }
@@ -83,7 +83,7 @@ if (isset ($export_flatview_form) && (!$file_type == 'pdf')) {
 	Display :: display_normal_message($export_flatview_form->toHtml(),false);
 }
 if (isset($_GET['selectcat'])) {
-	$category_id=$_GET['selectcat'];	
+	$category_id=Security::remove_XSS($_GET['selectcat']);	
 } else {
 	$category_id='';
 }
@@ -92,7 +92,7 @@ $simple_search_form= new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_
 $values= $simple_search_form->exportValues();
 $keyword = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
-	$keyword = $_GET['search'];
+	$keyword = Security::remove_XSS($_GET['search']);
 }
 if ($simple_search_form->validate() && (empty($keyword))) {
 	$keyword = $values['keyword'];
@@ -193,7 +193,11 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
 		//@todo load images with jquery
 		echo '<div id="contentArea" style="text-align:center;" >';
 			$image_file = $flatviewtable->display_graph();
-			echo '<img  src="'.$image_file.'">';	
+			$my_info_path_img=array();
+			$my_info_path_img=explode('/',$image_file);
+			if (strlen($my_info_path_img[5])==32) {
+				echo '<img  src="'.$image_file.'">';	
+			}
 			$flatviewtable->display();		
 			$flatviewtable->display_graph_by_resource();
 		echo '</div>';						

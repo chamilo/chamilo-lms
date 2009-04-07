@@ -270,7 +270,7 @@ $EndActivity = "Fin de la actividad";
 $GoToQuestion = "Ir a la pregunta";
 $NoFeedback = " Examen (sin feedback)";
 $DirectFeedback = "Autoevaluación (feedback inmediato)";
-$FeedbackType = "Evaluación :";
+$FeedbackType = "Evaluación";
 $Scenario = "Escenario";
 $VisitUrl = "Visitar esta dirección";
 $ExitTest = "Salir del examen";
@@ -291,4 +291,5 @@ $HideResultsToStudents = "Ocultar los resultados a los estudiantes";
 $ShowResultsToStudents = "Mostrar los resultados a los estudiantes";
 $ProcedToQuestions = "Preparar preguntas";
 $AddQuestionToExercise = "Añadir pregunta";
+$PresentationQuestions = "Presentación de las preguntas";
 ?>

@@ -291,4 +291,5 @@ $HideResultsToStudents = "Non mostrare i risultati ai corsisti";
 $ShowResultsToStudents = "Mostra i risultati ai corsisti";
 $ProcedToQuestions = "Prepara i quesiti";
 $AddQuestionToExercise = "Aggiungi quesito";
+$PresentationQuestions = "Introduzione ai quesiti";
 ?>

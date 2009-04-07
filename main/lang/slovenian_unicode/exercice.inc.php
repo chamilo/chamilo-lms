@@ -291,4 +291,5 @@ $HideResultsToStudents = "Skrij rezultate tečajnikom";
 $ShowResultsToStudents = "Prikaži rezultate tečajnikom";
 $ProcedToQuestions = "Nadaljuj k vprašanjem";
 $AddQuestionToExercise = "Dodaj vprašanje";
+$PresentationQuestions = "Predstavitev vprašanj";
 ?>

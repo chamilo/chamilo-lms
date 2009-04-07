@@ -1352,15 +1352,15 @@ function show_add_form($id = '')
 <tr>
 <div>
 <table border="0" width="80%">
-				<tr><td colspan="3">
+				<tr><td colspan="4">
 					<div id="err_date" style="display:none;color:red"></div>
 					<div id="err_start_date" style="display:none;color:red"></div>					
 				</td></tr>
 				<td width="10%">	
 					<!-- date: 1 -> 31 -->					
-					<?php echo get_lang('StartDate').": \n"; ?>
+					<nobr><?php echo get_lang('StartDate').": \n"; ?></nobr>
 				</td>
-				<td width="30%">
+				<td width="35%">
 					<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
 							<?php
 							// small loop for filling all the dates
@@ -1420,9 +1420,10 @@ function show_add_form($id = '')
 					</select>
 					<a href="javascript:openCalendar('new_calendar_item','f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
 					</td>
+					<td width="10%">	
+						<nobr><?php echo get_lang('StartTime').": \n"; ?></nobr>
+					</td>
 					<td>					
-							&nbsp;<?php echo get_lang('StartTime').": \n"; ?>&nbsp;
-	
 						<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
 							<!-- <option value="--">--</option> -->
 							<?php
@@ -1461,10 +1462,10 @@ function show_add_form($id = '')
 			<!-- END date and time -->
 <tr>
 <div>
-					<tr><td colspan="3"><div id="err_end_date" style="display:none;color:red"></div></td></tr>
+					<tr><td colspan="4"><div id="err_end_date" style="display:none;color:red"></div></td></tr>
 					<td >			
 							<!-- date: 1 -> 31 -->							
-							<?php echo get_lang('EndDate').": "; ?>
+							<nobr><?php echo get_lang('EndDate').": "; ?></nobr>
 					</td>
 					<td  >
 						<select name="end_fday">
@@ -1511,8 +1512,9 @@ function show_add_form($id = '')
 						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif',get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
 					</td>
 					<td >
-							&nbsp;<?php echo get_lang('EndTime').": \n"; ?>&nbsp;
-
+						<nobr><?php echo get_lang('EndTime').": \n"; ?></nobr>
+					</td>
+					<td >
 						<select name="end_fhour">
 							<!-- <option value="--">--</option> -->
 							<?php
@@ -1544,19 +1546,19 @@ function show_add_form($id = '')
 				</td>
 </div>
 </tr>
-<tr><td colspan="3">
+<tr><td colspan="4">
 <hr noshade="noshade" color="#cccccc" />
 	<div id="err_title" style="display:none;color:red"></div>										
 </td></tr>
 <tr class="subtitle">
-		<td colspan="3" valign="top"><?php echo get_lang('ItemTitle'); ?> :
+		<td colspan="4" valign="top"><?php echo get_lang('ItemTitle'); ?> :
 			<!--<div style='margin-left: 80px'><textarea name="title" cols="50" rows="2" wrap="virtual" style="vertical-align:top; width:75%; height:50px;"><?php  if (isset($title)) echo $title; ?></textarea></div>-->
 			<input type="text" size="60" name="title" value="<?php  if (isset($title)) echo $title; ?>" />
 		</td>
 	</tr>
 
 	<tr>
-		<td colspan="5">
+		<td colspan="4">
 
 			<?php
 			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
@@ -1577,7 +1579,7 @@ function show_add_form($id = '')
 	</tr>
 	<!--<?php /* ADDED BY UGENT, Patrick Cool, march 2004 */ ?>
 	<tr>
-		<td colspan="7">
+		<td colspan="4">
 	    <?php
 			//onclick="selectAll(this.form.elements[6],true)"
 
@@ -1589,7 +1591,7 @@ function show_add_form($id = '')
 	<?php
 	   //if ($_SESSION['addedresource'])
 	   echo "\t<tr>\n";
-	   echo "\t\t<td colspan=\"3\">\n";
+	   echo "\t\t<td colspan=\"4\">\n";
 	   //echo display_resources(0);//--------------------------------------------------------
 	   $test=$_SESSION['addedresource'];
 	   echo "\t\t</td>\n\t</tr>\n";
@@ -1599,13 +1601,13 @@ function show_add_form($id = '')
 	?>
     
     <tr>
-      <td colspan="2" />      
+      <td colspan="4" />      
     </tr>
     <?php
     }//only show repeat fields if adding, not if editing
     ?>
 	<tr>
-		<td colspan="3">
+		<td colspan="4">
 		<?php 
 		if ($_GET['action']=='edit'){
 			$class='save';

@@ -1589,7 +1589,7 @@ class Blog
 
 						/* edit by Kevin Van Den Haute (kevin@develop-it.be) */
 						echo "\t" . '<tr>' . "\n";
-							echo "\t\t" . '<td style="text-align:right; vertical-align:top;">Task management:&nbsp;&nbsp;</td>' . "\n";
+							echo "\t\t" . '<td style="text-align:right; vertical-align:top;">' . get_lang('TaskManager') . ':&nbsp;&nbsp;</td>' . "\n";
 							echo "\t\t" . '<td>' . "\n";
 								echo "\t\t\t" . '<table class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
 									echo "\t\t\t\t" . '<tr>' . "\n";
@@ -1679,7 +1679,7 @@ class Blog
 							$arrPermissions[] = $row['action'];
 
 						echo "\t" . '<tr>' . "\n";
-							echo "\t\t" . '<td style="text-align:right; vertical-align:top;">Task management:&nbsp;&nbsp;</td>' . "\n";
+							echo "\t\t" . '<td style="text-align:right; vertical-align:top;">' . get_lang('TaskManager') . ':&nbsp;&nbsp;</td>' . "\n";
 							echo "\t\t" . '<td>' . "\n";
 								echo "\t\t\t" . '<table  class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
 									echo "\t\t\t\t" . '<tr>' . "\n";

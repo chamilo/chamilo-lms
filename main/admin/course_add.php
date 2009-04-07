@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 19597 2009-04-07 14:38:36Z pcool $
+// $Id: course_add.php 19608 2009-04-07 18:04:42Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -108,7 +108,7 @@ $form->addElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscrib
 $form->add_textfield('disk_quota',get_lang('CourseQuota'));
 $form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');
 $form->add_progress_bar();
-$form->addElement('submit', null, get_lang('Ok'));
+$form->addElement('style_submit_button','submit', get_lang('CreateCourse'),'class="add"');
 // Set some default values
 $values['course_language'] = get_setting('platformLanguage');
 $values['disk_quota'] = get_setting('default_document_quotum');

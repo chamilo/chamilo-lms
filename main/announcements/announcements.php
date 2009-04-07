@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 19571 2009-04-06 19:34:52Z juliomontoya $
+<?php //$Id: announcements.php 19608 2009-04-07 18:04:42Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1144,18 +1144,26 @@ if ($display_form == true) {
 		$oFCKeditor->ToolbarSet = "Announcements";
 	}		
 	
+	if ($_GET['action']=='add') {
+		$class='add';
+		$text=get_lang('SendAnnouncement');
+	} elseif ($_GET['action']=='modify') {
+		$class='save';
+		$text=get_lang('ModifyAnnouncement');		
+	}
+	
 	$oFCKeditor->Value		= $content_to_modify;       
 	echo $oFCKeditor->CreateHtml();        
 	echo'<br />';
 	if(empty($_SESSION['toolgroup'])) {
 		echo '<input type="hidden" name="submitAnnouncement" value="OK">';
         //echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" /><br /><br />';
-        echo '<br /><button class="save"type="submit"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" >'.get_lang('Send').'</button><br /><br />';
+        echo '<br /><button class="'.$class.'"type="submit"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" >'.$text.'</button><br /><br />';
         
 	} else {
 		echo '<input type="hidden" name="submitAnnouncement" value="OK">';
 		//echo '<br /><input type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" /><br /><br />';
-	    echo '<br /><button class="save"type="submit"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" >'.get_lang('Send').'</button><br /><br />';
+	    echo '<br /><button class="'.$class.'"type="submit"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" >'.$text.'</button><br /><br />';
 		
 	}
 	echo '</form><br />';

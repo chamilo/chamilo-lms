@@ -103,7 +103,7 @@ switch ($_GET['action']) {
 		echo '<div class="actions">';   
 		echo '<form id="cat_form" action="m_reservation.php" method="get">';		
 		echo '<input type="hidden" name="action" value="overviewsubscriptions"/>';
-		echo '<input type="text" name="keyword" /><input type="submit" value="'.get_lang('Search').'" /></form>';
+		echo '<input type="text" name="keyword" /><button type="submit" class="search" value="'.get_lang('Search').'" >'.get_lang('Search').'</button></form>';
 		echo '</div><br>';		
 		
 		$table = new SortableTable('reservation', array ('Rsys', 'get_num_subscriptions_overview'), array ('Rsys', 'get_table_subcribed_reservations'), 1);		
@@ -234,7 +234,7 @@ switch ($_GET['action']) {
 		$form->add_datepicker('recurrence_until',get_lang('RepeatUntil'));
 		$form->addElement('html', '</div>');
 		$form->addElement('textarea', 'notes', get_lang('Notes'), array ('cols' => 40, 'rows' => 4));
-		$form->addElement('submit', 'submit', get_lang('Ok'));
+		$form->addElement('style_submit_button', 'submit', get_lang('AddNewBookingPeriod'),'class="add"');
 		$str='';
 		
 		if(!$_POST['forever']) $str.="window_hide('forever_timewindow');";
@@ -469,7 +469,7 @@ switch ($_GET['action']) {
 			$form->addElement('checkbox', 'auto_accept', get_lang('AutoAccept'));
 			$form->addElement('checkbox', 'timepicker', get_lang('TimePicker'),'',array('disabled'=>'disabled'));
 			$form->addElement('textarea', 'notes', get_lang('Notes'), array ('cols' => 40, 'rows' => 4));
-			$form->addElement('submit', 'submit', get_lang('Ok'));
+			$form->addElement('style_submit_button', 'submit', get_lang('EditNewBookingPeriod'),'class="save"');
 			$form->addElement('hidden', 'id', $Reservation_id);
 			$form->addElement('hidden', 'timepicker2');
 			$form->addElement('hidden', 'period', ($reservation[0][7] == '0000-00-00 00:00:00' && $reservation[0][8] == '0000-00-00 00:00:00' ? 0 : 1));
@@ -568,7 +568,7 @@ switch ($_GET['action']) {
 		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewBookingPeriod').'</a>';
 		echo '&nbsp;&nbsp;&nbsp;<a href="m_reservation.php?action=overviewsubscriptions">'.get_lang('OverviewReservedPeriods').'</a>';
 		echo '</div>';
-		echo '<div style="text-align: right; "><input type="text" name="keyword" /><input type="submit" value="'.get_lang('Search').'" /></div></form>';
+		echo '<div style="text-align: right; "><input type="text" name="keyword" /><button type="submit" class="search" value="'.get_lang('Search').'" >'.get_lang('Search').'</button></div></form>';
 		
 		echo '<br>';
 		if (isset ($_POST['action'])) {

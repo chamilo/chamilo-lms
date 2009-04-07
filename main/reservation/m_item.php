@@ -279,7 +279,7 @@ switch ($_GET['action']) {
 				$item_right['m_reservation'] = $item_rights[0]['m_reservation'];
 				$form->setDefaults($item_right);
 
-				$form->addElement('submit', 'submit', get_lang('Ok'));
+				$form->addElement('style_submit_button', 'submit', get_lang('Ok'),'class="save"');
 				if ($form->validate()) {
 					$values = $form->exportValues();
 					Rsys :: edit_item_right($values['item_id'], $values['class_id'], $values['edit_right'], $values['delete_right'], $values['m_reservation']);
@@ -373,7 +373,7 @@ switch ($_GET['action']) {
 		//$form->addElement('select', 'course_code', get_lang('ItemCourse'),array(''=>'','value'=>'tag'));
 		//$form->addRule('course', get_lang('ThisFieldIsRequired'), 'required');
 
-		$form->addElement('submit', 'submit', get_lang('Ok'));
+		$form->addElement('style_submit_button', 'submit', get_lang('AddNewResource'),'class="add"');
 		if ($form->validate()) {
 			$values = $form->exportValues();
 			if (Rsys :: add_item($values['name'], $values['description'], $values['category'], $values['course_code']))
@@ -405,7 +405,7 @@ switch ($_GET['action']) {
 		$form->addElement('textarea', 'description', get_lang('Description'), array ('rows' => '3', 'cols' => '40'));
 		$form->addRule('category_id', get_lang('ThisFieldIsRequired'), 'required');
 		$form->addElement('hidden', 'id', $item['id']);
-		$form->addElement('submit', 'submit', get_lang('Ok'));
+		$form->addElement('style_submit_button', 'submit', get_lang('EditResource'),'class="save"');
 		$form->setDefaults($item);
 		if ($form->validate()) {
 			$values = $form->exportValues();

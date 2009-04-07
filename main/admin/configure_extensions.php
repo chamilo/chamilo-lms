@@ -320,10 +320,10 @@ Display::display_header($nameTool);
 							{
 								$defaults[$row['subkey']] = $row['selected_value'];
 							}							
-							$form -> addElement('submit', 'activeExtension', get_lang('ReconfigureExtension'));
+							$form -> addElement('style_submit_button', 'activeExtension', get_lang('ReconfigureExtension'),'class="save"');
 						}
 						else {
-							$form -> addElement('submit', 'activeExtension', get_lang('ActivateExtension'));
+							$form -> addElement('style_submit_button', 'activeExtension', get_lang('ActivateExtension'),'class="save"');
 						}
 						$form -> setDefaults($defaults);
 						$form -> display();
@@ -387,13 +387,13 @@ Display::display_header($nameTool);
 							{
 								$defaults[$row['subkey']] = $row['selected_value'];
 							}							
-							$form -> addElement('submit', 'activeExtension', get_lang('ReconfigureExtension'));
+							$form -> addElement('style_submit_button', 'activeExtension', get_lang('ReconfigureExtension'),'class="save"');
 						}
 						else {
 							$defaults['host'] = 'localhost';
 							$defaults['port'] = '2002';
 							$defaults['size'] = '720x540';
-							$form -> addElement('submit', 'activeExtension', get_lang('ActivateExtension'));
+							$form -> addElement('style_submit_button', 'activeExtension', get_lang('ActivateExtension'),'class="save"');
 						}
 						
 						$form -> setDefaults($defaults);
@@ -490,7 +490,7 @@ Display::display_header($nameTool);
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<input type="hidden" name="extension_code" value="search" />
-						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" />
+						<button type="submit" class="save" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" ><?php echo get_lang('ActivateExtension') ?></button>
 						</form>
 					</td>
 				</tr>
@@ -513,7 +513,7 @@ Display::display_header($nameTool);
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<input type="hidden" name="extension_code" value="serverstats" />
-						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" />
+						<button type="submit" class="save" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" ><?php echo get_lang('ActivateExtension') ?></button>
 						</form>
 					</td>
 				</tr>
@@ -536,8 +536,9 @@ Display::display_header($nameTool);
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<input type="hidden" name="extension_code" value="bandwidthstats" />
-						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" />
+						<button type="submit" class="save" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" ><?php echo get_lang('ActivateExtension') ?></button>
 						</form>
+						
 					</td>
 				</tr>
 			</table>

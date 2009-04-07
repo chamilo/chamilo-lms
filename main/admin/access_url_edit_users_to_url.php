@@ -383,7 +383,6 @@ function sortOptions(options) {
 	newOptions = new Array();
 	for (i = 0 ; i<options.length ; i++)
 		newOptions[i] = options[i];
-url_list
 	newOptions = newOptions.sort(mysort);
 	options.length = 0;
 	for(i = 0 ; i < newOptions.length ; i++)

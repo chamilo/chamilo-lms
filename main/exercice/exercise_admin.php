@@ -58,10 +58,8 @@ $htmlHeadXtra[] = '<script>
 		function timelimit() {
 			if(document.getElementById(\'options2\').style.display == \'none\') {
 				document.getElementById(\'options2\').style.display = \'block\';
-				document.getElementById(\'img_plus_and_minus2\').innerHTML=\'&nbsp;<img src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 			} else {
 				document.getElementById(\'options2\').style.display = \'none\';
-				document.getElementById(\'img_plus_and_minus2\').innerHTML=\'&nbsp;<img src="../img/div_show.gif.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 			}	
 		}
 		

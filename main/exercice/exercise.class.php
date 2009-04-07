@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 19574 2009-04-06 20:56:01Z iflorespaz $
+* 	@version $Id: exercise.class.php 19599 2009-04-07 15:28:35Z cvargas1 $
 */
 
 
@@ -860,7 +860,17 @@ class Exercise
 		$fck_attribute['Height'] 	= '200px';
 		$fck_attribute['ToolbarSet'] = 'TestDescription';		  
 
-		$form -> addElement ('html_editor', 'exerciseDescription', get_lang('ExerciseDescription'));		
+		$form -> addElement ('html_editor', 'exerciseDescription', get_lang('ExerciseDescription'));
+		
+		$form -> addElement('html','<div class="row">
+			<div class="label">&nbsp;</div>
+			<div class="formw">
+				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+			</div>
+			</div>');
+			
+		// Random questions
+		$form -> addElement('html','<div id="options" style="display:none">');		
 		
 		if($type=='full') {									
 			// feedback type	
@@ -880,7 +890,7 @@ class Exercise
 				$radios = array();
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
-				$form -> addGroup($radios, null, get_lang('ExerciseType'));							
+				$form -> addGroup($radios, null, get_lang('PresentationQuestions'));							
 			} else {
 				// if is Directfeedback but has not questions we can allow to modify the question type
 				if ($this->selectNbrQuestions()== 0) {
@@ -901,16 +911,6 @@ class Exercise
 			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('ShowResultsToStudents'),'0');
 			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('HideResultsToStudents'),'1');
 			$form -> addGroup($radios_results_disabled, null, get_lang('Results'));	
-										
-			$form -> addElement('html','<div class="row">
-				<div class="label">&nbsp;</div>
-				<div class="formw">
-					<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
-				</div>
-				</div>');
-				
-			// Random questions
-			$form -> addElement('html','<div id="options" style="display:none">');
 		
 			$random = array();	
 			$option=array();
@@ -1012,7 +1012,7 @@ class Exercise
 	            $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00');
 	            
 			} else {
-				$defaults['exerciseType'] = 1;
+				$defaults['exerciseType'] = 2;
 				$defaults['exerciseAttempts'] = 0;
 				$defaults['randomQuestions'] = 0;
 				$defaults['exerciseDescription'] = '';

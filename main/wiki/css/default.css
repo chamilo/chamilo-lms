@@ -54,6 +54,7 @@
 		border-bottom-color: #ccc;
 		padding: 3px;
 		padding-top:5px;
+		border-top: 1px solid #ccc; 
 	}
 	#wikititle input {
 		border: 1px solid #333;
@@ -66,9 +67,6 @@
 	
 	#menuwiki {
 		background-color: #FFFFFF;
-		border-bottom-width: 1px;
-		border-bottom-style: solid;
-		border-bottom-color: #ccc;
 	}
 	#menuwiki li{
 		display: inline;

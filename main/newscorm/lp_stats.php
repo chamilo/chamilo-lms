@@ -151,6 +151,25 @@ if (!empty($export_csv)) {
 	);
 }
 
+// get attempts of a exercise
+if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
+	$clean_lp_item_id = Database::escape_string($_GET['my_lp_id']);
+	$clean_lp_id = Database::escape_string($_GET['lp_id']);
+	$clean_course_code = Database :: escape_string($course_code);
+	$sql_path = "SELECT path FROM $TBL_LP_ITEM WHERE id = '$clean_lp_item_id' AND lp_id = '$clean_lp_id'";
+	$res_path = api_sql_query($sql_path,__FILE__,__LINE__); 
+	$row_path = Database::fetch_array($res_path);
+	
+	if (Database::num_rows($res_path) > 0 ){		
+		if ($origin != 'tracking') {		    
+			$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '" AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '" AND status <> "incomplete" ORDER BY exe_date';
+		} else {										
+			$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '" AND exe_user_id="' . (int)$_GET['student_id'] . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '" AND status <> "incomplete" ORDER BY exe_date';
+		}		
+	}					
+						
+}
+
 $TBL_QUIZ = Database :: get_course_table('quiz');
 foreach ($list as $my_item_id) {
 	$extend_this = 0;
@@ -334,20 +353,12 @@ foreach ($list as $my_item_id) {
 			);
 			
 			$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);
-			
-			if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {				
-				if ($origin != 'tracking') {
-						$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$_GET['lp_id'].'" AND orig_lp_item_id = "'.(int)$_GET['my_lp_id'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
-				} else {										
-						$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)$_GET['student_id'] . '" AND orig_lp_id = "'.(int)$_GET['lp_id'].'" AND orig_lp_item_id = "'.(int)$_GET['my_lp_id'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
-				}						
-			} else {
-				if ($origin != 'tracking') {
-						$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$lp_id.'" AND orig_lp_item_id = "'.(int)$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
-				} else {										
-						$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)$_GET['student_id'] . '" AND orig_lp_id = "'.(int)$lp_id.'" AND orig_lp_item_id = "'.(int)$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
-				}						
-			}			 
+		
+			if ($origin != 'tracking') {					
+					$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$lp_id.'" AND orig_lp_item_id = "'.(int)$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
+			} else {										
+					$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)$_GET['student_id'] . '" AND orig_lp_id = "'.(int)$lp_id.'" AND orig_lp_item_id = "'.(int)$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
+			}													 
 				
 			$res_attempts = api_sql_query($sql_attempts,__FILE__,__LINE__);
 			$num_attempts = Database :: num_rows($res_attempts);				
@@ -356,27 +367,27 @@ foreach ($list as $my_item_id) {
 				if ($num_attempts > 0) {					
 					$n=1;										
 					while ($row_attempts = Database :: fetch_array($res_attempts)) {
-					$my_score = $row_attempts['exe_result'];
-					$my_maxscore = $row_attempts['exe_weighting'];
-					$my_exe_id	= $row_attempts['exe_id'];
-					$my_orig_lp = $row_attempts['orig_lp_id'];
-					$my_orig_lp_item = $row_attempts['orig_lp_item_id'];
-										
-					$mktime_start_date = convert_mysql_date($row_attempts['start_date']);
-					$mktime_exe_date = convert_mysql_date($row_attempts['exe_date']);
-					$mytime = ((int)$mktime_exe_date-(int)$mktime_start_date);					 
-					$time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
-					$time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);								
-					$output .= '<tr class="'.$oddclass.'"><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $n . '</td>'				
-				 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore)) . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
-				 	if ($origin != 'tracking') {
-				 		$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAttempt').'"></a></td>';						
-					} else {
-						$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '&total_time='.$mytime.'" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';							
-					}		 				 	        
-				 	$output .= '</tr>';
-					$n++;	
-					}	
+						$my_score = $row_attempts['exe_result'];
+						$my_maxscore = $row_attempts['exe_weighting'];
+						$my_exe_id	= $row_attempts['exe_id'];
+						$my_orig_lp = $row_attempts['orig_lp_id'];
+						$my_orig_lp_item = $row_attempts['orig_lp_item_id'];						
+						$mktime_start_date = convert_mysql_date($row_attempts['start_date']);
+						$mktime_exe_date = convert_mysql_date($row_attempts['exe_date']);
+						$mytime = ((int)$mktime_exe_date-(int)$mktime_start_date);					 
+						$time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
+						$time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);
+																		
+						$output .= '<tr class="'.$oddclass.'"><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $n . '</td>'				
+					 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore)) . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
+					 	if ($origin != 'tracking') {
+					 		$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAttempt').'"></a></td>';						
+						} else {
+							$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '&total_time='.$mytime.'" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';							
+						}		 				 	        
+					 	$output .= '</tr>';
+						$n++;												
+					}																								
 				}						
 			}
 
@@ -536,6 +547,8 @@ foreach ($list as $my_item_id) {
 			
 		);
 		$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);
+		$my_id = $row['myid'];
+		$my_lp_id = $row['mylpid'];
 		if ($row['item_type'] != 'dokeos_chapter') {
 			if ($row['item_type'] == 'quiz') {
 				$correct_test_link = '';
@@ -550,14 +563,12 @@ foreach ($list as $my_item_id) {
 
 				$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
 				$num = Database :: num_rows($resultLastAttempt);
-				if ($num > 0) {
-					$my_id = $row['myid'];
-					$my_lp_id = $row['mylpid'];																																
-					if (isset($_GET['extend_all']) && $_GET['extend_all'] == 1) {
-					$correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0"></a>';
-					$extend_all = 1;
-					} else {
-					$correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_all=1'.$my_url_suffix.'&my_lp_id='.$my_id.'"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="'.get_lang('ShowAllAttemptsByExercise').'"></a>';
+				if ($num > 0) {																																							
+					if (isset($_GET['extend_attempt']) && $_GET['extend_attempt'] == 1 && (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)  ) {						
+						$correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&my_ext_lp_id='.$my_id.'#anchor_ext_hidden_'.$my_lp_id.'"><img src="../img/view_less_stats.gif" alt="fold_view" border="0"></a>';
+						$extend_attempt = 1;
+					} else {						
+						$correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_attempt=1'.$my_url_suffix.'&my_lp_id='.$my_id.'#anchor_ext_show_'.$my_lp_id.'"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="'.get_lang('ShowAllAttemptsByExercise').'"></a>';
 					}
 				} else {
 					$correct_test_link = '-';
@@ -566,16 +577,29 @@ foreach ($list as $my_item_id) {
 				$correct_test_link = '-';
 			}
 
-			$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $lp_charset) . '</div></td>' . "\n"
 			//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
-			 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">'; 
-			 if ($row['item_type'] == 'quiz') {
-			 	$output .= ($score == 0 ? '0/'.$maxscore : ($maxscore == 0 ? $score : $score . '/' . $maxscore));//$maxscore == 0 ? $score : $score . '/' . $maxscore;
-			 } else {
-			    $output .= ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));	
-			 }			  
-			 $output .= "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $time . "</div></td><td>$correct_test_link</td>\n" . "</tr>\n";
 
+			if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {
+				$output .= "<tr class='$oddclass' id='anchor_ext_show_$my_lp_id'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $lp_charset) . '</div></td>' . "\n";				
+				$output .= '<td colspan="2">&nbsp;</td><td colspan="2">&nbsp;</td><td colspan="2">&nbsp;</td><td>'.$correct_test_link.'</td></tr>';
+				$output .= "</tr>\n";						 
+			} else {
+				if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_ext_lp_id']) && $_GET['my_ext_lp_id'] == $my_id)) {
+					$output .= "<tr class='$oddclass' id='anchor_ext_hidden_$my_lp_id'>\n"; 
+				} else {
+					$output .= "<tr class='$oddclass'>\n";	
+				}
+				$output .= "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $lp_charset) . '</div></td>' . "\n";							
+				$output .= '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">';			  
+				 if ($row['item_type'] == 'quiz') {
+				 	$output .= ($score == 0 ? '0/'.$maxscore : ($maxscore == 0 ? $score : $score . '/' . $maxscore));//$maxscore == 0 ? $score : $score . '/' . $maxscore;
+				 } else {
+				    $output .= ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));	
+				 }			 			  
+				 $output .= "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $time . "</div></td><td>$correct_test_link</td>\n";
+				 $output .= "</tr>\n";	
+			}			 
+			 			 
 			if (!empty($export_csv)) {
 				$temp = array ();
 				$temp[] = $title;
@@ -620,6 +644,41 @@ foreach ($list as $my_item_id) {
 				$counter++;
 			}
 		}
+																																												
+		// attempts list by exercise 
+		if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {
+			
+				$res_attempts = api_sql_query($sql_attempts,__FILE__,__LINE__);
+				$num_attempts = Database :: num_rows($res_attempts);																	
+				if ($row['item_type'] === 'quiz') {									
+					if ($num_attempts > 0) {					
+						$n=1;										
+						while ($row_attempts = Database :: fetch_array($res_attempts)) {
+							$my_score = $row_attempts['exe_result'];
+							$my_maxscore = $row_attempts['exe_weighting'];
+							$my_exe_id	= $row_attempts['exe_id'];
+							$my_orig_lp = $row_attempts['orig_lp_id'];
+							$my_orig_lp_item = $row_attempts['orig_lp_item_id'];												
+							$mktime_start_date = convert_mysql_date($row_attempts['start_date']);
+							$mktime_exe_date = convert_mysql_date($row_attempts['exe_date']);
+							$mytime = ((int)$mktime_exe_date-(int)$mktime_start_date);					 
+							$time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
+							$time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);
+																			
+							$output .= '<tr class="'.$oddclass.'" ><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $n . '</td>'				
+						 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore)) . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
+						 	if ($origin != 'tracking') {
+						 		$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAttempt').'"></a></td>';						
+							} else {
+								$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '&total_time='.$mytime.'" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';							
+							}		 				 	        
+						 	$output .= '</tr>';
+							$n++;												
+						}																								
+					}
+					$output .= '<tr><td colspan="12">&nbsp;</td></tr>';							
+				}								
+			}
 
 	}
 

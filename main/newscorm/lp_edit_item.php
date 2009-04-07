@@ -203,16 +203,33 @@ echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 		echo '<tr>';			
 		echo '<td class="tree">';
-			echo '<div class="lp_tree" style="height:90%" >';					
-				//build the tree with the menu items in it
-				echo $_SESSION['oLP']->build_tree();			
+		
+		$path_item = isset($_GET['path_item'])?$_GET['path_item']:0;		
+		$path_item = Database::escape_string($path_item);
+		$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
+		$sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE id = " . $path_item;
+		$res_doc=api_sql_query($sql_doc, __FILE__, __LINE__);
+		$path_file=Database::result($res_doc,0,0);					
+		$path_parts = pathinfo($path_file);
+						
+		if (Database::num_rows($res_doc) > 0 && $path_parts['extension']=='html'){
+			$count_items = count($_SESSION['oLP']->ordered_items);
+			$style = ($count_items > 12)?' style="height:250px;width:230px;overflow-x : auto; overflow : scroll;" ':' class="lp_tree" ';
+			echo '<div '.$style.'>';					
+			//build the tree with the menu items in it
+			echo $_SESSION['oLP']->build_tree();			
 			echo '</div>';
-			
 			// show the template list 
 			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>'; //line				
-			echo '<br>';				
-			echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';				
-					
+			echo '<br>';		
+			echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
+		} else {
+			echo '<div class="lp_tree" style="height:90%" >';					
+			//build the tree with the menu items in it
+			echo $_SESSION['oLP']->build_tree();			
+			echo '</div>';
+		}		
+		
 		echo '</td>';
 		
 		echo '<td class="workspace">';

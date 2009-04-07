@@ -4348,6 +4348,7 @@ class learnpath {
 			'id' => $row['id'],
 			'item_type' => $row['item_type'],
 			'title' => $row['title'],
+			'path' => $row['path'],
 			'description' => $row['description'],
 			'parent_item_id' => $row['parent_item_id'],
 			'previous_item_id' => $row['previous_item_id'],
@@ -4469,15 +4470,15 @@ class learnpath {
 						$return .= "\t\t" . '<td>' . "\n";
 						
 						if($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module')
-						{
-							$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
+						{										
+							$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item='.$arrLP[$i]['path'].'">';
 								$return .= '<img alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
 							$return .= '</a>' . "\n";
 						}
 						else
-						{
-							$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
-								$return .= '<img alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
+						{							
+							$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item='.$arrLP[$i]['path'].'">';
+							$return .= '<img alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
 							$return .= '</a>' . "\n";
 						}
 						
@@ -7265,7 +7266,8 @@ class learnpath {
 		}
 		//commented ":" for message in step
 		//$return .= $lang.': '; 
-		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang('Edit').'"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="'.get_lang("Edit").'" /> '.get_lang("Edit").'</a>';
+				
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '&path_item='.$row['path'].'" title="'.get_lang('Edit').'"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="'.get_lang("Edit").'" /> '.get_lang("Edit").'</a>';
 		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="'.get_lang("Move").'" /> '.get_lang("Move").'</a>';
 		// commented for now as prerequisites cannot be added to chapters
 		if($item_type != 'dokeos_chapter' && $item_type != 'chapter')

@@ -208,18 +208,25 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 
 	echo '<tr>';
 			
-		echo '<td class="tree">';
-		
-			echo '<div class="lp_tree">';					
-				//build the tree with the menu items in it
-				echo $_SESSION['oLP']->build_tree();			
-			echo '</div>';
-			
-			// show the template list 
+		echo '<td class="tree">';								
+			// show the template list 			
 			if ($_GET['type']=='document')
 			{
+				$count_items = count($_SESSION['oLP']->ordered_items);
+				$style = ($count_items > 12)?' style="height:250px;width:230px;overflow-x : auto; overflow-y : scroll;" ':' class="lp_tree" ';
+				echo '<div  '.$style.'>';					
+				//build the tree with the menu items in it
+				echo $_SESSION['oLP']->build_tree();			
+				echo '</div>';
+				// show the template list
+				echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>'; //line
 				echo '<br />';			
 				echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
+			} else {
+				echo '<div class="lp_tree">';					
+				//build the tree with the menu items in it
+				echo $_SESSION['oLP']->build_tree();			
+				echo '</div>';
 			}
 							
 			

@@ -258,7 +258,7 @@ class Evaluation implements GradebookItem
 		$rs=api_sql_query($sql_eval,__FILE__,__LINE__);
 		$row_old_weight=Database::fetch_array($rs,'ASSOC');
 		$current_date=strtotime(date('Y-m-d H:i:s',time()));
-		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".$arreval['id']."','".$arreval['name']."','".$arreval['description']."','".$current_date."','".$row_old_weight['weight']."','".$arreval['visible']."','evaluation',".api_get_user_id().")";
+		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($arreval['name'])."','".Database::escape_string($arreval['description'])."','".Database::escape_string($current_date)."','".Database::escape_string($row_old_weight['weight'])."','".Database::escape_string($arreval['visible'])."','evaluation',".api_get_user_id().")";
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
 	/**

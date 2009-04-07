@@ -5156,7 +5156,7 @@ class learnpath {
 					if($action != 'move') {
 						$return .= "\t\t" . '<tr>' . "\n";							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang('Title').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" class="learnpath_item_form" value="' . $item_title . '" /></td>' . "\n";						
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" style="width:98%;" type="text" class="learnpath_item_form" value="' . $item_title . '" /></td>' . "\n";						
 							$return .= "\t\t" . '</tr>' . "\n";
 					}				
 				
@@ -5165,7 +5165,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang('Parent').'</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
+							$return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
@@ -5195,7 +5195,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang('Position').'</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select class="learnpath_item_form" id="idPosition" name="previous" size="1">';
+							$return .= "\t\t\t\t" . '<select class="learnpath_item_form" style="width:100%;" id="idPosition" name="previous" size="1">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang('FirstPosition').'</option>';
 								
@@ -5258,7 +5258,7 @@ class learnpath {
 						$return .= "\t\t" . '</tr>' . "\n";						
 						$return .= "\t\t" . '<tr>' . "\n";						
 						$return .= "\t\t\t" . '<td class="label"><label for="maxTimeAllowed">'.get_lang('MaxTimeAllowed').'</label></td>' . "\n";
-						$return .= "\t\t\t" . '<td class="input"><input name="maxTimeAllowed" id="maxTimeAllowed" value="' . $extra_info['max_time_allowed'] . '" /></td>';
+						$return .= "\t\t\t" . '<td class="input"><input name="maxTimeAllowed" style="width:98%;" id="maxTimeAllowed" value="' . $extra_info['max_time_allowed'] . '" /></td>';
 							
 							//Remove temporaly the test description
 							//$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
@@ -5656,7 +5656,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang('Title').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" style="width:98%;" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 					}				
@@ -5704,7 +5704,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang('Position').'</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1" class="learnpath_item_form">';
+							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang('FirstPosition').'</option>';
 								
@@ -6202,7 +6202,7 @@ class learnpath {
 				$form->addElement('hidden','title');
 			}			
 			
-			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent"), '', 'class="learnpath_chapter_form" style="width:189px;" id="Parent" onchange="load_cbo(this.value);"');
+			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent"), '', 'class="learnpath_chapter_form" style="width:37%;" id="Parent" onchange="load_cbo(this.value);"');
 
 			foreach($arrHide as $key => $value)
 			{
@@ -6229,7 +6229,7 @@ class learnpath {
 			}
 		}
 		
-		$position = &$form->addElement('select', 'previous', get_lang('Position'), '', 'id="idPosition" class="learnpath_chapter_form"');
+		$position = &$form->addElement('select', 'previous', get_lang('Position'), '', 'id="idPosition" class="learnpath_chapter_form" style="width:37%;"');
 		
 		$position->addOption(get_lang('FirstPosition'),0,'style="padding-left:'.$value['padding'].'px;"');
 		
@@ -6449,7 +6449,7 @@ class learnpath {
 						
 			if($action != 'move')
 			{
-				$form->addElement('text','title', get_lang('Title'),'id="idTitle" class="learnpath_item_form" size=45%');
+				$form->addElement('text','title', get_lang('Title'),'id="idTitle" class="learnpath_item_form" size=44%');
 			}			
 						
 			//$arrHide = array($id);
@@ -6478,7 +6478,7 @@ class learnpath {
 					}
 				}
 			}
-			$parent_select = &$form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" style="width:263px;" onchange="load_cbo(this.value);"');
+			$parent_select = &$form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" style="width:40%;" onchange="load_cbo(this.value);"');
 
 			foreach($arrHide as $key => $value) {
 				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
@@ -6503,7 +6503,7 @@ class learnpath {
 				}
 			}
 			
-			$position = &$form->addElement('select', 'previous', get_lang('Position'), '', 'id="idPosition" class="learnpath_item_form"');
+			$position = &$form->addElement('select', 'previous', get_lang('Position'), '', 'id="idPosition" class="learnpath_item_form" style="width:40%;"');
 			$position->addOption(get_lang("FirstPosition"),0);
 			
 			foreach($arrHide as $key => $value) {
@@ -6765,7 +6765,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang('Title').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form"/></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" style="width:99%;" type="text" value="' . $item_title . '" class="learnpath_item_form"/></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 					}				
@@ -6810,7 +6810,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang('Position').'</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1" class="learnpath_item_form">';
+							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang("FirstPosition").'</option>';
 								
@@ -6840,14 +6840,14 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang('Description').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" class="learnpath_item_form" rows="4">' . $item_description . '</textarea></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" style="width:100%;" name="description" class="learnpath_item_form" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idURL">'.get_lang('Url').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input' . (is_numeric($extra_info) ? ' disabled="disabled"' : '') . ' id="idURL" name="url" type="text" value="' . $item_url . '" class="learnpath_item_form" /></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input' . (is_numeric($extra_info) ? ' disabled="disabled"' : '') . ' id="idURL" name="url" style="width:99%;" type="text" value="' . $item_url . '" class="learnpath_item_form" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 						
@@ -7024,7 +7024,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang('Title').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" style="width:100%;" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";			
 					}	
@@ -7034,7 +7034,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang('Parent').'</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
+							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" style="width:100%;" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
@@ -7076,7 +7076,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang('Position').'</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1" class="learnpath_item_form">';
+							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang("FirstPosition").'</option>';
 								
@@ -7886,7 +7886,7 @@ class learnpath {
 		$a_forums = get_forums();
 		
 		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . '><img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />'.get_lang('Forums').'</div>';
-		$return .= '<div class="lp_resource_elements" id="forums">';
+		$return .= '<div class="lp_resource_elements"  style="border:1px solid #999999;" id="forums">';
 		
 		foreach($a_forums as $forum)
 		{

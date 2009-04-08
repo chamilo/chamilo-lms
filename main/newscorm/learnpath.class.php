@@ -4436,7 +4436,7 @@ class learnpath {
 					}
 					else 
 					{
-						if ($arrLP[$i]['item_type']!='dokeos_chapter') {
+						if ($arrLP[$i]['item_type']!='dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module' && $arrLP[$i]['item_type'] != 'dir') {
 							$return .= ' <input type="file" name="mp3file'.$arrLP[$i]['id'].'" id="mp3file" />';
 							if (!empty($arrLP[$i]['audio']))
 							{

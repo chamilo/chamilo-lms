@@ -22,31 +22,46 @@ $lp_item_id = $_SESSION['oLP']->get_current_item_id();
  */
 $src = '';
 if($debug>0){error_log('New lp - In lp_content.php - Looking for file url',0);}
-switch($lp_type){
-	case 1:
-		$_SESSION['oLP']->stop_previous_item();
-		$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-		if($prereq_check === true){
-			$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
-			$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
-		}else{
-			$src = 'blank.php?error=prerequisites';
-		}		
-		break;
-	case 2:
-	case 3:
-		//save old if asset
-		$_SESSION['oLP']->stop_previous_item(); //save status manually if asset
-		$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-		if($prereq_check === true){
-			$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
-			$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
-		}else{
-			$src = 'blank.php';
-		}
-		break;
-	case 4:
-		break;
+
+$list = $_SESSION['oLP']->get_toc();
+
+$dokeos_chapter = false;
+
+foreach($list as $toc) {
+	if ($toc['id']==$lp_item_id && ($toc['type']=='dokeos_chapter' || $toc['type']=='dokeos_module' || $toc['type']=='dir')) {
+		$dokeos_chapter = true;		
+	}	
+}
+
+if ($dokeos_chapter) { 
+	$src='blank.php';
+} else {
+	switch($lp_type){
+		case 1:
+			$_SESSION['oLP']->stop_previous_item();
+			$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+			if($prereq_check === true){
+				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
+				$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
+			}else{
+				$src = 'blank.php?error=prerequisites';
+			}		
+			break;
+		case 2:
+		case 3:
+			//save old if asset
+			$_SESSION['oLP']->stop_previous_item(); //save status manually if asset
+			$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+			if($prereq_check === true){
+				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
+				$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
+			}else{
+				$src = 'blank.php';
+			}
+			break;
+		case 4:
+			break;	
+	}
 }
 if($debug>0){error_log('New lp - In lp_content.php - File url is '.$src,0);}
 $_SESSION['oLP']->set_previous_item($lp_item_id);

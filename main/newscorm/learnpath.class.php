@@ -2771,10 +2771,12 @@ class learnpath {
 			$count = Database::num_rows($result);			
 			if ($item['type']=='quiz') {
 				if ($item['status']=='completed') {
-				$html .= "<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' />";
+				$html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' width='12' height='12' />";
 				}
-			} else {
-					$html .= "<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' />";
+			} else {				
+					if ($item['type']!='dokeos_chapter' && $item['type']!='dokeos_module' && $item['type']!='dir') {	
+						$html .= "&nbsp;<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' width='12' height='12' />";
+					}
 				
 			}		
     		 		    		 		

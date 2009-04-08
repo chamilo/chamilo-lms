@@ -2380,3 +2380,8 @@ button.back {
 	padding-bottom: 3px;
 	padding-left: 5px;
 }
+
+#expire_session div{
+	float:left; 
+	padding-left:15px;
+}

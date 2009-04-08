@@ -1676,17 +1676,17 @@ function api_not_allowed($print_headers = false) {
 			if ($print_headers && $origin != 'learnpath') {Display::display_footer();}
 			die();			
 		} else {
-			include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');$form = new FormValidator('formLogin','post',api_get_self().'?'.$_SERVER['QUERY_STRING']);
+			include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+			$form = new FormValidator('formLogin','post',api_get_self().'?'.$_SERVER['QUERY_STRING']);
 			$form->addElement('static',null,null,'Username');
 			$form->addElement('text','login','',array('size'=>15));
 			$form->addElement('static',null,null,'Password');
 			$form->addElement('password','password','',array('size'=>15));
-			$form->addElement('submit','submitAuth',get_lang('Ok'));
-			$test = $form->return_form();
+			$form->addElement('style_submit_button','submitAuth',get_lang('Enter'),'class="login"');
+			$test ='<div id="expire_session"><br/>'.$form->return_form();'</div>';
+			
 			if((!headers_sent() or $print_headers) && $origin != 'learnpath'){Display::display_header('');}
-			echo '<div align="center">';
-			Display::display_error_message(get_lang('NotAllowed').'<br/><br/>'.get_lang('PleaseLoginAgainFromFormBelow').'<br/>'.$test,false);
-			echo '</div>';
+			Display::display_error_message('<left>'.get_lang('NotAllowed').'<br/>'.get_lang('PleaseLoginAgainFromFormBelow').'<br/>'.$test.'</left>',false);			
 			$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
 			if ($print_headers && $origin != 'learnpath') {Display::display_footer();}
 			die();

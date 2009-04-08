@@ -53,4 +53,6 @@ $LearnerMessage = "Messaggio da un corsista";
 $TitleIsRequired = "Il titolo è indispensabile";
 $AnnounceSentByEmail = "Avviso inviato via email";
 $AnnounceSentToUserSelection = "Avviso inviato ad un elenco di utenti";
+$SendAnnouncement = "Invia avviso";
+$ModifyAnnouncement = "Modifica l\'avviso";
 ?>

@@ -26,7 +26,7 @@ $BookingPeriodHasSubscriptions = "No es posible modificar el periodo de reserva 
 $TimePickerMaxUsers = "* Cuando el timepicker está siendo usado, el Máximo número de suscripciones es ignorado";
 $TimePickerMinMaxNull = "* Si el mínimo y máximo valor del timepicker es cero, el tiempo puede ser variable";
 $DeleteSelectedBookingPeriod = "Eliminar items selecionados";
-$EditNewBookingPeriod = "Editar un periodo de reserva";
+$EditNewBookingPeriod = "Editar periodo de reserva";
 $BookingPeriodAdded = "El periodo de reserva fue ingresado";
 $BookingPeriodDeleted = "El periodo de reserva fue eliminado";
 $ConfirmDeleteBookingPeriod = "¿ Está seguro de querer eliminar definitivamente este periodo de reserva ? ";
@@ -120,4 +120,6 @@ $ReservationUnavailable = "Estimado/a Señor(a),\\n\\n#NAME# no esta disponible t
 $ReservationAvailable = "Estimado/a Señor(a), \\n\\nQueremos informarle que #NAME# está disponible otra vez por lo que su reserva de #BEGIN# hasta #END# está de nuevamente activa.";
 $Resources = "Recursos";
 $EditBookingPeriod = "Editar periodo de reservación";
+$CreateResourceType = "Crear tipo de recurso";
+$ModifyResourceType = "Modificar tipo de recurso";
 ?>

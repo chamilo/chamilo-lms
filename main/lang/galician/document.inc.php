@@ -60,6 +60,7 @@ $langTocDown  = "Abaixo";
 $langTocUp  = "Arriba";
 $lang_cut_paste_link = "Sen molduras";
 $langCreatePath = "Crear un itinerario";
+$SendDocument = "Enviar documento";
 $langOogieConversionPowerPoint = "OOgie : Conversión de ficheiros de PowerPoint";
 $langWelcomeOogieSubtitle = "Conversor de PowerPoint a Rota de Aprendizaxe";
 $langAddMetadata = "Ver/Engadir Metadatos";
@@ -208,4 +209,8 @@ $TemplateTitleListLeftListDescription = "Lista á esquerda cun instrutor";
 $TemplateTitleStopAndThinkDescription = "Invitación a pararse e a reflexionar";
 $CreateTheDocument = "Gardar documento";
 $SharedFolder = "Cartafol compartido";
+$CreateFolder = "Crear o directorio";
+$HelpDefaultDirDocuments = "Este directorio contén os arquivos fornecidos por defecto. Pode eliminar ou engadir outros arquivos, pero se un arquivo está oculto cando é inserido nun documento web os estudantes tampouco poderán velo aquí. Cando insira un arquivo nun documento web fágao visible previamente. Os directorios poden seguir ocultos.";
+$HelpSharedFolder = "Este directorio contén os arquivos que os estudantes (e Vd.) envían a un curso a través do editor se non o fan desde a ferramenta grupos. Por defecto serán visibles por calquera profesor, pero estarán ocultos para outros estudantes salvo que accedan a eles mediante un acceso directo. Se fai visible o directorio dun estudante outros estudantes poderán ver todo o que conteña.";
+$TemplateImage = "Imaxe da plantilla";
 ?>

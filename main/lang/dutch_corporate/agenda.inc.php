@@ -65,4 +65,7 @@ $RepeatYearly = "Jaarlijks";
 $RepeatEnd = "Einddatum voor de herhaling";
 $RepeatedEventViewOriginalEvent = "Bekijk de originele gebeurtenis";
 $ICalFileImport = "Importeer iCal/ics file";
+$AllUsersOfThePlatform = "Alle gebruikers van het platform";
+$GlobalEvent = "Globale gebeurtenis";
+$IsNotiCalFormatFile = "Dit bestand is niet in het iCal formaat.";
 ?>

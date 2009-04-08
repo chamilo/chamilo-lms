@@ -51,4 +51,8 @@ $SelectEverybody = "Selecteer iedereen";
 $SelectedUsersGroups = "Gebruikers van de geselecteerde groepen";
 $LearnerMessage = "Bericht van een gebruiker";
 $TitleIsRequired = "Titel is verplicht";
+$AnnounceSentByEmail = "De aankondiging is via email verstuurd.";
+$AnnounceSentToUserSelection = "De aankondiging is gestuurd naar de geslecteerde gebruikers.";
+$SendAnnouncement = "Stuur aankondiging";
+$ModifyAnnouncement = "Wijzig aankondiging";
 ?>

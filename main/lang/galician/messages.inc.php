@@ -21,4 +21,5 @@ $InvalidMessageId = "O id da mensaxe a respostar non é válido.";
 $ErrorSendingMessage = "Produciuse un erro ao tentar enviar a mensaxe.";
 $SureYouWantToDeleteSelectedMessages = "Ten certeza de querer eliminar as mensaxes seleccionadas?";
 $SelectedMessagesDeleted = "Borrouse a mensaxe seleccionada";
+$TypeYourMessage = "Escriba a súa mensaxe";
 ?>

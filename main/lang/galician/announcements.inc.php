@@ -53,4 +53,6 @@ $LearnerMessage = "Mensaxe dun alumno";
 $TitleIsRequired = "O título é obrigatorio";
 $AnnounceSentByEmail = "Anuncio enviado por correo electrónico ";
 $AnnounceSentToUserSelection = "Anuncio enviado a unha selección de usuarios";
+$SendAnnouncement = "Enviar anuncio";
+$ModifyAnnouncement = "Modificar anuncio";
 ?>

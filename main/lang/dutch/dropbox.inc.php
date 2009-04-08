@@ -124,4 +124,6 @@ $NoFilesHere = "Hier zijn geen bestanden";
 $NoFilesHere = "Hier zijn geen bestanden";
 $NewDropboxFileUploaded = "Er werd een nieuw bestand verzonden naar de dropbox tool";
 $NewDropboxFileUploadedContent = "Er werd een nieuw bestand verzonden naar de dropbox van uw cursus";
+$langAddEdit = "Toevoegen / wijzigen";
+$AddComment  = "Commentaar toevoegen";
 ?>

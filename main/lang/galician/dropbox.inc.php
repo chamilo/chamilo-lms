@@ -127,4 +127,5 @@ $NewDropboxFileUploadedContent = "Enviouse un novo arquivo ó buzón de ficheiros 
 $langAddEdit = "Engadir / Editar";
 $ErrorNoFilesInFolder = "Este directorio está baleiro";
 $dropbox_lang["upload"] = "Enviar";
+$AddComment  = "Engadir comentario";
 ?>

@@ -120,4 +120,6 @@ $ReservationUnavailable = "Cara/o Utente,\\n\\n l\'elemento #NAME#  non è tempor
 $ReservationAvailable = "Cara/o Utente,\\n\\n l\'elemento #NAME#  è ora nuovamente disponibile, per cui la prenotazione dal #BEGIN al #END è ora attiva, grazie.";
 $Resources = "Risorse";
 $EditBookingPeriod = "Modifica il periodo di prenotazione";
+$CreateResourceType = "Crea tipo di risorsa";
+$ModifyResourceType = "Modifica tipo di risorsa";
 ?>

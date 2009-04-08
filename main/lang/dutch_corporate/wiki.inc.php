@@ -74,6 +74,14 @@ $AddedBy = "toegevoegd door";
 $EditedBy = "aangepast door";
 $DeletedBy = "gewist door";
 $WikiStandardMode = "Wiki mode";
+$UnlockPage = "Ontgrendelen";
 $HidePage = "Verberg pagina";
 $ShowPage = "Toon pagina";
+$WantedPages = "Gevraagde paginas";
+$MostVisitedPages = "Meest bezochte paginas";
+$MostActiveUsers = "Meest actieve gebruikers";
+$Contributions = "Bijdragen";
+$MostActiveUsers = "Meest actieve gebruikers";
+$LastVersion = "Laatste versie";
+$RestoredFromVersion = "Hersteld van versie";
 ?>

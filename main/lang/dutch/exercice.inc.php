@@ -84,6 +84,7 @@ $langScore = "Score";
 $langCorrespondsTo = "Correspondeert met";
 $langExpectedChoice = "Correct antwoord";
 $langYourTotalScore = "Uw totale score is";
+$ReachedMaxAttemptsAdmin = "U hebt het maximaal aantal toegelaten pogingen voor de test bereikt. U kunt echter, omdat u beheerder bent van deze cursus,  de test nog uitvoeren maar de resultaten zullen niet opgenomen worden in de resultaten pagina. ";
 $Build = "Gemaakt";
 $langEvalSet = "Evaluatieparameters";
 $langActive = "actief";

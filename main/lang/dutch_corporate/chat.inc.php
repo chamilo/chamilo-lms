@@ -35,4 +35,5 @@ $langCallSent = "Chatverzoek verzonden.  Wachten op de goedkeuring van uw partne
 $langChatDenied = "Uw verzoek is genegeerd door uw partner.";
 $Send = "Verstuur";
 $Connected = "verbonden";
+$Think = "Denk";
 ?>

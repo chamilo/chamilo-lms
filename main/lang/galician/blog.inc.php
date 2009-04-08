@@ -83,4 +83,5 @@ $DeleteBlog = "Eliminar este blog";
 $NoTasks = "Sen tarefas";
 $Shared = "Compartido";
 $PermissionGrantedByGroupOrRole = "Permiso concedido por grupo ou rol";
+$Reader = "Lector";
 ?>

@@ -947,4 +947,6 @@ $YouMustImportAFileAccordingToSelectedOption = "you must import a file according
 $ShowEmailOfTeacherOrTutorTitle = "Trainer or tutor\'s e-mail in footer";
 $ShowEmailOfTeacherOrTutorComent = "Show trainer or tutor\'s e-mail in footer ?";
 $Created = "Created";
+$AddSystemAnnouncement = "Add a system announcement";
+$EditSystemAnnouncement = "Edit a system announcement";
 ?>

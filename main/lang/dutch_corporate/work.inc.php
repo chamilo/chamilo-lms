@@ -33,4 +33,7 @@ $SendMailBody = "Een gebruiker postte een document in de publicaties-tool van uw
 $DirDelete = "Verwijder folder";
 $ValidateChanges = "Valideer wijzigingen";
 $FolderUpdated = "Folder werd bijgewerkt";
+$EndsAt = "Eindigt op (volledig gesloten)";
+$ExpiresAt = "verloopt op";
+$ModifyDirectory = "Folder wijzigen";
 ?>

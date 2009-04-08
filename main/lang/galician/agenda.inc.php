@@ -67,6 +67,7 @@ $RepeatedEventViewOriginalEvent = "Ver o evento inicial";
 $ICalFileImport = "Importar un ficheiro iCal/ics";
 $AllUsersOfThePlatform = "Todos os usuarios da Plataforma";
 $GlobalEvent = "Evento de carácter global";
+$ModifyEvent = "Modificar evento";
 $EndDateCannotBeBeforeTheStartDate = "A data final non pode ser menor que a data de inicio";
 $AgendaSortChronologicallyUp = "Ordenar eventos (antigos / recentes)";
 $AgendaSortChronologicallyDown = "Ordenar eventos (recentes / antigos)";

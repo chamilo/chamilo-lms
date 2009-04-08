@@ -120,4 +120,6 @@ $ReservationUnavailable = "Dear Sir/Madam,\\n\\nItem #NAME# is temporary unavail
 $ReservationAvailable = "Dear Sir/Madam,\\n\\nWe wish to inform you that #NAME# is available again so your reservation from #BEGIN# till #END# is active again.";
 $Resources = "Resources";
 $EditBookingPeriod = "Edit booking period";
+$CreateResourceType = "Create resource type";
+$ModifyResourceType = "Modify resource type";
 ?>

@@ -30,6 +30,7 @@ $Down = "omlaag";
 $Up = "omhoog";
 $Theme = "Thema";
 $TheListIsEmpty = "De lijst is leeg.";
+$CreateCategory = "Categorie aanmaken";
 $langCourseCreate = "Nieuwe modulepagina\'s aanmaken";
 $langTodo = "Suggesties";
 $UserName = "Gebruikersnaam (\'log-in\')";

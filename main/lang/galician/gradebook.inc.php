@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ModifyEvaluation = "Modificar avaliación";
+$CreateLink = "Crear enlace";
 $FlatView = "Vista plana";
 $ScoreEdit = "Editar as regras de puntuación";
 $ScoreColor = "Cor da puntuación";

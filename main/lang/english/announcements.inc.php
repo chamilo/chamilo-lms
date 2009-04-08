@@ -53,4 +53,6 @@ $LearnerMessage = "Message from a learner";
 $TitleIsRequired = "Title is required";
 $AnnounceSentByEmail = "Announcement sent by email";
 $AnnounceSentToUserSelection = "Announcement sent to the selected users";
+$SendAnnouncement = "Send announcement";
+$ModifyAnnouncement = "Modify announcement";
 ?>

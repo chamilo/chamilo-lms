@@ -60,6 +60,7 @@ $langTocDown  = "Omlaag";
 $langTocUp  = "Omhoog";
 $lang_cut_paste_link = "Geen frames";
 $langCreatePath = "Nieuw leerpad";
+$SendDocument = "Verstuur het document";
 $langOogieConversionPowerPoint = "Oogie: powerpoint conversie";
 $langWelcomeOogieSubtitle = "Een conversie applicatie die een Powerpoint presentatie omzet in een leerpad.";
 $langAddMetadata = "Metadata bekijken/veranderen";

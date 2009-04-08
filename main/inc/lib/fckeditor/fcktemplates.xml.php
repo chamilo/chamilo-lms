@@ -98,7 +98,7 @@ function load_platform_templates() {
             $image = api_get_path(WEB_PATH).'home/default_platform_document/'.$row['image'];
         } else {
             $image = api_get_path(WEB_PATH).'home/default_platform_document/empty.gif';
-        }
+        }        
       	$row['content'] =  str_replace('{CSS}',$css, $row['content']);
       	$row['content'] =  str_replace('{IMG_DIR}',$img_dir, $row['content']);
       	$row['content'] =  str_replace('{REL_PATH}', api_get_path(REL_PATH), $row['content']);
@@ -178,17 +178,19 @@ function load_personal_templates($user_id=0) {
 
 function load_empty_template()
 {
-	global $css;
+	global $css;			
 	?>
-
-<Template title="<?php echo s('Empty'); ?>" image="<?php echo api_get_path(WEB_PATH).'home/default_platform_document/empty.gif'; ?>">
+<Template title="<?php echo s2('Empty'); ?>" image="<?php echo api_get_path(WEB_PATH).'home/default_platform_document/empty.gif'; ?>">
     <Description></Description>
     <Html>
-        <![CDATA[
-        	<head>
-            	<?php echo $css ?>
-            </head>
-        ]]>    
+	    <![CDATA[
+		   <html>
+		   <head>
+			<?php echo $css ?>   
+		   <body></body>
+		   </head>
+		   </html>
+	   ]]>
     </Html>
 </Template>
 <?php

@@ -6637,7 +6637,7 @@ class learnpath {
 							$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
 							$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/'.$relative_path;
 
-							$form->addElement('style_submit_button', 'submit_button', get_lang('SaveDocument'),'class="save"');
+							$form->addElement('style_submit_button', 'submit_button', get_lang('LPCreateDocument'),'class="save"');
 							$renderer = $form->defaultRenderer();
 							$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
 
@@ -6652,7 +6652,7 @@ class learnpath {
 					elseif(is_numeric($extra_info))
 					{
 			
-						$form->addElement('style_submit_button', 'submit_button', get_lang('AddEdit'), 'class="save"');
+						$form->addElement('style_submit_button', 'submit_button', get_lang('SaveDocument'), 'class="save"');
 			
 						$return = $this->display_document($extra_info, true, true, true);
 						$form->addElement('html',$return);
@@ -6667,7 +6667,7 @@ class learnpath {
 			}
 			if(is_numeric($extra_info))
 			{
-				$form->addElement('style_submit_button', 'submit_button', get_lang('UploadFile'), 'value="submit_button", class="save"');
+				$form->addElement('style_submit_button', 'submit_button', get_lang('SaveDocument'), 'value="submit_button", class="save"');
 				$form->addElement('hidden', 'path', $extra_info);
 			}
 			elseif(is_array($extra_info))

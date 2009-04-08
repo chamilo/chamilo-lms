@@ -295,7 +295,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 else
 {	
 	include_once('../inc/reduced_header.inc.php');
-	$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
+	//$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
 	//check if audio recorder needs to be in studentview
 	$course_id=$_SESSION["_course"]["id"];
 	if($_SESSION["status"][$course_id]==5)
@@ -307,28 +307,7 @@ else
 		$audio_recorder_studentview = false;
 	}
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
-	$_SESSION['loaded_lp_view'] = true;
-	$audio_record_width='';
-	$show_audioplayer=false;
-	if ($displayAudioRecorder)
-	{	// we find if there is a audioplayer
-		$audio_recorder_item_id = $_SESSION['oLP']->current;
-		$docs = Database::get_course_table(TABLE_DOCUMENT);
-		$select = "SELECT * FROM $docs " .
-				" WHERE path like BINARY '/audio/lpi".Database::escape_string($audio_recorder_item_id)."-%' AND filetype='file' " .
-				" ORDER BY path DESC";
-		$res = api_sql_query($select);
-		if(Database::num_rows($res)>0)
-		{
-			$audio_record_width='85,';
-			$show_audioplayer=true;
-		}
-		else
-			$audio_record_width='';
-	}
-	else
-		$audio_record_width='';
-		
+	$_SESSION['loaded_lp_view'] = true;	
 	?>
 	<style type="text/css" media="screen, projection">
 	/*<![CDATA[*/
@@ -384,33 +363,49 @@ else
 				
 					$progress_bar = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
 					$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-					$mediaplayer = $_SESSION['oLP']->get_mediaplayer();
+					$mediaplayer = $_SESSION['oLP']->get_mediaplayer();	
+					
+					$tbl_lp_item	= Database::get_course_table('lp_item');
+					$show_audioplayer = false;
+					// getting all the information about the item
+					$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
+					$res_media= api_sql_query($sql, __FILE__, __LINE__);					
+					
+					if(Database::num_rows($res_media) > 0){
+						while($row_media= Database::fetch_array($res_media)) {
+						     if(!empty($row_media['audio'])) {$show_audioplayer = true; break;}	
+						}
+					}
+
 				?>
+				
 				<div id="lp_navigation_elem" class="lp_navigation_elem">
-					<div style="float:left; padding-top:22px;padding-left:10px;">
-					<?php echo $navigation_bar; ?>
-					</div>
-					<div style="float:left;  padding-top:22px">
-					<?php echo $progress_bar; ?>
-					</div>
-				</div>
+					<div style="float:left; padding-top:22px;padding-left:10px;"><?php echo $navigation_bar; ?></div>
+					<div style="float:left;  padding-top:22px"><?php echo $progress_bar; ?></div>
+				</div>				
 			</div>
+				    
 	    </div>
-	    </div>
-			<div id="media" style="margin:15px 34px;font-size:11.5pt" >
-			<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
-			</div>
+	    
+	    	<div id="author_name" style="margin:0;padding:0;text-align:center"><?php echo $_SESSION['oLP']->get_author() ?></div>		    
+		
+		</div>
+			
+			<?php $style_media = (($show_audioplayer)?' style= "margin:15px 34px;padding:0;font-size:35px;height:20px"':'style="height:1px"'); ?>
+			<div id="media" <?php echo $style_media ?> ><?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?></div>
 	     </div>	
-	<div id="message_id" name="message_name" class="message">
-	        <div id="msg_div_id" class="message"style="float:right; margin:10px 0;" >
-	        <?php echo $error = $_SESSION['oLP']->error; ?>
+		
+		<div id="message_id" name="message_name" class="message" style="height:12px">
+	        <div id="msg_div_id" class="message">
+	        <?php echo (!empty($_SESSION['oLP']->error)?$_SESSION['oLP']->error:''); ?>
 	        </div>
-     </div>
+     	</div>
+     
         <div id="toc_id" name="toc_name" class="lp_toc" style="position:relative;top:10px;left:0">
   			<div id="learningPathToc" style="width:320px;overflow-y:auto;overflow-x:hidden;font-size:9pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
         </div>
         
-        <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:100px;overflow:auto">
+        <div id="lp_log_name" name="lp_log_name" class="lp_log" style="position:relative;top:10px;left:0;height:100px;overflow:auto">
 	        <div id="log_content">
 	        </div>
 	        <div style="color: white;" onClick="cleanlog();">.</div>

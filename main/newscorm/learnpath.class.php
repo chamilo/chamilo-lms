@@ -4820,6 +4820,9 @@ class learnpath {
 			
 			while($row = Database::fetch_array($result))
 			{
+
+				$_SESSION['parent_item_id'] = ($row['item_type']=='dokeos_chapter')?$item_id:0;	
+				 								
 				$return .= $this->display_manipulate($item_id, $row['item_type']);
 				
 				$return .= '<div style="padding:10px;">';
@@ -5173,7 +5176,7 @@ class learnpath {
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
 								$arrHide = array($id);
-								
+								$parent_item_id = $_SESSION['parent_item_id'];
 								for($i = 0; $i < count($arrLP); $i++) {
 									if($action != 'add') {
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
@@ -5183,7 +5186,7 @@ class learnpath {
 										}
 									} else {
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 									}
 								}
 								if (is_array($arrLP)) {
@@ -5675,6 +5678,8 @@ class learnpath {
 								
 								$arrHide = array($id);
 								
+								$parent_item_id = $_SESSION['parent_item_id'];
+								
 								for($i = 0; $i < count($arrLP); $i++)
 								{
 									if($action != 'add')
@@ -5691,7 +5696,7 @@ class learnpath {
 									else
 									{
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 									}
 								}
 								if (is_array($arrLP)) {								
@@ -6482,11 +6487,18 @@ class learnpath {
 				}
 			}
 			$parent_select = &$form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" style="width:40%;" onchange="load_cbo(this.value);"');
-
-			foreach($arrHide as $key => $value) {
-				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
+						
+			foreach($arrHide as $key => $value) {		
+					$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');								
 			}
-			$parent_select -> setSelected($parent);
+					
+			if (!empty($id)) {
+				$parent_select -> setSelected($parent);
+			} else {
+				$parent_item_id = $_SESSION['parent_item_id'];
+				$parent_select -> setSelected($parent_item_id);	
+			}
+			
 			if(is_array($arrLP)) {
 				reset($arrLP);
 			}
@@ -6784,6 +6796,8 @@ class learnpath {
 								
 								$arrHide = array($id);
 								
+								$parent_item_id = $_SESSION['parent_item_id'];
+								
 								for($i = 0; $i < count($arrLP); $i++) {
 									if($action != 'add') {
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
@@ -6794,7 +6808,7 @@ class learnpath {
 										}
 									} else {
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 									}
 								}
 								
@@ -7039,6 +7053,9 @@ class learnpath {
 						
 							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" style="width:100%;" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
+							
+								$parent_item_id = $_SESSION['parent_item_id'];																					
+							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
 								$arrHide = array($id);
@@ -7059,7 +7076,7 @@ class learnpath {
 									else
 									{
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding). '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding). '</option>';
 									}
 								}
 								

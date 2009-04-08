@@ -4819,9 +4819,8 @@ class learnpath {
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			
 			while($row = Database::fetch_array($result))
-			{
-
-				$_SESSION['parent_item_id'] = ($row['item_type']=='dokeos_chapter')?$item_id:0;	
+			{				
+				$_SESSION['parent_item_id'] = ($row['item_type']=='dokeos_chapter' || $row['item_type']=='dokeos_module' || $row['item_type']=='dir')?$item_id:0;	
 				 								
 				$return .= $this->display_manipulate($item_id, $row['item_type']);
 				

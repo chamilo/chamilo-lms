@@ -236,7 +236,8 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	<div id="learningPathRightZone">
         <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="height:500px;width: 100%"></iframe>
     </div>
-	<div id="lp_log_id" name="lp_log_name" class="lp_log">
+    
+	<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:100px;overflow:auto">
 	        <div id="log_content">
 	        </div>
 	        <div style="color: white;" onClick="cleanlog();">.</div>
@@ -409,7 +410,7 @@ else
   			<div id="learningPathToc" style="width:320px;overflow-y:auto;overflow-x:hidden;font-size:9pt;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
         </div>
         
-        <div id="lp_log_id" name="lp_log_name" class="lp_log">
+        <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:100px;overflow:auto">
 	        <div id="log_content">
 	        </div>
 	        <div style="color: white;" onClick="cleanlog();">.</div>

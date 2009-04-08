@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 19520 2009-04-03 00:40:36Z cfasanando $ 
+<?php // $Id: scorm_api.php 19654 2009-04-08 18:37:16Z cfasanando $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -803,27 +803,31 @@ function dokeos_void_save_asset(myscore,mymax)
 	if((mymax == null) || (mymax == '')){mymax = 100;} //assume a default of 100, otherwise the score will not get saved (see lpi->set_score())
     xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, myscore, mymax);
 }
+
 /**
  * Logs information about SCORM messages into the log frame
  * @param	string	Message to log
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_scorm(message,priority){
+	
 	if(scorm_logs>priority){
-		if(frames["lp_log_name"] && frames["lp_log_name"].document && frames["lp_log_name"].document.getElementById && frames["lp_log_name"].document.getElementById('log_content')){
-			frames["lp_log_name"].document.getElementById("log_content").innerHTML += "SCORM: " + message + "<br/>";
+		if($("#lp_log_name") && $("#log_content")){
+			$("#log_content").append("SCORM: " + message + "<br/>");
 		}
 	}
+	
 }
+
 /**
  * Logs information about LMS activity into the log frame
  * @param	string	Message to log
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_lms(message,priority){
-	if(lms_logs>priority){
-		if(frames["lp_log_name"] && frames["lp_log_name"].document && frames["lp_log_name"].document.getElementById && frames["lp_log_name"].document.getElementById('log_content')){
-			frames["lp_log_name"].document.getElementById("log_content").innerHTML += "LMS: " + message + "<br/>";
+	if(lms_logs>priority){ 
+		if ($("#lp_log_name") && $("#log_content")) {
+			$("#log_content").append("LMS: " + message + "<br />");
 		}
 	}
 }

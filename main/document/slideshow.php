@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 19617 2009-04-07 23:43:23Z cvargas1 $
+<?php // $Id: slideshow.php 19656 2009-04-08 20:08:10Z iflorespaz $
 
 /*
 ==============================================================================
@@ -203,28 +203,48 @@ if ($slide_id == "all")
 } // if ($slide_id=="all")
 
 // creating the table
-echo "\n<table align='center' cellspacing='10'>";
+$html_table='';
+echo '<table align="center" width="760px" border="0" cellspacing="10">';
 $i = 0;
-foreach ($image_tag as $image_tag_item)
+$count_image=count($image_tag);
+$number_image=6;
+$number_iteration=ceil($count_image/$number_image);
+$p=0;
+for  ($k=0;$k<$number_iteration;$k++) {
+	echo '<tr>';		
+	for ($i=0;$i<$number_iteration;$i++) {
+			//echo '<td ><a href="slideshow.php?slide_id='.$link.'&curdirpath='.$pathurl.'>'.$image_tag[$p].'</a></td>';	
+			//var_dump($p);
+			if (!is_null($image_tag[$p])) {
+				echo '<td  style="border:1px solid; border-color: #CCCCCC #666666 #666666 #CCCCCC;">';
+				echo '<a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.' ">'.$image_tag[$p].'</a>';
+				echo '</td>';
+			}
+			$p++;
+		}
+	echo '</tr>';
+}
+echo '</table>';
+
+/*foreach ($image_tag as $image_tag_item)
 {
 	$link=$i;
 	// starting new table row
 	if ($i == 0)
 	{
-		echo "\n<tr>\n";
+		echo "<tr>";
 		$i ++;
 					
 	}
 	$link=$i-1;
-		echo "\t<td align='center' style='display:block; position:relative; top: -3px; left:-3px; padding:5px; background:#FFFFFF; border:1px solid; border-color: #CCCCCC #666666 #666666 #CCCCCC;'><a href='slideshow.php?slide_id=".$link."&curdirpath=".$pathurl."'>".$image_tag_item."</a></td>\n";
+		echo "<td align='center' style='display:block; position:relative; top: -3px; left:-3px; padding:5px; background:#FFFFFF; border:1px solid; border-color: #CCCCCC #666666 #666666 #CCCCCC;'><a href='slideshow.php?slide_id=".$link."&curdirpath=".$pathurl."'>".$image_tag_item."</a></td>";
 	
 	if ($i % 6 == 0 and $i !== 0) // 6 cols
 	{
-		echo "</tr>\n<tr>\n";
+		echo "</tr><tr>";
 	}
 	$i ++;
-}
-echo "</table>\n\n";
+}*/
 
 // =======================================================================
 //						ONE AT A TIME VIEW

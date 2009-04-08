@@ -2373,7 +2373,8 @@ button.back {
 
 .icon_image_content{
 	width:70px;
-	height:5em;
+	cursor:hand;
+	height:8em;
 	text-align: center;
 	padding-top: 3px;
 	padding-right: 5x;

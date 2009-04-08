@@ -16,7 +16,7 @@ chdir($cwdir);
 $error = api_failure::get_last_failure();
 if($error=='not_a_learning_path')
 {
-        $msg = urlencode(get_lang('UnknownPackageFormat'));
+        $msg = urlencode(get_lang('ScormUnknownPackageFormat'));
 }else{
 	if (api_get_setting('search_enabled')=='true') {
         require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');

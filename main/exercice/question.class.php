@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 19517 2009-04-02 21:59:06Z cvargas1 $
+<?php // $Id: question.class.php 19660 2009-04-08 21:30:20Z cvargas1 $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 19517 2009-04-02 21:59:06Z cvargas1 $
+* 	@version $Id: question.class.php 19660 2009-04-08 21:30:20Z cvargas1 $
 */
 
 
@@ -996,7 +996,7 @@ abstract class Question
 		global $fck_attribute;
 		$fck_attribute = array();
 		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '300';
+		$fck_attribute['Height'] = '150px';
 		$fck_attribute['ToolbarSet'] = 'QuestionDescription';
 		
 		if(is_array($fck_config)){
@@ -1079,8 +1079,9 @@ abstract class Question
 			echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">';
 			echo '<div class="icon_image_content">';
 			Display::display_icon($img, $explanation);
-			echo '</div>';
-			echo '<div class="icon_image_content">';
+			echo '<br>';
+			//echo '</div>';
+			//echo '<div class="icon_image_content">';
 			echo $explanation;
 			echo '</div>';
 			echo '</a>';
@@ -1094,8 +1095,9 @@ abstract class Question
 			echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">';	
 		echo '<div id="icon_test"  class="icon_image_content">';
 		Display::display_icon('database.gif', get_lang('GetExistingQuestion'), array('align'=>'middle'));
-		echo '</div>';
-		echo '<div class="icon_image_content">';
+		echo '<br>';
+		//echo '</div>';
+		//echo '<div class="icon_image_content">';
 		echo get_lang('GetExistingQuestion');
 		echo '</div>';
 		echo '</a>';

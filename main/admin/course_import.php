@@ -164,10 +164,6 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 set_time_limit(0);
 Display :: display_header($tool_name);
 
-$form = new FormValidator('update_course');
-$form->addElement('header', '', $tool_name);
-$form->display();
-
 if ($_POST['formSent'])
 {
 	if(empty($_FILES['import_file']['tmp_name']))
@@ -204,10 +200,27 @@ if (count($errors) != 0)
 }
 ?>
 <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin:0px;">
-<input type="file" name="import_file"/>
+<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
+<div class="row">
+	<div class="label"><?php echo get_lang('ImportCSVFileLocation');?></div>
+	<div class="formw">
+		<input type="file" name="import_file"/>
+	</div>
+</div>
+<div class="row">
+	<div class="label"></div>
+	<div class="formw">
+		<button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
+	</div>
+</div>
+
+
 <input type="hidden" name="formSent" value="1"/>
-<button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
+
 </form>
+
+<div style="clear: both;"></div>
+
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 
 <blockquote>

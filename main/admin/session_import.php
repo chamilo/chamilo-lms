@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 19263 2009-03-25 00:15:16Z aportugal $
+<?php // $Id: session_import.php 19639 2009-04-08 13:06:16Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -672,8 +672,12 @@ if ($_POST['formSent']) {
 	}
 }
 
+// display the header
 Display::display_header($tool_name);
-api_display_tool_title($tool_name);
+
+// display the tool title
+// api_display_tool_title($tool_name);
+
 if (count($inserted_in_course) > 1) {
 	$msg = get_lang('SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode').': ';
     foreach ($inserted_in_course as $code => $title) {
@@ -686,6 +690,7 @@ if (count($inserted_in_course) > 1) {
 
 <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
+<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
 <table border="0" cellpadding="5" cellspacing="0">
 
 <?php

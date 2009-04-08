@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 19597 2009-04-07 14:38:36Z pcool $
+<?php // $Id: user_list.php 19639 2009-04-08 13:06:16Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -579,7 +579,7 @@ else
 	
 	if (api_is_platform_admin()) {
 		echo '<div style="float:right;">
-			<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUsers')).get_lang('AddUsers').'</a>									
+			<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('add_user_big.gif',get_lang('AddUsers')).get_lang('AddUsers').'</a>									
 		  </div>'; 
 	}
 	  

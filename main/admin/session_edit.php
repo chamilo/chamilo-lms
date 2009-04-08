@@ -96,8 +96,12 @@ $result=api_sql_query($sql,__FILE__,__LINE__);
 $Coaches=api_store_result($result);
 $thisYear=date('Y');
 
+// display the header
 Display::display_header($tool_name);
-api_display_tool_title($tool_name);
+
+// display the tool title
+// api_display_tool_title($tool_name);
+
 if (!empty($return)) {
 	Display::display_error_message($return,false);
 }
@@ -105,6 +109,8 @@ if (!empty($return)) {
 
 <form method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id=<?php echo $id; ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
+
+<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
 
 <table border="0" cellpadding="5" cellspacing="0" width="550">
 

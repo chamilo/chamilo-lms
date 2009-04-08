@@ -54,7 +54,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	Display :: display_header($tool_name);
 	
 	$form = new FormValidator('advanced_search','get');
-	
+	$form->addElement('header', '', $tool_name);
 	$active_group = array();
 	$active_group[] = $form->createElement('checkbox','active','',get_lang('Active'));
 	$active_group[] = $form->createElement('checkbox','inactive','',get_lang('Inactive'));

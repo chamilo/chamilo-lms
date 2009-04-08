@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 19111 2009-03-17 20:44:30Z iflorespaz $
+<?php // $Id: configure_homepage.php 19639 2009-04-08 13:06:16Z pcool $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -650,6 +650,7 @@ switch($action){
 		//------------  Display for edit_notice case --------------
 		?>
 		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
+		<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
 		<input type="hidden" name="formSent" value="1"/>
 
 		<?php
@@ -661,6 +662,7 @@ switch($action){
 		}
 
 		?>
+		
 		<table border="0" cellpadding="5" cellspacing="0">
 		<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
 		<tr>
@@ -694,10 +696,10 @@ switch($action){
 		$default = array();
 		$form = new FormValidator('configure_homepage_'.$action, 'post', api_get_self().'?action='.$action, '', array('style' => 'margin: 0px;'));
 		$renderer =& $form->defaultRenderer();
-		$renderer->setHeaderTemplate('');
 		$renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
 		$renderer->setElementTemplate('{element}');
 		$renderer->setRequiredNoteTemplate('');
+		$form->addElement('header', '', $tool_name);
 		$form->addElement('hidden', 'formSent', '1');
 		$form->addElement('hidden', 'link_index', $action == 'edit_link' ? $link_index : '0');
 		$form->addElement('hidden', 'filename', $action == 'edit_link' ? $filename : '');

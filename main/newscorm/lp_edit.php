@@ -28,7 +28,7 @@ $defaults=array();
 $form = new FormValidator('form1', 'post', 'lp_controller.php');
 
 //Title
-$form -> addElement('text', 'lp_name', ucfirst(get_lang('_title')),array('size'=>47));
+$form -> addElement('text', 'lp_name', ucfirst(get_lang('_title')),array('size'=>43));
 
 //Encoding
 $encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));

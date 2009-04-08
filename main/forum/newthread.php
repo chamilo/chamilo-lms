@@ -88,18 +88,35 @@ $origin = '';
 if(isset($_GET['origin'])) {
 	$origin =  Security::remove_XSS($_GET['origin']);
 }
+/*
+ * 
+ * 			if(document.getElementById(\'id_qualify\').style.display == \'none\') {
+				document.getElementById(\'id_qualify\').style.display = \'block\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+
+			} else {
+			
+				document.getElementById(\'id_qualify\').style.display = \'none\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			}	
+ * 
+ * 
+ * 
+ * */
 
 // javascript
 $htmlHeadXtra[] = '<script>
 		
 		function advanced_parameters() {
-			if(document.getElementById(\'id_qualify\').style.display == \'none\') {
+				if(document.getElementById(\'id_qualify\').style.display == \'none\') {
 				document.getElementById(\'id_qualify\').style.display = \'block\';
-				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+
 			} else {
+			
 				document.getElementById(\'id_qualify\').style.display = \'none\';
-				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-			}	
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			}
 		}
 </script>';	
 /*

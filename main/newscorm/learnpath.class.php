@@ -4390,7 +4390,7 @@ class learnpath {
 		
 			$return .= "\t" . '<tr>' . "\n";
 			
-				$return .= "\t" . '<th width="75%">'.get_lang("Title").'</th>' . "\n";
+				$return .= "\t" . '<th width="60%">'.get_lang("Title").'</th>' . "\n";
 				//$return .= "\t" . '<th>'.get_lang("Description").'</th>' . "\n";
 				$return .= "\t" . '<th>'.get_lang("Audio").'</th>' . "\n";
 				$return .= "\t" . '<th>'.get_lang("Move").'</th>' . "\n";
@@ -4413,7 +4413,7 @@ class learnpath {
 					//$return .= "\t\t" . '<td>' . stripslashes($arrLP[$i]['description']) . '</td>' . "\n";
 					
 					// The audio column
-					$return .= "\t\t" . '<td>';
+					$return .= "\t\t" . '<td align="center">';
 					if (!$_GET['updateaudio'] OR $_GET['updateaudio'] <> 'true')
 					{
 						if (!empty($arrLP[$i]['audio']))
@@ -4446,13 +4446,15 @@ class learnpath {
 					
 					if(api_is_allowed_to_edit())
 					{
-						$return .= "\t\t" . '<td>' . "\n";
+						$return .= "\t\t" . '<td align="center">' . "\n";
 							
 							if($arrLP[$i]['previous_item_id'] != 0)
 							{
+								
 								$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=up&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
-									$return .= '<img alt="" src="../img/arrow_up_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveUp') . '"/>';
+									$return .= '<img style="margin:1px;" alt="" src="../img/arrow_up_' . ($arrLP[$i]['depth'] % 3). '.gif" title="' . get_lang('MoveUp') .'"/>';
 								$return .= '</a>' . "\n";
+								
 							}
 							else
 								$return .= "\t\t\t" . '<img alt="" src="../img/blanco.png" title="" />' . "\n";
@@ -4460,7 +4462,7 @@ class learnpath {
 							if($arrLP[$i]['next_item_id'] != 0)
 							{
 								$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=down&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
-									$return .= '<img src="../img/arrow_down_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveDown') . '" />';							
+									$return .= '<img style="margin:1px;" src="../img/arrow_down_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveDown') . '" />';							
 									
 								$return .= '</a>' . "\n";
 							}
@@ -4469,23 +4471,23 @@ class learnpath {
 							
 						$return .= "\t\t" . '</td>' . "\n";
 						
-						$return .= "\t\t" . '<td>' . "\n";
+						$return .= "\t\t" . '<td align="center">' . "\n";
 						
 						if($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module')
 						{										
 							$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item='.$arrLP[$i]['path'].'">';
-								$return .= '<img alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
+								$return .= '<img style="margin:1px;" alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
 							$return .= '</a>' . "\n";
 						}
 						else
 						{							
 							$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item='.$arrLP[$i]['path'].'">';
-							$return .= '<img alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
+							$return .= '<img style="margin:1px;" alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
 							$return .= '</a>' . "\n";
 						}
 						
 						$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . addslashes($title). '\');">';
-							$return .= '<img alt="" src="../img/delete.gif" title="' . get_lang('_delete_learnpath_module') . '" />';
+							$return .= '<img style="margin:1px;" alt="" src="../img/delete.gif" title="' . get_lang('_delete_learnpath_module') . '" />';
 						$return .= '</a>' . "\n";
 						
 						$return .= "\t\t" . '</td>' . "\n";

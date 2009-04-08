@@ -118,19 +118,31 @@ echo '</div>';
 
 Display::display_normal_message(get_lang('AddLpIntro'),false);
 
-echo '<p>'.get_lang('AddLpToStart').' :</p>';
-
-echo '<div style="width:465px;">';
 echo '<form method="post">';
-echo '<div>';
-echo '<label for="idTitle">'.get_lang('Title').' : </label><input id="idTitle" name="learnpath_name" type="text" size="50" /> ';
+
+// form title
+echo '<div class="row"><div class="form_header">'.get_lang('AddLpToStart').'</div></div>';
+
+// title field
+echo '<div class="row">';
+echo '<div class="label">';
+echo '<label for="idTitle">'.get_lang('Title').' : </label>';
 echo '</div>';
-echo '<div>';
-echo '<button  class="save" style="width:150px; float: right;" type="submit"/>'.get_lang('CreateLearningPath').'</button>';
+echo '<div class="formw">';
+echo '<input id="idTitle" name="learnpath_name" type="text" size="50" />';
+echo '</div>';
+echo '</div>';
+
+// submit button
+echo '<div class="row">';
+echo '<div class="label">';
+echo '</div>';
+echo '<div class="formw">';
+echo '<button  class="save" style="width:150px;" type="submit"/>'.get_lang('CreateLearningPath').'</button>';
+echo '</div>';
 echo '</div>';
 echo '<input name="post_time" type="hidden" value="' . time() . '" />';
 echo '</form>';
-echo '</div>';
 
 // footer
 Display::display_footer();

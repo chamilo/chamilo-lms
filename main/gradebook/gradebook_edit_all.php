@@ -70,7 +70,7 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 		
 		$interbreadcrumb[]= array (
 			'url' => $_SESSION['gradebook_dest'].'?&selectcat='.Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('Details'));
+			'name' => get_lang('EditAllWeights'));
 
 		Display :: display_header('');
 
@@ -174,7 +174,9 @@ if ($my_api_cidreq=='') {
 	$my_api_cidreq='cidReq='.$my_category['course_code'];
 }
 ?>
-<a href="<?php echo $_SESSION['gradebook_dest'].'?id_session='.$_SESSION['id_session'].'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"><< <?php echo get_lang('Back') ?></a>
+<div class="actions">
+<a href="<?php echo $_SESSION['gradebook_dest'].'?id_session='.$_SESSION['id_session'].'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"> <?php echo Display::return_icon('back.png').get_lang('Back') ?></a>
+</div>
 <form method="post" action="gradebook_edit_all.php?id_session=<?php echo $_SESSION['id_session'].'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id?>">
 <table class="data_table">
 		 <tr class="row_odd">

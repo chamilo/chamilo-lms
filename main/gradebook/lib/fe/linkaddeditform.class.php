@@ -63,6 +63,11 @@ class LinkAddEditForm extends FormValidator
 		}
 		$defaults = array();
 		$this->addElement('hidden', 'zero', 0);
+		
+		if (!empty($_GET['editlink']))
+		{
+			$this->addElement('header', '', get_lang('EditLink'));
+		}
 
 		// ELEMENT: name
 		if ($form_type == self :: TYPE_ADD || $link->is_allowed_to_change_name()) {

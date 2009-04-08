@@ -88,7 +88,7 @@ class LinkForm extends FormValidator
 	}
 
 	protected function build_create() {
-		
+		$this->addElement('header', '', get_lang('MakeLink'));
 		$select = $this->addElement('select',
 									'select_link',
 									get_lang('ChooseLink'),

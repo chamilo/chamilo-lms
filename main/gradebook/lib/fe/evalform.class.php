@@ -300,6 +300,13 @@ class EvalForm extends FormValidator
 	 * Builds a basic form that is used in add and edit
 	 */
 	private function build_basic_form($edit= 0) {
+		$form_title = get_lang('NewEvaluation');
+		if ($_GET['editeval']==1)
+		{
+			$form_title = get_lang('EditEvaluation');
+		}
+	
+		$this->addElement('header', '', $form_title);
 		$this->addElement('hidden', 'zero', 0);
 		$this->addElement('hidden', 'hid_user_id');
 		$this->addElement('hidden', 'hid_category_id');

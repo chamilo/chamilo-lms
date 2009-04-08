@@ -63,8 +63,8 @@ class ScoreDisplayForm extends FormValidator
 		$scorecol= array ();
 		
 		//settings for the colored score
-		
-		$this->addElement('header', 'h1', '<b>' . get_lang('ScoreColor') . '</b>');
+		$this->addElement('header', '', get_lang('ScoreEdit'));
+		$this->addElement('html', '<b>' . get_lang('ScoreColor') . '</b>');
 		$renderer = $this->defaultRenderer();
 		$elementTemplateColor = '<div class="row">
 			<div class="label">
@@ -87,7 +87,7 @@ class ScoreDisplayForm extends FormValidator
 
 		//settings for the scoring system
 		
-		$this->addElement('header', 'h2', '<b>' . get_lang('ScoringSystem') . '</b>');
+		$this->addElement('html', '<br /><b>' . get_lang('ScoringSystem') . '</b>');
 		$this->addElement('checkbox', 'enablescore', null, get_lang('EnableScoringSystem'), null);
 
 		if ($displayscore->is_custom()) {

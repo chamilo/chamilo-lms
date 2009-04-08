@@ -1,4 +1,4 @@
-<?php // $Id: index.php 19325 2009-03-25 20:54:39Z aportugal $
+<?php // $Id: index.php 19644 2009-04-08 14:55:54Z pcool $
 
 /*
 ==============================================================================
@@ -184,6 +184,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		//Se borro: echo ' <style> .row{} <\style> por que hacia conflicto en apartado personalizado con los estilos propios del formvalidator 		
 		// Build the form
 		$form = new FormValidator('course_description','POST','index.php','','style="width: 100%;"');
+		$form->addElement('header', '', $default_description_titles[$_GET['description_id']]);
 		$form->addElement('hidden', 'description_id');
 		
 		if ($_GET['action']=='edit' || $_POST['edit']==1 ) {

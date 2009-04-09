@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 19599 2009-04-07 15:28:35Z cvargas1 $
+* 	@version $Id: exercise.class.php 19675 2009-04-09 08:46:51Z pcool $
 */
 
 
@@ -850,7 +850,16 @@ class Exercise
 		if(empty($type)){
 			$type='full';
 		}
-		
+		// form title
+		if (!empty($_GET['exerciseId']))
+		{
+			$form_title = get_lang('ModifyExercise');
+		}
+		else 
+		{
+			$form_title = get_lang('NewEx');
+		}
+		$form->addElement('header', '', $form_title);
 		// title
 		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName'),'class="input_titles"');
 		// fck editor

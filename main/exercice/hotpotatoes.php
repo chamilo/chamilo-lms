@@ -22,38 +22,52 @@
 *	Code for Hotpotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.php 19328 2009-03-25 21:22:36Z aportugal $
+* 	@version $Id: hotpotatoes.php 19675 2009-04-09 08:46:51Z pcool $
 */
 
 
 // name of the language file that needs to be included
 $language_file ='exercice';
 
+// including the global Dokeos file
 include('../inc/global.inc.php');
 
-$this_section=SECTION_COURSES;
-
-
-$finish 		= (!empty($_POST['finish'])?$_POST['finish']:0);
-$imgcount		= (!empty($_POST['imgcount'])?$_POST['imgcount']:null);
-$fld					= (!empty($_POST['fld'])?$_POST['fld']:null);
-
-
+// include additional libraries
 include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
+include_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+include_once(api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
+include("hotpotatoes.lib.php");
+
+// section (for the tabs)
+$this_section=SECTION_COURSES;
+
+// access restriction: only teachers are allowed here
+if(!api_is_allowed_to_edit())
+{
+	api_not_allowed();
+}
+
+// the breadcrumbs
 $interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
+
 $is_allowedToEdit=api_is_allowed_to_edit();
 
+// Database table definitions
 $dbTable				= Database::get_course_table(TABLE_DOCUMENT);
+
+// setting some variables
 $baseServDir = $_configuration['root_sys'];
 $baseServUrl = $_configuration['url_append']."/";
 $document_sys_path = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $uploadPath = "/HotPotatoes_files";
+$finish 		= (!empty($_POST['finish'])?$_POST['finish']:0);
+$imgcount		= (!empty($_POST['imgcount'])?$_POST['imgcount']:null);
+$fld			= (!empty($_POST['fld'])?$_POST['fld']:null);
 
 // if user is allowed to edit
-if ($is_allowedToEdit)
+if (api_is_allowed_to_edit())
 {
-	include("hotpotatoes.lib.php");
 	//disable document parsing(?) - obviously deprecated
 	$enableDocumentParsing=false;
 
@@ -70,7 +84,7 @@ if ($is_allowedToEdit)
 
  /** display */
 // if finish is set; it's because the user came from this script in the first place (displaying hidden "finish" field)
-if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
+if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
 //if(($is_allowedToEdit) )
 {
 	$nameTools = get_lang('HotPotatoesTests');
@@ -83,12 +97,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 		// check something else than a string displayd on a button
 		if (strcmp($_POST['submit'],get_lang('Send'))===0)
 		{
-			/** el kell tarolni <- english please */
-			include_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-			/*======================================
-				FILEMANAGER BASIC VARIABLES DEFINITION
-				======================================*/
-			include_once(api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
+
 
 			//@todo: this value should be moved to the platform admin section
 			$maxFilledSpace = 100000000;
@@ -208,20 +217,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 	}
 
 	Display::display_header($nameTools,"Exercise");
-	$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
-	/* -----*/
 	?>
-
-	<br />
-	<table border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tr>
-  	<td width="50%"><h3><?php echo $nameTools; ?></h3></td>
-  	<td width="50%" align="right">
-	  </td>
-	</tr>
-	</table>
-	<table border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tr>
 
 <?php
 
@@ -236,20 +232,13 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 
 	if ($dialogBox)
 	{
-		echo 	"<td>\n<!-- dialog box -->\n&nbsp;\n</td>\n";
 		Display::display_normal_message($dialogBox, false); //main API
-		echo	"</td>\n";
-	}
-	else
-	{
-		echo "<td>\n<!-- dialog box -->\n&nbsp;\n</td>\n";
 	}
 
 	/*--------------------------------------
 			  UPLOAD SECTION
 	 --------------------------------------*/
 	echo	"<!-- upload  -->\n",
-			"<td align=\"left\" height=\"150\" style=\"background-image: url('../img/hotpotatoes.jpg'); background-repeat: no-repeat; background-position: 600px;\" valign=\"middle\">\n",
 			"<form action=\"".api_get_self()."\" method=\"post\" enctype=\"multipart/form-data\" >\n",
 			"<input type=\"hidden\" name=\"uploadPath\" value=\"\">\n",
 			"<input type=\"hidden\" name=\"fld\" value=\"$fld\">\n",
@@ -261,48 +250,33 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 	echo 	" : ",
 			"<input type=\"file\" name=\"userFile\">\n",
 			"<input type=\"submit\" name=\"submit\" value=\"".get_lang('Send')."\"><br/>\n";*/
-	echo '<table>';
-		echo '<tr>';
-			echo '<td width="250">';
-				if ($finish==0){
-					echo get_lang('DownloadFile').' : ';
-				}
-				else{
-					echo get_lang('DownloadImg').' : ';
-				}
-			echo '</td>';
-			echo '<td>';
-				echo '<input type="file" name="userFile">';
-			echo '</td>';
-		echo '</tr>';
-		echo '<tr>';
-			echo '<td width="250">';
-			echo '</td>';
-			echo '<td>';
-				echo '<button type="submit" class="save" name="submit" value="'.get_lang('Send').'">'.get_lang('SendFile').'</button>';
-			echo '</td>';
-		echo '</tr>';
-	echo '</table>';
+	Display::display_icon('hotpotatoes.jpg','',array('align'=> 'right', 'style' => 'position: absolute; padding-top: 30px; margin-left: 500px;'));
+	echo '<div class="row"><div class="form_header">'.$nameTools.'</div></div>';	
+	echo '<div class="row">';
+	echo '<div class="label">';
+	echo '<span class="form_required">*</span>';
+	if ($finish==0){
+		echo get_lang('DownloadFile').' : ';
+	}
+	else{
+		echo get_lang('DownloadImg').' : ';
+	}
+	echo '</div>';
+	echo '<div class="formw">';
+	echo '<input type="file" name="userFile">';
+	echo '</div>';
+	echo '</div>';
+	
+	echo '<div class="row">';
+	echo '<div class="label">';
+	echo '</div>';
+	echo '<div class="formw">	<button type="submit" class="save" name="submit" value="'.get_lang('Send').'">'.get_lang('SendFile').'</button>		</div>';
+	echo '</div>';	
+	
 ?>
-		</td>
-	</tr>
-	</table>
 
 <?php
-
-	Display::display_footer();
 }
-/*
-else
-{
-	if ($finish == 1)
-	{ // ok
-		//include("exercice.php");
-		header("Location: exercice.php");
-	}
-	else
-	{
-	}
-}
-*/
+// display the footer
+Display::display_footer();
 ?>

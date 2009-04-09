@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 19500 2009-04-02 15:15:56Z cvargas1 $
+<?php // $Id: admin.php 19675 2009-04-09 08:46:51Z pcool $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 19500 2009-04-02 15:15:56Z cvargas1 $
+* 	@version $Id: admin.php 19675 2009-04-09 08:46:51Z pcool $
 */
 
 
@@ -441,7 +441,7 @@ Display::display_header($nameTools,'Exercise');
 
 echo '<div class="actions">';
 echo Display::return_icon('preview.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
-echo Display::return_icon('lp_quiz.png', get_lang('ModifyExercise')).'<a href="exercise_admin.php?modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
 
 echo '</div>';
 

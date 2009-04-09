@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 19660 2009-04-08 21:30:20Z cvargas1 $
+<?php // $Id: question.class.php 19675 2009-04-09 08:46:51Z pcool $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 19660 2009-04-08 21:30:20Z cvargas1 $
+* 	@version $Id: question.class.php 19675 2009-04-09 08:46:51Z pcool $
 */
 
 
@@ -1104,6 +1104,11 @@ abstract class Question
 		echo '</div>';
 		echo '</div>';
 		echo '<div style="clear:both"></div>';
+	}
+	
+	static function get_types_information()
+	{
+		return self::$questionTypes;
 	}
 }
 endif;

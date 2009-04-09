@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 18979 2009-03-11 22:43:40Z cfasanando $
+<?php //$Id: agenda.php 19693 2009-04-09 19:55:28Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -234,6 +234,8 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false,true) OR (api_get_course_sett
 
 // tool introduction
 
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';

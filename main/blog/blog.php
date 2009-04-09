@@ -245,9 +245,6 @@ switch ($current_page)
 -----------------------------------------------------------
 */
 
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
 echo '<div class=actions>';
 ?>
 	<a href="<?php echo api_get_self(); ?>?blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('Home') ?>"><?php echo Display::return_icon('blog.gif', get_lang('Home')).get_lang('Home') ?></a>
@@ -257,10 +254,15 @@ echo '<div class=actions>';
 <?php	
 echo '</div>';	
 		
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// Please, preserve them.
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '300';
+$fck_attribute['ToolbarSet'] = 'Introduction';
+
 Display::display_introduction_section(TOOL_BLOG);
 
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
-//
 
 //Display::display_header($nameTools,'Blogs');
 ?>

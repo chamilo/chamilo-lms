@@ -1,4 +1,4 @@
-<?php // $Id: survey_list.php 18319 2009-02-07 00:03:42Z herodoto $
+<?php // $Id: survey_list.php 19693 2009-04-09 19:55:28Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey_list.php 18319 2009-02-07 00:03:42Z herodoto $
+* 	@version $Id: survey_list.php 19693 2009-04-09 19:55:28Z ivantcholakov $
 *
 * 	@todo use quickforms for the forms
 */
@@ -81,6 +81,8 @@ Display :: display_header($tool_name,'Survey');
 
 // introduction section
 
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';

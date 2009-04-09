@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 19608 2009-04-07 18:04:42Z cvargas1 $
+<?php //$Id: announcements.php 19693 2009-04-09 19:55:28Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -851,6 +851,8 @@ if($_REQUEST['publish_survey'])
 		     		Tool Title
 ====================================================*/
 
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';

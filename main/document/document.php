@@ -1,4 +1,4 @@
-<?php // $Id: document.php 19677 2009-04-09 09:49:45Z pcool $
+<?php // $Id: document.php 19693 2009-04-09 19:55:28Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -349,6 +349,8 @@ if($to_group_id !=0) //add group name after for group documents
 -----------------------------------------------------------
 */
 
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';

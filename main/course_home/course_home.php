@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 18319 2009-02-07 00:03:42Z herodoto $
+<?php // $Id: course_home.php 19693 2009-04-09 19:55:28Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -179,10 +179,11 @@ $reqdate="&reqdate=$temps";
 -----------------------------------------------------------
 */
 
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
-
 // A special case, some default settings do not fit. These settings should stay.
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
 $fck_attribute['Config']['CreateDocumentDir'] = 'document/';

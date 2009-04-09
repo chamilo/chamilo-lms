@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 19674 2009-04-09 08:32:26Z pcool $
+<?php // $Id: exercice.php 19693 2009-04-09 19:55:28Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -388,6 +388,8 @@ include_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
 event_access_tool(TOOL_QUIZ);
 
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';

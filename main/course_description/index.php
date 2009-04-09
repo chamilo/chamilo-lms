@@ -1,4 +1,4 @@
-<?php // $Id: index.php 19644 2009-04-08 14:55:54Z pcool $
+<?php // $Id: index.php 19693 2009-04-09 19:55:28Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -87,7 +87,11 @@ $nameTools = get_lang(TOOL_COURSE_DESCRIPTION);
 -----------------------------------------------------------
 */
 
-
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// Please, preserve them.
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '300';
+$fck_attribute['ToolbarSet'] = 'Introduction';
 
 Display::display_introduction_section(TOOL_COURSE_DESCRIPTION);
 

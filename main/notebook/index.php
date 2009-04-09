@@ -39,6 +39,8 @@ Display::display_header(get_lang(ucfirst($tool)));
 
 // tool introduction
 
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';

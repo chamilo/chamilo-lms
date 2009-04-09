@@ -1,4 +1,4 @@
-<?php // $Id: user.php 19524 2009-04-03 13:01:12Z herodoto $
+<?php // $Id: user.php 19693 2009-04-09 19:55:28Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -328,6 +328,8 @@ $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) && $_configuration['
 
 // introduction section
 
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';

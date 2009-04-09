@@ -192,11 +192,13 @@ api_display_tool_title($nameTools);
 	(editable by course admins)
 -----------------------------------------------------------
 */
+
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// You may ajust them if it is needed, but please, don't delete them.
 //TODO: check see if we need, it seems not working here
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'LearnPath';
-
 // TODO: These settings to be checked when it is possible.
 $fck_attribute['Config']['InDocument'] = false;
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';

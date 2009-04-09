@@ -1,4 +1,4 @@
-<?php // $Id: group.php 19529 2009-04-03 16:23:35Z herodoto $
+<?php // $Id: group.php 19693 2009-04-09 19:55:28Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -89,6 +89,8 @@ Display::display_header(get_lang('Groups'));
 
 // introduction section
 
+// The settings here for the online editor are needed and they are specific for the introduction section.
+// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';

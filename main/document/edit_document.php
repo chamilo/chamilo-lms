@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 19397 2009-03-27 22:02:19Z iflorespaz $
+<?php // $Id: edit_document.php 19676 2009-04-09 09:14:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -224,7 +224,6 @@ if(!is_dir($filepath))
 }
 
 /**************************************************/
-$nameTools = get_lang('EditDocument');
 $dbTable = Database::get_course_table(TABLE_DOCUMENT);
 
 if(!empty($_SESSION['_gid']))
@@ -597,8 +596,12 @@ if(file_exists($filepath.$doc))
 		- display user interface
 ==============================================================================
 */
+// display the header
+$nameTools = get_lang("EditDocument") . ': '.$file_name;
 Display::display_header($nameTools,"Doc");
-api_display_tool_title(get_lang("EditDocument") . ": $file_name");
+
+// display the tool title
+//api_display_tool_title($nameTools);
 
 if(isset($msgError))
 {
@@ -631,6 +634,9 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 	$action =  api_get_self().'?sourceFile='.urlencode($file_name).'&curdirpath='.urlencode($_GET['curdirpath']).'&file='.urlencode($_GET['file']).'&doc='.urlencode($doc);
 	$form = new FormValidator('formEdit','post',$action);
 
+	// form title
+	$form->addElement('header', '', $nameTools);
+	
 	$renderer = $form->defaultRenderer();
 
 	$form->addElement('hidden','filename');

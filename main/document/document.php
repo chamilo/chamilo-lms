@@ -1,4 +1,4 @@
-<?php // $Id: document.php 19385 2009-03-27 20:48:57Z iflorespaz $
+<?php // $Id: document.php 19676 2009-04-09 09:14:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -545,12 +545,23 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		//create the form that asks for the directory name
 		$new_folder_text = '<form action="'.api_get_self().'" method="post">';
 		$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'" />';
-		$new_folder_text .= get_lang('NewDir') .' ';
-		$new_folder_text .= '<input type="text" name="dirname" />';
-		$new_folder_text .= '<button type="submit" name="create_dir">'.get_lang('CreateFolder').'</button>';
+		// form title
+		$new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateDir').'</div></div>';
+		
+		// folder field
+		$new_folder_text .= '<div class="row">';
+		$new_folder_text .= '<div class="label"><span class="form_required">*</span>'.get_lang('NewDir').'</div>';
+		$new_folder_text .= '<div class="formw"><input type="text" name="dirname" /></div>';
+		$new_folder_text .= '</div>';
+		// submit button
+		$new_folder_text .= '<div class="row">';
+		$new_folder_text .= '<div class="label">&nbsp;</div>';
+		$new_folder_text .= '<div class="formw"><button type="submit" name="create_dir">'.get_lang('CreateFolder').'</button></div>';
+		$new_folder_text .= '</div>';		
 		$new_folder_text .= '</form>';
+		$new_folder_text .= '<div style="clear: both; margin-bottom: 10px;"></div>';
 		//show the form
-		Display::display_normal_message($new_folder_text,false);
+		echo $new_folder_text;
 	}
 
 

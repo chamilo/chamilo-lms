@@ -1,4 +1,4 @@
-<?php // $Id: quota.php 19485 2009-04-01 20:27:56Z juliomontoya $
+<?php // $Id: quota.php 19676 2009-04-09 09:14:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -30,49 +30,27 @@
 ==============================================================================
 */
 	
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/ 
-
 // name of the language file that needs to be included
 $language_file = 'document';
  
-
-// global settings initialisation 
-// also provides access to main api (inc/lib/main_api.lib.php)
+// including the global dokeos file
 include("../inc/global.inc.php"); 
 
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/ 
-
-//many useful functions in main_api.lib.php, by default included
+// including additional libraries
 include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 include_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 	
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/ 
-
+// some constants and variables 
 $courseDir   = $_course['path']."/document";
 $maxFilledSpace = DEFAULT_DOCUMENT_QUOTA;
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/ 
-
+// breadcrumbs
 $interbreadcrumb[]=array("url" => "document.php","name" => get_lang('Document'));
 
-$nameTools = get_lang("DocumentQuota"); // title of the page
+// title of the page
+$nameTools = get_lang("DocumentQuota");
 
+// display the header
 Display::display_header($nameTools,"Doc");
 
 
@@ -130,28 +108,18 @@ function display_quota($course_quota, $already_consumed_space)
 	echo $message;
 }
 	
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/ 
-echo '<div class="actions-title">';
-echo $nameTools;
-echo '</div>';
+// getting the course quota
 $course_quota = DocumentManager::get_course_quota();
 
+// setting the full path
 $full_path = $baseWorkDir . $courseDir;
 
+// calculating the total space
 $already_consumed_space = documents_total_space($_course);
 
+// displaying the quota
 display_quota($course_quota, $already_consumed_space);
 
-
-/*
-==============================================================================
-		FOOTER 
-==============================================================================
-*/ 
-
+// display the footer
 Display::display_footer();
 ?>

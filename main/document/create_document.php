@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 18772 2009-03-03 02:31:56Z ivantcholakov $
+<?php // $Id: create_document.php 19676 2009-04-09 09:14:37Z pcool $
 
 /*
 ==============================================================================
@@ -332,6 +332,9 @@ if (isset ($group))
 
 // Create a new form
 $form = new FormValidator('create_document');
+
+// form title
+$form->addElement('header', '', $nameTools);
 
 $renderer = & $form->defaultRenderer();
 

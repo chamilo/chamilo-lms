@@ -772,6 +772,9 @@ div.admin_section h4 {
 	background-color: #fff;
 	padding: 0 4px;
 }
+.tool-icon {
+	margin-bottom: -3px;
+}
 /* learning path */
 table.lp_build {
 	height:400px;

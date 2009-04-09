@@ -331,7 +331,7 @@ function show_tools_category($course_tool_category)
 				{
 					$tool_name = get_lang(ucfirst($toolsRow['name']));
 				}
-				Display::display_icon($toolsRow['image'], $tool_name);
+				Display::display_icon($toolsRow['image'], $tool_name, array('class'=>'tool-icon'));
 				echo '</a> ';
 					
 				echo $toollink;	

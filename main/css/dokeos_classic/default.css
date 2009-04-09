@@ -584,6 +584,10 @@ input.liteoption {
 
 .viewcaption {position: relative; top: -20px; font-size: 12px;
  font-weight: bold; color: #4171B5; background-color: #fff; padding: 0 4px;}
+ 
+.tool-icon {
+	margin-bottom: -3px;
+}
 /***********************************/
 
 /*****************************************************

@@ -81,7 +81,7 @@ class learnpath {
 	
 	var $arrMenu = array(); //array for the menu items
 
-	var $debug = 0; //logging level
+	var $debug = 1; //logging level
 
 
 
@@ -597,7 +597,7 @@ class learnpath {
      */
     function add_lp($course,$name,$description='',$learnpath='guess',$origin='zip',$zipname='')
     {
-		//if($this->debug>0){error_log('New LP - In learnpath::add_lp()',0);}
+		if($this->debug>0){error_log('New LP - In learnpath::add_lp()',0);}
     	//TODO
     	$tbl_lp = Database::get_course_table('lp');
     	//check course code exists
@@ -1949,6 +1949,7 @@ class learnpath {
      */
     function get_previous_item_id()
     {
+		if($this->debug>0){error_log('New LP - In learnpath::get_previous_item_id()',0);}
     	$new_index = $this->get_previous_index();
     	return $this->ordered_items[$new_index];
     }
@@ -1977,7 +1978,7 @@ class learnpath {
      */
 	function get_db_progress($lp_id,$user_id,$mode='%', $course_db='', $sincere=false)
 	{
-		//if($this->debug>0){error_log('New LP - In learnpath::get_db_progress()',0);}
+		if($this->debug>0){error_log('New LP - In learnpath::get_db_progress()',0);}
     	$table = Database::get_course_table('lp_view', $course_db);
     	$sql = "SELECT * FROM $table WHERE lp_id = $lp_id AND user_id = $user_id";
     	$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -2045,6 +2046,7 @@ class learnpath {
 	
 	function get_mediaplayer()
 	{
+		if($this->debug>0){error_log('New LP - In learnpath::get_mediaplayer()',0);}
 		global $_course;
 		
 		// Database table definition
@@ -2083,6 +2085,7 @@ class learnpath {
      */
     function get_progress_bar($mode='',$percentage=-1,$text_add='',$from_lp=false)
     {
+		if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar()',0);}
     	global $lp_theme_css;
     	
     	// Setting up the CSS path of the current style if exists   
@@ -2389,6 +2392,7 @@ class learnpath {
 	 * @return	integer	Number of interactions
 	 */
 	function get_interactions_count_from_db($lp_iv_id=0){
+		if($this->debug>1){error_log('New LP - In learnpath::get_interactions_count_from_db()',0);}
 		if(empty($lp_iv_id)){return -1;}
 		$table = Database::get_course_table('lp_iv_interaction');
 		$sql = "SELECT count(*) FROM $table WHERE lp_iv_id = $lp_iv_id";
@@ -2405,6 +2409,7 @@ class learnpath {
 	 * @todo 	Translate labels 
 	 */
 	function get_iv_interactions_array($lp_iv_id=0){
+		if($this->debug>0){error_log('New LP - In learnpath::get_iv_interactions_array()',0);}
 		$list = array();
 		$table = Database::get_course_table('lp_iv_interaction');
 		$sql = "SELECT * FROM $table WHERE lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
@@ -2443,6 +2448,7 @@ class learnpath {
 	 * @return	integer	Number of objectives
 	 */
 	function get_objectives_count_from_db($lp_iv_id=0){
+		if($this->debug>1){error_log('New LP - In learnpath::get_objectives_count_from_db()',0);}
 		if(empty($lp_iv_id)){return -1;}
 		$table = Database::get_course_table('lp_iv_objective');
 		$sql = "SELECT count(*) FROM $table WHERE lp_iv_id = $lp_iv_id";
@@ -2459,6 +2465,7 @@ class learnpath {
 	 * @todo 	Translate labels 
 	 */
 	function get_iv_objectives_array($lp_iv_id=0){
+		if($this->debug>1){error_log('New LP - In learnpath::get_iv_objectives_array()',0);}
 		$list = array();
 		$table = Database::get_course_table('lp_iv_objective');
 		$sql = "SELECT * FROM $table WHERE lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
@@ -2559,7 +2566,7 @@ class learnpath {
      */
     function get_flat_ordered_items_list($lp,$parent=0)
     {
-		//if($this->debug>0){error_log('New LP - In learnpath::get_flat_ordered_items_list('.$lp.','.$parent.')',0);}
+		if($this->debug>1){error_log('New LP - In learnpath::get_flat_ordered_items_list('.$lp.','.$parent.')',0);}
     	$list = array();
     	if(empty($lp)){return false;}
     	$tbl_lp_item = Database::get_course_table('lp_item');
@@ -3084,6 +3091,7 @@ class learnpath {
      * @return  bool    True or false
      */
     function has_audio() {
+		if($this->debug>1){error_log('New LP - In learnpath::has_audio()',0);}
         $has = false;
     	foreach ($this->items as $i=>$item) {
     		if (!empty($this->items[$i]->audio)) { 
@@ -4238,6 +4246,7 @@ class learnpath {
 	*/
 	function tree_array($array)
 	{
+		if($this->debug>1){error_log('New LP - In learnpath::tree_array()',0);}
 		$array = $this->sort_tree_array($array);
 		$this->create_tree_array($array);
 	}
@@ -4254,6 +4263,7 @@ class learnpath {
 	 */
 	function create_tree_array($array, $parent = 0, $depth = -1, $tmp = array())
 	{
+		if($this->debug>1){error_log('New LP - In learnpath::create_tree_array())',0);}
 		if(is_array($array))
 		{
 			for($i = 0; $i < count($array); $i++)
@@ -4300,6 +4310,7 @@ class learnpath {
 	 */
 	function sort_tree_array($array)
 	{
+		if($this->debug>1){error_log('New LP - In learnpath::sort_tree_array()',0);}
 		foreach($array as $key => $row)
 		{
 			$parent[$key]	= $row['parent_item_id'];
@@ -4326,6 +4337,7 @@ class learnpath {
 	 */
 	function overview()
 	{
+		if($this->debug>0){error_log('New LP - In learnpath::overview()',0);}
 		global $charset, $_course;
 		$return = '';
 		
@@ -4805,6 +4817,7 @@ class learnpath {
 	 */
 	function display_item($item_id, $iframe = true, $msg = '')
 	{
+		if($this->debug>0){error_log('New LP - In learnpath::display_item('.$item_id.')',0);}
 		global $_course; //will disappear
 		
 		$return = '';
@@ -8951,5 +8964,3 @@ if (!function_exists('trim_value')) {
 		$value = trim($value);
     }
 }
-
-?>

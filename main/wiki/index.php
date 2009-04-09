@@ -164,11 +164,14 @@ else
 MAIN CODE
 ==============================================================================
 */
-
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '300';
+$fck_attribute['ToolbarSet'] = 'Introduction';
 
 // introduction section
 Display::display_introduction_section(TOOL_WIKI);
 
+$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 /*
 -----------------------------------------------------------
 Wiki configuration settings

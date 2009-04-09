@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 19397 2009-03-27 22:02:19Z iflorespaz $
+<?php // $Id: upload.php 19677 2009-04-09 09:49:45Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -55,21 +55,21 @@
 ==============================================================================
 */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
-
 // name of the language file that needs to be included
 $language_file = 'document';
 
-
-// global settings initialisation
-// also provides access to main api (inc/lib/main_api.lib.php)
+// including the global Dokeos file
 include("../inc/global.inc.php");
+
+// including additional libraries
+include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+include_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
+include_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
+require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include('document.inc.php');
 
+// adding extra javascript to the form
 $htmlHeadXtra[] =
 "<script type=\"text/javascript\">
 <!-- //
@@ -167,12 +167,8 @@ function get_text_content($doc_path, $doc_mime) {
 		return FALSE;
 	}
 }
-/*
------------------------------------------------------------
-	Variables
-	- some need defining before inclusion of libraries
------------------------------------------------------------
-*/
+
+// variables
 $is_allowed_to_edit = api_is_allowed_to_edit();
 
 $courseDir   = $_course['path']."/document";
@@ -224,21 +220,7 @@ else
 	$path = '/';
 }
 
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
-
-//many useful functions in main_api.lib.php, by default included
-
-include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-include_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
-include_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
-
-//check the path
-//if the path is not found (no document id), set the path to /
+//check the path: if the path is not found (no document id), set the path to /
 if(!DocumentManager::get_document_id($_course,$path))
 {
 	$path = '/';
@@ -254,31 +236,25 @@ if (isset($_POST['unzip']) && $_POST['unzip'] == 1)
 {
 	include(api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
 }
-/*
------------------------------------------------------------
-	Variables
------------------------------------------------------------
-*/
+
+// variables
 $max_filled_space = DocumentManager::get_course_quota();
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
-
-$nameTools = get_lang('UplUploadDocument');
-$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($path).$req_gid, "name"=> $langDocuments);
-Display::display_header($nameTools,"Doc");
-
+// title of the tool
 if($to_group_id !=0) //add group name after for group documents
 {
 	$add_group_to_title = ' ('.$group_properties['name'].')';
 }
-//show the title
-echo '<div class="actions-title">';
-echo $nameTools.$add_group_to_title;
-echo '</div>';
+$nameTools = get_lang('UplUploadDocument').$add_group_to_title;
+
+// breadcrumbs
+$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($path).$req_gid, "name"=> $langDocuments);
+
+// display the header
+Display::display_header($nameTools,"Doc");
+
+
+
 /*
 -----------------------------------------------------------
 	Here we do all the work
@@ -520,30 +496,39 @@ if(isset($_GET['createdir']))
 	$new_folder_text .= '<button type="submit" class="save" name="create_dir">'.get_lang('CreateFolder').'</button>';
 	$new_folder_text .= '</form>';
 	//show the form
-	Display::display_normal_message($new_folder_text, false);
+	//Display::display_normal_message($new_folder_text, false);
+	
+	echo create_dir_form();
 }
-else {	//give them a link to create a directory
-	?>
-	<p><a href="<?php echo api_get_self(); ?>?path=<?php echo $path; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" align="absmiddle" alt ="" /> <?php echo(get_lang('CreateDir'));?></a></p>
-	<?php
-}
-?>
 
-<div id="folderselector">
-<?php
+// actions
+echo '<div class="actions">';
+
+// link back to the documents overview
+echo '<a href="document.php?curdirpath='.$path.'">'.Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>';
+
+// link to create a folder
+if(!isset($_GET['createdir']))
+{
+	echo '<a href="'.api_get_self().'?path='.$path.'&amp;createdir=1">'.Display::return_icon('folder_new.gif', get_lang('CreateDir')).get_lang('CreateDir').'</a>';
+}
+echo '</div>';
+
 //form to select directory
 $folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit);
 echo(build_directory_selector($folders,$path,$group_properties['directory']));
 ?>
-</div>
 
 <!-- start upload form -->
 
 <?php
 
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
 
 $form = new FormValidator('upload','POST',api_get_self(),'','enctype="multipart/form-data"');
+
+// form title
+$form->addElement('header', '', $nameTools);
 
 $form->addElement('hidden','curdirpath',$path);
 
@@ -590,14 +575,7 @@ $form->display();
 
 <!-- end upload form -->
 
- <!-- so they can get back to the documents   -->
- <p><?php echo (get_lang('Back'));?> <?php echo (get_lang('To'));?> <a href="document.php?curdirpath=<?php echo $path; ?>"><?php echo (get_lang('DocumentsOverview'));?></a></p>
-
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+// footer
 Display::display_footer();
 ?>

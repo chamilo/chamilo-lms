@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 19471 2009-03-31 23:28:53Z cvargas1 $
+<?php // $Id: document.inc.php 19677 2009-04-09 09:49:45Z pcool $
 
 /*
 ==============================================================================
@@ -487,4 +487,27 @@ function display_user_link_document($user_id, $name)
 	}
 }
 
+function create_dir_form()
+{
+	//create the form that asks for the directory name
+	$new_folder_text = '<form action="'.api_get_self().'" method="post">';
+	$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'" />';
+	// form title
+	$new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateDir').'</div></div>';
+	
+	// folder field
+	$new_folder_text .= '<div class="row">';
+	$new_folder_text .= '<div class="label"><span class="form_required">*</span>'.get_lang('NewDir').'</div>';
+	$new_folder_text .= '<div class="formw"><input type="text" name="dirname" /></div>';
+	$new_folder_text .= '</div>';
+	// submit button
+	$new_folder_text .= '<div class="row">';
+	$new_folder_text .= '<div class="label">&nbsp;</div>';
+	$new_folder_text .= '<div class="formw"><button type="submit" name="create_dir">'.get_lang('CreateFolder').'</button></div>';
+	$new_folder_text .= '</div>';		
+	$new_folder_text .= '</form>';
+	$new_folder_text .= '<div style="clear: both; margin-bottom: 10px;"></div>';	
+	
+	return $new_folder_text;
+}
 ?>

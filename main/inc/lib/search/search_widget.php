@@ -314,11 +314,9 @@ function search_widget_show($action='index.php') {
 
     echo '<h2>'.get_lang('Search').'</h2>';
 
-    // introduction section
-
-    // The settings here for the online editor are needed and they are specific for the introduction section.
-	// You may test and modify them, but please, don't delete them.
-	$fck_attribute['Width'] = '100%';
+    
+	// Tool introduction
+   	$fck_attribute['Width'] = '100%';
 	$fck_attribute['Height'] = '300';
 	$fck_attribute['ToolbarSet'] = 'Introduction';
     // TODO: Settings for the FCKEditor to be checked (insert an image for example). Probably this is a special case here.
@@ -329,7 +327,8 @@ function search_widget_show($action='index.php') {
         Display::display_introduction_section(TOOL_SEARCH,'left');
     }
 	$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
-    
+
+
     $op = 'or';
     if (!empty($_REQUEST['operator']) && in_array($op,array('or','and'))) {
         $op = $_REQUEST['operator'];

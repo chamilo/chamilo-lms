@@ -1,4 +1,4 @@
-<?php //$Id: work.php 19693 2009-04-09 19:55:28Z ivantcholakov $
+<?php //$Id: work.php 19694 2009-04-09 21:45:33Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 19693 2009-04-09 19:55:28Z ivantcholakov $
+*  	@version $Id: work.php 19694 2009-04-09 21:45:33Z ivantcholakov $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -380,16 +380,11 @@ if (!empty ($_POST['changeProperties'])) {
 	$uploadvisibledisabled = $row["show_score"];
 }
 
-// introduction section
-
-// The settings here for the online editor are needed and they are specific for the introduction section.
-// Please, preserve them.
+// Tool introduction
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
-
 Display :: display_introduction_section(TOOL_STUDENTPUBLICATION,'left');
-
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 /*

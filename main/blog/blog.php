@@ -239,6 +239,7 @@ switch ($current_page)
 		$nameTools = Blog :: get_blog_title($blog_id);
 		Display :: display_header($nameTools, 'Blogs');
 }
+
 /*
 -----------------------------------------------------------
 	Introduction section
@@ -254,14 +255,11 @@ echo '<div class=actions>';
 <?php	
 echo '</div>';	
 		
-// The settings here for the online editor are needed and they are specific for the introduction section.
-// Please, preserve them.
+// Tool introduction
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
-
 Display::display_introduction_section(TOOL_BLOG);
-
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 //Display::display_header($nameTools,'Blogs');

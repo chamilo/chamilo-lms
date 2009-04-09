@@ -87,9 +87,6 @@ Display::display_header($nameTools,"Path");
 	(editable by course admins)
 -----------------------------------------------------------
 */
-
-// The settings here for the online editor are needed and they are specific for the introduction section.
-// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
@@ -97,10 +94,9 @@ $fck_attribute['ToolbarSet'] = 'Introduction';
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
 $fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
 $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
-
 Display::display_introduction_section(TOOL_LEARNPATH);
-
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+
 
 if(api_is_allowed_to_edit())
 {

@@ -34,20 +34,14 @@ event_access_tool(TOOL_GLOSSARY);
 // displaying the header
 Display::display_header(get_lang(ucfirst($tool)));
 
-// tool introduction
-
-// The settings here for the online editor are needed and they are specific for the introduction section.
-// Please, preserve them.
+// Tool introduction
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
-
 Display::display_introduction_section(TOOL_GLOSSARY,'left');
-
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 // Glossary FckEditor setting
-
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Glossary';

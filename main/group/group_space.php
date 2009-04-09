@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 19693 2009-04-09 19:55:28Z ivantcholakov $
+<?php //$Id: group_space.php 19694 2009-04-09 21:45:33Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -97,15 +97,10 @@ Display::display_header($nameTools,"Group");
 	(editable by course admin)
 -----------------------------------------------------------
 */
-
-// The settings here for the online editor are needed and they are specific for the introduction section.
-// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
-
 Display::display_introduction_section(group_space_.$_SESSION['_gid']);
-
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 /*

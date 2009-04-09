@@ -100,8 +100,8 @@ include api_get_path(INCLUDE_PATH) . '/header.inc.php';
 
 //display title
 
-// The settings here for the online editor are needed and they are specific for the introduction section.
-// Please, preserve them.
+
+// Tool introduction
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
@@ -109,10 +109,9 @@ $fck_attribute['ToolbarSet'] = 'Introduction';
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
 $fck_attribute['Config']['CreateDocumentDir'] = '../../../courses/'.api_get_course_path().'/document/';
 $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
-
 Display::display_introduction_section(TOOL_QUIZ);
-
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+
 
 //Display Forms or dialog box(if needed)
 

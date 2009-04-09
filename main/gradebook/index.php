@@ -71,8 +71,6 @@ if (isset($_GET['isStudentView'])) {
 if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
 	Display :: display_header(get_lang('Details'));
 
-	// The settings here for the online editor are needed and they are specific for the introduction section.
-	// Please, preserve them.
 	//Introduction tool: student view
 	$fck_attribute['Width'] = '100%';
 	$fck_attribute['Height'] = '300';
@@ -98,8 +96,6 @@ if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['st
 		//	if ( !isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') && ($status<>1 && !api_is_platform_admin()) || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true' && $status<>1 && !api_is_platform_admin()) ) {
 		Display :: display_header(get_lang('Gradebook'));
 
-		// The settings here for the online editor are needed and they are specific for the introduction section.
-		// Please, preserve them.
 		//Introduction tool: student view
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '300';
@@ -750,8 +746,7 @@ if (api_is_platform_admin() || api_is_allowed_to_create_course()  || $status==1)
 -----------------------------------------------------------
 */
 
-	// The settings here for the online editor are needed and they are specific for the introduction section.
-	// Please, preserve them.
+	// Tool introduction
 	$fck_attribute['Width'] = '100%';
 	$fck_attribute['Height'] = '300';
 	$fck_attribute['ToolbarSet'] = 'Gradebook';

@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 19693 2009-04-09 19:55:28Z ivantcholakov $
+<?php // $Id: course_home.php 19694 2009-04-09 21:45:33Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -172,15 +172,13 @@ $reqdate="&reqdate=$temps";
 */
 //display course title for course home page (similar to toolname for tool pages)
 //echo '<h3>'.api_display_tool_title($nameTools) . '</h3>';
+
 /*
 -----------------------------------------------------------
 	Introduction section
 	(editable by course admins)
 -----------------------------------------------------------
 */
-
-// The settings here for the online editor are needed and they are specific for the introduction section.
-// Please, preserve them.
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
@@ -188,9 +186,7 @@ $fck_attribute['ToolbarSet'] = 'Introduction';
 $fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
 $fck_attribute['Config']['CreateDocumentDir'] = 'document/';
 $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
-
 Display::display_introduction_section(TOOL_COURSE_HOMEPAGE);
-
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 /*

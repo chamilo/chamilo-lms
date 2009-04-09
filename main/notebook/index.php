@@ -37,24 +37,17 @@ event_access_tool(TOOL_NOTEBOOK);
 // displaying the header
 Display::display_header(get_lang(ucfirst($tool)));
 
-// tool introduction
-
-// The settings here for the online editor are needed and they are specific for the introduction section.
-// Please, preserve them.
+// Tool introduction
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
-
 Display::display_introduction_section(TOOL_NOTEBOOK,'left');
-
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 
-// config notebook FckEditor buttons bar
-
+// Config notebook FckEditor buttons bar
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
-
 if(!api_is_allowed_to_edit())
 {
 	$fck_attribute['Config']['UserStatus'] = 'student';

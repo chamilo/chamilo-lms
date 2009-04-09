@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 19693 2009-04-09 19:55:28Z ivantcholakov $
+<?php // $Id: exercice.php 19694 2009-04-09 21:45:33Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -388,14 +388,11 @@ include_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
 event_access_tool(TOOL_QUIZ);
 
-// The settings here for the online editor are needed and they are specific for the introduction section.
-// Please, preserve them.
+// Tool introduction
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
-
 Display::display_introduction_section(TOOL_QUIZ);
-
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 // selects $limitExPage exercises at the same time

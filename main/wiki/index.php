@@ -165,16 +165,11 @@ MAIN CODE
 ==============================================================================
 */
 
-// introduction section
-
-// The settings here for the online editor are needed and they are specific for the introduction section.
-// Please, preserve them.
+// Tool introduction
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
-
 Display::display_introduction_section(TOOL_WIKI);
-
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 /*
@@ -185,7 +180,6 @@ Wiki configuration settings
 
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
-
 if(!api_is_allowed_to_edit())
 {
 	$fck_attribute['Config']['UserStatus'] = 'student';

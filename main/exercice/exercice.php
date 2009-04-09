@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 19404 2009-03-28 01:24:38Z cvargas1 $
+<?php // $Id: exercice.php 19674 2009-04-09 08:32:26Z pcool $
 
 /*
 ==============================================================================
@@ -907,7 +907,7 @@ $i++;
       <td><img src="../img/jqz.gif" alt="HotPotatoes" /></td>
 	   <td><?php echo ($ind+($page*$limitExPage)).'.'; ?></td>
        <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>    
-  <td></td><td></td>
+  <td></td>
       <td><a href="adminhp.php?hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" alt="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
        <img src="../img/wizard_gray_small.gif" border="0" title="<?php echo htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" />
   <a href="<?php echo $exercicePath; ?>?hpchoice=delete&amp;file=<?php echo $path; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSure'),ENT_QUOTES,$charset).$title."?"); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>

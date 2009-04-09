@@ -81,7 +81,7 @@ class learnpath {
 	
 	var $arrMenu = array(); //array for the menu items
 
-	var $debug = 0; //logging level
+	var $debug = 1; //logging level
 
 
 
@@ -2084,7 +2084,7 @@ class learnpath {
      */
     function get_progress_bar($mode='',$percentage=-1,$text_add='',$from_lp=false)
     {
-		if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar()',0);}
+		//if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar()',0);}
     	global $lp_theme_css;
     	
     	// Setting up the CSS path of the current style if exists   

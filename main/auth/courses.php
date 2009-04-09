@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 19337 2009-03-26 00:06:52Z iflorespaz $
+<?php // $Id: courses.php 19685 2009-04-09 13:02:29Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -176,7 +176,8 @@ if ($safe['action']=='deletecoursecategory' AND isset($_GET['id']))
 {
 	if($ctok == $_GET['sec_token'])
 	{
-		$message=delete_course_category($_GET['id']);
+		$get_id_cat=Security::remove_XSS($_GET['id']);
+		$message=delete_course_category($get_id_cat);
 	}
 }
 
@@ -195,32 +196,23 @@ if (isset($message))
 }
 
 // The menu with the different options in the course management
-echo "<div id=\"actions\">\n";
-if ($safe['action'] <> 'sortmycourses' AND isset($safe['action']))
-{
-	echo "<a href=\"".api_get_self()."?action=sortmycourses\">".Display::return_icon('deplacer_fichier.gif', get_lang("SortMyCourses")).' '.get_lang("SortMyCourses")."</a>";
+echo "<div id=\"actions\" class='actions'>";
+if ($safe['action'] <> 'sortmycourses' AND isset($safe['action'])) {
+	echo "&nbsp;&nbsp;<a href=\"".api_get_self()."?action=sortmycourses\">".Display::return_icon('deplacer_fichier.gif', get_lang("SortMyCourses")).' '.get_lang("SortMyCourses")."</a>&nbsp;";
+} else {
+	echo '&nbsp;&nbsp;<b>'.Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses').'</b>&nbsp;';
 }
-else
-{
-	echo '<b>'.Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses').'</b>';
+echo '&nbsp;';
+if ($safe['action']<>'createcoursecategory') {
+	echo "&nbsp;&nbsp;<a href=\"".api_get_self()."?action=createcoursecategory\">".Display::return_icon('folder_new.gif', get_lang("CreateCourseCategory")).' '.get_lang("CreateCourseCategory")."</a>&nbsp;";
+} else {
+	echo '&nbsp;&nbsp;<b>'.Display::return_icon('folder_new.gif', get_lang("CreateCourseCategory")).' '.get_lang('CreateCourseCategory').'</b>&nbsp;';
 }
-echo '&nbsp;&nbsp;';
-if ($safe['action']<>'createcoursecategory')
-{
-	echo "<a href=\"".api_get_self()."?action=createcoursecategory\">".Display::return_icon('folder_new.gif', get_lang("CreateCourseCategory")).' '.get_lang("CreateCourseCategory")."</a>\n";
-}
-else
-{
-	echo '<b>'.Display::return_icon('folder_new.gif', get_lang("CreateCourseCategory")).' '.get_lang('CreateCourseCategory').'</b>';
-}
-echo '&nbsp;&nbsp;';
-if ($safe['action']<>'subscribe')
-{
-	echo "\t\t<a href=\"".api_get_self()."?action=subscribe\">".Display::return_icon('view_more_stats.gif', get_lang("SubscribeToCourse")).' '.get_lang("SubscribeToCourse")."</a>\n";
-}
-else
-{
-	echo '<b>'.Display::return_icon('view_more_stats.gif', get_lang("SubscribeToCourse")).' '.get_lang("SubscribeToCourse").'</b>';
+echo '&nbsp;';
+if ($safe['action']<>'subscribe') {
+	echo "&nbsp;&nbsp;<a href=\"".api_get_self()."?action=subscribe\">".Display::return_icon('view_more_stats.gif', get_lang("SubscribeToCourse")).' '.get_lang("SubscribeToCourse")."</a>&nbsp;";
+} else {
+	echo '&nbsp;&nbsp;<b>'.Display::return_icon('view_more_stats.gif', get_lang("SubscribeToCourse")).' '.get_lang("SubscribeToCourse").'</b>&nbsp;';
 }
 echo "</div>";
 

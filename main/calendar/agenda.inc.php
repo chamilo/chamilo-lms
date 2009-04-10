@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 19586 2009-04-07 10:59:42Z ivantcholakov $
+<?php //$Id: agenda.inc.php 19706 2009-04-10 14:19:19Z pcool $
 
 /*
 ==============================================================================
@@ -1397,6 +1397,7 @@ function display_courseadmin_links() {
 		echo "</form> ";
 	}
 	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('ical_icon.gif', get_lang('ICalFileImport'))." ".get_lang('ICalFileImport')."</a>";
 }
 
 
@@ -2533,89 +2534,61 @@ function show_add_form($id = '')
 	}
 ?>
 
-<!-- START OF THE FORM  -->
+	<!-- START OF THE FORM  -->
 
-
-<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="frm_import_ical">
-<input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
-<div style="text-align:right;width:80%">
-
-<a href="javascript://" onclick="return plus_ical();"><span id="plusical"><input type="image" src="../img/ical_icon.gif" alt="<?php echo get_lang('ICalFileImport');?>" title="<?php echo get_lang('ICalFileImport');?>" /></span></a>
-<div id="icalform" style="display: none;">
-<label for="ical_import"><?php echo get_lang('ICalFileImport');?></label>
-<input type="file" name="ical_import"/><button class="save" type="submit" name="ical_submit" value="<?php echo get_lang('Import');?>"><?php echo get_lang('Import');?></button>
-</div>
-</div>
-</form>
-
-<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
-<input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
-<input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
-<input type="hidden" name="id_attach" value="<?php echo Security::remove_XSS($_REQUEST['id_attach']); ?>" />
-<input type="hidden" name="sort" value="asc" />
-<input type="hidden" name="submit_event" value="ok" />
-<table border="0" cellpadding="5" cellspacing="0" width="80%" id="newedit_form">
-	<!-- the title -->
-	<tr class="title">
-		<td colspan="2" align="left">
-		<span style="font-weight: bold;"><?php echo (isset($id) AND $id<>'')?get_lang('ModifyCalendarItem'):get_lang("AddCalendarItem"); ?></span>
-		</td>        
-	</tr>
-
-	<!--  the select specific users / send to all form -->
+	<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
+	<input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
+	<input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
+	<input type="hidden" name="id_attach" value="<?php echo Security::remove_XSS($_REQUEST['id_attach']); ?>" />
+	<input type="hidden" name="sort" value="asc" />
+	<input type="hidden" name="submit_event" value="ok" />
 	<?php
+	// The form title
+	if (isset($id) AND $id<>'')
+	{
+		$form_title = get_lang('ModifyCalendarItem');
+	}
+	else 
+	{
+		$form_title = get_lang('AddCalendarItem');
+	}
+	echo '<div class="row"><div class="form_header">'.$form_title.'</div></div>';
+
+	// selecting the users / groups
 	if (isset ($_SESSION['toolgroup']))
 	{
-		echo '<tr id="subtitle">';
-		echo '<td colspan="3">';
 		echo '<input type="hidden" name="selectedform[0]" value="GROUP:'.$_SESSION['toolgroup'].'"/>' ;
 		echo '<input type="hidden" name="To" value="true"/>' ;
-		echo '</td>';
-		echo '</tr>';
-
 	}
 	else
 	{
-		?>
-		<tr class="subtitle">
-			<td valign="top" colspan="4">
-				<?php
-				// this variable defines if the course administrator can send a message to a specific user / group
-				// or not
-				//echo "<input type=\"submit\" name=\"To\" value=\"".get_lang("SelectGroupsUsers")."\" style=\"float:left\">" ;
-
-				//echo "sessiewaarde: ".$_SESSION['allow_individual_calendar'];
-				echo get_lang("SentTo").": ";
-				if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id'])){
+		echo '	<div class="row">
+					<div class="label">
+						<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.Display::return_icon('group.gif', get_lang('SentTo'), array ('align' => 'absmiddle')).' '.get_lang('SentTo').'</a>
+					</div>
+					<div class="formw">';
+		if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id']))
+		{
 					echo get_lang("Everybody").'&nbsp;';
 				}
-				echo '<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.Display::return_icon('group.gif', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle')).' '.get_lang('ModifyRecipientList').'</a>';
 				show_to_form($to);
 				if (isset($_GET['id']) && $to!='everyone') {
 					echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
 				}
-			?>
-			<hr noshade="noshade" color="#cccccc" />
-		</td>
-	</tr>
+		echo '		</div>
+				</div>';
 
-	<?php
 	}
-	?>
 
-	<!-- START date and time -->
-<tr>
-<div>
-<table border="0" width="80%">
-				<tr><td colspan="4">
+	// start date and time
+	echo 	'<div class="row">
+				<div class="label">
+					'.get_lang('StartDate').'
+				</div>
+				<div class="formw">
 					<div id="err_date" style="display:none;color:red"></div>
-					<div id="err_start_date" style="display:none;color:red"></div>					
-				</td></tr>
-				<td width="10%">	
-					<!-- date: 1 -> 31 -->					
-					<nobr><?php echo get_lang('StartDate').": \n"; ?></nobr>
-				</td>
-				<td width="35%">
+					<div id="err_start_date" style="display:none;color:red"></div>';
+	?>
 					<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
 							<?php
 							// small loop for filling all the dates
@@ -2637,7 +2610,6 @@ function show_add_form($id = '')
 										}
 										 ?>
 					</select>
-					<!-- month: january -> december -->
 					<select name="fmonth" onchange="javascript:document.new_calendar_item.end_fmonth.value=this.value;">
 					<?php
 											echo "\n";
@@ -2673,12 +2645,8 @@ function show_add_form($id = '')
 													echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 												} ?>
 					</select>
-					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
-					</td>
-					<td width="10%">	
-						<nobr><?php echo get_lang('StartTime').": \n"; ?></nobr>
-					</td>
-					<td>					
+					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>					
+					&nbsp;<?php echo get_lang('StartTime').": \n"; ?>&nbsp;
 						<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
 							<!-- <option value="--">--</option> -->
 							<?php
@@ -2710,19 +2678,18 @@ function show_add_form($id = '')
 									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
-					</td>
+	<?php 
+	echo 	'	</div>
+			</div>';
 
-</div>
-</tr>
-			<!-- END date and time -->
-<tr>
-<div>
-					<tr><td colspan="4"><div id="err_end_date" style="display:none;color:red"></div></td></tr>
-					<td >			
-							<!-- date: 1 -> 31 -->							
-							<nobr><?php echo get_lang('EndDate').": "; ?></nobr>
-					</td>
-					<td  >
+	// end date and time
+	echo 	'<div class="row">
+				<div class="label">
+					'.get_lang('EndDate').'
+				</div>
+				<div class="formw">
+					<div id="err_end_date" style="display:none;color:red"></div>';	
+	?>
 						<select name="end_fday">
 							<?php
 								// small loop for filling all the dates
@@ -2764,12 +2731,9 @@ function show_add_form($id = '')
 									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
-						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
-					</td>
-					<td >
-						<nobr><?php echo get_lang('EndTime').": \n"; ?></nobr>
-					</td>
-					<td >
+					<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>
+					&nbsp;<?php echo get_lang('EndTime').": \n"; ?>&nbsp;
+
 						<select name="end_fhour">
 							<!-- <option value="--">--</option> -->
 							<?php
@@ -2797,26 +2761,30 @@ function show_add_form($id = '')
 									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
+	<?php 
+	echo 	'	</div>
+			</div>';
 						
-						<br>
-				</td>
-</div>
-</tr>
-<tr><td colspan="4">
-<hr noshade="noshade" color="#cccccc" />
+	// the title of the agenda item
+	echo 	' 	<div class="row">
+					<div class="label">
+						<span class="form_required">*</span>'.get_lang('ItemTitle').'
+					</div>
+					<div class="formw">
 	<div id="err_title" style="display:none;color:red"></div>										
-</td></tr>
-<tr class="subtitle">
-		<td colspan="4" valign="top"><?php echo get_lang('ItemTitle'); ?> :
-			<!--<div style='margin-left: 80px'><textarea name="title" cols="50" rows="2" wrap="virtual" style="vertical-align:top; width:75%; height:50px;"><?php  if (isset($title)) echo $title; ?></textarea></div>-->
-			<input type="text" size="60" name="title" value="<?php  if (isset($title)) echo $title; ?>" />
-		</td>
-	</tr>
+						<input type="text" size="60" name="title" value="';
+						if (isset($title)) echo $title;
+	echo				'" />
+					</div>
+				</div>';
 
-	<tr>
-		<td colspan="4">
 
-			<?php
+	// the main area of the agenda item: the wysiwyg editor
+	echo '	<div class="row">
+				<div class="label">
+					<span class="form_required">*</span> Term name
+				</div>
+				<div class="formw">';
 			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 
 			$oFCKeditor = new FCKeditor('content') ;
@@ -2832,96 +2800,72 @@ function show_add_form($id = '')
 			{
 				$oFCKeditor->ToolbarSet = 'Agenda';
 			}
-		
 			$oFCKeditor->Value		= $content;
 
 			$return =	$oFCKeditor->CreateHtml();
 
 			echo $return;
+	echo '		</div>
+			</div>';
 
- ?>
-		</td>
-	</tr>
-	<!--<?php /* ADDED BY UGENT, Patrick Cool, march 2004 */ ?>
-	<tr>
-		<td colspan="4">
-	    <?php
-			//onclick="selectAll(this.form.elements[6],true)"
+	// the added resources 
+	/*echo '	<div class="row">
+				<div class="label">
+					'.get_lang('AddedResources').'
+				</div>
+				<div class="formw">';
 			if ($_SESSION['allow_individual_calendar']=='show')
 				show_addresource_button('onclick="selectAll(this.form.elements[6],true)"');
 			else
 				show_addresource_button();
 			$form_elements=$_SESSION['formelements'];
-		?>
-		</td>
-	</tr>-->
-	<?php
-	   //if ($_SESSION['addedresource'])
-	   echo "\t<tr>\n";
-	   echo "\t\t<td colspan=\"4\">\n";
 	   echo display_resources(0);
 	   $test=$_SESSION['addedresource'];
-	   echo "\t\t</td>\n\t</tr>\n";
-	?>
-	   <!-- Attachment file -->
-	   <tr>
-		<td colspan="4">
-			<div>
-				<div class="label">&nbsp;
+	echo '		</div>
+			</div>';
+			*/
+	
+	// File attachment
+	echo '	<div class="row">
+				<div class="label">
+					<a href="javascript://" onclick="return plus_attachment();"><span id="plus">'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang('AddAnAttachment').'</span></a>
 				</div>
 				<div class="formw">
-					<a href="javascript://" onclick="return plus_attachment();"><span id="plus">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;<?php echo get_lang('AddAnAttachment') ?></span></a>
-				</div>
-			</div>
-
-			<div id="options" style="display: none;">
-				<table>
-					<tr><br />
-					</tr>
+					<table id="options" style="display: none;">
 					<tr>
 						<td colspan="2">
-					        <label for="file_name"><?php echo get_lang('FileName');?>&nbsp;:</label>
+					        <label for="file_name">'.get_lang('FileName').'&nbsp;</label>
 					        <input type="file" name="user_upload"/>
 					    </td>
 					 </tr>
 					 <tr>
 					    <td colspan="2">
-					    	<label for="comment"><?php echo get_lang('FileComment');?></label><br />
+					    	<label for="comment">'.get_lang('FileComment').'</label><br />
 					    	<textarea name="file_comment" rows ="4" cols = "34" ></textarea>
 					    </td>
 				    </tr>
 			    </table>
 			 </div>
-    	</td>
-    </tr>
+			</div>';
 
-	<?php
-	   /* END ADDED BY UGENT, Patrick Cool, march 2004 */
-    if(empty($id)) //only show repeat fields when adding the first time
+
+	// Repeating the calendar item
+    if(empty($id)) //only show repeat fields when adding, not for editing an calendar item
     {
-	?>
-
-    <tr>
-    <td colspan="4">
-			<div>
-				<div class="label">&nbsp;
+	echo '	<div class="row">
+				<div class="label">
+					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang('RepeatedEvent').'</span></a>
 				</div>
-				<div class="formw">
-					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;<?php echo get_lang('RepeatedEvent') ?></span></a>
-				</div>
-			</div>
-
-			<div id="options2" style="display: none;">
-				<table>
-					<tr><br />
-					</tr>
+				<div class="formw">';
+?>
+					<table id="options2" style="display: none;">
 					<tr>
-
-			      <td><label for="repeat"><?php echo get_lang('RepeatedEvent');?></label><input type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/></td>
-			      <td colspan="2" />
+							<td><label for="repeat"><?php echo get_lang('RepeatedEvent');?></label></td>
+							<td><input type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/></td>
 			    </tr>
 			    <tr>
-			      <td><label for="repeat_type"><?php echo get_lang('RepeatType');?></label>
+							<td><label for="repeat_type"><?php echo get_lang('RepeatType');?></label></td>
+							<td>
 			        <select name="repeat_type">
 			          <option value="daily"><?php echo get_lang('RepeatDaily');?></option>
 			          <option value="weekly"><?php echo get_lang('RepeatWeekly');?></option>
@@ -2931,10 +2875,10 @@ function show_add_form($id = '')
 			          <option value="yearly"><?php echo get_lang('RepeatYearly');?></option>
 			        </select>
 			      </td>
-			      <td colspan="2" />
 			    </tr>
 			    <tr>
-			      <td><label for="repeat_end_day"><?php echo get_lang('RepeatEnd');?></label>
+							<td><label for="repeat_end_day"><?php echo get_lang('RepeatEnd');?></label></td>
+			            	<td>
 			            <select name="repeat_end_day">
 			                <?php
 			                    // small loop for filling all the dates
@@ -2978,33 +2922,33 @@ function show_add_form($id = '')
 			                        echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 			                    } ?>
 			            </select>
-			            <a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
+			            		<a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>
 								    </td>
 				    </tr>
 			    </table>
-			 </div>
-    	</td>
-    <?php
+<?php
+	echo '		</div>
+			</div>';
     }//only show repeat fields if adding, not if editing
-    ?>
-	<tr>
-		<td colspan="4">
-		<br />
-		<?php
+    
+    
+    // the submit button for storing the calendar item
+    echo '		<div class="row">
+					<div class="label">
+			 </div>
+					<div class="formw">';
 		if(isset($_GET['id'])) {
-			$class="save";
+		$class='save';
 			$text=get_lang('ModifyEvent');
 		} else {
-			$class="add";
+		$class='add';
 			$text=get_lang('AgendaAdd'); 
 		}
+	echo '<button class="'.$class.'" type="button" name="name" onclick="selectAll(document.getElementById(\'selected_form\'),true)">'.$text.'</button>';
+	echo '			</div>
+				</div>';
 		?>
-		<button class="<?php echo $class; ?>" type="button" name="name" onclick="selectAll(document.getElementById('selected_form'),true)"><?php echo $text; ?></button>
-		</td>
-	</tr>
-</table>
-</form>
-<p>&nbsp;</p>
+	</form>
 <?php
 }
 
@@ -4320,8 +4264,12 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 {
 	global $_course;
     $user_id    = api_get_user_id();
+    
+    // database table definitions
     $t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
     $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+    $item_property 				=	Database::get_course_table(TABLE_ITEM_PROPERTY);
+    
     // some filtering of the input data
     $title      = Database::escape_string($title); // no html allowed in the title
     $content    = Database::escape_string($content);
@@ -4330,9 +4278,18 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     isset($_SESSION['id_session'])?$id_session=intval($_SESSION['id_session']):$id_session=null;
     // store in the table calendar_event
 
-    // check if exists in calendar_event table
-    $sql = "SELECT * FROM $t_agenda WHERE title='$title' AND content = '$content' AND start_date = '$start_date'
-    		AND end_date = '$end_date' ".(!empty($parent_id)? "AND parent_event_id = '$parent_id'":"")." AND session_id = '$id_session'";
+    // check if exists in calendar_event table and if it is not deleted!
+    $sql = "SELECT * FROM $t_agenda agenda, $item_property item_property 
+    			WHERE agenda.title='$title' 
+    			AND agenda.content = '$content' 
+    			AND agenda.start_date = '$start_date'
+    			AND agenda.end_date = '$end_date' ".(!empty($parent_id)? " 
+    			AND agenda.parent_event_id = '$parent_id'":"")." 
+    			AND agenda.session_id = '$id_session'
+    			AND item_property.tool = '".TOOL_CALENDAR_EVENT."'
+    			AND item_property.ref = agenda.id
+    			AND item_property.visibility <> 2    			
+    			";
     $result = api_sql_query($sql,__FILE__,__LINE__);
     $count = Database::num_rows($result);
     if ($count > 0) {
@@ -4634,7 +4591,6 @@ function agenda_import_ical($course_info,$file)
     $ve = $ical->getComponent(0);
     //print_r($ve);
     $ttitle = $ve->getProperty('summary');
-    //print_r($ttitle);
     $title = mb_convert_encoding($ttitle,$charset,'UTF-8');
     $tdesc = $ve->getProperty('description');
     $desc = mb_convert_encoding($tdesc,$charset,'UTF-8');
@@ -4762,4 +4718,25 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 	}
 	//print_r($agendaitems);
 	return $agendaitems;
+}
+
+function display_ical_import_form()
+{
+	echo '<div class="row"><div class="form_header">'.get_lang('ICalFileImport').'</div></div>';
+	echo '<form enctype="multipart/form-data"  action="'.api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action'].'" method="post" name="frm_import_ical">';
+	echo '<div class="row">
+				<div class="label">
+					<span class="form_required">*</span> '.get_lang('ICalFileImport').'
+				</div>
+				<div class="formw"><input type="file" name="ical_import"/>
+				</div>
+			</div>';
+	echo '<div class="row">
+				<div class="label">
+				</div>
+				<div class="formw">
+					<button class="save" type="submit" name="ical_submit" value="'.get_lang('Import').'">'.get_lang('Import').'</button>
+				</div>
+			</div>';	
+	echo '</form>';
 }

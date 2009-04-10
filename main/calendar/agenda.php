@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+<?php //$Id: agenda.php 19706 2009-04-10 14:19:19Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -304,7 +304,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 {
 	switch ($_GET['action'])
 	{
-		case "add":			
+		case "importical":			
             if(isset($_POST['ical_submit']))
             {
                 $course_info = api_get_course_info(); 
@@ -315,13 +315,21 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                 agenda_import_ical($course_info,$_FILES['ical_import']);
                 } else {
                 	Display::display_error_message(get_lang('IsNotiCalFormatFile'));
+                	display_ical_import_form();
+                	break;
                 }
                 if (api_get_setting('display_upcoming_events') == 'true') {
 					display_upcoming_events();
 				}
                 display_agenda_items();
             }
-			elseif ($_POST['submit_event'])
+            else 
+            {
+            	display_ical_import_form();
+            }
+            break;
+		case 'add':
+			if($_POST['submit_event'])
 			{
 		     $course_info = api_get_course_info();
 			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';

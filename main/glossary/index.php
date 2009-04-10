@@ -47,16 +47,6 @@ $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Glossary';
 
 
-// action links
-echo '<div class="actions">';
-if (api_is_allowed_to_edit())
-{
-	echo '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add">'.Display::return_icon('filenew.gif',get_lang('TermAddNew')).get_lang('TermAddNew').'</a>';
-}
-echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.Display::return_icon('view_list.gif',get_lang('ListView')).get_lang('ListView').'</a>';
-echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.Display::return_icon('view_table.gif',get_lang('TableView')).get_lang('TableView').'</a>';
-echo '</div>';
-
 if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('list','table')))
 {
 	$_SESSION['glossary_view'] = $_GET['view']; 
@@ -67,12 +57,10 @@ if (api_is_allowed_to_edit())
 	// Adding a glossary
 	if (isset($_GET['action']) && $_GET['action'] == 'addglossary') 
 	{
-		if (isset($_GET['msg']) && $_GET['msg'] == 'add') {
-			api_display_tool_title(get_lang('TermAddNew'));
-		}
 		// initiate the object
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 		// settting the form elements		
+		$form->addElement('header', '', get_lang('TermAddNew'));
 		$form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'100'));
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="add"');	
@@ -104,12 +92,10 @@ if (api_is_allowed_to_edit())
 	// Editing a glossary
 	else if (isset($_GET['action']) && $_GET['action'] == 'edit_glossary' && is_numeric($_GET['glossary_id'])) 
 	{
-		if (isset($_GET['msg']) && $_GET['msg'] == 'edit') {
-			api_display_tool_title(get_lang('TermEdit'));
-		}		
 		// initiate the object
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&glossary_id='.Security::remove_XSS($_GET['glossary_id']));
 		// settting the form elements		
+		$form->addElement('header', '', get_lang('TermEdit'));
 		$form->addElement('hidden', 'glossary_id');
 		$form->addElement('text', 'glossary_title', get_lang('TermName'),array('size'=>'100'));
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
@@ -356,6 +342,16 @@ function delete_glossary($glossary_id)
  */
 function display_glossary()
 {
+	// action links
+	echo '<div class="actions">';
+	if (api_is_allowed_to_edit())
+	{
+		echo '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add">'.Display::return_icon('filenew.gif',get_lang('TermAddNew')).get_lang('TermAddNew').'</a>';
+	}
+	echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.Display::return_icon('view_list.gif',get_lang('ListView')).get_lang('ListView').'</a>';
+	echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.Display::return_icon('view_table.gif',get_lang('TableView')).get_lang('TableView').'</a>';
+	echo '</div>';	
+	
 	if (!$_SESSION['glossary_view'] OR $_SESSION['glossary_view'] == 'table')
 	{
 		$table = new SortableTable('glossary', 'get_number_glossary_terms', 'get_glossary_data',0);
@@ -596,4 +592,6 @@ function move_glossary($direction, $glossary_id)
 	$sql2 = "UPDATE $t_glossary SET display_order = '".Database::escape_string($current_display_order)."' WHERE glossary_id = '".Database::escape_string($next_id)."'";
 	$res = api_sql_query($sql1, __FILE__, __LINE__);
 	$res = api_sql_query($sql2, __FILE__, __LINE__);
+	
+	Display::display_confirmation_message(get_lang('TermMoved'));	
 }

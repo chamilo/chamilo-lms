@@ -1,4 +1,4 @@
-<?php // $Id: link.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+<?php // $Id: link.php 19700 2009-04-10 11:07:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -191,11 +191,16 @@ $fck_attribute = null; // Clearing this global variable immediatelly after it ha
 
 if (is_allowed_to_edit() and isset($_GET['action']))
 {
+	
+	echo '<div class="actions">';
+	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('LinksOverview').'</a>';
+	echo '</div>';
+	
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
 	// has been submitted yet, hence !isset($submitLink)
 	if (($_GET['action']=="addlink" or $_GET['action']=="editlink") and empty($_POST['submitLink']))
 	{
-		echo '<div class="actions-title">';
+		echo '<div class="row">';
 		if ($_GET['action']=="addlink")
 			{echo '<div class="form_header">'.get_lang("LinkAdd").'</div>';}
 		else
@@ -209,42 +214,83 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 			echo "<input type=\"hidden\" name=\"id\" value=\"".Security::remove_XSS($_GET['id'])."\" />";
 		}
 
-		echo "<table><tr>"
-			. "<td align=\"right\">URL<span class=\"required\">*</span>  :</td>"
-			. "<td><input type=\"text\" name=\"urllink\" size=\"50\" value=\"" . (empty($urllink)?'http://':htmlentities($urllink)) . "\" /></td>"			. "</tr>";
-		echo "<tr>"
-				. "<td align=\"right\">" . get_lang("LinkName") . " :</td>"
-				. "<td><input type=\"text\" name=\"title\" size=\"50\" value=\"" . htmlentities($title,ENT_QUOTES,$charset) . "\" /></td>"
-				. "</tr>"
-				. "<tr>" .
-				"<td align=\"right\" valign=\"top\">" . get_lang("Description") . " :</td>" .
-				"<td><textarea rows=\"3\" cols=\"50\" name=\"description\">" .
-				htmlentities($description,ENT_QUOTES,$charset) . "</textarea></td></tr>";
+		echo '	<div class="row">
+					<div class="label">
+						<span class="form_required">*</span> '.get_lang('Url').'
+					</div>
+					<div class="formw">
+						<input type="text" name="urllink" size="50" value="' . (empty($urllink)?'http://':htmlentities($urllink)) . '" />
+					</div>
+				</div>';
+		
+		echo '	<div class="row">
+					<div class="label">
+						'.get_lang('LinkName').'
+					</div>
+					<div class="formw">
+						<input type="text" name="title" size="50" value="' . htmlentities($title,ENT_QUOTES,$charset) . '" />
+					</div>
+				</div>';
+
+		echo '	<div class="row">
+					<div class="label">
+						'.get_lang('Description').'
+					</div>
+					<div class="formw">
+						<textarea rows="3" cols="50" name="description">' .	htmlentities($description,ENT_QUOTES,$charset) . '</textarea>
+					</div>
+				</div>';
+
 
 		$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
 		$resultcategories = api_sql_query($sqlcategories)or die("Error: " . mysql_error());
 
 		if (Database::num_rows($resultcategories)) {
-			echo	"<tr><td align=\"right\">".get_lang("Category")." :</td><td>",
-					"<select name=\"selectcategory\">",
-					"<option value=\"0\">--</option>";
-
-			while ($myrow = Database::fetch_array($resultcategories)) {
-				echo "<option value=\"".$myrow["id"]."\"";
+			echo '	<div class="row">
+						<div class="label">
+							'.get_lang('Category').'
+						</div>
+						<div class="formw">';
+			echo '			<select name="selectcategory">';
+			echo '			<option value="0">--</option>';
+			while ($myrow = Database::fetch_array($resultcategories)) 
+			{
+				echo "		<option value=\"".$myrow["id"]."\"";
 				if ($myrow["id"]==$category)
 					{echo " selected";}
 				echo ">".$myrow["category_title"]."</option>";
 			}
-			    echo "</select></td></tr>";
+			echo '			</select>';
+			echo '		</div>
+					</div>';			
+			
+
+
+
 		}
 
-		echo "<tr><td align=\"right\">".get_lang("OnHomepage")." ? </td><td><input class=\"checkbox\" type=\"checkbox\" name=\"onhomepage\" id=\"onhomepage\" value=\"1\" $onhomepage><label for=\"onhomepage\"> ".get_lang("Yes")."</label></td></tr>";
+		echo '	<div class="row">
+					<div class="label">
+						'.get_lang('OnHomepage').'?
+					</div>
+					<div class="formw">
+						<input class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('Yes').'</label>
+					</div>
+				</div>';		
+
 		if(api_get_setting('search_enabled')=='true')
 		{
 			require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 			$specific_fields = get_specific_field_list();
 
-			echo '<tr><td align="right">'.get_lang("SearchFeatureDoIndexLink").' ? </td><td><input class="checkbox" type="checkbox" name="index_document" id="index_document" checked="checked"><label for="index_document">'.get_lang("Yes").'</label></td></tr>';
+			echo '	<div class="row">
+						<div class="label">
+							'.get_lang('SearchFeatureDoIndexLink').'?
+						</div>
+						<div class="formw">
+							<input class="checkbox" type="checkbox" name="index_document" id="index_document" checked="checked"><label for="index_document"> '.get_lang('Yes').'</label>
+						</div>';			
+			
 			foreach ($specific_fields as $specific_field) {
 				//Author : <input name="A" type="text" />
 
@@ -262,19 +308,31 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 					}
 				}
 
-				$sf_textbox = '<tr><td align="right">%s</td><td><input name="%s" type="text" value="%s"/>';
+				$sf_textbox = '	
+						<div class="row">
+							<div class="label">%s</div>
+							<div class="formw">
+								<input name="%s" type="text" value="%s"/>
+							</div>
+						</div>';				
+				
 				echo sprintf($sf_textbox, $specific_field['name'], $specific_field['code'], $default_values);
 			}
 		}	
 		
-		echo "<tr><td></td><td><button class=\"save\" type=\"Submit\" name=\"submitLink\" value=\"OK\">".get_lang('SaveLink')." </button></td></tr>",
+		echo '	<div class="row">
+					<div class="label">
+					</div>
+					<div class="formw">
+						<button class="save" type="Submit" name="submitLink" value="OK">'.get_lang('SaveLink').'</button>
+					</div>
+				</div>';	
 	
-			"</table>",
-			"</form>";
+		echo '</form>';
 	}
 	elseif(($_GET['action']=="addcategory" or $_GET['action']=="editcategory") and !$submitCategory)
 	{
-		echo "<div class='actions-title'>";
+		echo '<div class="row">';
 		if ($_GET['action']=="addcategory")
 			{echo '<div class="form_header">'.get_lang('CategoryAdd').'</div>';}
 		else
@@ -285,16 +343,34 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 		{
 			echo "<input type=\"hidden\" name=\"id\" value=\"".$id."\" />";
 		}
-		echo "<table><tr>",
-			"<td align=\"right\">".get_lang("CategoryName")."<span class=\"required\">*</span>  :</td>",
-			"<td><input type=\"text\" name=\"category_title\" size=\"50\" value=\"",htmlentities($category_title,ENT_QUOTES,$charset)."\" /></td>",
-			"</tr>",
-			"<tr><td align=\"right\" valign=\"top\">".get_lang("Description")." :</td>",
-			"<td><textarea rows=\"3\" cols=\"50\" name=\"description\">",htmlentities($description,ENT_QUOTES,$charset)."</textarea></td></tr>",
-			//"<tr><td></td><td><input type=\"Submit\" name=\"submitCategory\"value=\"".get_lang("Ok")."\"/></td></tr>",
-			"<tr><td></td><td><button class=\"save\" type=\"submit\" name=\"submitCategory\">".get_lang('CreateCategory')." </button></td></tr>",
-			"</table>",
-			"</form>";
+		
+		echo '	<div class="row">
+					<div class="label">
+						<span class="form_required">*</span> '.get_lang('CategoryName').'
+					</div>
+					<div class="formw">
+						<input type="text" name="category_title" size="50" value="'.htmlentities($category_title,ENT_QUOTES,$charset).'" />
+					</div>
+				</div>';
+		
+		echo '	<div class="row">
+					<div class="label">
+						'.get_lang('Description').'
+					</div>
+					<div class="formw">
+						<textarea rows="3" cols="50" name="description">'.htmlentities($description,ENT_QUOTES,$charset).'</textarea>
+					</div>
+				</div>';
+		
+		echo '	<div class="row">
+					<div class="label">
+					</div>
+					<div class="formw">
+						<button class="save" type="submit" name="submitCategory">'.get_lang('CreateCategory').' </button>
+					</div>
+				</div>';		
+		
+		echo "</form>";
 	}
 	/*elseif(($_GET['action']=="importcsv") and !$submitImport)  // RH start
 	{
@@ -310,13 +386,13 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 
 
 if (!empty($down))
-	{
+{
 	movecatlink($down);
-	}
+}
 if (!empty($up))
-	{
+{
 	movecatlink($up);
-	}
+}
 
 if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='addcategory' && $_GET['action']!='addlink') || $link_submitted || $category_submitted)
 {	

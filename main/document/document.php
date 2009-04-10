@@ -1,4 +1,4 @@
-<?php // $Id: document.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+<?php // $Id: document.php 19700 2009-04-10 11:07:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -382,7 +382,8 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		if(DocumentManager::get_document_id($_course,$_GET['move']))
 		{
 			$folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit || $group_member_with_upload_rights);
-			Display::display_normal_message(build_move_to_selector($folders,$_GET['curdirpath'],$_GET['move'],$group_properties['directory']),false);
+			echo '<div class="row"><div class="form_header">'.get_lang('Move').'</div></div>';
+			echo build_move_to_selector($folders,$_GET['curdirpath'],$_GET['move'],$group_properties['directory']);
 		}
 		
 		

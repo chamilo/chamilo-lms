@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 19677 2009-04-09 09:49:45Z pcool $
+<?php // $Id: document.inc.php 19700 2009-04-10 11:07:37Z pcool $
 
 /*
 ==============================================================================
@@ -368,7 +368,14 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 {
 	$form = '<form name="move_to" action="'.api_get_self().'" method="post">'."\n";
 	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />'."\n";
-	$form .= get_lang('MoveTo').' <select name="move_to">'."\n";
+	
+	$form .= '<div class="row">';
+	$form .= '	<div class="label">';
+	$form .= 	get_lang('MoveTo');
+	$form .= '	</div>';
+	$form .= '	<div class="formw">';
+	
+	$form .= ' <select name="move_to">'."\n";
 	
 	//group documents cannot be uploaded in the root
 	if($group_dir=='') 
@@ -418,9 +425,19 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 		}
 	}
 
-	$form .= '</select>'."\n";
-	$form .= '<button type="submit" name="move_file_submit">'.get_lang('MoveFile').'</button>'."\n";
+	$form .= '		</select>'."\n";
+	$form .= '	</div>';
+	
+	$form .= '<div class="row">';
+	$form .= '	<div class="label"></div>';
+	$form .= '	<div class="formw">';	
+	$form .= '		<button type="submit" name="move_file_submit">'.get_lang('MoveFile').'</button>'."\n";
+	$form .= '	</div>';	
+	$form .= '</div>';	
+
 	$form .= '</form>';
+	
+	$form .= '<div style="clear: both; margin-bottom: 10px;"></div>';		
 
 	return $form;
 }

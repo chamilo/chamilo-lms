@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 19656 2009-04-08 20:08:10Z iflorespaz $
+<?php // $Id: slideshow.php 19700 2009-04-10 11:07:37Z pcool $
 
 /*
 ==============================================================================
@@ -117,7 +117,7 @@ function MM_openBrWindow(theURL,winName,features) { //v2.0
 	<?php
 
 	// exit the slideshow
-	echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'folder_up.gif" alt="">'.get_lang('_exit_slideshow').'</a>&nbsp;';
+	echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>&nbsp;';
 
 	// show thumbnails
 	if ($slide_id <> "all") {

@@ -1,4 +1,4 @@
-<?php // $Id: slideshowoptions.php 19616 2009-04-07 22:29:18Z iflorespaz $ 
+<?php // $Id: slideshowoptions.php 19700 2009-04-10 11:07:37Z pcool $ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -133,25 +133,38 @@ function disableresizing() { //v2.0
 //-->
 </script>
 
-<p></p>
-<?php echo '<div class="actions-title">'.ucfirst(get_lang('_slideshow_options')).'</div>'; ?>
+
+<?php
+echo '<div class="actions">';
+echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>';
+echo '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('images_gallery.gif').get_lang('Back').' '.get_lang('To').' '.get_lang('Slideshow').'</a>';
+echo '</div>';
+?>
+
 <form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td valign="top"><input class="checkbox" name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" 
+	
+	<div class="row"><div class="form_header"><?php echo get_lang('_slideshow_options') ?></div></div>
+
+	<div class="row">
+		<div class="label">
+			<input class="checkbox" name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" 
 	  <?php 
 	  $image_resizing=$_SESSION["image_resizing"]; 
 	  if($image_resizing=="noresizing" or $image_resizing=="")
 	  	{
 		echo " checked";
 		}
-		?>
-	  ></td>
-      <td><?php echo get_lang('_no_resizing');?><br><?php echo get_lang('_no_resizing_comment');?>
-          </td>
-    </tr>
-    <tr>
-      <td valign="top"><input class="checkbox" name="radio_resizing" type="radio" onClick="enableresizing()" value="resizing"
+			?>>
+		</div>
+		<div class="formw"><?php echo get_lang('_no_resizing');?><br><?php echo get_lang('_no_resizing_comment');?>
+		</div>
+	</div>
+	
+
+	
+	<div class="row">
+		<div class="label">
+			<input class="checkbox" name="radio_resizing" type="radio" onClick="enableresizing()" value="resizing"
 	  <?php 
 	  $image_resizing=$_SESSION["image_resizing"]; 
 	  if($image_resizing=="resizing")
@@ -160,10 +173,12 @@ function disableresizing() { //v2.0
 		$width=$_SESSION["image_resizing_width"];
 		$height=$_SESSION["image_resizing_height"];
 		} 
-		?>></td>
-      <td><?php echo get_lang('_resizing');?><br><?php echo get_lang('_resizing_comment');?><br>
+			?>>
+		</div>
+		<div class="formw">
+			<?php echo get_lang('_resizing');?><br><?php echo get_lang('_resizing_comment');?><br>
         <?php echo get_lang('_width');?>: 
-        <input name="width" type="text" id="width" 
+	        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="width" type="text" id="width" 
 		<?php 
 		if ($image_resizing=="resizing")
 			{
@@ -185,14 +200,9 @@ function disableresizing() { //v2.0
 		else
 			{echo " class=\"disabled_input\""; }
 		?>
-		></td>
-    </tr>
-    <tr>
-      <td valign="top">&nbsp;</td>
-      <td><button type="submit" class="save" name="Submit" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Save'); ?></button></td>
-    </tr>
-  </table>
-
+			>		
+		</div>
+	</div>	
 </form>
 <?php
 Display::display_footer();

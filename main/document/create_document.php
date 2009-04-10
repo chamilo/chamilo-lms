@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 19676 2009-04-09 09:14:37Z pcool $
+<?php // $Id: create_document.php 19700 2009-04-10 11:07:37Z pcool $
 
 /*
 ==============================================================================
@@ -551,6 +551,11 @@ else
 {
 	Display :: display_header($nameTools, "Doc");
 	//api_display_tool_title($nameTools);
+	// actions
+	echo '<div class="actions">';
+	// link back to the documents overview
+	echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>';
+	echo '</div>';
 	$form->display();
 	Display :: display_footer();
 }

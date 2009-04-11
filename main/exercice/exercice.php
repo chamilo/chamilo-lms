@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+<?php // $Id: exercice.php 19709 2009-04-11 16:10:04Z iflorespaz $
 
 /*
 ==============================================================================
@@ -763,12 +763,23 @@ if ($origin != 'learnpath') {
 			<td width="15" valign="left"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
 				<?php $row['title']=api_parse_tex($row['title']); ?>
 			<td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&amp;exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a></td>
-			<td> <?php
+			<td align="center"> <?php
 			$exid = $row['id'];
+			//count number exercice - teacher
 			$sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '".Database::escape_string($exid)."'";
 			$sqlresult =api_sql_query($sqlquery);
 			$rowi = Database::result($sqlresult,0);
-			//echo $rowi.' '.strtolower(get_lang(($rowi>1?'Questions':'Question'))).'</td>';
+			
+			//count number random exercice - teacher
+			$sql_random_query='SELECT type,random,active,results_disabled,max_attempt FROM '.$TBL_EXERCICES.' WHERE id="'.Database::escape_string($exid).'" '; 
+			$rs_random=api_sql_query($sql_random_query,__FILE__,__LINE__);
+			$row_random=Database::fetch_array($rs_random);
+			if ($row_random['random']>0) {
+				echo $row_random['random'].' '.strtolower(get_lang(($row_random['random']>1?'Questions':'Question'))).'</td>';
+			} else {
+				echo $rowi.' '.strtolower(get_lang(($rowi>1?'Questions':'Question'))).'</td>';
+			}
+
 	  		//echo '<td><a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a></td>';
 	  		?>
 		    <td>
@@ -806,10 +817,21 @@ if ($origin != 'learnpath') {
 				 <td align="center"> <?php
 		 
 $exid = $row['id'];
+//count number exercise questions
 $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '".Database::escape_string($exid)."'";
 $sqlresult =api_sql_query($sqlquery);
 $rowi = Database::result($sqlresult,0);
-echo $rowi.' '.strtolower(get_lang(($rowi>1?'Questions':'Question'))); ?> </td>
+//count number random exercice
+$sql_random_query='SELECT type,random,active,results_disabled,max_attempt FROM '.$TBL_EXERCICES.' WHERE id="'.Database::escape_string($exid).'" '; 
+$rs_random=api_sql_query($sql_random_query,__FILE__,__LINE__);
+$row_random=Database::fetch_array($rs_random);
+if ($row_random['random']>0) {
+	echo $row_random['random'].' '.strtolower(get_lang(($row_random['random']>1?'Questions':'Question')));
+} else {
+//show results student
+echo $rowi.' '.strtolower(get_lang(($rowi>1?'Questions':'Question'))); 
+}
+?> </td>
   <td align="center"><?php
 $eid = $row['id'];
 $uid= api_get_user_id();

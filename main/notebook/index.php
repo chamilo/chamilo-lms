@@ -47,7 +47,7 @@ $fck_attribute = null; // Clearing this global variable immediatelly after it ha
 
 // Config notebook FckEditor buttons bar
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
+$fck_attribute['Height'] = '300';
 if(!api_is_allowed_to_edit())
 {
 	$fck_attribute['Config']['UserStatus'] = 'student';
@@ -68,7 +68,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 	// settting the form elements	
 	$form->addElement('header', '', get_lang('NoteAddNew'));
-	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'100'));
+	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'95'));
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('AddNote'), 'class="add"');	
 	

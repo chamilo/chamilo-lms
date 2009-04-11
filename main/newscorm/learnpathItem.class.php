@@ -1108,7 +1108,7 @@ function get_terms()
     	if($this->current_start_time == 0){ //shouldn't be necessary thanks to the open() method
     		$this->current_start_time = time();
     	}
-    	$this->current_stop_time=time();
+    	//$this->current_stop_time=time();
     	$time = $this->current_stop_time - $this->current_start_time;
     	if($time < 0){
     		return 0;
@@ -2267,31 +2267,39 @@ function get_terms()
 	     				// this is a array containing values finished
 	     				$case_completed=array('completed','passed','browsed');
 	     				$my_status = " status = '".$this->get_status(false)."' ,";
-	     					     				
+	     				
 	     				//is not multiple attempts
-	     				if ($this->get_prevent_reinit()==1) {
-		     				// process of status verified into data base
-		     				$sql_verified='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
-		     				$rs_verified=api_sql_query($sql_verified,__FILE__,__LINE__);
-		     				$row_verified=Database::fetch_array($rs_verified);
-		     				//get type lp i.e 2=scorm and 1=lp dokeos
-		     				
-		     				//error_log($my_type_lp);
+	     				if ($this->get_prevent_reinit()==1) {    				
+		  		     	// process of status verified into data base
+	     				
+	     				$sql_verified='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+	     				$rs_verified=api_sql_query($sql_verified,__FILE__,__LINE__);
+	     				$row_verified=Database::fetch_array($rs_verified);
+	     				
+	     				    //get type lp i.e 2=scorm and 1=lp dokeos	
 		    				// if not is completed or passed or browsed and learnig path is scorm
+		     				
 		     				if(!in_array($this->get_status(false),$case_completed) && $my_type_lp==2) {
 		     					$total_time =" total_time = total_time +".$this->get_total_time().", ";  
 		     				} else {
 		     					//verified into data base
 		     					if (!in_array($row_verified['status'],$case_completed) && $my_type_lp==2) {
 		     						$total_time =" total_time = total_time +".$this->get_total_time().", ";
-		     					}
+		     	 				} else {
+		     	 				//&& !in_array($row_verified['status'],$case_completed)
+		     	 				
+		     	 				//is lp dokeos
+		     	 					if ($my_type_lp==1) {
+	     								$total_time =" total_time = total_time + ".$this->get_total_time().", ";
+	     							}	
+		     	 				} 
 		     					
 		     				}
 	     				} else {
 	     					// is multipe attempts 
 	     					if (in_array($this->get_status(false),$case_completed) &&  $my_type_lp==2) {
 	     						//reset zero new attempt ?
-	     					}elseif(!in_array($this->get_status(false),$case_completed) &&  $my_type_lp==2){
+	     					} elseif (!in_array($this->get_status(false),$case_completed) &&  $my_type_lp==2){
 	     						$total_time =" total_time = ".$this->get_total_time().", ";
 	     					} else {
 	     						//is lp dokeos
@@ -2299,18 +2307,15 @@ function get_terms()
 	     					}
 	     					
 	     				}
-	     				 
-	     			
-	    
-	     				// if is learning path of dokeos
-	     				if ($my_type_lp==1) {
-	     					//$total_time =" total_time = ".$this->get_total_time().", ";
-	     				}
+	     						
+	     				/*if ($my_type_lp==1 && !in_array($row_verified['status'],$case_completed)) {
+	     					$total_time =" total_time = total_time + ".$this->get_total_time().", ";
+	     				}*/
 	     				
 	     			}
 			     	$sql = "UPDATE $item_view_table " .
 			     			"SET " .$total_time.
-			     			" start_time = ".$this->get_current_start_time().", " .
+			     			//" start_time = ".$this->get_current_start_time().", " .
 			     			" score = ".$this->get_score().", " .
 			     			$my_status.
 			     			" max_score = '".$this->get_max()."'," .
@@ -2320,6 +2325,8 @@ function get_terms()
 			     			"WHERE lp_item_id = ".$this->db_id." " .
 			     			"AND lp_view_id = ".$this->view_id." " .
 			     			"AND view_count = ".$this->attempt_id;
+			     			
+			     			$this->current_start_time = time();
 	     		}
 	    	 	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Updating item_view: '.$sql,0);}
 		     	$res = api_sql_query($sql,__FILE__,__LINE__);

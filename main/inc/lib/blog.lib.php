@@ -2654,11 +2654,11 @@ class Blog
 					  	<td><b>' . get_lang('AddBlog') . '</b><br /><br /></td>
 					  </tr>
 						<tr>
-					   <td align="right">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
+					   <td align="right"><span class="form_required">*</span>' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 					   <td><input name="blog_name" type="text" size="100" /></td>
 						</tr>
 						<tr>
-					   <td align="right">' . get_lang('Subtitle') . ':&nbsp;&nbsp;</td>
+					   <td align="right"><span class="form_required">*</span>' . get_lang('Subtitle') . ':&nbsp;&nbsp;</td>
 					   <td><input name="blog_subtitle" type="text" size="100" /></td>
 						</tr>
 						<tr>
@@ -2691,11 +2691,11 @@ class Blog
 					  	<td><b>' . get_lang('EditBlog') . '</b><br /><br /></td>
 					  </tr>
 						<tr>
-					   <td align="right">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
+					   <td align="right"><span class="form_required">*</span>' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 					   <td><input name="blog_name" type="text" size="100" value="' . $blog['blog_name'] . '" /></td>
 						</tr>
 						<tr>
-					   <td align="right">' . get_lang('Subtitle') . ':&nbsp;&nbsp;</td>
+					   <td align="right"><span class="form_required">*</span>' . get_lang('Subtitle') . ':&nbsp;&nbsp;</td>
 					   <td><input name="blog_subtitle" type="text" size="100" value="' . $blog['blog_subtitle'] . '" /></td>
 						</tr>
 						<tr>

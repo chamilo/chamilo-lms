@@ -72,23 +72,27 @@ if (api_is_allowed_to_edit())
 		PROCESSING..
 	==============================================================================
 	*/
-	if (!empty($_POST['new_blog_submit']))
-	{
-		Blog::create_blog($_POST['blog_name'],$_POST['blog_subtitle']);
+	$get_blog_name	   = Security::remove_XSS($_POST['blog_name']);
+	$get_blog_subtitle = Security::remove_XSS($_POST['blog_subtitle']);
+	$get_blog_id       = Security::remove_XSS($_POST['blog_id']);
+	
+	if (!empty($_POST['new_blog_submit'])) {
+		if (strlen(trim($_POST['blog_name']))>0 && strlen(trim($_POST['blog_subtitle']))>0) {
+			Blog::create_blog($get_blog_name,$get_blog_subtitle);
+		}
+
 	}
-	if (!empty($_POST['edit_blog_submit']))
-	{
-		Blog::edit_blog($_POST['blog_id'],$_POST['blog_name'],$_POST['blog_subtitle']);
+	if (!empty($_POST['edit_blog_submit'])) {
+		if (strlen(trim($_POST['blog_name']))>0 && strlen(trim($_POST['blog_subtitle']))>0) {
+			Blog::edit_blog($get_blog_id,$get_blog_name,$get_blog_subtitle);
+		}
 	}
-	if (isset($_GET['action']) && $_GET['action'] == 'visibility')
-	{
+	if (isset($_GET['action']) && $_GET['action'] == 'visibility') {
 		Blog::change_blog_visibility(Database::escape_string((int)$_GET['blog_id']));
 	}
-	if (isset($_GET['action']) && $_GET['action'] == 'delete')
-	{
+	if (isset($_GET['action']) && $_GET['action'] == 'delete') {
 		Blog::delete_blog(Database::escape_string((int)$_GET['blog_id']));
 	}
-	
 	
 	/*
 	==============================================================================

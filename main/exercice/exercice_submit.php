@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 19574 2009-04-06 20:56:01Z iflorespaz $
+<?php // $Id: exercice_submit.php 19710 2009-04-11 17:14:43Z cfasanando $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 19574 2009-04-06 20:56:01Z iflorespaz $
+* 	@version $Id: exercice_submit.php 19710 2009-04-11 17:14:43Z cfasanando $
 */
 
 
@@ -131,7 +131,8 @@ if ( empty ($buttonCancel) ) {
 }
 $error = '';
 if (!isset($exerciseType)) {
-$exe_start_date= date('Y-m-d H:i:s');
+$exe_start_date= time();
+$_SESSION['exercice_start_date'] = $exe_start_date;
 }
 // if the user has clicked on the "Cancel" button
 if($buttonCancel)
@@ -171,9 +172,6 @@ $exercise_row = Database::fetch_array($result);
 $exerciseType = $exercise_row['type'];
 $exerciseFeedbackType= $exercise_row['feedback_type'];
 
-if ($exerciseType == 1) {
-	$_SESSION['exercice_start_date'] = $exe_start_date;
-}
 
 if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2 && $exerciseFeedbackType!=1) {
 	$query = 'SELECT * FROM '.$stat_table.$condition;			
@@ -319,7 +317,7 @@ if ($formSent) {
 				
 														// first we explode the "::"
 														$pre_array = explode('::', $answer);
-				
+
 														// is switchable fill blank or not
 				                                        $last = count($pre_array)-1;
 														$is_set_switchable = explode('@', $pre_array[$last]);

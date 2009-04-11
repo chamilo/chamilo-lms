@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 17972 2009-01-23 20:11:22Z juliomontoya $
+<?php // $Id: events.lib.inc.php 19710 2009-04-11 17:14:43Z cfasanando $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -439,7 +439,7 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 				   orig_lp_id = '".$learnpath_id."',		
 				   orig_lp_item_id = '".$learnpath_item_id."',
 				   exe_duration = '".$duration."',
-				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date ='".$_SESSION['exercice_start_date']."'
+				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date =FROM_UNIXTIME(".$_SESSION['exercice_start_date'].")
 				 WHERE exe_id = '".$exeid."'";
 		$res = @api_sql_query($sql,__FILE__,__LINE__);
 		return $res;

@@ -143,16 +143,47 @@ if (!isset($src))
 	}
 }
 
-// update status from lp_item_view table when you finish the exercises in learning path
-if (isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
-    $TBL_LP_ITEM_VIEW		= Database::get_course_table(TABLE_LP_ITEM_VIEW);
-	$TBL_LP_VIEW			= Database::get_course_table(TABLE_LP_VIEW);	
-	$learnpath_item_id      = Security::remove_XSS($_GET['lp_item_id']);
-    $learnpath_id           = Security::remove_XSS($_GET['lp_id']);   	
-	
-	$sql = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' WHERE lp_item_id = '".Database::escape_string($learnpath_item_id)."'
-			 AND lp_view_id = (SELECT lp_view.id FROM $TBL_LP_VIEW lp_view WHERE user_id = '".Database::escape_string($user_id)."' AND lp_id='".Database::escape_string($learnpath_id)."')";
-	api_sql_query($sql,__FILE__,__LINE__);	
+// update status,total_time from lp_item_view table when you finish the exercises in learning path
+if (!empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
+
+	$_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
+
+	$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$TBL_LP_ITEM_VIEW		= Database::get_course_table(TABLE_LP_ITEM_VIEW);
+	$TBL_LP_VIEW			= Database::get_course_table(TABLE_LP_VIEW);
+	$TBL_LP_ITEM			= Database::get_course_table(TABLE_LP_ITEM);
+	$safe_item_id      = Database::escape_string($_GET['lp_item_id']);
+    $safe_id           = Database::escape_string($_GET['lp_id']);
+	$safe_exe_id = Database::escape_string($_REQUEST['exeId']);
+
+	if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
+
+		$sql = 'SELECT start_date,exe_date,exe_result,exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.(int)$safe_exe_id;
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$row_dates = Database::fetch_array($res);
+
+		$time_start_date = convert_mysql_date($row_dates['start_date']);
+		$time_exe_date 	 = convert_mysql_date($row_dates['exe_date']);
+		$mytime = ((int)$time_exe_date-(int)$time_start_date);
+		$score = (float)$row_dates['exe_result'];
+		$max_score = (float)$row_dates['exe_weighting'];
+
+		$sql_upd_status = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' WHERE lp_item_id = '".(int)$safe_item_id."'
+				 AND lp_view_id = (SELECT lp_view.id FROM $TBL_LP_VIEW lp_view WHERE user_id = '".(int)$_SESSION['oLP']->user_id."' AND lp_id='".(int)$safe_id."')";
+		api_sql_query($sql_upd_status,__FILE__,__LINE__);
+
+		$sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE id = '".(int)$safe_item_id."'";
+		api_sql_query($sql_upd_max_score,__FILE__,__LINE__);
+
+		$sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
+		$res_last_attempt = api_sql_query($sql_last_attempt,__FILE__,__LINE__);
+		$row_last_attempt = Database::fetch_row($res_last_attempt);
+
+		if (Database::num_rows($res_last_attempt)>0) {
+			$sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score,total_time = $mytime WHERE id='".$row_last_attempt[0]."'";
+			api_sql_query($sql_upd_score,__FILE__,__LINE__);
+		}
+	}
 }
 
 $_SESSION['oLP']->set_previous_item($lp_item_id);

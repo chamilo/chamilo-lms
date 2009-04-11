@@ -320,19 +320,7 @@ foreach ($list as $my_item_id) {
 				}
 				else 
 				{
-					if ($row['item_type'] == 'quiz')
-					{						
-						$myid= $row['myid'];							
-						// selecting the max score from an attempt
-						$sql = "SELECT SUM(t.ponderation) as maxscore from ( SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at " .
-							   "INNER JOIN  $tbl_quiz_questions as q  on(q.id = at.question_id) where exe_id ='$id_last_attempt' ) as t";
-																		
-						$result = api_sql_query($sql, __FILE__, __LINE__);
-						$row_max_score = Database :: fetch_array($result);							
-						$maxscore = $row_max_score['maxscore'];	
-					} else {
-						$maxscore = $row['mymaxscore'];
-					}
+					$maxscore = $row['mymaxscore'];
 				}
 			}
 			//Remove "NaN" if any (@todo: locate the source of these NaN)
@@ -352,43 +340,12 @@ foreach ($list as $my_item_id) {
 				
 			);
 			
-			$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);
-		
-			if ($origin != 'tracking') {					
-					$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$lp_id.'" AND orig_lp_item_id = "'.(int)$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
-			} else {										
-					$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row['path'] . '" AND exe_user_id="' . (int)$_GET['student_id'] . '" AND orig_lp_id = "'.(int)$lp_id.'" AND orig_lp_item_id = "'.(int)$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($course_code) . '" AND status <> "incomplete" ORDER BY exe_date';
-			}													 
-				
-			$res_attempts = api_sql_query($sql_attempts,__FILE__,__LINE__);
-			$num_attempts = Database :: num_rows($res_attempts);				
-									
-			if ($row['item_type'] === 'quiz') {									
-				if ($num_attempts > 0) {					
-					$n=1;										
-					while ($row_attempts = Database :: fetch_array($res_attempts)) {
-						$my_score = $row_attempts['exe_result'];
-						$my_maxscore = $row_attempts['exe_weighting'];
-						$my_exe_id	= $row_attempts['exe_id'];
-						$my_orig_lp = $row_attempts['orig_lp_id'];
-						$my_orig_lp_item = $row_attempts['orig_lp_item_id'];						
-						$mktime_start_date = convert_mysql_date($row_attempts['start_date']);
-						$mktime_exe_date = convert_mysql_date($row_attempts['exe_date']);
-						$mytime = ((int)$mktime_exe_date-(int)$mktime_start_date);					 
-						$time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
-						$time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);
-																		
-						$output .= '<tr class="'.$oddclass.'"><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $n . '</td>'				
-					 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore)) . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
-					 	if ($origin != 'tracking') {
-					 		$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAttempt').'"></a></td>';						
-						} else {
-							$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '&total_time='.$mytime.'" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';							
-						}		 				 	        
-					 	$output .= '</tr>';
-						$n++;												
-					}																								
-				}						
+			$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);			
+
+			if ($row['item_type'] != 'dokeos_chapter') {
+				$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $row['iv_view_count'] . "</td>\n"
+				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
+				 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . ($score == 0 ? '-' : ($maxscore === 0 ? $score : $score . '/' . $maxscore)) . "</div></td>\n" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';
 			}
 
 			$counter++;
@@ -473,24 +430,26 @@ foreach ($list as $my_item_id) {
 		
 		// selecting the exe_id from stats attempts tables in order to look the max score value
 		if ($origin != 'tracking') {
-			$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
+			$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
 		} else {
-			$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
+			$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
 		}
 
 		$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
 		$num = Database :: num_rows($resultLastAttempt);
 		if ($num > 0) {
-			if ($num > 1) {
-				while ($rowLA = Database :: fetch_row($resultLastAttempt)) {
-					$id_last_attempt = $rowLA[0];					
-				}
-			} else {
-				$id_last_attempt = Database :: result($resultLastAttempt, 0, 0);				
+			while ($rowLA = Database :: fetch_array($resultLastAttempt)) {
+				$id_last_attempt = $rowLA['exe_id'];
+				$last_start_date = convert_mysql_date($rowLA['start_date']);
+				$last_exe_date = convert_mysql_date($rowLA['exe_date']);
+				$score = $rowLA['exe_result'];
 			}
+			$subtotal_time = ((int)$last_exe_date-(int)$last_start_date);
+
+			$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
 		}
-	
-		if ($score == 0) 
+
+		if ($score == 0)
 		{
 			$maxscore = $row['mymaxscore'];
 		}
@@ -507,7 +466,7 @@ foreach ($list as $my_item_id) {
 					$maxscore = $row['mymaxscore'];
 				}
 			} 
-			else 
+			else
 			{
 				if ($row['item_type'] == 'quiz') 
 				{
@@ -519,8 +478,8 @@ foreach ($list as $my_item_id) {
 					$result = api_sql_query($sql, __FILE__, __LINE__);
 					$row_max_score = Database :: fetch_array($result);							
 					$maxscore = $row_max_score['maxscore'];
-				} 
-				else 
+				}
+				else
 				{
 					$maxscore = $row['mymaxscore'];
 				}
@@ -544,7 +503,7 @@ foreach ($list as $my_item_id) {
 			'passed' => 'ScormPassed',
 			'browsed' => 'ScormBrowsed',
 			'not attempted' => 'ScormNotAttempted',
-			
+
 		);
 		$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);
 		$my_id = $row['myid'];
@@ -555,10 +514,10 @@ foreach ($list as $my_item_id) {
 				$my_url_suffix ='';
 				if ($origin != 'tracking' && $origin != 'tracking_course') {
 					$my_url_suffix = '&course=' . api_get_course_id() . '&student_id=' . api_get_user_id() . '&lp_id=' . Security::remove_XSS($row['mylpid']);
-					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC ';
+					$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC ';
 				} else {
-					$my_url_suffix = '&course=' . $_GET['course'] . '&student_id=' . Security::remove_XSS($_GET['student_id']) . '&lp_id=' . Security::remove_XSS($row['mylpid']).'&origin=' . Security::remove_XSS($_GET['origin']);									
-					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . Database :: escape_string($_GET['student_id']) . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete"  ORDER BY exe_date DESC ';
+					$my_url_suffix = '&course=' . $_GET['course'] . '&student_id=' . Security::remove_XSS($_GET['student_id']) . '&lp_id=' . Security::remove_XSS($row['mylpid']).'&origin=' . Security::remove_XSS($_GET['origin']);
+					$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . Database :: escape_string($_GET['student_id']) . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete"  ORDER BY exe_date DESC ';
 				}
 
 				$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
@@ -647,7 +606,7 @@ foreach ($list as $my_item_id) {
 																																												
 		// attempts list by exercise 
 		if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {
-			
+
 				$res_attempts = api_sql_query($sql_attempts,__FILE__,__LINE__);
 				$num_attempts = Database :: num_rows($res_attempts);																	
 				if ($row['item_type'] === 'quiz') {									

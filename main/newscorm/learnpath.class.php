@@ -597,7 +597,7 @@ class learnpath {
      */
     function add_lp($course,$name,$description='',$learnpath='guess',$origin='zip',$zipname='')
     {
-		if($this->debug>0){error_log('New LP - In learnpath::add_lp()',0);}
+		//if($this->debug>0){error_log('New LP - In learnpath::add_lp()',0);}
     	//TODO
     	$tbl_lp = Database::get_course_table('lp');
     	//check course code exists
@@ -1665,7 +1665,7 @@ class learnpath {
 
     {
 
-		if($this->debug>0){error_log('New LP - In learnpath::get_id()',0);}
+		//if($this->debug>0){error_log('New LP - In learnpath::get_id()',0);}
 
     	if(!empty($this->lp_id))
 
@@ -3930,7 +3930,7 @@ class learnpath {
 			}else{
 				//if sco, then it is supposed to have been updated by some other call
 			}
-            $this->items[$this->current]->restart();
+            //$this->items[$this->current]->restart();
     	}
 		if($this->debug>0){error_log('New LP - End of learnpath::start_current_item()',0);}
     	return true;

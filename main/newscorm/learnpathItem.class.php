@@ -1628,8 +1628,10 @@ function get_terms()
 			$this->objectives_count = 0;
 			$this->objectives = array();
 			$this->lesson_location = '';
-			$this->write_to_db();
-		}else{ 
+			if ($this->type != TOOL_QUIZ) {
+				$this->write_to_db();
+			}
+		}else{
 			//restart current element is allowed (because it's not finished yet), 
 			// reinit current
 			$this->current_score = 0;
@@ -1741,7 +1743,7 @@ function get_terms()
 		 			}
 		 			break;
 		 		case TOOL_HOTPOTATOES:
-		 		case TOOL_QUIZ:
+		 		case TOOL_QUIZ: return false;break;
 				default:
 		 			//for now, everything that is not sco and not asset is set to
 		 			//completed when saved
@@ -2192,10 +2194,10 @@ function get_terms()
 	     	//now save into DB
 	     	$res = 0;
 	     	if(Database::num_rows($check_res)<1){
-                $my_status = '';
-	     		if ($this->type!='quiz') {
-	     				$my_status = $this->get_status(false);	
-	     		}
+                /*$my_status = '';
+	     		if ($this->type!=TOOL_QUIZ) {
+	     				$my_status = $this->get_status(false);
+	     		}*/
 		     	$sql = "INSERT INTO $item_view_table " .
 		     			"(total_time, " .
 		     			"start_time, " .
@@ -2212,7 +2214,7 @@ function get_terms()
 		     			"(".$this->get_total_time()."," .
 		     			"".$this->current_start_time."," .
 		     			"".$this->get_score()."," .
-		     			"'".$my_status."'," .
+		     			"'".$this->get_status(false)."'," .
 		     			"'".$this->get_max()."'," .
 		     			"".$this->db_id."," .
 		     			"".$this->view_id."," .

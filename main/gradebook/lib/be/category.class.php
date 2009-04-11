@@ -25,6 +25,7 @@
 /**
  * Defines a gradebook Category object
  * @author Bert Stepp�, Stijn Konings
+ * @author Isaac flores, <florespaz@bidsoftperu.com>
  * @package dokeos.gradebook
  */
 class Category implements GradebookItem
@@ -1087,4 +1088,18 @@ class Category implements GradebookItem
 	public function get_icon_name() {
 		return 'cat';
 	}
+	 /**
+     * Find category by name
+     * @param string $name_mask search string
+     * @return array category objects matching the search criterium
+     */
+    public function find_category ($name_mask,$allcat) {
+		$foundcats = array();
+		foreach ($allcat as $search_cat) {
+			if (!(strpos(strtolower($search_cat->get_name()), strtolower($name_mask)) === false)) {
+				$foundcats[] = $search_cat;				
+			}
+		}
+		return $foundcats;
+    }
 }

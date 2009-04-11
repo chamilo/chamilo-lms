@@ -234,10 +234,11 @@ class DisplayGradebook
 		}
 		// show navigation tree and buttons?
 		$header='';
-		$header .= '<table border=0 cellpadding=5>';
+		$header .= '<div class="actions"><table border=0 >';
 		if (($showtree == '1') || (isset ($_GET['studentoverview']))) {
 
-			$header .= '<tr><td style="vertical-align: top;">' . get_lang('CurrentCategory') . '</td><td style="vertical-align: top;"><form name="selector"><select name="selectcat" onchange="document.selector.submit()">';
+			$header .= '<tr><td style=" ">' . get_lang('CurrentCategory') . '</td>' .
+					'<td style=" "><form name="selector"><select name="selectcat" onchange="document.selector.submit()">';
 			$cats= Category :: load();
 
 			$tree= $cats[0]->get_tree();
@@ -256,7 +257,7 @@ class DisplayGradebook
 			}
 			$header .= '</select></form></td>';
 			if (!$selectcat == '0') {
-				$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?selectcat=' . $catobj->get_parent_id() . '"><img src="../img/folder_up.gif" border="0" alt="" /></a></td>';
+				$header .= '<td style=" "><a href="' . api_get_self() . '?selectcat=' . $catobj->get_parent_id() . '"><img src="../img/folder_up.gif" border="0" alt="" /></a></td>';
 			}
             if (!empty($simple_search_form) && $message_resource===false) {
 			    $header .= '<td style="vertical-align: top;">'.$simple_search_form->toHtml().'</td>';
@@ -277,7 +278,7 @@ class DisplayGradebook
 			}
 			$header .= '</td></tr>';
 		}
-		$header.='</table>';
+		$header.='</table></div>';
 
 		// for course admin & platform admin add item buttons are added to the header
 		$header .= '<div class="actions">';

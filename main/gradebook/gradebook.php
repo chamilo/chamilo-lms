@@ -490,8 +490,14 @@ if ($simple_search_form->validate() && (empty($keyword))) {
 if (!empty($keyword)) {
 	$cats= Category :: load($category);
 	$allcat= array ();
-	$alleval= Evaluation :: find_evaluations($keyword, $cats[0]->get_id());
-	$alllink= LinkFactory :: find_links($keyword, $cats[0]->get_id());
+	if ((isset($_GET['selectcat']) && $_GET['selectcat']==0) && isset($_GET['search'])) {
+		$allcat= $cats[0]->get_subcategories(null);
+		$allcat_info = Category    :: find_category($keyword,$allcat);
+	} else {
+		$alleval	 = Evaluation  :: find_evaluations($keyword, $cats[0]->get_id());
+		$alllink	 = LinkFactory :: find_links($keyword, $cats[0]->get_id());	
+	}
+
 } elseif (isset ($_GET['studentoverview'])) {
 	$cats= Category :: load($category);
 	$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
@@ -577,7 +583,11 @@ if (isset($_GET['search'])) {
 if (isset ($_GET['studentoverview'])) {
 	$addparams['studentoverview'] = '';
 }
-
+if (count($allcat_info)>0 && (isset($_GET['selectcat']) && $_GET['selectcat']==0) && isset($_GET['search'])) {
+	$allcat=$allcat_info;
+} else {
+	$allcat=$allcat;
+}
 $gradebooktable= new GradebookTable($cats[0], $allcat, $alleval, $alllink, $addparams);
 if (((empty ($allcat)) && (empty ($alleval)) && (empty ($alllink)) && (!$is_platform_admin) && ($is_course_admin) && (!isset ($_GET['selectcat']))) && api_is_course_tutor()) {
 	Display :: display_normal_message(get_lang('GradebookWelcomeMessage') . '<br /><br /><form name="createcat" method="post" action="' . api_get_self() . '?createallcategories=1"><input type="submit" value="' . get_lang('CreateAllCat') . '"></form>',false);

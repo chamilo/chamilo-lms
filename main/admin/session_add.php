@@ -362,7 +362,7 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td><button class="save" type="submit" name="name" value="<?php echo get_lang('NextStep') ?>"><?php echo get_lang('NextStep') ?></button>
+  <td><button class="save" type="submit" value="<?php echo get_lang('NextStep') ?>"><?php echo get_lang('NextStep') ?></button>
  </td>
 </tr>
 

@@ -481,7 +481,7 @@ $form_url_send=isset($form_send_data_message) ? $form_send_data_message :'';
         <?php }
   	 	if (api_get_setting('allow_social_tool')=='true') {      
         ?>
-        <li><a href="select_friend_response.php"><span><?php echo get_lang('Invites'); ?></span></a></li>
+        <li><a href="select_friend_response.php"><span><?php echo get_lang('PendingInvitations'); ?></span></a></li>
         <li><a href="contacts.inc.php"><span><?php echo get_lang('Contacts'); ?></span></a></li>
         <li><a href="group_contact.inc.php"><span><?php echo get_lang('ContactsGroups'); ?></span></a></li>
         <?php

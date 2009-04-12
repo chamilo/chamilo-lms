@@ -1461,7 +1461,7 @@ span.radio {
     float:left;
 	width:55%;  
 }
-.message-conten-body-right {
+.message-content-body-right {
 	float:right;   
 	text-align:left;
     width:45%;   
@@ -1482,7 +1482,7 @@ span.radio {
 	text-align:left;
 	margin-right:20px;
 }
-.message-conten-body-right dd {
+.message-content-body-right dd {
 	color:#333399;
     border-bottom:1px solid #CCCCCC;
 	height:20px;
@@ -1490,7 +1490,7 @@ span.radio {
 	outline-style:none;
 	background:#ffffff;
 }
-.message-conten-body-right:hover {
+.message-content-body-right:hover {
 }
    
 /**********************************************

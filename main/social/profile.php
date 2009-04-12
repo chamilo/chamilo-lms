@@ -1,53 +1,24 @@
-<?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) Julio Montoya Armas 
-	Copyright (c) Isaac Flores Paz 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 /**
-==============================================================================
 * This is the profile social main page
 * @author Julio Montoya <gugli100@gmail.com>
 * @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
-=============================================================================
+* @package dokeos.social
 */
-
-
+/**
+ * Init
+ */
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset = true;	
 require '../inc/global.inc.php';
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
-/*
-define(SOCIALUNKNOW,1);
-define(SOCIALPARENT,2);
-define(SOCIALFRIEND,3);
-define(SOCIALGOODFRIEND,4);
-define(SOCIALENEMY,5);
-define(SOCIALDELETED,6);
-*/
 $user_id = api_get_user_id();
 $show_full_profile = true;
 
 //I'm your friend? I can see your profile?
-
-if (isset($_GET['u'])) {	
+if (isset($_GET['u'])) {
 	$user_id 	= (int) Database::escape_string($_GET['u']);	
 	// It's me! 
 	if (api_get_user_id() != $user_id) {
@@ -236,7 +207,9 @@ if (isset($_GET['u'])) {
 	$param_user='';	
 }
 $_SESSION['social_user_id'] = $user_id;
-
+/**
+ * Helper functions definition
+ */
 function get_logged_user_course_html($my_course, $count) {
 	global $nosession;
 	if (api_get_setting('use_session_mode')=='true' && !$nosession) {
@@ -424,7 +397,9 @@ function get_logged_user_course_html($my_course, $count) {
 	//$my_course['creation_date'];
 	return $output;
 }
-
+/**
+ * Display
+ */
 Display :: display_header(null);
 
 // @todo here we must show the user information as read only 
@@ -656,7 +631,7 @@ echo '<div id="social-profile-container">';
     	  		echo Display::return_icon('edit.gif');
     	  		echo '&nbsp;&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>';    	  			
     	  	} else {
-    	  		echo '&nbsp;&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendAMessage').'</a><br />'; 
+    	  		echo '&nbsp;&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />'; 
     	  		//echo '&nbsp;&nbsp;<a href="#">'.get_lang('SendMessage').'</a>';	
     	  	}
     	  	echo '<br /><br />';

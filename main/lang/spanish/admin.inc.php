@@ -947,4 +947,6 @@ $YouMustImportAFileAccordingToSelectedOption = "Debe importar un archivo de acue
 $ShowEmailOfTeacherOrTutorTitle = "Correo electrónico del profesor o tutor en el pie";
 $ShowEmailOfTeacherOrTutorComent = "¿ Mostrar el correo electrónico del profesor o tutor en el pie de página ?";
 $Created = "Creado";
+$AddSystemAnnouncement = "Añadir anuncio del sistema";
+$EditSystemAnnouncement = "Editar anuncio del sistema";
 ?>

@@ -292,4 +292,8 @@ $ShowResultsToStudents = "Mostrar los resultados a los estudiantes";
 $ProcedToQuestions = "Preparar preguntas";
 $AddQuestionToExercise = "Añadir pregunta";
 $PresentationQuestions = "Presentación de las preguntas";
+$UniqueAnswer = "Opción múltiple";
+$MultipleAnswer = "Respuesta multiple";
+$FreeAnswer = "Respuesta abierta";
+$HotSpot = "Zonas de imagen";
 ?>

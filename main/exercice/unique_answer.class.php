@@ -65,7 +65,7 @@ class UniqueAnswer extends Question {
 		global $fck_attribute;
 
 		$fck_attribute = array();
-		$fck_attribute['Width'] = '60%';
+		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '125px';
 		
 		$fck_attribute['ToolbarSet'] = 'Answer';

@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 
 	For a full list of contributors, see "credits.txt".
@@ -203,34 +203,26 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 	echo "</tr>\n";
 	$curday = -1;
 	$today = getdate();
-	while ($curday <= $numberofdays[$month])
-	{
+	while ($curday <= $numberofdays[$month]) {
 		echo "<tr>\n";
-		for ($ii = 0; $ii < 7; $ii ++)
-		{
-			if (($curday == -1) && ($ii == $startdayofweek))
-			{
+		for ($ii = 0; $ii < 7; $ii ++) {
+			if (($curday == -1) && ($ii == $startdayofweek)) {
 				$curday = 1;
 			}
-			if (($curday > 0) && ($curday <= $numberofdays[$month]))
-			{
+			if (($curday > 0) && ($curday <= $numberofdays[$month])) {
 				$bgcolor = $ii < 5 ? $class = "class=\"days_week\"" : $class = "class=\"days_weekend\"";
-				$dayheader = "<b>$curday</b>";
-				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon']))
-				{
-					$dayheader = "$curday - ".get_lang("Today")."<br />";
+				$dayheader = "<b>$curday</b><br />";
+				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
+					$dayheader = "<b>$curday - ".get_lang("Today")."</b><br />";
 					$class = "class=\"days_today\"";
 				}
 				echo "<td ".$class.">", "".$dayheader;
-				if (!empty($agendaitems[$curday]))
-				{
+				if (!empty($agendaitems[$curday])) {
 					echo "<span class=\"agendaitem\">".$agendaitems[$curday]."</span>";
 				}
 				echo "</td>\n";
 				$curday ++;
-			}
-			else
-			{
+			} else {
 				echo "<td>&nbsp;</td>\n";
 			}
 		}

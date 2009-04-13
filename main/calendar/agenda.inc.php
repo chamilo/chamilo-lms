@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 19706 2009-04-10 14:19:19Z pcool $
+<?php //$Id: agenda.inc.php 19730 2009-04-13 16:16:07Z juliomontoya $
 
 /*
 ==============================================================================
@@ -4704,16 +4704,16 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		if ($type !== "day_view") // This is the array construction for the WEEK or MONTH view
 		{
 			$agendaitems[$day] .= "<div><i>$hour:$minute</i> <b>".get_lang('GlobalEvent'). ":  </b>".$item['title']."</div>";
-		}
-		else // this is the array construction for the DAY view
-			{
+		} else {
+			// this is the array construction for the DAY view
 			$halfhour = 2 * $agendatime['0'];
-			if ($agendatime['1'] >= '30')
-			{
+			if ($agendatime['1'] >= '30') {
 				$halfhour = $halfhour +1;
 			}
 			//$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> <b>".get_lang('Evento Global'). ":  </b><a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
-			$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> <b>".get_lang('GlobalEvent'). ":  </b>".$item['title']."</div>";
+			if (!is_array($agendaitems[$halfhour]))
+	        	$content = $agendaitems[$halfhour];                			
+			$agendaitems[$halfhour] = $content."<div><i>$hour:$minute</i> <b>".get_lang('GlobalEvent'). ":  </b>".$item['title']."</div>";
 		}
 	}
 	//print_r($agendaitems);

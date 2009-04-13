@@ -63,10 +63,16 @@ class FillBlanks extends Question
 	 */
 	function createAnswersForm ($form) 
 	{
-		$defaults = array();
+		$defaults = array();		
+		global $fck_attribute;
+		$fck_attribute = array();
+		//$fck_attribute['Width'] = '348px';
+		$fck_attribute['Width'] = '100%';
+		$fck_attribute['Height'] = '200px';
+		$fck_attribute['ToolbarSet'] = 'Full';
 
-		if(!empty($this->id))
-		{
+	
+		if(!empty($this->id)) {
 			$objAnswer = new answer($this->id);
 			
 			// the question is encoded like this
@@ -80,12 +86,9 @@ class FillBlanks extends Question
 			//make sure we only take the last bit to find special marks
 			$sz = count($pre_array);
 			$is_set_switchable = explode('@', $pre_array[$sz-1]);			
-			if ($is_set_switchable[1]) 
-			{
+			if ($is_set_switchable[1]) {
 				$defaults['multiple_answer']=1;	
-			}
-			else
-			{
+			} else {
 				$defaults['multiple_answer']=0;	
 			}
 			
@@ -95,19 +98,30 @@ class FillBlanks extends Question
 				$defaults['answer'] .= $pre_array[$i];
 			}
 			$a_weightings = explode(',',$is_set_switchable[0]);
-		}
-		else
-		{						
+		} else {						
 			$defaults['answer'] = get_lang('DefaultTextInBlanks');
 		}
 
 		// javascript
+		
 		echo '
 		<script type="text/javascript">
+			function FCKeditor_OnComplete( editorInstance )
+			{				
+				editorInstance.EditorDocument.addEventListener( \'keyup\', updateBlanks, true ) ;
+			}
+		
 		var firstTime = true;
-		function updateBlanks() {
-			field = document.getElementById("answer");
-			var answer = field.value;
+		function updateBlanks() 
+		{
+			if (firstTime) {
+				field = document.getElementById("answer");
+				var answer = field.value; } 
+			else {
+				var oEditor = FCKeditorAPI.GetInstance(\'answer\'); 
+				answer =  oEditor.GetXHTML( true ) ;
+			}   
+			
 			var blanks = answer.match(/\[[^\]]*\]/g);
 
 			var fields = "<div class=\"row\"><div class=\"label\">'.get_lang('Weighting').'</div><div class=\"formw\"><table>";
@@ -142,7 +156,10 @@ class FillBlanks extends Question
 
 		// answer
 		$form -> addElement ('html', '<br /><br /><div class="row"><div class="label"></div><div class="formw">'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank').'</div></div>');
-		$form -> addElement ('textarea', 'answer',get_lang('Answer'),'id="answer" cols="65" rows="6" onkeyup="updateBlanks(this)"');
+		
+		//$form->addElement('html_editor', 'answer',null, '');
+						
+		$form -> addElement ('html_editor', 'answer','<img src="../img/fillinblank.png">','id="answer" cols="122" rows="6" onkeyup="updateBlanks(this)"');
 		$form -> addRule ('answer',get_lang('GiveText'),'required');
 		$form -> addRule ('answer',get_lang('DefineBlanks'),'regex','/\[.*\]/');
  

@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 19700 2009-04-10 11:07:37Z pcool $
+<?php // $Id: slideshow.php 19728 2009-04-13 14:29:50Z juliomontoya $
 
 /*
 ==============================================================================
@@ -284,6 +284,36 @@ if ($slide_id !== "all")
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_array($result);
 
+	// back forward buttons
+	echo '<table align="center" border="0">';
+	echo '<tr>';
+	echo '<td align="center" >';
+	// previous slide
+	if ($slide > 0) {
+		echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'">';
+	}
+	echo '<img src="'.api_get_path(WEB_IMG_PATH).'silde_back.gif" alt="">';
+	if ($slide > 0) {
+		echo "</a> ";
+	}	
+	// divider
+	if ($slide_id <> "all") {
+		echo '</td><td valign="middle"> [ '.$next_slide.'/'.$total_slides.' ] </td><td>';
+	}		
+	// next slide
+	if ($slide < $total_slides -1 and $slide_id <> "all") {
+		echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
+	}
+	echo '<img src="'.api_get_path(WEB_IMG_PATH).'silde_next.gif" alt="">';
+	if ($slide > 0) {
+		echo '</a>';
+	}
+	echo '</td>';
+	echo '</tr>';
+	echo '</table>';
+	
+	echo '<br/>';
+
 	echo '<table align="center" border="0">';
 	echo '<tr>';
 	echo '<td align="center">';
@@ -294,45 +324,16 @@ if ($slide_id !== "all")
 	echo '<td align="center">';
 	$aux= explode(".", htmlspecialchars($image_files_only[$slide]));
     $ext= $aux[count($aux)-1];
-	echo '<strong>'.basename(htmlspecialchars($image_files_only[$slide]), '.'.$ext).'</strong>';	
+	echo '<strong>'.basename(htmlspecialchars($image_files_only[$slide]), '.'.$ext).'</strong>';			
 	echo '<br />'.$row['comment'].'<br />';	
 	list($width, $high) = getimagesize($image);
-	echo $width.' x '.$high.' '.round((filesize($image)/1024),2).' KB';	
+	echo $width.' x '.$high.' <br />';
+	echo round((filesize($image)/1024),2).' KB';	
     echo ' - '.$ext; 	
 	echo '</td>';
 	echo '</tr>';
 	echo '</table>';
-	echo '<table align="center" border="0">';
-	echo '<tr>';
-	echo '<td align="center" >';
-	// previous slide
-	if ($slide > 0)
-	{
-		echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'">';
-	}
-	echo '<img src="'.api_get_path(WEB_IMG_PATH).'silde_back.gif" alt="">';
-	if ($slide > 0)
-	{
-		echo "</a> ";
-	}	
-	// divider
-	if ($slide_id <> "all")
-	{
-		echo '</td><td valign="middle"> [ '.$next_slide.'/'.$total_slides.' ] </td><td>';
-	}		
-	// next slide
-	if ($slide < $total_slides -1 and $slide_id <> "all")
-	{
-		echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
-	}
-	echo '<img src="'.api_get_path(WEB_IMG_PATH).'silde_next.gif" alt="">';
-	if ($slide > 0)
-	{
-		echo '</a>';
-	}
-	echo '</td>';
-	echo '</tr>';
-	echo '</table>';
+	
 	
 } // if ($slide_id!=="all")
 

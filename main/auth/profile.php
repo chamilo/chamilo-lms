@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 19483 2009-04-01 20:07:16Z juliomontoya $
+<?php // $Id: profile.php 19727 2009-04-13 00:39:28Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -566,10 +566,10 @@ function upload_user_production($user_id)
 	return false; // this should be returned if anything went wrong with the upload
 }
 /**
- * Write old password to change a new password.
- * @param	int	User id
+ * Check current user's current password
  * @param	char	password
  * @return	bool true o false
+ * @uses Gets user ID from global variable
  */
 function check_user_password($password){
 	global $_user;

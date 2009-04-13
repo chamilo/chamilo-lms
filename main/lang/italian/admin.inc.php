@@ -947,4 +947,6 @@ $YouMustImportAFileAccordingToSelectedOption = "Devi importare un file seguendo 
 $ShowEmailOfTeacherOrTutorTitle = "E-mail del docente o del tutor a piè di pagina";
 $ShowEmailOfTeacherOrTutorComent = "Mostro l\'e-mail del docente o del tutor a piè di pagina?";
 $Created = "Creato";
+$AddSystemAnnouncement = "Aggiungi un avviso di sistema";
+$EditSystemAnnouncement = "Modifica un avviso di sistema";
 ?>

@@ -292,4 +292,8 @@ $ShowResultsToStudents = "Prikaži rezultate tečajnikom";
 $ProcedToQuestions = "Nadaljuj k vprašanjem";
 $AddQuestionToExercise = "Dodaj vprašanje";
 $PresentationQuestions = "Predstavitev vprašanj";
+$UniqueAnswer = "Večkratna izbira";
+$MultipleAnswer = "Večkraten odgovor";
+$FreeAnswer = "Prost odgovor";
+$HotSpot = "Slikovna področja";
 ?>

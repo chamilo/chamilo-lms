@@ -84,7 +84,6 @@ $YouCanNowAddQuestionToYourSurvey = "Du kan nu tilføje spørgsmål til evaluerings
 $SurveyUpdatedSuccesfully = "Evalueringen er opdateret";
 $QuestionAdded = "Spørgsmålet er tilføjet";
 $QuestionUpdated = "Spørgsmålet er opdateret";
-$SaveQuestion = "Gem spørgsmål";
 $RemoveAnswer = "Fjern valg";
 $AddAnswer = "Tilføj valg";
 $DisplayAnswersHorVert = "Vis valg";

@@ -240,4 +240,9 @@ $DisableResults = "Resultaten niet weergeven aan de cursisten";
 $EnableResults = "Resultaten weergeven aan de cursisten";
 $ValidateAnswer = "Antwoorden valideren";
 $ExerciseAttempts = "Max aantal pogingen";
+$AddQuestionToExercise = "Voeg een vraag toe aan de test";
+$UniqueAnswer = "Multiple choice";
+$MultipleAnswer = "Multiple answer";
+$FreeAnswer = "Open vraag";
+$HotSpot = "Hot spot";
 ?>

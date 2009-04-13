@@ -84,7 +84,6 @@ $YouCanNowAddQuestionToYourSurvey = "U kunt nu vragen toevoegen aan uw enquete";
 $SurveyUpdatedSuccesfully = "De enquete is met succes gewijzigd";
 $QuestionAdded = "De vraag is toegevoegd.";
 $QuestionUpdated = "De vraag is aangepast.";
-$SaveQuestion = "Vraag opslaan";
 $RemoveAnswer = "Antwoordmogelijkheid verwijderen";
 $AddAnswer = "Antwoordmogelijkheid toevoegen";
 $DisplayAnswersHorVert = "Geef de opties weer:";

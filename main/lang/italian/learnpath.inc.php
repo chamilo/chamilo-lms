@@ -207,7 +207,7 @@ $ViewScoreChangeHistory = "Vedi lo storico dei punteggi";
 $ImageWillResizeMsg = "L\'immagine sarà ridimensionata";
 $ImagePreview = "Anteprima immagine";
 $UplAlreadyExists = "Il file esiste già";
-$UnknownPackageFormat = "Formato sconosciuto";
+$ScormUnknownPackageFormat = "Formato sconosciuto";
 $UplUnableToSaveFile = "Impossibile salvare il file";
 $UnknownPackageFormat = "Il formato del pacchetto non è riconosciuto. Scegli un pacchetto valido.";
 $MoveDocument = "Sposta il documento";
@@ -223,4 +223,5 @@ $ModifyPrerequisities = "Modifica i prerequisiti";
 $CreateLearningPath = "Crea il modulo didattico";
 $AddExercise = "Aggiungi quesito";
 $AddForum = "Aggiungi forum";
+$LPCreateDocument = "Crea documento";
 ?>

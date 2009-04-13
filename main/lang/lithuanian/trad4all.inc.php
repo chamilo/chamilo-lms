@@ -367,6 +367,7 @@ $Survey = "Apklausos";
 $More = "Daugiau";
 $ClickHere = "Paspausti čia";
 $Here = "čia";
+$SaveQuestion = "Išsaugoti klausimą";
 $ReturnTo = "grįžti į";
 $Horizontal = "Horizontalus";
 $Vertical = "Vertikalus";

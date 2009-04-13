@@ -134,4 +134,5 @@ $ChooseItem = "Seleccione un item";
 $AverageResultsVsResource = "Promedio de resultados contra recursos";
 $ToViewGraphScoreRuleMustBeEnabled = "La vista de regla de puntuación gráfica debe estar habilitada";
 $GradebookPreviousWeight = "Peso anterior del recurso";
+$SaveAssessment = "Guardar evaluación";
 ?>

@@ -207,7 +207,7 @@ $ViewScoreChangeHistory = "Afficher l\'historique des changements de score";
 $ImageWillResizeMsg = "L\'image sera redimensionnée";
 $ImagePreview = "Prévisualisation image";
 $UplAlreadyExists = "Ce fichier existe déjà";
-$UnknownPackageFormat = "Format de paquet inconnu";
+$ScormUnknownPackageFormat = "Format de paquet inconnu";
 $UplUnableToSaveFile = "Impossible d\'enregistrer le fichier";
 $UnknownPackageFormat = "Le format du fichier envoyé n\'a pas pu être identifié. Veuillez vérifier qu\'il s\'agit bien d\'un fichier valide.";
 $MoveDocument = "Déplacer le document";
@@ -221,4 +221,7 @@ $ShowAndQualifyAttempt = "Voir et coter tentative";
 $langAddEdit = "Ajouter / Modifier";
 $ModifyPrerequisities = "Modifier les prérequis";
 $CreateLearningPath = "Continuer";
+$AddExercise = "Ajouter exercice";
+$AddForum = "Ajouter forum";
+$LPCreateDocument = "Créer document";
 ?>

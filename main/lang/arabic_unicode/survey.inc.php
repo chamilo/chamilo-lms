@@ -84,7 +84,6 @@ $YouCanNowAddQuestionToYourSurvey = "يمكنك الآن إضافة أسئلة �
 $SurveyUpdatedSuccesfully = "لقد تم تحديث الاستطلاع بنجاح";
 $QuestionAdded = ".لقد تم إضافة السؤال";
 $QuestionUpdated = ".لقد تم تحديث السؤال";
-$SaveQuestion = "احفظ السؤال";
 $RemoveAnswer = " أحذف اختيار";
 $AddAnswer = "أضف اختيار";
 $DisplayAnswersHorVert = "أعرض الاختيارات";

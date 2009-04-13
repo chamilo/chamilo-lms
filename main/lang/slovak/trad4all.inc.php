@@ -403,6 +403,7 @@ $Survey = "Prieskumy";
 $More = "Viac";
 $ClickHere = "Klikni sem";
 $Here = "tu";
+$SaveQuestion = "Uloži&#357; otázku";
 $ReturnTo = "vráti&#357; sa na";
 $Horizontal = "Horizontálny";
 $Vertical = "Vertikálny";

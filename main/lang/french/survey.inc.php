@@ -86,7 +86,6 @@ $YouCanNowAddQuestionToYourSurvey = "Vous pouvez maintenant ajouter des question
 $SurveyUpdatedSuccesfully = "L\'enquête a été mise à jour avec succès";
 $QuestionAdded = "La question a été ajoutée";
 $QuestionUpdated = "La question a été mise à jour";
-$SaveQuestion = "Enregistrer la question";
 $RemoveAnswer = "Supprimer une réponse";
 $AddAnswer = "Ajouter une réponse";
 $DisplayAnswersHorVert = "Afficher";
@@ -196,5 +195,7 @@ $AutoInviteLink = "Les utilisateurs qui ne sont pas invités peuvent utiliser ce 
 $CompleteTheSurveysQuestions = "Compléter les questions de l\'enquête";
 $SurveysDeleted = "Enquêtes supprimées";
 $RemindUnanswered = "Envoyer un rappel uniquement aux utilisateurs qui n\'ont pas répondu";
+$ModifySurvey = "Modifier l\'enquête";
 $CreateQuestionSurvey = "Enregistrer la question";
+$ModifyQuestionSurvey = "Modifier la question";
 ?>

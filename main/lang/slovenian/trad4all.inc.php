@@ -410,6 +410,7 @@ $Survey = "Evalvacijski vprašalniki";
 $More = "Veè";
 $ClickHere = "Klikni tule";
 $Here = "tule";
+$SaveQuestion = "Shrani vprašanje";
 $ReturnTo = "vrni se na";
 $Horizontal = "Vodoravno";
 $Vertical = "Navpièno";

@@ -58,4 +58,5 @@ $ExpiryDateAlreadyPassed = "La date d\'expiration est déjà passée";
 $EndDateAlreadyPassed = "La date de fin est déjà passée";
 $MoveXTo = "Déplacer %s vers";
 $QualificationMustNotBeMoreThanQualificationOver = "La cote ne peut pas être supérieure à la qualification maximale";
+$ModifyDirectory = "Modifier le répertoire";
 ?>

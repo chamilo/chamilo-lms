@@ -407,6 +407,7 @@ $Survey = "Kérd&#337;ívek";
 $More = "Tovább";
 $ClickHere = "Kattintson ide";
 $Here = "itt";
+$SaveQuestion = "Kérdés mentése.";
 $ReturnTo = "Vissza ide";
 $Horizontal = "Vízszintes";
 $Vertical = "Függ&#337;leges";

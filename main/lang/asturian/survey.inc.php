@@ -84,7 +84,6 @@ $YouCanNowAddQuestionToYourSurvey = "Agora pue amestar entrugues a la so encuest
 $SurveyUpdatedSuccesfully = "Actualizóse la encuesta";
 $QuestionAdded = "Amestóse la entruga.";
 $QuestionUpdated = "Actualizóse la entruga.";
-$SaveQuestion = "Guardar entruga";
 $RemoveAnswer = "Quitar opción";
 $AddAnswer = "Amestar opción";
 $DisplayAnswersHorVert = "Amosar";

@@ -84,7 +84,6 @@ $YouCanNowAddQuestionToYourSurvey = "Mostantól hozzáadhat kérdéseket kérd&#337;í
 $SurveyUpdatedSuccesfully = "A kérd&#337;ív sikeresen módosítva.";
 $QuestionAdded = "A kérdés hozzáadva.";
 $QuestionUpdated = "A kérdés frissítve.";
-$SaveQuestion = "Kérdés mentése.";
 $RemoveAnswer = "Lehet&#337;ség törlése";
 $AddAnswer = "Lehet&#337;ség hozzáadása";
 $DisplayAnswersHorVert = "Megtekint";

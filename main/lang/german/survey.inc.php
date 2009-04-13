@@ -84,7 +84,6 @@ $YouCanNowAddQuestionToYourSurvey = "Sie können nun Fragen zu Ihrer Umfrage hinz
 $SurveyUpdatedSuccesfully = "Die Umfrage wurde erfolgreich aktualisiert";
 $QuestionAdded = "Die Frage wurde hinzugefügt";
 $QuestionUpdated = "Die Frage wurde aktualisiert";
-$SaveQuestion = "Frage speichern";
 $RemoveAnswer = "Antwort löschen";
 $AddAnswer = "Anwort hinzufügen";
 $DisplayAnswersHorVert = "Anzeige";

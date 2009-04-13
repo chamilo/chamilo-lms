@@ -410,6 +410,7 @@ $Survey = "Questionari";
 $More = "Altro ...";
 $ClickHere = "Clicca qui";
 $Here = "qui";
+$SaveQuestion = "Salva la domanda";
 $ReturnTo = "ritorna a";
 $Horizontal = "Orizzontale";
 $Vertical = "Verticale";

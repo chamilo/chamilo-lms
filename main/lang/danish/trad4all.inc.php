@@ -406,6 +406,7 @@ $Survey = "Evalueringer";
 $More = "Flere";
 $ClickHere = "Klik her";
 $Here = "her";
+$SaveQuestion = "Gem spørgsmål";
 $ReturnTo = "tilbage til";
 $Horizontal = "Horisontal";
 $Vertical = "Vertikal";

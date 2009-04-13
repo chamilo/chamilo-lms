@@ -134,4 +134,5 @@ $ChooseItem = "Choose item";
 $AverageResultsVsResource = "Average results vs resource";
 $ToViewGraphScoreRuleMustBeEnabled = "To view graph score rule must be enabled";
 $GradebookPreviousWeight = "Previous weight of resource";
+$SaveAssessment = "Save assessment";
 ?>

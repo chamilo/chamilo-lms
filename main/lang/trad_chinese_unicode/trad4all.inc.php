@@ -306,6 +306,7 @@ $Survey = "統計調查";
 $More = "更多";
 $ClickHere = "按這兒";
 $Here = "這兒";
+$SaveQuestion = "儲存問題";
 $Horizontal = "水平";
 $Vertical = "垂直";
 $DisplaySearchResults = "展示搜尋結果 ";

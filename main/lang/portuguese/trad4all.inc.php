@@ -407,6 +407,7 @@ $Survey = "Questionários";
 $More = "Mais";
 $ClickHere = "Clicar aqui";
 $Here = "aqui";
+$SaveQuestion = "Guardar questão";
 $ReturnTo = "voltar a";
 $Horizontal = "Horizontal";
 $Vertical = "Vertical";

@@ -407,6 +407,7 @@ $Survey = "Encuestes";
 $More = "Más";
 $ClickHere = "Calque equí";
 $Here = "equí";
+$SaveQuestion = "Guardar entruga";
 $ReturnTo = "tornar a";
 $Horizontal = "Horizontal";
 $Vertical = "Vertical";

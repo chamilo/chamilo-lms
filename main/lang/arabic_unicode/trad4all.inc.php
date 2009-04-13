@@ -407,6 +407,7 @@ $Survey = "استبيانات ";
 $More = "أكثر ";
 $ClickHere = "انقر هنا ";
 $Here = "هنا ";
+$SaveQuestion = "احفظ السؤال";
 $ReturnTo = "إرجاع إلى ";
 $Horizontal = "أفقي ";
 $Vertical = "عمودي ";

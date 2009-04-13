@@ -86,7 +86,6 @@ $YouCanNowAddQuestionToYourSurvey = "Sedaj lahko vprašalniku dodate vprašanja";
 $SurveyUpdatedSuccesfully = "Vprašalnik je bil uspešno ažuriran";
 $QuestionAdded = "Vprašanje je bilo dodano.";
 $QuestionUpdated = "Vprašanje je bilo ažurirano.";
-$SaveQuestion = "Shrani vprašanje";
 $RemoveAnswer = "Odstrani možnost";
 $AddAnswer = "Dodaj možnost";
 $DisplayAnswersHorVert = "Prikaži";

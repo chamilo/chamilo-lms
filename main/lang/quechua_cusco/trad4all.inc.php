@@ -248,6 +248,7 @@ $NoOnlineStudents = "Mana yachaqekuna kashankuchu";
 $year = "wata";
 $PleaseStandBy = "Ama hina kaychu, suyaruy...";
 $Survey = "Tapuykuna";
+$SaveQuestion = "Allchay taputa";
 $DisplayAll = "Llanta  Qhawarichiy";
 $File_upload = "Khiputa apachiy";
 $NoUsersInCourse = "Kay  yachachinaqa mana haykuqmasikunayuqchu";

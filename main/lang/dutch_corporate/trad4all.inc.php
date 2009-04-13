@@ -383,6 +383,7 @@ $Survey = "Enquetes";
 $More = "Meer";
 $ClickHere = "Klik hier";
 $Here = "hier";
+$SaveQuestion = "Vraag opslaan";
 $ReturnTo = "terugkeren naar";
 $Horizontal = "Horizontaal";
 $Vertical = "Vertikaal";

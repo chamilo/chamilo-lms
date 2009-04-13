@@ -84,7 +84,6 @@ $YouCanNowAddQuestionToYourSurvey = "Teraz môžete do svojho prieskumu prida&#357
 $SurveyUpdatedSuccesfully = "Prieskum je úspešne aktualizovaný";
 $QuestionAdded = "Otázka je pridaná.";
 $QuestionUpdated = "Otázka je aktualizovaná.";
-$SaveQuestion = "Uloži&#357; otázku";
 $RemoveAnswer = "Odstráni&#357; možnos&#357;";
 $AddAnswer = "Prida&#357; možnos&#357;";
 $DisplayAnswersHorVert = "Zobrazi&#357; možnosti";

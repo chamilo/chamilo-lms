@@ -134,4 +134,5 @@ $ChooseItem = "Izberi element";
 $AverageResultsVsResource = "Povprečen rezultat / vir";
 $ToViewGraphScoreRuleMustBeEnabled = "Za ogled grafa mora biti pravilo prikaza rezultata omogočeno";
 $GradebookPreviousWeight = "Predhodne uteži resursov";
+$SaveAssessment = "Shrani ocenjevanje";
 ?>

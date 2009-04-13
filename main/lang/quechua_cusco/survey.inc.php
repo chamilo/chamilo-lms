@@ -79,7 +79,6 @@ $SurveyCreatedSuccesfully = "Tapuqa kamachisqaña";
 $YouCanNowAddQuestionToYourSurvey = "Kunanqa yapawaq tapukunata";
 $SurveyUpdatedSuccesfully = "Tapukuyqa kunanyachisqaña";
 $QuestionUpdated = "Tapuqa kunanyachikun ";
-$SaveQuestion = "Allchay taputa";
 $DisplayAnswersHorVert = "Qhawarichiy";
 $AnswerOptions = "Kutichiymanta hokaqninkuna ";
 $YesNo = "Ari / Mana";

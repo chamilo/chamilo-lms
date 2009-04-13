@@ -84,7 +84,6 @@ $YouCanNowAddQuestionToYourSurvey = "Pode acrescentar questões ao questionário";
 $SurveyUpdatedSuccesfully = "O questionário foi actualizado com êxito";
 $QuestionAdded = "A questão foi acrescentada.";
 $QuestionUpdated = "A questão foi actualizada.";
-$SaveQuestion = "Guardar questão";
 $RemoveAnswer = "Remover opção";
 $AddAnswer = "Acrescentar opção";
 $DisplayAnswersHorVert = "Mostrar";

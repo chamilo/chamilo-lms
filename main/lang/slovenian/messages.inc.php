@@ -35,5 +35,4 @@ $WriteAMessage = "Sestavi sporoèilo";
 $AlreadyReadMessage = "Sporoèilo je že bilo prebrano";
 $UnReadMessage = "Neprebrano sporoèilo";
 $MessageSent = "Sporoèilo je bilo poslano";
-$WriteToMessage = "Besedilo";
 ?>

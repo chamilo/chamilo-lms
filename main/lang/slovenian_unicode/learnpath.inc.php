@@ -207,7 +207,7 @@ $ViewScoreChangeHistory = "Poglej zgodovino sprememb rezultatov";
 $ImageWillResizeMsg = "Slika bo spremenila velikost sporočila";
 $ImagePreview = "Predogled slike";
 $UplAlreadyExists = "Datoteka že obstaja";
-$UnknownPackageFormat = "Neznan format paketa";
+$ScormUnknownPackageFormat = "Neznan format paketa";
 $UplUnableToSaveFile = "Ne morem shraniti datoteke";
 $UnknownPackageFormat = "Format tega paketa ni bil prepoznan. Preverite, če je paket dejansko veljaven paket.";
 $MoveDocument = "Premakni dokument";
@@ -223,4 +223,5 @@ $ModifyPrerequisities = "Spremeni predzahteve";
 $CreateLearningPath = "Ustvari učno pot";
 $AddExercise = "Dodaj vajo/test";
 $AddForum = "Dodaj forum";
+$LPCreateDocument = "Ustvari dokument";
 ?>

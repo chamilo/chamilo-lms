@@ -130,5 +130,9 @@ $ForumMoved = "Le forum a été déplacé";
 $YouMustAssignWeightOfQualification = "Veuillez assigner un poids de qualification";
 $DeleteAttachmentFile = "Supprimer le fichier joint";
 $EditAnAttachment = "Modifier un fichier joint";
+$SeeForum = "Voir forum";
 $CreateForum = "Créer ce forum";
+$ModifyForum = "Modifier forum";
+$CreateThread = "Créer fil de discussion";
+$ModifyThread = "Modifier fil de discussion";
 ?>

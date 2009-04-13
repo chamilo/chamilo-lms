@@ -292,4 +292,8 @@ $ShowResultsToStudents = "Mostra i risultati ai corsisti";
 $ProcedToQuestions = "Prepara i quesiti";
 $AddQuestionToExercise = "Aggiungi quesito";
 $PresentationQuestions = "Introduzione ai quesiti";
+$UniqueAnswer = "Scelta multipla";
+$MultipleAnswer = "Risposta multipla";
+$FreeAnswer = "Risposta aperta";
+$HotSpot = "Selezione zona";
 ?>

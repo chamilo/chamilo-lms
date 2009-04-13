@@ -84,7 +84,6 @@ $YouCanNowAddQuestionToYourSurvey = "Сейчас Вы можете добави
 $SurveyUpdatedSuccesfully = "Опросник был успешно обновлен";
 $QuestionAdded = "Вопрос добавлен";
 $QuestionUpdated = "Вопрос обновлен";
-$SaveQuestion = "Сохранить вопрос";
 $RemoveAnswer = "Удалить выбор";
 $AddAnswer = "Добавить возможный вариант";
 $DisplayAnswersHorVert = "Отобразить варианты выбора";

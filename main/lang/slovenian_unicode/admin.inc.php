@@ -947,4 +947,6 @@ $YouMustImportAFileAccordingToSelectedOption = "uvažana datoteka mora biti v sk
 $ShowEmailOfTeacherOrTutorTitle = "Učiteljev ali tutorjev e-poštni naslov v nogi";
 $ShowEmailOfTeacherOrTutorComent = "Prikažem učiteljev oz. tutorjev e-poštni  naslov v nogi?";
 $Created = "Ustvarjeno";
+$AddSystemAnnouncement = "Dodaj obvestilo sistema";
+$EditSystemAnnouncement = "Uredi obvestilo sistema";
 ?>

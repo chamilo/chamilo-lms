@@ -84,7 +84,6 @@ $YouCanNowAddQuestionToYourSurvey = "Dabar galite įdėti klausimus į apklausą
 $SurveyUpdatedSuccesfully = "Apklausa sėkmingai atnaujinta";
 $QuestionAdded = "Klausimas įrašytas.";
 $QuestionUpdated = "Klausimas atnaujintas.";
-$SaveQuestion = "Išsaugoti klausimą";
 $RemoveAnswer = "Pašalinti punktą";
 $AddAnswer = "Pridėti punktą";
 $DisplayAnswersHorVert = "Rodyti nustatymus";

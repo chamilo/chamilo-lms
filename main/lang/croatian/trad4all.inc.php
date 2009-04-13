@@ -407,6 +407,7 @@ $Survey = "Ankete";
 $More = "Više";
 $ClickHere = "Klikni ovdje";
 $Here = "ovdje";
+$SaveQuestion = "Spremi pitanje";
 $ReturnTo = "vrati se na";
 $Horizontal = "Horizontalno";
 $Vertical = "Vertikalno";

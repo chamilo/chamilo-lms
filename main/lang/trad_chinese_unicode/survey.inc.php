@@ -84,7 +84,6 @@ $YouCanNowAddQuestionToYourSurvey = "你現在可在問卷中加入問題";
 $SurveyUpdatedSuccesfully = "已成功更新統計調查";
 $QuestionAdded = "已新增問題";
 $QuestionUpdated = "已更新問題";
-$SaveQuestion = "儲存問題";
 $RemoveAnswer = "移除選項";
 $AddAnswer = "增加選項";
 $DisplayAnswersHorVert = "展示選項";

@@ -21,4 +21,5 @@ $NoteComment = "Contenu";
 $NoteAdded = "Note ajoutée";
 $NoteConfirmDelete = "Êtes-vous certain de vouloir supprimer cette note";
 $AddNote = "Enregistrer la note";
+$ModifyNote = "Modifier la note";
 ?>

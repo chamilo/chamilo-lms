@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 19730 2009-04-13 16:16:07Z juliomontoya $
+<?php //$Id: agenda.inc.php 19732 2009-04-13 18:52:43Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -2645,7 +2645,7 @@ function show_add_form($id = '')
 													echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 												} ?>
 					</select>
-					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>					
+					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>					
 					&nbsp;<?php echo get_lang('StartTime').": \n"; ?>&nbsp;
 						<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
 							<!-- <option value="--">--</option> -->
@@ -2731,7 +2731,7 @@ function show_add_form($id = '')
 									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
-					<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>
+					<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
 					&nbsp;<?php echo get_lang('EndTime').": \n"; ?>&nbsp;
 
 						<select name="end_fhour">
@@ -2922,7 +2922,7 @@ function show_add_form($id = '')
 			                        echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 			                    } ?>
 			            </select>
-			            		<a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif', get_lang('Select')); ?></a>
+			            		<a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
 								    </td>
 				    </tr>
 			    </table>

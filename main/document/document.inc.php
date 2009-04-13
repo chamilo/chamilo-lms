@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 19700 2009-04-10 11:07:37Z pcool $
+<?php // $Id: document.inc.php 19733 2009-04-13 20:22:31Z aportugal $
 
 /*
 ==============================================================================
@@ -520,7 +520,7 @@ function create_dir_form()
 	// submit button
 	$new_folder_text .= '<div class="row">';
 	$new_folder_text .= '<div class="label">&nbsp;</div>';
-	$new_folder_text .= '<div class="formw"><button type="submit" name="create_dir">'.get_lang('CreateFolder').'</button></div>';
+	$new_folder_text .= '<div class="formw"><button type="submit" class="add" name="create_dir">'.get_lang('CreateFolder').'</button></div>';
 	$new_folder_text .= '</div>';		
 	$new_folder_text .= '</form>';
 	$new_folder_text .= '<div style="clear: both; margin-bottom: 10px;"></div>';	

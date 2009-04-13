@@ -33,8 +33,14 @@
 
 <form method="post" action="{-P self-}">
     <textarea rows="4" class="mda" name="mda" id="mda" title="{-L ConfirmDelete-}"></textarea>
-    <input type="submit" value="{-L Store-}" onClick="return checkBeforeSubmit(event);"></input>
-    {-T dbrecord != empty <input type="submit" value="{-L DeleteAll-}" onClick="return setPendingOperation('~~', event);"></input>-}
+    <!--<input type="submit" value="{-L Store-}" onClick="return checkBeforeSubmit(event);"></input>-->
+    <button class="save" type="submit" value="{-L Store-}" onClick="return checkBeforeSubmit(event);">{-L Store-}</button>
+    
+    
+    {-T dbrecord != empty 
+    <!--<input type="submit" value="{-L DeleteAll-}" onClick="return setPendingOperation('~~', event);"></input>-->
+    <button class="minus" type="submit" value="{-L DeleteAll-}" onClick="return setPendingOperation('~~', event);">{-L DeleteAll-}</button>
+    -}
     <span onClick="document.getElementById('indexabletext').className ='dvo'">&#xa0;</span>
 {-D techfmt {-V metadata/lom/technical/format-}-}{-T techfmt == XML 
     <input type="submit" value="{-L CourseKwds-}" onClick="return setPendingOperation('!!', event);"></input>

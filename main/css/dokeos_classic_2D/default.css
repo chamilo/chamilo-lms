@@ -2810,8 +2810,8 @@ float:left;
 		width: 990px;	  
 		text-align:left;
 		margin:0 auto;
-	}
-		
+        float: left;
+}
 #social-profile-container {
 	width: 700px;
 }

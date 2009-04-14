@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 19384 2009-03-27 20:37:14Z juliomontoya $
+<?php // $Id: usermanager.lib.php 19763 2009-04-14 18:34:53Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -63,8 +63,7 @@ class UserManager
 	  * @param	int		Whether the account is enabled or disabled by default
  	  * @param	int		The user ID of the person who registered this user (optional, defaults to null)
  	  * @param	int		The department of HR in which the user is registered (optional, defaults to 0)
-	  * @return int     new user id - if the new user creation succeeds
-	  *         boolean false otherwise
+	  * @return mixed   new user id - if the new user creation succeeds, false otherwise
 	  *
 	  * @desc The function tries to retrieve $_user['user_id'] from the global space.
 	  * if it exists, $_user['user_id'] is the creator id       If       a problem arises,
@@ -1849,5 +1848,18 @@ class UserManager
         	return true;
         }
         return false;
+    }
+    /**
+     * Get the total count of users
+     * @return	mixed	Number of users or false on error
+     */
+    function get_number_of_users() {
+        $t_u = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT count(*) FROM $t_u";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) === 1) {
+        	return (int) Database::result($res,0,0);
+        }
+        return false;    	
     }
 }

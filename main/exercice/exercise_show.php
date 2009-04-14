@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 19760 2009-04-14 15:23:58Z juliomontoya $
+* 	@version $Id: exercise_show.php 19768 2009-04-14 20:37:08Z juliomontoya $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -230,20 +230,22 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
  * @param int       Question ID
  * @return void
  */
-function display_fill_in_blanks_answer($answer,$id,$questionId) {
+ 
+function display_fill_in_blanks_answer($answer,$id,$questionId)
+{
 	?>
 		<tr>
 		<td>
-			<?php echo nl2br($answer); ?>
+			<?php echo $answer; ?>
 		</td><?php
 		if(!api_is_allowed_to_edit()) {?>
-		<td>
-		<?php
-		$comm = get_comments($id,$questionId);
-		//echo $comm;
-		?>
-		</td>
-		</tr>
+			<td>
+			<?php
+			$comm = get_comments($id,$questionId);
+			//echo $comm;
+			?>
+			</td>
+			</tr>
 	<?php }
 }
 /**

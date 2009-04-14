@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 18637 2009-02-23 21:29:20Z cfasanando $
+* 	@version $Id: exercise_result.php 19761 2009-04-14 15:25:19Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -373,7 +373,7 @@ function display_fill_in_blanks_answer($answer)
 	?>
 		<tr>
 		<td>
-			<?php echo nl2br($answer); ?>
+			<?php echo ($answer); ?>
 		</td>
 		</tr>
 	<?php

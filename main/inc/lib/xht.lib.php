@@ -362,6 +362,18 @@ function _show_param()  // for debugging info
 function _lang($var, $cur_elem = 0)
 {
     $result = @call_user_func($this->xht_get_lang, $var, $cur_elem);
+
+	// This is a hack for proper working of the language selectors
+	// in the forms that are generated through templates.
+	if ($var == 'Langs')
+    {
+    	global $langLangs;
+    	if (isset($langLangs))
+    	{
+    		$result = $langLangs;
+    	}
+    }
+
     return isset($result) ? $result : $var;
 }
 

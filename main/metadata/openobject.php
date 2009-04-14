@@ -19,7 +19,9 @@
 
 require("md_funcs.php");
 // name of the language file that needs to be included 
+/*
 $language_file = 'Whatever'; 
+*/
 require("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 

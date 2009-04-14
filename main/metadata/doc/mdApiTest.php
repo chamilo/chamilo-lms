@@ -23,7 +23,9 @@ define('EID_TYPE', 'Document');
 require('../md_' . strtolower(EID_TYPE) . '.php');
 
 // name of the language file that needs to be included 
+/*
 $language_file = 'Whatever'; 
+*/
 require("../../inc/global.inc.php");
 
 isset($_course) or give_up("Select a course first...");

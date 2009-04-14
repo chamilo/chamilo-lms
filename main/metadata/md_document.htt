@@ -143,7 +143,7 @@
     <tr>
         <td colspan="2">{-D label Format-}{-C LABEL-}</td>
         <td>{-D xpath metadata/lom/technical/format-}{-D optionarray Formats-}{-C SELECT-}</td>
-        <td><a href="{-X metadata/lom/technical/location-}">{-D label Location-}{-C LABEL-}</a></td>
+        <td><a href="{-X metadata/lom/technical/location-}" target="_blank">{-D label Location-}{-C LABEL-}</a></td>
         <td>{-D xpath metadata/lom/technical/location-}{-C INPUTW-}</td>
     </tr>
     <tr>

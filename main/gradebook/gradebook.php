@@ -493,6 +493,8 @@ if (!empty($keyword)) {
 	if ((isset($_GET['selectcat']) && $_GET['selectcat']==0) && isset($_GET['search'])) {
 		$allcat= $cats[0]->get_subcategories(null);
 		$allcat_info = Category    :: find_category($keyword,$allcat);
+		$alleval=array();
+		$alllink=array();
 	} else {
 		$alleval	 = Evaluation  :: find_evaluations($keyword, $cats[0]->get_id());
 		$alllink	 = LinkFactory :: find_links($keyword, $cats[0]->get_id());	
@@ -583,7 +585,7 @@ if (isset($_GET['search'])) {
 if (isset ($_GET['studentoverview'])) {
 	$addparams['studentoverview'] = '';
 }
-if (count($allcat_info)>0 && (isset($_GET['selectcat']) && $_GET['selectcat']==0) && isset($_GET['search'])) {
+if (count($allcat_info)>=0 && (isset($_GET['selectcat']) && $_GET['selectcat']==0) && isset($_GET['search']) && strlen(trim($_GET['search']))>0 ) {
 	$allcat=$allcat_info;
 } else {
 	$allcat=$allcat;

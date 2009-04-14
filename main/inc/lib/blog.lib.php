@@ -2739,7 +2739,7 @@ class Blog
 							'<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />',
 							"</a>\n",
 							'<a href="' .api_get_self(). '?action=delete&amp;blog_id=' . $blog['blog_id'] . '" ',
-							'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"',
+							'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >',
 							'<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />',
 							"</a>\n",
 							'<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $blog['blog_id'] . '">',

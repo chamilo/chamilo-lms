@@ -220,9 +220,9 @@ class SessionManager {
 			$field_all_ids[] = $row_field_all_id[0];
 		}
 
-		foreach($field_ids as $field_id) {
-			// check if field id is used into table field value
-			if (is_array($field_all_ids)) {
+		if (count($field_ids) > 0 && count($field_all_ids) > 0) {
+			foreach($field_ids as $field_id) {
+				// check if field id is used into table field value				
 				if (in_array($field_id,$field_all_ids)) {
 					continue;
 				} else {

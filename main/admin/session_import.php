@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 19770 2009-04-14 20:44:00Z cfasanando $
+<?php // $Id: session_import.php 19771 2009-04-14 22:28:23Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -54,8 +54,8 @@ if ($_POST['formSent']) {
 		
 		if ($file_type == 'xml') {
 
-			$racine = simplexml_load_file($_FILES['import_file']['tmp_name']);			
-			if (is_object($racine)) {
+			$racine = @simplexml_load_file($_FILES['import_file']['tmp_name']);																		
+			if (is_object($racine)) {																				
 				if (count($racine->Users->User) > 0) {					
 					foreach($racine->Users->User as $userNode)
 					{
@@ -451,6 +451,9 @@ if ($_POST['formSent']) {
 					}
 					api_sql_query("UPDATE $tbl_session SET nbr_users='$countUsers', nbr_courses='$countCourses' WHERE id='$session_id'",__FILE__,__LINE__);
 
+				}
+				if(empty($racine->Users->User) && empty($racine->Courses->Course) && empty($racine->Session)) {
+					$errorMsg=get_lang('NoNeededData');
 				}
 			}
 			else

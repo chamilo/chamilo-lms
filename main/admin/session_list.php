@@ -140,10 +140,10 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	//api_display_tool_title($tool_name);
     
     if (!empty($_GET['warn'])) {
-        Display::display_warning_message(urldecode($_GET['warn']));
+        Display::display_warning_message(urldecode($_GET['warn']),false);
     }
     if(isset($_GET['action'])) {
-        Display::display_normal_message($_GET['message']);
+        Display::display_normal_message($_GET['message'],false);
     }
     ?>	
 	<div id="main">

@@ -68,7 +68,7 @@ class FillBlanks extends Question
 		$fck_attribute = array();
 		//$fck_attribute['Width'] = '348px';
 		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '200px';
+		$fck_attribute['Height'] = '450px';
 		$fck_attribute['ToolbarSet'] = 'Full';
 
 	
@@ -159,7 +159,7 @@ class FillBlanks extends Question
 		
 		//$form->addElement('html_editor', 'answer',null, '');
 						
-		$form -> addElement ('html_editor', 'answer','<img src="../img/fillinblank.png">','id="answer" cols="122" rows="6" onkeyup="updateBlanks(this)"');
+		$form -> addElement ('html_editor', 'answer','<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="updateBlanks(this)"');
 		$form -> addRule ('answer',get_lang('GiveText'),'required');
 		$form -> addRule ('answer',get_lang('DefineBlanks'),'regex','/\[.*\]/');
  

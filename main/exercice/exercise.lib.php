@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 19619 2009-04-08 00:19:19Z cvargas1 $
+<?php // $Id: exercise.lib.php 19760 2009-04-14 15:23:58Z juliomontoya $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 19619 2009-04-08 00:19:19Z cvargas1 $
+* 	@version $Id: exercise.lib.php 19760 2009-04-14 15:23:58Z juliomontoya $
 */
 
 /**
@@ -134,62 +134,57 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 		}
 
-		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-		{
+		for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$answer=$objAnswerTmp->selectAnswer($answerId);
 			$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 
-			if($answerType == FILL_IN_BLANKS)
-			{
+			if($answerType == FILL_IN_BLANKS) {
 				// splits text and weightings that are joined with the character '::'
 				list($answer)=explode('::',$answer);
-
+		
 				// because [] is parsed here we follow this procedure:
 				// 1. find everything between the [tex] and [/tex] tags
 				$startlocations=strpos($answer,'[tex]');
 				$endlocations=strpos($answer,'[/tex]');
 
-				if($startlocations !== false && $endlocations !== false)
-				{
+				if($startlocations !== false && $endlocations !== false) {
 					$texstring=substr($answer,$startlocations,$endlocations-$startlocations+6);
 					// 2. replace this by {texcode}
 					$answer=str_replace($texstring,'{texcode}',$answer);
 				}
 
 				// 3. do the normal matching parsing
-
-				// replaces [blank] by an input field
-				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10">',nl2br($answer));
+				// replaces [blank] by an input field				
+				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10">',($answer));
 				// 4. replace the {texcode by the api_pare_tex parsed code}
+				
 				$texstring = api_parse_tex($texstring);
 				$answer=str_replace("{texcode}",$texstring,$answer);
+				
 			}
 
 			// unique answer
-			if($answerType == UNIQUE_ANSWER)
-			{
-			$s.="<input type='hidden' name='choice2[".$questionId."]' value='0'>
-			<tr>
-			  <td  width=\"50\">
-				<input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'>
-			  </td>
-			  <td>";
-			$answer=api_parse_tex($answer);
-			$s.=$answer;
-			$s.="</td></tr>";
+			if($answerType == UNIQUE_ANSWER) {
+				$s.="<input type='hidden' name='choice2[".$questionId."]' value='0'>
+				<tr>
+				  <td  width=\"50\">
+					<input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'>
+				  </td>
+				  <td>";
+				$answer=api_parse_tex($answer);
+				$s.=$answer;
+				$s.="</td></tr>";
 
-			}
+			} elseif($answerType == MULTIPLE_ANSWER) {
 			// multiple answers
-			elseif($answerType == MULTIPLE_ANSWER)
-			{
-			$s.="<tr>
-			  <td width=\"50\"><input type='hidden' name='choice2[".$questionId."][0]' value='0'>
-			<input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
-			  </td>
-			  <td>";
-			$answer = api_parse_tex($answer);
-			$s.=$answer;
-			$s.="</td></tr>";
+				$s.="<tr>
+				  <td width=\"50\"><input type='hidden' name='choice2[".$questionId."][0]' value='0'>
+				<input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
+				  </td>
+				  <td>";
+				$answer = api_parse_tex($answer);
+				$s.=$answer;
+				$s.="</td></tr>";
 
 			}
 			// fill in blanks

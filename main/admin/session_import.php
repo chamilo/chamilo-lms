@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 19771 2009-04-14 22:28:23Z cfasanando $
+<?php // $Id: session_import.php 19772 2009-04-14 22:39:32Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -560,7 +560,9 @@ if ($_POST['formSent']) {
 					$courses = explode('|',$enreg['Courses']);
 
 					foreach($courses as $course){
-                        $CourseCode = $course;
+						
+                        $CourseCode = substr($course,0,strpos($course,'['));
+                        
                         if (CourseManager::course_exists($CourseCode)) {
                             // If the course exists we continue
                             $c_info = CourseManager::get_course_information($CourseCode);

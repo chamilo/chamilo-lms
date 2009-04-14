@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 19639 2009-04-08 13:06:16Z pcool $
+<?php // $Id: session_import.php 19770 2009-04-14 20:44:00Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -54,212 +54,216 @@ if ($_POST['formSent']) {
 		
 		if ($file_type == 'xml') {
 
-			$racine = simplexml_load_file($_FILES['import_file']['tmp_name']);
+			$racine = simplexml_load_file($_FILES['import_file']['tmp_name']);			
 			if (is_object($racine)) {
-				foreach($racine->Users->User as $userNode)
-				{
-					$username = mb_convert_encoding($userNode->Username,$charset,'utf-8');
-					$isCut = 0; // if the username given is too long
-					if(strlen($username)>20)
+				if (count($racine->Users->User) > 0) {					
+					foreach($racine->Users->User as $userNode)
 					{
-						$user_name_dist = $username;
-						$username = substr($username,0,20);
-						$isCut = 1;
-					}
-
-					$sql = "SELECT 1 FROM $tbl_user WHERE username='".addslashes($username)."'";
-					$rs = api_sql_query($sql, __FILE__, __LINE__);
-
-					if (Database::affected_rows()==0) {
-						if ($isCut) {
-							$errorMsg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$user_name_dist.' '.get_lang('To').' '.$username.' <br />';
+						$username = mb_convert_encoding($userNode->Username,$charset,'utf-8');
+						$isCut = 0; // if the username given is too long
+						if(strlen($username)>20)
+						{
+							$user_name_dist = $username;
+							$username = substr($username,0,20);
+							$isCut = 1;
 						}
-
-						$lastname = mb_convert_encoding($userNode->Lastname,$charset,'utf-8');
-						$firstname = mb_convert_encoding($userNode->Firstname,$charset,'utf-8');
-						$password = mb_convert_encoding($userNode->Password,$charset,'utf-8');
-						if(empty($password)) {
-							$password = base64_encode(rand(1000,10000));
-                        }
-						$email = mb_convert_encoding($userNode->Email,$charset,'utf-8');
-						$official_code = mb_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
-						$phone = mb_convert_encoding($userNode->Phone,$charset,'utf-8');
-						$status = mb_convert_encoding($userNode->Status,$charset,'utf-8');
-						switch ($status) {
-							case 'student' : $status = 5; break;
-							case 'teacher' : $status = 1; break;
-							default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
-						}
-
-						$sql = "INSERT INTO $tbl_user SET
-								username = '".Database::escape_string($username)."',
-								lastname = '".Database::escape_string($lastname)."',
-								firstname = '".Database::escape_string($firstname)."',
-								password = '".(api_get_encrypted_password($password))."',
-								email = '".Database::escape_string($email)."',
-								official_code = '".Database::escape_string($official_code)."',
-								phone = '".Database::escape_string($phone)."',
-								status = '".Database::escape_string($status)."'";
-						
-						//if available adding also the access_url rel user relationship
-						api_sql_query($sql, __FILE__, __LINE__);
-						$return=Database::get_last_insert_id();						
-						global $_configuration;
-						require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
-						if ($_configuration['multiple_access_urls']==true) {										
-							if (api_get_current_access_url_id()!=-1)
-								UrlManager::add_user_to_url($return, api_get_current_access_url_id());
-							else
-								UrlManager::add_user_to_url($return, 1);
-						} else {
-							//we are adding by default the access_url_user table with access_url_id = 1
-							UrlManager::add_user_to_url($return, 1);				
-						}						
-
-						if(Database::affected_rows()>0 && $sendMail) {														
-							$recipient_name = $firstname.' '.$lastname;
-							$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');			
-							$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');						
-							$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-						    $email_admin = get_setting('emailAdministrator');							
-							@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
-						}
-					} else {
-						$lastname = mb_convert_encoding($userNode->Lastname,$charset,'utf-8');
-						$firstname = mb_convert_encoding($userNode->Firstname,$charset,'utf-8');
-						$password = mb_convert_encoding($userNode->Password,$charset,'utf-8');
-						$email = mb_convert_encoding($userNode->Email,$charset,'utf-8');
-						$official_code = mb_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
-						$phone = mb_convert_encoding($userNode->Phone,$charset,'utf-8');
-						$status = mb_convert_encoding($userNode->Status,$charset,'utf-8');
-						switch($status) {
-							case 'student' : $status = 5; break;
-							case 'teacher' : $status = 1; break;
-							default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
-						}
-						
-						$sql = "UPDATE $tbl_user SET
+	
+						$sql = "SELECT 1 FROM $tbl_user WHERE username='".addslashes($username)."'";
+						$rs = api_sql_query($sql, __FILE__, __LINE__);
+	
+						if (Database::affected_rows()==0) {
+							if ($isCut) {
+								$errorMsg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$user_name_dist.' '.get_lang('To').' '.$username.' <br />';
+							}
+	
+							$lastname = mb_convert_encoding($userNode->Lastname,$charset,'utf-8');
+							$firstname = mb_convert_encoding($userNode->Firstname,$charset,'utf-8');
+							$password = mb_convert_encoding($userNode->Password,$charset,'utf-8');
+							if(empty($password)) {
+								$password = base64_encode(rand(1000,10000));
+	                        }
+							$email = mb_convert_encoding($userNode->Email,$charset,'utf-8');
+							$official_code = mb_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
+							$phone = mb_convert_encoding($userNode->Phone,$charset,'utf-8');
+							$status = mb_convert_encoding($userNode->Status,$charset,'utf-8');
+							switch ($status) {
+								case 'student' : $status = 5; break;
+								case 'teacher' : $status = 1; break;
+								default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
+							}
+	
+							$sql = "INSERT INTO $tbl_user SET
+									username = '".Database::escape_string($username)."',
 									lastname = '".Database::escape_string($lastname)."',
 									firstname = '".Database::escape_string($firstname)."',
-									".(empty($password) ? "" : "password = '".(api_get_encrypted_password($password))."',")."
+									password = '".(api_get_encrypted_password($password))."',
 									email = '".Database::escape_string($email)."',
 									official_code = '".Database::escape_string($official_code)."',
 									phone = '".Database::escape_string($phone)."',
-									status = '".Database::escape_string($status)."'
-								WHERE username = '".Database::escape_string($username)."'";
-
-						api_sql_query($sql, __FILE__, __LINE__);						
-					}
-				}
-				foreach($racine->Courses->Course as $courseNode) {
-					$course_code = mb_convert_encoding($courseNode->CourseCode,$charset,'utf-8');
-					$title = mb_convert_encoding($courseNode->CourseTitle,$charset,'utf-8');
-					$description = mb_convert_encoding($courseNode->CourseDescription,$charset,'utf-8');
-					$language = mb_convert_encoding($courseNode->CourseLanguage,$charset,'utf-8');
-					$username = mb_convert_encoding($courseNode->CourseTeacher,$charset,'utf-8');
-
-					$sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
-					$rs = api_sql_query($sql, __FILE__, __LINE__);
-
-					list($user_id, $lastname, $firstname) = Database::fetch_array($rs);
-					$keys = define_course_keys($course_code, "", $dbNamePrefix);
-
-					if (sizeof($keys)) {
-
-						$currentCourseCode = $keys['visual_code'];
-						$currentCourseId = $keys['currentCourseId'];
-						if(empty($currentCourseCode))
-							$currentCourseCode = $currentCourseId;
-						$currentCourseDbName = $keys['currentCourseDbName'];
-						$currentCourseRepository = $keys['currentCourseRepository'];
-
-						if($currentCourseId == strtoupper($course_code)) {
-							if (empty ($title)) {
-								$title = $keys['currentCourseCode'];
+									status = '".Database::escape_string($status)."'";
+							
+							//if available adding also the access_url rel user relationship
+							api_sql_query($sql, __FILE__, __LINE__);
+							$return=Database::get_last_insert_id();						
+							global $_configuration;
+							require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+							if ($_configuration['multiple_access_urls']==true) {										
+								if (api_get_current_access_url_id()!=-1)
+									UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+								else
+									UrlManager::add_user_to_url($return, 1);
+							} else {
+								//we are adding by default the access_url_user table with access_url_id = 1
+								UrlManager::add_user_to_url($return, 1);				
+							}						
+	
+							if(Database::affected_rows()>0 && $sendMail) {														
+								$recipient_name = $firstname.' '.$lastname;
+								$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');			
+								$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');						
+								$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+							    $email_admin = get_setting('emailAdministrator');							
+								@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
 							}
-							prepare_course_repository($currentCourseRepository, $currentCourseId);
-							update_Db_course($currentCourseDbName);
-							fill_course_repository($currentCourseRepository);
-							fill_Db_course($currentCourseDbName, $currentCourseRepository, 'french');
-							//register_course($currentCourseId, $currentCourseCode, $currentCourseRepository, $currentCourseDbName, "$lastname $firstname", $course['unit_code'], addslashes($course['FR']['title']), $language, $user_id);
-							$sql = "INSERT INTO ".$tbl_course." SET
-										code = '".$currentCourseId."',
-										db_name = '".$currentCourseDbName."',
-										directory = '".$currentCourseRepository."',
-										course_language = '".$language."',
-										title = '".$title."',
-										description = '".lang2db($description)."',
-										category_code = '',
-										visibility = '".$defaultVisibilityForANewCourse."',
-										show_score = '',
-										disk_quota = NULL,
-										creation_date = now(),
-										expiration_date = NULL,
-										last_edit = now(),
-										last_visit = NULL,
-										tutor_name = '".$lastname." ".$firstname."',
-										visual_code = '".$currentCourseCode."'";
-
-							api_sql_query($sql, __FILE__, __LINE__);
-
-							$sql = "INSERT INTO ".$tbl_course_user." SET
-										course_code = '".$currentCourseId."',
-										user_id = '".$user_id."',
-										status = '1',
-										role = '".lang2db('Professor')."',
-										tutor_id='1',
-										sort='". ($sort +1)."',
-										user_course_cat='0'";
-
-							api_sql_query($sql, __FILE__, __LINE__);
-						}
-
-					}
-				}                    
-				
-				foreach ($racine->Session as $sessionNode) { // foreach session
-					
-					$countCourses = 0;
-					$countUsers = 0;
-
-					$SessionName = mb_convert_encoding($sessionNode->SessionName,$charset,'utf-8');
-					$Coach = mb_convert_encoding($sessionNode->Coach,$charset,'utf-8');
-
-					if (!empty($Coach)) {
-						$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
-						$rsCoach = api_sql_query($sqlCoach);
-						list($CoachId) = (Database::fetch_array($rsCoach));
-						if(empty($CoachId))
-						{
-							$errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
-						}
-					}
-
-					$DateStart = $sessionNode->DateStart;
-					if(!empty($DateStart)) {
-						list($YearStart,$MonthStart, $DayStart) = explode('-',$DateStart);
-						if(empty($YearStart) || empty($MonthStart) || empty($DayStart)) {
-							$errorMsg .= get_lang('WrongDate').' : '.$DateStart.'<br />';
-							break;
 						} else {
-							$timeStart = mktime(0,0,0,$MonthStart,$DayStart,$YearStart);
+							$lastname = mb_convert_encoding($userNode->Lastname,$charset,'utf-8');
+							$firstname = mb_convert_encoding($userNode->Firstname,$charset,'utf-8');
+							$password = mb_convert_encoding($userNode->Password,$charset,'utf-8');
+							$email = mb_convert_encoding($userNode->Email,$charset,'utf-8');
+							$official_code = mb_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
+							$phone = mb_convert_encoding($userNode->Phone,$charset,'utf-8');
+							$status = mb_convert_encoding($userNode->Status,$charset,'utf-8');
+							switch($status) {
+								case 'student' : $status = 5; break;
+								case 'teacher' : $status = 1; break;
+								default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
+							}
+							
+							$sql = "UPDATE $tbl_user SET
+										lastname = '".Database::escape_string($lastname)."',
+										firstname = '".Database::escape_string($firstname)."',
+										".(empty($password) ? "" : "password = '".(api_get_encrypted_password($password))."',")."
+										email = '".Database::escape_string($email)."',
+										official_code = '".Database::escape_string($official_code)."',
+										phone = '".Database::escape_string($phone)."',
+										status = '".Database::escape_string($status)."'
+									WHERE username = '".Database::escape_string($username)."'";
+	
+							api_sql_query($sql, __FILE__, __LINE__);						
 						}
-
-						$DateEnd = $sessionNode->DateEnd;
+					}
+				}					
+				if (count($racine->Courses->Course) > 0) {			
+					foreach($racine->Courses->Course as $courseNode) {
+						$course_code = mb_convert_encoding($courseNode->CourseCode,$charset,'utf-8');
+						$title = mb_convert_encoding($courseNode->CourseTitle,$charset,'utf-8');
+						$description = mb_convert_encoding($courseNode->CourseDescription,$charset,'utf-8');
+						$language = mb_convert_encoding($courseNode->CourseLanguage,$charset,'utf-8');
+						$username = mb_convert_encoding($courseNode->CourseTeacher,$charset,'utf-8');
+	
+						$sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
+						$rs = api_sql_query($sql, __FILE__, __LINE__);
+	
+						list($user_id, $lastname, $firstname) = Database::fetch_array($rs);
+						$keys = define_course_keys($course_code, "", $dbNamePrefix);
+	
+						if (sizeof($keys)) {
+	
+							$currentCourseCode = $keys['visual_code'];
+							$currentCourseId = $keys['currentCourseId'];
+							if(empty($currentCourseCode))
+								$currentCourseCode = $currentCourseId;
+							$currentCourseDbName = $keys['currentCourseDbName'];
+							$currentCourseRepository = $keys['currentCourseRepository'];
+	
+							if($currentCourseId == strtoupper($course_code)) {
+								if (empty ($title)) {
+									$title = $keys['currentCourseCode'];
+								}
+								prepare_course_repository($currentCourseRepository, $currentCourseId);
+								update_Db_course($currentCourseDbName);
+								fill_course_repository($currentCourseRepository);
+								fill_Db_course($currentCourseDbName, $currentCourseRepository, 'french');
+								//register_course($currentCourseId, $currentCourseCode, $currentCourseRepository, $currentCourseDbName, "$lastname $firstname", $course['unit_code'], addslashes($course['FR']['title']), $language, $user_id);
+								$sql = "INSERT INTO ".$tbl_course." SET
+											code = '".$currentCourseId."',
+											db_name = '".$currentCourseDbName."',
+											directory = '".$currentCourseRepository."',
+											course_language = '".$language."',
+											title = '".$title."',
+											description = '".lang2db($description)."',
+											category_code = '',
+											visibility = '".$defaultVisibilityForANewCourse."',
+											show_score = '',
+											disk_quota = NULL,
+											creation_date = now(),
+											expiration_date = NULL,
+											last_edit = now(),
+											last_visit = NULL,
+											tutor_name = '".$lastname." ".$firstname."',
+											visual_code = '".$currentCourseCode."'";
+	
+								api_sql_query($sql, __FILE__, __LINE__);
+	
+								$sql = "INSERT INTO ".$tbl_course_user." SET
+											course_code = '".$currentCourseId."',
+											user_id = '".$user_id."',
+											status = '1',
+											role = '".lang2db('Professor')."',
+											tutor_id='1',
+											sort='". ($sort +1)."',
+											user_course_cat='0'";
+	
+								api_sql_query($sql, __FILE__, __LINE__);
+							}
+	
+						}
+					}                    
+				}
+				if (count($racine->Session) > 0) {
+					foreach ($racine->Session as $sessionNode) { // foreach session
+						
+						$countCourses = 0;
+						$countUsers = 0;
+	
+						$SessionName = mb_convert_encoding($sessionNode->SessionName,$charset,'utf-8');
+						$Coach = mb_convert_encoding($sessionNode->Coach,$charset,'utf-8');
+	
+						if (!empty($Coach)) {
+							$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
+							$rsCoach = api_sql_query($sqlCoach);
+							list($CoachId) = (Database::fetch_array($rsCoach));
+							if(empty($CoachId))
+							{
+								$errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
+							}
+						}
+	
+						$DateStart = $sessionNode->DateStart;
 						if(!empty($DateStart)) {
-							list($YearEnd,$MonthEnd, $DayEnd) = explode('-',$DateEnd);
-							if(empty($YearEnd) || empty($MonthEnd) || empty($DayEnd)) {
-								$errorMsg .= get_lang('WrongDate').' : '.$DateEnd.'<br />';
+							list($YearStart,$MonthStart, $DayStart) = explode('-',$DateStart);
+							if(empty($YearStart) || empty($MonthStart) || empty($DayStart)) {
+								$errorMsg .= get_lang('WrongDate').' : '.$DateStart.'<br />';
 								break;
 							} else {
-								$timeEnd = mktime(0,0,0,$MonthEnd,$DayEnd,$YearEnd);
+								$timeStart = mktime(0,0,0,$MonthStart,$DayStart,$YearStart);
+							}
+	
+							$DateEnd = $sessionNode->DateEnd;
+							if(!empty($DateStart)) {
+								list($YearEnd,$MonthEnd, $DayEnd) = explode('-',$DateEnd);
+								if(empty($YearEnd) || empty($MonthEnd) || empty($DayEnd)) {
+									$errorMsg .= get_lang('WrongDate').' : '.$DateEnd.'<br />';
+									break;
+								} else {
+									$timeEnd = mktime(0,0,0,$MonthEnd,$DayEnd,$YearEnd);
+								}
+							}
+							if($timeEnd - $timeStart < 0) {
+								$errorMsg .= get_lang('StartDateShouldBeBeforeEndDate').' : '.$DateEnd.'<br />';
 							}
 						}
-						if($timeEnd - $timeStart < 0) {
-							$errorMsg .= get_lang('StartDateShouldBeBeforeEndDate').' : '.$DateEnd.'<br />';
-						}
 					}
-
 
 					// verify that session doesn't exist
 					while(!$uniqueName)

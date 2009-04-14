@@ -28,6 +28,24 @@ require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
 
 api_protect_admin_script(true);
 
+$htmlHeadXtra[] = '<script language="javascript">
+		
+				function selectAll(idCheck,numRows,action) {
+					
+					for(i=0;i<numRows;i++) {
+						idcheck = document.getElementById(idCheck+"_"+i);
+						if (action == "true"){
+							idcheck.checked = true;
+						} else {
+							idcheck.checked = false;
+						}		
+					}		
+							
+				}
+				
+				</script>
+		';
+
 $tbl_session=Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_course=Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -185,7 +203,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	
 		<?php
 		$i=0;
-	
+		$x=0;
 		foreach ($Sessions as $key=>$enreg) {
 			if($key == $limit) {
 				break;
@@ -198,7 +216,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		?>
 	
 		<tr class="<?php echo $i?'row_odd':'row_even'; ?>">
-		  <td><input type="checkbox" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>
+		  <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>		  
 		  <td><a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php echo htmlentities($enreg['name'],ENT_QUOTES,$charset); ?></a></td>
 		  <td><a href="session_course_list.php?id_session=<?php echo $enreg['id']; ?>"><?php echo $nb_courses; ?> cours</a></td>
 		  <td><?php echo htmlentities($enreg['date_start'],ENT_QUOTES,$charset); ?></td>
@@ -214,6 +232,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	
 		<?php
 			$i=$i ? 0 : 1;
+			$x++;
 		}
 	
 		unset($Sessions);
@@ -264,7 +283,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		</div>
 	
 		<br>
-	
+		<a href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll') ?></a>&nbsp;-&nbsp;
+		<a href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll') ?></a>
 		<select name="action">
 		<option value="delete"><?php echo get_lang('DeleteSelectedSessions'); ?></option>
 		</select>

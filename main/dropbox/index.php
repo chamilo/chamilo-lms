@@ -229,6 +229,57 @@ foreach ($dropbox_categories as $category) {
 		$dropbox_sent_category[]=$category;
 	}
 }
+
+
+// ACTIONS
+if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
+	//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
+
+	// This is for the categories
+	if (isset($_GET['view_received_category']) AND $_GET['view_received_category']<>'') {
+		$view_dropbox_category_received=$_GET['view_received_category'];
+	} else {
+		$view_dropbox_category_received=0;
+	}
+
+
+	/* *** Menu Received *** */
+	echo '<div class="actions">';
+	if ($view_dropbox_category_received<>0) {
+		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
+		echo '<img src="../img/folder_up.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
+        $movelist[0] = 'Root'; // move_received selectbox content
+	} else {
+	    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory"><img src="../img/folder_new.gif" align=\"absmiddle\"/> '.get_lang('AddNewCategory').'</a>';		
+	}
+	
+	echo '</div>';
+}
+if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
+	//echo '<h3>'.get_lang('SentFiles').'</h3>';
+
+	// This is for the categories
+	if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category']<>'') {
+		$view_dropbox_category_sent=$_GET['view_sent_category'];
+	} else {
+		$view_dropbox_category_sent=0;
+	}
+
+	/* *** Menu Sent *** */
+	echo '<div class="actions">';
+	if ($view_dropbox_category_sent<>0) {
+		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
+		echo '<img src="../img/folder_up.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category=0&amp;view='.Security::remove_XSS($_GET['view']).'">'.get_lang('Root')."</a>\n";
+	} else {
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\"><img src=\"../img/folder_new.gif\" align=\"absmiddle\" /> ".get_lang('AddNewCategory')."</a>\n";
+	}
+	if (empty($_GET['view_sent_category'])) {
+	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=add\"><img src=\"../img/submit_file.gif\" align=\"absmiddle\"/> ".get_lang('UploadNewFile')."</a>&nbsp;\n";
+	}
+	echo '</div>';
+}
+
+
 /*
 -----------------------------------------------------------
 	THE MENU TABS
@@ -259,19 +310,6 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	} else {
 		$view_dropbox_category_received=0;
 	}
-
-
-	/* *** Menu Received *** */
-	echo '<div class="actions">';
-	if ($view_dropbox_category_received<>0) {
-		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
-		echo '<img src="../img/folder_up.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
-        $movelist[0] = 'Root'; // move_received selectbox content
-	} else {
-	    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory"><img src="../img/folder_new.gif" align=\"absmiddle\"/> '.get_lang('AddNewCategory').'</a>';		
-	}
-	
-	echo '</div>';
 
 	// object initialisation
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
@@ -415,20 +453,6 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
 	} else {
 		$view_dropbox_category_sent=0;
 	}
-
-	/* *** Menu Sent *** */
-	echo '<div class="actions">';
-	if ($view_dropbox_category_sent<>0) {
-		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
-		echo '<img src="../img/folder_up.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category=0&amp;view='.Security::remove_XSS($_GET['view']).'">'.get_lang('Root')."</a>\n";
-	} else {
-		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\"><img src=\"../img/folder_new.gif\" align=\"absmiddle\" /> ".get_lang('AddNewCategory')."</a>\n";
-	}
-	if (empty($_GET['view_sent_category'])) {
-	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=add\"><img src=\"../img/submit_file.gif\" align=\"absmiddle\"/> ".get_lang('UploadNewFile')."</a>&nbsp;\n";
-	}
-	echo '</div>';
-	//echo '<form name="sent_files" method="post" action="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'">';
 
 	// object initialisation
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);

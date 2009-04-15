@@ -283,11 +283,43 @@ if((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit())
 
 /*
 ==============================================================================
+		BREADCRUMBS
+==============================================================================
+*/ 
+if (!$_GET['view'] OR $_GET['view']=='received')
+{
+	$interbreadcrumb[] = array ("url" => "../dropbox/index.php", "name" => dropbox_lang("dropbox", "noDLTT"));
+	$nameTools = get_lang('ReceivedFiles');
+	
+	if ($_GET['action'] == 'addreceivedcategory')
+	{
+		$interbreadcrumb[] = array ("url" => "../dropbox/index.php?view=received", "name" => get_lang("ReceivedFiles"));
+		$nameTools = get_lang('AddNewCategory');		
+	}
+}
+if ($_GET['view']=='sent')
+{
+	$interbreadcrumb[] = array ("url" => "../dropbox/index.php", "name" => dropbox_lang("dropbox", "noDLTT"));
+	$nameTools = get_lang('SentFiles');
+	
+	if ($_GET['action'] == 'addsentcategory')
+	{
+		$interbreadcrumb[] = array ("url" => "../dropbox/index.php?view=sent", "name" => get_lang("SentFiles"));
+		$nameTools = get_lang('AddNewCategory');		
+	}
+	if ($_GET['action'] == 'add')
+	{
+		$interbreadcrumb[] = array ("url" => "../dropbox/index.php?view=sent", "name" => get_lang("SentFiles"));
+		$nameTools = get_lang('UploadNewFile');		
+	}		
+}
+
+
+/*
+==============================================================================
 		HEADER & TITLE
 ==============================================================================
 */ 
-
-$nameTools = dropbox_lang("dropbox", "noDLTT");
 
 if ($origin != 'learnpath')
 {
@@ -299,5 +331,5 @@ else // if we come from the learning path we have to include the stylesheet and 
 	echo $javascript;
 }
 
-api_display_tool_title($nameTools);
+// api_display_tool_title($nameTools);
 ?>

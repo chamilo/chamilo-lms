@@ -162,20 +162,38 @@ function delete_category($action, $id)
 */
 function display_move_form($part, $id, $target=array())
 {
-	$message=get_lang('MoveFileTo');
-	$message.='<form name="form1" method="post" action="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&view_sent_category='.$_GET['view_sent_category'].'&view='.$_GET['view'].'">';
-	$message.='<input type="hidden" name="id" value="'.$id.'">';
-	$message.='<input type="hidden" name="part" value="'.$part.'">';
-	$message.='<select name="move_target">';
-	$message.='<option value="0">'.get_lang('Root').'</option>';
+	echo '<div class="row"><div class="form_header">'.get_lang('MoveFileTo').'</div></div>';
+	echo '<form name="form1" method="post" action="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&view_sent_category='.$_GET['view_sent_category'].'&view='.$_GET['view'].'">';
+	echo '<input type="hidden" name="id" value="'.$id.'">';
+	echo '<input type="hidden" name="part" value="'.$part.'">';
+	echo '
+			<div class="row">
+				<div class="label">
+					<span class="form_required">*</span> '.get_lang('MoveFileTo').'
+				</div>
+				<div class="formw">';
+	echo '<select name="move_target">';
+	echo '<option value="0">'.get_lang('Root').'</option>';
 	foreach ($target as $key=>$category)
 	{
-		$message.='<option value="'.$category['cat_id'].'">'.$category['cat_name'].'</option>';
+		echo '<option value="'.$category['cat_id'].'">'.$category['cat_name'].'</option>';
 	}
-	$message.= '</select>';
-	$message.='<button class="save" type="submit" name="do_move" value="'.get_lang('Ok').'">'.get_lang('MoveFile').'</button>';
-	$message.='</form>';
-	Display :: display_normal_message($message,false);
+	echo  '</select>';
+	echo '	</div>
+			</div>';
+	
+	echo '
+		<div class="row">
+			<div class="label">
+			</div>
+			<div class="formw">
+				<button class="save" type="submit" name="do_move" value="'.get_lang('Ok').'">'.get_lang('MoveFile').'</button>
+			</div>
+		</div>	
+	';
+	echo '</form>';
+	
+	echo '<div style="clear: both;"></div>';
 }
 
 /**
@@ -439,30 +457,32 @@ function display_addcategory_form($category_name='', $id='')
 
 
 	echo "<form name=\"add_new_category\" method=\"post\" action=\"".api_get_self()."?view=".$_GET['view']."\">\n";
-	echo '<strong>'.$title.'</strong>';
 	if (isset($id) AND $id<>'')
 	{
 		echo '<input name="edit_id" type="hidden" value="'.$id.'">';
 	}
 	echo '<input name="target" type="hidden" value="'.$target.'">';
-	echo "<table border=\"0\">\n";
-	echo "\t<tr>\n";
-	echo "\t<td>\n";
-	echo get_lang('CategoryName').': ';
-	echo "\t</td>\n";
-	echo "\t<td>\n";
-	echo "<input type=\"text\" name=\"category_name\" value=\"".$category_name."\" />";
-	echo "\t</td>\n";
-	echo "\t</tr>\n";
-	echo "\t<tr>\n";
-	echo "\t<td valign=\"top\">\n";
-	echo "\t</td>\n";
-	echo "\t<td>\n";
-	echo "<button class=\"$class\"type=\"submit\" name=\"StoreCategory\"> ".$text."</button>";
-	echo "\t</td>\n";
-	echo "\t</tr>\n";
-	echo "</table>\n";
+	
+	echo '<div class="row"><div class="form_header">'.$title.'</div></div>';
+	
+	echo '	<div class="row">
+				<div class="label">
+					<span class="form_required">*</span>'.get_lang('CategoryName').'
+				</div>
+				<div class="formw">
+					<input type="text" name="category_name" value="'.$category_name.'" />
+				</div>
+			</div>';
+	
+	echo '	<div class="row">
+				<div class="label">
+				</div>
+				<div class="formw">
+					<button class="'.$class.'" type="submit" name="StoreCategory">'.$text.'</button>
+				</div>
+			</div>';	
 	echo "</form>";
+	echo '<div style="clear: both;"></div>';
 }
 
 /**
@@ -479,12 +499,14 @@ function display_add_form()
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 	?>
 	<form method="post" action="index.php?view_received_category=<?php echo $_GET['view_received_category']; ?>&view_sent_category=<?php echo $_GET['view_sent_category']; ?>&view=<?php echo $_GET['view']; ?>&<?php echo "origin=$origin"."&".api_get_cidreq(); ?>" enctype="multipart/form-data" onsubmit="return checkForm(this)">
-	<table border="0">
-		<tr>
-			<td  align="right">
-				<?php echo dropbox_lang("uploadFile")?>:
-			</td>
-			<td>
+	
+	<div class="row"><div class="form_header"><?php echo get_lang('UploadNewFile'); ?></div></div>
+	
+	<div class="row">
+		<div class="label">
+			<span class="form_required">*</span><?php echo dropbox_lang("uploadFile")?>:
+		</div>
+		<div class="formw">	
 				<input type="hidden" name="MAX_FILE_SIZE" value='<?php echo dropbox_cnf("maxFilesize")?>' />
 				<input type="file" name="file" size="20" <?php if (dropbox_cnf("allowOverwrite")) echo 'onChange="checkfile(this.value)"'; ?> />
 				<input type="hidden" name="dropbox_unid" value="<?php echo $dropbox_unid ?>" />
@@ -495,36 +517,30 @@ function display_add_form()
 					echo "<input type='hidden' name='origin' value='learnpath' />";
 				}
 				?>
-			</td>
-		</tr>
+		</div>
+	</div>
+		
 	<?php
 	if (dropbox_cnf("allowOverwrite"))
 	{
 		?>
-		<tr id="overwrite" style="display: none">
-			<td valign="top"  align="right">
-			</td>
-			<td>
+		<div class="row">
+			<div class="label">
+				
+			</div>
+			<div class="formw">
 				<input type="checkbox" name="cb_overwrite" id="cb_overwrite" value="true" /><?php echo dropbox_lang("overwriteFile")?>
-			</td>
-		</tr>
+			</div>
+		</div>	
 		<?php
 	}
 	?>
-		<tr>
-			<td valign="top"  align="left">
-				<?php echo dropbox_lang("description")?>:
-			</td>
-			<td>
-				<textarea name="description" cols="24" rows="2" style="width: 350px;"></textarea>
-			</td>
-		</tr>
-		<tr>
-			<td valign="top"  align="left">
-				<?php echo dropbox_lang("sendTo")?>:
-			</td>
-			<td valign="top"  align="left">
 
+	<div class="row">
+		<div class="label">
+			<?php echo dropbox_lang("sendTo")?>
+		</div>
+		<div class="formw">
 	<?php
 
 	//list of all users in this course and all virtual courses combined with it
@@ -620,13 +636,21 @@ function display_add_form()
 	  echo '<option value="user_'.$_user['user_id'].'">'.dropbox_lang("justUploadInSelect").'</option>';
     }
 
-	echo "</select>",
-		"</td></tr>",
-		"<tr><td></td>",
-		"<td><button type=\"Submit\" class=\"save\" name=\"submitWork\">".dropbox_lang("upload", "noDLTT")." </button>",
-		"</td></tr>",
-		"</table>",
-		"</form>";
+		echo '</select>
+		</div>
+	</div>';
+		
+	echo '
+		<div class="row">
+			<div class="label">
+			</div>
+			<div class="formw">
+				<button type="Submit" class="save" name="submitWork">'.dropbox_lang("upload", "noDLTT").'</button>
+			</div>
+		</div>
+	';		
+	
+	echo "</form>";
 }
 
 /**

@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 19710 2009-04-11 17:14:43Z cfasanando $
+<?php // $Id: exercice_submit.php 19788 2009-04-15 15:08:52Z juliomontoya $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 19710 2009-04-11 17:14:43Z cfasanando $
+* 	@version $Id: exercice_submit.php 19788 2009-04-15 15:08:52Z juliomontoya $
 */
 
 
@@ -841,6 +841,14 @@ else
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'; ?>" />
 
 <?php
+}
+
+// I'm in a preview mode
+if (api_is_course_admin()) {
+	echo '<div class="actions">';
+	echo Display::return_icon('quiz.gif', get_lang('GoBackToEx')).'<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('GoBackToEx').'</a>';
+	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+	echo '</div>';
 }
 
 $exerciseTitle=api_parse_tex($exerciseTitle);

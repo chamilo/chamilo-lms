@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 19761 2009-04-14 15:25:19Z juliomontoya $
+* 	@version $Id: exercise_result.php 19788 2009-04-15 15:08:52Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -435,6 +435,15 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		MAIN CODE
 ==============================================================================
 */
+
+// I'm in a preview mode
+if (api_is_course_admin()) {
+	echo '<div class="actions">';
+	echo Display::return_icon('quiz.gif', get_lang('GoBackToEx')).'<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('GoBackToEx').'</a>';
+	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+	echo '</div>';
+}
+
 $exerciseTitle=api_parse_tex($exerciseTitle);
 
 ?>

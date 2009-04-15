@@ -400,8 +400,8 @@ FCKConfig.ToolbarSets["TestDescription"] = [
 ] ;
 
 FCKConfig.ToolbarSets["QuestionDescription"] = [
-	['Save','FitWindow','-','PasteWord','-','Undo','Redo'],
-    ['Link','Unlink','Anchor'],
+	['FitWindow','-','PasteWord','-','Undo','Redo'],
+    ['Link','Unlink'],
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],

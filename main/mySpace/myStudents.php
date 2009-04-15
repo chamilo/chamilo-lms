@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 19432 2009-03-30 22:46:37Z iflorespaz $
+<?php //$Id: myStudents.php 19794 2009-04-15 19:54:31Z aportugal $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -300,7 +300,7 @@ if(!empty($_GET['student']))
 				<table width="100%" class="data_table">
 								<tr>
 									<th>
-										<?php echo get_lang('Informations'); ?>
+										<?php echo get_lang('Information'); ?>
 									</th>
 								</tr>
 								<tr>
@@ -402,7 +402,10 @@ if(!empty($_GET['student']))
 											</tr>
 											<tr>
 						<td align="right">
-													<?php echo get_lang('Progress') ?>
+													<?php 
+													echo get_lang('Progress'); 
+													Display :: display_icon('info2.gif',get_lang('ScormAndLPProgressTotalAverage') , array ('style' => 'margin-bottom:-5px;'));
+													?>
 												</td>
 						<td align="left">
 													<?php echo $avg_student_progress.' %' ?>
@@ -555,10 +558,13 @@ if(!empty($_GET['student']))
 				<table class="data_table">
 					<tr>
 						<th>
-							<?php echo get_lang('Learnpaths'); ?>
+							<?php echo get_lang('Learnpaths');?>
 						</th>
 						<th>
-							<?php echo get_lang('Time'); ?>
+							<?php 
+							echo get_lang('Time');
+							Display :: display_icon('info3.gif',get_lang('TotalTimeByCourse') , array ('style' => 'margin-bottom:-5px;')); 
+							?>
 						</th>
 						<th>
 							<?php 
@@ -567,13 +573,19 @@ if(!empty($_GET['student']))
 							?>
 						</th>
 						<th>
-							<?php echo get_lang('Progress'); ?>
+							<?php 
+							echo get_lang('Progress'); 
+							Display :: display_icon('info3.gif',get_lang('LPProgressScore') , array ('style' => 'margin-bottom:-5px;'));
+							?>
 						</th>
 						<th>
-							<?php echo get_lang('LastConnexion'); ?>
+							<?php 
+							echo get_lang('LastConnexion');
+							Display :: display_icon('info3.gif',get_lang('LastTimeTheCourseWasUsed') , array ('style' => 'margin-bottom:-5px;')); 
+							?>
 						</th>
 						<th>
-							<?php echo get_lang('Details'); ?>
+							<?php echo get_lang('Details');?>
 						</th>
 					</tr>
 <?php
@@ -664,13 +676,13 @@ if(!empty($_GET['student']))
 						<td>
 							<?php echo stripslashes($a_learnpath['name']); ?>
 						</td>
-						<td align="right">
+						<td align="center">
 						<?php echo api_time_to_hms($total_time) ?>
 						</td>
-						<td align="right">
+						<td align="center">
 							<?php if(!is_null($score)) echo $score.' %'; else echo '-'; ?>
 						</td>
-						<td align="right">
+						<td align="center">
 							<?php echo $progress ?>
 						</td>
 						<td align="center">
@@ -802,11 +814,11 @@ if(!empty($_GET['student']))
 						echo 		$a_exercices['title'];
 						echo "	</td>
 							 ";
-						echo "	<td align='right'>
+						echo "	<td align='center'>
 							  ";
 						echo 		$pourcentageScore.' %';
 						echo "	</td>
-								<td align='right'>
+								<td align='center'>
 							 ";
 						echo 		$a_essais['essais'];
 						echo "	</td>

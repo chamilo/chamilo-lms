@@ -513,33 +513,38 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 				  
 		$table = new SortableTable('tracking_list_course', 'count_teacher_courses');
 		$parameters['view'] = 'teacher';
+		$parameters['class'] = 'data_table';
+		
 		$table->set_additional_parameters($parameters);
 		$table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
 		$table -> set_header(1, get_lang('NbStudents'), false);
-		$table -> set_header(2, get_lang('AvgTimeSpentInTheCourse'), false);
-		$table -> set_header(3, get_lang('AvgStudentsProgress'), false);
-		$table -> set_header(4, get_lang('AvgStudentsScore'), false);
-		$table -> set_header(5, get_lang('AvgMessages'), false);
-		$table -> set_header(6, get_lang('AvgAssignments'), false);
-		$table -> set_header(7, get_lang('Details'), false);
+		$table -> set_header(2, get_lang('AvgTimeSpentInTheCourse').Display :: return_icon('info2.gif', get_lang('TimeOfActiveByTraining')),false);
+		$table -> set_header(3, get_lang('AvgStudentsProgress').Display :: return_icon('info2.gif', get_lang('AvgAllUsersInAllCourses')), false);
+		$table -> set_header(4, get_lang('AvgCourseScore'), false);
+		$table -> set_header(5, get_lang('AvgExercisesScore'), false);
+		$table -> set_header(6, get_lang('AvgMessages'), false);
+		$table -> set_header(7, get_lang('AvgAssignments'), false);
+		$table -> set_header(8, get_lang('Details'), false);
 
 		$csv_content[] = array(
 						get_lang('CourseTitle'),
 						get_lang('NbStudents'),
 						get_lang('AvgTimeSpentInTheCourse'),
 						get_lang('AvgStudentsProgress'),
-						get_lang('AvgStudentsScore'),
+						get_lang('AvgCourseScore'),
+						get_lang('AvgExercisesScore'),
 						get_lang('AvgMessages'),
 						get_lang('AvgAssignments')
 						);
 				
 		$a_course_students = array();
-		
+		//
 		foreach($a_courses as $course)
 		{
 			
 			$course_code = $course['course_code'];
-			
+			//var_dump(Tracking ::get_avg_student_exercise($student_id,$course_code));
+			//var_dump($course_code);
 			$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = 0;
 			
 			// students directly subscribed to the course
@@ -569,17 +574,19 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 				{
 					if(!in_array($row['user_id'], $a_course_students))
 					{
-						$nb_students_in_course++;
-						
+						$nb_students_in_course++;	
+											
 						// tracking datas
 						$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
 						$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
 						$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
-						$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
+						$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);						
 						$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
 						$a_course_students[] = $row['user_id'];
 					}
 				}
+				
+				
 			}
 			if($nb_students_in_course>0)
 			{
@@ -596,6 +603,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 			$table_row[] = $avg_time_spent_in_course;
 			$table_row[] = $avg_progress_in_course;
 			$table_row[] = $avg_score_in_course;
+			$table_row[] = $avg_score_in_exercise;
 			$table_row[] = $avg_messages_in_course;
 			$table_row[] = $avg_assignments_in_course;
 			$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
@@ -851,7 +859,8 @@ function export_tracking_user_overview()
 	}
 	$csv_row[] = get_lang('AvgTimeSpentInTheCourse');
 	$csv_row[] = get_lang('AvgStudentsProgress');
-	$csv_row[] = get_lang('AvgStudentsScore');
+	$csv_row[] = get_lang('AvgCourseScore');
+	$csv_row[] = get_lang('AvgExercisesScore');
 	$csv_row[] = get_lang('AvgMessages');
 	$csv_row[] = get_lang('AvgAssignments');
 	$csv_row[] = get_lang('TotalExercisesScoreObtained');
@@ -1010,7 +1019,8 @@ function course_info_tracking_filter($user_id,$url_params,$row)
 	$return .= '		<th>'.get_lang('Course').'</th>';
 	$return .= '		<th>'.get_lang('AvgTimeSpentInTheCourse').'</th>';
 	$return .= '		<th>'.get_lang('AvgStudentsProgress').'</th>';
-	$return .= '		<th>'.get_lang('AvgStudentsScore').'</th>';
+	$return .= '		<th>'.get_lang('AvgCourseScore').'</th>';
+	$return .= '		<th>'.get_lang('AvgExercisesScore').'</th>';
 	$return .= '		<th>'.get_lang('AvgMessages').'</th>';
 	$return .= '		<th>'.get_lang('AvgAssignments').'</th>';
 	$return .= '		<th>'.get_lang('TotalExercisesScoreObtained').'</th>';
@@ -1091,7 +1101,7 @@ function exercises_results($user_id, $course_code)
 		$questions_answered ++;
 	}
 	
-	if ($score_possible !== 0) {
+	if ($score_possible != 0) {
 		$percentage = round(($score_obtained / $score_possible * 100),2);	
 	} 
 	

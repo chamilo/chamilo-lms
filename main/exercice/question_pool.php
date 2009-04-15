@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 19785 2009-04-15 14:39:19Z juliomontoya $
+<?php // $Id: question_pool.php 19786 2009-04-15 14:46:05Z juliomontoya $
  
 /*
 ==============================================================================
@@ -30,7 +30,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 19785 2009-04-15 14:39:19Z juliomontoya $
+* 	@version $Id: question_pool.php 19786 2009-04-15 14:46:05Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -355,7 +355,7 @@ if($is_allowedToEdit)
 		if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (is_array($objExercise->questionList)) ) {	
             echo '<tr ',($i%2==0?'class="row_odd"':'class="row_even"'),'>';
             echo '  <td><a href="admin.php?',api_get_cidreq(),'&editQuestion=',$row['id'],'&fromExercise=',$fromExercise,'">',$row['question'],'</a></td>';
-            echo '  <td>';
+            echo '  <td align="center" >';
 			if (empty($fromExercise)) {
                 echo '<a href="admin.php?'.api_get_cidreq().'&amp;editQuestion=',$row['id'],'"><img src="../img/edit.gif" border="0" alt="',get_lang('Modify'),'"></a>',
                     '</td>',
@@ -366,7 +366,8 @@ if($is_allowedToEdit)
                 //echo $row['level'],'</td>',
 //					'<td><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
 				echo $row['level'],'</td>',
-					'<td><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
+					'<td align="center" ><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'">' .
+							'<img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
 			}
             echo '</td>';
             echo '</tr>';

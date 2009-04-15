@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 19785 2009-04-15 14:39:19Z juliomontoya $
+<?php // $Id: question.class.php 19797 2009-04-15 22:32:11Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 19785 2009-04-15 14:39:19Z juliomontoya $
+* 	@version $Id: question.class.php 19797 2009-04-15 22:32:11Z juliomontoya $
 */
 
 
@@ -1067,43 +1067,42 @@ abstract class Question
 			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
 			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]); 
 		}
-				
+		
+		echo '<table>';
+		echo '<tr>';
 		foreach ($question_type_custom_list as $i=>$a_type) {			
 			// include the class of the type
 			include_once($a_type[0]);			
 			 // get the picture of the type and the langvar which describes it
-			eval('$img = '.$a_type[1].'::$typePicture;');
-			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
+			eval('$img = '.$a_type[1].'::$typePicture;');			
+			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');			
+			echo '<td>';		
+				echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">';
+					echo '<div class="icon_image_content">';
+					echo Display::return_icon($img, $explanation);
+				echo '<br>';
+				echo $explanation;
+				echo '</div>';
+			echo '</a>';	
+			echo '</td>';
+		}		
 
-			echo '<div id="answer_type_'.$i.'">';
-			echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">';
+		echo '<td>';	
+			if ($feedbacktype==1) 
+				echo '<a href="question_pool.php?type=1&fromExercise='.$exerciseId.'">';
+			else
+				echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">';	
+				
 			echo '<div class="icon_image_content">';
-			Display::display_icon($img, $explanation);
+			echo Display::return_icon('database.gif', get_lang('GetExistingQuestion'), array('align'=>'middle'));		
 			echo '<br>';
-			//echo '</div>';
-			//echo '<div class="icon_image_content">';
-			echo $explanation;
-			echo '</div>';
-			echo '</a>';
-			echo '</div>';
-		}
-			
-		echo '<div id="answer_type_'.$i.'" >';
-		if ($feedbacktype==1)
-			echo '<a href="question_pool.php?type=1&fromExercise='.$exerciseId.'">';
-		else
-			echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">';	
-		echo '<div id="icon_test"  class="icon_image_content">';
-		Display::display_icon('database.gif', get_lang('GetExistingQuestion'), array('align'=>'middle'));
-		echo '<br>';
-		//echo '</div>';
-		//echo '<div class="icon_image_content">';
-		echo get_lang('GetExistingQuestion');
-		echo '</div>';
-		echo '</a>';
-		echo '</div>';
-		echo '</div>';
-		echo '<div style="clear:both"></div>';
+			echo get_lang('GetExistingQuestion');
+					echo '</a>';
+		echo '</td>';	
+		
+
+		echo '</div>';		
+		echo '</table>';
 	}
 	
 	static function get_types_information()

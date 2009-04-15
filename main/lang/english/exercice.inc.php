@@ -49,7 +49,7 @@ $langLessAnswers = "-answ";
 $langMoreElements = "+elem";
 $langLessElements = "-elem";
 $langTypeTextBelow = "Please type your text below";
-$langDefaultTextInBlanks = "[British people] live in the [United Kingdom].";
+$langDefaultTextInBlanks = "<table cellspacing=\\\"0\\\" cellpadding=\\\"10\\\" border=\\\"1\\\" style=\\\"width: 710px; height: 191px;\\\">    <tbody>        <tr>            <td width=\\\"450\\\">            <h2>User information</h2>            </td>            <td width=\\\"224\\\"> </td>        </tr>        <tr>            <td width=\\\"450\\\">Age</td>            <td width=\\\"224\\\" style=\\\"text-align: left;\\\">[25] years old</td>        </tr>        <tr>            <td width=\\\"450\\\" style=\\\"vertical-align: top;\\\">Sex</td>            <td width=\\\"224\\\" style=\\\"vertical-align: top; text-align: left;\\\">[M] (M or F)</td>        </tr>        <tr>            <td width=\\\"450\\\" style=\\\"vertical-align: top;\\\">Height</td>            <td width=\\\"224\\\" style=\\\"vertical-align: top; text-align: left;\\\">[66] Kg</td>        </tr>    </tbody></table>";
 $langDefaultMatchingOptA = "rich";
 $langDefaultMatchingOptB = "good looking";
 $langDefaultMakeCorrespond1 = "Your daddy is";

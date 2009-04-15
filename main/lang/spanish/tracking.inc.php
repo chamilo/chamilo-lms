@@ -190,7 +190,7 @@ $CourseTitle = "Título del curso";
 $NbStudents = "Número de alumnos";
 $TimeSpentInTheCourse = "Tiempo de permanencia en el curso";
 $AvgStudentsProgress = "Progreso de los alumnos";
-$AvgStudentsScore = "Puntuación media de los alumnos";
+$AvgCourseScore = "Puntuación media de las lecciones";
 $AvgMessages = "Mensajes por alumno";
 $AvgAssignments = "Trabajos por alumno";
 $ToolsMostUsed = "Herramientas más usadas";
@@ -234,4 +234,5 @@ $ChatLastConnection = "Última conexión al chat";
 $CourseInformation = "Información del curso";
 $NoAdditionalFieldsWillBeExported = "Campos adicionales no serán exportados";
 $langSendNotification = "Enviar las notificaciones";
+$AvgExercisesScore = "Puntuación media de los ejercicios";
 ?>

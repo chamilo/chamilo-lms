@@ -496,8 +496,8 @@ if($_GET['studentlist'] == 'false') {
 		$table -> set_header(0, get_lang('OfficialCode'), false, 'align="center"');
 		$table -> set_header(1, get_lang('LastName'), true, 'align="center"');
 		$table -> set_header(2, get_lang('FirstName'), false, 'align="center"');
-		$table -> set_header(3, get_lang('Time'),false);
-		$table -> set_header(4, get_lang('Progress'),false);
+		$table -> set_header(3, get_lang('TrainingTime'),false);
+		$table -> set_header(4, get_lang('CourseProgress'),false);
 		$table -> set_header(5, get_lang('Score'),false);	
 		$table -> set_header(6, get_lang('Student_publication'),false);
 		$table -> set_header(7, get_lang('Messages'),false);
@@ -577,8 +577,8 @@ if($_GET['studentlist'] == 'false') {
 									get_lang('OfficialCode'),
 									get_lang('LastName'),
 									get_lang('FirstName'),
-									get_lang('Time'),
-									get_lang('Progress'),
+									get_lang('TrainingTime'),
+									get_lang('CourseProgress'),
 									get_lang('Score'),
 									get_lang('Student_publication'),
 									get_lang('Messages'),

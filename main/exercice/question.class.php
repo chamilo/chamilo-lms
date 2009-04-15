@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 19675 2009-04-09 08:46:51Z pcool $
+<?php // $Id: question.class.php 19785 2009-04-15 14:39:19Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 19675 2009-04-09 08:46:51Z pcool $
+* 	@version $Id: question.class.php 19785 2009-04-15 14:39:19Z juliomontoya $
 */
 
 
@@ -90,7 +90,7 @@ abstract class Question
 		$this->weighting=0;
 		$this->position=1;
 		$this->picture='';
-		$this->level = 0;
+		$this->level = 1;
 		$this->exerciseList=array();
 	}
 
@@ -978,7 +978,7 @@ abstract class Question
 		//$radios_results_enabled[]=$test;
 		// question level
 		
-		$select_level = array (0,1,2,3,4,5); 
+		$select_level = array (1,2,3,4,5); 
 		//$radios_results_enabled[] = 	
 		foreach($select_level as $val) {
 			$radios_results_enabled[] = FormValidator :: createElement ('radio', null, null,$val,$val);

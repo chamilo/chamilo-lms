@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 19361 2009-03-26 20:10:41Z iflorespaz $
+<?php // $Id: question_pool.php 19785 2009-04-15 14:39:19Z juliomontoya $
  
 /*
 ==============================================================================
@@ -30,7 +30,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 19361 2009-03-26 20:10:41Z iflorespaz $
+* 	@version $Id: question_pool.php 19785 2009-04-15 14:39:19Z juliomontoya $
 */
 
 // name of the language file that needs to be included
@@ -192,17 +192,20 @@ if($is_allowedToEdit)
     	echo get_lang('Difficulty');
     	echo ' : <select name="exerciseLevel">';    	
 		//echo '<option value="-1">-- '.get_lang('AllExercises').' --</option>';
+		//level difficulty only from 1 to 5
 		if (!isset($exerciseLevel)) $exerciseLevel = -1;
 		
 		for ($level = -1; $level <=5; $level++) {
-			$selected ='';				
-			if ($exerciseLevel == $level) 
-				$selected = ' selected="selected" ';								 
-			if ($level==-1) {
-				echo '<option value="'.$level.'" '.$selected.'>-- '.get_lang('AllExercises').' --</option>';	
-			} else   {
-				echo '<option value="'.$level.'" '.$selected.'>'.$level.'</option>';
-			}		
+			$selected ='';
+			if ($level!=0) {	
+				if ($exerciseLevel == $level) 
+					$selected = ' selected="selected" ';								 
+				if ($level==-1) {
+					echo '<option value="'.$level.'" '.$selected.'>-- '.get_lang('AllExercises').' --</option>';	
+				} else   {
+					echo '<option value="'.$level.'" '.$selected.'>'.$level.'</option>';
+				}
+			}
 		}
 		echo '</select> ';
 	?>

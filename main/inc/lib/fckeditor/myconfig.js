@@ -91,11 +91,11 @@ FCKConfig.ToolbarSets["GlobalAgenda"] = [
 //Admin Templates
 FCKConfig.ToolbarSets["AdminTemplates"] = [
 	['NewPage','Templates','Save','Print','PageBreak','FitWindow','-','PasteWord','-','Undo','Redo','-','SelectAll','-','Find'],
+	['Bold','Italic','Underline'],
 	['Link','Unlink','Anchor'],
 	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
 	['Table','Smiley','SpecialChar','googlemaps'],
 	['FontFormat','FontName','FontSize'],
-	['Bold','Italic','Underline'],
 	['JustifyLeft','JustifyCenter','JustifyRight','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
 	['Source']
 ] ;

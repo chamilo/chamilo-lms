@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 19109 2009-03-17 18:17:50Z herodoto $
+<?php // $Id: settings.php 19810 2009-04-16 21:04:21Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -858,17 +858,18 @@ function handle_search() {
  */
 function handle_templates()
 {
-	if ($_GET['action'] == 'add' OR ( $_GET['action'] == 'edit' AND is_numeric($_GET['id'])))
-	{
-		add_edit_template();
+	if ($_GET['action'] != 'add') {
+		echo "\n<div class=\"actions\" style=\"margin-left:1px\" >";
+		echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('add_template.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
+		echo "\n</div>";
 	}
-	else 
-	{
-		if ($_GET['action'] == 'delete' and is_numeric($_GET['id']))
-		{
+
+	if ($_GET['action'] == 'add' OR ( $_GET['action'] == 'edit' AND is_numeric($_GET['id']))) {
+		add_edit_template();
+	} else {
+		if ($_GET['action'] == 'delete' and is_numeric($_GET['id'])) {
 			delete_template($_GET['id']);
 		}
-		echo '<a href="settings.php?category=Templates&amp;action=add">'.get_lang('AddTemplate').'</a>';
 		display_templates();
 	}
 }
@@ -1051,7 +1052,7 @@ function add_edit_template()
 		$form->setDefaults($defaults);
 	}	
 		// settting the form elements: the submit button
-	$form->addElement('submit', 'submit', get_lang('Ok'));
+	$form->addElement('style_submit_button' , 'submit', get_lang('Ok') ,'class="save"');
 	
 	// setting the rules: the required fields
 	$form->addRule('title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
@@ -1118,16 +1119,14 @@ function add_edit_template()
 	   
 	   // store the information in the database (as insert or as update)
 	   $table_system_template = Database :: get_main_table('system_template');
-	   if ($_GET['action'] == 'add')
-	   {
+	   if ($_GET['action'] == 'add') {
 		   	$sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".Database::escape_string($values['template_text'])."','".Database::escape_string($new_file_name)."')";
 		   	$result = api_sql_query($sql, __FILE__, __LINE__);
 		   	
 		   	// display a feedback message
 		   	Display::display_confirmation_message('TemplateAdded');
-	   }
-	   else 
-	   {
+		   	echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('add_template.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
+	   } else {
 		   	$sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."',
 											   		  content = '".Database::escape_string($values['template_text'])."'";
 		   	if (!empty($new_file_name))

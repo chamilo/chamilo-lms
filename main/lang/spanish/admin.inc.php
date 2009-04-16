@@ -498,7 +498,7 @@ $ImportCSVFileLocation = "Localización del fichero de importación CSV";
 $ClassesCreated = "Clases creadas";
 $ErrorsWhenImportingFile = "Errores al importar el fichero";
 $ServiceActivated = "Servicio activado";
-$ActivateExtension = "Servicios activados";
+$ActivateExtension = "Activar servicios ";
 $InvalidExtension = "Extensión no válida";
 $VersionCheckExplanation = "Para habilitar la comprobación automática de la versión debe registrar su plataforma en dokeos.com. La información obtenida al hacer clic en este botón sólo es para uso interno y sólo los datos añadidos estarán disponibles públicamente (número total de usuarios de la plataforma, número total de cursos, número total de estudiantes,...) (ver <a href=\"http://www.dokeos.com/stats/\">http://www.dokeos.com/stats/</a>). Cuando se registre, también aparecerá en esta lista mundial (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>. Si no quiere aparecer en esta lista, debe marcar la casilla inferior. El registro es tan fácil como hacer clic sobre este botón: <br />";
 $AfterApproval = "Después de ser aprobado";
@@ -953,6 +953,6 @@ $EditSystemAnnouncement = "Editar anuncio del sistema";
 $LPProgressScore = "Progreso total por lección";
 $TotalTimeByCourse = "Tiempo total por lección";
 $LastTimeTheCourseWasUsed = "Última vez que la lección fue usada";
-$TimeOfActiveByTraining = "Tiempo de una actividad por curso";
-$AvgAllUsersInAllCourses = "Promedio para todos los usuarios en todas las lecciones del curso";
+$AnnouncementAvailable = "El anuncio está disponible";
+$AnnouncementNotAvailable = "El anuncio no está disponible";
 ?>

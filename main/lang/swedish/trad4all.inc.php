@@ -33,6 +33,7 @@ $TheListIsEmpty = "Listan är tom.";
 $langCourseCreate = "Skapa en kurswebbsajt";
 $langTodo = "Att göra";
 $UserName = "Användarnamn";
+$lang_show_hide = "Visa / Göm";
 $langCategoryMod = "Modifiera kategori";
 $Hide = "Göm";
 $langArchive = "arkiv";

@@ -33,6 +33,7 @@ $TheListIsEmpty = "Die Liste ist leer.";
 $langCourseCreate = "Kurs erstellen";
 $langTodo = "Noch zu tun";
 $UserName = "Benutzername";
+$lang_show_hide = "Sichtbar / unsichtbar";
 $langCategoryMod = "Kategorie bearbeiten";
 $Hide = "Verbergen";
 $langArchive = "Archiv";

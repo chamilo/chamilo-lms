@@ -16,7 +16,6 @@ $lang_add_prereqi = "添加前提";
 $lang_add_title_and_desc = "修改标题和简介";
 $lang_delete = "删除";
 $lang_add_chapter = "添加模块";
-$lang_show_hide = "显示/隐藏";
 $langLearnpathMystatus = "学习进度";
 $langLearnpathCompstatus = "完成";
 $langLearnpathIncomplete = "未完成";

@@ -33,6 +33,7 @@ $TheListIsEmpty = "القائمة فارغة ";
 $langCourseCreate = "إنشاء منطقة مقرر ";
 $langTodo = "مهام ";
 $UserName = "اسم المستخدم ";
+$lang_show_hide = "إظهار / إخفاء";
 $langCategoryMod = "تعديل التصنيف ";
 $Hide = "إخفاء";
 $langArchive = "الأرشيف ";

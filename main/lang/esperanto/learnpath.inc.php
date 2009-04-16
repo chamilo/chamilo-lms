@@ -16,7 +16,6 @@ $lang_add_prereqi = "Aldoni anta&#365;sciajn postulojn ";
 $lang_add_title_and_desc = "&#348;an&#285;i titolon & priskribon ";
 $lang_delete = "Forigi ";
 $lang_add_chapter = "Aldoni &#265;apitron ";
-$lang_show_hide = "Vidigi / ka&#349;i";
 $langLearnpathMystatus = "Mia statuso ";
 $langLearnpathCompstatus = "kompletigita ";
 $langLearnpathIncomplete = "ne finita ";

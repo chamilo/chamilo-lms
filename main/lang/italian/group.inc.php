@@ -89,4 +89,5 @@ $GroupsFromClasses = "Gruppi basati sulle classi";
 $GroupsFromClassesInfo = "Scegliendo tale opzione, verranno creati dei gruppi sulla base delle classi iscritte al corso.";
 $Group = "Gruppo";
 $ForumOfGroup = "Forum del gruppo:";
+$BackToGroupList = "Torna all\'elenco gruppi";
 ?>

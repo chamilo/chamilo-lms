@@ -32,6 +32,7 @@ $TheListIsEmpty = "Lista je prazna.";
 $langCourseCreate = "Kreiraj okruženje kursa";
 $langTodo = "Treba uraditi";
 $UserName = "Korisni&#269;ko ime";
+$lang_show_hide = "Prikaži/Sakrij";
 $langCategoryMod = "Modifikuj kategoriju";
 $Hide = "Sakrij";
 $langArchive = "Arhiva";

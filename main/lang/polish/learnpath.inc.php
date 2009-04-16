@@ -18,7 +18,6 @@ $lang_add_prereqi = "Dodaj wymogi";
 $lang_add_title_and_desc = "Edytuj tytu&#322; i opis";
 $lang_delete = "Usu&#324;";
 $lang_add_chapter = "Dodaj modu&#322;";
-$lang_show_hide = "Poka&#380; / Ukryj";
 $langLearnpathMystatus = "Mój status";
 $langLearnpathCompstatus = "wykonano";
 $langLearnpathIncomplete = "niedoko&#324;czony";

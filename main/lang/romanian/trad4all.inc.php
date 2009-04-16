@@ -30,6 +30,7 @@ $TheListIsEmpty = "Lista este goala.";
 $langCourseCreate = "Creati o zona de curs";
 $langTodo = "De efectuat";
 $UserName = "Nume de utilizator";
+$lang_show_hide = "Arata / ascunde";
 $langCategoryMod = "Modifica categoria";
 $Hide = "Ascunde";
 $langArchive = "arhiva";

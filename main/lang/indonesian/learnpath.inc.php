@@ -16,7 +16,6 @@ $lang_add_prereqi = "Tambah prasyarat";
 $lang_add_title_and_desc = "Edit Judul dan deskripsi";
 $lang_delete = "Hapus";
 $lang_add_chapter = "Tambah modul";
-$lang_show_hide = "Tampilkan / Sembunyikan";
 $langLearnpathMystatus = "Status-ku";
 $langLearnpathCompstatus = "lengkap";
 $langLearnpathIncomplete = "tindak lengkap";

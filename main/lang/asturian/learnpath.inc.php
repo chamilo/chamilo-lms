@@ -18,7 +18,6 @@ $lang_add_prereqi = "Amestar requisitos previos";
 $lang_add_title_and_desc = "Editar títulu y descripción";
 $lang_delete = "Esborrar";
 $lang_add_chapter = "Amestar módulu";
-$lang_show_hide = "Amosar / esconder";
 $langLearnpathMystatus = "El mio estáu";
 $langLearnpathCompstatus = "completáu";
 $langLearnpathIncomplete = "ensin completar";

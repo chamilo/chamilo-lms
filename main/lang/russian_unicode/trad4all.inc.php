@@ -32,6 +32,7 @@ $TheListIsEmpty = "Список пустой.";
 $langCourseCreate = "Создать курс";
 $langTodo = "Выполнять";
 $UserName = "Имя пользователя";
+$lang_show_hide = "Показать/спрятать";
 $langCategoryMod = "Изменить раздел";
 $Hide = "Скрыть";
 $langArchive = "архив";

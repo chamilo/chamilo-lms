@@ -33,6 +33,7 @@ $TheListIsEmpty = "Prázdny zoznam.";
 $langCourseCreate = "Vytvor priestor pre kurz";
 $langTodo = "Urobi&#357;";
 $UserName = "Prihlasovacie meno";
+$lang_show_hide = "Ukáza&#357; / skry&#357;";
 $langCategoryMod = "Zmeni&#357; kategóriu";
 $Hide = "Skry&#357;";
 $langArchive = "archív";

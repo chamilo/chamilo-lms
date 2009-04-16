@@ -16,7 +16,6 @@ $lang_add_prereqi = "Adaugare prerechizite";
 $lang_add_title_and_desc = "Editeaza titlu si descriere";
 $lang_delete = "Sterge";
 $lang_add_chapter = "Adauga modul";
-$lang_show_hide = "Arata / ascunde";
 $langLearnpathMystatus = "Statusul meu";
 $langLearnpathCompstatus = "completat";
 $langLearnpathIncomplete = "incomplet";

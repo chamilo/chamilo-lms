@@ -18,7 +18,6 @@ $lang_add_prereqi = "Prida&#357; vstupné podmienky";
 $lang_add_title_and_desc = "Upravi&#357; názov a popis";
 $lang_delete = "Zmaza&#357;";
 $lang_add_chapter = "Prida&#357; kapitolu";
-$lang_show_hide = "Ukáza&#357; / skry&#357;";
 $langLearnpathMystatus = "Študijné výsledky";
 $langLearnpathCompstatus = "hotový";
 $langLearnpathIncomplete = "neúplný";

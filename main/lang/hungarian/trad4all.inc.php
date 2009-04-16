@@ -33,6 +33,7 @@ $TheListIsEmpty = "A lista üres.";
 $langCourseCreate = "Kurzus létrehozása";
 $langTodo = "Tennivalók";
 $UserName = "Felhasználói név";
+$lang_show_hide = "Mutat / Elrejt";
 $langCategoryMod = "Kategória módosítása";
 $Hide = "Elrejt";
 $langArchive = "archív";

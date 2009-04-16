@@ -33,6 +33,7 @@ $TheListIsEmpty = "Popis prazan.";
 $langCourseCreate = "Izradi okruženje kolegija";
 $langTodo = "U&#269;initi";
 $UserName = "Korisni&#269;ko ime ";
+$lang_show_hide = "Prikaži/sakrij";
 $langCategoryMod = "Izmijeni kategoriju";
 $Hide = "Sakrij";
 $langArchive = "Arhiva";

@@ -18,7 +18,6 @@ $lang_add_prereqi = "Добавить предварительные услов�
 $lang_add_title_and_desc = "Редактировать заглавие и описание";
 $lang_delete = "Удалить";
 $lang_add_chapter = "Добавить главу";
-$lang_show_hide = "Показать/спрятать";
 $langLearnpathMystatus = "Мой статус";
 $langLearnpathCompstatus = "завершено";
 $langLearnpathIncomplete = "незавершено";

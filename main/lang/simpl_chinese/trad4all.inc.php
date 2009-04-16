@@ -31,6 +31,7 @@ $TheListIsEmpty = "列表为空.";
 $langCourseCreate = "新建课程";
 $langTodo = "您的建议";
 $UserName = "用户名";
+$lang_show_hide = "显示/隐藏";
 $langCategoryMod = "修改分类";
 $Hide = "&#38544;&#34255;";
 $langArchive = "&#23384;&#26723;";

@@ -36,4 +36,11 @@ $FolderUpdated = "Map bijgewerkt";
 $EndsAt = "Eindigt op (volledig gesloten)";
 $ExpiresAt = "verloopt op";
 $ModifyDirectory = "Folder wijzigen";
+$DeleteAllFiles = "Alle bestanden verwijderen";
+$BackToWorksList = "Terug naar lijst";
+$EditMedia = "wijzig bestand";
+$AllFilesInvisible = "Alle bestanden zijn nu onzichtbaar";
+$FileInvisible = "Het bestand in nu onzichtbaar gemaakt";
+$AllFilesVisible = "Alle bestanden zijn nu zichtbaar";
+$FileVisible = "Het bestand in nu zichtbaar gemaakt";
 ?>

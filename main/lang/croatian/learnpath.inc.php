@@ -18,7 +18,6 @@ $lang_add_prereqi = "Dodaj preduvjete";
 $lang_add_title_and_desc = "Uredi naslov i opis";
 $lang_delete = "Izbriši";
 $lang_add_chapter = "Dodaj poglavlje";
-$lang_show_hide = "Prikaži/sakrij";
 $langLearnpathMystatus = "Moj status";
 $langLearnpathCompstatus = "dovršeno";
 $langLearnpathIncomplete = "nedovršeno";

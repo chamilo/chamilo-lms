@@ -30,6 +30,7 @@ $TheListIsEmpty = "Daftar kosong.";
 $langCourseCreate = "Buat situs mata kuliah";
 $langTodo = "Yang akan dilakukan";
 $UserName = "Nama user";
+$lang_show_hide = "Tampilkan / Sembunyikan";
 $langCategoryMod = "Ubah kategori";
 $Hide = "Sembunyi";
 $iso639_2_code = "en";

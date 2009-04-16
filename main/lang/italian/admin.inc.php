@@ -864,6 +864,7 @@ $SharedSettingIconComment = "Questa configurazione è condivisa";
 $GlobalAgenda = "Agenda generale";
 $AdvancedFileManagerTitle = "File manager avanzato per l\'editor wysiwyg";
 $AdvancedFileManagerComment = "Permette la gestione avanzata dei file attraverso l\'editor";
+$ScormAndLPProgressTotalAverage = "Media complessiva punteggi SCORM e moduli didattici";
 $MultipleAccessURLs = "URL multiple di accesso";
 $SearchShowUnlinkedResultsTitle = "Ricerca a testo libero: mostra i risultati non accessibili";
 $SearchShowUnlinkedResultsComment = "Nel mostrare i risultati di una ricerca a testo libero, come comportarsi con i risultati inaccessibili per l\'utente?";
@@ -949,4 +950,9 @@ $ShowEmailOfTeacherOrTutorComent = "Mostro l\'e-mail del docente o del tutor a p
 $Created = "Creato";
 $AddSystemAnnouncement = "Aggiungi un avviso di sistema";
 $EditSystemAnnouncement = "Modifica un avviso di sistema";
+$LPProgressScore = "Avanzamento totale per modulo";
+$TotalTimeByCourse = "Tempo totale per modulo";
+$LastTimeTheCourseWasUsed = "Ultimo accesso al modulo";
+$AnnouncementAvailable = "L\'avviso è disponibile";
+$AnnouncementNotAvailable = "L\'avviso non è disponibile";
 ?>

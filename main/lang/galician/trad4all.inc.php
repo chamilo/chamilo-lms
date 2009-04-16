@@ -33,6 +33,7 @@ $TheListIsEmpty = "A lista está valeira";
 $langCourseCreate = "Crear o sitio dun curso";
 $langTodo = "Suxestións";
 $UserName = "Nome de usuario";
+$lang_show_hide = "Amosar / ocultar";
 $langCategoryMod = "Modificar categoría";
 $Hide = "Agochar";
 $langArchive = "arquivo";

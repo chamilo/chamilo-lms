@@ -15,7 +15,6 @@ $lang_change_order = "T\'ijrachiy maypi kasqata";
 $lang_add_title_and_desc = "Ruwapay sutinchayninta ima nisqaynintawan ";
 $lang_delete = "Wañuchiy";
 $lang_add_chapter = "Yapay hoq chutinchayta";
-$lang_show_hide = "Qhawarichiy / pakay";
 $langLearnpathCompstatus = "Hunt\'achisqa";
 $langLearnpathIncomplete = "mana hut\'achisqa";
 $langLearnpathPassed = "Llallisqa";

@@ -31,6 +31,7 @@ $TheListIsEmpty = "Sąrašas tuščias.";
 $langCourseCreate = "Sukurti kursus";
 $langTodo = "Ką daryti";
 $UserName = "Vartotojo vardas";
+$lang_show_hide = "Rodyti / slėpti";
 $langCategoryMod = "Redaguoti kategoriją";
 $Hide = "Paslėpti";
 $langArchive = "archyvas ";

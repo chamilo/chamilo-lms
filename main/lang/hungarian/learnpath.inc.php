@@ -18,7 +18,6 @@ $lang_add_prereqi = "El&#337;feltétel hozzáadása";
 $lang_add_title_and_desc = "Cím és leírás szerkesztése";
 $lang_delete = "Törlés";
 $lang_add_chapter = "Modul hozzáadása";
-$lang_show_hide = "Mutat / Elrejt";
 $langLearnpathMystatus = "Állapotom";
 $langLearnpathCompstatus = "teljesítve";
 $langLearnpathIncomplete = "teljesítetlen";

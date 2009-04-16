@@ -36,6 +36,7 @@ $SaveChanges = "Shrani spremembe";
 $langCourseCreate = "Tvori področje tečaja";
 $langTodo = "Predlogi";
 $UserName = "Uporabniško ime";
+$lang_show_hide = "Prikaži / skrij";
 $langCategoryMod = "Spremeni kategorijo";
 $Hide = "Skrij";
 $langArchive = "arhiv";

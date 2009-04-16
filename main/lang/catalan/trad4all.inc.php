@@ -29,6 +29,7 @@ $TheListIsEmpty = "La llista és complerta";
 $langCourseCreate = "Crea el lloc d\'un curs";
 $langTodo = "Activitats a fer";
 $UserName = "Nom d\'usuari";
+$lang_show_hide = "Mostrar / ocultar";
 $langCategoryMod = "Modificar categoria";
 $iso639_2_code = "ct";
 $iso639_1_code = "cat";

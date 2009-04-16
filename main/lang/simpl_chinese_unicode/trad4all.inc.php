@@ -14,6 +14,7 @@ $langCode = "代码";
 $langUp = "向上";
 $langCourseCreate = "新建课程";
 $langTodo = "您的建议";
+$lang_show_hide = "显示/隐藏";
 $langCategoryMod = "修改分类";
 $langArchive = "存档";
 $langCourseCode = "课程编号";

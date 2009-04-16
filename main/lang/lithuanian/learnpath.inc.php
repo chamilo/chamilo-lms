@@ -18,7 +18,6 @@ $lang_add_prereqi = "Įterpti sąlygas";
 $lang_add_title_and_desc = "Redaguoti antraštę ir aprašymą";
 $lang_delete = "Ištrinti";
 $lang_add_chapter = "Įterpti modulį";
-$lang_show_hide = "Rodyti / slėpti";
 $langLearnpathMystatus = "Mano būsena";
 $langLearnpathCompstatus = "baigta";
 $langLearnpathIncomplete = "nebaigta";

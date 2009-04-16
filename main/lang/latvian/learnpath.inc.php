@@ -16,7 +16,6 @@ $lang_add_prereqi = "Pievienot priekšnoteikumus";
 $lang_add_title_and_desc = "Labot virsrakstu un aprakstu";
 $lang_delete = "Dz&#275;st";
 $lang_add_chapter = "Pievienot moduli";
-$lang_show_hide = "Redzams / neredzams";
 $langLearnpathMystatus = "Mans statuss";
 $langLearnpathCompstatus = "pabeigts";
 $langLearnpathIncomplete = "nepabeigts";

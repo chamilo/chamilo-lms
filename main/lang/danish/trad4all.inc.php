@@ -32,6 +32,7 @@ $TheListIsEmpty = "Listen er tom.";
 $langCourseCreate = "Opret kursusside";
 $langTodo = "Opgaver";
 $UserName = "Brugernavn";
+$lang_show_hide = "Vis/skjul";
 $langCategoryMod = "Ret kategori";
 $Hide = "Skjul";
 $langArchive = "Arkiv";

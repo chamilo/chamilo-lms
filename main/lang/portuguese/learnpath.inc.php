@@ -18,7 +18,6 @@ $lang_add_prereqi = "Acrescentar pré-requisitos";
 $lang_add_title_and_desc = "Editar título & descrição";
 $lang_delete = "Apagar";
 $lang_add_chapter = "Adicionar módulo";
-$lang_show_hide = "Mostrar / ocultar";
 $langLearnpathMystatus = "Estado";
 $langLearnpathCompstatus = "completa";
 $langLearnpathIncomplete = "incompleta";

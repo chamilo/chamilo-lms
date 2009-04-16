@@ -33,6 +33,7 @@ $CreateCategory = "Kamay mitata";
 $langCourseCreate = "Kamay huj yachachinata";
 $langTodo = "Ima rimariykuna";
 $UserName = "Haykuqmasi";
+$lang_show_hide = "Qhawarichiy / pakay";
 $Hide = "Pakay";
 $langArchive = "Khipu";
 $langCourseCode = "Yachachinaq chinpun";

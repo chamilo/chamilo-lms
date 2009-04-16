@@ -36,6 +36,7 @@ $SaveChanges = "Salva le modifiche";
 $langCourseCreate = "Crea un corso";
 $langTodo = "Suggerimenti";
 $UserName = "Nome Utente";
+$lang_show_hide = "Mostra / nascondi";
 $langCategoryMod = "Modifica una categoria";
 $Hide = "Nascondi";
 $langArchive = "Archivio";
@@ -705,4 +706,6 @@ $Filter = "Filtra";
 $Subject = "Oggetto";
 $Message = "Messaggio";
 $MoreInformation = "Ulteriori informazioni";
+$MakeInvisible = "Rendi invisibile";
+$MakeVisible = "Rendi visibile";
 ?>

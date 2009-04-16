@@ -30,6 +30,7 @@ $TheListIsEmpty = "Saraksts ir tukšs.";
 $langCourseCreate = "Izveidot kursa lapu";
 $langTodo = "Uzdevumi";
 $UserName = "Lietot&#257;jv&#257;rds";
+$lang_show_hide = "Redzams / neredzams";
 $langCategoryMod = "Labot kategoriju";
 $Hide = "Pasl&#275;pt";
 $langArchive = "arh&#299;vs";

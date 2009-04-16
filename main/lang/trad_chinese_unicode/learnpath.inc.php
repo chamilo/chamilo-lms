@@ -18,7 +18,6 @@ $lang_add_prereqi = "添加前提";
 $lang_add_title_and_desc = "修改標題和簡介";
 $lang_delete = "刪除";
 $lang_add_chapter = "添加模塊";
-$lang_show_hide = "顯示/隱藏";
 $langLearnpathMystatus = "學習進度";
 $langLearnpathCompstatus = "完成";
 $langLearnpathIncomplete = "未完成";

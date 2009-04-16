@@ -31,6 +31,7 @@ $TheListIsEmpty = "這清單未有項目";
 $langCourseCreate = "新建課程";
 $langTodo = "您的建議";
 $UserName = "使用者名稱";
+$lang_show_hide = "顯示/隱藏";
 $langCategoryMod = "修改分類";
 $Hide = "隱藏";
 $langArchive = "資料庫";

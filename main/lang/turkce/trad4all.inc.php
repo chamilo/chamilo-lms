@@ -30,6 +30,7 @@ $TheListIsEmpty = "Liste bo&#351;.";
 $langCourseCreate = "Ders sitesi yarat";
 $langTodo = "Yapýlacaklar";
 $UserName = "Kullan&#305;c&#305; ismi";
+$lang_show_hide = "Göster / Gizle";
 $langCategoryMod = "Kategori düzenle";
 $Hide = "Sakla";
 $iso639_2_code = "tr";

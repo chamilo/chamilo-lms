@@ -34,6 +34,7 @@ $CreateCategory = "Categorie aanmaken";
 $langCourseCreate = "Nieuwe modulepagina\'s aanmaken";
 $langTodo = "Suggesties";
 $UserName = "Gebruikersnaam (\'log-in\')";
+$lang_show_hide = "Weergeven/verbergen";
 $langCategoryMod = "Categorie wijzigen";
 $Hide = "Verbergen";
 $langArchive = "Archief";

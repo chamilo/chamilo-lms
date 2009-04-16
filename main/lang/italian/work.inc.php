@@ -59,4 +59,11 @@ $EndDateAlreadyPassed = "Il caricamento è stato chiuso";
 $MoveXTo = "Sposta %s verso";
 $QualificationMustNotBeMoreThanQualificationOver = "Il voto non può superare il valore massimo stabilito";
 $ModifyDirectory = "Modifica la cartella";
+$DeleteAllFiles = "Elimina tutti i file";
+$BackToWorksList = "Torna all\'elenco degli elaborati";
+$EditMedia = "Modifica file";
+$AllFilesInvisible = "Tutti i file sono stati resi invisibili";
+$FileInvisible = "Il file è stato reso invisibile";
+$AllFilesVisible = "Tutti i file sono stati resi visibili";
+$FileVisible = "Il file è stato reso visibile";
 ?>

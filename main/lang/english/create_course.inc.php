@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langProfessors = "Trainers";
-$langExplanation = "Once you click \"Create Training\", a training area is created which will include a section for Tests, Gradebook, Courses, Dropbox, Agenda and much more. Logging in as trainer allows you editing privileges to these areas of your training.";
+$langExplanation = "Once you click \"Create Training\", a training area is created which will include a section for Tests, Assessment, Courses, Dropbox, Agenda and much more. Logging in as trainer allows you editing privileges to these areas of your training.";
 $langEmpty = "You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your training code, see the Training Program";
 $langCodeTaken = "This training code is already in use.  <br>Use the <b>Back</b> button on your browser and try again";
 $langFormula = "Yours sincerely";
@@ -43,7 +43,7 @@ $langCreateCourseGroups = "Groups";
 $langCatagoryMain = "Main";
 $langCatagoryGroup = "Groups forums";
 $langLn = "Language";
-$langCreateSite = "Create training";
+$langCreateSite = "Create a training";
 $langFieldsRequ = "All fields required";
 $langEx = "e.g. <i>Innovation management</i>";
 $langFac = "Category";
@@ -99,7 +99,7 @@ $ExampleForum = "Example Forum";
 $ExampleThread = "Example Thread";
 $ExampleThreadContent = "Example content";
 $IntroductionWiki = "The word Wiki is short for WikiWikiWeb. Wikiwiki is a word from Hawaiian, meaning fast or speed. In a wiki, people can write pages together. If one person writes something wrong, then the next person can correct it. The next person can also add something new to the page. Because of this, the page gets better whenever someone changes it.";
-$CreateCourseArea = "Create training";
-$CreateCourse = "Create training";
+$CreateCourseArea = "Create a training";
+$CreateCourse = "Create a training";
 $Create = "Create";
 ?>

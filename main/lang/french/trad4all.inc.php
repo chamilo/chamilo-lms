@@ -36,6 +36,7 @@ $SaveChanges = "Enregistrer les modifications";
 $langCourseCreate = "Créer une formation";
 $langTodo = "Suggestions";
 $UserName = "Login";
+$lang_show_hide = "Visible/invisible";
 $langCategoryMod = "Modifier un dossier";
 $Hide = "Cacher";
 $langArchive = "archive";

@@ -18,7 +18,6 @@ $lang_add_prereqi = "Afegir requisits previs";
 $lang_add_title_and_desc = "Editar títol i descripció";
 $lang_delete = "Eliminar";
 $lang_add_chapter = "Afegir un apartat";
-$lang_show_hide = "Mostrar / ocultar";
 $langLearnpathMystatus = "El meu estat";
 $langLearnpathCompstatus = "completat";
 $langLearnpathIncomplete = "sense completar";

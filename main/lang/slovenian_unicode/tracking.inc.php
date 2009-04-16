@@ -234,4 +234,9 @@ $ChatLastConnection = "Zadnja povezava klepeta";
 $CourseInformation = "Informacije o tečaju";
 $NoAdditionalFieldsWillBeExported = "Nobena dodatna polja ne bodo izvožena";
 $langSendNotification = "Pošlji obvestila";
+$TimeOfActiveByTraining = "Čas aktivnosti po tečaju";
+$AvgAllUsersInAllCourses = "Povprečje vseh tečajnikov v vseh tečajih";
+$AvgExercisesScore = "Povprečen rezultat testa/vaje";
+$TrainingTime = "Čas v tečaju";
+$CourseProgress = "Napredovanje v tečaju";
 ?>

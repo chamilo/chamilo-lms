@@ -18,7 +18,6 @@ $lang_add_prereqi = "Voeg voorkennisvereisten toe";
 $lang_add_title_and_desc = "Wijzig titel & beschr.";
 $lang_delete = "Verwijderen";
 $lang_add_chapter = "Voeg hoofdstuk toe";
-$lang_show_hide = "Weergeven/verbergen";
 $langLearnpathMystatus = "Mijn toestand";
 $langLearnpathCompstatus = "afgewerkt";
 $langLearnpathIncomplete = "niet afgewerkt";

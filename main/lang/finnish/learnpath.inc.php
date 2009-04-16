@@ -18,7 +18,6 @@ $lang_add_prereqi = "Lis‰‰ ennakkovaatimuksia";
 $lang_add_title_and_desc = "Muokaa otsikkoa ja sis‰ltˆ‰";
 $lang_delete = "Poista";
 $lang_add_chapter = "Lis‰‰ moduuli";
-$lang_show_hide = "N‰yt‰ / piilota";
 $langLearnpathMystatus = "Tilanteeni";
 $langLearnpathCompstatus = "valmis";
 $langLearnpathIncomplete = "kesken";

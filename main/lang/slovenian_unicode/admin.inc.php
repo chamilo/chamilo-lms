@@ -864,6 +864,7 @@ $SharedSettingIconComment = "Nastavitve skupne rabe";
 $GlobalAgenda = "Globalna agenda";
 $AdvancedFileManagerTitle = "Napreden upravitelj datotek za WYSIWYG editor";
 $AdvancedFileManagerComment = "Omogočim napreden upravitelj datotek za WYSIWYG editor ? Omogočanje bo dodalo dodatne opcije k upravitelju datotek.";
+$ScormAndLPProgressTotalAverage = "Skupno povprečje napredovanja iz SCORM in tečajev";
 $MultipleAccessURLs = "URL-ji za dostop do platforme";
 $SearchShowUnlinkedResultsTitle = "Iskanje po vsebini: prikaži nepovezane rezultate";
 $SearchShowUnlinkedResultsComment = "Prikaz rezultatov iskanja po vsebini: kaj storiti z rezultati, ki niso dosegljivi trenutnemu uporabniku ?";
@@ -949,4 +950,7 @@ $ShowEmailOfTeacherOrTutorComent = "Prikažem učiteljev oz. tutorjev e-poštni 
 $Created = "Ustvarjeno";
 $AddSystemAnnouncement = "Dodaj obvestilo sistema";
 $EditSystemAnnouncement = "Uredi obvestilo sistema";
+$LPProgressScore = "Skupen napredek po tečaju";
+$TotalTimeByCourse = "Skupen čas po tečaju";
+$LastTimeTheCourseWasUsed = "Čas zadnje uporabe tečaja";
 ?>

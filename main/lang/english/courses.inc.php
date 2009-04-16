@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $lang_already_enrolled                      = "already enrolled";
-$lang_my_personnal_course_list              = "My personal training list";
+$lang_my_personnal_course_list              = "My personal trainings list";
 $lang_course_enrollment                     = "User trainings";
 $lang_course_not_available                  = "This training is not available or doesn\'t exist.";
 $lang_enroll                                = "Enroll";
@@ -16,9 +16,9 @@ $lang_select_course_in                      = "Select training in ";
 $lang_select_course_in_search_results       = "Select training from search results";
 $lang_unsubscribe                           = "Unsubscribe";
 $lang_back_to_my_home_page                  = "Back to my home page";
-$lang_back_to_my_personnal_course_list      = "Back to my training list";
+$lang_back_to_my_personnal_course_list      = "Back to my trainings list";
 $langTitular  = "Leader";
-$langBackToListOfThisUser  = "Back to training list";
+$langBackToListOfThisUser  = "Back to trainings list";
 $langAdministrationTools  = "Administration Tools";
 $lang_back_to_parent_category               = "Back to parent category";
 $lang_back_to_course_selection              = "Back to training selection";
@@ -47,7 +47,7 @@ $CourseManagement = "Course Management";
 $SortMyCourses = "Sort trainings";
 $SubscribeToCourse = "Subscribe to training";
 $UnsubscribeFromCourse = "Unsubscribe from trainings";
-$CreateCourseCategory = "Create training category";
+$CreateCourseCategory = "Create a training category";
 $CourseCategoryAbout2bedeleted = "Are you sure you want to delete this training category? Courses inside this training category will be moved outside the training categories";
 $CourseCategories = "Training Categories";
 $CoursesInCategory = "Trainings in this category";
@@ -69,7 +69,7 @@ $SubmitRegistrationCode = "Submit registration code";
 $CourseCategoryDeleted = "The category was deleted";
 $CategorySortingDone = "Category sorting done";
 $CourseCategoryEditStored = "Category updated";
-$buttonCreateCourseCategory = "Create training category";
+$buttonCreateCourseCategory = "Save training category";
 $buttonSaveCategory = "Save the category";
 $buttonChangeCategory = "Change category";
 ?>

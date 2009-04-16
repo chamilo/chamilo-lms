@@ -18,7 +18,6 @@ $lang_add_prereqi = "Lägg till förkunskaper";
 $lang_add_title_and_desc = "Ändra titel och beskrivning";
 $lang_delete = "Ta bort";
 $lang_add_chapter = "Lägg till modul";
-$lang_show_hide = "Visa / Göm";
 $langLearnpathMystatus = "Min status";
 $langLearnpathCompstatus = "avslutad";
 $langLearnpathIncomplete = "ej avslutad";

@@ -33,6 +33,7 @@ $TheListIsEmpty = "El llistáu ta vacíu";
 $langCourseCreate = "Crear un cursu";
 $langTodo = "Deberes por facer";
 $UserName = "Usuariu";
+$lang_show_hide = "Amosar / esconder";
 $langCategoryMod = "Modificar categoría";
 $Hide = "Esconder";
 $langArchive = "archivu";

@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langToolName = "Reports";
+$langToolName = "Reporting";
 $TrackingDisabled = "Reporting has been disabled by system administrator.";
 $InactivesStudents = "Inactive users";
 $AverageTimeSpentOnThePlatform = "Average time spent on portal";
@@ -175,9 +175,9 @@ $Annotate = "Notify";
 $DayOfDelay = "Day of delay";
 $NoProduction = "No production";
 $NoComment = "No comment";
-$LatestLogin = "Latest connection";
+$LatestLogin = "Last connection";
 $TimeSpentOnThePlatform = "Time spent in portal";
-$Messages = "Posts";
+$Messages = "Forum posts";
 $AveragePostsInForum = "Average posts number in the forum";
 $AverageAssignments = "Average assignments number";
 $Print = "Print";
@@ -204,7 +204,7 @@ $TeacherInterface = "Trainer View";
 $CoachInterface = "Coach interface";
 $AdminInterface = "Admin view";
 $NumberOfSessions = "Number of sessions";
-$YourCourseList = "Training list";
+$YourCourseList = "Trainings list";
 $YourStatistics = "Your statistics";
 $CoachList = "Trainer list";
 $CoachStudents = "Learners of trainer";
@@ -234,5 +234,9 @@ $ChatLastConnection = "Chat last connection";
 $CourseInformation = "Training Information";
 $NoAdditionalFieldsWillBeExported = "No additional fields will be exported";
 $langSendNotification = "Send notifications";
+$TimeOfActiveByTraining = "Time of active by training";
+$AvgAllUsersInAllCourses = "Avegare to all users in all courses of training";
 $AvgExercisesScore = "Average exercises score";
+$TrainingTime = "Training time";
+$CourseProgress = "Course progress";
 ?>

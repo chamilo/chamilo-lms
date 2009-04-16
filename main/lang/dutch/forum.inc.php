@@ -92,4 +92,5 @@ $ForumSearchResults = "Forum zoekresultaten";
 $ForumSearchInformation = "U kunt op meerdere zoektermen zoeken door gebruik te maken van het + teken";
 $YouWillBeNotifiedOfNewPosts = "U zal via email op de hoogte gebracht worden van nieuwe berichten.";
 $YouWillNoLongerBeNotifiedOfNewPosts = "U zal niet langer via email op de hoogte gebracht worden van nieuwe berichten.";
+$EditForum = "Forum wijzigen";
 ?>

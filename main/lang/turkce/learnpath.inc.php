@@ -16,7 +16,6 @@ $lang_add_prereqi = "Ön&#351;art ekle";
 $lang_add_title_and_desc = "Ba&#351;l&#305;k ve aç&#305;klama düzenle";
 $lang_delete = "Sil";
 $lang_add_chapter = "Bölüm Ekle";
-$lang_show_hide = "Göster / Gizle";
 $langLearnpathMystatus = "Durumum";
 $langLearnpathCompstatus = "tamamland&#305;";
 $langLearnpathIncomplete = "tamamlanmad&#305;";

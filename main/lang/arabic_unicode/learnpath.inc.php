@@ -18,7 +18,6 @@ $lang_add_prereqi = "أضف متطلبات مسبقة ";
 $lang_add_title_and_desc = "تحرير العنوان و النبذة ";
 $lang_delete = "حذف";
 $lang_add_chapter = "أضف درس ";
-$lang_show_hide = "إظهار / إخفاء";
 $langLearnpathMystatus = "حالتي ";
 $langLearnpathCompstatus = "مكتمل  ";
 $langLearnpathIncomplete = "غير مكتمل ";

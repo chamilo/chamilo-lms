@@ -16,7 +16,6 @@ $lang_add_prereqi = "เพิ่มแผนการเรียน ที่ต้องเรียนก่อน";
 $lang_add_title_and_desc = "แก้ไขชื่อและคำอธิบาย";
 $lang_delete = "ลบ";
 $lang_add_chapter = "เพิ่มหน่วยการเรียน/บทเรียน";
-$lang_show_hide = "ซ่อน/แสดง";
 $langLearnpathMystatus = "ผลการเรียน";
 $langLearnpathCompstatus = "เรียนแล้ว";
 $langLearnpathIncomplete = "ยังไม่เรียน";

@@ -30,6 +30,7 @@ $TheListIsEmpty = "La listo estas malplena.";
 $langCourseCreate = "Ekkrei kurspa&#285;aron";
 $langTodo = "Sugestoj";
 $UserName = "Ensalutnomo";
+$lang_show_hide = "Vidigi / ka&#349;i";
 $langCategoryMod = "&#348;an&#285;i kategorion ";
 $Hide = "Ka&#349;i";
 $iso639_2_code = "EO";

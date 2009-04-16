@@ -18,7 +18,6 @@ $lang_add_prereqi = "Tilføj betingelser";
 $lang_add_title_and_desc = "Ret titel & beskr.";
 $lang_delete = "Slet";
 $lang_add_chapter = "Tilføj kapitel";
-$lang_show_hide = "Vis/skjul";
 $langLearnpathMystatus = "Min status";
 $langLearnpathCompstatus = "gennemført";
 $langLearnpathIncomplete = "ufuldendt";

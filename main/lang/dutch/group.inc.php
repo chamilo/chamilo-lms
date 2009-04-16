@@ -89,4 +89,5 @@ $GroupsFromClasses = "Groepen op basis van klassen";
 $GroupsFromClassesInfo = "Gebruik makend van deze optie, kan u groepen aanmaken op basis van de klassen die ingeschreven zijn in uw cursus.";
 $Group = "Groep";
 $ForumOfGroup = "forum van groep: ";
+$BackToGroupList = "terug naar de groepenlijst";
 ?>

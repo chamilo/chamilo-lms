@@ -34,6 +34,7 @@ $CreateCategory = "Categorie aanmaken";
 $langCourseCreate = "Cursussite aanmaken";
 $langTodo = "Suggesties";
 $UserName = "Gebruikersnaam (\'log-in\')";
+$lang_show_hide = "Weergeven/verbergen";
 $langCategoryMod = "Categorie wijzigen";
 $Hide = "Verbergen";
 $langArchive = "Archief";
@@ -565,4 +566,6 @@ $BackToPreviousPage = "Terug naar de vorige pagina";
 $ListView = "Als lijst weergeven";
 $DisplayOrder = "Volgorde van weergave";
 $SaveDocument = "Document opslaan";
+$MakeInvisible = "Verbergen";
+$MakeVisible = "zichtbaar maken";
 ?>

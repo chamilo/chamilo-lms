@@ -8,8 +8,8 @@ On Debian Lenny
       http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=493944
       http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=493941
     on dokeos root:
-      mkdir xapiandb
-      chmod 777 xapiandb (or equivalent)
+      mkdir searchdb
+      chmod 777 searchdb (or equivalent)
   Useful xapian development tools
     apt-get install xapian-doc xapian-tools
     (See delve command)

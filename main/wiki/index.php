@@ -139,7 +139,9 @@ else
 Display::display_header($tool_name, 'Wiki');
 
 $is_allowed_to_edit = api_is_allowed_to_edit(); 
-api_display_tool_title($tool_name.$add_group_to_title);
+
+
+//api_display_tool_title($tool_name.$add_group_to_title);
 
 /*
 -----------------------------------------------------------

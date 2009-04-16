@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 19665 2009-04-08 23:21:32Z juliomontoya $ 
+<?php // $Id: scorm_api.php 19808 2009-04-16 20:01:40Z iflorespaz $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -157,6 +157,11 @@ var max_time_allowed = '<?php echo $oItem->get_max_time_allowed();?>';
 var interactions = new Array(<?php echo $oItem->get_interactions_js_array();?>);
 item_objectives = new Array();
 
+$(document).ready( function() { 
+	$("#current_item_id").attr("value",<?php echo $oItem->get_id();?>);
+	$("#old_item").attr("value",<?php echo $oItem->get_id();?>);	
+ } ); 
+ 
 //Dokeos internal variables
 var saved_lesson_status = 'not attempted';
 var lms_lp_id = <?php echo $oLP->get_id();?>;
@@ -695,21 +700,31 @@ function savedata(origin)
 	    	*/	
     	}
     }
-    
 	logit_lms('saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
-	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit);
-	if(item_objectives.length>0)
-	{
-		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
+	
+	old_item_id=$("#old_item").val();
+	
+	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, old_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit);
+	
+	$("#old_item").attr("value",lms_item_id)
+	
+	if(item_objectives.length>0) {
+		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,old_item_id,item_objectives);
 	}
 }
 
 function LMSCommit(val) {
 		logit_scorm('LMSCommit()',0);
 		G_LastError = G_NoError ;
-		G_LastErrorMessage = 'No error';	
-		savedata('commit');
-	    commit = false ; //now changes have been commited, no need to update until next SetValue()
+		G_LastErrorMessage = 'No error';
+
+		my_lms_time=LMSGetValue('cmi.core.session_time');
+		my_lms_status=LMSGetValue('cmi.core.lesson_status');
+		
+		if (my_lms_time.length!=0 && my_lms_status.length!=0) {
+			savedata('commit');
+		}
+	    commit = 'false' ; //now changes have been commited, no need to update until next SetValue()
 		return('true');
 }
 
@@ -722,12 +737,14 @@ function LMSFinish(val) {
 		G_LastErrorMessage = 'No error';
 		// why commit==false?	
 		if (( commit == false )) { 	
-			logit_scorm('LMSFinish() (no LMSCommit())',1); 
+			logit_scorm('LMSFinish() (no LMSCommit())',1);
+			 
 		}
+
 		if ( commit == true ) {
 			logit_scorm('LMSFinish() called',1);		
 			savedata('finish');
-		    commit = false ;
+		    commit = 'false' ;
 		}
 		return('true');
 }
@@ -1098,7 +1115,7 @@ function switch_item(current_item, next_item){
 	if(lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
         xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
 	}else{
-        xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
+       // xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
 	}
 	if(item_objectives.length>0)
 	{
@@ -1107,7 +1124,24 @@ function switch_item(current_item, next_item){
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
 	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);		
 	
-	//alert(lms_next_item);		
+	
+	$my_new_old_item=$("#old_item").val();
+	$my_new_current_item=$("#current_item_id").val();
+	
+	if ($my_new_current_item==next_item) {
+		$("#old_item").attr("value",$my_new_old_item)
+	} else {
+		$("#old_item").attr("value",$my_new_current_item)
+	}
+	if ($my_new_current_item==next_item) {
+		$("#old_item").attr("value",$my_new_current_item)
+	} else {
+		$("#current_item_id").attr("value",$my_new_old_item)
+	}
+	$("#status_old_item").attr("value",lesson_status);
+	$("#current_item_id").attr("value",next_item);	
+	
+	
 	//(3) open the new item in the content_id frame
 	switch(next_item){
 		case 'next':

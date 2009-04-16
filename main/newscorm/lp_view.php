@@ -273,6 +273,8 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	        </div>
 	        <div style="color: white;" onClick="cleanlog();">.</div>
     </div>
+	<input type="hidden" id="old_item" name ="old_item" value="0"/>
+    <input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
     </td></tr></table>
 	<script language="JavaScript" type="text/javascript">
 	// Need to be called after the <head> to be sure window.oxajax is defined
@@ -442,6 +444,8 @@ else
 	        <div style="color: white;" onClick="cleanlog();">.</div>
         </div>
 		</div>
+	<input type="hidden" id="old_item" name ="old_item" value="0"/>
+    <input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
     </td><td align="left" width="100%" valign="top">
     <div id="learningPathRightZone">
         <iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0" style="height:600px;width: 100%"></iframe>

@@ -1015,6 +1015,7 @@ class learnpathItem{
     		$table = Database::get_course_table('lp_item_view');
     		$sql = "SELECT * FROM $table WHERE id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";
     		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Checking DB: '.$sql,0);}
+    		//error_log($sql);
     		$res = api_sql_query($sql);
     		if(Database::num_rows($res)==1){
     			$row = Database::fetch_array($res);
@@ -2174,10 +2175,25 @@ function get_terms()
      */
      function write_to_db()
      {
+	
    		if($this->debug>0){error_log('New LP - In learnpathItem::write_to_db()',0);}
    		$mode = $this->get_lesson_mode();
    		$credit = $this->get_credit();
-   		if(($this->type == 'sco') && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse'))
+   		$my_verified_status=$this->get_status(false);
+   		
+   		$item_view_table = Database::get_course_table('lp_item_view');
+		$sql_verified='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+		$rs_verified=api_sql_query($sql_verified,__FILE__,__LINE__);
+		$row_verified=Database::fetch_array($rs_verified);
+					
+   		$my_case_completed=array('completed','passed','browsed');
+   		if (in_array($sql_verified['status'],$my_case_completed)) {
+   			$save=false;
+   		} else {
+   			$save=true;
+   		}
+
+   		if(($save===false && $this->type == 'sco') ||(($this->type == 'sco') && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse')))
    		{
    			//this info shouldn't be saved as the credit or lesson mode info prevent it
    			if($this->debug>1){error_log('New LP - In learnpathItem::write_to_db() - credit('.$credit.') or lesson_mode('.$mode.') prevent recording!',0);}
@@ -2266,8 +2282,7 @@ function get_terms()
 	     				$my_type_lp=learnpath::get_type_static($this->lp_id);
 	     				// this is a array containing values finished
 	     				$case_completed=array('completed','passed','browsed');
-	     				$my_status = " status = '".$this->get_status(false)."' ,";
-	     				
+
 	     				//is not multiple attempts
 	     				if ($this->get_prevent_reinit()==1) {    				
 		  		     	// process of status verified into data base
@@ -2279,18 +2294,24 @@ function get_terms()
 	     				    //get type lp i.e 2=scorm and 1=lp dokeos	
 		    				// if not is completed or passed or browsed and learnig path is scorm
 		     				
-		     				if(!in_array($this->get_status(false),$case_completed) && $my_type_lp==2) {
-		     					$total_time =" total_time = total_time +".$this->get_total_time().", ";  
+		     				if(!in_array($this->get_status(false),$case_completed) && $my_type_lp==2 ) {//&& $this->type!='dir'
+		     					$total_time =" total_time = total_time +".$this->get_total_time().", "; 
+		     					$my_status = " status = '".$this->get_status(false)."' ,"; 
 		     				} else {
 		     					//verified into data base
-		     					if (!in_array($row_verified['status'],$case_completed) && $my_type_lp==2) {
+		     					if (!in_array($row_verified['status'],$case_completed) && $my_type_lp==2 ) { //&& $this->type!='dir'
 		     						$total_time =" total_time = total_time +".$this->get_total_time().", ";
-		     	 				} else {
+		     						$my_status = " status = '".$this->get_status(false)."' ,"; 
+		     	 				} elseif (in_array($row_verified['status'],$case_completed) && $my_type_lp==2 && $this->type!='sco' ) {//&& $this->type!='dir'
+		     	 					$total_time =" total_time = total_time +".$this->get_total_time().", ";
+		     	 					$my_status = " status = '".$this->get_status(false)."' ,"; 
+		     					}else {
 		     	 				//&& !in_array($row_verified['status'],$case_completed)
 		     	 				
 		     	 				//is lp dokeos
-		     	 					if ($my_type_lp==1) {
+		     	 					if ($my_type_lp==1 && $this->type!='chapter') {
 	     								$total_time =" total_time = total_time + ".$this->get_total_time().", ";
+	     								$my_status = " status = '".$this->get_status(false)."' ,"; 
 	     							}	
 		     	 				} 
 		     					
@@ -2301,9 +2322,11 @@ function get_terms()
 	     						//reset zero new attempt ?
 	     					} elseif (!in_array($this->get_status(false),$case_completed) &&  $my_type_lp==2){
 	     						$total_time =" total_time = ".$this->get_total_time().", ";
+	     						$my_status = " status = '".$this->get_status(false)."' ,"; 
 	     					} else {
 	     						//is lp dokeos
 	     						$total_time =" total_time = total_time +".$this->get_total_time().", ";
+	     						$my_status = " status = '".$this->get_status(false)."' ,"; 
 	     					}
 	     					
 	     				}

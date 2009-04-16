@@ -59,7 +59,7 @@
 	//Buttons
 	define('LBL_BTN_SELECT', 'Seleccionar');
 	define('LBL_BTN_CANCEL', 'Cancelar');
-	define('LBL_BTN_UPLOAD', 'Enviar');
+	define('LBL_BTN_UPLOAD', 'Subir un archivo');
 	define('LBL_BTN_CREATE', 'Crear');
 	define('LBL_BTN_CLOSE', 'Cerrar');
 	define('LBL_BTN_NEW_FOLDER', 'Nueva carpeta');
@@ -67,9 +67,9 @@
 	define('LBL_BTN_EDIT_IMAGE', 'Editar');
 	define('LBL_BTN_VIEW', 'Seleccionar vista');
 	define('LBL_BTN_VIEW_TEXT', 'Texto');
-	define('LBL_BTN_VIEW_DETAILS', 'Detalles');
-	define('LBL_BTN_VIEW_THUMBNAIL', 'Miniaturas');
-	define('LBL_BTN_VIEW_OPTIONS', 'Ver en:');
+	define('LBL_BTN_VIEW_DETAILS', 'Lista de archivos');
+	define('LBL_BTN_VIEW_THUMBNAIL', 'Vista en miniatura');
+	define('LBL_BTN_VIEW_OPTIONS', 'Ver:');
 	//pagination
 	define('PAGINATION_NEXT', 'Siguiente');
 	define('PAGINATION_PREVIOUS', 'Anterior');

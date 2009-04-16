@@ -71,9 +71,9 @@
 	define('LBL_BTN_EDIT_IMAGE', 'Edit');
 	define('LBL_BTN_VIEW', 'Select View');
 	define('LBL_BTN_VIEW_TEXT', 'Text');
-	define('LBL_BTN_VIEW_DETAILS', 'Details');
+	define('LBL_BTN_VIEW_DETAILS', 'File list');
 	define('LBL_BTN_VIEW_THUMBNAIL', 'Thumbnails');
-	define('LBL_BTN_VIEW_OPTIONS', 'View In:');
+	define('LBL_BTN_VIEW_OPTIONS', 'View:');
 	//pagination
 	define('PAGINATION_NEXT', 'Next');
 	define('PAGINATION_PREVIOUS', 'Previous');

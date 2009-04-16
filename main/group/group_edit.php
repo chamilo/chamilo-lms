@@ -63,7 +63,7 @@ $current_group = GroupManager :: get_group_properties($_SESSION['_gid']);
 -----------------------------------------------------------
 */
 $nameTools = get_lang('EditGroup');
-$interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('GroupManagement'));
+$interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('Groups'));
 
 if (!api_is_allowed_to_edit(false,true)) {
 	api_not_allowed(true);
@@ -123,6 +123,7 @@ function check_group_members($value) {
 
 // Build form
 $form = new FormValidator('group_edit');
+$form->addElement('header', '', $nameTools);
 $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'referer');
 // Group name
@@ -307,11 +308,11 @@ if (isset($_POST['group_members'])) {
 	}
 }
 Display :: display_header($nameTools, "Group");
-echo '<div class="actions-title">';
-echo $nameTools;
-echo '</div>';
 ?>
-<a href="group_space.php"><?php  echo get_lang('GroupSpace') ?></a>
+
+<div class="actions">
+<a href="group_space.php"><?php  echo Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('GroupSpace') ?></a>
+</div>
 <br/>
 <br/>
 <?php

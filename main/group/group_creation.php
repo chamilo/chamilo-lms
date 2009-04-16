@@ -106,11 +106,9 @@ if (isset ($_POST['action']))
 	}
 }
 $nameTools = get_lang('GroupCreation');
-$interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('GroupManagement'));
+$interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('Groups'));
 Display :: display_header($nameTools, "Group");
-echo '<div class="actions-title">';
-echo $nameTools;
-echo '</div>';
+
 if (!is_allowed_to_edit())
 {
 	api_not_allowed();
@@ -217,7 +215,7 @@ elseif (isset ($_POST['number_of_groups']))
 
 EOT;
 	$renderer->setElementTemplate($element_template);
-
+	$form->addElement('header', '', $nameTools);
 
 	$form->addElement('hidden', 'action');
 	$form->addElement('hidden', 'number_of_groups');
@@ -272,11 +270,11 @@ else
 	 * Show form to generate new groups
 	 */
 	$categories = GroupManager :: get_categories();
-	echo '<b>'.get_lang('NewGroups').'</b>';
-	echo '<blockquote>';
+	//echo '<blockquote>';
 	if (count($categories) > 1 || isset ($categories[0]) && $categories[0]['id'] != VIRTUAL_COURSE_CATEGORY)
 	{
 		$create_groups_form = new FormValidator('create_groups');
+		$create_groups_form->addElement('header', '', $nameTools);
 		$group_el = array ();
 		$group_el[] = & $create_groups_form->createElement('static', null, null, get_lang('Create'));
 		$group_el[] = & $create_groups_form->createElement('text', 'number_of_groups', null, array ('size' => 3));
@@ -292,7 +290,7 @@ else
 	{
 		echo get_lang('NoCategoriesDefined');
 	}
-	echo '</blockquote>';
+	//echo '</blockquote>';
 	/*
 	 * Show form to generate groups from virtual courses
 	 */

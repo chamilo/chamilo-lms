@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+<?php //$Id: group_space.php 19800 2009-04-16 08:08:55Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -89,7 +89,7 @@ if 	($current_group['doc_state']!=1 and $current_group['calendar_state']!=1 and 
 	Header
 -----------------------------------------------------------
 */
-Display::display_header($nameTools,"Group");
+Display::display_header($nameTools.' '.stripslashes($current_group['name']),"Group");
 
 /*
 -----------------------------------------------------------
@@ -123,27 +123,30 @@ if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed
 	GroupManager :: unsubscribe_users($_SESSION['_user']['user_id'], $current_group['id']);
 	Display::display_normal_message(get_lang('StudentDeletesHimself'));
 }
+echo '<div class="actions">';
+echo '<a href="group.php">'.Display::return_icon('back.png').get_lang('BackToGroupList').'</a>';
 /*
  * Edit the group
  */
 if (api_is_allowed_to_edit(false,true) or GroupManager :: is_tutor($_user['user_id'])) {
 	isset($origin)?$my_origin = $origin:$my_origin='';
-	echo Display::return_icon('settings.gif', get_lang("EditGroup"))."<a href=\"group_edit.php?origin=$my_origin\">".get_lang("EditGroup")."</a><br/><br/>";
+	echo Display::return_icon('edit.gif', get_lang("EditGroup"))."<a href=\"group_edit.php?origin=$my_origin\">".get_lang("EditGroup")."</a>";
 }
 
 /*
  * Register to group
  */
 if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {	  
-	echo '<p align="right"><a href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang("RegIntoGroup").'</a></p>';
+	echo '<a href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('groupadd.gif').get_lang("RegIntoGroup").'</a>';
 }
 
 /*
  * Unregister from group
  */
 if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
-	echo '<p align="right"><a href="'.api_get_self().'?selfUnReg=1" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang("StudentUnsubscribe").'</a></p>';
+	echo '<a href="'.api_get_self().'?selfUnReg=1" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('group_delete.gif').get_lang("StudentUnsubscribe").'</a>';
 }
+echo '&nbsp;</div>';
 
 if( isset($_GET['action'])) {
 	switch( $_GET['action']) {
@@ -163,7 +166,8 @@ $is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course
 /*
  * Group title and comment
  */
-api_display_tool_title($nameTools.' '.stripslashes($current_group['name']));
+//api_display_tool_title($nameTools.' '.stripslashes($current_group['name']));
+
 if (!empty($current_group['description'])) {
 	echo '<blockquote>'.stripslashes($current_group['description']).'</blockquote>';
 }

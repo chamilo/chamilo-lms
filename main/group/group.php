@@ -1,4 +1,4 @@
-<?php // $Id: group.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+<?php // $Id: group.php 19800 2009-04-16 08:08:55Z pcool $
  
 /*
 ==============================================================================
@@ -105,18 +105,18 @@ if (isset ($_GET['action']))
 			if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $_GET['group_id']))
 			{
 				GroupManager :: subscribe_users($_SESSION['_user']['user_id'], $_GET['group_id']);
-				Display :: display_normal_message(get_lang('GroupNowMember'));
+				Display :: display_confirmation_message(get_lang('GroupNowMember'));
 			}
 			break;
 		case 'self_unreg' :
 			if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $_GET['group_id']))
 			{
 				GroupManager :: unsubscribe_users($_SESSION['_user']['user_id'], $_GET['group_id']);
-				Display :: display_normal_message(get_lang('StudentDeletesHimself'));
+				Display :: display_confirmation_message(get_lang('StudentDeletesHimself'));
 			}
 			break;
 		case 'show_msg' :
-			Display :: display_normal_message($_GET['msg']);
+			Display :: display_confirmation_message($_GET['msg']);
 			break;
 	}
 }
@@ -135,21 +135,21 @@ if (api_is_allowed_to_edit(false,true))
 				if( is_array($_POST['group']))
 				{
 					GroupManager :: delete_groups($_POST['group']);
-					Display :: display_normal_message(get_lang('SelectedGroupsDeleted'));
+					Display :: display_confirmation_message(get_lang('SelectedGroupsDeleted'));
 				}
 				break;
 			case 'empty_selected' :
 				if( is_array($_POST['group']))
 				{
                     GroupManager :: unsubscribe_all_users($_POST['group']);
-                    Display :: display_normal_message(get_lang('SelectedGroupsEmptied'));
+                    Display :: display_confirmation_message(get_lang('SelectedGroupsEmptied'));
 				}
 				break;
 			case 'fill_selected' :
 				if( is_array($_POST['group']))
 				{
                     GroupManager :: fill_groups($_POST['group']);
-                    Display :: display_normal_message(get_lang('SelectedGroupsFilled'));
+                    Display :: display_confirmation_message(get_lang('SelectedGroupsFilled'));
 				}
 				break;
 		}
@@ -161,23 +161,23 @@ if (api_is_allowed_to_edit(false,true))
 		{
 			case 'swap_cat_order' :
 				GroupManager :: swap_category_order($_GET['id1'], $_GET['id2']);
-				Display :: display_normal_message(get_lang('CategoryOrderChanged'));
+				Display :: display_confirmation_message(get_lang('CategoryOrderChanged'));
 				break;
 			case 'delete_one' :
 				GroupManager :: delete_groups($_GET['id']);
-				Display :: display_normal_message(get_lang('GroupDel'));
+				Display :: display_confirmation_message(get_lang('GroupDel'));
 				break;
 			case 'empty_one' :
 				GroupManager :: unsubscribe_all_users($_GET['id']);
-				Display :: display_normal_message(get_lang('GroupEmptied'));
+				Display :: display_confirmation_message(get_lang('GroupEmptied'));
 				break;
 			case 'fill_one' :
 				GroupManager :: fill_groups($_GET['id']);
-				Display :: display_normal_message(get_lang('GroupFilledGroups'));
+				Display :: display_confirmation_message(get_lang('GroupFilledGroups'));
 				break;
 			case 'delete_category' :
 				GroupManager :: delete_category($_GET['id']);
-				Display :: display_normal_message(get_lang('CategoryDeleted'));
+				Display :: display_confirmation_message(get_lang('CategoryDeleted'));
 				break;
 		}
 	}
@@ -198,13 +198,15 @@ if (api_is_allowed_to_edit(false,true))
 		//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
 		echo Display::return_icon('settings.gif', get_lang('PropModify')) . '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.get_lang('PropModify').'</a>&nbsp;';
 	}
+	echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
+	echo Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';	
 	//echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang('NewGroupCreate').'</a>&nbsp;';
 }
 $group_cats = GroupManager :: get_categories();
 if (get_setting('allow_group_categories') == 'true' && count($group_cats) > 1)
 {
 	//echo '<p><a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a></p>';
-	echo '<a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a>';
+	echo Display::return_icon('group.gif').' <a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a>';
 }
 echo '</div>';
 /*
@@ -218,13 +220,13 @@ foreach ($group_cats as $index => $category)
 	{
 		if (isset ($_GET['show_all']) || (isset ($_GET['category']) && $_GET['category'] == $category['id']))
 		{
-			echo '<img src="../img/opendir.gif" alt=""/>';
+			echo '<img src="../img/shared_folder.gif" alt=""/>';
 			echo ' <a href="group.php?'.api_get_cidreq().'&origin='.$_GET['origin'].'">'.$category['title'].'</a>';
 			$in_category = true;
 		}
 		else
 		{
-			echo '<img src="../img/file.gif" alt=""/>';
+			echo '<img src="../img/folder_document.gif" alt=""/>';
 			echo ' <a href="group.php?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;category='.$category['id'].'">'.$category['title'].'</a>';
 		}
 		$group_list = GroupManager :: get_group_list($category['id']);

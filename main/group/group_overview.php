@@ -1,4 +1,4 @@
-<?php // $Id: group_overview.php 18162 2009-02-02 18:07:20Z herodoto $
+<?php // $Id: group_overview.php 19800 2009-04-16 08:08:55Z pcool $
  
 /*
 ==============================================================================
@@ -97,10 +97,11 @@ if( isset($_GET['action']))
 	Header
 -----------------------------------------------------------
 */
-$interbreadcrumb[]=array("url" => "group.php","name" => get_lang('GroupManagement'));
+$interbreadcrumb[]=array("url" => "group.php","name" => get_lang('Groups'));
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath')
 { //so we are not in learnpath tool
 	if (! $is_allowed_in_course) api_not_allowed(true);
+	if (!api_is_allowed_to_edit(false,true))  api_not_allowed(true);
 	else Display::display_header($nameTools,"Group");
 }
 else
@@ -110,6 +111,14 @@ else
 
 // action links
 echo '<div class="actions">';
+echo Display::return_icon('groupadd.gif', get_lang('NewGroupCreate')) . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>';	
+echo Display::return_icon('group.gif', get_lang('Groups')) .'<a href="group.php?'.api_get_cidreq().'">'.get_lang('Groups').'</a>';
+if (get_setting('allow_group_categories') == 'true') {
+	echo Display::return_icon('folder_new.gif', get_lang('AddCategory')) . '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;';
+} else {
+	//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
+	echo Display::return_icon('settings.gif', get_lang('PropModify')) . '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.get_lang('PropModify').'</a>&nbsp;';
+}
 echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
 echo Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';
 echo '</div>';

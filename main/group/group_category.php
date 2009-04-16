@@ -1,5 +1,5 @@
 <?php
-// $Id: group_category.php 19398 2009-03-27 22:18:21Z iflorespaz $
+// $Id: group_category.php 19800 2009-04-16 08:08:55Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -75,7 +75,7 @@ if (get_setting('allow_group_categories') == 'true')
 	if (isset ($_GET['id']))
 	{
 		$category = GroupManager :: get_category($_GET['id']);
-		$nameTools = get_lang('Edit').' '.$category['title'];
+		$nameTools = get_lang('EditGroupCategory').': '.$category['title'];
 	}
 	else
 	{
@@ -89,7 +89,7 @@ else
 	$category = GroupManager :: get_category($_GET['id']);
 	$nameTools = get_lang('PropModify');
 }
-$interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('GroupManagement'));
+$interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('Groups'));
 // Build the form
 if (isset ($_GET['id']))
 {
@@ -112,6 +112,8 @@ else
 	$action = 'add_category';
 	$form = new FormValidator('group_category');
 }
+$form->addElement('header', '', $nameTools);
+
 // If categories allowed, show title & description field
 if (get_setting('allow_group_categories') == 'true')
 {
@@ -139,7 +141,7 @@ $group[] = & $form->createElement('static', null, null, get_lang('QtyOfUserCanSu
 $form->addGroup($group, 'limit_group', get_lang('GroupLimit'), ' ', false);
 $form->addRule('limit_group',get_lang('MaxGroupsPerUserInvalid'),'callback','check_groups_per_user');
 // Default settings for new groups
-$form->addElement('header', null, get_lang('DefaultSettingsForNewGroups'));
+$form->addElement('static', null, '<b>'.get_lang('DefaultSettingsForNewGroups').'</b>');
 // Members per group
 $form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'),MEMBER_PER_GROUP_NO_LIMIT);
 $group = array ();
@@ -214,9 +216,6 @@ if ($form->validate())
 }
 // Else display the form
 Display :: display_header($nameTools, "Group");
-echo '<div class="actions-title">';
-echo $nameTools;
-echo '</div>';
 $defaults = $category;
 $defaults['action'] = $action;
 if( $defaults['max_student'] == MEMBER_PER_GROUP_NO_LIMIT)

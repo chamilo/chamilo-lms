@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 19709 2009-04-11 16:10:04Z iflorespaz $
+<?php // $Id: exercice.php 19809 2009-04-16 20:05:58Z cfasanando $
 
 /*
 ==============================================================================
@@ -82,6 +82,7 @@ $TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_H
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_TRACK_ATTEMPT_RECORDING = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW		= Database::get_course_table (TABLE_LP_ITEM_VIEW);
+$TBL_LP_ITEM		= Database::get_course_table (TABLE_LP_ITEM);
 $TBL_LP_VIEW			= Database::get_course_table (TABLE_LP_VIEW);
 
 // document path
@@ -270,22 +271,50 @@ $headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset="
 api_mail_html($emailid, $emailid, $subject, $mess, $from_name, $from);
 
 
-if (in_array($origin, array('tracking_course','user_course'))){
-		// update score  when you qualify the exercises in Learning path detail
-		if (isset($_REQUEST['lp_item_id']) && isset($_REQUEST['lp_item_view_id']) && isset($_REQUEST['student_id']) && isset($_REQUEST['total_score']) && isset($_REQUEST['total_time'])) {
-			$lp_item_id = $_REQUEST['lp_item_id'];
-			$lp_item_view_id = $_REQUEST['lp_item_view_id'];
-			$student_id = $_REQUEST['student_id'];
+	if (in_array($origin, array('tracking_course','user_course'))){
+		
+		if (isset($_POST['lp_item_id']) && isset($_POST['lp_item_view_id']) && isset($_POST['student_id']) && isset($_POST['total_score']) && isset($_POST['total_time']) &&  isset($_POST['totalWeighting']) ) {
+			$lp_item_id = $_POST['lp_item_id'];
+			$lp_item_view_id = $_POST['lp_item_view_id'];
+			$student_id = $_POST['student_id'];
+			$totalWeighting =  $_POST['totalWeighting'];
 			if ($lp_item_id == strval(intval($lp_item_id)) && $lp_item_view_id == strval(intval($lp_item_view_id)) && $student_id == strval(intval($student_id))) {
-    			$score = (float)$_REQUEST['total_score'];
-    			$total_time = (int)$_REQUEST['total_time']; 			
-    			$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score,total_time = $total_time WHERE lp_item_id = '".(int)$lp_item_view_id."'
+    			$score = Database::escape_string($_POST['total_score']);
+    			$total_time = Database::escape_string($_POST['total_time']);
+    			$lp_item_id = Database::escape_string($lp_item_id);
+				$lp_item_view_id = Database::escape_string($lp_item_view_id);
+				$student_id = Database::escape_string($student_id);
+				$totalWeighting = Database::escape_string($totalWeighting);
+    			// get max view_count from lp_item_view    			
+    			$sql = "SELECT MAX(view_count) FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$lp_item_view_id."'
     					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '".(int)$student_id."' and lp_id='".(int)$lp_item_id."')";
-    			api_sql_query($sql_update_score,__FILE__,__LINE__);	    			    			
+    			$res_max_view_count = api_sql_query($sql,__FILE__,__LINE__);
+    			$row_max_view_count = Database::fetch_row($res_max_view_count);
+    			$max_view_count = (int)$row_max_view_count[0];
+    			    			 
+    			// update score and total_time from last attempt when you qualify the exercise in Learning path detail 			
+    			$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '".(float)$score."',total_time = '".(int)$total_time."' WHERE lp_item_id = '".(int)$lp_item_view_id."'
+    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '".(int)$student_id."' and lp_id='".(int)$lp_item_id."') AND view_count = '$max_view_count'";
+    			api_sql_query($sql_update_score,__FILE__,__LINE__);	 
+    			
+    			// update score and total_time from last attempt when you qualify the exercise in Learning path detail 			
+    			$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '".(float)$score."',total_time = '".(int)$total_time."' WHERE lp_item_id = '".(int)$lp_item_view_id."'
+    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '".(int)$student_id."' and lp_id='".(int)$lp_item_id."') AND view_count = '$max_view_count'";
+    			api_sql_query($sql_update_score,__FILE__,__LINE__);	 
+    			
+    			// update max_score from a exercise in lp
+    			$sql_update_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '".(float)$totalWeighting."'  WHERE id = '".(int)$lp_item_view_id."'";
+    			api_sql_query($sql_update_max_score,__FILE__,__LINE__);	  
+    			   			    			
             }
-		}						
-		//Redirect to the reporting		
-		header('location: ../mySpace/myStudents.php?origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['course']);
+		}
+		if ($origin=='tracking_course') {
+			//Redirect to the course detail in lp		
+			header('location: ../mySpace/lp_tracking.php?course='.Security::remove_XSS($_GET['course']).'&origin='.$origin.'&lp_id='.Security::remove_XSS($_POST['lp_item_id']).'&student_id='.Security::remove_XSS($_POST['student_id']));
+		} else {
+			//Redirect to the reporting		
+			header('location: ../mySpace/myStudents.php?origin='.$origin.'&student='.Security::remove_XSS($_GET['student']).'&details=true&course='.Security::remove_XSS($_GET['course']));	
+		}								
 	}
 }
 if ($_GET['gradebook'] && $_GET['exerciseId']) {

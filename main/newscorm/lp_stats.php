@@ -182,7 +182,7 @@ foreach ($list as $my_item_id) {
 
 	if (!empty ($view)) {
 		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
-		"iv.score as myscore, iv.total_time as mytime, i.id as myid, i.lp_id as mylpid, " .
+		"iv.score as myscore, iv.total_time as mytime, i.id as myid, i.lp_id as mylpid, iv.lp_view_id as mylpviewid, " .
 		"i.title as mytitle, i.max_score as mymaxscore, " .
 		"iv.max_score as myviewmaxscore, " .
 		"i.item_type as item_type, iv.view_count as iv_view_count, " .
@@ -197,7 +197,7 @@ foreach ($list as $my_item_id) {
 		" ORDER BY iv.view_count $qry_order ";
 	} else {
 		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
-		"iv.score as myscore, iv.total_time as mytime, i.id as myid, i.lp_id as mylpid,  " .
+		"iv.score as myscore, iv.total_time as mytime, i.id as myid, i.lp_id as mylpid, iv.lp_view_id as mylpviewid, " .
 		"i.title as mytitle, i.max_score as mymaxscore, " .
 		"iv.max_score as myviewmaxscore, " .
 		"i.item_type as item_type, iv.view_count as iv_view_count, " .
@@ -235,45 +235,8 @@ foreach ($list as $my_item_id) {
 			$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
 		}
 		
-		if ($row['item_type'] != 'dokeos_chapter') {
-			$correct_test_link = array ();
-			if ($row['item_type'] == 'quiz') 
-			{			
-				if ($origin != 'tracking') {
-					 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
-				} else {
-					 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
-				}
-
-				$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
-
-				$num = Database :: num_rows($resultLastAttempt);
-				
-				if ($num > 0) {
-					if ($num > 1) {
-						while ($rowLA = Database :: fetch_row($resultLastAttempt)) {
-							
-							$id_last_attempt = $rowLA[0];
-							if ($origin != 'tracking') {
-								$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id=' . $id_last_attempt . '&cidReq=' . $course_code . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
-							} else {
-								$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_id.'&my_lp_id='.$my_lp_id.'&id=' . $id_last_attempt . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
-							}
-						}
-					} else {
-						$id_last_attempt = Database :: result($resultLastAttempt, 0, 0);
-						if ($origin != 'tracking') {
-							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id=' . $id_last_attempt . '&cidReq=' . $course_code . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
-						} else {
-							$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_id.'&my_lp_id='.$my_lp_id.'&id=' . $id_last_attempt . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif"></a>';
-						}
-					}
-				}
-
-			} else {
-				$correct_test_link = '-';
-			}
-			//new attempt
+		if ($row['item_type'] != 'dokeos_chapter') {			
+			$correct_test_link = '-';						
 			$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4" class="content"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $lp_charset) . "</div></td>\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td><td class="content"></td>' . "\n" . "</tr>\n";
 		}
 
@@ -381,7 +344,10 @@ foreach ($list as $my_item_id) {
 	}
 	elseif ($num > 0) {
 		$row = Database :: fetch_array($result);
-
+		$my_id = $row['myid'];
+		$my_lp_id = $row['mylpid'];
+		$my_lp_view_id = $row['mylpviewid'];
+		
 		//check if there are interactions below
 		$extend_attempt_link = '';
 		$extend_this_attempt = 0;
@@ -440,13 +406,7 @@ foreach ($list as $my_item_id) {
 		if ($num > 0) {
 			while ($rowLA = Database :: fetch_array($resultLastAttempt)) {
 				$id_last_attempt = $rowLA['exe_id'];
-				$last_start_date = convert_mysql_date($rowLA['start_date']);
-				$last_exe_date = convert_mysql_date($rowLA['exe_date']);
-				$score = $rowLA['exe_result'];
 			}
-			$subtotal_time = ((int)$last_exe_date-(int)$last_start_date);
-
-			$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
 		}
 
 		if ($score == 0)
@@ -470,7 +430,19 @@ foreach ($list as $my_item_id) {
 			{
 				if ($row['item_type'] == 'quiz') 
 				{
-					$myid= $row['myid'];												
+					// get score and total time from last attempt of a exercise en lp					
+					$sql = "SELECT score,total_time FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'
+							ORDER BY view_count DESC limit 1";
+					$res_score_time = api_sql_query($sql,__FILE__,__LINE__);
+					$row_score_time = Database::fetch_array($res_score_time);
+					if (Database::num_rows($res_score_time) > 0) { 
+						$score = (float)$row_score_time['score'];
+						$subtotal_time =  (int)$row_score_time['total_time'];																
+					} else {
+						$score = 0;
+						$subtotal_time =  0;
+					}	
+					$time = learnpathItem :: get_scorm_time('js', $subtotal_time);																				
 					// selecting the max score from an attempt
 					$sql = "SELECT SUM(t.ponderation) as maxscore from ( SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at " .
 						  "INNER JOIN  $tbl_quiz_questions as q  on(q.id = at.question_id) where exe_id ='$id_last_attempt' ) as t";
@@ -505,9 +477,7 @@ foreach ($list as $my_item_id) {
 			'not attempted' => 'ScormNotAttempted',
 
 		);
-		$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);
-		$my_id = $row['myid'];
-		$my_lp_id = $row['mylpid'];
+		$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);		
 		if ($row['item_type'] != 'dokeos_chapter') {
 			if ($row['item_type'] == 'quiz') {
 				$correct_test_link = '';

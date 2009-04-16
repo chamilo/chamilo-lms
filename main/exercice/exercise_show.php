@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 19768 2009-04-14 20:37:08Z juliomontoya $
+* 	@version $Id: exercise_show.php 19809 2009-04-16 20:05:58Z cfasanando $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -1014,6 +1014,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 						<input type = "hidden" name="student_id" value="<?php echo Security::remove_XSS($_GET['student']);?>">
 						<input type = "hidden" name="total_score" value="<?php echo $totalScore; ?>">
 						<input type = "hidden" name="total_time" value="<?php echo Security::remove_XSS($_GET['total_time']);?>">
+						<input type = "hidden" name="totalWeighting" value="<?php echo $totalWeighting; ?>">
 				<?php		
 						}
 					} else {

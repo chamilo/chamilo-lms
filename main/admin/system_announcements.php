@@ -1,4 +1,4 @@
-<?php // $Id: system_announcements.php 19597 2009-04-07 14:38:36Z pcool $
+<?php // $Id: system_announcements.php 19807 2009-04-16 17:20:43Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -199,7 +199,7 @@ if ($action_todo)
 	$form->addElement('hidden', 'action');
 	$form->addElement('hidden', 'id');
 	$form->addElement('checkbox', 'send_mail', get_lang('SendMail'));
-	$form->addElement('submit', 'submit', get_lang('Ok'));
+	$form->addElement('style_submit_button', 'submit', get_lang('Ok'),'class="save"');
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true')
 	{
 		$values['content'] = WCAG_Rendering::HTML_to_text($values['content']);
@@ -279,12 +279,12 @@ if ($show_announcement_list)
 	{
 		$row = array ();
 		$row[] = $announcement->id;
-		$row[] = Display::return_icon(($announcement->visible ? 'visible.gif' : 'invisible.gif'));
+		$row[] = Display::return_icon(($announcement->visible ? 'accept.png' : 'exclamation.png'), ($announcement->visible ? get_lang('AnnouncementAvailable') : get_lang('AnnouncementNotAvailable')));
 		$row[] = $announcement->date_start;
 		$row[] = $announcement->date_end;
-		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_TEACHER."&amp;action=". ($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_teacher  ? 'visible.gif' : 'invisible.gif'))."</a>";
-		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_STUDENT."&amp;action=". ($announcement->visible_student  ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_student  ? 'visible.gif' : 'invisible.gif'))."</a>";
-		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_GUEST."&amp;action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest  ? 'visible.gif' : 'invisible.gif'))."</a>";
+		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_TEACHER."&amp;action=". ($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_teacher  ? 'visible.gif' : 'invisible.gif'), get_lang('show_hide'))."</a>";
+		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_STUDENT."&amp;action=". ($announcement->visible_student  ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_student  ? 'visible.gif' : 'invisible.gif'), get_lang('show_hide'))."</a>";
+		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_GUEST."&amp;action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest  ? 'visible.gif' : 'invisible.gif'), get_lang('show_hide'))."</a>";
 		$row[] = $announcement->title;
 		$row[] = $announcement->lang;
 		$row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.gif', get_lang('Edit'))."</a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
@@ -292,7 +292,7 @@ if ($show_announcement_list)
 	}
 	$table = new SortableTableFromArray($announcement_data);
 	$table->set_header(0,'',false);
-	$table->set_header(1,'', false);
+	$table->set_header(1,get_lang('Active'));
 	$table->set_header(2,get_lang('StartTimeWindow'));
 	$table->set_header(3,get_lang('EndTimeWindow'));
 	$table->set_header(4,get_lang('Teacher'));

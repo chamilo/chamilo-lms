@@ -1,4 +1,4 @@
-<?php //$Id: work.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+<?php //$Id: work.php 19801 2009-04-16 12:23:17Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+*  	@version $Id: work.php 19801 2009-04-16 12:23:17Z pcool $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -294,6 +294,13 @@ if (!empty($_SESSION['toolgroup'])){
 				"name" => get_lang('EditToolOptions'));
 		}
 	
+		if ($_GET['createdir'] == 1)
+		{
+			$interbreadcrumb[] = array (
+				"url" => "work.php",
+				"name" => get_lang('CreateFolder'));			
+		}
+	
 	Display :: display_header(null);
 	
 	
@@ -345,6 +352,13 @@ if (!empty($_SESSION['toolgroup'])){
 				"url" => "work.php",
 				"name" => get_lang('EditToolOptions'));
 		}
+		if ($_GET['createdir'] == 1)
+		{
+			$interbreadcrumb[] = array (
+				"url" => "work.php",
+				"name" => get_lang('CreateDir'));			
+		}		
+		
 		//--------------------------------------------------
 		Display :: display_header(null);
 	} else {
@@ -380,7 +394,8 @@ if (!empty ($_POST['changeProperties'])) {
 	$uploadvisibledisabled = $row["show_score"];
 }
 
-// Tool introduction
+// introduction section
+
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Introduction';
@@ -445,12 +460,16 @@ if (api_is_allowed_to_edit(false,true)) {
 						        SET accepted = 0";
 
 			api_sql_query($sql, __FILE__, __LINE__);
+			
+			Display::display_confirmation_message(get_lang('AllFilesInvisible'));
 		} else {
 			$sql = "UPDATE  " . $work_table . "
 						        SET accepted = 0
 								WHERE id = '" . $make_invisible . "'";
 
 			api_sql_query($sql, __FILE__, __LINE__);
+			
+			Display::display_confirmation_message(get_lang('FileInvisible'));
 		}				
 	}
 
@@ -466,12 +485,15 @@ if (api_is_allowed_to_edit(false,true)) {
 			$sql = "UPDATE  " . $work_table . "
 						        SET accepted = 1";
 			api_sql_query($sql, __FILE__, __LINE__);
+			Display::display_confirmation_message(get_lang('AllFilesVisible'));
 
 		} else {
 			$sql = "UPDATE  " . $work_table . "
 						        SET accepted = 1
 								WHERE id = '" . $make_visible . "'";
 			api_sql_query($sql, __FILE__, __LINE__);
+			
+			Display::display_confirmation_message(get_lang('FileVisible'));
 		}
 				
 		// update all the parents in the table item propery		
@@ -542,7 +564,7 @@ if (api_is_allowed_to_edit(false,true)) {
 					$id = Database::insert_id();
 					//Folder created
 					api_item_property_update($_course, 'work', $id, 'DirectoryCreated', $user_id);		
-					Display :: display_normal_message('<span title="' . $created_dir . '">' . get_lang('DirectoryCreated') . '</span>', false);	
+					Display :: display_confirmation_message(get_lang('DirectoryCreated'), false);	
 					//Database :: escape_string($_REQUEST['make_visible']);
 					//if($_POST['type1']==1)
 					//$insert_limite		 	
@@ -620,7 +642,7 @@ if (api_is_allowed_to_edit(false,true)) {
 		$delete_directory=$_REQUEST['delete_dir'];
 		$id=$_REQUEST['delete2'];
 		del_dir($base_work_dir . '/', $delete_directory,$id);		
-		Display :: display_normal_message($delete_directory . ' ' . get_lang('DirDeleted'));
+		Display :: display_confirmation_message(get_lang('DirDeleted') . ': '.$delete_directory);
 	}
 	if (!empty ($_REQUEST['delete2'])) {		
 		$delete_2=$_REQUEST['delete2'];
@@ -650,7 +672,7 @@ if (api_is_allowed_to_edit(false,true)) {
 		while($folder = Database::fetch_array($res)) {			
 		$folders[] = substr($folder['url'],1,(strlen($folder['url'])-1));
 		}	
-		Display :: display_normal_message(build_work_move_to_selector($folders, $cur_dir_path, $_REQUEST['move']), false);
+		echo build_work_move_to_selector($folders, $cur_dir_path, $_REQUEST['move']);
 	}
 	/* ------------------
 	 * Move file command
@@ -681,7 +703,7 @@ if (api_is_allowed_to_edit(false,true)) {
 					api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);								
 				}		
 				
-				Display :: display_normal_message(get_lang('DirMv'));
+				Display :: display_confirmation_message(get_lang('DirMv'));
 			} else {
 				Display :: display_error_message(get_lang('Impossible'));
 			}
@@ -1011,7 +1033,7 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 	}
 	event_upload($Id);
 	$submit_success_message = $message . "<br />\n";
-	Display :: display_normal_message($submit_success_message, false);
+	Display :: display_confirmation_message($submit_success_message, false);
 }
 
 /*=======================================
@@ -1089,6 +1111,17 @@ if ($is_course_member) {
 
 		$form = new FormValidator('form', 'POST', api_get_self() . "?curdirpath=" . rtrim(Security :: remove_XSS($cur_dir_path),'/') . "&gradebook=".$_GET['gradebook']."&origin=$origin", '', 'enctype="multipart/form-data"');
 
+		// form title
+		if ($edit)
+		{
+			$form_title = get_lang('EditMedia');
+		}
+		else 
+		{
+			$form_title = get_lang('UploadADocument');
+		}
+		$form->addElement('header', '', $form_title);
+
 		if (!empty ($error_message)) {
 			Display :: display_error_message($error_message);
 		}
@@ -1162,7 +1195,7 @@ if ($is_course_member) {
 
 		$form->add_real_progress_bar('uploadWork', 'DownloadFile');
 		$form->setDefaults($defaults);
-		echo '<br /><br />';
+		$form->addRule('file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 		$form->display();			
 	
 			
@@ -1220,27 +1253,36 @@ function draw_date_picker($prefix,$default='') {
 	//show them the form for the directory name
 	if (isset ($_REQUEST['createdir']) && $is_allowed_to_edit) {
 		//create the form that asks for the directory name
-		$new_folder_text = '<br /><br /><form name="form1"  method="POST">';
+		$new_folder_text = '<form name="form1"  method="POST">';
+		$new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateDir').'</div></div>';
 		$new_folder_text .= '<input type="hidden" name="curdirpath" value="' . Security :: remove_XSS($cur_dir_path) . '"/>';
 		$new_folder_text .= '<input type="hidden" name="sec_token" value="'.$stok.'" />';
 		$new_folder_text .= '<div id="msg_error1" style="display:none;color:red"></div>';
-		$new_folder_text .= get_lang('NewDir') . ' ';		
-		$new_folder_text .= '<input type="text" name="new_dir" onfocus="document.getElementById(\'msg_error1\').style.display=\'none\';"/>';
+		$new_folder_text .= '<div class="row">
+								<div class="label">
+									<span class="form_required">*</span>'.get_lang('NewDir').'
+								</div>
+								<div class="formw">
+									<input type="text" name="new_dir" onfocus="document.getElementById(\'msg_error1\').style.display=\'none\';"/>
+								</div>
+							</div>';
 		//$new_folder_text .= '<button type="button" name="create_dir" class="add" onClick="validate();" value="' . get_lang('Ok') . '"/>'.get_lang('CreateDirectory').'</button>';
 		//new additional fields inside the "if condition" just to agroup
 		if(true):
 
-		$addtext = '<div style="padding:10px">'.get_lang('Description').'<br /><textarea name="description" rows="4" cols="70"></textarea></div>';
-				
-		$addtext .= '<div style="align:left"> <div class="label">&nbsp;</div> <div class="formw"> <a href="javascript://" onclick=" return plus();"><span id="plus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>';
-		$addtext .='</div> </div>';
-			
-		// Random questions
-		$addtext .='<br /><div id="options" style="display: none;">';		
+		$new_folder_text .= '<div class="row">
+								<div class="label">
+									'.get_lang('Description').'
+								</div>
+								<div class="formw">
+									<textarea name="description" rows="4" cols="70"></textarea>
+								</div>
+							</div>';
 
-
+		// Advanced parameters
+		$addtext .='<div id="options" style="display: none;">';		
 		$addtext .= '<div style="padding:10px">';		
-		$addtext .= '<fieldset style="padding:5px"><legend>'.get_lang('QualificationOfAssignment').'</legend>';				
+		$addtext .= '<b>'.get_lang('QualificationOfAssignment').'</b>';				
 		$addtext .= '<table cellspacing="0" cellpading="0" border="0"><tr>';
 		$addtext .= '<td colspan="2">&nbsp;&nbsp;'.get_lang('QualificationNumberOver').'&nbsp;';		
 		$addtext .= '<input type="text" name="qualification_value" value="" size="5"/></td><tr><td colspan="2">';		
@@ -1250,27 +1292,43 @@ function draw_date_picker($prefix,$default='') {
 		$addtext .=	'&nbsp;&nbsp;'.get_lang('WeightInTheGradebook').'&nbsp;';				
 		$addtext .= '<input type="text" name="weight" value="" size="5" onfocus="document.getElementById(\'msg_error_weight\').style.display=\'none\';"/></div></td></tr>';
 		$addtext .= '</tr></table>';				
-		$addtext .= '</fieldset><br />';		
-		$addtext .= '<fieldset style="padding:5px"><legend>'.get_lang('DatesAvailables').'</legend>';
-		$addtext .= '* <input type="checkbox" value="1" name="type1" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>'.get_lang('EnableExpiryDate').'';		
+		$addtext .= '<br />';		
+		$addtext .= '<b>'.get_lang('DatesAvailables').'</b><br>';
+		$addtext .= '<input type="checkbox" value="1" name="type1" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>'.get_lang('EnableExpiryDate').'';		
 		$addtext .= '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';		
 		$addtext .= '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';	
 		$addtext .= '<div id="option2" style="padding:4px;display:none">&nbsp;&nbsp;';			
 		$addtext .= draw_date_picker('expires').'</div>';				
-		$addtext .= '<br />* <input type="checkbox" value="1" name="type2" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>'.get_lang('EnableEndDate').'';		
+		$addtext .= '<br /><input type="checkbox" value="1" name="type2" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>'.get_lang('EnableEndDate').'';		
 		$addtext .= '<div id="option3" style="padding:4px;display:none">';
 		$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error4" style="display:none;color:red"></div>';
 		$addtext .= draw_date_picker('ends').'<br />';
 		$addtext .= '&nbsp;&nbsp;'.make_checkbox('add_to_calendar').get_lang('AddToCalendar').'</div>';
-		$addtext .= '</fieldset>';				
 		$addtext .= '</div>';
 		$addtext .= '</div>';		
-		$new_folder_text .= $addtext;
+		
+		$new_folder_text .= '<div class="row">
+								<div class="label">
+									<a href="javascript://" onclick=" return plus();"><span id="plus">'.Display::return_icon('div_show.gif').' '.get_lang('AdvancedParameters').'</span></a>
+								</div>
+								<div class="formw">
+									'.$addtext.'
+								</div>
+							</div>';		
+
+	
 		endif;
 		
-		$new_folder_text .= '<button type="button" class="add" name="create_dir" onClick="validate();" value="' . get_lang('CreateDirectory') . '"/>' . get_lang('CreateDirectory') . '</button>';
+		$new_folder_text .= '<div class="row">
+								<div class="label">
+								</div>
+								<div class="formw">
+									<button type="button" class="add" name="create_dir" onClick="validate();" value="' . get_lang('CreateDirectory') . '"/>' . get_lang('CreateDirectory') . '</button>
+								</div>
+							</div>';		
 		
-		$new_folder_text .= '<br /><br /></form>';
+		
+		$new_folder_text .= '</form>';
 		//show the form
 		echo $new_folder_text;
 	}

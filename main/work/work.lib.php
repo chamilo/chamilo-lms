@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 19471 2009-03-31 23:28:53Z cvargas1 $
+<?php //$Id: work.lib.php 19801 2009-04-16 12:23:17Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 19471 2009-03-31 23:28:53Z cvargas1 $
+* 	@version $Id: work.lib.php 19801 2009-04-16 12:23:17Z pcool $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -22,23 +22,57 @@ require_once '../inc/lib/fileDisplay.lib.php';
 function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)  
 {
 	echo '<div class="actions">';
+	
+	if ($_GET['display_tool_options'] == 'true' OR $_GET['display_upload_form'] == 'true' )
+	{
+		echo '<a href="work.php">'.Display::return_icon('back.png').' '.get_lang('BackToWorksList').'</a>';
+	}
+	
 	$display_output = "";
 	isset($_GET['origin'])?$origin = Security::remove_XSS($_GET['origin']):$origin='';
 	if (strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
 		$parent_dir = dirname($cur_dir_path);
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif', get_lang('Up')).' '.get_lang('Up').'</a>&nbsp&nbsp';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif', get_lang('Up')).' '.get_lang('Up').'</a>';
 	}
 
 	if (! $always_show_tool_options && api_is_allowed_to_edit()) {
 		// Create dir		
-		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.$_GET['toolgroup'].'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateDir').'" title ="'.get_lang('CreateDir').'" /> '.get_lang('CreateDir').' </a>&nbsp&nbsp';
+		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.$_GET['toolgroup'].'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateDir').'" title ="'.get_lang('CreateDir').'" /> '.get_lang('CreateDir').' </a>';
 		// Options
-		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>&nbsp&nbsp";							
+		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>";							
 	}
 	
 	if (! $always_show_upload_form ) {
 		
-			$display_output .= "&nbsp&nbsp<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".$origin."\">".Display::return_icon('submit_file.gif', get_lang("UploadADocument"))." ". get_lang("UploadADocument") .'</a>&nbsp&nbsp&nbsp&nbsp';	
+			$display_output .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".$origin."\">".Display::return_icon('submit_file.gif', get_lang("UploadADocument"))." ". get_lang("UploadADocument") .'</a>';	
+							
+	}
+	
+	if (api_is_allowed_to_edit())
+	{
+		// delete all files
+		$display_output .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;delete=all\" ".
+			"onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
+			Display::return_icon('delete.gif', get_lang('Delete')).' '.get_lang('DeleteAllFiles')."</a>";
+
+		// make all files visible or invisible
+		$work_table 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);		
+		$sql_query = "SHOW COLUMNS FROM ".$work_table." LIKE 'accepted'";
+		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
+	
+		if ($sql_result) {
+			$columnStatus = mysql_fetch_array($sql_result);
+	
+			if ($columnStatus['Default'] == 1) {
+				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=$origin&make_invisible=all\">".
+						Display::return_icon('invisible.gif', get_lang('Invisible')).' '.get_lang('MakeInvisible').
+						"</a>\n";
+			} else {
+				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;make_visible=all\">".
+						Display::return_icon('visible.gif', get_lang('Visible')).' '.get_lang('MakeVisible').
+						"</a>\n";
+			}
+		}			
 							
 	}
 
@@ -70,37 +104,17 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 		return;
 	}
 	echo '<form method="post" action="'.api_get_self().'?origin='.$origin.'&display_tool_options=true">';
-
-	echo	"<br/><table class=\"data_table\">\n",
-			"<tr><th>&nbsp;</th><th>".get_lang("Modify")."</th></tr><tr class=\"row_even\">\n",
-			"<td align=\"right\">",
-			get_lang('AllFiles')." : </td>",
-			"<td ><a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;delete=all&amp;display_tool_options=true\" ",
-			"onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">",
-			"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Delete')."\" title=\"".get_lang('Delete')."\" />",
-			"</a>",
-			"&nbsp;";
-
-	$sql_query = "SHOW COLUMNS FROM ".$work_table." LIKE 'accepted'";
-	$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
-
-	if ($sql_result) {
-		$columnStatus = mysql_fetch_array($sql_result);
-
-		if ($columnStatus['Default'] == 1) {
-			echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=$origin&make_invisible=all&display_tool_options=true\">",
-					"<img src=\"../img/visible.gif\" border=\"0\" alt=\"".get_lang('Invisible')."\" title=\"".get_lang('Invisible')."\" />",
-					"</a>\n";
-		} else {
-			echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;make_visible=all&amp;display_tool_options=true\">",
-					"<img src=\"../img/invisible.gif\" border=\"0\" alt=\"".get_lang('Visible')."\" title=\"".get_lang('Visible')."\" />",
-					"</a>\n";
-		}
-	}
-	echo "</td></tr>";
+	echo '<div class="row"><div class="form_header">'.get_lang('EditToolOptions').'</div></div>';
 	display_default_visibility_form($uploadvisibledisabled);
-	echo '</table>';	
-	echo '<div>'.get_lang("ValidateChanges").' : <button type="submit" class="save" name="changeProperties" value="'.get_lang('Ok').'">'.get_lang('Ok').'</button></div></form>';
+	echo '<div class="row">
+				<div class="label">
+					<span class="form_required">*</span> Term name
+				</div>
+				<div class="formw">
+					<button type="submit" class="save" name="changeProperties" value="'.get_lang('Ok').'">'.get_lang('Ok').'</button>
+				</div>
+			</div>';
+	echo '</form>';
 
 }
 
@@ -113,15 +127,19 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 */
 function display_default_visibility_form($uploadvisibledisabled) {
 	?>
-	<tr class="row_odd"><td align="right">
-		<strong><?php echo get_lang("_default_upload"); ?></strong></td>
-		<td><input class="checkbox" type="radio" name="uploadvisibledisabled" value="0"
+	<div class="row">
+		<div class="label">
+			<?php echo get_lang("_default_upload"); ?>
+		</div>
+		<div class="formw">
+			<input class="checkbox" type="radio" name="uploadvisibledisabled" value="0"
 			<?php if($uploadvisibledisabled==0) echo "checked";  ?> />
 		<?php echo get_lang("_new_visible");?><br />
 		<input class="checkbox" type="radio" name="uploadvisibledisabled" value="1"
 			<?php if($uploadvisibledisabled==1) echo "checked";  ?> />
-		<?php echo get_lang("_new_unvisible"); ?><br />
-	</td></tr>
+				<?php echo get_lang("_new_unvisible"); ?>		
+		</div>
+	</div>
 	<?php
 }
 
@@ -502,6 +520,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						api_sql_query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
 						//api_sql_query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'',__FILE__,__LINE__);		
 					
+					Display::display_confirmation_message(get_lang('FolderEdited'));
 					
 					$values = $form_folder -> exportValues();
 					$values = $values['my_group'];			
@@ -805,8 +824,14 @@ function build_work_move_to_selector($folders,$curdirpath,$move_file,$group_dir=
 	$title = Database::fetch_row($result);
 	
 	$form = '<form name="move_to" action="'.api_get_self().'" method="POST">'."\n";
+	$form .= '<div class="row"><div class="form_header">'.get_lang('MoveFile').'</div></div>';
 	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />'."\n";	
-	$form .= sprintf(get_lang('MoveXTo'),$title[0]).' <select name="move_to">'."\n";
+	$form .= '<div class="row">
+				<div class="label">
+					<span class="form_required">*</span>'.sprintf(get_lang('MoveXTo'),$title[0]).'
+				</div>
+				<div class="formw">';
+	$form .= ' <select name="move_to">'."\n";
 	
 	//group documents cannot be uploaded in the root
 	if($group_dir=='') {
@@ -839,8 +864,17 @@ function build_work_move_to_selector($folders,$curdirpath,$move_file,$group_dir=
 	}
 
 	$form .= '</select>'."\n";
-	$form .= '<input type="submit" name="move_file_submit" value="'.get_lang('Ok').'" />'."\n";
+	$form .= '	</div>
+			</div>';
+	$form .= '<div class="row">
+					<div class="label">
+											</div>
+					<div class="formw">
+						<button type="submit" class="save" name="move_file_submit">'.get_lang('MoveFile').'</button>
+					</div>
+				</div>';
 	$form .= '</form>';
+	$form .= '<div style="clear: both; margin-bottom: 10px;"></div>';
 
 	return $form;
 }
@@ -1149,10 +1183,10 @@ function to_javascript_work() {
 			function plus() {
 				if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+					document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 				} else {
 				document.getElementById(\'options\').style.display = \'none\';
-				document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+				document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 				}	
 			}
 			

@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 19808 2009-04-16 20:01:40Z iflorespaz $ 
+<?php // $Id: scorm_api.php 19836 2009-04-17 16:58:10Z iflorespaz $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -139,7 +139,7 @@ var G_LastError = G_NoError ;
 var G_LastErrorMessage = 'No error';
 //this is not necessary and is only provided to make bad Articulate contents shut up (and not trigger useless JS messages)
 var G_LastErrorString = 'No error';
-
+status_info=new Array();
 var commit = false ;
 
 //Strictly scorm variables
@@ -195,6 +195,7 @@ var old_session_time = '';
 var old_suspend_data = '';
 var lms_old_item_id = 0;
 
+var execute_stats='false';
 /**
  * Function called mandatorily by the SCORM content to start the SCORM communication
  */
@@ -711,6 +712,7 @@ function savedata(origin)
 	if(item_objectives.length>0) {
 		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,old_item_id,item_objectives);
 	}
+	execute_stats='false';
 }
 
 function LMSCommit(val) {
@@ -718,12 +720,17 @@ function LMSCommit(val) {
 		G_LastError = G_NoError ;
 		G_LastErrorMessage = 'No error';
 
+		if (status_info.length==2) {
+			//alert(status_info);
+			status_info=new Array();
+		}
 		my_lms_time=LMSGetValue('cmi.core.session_time');
 		my_lms_status=LMSGetValue('cmi.core.lesson_status');
 		
 		if (my_lms_time.length!=0 && my_lms_status.length!=0) {
 			savedata('commit');
 		}
+		
 	    commit = 'false' ; //now changes have been commited, no need to update until next SetValue()
 		return('true');
 }
@@ -900,11 +907,20 @@ function load_item(item_id,url){
  * leaving it
  */
 function dokeos_save_asset(){
-	logit_lms('dokeos_save_asset',2);
-    xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
-    if(item_objectives.length>0)
-	{
-		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
+	// only for dokeos lps
+	if (execute_stats=='true') {
+		execute_stats='false';
+	} else {
+		execute_stats='true';
+	}
+	 
+	if(lms_lp_type==1 || lms_item_type=='asset'){
+		logit_lms('dokeos_save_asset',2);
+	    xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
+	    if(item_objectives.length>0)
+		{
+			xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
+		}
 	}
 }
 /**
@@ -1030,6 +1046,23 @@ function update_toc(update_action,update_id)
     <?php //} ?>
 	//return true;
 }
+
+function update_stats() {	
+	//alert(execute_stats);
+	if (execute_stats=='true') {
+		//alert(execute_stats);
+		try {
+		cont_f = document.getElementById('content_id');
+		cont_f.src="lp_controller.php?action=stats";
+		cont_f.reload();
+		} catch (e) {
+			return false;
+		}			
+	}
+	execute_stats='false';
+	//alert(execute_stats);
+
+}
 /**
  * Updates the progress bar with the new status. Prevents the need of a page refresh and flickering
  * @param	integer	Number of completed items
@@ -1124,7 +1157,7 @@ function switch_item(current_item, next_item){
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
 	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);		
 	
-	
+	status_info.push(lesson_status);
 	$my_new_old_item=$("#old_item").val();
 	$my_new_current_item=$("#current_item_id").val();
 	

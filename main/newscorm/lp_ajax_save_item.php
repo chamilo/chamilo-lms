@@ -164,9 +164,11 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
             $i_id_last_connection=$row['login_id'];
             $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
             api_sql_query($s_sql_update_logout_date);
-        }
-        
+        }        
     }
+    
+    $return .="update_stats();";
+    
     return $return;
     //return $objResponse;
 }
@@ -182,6 +184,7 @@ if(isset($_GET['interact'])) {
         }
     }
 }
+
 echo save_item(
             $_GET['lid'],
             $_GET['uid'],

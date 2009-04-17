@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 19810 2009-04-16 21:04:21Z aportugal $
+<?php // $Id: settings.php 19832 2009-04-17 14:05:16Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -543,20 +543,27 @@ function handle_stylesheets()
 	$currentstyle = api_get_setting('stylesheets');
 	$is_style_changeable=false;
 	
+	
 	if ($_configuration['access_url']!=1)
 	{
 		$style_info = api_get_settings('stylesheets','',1,0);
 		$url_info = api_get_access_url($_configuration['access_url']);	 
 		if ($style_info[0]['access_url_changeable']==1 && $url_info['active']==1)
 		{
-			$is_style_changeable=true;			
-			echo '<a href="" id="stylesheetuploadlink" onclick="document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\';return false; ">'.get_lang('UploadNewStylesheet').'</a>';
+			$is_style_changeable=true;	
+			echo '<div class="actions" id="stylesheetuploadlink">';	
+			Display::display_icon('theme_add.gif');	
+			echo '<a href="" onclick="document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\';return false; ">'.get_lang('UploadNewStylesheet').'</a>';
+			echo '</div>';
 		} 
 	}
 	else
 	{
 		$is_style_changeable=true;
-		echo '<a href="" id="stylesheetuploadlink" onclick="document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\';return false; ">'.get_lang('UploadNewStylesheet').'</a>';
+		echo '<div class="actions" id="stylesheetuploadlink">';	
+		Display::display_icon('theme_add.gif');
+		echo '<a href="" onclick="document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\';return false; ">'.get_lang('UploadNewStylesheet').'</a>';
+		echo '</div>';
 	}	
 		
 	$form = new FormValidator('stylesheet_upload','post','settings.php?category=stylesheets&showuploadform=true');
@@ -860,7 +867,7 @@ function handle_templates()
 {
 	if ($_GET['action'] != 'add') {
 		echo "\n<div class=\"actions\" style=\"margin-left:1px\" >";
-		echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('add_template.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
+		echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('template_add.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
 		echo "\n</div>";
 	}
 

@@ -207,7 +207,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 		$path_item = isset($_GET['path_item'])?$_GET['path_item']:0;		
 		$path_item = Database::escape_string($path_item);
 		$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-		$sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE id = " . $path_item;
+		$sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE id = '". $path_item."' ";
 		$res_doc=api_sql_query($sql_doc, __FILE__, __LINE__);
 		$path_file=Database::result($res_doc,0,0);					
 		$path_parts = pathinfo($path_file);

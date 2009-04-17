@@ -21,10 +21,8 @@ include_once (api_get_path(LIBRARY_PATH).'database.lib.php');
 */
 
 /**
-* Not tested yet.
-* We need this new function so not every script that creates courses needs
-* to be changed when the behaviour necessary to create a course changes.
-* This will reduce bugs.
+* Top-level function to create a course. Calls other functions to take care of
+* the various parts of the course creation.
 * @param	string	Course code requested (might be altered to match possible values)
 * @param	string	Course title
 * @param	string	Tutor name

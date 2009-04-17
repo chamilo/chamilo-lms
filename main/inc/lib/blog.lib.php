@@ -2648,27 +2648,43 @@ class Blog
 	function display_new_blog_form()
 	{
 		echo '<form name="add_blog" method="post" action="blog_admin.php">
-					<table width="100%" border="0" cellspacing="2" cellpadding="0" class="newBlog">
-					  <tr>
-					  	<td></td>
-					  	<td><b>' . get_lang('AddBlog') . '</b><br /><br /></td>
-					  </tr>
-						<tr>
-					   <td align="right"><span class="form_required">*</span>' . get_lang('Title') . ':&nbsp;&nbsp;</td>
-					   <td><input name="blog_name" type="text" size="100" /></td>
-						</tr>
-						<tr>
-					   <td align="right"><span class="form_required">*</span>' . get_lang('Subtitle') . ':&nbsp;&nbsp;</td>
-					   <td><input name="blog_subtitle" type="text" size="100" /></td>
-						</tr>
-						<tr>
-							<td align="right">&nbsp;</td>
+				<div class="row">
+					<div class="form_header">
+						' . get_lang('AddBlog') . '
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="label">
+						<span class="form_required">*</span>' . get_lang('Title') . '
+					</div>
+					<div class="formw">
+						<input name="blog_name" type="text" size="100" />
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="label">
+						' . get_lang('Subtitle') . '
+					</div>
+					<div class="formw">
+						<input name="blog_subtitle" type="text" size="100" />
+					</div>
+				</div>	
+				
+				<div class="row">
+					<div class="label">
+					</div>
+					<div class="formw">
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="new_blog_submit" value="true" />
-							<td><br /><button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button></td>
-						</tr>
-					</table>
-				</form>';
+						<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
+					</div>
+				</div>								
+			</form>
+			<div style="clear: both; margin-bottom:10px;"></div>
+			';
+			
 	}
 
 	/**
@@ -2685,28 +2701,43 @@ class Blog
 		$blog = Database::fetch_array($result);
 
 		echo '<form name="edit_blog" method="post" action="blog_admin.php">
-					<table width="100%" border="0" cellspacing="2" cellpadding="0" class="newBlog">
-					  <tr>
-					  	<td></td>
-					  	<td><b>' . get_lang('EditBlog') . '</b><br /><br /></td>
-					  </tr>
-						<tr>
-					   <td align="right"><span class="form_required">*</span>' . get_lang('Title') . ':&nbsp;&nbsp;</td>
-					   <td><input name="blog_name" type="text" size="100" value="' . $blog['blog_name'] . '" /></td>
-						</tr>
-						<tr>
-					   <td align="right"><span class="form_required">*</span>' . get_lang('Subtitle') . ':&nbsp;&nbsp;</td>
-					   <td><input name="blog_subtitle" type="text" size="100" value="' . $blog['blog_subtitle'] . '" /></td>
-						</tr>
-						<tr>
-							<td align="right">&nbsp;</td>
+				<div class="row">
+					<div class="form_header">
+						' . get_lang('EditBlog') . '
+					</div>
+				</div>	
+				
+				<div class="row">
+					<div class="label">
+						<span class="form_required">*</span>' . get_lang('Title') . '
+					</div>
+					<div class="formw">
+						<input name="blog_name" type="text" size="100" value="' . $blog['blog_name'] . '" />
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="label">
+						' . get_lang('Subtitle') . '
+					</div>
+					<div class="formw">
+						<input name="blog_subtitle" type="text" size="100" value="' . $blog['blog_subtitle'] . '" />
+					</div>
+				</div>	
+				
+				<div class="row">
+					<div class="label">
+					</div>
+					<div class="formw">
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="edit_blog_submit" value="true" />
 							<input type="hidden" name="blog_id" value="' . $blog['blog_id'] . '" />
-							<td><br /><button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button></td>
-						</tr>
-					</table>
-				</form>';
+						<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
+					</div>
+				</div>	
+			</form>
+			<div style="clear: both; margin-bottom:10px;"></div>
+			';
 	}
 
 	/**

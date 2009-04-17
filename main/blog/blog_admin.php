@@ -99,7 +99,7 @@ if (api_is_allowed_to_edit())
 		DISPLAY
 	==============================================================================
 	*/
-	api_display_tool_title($nameTools);
+	//api_display_tool_title($nameTools);
 	//api_introductionsection(TOOL_BLOG);
 	
 	

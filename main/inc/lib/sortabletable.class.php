@@ -265,7 +265,7 @@ class SortableTable extends HTML_Table
 					$html .= '<option value="'.$action.'">'.$label.'</option>';
 				}
 				$html .= '</select>';
-				$html .= '&nbsp;&nbsp;<button type="submit" class="save" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang('Ok').'</button>';
+				$html .= '&nbsp;&nbsp;<button type="submit" class="save" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang('Select').'</button>';
 			}
 			else
 			{

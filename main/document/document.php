@@ -1,4 +1,4 @@
-<?php // $Id: document.php 19700 2009-04-10 11:07:37Z pcool $
+<?php // $Id: document.php 19839 2009-04-17 19:55:53Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -603,7 +603,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$template_text .= '<tr><td>'.get_lang('TemplateImage').' : </td>';
 		$template_text .= '<td><input type="file" name="template_image" id="template_image" /></td></tr>';
 		$template_text .= '</table>';
-		$template_text .= '<button type="submit" name="create_template">'.get_lang('Ok').'</button>';
+		$template_text .= '<button type="submit" class="add" name="create_template">'.get_lang('CreateTemplate').'</button>';
 		$template_text .= '</form>';
 		//show the form
 		Display::display_normal_message($template_text,false);		

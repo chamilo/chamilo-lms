@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 19675 2009-04-09 08:46:51Z pcool $
+* 	@version $Id: exercise.class.php 19839 2009-04-17 19:55:53Z cvargas1 $
 */
 
 
@@ -874,7 +874,7 @@ class Exercise
 		$form -> addElement('html','<div class="row">
 			<div class="label">&nbsp;</div>
 			<div class="formw">
-				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top" ><img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
 			</div>
 			</div>');
 			

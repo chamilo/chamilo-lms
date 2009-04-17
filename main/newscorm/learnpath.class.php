@@ -6676,8 +6676,16 @@ class learnpath {
 							$fck_attribute['Config']['CreateDocumentDir'] = $relative_prefix;
 							$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
 							$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/'.$relative_path;
-
-							$form->addElement('style_submit_button', 'submit_button', get_lang('LPCreateDocument'),'class="save"');
+							
+							if ($_GET['action']=='add_item'){
+								$class='add';
+								$text=get_lang('LPCreateDocument');
+							} else if ($_GET['action']=='edit_item'){
+								$class='save';
+								$text=get_lang('LPModifyDocument');
+							}	
+							
+							$form->addElement('style_submit_button', 'submit_button', $text,'class="'.$class.'"');
 							$renderer = $form->defaultRenderer();
 							$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
 

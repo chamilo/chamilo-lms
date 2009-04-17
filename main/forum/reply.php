@@ -96,7 +96,6 @@ $htmlHeadXtra[] = '<script>
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 
 			} else {
-			
 				document.getElementById(\'id_qualify\').style.display = \'none\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 			}	
@@ -187,9 +186,16 @@ if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0) {
 }
 /*
 -----------------------------------------------------------
-	Display forms / Feedback Messages
+	Action links
 -----------------------------------------------------------
 */
+
+echo '<div class="actions">';
+echo '<span style="float:right;">'.search_link().'</span>';
+echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
+echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'">'.Display::return_icon('forum.gif').' '.get_lang('BackToForum').'</a>';
+echo '<a href="viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'">'.Display::return_icon('forumthread.gif').' '.get_lang('BackToThread').'</a>';
+echo '</div>';
 /*
 -----------------------------------------------------------
 	Display Forum Category and the Forum information

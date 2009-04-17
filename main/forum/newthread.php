@@ -88,21 +88,6 @@ $origin = '';
 if(isset($_GET['origin'])) {
 	$origin =  Security::remove_XSS($_GET['origin']);
 }
-/*
- * 
- * 			if(document.getElementById(\'id_qualify\').style.display == \'none\') {
-				document.getElementById(\'id_qualify\').style.display = \'block\';
-				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-
-			} else {
-			
-				document.getElementById(\'id_qualify\').style.display = \'none\';
-				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-			}	
- * 
- * 
- * 
- * */
 
 // javascript
 $htmlHeadXtra[] = '<script>
@@ -113,7 +98,6 @@ $htmlHeadXtra[] = '<script>
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 
 			} else {
-			
 				document.getElementById(\'id_qualify\').style.display = \'none\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 			}
@@ -185,7 +169,7 @@ if($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
 } else {
 	Display :: display_header(null);
-	api_display_tool_title($nameTools);
+	//api_display_tool_title($nameTools);
 }
 /*
 -----------------------------------------------------------
@@ -221,6 +205,12 @@ if (!$_user['user_id']  AND $current_forum['allow_anonymous']<>1) {
 -----------------------------------------------------------
 */
 handle_forum_and_forumcategories();
+// action links
+echo '<div class="actions">';
+echo '<span style="float:right;">'.search_link().'</span>';
+echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
+echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'">'.Display::return_icon('forum.gif').' '.get_lang('BackToForum').'</a>';
+echo '</div>';
 
 /*
 -----------------------------------------------------------

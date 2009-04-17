@@ -194,8 +194,16 @@ function show_add_forum_form($inputvalues=array()) {
 	$form = new FormValidator('forumcategory', 'post', 'index.php');
 
 	// the header for the form
+	if (!empty($inputvalues))
+	{
+		$form_title = get_lang('EditForum');
+	}
+	else 
+	{
+		$form_title = get_lang('AddForum');
+	}
 	$session_header = isset($_SESSION['session_name']) ? ' ('.$_SESSION['session_name'].') ' : '';
-	$form->addElement('header', '', get_lang('AddForum').$session_header);
+	$form->addElement('header', '', $form_title.$session_header);
 
 	// we have a hidden field if we are editing
 	if (is_array($inputvalues)) {
@@ -231,13 +239,13 @@ function show_add_forum_form($inputvalues=array()) {
 	
 			/*		if (document.getElementById('id_qualify').style.display == 'none') {
 					document.getElementById('id_qualify').style.display = 'block';
-					document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/nolines_minus.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+					document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
 				} else {
 				document.getElementById('options').style.display = 'none';
-				document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/nolines_plus.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+				document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
 				}*/
 			
-		$form->addElement('static','Group','','<div id="plus"><a href="javascript://" onclick="advanced_parameters()" ><br /><span id="plus_minus">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a></div>');
+	$form->addElement('static','Group','<br /><div id="plus"><a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a></div>','');
 		$form->addElement('html','<div id="options" style="display:none">');
 	
 	$group='';
@@ -373,7 +381,8 @@ function show_add_forum_form($inputvalues=array()) {
 		$check = Security::check_token('post');	
 		if ($check) {
 			$values = $form->exportValues();
-	   		store_forum($values);
+	   		$return_message = store_forum($values);
+	   		Display :: display_confirmation_message($return_message);
 		}
 		Security::clear_token();
 	} else {
@@ -1844,6 +1853,21 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	global $origin;
 	global $charset; 
 
+	// setting the class and text of the form title and submit button
+	if ($_GET['action']=='quote'){
+		$class='save';
+		$text=get_lang('QuoteMessage');
+	}elseif ($_GET['action'] == 'replythread'){
+		$class='save';
+		$text=get_lang('ReplyToThread');			
+	}elseif ($_GET['action']=='replymessage'){
+		$class='save';
+		$text=get_lang('ReplyToMessage');		
+	}else {
+		$class='add';
+		$text=get_lang('CreateThread');		
+	}	
+
 	// initiate the object
 	$my_thread  = isset($_GET['thread']) ? $_GET['thread']:'';
 	$my_forum   = isset($_GET['forum'])  ? $_GET['forum']:'';
@@ -1852,6 +1876,8 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$my_gradebook    = isset($_GET['gradebook'])   ? $_GET['gradebook']:'';
 	$form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($my_thread).'&post='.Security::remove_XSS($my_post).'&action='.Security::remove_XSS($my_action).'&origin='.$origin);
 	$form->setConstants(array('forum' => '5'));
+
+	$form->addElement('header', '', $text);
 
 	// settting the form elements
 	$form->addElement('hidden', 'forum_id', strval(intval($my_forum)));
@@ -1865,7 +1891,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
-	$form->addElement('static','Group','','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>');
+	$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" /> '.get_lang('AdvancedParameters').'</span></a>','');
 	$form->addElement('html','<div id="id_qualify" style="display:none">');
 	if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ){
 		// thread qualify
@@ -1902,16 +1928,6 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$info    =api_get_user_info($userid);
 	$courseid=api_get_course_id();		
 	
-	if ($_GET['action']=='quote'){
-		$class='save';
-		$text=get_lang('QuoteMessage');
-	}elseif ($_GET['action']=='replymessage'){
-		$class='save';
-		$text=get_lang('ReplyToThread');		
-	}else {
-		$class='add';
-		$text=get_lang('CreateThread');		
-	}
 		
 	$form->addElement('style_submit_button', 'SubmitPost', $text, 'class="'.$class.'"');	
 	$form->add_real_progress_bar('DocumentUpload','user_upload');
@@ -1965,9 +1981,15 @@ function show_add_post_form($action='', $id='', $form_values='') {
 		$form->setConstants(array('sec_token' => $token));
 		$form->display();
 		echo '<br />';
-		if ($forum_setting['show_thread_iframe_on_reply'] and $action<>'newthread') {
-
-				echo "<iframe src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($my_thread)."#".Security::remove_XSS($my_post)."\" width=\"80%\"></iframe>";
+		if ($forum_setting['show_thread_iframe_on_reply'] and $action<>'newthread')
+		{
+			echo '<div class="row">
+					<div class="label">'.get_lang('Thread').'
+					</div>
+					<div class="formw">';
+			echo "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($my_thread)."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
+			echo '	</div>
+				</div>';			
 
 			
 		}
@@ -2276,7 +2298,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 
 	// initiate the object
 	$form = new FormValidator('edit_post', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']));
-
+	$form->addElement('header', '', get_lang('EditPost'));
 	// settting the form elements
 	$form->addElement('hidden', 'post_id', $current_post['post_id']);
 	$form->addElement('hidden', 'thread_id', $current_thread['thread_id']);
@@ -2287,7 +2309,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
 	
-	$form->addElement('static','Group','','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>');
+	$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>','');
 	$form->addElement('html','<div id="id_qualify" style="display:none">');
 	
 	if (!isset($_GET['edit'])) {				
@@ -2896,7 +2918,12 @@ function move_thread_form() {
 	$forum_categories=get_forum_categories();
 	$forums=get_forums();
 
-	$htmlcontent="\n<tr>\n<td></td>\n<td>\n<SELECT NAME='forum'>\n";
+	$htmlcontent .= '	<div class="row">
+		<div class="label">
+			<span class="form_required">*</span>'.get_lang('MoveTo').'
+		</div>
+		<div class="formw">';
+	$htmlcontent .= "<SELECT NAME='forum'>\n";
 	foreach ($forum_categories as $key=>$category) {
 		$htmlcontent.="\t<OPTGROUP LABEL=\"".$category['cat_title']."\">\n";
 		foreach ($forums as $key=>$forum) {
@@ -2906,7 +2933,10 @@ function move_thread_form() {
 		}
 		$htmlcontent.="\t</OPTGROUP>\n";
 	}
-	$htmlcontent.="</SELECT>\n</td></tr>";
+	$htmlcontent.="</SELECT>\n";
+	$htmlcontent .= '	</div>
+					</div>';
+	
 	$form->addElement('html',$htmlcontent);
 
 	// The OK button

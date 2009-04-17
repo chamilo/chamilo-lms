@@ -154,7 +154,7 @@ if ($origin=='learnpath') {
 } else {
 	// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
 	Display :: display_header('');
-	api_display_tool_title($nameTools);
+	//api_display_tool_title($nameTools);
 }
 
 /*
@@ -302,6 +302,7 @@ echo '<div class="actions">';
 if (empty($_SESSION['toolgroup'])){
 	echo '<span style="float:right;">'.search_link().'</span>';
 }
+echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
 // The link should appear when
 // 1. the course admin is here
 // 2. the course member is here and new threads are allowed

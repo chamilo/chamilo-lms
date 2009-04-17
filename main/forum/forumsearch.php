@@ -103,7 +103,9 @@ if ($origin=='learnpath') {
 }
 
 // Display the tool title
-api_display_tool_title($nameTools);
+// api_display_tool_title($nameTools);
+
+// tool introduction
 
 // Tool introduction
 $fck_attribute['Width'] = '100%';

@@ -137,7 +137,7 @@ if ($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
 } else {
 	Display :: display_header(null);
-	api_display_tool_title($nameTools);
+	//api_display_tool_title($nameTools);
 }
 
 /*
@@ -157,6 +157,21 @@ $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 if (!api_is_allowed_to_edit(false,true) AND $current_forum_category['visibility']==0) {
 	forum_not_allowed_here();
 }
+
+/*
+-----------------------------------------------------------
+	Action Links
+-----------------------------------------------------------
+*/
+echo '<div class="actions">';
+echo '<span style="float:right;">'.search_link().'</span>';
+echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
+if (api_is_allowed_to_edit(false,true)) {
+	//echo '<a href="'.api_get_self().'?forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a> | ';
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum"> '.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';
+	//echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';
+}
+echo '</div>';
 
 /*
 ------------------------------------------------------------------------------------------------------
@@ -215,20 +230,6 @@ if ($action_forums!='add') {
 	{
 		unset($_SESSION['_gid']);
     }	
-	
-	/*
-	-----------------------------------------------------------
-		Action Links
-	-----------------------------------------------------------
-	*/
-	echo '<div class="actions">';
-	echo '<span style="float:right;">'.search_link().'</span>';
-	if (api_is_allowed_to_edit(false,true)) {
-		//echo '<a href="'.api_get_self().'?forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a> | ';
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum"> '.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';
-		//echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';
-	}
-	echo '</div>';
 	
 	/*
 	-----------------------------------------------------------

@@ -128,7 +128,7 @@ if (isset($_GET['action']) && $_GET['action']=='add' ) {
  
 Display :: display_header('');
 
-api_display_tool_title($nameTools);
+// api_display_tool_title($nameTools);
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 
 // Tool introduction

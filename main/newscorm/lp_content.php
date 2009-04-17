@@ -47,8 +47,13 @@ if ($dokeos_chapter) {
 				$src = 'blank.php?error=prerequisites';
 			}		
 			break;
-		case 2:
-		case 3:
+		case 2:  
+				$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+				if(!$prereq_check) {
+					$src = 'blank.php?error=prerequisites';	
+				}				
+				break;
+		case 3:			
 			//save old if asset
 			$_SESSION['oLP']->stop_previous_item(); //save status manually if asset
 			$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);

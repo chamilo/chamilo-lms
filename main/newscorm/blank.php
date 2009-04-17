@@ -25,9 +25,11 @@ include_once('../inc/reduced_header.inc.php');
 
 switch($_GET['error']){
 	case 'document_deleted':
+		echo '<br /><br />';
 		Display::display_error_message(get_lang('DocumentHasBeenDeleted'));
 		break;
-	case 'prerequisites':
+	case 'prerequisites':	
+		echo '<br /><br />';	
 		Display::display_normal_message(get_lang('_prereq_not_complete'));
 		break;
 	default:

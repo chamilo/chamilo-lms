@@ -97,7 +97,7 @@ unset($_SESSION['questionList']);
  * Get a link to the corresponding document
  */
 
-
+global $src;
 if (!isset($src))
  {
  	$src = '';
@@ -123,7 +123,7 @@ if (!isset($src))
 				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
 				$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
 			}else{
-			$src = 'blank.php';
+			$src = 'blank.php?error=prerequisites';
 			}
 			break;
 		case 3:
@@ -146,8 +146,7 @@ if (!isset($src))
 // update status,total_time from lp_item_view table when you finish the exercises in learning path
 if (!empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
 
-	$_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
-	global $src;
+	$_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();	
 	$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$TBL_LP_ITEM_VIEW		= Database::get_course_table(TABLE_LP_ITEM_VIEW);
 	$TBL_LP_VIEW			= Database::get_course_table(TABLE_LP_VIEW);

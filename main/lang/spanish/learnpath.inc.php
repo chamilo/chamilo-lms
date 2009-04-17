@@ -223,4 +223,9 @@ $CreateLearningPath = "Crear lección";
 $AddExercise = "Agregar ejercicio";
 $AddForum = "Agregar foro";
 $LPCreateDocument = "Crear documento";
+$ObjectiveID = "ID del objetivo";
+$ObjectiveStatus = "Estatus del objetivo";
+$ObjectiveRawScore = "Puntaje crudo del objetivo";
+$ObjectiveMaxScore = "Puntaje máximo del objetivo";
+$ObjectiveMinScore = "Puntaje mínimo del objetivo";
 ?>

@@ -955,4 +955,5 @@ $TotalTimeByCourse = "Tiempo total por lección";
 $LastTimeTheCourseWasUsed = "Última vez que la lección fue usada";
 $AnnouncementAvailable = "El anuncio está disponible";
 $AnnouncementNotAvailable = "El anuncio no está disponible";
+$Searching = "Buscando";
 ?>

@@ -706,4 +706,5 @@ $Filter = "Filtrar";
 $Subject = "Asunto";
 $Message = "Mensaje";
 $MoreInformation = "Mas información";
+$Image = "Imagen";
 ?>

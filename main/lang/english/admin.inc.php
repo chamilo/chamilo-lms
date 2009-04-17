@@ -955,4 +955,5 @@ $TotalTimeByCourse = "Total time by course";
 $LastTimeTheCourseWasUsed = "Last time the course was used";
 $AnnouncementAvailable = "The announcement is available";
 $AnnouncementNotAvailable = "The announcement is not available";
+$Searching = "Searching";
 ?>

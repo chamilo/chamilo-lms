@@ -2273,52 +2273,41 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 	$okForRegisterCourse = true;
 
 	// Check if I have all
-	if(empty ($courseSysCode))
-	{
+	if (empty($courseSysCode)) {
 		$error_msg[] = "courseSysCode is missing";
 		$okForRegisterCourse = false;
 	}
-	if(empty ($courseScreenCode))
-	{
+	if (empty($courseScreenCode)) {
 		$error_msg[] = "courseScreenCode is missing";
 		$okForRegisterCourse = false;
 	}
-	if(empty ($courseDbName))
-	{
+	if (empty($courseDbName)) {
 		$error_msg[] = "courseDbName is missing";
 		$okForRegisterCourse = false;
 	}
-	if(empty ($courseRepository))
-	{
+	if (empty($courseRepository)) {
 		$error_msg[] = "courseRepository is missing";
 		$okForRegisterCourse = false;
 	}
-	if(empty ($titular))
-	{
+	if (empty($titular)) {
 		$error_msg[] = "titular is missing";
 		$okForRegisterCourse = false;
 	}
-	if(empty ($title))
-	{
+	if (empty($title)) {
 		$error_msg[] = "title is missing";
 		$okForRegisterCourse = false;
 	}
-	if(empty ($course_language))
-	{
+	if (empty($course_language)) {
 		$error_msg[] = "language is missing";
 		$okForRegisterCourse = false;
 	}
 
-	if(empty ($expiration_date))
-	{
+	if (empty($expiration_date)) {
 		$expiration_date = "NULL";
-	}
-	else
-	{
+	} else {
 		$expiration_date = "FROM_UNIXTIME(".$expiration_date . ")";
 	}
-	if($okForRegisterCourse)
-	{
+	if ($okForRegisterCourse) {
 		$titular=addslashes($titular);
 		// here we must add 2 fields
 		$sql = "INSERT INTO ".$TABLECOURSE . " SET
@@ -2356,8 +2345,8 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					user_course_cat='0'";
 		api_sql_query($sql, __FILE__, __LINE__);
 
-		if(count($teachers)>0) {
-			foreach($teachers as $key) {
+		if (count($teachers)>0) {
+			foreach ($teachers as $key) {
 				$sql = "INSERT INTO ".$TABLECOURSUSER . " SET
 					course_code = '".Database::escape_string($courseSysCode) . "',
 					user_id = '".Database::escape_string($key) . "',
@@ -2374,8 +2363,9 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 		if ($_configuration['multiple_access_urls']==true) {			
 			$url_id=1;				
-			if (api_get_current_access_url_id()!=-1)
-				$url_id=api_get_current_access_url_id();											
+			if (api_get_current_access_url_id()!=-1) {
+				$url_id=api_get_current_access_url_id();
+			}											
 			UrlManager::add_course_to_url($courseSysCode,$url_id);			
 		} else {
 			UrlManager::add_course_to_url($courseSysCode,1);
@@ -2387,32 +2377,44 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 /**
 *	WARNING: this function always returns true.
 */
-function checkArchive($pathToArchive)
-{
+function checkArchive($pathToArchive) {
 	return TRUE;
 }
 
-function readPropertiesInArchive($archive, $isCompressed = TRUE)
-{
+/**
+ * Extract properties of the files from a ZIP package, write them to disk and
+ * return them as an array.
+ * @param	string	Absolute path to the ZIP file
+ * @param	bool	Whether the ZIP file is compressed (not implemented). Defaults to TRUE.
+ * @return	array	List of files properties from the ZIP package
+ */
+function readPropertiesInArchive($archive, $isCompressed = TRUE) {
 	include (api_get_path(LIBRARY_PATH) . "pclzip/pclzip.lib.php");
 	printVar(dirname($archive), "Zip : ");
 	$uid = api_get_user_id();
 	/*
 	string tempnam ( string dir, string prefix)
-	tempnam() cree un fichier temporaire unique dans le dossier dir. Si le dossier n'existe pas, tempnam() va generer un nom de fichier dans le dossier temporaire du systeme.
-	Avant PHP 4.0.6, le comportement de tempnam() dependait de l'OS sous-jacent. Sous Windows, la variable d'environnement TMP remplace le parametre dir; sous Linux, la variable d'environnement TMPDIR a la priorite tandis que pour les OS en systeme V R4, le parametre dir sera toujours utilise si le dossier qu'il represente existe. Consultez votre documentation pour plus de details.
-	tempnam() retourne le nom du fichier temporaire, ou la chaine NULL en cas d'echec.
+	tempnam() creates a unique temporary file in the dir directory. If the
+	directory doesn't existm tempnam() will generate a filename in the system's
+	temporary directory.
+	Before PHP 4.0.6, the behaviour of tempnam() depended of the underlying OS.
+	Under Windows, the "TMP" environment variable replaces the dir parameter;
+	under Linux, the "TMPDIR" environment variable has priority, while for the
+	OSes based on system V R4, the dir parameter will always be used if the 
+	directory which it represents exists. Consult your documentation for more 
+	details.
+	tempnam() returns the temporary filename, or the string NULL upon failure.
 	*/
 	$zipFile = new pclZip($archive);
 	$tmpDirName = dirname($archive) . "/tmp".$uid.uniqid($uid);
-	if(mkpath($tmpDirName))
+	if (mkpath($tmpDirName)) {
 		$unzippingSate = $zipFile->extract($tmpDirName);
-	else
+	} else {
 		die("mkpath failed");
+	}
 	$pathToArchiveIni = dirname($tmpDirName) . "/archive.ini";
 	//	echo $pathToArchiveIni;
 	$courseProperties = parse_ini_file($pathToArchiveIni);
 	rmdir($tmpDirName);
 	return $courseProperties;
 }
-?>

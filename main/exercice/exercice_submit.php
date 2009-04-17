@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 19788 2009-04-15 15:08:52Z juliomontoya $
+<?php // $Id: exercice_submit.php 19837 2009-04-17 17:25:50Z cfasanando $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 19788 2009-04-15 15:08:52Z juliomontoya $
+* 	@version $Id: exercice_submit.php 19837 2009-04-17 17:25:50Z cfasanando $
 */
 
 
@@ -141,6 +141,16 @@ if($buttonCancel)
 	header("Location: exercice.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
 	exit();
 }
+
+if ($origin == 'learnpath' && isset($_GET['not_multiple_attempt']) && $_GET['not_multiple_attempt'] == strval(intval($_GET['not_multiple_attempt']))) {
+	$not_multiple_attempt = (int)$_GET['not_multiple_attempt'];
+	if ($not_multiple_attempt === 1) {
+		include_once('../inc/reduced_header.inc.php');		
+		Display::display_warning_message(get_lang('ReachedOneAttempt'));
+		exit;
+	}	
+}
+
 
 if ($origin=='builder') {
 	/*******************************/
@@ -844,7 +854,7 @@ else
 }
 
 // I'm in a preview mode
-if (api_is_course_admin()) {
+if (api_is_course_admin() && $origin!='learnpath') {
 	echo '<div class="actions">';
 	echo Display::return_icon('quiz.gif', get_lang('GoBackToEx')).'<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('GoBackToEx').'</a>';
 	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';

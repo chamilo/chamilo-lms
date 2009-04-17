@@ -2850,6 +2850,7 @@ class learnpath {
     	$file = '';
 		$lp_table = Database::get_course_table(TABLE_LP_MAIN);
 		$lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
+		$lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     	$sel = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams " .
     			"FROM $lp_table l, $lp_item_table li WHERE li.id = $item_id AND li.lp_id = l.id";
     	if($this->debug>2){error_log('New LP - In learnpath::get_link() - selecting item '.$sel,0);}
@@ -2887,6 +2888,34 @@ class learnpath {
     				}else{
 	    				require_once('resourcelinker.inc.php');
     					$file = rl_get_resource_link_for_learnpath(api_get_course_id(),$this->get_id(),$item_id);
+    					
+    					// check how much attempts of a exercise exits in lp    						    					    					    			
+	    				$lp_item_id = $this->get_current_item_id();
+	    				$lp_view_id = $this->get_view_id();
+	    				$prevent_reinit = $this->items[$this->current]->prevent_reinit;	    				 	    			
+	    				$list = $this->get_toc();
+						$type_quiz = false;
+						
+						foreach($list as $toc) {
+							if ($toc['id'] == $lp_item_id && ($toc['type']=='quiz') ) {
+								$type_quiz = true;		
+							}	
+						}
+	    					    					    				
+	    				if ($type_quiz) {
+	    					$lp_item_id = Database::escape_string($lp_item_id);
+	    					$lp_view_id = Database::escape_string($lp_view_id);
+	    					$sql = "SELECT count(*) FROM $lp_item_view_table WHERE lp_item_id='".(int)$lp_item_id."' AND lp_view_id ='".(int)$lp_view_id."' AND status='completed'";
+	    					$result = api_sql_query($sql,__FILE__,__LINE__);
+	    					$row_count = Database::fetch_row($result);
+	    					$count_item_view = (int)$row_count[0];	    					
+	    					$not_multiple_attempt = 0;
+	    					if ($prevent_reinit === 1 && $count_item_view > 0) {
+	    						$not_multiple_attempt = 1;	    						
+	    					}
+	    					$file .= '&not_multiple_attempt='.$not_multiple_attempt;	    						    						    					
+	    				}
+    					    					    					    					    					
     					$tmp_array=explode("/",$file);
     					$document_name=$tmp_array[count($tmp_array)-1];
     					if(strpos($document_name,'_DELETED_')){

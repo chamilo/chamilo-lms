@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 19809 2009-04-16 20:05:58Z cfasanando $
+* 	@version $Id: exercise_show.php 19813 2009-04-17 00:19:28Z cvargas1 $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -866,7 +866,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		 	echo '
 			<tr>
 				<td colspan="2">
-					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="600" height="400">
+					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=0" width="556" height="421">
 						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" />
 					</object>
 				</td>

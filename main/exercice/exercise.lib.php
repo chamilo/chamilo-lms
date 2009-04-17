@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 19760 2009-04-14 15:23:58Z juliomontoya $
+<?php // $Id: exercise.lib.php 19813 2009-04-17 00:19:28Z cvargas1 $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 19760 2009-04-14 15:23:58Z juliomontoya $
+* 	@version $Id: exercise.lib.php 19813 2009-04-17 00:19:28Z cvargas1 $
 */
 
 /**
@@ -287,7 +287,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		$objAnswerTmp=new Answer($questionId);
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 
-		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #4271b5; height: 390px; width: 240px;"><b>'.get_lang('HotspotZones').'</b><ol>';
+		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #4271b5; height: 481px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><ol>';
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
 			$answer_list .= '<li>'.$objAnswerTmp->selectAnswer($answerId).'</li>';
@@ -444,7 +444,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 						// Check to see if the version meets the requirements for playback
 						if (hasReqestedVersion) {  // if we've detected an acceptable version
-						    var oeTags = '<object type=\"application/x-shockwave-flash\" data=\"../plugin/hotspot/hotspot_user.swf?modifyAnswers=".$questionId."&amp;canClick:".$canClick."\" width=\"600\" height=\"400\">'
+						    var oeTags = '<object type=\"application/x-shockwave-flash\" data=\"../plugin/hotspot/hotspot_user.swf?modifyAnswers=".$questionId."&amp;canClick:".$canClick."\" width=\"556\" height=\"501\">'
 										+ '<param name=\"movie\" value=\"../plugin/hotspot/hotspot_user.swf?modifyAnswers=".$questionId."&amp;canClick:".$canClick."\" \/>'
 										+ '<\/object>';
 						    document.write(oeTags);   // embed the Flash Content SWF when all tests are passed

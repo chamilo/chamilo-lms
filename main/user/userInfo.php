@@ -1,4 +1,4 @@
-<?php // $Id: userInfo.php 19254 2009-03-24 22:18:53Z cvargas1 $
+<?php // $Id: userInfo.php 19824 2009-04-17 09:56:23Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -87,7 +87,7 @@ else
 
 $currentCourse = $currentCourseID;
 
-api_display_tool_title(get_lang("Users"));
+// api_display_tool_title(get_lang("Users"));
 
 /*
  * data  found  in settings  are :
@@ -280,7 +280,20 @@ if ($allowedToEditContent)
 ==============================================================================
 */
 // Back button for each display mode (Top)
-echo "<div class=\"actions\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
+echo '<div class="actions">';
+echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('members.gif').get_lang('BackUser').'</a>';
+if (!is_numeric($_GET['editMainUserInfo']))
+{
+	echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.gif').get_lang('EditUser').'</a>';
+}
+else 
+{
+	echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('edit.gif').get_lang('ViewUser').'</a>';
+}
+echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&amp;origin=user_course&amp;student='.$userIdViewed.'&amp;details=true&amp;course='.$_course['id'].'">'.Display::return_icon('statistics.gif').get_lang('UserStatistics').'</a>';
+echo '</div>';
+
+
 if ($displayMode == "viewDefEdit")
 {
 	/*>>>>>>>>>>>> CATEGORIES DEFINITIONS : EDIT <<<<<<<<<<<<*/

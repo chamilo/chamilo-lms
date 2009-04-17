@@ -1,4 +1,4 @@
-<?php // $Id: subscribe_user.php 18925 2009-03-10 14:09:33Z ndieschburg $
+<?php // $Id: subscribe_user.php 19824 2009-04-17 09:56:23Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -64,9 +64,14 @@ if ($_REQUEST['type']=='teacher') {
 
 //extra entries in breadcrumb
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
+if ($_POST['keyword'])
+{
+	$interbreadcrumb[] = array ("url" => "subscribe_user.php?type=".Security::remove_XSS($_GET['type']), "name" => $tool_name);
+	$tool_name = get_lang('SearchResults');
+}
 Display :: display_header($tool_name, "User");
 
-api_display_tool_title($tool_name);
+// api_display_tool_title($tool_name);
 
 /*
 ============================================================================== 
@@ -416,11 +421,19 @@ function active_filter($active, $url_params, $row) {
 
 // Build search-form
 echo '<div class="actions">';
+
+$actions .= '<a href="user.php">'.Display::return_icon('members.gif').' '.get_lang('BackToUserList').'</a>';
+if ($_POST['keyword'])
+{
+	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_GET['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
+}
+
 $form = new FormValidator('search_user', 'POST',api_get_self().'?type='.$_REQUEST['type'],'',null,false);
 $renderer = & $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->add_textfield('keyword', '', false);
 $form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
+$form->addElement('static','additionalactions',null,$actions);
 $form->display();
 echo '</div>';
 
@@ -442,13 +455,15 @@ $table->set_header($col ++, get_lang('reg'), false);
 $table->set_column_filter($col -1, 'reg_filter');
 $table->set_form_actions(array ('subscribe' => get_lang('reg')), 'user');
 
-// Display table
-$table->display();
-
 if ( !empty($_POST['keyword'])) {
 	$keyword_name=Security::remove_XSS($_POST['keyword']);
 	echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';	
 }
+
+// Display table
+$table->display();
+
+
 /*
 ============================================================================== 
 		FOOTER 

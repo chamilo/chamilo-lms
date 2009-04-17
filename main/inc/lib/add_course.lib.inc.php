@@ -51,7 +51,6 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
 		update_Db_course($db_name);
 		fill_course_repository($directory);
 		fill_Db_course($db_name, $directory, $course_language);
-		add_course_role_right_location_values($code);
 		register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $course_admin_id, $expiration_date);
 
 		return true;
@@ -2418,3 +2417,4 @@ function readPropertiesInArchive($archive, $isCompressed = TRUE)
 	rmdir($tmpDirName);
 	return $courseProperties;
 }
+?>

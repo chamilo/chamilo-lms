@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 19004 2009-03-12 18:04:08Z juliomontoya $
+* 	@version $Id: question.php 19829 2009-04-17 13:49:47Z pcool $
 */
 
 // name of the language file that needs to be included
@@ -90,10 +90,15 @@ if ($_GET['action'] == 'edit') {
 // the possible question types
 $possible_types = array('personality','yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak', 'percentage', 'score');
 
+// actions 
+$actions = '<div class="actions">';
+$actions .= '<a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png').get_lang('BackToSurvey').'</a>';
+$actions .= '</div>';
 // checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types))
 {
 	Display :: display_header($tool_name,'Survey');
+	echo $actions; 
 	Display :: display_error_message(get_lang('TypeDoesNotExist'), false);
 	Display :: display_footer();
 }
@@ -103,6 +108,7 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types)) {
 	if (!isset($_POST['save_question'])) {
 		// Displaying the header
 		Display::display_header($tool_name,'Survey');	
+		echo $actions; 
 		$error_message='';	
 		// Displys message if exists					
 		if (isset($_SESSION['temp_sys_message'])) {	
@@ -112,9 +118,6 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types)) {
 				Display::display_error_message(get_lang($error_message), true);			
 			} 		
 		}
-		  
-		echo '<img src="../img/'.survey_manager::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" /><br />';
-		echo get_lang(ucfirst($_GET['type']));
 	}
 	$form = new $_GET['type'];
 

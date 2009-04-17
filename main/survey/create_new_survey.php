@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 19254 2009-03-24 22:18:53Z cvargas1 $
+* 	@version $Id: create_new_survey.php 19829 2009-04-17 13:49:47Z pcool $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -137,6 +137,8 @@ else
 
 // initiate the object
 $form = new FormValidator('survey', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id);
+
+$form->addElement('header', '', $tool_name);
 
 // settting the form elements
 if ($_GET['action'] == 'edit' AND isset($survey_id) AND is_numeric($survey_id))

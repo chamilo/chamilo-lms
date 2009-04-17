@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 19606 2009-04-07 17:53:13Z iflorespaz $
+* 	@version $Id: survey.lib.php 19829 2009-04-17 13:49:47Z pcool $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1329,23 +1329,39 @@ class question
 	{
 		global $fck_attribute;
 		global $survey_data;
-		$this->html = '<form id="question_form" name="question_form" method="post" action="'.api_get_self().'?action='.$_GET['action'].'&type='.$_GET['type'].'&survey_id='.$_GET['survey_id'].'&question_id='.$_GET['question_id'].'">';
+		
+		//$tool_name = '<img src="../img/'.survey_manager::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" />';
+		$tool_name = Display::return_icon(survey_manager::icon_question($_GET['type']),get_lang(ucfirst($_GET['type'])),array('align'=>'middle', 'height'=>'22px')).' ';
+		if ($_GET['action'] == 'add') {
+			$tool_name .= get_lang('AddQuestion');
+		}
+		if ($_GET['action'] == 'edit') {
+			$tool_name .= get_lang('EditQuestion');
+		}
+		$tool_name .= ': '.get_lang(ucfirst($_GET['type']));
+		
+		$this->html .= '<div class="row"><div class="form_header">'.$tool_name.'</div></div>';
+		$this->html .= '<form id="question_form" name="question_form" method="post" action="'.api_get_self().'?action='.$_GET['action'].'&type='.$_GET['type'].'&survey_id='.$_GET['survey_id'].'&question_id='.$_GET['question_id'].'">';
 		$this->html .= '		<input type="hidden" name="survey_id" id="survey_id" value="'.$_GET['survey_id'].'"/>';
 		$this->html .= '		<input type="hidden" name="question_id" id="question_id" value="'.$_GET['question_id'].'"/>';
 		$this->html .= '		<input type="hidden" name="shared_question_id" id="shared_question_id" value="'.$form_content['shared_question_id'].'"/>';
 		$this->html .= '		<input type="hidden" name="type" id="type" value="'.$_GET['type'].'"/>';
-		$this->html .= '<table>';
-		$this->html .= '	<tr>';
-		$this->html .= '		<td colspan="3"><strong>'.get_lang('Question').'</strong></td>';
-		$this->html .= '	</tr>';
-		$this->html .= '	<tr>';
-		//$this->html .= '		<td><label for="question">'.get_lang('Question').'</label></td>';
+
+		// question field
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '100';
 		$fck_attribute['ToolbarSet'] = 'Survey';
-		//$this->html .= '		<td><input type="text" name="question" id="question" value="'.$form_content['question'].'"/></td>';
-		$this->html .= '		<td colspan="3" width="550">'.api_return_html_area('question', html_entity_decode(stripslashes($form_content['question']))).'</td>';
-		$this->html .= '	</tr>';
+		$this->html .= '	<div class="row">';
+		$this->html .= '		<div class="label">';
+		$this->html .= '			<span class="form_required">*</span> '.get_lang('Question');
+		$this->html .= '		</div>';
+		$this->html .= '		<div class="formw">';
+		$this->html .= api_return_html_area('question', html_entity_decode(stripslashes($form_content['question'])));
+		$this->html .= '		</div>';
+		$this->html .= '	</div>';		
+		
+		
+
 		/*
 		$this->html .= '	<tr>';
 		$this->html .= '		<td><label for="question_comment">'.get_lang('QuestionComment').'</label></td>';
@@ -1353,6 +1369,8 @@ class question
 		$this->html .= '		<td>&nbsp;</td>';
 		$this->html .= '	</tr>';
 		*/
+
+		$this->html .= '<table>';
 
 		$this->html .='	<tr><td colspan="">&nbsp;</td></tr>'; 
 
@@ -1413,12 +1431,16 @@ class question
 			$class="add";
 			$text=get_lang('CreateQuestionSurvey'); 
 		}		
-		$this->html .= '	<tr>';
-		$this->html .= '		<td>&nbsp;</td>';
-		$this->html .= '		<td><button class="'.$class.'"type="submit" name="save_question">'.$text.'</button></td>';
-		$this->html .= '		<td>&nbsp;</td>';
-		$this->html .= '	</tr>';
-		$this->html .= '</table>';
+		
+		$this->html .= '	<div class="row">';
+		$this->html .= '		<div class="label">';
+		$this->html .= '		</div>';
+		$this->html .= '		<div class="formw">';
+		$this->html .= '			<button class="'.$class.'"type="submit" name="save_question">'.$text.'</button>';
+		$this->html .= '		</div>';
+		$this->html .= '	</div>';
+		
+
 		$this->html .= '</form>';
 		echo $this->html;
 	}
@@ -1579,13 +1601,12 @@ class yesno extends question
 	{
 		$this->html = parent::create_form($form_content);
 		// Horizontal or vertical
-		$this->html .= '	<tr>';
-		$this->html .= '		<td colspan="2"><strong>'.get_lang('DisplayAnswersHorVert').'</strong></td>';
-		$this->html .= '	</tr>';
-		$this->html .= '	<tr>';
-		$this->html .= '		<td align="right" valign="top">&nbsp;</td>';
-		$this->html .= '		<td>';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked="cheked" ';
+		$this->html .= '	<div class="row">';
+		$this->html .= '		<div class="label">';
+		$this->html .= 				get_lang('DisplayAnswersHorVert');
+		$this->html .= '		</div>';
+		$this->html .= '		<div class="formw">';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
 						if ($form_content['horizontalvertical'] == 'horizontal')
 						{
 							$this->html .= 'checked="checked"';
@@ -1597,17 +1618,17 @@ class yesno extends question
 							$this->html .= 'checked="checked"';
 						}
     	$this->html .= ' />'.get_lang('Vertical').'</label>';
-		$this->html .= '		</td>';
-		$this->html .= '		<td>&nbsp;</td>';
-		$this->html .= '	</tr>';
-		$this->html .='		<tr>
-								<td colspan="">&nbsp;</td>
-							</tr>';
+		$this->html .= '		</div>';
+		$this->html .= '	</div>';
+
 
 		// The options
-		$this->html .= '	<tr>';
-		$this->html .= '	<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
-		$this->html .= '	</tr>';
+		$this->html .= '	<div class="row">';
+		$this->html .= '		<div class="label">';
+		$this->html .= 				get_lang('AnswerOptions');
+		$this->html .= '		</div>';
+		$this->html .= '		<div class="formw">';
+		$this->html .= '			<table style="margin-left: 185px;">';	
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right"><label for="answers[0]">1</label></td>';
 		//$this->html .= '		<td><input type="text" name="answers[0]" id="answers[0]" value="'.$form_content['answers'][0].'" /></td>';
@@ -1620,6 +1641,11 @@ class yesno extends question
 		$this->html .= '		<td width="550">'.api_return_html_area('answers[1]', stripslashes($form_content['answers'][1])).'</td>';
 		$this->html .= '		<td><input type="image" src="../img/up.gif" value="move_up[1]" name="move_up[1]" /></td>';
 		$this->html .= '	</tr>';
+		$this->html .= '			</table>';
+		$this->html .= '		</div>';
+		$this->html .= '	</div>';	
+		
+
 	}
 
 	/**
@@ -1672,14 +1698,13 @@ class multiplechoice extends question
 	function create_form($form_content)
 	{
 		$this->html = parent::create_form($form_content);
-		$this->html .= '	<tr>';
-		$this->html .= '		<td colspan="2"><strong>'.get_lang('DisplayAnswersHorVert').'</strong></td>';
-		$this->html .= '	</tr>';
 		// Horizontal or vertical
-		$this->html .= '	<tr>';
-		$this->html .= '		<td align="right" valign="top">&nbsp;</td>';
-		$this->html .= '		<td>';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked="cheked" ';
+		$this->html .= '	<div class="row">';
+		$this->html .= '		<div class="label">';
+		$this->html .= 				get_lang('DisplayAnswersHorVert');
+		$this->html .= '		</div>';
+		$this->html .= '		<div class="formw">';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
 						if ($form_content['horizontalvertical'] == 'horizontal')
 						{
 							$this->html .= 'checked="checked"';
@@ -1690,18 +1715,18 @@ class multiplechoice extends question
 						{
 							$this->html .= 'checked="checked"';
 						}
-    	$this->html .= ' />'.get_lang('Vertical').'</label>';		$this->html .= '		</td>';
-		$this->html .= '		<td>&nbsp;</td>';
-		$this->html .= '	</tr>';
-		$this->html .='		<tr>
-								<td colspan="">&nbsp;</td>
-							</tr>';
+    	$this->html .= ' />'.get_lang('Vertical').'</label>';
+		$this->html .= '		</div>';
+		$this->html .= '	</div>';
 
 		// The Options
-		$this->html .= '	<tr>';
-		$this->html .= '		<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
-		$this->html .= '	</tr>';
+		$this->html .= '	<div class="row">';
+		$this->html .= '		<div class="label">';
+		$this->html .= 				get_lang('AnswerOptions');
+		$this->html .= '		</div>';
+		$this->html .= '		<div class="formw">';
 		$total_number_of_answers = count($form_content['answers']);
+		$this->html .= ' 			<table style="margin-left: 185px;">';
 		foreach ($form_content['answers'] as $key=>$value)
 		{
 			$this->html .= '	<tr>';
@@ -1726,6 +1751,10 @@ class multiplechoice extends question
 		}
 		// The buttons for adding or removing
 		$this->html .= parent :: add_remove_buttons($form_content);
+		$this->html .= ' 			</table>';
+		$this->html .= '		</div>';
+		$this->html .= '	</div>';		
+
 	}
 
 	/**
@@ -1764,7 +1793,7 @@ class personality extends question
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right" valign="top">&nbsp;</td>';
 		$this->html .= '		<td>';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked="cheked" ';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
 		
 		if ($form_content['horizontalvertical'] == 'horizontal')
 		{
@@ -1865,14 +1894,13 @@ class multipleresponse extends question
 	function create_form($form_content)
 	{
 		$this->html = parent::create_form($form_content);
-		$this->html .= '	<tr>';
-		$this->html .= '		<td colspan="2"><strong>'.get_lang('DisplayAnswersHorVert').'</strong></td>';
-		$this->html .= '	</tr>';
 		// Horizontal or vertical
-		$this->html .= '	<tr>';
-		$this->html .= '		<td align="right" valign="top">&nbsp;</td>';
-		$this->html .= '		<td>';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked="cheked" ';
+		$this->html .= '	<div class="row">';
+		$this->html .= '		<div class="label">';
+		$this->html .= 				get_lang('DisplayAnswersHorVert');
+		$this->html .= '		</div>';
+		$this->html .= '		<div class="formw">';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
 						if ($form_content['horizontalvertical'] == 'horizontal')
 						{
 							$this->html .= 'checked="checked"';
@@ -1883,19 +1911,19 @@ class multipleresponse extends question
 						{
 							$this->html .= 'checked="checked"';
 						}
-    	$this->html .= ' />'.get_lang('Vertical').'</label>';		$this->html .= '		</td>';
-		$this->html .= '		<td>&nbsp;</td>';
-		$this->html .= '	</tr>';
-		$this->html .='		<tr>
-								<td colspan="">&nbsp;</td>
-							</tr>';
+    	$this->html .= ' />'.get_lang('Vertical').'</label>';
+		$this->html .= '		</div>';
+		$this->html .= '	</div>';
 
 
 		// The options
-		$this->html .= '	<tr>';
-		$this->html .= '		<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
-		$this->html .= '	</tr>';
+		$this->html .= '	<div class="row">';
+		$this->html .= '		<div class="label">';
+		$this->html .= 				get_lang('AnswerOptions');
+		$this->html .= '		</div>';
+		$this->html .= '		<div class="formw">';
 		$total_number_of_answers = count($form_content['answers']);
+		$this->html .= ' 			<table style="margin-left: 185px;">';
 		foreach ($form_content['answers'] as $key=>$value)
 		{
 			$this->html .= '	<tr>';
@@ -1920,6 +1948,9 @@ class multipleresponse extends question
 		}
 		// The buttons for adding or removing
 		$this->html .= parent :: add_remove_buttons($form_content);
+		$this->html .= ' 			</table>';
+		$this->html .= '		</div>';
+		$this->html .= '	</div>';			
 	}
 
 	/**
@@ -1972,10 +2003,13 @@ class dropdown extends question
 	{
 		$this->html = parent::create_form($form_content);
 		// The answers
-		$this->html .= '	<tr>';
-		$this->html .= '		<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
-		$this->html .= '	</tr>';
+		$this->html .= '	<div class="row">';
+		$this->html .= '		<div class="label">';
+		$this->html .= 				get_lang('AnswerOptions');
+		$this->html .= '		</div>';
+		$this->html .= '		<div class="formw">';
 		$total_number_of_answers = count($form_content['answers']);
+		$this->html .= ' 			<table style="margin-left: 185px;">';
 		foreach ($form_content['answers'] as $key=>$value)
 		{
 			$this->html .= '	<tr>';
@@ -1999,6 +2033,9 @@ class dropdown extends question
 		}
 		// The buttons for adding or removing
 		$this->html .= parent :: add_remove_buttons($form_content);
+		$this->html .= ' 			</table>';
+		$this->html .= '		</div>';
+		$this->html .= '	</div>';		
 	}
 
 	/**
@@ -2174,17 +2211,24 @@ class score extends question
 	{
 		$this->html = parent::create_form($form_content);
 		// the maximum score that can be given
-		$this->html .= '	<tr>';
-		$this->html .= '		<td colspan="3"><strong>'.get_lang('MaximumScore').'</strong></td>';
-		$this->html .= '	</tr>';
-		$this->html .= '	<tr>
-								<td colspan="3"><input type="text" name="maximum_score" value="'.$form_content['maximum_score'].'"></td>
-							</tr>';
+		$this->html .= '	<div class="row">';
+		$this->html .= '		<div class="label">';
+		$this->html .= '			<span class="form_required">*</span>'.get_lang('MaximumScore');
+		$this->html .= '		</div>';
+		$this->html .= '		<div class="formw">';
+		$this->html .= '			<input type="text" name="maximum_score" value="'.$form_content['maximum_score'].'">';
+		$this->html .= '		</div>';
+		$this->html .= '	</div>';
+				
+
 		// The answers
-		$this->html .= '	<tr>';
-		$this->html .= '		<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
-		$this->html .= '	</tr>';
+		$this->html .= '	<div class="row">';
+		$this->html .= '		<div class="label">';
+		$this->html .= 				get_lang('AnswerOptions');
+		$this->html .= '		</div>';
+		$this->html .= '		<div class="formw">';
 		$total_number_of_answers = count($form_content['answers']);
+		$this->html .= ' 			<table style="margin-left: 185px;">';
 		foreach ($form_content['answers'] as $key=>$value)
 		{
 			$this->html .= '	<tr>';
@@ -2209,6 +2253,9 @@ class score extends question
 		}
 		// The buttons for adding or removing
 		$this->html .= parent :: add_remove_buttons($form_content);
+		$this->html .= ' 			</table>';
+		$this->html .= '		</div>';
+		$this->html .= '	</div>';			
 	}
 
 	function render_question($form_content, $answers=array())
@@ -4265,33 +4312,47 @@ class SurveyUtil {
 	function display_survey_search_form()
 	{
 		echo '<form method="get" action="survey_list.php?search=advanced">';
-		echo '<table>
-				<tr>
-					<td>'.get_lang('Title').'</td>
-					<td><input type="text" name="keyword_title"/></td>
-				</tr>
-				<tr>
-					<td>'.get_lang('Code').'</td>
-					<td><input type="text" name="keyword_code"/></td>
-				</tr>
-				<tr>
-					<td>'.get_lang('Language').'</td>
-					<td>
-						<select name="keyword_language"><option value="%">'.get_lang('All').'</option>';
+		echo '<div class="row"><div class="form_header">'.get_lang('SearchASurvey').'</div></div>';
+		echo '	<div class="row">
+					<div class="label">
+						'.get_lang('Title').'
+					</div>
+					<div class="formw">
+						<input type="text" name="keyword_title"/>
+					</div>
+				</div>';	
+		echo '	<div class="row">
+					<div class="label">
+						'.get_lang('Code').'
+					</div>
+					<div class="formw">
+						<input type="text" name="keyword_code"/>
+					</div>
+				</div>';			
+		echo '	<div class="row">
+					<div class="label">
+						'.get_lang('Language').'
+					</div>
+					<div class="formw">';
+		echo '			<select name="keyword_language"><option value="%">'.get_lang('All').'</option>';
 		$languages = api_get_languages();
 		foreach ($languages['name'] as $index => $name)
 		{
-			echo '<option value="'.$languages['folder'][$index].'">'.$name.'</option>';
+			echo '			<option value="'.$languages['folder'][$index].'">'.$name.'</option>';
 		}
-		echo '			</select>
-					</td>
-				</tr>
-				<tr>
-					<td>&nbsp;<input type="hidden" name="cidReq" value="'.api_get_course_id().'"/></td>
-					<td><button class="search" type="submit" name="do_search">'.get_lang('Search').'</button></td>
-				</tr>
-			</table>
-		</form>';
+		echo '			</select>';		
+		echo '		</div>
+				</div>';		
+		echo '<input type="hidden" name="cidReq" value="'.api_get_course_id().'"/>';
+		echo '	<div class="row">
+					<div class="label">
+					</div>
+					<div class="formw">
+						<button class="search" type="submit" name="do_search">'.get_lang('Search').'</button>
+					</div>
+				</div>';		
+		echo '</form>';
+		echo '<div style="clear: both;margin-bottom: 10px;"></div>';
 	}
 	
 	/**
@@ -4388,7 +4449,7 @@ class SurveyUtil {
 		{
 			$return .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('empty.gif', get_lang('EmptySurvey')).'</a>';
+			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean_group.gif', get_lang('EmptySurvey')).'</a>';
 		}
 		//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 		//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
@@ -4409,7 +4470,7 @@ class SurveyUtil {
 		//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
 		$return .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>';
 		$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
-		$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('empty.gif', get_lang('EmptySurvey')).'</a>';
+		$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean_group.gif', get_lang('EmptySurvey')).'</a>';
 		//$return .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
 		return $return;
 	}

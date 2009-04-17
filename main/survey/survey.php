@@ -1,4 +1,4 @@
-<?php // $Id: survey.php 19606 2009-04-07 17:53:13Z iflorespaz $
+<?php // $Id: survey.php 19829 2009-04-17 13:49:47Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 19606 2009-04-07 17:53:13Z iflorespaz $
+* 	@version $Id: survey.php 19829 2009-04-17 13:49:47Z pcool $
 *
 * 	@todo use quickforms for the forms
 */
@@ -141,8 +141,7 @@ if(!empty($survey_data['survey_version'])) echo '<b>'.get_lang('Version').': '.$
 SurveyUtil::check_first_last_question($_GET['survey_id']);
 
 // Action links
-$survey_actions = get_lang('Survey').': ';
-$survey_actions .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).' '.get_lang('EditSurvey').'</a>';
+$survey_actions = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).' '.get_lang('EditSurvey').'</a>';
 $survey_actions .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$_GET['survey_id'].'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).' '.get_lang('DeleteSurvey').'</a>';
 //$survey_actions .= '<a href="create_survey_in_another_language.php?id_survey='.$_GET['survey_id'].'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 $survey_actions .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('preview.gif', get_lang('Preview')).' '.get_lang('Preview').'</a>';

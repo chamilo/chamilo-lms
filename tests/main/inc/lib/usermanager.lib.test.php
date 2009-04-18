@@ -19,8 +19,7 @@ class TestUserManager extends UnitTestCase
 		);
     	$res = UserManager::create_user($user['firstname'],$user['lastname'],$user['status'],$user['email'],$user['username'],$user['pass'],null,null,null,null,$user['auth_source'],null,$user['active']);
     	$this->assertPattern('/\d/',$res);
-    	$res = UserManager::delete_user($res);
-    	$this->assertTrue($res);
+        $res = UserManager::delete_user($res);
     }
     function testCreateUserAddCount()
     {
@@ -38,14 +37,32 @@ class TestUserManager extends UnitTestCase
 		);
 		$precount = UserManager::get_number_of_users();
     	$res = UserManager::create_user($user['firstname'],$user['lastname'],$user['status'],$user['email'],$user['username'],$user['pass'],null,null,null,null,$user['auth_source'],null,$user['active']);
+        $this->assertFalse(!(bool)$res);
 		$postcount = UserManager::get_number_of_users();
-		$this->assertFalse(!(bool)$res);
     	$this->assertTrue(($precount+1)===$postcount);
     	$precount = $postcount;
     	$res = UserManager::delete_user($res);
 		$postcount = UserManager::get_number_of_users();
 		$this->assertFalse(!(bool)$res);
     	$this->assertTrue(($precount-1)===$postcount);
+    }
+    function testDeleteUserReturnsTrue()
+    {
+        $user = array(
+        'username' => 'ywarnier',
+        'pass' => 'ywarnier',
+        'firstname' => 'Yannick',
+        'lastname' => 'Warnier',
+        'status' => 1,
+        'auth_source' => 'platform',
+        'email' => 'yannick.warnier@testdokeos.com',
+        'status' => 1,
+        'creator_id' => 1,
+        'active' => 1,
+        );
+        $res = UserManager::create_user($user['firstname'],$user['lastname'],$user['status'],$user['email'],$user['username'],$user['pass'],null,null,null,null,$user['auth_source'],null,$user['active']);
+        $res = UserManager::delete_user($res);
+        $this->assertTrue($res);
     }
 }
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 19763 2009-04-14 18:34:53Z yannoo $
+<?php // $Id: usermanager.lib.php 19848 2009-04-18 19:13:05Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -114,7 +114,7 @@ class UserManager
 				                    expiration_date = '".Database::escape_string($expiration_date)."',
 									hr_dept_id = '".Database::escape_string($hr_dept_id)."',
 									active = '".Database::escape_string($active)."'";
-		$result = api_sql_query($sql);
+		$result = api_sql_query($sql, __FILE__, __LINE__);
 		if ($result) {
 			//echo "id returned";			
 			$return=Database::get_last_insert_id();

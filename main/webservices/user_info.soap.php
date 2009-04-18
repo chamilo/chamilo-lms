@@ -106,18 +106,17 @@ function DokeosWSCourseListOfUser($username, $signature) {
 
 /* Register DokeosWSCourseList function */
 // Register the data structures used by the service
-
 $server->wsdl->addComplexType(
-        'eventDetails',
-        'complexType',
-        'struct',
-        'all',
-        '',
-        array(
-            'name'=>'date','type'=>'xsd:string',
-            'name'=>'title','type'=>'xsd:string',
-            'name'=>'coursetitle','type'=>'xsd:string',
-        )
+    'eventDetails',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'name'=>'date','type'=>'xsd:string',
+        'name'=>'title','type'=>'xsd:string',
+        'name'=>'coursetitle','type'=>'xsd:string',
+    )
 );
 
 $server->wsdl->addComplexType(
@@ -155,7 +154,7 @@ $server->register('DokeosWSEventsList',       // method name
  * @param string User's API key (the user's API key)
  * @param int    Start date, in YYYYMMDD format
  * @param int    End date, in YYYYMMDD format
- * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
+ * @return array Events list
  */
 function DokeosWSEventsList($username,$signature,$datestart=0,$dateend=0) {
     

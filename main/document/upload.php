@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 19677 2009-04-09 09:49:45Z pcool $
+<?php // $Id: upload.php 19852 2009-04-18 22:19:24Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -248,10 +248,10 @@ if($to_group_id !=0) //add group name after for group documents
 $nameTools = get_lang('UplUploadDocument').$add_group_to_title;
 
 // breadcrumbs
-$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($path).$req_gid, "name"=> $langDocuments);
+$interbreadcrumb[] = array('url' =>'./document.php?curdirpath='.urlencode($path).$req_gid, 'name'=> get_lang('Documents'));
 
 // display the header
-Display::display_header($nameTools,"Doc");
+Display::display_header($nameTools, 'Doc');
 
 
 

@@ -473,18 +473,18 @@ $form_url_send=isset($form_send_data_message) ? $form_send_data_message :'';
 
 <div id="container-9">
     <ul>
-        <li><a href="data_personal.inc.php"><span><?php Display :: display_icon('profile.png' ); echo get_lang('PersonalData'); ?></span></a></li>
+        <li><a href="data_personal.inc.php"><span><?php Display :: display_icon('profile.png' ); echo '&nbsp;&nbsp;'.get_lang('PersonalData'); ?></span></a></li>
         <?php 
        	if (api_get_setting('allow_message_tool')=='true') { 
        	?>        
-        <li><a href="../messages/inbox.php<?php echo $form_url_send; ?>"><span><?php Display :: display_icon('inbox.png'); echo get_lang('Inbox');?></span></a></li>
-        <li><a href="../messages/outbox.php<?php echo $form_url_send; ?>"><span><?php Display :: display_icon('outbox.png',false ); echo get_lang('Outbox');?></span></a></li>
+        <li><a href="../messages/inbox.php<?php echo $form_url_send; ?>"><span><?php Display :: display_icon('inbox.png'); echo '&nbsp;&nbsp;'.get_lang('Inbox');?></span></a></li>
+        <li><a href="../messages/outbox.php<?php echo $form_url_send; ?>"><span><?php Display :: display_icon('outbox.png',false ); echo '&nbsp;&nbsp;'.get_lang('Outbox');?></span></a></li>
         <?php }
   	 	if (api_get_setting('allow_social_tool')=='true') {      
         ?>
-        <li><a href="select_friend_response.php"><span><?php Display :: display_icon('pending_invitation.png'); echo get_lang('PendingInvitations'); ?></span></a></li>
-        <li><a href="contacts.inc.php"><span><?php Display :: display_icon('contacts.png'); echo get_lang('Contacts'); ?></span></a></li>
-        <li><a href="group_contact.inc.php"><span><?php Display :: display_icon('group_contact.png'); echo get_lang('ContactsGroups'); ?></span></a></li>
+        <li><a href="select_friend_response.php"><span><?php Display :: display_icon('pending_invitation.png'); echo '&nbsp;&nbsp;'.get_lang('PendingInvitations'); ?></span></a></li>
+        <li><a href="contacts.inc.php"><span><?php Display :: display_icon('contacts.png'); echo '&nbsp;&nbsp;'.get_lang('Contacts'); ?></span></a></li>
+        <li><a href="group_contact.inc.php"><span><?php Display :: display_icon('group_contact.png'); echo '&nbsp;&nbsp;'.get_lang('ContactsGroups'); ?></span></a></li>
         <?php
   	 	}
         ?>   

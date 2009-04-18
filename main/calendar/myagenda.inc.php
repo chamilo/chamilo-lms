@@ -889,6 +889,7 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 	
 	// get agenda-items for every course
 	$courses = api_get_user_courses($user_id,false);
+    require_once(api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 	foreach ($courses as $id => $course)
 	{		
 		$c = api_get_course_info($course['code']);

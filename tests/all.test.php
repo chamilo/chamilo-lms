@@ -1,5 +1,7 @@
 <?php //$id$
 require_once('../main/inc/global.inc.php');
+$_SESSION['_user']['user_id'] = 1;
+require('../main/inc/global.inc.php');
 require_once('simpletest/autorun.php');
 
 class AllTests extends TestSuite {

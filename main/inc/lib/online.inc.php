@@ -67,6 +67,66 @@ function LoginCheck($uid)
 }
 
 /**
+ * This function handles the logout and is called whenever there is a $_GET['logout']
+ * @return void  Directly redirects the user or leaves him where he is, but doesn't return anything
+ * @author Fernando P. García <fernando@develcuy.com>
+ */
+function online_logout() {
+    global $_configuration, $extAuthSource;
+    // variable initialisation
+    $query_string='';
+
+    if (!empty($_SESSION['user_language_choice'])) {
+        $query_string='?language='.$_SESSION['user_language_choice'];
+    }
+
+    // Database table definition
+    $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+
+    // selecting the last login of the user
+    $uid = intval($_GET['uid']);
+    $sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$uid' ORDER BY login_date DESC LIMIT 0,1";
+    $q_last_connection=api_sql_query($sql_last_connection);
+    if (Database::num_rows($q_last_connection)>0) {
+        $i_id_last_connection=Database::result($q_last_connection,0,"login_id");
+    }
+  
+    if (!isset($_SESSION['login_as'])) {
+        $current_date=date('Y-m-d H:i:s',time());
+        $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id='$i_id_last_connection'";
+        api_sql_query($s_sql_update_logout_date);
+    }
+    LoginDelete($uid, $_configuration['statistics_database']); //from inc/lib/online.inc.php - removes the "online" status
+  
+    //the following code enables the use of an external logout function.
+    //example: define a $extAuthSource['ldap']['logout']="file.php" in configuration.php
+    // then a function called ldap_logout() inside that file 
+    // (using *authent_name*_logout as the function name) and the following code 
+    // will find and execute it 
+    $uinfo = api_get_user_info($uid);
+    if (($uinfo['auth_source'] != PLATFORM_AUTH_SOURCE) && is_array($extAuthSource)) {
+        if (is_array($extAuthSource[$uinfo['auth_source']])) {
+            $subarray = $extAuthSource[$uinfo['auth_source']];
+            if (!empty($subarray['logout']) && file_exists($subarray['logout'])) {
+                require_once($subarray['logout']);
+                $logout_function = $uinfo['auth_source'].'_logout';
+                if (function_exists($logout_function)) {
+                    $logout_function($uinfo);
+                }
+            }
+        }
+    }
+    require_once api_get_path(SYS_PATH) . 'main/chat/chat_functions.lib.php';
+    exit_of_chat($uid);
+    api_session_destroy();
+    global $logout_no_redirect;
+    if (!$logout_no_redirect) {
+        header("Location: index.php$query_string");
+        exit;
+    }
+}
+
+/**
  * Remove all login records from the track_e_online stats table, for the given user ID.
  * @param int User ID
  * @return void

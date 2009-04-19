@@ -9,7 +9,7 @@
 /**
  * Init
  */
-$language_file = array('registration','messages','userInfo','admin');
+$language_file = array('registration','messages','userInfo','admin','forum','blog');
 $cidReset = true;	
 require '../inc/global.inc.php';
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');

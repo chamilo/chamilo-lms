@@ -449,6 +449,7 @@ if (isset($_GET['sendform'])) {
 	$form_reply[]=$_POST['re_id'];
 	$form_reply[]=urlencode($_POST['compose']);
 	$form_reply[]=urlencode($_POST['id_text_name']);
+	$form_reply[]=urlencode($_POST['save_form']);
 	$form_info=implode(',',$form_reply);
 	$form_send_data_message='?form_reply='.$form_info;
 } elseif (isset($_GET['inbox'])) {
@@ -473,18 +474,18 @@ $form_url_send=isset($form_send_data_message) ? $form_send_data_message :'';
 
 <div id="container-9">
     <ul>
-        <li><a href="data_personal.inc.php"><span><?php Display :: display_icon('profile.png' ); echo '&nbsp;&nbsp;'.get_lang('PersonalData'); ?></span></a></li>
+        <li><a href="data_personal.inc.php"><span><?php Display :: display_icon('profile.png',get_lang('PersonalData')); echo '&nbsp;&nbsp;'.get_lang('PersonalData'); ?></span></a></li>
         <?php 
        	if (api_get_setting('allow_message_tool')=='true') { 
        	?>        
-        <li><a href="../messages/inbox.php<?php echo $form_url_send; ?>"><span><?php Display :: display_icon('inbox.png'); echo '&nbsp;&nbsp;'.get_lang('Inbox');?></span></a></li>
-        <li><a href="../messages/outbox.php<?php echo $form_url_send; ?>"><span><?php Display :: display_icon('outbox.png',false ); echo '&nbsp;&nbsp;'.get_lang('Outbox');?></span></a></li>
+        <li><a href="../messages/inbox.php<?php echo $form_url_send; ?>"><span><?php Display :: display_icon('inbox.png',get_lang('Inbox')); echo '&nbsp;&nbsp;'.get_lang('Inbox');?></span></a></li>
+        <li><a href="../messages/outbox.php<?php echo $form_url_send; ?>"><span><?php Display :: display_icon('outbox.png',get_lang('Outbox') ); echo '&nbsp;&nbsp;'.get_lang('Outbox');?></span></a></li>
         <?php }
   	 	if (api_get_setting('allow_social_tool')=='true') {      
         ?>
-        <li><a href="select_friend_response.php"><span><?php Display :: display_icon('pending_invitation.png'); echo '&nbsp;&nbsp;'.get_lang('PendingInvitations'); ?></span></a></li>
-        <li><a href="contacts.inc.php"><span><?php Display :: display_icon('contacts.png'); echo '&nbsp;&nbsp;'.get_lang('Contacts'); ?></span></a></li>
-        <li><a href="group_contact.inc.php"><span><?php Display :: display_icon('group_contact.png'); echo '&nbsp;&nbsp;'.get_lang('ContactsGroups'); ?></span></a></li>
+        <li><a href="select_friend_response.php"><span><?php Display :: display_icon('pending_invitation.png',get_lang('PendingInvitations')); echo '&nbsp;&nbsp;'.get_lang('PendingInvitations'); ?></span></a></li>
+        <li><a href="contacts.inc.php"><span><?php Display :: display_icon('contacts.png',get_lang('Contacts')); echo '&nbsp;&nbsp;'.get_lang('Contacts'); ?></span></a></li>
+        <li><a href="group_contact.inc.php"><span><?php Display :: display_icon('group_contact.png',get_lang('ContactsGroups')); echo '&nbsp;&nbsp;'.get_lang('ContactsGroups'); ?></span></a></li>
         <?php
   	 	}
         ?>   

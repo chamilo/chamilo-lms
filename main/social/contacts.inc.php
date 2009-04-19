@@ -10,6 +10,9 @@ require_once '../inc/lib/social.lib.php';
 $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
 //$list_path_friends=array();
+$request=api_is_xml_http_request();
+$language_variable=($request===true) ? mb_convert_encoding(get_lang('Contacts'),'UTF-8',$charset) : get_lang('Contacts');
+api_display_tool_title($language_variable);
 ?>
 <div id="id" class="actions">
 <?php echo utf8_encode(get_lang('SocialInformationComment')); ?>

@@ -112,7 +112,7 @@ if( trim($info_delete_outbox[0])=='delete' ) {
 }
 /**************************************************************/
 $table_message = Database::get_main_table(TABLE_MESSAGE);
-echo '<div id="div_content_messages_sent">&nbsp;&nbsp;';
+echo '<div id="div_content_messages_sent">';
 api_display_tool_title(mb_convert_encoding(get_lang('Outbox'),'UTF-8',$charset));
 echo '<div class=actions>';
 $language_variable=($request===true) ? mb_convert_encoding(get_lang('MessageOutboxComment'),'UTF-8',$charset) : get_lang('MessageOutboxComment');

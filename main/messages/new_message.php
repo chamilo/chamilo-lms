@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 19472 2009-03-31 23:51:28Z cvargas1 $
+<?php // $Id: new_message.php 19860 2009-04-19 16:39:28Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,7 +50,8 @@ if (api_get_setting('allow_message_tool')!='true'){
 require_once'../messages/message.class.php';
 require_once(api_get_path(LIBRARY_PATH).'/text.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php');
-$nameTools= get_lang('Messages');
+$request=api_is_xml_http_request();
+$nameTools=($request===true) ? mb_convert_encoding(get_lang('Messages'),'UTF-8',$charset) : get_lang('Messages');
 /*
 -----------------------------------------------------------
 	Constants and variables
@@ -98,7 +99,8 @@ $(document).ready(function (){
       });  
 });
 	</script>';	
-$nameTools = get_lang('ComposeMessage');
+
+$nameTools=($request===true) ? mb_convert_encoding(get_lang('ComposeMessage'),'UTF-8',$charset) : get_lang('ComposeMessage');
 $fck_attribute['Height'] = "150";
 $fck_attribute['Width'] = "95%";
 $fck_attribute['ToolbarSet'] = "Profil";
@@ -168,7 +170,8 @@ function manage_form ($default, $select_from_user_list = null) {
 	$form->add_textfield('title', mb_convert_encoding(get_lang('Title'),'UTF-8',$charset));
 	$form->add_html_editor('content', '',false,false);
 	if (isset($_GET['re_id'])) {
-		$form->addElement('hidden','re_id',$_GET['re_id']);
+		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
+		$form->addElement('hidden','save_form','save_form');
 	}
 	$form->addElement('submit', 'compose', get_lang('Send'));
 	$form->setDefaults($default);
@@ -210,11 +213,10 @@ if (isset($_GET['rs'])) {
 		'url' => '#',
 		'name' => get_lang('ComposeMessage')
 	);
-$request=api_is_xml_http_request();
+
 if ($request===false) {
 	Display::display_header('');	
 }
-
 api_display_tool_title($nameTools);
 echo '<div class=actions>';
 echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',get_lang('BackToInbox')).get_lang('BackToInbox').'</a>';

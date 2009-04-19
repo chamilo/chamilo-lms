@@ -105,6 +105,10 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 			$user_email=trim($user_email_prepare[1]);	
 		}
 		$user_id_by_email=MessageManager::get_user_id_by_email($user_email);
+
+		if ($info_reply[6]=='save_form') {
+			$user_id_by_email=$info_reply[2];
+		}
 		if ( isset($user_reply) && !is_null($user_id_by_email) && strlen($info_reply[0]) >0) {
 			MessageManager::send_message($user_id_by_email, $title, $content);
 			MessageManager::display_success_message($user_id_by_email);
@@ -151,7 +155,7 @@ if ($request===false) {
 	$link_ref="../messages/new_message.php?rs=1";
 }
 $table_message = Database::get_main_table(TABLE_MESSAGE);
-echo '<div id="div_content_messages">&nbsp;&nbsp;';
+echo '<div id="div_content_messages">';
 api_display_tool_title(mb_convert_encoding(get_lang('Inbox'),'UTF-8',$charset));
 echo '<div class=actions>';
 echo '<a onclick="compose_and_show_message(\'show\',\'1\')" href="javascript:void(0)">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';

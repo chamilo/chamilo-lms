@@ -8,10 +8,11 @@ $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
 api_block_anonymous_users();
 $request=api_is_xml_http_request();
+$language_variable=($request===true) ? mb_convert_encoding(get_lang('SocialInvitesComment'),'UTF-8',$charset) : get_lang('SocialInvitesComment');
+api_display_tool_title($language_variable);
 ?>
 <div class="actions">
 <?php
-$language_variable=($request===true) ? utf8_encode(get_lang('SocialInvitesComment')) : get_lang('SocialInvitesComment');
 echo $language_variable;	
  ?>
 </div>

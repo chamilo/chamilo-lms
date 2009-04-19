@@ -11,6 +11,9 @@ $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
 $list_path_friends=array();
 $list_groups=array();
+$request=api_is_xml_http_request();
+$language_variable=($request===true) ? mb_convert_encoding(get_lang('ContactsGroups'),'UTF-8',$charset) : get_lang('ContactsGroups');
+api_display_tool_title($language_variable);
 ?>
 <div id="id" class="actions">
 <?php echo '&nbsp;&nbsp;'.utf8_encode(get_lang('ContactsGroupsComment')); ?>

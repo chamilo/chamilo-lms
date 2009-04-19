@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 19727 2009-04-13 00:39:28Z yannoo $
+<?php // $Id: profile.php 19861 2009-04-19 16:49:50Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -761,7 +761,7 @@ if (api_get_setting('extended_profile') == 'true') {
 		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif',get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
 	}
 	if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') { 
-		echo '<a href="../social/profile.php">'.Display::return_icon('edit.gif').'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+		echo '<a href="../social/profile.php">'.Display::return_icon('shared_profile.png',get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
 	}
 	echo '</div>';
 } 

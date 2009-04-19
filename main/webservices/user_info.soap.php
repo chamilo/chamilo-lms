@@ -81,9 +81,12 @@ function DokeosWSCourseListOfUser($username, $signature) {
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
     $list = UserManager::get_api_keys($user_id,'dokeos');
-    $key = $list[0];
+    $key = '';
+    foreach ($list as $key) {
+    	break;
+    }
     
-    $local_key = sha1($username.$key);
+    $local_key = $username.$key;
 
     if (!api_is_valid_secret_key($signature, $local_key)) {
         return -1; //secret key is incorrect
@@ -167,9 +170,12 @@ function DokeosWSEventsList($username,$signature,$datestart=0,$dateend=0) {
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
     $list = UserManager::get_api_keys($user_id,'dokeos');
-    $key = $list[0];
+    $key = '';
+    foreach ($list as $key) {
+    	break;
+    }
     
-    $local_key = sha1($username.$key);
+    $local_key = $username.$key;
 
     if (!api_is_valid_secret_key($signature, $local_key)) {
         return -1; //secret key is incorrect

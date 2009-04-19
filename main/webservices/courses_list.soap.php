@@ -72,8 +72,7 @@ $server->register('DokeosWSCourseList',         // method name
  * @param mixed  Array or string. Type of visibility of course (public, public-registered, private, closed)
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
-function DokeosWSCourseList($username, $signature, $visibilities='public') {
-	if (empty($username) or empty($signature)) { return -1; }
+function DokeosWSCourseList($username, $signature, $visibilities='public') {	    if (empty($username) or empty($signature)) { return -1; }
 
     require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
     require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
@@ -84,9 +83,12 @@ function DokeosWSCourseList($username, $signature, $visibilities='public') {
     if (!UserManager::is_admin($user_id)) { return -1; }
     
     $list = UserManager::get_api_keys($user_id,'dokeos');
-    $key = $list[0];
+    $key = '';
+    foreach ($list as $key) {
+        break;
+    }
     
-    $local_key = sha1($username.$key);
+    $local_key = $username.$key;
 
     if (!api_is_valid_secret_key($signature, $local_key)) {
         return -1; //secret key is incorrect

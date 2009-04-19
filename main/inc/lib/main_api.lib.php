@@ -1812,7 +1812,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 	if (!is_null($to_user_id)) {
 		$to_filter = " AND to_user_id='$to_user_id'"; // set filter to intended user
 	} else {
-		if (!is_null($to_group_id) and $to_group_id == strval(intval($to_group_id))) {
+		if (($to_group_id != 0) && $to_group_id == strval(intval($to_group_id))) {
 			$to_filter = " AND to_group_id='$to_group_id'"; // set filter to intended group
 		}
 	}

@@ -359,6 +359,159 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
             } //end if is_array($extAuthSource)
 
         } //end else login failed
+    } elseif(api_get_setting('sso_authentication') &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
+    	/**
+    	 * TODO:
+    	 * - Implement user interface for api_get_setting('sso_authentication')
+    	 *   } elseif (api_get_setting('sso_authentication')=='true') {
+    	 * - Work on a better validation for webservices paths. Current is very poor and exit
+    	 * - $master variable should be recovered from dokeos settings.
+    	*/
+        $master = array(
+    		'domain' => api_get_setting('sso_authentication_domain'), 			//	'localhost/project/drupal5',
+    		'auth_uri' => api_get_setting('sso_authentication_auth_uri'),		//	'/?q=user',
+    		'deauth_uri' => api_get_setting('sso_authentication_unauth_uri'),	//	'/?q=logout',
+    		'protocol' => api_get_setting('sso_authentication_protocol')		//	'http://',
+        );
+        $referer = $master['protocol'] . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        if (isset($_SESSION['_user']['user_id'])) {
+            if ($logout) {
+                // Library needed by index.php
+                include_once api_get_path(LIBRARY_PATH) . 'online.inc.php';
+                include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+                // Prevent index.php to redirect
+                global $logout_no_redirect;
+                $logout_no_redirect = TRUE;
+                // Make custom redirect after logout
+                online_logout();
+                header('Location: '. $master['protocol'] . $master['domain'] . $master['deauth_uri']);
+                exit;
+            }
+      } elseif(!$logout) {
+          $master_url = $master['domain'] . $master['auth_uri'];
+          // Handle cookie comming from Master Server
+          if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed'])) {
+              // Target to redirect after success SSO
+              $target = api_get_path(WEB_PATH);
+              // Redirect to master server
+              header('Location: ' . $master['protocol'] . $master_url . '&sso_referer=' . urlencode($referer) . '&sso_target=' . urlencode($target));
+              exit;
+          } elseif (isset($_GET['sso_cookie'])) {
+              if (isset($_GET['sso_referer']) ? $_GET['sso_referer'] === $master['protocol']. $master_url : FALSE) {
+                  $sso = unserialize(base64_decode($_GET['sso_cookie']));
+                  //lookup the user in the main database
+                  $user_table = Database::get_main_table(TABLE_MAIN_USER);
+                  $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
+                          FROM $user_table
+                          WHERE username = '".trim(addslashes($sso['username']))."'";
+              
+                  $result = api_sql_query($sql,__FILE__,__LINE__);
+
+                  if (Database::num_rows($result) > 0) {
+                      $uData = Database::fetch_array($result);
+                      // check the user's password
+                      if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
+                          // Make sure password is encrypted with md5
+                          if (!$userPasswordCrypted) {
+                              $uData['password'] = md5($uData['password']);
+                          }
+                          //the authentification of this user is managed by Dokeos itself// check the user's password
+                          // password hash comes into a sha1
+                          if ($sso['secret'] === sha1($uData['password']) && ($sso['username'] == $uData['username'])) {
+                              // check if the account is active (not locked)
+                              if ($uData['active']=='1') {
+                                  // check if the expiration date has not been reached
+                                  if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
+                                      global $_configuration;
+                                      if ($_configuration['multiple_access_urls']==true) {
+                                          //check the access_url configuration setting if the user is registered in the access_url_rel_user table
+                                          //getting the current access_url_id of the platform                              
+                                          $current_access_url_id = api_get_current_access_url_id();
+                                          // my user is subscribed in these sites => $my_url_list   
+                                          $my_url_list = api_get_access_url_from_user($uData['user_id']);
+                                                
+                                          if (is_array($my_url_list) && count($my_url_list)>0 ) {
+                                              if (in_array($current_access_url_id, $my_url_list)) {
+                                                  // the user has permission to enter at this site
+                                                  $_user['user_id'] = $uData['user_id'];
+                                                  api_session_register('_user');
+                                                  if (!function_exists('event_login')){
+                                                      include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+                                                      event_login();
+                                                  }
+                                                  // Redirect to homepage
+                                                  $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
+                                                  header('Location: '. $sso_target);
+                                              } else {
+                                                  // user does not have permission for this site
+                                                  $loginFailed = true;
+                                                  api_session_unregister('_uid');
+                                                  header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+                                                  exit;
+                                              }                       
+                                          } else {
+                                              // there is no URL in the multiple urls list for this user
+                                              $loginFailed = true;
+                                              api_session_unregister('_uid');
+                                              header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+                                              exit;                         
+                                          }
+                                      } else {
+                                            //single URL access
+                                            $_user['user_id'] = $uData['user_id'];
+                                            api_session_register('_user');
+                                            if (!function_exists('event_login')){
+                                                include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+                                                event_login();
+                                            }
+                                            // Redirect to homepage
+                                            $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
+                                            header('Location: '. $sso_target);           
+                                        }
+                                    } else {
+                                        // user account expired
+                                        $loginFailed = true;
+                                        api_session_unregister('_uid');
+                                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
+                                        exit;
+                                    }
+                                } else {
+                                    //user not active
+                                    $loginFailed = true;
+                                    api_session_unregister('_uid');
+                                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
+                                    exit;
+                                }
+                            } else {
+                              //sha1 of password is wrong
+                              $loginFailed = true;
+                              api_session_unregister('_uid');
+                              header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
+                              exit;
+                            }
+                        } else {
+                            //auth_source is wrong
+                            $loginFailed = true;
+                            api_session_unregister('_uid');
+                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
+                            exit;
+                        }
+                    } else {
+                        //no user by that login
+                        $loginFailed = true;
+                        api_session_unregister('_uid');
+                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
+                        exit;
+                    }
+                } else {
+                    //request comes from unknown source
+                    $loginFailed = true;
+                    api_session_unregister('_uid');
+                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
+                    exit;
+                }
+            }
+        }
     } elseif (api_get_setting('openid_authentication')=='true') {
 		if (!empty($_POST['openid_url'])) {
 	    	include('main/auth/openid/login.php');

@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 19788 2009-04-15 15:08:52Z juliomontoya $
+* 	@version $Id: exercise_result.php 19894 2009-04-20 16:38:00Z cvargas1 $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -911,15 +911,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					display_free_answer($choice);
 				}
 				elseif($answerType == HOT_SPOT)
-				{
-					
-					$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-					// Save into db
-					$sql = "INSERT INTO $tbl_track_e_hotspot (`hotspot_user_id` , `hotspot_course_code` , `hotspot_exe_id` , `hotspot_question_id` , `hotspot_answer_id` , `hotspot_correct` , `hotspot_coordinate` ) 
-							VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."', '".Database::escape_string($answerId)."', '".Database::escape_string($studentChoice)."', '".Database::escape_string($_SESSION['exerciseResultCoordinates'][$questionId][$answerId])."')";
-				
-					$result = api_sql_query($sql,__FILE__,__LINE__);
-					
+				{					
 					display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
 				}
 				elseif($answerType == HOT_SPOT_ORDER)
@@ -1054,10 +1046,13 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		<br />
 			<?php
 			if ($origin != 'learnpath') {
+				
+				echo "Holaaaaaaaaaaaaaaaaaaaaaaa";
 			?>
+			
 			<button type="submit" class="save"><?php echo get_lang('Finish');?></button>
 			<?php
-			} else {							
+			} else {			
 			?>							
 				<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>';" value="<?php echo get_lang('Finish'); ?>"><?php echo get_lang('Finish');?></button>				
 			<?php }?>

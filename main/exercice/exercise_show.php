@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 19813 2009-04-17 00:19:28Z cvargas1 $
+* 	@version $Id: exercise_show.php 19894 2009-04-20 16:38:00Z cvargas1 $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -306,6 +306,9 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				<td valign="top" align="left"><?php echo $answerId; ?></td>
 				<td valign="top" align="left">
 					<?php $studentChoice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $studentChoice; ?>
+				</td>
+				<td valign="top">
+					<?php echo stripslashes($answerComment); ?>
 				</td>
 		</tr>
 	<?php
@@ -844,14 +847,13 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 						$answer=$objAnswerTmp->selectAnswer($answerId);
 						$answerComment=$objAnswerTmp->selectComment($answerId);
 						$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-						$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+						$answerWeighting=$objAnswerTmp->selectWeighting($answerId);				
 						
 						$TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 						$query = "select hotspot_correct from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".Database::escape_string($id)."' and hotspot_question_id= '".Database::escape_string($questionId)."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
 						$resq=api_sql_query($query);
 						$choice = Database::result($resq,0,"hotspot_correct");
-						display_hotspot_answer($answerId,$answer,$choice,$answerComment);
-		
+						display_hotspot_answer($answerId,$answer,$choice,$answerComment);		
 						$i++;
 				 	}
 				 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";

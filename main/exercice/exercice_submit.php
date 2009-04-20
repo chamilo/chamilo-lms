@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 19837 2009-04-17 17:25:50Z cfasanando $
+<?php // $Id: exercice_submit.php 19894 2009-04-20 16:38:00Z cvargas1 $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 19837 2009-04-17 17:25:50Z cfasanando $
+* 	@version $Id: exercice_submit.php 19894 2009-04-20 16:38:00Z cvargas1 $
 */
 
 
@@ -487,6 +487,13 @@ if ($formSent) {
 															$questionScore+=$answerWeighting;
 															$totalScore+=$answerWeighting;
 														}
+																			
+														$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+														// Save into db
+														$sql = "INSERT INTO $tbl_track_e_hotspot (`hotspot_user_id` , `hotspot_course_code` , `hotspot_exe_id` , `hotspot_question_id` , `hotspot_answer_id` , `hotspot_correct` , `hotspot_coordinate` ) 
+																VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."', '".Database::escape_string($answerId)."', '".Database::escape_string($studentChoice)."', '".Database::escape_string($_SESSION['exerciseResultCoordinates'][$questionId][$answerId])."')";
+													
+														$result = api_sql_query($sql,__FILE__,__LINE__);
 														break;
 								// for hotspot with fixed order
 								case HOT_SPOT_ORDER :	$studentChoice=$choice['order'][$answerId];

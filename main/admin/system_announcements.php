@@ -1,4 +1,4 @@
-<?php // $Id: system_announcements.php 19807 2009-04-16 17:20:43Z aportugal $
+<?php // $Id: system_announcements.php 19895 2009-04-20 16:52:17Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -199,7 +199,16 @@ if ($action_todo)
 	$form->addElement('hidden', 'action');
 	$form->addElement('hidden', 'id');
 	$form->addElement('checkbox', 'send_mail', get_lang('SendMail'));
-	$form->addElement('style_submit_button', 'submit', get_lang('Ok'),'class="save"');
+	if ($_GET['action']=='add'){
+		$text=get_lang('AddSystemAnnouncement');
+		$class='add';
+		
+	} elseif ($_GET['action']=='edit'){
+		$text=get_lang('EditSystemAnnouncement');
+		$class='save';
+	}
+	
+	$form->addElement('style_submit_button', 'submit', $text,'class="'.$class.'"');
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true')
 	{
 		$values['content'] = WCAG_Rendering::HTML_to_text($values['content']);

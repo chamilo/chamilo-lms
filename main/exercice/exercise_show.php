@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 19894 2009-04-20 16:38:00Z cvargas1 $
+* 	@version $Id: exercise_show.php 19897 2009-04-20 17:21:18Z cfasanando $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -328,7 +328,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 	<?php
 		$sql_test_name='SELECT title, description, results_disabled FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
 		$result=api_sql_query($sql_test_name);
-		$show_results = true;
+		$show_results = false;
 		// Avoiding the "Score 0/0" message  when the exe_id is not set 	
 		if (Database::num_rows($result)>0 && isset($id)) {
 			$test=Database::result($result,0,0);		
@@ -357,7 +357,9 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			echo '</td>
 			</tr>
 			</table>';
-		}		
+		}
+		
+		if ($origin != 'learnpath') {		
 		$show_results = true;
 		
 ?>	
@@ -382,7 +384,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 	 </table>
 	 <br />
   <?php
-
+		}
 	$i=$totalScore=$totalWeighting=0;
 	if($debug>0){echo "ExerciseResult: "; var_dump($exerciseResult); echo "QuestionList: ";var_dump($questionList);}
 	
@@ -980,6 +982,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		$totalWeighting+=$questionWeighting;
 		}
 ?>
+<?php if($origin!='learnpath') {?>
 <tr><td align="left"><b><?php
 			//$query = "update ".$TBL_TRACK_EXERCICES." set exe_result = $totalScore where exe_id = '$id'";
 			//api_sql_query($query,__FILE__,__LINE__);
@@ -994,6 +997,9 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				}
                   ?> !</b>
 	</td></tr>
+<?php } else {?>
+<tr><td><br /><br /><?php Display::display_normal_message(get_lang('ExerciseFinished')) ?></td></tr>
+<?php } ?>	
 	<tr>
 		<td align="left">
 		<br />

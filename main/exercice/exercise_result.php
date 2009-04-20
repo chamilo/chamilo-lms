@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 19894 2009-04-20 16:38:00Z cvargas1 $
+* 	@version $Id: exercise_result.php 19897 2009-04-20 17:21:18Z cfasanando $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -311,7 +311,9 @@ else
 </head>
 
 <body>
+<?php if ($origin != 'learnpath') { ?>
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css'; ?>" />
+<?php } ?>
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'; ?>" />
 <?php
 }
@@ -437,7 +439,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 */
 
 // I'm in a preview mode
-if (api_is_course_admin()) {
+if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '<div class="actions">';
 	echo Display::return_icon('quiz.gif', get_lang('GoBackToEx')).'<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('GoBackToEx').'</a>';
 	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
@@ -447,8 +449,11 @@ if (api_is_course_admin()) {
 $exerciseTitle=api_parse_tex($exerciseTitle);
 
 ?>
-	<h3><?php echo $exerciseTitle ?>: <?php echo get_lang("Result"); ?></h3>
-	<?php echo $exerciseDescription; ?>
+	<?php if($origin != 'learnpath') {?>	
+		<h3><?php echo $exerciseTitle ?>: <?php echo get_lang("Result"); ?></h3>
+		<?php echo $exerciseDescription; ?>
+	<?php } ?>
+	
 	<form method="get" action="exercice.php">
 	<input type="hidden" name="origin" value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
@@ -511,6 +516,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			$colspan=1;
 		}
 		?>
+		<?php if($origin != 'learnpath') {?>
 			<table width="100%" border="0" cellpadding="3" cellspacing="2">
 			<tr bgcolor="#E6E6E6">
 			<td colspan="<?php echo $colspan; ?>">
@@ -602,6 +608,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				</tr>
 			<?php
 		}
+		   } 
 
 		// construction of the Answer object
 		$objAnswerTmp=new Answer($questionId);
@@ -865,12 +872,16 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			if($answerType != MATCHING || $answerCorrect)
 			{
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-				{
-					display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect);
+				{	
+					if ($origin!='learnpath') {
+						display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect);
+					}
 				}
 				elseif($answerType == FILL_IN_BLANKS)
 				{
-					display_fill_in_blanks_answer($answer);
+					if ($origin!='learnpath') {
+						display_fill_in_blanks_answer($answer);
+					}
 				}
 				elseif($answerType == FREE_ANSWER)
 				{
@@ -908,11 +919,16 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					}else{
 						//this is a problem (it means that there is no admin for this course)
 					}
-					display_free_answer($choice);
+					if($origin != 'learnpath') {
+						display_free_answer($choice);
+					}
+					
 				}
 				elseif($answerType == HOT_SPOT)
 				{					
-					display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
+					if ($origin != 'learnpath') {
+						display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
+					}
 				}
 				elseif($answerType == HOT_SPOT_ORDER)
 				{
@@ -920,6 +936,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				}
 				else
 				{
+					if ($origin != 'learnpath') {
 					?>
 						<tr>
 						<td width="50%">
@@ -935,6 +952,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 						</td>
 						</tr>
 					<?php
+					}
 				}
 			}
 		} // end for that loops over all answers of the current question
@@ -942,6 +960,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER)
 			{
 				// We made an extra table for the answers
+				if($origin != 'learnpath') {
 				echo "</table></td></tr>";
 				?>
 				
@@ -954,8 +973,10 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					</td>
 				</tr>
 				<?php 
+				} 
 			}
 		?>
+		<?php if($origin != 'learnpath') { ?>
 			<tr>
 			<td colspan="<?php echo $colspan; ?>" align="left">
 				<b>
@@ -970,6 +991,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			</td>
 			</tr>
 			</table>
+			<?php } ?>
 		<?php
 		// destruction of Answer
 		unset($objAnswerTmp);
@@ -1029,6 +1051,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		}
 	} // end huge foreach() block that loops over all questions
 	?>
+	<?php if($origin != 'learnpath') { ?>
 		<table width="100%" border="0" cellpadding="3" cellspacing="2">
 		<tr>
 		<td>
@@ -1044,26 +1067,21 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		<tr>
 		<td>
 		<br />
-			<?php
-			if ($origin != 'learnpath') {
-				
-				echo "Holaaaaaaaaaaaaaaaaaaaaaaa";
-			?>
 			
 			<button type="submit" class="save"><?php echo get_lang('Finish');?></button>
-			<?php
-			} else {			
-			?>							
-				<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>';" value="<?php echo get_lang('Finish'); ?>"><?php echo get_lang('Finish');?></button>				
-			<?php }?>
+				
 		</td>
 		</tr>
 		</table>
-
+	<?php } ?>
 		</form>
 
-		<br />
-	<?php
+		<br /><br />
+<?php if($origin == 'learnpath') {	
+	Display::display_normal_message(get_lang('ExerciseFinished'));							
+?>					
+	<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>';" value="<?php echo get_lang('Finish'); ?>"><?php echo get_lang('Finish');?></button>				
+<?php }	
 /*
 ==============================================================================
 		Tracking of results

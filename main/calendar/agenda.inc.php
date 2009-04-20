@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 19732 2009-04-13 18:52:43Z ivantcholakov $
+<?php //$Id: agenda.inc.php 19905 2009-04-20 23:10:25Z aportugal $
 
 /*
 ==============================================================================
@@ -409,7 +409,7 @@ function display_monthcalendar($month, $year)
 	$today = getdate();
 	while ($curday <=$numberofdays[$month])
   	{
-	echo "<tr>\n";
+	echo "<tr>\n";	
     	for ($ii=0; $ii<7; $ii++)
 	  	{
 	  		if (($curday == -1)&&($ii==$startdayofweek))
@@ -421,16 +421,18 @@ function display_monthcalendar($month, $year)
 				$bgcolor = $ii<5 ? "class=\"row_odd\"" : "class=\"row_even\"";
 
 				$dayheader = "$curday";
-				if (key_exists($curday,$data))
-				{
+				
+				if (key_exists($curday,$data)) {
 					$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
 					foreach ($data[$curday] as $key=>$agenda_item)
 					{
-						foreach ($agenda_item as $key=>$value)
-						{
-							$dayheader .= '<br /><b>'.substr($value['start_date'],11,8).'</b>';
-							$dayheader .= ' - ';
-							$dayheader .= $value['title'];
+						foreach ($agenda_item as $key=>$value) {
+							$month_start_date = (int)substr($value['start_date'],5,2);
+							if ($month == $month_start_date) {
+								$dayheader .= '<br /><b>'.substr($value['start_date'],11,8).'</b>';
+								$dayheader .= ' - ';
+								$dayheader .= $value['title'];
+							}
 								//$agendaitems = get_global_agenda_items($agendaitems, $curday, $month, $year, $startdayofweek, "month_view");
 								//echo $agendaitems['title'];
 						}

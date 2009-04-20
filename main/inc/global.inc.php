@@ -457,7 +457,11 @@ if ($_course['language'])
 	$language_interface = $_course['language'];
 }
 
-
+// Sometimes the variable $language_interface is changed
+// temporarily for achieving translation in different language.
+// We need to save the genuine value of this variable and
+// to use it within the function get_lang(...).
+$language_interface_initial_value = $language_interface;
 
 /*
  * Include all necessary language files

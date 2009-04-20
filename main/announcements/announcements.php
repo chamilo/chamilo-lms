@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 19702 2009-04-10 11:39:21Z pcool $
+<?php //$Id: announcements.php 19898 2009-04-20 17:54:24Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1112,7 +1112,7 @@ if(!empty($error_message))
 				($email_ann=='1')?$checked='checked':$checked='';
 				echo '	<div class="row">
 							<div class="label">
-								<input class="checkbox" type="checkbox" value="1" name="email_ann" '.$checked.'>
+								<input class="checkbox" type="checkbox" value="1" name="email_ann" checked>
 							</div>
 							<div class="formw">'.get_lang('EmailOption').'
 							</div>

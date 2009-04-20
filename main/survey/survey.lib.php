@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 19829 2009-04-17 13:49:47Z pcool $
+* 	@version $Id: survey.lib.php 19898 2009-04-20 17:54:24Z cvargas1 $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1606,7 +1606,7 @@ class yesno extends question
 		$this->html .= 				get_lang('DisplayAnswersHorVert');
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked ';
 						if ($form_content['horizontalvertical'] == 'horizontal')
 						{
 							$this->html .= 'checked="checked"';
@@ -1704,7 +1704,7 @@ class multiplechoice extends question
 		$this->html .= 				get_lang('DisplayAnswersHorVert');
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked ';
 						if ($form_content['horizontalvertical'] == 'horizontal')
 						{
 							$this->html .= 'checked="checked"';
@@ -1793,7 +1793,7 @@ class personality extends question
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right" valign="top">&nbsp;</td>';
 		$this->html .= '		<td>';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked ';
 		
 		if ($form_content['horizontalvertical'] == 'horizontal')
 		{
@@ -1900,7 +1900,7 @@ class multipleresponse extends question
 		$this->html .= 				get_lang('DisplayAnswersHorVert');
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
-		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
+		$this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" checked ';
 						if ($form_content['horizontalvertical'] == 'horizontal')
 						{
 							$this->html .= 'checked="checked"';

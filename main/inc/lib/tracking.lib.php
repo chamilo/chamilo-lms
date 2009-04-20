@@ -241,6 +241,70 @@ class Tracking {
 		return $nb_courses;
 	}
 
+	/**
+	 * This function gets the score average from all tests in a course by student 
+	 * @param int $student_id - User id
+	 * @param string $course_code - Course id
+	 * @return string value (number %) Which represents a round integer about the score average.
+	 */
+	function get_avg_student_exercise_score($student_id, $course_code) {
+
+		// protect datas
+		$student_id = Database::escape_string($student_id);
+		$course_code = Database::escape_string($course_code);
+
+		// get the informations of the course 
+		$a_course = CourseManager :: get_course_information($course_code);
+		
+		if(!empty($a_course['db_name']))
+		{		
+			// table definition
+			$tbl_course_quiz = Database::get_course_table(TABLE_QUIZ_TEST,$a_course['db_name']);
+			$tbl_stats_exercise = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);			
+			
+			//get the list of exercises
+			$sql = "SELECT id, title FROM $tbl_course_quiz WHERE active <> -1";			
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$count_exe = Database::num_rows($rs);
+			
+			if ($count_exe > 0) {
+				$quiz_avg_score = 0;
+				while($quiz = Database::fetch_array($rs)) {
+
+					// get the score and max score from track_e_exercise	
+					$sql = 'SELECT exe_result , exe_weighting
+							FROM '.$tbl_stats_exercise.'
+							WHERE exe_exo_id = '.(int)$quiz['id'].'
+							AND exe_user_id = '.(int)$student_id.'		
+							AND orig_lp_id = 0
+							AND orig_lp_item_id = 0		
+							ORDER BY exe_date DESC';
+					
+					$rsAttempt = api_sql_query($sql, __FILE__, __LINE__);
+					$nb_attempts = 0;
+					while ($attempt = Database::fetch_array($rsAttempt)) {
+						$nb_attempts++;
+						$exe_weight=$attempt['exe_weighting'];
+						if ($exe_weight>0) {
+							$quiz_avg_score = $attempt['exe_result']/$exe_weight*100;
+						}
+					}
+					if($nb_attempts>0) {
+						$quiz_avg_score = $quiz_avg_score / $nb_attempts;
+		            }
+				}		
+										
+				return $quiz_avg_score/$count_exe;				    	
+			}				
+		}
+		else
+		{
+			return null;
+		}
+	
+	}
+
+
 	function get_avg_student_progress($student_id, $course_code) {
 		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 

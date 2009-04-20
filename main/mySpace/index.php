@@ -543,9 +543,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 		{
 			
 			$course_code = $course['course_code'];
-			//var_dump(Tracking ::get_avg_student_exercise($student_id,$course_code));
-			//var_dump($course_code);
-			$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = 0;
+			$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 			
 			// students directly subscribed to the course
 			$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
@@ -557,6 +555,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 				// tracking datas
 				$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
 				$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
+				$avg_score_in_exercise += Tracking :: get_avg_student_exercise_score ($row['user_id'], $course_code);
 				$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
 				$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
 				$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
@@ -578,21 +577,22 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 											
 						// tracking datas
 						$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
-						$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
+						$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);						
+						$avg_score_in_exercise += Tracking :: get_avg_student_exercise_score ($row['user_id'], $course_code);														
 						$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
 						$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);						
 						$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
 						$a_course_students[] = $row['user_id'];
 					}
-				}
-				
-				
+				}							
 			}
+
 			if($nb_students_in_course>0)
 			{
 				$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
 				$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course,2).' %';
 				$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course,2).' %';
+				$avg_score_in_exercise = round($avg_score_in_exercise / $nb_students_in_course,2).' %';
 				$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course,2);
 				$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course,2);
 			}
@@ -614,6 +614,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 								$avg_time_spent_in_course,
 								$avg_progress_in_course,
 								$avg_score_in_course,
+								$avg_score_in_exercise,
 								$avg_messages_in_course,
 								$avg_assignments_in_course,
 								);

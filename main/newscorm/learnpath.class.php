@@ -802,14 +802,19 @@ class learnpath {
     	//If an ID is specifically given and the current LP is not the same,
     	//prevent delete
     	if(!empty($id) && ($id != $this->lp_id)){return false;}
-    	
-		//if($this->debug>0){error_log('New LP - In learnpath::delete()',0);}
-    	foreach($this->items as $id => $dummy)
-    	{
-    		$this->items[$id]->delete();
-    	}
+
     	$lp = Database::get_course_table('lp');
     	$lp_view = Database::get_course_table('lp_view');
+    	$lp_item_view = Database::get_course_table('lp_item_view');
+    	
+		//if($this->debug>0){error_log('New LP - In learnpath::delete()',0);}
+		//delete lp item id
+    	foreach($this->items as $id => $dummy) {
+    		//$this->items[$id]->delete();
+    		$sql_del_view = "DELETE FROM $lp_item_view WHERE lp_item_id = '".$id."'";
+    		$res_del_item_view=api_sql_query($sql_del_view,__FILE__,__LINE__);
+    	}
+
     	$sql_del_view = "DELETE FROM $lp_view WHERE lp_id = ".$this->lp_id;
     	//if($this->debug>2){error_log('New LP - Deleting views bound to lp '.$this->lp_id.': '.$sql_del_view,0);}
     	$res_del_view = api_sql_query($sql_del_view, __FILE__, __LINE__);

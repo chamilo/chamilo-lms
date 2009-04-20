@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 19836 2009-04-17 16:58:10Z iflorespaz $ 
+<?php // $Id: scorm_api.php 19900 2009-04-20 20:16:28Z iflorespaz $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -142,6 +142,14 @@ var G_LastErrorString = 'No error';
 status_info=new Array();
 var commit = false ;
 
+var variables_scorm = new Array('cmi.core.score.raw','cmi.core.score.max','cmi.core.score.min','cmi.core.lesson_location',
+'cmi.core.lesson_status','cmi.completion_status','cmi.core.session_time','cmi.score.scaled','cmi.success_status',
+'cmi.suspend_data','cmi.core.exit','interactions');
+
+var variable_to_send=new Array();
+var updatetable_to_list=new Array();
+var info_of_variable_to_send=new Array();
+
 //Strictly scorm variables
 var score=<?php echo $oItem->get_score();?>;
 var max='<?php echo $oItem->get_max();?>';
@@ -156,11 +164,29 @@ var launch_data = '<?php echo $oItem->get_launch_data();?>';
 var max_time_allowed = '<?php echo $oItem->get_max_time_allowed();?>';
 var interactions = new Array(<?php echo $oItem->get_interactions_js_array();?>);
 item_objectives = new Array();
-
+info_lms_item=new Array();
 $(document).ready( function() { 
+	info_lms_item[0]='<?php echo $oItem->get_id();?>';
+	info_lms_item[1]='<?php echo $oItem->get_id();?>';
+	
 	$("#current_item_id").attr("value",<?php echo $oItem->get_id();?>);
-	$("#old_item").attr("value",<?php echo $oItem->get_id();?>);	
+	$("#old_item").attr("value",<?php echo $oItem->get_id();?>);
+	
+	//var myiframe=document.getElementById('content_id');
+	//myiframe.Events.AttachEvent("onclick", update_lp_item_id);
+	//myiframe.contentWindow.document.addEventListener("click", update_lp_item_id, false);
+		
  } ); 
+ 
+ 
+$(document).ready( function() { 
+ $("iframe#content_id").load( function(){
+  //alert("Document title: " + $("iframe#content_id").attr('src'));
+  info_lms_item[0]=info_lms_item[1];
+  info_lms_item[1]= info_lms_item[1];
+ });
+});
+ 
  
 //Dokeos internal variables
 var saved_lesson_status = 'not attempted';
@@ -196,6 +222,9 @@ var old_suspend_data = '';
 var lms_old_item_id = 0;
 
 var execute_stats='false';
+
+
+    
 /**
  * Function called mandatorily by the SCORM content to start the SCORM communication
  */
@@ -208,7 +237,10 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
 	 * it will have all the correct variables set 
 	 */	 
 	G_LastError = G_NoError ;
-	G_LastErrorMessage = 'No error';	
+	G_LastErrorMessage = 'No error';
+	//reinit to list
+	reinit_updatatetable_list ()
+		
 	lms_initialized=0;
 	// if there are more parameters than ""		
 	if (arguments.length>1) {
@@ -285,7 +317,7 @@ function LMSGetValue(param)
 	    if(lesson_status != '') {
 	    	result=lesson_status;
 	    } else {	    	
-	    	result='not attempted';
+	    	//result='not attempted';
 	    }
 	} else if(param == 'cmi.core.student_id'){
 	// ---- cmi.core.student_id
@@ -465,41 +497,52 @@ function LMSSetValue(param, val) {
 	return_value = 'false';
 	if( param == "cmi.core.score.raw" ) {
 		score= val; 
+		updatetable_to_list['cmi.core.score.raw']='true';
 		return_value='true';
 	} else if ( param == "cmi.core.score.max" ) {
 		max = val;
+		updatetable_to_list['cmi.core.score.max']='true';
 		return_value='true';
 	} else if ( param == "cmi.core.score.min" ) {
 		min = val;
+		updatetable_to_list['cmi.core.score.min']='true';
 		return_value='true';
 	} else if ( param == "cmi.core.lesson_location" ) {
 		lesson_location = val;
+		updatetable_to_list['cmi.core.lesson_location']='true';
 		return_value='true';
 	} else if ( param == "cmi.core.lesson_status" ) {
 		saved_lesson_status = lesson_status;
 		lesson_status = val;
+		updatetable_to_list['cmi.core.lesson_status']='true';
 	    return_value='true';
 	} else if ( param == "cmi.completion_status" ) {
 		lesson_status = val;
+		updatetable_to_list['cmi.completion_status']='true';
 		return_value='true'; //1.3
 	} else if ( param == "cmi.core.session_time" ) {
-		session_time = val;		
+		session_time = val;
+		updatetable_to_list['cmi.core.session_time']='true';		
 		return_value='true';
 	} else if ( param == "cmi.score.scaled") { //1.3
 		if(val<=1 && val>=-1) { 
 			score = val ;
+			updatetable_to_list['cmi.score.scaled']='true';
 			return_value='true';
 		} else {
 			return_value='false';
 		}
 	} else if ( param == "cmi.success_status" ) {
 		success_status = val;
+		updatetable_to_list['cmi.success_status']='true';
 		return_value='true'; //1.3
 	} else if ( param == "cmi.suspend_data" ) {
 		suspend_data = val;
+		updatetable_to_list['cmi.suspend_data']='true';
 		return_value='true';
 	} else if ( param == "cmi.core.exit" ) {
 		lms_item_core_exit = val;
+		updatetable_to_list['cmi.core.exit']='true';
 		return_value='true';
 	} else if ( param == "cmi.core.student_id" ) {
 		G_LastError = G_ElementIsReadOnly;
@@ -507,7 +550,7 @@ function LMSSetValue(param, val) {
 		G_LastError = G_ElementIsReadOnly;
 	} else if ( param == "cmi.core.credit" ) {
 		G_LastError = G_ElementIsReadOnly;
-	} else if ( param == "cmi.core.entry" ) {
+	} else if ( param == "cmi.core.entry" ) {               
 		G_LastError = G_ElementIsReadOnly;
 	} else if ( param == "cmi.core.total_time" ) {
 		G_LastError = G_ElementIsReadOnly;			
@@ -528,6 +571,7 @@ function LMSSetValue(param, val) {
 	} else {
 		var myres = new Array();
 		if(myres = param.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency)(.*)/)) {
+			updatetable_to_list['interactions']='true';
 			elem_id = myres[1];
 			if(elem_id > interactions.length) //interactions setting should start at 0
 			{
@@ -592,6 +636,7 @@ function LMSSetValue(param, val) {
 			}
 		} else if(param.substring(0,15)== 'cmi.objectives.'){
 			var myres = '';
+			updatetable_to_list['objectives']='true';
 			if(myres = param.match(/cmi.objectives.(\d+).(id|score|status)(.*)/))
 			{
 				obj_id = myres[1];
@@ -669,8 +714,35 @@ function SetValue(param, val) {
 	return LMSSetValue(param, val);
 }
 
-function savedata(origin)
-{ 
+function ProcessValueScorm () {
+
+	for (i=0;i<variables_scorm.length;i++) {
+
+		if (updatetable_to_list[variables_scorm[i]]=='true') {
+			info_update_table=variables_scorm[i];
+			variable_to_send.push(info_update_table);
+		}
+	}
+	
+	return variable_to_send;
+}
+
+function reinit_updatatetable_list () {
+	
+	for (i=0;i<variables_scorm.length;i++) {
+
+		if (updatetable_to_list[variables_scorm[i]]=='true') {
+			updatetable_to_list[variables_scorm[i]]='false';
+		}
+	}
+	lesson_status='';
+	
+}
+
+function savedata(origin) { 
+	my_get_value_scorm=new Array();
+	my_get_value_scorm=ProcessValueScorm();
+
 	//origin can be 'commit', 'finish' or 'terminate'	
     if ((lesson_status != 'completed') && (lesson_status != 'passed') && (mastery_score >=0) && (score >= mastery_score)) {
 		lesson_status = 'passed';
@@ -698,40 +770,42 @@ function savedata(origin)
 	    	} else if (mastery_score!= '') {
 	    		lesson_status = 'completed';
 	    	}
-	    	*/	
+	    	*/
     	}
     }
+
+    
 	logit_lms('saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
 	
-	old_item_id=$("#old_item").val();
+	old_item_id=info_lms_item[0];
+	//xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit);
 	
-	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, old_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit);
+
 	
-	$("#old_item").attr("value",lms_item_id)
+	
+	xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, old_item_id,my_get_value_scorm);	
+	//info_lms_item[0] is old_item_id and info_lms_item[1] is current_item_id
+	info_lms_item[0]=info_lms_item[0];
+	info_lms_item[1]=lms_item_id;
 	
 	if(item_objectives.length>0) {
 		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,old_item_id,item_objectives);
 	}
 	execute_stats='false';
+	
+	//clean array
+	variable_to_send=new Array();
+	my_get_value_scorm=new Array();
 }
 
 function LMSCommit(val) {
 		logit_scorm('LMSCommit()',0);
 		G_LastError = G_NoError ;
 		G_LastErrorMessage = 'No error';
-
-		if (status_info.length==2) {
-			//alert(status_info);
-			status_info=new Array();
-		}
-		my_lms_time=LMSGetValue('cmi.core.session_time');
-		my_lms_status=LMSGetValue('cmi.core.lesson_status');
 		
-		if (my_lms_time.length!=0 && my_lms_status.length!=0) {
-			savedata('commit');
-		}
-		
-	    commit = 'false' ; //now changes have been commited, no need to update until next SetValue()
+		savedata('commit');
+		reinit_updatatetable_list();
+	    //commit = 'false' ; //now changes have been commited, no need to update until next SetValue()
 		return('true');
 }
 
@@ -748,11 +822,14 @@ function LMSFinish(val) {
 			 
 		}
 
-		if ( commit == true ) {
+		//if ( commit == true ) {
 			logit_scorm('LMSFinish() called',1);		
 			savedata('finish');
 		    commit = 'false' ;
-		}
+		//}
+		
+		//reinit to list
+		reinit_updatatetable_list()		
 		return('true');
 }
 
@@ -881,20 +958,20 @@ function addListeners(){
  * possibly deprecated
  */
 function load_item(item_id,url){
-	if(document.getElementById('content_id'))
-	{
+	if(document.getElementById('content_id')) {
 		logit_lms('Loading item '+item_id,2);
 		var cont_f = document.getElementById('content_id');
 		if(cont_f.src){
 			lms_old_item_id = lms_item_id;
 			var lms_new_item_id = item_id;
 			//load new content page into content frame
-			if(lms_lp_type==1 || lms_item_type=='asset'){
+			if(lms_lp_type==1 || lms_item_type=='asset') {
 				dokeos_save_asset();
 			}
 			cont_f.src = url;
+
 			update_toc('unhighlight',lms_old_item_id);
-			update_toc('highlight',item_id);
+			update_toc('highlight',lms_old_item_id);
 			return true;
 		}
 		logit_lms('cont_f.src has no properties',0);
@@ -906,7 +983,7 @@ function load_item(item_id,url){
  * Save a Dokeos learnpath item's time and mark as completed upon
  * leaving it
  */
-function dokeos_save_asset(){
+function dokeos_save_asset() {
 	// only for dokeos lps
 	if (execute_stats=='true') {
 		execute_stats='false';
@@ -1147,41 +1224,59 @@ function switch_item(current_item, next_item){
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
 	if(lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
         xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
+		if(item_objectives.length>0) {
+			xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
+		}
 	}else{
        // xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
 	}
-	if(item_objectives.length>0)
-	{
-		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
-	}
+
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
 	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);		
-	
+
 	status_info.push(lesson_status);
-	$my_new_old_item=$("#old_item").val();
-	$my_new_current_item=$("#current_item_id").val();
+	/*$my_new_old_item=$("#old_item").val();
+	$my_new_current_item=$("#current_item_id").val();*/
 	
-	if ($my_new_current_item==next_item) {
-		$("#old_item").attr("value",$my_new_old_item)
+	$my_new_old_item=info_lms_item[0];
+	$my_new_current_item=info_lms_item[1];
+	
+	//current item
+
+	//old item
+	//info_lms_item[0]=next_item;
+			
+	if (info_lms_item[1]==next_item && next_item!='next' && next_item!='previous') {
+		info_lms_item[0]=next_item;
+		info_lms_item[1]=next_item;
 	} else {
-		$("#old_item").attr("value",$my_new_current_item)
+		if (next_item!='next' && next_item!='previous') {
+			info_lms_item[0]=info_lms_item[1];
+			info_lms_item[1]=next_item;
+		}
 	}
-	if ($my_new_current_item==next_item) {
-		$("#old_item").attr("value",$my_new_current_item)
+
+	if (info_lms_item[0]==next_item && next_item!='next' && next_item!='previous') {
+		info_lms_item[0]=next_item;
+		info_lms_item[1]=next_item;
 	} else {
-		$("#current_item_id").attr("value",$my_new_old_item)
+		if (next_item!='next' && next_item!='previous') {
+			info_lms_item[0]=info_lms_item[0];
+			info_lms_item[1]=next_item;
+		}	
 	}
-	$("#status_old_item").attr("value",lesson_status);
-	$("#current_item_id").attr("value",next_item);	
-	
-	
+
 	//(3) open the new item in the content_id frame
 	switch(next_item){
 		case 'next':
 			next_item = lms_next_item;
+			info_lms_item[0]=info_lms_item[1];
+			info_lms_item[1]=lms_next_item;
 			break;
 		case 'previous':
 			next_item = lms_previous_item;
+			info_lms_item[0]=info_lms_item[1];
+			info_lms_item[1]=lms_previous_item;
 			break;
 		default:
 			break;
@@ -1252,7 +1347,95 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
             'core_exit': lms_item_core_exit
         }
         */
-        $.ajax({
+       if ( lms_lp_type==1) {
+          $.ajax({
+            type:"GET",
+            data: params,
+            url: "lp_ajax_save_item.php", 
+            dataType: "script",
+            async: false
+            }
+        );     	
+       }
+
+        
+}
+
+function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,info_get_lms) {
+
+// var variables_scorm = new Array('cmi.core.score.raw','cmi.core.score.max','cmi.core.score.min','cmi.core.lesson_location',
+//'cmi.core.lesson_status','cmi.completion_status','cmi.core.session_time','cmi.score.scaled','cmi.success_status',
+//'cmi.suspend_data','cmi.core.exit','interactions');
+
+	params='';
+	params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+lms_item_id;
+	
+	for (k=0;k<info_get_lms.length;k++) {
+		if (my_get_value_scorm[k]=='cmi.core.session_time') {
+			params += '&t='+session_time;
+		} else if (my_get_value_scorm[k]=='cmi.core.lesson_status' && lesson_status!='') {
+			 params += '&status='+lesson_status;
+		} else if (my_get_value_scorm[k]=='cmi.core.score.raw') {
+			 params += '&s='+score;
+		} else if (my_get_value_scorm[k]=='cmi.core.score.max') {
+        	params += '&max='+max;			
+		} else if (my_get_value_scorm[k]=='cmi.core.score.min') {
+	        params += '&min='+min;		
+		} else if (my_get_value_scorm[k]=='cmi.core.lesson_location') {
+	        params += '&loc='+lesson_location;		
+		} else if (my_get_value_scorm[k]=='cmi.completion_status') {
+			
+		} else if (my_get_value_scorm[k]=='cmi.score.scaled') {
+			
+		} else if (my_get_value_scorm[k]=='cmi.suspend_data') {
+	        params += '&suspend='+suspend_data;		
+		} else if (my_get_value_scorm[k]=='cmi.completion_status') {
+			
+		} else if (my_get_value_scorm[k]=='cmi.core.exit') {
+	        params += '&core_exit='+lms_item_core_exit;		
+		}
+		
+		if (my_get_value_scorm[k]=='interactions') {
+			is_interactions='true';
+		} else {
+			is_interactions='false';
+		}
+	}
+		 
+ if (is_interactions=='true')  {
+         interact_string = '';
+        for (i in interactions){
+        	interact_string += '&interact['+i+']=';
+            interact_temp = '[';
+            for (j in interactions[i]) {
+            	interact_temp += interactions[i][j]+',';
+            }
+            interact_temp = interact_temp.substr(0,(interact_temp.length-2)) + ']';
+            interact_string += encodeURIComponent(interact_temp);
+        }
+        //interact_string = encodeURIComponent(interact_string.substr(0,(interact_string.length-1)));
+        
+        params += interact_string;	
+        is_interactions='false';
+ }
+
+  	//alert("parameters : "+params); 
+        /*params = {
+            'lid': lms_lp_id,
+            'uid': lms_user_id,
+            'vid': lms_view_id,
+            'iid': lms_item_id,
+            's': score,
+            'max': max,
+            'min': min,
+            'status': lesson_status, 
+            't': session_time, 
+            'suspend': suspend_data,
+            'loc': lesson_location,
+            'interact': interac_string, 
+            'core_exit': lms_item_core_exit
+        }*/
+       $.ajax({
             type:"GET",
             data: params,
             url: "lp_ajax_save_item.php", 
@@ -1260,7 +1443,11 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
             async: false
             }
         );
+        
+        params='';
+        
 }
+
 /**
  * Starts the timer with the server clock time.
  * Originally, we used the xajax library. Now we use jQuery
@@ -1320,6 +1507,8 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
         async: false
     });
 }
+
+
 addEvent(window,'load',addListeners,false);
 if(lms_lp_type==1 || lms_item_type=='asset'){
 	xajax_start_timer();

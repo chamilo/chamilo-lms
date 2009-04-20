@@ -97,7 +97,7 @@ unset($_SESSION['questionList']);
  * Get a link to the corresponding document
  */
 
-global $src;
+
 if (!isset($src))
  {
  	$src = '';
@@ -143,9 +143,18 @@ if (!isset($src))
 	}
 }
 
-// update status,total_time from lp_item_view table when you finish the exercises in learning path
-if (!empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
+$list = $_SESSION['oLP']->get_toc();
+$type_quiz = false;
 
+foreach($list as $toc) {
+	if ($toc['id'] == $lp_item_id && ($toc['type']=='quiz') ) {
+		$type_quiz = true;		
+	}	
+}
+
+// update status,total_time from lp_item_view table when you finish the exercises in learning path
+if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
+	global $src;
 	$_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();	
 	$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$TBL_LP_ITEM_VIEW		= Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -183,7 +192,7 @@ if (!empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_
 			api_sql_query($sql_upd_score,__FILE__,__LINE__);
 		}
 	}
-	$src = $_SESSION['oLP']->get_link('http',$safe_item_id);
+	$src = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?action=stats';
 }
 
 $_SESSION['oLP']->set_previous_item($lp_item_id);

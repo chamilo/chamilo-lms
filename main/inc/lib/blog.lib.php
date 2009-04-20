@@ -1299,54 +1299,79 @@ class Blog
 			</script>';
 
 
-			echo '<form name="add_post" enctype="multipart/form-data"  method="post" action="blog.php?blog_id=' . $blog_id . '">
-				 <div class="form_header">' . get_lang('NewPost') . '</div> 
-						<table width="100%" border="0" cellspacing="2" cellpadding="0">
-							<tr>
-						   <td width="120" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
-						   <td><input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" />' .
-						   		'<input type="hidden" name="post_title_edited" id="post_title_edited" value="false" /><br /><br /></td>
-							</tr>
-							<tr>
-						   <td valign="top">' . get_lang('PostFullText') . ':&nbsp;&nbsp;</td>
-						   <td>';
+			echo '<form name="add_post" enctype="multipart/form-data"  method="post" action="blog.php?action=new_post&blog_id=' . $blog_id . '">';
+			
+			echo '<input type="hidden" name="post_title_edited" id="post_title_edited" value="false" />';
+			
+			// form title
+			echo '<div class="row"><div class="form_header">' . get_lang('NewPost') . '</div></div>';
+			
+			// article title
+			echo '<div class="row">
+						<div class="label">
+							<span class="form_required">*</span>' . get_lang('Title') . '
+						</div>
+						<div class="formw">
+							<input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" />
+						</div>
+					</div>';
 
-									$oFCKeditor = new FCKeditor('post_full_text') ;
+			// article text
+			$oFCKeditor = new FCKeditor('post_full_text') ;
+			$oFCKeditor->Width		= '100%';
+			$oFCKeditor->Height		= '400';
+			if(!api_is_allowed_to_edit())
+			{
+				$oFCKeditor->ToolbarSet = 'Blog_Student';
+			}
+			else
+			{
+				$oFCKeditor->ToolbarSet = 'Blog';
+			}	
+			$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
+		
+			echo '<div class="row">
+						<div class="label">
+							' . get_lang('PostFullText') . '
+						</div>
+						<div class="formw">';
+			$oFCKeditor->Create();
+			echo '		</div>
+					</div>';			
 									
-									$oFCKeditor->Width		= '100%';
-									$oFCKeditor->Height		= '400';
+			// attachment
+			echo '<div class="row">
+						<div class="label">
+							' . get_lang('AddAnAttachment') . '
+						</div>
+						<div class="formw">
+							<input type="file" name="user_upload"/>
+						</div>
+					</div>';
 									
-									if(!api_is_allowed_to_edit())
-									{
-										
-										$oFCKeditor->ToolbarSet = 'Blog_Student';
-									}
-									else
-									{
-										$oFCKeditor->ToolbarSet = 'Blog';
-									}	
-									
-									$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
-									
-									$oFCKeditor->Create() ;
+			// comment
+			echo '<div class="row">
+						<div class="label">
+							' . get_lang('FileComment') . '
+						</div>
+						<div class="formw">
+							<textarea name="post_file_comment" cols="34" /></textarea>
+						</div>
+					</div>';
 
-			echo '			 <br /></td>
-							</tr> 
-							<tr><td><b>'.get_lang('AddAnAttachment').'</b></td></tr>	
-							<tr><td width="80" valign="top">' . get_lang('FileName'). ':&nbsp;&nbsp;</td>
-						    <td><input type="file" name="user_upload"/></td><br></tr>						    
-						    <tr><td width="80" valign="top">' . get_lang('FileComment'). ':&nbsp;&nbsp;</td>
-						    <td><br /><textarea name="post_file_comment" cols="34" /></textarea></td></tr>
-							<tr>
-								<td >&nbsp;</td>
-								<td>
+			// submit
+			echo '<div class="row">
+						<div class="label">
+						</div>
+						<div class="formw">
 								 <input type="hidden" name="action" value="" />
 								 <input type="hidden" name="new_post_submit" value="true" />
 								 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
-								</td>
-							</tr>
-						</table>
-					</form>';
+						</div>
+					</div>';
+			
+				 
+			echo '</form>';
 		}
 		else
 		{
@@ -1378,17 +1403,22 @@ class Blog
 		// Prepare data
 		$blog_post_text = stripslashes($blog_post['full_text']);
 
-		echo '<form name="edit_post" method="post" action="blog.php?blog_id=' . $blog_id . '">
-			 <span class="blogpost_title">' . get_lang('EditPost') . '</span>
-					<table width="100%" border="0" cellspacing="2" cellpadding="0">
-						<tr>
-					   <td width="80" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
-					   <td><input name="post_title" id="post_title" type="text" size="60" value="'.stripslashes($blog_post['title']) . '" /><br /><br /></td>
-						</tr>
-						<tr>
-					   <td valign="top">' . get_lang('PostFullText') . ':&nbsp;&nbsp;</td>
-					   <td>';
+		echo '<form name="edit_post" method="post" action="blog.php?action=edit_post&post_id=' . Security::remove_XSS($_GET['post_id']) . '&blog_id=' . Security::remove_XSS($blog_id) . '&article_id='.Security::remove_XSS($_GET['article_id']).'&task_id='.Security::remove_XSS($_GET['task_id']).'">';
+		
+		// form title
+		echo '<div class="row"><div class="form_header">' . get_lang('EditPost') . '</div></div>';
+		
+		// article title
+		echo '	<div class="row">
+					<div class="label">
+						<span class="form_required">*</span>' . get_lang('Title') . '
+					</div>
+					<div class="formw">
+						<input name="post_title" id="post_title" type="text" size="60" value="'.stripslashes($blog_post['title']) . '" />
+					</div>
+				</div>';
 
+		// article text
 								$oFCKeditor = new FCKeditor('post_full_text') ;
 
 								$oFCKeditor->Width		= '100%';
@@ -1396,31 +1426,37 @@ class Blog
 								
 								if(!api_is_allowed_to_edit())
 								{
-									
 									$oFCKeditor->ToolbarSet = 'Blog_Student';
 								}
 								else
 								{
 									$oFCKeditor->ToolbarSet = 'Blog';
 								}								
-								
 								$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
+		echo '	<div class="row">
+					<div class="label">
+						' . get_lang('PostFullText') . '
+					</div>
+					<div class="formw">';
+		echo $oFCKeditor->Create();
+		echo '		</div>
+				</div>';		
 								
-								$oFCKeditor->Create() ;
 
-		echo '			 <br /></td>
-						</tr>
-						<tr>
-							<td >&nbsp;</td>
-							<td>
+		// submit
+		echo '	<div class="row">
+					<div class="label">
+					</div>
+					<div class="formw">
 							 <input type="hidden" name="action" value="" />
 							 <input type="hidden" name="edit_post_submit" value="true" />
 							 <input type="hidden" name="post_id" value="' . (int)$_GET['post_id'] . '" />
 							 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
-							</td>
-						</tr>
-					</table>
-				</form>';
+					</div>
+				</div>';
+		
+		
+		echo '</form>';
 	}
 
 	/**
@@ -1573,24 +1609,38 @@ class Blog
 		// Init
 		$colors = array('FFFFFF','FFFF99','FFCC99','FF9933','FF6699','CCFF99','CC9966','66FF00', '9966FF', 'CF3F3F', '990033','669933','0033FF','003366','000000');
 
-		// Display
-		echo '<form name="add_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">' .
-				'
-					<div class="actions">' . get_lang('AddTask') . '</div>
-					<table width="100%" border="0" cellspacing="2">
-						<tr>
-					   <td align="right">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
-					   <td><input name="task_name" type="text" size="70" /></td>
-						</tr>
-						<tr>
-					   <td align="right">' . get_lang('Description') . ':&nbsp;&nbsp;</td>
-					   <td><input name="task_description" type="text" size="70" /></td>
-						</tr>';
+		// form
+		echo '<form name="add_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">';
+		
+		// form title
+		echo '<div class="row"><div class="form_header">'.get_lang('AddTask').'</div></div>';
+		
+		// task title
+		echo '	<div class="row">
+					<div class="label">
+						<span class="form_required">*</span>' . get_lang('Title') . '
+					</div>
+					<div class="formw">
+						<input name="task_name" type="text" size="70" />
+					</div>
+				</div>';
+		
+		// task comment
+		echo '	<div class="row">
+					<div class="label">
+						' . get_lang('Description') . '
+					</div>
+					<div class="formw">
+						<input name="task_description" type="text" size="70" />
+					</div>
+				</div>';
 
-						/* edit by Kevin Van Den Haute (kevin@develop-it.be) */
-						echo "\t" . '<tr>' . "\n";
-							echo "\t\t" . '<td style="text-align:right; vertical-align:top;">' . get_lang('TaskManager') . ':&nbsp;&nbsp;</td>' . "\n";
-							echo "\t\t" . '<td>' . "\n";
+		// task management
+		echo '	<div class="row">
+					<div class="label">
+						' . get_lang('TaskManager') . '
+					</div>
+					<div class="formw">';
 								echo "\t\t\t" . '<table class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
 									echo "\t\t\t\t" . '<tr>' . "\n";
 										echo "\t\t\t\t\t" . '<th colspan="2" style="width:223px;">' . get_lang('ArticleManager') . '</th>' . "\n";
@@ -1607,30 +1657,40 @@ class Blog
 										echo "\t\t\t\t\t" . '<td style="border:1px dotted #808080; text-align:center;"><input id="commentsDelete" name="chkCommentsDelete" type="checkbox" /></td>' . "\n";
 									echo "\t\t\t\t" . '</tr>' . "\n";
 								echo "\t\t\t" . '</table>' . "\n";
-							echo "\t\t" . '</td>' . "\n";
-						echo "\t" . '</tr>' . "\n";
-						/* end of edit */
+		echo '		</div>
+				</div>';			
+		
 
-		echo '			<tr>
-					   <td align="right">' . get_lang('Color') . ':&nbsp;&nbsp;</td>
-					   <td>
-					   	<select name="task_color" id="color" style="width: 150px; background-color: #eeeeee" onchange="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value" onkeypress="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value">';
+		// task color
+		echo '	<div class="row">
+					<div class="label">
+						' . get_lang('Color') . '
+					</div>
+					<div class="formw">';
+		echo '		   	<select name="task_color" id="color" style="width: 150px; background-color: #eeeeee" onchange="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value" onkeypress="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value">';
 								foreach ($colors as $color)
 								{
 									$style = 'style="background-color: #' . $color . '"';
 									echo '<option value="' . $color . '" ' . $style . '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>';
 								}
-		echo '			   </select>
-						  </td>
-						</tr>
-						<tr>
-							<td align="right">&nbsp;</td>
+		echo '			   </select>';		
+		echo '		</div>
+				</div>';
+
+		// submit
+		echo '	<div class="row">
+					<div class="label">
+					</div>
+					<div class="formw">
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="new_task_submit" value="true" />
-							<td><br /><button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button></td>
-						</tr>
-					</table>
-				</form>';
+						<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
+					</div>
+				</div>';		
+
+		echo '</form>';
+		
+		echo '<div style="clear:both; margin-bottom: 10px;"></div>';
 	}
 	
 
@@ -1780,22 +1840,39 @@ class Blog
 		}
 		$select_task_list .= '</select>';
 
-		// Display
-		echo '<form name="assign_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">
-					<div class="actions">' . get_lang('AssignTask') . '</div>
-					<table width="100%" border="0" cellspacing="2" cellpadding="0">
-						<tr>
-					   <td align="right">' . get_lang('SelectUser') . ':&nbsp;&nbsp;</td>
-					   <td>' . $select_user_list . '</td>
-						</tr>
-						<tr>
-					   <td align="right">' . get_lang('SelectTask') . ':&nbsp;&nbsp;</td>
-					   <td>' . $select_task_list . '</td>
-						</tr>
-						<tr>
-					   <td align="right">' . get_lang('SelectTargetDate') . ':&nbsp;&nbsp;</td>
-					   <td>
-					    <select name="task_day">';
+		// form
+		echo '<form name="assign_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">';
+		
+		// form title
+		echo '<div class="row"><div class="form_header">'.get_lang('AssignTask').'</div></div>';
+		
+		// user
+		echo '	<div class="row">
+					<div class="label">
+						<span class="form_required">*</span>' . get_lang('SelectUser') . '
+					</div>
+					<div class="formw">
+						'.$select_user_list.'
+					</div>
+				</div>';
+		
+		// task
+		echo '	<div class="row">
+					<div class="label">
+						<span class="form_required">*</span>' . get_lang('SelectTask') . '
+					</div>
+					<div class="formw">
+						'.$select_task_list.'
+					</div>
+				</div>';
+
+		// date
+		echo '	<div class="row">
+					<div class="label">
+						<span class="form_required">*</span>' . get_lang('SelectTargetDate') . '
+					</div>
+					<div class="formw">';
+		echo '			    <select name="task_day">';
 								for($i=1; $i<=31; $i++)
 								{
 									// values need to have double digits
@@ -1831,17 +1908,25 @@ class Blog
 									echo "\t\t\t\t<option value=\"" . $value."\">" . $value."</option>\n";
 								}
 							echo '</select>
-							<a title="Kalender" href="javascript:openCalendar(\'assign_task\', \'task_\')"><img src="../img/calendar_select.gif" border="0" align="absmiddle"/></a>
-						 </td>
-						</tr>
-						<tr>
-							<td align="right">&nbsp;</td>
+							<a title="Kalender" href="javascript:openCalendar(\'assign_task\', \'task_\')"><img src="../img/calendar_select.gif" border="0" align="absmiddle"/></a>';		
+		echo '		</div>
+				</div>';	
+		
+		// submit
+		echo '	<div class="row">
+					<div class="label">
+					</div>
+					<div class="formw">
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="assign_task_submit" value="true" />
-							<td><br /><button class="save" type="submit" name="Submit">' . get_lang('Ok') . '</button></td>
-						</tr>
-					</table>
-				</form>';
+						<button class="save" type="submit" name="Submit">' . get_lang('Ok') . '</button>
+					</div>
+				</div>';		
+		
+		
+
+		echo '</form>';
+		echo '<div style="clear: both; margin-bottom:10px;"></div>';
 	}
 
 		/**
@@ -2199,7 +2284,9 @@ class Blog
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 		$table_course_user 	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-		echo '<span class="blogpost_title">' . get_lang('SubscribeMembers') . '</span>';
+	
+		echo '<div class="row"><div class="form_header">'.get_lang('SubscribeMembers').'</div></div>';
+		
 		$properties["width"] = "100%";
 
 		// Get blog members' id.
@@ -2304,7 +2391,7 @@ class Blog
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 
-		echo '<span class="blogpost_title">' . get_lang('UnsubscribeMembers') . '</span>';
+		echo '<div class="row"><div class="form_header">'.get_lang('UnsubscribeMembers').'</div></div>';
 
 		$properties["width"] = "100%";
 		//table column titles
@@ -2396,7 +2483,8 @@ class Blog
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 
-		echo '<span class="blogpost_title">' . get_lang('RightsManager') . '</span>';
+		echo '<div class="row"><div class="form_header">'.get_lang('RightsManager').'</div></div>';
+		echo '<br />';
 
 		// Integration of patricks permissions system.
 		require_once(api_get_path(SYS_CODE_PATH).'permissions/blog_permissions.inc.php');
@@ -2410,51 +2498,70 @@ class Blog
 	 */
 	function display_new_comment_form($blog_id, $post_id, $title)
 	{
-		echo '<form name="add_post" enctype="multipart/form-data" method="post" action="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '">
-				<div class="form_header">'.(isset($_GET['task_id']) ? get_lang('ExecuteThisTask') : get_lang('AddNewComment')) . '</div>
-					<table width="100%" border="0" cellspacing="2" cellpadding="0" class="new_comment">
-						<tr>
-					   <td width="100" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
-					   <td><input name="comment_title" id="comment_title" type="text" size="60" value="Re: '.stripslashes($title) . '" /><br /><br /></td>
-						</tr>
-						<tr>
-					   <td valign="top">' . get_lang('Comment') . ':&nbsp;&nbsp;</td>
-					   <td>';
+		echo '<form name="add_post" enctype="multipart/form-data" method="post" action="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '">';
+		
+		// form title
+		echo '<div class="row"><div class="form_header">';
+		echo (isset($_GET['task_id']) ? get_lang('ExecuteThisTask') : get_lang('AddNewComment'));
+		echo '</div></div>';
+		
+		// comment title
+		echo '	<div class="row">
+					<div class="label">
+						<span class="form_required">*</span>' . get_lang('Title') . '
+					</div>
+					<div class="formw">
+						<input name="comment_title" id="comment_title" type="text" size="60" value="Re: '.stripslashes($title) . '" />
+					</div>
+				</div>';
 
+		// comment text
 									$oFCKeditor = new FCKeditor('comment_text') ;													
-									
 									$oFCKeditor->Width		= '100%';
 									$oFCKeditor->Height		= '300';
-																
 									if(!api_is_allowed_to_edit())
 									{
-										
 										$oFCKeditor->ToolbarSet = 'BlogComment_Student';
 									}
 									else
 									{
 										$oFCKeditor->ToolbarSet = 'BlogComment';
 									}		
-									
 									$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
+		echo '	<div class="row">
+					<div class="label">
+						' . get_lang('Comment') . '
+					</div>
+					<div class="formw">';
+		echo $oFCKeditor->Create() ;
+		echo '		</div>
+				</div>';	
 									
-									$oFCKeditor->Create() ;
+		// attachment
+		echo '	<div class="row">
+					<div class="label">
+						' . get_lang('AddAnAttachment') . '
+					</div>
+					<div class="formw">
+						<input type="file" name="user_upload"/>
+					</div>
+				</div>';
 
-		echo '			 <br /></td>
-						</tr>
+		// attachment comment
+		echo '	<div class="row">
+					<div class="label">
+						' . get_lang('FileComment') . '
+					</div>
+					<div class="formw">
+						<textarea name="post_file_comment" cols="34" /></textarea>
+					</div>
+				</div>';
 							 
-							<tr><td><b>'.get_lang('AddAnAttachment').'</b><br /><br /></td></tr>	
-							<tr><td width="80" valign="top">' . get_lang('FileName'). ':&nbsp;&nbsp;</td>
-						    <td><input type="file" name="user_upload"/></td><br></tr>						    
-						    <tr><td width="80" valign="top">' .get_lang('FileComment'). ':&nbsp;&nbsp;</td>
-						    <td><br /><textarea name="post_file_comment" cols="34" /></textarea></td></tr>
-							<tr>	
-								
-								
-								
-						<tr>
-							<td >&nbsp;</td>
-							<td>
+		// attachment comment
+		echo '	<div class="row">
+					<div class="label">
+					</div>
+					<div class="formw">
 							 <input type="hidden" name="action" value="" />
 							 <input type="hidden" name="comment_parent_id" id="comment_parent_id" value="0" />';
 									if(isset($_GET['task_id']))
@@ -2467,10 +2574,9 @@ class Blog
 										echo ' <input type="hidden" name="new_comment_submit" value="true" />';
 									}
 		echo '					<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
-							</td>
-						</tr>
-					</table>
-				</form>';
+					</div>
+				</div>';
+		echo '</form>';
 	}
 
 
@@ -2647,7 +2753,7 @@ class Blog
 	 */
 	function display_new_blog_form()
 	{
-		echo '<form name="add_blog" method="post" action="blog_admin.php">
+		echo '<form name="add_blog" method="post" action="blog_admin.php?action=add">
 				<div class="row">
 					<div class="form_header">
 						' . get_lang('AddBlog') . '
@@ -2659,16 +2765,16 @@ class Blog
 						<span class="form_required">*</span>' . get_lang('Title') . '
 					</div>
 					<div class="formw">
-						<input name="blog_name" type="text" size="100" />
+						<input name="blog_name" type="text" size="100" value="'.$_POST['blog_name'].'" />
 					</div>
 				</div>
 				
 				<div class="row">
 					<div class="label">
-						' . get_lang('Subtitle') . '
+						<span class="form_required">*</span>' . get_lang('Subtitle') . '
 					</div>
 					<div class="formw">
-						<input name="blog_subtitle" type="text" size="100" />
+						<input name="blog_subtitle" type="text" size="100" value="'.$_POST['blog_subtitle'].'"/>
 					</div>
 				</div>	
 				
@@ -2700,7 +2806,13 @@ class Blog
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$blog = Database::fetch_array($result);
 
-		echo '<form name="edit_blog" method="post" action="blog_admin.php">
+		// the form contained errors but we do not want to lose the changes the user already did
+		if ($_POST)
+		{
+			$blog['blog_name'] 		= $_POST['blog_name'];
+			$blog['blog_subtitle'] 	= $_POST['blog_subtitle'];
+		}
+		echo '<form name="edit_blog" method="post" action="blog_admin.php?action=edit&blog_id='.Security::remove_XSS($_GET['blog_id']).'">
 				<div class="row">
 					<div class="form_header">
 						' . get_lang('EditBlog') . '
@@ -2718,7 +2830,7 @@ class Blog
 				
 				<div class="row">
 					<div class="label">
-						' . get_lang('Subtitle') . '
+						<span class="form_required">*</span>' . get_lang('Subtitle') . '
 					</div>
 					<div class="formw">
 						<input name="blog_subtitle" type="text" size="100" value="' . $blog['blog_subtitle'] . '" />

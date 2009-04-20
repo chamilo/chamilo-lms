@@ -103,11 +103,18 @@ function save_data($courses)
 {
 	global $_configuration, $firstExpirationDelay;
 	$msg = '';
+	$enabled_languages = api_get_languages();
+	$enabled_languages = $enabled_languages["folder"];
 	foreach($courses as $index => $course)
 	{
+		$course_language = $course['Language'];
+		if (empty($course_language) || !in_array($course_language, $enabled_languages))
+		{
+			$course_language = api_get_setting('platformLanguage');
+		}
 		$keys = define_course_keys($course['Code'], "", $_configuration['db_prefix']);
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "SELECT user_id, CONCAT(lastname,' ',firstname) AS name FROM $user_table WHERE username = '".mysql_real_escape_string($course['Teacher'])."'";
+		$sql = "SELECT user_id, CONCAT(lastname,' ',firstname) AS name FROM $user_table WHERE username = '".Database::escape_string($course['Teacher'])."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$teacher = mysql_fetch_object($res);
 		$visual_code = $keys["currentCourseCode"];
@@ -118,8 +125,8 @@ function save_data($courses)
 		prepare_course_repository($directory, $code);
 		update_Db_course($db_name);
 		fill_course_repository($directory);
-		fill_Db_course($db_name, $directory, api_get_setting('platformLanguage'),array());
-		register_course($code, $visual_code, $directory, $db_name, $teacher->name, $course['CourseCategory'], $course['Title'], api_get_setting('platformLanguage'), $teacher->user_id, $expiration_date);
+		fill_Db_course($db_name, $directory, $course_language, array());
+		register_course($code, $visual_code, $directory, $db_name, $teacher->name, $course['CourseCategory'], $course['Title'], $course_language, $teacher->user_id, $expiration_date);
 		$msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$directory.'/">'.$code.'</a> '.get_lang('Created').'<br />';
 	}
     if (!empty($msg)) {
@@ -225,8 +232,8 @@ if (count($errors) != 0)
 
 <blockquote>
 <pre>
-<b>Code</b>;<b>Title</b>;<b>CourseCategory</b>;<b>Teacher</b>
-BIO0015;Biology;BIO;username
+<b>Code</b>;<b>Title</b>;<b>CourseCategory</b>;<b>Teacher</b>;Language
+BIO0015;Biology;BIO;username;english
 </pre>
 </blockquote>
 

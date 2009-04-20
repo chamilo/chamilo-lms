@@ -438,7 +438,8 @@ class Tracking {
 					$rsItems = api_sql_query($sql, __FILE__, __LINE__);
 				
 					//We get the last view id of this LP
-					$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
+					$sql = "SELECT id FROM $lp_view_table  WHERE user_id = '".intval($student_id)."' and lp_id='".intval($a_learnpath['id'])."'";
+					//$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 					$lp_view_id = intval(Database::result($rs_last_lp_view_id,0,'id'));
 					
@@ -446,11 +447,12 @@ class Tracking {
 					if ($lp_view_id!=0) {
 						while ($item = Database :: fetch_array($rsItems, 'ASSOC')) {
 							// we take the score from a LP because we have lp_view_id
-							$sql = 'SELECT score as student_score 
+							$sql = "SELECT score FROM $lp_item_view_table WHERE lp_item_id = '".(int)$item['item_id']."' and lp_view_id = '".(int)$lp_view_id."'
+							ORDER BY view_count DESC limit 1";
+							/*$sql = 'SELECT score as student_score 
 									FROM '.$lp_item_view_table.' as lp_view_item
 									WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
-									AND lp_view_id = "'.$lp_view_id.'" ';
-							
+									AND lp_view_id = "'.$lp_view_id.'" ';*/							
 							$rsScores = api_sql_query($sql, __FILE__, __LINE__);
 														 
 							// Real max score - this was implemented because of the random exercises							

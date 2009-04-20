@@ -466,13 +466,18 @@ foreach ($list as $my_item_id) {
 				if ($row['item_type'] == 'quiz') 
 				{
 					// get score and total time from last attempt of a exercise en lp					
-					$sql = "SELECT score,total_time FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'
+					$sql = "SELECT score FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'
 							ORDER BY view_count DESC limit 1";
-					$res_score_time = api_sql_query($sql,__FILE__,__LINE__);
-					$row_score_time = Database::fetch_array($res_score_time);
-					if (Database::num_rows($res_score_time) > 0) { 
-						$score = (float)$row_score_time['score'];
-						$subtotal_time =  (int)$row_score_time['total_time'];																
+					$res_score = api_sql_query($sql,__FILE__,__LINE__);
+					$row_score = Database::fetch_array($res_score);
+					
+					$sql = "SELECT SUM(total_time) as total_time FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'";
+					$res_time = api_sql_query($sql,__FILE__,__LINE__);
+					$row_time = Database::fetch_array($res_time);
+					
+					if (Database::num_rows($res_score) > 0 && Database::num_rows($res_time) > 0) { 
+						$score = (float)$row_score['score'];
+						$subtotal_time = (int)$row_time['total_time'];																
 					} else {
 						$score = 0;
 						$subtotal_time =  0;

@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 19829 2009-04-17 13:49:47Z pcool $
+* 	@version $Id: question.php 19904 2009-04-20 22:56:46Z cvargas1 $
 */
 
 // name of the language file that needs to be included
@@ -122,7 +122,6 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types)) {
 	$form = new $_GET['type'];
 
 	// The defaults values for the form
-	$form_content['horizontalvertical'] = 'vertical2';
 	$form_content['answers'] = array('', '');
 	
 	if ($_GET['type'] == 'yesno') {
@@ -159,10 +158,13 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types)) {
 		$form_content['question']=$_SESSION['temp_user_message'];
 		$form_content['answers']=$_SESSION['temp_answers'];
 		$form_content['values']=$_SESSION['temp_values'];
+		$form_content['horizontalvertical'] = $_SESSION['temp_horizontalvertical'];
+		
 		
 		unset($_SESSION['temp_user_message']);
 		unset($_SESSION['temp_answers']);
 		unset($_SESSION['temp_values']);								
+		unset($_SESSION['temp_horizontalvertical']);
 	}
 	
 	$form->create_form($form_content);

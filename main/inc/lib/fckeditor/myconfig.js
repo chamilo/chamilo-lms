@@ -140,11 +140,10 @@ FCKConfig.ToolbarSets["Introduction"] = [
 	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
 	['Table','SpecialChar'],
 	['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
-	'/',	
+	'-',['Source'],'/',
 	['Style','FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline'],
-	['JustifyLeft','JustifyCenter','JustifyRight'],
-	['Source']
+	['JustifyLeft','JustifyCenter','JustifyRight']
 ] ;
 
 //Agenda
@@ -179,11 +178,10 @@ FCKConfig.ToolbarSets["Announcements"] = [
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
-    '/',    
+    '-',['Source'],'/',
     ['Style','FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline'],
-    ['JustifyLeft','JustifyCenter','JustifyRight'],
-    ['Source']
+    ['JustifyLeft','JustifyCenter','JustifyRight']
 ] ;
 
 FCKConfig.ToolbarSets["Announcements_Student"] = [
@@ -263,11 +261,10 @@ FCKConfig.ToolbarSets["Documents"] = [
 	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
 	['Table','SpecialChar'],
 	['Outdent','Indent','-','TextColor','BGColor','-','OrderedList','UnorderedList'],
-	'/',	
+	'-',['Source'],'/',	
 	['Style','FontFormat','FontName','FontSize'],
 	['Bold','Italic','Underline'],
-	['JustifyLeft','JustifyCenter','JustifyRight'],
-	['Source']
+	['JustifyLeft','JustifyCenter','JustifyRight']
 ] ;
 
 FCKConfig.ToolbarSets["Documents_Student"] = [
@@ -294,11 +291,10 @@ FCKConfig.ToolbarSets["Forum"] = [
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
-    '/',    
+    '-',['Source'],'/',
     ['Style','FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline'],
-    ['JustifyLeft','JustifyCenter','JustifyRight'],
-    ['Source']
+    ['JustifyLeft','JustifyCenter','JustifyRight']
 ];
 
 FCKConfig.ToolbarSets["Forum_Student"] = [
@@ -321,11 +317,10 @@ FCKConfig.ToolbarSets["Glossary"] = [
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
-    '/',    
+    '-',['Source'],'/',
     ['Style','FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline'],
-    ['JustifyLeft','JustifyCenter','JustifyRight'],
-    ['Source']
+    ['JustifyLeft','JustifyCenter','JustifyRight']
 ] ;
 
 //Learning Path
@@ -353,11 +348,10 @@ FCKConfig.ToolbarSets["Notebook"] = [
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
-    '/',    
+    '-',['Source'],'/',
     ['Style','FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline'],
-    ['JustifyLeft','JustifyCenter','JustifyRight'],
-    ['Source']
+    ['JustifyLeft','JustifyCenter','JustifyRight']
 ] ;
 
 FCKConfig.ToolbarSets["Notebook_Student"] = [

@@ -50,9 +50,9 @@ while($row = Database :: fetch_array($rs))
 {
 	$Courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
 }
-
-api_display_tool_title($nameTools);
-
+echo '<div class="actions-title" >';
+echo $nameTools;
+echo '</div>';
 $now=date('Y-m-d');
 
 ?>
@@ -106,7 +106,13 @@ foreach($Courses as $enreg)
   	</td>
 
   	<td align='center'>
-		<?php echo $pourcentageScore.'%'; ?>
+		<?php 
+		if (!is_null($pourcentageScore)) {
+			echo $pourcentageScore.'%'; 
+		} else {
+			echo '0%';
+		}
+		?>
   	</td>
 
   	<td align='center' >
@@ -344,15 +350,19 @@ foreach($Courses as $enreg)
 							echo '</td>';								 
 																						
 							if ($a_exercices['results_disabled']==0) {								
-								echo '<td align="center">';							 
-								echo $pourcentageScore.'%';
+								echo '<td align="center">';	
+								if ($a_essais['essais']>0) {
+									echo $pourcentageScore.'%';
+								} else {
+									echo '/';
+								}						 
 								echo '</td>';								
 								echo '<td align="center">';
 								echo  $a_essais['essais'];
 								echo '</td>
 										<td align="center" width="25">';
 								if($a_essais['essais']>0)
-									echo '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
+									echo '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.Security::remove_XSS($_GET['id_session']).'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
 								echo '</td>';
 							} else {
 								// we show or not the results if the teacher wants to									

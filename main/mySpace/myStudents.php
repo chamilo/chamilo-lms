@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 19794 2009-04-15 19:54:31Z aportugal $
+<?php //$Id: myStudents.php 19957 2009-04-21 21:43:08Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -657,8 +657,9 @@ if(!empty($_GET['student']))
 					
 					//QUIZZ IN LP
 					$score = Tracking::get_avg_student_score(intval($_GET['student']), Database::escape_string($_GET['course']), array($a_learnpath['id']));				
+					
 					if (empty($score)) {
-						$score = 0;
+						//$score = 0;
 					}
 					if($i%2==0){
 						$s_css_class="row_odd";
@@ -680,7 +681,7 @@ if(!empty($_GET['student']))
 						<?php echo api_time_to_hms($total_time) ?>
 						</td>
 						<td align="center">
-							<?php if(!is_null($score)) echo $score.' %'; else echo '-'; ?>
+							<?php if(!is_null($score)) echo $score.' %'; else echo '/';$score=0; ?>
 						</td>
 						<td align="center">
 							<?php echo $progress ?>
@@ -693,7 +694,7 @@ if(!empty($_GET['student']))
 							if($any_result === true)
 							{
 							?>
-							<a href="lp_tracking.php?course=<?php echo $_GET['course'] ?>&origin=<?php echo $_GET['origin'] ?>&lp_id=<?php echo $a_learnpath['id']?>&student_id=<?php echo $a_infosUser['user_id'] ?>">
+							<a href="lp_tracking.php?course=<?php echo Security::remove_XSS($_GET['course']) ?>&origin=<?php echo Security::remove_XSS($_GET['origin']) ?>&lp_id=<?php echo $a_learnpath['id']?>&student_id=<?php echo $a_infosUser['user_id'] ?>">
 								<img src="../img/2rightarrow.gif" border="0" />
 							</a>
 							<?php
@@ -741,7 +742,7 @@ if(!empty($_GET['student']))
 			$csv_content[] = array();
 			$csv_content[] = array(get_lang('Exercices'),get_lang('Score'),get_lang('Attempts'));
 						
-			$a_infosCours = CourseManager :: get_course_information($_GET['course']);			
+			$a_infosCours = CourseManager :: get_course_information(Security::remove_XSS($_GET['course']));			
 			$t_tool = Database::get_course_table(TABLE_TOOL_LIST,$a_infosCours['db_name']);									
 			$sql='SELECT visibility FROM '.$t_tool.' WHERE name="quiz"';			
 										
@@ -757,6 +758,7 @@ if(!empty($_GET['student']))
 		
 				$resultExercices = api_sql_query($sqlExercices,__FILE__,__LINE__);
 				$i = 0;
+				$is_student=Security::remove_XSS($_GET['student']);
 				if(Database::num_rows($resultExercices)>0)
 				{
 					while($a_exercices = Database::fetch_array($resultExercices))
@@ -767,14 +769,14 @@ if(!empty($_GET['student']))
 										AND ex.exe_exo_id = ".$a_exercices['id']."
 										AND orig_lp_id = 0
 										AND orig_lp_item_id = 0				
-										AND exe_user_id='".$_GET["student"]."'"
+										AND exe_user_id='".Database::escape_string($is_student)."'"
 									 ;
 						$resultEssais = api_sql_query($sqlEssais,__FILE__,__LINE__);
 						$a_essais = Database::fetch_array($resultEssais);
 						
 						$sqlScore = "SELECT exe_id, exe_result,exe_weighting
 									 FROM $tbl_stats_exercices
-									 WHERE exe_user_id = ".$_GET['student']."
+									 WHERE exe_user_id = ".Database::escape_string($is_student)."
 									 AND exe_cours_id = '".$a_infosCours['code']."'
 									 AND exe_exo_id = ".$a_exercices['id']."
 									 AND orig_lp_id = 0
@@ -816,7 +818,13 @@ if(!empty($_GET['student']))
 							 ";
 						echo "	<td align='center'>
 							  ";
-						echo 		$pourcentageScore.' %';
+						if ($a_essais['essais']>0 ) {
+							echo $pourcentageScore.' %';
+						} else {
+							echo '/';
+							$pourcentageScore=0;
+						}
+
 						echo "	</td>
 								<td align='center'>
 							 ";
@@ -825,14 +833,14 @@ if(!empty($_GET['student']))
 								<td align='center'>
 							 ";
 						
-						$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$a_exercices['id'].'" AND exe_user_id="'.$_GET['student'].'" AND exe_cours_id="'.$a_infosCours['code'].'" AND orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY exe_date DESC LIMIT 1';
+						$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$a_exercices['id'].'" AND exe_user_id="'.Security::remove_XSS($_GET['student']).'" AND exe_cours_id="'.$a_infosCours['code'].'" AND orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY exe_date DESC LIMIT 1';
 						$resultLastAttempt = api_sql_query($sql_last_attempt,__FILE__,__LINE__);
 						if(Database::num_rows($resultLastAttempt)>0)
 						{
 							$id_last_attempt=Database::result($resultLastAttempt,0,0);
 							
 							if($a_essais['essais']>0)
-								echo		'<a href="../exercice/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$a_infosCours['code'].'&student='.$_GET['student'].'&origin='.(empty($_GET['origin']) ? 'tracking' : $_GET['origin']).'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+								echo '<a href="../exercice/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$a_infosCours['code'].'&student='.Security::remove_XSS($_GET['student']).'&origin='.(empty($_GET['origin']) ? 'tracking' : Security::remove_XSS($_GET['origin'])).'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0" /> </a>';
 						}
 						echo "	</td>
 							  </tr>
@@ -966,7 +974,7 @@ if(!empty($_GET['student']))
 				$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
 			}
 			else{
-				$a_courses = Tracking :: get_courses_followed_by_coach($_GET['id_coach']);
+				$a_courses = Tracking :: get_courses_followed_by_coach(Security::remove_XSS($_GET['id_coach']));
 			}
 		}
 		if(count($a_courses)>0)

@@ -76,10 +76,8 @@ class TableSort
 	/**
 	 * Sort 2-dimensional table.
 	 * @param array $data The data to be sorted.
-	 * @param int $column The column on which the data should be sorted (default =
-	 * 0)
-	 * @param string $direction The direction to sort (SORT_ASC (default) or
-	 * SORT_DESC)
+	 * @param int $column The column on which the data should be sorted (default = 0)
+	 * @param string $direction The direction to sort (SORT_ASC (default) or SORT_DESC)
 	 * @param constant $type How should data be sorted (SORT_REGULAR, SORT_NUMERIC,
 	 * SORT_STRING,SORT_DATE,SORT_IMAGE)
 	 * @return array The sorted dataset
@@ -88,6 +86,8 @@ class TableSort
 	function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGULAR)
 	{
 		if(!is_array($data) or count($data)==0){return array();}
+        if($column != strval(intval($column))){return $data;} //probably an attack
+        if(!in_array($direction,array(SORT_ASC,SORT_DESC))){return $data;} // probably an attack
 		switch ($type)
 		{
 			case SORT_REGULAR :
@@ -108,19 +108,20 @@ class TableSort
 			case SORT_NUMERIC :
 				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
 				break;
-			case SORT_STRING :
-				$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
-				break;
 			case SORT_IMAGE :
 				$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
 				break;
 			case SORT_DATE :
 				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
+            case SORT_STRING :
+            default:
+                $compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
+                break;
 		}
 		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return ('.$direction.' == SORT_ASC ? ('.$compare_function.') : !('.$compare_function.'));';
 		// Sort the content
 				
-		//usort($data, create_function('$a,$b', $function_body));
+		usort($data, create_function('$a,$b', $function_body));
 		
 		return $data;
 	}

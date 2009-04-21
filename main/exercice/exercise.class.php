@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 19839 2009-04-17 19:55:53Z cvargas1 $
+* 	@version $Id: exercise.class.php 19959 2009-04-21 22:29:46Z cvargas1 $
 */
 
 
@@ -897,9 +897,9 @@ class Exercise
 			//	$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
 				// test type
 				$radios = array();
-				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
-				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
-				$form -> addGroup($radios, null, get_lang('PresentationQuestions'));							
+				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageOne'),'1');
+				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageAll'),'2');
+				$form -> addGroup($radios, null, get_lang('QuestionsPerPage'));							
 			} else {
 				// if is Directfeedback but has not questions we can allow to modify the question type
 				if ($this->selectNbrQuestions()== 0) {
@@ -917,15 +917,15 @@ class Exercise
 			}
 			
 			$radios_results_disabled = array();
-			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('ShowResultsToStudents'),'0');
-			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('HideResultsToStudents'),'1');
-			$form -> addGroup($radios_results_disabled, null, get_lang('Results'));	
+			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('Yes'),'0');
+			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('No'),'1');
+			$form -> addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));	
 		
 			$random = array();	
 			$option=array();
 			$max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
 			$option = range(0,$max);
-			$option[0]=get_lang('DoNotRandomize');
+			$option[0]=get_lang('No');
 	
 			$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option);
 			$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');		

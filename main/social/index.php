@@ -392,6 +392,7 @@ function hide_search_list () {
 }
 </script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/jquery.tabs.css" type="text/css" media="print, projection, screen">';
 $htmlHeadXtra[] = '
         <!-- Additional IE/Win specific style sheet (Conditional Comments) -->
         <!--[if lte IE 7]>
@@ -483,7 +484,7 @@ $form_url_send=isset($form_send_data_message) ? $form_send_data_message :'';
         <?php }
   	 	if (api_get_setting('allow_social_tool')=='true') {      
         ?>
-        <li><a href="select_friend_response.php"><span><?php Display :: display_icon('pending_invitation.png',get_lang('PendingInvitations')); echo '&nbsp;&nbsp;'.get_lang('PendingInvitations'); ?></span></a></li>
+        <li><a href="select_friend_response.php"><span><?php Display :: display_icon('pending_invitation.png',get_lang('PendingInvitations'), array('height'=>'22px')); echo '&nbsp;&nbsp;'.get_lang('PendingInvitations'); ?></span></a></li>
         <li><a href="contacts.inc.php"><span><?php Display :: display_icon('contacts.png',get_lang('Contacts')); echo '&nbsp;&nbsp;'.get_lang('Contacts'); ?></span></a></li>
         <li><a href="group_contact.inc.php"><span><?php Display :: display_icon('group_contact.png',get_lang('ContactsGroups')); echo '&nbsp;&nbsp;'.get_lang('ContactsGroups'); ?></span></a></li>
         <?php

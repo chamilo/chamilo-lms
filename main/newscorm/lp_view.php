@@ -310,7 +310,10 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 		}
 		document.getElementById('learningPathToc').style.height = newLeftZoneHeight + 'px';
 		document.getElementById('learningPathRightZone').style.height = newRightZoneHeight + 'px';
+				
+		if(document.getElementById('content_id')) {		
 		document.getElementById('content_id').style.height = newRightZoneHeight + 'px';
+		} 		
 		if (document.body.clientHeight > winHeight) {
 			document.body.style.overflow = 'auto';
 		} else {

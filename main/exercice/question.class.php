@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 19797 2009-04-15 22:32:11Z juliomontoya $
+<?php // $Id: question.class.php 19955 2009-04-21 21:04:23Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 19797 2009-04-15 22:32:11Z juliomontoya $
+* 	@version $Id: question.class.php 19955 2009-04-21 21:04:23Z juliomontoya $
 */
 
 
@@ -1058,7 +1058,6 @@ abstract class Question
 	static function display_type_menu ($feedbacktype = 0)
 	{
 		global $exerciseId;
-		echo '<div>';
 		// 1. by default we show all the question types
 		$question_type_custom_list = self::$questionTypes;
 				
@@ -1066,8 +1065,7 @@ abstract class Question
 		if ($feedbacktype==1) {
 			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
 			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]); 
-		}
-		
+		}		
 		echo '<table>';
 		echo '<tr>';
 		foreach ($question_type_custom_list as $i=>$a_type) {			
@@ -1098,10 +1096,7 @@ abstract class Question
 			echo '<br>';
 			echo get_lang('GetExistingQuestion');
 					echo '</a>';
-		echo '</td>';	
-		
-
-		echo '</div>';		
+		echo '</td>';
 		echo '</table>';
 	}
 	

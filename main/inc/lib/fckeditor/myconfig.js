@@ -415,8 +415,9 @@ FCKConfig.ToolbarSets["FreeAnswer"] = [
 ] ;
 
 FCKConfig.ToolbarSets["CommentAnswers"] = [
-	['FitWindow','Link','Unlink','Image','flvPlayer','Table','Bold','Italic','TextColor','BGColor','Source']
+	['Link','Unlink','Image','flvPlayer','Bold','Italic','TextColor','BGColor']
 ] ;
+
 
 //Wiki
 FCKConfig.ToolbarSets["Wiki"] = [

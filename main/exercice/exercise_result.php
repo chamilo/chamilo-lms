@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 19897 2009-04-20 17:21:18Z cfasanando $
+* 	@version $Id: exercise_result.php 19955 2009-04-21 21:04:23Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -343,9 +343,10 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		border="0" alt=" " />
 	</td>
 	<td width="45%" style="border-bottom: 1px solid #4171B5;">
-		<?php
+		<?php		
 		$answer=api_parse_tex($answer);
-		echo $answer; ?>
+		echo $answer; 
+		?>
 	</td>
 	<td width="45%" style="border-bottom: 1px solid #4171B5;">
 		<?php
@@ -481,8 +482,8 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 	}	 
 	
 	$counter=0;
-	foreach($questionList as $questionId)
-	{
+	
+	foreach($questionList as $questionId) {
 		$counter++;
 		// gets the student choice for this question
 		$choice=$exerciseResult[$questionId];
@@ -498,21 +499,14 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		// destruction of the Question object
 		unset($objQuestionTmp);
 
-		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-		{
+		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
 			$colspan=4;
-		}
-		elseif($answerType == MATCHING || $answerType == FREE_ANSWER)
-		{
+		} elseif($answerType == MATCHING || $answerType == FREE_ANSWER) {
 			$colspan=2;
-		}
-		elseif($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER)
-		{
+		} elseif($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
 			$colspan=4;
 			$rowspan=$nbrAnswers+1;
-		}
-		else
-		{
+		} else {
 			$colspan=1;
 		}
 		?>
@@ -524,15 +518,12 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			</td>
 			</tr>
 			<tr>
-			<td colspan="<?php echo $colspan; ?>">
-				<i>
-				<?php echo $questionDescription; ?>
-				</i>
+			<td colspan="<?php echo $colspan; ?>">				
+				<i><?php echo $questionDescription; ?></i>				
 			</td>
 			</tr>
 		<?php
-		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-		{
+		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER){
 			?>
 				<tr>
 				<td width="5%" valign="top" align="center" nowrap="nowrap">
@@ -549,9 +540,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				</td>
 				</tr>
 			<?php
-		}
-		elseif($answerType == FILL_IN_BLANKS)
-		{
+		} elseif($answerType == FILL_IN_BLANKS) {
 			?>
 				<tr>
 				<td>
@@ -559,9 +548,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				</td>
 				</tr>
 			<?php
-		}
-		elseif($answerType == FREE_ANSWER)
-		{
+		} elseif($answerType == FREE_ANSWER) {
 			?>
 				<tr>
 				<td width="55%">
@@ -572,9 +559,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				</td>
 				</tr>
 			<?php
-		}
-		elseif($answerType == HOT_SPOT)
-		{
+		} elseif($answerType == HOT_SPOT) {
 			?>
 				<tr>
 					<td valign="top" colspan="2">
@@ -594,9 +579,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 								</td>
 							</tr>
 			<?php
-		}
-		else
-		{
+		} else {
 			?>
 				<tr>
 				<td width="50%">
@@ -616,257 +599,244 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		$questionScore=0;
 		if($answerType == FREE_ANSWER)
 			$nbrAnswers = 1;
-		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-		{
+			
+		for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+			
 			$answer=$objAnswerTmp->selectAnswer($answerId);
 			$answerComment=$objAnswerTmp->selectComment($answerId);
 			$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 			$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-
-			switch($answerType)
-			{
+			switch($answerType) {
 				// for unique answer
 				case UNIQUE_ANSWER :
-										$studentChoice=($choice == $answerId)?1:0;
-
-										if($studentChoice)
-										{
-										  	$questionScore+=$answerWeighting;
-											$totalScore+=$answerWeighting;
-										}
-
-
-										break;
+						$studentChoice=($choice == $answerId)?1:0;
+						if($studentChoice) {
+						  	$questionScore+=$answerWeighting;
+							$totalScore+=$answerWeighting;
+						}
+						break;
 				// for multiple answers
 				case MULTIPLE_ANSWER :
-
-										$studentChoice=$choice[$answerId];
-
-										if($studentChoice)
-										{
-											$questionScore+=$answerWeighting;
-											$totalScore+=$answerWeighting;
-										}
-
-										break;
+						$studentChoice=$choice[$answerId];
+						if($studentChoice) {
+							$questionScore+=$answerWeighting;
+							$totalScore+=$answerWeighting;
+						}
+						break;
 				// for fill in the blanks
-				case FILL_IN_BLANKS :
-									
-							    		// the question is encoded like this
-									    // [A] B [C] D [E] F::10,10,10@1
-									    // number 1 before the "@" means that is a switchable fill in blank question
-									    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
-									    // means that is a normal fill blank question			
+				case FILL_IN_BLANKS :					
+			    		// the question is encoded like this
+					    // [A] B [C] D [E] F::10,10,10@1
+					    // number 1 before the "@" means that is a switchable fill in blank question
+					    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
+					    // means that is a normal fill blank question			
 
-										// first we explode the "::"
-										$pre_array = explode('::', $answer);	
-				
-										// is switchable fill blank or not
-                                        $last = count($pre_array)-1;		
-										$is_set_switchable = explode('@', $pre_array[$last]);
-										
-										$switchable_answer_set=false;
-										if (isset($is_set_switchable[1]) && $is_set_switchable[1]==1)
-										{
-											$switchable_answer_set=true;
-										}								
-										
-                                        $answer = '';
-                                        for ($k=0; $k<$last; $k++)
-                                        {
-										  $answer .= $pre_array[$k];
-                                        }
-										
-										// splits weightings that are joined with a comma
-										$answerWeighting = explode(',',$is_set_switchable[0]);				
+						// first we explode the "::"
+						$pre_array = explode('::', $answer);	
 
-										// we save the answer because it will be modified
-										$temp=$answer;
+						// is switchable fill blank or not
+                        $last = count($pre_array)-1;		
+						$is_set_switchable = explode('@', $pre_array[$last]);
+						
+						$switchable_answer_set=false;
+						if (isset($is_set_switchable[1]) && $is_set_switchable[1]==1)
+						{
+							$switchable_answer_set=true;
+						}								
+						
+                        $answer = '';
+                        for ($k=0; $k<$last; $k++)
+                        {
+						  $answer .= $pre_array[$k];
+                        }
+						
+						// splits weightings that are joined with a comma
+						$answerWeighting = explode(',',$is_set_switchable[0]);				
 
-										// TeX parsing
-										// 1. find everything between the [tex] and [/tex] tags
-										$startlocations=strpos($temp,'[tex]');
-										$endlocations=strpos($temp,'[/tex]');
+						// we save the answer because it will be modified
+						$temp=$answer;
 
-										if($startlocations !== false && $endlocations !== false)
-										{
-											$texstring=substr($temp,$startlocations,$endlocations-$startlocations+6);
-											// 2. replace this by {texcode}
-											$temp=str_replace($texstring,'{texcode}',$temp);
-										}
+						// TeX parsing
+						// 1. find everything between the [tex] and [/tex] tags
+						$startlocations=strpos($temp,'[tex]');
+						$endlocations=strpos($temp,'[/tex]');
 
-										$answer='';
-										$j=0;
-										
-                                        //initialise answer tags
-										$user_tags=array();
-										$correct_tags=array();
-										$real_text=array();
-										// the loop will stop at the end of the text
-										while(1)
-										{
-											// quits the loop if there are no more blanks (detect '[')
-											if(($pos = strpos($temp,'[')) === false)
-											{
-												// adds the end of the text
-												$answer=$temp;
-												// TeX parsing - replacement of texcode tags
-												$texstring = api_parse_tex($texstring);
-												$answer=str_replace("{texcode}",$texstring,$answer);
-                                                $real_text[] = $answer;
-												break; //no more "blanks", quit the loop
-											}
-											// adds the piece of text that is before the blank 
-                                            //and ends with '[' into a general storage array
-                                            $real_text[]=substr($temp,0,$pos+1);
-											$answer.=substr($temp,0,$pos+1);
-											//take the string remaining (after the last "[" we found)
-											$temp=substr($temp,$pos+1);
-											// quit the loop if there are no more blanks, and update $pos to the position of next ']'
-											if(($pos = strpos($temp,']')) === false)
-											{
-												// adds the end of the text
-												$answer.=$temp;
-												break;
-											}
-											$choice[$j]=trim($choice[$j]);
-											$user_tags[]=stripslashes(strtolower($choice[$j]));
-											//put the contents of the [] answer tag into correct_tags[]
-                                            $correct_tags[]=strtolower(substr($temp,0,$pos));
-											$j++;
-											$temp=substr($temp,$pos+1);
-                                            //$answer .= ']';
-										}
-																			
-										$answer='';			
-										$real_correct_tags = $correct_tags;							
-										$chosen_list=array();
-										
-										for($i=0;$i<count($real_correct_tags);$i++)
-										{
-											if ($i==0)
-											{
-												$answer.=$real_text[0];
-											}
-											
-											if (!$switchable_answer_set)
-											{						
-												if ($correct_tags[$i]==$user_tags[$i])
-												{
-													// gives the related weighting to the student
-													$questionScore+=$answerWeighting[$i]; 
-													// increments total score
-													$totalScore+=$answerWeighting[$i];
-													// adds the word in green at the end of the string
-													$answer.=stripslashes($correct_tags[$i]); 
-												}
-												// else if the word entered by the student IS NOT the same as the one defined by the professor											
-												elseif(!empty($user_tags[$i]))
-												{
-													// adds the word in red at the end of the string, and strikes it
-													$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
-												}
-												else
-												{
-													// adds a tabulation if no word has been typed by the student
-													$answer.='&nbsp;&nbsp;&nbsp;';
-												}												
-											} 
-											else
-											{ 	// switchable fill in the blanks
-												if (in_array($user_tags[$i],$correct_tags))
-												{
-													$chosen_list[]=$user_tags[$i];													
-													$correct_tags=array_diff($correct_tags,$chosen_list);
-																	
-													// gives the related weighting to the student												
-													$questionScore+=$answerWeighting[$i];
-													// increments total score
-													$totalScore+=$answerWeighting[$i];
-													// adds the word in green at the end of the string
-													$answer.=stripslashes($user_tags[$i]);
-												}													// else if the word entered by the student IS NOT the same as the one defined by the professor											
-												elseif(!empty($user_tags[$i]))
-												{
-													// adds the word in red at the end of the string, and strikes it
-													$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
-												}
-												else
-												{
-													// adds a tabulation if no word has been typed by the student
-													$answer.='&nbsp;&nbsp;&nbsp;';
-												}												
-											}
-											// adds the correct word, followed by ] to close the blank
-											$answer.=' / <font color="green"><b>'.$real_correct_tags[$i].'</b></font>]';
-											if ( isset( $real_text[$i+1] ) ) {
-                                                $answer.=$real_text[$i+1];
-                                            }
-										} 
+						if($startlocations !== false && $endlocations !== false)
+						{
+							$texstring=substr($temp,$startlocations,$endlocations-$startlocations+6);
+							// 2. replace this by {texcode}
+							$temp=str_replace($texstring,'{texcode}',$temp);
+						}
 
-										break;
+						$answer='';
+						$j=0;
+						
+                        //initialise answer tags
+						$user_tags=array();
+						$correct_tags=array();
+						$real_text=array();
+						// the loop will stop at the end of the text
+						while(1)
+						{
+							// quits the loop if there are no more blanks (detect '[')
+							if(($pos = strpos($temp,'[')) === false)
+							{
+								// adds the end of the text
+								$answer=$temp;
+								// TeX parsing - replacement of texcode tags
+								$texstring = api_parse_tex($texstring);
+								$answer=str_replace("{texcode}",$texstring,$answer);
+                                $real_text[] = $answer;
+								break; //no more "blanks", quit the loop
+							}
+							// adds the piece of text that is before the blank 
+                            //and ends with '[' into a general storage array
+                            $real_text[]=substr($temp,0,$pos+1);
+							$answer.=substr($temp,0,$pos+1);
+							//take the string remaining (after the last "[" we found)
+							$temp=substr($temp,$pos+1);
+							// quit the loop if there are no more blanks, and update $pos to the position of next ']'
+							if(($pos = strpos($temp,']')) === false)
+							{
+								// adds the end of the text
+								$answer.=$temp;
+								break;
+							}
+							$choice[$j]=trim($choice[$j]);
+							$user_tags[]=stripslashes(strtolower($choice[$j]));
+							//put the contents of the [] answer tag into correct_tags[]
+                            $correct_tags[]=strtolower(substr($temp,0,$pos));
+							$j++;
+							$temp=substr($temp,$pos+1);
+                            //$answer .= ']';
+						}
+															
+						$answer='';			
+						$real_correct_tags = $correct_tags;							
+						$chosen_list=array();
+						
+						for($i=0;$i<count($real_correct_tags);$i++) {
+							if ($i==0)
+							{
+								$answer.=$real_text[0];
+							}
+							
+							if (!$switchable_answer_set)
+							{						
+								if ($correct_tags[$i]==$user_tags[$i])
+								{
+									// gives the related weighting to the student
+									$questionScore+=$answerWeighting[$i]; 
+									// increments total score
+									$totalScore+=$answerWeighting[$i];
+									// adds the word in green at the end of the string
+									$answer.=stripslashes($correct_tags[$i]); 
+								}
+								// else if the word entered by the student IS NOT the same as the one defined by the professor											
+								elseif(!empty($user_tags[$i]))
+								{
+									// adds the word in red at the end of the string, and strikes it
+									$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
+								}
+								else
+								{
+									// adds a tabulation if no word has been typed by the student
+									$answer.='&nbsp;&nbsp;&nbsp;';
+								}												
+							} else { 	
+								// switchable fill in the blanks
+								if (in_array($user_tags[$i],$correct_tags)) {
+									$chosen_list[]=$user_tags[$i];													
+									$correct_tags=array_diff($correct_tags,$chosen_list);
+													
+									// gives the related weighting to the student												
+									$questionScore+=$answerWeighting[$i];
+									// increments total score
+									$totalScore+=$answerWeighting[$i];
+									// adds the word in green at the end of the string
+									$answer.=stripslashes($user_tags[$i]);
+								}													// else if the word entered by the student IS NOT the same as the one defined by the professor											
+								elseif(!empty($user_tags[$i]))
+								{
+									// adds the word in red at the end of the string, and strikes it
+									$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
+								}
+								else
+								{
+									// adds a tabulation if no word has been typed by the student
+									$answer.='&nbsp;&nbsp;&nbsp;';
+								}												
+							}
+							// adds the correct word, followed by ] to close the blank
+							$answer.=' / <font color="green"><b>'.$real_correct_tags[$i].'</b></font>]';
+							if ( isset( $real_text[$i+1] ) ) {
+                                $answer.=$real_text[$i+1];
+                            }
+						}
+						break;
 				// for free answer
 				case FREE_ANSWER :
-										$studentChoice=$choice;
+						$studentChoice=$choice;
 
-										if($studentChoice)
-										{
-											//Score is at -1 because the question has'nt been corected
-										  	$questionScore=-1;
-											$totalScore+=0;
-										}
+						if($studentChoice)
+						{
+							//Score is at -1 because the question has'nt been corected
+						  	$questionScore=-1;
+							$totalScore+=0;
+						}
 
 
-										break;
+						break;
 				// for matching
 				case MATCHING :
-										if($answerCorrect)
-										{
-											if($answerCorrect == $choice[$answerId])
-											{
-												$questionScore+=$answerWeighting;
-												$totalScore+=$answerWeighting;
-												$choice[$answerId]=$matching[$choice[$answerId]];
-											}
-											elseif(!$choice[$answerId])
-											{
-												$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
-											}
-											else
-											{
-												$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
-											}
-										}
-										else
-										{
-											$matching[$answerId]=$answer;
-										}
-										break;
+						if($answerCorrect)
+						{
+							if($answerCorrect == $choice[$answerId])
+							{
+								$questionScore+=$answerWeighting;
+								$totalScore+=$answerWeighting;
+								$choice[$answerId]=$matching[$choice[$answerId]];
+							}
+							elseif(!$choice[$answerId])
+							{
+								$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
+							}
+							else
+							{
+								$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
+							}
+						}
+						else
+						{
+							$matching[$answerId]=$answer;
+						}
+						break;
 				// for hotspot with no order
-				case HOT_SPOT :			$studentChoice=$choice[$answerId];
+				case HOT_SPOT :			
+						$studentChoice=$choice[$answerId];
+						if($studentChoice)
+						{
+							$questionScore+=$answerWeighting;
+							$totalScore+=$answerWeighting;
+						}
 
-										if($studentChoice)
-										{
-											$questionScore+=$answerWeighting;
-											$totalScore+=$answerWeighting;
-										}
-
-										break;
+						break;
 				// for hotspot with fixed order
-				case HOT_SPOT_ORDER :	$studentChoice=$choice['order'][$answerId];
+				case HOT_SPOT_ORDER :	
+						$studentChoice=$choice['order'][$answerId];
 
-										if($studentChoice == $answerId)
-										{
-											$questionScore+=$answerWeighting;
-											$totalScore+=$answerWeighting;
-											$studentChoice = true;
-										}
-										else
-										{
-											$studentChoice = false;
-										}
+						if($studentChoice == $answerId)
+						{
+							$questionScore+=$answerWeighting;
+							$totalScore+=$answerWeighting;
+							$studentChoice = true;
+						}
+						else
+						{
+							$studentChoice = false;
+						}
 
-										break;
+						break;
 			} // end switch Answertype
 			
 			if($answerType != MATCHING || $answerCorrect)

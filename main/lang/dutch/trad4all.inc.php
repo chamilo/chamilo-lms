@@ -566,6 +566,7 @@ $BackToPreviousPage = "Terug naar de vorige pagina";
 $ListView = "Als lijst weergeven";
 $DisplayOrder = "Volgorde van weergave";
 $SaveDocument = "Document opslaan";
+$ModifyCategory = "Categorie wijzigen";
 $MakeInvisible = "Verbergen";
 $MakeVisible = "zichtbaar maken";
 ?>

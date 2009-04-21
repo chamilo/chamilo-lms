@@ -411,7 +411,7 @@ $Survey = "Questionari";
 $More = "Altro ...";
 $ClickHere = "Clicca qui";
 $Here = "qui";
-$SaveQuestion = "Salva la domanda";
+$SaveQuestion = "Salva il quesito";
 $ReturnTo = "ritorna a";
 $Horizontal = "Orizzontale";
 $Vertical = "Verticale";
@@ -708,4 +708,5 @@ $Message = "Messaggio";
 $MoreInformation = "Ulteriori informazioni";
 $MakeInvisible = "Rendi invisibile";
 $MakeVisible = "Rendi visibile";
+$Image = "Immagine";
 ?>

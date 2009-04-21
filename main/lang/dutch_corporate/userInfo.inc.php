@@ -30,4 +30,5 @@ $langUnregister = "Uitschrijven";
 $langAddAUser = "gebruikers toevoegen";
 $UsersUnsubscribed = "De geselecteerde gebruikers zijn uitgeschreven uit de module";
 $ThisStudentIsSubscribeThroughASession = "De gebruiker is ingeschreven in deze module via een sessie. U kan deze informatie niet wijzigen";
+$Invites = "Uitnodigingen";
 ?>

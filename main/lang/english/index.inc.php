@@ -1,21 +1,21 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langInvalidId = "Login failed - incorrect username or password.";
-$langWelcome = "courses are freely available below. Other  courses requirea username and a password, which you can obtain by clicking on \'registration\'. Trainerscan create course areas by clicking on registration too, but selecting then\'Create training areas\'.";
-$langPass = "Password";
+$langInvalidId = "Login failed - incorrect login or password.";
+$langWelcome = "trainings are freely available below. Other  trainings requirea login and a password, which you can obtain by clicking on \'registration\'. Trainerscan create trainings by clicking on registration too, but selecting then\'Create trainings\'.";
+$langPass = "Pass";
 $langEnter = "Enter";
-$langReg = "Registration";
+$langReg = "Register";
 $langMenu  = "Menu";
 $langAdvises = "Advises";
-$langCourseDoesntExist = "<b>Warning :</b> This course doesn\'t exist";
+$langCourseDoesntExist = "<b>Warning :</b> This training does not exist";
 $langGetCourseFromOldPortal = "click here to get this training from your old portal";
 $langOtherCourses = "Trainings list";
 $langSupportForum = "Support forum";
 $langCategories  = "Categories";
 $langBackToHomePage  = "Categories Overview";
 $lang_No_course_publicly_available  = "No training publicly available.";
-$langLostPassword  = "Lost Password";
+$langLostPassword  = "I lost my password";
 $lang_edit_my_course_list  = "Edit trainings list";
 $langAgenda  = "Agenda next events";
 $langValvas  = "Latest announcements";
@@ -30,8 +30,8 @@ $Intranet = "Intranet";
 $Englin = "English";
 $langInvalidForSelfRegistration = "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>";
 $langSubCat = "sub-categories";
-$langMenuGeneral = "General";
-$langMenuUser = "User";
+$langMenuGeneral = "Help";
+$langMenuUser = "My account";
 $langMenuAdmin = "Portal Admin";
 $langUsersOnLineList = "Online users list";
 $langTotalOnLine = "Total online";
@@ -55,15 +55,15 @@ $langDiplomas = "Diplomas";
 $langTeach = "What s/he can teach";
 $langOpenarea = "Personal area";
 $langProductions = "Productions";
-$langSendChatRequest = "Send chat request to this person";
+$langSendChatRequest = "Send a chat proposal to this person";
 $langRequestDenied = "The invitation has been rejected.";
 $UsageDatacreated = "Usage data created";
-$SessionView = "Display the courses ordered by sessions";
+$SessionView = "Display trainings ordered by training sessions";
 $CourseView = "Display the full list of the trainings";
 $DropboxFileAdded = "Dropbox file added";
 $NewMessageInForum = "New message posted in the forum";
 $FolderCreated = "New folder created";
 $LinkAdded = "New link added";
 $AnnouncementAdded = "Announcement added";
-$AgendaAdded = "Agenda item added";
+$AgendaAdded = "Event added";
 ?>

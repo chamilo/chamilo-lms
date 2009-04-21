@@ -135,4 +135,5 @@ $CreateForum = "Crear foro";
 $ModifyForum = "Modificar foro";
 $CreateThread = "Crear tema";
 $ModifyThread = "Modificar tema";
+$EditForum = "Editar foro";
 ?>

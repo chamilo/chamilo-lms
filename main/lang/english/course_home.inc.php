@@ -17,12 +17,12 @@ $ToolIsNowHidden = "The tool is now invisible.";
 $EditLink = "Edit link";
 $Blog_management = "Projects";
 $Forum = "Forums";
-$Course_maintenance = "Maintenance";
+$Course_maintenance = "Backup";
 $TOOL_SURVEY = "Surveys";
 $GreyIcons = "Toolbox";
 $Interaction = "Interaction";
 $Authoring = "Authoring";
 $Administration = "Administration";
-$IntroductionTextUpdated = "The introduction text has been updated";
-$IntroductionTextDeleted = "Introduction text deleted";
+$IntroductionTextUpdated = "Intro was updated";
+$IntroductionTextDeleted = "Intro was deleted";
 ?>

@@ -36,4 +36,5 @@ $langChatDenied = "Uw verzoek is genegeerd door uw partner.";
 $Send = "Verstuur";
 $Connected = "verbonden";
 $Think = "Denk";
+$BigGrin = "Brede grijns";
 ?>

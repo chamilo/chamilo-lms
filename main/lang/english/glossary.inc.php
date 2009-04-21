@@ -1,8 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$TermAddNew = "Add new term";
-$TermName = "Term name";
+$TermAddNew = "Add new glossary term";
+$TermName = "Term";
 $TermDefinition = "Term definition";
 $TermDeleted = "Term removed";
 $TermUpdated = "Term updated";
@@ -13,10 +13,10 @@ $TermEdit = "Edit term";
 $TermDeleteAction = "Delete term";
 $OrderBy = "Order by";
 $CreationDate = "Creation date";
-$UpdateDate = "Update date";
+$UpdateDate = "Updated";
 $PreSelectedOrder = "Pre-defined";
 $TermAdded = "Term added";
-$YouMustEnterATermName = "You must enter a term name";
+$YouMustEnterATermName = "You must enter a term";
 $YouMustEnterATermDefinition = "You must enter a term definition";
 $TableView = "Table view";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "This glossary term already exists. Please change the term name.";

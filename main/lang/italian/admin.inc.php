@@ -955,4 +955,5 @@ $TotalTimeByCourse = "Tempo totale per modulo";
 $LastTimeTheCourseWasUsed = "Ultimo accesso al modulo";
 $AnnouncementAvailable = "L\'avviso è disponibile";
 $AnnouncementNotAvailable = "L\'avviso non è disponibile";
+$Searching = "Sto cercando";
 ?>

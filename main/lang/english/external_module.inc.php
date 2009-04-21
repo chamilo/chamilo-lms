@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langLinkSite = "Link to a website";
-$langSubTitle = "Adds a link to a page on the homepage of your course. To do this, go to that page, copy its URL in the address bar on the top of your browser, and paste it into the \"Link\" field below.";
+$langSubTitle = "Adds a link to a page on the homepage of your training. To do this, go to that page, copy its URL in the address bar on the top of your browser, and paste it into the \"Link\" field below.";
 $langAddPage            = "Add a page";
 $langSendPage           = "Page to upload";
 $langCouldNot           = "File could not be uploaded";
@@ -17,9 +17,9 @@ $langNewWindow = "In a new window";
 $langAdded = "The link has been added";
 $langAddLink = "Add a link";
 $langNoLinkName = "Please enter the link name";
-$langEditLink = "Edit Course Homepage Link";
+$langEditLink = "Edit link";
 $langChangePress = "Change and press OK";
-$langLinkChanged = "Course Homepage Link changed. Use breadcrumb menu above to return to the homepage.";
+$langLinkChanged = "Training homepage link changed. Use the breadcrumb menu above to return to the homepage.";
 $NoLinkName = "No link name";
 $NoLinkURL = "No link URL";
 $LinkChanged = "Link modified";

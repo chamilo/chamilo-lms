@@ -2,9 +2,9 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langCourseProgram  = "Description";
-$langThisCourseDescriptionIsEmpty  = "Description not available.";
+$langThisCourseDescriptionIsEmpty  = "There is no training description so far.";
 $langEditCourseProgram  = "Create or edit a description.";
-$QuestionPlan  = "Suggestion:";
+$QuestionPlan  = "Help";
 $langInfo2Say  = "Information to give to users";
 $langOuAutreTitre  = "Title";
 $langNewBloc  = "Other";

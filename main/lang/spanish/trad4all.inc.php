@@ -706,5 +706,7 @@ $Filter = "Filtrar";
 $Subject = "Asunto";
 $Message = "Mensaje";
 $MoreInformation = "Mas información";
+$MakeInvisible = "Hacer invisible";
+$MakeVisible = "Hacer visible";
 $Image = "Imagen";
 ?>

@@ -59,4 +59,11 @@ $EndDateAlreadyPassed = "Fecha final ya ha pasado";
 $MoveXTo = "Mover %s A";
 $QualificationMustNotBeMoreThanQualificationOver = "La calificación no puede ser superior a la calificacion máxima";
 $ModifyDirectory = "Modificar directorio";
+$DeleteAllFiles = "Eliminar todos los archivos";
+$BackToWorksList = "Volver a la lista de tareas";
+$EditMedia = "Editar y marcar el trabajo";
+$AllFilesInvisible = "Todos los trabajos ahora son invisibles";
+$FileInvisible = "El archivo ahora es invisible";
+$AllFilesVisible = "Todos los trabajos ahora son visibles";
+$FileVisible = "El archivo ahora es visible";
 ?>

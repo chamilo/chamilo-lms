@@ -77,11 +77,16 @@ $WikiStandardMode = "Wiki mode";
 $UnlockPage = "Ontgrendelen";
 $HidePage = "Verberg pagina";
 $ShowPage = "Toon pagina";
+$AllowLaterSends = "Maak het sturen met vertraging mogelijk";
+$EmailWikiChanges = "Hou me op de hoogte van wijzigingen in de wiki";
+$EmailWikipageModified = "De wiki pagina is gewijzigd.";
+$EmailWikiPageAdded = "De pagina is toegevoegd.";
 $WantedPages = "Gevraagde paginas";
 $MostVisitedPages = "Meest bezochte paginas";
 $MostActiveUsers = "Meest actieve gebruikers";
 $Contributions = "Bijdragen";
 $MostActiveUsers = "Meest actieve gebruikers";
+$Restore = "Herstellen";
 $LastVersion = "Laatste versie";
 $RestoredFromVersion = "Hersteld van versie";
 ?>

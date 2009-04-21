@@ -67,5 +67,6 @@ $RepeatedEventViewOriginalEvent = "Bekijk de originele gebeurtenis";
 $ICalFileImport = "Importeer iCal/ics file";
 $AllUsersOfThePlatform = "Alle gebruikers van het platform";
 $GlobalEvent = "Globale gebeurtenis";
+$ModifyEvent = "Evenement wijzigen";
 $IsNotiCalFormatFile = "Dit bestand is niet in het iCal formaat.";
 ?>

@@ -39,11 +39,11 @@ $langCsvLinesNew = "new link(s) created.";
 $langCsvExplain = "The file should look like:<blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1;<b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\";</pre></blockquote>If URL and category are equal to those of an existing link, its title and description are updated. In all other cases a new link is created.<br><br>Bold = mandatory. Fields can be in any order, names in upper- or lowercase. Additional fields are added to description. Separator: comma or semicolon. Values may be quoted, but not the field names. Some [b]HTML tags[/b] can be imported in the description field.";
 $langLinkUpdated = "Link has been updated";
 $langAll_Link_Deleted = "Link has been deleted";
-$langOnHomepage = "Show link on homepage";
-$langShowLinkOnHomepage = "Show this link as an icon on the course homepage";
+$langOnHomepage = "Show link on training homepage";
+$langShowLinkOnHomepage = "Show this link as an icon on training homepage";
 $langCsvImport = "CSV import";
 $General = "General";
 $SearchFeatureDoIndexLink = "Index link title and description? ";
 $langSaveLink = "Save link";
-$langSaveCategory = "Save category";
+$langSaveCategory = "Save folder";
 ?>

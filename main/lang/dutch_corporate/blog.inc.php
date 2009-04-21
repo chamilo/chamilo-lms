@@ -84,4 +84,5 @@ $NoTasks = "Geen taken";
 $Shared = "Gedeeld";
 $PermissionGrantedByGroupOrRole = "Rechten toegekend per groep of rol";
 $Reader = "Lezer";
+$SeeBlog = "Project bekijken";
 ?>

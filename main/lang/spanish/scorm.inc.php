@@ -51,5 +51,5 @@ $GenericScorm = "SCORM genérico";
 $UnknownPackageFormat = "El formato del paquete no puede ser reconocido. Por favor, cerciórese de que esté bien creado y de que no contenga errores. Los problemas pueden deberse al formato ZIP o a la transferencia de ficheros muy largos. Si no está seguro del fichero ZIP use el mínimo de funcionalidades al comprimir.";
 $Attempt = "Intento";
 $MoveTheCurrentForum = "Mover el foro actual";
-$WarningWhenEditingScorm = "¡ Aviso ! <br /> Si edita el contenido de un elemento scorm, puede alterar el informe de la secuencia de aprendizaje o dañar el elemento.";
+$WarningWhenEditingScorm = "¡ Aviso ! Si edita el contenido de un elemento scorm, puede alterar el informe de la secuencia de aprendizaje o dañar el elemento.";
 ?>

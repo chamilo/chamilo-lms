@@ -11,8 +11,8 @@ $SaveNote = "Save note";
 $WriteYourNoteHere = "Click here to write a new note";
 $SearchByTitle = "Search by title";
 $WriteTheTitleHere = "Write the title here";
-$UpdateDate = "Last modification";
-$NoteAddNew = "Add new note";
+$UpdateDate = "Latest modification";
+$NoteAddNew = "Add new note in my personal notebook";
 $OrderByCreationDate = "Sort by date created";
 $OrderByModificationDate = "Sort by date last modified";
 $OrderByTitle = "Sort by title";
@@ -21,5 +21,5 @@ $NoteComment = "Note details";
 $NoteAdded = "Note added";
 $NoteConfirmDelete = "Are you sure you want to delete this note";
 $AddNote = "Add note";
-$ModifyNote = "Modify note";
+$ModifyNote = "Edit note";
 ?>

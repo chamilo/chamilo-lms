@@ -539,4 +539,5 @@ $CommentAdded = "Uw commentaar is toegevoegd.";
 $BackToPreviousPage = "Terug naar de vorige pagina";
 $ListView = "Als lijst weergeven";
 $SaveDocument = "Document opslaan";
+$ModifyCategory = "Categorie wijzigen";
 ?>

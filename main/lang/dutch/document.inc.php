@@ -207,4 +207,5 @@ $TemplateTitleTimelineDescription = "3 lijsten met een pijl die het verband aang
 $TemplateTitleStopAndThink = "Stop en denk na";
 $TemplateTitleListLeftListDescription = "Linker lijst met een lesgever";
 $TemplateTitleStopAndThinkDescription = "Een paginaopmaak die u aanzet om te stoppen en even na te denken. ";
+$TemplateImage = "Icoon voor het sjabloon";
 ?>

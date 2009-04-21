@@ -64,7 +64,7 @@ $MessageOutboxComment = "Aquí puede ver los mensajes que ha enviado";
 $MyPersonalData = "Aquí puede ver y modificar sus datos personales";
 $AlterPersonalData = "Modifique sus datos personales desde aquí";
 $Invites = "Mis invitados";
-$ContactsGroups = "Mis grupos de contactos";
+$ContactsGroups = "Mis grupos";
 $ErrorSendingMessage = "Error al enviar el mensaje";
 $PendingInvitations = "Invitaciones pendientes";
 $MyInbox = "Bandeja de entrada";
@@ -81,4 +81,7 @@ $UserNonRegisteredAtTheCourse = "Usuario no registrado al curso";
 $ChangeContactGroup = "Cambiar el grupo de mi contacto";
 $Friend = "Amigo";
 $ViewMySharedProfile = "Mi perfil compartido";
+$UserStatistics = "Presentación de informes para este usuario";
+$EditUser = "Editar usuario";
+$ViewUser = "Ver usuario";
 ?>

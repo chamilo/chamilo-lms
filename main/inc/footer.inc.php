@@ -1,4 +1,4 @@
-<?php // $Id: footer.inc.php 19131 2009-03-18 19:47:50Z cvargas1 $
+<?php // $Id: footer.inc.php 19941 2009-04-21 14:11:00Z pcool $
  
 /*
 ==============================================================================
@@ -73,9 +73,15 @@ api_plugin('footer');
 ?>
 <?php
 if (get_setting('show_administrator_data')=="true") {
+	
+	// platform manager
+	echo "<span id=\"platformmanager\">".get_lang("Manager") ?> : <?php echo Display::encrypted_mailto_link(get_setting('emailAdministrator'),get_setting('administratorName')." ".get_setting('administratorSurname'));
+
+	// course manager
 	$id_course=api_get_course_id();
 	$id_session=api_get_session_id();
 	if (isset($id_course) && $id_course!=-1){
+		echo "<span id=\"coursemanager\">";
 		if ($id_session==0){
 			$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
 			if (count($mail)>1){
@@ -97,8 +103,8 @@ if (get_setting('show_administrator_data')=="true") {
 				echo Display::encrypted_mailto_link($v,$k); 
 			}
 		}
+		echo '</span>';
 	} 
-	echo "<br />".get_lang("Manager") ?> : <?php echo Display::encrypted_mailto_link(get_setting('emailAdministrator'),get_setting('administratorName')." ".get_setting('administratorSurname'));
 }
 ?>&nbsp;
 </div> <!-- end of #footer -->

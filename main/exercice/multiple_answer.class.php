@@ -70,8 +70,7 @@ class MultipleAnswer extends Question {
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '100px';
 		$fck_attribute['ToolbarSet'] = 'Answer';
-		$fck_attribute['Config']['ToolbarStartExpanded']='false';
-			
+		$fck_attribute['Config']['ToolbarStartExpanded']='false';			
 
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -98,8 +97,7 @@ class MultipleAnswer extends Question {
 						</th>
 						<th>
 							'.get_lang('Weighting').'
-						</th>
-						
+						</th>						
 					</tr>';
 		$form -> addElement ('html', $html);
 
@@ -140,7 +138,7 @@ class MultipleAnswer extends Question {
 			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"');
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 			$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"');
-			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0"');
+			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
 			$form -> addElement ('html', '</tr>');
 		}
 		$form -> addElement ('html', '</table>');
@@ -184,8 +182,7 @@ class MultipleAnswer extends Question {
 
 			if($goodAnswer){
     			$weighting = abs($weighting);
-			}
-			else{
+			} else {
 				$weighting = abs($weighting);
 				$weighting = -$weighting;
 			}

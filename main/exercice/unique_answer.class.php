@@ -248,7 +248,7 @@ class UniqueAnswer extends Question {
 			
 			//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 						
-			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="2" value="0"');
+			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
 			$form -> addElement ('html', '</tr>');
 		}
 		

@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 18549 2009-02-17 18:08:58Z cfasanando $
+<?php // $Id: CourseBuilder.class.php 19948 2009-04-21 17:27:59Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -128,7 +128,7 @@ class CourseBuilder
 	{
 		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
 		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);	
-		echo $this->course->type;			
+			
         if (!empty($this->course->type) && $this->course->type=='partial')        	
         	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path NOT LIKE \'/images/gallery%\' ORDER BY path';
         else

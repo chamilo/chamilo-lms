@@ -1,4 +1,4 @@
-<?php // $Id: import_backup.php 18925 2009-03-10 14:09:33Z ndieschburg $
+<?php // $Id: import_backup.php 19948 2009-04-21 17:27:59Z juliomontoya $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -74,105 +74,80 @@ require_once('classes/CourseSelectForm.class.php');
 // Display the tool title
 api_display_tool_title($nameTools);
 
+
 /*
 ==============================================================================
 		MAIN CODE
 ==============================================================================
 */ 
-if(  (isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (isset($_POST['import_option']) && $_POST['import_option'] == 'full_backup' ) )
-{
+
+if((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (isset($_POST['import_option']) && $_POST['import_option'] == 'full_backup' )) {
 	$error=false;	
-	if(isset($_POST['action']) && $_POST['action'] == 'course_select_form' )
-	{
+	if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+		// partial backup here we recover the documents posted
 		$course = CourseSelectForm::get_posted_course();
-	}
-	else
-	{
-		if( $_POST['backup_type'] == 'server')
-		{
+						
+	} else {
+		if( $_POST['backup_type'] == 'server') {
 			$filename = $_POST['backup_server'];	
 			$delete_file = false;
-		}
-		else
-		{
+		} else {
 			if($_FILES['backup']['error']==0){
 				$filename = CourseArchiver::import_uploaded_file($_FILES['backup']['tmp_name']);
-				if ($filename === false)
-                {
+				if ($filename === false) {
                 	$error = true;
-                }
-                else
-                {
+                } else                {
                     $delete_file = true;
                 }
-			}
-			else{
+			} else {
 				$error=true;
 			}
 		}
-        if(!$error)
-        {
+        if(!$error) {
+		  // full backup
 		  $course = CourseArchiver::read_course($filename,$delete_file);
         }
 	}
-	if(!$error && $course->has_resources())
-	{
-		$cr = new CourseRestorer($course);
+	
+	if(!$error && $course->has_resources()) {		
+		$cr = new CourseRestorer($course);		
 		$cr->set_file_option($_POST['same_file_name_option']);
 		$cr->restore();
 		Display::display_normal_message(get_lang('ImportFinished').
                 //'<a class="bottom-link" href="../course_home/course_home.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('CourseHomepage').'</a>',false); // This is not the preferable way to go to the course homepage.
                 '<a class="bottom-link" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">&lt;&lt; '.get_lang('CourseHomepage').'</a>',false);
-	}
-	else
-	{
+	} else {
 		if(!$error){
 			Display::display_warning_message(get_lang('NoResourcesInBackupFile').
                 '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
-		}
-		elseif ($filename === false)
-        {
+		} elseif ($filename === false) {
             Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin').
                 '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
-        }
-        else
-        {
+        } else {
 			Display::display_error_message(ucfirst(get_lang('UploadError')).
                 '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
 		}
 	}
 	CourseArchiver::clean_backup_dir();
-}
-elseif (isset($_POST['import_option']) && $_POST['import_option'] == 'select_items')
-{
-	if( $_POST['backup_type'] == 'server')
-	{
+} elseif (isset($_POST['import_option']) && $_POST['import_option'] == 'select_items') {	
+	if( $_POST['backup_type'] == 'server') {
 		$filename = $_POST['backup_server'];
 		$delete_file = false;	
-	}
-	else
-	{
+	} else {
 		$filename = CourseArchiver::import_uploaded_file($_FILES['backup']['tmp_name']);
 		$delete_file = true;
 	}
-	$course = CourseArchiver::read_course($filename,$delete_file);
-	if ($course->has_resources() && ($filename !== false))
-	{
+	$course = CourseArchiver::read_course($filename,$delete_file);	
+	if ($course->has_resources() && ($filename !== false)) {
 		CourseSelectForm::display_form($course,array('same_file_name_option'=>$_POST['same_file_name_option']));
-	}
-    elseif ($filename === false)
-    {
+	} elseif ($filename === false) {
     	Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin').
                 '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
-    }
-	else
-	{
+    } else {
 		Display::display_warning_message(get_lang('NoResourcesInBackupFile').	
                 '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
 	}
-}
-else
-{
+} else {
 	$user = api_get_user_info();
 	$backups = CourseArchiver::get_available_backups($is_platformAdmin?null:$user['user_id']);
 	$backups_available = (count($backups)>0);

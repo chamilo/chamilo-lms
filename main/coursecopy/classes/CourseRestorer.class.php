@@ -1,4 +1,4 @@
-<?php // $Id: CourseRestorer.class.php 19321 2009-03-25 20:15:33Z juliomontoya $
+<?php // $Id: CourseRestorer.class.php 19948 2009-04-21 17:27:59Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -82,14 +82,11 @@ class CourseRestorer
 	 */
 	function restore($destination_course_code = '')
 	{
-		if ($destination_course_code == '')
-		{
+		if ($destination_course_code == '') {
 			$course_info = api_get_course_info();
 			$this->course->destination_db = $course_info['dbName'];
 			$this->course->destination_path = $course_info['path'];
-		}
-		else
-		{
+		} else {
 			$course_info = Database :: get_course_info($destination_course_code);
 			$this->course->destination_db = $course_info['database'];
 			$this->course->destination_path = $course_info['directory'];
@@ -108,33 +105,33 @@ class CourseRestorer
 		$this->restore_student_publication();
 		// Restore the item properties
 		$table = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
-		foreach ($this->course->resources as $type => $resources)
-		{
-			foreach ($resources as $id => $resource)
-			{
-				foreach ($resource->item_properties as $property)
-				{
-					// First check if there isn't allready a record for this resource
-					$sql = "SELECT * FROM $table WHERE tool = '".$property['tool']."' AND ref = '".$resource->destination_id."'";
-					$res = api_sql_query($sql,__FILE__,__LINE__);
-					if( Database::num_rows($res) == 0)
+		foreach ($this->course->resources as $type => $resources) {
+			if (is_array($resources)) {
+				foreach ($resources as $id => $resource) {
+					foreach ($resource->item_properties as $property)
 					{
-						// The to_group_id and to_user_id are set to default values as users/groups possibly not exist in the target course
-						$sql = "INSERT INTO $table SET
-												tool = '".$property['tool']."',
-												insert_user_id = '".$property['insert_user_id']."',
-												insert_date = '".$property['insert_date']."',
-												lastedit_date = '".$property['lastedit_date']."',
-												ref = '".$resource->destination_id."',
-												lastedit_type = '".$property['lastedit_type']."',
-												lastedit_user_id = '".$property['lastedit_user_id']."',
-												visibility = '".$property['visibility']."',
-												start_visible = '".$property['start_visible']."',
-												end_visible = '".$property['end_visible']."',
-												to_user_id  = '".$property['to_user_id']."',
-												to_group_id = '0'";
-												;
-						api_sql_query($sql, __FILE__, __LINE__);
+						// First check if there isn't allready a record for this resource
+						$sql = "SELECT * FROM $table WHERE tool = '".$property['tool']."' AND ref = '".$resource->destination_id."'";
+						$res = api_sql_query($sql,__FILE__,__LINE__);
+						if( Database::num_rows($res) == 0)
+						{
+							// The to_group_id and to_user_id are set to default values as users/groups possibly not exist in the target course
+							$sql = "INSERT INTO $table SET
+													tool = '".$property['tool']."',
+													insert_user_id = '".$property['insert_user_id']."',
+													insert_date = '".$property['insert_date']."',
+													lastedit_date = '".$property['lastedit_date']."',
+													ref = '".$resource->destination_id."',
+													lastedit_type = '".$property['lastedit_type']."',
+													lastedit_user_id = '".$property['lastedit_user_id']."',
+													visibility = '".$property['visibility']."',
+													start_visible = '".$property['start_visible']."',
+													end_visible = '".$property['end_visible']."',
+													to_user_id  = '".$property['to_user_id']."',
+													to_group_id = '0'";
+													;
+							api_sql_query($sql, __FILE__, __LINE__);
+						}
 					}
 				}
 			}
@@ -143,61 +140,74 @@ class CourseRestorer
 		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES, $this->course->destination_db);
 		foreach ($this->course->resources as $type => $resources)
 		{
-			foreach ($resources as $id => $resource)
-			{
-				$linked_resources = $resource->get_linked_resources();
-				foreach ($linked_resources as $to_type => $to_ids)
+			if (is_array($resources)) 
+				foreach ($resources as $id => $resource)
 				{
-					foreach ($to_ids as $index => $to_id)
+					$linked_resources = $resource->get_linked_resources();
+					foreach ($linked_resources as $to_type => $to_ids)
 					{
-						$to_resource = $this->course->resources[$to_type][$to_id];
-						$sql = "INSERT INTO ".$table." SET source_type = '".$type."', source_id = '".$resource->destination_id."', resource_type='".$to_type."', resource_id='".$to_resource->destination_id."' ";
-						api_sql_query($sql, __FILE__, __LINE__);
+						foreach ($to_ids as $index => $to_id)
+						{
+							$to_resource = $this->course->resources[$to_type][$to_id];
+							$sql = "INSERT INTO ".$table." SET source_type = '".$type."', source_id = '".$resource->destination_id."', resource_type='".$to_type."', resource_id='".$to_resource->destination_id."' ";
+							api_sql_query($sql, __FILE__, __LINE__);
+						}
 					}
 				}
-			}
 		}
 	}
 	/**
 	 * Restore documents
 	 */
 	function restore_documents()
-	{
-		if ($this->course->has_resources(RESOURCE_DOCUMENT))
-		{
+	{		
+		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {			
 			$table = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
 			$destination_course['dbName']= $this->course->destination_db;
-			
-			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document)
-			{	
+			/* echo '<pre>'; echo $this->course->backup_path; echo '<br>'; */
+			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 				$perm = api_get_setting('permissions_for_new_directories');
-			    $perm = octdec(!empty($perm)?$perm:0770);				
-				$dirs = explode('/', dirname($document->path));
-				
-				$my_temp = '';
-				for ($i=1; $i<count($dirs); $i++) {					
-					$my_temp .= $dirs[$i];					
-					if (!is_dir($path.'document/'.$my_temp)) {						
-						$sql = "SELECT id FROM ".$table." WHERE path='/".Database::escape_string($my_temp)."'";
-						$res = api_sql_query($sql, __FILE__, __LINE__);									
-						$num_result = Database::num_rows($res);
-						if ($num_result==0) {							
-							$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document','/'.$my_temp,basename($my_temp));
-						}						
-					}	
-					$my_temp .= '/';																
-				}
-				
-				
-				if ($document->file_type == DOCUMENT)
-				{
-					if (file_exists($path.$document->path))
-					{
-						switch ($this->file_option)
-						{
-							case FILE_OVERWRITE :
+			    $perm = octdec(!empty($perm)?$perm:0770);
+			    $dirs = explode('/', dirname($document->path));	
+			    if (count($dirs)==1) {
+			    	if ($this->file_type==FOLDER) {
+			    		$new = substr($document->path, 8);
+			    		$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document',$new,basename($new));
+			    	}
+			    } else {			    	    								
+					$my_temp = '';		
+					for ($i=1; $i<=count($dirs); $i++) {			
+						$my_temp .= $dirs[$i];					
+						if (!is_dir($path.'document/'.$my_temp)) {											
+							$sql = "SELECT id FROM ".$table." WHERE path='/".Database::escape_string($my_temp)."'"; 
+							//echo '<br>';							
+							$res = api_sql_query($sql, __FILE__, __LINE__);							
+							$num_result = Database::num_rows($res);					
+							if ($num_result==0) {
+								$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document','/'.$my_temp,basename($my_temp));
+							}
+						}
+						$my_temp .= '/';																
+					}
+			    }
+			    /*
+				echo '<br>';
+				echo '------------------------';
+				echo '<br>';
+				echo '$doculent:';echo '<br>';
+				echo print_r($document); echo '<br>';
+				echo 'documlent->path'.$path.$document->path;echo '<br>';
+				echo 'file option:'.$this->file_option; echo '<br>';
+				echo 'filetype:'.$document->file_type ;
+				echo '<br>';
+				*/
+				if ($document->file_type == DOCUMENT) {
+					if (file_exists($path.$document->path)) {	
+						switch ($this->file_option) {
+							case FILE_OVERWRITE :								
+								$this->course->backup_path.'/'.$document->path;
 								copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
 								$sql = "SELECT id FROM ".$table." WHERE path='/".substr($document->path, 9)."'";
 								$res = api_sql_query($sql, __FILE__, __LINE__);
@@ -215,21 +225,17 @@ class CourseRestorer
 							case FILE_RENAME :
 								$i = 1;
 								$ext = explode('.', basename($document->path));
-								if (count($ext) > 1)
-								{
+								if (count($ext) > 1) {
 									$ext = array_pop($ext);
 									$file_name_no_ext = substr($document->path, 0, - (strlen($ext) + 1));
 									$ext = '.'.$ext;
-								}
-								else
-								{
+								} else {
 									$ext = '';
 									$file_name_no_ext = $document->path;
 								}
 								$new_file_name = $file_name_no_ext.'_'.$i.$ext;
 								$file_exists = file_exists($path.$new_file_name);
-								while ($file_exists)
-								{
+								while ($file_exists) {
 									$i ++;
 									$new_file_name = $file_name_no_ext.'_'.$i.$ext;
 									$file_exists = file_exists($path.$new_file_name);
@@ -253,6 +259,7 @@ class CourseRestorer
 					else
 					{
 						//make sure the source file actually exists
+						//echo $this->course->backup_path.'/'.$document->path;
 						if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path)))
 						{
 							copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
@@ -276,10 +283,10 @@ class CourseRestorer
 							}
 						}
 					} // end file doesn't exist
-				}
+				}				
 				else
 				{
-					$sql = "SELECT id FROM ".$table." WHERE path = '/".Database::escape_string(substr($document->path, 9))."'";
+					/*$sql = "SELECT id FROM ".$table." WHERE path = '/".Database::escape_string(substr($document->path, 9))."'";
 					$res = api_sql_query($sql,__FILE__,__LINE__);
 					if( Database::num_rows($res)> 0)
 					{
@@ -291,7 +298,7 @@ class CourseRestorer
 						$sql = "INSERT INTO ".$table." SET path = '/".Database::escape_string(substr($document->path, 9))."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
 						api_sql_query($sql, __FILE__, __LINE__);
 						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
-					}
+					}*/
 				} // end folder
 			} // end for each
 		}
@@ -328,7 +335,7 @@ class CourseRestorer
 						case FILE_SKIP :
 							break;
 						case FILE_RENAME :
-							$i = 1;
+							$i = 1; 
 
 							$ext = explode('.', basename($document->path));
 
@@ -1082,7 +1089,7 @@ class CourseRestorer
 /**
  * copy all directory and sub directory
  */
-	function api_create_all_directory($source, $dest, $overwrite = false){
+	function api_create_all_directory($source, $dest, $overwrite = false){		
    		if(!is_dir($dest)) {
     		mkdir($dest);
     	}

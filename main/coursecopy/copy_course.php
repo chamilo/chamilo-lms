@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 18925 2009-03-10 14:09:33Z ndieschburg $
+// $Id: copy_course.php 19948 2009-04-21 17:27:59Z juliomontoya $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -67,14 +67,10 @@ Display::display_header($nameTools);
 ==============================================================================
 */ 
 // If a CourseSelectForm is posted or we should copy all resources, then copy them
-if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy'))
-{
-	if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form')
-	{
-		$course = CourseSelectForm :: get_posted_course();
-	}
-	else
-	{
+if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')) {
+	if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
+		$course = CourseSelectForm :: get_posted_course('copy_course');		
+	} else {
 		$cb = new CourseBuilder();
 		$course = $cb->build();
 	}
@@ -82,10 +78,8 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 	$cr->set_file_option($_POST['same_file_name_option']);
 	$cr->restore($_POST['destination_course']);
 	Display::display_normal_message(get_lang('CopyFinished'));
-}
-// Else, if a CourseSelectForm is requested, show it
-elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items')
-{
+} elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
+	// Else, if a CourseSelectForm is requested, show it
 	Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
 	$cb = new CourseBuilder();
 	$course = $cb->build();
@@ -93,35 +87,27 @@ elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items'
 	//echo '<br/><br/>';
 	$hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
 	$hidden_fields['destination_course'] = $_POST['destination_course'];
-	CourseSelectForm :: display_form($course, $hidden_fields);
-}
-// Else, show the default page
-else
-{
+	CourseSelectForm :: display_form($course, $hidden_fields, true);
+} else {	
 	$table_c = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$table_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$user_info = api_get_user_info();
 	$course_info = api_get_course_info();
 	$sql = 'SELECT * FROM '.$table_c.' c, '.$table_cu.' cu WHERE cu.course_code = c.code';
-	if( ! api_is_platform_admin())
-	{
+	if (!api_is_platform_admin()) {
 		$sql .= ' AND cu.status=1 ';
 	}
 	$sql .= ' AND target_course_code IS NULL AND cu.user_id = '.$user_info['user_id'].' AND c.code != '."'".$course_info['sysCode']."'".' ORDER BY title ASC';
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if( mysql_num_rows($res) == 0)
-	{
+	if( mysql_num_rows($res) == 0) {
 		Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));	
-	}
-	else
-	{
+	} else {
 ?>
 	<form method="post" action="copy_course.php">
 	<?php
 	echo get_lang('SelectDestinationCourse');
 	echo ' <select name="destination_course"/>';
-	while ($obj = mysql_fetch_object($res))
-	{
+	while ($obj = mysql_fetch_object($res)) {
 		echo '<option value="'.$obj->code.'">'.$obj->title.'</option>';
 	}
 	echo '</select>';

@@ -1,4 +1,4 @@
-<?php // $Id: recycle_course.php 18925 2009-03-10 14:09:33Z ndieschburg $
+<?php // $Id: recycle_course.php 19948 2009-04-21 17:27:59Z juliomontoya $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -38,8 +38,7 @@ $language_file = array ('admin','course_info','coursebackup');
 include ('../inc/global.inc.php');
 
 // Check access rights (only teachers are allowed here)
-if( ! api_is_allowed_to_edit())
-{
+if( ! api_is_allowed_to_edit()) {
 	api_not_allowed(true);	
 }
 // section for the tabs
@@ -66,38 +65,27 @@ api_display_tool_title($nameTools);
 		MAIN CODE
 ==============================================================================
 */ 
-if(  (isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'full_backup' ) )
-{
-	if(isset($_POST['action']) && $_POST['action'] == 'course_select_form' )
-	{
+if(  (isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'full_backup' ) ) {
+	if(isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) {
 		$course = CourseSelectForm::get_posted_course();
-	}
-	else
-	{
+	} else {
 		$cb = new CourseBuilder();
 		$course = $cb->build();	
 	}
 	$cr = new CourseRecycler($course);
 	$cr->recycle();
 	Display::display_confirmation_message(get_lang('RecycleFinished'));
-}
-elseif( isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'select_items')
-{
+} elseif( isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'select_items') {
 	$cb = new CourseBuilder();
 	$course = $cb->build();	
 	CourseSelectForm::display_form($course);
-}
-else
-{
+} else {
 	$cb = new CourseBuilder();
 	$course = $cb->build();
-	if( ! $course->has_resources())
-	{
+	if( ! $course->has_resources()) {
 		echo get_lang('NoResourcesToRecycle');	
-	}	
-	else
-	{
-	Display::display_warning_message(get_lang('RecycleWarning'),false);
+	} else {
+		Display::display_warning_message(get_lang('RecycleWarning'),false);
 	?>
 	<form method="post" action="recycle_course.php">
 	<input type="radio" class="checkbox" id="recycle_option_1" name="recycle_option" value="full_backup" checked="checked"/>

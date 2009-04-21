@@ -1,4 +1,4 @@
-<?php // $Id: Course.class.php 16630 2008-10-27 19:11:45Z ivantcholakov $
+<?php // $Id: Course.class.php 19948 2009-04-21 17:27:59Z juliomontoya $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -52,22 +52,19 @@ class Course
 	 */
 	function is_linked_resource(& $resource_to_check)
 	{
-		foreach($this->resources as $type => $resources)
-		{
-			foreach($resources as $id => $resource)
-			{
-				if( $resource->links_to($resource_to_check) )
-				{
-					return true;	
-				}
-				if( $type == RESOURCE_LEARNPATH && get_class($resource)=='Learnpath')
-				{
-					if($resource->has_item($resource_to_check))
-					{
+		foreach($this->resources as $type => $resources) {
+			if (is_array($resources)) {
+				foreach($resources as $id => $resource) {
+					if( $resource->links_to($resource_to_check) ) {
 						return true;	
-					}	
+					}
+					if( $type == RESOURCE_LEARNPATH && get_class($resource)=='Learnpath') {
+						if($resource->has_item($resource_to_check)) {
+							return true;	
+						}	
+					}
 				}
-			}	
+			}
 		}
 		return false;
 	}

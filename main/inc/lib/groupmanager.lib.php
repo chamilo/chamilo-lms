@@ -109,7 +109,7 @@ class GroupManager
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER, $course_db);
-		$session_id=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : false;
+		$session_id=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : 0;
 		$session_condition = intval($session_id)==0 ? '' : ' g.session_id IN (0,'.intval($session_id).') ';
 		
 		$sql = "SELECT  g.id ,
@@ -137,10 +137,11 @@ class GroupManager
 		else if(!empty($session_condition))
 			$sql .= 'WHERE '.$session_condition;
 			
-		$sql .= " GROUP BY `g`.`id` ORDER BY UPPER(g.name)";
+		$sql .= "AND session_id='".$session_id."' GROUP BY `g`.`id` ORDER BY UPPER(g.name)";
+
 		$groupList = api_sql_query($sql,__FILE__,__LINE__);
 		$groups = array ();
-		while ($thisGroup = mysql_fetch_array($groupList))
+		while ($thisGroup = Database::fetch_array($groupList))
 		{
 			if ($thisGroup['category_id'] == VIRTUAL_COURSE_CATEGORY)
 			{
@@ -171,7 +172,7 @@ class GroupManager
 	function create_group($name, $category_id, $tutor, $places)
 	{
 		global $_course,$_user;
-		isset($_SESSION['id_session'])?$my_id_session = intval($_SESSION['id_session']):$my_id_session=null;
+		isset($_SESSION['id_session'])?$my_id_session = intval($_SESSION['id_session']):$my_id_session=0;
 		$currentCourseRepository = $_course['path'];
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		$table_forum = Database :: get_course_table(TABLE_FORUM);
@@ -183,7 +184,7 @@ class GroupManager
 		}
 		$sql = "INSERT INTO ".$table_group." SET category_id='".$category_id."', max_student = '".$places."', doc_state = '".$category['doc_state']."', calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', forum_state = '".$category['forum_state']."', wiki_state = '".$category['wiki_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."', session_id='".$my_id_session."'";
 		api_sql_query($sql,__FILE__,__LINE__);
-		$lastId = mysql_insert_id();
+		$lastId = Database::insert_id();
 		/*$secret_directory = uniqid("")."_team_".$lastId;
 		while (is_dir(api_get_path(SYS_COURSE_PATH).$currentCourseRepository."/group/$secret_directory"))
 		{
@@ -194,7 +195,7 @@ class GroupManager
 		$desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
 		$dir_name = create_unexisting_directory($_course,$_user['user_id'],$lastId,NULL,api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document',$desired_dir_name);
 		/* Stores the directory path into the group table */
-		$sql = "UPDATE ".$table_group." SET   name = '".mysql_real_escape_string($name)."', secret_directory = '".$dir_name."' WHERE id ='".$lastId."'";
+		$sql = "UPDATE ".$table_group." SET   name = '".Database::escape_string($name)."', secret_directory = '".$dir_name."' WHERE id ='".$lastId."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 		
 		// create a forum if needed
@@ -536,7 +537,7 @@ class GroupManager
 		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY, $course_db);
 		$sql = "SELECT * FROM $table_group_cat WHERE id = $id";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		return mysql_fetch_array($res);
+		return Database::fetch_array($res);
 	}
 	/**
 	 * Get the category of a given group
@@ -557,7 +558,7 @@ class GroupManager
 		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY, $course_db);
 		$sql = "SELECT gc.* FROM $table_group_cat gc, $table_group g WHERE gc.id = g.category_id AND g.id=$group_id";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$cat = mysql_fetch_array($res);
+		$cat = Database::fetch_array($res);
 		return $cat;
 	}
 	/**
@@ -578,7 +579,7 @@ class GroupManager
 		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY, $course_db);
 		$sql = "SELECT id FROM $table_group WHERE category_id='".$cat_id."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		if (mysql_num_rows($res) > 0)
+		if (Database::num_rows($res) > 0)
 		{
 			$groups_to_delete = array ();
 			while ($group = mysql_fetch_object($res))
@@ -624,7 +625,7 @@ class GroupManager
 					self_unreg_allowed = '".$self_unregistration_allowed."',
 					max_student = '".$maximum_number_of_students."' ";
 		api_sql_query($sql,__FILE__,__LINE__);
-		$id = mysql_insert_id();
+		$id = Database::insert_id();
 		if ($id == VIRTUAL_COURSE_CATEGORY)
 		{
 			$sql = "UPDATE  ".$table_group_category." SET id = ". ($id +1)." WHERE id = $id";
@@ -648,8 +649,8 @@ class GroupManager
 	{
 		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "UPDATE ".$table_group_category."
-				SET title='".mysql_real_escape_string($title)."',
-				description='".mysql_real_escape_string($description)."',
+				SET title='".Database::escape_string($title)."',
+				description='".Database::escape_string($description)."',
 				doc_state = '".$doc_state."',
 				work_state = '".$work_state."',
             	calendar_state = '".$calendar_state."',
@@ -1244,7 +1245,7 @@ class GroupManager
 		             WHERE `user_id`='".$user_id."'
 		             AND `course_code`='".$_course['sysCode']."'"."AND tutor_id=1";
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
-		$result = (mysql_num_rows($db_result) > 0);
+		$result = (Database::num_rows($db_result) > 0);
 		return $result;
 	}
 
@@ -1269,7 +1270,7 @@ class GroupManager
 
 	if($groupres)
 	{
-		while ($myrow= mysql_fetch_array($groupres))
+		while ($myrow= Database::fetch_array($groupres))
 			$groups[]=$myrow['group_id'];
 	}
 

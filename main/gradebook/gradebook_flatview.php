@@ -122,7 +122,20 @@ if (isset ($_GET['exportpdf']))	{
 		$export= $export_pdf_form->exportValues();
 		$format = $export['orientation'];
 		$pdf =& new Cezpdf('a4',$format); //format is 'portrait' or 'landscape'
-		export_pdf($pdf,$printable_data[1],$printable_data[0],$format);
+		$clear_printable_data=array();
+		$clear_send_printable_data=array();		
+		//var_dump(count($printable_data[1]));
+		for ($i=0;$i<count($printable_data[1]);$i++) {
+			for ($k=0;$k<count($printable_data[1][$i]);$k++) {
+				$clear_printable_data[]=strip_tags($printable_data[1][$i][$k]);
+			}
+			$clear_send_printable_data[]=$clear_printable_data;
+			$clear_printable_data=array();	
+		}
+		/*var_dump($printable_data[1]);
+		var_dump('--------------');
+		var_dump($clear_send_printable_data);*/
+		export_pdf($pdf,$clear_send_printable_data,$printable_data[0],$format);
 		exit;		
 	}
 }

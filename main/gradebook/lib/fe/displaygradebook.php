@@ -162,6 +162,8 @@ class DisplayGradebook
 		$header .= '<a class="quiz_export_link" href="#" onclick="document.form1b.submit();">'.Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' '.get_lang('ExportAsXLS').'</a>';
 
 		$header .= '<a href="' . api_get_self() . '?print=&selectcat=' . $catobj->get_id() . '" target="_blank">'.Display::return_icon('printmgr.gif', get_lang('Print')).' ' . get_lang('Print') . '</a>';
+		$header .= '<a href="' . api_get_self() . '?exportpdf=&selectcat=' . $catobj->get_id() . '" >'.Display::return_icon('file_pdf.gif', get_lang('ExportAsPDF')).' ' . get_lang('ExportToPDF') . '</a>';	
+		//exportpdf
 		$header .= '</div>';
 
 		if (!$catobj->get_id() == '0') {

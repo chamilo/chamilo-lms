@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 19597 2009-04-07 14:38:36Z pcool $
+<?php // $Id: user_add.php 19952 2009-04-21 19:52:11Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,10 +73,12 @@ function display_drh_list(){
 	if(document.getElementById("status_select").value=='.STUDENT.')
 	{
 		document.getElementById("drh_list").style.display="block";
+		document.getElementById("id_platform_admin").style.display="none";
 	}
 	else
 	{ 
 		document.getElementById("drh_list").style.display="none";
+		document.getElementById("id_platform_admin").style.display="block";
 		document.getElementById("drh_select").options[0].selected="selected";
 	}
 }
@@ -152,7 +154,7 @@ $status[SESSIONADMIN] = get_lang('SessionsAdmin');
 $form->addElement('select','status',get_lang('Status'),$status,'id="status_select" onchange="display_drh_list()"');
 $form->addElement('select_language', 'language', get_lang('Language'));
 //drh list (display only if student)
-$display = $_POST['status'] == STUDENT || !isset($_POST['status']) ? 'block' : 'none';
+$display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'block' : 'none';
 $form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
 $drh_select = $form->addElement('select','hr_dept_id',get_lang('Drh'),array(),'id="drh_select"');
 $drh_list = UserManager :: get_user_list(array('status'=>DRH),array('lastname','firstname'));
@@ -173,9 +175,12 @@ $form->addElement('html', '</div>');
 
 // Platform admin
 $group = array();
-$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin',null,get_lang('Yes'),1);
-$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin',null,get_lang('No'),0);
+$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin','id="id_platform_admin"',get_lang('Yes'),1);
+$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin','id="id_platform_admin"',get_lang('No'),0);
+$display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'none' : 'block';
+$form->addElement('html','<div id="id_platform_admin" style="display:'.$display.';">');
 $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
+$form->addElement('html', '</div>');
 // Send email
 $group = array();
 $group[] =& HTML_QuickForm::createElement('radio', 'send_mail',null,get_lang('Yes'),1);

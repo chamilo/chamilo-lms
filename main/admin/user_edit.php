@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 19597 2009-04-07 14:38:36Z pcool $
+<?php // $Id: user_edit.php 19952 2009-04-21 19:52:11Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -197,7 +197,10 @@ if($user_id != $_SESSION['_uid'])
 	$group = array();
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin',null,get_lang('Yes'),1);
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin',null,get_lang('No'),0);
-	$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;',false);
+	if ($user_data['status']<>5) {
+		$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;',false);	
+	} 
+	
 }
 
 // Send email

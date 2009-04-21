@@ -186,25 +186,22 @@ class FlatViewTable extends SortableTable
 		if ($this->datagen->get_total_items_count()>0 && $total_users > 0 ) {						
 			array_shift($header_name); 
 			array_shift($header_name);
-			array_pop($header_name);						
-			
+
 			$displayscore= ScoreDisplay :: instance();
 			$customdisplays = $displayscore->get_custom_score_display_settings();
 			if (is_array($customdisplays) && count(($customdisplays))) { 
 				
-				$user_results = ($this->datagen->get_data_to_graph2());								
+				$user_results = ($this->datagen->get_data_to_graph2());	
 				$pre_result = $new_result = array();			
-				//print_r($user_results);			
 				$DataSet = new pData;
-				//filling the Dataset			
+				//filling the Dataset
 				foreach($user_results as $result) {
-					//print_r($result);				
-					for($i=0; $i< count($header_name); $i++) {											
+					//print_r($result);	
+					for($i=0; $i< count($header_name); $i++) {									
 						$pre_result[$i+3][]=$result[$i+1];
 						$pre_result_pie[$i+3][] = $result[$i+1][0]; 				
 					}			
-				}			
-				
+				}	
 				/*$display_list = array();
 				foreach( $customdisplays as $display) {
 					$display_list[] = $display['display'];
@@ -215,6 +212,7 @@ class FlatViewTable extends SortableTable
 				$resource_list = array();			 
 				$pre_result2 = array();
 				//print_r($pre_result); exit;
+
 				foreach($pre_result as $key=>$res_array) {
 					rsort($res_array);			
 					$pre_result2[] = $res_array;
@@ -226,7 +224,7 @@ class FlatViewTable extends SortableTable
 						//$resource_list 			 
 						//$total =  $res / ($total_users*100);				
 						// mayor a menor					
-						$key_list = array();								
+						$key_list = array();
 						foreach($res_array as $user_result) {												
 							$resource_list[$key][$user_result[1]]+=1;
 							$key_list[] = $user_result[1];						
@@ -245,21 +243,23 @@ class FlatViewTable extends SortableTable
 				$i = 1;
 				$j = 0;
 				// here-----------------------------------
-				//print_r($resource_list);			
+				//print_r($resource_list);
 				foreach($resource_list as $key=>$resource) {
 					$new_resource_list = $new_resource_list_name = array();				
-					$DataSet = new pData;				
+					$DataSet = new pData;		 		
 					foreach($resource as $name=>$cant) {					
 						//$new_resource_list[]=$cant;
 						//$new_resource_list_name[]=$name;					
 						$DataSet->AddPoint($cant,"Serie".$j);
 						$DataSet->SetSerieName(strip_tags($name),"Serie".$j);
 						$j++;
-					}								  			
+					}									  			
 					//print_r($pre_result); print_r($header_name);			
 					// Dataset definition   		  
-					$DataSet->AddAllSeries();  
-					$DataSet->SetAbsciseLabelSerie();
+					$DataSet->AddAllSeries(); 
+					$DataSet->SetAbsciseLabelSerie('');
+					$DataSet->SetXAxisName(get_lang('GradebookSkillsRanking')); 
+					$DataSet->SetYAxisName(get_lang('Students')); 
 					$show_draw = true;
 					// Cache definition   
 					$Cache = new pCache();

@@ -114,6 +114,7 @@ class TableSort
 				break;
 			case SORT_DATE :
 				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
+				break;
             case SORT_STRING :
             default:
                 $compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
@@ -247,6 +248,7 @@ class TableSort
 				break;
 			case SORT_DATE :
 				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
+				break;
             case SORT_STRING :
             default:
                 $compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';

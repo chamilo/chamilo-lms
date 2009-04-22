@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 19978 2009-04-22 17:12:23Z iflorespaz $
+<?php // $Id: whoisonline.php 19982 2009-04-22 17:43:37Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -376,9 +376,9 @@ else
 $referer = empty($_GET['referer'])?'index.php':htmlentities(strip_tags($_GET['referer']),ENT_QUOTES,$charset);
 
 if (isset($_GET['id'])) {
-	echo '<a href="whoisonline.php">&lt; '.get_lang('Back').'</a>';	
+	echo '<a href="whoisonline.php">&lt; '.get_lang('BackHome').'</a>';	
 } else {
-	echo '<a href="'.$referer.'">&lt; '.get_lang('Back').'</a>';	
+	echo '<a href="'.$referer.'" class="fake_button_back">'.get_lang('BackHome').'</a>';	
 } 
 
 /*

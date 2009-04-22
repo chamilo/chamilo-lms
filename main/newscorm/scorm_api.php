@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 19900 2009-04-20 20:16:28Z iflorespaz $ 
+<?php // $Id: scorm_api.php 19964 2009-04-22 00:57:41Z cfasanando $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -1284,12 +1284,22 @@ function switch_item(current_item, next_item){
 	var mysrc = 'lp_controller.php?action=content&lp_id='+lms_lp_id+'&item_id='+next_item;
 	var cont_f = $("#content_id");
 	
-	<?php if($oLP->mode == 'fullscreen'){ ?>
-	cont_f = window.open(''+mysrc,'content_name','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
+	<?php if($oLP->mode == 'fullscreen'){ ?>		
+	cont_f = window.open(''+mysrc,'content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
+	cont_f.onload=function(){
+		info_lms_item[0]=info_lms_item[1];
+		info_lms_item[1]= info_lms_item[1];
+	}
+	
+	cont_f.onunload=function(){
+		info_lms_item[0]=info_lms_item[1];
+		info_lms_item[1]= info_lms_item[1];
+	}
+
 	<?php } else { ?>
 		cont_f.attr("src",mysrc);
 	<?php } ?>
-		
+
 	if(lms_lp_type==1 || lms_item_type=='asset'){
 		xajax_start_timer();
 	}	

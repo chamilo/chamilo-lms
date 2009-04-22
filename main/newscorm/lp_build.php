@@ -226,9 +226,14 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 					echo '</div>';
 				}				
 				if($is_new) {
-					Display::display_normal_message(get_lang("LPCreatedToContinue"));
+					Display::display_normal_message(get_lang('LPCreatedToContinue'));
 				} else {
-					Display::display_normal_message(get_lang('LPCreatedAddChapterStep'));
+					// Display::display_normal_message(get_lang('LPCreatedAddChapterStep'), false);
+					echo '<div class="normal-message">';
+						echo '<div style="margin-left: 25px; margin-right: 20px;">';				
+							echo get_lang("LearnPathAdded");
+						echo '</div>';				
+					echo '</div>';					
 				}								
 			}		
 		echo '</td>';			

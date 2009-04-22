@@ -86,6 +86,7 @@ $lp_item_id = $_SESSION['oLP']->get_current_item_id();
 //Prepare variables for the test tool (just in case) - honestly, this should disappear later on
 $_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();
 $_SESSION['scorm_item_id'] = $lp_item_id;
+$_SESSION['lp_mode'] = $_SESSION['oLP']->mode;
 //reinit exercises variables to avoid spacename clashes (see exercise tool)
 if(isset($exerciseResult) or isset($_SESSION['exerciseResult']))
 {
@@ -192,7 +193,14 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 			api_sql_query($sql_upd_score,__FILE__,__LINE__);
 		}
 	}
-	$src = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?action=stats';
+	if($_SESSION['oLP']->mode == 'fullscreen') {
+		$lp_next_item_id = $_SESSION['oLP']->get_next_item_id();
+		$src = $_SESSION['oLP']->get_link('http',$lp_next_item_id);
+		$_SESSION['oLP']->current = $lp_next_item_id;				
+	} else {
+		$src = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?action=stats';
+	}		
+		
 }
 
 $_SESSION['oLP']->set_previous_item($lp_item_id);

@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 19955 2009-04-21 21:04:23Z juliomontoya $
+* 	@version $Id: exercise_show.php 19979 2009-04-22 17:12:35Z cfasanando $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -377,7 +377,12 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			echo '</td>
 			</tr>
 			</table>';
-		}	
+		}
+		
+		if ($origin == 'learnpath') {
+			$show_results = false;
+		}
+			
 		if ($show_results) {			
 		?>
 			<table>
@@ -1039,7 +1044,7 @@ if($origin!='learnpath') {?>
 					 </form>
 				<?php }
 		 	}  		
-			if ($origin=='learnpath' || $origin=='student_progress') {?>				
+			if ($origin=='student_progress') {?>				
 				<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>										
 			<?php } else if($origin=='myprogress') {?>
 				<button type="button" class="save" onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>				
@@ -1052,6 +1057,14 @@ if ($origin != 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();
 } else {
+	$lp_mode =  $_SESSION['lp_mode'];	
+	if ($lp_mode == 'fullscreen') {							
+?>					
+	<button type="button" class="save" onclick="window.opener.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>';window.close()" value="<?php echo get_lang('Finish'); ?>"><?php echo get_lang('Finish');?></button>				
+<?php } else { ?>					
+	<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>';" value="<?php echo get_lang('Finish'); ?>"><?php echo get_lang('Finish');?></button>				
+<?php } 
+
 	//record the results in the learning path, using the SCORM interface (API)
 	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 	echo '</body></html>';

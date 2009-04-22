@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 19860 2009-04-19 16:39:28Z iflorespaz $
+<?php // $Id: new_message.php 19975 2009-04-22 14:23:01Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -217,7 +217,8 @@ if (isset($_GET['rs'])) {
 if ($request===false) {
 	Display::display_header('');	
 }
-api_display_tool_title($nameTools);
+
+//api_display_tool_title($nameTools);
 echo '<div class=actions>';
 echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',get_lang('BackToInbox')).get_lang('BackToInbox').'</a>';
 echo '</div>';

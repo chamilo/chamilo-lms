@@ -155,8 +155,8 @@ if ($request===false) {
 	$link_ref="../messages/new_message.php?rs=1";
 }
 $table_message = Database::get_main_table(TABLE_MESSAGE);
-echo '<div id="div_content_messages">';
-api_display_tool_title(mb_convert_encoding(get_lang('Inbox'),'UTF-8',$charset));
+echo '<div id="div_content_messages">&nbsp;&nbsp;';
+//api_display_tool_title(mb_convert_encoding(get_lang('Inbox'),'UTF-8',$charset));
 echo '<div class=actions>';
 echo '<a onclick="compose_and_show_message(\'show\',\'1\')" href="javascript:void(0)">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>';
 echo '</div>';

@@ -413,7 +413,7 @@ echo $s="<script>$(document).ready( function(){
 		});</script>";
 			
 //echo '<div id="actions">';
-	//echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>';
+//echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>';
 //echo '</div>';
 
 //Setting some course info 
@@ -463,7 +463,7 @@ echo '<div id="social-profile-wrapper">';
 				$number_loop   = ($number_friends/$number_of_images);
 				$loop_friends  = ceil($number_loop);
 				$j=0;
-				$friend_html .= '<div class="actions-profile">'.get_lang('SocialFriend').'</div>';	
+				$friend_html .= '<div class="sectiontitle">'.get_lang('SocialFriend').'</div>';	
 				$friend_html.= '<div id="friend-container">';							
 					$friend_html.= '<div id="friend-header">';
 							//$friend_html.=  $friends_count.' '.get_lang('Friends');
@@ -501,7 +501,7 @@ echo '<div id="social-profile-wrapper">';
 				}
 				//$friend_html.='</div>'; // close the div friend-container
 			} else {
-					$friend_html .= '<div class="actions-profile">'.get_lang('Friends').'</div>';
+					$friend_html .= '<div class="sectiontitle">'.get_lang('Friends').'</div>';
 					$friend_html.= '<div id="friend-container">';					
 					$friend_html.= '<div id="friend-header">';
 					$friend_html.= '<div style="float:left;">'.get_lang('Friends').'</div>';
@@ -521,7 +521,7 @@ echo '<div id="social-profile-wrapper">';
 			echo '<div class="clear"></div><br />';
 			echo '<div id="social-profile-invitations" >';
 			if ($count_pending_invitations > 0) {
-				echo '<div class="actions-profile">';
+				echo '<div class="sectiontitle">';
 				echo get_lang('PendingInvitations');
 				echo '</div>';
 				for ($i=0;$i<$count_pending_invitations;$i++) {
@@ -547,7 +547,7 @@ echo '<div id="social-profile-wrapper">';
 			$production_list =  UserManager::build_production_list($user_id);
 			if (!empty($production_list )) {
 				echo '<div class="clear"></div><br />';
-				echo '<div class="actions-profile">';
+				echo '<div class="sectiontitle">';
 				echo get_lang('MyProductions');
 				echo '</div>';
 				echo '<div class="rounded1">';
@@ -563,7 +563,7 @@ echo '<div id="social-profile-wrapper">';
 			
 			if (!empty($file_list)) {
 				echo '<div class="clear"></div><br />';
-				echo '<div class="actions-profile">';
+				echo '<div class="sectiontitle">';
 				echo get_lang('ImagesUploaded');
 				echo '</div>';
 				echo '</br><div class="rounded2">';
@@ -577,7 +577,7 @@ echo '<div id="social-profile-wrapper">';
 			//-- Competences
 			if (!empty($user_info['competences']) || !empty($user_info['diplomas']) || !empty($user_info['openarea']) || !empty($user_info['teach']) ) {
 				echo '<div class="clear"></div>';
-				echo '<div class="actions-profile">';				
+				echo '<div class="sectiontitle">';				
 				echo get_lang('MoreInformation');
 				echo '</div>';
 			}
@@ -645,7 +645,7 @@ echo '<div id="social-profile-container">';
 				//-- Extra Data							
 				$extra_user_data = UserManager::get_extra_user_data($user_id);
 				if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
-					echo '<div class="actions-profile">';
+					echo '<div class="sectiontitle">';
 					echo get_lang('ExtraInformation');
 					echo '</div>';
 					echo '<div class="rounded left-side">';
@@ -659,7 +659,7 @@ echo '<div id="social-profile-container">';
 				// ---- My Agenda Items
 				$my_agenda_items = show_simple_personal_agenda($user_id);
 				if (!empty($my_agenda_items)) {
-					echo '<div class="actions-profile">';					
+					echo '<div class="sectiontitle">';					
 					echo get_lang('MyAgenda');
 					echo '</div>';
 					$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
@@ -675,7 +675,7 @@ echo '<div id="social-profile-container">';
 		    	foreach ($course_list_code as $course) {
 	    			$content = get_all_annoucement_by_user_course($course['dbName'],$my_announcement_by_user_id);	 			
 	    	  		if (!empty($content)) {	 		    	  			  
-		    	  		$announcement_content.= '<h3>'.$course['title'].'</h3>';
+		    	  		$announcement_content.= $course['title'];
 						$announcement_content.= '<div class="rounded left-side">';							
 						$announcement_content.= $content;	
 						$announcement_content.= '</div>';
@@ -684,7 +684,7 @@ echo '<div id="social-profile-container">';
 	    	  	}
 	    	  	
 	    	  	if(!empty($announcement_content)) {
-	    	  		echo '<div class="actions-profile">';
+	    	  		echo '<div class="sectiontitle">';
 	    	  		echo get_lang('Announcements');
 	    	  		echo '</div>';
 	    	  		echo $announcement_content;
@@ -695,7 +695,7 @@ echo '<div id="social-profile-container">';
   	// CENTER COLUMN
 	echo '<div id="social-profile-content">';
 		    //--- Basic Information	
-		    echo '<div class="actions-profile">';		
+		    echo '<div class="sectiontitle">';		
 			echo get_lang('Information');  //class="social-profile-info"
 			echo '</div>';
 			if ($show_full_profile) {		 
@@ -731,7 +731,7 @@ echo '<div id="social-profile-container">';
 				//print_r($personal_course_list);		
 				//echo '<pre>';
 				if ( is_array($list) ) {
-					echo '<div class="actions-profile">';
+					echo '<div class="sectiontitle">';
 					echo ucfirst(get_lang('MyCourses'));
 					echo '</div>';
 					//Courses whithout sessions

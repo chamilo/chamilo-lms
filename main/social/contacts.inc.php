@@ -12,12 +12,8 @@ $_SESSION['this_section']=$this_section;
 //$list_path_friends=array();
 $request=api_is_xml_http_request();
 $language_variable=($request===true) ? mb_convert_encoding(get_lang('Contacts'),'UTF-8',$charset) : get_lang('Contacts');
-api_display_tool_title($language_variable);
-?>
-<div id="id" class="actions">
-<?php echo utf8_encode(get_lang('SocialInformationComment')); ?>
-</div>
-<?php
+//api_display_tool_title($language_variable);
+
 $user_id=api_get_user_id();
 $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,true);
 ?>
@@ -25,7 +21,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-content-table">
   <tr>
     <td width="100%" height="20" valign="top">
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-title">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td width="100%" height="20" valign="top"><?php
         echo '&nbsp;&nbsp;Dokeos&nbsp;&nbsp;-&nbsp;&nbsp;';
@@ -52,7 +48,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
         <td width="100%" height="22" valign="top">
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
           <tr>
-            <td width="100%" height="22" valign="top" class="social-title">&nbsp;&nbsp;<?php echo utf8_encode(get_lang('ContactsList')); ?></td>
+            <td width="100%" height="22" valign="top">&nbsp;&nbsp;<?php echo utf8_encode(get_lang('ContactsList')); ?></td>
               </tr>
         </table></td>
         </tr>

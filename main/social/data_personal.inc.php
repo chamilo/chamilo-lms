@@ -109,9 +109,9 @@ if (isset($_POST['load_ajax'])) {
 	// normal behavior
 $request=api_is_xml_http_request();
 $language_variable=($request===true) ? mb_convert_encoding(get_lang('PersonalData'),'UTF-8',$charset) : get_lang('PersonalData');
-api_display_tool_title($language_variable);
+//api_display_tool_title($language_variable);
 
-	echo '<div id="actions" class="actions">';
+	echo '<div class="actions">';
 	echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif',mb_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset)).'&nbsp;'.mb_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>&nbsp;&nbsp;';
 	if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
 		echo '<a href="../social/profile.php?shared=true">'.Display::return_icon('shared_profile.png',mb_convert_encoding(get_lang('ViewSharedProfile'),'UTF-8',$charset)).'&nbsp;'.mb_convert_encoding(get_lang('ViewSharedProfile'),'UTF-8',$charset).'</a>';		

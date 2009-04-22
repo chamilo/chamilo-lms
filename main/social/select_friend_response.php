@@ -10,13 +10,8 @@ api_block_anonymous_users();
 $request=api_is_xml_http_request();
 $language_variable=($request===true) ? mb_convert_encoding(get_lang('PendingInvitations'),'UTF-8',$charset) : get_lang('PendingInvitations');
 $language_comment=($request===true) ? mb_convert_encoding(get_lang('SocialInvitesComment'),'UTF-8',$charset) : get_lang('SocialInvitesComment');
-api_display_tool_title($language_variable);
+//api_display_tool_title($language_variable);
 ?>
-<div class="actions">
-<?php
-echo $language_comment;	
- ?>
-</div>
 <div id="id_response" align="center"></div>
 <?php
 $list_get_invitation=array();

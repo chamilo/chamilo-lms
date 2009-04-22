@@ -2784,7 +2784,7 @@ class Blog
 					<div class="formw">
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="new_blog_submit" value="true" />
-						<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
+						<button class="save" type="submit" name="Submit">' . get_lang('SaveProject') . '</button>
 					</div>
 				</div>								
 			</form>

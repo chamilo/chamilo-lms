@@ -206,7 +206,7 @@ $lp_theme_css=$_SESSION['oLP']->get_theme(); //sets the css theme of the LP this
  
 if($_SESSION['oLP']->mode == 'fullscreen')
 {
-	$htmlHeadXtra[] = "<script>window.open('$src','content_name','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";	
+	$htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";	
 	include_once('../inc/reduced_header.inc.php');
 	
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
@@ -315,7 +315,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
     				<input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
     				</td><td align="left" width="100%" valign="top">
     				<div id="learningPathRightZone">
-        			<iframe id="content_id_blank" name="content_name_blank" src="<?php echo $src; ?>" border="0" frameborder="0" style="height:600px;width: 100%"></iframe>
+        			<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="height:600px;width: 100%"></iframe>
     				</div>
     </td></tr>
     </table>

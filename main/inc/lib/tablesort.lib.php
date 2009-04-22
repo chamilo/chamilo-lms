@@ -205,11 +205,10 @@ class TableSort
 		
 	function sort_table_config($data, $column = 0, $direction = SORT_ASC, $column_show=null, $column_order=null,$type = SORT_REGULAR)
 	{
-		if(!is_array($data) || count($data)==0)
-		{
-			return array();
-		}
-		
+        if(!is_array($data) or count($data)==0){return array();}
+        if($column != strval(intval($column))){return $data;} //probably an attack
+        if(!in_array($direction,array(SORT_ASC,SORT_DESC))){return $data;} // probably an attack
+        $compare_function = '';		
 		// Change columns sort 			 
 	 	// Here we say that the real way of how the columns are going to be order is manage by the $column_order array
 	 	if(is_array($column_order)) 

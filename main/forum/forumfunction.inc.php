@@ -2505,7 +2505,7 @@ function display_user_image($user_id,$name, $origin='') {
 		$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);
 		$image_repository = $image_path['dir'];
 		$existing_image = $image_path['file'];
-		return 	$link.'<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  title="'.$name.'"  /></a>';			
+		return 	$link.'<img style="width:120px; height:100px;" src="'.$image_repository.$existing_image.'" alt="'.$name.'"  title="'.$name.'"  /></a>';			
 			
 	} else {
 		return $link.'<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  title="'.$name.'"  /></a>';

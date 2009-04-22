@@ -88,6 +88,7 @@ class TableSort
 		if(!is_array($data) or count($data)==0){return array();}
         if($column != strval(intval($column))){return $data;} //probably an attack
         if(!in_array($direction,array(SORT_ASC,SORT_DESC))){return $data;} // probably an attack
+        $compare_function = '';
 		switch ($type)
 		{
 			case SORT_REGULAR :

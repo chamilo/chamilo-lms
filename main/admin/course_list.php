@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 19639 2009-04-08 13:06:16Z pcool $
+<?php // $Id: course_list.php 19995 2009-04-22 20:32:11Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -255,7 +255,7 @@ else
 	$form->addElement('text','keyword',get_lang('keyword'));
 	$form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'),'class="search"');
 	$form->addElement('static','search_advanced_link',null,'<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
-	echo '<div style="float:right;">
+	echo '<div style="float:right;margin-top:5px;margin-right:5px;">
 			  <a href="'.api_get_path(WEB_CODE_PATH).'admin/course_add.php">'.Display::return_icon('course_add.gif',get_lang('AddSession')).get_lang('AddCourse').'</a>									
 		 </div>';
 		 

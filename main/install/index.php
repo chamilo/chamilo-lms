@@ -625,7 +625,7 @@ elseif($_POST['step5'])
 	<table width="100%">
 	<tr>
 	  <td><button type="submit" class="back" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" /><?php echo get_lang('Previous'); ?></button></td>
-	  <td align="right"><button class="save" type="submit" name="step6" value="<?php echo get_lang('InstallDokeos'); ?> &gt;" onclick="javascript:if(this.value == '<?php $msg = get_lang('PleaseWait');?>...') return false; else this.value='<?php $msg = get_lang('PleaseWait');?>...';" ><?php echo $msg; ?></button></td>
+	  <td align="right"><button class="save" type="submit" name="step6" value="<?php echo get_lang('InstallDokeos'); ?> &gt;" onclick="javascript:if(this.value == '<?php $msg = get_lang('PleaseWait');?>...') return false; else this.value='<?php $msg = get_lang('InstallDokeos');?>...';" ><?php echo $msg; ?></button></td>
 	</tr>
 	</table>
 

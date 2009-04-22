@@ -913,9 +913,9 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 		if($dbConnect==1): ?>
 		<td colspan="2">
 			<div class="confirmation-message">
-				<div  style="float:left; margin-right:10px;">
+				<!--<div  style="float:left; margin-right:10px;">
 				<img src="../img/message_confirmation.png" alt="Confirmation" />
-				</div>
+				</div>-->
 				<div style="float:left;">
 				MySQL host info: <?php echo mysql_get_host_info(); ?><br />
 				MySQL server version: <?php echo mysql_get_server_info(); ?><br />
@@ -927,9 +927,9 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 		<?php else: ?>
 		<td colspan="2">
 			<div style="float:left;" class="error-message">
-				<div  style="float:left; margin-right:10px;">
+				<!--<div  style="float:left; margin-right:10px;">
 				<img src="../img/message_error.png" alt="Error" />
-				</div>
+				</div>-->
 				<div style="float:left;">
 				<strong>MySQL error: <?php echo mysql_errno(); ?></strong><br />
 				<?php echo mysql_error().'<br/>'; ?>
@@ -1144,7 +1144,7 @@ function display_after_install_message($installType, $nbr_courses)
 	<br /><br />
 	<?php
 	echo '<div class="warning-message">';
-	echo '<img src="../img/message_warning.png" style="float:left; margin-right:10px;" alt="'.get_lang('Warning').'"/>';
+	//echo '<img src="../img/message_warning.png" style="float:left; margin-right:10px;" alt="'.get_lang('Warning').'"/>';
 	echo '<b>'.get_lang('SecurityAdvice').'</b>';
 	echo ': ';
 	printf(get_lang('ToProtectYourSiteMakeXAndYReadOnly'),'main/inc/conf/configuration.php','main/install/index.php');

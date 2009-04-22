@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.8.3-1.8.4.inc.php 13095 2007-09-19 17:43:08Z yannoo $
+<?php //$Id: update-files-1.8.3-1.8.4.inc.php 19996 2009-04-22 22:11:14Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software

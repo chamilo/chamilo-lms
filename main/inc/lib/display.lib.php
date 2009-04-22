@@ -382,7 +382,8 @@ class Display {
 						</style>';
 		}
 		echo '<div class="normal-message">';
-		Display :: display_icon('message_normal.gif', get_lang('InfoMessage'), array ('style' => 'float:left; margin-right:10px;'));
+		//Display :: display_icon('message_normal.gif', get_lang('InfoMessage'), array ('style' => 'float:left; margin-right:10px;'));
+		get_lang('InfoMessage', array ('style' => 'float:left; margin-right:10px;'));
 		echo "<div style='margin-left: 43px'>".$message.'</div></div>';
 	}
 
@@ -412,7 +413,8 @@ class Display {
 						</style>';
 		}
 		echo '<div class="warning-message">';
-		Display :: display_icon('message_warning.png', get_lang('WarningMessage'), array ('style' => 'float:left; margin-right:10px;'));
+		//Display :: display_icon('message_warning.png', get_lang('WarningMessage'), array ('style' => 'float:left; margin-right:10px;'));
+		get_lang('WarningMessage', array ('style' => 'float:left; margin-right:10px;'));
 		echo $message.'</div>';
 	}
 
@@ -441,7 +443,8 @@ class Display {
 						</style>';
 		}
 		echo '<div class="confirmation-message">';
-		Display :: display_icon('message_confirmation.gif', get_lang('ConfirmationMessage'), array ('style' => 'float:left; margin-right:10px;margin-left:5px;'));
+		//Display :: display_icon('message_confirmation.gif', get_lang('ConfirmationMessage'), array ('style' => 'float:left; margin-right:10px;margin-left:5px;'));
+		get_lang('ConfirmationMessage', array ('style' => 'float:left; margin-right:10px;margin-left:5px;'));
 		echo $message.'</div>';
 	}
 
@@ -474,7 +477,8 @@ class Display {
 						</style>';
 		}
 		echo '<div class="error-message">';
-		Display :: display_icon('message_error.png', get_lang('ErrorMessage'), array ('style' => 'float:left; margin-right:10px;'));
+		//Display :: display_icon('message_error.png', get_lang('ErrorMessage'), array ('style' => 'float:left; margin-right:10px;'));
+		get_lang('ErrorMessage', array ('style' => 'float:left; margin-right:10px;'));
 		echo $message.'</div>';
 	}
 	/**

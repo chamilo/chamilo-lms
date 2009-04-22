@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 19613 2009-04-07 20:42:21Z aportugal $
+// $Id: add_course.php 19993 2009-04-22 20:18:15Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -42,7 +42,9 @@ if (api_get_setting('allow_users_to_create_courses')=='false' && !api_is_platfor
 }
 Display :: display_header($tool_name);
 // Displaying the tool title
-api_display_tool_title($tool_name);
+echo '<div class="actions-title">';
+echo $tool_name;
+echo '</div>';
 // Check access rights
 if (!api_is_allowed_to_create_course()) {
 	Display :: display_error_message(get_lang("NotAllowed"));
@@ -127,7 +129,7 @@ if ($form->validate()) {
 } else {
 	// Display the form
 	$form->display();
-	echo '<p>'.get_lang('Explanation').'</p>';
+	Display::display_normal_message(get_lang('Explanation'));
 }
 /*
 ==============================================================================

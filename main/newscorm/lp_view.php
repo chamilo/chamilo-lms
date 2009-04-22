@@ -294,6 +294,10 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 					</div>				
 			</div>  
 	    </div>
+	    
+	    			<div id="author_name" style="margin:0;padding:0;text-align:center">
+	    			<?php echo $_SESSION['oLP']->get_author() ?>
+	    			</div>
 	    	
    </div>
 			

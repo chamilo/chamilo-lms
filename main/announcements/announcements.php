@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 19898 2009-04-20 17:54:24Z cvargas1 $
+<?php //$Id: announcements.php 19973 2009-04-22 13:24:52Z ndieschburg $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -882,7 +882,7 @@ $fck_attribute = null; // Clearing this global variable immediatelly after it ha
       ======================================================================*/
 		if(api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ) // check teacher status
 		{
-	      	if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
+	      	/*if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 				{
 
 					$sql="SELECT
@@ -898,7 +898,7 @@ $fck_attribute = null; // Clearing this global variable immediatelly after it ha
 				}
 		}
 		else 	// students only get to see the visible announcements
-		{
+		{*/
 			if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 				{
 					$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);

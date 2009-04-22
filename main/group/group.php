@@ -1,4 +1,4 @@
-<?php // $Id: group.php 19800 2009-04-16 08:08:55Z pcool $
+<?php // $Id: group.php 19988 2009-04-22 20:05:49Z iflorespaz $
  
 /*
 ==============================================================================
@@ -35,6 +35,7 @@
 *	@author Patrick Cool, show group comment under the group name
 *	@author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
 *	@author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
+*	@author Isaac Flores, code cleaning and improvements
 *	@package dokeos.group
 ==============================================================================
 */
@@ -97,26 +98,33 @@ $fck_attribute = null; // Clearing this global variable immediatelly after it ha
 /*
  * Self-registration and unregistration
  */
+ $my_group_id = Security::remove_XSS($_GET['group_id']);
+ $my_msg	  = Security::remove_XSS($_GET['msg']);
+ $my_group    = Security::remove_XSS($_POST['group']);
+ $my_get_id1  = Security::remove_XSS($_GET['id1']);
+ $my_get_id2  = Security::remove_XSS($_GET['id2']);
+ $my_get_id   = Security::remove_XSS($_GET['id']);
+ 
 if (isset ($_GET['action']))
 {
 	switch ($_GET['action'])
 	{
 		case 'self_reg' :
-			if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $_GET['group_id']))
+			if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $my_group_id))
 			{
-				GroupManager :: subscribe_users($_SESSION['_user']['user_id'], $_GET['group_id']);
+				GroupManager :: subscribe_users($_SESSION['_user']['user_id'],$my_group_id);
 				Display :: display_confirmation_message(get_lang('GroupNowMember'));
 			}
 			break;
 		case 'self_unreg' :
-			if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $_GET['group_id']))
+			if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $my_group_id))
 			{
-				GroupManager :: unsubscribe_users($_SESSION['_user']['user_id'], $_GET['group_id']);
+				GroupManager :: unsubscribe_users($_SESSION['_user']['user_id'],$my_group_id);
 				Display :: display_confirmation_message(get_lang('StudentDeletesHimself'));
 			}
 			break;
 		case 'show_msg' :
-			Display :: display_confirmation_message($_GET['msg']);
+			Display :: display_confirmation_message($my_msg);
 			break;
 	}
 }
@@ -134,21 +142,21 @@ if (api_is_allowed_to_edit(false,true))
 			case 'delete_selected' :
 				if( is_array($_POST['group']))
 				{
-					GroupManager :: delete_groups($_POST['group']);
+					GroupManager :: delete_groups($my_group);
 					Display :: display_confirmation_message(get_lang('SelectedGroupsDeleted'));
 				}
 				break;
 			case 'empty_selected' :
 				if( is_array($_POST['group']))
 				{
-                    GroupManager :: unsubscribe_all_users($_POST['group']);
+                    GroupManager :: unsubscribe_all_users($my_group);
                     Display :: display_confirmation_message(get_lang('SelectedGroupsEmptied'));
 				}
 				break;
 			case 'fill_selected' :
 				if( is_array($_POST['group']))
 				{
-                    GroupManager :: fill_groups($_POST['group']);
+                    GroupManager :: fill_groups($my_group);
                     Display :: display_confirmation_message(get_lang('SelectedGroupsFilled'));
 				}
 				break;
@@ -160,23 +168,23 @@ if (api_is_allowed_to_edit(false,true))
 		switch ($_GET['action'])
 		{
 			case 'swap_cat_order' :
-				GroupManager :: swap_category_order($_GET['id1'], $_GET['id2']);
+				GroupManager :: swap_category_order($my_get_id1,$my_get_id2);
 				Display :: display_confirmation_message(get_lang('CategoryOrderChanged'));
 				break;
 			case 'delete_one' :
-				GroupManager :: delete_groups($_GET['id']);
+				GroupManager :: delete_groups($my_get_id);
 				Display :: display_confirmation_message(get_lang('GroupDel'));
 				break;
 			case 'empty_one' :
-				GroupManager :: unsubscribe_all_users($_GET['id']);
+				GroupManager :: unsubscribe_all_users($my_get_id);
 				Display :: display_confirmation_message(get_lang('GroupEmptied'));
 				break;
 			case 'fill_one' :
-				GroupManager :: fill_groups($_GET['id']);
+				GroupManager :: fill_groups($my_get_id);
 				Display :: display_confirmation_message(get_lang('GroupFilledGroups'));
 				break;
 			case 'delete_category' :
-				GroupManager :: delete_category($_GET['id']);
+				GroupManager :: delete_category($my_get_id);
 				Display :: display_confirmation_message(get_lang('CategoryDeleted'));
 				break;
 		}
@@ -221,7 +229,7 @@ foreach ($group_cats as $index => $category)
 		if (isset ($_GET['show_all']) || (isset ($_GET['category']) && $_GET['category'] == $category['id']))
 		{
 			echo '<img src="../img/shared_folder.gif" alt=""/>';
-			echo ' <a href="group.php?'.api_get_cidreq().'&origin='.$_GET['origin'].'">'.$category['title'].'</a>';
+			echo ' <a href="group.php?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'">'.$category['title'].'</a>';
 			$in_category = true;
 		}
 		else
@@ -374,7 +382,7 @@ foreach ($group_cats as $index => $category)
 			$paging_options = array ();
 		}
 		$table = new SortableTableFromArrayConfig($group_data, 1);
-		isset($_GET['category'])?$my_cat = $_GET['category']: $my_cat = null; 
+		isset($_GET['category'])?$my_cat = Security::remove_XSS($_GET['category']): $my_cat = null; 
 		$table->set_additional_parameters(array('category'=>$my_cat));
 		$column = 0;
 		if (api_is_allowed_to_edit(false,true) and count($group_list) > 1)

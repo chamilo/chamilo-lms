@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 19800 2009-04-16 08:08:55Z pcool $
+<?php //$Id: group_space.php 19988 2009-04-22 20:05:49Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -64,7 +64,7 @@ $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang("Groups"));
 
 /*
 -----------------------------------------------------------
-	Ensure all private groups // Juan Carlos Raña Trabado
+	Ensure all private groups // Juan Carlos Raï¿½a Trabado
 -----------------------------------------------------------
 */
 
@@ -151,7 +151,7 @@ echo '&nbsp;</div>';
 if( isset($_GET['action'])) {
 	switch( $_GET['action']) {
 		case 'show_msg':
-			Display::display_normal_message($_GET['msg']);
+			Display::display_normal_message(Security::remove_XSS($_GET['msg']));
 			break;
 	}
 }
@@ -312,9 +312,9 @@ if (!empty($tutor_info))
 echo '<b>'.get_lang("GroupMembers").':</b>';
 
 $table = new SortableTable('group_users', 'get_number_of_group_users', 'get_group_user_data',2);
-$my_cidreq=isset($_GET['cidReq']) ? $_GET['cidReq'] : '';
-$my_origin=isset($_GET['origin']) ? $_GET['origin'] : '';
-$my_gidreq=isset($_GET['gidReq']) ? $_GET['gidReq'] : '';
+$my_cidreq=isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
+$my_origin=isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
+$my_gidreq=isset($_GET['gidReq']) ? Security::remove_XSS($_GET['gidReq']) : '';
 $parameters = array('cidReq' => $my_cidreq, 'origin'=> $my_origin, 'gidReq' => $my_gidreq);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '');

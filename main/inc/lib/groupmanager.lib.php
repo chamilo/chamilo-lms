@@ -100,19 +100,32 @@ class GroupManager
 	{
 		global $_user;
 		$course_db = '';
-		if ($course_code != null)
-		{
+		$my_user_id=api_get_user_id();
+		$my_status_of_user_in_course='';
+		if ($course_code != null) {
 			$course_info = Database :: get_course_info($course_code);
 			$course_db = $course_info['database'];
+		} else {
+			$my_course_code=api_get_course_id();
 		}
 		$table_group = Database :: get_course_table(TABLE_GROUP, $course_db);
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER, $course_db);
 		$session_id=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : 0;
-		$session_condition = intval($session_id)==0 ? '' : ' g.session_id IN (0,'.intval($session_id).') ';
+		$session_condition = intval($session_id)==0 ? '' : ' g.session_id = '.intval($session_id).' ';
+		$my_status_of_user_in_course=CourseManager::get_user_in_course_status($my_user_id,$my_course_code);
 		
-		$sql = "SELECT  g.id ,
+		$is_student_in_session=false;
+		if (is_null($my_status_of_user_in_course) || $my_status_of_user_in_course=='') {//into session
+			if ($session_id>0) {
+				$is_student_in_session=true;
+			}
+		}
+
+		//COURSEMANAGER or STUDENT
+		if ($my_status_of_user_in_course==COURSEMANAGER ) {
+			$sql = "SELECT  g.id ,
 						g.name ,
 						g.description ,
 						g.category_id,
@@ -129,6 +142,25 @@ class GroupManager
 					LEFT JOIN ".$table_group_user." `ug2`
 					ON `ug2`.`group_id` = `g`.`id`";
 					
+		} elseif ($my_status_of_user_in_course==STUDENT || $is_student_in_session===true) {
+						$sql = "SELECT  g.id ,
+						g.name ,
+						g.description ,
+						g.category_id,
+						g.max_student maximum_number_of_members,
+						g.secret_directory,
+						g.self_registration_allowed,
+						g.self_unregistration_allowed,
+						g.session_id,
+						ug.user_id is_member,
+						COUNT(ug2.id) number_of_members
+					FROM ".$table_group." `g`
+					INNER JOIN ".$table_group_user." `ug`
+					ON `ug`.`group_id` = `g`.`id` AND `ug`.`user_id` = '".$_user['user_id']."'
+					INNER JOIN ".$table_group_user." `ug2`
+					ON `ug2`.`group_id` = `g`.`id`";
+		}
+							
 		if ($category != null){
 			$sql .= " WHERE `g`.`category_id` = '".$category."' ";
 			if(!empty($session_condition))
@@ -136,8 +168,7 @@ class GroupManager
 		}
 		else if(!empty($session_condition))
 			$sql .= 'WHERE '.$session_condition;
-			
-		$sql .= "AND session_id='".$session_id."' GROUP BY `g`.`id` ORDER BY UPPER(g.name)";
+		$sql .= " GROUP BY `g`.`id` ORDER BY UPPER(g.name)";
 
 		$groupList = api_sql_query($sql,__FILE__,__LINE__);
 		$groups = array ();
@@ -146,7 +177,7 @@ class GroupManager
 			if ($thisGroup['category_id'] == VIRTUAL_COURSE_CATEGORY)
 			{
 				$sql = "SELECT title FROM $table_course WHERE code = '".$thisGroup['name']."'";
-				$obj = mysql_fetch_object(api_sql_query($sql,__FILE__,__LINE__));
+				$obj = Database::fetch_object(api_sql_query($sql,__FILE__,__LINE__));
 				$thisGroup['name'] = $obj->title;
 			}
 			if($thisGroup['session_id']!=0)
@@ -380,7 +411,7 @@ class GroupManager
 		$sql = 'SELECT id, secret_directory, session_id FROM '.$group_table.' WHERE id IN ('.implode(' , ', $group_ids).')';
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
 		$forum_ids = array ();
-		while ($group = mysql_fetch_object($db_result))
+		while ($group = Database::fetch_object($db_result))
 		{
 			// move group-documents to garbage
 			$source_directory = api_get_path(SYS_COURSE_PATH).$course['path']."/group/".$group->secret_directory;
@@ -398,7 +429,7 @@ class GroupManager
 		$sql2 = "DELETE FROM ".$forum_table." WHERE forum_of_group IN ('".implode("' , '", $group_ids)."')";
 		api_sql_query($sql2,__FILE__,__LINE__);
 		
-		return mysql_affected_rows();
+		return Database::affected_rows();
 	}
 
 	/**
@@ -415,7 +446,7 @@ class GroupManager
 		$sql = 'SELECT   *  FROM '.$table_group.' WHERE id = '.$group_id;
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
 
-			$db_object = mysql_fetch_object($db_result);
+			$db_object = Database::fetch_object($db_result);
 			$result['id'] = $db_object->id;
 			$result['name'] = $db_object->name;
 			$result['tutor_id'] = isset($db_object->tutor_id)?$db_object->tutor_id:null;
@@ -491,7 +522,7 @@ class GroupManager
 	{
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		$res = api_sql_query('SELECT COUNT(id) AS number_of_groups FROM '.$table_group);
-		$obj = mysql_fetch_object($res);
+		$obj = Database::fetch_object($res);
 		return $obj->number_of_groups;
 	}
 
@@ -515,7 +546,7 @@ class GroupManager
 		$sql = "SELECT * FROM $table_group_cat ORDER BY display_order";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$cats = array ();
-		while ($cat = mysql_fetch_array($res))
+		while ($cat = Database::fetch_array($res))
 		{
 			$cats[] = $cat;
 		}
@@ -582,7 +613,7 @@ class GroupManager
 		if (Database::num_rows($res) > 0)
 		{
 			$groups_to_delete = array ();
-			while ($group = mysql_fetch_object($res))
+			while ($group = Database::fetch_object($res))
 			{
 				$groups_to_delete[] = $group->id;
 			}
@@ -605,15 +636,15 @@ class GroupManager
 		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "SELECT MAX(display_order)+1 as new_order FROM $table_group_category ";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$obj = mysql_fetch_object($res);
+		$obj = Database::fetch_object($res);
 		if (!isset ($obj->new_order))
 		{
 			$obj->new_order = 1;
 		}
 		$sql = "INSERT INTO ".$table_group_category."
-					SET title='".mysql_real_escape_string($title)."',
+					SET title='".Database::escape_string($title)."',
 					display_order ='".$obj->new_order."',
-					description='".mysql_real_escape_string($description)."',
+					description='".Database::escape_string($description)."',
 					doc_state = '".$doc_state."',
 					work_state = '".$work_state."',
 					calendar_state = '".$calendar_state."',
@@ -685,7 +716,7 @@ class GroupManager
 			$sql .= ' AND g.category_id = '.$category_id;
 		$sql .= ' GROUP BY gu.user_id ORDER BY current_max DESC LIMIT 1';
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$obj = mysql_fetch_object($res);
+		$obj = Database::fetch_object($res);
 		return $obj->current_max;
 	}
 	/**
@@ -698,8 +729,8 @@ class GroupManager
 		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "SELECT id,display_order FROM $table_group_cat WHERE id IN ($id1,$id2)";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$cat1 = mysql_fetch_object($res);
-		$cat2 = mysql_fetch_object($res);
+		$cat1 = Database::fetch_object($res);
+		$cat2 = Database::fetch_object($res);
 		$sql = "UPDATE $table_group_cat SET display_order=$cat2->display_order WHERE id=$cat1->id";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$sql = "UPDATE $table_group_cat SET display_order=$cat1->display_order WHERE id=$cat2->id";
@@ -723,7 +754,7 @@ class GroupManager
 		$sql = "SELECT user_id FROM $group_user_table WHERE group_id = $group_id";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$users = array ();
-		while ($obj = mysql_fetch_object($res))
+		while ($obj = Database::fetch_object($res))
 		{
 			$users[] = $obj->user_id;
 		}
@@ -874,7 +905,7 @@ class GroupManager
 	{
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 		$db_result = api_sql_query('SELECT  COUNT(*) AS number_of_students FROM '.$table_group_user.' WHERE group_id = '.$group_id);
-		$db_object = mysql_fetch_object($db_result);
+		$db_object = Database::fetch_object($db_result);
 		return $db_object->number_of_students;
 	}
 	/**
@@ -886,7 +917,7 @@ class GroupManager
 	{
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		$db_result = api_sql_query('SELECT   max_student  FROM '.$table_group.' WHERE id = '.$group_id);
-		$db_object = mysql_fetch_object($db_result);
+		$db_object = Database::fetch_object($db_result);
 		if ($db_object->max_student == 0)
 		{
 			return INFINITE;
@@ -904,7 +935,7 @@ class GroupManager
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		$sql = 'SELECT  COUNT(*) AS number_of_groups FROM '.$table_group_user.' gu, '.$table_group.' g WHERE gu.user_id = \''.$user_id.'\' AND g.id = gu.group_id AND g.category_id=  \''.$cat_id.'\'';
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
-		$db_object = mysql_fetch_object($db_result);
+		$db_object = Database::fetch_object($db_result);
 		return $db_object->number_of_groups;
 	}
 	/**
@@ -920,7 +951,7 @@ class GroupManager
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		$sql = 'SELECT  self_registration_allowed FROM '.$table_group.' WHERE id = '.$group_id;
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
-		$db_object = mysql_fetch_object($db_result);
+		$db_object = Database::fetch_object($db_result);
 		return $db_object->self_registration_allowed == 1 && GroupManager :: can_user_subscribe($user_id, $group_id);
 	}
 	/**
@@ -935,7 +966,7 @@ class GroupManager
 			return false;
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		$db_result = api_sql_query('SELECT  self_unregistration_allowed FROM '.$table_group.' WHERE id = '.$group_id);
-		$db_object = mysql_fetch_object($db_result);
+		$db_object = Database::fetch_object($db_result);
 		return $db_object->self_unregistration_allowed == 1 && GroupManager :: can_user_unsubscribe($user_id, $group_id);
 	}
 	/**
@@ -1003,7 +1034,7 @@ class GroupManager
 					ORDER BY UPPER(`u`.`lastname`), UPPER(`u`.`firstname`)";
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
 		$users = array ();
-		while ($user = mysql_fetch_object($db_result))
+		while ($user = Database::fetch_object($db_result))
 		{
 			$member['user_id'] = $user->user_id;
 			$member['firstname'] = $user->firstname;
@@ -1032,7 +1063,7 @@ class GroupManager
 					ORDER BY UPPER(`u`.`lastname`), UPPER(`u`.`firstname`)";
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
 		$users = array ();
-		while ($user = mysql_fetch_object($db_result))
+		while ($user = Database::fetch_object($db_result))
 		{
 			if ($id_only==false)
 			{
@@ -1169,7 +1200,7 @@ class GroupManager
 		$table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
 		$sql = "SELECT * FROM ".$table_group_tutor." WHERE user_id='".$user_id."' AND group_id='".$group_id."'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
-		if (mysql_num_rows($result)>0)
+		if (Database::num_rows($result)>0)
 		{
 			return true;
 		}
@@ -1223,7 +1254,7 @@ class GroupManager
 				AND cu.course_code='".$_course['sysCode']."'";
 		$resultTutor = api_sql_query($sql,__FILE__,__LINE__);
 		$tutors = array ();
-		while ($tutor = mysql_fetch_array($resultTutor))
+		while ($tutor = Database::fetch_array($resultTutor))
 		{
 			$tutors[] = $tutor;
 		}
@@ -1476,7 +1507,7 @@ class GroupManager
 		$res = api_sql_query($sql_groups,__FILE__,__LINE__);
 		
 		$groups=array();
-	    while($group = mysql_fetch_array($res))
+	    while($group = Database::fetch_array($res))
 	    {
 	    	$groups[] .= $group['name'];
 	    }

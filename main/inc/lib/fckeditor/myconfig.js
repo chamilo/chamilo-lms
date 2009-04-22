@@ -338,7 +338,7 @@ FCKConfig.ToolbarSets["LearnPath"] = [
 ] ;//save, FitWindow don't run well here
 
 FCKConfig.ToolbarSets["CommentLearningPath"] = [
-	['FitWindow','Link','Unlink','Image','flvPlayer','Table','Bold','Italic','TextColor','BGColor','Source']
+	['Link','Unlink','Bold','Italic','TextColor','BGColor','Source']
 ] ;
 
 //Notebook

@@ -1,4 +1,4 @@
-<?php // $Id: footer.inc.php 19941 2009-04-21 14:11:00Z pcool $
+<?php // $Id: footer.inc.php 19990 2009-04-22 20:11:36Z cvargas1 $
  
 /*
 ==============================================================================
@@ -86,10 +86,10 @@ if (get_setting('show_administrator_data')=="true") {
 			$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
 			if (count($mail)>1){
 				$bar='&nbsp;|&nbsp;';
-				echo get_lang('Teachers')." : ";
+				echo '&nbsp;'.get_lang('Teachers')." : ";
 			} else {
 				$bar='';
-				echo get_lang('Teacher')." : ";
+				echo '&nbsp;'.get_lang('Teacher')." : ";
 			}
 			foreach($mail as $value=>$key) {
 				foreach($key as $email=>$name){
@@ -98,7 +98,7 @@ if (get_setting('show_administrator_data')=="true") {
 			}
 		} else {
 			$mail=CourseManager::get_email_of_tutor_to_session($id_session);
-			echo get_lang('Tutor')." : ";
+			echo '&nbsp;'.get_lang('Tutor')." : ";
 			foreach($mail as $v=>$k) {
 				echo Display::encrypted_mailto_link($v,$k); 
 			}

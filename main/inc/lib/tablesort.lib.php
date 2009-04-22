@@ -242,14 +242,15 @@ class TableSort
 			case SORT_NUMERIC :
 				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
 				break;
-			case SORT_STRING :
-				$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
-				break;
 			case SORT_IMAGE :
 				$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
 				break;
 			case SORT_DATE :
 				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
+            case SORT_STRING :
+            default:
+                $compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
+                break;
 		}		
 				
 		$function_body = '$el1 = $a['.$column.']; ' .

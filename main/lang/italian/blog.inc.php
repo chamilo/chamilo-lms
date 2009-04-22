@@ -1,8 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$MyTasks = "Mie attività";
-$FavoriteBlogs = "Blog preferiti";
+$MyTasks = "Le mie attività";
+$FavoriteBlogs = "I miei blog";
 $Navigation = "Navigazione";
 $TopTen = "Classifica dei blog";
 $Subtitle = "Sottotitolo";

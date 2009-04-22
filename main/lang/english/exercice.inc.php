@@ -297,4 +297,7 @@ $MultipleAnswer = "Multiple answer";
 $FreeAnswer = "Open question";
 $HotSpot = "Image zones";
 $ReachedOneAttempt = "You can not take this test because you have already reached one attempt";
+$QuestionsPerPage = "Questions per page";
+$QuestionsPerPageOne = "One";
+$QuestionsPerPageAll = "All";
 ?>

@@ -297,4 +297,7 @@ $MultipleAnswer = "Respuesta multiple";
 $FreeAnswer = "Respuesta abierta";
 $HotSpot = "Zonas de imagen";
 $ReachedOneAttempt = "No es posible tomar el examen, pues alcanzó el numero máximo de intentos";
+$QuestionsPerPage = "Preguntas por pagina";
+$QuestionsPerPageOne = "Una";
+$QuestionsPerPageAll = "Todas";
 ?>

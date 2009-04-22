@@ -297,4 +297,7 @@ $MultipleAnswer = "Risposta multipla";
 $FreeAnswer = "Risposta aperta";
 $HotSpot = "Selezione zona";
 $ReachedOneAttempt = "Non è possibile ripetere ulteriormente questo test, in quanto già completato";
+$QuestionsPerPage = "Quesiti per pagina";
+$QuestionsPerPageOne = "Uno";
+$QuestionsPerPageAll = "Tutti";
 ?>

@@ -247,7 +247,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	       		<div style="width:140px; float:left;">
 	       		<span style="float:right; padding-top:16px; padding-right:10px;">
 		        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-		        <img src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
+		        <img  width="120" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
 		        <?php 
 					else
 					: echo Display :: display_icon('unknown_250_100.jpg', ' ');
@@ -431,7 +431,7 @@ else
 	       		<div style="width:140px; float:left;">
 	       		<span style="float:right; padding-top:16px; padding-right:10px;">
 		        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-		        <img src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
+		        <img width="120" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
 		        <?php 
 					else
 					: echo Display :: display_icon('unknown_250_100.jpg', ' ');

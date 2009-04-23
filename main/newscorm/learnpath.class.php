@@ -5207,7 +5207,7 @@ class learnpath {
 					if($action != 'move') {
 						$return .= "\t\t" . '<tr>' . "\n";							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang('Title').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" style="width:98%;" type="text" class="learnpath_item_form" value="' . $item_title . '" /></td>' . "\n";						
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" size="44" type="text" class="learnpath_item_form" value="' . $item_title . '" /></td>' . "\n";						
 							$return .= "\t\t" . '</tr>' . "\n";
 					}				
 				
@@ -5707,7 +5707,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang('Title').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" style="width:98%;" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" size="44" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 					}				
@@ -5717,7 +5717,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang('Parent').'</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
+							$return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
@@ -5834,9 +5834,9 @@ class learnpath {
 					}
 					
 					$return .= "\t\t" . '<tr>' . "\n";						
-						$return .= "\t\t\t" .'<td>&nbsp;<td colspan="2"><button class="save" name="submit_button" type="submit"> '.get_lang('Ok').'</button></td>' . "\n";					
+					$return .= "\t\t\t" . '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit"> '.get_lang('Ok').' </button></td>' . "\n";		
 					$return .= "\t\t" . '</tr>' . "\n";
-				
+					
 				$return .= "\t" . '</table>' . "\n";	
 				
 				if($action == 'move') {
@@ -6833,7 +6833,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang('Title').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" style="width:99%;" type="text" value="' . $item_title . '" class="learnpath_item_form"/></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" size="44" type="text" value="' . $item_title . '" class="learnpath_item_form"/></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 					}				
@@ -6843,7 +6843,7 @@ class learnpath {
 						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang('Parent').'</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
-							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
+							$return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
 								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
@@ -7094,7 +7094,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang('Title').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" style="width:100%;" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" size="44" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";			
 					}	
@@ -7226,9 +7226,7 @@ class learnpath {
 					}
 					
 					$return .= "\t\t" . '<tr>' . "\n";
-						
-						$return .= "\t\t\t" . '<td>&nbsp</td><td colspan="2"><button class="save" name="submit_button" type="submit">'.get_lang("Ok").'</button></td>' . "\n";
-					
+					$return .= "\t\t\t" . '<td>&nbsp</td><td><button class="save" name="submit_button" type="submit">'.get_lang("Ok").'</button></td>' . "\n";
 					$return .= "\t\t" . '</tr>' . "\n";
 				
 				$return .= "\t" . '</table>' . "\n";	

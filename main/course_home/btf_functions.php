@@ -1,5 +1,5 @@
 <?php
-// $Id: btf_functions.php 19215 2009-03-23 19:57:33Z ivantcholakov $
+// $Id: btf_functions.php 20027 2009-04-23 19:18:54Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -169,7 +169,11 @@ function showtools2($cat)
 		// VISIBLE
 		if ($toolsRow['visibility'] or $cat == 'courseAdmin' or $cat == 'platformAdmin')
 		{	
-			if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
+			if(strpos($toolsRow['name'],'visio_')!==false)
+			{	
+				$cell_content .= '<a  href="javascript: void(0);" onclick="window.open(\'' . $toolsRow['link'].$link_annex . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"><img src="'.$toolsRow['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>';
+			}
+			else if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
 			{					
 				/*
 				$cell_content .= '<a href="#" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"><img src="'.$toolsRow['img'].'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']				
@@ -189,7 +193,11 @@ function showtools2($cat)
 		{
 			if (api_is_allowed_to_edit())
 			{
-				if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
+				if(strpos($toolsRow['name'],'visio_')!==false)
+				{	
+					$cell_content .= '<a  href="javascript: void(0);" onclick="window.open(\'' . $toolsRow['link'].$link_annex . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; 
+				}
+				else if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
 				{					
 					/*
 					$cell_content .= '<a href="#" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
@@ -216,7 +224,7 @@ function showtools2($cat)
 
 		$lnk = array ();
 		if (api_is_allowed_to_edit() and $cat != "courseAdmin" && !strpos($toolsRow['link'], 'learnpath_handler.php?learnpath_id'))
-		{
+		{			
 			if ($toolsRow["visibility"])
 			{
 				$link['name'] = Display::return_icon('remove.gif', get_lang('Deactivate'), array('style' => 'vertical-align:middle;'));

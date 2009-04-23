@@ -56,7 +56,7 @@ if (isset($_POST['load_ajax'])) {
 				$all_result_data = 0;
 				if ($forum_result !='') {					
 					api_display_tool_title(get_lang('Forum'));
-					echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;" >';
+					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;" >';
 					echo $forum_result;
 					echo '</div>';	
 					echo '<br />';
@@ -68,7 +68,7 @@ if (isset($_POST['load_ajax'])) {
 				if (!empty($result)) {
 					echo '<div class="clear"></div><br />';
 					api_display_tool_title(get_lang('BlogPosts'));				
-					echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
+					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
 					echo $result;
 					echo '</div>';
 					echo '<br />';
@@ -79,7 +79,7 @@ if (isset($_POST['load_ajax'])) {
 				$result = get_blog_comment_from_user($course_db, $user_id); 
 				if (!empty($result)) {
 					api_display_tool_title(get_lang('BlogComments'));							
-					echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
+					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
 					echo $result;
 					echo '</div>';
 					echo '<br />';
@@ -92,7 +92,7 @@ if (isset($_POST['load_ajax'])) {
 			} else {
 					echo '<div class="clear"></div><br />';
 					api_display_tool_title(get_lang('Details'));	
-					echo '<div class="rounded social-profile-post" style="background:#FAF9F6; padding:0px;">';
+					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
 					echo get_lang('UserNonRegisteredAtTheCourse');
 					echo '<div class="clear"></div><br />';
 					echo '</div>';

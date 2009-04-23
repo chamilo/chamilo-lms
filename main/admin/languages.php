@@ -1,26 +1,5 @@
-<?php
-// $Id: languages.php 18413 2009-02-10 18:51:52Z cvargas1 $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php // $Id: languages.php 19999 2009-04-23 00:14:09Z yannoo $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 * This page allows the platform admin to decide which languages should
@@ -35,7 +14,6 @@
 * @package dokeos.admin
 ==============================================================================
 */
-
 /*
 ============================================================================== 
 	   INIT SECTION
@@ -185,7 +163,7 @@ while ($row = Database::fetch_array($result_select)) {
 	if ($row['english_name'] == $row_lang['selected_value']){
 		$setplatformlanguage = Display::return_icon('links.gif', get_lang('CurrentLanguagesPortal'));
 	} else {		
-		$setplatformlanguage = "<a href=\"javascript:if (confirm('".get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault')."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('link_na.gif',get_lang('SetLanguageAsDefault'))."</a>";
+		$setplatformlanguage = "<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault'))."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('link_na.gif',get_lang('SetLanguageAsDefault'))."</a>";
 	}		
 	if ($row['available'] == 1) {
 		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage;

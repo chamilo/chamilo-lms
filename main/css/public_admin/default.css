@@ -690,8 +690,14 @@ input.liteoption {
 }
 #agenda .title a { color: #fff;}
 #agenda .agendaitem {font-size: 12px;}
-#smallcalendar .title {background-color: #dcdcdc; font-weight: bold; padding: 2px;
- color: #666; text-align: center; font-size: 11px;}
+#smallcalendar .title {
+	background-color: #dcdcdc; 
+	font-weight: bold;
+	padding: 5px;
+ 	color: #666; 
+ 	text-align: center;
+ 	font-size: 11px;
+}
 #smallcalendar .title a { color: #666;}
 #agenda_select {list-style: none; border: 0px solid green;
  margin: 30px 0 0 0; padding: 0 0 0 10px;}
@@ -989,14 +995,14 @@ div.row div.form_header {
 div.row div.label {
 	float: left;
 	width: 18%;
-	text-align: right;
+	text-align: left;
 }
 div.row div.formw {
-	width: 80%;
+	width: 100%;
 }
 [dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
 	float: left;
-	text-align: right;
+	text-align: left;
 }
 [dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
 	float: right;
@@ -2416,7 +2422,7 @@ button.back {
 .icon_image_content{
 	width:70px;
 	cursor:hand;
-	height:12em;
+	height:11em;
 	text-align: center;
 	padding-top: 3px;
 	padding-right: 5x;

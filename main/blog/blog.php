@@ -298,7 +298,7 @@ $fck_attribute = null; // Clearing this global variable immediatelly after it ha
 
 <table width="100%">
 <tr>
-	<td width="220" class="blog_left" valign="top">
+	<td width="10%" style="float;left;" class="blog_left" valign="top">
 		<?php
 
 $month = (int)$_GET['month'] ? (int)$_GET['month'] : (int) date('m');

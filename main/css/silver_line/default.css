@@ -2029,6 +2029,12 @@ div.system_announcement {
     /*background:url(images/actions.jpg) repeat-x;*/
     vertical-align:middle;
 }
+.actions-message {
+    white-space: nowrap;
+    padding: 2px;
+    background-color: #f0f0f0;
+    border: 1px solid #bbb;
+}
 /**********************************************
  *  MESSAGE TOOL                           *
  **********************************************/

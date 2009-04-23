@@ -1927,6 +1927,12 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
     /*background:url(images/actions.jpg) repeat-x;*/
     vertical-align:middle;
 }
+.actions-message {
+    white-space: nowrap;
+    padding: 2px;
+    background-color: #f0f0f0;
+    border: 1px solid #bbb;
+}
 /**********************************************
  *  MESSAGE TOOL                           *
  **********************************************/

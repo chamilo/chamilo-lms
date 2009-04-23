@@ -487,6 +487,12 @@ form span.form_error {
     /*background:url(images/actions.jpg) repeat-x;*/
     vertical-align:middle;
 }
+.actions-message {
+    white-space: nowrap;
+    padding: 2px;
+    background-color: #f0f0f0;
+    border: 1px solid #bbb;
+}
 /* styles for the profile page */
 .profile_image {
 	float: right;

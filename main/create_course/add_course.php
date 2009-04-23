@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 20041 2009-04-23 22:25:14Z yannoo $
+// $Id: add_course.php 20043 2009-04-23 22:37:29Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -63,7 +63,7 @@ $maxlength = 40 - $dbnamelength;
 // Build the form
 $categories = array();
 $form = new FormValidator('add_course');
-$form->add_textfield('title',get_lang('Title'),true,array('size'=>'60'));
+$form->add_textfield('title',get_lang('CourseName'),true,array('size'=>'60'));
 $form->addElement('static',null,null,get_lang('Ex'));
 $categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), $categories);
 CourseManager::select_and_sort_categories($categories_select);

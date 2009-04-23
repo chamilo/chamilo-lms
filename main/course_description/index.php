@@ -1,4 +1,4 @@
-<?php // $Id: index.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+<?php // $Id: index.php 20024 2009-04-23 16:52:51Z aportugal $
 
 /*
 ==============================================================================
@@ -206,7 +206,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		} else {			
 			$form->add_html_editor('contentDescription', get_lang('Content'));
 		}
-		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+		$form->addElement('style_submit_button', null, get_lang('SaveIntroText'), 'class="save"');
 		// Set some default values
 		$default['title'] = $default_description_titles[$description_id];
 		$default['contentDescription'] = $description_content;

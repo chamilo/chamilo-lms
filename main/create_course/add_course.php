@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 19993 2009-04-22 20:18:15Z iflorespaz $
+// $Id: add_course.php 20041 2009-04-23 22:25:14Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -117,9 +117,12 @@ if ($form->validate()) {
         $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
 		$message = get_lang('JustCreated');
 		$message .= ' <a href="'.$link.'">'.$visual_code."</a>";
-		$message .= "<br /><br /><br />";
-		$message .= '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
+		//$message .= "<br /><br /><br />";
+		//$message .= '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
 		Display :: display_confirmation_message($message,false);
+		echo '<div style="float:right; margin:6px 6px 0px 0px;">' .
+				'<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .
+			 '</div>';
 	} else {
 		Display :: display_error_message(get_lang('CourseCodeAlreadyExists'),false);
 		$form->display();

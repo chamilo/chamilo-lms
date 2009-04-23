@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 19973 2009-04-22 13:24:52Z ndieschburg $
+<?php //$Id: announcements.php 20049 2009-04-23 23:33:11Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -668,27 +668,21 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 						}
 
 
-					    if(is_array($userlist))
-					    {
+					    if (is_array($userlist)) {
 					    	$userlist = "'".implode("', '", array_unique($userlist) )."'";
 
 					    	// send to the created 'userlist'
 						    $sqlmail = "SELECT user_id, lastname, firstname, email
 							       					 FROM $tbl_user
 							       					 WHERE user_id IN (".$userlist.")";
-					    }
-				    	else if(empty($_POST['not_selected_form']))
-				    	{
-				    		if(empty($_SESSION['id_session']) || api_get_setting('use_session_mode')=='false')
-				    		{
+					    } else if (empty($_POST['not_selected_form'])) {
+				    		if(empty($_SESSION['id_session']) || api_get_setting('use_session_mode')=='false') {
 					    		// send to everybody
 					    		$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
 						                     FROM $tbl_course_user, $tbl_user
 						                     WHERE course_code='".Database::escape_string($_course['sysCode'])."'
 						                     AND course_rel_user.user_id = user.user_id";
-				    		}
-				    		else
-				    		{
+				    		} else {
 				    			$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
 						                     FROM $tbl_user
 											 INNER JOIN $tbl_session_course_user
@@ -699,8 +693,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 				    		}
 				    	}
 
-						if($sqlmail!='')
-						{
+						if ($sqlmail!='') {
 							$result = api_sql_query($sqlmail,__FILE__,__LINE__);
 
 					    	/*=================================================================================
@@ -708,8 +701,8 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 						    =================================================================================*/
 
 
-							while ($myrow = Database::fetch_array($result))
-							{
+							$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);
+							while ($myrow = Database::fetch_array($result)) {
 								/*    Header : Bericht van uw lesgever - GES ($_cid)
 
 									  Body :   John Doe (prenom + nom) <john_doe@hotmail.com> (email)
@@ -721,10 +714,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 
 								$emailSubject = "[" . $_course['official_code'] . "] " . $emailTitle;
 
-								$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);
-
-	                            if($surveyid)
-	                            {
+	                            if ($surveyid) {
 	                            	$newContentone=str_replace("#page#","choose_language.php",$newContent);
 									$newContenttwo=str_replace("#temp#",$template,$newContentone);
 									$newContentthree=str_replace("#sid#",$surveyid,$newContenttwo);
@@ -740,9 +730,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 									$headers="From:$sender_name\r\nReply-to: $email\r\nContent-type: text/html; charset=iso-8859-15";
 									//@mail($myrow["email"],stripslashes($emailTitle),$message,$headers);
 									api_mail('',$myrow["email"],stripslashes($emailTitle),$message,$sender_name,$email);
-	                            }
-	                            else
-	                            {
+	                            } else {
                                     // intro of the email: receiver name and subject
 									$mail_body = $myrow["lastname"]." ".$myrow["firstname"]."<br />\n".stripslashes($emailTitle)."<br />";
 									// main part of the email
@@ -965,8 +953,7 @@ $announcement_number = Database::num_rows($result);
 				ADD ANNOUNCEMENT / DELETE ALL
 ----------------------------------------------------*/
 echo '<div class="actions">';
-if(!$surveyid)
-{
+if (!$surveyid) {
 		if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath'))
 		{
 
@@ -980,8 +967,7 @@ if(!$surveyid)
 }
 echo '</div>';
 
-		if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath')
-		{
+		if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath') {
 			echo "\n\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
 			echo "\t<tr>\n";
 
@@ -991,31 +977,26 @@ echo '</div>';
 /*----------------------------------------------------
 				ANNOUNCEMENTS LIST
 ----------------------------------------------------*/
-if(!$surveyid)
-{
+if (!$surveyid) {
+	if ($display_title_list == true) {
+		echo "\t\t\t<table>\n";
+		while ($myrow = Database::fetch_array($result)) {
+				$title = $myrow['title'];
 	
-if ($display_title_list == true)
-{
-	echo "\t\t\t<table>\n";
-	while ($myrow = Database::fetch_array($result))
-	{
-			$title = $myrow['title'];
-
-			echo "\t\t\t\t<tr>\n";
-			echo "\t\t\t\t\t<td width=\"15%\">\n";
-			if ($myrow['visibility']==0)
-				{ $class="class=\"invisible\"";}
-			else
-			{ $class="";}
-			echo "\t\t\t\t\t\t<a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title,$length) . "</a>\n";
-			echo "\t\t\t\t\t</td>\n\t\t\t\t</tr>\n";
-	}
-	echo "\t\t\t</table>\n";
-} // end $display_title_list == true
+				echo "\t\t\t\t<tr>\n";
+				echo "\t\t\t\t\t<td width=\"15%\">\n";
+				if ($myrow['visibility']==0)
+					{ $class="class=\"invisible\"";}
+				else
+				{ $class="";}
+				echo "\t\t\t\t\t\t<a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title,$length) . "</a>\n";
+				echo "\t\t\t\t\t</td>\n\t\t\t\t</tr>\n";
+		}
+		echo "\t\t\t</table>\n";
+	} // end $display_title_list == true
 }
 
-if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
-{
+if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 	echo   "\t\t</td>\n";
 	echo "\t\t<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>\n";
 	// START RIGHT PART
@@ -1026,14 +1007,12 @@ if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 	        DISPLAY ACTION MESSAGE
 =======================================*/
 
-if (isset($message) && $message == true)
-{
+if (isset($message) && $message == true) {
 	Display::display_confirmation_message($message);
 	$display_announcement_list = true;
 	$display_form             = false;
 }
-if(!empty($error_message))
-{
+if (!empty($error_message)) {
 	Display::display_error_message($error_message);
 	$display_announcement_list = false;
 	$display_form             = true;
@@ -1044,71 +1023,56 @@ if(!empty($error_message))
 ==================================================================================*/
 
 
-	if ($display_form == true)
-	{
+if ($display_form == true) {
 	
 	$content_to_modify=stripslashes($content_to_modify);
 	$title_to_modify=stripslashes($title_to_modify);
 	
 	// DISPLAY ADD ANNOUNCEMENT COMMAND
-		echo "<form method=\"post\" name=\"f1\" action=\"".api_get_self()."?publish_survey=$surveyid&id=".$_GET['id']."&db_name=$db_name&cidReq=".$_GET['cidReq']."&action=".$_GET['action']."\" style=\"margin:0px;\">\n";
+		echo '<form method="post" name="f1" action="'.api_get_self().'?publish_survey='.Security::remove_XSS($surveyid).'&id='.Security::remove_XSS($_GET['id']).'&db_name='.$db_name.'&cidReq='.Security::remove_XSS($_GET['cidReq']).'&action='.Security::remove_XSS($_GET['action']).'" style="margin:0px;">'."\n";
 
-		if (empty($_GET['id']))
-		{
+		if (empty($_GET['id'])) {
 			$form_name = get_lang('AddAnnouncement');
-		}
-		else 
-		{
+		} else {
 			$form_name = get_lang('EditAnnouncement');
 		}
 		echo '<div class="row"><div class="form_header">'.$form_name.'</div></div>';
 
 		//this variable defines if the course administrator can send a message to a specific user / group or not
-		if(empty($_SESSION['toolgroup']))
-		{
+		if (empty($_SESSION['toolgroup'])) {
 			echo '	<div class="row">
 						<div class="label">'.
 							Display::return_icon('group.gif', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle')).'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('SentTo').'</a>
 						</div>
 						<div class="formw">';
-		if(isset($_GET['id']) && is_array($to)){
-			echo '&nbsp;';
-			}
-			elseif(isset($_GET['remind_inactive']))
-			{
-			$email_ann = '1';
-			$_SESSION['select_groupusers']="show";
-			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'), 7);
-			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));
-			}
-			elseif(isset($_GET['remindallinactives']) && $_GET['remindallinactives']=='true')
-			{
-			$since = isset($_GET['since']) ? intval($_GET['since']) : 6;
-			$to = Tracking :: get_inactives_students_in_course($_course['id'],$since, $_SESSION['id_session']);
-				foreach($to as &$user)
-				{
-				$user = 'USER:'.$user;
-			}
-			$_SESSION['select_groupusers']="show";
-			$email_ann = '1';
-			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),$since);
-			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));			
+			if (isset($_GET['id']) && is_array($to)) {
+				echo '&nbsp;';
+			} elseif (isset($_GET['remind_inactive'])) {
+				$email_ann = '1';
+				$_SESSION['select_groupusers']="show";
+				$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'), 7);
+				$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));
+			} elseif(isset($_GET['remindallinactives']) && $_GET['remindallinactives']=='true') {
+				$since = isset($_GET['since']) ? intval($_GET['since']) : 6;
+				$to = Tracking :: get_inactives_students_in_course($_course['id'],$since, $_SESSION['id_session']);
+				foreach($to as &$user) {
+					$user = 'USER:'.$user;
+				}
+				$_SESSION['select_groupusers']="show";
+				$email_ann = '1';
+				$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),$since);
+				$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));			
 				
-			/*
-			//echo '&nbsp;<script type="text/javascript">document.onload = "document.getElementById(\'recipient_list\').style.display=\'block\'";</script>';
-			*/
+			} else {
+				echo get_lang("Everybody");
 			}
-			else{
-			echo get_lang("Everybody");
-		}
-		show_to_form($to);
+			show_to_form($to);
 			echo '		</div>
-					</div>';
-				
-				
+						</div>';
+					
+					
 			if (!isset($announcement_to_modify) ) $announcement_to_modify ='';
-			if ($announcement_to_modify=='')
-			{
+			if ($announcement_to_modify=='') {
 				($email_ann=='1')?$checked='checked':$checked='';
 				echo '	<div class="row">
 							<div class="label">
@@ -1163,7 +1127,7 @@ if(!empty($error_message))
 						<span class="form_required">*</span> '.get_lang('EmailTitle').'
 					</div>
 					<div class="formw">
-						<input type="text" id="emailTitle" name="emailTitle" value="'.$title_to_modify.'">
+						<input type="text" id="emailTitle" name="emailTitle" value="'.$title_to_modify.'" size="60">
 					</div>
 				</div>';
 		
@@ -1583,7 +1547,6 @@ if(!empty($error_message))
 }	// end: if ($displayAnnoucementList)
 
 echo "</table>";
-
 if (!empty($display_specific_announcement)) display_announcement($announcement_id);
 
 /*

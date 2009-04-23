@@ -431,7 +431,9 @@ foreach ($personal_course_list as $my_course) {
 	}
 	$i++;
 }
-					
+echo '<div class="actions-title">';
+echo get_lang('ViewMySharedProfile');
+echo '</div>';					
 echo '<div id="social-profile-wrapper">';
 // RIGHT COLUMN
     echo '<div id="social-profile-right">';			
@@ -464,7 +466,7 @@ echo '<div id="social-profile-wrapper">';
 				$loop_friends  = ceil($number_loop);
 				$j=0;
 				$friend_html .= '<div class="sectiontitle">'.get_lang('SocialFriend').'</div>';	
-				$friend_html.= '<div id="friend-container">';							
+				$friend_html.= '<div id="friend-container" class="social-friend-container">';							
 					$friend_html.= '<div id="friend-header">';
 							//$friend_html.=  $friends_count.' '.get_lang('Friends');
 						if ($friends_count == 1)
@@ -502,7 +504,7 @@ echo '<div id="social-profile-wrapper">';
 				//$friend_html.='</div>'; // close the div friend-container
 			} else {
 					$friend_html .= '<div class="sectiontitle">'.get_lang('Friends').'</div>';
-					$friend_html.= '<div id="friend-container">';					
+					$friend_html.= '<div id="friend-container" class="social-friend-container">';					
 					$friend_html.= '<div id="friend-header">';
 					$friend_html.= '<div style="float:left;">'.get_lang('Friends').'</div>';
 					$friend_html.= '<div style="float:right;">'.get_lang('SeeAll').'</div>';
@@ -581,37 +583,39 @@ echo '<div id="social-profile-wrapper">';
 				echo get_lang('MoreInformation');
 				echo '</div>';
 			}
+			echo '<div class="social-content-competences">';
 			$cut_size = 220;
 			if (!empty($user_info['competences'])) {		
 				echo '<br />';
-				echo get_lang('Competences');
-				echo '<div class="rounded social-profile-post" style="width:268px;">';
+				echo '<div class="social-background-content" style="width:100%;">';
+				echo '<div class="social-actions-message">'.get_lang('Competences').'</div>';
 				echo cut($user_info['competences'],$cut_size);
-				echo '<br />';
 				echo '</div>';
+				echo '<br />';
 			}
 			
-			if (!empty($user_info['diplomas'])) {	
-				echo get_lang('Diplomas');
-				echo '<div class="rounded social-profile-post" style="width:268px;" >';
+			if (!empty($user_info['diplomas'])) {
+				echo '<div class="social-background-content" style="width:100%;" >';					
+				echo '<div class="social-actions-message">'.get_lang('Diplomas').'</div>';
 				echo cut($user_info['diplomas'],$cut_size); 
-				echo '<br />';
 				echo '</div>';
+				echo '<br />';
 			}
-			if (!empty($user_info['openarea'])) {	
-				echo get_lang('OpenArea');
-				echo '<div class="rounded social-profile-post" style="width:268px;" >';
+			if (!empty($user_info['openarea'])) {
+				echo '<div class="social-background-content" style="width:100%;" >';	
+				echo '<div class="social-actions-message">'.get_lang('OpenArea').'</div>';
 				echo cut($user_info['openarea'],$cut_size); 
-				echo '<br />';
 				echo '</div>';
+				echo '<br />';
 			}
-			if (!empty($user_info['teach'])) {	
-				echo get_lang('Teach');
-				echo '<div class="rounded social-profile-post" style="width:268px;" >';
+			if (!empty($user_info['teach'])) {
+				echo '<div class="social-background-content" style="width:100%;" >';					
+				echo '<div class="social-actions-message">'.get_lang('Teach').'</div>';
 				echo cut($user_info['teach'],$cut_size);
-				echo '<br />';
 				echo '</div>';
-			}				
+				echo '<br />';
+			}
+			echo '</div>';				
 		}
 		
 	echo '</div>'; // end of content section
@@ -622,25 +626,32 @@ echo '<div id="social-profile-container">';
 	// LEFT COLUMN
 	echo '<div id="social-profile-left">';
 			//--- User image
+			echo '<div class="social-content-image">';
+			echo '<div class="social-background-content" style="width:95%;" align="center">';
+			echo '<br/>';
     	  	echo '<img src='.$img_array['dir'].$img_array['file'].' /> <br /><br />';
-    	  	
+    	  	echo '</div>';
+    	  	echo '</div>';
+    	  	echo '<br/>';
+    	  	echo '<div class="actions" style="margin-right:5px;">';
     	  	if (api_get_user_id() == $user_id) {
     	  		// if i'm me
     	  		echo Display::return_icon('email.gif');
-    	  		echo '&nbsp;&nbsp;<a href="../social/index.php#remote-tab-2">'.get_lang('MyInbox').'</a><br />'; 
+    	  		echo '&nbsp;<a href="../social/index.php#remote-tab-2">'.get_lang('MyInbox').'</a>&nbsp;'; 
     	  		echo Display::return_icon('edit.gif');
-    	  		echo '&nbsp;&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>';    	  			
+    	  		echo '&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>&nbsp;';    	  			
     	  	} else {
-    	  		echo '&nbsp;&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />'; 
+    	  		echo '&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />'; 
     	  		//echo '&nbsp;&nbsp;<a href="#">'.get_lang('SendMessage').'</a>';	
     	  	}
-    	  	echo '<br /><br />';
+    	  	echo '</div>';
+    	  	echo '<br />';
     	  	
     	  	// Send message or Add to friend links
     	  	/*if (!$show_full_profile) {
     	  		echo '&nbsp;&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />'; 		
     	  	}*/
-    	  	
+
     	  	if ($show_full_profile) {    	  		
 				//-- Extra Data							
 				$extra_user_data = UserManager::get_extra_user_data($user_id);
@@ -648,7 +659,7 @@ echo '<div id="social-profile-container">';
 					echo '<div class="sectiontitle">';
 					echo get_lang('ExtraInformation');
 					echo '</div>';
-					echo '<div class="rounded left-side">';
+					echo '<div class="social-background-content">';
 						foreach($extra_user_data as $key=>$data) {
 							echo ucfirst($key).': '.$data;
 							echo '<br />';
@@ -663,10 +674,13 @@ echo '<div id="social-profile-container">';
 					echo get_lang('MyAgenda');
 					echo '</div>';
 					$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
-					echo '<div class="rounded left-side">';	
+					echo '<div class="social-content-agenda">';
+					echo '<div class="social-background-content">';	
 					echo $my_agenda_items; 
 					echo '</div>';
+					
 					echo '<br /><br />';
+					echo '</div>';
 				}
 					
 				//-----Announcements
@@ -674,9 +688,9 @@ echo '<div id="social-profile-container">';
 				$my_announcement_by_user_id=isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
 		    	foreach ($course_list_code as $course) {
 	    			$content = get_all_annoucement_by_user_course($course['dbName'],$my_announcement_by_user_id);	 			
-	    	  		if (!empty($content)) {	 		    	  			  
-		    	  		$announcement_content.= $course['title'];
-						$announcement_content.= '<div class="rounded left-side">';							
+	    	  		if (!empty($content)) {		    	  			  
+						$announcement_content.= '<div class="social-background-content" style="width:100%">';	
+						$announcement_content.= '<div class="actions">'.$course['title'].'</div>';					
 						$announcement_content.= $content;	
 						$announcement_content.= '</div>';
 						$announcement_content.= '<br/>';
@@ -686,18 +700,22 @@ echo '<div id="social-profile-container">';
 	    	  	if(!empty($announcement_content)) {
 	    	  		echo '<div class="sectiontitle">';
 	    	  		echo get_lang('Announcements');
+	    	  		echo '</div><br/>';
+	    	  		echo '<div class="social-content-announcements">';
+	    	  		echo $announcement_content.'<br/>';
 	    	  		echo '</div>';
-	    	  		echo $announcement_content;
 	    	  	}					
     	  	}
     echo '</div>';
     
   	// CENTER COLUMN
 	echo '<div id="social-profile-content">';
+
 		    //--- Basic Information	
 		    echo '<div class="sectiontitle">';		
 			echo get_lang('Information');  //class="social-profile-info"
 			echo '</div>';
+			echo '<div class="social-content-information">';
 			if ($show_full_profile) {		 
 				echo '<div class="social-profile-info" >';					
 					echo '<dt>'.get_lang('UserName').'</dt>
@@ -724,8 +742,10 @@ echo '<div id="social-profile-container">';
 						echo '<dt>'.get_lang('Name').'</dt>		
 						  <dd>'. $user_info['firstname'].' '.$user_info['lastname'].'</dd>';					
 				echo '</div>';
-			}			
-			echo '<div class="clear"></div><br />';			
+			}
+						
+			echo '<div class="clear"></div><br />';
+			echo '</div>';		
 			// COURSES LIST
 			if ($show_full_profile) {							
 				//print_r($personal_course_list);		
@@ -734,6 +754,7 @@ echo '<div id="social-profile-container">';
 					echo '<div class="sectiontitle">';
 					echo ucfirst(get_lang('MyCourses'));
 					echo '</div>';
+					echo '<div class="social-content-training">';
 					//Courses whithout sessions
 					$old_user_category = 0;
 					$i=1;
@@ -741,9 +762,9 @@ echo '<div id="social-profile-container">';
 						if ( empty($value[2]) ) { //if out of any session				
 													
 							echo $value[1];
-							echo '<div id="loading'.$i.'"></div>';
+							//echo '<div id="loading'.$i.'">&nbsp;</div>';
 							//class="social-profile-rounded maincourse"							
-							echo '<div id="social_content'.$i.'" class="rounded maincourse" style="background : #EFEFEF; padding:0px; ">';							
+							echo '<div id="social_content'.$i.'"  style="background : #EFEFEF; padding:0px; ">';							
 							echo '</div>';		
 							$i++;
 						}
@@ -787,6 +808,7 @@ echo '<div id="social-profile-container">';
 				echo '<br />';				            
 		echo '</div>';
 		}
+	echo '</div>';
 	echo '</div>';
 echo '</div>';
 

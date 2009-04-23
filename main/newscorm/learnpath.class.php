@@ -4551,7 +4551,7 @@ class learnpath {
 		
 		if ($_GET['updateaudio'] == 'true')
 		{
-			$return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">'.get_lang('SaveAudio').'</button></div>';
+			$return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">'.get_lang('Save audio and organization').'</button></div>';
 		}				
 				
 		

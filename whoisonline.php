@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 19982 2009-04-22 17:43:37Z aportugal $
+<?php // $Id: whoisonline.php 20022 2009-04-23 15:48:20Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -219,7 +219,9 @@ function display_individual_user($user_id)
 		$status = ($user_object->status == COURSEMANAGER ? get_lang('Teacher') : get_lang('Student'));
 		$interbreadcrumb[]=array("url" => "whoisonline.php","name" => get_lang('UsersOnLineList'));
 		Display::display_header($alt);
-		api_display_tool_title($alt);
+		echo '<div class="actions-title">';
+		echo $alt;
+		echo '</div><br/>';
 		echo '<div style="text-align: center">';
 		if (strlen(trim($user_object->picture_uri)) > 0) {
 			$sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id,'system');			
@@ -278,7 +280,9 @@ function display_individual_user($user_id)
 	else
 	{
 		Display::display_header(get_lang('UsersOnLineList'));
-		api_display_tool_title(get_lang('UsersOnLineList'));
+		echo '<div class="actions-title">';
+		echo get_lang('UsersOnLineList');
+		echo '</div>';
 	}
 }
 /**
@@ -339,8 +343,10 @@ if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR 
 	if (!isset($_GET['id']))
 	{
 		Display::display_header(get_lang('UsersOnLineList'));
-		api_display_tool_title(get_lang('UsersOnLineList'));
-		echo '<b>'.get_lang('TotalOnLine').' : '.$total.'</b>';
+		echo '<div class="actions-title">';
+		echo get_lang('UsersOnLineList');
+		echo '</div>';
+		echo '<div class="actions-message">'.get_lang('TotalOnLine').' : '.$total.'</div>';
 		if ($_GET['id']=='') {
 			echo '<p><a href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
 		} else {
@@ -365,7 +371,9 @@ if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR 
 	elseif(isset($_GET['id']))
 	{
 		Display::display_header(get_lang('UsersOnLineList'));
-		api_display_tool_title(get_lang('UsersOnLineList'));
+		echo '<div class="actions-title">';
+		echo get_lang('UsersOnLineList');
+		echo '</div>';
 	}
 }
 else

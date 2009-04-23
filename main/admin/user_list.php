@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 19639 2009-04-08 13:06:16Z pcool $
+<?php // $Id: user_list.php 20046 2009-04-23 22:54:12Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -576,12 +576,6 @@ else
 	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 	$tool_name = get_lang('UserList');
 	Display :: display_header($tool_name, "");
-	
-	if (api_is_platform_admin()) {
-		echo '<div style="float:right;">
-			<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('add_user_big.gif',get_lang('AddUsers')).get_lang('AddUsers').'</a>									
-		  </div>'; 
-	}
 	  
 	//api_display_tool_title($tool_name);
 	if (isset ($_GET['action'])) {
@@ -662,15 +656,17 @@ else
 	$form->addElement('text','keyword',get_lang('keyword'));
 	$form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="search"');
 	$form->addElement('static','search_advanced_link',null,'<a href="user_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
-	echo '<div class="actions">';
+	echo '<div class="actions" style="width:100%;">';
+	if (api_is_platform_admin()) {
+		echo '<span style="float:right; padding-top:7px;">'.
+			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('add_user_big.gif',get_lang('AddUsers')).get_lang('AddUsers').'</a>'.									
+			 '</span>';
+	}
 	$form->display();
 	echo '</div>';
-	if (isset ($_GET['keyword']))
-	{
+	if (isset ($_GET['keyword'])) {
 		$parameters = array ('keyword' => $_GET['keyword']);
-	}
-	elseif (isset ($_GET['keyword_firstname']))
-	{
+	} elseif (isset ($_GET['keyword_firstname'])) {
 		$parameters['keyword_firstname'] = $_GET['keyword_firstname'];
 		$parameters['keyword_lastname'] = $_GET['keyword_lastname'];
 		$parameters['keyword_email'] = $_GET['keyword_email'];

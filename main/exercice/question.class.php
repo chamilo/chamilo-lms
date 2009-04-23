@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 19955 2009-04-21 21:04:23Z juliomontoya $
+<?php // $Id: question.class.php 20029 2009-04-23 19:57:27Z aportugal $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 19955 2009-04-21 21:04:23Z juliomontoya $
+* 	@version $Id: question.class.php 20029 2009-04-23 19:57:27Z aportugal $
 */
 
 
@@ -1075,11 +1075,11 @@ abstract class Question
 			eval('$img = '.$a_type[1].'::$typePicture;');			
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');			
 			echo '<td>';		
-				echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">';
-					echo '<div class="icon_image_content">';
-					echo Display::return_icon($img, $explanation);
+			echo '<div class="icon_image_content">';
+				echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">';	
+				echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
 				echo '<br>';
-				echo $explanation;
+				echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
 				echo '</div>';
 			echo '</a>';	
 			echo '</td>';

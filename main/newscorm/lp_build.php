@@ -220,9 +220,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			} else {
 				if($is_new) {
 					echo '<div class="confirmation-message">';
-						echo '<div style="margin-left: 25px; margin-right: 20px;">';				
 							echo get_lang("LearnPathAdded");
-						echo '</div>';				
 					echo '</div>';
 				}				
 				if($is_new) {
@@ -230,9 +228,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				} else {
 					// Display::display_normal_message(get_lang('LPCreatedAddChapterStep'), false);
 					echo '<div class="normal-message">';
-						echo '<div style="margin-left: 25px; margin-right: 20px;">';				
 							echo get_lang("LearnPathAdded");
-						echo '</div>';				
 					echo '</div>';					
 				}								
 			}		

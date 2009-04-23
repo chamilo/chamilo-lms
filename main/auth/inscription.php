@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 19565 2009-04-06 14:55:45Z juliomontoya $
+// $Id: inscription.php 20042 2009-04-23 22:34:50Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -455,30 +455,28 @@ if ($form->validate()) {
 		}
 	}
 
-	echo "<p>".get_lang('Dear')." ".stripslashes("$recipient_name").",<br><br>".get_lang('PersonalSettings').".</p>\n";
+	echo "<p>".get_lang('Dear')." ".stripslashes("$recipient_name").",<br /><br />".get_lang('PersonalSettings').".</p>\n";
 
 	if (!empty ($values['email']))
 	{
 		echo "<p>".get_lang('MailHasBeenSent').".</p>";
 	}
 
-	if ($is_allowedCreateCourse)
-	{
+	$button_text = "";
+	if ($is_allowedCreateCourse) {
 		echo "<p>", get_lang('NowGoCreateYourCourse'), ".</p>\n";
 		$actionUrl = "../create_course/add_course.php";
-	}
-	else
-	{
+		$button_text = get_lang('CourseCreate');
+	} else {
 		echo "<p>", get_lang('NowGoChooseYourCourses'), ".</p>\n";
 		$actionUrl = "courses.php?action=subscribe";
+		$button_text = get_lang('Next');
 	}
 	// ?uidReset=true&uidReq=$_user['user_id']
 
-	echo "<form action=\"", $actionUrl, "\"  method=\"post\">\n", "<button type=\"submit\" class=\"next\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">".get_lang('Next')."</button>\n", "</form><br>\n";
+	echo "<form action=\"", $actionUrl, "\"  method=\"post\">\n", "<button type=\"submit\" class=\"next\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">".$button_text."</button>\n", "</form><br />\n";
 
-}
-else
-{
+} else {
 	$form->display();
 }
 ?>

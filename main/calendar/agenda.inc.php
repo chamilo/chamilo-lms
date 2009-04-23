@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 19905 2009-04-20 23:10:25Z aportugal $
+<?php //$Id: agenda.inc.php 20031 2009-04-23 21:04:02Z cfasanando $
 
 /*
 ==============================================================================
@@ -338,8 +338,23 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 				echo "\t<td ".$class.">";
 				if (!empty($agendaitems[$curday]))
 				{
-					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."\">".$dayheader."</a>";
-				}
+					$month_curday = array();
+					$items_curday = $agendaitems[$curday][$curday];
+					
+					foreach ($items_curday as $item_curday) {
+						$start_date_item = $item_curday['start_date'];
+						$month_item = (int)substr($start_date_item,5,2);
+						if($month == $month_item) {
+							$month_curday[] = $item_curday['start_date'];
+						}
+					}										
+														
+					if (!empty($month_curday)) {										
+						echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."\">".$dayheader."</a>";
+					} else {
+						echo $dayheader;
+					}
+				}				
 				else
 				{
 					echo $dayheader;

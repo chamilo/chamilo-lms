@@ -238,12 +238,12 @@ class StudentPublicationLink extends AbstractLink
    	public function needs_name_and_description() {
 		return false;
 	}
-	 
-    public function get_name() {
-    	$this->get_exercise_data();
-    	return isset($this->exercise_data['url']) ? $this->exercise_data['url'] : null;
-    }    
 	
+	public function get_name() {
+    	$this->get_exercise_data();
+    	return (isset($this->exercise_data['url'])&&(substr($this->exercise_data['url'],0,1)=='/')? substr($this->exercise_data['url'], 1) : null);
+    }
+    
     public function get_description() {
     	$this->get_exercise_data();
     	return isset($this->exercise_data['description']) ? $this->exercise_data['description'] : null;

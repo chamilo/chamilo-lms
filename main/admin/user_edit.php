@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 19952 2009-04-21 19:52:11Z cvargas1 $
+<?php // $Id: user_edit.php 20035 2009-04-23 21:49:20Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -346,7 +346,9 @@ if( $form->validate())
 		if (empty($thumbwidth) or $thumbwidth==0) {
 			$thumbwidth=150;
 		}
-		$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+		
+		$divizor = ($picture_infos[0] > 0)?$picture_infos[0]:1;
+		$new_height = round(($thumbwidth/$divizor)*$picture_infos[1]);
 	
 		$temp->resize($thumbwidth,$new_height,0);
 		$type=$picture_infos[2];

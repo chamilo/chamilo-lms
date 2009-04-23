@@ -43,7 +43,7 @@ $fck_attribute = null; // Clearing this global variable immediatelly after it ha
 
 // Glossary FckEditor setting
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
+$fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Glossary';
 
 
@@ -61,7 +61,7 @@ if (api_is_allowed_to_edit())
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 		// settting the form elements		
 		$form->addElement('header', '', get_lang('TermAddNew'));
-		$form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'100'));
+		$form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'95'));
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="add"');	
 		

@@ -19,7 +19,7 @@
 * @author     Laurent Laville <pear@laurent-laville.org>
 * @copyright  1997-2005 The PHP Group
 * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
-* @version    CVS: $Id: advmultiselect.php 7739 2006-02-12 17:21:34Z turboke $
+* @version    CVS: $Id: advmultiselect.php 20028 2009-04-23 19:32:35Z cfasanando $
 * @link       http://pear.php.net/package/HTML_QuickForm_advmultiselect
 */
 
@@ -565,11 +565,14 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
             // The 'unselected' multi-select which appears on the left
             $strHtmlUnselected = "<select$attrUnselected>". PHP_EOL;
-            foreach ($arrHtmlUnselected as $data) {
-                $strHtmlUnselected .= $tabs . $tab
-                                   . '<option' . $this->_getAttrString($data['attr']) . '>'
-                                   . $data['text'] . '</option>' . PHP_EOL;
+            if (is_array($arrHtmlUnselected) && count($arrHtmlUnselected) > 0) {
+		        foreach ($arrHtmlUnselected as $data) {
+		            $strHtmlUnselected .= $tabs . $tab
+		                               . '<option' . $this->_getAttrString($data['attr']) . '>'
+		                               . $data['text'] . '</option>' . PHP_EOL;
+		        }
             }
+            
             $strHtmlUnselected .= '</select>';
 
             // The 'selected' multi-select which appears on the right

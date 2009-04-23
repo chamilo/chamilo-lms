@@ -14,8 +14,9 @@
 
 /* Skin */
 .tabs-nav {
+	margin-left:0px;
     list-style: none;
-    padding: 4px 0 4px 4px;
+    padding: 0px 4px 4px 4px;
     border-bottom:1px dotted #999999;
 	border-top:1px dotted #999999;
 	vertical-align:middle;
@@ -59,19 +60,19 @@
     background-position: 100% -100px;
 }
 .tabs-nav a span {
-   //width: 64px; /* IE 6 treats width as min-width */
-   //min-width: 64px;
-   //height: 18px; /* IE 6 treats height as min-height */
-   //min-height: 18px;
-   //padding-top: 6px;
-   //padding-right: 0;
+   /*width: 64px;*/ /* IE 6 treats width as min-width */
+   /*min-width: 64px;*/
+   /*height: 18px;*/ /* IE 6 treats height as min-height */
+   /*min-height: 18px;*/
+   /*padding-top: 6px;*/
+   /*padding-right: 0;*/
 }
 *>.tabs-nav a span { /* hide from IE 6 */
     width: auto;
     height: auto;
 }
 .tabs-nav .tabs-selected a span {
-    //padding-top: 7px;
+    /*padding-top: 7px;*/
 }
 .tabs-nav .tabs-selected a span, .tabs-nav a:hover span, .tabs-nav a:focus span, .tabs-nav a:active span {
     background-position: 0 -50px;
@@ -89,9 +90,9 @@
     opacity: .4;
 }
 .tabs-container {
-    //border-top: 1px solid #97a5b0;
-    //padding: 1em 8px;
-    //background: #fff; /* declare background color for container to avoid distorted fonts in IE while fading */
+    /*border-top: 1px solid #97a5b0;
+    padding: 1em 8px;
+    background: #fff;*/ /* declare background color for container to avoid distorted fonts in IE while fading */
 }
 .tabs-loading em {
     padding: 0 0 0 20px;

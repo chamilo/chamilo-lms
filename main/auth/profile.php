@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 19861 2009-04-19 16:49:50Z iflorespaz $
+<?php // $Id: profile.php 20036 2009-04-23 22:06:02Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -790,7 +790,8 @@ if(!empty($warning_msg))
 //User picture size is calculated from SYSTEM path
 $image_syspath = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system',false,true);
 $image_syspath['dir'].$image_syspath['file'];
-$image_size = getimagesize($image_syspath['dir'].$image_syspath['file']);
+
+$image_size = @getimagesize($image_syspath['dir'].$image_syspath['file']);
 
 //Web path
 $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',false,true);

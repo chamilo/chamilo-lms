@@ -15,7 +15,7 @@
 // by each window's script. Added translation for a few other HTML elements.
 
 function getAbsolutePos(el) {
-	var r = { x: el.offsetLeft, y: el.offsetTop };
+	// var r = { x: el.offsetLeft, y: el.offsetTop }; // avoiding being in the center of the page
 	if (el.offsetParent) {
 		var tmp = getAbsolutePos(el.offsetParent);
 		r.x += tmp.x;

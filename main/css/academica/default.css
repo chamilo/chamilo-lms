@@ -1685,17 +1685,17 @@ float:left;
 
 
 #social-profile-wrapper {	
-		width: 990px;	  
+        width: 100%;       
 		text-align:left;
 		margin:0 auto;
 		float: left;
 }
 #social-profile-container {
-	width: 700px;
+    /*width: 100%;*/
 }
 #social-profile-left {
 	float:left;
-	width:220px;
+    width:22%;
 }
 .left-side { 
 	min-width: 198px;
@@ -1703,10 +1703,11 @@ float:left;
 }
 #social-profile-content { 
 	float:right;
-	width:480px;	
+    width:48%;	
 }
 #social-profile-right {
-	float:right; width:290px		
+	float:right;
+    width:30%;		
 }
 .social-profile-post {
 	width: 450px;
@@ -1745,6 +1746,48 @@ float:left;
     font-weight:700;
     margin-right:2px;
 }   
+.social-content-image {
+    margin-top:4px;
+    margin-right:5px;
+    background:#EFEFEF;
+    border-left:1px #999999 dotted;
+    border-top:1px #999999 dotted ;
+    border-right:1px #999999 dotted;
+    border-bottom:1px #999999 dotted;
+}
+.social-background-content {
+    background:#EFEFEF; 
+}
+.social-content-information {
+    margin-left:10px;
+    margin-right:10px;  
+}
+.social-content-training {
+    margin-left:10px;
+    margin-right:10px;  
+}
+.social-friend-container {
+    margin-left:10px;
+    margin-right:10px;  
+}
+.social-content-competences {
+    margin-left:5px;
+    margin-right:5px;   
+}
+.social-content-announcements {
+    margin-left:10px;
+    margin-right:10px;  
+}
+.social-content-agenda {
+    margin-left:10px;
+    margin-right:10px;      
+}
+.social-actions-message {
+    white-space: nowrap;
+    padding: 2px;
+    background-color: #ffffff;
+    border: 1px solid #bbb; 
+}
 /*****************************************************
  *  BUTTONS	                                         *
  *****************************************************/

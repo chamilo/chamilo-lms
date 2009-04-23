@@ -611,7 +611,7 @@ this lets the navigation menu appear to the left:
 }
 #lang_form input, #lang_form select{
 	font-size: 12px;
-	margin-left: 10px;
+	margin-left: 4px;
 }
 
 #formLogin label {
@@ -2389,6 +2389,8 @@ button.search {
 /*including "login" image*/
 button.login {
     background-image:url(images/button_login.gif);
+	margin:2px 5px 3px 5px !important;
+	
 }
 
 /*including "plus" image*/

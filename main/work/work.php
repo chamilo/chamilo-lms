@@ -1,4 +1,4 @@
-<?php //$Id: work.php 19801 2009-04-16 12:23:17Z pcool $
+<?php //$Id: work.php 20023 2009-04-23 15:52:15Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 19801 2009-04-16 12:23:17Z pcool $
+*  	@version $Id: work.php 20023 2009-04-23 15:52:15Z juliomontoya $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1309,7 +1309,7 @@ function draw_date_picker($prefix,$default='') {
 		
 		$new_folder_text .= '<div class="row">
 								<div class="label">
-									<a href="javascript://" onclick=" return plus();"><span id="plus">'.Display::return_icon('div_show.gif').' '.get_lang('AdvancedParameters').'</span></a>
+									<a href="#" onclick=" return plus();"><span id="plus">'.Display::return_icon('div_show.gif').' '.get_lang('AdvancedParameters').'</span></a>
 								</div>
 								<div class="formw">
 									'.$addtext.'
@@ -1323,7 +1323,7 @@ function draw_date_picker($prefix,$default='') {
 								<div class="label">
 								</div>
 								<div class="formw">
-									<button type="button" class="add" name="create_dir" onClick="validate();" value="' . get_lang('CreateDirectory') . '"/>' . get_lang('CreateDirectory') . '</button>
+									<button type="button" class="add" name="create_dir" onClick="validate();" value="' . addslashes(get_lang('CreateDirectory')) . '"/>' . addslashes(get_lang('CreateDirectory')) . '</button>
 								</div>
 							</div>';		
 		

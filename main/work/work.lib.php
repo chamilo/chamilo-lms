@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 19801 2009-04-16 12:23:17Z pcool $
+<?php //$Id: work.lib.php 20023 2009-04-23 15:52:15Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 19801 2009-04-16 12:23:17Z pcool $
+* 	@version $Id: work.lib.php 20023 2009-04-23 15:52:15Z juliomontoya $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -1183,10 +1183,10 @@ function to_javascript_work() {
 			function plus() {
 				if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+					document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/div_hide.gif" alt="" />&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
 				} else {
 				document.getElementById(\'options\').style.display = \'none\';
-				document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+				document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
 				}	
 			}
 			

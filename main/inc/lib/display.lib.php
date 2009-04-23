@@ -384,7 +384,7 @@ class Display {
 		echo '<div class="normal-message">';
 		//Display :: display_icon('message_normal.gif', get_lang('InfoMessage'), array ('style' => 'float:left; margin-right:10px;'));
 		get_lang('InfoMessage', array ('style' => 'float:left; margin-right:10px;'));
-		echo "<div style='margin-left: 43px'>".$message.'</div></div>';
+		echo $message.'</div>';
 	}
 
 	/**

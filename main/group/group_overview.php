@@ -1,4 +1,4 @@
-<?php // $Id: group_overview.php 19800 2009-04-16 08:08:55Z pcool $
+<?php // $Id: group_overview.php 20095 2009-04-24 22:24:33Z juliomontoya $
  
 /*
 ==============================================================================
@@ -119,7 +119,7 @@ if (get_setting('allow_group_categories') == 'true') {
 	//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
 	echo Display::return_icon('settings.gif', get_lang('PropModify')) . '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.get_lang('PropModify').'</a>&nbsp;';
 }
-echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
+//echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
 echo Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';
 echo '</div>';
 

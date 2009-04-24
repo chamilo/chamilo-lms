@@ -1,4 +1,4 @@
-<?php // $Id: group.php 20078 2009-04-24 15:52:14Z iflorespaz $
+<?php // $Id: group.php 20095 2009-04-24 22:24:33Z juliomontoya $
  
 /*
 ==============================================================================
@@ -206,7 +206,7 @@ if (api_is_allowed_to_edit(false,true))
 		//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
 		echo Display::return_icon('settings.gif', get_lang('PropModify')) . '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.get_lang('PropModify').'</a>&nbsp;';
 	}
-	echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
+	//echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
 	echo Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';	
 	//echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang('NewGroupCreate').'</a>&nbsp;';
 }

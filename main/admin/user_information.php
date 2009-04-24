@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 19380 2009-03-27 17:02:50Z herodoto $
+// $Id: user_information.php 20076 2009-04-24 15:13:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,7 +79,7 @@ $webdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'web',
 $webdir = $webdir_array['dir'];
 $fullurl=$webdir.$webdir_array['file'];
 $system_image_path=$sysdir.$webdir_array['file'];
-list($width, $height, $type, $attr) = getimagesize($system_image_path);
+list($width, $height, $type, $attr) = @getimagesize($system_image_path);
 $resizing = (($height > 200) ? 'height="200"' : '');
 $height += 30;
 $width += 30;

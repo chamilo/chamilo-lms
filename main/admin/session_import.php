@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 19772 2009-04-14 22:39:32Z cfasanando $
+<?php // $Id: session_import.php 20098 2009-04-24 22:30:00Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -723,7 +723,7 @@ if(!empty($errorMsg)) {
   <td nowrap="nowrap" valign="top"><?php echo get_lang('FileType'); ?> :</td>
   <td>
 	<input class="checkbox" type="radio" name="file_type" id="file_type_xml" value="xml" checked="checked" /> <label for="file_type_xml">XML</label> (<a href="exemple.xml" target="_blank"><?php echo get_lang('ExampleXMLFile'); ?></a>)<br>
-	<input class="checkbox" type="radio" name="file_type" id="file_type_csv"  value="csv" <?php if($formSent && $file_type == 'csv') echo 'checked="checked"'; ?>> <label for="file_type_csv">CSV</label> (<a href="exempleSession.csv" target="_blank"><?php echo get_lang('ExampleCSVFile'); ?></a>)<br>
+	<input class="checkbox" type="radio" name="file_type" id="file_type_csv"  value="csv" <?php if($formSent && $file_type == 'csv') echo 'checked="checked"'; ?>> <label for="file_type_csv">CSV</label> (<a href="exemple.csv" target="_blank"><?php echo get_lang('ExampleCSVFile'); ?></a>)<br>
   </td>
 </tr>
 <tr>

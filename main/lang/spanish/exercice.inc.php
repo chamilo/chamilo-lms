@@ -300,4 +300,5 @@ $ReachedOneAttempt = "No es posible tomar el examen, pues alcanzó el numero máxi
 $QuestionsPerPage = "Preguntas por pagina";
 $QuestionsPerPageOne = "Una";
 $QuestionsPerPageAll = "Todas";
+$EditIndividualComment = "Editar feedback";
 ?>

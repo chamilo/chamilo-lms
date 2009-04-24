@@ -51,4 +51,8 @@ $SelectEverybody = "Selecteaza tot";
 $SelectedUsersGroups = "Grupurile de utiilizatori selectate";
 $LearnerMessage = "Mesaj de la un elev";
 $TitleIsRequired = "Titlul este obligatoriu";
+$AnnounceSentByEmail = "Anuntul este trimis prin e-mail.";
+$AnnounceSentToUserSelection = "Anuntul este trimis la utilizatorii selectati.";
+$SendAnnouncement = "Trimite anunt.";
+$ModifyAnnouncement = "Modifica anuntul.";
 ?>

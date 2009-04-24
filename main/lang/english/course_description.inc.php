@@ -16,4 +16,5 @@ $CourseDescriptionUpdated = "The description has been updated";
 $CourseDescriptionDeleted = "Description has been deleted";
 $CourseDescriptionIntro = "To create a description, click on a heading and complete the field.<br><br> Click OK to continue.";
 $langSaveDescription = "Save description";
+$SaveIntroText = "Save intro text";
 ?>

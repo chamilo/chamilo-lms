@@ -949,4 +949,5 @@ $ShowEmailOfTeacherOrTutorComent = "Afficher l\'e-mail de l\'enseignant (ou du c
 $Created = "Créé";
 $AddSystemAnnouncement = "Ajouter une annonce système";
 $EditSystemAnnouncement = "Éditer l\'annonce système";
+$AddLDAPUsers = "Ajouter ces utilisateurs LDAP";
 ?>

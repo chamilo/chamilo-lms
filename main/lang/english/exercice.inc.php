@@ -300,4 +300,5 @@ $ReachedOneAttempt = "You can not take this test because you have already reache
 $QuestionsPerPage = "Questions per page";
 $QuestionsPerPageOne = "One";
 $QuestionsPerPageAll = "All";
+$EditIndividualComment = "Edit individual feedback";
 ?>

@@ -84,4 +84,5 @@ $NoTasks = "Pas de tâches";
 $Shared = "Partagé";
 $PermissionGrantedByGroupOrRole = "Permission allouée par groupe ou par rôle";
 $Reader = "Lecteur";
+$SeeBlog = "Voir le blog";
 ?>

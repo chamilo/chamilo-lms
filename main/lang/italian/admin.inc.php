@@ -956,4 +956,5 @@ $LastTimeTheCourseWasUsed = "Ultimo accesso al modulo";
 $AnnouncementAvailable = "L\'avviso è disponibile";
 $AnnouncementNotAvailable = "L\'avviso non è disponibile";
 $Searching = "Sto cercando";
+$AddLDAPUsers = "Aggiungi utenti LDAP";
 ?>

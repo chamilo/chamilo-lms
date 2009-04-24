@@ -367,7 +367,7 @@ $AttemptedCreationVirtualCourse = "Attempted creation of virtual course...";
 $WantedCourseCode = "Wanted training code";
 $ResetPassword = "Reset password";
 $CheckToSendNewPassword = "Check to send new password";
-$AutoGeneratePassword = "Automattically generate a new password";
+$AutoGeneratePassword = "Automatically generate a new password";
 $UseDocumentTitleTitle = "Use a title for the document name";
 $UseDocumentTitleComment = "This will allow the use of a title for document names instead of document_name.ext";
 $StudentPublications = "Assignments";
@@ -956,4 +956,5 @@ $LastTimeTheCourseWasUsed = "Last time learner entered the training";
 $AnnouncementAvailable = "The announcement is available";
 $AnnouncementNotAvailable = "The announcement is not available";
 $Searching = "Searching";
+$AddLDAPUsers = "Add LDAP users";
 ?>

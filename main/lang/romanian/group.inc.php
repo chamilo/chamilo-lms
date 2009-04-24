@@ -89,4 +89,5 @@ $GroupsFromClasses = "Grupuri din clase";
 $GroupsFromClassesInfo = "Utilizand aceasta optiune, puteti crea grupuri bazate pe clasele inscrise la cursul dumneavoastra.";
 $Group = "Grup";
 $ForumOfGroup = "Forumul grupului:";
+$BackToGroupList = "Inapoi la lista de grupuri.";
 ?>

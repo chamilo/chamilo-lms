@@ -135,4 +135,5 @@ $CreateForum = "Créer ce forum";
 $ModifyForum = "Modifier forum";
 $CreateThread = "Créer fil de discussion";
 $ModifyThread = "Modifier fil de discussion";
+$BackToForum = "Retour au forum";
 ?>

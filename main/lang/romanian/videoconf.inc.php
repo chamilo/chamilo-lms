@@ -1,5 +1,56 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Camera = "Camera";
+$Microphone = "Microfon";
+$Name = "Nume";
+$DeleteStream = "Sterge fluxul";
+$Progress = "Progres";
+$Play = "Play";
+$Stop = "Stop";
+$Record = "Inregistreaza";
+$NoFileAvailable = "Nici un fisier valabil";
+$RecordingOnlyForTeachers = "Inregistrarea e permisa doar pentru profesori.";
+$UsersNow = "Utilizatorii curenti:";
+$StartConference = "Incepe conferinta.";
 $MyName = "Numele meu";
+$OrganisationSVideoconference = "Video conferinta Dokeos";
+$ImportPresentation = "Import prezentare";
+$RefreshList = "Improspateaza lista";
+$GoToTop = "Mergi sus";
+$NewPoll = "Sondaj nou";
+$CreateNewPoll = "Un nou sondaj de opinie pentru acest spatiu.";
+$Question = "Intrebare:";
+$PollType = "Tip:";
+$Create = "Editare";
+$InfoConnectedUsersGetNotifiedOfThisPoll = "Edita informa&#355;ii: fiecare utilizator conectat in acest spatiu va fi un mesaj ca acest nou sondaj de opinie este disponibil.";
+$YesNo = "Da/Nu";
+$Numeric1To10 = "Numeric 1-10";
+$Poll = "Sondaj";
+$YouHaveToBecomeModeratorOfThisRoomToStartPolls = "Trebuie sa fiti moderator al acestui domeniu ca sa face sondaje.";
+$YourVoteHasBeenSent = "Ati votat.";
+$YouAlreadyVotedForThisPoll = "Ati votat.";
+$VoteButton = "Voteaza!";
+$YourAnswer = "Raspunsul dumneavoastra:";
+$Yes = "Da";
+$No = "Nu";
+$WantsToKnow = "vreau sa stiu:";
+$PollResults = "Rezultatele sondajului";
+$Votes = "Voturi:";
+$Result = "Rezultat:";
+$ThereIsNoPoll = "Nu e nici un sondaj disponibil.";
+$MeetingMode = "Sedinta (max. 4 locuri)";
+$ConferenceMaxSeats = "Conferinta (max. 50 locuri)";
+$Mode = "Mod";
+$RemainingSeats = "Locuri ramase";
+$AlreadyIn = "Deja prezent";
+$CheckIn = "Check in";
+$TheModeratorHasLeft = "Moderatorul acestei conferinte a parasit incaperea.";
+$SystemMessage = "Mesajul sistemului";
+$ChooseDevices = "Alege echipamente";
+$ChooseCam = "Alege camera:";
+$ChooseMic = "Alege microfon:";
+$OK = "OK";
+$YouHaveToReconnectSoThatTheChangesTakeEffect = "Trebuie sa va logati din nou daca doriti sa faceti schimbari.";
+$ChangeSettings = "Schimba setarile.";
 ?>

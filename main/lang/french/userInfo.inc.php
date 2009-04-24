@@ -81,4 +81,6 @@ $UserNonRegisteredAtTheCourse = "Utilisateur non inscrit à ce cours";
 $ChangeContactGroup = "Changer de groupe de contact";
 $Friend = "Ami";
 $ViewMySharedProfile = "Voir mon profil partagé";
+$EditUser = "Modifier cet utilisateur";
+$ViewUser = "Voir cet utilisateur";
 ?>

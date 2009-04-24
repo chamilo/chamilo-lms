@@ -709,4 +709,5 @@ $MoreInformation = "Ulteriori informazioni";
 $MakeInvisible = "Rendi invisibile";
 $MakeVisible = "Rendi visibile";
 $Image = "Immagine";
+$CourseName = "Titolo del corso";
 ?>

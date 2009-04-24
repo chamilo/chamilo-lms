@@ -136,4 +136,6 @@ $ModifyForum = "Modifica il forum";
 $CreateThread = "Crea un argomento";
 $ModifyThread = "Modifica l\'argomento";
 $EditForum = "Modifica il forum";
+$BackToForum = "Torna al forum";
+$BackToForumOverview = "Torna all\'elenco dei forum";
 ?>

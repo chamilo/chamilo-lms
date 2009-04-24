@@ -96,7 +96,7 @@ $langNewStudentPublicationCreated = "La pagina per il caricamento degli elaborat
 $langNewModuleCreated = "Il nuovo capitolo è stato creato: puoi aggiungere degli elementi.";
 $langNewExerciseCreated = "Il nuovo test è stato creato";
 $langItemRemoved = "L\'elemento è stato rimosso";
-$langLearnPathAdded = "Il Modulo didattico è stato creato con successo: ora puoi aggiungere nuovi elementi ed eventualmente nuovi capitoli, per una migliore strutturazione.";
+$langLearnPathAdded = "<p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"../img/gallery/creative.png\" alt=\"practicerAnim.gif\" />Benvenuti nel sistema autore di Dokeos !</big></p> <ul> <li><b>Crea</b> : Aggiungi capitoli ed elementi al modulo che hai creato</li> <li><b>Ordina</b> : Ordini le diverse parti nel menù a sinistra e aggiungi un commento audio</li> <li><b>Vedi</b> : Visualizzi il modulo dal punto di vista del corsista</li> <li><b>Nuovo capitolo</b> : Capitolo 1, Capitolo 2 o Settimana 1, Settimana 2...</li> <li><b>Nuovo elemento</b> : Aggiungi documenti, test ed attività anche attraverso modelli di pagina, gallerie di immagini e media</li> </ul> <br> <br> <br> <br><br> <br> <br> <br> <br>";
 $langConverting = "Sto convertendo...";
 $langPpt2lpError = "C\'è stato un errore nel corso della conversione della presentazione. Controlla che il nome della presentazione non contenga caratteri speciali.";
 $langBuild = "Crea";
@@ -139,7 +139,7 @@ $langEditCurrentExecice = "Modifica il test";
 $langUploadScorm = "Importa SCORM o AICC";
 $langPowerPointConvert = "Converti una Presentazione";
 $langLPCreatedToContinue = "Per proseguire puoi aggiungere Capitoli o Elementi tramite il menù in alto a sinistra.";
-$langLPCreatedAddChapterStep = "Puoi aggiungere al Modulo un Capitolo o un Elemento tramite il menù a sinistra.";
+$langLPCreatedAddChapterStep = "<p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"../img/gallery/creative.png\" alt=\"practicerAnim.gif\" />Benvenuti nel sistema autore di Dokeos !</big></p> <ul> <li><b>Crea</b> : Aggiungi capitoli ed elementi al modulo che hai creato</li> <li><b>Ordina</b> : Ordini le diverse parti nel menù a sinistra e aggiungi un commento audio</li> <li><b>Vedi</b> : Visualizzi il modulo dal punto di vista del corsista</li> <li><b>Nuovo capitolo</b> : Capitolo 1, Capitolo 2 o Settimana 1, Settimana 2...</li> <li><b>Nuovo elemento</b> : Aggiungi documenti, test ed attività anche attraverso modelli di pagina, gallerie di immagini e media</li> </ul> <br> <br> <br> <br><br> <br> <br> <br> <br>";
 $langPrerequisitesAdded = "Sono stati aggiunti dei prerequisiti per il presente elemento";
 $langAddEditPrerequisites = "Aggiungi o modifica i prerequisiti";
 $langMinimum = "Minimo";

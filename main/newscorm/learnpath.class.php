@@ -7700,7 +7700,7 @@ class learnpath {
 		}
 		$return .= '<tr>';
 		$return .= '<td colspan="3">';
-		$return .= '<button class="save" name="submit_button" type="submit">'.get_lang("ModifyPrerequisities").' </button></td>' . "\n";
+		$return .= '<button class="save" name="submit_button" type="submit">'.get_lang("ModifyPrerequisites").' </button></td>' . "\n";
 		$return .= '</td>';
 		$return .= '</tr>';
 		$return .= '</table>';

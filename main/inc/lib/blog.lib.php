@@ -1218,8 +1218,7 @@ class Blog
 	 */
 	function display_form_new_post($blog_id)
 	{
-		if(api_is_allowed('BLOG_' . $blog_id, 'article_add'))
-		{
+		if(api_is_allowed('BLOG_' . $blog_id, 'article_add')) {
 			echo '<script type="text/javascript">
 					function FCKeditor_OnComplete( editorInstance )
 					{
@@ -1307,9 +1306,9 @@ class Blog
 			echo '<div class="row"><div class="form_header">' . get_lang('NewPost') . '</div></div>';
 			
 			// article title
-			echo '<div class="row">
-						<div class="label">
-							<span class="form_required">*</span>' . get_lang('Title') . '
+			echo '<div class="row" style="float:left;">
+						<div class="label" >
+							<span class="form_required">*</span>'.get_lang('Title') . '
 						</div>
 						<div class="formw">
 							<input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" />
@@ -1320,61 +1319,56 @@ class Blog
 			$oFCKeditor = new FCKeditor('post_full_text') ;
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Height		= '400';
-			if(!api_is_allowed_to_edit())
-			{
+			if(!api_is_allowed_to_edit()) {
 				$oFCKeditor->ToolbarSet = 'Blog_Student';
-			}
-			else
-			{
+			} else {
 				$oFCKeditor->ToolbarSet = 'Blog';
 			}	
-			$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
+			$oFCKeditor->Value = isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
 		
-			echo '<div class="row">
-						<div class="label">
+			echo '<div class="row" style="float:left;width:100%">
+						<div class="label" style="width:7%" > 
 							' . get_lang('PostFullText') . '
 						</div>
-						<div class="formw">';
-			$oFCKeditor->Create();
-			echo '		</div>
+						<div style="padding-left:110px;width:90%">';
+						$oFCKeditor->Create();
+					echo '</div>
 					</div>';			
-									
+			echo '<br /><br />';		
 			// attachment
-			echo '<div class="row">
-						<div class="label">
+			echo '<div style="float:left;width:100%">
+						<div style="float:left;padding-right:10px">
 							' . get_lang('AddAnAttachment') . '
 						</div>
-						<div class="formw">
+						<div style="float:left;">
 							<input type="file" name="user_upload"/>
 						</div>
 					</div>';
-									
+			echo '<br /><br />';
 			// comment
-			echo '<div class="row">
-						<div class="label">
+			echo '<div style="float:left;width:100%">
+					<div style="float:left;padding-right:28px">
 							' . get_lang('FileComment') . '
 						</div>
-						<div class="formw">
+						<div style="float:left;">
 							<textarea name="post_file_comment" cols="34" /></textarea>
 						</div>
 					</div>';
-
+			echo '<br /><br />';
 			// submit
-			echo '<div class="row">
+			echo '<div class="row" style="float:left;padding-left:90px;" >
 						<div class="label">
 						</div>
 						<div class="formw">
-								 <input type="hidden" name="action" value="" />
-								 <input type="hidden" name="new_post_submit" value="true" />
-								 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
+							 <input type="hidden" name="action" value="" />
+							 <input type="hidden" name="new_post_submit" value="true" />
+							 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
 						</div>
 					</div>';
 			
 				 
 			echo '</form>';
-		}
-		else
-		{
+		} else {
 			api_not_allowed();
 		}
 	}

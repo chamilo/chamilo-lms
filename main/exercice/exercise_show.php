@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20080 2009-04-24 16:27:22Z juliomontoya $
+* 	@version $Id: exercise_show.php 20081 2009-04-24 17:57:27Z juliomontoya $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -371,7 +371,16 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				if ($result_disabled==1) {			
 					//api_not_allowed();
 					$show_results = false;
-					Display::display_warning_message(get_lang('CantViewResults'));				
+					//Display::display_warning_message(get_lang('CantViewResults'));
+					if ($origin!='learnpath')
+						Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);						
+					else {
+						Display::display_warning_message(get_lang('ThankYouForPassingTheTest'));
+					}
+					echo '</td>
+						</tr>
+						</table>';
+						
 				}
 			}				
 			$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($_user['user_id'])." ";

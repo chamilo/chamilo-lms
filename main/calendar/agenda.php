@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 19706 2009-04-10 14:19:19Z pcool $
+<?php //$Id: agenda.php 20083 2009-04-24 18:54:49Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -274,6 +274,83 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 }
 echo '</div><br />';
 
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+{
+	switch ($_GET['action'])
+	{
+		case "importical":			
+					            if(isset($_POST['ical_submit']))
+					            {
+					                $course_info = api_get_course_info(); 
+					                $ical_name = $_FILES['ical_import']['name'];
+					                $ical_type = $_FILES['ical_import']['type'];
+					                $ext = substr($ical_name,(strrpos($ical_name,".")+1));                              
+					                if ($ical_type === 'text/calendar' || $ext === 'ics') {
+					                agenda_import_ical($course_info,$_FILES['ical_import']);
+					                $is_ical = true;
+					                } else {
+					                	$is_ical = false;                	                	
+					                }                
+					            }            
+					            break;
+		case 'add':
+								if($_POST['submit_event'])
+								{
+							     	$course_info = api_get_course_info();
+								    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
+					                $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
+									$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$_POST['file_comment']);				
+					                if(!empty($_POST['repeat']))
+					                {
+					                	$end_y = intval($_POST['repeat_end_year']);
+					                    $end_m = intval($_POST['repeat_end_month']);
+					                    $end_d = intval($_POST['repeat_end_day']);
+					                    $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
+					                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,$_POST['selectedform'],$_POST['file_comment']);
+					                }                 
+								}			
+								break;
+		case "edit":
+								if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id']) ) ) )
+								{ // a coach can only delete an element belonging to his session
+									if ($_POST['submit_event'])
+									{		$my_id_attach = (int)$_REQUEST['id_attach'];
+											$my_file_comment = Database::escape_string($_REQUEST['file_comment']);
+											store_edited_agenda_item($my_id_attach,$my_file_comment);						
+									}				
+								}			
+								break;
+		case "delete":
+								$id=(int)$_GET['id'];
+								if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
+								{ // a coach can only delete an element belonging to his session
+									delete_agenda_item($id);
+								}				
+								break;
+		case "showhide":
+								$id=(int)$_GET['id'];
+								if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
+								{ // a coach can only delete an element belonging to his session
+									showhide_agenda_item($id);
+								}			
+								break;
+		case "announce": 		//copying the agenda item into an announcement
+								$id=(int)$_GET['id'];
+								if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
+								{ // a coach can only delete an element belonging to his session
+									$ann_id = store_agenda_item_as_announcement($id);
+									$tool_group_link = (isset($_SESSION['toolgroup'])?'&toolgroup='.$_SESSION['toolgroup']:'');								
+									Display::display_normal_message(get_lang('CopiedAsAnnouncement').'&nbsp;<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
+								}			
+								break;
+		case "delete_attach": 	//delete attachment file
+								$id_attach = (int)$_GET['id_attach'];
+								if (!empty($id_attach)) {
+									delete_attachment_file($id_attach);
+								}			
+								break;
+	}
+}
 
 echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">'
 		. '<tr>';
@@ -283,15 +360,16 @@ if (empty($_GET['origin']) or $_GET['origin']!='learnpath')
 {
 	echo '<td width="220" height="19" valign="top">';
 	// the small calendar
-	$MonthName = $MonthsLong[$select_month -1];
+	$MonthName = $MonthsLong[$select_month -1];	
 	$agenda_items=get_calendar_items($select_month,$select_year);
 	if (api_get_setting('display_mini_month_calendar') == 'true')
 	{
 		display_minimonthcalendar($agenda_items, $select_month,$select_year, $MonthName);
 	}
-	/*if (api_get_setting('display_upcoming_events') == 'true') {
+	echo '<br />';
+	if (api_get_setting('display_upcoming_events') == 'true') {
 		display_upcoming_events();
-	}*/
+	}
 	echo '</td>';
 	echo '<td width="20" background="../img/verticalruler.gif">&nbsp;</td>';
 }
@@ -300,137 +378,56 @@ if (empty($_GET['origin']) or $_GET['origin']!='learnpath')
 echo '<td valign="top">';
 echo '<div class="sort" style="float:left">';
 echo '</div>';
-if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
-{
-	switch ($_GET['action'])
-	{
-		case "importical":			
-            if(isset($_POST['ical_submit']))
-            {
-                $course_info = api_get_course_info(); 
-                $ical_name = $_FILES['ical_import']['name'];
-                $ical_type = $_FILES['ical_import']['type'];
-                $ext = substr($ical_name,(strrpos($ical_name,".")+1));                              
-                if ($ical_type === 'text/calendar' || $ext === 'ics') {
-                agenda_import_ical($course_info,$_FILES['ical_import']);
-                } else {
-                	Display::display_error_message(get_lang('IsNotiCalFormatFile'));
-                	display_ical_import_form();
-                	break;
-                }
-                if (api_get_setting('display_upcoming_events') == 'true') {
-					display_upcoming_events();
-				}
-                display_agenda_items();
-            }
-            else 
-            {
-            	display_ical_import_form();
-            }
-            break;
-		case 'add':
-			if($_POST['submit_event'])
-			{
-		     $course_info = api_get_course_info();
-			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
-                $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
-				$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$_POST['file_comment']);
-                if(!empty($_POST['repeat']))
-                {
-                	$end_y = intval($_POST['repeat_end_year']);
-                    $end_m = intval($_POST['repeat_end_month']);
-                    $end_d = intval($_POST['repeat_end_day']);
-                    $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,$_POST['selectedform'],$_POST['file_comment']);
-                } 
-                if (api_get_setting('display_upcoming_events') == 'true') {
-					display_upcoming_events();
-				}               
-				display_agenda_items();
-			}
-			else
-			{
-				show_add_form();
-			}
-			break;
 
-		case "edit":
-			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id']) ) ) )
-			{ // a coach can only delete an element belonging to his session
-				if ($_POST['submit_event'])
-				{		$my_id_attach = (int)$_REQUEST['id_attach'];
-						$my_file_comment = Database::escape_string($_REQUEST['file_comment']);
-						store_edited_agenda_item($my_id_attach,$my_file_comment);
-						if (api_get_setting('display_upcoming_events') == 'true') {
-							display_upcoming_events();
-						}
-						display_agenda_items();
-				}
-				else
-				{
-						$id=(int)$_GET['id'];
-						show_add_form($id);
-				}
-			}
-			else
-			{
-				if (api_get_setting('display_upcoming_events') == 'true') {
-					display_upcoming_events();
-				}
-				display_agenda_items();
-			}
-			break;
-
-		case "delete":
-			$id=(int)$_GET['id'];
-			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
-			{ // a coach can only delete an element belonging to his session
-				delete_agenda_item($id);
-			}
-				if (api_get_setting('display_upcoming_events') == 'true') {
-					display_upcoming_events();
-				}
-				display_agenda_items();
-			break;
-
-		case "showhide":
-			$id=(int)$_GET['id'];
-			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
-			{ // a coach can only delete an element belonging to his session
-				showhide_agenda_item($id);
-			}
-			if (api_get_setting('display_upcoming_events') == 'true') {
-					display_upcoming_events();
-			}
-			display_agenda_items();
-			break;
-		case "announce": //copying the agenda item into an announcement
-			$id=(int)$_GET['id'];
-			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
-			{ // a coach can only delete an element belonging to his session
-				$ann_id = store_agenda_item_as_announcement($id);
-				$tool_group_link = (isset($_SESSION['toolgroup'])?'&toolgroup='.$_SESSION['toolgroup']:'');
-				echo '<br />';
-				Display::display_normal_message(get_lang('CopiedAsAnnouncement').'<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
-			}
-			if (api_get_setting('display_upcoming_events') == 'true') {
-					display_upcoming_events();
-			}
-			display_agenda_items();
-			break;
-		case "delete_attach": //delete attachment file
-			$id_attach = (int)$_GET['id_attach'];
-			if (!empty($id_attach)) {
-				delete_attachment_file($id_attach);
-			}
-			if (api_get_setting('display_upcoming_events') == 'true') {
-					display_upcoming_events();
-			}
-			display_agenda_items();
-			break;
-
-	}
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) {
+		
+	switch ($_GET['action']) {
+		case 'importical' :								
+								if (isset($_POST['ical_submit'])) {        
+							        if (!$is_ical) {
+									Display::display_error_message(get_lang('IsNotiCalFormatFile'));
+	                				display_ical_import_form();
+	                				break;
+									}
+							        display_agenda_items();						        
+							    }
+							    else {
+							    	display_ical_import_form();
+							    }
+							    break;
+		case 'add' :
+								if ($_POST['submit_event']) {		
+									display_agenda_items();
+								} else {			
+										show_add_form();
+								}
+								break;
+		case 'edit' :				
+								if ( !(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
+									if ($_POST['submit_event']) {		
+										display_agenda_items();
+									}
+									else {
+										$id=(int)$_GET['id'];
+										show_add_form($id);
+									}
+								} else {
+									display_agenda_items();
+								}
+								break;	
+		case 'delete':
+								display_agenda_items();				
+								break;
+		case 'showhide':
+								display_agenda_items();			
+								break;
+		case 'announce': 		display_agenda_items();			
+								break;
+		case 'delete_attach': 	display_agenda_items();		
+								break;	
+	}	
 }
+
 // this is for students and whenever the courseaministrator has not chosen any action. It is in fact the default behaviour
 if (!$_GET['action'] || $_GET['action']=="showall"  || $_GET['action']=="showcurrent" || $_GET['action']=="view")
 {
@@ -443,27 +440,17 @@ if (!$_GET['action'] || $_GET['action']=="showall"  || $_GET['action']=="showcur
                  display_one_agenda_item((int)$_GET['agenda_id']);
             }
             else
-            {
-            	if (api_get_setting('display_upcoming_events') == 'true') {
-					display_upcoming_events();
-				}
+            {            	
 			     display_agenda_items();
             }
 		}
         else 
-        {        	
-        		if (api_get_setting('display_upcoming_events') == 'true') {
-					display_upcoming_events();
-				}
-				display_monthcalendar($select_month, $select_year);	
-        	
+        {        	        		
+				display_monthcalendar($select_month, $select_year);	        	
 		}
 	}
 	else
-	{
-		if (api_get_setting('display_upcoming_events') == 'true') {
-					display_upcoming_events();
-		}
+	{		
 		display_one_agenda_item((int)$_GET['agenda_id']);
 	}
 }

@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 19979 2009-04-22 17:12:35Z cfasanando $
+* 	@version $Id: exercise_show.php 20074 2009-04-24 14:31:45Z juliomontoya $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -31,7 +31,14 @@ define('MATCHING',		4);
 define('FREE_ANSWER', 5);
 define('HOTSPOT', 6);
 
-api_protect_course_script();
+if ( empty ( $origin ) ) {
+    $origin = $_REQUEST['origin'];
+}
+
+if ($origin == 'learnpath')
+	api_protect_course_script();
+else 
+	api_protect_course_script(true);
 
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -45,13 +52,12 @@ $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTE
 
 $dsp_percent = false;
 $debug=0;
+
 if($debug>0) {
 	echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);
 }
 // general parameters passed via POST/GET
-if ( empty ( $origin ) ) {
-    $origin = $_REQUEST['origin'];
-}
+
 if ( empty ( $learnpath_id ) ) {
     $learnpath_id       = $_REQUEST['learnpath_id'];
 }
@@ -84,6 +90,10 @@ if ( empty ( $objExercise ) ) {
 }
 if ( empty ( $exeId ) ) {
     $exeId = $_REQUEST['id'];
+}
+
+if ( empty ( $action ) ) {
+    $action = $_GET['action'];
 }
 
 $is_allowedToEdit=api_is_allowed_to_edit() || $is_courseTutor;
@@ -130,11 +140,14 @@ $id 	   = $_REQUEST['id'];
 <script language="javascript">
 function showfck(sid,marksid)
 {
-document.getElementById(sid).style.visibility='visible';
-document.getElementById(marksid).style.visibility='visible';
+	document.getElementById(sid).style.display='block';
+	document.getElementById(marksid).style.display='block';
+	var comment = 'feedback_'+sid; 
+	document.getElementById(comment).style.display='none';
 }
 
-function getFCK(vals,marksid){
+function getFCK(vals,marksid)
+{
   var f=document.getElementById('myform');
 
   var m_id = marksid.split(',');
@@ -172,7 +185,7 @@ function get_comments($id,$question_id)
 {
 	global $TBL_TRACK_ATTEMPT;
 	//$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id and question_id)."' = '".Database::escape_string($question_id)."' order by question_id";
-	$sql = "SELECT teacher_comment FROM ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' order by question_id";
+	$sql = "SELECT teacher_comment FROM ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' ORDER by question_id";
 	$sqlres = api_sql_query($sql, __FILE__, __LINE__);
 	$comm = Database::result($sqlres,0,"teacher_comment");
 	return $comm;
@@ -340,7 +353,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 */
 
 ?>
-<table width="100%" border="0" cellspacing=0 cellpadding=0>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td colspan="2">
 	<?php
@@ -367,8 +380,8 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 							INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 
 							INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
 							INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id    
-						WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
-						GROUP BY quizz_rel_questions.question_order, attempts.question_id"; 
+					  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
+					  GROUP BY quizz_rel_questions.question_order, attempts.question_id"; 
 						//GROUP BY questions.position, attempts.question_id";
 			$result =api_sql_query($query, __FILE__, __LINE__);							
 		} else {
@@ -405,9 +418,11 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				</tr>
 			 </table>	 
 			 <br />
+</table>	
 		  <?php
 		}
 	$i=$totalScore=$totalWeighting=0;
+	
 	if($debug>0){echo "ExerciseResult: "; var_dump($exerciseResult); echo "QuestionList: ";var_dump($questionList);}
 	
 		// for each question
@@ -423,7 +438,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		
 		//we hide the results
 		if ($show_results)
-		foreach($questionList as $questionId) {			
+		foreach($questionList as $questionId) {	
 			$counter++;
 			$k++;
 			$choice=$exerciseResult[$questionId];
@@ -438,27 +453,23 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			// destruction of the Question object
 			unset($objQuestionTmp);
 	
-			if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-			{
+			if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+				$colspan=2;
+			}			
+			if($answerType == MATCHING || $answerType == FREE_ANSWER) {
+				$colspan=2;
+			} else {
 				$colspan=2;
 			}
-			if($answerType == MATCHING || $answerType == FREE_ANSWER)
-			{
-				$colspan=2;
-			}
-			else
-			{
-				$colspan=2;
-			}?>
+			?>
+	
+	    	<div id="question_title" class="sectiontitle">
+	    		<?php echo get_lang("Question").' '.($counter).' : '.$questionName; ?>
+	    	</div>	   
+	    	<div id="question_description">
+	    		<?php echo $questionDescription; ?>
+	    	</div>
 
-		  <tr>  
-		    <td colspan="2" height="24px"><div id="question_title" class="sectiontitle"><?php echo get_lang("Question").' '.($counter).' : '.$questionName; ?> </div></td>
-		  </tr>
-		   <tr>
-		    <td colspan="2"><?php echo $questionDescription; ?> </td>
-		  </tr>
-		  <tr>
-		  <td width="100%" height="90" valign="top">
  		 <?php
 			if($answerType == MULTIPLE_ANSWER) {
 				$choice=array();
@@ -468,11 +479,10 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				<td>&nbsp;</td>
 				</tr>
 				<tr>
-				<td><i><?php echo get_lang("Choice"); ?></i> </td>
-				<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
-				<td><i><?php echo get_lang("Answer"); ?></i></td>
-				<td><i><?php echo get_lang("Comment"); ?></i></td>
-					
+					<td><i><?php echo get_lang("Choice"); ?></i> </td>
+					<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
+					<td><i><?php echo get_lang("Answer"); ?></i></td>
+					<td><i><?php echo get_lang("Comment"); ?></i></td>					
 				</tr>
 				<tr>
 				<td>&nbsp;</td>
@@ -497,8 +507,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 						if($studentChoice) {
 							$questionScore+=$answerWeighting;
 							$totalScore+=$answerWeighting;
-						}
-	
+						}	
 					?>
 				<tr>
 				<td> <?php
@@ -512,11 +521,11 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				<?php
 			$i++;
 			 }?>
-				</table>
+			</table>
 		<?php 
 			} elseif ($answerType == UNIQUE_ANSWER) {
 		?>
-		<table width="100%" border="0">
+		<table width="100%" border="0" cellspacing="3" cellpadding="3">
 			<tr>
 			<td>&nbsp;</td>
 			</tr>
@@ -566,7 +575,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 	<?php  
 	} elseif($answerType == FILL_IN_BLANKS){
 		?>
-			<table width="100%" border="0">
+			<table width="100%" border="0" cellspacing="3" cellpadding="3">
 			<tr>
 			<td>&nbsp;</td>
 			</tr>
@@ -728,7 +737,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 	<?php  
 	} elseif($answerType == FREE_ANSWER) {
 		?>
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<table width="100%" border="0" cellspacing="3" cellpadding="3">
 			<tr>
 			<td>&nbsp;</td>
 			</tr>
@@ -758,7 +767,9 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			<td valign="top"><?php display_free_answer($choice, $id, $questionId);?> </td>
 			</tr>
 			</table>
-	<?php  } elseif($answerType == MATCHING) {
+	<?php  
+	} elseif($answerType == MATCHING) {
+		
 		$objAnswerTmp=new Answer($questionId);		
 		$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 		$TBL_TRACK_ATTEMPT= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -774,7 +785,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		
 		$res_answers = api_sql_query($sql_select_answer, __FILE__, __LINE__);
 		
-		echo '<table width="100%" height="71" border="0">';
+		echo '<table width="100%" height="71" border="0" cellspacing="3" cellpadding="3" >';
 		echo '<tr><td colspan="2">&nbsp;</td></tr>';
 		echo '<tr>
 				<td><span style="font-style: italic;">'.get_lang("ElementList").'</span> </td>
@@ -786,10 +797,8 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		
 		while($a_answers = Database::fetch_array($res_answers)) {			
 			$i_answer_id = $a_answers['id']; //3
-			$s_answer_label = $a_answers['answer'];  // your dady - you mother
-			
-			$i_answer_correct_answer = $a_answers['correct']; //1 - 2
-			
+			$s_answer_label = $a_answers['answer'];  // your dady - you mother			
+			$i_answer_correct_answer = $a_answers['correct']; //1 - 2			
 			$i_answer_position = $a_answers['position']; // 3 - 4
 			
 			 $sql_user_answer = 
@@ -834,7 +843,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		echo '</table>';	
 	} else if($answerType == HOTSPOT) {
 		?>
-		<table width="355" border="0" cellspacing="0" cellpadding="0">		
+		<table width="355" border="0">		
 			<tr>
 			<td>&nbsp;</td>
 			</tr>
@@ -881,178 +890,181 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			</tr>
 			</table><br/>';
 	}
-	?>
-		 </td>
-		<td width="320" height="90" valign = "top">				
-			<table width="100%" border="0" cellspacing="3" cellpadding="3">		
-			 <?php 
-				 if($is_allowedToEdit) {
-				 	?>						 	
-						<tr>
-							<td height="28px"></td>
-						</tr>
-						<tr>
-							<td>							
-						<?php	
-						//if (isset($_REQUEST['showdiv']) && $questionId==$_REQUEST['ques_id'])
-							//{
-							$name = "fckdiv".$questionId;
-							$marksname = "marksName".$questionId;
-							?>
-							<i><?php echo get_lang('MoreFeedback'); ?></i>
-							<br /><br />
-							<a href="javascript://" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');"><?php if ($answerType == FREE_ANSWER) echo "&nbsp;".get_lang('EditCommentsAndMarks'); else echo "&nbsp;".get_lang('AddComments');?></a>
-							<?php
-							$comnt = get_comments($id,$questionId);
-							
-							echo "<br /><br />".$comnt;
-							?>
-							<div id="<?php echo $name; ?>" style="visibility:hidden">
-							<?php
-							$arrid[] = $questionId;
-							$fck_attribute['Width'] = '270';
-							$fck_attribute['Height'] = '120';
-							$fck_attribute['ToolbarSet'] = 'CommentAnswers';
-							$fck_attribute['Config']['ToolbarStartExpanded']='false';							
-	
-							$$questionId = new FormValidator('frmcomments'.$questionId,'post','');
-							$renderer =& $$questionId->defaultRenderer();
-							$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
-							$renderer->setElementTemplate('<div align="left">{element}</div>');
-							$comnt =get_comments($id,$questionId);
-							${user.$questionId}['comments_'.$questionId] = $comnt;
-							$$questionId->addElement('html_editor','comments_'.$questionId,false);
-							//$$questionId->addElement('submit','submitQuestion',get_lang('Ok'));
-							$$questionId->setDefaults(${user.$questionId});							
-							$$questionId->display();
-							
-							echo '</div>';
-					} else {
-						$comnt = get_comments($id,$questionId);
-						?>
-						<tr>
-							<td height="28px"></td>
-						</tr>
-						
-						<tr>						
-							<td><i><?php if (!empty($comnt)) echo get_lang('MoreFeedback'); ?></i></td>
-						</tr>
-						<tr>
-							<td>
-							<br /> <br />
-						<?php echo $comnt; 
-						echo '</td><td>';						
-					}
-				?>
-				 </td>
-				  </tr>
-				 </table>
-		 </td>
-	</tr>
-  <tr>
-  
-  <td></td>
-  <td align= "left" >
-  <?php
-		 if($is_allowedToEdit) {
-			if ($answerType == FREE_ANSWER) {
-				$marksname = "marksName".$questionId;
-			?>
-			<div id="<?php echo $marksname; ?>" style="visibility:hidden">
-			<form name="marksform_<?php echo $questionId; ?>" method="post" action="">
- 		    <?php
-				$arrmarks[] = $questionId;
-				echo get_lang("AssignMarks");
-				echo "<select name='marks' id='marks'>";
-				for($i=0;$i<=$questionWeighting;$i++) {
-					?>
-					<option <?php if ($i==$questionScore) echo "selected='selected'";?>>
-						<?php echo $i;
-							?></option>
-						<?php } ?>
-				  </select>
-				  </form></div><?php
-				  if($questionScore==-1) {
-				  	$questionScore=0;
-				  	echo '<br>'.get_lang('notCorrectedYet');
-				  }
-			} else {
-				 	$arrmarks[] = $questionId;
-				 	echo '<div id="'.$marksname.'" style="visibility:hidden"><form name="marksform_'.$questionId.'" method="post" action=""><select name="marks" id="marks" style="display:none;"><option>'.$questionScore.'</option></select></form></div>';
-			}
-		} else {
-			if($questionScore==-1) {
-				  	$questionScore=0;
-			}		
-		}
-	?>	
-  </td><tr><td align="left"><b>
-  <?php echo get_lang('Score')." : $questionScore/$questionWeighting"; ?></b><br /><br /></td>
-  </tr>
-		<?php  unset($objAnswerTmp);
-		$i++;
-		$totalWeighting+=$questionWeighting;
-		}
-
-if($origin!='learnpath') {?>
-<tr><td align="left"><b>
-	<?php
-			//$query = "update ".$TBL_TRACK_EXERCICES." set exe_result = $totalScore where exe_id = '$id'";
-			//api_sql_query($query,__FILE__,__LINE__);
-			if ($show_results) {
-				echo '<br/>'.get_lang('YourTotalScore')." ";
-				if($dsp_percent == true) {
-					echo number_format(($totalScore/$totalWeighting)*100,1,'.','')."%";
-				} else {
-					echo $totalScore."/".$totalWeighting;
-				}
-				echo '!</b>';
-			}
-	?>
-	</td></tr>
-	 <?php } else {?>
-  	 <tr><td><br /><br /><?php Display::display_normal_message(get_lang('ExerciseFinished')) ?></td></tr>
- 	 <?php } ?>
-
+	?>		
+<table width="100%" border="0" cellspacing="3" cellpadding="0">		
+<?php 
+if($is_allowedToEdit) {
+?>			
 	<tr>
-		<td align="left">
+		<td>							
+	<?php
+		$name = "fckdiv".$questionId;
+		$marksname = "marksName".$questionId;
+		?>			
 		<br />
+		<a href="javascript://" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');">
 		<?php 
-			if (is_array($arrid) && is_array($arrmarks)) {
-				$strids = implode(",",$arrid);
-				$marksid = implode(",",$arrmarks);
+		if ($answerType == FREE_ANSWER)  
+			echo get_lang('EditCommentsAndMarks'); 
+		else {
+			if ($action=='edit')
+				echo get_lang('EditIndividualComment');
+			else {
+				echo get_lang('AddComments');
 			}
-			if($is_allowedToEdit) {		
-					if (in_array($origin, array('tracking_course','user_course'))) {
-						echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.urlencode($test).'&emailid='.$emailId.'&origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].'" method="post">';
-						if (isset($_GET['myid']) && isset($_GET['my_lp_id']) && isset($_GET['student'])) {
-				?>
-						<input type = "hidden" name="lp_item_id" value="<?php echo Security::remove_XSS($_GET['myid']); ?>">
-						<input type = "hidden" name="lp_item_view_id" value="<?php echo Security::remove_XSS($_GET['my_lp_id']); ?>">
-						<input type = "hidden" name="student_id" value="<?php echo Security::remove_XSS($_GET['student']);?>">
-						<input type = "hidden" name="total_score" value="<?php echo $totalScore; ?>">
-						<input type = "hidden" name="total_time" value="<?php echo Security::remove_XSS($_GET['total_time']);?>">
-						<input type = "hidden" name="totalWeighting" value="<?php echo $totalWeighting; ?>">
-				<?php		
-						}
-					} else {
-						echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'" method="post">';
-					}					
-					if ($origin!='learnpath' && $origin!='student_progress') {
-				?>					
-					 <button type="submit" class="save" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"><?php echo get_lang('FinishTest'); ?></button>					 
-					 </form>
-				<?php }
-		 	}  		
-			if ($origin=='student_progress') {?>				
-				<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>										
-			<?php } else if($origin=='myprogress') {?>
-				<button type="button" class="save" onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>				
-			<?php }?>	
-		</td>
-		</tr>
-</table>
+		}
+		?></a>
+		<br />
+		<div id="feedback_<?= $name ?>" style="width:100%">
+		<?php															
+		$comnt = trim(get_comments($id,$questionId));
+		if (empty($comnt)) {
+			echo '<br />';
+		} else {
+			echo '<div id="question_feedback">'.$comnt.'</div>';			
+		}
+		?>
+		</div>
+		<div id="<?php echo $name; ?>" style="display:none">
+		<?php
+		$arrid[] = $questionId;
+		$fck_attribute['Width'] = '100%';
+		$fck_attribute['Height'] = '120';
+		$fck_attribute['ToolbarSet'] = 'CommentAnswers';
+		$fck_attribute['Config']['ToolbarStartExpanded']='false';							
+
+		$feedback_form = new FormValidator('frmcomments'.$questionId,'post','');
+		$feedback_form->addElement('html','<br>');
+		$renderer =& $feedback_form->defaultRenderer();
+		$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
+		$renderer->setElementTemplate('<div align="left">{element}</div>');
+		$comnt =get_comments($id,$questionId);
+		${user.$questionId}['comments_'.$questionId] = $comnt;
+		$feedback_form->addElement('html_editor','comments_'.$questionId,false);
+		$feedback_form->addElement('html','<br>');
+		//$feedback_form->addElement('submit','submitQuestion',get_lang('Ok'));
+		$feedback_form->setDefaults(${user.$questionId});							
+		$feedback_form->display();			
+		echo '</div>';
+	} else {
+		$comnt = get_comments($id,$questionId);
+		?>		
+		<tr>
+			<td>
+			<br />
+			<?php
+			if (!empty($comnt)) {
+				echo '<b>'.get_lang('FeedbackType').'</b>';									
+				echo '<div id="question_feedback">'.$comnt.'</div>';
+			} 
+			?>	
+			</td>
+		<td>
+		<?php						
+	}
+?>
+				 
 <?php
+	 if($is_allowedToEdit) {
+		if ($answerType == FREE_ANSWER) {
+			$marksname = "marksName".$questionId;
+		?>
+		<div id="<?php echo $marksname; ?>" style="display:none">
+		<form name="marksform_<?php echo $questionId; ?>" method="post" action="">
+	    <?php
+			$arrmarks[] = $questionId;
+			echo get_lang("AssignMarks");				
+			echo "&nbsp;<select name='marks' id='marks'>";
+			for($i=0;$i<=$questionWeighting;$i++) {
+				?>
+				<option <?php if ($i==$questionScore) echo "selected='selected'";?>>
+					<?php echo $i;
+						?></option>
+					<?php } ?>
+			  </select>
+			  </form><br/ ></div><?php
+			  if($questionScore==-1) {
+			  	$questionScore=0;
+			  	echo '<br>'.get_lang('notCorrectedYet');
+			  }
+		} else {
+			 	$arrmarks[] = $questionId;
+			 	echo '<div id="'.$marksname.'" style="display:none"><form name="marksform_'.$questionId.'" method="post" action="">
+			 		  <select name="marks" id="marks" style="display:none;"><option>'.$questionScore.'</option></select></form><br/ ></div>';
+		}
+	} else {
+		if($questionScore==-1) {
+			 $questionScore=0;
+		}		
+	}
+?>	
+</td>
+</tr>
+</table>
+
+<div id="question_score">
+	<?php echo get_lang('Score')." : $questionScore/$questionWeighting"; ?>
+</div>
+
+<?php  
+	unset($objAnswerTmp);
+	$i++;
+	$totalWeighting+=$questionWeighting;
+}
+
+if($origin!='learnpath') {
+	//$query = "update ".$TBL_TRACK_EXERCICES." set exe_result = $totalScore where exe_id = '$id'";
+	//api_sql_query($query,__FILE__,__LINE__);
+	if ($show_results) {
+		echo '<div id="question_score">'.get_lang('YourTotalScore')." ";
+		if($dsp_percent == true) {
+			echo number_format(($totalScore/$totalWeighting)*100,1,'.','')."%";
+		} else {
+			echo $totalScore."/".$totalWeighting;
+		}
+		echo '!</div>';		
+	}
+} else {
+	echo '<br /><br />';	
+  	Display::display_normal_message(get_lang('ExerciseFinished'));
+	echo '<br />';
+} 
+
+if (is_array($arrid) && is_array($arrmarks)) {
+	$strids = implode(",",$arrid);
+	$marksid = implode(",",$arrmarks);
+}
+
+if($is_allowedToEdit) {		
+	if (in_array($origin, array('tracking_course','user_course'))) {
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.urlencode($test).'&emailid='.$emailId.'&origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].'" method="post">';
+		if (isset($_GET['myid']) && isset($_GET['my_lp_id']) && isset($_GET['student'])) {
+	?>
+		<input type = "hidden" name="lp_item_id" value="<?php echo Security::remove_XSS($_GET['myid']); ?>">
+		<input type = "hidden" name="lp_item_view_id" value="<?php echo Security::remove_XSS($_GET['my_lp_id']); ?>">
+		<input type = "hidden" name="student_id" value="<?php echo Security::remove_XSS($_GET['student']);?>">
+		<input type = "hidden" name="total_score" value="<?php echo $totalScore; ?>">
+		<input type = "hidden" name="total_time" value="<?php echo Security::remove_XSS($_GET['total_time']);?>">
+		<input type = "hidden" name="totalWeighting" value="<?php echo $totalWeighting; ?>">
+	<?php		
+		}
+	} else {
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'" method="post">';
+	}					
+	if ($origin!='learnpath' && $origin!='student_progress') {
+	?>					
+		<button type="submit" class="save" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"><?php echo get_lang('FinishTest'); ?></button>					 
+		</form>
+	<?php 
+	}
+}  		
+
+if ($origin=='student_progress') {?>				
+	<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>										
+<?php } else if($origin=='myprogress') {?>
+	<button type="button" class="save" onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id()?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>				
+<?php }
+		
 if ($origin != 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();

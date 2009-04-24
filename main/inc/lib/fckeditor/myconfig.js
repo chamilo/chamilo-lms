@@ -415,7 +415,7 @@ FCKConfig.ToolbarSets["FreeAnswer"] = [
 ] ;
 
 FCKConfig.ToolbarSets["CommentAnswers"] = [
-	['Link','Unlink','Image','flvPlayer','Bold','Italic','TextColor','BGColor']
+	['Link','Unlink','Bold','Italic','TextColor','BGColor']
 ] ;
 
 

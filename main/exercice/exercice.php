@@ -1,4 +1,4 @@
-<?php // $Id: exercice.php 19809 2009-04-16 20:05:58Z cfasanando $
+<?php // $Id: exercice.php 20074 2009-04-24 14:31:45Z juliomontoya $
 
 /*
 ==============================================================================
@@ -1167,22 +1167,24 @@ if ($_configuration['tracking_enabled'] && ($show == 'result') )
 			  		echo '<td>'.round(($res/($results[$i][3]!=0?$results[$i][3]:1))*100,2).'% ('.$res.' / '.$results[$i][3].')</td>';
 			  		
 			  		// Is hard to read this!!
-			  		
+			  		/*
 					echo '<td>'.(($is_allowedToEdit||$is_tutor)?
 								"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".
 								(($revised)?get_lang('Edit'):get_lang('Qualify'))."</a>".
 								((api_is_platform_admin() || $is_tutor)?' - <a href="exercice.php?cidReq='.htmlentities($_GET['cidReq']).'&show=result&filter='.$filter.'&delete=delete&did='.$id.'" onclick="javascript:if(!confirm(\''.sprintf(get_lang('DeleteAttempt'),$user,$dt).'\')) return false;">'.get_lang('Delete').'</a>':'')
 								.(($is_allowedToEdit)?' - <a href="exercice_history.php?cidReq='.htmlentities($_GET['cidReq']).'&exe_id='.$id.'">'.get_lang('ViewHistoryChange').'</a>':'')
 								:(($revised)?"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>":'')).'</td>';
-											
-					/*				
+					*/		
+							
 					echo '<td>';
-						if ($is_allowedToEdit||$is_tutor) {
-							echo "<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>";
-							if ($revised)			
+						if ($is_allowedToEdit||$is_tutor) {							
+							if ($revised) {
+								echo "<a href='exercise_show.php?action=edit&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>";
 								echo get_lang('Edit');
-							else
-								echo get_lang('Qualify');
+							} else {
+								echo "<a href='exercise_show.php?action=qualify&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>";
+								echo get_lang('Qualify'); 
+							}
 							echo "</a>";				
 								
 							if (api_is_platform_admin() || $is_tutor)
@@ -1196,7 +1198,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result') )
 							echo '&nbsp;'.get_lang('NoResultsYet'); 
 						}						
 					echo '</td>';
-					*/
+					
 												
 					echo '</tr>';
 					

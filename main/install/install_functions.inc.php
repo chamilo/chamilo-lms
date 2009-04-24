@@ -333,7 +333,7 @@ function display_language_selection_box()
 	//Reduce the number of languages shown to only show those with higher than 90% translation in DLTT
 	//This option can be easily removed later on. The aim is to test people response to less choice
 	//$language_to_display = $language_list;
-	$language_to_display = array('brazilian','dutch','english','french','german','hungarian','italian','portuguese','slovenian','spanish');
+	$language_to_display = array('asturian','english','italian','french','slovenian','slovenian_unicode','spanish');
 
 	//display
 	echo "\t\t<select name=\"language_list\">\n";
@@ -987,13 +987,29 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	echo "<tr>\n";
 	echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>\n";
 	if($installType == 'update')
-	{
+	{		
 		echo '<td><input type="hidden" name="languageForm" value="'.htmlentities($languageForm).'" />'.$languageForm."</td>\n";
 	}
 	else // new installation
 	{
-		echo '<td>';
-		echo "<select name=\"languageForm\">\n";
+		
+	echo '<td>';
+	
+	$array_lang = array('asturian','english','italian','french','slovenian','slovenian_unicode','spanish');
+
+	////Only display Language have 90% +
+	echo "\t\t<select name=\"languageForm\">\n";	
+				
+	foreach ($array_lang as $key => $value)	{
+		echo '<option value="'.$value.'"';
+		if($value == $languageForm) echo ' selected="selected"';
+		echo ">$value</option>\n";
+	}
+
+	echo "\t\t</select>\n";
+	
+	//Display all language
+	/*echo "<select name=\"languageForm\">\n";
 		$dirname='../lang/';
 		
 		if ($dir=@opendir($dirname)) {
@@ -1006,6 +1022,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 			closedir($dir);
 		}
 		sort($lang_files);
+				
 		
 		foreach ($lang_files as $file) {
 			echo '<option value="'.$file.'"';
@@ -1014,7 +1031,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 		}
 
 
-		echo '</select>';
+		echo '</select>';*/
 		echo "</td>\n";
 	}
 	echo "</tr>\n";

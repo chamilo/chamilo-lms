@@ -1,5 +1,5 @@
 <?php
-// $Id: create_backup.php 18925 2009-03-10 14:09:33Z ndieschburg $
+// $Id: create_backup.php 20084 2009-04-24 20:10:43Z aportugal $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -90,7 +90,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 	$zip_file = CourseArchiver :: write_course($course);
 	Display::display_confirmation_message(get_lang('BackupCreated').'<br /><br /><a class="bottom-link" href="../course_info/download.php?archive='.$zip_file.'">'.$zip_file.'</a>', false);
 	//echo '<p><a href="../course_home/course_home.php">&lt;&lt; '.get_lang('CourseHomepage').'</a></p>'; // This is not the preferable way to go to the course homepage.
-	echo '<p><a href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">&lt;&lt; '.get_lang('CourseHomepage').'</a></p>';
+	echo '<p><a class="bottom-link"  href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">&nbsp;'.get_lang('CourseHomepage').'</a></p>';
 ?>
 	<!-- Manual download <script language="JavaScript">
 	 setTimeout('download_backup()',2000);

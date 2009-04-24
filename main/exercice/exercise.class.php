@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 20087 2009-04-24 20:44:55Z juliomontoya $
+* 	@version $Id: exercise.class.php 20092 2009-04-24 21:35:40Z juliomontoya $
 */
 
 
@@ -866,17 +866,17 @@ class Exercise
 		$fck_attribute['Width'] 	= '100%'; 
 		$fck_attribute['Height'] 	= '200px';
 		$fck_attribute['ToolbarSet'] = 'TestDescription';
-		
+		/*
 		$form -> addElement('html','<div class="row">
-		<div class="label">&nbsp;</div>
-		<div class="formw">
-			<a href="javascript://" onclick=" return show_media()"><img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</a>
+		<div class="label"></div>
+		<div class="formw" style="height:50px">
+			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
 		</div>
 		</div>');
-				  
-		$form -> addElement ('html','<div id="media" style="display:none;">');
+	*/
+		//$form -> addElement ('html','<div id="media" style="display:none;">');
 		$form -> addElement ('html_editor', 'exerciseDescription');
-		$form -> addElement ('html','</div>');
+		//$form -> addElement ('html','</div>');
 		
 		$form -> addElement('html','<div class="row">
 			<div class="label">&nbsp;</div>

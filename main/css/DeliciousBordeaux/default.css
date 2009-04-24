@@ -1,0 +1,2357 @@
+/*****************************************************
+ *  MAIN		                                    *
+ *****************************************************/
+body {
+	/* hack ignored by non-IE to enable ie to support :hover on button */
+     behavior:url("/main/css/csshover3.htc");
+	font-family: arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+	color: #000;
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+}
+#outerframe {
+	position: relative;  /* do not remove, fixes a bug in IE */
+	border: 1px solid #fff;
+	background-color: #fff;
+}
+/* Hides from IE5-mac \*/
+* html #outerframe {
+	height: 1%;
+}
+/* End hide from IE5-mac */
+
+#main {
+	position: relative; /* to avoid the IE peekabo bug*/
+	margin: 0px auto;
+	margin-top: 10px;
+	width: 98%;
+	padding: 0px 10px 10px 10px;
+	min-height: 320px;
+}
+/* for content section in main index.php file */
+.maincontent {
+	float: left;
+	width: 78%;
+	padding: 4px;
+	background-color: #fff;
+}
+#center {
+	margin: 0 190px 0 0;
+	padding: 10px 0 40px 0;
+	min-height: 300px;
+}
+.invisible {
+	color: #999;
+}
+.invisible a:link, .invisible a:visited {
+	color: #999;
+}
+a.invisible:link, a.invisible:visited {
+	color: #999;
+}
+.clear {
+	clear: both;
+	line-height: 
+ 0px;
+	height: 0;
+}
+/*****************************************************
+ *  REDEFINED HTML TAGS                              *
+ *****************************************************/
+img {
+	border: none;
+}
+p, blockquote, ol, ul {
+}
+h1 {
+	font-size: 21px;
+}
+h2 {
+	font-size: 18px;
+}
+h3 {
+	font-size: 15px;
+	margin-top:0px;
+	padding-top:0px;
+}
+h4 {
+	font-size: 12px;
+}
+h5, h6 {
+}
+/* the following for regular <a> elements */
+a:link {
+	text-decoration: none;
+	font-weight : bold;
+	color : #975b5b;
+}
+a:visited {
+	text-decoration: none;
+	font-weight : bold;
+	color : #975b5b;
+}
+a:hover {
+	text-decoration: none;
+	color: #a8a7a7;
+	font-weight: bold;
+}
+a:active {
+	text-decoration: none;
+	font-weight : bold;
+	color : #975b5b;
+}
+select, textarea {
+	color : #000;
+	border: 1px solid #000;
+}
+input.checkbox {
+	border-width: 0;
+}
+/* form elements */
+
+select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
+	cursor:	pointer;
+}
+input[text] {
+}
+input.link_alike {
+	background-color: #FFFFFF;
+	border-width: 0px;
+	color: #4171b5;
+	font-weight: bold;
+	text-align: left;
+	padding: 0px;
+	margin: 0px;
+}
+input.link_alike:hover {
+	background-color: #FFFFFF;
+	border-width: 0px;
+	color: #FF0000;
+	font-weight: bold;
+	text-align: left;
+	padding: 0px;
+	margin: 0px;
+}
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+	background-image:url(images/shadow.gif);
+}
+/* user_portal course status icon */
+.coursestatusicons {
+	border: 0px solid #000;
+	float: left;
+	padding-right: 5px;
+	width: auto;
+}
+/* user_portal course list */
+.courses {
+	list-style-type: none;
+	margin-bottom: 5px;
+}
+/*****************************************************
+ *  HEADER STYLES                                    *
+ *****************************************************/
+#header {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+/********************************************************
+ *  HEADER 1: Title, portal, organisation, course title	*
+ ********************************************************/
+#header1 {
+	padding: 4px;
+	color: #975b5b;
+}
+#header1 a {
+	color: #636363;
+	text-decoration: none;
+}
+#header1 a:hover {
+	text-decoration: underline;
+}
+#sitename {
+	margin: 0;
+	font-weight: bold;
+}
+#top_corner {
+}
+#institution {
+	float: left;
+}
+#my_courses {
+	float: right;
+}
+/********************************************************
+ *  HEADER 2: Users online, help, student/teacher view	*
+ ********************************************************/
+#header2 {
+	position: relative; /* to avoid the IE peekabo bug*/
+	color: #636363;/*border: 1px solid red;*/
+}
+#header2 a {
+	color: #636363;
+	text-decoration: none;
+	font-weight:normal;
+}
+#header2 a:hover {
+	text-decoration: underline;
+}
+/* Header2Right: online users, student/teacher view, help */
+#Header2Right ul {
+	position: relative; /* to avoid the IE peekabo bug*/
+	float: right;
+	width: 70%;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	text-align: right;
+}
+#Header2Right ul li {
+	display: inline;
+}
+#Header2Right ul li a {
+	padding: 4px 6px 4px 4px;
+	color:#636363;
+}
+/*****************************************************
+ *  HEADER 3: TABS OF THE HEADER			     	 *
+ *****************************************************/
+#header3 {
+	height:auto;
+	background-image: url(images/tab-repeat.png);
+	background-position: 0px 1px;
+	background-repeat: repeat-x;/*border: 1px solid green;*/
+}
+#header3 a {
+	DISPLAY: block;
+	PADDING-RIGHT: 15px;
+	PADDING-LEFT: 6px;
+	COLOR: #fff;
+	PADDING-TOP: 10px;
+}
+#header3 a:hover {
+	color: #a8a7a7;
+}
+#header3 ul {
+	PADDING-RIGHT: 10px;
+	PADDING-LEFT: 10px;
+	PADDING-BOTTOM: 0px;
+	MARGIN: 0px;
+	LIST-STYLE-TYPE: none;
+	display: inline;
+}
+#header3 li {
+	PADDING-RIGHT: 0px;
+	PADDING-LEFT: 9px;
+	FLOAT: left;
+	PADDING-BOTTOM: 0px;
+	MARGIN: 0px;
+	padding-top: 10px;
+	height: 31px;
+}
+#header3 li#current {
+	background:  url(images/tab-left.png) no-repeat bottom left;
+	padding-top: 1px;
+	height: 41px;
+}
+#header3 #current a {
+	background:  url(images/tab-right.png) no-repeat top right;
+	height: 41px;
+	margin-bottom: 5px;
+}
+#header3 .banner_links {
+	margin: 0;
+}
+#header3 input.logout {
+	/* makes an input appear like a link in this header */
+	margin: 0 0 0 0;
+	padding: 0;
+	background-color: transparent;
+	border: none;
+	COLOR: rgb(39,84,175);
+	font-weight:bold;
+	display: inline;
+	background:  url(../../img/tab_right.gif) no-repeat right top;
+	PADDING-RIGHT: 10px;
+	PADDING-TOP: 3px;
+}
+#header3 input:hover {
+	color: #333;
+	background:  url(../../img/tab_right_hover.gif) no-repeat right top;
+}
+#header3 input {
+	padding-right: 15px;
+	display: block;
+	padding-left: 6px;
+}
+#header3 #logout {
+	margin-top: 0px;
+}
+#header3 input.logout:hover {
+}
+#logout {
+	display: inline;
+	float: right;
+	width: auto;
+	text-align: right;
+}
+/*****************************************************
+ *  HEADER 3: not used          			     	 *
+ *****************************************************/
+#header4 {
+	height: 15px;
+	background-color: #975b5b;
+	color: #fff;
+	padding: 4px;
+	padding-left: 21px;
+	margin-bottom: 2px;
+	clear:right;
+}
+#header4 a {
+	color: #fff;
+}
+#header4 a:hover {
+	text-decoration: none;
+	color: #a8a7a7;
+}
+/* The tool shortcuts */
+#toolshortcuts {
+	text-align: right;
+	clear: right;
+}
+/*****************************************************
+ *  FOOTER STYLES                                    *
+ *****************************************************/
+#footer {
+	height:auto;
+	background-image: url(images/tab-repeat.png);
+	background-repeat: repeat-x;
+	color:#fff;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	background-position: center -15px;
+}
+#footer a {
+	color:#fff;
+}
+#footer #platformmanager{
+
+}
+#footer #coursemanager{
+	margin-left: 10px; 
+}
+.copyright {
+	display: inline;
+	float: right;
+	padding-right: 5px;
+}
+#bottom_corner {
+}
+/*****************************************************
+ *  NAVIGATION MENU                                  *
+ *****************************************************/
+.menu {
+	float: right;
+	width: 20%;
+	padding: 0 0 6px 0;
+	border: 1px solid #636363;
+}
+.menucaption {
+	font-weight: bold;
+	padding-left: 12px;
+}
+.menusection {
+	width: auto;
+	margin: 24px 6px 0 6px;
+	padding-left: 10px;
+	border: 1px solid #636363;
+	background-color: #FFF;
+}
+.menusectioncaption {
+	position: relative;
+	top: -9px;
+	background-color: #FFF;
+	padding: 0 8px 0 4px;
+}
+.menulist {
+	list-style: none;
+	margin: 0 0 12px 0;
+	padding: 0;
+}
+#centerwrap {
+	float: left;
+	width: 100%;
+	margin-right: -95%;/* this needs to be less than 100% for Moz/Mac which thinks
+         it's empty otherwise. The difference is made up by putting a
+         negative left margin on the left float:
+	   Note IE/Mac doesn't like this method ~ it wants the 100% so it can
+	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
+	*/
+}
+#center {
+	margin: 0 190px 0 0;
+	padding: 10px 0 40px 0;
+	min-height: 300px;
+}
+#toolnav {
+	float: right;
+	width: 180px;
+	padding: 0;
+	margin: 0;
+	margin-left: -5%; /* the difference to make the left colum appear flush left */
+}
+/* Hide from IE5-mac. Only IE-win sees this. \*/
+* html #toolnav {
+	margin-right: 0px;
+}
+* html #center {
+	height: 1%;
+	margin-left: 0;
+}
+/* End hide from IE5/mac */
+
+
+
+/* --- course navigation menu as a definition list  --- */
+#swap_menu_link {
+	float: left;
+}
+#toolnavbox {
+	margin: 0 0 0 10px;
+	padding: 0;
+	float: left;
+	border: 1px solid #4271b5;
+}
+#toolnavbox dl {
+	width: 160px;
+	margin: 0 auto;
+	padding: 0;
+	background: transparent;
+	text-align: center;
+}
+#toolnavbox dt {
+	margin: 0;
+	padding: 0;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	border-bottom: 1px solid #fff;
+	background: transparent;
+}
+#toolnavbox dd {
+	margin: 0;
+	padding: 0;
+	color: #009;
+	text-align: left;
+	border-bottom:1px solid #fff;
+	background: #E5EDF9;
+}
+#toolnav img {
+	float: left;
+	width: 25px;
+	height: 25px;
+	margin: 0 4px 0 0;
+}
+#toolnavlist a, #toolnavlist a:link {
+	background: #E5EDF9;
+	color: #4171b5;
+	padding: 5px 5px 5px 10px;
+	margin: 0;
+	text-decoration: none;
+	display: block;
+}
+#toolnavlist a:hover {
+	background: #fff;
+	color:#4171b5;
+}
+#toolnavlist a#here {
+	background: #fff;
+	color:#4171b5;
+}
+/* --- end of course navigation menu section  --- */
+/*
+this lets the navigation menu appear to the left:
+#center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
+ min-height: 300px; }
+
+#toolnav { float: left; width: 180px; padding: 20px 0 0 0;
+ margin-left: -5%;
+}
+#toolnav { float: right; width: 180px; padding: 0; margin: 0;
+ margin-left: -5%; /* the difference to make the left colum appear flush left
+}*/
+
+
+/*  LOGIN AND LANGUAGE FORM */
+#lang_form {
+	text-align: left;
+	margin: 2px 0 10px 0;
+	padding: 2px;
+}
+#lang_form input, #lang_form select {
+}
+#formLogin label {
+	margin: 4px 6px;
+}
+#formLogin input {
+	margin: 4px 6px;
+}
+#login_fail {
+	margin: 0 6px 6px 6px;
+	padding: 4px;
+	border: 1px solid #f00;
+	background-color: #fff;
+	color: #f00;
+}
+input.mainoption {
+	font-weight : bold;
+}
+input.liteoption {
+	font-weight : normal;
+}
+/*****************************************************
+ * COURSE HOMEPAGE			                         *
+ *****************************************************/
+/* various sections in course-home.php file  */
+#toolremove {
+	width: 40%;
+	color: #f00;
+	font-weight: bold;
+	margin: 10px auto;
+	padding: 10px;
+	border: 2px solid #f00;
+}
+#courseintro {
+	clear: both;
+	width: 80%;
+	margin: 10px auto;
+	padding: 10px;
+	border-bottom: 1px solid #636363;
+}
+#courseintro_icons {
+	clear: both;
+	width: 80%;
+	margin: 10px auto;
+}
+.everybodyview {
+	position: relative; /* to avoid the IE peekabo bug ?*/
+	width: 80%;
+	margin: 10px auto;
+	padding: 10px;
+}
+.Authoringview, .courseadminview, .platformadminview {
+	position: relative;
+	width: 80%;
+	margin: 25px auto 10px;
+	padding: 10px;
+	border: 1px solid #636363;
+}
+.viewcaption {
+	position: relative;
+	top: -20px;
+	font-weight: bold;
+	color: #636363;
+	background-color: #fff;
+	padding: 0 4px;
+}
+/*****************************************************
+ *  			AGENDA                               *
+ *****************************************************/
+#agenda {
+	width: 100%;
+	margin: 0 auto;
+	border: 1px solid #bbb;
+	border-collapse: collapse;
+}
+.agenda_month_divider {
+	background-color: #dcdcdc;
+	font-weight: bold;
+	color: #666;
+	text-align: center;
+}
+#agenda .title a {
+	color: #fff;
+}
+#agenda .agendaitem {
+}
+#smallcalendar .title {
+	background-color: #dcdcdc;
+	font-weight: bold;
+	padding: 2px;
+	color: #666;
+	text-align: center;
+	font-size: 11px;
+}
+#smallcalendar .title a {
+	color: #666;
+}
+#agenda_select {
+	list-style: none;
+	border: 0px solid green;
+	margin: 30px 0 0 0;
+	padding: 0 0 0 10px;
+}
+/* ---------------------------------------------------
+	styles for the agenda (day, week, month view)
+-----------------------------------------------------*/
+#agenda_list {
+	width: 100%;
+	margin: 0 auto;
+	border: 1px solid #fff;
+	border-collapse: collapse;
+}
+/*The caption of the calendar (displays the month and the << and >> links*/
+#agenda_list .title {
+	background-color: #dcdcdc;
+	font-weight: bold;
+	color: #666;
+	text-align: left;
+	padding: 2px 10px;
+	text-align: center;
+	border: 1px solid #bbb;
+}
+#agenda_list .title a:link, #agenda_list #title a:visited {
+	background-color: #dcdcdc;
+	font-weight: bold;
+	font-size: 11px;
+	color: #666;
+	padding: 2px 10px;
+	text-align: center;
+}
+#agenda_list .title a:hover {
+	background-color: #dcdcdc;
+	font-weight: bold;
+	font-size: 11px;
+	color: #f3840d;
+	padding: 2px 10px;
+	text-align: center;
+}
+/* The cells with the name of the days of the weeks (mon->sun)*/
+#agenda_list .weekdays {
+	background-color: #dcdcdc;
+	text-align: center;
+	font-weight: bold;
+	border: 1px solid #264269;
+	border-collapse: collapse;
+}
+/* The cells for the days (1->31) */
+#agenda_list .days_week {
+	height: 40px;
+	width: 12%;
+	text-align: left;
+	vertical-align: top;
+	border: 1px solid #264269;
+	border-collapse: collapse;
+	background-color: #f5f5f5;
+}
+#agenda_list .days_weekend {
+	height: 40px;
+	width: 12%;
+	text-align: left;
+	vertical-align: top;
+	border: 1px solid #264269;
+	border-collapse: collapse;
+	background-color: #e6e6e6;
+}
+#agenda_list .days_today {
+	height: 40px;
+	width: 12%;
+	text-align: left;
+	vertical-align: top;
+	border: 1px solid #264269;
+	border-collapse: collapse;
+	background-color: #FFCA8D;
+	color: #CC3300;
+	font-weight: bold;
+}
+/* text in the cells: display of agenda items (visible)*/
+#agenda_list .data {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: bold;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+}
+#agenda_list .datanotbold {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+}
+#agenda_list .text {
+	background-color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+}
+/*text in the cells: display of agenda items (invisible)*/
+#agenda_list .data_hidden {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: bold;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+	color: #999999;
+}
+#agenda_list .datanotbold_hidden {
+	background-color: #eee;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+	color: #999999;
+}
+#agenda_list .text_hidden {
+	background-color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+	color: #999999;
+}
+/*text in the cells: display of agenda items (highlighted)*/
+#agenda_list .datanow {
+	background-color: #FFCC00;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: bold;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+}
+#agenda_list .datanotboldnow {
+	background-color: #FFCC00;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+}
+#agenda_list .textnow {
+	background-color: #fff;
+	text-align: left;
+	padding: 2px 10px;
+	font-weight: normal;
+	border: 0px solid #dcdcdc;
+	border-collapse: collapse;
+}
+/* ---------------------------------------------------
+	styles for the mini agenda
+-----------------------------------------------------*/
+#smallcalendar {
+	width: 100%;
+	margin: 0 auto;
+	border: 1px solid #fff;
+	border-collapse: collapse;
+}
+#smallcalendar .weekdays {
+	background-color: #dcdcdc;
+	text-align: center;
+	font-size: 11px;
+	font-weight: bold;
+	border: 1px solid #fff;
+	border-collapse: collapse;
+}
+#smallcalendar .days_week {
+	background-color: #f5f5f5;
+	text-align: center;
+	font-size: 11px;
+	border-collapse: collapse;
+}
+#smallcalendar .days_weekend {
+	background-color: #e6e6e6;
+	text-align: center;
+	font-size: 11px;
+	border: 1px solid #fff;
+	border-collapse: collapse;
+}
+#smallcalendar .days_today {
+	width: 12%;
+	text-align: center;
+	font-size: 11px;
+	border: 1px solid #FA8500;
+	border-collapse: collapse;
+	background-color: #FFCA8D;
+}
+/* ---------------------------------------------------
+	styles for the personal agenda
+-----------------------------------------------------*/
+.personal_agenda {
+	color: #008000;
+}
+.personal_agenda a:link, .personal_agenda a:visited {
+	color: #008000;
+}
+a.personal_agenda:link, a.personal_agenda:visited {
+	color: #008000;
+}
+.personal_agenda a:hover, .personal_agenda a:hover {
+	color: #666666;
+}
+a.personal_agenda:hover, a.personal_agenda:hover {
+	color: #666666;
+}
+/*****************************************************
+ *  DISPLAY MESSAGES	                             *
+ *****************************************************/
+/* normal and erro message-box */
+.normal-message {
+	position: relative;
+	margin: 10px auto 10px 10px;
+	width: 98%;
+	left: 0.1%;
+	border-width: 1px;
+	border-style: solid;
+	padding: 5px;
+	border: 1px solid #975b5b;
+	color: #975b5b;
+	background-color: #EFEFEF;
+	min-height: 30px;
+}
+.warning-message {
+	position: relative;
+	margin: 10px auto;
+	margin-left: -250px;
+	width: 500px;
+	left: 50%;
+	right: 50%;
+	border-width: 1px;
+	border-style: solid;
+	padding: 5px;
+	border: 1px solid #FFB30F;
+	color: #FFB30F;
+	background-color: #EFEFEF;
+	min-height: 30px;
+}
+.confirmation-message {
+	position: relative;
+	margin: 5px 1px 0 10px;
+ //margin-left: 2px;
+ //margin: 10px auto 10px;
+	width: 98%;
+ //right: 50%;
+	border-width: 1px;
+	border-style: solid;
+	padding: 5px;
+	border: 1px solid #1F8323;
+	color: #1F8323;
+	background-color: #EFEFEF;
+	min-height: 30px;
+}
+.error-message {
+	position: relative;
+	margin: 10px auto;
+	margin-left: -250px;
+	width: 500px;
+	left: 50%;
+	right: 50%;
+	border-width: 1px;
+	border-style: solid;
+	padding: 5px;
+	border: 1px solid #FF0000;
+	color: #FF0000;
+	background-color: #EFEFEF;
+	min-height: 30px;
+}
+.confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link {
+	position: absolute;
+	bottom: 0.2em;
+	right: 0.5em;
+}
+#message {
+	margin: 0 auto;
+	text-align: center;
+}
+#message select {
+	margin: 10px 0;
+	width: 220px;
+}
+#message textarea {
+	margin: 10px 0;
+}
+#message td {
+	padding: 4px;
+}
+.message-top-title {
+	float:left;
+	margin-top:1px;
+	margin-bottom:1px;
+	background-color:#F2F2F2;
+	width:600px;
+	border-bottom:1px solid #CCCCCC;
+ margin:left:5px;
+}
+.message-bottom-title {
+	height:22px;
+	float:left;
+	margin-top:1px;
+	margin-bottom:1px;
+	background-color:#F2F2F2;
+	width:600px;
+	border-bottom:1px solid #CCCCCC;
+}
+.message-content-body-left {
+	float:left;/*width:55%;  */
+}
+.message-conten-body-right {
+	float:right;
+	text-align:left;
+	width:60%;
+}
+.message-body-title {
+	float:right;
+	margin-top:1px;
+	margin-bottom:5px;
+	border-bottom:1px solid #CCCCCC;
+	border-collapse:collapse;
+}
+.message-image-info {
+	width:80%;
+	float:left;
+	margin-top:10px;
+	margin-bottom:10px;
+	margin-left:10px;
+	text-align:left;
+	margin-right:20px;
+}
+.message-conten-body-right dd {
+	color:#333399;
+	border-bottom:1px solid #CCCCCC;
+	height:20px;
+	text-decoration:none;
+	outline-style:none;
+	background:#ffffff;
+}
+.message-conten-body-right:hover {
+}
+/**********************************************
+ *  DOCUMENT MODULE                           *
+ **********************************************/
+/* styles from the document.php file */
+.comment {
+	margin-left: 30px;
+}
+/* styles from the upload.php file */
+dl.upload_option {
+	margin: 1em 0;
+	padding: 0;
+}
+.upload_option dt {
+	font-weight:bold;
+	margin:0;
+}
+.upload_option dd {
+	margin:0;
+}
+.document_owner {
+	text-align: right;
+}
+/**********************************************
+ *  DROPBOX MODULE                            *
+ **********************************************/
+/* styles from dropbox.php file */
+.dropbox_detail {
+	font-size: small
+}
+.dropbox_date {
+	color: #737780;
+	font-style: italic;
+	font-weight: normal;
+}
+.dropbox_person {
+	font-weight: bold
+}
+.dropbox_listTitle {
+	color: #000000;
+}
+.dropbox_feedback {
+	font-size: x-small;
+	height: 50px;
+	width: 200px;
+	overflow: auto
+}
+.dropbox_feedbacks {
+	height: 250px;
+	width: 100%;
+	overflow: auto
+}
+/**********************************************
+ *  CHAT MODULE                               *
+ **********************************************/
+/* styles for chat / conference tools */
+#chat_entermessage {
+	background-color: #D6E5FA;
+	border-top: 1px solid #4171B5;
+	padding: 5px;
+	margin: 0;
+}
+/* the following for the grayed out elements */
+a.nobold:link, a.nobold:visited, a.nobold:active {
+	font-weight: normal;
+	color: #999;
+	margin: 0 0 0 25px;
+}
+a.nobold:hover {
+	font-weight: normal;
+	color: #999;
+	text-decoration: underline;
+	margin: 0 0 0 25px;
+}
+.note {
+	margin: 6px;
+	line-height: 14px;
+	background-color: #FFF089;
+	color: #4171B5;
+	border: 1px solid #4171B5;
+	padding: 4px;
+}
+.alternativeBgLight {
+	background-color: #f5f5f5;
+	border: 1px solid #4171B5;
+	border-collapse: collapse;
+}
+.alternativeBgDark {
+	background-color: #ccf;
+	border: 1px solid #4171B5;
+	border-collapse: collapse;
+}
+.myagendatoday {
+	background-color: #FFCA8D;
+	border-collapse: collapse;
+	color: #CC3300;
+	font-weight: bold;
+}
+/*****************************************************
+ *  FORM STYLES                                      *
+ *****************************************************/
+div.row {
+	clear: both;
+	padding-top: 8px;
+}
+div.row div.form_header {
+	white-space: nowrap;
+	padding: 2px;
+	border: 1px solid #636363;
+	background-image: url(images/tab-repeat.png);
+	background-position:bottom;
+	color: #FFFFFF;
+	font-weight: bold;
+}
+div.row div.label {
+	float: left;
+	width: 18%;
+	text-align: right;
+}
+div.row div.formw {
+	width: 80%;
+}
+[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
+	float: left;
+	text-align: right;
+}
+[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
+	float: right;
+	text-align: left;
+}
+span.form_required {
+	color: #f00;
+}
+span.form_error {
+	color: #f00;
+	font-size: x-small;
+	margin: 2px;
+}
+/*****************************************************
+ *  DATA TABLE STYLES                                *
+ *****************************************************/
+.cell_header {
+	background-color: #EEEEFF;
+	font-weight:bold;
+	text-align:left;
+	padding-left:5px;
+}   /* header cell in data table in tools */
+.data_table {
+	border-collapse: collapse;
+	width: 100%;
+	padding: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.data_table th {
+	padding-right: 20px;
+	border: 1px solid #636363;
+	background-color: #975b5b;
+	color: #FFF;
+}
+.data_table th a {
+	color: #fff;
+}
+.data_table th a:hover {
+	color: #a8a7a7;
+}
+.data_table tr.row_odd {
+	background-color: #fafafa;
+}
+.data_table tr.row_odd:hover, .data_table tr.row_even:hover {
+	background-color: #f0f0f0;
+}
+.data_table tr.row_even {
+	background-color: #fff;
+}
+.data_table td {
+	padding: 5px;
+	vertical-align: top;
+	border-bottom: 1px solid #b0b0b0;
+	border-right: 1px dotted #e1e1e1;
+	border-left: 1px dotted #e1e1e1;
+}
+.data_table td.border {
+	padding: 5px;
+	vertical-align: top;
+	border: 1px solid gray;
+}
+.data_table td.none {
+	padding: 5px;
+	vertical-align: top;
+	border-right:none;
+	border-bottom: none;
+	border-left:none;
+}
+.data_table td.redText {
+	color:red;
+}
+.data_table td.borderRight {
+	border-right:1px solid gray;
+	border-bottom: none;
+	border-left:none;
+}
+.data_table td.borderLeft {
+	border-left:1px solid gray;
+	border-bottom: none;
+	border-right:none;
+}
+.data_table td.noLink {
+	color: gray;
+}
+.data_table tr.tableName {
+	padding: 5px;
+	border: 1px solid gray;
+	background-color: #e6e6ff;
+	text-align:left;
+}
+.data_table tr.total {
+	padding: 5px;
+	border: 1px solid gray;
+	background-color: #ffffcc;
+	text-align:left;
+}
+.data_table th.head {
+	padding-right: 20px;
+	border: 1px solid gray;
+	background-color: #ffffcc;
+}
+/* admin page tool list definitions */
+.tool_list dt {
+	font-weight: bold;
+}
+.tool_list dd {
+	margin: 0;
+	padding: 4px 0 0 10px;
+}
+/* divs for category list / platform news on home page */
+.home_cats {
+	width: 45%;
+	float: left;
+	position: relative;
+	margin: 0;
+	padding: 0px;
+	padding-top: 8px;
+	background: #fff;
+}
+.home_news {
+	width: 45%;
+	float: right;
+	position: relative;
+	margin: 0;
+	padding: 0px;
+	padding-top: 8px;
+	background: #fff;
+}
+label.left {
+	float: left;
+	width: 15em;
+	margin: 0 0 0.5em 0;
+}
+form br {
+	clear: both;
+}
+/* Fix for alignment problem in IE-Win browsers  */
+/*  Hide from IE5-mac. Only IE-win sees this. \*/
+* html .label {
+	margin-right: 10px;
+}
+* html .data {
+	height: 1%;
+	margin-left: 0;
+}
+/* End hide from IE5/mac */
+
+.radio, .checkbox {
+	margin: 0;
+	padding: 0;
+	border: none;
+	background-color: transparent;
+}
+.required {
+	color: #f00;
+	font-weight: bold;
+}
+/* Admin section */
+div.admin_section {
+	width: 40%;
+	float: left;
+	padding: 5px;
+	margin: 10px 20px;
+}
+div.admin_section h4 {
+	margin: 0;
+	border-bottom: 1px solid gray;
+	width: 100%;
+}
+.user_course_category {
+	background-color: #efefef;
+	border: 1px solid #666;
+	font-weight: bold;
+	color: #666;
+	list-style-type: none;
+	margin: 5px;
+	padding: 5px;
+}
+.sessions_list {
+	line-height: 20px;
+	margin-top: 20px;
+}
+.sessions_list_inactive {
+	line-height: 20px;
+}
+.session_box {
+	background-color: #efefef;
+	border: 1px solid #666;
+	font-weight: bold;
+	color: #666;
+	list-style-type: none;
+	margin: 5px;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+.session_box_title {
+}
+.session_box_coach {
+}
+.session_course_item {
+	padding: 0px;
+	margin: 0px;
+}
+/***************************************************************
+ *  DOKEOS CONFIG SETTINGS OF THE PLATFORM ADMIN SECTION 	   *
+ ***************************************************************/
+.sectiontitle {
+	background-color: #EFEFEF;
+	border: 1px solid #cccccc;
+	font-weight: bold;
+	color: #666666;
+	list-style-type: none;
+	padding: 5px;
+	font-size: 11px;
+}
+.sectioncomment {
+	color: #000000;
+	margin: 5px;
+	padding: 5px;
+	font-size: 11px;
+}
+.sectionvalue {
+	list-style-type: none;
+	margin: 5px;
+	padding: 5px;
+}
+/*****************************************************
+ *  ANNOUNCEMENTS									 *
+ *****************************************************/
+.announcements_datum {
+	font-style: italic;
+	color: #666666;
+}
+/*****************************************************
+ *  SYSTEM ANNOUNCEMENTS						     *
+ *****************************************************/
+div.system_announcements {
+}
+div.system_announcements h3 {
+}
+div.system_announcement {
+	margin: 5px;
+}
+div.system_announcement_title {
+}
+div.system_announcement_content {
+	margin-left: 20px;
+	border-left: 1px solid gray;
+	padding-left: 5px;
+}
+/*****************************************************
+ *  THE NEW FORUM					     *
+ *****************************************************/
+/* **** FORUM CATEGORY **** */
+.forum_category {
+	background-color: #0066CC;
+	color: #fff;
+}
+.forum_category a {
+	color: #fff;
+}
+.forum_category_header {
+	background-color: #0066CC;
+	color: #fff;
+}
+tr.forum_category_header a {
+	color: #fff;
+}
+/* **** FORUM **** */
+.forum_header {
+	background-color: #EFEFEF;
+}
+/* **** THREAD **** */
+.forum_threadheader {
+	color: #aaa;
+	background-color: #F7F7F7;
+}
+tr.forum_threadheader td {
+}
+.forum-thread-header {
+	color: #000000;
+	background-color: #F7F7F7;
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	border-top: 1px solid #aaa;
+}
+.forum-thread-body {
+	color: #000000;
+	background-color: #FFFFFF;
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	border-top: 1px solid #aaa;
+}
+/* **** POST **** */
+.quote {
+	background-color: #EFEFEF;
+}
+.forum_message_left {
+	width: 150px;
+	vertical-align: top;
+	border-right: 1px solid #aaa;
+	background-color: #F7F7F7;
+}
+.forum_message_left_2_be_approved {
+	width: 150px;
+	vertical-align: top;
+	border-right: 1px solid #aaa;
+	background-color: #F7F7F7;
+	color: #999;
+}
+.forum_message_post_title {
+	font-weight: bold;
+	background-color: #F7F7F7;
+	height: 20px;
+}
+.forum_message_post_title_2_be_approved {
+	color: #999;
+	font-weight: bold;
+	background-color: #F7F7F7;
+	height: 20px;
+}
+.forum_message_post_text {
+	margin-bottom: 10px;
+	vertical-align: top;
+}
+.forum_message_post_text_2_be_approved {
+	color: #999;
+	margin-bottom: 10px;
+	vertical-align: top;
+}
+.current {
+	font-weight: bold;
+}
+.structure {
+	font-weight: bold;
+	background-color: #F7F7F7;
+	height: 20px;
+}
+a.forum_group_link {
+	font-weight: lighter;
+	display:inline;
+}
+.forum_description {
+	color: #000;
+	font-weight: normal;
+}
+.forum_title {
+	color: #000;
+	font-size: 14px;
+}
+.forum_low_description {
+	color: #737780;
+	font-style: italic;
+	font-weight: normal;
+}
+.forum_attach_comment {
+	color: #737780;
+	font-style: italic;
+	font-weight: normal;
+}
+/* **** BLOG **** */
+span.blog_title {
+	font-size: 18px;
+	font-weight: bold;
+	color: #1657A9;
+}
+span.blog_subttitle {
+}
+td.blog_left {
+	margin-right: 5px;
+	padding-right: 5px;
+	border-right: 1px solid #dddddd;
+}
+td.blog_right {
+	padding-left: 10px;
+}
+td.blog_menu_title {
+	background-color: #dddddd;
+	color: #1657A9;
+	font-weight: bold;
+	font-size: 11px;
+	padding: 2px;
+}
+td.blog_menu {
+	border-bottom: 1px dashed #dddddd;
+	border-right: 1px dashed #dddddd;
+	border-left: 1px dashed #dddddd;
+	padding: 10px;
+}
+td.blog_menu ul {
+	margin-top: 0;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 15px;
+	padding: 0;
+}
+td.blog_menu ul li {
+}
+span.blogpost_title {
+	display: block;
+	font-size: 18px;
+	font-weight: bold;
+	color: #1657A9;
+	padding-bottom: 5px;
+}
+span.blogpost_date {
+	display: block;
+	font-weight: bold;
+	color: #333333;
+	padding-bottom: 10px;
+}
+span.blogpost_info {
+	display: block;
+	color: #333333;
+	border-top: 1px solid #dddddd;
+	margin-top: 5px;
+}
+table.newBlog {
+	border: 1px solid #dddddd;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #f6f6f6;
+}
+table.newTask {
+	border: 1px solid #dddddd;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #f6f6f6;
+}
+table.new_comment {
+	border: 1px solid #dddddd;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #F4F4F4;
+}
+div.blogpost_comment {
+	border-top: 1px dashed #dddddd;
+	border-right: 1px dashed #dddddd;
+	border-bottom: 1px dashed #dddddd;
+	border-left: 1px dashed #dddddd;
+	margin-bottom: 10px;
+	padding: 10px;
+	background-color: white;
+}
+span.blogpost_comment_title {
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	color: #1657A9;
+	padding-bottom: 5px;
+}
+span.blogpost_comment_date {
+	display: block;
+	font-size: 10px;
+	font-weight: bold;
+	color: #333333;
+	padding-bottom: 10px;
+}
+span.blogpost_comment_info {
+	font-size: 10px;
+	display: block;
+	color: #333333;
+	border-top: 1px solid #dddddd;
+	margin-top: 10px;
+}
+div.blogpost {
+	border: 1px solid #DDDDDD;
+	background-color: #ECECEC;
+	margin-bottom: 15px;
+	padding: 10px;
+}
+div.comments {
+	border: 1px solid #dddddd;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #F4F4F4;
+}
+.attachment_comment {
+	color: #737780;
+	font-style: italic;
+	font-weight: normal;
+}
+.link {
+	text-decoration: none;
+	font-weight : bold;
+	color : #1657A9;
+	cursor: pointer
+}
+.link:hover {
+	text-decoration: none;
+	color: #abd9f1;
+	font-weight: bold;
+	cursor: pointer
+}
+/*****************************************************
+ *  INSTALLATION								     *
+ *****************************************************/
+#installation_steps {
+	float:left;
+	background-color: #EFEFEF;
+}
+.current_step {
+	font-weight: bold;
+}
+.RequirementHeading {
+	margin-right:10px;
+}
+.RequirementHeading h1 {
+	color:#0066CC;
+	font-size:1.2em;
+	font-weight: bold;
+	border-bottom: 1px solid #0066CC;
+}
+.RequirementText {
+	color:#666;
+	font-size:1.0em;
+	font-weight: normal;
+	float:right;
+	width:200px;
+}
+.RequirementContent {
+	color:#000;
+	font-size:1.0em;
+	font-weight: normal;
+}
+.RequirementContent table {
+	border: 1px solid #ccc;
+	width: 400px;
+}
+.RequirementContent table th {
+	border-bottom: 1px solid #ccc;
+	text-align: left;
+}
+.requirements-item {
+	width: 50%;
+	background-color:#f7f7f7;
+	padding-left:2px;
+}
+.requirements-value {
+}
+/************************************************************
+  styles below here are not necessarily used in the current
+	release and the CVS files, they are from earlier versions,
+	and have been left untouched for anyone needing them in
+	their own platform ...
+*************************************************************/
+.topBanner a:link, .topBanner a:active, .topBanner a:visited {
+	text-decoration:none;
+	color:white;
+}
+.topBanner table {
+	text-decoration:none;
+}
+.topBanner a:hover {
+	text-decoration:underline;
+}
+.topBanner td {
+	border-top: solid White 1px;
+}
+.alternativeBgLight {
+	background-color: #f5f5f5;
+}
+.alternativeBgDark {
+	background-color: #e6e6e6
+}
+.forms {
+	letter-spacing: normal;
+	text-align: justify;
+	text-indent: 3pt;
+	word-spacing: normal;
+	padding: 2px 5px;
+}
+.formsTips {
+	text-align: justify;
+	text-indent: 15pt;
+	word-spacing: normal;
+}
+.warn {
+	border: thin double Silver;
+	margin-left: 15px;
+	margin-right: 15px;
+	color: Red;
+	padding-left: 25px;
+}
+.small {
+	font-size: 11px
+}
+.xsmall {
+	font-size: 11px
+}
+.xxsmall {
+	font-size: 9px
+}
+/*
+ * TABBED INTERFACE
+ */
+#tabbed_menu {
+	width: 100%;
+	height: 20px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #666666;
+	margin-bottom: 20px;
+}
+#tabbed_menu #tabbed_menu_tabs li {
+	margin: 0px 10px;
+	padding: 0px;
+	display: inline;
+	list-style-type: none;
+}
+#tabbed_menu #tabbed_menu_tabs a:link, #tabbed_menu_tabs a:visited {
+	float: left;
+	background: #f3f3f3;
+	font-weight: bold;
+	padding: 2px 10px 2px 10px;
+	margin-right: 4px;
+	border: 1px solid #cccccc;
+	border-bottom: 1px solid #666666;
+	text-decoration: none;
+	color: #666;
+}
+#tabbed_menu #tabbed_menu_tabs a:link.active, #tabbed_menu_tabs a:visited.active {
+	border: 1px solid #666666;
+	border-bottom: 1px solid #fff;
+	background: #fff;
+	color: #000;
+}
+.skip {
+	display: none;
+}
+#WCAG-editor {
+	border: 1px #DCDCDC solid;
+	background-color: #F0F0F0;
+	width: 100%;
+}
+#WCAG-editor .title {
+	padding: 2px;
+	background-color: #DCDCDC;
+	text-align: center;
+	color: #000000;
+	font-weight: bold;
+}
+#WCAG-editor .body {
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right: 13px;
+	padding-bottom: 5px;
+}
+#WCAG-editor textarea {
+	margin-left: 0px;
+	margin-right: 0px;
+	width: 100%;
+	height: 180px;
+	border: 1px #DCDCDC solid;
+}
+#WCAG-editor input {
+	width: 100%;
+}
+/* don't work on IE 6 */
+#WCAG-editor input[type="checkbox"], #WCAG-editor input[type="radio"], #WCAG-editor input[type="submit"] {
+	width: auto;
+}
+/* only for IE6 */
+#WCAG-editor #submit, #WCAG-editor #visible_teacher, #WCAG-editor #visible_student, #WCAG-editor #visible_guest {
+	width: auto;
+}
+#WCAG-content img {
+	float: left;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+#WCAG-content p {
+	text-align: justify;
+}
+/* hack for IE < 7 */
+
+#course_description input {
+	width: auto;
+}
+#course_description #imagefile, #course_description #imageLabel, #course_description #link, #course_description #linkLabel {
+	width: 100%;
+}
+.WCAG-form textarea {
+	width: 100%;
+	height: 180px;
+}
+/*
+------------------------------------------------------------------------------
+    OTHERS
+------------------------------------------------------------------------------
+*/
+.input_titles {
+	width: 300px;
+}
+/*
+------------------------------------------------------------------------------
+    Survey
+------------------------------------------------------------------------------
+*/
+#survey_title {
+	background-color:#264269;
+	color:#FFF;
+	padding:2px;
+	border: 1px solid #264269;
+}
+#survey_subtitle {
+	background-color:#264269;
+	color:#FFF;
+	padding:2px;
+	border: 1px solid #264269;
+}
+.survey_content {
+	background-color:#EFEFEF;
+	color:#264269;
+	padding:5px;
+	border: 1px solid #264269;
+}
+.survey_question_wrapper {
+	border: 1px solid #4271b5;
+}
+.survey_question {
+	background-color:#4271b5;
+	color:#FFFFFF;
+	padding:5px;
+}
+.survey_question_options {
+	background-color:#FFF;
+	color:#000;
+	padding:5px;
+}
+.survey_export_link {
+	float: right;
+}
+/*
+------------------------------------------------------------------------------^M
+    sessions
+------------------------------------------------------------------------------^M
+*/
+
+#ajax_list_coachs {
+	position:absolute;
+	border:1px solid #4171B5;
+	margin:0px;
+	padding:0px;
+	margin-left:200px;
+	margin-top:-23px;
+	background-color:#FFFFFF;
+	height:auto;
+	overflow:auto;
+}
+#ajax_list_courses {
+	position:absolute;
+	border:1px solid #4171B5;
+	margin:0px;
+	padding:0px;
+	margin-left:200px;
+	background-color:#FFFFFF;
+	height:auto;
+	overflow:auto;
+}
+#ajax_list_users {
+	position:absolute;
+	border:1px solid #4171B5;
+	margin:0px;
+	padding:0px;
+	margin-left:200px;
+	background-color:#FFFFFF;
+	height:auto;
+	overflow:auto;
+}
+#chat_login_name {
+	color : #4171b5;
+}
+/* Quizzes tool */
+.quiz_export_link {
+	float: right;
+}
+/*
+------------------------------------------------------------------------------
+    Learning path
+------------------------------------------------------------------------------
+*/
+#show_audiorecorder_div {
+	background:#F0F0F0;
+	border:1px solid #999999;
+	font-weight:bold;
+	padding:2px;
+	width:350px;
+}
+/* Glossary tool */
+.glossary-term {
+	margin: 1em;
+	background-color: #ffe99b;
+	padding: 0.5em 0.5em 1.8em 0;
+	-moz-border-radius: 0.5em;
+}
+.glossary-term-title {
+	margin: 2em 0 1em 0.5em;
+	font-weight: bold;
+	font-size: 120%;
+}
+.glossary-term-desc {
+	margin-left: 1em;
+}
+.glossary-term-action-links {
+	float: right;
+}
+.glossary-term-edit-form {
+	margin: 1em;
+	background-color: #FFE4C4;
+	padding: 0.5em 0.5em 2em 0;
+	-moz-border-radius: 0.5em;
+}
+.glossary-term-edit-desc {
+	font-weight: bold;
+	font-size: 120%;
+}
+.glossary-term-edit-title {
+	font-weight: bold;
+	font-size: 120%;
+}
+.glossary-add-form {
+	font-weight: bold;
+	font-size: 120%;
+	margin: 1em;
+}
+.glossary-orderby-link {
+	float:right;
+	margin: 1em;
+}
+.glossary-msg-error {
+	color: #FF0000;
+	display :none;
+	font-weight: normal;
+	font-size: 80%;
+}
+/* Notebook */
+.notebook-add-form {
+	margin: 1em;
+	background-color: #c3d9ff;
+	padding: 1em 1em;
+}
+.notebook-add-desc-textarea {
+	background-color: #f2f5f8;
+	border-color: #ffe99b;
+	overflow: hidden;
+}
+.notebook-add-title-text {
+	background-color: #f2f5f8;
+	border-color: #ffe99b;
+}
+.notebook-edit-desc-textarea {
+	background-color: #e0ecff;
+	border-color: #ffe99b;
+	overflow: hidden;
+}
+.notebook-edit-title-text {
+	background-color: #e0ecff;
+	border-color: #ffe99b;
+}
+.notebook-msg-error {
+	color: #FF0000;
+	display :none;
+	background-color: #ffe99b;
+	width: 40%;
+}
+.notebook-list {
+	margin: 1em 1em 0em 1em;
+	background-color: #79b;
+	padding: 0.3em 0.3em;
+	-moz-border-radius: 0.5em;
+}
+.notebook-title-list {
+	color : #fff;
+	padding: 0.3em 0.3em;
+	font-weight: bold;
+	font-size: 120%;
+}
+.notebook-desc-list {
+	margin: 0em;
+	background-color: #f2f5f8;
+	padding: 0.5em 0.3em 2em 0.3em;
+	border: 1px solid #79b;
+}
+.notebook-term-action-links {
+	padding: 0.3em 0.3em;
+	width: 50%;
+	color : #fff;
+}
+.notebook-orderby-link {
+	text-align:right;
+	margin-right: 1em;
+}
+.notebook-search-title {
+	text-align:right;
+	margin: 1em;
+}
+.notebook-date-information {
+	color : #fff;
+	padding: 0.3em;
+	font-size: 120%;
+	font-weight: bold;
+}
+/* Gradebook */
+.resource-deleted {
+	color:#990000;
+}
+.gradebook-table-header {
+	border: 1px solid rgb(153, 153, 153);
+	background: rgb(240, 240, 240) none repeat scroll 0% 0%;
+}
+.gradebook-table-body {
+	border: 1px solid rgb(153, 153, 153);
+	background: rgb(255, 255, 255) none repeat scroll 0% 0%;
+}
+/* actions */
+.actions_lp {
+	background:#F8F8F8;
+	height:29px;
+	padding-left: -17px;
+	margin: 5px 2px 1px 23px;
+	background:url(images/actions.jpg) repeat-x;
+	vertical-align:middle;
+	width: 90%;
+}
+.actions_lp img {
+	vertical-align:middle;
+}
+.actions_lp a {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions_lp span {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions_lp form {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions {
+	background:#efefef;
+	border-bottom:1px dotted #975b5b;
+	border-top:1px dotted #975b5b;
+	padding:2px;
+	margin-bottom: 5px;
+	vertical-align:middle;
+}
+.actions img {
+	/*display:inline-block;*/
+	border: none;
+	text-decoration: none;
+	background-color: #efefef;
+	padding-right: 5px;
+	vertical-align:middle;
+}
+.actions a {
+	display:inline-block;
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions span {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions form {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+/* big actions */
+.actionsbig {
+	background:#F8F8F8;
+	border-bottom:1px solid #999999;
+	border-top:1px solid #999999;
+	background-color:#efefef;
+	height:100%;
+	padding:2px;
+	margin-bottom: 5px;
+	vertical-align:middle;
+	float:left;
+	width:100%;
+}
+.actionsbig a {
+	float:left;
+	padding-left:12px;
+	padding-right:12px;
+	text-align:center;
+}
+.actions img {
+	vertical-align:middle;
+}
+.actions a {
+	margin-right: 10px;
+	vertical-align:middle;
+}
+.actions-title {
+	background:#efefef;
+	border-bottom:1px dotted #999999;
+	border-top:1px dotted #999999;
+	padding:4px;
+	margin-bottom: 5px;
+	font-size:14px;
+	font-weight:bolder;
+	vertical-align:middle;
+}
+/**********************************************
+ *  MESSAGE TOOL                           *
+ **********************************************/
+.message_view_table {
+	cellspacing:0;
+	cellpadding:0;
+	background-color:#dbeaf5;
+ border=0;
+	border-collapse: collapse;
+	width: 100%;
+}
+.message_view_table th {
+	padding-right: 12px;
+	border: 1px solid gray;
+	background-color: #f0f0f0;
+}
+.message-select-box {
+	float:left;
+	width:350px;
+	display:inline;
+	position:absolute;
+	margin-top:20px;
+	margin-left:32px;
+}
+/* styles from the my.profile.php file */
+.message-content {
+	float:right;
+	margin:20px auto;
+	background:#F5E38E;
+	border:2px solid #EBCA4F;
+	padding:10px;
+	width:200px;
+	position:relative;
+}
+.message-content .message-delete {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+}
+.message-content-internal {
+	display:inline;
+	margin:20px auto;
+	background:#F5E38E;
+	border:2px solid #EBCA4F;
+	padding:10px;
+	width:100px;
+	position:relative;
+	margin-top:150px;
+	margin-right:-100px;
+}
+.message-title {
+	color:#ff0000;
+	font-size:15px;
+}
+.message-body {
+	font-size:11px;
+	padding: 0 0 11px;
+	color:#333;
+}
+.message-link {
+	color:#ff8400;
+}
+.message-view {
+	float:right;
+	margin:20px auto;
+	background:#F5E38E;
+	border:2px solid #EBCA4F;
+	padding:10px;
+	width:100px;
+	position:relative;
+	margin-top:115px;
+	margin-right:-100px;
+}
+.message-content-table {
+	background-color:white;
+	border:1px solid black;
+	position:absolute;
+	width:200px;
+	height:60px;
+	z-index:3;
+	visibility:hidden;
+	top:85px;
+	left:10px;
+	margin: 0px;
+	padding: 0px;
+}
+/*SOCIAL TOOL*/
+.image-social-content {
+	cursor:pointer;
+	text-align:left;
+	margin:1px auto;
+	background:#ffffff;
+	border:1px solid #B8C8DC;
+	padding:5px;
+	width:100px;
+	position:relative;
+	margin-right:3px;
+	margin-left:4px;
+	margin-bottom:2px;
+}
+.image-social-content .image-delete {
+	position: absolute;
+	top: 1px;
+	right: 1px;
+	cursor: pointer;
+}
+.social-info {
+	background:#B8C8DC;
+	color:#4475B0;
+	font-size:12px;
+	font-weight:bold;
+}
+.social-display-image {
+	float:right;
+	margin-top:-130px;
+	margin-right:5px;
+}
+.social-search-image {
+	color:#000033;
+	margin-top:2px;
+	border-bottom:1px solid #6B6262;
+	border-left:1px solid #6B6262;
+	border-right:1px solid #6B6262;
+	border-top:1px solid #6B6262;
+	width:250px;
+}
+.social-subtitle-search {
+	background:#ffffff;
+	border-top:1px #9DACBF solid;
+	border-bottom:1px #9DACBF solid;
+}
+.social-align-box {
+	text-align:left;
+	float:left;
+}
+.social-content-description {
+	background:#ECE9D8;
+}
+.social-content-body {
+	background:#ffffff;
+}
+.social-content-table {
+	border-top:1px #9DACBF solid;
+	border-left:1px #9DACBF solid;
+	border-right:1px #9DACBF solid;
+	border-bottom:1px #9DACBF solid;
+}
+
+.social-profile-info dt {
+	text-align:left;
+	clear:left;
+	color:#975b5b;
+	float:left;
+	width:100px;
+}
+.social-profile-info dd {
+	padding:1px 0px 3px 0px;
+	float:left;
+	margin:0;
+	display : block;
+	padding-left:10px;
+	width:200px;
+}
+
+
+
+/* general layout of the profile page */
+#social-profile-wrapper {
+	width: 1000px;
+	text-align:left;
+	margin:0 auto;
+}
+#social-profile-container {
+	width: 705px;
+}
+#social-profile-left {
+	float:left;
+	width:220px;
+}
+#social-profile-content {
+	float:right;
+	width:480px;
+	margin-left: 4px;
+}
+#social-profile-right {
+	float:right;
+	width:290px;
+	margin-left: 4px;
+}
+
+
+/*****************************************************
+ *  BUTTONS	                                         *
+ *****************************************************/
+/* BUTTONS */
+button {
+	margin:0 5px 3px 3px !important;
+	background-color: #a8a7a7;
+	border-width: 1px;
+	-moz-border-radius-topright : 5px;
+	-moz-border-radius-topleft : 5px;
+	-moz-border-radius-bottomright : 5px;
+	-moz-border-radius-bottomleft : 5px;
+	font-size: 100%;
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+	padding:5px 15px 5px 15px;
+	vertical-align:middle;
+}
+button:hover {
+	background-color:#a8a7a7;
+	color:#545454;
+	border-style: inset;
+}
+/* button with image */
+button.add, button.save, button.cancel, button.search, button.login, button.plus, button.minus, button.next, button.back {
+	padding-left:30px;
+	background-position:10px;
+	background-repeat:no-repeat;
+}
+/* POSITIVE */
+button.save, button.add, button.search, button.login, button.plus, button.minus, button.next, button.back {
+	background-color:#ddd;
+	border-color: #D4E2F6;
+}
+button.save:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover {
+	border-color: #D4E2F6;
+	background-color:#efefef;
+}
+/* NEGATIVE */
+button.cancel {
+	background-color:#F8E8E6;
+	border-color: #FFE3DE;
+}
+button.cancel:hover {
+	border-color: #F4E1D0;
+	background-color: #FFE3DE;
+}
+/*including "save" image*/
+button.save {
+	background-image:url(images/button_accept.gif);
+}
+/*including "add" image*/
+button.add {
+	background-image:url(images/button_add.gif);
+}
+/*including "cancel" image*/
+button.cancel {
+	background-image:url(images/button_delete.gif);
+}
+/*including "search" image*/
+button.search {
+	background-image:url(images/button_search.gif);
+}
+/*including "login" image*/
+button.login {
+	background-image:url(images/button_login.gif);
+}
+/*including "plus" image*/
+button.plus {
+	background-image:url(images/button_plus.gif);
+}
+/*including "minus" image*/
+button.minus {
+	background-image:url(images/button_minus.gif);
+}
+/*including "next" image*/
+button.next {
+	background-image:url(images/button_next.gif);
+}
+/*including "back" image*/
+button.back {
+	background-image:url(images/button_back.gif);
+}
+.icon_image_content {
+	width:70px;
+	height:5em;
+	text-align: center;
+	padding-top: 3px;
+	padding-right: 5x;
+	padding-bottom: 3px;
+	padding-left: 5px;
+}

@@ -1,4 +1,4 @@
-<?php // $Id: system_announcements.php 19895 2009-04-20 16:52:17Z cvargas1 $
+<?php // $Id: system_announcements.php 20077 2009-04-24 15:48:09Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -163,12 +163,9 @@ if (isset ($_GET['action']) && $_GET['action'] == 'edit')
 
 if ($action_todo)
 {
-	if ($_GET['action'] == 'add')
-	{
+	if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'add') {
 		$form_title = get_lang('AddSystemAnnouncement');
-	}
-	elseif ($_GET['action'] == 'edit')
-	{
+	} elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') {
 		$form_title = get_lang('EditSystemAnnouncement');
 	}
 	
@@ -195,17 +192,19 @@ if ($action_todo)
 	$form->add_timewindow('start','end',get_lang('StartTimeWindow'),get_lang('EndTimeWindow'));
 	$form->addElement('checkbox', 'visible_teacher', get_lang('Visible'), get_lang('Teacher'));
 	$form->addElement('checkbox', 'visible_student', null, get_lang('Student'));
-	$form->addElement('checkbox', 'visible_guest', null, get_lang('Guest'));
-	$form->addElement('hidden', 'action');
+	$form->addElement('checkbox', 'visible_guest', null, get_lang('Guest'));	
 	$form->addElement('hidden', 'id');
 	$form->addElement('checkbox', 'send_mail', get_lang('SendMail'));
-	if ($_GET['action']=='add'){
+	
+	if (isset($_REQUEST['action']) && $_REQUEST['action']=='add') {
 		$text=get_lang('AddSystemAnnouncement');
 		$class='add';
+		$form->addElement('hidden', 'action','add');
 		
-	} elseif ($_GET['action']=='edit'){
+	} elseif (isset($_REQUEST['action']) && $_REQUEST['action']=='edit') {
 		$text=get_lang('EditSystemAnnouncement');
 		$class='save';
+		$form->addElement('hidden', 'action','edit');
 	}
 	
 	$form->addElement('style_submit_button', 'submit', $text,'class="'.$class.'"');

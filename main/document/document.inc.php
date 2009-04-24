@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 19733 2009-04-13 20:22:31Z aportugal $
+<?php // $Id: document.inc.php 20088 2009-04-24 20:51:44Z iflorespaz $
 
 /*
 ==============================================================================
@@ -508,7 +508,7 @@ function create_dir_form()
 {
 	//create the form that asks for the directory name
 	$new_folder_text = '<form action="'.api_get_self().'" method="post">';
-	$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'" />';
+	$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.Security::remove_XSS($_GET['curdirpath']).'" />';
 	// form title
 	$new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateDir').'</div></div>';
 	

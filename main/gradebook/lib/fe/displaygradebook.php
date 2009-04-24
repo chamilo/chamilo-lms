@@ -158,7 +158,7 @@ class DisplayGradebook
 		echo '<input type="hidden" name="export_format" value="xls">';
 		echo '</form>';
 
-		$header .= '<a class="quiz_export_link" href="#" onclick="document.form1a.submit();">'.Display::return_icon('csv.gif', get_lang('ExportAsCSV')).' '.get_lang('ExportAsCSV').'</a>';
+		//$header .= '<a class="quiz_export_link" href="#" onclick="document.form1a.submit();">'.Display::return_icon('csv.gif', get_lang('ExportAsCSV')).' '.get_lang('ExportAsCSV').'</a>';
 		$header .= '<a class="quiz_export_link" href="#" onclick="document.form1b.submit();">'.Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' '.get_lang('ExportAsXLS').'</a>';
 
 		$header .= '<a href="' . api_get_self() . '?print=&selectcat=' . $catobj->get_id() . '" target="_blank">'.Display::return_icon('printmgr.gif', get_lang('Print')).' ' . get_lang('Print') . '</a>';

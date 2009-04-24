@@ -1,4 +1,4 @@
-<?php // $Id: group.php 19988 2009-04-22 20:05:49Z iflorespaz $
+<?php // $Id: group.php 20078 2009-04-24 15:52:14Z iflorespaz $
  
 /*
 ==============================================================================
@@ -100,11 +100,11 @@ $fck_attribute = null; // Clearing this global variable immediatelly after it ha
  */
  $my_group_id = Security::remove_XSS($_GET['group_id']);
  $my_msg	  = Security::remove_XSS($_GET['msg']);
- $my_group    = Security::remove_XSS($_POST['group']);
+ $my_group    = $_POST['group'];
  $my_get_id1  = Security::remove_XSS($_GET['id1']);
  $my_get_id2  = Security::remove_XSS($_GET['id2']);
  $my_get_id   = Security::remove_XSS($_GET['id']);
- 
+
 if (isset ($_GET['action']))
 {
 	switch ($_GET['action'])

@@ -524,12 +524,18 @@ function store_forum($values) {
 	global $_user;
 	
 	$table_forums = Database::get_course_table(TABLE_FORUM);
-
+	
 	// find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
-	$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".Database::escape_string($values['forum_category']);
-	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$row=Database::fetch_array($result);
-	$new_max=$row['sort_max']+1;
+	if (is_null($values['forum_category'])) {
+		$new_max=null;
+	} else {
+		$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".Database::escape_string($values['forum_category']);
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$row=Database::fetch_array($result);
+		$new_max=$row['sort_max']+1;	
+	}
+
+	
 	$session_id = isset($_SESSION['id_session']) ? $_SESSION['id_session'] : 0;
 	
 	$clean_title=Security::remove_XSS(Database::escape_string(htmlspecialchars($values['forum_title'])));

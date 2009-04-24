@@ -521,6 +521,7 @@ foreach ($list as $my_item_id) {
 
 		);
 		$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);		
+		
 		if ($row['item_type'] != 'dokeos_chapter') {
 			if ($row['item_type'] == 'quiz') {
 				$correct_test_link = '';
@@ -567,8 +568,8 @@ foreach ($list as $my_item_id) {
 				 	
 				 	if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
 						$output .=  '-';
-					} else {
-						$output .= ($score == 0 ? '0/'.$maxscore : ($maxscore == 0 ? $score : $score . '/' . $maxscore));	
+					} else {						
+						$output .= ($score == 0 ? '0/'.float_format( $maxscore, 1) : ($maxscore == 0 ? $score : float_format( $score, 1) . '/' . float_format($maxscore, 1)));	
 					}
 					
 				 } else {
@@ -593,6 +594,7 @@ foreach ($list as $my_item_id) {
 				} else {
 					$temp[] = ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));
 				}
+				
 				$temp[] = $time;
 				$csv_content[] = $temp;
 			}
@@ -652,7 +654,18 @@ foreach ($list as $my_item_id) {
 							if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
 								$view_score =  '-';
 							} else {
-								$view_score = ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore));	
+								//show only float when need it
+								$my_score  = float_format( $my_score, 1); 
+								$my_maxscore =float_format($my_maxscore, 1);								 
+								if ($my_score == 0 ){
+									$view_score = 	'0/'.$my_maxscore;
+								} else {
+									if ($my_maxscore==0) 
+										$view_score = $my_score;
+									else 
+										$view_score = $my_score . '/' . $my_maxscore;									
+								}
+								//$view_score = ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore));	
 							}
 																			
 							$output .= '<tr class="'.$oddclass.'" ><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $n . '</td>'				

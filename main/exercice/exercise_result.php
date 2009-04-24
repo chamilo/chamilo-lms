@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 19979 2009-04-22 17:12:35Z cfasanando $
+* 	@version $Id: exercise_result.php 20089 2009-04-24 21:12:54Z cvargas1 $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -159,6 +159,16 @@ $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
 $exerciseDescription=stripslashes($exerciseDescription);
 
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
+}
 
 $nameTools=get_lang('Exercice');
 

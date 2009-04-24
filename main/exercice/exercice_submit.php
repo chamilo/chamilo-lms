@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 19894 2009-04-20 16:38:00Z cvargas1 $
+<?php // $Id: exercice_submit.php 20089 2009-04-24 21:12:54Z cvargas1 $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 19894 2009-04-20 16:38:00Z cvargas1 $
+* 	@version $Id: exercice_submit.php 20089 2009-04-24 21:12:54Z cvargas1 $
 */
 
 
@@ -702,7 +702,16 @@ if(!$questionNum || $_POST['questionNum']) {
     }
 }
 
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
 
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
+}
 
 //$nameTools=get_lang('Exercice');
 

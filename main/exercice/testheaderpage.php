@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: testheaderpage.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: testheaderpage.php 20089 2009-04-24 21:12:54Z cvargas1 $
 */
 
 // name of the language file that needs to be included
@@ -40,6 +40,16 @@ include('../inc/global.inc.php');
 	}
 	$nameTools = $title;
 	$noPHP_SELF=true;
+	if (isset($_SESSION['gradebook'])){
+		$gradebook=	$_SESSION['gradebook'];
+	}
+	
+	if (!empty($gradebook) && $gradebook=='view') {	
+		$interbreadcrumb[]= array (
+				'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+				'name' => get_lang('Gradebook')
+			);
+	}	
 	$interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
 	Display::display_header($nameTools,"Exercise");
 	echo "<a name='TOP'></a>";

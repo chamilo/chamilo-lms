@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 19786 2009-04-15 14:46:05Z juliomontoya $
+<?php // $Id: question_pool.php 20089 2009-04-24 21:12:54Z cvargas1 $
  
 /*
 ==============================================================================
@@ -30,7 +30,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 19786 2009-04-15 14:46:05Z juliomontoya $
+* 	@version $Id: question_pool.php 20089 2009-04-24 21:12:54Z cvargas1 $
 */
 
 // name of the language file that needs to be included
@@ -135,6 +135,17 @@ if($is_allowedToEdit)
 		header("Location: admin.php?exerciseId=$fromExercise");
 		exit();
 	}
+}
+
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
 }
 
 $nameTools=get_lang('QuestionPool');

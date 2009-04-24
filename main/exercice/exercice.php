@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20087 2009-04-24 20:44:55Z juliomontoya $
+// $Id: exercice.php 20089 2009-04-24 21:12:54Z cvargas1 $
 
 /*
 ==============================================================================
@@ -332,7 +332,16 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 		}
 	}
 }
-if ($_GET['gradebook'] && $_GET['exerciseId']) {
+
+if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
+	$_SESSION['gradebook']=$_GET['gradebook'];
+	$gradebook=	$_SESSION['gradebook'];
+} elseif (empty($_GET['gradebook'])) {
+	unset($_SESSION['gradebook']);
+	$gradebook=	'';
+} 
+
+if (!empty($gradebook) && $gradebook=='view') {	
 	$interbreadcrumb[] = array (
 		'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
 		'name' => get_lang('Gradebook')
@@ -345,13 +354,13 @@ if ($show != 'result') {
 	if ($is_allowedToEdit || $is_tutor) {
 		$nameTools = get_lang('StudentScore');
 		$interbreadcrumb[] = array (
-			"url" => "exercice.php",
+			"url" => "exercice.php?gradebook=$gradebook",
 			"name" => get_lang('Exercices')
 		);
 	} else {
 		$nameTools = get_lang('YourScore');
 		$interbreadcrumb[] = array (
-			"url" => "exercice.php",
+			"url" => "exercice.php?gradebook=$gradebook",
 			"name" => get_lang('Exercices')
 		);
 	}
@@ -676,9 +685,9 @@ if ($_configuration['tracking_enabled']) {
 					null;
 			}
 			if ($_REQUEST['filter'] == '1' or !isset ($_REQUEST['filter'])) {
-				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2' . '" >' . Display :: display_icon('checkbox_on.gif', get_lang('ShowCorrectedOnly')) . get_lang('ShowCorrectedOnly') . '</a>';
+				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&gradebook='.$gradebook.'&filter=2' . '" >' . Display :: display_icon('checkbox_on.gif', get_lang('ShowCorrectedOnly')) . get_lang('ShowCorrectedOnly') . '</a>';
 			} else {
-				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1' . '" >' . Display :: display_icon('checkbox_off.gif', get_lang('ShowUnCorrectedOnly')) . get_lang('ShowUnCorrectedOnly') . '</a>';
+				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&gradebook='.$gradebook.'&filter=1' . '" >' . Display :: display_icon('checkbox_off.gif', get_lang('ShowUnCorrectedOnly')) . get_lang('ShowUnCorrectedOnly') . '</a>';
 			}
 			//$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
 			//$form_filter .= make_select('filter',array(1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised')),$filter);

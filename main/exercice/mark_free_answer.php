@@ -105,6 +105,17 @@ if(!$is_courseTutor)
 
 $obj_question = Question :: read($my_qst);
 
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
+}
+
 $nameTools=get_lang('Exercice');
 
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));

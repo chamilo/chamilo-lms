@@ -22,7 +22,7 @@
 *	Code for Hotpotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.php 19675 2009-04-09 08:46:51Z pcool $
+* 	@version $Id: hotpotatoes.php 20089 2009-04-24 21:12:54Z cvargas1 $
 */
 
 
@@ -48,6 +48,16 @@ if(!api_is_allowed_to_edit())
 	api_not_allowed();
 }
 
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
+}
 // the breadcrumbs
 $interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
 

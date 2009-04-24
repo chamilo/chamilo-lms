@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 19675 2009-04-09 08:46:51Z pcool $
+<?php // $Id: admin.php 20089 2009-04-24 21:12:54Z cvargas1 $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 19675 2009-04-09 08:46:51Z pcool $
+* 	@version $Id: admin.php 20089 2009-04-24 21:12:54Z cvargas1 $
 */
 
 
@@ -306,6 +306,17 @@ if($cancelAnswers)
 // modifies the query string that is used in the link of tool name
 if($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
 	$nameTools=get_lang('QuestionManagement');
+}
+
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
 }
 
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));

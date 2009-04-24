@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20087 2009-04-24 20:44:55Z juliomontoya $
+* 	@version $Id: exercise_show.php 20089 2009-04-24 21:12:54Z cvargas1 $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -98,6 +98,17 @@ if ( empty ( $action ) ) {
 
 $is_allowedToEdit=api_is_allowed_to_edit() || $is_courseTutor;
 $nameTools=get_lang('CorrectTest');
+
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
+}
 
 if($origin=='user_course') {
 	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".Security::remove_XSS($_GET['course']), "name" => get_lang("Users"));

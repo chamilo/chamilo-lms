@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 19959 2009-04-21 22:29:46Z cvargas1 $
+* 	@version $Id: exercise.class.php 20087 2009-04-24 20:44:55Z juliomontoya $
 */
 
 
@@ -851,25 +851,32 @@ class Exercise
 			$type='full';
 		}
 		// form title
-		if (!empty($_GET['exerciseId']))
-		{
+		if (!empty($_GET['exerciseId'])) {
 			$form_title = get_lang('ModifyExercise');
-		}
-		else 
-		{
+		} else {
 			$form_title = get_lang('NewEx');
 		}
 		$form->addElement('header', '', $form_title);
 		// title
 		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName'),'class="input_titles"');
+		
 		// fck editor
 		global $fck_attribute;
 		$fck_attribute = array();		
 		$fck_attribute['Width'] 	= '100%'; 
 		$fck_attribute['Height'] 	= '200px';
-		$fck_attribute['ToolbarSet'] = 'TestDescription';		  
-
-		$form -> addElement ('html_editor', 'exerciseDescription', get_lang('ExerciseDescription'));
+		$fck_attribute['ToolbarSet'] = 'TestDescription';
+		
+		$form -> addElement('html','<div class="row">
+		<div class="label">&nbsp;</div>
+		<div class="formw">
+			<a href="javascript://" onclick=" return show_media()"><img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</a>
+		</div>
+		</div>');
+				  
+		$form -> addElement ('html','<div id="media" style="display:none;">');
+		$form -> addElement ('html_editor', 'exerciseDescription');
+		$form -> addElement ('html','</div>');
 		
 		$form -> addElement('html','<div class="row">
 			<div class="label">&nbsp;</div>
@@ -881,7 +888,7 @@ class Exercise
 		// Random questions
 		$form -> addElement('html','<div id="options" style="display:none">');		
 		
-		if($type=='full') {									
+		if($type=='full') {
 			// feedback type	
 			$radios_feedback = array();
 			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('Feedback'),'0');

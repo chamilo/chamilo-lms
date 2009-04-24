@@ -55,8 +55,18 @@ $htmlHeadXtra[] = '<script>
 				document.getElementById(\'options\').style.display = \'none\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 			}	
-		}
+		}			 	
+				
+		function show_media() {
+			if(document.getElementById(\'media\').style.display == \'none\') {
+				document.getElementById(\'media\').style.display = \'block\';
 
+			} else {			
+				document.getElementById(\'media\').style.display = \'none\';
+				
+			}	
+		}			
+			
 		function timelimit() {
 			if(document.getElementById(\'options2\').style.display == \'none\') {
 				document.getElementById(\'options2\').style.display = \'block\';

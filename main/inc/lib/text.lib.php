@@ -1,9 +1,9 @@
-<?php // $Id: text.lib.php 17946 2009-01-22 20:52:23Z juliomontoya $
+<?php // $Id: text.lib.php 20087 2009-04-24 20:44:55Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos S.A.
+	Copyright (c) 2004-2009 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -289,11 +289,11 @@ function latex_gif_renderer($latex_code)
 
 
 /**
- * This function returns the difference between the current date (date(now)) with the parameter $date in a string format like "2 days, 1 hour" 
+ * Returns the difference between the current date (date(now)) with the parameter $date in a string format like "2 days, 1 hour" 
  * Example: $date="2008-03-07 15:44:08"; 
  * 			date_to_str($date) it will return 3 days, 20 hours 		
  *  
- * @param string This string has to be the result of a date function in this format -> date("Y-m-d H:i:s",time());
+ * @param  string The string has to be the result of a date function in this format -> date("Y-m-d H:i:s",time());
  * @return string The difference between the current date and the parameter in a literal way "3 days, 2 hour" * 
  * @author Julio Montoya 
  */
@@ -306,8 +306,7 @@ function date_to_str_ago($date)
 	static $min_decades, $min_years, $min_months, $min_weeks, $min_days, $min_hours, $min_minutes;
 	static $sec_time_time, $sec_time_sing, $sec_time_plu;
 
-	if (!$initialized)
-	{
+	if (!$initialized) {
 		$today = ucfirst(get_lang('Today'));
 		$yesterday = ucfirst(get_lang('Yesterday'));
 
@@ -333,7 +332,6 @@ function date_to_str_ago($date)
 		$sec_time_time=array(315569260,31556926,2629743.83,604800,86400,3600,60);		
 		$sec_time_sing=array($min_decade,$min_year,$min_month,$min_week,$min_day,$min_hour,$min_minute);
 		$sec_time_plu =array($min_decades,$min_years,$min_months,$min_weeks,$min_days,$min_hours,$min_minutes);
-
 		$initialized = true;
 	}
 
@@ -357,16 +355,13 @@ function date_to_str_ago($date)
 	$act_mth=date('n');
 	$act_yr = date('Y');
 	
-	if ($dst_day==$act_day && $dst_mth==$act_mth && $dst_yr == $act_yr )
-	{
+	if ($dst_day==$act_day && $dst_mth==$act_mth && $dst_yr == $act_yr ) {
 		return $today;
 	}
 
-	if ($dst_day==$act_day-1 && $dst_mth==$act_mth && $dst_yr == $act_yr )
-	{
+	if ($dst_day==$act_day-1 && $dst_mth==$act_mth && $dst_yr == $act_yr ) {
 		return $yesterday;
-	}
-	
+	}	
 				
 	$str_result=array();	
 	$time_result=array();
@@ -374,22 +369,16 @@ function date_to_str_ago($date)
 	
 	$str='';
 	$i=0;		
-	for ($i=0;$i<count($sec_time_time);$i++)
-	{
-		$seconds=$sec_time_time[$i];
-			
+	for ($i=0;$i<count($sec_time_time);$i++) {
+		$seconds=$sec_time_time[$i];			
 		if($seconds > $time) {
 			continue;
-		}
-					
+		}					
 		$current_value=intval($time/$seconds);
 					
-		if ($current_value != 1) 
-		{			
+		if ($current_value != 1) {			
 			$date_str=	$sec_time_plu[$i];
-		} 
-		else
-		{
+		} else {
 			$date_str=	$sec_time_sing[$i];
 	
 		}			
@@ -399,32 +388,25 @@ function date_to_str_ago($date)
 		$time_result[]=	$current_value;				
 		$str.=$current_value.$date_str;				
 		$time%=$seconds;			
-	}	
-
-		
-	if ($key_result[0]== $min_day && $key_result[1]== $min_minute)
-	{
+	}
+			
+	if ($key_result[0]== $min_day && $key_result[1]== $min_minute) {
 		$key_result[1]=' 0 '.$min_hours;
 		$str_result[0]=$time_result[0].' '.$key_result[0];
 		$str_result[1]=$key_result[1];		
 	}
 	
-	if ($key_result[0]== $min_year && ($key_result[1]== $min_day || $key_result[1]== $min_week))
-	{
+	if ($key_result[0]== $min_year && ($key_result[1]== $min_day || $key_result[1]== $min_week)) {
 		$key_result[1]=' 0 '.$min_months;
 		$str_result[0]=$time_result[0].' '.$key_result[0];
 		$str_result[1]=$key_result[1];		
 	}
 	
-	if (!empty($str_result[1])) 
-	{
+	if (!empty($str_result[1])) {
 		$str=$str_result[0].', '.$str_result[1];
-	}	
-	else 
-	{
+	} else {
 		$str=$str_result[0];
-	}
-	
+	}	
 	return $str;	
 }
 /**
@@ -441,6 +423,28 @@ function cut($text,$maxchar)
 	} else {
 		return $text;
 	}	
+}
+/**
+ * Show a number as only integers if no decimals, but will show 2 decimals if exist.
+ * 
+ * @param mixed number to convert 
+ * @param int  decimal points 0=never, 1=if needed, 2=always
+ * @return mixed an integer or a float depends on the parameter
+ */
+function float_format($number, $flag = 1) 
+{ 
+	if (is_numeric($number)) { // a number
+		if (!$number) { // zero
+			$result = ($flag == 2 ? '0.00' : '0'); // output zero
+		} else { // value
+			if (floor($number) == $number) { // whole number
+				$result = number_format($number, ($flag == 2 ? 2 : 0)); // format
+			} else { // cents
+				$result = number_format(round($number, 2), ($flag == 0 ? 0 : 2)); // format
+			} // integer or decimal
+		} // value
+		return $result;
+	}
 }
 
 ?>

@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20081 2009-04-24 17:57:27Z juliomontoya $
+* 	@version $Id: exercise_show.php 20087 2009-04-24 20:44:55Z juliomontoya $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -372,15 +372,12 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 					//api_not_allowed();
 					$show_results = false;
 					//Display::display_warning_message(get_lang('CantViewResults'));
-					if ($origin!='learnpath')
+					if ($origin!='learnpath') {
 						Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);						
-					else {
-						Display::display_warning_message(get_lang('ThankYouForPassingTheTest'));
-					}
-					echo '</td>
+						echo '</td>
 						</tr>
 						</table>';
-						
+					}	
 				}
 			}				
 			$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($_user['user_id'])." ";
@@ -1008,7 +1005,11 @@ if($is_allowedToEdit) {
 </table>
 
 <div id="question_score">
-	<?php echo get_lang('Score')." : $questionScore/$questionWeighting"; ?>
+	<?php
+		$my_total_score  = float_format($questionScore,1);
+		$my_total_weight = float_format($questionWeighting,1);			 
+		echo get_lang('Score')." : $my_total_score/$my_total_weight"; 
+		?>
 </div>
 
 <?php  
@@ -1023,9 +1024,13 @@ if($origin!='learnpath') {
 	if ($show_results) {
 		echo '<div id="question_score">'.get_lang('YourTotalScore')." ";
 		if($dsp_percent == true) {
-			echo number_format(($totalScore/$totalWeighting)*100,1,'.','')."%";
+			$my_result = number_format(($totalScore/$totalWeighting)*100,1,'.','');
+			$my_result = float_format($my_result,1);
+			echo $my_result."%";
 		} else {
-			echo $totalScore."/".$totalWeighting;
+			$my_total_score  = float_format($totalScore,1);
+			$my_total_weight = float_format($totalWeighting,1);			
+			echo $my_total_score."/".$my_total_weight;
 		}
 		echo '!</div>';		
 	}

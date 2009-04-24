@@ -82,15 +82,16 @@ $TBL_TRACK_ATTEMPT_RECORDING= Database::get_statistic_table(TABLE_STATISTIC_TRAC
 //event_access_tool(TOOL_QUIZ);
 
 ?>
+<div class="actions">
 <a href="exercice.php?cidReq=<?php echo $_GET['cidReq'] ?>&show=result"><< <?php echo get_lang('Back') ?></a>
-
+</div>
 <table class="data_table">
 		 <tr class="row_odd">
 		  <th><?php echo get_lang('Question'); ?></th>
-		  <th><?php echo get_lang('Value'); ?></th>
+		  <th width="50px"><?php echo get_lang('Value'); ?></th>
 		  <th><?php echo get_lang('Feedback'); ?></th>
-		  <th><?php echo get_lang('Date'); ?></th>
-		  <th><?php echo get_lang('Author'); ?></th>
+		  <th width="150px"><?php echo get_lang('Date'); ?></th>
+		  <th ><?php echo get_lang('Author'); ?></th>
 		 </tr>
 <?php
 
@@ -100,18 +101,17 @@ $sql = 'SELECT * FROM '.$TBL_EXERCICES;
 $query = api_sql_query($sql,__FILE__,__LINE__);
 */
 
-$sql = "SELECT *, quiz_question.question, CONCAT(firstname,' ',lastname) as full_name FROM $TBL_TRACK_ATTEMPT_RECORDING,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY question ASC";
+$sql = "SELECT *, quiz_question.question, CONCAT(firstname,' ',lastname) as full_name FROM $TBL_TRACK_ATTEMPT_RECORDING t,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY t.insert_date desc,question ASC";
 $query = api_sql_query($sql,__FILE__,__LINE__);
-
-while($row = mysql_fetch_array($query)){
+while($row = Database::fetch_array($query)){
 	echo '<tr';
 	if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"';
 	echo '>';
 
 	echo '<td>'.$row['question'].'</td>';
-	echo '<td>'.get_lang('NewScore').': '.$row['marks'].'</td>';
+	echo '<td>'.$row['marks'].'</td>';
 	if(!empty($row['teacher_comment'])){
-		echo '<td>'.get_lang('NewComment').': '.$row['teacher_comment'].'</td>';
+		echo '<td>'.$row['teacher_comment'].'</td>';
 	} else {
 		echo '<td>'.get_lang('WithoutComment').'</td>';
 	}

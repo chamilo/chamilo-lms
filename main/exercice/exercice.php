@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20089 2009-04-24 21:12:54Z cvargas1 $
+// $Id: exercice.php 20100 2009-04-24 23:55:22Z iflorespaz $
 
 /*
 ==============================================================================
@@ -159,8 +159,70 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$url = api_get_path(WEB_CODE_PATH) . 'exercice/exercice.php?' . api_get_cidreq() . '&show=result';
 	$TBL_RECORDING = Database :: get_statistic_table('track_e_attempt_recording');
 	$total_weighting = $_REQUEST['totalWeighting'];
+	
+		$my_post_info=array(); 
+	$post_content_id=array();
+	$comments_exist=false;
+	foreach ($_POST as $key_index=>$key_value) {
+		$my_post_info=explode('_',$key_index);
+		$post_content_id[]=$my_post_info[1];
+		if ($my_post_info[0]=='comments') {
+			$comments_exist=true;
+		}
+	}
+	//var_dump($comments_exist);
+	$loop_in_track=($comments_exist===true) ? (count($_POST)/2) : count($_POST);
+	//var_dump($loop_in_track);
+	$k=$post_content_id[0];
+	for ($i=$k;$i<($loop_in_track+$k);$i++) {
+		
+		//echo $_POST['marks_'.$i].' y '.$_POST['comments_'.$i].'<br/>';
+		
+		$my_marks=$_POST['marks_'.$i];
+		$contain_comments=$_POST['comments_'.$i];
+		
+		if (isset($contain_comments)) {
+			$my_comments=$_POST['comments_'.$i];
+		} else {
+			$my_comments='';
+		}
+			$my_questionid=$i;
+			$sql = "SELECT question from $TBL_QUESTIONS WHERE id = '$my_questionid'";
+			$result =api_sql_query($sql, __FILE__, __LINE__);
+			$ques_name = Database::result($result,0,"question");
 
-	foreach ($_POST as $key => $v) {
+			$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '".$my_marks."',teacher_comment = '".$my_comments."'
+					  WHERE question_id = '".$my_questionid."'
+					  AND exe_id='".$id."'";
+			api_sql_query($query, __FILE__, __LINE__);
+
+			$qry = 'SELECT sum(marks) as tot
+					FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.intval($id).'
+					GROUP BY question_id';
+
+			$res = api_sql_query($qry,__FILE__,__LINE__);
+			$tot = Database::result($res,0,'tot');
+			//updating also the total weight 
+			$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".Database::escape_string($tot)."', exe_weighting = '".Database::escape_string($total_weighting)."'
+						 WHERE exe_Id='".Database::escape_string($id)."'";
+			
+			api_sql_query($totquery, __FILE__, __LINE__);
+
+			$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
+					'(exe_id,
+					question_id,
+					marks,
+					insert_date,
+					author,
+					teacher_comment)
+					VALUES
+					('."'$id','".$my_questionid."','$my_marks','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".',"'.$my_comments.'")';
+			api_sql_query($recording_changes, __FILE__, __LINE__);	
+			
+	}
+	$post_content_id=array();
+	
+	/*foreach ($_POST as $key => $v) {
 		$keyexp = explode('_', $key);
 
 		$id = Database :: escape_string($id);
@@ -214,7 +276,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 								(' . "'$id','" . $my_questionid . "','$v','" . date('Y-m-d H:i:s') . "','" . api_get_user_id() . "'" . ')';
 			api_sql_query($recording_changes, __FILE__, __LINE__);
 		}
-	}
+	}*/
 
 	$qry = 'SELECT DISTINCT question_id, marks
 			FROM ' . $TBL_TRACK_ATTEMPT . ' where exe_id = ' . intval($id) . '
@@ -1036,7 +1098,7 @@ if ($show == 'test') {
         <td><?php echo ($ind+($page*$limitExPage)).'.'; ?><!--<img src="../img/jqz.jpg" alt="HotPotatoes" />--></td>
        <td>&nbsp;</td>
         <td><a href="showinframes.php?<?php echo api_get_cidreq()."&amp;file=".$path."&amp;cid=".$_course['official_code']."&amp;uid=".$_user['user_id'].'"'; if(!$active) echo 'class="invisible"'; ?>"><?php echo $title;?></a></td>
-		<td>&nbsp;</td><td>&nbsp;</td>
+		<td>&nbsp;</td><td>&nbsp;</td>float_format
   </tr>
   <?php
 

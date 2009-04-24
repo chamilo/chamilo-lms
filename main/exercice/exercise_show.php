@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20089 2009-04-24 21:12:54Z cvargas1 $
+* 	@version $Id: exercise_show.php 20100 2009-04-24 23:55:22Z iflorespaz $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -967,7 +967,7 @@ if($is_allowedToEdit) {
 			<br />
 			<?php
 			if (!empty($comnt)) {
-				echo '<b>'.get_lang('FeedbackType').'</b>';									
+				echo '<b>'.get_lang('Feedback').'</b>';									
 				echo '<div id="question_feedback">'.$comnt.'</div>';
 			} 
 			?>	

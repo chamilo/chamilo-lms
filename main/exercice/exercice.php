@@ -1,10 +1,10 @@
-<?php // $Id: exercice.php 20074 2009-04-24 14:31:45Z juliomontoya $
+<?php // $Id: exercice.php 20080 2009-04-24 16:27:22Z juliomontoya $
 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
@@ -143,8 +143,7 @@ if($_GET['delete']=='delete' && ($is_allowedToEdit || api_is_coach()) && !empty(
 }
 
 
-if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || $is_tutor))
-{
+if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || $is_tutor)) {
 	$id  = $_GET['exeid'];
 	$emailid = $_GET['emailid'];
 	$test  = $_GET['test'];
@@ -152,26 +151,35 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 	$from_name = $_SESSION['_user']['firstName']." ".$_SESSION['_user']['lastName'];
 	$url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
 	$TBL_RECORDING = Database::get_statistic_table('track_e_attempt_recording');
+	$total_weighting = $_REQUEST['totalWeighting']; 
+	
 	foreach ($_POST as $key=>$v) {
 		$keyexp = explode('_',$key);
-		if ($keyexp[0] == "marks") {
-			$sql = "select question from $TBL_QUESTIONS where id = '$keyexp[1]'";
+		
+		$id = Database::escape_string($id);
+		$v = Database::escape_string($v);
+		$my_questionid= Database::escape_string($keyexp[1]);
+		 	
+		if ($keyexp[0] == "marks") {			
+			$sql = "SELECT question from $TBL_QUESTIONS WHERE id = '$my_questionid'";
 			$result =api_sql_query($sql, __FILE__, __LINE__);
 			$ques_name = Database::result($result,0,"question");
 
-			$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '".Database::escape_string($v)."'
-						WHERE question_id = '".Database::escape_string($keyexp[1])."'
-						AND exe_id='".Database::escape_string($id)."'";
+			$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '".$v."'
+					  WHERE question_id = '".$my_questionid."'
+					  AND exe_id='".$id."'";
 			api_sql_query($query, __FILE__, __LINE__);
 
 			$qry = 'SELECT sum(marks) as tot
-					FROM '.$TBL_TRACK_ATTEMPT.' where exe_id = '.intval($id).'
+					FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.intval($id).'
 					GROUP BY question_id';
 
 			$res = api_sql_query($qry,__FILE__,__LINE__);
 			$tot = Database::result($res,0,'tot');
-
-			$totquery = "update $TBL_TRACK_EXERCICES set exe_result = '".Database::escape_string($tot)."' where exe_Id='".Database::escape_string($id)."'";
+			//updating also the total weight 
+			$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".Database::escape_string($tot)."', exe_weighting = '".Database::escape_string($total_weighting)."'
+						 WHERE exe_Id='".Database::escape_string($id)."'";
+			
 			api_sql_query($totquery, __FILE__, __LINE__);
 
 			$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
@@ -181,13 +189,13 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 					insert_date,
 					author)
 					VALUES
-					('."'$id','".$keyexp[1]."','$v','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".')';
+					('."'$id','".$my_questionid."','$v','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".')';
 			api_sql_query($recording_changes, __FILE__, __LINE__);
-		} else {
-		  $query = "UPDATE $TBL_TRACK_ATTEMPT SET teacher_comment = '".Database::escape_string($v)."'
-		  			WHERE question_id = '".Database::escape_string($keyexp[1])."'
-		  			AND exe_id = '".Database::escape_string($id)."'";
-		   api_sql_query($query, __FILE__, __LINE__);
+		} else {  
+			$query = "UPDATE $TBL_TRACK_ATTEMPT SET teacher_comment = '".$v."'
+		  			WHERE question_id = '".$my_questionid."'
+		  			AND exe_id = '".$id."'";
+		    api_sql_query($query, __FILE__, __LINE__);
 
 			$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
 					'(exe_id,
@@ -196,16 +204,14 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 					insert_date,
 					author)
 					VALUES
-					('."'$id','".$keyexp[1]."','$v','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".')';
+					('."'$id','".$my_questionid."','$v','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".')';
 			api_sql_query($recording_changes, __FILE__, __LINE__);
-
 		}
-
 }
 
 $qry = 'SELECT DISTINCT question_id, marks
-			FROM '.$TBL_TRACK_ATTEMPT.' where exe_id = '.intval($id).'
-			GROUP BY question_id';
+		FROM '.$TBL_TRACK_ATTEMPT.' where exe_id = '.intval($id).'
+		GROUP BY question_id';
 
 $res = api_sql_query($qry,__FILE__,__LINE__);
 $tot = 0;
@@ -269,15 +275,13 @@ $headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset="
 //mail($emailid, $subject, $mess,$headers);
 
 api_mail_html($emailid, $emailid, $subject, $mess, $from_name, $from);
-
-
-	if (in_array($origin, array('tracking_course','user_course'))){
-		
-		if (isset($_POST['lp_item_id']) && isset($_POST['lp_item_view_id']) && isset($_POST['student_id']) && isset($_POST['total_score']) && isset($_POST['total_time']) &&  isset($_POST['totalWeighting']) ) {
+	if (in_array($origin, array('tracking_course','user_course'))) {
+		if (isset($_POST['lp_item_id']) && isset($_POST['lp_item_view_id']) && isset($_POST['student_id']) && isset($_POST['total_score']) && isset($_POST['total_time']) &&  isset($_POST['totalWeighting']) ) {			
 			$lp_item_id = $_POST['lp_item_id'];
 			$lp_item_view_id = $_POST['lp_item_view_id'];
 			$student_id = $_POST['student_id'];
 			$totalWeighting =  $_POST['totalWeighting'];
+			
 			if ($lp_item_id == strval(intval($lp_item_id)) && $lp_item_view_id == strval(intval($lp_item_view_id)) && $student_id == strval(intval($student_id))) {
     			$score = Database::escape_string($_POST['total_score']);
     			$total_time = Database::escape_string($_POST['total_time']);
@@ -304,6 +308,7 @@ api_mail_html($emailid, $emailid, $subject, $mess, $from_name, $from);
     			
     			// update max_score from a exercise in lp
     			$sql_update_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '".(float)$totalWeighting."'  WHERE id = '".(int)$lp_item_view_id."'";
+    			
     			api_sql_query($sql_update_max_score,__FILE__,__LINE__);	  
     			   			    			
             }
@@ -1097,7 +1102,8 @@ if ($_configuration['tracking_enabled'] && ($show == 'result') )
 
 			for ($i = 0; $i < $sizeof; $i++) {
 				$revised = false;
-				$sql_exe='SELECT exe_id FROM '.Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING).' WHERE author != '."''".' AND exe_id = '."'".$results[$i][5]."'".' LIMIT 1';
+				$sql_exe='SELECT exe_id FROM '.Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING).'
+						  WHERE author != '."''".' AND exe_id = '."'".Database::escape_string($results[$i][5])."'".' LIMIT 1';
 				$query = api_sql_query($sql_exe,__FILE__,__LINE__);
 
 				if ( Database::num_rows($query) > 0) {
@@ -1195,7 +1201,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result') )
 							if ($revised)
 								echo "<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a> ";
 							else
-							echo '&nbsp;'.get_lang('NoResultsYet'); 
+							echo '&nbsp;'.get_lang('NoResult'); 
 						}						
 					echo '</td>';
 					

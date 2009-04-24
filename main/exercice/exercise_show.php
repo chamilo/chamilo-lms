@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20074 2009-04-24 14:31:45Z juliomontoya $
+* 	@version $Id: exercise_show.php 20080 2009-04-24 16:27:22Z juliomontoya $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -184,7 +184,6 @@ function getFCK(vals,marksid)
 function get_comments($id,$question_id)
 {
 	global $TBL_TRACK_ATTEMPT;
-	//$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id and question_id)."' = '".Database::escape_string($question_id)."' order by question_id";
 	$sql = "SELECT teacher_comment FROM ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' ORDER by question_id";
 	$sqlres = api_sql_query($sql, __FILE__, __LINE__);
 	$comm = Database::result($sqlres,0,"teacher_comment");
@@ -390,8 +389,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			echo '</td>
 			</tr>
 			</table>';
-		}
-		
+		}		
 		if ($origin == 'learnpath') {
 			$show_results = false;
 		}
@@ -438,7 +436,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		
 		//we hide the results
 		if ($show_results)
-		foreach($questionList as $questionId) {	
+		foreach($questionList as $questionId) {
 			$counter++;
 			$k++;
 			$choice=$exerciseResult[$questionId];
@@ -461,8 +459,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			} else {
 				$colspan=2;
 			}
-			?>
-	
+			?>	
 	    	<div id="question_title" class="sectiontitle">
 	    		<?php echo get_lang("Question").' '.($counter).' : '.$questionName; ?>
 	    	</div>	   
@@ -470,7 +467,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 	    		<?php echo $questionDescription; ?>
 	    	</div>
 
- 		 <?php
+ 		 	<?php
 			if($answerType == MULTIPLE_ANSWER) {
 				$choice=array();
 				?>
@@ -522,59 +519,58 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			$i++;
 			 }?>
 			</table>
-		<?php 
+			<?php 
 			} elseif ($answerType == UNIQUE_ANSWER) {
-		?>
-		<table width="100%" border="0" cellspacing="3" cellpadding="3">
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><i><?php echo get_lang("Choice"); ?></i> </td>
-				<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
-				<td><i><?php echo get_lang("Answer"); ?></i></td>
-				<td><i><?php echo get_lang("Comment"); ?></i></td>			
-			</tr>
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<?php
-			$objAnswerTmp=new Answer($questionId);
-			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-			$questionScore=0;
-			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {				
-				$answer=$objAnswerTmp->selectAnswer($answerId);
-				$answerComment=$objAnswerTmp->selectComment($answerId);
-				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-				$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-				$resultans = api_sql_query($queryans, __FILE__, __LINE__);
-				$choice = Database::result($resultans,0,"answer");
-				$studentChoice=($choice == $answerId)?1:0;
-				if ($studentChoice) {
-				  	$questionScore+=$answerWeighting;
-					$totalScore+=$answerWeighting;
-				}
+			?>
+			<table width="100%" border="0" cellspacing="3" cellpadding="3">
+				<tr>
+				<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td><i><?php echo get_lang("Choice"); ?></i> </td>
+					<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
+					<td><i><?php echo get_lang("Answer"); ?></i></td>
+					<td><i><?php echo get_lang("Comment"); ?></i></td>			
+				</tr>
+				<tr>
+				<td>&nbsp;</td>
+				</tr>
+				<?php
+				$objAnswerTmp=new Answer($questionId);
+				$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
+				$questionScore=0;
+				for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {				
+					$answer=$objAnswerTmp->selectAnswer($answerId);
+					$answerComment=$objAnswerTmp->selectComment($answerId);
+					$answerCorrect=$objAnswerTmp->isCorrect($answerId);
+					$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+					$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+					$resultans = api_sql_query($queryans, __FILE__, __LINE__);
+					$choice = Database::result($resultans,0,"answer");
+					$studentChoice=($choice == $answerId)?1:0;
+					if ($studentChoice) {
+					  	$questionScore+=$answerWeighting;
+						$totalScore+=$answerWeighting;
+					}
+					?>
+				<tr>
+				<td>
+					<?php				
+					if($answerId==1)
+						display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
+					else
+						display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");						
+					?>
+				</td>
+				</tr>
+				<?php
+				$i++;
+				}	
 				?>
-			<tr>
-			<td>
-				<?php				
-				if($answerId==1)
-					display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
-				else
-					display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
-					
+				</table>
+				<?php  
+				} elseif($answerType == FILL_IN_BLANKS){
 				?>
-			</td>
-			</tr>
-			<?php
-			$i++;
-			}	
-		?>
-			</table>
-	<?php  
-	} elseif($answerType == FILL_IN_BLANKS){
-		?>
 			<table width="100%" border="0" cellspacing="3" cellpadding="3">
 			<tr>
 			<td>&nbsp;</td>
@@ -983,9 +979,9 @@ if($is_allowedToEdit) {
 					<?php } ?>
 			  </select>
 			  </form><br/ ></div><?php
-			  if($questionScore==-1) {
-			  	$questionScore=0;
-			  	echo '<br>'.get_lang('notCorrectedYet');
+				if($questionScore==-1) {
+					$questionScore=0;
+			  	echo '<br />'.get_lang('notCorrectedYet');
 			  }
 		} else {
 			 	$arrmarks[] = $questionId;
@@ -1046,10 +1042,10 @@ if($is_allowedToEdit) {
 		<input type = "hidden" name="total_score" value="<?php echo $totalScore; ?>">
 		<input type = "hidden" name="total_time" value="<?php echo Security::remove_XSS($_GET['total_time']);?>">
 		<input type = "hidden" name="totalWeighting" value="<?php echo $totalWeighting; ?>">
-	<?php		
+	<?php		 
 		}
 	} else {
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'" method="post">';
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'&totalWeighting='.$totalWeighting.'" method="post">';
 	}					
 	if ($origin!='learnpath' && $origin!='student_progress') {
 	?>					

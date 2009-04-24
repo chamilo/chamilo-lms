@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20031 2009-04-23 21:04:02Z cfasanando $
+<?php //$Id: agenda.inc.php 20093 2009-04-24 22:08:45Z cfasanando $
 
 /*
 ==============================================================================
@@ -524,12 +524,47 @@ function move(fbox,	tbox)
 			fLength++;
 		}
 	}
+	
+	//arrFbox.sort();
+	//arrTbox.sort()		
 
-	arrFbox.sort();
-	arrTbox.sort();
+	var arrFboxGroup = new Array();
+	var arrFboxUser = new Array();
+	var prefix_x;											
+			
+	for (x = 0; x < arrFbox.length; x++) {
+		prefix_x = arrFbox[x].substring(0,2);		
+		if (prefix_x == 'G:') {
+			arrFboxGroup.push(arrFbox[x]);					
+		} else {
+			arrFboxUser.push(arrFbox[x]);					
+		}		  
+	}		
+	
+	arrFboxGroup.sort();
+	arrFboxUser.sort();
+	arrFbox = arrFboxGroup.concat(arrFboxUser);				
+									
+	var arrTboxGroup = new Array();
+	var arrTboxUser = new Array();	
+	var prefix_y;						
+				
+	for (y = 0; y < arrTbox.length; y++) {
+		prefix_y = arrTbox[y].substring(0,2);				
+		if (prefix_y == 'G:') {
+			arrTboxGroup.push(arrTbox[y]);
+		} else {
+			arrTboxUser.push(arrTbox[y]);
+		}			
+	}													
+				
+	arrTboxGroup.sort();
+	arrTboxUser.sort();
+	arrTbox = arrTboxGroup.concat(arrTboxUser);
+
 	fbox.length	= 0;
 	tbox.length	= 0;
-
+		
 	var	c;
 	for(c =	0; c < arrFbox.length; c++)
 	{
@@ -823,7 +858,7 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 	// adding the groups to the select form
 
 	if (isset($to_already_selected) && $to_already_selected==='everyone') {
-		echo "\t\t<option value=\"\">&nbsp;</option>\n";
+		echo "\t\t<option value=\"\">--------------------------------------------</option>\n";
 	} else {
 		if (is_array($group_list))
 		{
@@ -840,7 +875,7 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 			// a divider
 			
 		}
-		echo	"<option value=\"\">----------------------------------</option>";
+		echo	"<option value=\"\">--------------------------------------------</option>";
 		// adding the individual users to the select form
 		foreach($user_list as $this_user)
 		{
@@ -879,18 +914,29 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 	echo "\t\t<select id=\"selected_form\" name=\"selectedform[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
 	if(is_array($to_already_selected))
 	{
+		$select_options_group = array();
+		$select_options_user = array();
+		$select_options_groupuser = array();		
 		foreach($to_already_selected as $groupuser)
 		{
 			list($type,$id)=explode(":",$groupuser);
 			if ($type=="GROUP")
 			{
-				echo "\t\t<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
-			}
+				$select_options_group[] = "\t\t<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
+				//echo "\t\t<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";												
+			}			
 			else
-			{
-				echo "\t\t<option value=\"".$groupuser."\">".$ref_array_users[$id]['lastName']." ".$ref_array_users[$id]['firstName']."</option>";
-			}
+			{								
+				$select_options_user[] = "\t\t<option value=\"".$groupuser."\">".$ref_array_users[$id]['lastName']." ".$ref_array_users[$id]['firstName']."</option>";
+				//echo "\t\t<option value=\"".$groupuser."\">".$ref_array_users[$id]['lastName']." ".$ref_array_users[$id]['firstName']."</option>";
+			}			
 		}
+		$select_options_group[] = "<option value=\"\">--------------------------------------------</option>";
+		$select_options_groupuser = array_merge($select_options_group,$select_options_user);
+		
+		foreach($select_options_groupuser as $select_options) {
+			echo $select_options;
+		}		
 	} else {
 			if($to_already_selected=='everyone'){							
 				// adding the groups to the select form
@@ -907,7 +953,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 						}
 					}					
 				}
-			
+				echo	"<option value=\"\">--------------------------------------------</option>";
 				// adding the individual users to the select form
 				foreach($user_list as $this_user)
 				{
@@ -1581,8 +1627,7 @@ function store_edited_agenda_item($id_attach,$file_comment)
 	// step 3: update the attachments (=delete all and add those in the session
 	update_added_resources("Agenda", $id);
 
-	// return the message;
-	echo '<br />';
+	// return the message;	
 	Display::display_confirmation_message(get_lang("EditSuccess"));
 
 }
@@ -1660,8 +1705,7 @@ function delete_agenda_item($id)
 			//resetting the $id;
 			$id=null;
 
-			// displaying the result message in the yellow box
-			echo '<br />';
+			// displaying the result message in the yellow box			
 			Display::display_confirmation_message(get_lang("AgendaDeleteSuccess"));
 		}	  // if (isset($id)&&$id&&isset($action)&&$action=="delete")
 	} // if ($is_allowed_to_edit)
@@ -1685,8 +1729,7 @@ function showhide_agenda_item($id)
 		if (isset($_GET['id'])&&$_GET['id']&&isset($_GET['action'])&&$_GET['action']=="showhide")
 		{
 			$id=(int)addslashes($_GET['id']);
-			change_visibility($nameTools,$id);
-			echo '<br />';
+			change_visibility($nameTools,$id);			
 			Display::display_confirmation_message(get_lang("VisibilityChanged"));
 		}
 	}
@@ -4377,8 +4420,7 @@ function delete_attachment_file($id_attach) {
 	$last_id_file=Database::insert_id();
 	// update item_property
 	api_item_property_update($_course, 'calendar_event_attachment', $id_attach ,'AgendaAttachmentDeleted', api_get_user_id());
-	if (!empty($result)) {
-	echo '<br />';	
+	if (!empty($result)) {	
 	Display::display_confirmation_message(get_lang("AttachmentFileDeleteSuccess"));
 	}
 }

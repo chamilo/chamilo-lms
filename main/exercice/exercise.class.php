@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 20100 2009-04-24 23:55:22Z iflorespaz $
+* 	@version $Id: exercise.class.php 20106 2009-04-25 07:04:20Z yannoo $
 */
 
 
@@ -891,11 +891,11 @@ class Exercise
 		if($type=='full') {
 			// feedback type	
 			$radios_feedback = array();
-			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('ExerciceAtEndOfTest'),'0');
+			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('ExerciseAtTheEndOfTheTest'),'0');
 			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2');
 			$form -> addGroup($radios_feedback, null, get_lang('FeedbackType'));		
 			
-			$feedback_option[0]=get_lang('ExerciceAtEndOfTest');
+			$feedback_option[0]=get_lang('ExerciseAtTheEndOfTheTest');
 			$feedback_option[1]=get_lang('DirectFeedback');
 			$feedback_option[2]=get_lang('NoFeedback');
 						

@@ -21,7 +21,7 @@
 	background-color: white;
 	height: 300px; 
 	width: 94%;
-	border-left: 15px #FFF solid;
+	border-left: 10px #FFF solid;
 }
 .inner_lp_toc .scorm_item{
 
@@ -176,7 +176,6 @@ width:10px;
 	background:#ccc;
 	font-size: 14px;
 	color: #444;	
-	width: 89%;	
-	margin-left:17px;
+	width: 89%;		
 	padding: 1px 5px 3px 8px;	
 }

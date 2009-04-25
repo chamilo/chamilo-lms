@@ -1,4 +1,4 @@
-<?php // $Id: link.php 19700 2009-04-10 11:07:37Z pcool $
+<?php // $Id: link.php 20102 2009-04-25 01:53:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -193,7 +193,7 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 {
 	
 	echo '<div class="actions">';
-	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('LinksOverview').'</a>';
+	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png').get_lang('BackToLinksOverview').'</a>';
 	echo '</div>';
 	
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing

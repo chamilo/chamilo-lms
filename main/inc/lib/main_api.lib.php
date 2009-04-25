@@ -1295,7 +1295,7 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 		$cache[$language][$dltt][$variable] = $langvar;
 		return $langvar;
 	}
-	if ($notrans != 'DLTT') {
+	if (!$dltt) {
 		$cache[$language][$dltt][$variable] = $ot.$variable.$ct;
 		return $cache[$language][$dltt][$variable];
 	}

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20093 2009-04-24 22:08:45Z cfasanando $
+<?php //$Id: agenda.inc.php 20101 2009-04-25 01:05:54Z yannoo $
 
 /*
 ==============================================================================
@@ -2842,7 +2842,7 @@ function show_add_form($id = '')
 	// the main area of the agenda item: the wysiwyg editor
 	echo '	<div class="row">
 				<div class="label">
-					<span class="form_required">*</span> Term name
+					<span class="form_required">*</span>'.get_lang('Description').'
 				</div>
 				<div class="formw">';
 			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");

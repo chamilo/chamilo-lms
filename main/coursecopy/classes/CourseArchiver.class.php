@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseArchiver.class.php 15429 2008-05-26 20:34:37Z yannoo $
+// $Id: CourseArchiver.class.php 20104 2009-04-25 03:08:08Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -47,7 +47,7 @@ class CourseArchiver
 		{
 			while (($file = readdir($handle)) !== false)
 			{
-				if ($file != "." && $file != ".." && strpos($file,'CourseArchiver_') == 0 && is_dir($dir.'/'.$file))
+				if ($file != "." && $file != ".." && strpos($file,'CourseArchiver_') === 0 && is_dir($dir.'/'.$file))
 				{
 					rmdirr($dir.'/'.$file);
 				}

@@ -133,33 +133,39 @@ class Blog
 	function create_blog($title, $subtitle)
 	{
 		global $_user;
-
+		$current_date=date('Y-m-d H:i:s',time());
 		// Tabel definitions
 		$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool 			= Database::get_course_table(TABLE_TOOL_LIST);
 		$tbl_blogs_posts 	= Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_blogs_tasks 	= Database::get_course_table(TABLE_BLOGS_TASKS);
 
-		// Create the blog
-		$sql = "INSERT INTO $tbl_blogs (`blog_name`, `blog_subtitle`, `date_creation`, `visibility` )
-					VALUES ('".Database::escape_string($title)."', '".Database::escape_string($subtitle)."', NOW(), '1');";
-		api_sql_query($sql, __FILE__, __LINE__);
-		$this_blog_id = Database::get_last_insert_id();
-
-		// Make first post. :)
-		$sql = "INSERT INTO $tbl_blogs_posts (`title`, `full_text`, `date_creation`, `blog_id`, `author_id` )
-					VALUES ('".get_lang("Welcome")."', '" . get_lang('FirstPostText')."', NOW(), '".Database::escape_string((int)$this_blog_id)."', '".Database::escape_string((int)$_user['user_id'])."');";
-		api_sql_query($sql, __FILE__, __LINE__);
-
-		// Put it on course homepage
-		$sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool)
-					VALUES ('".Database::escape_string($title)."','blog/blog.php?blog_id=".(int)$this_blog_id."','blog.gif','1','0','pastillegris.gif',0)";
-		api_sql_query($sql, __FILE__, __LINE__);
-
-		// Subscribe the teacher to this blog
-		Blog::set_user_subscribed((int)$this_blog_id,(int)$_user['user_id']);
-
-		return void;
+		//verified if exist blog
+		$sql='SELECT COUNT(*) as count FROM '.$tbl_blogs.'  WHERE blog_name="'.$title.'" AND blog_subtitle="'.$subtitle.'";';
+		$res=Database::query($sql,__FILE__,__LINE__);
+		$info_count=Database::result($res,0,0);
+		if ($info_count==0) {
+			// Create the blog
+			$sql = "INSERT INTO $tbl_blogs (`blog_name`, `blog_subtitle`, `date_creation`, `visibility` )
+						VALUES ('".Database::escape_string($title)."', '".Database::escape_string($subtitle)."', '".$current_date."', '1');";
+			api_sql_query($sql, __FILE__, __LINE__);
+			$this_blog_id = Database::get_last_insert_id();
+	
+			// Make first post. :)
+			$sql = "INSERT INTO $tbl_blogs_posts (`title`, `full_text`, `date_creation`, `blog_id`, `author_id` )
+						VALUES ('".get_lang("Welcome")."', '" . get_lang('FirstPostText')."','".$current_date."', '".Database::escape_string((int)$this_blog_id)."', '".Database::escape_string((int)$_user['user_id'])."');";
+			api_sql_query($sql, __FILE__, __LINE__);
+	
+			// Put it on course homepage
+			$sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool)
+						VALUES ('".Database::escape_string($title)."','blog/blog.php?blog_id=".(int)$this_blog_id."','blog.gif','1','0','pastillegris.gif',0)";
+			api_sql_query($sql, __FILE__, __LINE__);
+	
+			// Subscribe the teacher to this blog
+			Blog::set_user_subscribed((int)$this_blog_id,(int)$_user['user_id']);
+	
+			return void;
+		}
 	}
 
 	/**
@@ -259,7 +265,8 @@ class Blog
 		
 		$upload_ok=true;
 		$has_attachment=false;
-
+		$current_date=date('Y-m-d H:i:s',time());
+		
 		if(!empty($_FILES['user_upload']['name']))
 		{
 			require_once('fileUpload.lib.php'); 
@@ -274,7 +281,7 @@ class Blog
 	
 			// Create the post
 			$sql = "INSERT INTO " . $tbl_blogs_posts." (`title`, `full_text`, `date_creation`, `blog_id`, `author_id` )
-					VALUES ('".Database::escape_string($title)."', '".Database::escape_string($full_text)."', NOW(), '".(int)$blog_id."', '".(int)$_user['user_id']."');";
+					VALUES ('".Database::escape_string($title)."', '".Database::escape_string($full_text)."','".$current_date."', '".(int)$blog_id."', '".(int)$_user['user_id']."');";
 						
 			api_sql_query($sql, __FILE__, __LINE__);
 			$last_post_id=Database::insert_id();
@@ -398,7 +405,8 @@ class Blog
 		
 		$upload_ok=true;
 		$has_attachment=false;
-
+		$current_date=date('Y-m-d H:i:s',time());
+		
 		if(!empty($_FILES['user_upload']['name']))
 		{
 			require_once('fileUpload.lib.php'); 
@@ -413,7 +421,7 @@ class Blog
 	
 			// Create the comment
 			$sql = "INSERT INTO $tbl_blogs_comments (`title`, `comment`, `author_id`, `date_creation`, `blog_id`, `post_id`, `parent_comment_id`, `task_id` )
-						VALUES ('".Database::escape_string($title)."', '".Database::escape_string($full_text)."', '".(int)$_user['user_id']."', NOW(), '".(int)$blog_id."', '".(int)$post_id."', '".(int)$parent_id."', '".(int)$task_id."')";
+						VALUES ('".Database::escape_string($title)."', '".Database::escape_string($full_text)."', '".(int)$_user['user_id']."','".$current_date."', '".(int)$blog_id."', '".(int)$post_id."', '".(int)$parent_id."', '".(int)$task_id."')";
 			api_sql_query($sql, __FILE__, __LINE__);
 	
 			// Empty post values, or they are shown on the page again
@@ -2854,10 +2862,52 @@ class Blog
 		global $charset;
 		// Init
 		$counter = 0;
+
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
+		$sql = 'SELECT blog_name,blog_subtitle,visibility,blog_id FROM '.$tbl_blogs.' ORDER BY date_creation DESC ';
+		$result = api_sql_query($sql, __FILE__, __LINE__);
 
+		while ($row_project=Database::fetch_row($result)) {
+			$list_info[]=$row_project;
+		}
+		$list_content_blog=array();
+		$list_body_blog=array();
 
-		$sql = "SELECT `blog_id`, `blog_name`, `blog_subtitle`, `visibility` FROM $tbl_blogs ORDER BY `blog_name`";
+		foreach($list_info as $key => $info_log) {
+		
+				$list_body_blog[]=$info_log[0];
+				$list_body_blog[]=$info_log[1];	
+				
+				$visibility_icon=($info_log[2]==0) ? 'invisible' : 'visible';
+				$visibility_info=($info_log[2]==0) ? 'Visible' : 'Invisible';
+			 	$my_image.='<a href="' .api_get_self(). '?action=edit&amp;blog_id=' . $info_log[3] . '">';
+				$my_image.='<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />';
+				$my_image.="</a>\n";
+				$my_image.='<a href="' .api_get_self(). '?action=delete&amp;blog_id=' . $info_log[3] . '" ';
+				$my_image.='onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >';
+				$my_image.='<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />';
+				$my_image.="</a>\n";
+				$my_image.='<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $info_log[3] . '">';
+				$my_image.='<img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang($visibility_info) . '" />';
+				$my_image.="</a>\n";
+										
+				$list_body_blog[]=$my_image;
+				$my_image='';
+		
+				$list_content_blog[]=$list_body_blog;
+				$list_body_blog=array();
+		}
+		$parameters='';
+		//$parameters=array('action'=>Security::remove_XSS($_GET['action']));
+		
+		$table = new SortableTableFromArrayConfig($list_content_blog, 1,20,'project');
+		$table->set_additional_parameters($parameters);
+		$table->set_header(0, get_lang('Title'));
+		$table->set_header(1, get_lang('Subtitle'));
+		$table->set_header(2, get_lang('Modify'));
+		$table->display();
+		$list_content_blog=array();
+		/*$sql = "SELECT `blog_id`, `blog_name`, `blog_subtitle`, `visibility` FROM $tbl_blogs ORDER BY `blog_name`";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		while($blog = Database::fetch_array($result))
@@ -2884,8 +2934,9 @@ class Blog
 							"</a>\n",
 						 '</td>',
 					'</tr>';
-		}
+		}*/
 	}
+
 }
 
 

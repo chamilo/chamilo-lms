@@ -78,7 +78,7 @@ class SurveyManager
 
 
 	function create_group($survey_id,$group_title,$introduction,$table_group)
-	{
+	{		
 		$sql_query = "SELECT * FROM $table_group where groupname='".$group_title."' AND survey_id=".intval($survey_id);
 		$res = api_sql_query($sql_query, __FILE__, __LINE__);
 		if(mysql_num_rows($res))
@@ -1089,7 +1089,7 @@ function create_course_survey_rel($cidReq,$survey_id,$table_course,$table_course
 }
 
 function import_existing_question($surveyid,$qids,$table_group,$table_question,$yes)
- {
+{
   $qid=explode(",",$qids);
   $count = count($qid);
   for($i=0; $i<$count; $i++)
@@ -1593,315 +1593,92 @@ function get_questions_move($curr_dbname)
 	return $question1;
 }
 
-/**
- * Displays a sortable table for the surveys
- *
- * @param unknown_type $groupid
- * @param unknown_type $surveyid
- * @param unknown_type $curr_dbname
- * @param unknown_type $header
- * @param unknown_type $content
- * @param unknown_type $sorting_options
- * @param unknown_type $paging_options
- * @param unknown_type $query_vars
- *
- * @todo check if this function is needed as it seems that this is a copy of the Display::display_sortable_table function.
- */
-function display_sortable_table($groupid,$surveyid,$curr_dbname,$header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null)
+function listGroups($id_survey, $fields = '*')
 {
-		global $origin;
-
-		// Database table definitions
-		/** @todo use database constants for the survey tables */
-		$table_survey 		= Database :: get_course_table('survey');
-		$table_group 		=  Database :: get_course_table('survey_group');
-		$table_question 	= Database :: get_course_table('questions');
-		$table_course 		= Database::get_main_table(TABLE_MAIN_COURSE);
-		$table_survey_group = Database :: get_course_table('survey_group');
-
-		require_once ('tablesort.lib.php');
-		if (!isset ($paging_options['per_page_default']))
-		{
-			$paging_options['per_page_default'] = 10;
-		}
-		if (!isset ($paging_options['page_nr']))
-		{
-			$paging_options['page_nr'] = (isset ($_GET['page_nr']) ? $_GET['page_nr'] : 1);
-		}
-		if (!isset ($paging_options['per_page']))
-		{
-			$paging_options['per_page'] = (isset ($_GET['per_page']) ? $_GET['per_page'] : $paging_options['per_page_default']);
-		}
-		if (!isset ($sorting_options['column']))
-		{
-			$sorting_options['column'] = (isset ($_GET['column']) ? $_GET['column'] : 0);
-		}
-		if (!isset ($sorting_options['direction']))
-		{
-			$sorting_options['direction'] = (isset ($_GET['direction']) ? $_GET['direction'] : SORT_ASC);
-		}
-		// Build the query_string
-		if (is_array($query_vars))
-		{
-			foreach ($query_vars as $key => $value)
-			{
-				$query_string .= '&amp;'.urlencode($key).'='.urlencode($value);
-			}
-		}
-		$content = SurveyManager :: sort_table($content, $sorting_options['column'],'');
-		// Get data for selected page
-		$page_nav = '';
-		$page_content = array ();
-		 $pages = array_chunk($content, intval($paging_options['per_page']));
-		if( $paging_options['page_nr'] > count($pages))
-		{
-			$paging_options['page_nr'] = count($pages);
-		}
-		$page_content = $pages[$paging_options['page_nr'] - 1];
-		// Build navigation bar
-		if (count($pages) > 1)
-		{
-			$page_nav = get_lang('Page').' : ';
-			if ($paging_options['page_nr'] > 1)
-			{
-				$page_nav .= '<a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='. ($paging_options['page_nr'] - 1).'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">&laquo;</a> ';
-			}
-			for ($i = $paging_options['page_nr'] - 3; $i < $paging_options['page_nr']; $i ++)
-			{
-				if ($i > 0)
-				{
-					$page_nav .= '<a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='.$i.'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">'.$i.'</a> ';
-				}
-			}
-			if ($i == $paging_options['page_nr'])
-			{
-				$page_nav .= '<b>'.$i.'</b> ';
-			}
-			for ($i = $paging_options['page_nr'] + 1; $i < $paging_options['page_nr'] + 4; $i ++)
-			{
-				if ($i <= count($pages))
-				{
-					$page_nav .= '<a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='.$i.'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">'.$i.'</a> ';
-				}
-			}
-			if ($paging_options['page_nr'] < count($pages))
-			{
-				$page_nav .= '<a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='. ($paging_options['page_nr'] + 1).'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">&raquo;</a> ';
-			}
-		}
-		$view_switch = '';
-		if (count($pages) == 1 && count($page_content) > $paging_options['per_page_default'])
-		{
-			$view_switch = ' <a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr=1&amp;per_page='.$paging_options['per_page_default'].''.$query_string.'">'.get_lang('Show').' '.$paging_options['per_page_default'].'</a>';
-		}
-		elseif (count($pages) > 1)
-		{
-			$view_switch = ' <a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr=1&amp;per_page='.count($content).''.$query_string.'">'.get_lang('ShowAll').'</a>';
-		}
-		$page_nav = '<table width="100%"><tr><td>'.$view_switch.'</td><td align="right">'.$page_nav.'</td></tr></table>';
-		// Determine new direction
-		$new_direction = ($sorting_options['direction'] == SORT_ASC ? SORT_DESC : SORT_ASC);
-		echo "\n";
-		echo $page_nav;
-		// Show the table
-		echo '<table class="data_table" width="100%">';
-		echo "\n";
-		echo '<tr>';
-		foreach ($header as $key => $value)
-		{
-			echo '<th '.$value[2].'>';
-			if ($value[1])
-			{
-				echo $value[0];
-				if ($sorting_options['column'] == $key)
-				{
-					echo $sorting_options['direction'] == SORT_ASC ? '&nbsp;&#8595; ' : '&nbsp;&#8593; ';
-				}
-			}
-			else
-			{
-				echo $value[0];
-			}
-			echo '</th>';
-		}
-		echo '</tr>';
-		echo "\n";
-		if( is_array($page_content))
-		{
-			$x=0;
-            $y=count($page_content);
-
-			$page_nr=$paging_options['page_nr'];
-			$per_page=$paging_options['per_page'];
-			$sql="SELECT * FROM $table_question WHERE survey_id = '$surveyid'";
-			$res1=api_sql_query($sql,__FILE__,__LINE__);
-			$num1=mysql_num_rows($res1);
-			$number_q=ceil($num1/10);
-			$sql_gr="SELECT * FROM $table_question WHERE gid='$groupid' AND survey_id = '$surveyid'";
-			$result_gr=api_sql_query($sql_gr,__FILE__,__LINE__);
-            $num_gr=mysql_num_rows($result_gr);
-			$questions=mysql_fetch_array($result_gr);
-			foreach ($page_content as $row => $data)
-			{
-
-				echo '<tr class="'. ($row % 2 == 0 ? 'row_even' : 'row_odd').'">';
-
-				foreach( $data as $column => $value)
-				{
-					echo '<td '.(isset($header[$column][3])? $header[$column][3] : '' ).'>';
-
-					if($x==0 && $page_nr==1)
-					{
-                       echo str_replace('<img src="../img/up.gif" border="0" title="lang_move_up">',"",$value);
-
-					}
-					elseif(($page_nr==$number_q) && ($x==$y-1))
-					{
-
-					   echo str_replace('<img src="../img/down.gif" border="0" title="lang_move_down">',"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$value);
-
-					}
-
-					else{
-                    echo $value;
-					}
-					echo '</td>';
-				}
-				echo '</tr>';
-				echo "\n";
-               	$x++;
-			}
-		}
-		echo '</table>';
-		echo $page_nav;
+	$groups_table = Database :: get_course_table(TABLE_MAIN_GROUP);
+	$sql = 'SELECT '.$fields.' FROM '.$groups_table.'
+			WHERE survey_id='.$id_survey.' ORDER BY sortby';
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$groups = array();
+	while($row = mysql_fetch_array($rs)){
+		$groups[] = $row;
 	}
-
-
-function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGULAR)
-	{
-		switch ($type)
-		{
-			case SORT_REGULAR :
-				if (TableSort::is_image_column($data, $column))
-				{
-					return TableSort::sort_table($data, $column, $direction, SORT_IMAGE);
-				}
-				elseif (TableSort::is_date_column($data, $column))
-				{
-					return TableSort::sort_table($data, $column, $direction, SORT_DATE);
-				}
-				elseif (TableSort::is_numeric_column($data, $column))
-				{
-					return TableSort::sort_table($data, $column, $direction, SORT_NUMERIC);
-				}
-
-				return TableSort::sort_table($data, $column, $direction, SORT_STRING);
-				break;
-			case SORT_NUMERIC :
-				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
-				break;
-			case SORT_STRING :
-				$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
-				break;
-			case SORT_IMAGE :
-				$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
-				break;
-			case SORT_DATE :
-				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
-		}
-		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return ('.$direction.' == SORT_ASC ? ('.$compare_function.') : !('.$compare_function.'));';
-		// Sort the content
-		usort($data, create_function('$a,$b', $function_body));
-		return $data;
-	}
-
-	function listGroups($id_survey, $fields = '*'){
-
-		$groups_table = Database :: get_course_table(TABLE_MAIN_GROUP);
-
-		$sql = 'SELECT '.$fields.' FROM '.$groups_table.'
-				WHERE survey_id='.$id_survey.' ORDER BY sortby';
-
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
-
-		$groups = array();
-		while($row = mysql_fetch_array($rs)){
-			$groups[] = $row;
-		}
-
-		return $groups;
-	}
-
-	function listQuestions($id_survey, $fields = '*'){
-
-		$questions_table = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
-		$groups_table = Database :: get_course_table('survey_group');
-
-		$sql = 'SELECT '.$fields.'
-				FROM '.$questions_table.' questions
-				INNER JOIN '.$groups_table.' groups
-					ON questions.gid = groups.group_id
-				WHERE questions.survey_id='.$id_survey.'
-				ORDER BY groups.sortby, questions.sortby';
-
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
-
-		$questions = array();
-		while($row = mysql_fetch_array($rs)){
-			$questions[] = $row;
-		}
-
-		return $questions;
-
-	}
-
-	function listAnswers($qid){
-
-		$answers_table = Database :: get_course_table('survey_report');
-
-		$sql = 'SELECT DISTINCT answer FROM '.$answers_table.'
-				WHERE qid='.$qid;
-
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
-
-		$answers = array();
-		while($row = mysql_fetch_array($rs)){
-			$answers[] = $row;
-		}
-
-		return $answers;
-	}
-
-
-	function listUsers($survey_id, $dbname, $fields='id, user_id, firstname, lastname, email, organization') {
-
-		$tbl_survey_users = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
-		$sql = 'SELECT '.$fields.' FROM '.$tbl_survey_users.'
-				WHERE survey_id='.$survey_id.'
-				AND db_name="'.$dbname.'"
-				ORDER BY lastname, firstname ';
-
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		$users = array();
-		while($row = mysql_fetch_array($rs))
-			$users[] = $row;
-
-		return $users;
-
-	}
-
-	function getUserAnswersDetails($id_userAnswers, $params=''){
-
-		$table_answers = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
-		$sql = 'SELECT * FROM '.$table_answers.' '.$where.' '.$order;
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		$answers = array();
-		while($row = mysql_fetch_array($rs))
-			$answers[] = $row;
-
-		return $answers;
-	}
+	return $groups;
 }
+
+function listQuestions($id_survey, $fields = '*')
+{
+
+	$questions_table = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
+	$groups_table = Database :: get_course_table('survey_group');
+
+	$sql = 'SELECT '.$fields.'
+			FROM '.$questions_table.' questions
+			INNER JOIN '.$groups_table.' groups
+				ON questions.gid = groups.group_id
+			WHERE questions.survey_id='.$id_survey.'
+			ORDER BY groups.sortby, questions.sortby';
+
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+
+	$questions = array();
+	while($row = mysql_fetch_array($rs)){
+		$questions[] = $row;
+	}
+
+	return $questions;
+
+}
+
+function listAnswers($qid){
+
+	$answers_table = Database :: get_course_table('survey_report');
+
+	$sql = 'SELECT DISTINCT answer FROM '.$answers_table.'
+			WHERE qid='.$qid;
+
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+
+	$answers = array();
+	while($row = mysql_fetch_array($rs)){
+		$answers[] = $row;
+	}
+
+	return $answers;
+}
+
+
+function listUsers($survey_id, $dbname, $fields='id, user_id, firstname, lastname, email, organization') {
+
+	$tbl_survey_users = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
+	$sql = 'SELECT '.$fields.' FROM '.$tbl_survey_users.'
+			WHERE survey_id='.$survey_id.'
+			AND db_name="'.$dbname.'"
+			ORDER BY lastname, firstname ';
+
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$users = array();
+	while($row = mysql_fetch_array($rs))
+		$users[] = $row;
+
+	return $users;
+
+}
+
+function getUserAnswersDetails($id_userAnswers, $params=''){
+
+	$table_answers = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
+	$sql = 'SELECT * FROM '.$table_answers.' '.$where.' '.$order;
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$answers = array();
+	while($row = mysql_fetch_array($rs))
+		$answers[] = $row;
+
+	return $answers;
+}
+
+}
+
 
 /**
  * 
@@ -1926,10 +1703,10 @@ class SurveyTree
 	
 		// searching
 		$search_restriction = SurveyUtil::survey_search_restriction();
-		if ($search_restriction)
-		{
+		if ($search_restriction) {
 			$search_restriction = ' AND '.$search_restriction;
 		}
+		
 		$sql = "SELECT survey.survey_id , survey.parent_id, survey_version, survey.code as name
 		FROM $table_survey survey 
 		LEFT JOIN  $table_survey_question  survey_question 

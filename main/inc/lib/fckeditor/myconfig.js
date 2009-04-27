@@ -381,7 +381,7 @@ FCKConfig.ToolbarSets["Survey"] = [
 
 //Test
 FCKConfig.ToolbarSets["TestDescription"] = [
-	['Save','FitWindow','-','PasteWord','-','Undo','Redo'],
+	['FitWindow','-','PasteWord','-','Undo','Redo'],
     ['Link','Unlink','Anchor'],
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],

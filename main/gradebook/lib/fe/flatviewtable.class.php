@@ -74,7 +74,6 @@ class FlatViewTable extends SortableTable
 			array_pop($header_name);			
 			$user_results = ($this->datagen->get_data_to_graph());				
 			$pre_result = $new_result = array();
-			
 			$DataSet = new pData;
 			//filling the Dataset			
 			foreach($user_results as $result) {
@@ -91,16 +90,15 @@ class FlatViewTable extends SortableTable
 					if ($total != 0)
 						$show_draw  = true; 					
 					$DataSet->AddPoint($total,"Serie".$i);					
-					$DataSet->SetSerieName($header_name[$i-1],"Serie".$i);  
+					$DataSet->SetSerieName($header_name[$i-1],"Serie".$i);
+					// Dataset definition   		  
+					$DataSet->AddAllSeries();  
+					$DataSet->SetAbsciseLabelSerie(); 
 					$i++; 	
 				}
 			}			
 			//print_r($pre_result); print_r($header_name);			
-			
-			// Dataset definition   		  
-			$DataSet->AddAllSeries();  
-			$DataSet->SetAbsciseLabelSerie();
-			
+				
 			// Cache definition   
 			$Cache = new pCache();
 			// the graph id
@@ -182,11 +180,11 @@ class FlatViewTable extends SortableTable
 		$header_name = $this->datagen->get_header_names();
 		$total_users = $this->datagen->get_total_users_count();
 		$img_file = '';
-		
+
 		if ($this->datagen->get_total_items_count()>0 && $total_users > 0 ) {						
 			array_shift($header_name); 
 			array_shift($header_name);
-
+			
 			$displayscore= ScoreDisplay :: instance();
 			$customdisplays = $displayscore->get_custom_score_display_settings();
 			if (is_array($customdisplays) && count(($customdisplays))) { 

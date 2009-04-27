@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20029 2009-04-23 19:57:27Z aportugal $
+<?php // $Id: question.class.php 20136 2009-04-27 20:52:51Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20029 2009-04-23 19:57:27Z aportugal $
+* 	@version $Id: question.class.php 20136 2009-04-27 20:52:51Z juliomontoya $
 */
 
 
@@ -968,6 +968,21 @@ abstract class Question
 					div.row div.label{ width: 10%; }
 					div.row div.formw{ width: 89%; }
 				</style>';
+				
+		echo '	<script>
+				function show_media() {
+			if(document.getElementById(\'media\').style.display == \'none\') {
+				document.getElementById(\'media\').style.display = \'block\';
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
+			} else {			
+				document.getElementById(\'media\').style.display = \'none\';
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
+				
+			}	
+		}	
+			</script>';		
+			
+
 		$renderer = $form->defaultRenderer();
 		$form->addElement('html','<div class="form">');
 		// question name
@@ -992,6 +1007,8 @@ abstract class Question
 		// question type
 		$answerType= intval($_REQUEST['answerType']);
 		$form->addElement('hidden','answerType',$_REQUEST['answerType']);
+		
+		
 		// html editor
 		global $fck_attribute;
 		$fck_attribute = array();
@@ -1001,12 +1018,22 @@ abstract class Question
 		
 		if(is_array($fck_config)){
 			$fck_attribute = array_merge($fck_attribute,$fck_config);
-		}
-		
+		}		
 		
 		if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
 
-		$form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false);
+		$form -> addElement('html','<div class="row">
+		<div class="label"></div>
+		<div class="formw" style="height:50px">
+			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
+		</div>
+		</div>');
+		
+		$form -> addElement ('html','<div id="media" style="display:none;">');
+				
+		$form->add_html_editor('questionDescription','', false);
+		$form -> addElement ('html','</div>');
+		
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionDescription');
 
 		// hidden values

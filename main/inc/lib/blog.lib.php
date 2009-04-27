@@ -1314,7 +1314,7 @@ class Blog
 			echo '<div class="row"><div class="form_header">' . get_lang('NewPost') . '</div></div>';
 			
 			// article title
-			echo '<div class="row" style="float:left;">
+			echo '<div class="row">
 						<div class="label" >
 							<span class="form_required">*</span>'.get_lang('Title') . '
 						</div>
@@ -1334,49 +1334,51 @@ class Blog
 			}	
 			$oFCKeditor->Value = isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
 		
-			echo '<div class="row" style="float:left;width:100%">
-						<div class="label" style="width:7%" > 
+			echo '<div class="row">
+						<div class="label">
 							' . get_lang('PostFullText') . '
 						</div>
-						<div style="padding-left:110px;width:90%">';
-						$oFCKeditor->Create();
-					echo '</div>
+						<div class="formw">';
+			$oFCKeditor->Create();
+			echo '		</div>
 					</div>';			
-			echo '<br /><br />';		
+									
 			// attachment
-			echo '<div style="float:left;width:100%">
-						<div style="float:left;padding-right:10px">
+			echo '<div class="row">
+						<div class="label">
 							' . get_lang('AddAnAttachment') . '
 						</div>
-						<div style="float:left;">
+						<div class="formw">
 							<input type="file" name="user_upload"/>
 						</div>
 					</div>';
-			echo '<br /><br />';
+									
 			// comment
-			echo '<div style="float:left;width:100%">
-					<div style="float:left;padding-right:28px">
+			echo '<div class="row">
+						<div class="label">
 							' . get_lang('FileComment') . '
 						</div>
-						<div style="float:left;">
+						<div class="formw">
 							<textarea name="post_file_comment" cols="34" /></textarea>
 						</div>
 					</div>';
-			echo '<br /><br />';
+
 			// submit
-			echo '<div class="row" style="float:left;padding-left:90px;" >
+			echo '<div class="row">
 						<div class="label">
 						</div>
 						<div class="formw">
-							 <input type="hidden" name="action" value="" />
-							 <input type="hidden" name="new_post_submit" value="true" />
-							 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
+								 <input type="hidden" name="action" value="" />
+								 <input type="hidden" name="new_post_submit" value="true" />
+								 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
 						</div>
 					</div>';
 			
 				 
 			echo '</form>';
-		} else {
+		}
+		else
+		{
 			api_not_allowed();
 		}
 	}
@@ -2872,41 +2874,42 @@ class Blog
 		}
 		$list_content_blog=array();
 		$list_body_blog=array();
-
-		foreach($list_info as $key => $info_log) {
 		
-				$list_body_blog[]=$info_log[0];
-				$list_body_blog[]=$info_log[1];	
-				
-				$visibility_icon=($info_log[2]==0) ? 'invisible' : 'visible';
-				$visibility_info=($info_log[2]==0) ? 'Visible' : 'Invisible';
-			 	$my_image.='<a href="' .api_get_self(). '?action=edit&amp;blog_id=' . $info_log[3] . '">';
-				$my_image.='<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />';
-				$my_image.="</a>\n";
-				$my_image.='<a href="' .api_get_self(). '?action=delete&amp;blog_id=' . $info_log[3] . '" ';
-				$my_image.='onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >';
-				$my_image.='<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />';
-				$my_image.="</a>\n";
-				$my_image.='<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $info_log[3] . '">';
-				$my_image.='<img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang($visibility_info) . '" />';
-				$my_image.="</a>\n";
-										
-				$list_body_blog[]=$my_image;
-				$my_image='';
-		
-				$list_content_blog[]=$list_body_blog;
-				$list_body_blog=array();
+		if (is_array($list_info)) {
+			foreach($list_info as $key => $info_log) {
+			
+					$list_body_blog[]=$info_log[0];
+					$list_body_blog[]=$info_log[1];	
+					
+					$visibility_icon=($info_log[2]==0) ? 'invisible' : 'visible';
+					$visibility_info=($info_log[2]==0) ? 'Visible' : 'Invisible';
+				 	$my_image.='<a href="' .api_get_self(). '?action=edit&amp;blog_id=' . $info_log[3] . '">';
+					$my_image.='<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />';
+					$my_image.="</a>\n";
+					$my_image.='<a href="' .api_get_self(). '?action=delete&amp;blog_id=' . $info_log[3] . '" ';
+					$my_image.='onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >';
+					$my_image.='<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />';
+					$my_image.="</a>\n";
+					$my_image.='<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $info_log[3] . '">';
+					$my_image.='<img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang($visibility_info) . '" />';
+					$my_image.="</a>\n";
+											
+					$list_body_blog[]=$my_image;
+					$my_image='';
+			
+					$list_content_blog[]=$list_body_blog;
+					$list_body_blog=array();
+			}
+			$parameters='';
+			//$parameters=array('action'=>Security::remove_XSS($_GET['action']));			
+			$table = new SortableTableFromArrayConfig($list_content_blog, 1,20,'project');
+			//$table->set_additional_parameters($parameters);
+			$table->set_header(0, get_lang('Title'));
+			$table->set_header(1, get_lang('Subtitle'));
+			$table->set_header(2, get_lang('Modify'));
+			$table->display();
 		}
-		$parameters='';
-		//$parameters=array('action'=>Security::remove_XSS($_GET['action']));
-		
-		$table = new SortableTableFromArrayConfig($list_content_blog, 1,20,'project');
-		$table->set_additional_parameters($parameters);
-		$table->set_header(0, get_lang('Title'));
-		$table->set_header(1, get_lang('Subtitle'));
-		$table->set_header(2, get_lang('Modify'));
-		$table->display();
-		$list_content_blog=array();
+	
 		/*$sql = "SELECT `blog_id`, `blog_name`, `blog_subtitle`, `visibility` FROM $tbl_blogs ORDER BY `blog_name`";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 

@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 20099 2009-04-24 22:37:59Z juliomontoya $
+* 	@version $Id: survey.lib.php 20132 2009-04-27 19:51:24Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -194,10 +194,10 @@ class survey_manager
 				if(!empty($values['parent_id']))
 				{
 					$additional['columns'] .= ', survey_version';
-					$sql = 'SELECT survey_version FROM '.$table_survey.' WHERE parent_id = '.$values['parent_id'].' ORDER BY survey_version DESC LIMIT 1';
+					$sql = 'SELECT survey_version FROM '.$table_survey.' WHERE parent_id = '.Database::escape_string($values['parent_id']).' ORDER BY survey_version DESC LIMIT 1';
 					$rs = api_sql_query($sql,__FILE__,__LINE__);
 					if(Database::num_rows($rs)===0) {
-						$sql = 'SELECT survey_version FROM '.$table_survey.' WHERE survey_id = '.$values['parent_id'];
+						$sql = 'SELECT survey_version FROM '.$table_survey.' WHERE survey_id = '.Database::escape_string($values['parent_id']);
 						$rs = api_sql_query($sql,__FILE__,__LINE__);
 						$getversion = Database::fetch_array($rs,ASSOC);
 						if(empty($getversion['survey_version']))
@@ -434,7 +434,7 @@ class survey_manager
 		$table_survey_question_group = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 		$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_options = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-
+		$parent_survey = Database::escape_string($parent_survey);
 		//get groups
 		$sql = "SELECT * from $table_survey_question_group WHERE survey_id='".$parent_survey."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);	
@@ -1349,7 +1349,8 @@ class question
 
 		// question field
 		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '100';
+		$fck_attribute['Height'] = '120';
+		
 		$fck_attribute['ToolbarSet'] = 'Survey';
 		$this->html .= '	<div class="row">';
 		$this->html .= '		<div class="label">';
@@ -4717,7 +4718,7 @@ class SurveyUtil {
 		
 		$count=0;
 		for ($i=0;$i<count($all_question_id);$i++) {
-			$sql='SELECT COUNT(*) as count FROM '.$table_survey_answer.' WHERE question_id='.$all_question_id[$i]['question_id'].' AND user='.api_get_user_id();
+			$sql='SELECT COUNT(*) as count FROM '.$table_survey_answer.' WHERE question_id='.Database::escape_string($all_question_id[$i]['question_id']).' AND user='.api_get_user_id();
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 			while($row=Database::fetch_array($result,'ASSOC')) {
 				if ($row['count'] == 0) {
@@ -4744,11 +4745,10 @@ class SurveyUtil {
 				";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$counter = 0;
-		while ($row = Database::fetch_array($result,'ASSOC'))
-		{
+		while ($row = Database::fetch_array($result,'ASSOC')) {
 			// get the user into survey answer table (user or anonymus)
 			$sql = "SELECT user FROM $table_survey_answer 
-				WHERE survey_id = (SELECT survey_id from $table_survey WHERE code ='".$row['code']."')";
+				    WHERE survey_id = (SELECT survey_id from $table_survey WHERE code ='".Database::escape_string($row['code'])."')";
 			$result_answer = api_sql_query($sql, __FILE__, __LINE__);
 			$row_answer = Database::fetch_array($result_answer,'ASSOC');	
 			echo '<tr>';
@@ -5025,12 +5025,17 @@ class SurveyUtil {
 	 * @return boolean  
 	 *  
 	 */
-	function show_link_available($user_id,$survey_code,$user_answer) {
+	function show_link_available($user_id,$survey_code,$user_answer)
+	{
 		$table_survey = Database :: get_course_table(TABLE_SURVEY);
 		$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
 		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 		$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
-
+		
+		$survey_code = Database::escape_string($survey_code);
+		$user_id = Database::escape_string($user_id);
+		$user_answer = Database::escape_string($user_answer);
+			
 		$sql='SELECT COUNT(*) as count FROM '.$table_survey_invitation.' WHERE user='.$user_id.' AND survey_code="'.$survey_code.'" AND answered="1"';
 		$sql2='SELECT COUNT(*) as count FROM '.$table_survey.' s INNER JOIN '.$table_survey_question.' q ON s.survey_id=q.survey_id WHERE s.code="'.$survey_code.'" AND q.type NOT IN("pagebreak","comment")';
 		$sql3='SELECT COUNT(DISTINCT question_id) as count FROM '.$table_survey_answer.' WHERE survey_id=(SELECT survey_id FROM '.$table_survey.' WHERE code="'.$survey_code.'") AND user="'.$user_answer.'" ';		

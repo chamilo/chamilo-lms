@@ -1,10 +1,10 @@
-<?php // $Id: infocours.php 18287 2009-02-06 16:23:12Z ndieschburg $
+<?php // $Id: infocours.php 20126 2009-04-27 17:09:24Z juliomontoya $
 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Hugues Peeters
@@ -156,9 +156,17 @@ $form->applyFilter('visual_code', 'strtoupper');
 $prof = &$form->addElement('select', 'tutor_name', get_lang('Professors'), $a_profs);
 $prof -> setSelected($s_selected_tutor);
 $form->add_textfield('title', get_lang('Title'), true, array ('size' => '60'));
+$form->applyFilter('title','html_filter');
+$form->applyFilter('title','trim');
+
 $form->addElement('select', 'category_code', get_lang('Fac'), $categories);
 $form->add_textfield('department_name', get_lang('Department'), false, array ('size' => '60'));
+$form->applyFilter('department_name','html_filter');
+$form->applyFilter('department_name','trim');
+
 $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array ('size' => '60'));
+$form->applyFilter('department_url','html_filter');
+
 $form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
 $form->addElement('static', null, '&nbsp;', get_lang('TipLang'));
@@ -289,13 +297,11 @@ $values['allow_learning_path_theme'] = api_get_course_setting('allow_learning_pa
 
 $form->setDefaults($values);
 // Validate form
-if ($form->validate() && is_settings_editable())
-	{
+if ($form->validate() && is_settings_editable()) {
 	$update_values = $form->exportValues();
-	foreach ($update_values as $index => $value)
-		{
-		$update_values[$index] = mysql_real_escape_string($value);
-		}
+	foreach ($update_values as $index => $value) {
+		$update_values[$index] = Database::escape_string($value);
+	}	
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "UPDATE $table_course SET title 			= '".$update_values['title']."',
 										 visual_code 	= '".$update_values['visual_code']."',

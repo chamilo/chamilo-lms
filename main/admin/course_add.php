@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 19608 2009-04-07 18:04:42Z cvargas1 $
+// $Id: course_add.php 20126 2009-04-27 17:09:24Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -91,11 +91,22 @@ $form->applyFilter('visual_code','strtoupper');
 $form->addRule('wanted_code',get_lang('Max'),'maxlength',$maxlength);
 $form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers);
 $form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size=5');
+//Title
 $form->add_textfield('title', get_lang('Title'),true, array ('size' => '60'));
+$form->applyFilter('title','html_filter');
+$form->applyFilter('title','trim');
+
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
 CourseManager::select_and_sort_categories($categories_select);
+//Course department
 $form->add_textfield('department_name', get_lang('CourseDepartment'),false, array ('size' => '60'));
+$form->applyFilter('department_name','html_filter');
+$form->applyFilter('department_name','trim');
+
+//Department URL 
 $form->add_textfield('department_url', get_lang('CourseDepartmentURL'),false, array ('size' => '60'));
+$form->applyFilter('department_url','html_filter');
+
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
 $form->addElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
 $form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
@@ -119,8 +130,7 @@ reset($teachers);
 $values['course_teachers'] = key($teachers);
 $form->setDefaults($values);
 // Validate form
-if( $form->validate())
-{
+if( $form->validate()) {
 	$course = $form->exportValues();
 	$code = $course['visual_code'];
 	$tutor_name = $teachers[$course['tutor_id']];
@@ -135,7 +145,6 @@ if( $form->validate())
 			break;
 		}
 	}
-
 	$title = $course['title'];
 	$category = $course['category_code'];
 	$department_name = $course['department_name'];

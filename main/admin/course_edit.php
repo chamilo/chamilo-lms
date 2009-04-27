@@ -1,4 +1,4 @@
-<?php // $Id: course_edit.php 19608 2009-04-07 18:04:42Z cvargas1 $
+<?php // $Id: course_edit.php 20126 2009-04-27 17:09:24Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -128,12 +128,23 @@ EOT;
 $renderer = $form->defaultRenderer();
 $renderer -> setElementTemplate($element_template, 'group');
 $form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="50" align="center"><input type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" value=">>"><br><br><input type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" value="<<"></td><td>');
-
+//title 
 $form->add_textfield( 'title', get_lang('Title'),true, array ('size' => '60'));
+$form->applyFilter('title','html_filter');
+$form->applyFilter('title','trim');
+
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
 CourseManager::select_and_sort_categories($categories_select);
+
 $form->add_textfield( 'department_name', get_lang('CourseDepartment'), false,array ('size' => '60'));
+$form->applyFilter('department_name','html_filter');
+$form->applyFilter('department_name','trim');
+
 $form->add_textfield( 'department_url', get_lang('CourseDepartmentURL'),false, array ('size' => '60'));
+$form->applyFilter('department_url','html_filter');
+$form->applyFilter('department_url','trim');
+
+
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
 $form->addElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
 $form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);

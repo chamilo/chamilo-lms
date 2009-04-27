@@ -40,10 +40,12 @@ require_once ('lib/scoredisplay.class.php');
 require_once (api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php');
 api_block_anonymous_users();
 block_students();
+
 $interbreadcrumb[]= array (
 	'url' => $_SESSION['gradebook_dest'],
 	'name' => get_lang('Gradebook'
 ));
+
 //load the evaluation & category
 $select_eval=Security::remove_XSS($_GET['selecteval']);
 if (empty($select_eval)) {
@@ -410,7 +412,19 @@ if (isset ($_GET['deleteall'])) {
 	exit;
 }
 if ((!isset ($_GET['export'])) && (!isset ($_GET['import']))) {
-	Display :: display_header(get_lang('ViewResult'));	
+
+	if (!isset($_GET['selectcat'])) {
+		$interbreadcrumb[]= array (
+		'url' => $_SESSION['gradebook_dest'].'?selectcat=' .$currentcat[0]->get_id(),
+		'name' => get_lang('Details')
+		  );
+	}	
+	$interbreadcrumb[]= array (
+	'url' => 'gradebook_view_result.php'.'?selecteval='.Security::remove_XSS($_GET['selecteval']),
+	'name' => get_lang('ViewResult'
+	));
+	
+	Display :: display_header('');	
 }
 if (isset ($_GET['addresultnostudents'])) {
 	Display :: display_warning_message(get_lang('AddResultNoStudents'),false);

@@ -100,7 +100,7 @@ if ($invitationcode == "auto" && isset($_GET['scode'])){
         $tempdata  = survey_manager :: get_survey($row['survey_id']);
         check_time_availability($tempdata); //exit if survey not available anymore
         // check for double invitation records (insert should be done once)
-        $sql = "select user from $table_survey_invitation where invitation_code = '".Database::escape_string($autoInvitationcode)."'";
+        $sql = "SELECT user from $table_survey_invitation where invitation_code = '".Database::escape_string($autoInvitationcode)."'";
         $result = api_sql_query($sql, __FILE__, __LINE__);
         if (Database :: num_rows($result) == 0){ // ok
             $sql = "insert into $table_survey_invitation (survey_code,user, invitation_code, invitation_date) ";
@@ -329,6 +329,7 @@ if ($survey_data['form_fields']!='' && $survey_data['anonymous'] == 0 && is_arra
 			}
 		}
 	}
+	
 	// we use the same form as in auth/profile.php
 	require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
 	$form = new FormValidator('profile', 'post', api_get_self() . "?" . str_replace('&show_form=1', '&show_form=1', $_SERVER['QUERY_STRING']), null, array (
@@ -336,19 +337,29 @@ if ($survey_data['form_fields']!='' && $survey_data['anonymous'] == 0 && is_arra
 	));
 
 	if ($list['lastname'] == 1) {
-		//	LAST NAME and FIRST NAME
+		//	LAST NAME
 		$form->addElement('text', 'lastname', get_lang('LastName'), array ('size' => 40));
+				
+		if (api_get_setting('profile', 'name') !== 'true')
+			$form->freeze(array ('lastname'));
+			
+		$form->applyFilter(array ('lastname'), 'stripslashes');
+		$form->applyFilter(array ('lastname'), 'trim');
+		$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');		
+	}
+	
+	if ($list['firstname'] == 1 ) {
+		//FIRST NAME		
 		$form->addElement('text', 'firstname', get_lang('FirstName'), array ('size' => 40));
 		
 		if (api_get_setting('profile', 'name') !== 'true')
-			$form->freeze(array ('lastname','firstname'));
+			$form->freeze(array ('firstname'));
 			
-		$form->applyFilter(array ('lastname','firstname'), 'stripslashes');
-		$form->applyFilter(array ('lastname','firstname'), 'trim');
-		$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+		$form->applyFilter(array ('firstname'), 'stripslashes');
+		$form->applyFilter(array ('firstname'), 'trim');		
 		$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 	}
-
+	
 	if ($list['official_code'] == 1) {
 		//	OFFICIAL CODE
 		if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
@@ -606,8 +617,8 @@ if (isset ($_GET['show']) || isset ($_POST['personality']))
 		if (empty ($_SESSION['paged_questions'])) 
 		{
 			$sql = "SELECT * FROM $table_survey_question
-			    				WHERE survey_id = '" . Database :: escape_string($survey_invitation['survey_id']) . "'
-			    				ORDER BY sort ASC";
+			    	WHERE survey_id = '" . Database :: escape_string($survey_invitation['survey_id']) . "'
+			    	ORDER BY sort ASC";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			while ($row = Database :: fetch_array($result, 'ASSOC')) 
 			{

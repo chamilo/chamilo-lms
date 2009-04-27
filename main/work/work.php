@@ -1,4 +1,4 @@
-<?php //$Id: work.php 20023 2009-04-23 15:52:15Z juliomontoya $
+<?php //$Id: work.php 20124 2009-04-27 16:16:59Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 20023 2009-04-23 15:52:15Z juliomontoya $
+*  	@version $Id: work.php 20124 2009-04-27 16:16:59Z juliomontoya $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1254,13 +1254,13 @@ function draw_date_picker($prefix,$default='') {
 	if (isset ($_REQUEST['createdir']) && $is_allowed_to_edit) {
 		//create the form that asks for the directory name
 		$new_folder_text = '<form name="form1"  method="POST">';
-		$new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateDir').'</div></div>';
+		$new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateAssignment').'</div></div>';
 		$new_folder_text .= '<input type="hidden" name="curdirpath" value="' . Security :: remove_XSS($cur_dir_path) . '"/>';
 		$new_folder_text .= '<input type="hidden" name="sec_token" value="'.$stok.'" />';
 		$new_folder_text .= '<div id="msg_error1" style="display:none;color:red"></div>';
 		$new_folder_text .= '<div class="row">
 								<div class="label">
-									<span class="form_required">*</span>'.get_lang('NewDir').'
+									<span class="form_required">*</span>'.get_lang('AssignmentName').'
 								</div>
 								<div class="formw">
 									<input type="text" name="new_dir" onfocus="document.getElementById(\'msg_error1\').style.display=\'none\';"/>
@@ -1323,7 +1323,7 @@ function draw_date_picker($prefix,$default='') {
 								<div class="label">
 								</div>
 								<div class="formw">
-									<button type="button" class="add" name="create_dir" onClick="validate();" value="' . addslashes(get_lang('CreateDirectory')) . '"/>' . addslashes(get_lang('CreateDirectory')) . '</button>
+									<button type="button" class="add" name="create_dir" onClick="validate();" value="' . addslashes(get_lang('CreateDirectory')) . '"/>' . addslashes(get_lang('ButtonCreateAssignment')) . '</button>
 								</div>
 							</div>';		
 		

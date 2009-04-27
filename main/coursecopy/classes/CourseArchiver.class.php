@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseArchiver.class.php 20104 2009-04-25 03:08:08Z ivantcholakov $
+// $Id: CourseArchiver.class.php 20139 2009-04-27 22:32:39Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -75,7 +75,7 @@ class CourseArchiver
 		if($res == false)
 		{
 			//TODO set and handle an error message telling the user to review the permissions on the archive directory
-      			error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini').' - This error, occuring because your archive directory will not let this script write data into it, will prevent courses backups to be created',0);
+      		error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini').' - This error, occuring because your archive directory will not let this script write data into it, will prevent courses backups to be created',0);
 		} 
 		// Write the course-object to the file
 		$fp = @fopen($course_info_file, 'w');
@@ -95,18 +95,15 @@ class CourseArchiver
 		} 
 
 		// Copy all documents to the temp-dir
-		if( is_array($course->resources[RESOURCE_DOCUMENT]))
-		{
-			foreach ($course->resources[RESOURCE_DOCUMENT] as $id => $document)
-			{
-				if ($document->file_type == DOCUMENT)
-				{
+		if( is_array($course->resources[RESOURCE_DOCUMENT])) {
+			foreach ($course->resources[RESOURCE_DOCUMENT] as $id => $document) {
+				if ($document->file_type == DOCUMENT) {
 					$doc_dir = $backup_dir.$document->path;
 					mkdirr(dirname($doc_dir), 0755);
-					copy($course->path.$document->path, $doc_dir);
-				}
-				else
-				{
+					if (file_exists($course->path.$document->path)) {
+						copy($course->path.$document->path, $doc_dir);	
+					}					
+				} else {
 					mkdirr($backup_dir.$document->path, 0755);
 				}
 			}

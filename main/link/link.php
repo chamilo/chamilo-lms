@@ -1,4 +1,4 @@
-<?php // $Id: link.php 20102 2009-04-25 01:53:35Z yannoo $
+<?php // $Id: link.php 20130 2009-04-27 17:58:35Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -234,7 +234,7 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 
 		echo '	<div class="row">
 					<div class="label">
-						'.get_lang('Description').'
+						'.get_lang('LinkRelatedActivity').'
 					</div>
 					<div class="formw">
 						<textarea rows="3" cols="50" name="description">' .	htmlentities($description,ENT_QUOTES,$charset) . '</textarea>

@@ -60,22 +60,33 @@ if(!$is_allowedToEdit){
 	exit;
 }
 
+$interbreadcrumb[]= array (
+	'url' => 'exercice.php'.'?show=result',
+	'name' => get_lang('Exercices')
+);
+$interbreadcrumb[]= array (
+	'url' => 'exercice.php'.'?show=result&amp;filter=2',
+	'name' => get_lang('StudentScore')
+);
+$interbreadcrumb[]= array (
+	'url' => 'exercice_history.php'.'?exe_id='.Security::remove_XSS($_GET['exe_id']),
+	'name' => get_lang('Details')
+);
+
 $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCICES			= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_EXERCICES_QUESTION	= Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT_RECORDING= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 //$nameTools=get_lang('Exercices');
-	Display::display_header($nameTools,"Exercise");
-	if(isset($_GET['message']))
-	{
-		if (in_array($_GET['message'], array('ExerciseEdited')))
-		{
-			Display::display_confirmation_message(get_lang($_GET['message']));
+Display::display_header($nameTools,"Exercise");
+
+	if(isset($_GET['message'])) {
+		if (in_array($_GET['message'], array('ExerciseEdited'))) {
+			$my_message_history=Security::remove_XSS($_GET['message']);
+			Display::display_confirmation_message(get_lang($my_message_history));
 		}
 	}
-
-
 
 //include_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
@@ -100,7 +111,6 @@ $TBL_TRACK_ATTEMPT_RECORDING= Database::get_statistic_table(TABLE_STATISTIC_TRAC
 $sql = 'SELECT * FROM '.$TBL_EXERCICES;
 $query = api_sql_query($sql,__FILE__,__LINE__);
 */
-
 $sql = "SELECT *, quiz_question.question, CONCAT(firstname,' ',lastname) as full_name FROM $TBL_TRACK_ATTEMPT_RECORDING t,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY t.insert_date desc,question ASC";
 $query = api_sql_query($sql,__FILE__,__LINE__);
 while($row = Database::fetch_array($query)){

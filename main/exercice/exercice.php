@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20131 2009-04-27 17:59:35Z cvargas1 $
+// $Id: exercice.php 20141 2009-04-27 23:04:08Z iflorespaz $
 
 /*
 ==============================================================================
@@ -160,7 +160,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$TBL_RECORDING = Database :: get_statistic_table('track_e_attempt_recording');
 	$total_weighting = $_REQUEST['totalWeighting'];
 	
-		$my_post_info=array(); 
+	$my_post_info=array(); 
 	$post_content_id=array();
 	$comments_exist=false;
 	foreach ($_POST as $key_index=>$key_value) {
@@ -170,23 +170,26 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 			$comments_exist=true;
 		}
 	}
-	//var_dump($comments_exist);
+
 	$loop_in_track=($comments_exist===true) ? (count($_POST)/2) : count($_POST);
-	//var_dump($loop_in_track);
-	$k=$post_content_id[0];
-	for ($i=$k;$i<($loop_in_track+$k);$i++) {
+	$array_content_id_exe=array();
+	if ($comments_exist===true) {
+		$array_content_id_exe=array_slice($post_content_id,$loop_in_track);
+	} else {
+		$array_content_id_exe=$post_content_id;
+	}
+
+	for ($i=0;$i<$loop_in_track;$i++) {
 		
-		//echo $_POST['marks_'.$i].' y '.$_POST['comments_'.$i].'<br/>';
-		
-		$my_marks=$_POST['marks_'.$i];
-		$contain_comments=$_POST['comments_'.$i];
+		$my_marks=$_POST['marks_'.$array_content_id_exe[$i]];
+		$contain_comments=$_POST['comments_'.$array_content_id_exe[$i]];
 		
 		if (isset($contain_comments)) {
-			$my_comments=$_POST['comments_'.$i];
+			$my_comments=$_POST['comments_'.$array_content_id_exe[$i]];
 		} else {
 			$my_comments='';
 		}
-			$my_questionid=$i;
+			$my_questionid=$array_content_id_exe[$i];
 			$sql = "SELECT question from $TBL_QUESTIONS WHERE id = '$my_questionid'";
 			$result =api_sql_query($sql, __FILE__, __LINE__);
 			$ques_name = Database::result($result,0,"question");
@@ -221,7 +224,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 			
 	}
 	$post_content_id=array();
-	
+	$array_content_id_exe=array();
 	/*foreach ($_POST as $key => $v) {
 		$keyexp = explode('_', $key);
 

@@ -66,4 +66,7 @@ $AllFilesInvisible = "Todos los trabajos ahora son invisibles";
 $FileInvisible = "El archivo ahora es invisible";
 $AllFilesVisible = "Todos los trabajos ahora son visibles";
 $FileVisible = "El archivo ahora es visible";
+$ButtonCreateAssignment = "Crear";
+$AssignmentName = "Nombre de la tarea";
+$CreateAssignment = "Crear tarea";
 ?>

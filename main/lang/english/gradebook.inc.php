@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifyEvaluation = "Save assessment";
 $CreateLink = "Add this learning activity to the assessment";
-$FlatView = "Competences Report";
+$FlatView = "Gradebook view";
 $ScoreEdit = "Skills ranking";
 $ScoreColor = "Competence thresholds colouring";
 $ScoringSystem = "Skills ranking";

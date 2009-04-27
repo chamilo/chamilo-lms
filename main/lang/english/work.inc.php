@@ -66,4 +66,7 @@ $AllFilesInvisible = "All papers are now invisible";
 $FileInvisible = "The file is now invisible";
 $AllFilesVisible = "All papers are now visible";
 $FileVisible = "The file is now visible";
+$ButtonCreateAssignment = "Create";
+$AssignmentName = "Assignment name";
+$CreateAssignment = "Create assignment";
 ?>

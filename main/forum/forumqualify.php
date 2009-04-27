@@ -85,6 +85,16 @@ $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 	Header and Breadcrumbs
 -----------------------------------------------------------
 */
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
+}
 
 if ($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
@@ -97,27 +107,16 @@ if ($origin=='learnpath') {
 		$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
 		if ($message<>'PostDeletedSpecial') {
-			$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+			$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;gradebook=".$gradebook."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
 		}
 		$interbreadcrumb[]=array("url" => "#","name" => get_lang('QualifyThread'));
 		// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
 		Display :: display_header('');
 		api_display_tool_title($nameTools);
-	} else if (isset($_GET['gradebook']) and $_GET['gradebook']=='view'){
-		
-		$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-		$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook'));
-		$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;gradebook=view","name" => prepare4display($current_thread['thread_title']));
-		$interbreadcrumb[]=array("url" => "#","name" => prepare4display($current_forum['forum_title']));
-		Display :: display_header('');
-		api_display_tool_title($nameTools);			
-		
 	} else {
 		
 		$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-		$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
+		$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
 		$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
 
 		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
@@ -125,9 +124,9 @@ if ($origin=='learnpath') {
 		if ($message<>'PostDeletedSpecial') {
 			if (isset($_GET['gradebook']) and $_GET['gradebook']=='view') {
 				$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-				$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+				$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$info_thread['forum_id']."&amp;gradebook=".$gradebook."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
 			} else {
-				$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+				$interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;gradebook=".$gradebook."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
 			}
 		}
 		// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string

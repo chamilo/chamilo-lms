@@ -145,8 +145,8 @@ $next_img = '<img src="'.api_get_path(WEB_CODE_PATH).'img/next.png"  style="vert
 $first_page_text = '<img src="'.api_get_path(WEB_CODE_PATH).'img/first.png"  style="vertical-align: middle;"/>';
 $last_page_text	 = '<img src="'.api_get_path(WEB_CODE_PATH).'img/last.png"  style="vertical-align: middle;"/>';
 
-$href_prev='"viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$prev_next_array[$prev_id].'&amp;origin='. $origin .'"';
-$href_next='"viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$prev_next_array[$next_id].'&amp;origin='. $origin .'"';
+$href_prev='"viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$prev_next_array[$prev_id].'&amp;origin='. $origin .'&amp;gradebook='. $gradebook .'"';
+$href_next='"viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$prev_next_array[$next_id].'&amp;origin='. $origin .'&amp;gradebook='. $gradebook .'"';
 
 // the last message
 if ($next_id>=$max) 
@@ -170,7 +170,7 @@ if ($prev_id<0)
 }
 
 //first message img
-echo '<a title="'.get_lang('FirstMessage').'" href="viewthread.php?'.api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;origin=".$origin."&amp;id=1&amp;post=".$prev_next_array[0]."\" $class>".$first_page_text."</a>";
+echo '<a title="'.get_lang('FirstMessage').'" href="viewthread.php?'.api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;gradebook=".$gradebook."&amp;origin=".$origin."&amp;id=1&amp;post=".$prev_next_array[0]."\" $class>".$first_page_text."</a>";
 // prev message link 
 if ($href_prev==1)
 {

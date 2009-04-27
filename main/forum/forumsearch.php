@@ -78,6 +78,17 @@ $nameTools=get_lang('Forum');
 
 // breadcrumbs
 
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
+}
+
 if (!empty ($_GET['gidReq'])) {
 	$toolgroup = Database::escape_string($_GET['gidReq']);
 	api_session_register('toolgroup');
@@ -91,7 +102,7 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[] = array ("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
 	$interbreadcrumb[]=array('url' => 'forumsearch.php','name' => get_lang('ForumSearch'));
 } else {
-	$interbreadcrumb[]=array('url' => 'index.php','name' => $nameTools);
+	$interbreadcrumb[]=array('url' => 'index.php?gradebook='.$gradebook.'','name' => $nameTools);
 	$interbreadcrumb[]=array('url' => 'forumsearch.php','name' => get_lang('ForumSearch'));
 }
 

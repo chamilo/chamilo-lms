@@ -151,8 +151,9 @@ function handle_forum_and_forumcategories() {
 * @version february 2006, dokeos 1.8
 */
 function show_add_forumcategory_form($inputvalues=array()) {
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	// initiate the object
-	$form = new FormValidator('forumcategory','post');
+	$form = new FormValidator('forumcategory','post','index.php?&gradebook='.$gradebook.'');
 
 	// settting the form elements
 	$form->addElement('header', '', get_lang('AddForumCategory'));
@@ -189,9 +190,9 @@ function show_add_forumcategory_form($inputvalues=array()) {
 */
 function show_add_forum_form($inputvalues=array()) {
 	global $_course;
-
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	// initiate the object
-	$form = new FormValidator('forumcategory', 'post', 'index.php');
+	$form = new FormValidator('forumcategory', 'post', 'index.php?gradebook='.$gradebook.'');
 
 	// the header for the form
 	if (!empty($inputvalues))
@@ -434,7 +435,8 @@ function delete_forum_image($forum_id)
 */
 function show_edit_forumcategory_form($inputvalues=array()) {
 	// initiate the object
-	$form = new FormValidator('forumcategory','post');
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
+	$form = new FormValidator('forumcategory','post','index.php?&gradebook='.$gradebook.'');
 
 	// settting the form elements
 	$form->addElement('header', '', get_lang('EditForumCategory'));
@@ -786,6 +788,7 @@ function check_if_last_post_of_thread($thread_id) {
 */
 function display_visible_invisible_icon($content, $id, $current_visibility_status, $additional_url_parameters='') {
 	global $origin;
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	$id = Security::remove_XSS($id);
 	if ($current_visibility_status=='1') {
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
@@ -794,7 +797,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 				echo $key.'='.$value.'&amp;';
 			}
 		}
-		echo 'action=invisible&amp;content='.$content.'&amp;id='.$id.'&amp;origin='.$origin.'">'.icon('../img/visible.gif',get_lang('MakeInvisible')).'</a>';
+		echo 'action=invisible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.icon('../img/visible.gif',get_lang('MakeInvisible')).'</a>';
 	}
 	if ($current_visibility_status=='0') {
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
@@ -803,7 +806,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 				echo $key.'='.$value.'&amp;';
 			}
 		}
-		echo 'action=visible&amp;content='.$content.'&amp;id='.$id.'&amp;origin='.$origin.'">'.icon('../img/invisible.gif',get_lang('MakeVisible')).'</a>';
+		echo 'action=visible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.icon('../img/invisible.gif',get_lang('MakeVisible')).'</a>';
 	}
 }
 
@@ -1711,7 +1714,8 @@ function store_thread($values) {
 	global $current_forum;
 	global $origin;
 	global $forum_table_attachment;
-
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
+	
 	$upload_ok=1;
 	$has_attachment=false;
 		
@@ -1820,7 +1824,7 @@ function store_thread($values) {
 			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
 		} else {
 			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-			$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
+			$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
 		}
 		$reply_info['new_post_id'] = $last_post_id;
 		$my_post_notification=isset($values['post_notification']) ? $values['post_notification'] : null;
@@ -1858,7 +1862,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	global $_user;
 	global $origin;
 	global $charset; 
-
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	// setting the class and text of the form title and submit button
 	if ($_GET['action']=='quote'){
 		$class='save';
@@ -1880,7 +1884,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$my_action  = isset($_GET['action']) ? $_GET['action']:'';
 	$my_post    = isset($_GET['post'])   ? $_GET['post']:'';
 	$my_gradebook    = isset($_GET['gradebook'])   ? $_GET['gradebook']:'';
-	$form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($my_thread).'&post='.Security::remove_XSS($my_post).'&action='.Security::remove_XSS($my_action).'&origin='.$origin);
+	$form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($my_forum).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($my_thread).'&post='.Security::remove_XSS($my_post).'&action='.Security::remove_XSS($my_action).'&origin='.$origin);
 	$form->setConstants(array('forum' => '5'));
 
 	$form->addElement('header', '', $text);
@@ -2183,6 +2187,7 @@ function store_reply($values) {
 	global $_course;
 	global $current_forum;
 	global $origin;
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
 
 	$post_date=date('Y-m-d H:i:s');
 	if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit()) {
@@ -2261,7 +2266,7 @@ function store_reply($values) {
 		}
 		
 		$message.='<br />'.get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-		$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&origin='.$origin.'">'.get_lang('Message').'</a>';
+		$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.get_lang('Message').'</a>';
 	
 		// setting the notification correctly
 		$my_post_notification=isset($values['post_notification']) ? $values['post_notification'] :null;
@@ -2301,9 +2306,10 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	global $forum_setting;
 	global $_user;
 	global $origin;
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
 
 	// initiate the object
-	$form = new FormValidator('edit_post', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']));
+	$form = new FormValidator('edit_post', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&gradebook='.$gradebook.'&origin='.$origin.'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post']));
 	$form->addElement('header', '', get_lang('EditPost'));
 	// settting the form elements
 	$form->addElement('hidden', 'post_id', $current_post['post_id']);
@@ -2413,6 +2419,7 @@ function store_edit_post($values) {
 	global $table_threads;
 	global $table_posts;
 	global $origin;
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	// first we check if the change affects the thread and if so we commit the changes (sticky and post_title=thread_title are relevant)
 	//if (array_key_exists('is_first_post_of_thread',$values)  AND $values['is_first_post_of_thread']=='1') {
 		$sql="UPDATE $table_threads SET thread_title='".Database::escape_string($values['post_title'])."',
@@ -2466,7 +2473,7 @@ function store_edit_post($values) {
 
 	$message=get_lang('EditPostStored').'<br />';
 	$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-	$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'&amp;thread='.$values['thread_id'].'&amp;post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
+	$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.$values['thread_id'].'&amp;post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
 
 	session_unregister('formelements');
 	session_unregister('origin');
@@ -2912,9 +2919,9 @@ function send_mail($user_info=array(), $thread_information=array()) {
 */
 function move_thread_form() {
 	global $origin;
-
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	// initiate the object
-	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&action='.Security::remove_XSS($_GET['action']).'&origin='.$origin);
+	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($_GET['thread']).'&action='.Security::remove_XSS($_GET['action']).'&origin='.$origin);
 	// the header for the form
 	$form->addElement('header', '', get_lang('MoveThread'));
 	// invisible form: the thread_id
@@ -2971,8 +2978,9 @@ function move_thread_form() {
 */
 function move_post_form() {
 	global $origin;
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	// initiate the object
-	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&origin='.$origin.'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&post='.Security::remove_XSS($_GET['post']));
+	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&origin='.$origin.'&gradebook='.$gradebook.'&post='.Security::remove_XSS($_GET['post']).'&action='.Security::remove_XSS($_GET['action']).'&post='.Security::remove_XSS($_GET['post']));
 	// the header for the form
 	$form->addElement('header', '', get_lang('MovePost'));
 
@@ -3177,7 +3185,7 @@ function forum_search() {
 function display_forum_search_results($search_term) {
 	global $table_categories, $table_forums, $table_threads, $table_posts; 
 	global $origin;
-	
+	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	// defining the search strings as an array
 	if (strstr($search_term,'+')) {
 		$search_terms = explode('+',$search_term);
@@ -3224,7 +3232,7 @@ function display_forum_search_results($search_term) {
 			$search_results_item = '<li><a href="viewforumcategory.php?forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'&origin='.$origin.'&amp;search='.urlencode($search_term).'">'.$forum_categories_list[$row['forum_id']['forum_category']]['cat_title'].'</a> > ';
 			$search_results_item .= '<a href="viewforum.php?forum='.$row['forum_id'].'&amp;origin='.$origin.'&amp;search='.urlencode($search_term).'">'.$forum_list[$row['forum_id']]['forum_title'].'</a> > ';
 			//$search_results_item .= '<a href="">THREAD</a> > ';
-			$search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&amp;origin='.$origin.'&amp;thread='.$row['thread_id'].'&amp;search='.urlencode($search_term).'">'.$row['post_title'].'</a>';
+			$search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;thread='.$row['thread_id'].'&amp;search='.urlencode($search_term).'">'.$row['post_title'].'</a>';
 			$search_results_item .= '<br />';
 			if (strlen($row['post_title']) > 200 ) {
 				$search_results_item .= substr(strip_tags($row['post_title']),0,200).'...';

@@ -116,8 +116,19 @@ else
 	Header and Breadcrumbs
 -----------------------------------------------------------
 */
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
+}
+
 $current_forum_category=get_forum_categories($_GET['forumcategory']);
-$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => $nameTools);
+$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => prepare4display($current_forum_category['cat_title']));
 
 
@@ -165,7 +176,7 @@ if (!api_is_allowed_to_edit(false,true) AND $current_forum_category['visibility'
 */
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
-echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
+echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
 if (api_is_allowed_to_edit(false,true)) {
 	//echo '<a href="'.api_get_self().'?forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a> | ';
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum"> '.Display::return_icon('forum_new.gif', get_lang('AddForum')).' '.get_lang('AddForum').'</a>';

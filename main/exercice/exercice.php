@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20100 2009-04-24 23:55:22Z iflorespaz $
+// $Id: exercice.php 20131 2009-04-27 17:59:35Z cvargas1 $
 
 /*
 ==============================================================================
@@ -396,7 +396,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 }
 
 if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
-	$_SESSION['gradebook']=$_GET['gradebook'];
+	$_SESSION['gradebook']=Security::remove_XSS($_GET['gradebook']);
 	$gradebook=	$_SESSION['gradebook'];
 } elseif (empty($_GET['gradebook'])) {
 	unset($_SESSION['gradebook']);

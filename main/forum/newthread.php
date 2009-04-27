@@ -122,6 +122,16 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 -----------------------------------------------------------
 */
 
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
+}
 
 if (!empty($_GET['gidReq'])) {
 	$toolgroup = Database::escape_string($_GET['gidReq']);
@@ -137,13 +147,7 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
 	$interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
 } else {
-	if( (isset($_GET['gradebook']) && $_GET['gradebook']=='view') || ( isset($_POST['gradebook']) && $_POST['gradebook']=='view')) {
-			$interbreadcrumb[]= array (
-				'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-				'name' => get_lang('Gradebook')
-			);
-	}
-	$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
+	$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook","name" => $nameTools);
 	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
 	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
 	$interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));	
@@ -208,7 +212,7 @@ handle_forum_and_forumcategories();
 // action links
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
-echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
+echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
 echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'">'.Display::return_icon('forum.gif').' '.get_lang('BackToForum').'</a>';
 echo '</div>';
 

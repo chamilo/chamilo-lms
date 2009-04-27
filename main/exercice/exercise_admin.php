@@ -60,9 +60,10 @@ $htmlHeadXtra[] = '<script>
 		function show_media() {
 			if(document.getElementById(\'media\').style.display == \'none\') {
 				document.getElementById(\'media\').style.display = \'block\';
-
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
 			} else {			
 				document.getElementById(\'media\').style.display = \'none\';
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
 				
 			}	
 		}			

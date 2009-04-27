@@ -4453,7 +4453,19 @@ class learnpath {
 				
 				$return .= "\t" . '<tr class="'.$oddclass.'">' . "\n";
 					
-					$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:3px;" />' . $title . '</td>' . "\n";
+					$icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
+					if (file_exists("../img/lp_" . $icon_name . ".png"))
+					{
+						$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.png" style="margin-right:3px;" />' . $title . '</td>' . "\n";
+					}
+					else if(file_exists("../img/lp_" . $icon_name . ".gif"))
+					{
+						$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.gif" style="margin-right:3px;" />' . $title . '</td>' . "\n";
+					}
+					else
+					{
+						$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_document.png" style="margin-right:3px;" />' . $title . '</td>' . "\n";
+					}
 					//$return .= "\t\t" . '<td>' . stripslashes($arrLP[$i]['description']) . '</td>' . "\n";
 					
 					// The audio column
@@ -4645,13 +4657,14 @@ class learnpath {
 		{
 			$title = addslashes($arrLP[$i]['title']); 
 			$menu_page = api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $_SESSION['oLP']->lp_id;
-			if(file_exists("../img/lp_" . $arrLP[$i]['item_type'] . ".png"))
+			$icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
+			if (file_exists("../img/lp_" . $icon_name . ".png"))
 			{
-				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $title . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".png', '../img/lp_" . $arrLP[$i]['item_type'] . ".png');\n";
+				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $title . "', '" . $menu_page . "', '', '', '../img/lp_" . $icon_name . ".png', '../img/lp_" . $icon_name . ".png');\n";
 			}
-			else if(file_exists("../img/lp_" . $arrLP[$i]['item_type'] . ".gif"))
+			else if(file_exists("../img/lp_" . $icon_name . ".gif"))
 			{
-				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $title . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif');\n";
+				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $title . "', '" . $menu_page . "', '', '', '../img/lp_" . $icon_name . ".gif', '../img/lp_" . $icon_name . ".gif');\n";
 			}
 			else
 			{
@@ -7673,7 +7686,19 @@ class learnpath {
 			$return .= '<tr>';
 			$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ && $arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
 			$return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
-			$return .= '<img alt="" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:5px;" title="" />';
+			$icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
+			if (file_exists("../img/lp_" . $icon_name . ".png"))
+			{
+				$return .= '<img alt="" src="../img/lp_' . $icon_name . '.png" style="margin-right:5px;" title="" />';
+			}
+			else if(file_exists("../img/lp_" . $icon_name . ".gif"))
+			{
+				$return .= '<img alt="" src="../img/lp_' . $icon_name . '.gif" style="margin-right:5px;" title="" />';
+			}
+			else
+			{
+				$return .= '<img alt="" src="../img/lp_document.png" style="margin-right:5px;" title="" />';
+			}
 			$return .= '<label for="id' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</label>';
 			$return .= '</td>';
 			//$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';

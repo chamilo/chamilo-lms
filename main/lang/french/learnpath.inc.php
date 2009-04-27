@@ -218,9 +218,14 @@ $ShowAllAttemptsByExercise = "Tentatives par test";
 $ShowAttempt = "Voir tentative";
 $ShowAndQualifyAttempt = "Voir et coter tentative";
 $langAddEdit = "Ajouter / Modifier";
-$ModifyPrerequisities = "Modifier les prérequis";
+$ModifyPrerequisites = "Modifier les prérequis";
 $CreateLearningPath = "Continuer";
 $AddExercise = "Ajouter exercice";
 $AddForum = "Ajouter forum";
 $LPCreateDocument = "Créer document";
+$ObjectiveID = "ID objectif";
+$ObjectiveStatus = "Statut";
+$ObjectiveRawScore = "Score";
+$ObjectiveMaxScore = "Score max";
+$ObjectiveMinScore = "Score min";
 ?>

@@ -99,7 +99,7 @@ $ExampleForum = "Example Forum";
 $ExampleThread = "Example Thread";
 $ExampleThreadContent = "Example content";
 $IntroductionWiki = "The word Wiki is short for WikiWikiWeb. Wikiwiki is a Hawaiian word, meaning \"fast\" or \"speed\". In a wiki, people write pages together. If one person writes something wrong, the next person can correct it. The next person can also add something new to the page. Because of this, the pages improve continuously.";
-$CreateCourseArea = "Create a training";
+$CreateCourseArea = "Create this training";
 $CreateCourse = "Create a training";
 $Create = "Create";
 ?>

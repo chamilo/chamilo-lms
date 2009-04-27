@@ -706,5 +706,8 @@ $Filter = "Filtre";
 $Subject = "Sujet";
 $Message = "Message";
 $MoreInformation = "Plus d\'info";
+$MakeInvisible = "Rendre invisible";
+$MakeVisible = "Rendre visible";
 $Image = "Image";
+$CourseName = "Nom de la formation";
 ?>

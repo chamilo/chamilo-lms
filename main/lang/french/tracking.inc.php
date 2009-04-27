@@ -234,4 +234,9 @@ $ChatLastConnection = "Dernière connexion à la discussion";
 $CourseInformation = "Info cours";
 $NoAdditionalFieldsWillBeExported = "Les champs additionnels ne seront pas exportés";
 $langSendNotification = "Notifier";
+$TimeOfActiveByTraining = "Temps passé dans la formation";
+$AvgAllUsersInAllCourses = "Moyenne de tous les apprenants dans tous les cours de cette formation";
+$AvgExercisesScore = "Score moyen aux exercices";
+$TrainingTime = "Temps";
+$CourseProgress = "Progrès";
 ?>

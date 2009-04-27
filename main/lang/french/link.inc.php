@@ -46,4 +46,5 @@ $General = "Général";
 $SearchFeatureDoIndexLink = "Indexer le titre et la description du lien?";
 $langSaveLink = "Enregistrer le lien";
 $langSaveCategory = "Enregistrer le dossier";
+$BackToLinksOverview = "Retour à la vue globale des liens";
 ?>

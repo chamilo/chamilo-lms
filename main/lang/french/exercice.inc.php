@@ -296,4 +296,12 @@ $UniqueAnswer = "Choix multiple";
 $MultipleAnswer = "Réponses multiples";
 $FreeAnswer = "Question ouverte";
 $HotSpot = "Zones sur images";
+$ReachedOneAttempt = "Vous ne pouvez pas passer ce test car vous avez déjà effectué une première tentative.";
+$QuestionsPerPage = "Questions par page";
+$QuestionsPerPageOne = "Une";
+$QuestionsPerPageAll = "Toutes";
+$EditIndividualComment = "Éditer le feedback individuel";
+$ThankYouForPassingTheTest = "Merci d\'avoir tenté l\'exercice";
+$ExerciseAtTheEndOfTheTest = "À la fin du test";
+$EnrichQuestion = "Enrichir la question";
 ?>

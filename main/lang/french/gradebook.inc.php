@@ -135,4 +135,6 @@ $AverageResultsVsResource = "Résultats moyens par épreuve";
 $ToViewGraphScoreRuleMustBeEnabled = "Les règles de score doivent être activées pour voir le graphe";
 $GradebookPreviousWeight = "Poids de la ressource précédemment";
 $SaveAssessment = "Enregistrer l\'exercice";
+$FolderView = "Accueil des travaux";
+$GradebookSkillsRanking = "Cotation des compétences";
 ?>

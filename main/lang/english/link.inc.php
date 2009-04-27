@@ -46,4 +46,5 @@ $General = "General";
 $SearchFeatureDoIndexLink = "Index link title and description? ";
 $langSaveLink = "Save link";
 $langSaveCategory = "Save folder";
+$BackToLinksOverview = "Back to links overview";
 ?>

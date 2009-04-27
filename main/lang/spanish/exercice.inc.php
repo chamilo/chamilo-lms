@@ -49,7 +49,7 @@ $langLessAnswers = "-resp";
 $langMoreElements = "+elem";
 $langLessElements = "-elem";
 $langTypeTextBelow = "Escriba el texto debajo";
-$langDefaultTextInBlanks = "<table cellspacing=\\\"0\\\" cellpadding=\\\"10\\\" border=\\\"1\\\" style=\\\"width: 710px; height: 191px;\\\">    <tbody>        <tr>            <td width=\\\"450\\\">            <h2>User information</h2>            </td>            <td width=\\\"224\\\"> </td>        </tr>        <tr>            <td width=\\\"450\\\">Age</td>            <td width=\\\"224\\\" style=\\\"text-align: left;\\\">[25] years old</td>        </tr>        <tr>            <td width=\\\"450\\\" style=\\\"vertical-align: top;\\\">Sex</td>            <td width=\\\"224\\\" style=\\\"vertical-align: top; text-align: left;\\\">[M] (M or F)</td>        </tr>        <tr>            <td width=\\\"450\\\" style=\\\"vertical-align: top;\\\">Height</td>            <td width=\\\"224\\\" style=\\\"vertical-align: top; text-align: left;\\\">[66] Kg</td>        </tr>    </tbody></table>";
+$langDefaultTextInBlanks = "<table cellspacing=\\\"0\\\" cellpadding=\\\"10\\\" border=\\\"1\\\" style=\\\"width: 710px; height: 191px;\\\">    <tbody>        <tr>            <td width=\\\"450\\\"  colspan=\"2\" >            <h3>Ejemplo: Calcular el índice de masa corporal</h3>            </td>        </tr>        <tr>            <td width=\\\"450\\\"  style=\"text-align: right;\" ><strong>Edad</strong></td>            <td width=\"75%\" style=\\\"text-align: left;\\\">[25] años</td>        </tr>        <tr>            <td width=\\\"450\\\" style=\"vertical-align: top; text-align: right;\"><strong>Sexo</strong></td>            <td width=\"75%\" style=\\\"vertical-align: top; text-align: left;\\\">[M] (M o F)</td>        </tr>        <tr>            <td width=\\\"450\\\" style=\"vertical-align: top; text-align: right;\"><strong>Peso</strong></td>            <td width=\"75%\" style=\\\"vertical-align: top; text-align: left;\\\">66 Kg</td>        </tr>  <tr>            <td width=\\\"450\\\"  style=\"text-align: right;\" ><strong>Talla</strong></td>            <td width=\"75%\" style=\\\"text-align: left;\\\">1.78 m</td>        </tr><td style=\"vertical-align: top; text-align: right;\"><strong>Índice de masa corporal</strong></td> <td style=\"vertical-align: top;\">IMC =Peso/Talla<sup>2</sup> (Cf.<a href=\"http://es.wikipedia.org/wiki/%C3%8Dndice_de_masa_corporal\" onclick=\"window.open(this.href,\'\',\'resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status\'); return false\"> Artículo de Wikipedia</a>)</td>    </tbody></table>";
 $langDefaultMatchingOptA = "rico";
 $langDefaultMatchingOptB = "atractivo";
 $langDefaultMakeCorrespond1 = "Tu padre es";
@@ -301,4 +301,7 @@ $QuestionsPerPage = "Preguntas por pagina";
 $QuestionsPerPageOne = "Una";
 $QuestionsPerPageAll = "Todas";
 $EditIndividualComment = "Editar feedback";
+$ThankYouForPassingTheTest = "Gracias por pasar el examen";
+$ExerciseAtTheEndOfTheTest = "Al final del ejercicio";
+$EnrichQuestion = "Enriquecer pregunta ";
 ?>

@@ -59,4 +59,11 @@ $EndDateAlreadyPassed = "La date de fin est déjà passée";
 $MoveXTo = "Déplacer %s vers";
 $QualificationMustNotBeMoreThanQualificationOver = "La cote ne peut pas être supérieure à la qualification maximale";
 $ModifyDirectory = "Modifier le répertoire";
+$DeleteAllFiles = "Supprimer tous les travaux";
+$BackToWorksList = "Retour à la liste de travaux";
+$EditMedia = "Éditer et coter le travail";
+$AllFilesInvisible = "Tous les travaux sont à présent visibles";
+$FileInvisible = "Le fichier est à présent invisible";
+$AllFilesVisible = "Tous les travaux sont à présent visibles";
+$FileVisible = "Le travail est à présent visible";
 ?>

@@ -300,4 +300,8 @@ $ReachedOneAttempt = "Non è possibile ripetere ulteriormente questo test, in qua
 $QuestionsPerPage = "Quesiti per pagina";
 $QuestionsPerPageOne = "Uno";
 $QuestionsPerPageAll = "Tutti";
+$EditIndividualComment = "Modifica il commento";
+$ThankYouForPassingTheTest = "Grazie per aver eseguito il test";
+$ExerciseAtTheEndOfTheTest = "Alla fine del test";
+$EnrichQuestion = "Perfeziona il quesito";
 ?>

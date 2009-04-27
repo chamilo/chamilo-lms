@@ -208,5 +208,5 @@ $ShowAllAttemptsByExercise = "Ukáza&#357; všetky pokusy pod&#318;a cvi&#269;enia
 $ShowAttempt = "Ukáza&#357; pokus";
 $ShowAndQualifyAttempt = "Ukáza&#357; a posúdi&#357; pokus";
 $langAddEdit = "Prida&#357; / Upravi&#357;";
-$ModifyPrerequisities = "Zmeni&#357; predpoklady";
+$ModifyPrerequisites = "Zmeni&#357; predpoklady";
 ?>

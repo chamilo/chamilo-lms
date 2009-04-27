@@ -126,7 +126,7 @@ echo '<div class="row"><div class="form_header">'.get_lang('AddLpToStart').'</di
 // title field
 echo '<div class="row">';
 echo '<div class="label">';
-echo '<label for="idTitle">'.get_lang('Title').' : </label>';
+echo '<label for="idTitle">'.get_lang('LPName').' : </label>';
 echo '</div>';
 echo '<div class="formw">';
 echo '<input id="idTitle" name="learnpath_name" type="text" size="50" />';

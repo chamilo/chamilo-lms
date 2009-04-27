@@ -6700,7 +6700,7 @@ class learnpath {
 								$text=get_lang('LPCreateDocument');
 							} else if ($_GET['action']=='edit_item'){
 								$class='save';
-								$text=get_lang('LPModifyDocument');
+								$text=get_lang('SaveDocument');
 							}	
 							
 							$form->addElement('style_submit_button', 'submit_button', $text,'class="'.$class.'"');
@@ -6738,7 +6738,7 @@ class learnpath {
 			}
 			elseif(is_array($extra_info))
 			{
-				$form->addElement('style_submit_button', 'submit_button', get_lang('TitleManipulateDocument'), 'class="save"');
+				$form->addElement('style_submit_button', 'submit_button', get_lang('SaveDocument'), 'class="save"');
 				$form->addElement('hidden', 'path', $extra_info['path']);
 			}
 			

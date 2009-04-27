@@ -169,10 +169,10 @@ echo	'<th>'.get_lang('Name').'</th>'."\n" .
 		'<th>'.get_lang('Progress')."</th>\n";
 if (api_is_allowed_to_edit())
 {
-  echo '<th>'.get_lang('Description')."</th>\n" .
+  echo '<th>'.get_lang('CourseSettings')."</th>\n" .
   		//xport now is inside "Edit"
   		//'<th>'.get_lang('ExportShort')."</th>\n" .
-		'<th>'.get_lang('Modify')."</th>\n" .
+		'<th>'.get_lang('AuthoringOptions')."</th>\n" .
 		'<th>'.get_lang('Move')."</th>\n";
 }
 

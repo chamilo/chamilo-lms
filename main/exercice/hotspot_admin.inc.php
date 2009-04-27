@@ -24,17 +24,15 @@
 * 	@author Toon Keppens
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-
+require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
-if(!defined('ALLOWED_TO_INCLUDE'))
-{
+if(!defined('ALLOWED_TO_INCLUDE')) {
 	exit();
 }
 $modifyAnswers = $_GET['hotspotadmin'];
 
-if(!is_object($objQuestion))
-{
+if(!is_object($objQuestion)) {
 	$objQuestion = Question :: read($modifyAnswers);
 }
 
@@ -87,8 +85,6 @@ if($modifyIn)
     $weighting=unserialize($weighting);
     $hotspot_coordinates=unserialize($hotspot_coordinates);
     $hotspot_type=unserialize($hotspot_type);
-
-
     unset($buttonBack);
 }
 
@@ -105,53 +101,43 @@ if($submitAnswers || $buttonBack)
 
         $reponse[$i]=trim($reponse[$i]);
         $comment[$i]=trim($comment[$i]);
-        $weighting[$i]=intval($weighting[$i]);
+        $weighting[$i]=$weighting[$i]; // it can be float
 
         // checks if field is empty
-        if(empty($reponse[$i]) && $reponse[$i] != '0')
-        {
+        if(empty($reponse[$i]) && $reponse[$i] != '0') {
             $msgErr=get_lang('HotspotGiveAnswers');
 
             // clears answers already recorded into the Answer object
             $objAnswer->cancel();
-
             break;
         }
 
-        if($weighting[$i] <= 0)
-        {
+        if($weighting[$i] <= 0) {
         	$msgErr=get_lang('HotspotWeightingError');
-
         	// clears answers already recorded into the Answer object
             $objAnswer->cancel();
-
             break;
         }
-        if($hotspot_coordinates[$i] == '0;0|0|0' || empty($hotspot_coordinates[$i]))
-        {
+        
+        if($hotspot_coordinates[$i] == '0;0|0|0' || empty($hotspot_coordinates[$i])) {
         	$msgErr=get_lang('HotspotNotDrawn');
-
         	// clears answers already recorded into the Answer object
             $objAnswer->cancel();
-
             break;
         }
 
     }  // end for()
 
 
-    if(empty($msgErr))
-    {
+    if(empty($msgErr)) {
 
-    	for($i=1;$i <= $nbrAnswers;$i++)
-        {
+    	for($i=1;$i <= $nbrAnswers;$i++) {
             if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is HOT_SPOT'."<br />\n";}
 
             $reponse[$i]=trim($reponse[$i]);
             $comment[$i]=addslashes(trim($comment[$i]));
-            $weighting[$i]=intval($weighting[$i]);
-			if($weighting[$i])
-			{
+            $weighting[$i]=($weighting[$i]); //it can be float
+			if($weighting[$i]) {
 				$questionWeighting+=$weighting[$i];
 			}
 			// creates answer
@@ -165,9 +151,7 @@ if($submitAnswers || $buttonBack)
         $objQuestion->save($exerciseId);
 
         $editQuestion=$questionId;
-
         unset($modifyAnswers);
-
         echo '<script type="text/javascript">window.location.href="admin.php"</script>';
 
     }
@@ -322,15 +306,13 @@ if($modifyAnswers)
 					</tr>
 
 					<?php
-								for($i=1;$i <= $nbrAnswers;$i++)
-								{
+								for($i=1;$i <= $nbrAnswers;$i++) {
 					?>
-
 					<tr>
 					  <td valign="top"><div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div></td>
 					  <td valign="top" align="left"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo htmlentities($reponse[$i]); ?>" size="45" /></td>
 					  <td align="left"><textarea wrap="virtual" rows="1" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo stripslashes(htmlentities($comment[$i])); ?></textarea></td>
-					  <td valign="top"><input type="text" name="weighting[<?php echo $i; ?>]" size="5" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
+					  <td valign="top"><input type="text" name="weighting[<?php echo $i; ?>]" size="5" value="<?php echo (isset($weighting[$i]) ? float_format($weighting[$i],1) : 10); ?>" />
 					  <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
 					  <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>" /></td>
 					</tr>

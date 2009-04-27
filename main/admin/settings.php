@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 19832 2009-04-17 14:05:16Z pcool $
+<?php // $Id: settings.php 20112 2009-04-27 08:10:13Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -640,7 +640,7 @@ function handle_stylesheets()
 					{
 						$selected = '';
 					}
-					$show_name=ucwords(str_replace('_',' ', $style_dir));
+					$show_name=get_lang($style_dir);
 					
 					if ($is_style_changeable)
 					{					

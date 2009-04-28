@@ -1,9 +1,9 @@
-<?php // $Id: settings.php 20112 2009-04-27 08:10:13Z pcool $
+<?php // $Id: settings.php 20161 2009-04-28 20:31:39Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004-2008 Dokeos SPRL
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University
 	Copyright (c) Patrick Cool, Ghent University
 	Copyright (c) Julio Montoya, Dokeos
@@ -182,9 +182,11 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 			case 'textfield' :	
 				if ($row['variable']=='account_valid_duration') {
 					$form->addElement('text', $row['variable'], get_lang($row['comment']),array('maxlength'=>'5'));
+					$form->applyFilter($row['variable'],'html_filter');					
 					$default_values[$row['variable']] = $row['selected_value'];	
 				} else {
 					$form->addElement('text', $row['variable'], get_lang($row['comment']),$hideme);
+					$form->applyFilter($row['variable'],'html_filter');
 					$default_values[$row['variable']] = $row['selected_value'];		
 				}					
 

@@ -90,7 +90,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 	else 
 	{
 		echo '<div class="actions">';
-		echo '<a href="index.php?'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackToNotesList')).get_lang('BackToNotesList').'</a>';
+		echo '<a href="index.php?'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackToNoteList')).get_lang('BackToNoteList').'</a>';
 		echo '</div>';
 		$token = Security::get_token();
 		$form->addElement('hidden','sec_token');

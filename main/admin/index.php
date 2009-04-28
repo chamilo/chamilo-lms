@@ -1,4 +1,4 @@
-<?php // $Id: index.php 19567 2009-04-06 15:05:46Z juliomontoya $
+<?php // $Id: index.php 20155 2009-04-28 19:19:31Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -131,11 +131,11 @@ if(api_is_platform_admin()) {
 	</li>
 	<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
 	<li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
-	<li><a href="course_import.php"><?php echo get_lang('ImportCourses').' CSV'; ?></a></li>
+	<li><a href="course_import.php"><?php echo get_lang('ImportCourses'); ?></a></li>
 	<!--<li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses') ?></a></li>-->
-	<li><a href="course_category.php"><?php echo get_lang("AdminCategories"); ?></a></li>
+	<li><a href="course_category.php"><?php echo get_lang('AdminCategories'); ?></a></li>
 	<li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
-	<li><a href="course_user_import.php"><?php echo get_lang('ImportUsersToACourse').' CSV'; ?></a></li>
+	<li><a href="course_user_import.php"><?php echo get_lang('ImportUsersToACourse'); ?></a></li>
 	<?php if (api_get_setting('search_enabled')=='true') { ?>
 	  <li><a href="specific_fields.php"><?php echo get_lang('SpecificSearchFields'); ?></a></li>
 	<?php } ?>
@@ -161,7 +161,7 @@ if(api_is_platform_admin()) {
 	  }
 	  
 	  if (get_setting('allow_reservation')=='true') {
-		  	echo '<li><a href="../reservation/m_category.php">'.get_lang('BookingSystem').' ('.get_lang('ConfigureResourceType').')</a></li>';
+		  	echo '<li><a href="../reservation/m_category.php">'.get_lang('BookingSystem').'</a></li>';
 	  }
 		
 	  ?>

@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 20126 2009-04-27 17:09:24Z juliomontoya $
+// $Id: course_add.php 20157 2009-04-28 20:21:17Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -84,19 +84,26 @@ $dbnamelength = strlen($_configuration['db_prefix']);
 $maxlength = 40 - $dbnamelength;
 
 // Build the form
-$form = new FormValidator('update_course');
+$form = new FormValidator('update_course'); 
 $form->addElement('header', '', $tool_name);
 $form->add_textfield( 'visual_code', get_lang('CourseCode'),false,array('size'=>'20','maxlength'=>20));
 $form->applyFilter('visual_code','strtoupper');
+$form->applyFilter('visual_code','html_filter');
+
 $form->addRule('wanted_code',get_lang('Max'),'maxlength',$maxlength);
 $form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers);
+$form->applyFilter('tutor_id','html_filter');
+
 $form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size=5');
+$form->applyFilter('course_teachers','html_filter');
+
 //Title
 $form->add_textfield('title', get_lang('Title'),true, array ('size' => '60'));
 $form->applyFilter('title','html_filter');
 $form->applyFilter('title','trim');
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
+$form->applyFilter('category_code','html_filter');
 CourseManager::select_and_sort_categories($categories_select);
 //Course department
 $form->add_textfield('department_name', get_lang('CourseDepartment'),false, array ('size' => '60'));
@@ -108,6 +115,8 @@ $form->add_textfield('department_url', get_lang('CourseDepartmentURL'),false, ar
 $form->applyFilter('department_url','html_filter');
 
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
+$form->applyFilter('select_language','html_filter');
+
 $form->addElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
 $form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $form->addElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
@@ -116,6 +125,7 @@ $form->addElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allo
 $form->addElement('radio', 'subscribe', null, get_lang('Denied'), 0);
 $form->addElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
 $form->addElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
+
 $form->add_textfield('disk_quota',get_lang('CourseQuota'));
 $form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');
 $form->add_progress_bar();

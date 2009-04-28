@@ -1,4 +1,4 @@
-<?php // $Id: course_edit.php 20126 2009-04-27 17:09:24Z juliomontoya $
+<?php // $Id: course_edit.php 20157 2009-04-28 20:21:17Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -102,8 +102,11 @@ $form = new FormValidator('update_course');
 $form->addElement('hidden','code',$course_code);
 $form->add_textfield('visual_code', get_lang('CourseCode'));
 $form->applyFilter('visual_code','strtoupper');
+$form->applyFilter('visual_code','html_filter');
 //$form->add_textfield('tutor_name', get_lang('CourseTitular'));
 $form->addElement('select', 'tutor_name', get_lang('CourseTitular'), $platform_teachers);
+$form->applyFilter('tutor_name','html_filter');
+
 //$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size="4" style="width: 150px;"');
 
 $group=array();
@@ -146,6 +149,7 @@ $form->applyFilter('department_url','trim');
 
 
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
+$form->applyFilter('select_language','html_filter');
 $form->addElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
 $form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $form->addElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);

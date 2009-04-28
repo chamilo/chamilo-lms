@@ -80,8 +80,7 @@ $htmlHeadXtra[] = '<script>
 		{
 			var index = document.exercise_admin.exerciseFeedbackType.selectedIndex;
 			
-			if (index == \'1\') {
-					
+			if (index == \'1\') {					
 				document.exercise_admin.exerciseType[1].checked=true;
 				document.exercise_admin.exerciseType[0].disabled=true;					
 								
@@ -118,9 +117,9 @@ $objExercise -> createForm ($form);
  * VALIDATE FORM
  *********************/
 if($form -> validate()) {
-	$objExercise -> processCreation($form);
-	if($form -> getSubmitValue('edit') == 'true') {
-		header('Location:exercice.php?message=ExerciseEdited');
+	$objExercise -> processCreation($form);	
+	if ($form -> getSubmitValue('edit') == 'true') {
+		header('Location:admin.php?message=ExerciseEdited&exerciseId='.$objExercise->id);
 	} else {
 		header('Location:admin.php?message=ExerciseStored&exerciseId='.$objExercise->id);
 	}
@@ -128,7 +127,7 @@ if($form -> validate()) {
 	/*********************
 	 * DISPLAY FORM
 	 *********************/
-	if (isset($_SESSION['gradebook'])){
+	if (isset($_SESSION['gradebook'])) {
 		$gradebook=	$_SESSION['gradebook'];
 	}
 	

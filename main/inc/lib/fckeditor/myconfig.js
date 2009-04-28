@@ -291,10 +291,11 @@ FCKConfig.ToolbarSets["Forum"] = [
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
-    '-',['Source'],'/',
+    '/',
     ['Style','FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline'],
-    ['JustifyLeft','JustifyCenter','JustifyRight']
+    ['JustifyLeft','JustifyCenter','JustifyRight'],
+    ['Source']
 ];
 
 FCKConfig.ToolbarSets["Forum_Student"] = [

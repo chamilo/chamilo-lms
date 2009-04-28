@@ -539,7 +539,7 @@ function change_visibility($id, $scope)
 
 	if ($scope == "link")
 	{
-		$sqlselect = "SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".TOOL_LINK."' and ref='".$id."'";
+		$sqlselect = "SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".TOOL_LINK."' and ref='".Database::escape_string($id)."'";
 		$result = api_sql_query($sqlselect);
 		$row = Database::fetch_array($result);
 		api_item_property_update($_course, TOOL_LINK, $id, $_GET['action'], $_user['user_id']);

@@ -1,4 +1,4 @@
-<?php // $Id: link.php 20130 2009-04-27 17:58:35Z juliomontoya $
+<?php // $Id: link.php 20163 2009-04-28 20:55:13Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -77,26 +77,27 @@ $action = (!empty($_REQUEST['action'])?$_REQUEST['action']:'');
 $category_title = (!empty($_REQUEST['category_title'])?$_REQUEST['category_title']:'');
 $submitCategory = isset($_POST['submitCategory'])?true:false;
 $nameTools = get_lang('Links');
-	if (isset($_GET['action']) && $_GET['action']=='addlink')
-	{
-		$nameTools = '';
-		$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
-		$interbreadcrumb[] = array ('url' => 'link.php?action=addlink', 'name' => get_lang('AddLink'));
-	}	
-	
-	if (isset($_GET['action']) && $_GET['action']=='addcategory') 
-	{
-		$nameTools = '';
-		$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
-		$interbreadcrumb[] = array ('url' => 'link.php?action=addcategory', 'name' => get_lang('AddCategory'));
-	}
-	
-	if (isset($_GET['action']) && $_GET['action']=='editlink') 
-	{
-		$nameTools = '';
-		$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
-		$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditLink'));
-	}	 	
+
+if (isset($_GET['action']) && $_GET['action']=='addlink')
+{
+	$nameTools = '';
+	$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
+	$interbreadcrumb[] = array ('url' => 'link.php?action=addlink', 'name' => get_lang('AddLink'));
+}	
+
+if (isset($_GET['action']) && $_GET['action']=='addcategory') 
+{
+	$nameTools = '';
+	$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
+	$interbreadcrumb[] = array ('url' => 'link.php?action=addcategory', 'name' => get_lang('AddCategory'));
+}
+
+if (isset($_GET['action']) && $_GET['action']=='editlink') 
+{
+	$nameTools = '';
+	$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
+	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditLink'));
+}	 	
 	
 				
 // Database Table definitions
@@ -206,9 +207,10 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 		else
 			{echo '<div class="form_header">'.get_lang("LinkMod").'</div>';}
 		echo '</div>';
-		if ($category=="")
-			{$category=0;}
-		echo "<form method=\"post\" action=\"".api_get_self()."?action=".Security::remove_XSS($_GET['action'])."&amp;urlview=".$urlview."\">";
+		if ($category=="") {
+			$category=0;
+		}
+		echo "<form method=\"post\" action=\"".api_get_self()."?action=".Security::remove_XSS($_GET['action'])."&amp;urlview=".Security::remove_XSS($urlview)."\">";
 		if ($_GET['action']=="editlink")
 		{
 			echo "<input type=\"hidden\" name=\"id\" value=\"".Security::remove_XSS($_GET['id'])."\" />";
@@ -338,7 +340,7 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 		else
 			{echo '<div class="form_header">'.get_lang('CategoryMod').'</div>';}
 		echo "</div>\n\n";
-		echo "<form method=\"post\" action=\"".api_get_self()."?action=".Security::remove_XSS($_GET['action'])."&amp;urlview=".$urlview."\">";
+		echo "<form method=\"post\" action=\"".api_get_self()."?action=".Security::remove_XSS($_GET['action'])."&amp;urlview=".Security::remove_XSS($urlview)."\">";
 		if ($_GET['action']=="editcategory")
 		{
 			echo "<input type=\"hidden\" name=\"id\" value=\"".$id."\" />";
@@ -385,25 +387,22 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 }
 
 
-if (!empty($down))
-{
+if (!empty($down)) {
 	movecatlink($down);
 }
-if (!empty($up))
-{
+if (!empty($up)) {
 	movecatlink($up);
 }
 
-if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='addcategory' && $_GET['action']!='addlink') || $link_submitted || $category_submitted)
-{	
+if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='addcategory' && $_GET['action']!='addlink') || $link_submitted || $category_submitted) {	
 	/*
 	-----------------------------------------------------------
 		Action Links
 	-----------------------------------------------------------
 	*/
 	echo '<div class="actions">';
-	if(is_allowed_to_edit())
-	{
+	if(is_allowed_to_edit()) {
+		$urlview = Security::remove_XSS($urlview);
 		echo Display::return_icon('linksnew.gif',get_lang('LinkAdd'))." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addlink&amp;category=".(!empty($category)?$category:'')."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
 		echo Display::return_icon('folder_new.gif', get_lang("CategoryAdd"))." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
 		   /* "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
@@ -472,7 +471,7 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 				echo '<table class="data_table">';
 				echo '<tr>';			
 					echo '<th width="81%"  style="font-weight: bold; text-align:left;padding-left: 5px;">';
-					echo '<a href="'.api_get_self()."?".api_get_cidreq()."&urlview=".$newurlview."\">";
+					echo '<a href="'.api_get_self()."?".api_get_cidreq()."&urlview=".Security::remove_XSS($newurlview)."\">";
 					echo "<img src=../img/remove.gif>&nbsp;&nbsp;".htmlentities($myrow["category_title"],ENT_QUOTES,$charset)."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
 					
 					if (is_allowed_to_edit())

@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20136 2009-04-27 20:52:51Z juliomontoya $
+<?php // $Id: question.class.php 20159 2009-04-28 20:22:40Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20136 2009-04-27 20:52:51Z juliomontoya $
+* 	@version $Id: question.class.php 20159 2009-04-28 20:22:40Z juliomontoya $
 */
 
 
@@ -962,22 +962,22 @@ abstract class Question
 	 * A subclass can redifine this function to add fields...
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
-	function createForm (&$form,$fck_config=0) {
-
+	function createForm (&$form,$fck_config=0)
+	{
 		echo '	<style>
 					div.row div.label{ width: 10%; }
 					div.row div.formw{ width: 89%; }
 				</style>';
 				
-		echo '	<script>
-				function show_media() {
+		echo '<script>
+			function show_media()
+			{
 			if(document.getElementById(\'media\').style.display == \'none\') {
 				document.getElementById(\'media\').style.display = \'block\';
 				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
 			} else {			
 				document.getElementById(\'media\').style.display = \'none\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
-				
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';				
 			}	
 		}	
 			</script>';		
@@ -987,6 +987,8 @@ abstract class Question
 		$form->addElement('html','<div class="form">');
 		// question name
 		$form->addElement('text','questionName',get_lang('Question'),'size="60"');
+		$form->applyFilter('questionName','html_filter');
+		
 		//$radios_results_enabled[] = $form->createElement('static', null, null, null);
 		//$test=FormValidator :: createElement ('text', 'questionName');
 

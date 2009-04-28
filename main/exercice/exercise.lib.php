@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 19813 2009-04-17 00:19:28Z cvargas1 $
+<?php // $Id: exercise.lib.php 20143 2009-04-28 00:39:27Z iflorespaz $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 19813 2009-04-17 00:19:28Z cvargas1 $
+* 	@version $Id: exercise.lib.php 20143 2009-04-28 00:39:27Z iflorespaz $
 */
 
 /**
@@ -167,24 +167,24 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			if($answerType == UNIQUE_ANSWER) {
 				$s.="<input type='hidden' name='choice2[".$questionId."]' value='0'>
 				<tr>
-				  <td  width=\"50\">
+				 <td><div style='float:left;margin-top:10px;margin-right:10px;margin-left:5px'>
 					<input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'>
-				  </td>
-				  <td>";
+				  </div>
+				  <div style='float:rigth;margin-top:10px;margin-right:10px;margin-left:30px'>";
 				$answer=api_parse_tex($answer);
 				$s.=$answer;
-				$s.="</td></tr>";
+				$s.="</div></td></tr>";
 
 			} elseif($answerType == MULTIPLE_ANSWER) {
 			// multiple answers
-				$s.="<tr>
-				  <td width=\"50\"><input type='hidden' name='choice2[".$questionId."][0]' value='0'>
-				<input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
-				  </td>
-				  <td>";
+				$s.="<tr >
+				  <td ><div style='float:left;margin-top:10px;margin-right:10px;margin-left:5px'>
+				  	<input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
+				  	<input type='hidden' name='choice2[".$questionId."][0]' value='0'>
+				 </div><div style='float:rigth;margin-top:10px;margin-right:10px;margin-left:30px'>";
 				$answer = api_parse_tex($answer);
 				$s.=$answer;
-				$s.="</td></tr>";
+				$s.="</div></td></tr>";
 
 			}
 			// fill in blanks

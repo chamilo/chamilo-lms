@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 20043 2009-04-23 22:37:29Z yannoo $
+// $Id: add_course.php 20160 2009-04-28 20:23:02Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -63,15 +63,27 @@ $maxlength = 40 - $dbnamelength;
 // Build the form
 $categories = array();
 $form = new FormValidator('add_course');
+//title
 $form->add_textfield('title',get_lang('CourseName'),true,array('size'=>'60'));
+$form->applyFilter('title', 'html_filter');
+	
 $form->addElement('static',null,null,get_lang('Ex'));
 $categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), $categories);
+$form->applyFilter('category_code', 'html_filter');
+
 CourseManager::select_and_sort_categories($categories_select);
 $form->addElement('static',null,null, get_lang('TargetFac'));
+
 $form->add_textfield('wanted_code', get_lang('Code'),false,array('size'=>'$maxlength','maxlength'=>$maxlength));
+$form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code',get_lang('Max'),'maxlength',$maxlength);
+
 $titular= &$form->add_textfield('tutor_name', get_lang('Professors'),true,array('size'=>'60'));
+$form->applyFilter('tutor_name', 'html_filter');
+
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
+$form->applyFilter('select_language', 'html_filter');
+
 $form->addElement('style_submit_button', null, get_lang('CreateCourseArea'), 'class="add"');
 $form->add_progress_bar();
 

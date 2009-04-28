@@ -321,14 +321,6 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	</div>
 	<!-- end media player layaout -->	
 
-	<!-- message prerequisite layout -->
-	<div id="message_id" name="message_name" class="message" style="height:12px">
-		<div id="msg_div_id" class="message">
-		<?php echo (!empty($_SESSION['oLP']->error)?$_SESSION['oLP']->error:''); ?>
-		</div>
-	</div>
-	<!-- end message prerequisite layout -->
-
 	<!-- toc layout -->     
 	<div id="toc_id" name="toc_name"  style="padding:0;margin:0;position:relative;top:10px;left:0;">
 		<div id="learningPathToc" style="width:100%;overflow-y:auto;overflow-x:hidden;font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
@@ -531,14 +523,6 @@ else
 		<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
 	</div>
 	<!-- end media player layaout -->	
-
-	<!-- message prerequisite layout -->
-	<div id="message_id" name="message_name" class="message" style="height:12px">
-		<div id="msg_div_id" class="message">
-		<?php echo (!empty($_SESSION['oLP']->error)?$_SESSION['oLP']->error:''); ?>
-		</div>
-	</div>
-	<!-- end message prerequisite layout -->
 
 	<!-- toc layout -->     
 	<div id="toc_id" name="toc_name"  style="padding:0;margin:0;position:relative;top:10px;left:0;">

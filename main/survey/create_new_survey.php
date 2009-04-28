@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 19829 2009-04-17 13:49:47Z pcool $
+* 	@version $Id: create_new_survey.php 20156 2009-04-28 20:18:02Z juliomontoya $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -147,6 +147,8 @@ if ($_GET['action'] == 'edit' AND isset($survey_id) AND is_numeric($survey_id))
 }
 
 $survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '40'));
+$form->applyFilter('survey_code', 'html_filter');
+
 if ($_GET['action'] == 'edit') {
 	$survey_code->freeze();
 	$form->applyFilter('survey_code', 'strtoupper');

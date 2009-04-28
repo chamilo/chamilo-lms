@@ -62,6 +62,7 @@ if (api_is_allowed_to_edit())
 		// settting the form elements		
 		$form->addElement('header', '', get_lang('TermAddNew'));
 		$form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'95'));
+		$form->applyFilter('glossary_title', 'html_filter');
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="save"');	
 		

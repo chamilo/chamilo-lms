@@ -69,6 +69,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 	// settting the form elements	
 	$form->addElement('header', '', get_lang('NoteAddNew'));
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'95'));
+	$form->applyFilter('note_title', 'html_filter');
+	
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('AddNote'), 'class="add"');	
 	

@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20159 2009-04-28 20:22:40Z juliomontoya $
+<?php // $Id: question.class.php 20165 2009-04-28 21:27:51Z aportugal $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20159 2009-04-28 20:22:40Z juliomontoya $
+* 	@version $Id: question.class.php 20165 2009-04-28 21:27:51Z aportugal $
 */
 
 
@@ -1002,7 +1002,7 @@ abstract class Question
 		}
 		$form->addGroup($radios_results_enabled,'questionLevel',get_lang('Difficulty'));
 					
-		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionName');
+		$renderer->setElementTemplate('<div class="row" ><!-- BEGIN required --><span class="form_required" style="float:left; margin-left: 75px ;">*</span><!-- END required --><div style="float:left;">{label}</div><div class="formw" >{element}</div></div>','questionName');
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 

@@ -99,6 +99,7 @@ if (api_is_allowed_to_edit())
 		$form->addElement('header', '', get_lang('TermEdit'));
 		$form->addElement('hidden', 'glossary_id');
 		$form->addElement('text', 'glossary_title', get_lang('TermName'),array('size'=>'100'));
+		$form->applyFilter('glossary_title', 'html_filter');
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermUpdateButton'), 'class="save"');	
 		

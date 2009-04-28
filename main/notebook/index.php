@@ -109,6 +109,7 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 	// settting the form elements	
 	$form->addElement('hidden', 'notebook_id');
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'100'));
+	$form->applyFilter('note_title', 'html_filter');
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyNote'), 'class="save"');	
 	

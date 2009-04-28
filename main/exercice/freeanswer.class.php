@@ -47,19 +47,15 @@ class FreeAnswer extends Question {
 	 * function which redifines Question::createAnswersForm
 	 * @param the formvalidator instance
 	 */
-	function createAnswersForm ($form) {
-
+	function createAnswersForm ($form)
+	{
 		$form -> addElement('text','weighting',get_lang('Weighting'),'size="5"');
-		if(!empty($this->id))
-		{
-			$form -> setDefaults(array('weighting' => $this->weighting));
-		}
-		else {
+		if(!empty($this->id)) {
+			$form -> setDefaults(array('weighting' => float_format($this->weighting, 1)));
+		} else {
 			$form -> setDefaults(array('weighting' => '10'));
 		}
-
 	}
-
 
 	/**
 	 * abstract function which creates the form to create / edit the answers of the question

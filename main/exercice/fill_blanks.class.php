@@ -68,7 +68,7 @@ class FillBlanks extends Question
 		$fck_attribute = array();
 		//$fck_attribute['Width'] = '348px';
 		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '450px';
+		$fck_attribute['Height'] = '350px';
 		$fck_attribute['ToolbarSet'] = 'Full';
 
 	

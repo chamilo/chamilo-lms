@@ -99,7 +99,7 @@ class UniqueAnswer extends Question {
 		$html='
 		<div class="row">
 			<div class="label">
-			'.get_lang('Answers').'
+			'.get_lang('Answers').' <br /> <img src="../img/fill_field.png">
 			</div>
 			<div class="formw">
 				<table class="data_table">
@@ -176,8 +176,8 @@ class UniqueAnswer extends Question {
 				}
 				
 				$defaults['answer['.$i.']'] = $answer -> answer[$i];
-				$defaults['comment['.$i.']'] = $answer -> comment[$i];
-				$defaults['weighting['.$i.']'] = $answer -> weighting[$i];
+				$defaults['comment['.$i.']'] = $answer -> comment[$i]; 
+				$defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
 				
 				$item_list=explode('@@',$answer -> destination[$i]);
 				//echo '<pre>';	print_r($item_list);

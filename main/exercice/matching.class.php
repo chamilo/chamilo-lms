@@ -74,25 +74,19 @@ class Matching extends Question {
 			if(isset($_POST['moreOptions']))
 				$nb_options++;
 
-		}
-		else if(!empty($this -> id))
-		{
+		} else if(!empty($this -> id)) {			
 			$answer = new Answer($this -> id);
 			$answer -> read();
-			if(count($answer->nbrAnswers)>0)
-			{
+			if(count($answer->nbrAnswers)>0) {
 				$a_matches = $a_options = array();
 				$nb_matches = $nb_options = 0;
 				for($i=1 ; $i<=$answer->nbrAnswers ; $i++){
-					if($answer -> isCorrect($i))
-					{
+					if ($answer -> isCorrect($i)) {
 						$nb_matches++;
-						$defaults['answer['.$nb_matches.']'] = $answer -> selectAnswer($i);
-						$defaults['weighting['.$nb_matches.']'] = $answer -> selectWeighting($i);
+						$defaults['answer['.$nb_matches.']'] = $answer -> selectAnswer($i);						
+						$defaults['weighting['.$nb_matches.']'] = float_format($answer -> selectWeighting($i),1);
 						$defaults['matches['.$nb_matches.']'] = $answer -> correct[$i];
-					}
-					else
-					{
+					} else {
 						$nb_options++;
 						$defaults['option['.$nb_options.']'] = $answer -> selectAnswer($i);
 					}
@@ -113,13 +107,8 @@ class Matching extends Question {
 			$a_matches[$i] = chr(64+$i);  // fill the array with A, B, C.....
 		}
 
-
-
-
-
 		$form -> addElement('hidden', 'nb_matches', $nb_matches);
 		$form -> addElement('hidden', 'nb_options', $nb_options);
-
 
 		////////////////////////
 		// DISPLAY MATCHES ////
@@ -128,13 +117,13 @@ class Matching extends Question {
 		$html='
 		<div class="row">
 			<div class="label">
-			'.get_lang('Answers').'
+			'.get_lang('Answers').' <br /> <img src="../img/fill_field.png">
 			</div>
 			<div class="formw">
 				'.get_lang('MakeCorrespond').'
 				<table class="data_table">
 					<tr style="text-align: center">
-						<th>
+						<th width="40px">
 							'.get_lang('Number').'
 						</th>
 						<th>
@@ -149,24 +138,21 @@ class Matching extends Question {
 						
 					</tr>';
 		$form -> addElement ('html', $html);
+		
+		//$form -> addElement ('html_editor', 'answer','<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="updateBlanks(this)"');
 
-
-		for($i = 1 ; $i <= $nb_matches ; ++$i)
-		{
-
+		for($i = 1 ; $i <= $nb_matches ; ++$i) {
 			$form -> addElement ('html', '<tr><td>');
-
 			$group = array();
 			$puce = FormValidator :: createElement ('text', null,null,'value="'.$i.'"');
 			$puce->freeze();
-			$group[] = $puce;
-			$group[] = FormValidator :: createElement ('text', 'answer['.$i.']',null, 'size="30" style="margin-left: 0em;"');
-			$group[] = FormValidator :: createElement ('select', 'matches['.$i.']',null,$a_matches);
-			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="2" value="10"');
+			$group[] = $puce;			
+			
+			$group[] = FormValidator :: createElement ('text', 'answer['.$i.']',null, 'size="40" style="margin-left: 0em;"');
+			$group[] = FormValidator :: createElement ('select', 'matches['.$i.']',null,$a_matches);			
+			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
 			$form -> addGroup($group, null, null, '</td><td width="0">');
-
 			$form -> addElement ('html', '</td></tr>');
-
 		}
 
 		$form -> addElement ('html', '</table></div></div>');
@@ -174,8 +160,6 @@ class Matching extends Question {
 		$group[] = FormValidator :: createElement ('style_submit_button', 'lessMatches', get_lang('DelElem'),'class="minus"');
 		$group[] = FormValidator :: createElement ('style_submit_button', 'moreMatches', get_lang('AddElem'),'class="plus"');
 		$form -> addGroup($group);
-
-
 
 		////////////////////////
 		// DISPLAY OPTIONS ////
@@ -187,7 +171,7 @@ class Matching extends Question {
 			<div class="formw"><br /><br />
 				<table class="data_table">
 					<tr style="text-align: center;">
-						<th>
+						<th width="40px">
 							'.get_lang('Number').'						
 						</th>
 						<th>
@@ -197,17 +181,14 @@ class Matching extends Question {
 					</tr>';
 		$form -> addElement ('html', $html);
 
-
-
-		for($i = 1 ; $i <= $nb_options ; ++$i)
-		{
+		for($i = 1 ; $i <= $nb_options ; ++$i) {
 			$form -> addElement ('html', '<tr><td>');
 
 			$group = array();
 			$puce = FormValidator :: createElement ('text', null,null,'value="'.chr(64+$i).'"');
 			$puce->freeze();
 			$group[] = $puce;
-			$group[] = FormValidator :: createElement ('text', 'option['.$i.']',null, 'size="30" style="margin-left: 0em;"');
+			$group[] = FormValidator :: createElement ('text', 'option['.$i.']',null, 'size="40" style="margin-left: 0em;"');
 			$form -> addGroup($group, null, null, '</td><td width="0">');
 
 			$form -> addElement ('html', '</td></tr>');
@@ -219,9 +200,7 @@ class Matching extends Question {
 		$group[] = FormValidator :: createElement ('style_submit_button', 'lessOptions', get_lang('DelElem'),'class="minus"');
 		$group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'),'class="plus"');
 		$form -> addGroup($group);
-
 		$form -> setDefaults($defaults);
-
 		$form->setConstants(array('nb_matches' => $nb_matches,'nb_options' => $nb_options));
 
 	}

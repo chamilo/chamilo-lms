@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20124 2009-04-27 16:16:59Z juliomontoya $
+<?php //$Id: work.lib.php 20164 2009-04-28 21:02:46Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20124 2009-04-27 16:16:59Z juliomontoya $
+* 	@version $Id: work.lib.php 20164 2009-04-28 21:02:46Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -21,20 +21,20 @@ require_once '../inc/lib/fileDisplay.lib.php';
 
 function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)  
 {
-	echo '<div class="actions">';
-	
-	if ($_GET['display_tool_options'] == 'true' OR $_GET['display_upload_form'] == 'true' )
-	{
-		echo '<a href="work.php">'.Display::return_icon('back.png').' '.get_lang('BackToWorksList').'</a>';
-	}
-	
+
 	$display_output = "";
 	isset($_GET['origin'])?$origin = Security::remove_XSS($_GET['origin']):$origin='';
 	if (strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
 		$parent_dir = dirname($cur_dir_path);
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif', get_lang('Up')).' '.get_lang('Up').'</a>';
 	}
-
+	echo '<div class="actions">';
+	if ($_GET['display_tool_options'] == 'true' OR $_GET['display_upload_form'] == 'true' )
+	{
+		if ($origin!='learnpath') {
+			echo '<a href="work.php">'.Display::return_icon('back.png').' '.get_lang('BackToWorksList').'</a>';
+		}
+	}
 	if (! $always_show_tool_options && api_is_allowed_to_edit()) {
 		// Create dir		
 		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.$_GET['toolgroup'].'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateDir').'" title ="'.get_lang('CreateDir').'" /> '.get_lang('CreateAssignment').' </a>';
@@ -436,7 +436,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						$form_folder -> addElement('html','<div class="row">
 	 	                         <div class="label">&nbsp;</div>
  	  	                         <div class="formw">
- 	  	                                 <a href="javascript://" onclick=" return plus();" ><span id="plus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+ 	  	                                 <a href="javascript://" onclick=" return plus();" ><span id="plus">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
  	  	                         </div>
 	  	                         </div>	');
 	  	                         
@@ -614,7 +614,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			
 			$show_as_icon = get_work_id($mydir); //true or false
 			if ($show_as_icon) {
-				$row[] = '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&action=downloadfolder&path=/'.$mydir.'"><img src="../img/zip_save.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" width="17" height="17"/></a><a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$_GET['gradebook'].'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
+				$row[] = '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&action=downloadfolder&path=/'.$mydir.'"><img src="../img/zip_save.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" width="17" height="17"/></a><a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
 			} else {
 				$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;	
 			}									
@@ -634,7 +634,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		
 		if( $is_allowed_to_edit) {
 			$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
-				'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$_GET['gradebook'].'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';						
+				'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';						
 			$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&delete_dir='.$mydir.'&delete2='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'" title="'.get_lang('DirDelete').'"></a>';
 			$row[] = $action;
 		} else {
@@ -691,7 +691,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			if( $is_allowed_to_edit) {
 				
 				$action = '';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'&gradebook='.$_GET['gradebook'].'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'" ><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'" title="'.get_lang('WorkDelete').'"></a>';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;move='.$work->id.'" title="'.get_lang('Move').'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="'.get_lang('Move').'" /></a>';
 				if($work->accepted == '1') {
@@ -703,7 +703,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				$row[] = $action;
 			} elseif($is_author) {
 				$action = '';				
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&gradebook='.$_GET['gradebook'].'&amp;origin='.$origin.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif"  alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;origin='.$origin.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif"  alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'"  ><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'" title="'.get_lang('WorkDelete').'" ></a>';
 
 				$row[] = $action;

@@ -143,13 +143,20 @@ $therow=Database::fetch_array($result);
 /*==================================================
 	prerequisites setting end
  ==================================================*/	
- 
-if (isset($_GET['gradebook']) and $_GET['gradebook']=='view'){
-	$interbreadcrumb[]= array (
-		'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-		'name' => get_lang('Gradebook'));
-}	  
+if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
+	$_SESSION['gradebook']=Security::remove_XSS($_GET['gradebook']);
+	$gradebook=	$_SESSION['gradebook'];
+} elseif (empty($_GET['gradebook'])) {
+	unset($_SESSION['gradebook']);
+	$gradebook=	'';
+} 
 
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[] = array (
+		'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
+		'name' => get_lang('Gradebook')
+	);
+}
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
 
 $interbreadcrumb[]= array ("url"=>api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));

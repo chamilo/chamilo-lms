@@ -75,6 +75,16 @@ if ($dokeos_chapter) {
 if($debug>0){error_log('New lp - In lp_content.php - File url is '.$src,0);}
 $_SESSION['oLP']->set_previous_item($lp_item_id);
 
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('Gradebook')
+		);
+}
 // Define the 'doc.inc.php' as language file
 $nameTools = $_SESSION['oLP']->get_name();
 $interbreadcrumb[]= array ("url"=>"./lp_list.php", "name"=> get_lang('Doc'));

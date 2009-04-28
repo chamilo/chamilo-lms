@@ -1883,7 +1883,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$my_forum   = isset($_GET['forum'])  ? $_GET['forum']:'';
 	$my_action  = isset($_GET['action']) ? $_GET['action']:'';
 	$my_post    = isset($_GET['post'])   ? $_GET['post']:'';
-	$my_gradebook    = isset($_GET['gradebook'])   ? $_GET['gradebook']:'';
+	$my_gradebook    = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']):'';
 	$form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($my_forum).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($my_thread).'&post='.Security::remove_XSS($my_post).'&action='.Security::remove_XSS($my_action).'&origin='.$origin);
 	$form->setConstants(array('forum' => '5'));
 

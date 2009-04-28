@@ -85,7 +85,7 @@ foreach ($rows as $row) {
 		if( isset($_GET['gradebook'])){
 			if ($increment>0 && $user_status!=1 ) {
 				$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-				echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".$_GET['gradebook']."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
+				echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".Security::remove_XSS($_GET['gradebook'])."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
 			 }
 		} else {
 			if ($increment>0 && $user_status!=1 ) {

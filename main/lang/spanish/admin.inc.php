@@ -956,9 +956,11 @@ $LastTimeTheCourseWasUsed = "Última vez que la lección fue usada";
 $AnnouncementAvailable = "El anuncio está disponible";
 $AnnouncementNotAvailable = "El anuncio no está disponible";
 $Searching = "Buscando";
+$AddLDAPUsers = "Añadir usuarios LDAP";
 $academica = "Academica";
 $baby_orange = "Bebe naranja";
 $BlueLagoon = "Laguna azul";
+$CoolBlue = "Azul fresco";
 $corporate = "Corporativo";
 $cosmic_campus = "Campo cósmico";
 $DeliciousBordeaux = "Deliciosos Burdeos";
@@ -973,4 +975,5 @@ $RoyalPurple = "Púrpura real";
 $silver_line = "Línea plateada";
 $sober_brown = "Marrón sobrio";
 $SteelGrey = "Gris acero";
+$TastyOlive = "Oliva sabroso";
 ?>

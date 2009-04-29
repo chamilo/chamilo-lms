@@ -134,7 +134,7 @@ $ChooseItem = "Scegli un elemento";
 $AverageResultsVsResource = "Punteggio medio per risorsa";
 $ToViewGraphScoreRuleMustBeEnabled = "Per vedere il grafico devono essere attivate le regole sul punteggio";
 $GradebookPreviousWeight = "Peso precedentemente assegnato";
-$SaveAssessment = "Salva la valutazione";
+$AddAssessment = "Salva la valutazione";
 $FolderView = "Registro";
 $GradebookSkillsRanking = "Valutazione competenze";
 ?>

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $ModifyEvaluation = "Modificar evaluación";
-$CreateLink = "Crear enlace";
+$CreateLink = "Añadir esta actividad a la evaluación";
 $FlatView = "Vista plana";
 $ScoreEdit = "Editar las reglas de puntuación";
 $ScoreColor = "Color de la puntuación";
@@ -134,7 +134,8 @@ $ChooseItem = "Seleccione un item";
 $AverageResultsVsResource = "Promedio de resultados contra recursos";
 $ToViewGraphScoreRuleMustBeEnabled = "La vista de regla de puntuación gráfica debe estar habilitada";
 $GradebookPreviousWeight = "Peso anterior del recurso";
-$SaveAssessment = "Guardar evaluación";
+$AddAssessment = "Añadir evaluación";
 $FolderView = "Ver cuaderno de calificaciones";
 $GradebookSkillsRanking = "Clasificación de habilidades";
+$SaveScoringRules = "Guardar reglas de puntuación";
 ?>

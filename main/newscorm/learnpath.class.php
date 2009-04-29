@@ -4412,25 +4412,28 @@ class learnpath {
 		$arrLP = $this->arrMenu;		
 		unset($this->arrMenu);	 
 		
-		if(api_is_allowed_to_edit())
-		{
+		if (api_is_allowed_to_edit()) {
+			
 			$gradebook=Security::remove_XSS($_GET['gradebook']);
 			$return .= '<div class="actions">';
-			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;gradebook='.$gradebook.'&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.Display::return_icon('learnpath_build.gif', get_lang('Build')).' '.get_lang('Build').'</a>';			
-						
-			$return .= '<span>'.Display::return_icon('learnpath_organize.gif', get_lang("BasicOverview")).' '.get_lang("BasicOverview").'</span>';
-									
+			
+			//$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;gradebook='.$gradebook.'&amp;action=build&amp;lp_id=' . $this->lp_id . '" title="'.get_lang("Build").'">'.Display::return_icon('learnpath_build.gif', get_lang('Build')).' '.get_lang('Build').'</a>';
+			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;gradebook='.$gradebook.'&amp;action=build&amp;lp_id=' . $this->lp_id . '" title="'.get_lang("Build").'"><img alt="'.get_lang("Build").'" src="../img/learnpath_build.png" title="'.get_lang("Build").'" />'.get_lang("Build").'</a>';
+			//$return .= '<span>'.Display::return_icon('learnpath_organize.gif', get_lang("BasicOverview")).' '.get_lang("BasicOverview").'</span>';
+			$return .= '<span><img alt="'.get_lang("BasicOverview").'" src="../img/learnpath_organize.png" title="'.get_lang("BasicOverview").'" />'.' '.get_lang('BasicOverview').'</span>';		
 			$return .= '<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.Display::return_icon('learnpath_view.gif', get_lang("Display")).' '.get_lang("Display").'</a>';			
 			
 			$return .= '<a href="'.api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('audio.gif', get_lang('UpdateAllAudioFragments')).' '.get_lang('UpdateAllAudioFragments').'</a>';
 			$return .= '</div>';
+			
 		}
 		
 		// we need to start a form when we want to update all the mp3 files
-		if ($_GET['updateaudio'] == 'true' AND count($arrLP) <> 0)
-		{
+		if ($_GET['updateaudio'] == 'true' AND count($arrLP) <> 0) {
+			
 			$return .= '<form action="'.api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';	
 			$return .= Display::display_warning_message(get_lang('LeaveEmptyToKeepCurrentFile'));
+			
 		}
 		
 		$return .= '<table class="data_table">' . "\n";

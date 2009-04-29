@@ -1,4 +1,4 @@
-<?php // $Id: infocours.php 20126 2009-04-27 17:09:24Z juliomontoya $
+<?php // $Id: infocours.php 20169 2009-04-29 00:52:58Z yannoo $
 
 /*
 ==============================================================================
@@ -132,7 +132,6 @@ while($a_titulars=mysql_fetch_array($q_result_titulars)){
 		}
 		$s_disabled_select_titular="";
 		if(!$is_courseAdmin){
-			$s_disabled_select_titular="disabled=disabled";
 		}
 		$a_profs[$s_firstname.' '.$s_lastname]="$s_lastname $s_firstname ($s_username)";
 }
@@ -178,6 +177,7 @@ $form->addElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('Ope
 $form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $form->addElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
 $form->addElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
+$form->addElement('static', null, null, get_lang("CourseAccessConfigTip"));
 $form -> addElement('html',$linebreak);
 
 $form->addElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
@@ -188,7 +188,6 @@ $form->addElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('
 $form->addElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form -> addElement('html',$linebreak);
 
-$form->addElement('static', null, null, get_lang("ConfTip"));
 $form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array ('size' => '60'));
 
 

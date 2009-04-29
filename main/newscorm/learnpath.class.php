@@ -2658,7 +2658,7 @@ class learnpath {
     	//echo $this->current;
     	//$parent = $this->items[$this->current]->get_parent();
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
-    	$html= '<div class="scorm_title"><div class="scorm_title_text">'.mb_convert_encoding($this->get_name(),$this->encoding,$mych).'</div></div>';
+    	$html= '<div class="scorm_title"><div class="scorm_title_text">'.$this->get_name().'</div></div>';
     	
     	// build, display
     	if(api_is_allowed_to_edit())

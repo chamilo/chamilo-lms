@@ -157,8 +157,10 @@ function show_add_forumcategory_form($inputvalues=array()) {
 
 	// settting the form elements
 	$form->addElement('header', '', get_lang('AddForumCategory'));
-	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
+	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');	
+	$form->applyFilter('forum_category_title', 'html_filter');	
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
+	$form->applyFilter('forum_category_comment', 'html_filter');	
 	$form->addElement('style_submit_button', 'SubmitForumCategory', get_lang('CreateCategory'), 'class="add"');
 
 	// setting the rules
@@ -213,15 +215,18 @@ function show_add_forum_form($inputvalues=array()) {
 	}
 	// The title of the forum
 	$form->addElement('text', 'forum_title', get_lang('Title'),'class="input_titles"');
+	$form->applyFilter('forum_title', 'html_filter');
 	// The comment of the forum
 	$form->addElement('html_editor', 'forum_comment', get_lang('Comment'));
+	$form->applyFilter('forum_comment', 'html_filter');
 	// dropdown list: Forum Categories
 	$forum_categories=get_forum_categories();
 	foreach ($forum_categories as $key=>$value) {
 		$forum_categories_titles[$value['cat_id']]=$value['cat_title'];
 	}
 	$form->addElement('select', 'forum_category', get_lang('InForumCategory'), $forum_categories_titles);
-
+	$form->applyFilter('forum_category', 'html_filter');
+	
 	if ($_course['visibility']==COURSE_VISIBILITY_OPEN_WORLD) {
 		// This is for vertical
 		//$form->addElement('radio', 'allow_anonymous', get_lang('AllowAnonymousPosts'), get_lang('Yes'), 1);
@@ -447,7 +452,9 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 	$form->addElement('header', '', get_lang('EditForumCategory'));
 	$form->addElement('hidden', 'forum_category_id');
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
+	$form->applyFilter('forum_category_title', 'html_filter');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
+	$form->applyFilter('forum_category_comment', 'html_filter');	
 	$form->addElement('style_submit_button', 'SubmitEditForumCategory',get_lang('ModifyCategory'), 'class="save"');
 	global $charset;
 	// setting the default values
@@ -698,7 +705,7 @@ function delete_forum_forumcategory_thread($content, $id) {
 		if (!empty($number_threads)){
 			$sql="SELECT thread_id FROM". $table_forum_thread . "WHERE forum_id='".$id."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$row = mysql_fetch_array($result);
+			$row = Database::fetch_array($result);
 			foreach ($row as $arr_forum) {
 				$forum_id = $arr_forum['thread_id'];
 				api_item_property_update($_course,'forum_thread',$forum_id,'delete',api_get_user_id());			
@@ -1902,10 +1909,13 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	// if anonymous posts are allowed we also display a form to allow the user to put his name or username in
 	if ($current_forum['allow_anonymous']==1 AND !isset($_user['user_id'])) {
 		$form->addElement('text', 'poster_name', get_lang('Name'));
+		$form->applyFilter('poster_name', 'html_filter');		
 	}
 
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
+	$form->applyFilter('post_title', 'html_filter');	
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
+	$form->applyFilter('post_text', 'html_filter');	
 	$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" /> '.get_lang('AdvancedParameters').'</span></a>','');
 	$form->addElement('html','<div id="id_qualify" style="display:none">');
 	if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ){
@@ -1913,11 +1923,14 @@ function show_add_post_form($action='', $id='', $form_values='') {
 		
 		$form->addElement('static','Group', '<br /><strong>'.get_lang('AlterQualifyThread').'</strong>');
 		$form->addElement('text', 'numeric_calification', get_lang('QualifyNumeric'),'Style="width:40px"');
+		$form->applyFilter('numeric_calification', 'html_filter');	
 		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 
 		$form -> addElement('html','<div id="options_field" style="display:none">');
 		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
+		$form->applyFilter('calification_notebook_title', 'html_filter');
 		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="this.select();"');
+		$form->applyFilter('weight_calification', 'html_filter');		
 		$form->addElement('html','</div>'); 
 	}
 
@@ -1938,6 +1951,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$form->addElement('html','<br /><b><div class="row"><div class="label">'.get_lang('AddAnAttachment').'</div></div></b><br /><br />');
 	$form->addElement('file','user_upload',get_lang('FileName'),'');		
 	$form->addElement('textarea','file_comment',get_lang('FileComment'),array ('rows' => 4, 'cols' => 34));
+	$form->applyFilter('file_comment', 'html_filter');
 	$form->addElement('html','</div>');
 	$userid  =api_get_user_id();
 	$info    =api_get_user_info($userid);
@@ -2323,15 +2337,18 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	if ($current_post['post_parent_id']==0) {
 		$form->addElement('hidden', 'is_first_post_of_thread', '1');
 	}
-	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
+	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');	
+	$form->applyFilter('post_title', 'html_filter');
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
-	
+	$form->applyFilter('post_text', 'html_filter');	
+		
 	$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>','');
 	$form->addElement('html','<div id="id_qualify" style="display:none">');
 	
 	if (!isset($_GET['edit'])) {				
 		$form->addElement('static','Group','<strong>'.get_lang('AlterQualifyThread').'</strong>');
 		$form->addElement('text', 'numeric_calification', get_lang('QualifyNumeric'),'value="'.$current_thread['thread_qualify_max'].'" Style="width:40px"');
+		$form->applyFilter('numeric_calification', 'html_filter');
 		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');		
 		$defaults['thread_qualify_gradebook']=is_resource_in_course_gradebook(api_get_course_id(),5,$_GET['thread'],api_get_session_id());
 				
@@ -2341,7 +2358,9 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 			$form -> addElement('html','<div id="options_field" style="display:none">');
 		}						
 		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'),'value="'.$current_thread['thread_title_qualify'].'"');
+		$form->applyFilter('calification_notebook_title', 'html_filter');
 		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="'.$current_thread['thread_weight'].'" Style="width:40px"');		
+		$form->applyFilter('weight_calification', 'html_filter');
 		$form->addElement('html','</div>');				
 		//add gradebook
 	}
@@ -2366,7 +2385,8 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	// user upload
 	$form->addElement('html','<br /><b><div class="row"><div class="label">'.$message.'</div></div></b><br /><br />');
 	$form->addElement('file','user_upload',get_lang('FileName'),'');		
-	$form->addElement('textarea','file_comment',get_lang('FileComment'),array ('rows' => 4, 'cols' => 34));		
+	$form->addElement('textarea','file_comment',get_lang('FileComment'),array ('rows' => 4, 'cols' => 34));
+	$form->applyFilter('file_comment', 'html_filter');			
 	$form->addElement('html','</div><br /><br />');
 	if ($current_forum['allow_attachments']=='1' OR api_is_allowed_to_edit()) {
 		if (empty($form_values) AND !isset($_POST['SubmitPost'])) {
@@ -3000,7 +3020,7 @@ function move_post_form() {
 		$threads_list[$value['thread_id']]=$value['thread_title'];
 	}
 	$form->addElement('select', 'thread', get_lang('MoveToThread'), $threads_list);
-
+	$form->applyFilter('thread', 'html_filter');	
 
 	// The OK button
 	$form->addElement('style_submit_button', 'submit',get_lang('MovePost'),'class="save"');
@@ -3162,6 +3182,7 @@ function forum_search() {
 	// settting the form elements
 	$form->addElement('header', '', get_lang('ForumSearch'));
 	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles"');
+	$form->applyFilter('search_term', 'html_filter');
 	$form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation')/*, $dissertation[$_GET['opleidingsonderdeelcode']]['code']*/);
 	$form->addElement('style_submit_button', 'SubmitForumSearch', get_lang('Search'), 'class="search"');
 

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20048 2009-04-23 23:13:33Z yannoo $
+<?php // $Id: index.php 20191 2009-04-29 18:47:48Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -130,6 +130,7 @@ $default_description_title_editable[7] = true;
 ==============================================================================
 */
 $description_id = isset ($_REQUEST['description_id']) ? intval($_REQUEST['description_id']) : null;
+
 $action = $_GET['action'];
 if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 	// Delete a description block
@@ -143,7 +144,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		if (!empty($description_id)) {
 		$sql = "SELECT * FROM $tbl_course_description WHERE id='$description_id'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-			if ($description = mysql_fetch_array($result)) {
+			if ($description = Database::fetch_array($result)) {
 				$default_description_titles[$description_id] = $description['title'];
 				$description_content = $description['content'];
 	
@@ -154,7 +155,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		} else {
 			$sql = "SELECT MAX(id) as MAX FROM $tbl_course_description ";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$max= mysql_fetch_array($result);				
+			$max= Database::fetch_array($result);				
 			$description_id = $max['MAX']+1;
 			if ($description_id < ADD_BLOCK) {
 					$description_id=8;
@@ -163,7 +164,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		//Se borro: echo ' <style> .row{} <\style> por que hacia conflicto en apartado personalizado con los estilos propios del formvalidator 		
 		// Build the form
 		$form = new FormValidator('course_description','POST','index.php','','style="width: 100%;"');
-		$form->addElement('header', '', $default_description_titles[$_GET['description_id']]);
+		$form->addElement('header', '', $default_description_titles[(int)($_GET['description_id'])]);
 		$form->addElement('hidden', 'description_id');
 		
 		if ($_GET['action']=='edit' || $_POST['edit']==1 ) {
@@ -203,11 +204,11 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 			$title = $description['title'];
 			if ($description['description_id'] >= ADD_BLOCK) {
 				if ($description['edit']=='1') {					
-					$sql = "UPDATE $tbl_course_description SET  title = '".mysql_real_escape_string($title)."', content = '".mysql_real_escape_string($content)."' WHERE id = '".$description_id."' ";				
+					$sql = "UPDATE $tbl_course_description SET  title = '".Database::escape_string($title)."', content = '".Database::escape_string($content)."' WHERE id = '".$description_id."' ";				
 					api_sql_query($sql, __FILE__, __LINE__);					
 				} else {								
 					$result = api_sql_query($sql, __FILE__, __LINE__);
-					$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".mysql_real_escape_string($title)."', content = '".mysql_real_escape_string($content)."'";				
+					$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string($title)."', content = '".Database::escape_string($content)."'";				
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
 				/*$sql = "SELECT id FROM $tbl_course_description WHERE id = ".ADD_BLOCK;
@@ -224,13 +225,38 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 				}
 				$sql = "DELETE FROM $tbl_course_description WHERE id = '".$description_id."'";
 				api_sql_query($sql, __FILE__, __LINE__);
-				$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".mysql_real_escape_string($title)."', content = '".mysql_real_escape_string($content)."'";
+				$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string($title)."', content = '".Database::escape_string($content)."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 			Display :: display_confirmation_message(get_lang('CourseDescriptionUpdated'));
 		}
 		// Show the form
 		else {
+				// menu top 
+				//***********************************
+					if (api_is_allowed_to_edit()) {
+						$categories = array ();
+						
+						foreach ($default_description_titles as $id => $title) {
+							$categories[$id] = $title;
+						}
+						$categories[ADD_BLOCK] = get_lang('NewBloc');
+						
+						$i=1;
+						echo '<div class="actions">';
+						ksort($categories);
+						foreach ($categories as $id => $title) {
+							if ($i==8) { 
+								echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>';
+								break;
+							} else {
+								echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$id.'">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>&nbsp;&nbsp;';
+								$i++;
+							}
+						}
+						echo '</div>';
+					}
+				//***********************************
 			if ($show_peda_suggest) {
 				if (isset ($question[$description_id])) {
 					$message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
@@ -255,7 +281,7 @@ if ($show_description_list) {
 	$sql = "SELECT * FROM $tbl_course_description ORDER BY id";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$descriptions;
-	while ($description = mysql_fetch_object($result)) {
+	while ($description = Database::fetch_object($result)) {
 		$descriptions[$description->id] = $description;
 	}
 	if (api_is_allowed_to_edit()) {

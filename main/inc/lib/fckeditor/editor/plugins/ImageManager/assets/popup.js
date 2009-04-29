@@ -15,7 +15,7 @@
 // by each window's script. Added translation for a few other HTML elements.
 
 function getAbsolutePos(el) {
-	// var r = { x: el.offsetLeft, y: el.offsetTop }; // avoiding being in the center of the page
+	var r = { x: el.offsetLeft, y: el.offsetTop };
 	if (el.offsetParent) {
 		var tmp = getAbsolutePos(el.offsetParent);
 		r.x += tmp.x;
@@ -62,7 +62,11 @@ function __dlg_init(bottom) {
 		var x = opener.screenX + (opener.outerWidth - window.outerWidth) / 2;
 		var y = opener.screenY + (opener.outerHeight - window.outerHeight) / 2;
 		
+		// Avoiding being in the center of the page.
+		/*
 		window.moveTo(x, y);
+		*/
+
 		//window.innerWidth = body.offsetWidth + 5;
 		//window.innerHeight = body_height + 2;
 	} else {
@@ -78,10 +82,15 @@ function __dlg_init(bottom) {
 		var x = (screen.availWidth - W) / 2;
 		var y = (screen.availHeight - H) / 2;
 		//alert('x:'+x+' y:'+y+' ch:'+ch);
+
+		// Avoiding being in the center of the page.
+		/*
 		if(Dialog.is_ie)
 			window.moveTo(x, y);
 		else //opera
 			window.moveTo(x, y - H/4);
+		*/
+
 	}
 	document.body.onkeypress = __dlg_close_on_esc;
 };

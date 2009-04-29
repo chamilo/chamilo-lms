@@ -88,8 +88,9 @@ foreach($Courses as $enreg)
 
 	$lastConnexion = Tracking :: get_last_connection_date_on_the_course($_user['user_id'],$enreg['code']);
 	$progress = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
-	$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']));
-	$pourcentageScore = Tracking :: get_avg_student_score($_user['user_id'], $enreg['code']);
+	$total_time_login=Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']);
+	$time = api_time_to_hms($total_time_login);
+	$pourcentageScore = Tracking :: get_average_test_scorm_and_lp ($_user['user_id'], $enreg['code']);
 ?>
 
 <tr class='<?php echo $i?'row_odd':'row_even'; ?>'>
@@ -264,7 +265,7 @@ foreach($Courses as $enreg)
 								<td align='center' width=180px >
 							 ";
 						if($start_time!=''){
-							echo format_locale_date(get_lang('dateFormatLong'),$start_time);
+							echo $lastConnexion;
 						}
 						else{
 							echo '-';

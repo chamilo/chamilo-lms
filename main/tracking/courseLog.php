@@ -490,7 +490,7 @@ if($_GET['studentlist'] == 'false') {
 
 	$tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : 0;
 	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : 'DESC';
-	
+
 	if (count($a_students)>0) {
 		$table = new SortableTable('tracking', 'count_student_in_course');
 		$table -> set_header(0, get_lang('OfficialCode'), false, 'align="center"');
@@ -517,7 +517,7 @@ if($_GET['studentlist'] == 'false') {
 			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0 ;
 			$nb_courses_student = 0;
 			$avg_time_spent = Tracking :: get_time_spent_on_the_course($student_id, $course_code);			
-			$avg_student_score = Tracking :: get_avg_student_score($student_id, $course_code);						
+			$avg_student_score = Tracking :: get_average_test_scorm_and_lp($student_id, $course_code);						
 			$avg_student_progress = Tracking :: get_avg_student_progress($student_id, $course_code);
 			$total_assignments = Tracking :: count_student_assignments($student_id, $course_code);
 			$total_messages = Tracking :: count_student_messages($student_id, $course_code);

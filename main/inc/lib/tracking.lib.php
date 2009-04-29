@@ -373,10 +373,9 @@ class Tracking {
 		
 		$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);	
-		
 		$course = CourseManager :: get_course_information($course_code);
-		if(!empty($course['db_name']))
-		{
+		if (!empty($course['db_name'])) {
+			
 			$tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION,$course['db_name']);		
 			$lp_table = Database :: get_course_table(TABLE_LP_MAIN,$course['db_name']);
 			$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM,$course['db_name']);
@@ -389,10 +388,11 @@ class Tracking {
 				$sql_course_lp.=' WHERE id IN ('.implode(',',$lp_ids).')';
 			}
 			$sql_result_lp = api_sql_query($sql_course_lp, __FILE__, __LINE__);
-			
+
 			$lp_scorm_score_total = 0;
 			$lp_scorm_weighting_total = 0;
-			
+			$lp_scorm_result_score_total = 0;
+			$lp_scorm_loop=0;
 			if(Database::num_rows($sql_result_lp)>0){
 				//Scorm test
 				while($a_learnpath = Database::fetch_array($sql_result_lp)){
@@ -402,23 +402,34 @@ class Tracking {
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 					$lp_view_id = Database::result($rs_last_lp_view_id,0,'id');					
 					
-					$sql='SELECT SUM(lp_iv.score)/count(lp_item_id) as score, SUM(lp_iv.max_score)/count(lp_item_id) as max_score 
+					$sql_max_score='SELECT lp_iv.score as score,lp_iv.max_score 
 							FROM '.$lp_item_view_table.' as lp_iv
 							INNER JOIN '.$lp_item_table.' as lp_i
 								ON lp_i.id = lp_iv.lp_item_id
 								AND lp_i.item_type="sco"
-							WHERE lp_iv.max_score != ""
-							AND lp_view_id="'.$lp_view_id.'"';
-					
-					$rs = api_sql_query($sql, __FILE__, __LINE__);	
-					$lp_scorm_score_total+=Database::result($rs, 0, 'score');
-					$lp_scorm_weighting_total+=Database::result($rs, 0, 'max_score');
+							WHERE lp_view_id="'.$lp_view_id.'"';
+							
+					//$rs = api_sql_query($sql, __FILE__, __LINE__);	
+
+					//$sql_max_score='SELECT max_score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" ';
+					$res_max_score=Database::query($sql_max_score,__FILE__,__LINE__);	
+					$count_total_loop=0;								
+					while ($row_max_score=Database::fetch_array($res_max_score)) {
+						if ($row_max_score['max_score']==0) {
+							$lp_scorm_result_score_total+=$row_max_score['score']/100;
+						} else {
+							$lp_scorm_result_score_total+=$row_max_score['max_score']/$row_max_score['score'];
+						}
+						$count_total_loop++;
+					}
+					if ($count_total_loop==0) {
+						$count_total_loop=1;
+					}
+					$score_of_scorm_calculate=round((($lp_scorm_result_score_total/$count_total_loop)*100),2);
 				}
-					
 				//The next call to a MySQL fetch function, such as mysql_fetch_assoc(), would return that row. 
 				mysql_data_seek($sql_result_lp,0);
-				
-				
+
 				//Quizz in a LP
 				while($a_learnpath = Database::fetch_array($sql_result_lp)){
 					//we got the maxscore this is wrong			
@@ -446,15 +457,17 @@ class Tracking {
 					$total_score = $total_weighting = 0;
 					if ($lp_view_id!=0) {
 						while ($item = Database :: fetch_array($rsItems, 'ASSOC')) {
+
 							// we take the score from a LP because we have lp_view_id
 							$sql = "SELECT score FROM $lp_item_view_table WHERE lp_item_id = '".(int)$item['item_id']."' and lp_view_id = '".(int)$lp_view_id."'
 							ORDER BY view_count DESC limit 1";
+
 							/*$sql = 'SELECT score as student_score 
 									FROM '.$lp_item_view_table.' as lp_view_item
 									WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
 									AND lp_view_id = "'.$lp_view_id.'" ';*/							
 							$rsScores = api_sql_query($sql, __FILE__, __LINE__);
-														 
+							 
 							// Real max score - this was implemented because of the random exercises							
 					 		$sql_last_attempt = 'SELECT exe_id FROM '. $tbl_stats_exercices. ' ' .
 					 							'WHERE exe_exo_id="' .$item['path']. '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.$a_learnpath['id'].'" AND orig_lp_item_id = "'.$item['item_id'].'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
@@ -516,6 +529,8 @@ class Tracking {
 				//i.e 10.52
 				$pourcentageScore = round( (($totalScore * 100) / $lp_scorm_weighting_total),2);
 				return $pourcentageScore;
+			} elseif ($score_of_scorm_calculate>0) {
+				return $score_of_scorm_calculate;
 			} else {
 				return null;
 			}
@@ -1201,6 +1216,77 @@ class Tracking {
 		
 		return $a_students;
 	}
+	/**
+	 * allow get average  of test of scorm and lp
+	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @param int the user id
+	 * @param string the course id
+	 */
+	function get_average_test_scorm_and_lp ($user_id,$course_id) {
+				//the score inside the Reporting table
 
+		$course_info=api_get_course_info($course_id);
+		$lp_table = Database :: get_course_table(TABLE_LP_MAIN,$course_info['dbName']);
+		$lp_view_table = Database  :: get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
+		$lp_item_view_table = Database  :: get_course_table(TABLE_LP_ITEM_VIEW,$course_info['dbName']);
+		$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM,$course_info['dbName']);
+		$sql_type='SELECT id,lp_type FROM '.$lp_table;
+		$rs_type=Database::query($sql_type);
+		$average_data=0;
+		$count_loop=0;
+		while ($row_type=Database::fetch_array($rs_type)) {
+
+			if ($row_type['lp_type']==1) {//lp dokeos
+					
+					$sql = "SELECT id FROM $lp_view_table  WHERE user_id = '".intval($user_id)."' and lp_id='".$row_type['id']."'";
+					$rs_last_lp_view_id = Database::query($sql, __FILE__, __LINE__);
+					$lp_view_id = intval(Database::result($rs_last_lp_view_id,0,'id'));
+					
+					$sql_list_view='SELECT li.max_score,lv.user_id,liw.score,(liw.score/li.max_score) as sum_data FROM '.$lp_item_table.' li INNER JOIN '.$lp_view_table.' lv
+					ON li.lp_id=lv.lp_id INNER JOIN '.$lp_item_view_table.' liw ON liw.lp_item_id=li.id WHERE lv.user_id="'.$user_id.'" AND li.item_type="quiz" AND liw.lp_view_id="'.$lp_view_id.'"';
+					$sum=0;
+					$tot=0;
+					$rs_list_view1=Database::query($sql_list_view,__FILE__,__LINE__);
+					while ($row_list_view=Database::fetch_array($rs_list_view1)) {
+						$sum=$sum+$row_list_view['sum_data'];
+						$tot++;
+					}
+					if ($tot==0) {
+						$tot=1;
+					}
+					$average_data1=$sum/$tot;
+
+					$sql_list_view='';
+					$rs_last_lp_view_id='';
+			
+			} elseif ($row_type['lp_type']==2) {//lp scorm
+					$sql = "SELECT id FROM $lp_view_table  WHERE user_id = '".intval($user_id)."' and lp_id='".$row_type['id']."'";
+					$rs_last_lp_view_id = Database::query($sql, __FILE__, __LINE__);
+					$lp_view_id = intval(Database::result($rs_last_lp_view_id,0,'id'));	
+
+					$sql_list_view='SELECT li.max_score,lv.user_id,liw.score,(liw.score/li.max_score) as sum_data FROM '.$lp_item_table.' li INNER JOIN '.$lp_view_table.' lv
+					ON li.lp_id=lv.lp_id INNER JOIN '.$lp_item_view_table.' liw ON liw.lp_item_id=li.id WHERE lv.user_id="'.$user_id.'" AND li.item_type="sco" AND liw.lp_view_id="'.$lp_view_id.'"';
+					$tot=0;
+					$sum=0;
+
+					$rs_list_view2=Database::query($sql_list_view,__FILE__,__LINE__);
+					while ($row_list_view=Database::fetch_array($rs_list_view2)) {
+						$sum=$sum+$row_list_view['sum_data'];
+						$tot++;
+					}
+					if ($tot==0) {
+						$tot=1;
+					}
+					$average_data2=$sum/$tot;				
+			}
+			$average_data_sum=$average_data_sum+$average_data1+$average_data2;
+			$average_data2=0;
+			$average_data1=0;
+			$count_loop++;
+		}
+
+		$avg_student_score=round(($average_data_sum/$count_loop)*100,2);
+		return $avg_student_score;
+	}
 }
 ?>

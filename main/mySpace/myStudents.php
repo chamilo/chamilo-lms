@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 19957 2009-04-21 21:43:08Z iflorespaz $
+<?php //$Id: myStudents.php 20184 2009-04-29 16:28:20Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -237,9 +237,11 @@ if(!empty($_GET['student']))
 		$nb_courses++;
 		$avg_student_progress = Tracking :: get_avg_student_progress($a_infosUser['user_id'],$course_id);
 		//the score inside the Reporting table
-		$avg_student_score = Tracking :: get_avg_student_score($a_infosUser['user_id'],$course_id);			
+		$avg_student_score=Tracking::get_average_test_scorm_and_lp($a_infosUser['user_id'],$course_id);
 	}
+	
 
+	
 	$avg_student_progress = round($avg_student_progress,2);
 	$avg_student_score = round($avg_student_score,2);
 	
@@ -681,7 +683,20 @@ if(!empty($_GET['student']))
 						<?php echo api_time_to_hms($total_time) ?>
 						</td>
 						<td align="center">
-							<?php if(!is_null($score)) echo $score.' %'; else echo '/';$score=0; ?>
+							<?php 
+							if(!is_null($score)) {
+								 echo $score.' %';
+								} else {
+									
+									if ('0'==$progress{0}) {
+										echo '/';
+									} else {
+										echo '0%';
+									}
+								 	
+								 	$score=0;
+							} 
+							?>
 						</td>
 						<td align="center">
 							<?php echo $progress ?>

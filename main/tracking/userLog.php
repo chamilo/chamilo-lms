@@ -1,9 +1,9 @@
-<?php // $Id: userLog.php 12263 2007-05-03 13:34:40Z elixir_julian $
+<?php // $Id: userLog.php 20202 2009-04-29 22:31:20Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
@@ -35,7 +35,7 @@
 ==============================================================================
 */
 $uInfo = $_REQUEST['uInfo'];
-$view = $_REQUEST['view'];
+$view  = $_REQUEST['view'];
 // name of the language file that needs to be included 
 $language_file = 'tracking';
 
@@ -71,10 +71,9 @@ require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 -----------------------------------------------------------
 */
 // charset determination
-if ($_GET['scormcontopen'])
-{
+if (isset($_GET['scormcontopen'])) {
 	$tbl_lp = Database::get_course_table('lp');
-	$contopen = (int) $_GET['scormcontopen'];
+	$contopen = Database::escape_string($_GET['scormcontopen']);
 	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_array($res);
@@ -82,15 +81,13 @@ if ($_GET['scormcontopen'])
 	//header('Content-Type: text/html; charset='. $row['default_encoding']);
 }
 
-
 /*
 $interbreadcrumb[]= array ("url"=>"../group/group.php", "name"=> get_lang('BredCrumpGroups'));
 $interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=$_gid", "name"=> get_lang('BredCrumpGroupSpace'));
 */
 
-if($uInfo)
-{
-	$interbreadcrumb[]= array ("url"=>"../user/userInfo.php?uInfo=$uInfo", "name"=> ucfirst(get_lang('Users')));
+if(isset($uInfo)) {
+	$interbreadcrumb[]= array ('url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo), "name"=> ucfirst(get_lang('Users')));
 }
 
 $nameTools = get_lang('ToolName');
@@ -107,8 +104,6 @@ $htmlHeadXtra[] = "<style type='text/css'>
 td {border-bottom: thin dashed gray;}
 /*]]>*/
 </style>";
-
-
 
 Display::display_header($nameTools,"Tracking");
 
@@ -138,7 +133,6 @@ $TABLECOURSE_WORK       	= Database::get_course_table(TABLE_STUDENT_PUBLICATION)
 $TABLECOURSE_GROUPSUSER 	= Database::get_course_table(TABLE_GROUP_USER);
 $TABLECOURSE_EXERCICES  	= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_TRACK_HOTPOTATOES  	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-
 
 if(api_get_setting('use_session_mode') == "true") {
 	$sql = "SELECT 1
@@ -201,28 +195,28 @@ function myEnc($isostring,$supposed_encoding='ISO-8859-15')
 * Displays the number of logins every month for a specific user in a specific course.
 */
 function display_login_tracking_info($view, $user_id, $course_id)
-{
+{	
 	$MonthsLong = $GLOBALS['MonthsLong'];
 	$track_access_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 	$tempView = $view;
-	if(substr($view,0,1) == '1')
-	{
+	if(substr($view,0,1) == '1') {
 		$new_view = substr_replace($view,'0',0,1);
 		echo "
 			<tr>
-					<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('LoginsAndAccessTools'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=10000'>".get_lang('ExportAsCSV')."</a>]
-					</td>
+				<td valign='top'>
+				<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font>" .
+				"<b>".myEnc(get_lang('LoginsAndAccessTools'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=10000'>".get_lang('ExportAsCSV')."</a>]
+				</td>
 			</tr>
 			";
 		echo "<tr><td style='padding-left : 40px;' valign='top'>".myEnc(get_lang('LoginsDetails'))."<br>";
 
-		$sql = "SELECT UNIX_TIMESTAMP(`access_date`), count(`access_date`)
+		$sql = "SELECT UNIX_TIMESTAMP(access_date), count(access_date)
 					FROM $track_access_table
-					WHERE `access_user_id` = '$user_id'
-					AND `access_cours_code` = '".$course_id."'
-					GROUP BY YEAR(`access_date`),MONTH(`access_date`)
-					ORDER BY YEAR(`access_date`),MONTH(`access_date`) ASC";
+					WHERE access_user_id = '".Database::escape_string($user_id)."'
+					AND access_cours_code = '".Database::escape_string($course_id)."'
+					GROUP BY YEAR(access_date),MONTH(access_date)
+					ORDER BY YEAR(access_date),MONTH(access_date) ASC";
 
 		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
 		//$results = getManyResults2Col($sql);
@@ -238,13 +232,11 @@ function display_login_tracking_info($view, $user_id, $course_id)
 				</td>
 			</tr>";
 		$total = 0;
-		if (is_array($results))
-		{
-			for($j = 0 ; $j < count($results) ; $j++)
-			{
+		if (is_array($results)) {
+			for($j = 0 ; $j < count($results) ; $j++) {
 				echo "<tr>";
 				//echo "<td class='content'><a href='logins_details.php?uInfo=$user_id&reqdate=".$results[$j][0]."'>".$langMonthNames['long'][date("n", $results[$j][0])-1]." ".date("Y", $results[$j][0])."</a></td>";
-				echo "<td class='content'><a href='logins_details.php?uInfo=$user_id&reqdate=".$results[$j][0]."&view=$view'>".$MonthsLong[date('n', $results[$j][0])-1].' '.date('Y', $results[$j][0])."</a></td>";
+				echo "<td class='content'><a href='logins_details.php?uInfo=".Security::remove_XSS($user_id)."&reqdate=".$results[$j][0]."&view=".Security::remove_XSS($view)."'>".$MonthsLong[date('n', $results[$j][0])-1].' '.date('Y', $results[$j][0])."</a></td>";
 				echo "<td valign='top' align='right' class='content'>".$results[$j][1]."</td>";
 				echo"</tr>";
 				$total = $total + $results[$j][1];
@@ -253,24 +245,20 @@ function display_login_tracking_info($view, $user_id, $course_id)
 			echo "<td>".myEnc(get_lang('Total'))."</td>";
 			echo "<td align='right' class='content'>".$total."</td>";
 			echo"</tr>";
-		}
-		else
-		{
+		} else {
 			echo "<tr>";
 			echo "<td colspan='2'><center>".myEnc(get_lang('NoResult'))."</center></td>";
 			echo"</tr>";
 		}
 		echo "</table>";
 		echo "</td></tr>";
-	}
-	else
-	{
+	} else {
 		$new_view = substr_replace($view,'1',0,1);
 		echo "
 			<tr>
-					<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('LoginsAndAccessTools'))."</a>
-					</td>
+				<td valign='top'>
+				+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".myEnc(get_lang('LoginsAndAccessTools'))."</a>
+				</td>
 			</tr>
 		";
 	}
@@ -286,26 +274,24 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 	if(substr($view,1,1) == '1')
 	{
 		$new_view = substr_replace($view,'0',1,1);
-		echo "
-			<tr>
+		echo "<tr>
 				<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('ExercicesResults'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=01000'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('ExercicesResults'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=01000'>".get_lang('ExportAsCSV')."</a>]
 				</td>
-			</tr>
-		";
+			</tr>";
 		echo "<tr><td style='padding-left : 40px;' valign='top'>".myEnc(get_lang('ExercicesDetails'))."<br />";
 
-		$sql = "SELECT `ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`)
-			FROM $TABLECOURSE_EXERCICES AS ce , `$TABLETRACK_EXERCICES` AS te
-			WHERE `te`.`exe_cours_id` = '$course_id'
-				AND `te`.`exe_user_id` = '$user_id'
-				AND `te`.`exe_exo_id` = `ce`.`id`
-			ORDER BY `ce`.`title` ASC, `te`.`exe_date` ASC";
+		$sql = "SELECT ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
+			FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
+			WHERE te.exe_cours_id = '".Database::escape_string($course_id)."'
+				AND te.exe_user_id = '".Database::escape_string($user_id)."'
+				AND te.exe_exo_id = ce.id
+			ORDER BY ce.title ASC, te.exe_date ASC";
 
-		$hpsql = "SELECT `te`.`exe_name`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`)
+		$hpsql = "SELECT te.exe_name, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
 			FROM $TBL_TRACK_HOTPOTATOES AS te
-			WHERE `te`.`exe_user_id` = '$user_id' AND `te`.`exe_cours_id` = '$course_id'
-			ORDER BY `te`.`exe_cours_id` ASC, `te`.`exe_date` ASC";
+			WHERE te.exe_user_id = '".Database::escape_string($user_id)."' AND te.exe_cours_id = '".Database::escape_string($course_id)."'
+			ORDER BY te.exe_cours_id ASC, te.exe_date ASC";
 
 		$hpresults = getManyResultsXCol($hpsql, 4);
 
@@ -328,10 +314,8 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 				</td>
 			</tr>";
 
-		if (is_array($results))
-		{
-			for($i = 0; $i < sizeof($results); $i++)
-			{
+		if (is_array($results)) {
+			for($i = 0; $i < sizeof($results); $i++) {
 				$display_date = format_locale_date(get_lang('dateTimeFormatLong'), $results[$i][3]);
 				echo "<tr>\n";
 				echo "<td class='content'>".$results[$i][0]."</td>\n";
@@ -339,22 +323,17 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 				echo "<td valign='top' align='right' class='content'>".$results[$i][1]." / ".$results[$i][2]."</td>\n";
 				echo "</tr>\n";
 			}
-		}
-		else // istvan begin
-		{
+		} else {
+			// istvan begin
 			$NoTestRes = 1;
 		}
 
 		// The Result of Tests
-		if(is_array($hpresults))
-		{
-			for($i = 0; $i < sizeof($hpresults); $i++)
-			{
+		if(is_array($hpresults)) {
+			for($i = 0; $i < sizeof($hpresults); $i++) {
 				$title = GetQuizName($hpresults[$i][0],'');
-
 				if ($title == '')
 					$title = GetFileName($hpresults[$i][0]);
-
 				$display_date = format_locale_date(get_lang('dateTimeFormatLong'), $hpresults[$i][3]);
 ?>
 				<tr>
@@ -363,31 +342,25 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 					<td class="content" align="center"><?php echo $hpresults[$i][1]; ?> / <?php echo $hpresults[$i][2]; ?></td>
 				</tr>
 <?php		}
-		}
-		else
-		{
+		} else {
 			$NoHPTestRes = 1;
 		}
 
-		if ($NoTestRes == 1 && $NoHPTestRes == 1)
-		{
+		if ($NoTestRes == 1 && $NoHPTestRes == 1) {
 			echo "<tr>\n";
 			echo "<td colspan='3'><center>".myEnc(get_lang('NoResult'))."</center></td>\n";
 			echo "</tr>\n";
 		}
 		echo "</table>";
 		echo "</td>\n</tr>\n";
-	}
-	else
-	{
+	} else {
 		$new_view = substr_replace($view,'1',1,1);
 		echo "
 			<tr>
 				<td valign='top'>
 					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('ExercicesResults'))."</a>
 				</td>
-			</tr>
-		";
+			</tr>";
 	}
 }
 
@@ -397,24 +370,21 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 */
 function display_student_publications_tracking_info($view, $user_id, $course_id)
 {
-	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong;
-	if(substr($view,2,1) == '1')
-	{
+	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong, $_course; 
+	if(substr($view,2,1) == '1') {
 		$new_view = substr_replace($view,'0',2,1);
-		echo "
-			<tr>
+		echo "<tr>
 					<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('WorkUploads'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=00100'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('WorkUploads'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00100'>".get_lang('ExportAsCSV')."</a>]
 					</td>
-			</tr>
-		";
+			</tr>";
 		echo "<tr><td style='padding-left : 40px;' valign='top'>".myEnc(get_lang('WorksDetails'))."<br>";
-		$sql = "SELECT `u`.`upload_date`, `w`.`title`, `w`.`author`,`w`.`url`
-							FROM `$TABLETRACK_UPLOADS` `u` , $TABLECOURSE_WORK `w`
-							WHERE `u`.`upload_work_id` = `w`.`id`
-								AND `u`.`upload_user_id` = '$user_id'
-								AND `u`.`upload_cours_id` = '$course_id'
-							ORDER BY `u`.`upload_date` DESC";
+		$sql = "SELECT u.upload_date, w.title, w.author,w.url
+							FROM $TABLETRACK_UPLOADS u , $TABLECOURSE_WORK w
+							WHERE u.upload_work_id = w.id
+								AND u.upload_user_id = '".Database::escape_string($user_id)."'
+								AND u.upload_cours_id = '".Database::escape_string($course_id)."'
+							ORDER BY u.upload_date DESC";
 		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
 		$results = getManyResultsXCol($sql,4);
 		echo "<table cellpadding='2' cellspacing='1' border='0' align=center>";
@@ -429,10 +399,8 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 				".myEnc(get_lang('Date'))."
 				</td>
 			</tr>";
-		if (is_array($results))
-		{
-			for($j = 0 ; $j < count($results) ; $j++)
-			{
+		if (is_array($results)) {
+			for($j = 0 ; $j < count($results) ; $j++) {
 				$pathToFile = api_get_path(WEB_COURSE_PATH).$_course['path']."/".$results[$j][3];
 				$timestamp = strtotime($results[$j][0]);
 				$beautifulDate = format_locale_date($dateTimeFormatLong,$timestamp);
@@ -444,24 +412,19 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 				echo "<td class='content'>".$beautifulDate."</td>";
 				echo"</tr>";
 			}
-
-		}
-		else
-		{
+		} else {
 			echo "<tr>";
 			echo "<td colspan='3'><center>".myEnc(get_lang('NoResult'))."</center></td>";
 			echo"</tr>";
 		}
 		echo "</table>";
 		echo "</td></tr>";
-	}
-	else
-	{
+	} else {
 		$new_view = substr_replace($view,'1',2,1);
 		echo "
 			<tr>
 					<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('WorkUploads'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".myEnc(get_lang('WorkUploads'))."</a>
 					</td>
 			</tr>
 		";
@@ -475,23 +438,22 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 function display_links_tracking_info($view, $user_id, $course_id)
 {
 	global $TABLETRACK_LINKS, $TABLECOURSE_LINKS;
-	if(substr($view,3,1) == '1')
-	{
+	if(substr($view,3,1) == '1') {
 		$new_view = substr_replace($view,'0',3,1);
 		echo "
 			<tr>
 					<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('LinksAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=00010'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('LinksAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00010'>".get_lang('ExportAsCSV')."</a>]
 					</td>
 			</tr>
 		";
 		echo "<tr><td style='padding-left : 40px;' valign='top'>".myEnc(get_lang('LinksDetails'))."<br>";
-		$sql = "SELECT `cl`.`title`, `cl`.`url`
-					FROM `$TABLETRACK_LINKS` AS sl, $TABLECOURSE_LINKS AS cl
-					WHERE `sl`.`links_link_id` = `cl`.`id`
-						AND `sl`.`links_cours_id` = '$course_id'
-						AND `sl`.`links_user_id` = '$user_id'
-					GROUP BY `cl`.`title`, `cl`.`url`";
+		$sql = "SELECT cl.title, cl.url
+					FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
+					WHERE sl.links_link_id = cl.id
+						AND sl.links_cours_id = '".Database::escape_string($course_id)."'
+						AND sl.links_user_id = '".Database::escape_string($user_id)."'
+					GROUP BY cl.title, cl.url";
 		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
 		$results = getManyResults2Col($sql);
 		echo "<table cellpadding='2' cellspacing='1' border='0' align=center>";
@@ -500,32 +462,25 @@ function display_links_tracking_info($view, $user_id, $course_id)
 				".myEnc(get_lang('LinksTitleLinkColumn'))."
 				</td>
 			</tr>";
-		if (is_array($results))
-		{
-			for($j = 0 ; $j < count($results) ; $j++)
-			{
+		if (is_array($results)) {
+			for($j = 0 ; $j < count($results) ; $j++) {
 					echo "<tr>";
 					echo "<td class='content'><a href='".$results[$j][1]."'>".$results[$j][0]."</a></td>";
 					echo"</tr>";
 			}
-
-		}
-		else
-		{
+		} else {
 			echo "<tr>";
 			echo "<td ><center>".myEnc(get_lang('NoResult'))."</center></td>";
 			echo"</tr>";
 		}
 		echo "</table>";
 		echo "</td></tr>";
-	}
-	else
-	{
+	} else {
 		$new_view = substr_replace($view,'1',3,1);
 		echo "
 			<tr>
 					<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('LinksAccess'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".myEnc(get_lang('LinksAccess'))."</a>
 					</td>
 			</tr>
 		";
@@ -544,17 +499,17 @@ function display_document_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('DocumentsAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=00001'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('DocumentsAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00001'>".get_lang('ExportAsCSV')."</a>]
 					</td>
 			</tr>
 		";
 		echo "<tr><td style='padding-left : 40px;' valign='top'>".myEnc(get_lang('DocumentsDetails'))."<br>";
 
-		$sql = "SELECT `down_doc_path`
+		$sql = "SELECT down_doc_path
 					FROM $downloads_table
-					WHERE `down_cours_id` = '$course_id'
-						AND `down_user_id` = '$user_id'
-					GROUP BY `down_doc_path`";
+					WHERE down_cours_id = '".Database::escape_string($course_id)."'
+						AND down_user_id = '".Database::escape_string($user_id)."'
+					GROUP BY down_doc_path";
 
 		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
 		$results = getManyResults1Col($sql);
@@ -564,32 +519,25 @@ function display_document_tracking_info($view, $user_id, $course_id)
 				".myEnc(get_lang('DocumentsTitleDocumentColumn'))."
 				</td>
 			</tr>";
-		if (is_array($results))
-		{
-			for($j = 0 ; $j < count($results) ; $j++)
-			{
+		if (is_array($results)) {
+			for($j = 0 ; $j < count($results) ; $j++) {
 					echo "<tr>";
 					echo "<td class='content'>".$results[$j]."</td>";
 					echo"</tr>";
 			}
-
-		}
-		else
-		{
+		} else {
 			echo "<tr>";
 			echo "<td><center>".myEnc(get_lang('NoResult'))."</center></td>";
 			echo"</tr>";
 		}
 		echo "</table>";
 		echo "</td></tr>";
-	}
-	else
-	{
+	} else {
 		$new_view = substr_replace($view,'1',4,1);
 		echo "
 			<tr>
 					<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('DocumentsAccess'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".myEnc(get_lang('DocumentsAccess'))."</a>
 					</td>
 			</tr>
 		";
@@ -612,43 +560,36 @@ function display_document_tracking_info($view, $user_id, $course_id)
 <table width="100%" cellpadding="2" cellspacing="3" border="0">
 <?php
 // check if uid is tutor of this group
-if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configuration['tracking_enabled'] )
-{
-	if(!$uInfo && !isset($uInfo) )
-	{
+if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configuration['tracking_enabled'] ) {
+	if(!$uInfo && !isset($uInfo) ) {
 		/***************************************************************************
 		*
 		*		Display list of user of this group
 		*
 		***************************************************************************/
+		
 		echo "<h4>".myEnc(get_lang('ListStudents'))."</h4>";
-		if( $is_allowedToTrackEverybodyInCourse )
-		{
+		if( $is_allowedToTrackEverybodyInCourse ) {
 			// if user can track everybody : list user of course
 			if(api_get_setting('use_session_mode')) {
 				$sql = "SELECT count(user_id)
-							FROM $TABLECOURSUSER
-							WHERE `course_code` = '$_cid'";
-			}
-			else {
+						FROM $TABLECOURSUSER
+						WHERE course_code = '".Database::escape_string($_cid)."'";
+			} else {
 				$sql = "SELECT count(id_user)
-							FROM $tbl_session_course_user
-							WHERE `course_code` = '$_cid'";
+						FROM $tbl_session_course_user
+						WHERE course_code = '".Database::escape_string($_cid)."'";
 			}
-		}
-		else
-		{
+		} else {
 			// if user can only track one group : list users of this group
 			$sql = "SELECT count(user)
-						FROM $TABLECOURSE_GROUPSUSER
-						WHERE `group_id` = '$_gid'";
+					FROM $TABLECOURSE_GROUPSUSER
+					WHERE group_id = '".Database::escape_string($_gid)."'";
 		}
 		$userGroupNb = getOneResult($sql);
 		$step = 25; // number of student per page
-		if ($userGroupNb > $step)
-		{
-			if(!isset($offset))
-			{
+		if ($userGroupNb > $step) {
+			if(!isset($offset)) {
 					$offset=0;
 			}
 
@@ -659,47 +600,41 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 					."<tr>\n"
 							."<td align='left'>";
 
-			if ($previous >= 0)
-			{
+			if ($previous >= 0) {
 					$navLink .= "<a href='".api_get_self()."?offset=$previous'>&lt;&lt; ".myEnc(get_lang('PreviousPage'))."</a>";
 			}
 
 			$navLink .= "</td>\n"
 					."<td align='right'>";
 
-			if ($next < $userGroupNb)
-			{
+			if ($next < $userGroupNb) {
 					$navLink .= "<a href='".api_get_self()."?offset=$next'>".myEnc(get_lang('NextPage'))." &gt;&gt;</a>";
 			}
 
 			$navLink .= "</td>\n"
 					."</tr>\n"
 					."</table>\n";
-		}
-		else
-		{
+		} else {
 			$offset = 0;
 		}
-
 		echo $navLink;
 
 	if (!settype($offset, 'integer') || !settype($step, 'integer')) die('Offset or step variables are not integers.');	//sanity check of integer vars
-		if( $is_allowedToTrackEverybodyInCourse )
-		{
+		if( $is_allowedToTrackEverybodyInCourse ) {
 			// list of users in this course
-			$sql = "SELECT `u`.`user_id`, `u`.`firstname`,`u`.`lastname`
+			$sql = "SELECT u.user_id, u.firstname,u.lastname
 						FROM $TABLECOURSUSER cu , $TABLEUSER u
-						WHERE `cu`.`user_id` = `u`.`user_id`
-							AND `cu`.`course_code` = '$_cid'
+						WHERE cu.user_id = u.user_id
+							AND cu.course_code = '".Database::escape_string($_cid)."'
 						LIMIT $offset,$step";
 		}
 		else
 		{
 			// list of users of this group
-			$sql = "SELECT `u`.`user_id`, `u`.`firstname`,`u`.`lastname`
+			$sql = "SELECT u.user_id, u.firstname,u.lastname
 						FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-						WHERE `gu`.`user_id` = `u`.`user_id`
-							AND `gu`.`group_id` = '$_gid'
+						WHERE gu.user_id = u.user_id
+							AND gu.group_id = '".Database::escape_string($_gid)."'
 						LIMIT $offset,$step";
 		}
 		$list_users = getManyResults3Col($sql);
@@ -707,8 +642,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 					."<tr align='center' valign='top' bgcolor='#E6E6E6'>\n"
 					."<td align='left'>",myEnc(get_lang('UserName')),"</td>\n"
 					."</tr>\n";
-		for($i = 0 ; $i < sizeof($list_users) ; $i++)
-		{
+		for($i = 0 ; $i < sizeof($list_users) ; $i++) {
 			echo    "<tr valign='top' align='center'>\n"
 					."<td align='left'>"
 					."<a href='".api_get_self()."?uInfo=",$list_users[$i][0],"'>"
@@ -719,9 +653,9 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		echo        "</table>\n";
 
 		echo $navLink;
-	}
-	else // if uInfo is set
-	{
+	} else {
+		// if uInfo is set
+		
 		/***************************************************************************
 		*
 		*		Informations about student uInfo
@@ -729,27 +663,24 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		***************************************************************************/
 		// these checks exists for security reasons, neither a prof nor a tutor can see statistics of a user from
 		// another course, or group
-		if( $is_allowedToTrackEverybodyInCourse )
-		{
+		if( $is_allowedToTrackEverybodyInCourse ) {
 			// check if user is in this course
 			$tracking_is_accepted = $is_course_member;
 			$tracked_user_info = Database::get_user_info_from_id($uInfo);
-		}
-		else
-		{
+		} else {
+			
 			// check if user is in the group of this tutor
-			$sql = "SELECT `u`.`firstname`,`u`.`lastname`, `u`.`email`
+			$sql = "SELECT u.firstname,u.lastname, u.email
 						FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-						WHERE `gu`.`user_id` = `u`.`user_id`
-							AND `gu`.`group_id` = '$_gid'
-							AND `u`.`user_id` = '$uInfo'";
+						WHERE gu.user_id = u.user_id`
+							AND gu.group_id = '".Database::escape_string($_gid)."'
+							AND u.user_id = '".Database::escape_string($uInfo)."'";
 			$query = api_sql_query($sql,__FILE__,__LINE__);
 			$tracked_user_info = @mysql_fetch_assoc($query);
 			if(is_array($tracked_user_info)) $tracking_is_accepted = true;
 		}
 
-		if ($tracking_is_accepted)
-		{
+		if ($tracking_is_accepted) {
 			$tracked_user_info['email'] == '' ? $mail_link = myEnc(get_lang('NoEmail')) : $mail_link = Display::encrypted_mailto_link($tracked_user_info['email']);
 
 			echo "<tr><td>";
@@ -765,8 +696,8 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 			// show none : number of 0 is equal to or bigger than number of categories
 			echo "<tr>
 					<td>
-					[<a href='".api_get_self()."?uInfo=$uInfo&view=1111111'>".myEnc(get_lang('ShowAll'))."</a>]
-					[<a href='".api_get_self()."?uInfo=$uInfo&view=0000000'>".myEnc(get_lang('ShowNone'))."</a>]".
+					[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($uInfo)."&view=1111111'>".myEnc(get_lang('ShowAll'))."</a>]
+					[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($uInfo)."&view=0000000'>".myEnc(get_lang('ShowNone'))."</a>]".
 					//"||[<a href='".api_get_self()."'>".myEnc(get_lang('BackToList'))."</a>]".
 					"</td>
 				</tr>
@@ -789,9 +720,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 
 			//Documents downloaded
 			display_document_tracking_info($view, $uInfo, $_cid);
-		}
-		else
-		{
+		} else {
 			echo myEnc(get_lang('ErrorUserNotInGroup'));
 		}
 
@@ -801,33 +730,29 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
          *		Scorm contents and Learning Path
          *
          ***************************************************************************/
-        if(substr($view,5,1) == '1')
-        {
+        if(substr($view,5,1) == '1') {
             $new_view = substr_replace($view,'0',5,1);
-            echo "
-                <tr>
+            echo "<tr>
                         <td valign='top'>
-                        <font     color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('ScormAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?view=$new_view&uInfo=$uInfo'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=000001'>".get_lang('ExportAsCSV')."</a>]
+                        <font     color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('ScormAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?view=".Security::remove_XSS($new_view)."&uInfo=".Security::remove_XSS($uInfo)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=000001'>".get_lang('ExportAsCSV')."</a>]
                         </td>
-                </tr>
-            ";
+                </tr>";
 
             $sql = "SELECT id, name FROM $tbl_learnpath_main";
     		$result=api_sql_query($sql,__FILE__,__LINE__);
     	    $ar=Database::fetch_array($result);
-
+    	    
 	    	echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
             echo "<table cellpadding='2' cellspacing='1' border='0' align='center'><tr>
     				                <td class='secLine'>
     								&nbsp;".myEnc(get_lang('ScormContentColumn'))."&nbsp;
     				                </td>
     		</tr>";
-            if (is_array($ar))
-            {
+            if (is_array($ar)) {
     			while ($ar['id'] != '') {
     				$lp_title = stripslashes($ar['name']);
     				echo "<tr><td>";
-    				echo "<a href='".api_get_self()."?view=".$view."&scormcontopen=".$ar['id']."&uInfo=$uInfo' class='specialLink'>$lp_title</a>";
+    				echo "<a href='".api_get_self()."?view=".$view."&scormcontopen=".$ar['id']."&uInfo=".Security::remove_XSS($uInfo)."' class='specialLink'>$lp_title</a>";
     				echo "</td></tr>";
     				if ($ar['id']==$scormcontopen) { //have to list the students here
         					$contentId=$ar['id'];
@@ -835,7 +760,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 									"FROM $tbl_learnpath_item i " .
 									"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
 									"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
-									"WHERE (v.user_id=$uInfo and v.lp_id=$contentId) ORDER BY v.id, i.id";
+									"WHERE (v.user_id=".Database::escape_string($uInfo)." and v.lp_id=$contentId) ORDER BY v.id, i.id";
    							$result3=api_sql_query($sql3,__FILE__,__LINE__);
    						    $ar3=Database::fetch_array($result3);
                             if (is_array($ar3)) {
@@ -870,10 +795,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
    					}
 		    		$ar=Database::fetch_array($result);
     			}
-
-            }
-            else
-            {
+            } else {
 				$noscorm=true;
             }
 
@@ -884,37 +806,29 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 			}
             echo "</table>";
             echo "</td></tr>";
-        }
-        else
-        {
+        } else {
             $new_view = substr_replace($view,'1',5,1);
             echo "
                 <tr>
                         <td valign='top'>
-                        +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?view=$new_view&uInfo=$uInfo' class='specialLink'>".myEnc(get_lang('ScormAccess'))."</a>
+                        +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?view=".Security::remove_XSS($new_view)."&uInfo=".Security::remove_XSS($uInfo)."' class='specialLink'>".myEnc(get_lang('ScormAccess'))."</a>
                         </td>
                 </tr>
             ";
         }
 
     }
-}
-// not allowed
-else
-{
+} else {
+	// not allowed
     if(!$_configuration['tracking_enabled'])
     {
         echo myEnc(get_lang('TrackingDisabled'));
-    }
-    else
-    {
+    } else {
         api_not_allowed();
     }
 }
 ?>
-
 </table>
-
 <?php
 Display::display_footer();
 ?>

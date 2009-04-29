@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 20159 2009-04-28 20:22:40Z juliomontoya $
+* 	@version $Id: exercise.class.php 20200 2009-04-29 22:14:55Z cvargas1 $
 */
 
 
@@ -905,8 +905,8 @@ class Exercise
 			//	$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
 				// test type
 				$radios = array();
-				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageOne'),'1');
-				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageAll'),'2');
+				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageOne'),'2');
+				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageAll'),'1');
 				$form -> addGroup($radios, null, get_lang('QuestionsPerPage'));							
 			} else {
 				// if is Directfeedback but has not questions we can allow to modify the question type

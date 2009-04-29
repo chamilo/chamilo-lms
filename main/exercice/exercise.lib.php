@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 20143 2009-04-28 00:39:27Z iflorespaz $
+<?php // $Id: exercise.lib.php 20200 2009-04-29 22:14:55Z cvargas1 $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 20143 2009-04-28 00:39:27Z iflorespaz $
+* 	@version $Id: exercise.lib.php 20200 2009-04-29 22:14:55Z cvargas1 $
 */
 
 /**
@@ -287,7 +287,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		$objAnswerTmp=new Answer($questionId);
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 
-		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #4271b5; height: 481px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><ol>';
+		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #A4A4A4; height: 481px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><ol>';
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
 			$answer_list .= '<li>'.$objAnswerTmp->selectAnswer($answerId).'</li>';

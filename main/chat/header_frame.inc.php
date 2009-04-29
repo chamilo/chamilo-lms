@@ -41,6 +41,7 @@ $bodyXtra='';
 if(FRAME == 'hidden')
 {
 	$bodyXtra='onload="javascript:updateChat(); updateConnected(); setTimeout(\'submitHiddenForm();\',5000);"';
+    // change timeout to change refresh time of the chat window 
 }
 elseif(FRAME == 'message')
 {

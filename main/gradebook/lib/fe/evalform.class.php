@@ -283,7 +283,7 @@ class EvalForm extends FormValidator
 		} else {
 			$this->addElement('checkbox', 'addresult', get_lang('AddResult'));
 		}
-		$this->addElement('style_submit_button', 'submit', get_lang('SaveAssessment'),'class="add"');
+		$this->addElement('style_submit_button', 'submit', get_lang('AddAssessment'),'class="add"');
 	}
 	/**
 	 * Builds a form to edit an evaluation

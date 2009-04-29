@@ -186,7 +186,7 @@ if ($my_api_cidreq=='') {
 		 <?php echo $output ?>
  </table>
  <input type="hidden" name="submitted" value="1" />
- <button class="save" type="submit" name="name" value="<?php echo get_lang('Save') ?>"><?php echo get_lang('Save') ?></button>  
+ <button class="save" type="submit" name="name" value="<?php echo get_lang('Save') ?>"><?php echo get_lang('SaveScoringRules') ?></button>  
 </form>
 <?php
 Display :: display_footer();

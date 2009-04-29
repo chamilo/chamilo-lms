@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20141 2009-04-27 23:04:08Z iflorespaz $
+// $Id: exercice.php 20206 2009-04-29 23:46:33Z yannoo $
 
 /*
 ==============================================================================
@@ -121,7 +121,7 @@ if (isset ($_SESSION['exerciseResult'])) {
 
 //general POST/GET/SESSION/COOKIES parameters recovery
 if (empty ($origin)) {
-	$origin = $_REQUEST['origin'];
+	$origin = Security::remove_XSS($_REQUEST['origin']);
 }
 if (empty ($choice)) {
 	$choice = $_REQUEST['choice'];
@@ -143,15 +143,15 @@ if ($origin == 'learnpath') {
 	$show = 'result';
 }
 
-if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !empty ($_GET['did'])) {
-	$sql = 'DELETE FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES) . ' WHERE exe_id = ' . (int) $_GET['did'];
+if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !empty ($_GET['did']) && $_GET['did'] == strval(intval($_GET['did']))) {
+	$sql = 'DELETE FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES) . ' WHERE exe_id = ' . $_GET['did']; //_GET[did] filtered by entry condition
 	api_sql_query($sql, __FILE__, __LINE__);
 	header('Location: exercice.php?cidReq=' . htmlentities($_GET['cidReq']) . '&show=result');
 	exit;
 }
 
-if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor)) {
-	$id = $_GET['exeid'];
+if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid']== strval(intval($_GET['exeid']))) {
+	$id = $_GET['exeid']; //filtered by post-condition
 	$emailid = $_GET['emailid'];
 	$test = $_GET['test'];
 	$from = $_SESSION['_user']['mail'];
@@ -181,11 +181,11 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 
 	for ($i=0;$i<$loop_in_track;$i++) {
 		
-		$my_marks=$_POST['marks_'.$array_content_id_exe[$i]];
-		$contain_comments=$_POST['comments_'.$array_content_id_exe[$i]];
+		$my_marks=Database::escape_string($_POST['marks_'.$array_content_id_exe[$i]]);
+		$contain_comments=Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
 		
 		if (isset($contain_comments)) {
-			$my_comments=$_POST['comments_'.$array_content_id_exe[$i]];
+			$my_comments=Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
 		} else {
 			$my_comments='';
 		}
@@ -194,7 +194,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 			$result =api_sql_query($sql, __FILE__, __LINE__);
 			$ques_name = Database::result($result,0,"question");
 
-			$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '".$my_marks."',teacher_comment = '".$my_comments."'
+			$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks',teacher_comment = '$my_comments'
 					  WHERE question_id = '".$my_questionid."'
 					  AND exe_id='".$id."'";
 			api_sql_query($query, __FILE__, __LINE__);
@@ -334,8 +334,8 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	'  </div>' .
 	'  </body>' .
 	'  </html>';
-	$message = '<p>' . sprintf(get_lang('AttemptVCCLong'), $test) . ' <A href="#url#">#url#</A></p><br />';
-	$mess = str_replace("#test#", $test, $message);
+	$message = '<p>' . sprintf(get_lang('AttemptVCCLong'), Security::remove_XSS($test)) . ' <A href="#url#">#url#</A></p><br />';
+	$mess = str_replace("#test#", Security::remove_XSS($test), $message);
 	//$message= str_replace("#ques_name#",$ques_name,$mess);
 	$message = str_replace("#url#", $url, $mess);
 	$mess = stripslashes($message);
@@ -1311,9 +1311,9 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 					echo "</a>";
 
 					if (api_is_platform_admin() || $is_tutor)
-						echo ' - <a href="exercice.php?cidReq=' . htmlentities($_GET['cidReq']) . '&show=result&filter=' . $filter . '&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">' . get_lang('Delete') . '</a>';
+						echo ' - <a href="exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">' . get_lang('Delete') . '</a>';
 					if ($is_allowedToEdit)
-						echo ' - <a href="exercice_history.php?cidReq=' . htmlentities($_GET['cidReq']) . '&exe_id=' . $id . '">' . get_lang('ViewHistoryChange') . '</a>';
+						echo ' - <a href="exercice_history.php?cidReq=' . security::remove_XSS($_GET['cidReq']) . '&exe_id=' . $id . '">' . get_lang('ViewHistoryChange') . '</a>';
 				} else {
 					if ($revised)
 						echo "<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>" . get_lang('Show') . "</a> ";

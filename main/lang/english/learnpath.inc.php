@@ -222,10 +222,13 @@ $ModifyPrerequisites = "Save prerequisites settings";
 $CreateLearningPath = "Continue >";
 $AddExercise = "Validate";
 $AddForum = "Add forum";
-$LPCreateDocument = "Validate";
+$LPCreateDocument = "Add this document to the course";
 $ObjectiveID = "Objective ID";
 $ObjectiveStatus = "Objective status";
 $ObjectiveRawScore = "Objective raw score";
 $ObjectiveMaxScore = "Objective max score";
 $ObjectiveMinScore = "Objective min score";
+$LPName = "Course name";
+$AuthoringOptions = "Authoring options";
+$CourseSettings = "Course settings";
 ?>

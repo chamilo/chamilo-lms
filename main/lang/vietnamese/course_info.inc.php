@@ -11,7 +11,7 @@ $langPublic = "Truy cập không cần login";
 $langPrivOpen = "Truy cập có điều kiện hạn chế, đăng ký tự do";
 $langPrivate = "Truy cập chỉ với <a href=../user/user.php>danh sách user</a>)";
 $langForbidden = "Không có quyền";
-$langConfTip = "By default, you course is only accessible to you as its only registered user. If you want some confidentiality,the simplest way is to open registration duringone week, ask the students to register themselves, then close registration and check for possible intruders in the user list.";
+$CourseAccessConfigTip = "By default, you course is only accessible to you as its only registered user. If you want some confidentiality,the simplest way is to open registration duringone week, ask the students to register themselves, then close registration and check for possible intruders in the user list.";
 $langTipLang  = "This language will be valid for every visitor of your course\'s website.";
 $langVid = "Video";
 $langWork = "Bài viết của học sinh";

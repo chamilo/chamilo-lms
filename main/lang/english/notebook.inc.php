@@ -22,4 +22,5 @@ $NoteAdded = "Note added";
 $NoteConfirmDelete = "Are you sure you want to delete this note";
 $AddNote = "Create note";
 $ModifyNote = "Edit note";
+$BackToNoteList = "Back to note list";
 ?>

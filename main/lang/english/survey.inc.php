@@ -198,4 +198,5 @@ $RemindUnanswered = "Remind only users who didn\'t answer";
 $ModifySurvey = "Edit survey";
 $CreateQuestionSurvey = "Create question";
 $ModifyQuestionSurvey = "Edit question";
+$BackToSurvey = "Back to survey";
 ?>

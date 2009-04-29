@@ -228,4 +228,7 @@ $ObjectiveStatus = "Status dell\'Obiettivo";
 $ObjectiveRawScore = "Punteggio grezzo dell\'Obiettivo";
 $ObjectiveMaxScore = "Punteggio massimo Obiettivo";
 $ObjectiveMinScore = "Punteggio minimo Obiettivo";
+$LPName = "Titolo del modulo";
+$AuthoringOptions = "Opzioni di authoring";
+$CourseSettings = "Configurazione del modulo";
 ?>

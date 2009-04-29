@@ -12,7 +12,7 @@ $langUnsubscription = "Odjavi";
 $langPrivOpen = "Privatni pristup, registracija je otvorena";
 $langPrivate = "Privatni pristup (Sajt je dostupan samo osobama na <a href=../user/user.php>Listi Korisnika</a>)";
 $langForbidden = "Nije dozvoljeno";
-$langConfTip = "Kurs je uvek javan, ali Vi možete da definišete nivo poverljivosti gore.";
+$CourseAccessConfigTip = "Kurs je uvek javan, ali Vi možete da definišete nivo poverljivosti gore.";
 $langOpenToTheWorld = "Otvoren – pristup omogu&#263;en celom svetu";
 $OpenToThePlatform = "Otovreno – pristup je dozvoljen korisnicima koji su registrovani na platformi";
 $langOpenToThePlatform = "Otvoren – pristup dozvoljen svim korisnicima koji su registrovani na platformi";

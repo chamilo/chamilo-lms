@@ -12,7 +12,7 @@ $langUnsubscription = "Peruuta osallistuminen";
 $langPrivOpen = "Yksityinen pääsy, avoin rekisteröityminen";
 $langPrivate = "Yksityinen pääsy, reisteröityminen suljettu (sisäänpääsy vain <a href=../user/user.php>käyttäjien listalta</a>)";
 $langForbidden = "Ei sallittu";
-$langConfTip = "Oletuksena kurssille on pääsy vain rekisteröityneille henkilöille. Jos halutaan luottamuksellisuutta, niin helpointa on avata rekisteröinti yhden viikon ajaksi, pyytää opiskelijoita rekeisteröitymään ja sitten sulkea rekisteröinti ja tarkistaa mahdolliset tunkeutujat käyttjien listalta.";
+$CourseAccessConfigTip = "Oletuksena kurssille on pääsy vain rekisteröityneille henkilöille. Jos halutaan luottamuksellisuutta, niin helpointa on avata rekisteröinti yhden viikon ajaksi, pyytää opiskelijoita rekeisteröitymään ja sitten sulkea rekisteröinti ja tarkistaa mahdolliset tunkeutujat käyttjien listalta.";
 $langOpenToTheWorld = "Avoinna - kaikilla pääsy (myös vierailijat)";
 $OpenToThePlatform = "Avoinna - kaikki rekisteröityneet käyttäjät pääsevät";
 $langOpenToThePlatform = "Avoinna - kaikki ympäristöön rekisteröityneet käyttäjät pääsevät sisälle";

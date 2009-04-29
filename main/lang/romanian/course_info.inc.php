@@ -12,7 +12,7 @@ $langUnsubscription = "Anuleaza inscrierea";
 $langPrivOpen = "Acces privat, inregistrati-va!";
 $langPrivate = "Acaes privat (site accesibil doar persoanelor din <a href=../user/user.php>Lista de utilizatori</a>)";
 $langForbidden = "Nu este permis";
-$langConfTip = "Cursul tau este pubilic. Dar poti alege nivelul de confidentialitate de alaturi.";
+$CourseAccessConfigTip = "Cursul tau este pubilic. Dar poti alege nivelul de confidentialitate de alaturi.";
 $langOpenToTheWorld = "Deschis - accesul permis pentru toata lumea";
 $OpenToThePlatform = "Deschis - accesul permis pentru utilizatorii inregistrati";
 $langOpenToThePlatform = "Deschis - accesul permis doar utilizatorilor inregistrati pe aceasta platforma";

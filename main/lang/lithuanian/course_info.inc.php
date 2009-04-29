@@ -12,7 +12,7 @@ $langUnsubscription = "Atsisakyti";
 $langPrivOpen = "Privatus priėjimas, galima registracija";
 $langPrivate = "Privatus priėjimas - tinklapis prieinamas tik kurso nariams (žiūrėti <a href=../user/user.php>Vartotojų sąrašas</a>)";
 $langForbidden = "Neleidžiama";
-$langConfTip = "Pagal nutylėjimą jūsų kursas viešas, bet Jūs galte nustatyti priėjimo teises žemiau.";
+$CourseAccessConfigTip = "Pagal nutylėjimą jūsų kursas viešas, bet Jūs galte nustatyti priėjimo teises žemiau.";
 $langOpenToTheWorld = "Atvira - priėjimas leidžiamas bet kam";
 $OpenToThePlatform = "Atvira - priėjimas leidžiamas prisiregistravusiems sistemoje vartotojams";
 $langOpenToThePlatform = "Atvira - priėjimas leidžiamas prisiregistravusiems sistemoje vartotojams";

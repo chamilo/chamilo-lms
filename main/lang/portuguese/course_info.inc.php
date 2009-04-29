@@ -12,7 +12,7 @@ $langUnsubscription = "Anular Inscrição";
 $langPrivOpen = "Acesso privado, inscrição aberta";
 $langPrivate = "Acesso privado (curso reservado às pessoas que aparecem na lista de <a href=../user/user.php>Utilizadores</a>)";
 $langForbidden = "Não está registado como responsável por este curso";
-$langConfTip = "Por omissão, o curso é público. Mas pode alterar o nível de confidencialidade acima.";
+$CourseAccessConfigTip = "Por omissão, o curso é público. Mas pode alterar o nível de confidencialidade acima.";
 $langOpenToTheWorld = "Aberto para todas as pessoas, inscritas ou anónimas.";
 $OpenToThePlatform = "Aberto - acesso permitido aos utilizadores inscritos na plataforma.";
 $langOpenToThePlatform = "Aberto - acesso permitido aos utilizadores inscritos na plataforma.";

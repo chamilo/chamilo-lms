@@ -12,7 +12,7 @@ $langUnsubscription = "Atteikties";
 $langPrivOpen = "Ierobežota pieeja, re&#291;istr&#275;šan&#257;s at&#316;auta";
 $langPrivate = "Limit&#275;ta pieeja (lapa pieejama tikai <a href=../user/user.php>lietot&#257;ju sarakst&#257;</a> esošajiem)";
 $langForbidden = "Nav at&#316;auts";
-$langConfTip = "P&#275;c noklus&#275;juma J&#363;su kurss ir publisks. Ta&#269;u J&#363;s varat nor&#257;d&#299;t pieejas noteikumus augst&#257;k.";
+$CourseAccessConfigTip = "P&#275;c noklus&#275;juma J&#363;su kurss ir publisks. Ta&#269;u J&#363;s varat nor&#257;d&#299;t pieejas noteikumus augst&#257;k.";
 $langOpenToTheWorld = "Atkl&#257;t&#257; pieeja - iesp&#275;jama no jebkuras vietas pasaul&#275;!";
 $OpenToThePlatform = "Atv&#275;rts - pieeja at&#316;auta visiem sist&#275;m&#257; re&#291;istr&#275;tajiem lietot&#257;jiem";
 $langOpenToThePlatform = "Atkl&#257;t&#257; pieeja - iesp&#275;jama lietot&#257;jiem, kas re&#291;istr&#275;jušies port&#257;l&#257;";

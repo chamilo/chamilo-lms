@@ -710,4 +710,5 @@ $MakeInvisible = "Rendi invisibile";
 $MakeVisible = "Rendi visibile";
 $Image = "Immagine";
 $CourseName = "Titolo del corso";
+$SendAMessage = "Invia messaggio";
 ?>

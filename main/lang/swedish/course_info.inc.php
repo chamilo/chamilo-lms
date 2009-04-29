@@ -12,7 +12,7 @@ $langUnsubscription = "Avsluta prenumeration";
 $langPrivOpen = "Privat åtkomst, registrering öppen";
 $langPrivate = "Privat åtkomst, registrering stängd (sajt tillgänglig bara för personer på <a href=../user/user.php>Användarlistan</a>)";
 $langForbidden = "Inte tillåtet";
-$langConfTip = "Som standard kommer din kurs att kunna nås av alla så länge som det är registrerade användare. I händelse av att du har något konfidentiellt, det enklaste är att öppna registrering underen vecka, och be studenterna att de registrerar sig själva, därefter stänga registreringen och kontrollera användarlistan efter obehöriga.";
+$CourseAccessConfigTip = "Som standard kommer din kurs att kunna nås av alla så länge som det är registrerade användare. I händelse av att du har något konfidentiellt, det enklaste är att öppna registrering underen vecka, och be studenterna att de registrerar sig själva, därefter stänga registreringen och kontrollera användarlistan efter obehöriga.";
 $langOpenToTheWorld = "Öppen - åtkomst tillåten för hela världen";
 $OpenToThePlatform = "Öppen - access tillåten för alla registrerade på plattformen";
 $langOpenToThePlatform = "Öppen - åtkomst tillåten för användare registrerade på plattformen.";

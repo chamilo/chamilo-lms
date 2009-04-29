@@ -12,7 +12,7 @@ $langUnsubscription = "Leiratkozás";
 $langPrivOpen = "Csak privát belépés, de szabad regisztráció";
 $langPrivate = "Csak privát belépés (az oldalt csak a <a href=../user/user.php>Felhasználó listá</a>-n található személyek érhetik el)";
 $langForbidden = "Nem engedélyezett";
-$langConfTip = "Alapértelmezés szerint a kurzus nyilvános, de az engedélyezési szintet fent beállíthatja.";
+$CourseAccessConfigTip = "Alapértelmezés szerint a kurzus nyilvános, de az engedélyezési szintet fent beállíthatja.";
 $langOpenToTheWorld = "Nyitva - elérhet&#337; az egész világ számára.";
 $OpenToThePlatform = "Nyitva - csak regisztrált tagok számára elérhet&#337;.";
 $langOpenToThePlatform = "Nyitva - csak regisztrált tagok számára elérhet&#337;.";

@@ -11,7 +11,7 @@ $langPublic = "ログインなしに、キャンパスペ〖ジからアクセ�
 $langPrivOpen = "判峡荚嘎年¨判峡は材墙です。";
 $langPrivate = "判峡荚嘎年¨判峡もできません。判峡されたユ〖ザ(<a href=../user/user.php>办枉</a> )のみ网脱材墙です。";
 $langForbidden = "钓材されていません";
-$langConfTip = "By default, you course is only accessible to you as its only registered user. IN case you want some confidentiality, 
+$CourseAccessConfigTip = "By default, you course is only accessible to you as its only registered user. IN case you want some confidentiality, 
 the simplest is to open registration during
 one week, ask the students to register themselves, then close registration and check possible intruders in the users list.";
 $langOpenToTheWorld = "给倡¨链坤肠に给倡します。";

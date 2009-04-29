@@ -228,4 +228,6 @@ $ObjectiveStatus = "Estatus del objetivo";
 $ObjectiveRawScore = "Puntaje crudo del objetivo";
 $ObjectiveMaxScore = "Puntaje máximo del objetivo";
 $ObjectiveMinScore = "Puntaje mínimo del objetivo";
+$LPName = "Nombre de la lección";
+$CourseSettings = "Configuración de la lección";
 ?>

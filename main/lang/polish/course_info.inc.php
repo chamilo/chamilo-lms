@@ -12,7 +12,7 @@ $langUnsubscription = "Wypisz";
 $langPrivOpen = "Dostêp autoryzowany, rejestracja otwarta";
 $langPrivate = "Dost&#281;p autoryzowany, rejestracja zamkni&#281;ta (Kurs dost&#281;pny dla zarejestrowanych <a href=../user/user.php>U&#380;ytkowników</a>)";
 $langForbidden = "Niedostêpny";
-$langConfTip = "Domy&#347;lnie kurs powinien by&#263; dost&#281;pny tylko dla zarejestrowanych u&#380;ytkowników. &#379;eby upro&#347;ci&#263; rejestracj&#281; nowych u&#380;ytkowników, mo&#380;esz otworzy&#380; kurs tak, &#380;eby studenci rejestrowali si&#281; sami, a nast&#281;pnie zamkn&#261;&#263; kurs, &#380;eby unikn&#261;&#263; wpisywania si&#281; intruzów na list&#281; studentów.";
+$CourseAccessConfigTip = "Domy&#347;lnie kurs powinien by&#263; dost&#281;pny tylko dla zarejestrowanych u&#380;ytkowników. &#379;eby upro&#347;ci&#263; rejestracj&#281; nowych u&#380;ytkowników, mo&#380;esz otworzy&#380; kurs tak, &#380;eby studenci rejestrowali si&#281; sami, a nast&#281;pnie zamkn&#261;&#263; kurs, &#380;eby unikn&#261;&#263; wpisywania si&#281; intruzów na list&#281; studentów.";
 $langOpenToTheWorld = "Dost&#281;p dla otwarty dla ca&#322;ego &#347;wiata (nie wymaga konta i logowania)";
 $OpenToThePlatform = "Otwarty - dost&#281;pny dla zarejestrowanych u&#380;ytkowników platformy";
 $langOpenToThePlatform = "Dost&#281;p otwarty dla u&#380;ytkowników zarejestrowanych w platformie";

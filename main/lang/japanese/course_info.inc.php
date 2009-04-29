@@ -11,7 +11,7 @@ $langPublic = "ログインなしに、キャンパスページからアクセスできます。";
 $langPrivOpen = "登録者限定：登録は可能です。";
 $langPrivate = "登録者限定：登録もできません。登録されたユーザ(<a href=../user/user.php>一覧</a> )のみ利用可能です。";
 $langForbidden = "許可されていません";
-$langConfTip = "By default, you course is only accessible to you as its only registered user. IN case you want some confidentiality, the simplest is to open registration duringone week, ask the students to register themselves, then close registration and check possible intruders in the users list.";
+$CourseAccessConfigTip = "By default, you course is only accessible to you as its only registered user. IN case you want some confidentiality, the simplest is to open registration duringone week, ask the students to register themselves, then close registration and check possible intruders in the users list.";
 $langOpenToTheWorld = "公開：全世界に公開します。";
 $OpenToThePlatform = "公開：登録されたユーザに公開します。";
 $langTipLang  = "この言語は、あなたのコースのウエブサイトの全ての訪問者の公用言語です。";

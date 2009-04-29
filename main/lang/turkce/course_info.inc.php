@@ -12,7 +12,7 @@ $langUnsubscription = "Kayd&#305; sil";
 $langPrivOpen = "Özel giriþ, kayýtlar açýktýr";
 $langPrivate = "Özel giriþ, kayýtlar kapalýdýr (bu dersin sitesine sadece <a href=../user/user.php>bu listedeki kullanýcýlar girebilir</a>)";
 $langForbidden = "Ýzinli deðil";
-$langConfTip = "Varsayýlan olarak, dersinizin web sitesine sadece kayýtlý kullanýcýlar girebilir. Eðer gizlilik istiyorsanýz, öðrencilerin kendiliklerinden kaydolabilecekleri bir süre kayýtlarý açýk tutunuz, sonra kapatarak kullanýcý listesinden istemediklerinizi siliniz.";
+$CourseAccessConfigTip = "Varsayýlan olarak, dersinizin web sitesine sadece kayýtlý kullanýcýlar girebilir. Eðer gizlilik istiyorsanýz, öðrencilerin kendiliklerinden kaydolabilecekleri bir süre kayýtlarý açýk tutunuz, sonra kapatarak kullanýcý listesinden istemediklerinizi siliniz.";
 $langOpenToTheWorld = "Aç&#305;k - genel eri&#351;ime aç&#305;k";
 $OpenToThePlatform = "Aç&#305;k - sadece platforma kay&#305;tl&#305; kullan&#305;c&#305;lara eri&#351;im hakk&#305;";
 $langOpenToThePlatform = "Aç&#305;k - sadece platforma kay&#305;tl&#305; kullan&#305;c&#305;lara eri&#351;im hakk&#305;";

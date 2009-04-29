@@ -12,7 +12,7 @@ $langUnsubscription = "Uitschrijven";
 $langPrivOpen = "Beperkte toegang, open registratie";
 $langPrivate = "Beperkte toegang, gesloten registratie (site voorbehouden voor personen vermeld in de <a href=\"../user/user.php\">gebruikerslijst</a>)";
 $langForbidden = "U bent geen beheerder van deze cursus.";
-$langConfTip = "Standaard bent u de enige gebruiker van uw cursus. Als u een minimum aan privacy wenst, is het aan te bevelen om de registratie gedurende een week te openen en aan de studenten te vragen zichzelf in te schrijven. Daarna sluit u de registratie en controleert u mogelijke indringers in de gebruikerslijst.";
+$CourseAccessConfigTip = "Standaard bent u de enige gebruiker van uw cursus. Als u een minimum aan privacy wenst, is het aan te bevelen om de registratie gedurende een week te openen en aan de studenten te vragen zichzelf in te schrijven. Daarna sluit u de registratie en controleert u mogelijke indringers in de gebruikerslijst.";
 $langOpenToTheWorld = "Open &ndash; toegang toegelaten voor de hele wereld";
 $OpenToThePlatform = "Open &ndash; toegang toegelaten voor geregistreerde gebruikers";
 $langOpenToThePlatform = "Open &ndash; toegang toegelaten voor geregistreerde gebruikers";

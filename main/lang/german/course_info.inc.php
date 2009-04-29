@@ -12,7 +12,7 @@ $langUnsubscription = "Abmelden";
 $langPrivOpen = "Eingeschränkter Zugang, Registrierung offen";
 $langPrivate = "Eingeschränkt - Belegung geschlossen (Zugang ist nur für angemeldete <a href=../user/user.php>Kursteilnemer</a> möglich)";
 $langForbidden = "Nicht erlaubt";
-$langConfTip = "In der Grundeinstellung ist ein Kurs auch anderen zugänglich.  Wenn Sie den Zugriff einschränken möchten, öffnen Sie die Einschreibung während einer Einschreibungsfrist (z.B. eine Woche) und bitten Sie die Teilnehmer/innen sich einzuschreiben. Im Anschluss sperren Sie die Einschreibung und überprüfen die Teilnehmerliste auf \'Trittbrettfahrer\'.";
+$CourseAccessConfigTip = "In der Grundeinstellung ist ein Kurs auch anderen zugänglich.  Wenn Sie den Zugriff einschränken möchten, öffnen Sie die Einschreibung während einer Einschreibungsfrist (z.B. eine Woche) und bitten Sie die Teilnehmer/innen sich einzuschreiben. Im Anschluss sperren Sie die Einschreibung und überprüfen die Teilnehmerliste auf \'Trittbrettfahrer\'.";
 $langOpenToTheWorld = "Offen - Zugang möglich für alle";
 $OpenToThePlatform = "Offen - Kurs ist zugänglich für Benutzer der Lernplattform";
 $langOpenToThePlatform = "Offen - Zugang möglich für alle eingeschriebenen Benutzer";

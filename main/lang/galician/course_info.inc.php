@@ -12,7 +12,7 @@ $langUnsubscription = "Desinscribir";
 $langPrivOpen = "Acceso privado, inscrición aberta";
 $langPrivate = "Acceso privado, inscrición fechada (web reservada ás persoas que aparecen na lista <a href=../user/user.php>usuarios</a>)";
 $langForbidden = "Non estás rexistrado como responsable neste curso";
-$langConfTip = "Por defecto, o seu curso soamente é accesiblepara vostede, vostede é o único usuario. Se vostede desexa un mínimo de confidencialidade, o más simple é abrira inscripción durante unha semana, pedir ós estudiantes que se inscriban eles mesmos,despois pechar a inscripción e verificar na lista dos usuarios os eventuais intrusos.";
+$CourseAccessConfigTip = "Por defecto, o seu curso soamente é accesiblepara vostede, vostede é o único usuario. Se vostede desexa un mínimo de confidencialidade, o más simple é abrira inscripción durante unha semana, pedir ós estudiantes que se inscriban eles mesmos,despois pechar a inscripción e verificar na lista dos usuarios os eventuais intrusos.";
 $langOpenToTheWorld = "Aberto - acceso permitido para todo o mundo";
 $OpenToThePlatform = "Aberto - acceso permitido para os usuarios rexistrados na plataforma";
 $langOpenToThePlatform = "Aberto - acceso permitido para usuarios rexistrados na plataforma";

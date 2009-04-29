@@ -12,7 +12,7 @@ $langUnsubscription = "Odhlásit";
 $langPrivOpen = "Privátní p&#345;ístup, otev&#345;ená registrace";
 $langPrivate = "Privátní p&#345;ístup - stránka dostupná poze pro &#269;leny kurzu (viz <a href=../user/user.php>Seznam uživatel&#367;</a>)";
 $langForbidden = "Zakázaný";
-$langConfTip = "Standartn&#283; je kurz nastaven jako ve&#345;ejný. Naho&#345;e však m&#367;žete nastavit úrove&#328; d&#367;v&#283;rnosti.";
+$CourseAccessConfigTip = "Standartn&#283; je kurz nastaven jako ve&#345;ejný. Naho&#345;e však m&#367;žete nastavit úrove&#328; d&#367;v&#283;rnosti.";
 $langOpenToTheWorld = "Otev&#345;eno - p&#345;ístup povolen všem";
 $OpenToThePlatform = "Otev&#345;eno - p&#345;ístup povolen pouze registrovaným uživatel&#367;m platformy";
 $langOpenToThePlatform = "Otev&#345;eno - p&#345;ístup povolen pouze registrovaným uživatel&#367;m platformy";

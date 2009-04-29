@@ -12,7 +12,7 @@ $langUnsubscription = "Izpiši";
 $langPrivOpen = "Privaten dostop, odprta registracija";
 $langPrivate = "Privaten dostop (dostop le ljudem iz <a href=../user/user.php>seznama uporabnikov</a>)";
 $langForbidden = "Ni dovoljeno";
-$langConfTip = "Privzeto je tvoj tečaj javno dostopen. Lahko pa določite stopnjo zaupnosti z zgornjimi možnostmi.";
+$CourseAccessConfigTip = "Privzeto je tvoj tečaj javno dostopen. Lahko pa določite stopnjo zaupnosti z zgornjimi možnostmi.";
 $langOpenToTheWorld = "Odprt - dostop dovoljen vsakomur";
 $OpenToThePlatform = "Odprt - dostop dovoljen vsem uporabnikom, registriranim v portal";
 $langOpenToThePlatform = " Odprt - dostop dovoljen vsem uporabnikom, registriranim v portal";

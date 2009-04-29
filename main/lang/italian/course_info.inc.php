@@ -12,7 +12,7 @@ $langUnsubscription = "Cancella l\'iscrizione";
 $langPrivOpen = "Accesso privato, Iscrizione aperta";
 $langPrivate = "Privato - sito accessibile agli utenti presenti nell\'elenco <a href=../user/user.php>Utenti</a>";
 $langForbidden = "Non consentito";
-$langConfTip = "Per default, il corso è accessibile al pubblico. Le opzioni qui sopra modificano il livello di riservatezza.";
+$CourseAccessConfigTip = "Per default, il corso è accessibile al pubblico. Le opzioni qui sopra modificano il livello di riservatezza.";
 $langOpenToTheWorld = "Aperto - chiunque può accedere al corso";
 $OpenToThePlatform = "Aperto - accesso consentito solo agli utenti registrati presso la piattaforma";
 $langOpenToThePlatform = "Aperto - accesso consentito agli utenti registrati presso la piattaforma";

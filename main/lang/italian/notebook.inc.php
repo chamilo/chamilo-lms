@@ -22,4 +22,5 @@ $NoteAdded = "Appunto aggiunto";
 $NoteConfirmDelete = "Vuoi veramente eliminare l\'appunto?";
 $AddNote = "Aggiungi appunto";
 $ModifyNote = "Modifica appunto";
+$BackToNoteList = "Torna all\'elenco degli appunti";
 ?>

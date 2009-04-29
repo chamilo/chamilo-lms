@@ -198,4 +198,5 @@ $RemindUnanswered = "Recordatorio sólo para los usuarios que no hayan respondido
 $ModifySurvey = "Modificar encuesta";
 $CreateQuestionSurvey = "Crear pregunta";
 $ModifyQuestionSurvey = "Modificar pregunta";
+$BackToSurvey = "Volver a la encuesta";
 ?>

@@ -12,7 +12,7 @@ $langUnsubscription = "Anular matrícula";
 $langPrivOpen = "Accesu priváu, matrícula abierta";
 $langPrivate = "Accesu priváu, matrícula cerrada (web acutada pa les persones qu\'apaecen nel llistáu<a href=../user/user.php>usuarios</a>)";
 $langForbidden = "Usté ta ensin rexistrar como responsable d\'esti cursu";
-$langConfTip = "Por defeutu\'l so cursu ye públicu, pero pue definir otru nivel de confidencialidá coles opciones qu\'apaecen más enriba.";
+$CourseAccessConfigTip = "Por defeutu\'l so cursu ye públicu, pero pue definir otru nivel de confidencialidá coles opciones qu\'apaecen más enriba.";
 $langOpenToTheWorld = "Públicu - accesu permitíu a tol mundu";
 $OpenToThePlatform = "Públicu - accesu permitíu namás a usuarios rexistraos na plataforma";
 $langOpenToThePlatform = "Públicu - accesu permitíu namás a los usuarios rexistraos na plataforma";

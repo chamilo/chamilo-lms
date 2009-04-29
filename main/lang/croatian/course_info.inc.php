@@ -12,7 +12,7 @@ $langUnsubscription = "Ispiši";
 $langPrivOpen = "Privatni pristup, slobodna registracija";
 $langPrivate = "Privatni pristup (prijava ograni&#269;ena na osobe iz   <a href=../user/user.php>Popis korisnika</a>)";
 $langForbidden = "Zabranjeno";
-$langConfTip = "U standardnoj postavi po&#269;etni i jedini korisnik je onaj koji je otvorio web stranice kolegija.Najjednostavniji na&#269;in je da otvorite stranice na tjedan dana i dopustite studentima da se sami prijave, a potom zaklju&#269;ate pristupi pregledate popis zbog mogu&#263;ih nezvanih korisnika.";
+$CourseAccessConfigTip = "U standardnoj postavi po&#269;etni i jedini korisnik je onaj koji je otvorio web stranice kolegija.Najjednostavniji na&#269;in je da otvorite stranice na tjedan dana i dopustite studentima da se sami prijave, a potom zaklju&#269;ate pristupi pregledate popis zbog mogu&#263;ih nezvanih korisnika.";
 $langOpenToTheWorld = "Otvoreno - pristup omogu&#263;en svima";
 $OpenToThePlatform = "Otvoreno - pristup omogu&#263;en korisnicima registriranima na platformu";
 $langOpenToThePlatform = "Otvoreno - pristup omogu&#263;en korisnicima registriranima na platformu";

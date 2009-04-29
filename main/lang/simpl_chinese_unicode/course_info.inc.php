@@ -11,7 +11,7 @@ $langUnsubscription = "取消注册";
 $langPrivOpen = "内部访问-对注册用户开放";
 $langPrivate = "内部访问-仅对课程用户开放 (查看 <a href=\"../user/user.php\">用户列表</a>)";
 $langForbidden = "禁止";
-$langConfTip = "默认访问策略设置为开放，您可自定义访问限制策略。";
+$CourseAccessConfigTip = "默认访问策略设置为开放，您可自定义访问限制策略。";
 $langOpenToTheWorld = "开放－允许任何人访问";
 $langOpenToThePlatform = "开放－允许注册用户访问";
 $langTipLang  = "将此语言设为课程的默认语言。";

@@ -66,4 +66,7 @@ $AllFilesInvisible = "Tutti i file sono stati resi invisibili";
 $FileInvisible = "Il file è stato reso invisibile";
 $AllFilesVisible = "Tutti i file sono stati resi visibili";
 $FileVisible = "Il file è stato reso visibile";
+$ButtonCreateAssignment = "Crea";
+$AssignmentName = "Titolo dell\'elaborato";
+$CreateAssignment = "Crea l\'elaborato";
 ?>

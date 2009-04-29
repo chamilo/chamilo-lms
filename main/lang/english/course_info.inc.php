@@ -12,7 +12,7 @@ $langUnsubscription = "Unsubscribe";
 $langPrivOpen = "Private access, registration open";
 $langPrivate = "Private access - site accessible only to training members (see the <a href=../user/user.php>Users list</a>)";
 $langForbidden = "Not allowed";
-$langConfTip = "By default your training is public. But you can define the level of confidentiality above.";
+$CourseAccessConfigTip = "By default your training is public. But you can define the level of confidentiality above.";
 $langOpenToTheWorld = "Open - access allowed for the whole world";
 $OpenToThePlatform = "Open - access allowed for users registered in portal";
 $langOpenToThePlatform = "Open - access allowed for users registered on the platform";

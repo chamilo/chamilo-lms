@@ -573,7 +573,7 @@ $SearchFeatureDoIndexDocument = "Index document text?";
 $SearchFeatureDocumentLanguage = "Document language for indexation";
 $With = "with";
 $GeneralCoach = "General coach";
-$SaveDocument = "Validate";
+$SaveDocument = "Save document";
 $CategoryDeleted = "The category has been deleted";
 $CategoryAdded = "Category added";
 $IP = "IP";
@@ -710,4 +710,5 @@ $MakeInvisible = "Make invisible";
 $MakeVisible = "Make visible";
 $Image = "Image";
 $CourseName = "Training name";
+$SendAMessage = "Send a message";
 ?>

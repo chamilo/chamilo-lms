@@ -11,7 +11,7 @@ $langPublic = "Capaian Umum (Subjek boleh dicapai tanpa proses <i>login</i>)";
 $langPrivOpen = "Capaian Peribadi, Pendaftaran Terbuka";
 $langPrivate = "Capaian terhad (Subjek hanya boleh dicapai oleh pengguna berikut sahaja <a href=../user/user.php>Senarai Pengguna</a>)";
 $langForbidden = "Tidak dibenarkan";
-$langConfTip = "Secara lalai, subjek anda hanya boleh diakses jika anda pengguna berdaftar. Jika anda inginkan kerahsian,cara terbaik ialah membuka pendaftaranselama seminggu, dan arahkan Pelajar anda untuk mendaftar sendiri, kemudian tutup Pendaftaran dan periksa samada terdapat Pengguna yang tidak dikenali.";
+$CourseAccessConfigTip = "Secara lalai, subjek anda hanya boleh diakses jika anda pengguna berdaftar. Jika anda inginkan kerahsian,cara terbaik ialah membuka pendaftaranselama seminggu, dan arahkan Pelajar anda untuk mendaftar sendiri, kemudian tutup Pendaftaran dan periksa samada terdapat Pengguna yang tidak dikenali.";
 $langTipLang  = "Sila pilih bahasa yang anda kehendaki untuk Laman Subjek.";
 $langVid = "Video";
 $langWork = "Tugasan";

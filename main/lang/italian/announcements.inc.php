@@ -55,4 +55,5 @@ $AnnounceSentByEmail = "Avviso inviato via email";
 $AnnounceSentToUserSelection = "Avviso inviato agli utenti selezionati";
 $SendAnnouncement = "Invia avviso";
 $ModifyAnnouncement = "Modifica l\'avviso";
+$ButtonPublishAnnouncement = "Pubblica l\'avviso";
 ?>

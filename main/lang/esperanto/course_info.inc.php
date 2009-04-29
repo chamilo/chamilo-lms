@@ -12,7 +12,7 @@ $langUnsubscription = "Malali&#285;i ";
 $langPrivOpen = "Limigita aliro, malferma registrado ";
 $langPrivate = "Limigira aliro, ferma registrado (retejo rezervita al personoj menciitaj en la listo <a href=../user/user.php>uzuloj</a>)";
 $langForbidden = "Vi ne estas mastrumanto de &#265;i-kurso ";
-$langConfTip = "Norme vi estas la ununura uzanto de via kurso. Se vi deziras minimumon da privateco, estas konsilinde malfermi la registradon dum semajno kaj peti al la studentoj ali&#285;i. Poste vi fermu la registradon kaj kontrolas pri eventualaj enrompintoj en la uzula listo.";
+$CourseAccessConfigTip = "Norme vi estas la ununura uzanto de via kurso. Se vi deziras minimumon da privateco, estas konsilinde malfermi la registradon dum semajno kaj peti al la studentoj ali&#285;i. Poste vi fermu la registradon kaj kontrolas pri eventualaj enrompintoj en la uzula listo.";
 $langOpenToTheWorld = "Malferma - aliro permesita al &#265;iu ajn ";
 $OpenToThePlatform = "Malferma - aliro permesita al registritaj uzuloj ";
 $langOpenToThePlatform = "Malferma - aliro permesita al registritaj uzuloj ";

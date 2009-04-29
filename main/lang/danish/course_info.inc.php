@@ -12,7 +12,7 @@ $langUnsubscription = "Afmeld";
 $langPrivOpen = "Fortrolig adgang, tilmelding tilladt";
 $langPrivate = "Fortrolig adgang - kursussiden er kun åben for deltagere på <a href=../user/user.php>Deltagerlisten</a>)";
 $langForbidden = "Ikke tilladt";
-$langConfTip = "Som standard er dit kursus tilgængeligt for registrerede brugere på AULA. Ønsker du en vis fortrolighed omkring adgang til kursussiden, er det lettest at åbne for tilmeldinger i f.eks. en uge (vælg: Fortrolig adgang, Kursustilmelding Tilladt) og bede de studerende om i første lektion at tilmelde sig. Derefter lukker du siden for tilmeldinger (vælg: Kursustilmelding Nægtet). Du kan nu se de tilmeldte på deltagerlisten og slette evt. uvelkomne. Kursussiden er nu kun tilgængelig via login.";
+$CourseAccessConfigTip = "Som standard er dit kursus tilgængeligt for registrerede brugere på AULA. Ønsker du en vis fortrolighed omkring adgang til kursussiden, er det lettest at åbne for tilmeldinger i f.eks. en uge (vælg: Fortrolig adgang, Kursustilmelding Tilladt) og bede de studerende om i første lektion at tilmelde sig. Derefter lukker du siden for tilmeldinger (vælg: Kursustilmelding Nægtet). Du kan nu se de tilmeldte på deltagerlisten og slette evt. uvelkomne. Kursussiden er nu kun tilgængelig via login.";
 $langOpenToTheWorld = "Åben - adgang for hele verden";
 $OpenToThePlatform = "Åben - adgang tilladt for deltagere på sidens deltagerlisten og brugere på systemet med et direkte link til siden";
 $langOpenToThePlatform = "Åben - adgang tilladt for deltagere på sidens deltagerlisten og brugere på systemet med et direkte link til siden";

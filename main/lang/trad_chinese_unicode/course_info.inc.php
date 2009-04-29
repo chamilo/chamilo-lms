@@ -12,7 +12,7 @@ $langUnsubscription = "取消註冊";
 $langPrivOpen = "內部訪問-對註冊用戶開放";
 $langPrivate = "內部訪問-僅對課程用戶開放 (檢視 <a href=\"../user/user.php\">用戶清單</a>)";
 $langForbidden = "禁止";
-$langConfTip = "預設訪問策略設定為開放，您可自定義訪問限制策略。";
+$CourseAccessConfigTip = "預設訪問策略設定為開放，您可自定義訪問限制策略。";
 $langOpenToTheWorld = "開放－允許任何人訪問";
 $OpenToThePlatform = "開放 - 允許已於本平台註冊人士進入";
 $langOpenToThePlatform = "開放 - 允許已於本平台註冊人士進入 ";

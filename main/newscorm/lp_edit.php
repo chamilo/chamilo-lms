@@ -121,7 +121,10 @@ $form->addElement('file', 'lp_preview_image', ($_SESSION['oLP']->get_preview_ima
 	</div>';
 $form->addElement('html', $div);
 
+/*
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
+*/
+$form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
 
 // Search terms (only if search is activated)
 if (api_get_setting('search_enabled') === 'true')

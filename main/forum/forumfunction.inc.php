@@ -332,7 +332,7 @@ function show_add_forum_form($inputvalues=array()) {
 	 } 	 
 	 $forum_image=isset($inputvalues['forum_image']) ? $inputvalues['forum_image'] : '';
 	 $form->addElement('file', 'picture', ($forum_image != '' ? get_lang('UpdateImage') : get_lang('AddImage'))); 	 
-	 $form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
+	 $form->addRule('picture', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
 	 $form->addElement('html','</div>');
 
 	// The OK button

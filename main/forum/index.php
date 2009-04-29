@@ -372,7 +372,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						echo "\t\t<td width=\"50\">";	
 						if(!empty($forum['forum_image'])) {
 							$image_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$forum['forum_image'];												
+
+							/*
 							$image_size = @getimagesize($image_path);
+							*/
+							$image_size = @getimagesize(api_url_to_local_path($image_path));
+
 							$img_attributes = '';
 							if (!empty($image_size)) {
 								if ($image_size[0] > 100 || $image_size[1] > 100) {

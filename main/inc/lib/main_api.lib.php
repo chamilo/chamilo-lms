@@ -3389,3 +3389,76 @@ function api_is_windows_os() {
 
 	return strtolower(substr($os, 0, 3 )) === 'win' ? true : false;
 }
+
+// This function converts URLs into local file names.
+// Purpose: To help diagnosing or making workarounds concerning problems, caused by getimagesize().
+//
+// Usage:
+// $imagesize = @getimagesize($image);  ---->  $imagesize = @getimagesize(api_url_to_local_path($image));
+//
+// First implementation: Dokeos 1.8.6.
+// Ivan Tcholakov, 23-SEP-2008.
+// GNU General Public License version 2 or any later (Free Software Foundation).
+function api_url_to_local_path($url)
+{
+	// Check for a valid URL.
+	if (!preg_match('/https?:\/\/(.*?):{0,1}([0-9]*)(\/)(.*?)/', $url))
+	{
+		return $url;	// Return non-URLs without modifications.
+	}
+
+	$original_url = $url;
+	$url = urldecode($url);
+
+	// A special case:
+	// If the URL points the document download script directly (without mod-rewrite translation),
+	// we will translate this URL into a simple one, in order to process it easy below.
+	// For example:
+	// http://localhost/dokeos/main/document/download.php?doc_url=/image.png&cDir=/
+	// becomes
+	// http://localhost/dokeos/courses/TEST/document/image.png
+	//
+	if (preg_match('/(.*)main\/document\/download.php\?doc_url=\/(.*)&cDir=\/(.*)?/', $url, $matches))
+	{
+		global $_cid, $_course;
+		if (!empty($_cid) and $_cid != -1 and isset($_course)) // Inside a course?
+		{
+			$url = $matches[1].'courses/'.$_course['path'].'/document/'.str_replace('//', '/', $matches[3].'/'.$matches[2]);
+		}
+		else
+		{
+			return $original_url;	// Not inside a course, return then the URL "as is".
+		}
+	}
+
+	// Generally, we have to deal with URLs like this:
+	// http://localhost/dokeos/courses/TEST/document/image.png?cidReq=TEST
+	// Let us remove possibe URL's parameters:
+	// http://localhost/dokeos/courses/TEST/document/image.png
+	$tmp = explode('?', $url);
+	$array_url = explode ('/', $tmp[0]);
+
+	// Pulling out the filename image.png
+	// The rest of the URL is http://localhost/dokeos/courses/TEST/document
+	$file_name = array_pop($array_url);
+
+	// api_get_path(WEB_PATH) returns for example http://localhost/dokeos/
+	$array_web_path = explode ('/', api_get_path(WEB_PATH));
+
+	// Getting the relative local path.
+	// http://localhost/dokeos/courses/TEST/document
+	// http://localhost/dokeos/
+	// ---------------------------------------------
+	//                         courses/TEST/document
+	$array_local_path = array_values(array_diff($array_url, $array_web_path));
+	$local_path = implode('/', $array_local_path);
+
+	// Sanity check - you may have seen this comment in dokeos/main/document/download.php:
+	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
+	// Let us remove double slashes, if any (triple too, etc.).
+	$local_path = preg_replace('@/{2,}@', '/', $local_path);
+
+	// Finally, we will concatenate: the system root (for example /var/www/), the relative local path, and the file name.
+	// /var/www/courses/TEST/document/image.png
+	return str_replace("\\", '/', api_get_path(SYS_PATH)).(empty($local_path) ? '' : $local_path.'/').$file_name;
+}

@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 20036 2009-04-23 22:06:02Z cfasanando $
+<?php // $Id: profile.php 20174 2009-04-29 04:34:13Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -808,7 +808,13 @@ if ($image_size[0] > 300) {
 
 // get the path,width and height from original picture
 $big_image = $image_dir.'big_'.$image;
+
+/*
 $big_image_size = @getimagesize($big_image);
+*/
+// To avoid possible bugs within getimagesize(), we have to pass here the system path of the original image.
+$big_image_size = @getimagesize(api_url_to_local_path($big_image));
+
 $big_image_width= $big_image_size[0];
 $big_image_height= $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();

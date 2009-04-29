@@ -100,7 +100,7 @@ class Result
 		
 		if (is_null($id ) && is_null($user_id) && !is_null($evaluation_id)) {
 
-			$sql_verified_if_exist_evaluation='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE evaluation_id="'.$evaluation_id.'";';
+			$sql_verified_if_exist_evaluation='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE evaluation_id="'.Database::escape_string($evaluation_id).'";';
 			$res_verified_if_exist_evaluation=Database::query($sql_verified_if_exist_evaluation,__FILE__,__LINE__);
 			$info_verified_if_exist_evaluation=Database::result($res_verified_if_exist_evaluation,0,0);
 				if ($info_verified_if_exist_evaluation!=0) {
@@ -115,11 +115,11 @@ class Result
 				
 				$current_date=time();
 				for ($i=0;$i<count($list_user_course_list);$i++) {
-					$sql_verified='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE user_id="'.$list_user_course_list[$i]['user_id'].'" AND evaluation_id="'.$evaluation_id.'";';
+					$sql_verified='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE user_id="'.(int)($list_user_course_list[$i]['user_id']).'" AND evaluation_id="'.Database::escape_string($evaluation_id).'";';
 					$res_verified=Database::query($sql_verified,__FILE__,__LINE__);
 					$info_verified=Database::result($res_verified,0,0);
 					if ($info_verified==0) {
-						$sql_insert='INSERT INTO '.$tbl_grade_results.'(user_id,evaluation_id,date,score) values ("'.$list_user_course_list[$i]['user_id'].'","'.$evaluation_id.'","'.$current_date.'",0);';
+						$sql_insert='INSERT INTO '.$tbl_grade_results.'(user_id,evaluation_id,date,score) values ("'.Database::escape_string($list_user_course_list[$i]['user_id']).'","'.Database::escape_string($evaluation_id).'","'.$current_date.'",0);';
 						$res_insert=Database::query($sql_insert,__FILE__,__LINE__);
 					}
 				}
@@ -130,13 +130,13 @@ class Result
 		$sql='SELECT id,user_id,evaluation_id,date,score FROM '.$tbl_grade_results;
 		$paramcount = 0;
 		if (!empty ($id)) {
-			$sql.= ' WHERE id = '.$id;
+			$sql.= ' WHERE id = '.Database::escape_string($id);
 			$paramcount ++;
 		}
 		if (!empty ($user_id)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
-			$sql .= ' user_id = '.$user_id;
+			$sql .= ' user_id = '.Database::escape_string($user_id);
 			$paramcount ++;
 		}
 		if (!empty ($evaluation_id)) {
@@ -145,7 +145,7 @@ class Result
 			} else {
 			 $sql .= ' WHERE';	
 			}
-			$sql .= ' evaluation_id = '.$evaluation_id;
+			$sql .= ' evaluation_id = '.Database::escape_string($evaluation_id);
 			$paramcount ++;
 		}
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -175,7 +175,7 @@ class Result
 			 $sql .= ',score';	
 			}
 			$sql .= ') VALUES
-					('.$this->get_user_id().', '.$this->get_evaluation_id()
+					('.(int)$this->get_user_id().', '.(int)$this->get_evaluation_id()
 					.', '.$this->get_date();
 			if (isset($this->score)) {
 			 $sql .= ', '.$this->get_score();
@@ -207,7 +207,7 @@ class Result
 			 	$sql .= ',score';	
 			}
 				$sql .= ') VALUES
-					('.$arr['id'].','.$arr['user_id'].', '.$arr['evaluation']
+					('.(int)$arr['id'].','.(int)$arr['user_id'].', '.(int)$arr['evaluation']
 					.', '.$arr['creation_date'];
 			if (isset($arr['score'])) {
 				 $sql .= ', '.$arr['score'];

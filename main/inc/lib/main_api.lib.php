@@ -816,7 +816,15 @@ function api_session_destroy() {
 		STRING MANAGEMENT
 ==============================================================================
 */
-function api_add_url_param($url, $param) {
+/**
+ * Add a parameter to the existing URL. If this parameter already exists,
+ * just replace it with the new value
+ * @param   string  The URL
+ * @param   string  param=value string
+ * @param   boolean Whether to filter XSS or not
+ * @return  string  The URL with the added parameter
+ */
+function api_add_url_param($url, $param, $filter_xss=true) {
 	if (empty ($param)) {
 		return $url;
 	}
@@ -844,6 +852,9 @@ function api_add_url_param($url, $param) {
 	} else {
 		$url = $url.'?'.$param;
 	}
+    if ($filter_xss === true) {
+    	$url = Security::remove_XSS($url);
+    }
 	return $url;
 }
 /**

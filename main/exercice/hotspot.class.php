@@ -58,7 +58,12 @@ class HotSpot extends Question {
 		if(!isset($_GET['editQuestion']))
 		{
 			$form->addElement('file','imageUpload',get_lang('UploadJpgPicture'));
+
+			/*
 			$form->addRule('imageUpload', get_lang('OnlyJPG'), 'mimetype',array('image/jpeg','image/pjpeg','image/gif','image/png'));
+			*/
+			$form->addRule('imageUpload', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
+
 			$form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
 		}
 	}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Sessions>
+    <Users>
+        <User>
+            <Username>jmontoya</Username>
+            <Lastname>Montoya</Lastname>
+            <Firstname>Julio</Firstname>
+            <Password>secret</Password>
+            <Email>example@example.com</Email>
+            <OfficialCode>123</OfficialCode>
+            <Phone>511-1234567</Phone>
+            <Status>teacher</Status>
+        </User>
+    </Users>
+    <Courses>
+        <Course>
+            <CourseCode>08011942</CourseCode>
+            <CourseTeacher>Hawking</CourseTeacher>
+            <CourseLanguage>English</CourseLanguage>
+            <CourseTitle>Maths</CourseTitle>
+            <CourseDescription>Wormholes</CourseDescription>
+        </Course>
+    </Courses>
+    <Session>
+        <SessionName>The Universe</SessionName>
+        <Coach>Coach</Coach>
+        <DateStart>2008/08/89</DateStart>
+        <DateEnd>2012/12/12</DateEnd>
+        <User>jmontoya</User>
+        <User>jmontoya2</User>
+    	<Course>
+    		<CourseCode>08011942</CourseCode>
+    		<Coach>Hawking</Coach>
+    		<User>jmontoya</User>
+			<User>jmontoya2</User>    		
+    	</Course>
+    </Session>
+</Sessions>

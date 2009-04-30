@@ -212,9 +212,12 @@ class UniqueAnswer extends Question {
 				$defaults['destination'.$i]=$list_destination;
 				*/
 				//$defaults['destination'.$i] = $list_destination;		
-			}
-			else
-			{
+			}else {
+				$defaults['answer[1]']  = get_lang('langDefaultUniqueAnswer1');				
+				$defaults['weighting[1]'] = 10;
+				$defaults['answer[2]']  = get_lang('langDefaultUniqueAnswer2');
+				$defaults['weighting[2]'] = 0;
+				
 				$temp_scenario['destination'.$i] = array('0');
 				$temp_scenario['lp'.$i] = array('0');
 				//$defaults['scenario']

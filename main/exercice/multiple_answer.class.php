@@ -103,12 +103,10 @@ class MultipleAnswer extends Question {
 
 		$defaults = array();
 		$correct = 0;
-		if(!empty($this -> id))
-		{
+		if(!empty($this -> id))	{
 			$answer = new Answer($this -> id);
 			$answer -> read();
-			if(count($answer->nbrAnswers)>0 && !$form->isSubmitted())
-			{
+			if(count($answer->nbrAnswers)>0 && !$form->isSubmitted()) {
 				$nb_answers = $answer->nbrAnswers;
 			}
 		}
@@ -116,16 +114,22 @@ class MultipleAnswer extends Question {
 		$form -> addElement('hidden', 'nb_answers');		
 		$boxes_names = array();
 
-		for($i = 1 ; $i <= $nb_answers ; ++$i)
-		{			
-			if(is_object($answer))
-			{
+		for($i = 1 ; $i <= $nb_answers ; ++$i) {			
+			if(is_object($answer)) {
 				$defaults['answer['.$i.']'] = $answer -> answer[$i];
 				$defaults['comment['.$i.']'] = $answer -> comment[$i];
 				$defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
 				$defaults['correct['.$i.']'] = $answer -> correct[$i];
+			} else {
+				$defaults['answer[1]']  = get_lang('langDefaultMultipleAnswer1');
+				$defaults['comment[1]'] = get_lang('langDefaultMultipleComment1');
+				$defaults['correct[1]'] = true;
+				$defaults['weighting[1]'] = 10;
+				$defaults['answer[2]']  = get_lang('langDefaultMultipleAnswer2');
+				$defaults['comment[2]'] = get_lang('langDefaultMultipleComment2');
+				$defaults['correct[2]'] = false;
+				$defaults['weighting[2]'] = -5;
 			}
-			
 			$renderer = & $form->defaultRenderer();
 			$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
 			

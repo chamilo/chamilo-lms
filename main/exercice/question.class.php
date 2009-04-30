@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20165 2009-04-28 21:27:51Z aportugal $
+<?php // $Id: question.class.php 20224 2009-04-30 15:59:43Z cfasanando $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20165 2009-04-28 21:27:51Z aportugal $
+* 	@version $Id: question.class.php 20224 2009-04-30 15:59:43Z cfasanando $
 */
 
 
@@ -986,7 +986,7 @@ abstract class Question
 		$renderer = $form->defaultRenderer();
 		$form->addElement('html','<div class="form">');
 		// question name
-		$form->addElement('text','questionName',get_lang('Question'),'size="60"');
+		$form->addElement('text','questionName','<span class="form_required">*</span> '.get_lang('Question'),'size="60"');
 		$form->applyFilter('questionName','html_filter');
 		
 		//$radios_results_enabled[] = $form->createElement('static', null, null, null);
@@ -1002,7 +1002,7 @@ abstract class Question
 		}
 		$form->addGroup($radios_results_enabled,'questionLevel',get_lang('Difficulty'));
 					
-		$renderer->setElementTemplate('<div class="row" ><!-- BEGIN required --><span class="form_required" style="float:left; margin-left: 75px ;">*</span><!-- END required --><div style="float:left;">{label}</div><div class="formw" >{element}</div></div>','questionName');
+		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw" >{element}</div></div>','questionName');
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
@@ -1033,7 +1033,7 @@ abstract class Question
 		
 		$form -> addElement ('html','<div id="media" style="display:none;">');
 				
-		$form->add_html_editor('questionDescription','', false);
+		$form->add_html_editor('questionDescription', get_lang('langQuestionDescription'), false);
 		$form -> addElement ('html','</div>');
 		
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionDescription');
@@ -1041,7 +1041,13 @@ abstract class Question
 		// hidden values
 		$form->addElement('hidden','myid',$_REQUEST['myid']);
 
-
+		switch($answerType) {
+			case 1:	$this->question = get_lang('langDefaultUniqueQuestion'); break;
+			case 2:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
+			case 3:	$this->question = get_lang('langDefaultFillBlankQuestion'); break;
+			case 4:	$this->question = get_lang('langDefaultMathingQuestion'); break;			
+			case 5:	$this->question = get_lang('langDefaultOpenQuestion');	break;
+		}		
 		// default values
 		$defaults = array();
 		$defaults['questionName'] = $this -> question;
@@ -1094,39 +1100,36 @@ abstract class Question
 		if ($feedbacktype==1) {
 			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
 			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]); 
-		}		
-		echo '<table>';
-		echo '<tr>';
+		}
+		echo '<ul class="question_menu" style="padding:0px; margin:-2px;">';
 		foreach ($question_type_custom_list as $i=>$a_type) {			
 			// include the class of the type
 			include_once($a_type[0]);			
 			 // get the picture of the type and the langvar which describes it
 			eval('$img = '.$a_type[1].'::$typePicture;');			
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');			
-			echo '<td>';		
-			echo '<div class="icon_image_content">';
-				echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">';	
-				echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
-				echo '<br>';
-				echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
-				echo '</div>';
-			echo '</a>';	
-			echo '</td>';
-		}		
-
-		echo '<td>';	
-			if ($feedbacktype==1) 
-				echo '<a href="question_pool.php?type=1&fromExercise='.$exerciseId.'">';
-			else
-				echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">';	
-				
-			echo '<div class="icon_image_content">';
-			echo Display::return_icon('database.gif', get_lang('GetExistingQuestion'), array('align'=>'middle'));		
+			echo '<li>';		
+			echo '<div class="icon_image_content">';	
+			echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
 			echo '<br>';
-			echo get_lang('GetExistingQuestion');
-					echo '</a>';
-		echo '</td>';
-		echo '</table>';
+			echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
+			echo '</div>';
+			echo '</li>';
+		}
+		echo '<li>';
+		echo '<div class="icon_image_content">';
+		if ($feedbacktype==1) { 
+			echo $url = '<a href="question_pool.php?type=1&fromExercise='.$exerciseId.'">';
+		} else {
+			echo $url = '<a href="question_pool.php?fromExercise='.$exerciseId.'">';	
+		}
+		echo Display::return_icon('database.gif', get_lang('GetExistingQuestion'), '');		
+		echo '</a><br>';
+		echo $url;
+		echo get_lang('GetExistingQuestion');
+		echo '</a>';
+		echo '</div></li>';
+		echo '</ul>';
 	}
 	
 	static function get_types_information()

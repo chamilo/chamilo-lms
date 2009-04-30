@@ -1,4 +1,4 @@
-<?php // $Id: infocours.php 20169 2009-04-29 00:52:58Z yannoo $
+<?php // $Id: infocours.php 20208 2009-04-30 00:01:52Z yannoo $
 
 /*
 ==============================================================================
@@ -132,6 +132,7 @@ while($a_titulars=mysql_fetch_array($q_result_titulars)){
 		}
 		$s_disabled_select_titular="";
 		if(!$is_courseAdmin){
+            $s_disabled_select_titular="disabled=disabled";
 		}
 		$a_profs[$s_firstname.' '.$s_lastname]="$s_lastname $s_firstname ($s_username)";
 }

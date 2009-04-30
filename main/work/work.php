@@ -1,4 +1,4 @@
-<?php //$Id: work.php 20164 2009-04-28 21:02:46Z cvargas1 $
+<?php //$Id: work.php 20209 2009-04-30 00:11:19Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 20164 2009-04-28 21:02:46Z cvargas1 $
+*  	@version $Id: work.php 20209 2009-04-30 00:11:19Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -203,7 +203,7 @@ api_protect_course_script(true);
 */
 
 if (isset ($_POST['cancelForm']) && !empty ($_POST['cancelForm'])) {
-	header('Location: ' . api_get_self() . "?origin=$origin");
+	header('Location: ' . api_get_self() . "?origin=$origin&gradebook=$gradebook");
 	exit ();
 }
 
@@ -247,8 +247,23 @@ if(isset($_GET['action']) && $_GET['action']=="downloadfolder")
 	Header
 -----------------------------------------------------------
 */
-isset($_GET['gradebook'])?$gradebook=Security::remove_XSS($_GET['gradebook']):$gradebook='';
-	
+
+
+if (isset($_GET['gradebook']) && $_GET['gradebook']='view' ) {
+	$_SESSION['gradebook']=Security::remove_XSS($_GET['gradebook']);
+	$gradebook=	$_SESSION['gradebook'];
+} elseif (empty($_GET['gradebook'])) {
+	unset($_SESSION['gradebook']);
+	$gradebook=	'';
+}
+
+if (!empty($gradebook) && $gradebook=='view') {	
+	$interbreadcrumb[] = array (
+		'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
+		'name' => get_lang('Gradebook')
+	);
+}
+
 if (!empty($_SESSION['toolgroup'])){
 	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
 	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
@@ -306,14 +321,7 @@ if (!empty($_SESSION['toolgroup'])){
 	
 } else {
 
-
-	if (isset($origin) && $origin != 'learnpath') {
-		
-		if (isset($_GET['gradebook']) and $_GET['gradebook']=='view'){
-			$interbreadcrumb[]= array (
-				'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-				'name' => get_lang('Gradebook'));
-		}		
+	if (isset($origin) && $origin != 'learnpath') {	
 		$url_dir ='';
 		$interbreadcrumb[] = array ('url' => $url_dir,'name' => get_lang('StudentPublications'));
 		//if (!$display_tool_options  && !$display_upload_form)
@@ -1388,7 +1396,7 @@ if (!$display_upload_form && !$display_tool_options) {
 		isset($_GET['cidreq'])?$cidreq = Security::Remove_XSS($_GET['cidreq']):$cidreq='';
 		isset($_GET['curdirpath'])?$curdirpath = Security::Remove_XSS($_GET['curdirpath']):$curdirpath='';
 		isset($_REQUEST['filter'])?$filter = (int)$_REQUEST['filter']:$filter='';
-		$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.$cidreq.'&curdirpath='.$curdirpath.'">';
+		$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.$cidreq.'&curdirpath='.$curdirpath.'&gradebook='.$gradebook.'">';
 		$form_filter .= make_select('filter',array(0=>get_lang('SelectAFilter'),1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised'),3=>get_lang('FilterByNotExpired')),$filter);
 		$form_filter .= '<input type="submit" value="'.get_lang('FilterAssignments').'"</form>';
 		echo $form_filter;

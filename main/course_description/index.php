@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20191 2009-04-29 18:47:48Z iflorespaz $
+<?php // $Id: index.php 20237 2009-04-30 21:38:20Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -34,15 +34,22 @@ include_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 */
 
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('CourseProgram'));
- 
-if(isset($_GET['description_id']) && $_GET['description_id']==1) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('GeneralDescription'));
-if(isset($_GET['description_id']) && $_GET['description_id']==2) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Objectives'));
-if(isset($_GET['description_id']) && $_GET['description_id']==3) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Topics'));
-if(isset($_GET['description_id']) && $_GET['description_id']==4) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Methodology'));
-if(isset($_GET['description_id']) && $_GET['description_id']==5) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('CourseMaterial'));
-if(isset($_GET['description_id']) && $_GET['description_id']==6) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('HumanAndTechnicalResources'));
-if(isset($_GET['description_id']) && $_GET['description_id']==7) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Assessment'));
-if(isset($_GET['description_id']) && $_GET['description_id']==8) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('NewBloc'));
+
+$description_id = isset ($_REQUEST['description_id']) ? Security::remove_XSS($_REQUEST['description_id']) : null;
+$action = isset($_GET['action'])?Security::remove_XSS($_GET['action']):'';
+$edit = isset($_POST['edit'])?Security::remove_XSS($_POST['edit']):'';
+$add = isset($_POST['add'])?Security::remove_XSS($_POST['add']):'';
+
+$description_id = intval($description_id);
+
+if($description_id == 1) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('GeneralDescription'));
+if($description_id == 2) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Objectives'));
+if($description_id == 3) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Topics'));
+if($description_id == 4) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Methodology'));
+if($description_id == 5) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('CourseMaterial'));
+if($description_id == 6) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('HumanAndTechnicalResources'));
+if($description_id == 7) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Assessment'));
+if($description_id == 8) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('NewBloc'));
 
 api_protect_course_script(true);
 $nameTools = get_lang('CourseProgram');
@@ -64,9 +71,6 @@ $nameTools = get_lang(TOOL_COURSE_DESCRIPTION);
 	Introduction section
 -----------------------------------------------------------
 */
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
 Display::display_introduction_section(TOOL_COURSE_DESCRIPTION);
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
@@ -129,20 +133,18 @@ $default_description_title_editable[7] = true;
 		MAIN CODE
 ==============================================================================
 */
-$description_id = isset ($_REQUEST['description_id']) ? intval($_REQUEST['description_id']) : null;
 
-$action = $_GET['action'];
 if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 	// Delete a description block
-	if (isset ($_GET['action']) && $_GET['action'] == 'delete') {
-		$sql = "DELETE FROM $tbl_course_description WHERE id='$description_id'";
+	if ($action == 'delete') {
+		$sql = "DELETE FROM $tbl_course_description WHERE id='".$description_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 		Display :: display_confirmation_message(get_lang('CourseDescriptionDeleted'));
 	}
 	// Add or edit a description block
 	else {
 		if (!empty($description_id)) {
-		$sql = "SELECT * FROM $tbl_course_description WHERE id='$description_id'";
+		$sql = "SELECT * FROM $tbl_course_description WHERE id='".$description_id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 			if ($description = Database::fetch_array($result)) {
 				$default_description_titles[$description_id] = $description['title'];
@@ -164,25 +166,26 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		//Se borro: echo ' <style> .row{} <\style> por que hacia conflicto en apartado personalizado con los estilos propios del formvalidator 		
 		// Build the form
 		$form = new FormValidator('course_description','POST','index.php','','style="width: 100%;"');
-		$form->addElement('header', '', $default_description_titles[(int)($_GET['description_id'])]);
+		$form->addElement('header', '', $default_description_titles[$description_id]);
 		$form->addElement('hidden', 'description_id');
 		
-		if ($_GET['action']=='edit' || $_POST['edit']==1 ) {
+		if ($action == 'edit' || intval($edit) == 1 ) {
 			$form->addElement('hidden', 'edit','1');
 		}		
 
-		if ($_GET['action']=='add' || $_POST['add']==1 ) {
+		if ($action == 'add' || intval($add) == 1 ) {
 			$form->addElement('hidden', 'add','1');	
 		}		
 			
-		if (($description_id >= ADD_BLOCK) || $default_description_title_editable[$description_id] || $_GET['action']=='add' || $_POST['add']=='1') {			
+		if (($description_id >= ADD_BLOCK) || $default_description_title_editable[$description_id] || $action == 'add' || intval($edit) == 1) {			
 			$form->add_textfield('title', get_lang('Title'), true, array('size'=>'width: 350px;'));
+			$form->applyFilter('title','html_filter');
 		}
 		
 		if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 			WCAG_rendering::prepare_admin_form($description_content, $form);
 		} else {			
-			$form->add_html_editor('contentDescription', get_lang('Content'));
+			$form->add_html_editor('contentDescription', get_lang('Content'));			
 		}
 		$form->addElement('style_submit_button', null, get_lang('SaveIntroText'), 'class="save"');
 		// Set some default values

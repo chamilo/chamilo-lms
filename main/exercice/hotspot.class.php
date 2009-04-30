@@ -60,7 +60,6 @@ class HotSpot extends Question {
 			$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">'.get_lang('UploadJpgPicture').'</div></div>');
 			$form->addElement('file','imageUpload','<span class="form_required">*</span><img src="../img/hotspots.png" />');
 			$renderer->setElementTemplate('<div class="row"><div class="label" style="margin-top:-30px;">{label}</div><div class="formw" >{element}</div></div>','imageUpload');
-			$form->addRule('imageUpload', get_lang('OnlyJPG'), 'mimetype',array('image/jpeg','image/pjpeg','image/gif','image/png'));
 			$form->addRule('imageUpload', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
 			$form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
 

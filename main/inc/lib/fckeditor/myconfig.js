@@ -66,14 +66,15 @@ FCKConfig.ToolbarSets["LinksHomePage"] = [
 
 //System Announcements
 FCKConfig.ToolbarSets["SystemAnnouncements"] = [
-	['NewPage','FitWindow','-','Undo','Redo','-','SelectAll'],
-	['Link','Unlink','Anchor'],
-	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
-	['Table','Smiley','SpecialChar'],
-	['FontName','FontSize'],
-	['Bold','Italic','Underline'],
-	['JustifyLeft','JustifyCenter','JustifyRight','-','OrderedList','UnorderedList','-','TextColor','BGColor'],
-	['Source']
+	['Save','FitWindow','PasteWord','-','Undo','Redo'],
+    ['Link','Unlink','Anchor'],
+    ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
+    ['Table','SpecialChar'],
+    ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor','-','Source'],
+    '/',
+    ['Style','FontFormat','FontName','FontSize'],
+    ['Bold','Italic','Underline'],
+    ['JustifyLeft','JustifyCenter','JustifyRight']
 ] ;
 
 //Global Agenda

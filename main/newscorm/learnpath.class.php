@@ -5388,8 +5388,7 @@ class learnpath {
 
 			$sql_hot = "SELECT * FROM ".$TBL_DOCUMENT."
 			WHERE path LIKE '".$uploadPath."/%/%htm%'
-			ORDER BY id ASC";
-		
+			AND id = ".(int)$extra_info." ORDER BY id ASC";
 				
 		  	$res_hot = api_sql_query($sql_hot, __FILE__, __LINE__);
 
@@ -5397,6 +5396,10 @@ class learnpath {
 
 			$item_title = $row['title'];
 			$item_description = $row['description'];
+			
+			if(!empty($row['comment'])) {
+				$item_title = $row['comment'];
+			} 
 		}
 		else
 		{
@@ -7882,7 +7885,7 @@ class learnpath {
 			$return .= '<div class="lp_resource_element">';
 			//display quizhotpotatoes
 			$return .= '<img alt="" src="../img/jqz.gif" style="margin-right:5px;" title="" />';
-			$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_hot['title'] . '</a>';
+			$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">' . ((!empty($row_hot['comment']))?$row_hot['comment']:$row_hot['title']). '</a>';
 			//$return .= $row_quiz['title'];
 			$return .= '</div>';
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 20042 2009-04-23 22:34:50Z yannoo $
+// $Id: inscription.php 20243 2009-04-30 23:35:35Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -45,7 +45,9 @@ require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 
 $tool_name = get_lang('Registration');
 Display :: display_header($tool_name);
-
+echo '<div class="actions-title">';
+echo $tool_name;
+echo '</div>';
 // Forbidden to self-register
 if (get_setting('allow_registration') == 'false') {
 	api_not_allowed();
@@ -480,7 +482,10 @@ if ($form->validate()) {
 	$form->display();
 }
 ?>
-<a href="<?php echo api_get_path(WEB_PATH); ?>">&lt;&lt; <?php echo get_lang('Back'); ?></a>
+<br/>
+<div class="actions">
+<a href="<?php echo api_get_path(WEB_PATH); ?>" class="fake_button_back" ><?php echo get_lang('Back'); ?></a>
+</div>
 <?php
 /*
 ==============================================================================

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20237 2009-04-30 21:38:20Z cfasanando $
+<?php // $Id: index.php 20239 2009-04-30 22:44:21Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -40,16 +40,14 @@ $action = isset($_GET['action'])?Security::remove_XSS($_GET['action']):'';
 $edit = isset($_POST['edit'])?Security::remove_XSS($_POST['edit']):'';
 $add = isset($_POST['add'])?Security::remove_XSS($_POST['add']):'';
 
-$description_id = intval($description_id);
-
-if($description_id == 1) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('GeneralDescription'));
-if($description_id == 2) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Objectives'));
-if($description_id == 3) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Topics'));
-if($description_id == 4) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Methodology'));
-if($description_id == 5) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('CourseMaterial'));
-if($description_id == 6) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('HumanAndTechnicalResources'));
-if($description_id == 7) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Assessment'));
-if($description_id == 8) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('NewBloc'));
+if(intval($description_id) == 1) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('GeneralDescription'));
+if(intval($description_id) == 2) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Objectives'));
+if(intval($description_id) == 3) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Topics'));
+if(intval($description_id) == 4) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Methodology'));
+if(intval($description_id) == 5) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('CourseMaterial'));
+if(intval($description_id) == 6) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('HumanAndTechnicalResources'));
+if(intval($description_id) == 7) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Assessment'));
+if(intval($description_id) == 8) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('NewBloc'));
 
 api_protect_course_script(true);
 $nameTools = get_lang('CourseProgram');
@@ -134,7 +132,8 @@ $default_description_title_editable[7] = true;
 ==============================================================================
 */
 
-if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
+if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {	
+	$description_id = intval($description_id);
 	// Delete a description block
 	if ($action == 'delete') {
 		$sql = "DELETE FROM $tbl_course_description WHERE id='".$description_id."'";
@@ -296,7 +295,7 @@ if ($show_description_list) {
 		$categories[ADD_BLOCK] = get_lang('NewBloc');
 		
 		$i=1;
-		echo '<div class="actions">';
+		echo '<div class="actions" style="margin-bottom:30px">';
 		ksort($categories);
 		foreach ($categories as $id => $title) {
 			if ($i==8) { 

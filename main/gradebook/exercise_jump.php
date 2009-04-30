@@ -41,6 +41,7 @@ $course_code = api_get_course_id();
 $course_info = Database::get_course_info($course_code);
 $course_title = $course_info['title'];
 $course_code = $return_result['code'];
+$gradebook=Security::remove_XSS($_GET['gradebook']);
 
 $dbname = $course_info['db_name'];
 
@@ -48,7 +49,7 @@ $_course['name'] = $course_title;
 $_course['official_code'] = $course_code;
 
 if (isset($_GET['doexercise'])) {
-	header('Location: ../exercice/exercice_submit.php?cidReq='.$cidReq.'&origin=&learnpath_id=&learnpath_item_id=&exerciseId='.Security::remove_XSS($_GET['doexercise']));
+	header('Location: ../exercice/exercice_submit.php?cidReq='.$cidReq.'&gradebook='.$gradebook.'&origin=&learnpath_id=&learnpath_item_id=&exerciseId='.Security::remove_XSS($_GET['doexercise']));
 	exit;
 } else {
 	if (isset($_GET['gradebook'])) {

@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 20200 2009-04-29 22:14:55Z cvargas1 $
+<?php // $Id: exercice_submit.php 20227 2009-04-30 16:40:35Z cvargas1 $
 
 /*
 ==============================================================================
@@ -42,7 +42,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 20200 2009-04-29 22:14:55Z cvargas1 $
+* 	@version $Id: exercice_submit.php 20227 2009-04-30 16:40:35Z cvargas1 $
 */
 
 
@@ -702,20 +702,23 @@ if(!$questionNum || $_POST['questionNum']) {
     }
 }
 
-if (isset($_SESSION['gradebook'])){
+if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
+	$_SESSION['gradebook']=Security::remove_XSS($_GET['gradebook']);
 	$gradebook=	$_SESSION['gradebook'];
-}
+} elseif (empty($_GET['gradebook'])) {
+	unset($_SESSION['gradebook']);
+	$gradebook=	'';
+} 
 
 if (!empty($gradebook) && $gradebook=='view') {	
-	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
-		);
+	$interbreadcrumb[] = array (
+		'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
+		'name' => get_lang('Gradebook')
+	);
 }
-
 //$nameTools=get_lang('Exercice');
 
-$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[]=array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
 $interbreadcrumb[]=array("url" => "#","name" => $exerciseTitle);
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool

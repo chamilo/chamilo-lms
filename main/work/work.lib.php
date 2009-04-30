@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20209 2009-04-30 00:11:19Z cvargas1 $
+<?php //$Id: work.lib.php 20227 2009-04-30 16:40:35Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20209 2009-04-30 00:11:19Z cvargas1 $
+* 	@version $Id: work.lib.php 20227 2009-04-30 16:40:35Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -32,7 +32,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	if ($_GET['display_tool_options'] == 'true' OR $_GET['display_upload_form'] == 'true' )
 	{
 		if ($origin!='learnpath') {
-			echo '<a href="work.php">'.Display::return_icon('back.png').' '.get_lang('BackToWorksList').'</a>';
+			echo '<a href="work.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png').' '.get_lang('BackToWorksList').'</a>';
 		}
 	}
 	if (! $always_show_tool_options && api_is_allowed_to_edit()) {

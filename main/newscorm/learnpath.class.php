@@ -5859,7 +5859,7 @@ class learnpath {
 					}
 					
 					$return .= "\t\t" . '<tr>' . "\n";						
-					$return .= "\t\t\t" . '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit"> '.get_lang('Ok').' </button></td>' . "\n";		
+					$return .= "\t\t\t" . '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit"> '.get_lang('AddForumToCourse').' </button></td>' . "\n";		
 					$return .= "\t\t" . '</tr>' . "\n";
 					
 				$return .= "\t" . '</table>' . "\n";	
@@ -6321,7 +6321,7 @@ class learnpath {
 		
 		if(is_array($arrLP)) { reset($arrLP); }
 		
-		$form->addElement('style_submit_button', 'submit_button', get_lang('Save'),'class="save"');
+		$form->addElement('style_submit_button', 'submit_button', get_lang('SaveSection'),'class="save"');
 		
 		if($item_type == 'module' || $item_type == 'dokeos_module')
 		{
@@ -6933,13 +6933,13 @@ class learnpath {
 					$return .= "\t\t" . '</tr>' . "\n";
 					
 					if($action != 'move') {
-						
-						$return .= "\t\t" . '<tr>' . "\n";
+						//Description filed is commentd for link
+						/*$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang('Description').'</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" style="width:100%;" name="description" class="learnpath_item_form" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
-						$return .= "\t\t" . '</tr>' . "\n";
+						$return .= "\t\t" . '</tr>' . "\n";*/
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
@@ -6998,7 +6998,7 @@ class learnpath {
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">'.get_lang("Ok").'</button></td>' . "\n";
+						$return .= "\t\t\t" . '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">'.get_lang("AddLinkToCourse").'</button></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -7253,7 +7253,7 @@ class learnpath {
 					}
 					
 					$return .= "\t\t" . '<tr>' . "\n";
-					$return .= "\t\t\t" . '<td>&nbsp</td><td><button class="save" name="submit_button" type="submit">'.get_lang("Ok").'</button></td>' . "\n";
+					$return .= "\t\t\t" . '<td>&nbsp</td><td><button class="save" name="submit_button" type="submit">'.get_lang("AddAssignmentToCourse").'</button></td>' . "\n";
 					$return .= "\t\t" . '</tr>' . "\n";
 				
 				$return .= "\t" . '</table>' . "\n";	

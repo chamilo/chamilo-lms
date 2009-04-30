@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 20162 2009-04-28 20:41:46Z cfasanando $
+<?php //$Id: announcements.php 20244 2009-04-30 23:38:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -733,7 +733,9 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 	                            } else {
                                     // intro of the email: receiver name and subject
 									$mail_body = $myrow["lastname"]." ".$myrow["firstname"]."<br />\n".stripslashes($emailTitle)."<br />";
-									// main part of the email
+									// make a change for absolute url
+                					$newContent = str_replace('src=\"../../','src=\"'.api_get_path(WEB_PATH).'', $newContent);
+                                    // main part of the email
                                     $mail_body .= trim(stripslashes($newContent));
                                     // signature of email: sender name and course URL after -- line
                                     $mail_body .= "<br />-- <br />";

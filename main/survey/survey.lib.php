@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 20132 2009-04-27 19:51:24Z juliomontoya $
+* 	@version $Id: survey.lib.php 20244 2009-04-30 23:38:03Z cfasanando $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -4125,7 +4125,12 @@ class SurveyUtil {
                     }
                 }
                 // send the email if checkboxed
-                if (($newUser==true || $reminder==1) && $sendmail<>0) {
+                if (($newUser == true || $reminder == 1) && $sendmail <> 0) {
+                	// make a change for absolute url
+                	if (isset($invitation_text)) {
+                		$invitation_text = str_replace('src="../../','src="'.api_get_path(WEB_PATH).'', $invitation_text);
+                		$invitation_text = trim(stripslashes($invitation_text));
+                	}
                     SurveyUtil::send_invitation_mail($value, $invitation_code, $invitation_title, $invitation_text);
                     $counter++;
                 }
@@ -4193,9 +4198,9 @@ class SurveyUtil {
                     $sender_email = $noreply;
                 }
             }
-
+			
             api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, $replyto);
-
+			
         }
 
 	/**

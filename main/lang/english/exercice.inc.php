@@ -317,4 +317,5 @@ $langDefaultMultipleComment2 = "It is a country located on the western side of S
 $langDefaultFillBlankQuestion = "Calculate BMI?";
 $langDefaultMathingQuestion = "Determine the following relation";
 $langDefaultOpenQuestion = "When they celebrate the Labor Day?";
+$SaveSection = "Save section";
 ?>

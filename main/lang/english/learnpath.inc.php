@@ -220,7 +220,7 @@ $ShowAndQualifyAttempt = "Show and mark attempt";
 $langAddEdit = "Add / Edit";
 $ModifyPrerequisites = "Save prerequisites settings";
 $CreateLearningPath = "Continue >";
-$AddExercise = "Validate";
+$AddExercise = "Add test to course";
 $AddForum = "Add forum";
 $LPCreateDocument = "Add this document to the course";
 $ObjectiveID = "Objective ID";
@@ -231,4 +231,7 @@ $ObjectiveMinScore = "Objective min score";
 $LPName = "Course name";
 $AuthoringOptions = "Authoring options";
 $CourseSettings = "Course settings";
+$AddLinkToCourse = "Add link to course";
+$AddAssignmentToCourse = "Add assignment to course";
+$AddForumToCourse = "Add forum to course";
 ?>

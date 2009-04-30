@@ -152,4 +152,5 @@ $CurrentVersion = "Current version";
 $LastVersion = "Latest version";
 $PageRestored = "The page has been restored. You can view it by clicking";
 $RestoredFromVersion = "Restored from version";
+$HWiki = "Help: wiki";
 ?>

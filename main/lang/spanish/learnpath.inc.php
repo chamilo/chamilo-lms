@@ -220,7 +220,7 @@ $ShowAndQualifyAttempt = "Mostrar y calificar intento";
 $langAddEdit = "Añadir / Editar";
 $ModifyPrerequisites = "Modificar los prerrequisitos";
 $CreateLearningPath = "Crear lección";
-$AddExercise = "Agregar ejercicio";
+$AddExercise = "Agregar ejercicio a lección";
 $AddForum = "Agregar foro";
 $LPCreateDocument = "Crear documento";
 $ObjectiveID = "ID del objetivo";
@@ -231,4 +231,7 @@ $ObjectiveMinScore = "Puntaje mínimo del objetivo";
 $LPName = "Nombre de la lección";
 $AuthoringOptions = "Autorización de opciones";
 $CourseSettings = "Configuración de la lección";
+$AddLinkToCourse = "Agregar enlace a lección";
+$AddAssignmentToCourse = "Agregar tarea a lección";
+$AddForumToCourse = "Agregar foro a lección";
 ?>

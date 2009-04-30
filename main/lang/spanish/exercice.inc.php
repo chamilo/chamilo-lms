@@ -317,4 +317,5 @@ $langDefaultMultipleComment2 = "Es un país situado en el lado occidental de Suda
 $langDefaultFillBlankQuestion = "Calcular el índice de masa corporal?";
 $langDefaultMathingQuestion = "Determinar la siguiente relación";
 $langDefaultOpenQuestion = "Cuando se celebra el día del Trabajo?";
+$SaveSection = "Guardar capítulo";
 ?>

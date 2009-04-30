@@ -304,4 +304,17 @@ $EditIndividualComment = "Editar feedback";
 $ThankYouForPassingTheTest = "Gracias por pasar el examen";
 $ExerciseAtTheEndOfTheTest = "Al final del ejercicio";
 $EnrichQuestion = "Enriquecer pregunta ";
+$langDefaultUniqueQuestion  = "Cuál de los siguientes alimentos es un productos lácteo?";
+$langDefaultUniqueAnswer1 = "leche";
+$langDefaultUniqueComment1 = "La leche es la base de numerosos productos lácteos, como la mantequilla, el queso, el yogur, entre otros";
+$langDefaultUniqueAnswer2 = "Avena";
+$langDefaultUniqueComment2 = "La avena es uno de los cereales más completos. Por sus cualidades energéticas y nutritivas ha sido la base de la alimentación de pueblos";
+$langDefaultMultipleQuestion = "Cuál de los siguientes paises no pertenecen al continente  europeos?";
+$langDefaultMultipleAnswer1 = "España";
+$langDefaultMultipleComment1 = "Es un país soberano miembro de la Unión Europea, constituido en Estado social y democrático de Derecho, y cuya forma de gobierno es la monarquía parlamentaria";
+$langDefaultMultipleAnswer2 = "Perú";
+$langDefaultMultipleComment2 = "Es un país situado en el lado occidental de Sudamérica. Está limitado por el norte con Ecuador y Colombia, por el este con Brasil, por el  sureste con Bolivia, por el sur con Chile, y por el oeste con el Océano Pacífico";
+$langDefaultFillBlankQuestion = "Calcular el índice de masa corporal?";
+$langDefaultMathingQuestion = "Determinar la siguiente relación";
+$langDefaultOpenQuestion = "Cuando se celebra el día del Trabajo?";
 ?>

@@ -304,4 +304,17 @@ $EditIndividualComment = "Edit individual feedback";
 $ThankYouForPassingTheTest = "Thank you for passing the test";
 $ExerciseAtTheEndOfTheTest = "At end of test";
 $EnrichQuestion = "Enrich question";
+$langDefaultUniqueQuestion  = "Which of the following foods is a milk product?";
+$langDefaultUniqueAnswer1 = "Milk";
+$langDefaultUniqueComment1 = "Milk is the basis of many dairy products such as butter, cheese, yogurt, among other";
+$langDefaultUniqueAnswer2 = "Oats";
+$langDefaultUniqueComment2 = "Oats are one of the most comprehensive grain. By their energy and nutritional qualities has been the basis of feeding people";
+$langDefaultMultipleQuestion = "Which of the following countries outside the European continent?";
+$langDefaultMultipleAnswer1 = "Spain";
+$langDefaultMultipleComment1 = "Is a sovereign member of the European Union, established in social and democratic state of law, and whose form of government is parliamentary monarchy";
+$langDefaultMultipleAnswer2 = "Peru";
+$langDefaultMultipleComment2 = "It is a country located on the western side of South America. Is limited to the north by Ecuador and Colombia, on the east by Brazil, on the southeast by Bolivia, on the south by Chile, and to the west by the Pacific Ocean";
+$langDefaultFillBlankQuestion = "Calculate BMI?";
+$langDefaultMathingQuestion = "Determine the following relation";
+$langDefaultOpenQuestion = "When they celebrate the Labor Day?";
 ?>

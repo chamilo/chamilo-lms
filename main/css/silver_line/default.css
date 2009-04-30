@@ -698,6 +698,7 @@ div.row {
 div.row div.formw {
 	width: 73%;
 	margin: 0;
+	float:left;
 }
 
 div.row div.label {
@@ -2533,3 +2534,6 @@ button.back {
 	padding-bottom: 3px;
 	padding-left: 5px;
 }
+.question_menu {list-style:none; float:left; }
+.question_menu li{float:left; margin:0px;}
+#exercise_admin {margin: 0; padding: 0; border: 0; }

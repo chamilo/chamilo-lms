@@ -1054,6 +1054,7 @@ div.row div.label {
 }
 div.row div.formw {
 	width: 80%;
+	float:left;
 }
 [dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
 	float: left;
@@ -2355,3 +2356,6 @@ button.back {
 	padding-bottom: 3px;
 	padding-left: 5px;
 }
+.question_menu {list-style:none; float:left; }
+.question_menu li{float:left; margin:0px;}
+#exercise_admin {margin: 0; padding: 0; border: 0; }

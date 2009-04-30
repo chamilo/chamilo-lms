@@ -314,6 +314,7 @@ form div.row div.label {
 }
 form div.row div.formw {
 	width: 80%;
+	float:left;
 }
 [dir=ltr] form div.row div.label, [dir=rtl] form div.row div.formw {
 	float: left;
@@ -435,7 +436,7 @@ form span.form_error {
 }
 .actionsbig a  { 
 	float:left; 
-	padding-left:12px;
+	padding-left:6px;
 	padding-right:12px; 
 	text-align:center;
 	
@@ -1914,3 +1915,7 @@ button.back {
 	padding-bottom: 3px;
 	padding-left: 5px;
 }
+
+.question_menu {list-style:none; float:left; }
+.question_menu li{float:left; margin:0px;}
+#exercise_admin {margin: 0; padding: 0; border: 0; }

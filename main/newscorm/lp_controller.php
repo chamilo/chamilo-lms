@@ -214,10 +214,10 @@ switch($action)
 							$document_id = $_SESSION['oLP']->create_document($_course);
 							
 						}								
-						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $document_id, $_POST['title'], $_POST['description'], $_POST['prerequisites']);
+						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $document_id, Security::remove_XSS($_POST['title']), $_POST['description'], $_POST['prerequisites']);
 					} else {	
 						//for all other item types than documents, load the item using the item type and path rather than its ID
-						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites'],$_POST['maxTimeAllowed']);
+						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], Security::remove_XSS($_POST['title']), $_POST['description'], $_POST['prerequisites'],$_POST['maxTimeAllowed']);
 					}
 					
 					//display 					
@@ -254,7 +254,7 @@ switch($action)
 							
 				//Kevin Van Den Haute: changed $_REQUEST['learnpath_description'] by '' because it's not used
 				//old->$new_lp_id = learnpath::add_lp(api_get_course_id(), $_REQUEST['learnpath_name'], $_REQUEST['learnpath_description'], 'dokeos', 'manual', '');
-				$new_lp_id = learnpath::add_lp(api_get_course_id(), $_REQUEST['learnpath_name'], '', 'dokeos', 'manual', '');
+				$new_lp_id = learnpath::add_lp(api_get_course_id(), Security::remove_XSS($_REQUEST['learnpath_name']), '', 'dokeos', 'manual', '');
 				//learnpath::toggle_visibility($new_lp_id,'v');
 				//Kevin Van Den Haute: only go further if learnpath::add_lp has returned an id
 				if(is_numeric($new_lp_id))
@@ -359,7 +359,7 @@ switch($action)
 				//todo mp3 edit
 				$audio = array();
 				if (isset($_FILES['mp3'])) $audio = $_FILES['mp3'];
-				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'],$audio, $_POST['maxTimeAllowed']);
+				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], Security::remove_XSS($_POST['title']), $_POST['description'], $_POST['prerequisites'],$audio, $_POST['maxTimeAllowed']);
 				
 				if(isset($_POST['content_lp'])) {
 					$_SESSION['oLP']->edit_document($_course);
@@ -417,7 +417,7 @@ switch($action)
 			
 			if(isset($_POST['submit_button']))
 			{
-				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description']);
+				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], Security::remove_XSS($_POST['title']), $_POST['description']);
 				
 				$is_success = true;
 			}
@@ -561,8 +561,9 @@ switch($action)
 		if(!$lp_found){ error_log('New LP - No learnpath given for edit',0); require('lp_list.php'); }
 		else{
 			$_SESSION['refresh'] = 1;
-			$_SESSION['oLP']->set_name($_REQUEST['lp_name']);
-			$author=	$_REQUEST['lp_author'];					
+			$lp_name=Security::remove_XSS($_REQUEST['lp_name']);
+			$_SESSION['oLP']->set_name($lp_name);
+			$author=$_REQUEST['lp_author'];					
 			//fixing the author name (no body or html tags)		
 		$auth_init = stripos($author,'<p>');
 		if ( $auth_init === false ) {

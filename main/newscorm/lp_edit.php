@@ -40,7 +40,7 @@ $form = new FormValidator('form1', 'post', 'lp_controller.php');
 
 //Title
 $form -> addElement('text', 'lp_name', ucfirst(get_lang('_title')),array('size'=>43));
-
+$form-> applyFilter('lp_name', 'html_filter');
 //Encoding
 $encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));
 $encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP');
@@ -96,7 +96,7 @@ if (api_get_setting('allow_course_theme') == 'true')
 //$form->add_html_editor('lp_author', get_lang('Author')); 
 
 $form->addElement('html_editor','lp_author',get_lang('Author'),array('size'=>80) ); 
-
+$form->applyFilter('lp_author', 'html_filter');
 // LP image	
 $form->add_progress_bar();
 if( strlen($_SESSION['oLP']->get_preview_image() ) > 0)
@@ -132,7 +132,6 @@ if (api_get_setting('search_enabled') === 'true')
 	$specific_fields = get_specific_field_list();
 	foreach ($specific_fields as $specific_field) {
 		$form -> addElement ('text', $specific_field['code'], $specific_field['name']);
-
 		$filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $_SESSION['oLP']->lp_id, 'tool_id' => '\''. TOOL_LEARNPATH .'\'');
 		$values = get_specific_field_values_list($filter, array('value'));
 		if ( !empty($values) ) {

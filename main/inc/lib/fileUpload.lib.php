@@ -1172,11 +1172,11 @@ function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL, $
 	$sql="INSERT INTO $table_document
 	(`path`,`filetype`,`size`,`title`, `comment`, readonly)
 	VALUES ('$path','$filetype','$filesize','".
-	Database::escape_string($title)."', '$comment',$readonly)";
+	Database::escape_string(htmlspecialchars($title),ENT_QUOTES)."', '$comment',$readonly)";
 	if(api_sql_query($sql,__FILE__,__LINE__))
 	{
 		//display_message("Added to database (id ".mysql_insert_id().")!");
-		return mysql_insert_id();
+		return Database::insert_id();
 	}
 	else
 	{

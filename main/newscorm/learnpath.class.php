@@ -371,9 +371,9 @@ class learnpath {
     	$max_time_allowed = $this->escape_string(htmlentities($max_time_allowed));
         if (empty($max_time_allowed)) { $max_time_allowed = 0; }
     	
+    	$title=htmlspecialchars($title,ENT_QUOTES);
     	$title = $this->escape_string(mb_convert_encoding($title,$this->encoding,$charset));
     	$description = $this->escape_string(mb_convert_encoding($description,$this->encoding,$charset)); 
-    	
     	$sql_count = "
     		SELECT COUNT(id) AS num
     		FROM " . $tbl_lp_item . "
@@ -997,7 +997,7 @@ class learnpath {
     		$sql_update = "
     			UPDATE " . $tbl_lp_item . " 
     			SET 
-    				title = '" . $this->escape_string(htmlentities($title)) . "',
+    				title = '" . $this->escape_string(htmlspecialchars($title,ENT_QUOTES)) . "',
 					prerequisite = '".$prerequisites."',
     				description = '" . $this->escape_string(htmlentities($description)) . "'
                     ". $audio_update_sql . ",
@@ -1113,7 +1113,7 @@ class learnpath {
     		$sql_update = "
 	    		UPDATE " . $tbl_lp_item . "
 	    		SET
-	    			title = '" . $this->escape_string(htmlentities($title)) . "',
+	    			title = '" . $this->escape_string(htmlspecialchars($title,ENT_QUOTES)) . "',
 	    			description = '" . $this->escape_string(htmlentities($description)) . "',
 	    			parent_item_id = " . $parent . ",
 	    			previous_item_id = " . $previous . ",
@@ -4783,7 +4783,7 @@ class learnpath {
 							$ct .= ", comment='" . $new_comment . "'";
 						
 						if($new_title)
-							$ct .= ", title='" . $new_title . ".html	'";
+							$ct .= ", title='" . Database::escape_string(htmlspecialchars($new_title,ENT_QUOTES)) . ".html	'";
 						
 						$sql_update = "
 							UPDATE " . $tbl_doc . "
@@ -6270,6 +6270,7 @@ class learnpath {
 			if($action != 'move')
 			{
 				$form->addElement('text','title', get_lang('Title'),'id="idTitle" class="learnpath_chapter_form" size="40%"');
+				$form->applyFilter('title', 'html_filter');
 				//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"');
 			}
 			else
@@ -6525,6 +6526,7 @@ class learnpath {
 			if($action != 'move')
 			{
 				$form->addElement('text','title', get_lang('Title'),'id="idTitle" class="learnpath_item_form" size=44%');
+				$form->applyFilter('title', 'html_filter');
 			}			
 						
 			//$arrHide = array($id);
@@ -7359,14 +7361,14 @@ class learnpath {
 		//commented ":" for message in step
 		//$return .= $lang.': '; 
 				
-		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '&path_item='.$row['path'].'" title="'.get_lang('Edit').'"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="'.get_lang("Edit").'" /> '.get_lang("Edit").'</a>';
-		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="'.get_lang("Move").'" /> '.get_lang("Move").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '&path_item='.$row['path'].'" title="'.get_lang('Edit').'"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="'.get_lang("Edit").'" /> '.get_lang("Edit").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="'.get_lang("Move").'" /> '.get_lang("Move").'</a>';
 		// commented for now as prerequisites cannot be added to chapters
 		if($item_type != 'dokeos_chapter' && $item_type != 'chapter')
 		{
-			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang('Prerequisites').'"><img align="absbottom" alt="'.get_lang('Prerequisites').'" src="../img/right.gif" title="'.get_lang('Prerequisites').'" /> '.get_lang('Prerequisites').'</a>';
+			$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang('Prerequisites').'"><img align="absbottom" alt="'.get_lang('Prerequisites').'" src="../img/right.gif" title="'.get_lang('Prerequisites').'" /> '.get_lang('Prerequisites').'</a>';
 		}
-		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' .addslashes($s_title). '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="'.get_lang("Delete").'" /> '.get_lang("Delete").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' .addslashes($s_title). '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="'.get_lang("Delete").'" /> '.get_lang("Delete").'</a>';
 		
 		//$return .= '<br><br><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang("NoDescription").'' : stripslashes(nl2br($s_description))) . '</p>';
 		
@@ -7880,7 +7882,7 @@ class learnpath {
 			$return .= '<div class="lp_resource_element">';
 			//display quizhotpotatoes
 			$return .= '<img alt="" src="../img/jqz.gif" style="margin-right:5px;" title="" />';
-			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_hot['title'] . '</a>';
+			$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_hot['title'] . '</a>';
 			//$return .= $row_quiz['title'];
 			$return .= '</div>';
 		}
@@ -7888,7 +7890,7 @@ class learnpath {
     	while($row_quiz = Database::fetch_array($res_quiz)) {
 			$return .= '<div class="lp_resource_element">';
 			$return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
-			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_quiz['title'] . '</a>';
+			$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_quiz['title'] . '</a>';
 			//$return .= $row_quiz['title'];
 			$return .= '</div>'; 
 		}
@@ -7931,7 +7933,7 @@ class learnpath {
 				$return .= '<div class="lp_resource_element">';
 				
 					$return .= '<img alt="" src="../img/file_html_small.gif" style="margin-right:5px;" title="" />';
-					$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
+					$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
 				
 				$return .= '</div>';
 			}
@@ -7967,7 +7969,7 @@ class learnpath {
 		$return .= '<div class="lp_resource_elements" id="resStudent">';
 		$return .= '<div class="lp_resource_element">';
 		$return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
-		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
 		$return .= '</div>';
 		$return .= '</div>';
 		
@@ -8012,12 +8014,12 @@ class learnpath {
 						';
 			$return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a style="cursor:hand" onclick="toggle_forum('.$forum['forum_id'].')" style="vertical-align:middle"><img src="'.api_get_path(WEB_IMG_PATH).'add.gif" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" /></a>
-						<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . $forum['forum_title'] . '</a><ul style="display:none" id="forum_'.$forum['forum_id'].'_content">';
+						<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . $forum['forum_title'] . '</a><ul style="display:none" id="forum_'.$forum['forum_id'].'_content">';
 			$a_threads = get_threads($forum['forum_id']);
 			if(is_array($a_threads)){
 				foreach($a_threads as $thread)
 				{
-					$return .=  '<li><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . $thread['thread_title'] . '</a></li>';
+					$return .=  '<li><a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . $thread['thread_title'] . '</a></li>';
 				}
 			}
 			$return .= '</ul></div>';

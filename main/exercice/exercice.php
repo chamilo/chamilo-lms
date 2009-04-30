@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20206 2009-04-29 23:46:33Z yannoo $
+// $Id: exercice.php 20236 2009-04-30 21:01:58Z iflorespaz $
 
 /*
 ==============================================================================
@@ -198,6 +198,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 					  WHERE question_id = '".$my_questionid."'
 					  AND exe_id='".$id."'";
 			api_sql_query($query, __FILE__, __LINE__);
+			
 
 			$qry = 'SELECT sum(marks) as tot
 					FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.intval($id).'
@@ -208,9 +209,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 			//updating also the total weight 
 			$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".Database::escape_string($tot)."', exe_weighting = '".Database::escape_string($total_weighting)."'
 						 WHERE exe_Id='".Database::escape_string($id)."'";
-			
 			api_sql_query($totquery, __FILE__, __LINE__);
-
 			$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
 					'(exe_id,
 					question_id,
@@ -221,6 +220,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 					VALUES
 					('."'$id','".$my_questionid."','$my_marks','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".',"'.$my_comments.'")';
 			api_sql_query($recording_changes, __FILE__, __LINE__);	
+	
 			
 	}
 	$post_content_id=array();
@@ -293,7 +293,17 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 
 	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '" . Database :: escape_string($tot) . "' WHERE exe_Id='" . Database :: escape_string($id) . "'";
 
+	//search items 
+	$sql_lp='SELECT li.id as lp_item_id,li.lp_id,li.item_type,li.path,liv.id AS lp_view_id,liv.user_id,max(liv.view_count) AS view_count FROM '.$TBL_LP_ITEM.' li 
+	INNER JOIN '.$TBL_LP_VIEW.' liv ON li.lp_id=liv.lp_id WHERE li.path="'.Database::escape_string(Security::remove_XSS($_POST['my_exe_exo_id'])).'" AND li.item_type="quiz" AND user_id="'.Database::escape_string(Security::remove_XSS($_POST['student_id'])).'" ';
+	$rs_lp=Database::query($sql_lp,__FILE__,__LINE__);
+	$row_lp=Database::fetch_array($rs_lp);
+
+	//update score in learnig path
+	$sql_lp_view='UPDATE '.$TBL_LP_ITEM_VIEW.' liv SET score ="'.$tot.'" WHERE liv.lp_item_id="'.(int)$row_lp['lp_item_id'].'" AND liv.lp_view_id="'.(int)$row_lp['lp_view_id'].'" AND liv.view_count="'.(int)$row_lp['view_count'].'" ;';
+	$rs_lp_view=Database::query($sql_lp_view);
 	api_sql_query($totquery, __FILE__, __LINE__);
+	
 	$subject = get_lang('ExamSheetVCC');
 	$htmlmessage = '<html>' .
 	'<head>' .
@@ -365,7 +375,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 				$student_id = Database :: escape_string($student_id);
 				$totalWeighting = Database :: escape_string($totalWeighting);
 				// get max view_count from lp_item_view    			
-				$sql = "SELECT MAX(view_count) FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
+				/*$sql = "SELECT MAX(view_count) FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
 				    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "')";
 				$res_max_view_count = api_sql_query($sql, __FILE__, __LINE__);
 				$row_max_view_count = Database :: fetch_row($res_max_view_count);
@@ -379,7 +389,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 				// update score and total_time from last attempt when you qualify the exercise in Learning path detail 			
 				$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . (float) $score . "',total_time = '" . (int) $total_time . "' WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
 				    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "') AND view_count = '$max_view_count'";
-				api_sql_query($sql_update_score, __FILE__, __LINE__);
+				api_sql_query($sql_update_score, __FILE__, __LINE__);*/
 
 				// update max_score from a exercise in lp
 				$sql_update_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '" . (float) $totalWeighting . "'  WHERE id = '" . (int) $lp_item_view_id . "'";

@@ -644,7 +644,8 @@ foreach ($list as $my_item_id) {
 							$my_maxscore = $row_attempts['exe_weighting'];
 							$my_exe_id	= $row_attempts['exe_id'];
 							$my_orig_lp = $row_attempts['orig_lp_id'];
-							$my_orig_lp_item = $row_attempts['orig_lp_item_id'];												
+							$my_orig_lp_item = $row_attempts['orig_lp_item_id'];
+							$my_exo_exe_id=$row_attempts['exe_exo_id'];												
 							$mktime_start_date = convert_mysql_date($row_attempts['start_date']);
 							$mktime_exe_date = convert_mysql_date($row_attempts['exe_date']);
 							$mytime = ((int)$mktime_exe_date-(int)$mktime_start_date);					 
@@ -681,7 +682,7 @@ foreach ($list as $my_item_id) {
 								if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
 									$output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
 								} else {
-									$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '&total_time='.$mytime.'" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';	
+									$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $_GET['student_id'] . '&total_time='.$mytime.'&my_exe_exo_id='.$my_exo_exe_id.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';	
 								}															
 							}		 				 	        
 						 	$output .= '</tr>';

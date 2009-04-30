@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20231 2009-04-30 18:08:12Z cvargas1 $
+* 	@version $Id: exercise_show.php 20236 2009-04-30 21:01:58Z iflorespaz $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -1067,6 +1067,7 @@ if($is_allowedToEdit) {
 		<input type = "hidden" name="total_score" value="<?php echo $totalScore; ?>">
 		<input type = "hidden" name="total_time" value="<?php echo Security::remove_XSS($_GET['total_time']);?>">
 		<input type = "hidden" name="totalWeighting" value="<?php echo $totalWeighting; ?>">
+		<input type = "hidden" name="my_exe_exo_id" value="<?php echo Security::remove_XSS($_GET['my_exe_exo_id']); ?>">		
 	<?php		 
 		}
 	} else {

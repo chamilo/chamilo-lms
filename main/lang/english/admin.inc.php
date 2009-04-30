@@ -976,4 +976,5 @@ $silver_line = "Silver line";
 $sober_brown = "Sober brown";
 $SteelGrey = "Steel grey";
 $TastyOlive = "Tasty olive";
+$AddNews  = "Add news ";
 ?>

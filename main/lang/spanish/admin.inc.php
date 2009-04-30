@@ -976,4 +976,5 @@ $silver_line = "Línea plateada";
 $sober_brown = "Marrón sobrio";
 $SteelGrey = "Gris acero";
 $TastyOlive = "Oliva sabroso";
+$AddNews  = "Agregar noticias";
 ?>

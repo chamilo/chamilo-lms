@@ -69,4 +69,5 @@ $FileVisible = "Il file è stato reso visibile";
 $ButtonCreateAssignment = "Crea";
 $AssignmentName = "Titolo dell\'elaborato";
 $CreateAssignment = "Crea l\'elaborato";
+$FolderEdited = "Cartella modificata";
 ?>

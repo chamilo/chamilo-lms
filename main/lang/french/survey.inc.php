@@ -198,4 +198,5 @@ $RemindUnanswered = "Envoyer un rappel uniquement aux utilisateurs qui n\'ont pa
 $ModifySurvey = "Modifier l\'enquête";
 $CreateQuestionSurvey = "Enregistrer la question";
 $ModifyQuestionSurvey = "Modifier la question";
+$BackToSurvey = "Retour à l\'enquête";
 ?>

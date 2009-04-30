@@ -69,4 +69,5 @@ $FileVisible = "El archivo ahora es visible";
 $ButtonCreateAssignment = "Crear";
 $AssignmentName = "Nombre de la tarea";
 $CreateAssignment = "Crear tarea";
+$FolderEdited = "Carpeta modificada";
 ?>

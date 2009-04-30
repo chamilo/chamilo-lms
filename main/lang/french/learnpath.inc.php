@@ -228,4 +228,7 @@ $ObjectiveStatus = "Statut";
 $ObjectiveRawScore = "Score";
 $ObjectiveMaxScore = "Score max";
 $ObjectiveMinScore = "Score min";
+$LPName = "Nom du cours";
+$AuthoringOptions = "Options d\'authoring";
+$CourseSettings = "Paramètres du cours";
 ?>

@@ -55,4 +55,5 @@ $AnnounceSentByEmail = "Annonce envoyée par e-mail";
 $AnnounceSentToUserSelection = "Annonce envoyée aux utilisateurs sélectionnés";
 $SendAnnouncement = "Envoyer annonce";
 $ModifyAnnouncement = "Modifier annonce";
+$ButtonPublishAnnouncement = "Publier annonce";
 ?>

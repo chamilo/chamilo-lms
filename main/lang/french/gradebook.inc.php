@@ -137,4 +137,5 @@ $GradebookPreviousWeight = "Poids de la ressource précédemment";
 $AddAssessment = "Enregistrer l\'exercice";
 $FolderView = "Accueil des travaux";
 $GradebookSkillsRanking = "Cotation des compétences";
+$SaveScoringRules = "Sauver les règles de ponctuation";
 ?>

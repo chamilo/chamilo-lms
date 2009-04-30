@@ -229,5 +229,6 @@ $ObjectiveRawScore = "Puntaje crudo del objetivo";
 $ObjectiveMaxScore = "Puntaje máximo del objetivo";
 $ObjectiveMinScore = "Puntaje mínimo del objetivo";
 $LPName = "Nombre de la lección";
+$AuthoringOptions = "Autorización de opciones";
 $CourseSettings = "Configuración de la lección";
 ?>

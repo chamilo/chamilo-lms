@@ -66,4 +66,7 @@ $AllFilesInvisible = "Tous les travaux sont à présent visibles";
 $FileInvisible = "Le fichier est à présent invisible";
 $AllFilesVisible = "Tous les travaux sont à présent visibles";
 $FileVisible = "Le travail est à présent visible";
+$ButtonCreateAssignment = "Créer";
+$AssignmentName = "Nom de la tâche";
+$CreateAssignment = "Créer tâche";
 ?>

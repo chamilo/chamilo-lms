@@ -137,4 +137,5 @@ $GradebookPreviousWeight = "Peso precedentemente assegnato";
 $AddAssessment = "Salva la valutazione";
 $FolderView = "Registro";
 $GradebookSkillsRanking = "Valutazione competenze";
+$SaveScoringRules = "Salva le regole sul punteggio";
 ?>

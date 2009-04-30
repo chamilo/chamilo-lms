@@ -55,5 +55,5 @@ $AnnounceSentByEmail = "Announcement sent by email";
 $AnnounceSentToUserSelection = "Announcement sent to the selected users";
 $SendAnnouncement = "Send announcement";
 $ModifyAnnouncement = "Edit announcement";
-$ButtonPublishAnnouncement = "Pubish announcement";
+$ButtonPublishAnnouncement = "Send announcement";
 ?>

@@ -69,4 +69,5 @@ $FileVisible = "The file is now visible";
 $ButtonCreateAssignment = "Create";
 $AssignmentName = "Assignment name";
 $CreateAssignment = "Create assignment";
+$FolderEdited = "Folder edited";
 ?>

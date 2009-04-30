@@ -95,7 +95,7 @@ if (empty($choice_value) )
 		//alert(choice_js);						
 								
 	";		
-	echo 'window.location.href = "exercise_submit_modal.php?hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'";</script>';
+	echo 'window.location.href = "exercise_submit_modal.php?hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'gradebook='.$gradebook.'";</script>';
 }
 
 $choice=array();

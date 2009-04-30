@@ -258,7 +258,7 @@ class StudentPublicationLink extends AbstractLink
 			.'main/work/work.php?cidReq='.$this->get_course_code().'&gradebook=view&curdirpath='.substr($this->exercise_data['url'], 1);
 		if (!api_is_allowed_to_create_course()
 			&& $this->calc_score(api_get_user_id()) == null) {
-		$url .= '&curdirpath=/'.$this->get_ref_id();				
+		//$url .= '&curdirpath=/'.$this->get_ref_id();				
 			}
 		return $url;
 	}

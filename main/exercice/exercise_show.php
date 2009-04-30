@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20100 2009-04-24 23:55:22Z iflorespaz $
+* 	@version $Id: exercise_show.php 20231 2009-04-30 18:08:12Z cvargas1 $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -120,7 +120,7 @@ if($origin=='user_course') {
 	$interbreadcrumb[] = array ("url" => "../auth/my_progress.php?id_session".Security::remove_XSS($_GET['id_session'])."&course=".$_cid, "name" => get_lang('MyProgress'));
 	unset($_cid);
 } else {
-	$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+	$interbreadcrumb[]=array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
 	$this_section=SECTION_COURSES;
 }
 

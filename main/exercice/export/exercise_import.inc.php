@@ -279,7 +279,7 @@ function import_exercise($file)
             array_push ($backlog_message, 'QUESTION DATA INVALID !!!');
         }
     }
-    $link = "<center><a href=\"../exercise_submit.php?exId=".$exercise_id."\">".get_lang('See the exercise')."</a></center>";
+    $link = "<center><a href=\"../exercise_submit.php?gradebook=$gradebook&exId=".$exercise_id."\">".get_lang('See the exercise')."</a></center>";
     array_push ($backlog_message, $link);
 
     //delete the temp dir where the exercise was unzipped

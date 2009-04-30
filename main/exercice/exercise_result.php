@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 20089 2009-04-24 21:12:54Z cvargas1 $
+* 	@version $Id: exercise_result.php 20231 2009-04-30 18:08:12Z cvargas1 $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -172,7 +172,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 $nameTools=get_lang('Exercice');
 
-$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[]=array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
 $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
 					<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
 					<script language=\"JavaScript\" type=\"text/javascript\">

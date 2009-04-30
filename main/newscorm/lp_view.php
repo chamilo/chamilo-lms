@@ -223,40 +223,35 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 <input type="hidden" id="old_item" name ="old_item" value="0"/>
 <input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
 	
-<div>
-<div style="float:left;width:20%">
-<!--table>
-<tr><td valign="top"-->
-<!-- header -->
-<div id="header">
-        <div id="learningPathHeader" style="font-size:14px;  ">
-            <table>
-                <tr>
-                    <td>
-                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
-                    </td>
-                    <td>
-                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><?php echo get_lang('CourseHomepageLink'); ?></a>
-                    </td>
-                </tr>
-            </table>
-        </div>
-</div>
-<!-- end header -->    
+<div id="learningPathMain"  style="width:100%;height:100%;border : 0pt solid black" >
 
-<!-- Left Zone -->    
-<div id="learningPathLeftZone" style="width:100%;">
-  
-	<!-- Image preview Layout -->
-	<div id="author_image" name="author_image" class="lp_author_image">	
+	<div id="learningPathLeftZone" style="float:left;width:280px;border : 0pt solid blue;height:100%">
+
+		<!-- header -->
+		<div id="header">
+		        <div id="learningPathHeader" style="font-size:14px;">
+		            <table>
+		                <tr>
+		                    <td>
+		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
+		                    </td>
+		                    <td>
+		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><?php echo get_lang('CourseHomepageLink'); ?></a>
+		                    </td>
+		                </tr>
+		            </table>
+		        </div>
+		</div>
+		<!-- end header --> 
+
+<!-- Image preview Layout -->
+	<div id="author_image" name="author_image" class="lp_author_image" style="border : 0pt solid blue;height:23%; width:100%;">	
 		<?php $image = '../img/lp_author_background.gif'; ?>
-				 
-		<div id="image_preview;">
-				
-			<div style="height:140px; background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;">
+
+			<div id="preview_image" style="padding:5px;background: url('../img/lp_author_background.gif') no-repeat">
 						       	   		       	
-		       	<div style="width:120px; float:left;">
-		       		<span style="float:right; padding-top:16px; padding-right:10px;">
+		       	<div style="width:100; float:left;border : 0pt solid blue; height:100">
+		       		<span style="padding:2px;">
 			        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
 			        <img width="120" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
 			        <?php 
@@ -267,7 +262,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 					</span>
 		       	</div>
 		       		       		       
-				<div id="nav_id" name="nav_name" class="lp_nav" style="float:left; width:150px;">
+				<div id="nav_id" name="nav_name" class="lp_nav" style="margin-left:105;border : 0pt solid brown;height:150">
 			        <?php										
 						$display_mode = $_SESSION['oLP']->mode;
 						$scorm_css_header = true;
@@ -299,58 +294,48 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 					?>
 					
 					<div id="lp_navigation_elem" class="lp_navigation_elem">
-						<div style="float:left; padding-top:22px;padding-left:10px;"><?php echo $navigation_bar; ?></div>
-						<div style="float:left;  padding-top:22px"><?php echo $progress_bar; ?></div>
-					</div>
-									
-				</div>						  
-			</div>	   
+						<div style="padding-top:20px;padding-bottom:50px;border : 0pt solid red" ><?php echo $navigation_bar; ?></div> 
+						<div style="border : 0pt solid red"><?php echo $progress_bar; ?></div>
+					</div>									
+				</div>		  
 	 
-			<div id="author_name" style="margin:0;padding:0;text-align:center">
-			<?php echo $_SESSION['oLP']->get_author() ?>
-			</div>				    		
-		</div>
-
+				<div id="author_name" style="margin:0;padding:0;text-align:center;border:0pt solid brown;height:29px;">
+				<?php echo $_SESSION['oLP']->get_author() ?>
+				</div>					
+		</div>		    					
 	</div>   				   			
 	<!-- end image preview Layout -->
-	
+
 	<!-- media player layaout -->		
-	<?php $style_media = (($show_audioplayer)?' style= "margin:15px 15px;padding:0;font-size:35px;height:20px"':'style="height:1px"'); ?>
-	<div id="media" <?php echo $style_media ?> >
+	<?php $style_media = (($show_audioplayer)?' style= "margin:5px;font-size:32pt;height:20px;border:0pt solid brown"':'style="height:1px"'); ?>
+	<div id="media"  <?php echo $style_media ?>>
 		<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
 	</div>
-	<!-- end media player layaout -->	
-
+	<!-- end media player layaout -->
+	
 	<!-- toc layout -->     
-	<div id="toc_id" name="toc_name"  style="padding:0;margin:0;position:relative;top:10px;left:0;">
-		<div id="learningPathToc" style="width:100%;overflow-y:auto;overflow-x:hidden;font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
+	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;border: 0pt solid black;height:60%;width:100%">
+		<div id="learningPathToc" style="height:50%,overflow-y:auto;overflow-x:hidden;font-size:9pt;margin:0;border: 0pt solid red"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
 	</div>
 	<!-- end toc layout -->
 
 	<!-- log message layout -->
-	<div id="lp_log_name" name="lp_log_name" class="lp_log" style="position:relative;top:10px;left:0;height:100px;overflow:auto">
+	<div id="lp_log_name" name="lp_log_name" class="lp_log" style="overflow:auto;border:0pt solid red;border: 0pt solid blue">
 		<div id="log_content"></div>
 		<div style="color: white;" onClick="cleanlog();">.</div>
 	</div>
 	<!-- end log message layout -->
-
-        			
-</div>
+	</div>
 <!-- end left Zone --> 					
 
-</div>
-<div style="margin-left:21%">     				
-<!--/td><td align="left" width="100%" valign="top"-->
-
 <!-- right Zone -->    				
-<div id="learningPathRightZone">
-<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="height:3000px;width: 100%"></iframe>
+	<div id="learningPathRightZone" style="margin-left:282px;border : 0pt solid blue;height:100%">
+		<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
+	</div>
+<!-- end right Zone -->
+
 </div>
-<!-- end right Zone -->	
-				
-<!--/td></tr>
-</table-->
-</div></div>   
+   
 	<script language="JavaScript" type="text/javascript">
 	// Need to be called after the <head> to be sure window.oxajax is defined
   	var dokeos_xajax_handler = window.oxajax;
@@ -376,10 +361,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 		}
 		document.getElementById('learningPathToc').style.height = newLeftZoneHeight + 'px';
 		document.getElementById('learningPathRightZone').style.height = newRightZoneHeight + 'px';
-				
-		if(document.getElementById('content_id')) {		
 		document.getElementById('content_id').style.height = newRightZoneHeight + 'px';
-		} 		
 		if (document.body.clientHeight > winHeight) {
 			document.body.style.overflow = 'auto';
 		} else {
@@ -388,6 +370,16 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	};
 
 	window.onload = function() {
+	
+		screen_height = screen.height;
+		screen_width = screen.height;
+	
+		document.getElementById('learningPathLeftZone').style.height = "100%"; 
+		document.getElementById('learningPathToc').style.height = "60%";
+		document.getElementById('learningPathToc').style.width = "100%";
+		document.getElementById('learningPathRightZone').style.height = "100%" 
+		document.getElementById('content_id').style.height = "100%" ; 
+			
 		initialLeftZoneHeight = document.getElementById('learningPathToc').offsetHeight;
 		initialRightZoneHeight = document.getElementById('learningPathRightZone').offsetHeight;
 		docHeight = document.body.clientHeight;
@@ -423,43 +415,36 @@ else
 
 	<input type="hidden" id="old_item" name ="old_item" value="0"/>
 	<input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
-	
-<div>
-<div style="float:left;width:280px">
-	
-<!--table>
-<tr><td valign="top"-->
 
-<!-- header -->
-<div id="header">
-        <div id="learningPathHeader" style="font-size:14px;">
-            <table>
-                <tr>
-                    <td>
-                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
-                    </td>
-                    <td>
-                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><?php echo get_lang('CourseHomepageLink'); ?></a>
-                    </td>
-                </tr>
-            </table>
-        </div>
-</div>
-<!-- end header -->    
+<div id="learningPathMain"  style="width:100%;height:100%;border : 0pt solid black" >
 
-<!-- Left Zone -->    
-<div id="learningPathLeftZone" style="width:280px;">
-  
-	<!-- Image preview Layout -->
-	<div id="author_image" name="author_image" class="lp_author_image">	
+	<div id="learningPathLeftZone" style="float:left;width:280px;border : 0pt solid blue;height:100%">
+
+		<!-- header -->
+		<div id="header">
+		        <div id="learningPathHeader" style="font-size:14px;">
+		            <table>
+		                <tr>
+		                    <td>
+		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
+		                    </td>
+		                    <td>
+		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><?php echo get_lang('CourseHomepageLink'); ?></a>
+		                    </td>
+		                </tr>
+		            </table>
+		        </div>
+		</div>
+		<!-- end header --> 
+
+<!-- Image preview Layout -->
+	<div id="author_image" name="author_image" class="lp_author_image" style="border : 0pt solid blue;height:23%; width:100%;">	
 		<?php $image = '../img/lp_author_background.gif'; ?>
-				 
-		<div id="image_preview;">
-				
-			<div style="height:140px; background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;">
+
+			<div id="preview_image" style="padding:5px;background: url('../img/lp_author_background.gif') no-repeat">
 						       	   		       	
-		       	<div style="width:120px; float:left;">
-		       		<span style="float:right; padding-top:16px; padding-right:10px;">
+		       	<div style="width:100; float:left;border : 0pt solid blue; height:100">
+		       		<span style="padding:2px;">
 			        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
 			        <img width="120" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
 			        <?php 
@@ -470,7 +455,7 @@ else
 					</span>
 		       	</div>
 		       		       		       
-				<div id="nav_id" name="nav_name" class="lp_nav" style="float:left; width:150px;">
+				<div id="nav_id" name="nav_name" class="lp_nav" style="margin-left:105;border : 0pt solid brown;height:150">
 			        <?php										
 						$display_mode = $_SESSION['oLP']->mode;
 						$scorm_css_header = true;
@@ -502,59 +487,48 @@ else
 					?>
 					
 					<div id="lp_navigation_elem" class="lp_navigation_elem">
-						<div style="float:left; padding-top:22px;padding-left:10px;"><?php echo $navigation_bar; ?></div>
-						<div style="float:left;  padding-top:22px"><?php echo $progress_bar; ?></div>
-					</div>
-									
-				</div>						  
-			</div>	   
+						<div style="padding-top:20px;padding-bottom:50px;border : 0pt solid red" ><?php echo $navigation_bar; ?></div> 
+						<div style="border : 0pt solid red"><?php echo $progress_bar; ?></div>
+					</div>									
+				</div>		  
 	 
-			<div id="author_name" style="margin:0;padding:0;text-align:center">
-			<?php echo $_SESSION['oLP']->get_author() ?>
-			</div>				    		
-		</div>
-
+				<div id="author_name" style="margin:0;padding:0;text-align:center;border:0pt solid brown;height:29px;">
+				<?php echo $_SESSION['oLP']->get_author() ?>
+				</div>					
+		</div>		    					
 	</div>   				   			
 	<!-- end image preview Layout -->
-	
+
 	<!-- media player layaout -->		
-	<?php $style_media = (($show_audioplayer)?' style= "margin:15px 15px;padding:0;font-size:35px;height:20px"':'style="height:1px"'); ?>
-	<div id="media" <?php echo $style_media ?> >
+	<?php $style_media = (($show_audioplayer)?' style= "margin:5px;font-size:32pt;height:20px;border:0pt solid brown"':'style="height:1px"'); ?>
+	<div id="media"  <?php echo $style_media ?>>
 		<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
 	</div>
-	<!-- end media player layaout -->	
-
+	<!-- end media player layaout -->
+	
 	<!-- toc layout -->     
-	<div id="toc_id" name="toc_name"  style="padding:0;margin:0;position:relative;top:10px;left:0;">
-		<div id="learningPathToc" style="width:280px;overflow-y:auto;overflow-x:hidden;font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
+	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;border: 0pt solid black;height:60%;width:100%">
+		<div id="learningPathToc" style="height:50%,overflow-y:auto;overflow-x:hidden;font-size:9pt;margin:0;border: 0pt solid red"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
 	</div>
 	<!-- end toc layout -->
 
 	<!-- log message layout -->
-	<div id="lp_log_name" name="lp_log_name" class="lp_log" style="position:relative;top:10px;left:0;height:100px;overflow:auto">
+	<div id="lp_log_name" name="lp_log_name" class="lp_log" style="overflow:auto;border:0pt solid red;border: 0pt solid blue">
 		<div id="log_content"></div>
 		<div style="color: white;" onClick="cleanlog();">.</div>
 	</div>
 	<!-- end log message layout -->
-
-        			
-</div>
+	</div>
 <!-- end left Zone --> 					
 
-</div>
-<div style="margin-left:282px">
-  				
-<!--/td><td align="left" width="100%" valign="top"-->
-
 <!-- right Zone -->    				
-<div id="learningPathRightZone">
-<iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0"  style="height:3000px;width: 100%"></iframe>
-</div>
+	<div id="learningPathRightZone" style="margin-left:282px;border : 0pt solid blue;height:100%">
+		<iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
+	</div>
 <!-- end right Zone -->
 
-</div> </div>
-<!--/td></tr>
-</table-->
+</div>
+
     <script language="JavaScript" type="text/javascript">
 	// Need to be called after the <head> to be sure window.oxajax is defined
   	var dokeos_xajax_handler = window.oxajax;
@@ -589,6 +563,16 @@ else
 	};
 
 	window.onload = function() {
+	
+		screen_height = screen.height;
+		screen_width = screen.height;
+	
+		document.getElementById('learningPathLeftZone').style.height = "100%"; 
+		document.getElementById('learningPathToc').style.height = "60%";
+		document.getElementById('learningPathToc').style.width = "100%";
+		document.getElementById('learningPathRightZone').style.height = "100%" 
+		document.getElementById('content_id').style.height = "100%" ; 
+			
 		initialLeftZoneHeight = document.getElementById('learningPathToc').offsetHeight;
 		initialRightZoneHeight = document.getElementById('learningPathRightZone').offsetHeight;
 		docHeight = document.body.clientHeight;

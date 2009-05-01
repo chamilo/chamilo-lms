@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20227 2009-04-30 16:40:35Z cvargas1 $
+<?php //$Id: work.lib.php 20250 2009-05-01 14:52:02Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20227 2009-04-30 16:40:35Z cvargas1 $
+* 	@version $Id: work.lib.php 20250 2009-05-01 14:52:02Z iflorespaz $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -37,7 +37,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	}
 	if (! $always_show_tool_options && api_is_allowed_to_edit()) {
 		// Create dir		
-		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.$_GET['toolgroup'].'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateDir').'" title ="'.get_lang('CreateDir').'" /> '.get_lang('CreateAssignment').' </a>';
+		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateDir').'" title ="'.get_lang('CreateDir').'" /> '.get_lang('CreateAssignment').' </a>';
 		// Options
 		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."&amp;gradebook=".$gradebook."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>";							
 	}
@@ -61,7 +61,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 	
 		if ($sql_result) {
-			$columnStatus = mysql_fetch_array($sql_result);
+			$columnStatus = Database::fetch_array($sql_result);
 	
 			if ($columnStatus['Default'] == 1) {
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;make_invisible=all\">".
@@ -405,17 +405,18 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			if(isset($clean_edit_dir) && $clean_edit_dir==$mydir) {	
 				if(!empty($row['has_properties'])) {
 					$sql = api_sql_query('SELECT * FROM '.$work_assigment.' WHERE id = '."'".$row['has_properties']."'".' LIMIT 1',__FILE__,__LINE__);
-					$homework = mysql_fetch_array($sql);					
+					$homework = Database::fetch_array($sql);					
 				}
 			
 				$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir);
 
 				$group_name[] = FormValidator :: createElement('text','dir_name');
+				
 				//$group_name[] = FormValidator :: createElement('submit','submit_edit_dir',get_lang('Ok'));
 				
 				$form_folder -> addGroup($group_name,'my_group',get_lang('Title'));
 				$form_folder -> addGroupRule('my_group',get_lang('ThisFieldIsRequired'),'required');				
-				$defaults = array('my_group[dir_name]'=>$dir,'description'=>$row['description']);				
+				$defaults = array('my_group[dir_name]'=>html_entity_decode($dir),'description'=>html_entity_decode($row['description']));				
 				$form_folder-> addElement('textarea','description',get_lang('Description'),array('rows'=>5,'cols'=>50));
 				$qualification_input[] = FormValidator :: createElement('text','qualification');
 				

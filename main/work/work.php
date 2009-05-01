@@ -1,4 +1,4 @@
-<?php //$Id: work.php 20227 2009-04-30 16:40:35Z cvargas1 $
+<?php //$Id: work.php 20250 2009-05-01 14:52:02Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 20227 2009-04-30 16:40:35Z cvargas1 $
+*  	@version $Id: work.php 20250 2009-05-01 14:52:02Z iflorespaz $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -443,7 +443,7 @@ if (api_is_allowed_to_edit(false,true)) {
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		if (!empty($result)) {
-			$row = mysql_fetch_array($result);
+			$row = Database::fetch_array($result);
 			$workTitle = $row['title'];
 			$workAuthor = $row['author'];
 			$workDescription = $row['description'];
@@ -552,7 +552,7 @@ if (api_is_allowed_to_edit(false,true)) {
 					$sql_add_publication = "INSERT INTO " . $work_table . " SET " .			
 										   "url         = '". $dir_name_sql ."',
 									       title        = '',
-						                   description 	= '".Database::escape_string($_POST['description'])."',
+						                   description 	= '".Database::escape_string(Security::remove_XSS($_POST['description']))."',
 						                   author      	= '',
 										   active		= '0',
 										   accepted		= '1',
@@ -735,7 +735,7 @@ else {
 			/*not authorized to this user */
 		} else {
 			//Get the author ID for that document from the item_property table
-			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" . mysql_real_escape_string($delete);
+			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" .Database::escape_string($delete);
 			$author_qry = api_sql_query($author_sql, __FILE__, __LINE__);
 			
 			if (Database :: num_rows($author_qry) == 1) {
@@ -748,7 +748,7 @@ else {
 				
 				if ($result1) {
 					api_item_property_update($_course, 'work', $delete, 'DocumentDeleted', $user_id);
-					while ($thisUrl = mysql_fetch_array($result1)) {
+					while ($thisUrl = Database::fetch_array($result1)) {
 						// check the url really points to a file in the work area
 						// (some work links can come from groups area...)
 						if (substr(dirname($thisUrl['url']), -4) == "work") {
@@ -849,8 +849,8 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 				}				
 				$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
 										       "url         = '" . $url . "',
-										       title       = '" . $title . "',
-							                   description = '" . $description . "',
+										       title       = '" . Database::escape_string(Security::remove_XSS($title)) . "',
+							                   description = '" . Database::escape_string(Security::remove_XSS($description)) . "',
 							                   author      = '" . $authors . "',
 											   active		= '" . $active . "',
 											   accepted		= '" . (api_is_allowed_to_edit()?$uploadvisibledisabled:(!$uploadvisibledisabled)) . "',
@@ -894,14 +894,14 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 			if (!Database::num_rows($result)) {
 				api_sql_query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL");
 			}
-	
+				$current_date = date('Y-m-d H:i:s');
 				$sql = "INSERT INTO  " . $work_table . "
 					        	SET url        	= '" . $url . "',
-					            title       	= '" . $title . "',
-					            description 	= '" . $description . "',
+					            title       	= '" . Database::escape_string(Security::remove_XSS($title)) . "',
+					            description 	= '" . Database::escape_string(Security::remove_XSS($description)) . "',
 					            author      	= '" . $authors . "',					 
 							    post_group_id = '".$post_group_id."',
-					            sent_date    	= NOW(),
+					            sent_date    	= '".$current_date."',
 					            session_id = ".intval($id_session);
 	
 			api_sql_query($sql, __FILE__, __LINE__);
@@ -950,8 +950,8 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 					Display::display_error_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'));				
 				} else {			
 					$sql = "UPDATE  " . $work_table . "
-					        SET	title       = '" . $title . "',
-					            description = '" . $description . "'
+					        SET	title       = '" . Database::escape_string(Security::remove_XSS($title)) . "',
+					            description = '" . Database::escape_string(Security::remove_XSS($description)) . "'
 					            ".$add_to_update."
 					        WHERE id    = '$id'";
 				api_sql_query($sql, __FILE__, __LINE__);				
@@ -1051,13 +1051,13 @@ $has_expired = false;
 $has_ended = false;
 isset($_GET['curdirpath'])?$curdirpath=Database::escape_string($_GET['curdirpath']):$curdirpath='';
 $sql = api_sql_query('SELECT description,id FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE filetype = '."'folder'".' and has_properties != '."''".' and url = '."'/".$curdirpath."'".' LIMIT 1',__FILE__,__LINE__);
-$is_special = mysql_num_rows($sql);
+$is_special = Database::num_rows($sql);
 if($is_special > 0):
 	$is_special = true;
 	define('IS_ASSIGNMENT',1);
-	$publication = mysql_fetch_array($sql);
+	$publication = Database::fetch_array($sql);
 	$sql = api_sql_query('SELECT * FROM '.$TSTDPUBASG.' WHERE publication_id = '.(string)$publication['id'].' LIMIT 1',__FILE__,__LINE__);
-	$homework = mysql_fetch_array($sql);
+	$homework = Database::fetch_array($sql);
 	
 	if($homework['expires_on']!='0000-00-00 00:00:00' || $homework['ends_on']!='0000-00-00 00:00:00'):		
 		$time_now = convert_date_to_number(date('Y-m-d H:i:s'));	

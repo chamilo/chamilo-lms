@@ -26,7 +26,7 @@
 *	The Dokeos wiki is a further development of the CoolWiki plugin.
 *
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-* 	@Author Juan Carlos Ra�a <herodoto@telefonica.net>
+* 	@Author Juan Carlos Raña <herodoto@telefonica.net>
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
 *
@@ -283,7 +283,7 @@ if ($_GET['view'])
 				$PassEdit=true;
 			}
 		 
-			// check if is a assignment
+			// check if is an assignment
 			if(stripslashes($current_row['assignment'])==1)
 			{
 				Display::display_normal_message(get_lang('EditAssignmentWarning'));
@@ -354,83 +354,100 @@ WIKI WRAPPER
 echo "<div id='wikiwrapper'>";
 
 /** Actions bar (= action of the wiki tool, not of the page)**/
-echo '<div class="actions">';
-//menu home
-echo '<a href="index.php?cidReq='.$_course[id].'&action=show&amp;title=index&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.Display::display_icon('home.gif',get_lang('HomeWiki')).' '.get_lang('HomeWiki').'</a>';
-//menu add page
-echo '<a href="index.php?cidReq='.$_course[id].'&action=addnew&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('addnew').'>'.Display::display_icon('introduction_add.gif',get_lang('AddNew')).' '.get_lang('AddNew').'</a>';
-//menu find
-echo '<a href="index.php?cidReq='.$_course[id].'&action=searchpages&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('searchpages').'>'.Display::display_icon('search.gif',get_lang('SearchPages')).' '.get_lang('SearchPages').'</a>';
-//menu all pages
-echo '<a href="index.php?cidReq='.$_course[id].'&action=allpages&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('allpages').'>'.Display::display_icon('theory.gif',get_lang('AllPages')).' '.get_lang('AllPages').'</a>';
-//menu recent changes
-echo '<a href="index.php?cidReq='.$_course[id].'&action=recentchanges&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('recentchanges').'>'.Display::display_icon('clock.gif',get_lang('RecentChanges')).' '.get_lang('RecentChanges').'</a>';
-//menu delete all wiki
-if(api_is_allowed_to_edit() || api_is_platform_admin()) 
-{	
-	echo '<a href="index.php?action=deletewiki&amp;title='.$page.'"'.is_active_navigation_tab('deletewiki').'">'.Display::display_icon('delete.gif',get_lang('DeleteWiki')).' '.get_lang('DeleteWiki').'</a>';
-}
-
-//menu more
-echo '<a href="index.php?action=more&amp;title='.$page.'"'.is_active_navigation_tab('more').'">'.Display::display_icon('addd.gif',get_lang('More')).' '.get_lang('More').'</a>';
+echo '<div id="menuwiki">';
+echo '<table>';
+echo '<tr>';
+echo '<td>';
+	echo get_lang('Menu');
+echo '</td>';
+echo '</tr>';
+echo '<tr>';
+echo '<td>';
+	//menu home
+	echo '<ul><li><a href="index.php?cidReq='.$_course[id].'&action=show&amp;title=index&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.get_lang('HomeWiki').'</a></li>';
+	//menu add page
+	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=addnew&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('addnew').'>'.get_lang('AddNew').'</a></li>';
+	
+	//menu find
+	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=searchpages&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('searchpages').'>'.get_lang('SearchPages').'</a></li>';
+	//menu all pages
+	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=allpages&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('allpages').'>'.get_lang('AllPages').'</a></li>';
+	//menu recent changes
+	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=recentchanges&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('recentchanges').'>'.get_lang('RecentChanges').'</a></li>';
+	//menu delete all wiki
+	if(api_is_allowed_to_edit() || api_is_platform_admin()) 
+	{	
+			echo '<li><a href="index.php?action=deletewiki&amp;title='.$page.'"'.is_active_navigation_tab('deletewiki').'>'.get_lang('DeleteWiki').'</a></li>';
+	}
+	//menu more
+	
+	echo '<li><a href="index.php?action=more&amp;title='.$page.'"'.is_active_navigation_tab('more').'>'.get_lang('More').'</a></li>';
+	
+	
+	echo '</ul>';
+echo '</td>';
+echo '</tr>';
+echo '</table>';	
 echo '</div>';
 
-
-/** menuwiki (= actions of the page, not of the wiki tool) **/
-if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recentchanges', 'deletewiki', 'more', 'mactiveusers', 'mvisited', 'mostchanged', 'orphaned', 'wanted')))
-{
-	echo "<div id='menuwiki'>";
-	echo '<ul id="tabnav">';
-	//menu show page
-	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('showpage').' style="margin-left:20px;"><img src="../img/wiki/wviewpage.png" title="'.get_lang('ShowThisPage').'" align="absmiddle"/> '.get_lang('Page').'</a></li>';
-	
-	//menu edit page
-	if ($_clean['group_id'])
-	{
-	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=edit&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('edit').'><img src="../img/wiki/wedit.png" title="'.get_lang('EditThisPage').'" align="absmiddle"/> '.get_lang('EditPage').'</a></li>';
-
-	}
-	else
-	{
-	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=edit&amp;title='.$page.'"'.is_active_navigation_tab('edit').'><img src="../img/wiki/wedit.png" title="'.get_lang('EditThisPage').'" align="absmiddle"/> '.get_lang('EditPage').'</a></li>';
-	
-	}
-	//menu discuss page
-	echo '<li><a href="index.php?action=discuss&amp;title='.$page.'"'.is_active_navigation_tab('discuss').'"><img src="../img/wiki/wdiscuss.png" title="'.get_lang('DiscussThisPage').'" align="absmiddle"/> '.get_lang('Discuss').'</a></li>';
-	//menu history
-	if ($_clean['group_id']!=0)
-	{
-	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=history&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('history').'><img src="../img/wiki/whistory.png" title="'.get_lang('ShowPageHistory').'" align="absmiddle"/> '.get_lang('History').'</a></li>';
-
-	}
-	else
-	{
-	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=history&amp;title='.$page.'"'.is_active_navigation_tab('history').'><img src="../img/wiki/whistory.png" title="'.get_lang('ShowPageHistory').'" align="absmiddle"/> '.get_lang('History').'</a></li>';
-	}
-	//menu linkspages
-	echo '<li><a href="index.php?action=links&amp;title='.$page.'"'.is_active_navigation_tab('links').'"><img src="../img/wiki/wlinkspages.png" title="'.$ShowLinksPages.'" align="absmiddle"/> '.$LinksPages.'</a></li>';
-	//menu delete wikipage
-	if(api_is_allowed_to_edit() || api_is_platform_admin())
-	{
-	echo '<li><a href="index.php?action=delete&amp;title='.$page.'"'.is_active_navigation_tab('delete').'"><img src="../img/wiki/wdelete.png" title="'.get_lang('DeleteThisPage').'" align="absmiddle"/> '.get_lang('Delete').'</a></li>';
-	}
-	echo '</ul></div>';
-}
 
 /*
 -----------------------------------------------------------
 MAIN WIKI AREA
 -----------------------------------------------------------
 */
+
 echo "<div id='mainwiki'>";
+/** menuwiki (= actions of the page, not of the wiki tool) **/
+if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recentchanges', 'deletewiki', 'more', 'mactiveusers', 'mvisited', 'mostchanged', 'orphaned', 'wanted')))
+{
+	echo "<div class='actions'>";	
+	
+	//menu show page
+	echo '<a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('showpage').'>'.Display::display_icon('lp_document.png',get_lang('ShowThisPage')).' '.get_lang('Page').'</a>';	
+	
+	//menu edit page
+	if ($_clean['group_id'])
+	{
+		echo '<a href="index.php?cidReq='.$_course[id].'&action=edit&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('edit').'>'.Display::display_icon('lp_quiz.png',get_lang('EditThisPage')).' '.get_lang('EditPage').'</a>';		
 
+	}
+	else
+	{
+		echo '<a href="index.php?cidReq='.$_course[id].'&action=edit&amp;title='.$page.'"'.is_active_navigation_tab('edit').'>'.Display::display_icon('lp_quiz.png',get_lang('EditThisPage')).' '.get_lang('EditPage').'</a>';
+	
+	}
+	//menu discuss page
+	echo '<a href="index.php?action=discuss&amp;title='.$page.'"'.is_active_navigation_tab('discuss').'>'.Display::display_icon('comment_bubble.gif',get_lang('DiscussThisPage')).' '.get_lang('Discuss').'</a>';
+	
+	//menu history
+	if ($_clean['group_id']!=0)
+	{
+		echo '<a href="index.php?cidReq='.$_course[id].'&action=history&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('history').'>'.Display::display_icon('history.gif',get_lang('ShowPageHistory')).' '.get_lang('History').'</a>';
 
-/////////////////////// more options /////////////////////// Juan Carlos Ra�a Trabado
+	}
+	else
+	{
+		echo '<a href="index.php?cidReq='.$_course[id].'&action=history&amp;title='.$page.'"'.is_active_navigation_tab('history').'>'.Display::display_icon('history.gif',get_lang('ShowPageHistory')).' '.get_lang('History').'</a>';
+	
+	}
+	//menu linkspages
+	echo '<a href="index.php?action=links&amp;title='.$page.'"'.is_active_navigation_tab('links').'>'.Display::display_icon('lp_link.png',get_lang('ShowLinksPages')).' '.get_lang('LinksPages').'</a>';
+	
+	//menu delete wikipage
+	if(api_is_allowed_to_edit() || api_is_platform_admin())
+	{
+		echo '<a href="index.php?action=delete&amp;title='.$page.'"'.is_active_navigation_tab('delete').'>'.Display::display_icon('delete.gif',get_lang('DeleteThisPage')).' '.get_lang('Delete').'</a>';
+	}
+	echo '</div>';
+}
+
+/////////////////////// more options /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='more')
 {
 	
-	echo '<div id="wikititle">'.get_lang('More').'</div>';
+	echo '<div class="actions">'.get_lang('More').'</div>';
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{
@@ -503,11 +520,11 @@ if ($_GET['action']=='more')
 
 }
 
-/////////////////////// Most active users /////////////////////// Juan Carlos Ra�a Trabado
+/////////////////////// Most active users /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='mactiveusers')
 {
-	echo '<div id="wikititle">'.get_lang('MostActiveUsers').'</div>';
+	echo '<div class="actions">'.get_lang('MostActiveUsers').'</div>';
 	
 	$sql='SELECT *, COUNT(*) AS NUM_EDIT FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY user_id';
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);		
@@ -535,13 +552,13 @@ if ($_GET['action']=='mactiveusers')
 }
 
 
-/////////////////////// User contributions /////////////////////// Juan Carlos Ra�a Trabado
+/////////////////////// User contributions /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='usercontrib')
 {
 	$userinfo=Database::get_user_info_from_id(Security::remove_XSS($_GET['user_id']));
 	
-	echo '<div id="wikititle">'.get_lang('UserContributions').': <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a><a href="'.api_get_self().'?cidReq='.$_course[id].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'"></a></div>';
+	echo '<div class="actions">'.get_lang('UserContributions').': <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a><a href="'.api_get_self().'?cidReq='.$_course[id].'&action=usercontrib&user_id='.urlencode($row['user_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'"></a></div>';
 		
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
@@ -624,11 +641,11 @@ if ($_GET['action']=='usercontrib')
 	}	
 }
 
-/////////////////////// Most changed pages /////////////////////// Juan Carlos Ra�a Trabado
+/////////////////////// Most changed pages /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='mostchanged')
 {
-	echo '<div id="wikititle">'.get_lang('MostChangedPages').'</div>';
+	echo '<div class="actions">'.get_lang('MostChangedPages').'</div>';
 	
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
@@ -679,11 +696,11 @@ if ($_GET['action']=='mostchanged')
 		
 }
 
-/////////////////////// Most visited pages /////////////////////// Juan Carlos Ra�a Trabado
+/////////////////////// Most visited pages /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='mvisited')
 {
-	echo '<div id="wikititle">'.get_lang('MostVisitedPages').'</div>';	
+	echo '<div class="actions">'.get_lang('MostVisitedPages').'</div>';	
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 	{	
@@ -732,11 +749,11 @@ if ($_GET['action']=='mvisited')
 	}	
 }
 
-/////////////////////// Wanted pages /////////////////////// Juan Carlos Ra�a Trabado
+/////////////////////// Wanted pages /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='wanted')
 {
-	echo '<div id="wikititle">'.get_lang('WantedPages').'</div>';		
+	echo '<div class="actions">'.get_lang('WantedPages').'</div>';		
 	
 	$pages = array();
 	$refs = array();	
@@ -782,11 +799,11 @@ if ($_GET['action']=='wanted')
 	echo '</ul>';
 }
 
-/////////////////////// Orphaned pages /////////////////////// Juan Carlos Ra�a Trabado
+/////////////////////// Orphaned pages /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='orphaned')
 {
-	echo '<div id="wikititle">'.get_lang('OrphanedPages').'</div>';	
+	echo '<div class="actions">'.get_lang('OrphanedPages').'</div>';	
 		
 	$pages = array();
    	$refs = array();
@@ -863,11 +880,11 @@ if ($_GET['action']=='orphaned')
 	
 }
 
-/////////////////////// delete current page /////////////////////// Juan Carlos Ra�a Trabado
+/////////////////////// delete current page /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='delete')
 {
-	
+	echo '<div style="float:left">';
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{
 		echo '<div id="wikititle">'.get_lang('DeletePageHistory').'</div>';
@@ -903,16 +920,19 @@ if ($_GET['action']=='delete')
 	else
 	{
 		Display::display_normal_message(get_lang("OnlyAdminDeletePageWiki"));		
-	}	
+	}
+	
+	echo '</div>';	
 }
 
 
-/////////////////////// delete all wiki /////////////////////// Juan Carlos Ra�a Trabado
+/////////////////////// delete all wiki /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='deletewiki')
 {
-	echo '<div id="wikititle">'.get_lang('DeleteWiki').'</div>';		
-
+	
+	echo '<div class="actions">'.get_lang('DeleteWiki').'</div>';		
+	echo '<div style="float:left">';
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{	
 		$message = 	get_lang('ConfirmDeleteWiki');
@@ -931,16 +951,19 @@ if ($_GET['action']=='deletewiki')
 		{
 		Display::display_normal_message(get_lang("OnlyAdminDeleteWiki"));
 	}
+	echo '</div>';
 }
 			
 /////////////////////// search wiki pages ///////////////////////
 if ($_GET['action']=='searchpages')
 {
+echo '<div class="actions">'.get_lang('SearchPages').'</div>';
+echo '<div style=" float:left">';
 	// initiate the object
 	$form = new FormValidator('wiki_search','post', api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&action='.Security::remove_XSS($_GET['action']).'&group_id='.Security::remove_XSS($_GET['group_id']));
 	
 	// settting the form elements
-	$form->addElement('header', '', get_lang('SearchPages'));
+
 	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles"');
 	$form->addElement('checkbox', 'search_content', null, get_lang('AlsoSearchContent'));
 	$form->addElement('style_submit_button', 'SubmitWikiSearch', get_lang('Search'), 'class="search"');
@@ -959,11 +982,11 @@ if ($_GET['action']=='searchpages')
 			{	
 		$form->display();
 		}
-	
+echo '</div>';	
 } 	
 
 
-///////////////////////  What links here. Show pages that have linked this page /////////////////////// Juan Carlos Ra�a Trabado
+///////////////////////  What links here. Show pages that have linked this page /////////////////////// Juan Carlos Raña Trabado
 
 if ($_GET['action']=='links')
 {
@@ -1084,6 +1107,8 @@ if ($_GET['action']=='links')
 if ($_GET['action']=='addnew')
 {
 	
+	echo '<div class="actions">'.get_lang('AddNew').'</div>';
+	
 	//first, check if page index was created. chektitle=false
 	if (checktitle('index'))
 	{		
@@ -1104,19 +1129,15 @@ if ($_GET['action']=='addnew')
 	else
 	{  
 		if(api_is_allowed_to_edit() || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid']) || Security::remove_XSS($_GET['group_id'])==0)
-		{					
-			echo '<div class="row">';
-			echo '<div class="form_header">'.get_lang('AddNew').'</div>';
-			echo '</div>';
-			echo '<div class="row">';
-			display_new_wiki_form();		
-			echo '</div>';
+		{	
+			display_new_wiki_form();
 		}
 		else
 		{
 			Display::display_normal_message(get_lang('OnlyAddPagesGroupMembers')); 
 		}		
-	} 
+	}
+
 }
 
 
@@ -1270,6 +1291,7 @@ if ($_GET['action']=='edit')
 
 if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifferences']))
 {
+	echo '<div style="float:left">';
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
     //First, see the property visibility that is at the last register and therefore we should select descending order. But to give ownership to each record, this is no longer necessary except for the title. TODO: check this
@@ -1414,7 +1436,6 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 			if(isset($_POST['HistoryDifferences']))
 			{				
 				echo '<table>'.diff( stripslashes($version_old['content']), stripslashes($version_new['content']), true, 'format_table_line' ).'</table>'; // format_line mode is better for words
-				echo '</div>'; 					
 				echo '</div>';
 				
 				echo '<br />'; 
@@ -1427,8 +1448,10 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 				echo '<span class="diffDeleted" >'.get_lang('WikiDiffDeletedLine').'</span><br />'; 
 				echo '<span class="diffMoved" >'.get_lang('WikiDiffMovedLine').'</span><br />'; 
 				echo '</td>';
-				echo '</tr></table>';	
-							
+				echo '</tr></table>';				
+				 					
+				echo '</div>';
+			
 			}
 							
 	        if(isset($_POST['HistoryDifferences2']))
@@ -1442,7 +1465,6 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 				$renderer = &new Text_Diff_Renderer_inline();
 				echo '<style>del{background:#fcc}ins{background:#cfc}</style>'.$renderer->render($diff); // Code inline	
 				//echo '<div class="diffEqual">'.html_entity_decode($renderer->render($diff)).'</div>'; // Html inline. By now, turned off by problems in comparing pages separated by more than one version
-				echo '</div>'; 					
 				echo '</div>';
 				
 				echo '<br />'; 
@@ -1453,11 +1475,14 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 				echo '<span class="diffAddedTex" >'.get_lang('WikiDiffAddedTex').'</span><br />'; 
 				echo '<span class="diffDeletedTex" >'.get_lang('WikiDiffDeletedTex').'</span><br />'; 			
 				echo '</td>';
-				echo '</tr></table>';				
+				echo '</tr></table>';
+				 					
+				echo '</div>';	
 					
 			}	
 		}
 	}
+	echo '</div>';
 }
 
 
@@ -1480,7 +1505,7 @@ if ($_GET['action']=='recentchanges')
 		$notify_all= '<a href="index.php?action=recentchanges&amp;actionpage=notify_all&amp;title='.$page.'"><img src="../img/wiki/send_mail.gif" title="'.get_lang('FullCancelNotifyByEmail').'" alt="'.get_lang('FullCancelNotifyByEmail').'"  style="vertical-align:middle;"/>'.get_lang('NotifyChanges').'</a>';
 	}	
 		
-	echo '<div id="wikititle"><span style="float: right;">'.$notify_all.'</span>'.get_lang('RecentChanges').'</div>';
+	echo '<div class="actions"><span style="float: right;">'.$notify_all.'</span>'.get_lang('RecentChanges').'</div>';
 	
 	
 	
@@ -1553,7 +1578,7 @@ if ($_GET['action']=='recentchanges')
 
 if ($_GET['action']=='allpages')
 {	
-	echo '<div id="wikititle">'.get_lang('AllPages').'</div>';
+	echo '<div class="actions">'.get_lang('AllPages').'</div>';
 	
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
@@ -1922,12 +1947,16 @@ if ($_GET['action']=='discuss')
 		}
 		else
 		{
+
 			Display::display_warning_message(get_lang('LockByTeacher'),false);
+
 		}	
 	}
 	else
 	{	
+		
 			Display::display_normal_message(get_lang('DiscussNotAvailable'));
+
 	}
 }
 
@@ -1997,7 +2026,7 @@ function checktitle($paramwk)
 
 
 /**
-* @author Juan Carlos Ra�a <herodoto@telefonica.net>
+* @author Juan Carlos Raña <herodoto@telefonica.net>
 * check wikilinks that has a page
 **/
 function links_to($input)
@@ -2038,7 +2067,7 @@ function links_to($input)
 
 /*
 detect and add style to external links
-author Juan Carlos Ra�a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_external_link($input)
 {
@@ -2050,7 +2079,7 @@ function detect_external_link($input)
 
 /*
 detect and add style to anchor links
-author Juan Carlos Ra�a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_anchor_link($input)
 {
@@ -2062,7 +2091,7 @@ function detect_anchor_link($input)
 
 /*
 detect and add style to mail links
-author Juan Carlos Ra�a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_mail_link($input)
 {
@@ -2074,7 +2103,7 @@ function detect_mail_link($input)
 
 /*
 detect and add style to ftp links
-author Juan Carlos Ra�a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_ftp_link($input)
 {
@@ -2086,7 +2115,7 @@ function detect_ftp_link($input)
 
 /*
 detect and add style to news links
-author Juan Carlos Ra�a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_news_link($input)
 {
@@ -2098,7 +2127,7 @@ function detect_news_link($input)
 
 /*
 detect and add style to irc links
-author Juan Carlos Ra�a Trabado
+author Juan Carlos Raña Trabado
 **/
 function detect_irc_link($input)
 {
@@ -2114,8 +2143,8 @@ function detect_irc_link($input)
 * It is true that the adding of links is probably the most anoying part of Wiki for the people
 * who know something about the wiki syntax.
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-* Improvements [[]] and [[ | ]]by Juan Carlos Ra�a
-* Improvements internal wiki style and mark group by Juan Carlos Ra�a
+* Improvements [[]] and [[ | ]]by Juan Carlos Raña
+* Improvements internal wiki style and mark group by Juan Carlos Raña
 **/
 function make_wiki_link_clickable($input)
 {
@@ -2235,7 +2264,7 @@ function save_wiki()
 
 /**
 * This function restore a wikipage
-* @author Juan Carlos Ra�a <herodoto@telefonica.net>
+* @author Juan Carlos Raña <herodoto@telefonica.net>
 **/
 function restore_wikipage($r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_progress, $c_version, $r_version, $r_linksto)
 {
@@ -2260,7 +2289,7 @@ function restore_wikipage($r_reflink, $r_title, $r_content, $r_group_id, $r_assi
 
 /**
 * This function delete a wiki
-* @author Juan Carlos Ra�a <herodoto@telefonica.net>
+* @author Juan Carlos Raña <herodoto@telefonica.net>
 **/
 
 function delete_wiki()
@@ -2388,7 +2417,7 @@ function save_new_wiki()
 **/
 function display_new_wiki_form()
 {
-
+    echo '<div style=" float:left">';
 	?>
 	<script language="JavaScript" type="text/JavaScript"> 
     <!-- 
@@ -2445,6 +2474,7 @@ function display_new_wiki_form()
 	echo '<button class="save" type="submit" name="SaveWikiNew" " onClick="return Send(this.form)">'.get_lang('langSave').'</button>'; 	//for button icon
 	echo '</div>';
 	echo '</form>';
+	echo '<div>';
 }
 
 /**
@@ -2752,7 +2782,7 @@ function is_active_navigation_tab($paramwk)
 
 /**
  * Lock add pages
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 
 function check_addnewpagelock() 
@@ -2803,7 +2833,7 @@ function check_addnewpagelock()
 
 /**
  * Protect page
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_protect_page() 
 {
@@ -2858,7 +2888,7 @@ function check_protect_page()
 
 /**
  * Visibility page
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_visibility_page() 
 {
@@ -2913,7 +2943,7 @@ function check_visibility_page()
 
 /**
  * Visibility discussion
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_visibility_discuss() 
 {
@@ -2969,7 +2999,7 @@ function check_visibility_discuss()
 
 /**
  * Lock add discussion
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_addlock_discuss() 
 {
@@ -3024,7 +3054,7 @@ function check_addlock_discuss()
 
 /**
  * Lock rating discussion
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_ratinglock_discuss() 
 {
@@ -3079,7 +3109,7 @@ function check_ratinglock_discuss()
 
 /**
  * Notify page changes
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
  
 function check_notify_page($reflink)
@@ -3145,7 +3175,7 @@ function check_notify_page($reflink)
 
 /**
  * Notify discussion changes
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function check_notify_discuss($reflink)
 {
@@ -3226,7 +3256,7 @@ function check_notify_discuss($reflink)
 
 /**
  * Notify all changes
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
  
 function check_notify_all()
@@ -3285,7 +3315,7 @@ function check_notify_all()
 
 /**
  * Function check emailcue and send email when a page change
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
  
 function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
@@ -3476,7 +3506,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 
 /**
  * Function export last wiki page version to document area
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function export2doc($wikiTitle, $wikiContents, $groupId)
 {
@@ -3510,7 +3540,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 
 /**
  * Function wizard individual assignment
- * @author Juan Carlos Ra�a <herodoto@telefonica.net>
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 function auto_add_page_users($assignment_type)
 {
@@ -3651,7 +3681,7 @@ function display_wiki_search_results($search_term, $search_content=0)
 {
 	global $tbl_wiki, $groupfilter, $MonthsLong; 
 	
-	echo '<div class="row"><div class="form_header">'.get_lang('WikiSearchResults').'</div></div>';
+	echo '<div style="float:left><div class="row" ><div class="form_header">'.get_lang('WikiSearchResults').'</div></div></div>';
 
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 

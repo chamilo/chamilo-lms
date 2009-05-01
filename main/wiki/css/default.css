@@ -49,12 +49,10 @@
 		font-size: 100%;
 		font-weight: bold;
 		background-color: #EFEFEF;
-		border-bottom-width: 2px;
-		border-bottom-style: solid;
-		border-bottom-color: #ccc;
+		border-bottom: 1px solid #cccccc;
 		padding: 3px;
 		padding-top:5px;
-		border-top: 1px solid #ccc; 
+		border-top: 1px solid #ccc;
 	}
 	#wikititle input {
 		border: 1px solid #333;
@@ -62,21 +60,40 @@
 	}
 	#wikicontent {
 		padding-top:5px;
-		min-height:300px;		
+		min-height:300px;
+		min-width: 800px;
 	}		
 	
-	#menuwiki {
-		background-color: #FFFFFF;
+	#menuwiki {			
+		width:250 px;
+		float:left;	
+		border-top: 1px solid #cccccc;
+		border-right: 1px solid #cccccc;
+		border-bottom: 1px solid #cccccc;
+		border-left: 1px solid #cccccc;
+		margin-bottom: 10px;
+		padding: 10px;
+		background-color: #efefef;
 	}
-	#menuwiki li{
-		display: inline;
-	}
-	#menuwiki a:link{
 
+	#menuwiki li{			
+		list-style-type: square;	
 	}
-	#menuwiki a:hover{
-
+	
+	#mainwiki {
+		border-left: 1px solid #cccccc;
+		margin-left:200px;
+		padding-left:10px;	
 	}
+		
+	#wikifooter {
+		background-color: #EFEFEF;	
+		border-top: 1px solid #cccccc;
+		border-bottom: 1px solid #cccccc;
+		border-left: 1px solid #cccccc;
+		border-right: 1px solid #cccccc;	
+	}
+		
 	.fwiki1{
 	    font-size:larger;
 	    font-style:italic;
@@ -85,11 +102,11 @@
 	}
 	.fwiki2{
 	    font-size:smaller;
-	    background-color:#FFF;
+	    background-color:#ffffff;
 	}
 
 	.message {
-		color: #CCCCCC
+		color: #cccccc;
 	}
 	.wiki_warning{
 		color: #FF0000;
@@ -124,8 +141,9 @@
 		height: 20px;
 		margin: 0;
 		padding-left: 10px;
-		background-color:#ccc;
+		background-color:#cccccc;
 	}
+	
 	#tabnav{
 		height: 20px;
 		margin: 0;

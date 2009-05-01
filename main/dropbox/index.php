@@ -237,7 +237,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 
 	// This is for the categories
 	if (isset($_GET['view_received_category']) AND $_GET['view_received_category']<>'') {
-		$view_dropbox_category_received=$_GET['view_received_category'];
+		$view_dropbox_category_received=Security::remove_XSS($_GET['view_received_category']);
 	} else {
 		$view_dropbox_category_received=0;
 	}
@@ -247,7 +247,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	echo '<div class="actions">';
 	if ($view_dropbox_category_received<>0) {
 		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
-		echo '<img src="../img/folder_up.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
+		echo '<img src="../img/folder_up.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.get_lang('Root')."</a>\n";
         $movelist[0] = 'Root'; // move_received selectbox content
 	} else {
 	    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory"><img src="../img/folder_new.gif" align=\"absmiddle\"/> '.get_lang('AddNewCategory').'</a>';		
@@ -558,7 +558,7 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
 		}
 	}
 	// Displaying the table
-	$additional_get_parameters=array('view'=>$_GET['view'], 'view_received_category'=>$_GET['view_received_category'],'view_sent_category'=>$_GET['view_sent_category']);
+	$additional_get_parameters=array('view'=>Security::remove_XSS($_GET['view']), 'view_received_category'=>Security::remove_XSS($_GET['view_received_category']),'view_sent_category'=>Security::remove_XSS($_GET['view_sent_category']));
 	Display::display_sortable_config_table($column_header, $dropbox_data_sent, $sorting_options, $paging_options, $additional_get_parameters,$column_show,$column_order, array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download')));
   }
 }

@@ -375,15 +375,15 @@ function store_addcategory()
 	if (!$_POST['edit_id'])
 	{
 		// step 3a, we check if the category doesn't already exist
-		$sql="SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE user_id='".$_user['user_id']."' AND cat_name='".Database::escape_string($_POST['category_name'])."' AND received='".$received."' AND sent='".$sent."'";
+		$sql="SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE user_id='".$_user['user_id']."' AND cat_name='".Database::escape_string(Security::remove_XSS($_POST['category_name']))."' AND received='".$received."' AND sent='".$sent."'";
 		$result=api_sql_query($sql);
 
 
 		// step 3b, we add the category if it does not exist yet.
-		if (mysql_num_rows($result)==0)
+		if (Database::num_rows($result)==0)
 		{
 			$sql="INSERT INTO ".$dropbox_cnf['tbl_category']." (cat_name, received, sent, user_id)
-					VALUES ('".Database::escape_string($_POST['category_name'])."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', '".Database::escape_string($_user['user_id'])."')";
+					VALUES ('".Database::escape_string(Security::remove_XSS($_POST['category_name']))."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', '".Database::escape_string($_user['user_id'])."')";
 			api_sql_query($sql);
 			return get_lang('CategoryStored');
 		}
@@ -394,9 +394,9 @@ function store_addcategory()
 	}
 	else
 	{
-		$sql="UPDATE ".$dropbox_cnf['tbl_category']." SET cat_name='".Database::escape_string($_POST['category_name'])."', received='".Database::escape_string($received)."' , sent='".Database::escape_string($sent)."'
+		$sql="UPDATE ".$dropbox_cnf['tbl_category']." SET cat_name='".Database::escape_string(Security::remove_XSS($_POST['category_name']))."', received='".Database::escape_string($received)."' , sent='".Database::escape_string($sent)."'
 				WHERE user_id='".Database::escape_string($_user['user_id'])."'
-				AND cat_id='".Database::escape_string($_POST['edit_id'])."'";
+				AND cat_id='".Database::escape_string(Security::remove_XSS($_POST['edit_id']))."'";
 		api_sql_query($sql);
 		return get_lang('CategoryModified');
 	}
@@ -422,7 +422,7 @@ function display_addcategory_form($category_name='', $id='')
 		// retrieve the category we are editing
 		$sql="SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id='".Database::escape_string($id)."'";
 		$result=api_sql_query($sql);
-		$row=mysql_fetch_array($result);
+		$row=Database::fetch_array($result);
 
 		if ($category_name=='') // after an edit with an error we do not want to return to the original name but the name we already modified. (happens when createinrecievedfiles AND createinsentfiles are not checked)
 		{
@@ -456,10 +456,10 @@ function display_addcategory_form($category_name='', $id='')
 	}
 
 
-	echo "<form name=\"add_new_category\" method=\"post\" action=\"".api_get_self()."?view=".$_GET['view']."\">\n";
+	echo "<form name=\"add_new_category\" method=\"post\" action=\"".api_get_self()."?view=".Security::remove_XSS($_GET['view'])."\">\n";
 	if (isset($id) AND $id<>'')
 	{
-		echo '<input name="edit_id" type="hidden" value="'.$id.'">';
+		echo '<input name="edit_id" type="hidden" value="'.Security::remove_XSS($id).'">';
 	}
 	echo '<input name="target" type="hidden" value="'.$target.'">';
 	

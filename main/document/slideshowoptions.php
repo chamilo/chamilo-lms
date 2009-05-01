@@ -1,4 +1,4 @@
-<?php // $Id: slideshowoptions.php 19700 2009-04-10 11:07:37Z pcool $ 
+<?php // $Id: slideshowoptions.php 20245 2009-05-01 00:15:06Z herodoto $ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -199,8 +199,11 @@ echo '</div>';
 			}
 		else
 			{echo " class=\"disabled_input\""; }
+
 		?>
-			>		
+			>
+            </br></br></br>
+            <button type="submit" class="save" name="Submit" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Save'); ?></button>		
 		</div>
 	</div>	
 </form>

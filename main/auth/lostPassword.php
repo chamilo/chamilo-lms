@@ -1,6 +1,6 @@
 <?php
 
-// $Id: lostPassword.php 19471 2009-03-31 23:28:53Z cvargas1 $
+// $Id: lostPassword.php 20254 2009-05-02 21:24:08Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -53,14 +53,17 @@ if (get_setting('allow_lostpassword') == "false")
 {
 	api_not_allowed();
 }
-api_display_tool_title($tool_name);
+echo '<div class="actions-title">';
+echo $tool_name;
+echo '</div>';
 $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 if (isset ($_GET["reset"]) && isset ($_GET["id"]))
 {
 	$msg = reset_password($_GET["reset"], $_GET["id"]);
 	$msg .= '. <br/>'.get_lang('YourPasswordHasBeenEmailed');
-	$msg .= '<br/><br/><a href="'.api_get_path(WEB_PATH).'main/auth/lostPassword.php">&lt;&lt; '.get_lang('Back').'</a>';
-	echo $msg;
+	$msg1= '<a href="'.api_get_path(WEB_PATH).'main/auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
+	Display::display_normal_message($msg);
+	echo '<br/><br/><div class="actions" >'.$msg1.'</div>';
 }
 else
 {
@@ -78,9 +81,9 @@ else
 											FROM ".$tbl_user."
 											WHERE LOWER(email) = '".mysql_real_escape_string($email)."'
 											AND   email != '' ", __FILE__, __LINE__);
-		if ($result && mysql_num_rows($result))
+		if ($result && Database::num_rows($result))
 		{
-			while ($data = mysql_fetch_array($result))
+			while ($data = Database::fetch_array($result))
 			{
 				$user[] = $data;
 			}
@@ -97,8 +100,8 @@ else
 		{
 			Display::display_error_message(get_lang('_no_user_account_with_this_email_address'));
 		}
-		$msg .= '<br/><br/><a href="'.api_get_path(WEB_PATH).'main/auth/lostPassword.php">&lt;&lt; '.get_lang('Back').'</a>';
-		echo '<p>'.$msg.'</p>';
+		$msg .= '<a href="'.api_get_path(WEB_PATH).'main/auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
+		echo '<br/><br/><div class="actions" >'.$msg.'</div>';
 	}
 	else
 	{
@@ -107,7 +110,10 @@ else
 		echo '</p>';
 		$form->display();
 		?>
-		<a href="<?php echo api_get_path(WEB_PATH); ?>">&lt;&lt; <?php echo get_lang('Back'); ?></a>
+		<br/>
+		<div class="actions">
+		<a href="<?php echo api_get_path(WEB_PATH); ?>" class="fake_button_back" ><?php echo get_lang('Back'); ?></a>
+		</div>
 		<?php
 	}
 }

@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 20243 2009-04-30 23:35:35Z iflorespaz $
+<?php // $Id: whoisonline.php 20256 2009-05-02 23:37:09Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -260,20 +260,20 @@ function display_individual_user($user_id)
 		echo $status.'<br />';
 		echo '</div>';
 		if ($user_object->competences) {
-			echo '<dt><strong>'.get_lang('MyCompetences').'</strong></dt>';
+			echo '<dt><div class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div></dt>';
 			echo '<dd>'.$user_object->competences.'</dd>';
 		}
 		if ($user_object->diplomas) {
-			echo '<dt><strong>'.get_lang('MyDiplomas').'</strong></dt>';
+			echo '<dt><div class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div></dt>';
 			echo '<dd>'.$user_object->diplomas.'</dd>';
 		}
 		if ($user_object->teach) {
-			echo '<dt><strong>'.get_lang('MyTeach').'</strong></dt>';
+			echo '<dt><div class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div></dt>';
 			echo '<dd>'.$user_object->teach.'</dd>';;
 		}
 		display_productions($user_object->user_id);
 		if ($user_object->openarea) {
-			echo '<dt><strong>'.get_lang('MyPersonalOpenArea').'</strong></dt>';
+			echo '<dt><div class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div></dt>';
 			echo '<dd>'.$user_object->openarea.'</dd>';
 		}
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice_submit.php 20231 2009-04-30 18:08:12Z cvargas1 $
+// $Id: exercice_submit.php 20252 2009-05-02 20:56:25Z iflorespaz $
 
 /*
 ==============================================================================
@@ -43,7 +43,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 20231 2009-04-30 18:08:12Z cvargas1 $
+* 	@version $Id: exercice_submit.php 20252 2009-05-02 20:56:25Z iflorespaz $
 */
 
 include ('exercise.class.php');
@@ -590,8 +590,10 @@ if ($formSent) {
 					// end huge foreach() block that loops over all questions
 
 					//at loops over all questions
-					$sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . $exe_id;
-					api_sql_query($sql_update, __FILE__, __LINE__);
+					if (isset($exe_id)) {
+						$sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . $exe_id;
+						api_sql_query($sql_update, __FILE__, __LINE__);
+					}
 					//END of saving and qualifying
 					//------------------------------------------------------------------------------------------
 					//

@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 19710 2009-04-11 17:14:43Z cfasanando $
+<?php // $Id: events.lib.inc.php 20253 2009-05-02 21:00:17Z iflorespaz $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -563,9 +563,12 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 		('."'$exeId','".$quesId."','$score','".date('Y-m-d H:i:s')."',''".')';
 		api_sql_query($recording_changes,__FILE__,__LINE__);
 	}
-
-	$res = @api_sql_query($sql,__FILE__,__LINE__);
-	return $res;
+	if (isset($quesId) && isset($exeId) && isset($user_id)) {
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		return $res;
+	} else {
+		return false;
+	}
 }
 
 /**

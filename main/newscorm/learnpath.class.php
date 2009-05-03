@@ -4990,6 +4990,16 @@ class learnpath {
 				
 				case TOOL_LINK:
 					
+					$link_id = (string)$row['path'];
+					if (ctype_digit($link_id)) {
+						$tbl_link = Database::get_course_table(TABLE_LINK);
+						$res_link = api_sql_query('SELECT url FROM '.$tbl_link.' WHERE id = '.$link_id, __FILE__, __LINE__);
+						$row_link = Database::fetch_array($res_link);
+						if (is_array($row_link)) {
+							$row['url'] = $row_link['url'];
+						}
+					}
+
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_link_form('edit', $item_id, $row);
 					
@@ -6784,6 +6794,7 @@ class learnpath {
 		if($id != 0 && is_array($extra_info)) {
 			$item_title			= stripslashes($extra_info['title']);
 			$item_description	= stripslashes($extra_info['description']);
+			$item_url			= stripslashes($extra_info['url']);
 		} elseif(is_numeric($extra_info)) {
 			$sql_link = "
 				SELECT
@@ -6803,6 +6814,7 @@ class learnpath {
 		} else {
 			$item_title			= '';
 			$item_description	= '';
+			$item_url			= '';
 		}
 		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);
 		$item_description=mb_convert_encoding($item_description,$charset,$this->encoding);				

@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 19125 2009-03-18 15:16:29Z iflorespaz $
+<?php //$Id: announcements.inc.php 20263 2009-05-04 03:59:27Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -40,7 +40,10 @@
 */
 function display_announcement($announcement_id)
 {
-	global $_user, $dateFormatLong;
+	global $_user, $dateFormatLong;	
+	
+	if ($announcement_id != strval(intval($announcement_id))) { return false; } // potencial sql injection
+	
 	$tbl_announcement 	= Database::get_course_table('announcement');
 	$tbl_item_property	= Database::get_course_table('item_property');
 	
@@ -336,7 +339,7 @@ function load_edit_users($tool, $id)
 {
 	global $_course;
 	global $tbl_item_property;
-
+	
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 	$result=api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
 	while ($row=Database::fetch_array($result))
@@ -432,6 +435,41 @@ function to_javascript()
 
 		arrFbox.sort();
 		arrTbox.sort();
+				
+		var arrFboxGroup = new Array();
+		var arrFboxUser = new Array();
+		var prefix_x;											
+				
+		for (x = 0; x < arrFbox.length; x++) {
+			prefix_x = arrFbox[x].substring(0,2);		
+			if (prefix_x == 'G:') {
+				arrFboxGroup.push(arrFbox[x]);					
+			} else {
+				arrFboxUser.push(arrFbox[x]);					
+			}		  
+		}		
+		
+		arrFboxGroup.sort();
+		arrFboxUser.sort();
+		arrFbox = arrFboxGroup.concat(arrFboxUser);				
+										
+		var arrTboxGroup = new Array();
+		var arrTboxUser = new Array();	
+		var prefix_y;						
+					
+		for (y = 0; y < arrTbox.length; y++) {
+			prefix_y = arrTbox[y].substring(0,2);				
+			if (prefix_y == 'G:') {
+				arrTboxGroup.push(arrTbox[y]);
+			} else {
+				arrTboxUser.push(arrTbox[y]);
+			}			
+		}													
+					
+		arrTboxGroup.sort();
+		arrTboxUser.sort();
+		arrTbox = arrTboxGroup.concat(arrTboxUser);		
+				
 		fbox.length	= 0;
 		tbox.length	= 0;
 
@@ -466,6 +504,7 @@ function to_javascript()
 		if (document.getElementById('emailTitle').value==''){
 			document.getElementById('msg_error').innerHTML='".get_lang('FieldRequired')."';
 			document.getElementById('msg_error').style.display='block';
+			document.getElementById('emailTitle').focus();		
 		}else {
 			if (cbList.length <	1) {
 				if (!confirm(\"".get_lang('Send2All')."\")) {
@@ -667,7 +706,7 @@ function sent_to($tool, $id)
 function change_visibility_announcement($tool,$id)
 {
 	global $_course;
-	global $tbl_item_property;
+	global $tbl_item_property;	
 
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 
@@ -701,6 +740,10 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 	global $tbl_announcement;
 	global $tbl_item_property;
 
+	$emailTitle = Database::escape_string($emailTitle);
+	$newContent = Database::escape_string($newContent);
+	$order = intval($order);
+	
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
 	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
@@ -747,6 +790,10 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 
 	global $tbl_announcement;
 	global $tbl_item_property;
+
+	$emailTitle = Database::escape_string($emailTitle);
+	$newContent = Database::escape_string($newContent);
+	$order = intval($order);
 
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
@@ -799,6 +846,9 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to)
 	global $tbl_announcement;
 	global $tbl_item_property;
 	
+	$emailTitle = Database::escape_string($emailTitle);
+	$newContent = Database::escape_string($newContent);
+	
 	// store the modifications in the table announcement
 	$sql = "UPDATE $tbl_announcement SET content='$newContent', title = '$emailTitle' WHERE id='$id'";
 
@@ -849,6 +899,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to)
 function send_announcement_email($user_list, $course_code, $_course, $mail_title, $mail_content)
 {
 	global $_user;
+			
 	foreach ($user_list as $this_user)
 	{
 		/*    Header : Bericht van uw lesgever - GES ($course_code) - Morgen geen les! ($mail_title)

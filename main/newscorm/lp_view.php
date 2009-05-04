@@ -249,7 +249,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 		       	<div style="width:100; float:left;border : 0pt solid blue; height:100">
 		       		<span style="padding:2px;">
 			        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-			        <img width="150" height="110" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
+			        <img width="115" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
 			        <?php 
 						else
 						: echo Display :: display_icon('unknown_250_100.jpg', ' ');
@@ -289,7 +289,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 						}
 					?>
 					
-					<div id="lp_navigation_elem" class="lp_navigation_elem" style="padding-left:110px">
+					<div id="lp_navigation_elem" class="lp_navigation_elem" style="padding-left:125px">
 						<div style="padding-top:20px;padding-bottom:50px;border : 0pt solid red" ><?php echo $navigation_bar; ?></div> 
 						<div style="border : 0pt solid red"><?php echo $progress_bar; ?></div>
 					</div>									
@@ -441,10 +441,10 @@ else
 
 			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
 						       	   		       	
-		       	<div style="width:100; float:left;border : 0pt solid blue; height:100">
+		       	<div style="width:100; float:left;border : 0pt solid blue; height:105">
 		       		<span style="padding:2px;">
 			        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-			        <img width="150" height="110" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
+			        <img width="115" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
 			        <?php 
 						else
 						: echo Display :: display_icon('unknown_250_100.jpg', ' ');
@@ -484,7 +484,7 @@ else
 						}
 					?>
 					
-					<div id="lp_navigation_elem" class="lp_navigation_elem" style="padding-left:110px">
+					<div id="lp_navigation_elem" class="lp_navigation_elem" style="padding-left:125px">
 						<div style="padding-top:20px;padding-bottom:50px;border : 0pt solid red" ><?php echo $navigation_bar; ?></div> 
 						<div style="border : 0pt solid red"><?php echo $progress_bar; ?></div>
 					</div>									
@@ -500,7 +500,7 @@ else
 
 	
 	<!-- media player layaout -->		
-	<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:22px;left:10px;margin:8px;font-size:32pt;height:25px;border:0pt solid brown"':'style="height:1px"'); ?>
+	<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:22px;left:10px;margin:8px;font-size:32pt;height:25px;border:0pt solid brown"':'style="height:20px"'); ?>
 	<div id="media"  <?php echo $style_media ?>>
 		<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
 	</div>

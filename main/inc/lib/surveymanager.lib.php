@@ -79,7 +79,8 @@ class SurveyManager
 
 	function create_group($survey_id,$group_title,$introduction,$table_group)
 	{		
-		$sql_query = "SELECT * FROM $table_group where groupname='".$group_title."' AND survey_id=".intval($survey_id);
+		
+		$sql_query = "SELECT * FROM $table_group WHERE groupname='".Database::escape_string($group_title)."' AND survey_id=".Database::escape_string($survey_id);
 		$res = api_sql_query($sql_query, __FILE__, __LINE__);
 		if(mysql_num_rows($res))
 		{
@@ -89,7 +90,7 @@ class SurveyManager
 		else
 		 {
 
-			$sql = 'SELECT MAX(sortby) FROM '.$table_group.' WHERE survey_id="'.$survey_id.'"';
+			$sql = 'SELECT MAX(sortby) FROM '.$table_group.' WHERE survey_id="'.Database::escape_string($survey_id).'"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
 			list($sortby) = mysql_fetch_array($rs);
 			$sortby++;
@@ -104,7 +105,8 @@ class SurveyManager
 	function get_survey_author($authorid)
 	{
 			$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-		    $sql_query = "SELECT * FROM $user_table where user_id='$authorid'";
+			$authorid = Database::escape_string($authorid);
+		    $sql_query = "SELECT * FROM $user_table WHERE user_id='$authorid'";
 			$res = api_sql_query($sql_query, __FILE__, __LINE__);
 			$firstname=@mysql_result($res,0,'firstname');
 			return $firstname;
@@ -114,6 +116,7 @@ class SurveyManager
 	function get_author($db_name,$survey_id)
 	{
 	    //$table_survey = Database :: get_course_table('survey');
+	    $survey_id = Database::escape_string($survey_id);
 		$sql = "SELECT author FROM $db_name.survey WHERE survey_id='$survey_id'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$author=@mysql_result($res,0,'author');
@@ -123,13 +126,12 @@ class SurveyManager
 	function get_surveyid($db_name,$group_id)
 	{
 	    //$group_table = Database :: get_course_table('survey_group');
+	    $group_id = Database::escape_string($group_id);
 		$sql = "SELECT survey_id FROM $db_name.survey_group WHERE group_id='$group_id'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$surveyid=@mysql_result($res,0,'survey_id');
 		return $surveyid;
 	}
-
-
 
 	/*function get_survey_code($table_survey,$survey_code)
 	{
@@ -142,6 +144,7 @@ class SurveyManager
 	function get_groupname($db_name,$gid)
 	{
 		//$grouptable = Database :: get_course_table('survey_group');
+		$gid = Database::escape_string($gid);
 		$sql = "SELECT * FROM $db_name.survey_group WHERE group_id='$gid'";
 		$res=api_sql_query($sql);
 		$code=@mysql_result($res,0,'groupname');
@@ -150,21 +153,26 @@ class SurveyManager
 
 
 	function insert_into_group($survey_id,$group_title,$introduction,$tb)
-	{
-		$sql="INSERT INTO $tb(group_id,survey_id,group_title,introduction) values('','$survey_id','$group_title','$introduction')";
+	{				
+		$survey_id = Database::escape_string($survey_id);
+		$group_title = Database::escape_string($group_title);
+		$introduction = Database::escape_string($introduction);	
+		
+		$sql="INSERT INTO $tb (group_id,survey_id,group_title,introduction) values('','$survey_id','$group_title','$introduction')";
 		$result=api_sql_query($sql);
 		return mysql_insert_id();
 	}
 
 	function get_survey_code($table_survey,$survey_code)
 	{
-			$sql="SELECT code FROM $table_survey where code='$survey_code'";
-			//echo $sql;
-			//exit;
-			$result=api_sql_query($sql);
-			$code=@mysql_result($result,0,'code');
-			//echo $code;exit;
-			return($code);
+		$survey_code = Database::escape_string($survey_code);
+		$sql="SELECT code FROM $table_survey where code='$survey_code'";
+		//echo $sql;
+		//exit;
+		$result=api_sql_query($sql);
+		$code=@mysql_result($result,0,'code');
+		//echo $code;exit;
+		return($code);
 	}
 
 	function get_survey_list()
@@ -241,7 +249,9 @@ class SurveyManager
           $res_course = api_sql_query($sql_course,__FILE__,__LINE__);
           $obj_course=@mysql_fetch_object($res_course);
           $curr_dbname = $obj_course->db_name ;
-		  $sql = "UPDATE $curr_dbname.survey SET code='$surveycode', title='$surveytitle', subtitle='$surveysubtitle', lang='$survey_language',   avail_from='$availablefrom', avail_till='$availabletill', is_shared='$isshare', template='$surveytemplate', intro='$surveyintroduction',surveythanks='$surveythanks' WHERE survey_id='$surveyid'";
+          $surveyid = Database::escape_string($surveyid);
+		  $sql = "UPDATE $curr_dbname.survey SET code='$surveycode', title='$surveytitle', subtitle='$surveysubtitle', lang='$survey_language',   avail_from='$availablefrom', avail_till='$availabletill', is_shared='$isshare', template='$surveytemplate', intro='$surveyintroduction',surveythanks='$surveythanks'
+		  		  WHERE survey_id='$surveyid'";
 		  api_sql_query($sql, __FILE__, __LINE__);
 		  return $curr_dbname;
 	}
@@ -351,7 +361,8 @@ class SurveyManager
 	 function get_question_type($questionid)
 	 {
 	  $table_question = Database :: get_course_table('questions');
-	  $sql = "SELECT * FROM $table_question where qid='$questionid'";
+	  $questionid = Database::escape_string($questionid);
+	  $sql = "SELECT * FROM $table_question WHERE qid='$questionid'";
 			$res=api_sql_query($sql);
 			$code=@mysql_result($res,0,'type');
 			return($code);
@@ -361,15 +372,17 @@ class SurveyManager
 	 function no_of_question($db_name,$gid)
 	 {
 	  //$table_question = Database :: get_course_table('questions');
-	  $sql = "SELECT * FROM $db_name.questions where gid='$gid'";
+	  $gid = Database::escape_string($gid);
+	  $sql = "SELECT * FROM $db_name.questions WHERE gid='$gid'";
 			$res=api_sql_query($sql);
 			$code=@mysql_num_rows($res);
 			return($code);
 	 }
 
 
-function get_question_data($qid,$curr_dbname)
-	 {
+	function get_question_data($qid,$curr_dbname)
+	{
+			$qid = Database::escape_string($qid);
 	        $sql = "SELECT * FROM $curr_dbname.questions where qid='$qid'";
 			$res=api_sql_query($sql);
 			$rs=mysql_fetch_object($res);
@@ -381,10 +394,9 @@ function get_question_data($qid,$curr_dbname)
 			return $rs;
 	 }
 
-	function get_data($id, $field) {
-
+	function get_data($id, $field)
+	{
 		global $_course;
-
 		$sql='SELECT '.$field.' FROM '.$_course['dbName'].'.survey WHERE survey_id='.intval($id);
 		$res=api_sql_query($sql);
 		$code=@mysql_result($res,0);
@@ -392,33 +404,34 @@ function get_question_data($qid,$curr_dbname)
 
 	}
 
-	function get_all_datas($id) {
-
+	function get_all_datas($id)
+	{
 		global $_course;
-
 		$sql='SELECT * FROM '.$_course['dbName'].'.survey WHERE survey_id='.intval($id);
-
 		$res=api_sql_query($sql);
 		return mysql_fetch_object($res);
-
 	}
 
-	 function get_surveyname($db_name,$sid)
-		{
+	function get_surveyname($db_name,$sid)
+	{
 			//$surveytable=Database:: get_course_table('survey');
+			$sid = Database::escape_string($sid);
 			$sql="SELECT * FROM $db_name.survey WHERE survey_id=$sid";
 			$res=api_sql_query($sql);
 			$code=@mysql_result($res,0,'title');
 			return($code);
-		}
+	}
+	
 	function get_surveyname_display($sid)
-		{
+	{
+			$sid = Database::escape_string($sid);
 			$surveytable=Database:: get_course_table('survey');
 			$sql="SELECT * FROM $surveytable WHERE survey_id=$sid";
 			$res=api_sql_query($sql);
 			$code=@mysql_result($res,0,'title');
 			return($code);
-		}
+	}
+	
 	/*
 	function join_survey($question_type)
 		{
@@ -435,7 +448,7 @@ function get_question_data($qid,$curr_dbname)
 	function import_questions($import_type, $ids)
 	{
 			//$groupname=surveymanager::get_groupname($gid_arr[$index]);
-			switch ($import_type){
+			switch ($import_type) {
 				case "survey":
 				{
 
@@ -481,12 +494,14 @@ function get_question_data($qid,$curr_dbname)
 		$table_group 	= Database :: get_course_table('survey_group');
 		$table_question = Database :: get_course_table('questions');
 
+		$survey_id = Database::escape_string($survey_id);
+		
 		// Deleting the survey
 		$sql = "DELETE FROM $table_survey WHERE survey_id='".$survey_id."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		// Deleting all the questions of the survey
-		$sql = "select * FROM $table_group WHERE survey_id='".$survey_id."'";
+		$sql = "SELECT * FROM $table_group WHERE survey_id='".$survey_id."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		while($obj = mysql_fetch_object($res))
 		{
@@ -497,7 +512,6 @@ function get_question_data($qid,$curr_dbname)
 		// Deleting the groups of the survey
 		$sql = "DELETE FROM $table_group WHERE survey_id='".$survey_id."'";
 		api_sql_query($sql,__FILE__,__LINE__);
-
 		return true;
 	}
 
@@ -525,14 +539,14 @@ function get_question_data($qid,$curr_dbname)
 
 
 	function ques_id_group_name($qid)
-		{
-			$ques_table=Database::get_course_table('questions');
-			$sql="SELECT gid FROM $ques_table where qid=$qid";
-			$res=api_sql_query($sql);
-			$id=@mysql_result($res,0,'gid');
-			$gname=surveymanager::get_groupname($id);
-			return($gname);
-		}
+	{
+		$ques_table=Database::get_course_table('questions');
+		$sql="SELECT gid FROM $ques_table where qid=$qid";
+		$res=api_sql_query($sql);
+		$id=@mysql_result($res,0,'gid');
+		$gname=surveymanager::get_groupname($id);
+		return($gname);
+	}
 
 	function insert_questions($sid,$newgid,$gid,$table_group)
 	{

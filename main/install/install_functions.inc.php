@@ -899,8 +899,8 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	  <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm? get_lang('One') : get_lang('Several'); ?></td>
 	  <?php else: ?>
 	  <td>
-		<input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm?'checked="checked" ':''; ?> onclick="document.getElementById('dbStatsForm').disabled='true'; document.getElementById('dbUserForm').disabled='true';" /> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
-		<input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm?'':'checked="checked" '; ?> onclick="document.getElementById('dbStatsForm').disabled='false'; document.getElementById('dbUserForm').disabled='false';" /> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
+		<input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm?'checked="checked" ':''; ?> onclick="show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
+		<input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm?'':'checked="checked" '; ?> onclick="show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
 	  </td>
 	  <?php endif; ?>
 
@@ -1181,7 +1181,7 @@ function display_after_install_message($installType, $nbr_courses)
 function test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm) {
 	$dbConnect = -1;
 	if ($singleDbForm == 1) {
-		if(mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false) {
+		if(@mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false) {
 			$dbConnect = 1;
 		} else {
 			$dbConnect = -1;

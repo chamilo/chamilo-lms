@@ -359,12 +359,43 @@ if ($encryptPassForm=='1' ) {
 		@import "../css/public_admin/default.css";
 		/*]]>*/
 	</style>
+	<script type="text/javascript" src="../inc/lib/javascript/jquery.js"></script>
+	<script type="text/javascript" >
+		$(document).ready( function() {
+			 //checked
+			if ($('#singleDb1').attr('checked')==false) {
+					$('#dbStatsForm').removeAttr('disabled');
+					$('#dbUserForm').removeAttr('disabled');
+					$('#dbStatsForm').attr('value','dokeos_stats');
+					$('#dbUserForm').attr('value','dokeos_user');			
+			} else if($('#singleDb1').attr('checked')==true){
+					$('#dbStatsForm').attr('disabled','disabled');
+					$('#dbUserForm').attr('disabled','disabled');
+					$('#dbStatsForm').attr('value','dokeos_main');
+					$('#dbUserForm').attr('value','dokeos_main');												
+			}	
+	 	} ); 	
+	</script>
+	<script type="text/javascript">
+
+		function show_hide_tracking_and_user_db (my_option) {
+			if (my_option=='singleDb1') {
+				$('#dbStatsForm').attr('disabled','true');
+				$('#dbUserForm').attr('disabled','true');
+				$('#dbStatsForm').attr('value','dokeos_main');
+				$('#dbUserForm').attr('value','dokeos_main');								
+			} else if (my_option=='singleDb0') {
+				$('#dbStatsForm').removeAttr('disabled');
+				$('#dbUserForm').removeAttr('disabled');
+				$('#dbStatsForm').attr('value','dokeos_stats');
+				$('#dbUserForm').attr('value','dokeos_user');											
+			}
+		}
+	</script>	
 	<script language="javascript">
 		init_visibility=0;
-		function show_hide_option()
-		{
-			if(init_visibility == 0)
-			{
+		function show_hide_option() {
+			if(init_visibility == 0) {
 				document.getElementById('optional_param1').style.display = '';
 				document.getElementById('optional_param2').style.display = '';
 				if(document.getElementById('optional_param3'))
@@ -375,13 +406,10 @@ if ($encryptPassForm=='1' ) {
 				document.getElementById('optional_param5').style.display = '';
 				document.getElementById('optional_param6').style.display = '';
 				init_visibility = 1;
-			}
-			else
-			{
+			} else {
 				document.getElementById('optional_param1').style.display = 'none';
 				document.getElementById('optional_param2').style.display = 'none';
-				if(document.getElementById('optional_param3'))
-				{
+				if(document.getElementById('optional_param3')) {
 					document.getElementById('optional_param3').style.display = 'none';
 				}
 				document.getElementById('optional_param4').style.display = 'none';

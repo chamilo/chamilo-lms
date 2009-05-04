@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 19728 2009-04-13 14:29:50Z juliomontoya $
+<?php // $Id: slideshow.php 20266 2009-05-04 05:55:50Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -39,7 +39,7 @@ http://icto.UGent.be
 */
 /*
 ==============================================================================
-Improve by Juan Carlos Ra�a Trabado
+Improved by Juan Carlos Raсa Trabado
 herodoto@telefonica.net
 January 2008
 ==============================================================================
@@ -211,14 +211,14 @@ $number_image=6;
 $number_iteration=ceil($count_image/$number_image);
 $p=0;
 for  ($k=0;$k<$number_iteration;$k++) {
-	echo '<tr>';		
+	echo '<tr height="'.$thumbnail_height.'">';		
 	for ($i=0;$i<$number_iteration;$i++) {
 			//echo '<td ><a href="slideshow.php?slide_id='.$link.'&curdirpath='.$pathurl.'>'.$image_tag[$p].'</a></td>';	
 			//var_dump($p);
 			if (!is_null($image_tag[$p])) {
 				echo '<td  style="border:1px solid; border-color: #CCCCCC #666666 #666666 #CCCCCC;">';
-				echo '<a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.' ">'.$image_tag[$p].'</a>';
-				echo '</td>';
+				echo '<div align="center"><a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.' ">'.$image_tag[$p].'</a>';
+				echo '</div></td>';
 			}
 			$p++;
 		}
@@ -261,11 +261,13 @@ if ($slide_id !== "all")
 	if ($_SESSION["image_resizing"] == "resizing")
 	{
 		$height_width_tags = 'width="'.$image_width.'" height="'.$image_height.'"';
-		
-		//adjust proportions. Juan Carlos Ra�a Trabado TODO: replace resize_image function ?	
+
+		/* // Removed by Ivan Tcholakov, 04-MAY-2009. After some changes this fragment of code is not needed anymore.
+		//adjust proportions. Juan Carlos Raсa Trabado TODO: replace resize_image function ?	
 		$size = @ getimagesize($image);
 		$height_width_tags = (($size[1] > $image_width) ? 'width="'.$image_width.'"' : '');
 		$height_width_tags = (($size[1] > $image_height) ? 'height="'.$image_height.'"' : '');		
+		*/
 	}
 	
 

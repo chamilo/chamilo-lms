@@ -74,8 +74,8 @@ Description:
 //							this overrides the $_SESSION["image_resizing"] a bit so that a thumbnail
 //							view is also possible when you choose not to resize the source images
 
-function resize_image($image, $target_width, $target_height, $slideshow=0)
-{
+function resize_image($image, $target_width, $target_height, $slideshow=0) {
+/*  // Replaced fragment of code by Ivan Tcholakov, 04-MAY-2009.
 	// 1. grabbing the image height and width of the original image
 		$image_properties=getimagesize($image); 
 		$source_width=$image_properties["0"]; 
@@ -123,6 +123,17 @@ function resize_image($image, $target_width, $target_height, $slideshow=0)
 // storing the resulting height and width in an array and returning it
 $image_height_width[]=$image_height;
 $image_height_width[]=$image_width;
-return $image_height_width; 
+return $image_height_width;
+*/
+	$result = array();
+	if ($_SESSION['image_resizing'] == 'resizing' or $slideshow==1) {
+		$new_sizes = api_resize_image($image, $target_width, $target_height);
+		$result[] = $new_sizes['height'];
+		$result[] = $new_sizes['width'];
+	} else {
+		$result[] = $image_height;
+		$result[] = $image_width;
+	}
+	return $result;
 }
 ?>

@@ -219,10 +219,10 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
 #header3 {
-	height:auto;
 	background-image: url(images/tab-repeat.png);
-	background-position: 0px 1px;
+	background-position: 0px 0px;
 	background-repeat: repeat-x;/*border: 1px solid green;*/
+	height:41px;
 }
 #header3 a {
 	DISPLAY: block;
@@ -230,6 +230,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	PADDING-LEFT: 6px;
 	COLOR: #fff;
 	PADDING-TOP: 10px;
+	float: left;
 }
 #header3 a:hover {
 	color: #a8a7a7;
@@ -252,14 +253,14 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	height: 31px;
 }
 #header3 li#current {
-	background:  url(images/tab-left.png) no-repeat bottom left;
-	padding-top: 1px;
+	background:  url(images/tab-left.png) no-repeat top left;
+	padding-top: 0px;
 	height: 41px;
+	float: left;
 }
 #header3 #current a {
 	background:  url(images/tab-right.png) no-repeat top right;
-	height: 41px;
-	margin-bottom: 5px;
+	height: 31px;
 }
 #header3 .banner_links {
 	margin: 0;
@@ -296,6 +297,9 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	float: right;
 	width: auto;
 	text-align: right;
+}
+#header3 .clear {
+	display: none;
 }
 /*****************************************************
  *  HEADER 3: not used          			     	 *

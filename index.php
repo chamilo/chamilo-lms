@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20032 2009-04-23 21:04:45Z juliomontoya $
+<?php // $Id: index.php 20297 2009-05-04 20:32:16Z juliomontoya $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 20032 2009-04-23 21:04:45Z juliomontoya $
+* 	@version $Id: index.php 20297 2009-05-04 20:32:16Z juliomontoya $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -98,12 +98,9 @@ $track_login_table 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_L
 $_setting['display_courses_to_anonymous_users'] = 'true';
 
 /** @todo remove this piece of code because this is not used */
-if (isset ($_user['user_id'])) {
+if (isset($_user['user_id'])) {
 	$nameTools = api_get_setting('siteName');
 }
-
-
-
 
 
 /*
@@ -390,51 +387,11 @@ function display_anonymous_right_menu() {
 		}
 	}
 
-	/*** hide right menu "general" and other parts on anonymous right menu  *****/
-	 echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
-	 echo "<ul class=\"menulist\">";
 
-	$user_selected_language = api_get_interface_language();
-	global $home, $home_old;
-	if (!isset ($user_selected_language))
-		$user_selected_language = $platformLanguage; 
-	if (!file_exists($home.'home_menu_'.$user_selected_language.'.html')) {
-		if (file_exists($home.'home_menu.html'))
-			include ($home.'home_menu.html');
-		else {
-			include ($home_old.'home_menu.html');
-		}		
-	} else {
-		include($home.'home_menu_'.$user_selected_language.'.html');
-	}
-	echo '</ul>';
-	echo '</div>';
-
-	if ($_user['user_id'] && api_number_of_plugins('campushomepage_menu') > 0) {
-		echo '<div class="note" style="background: none">';
-		api_plugin('campushomepage_menu');
-		echo '</div>';
-	}
-
-	/**
-	 * User section
-	 */
+	// My Account section
 	if (isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id']!=0) {
 		// tabs that are deactivated are added here
-		if (!empty($menu_navigation)) {
-			echo "<div class=\"menusection\">";
-			echo "<span class=\"menusectioncaption\">".get_lang("MainNavigation")."</span>";
-			echo "<ul class=\"menulist\">";
-			foreach($menu_navigation as $section => $navigation_info) {
-				$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
-				echo '<li'.$current.'>';
-				echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
-				echo '</li>';
-				echo "\n";
-			}
-			echo "</ul>";
-			echo '</div>';
-		}
+
 
 		$show_menu=false;
 		$show_create_link=false;
@@ -469,8 +426,50 @@ function display_anonymous_right_menu() {
 			echo "</ul>";
 			echo "</div>";			
 		}
-	}
 		
+		if (!empty($menu_navigation)) {
+			echo "<div class=\"menusection\">";
+			echo "<span class=\"menusectioncaption\">".get_lang("MainNavigation")."</span>";
+			echo "<ul class=\"menulist\">";
+			foreach($menu_navigation as $section => $navigation_info) {
+				$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
+				echo '<li'.$current.'>';
+				echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+				echo '</li>';
+				echo "\n";
+			}
+			echo "</ul>";
+			echo '</div>';
+		}
+	}
+	
+	// help ection
+	/*** hide right menu "general" and other parts on anonymous right menu  *****/
+	 echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
+	 echo "<ul class=\"menulist\">";
+
+	$user_selected_language = api_get_interface_language();
+	global $home, $home_old;
+	if (!isset ($user_selected_language))
+		$user_selected_language = $platformLanguage; 
+	if (!file_exists($home.'home_menu_'.$user_selected_language.'.html')) {
+		if (file_exists($home.'home_menu.html'))
+			include ($home.'home_menu.html');
+		else {
+			include ($home_old.'home_menu.html');
+		}		
+	} else {
+		include($home.'home_menu_'.$user_selected_language.'.html');
+	}
+	echo '</ul>';
+	echo '</div>';
+
+	if ($_user['user_id'] && api_number_of_plugins('campushomepage_menu') > 0) {
+		echo '<div class="note" style="background: none">';
+		api_plugin('campushomepage_menu');
+		echo '</div>';
+	}
+			
 	// includes for any files to be displayed below anonymous right menu
 	
 	if (!file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_exists($home.'home_notice.html') && file_get_contents($home.'home_notice.html')!='') {
@@ -565,7 +564,7 @@ function display_anonymous_course_list() {
 	//init
 	$user_identified = (api_get_user_id()>0 && !api_is_anonymous());
 	$web_course_path = api_get_path(WEB_COURSE_PATH);
-	$category = $_GET["category"];
+	$category = Databas::escape_string($_GET['category']);
 	global $setting_show_also_closed_courses;
 
 	// Database table definitions

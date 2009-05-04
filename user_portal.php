@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 18379 2009-02-09 20:42:34Z juliomontoya $
+<?php // $Id: user_portal.php 20297 2009-05-04 20:32:16Z juliomontoya $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -204,6 +204,7 @@ function get_personal_course_list($user_id) {
 	$tbl_session_course_user= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$tbl_session 			= Database :: get_main_table(TABLE_MAIN_SESSION);
 
+	$user_id = Database::escape_string($user_id);
 	$personal_course_list = array ();
 
 	//Courses in which we suscribed out of any session
@@ -637,7 +638,7 @@ function get_user_course_categories() {
 
 	$output = array();
 	$table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_user['user_id']."'";
+	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".Database::escape_string($_user['user_id'])."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while ($row = Database::fetch_array($result)) {
 		$output[$row['id']] = $row['title'];
@@ -804,8 +805,7 @@ if ( is_array($list) ) {
 		if ( empty($value[2]) ) { //if out of any session
 
 			$userdefined_categories = get_user_course_categories();
-			echo '	
-	<ul class="courseslist">';
+			echo '<ul class="courseslist">';
 
 			if ($old_user_category<>$value[0]) {
 				if ($key<>0 OR $value[0]<>0) {// there are courses in the previous category
@@ -903,22 +903,6 @@ api_session_register('status');
 */
 echo '	<div class="menu">';
 
-// tabs that are deactivated are added here
-if (!empty($menu_navigation)) {
-	echo '<div class="menusection">';
-	echo '<span class="menusectioncaption">'.get_lang('MainNavigation').'</span>';
-	echo '<ul class="menulist">';
-	foreach ($menu_navigation as $section => $navigation_info) {
-		$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
-		echo '<li'.$current.'>';
-		echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
-		echo '</li>';
-		echo "\n";
-	}
-	echo '</ul>';
-	echo '</div>';
-}
-
 // api_display_language_form(); // moved to the profile page.
 
 $show_menu=false;
@@ -947,6 +931,7 @@ if(isset($toolsList) and is_array($toolsList) and isset($digest)) {
 	$show_menu=true;	
 }
 
+// My account section
 if ($show_menu){
 	echo '<div class="menusection">';
 	echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
@@ -960,6 +945,23 @@ if ($show_menu){
 	echo '</ul>';
 	echo '</div>';
 }	
+
+// Main navigation section
+// tabs that are deactivated are added here
+if (!empty($menu_navigation)) {
+	echo '<div class="menusection">';
+	echo '<span class="menusectioncaption">'.get_lang('MainNavigation').'</span>';
+	echo '<ul class="menulist">';
+	foreach ($menu_navigation as $section => $navigation_info) {
+		$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
+		echo '<li'.$current.'>';
+		echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+		echo '</li>';
+		echo "\n";
+	}
+	echo '</ul>';
+	echo '</div>';
+}
 
 
 // plugins for the my courses menu

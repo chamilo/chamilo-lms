@@ -241,15 +241,15 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 		<!-- end header --> 
 
 <!-- Image preview Layout -->
-	<div id="author_image" name="author_image" class="lp_author_image" style="border : 0pt solid blue;height:23%; width:100%;">	
+	<div id="author_image" name="author_image" class="lp_author_image" style="border : 0pt solid blue;height:23%; width:100%;margin-left:5px">	
 		<?php $image = '../img/lp_author_background.gif'; ?>
 
-			<div id="preview_image" style="padding:5px;background: url('../img/lp_author_background.gif') no-repeat">
+			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
 						       	   		       	
 		       	<div style="width:100; float:left;border : 0pt solid blue; height:100">
 		       		<span style="padding:2px;">
 			        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-			        <img width="120" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
+			        <img width="150" height="110" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
 			        <?php 
 						else
 						: echo Display :: display_icon('unknown_250_100.jpg', ' ');
@@ -258,7 +258,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 					</span>
 		       	</div>
 		       		       		       
-				<div id="nav_id" name="nav_name" class="lp_nav" style="margin-left:105;border : 0pt solid brown;height:150">
+				<div id="nav_id" name="nav_name" class="lp_nav" style="margin-left:105;border : 0pt solid brown;height:90">
 			        <?php										
 						$display_mode = $_SESSION['oLP']->mode;
 						$scorm_css_header = true;
@@ -289,21 +289,23 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 						}
 					?>
 					
-					<div id="lp_navigation_elem" class="lp_navigation_elem">
+					<div id="lp_navigation_elem" class="lp_navigation_elem" style="padding-left:110px">
 						<div style="padding-top:20px;padding-bottom:50px;border : 0pt solid red" ><?php echo $navigation_bar; ?></div> 
 						<div style="border : 0pt solid red"><?php echo $progress_bar; ?></div>
 					</div>									
 				</div>		  
 	 
-				<div id="author_name" style="margin:0;padding:0;text-align:center;border:0pt solid brown;height:29px;">
+					<div id="author_name" style="position:relative;top:15px;left:2px;margin:0;padding:0;text-align:center;border:0pt solid brown;height:50px;width:100%">
 				<?php echo $_SESSION['oLP']->get_author() ?>
-				</div>					
-		</div>		    					
+				</div> 				
+		</div>	
+			   					
 	</div>   				   			
 	<!-- end image preview Layout -->
 
+	
 	<!-- media player layaout -->		
-	<?php $style_media = (($show_audioplayer)?' style= "margin:5px;font-size:32pt;height:20px;border:0pt solid brown"':'style="height:1px"'); ?>
+	<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:22px;left:10px;margin:8px;font-size:32pt;height:25px;border:0pt solid brown"':'style="height:20px"'); ?>
 	<div id="media"  <?php echo $style_media ?>>
 		<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
 	</div>
@@ -311,7 +313,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	
 	<!-- toc layout -->     
 	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;border: 0pt solid black;height:60%;width:100%">
-		<div id="learningPathToc" style="height:50%,overflow-y:auto;overflow-x:hidden;font-size:9pt;margin:0;border: 0pt solid red"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
+		<div id="learningPathToc" style="font-size:9pt;margin:0;border: 0pt solid red"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
 	</div>
 	<!-- end toc layout -->
 
@@ -322,7 +324,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 	</div>
 	<!-- end log message layout -->
 	</div>
-<!-- end left Zone --> 					
+<!-- end left Zone --> 			
 
 <!-- right Zone -->    				
 	<div id="learningPathRightZone" style="margin-left:282px;border : 0pt solid blue;height:100%">
@@ -434,15 +436,15 @@ else
 		<!-- end header --> 
 
 <!-- Image preview Layout -->
-	<div id="author_image" name="author_image" class="lp_author_image" style="border : 0pt solid blue;height:23%; width:100%;">	
+	<div id="author_image" name="author_image" class="lp_author_image" style="border : 0pt solid blue;height:23%; width:100%;margin-left:5px">	
 		<?php $image = '../img/lp_author_background.gif'; ?>
 
-			<div id="preview_image" style="padding:5px;background: url('../img/lp_author_background.gif') no-repeat">
+			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
 						       	   		       	
 		       	<div style="width:100; float:left;border : 0pt solid blue; height:100">
 		       		<span style="padding:2px;">
 			        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-			        <img width="120" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
+			        <img width="150" height="110" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
 			        <?php 
 						else
 						: echo Display :: display_icon('unknown_250_100.jpg', ' ');
@@ -451,7 +453,7 @@ else
 					</span>
 		       	</div>
 		       		       		       
-				<div id="nav_id" name="nav_name" class="lp_nav" style="margin-left:105;border : 0pt solid brown;height:150">
+				<div id="nav_id" name="nav_name" class="lp_nav" style="margin-left:105;border : 0pt solid brown;height:90">
 			        <?php										
 						$display_mode = $_SESSION['oLP']->mode;
 						$scorm_css_header = true;
@@ -482,21 +484,23 @@ else
 						}
 					?>
 					
-					<div id="lp_navigation_elem" class="lp_navigation_elem">
+					<div id="lp_navigation_elem" class="lp_navigation_elem" style="padding-left:110px">
 						<div style="padding-top:20px;padding-bottom:50px;border : 0pt solid red" ><?php echo $navigation_bar; ?></div> 
 						<div style="border : 0pt solid red"><?php echo $progress_bar; ?></div>
 					</div>									
 				</div>		  
 	 
-				<div id="author_name" style="margin:0;padding:0;text-align:center;border:0pt solid brown;height:29px;">
+					<div id="author_name" style="position:relative;top:15px;left:2px;margin:0;padding:0;text-align:center;border:0pt solid brown;height:50px;width:100%">
 				<?php echo $_SESSION['oLP']->get_author() ?>
-				</div>					
-		</div>		    					
+				</div> 				
+		</div>	
+			   					
 	</div>   				   			
 	<!-- end image preview Layout -->
 
+	
 	<!-- media player layaout -->		
-	<?php $style_media = (($show_audioplayer)?' style= "margin:5px;font-size:32pt;height:20px;border:0pt solid brown"':'style="height:1px"'); ?>
+	<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:22px;left:10px;margin:8px;font-size:32pt;height:25px;border:0pt solid brown"':'style="height:1px"'); ?>
 	<div id="media"  <?php echo $style_media ?>>
 		<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
 	</div>
@@ -504,7 +508,7 @@ else
 	
 	<!-- toc layout -->     
 	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;border: 0pt solid black;height:60%;width:100%">
-		<div id="learningPathToc" style="height:50%,overflow-y:auto;overflow-x:hidden;font-size:9pt;margin:0;border: 0pt solid red"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
+		<div id="learningPathToc" style="font-size:9pt;margin:0;border: 0pt solid red"><?php echo $_SESSION['oLP']->get_html_toc(); ?></div>
 	</div>
 	<!-- end toc layout -->
 

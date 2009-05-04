@@ -22,7 +22,7 @@
 *	This script shows the list of exercises for administrators and students.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: Hpdownload.php 12269 2007-05-03 14:17:37Z elixir_julian $
+* 	@version $Id: Hpdownload.php 20283 2009-05-04 16:42:52Z juliomontoya $
 */
 
 
@@ -37,32 +37,24 @@ $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 
 $doc_url=urldecode($_GET['doc_url']);
 
-$filename=basename($doc_url);
+$filename=basename(Security::remove_XSS($doc_url));
 
 // launch event
 //event_download($doc_url);
-if (isset($_course['path']))
-{
-//	$full_file_name=$_configuration['root_sys']."courses/".$_course['path'].'/document'.$doc_url;
+if (isset($_course['path'])) {
 	$full_file_name = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$doc_url;
-}
-else
-{
-//$full_file_name=$_configuration['root_sys']."courses/".$cid.'/document'.$doc_url;
-$full_file_name = api_get_path(SYS_COURSE_PATH).$cid.'/document'.$doc_url;
+} else {
+	$full_file_name = api_get_path(SYS_COURSE_PATH).$cid.'/document'.$doc_url;
 }
 
-if(!is_file($full_file_name))
-{
+if(!is_file($full_file_name)) {
 	exit();
 }
 
 $extension=explode('.',$filename);
-
 $extension=strtolower($extension[sizeof($extension)-1]);
 
-switch($extension)
-{
+switch($extension) {
 	case 'gz':		$content_type='application/x-gzip';			break;
 	case 'zip':		$content_type='application/zip';			break;
 	case 'pdf':		$content_type='application/pdf';			break;
@@ -91,10 +83,7 @@ header('Last-Modified: '.gmdate('D, d M Y H:i:s',time()+10).' GMT');
 ------------------------------------------------------------------------------
 */
 
-
-
-if($content_type == 'text/html')
-{
+if($content_type == 'text/html') {
 	include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 	$directory_name = dirname($full_file_name);
 
@@ -175,11 +164,7 @@ if($content_type == 'text/html')
 
 //normal case, all non-html files
 //header('Content-length: '.filesize($full_file_name));
-
 $fp=fopen($full_file_name,'rb');
-
-	fpassthru($fp);
-
+fpassthru($fp);
 fclose($fp);
-
 ?>

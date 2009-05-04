@@ -3486,11 +3486,11 @@ function api_resize_image($image, $target_width, $target_height) {
 	$image_properties = @getimagesize(api_url_to_local_path($image)); // We have to call getimagesize() in a safe way.
 	$image_width = $image_properties[0];
 	$image_height = $image_properties[1];
-	return api_calculate_image_sizes($image_width, $image_height, $target_width, $target_height);
+	return api_calculate_image_size($image_width, $image_height, $target_width, $target_height);
 }
 
 /**
- * This function calculates new image sizes, with preserving image's proportions (or aspect ratio).
+ * This function calculates new image size, with preserving image's proportions (or aspect ratio).
  * @author Ivan Tcholakov, MAY-2009.
  * @author The initial idea has been taken from code by Patrick Cool, MAY-2004.
  * @param int $image_width		Initial width
@@ -3499,7 +3499,7 @@ function api_resize_image($image, $target_width, $target_height) {
  * @param int $target_height	Targeted height
  * @return array				Calculated new width and height
  */
-function api_calculate_image_sizes($image_width, $image_height, $target_width, $target_height) {
+function api_calculate_image_size($image_width, $image_height, $target_width, $target_height) {
 	// Only maths is here.
 	$result = array('width' => $image_width, 'height' => $image_height);
 	if ($image_width <= 0 || $image_height <= 0) {

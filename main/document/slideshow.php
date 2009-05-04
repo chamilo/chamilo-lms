@@ -1,10 +1,10 @@
-<?php // $Id: slideshow.php 20266 2009-05-04 05:55:50Z ivantcholakov $
+<?php // $Id: slideshow.php 20277 2009-05-04 15:40:57Z juliomontoya $
 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
@@ -24,6 +24,7 @@
 /**
 ============================================================================== 
 *	@author Patrick Cool
+*   @author Julio Montoya Lots of improvements, cleaning, adding security 
 *	@package dokeos.document
 ============================================================================== 
 */
@@ -35,16 +36,12 @@ Ghent University
 Mai 2004
 http://icto.UGent.be
 
-==============================================================================
-*/
-/*
-==============================================================================
-Improved by Juan Carlos Raсa Trabado
+Improve by Juan Carlos Ra�a Trabado
 herodoto@telefonica.net
 January 2008
+
 ==============================================================================
 */
-
 // including the language file
 
 // name of the language file that needs to be included 
@@ -54,17 +51,14 @@ include ('../inc/global.inc.php');
 
 $noPHP_SELF = true;
 
-$path = $_GET['curdirpath'];
+$path = Security::remove_XSS($_GET['curdirpath']);
 $pathurl = urlencode($path);
 
-$slide_id = $_GET['slide_id'];
+$slide_id = Security::remove_XSS($_GET['slide_id']);
 
-if ($path and $path <> "")
-{
+if ($path and $path <> "") {
 	$folder = $path."/";
-}
-else
-{
+} else {
 	$folder = "";
 }
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -75,28 +69,26 @@ include ('slideshow.inc.php');
 // breadcrumb navigation
 $url = "document.php?curdirpath=".$pathurl;
 $originaltoolname = get_lang('Documents');
-$interbreadcrumb[] = array ("url" => $url, "name" => $originaltoolname);
+$interbreadcrumb[] = array ("url" => Security::remove_XSS($url), "name" => $originaltoolname);
 
 // because $nametools uses $_SERVER['PHP_SELF'] for the breadcrumbs instead of $_SERVER['REQUEST_URI'], I had to 
 // bypass the $nametools thing and use <b></b> tags in the $interbreadcrump array
-$url = "slideshow.php?curdirpath=".$pathurl;
+//$url = "slideshow.php?curdirpath=".$pathurl;
 $originaltoolname = get_lang('SlideShow');
 //$interbreadcrumb[]= array ("url"=>$url, "name"=>$originaltoolname );
 
 Display :: display_header($originaltoolname, "Doc");
 
 // loading the slides from the session
-$image_files_only = $_SESSION["image_files_only"];
+if (isset($_SESSION["image_files_only"])) {
+	$image_files_only = $_SESSION["image_files_only"];
+}
 
 // calculating the current slide, next slide, previous slide and the number of slides
-if ($slide_id <> "all")
-{
-	if ($slide_id)
-	{
+if ($slide_id <> "all") {
+	if ($slide_id) {
 		$slide = $slide_id;
-	}
-	else
-	{
+	} else {
 		$slide = 0;
 	}
 	$previous_slide = $slide -1;
@@ -112,10 +104,8 @@ function MM_openBrWindow(theURL,winName,features) { //v2.0
 //-->
 </script>
 
-
 <div class="actions">
 	<?php
-
 	// exit the slideshow
 	echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>&nbsp;';
 
@@ -124,9 +114,7 @@ function MM_openBrWindow(theURL,winName,features) { //v2.0
 		echo '<a href="slideshow.php?slide_id=all&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'thumbnails.png" alt="">'.get_lang('_show_thumbnails').'</a>&nbsp;';
 	} else {
 		echo '<img src="'.api_get_path(WEB_IMG_PATH).'thumbnails_na.png" alt="">'.get_lang('_show_thumbnails').'&nbsp;';
-	}
-	$image = $sys_course_path.$_course['path']."/document/".$folder.$image_files_only[$slide];
-	
+	}	
 	// slideshow options
 	echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'acces_tool.gif" alt="">'.get_lang('_set_slideshow_options').'</a> &nbsp;';
 ?>
@@ -139,17 +127,14 @@ echo '<br />';
 //				TREATING THE POST DATA FROM SLIDESHOW OPTIONS
 // =======================================================================
 // if we come from slideshowoptions.php we sessionize (new word !!! ;-) the options
-if (isset ($_POST['Submit'])) // we come from slideshowoptions.php
-{
-	$_SESSION["image_resizing"] = $_POST['radio_resizing'];
-	if ($_POST['radio_resizing'] == "resizing" && $_POST['width'] != '' && $_POST['height'] != '')
-	{
+if (isset ($_POST['Submit'])) {
+	// we come from slideshowoptions.php
+	$_SESSION["image_resizing"] = Security::remove_XSS($_POST['radio_resizing']);
+	if ($_POST['radio_resizing'] == "resizing" && $_POST['width'] != '' && $_POST['height'] != '') {
 		//echo "resizing"; 
-		$_SESSION["image_resizing_width"] = $_POST['width'];
-		$_SESSION["image_resizing_height"] = $_POST['height'];
-	}
-	else
-	{
+		$_SESSION["image_resizing_width"] = Security::remove_XSS($_POST['width']);
+		$_SESSION["image_resizing_height"] = Security::remove_XSS($_POST['height']);
+	} else {
 		//echo "unsetting the session heighte and width"; 
 		$_SESSION["image_resizing_width"] = null;
 		$_SESSION["image_resizing_height"] = null;
@@ -158,13 +143,10 @@ if (isset ($_POST['Submit'])) // we come from slideshowoptions.php
 
 
 // The target height and width depends if we choose resizing or no resizing
-if ($_SESSION["image_resizing"] == "resizing")
-{
+if ($_SESSION["image_resizing"] == "resizing") {
 	$target_width = $_SESSION["image_resizing_width"];
 	$target_height = $_SESSION["image_resizing_height"];
-}
-else
-{
+} else {
 	$image_width = $source_width;
 	$image_height = $source_height;
 }
@@ -174,32 +156,26 @@ else
 // =======================================================================
 // this is for viewing all the images in the slideshow as thumbnails. 
 $image_tag = array ();
-if ($slide_id == "all")
-{
+if ($slide_id == "all") {
 	$thumbnail_width = 100;
-	$thumbnail_height = 100;	
-
-	$row_items = 4;
-
-	foreach ($image_files_only as $one_image_file)
-	{
+	$thumbnail_height = 100;
+	$row_items = 4;	
+	foreach ($image_files_only as $one_image_file) {		
 		$image = $sys_course_path.$_course['path']."/document/".$folder.$one_image_file;
-		$image_height_width = resize_image($image, $thumbnail_width, $thumbnail_height, 1);
-		
-		$image_height = $image_height_width[0];
-		$image_width = $image_height_width[1];		
-		
-		if ($path and $path !== "/")
-		{
-			$doc_url = $path."/".$one_image_file;
-		}
-		else
-		{
-			$doc_url = $path.$one_image_file;
-		}
-
-		$image_tag[] = "<img src='download.php?doc_url=".$doc_url."' border='0' width='".$image_width."' height='".$image_height."' title='".$one_image_file."'>";
-	} // foreach ($image_files_only as $one_image_file)
+		if (file_exists($image)) {
+			$image_height_width = resize_image($image, $thumbnail_width, $thumbnail_height, 1);
+			
+			$image_height = $image_height_width[0];
+			$image_width = $image_height_width[1];		
+			
+			if ($path and $path !== "/") {
+				$doc_url = $path."/".$one_image_file;
+			} else {
+				$doc_url = $path.$one_image_file;
+			}	
+			$image_tag[] = "<img src='download.php?doc_url=".$doc_url."' border='0' width='".$image_width."' height='".$image_height."' title='".$one_image_file."'>";			
+		}		
+	} // foreach ($image_files_only as $one_image_file)	
 } // if ($slide_id=="all")
 
 // creating the table
@@ -210,15 +186,13 @@ $count_image=count($image_tag);
 $number_image=6;
 $number_iteration=ceil($count_image/$number_image);
 $p=0;
-for  ($k=0;$k<$number_iteration;$k++) {
-	echo '<tr height="'.$thumbnail_height.'">';		
-	for ($i=0;$i<$number_iteration;$i++) {
-			//echo '<td ><a href="slideshow.php?slide_id='.$link.'&curdirpath='.$pathurl.'>'.$image_tag[$p].'</a></td>';	
-			//var_dump($p);
+for ($k=0;$k<$number_iteration;$k++) {
+	echo '<tr height="'.$thumbnail_height.'">';	
+	for ($i=0;$i<$number_image;$i++) {
 			if (!is_null($image_tag[$p])) {
 				echo '<td  style="border:1px solid; border-color: #CCCCCC #666666 #666666 #CCCCCC;">';
 				echo '<div align="center"><a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.' ">'.$image_tag[$p].'</a>';
-				echo '</div></td>';
+				echo '</div></td>';				
 			}
 			$p++;
 		}
@@ -226,119 +200,94 @@ for  ($k=0;$k<$number_iteration;$k++) {
 }
 echo '</table>';
 
-/*foreach ($image_tag as $image_tag_item)
-{
-	$link=$i;
-	// starting new table row
-	if ($i == 0)
-	{
-		echo "<tr>";
-		$i ++;
-					
-	}
-	$link=$i-1;
-		echo "<td align='center' style='display:block; position:relative; top: -3px; left:-3px; padding:5px; background:#FFFFFF; border:1px solid; border-color: #CCCCCC #666666 #666666 #CCCCCC;'><a href='slideshow.php?slide_id=".$link."&curdirpath=".$pathurl."'>".$image_tag_item."</a></td>";
-	
-	if ($i % 6 == 0 and $i !== 0) // 6 cols
-	{
-		echo "</tr><tr>";
-	}
-	$i ++;
-}*/
-
 // =======================================================================
 //						ONE AT A TIME VIEW
 // =======================================================================
 // this is for viewing all the images in the slideshow one at a time. 
-if ($slide_id !== "all")
-{
+if ($slide_id !== "all") {
 	$image = $sys_course_path.$_course['path']."/document/".$folder.$image_files_only[$slide];
-	$image_height_width = resize_image($image, $target_width, $target_height);
-
-	$image_height = $image_height_width[0];
-	$image_width = $image_height_width[1];
-
-	if ($_SESSION["image_resizing"] == "resizing")
-	{
-		$height_width_tags = 'width="'.$image_width.'" height="'.$image_height.'"';
-
-		/* // Removed by Ivan Tcholakov, 04-MAY-2009. After some changes this fragment of code is not needed anymore.
-		//adjust proportions. Juan Carlos Raсa Trabado TODO: replace resize_image function ?	
-		$size = @ getimagesize($image);
-		$height_width_tags = (($size[1] > $image_width) ? 'width="'.$image_width.'"' : '');
-		$height_width_tags = (($size[1] > $image_height) ? 'height="'.$image_height.'"' : '');		
-		*/
-	}
+	if (file_exists($image)) {
+		$image_height_width = resize_image($image, $target_width, $target_height);
 	
-
-	// showing the comment of the image, Patrick Cool, 8 april 2005
-	// this is done really quickly and should be cleaned up a little bit using the API functions
-	$tbl_documents = Database::get_course_table(TABLE_DOCUMENT);
-	if ($path=='/')
-	{
-		$pathpart='/';
-	}
-	else 
-	{
-		$pathpart=$path.'/'; 
-	}
-	$sql = "SELECT * FROM $tbl_documents WHERE path='".$pathpart.$image_files_only[$slide]."'";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
-	$row = Database::fetch_array($result);
-
-	// back forward buttons
-	echo '<table align="center" border="0">';
-	echo '<tr>';
-	echo '<td align="center" >';
-	// previous slide
-	if ($slide > 0) {
-		echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'">';
-	}
-	echo '<img src="'.api_get_path(WEB_IMG_PATH).'silde_back.gif" alt="">';
-	if ($slide > 0) {
-		echo "</a> ";
-	}	
-	// divider
-	if ($slide_id <> "all") {
-		echo '</td><td valign="middle"> [ '.$next_slide.'/'.$total_slides.' ] </td><td>';
+		$image_height = $image_height_width[0];
+		$image_width = $image_height_width[1];
+	
+		if ($_SESSION["image_resizing"] == "resizing") {
+			$height_width_tags = 'width="'.$image_width.'" height="'.$image_height.'"';
+			
+			/* // Removed by Ivan Tcholakov, 04-MAY-2009. After some changes this fragment of code is not needed anymore.
+			//adjust proportions. Juan Carlos Raсa Trabado TODO: replace resize_image function ?	
+			$size = @ getimagesize($image);
+			$height_width_tags = (($size[1] > $image_width) ? 'width="'.$image_width.'"' : '');
+			$height_width_tags = (($size[1] > $image_height) ? 'height="'.$image_height.'"' : '');		
+			*/
+		}		
+	
+		// showing the comment of the image, Patrick Cool, 8 april 2005
+		// this is done really quickly and should be cleaned up a little bit using the API functions
+		$tbl_documents = Database::get_course_table(TABLE_DOCUMENT);
+		if ($path=='/') {
+			$pathpart='/';
+		} else {
+			$pathpart=$path.'/'; 
+		}
+		$sql = "SELECT * FROM $tbl_documents WHERE path='".Database::escape_string($pathpart.$image_files_only[$slide])."'";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$row = Database::fetch_array($result);
+	
+		// back forward buttons
+		echo '<table align="center" border="0">';
+		echo '<tr>';
+		echo '<td align="center" >';
+		// previous slide
+		if ($slide > 0) {
+			echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'">';
+		}
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).'silde_back.gif" alt="">';
+		if ($slide > 0) {
+			echo "</a> ";
+		}	
+		// divider
+		if ($slide_id <> "all") {
+			echo '</td><td valign="middle"> [ '.$next_slide.'/'.$total_slides.' ] </td><td>';
+		}		
+		// next slide
+		if ($slide < $total_slides -1 and $slide_id <> "all") {
+			echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
+		}
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).'silde_next.gif" alt="">';
+		if ($slide > 0) {
+			echo '</a>';
+		}
+		echo '</td>';
+		echo '</tr>';
+		echo '</table>';
+		
+		echo '<br/>';
+	
+		echo '<table align="center" border="0">';
+		echo '<tr>';
+		echo '<td align="center">';
+		echo "<img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags.">";
+		echo '</td>';
+		echo '</tr>';
+		echo '<tr>';
+		echo '<td align="center">';
+		$aux= explode(".", htmlspecialchars($image_files_only[$slide]));
+	    $ext= $aux[count($aux)-1];
+		echo '<strong>'.basename(htmlspecialchars($image_files_only[$slide]), '.'.$ext).'</strong>';			
+		echo '<br />'.$row['comment'].'<br />';	
+		list($width, $high) = getimagesize($image);
+		echo $width.' x '.$high.' <br />';
+		echo round((filesize($image)/1024),2).' KB';	
+	    echo ' - '.$ext; 	
+		echo '</td>';
+		echo '</tr>';
+		echo '</table>';
+	} else {
+		Display::display_warning_message(get_lang('FileNotExist'));
 	}		
-	// next slide
-	if ($slide < $total_slides -1 and $slide_id <> "all") {
-		echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
-	}
-	echo '<img src="'.api_get_path(WEB_IMG_PATH).'silde_next.gif" alt="">';
-	if ($slide > 0) {
-		echo '</a>';
-	}
-	echo '</td>';
-	echo '</tr>';
-	echo '</table>';
-	
-	echo '<br/>';
-
-	echo '<table align="center" border="0">';
-	echo '<tr>';
-	echo '<td align="center">';
-	echo "<img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags.">";
-	echo '</td>';
-	echo '</tr>';
-	echo '<tr>';
-	echo '<td align="center">';
-	$aux= explode(".", htmlspecialchars($image_files_only[$slide]));
-    $ext= $aux[count($aux)-1];
-	echo '<strong>'.basename(htmlspecialchars($image_files_only[$slide]), '.'.$ext).'</strong>';			
-	echo '<br />'.$row['comment'].'<br />';	
-	list($width, $high) = getimagesize($image);
-	echo $width.' x '.$high.' <br />';
-	echo round((filesize($image)/1024),2).' KB';	
-    echo ' - '.$ext; 	
-	echo '</td>';
-	echo '</tr>';
-	echo '</table>';
-	
-	
 } // if ($slide_id!=="all")
 
 Display :: display_footer();
 ?>
-

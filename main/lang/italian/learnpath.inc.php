@@ -231,4 +231,7 @@ $ObjectiveMinScore = "Punteggio minimo Obiettivo";
 $LPName = "Titolo del modulo";
 $AuthoringOptions = "Opzioni di authoring";
 $CourseSettings = "Configurazione del modulo";
+$AddLinkToCourse = "Aggiungi collegamento al modulo";
+$AddAssignmentToCourse = "Aggiungi pagina elaborati al modulo";
+$AddForumToCourse = "Aggiungi Forum al modulo";
 ?>

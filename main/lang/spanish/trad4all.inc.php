@@ -711,4 +711,6 @@ $MakeVisible = "Hacer visible";
 $Image = "Imagen";
 $CourseName = "Nombre del curso";
 $SendAMessage = "Enviar mensaje";
+$Menu = "Menú";
+$BackToUserList = "Regresar a lista de usurios";
 ?>

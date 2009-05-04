@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20280 2009-05-04 16:10:06Z cfasanando $
+* 	@version $Id: exercise_show.php 20287 2009-05-04 17:14:06Z iflorespaz $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -16,7 +16,7 @@ $language_file=array('exercice','tracking');
 
 // including the global dokeos file
 include('../inc/global.inc.php');
-
+include('../inc/lib/course.lib.php');
 // including additional libraries
 include_once('exercise.class.php');
 include_once('question.class.php');
@@ -413,20 +413,31 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			
 		if ($show_results) {			
 		?>
-			<table>
+			<table width="100%">
 				<tr>
-					<td style="font-weight:bold"><?php echo get_lang('CourseTitle')?> : </td>
-					<td><?php echo $_course['name'] ?></td>
+					<td style="font-weight:bold" width="10%"><div class="actions-message"><?php echo '&nbsp;'.get_lang('CourseTitle')?> : </div></td>
+					<td><div class="actions-message" width="90%"><?php echo $_course['name'] ?></div></td>
 				</tr>
 				<tr>
-					<td style="font-weight:bold"><?php echo get_lang('User')?> : </td>
-					<td><?php echo $user_name ?></td>
+					<td style="font-weight:bold" width="10%"><div class="actions-message"><?php echo '&nbsp;'.get_lang('User')?> : </div></td>
+					<td><div class="actions-message" width="90%"><?php
+					$course_code=api_get_course_id();
+					$user_id=api_get_user_id();
+					$status_info=CourseManager::get_user_in_course_status($user_id,$course_code);
+					if (STUDENT==$status_info) {
+						$user_info=api_get_user_info($user_id); 
+						echo $user_info['firstName'].' '.$user_info['lastName'];
+					} else {
+						echo $user_name;
+					}
+
+					?></div></td>
 				</tr>
 				<tr>
-					<td style="font-weight:bold">
-						<?php echo get_lang("Exercise"); ?>
+					<td style="font-weight:bold" width="10%" class="actions-message">
+						<?php echo '&nbsp;'.get_lang("Exercise").' :'; ?>
 					</td>
-					<td>
+					<td width="90%">
 					<?php echo stripslashes($test)?><br />
 					<?php echo $exerciseDexcription; ?>
 					</td>

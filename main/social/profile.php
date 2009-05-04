@@ -422,22 +422,31 @@ $personal_course_list = UserManager::get_personal_session_course_list($my_user_i
 $course_list_code = array();
 $i=1;
 //print_r($personal_course_list);
-foreach ($personal_course_list as $my_course) {
-	if ($i<=10) {
-		$list[] = get_logged_user_course_html($my_course,$i);	
-		$course_list_code[] = array('code'=>$my_course['c'],'dbName'=>$my_course['db'], 'title'=>$my_course['i']);
-	} else {
-		break;
+if (is_array($personal_course_list)) {
+	foreach ($personal_course_list as $my_course) {
+		if ($i<=10) {
+			$list[] = get_logged_user_course_html($my_course,$i);	
+			$course_list_code[] = array('code'=>$my_course['c'],'dbName'=>$my_course['db'], 'title'=>$my_course['i']);
+		} else {
+			break;
+		}
+		$i++;
 	}
-	$i++;
 }
+
 echo '<div class="actions-title">';
-echo get_lang('ViewMySharedProfile');
+if ($user_id == api_get_user_id())
+	echo get_lang('ViewMySharedProfile');
+else 
+	echo $user_info['firstname'].' '.$user_info['lastname'].' '.get_lang('Profile');
+		
 echo '</div>';					
+
 echo '<div id="social-profile-wrapper">';
 // RIGHT COLUMN
     echo '<div id="social-profile-right">';			
 		//---- FRIENDS
+		
 		if ($show_full_profile) {
 			$list_path_friends= $list_path_normal_friends = $list_path_parents = array();
 			
@@ -467,18 +476,15 @@ echo '<div id="social-profile-wrapper">';
 				$j=0;
 				$friend_html .= '<div class="sectiontitle">'.get_lang('SocialFriend').'</div>';	
 				$friend_html.= '<div id="friend-container" class="social-friend-container">';							
-					$friend_html.= '<div id="friend-header">';
-							//$friend_html.=  $friends_count.' '.get_lang('Friends');
-						if ($friends_count == 1)
-							$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friend').'</div>';
-						else 
-							$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
-							
-						if (api_get_user_id() == $user_id)	
-							$friend_html.= '<div style="float:right;"><a href="index.php?#remote-tab-6">'.get_lang('SeeAll').'</a></div>';
-													
-					$friend_html.= '</div><br/>'; // close div friend-header
-						
+				$friend_html.= '<div id="friend-header">';
+				//$friend_html.=  $friends_count.' '.get_lang('Friends');
+				if ($friends_count == 1)
+					$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friend').'</div>';
+				else 
+					$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
+				if (api_get_user_id() == $user_id)	
+					$friend_html.= '<div style="float:right;"><a href="index.php?#remote-tab-6">'.get_lang('SeeAll').'</a></div>';													
+					$friend_html.= '</div><br/>'; // close div friend-header						
 								
 				for ($k=0;$k<$loop_friends;$k++) {				
 					if ($j==$number_of_images) {
@@ -500,8 +506,7 @@ echo '<div id="social-profile-wrapper">';
 						}
 						$j++; 
 					}				
-				}
-				//$friend_html.='</div>'; // close the div friend-container
+				}			
 			} else {
 					$friend_html .= '<div class="sectiontitle">'.get_lang('Friends').'</div>';
 					$friend_html.= '<div id="friend-container" class="social-friend-container">';					
@@ -510,39 +515,39 @@ echo '<div id="social-profile-wrapper">';
 					$friend_html.= '<div style="float:right;">'.get_lang('SeeAll').'</div>';
 					$friend_html.= '</div><br/><br/>'; // close div friend-header					
 			}
-			$friend_html.= '</div>';		
+			$friend_html.= '</div>'; 		
 			echo $friend_html; 				
 			//Pending invitations	
 			if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
-			$pending_invitations = UserFriend::get_list_invitation_of_friends_by_user_id(api_get_user_id());
-			$list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
-			$count_pending_invitations = count($pending_invitations);
-			//echo '<div class="clear"></div><br />';		
-				//javascript:register_friend(this)
-				//var_dump($pending_invitations);
-			echo '<div class="clear"></div><br />';
-			echo '<div id="social-profile-invitations" >';
-			if ($count_pending_invitations > 0) {
-				echo '<div class="sectiontitle">';
-				echo get_lang('PendingInvitations');
-				echo '</div>';
-				for ($i=0;$i<$count_pending_invitations;$i++) {
-					//var_dump($invitations);
-					echo '<div id="dpending_'.$pending_invitations[$i]['user_sender_id'].'">'; 
-						echo '<div style="float:left;width:60px;" >';
-							echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
-						echo '</div>';
-						echo '<div style="padding-left:70px;">';
-							echo ' '.substr($pending_invitations[$i]['content'],0,50);
-							echo '<br />';
-							echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
-							echo '<div id="id_response">&nbsp;</div>';
-						echo '</div>';
+				$pending_invitations = UserFriend::get_list_invitation_of_friends_by_user_id(api_get_user_id());
+				$list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
+				$count_pending_invitations = count($pending_invitations);
+				//echo '<div class="clear"></div><br />';		
+					//javascript:register_friend(this)
+					//var_dump($pending_invitations);
+				echo '<div class="clear"></div><br />';
+				echo '<div id="social-profile-invitations" >';
+				if ($count_pending_invitations > 0) {
+					echo '<div class="sectiontitle">';
+					echo get_lang('PendingInvitations');
 					echo '</div>';
-					echo '<div class="clear"></div>';
+					for ($i=0;$i<$count_pending_invitations;$i++) {
+						//var_dump($invitations);
+						echo '<div id="dpending_'.$pending_invitations[$i]['user_sender_id'].'">'; 
+							echo '<div style="float:left;width:60px;" >';
+								echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
+							echo '</div>';
+							echo '<div style="padding-left:70px;">';
+								echo ' '.substr($pending_invitations[$i]['content'],0,50);
+								echo '<br />';
+								echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
+								echo '<div id="id_response">&nbsp;</div>';
+							echo '</div>';
+						echo '</div>';
+						echo '<div class="clear"></div>';
+					}
 				}
-			}
-			echo '</div>';
+				echo '</div>';
 			}
 			
 			//--Productions			
@@ -571,8 +576,7 @@ echo '<div id="social-profile-wrapper">';
 				echo '</br><div class="rounded2">';
 				echo $file_list;
 				echo '</div>';		
-			}
-			
+			}			
 			
 			//loading this information 
 			
@@ -616,11 +620,12 @@ echo '<div id="social-profile-wrapper">';
 				echo '<br />';
 			}
 			echo '</div>';				
+		} else {
+			echo '<div class="clear"></div><br />';	
 		}
-		
+				
 	echo '</div>'; // end of content section
-//	echo '</div>'; 
-			
+		
 		
 echo '<div id="social-profile-container">';
 	// LEFT COLUMN

@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20288 2009-05-04 17:48:40Z juliomontoya $
+* 	@version $Id: exercise_show.php 20305 2009-05-04 22:31:34Z iflorespaz $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -422,8 +422,17 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				<tr>
 					<td style="font-weight:bold" width="10%"><div class="actions-message"><?php echo '&nbsp;'.get_lang('User')?> : </div></td>
 					<td><div class="actions-message" width="90%"><?php
-					$course_code=api_get_course_id();
-					$user_id=api_get_user_id();
+					if (isset($_GET['cidReq'])) {
+						$course_code=Security::remove_XSS($_GET['cidReq']);
+					} else {
+						$course_code=api_get_course_id();	
+					}
+					if (isset($_GET['student'])) {
+						$user_id=Security::remove_XSS($_GET['student']);
+					}else {
+						$user_id=api_get_user_id();
+					}
+
 					$status_info=CourseManager::get_user_in_course_status($user_id,$course_code);
 					if (STUDENT==$status_info) {
 						$user_info=api_get_user_info($user_id); 

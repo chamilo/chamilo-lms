@@ -1,4 +1,4 @@
-<?php // $Id: link.php 20163 2009-04-28 20:55:13Z juliomontoya $
+<?php // $Id: link.php 20300 2009-05-04 20:56:08Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -78,22 +78,19 @@ $category_title = (!empty($_REQUEST['category_title'])?$_REQUEST['category_title
 $submitCategory = isset($_POST['submitCategory'])?true:false;
 $nameTools = get_lang('Links');
 
-if (isset($_GET['action']) && $_GET['action']=='addlink')
-{
+if (isset($_GET['action']) && $_GET['action']=='addlink') {
 	$nameTools = '';
 	$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
 	$interbreadcrumb[] = array ('url' => 'link.php?action=addlink', 'name' => get_lang('AddLink'));
 }	
 
-if (isset($_GET['action']) && $_GET['action']=='addcategory') 
-{
+if (isset($_GET['action']) && $_GET['action']=='addcategory') {
 	$nameTools = '';
 	$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
 	$interbreadcrumb[] = array ('url' => 'link.php?action=addcategory', 'name' => get_lang('AddCategory'));
 }
 
-if (isset($_GET['action']) && $_GET['action']=='editlink') 
-{
+if (isset($_GET['action']) && $_GET['action']=='editlink') {
 	$nameTools = '';
 	$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditLink'));
@@ -128,10 +125,8 @@ function MM_popupMsg(msg) { //v1.0
 */
 $nameTools = get_lang("Links");
 
-if(isset($_GET['action']))
-{
-	switch($_GET['action'])
-	{
+if(isset($_GET['action'])) {
+	switch($_GET['action']) {
 		case "addlink":		
 			if($link_submitted)
 			{
@@ -190,17 +185,14 @@ Display::display_introduction_section(TOOL_LINK,'left');
 $fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 
-if (is_allowed_to_edit() and isset($_GET['action']))
-{
-	
+if (is_allowed_to_edit() and isset($_GET['action'])) {	
 	echo '<div class="actions">';
 	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png').get_lang('BackToLinksOverview').'</a>';
 	echo '</div>';
 	
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
 	// has been submitted yet, hence !isset($submitLink)
-	if (($_GET['action']=="addlink" or $_GET['action']=="editlink") and empty($_POST['submitLink']))
-	{
+	if (($_GET['action']=="addlink" or $_GET['action']=="editlink") and empty($_POST['submitLink'])) {
 		echo '<div class="row">';
 		if ($_GET['action']=="addlink")
 			{echo '<div class="form_header">'.get_lang("LinkAdd").'</div>';}
@@ -245,7 +237,7 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 
 
 		$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
-		$resultcategories = api_sql_query($sqlcategories)or die("Error: " . mysql_error());
+		$resultcategories = api_sql_query($sqlcategories,__FILE__,__LINE__);
 
 		if (Database::num_rows($resultcategories)) {
 			echo '	<div class="row">
@@ -331,9 +323,7 @@ if (is_allowed_to_edit() and isset($_GET['action']))
 				</div>';	
 	
 		echo '</form>';
-	}
-	elseif(($_GET['action']=="addcategory" or $_GET['action']=="editcategory") and !$submitCategory)
-	{
+	} elseif(($_GET['action']=="addcategory" or $_GET['action']=="editcategory") and !$submitCategory) {
 		echo '<div class="row">';
 		if ($_GET['action']=="addcategory")
 			{echo '<div class="form_header">'.get_lang('CategoryAdd').'</div>';}
@@ -428,19 +418,17 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	//Starting the table which contains the categories
 	$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
 	$resultcategories=api_sql_query($sqlcategories);
-	
+		
 	echo '<table class="data_table">';
 	// displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
-		$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 or category_id IS NULL";
-		$result = api_sql_query($sqlLinks);
-		$numberofzerocategory=Database::num_rows($result);
-		
-		if ($numberofzerocategory!==0)
-		{
-			echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\"><i>".get_lang('General')."</i></th></tr>";
-			echo '</table>';	
-			showlinksofcategory(0);		
-		}
+	$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 or category_id IS NULL";
+	$result = api_sql_query($sqlLinks);
+	$numberofzerocategory=Database::num_rows($result);		
+	if ($numberofzerocategory!==0) {
+		echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\"><i>".get_lang('General')."</i></th></tr>";
+		echo '</table>';	
+		showlinksofcategory(0);		
+	}
 		
 	$i=0;
 	$catcounter=1;
@@ -448,7 +436,8 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 
 	while ($myrow=Database::fetch_array($resultcategories))
 	{
-		if (!isset($urlview))
+		//if (!isset($urlview))
+		if ($urlview == '')
 		{
 			// No $view set in the url, thus for each category link it should be all zeros except it's own
 			makedefaultviewcode($i);

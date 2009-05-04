@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 20255 2009-05-02 23:16:22Z iflorespaz $
+* 	@version $Id: survey.lib.php 20306 2009-05-04 23:22:40Z iflorespaz $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -4394,7 +4394,7 @@ class SurveyUtil {
 		$table->set_header(7, get_lang('AvailableUntill'));
 		$table->set_header(8, get_lang('Invite'));
 		$table->set_header(9, get_lang('Anonymous'));
-		$table->set_header(10, get_lang('Modify'), false,'width="120"');
+		$table->set_header(10, get_lang('Modify'), false,'width="130"');
 		$table->set_column_filter(9, 'anonymous_filter');
 		$table->set_column_filter(10, 'modify_filter');
 			$table->set_form_actions(array ('delete' => get_lang('DeleteSurvey')));
@@ -4427,7 +4427,7 @@ class SurveyUtil {
 		$table->set_header(7, get_lang('AvailableUntill'));
 		$table->set_header(8, get_lang('Invite'));
 		$table->set_header(9, get_lang('Anonymous'));
-		$table->set_header(10, get_lang('Modify'), false,'width="120"');
+		$table->set_header(10, get_lang('Modify'), false,'width="130"');
 		$table->set_column_filter(9, 'anonymous_filter');
 		$table->set_column_filter(10, 'modify_filter_for_coach');	
 		$table->display();

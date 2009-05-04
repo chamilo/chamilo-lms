@@ -153,7 +153,8 @@ if (Database :: num_rows($result) > 1)
 			echo '<option value="' . $row['survey_id'] . '">' . $row['lang'] . '</option>';
 		}
 		echo '</select>';
-		echo '  <input type="submit" name="Submit" value="' . get_lang('Ok') . '" />';
+		//echo '  <input type="submit" name="Submit" value="' . get_lang('Ok') . '" class="next" />';
+		echo '<button type="submit" name="Submit" class="next">'.get_lang('Ok').'</button>';
 		echo '</form>';
 		display :: display_footer();
 		exit();
@@ -526,7 +527,7 @@ if ($survey_data['form_fields']!='' && $survey_data['anonymous'] == 0 && is_arra
 			$form->addRule('extra_' . $field_details[1], get_lang('ThisFieldIsRequired'), 'required');
 		}
 	}
-	$form->addElement('submit', '', get_lang('Next'));
+	$form->addElement('style_submit_button', '', get_lang('Next'),array('class'=>'next'));
 	$user_data = array_merge($user_data, $extra_data);
 	$form->setDefaults($user_data);
 }
@@ -1202,11 +1203,13 @@ if ($survey_data['survey_type'] === '0')
 		// the normal survey as always		
 		if (($show < $numberofpages) || !$_GET['show']) //$show = $_GET['show']+1
 		{
-			echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' >> " />';
+			//echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' " class="next" />';
+			echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
 		}
 	
 		if ($show >= $numberofpages && $_GET['show']) {
-			echo '<input type="submit" name="finish_survey" value="' . get_lang('FinishSurvey') . ' >> " />';
+			//echo '<input type="submit" name="finish_survey" value="' . get_lang('FinishSurvey') . '" class="next" />';
+			echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
 		}
 	}
 	else
@@ -1217,12 +1220,14 @@ if ($survey_data['survey_type'] === '0')
 			$numberofpages = count($paged_questions);		
 			if (($show < $numberofpages) || !$_GET['show']) //$show = $_GET['show']+1
 			{
-				echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' >> " />';
+				//echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . '" class="next" />';
+				echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
 			}
 	
 			if ($show >= $numberofpages && $_GET['show']) 
 			{
-				echo '<input type="submit" name="finish_survey" value="' . get_lang('FinishSurvey') . ' >> " />';
+				//echo '<input type="submit" name="finish_survey" value="' . get_lang('FinishSurvey') . '" class="next" />';
+				echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
 			}		
 		}
 	}
@@ -1259,8 +1264,8 @@ elseif ($survey_data['survey_type'] === '1') //conditional/personality-test type
 		if ($personality ==0)
 		if ( ($show <= $numberofpages) || !$_GET['show'] ) //$show = $_GET['show']+1
 		{	
-			echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' >> " />';
-
+			//echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' " class="next" />';
+			echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
 			if ($survey_data['one_question_per_page']==0)
 			{
 				if ($personality >= 0 ) 
@@ -1299,29 +1304,34 @@ elseif ($survey_data['survey_type'] === '1') //conditional/personality-test type
 				
 				if ($show  >= $numberofpages )				   
 				{	
-					echo '<input type="submit" name="finish_survey" value="' . get_lang('FinishSurvey') . ' >> " />';
+					//echo '<input type="submit" name="finish_survey" value="' . get_lang('FinishSurvey') . ' " class="next" />';
+					echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
 				} 
 				else 
 				{
 					echo '<input type="hidden" name="personality" value="' . $personality . '">';
-					echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' >> " />';
+					//echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . '" class="next" />';
+					echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';					
 				}				
 			}
 			else
 			{
 				// if the personality test hidden input was set.
-				echo '<input type="submit" name="finish_survey" value="' . get_lang('FinishSurvey') . ' >> " />';
+				//echo '<input type="submit" name="finish_survey" value="' . get_lang('FinishSurvey') . ' " class="next" />';
+				echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';				
 			}			
 		}		
 	}
 	// this is the case when the show_profile_form is true but there are not form_fields 
 	elseif ($survey_data['form_fields'] == '')	
 	{				
-		echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' >> " />';
+		//echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' " class="next" />';
+		echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
 	}	
 	elseif(!is_array($user_data))
 	{	// if the user is not registered in the platform we do not show the form to update his information
-		echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' >> " />'; 
+		//echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' " class="next" />';
+		echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';	 
 	}
 }
 echo '</form>';

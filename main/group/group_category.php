@@ -1,5 +1,5 @@
 <?php
-// $Id: group_category.php 19800 2009-04-16 08:08:55Z pcool $
+// $Id: group_category.php 20293 2009-05-04 19:28:21Z iflorespaz $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -102,9 +102,8 @@ else
 {
     //Checks if the field was created in the table Category. It creates it if is neccesary
     $table_category = Database :: get_course_table(GROUP_CATEGORY_TABLE);
-	if (mysql_query("SELECT wiki_state FROM $table_category") == FALSE)
-    {
-    	mysql_query("ALTER TABLE $table_category ADD `wiki_state` tinyint(3) UNSIGNED NOT NULL default '1';");
+	if (Database::query("SELECT wiki_state FROM $table_category",__FILE__,__LINE__) == FALSE) {
+    	Database::query("ALTER TABLE $table_category ADD `wiki_state` tinyint(3) UNSIGNED NOT NULL default '1';",__FILE__,__LINE__);
     }
 	
 	
@@ -112,7 +111,8 @@ else
 	$action = 'add_category';
 	$form = new FormValidator('group_category');
 }
-$form->addElement('header', '', $nameTools);
+	$form->addElement('html', '<div class="sectiontitle" >'.$nameTools);
+	$form->addElement('html', '</div>');
 
 // If categories allowed, show title & description field
 if (get_setting('allow_group_categories') == 'true')
@@ -141,7 +141,11 @@ $group[] = & $form->createElement('static', null, null, get_lang('QtyOfUserCanSu
 $form->addGroup($group, 'limit_group', get_lang('GroupLimit'), ' ', false);
 $form->addRule('limit_group',get_lang('MaxGroupsPerUserInvalid'),'callback','check_groups_per_user');
 // Default settings for new groups
-$form->addElement('static', null, '<b>'.get_lang('DefaultSettingsForNewGroups').'</b>');
+//$form->addElement('static', null, '<b>'.get_lang('DefaultSettingsForNewGroups').'</b>');
+
+$form->addElement('html', '<br/><br/><div class="sectiontitle" >'.get_lang('DefaultSettingsForNewGroups'));
+$form->addElement('html', '</div>');
+	
 // Members per group
 $form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'),MEMBER_PER_GROUP_NO_LIMIT);
 $group = array ();

@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 20243 2009-04-30 23:35:35Z iflorespaz $
+// $Id: inscription.php 20290 2009-05-04 18:04:33Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -483,9 +483,15 @@ if ($form->validate()) {
 }
 ?>
 <br/>
+<?php
+if (!isset($_POST['username'])) {
+?>
 <div class="actions">
 <a href="<?php echo api_get_path(WEB_PATH); ?>" class="fake_button_back" ><?php echo get_lang('Back'); ?></a>
 </div>
+<?php
+}
+?>
 <?php
 /*
 ==============================================================================

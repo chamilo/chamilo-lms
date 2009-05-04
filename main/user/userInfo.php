@@ -1,4 +1,4 @@
-<?php // $Id: userInfo.php 19824 2009-04-17 09:56:23Z pcool $
+<?php // $Id: userInfo.php 20261 2009-05-04 03:10:45Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -434,11 +434,11 @@ elseif ($displayMode == "viewMainInfoEdit")
 		
 				if (api_get_setting('extended_profile') == 'true')
 				{
-					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
-					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
-					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
-					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
-					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
+					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
+					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
+					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
+					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
+					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
 				}
 
 	}
@@ -553,11 +553,11 @@ elseif ($displayMode == "viewContentList") // default display
 								
 				if (api_get_setting('extended_profile') == 'true')
 				{
-					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
-					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
-					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
-					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
-					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
+					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
+					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
+					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
+					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
+					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
 				}
 	}
 	else{

@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 20231 2009-04-30 18:08:12Z cvargas1 $
+* 	@version $Id: exercise_result.php 20280 2009-05-04 16:10:06Z cfasanando $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -1058,14 +1058,11 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 		<br /><br />
 <?php if($origin == 'learnpath') {	
-	Display::display_normal_message(get_lang('ExerciseFinished'));
+	//Display::display_normal_message(get_lang('ExerciseFinished'));
 	$lp_mode =  $_SESSION['lp_mode'];	
-	if ($lp_mode == 'fullscreen') {							
-?>					
-	<button type="button" class="save" onclick="window.opener.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>';window.close()" value="<?php echo get_lang('Finish'); ?>"><?php echo get_lang('Finish');?></button>				
-<?php } else { ?>					
-	<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>';" value="<?php echo get_lang('Finish'); ?>"><?php echo get_lang('Finish');?></button>				
-<?php }
+	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId;
+	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';	 
+	echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
 }	
 /*
 ==============================================================================

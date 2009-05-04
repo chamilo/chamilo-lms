@@ -153,6 +153,8 @@ foreach($list as $toc) {
 	}	
 }
 
+$ctok = $_SESSION['sec_token'];
+
 // update status,total_time from lp_item_view table when you finish the exercises in learning path
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
 	global $src;
@@ -193,14 +195,8 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 			api_sql_query($sql_upd_score,__FILE__,__LINE__);
 		}
 	}
-	if($_SESSION['oLP']->mode == 'fullscreen') {
-		$lp_next_item_id = $_SESSION['oLP']->get_next_item_id();
-		$src = $_SESSION['oLP']->get_link('http',$lp_next_item_id);
-		$_SESSION['oLP']->current = $lp_next_item_id;				
-	} else {
-		$src = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?action=stats';
-	}		
-		
+	
+	$src = 'blank.php?msg=exerciseFinished';					
 }
 
 $_SESSION['oLP']->set_previous_item($lp_item_id);

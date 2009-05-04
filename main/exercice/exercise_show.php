@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20236 2009-04-30 21:01:58Z iflorespaz $
+* 	@version $Id: exercise_show.php 20280 2009-05-04 16:10:06Z cfasanando $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -1045,10 +1045,6 @@ if($origin!='learnpath') {
 		}
 		echo '!</div>';		
 	}
-} else {
-	echo '<br /><br />';	
-  	Display::display_normal_message(get_lang('ExerciseFinished'));
-	echo '<br />';
 } 
 
 if (is_array($arrid) && is_array($arrmarks)) {
@@ -1091,13 +1087,13 @@ if ($origin != 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();
 } else {
-	$lp_mode =  $_SESSION['lp_mode'];	
-	if ($lp_mode == 'fullscreen') {							
-?>					
-	<button type="button" class="save" onclick="window.opener.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>';window.close()" value="<?php echo get_lang('Finish'); ?>"><?php echo get_lang('Finish');?></button>				
-<?php } else { ?>					
-	<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>';" value="<?php echo get_lang('Finish'); ?>"><?php echo get_lang('Finish');?></button>				
-<?php } 
+	
+	
+	$lp_mode =  $_SESSION['lp_mode'];
+	
+	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId;
+	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';	 
+	echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
 
 	//record the results in the learning path, using the SCORM interface (API)
 	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";

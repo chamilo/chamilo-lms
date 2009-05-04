@@ -1,4 +1,4 @@
-<?php // $Id: slideshowoptions.php 20259 2009-05-03 23:03:40Z ivantcholakov $ 
+<?php // $Id: slideshowoptions.php 20286 2009-05-04 17:00:51Z ivantcholakov $ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -129,6 +129,8 @@ function disableresizing() { //v2.0
 	document.options.height.disabled=true;
 	document.options.height.className='disabled_input'; 
 }
+
+window.onload = <?php echo $_SESSION['image_resizing'] == 'resizing' ? 'enableresizing' : 'disableresizing'; ?>;
 
 //-->
 </script>

@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 19848 2009-04-18 19:13:05Z yannoo $
+<?php // $Id: usermanager.lib.php 20303 2009-05-04 21:12:43Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1455,6 +1455,7 @@ class UserManager
 		$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		
+		$user_id = Database::escape_string($user_id);
 		//we filter the courses from the URL
 		$join_access_url=$where_access_url='';		
 		global $_configuration;		

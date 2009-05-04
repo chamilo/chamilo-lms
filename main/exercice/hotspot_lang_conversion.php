@@ -30,16 +30,17 @@ include_once('../inc/global.inc.php');
 
 $hotspot_lang_file = api_get_path(SYS_LANG_PATH);
 
-if(isset($_GET['lang']))
-{
-	$search = array('../','\\0');
-	$lang = str_replace($search,'',urldecode($_GET['lang']));
-	if(file_exists($hotspot_lang_file . $lang . '/hotspot.inc.php'))
-		$hotspot_lang_file .= $lang . '/hotspot.inc.php';
-	else
-		$hotspot_lang_file .= 'english/hotspot.inc.php';
-}
-else
+if(isset($_GET['lang'])) {
+	//$search = array('../','\\0','\\');
+	$lang = urldecode($_GET['lang']);
+	if (preg_match('/^[a-zA-Z0-9\._-]+$/', $lang)) {		
+		//$lang = str_replace($search,$replace,urldecode($_GET['lang']));
+		if(file_exists($hotspot_lang_file . $lang . '/hotspot.inc.php'))
+			$hotspot_lang_file .= $lang . '/hotspot.inc.php';
+		else
+			$hotspot_lang_file .= 'english/hotspot.inc.php';
+	}
+} else
 	$hotspot_lang_file .= 'english/hotspot.inc.php';
 
 $file = file($hotspot_lang_file);

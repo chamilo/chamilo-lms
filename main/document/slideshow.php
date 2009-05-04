@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 20284 2009-05-04 16:54:26Z juliomontoya $
+<?php // $Id: slideshow.php 20302 2009-05-04 21:04:04Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -56,10 +56,10 @@ $pathurl = urlencode($path);
 
 $slide_id = Security::remove_XSS($_GET['slide_id']);
 
-if ($path and $path <> "") {
-	$folder = $path."/";
+if ($path <> '/') {
+	$folder = $path.'/';
 } else {
-	$folder = "";
+	$folder = '/';
 }
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 
@@ -162,7 +162,7 @@ if ($slide_id == "all") {
 	$row_items = 4;	
 	if (is_array($image_files_only)) {
 		foreach ($image_files_only as $one_image_file) {	
-			$image = $sys_course_path.$_course['path']."/document/".$folder.$one_image_file;
+			$image = $sys_course_path.$_course['path']."/document".$folder.$one_image_file;
 			if (file_exists($image)) {
 				$image_height_width = resize_image($image, $thumbnail_width, $thumbnail_height, 1);
 				
@@ -207,7 +207,7 @@ echo '</table>';
 // =======================================================================
 // this is for viewing all the images in the slideshow one at a time. 
 if ($slide_id !== "all") {
-	$image = $sys_course_path.$_course['path']."/document/".$folder.$image_files_only[$slide];
+	$image = $sys_course_path.$_course['path']."/document".$folder.$image_files_only[$slide];
 	if (file_exists($image)) {
 		$image_height_width = resize_image($image, $target_width, $target_height);
 	

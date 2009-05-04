@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 20277 2009-05-04 15:40:57Z juliomontoya $
+<?php // $Id: slideshow.php 20284 2009-05-04 16:54:26Z juliomontoya $
 
 /*
 ==============================================================================
@@ -160,22 +160,24 @@ if ($slide_id == "all") {
 	$thumbnail_width = 100;
 	$thumbnail_height = 100;
 	$row_items = 4;	
-	foreach ($image_files_only as $one_image_file) {		
-		$image = $sys_course_path.$_course['path']."/document/".$folder.$one_image_file;
-		if (file_exists($image)) {
-			$image_height_width = resize_image($image, $thumbnail_width, $thumbnail_height, 1);
-			
-			$image_height = $image_height_width[0];
-			$image_width = $image_height_width[1];		
-			
-			if ($path and $path !== "/") {
-				$doc_url = $path."/".$one_image_file;
-			} else {
-				$doc_url = $path.$one_image_file;
-			}	
-			$image_tag[] = "<img src='download.php?doc_url=".$doc_url."' border='0' width='".$image_width."' height='".$image_height."' title='".$one_image_file."'>";			
-		}		
-	} // foreach ($image_files_only as $one_image_file)	
+	if (is_array($image_files_only)) {
+		foreach ($image_files_only as $one_image_file) {	
+			$image = $sys_course_path.$_course['path']."/document/".$folder.$one_image_file;
+			if (file_exists($image)) {
+				$image_height_width = resize_image($image, $thumbnail_width, $thumbnail_height, 1);
+				
+				$image_height = $image_height_width[0];
+				$image_width = $image_height_width[1];		
+				
+				if ($path and $path !== "/") {
+					$doc_url = $path."/".$one_image_file;
+				} else {
+					$doc_url = $path.$one_image_file;
+				}	
+				$image_tag[] = "<img src='download.php?doc_url=".$doc_url."' border='0' width='".$image_width."' height='".$image_height."' title='".$one_image_file."'>";			
+			}		
+		} // foreach ($image_files_only as $one_image_file)
+	}
 } // if ($slide_id=="all")
 
 // creating the table

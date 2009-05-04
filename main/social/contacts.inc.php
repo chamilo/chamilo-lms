@@ -37,7 +37,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
     <td height="25" valign="top">
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-subtitle-search">
       <tr>
-        <td width="100%" height="25" valign="top" class="social-align-box">&nbsp;&nbsp;<?php echo get_lang('Search').'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?><input class="social-search-image" type="text" class="search-image" id="id_search_image" name="id_search_image" value="" onkeyup="search_image_social(this)" /></td>
+        <td width="100%" height="25" valign="top" class="social-align-box">&nbsp;&nbsp;<?php echo mb_convert_encoding(get_lang('Search'),'UTF-8',$charset) .'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?><input class="social-search-image" type="text" class="search-image" id="id_search_image" name="id_search_image" value="" onkeyup="search_image_social(this)" /></td>
       </tr>
     </table></td>
   </tr>

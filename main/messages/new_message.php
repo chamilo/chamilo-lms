@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 19975 2009-04-22 14:23:01Z pcool $
+<?php // $Id: new_message.php 20301 2009-05-04 20:58:41Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -173,7 +173,7 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');
 	}
-	$form->addElement('submit', 'compose', get_lang('Send'));
+	$form->addElement('submit', 'compose',mb_convert_encoding(get_lang('Send'),'UTF-8',$charset));
 	$form->setDefaults($default);
 	if ($form->validate()) {
 		$values = $form->exportValues();
@@ -220,7 +220,7 @@ if ($request===false) {
 
 //api_display_tool_title($nameTools);
 echo '<div class=actions>';
-echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',get_lang('BackToInbox')).get_lang('BackToInbox').'</a>';
+echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',mb_convert_encoding(get_lang('BackToInbox'),'UTF-8',$charset)).mb_convert_encoding(get_lang('BackToInbox'),'UTF-8',$charset).'</a>';
 echo '</div>';
 if (!isset($_POST['compose'])) {
 	if(isset($_GET['re_id'])) {

@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20287 2009-05-04 17:14:06Z iflorespaz $
+* 	@version $Id: exercise_show.php 20288 2009-05-04 17:48:40Z juliomontoya $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -339,16 +339,17 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		</td>
 		<td valign="top" align="left"><?php echo $answerId; ?></td>
 		<td valign="top" align="left">
-			<?php $studentChoice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $studentChoice; ?>
+			<?php 
+			$my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $my_choice; ?>
 		</td>
 		
 		<td valign="top" align="left" >
 			<?php
 			$answerComment=api_parse_tex($answerComment);
 			if($studentChoice) {
-				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';			
+				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';							
 			} else {
-				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';
+				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';				
 			} 
 			?>
 		</td>	

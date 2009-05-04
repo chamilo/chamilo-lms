@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 20280 2009-05-04 16:10:06Z cfasanando $
+* 	@version $Id: exercise_result.php 20288 2009-05-04 17:48:40Z juliomontoya $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -434,10 +434,18 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				</td>
 				<td valign="top"><?php echo $answerId; ?></td>
 				<td valign="top">
-					<?php $studentChoice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $studentChoice; ?>
+					<?php $my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $my_choice; ?>
 				</td>
-				<td valign="top">
-					<?php echo stripslashes($answerComment); ?>
+				<td valign="top">				
+					<?php
+					if ($studentChoice) {
+						echo '<span style="font-weight: bold; color: #008000;">';							
+					} else {
+						echo '<span style="font-weight: bold; color: #FF0000;">';												
+					}					
+					echo stripslashes($answerComment);
+					echo '</span>';				 
+					?>
 				</td>
 		</tr>
 	<?php
@@ -937,8 +945,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			}
 		} // end for that loops over all answers of the current question
 
-		if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER)
-			{
+		if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
 				// We made an extra table for the answers
 				if($origin != 'learnpath') {
 				echo "</table></td></tr>";
@@ -962,10 +969,9 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				<b>
 				<?php
 				if($questionScore==-1){ 
-					echo get_lang('Score')." : 0/$questionWeighting";
-				}
-				else{
-					echo get_lang('Score')." : $questionScore/$questionWeighting";
+					echo get_lang('Score').": 0 /".float_format($questionWeighting);
+				} else {					
+					echo get_lang('Score').": ".float_format($questionScore,1)."/".float_format($questionWeighting,1);
 				}
 				?></b><br /><br />
 			</td>
@@ -1035,13 +1041,15 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		<table width="100%" border="0" cellpadding="3" cellspacing="2">
 		<tr>
 		<td>
-			<b><?php echo get_lang('YourTotalScore')." ";
-			if($dsp_percent == true){
+			<b>
+			<?php echo get_lang('YourTotalScore')." ";
+			if ($dsp_percent == true) {
 			  echo number_format(($totalScore/$totalWeighting)*100,1,'.','')."%";
-			}else{
-			  echo $totalScore."/".$totalWeighting;
+			} else {
+			  echo float_format($totalScore,1)."/".float_format($totalWeighting,1);
 			}
-                        ?></b>
+			?>
+			</b>
 		</td>
 		</tr>
 		<tr>

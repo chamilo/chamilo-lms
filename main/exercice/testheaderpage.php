@@ -22,21 +22,20 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: testheaderpage.php 20089 2009-04-24 21:12:54Z cvargas1 $
+* 	@version $Id: testheaderpage.php 20279 2009-05-04 15:55:58Z juliomontoya $
 */
 
 // name of the language file that needs to be included
 $language_file='exercice';
 
-
 include('../inc/global.inc.php');
 
-	require_once($_configuration['root_sys'].'main/exercice/hotpotatoes.lib.php');
+	require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 	$documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
-	$title = GetQuizName($_GET['file'],$documentPath);
-	if ($title =='')
-	{
-		$title = GetFileName($_GET['file']);
+	$my_file = Security::remove_XSS($_GET['file']);
+	$title = GetQuizName($my_file,$documentPath);
+	if ($title =='') {
+		$title = GetFileName($my_file);
 	}
 	$nameTools = $title;
 	$noPHP_SELF=true;

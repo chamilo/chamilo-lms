@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.lib.php 18415 2009-02-10 18:58:55Z cfasanando $
+* 	@version $Id: hotpotatoes.lib.php 20279 2009-05-04 15:55:58Z juliomontoya $
 */
 
 
@@ -77,24 +77,27 @@ function GetQuizName($fname,$fpath)
 	$title = "";
 	$title = GetComment($fname);
 
-	if($title=="")
-	{
-		if (!($fp = fopen($fpath.$fname, "r"))) {
-		//die("could not open Quiz input");
-			return GetFileName($fname);
+	if($title=="") {
+		if (file_exists($fpath.$fname)) {
+			if (!($fp = fopen($fpath.$fname, "r"))) {
+			//die("could not open Quiz input");
+				return GetFileName($fname);
+			}
+	
+			$contents = fread($fp, filesize($fpath.$fname));
+			fclose($fp);
+	
+			$contents = strtolower($contents);
+	
+			$pattern = array ( 1 => "title>", 2 => "/title>");
+	
+			$s_contents = substr($contents,0,strpos($contents,$pattern["2"])-1);
+			$e_contents = substr($s_contents,strpos($contents,$pattern["1"])+strlen($pattern["1"]),strlen($s_contents));
+	
+			$title = $e_contents;
+		} else {
+			return '';
 		}
-
-		$contents = fread($fp, filesize($fpath.$fname));
-		fclose($fp);
-
-		$contents = strtolower($contents);
-
-		$pattern = array ( 1 => "title>", 2 => "/title>");
-
-		$s_contents = substr($contents,0,strpos($contents,$pattern["2"])-1);
-		$e_contents = substr($s_contents,strpos($contents,$pattern["1"])+strlen($pattern["1"]),strlen($s_contents));
-
-		$title = $e_contents;
 	}
 	return $title;
 

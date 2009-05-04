@@ -138,4 +138,5 @@ $ModifyThread = "Edit thread";
 $EditForum = "Edit forum";
 $BackToForum = "Back to forum";
 $BackToForumOverview = "Back to forum overview";
+$BackToThread = "Back to thread";
 ?>

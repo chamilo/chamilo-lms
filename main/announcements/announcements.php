@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 20263 2009-05-04 03:59:27Z cfasanando $
+<?php //$Id: announcements.php 20289 2009-05-04 17:57:08Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -889,16 +889,24 @@ $announcement_number = Database::num_rows($result);
 /*----------------------------------------------------
 				ADD ANNOUNCEMENT / DELETE ALL
 ----------------------------------------------------*/
-echo '<div class="actions">';
+
 if (!$surveyid) {
+	$show_actions = false;	
 	if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('announce_add.gif',get_lang('AddAnnouncement')).get_lang('AddAnnouncement')."</a>";		
+		echo '<div class="actions">';
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('announce_add.gif',get_lang('AddAnnouncement')).get_lang('AddAnnouncement')."</a>";
+		$show_actions = true;				
 	}
+		
 	if (api_is_allowed_to_edit() && $announcement_number > 1) {
+		if (!$show_actions)
+			echo '<div class="actions">';			
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('valves_delete.gif',get_lang('AnnouncementDeleteAll'), array ('style' => 'width:22px; height:22px;')).get_lang('AnnouncementDeleteAll')."</a>\n";
-	}	// if announcementNumber > 1		
+	}	// if announcementNumber > 1
+	if ($show_actions)
+		echo '</div>';		
 }
-echo '</div>';
+
 if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath') {
 	echo "\n\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
 	echo "\t<tr>\n";

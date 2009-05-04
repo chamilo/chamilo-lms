@@ -3473,3 +3473,53 @@ function api_url_to_local_path($url)
 	// /var/www/courses/TEST/document/image.png
 	return str_replace("\\", '/', api_get_path(SYS_PATH)).(empty($local_path) ? '' : $local_path.'/').$file_name;
 }
+
+/**
+ * This function resizes an image, with preserving its proportions (or aspect ratio).
+ * @author Ivan Tcholakov, MAY-2009.
+ * @param int $image			System path or URL of the image
+ * @param int $target_width		Targeted width
+ * @param int $target_height	Targeted height
+ * @return array				Calculated new width and height
+ */
+function api_resize_image($image, $target_width, $target_height) {
+	$image_properties = @getimagesize(api_url_to_local_path($image)); // We have to call getimagesize() in a safe way.
+	$image_width = $image_properties[0];
+	$image_height = $image_properties[1];
+	return api_calculate_image_sizes($image_width, $image_height, $target_width, $target_height);
+}
+
+/**
+ * This function calculates new image sizes, with preserving image's proportions (or aspect ratio).
+ * @author Ivan Tcholakov, MAY-2009.
+ * @author The initial idea has been taken from code by Patrick Cool, MAY-2004.
+ * @param int $image_width		Initial width
+ * @param int $image_height		Initial height
+ * @param int $target_width		Targeted width
+ * @param int $target_height	Targeted height
+ * @return array				Calculated new width and height
+ */
+function api_calculate_image_sizes($image_width, $image_height, $target_width, $target_height) {
+	// Only maths is here.
+	$result = array('width' => $image_width, 'height' => $image_height);
+	if ($image_width <= 0 || $image_height <= 0) {
+		return $result;
+	}
+	$resize_factor_width = $target_width / $image_width;
+	$resize_factor_height = $target_height / $image_height;
+	$delta_width = $target_width - $image_width * $resize_factor_height;
+	$delta_height = $target_height - $image_height * $resize_factor_width;
+	if ($delta_width > $delta_height) {
+		$result['width'] = ceil($image_width * $resize_factor_height);
+		$result['height'] = ceil($image_height * $resize_factor_height);
+	}
+	elseif ($delta_width < $delta_height) {
+		$result['width'] = ceil($image_width * $resize_factor_width);
+		$result['height'] = ceil($image_height * $resize_factor_width);
+	}
+	else {
+		$result['width'] = ceil($target_width);
+		$result['height'] = ceil($target_height);
+	}
+	return $result;
+}

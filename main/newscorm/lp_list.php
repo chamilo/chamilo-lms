@@ -202,7 +202,7 @@ if (is_array($flat_list))
 	    if (($counter % 2)==0) { $oddclass="row_odd"; } else { $oddclass="row_even"; }
 
 		$url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
-		$name = $details['lp_name'];
+		$name = utf8_decode(html_entity_decode($details['lp_name'], ENT_QUOTES, 'UTF-8'));
 		$image='<img src="../img/kcmdf.gif" border="0" align="absmiddle" alt="' . $name . '">'."\n";
 	    $dsp_line =	'<tr align="center" class="'.$oddclass.'">'."\n" .
         	'<td align="left" valign="top">' .

@@ -4664,7 +4664,8 @@ class learnpath {
 		$title='';
 		for($i = 0; $i < count($arrLP); $i++)
 		{
-			$title = addslashes($arrLP[$i]['title']); 
+			//$title = addslashes(($arrLP[$i]['title']));
+			$title = utf8_decode(html_entity_decode(addslashes($arrLP[$i]['title']),ENT_QUOTES,$this->encoding));
 			$menu_page = api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $_SESSION['oLP']->lp_id;
 			$icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
 			if (file_exists("../img/lp_" . $icon_name . ".png"))
@@ -4902,7 +4903,7 @@ class learnpath {
 					$row['title'] = utf8_decode($row['title']);
 				}		
 				
-				$return .= '<p class="lp_title">' . stripslashes($row['title']) . '</p>';
+				$return .= '<p class="lp_title">' . $title = utf8_decode(html_entity_decode(stripslashes($row['title']),ENT_QUOTES,$this->encoding)) . '</p>';
 				//$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';
 				
 				//$return .= '<hr />';

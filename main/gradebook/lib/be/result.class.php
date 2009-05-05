@@ -97,7 +97,6 @@ class Result
 	public function load ($id = null, $user_id = null, $evaluation_id = null) {
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$tbl_course_rel_course = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		
 		if (is_null($id ) && is_null($user_id) && !is_null($evaluation_id)) {
 
 			$sql_verified_if_exist_evaluation='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE evaluation_id="'.Database::escape_string($evaluation_id).'";';
@@ -105,7 +104,7 @@ class Result
 			$info_verified_if_exist_evaluation=Database::result($res_verified_if_exist_evaluation,0,0);
 				if ($info_verified_if_exist_evaluation!=0) {
 					
-				$sql_course_rel_user='SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="5"; ';
+				$sql_course_rel_user='SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="5" AND course_code="'.api_get_course_id().'"; ';
 				$res_course_rel_user=Database::query($sql_course_rel_user,__FILE__,__LINE__);
 				
 				$list_user_course_list=array();
@@ -116,6 +115,7 @@ class Result
 				$current_date=time();
 				for ($i=0;$i<count($list_user_course_list);$i++) {
 					$sql_verified='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE user_id="'.(int)($list_user_course_list[$i]['user_id']).'" AND evaluation_id="'.Database::escape_string($evaluation_id).'";';
+					//$my_status_in_course=CourseManager::get_user_in_course_status($list_user_course_list[$i]['user_id'], api_get_course_id());
 					$res_verified=Database::query($sql_verified,__FILE__,__LINE__);
 					$info_verified=Database::result($res_verified,0,0);
 					if ($info_verified==0) {

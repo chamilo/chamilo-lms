@@ -1,4 +1,4 @@
-<?php // $Id: infocours.php 20208 2009-04-30 00:01:52Z yannoo $
+<?php // $Id: infocours.php 20343 2009-05-05 20:31:47Z juliomontoya $
 
 /*
 ==============================================================================
@@ -154,6 +154,8 @@ $visual_code=$form->addElement('text','visual_code', get_lang('Code'));
 $form->applyFilter('visual_code', 'strtoupper');
 //$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
 $prof = &$form->addElement('select', 'tutor_name', get_lang('Professors'), $a_profs);
+$form->applyFilter('tutor_name','html_filter');
+
 $prof -> setSelected($s_selected_tutor);
 $form->add_textfield('title', get_lang('Title'), true, array ('size' => '60'));
 $form->applyFilter('title','html_filter');

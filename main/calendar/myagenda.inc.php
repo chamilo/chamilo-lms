@@ -320,6 +320,11 @@ function show_new_personal_item_form($id = "")
 	// if an $id is passed to this function this means we are editing an item
 	// we are loading the information here (we do this after everything else
 	// to overwrite the default information)
+	
+	if ($id != strval(intval($id))) {
+		return false; //potential SQL injection
+	}	
+	
 	if ($id <> "")
 	{
 		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
@@ -480,6 +485,15 @@ function store_personal_item($day, $month, $year, $hour, $minute, $title, $conte
 	global $_user;
 	//constructing the date
 	$date = $year."-".$month."-".$day." ".$hour.":".$minute.":00";
+	
+	$date = Database::escape_string($date);
+	$title = Database::escape_string($title);
+	$content = Database::escape_string($content);
+	if ($id != strval(intval($id))) {
+		return false; //potential SQL injection
+	}
+	
+	
 	if ($id <> "")
 	{ // we are updating
 		$sql = "UPDATE ".$tbl_personal_agenda." SET user='".$_user['user_id']."', title='".$title."', text='".$content."', date='".$date."' WHERE id='".$id."'";
@@ -858,6 +872,11 @@ function delete_personal_agenda($id)
 {
 	global $tbl_personal_agenda;
 	global $_user;
+	
+	if ($id != strval(intval($id))) {
+		return false; //potential SQL injection
+	}	
+	
 	if ($id <> '')
 	{
 		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";

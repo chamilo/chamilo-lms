@@ -1,4 +1,4 @@
-<?php //$Id: myagenda.php 19108 2009-03-17 17:35:50Z ndieschburg $
+<?php //$Id: myagenda.php 20343 2009-05-05 20:31:47Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -77,13 +77,13 @@ $nameTools = get_lang('MyAgenda');
 
 // if we come from inside a course and click on the 'My Agenda' link we show a link back to the course
 // in the breadcrumbs
-if(!empty($_GET['coursePath']))
-{
+if(!empty($_GET['coursePath'])) {
 	$course_path = htmlentities(strip_tags($_GET['coursePath']),ENT_QUOTES,$charset);
+	$course_path = str_replace(array('../','..\\'),array('',''),$course_path); 	
 }
-if (!empty ($course_path))
-{
-	$interbreadcrumb[] = array ('url' => api_get_path(WEB_COURSE_PATH).urlencode($course_path).'/index.php', 'name' => $_GET['courseCode']);
+
+if (!empty ($course_path)) {
+	$interbreadcrumb[] = array ('url' => api_get_path(WEB_COURSE_PATH).urlencode($course_path).'/index.php', 'name' => Security::remove_XSS($_GET['courseCode']));
 }
 // this loads the javascript that is needed for the date popup selection
 $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
@@ -127,9 +127,9 @@ if (empty($_SESSION['view']))
 	$_SESSION['view'] = "month";
 }
 // 2. Storing it in the session. If we change the view by clicking on the links left, we change the session
-if (!empty($_GET['view']))
-{
-	$_SESSION['view'] = $_GET['view'];
+if (!empty($_GET['view'])) {	
+	$_SESSION['view'] = Security::remove_XSS($_GET['view']);
+	
 }
 // 3. The views: (month, week, day, personal)
 if ($_SESSION['view'])

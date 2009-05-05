@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 20184 2009-04-29 16:28:20Z iflorespaz $
+<?php //$Id: myStudents.php 20343 2009-05-05 20:31:47Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -123,7 +123,7 @@ function calculHours($seconds)
 function is_teacher($course_code){
 	global $_user;
 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$sql="SELECT 1 FROM $tbl_course_user WHERE user_id='".$_user["user_id"]."' AND course_code='".$course_code."' AND status='1'";
+	$sql="SELECT 1 FROM $tbl_course_user WHERE user_id='".$_user["user_id"]."' AND course_code='".Database::escape_string($course_code)."' AND status='1'";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	if(Database::result($result)!=1)
 	{
@@ -190,7 +190,7 @@ if(!empty($_GET['student']))
 	
 	echo '<div class="actions">
 		<a href="#" onclick="window.print()"><img src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-		<a href="'.api_get_self().'?'.$_SERVER['QUERY_STRING'].'&export=csv"><img src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+		<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=csv"><img src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 	  </div>';
 	  	  
 	// is the user online ?

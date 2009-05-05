@@ -1461,7 +1461,7 @@ class CourseManager
 		//above was the normal course creation table update call,
 		//now one more thing: fill in the target_course_code field
 
-		$sql_query = "UPDATE $course_table SET target_course_code = '$real_course_code' WHERE code = '$course_sys_code' LIMIT 1 ";
+		$sql_query = "UPDATE $course_table SET target_course_code = '$real_course_code' WHERE code = '".Database::escape_string($course_sys_code)."' LIMIT 1 ";
 		api_sql_query($sql_query, __FILE__, __LINE__);
 
 		return true;

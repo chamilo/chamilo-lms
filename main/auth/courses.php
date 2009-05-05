@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 19685 2009-04-09 13:02:29Z iflorespaz $
+<?php // $Id: courses.php 20343 2009-05-05 20:31:47Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -467,7 +467,7 @@ function display_search_courses()
 	echo "<form class=\"course_list\" method=\"post\" action=\"".api_get_self()."?action=subscribe\">",
 					'<input type="hidden" name="sec_token" value="'.$stok.'">',
 					"<input type=\"hidden\" name=\"search_course\" value=\"1\" />",
-					"<input type=\"text\" name=\"search_term\" value=\"".(empty($_POST['search_term'])?'':$_POST['search_term'])."\" />",
+					"<input type=\"text\" name=\"search_term\" value=\"".(empty($_POST['search_term'])?'':Security::remove_XSS($_POST['search_term']))."\" />",
 					"&nbsp;<button class=\"search\" type=\"submit\">",get_lang("_search")," </button>",
 					"</form>";
 	if (isset($_POST['search_course']))

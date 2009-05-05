@@ -70,6 +70,7 @@ $DrawUnderline = "Rita understrykning";
 $Rectangle = "Rektangel";
 $Elipse = "Elips";
 $Arrow = "Pil";
+$DeleteChosenItem = "Radera den valda resursen";
 $BecomeModerator = "Bli moderator";
 $Close = "Stäng";
 $Italic = "Kursiv";

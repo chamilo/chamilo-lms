@@ -43,7 +43,7 @@ $langCreateCourseGroups = "Grupper";
 $langCatagoryMain = "Huvud";
 $langCatagoryGroup = "Gruppforum";
 $langLn = "Språk";
-$langCreateSite = "Skapa en kurswebbsajt";
+$langCreateSite = "Skapa en kurs";
 $langFieldsRequ = "Alla fält krävs";
 $langEx = "e.g. <i>Svenska A</i>";
 $langFac = "Fakultet";
@@ -99,4 +99,7 @@ $ExampleForum = "Forumexempel";
 $ExampleThread = "Trådexempel";
 $ExampleThreadContent = "Innehållsexempel";
 $IntroductionWiki = "Ordet Wiki är en förkortning för WikiWikiWeb. Ordet Wikiwiki kommer från Hawaii och betyder snabb eller hastighet. I en wiki kan olika personer skapa innehåll tillsammans. Om en person skriver något som är ofullständigt eller fel, kan nästa person rätta eller komplettera det med mer innehåll. På så sätt kan innehållet hela tiden utökas och förbättras.";
+$CreateCourseArea = "Skapa den här kursen";
+$CreateCourse = "Skapa en kurs";
+$Create = "Skapa";
 ?>

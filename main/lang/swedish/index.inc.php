@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Ogiltig inloggning. Om du inte är registrerad fyll i <a href=\'claroline/auth/inscription.php\'>registreringsformuläret</a></font color>";
-$langWelcome = "fria kurser är tillgängliga nedan. Andra kurser kräver ett användarnamn och lösenord, vilket du kan erhålla genom att klicka på \'Registrering\'. Lärare kan skapa kurswebbsajter genom att klicka på registrering också, men sedan välja \'Skapa kurswebbsajt (lärare)\'.";
+$langWelcome = "fria kurser är tillgängliga nedan. Andra kurser kräver ett användarnamn och lösenord, vilket du kan erhålla genom att klicka på \'Registrering\'. Lärare kan skapa kurs genom att klicka på registrering också, men sedan välja \'Skapa kurs (lärare)\'.";
 $langPass = "Lösenord";
 $langEnter = "Stig in";
 $langReg = "Registrering";

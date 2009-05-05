@@ -124,7 +124,7 @@ class GroupManager
 		}
 
 		//COURSEMANAGER or STUDENT
-		if ($my_status_of_user_in_course==COURSEMANAGER ) {
+		if ($my_status_of_user_in_course==COURSEMANAGER or api_is_allowed_to_edit()) {
 			$sql = "SELECT  g.id ,
 						g.name ,
 						g.description ,

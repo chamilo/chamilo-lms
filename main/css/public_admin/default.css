@@ -1694,9 +1694,11 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	color:#264269;
 	padding:5px;
 	border: 1px solid #999;
+	margin-top: 4px;
 }
 .survey_question_wrapper{
  	border: 1px solid #999;
+	margin-top:4px;
 }
 .survey_question{
 	/* 264269 4271b5 E5EDF9 */

@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice_submit.php 20252 2009-05-02 20:56:25Z iflorespaz $
+// $Id: exercice_submit.php 20351 2009-05-05 23:59:13Z cvargas1 $
 
 /*
 ==============================================================================
@@ -43,7 +43,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 20252 2009-05-02 20:56:25Z iflorespaz $
+* 	@version $Id: exercice_submit.php 20351 2009-05-05 23:59:13Z cvargas1 $
 */
 
 include ('exercise.class.php');
@@ -103,11 +103,9 @@ if (empty ($formSent)) {
 if (empty ($exerciseResult)) {
 	$exerciseResult = $_REQUEST['exerciseResult'];
 }
-
 if (empty ($exerciseResultCoordinates)) {
 	$exerciseResultCoordinates = $_REQUEST['exerciseResultCoordinates'];
 }
-
 if (empty ($exerciseType)) {
 	$exerciseType = $_REQUEST['exerciseType'];
 }
@@ -183,6 +181,7 @@ if ($origin == 'builder') {
 		unset ($exerciseResultCoordinates);
 	}
 }
+
 $safe_lp_id = ($learnpath_id == '') ? 0 : (int) $learnpath_id;
 $safe_lp_item_id = ($learnpath_item_id == '') ? 0 : (int) $learnpath_item_id;
 $condition = ' WHERE ' .
@@ -243,7 +242,8 @@ if ($formSent) {
 			echo str_repeat('&nbsp;', 0) . '$choice is an array' . "<br />\n";
 		}
 
-		if ($exerciseType == 1) {
+		if ($exerciseType == 1)
+		{
 			// $exerciseResult receives the content of the form.
 			// Each choice of the student is stored into the array $choice
 			$exerciseResult = $choice;
@@ -251,6 +251,7 @@ if ($formSent) {
 			if (isset ($_POST['hotspot'])) {
 				$exerciseResultCoordinates = $_POST['hotspot'];
 			}
+	
 		} else {
 			// gets the question ID from $choice. It is the key of the array
 			list ($key) = array_keys($choice);
@@ -308,7 +309,7 @@ if ($formSent) {
 							$answerComment = $objAnswerTmp->selectComment($answerId);
 							$answerCorrect = $objAnswerTmp->isCorrect($answerId);
 							$answerWeighting = $objAnswerTmp->selectWeighting($answerId);
-
+							
 							switch ($answerType) {
 								// for unique answer
 								case UNIQUE_ANSWER :
@@ -505,13 +506,10 @@ if ($formSent) {
 										$questionScore += $answerWeighting;
 										$totalScore += $answerWeighting;
 									}
-
 									$tbl_track_e_hotspot = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-									// Save into db
 									$sql = "INSERT INTO $tbl_track_e_hotspot (`hotspot_user_id` , `hotspot_course_code` , `hotspot_exe_id` , `hotspot_question_id` , `hotspot_answer_id` , `hotspot_correct` , `hotspot_coordinate` ) 
-																									VALUES ('" . Database :: escape_string($_user['user_id']) . "', '" . Database :: escape_string($_course['id']) . "', '" . Database :: escape_string($exeId) . "', '" . Database :: escape_string($questionId) . "', '" . Database :: escape_string($answerId) . "', '" . Database :: escape_string($studentChoice) . "', '" . Database :: escape_string($_SESSION['exerciseResultCoordinates'][$questionId][$answerId]) . "')";
-
-									$result = api_sql_query($sql, __FILE__, __LINE__);
+									VALUES ('" . Database :: escape_string($_user['user_id']) . "', '" . Database :: escape_string($_course['id']) . "', '" . Database :: escape_string($exeId) . "', '" . Database :: escape_string($questionId) . "', '" . Database :: escape_string($answerId) . "', '" . Database :: escape_string($studentChoice) . "', '" . Database :: escape_string($_SESSION['exerciseResultCoordinates'][$questionId][$answerId]) . "')";
+									$result = api_sql_query($sql, __FILE__, __LINE__);												
 									break;
 									// for hotspot with fixed order
 								case HOT_SPOT_ORDER :
@@ -527,7 +525,6 @@ if ($formSent) {
 									break;
 							} // end switch Answertype
 						} // end for that loops over all answers of the current question
-
 						// destruction of Answer
 						unset ($objAnswerTmp);
 
@@ -572,12 +569,10 @@ if ($formSent) {
 									exercise_attempt($questionScore, $answer, $quesId, $exeId, $j);
 
 								}
-							}
-							elseif ($answerType == FREE_ANSWER) {
+							} elseif ($answerType == FREE_ANSWER) {
 								$answer = $choice;
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
-							}
-							elseif ($answerType == UNIQUE_ANSWER) {
+							} elseif ($answerType == UNIQUE_ANSWER) {
 								$sql = "select id from $table_ans where question_id='" . Database :: escape_string($questionId) . "' and position='" . Database :: escape_string($choice) . "'";
 								$res = api_sql_query($sql, __FILE__, __LINE__);
 								$answer = Database :: result($res, 0, "id");
@@ -612,22 +607,23 @@ if ($formSent) {
 	// the script "exercise_result.php" will take the variable $exerciseResult from the session
 	api_session_register('exerciseResult');
 	api_session_register('exerciseResultCoordinates');
-
-	// if it is the last question (only for a sequential exercise)
-	if ($exerciseType == 1 || $questionNum >= $nbrQuestions) {
+	define('ALL_ON_ONE_PAGE',1);
+	define('ONE_PER_PAGE',2);
+	// if all questions on one page OR if it is the last question (only for an exercise with one question per page)
+	if ($exerciseType == ALL_ON_ONE_PAGE || $questionNum >= $nbrQuestions) {
 		if ($debug > 0) {
 			echo str_repeat('&nbsp;', 0) . 'Redirecting to exercise_result.php - Remove debug option to let this happen' . "<br />\n";
 		}
 		// goes to the script that will show the result of the exercise
-		if ($exerciseType == 1) {
-			header("Location: exercise_result.php?exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
+		if ($exerciseType == ALL_ON_ONE_PAGE) {
+			header("Location: exercise_result.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
 		} else {
 			if ($exe_id != '') {
 				//clean incomplete
 				$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "'" . ' WHERE exe_id = ' . $exe_id;
 				api_sql_query($update_query, __FILE__, __LINE__);
 			}
-			header("Location: exercise_show.php?id=$exeId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
+			header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
 		}
 		exit ();
 	}
@@ -1013,7 +1009,8 @@ if (!empty ($error)) {
 	}
 	$s = "<p>$exerciseDescription</p>";
 
-	if ($exerciseType == 2) {
+	if ($exerciseType == 2) 
+	{
 		$s2 = "&exerciseId=" . $exerciseId;
 	}
 

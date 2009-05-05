@@ -1,23 +1,6 @@
-<?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
-*/
-
-
+<?php //$id:$
+/* For licensing terms, see /dokeos_license.txt */
+//error_log(__FILE__);
 /**
 *	This file generates the ActionScript variables code used by the HotSpot .swf
 *	@package dokeos.exercise
@@ -102,15 +85,11 @@ $questionId    = $_GET['modifyAnswers'];
 $course_code = $_course['id'];
 
 // Get clicks
-if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0)
-{
-	foreach ($_SESSION['exerciseResultCoordinates'][$questionId] as $coordinate)
-	{
+if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {
+	foreach ($_SESSION['exerciseResultCoordinates'][$questionId] as $coordinate) {
 		$output2 .= $coordinate."|";
 	}
-}
-else
-{
+} else {
 	// get it from db
 	$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 	$sql = 'SELECT hotspot_coordinate 
@@ -120,8 +99,7 @@ else
 			AND hotspot_exe_id='.intval($exe_id);
 	
 	$rs = @api_sql_query($sql); // don't output error because we are in Flash execution.
-	while($row = Database :: fetch_array($rs))
-	{
+	while($row = Database :: fetch_array($rs)) {
 		$output2 .= $row['hotspot_coordinate']."|";
 	}
 }

@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20331 2009-05-05 15:17:55Z juliomontoya $
+* 	@version $Id: exercise_show.php 20351 2009-05-05 23:59:13Z cvargas1 $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -19,17 +19,9 @@ include('../inc/global.inc.php');
 include('../inc/lib/course.lib.php');
 // including additional libraries
 include_once('exercise.class.php');
-include_once('question.class.php');
+include_once('question.class.php'); //also defines answer type constants
 include_once('answer.class.php');
 include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-
-// answer types
-define('UNIQUE_ANSWER',	1);
-define('MULTIPLE_ANSWER',	2);
-define('FILL_IN_BLANKS',	3);
-define('MATCHING',		4);
-define('FREE_ANSWER', 5);
-define('HOTSPOT', 6);
 
 if ( empty ( $origin ) ) {
     $origin = $_REQUEST['origin'];
@@ -875,7 +867,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			echo '</tr>';			
 		}		
 		echo '</table>';	
-	} else if($answerType == HOTSPOT) {
+	} else if($answerType == HOT_SPOT) {
 		?>
 		<table width="355" border="0">		
 			<tr>
@@ -888,7 +880,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			?>
 			<tr>
 				<td valign="top" align="left" style="padding-left:0px;" >
-					<table style="border: 1px solid #4271b5;border-bottom:none" width="556px">
+					<table style="border: 1px solid #A4A4A4;border-bottom:none" width="556px">
 					<?php 
 					for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 						$answer=$objAnswerTmp->selectAnswer($answerId);
@@ -911,13 +903,12 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		 			?>
 		 			</table>
 		 		</td></tr>
-		 		<?php
-		 		
-		 	echo '
-			<tr>
-				<td colspan="2">
-					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=0" width="556" height="421">
-						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" />
+		 		<?php	
+		 	echo '<tr>
+				<td colspan="2">'.
+					//<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="421">
+					'<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=0" width="556" height="421">
+						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=0" />
 					</object>
 
 				</td>

@@ -47,10 +47,23 @@ class OpenofficePresentation extends OpenofficeDocument {
 			
 			//filename is utf8 encoded, but when we decode, some chars are not translated (like quote &rsquo;).
 			//so we remove these chars by translating it in htmlentities and the reconvert it in want charset
-			$slide_name = htmlentities($slide_name,ENT_COMPAT,$this->original_charset); 
+
+			// A note by Ivan Tcholakov, 05-MAY-2009: On my machine (Ubuntu 9.04) $slide_name is not utf8 encoded.
+			// ----------------------------------------------------------------------------------------------------------
+
+			//$slide_name = htmlentities($slide_name,ENT_COMPAT,$this->original_charset);
+			$slide_name = htmlentities($slide_name, ENT_COMPAT, 'ISO-8859-15');
+
 			$slide_name = str_replace('&rsquo;','\'',$slide_name);
-			$slide_name = mb_convert_encoding($slide_name, api_get_setting('platform_charset'), $this->original_charset);
-			$slide_name = html_entity_decode($slide_name);
+
+			//$slide_name = mb_convert_encoding($slide_name, api_get_setting('platform_charset'), $this->original_charset);
+			$slide_name = mb_convert_encoding($slide_name, api_get_setting('platform_charset'), 'ISO-8859-15');
+
+			//$slide_name = html_entity_decode($slide_name);
+			$slide_name = html_entity_decode($slide_name, ENT_QUOTES, api_get_setting('platform_charset'));
+
+			// ----------------------------------------------------------------------------------------------------------
+			//
 			
 			if($this->take_slide_name === true)
 			{

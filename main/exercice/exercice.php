@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20236 2009-04-30 21:01:58Z iflorespaz $
+// $Id: exercice.php 20350 2009-05-05 23:12:58Z cfasanando $
 
 /*
 ==============================================================================
@@ -760,9 +760,9 @@ if ($_configuration['tracking_enabled']) {
 					null;
 			}
 			if ($_REQUEST['filter'] == '1' or !isset ($_REQUEST['filter'])) {
-				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&gradebook='.$gradebook.'&filter=2' . '" >' . Display :: display_icon('checkbox_on.gif', get_lang('ShowCorrectedOnly')) . get_lang('ShowCorrectedOnly') . '</a>';
+				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&gradebook='.$gradebook.'&filter=2' . '" >' . get_lang('ShowCorrectedOnly') . '</a>'; //  Display :: display_icon('checkbox_on.gif', get_lang('ShowCorrectedOnly')) 
 			} else {
-				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&gradebook='.$gradebook.'&filter=1' . '" >' . Display :: display_icon('checkbox_off.gif', get_lang('ShowUnCorrectedOnly')) . get_lang('ShowUnCorrectedOnly') . '</a>';
+				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&gradebook='.$gradebook.'&filter=1' . '" >' . get_lang('ShowUnCorrectedOnly') . '</a>'; //. Display :: display_icon('checkbox_off.gif', get_lang('ShowUnCorrectedOnly')) 
 			}
 			//$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
 			//$form_filter .= make_select('filter',array(1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised')),$filter);

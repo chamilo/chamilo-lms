@@ -1538,12 +1538,12 @@ function api_display_tool_view_option() {
 			// we have to remove the isStudentView=true from the $sourceurl
 			$sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
 			$sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-			$output_string .= '<a href="'.$sourceurl.'&isStudentView=false" target="_top">'.get_lang("CourseManagerview").'</a>';
+			$output_string .= '<a href="'.$sourceurl.'&isStudentView=false" target="_top">'.get_lang("StudentView").'</a>';
 		} elseif ($_SESSION['studentview']=='teacherview') {
 			//switching to teacherview
 			$sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
 			$sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-			$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
+			$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("CourseManagerview").'</a>';
 		}
 	} else {
 		$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
@@ -3465,7 +3465,7 @@ function api_url_to_local_path($url)
 	$local_path = implode('/', $array_local_path);
 
 	// Sanity check - you may have seen this comment in dokeos/main/document/download.php:
-	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
+	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (Renï¿½)
 	// Let us remove double slashes, if any (triple too, etc.).
 	$local_path = preg_replace('@/{2,}@', '/', $local_path);
 

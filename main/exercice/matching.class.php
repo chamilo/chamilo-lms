@@ -159,6 +159,7 @@ class Matching extends Question {
 		$group = array();
 		$group[] = FormValidator :: createElement ('style_submit_button', 'lessMatches', get_lang('DelElem'),'class="minus"');
 		$group[] = FormValidator :: createElement ('style_submit_button', 'moreMatches', get_lang('AddElem'),'class="plus"');
+			
 		$form -> addGroup($group);
 
 		////////////////////////
@@ -196,9 +197,15 @@ class Matching extends Question {
 		}
 
 		$form -> addElement ('html', '</table></div></div>');
+		
 		$group = array();
 		$group[] = FormValidator :: createElement ('style_submit_button', 'lessOptions', get_lang('DelElem'),'class="minus"');
 		$group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'),'class="plus"');
+		
+		global $text, $class;
+		// setting the save button here and not in the question class.php
+		$group[] = FormValidator :: createElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+		
 		$form -> addGroup($group);
 		$form -> setDefaults($defaults);
 		$form->setConstants(array('nb_matches' => $nb_matches,'nb_options' => $nb_options));

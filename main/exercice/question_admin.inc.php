@@ -27,7 +27,7 @@
 * 	It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_admin.inc.php 19675 2009-04-09 08:46:51Z pcool $
+* 	@version $Id: question_admin.inc.php 20331 2009-05-05 15:17:55Z juliomontoya $
 */
 
 /*
@@ -111,10 +111,11 @@ if(is_object($objQuestion))
 	// answer form elements
 	$objQuestion -> createAnswersForm ($form);
 
-	// submit button
-	$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-	$renderer = $form->defaultRenderer();
-	$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','submitQuestion');
+	// submit button is implemented in every question type 
+	
+	//$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+	//$renderer = $form->defaultRenderer();
+	//$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','submitQuestion');
 
 
 	/**********************

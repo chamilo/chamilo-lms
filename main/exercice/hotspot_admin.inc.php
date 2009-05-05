@@ -325,7 +325,7 @@ if($modifyAnswers)
 		</td>	
 	</tr>
 	<tr>
-		<td colspan="2" valign="top" style="border:1px solid #4271b5;border-top:none">
+		<td colspan="2" valign="top" style="border:1px solid #ccc;border-top:none">
 			<script type="text/javascript">
 				<!--
 				// Version check based upon the values entered above in "Globals"

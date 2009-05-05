@@ -532,20 +532,16 @@ if ($survey_data['form_fields']!='' && $survey_data['anonymous'] == 0 && is_arra
 	$form->setDefaults($user_data);
 }
 
-if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($user_data) && !isset ($_GET['show']))
-{
-	if ($form->validate()) 
-	{
+if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($user_data) && !isset ($_GET['show'])) {
+	if ($form->validate()) {
 		$user_data = $form->exportValues();
 		if (is_array($user_data)) {
 			if (count($user_data)>0) {
 				$extras = array ();
 				// build SQL query
 				$sql = "UPDATE $table_user SET";
-				foreach ($user_data as $key => $value) 
-                {
-					if (substr($key, 0, 6) == 'extra_') //an extra field
-						{
+				foreach ($user_data as $key => $value) {
+					if (substr($key, 0, 6) == 'extra_') { //an extra field
 						$extras[substr($key, 6)] = $value;
 					} else {
 						$sql .= " $key = '" . Database :: escape_string($value) . "',";
@@ -575,8 +571,7 @@ if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($u
 	
 	} 
 	//elseif ($_GET['show_form']==1) //	// displaying the field
-	else 
-	{
+	else {
 		echo '<div id="survey_content" class="survey_content">' . get_lang('UpdateInformation') . '</div>';
 		//we unset the sessions
 		unset($_SESSION['paged_questions']);
@@ -1204,7 +1199,7 @@ if ($survey_data['survey_type'] === '0')
 		if (($show < $numberofpages) || !$_GET['show']) //$show = $_GET['show']+1
 		{
 			//echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' " class="next" />';
-			echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+			echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('NextQuestion').'</button>';
 		}
 	
 		if ($show >= $numberofpages && $_GET['show']) {

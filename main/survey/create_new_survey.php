@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 20156 2009-04-28 20:18:02Z juliomontoya $
+* 	@version $Id: create_new_survey.php 20345 2009-05-05 21:06:43Z cfasanando $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -161,12 +161,13 @@ $form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'));
 $fck_attribute['Config']['ToolbarStartExpanded']='false';
 $fck_attribute['Height'] = '100';
 $form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'));
+/*
 $lang_array = api_get_languages();
-foreach ($lang_array['name'] as $key=>$value)
-{
+foreach ($lang_array['name'] as $key=>$value) {
 	$languages[$lang_array['folder'][$key]] = $value;
 }
 $form->addElement('select', 'survey_language', get_lang('Language'), $languages);
+*/
 $form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name'=>'survey'));
 $form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name'=>'survey'));
 

@@ -193,7 +193,7 @@ else
 	if (($show < $numberofpages) OR !$_GET['show'])
 	{
 		//echo '<a href="'.api_get_self().'?survey_id='.$survey_id.'&amp;show='.$limit.'">NEXT</a>';
-		echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'   </button>';
+		echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('NextQuestion').'   </button>';
 	}
 	if ($show >= $numberofpages AND $_GET['show'])
 	{

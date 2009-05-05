@@ -155,11 +155,11 @@ class FillBlanks extends Question
 
 
 		// answer
-		$form -> addElement ('html', '<br /><br /><div class="row"><div class="label"></div><div class="formw">'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank').'</div></div>');
-		
-		//$form->addElement('html_editor', 'answer',null, '');
-						
+		$form -> addElement ('html', '<br /><br /><div class="row"><div class="label"></div><div class="formw">'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank').'</div></div>');						
 		$form -> addElement ('html_editor', 'answer','<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="updateBlanks(this)"');
+		$form -> addElement ('textarea', 'answer',get_lang('Answer'),'id="answer" cols="65" rows="6" onkeyup="updateBlanks(this)"');
+		
+		
 		$form -> addRule ('answer',get_lang('GiveText'),'required');
 		$form -> addRule ('answer',get_lang('DefineBlanks'),'regex','/\[.*\]/');
  
@@ -185,6 +185,8 @@ class FillBlanks extends Question
 	function processAnswersCreation($form) 
 	{
 		$answer = $form -> getSubmitValue('answer');
+		//Due the fckeditor transform the elements to their HTML value
+		$answer = html_entity_decode($answer);
 
 		//remove the :: eventually written by the user
 		$answer = str_replace('::','',$answer);

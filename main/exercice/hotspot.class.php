@@ -62,6 +62,7 @@ class HotSpot extends Question {
 			$form->addElement('file','imageUpload','<span class="form_required">*</span><img src="../img/hotspots.png" />');
 						
 			// setting the save button here and not in the question class.php
+			// Saving a question
 			$form->addElement('style_submit_button','submitQuestion',get_lang('GoToQuestion'), 'class="'.$class.'"');
 			
 			$renderer->setElementTemplate('<div class="row"><div class="label" style="margin-top:-30px;">{label}</div><div class="formw" >{element}</div></div>','imageUpload');
@@ -69,7 +70,8 @@ class HotSpot extends Question {
 			$form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
 		} else {
 			// setting the save button here and not in the question class.php
-			$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');			
+			// Editing a question
+			$form->addElement('style_submit_button','submitQuestion',get_lang('GoToQuestion'), 'class="'.$class.'"');			
 		}
 		
 	}

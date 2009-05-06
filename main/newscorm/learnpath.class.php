@@ -2067,7 +2067,7 @@ class learnpath {
 			$output .= '<script type="text/javascript">
 						var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
 						s1.addParam("allowscriptaccess","always");
-							s1.addParam("flashvars","file='.api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/audio/'.$row['audio'].'&image=preview.jpg&autostart=true");
+							s1.addParam("flashvars","file='.api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/audio/'.$row['audio'].'&autostart=true");
 						s1.write("container");
 					</script>';
 		}
@@ -4483,7 +4483,7 @@ class learnpath {
 							$return .= '<script type="text/javascript">
 											var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
 											s1.addParam("allowscriptaccess","always");
-											s1.addParam("flashvars","file=../../courses/'.$_course['path'].'/document/audio/'.$arrLP[$i]['audio'].'&image=preview.jpg");
+											s1.addParam("flashvars","file=../../courses/'.$_course['path'].'/document/audio/'.$arrLP[$i]['audio'].'");
 											s1.write("container'.$i.'");
 										</script>';	
 						}
@@ -7365,7 +7365,7 @@ class learnpath {
 			$return .= '<script type="text/javascript">
 							var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
 							s1.addParam("allowscriptaccess","always");
-							s1.addParam("flashvars","file=../../courses/'.$_course['path'].'/document/audio/'.$row['audio'].'&image=preview.jpg&autostart=true");
+							s1.addParam("flashvars","file=../../courses/'.$_course['path'].'/document/audio/'.$row['audio'].'&autostart=true");
 							s1.write("container");
 						</script>';
 		}

@@ -81,7 +81,7 @@ class learnpath {
 	
 	var $arrMenu = array(); //array for the menu items
 
-	var $debug = 1; //logging level
+	var $debug = 0; //logging level
 	
 	/**
 	 * Class constructor. Needs a database handler, a course code and a learnpath id from the database.

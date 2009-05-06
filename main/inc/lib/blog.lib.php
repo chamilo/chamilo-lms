@@ -2769,7 +2769,7 @@ class Blog
 						<span class="form_required">*</span>' . get_lang('Title') . '
 					</div>
 					<div class="formw">
-						<input name="blog_name" type="text" size="100" value="'.$_POST['blog_name'].'" />
+						<input name="blog_name" type="text" size="100" value="'.Security::remove_XSS($_POST['blog_name']).'" />
 					</div>
 				</div>
 				
@@ -2778,7 +2778,7 @@ class Blog
 						<span class="form_required">*</span>' . get_lang('Subtitle') . '
 					</div>
 					<div class="formw">
-						<input name="blog_subtitle" type="text" size="100" value="'.$_POST['blog_subtitle'].'"/>
+						<input name="blog_subtitle" type="text" size="100" value="'.Security::remove_XSS($_POST['blog_subtitle']).'"/>
 					</div>
 				</div>	
 				

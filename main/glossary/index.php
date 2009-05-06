@@ -32,6 +32,12 @@ $tool = TOOL_GLOSSARY;
 event_access_tool(TOOL_GLOSSARY);
 
 // displaying the header
+
+if ( isset($_GET['action']) && ($_GET['action'] == 'addglossary' || $_GET['action'] == 'edit_glossary')) {
+$tool=get_lang('GlossaryManagement');
+$interbreadcrumb[] = array ("url"=>"index.php", "name"=> ucfirst(get_lang(TOOL_GLOSSARY)));
+}
+
 Display::display_header(get_lang(ucfirst($tool)));
 
 // Tool introduction
@@ -76,10 +82,10 @@ if (api_is_allowed_to_edit())
 			if ($check) 
 			{
 		   		$values = $form->exportValues();
-		   		save_glossary($values);
-		   		display_glossary();
+		   		save_glossary($values);		   		
 			}
 			Security::clear_token();
+			display_glossary();
 		} 
 		else 
 		{
@@ -117,10 +123,10 @@ if (api_is_allowed_to_edit())
 			if ($check) 
 			{
 		   		$values = $form->exportValues();
-		   		update_glossary($values);
-		   		display_glossary();
+		   		update_glossary($values);		   		
 			}
 			Security::clear_token();
+			display_glossary();
 		} 
 		else 
 		{
@@ -345,7 +351,7 @@ function delete_glossary($glossary_id)
 function display_glossary()
 {
 	// action links
-	echo '<div class="actions">';
+	echo '<div class="actions" style="margin-bottom:10px">';
 	if (api_is_allowed_to_edit())
 	{
 		echo '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add">'.Display::return_icon('filenew.gif',get_lang('TermAddNew')).get_lang('TermAddNew').'</a>';
@@ -453,9 +459,13 @@ function get_glossary_data($from, $number_of_items, $column, $direction)
 	
 	$return = array ();
 	while ($data = Database::fetch_row($res))
-	{
-		$return[] = $data;
-	}
+	{	
+		if (!$_SESSION['glossary_view'] OR $_SESSION['glossary_view'] == 'table') {		
+			$data[2] = str_replace(array('<p>','</p>'),array('','<br />'),$data[2]);
+		}
+		$return[] = $data;		
+	}	
+	
 	return $return;	
 }
 
@@ -476,8 +486,7 @@ function actions_filter($glossary_id,$url_params,$row)
 	{
 		$_SESSION['max_glossary_display'] = get_max_glossary_item();
 	}
-
-	$return = '';
+	
 	if (empty($_GET['glossary_column'])) {
 		if ($row[0] > 1)
 		{

@@ -34,6 +34,11 @@ $tool = TOOL_NOTEBOOK;
 // tracking
 event_access_tool(TOOL_NOTEBOOK);
 
+if ( isset($_GET['action']) && ($_GET['action'] == 'addnote' || $_GET['action'] == 'editnote')) {
+$tool=get_lang('NotebookManagement');
+$interbreadcrumb[] = array ("url"=>"index.php", "name"=> ucfirst(get_lang(TOOL_NOTEBOOK)));
+}
+
 // displaying the header
 Display::display_header(get_lang(ucfirst($tool)));
 
@@ -97,10 +102,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 		display_notes();						
 	} 
 	else 
-	{
-		echo '<div class="actions">';
-		echo '<a href="index.php?'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackToNoteList')).get_lang('BackToNoteList').'</a>';
-		echo '</div>';			
+	{		
 		$token = Security::get_token();
 		$form->addElement('hidden','sec_token');
 		$form->setConstants(array('sec_token' => $token));		
@@ -120,6 +122,7 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 	// initiate the object
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.Security::remove_XSS($_GET['notebook_id']));
 	// settting the form elements	
+	$form->addElement('header', '', get_lang('ModifyNote'));
 	$form->addElement('hidden', 'notebook_id');
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'100'));
 	$form->applyFilter('note_title', 'html_filter');
@@ -147,9 +150,6 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 	} 
 	else 
 	{
-		echo '<div class="actions">';
-		echo '<a href="index.php?'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackToNotesList')).get_lang('BackToNotesList').'</a>';
-		echo '</div>';
 		$token = Security::get_token();
 		$form->addElement('hidden','sec_token');
 		$form->setConstants(array('sec_token' => $token));		

@@ -123,122 +123,136 @@ function calculHours($seconds)
 }
 
 /* MAIN */
-
 $user_id = Database::escape_string($_REQUEST['student']);
 $course_code=Database::escape_string($_REQUEST['course']);
 
 include_once(api_get_path(LIBRARY_PATH).'pchart/pData.class.php');
 include_once(api_get_path(LIBRARY_PATH).'pchart/pChart.class.php');
 include_once(api_get_path(LIBRARY_PATH).'pchart/pCache.class.php');
-$connections = get_connections_to_course($user_id, $course_code);
-$i = 0;		
+$connections = get_connections_to_course($user_id, $course_code);	
 if (api_is_xml_http_request()) {
 	$type  = Security::remove_XSS($_GET['type']);	
-	$main_year = $main_month_year = $main_day = array();
-	foreach ($connections as $key=>$data) {				
-		//creating the main array		
-		//$main_year[date('Y',$data['login'])]+=calculHours($data['logout']-$data['login'])*60;	
-		$main_month_year[date('m-Y',$data['login'])]+=calculHours($data['logout']-$data['login'])*60;
-		$main_day[date('d-m-Y',$data['login'])]+=calculHours($data['logout']-$data['login'])*60;
-			
-		if ($i > 500) {
-			break;
-		}
-		$i++;
-	}	 
-	switch ($type) {
-		case 'day':
-		$main_date = $main_day;
-		break;
-		case 'month':
-		$main_date = $main_month_year ;						
-		break;
-		case 'year':
-		$main_date = $main_year;
-		break;
-	}
-	
-	//echo '<pre>'; print_r($main_date);
-	// the nice graphics :D
-	$labels = array_keys($main_date);	
-	if (count($main_date)==1) {
-		$labels = $labels[0];
-		$main_date = $main_date[$labels];
-	}
-	
-	$DataSet = new pData;	
-	$DataSet->AddPoint($main_date,'Q');
-	if (count($main_date)!=1) {
-		$DataSet->AddPoint($labels,'Date');
-	}
-	$DataSet->AddAllSeries();  
-	$DataSet->RemoveSerie('Date');  
-	$DataSet->SetAbsciseLabelSerie('Date');
-	$DataSet->SetYAxisName(ucfirst(get_lang('MinMinutes')));  
-	$graph_id = api_get_user_id().'AccessDetails'.api_get_course_id();
-	$DataSet->AddAllSeries();
-	
-	$Cache = new pCache();
-	// the graph id
-	$data = $DataSet->GetData();
-	
-	if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
-	//if (0) {
-		//if we already created the img
-		//	echo 'in cache';
-		$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());			
-	} else  {		  
-	// if the image does not exist in the main/garbage/ folder		
-		// Initialise the graph  
-		$Test = new pChart(760,230);
-		 
-		//which schema of color will be used
-		$quant_resources = count($data[0])-1;					
-		// Adding the color schemma
-		$Test->loadColorPalette(api_get_path(LIBRARY_PATH)."pchart/palette/default.txt");
-								
-	  	$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",8);     
-	  	$Test->setGraphArea(70,30,680,200);     
-	  	$Test->drawFilledRoundedRectangle(7,7,693,223,5,240,240,240);     
-	  	$Test->drawRoundedRectangle(5,5,695,225,5,230,230,230);     
-	  	$Test->drawGraphArea(255,255,255,TRUE);  
-	  	$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_START0,150,150,150,TRUE,0,0);     
-	  	$Test->drawGrid(4,TRUE,230,230,230,50);  
-	    $Test->setLineStyle(2); 
-		// Draw the 0 line     
-		$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",6);     
-		$Test->drawTreshold(0,143,55,72,TRUE,TRUE);
-		
-	  	if (count($main_date)==1) {
-			//Draw a graph 
-			echo '<strong>'.$labels.'</strong><br/>';			
-  			$Test->drawBarGraph($DataSet->GetData(),$DataSet->GetDataDescription(),TRUE);
-	  	} else {
-			//Draw the line graph  
-			$Test->drawLineGraph($DataSet->GetData(),$DataSet->GetDataDescription());     
-			$Test->drawPlotGraph($DataSet->GetData(),$DataSet->GetDataDescription(),3,2,255,255,255);
- 		}
-	  
-		// Finish the graph     
-		$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",8);     
-		       
-		$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",10);     
-		$Test->drawTitle(60,22,get_lang('AccessDetails'),50,50,50,585);    
-		
-		//------------------						
-		//echo 'not in cache';			
-		$Cache->WriteToCache($graph_id,$DataSet->GetData(),$Test);						
-		ob_start();
-		$Test->Stroke();
-		ob_end_clean();				
-		$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());		
+	$main_year = $main_month_year = $main_day = array();	
+	// get last 8 days/months
+	$last_days = 8;	
+	$last_months = 5;	
+	for ($i=$last_days; $i>=0; $i--) {
+		$main_day[date ('d-m-Y', mktime () - $i * 3600 * 24)]=0;			
 	}	
-	echo '<img src="'.api_get_path(WEB_CODE_PATH).'garbage/'.$img_file.'">';
+	for ($i=$last_months; $i>=0; $i--) {
+		$main_month_year[date ('m-Y', mktime () - $i*30 * 3600 * 24)]=0;	
+	} 
+	
+	$i = 0;		
+	if (is_array($connections) && count($connections)>0 ){
+		foreach ($connections as $key=>$data) {				
+			//creating the main array		
+			//$main_year[date('Y',$data['login'])]+=calculHours($data['logout']-$data['login'])*60;
+			//$main_month_year[date('m-Y',$data['login'])]+=calculHours($data['logout']-$data['login'])*60;
+			$main_month_year[date('m-Y',$data['login'])]+=float_format(($data['logout']-$data['login'])/60, 0);
+			//$main_day[date('d-m-Y',$data['login'])]+=calculHours($data['logout']-$data['login'])*60;
+			$main_day[date('d-m-Y',$data['login'])]+=float_format(($data['logout']-$data['login'])/60, 0);
+			if ($i > 500) {
+				break;
+			}
+			$i++;
+		}
+		//var_dump($main_month_year);				
+		switch ($type) {
+			case 'day':
+			$main_date = $main_day;
+			break;
+			case 'month':
+			$main_date = $main_month_year ;						
+			break;
+			case 'year':
+			$main_date = $main_year;
+			break;
+		}		
+		//echo '<pre>'; print_r($main_date);
+		
+		// the nice graphics :D
+		$labels = array_keys($main_date);	
+		if (count($main_date)==1) {
+			$labels = $labels[0];
+			$main_date = $main_date[$labels];
+		}
+		
+		$DataSet = new pData;	
+		$DataSet->AddPoint($main_date,'Q');
+		if (count($main_date)!=1) {
+			$DataSet->AddPoint($labels,'Date');
+		}
+		$DataSet->AddAllSeries();  
+		$DataSet->RemoveSerie('Date');  
+		$DataSet->SetAbsciseLabelSerie('Date');
+		$DataSet->SetYAxisName(ucfirst(get_lang('MinMinutes')));  
+		$graph_id = api_get_user_id().'AccessDetails'.api_get_course_id();
+		$DataSet->AddAllSeries();
+		
+		$Cache = new pCache();
+		// the graph id
+		$data = $DataSet->GetData();
+		
+		if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
+		//if (0) {
+			//if we already created the img
+			//	echo 'in cache';
+			$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());			
+		} else  {		  
+		// if the image does not exist in the main/garbage/ folder		
+			// Initialise the graph  
+			$Test = new pChart(760,230);
+			 
+			//which schema of color will be used
+			$quant_resources = count($data[0])-1;					
+			// Adding the color schemma
+			$Test->loadColorPalette(api_get_path(LIBRARY_PATH)."pchart/palette/default.txt");
+									
+		  	$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",8);     
+		  	$Test->setGraphArea(70,30,680,200);     
+		  	$Test->drawFilledRoundedRectangle(7,7,693,223,5,240,240,240);     
+		  	$Test->drawRoundedRectangle(5,5,695,225,5,230,230,230);     
+		  	$Test->drawGraphArea(255,255,255,TRUE);  
+		  	$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_START0,150,150,150,TRUE,0,0);     
+		  	$Test->drawGrid(4,TRUE,230,230,230,50);  
+		    $Test->setLineStyle(2); 
+			// Draw the 0 line     
+			$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",6);     
+			$Test->drawTreshold(0,143,55,72,TRUE,TRUE);
+			
+		  	if (count($main_date)==1) {
+				//Draw a graph 
+				echo '<strong>'.$labels.'</strong><br/>';			
+	  			$Test->drawBarGraph($DataSet->GetData(),$DataSet->GetDataDescription(),TRUE);
+		  	} else {
+				//Draw the line graph  
+				$Test->drawLineGraph($DataSet->GetData(),$DataSet->GetDataDescription());     
+				$Test->drawPlotGraph($DataSet->GetData(),$DataSet->GetDataDescription(),3,2,255,255,255);
+	 		}
+		  
+			// Finish the graph     
+			$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",8);     
+			       
+			$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",10);     
+			$Test->drawTitle(60,22,get_lang('AccessDetails'),50,50,50,585);    
+			
+			//------------------						
+			//echo 'not in cache';			
+			$Cache->WriteToCache($graph_id,$DataSet->GetData(),$Test);						
+			ob_start();
+			$Test->Stroke();
+			ob_end_clean();				
+			$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());		
+		}
+		echo '<img src="'.api_get_path(WEB_CODE_PATH).'garbage/'.$img_file.'">';
+	} else {
+		Display::display_warning_message (get_lang('GraphicNotAvailable'));
+	}
 	exit;
 }
 
 $nameTools= get_lang('AccessDetails');
-
 
 //StudentDetails
 if (isset($_GET['origin']) && strcmp($_GET['origin'],'tracking_course')===0) {
@@ -250,7 +264,6 @@ if (isset($_GET['origin']) && strcmp($_GET['origin'],'tracking_course')===0) {
 	$interbreadcrumb[] = array ("url" => "myStudents.php?student=".Security::remove_XSS($_GET['student'])."&details=true&origin=".Security::remove_XSS($_GET['origin'])."&amp;course=".Security::remove_XSS($_GET['course']).'&amp;cidReq='.Security::remove_XSS($_GET['course']), "name" => get_lang('DetailsStudentInCourse'));
 	$interbreadcrumb[] = array ("url" => "#", "name" => get_lang("Details"));
 }
-
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery-1.1.3.1.pack.js" type="text/javascript"></script>';
@@ -266,8 +279,8 @@ $(function() {
 </script>'  ;
 
 Display :: display_header('');
-$TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
-$mainUserInfo = api_get_user_info($user_id, $course_code);
+$TBL_USERINFO_DEF 	= Database :: get_course_table(TABLE_USER_INFO);
+$mainUserInfo 		= api_get_user_info($user_id, $course_code);
 
 $result_to_print = '';
 $main_date_array = array();
@@ -278,7 +291,7 @@ foreach ($connections as $key=>$data) {
 api_display_tool_title(get_lang('DetailsStudentInCourse'));
 echo '<div class="actions">';
 echo '<strong>'.get_lang('User').': '.$mainUserInfo['firstName'].' '.$mainUserInfo['lastName'].'</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>'.get_lang('Course').': '.$course_code.'</strong></div>';
-echo '<br/>';
+
 ?>
 <div id="container-9">
     <ul>                

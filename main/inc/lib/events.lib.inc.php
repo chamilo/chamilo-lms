@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 20253 2009-05-02 21:00:17Z iflorespaz $
+<?php // $Id: events.lib.inc.php 20355 2009-05-06 03:46:06Z cvargas1 $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -114,8 +114,6 @@ function event_login()
 					'".Database::escape_string($_SERVER['REMOTE_ADDR'])."',
 					FROM_UNIXTIME(".$reallyNow."))";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	//$mysql_query($sql);
-	//return 0;
 }
 
 /**
@@ -312,7 +310,6 @@ function event_download($doc_url)
 				 FROM_UNIXTIME(".$reallyNow.")
 				)";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	//$mysql_query($sql);
 	return 1;
 }
 
@@ -360,7 +357,6 @@ function event_upload($doc_id)
 				 FROM_UNIXTIME(".$reallyNow.")
 				)";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	//$mysql_query($sql);
 	return 1;
 }
 
@@ -408,7 +404,6 @@ function event_link($link_id)
 				 FROM_UNIXTIME(".$reallyNow.")
 				)";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	//$mysql_query($sql);
 	return 1;
 }
 
@@ -569,6 +564,38 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	} else {
 		return false;
 	}
+}
+/**
+ * Record an hotspot spot for this attempt at answering an hotspot question
+ * @param	int		Exercise ID
+ * @param	int		Question ID
+ * @param	int		Answer ID
+ * @param	int		Whether this answer is correct (1) or not (0)
+ * @param	string	Coordinates of this point (e.g. 123;324)
+ * @return	boolean	Result of the insert query
+ * @uses Course code and user_id from global scope $_cid and $_user 
+ */
+function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $coords)
+{
+	global $_configuration, $_user, $_cid;
+
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
+
+	$tbl_track_e_hotspot = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+	$sql = "INSERT INTO $tbl_track_e_hotspot " .
+			"(hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".
+			" VALUES ('" . Database :: escape_string($_user['user_id']) . "'," .
+			" '" . Database :: escape_string($_cid) . "', " .
+			" '" . Database :: escape_string($exe_id) . "', " .
+			" '" . Database :: escape_string($question_id) . "'," .
+			" '" . Database :: escape_string($answer_id) . "'," .
+			" '" . Database :: escape_string($correct) . "'," .
+			" '" . Database :: escape_string($coords) . "')";
+	return $result = api_sql_query($sql, __FILE__, __LINE__);
 }
 
 /**

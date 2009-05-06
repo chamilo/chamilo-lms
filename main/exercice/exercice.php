@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20350 2009-05-05 23:12:58Z cfasanando $
+// $Id: exercice.php 20381 2009-05-06 22:12:47Z cvargas1 $
 
 /*
 ==============================================================================
@@ -146,7 +146,8 @@ if ($origin == 'learnpath') {
 if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !empty ($_GET['did']) && $_GET['did'] == strval(intval($_GET['did']))) {
 	$sql = 'DELETE FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES) . ' WHERE exe_id = ' . $_GET['did']; //_GET[did] filtered by entry condition
 	api_sql_query($sql, __FILE__, __LINE__);
-	header('Location: exercice.php?cidReq=' . htmlentities($_GET['cidReq']) . '&show=result');
+	$filter=Security::remove_XSS($_GET['filter']);
+	header('Location: exercice.php?cidReq=' . htmlentities($_GET['cidReq']) . '&show=result&filter=' . $filter . '');
 	exit;
 }
 
@@ -743,11 +744,13 @@ if ($_configuration['tracking_enabled']) {
 		}*/
 
 		if (api_is_allowed_to_edit()) {
-			if (!$_REQUEST['filter']) {
+			if (!$_GET['filter']) {
 				$filter_by_not_revised = true;
 				$filter = 1;
+			} else {
+				$filter=Security::remove_XSS($_GET['filter']);
 			}
-			$filter = (int) $_REQUEST['filter'];
+			$filter = (int) $_GET['filter'];
 
 			switch ($filter) {
 				case 1 :
@@ -759,10 +762,10 @@ if ($_configuration['tracking_enabled']) {
 				default :
 					null;
 			}
-			if ($_REQUEST['filter'] == '1' or !isset ($_REQUEST['filter'])) {
-				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&gradebook='.$gradebook.'&filter=2' . '" >' . get_lang('ShowCorrectedOnly') . '</a>'; //  Display :: display_icon('checkbox_on.gif', get_lang('ShowCorrectedOnly')) 
+			if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
+				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&gradebook='.$gradebook. '" >' . get_lang('ShowCorrectedOnly') . '</a>'; //  Display :: display_icon('checkbox_on.gif', get_lang('ShowCorrectedOnly')) 
 			} else {
-				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&gradebook='.$gradebook.'&filter=1' . '" >' . get_lang('ShowUnCorrectedOnly') . '</a>'; //. Display :: display_icon('checkbox_off.gif', get_lang('ShowUnCorrectedOnly')) 
+				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&gradebook='.$gradebook.'" >' . get_lang('ShowUnCorrectedOnly') . '</a>'; //. Display :: display_icon('checkbox_off.gif', get_lang('ShowUnCorrectedOnly')) 
 			}
 			//$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
 			//$form_filter .= make_select('filter',array(1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised')),$filter);

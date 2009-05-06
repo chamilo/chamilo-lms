@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 20351 2009-05-05 23:59:13Z cvargas1 $
+* 	@version $Id: exercise_result.php 20357 2009-05-06 03:54:49Z cvargas1 $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -96,6 +96,9 @@ if ( empty ( $formSent ) ) {
 if ( empty ( $exerciseResult ) ) {
      $exerciseResult = $_SESSION['exerciseResult'];
 }
+if ( empty ( $exerciseResultCoordinates ) ) {
+     $exerciseResultCoordinates = $_SESSION['exerciseResultCoordinates'];
+}
 if ( empty ( $questionId ) ) {
     $questionId = $_REQUEST['questionId'];
 }
@@ -117,6 +120,7 @@ if ( empty ( $objExercise ) ) {
 if ( empty ( $exerciseType ) ) {
     $exerciseType = $_REQUEST['exerciseType'];
 }
+
 $_configuration['live_exercise_tracking'] = false;
 if($_configuration['live_exercise_tracking']) define('ENABLED_LIVE_EXERCISE_TRACKING',1);
 
@@ -807,16 +811,6 @@ foreach ($questionList as $questionId) {
 						$questionScore+=$answerWeighting;
 						$totalScore+=$answerWeighting;
 					}
-					$tbl_track_e_hotspot = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-					$sql_verified='SELECT COUNT(*) AS count FROM '.$tbl_track_e_hotspot.' WHERE hotspot_user_id="'.Database :: escape_string($_user['user_id']).'" AND hotspot_course_code="'.Database :: escape_string($_course['id']).'" 
-					AND hotspot_question_id="'.Database :: escape_string($questionId).'" AND hotspot_answer_id="'.Database :: escape_string($answerId).'" AND hotspot_correct="'. Database :: escape_string($studentChoice).'" AND hotspot_coordinate="'.Database :: escape_string($_SESSION['exerciseResultCoordinates'][$questionId][$answerId]).'" ;';
-					$res_verified=Database::query($sql_verified,__FILE__,__LINE__);
-					$my_count_result=Database::result($res_verified,0,0);
-					if ($my_count_result==0) {
-						$sql = "INSERT INTO $tbl_track_e_hotspot (`hotspot_user_id` , `hotspot_course_code` , `hotspot_exe_id` , `hotspot_question_id` , `hotspot_answer_id` , `hotspot_correct` , `hotspot_coordinate` ) 
-						VALUES ('" . Database :: escape_string($_user['user_id']) . "', '" . Database :: escape_string($_course['id']) . "', '" . Database :: escape_string($exeId) . "', '" . Database :: escape_string($questionId) . "', '" . Database :: escape_string($answerId) . "', '" . Database :: escape_string($studentChoice) . "', '" . Database :: escape_string($_SESSION['exerciseResultCoordinates'][$questionId][$answerId]) . "')";
-						$result = api_sql_query($sql, __FILE__, __LINE__);				
-					}
 					break;
 			// for hotspot with fixed order
 			case HOT_SPOT_ORDER :
@@ -1006,6 +1000,13 @@ foreach ($questionList as $questionId) {
 				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
 			} else {
 				exercise_attempt($questionScore,0 ,$quesId,$exeId,0);
+			}
+		} elseif ($answerType == HOT_SPOT) {
+			exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
+			if (is_array($exerciseResultCoordinates[$quesId])) {
+				foreach($exerciseResultCoordinates[$quesId] as $idx => $val) {
+					exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val);
+				}
 			}
 		} else {
 			exercise_attempt($questionScore,$answer,$quesId,$exeId,0);

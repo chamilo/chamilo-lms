@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20353 2009-05-06 01:27:48Z cvargas1 $
+* 	@version $Id: exercise_show.php 20357 2009-05-06 03:54:49Z cvargas1 $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -407,7 +407,7 @@ if ($origin == 'learnpath') {
 }
 	
 if ($show_results == true ) {			
-?>
+	?>
 	<table width="100%">
 		<tr>
 			<td style="font-weight:bold" width="10%"><div class="actions-message"><?php echo '&nbsp;'.get_lang('CourseTitle')?> : </div></td>
@@ -858,7 +858,7 @@ if ($show_results) {
 					<td valign="top" align="left" style="padding-left:0px;" >
 						<table style="border: 1px solid #A4A4A4;border-bottom:none" width="556px">
 			<?php 
-			for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 				$answer=$objAnswerTmp->selectAnswer($answerId);
 				$answerComment=$objAnswerTmp->selectComment($answerId);
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
@@ -880,113 +880,113 @@ if ($show_results) {
 		 	echo '<tr>
 				<td colspan="2">'.
 					//<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="421">
-					'<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=0" width="556" height="421">
-						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=0" />
+					'<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" width="556" height="421">
+						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" />
 					</object>
 
 				</td>
 			</tr>
 			</table><br/>';
 		}
-	} // end of large foreach on questions
 
-	echo '<table width="100%" border="0" cellspacing="3" cellpadding="0">';		
-	if ($is_allowedToEdit) {
-		echo '<tr><td>';							
-		$name = "fckdiv".$questionId;
-		$marksname = "marksName".$questionId;
-		?>			
-		<br />
-		<a href="javascript://" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');">
-		<?php 
-		if ($answerType == FREE_ANSWER) {  
-			echo get_lang('EditCommentsAndMarks'); 
-		} else {
-			if ($action=='edit') {
-				echo get_lang('EditIndividualComment');
-			} else {
-				echo get_lang('AddComments');
-			}
-		}
-		echo '</a><br /><div id="feedback_'.$name.'" style="width:100%">';
-		$comnt = trim(get_comments($id,$questionId));
-		if (empty($comnt)) {
-			echo '<br />';
-		} else {
-			echo '<div id="question_feedback">'.$comnt.'</div>';			
-		}
-		echo '</div><div id="'.$name.'" style="display:none">';
-		$arrid[] = $questionId;
-		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '120';
-		$fck_attribute['ToolbarSet'] = 'CommentAnswers';
-		$fck_attribute['Config']['ToolbarStartExpanded']='false';							
-
-		$feedback_form = new FormValidator('frmcomments'.$questionId,'post','');
-		$feedback_form->addElement('html','<br>');
-		$renderer =& $feedback_form->defaultRenderer();
-		$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
-		$renderer->setElementTemplate('<div align="left">{element}</div>');
-		$comnt =get_comments($id,$questionId);
-		${user.$questionId}['comments_'.$questionId] = $comnt;
-		$feedback_form->addElement('html_editor','comments_'.$questionId,false);
-		$feedback_form->addElement('html','<br>');
-		//$feedback_form->addElement('submit','submitQuestion',get_lang('Ok'));
-		$feedback_form->setDefaults(${user.$questionId});							
-		$feedback_form->display();			
-		echo '</div>';
-	} else {
-		$comnt = get_comments($id,$questionId);
-		echo '<tr><td><br />';
-		if (!empty($comnt)) {
-			echo '<b>'.get_lang('Feedback').'</b>';									
-			echo '<div id="question_feedback">'.$comnt.'</div>';
-		}
-		echo '</td><td>';
-	}
-	if ($is_allowedToEdit) {
-		if ($answerType == FREE_ANSWER) {
+		echo '<table width="100%" border="0" cellspacing="3" cellpadding="0">';		
+		if ($is_allowedToEdit) {
+			echo '<tr><td>';							
+			$name = "fckdiv".$questionId;
 			$marksname = "marksName".$questionId;
-			?>
-			<div id="<?php echo $marksname; ?>" style="display:none">
-			<form name="marksform_<?php echo $questionId; ?>" method="post" action="">
-		    <?php
-			$arrmarks[] = $questionId;
-			echo get_lang("AssignMarks");				
-			echo "&nbsp;<select name='marks' id='marks'>";
-			for ($i=0;$i<=$questionWeighting;$i++) {
-				echo '<option '.(($i==$questionScore)?"selected='selected'":'').'>'.$i.'</option>';
+			?>			
+			<br />
+			<a href="javascript://" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');">
+			<?php 
+			if ($answerType == FREE_ANSWER) {  
+				echo get_lang('EditCommentsAndMarks'); 
+			} else {
+				if ($action=='edit') {
+					echo get_lang('EditIndividualComment');
+				} else {
+					echo get_lang('AddComments');
+				}
 			}
-			echo '</select>';
-			echo '</form><br/ ></div>';
-			if ($questionScore==-1) {
-				$questionScore=0;
-			  	echo '<br />'.get_lang('notCorrectedYet');
+			echo '</a><br /><div id="feedback_'.$name.'" style="width:100%">';
+			$comnt = trim(get_comments($id,$questionId));
+			if (empty($comnt)) {
+				echo '<br />';
+			} else {
+				echo '<div id="question_feedback">'.$comnt.'</div>';			
+			}
+			echo '</div><div id="'.$name.'" style="display:none">';
+			$arrid[] = $questionId;
+			$fck_attribute['Width'] = '100%';
+			$fck_attribute['Height'] = '120';
+			$fck_attribute['ToolbarSet'] = 'CommentAnswers';
+			$fck_attribute['Config']['ToolbarStartExpanded']='false';							
+	
+			$feedback_form = new FormValidator('frmcomments'.$questionId,'post','');
+			$feedback_form->addElement('html','<br>');
+			$renderer =& $feedback_form->defaultRenderer();
+			$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
+			$renderer->setElementTemplate('<div align="left">{element}</div>');
+			$comnt =get_comments($id,$questionId);
+			${user.$questionId}['comments_'.$questionId] = $comnt;
+			$feedback_form->addElement('html_editor','comments_'.$questionId,false);
+			$feedback_form->addElement('html','<br>');
+			//$feedback_form->addElement('submit','submitQuestion',get_lang('Ok'));
+			$feedback_form->setDefaults(${user.$questionId});							
+			$feedback_form->display();			
+			echo '</div>';
+		} else {
+			$comnt = get_comments($id,$questionId);
+			echo '<tr><td><br />';
+			if (!empty($comnt)) {
+				echo '<b>'.get_lang('Feedback').'</b>';									
+				echo '<div id="question_feedback">'.$comnt.'</div>';
+			}
+			echo '</td><td>';
+		}
+		if ($is_allowedToEdit) {
+			if ($answerType == FREE_ANSWER) {
+				$marksname = "marksName".$questionId;
+				?>
+				<div id="<?php echo $marksname; ?>" style="display:none">
+				<form name="marksform_<?php echo $questionId; ?>" method="post" action="">
+			    <?php
+				$arrmarks[] = $questionId;
+				echo get_lang("AssignMarks");				
+				echo "&nbsp;<select name='marks' id='marks'>";
+				for ($i=0;$i<=$questionWeighting;$i++) {
+					echo '<option '.(($i==$questionScore)?"selected='selected'":'').'>'.$i.'</option>';
+				}
+				echo '</select>';
+				echo '</form><br/ ></div>';
+				if ($questionScore==-1) {
+					$questionScore=0;
+				  	echo '<br />'.get_lang('notCorrectedYet');
+				}
+			} else {
+				$arrmarks[] = $questionId;
+				echo '<div id="'.$marksname.'" style="display:none"><form name="marksform_'.$questionId.'" method="post" action="">
+					  <select name="marks" id="marks" style="display:none;"><option>'.$questionScore.'</option></select></form><br/ ></div>';
 			}
 		} else {
-			$arrmarks[] = $questionId;
-			echo '<div id="'.$marksname.'" style="display:none"><form name="marksform_'.$questionId.'" method="post" action="">
-				  <select name="marks" id="marks" style="display:none;"><option>'.$questionScore.'</option></select></form><br/ ></div>';
+			if ($questionScore==-1) {
+				 $questionScore=0;
+			}
 		}
-	} else {
-		if ($questionScore==-1) {
-			 $questionScore=0;
-		}
-	}
-	?>	
-	</td>
-	</tr>
-	</table>
-	
-	<div id="question_score">
-	<?php
-	$my_total_score  = float_format($questionScore,1);
-	$my_total_weight = float_format($questionWeighting,1);			 
-	echo get_lang('Score')." : $my_total_score/$my_total_weight"; 
-	echo '</div>';
-	unset($objAnswerTmp);
-	$i++;
-	$totalWeighting+=$questionWeighting;
+		?>	
+		</td>
+		</tr>
+		</table>
+		
+		<div id="question_score">
+		<?php
+		$my_total_score  = float_format($questionScore,1);
+		$my_total_weight = float_format($questionWeighting,1);			 
+		echo get_lang('Score')." : $my_total_score/$my_total_weight"; 
+		echo '</div>';
+		unset($objAnswerTmp);
+		$i++;
+		$totalWeighting+=$questionWeighting;
+	} // end of large foreach on questions
 } //end of condition if $show_results
 
 if ($origin!='learnpath') {

@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice_submit.php 20351 2009-05-05 23:59:13Z cvargas1 $
+// $Id: exercice_submit.php 20357 2009-05-06 03:54:49Z cvargas1 $
 
 /*
 ==============================================================================
@@ -43,7 +43,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 20351 2009-05-05 23:59:13Z cvargas1 $
+* 	@version $Id: exercice_submit.php 20357 2009-05-06 03:54:49Z cvargas1 $
 */
 
 include ('exercise.class.php');
@@ -248,6 +248,10 @@ if ($formSent) {
 			// Each choice of the student is stored into the array $choice
 			$exerciseResult = $choice;
 
+			// Also store hotspot spots in the session ($exerciseResultCoordinates
+			// will be stored in the session at the end of this script)
+			// The results will be stored by exercise_result.php if we are in
+			// an exercise of type 1 (=all on one page)
 			if (isset ($_POST['hotspot'])) {
 				$exerciseResultCoordinates = $_POST['hotspot'];
 			}
@@ -296,6 +300,10 @@ if ($formSent) {
 						// destruction of the Question object
 						unset ($objQuestionTmp);
 
+						if (isset ($_POST['hotspot']) && isset($_POST['hotspot'][$key])) {
+							$exerciseResultCoordinates[$key] = $_POST['hotspot'][$key];
+						}
+						
 						// construction of the Answer object
 						$objAnswerTmp = new Answer($questionId);
 						$nbrAnswers = $objAnswerTmp->selectNbrAnswers();
@@ -506,10 +514,6 @@ if ($formSent) {
 										$questionScore += $answerWeighting;
 										$totalScore += $answerWeighting;
 									}
-									$tbl_track_e_hotspot = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-									$sql = "INSERT INTO $tbl_track_e_hotspot (`hotspot_user_id` , `hotspot_course_code` , `hotspot_exe_id` , `hotspot_question_id` , `hotspot_answer_id` , `hotspot_correct` , `hotspot_coordinate` ) 
-									VALUES ('" . Database :: escape_string($_user['user_id']) . "', '" . Database :: escape_string($_course['id']) . "', '" . Database :: escape_string($exeId) . "', '" . Database :: escape_string($questionId) . "', '" . Database :: escape_string($answerId) . "', '" . Database :: escape_string($studentChoice) . "', '" . Database :: escape_string($_SESSION['exerciseResultCoordinates'][$questionId][$answerId]) . "')";
-									$result = api_sql_query($sql, __FILE__, __LINE__);												
 									break;
 									// for hotspot with fixed order
 								case HOT_SPOT_ORDER :
@@ -532,6 +536,9 @@ if ($formSent) {
 
 						$totalWeighting += $questionWeighting;
 						//added by priya saini
+						// Store results directly in the database
+						// For all in one page exercises, the results will be
+						// stored by exercise_results.php (using the session)
 						if ($_configuration['tracking_enabled']) {
 							if (empty ($choice)) {
 								$choice = 0;
@@ -577,6 +584,13 @@ if ($formSent) {
 								$res = api_sql_query($sql, __FILE__, __LINE__);
 								$answer = Database :: result($res, 0, "id");
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
+							} elseif ($answerType == HOT_SPOT) {
+								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
+								if (is_array($exerciseResultCoordinates[$key])) {
+									foreach($exerciseResultCoordinates[$key] as $idx => $val) {
+										exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val);
+									}
+								}
 							} else {
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
 							}
@@ -592,10 +606,6 @@ if ($formSent) {
 					//END of saving and qualifying
 					//------------------------------------------------------------------------------------------
 					//
-				}
-
-				if (isset ($_POST['hotspot'])) {
-					$exerciseResultCoordinates[$key] = $_POST['hotspot'][$key];
 				}
 			}
 		}

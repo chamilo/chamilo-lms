@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice_submit.php 20357 2009-05-06 03:54:49Z cvargas1 $
+// $Id: exercice_submit.php 20369 2009-05-06 16:12:55Z cfasanando $
 
 /*
 ==============================================================================
@@ -43,7 +43,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 20357 2009-05-06 03:54:49Z cvargas1 $
+* 	@version $Id: exercice_submit.php 20369 2009-05-06 16:12:55Z cfasanando $
 */
 
 include ('exercise.class.php');
@@ -143,6 +143,7 @@ if ($origin == 'learnpath' && isset ($_GET['not_multiple_attempt']) && $_GET['no
 	$not_multiple_attempt = (int) $_GET['not_multiple_attempt'];
 	if ($not_multiple_attempt === 1) {
 		include_once ('../inc/reduced_header.inc.php');
+		echo '<div style="height:10px">&nbsp;</div>';
 		Display :: display_warning_message(get_lang('ReachedOneAttempt'));
 		exit;
 	}
@@ -888,7 +889,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 		//if there was no valid iso-code, use the english one
 		$document_language = 'en';
 	}
-
+	echo '<div style="height:10px">&nbsp;</div>';
 	/*
 	 * HTML HEADER
 	 */

@@ -1,4 +1,4 @@
-<?php //$Id: work.php 20250 2009-05-01 14:52:02Z iflorespaz $
+<?php //$Id: work.php 20369 2009-05-06 16:12:55Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 20250 2009-05-01 14:52:02Z iflorespaz $
+*  	@version $Id: work.php 20369 2009-05-06 16:12:55Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -402,6 +402,10 @@ if (!empty ($_POST['changeProperties'])) {
 }
 
 // introduction section
+
+if ($origin=='learnpath') {
+	echo '<div style="height:15px">&nbsp;</div>';
+}
 
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
@@ -1396,10 +1400,14 @@ if (!$display_upload_form && !$display_tool_options) {
 		isset($_GET['cidreq'])?$cidreq = Security::Remove_XSS($_GET['cidreq']):$cidreq='';
 		isset($_GET['curdirpath'])?$curdirpath = Security::Remove_XSS($_GET['curdirpath']):$curdirpath='';
 		isset($_REQUEST['filter'])?$filter = (int)$_REQUEST['filter']:$filter='';
-		$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.$cidreq.'&curdirpath='.$curdirpath.'&gradebook='.$gradebook.'">';
-		$form_filter .= make_select('filter',array(0=>get_lang('SelectAFilter'),1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised'),3=>get_lang('FilterByNotExpired')),$filter);
-		$form_filter .= '<input type="submit" value="'.get_lang('FilterAssignments').'"</form>';
-		echo $form_filter;
+		
+		if ($origin != 'learnpath') {
+			$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.$cidreq.'&curdirpath='.$curdirpath.'&gradebook='.$gradebook.'">';
+			$form_filter .= make_select('filter',array(0=>get_lang('SelectAFilter'),1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised'),3=>get_lang('FilterByNotExpired')),$filter);
+			$form_filter .= '<input type="submit" value="'.get_lang('FilterAssignments').'"</form>';
+			echo $form_filter;
+		}
+		
 	} 
 	display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
 }

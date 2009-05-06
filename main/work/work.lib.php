@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20250 2009-05-01 14:52:02Z iflorespaz $
+<?php //$Id: work.lib.php 20369 2009-05-06 16:12:55Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20250 2009-05-01 14:52:02Z iflorespaz $
+* 	@version $Id: work.lib.php 20369 2009-05-06 16:12:55Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -35,7 +35,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 			echo '<a href="work.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png').' '.get_lang('BackToWorksList').'</a>';
 		}
 	}
-	if (! $always_show_tool_options && api_is_allowed_to_edit()) {
+	if (! $always_show_tool_options && api_is_allowed_to_edit() && $origin != 'learnpath') {
 		// Create dir		
 		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateDir').'" title ="'.get_lang('CreateDir').'" /> '.get_lang('CreateAssignment').' </a>';
 		// Options
@@ -48,7 +48,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 							
 	}
 	
-	if (api_is_allowed_to_edit())
+	if (api_is_allowed_to_edit() && $origin != 'learnpath')
 	{
 		// delete all files
 		$display_output .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;delete=all\" ".
@@ -320,12 +320,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	
 	$table_header[] = array(get_lang('Date'),true);
 	
-	if( $is_allowed_to_edit) {
-	$table_header[] = array(get_lang('Modify'),true);
-	}
+	if ($origin != 'learnpath') {		
+		if ($is_allowed_to_edit) {
+		$table_header[] = array(get_lang('Modify'),true);
+		}
+		$table_header[] = array('RealDate',false);
+	}	
 	
-	$table_header[] = array('RealDate',false);
-		
+	
 	// An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide 
 	$column_show[]=1; // type
 	$column_show[]=1; // title
@@ -336,7 +338,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 
 	$column_show[]=1; //date
 	
-	if( $is_allowed_to_edit) {
+	if( $is_allowed_to_edit && $origin != 'learnpath') {
 		$column_show[]=1; //modify
 	}
 	
@@ -633,13 +635,15 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$row[]='';			
 		}	
 		
-		if( $is_allowed_to_edit) {
-			$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
-				'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';						
-			$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$mydir.'&delete2='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'" title="'.get_lang('DirDelete').'"></a>';
-			$row[] = $action;
-		} else {
-			$row[] = "";
+		if ($origin != 'learnpath') {
+			if( $is_allowed_to_edit) {
+				$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
+					'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';						
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$mydir.'&delete2='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'" title="'.get_lang('DirDelete').'"></a>';
+				$row[] = $action;
+			} else {
+				$row[] = "";
+			}
 		}		
 		$table_data[] = $row;
 	}

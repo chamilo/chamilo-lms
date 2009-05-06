@@ -69,19 +69,22 @@ foreach ($rows as $row) {
 	if (($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
 		echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$row['post_id']."&origin=".$origin."&edit=edition&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
 	}
-	if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
-		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=delete&amp;content=post&amp;id=".$row['post_id']."&origin=".$origin."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
-		display_visible_invisible_icon('post', $row['post_id'], $row['visible'],array('forum'=>Security::remove_XSS($_GET['forum']),'thread'=>Security::remove_XSS($_GET['thread']), 'origin'=>$origin ));
-		echo "\n";
-		if ($increment>0) {
-			echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;post=".$row['post_id']."&origin=".$origin."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>";
-		}
+	
+	if ($origin != 'learnpath') {
+		if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=delete&amp;content=post&amp;id=".$row['post_id']."&origin=".$origin."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
+			display_visible_invisible_icon('post', $row['post_id'], $row['visible'],array('forum'=>Security::remove_XSS($_GET['forum']),'thread'=>Security::remove_XSS($_GET['thread']), 'origin'=>$origin ));
+			echo "\n";
+			if ($increment>0) {
+				echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;post=".$row['post_id']."&origin=".$origin."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>";
+			}
+		}	
 	}
 	
 	$userinf=api_get_user_info($row['user_id']);
 	$user_status=api_get_status_of_user_in_course($row['user_id'],api_get_course_id());
 	$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$row['poster_id'],$_GET['thread']);
-	if (api_is_allowed_to_edit()) {
+	if (api_is_allowed_to_edit() && $origin != 'learnpath') {
 		if( isset($_GET['gradebook'])){
 			if ($increment>0 && $user_status!=1 ) {
 				$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));

@@ -3285,18 +3285,23 @@ function display_forum_search_results($search_term) {
  */
 function search_link() {
 	global $origin;
-	$return = '<a href="forumsearch.php?'.api_get_cidreq().'&action=search&origin='.$origin.'"> '.Display::return_icon('search.gif', get_lang('Search')).' '.get_lang('Search').'</a>';
-	if (!empty($_GET['search'])) {
-		$return .= ': '.Security::remove_XSS($_GET['search']).' ';
-		$url = api_get_self().'?';
-		foreach ($_GET as $key=>$value) {
-			if ($key<>'search') {
-				$url_parameter[]=Security::remove_XSS($key).'='.Security::remove_XSS($value);
+	
+	$return = '';
+	
+	if ($origin != 'learnpath') {
+		$return = '<a href="forumsearch.php?'.api_get_cidreq().'&action=search&origin='.$origin.'"> '.Display::return_icon('search.gif', get_lang('Search')).' '.get_lang('Search').'</a>';
+		if (!empty($_GET['search'])) {
+			$return .= ': '.Security::remove_XSS($_GET['search']).' ';
+			$url = api_get_self().'?';
+			foreach ($_GET as $key=>$value) {
+				if ($key<>'search') {
+					$url_parameter[]=Security::remove_XSS($key).'='.Security::remove_XSS($value);
+				}
 			}
+			$url = $url.implode('&amp;',$url_parameter);
+			$return .= '<a href="'.$url.'">'.Display::return_icon('delete.gif', get_lang('RemoveSearchResults')).'</a>';
 		}
-		$url = $url.implode('&amp;',$url_parameter);
-		$return .= '<a href="'.$url.'">'.Display::return_icon('delete.gif', get_lang('RemoveSearchResults')).'</a>';
-	}
+	} 
 	return $return;
 }
 /**

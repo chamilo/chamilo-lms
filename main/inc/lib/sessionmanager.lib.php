@@ -529,4 +529,41 @@ class SessionManager {
 			return false; //field not found
 		}
 	}
+	
+	/**
+	* Checks the relationship between an Session and a Course (return the num_rows)  
+	* @param int user id
+	* @param int url id
+	* @return int num_rows or false if there are not fields 
+	* */
+	function relation_session_course_exist ($session_id, $course_id)
+	{		
+		$tbl_session_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$return_value = false;					
+		$sql= "SELECT course_code FROM $tbl_session_course WHERE id_session = ".Database::escape_string($session_id)." AND course_code = '".Database::escape_string($course_id)."'";
+		$result = api_sql_query($sql,  __FILE__, __LINE__);
+		$num = Database::num_rows($result);
+		if ($num>0) {
+			$return_value = true;
+		}
+		return $return_value;
+	}
+	
+	/**
+	* Get the session information by name  
+	* @param string session name
+	* @return mixed false if the session does not exist, array if the session exist  
+	* */	
+	function get_session_by_name($session_name)
+	{
+		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+		$sql = 'SELECT id, id_coach, date_start, date_end FROM '.$tbl_session.' WHERE name="'.Database::escape_string($session_name).'"';
+		$result = api_sql_query($sql,  __FILE__, __LINE__);
+		$num = Database::num_rows($result);
+		if ($num>0){
+			return Database::fetch_array($result);	
+		} else {
+			return false;
+		}
+	}
 }

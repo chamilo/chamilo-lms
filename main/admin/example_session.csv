@@ -1,2 +1,3 @@
 SessionName;Coach;DateStart;DateEnd;Users;Courses
 Session1;jmontoya;2008/08/08;2012/12/12;username1|username2;course1[coach1][username1,username2]|course2[coach1][username1,username2]
+Session2;jmontoya;2008/08/08;2012/12/12;username1|username2;course1[coach1][username1,username2]|course2[coach1][username1,username2]

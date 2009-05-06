@@ -1,6 +1,5 @@
 <?php //$id:$
 /* For licensing terms, see /dokeos_license.txt */
-//error_log(__FILE__);
 /**
 *	This file generates the ActionScript variables code used by the HotSpot .swf
 *	@package dokeos.exercise
@@ -73,10 +72,9 @@ while ($hotspot = mysql_fetch_array($result))
 	$i++;
 }
 
-// Generate empty
+// Generate empty (the maximum number of points is 12 - it is said so in the user interface)
 $i++;
-for ($i; $i <= 12; $i++)
-{
+for ($i; $i <= 12; $i++) {
 	$output .= "&hotspot_".$i."=false";
 }
 
@@ -92,12 +90,11 @@ if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {
 } else {
 	// get it from db
 	$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-	$sql = 'SELECT hotspot_coordinate 
-			FROM '.$tbl_track_e_hotspot.'
-			WHERE hotspot_question_id = '.intval($questionId).'
-			AND hotspot_course_code = "'.Database::escape_string($course_code).'"
-			AND hotspot_exe_id='.intval($exe_id);
-	
+	$sql = 'SELECT hotspot_coordinate '.
+			' FROM '.$tbl_track_e_hotspot.
+			' WHERE hotspot_question_id = '.intval($questionId).
+			' AND hotspot_course_code = "'.Database::escape_string($course_code).'"'.
+			' AND hotspot_exe_id='.intval($exe_id);
 	$rs = @api_sql_query($sql); // don't output error because we are in Flash execution.
 	while($row = Database :: fetch_array($rs)) {
 		$output2 .= $row['hotspot_coordinate']."|";

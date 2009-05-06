@@ -10,7 +10,7 @@ $AllPages = "All pages";
 $AddNew = "Add new page";
 $ChangesStored = "Your changes have been saved";
 $NewWikiSaved = "The wiki page has been saved. You can see it clicking on:";
-$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Dokeos\" /></p> <p align=\"center\">To begin editing this page click here --> </p> ";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Dokeos\" /></p> <p align=\"center\">To begin editing this page and remove this text</p> ";
 $CourseWikiPages = "Wiki pages";
 $GroupWikiPages = "Group wiki pages";
 $NoWikiPageTitle = "Your changes have been saved. You still have to give a name to the page";

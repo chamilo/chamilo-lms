@@ -61,9 +61,15 @@ else
 
 // Action handling: Adding a note
 if (isset($_GET['action']) && $_GET['action'] == 'addnote') 
-{
-	$_SESSION['notebook_view'] = 'creation_date';
+{			
 	
+	if (!empty($_GET['isStudentView'])) {
+		display_notes();
+		exit;		
+	} 
+	
+	$_SESSION['notebook_view'] = 'creation_date';
+		
 	// initiate the object
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 	// settting the form elements	
@@ -83,17 +89,18 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 		$check = Security::check_token('post');	
 		if ($check) 
 		{
-	   		$values = $form->exportValues();
+	   		$values = $form->exportValues();	   		
 	   		save_note($values);
-	   		display_notes();
+	   		
 		}
-		Security::clear_token();
+		Security::clear_token();		
+		display_notes();						
 	} 
 	else 
 	{
 		echo '<div class="actions">';
 		echo '<a href="index.php?'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackToNoteList')).get_lang('BackToNoteList').'</a>';
-		echo '</div>';
+		echo '</div>';			
 		$token = Security::get_token();
 		$form->addElement('hidden','sec_token');
 		$form->setConstants(array('sec_token' => $token));		
@@ -104,6 +111,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 // Action handling: Editing a note
 else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET['notebook_id'])) 
 {
+	
+	if (!empty($_GET['isStudentView'])) {
+		display_notes();
+		exit;		
+	} 
+		
 	// initiate the object
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.Security::remove_XSS($_GET['notebook_id']));
 	// settting the form elements	
@@ -127,10 +140,10 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 		if ($check) 
 		{
 	   		$values = $form->exportValues();
-	   		update_note($values);	
-	   		display_notes();   			   		
+	   		update_note($values);
 		}
 		Security::clear_token();
+		display_notes();
 	} 
 	else 
 	{
@@ -199,14 +212,15 @@ function save_note($values)
 	// Database table definition
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 	
-	$sql = "INSERT INTO $t_notebook (user_id, course, session_id, title, description, creation_date, status)
+	$sql = "INSERT INTO $t_notebook (user_id, course, session_id, title, description, creation_date,update_date,status)
 			VALUES(
 				'".Database::escape_string(api_get_user_id())."', 
 				'".Database::escape_string(api_get_course_id())."',
 				'".Database::escape_string($_SESSION['id_session'])."',
 				'".Database::escape_string($values['note_title'])."',
 				'".Database::escape_string($values['note_comment'])."',
-				'".Database::escape_string(date('Y-m-d H:i:s'))."',
+				'".Database::escape_string(date('Y-m-d H:i:s'))."', 
+				'".Database::escape_string(date('Y-m-d H:i:s'))."',		
 				'0')";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	// display the feedback message
@@ -267,10 +281,10 @@ function delete_note($notebook_id)
 function display_notes()
 {
 	// action links
-	echo '<div class="actions">';
+	echo '<div class="actions" style="margin-bottom:20px">';
 	//if (api_is_allowed_to_edit())
 	//{
-		echo '<a href="index.php?'.api_get_cidreq().'&action=addnote&msg=add">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
+		echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
 	//}
 	echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date">'.Display::return_icon('calendar_select.gif',get_lang('OrderByCreationDate')).get_lang('OrderByCreationDate').'</a>';
 	echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=update_date">'.Display::return_icon('calendar_select.gif',get_lang('OrderByModificationDate')).get_lang('OrderByModificationDate').'</a>';
@@ -279,7 +293,7 @@ function display_notes()
 	
 	if (!in_array($_SESSION['notebook_view'],array('creation_date','update_date', 'title')))
 	{
-		$_SESSION['notebook_view'] = 'update_date';
+		$_SESSION['notebook_view'] = 'creation_date';
 	}
 	
 	// Database table definition
@@ -299,7 +313,7 @@ function display_notes()
 	{
 		echo '<div class="sectiontitle">';
 		echo '<span style="float: right;"> ('.get_lang('CreationDate').': '.date_to_str_ago($row['creation_date']).'&nbsp;&nbsp;<span class="dropbox_date">'.$row['creation_date'].'</span>';
-		if ($row['update_date'] <> '0000-00-00 00:00:00')
+		if ($row['update_date'] <> $row['creation_date'])
 		{
 			echo ', '.get_lang('UpdateDate').': '.date_to_str_ago($row['update_date']).'&nbsp;&nbsp;<span class="dropbox_date">'.$row['update_date'].'</span>';
 		}
@@ -308,7 +322,7 @@ function display_notes()
 		echo '</div>';
 		echo '<div class="sectioncomment">'.$row['description'].'</div>';
 		echo '<div>';
-		echo '<a href="'.api_get_self().'?action=editnote&amp;notebook_id='.$row['notebook_id'].'&msg=edit">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+		echo '<a href="'.api_get_self().'?action=editnote&amp;notebook_id='.$row['notebook_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 		echo '<a href="'.api_get_self().'?action=deletenote&amp;notebook_id='.$row['notebook_id'].'" onclick="return confirmation(\''.$row['title'].'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 		echo '</div>';
 	}

@@ -1,0 +1,9 @@
+ERROR: Invalid type 'foobar' in DEFAULT in directive hash 'Ns.Dir'
+----
+Ns
+DESCRIPTION: Namespace
+----
+Ns.Dir
+DESCRIPTION: Directive
+TYPE: foobar
+DEFAULT: 0

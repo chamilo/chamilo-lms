@@ -1,0 +1,9 @@
+ERROR: Directive in id 'Ns.+' in directive 'Ns.+' must be alphanumeric
+----
+Ns
+DESCRIPTION: Generic namespace.
+----
+ID: Ns.+
+TYPE: int
+DESCRIPTION: Description
+DEFAULT: 0

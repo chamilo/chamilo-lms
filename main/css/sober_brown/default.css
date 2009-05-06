@@ -2158,7 +2158,12 @@ span.radio {
 	background: url(images/close_highlight.gif) no-repeat;
 	padding-left: 20px; 
 } 
-  /*SOCIAL TOOL*/
+/* Quizzes tool */
+.quiz_export_link {
+	float: right;
+}
+
+/*SOCIAL TOOL*/
 .image-social-content {
     cursor:pointer;
     text-align:left;

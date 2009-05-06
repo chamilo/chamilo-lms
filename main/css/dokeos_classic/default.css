@@ -2109,6 +2109,11 @@ span.radio {
 	padding-left: 20px; 
 } 
 
+/* Quizzes tool */
+.quiz_export_link {
+	float: right;
+}
+
 /*SOCIAL TOOL*/
 .image-social-content {
     cursor:pointer;

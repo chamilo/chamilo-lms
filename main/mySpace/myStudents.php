@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 20343 2009-05-05 20:31:47Z juliomontoya $
+<?php //$Id: myStudents.php 20368 2009-05-06 16:02:20Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -702,7 +702,11 @@ if(!empty($_GET['student']))
 							<?php echo $progress ?>
 						</td>
 						<td align="center">
-							<?php if($start_time!='' && $start_time>0) echo format_locale_date(get_lang('DateFormatLongWithoutDay'),$start_time); else echo '-'; ?>
+							<?php if($start_time!='' && $start_time>0) {
+									 echo format_locale_date(get_lang('DateFormatLongWithoutDay'),$start_time);
+								} else {
+								 	echo '-';
+								} ?>
 						</td>
 						<td align="center">
 							<?php

@@ -402,7 +402,7 @@ class Tracking {
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 					$lp_view_id = Database::result($rs_last_lp_view_id,0,'id');					
 					
-					$sql_max_score='SELECT lp_iv.score as score,lp_iv.max_score 
+					$sql_max_score='SELECT lp_iv.score as score,lp_i.max_score 
 							FROM '.$lp_item_view_table.' as lp_iv
 							INNER JOIN '.$lp_item_table.' as lp_i
 								ON lp_i.id = lp_iv.lp_item_id
@@ -410,15 +410,14 @@ class Tracking {
 							WHERE lp_view_id="'.$lp_view_id.'"';
 							
 					//$rs = api_sql_query($sql, __FILE__, __LINE__);	
-
 					//$sql_max_score='SELECT max_score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" ';
 					$res_max_score=Database::query($sql_max_score,__FILE__,__LINE__);	
 					$count_total_loop=0;								
 					while ($row_max_score=Database::fetch_array($res_max_score)) {
 						if ($row_max_score['max_score']==0) {
-							$lp_scorm_result_score_total+=$row_max_score['score']/100;
+							$lp_scorm_result_score_total+=($row_max_score['score']/100)*100;
 						} else {
-							$lp_scorm_result_score_total+=$row_max_score['max_score']/$row_max_score['score'];
+							$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score'])*100;
 						}
 						$count_total_loop++;
 					}
@@ -1264,7 +1263,7 @@ class Tracking {
 					$rs_last_lp_view_id = Database::query($sql, __FILE__, __LINE__);
 					$lp_view_id = intval(Database::result($rs_last_lp_view_id,0,'id'));	
 
-					$sql_list_view='SELECT li.max_score,lv.user_id,liw.score,(liw.score/li.max_score) as sum_data FROM '.$lp_item_table.' li INNER JOIN '.$lp_view_table.' lv
+					$sql_list_view='SELECT li.max_score,lv.user_id,liw.score,((liw.score/li.max_score)*100) as sum_data FROM '.$lp_item_table.' li INNER JOIN '.$lp_view_table.' lv
 					ON li.lp_id=lv.lp_id INNER JOIN '.$lp_item_view_table.' liw ON liw.lp_item_id=li.id WHERE lv.user_id="'.$user_id.'" AND li.item_type="sco" AND liw.lp_view_id="'.$lp_view_id.'"';
 					$tot=0;
 					$sum=0;
@@ -1286,7 +1285,7 @@ class Tracking {
 		}
 		
 		if ((int)$count_loop > 0) {
-			$avg_student_score = round(($average_data_sum / $count_loop) * 100, 2);
+			$avg_student_score = round(($average_data_sum / $count_loop)*100, 2);
 		}
 		
 		return $avg_student_score;

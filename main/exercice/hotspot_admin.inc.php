@@ -266,9 +266,9 @@ if($modifyAnswers)
 	<tr>
 		<td colspan="2" valign="bottom">
 			<button type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" ><?php echo get_lang('LessHotspots'); ?></button>
-			<button type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" /><?php echo get_lang('MoreHotspots'); ?></button>
+			<button type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" /><?php echo get_lang('langMoreHotspotsImage'); ?></button>
 			<button type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" ><?php echo get_lang('Cancel'); ?></button>
-			<button type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" /><?php echo get_lang('SaveQuestion'); ?></button>
+			<button type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" /><?php echo get_lang('AddQuestionToExercise'); ?></button>
 		</td>
 	</tr>
 	<tr>

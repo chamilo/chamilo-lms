@@ -240,7 +240,7 @@ foreach ($list as $my_item_id) {
 		}
         $extend_link='';
 		if (!empty($inter_num)) {
-			$extend_link = '<a href="' . api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix . '"><img src="../img/visible.gif" alt="fold_view" border="0"></a>' . "\n";
+			$extend_link = '<a href="' . api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix . '"><img src="../img/visible.gif" alt="'.get_lang('HideAttemptView').'" title="'.get_lang('HideAttemptView').'"  border="0"></a>' . "\n";
 		}
 		$title = $row['mytitle'];
 		$title = stripslashes(html_entity_decode($title, ENT_QUOTES, $dokeos_charset));
@@ -263,10 +263,10 @@ foreach ($list as $my_item_id) {
 				if (!empty ($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
 					//the extend button for this attempt has been clicked
 					$extend_this_attempt = 1;
-					$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/visible.gif" alt="fold_attempt_view" border="0"></a>' . "\n";
+					$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/visible.gif" alt="'.get_lang('HideAttemptView').'" title="'.get_lang('HideAttemptView').'" border="0"></a>' . "\n";
 				} else { //same case if fold_attempt_id is set, so not implemented explicitly
 					//the extend button for this attempt has not been clicked
-					$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="extend_attempt_view" border="0"></a>' . "\n";
+					$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="'.get_lang('ExtendAttemptView').'" title="'.get_lang('ExtendAttemptView').'"  border="0"></a>' . "\n";
 				}
 			}
 
@@ -392,10 +392,10 @@ foreach ($list as $my_item_id) {
 			if (!empty ($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
 				//the extend button for this attempt has been clicked
 				$extend_this_attempt = 1;
-				$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/visible.gif" alt="fold_attempt_view" border="0"></a>' . "\n";
+				$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/visible.gif" alt="'.get_lang('HideAttemptView').'" title="'.get_lang('HideAttemptView').'" border="0"></a>' . "\n";
 			} else { //same case if fold_attempt_id is set, so not implemented explicitly
 				//the extend button for this attempt has not been clicked
-				$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="extend_attempt_view" border="0"></a>' . "\n";
+				$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="'.get_lang('ExtendAttemptView').'" title="'.get_lang('ExtendAttemptView').'" border="0"></a>' . "\n";
 			}
 		}
 
@@ -407,7 +407,7 @@ foreach ($list as $my_item_id) {
 		//$extend_link = '<img src="../img/invisible.gif" alt="extend_disabled">';
 		$extend_link = '';
 		if ($inter_num > 1) {
-			$extend_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="extend_view" border="0"></a>';
+			$extend_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="'.get_lang('ExtendAttemptView').'" title="'.get_lang('ExtendAttemptView').'"  border="0"></a>';
 		}
 		if (($counter % 2) == 0) {
 			$oddclass = "row_odd";

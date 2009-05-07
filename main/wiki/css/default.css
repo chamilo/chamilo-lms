@@ -61,11 +61,9 @@
 	#wikicontent {
 		padding-top:5px;
 		min-height:300px;
-		min-width: 800px;
 	}		
 	
 	#menuwiki {			
-		width:250 px;
 		float:left;	
 		border-top: 1px solid #cccccc;
 		border-right: 1px solid #cccccc;
@@ -82,7 +80,7 @@
 	
 	#mainwiki {
 		border-left: 1px solid #cccccc;
-		margin-left:200px;
+		margin-left:240px;
 		padding-left:10px;	
 	}
 		

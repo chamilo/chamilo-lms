@@ -355,7 +355,7 @@ echo "<div id='wikiwrapper'>";
 
 /** Actions bar (= action of the wiki tool, not of the page)**/
 echo '<div id="menuwiki">';
-echo '<table>';
+echo '<table width="210">';
 echo '<tr>';
 echo '<td>';
 	echo get_lang('Menu');

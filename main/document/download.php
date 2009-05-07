@@ -1,4 +1,4 @@
-<?php // $Id: download.php 17795 2009-01-17 19:31:51Z spyroux $
+<?php // $Id: download.php 20388 2009-05-07 12:38:12Z spyroux $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -55,9 +55,6 @@ $this_section=SECTION_COURSES;
 
 include(api_get_path(LIBRARY_PATH).'document.lib.php');
 
-//protection
-api_protect_course_script();
-
 $doc_url = $_GET['doc_url'];
 //change the '&' that got rewritten to '///' by mod_rewrite back to '&'
 $doc_url = str_replace('///', '&', $doc_url);
@@ -65,31 +62,50 @@ $doc_url = str_replace('///', '&', $doc_url);
 $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
 
-include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
-if (! isset($_course))
-{
-	api_not_allowed(true);
+// dealing with image included into survey: when users receive a link towards a 
+// survey while not being authenticated on the plateform. 
+// the administrator should probably be able to disable this code through admin
+// inteface
+$refer_script = strrchr($_SERVER["HTTP_REFERER"],'/');
+if (substr($refer_script,0,15) == "/fillsurvey.php") {
+	$invitation = substr(strstr($refer_script, 'invitationcode='),15);
+	$course = strstr($refer_script, 'course=');
+	$course = substr($course, 7, strpos($course, '&')-7);
+	include ("../survey/survey.download.inc.php");
+	$_course = check_download_survey($course, $invitation, $doc_url);
+	$_course['path']=$_course['directory'];
+} else {
+	//protection
+	api_protect_course_script();
+
+	include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
+
+	if (! isset($_course))
+	{
+		api_not_allowed(true);
+	}
+
+
+	//if the rewrite rule asks for a directory, we redirect to the document explorer
+	if(is_dir(api_get_path(SYS_COURSE_PATH).$_course['path']."/document".$doc_url)) 
+	{
+		//remove last slash if present
+		//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url; 
+		//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (Ren�)
+		while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
+		//group folder?
+		$gid_req = ($_GET['gidReq'])?'&gidReq='.$_GET['gidReq']:'';
+		//create the path
+		$document_explorer = api_get_path(WEB_CODE_PATH).'document/document.php?curdirpath='.urlencode($doc_url).'&cidReq='.$_GET['cidReq'].$gid_req;
+		//redirect
+		header('Location: '.$document_explorer);
+	}
+
+	// launch event
+	event_download($doc_url);
+
 }
-
-
-//if the rewrite rule asks for a directory, we redirect to the document explorer
-if(is_dir(api_get_path(SYS_COURSE_PATH).$_course['path']."/document".$doc_url)) 
-{
-	//remove last slash if present
-	//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url; 
-	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (Ren�)
-	while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
-	//group folder?
-	$gid_req = ($_GET['gidReq'])?'&gidReq='.$_GET['gidReq']:'';
-	//create the path
-	$document_explorer = api_get_path(WEB_CODE_PATH).'document/document.php?curdirpath='.urlencode($doc_url).'&cidReq='.$_GET['cidReq'].$gid_req;
-	//redirect
-	header('Location: '.$document_explorer);
-}
-
-// launch event
-event_download($doc_url);
 
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $full_file_name = $sys_course_path.$_course['path'].'/document'.$doc_url;
@@ -103,4 +119,5 @@ if (!$is_allowed_to_edit &&
 }
 
 DocumentManager::file_send_for_download($full_file_name);
+
 ?>

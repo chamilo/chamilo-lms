@@ -884,7 +884,7 @@ if ($_GET['action']=='orphaned')
 
 if ($_GET['action']=='delete')
 {
-	echo '<div style="float:left">';
+	echo '<div style="overflow:hidden">';
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{
 		echo '<div id="wikititle">'.get_lang('DeletePageHistory').'</div>';
@@ -932,7 +932,7 @@ if ($_GET['action']=='deletewiki')
 {
 	
 	echo '<div class="actions">'.get_lang('DeleteWiki').'</div>';		
-	echo '<div style="float:left">';
+	echo '<div style="overflow:hidden">';
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{	
 		$message = 	get_lang('ConfirmDeleteWiki');
@@ -945,20 +945,20 @@ if ($_GET['action']=='deletewiki')
 		if (!isset($_GET['delete']))
 		{
 			Display::display_warning_message($message,false);
-	}
 		}
-		else
-		{
+	}
+	else
+	{
 		Display::display_normal_message(get_lang("OnlyAdminDeleteWiki"));
 	}
-	echo '</div>';
+	echo '</div>';	
 }
 			
 /////////////////////// search wiki pages ///////////////////////
 if ($_GET['action']=='searchpages')
 {
-echo '<div class="actions">'.get_lang('SearchPages').'</div>';
-echo '<div style=" float:left">';
+	echo '<div class="actions">'.get_lang('SearchPages').'</div>';
+	echo '<div style="overflow:hidden">';
 	// initiate the object
 	$form = new FormValidator('wiki_search','post', api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&action='.Security::remove_XSS($_GET['action']).'&group_id='.Security::remove_XSS($_GET['group_id']));
 	
@@ -973,16 +973,16 @@ echo '<div style=" float:left">';
 	$form->addRule('search_term', get_lang('TooShort'),'minlength',3);	
 			
 	if ($form->validate())
-			{
+	{
 		$form->display();
 		$values = $form->exportValues();
 		display_wiki_search_results($values['search_term'], $values['search_content']);
-			}
+	}
 	else 
-			{	
+	{	
 		$form->display();
-		}
-echo '</div>';	
+    }
+	echo '</div>';
 } 	
 
 
@@ -1291,7 +1291,7 @@ if ($_GET['action']=='edit')
 
 if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifferences']))
 {
-	echo '<div style="float:left">';
+	echo '<div style="overflow:hidden">';
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
     //First, see the property visibility that is at the last register and therefore we should select descending order. But to give ownership to each record, this is no longer necessary except for the title. TODO: check this
@@ -1396,14 +1396,14 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 				{
 					echo get_lang('Comments').':  ---';
 				}
-					
 				echo ' ) </li>';
 			   
-				$counter++;		
+				$counter++;	
 			} //end while
+			echo '<br/>'; 
 			echo '<button class="search" type="submit" name="HistoryDifferences" value="HistoryDifferences">'.get_lang('ShowDifferences').' '.get_lang('LinesDiff').'</button>';
 			echo '<button class="search" type="submit" name="HistoryDifferences2" value="HistoryDifferences2">'.get_lang('ShowDifferences').' '.get_lang('WordsDiff').'</button>';
-			echo '</ul></div></form>';	
+			echo '</ul></form></div>';	
 		}	
 		// We show the differences between two versions
 		else
@@ -2417,7 +2417,7 @@ function save_new_wiki()
 **/
 function display_new_wiki_form()
 {
-    echo '<div style=" float:left">';
+    
 	?>
 	<script language="JavaScript" type="text/JavaScript"> 
     <!-- 
@@ -2433,7 +2433,7 @@ function display_new_wiki_form()
     </script>
 	<?php
 	echo '<form name="form1" method="post" action="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
-	//echo '<div id="wikititle">';
+	echo '<div id="wikititle">';
 	echo  '<span class="form_required">*</span> '.get_lang(Title).': <input type="text" name="title" value="'.urldecode($_GET['title']).'">';
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
@@ -2441,7 +2441,7 @@ function display_new_wiki_form()
 	
 		$_clean['group_id']=(int)$_SESSION['_gid']; // TODO: check if delete ?
 		
-		echo '<br /><img src="../img/wiki/assignment.gif" />&nbsp;'.get_lang('DefineAssignmentPage').'&nbsp;<input type="checkbox" name="assignment" value="1">'; // 1= teacher 2 =student
+		echo '&nbsp;<img src="../img/wiki/assignment.gif" />&nbsp;'.get_lang('DefineAssignmentPage').'&nbsp;<input type="checkbox" name="assignment" value="1">'; // 1= teacher 2 =student
 			
 			//by now turned off			
 			//echo'<div style="border:groove">';			
@@ -2450,7 +2450,7 @@ function display_new_wiki_form()
 		    //echo '<br />&nbsp;'.get_lang('AllowLaterSends').'&nbsp;<INPUT TYPE="checkbox" NAME="delayedsubmit" VALUE="0">'; //by now turned off		
 			//echo'</div>';			
 	}
-	echo '<br /></div>';
+	echo '</div>';
 	echo '<div id="wikicontent">';
 	api_disp_html_area('content','','300px'); 	
 	echo '<br/>';
@@ -2474,7 +2474,6 @@ function display_new_wiki_form()
 	echo '<button class="save" type="submit" name="SaveWikiNew" " onClick="return Send(this.form)">'.get_lang('langSave').'</button>'; 	//for button icon
 	echo '</div>';
 	echo '</form>';
-	echo '<div>';
 }
 
 /**
@@ -3681,7 +3680,7 @@ function display_wiki_search_results($search_term, $search_content=0)
 {
 	global $tbl_wiki, $groupfilter, $MonthsLong; 
 	
-	echo '<div style="float:left><div class="row" ><div class="form_header">'.get_lang('WikiSearchResults').'</div></div></div>';
+	echo '<div class="row"><div class="form_header">'.get_lang('WikiSearchResults').'</div></div>';
 
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 

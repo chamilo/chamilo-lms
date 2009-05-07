@@ -168,11 +168,11 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
         $sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".api_get_user_id()."' ORDER BY login_date DESC LIMIT 0,1";
         
         $q_last_connection=api_sql_query($sql_last_connection);
-        if(Database::num_rows($q_last_connection) > 0)
-        {
+        if(Database::num_rows($q_last_connection) > 0) {
+        	$current_time=date('Y-m-d H:i:s');
             $row = Database::fetch_array($q_last_connection);
             $i_id_last_connection=$row['login_id'];
-            $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
+            $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date='".$current_time."' WHERE login_id='$i_id_last_connection'";
             api_sql_query($s_sql_update_logout_date);
         }        
     }

@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 19964 2009-04-22 00:57:41Z cfasanando $ 
+<?php // $Id: scorm_api.php 20394 2009-05-07 20:11:37Z iflorespaz $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -1125,9 +1125,7 @@ function update_toc(update_action,update_id)
 }
 
 function update_stats() {	
-	//alert(execute_stats);
 	if (execute_stats=='true') {
-		//alert(execute_stats);
 		try {
 		cont_f = document.getElementById('content_id');
 		cont_f.src="lp_controller.php?action=stats";
@@ -1137,8 +1135,6 @@ function update_stats() {
 		}			
 	}
 	execute_stats='false';
-	//alert(execute_stats);
-
 }
 /**
  * Updates the progress bar with the new status. Prevents the need of a page refresh and flickering
@@ -1230,7 +1226,7 @@ function switch_item(current_item, next_item){
 	}else{
        // xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
 	}
-
+	execute_stats=false;
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
 	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);		
 

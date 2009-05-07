@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 20368 2009-05-06 16:02:20Z iflorespaz $
+<?php //$Id: myStudents.php 20396 2009-05-07 21:23:22Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -748,7 +748,7 @@ if(!empty($_GET['student']))
 						<?php echo get_lang('Exercices'); ?>
 					</th>
 					<th>
-						<?php echo get_lang('Score') ?>
+						<?php echo get_lang('Score').Display :: return_icon('info3.gif', get_lang('LastScoreTest')) ?>
 					</th>
 					<th>
 						<?php echo get_lang('Attempts'); ?>

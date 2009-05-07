@@ -268,7 +268,7 @@ class Tracking {
 			$count_exe = Database::num_rows($rs);
 			
 			if ($count_exe > 0) {
-				$quiz_avg_score = 0;
+				$quiz_avg_total_score = 0;
 				while($quiz = Database::fetch_array($rs)) {
 
 					// get the score and max score from track_e_exercise	
@@ -277,24 +277,28 @@ class Tracking {
 							WHERE exe_exo_id = '.(int)$quiz['id'].'
 							AND exe_user_id = '.(int)$student_id.'		
 							AND orig_lp_id = 0
+							AND exe_cours_id = "'.Database::escape_string($course_code).'"		
 							AND orig_lp_item_id = 0		
 							ORDER BY exe_date DESC';
 					
 					$rsAttempt = api_sql_query($sql, __FILE__, __LINE__);
 					$nb_attempts = 0;
-					while ($attempt = Database::fetch_array($rsAttempt)) {
-						$nb_attempts++;
+										
+					$quiz_avg_score = 0;
+					while ($attempt = Database::fetch_array($rsAttempt)) {						
+						$nb_attempts++;						
 						$exe_weight=$attempt['exe_weighting'];
-						if ($exe_weight>0) {
-							$quiz_avg_score = $attempt['exe_result']/$exe_weight*100;
-						}
-					}
+						if ($exe_weight >0) {							
+							$quiz_avg_score += round(($attempt['exe_result']/$exe_weight*100),2);
+						}						
+					}					
 					if($nb_attempts>0) {
 						$quiz_avg_score = $quiz_avg_score / $nb_attempts;
-		            }
-				}		
-										
-				return $quiz_avg_score/$count_exe;				    	
+		            }		            		            
+		            	            
+		           	$quiz_avg_total_score += $quiz_avg_score;		            
+				}												
+				return $quiz_avg_total_score/$count_exe;				    	
 			}				
 		}
 		else

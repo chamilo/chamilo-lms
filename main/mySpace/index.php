@@ -518,10 +518,10 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 		$table->set_additional_parameters($parameters);
 		$table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
 		$table -> set_header(1, get_lang('NbStudents'), false);
-		$table -> set_header(2, get_lang('AvgTimeSpentInTheCourse').Display :: return_icon('info2.gif', get_lang('TimeOfActiveByTraining')),false);
-		$table -> set_header(3, get_lang('AvgStudentsProgress').Display :: return_icon('info2.gif', get_lang('AvgAllUsersInAllCourses')), false);
-		$table -> set_header(4, get_lang('AvgCourseScore'), false);
-		$table -> set_header(5, get_lang('AvgExercisesScore'), false);
+		$table -> set_header(2, get_lang('AvgTimeSpentInTheCourse').Display :: return_icon('info3.gif', get_lang('TimeOfActiveByTraining')),false);
+		$table -> set_header(3, get_lang('AvgStudentsProgress').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses')), false);
+		$table -> set_header(4, get_lang('AvgCourseScore').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses')), false);
+		$table -> set_header(5, get_lang('AvgExercisesScore').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses')), false);
 		$table -> set_header(6, get_lang('AvgMessages'), false);
 		$table -> set_header(7, get_lang('AvgAssignments'), false);
 		$table -> set_header(8, get_lang('Details'), false);
@@ -606,7 +606,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 			$table_row[] = $avg_score_in_exercise;
 			$table_row[] = $avg_messages_in_course;
 			$table_row[] = $avg_assignments_in_course;
-			$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+			$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 			
 			$csv_content[] = array(
 								html_entity_decode($course['title']),
@@ -748,7 +748,7 @@ if(api_is_platform_admin() && $view=='admin')
 		$table_row[] = $nb_students;
 		$table_row[] = $nb_courses;
 		$table_row[] = $nb_sessions;
-		$table_row[] = '<a href="session.php?id_coach='.$a_coachs['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+		$table_row[] = '<center><a href="session.php?id_coach='.$a_coachs['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 		$all_datas[] = $table_row;
 		
 		$csv_content[] = array(
@@ -900,9 +900,11 @@ function export_tracking_user_overview()
 			// time spent in the course
 			$csv_row[] = api_time_to_hms(Tracking :: get_time_spent_on_the_course ($user[4], $row[0]));
 			// student progress in course
-			$csv_row[] = Tracking :: get_avg_student_progress ($user[4], $row[0]);
+			$csv_row[] = round(Tracking :: get_avg_student_progress ($user[4], $row[0]),2);
 			// student score
-			$csv_row[] = Tracking :: get_avg_student_score ($user[4], $row[0]);
+			$csv_row[] = round(Tracking :: get_avg_student_score ($user[4], $row[0]),2);
+			// student tes score
+			$csv_row[] = round(Tracking :: get_avg_student_exercise_score ($user[4], $row[0]),2);			
 			// student messages
 			$csv_row[] = Tracking :: count_student_messages ($user[4], $row[0]);
 			// student assignments
@@ -1046,9 +1048,11 @@ function course_info_tracking_filter($user_id,$url_params,$row)
 		// time spent in the course
 		$return .= '	<td>'.api_time_to_hms(Tracking :: get_time_spent_on_the_course ($user_id, $row[0])).'</td>';
 		// student progress in course
-		$return .= '	<td>'.Tracking :: get_avg_student_progress ($user_id, $row[0]).'</td>';
+		$return .= '	<td>'.round(Tracking :: get_avg_student_progress ($user_id, $row[0]),2).'</td>';
 		// student score
-		$return .= '	<td>'.Tracking :: get_avg_student_score ($user_id, $row[0]).'</td>';
+		$return .= '	<td>'.round(Tracking :: get_avg_student_score ($user_id, $row[0]),2).'</td>';
+		// student tes score
+		$return .= '	<td>'.round(Tracking :: get_avg_student_exercise_score ($user_id, $row[0]),2).'%</td>';		
 		// student messages
 		$return .= '	<td>'.Tracking :: count_student_messages ($user_id, $row[0]).'</td>';
 		// student assignments

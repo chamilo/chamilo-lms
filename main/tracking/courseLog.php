@@ -228,38 +228,51 @@ if($_GET['studentlist'] == 'false') {
 	if (Database::num_rows($rs)>0) {
 		// gets course actual administrators 
 		$sql = "SELECT user.user_id FROM $table_user user, $TABLECOURSUSER course_user
-		  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
+		  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status <> '1' ";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$admin_course = '';
+		
+		$student_ids = array();
+				
 		while($row = Database::fetch_row($res)) {
-			$admin_course .='\''.$row[0].'\','; 	
+			$student_ids[] = $row[0];
 		}
-		$admin_course = substr($admin_course,0,(strlen($admin_course)-1));
-		$cond_user = (!empty($admin_course)?' AND exe_user_id NOT IN('.$admin_course.')':' ');
+		$count_students = count($student_ids);
 		while($quiz = Database::fetch_array($rs)) {
 			$quiz_avg_score = 0;
-			
-			// get the scorn in exercises	
-			$sql = 'SELECT exe_result , exe_weighting
-					FROM '.$TABLETRACK_EXERCISES.'
-					WHERE exe_exo_id = '.$quiz['id'].'
-					'.$cond_user.'		
-					AND orig_lp_id = 0
-					AND orig_lp_item_id = 0		
-					ORDER BY exe_date DESC';
-			$rsAttempt = api_sql_query($sql, __FILE__, __LINE__);
-			$nb_attempts = 0;
-			while ($attempt = Database::fetch_array($rsAttempt)) {
-				$nb_attempts++;
-				$exe_weight=$attempt['exe_weighting'];
-				if ($exe_weight>0) {
-					$quiz_avg_score += $attempt['exe_result']/$exe_weight*100;
-				}
+						
+			if($count_students > 0) {
+				
+				foreach($student_ids as $student_id) {
+				
+					// get the scorn in exercises	
+					$sql = 'SELECT exe_result , exe_weighting
+							FROM '.$TABLETRACK_EXERCISES.'
+							WHERE exe_exo_id = '.$quiz['id'].'
+							AND exe_user_id = '.(int)$student_id.'		
+							AND exe_cours_id = "'.api_get_course_id().'"			
+							AND orig_lp_id = 0
+							AND orig_lp_item_id = 0		
+							ORDER BY exe_date DESC';
+					$rsAttempt = api_sql_query($sql, __FILE__, __LINE__);
+					$nb_attempts = 0;										
+					$avg_student_score = 0;
+					while ($attempt = Database::fetch_array($rsAttempt)) {
+						$nb_attempts++;
+						$exe_weight=$attempt['exe_weighting'];						
+						if ($exe_weight>0) {
+							$avg_student_score += round(($attempt['exe_result']/$exe_weight*100),2);
+						}
+					}
+					
+					if ($nb_attempts>0) {
+						$avg_student_score = $avg_student_score / $nb_attempts;
+		            }
+					$quiz_avg_score += $avg_student_score;										
+				}								
+					
 			}
-			if($nb_attempts>0) {
-				$quiz_avg_score = $quiz_avg_score / $nb_attempts;
-            }
-			echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.round($quiz_avg_score,2).' %</td></tr>';
+            
+			echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.round(($quiz_avg_score/$count_students),2).' %</td></tr>';
 			if ($export_csv) {
 				$temp=array($quiz['title'],$quiz_avg_score);
 				$csv_content[] = $temp;

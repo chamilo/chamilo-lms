@@ -2338,7 +2338,7 @@ function get_terms()
 	     			}
 			     	$sql = "UPDATE $item_view_table " .
 			     			"SET " .$total_time.
-			     			//" start_time = ".$this->get_current_start_time().", " .
+			     			" start_time = ".$this->get_current_start_time().", " .
 			     			" score = ".$this->get_score().", " .
 			     			$my_status.
 			     			" max_score = '".$this->get_max()."'," .

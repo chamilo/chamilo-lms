@@ -208,6 +208,7 @@ $TemplateTitleStopAndThink = "Stop and think";
 $TemplateTitleListLeftListDescription = "Left list with an instructor";
 $TemplateTitleStopAndThinkDescription = "Layout encouraging to stop and think";
 $CreateTheDocument = "Validate";
+$CreateTemplate = "Create template";
 $SharedFolder = "Shared folder";
 $CreateFolder = "Create the folder";
 $HelpDefaultDirDocuments = "This directory contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The directories can remain hidden.";

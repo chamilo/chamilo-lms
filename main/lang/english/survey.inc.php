@@ -199,4 +199,6 @@ $ModifySurvey = "Edit survey";
 $CreateQuestionSurvey = "Create question";
 $ModifyQuestionSurvey = "Edit question";
 $BackToSurvey = "Back to survey";
+$UpdateInformation = "Update information";
+$PleaseFillSurvey = "Please fill survey";
 ?>

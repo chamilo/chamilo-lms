@@ -713,4 +713,5 @@ $CourseName = "Nombre del curso";
 $SendAMessage = "Enviar mensaje";
 $Menu = "Menú";
 $BackToUserList = "Regresar a lista de usurios";
+$GraphicNotAvailable = "Gráfico no disponible";
 ?>

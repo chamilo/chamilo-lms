@@ -138,7 +138,7 @@ $langMoveTheCurrentExercise = "Move the current test";
 $langEditCurrentExecice = "Edit the current test";
 $langUploadScorm = "Import SCORM course";
 $langPowerPointConvert = "Oogie Rapid Learning";
-$langLPCreatedToContinue = "To continue add a section or a learning object to your course.";
+$langLPCreatedToContinue = "To continue add a section or a learning object or activity to your course.";
 $langLPCreatedAddChapterStep = "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Dokeos course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner\'s viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : build your course step by step with documents, tests and activities and get helped by authoring templates, mascots and media galleries</li>        </ul></html></body>";
 $langPrerequisitesAdded = "Prerequisites to the current learning object have been added.";
 $langAddEditPrerequisites = "Add/edit prerequisites";

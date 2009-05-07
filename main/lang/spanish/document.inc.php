@@ -208,6 +208,7 @@ $TemplateTitleStopAndThink = "Detente y reflexiona";
 $TemplateTitleListLeftListDescription = "Lista a la izquierda con un instructor";
 $TemplateTitleStopAndThinkDescription = "Invitación a pararse y a reflexionar";
 $CreateTheDocument = "Guardar documento";
+$CreateTemplate = "Crear plantilla";
 $SharedFolder = "Carpeta compartida";
 $CreateFolder = "Crear el directorio";
 $HelpDefaultDirDocuments = "Este directorio contiene los archivos suministrados por defecto. Puede eliminar o añadir otros archivos, pero si un archivo está oculto cuando es insertado en un documento web los estudiantes tampoco podrán verlo aquí. Cuando inserte un archivo en un documento web hágalo visible previamente. Los directorios pueden seguir ocultos.";

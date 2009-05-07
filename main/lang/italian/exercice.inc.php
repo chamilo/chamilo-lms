@@ -318,4 +318,5 @@ $langDefaultFillBlankQuestion = "Calcola l\'IMC (o BMI)";
 $langDefaultMathingQuestion = "Determina la relazione seguente";
 $langDefaultOpenQuestion = "Quando si celebra la \"Festa dei lavoratori\"?";
 $SaveSection = "Salva l\'elemento";
+$langMoreHotspotsImage = "Aggiungi/Modifica zone attive sull\'immagine";
 ?>

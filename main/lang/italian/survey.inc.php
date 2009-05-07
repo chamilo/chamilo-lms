@@ -199,4 +199,6 @@ $ModifySurvey = "Modifica questionario";
 $CreateQuestionSurvey = "Crea item";
 $ModifyQuestionSurvey = "Modifica item";
 $BackToSurvey = "Torna al questionario";
+$UpdateInformation = "Aggiorna informazione";
+$PleaseFillSurvey = "Riempi il questionario, grazie.";
 ?>

@@ -713,4 +713,5 @@ $CourseName = "Training name";
 $SendAMessage = "Send a message";
 $Menu = "Menu";
 $BackToUserList = "Back to user list";
+$GraphicNotAvailable = "Graphic not available";
 ?>

@@ -318,4 +318,6 @@ $langDefaultFillBlankQuestion = "Calcular el índice de masa corporal";
 $langDefaultMathingQuestion = "Determinar la siguiente relación";
 $langDefaultOpenQuestion = "¿Cuándo se celebra el día del Trabajo?";
 $SaveSection = "Guardar capítulo";
+$langMoreHotspotsImage = "Agregar / editar hotspots en la imagen";
+$ReachedTimeLimitAdmin = "Ha llegado al Tiempo limite alcanzado por admin";
 ?>

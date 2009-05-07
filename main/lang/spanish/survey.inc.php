@@ -199,4 +199,6 @@ $ModifySurvey = "Modificar encuesta";
 $CreateQuestionSurvey = "Crear pregunta";
 $ModifyQuestionSurvey = "Modificar pregunta";
 $BackToSurvey = "Volver a la encuesta";
+$UpdateInformation = "Actualización de información";
+$PleaseFillSurvey = "Por favor, llene la encuesta";
 ?>

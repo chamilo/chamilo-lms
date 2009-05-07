@@ -205,8 +205,8 @@ $State = "Status";
 $NotAttempted = "Not attempted";
 $AddElem = "Add element";
 $DelElem = "Remove element";
-$PlusAnswer = "Add answer";
-$LessAnswer = "Remove answer";
+$PlusAnswer = "Add answer option";
+$LessAnswer = "Remove answer option";
 $YourScore = "Your score";
 $Attempted = "Attempted";
 $AssignMarks = "Assign a mark";
@@ -318,4 +318,6 @@ $langDefaultFillBlankQuestion = "Calculate BMI?";
 $langDefaultMathingQuestion = "Determine the following relation";
 $langDefaultOpenQuestion = "When they celebrate the Labor Day?";
 $SaveSection = "Save section";
+$langMoreHotspotsImage = "Add/edit hotspots on the image";
+$ReachedTimeLimitAdmin = "Reached time limit admin";
 ?>

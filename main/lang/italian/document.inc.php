@@ -208,6 +208,7 @@ $TemplateTitleStopAndThink = "Fermo e pensa";
 $TemplateTitleListLeftListDescription = "Elenco a sinistra con docente";
 $TemplateTitleStopAndThinkDescription = "Invito a fermarsi e a riflettere";
 $CreateTheDocument = "Salva il documento";
+$CreateTemplate = "Crea modello";
 $SharedFolder = "Cartella condivisa";
 $CreateFolder = "Crea una cartella";
 $HelpDefaultDirDocuments = "Questa cartella contiene per default l\'archivio dei file. Puoi aggiungere altri file. Se i file sono marcati come invisibili, continueranno a non essere visibili anche se inseriti in una pagina web. Per usare un file in una pagina devi quindi prima rendere visibile il file, anche se la cartella - marcata invisibile - continuerà a non essere accessibile.";

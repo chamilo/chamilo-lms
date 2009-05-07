@@ -48,7 +48,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
         <td width="100%" height="22" valign="top">
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-align-box">
           <tr>
-            <td width="100%" height="22" valign="top">&nbsp;&nbsp;<?php echo utf8_encode(get_lang('ContactsList')); ?></td>
+            <td width="100%" height="22" valign="top">&nbsp;&nbsp;<?php echo mb_convert_encoding(get_lang('ContactsList'),'UTF-8',$charset); ?></td>
               </tr>
         </table></td>
         </tr>

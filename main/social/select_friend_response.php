@@ -32,7 +32,7 @@ for ($i=0;$i<$number_loop;$i++) {
     <td width="600" height="20" valign="top"><table width="100%" border="0"
 cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
       <tr>
-        <td width="600" height="20" valign="top"><div align="left"><?php echo utf8_encode(get_lang('RequestContact')); ?></div></td>
+        <td width="600" height="20" valign="top"><div align="left"><?php echo mb_convert_encoding(get_lang('RequestContact'),'UTF-8',$charset); ?></div></td>
         </tr>
     </table></td>
   </tr>
@@ -65,7 +65,7 @@ width="100%" border="0" cellpadding="0" cellspacing="0">
                                 <?php 
                                 $user_id=$list_get_invitation[$i]['user_sender_id'];
                                 $user_info=api_get_user_info($user_id);
-                                echo utf8_encode($user_info['firstName']).' '.utf8_encode($user_info['lastName']);
+                                echo mb_convert_encoding($user_info['firstName'],'UTF-8',$charset) .' '.mb_convert_encoding($user_info['lastName'],'UTF-8',$charset);
                                 ?></td>
                                 </tr>
                             </table></td>
@@ -86,7 +86,7 @@ border="0" cellpadding="0" cellspacing="0">
                                 <td width="500" height="22" valign="top"><?php
                                 $title=get_lang($list_get_invitation[$i]['title']);
                                 $content=get_lang($list_get_invitation[$i]['content']);
-                                echo utf8_encode($title).' : '.utf8_encode($content);
+                                echo mb_convert_encoding($title,'UTF-8',$charset).' : '.mb_convert_encoding($content,'UTF-8',$charset);
                                 ?> </td>
                                 </tr>
                             </table></td>
@@ -106,8 +106,8 @@ border="0" cellpadding="0" cellspacing="0">
 cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
               <tr>
                 <td width="600" height="25" valign="top"><div align="right">
-                  <input type="submit" name="btn_accepted" id="<?php echo "btn_accepted_".$user_id ?>" value="<?php echo utf8_encode(get_lang('Accept')); ?>" onclick="javascript:register_friend(this)"  />
-                  <input type="submit" name="btn_denied" id="<?php echo "btn_deniedst_".$user_id ?>" value="<?php echo utf8_encode(get_lang('Deny')); ?>" onclick="javascript:denied_friend(this)" />
+                  <input type="submit" name="btn_accepted" id="<?php echo "btn_accepted_".$user_id ?>" value="<?php echo mb_convert_encoding(get_lang('Accept'),'UTF-8',$charset); ?>" onclick="javascript:register_friend(this)"  />
+                  <input type="submit" name="btn_denied" id="<?php echo "btn_deniedst_".$user_id ?>" value="<?php echo mb_convert_encoding(get_lang('Deny'),'UTF-8',$charset); ?>" onclick="javascript:denied_friend(this)" />
                   </div></td>
                     </tr>
             </table></td>

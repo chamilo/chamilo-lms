@@ -73,7 +73,7 @@ for ($p=0;$p<count($list_groups);$p++) {
 	echo $friend_html; 
 		}  
 		else {
-			echo utf8_encode(get_lang('YouDontHaveContactsInThisGroup'));
+			echo mb_convert_encoding(get_lang('YouDontHaveContactsInThisGroup'),'UTF-8',$charset);
 		}
 		?>
 		</div>

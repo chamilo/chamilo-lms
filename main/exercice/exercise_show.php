@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20357 2009-05-06 03:54:49Z cvargas1 $
+* 	@version $Id: exercise_show.php 20391 2009-05-07 17:02:18Z iflorespaz $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -429,6 +429,9 @@ if ($show_results == true ) {
 
 			$status_info=CourseManager::get_user_in_course_status($user_id,$course_code);
 			if (STUDENT==$status_info) {
+				$user_info=api_get_user_info($user_id); 
+				echo $user_info['firstName'].' '.$user_info['lastName'];
+			} elseif(COURSEMANAGER==$status_info && !isset($_GET['user'])) {
 				$user_info=api_get_user_info($user_id); 
 				echo $user_info['firstName'].' '.$user_info['lastName'];
 			} else {

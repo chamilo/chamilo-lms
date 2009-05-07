@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20381 2009-05-06 22:12:47Z cvargas1 $
+// $Id: exercice.php 20391 2009-05-07 17:02:18Z iflorespaz $
 
 /*
 ==============================================================================
@@ -296,14 +296,15 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 
 	//search items 
 	$sql_lp='SELECT li.id as lp_item_id,li.lp_id,li.item_type,li.path,liv.id AS lp_view_id,liv.user_id,max(liv.view_count) AS view_count FROM '.$TBL_LP_ITEM.' li 
-	INNER JOIN '.$TBL_LP_VIEW.' liv ON li.lp_id=liv.lp_id WHERE li.path="'.Database::escape_string(Security::remove_XSS($_POST['my_exe_exo_id'])).'" AND li.item_type="quiz" AND user_id="'.Database::escape_string(Security::remove_XSS($_POST['student_id'])).'" ';
+	INNER JOIN '.$TBL_LP_VIEW.' liv ON li.lp_id=liv.lp_id WHERE li.path="'.Database::escape_string(Security::remove_XSS($_POST['my_exe_exo_id'])).'" AND li.item_type="quiz" AND user_id="'.Database::escape_string(Security::remove_XSS($_POST['student_id'])).'"  GROUP BY li.id,liv.view_count';
 	$rs_lp=Database::query($sql_lp,__FILE__,__LINE__);
-	$row_lp=Database::fetch_array($rs_lp);
-
-	//update score in learnig path
-	$sql_lp_view='UPDATE '.$TBL_LP_ITEM_VIEW.' liv SET score ="'.$tot.'" WHERE liv.lp_item_id="'.(int)$row_lp['lp_item_id'].'" AND liv.lp_view_id="'.(int)$row_lp['lp_view_id'].'" AND liv.view_count="'.(int)$row_lp['view_count'].'" ;';
-	$rs_lp_view=Database::query($sql_lp_view);
-	api_sql_query($totquery, __FILE__, __LINE__);
+	if (!($rs_lp===false)) {
+		$row_lp=Database::fetch_array($rs_lp);
+		//update score in learnig path
+		$sql_lp_view='UPDATE '.$TBL_LP_ITEM_VIEW.' liv SET score ="'.$tot.'" WHERE liv.lp_item_id="'.(int)$row_lp['lp_item_id'].'" AND liv.lp_view_id="'.(int)$row_lp['lp_view_id'].'" AND liv.view_count="'.(int)$row_lp['view_count'].'" ;';
+		$rs_lp_view=Database::query($sql_lp_view, __FILE__, __LINE__);		
+	}
+	Database::query($totquery, __FILE__, __LINE__);
 	
 	$subject = get_lang('ExamSheetVCC');
 	$htmlmessage = '<html>' .

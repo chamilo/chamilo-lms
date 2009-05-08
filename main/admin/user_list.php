@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 20400 2009-05-08 05:19:37Z yannoo $
+<?php // $Id: user_list.php 20402 2009-05-08 08:16:12Z ndieschburg $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -259,7 +259,7 @@ function login_user($user_id) {
 function get_number_of_users()
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$sql = "SELECT COUNT(u.user_id) AS total_number_of_items FROM $user_table u";
+	$sql = "SELECT COUNT(DISTINCT u.user_id) AS total_number_of_items FROM $user_table u";
 	
 	// adding the filter to see the user's only of the current access_url 
     global $_configuration;
@@ -322,7 +322,7 @@ function get_number_of_users()
 function get_user_data($from, $number_of_items, $column, $direction)
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$sql = "SELECT
+	$sql = "SELECT DISTINCT
                  u.user_id				AS col0,
                  u.official_code		AS col1,
 				 u.lastname 			AS col2,

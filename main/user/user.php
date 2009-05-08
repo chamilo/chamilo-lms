@@ -1,4 +1,4 @@
-<?php // $Id: user.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+<?php // $Id: user.php 20426 2009-05-08 21:03:05Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -456,7 +456,13 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);				
 				$image_repository = $image_path['dir'];
 				$existing_image = $image_path['file'];
-				$photo= '<center><img src="'.$image_repository.$existing_image.'" alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'"  width="22" height="22" title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></center>';									
+				if (!api_is_anonymous()) {
+					$photo= '<center><a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img src="'.$image_repository.$existing_image.'" alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'"  width="22" height="22" title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></a></center>';
+				}
+				else
+				{
+					$photo= '<center><img src="'.$image_repository.$existing_image.'" alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'"  width="22" height="22" title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></center>';
+				}												
 				$temp[] = $photo;
 
 				
@@ -489,7 +495,13 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);				
 				$image_repository = $image_path['dir'];
 				$existing_image = $image_path['file'];
-				$photo= '<center><img src="'.$image_repository.$existing_image.'" alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'"  width="22" height="22" title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></center>';	
+				if (!api_is_anonymous()) {
+					$photo= '<center><a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img src="'.$image_repository.$existing_image.'" alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'"  width="22" height="22" title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></a></center>';
+				}
+				else
+				{
+					$photo= '<center><img src="'.$image_repository.$existing_image.'" alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'"  width="22" height="22" title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></center>';
+				}	
 				$temp[] = $photo;			
 								
 				$temp[] = $o_course_user['firstname'];
@@ -544,11 +556,6 @@ function modify_filter($user_id) {
 	global $origin,$_user, $_course, $is_allowed_to_track,$charset;
 
 	$result="<div style='text-align: center'>";
-
-	// info
-	if (!api_is_anonymous()) {
-		$result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img border="0" alt="'.get_lang('Info').'" src="../img/user_info.gif" /></a>&nbsp;';
-	}
 
 	if ($is_allowed_to_track) {
 		$result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course&amp;id_session='.$_SESSION["id_session"].'" title="'.get_lang('Tracking').'"  ><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';

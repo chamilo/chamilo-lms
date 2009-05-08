@@ -316,7 +316,7 @@ if ($origin!='learnpath') {
 	if (empty($_SESSION['toolgroup'])){
 		echo '<span style="float:right;">'.search_link().'</span>';
 	}
-	echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
+	echo '<a href="index.php">'.Display::return_icon('back.png',get_lang('BackToForumOverview')).' '.get_lang('BackToForumOverview').'</a>';
 	// The link should appear when
 	// 1. the course admin is here
 	// 2. the course member is here and new threads are allowed

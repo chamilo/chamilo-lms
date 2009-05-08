@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 20046 2009-04-23 22:54:12Z yannoo $
+<?php // $Id: user_list.php 20399 2009-05-08 05:17:27Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -331,8 +331,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
                  u.email				AS col5,
                  u.status				AS col6,
                  u.active				AS col7,
-                 u.user_id				AS col8
-             FROM $user_table u ";
+                 u.user_id				AS col8 ".
+                 ", u.expiration_date      AS exp ".
+            " FROM $user_table u ";
                  
     // adding the filter to see the user's only of the current access_url 
     global $_configuration;
@@ -386,9 +387,22 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 		
 	$users = array ();
+    $t = time();
 	while ($user = Database::fetch_row($res)) {
-		$users[] = $user;
+        error_log(print_r($user,1));
+        if ($user[7] == 1 && $user[9] != '0000-00-00 00:00:00') {
+            // check expiration date
+            $expiration_time = convert_mysql_date($user[9]);
+            error_log('Comparing '.$expiration_time.' to '.$t.' for user '.$user[0]);
+            // if expiration date is passed, store a special value for active field
+            if ($expiration_time < $t) {
+        	   $user[7] = '-1';
+            }
+        }
+        // forget about the expiration date field
+        $users[] = array($user[0],$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
 	}
+    error_log(print_r($users,1));
 	return $users;
 }
 /**
@@ -454,23 +468,23 @@ function modify_filter($user_id,$url_params,$row)
  * @param string $url_params
  * @return string Some HTML-code with the lock/unlock button
  */
-function active_filter($active, $url_params, $row)
-{
+function active_filter($active, $url_params, $row) {
 	global $_user;
 
-	if ($active=='1')
-	{
+	if ($active=='1') {
 		$action='lock';
 		$image='right';
-	}
-	if ($active=='0')
-	{
+	} elseif ($active=='-1') {
+    	$action='edit';
+        $image='expired';
+    } elseif ($active=='0') {
 		$action='unlock';
 		$image='wrong';
 	}
 
-	if ($row['0']<>$_user['user_id']) // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-	{
+    if ($action=='edit') {
+        $result = Display::return_icon($image.'.gif', get_lang('AccountExpired'));    	
+    }elseif ($row['0']<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 		$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon($image.'.gif', get_lang(ucfirst($action))).'</a>';
 	}
 	return $result;

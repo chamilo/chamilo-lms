@@ -674,7 +674,7 @@ if (isset($uidReset) && $uidReset) // session data refresh requested
 			$_user ['status']	= $uData ['status'];
 
             $is_platformAdmin        = (bool) (! is_null( $uData['is_admin']));
-            $is_allowedCreateCourse  = (bool) ($uData ['status'] == 1);
+            $is_allowedCreateCourse  = (bool) (($uData ['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
 
             api_session_register('_user');
         } else {

@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 19904 2009-04-20 22:56:46Z cvargas1 $
+* 	@version $Id: question.php 20424 2009-05-08 20:40:27Z herodoto $
 */
 
 // name of the language file that needs to be included
@@ -92,7 +92,7 @@ $possible_types = array('personality','yesno', 'multiplechoice', 'multiplerespon
 
 // actions 
 $actions = '<div class="actions">';
-$actions .= '<a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png').get_lang('BackToSurvey').'</a>';
+$actions .= '<a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackToSurvey')).get_lang('BackToSurvey').'</a>';
 $actions .= '</div>';
 // checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types))

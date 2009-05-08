@@ -251,8 +251,11 @@ function show_add_forum_form($inputvalues=array()) {
 				document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
 				}*/
 			
-	$form->addElement('static','Group','<br /><div id="plus"><a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a></div>','');
-		$form->addElement('html','<div id="options" style="display:none">');
+	$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
+	$form->addElement('html', '<br /><div id="plus"><a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a></div>','');
+	$form->addElement('html','</div></div>');
+	$form->addElement('html','<div id="options" style="display:none">');
+	
 	
 	$group='';
 	$group[] =& HTML_QuickForm::createElement('radio', 'students_can_edit',null,get_lang('Yes'),1);
@@ -1916,8 +1919,12 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$form->applyFilter('post_title', 'html_filter');	
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
 	$form->applyFilter('post_text', 'html_filter');	
-	$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" /> '.get_lang('AdvancedParameters').'</span></a>','');
+	
+	$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
+	$form->addElement('html','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" /> '.get_lang('AdvancedParameters').'</span></a>','');
+	$form->addElement('html', '</div></div>');
 	$form->addElement('html','<div id="id_qualify" style="display:none">');
+	
 	if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ){
 		// thread qualify
 		
@@ -2342,7 +2349,9 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
 	$form->applyFilter('post_text', 'html_filter');	
 		
-	$form->addElement('static','Group','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>','');
+	$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
+	$form->addElement('HTML','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>','');
+	$form->addElement('html','</div></div>');
 	$form->addElement('html','<div id="id_qualify" style="display:none">');
 	
 	if (!isset($_GET['edit'])) {				

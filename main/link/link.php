@@ -1,4 +1,4 @@
-<?php // $Id: link.php 20300 2009-05-04 20:56:08Z juliomontoya $
+<?php // $Id: link.php 20408 2009-05-08 15:23:06Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -187,7 +187,7 @@ $fck_attribute = null; // Clearing this global variable immediatelly after it ha
 
 if (is_allowed_to_edit() and isset($_GET['action'])) {	
 	echo '<div class="actions">';
-	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png').get_lang('BackToLinksOverview').'</a>';
+	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png',get_lang('BackToLinksOverview')).get_lang('BackToLinksOverview').'</a>';
 	echo '</div>';
 	
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
@@ -228,7 +228,7 @@ if (is_allowed_to_edit() and isset($_GET['action'])) {
 
 		echo '	<div class="row">
 					<div class="label">
-						'.get_lang('LinkRelatedActivity').'
+						'.get_lang('Description').'
 					</div>
 					<div class="formw">
 						<textarea rows="3" cols="50" name="description">' .	htmlentities($description,ENT_QUOTES,$charset) . '</textarea>

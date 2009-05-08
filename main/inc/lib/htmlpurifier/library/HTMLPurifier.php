@@ -85,7 +85,22 @@ class HTMLPurifier
      *                The parameter can also be any type that
      *                HTMLPurifier_Config::create() supports.
      */
-    public function __construct($config = null) {
+    public function __construct($config = null,$user_status) {
+		if ($user_status==STUDENT) {
+			
+			global $tag_student,$attribute_student;//$tag_student
+	   		$config->set('HTML', 'AllowedElements',$tag_student);//'a,em,blockquote,p,code,pre,strong,b,img,span'
+			$config->set('HTML', 'AllowedAttributes',$attribute_student);//'a.href,a.title,img.src'
+		} elseif ($user_status==COURSEMANAGER) {
+			global $tag_teacher,$attribute_teacher;			
+	   		$config->set('HTML', 'AllowedElements',$tag_teacher);
+			$config->set('HTML', 'AllowedAttributes', $attribute_teacher);//'a.href,a.title,img.src'				
+		} else {
+			global $tag_anonymous,$attribute_anonymous;			
+	   		$config->set('HTML', 'AllowedElements', $tag_anonymous);
+			$config->set('HTML', 'AllowedAttributes',$attribute_anonymous);//'a.href,a.title,img.src'			
+		}
+			$config->set('HTML', 'TidyLevel', 'light');
 
         $this->config = HTMLPurifier_Config::create($config);
 

@@ -330,13 +330,21 @@ require($includePath."/local.inc.php");
 
 // ===== "who is logged in?" module section =====
 
-include_once($includePath."/lib/online.inc.php");
+require_once($includePath."/lib/online.inc.php");
 // check and modify the date of user in the track.e.online table
 if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php'))
 {
 	LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '',$_configuration['statistics_database']);
 }
-
+//load array Kses for Htmlpurifier
+require_once $includePath."/lib/formvalidator/Rule/allowed_tags.inc.php";
+//load htmpurifier
+require_once $includePath."/lib/htmlpurifier/library/HTMLPurifier.auto.php";
+global $config_purifier;
+$charset = api_get_setting('platform_charset');
+$config_purifier = HTMLPurifier_Config::createDefault();
+$config_purifier->set('Core', 'Encoding',$charset);
+$config_purifier->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');	
 // ===== end "who is logged in?" module section =====
 
 if(get_setting('server_type') == 'test')

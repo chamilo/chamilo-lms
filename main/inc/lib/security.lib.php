@@ -247,20 +247,26 @@ class Security{
 	 * @param	mixed	The variable to filter for XSS, this params can be a string or an array (example : array(x,y)) 
 	 * @return	mixed	Filtered string or array
 	 */
-	function remove_XSS($var) {
+	function remove_XSS($var,$user_status=null) {
 		global $charset;
-		if (is_array($var)) {
-			if (count($var)>0) {
-				foreach ($var as &$value_var) {
-					$value_var=htmlentities($value_var,ENT_QUOTES,$charset);	
-				}				
+		global $config_purifier;
+		if (is_null($user_status)) {
+			if (is_array($var)) {
+				if (count($var)>0) {
+					foreach ($var as &$value_var) {
+						$value_var=htmlentities($value_var,ENT_QUOTES,$charset);	
+					}				
+				} else {
+					return '';
+				} 
+				return $var;
+	
 			} else {
-				return '';
-			} 
-			return $var;
-
+				return htmlentities($var,ENT_QUOTES,$charset);	
+			}			
 		} else {
-			return htmlentities($var,ENT_QUOTES,$charset);	
-		}
+		$purifier = new HTMLPurifier($config_purifier,$user_status);
+		return $purifier->purify($var);
+		}		
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20391 2009-05-07 17:02:18Z iflorespaz $
+// $Id: exercice.php 20418 2009-05-08 19:33:09Z juliomontoya $
 
 /*
 ==============================================================================
@@ -295,14 +295,16 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '" . Database :: escape_string($tot) . "' WHERE exe_Id='" . Database :: escape_string($id) . "'";
 
 	//search items 
-	$sql_lp='SELECT li.id as lp_item_id,li.lp_id,li.item_type,li.path,liv.id AS lp_view_id,liv.user_id,max(liv.view_count) AS view_count FROM '.$TBL_LP_ITEM.' li 
-	INNER JOIN '.$TBL_LP_VIEW.' liv ON li.lp_id=liv.lp_id WHERE li.path="'.Database::escape_string(Security::remove_XSS($_POST['my_exe_exo_id'])).'" AND li.item_type="quiz" AND user_id="'.Database::escape_string(Security::remove_XSS($_POST['student_id'])).'"  GROUP BY li.id,liv.view_count';
-	$rs_lp=Database::query($sql_lp,__FILE__,__LINE__);
-	if (!($rs_lp===false)) {
-		$row_lp=Database::fetch_array($rs_lp);
-		//update score in learnig path
-		$sql_lp_view='UPDATE '.$TBL_LP_ITEM_VIEW.' liv SET score ="'.$tot.'" WHERE liv.lp_item_id="'.(int)$row_lp['lp_item_id'].'" AND liv.lp_view_id="'.(int)$row_lp['lp_view_id'].'" AND liv.view_count="'.(int)$row_lp['view_count'].'" ;';
-		$rs_lp_view=Database::query($sql_lp_view, __FILE__, __LINE__);		
+	if (isset($_POST['my_exe_exo_id']) && isset($_POST['student_id'])) {
+		$sql_lp='SELECT li.id as lp_item_id,li.lp_id,li.item_type,li.path,liv.id AS lp_view_id,liv.user_id,max(liv.view_count) AS view_count FROM '.$TBL_LP_ITEM.' li 
+		INNER JOIN '.$TBL_LP_VIEW.' liv ON li.lp_id=liv.lp_id WHERE li.path="'.Database::escape_string(Security::remove_XSS($_POST['my_exe_exo_id'])).'" AND li.item_type="quiz" AND user_id="'.Database::escape_string(Security::remove_XSS($_POST['student_id'])).'" ';
+		$rs_lp=Database::query($sql_lp,__FILE__,__LINE__);
+		if (!($rs_lp===false)) {
+			$row_lp=Database::fetch_array($rs_lp);	
+			//update score in learnig path
+			$sql_lp_view='UPDATE '.$TBL_LP_ITEM_VIEW.' liv SET score ="'.$tot.'" WHERE liv.lp_item_id="'.(int)$row_lp['lp_item_id'].'" AND liv.lp_view_id="'.(int)$row_lp['lp_view_id'].'" AND liv.view_count="'.(int)$row_lp['view_count'].'" ;';		
+			$rs_lp_view=Database::query($sql_lp_view,__FILE__, __LINE__);
+		}
 	}
 	Database::query($totquery, __FILE__, __LINE__);
 	
@@ -1386,6 +1388,5 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo $clarolineRepositoryWeb ?>css/default.css" />
 	<?php
-
 }
 ?>

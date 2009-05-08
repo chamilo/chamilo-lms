@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 20200 2009-04-29 22:14:55Z cvargas1 $
+<?php // $Id: exercise.lib.php 20411 2009-05-08 15:57:21Z juliomontoya $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 20200 2009-04-29 22:14:55Z cvargas1 $
+* 	@version $Id: exercise.lib.php 20411 2009-05-08 15:57:21Z juliomontoya $
 */
 
 /**
@@ -149,16 +149,44 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 				if($startlocations !== false && $endlocations !== false) {
 					$texstring=substr($answer,$startlocations,$endlocations-$startlocations+6);
-					// 2. replace this by {texcode}
+				// 2. replace this by {texcode}
 					$answer=str_replace($texstring,'{texcode}',$answer);
 				}
 
 				// 3. do the normal matching parsing
-				// replaces [blank] by an input field				
-				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10">',($answer));
-				// 4. replace the {texcode by the api_pare_tex parsed code}
+				// replaces [blank] by an input field			
 				
-				$texstring = api_parse_tex($texstring);
+				//getting the matches				
+				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10">',($answer));
+				
+				// Change input size 
+				/*
+				preg_match_all('/\[[^]]+]/',$answer,$matches);										
+				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="@@">',($answer));								
+				
+				// 4. resize the input				
+				foreach($matches[0] as $match) {					
+					$answer_len = strlen($match)-2;					
+					//we will only replace 1 item 
+					// echo implode("replace term", explode("search term", "input", $limit));					
+					if ($answer_len <= 5) {
+						$answer = (implode("5", explode("@@", $answer, 2)));												
+					} elseif($answer_len <= 10) {
+						$answer = (implode("10", explode("@@", $answer, 2)));												
+					} elseif($answer_len <= 20) {
+						$answer = (implode("20", explode("@@", $answer, 2)));
+					} elseif($answer_len <= 30) {
+						$answer = (implode("30", explode("@@", $answer, 2)));
+					} elseif($answer_len <= 40) {
+						$answer = (implode("40", explode("@@", $answer, 2)));						
+					} elseif($answer_len > 40) {
+						$answer = (implode("55", explode("@@", $answer, 2))); 
+					}			
+				}
+				*/
+				
+				// 5. replace the {texcode by the api_pare_tex parsed code}				
+				$texstring = api_parse_tex($texstring); 
 				$answer=str_replace("{texcode}",$texstring,$answer);
 				
 			}

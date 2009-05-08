@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 20399 2009-05-08 05:17:27Z yannoo $
+<?php // $Id: user_list.php 20400 2009-05-08 05:19:37Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -389,11 +389,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$users = array ();
     $t = time();
 	while ($user = Database::fetch_row($res)) {
-        error_log(print_r($user,1));
         if ($user[7] == 1 && $user[9] != '0000-00-00 00:00:00') {
             // check expiration date
             $expiration_time = convert_mysql_date($user[9]);
-            error_log('Comparing '.$expiration_time.' to '.$t.' for user '.$user[0]);
             // if expiration date is passed, store a special value for active field
             if ($expiration_time < $t) {
         	   $user[7] = '-1';
@@ -402,7 +400,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
         // forget about the expiration date field
         $users[] = array($user[0],$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
 	}
-    error_log(print_r($users,1));
 	return $users;
 }
 /**

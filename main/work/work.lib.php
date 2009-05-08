@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20369 2009-05-06 16:12:55Z cfasanando $
+<?php //$Id: work.lib.php 20409 2009-05-08 15:31:25Z herodoto $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20369 2009-05-06 16:12:55Z cfasanando $
+* 	@version $Id: work.lib.php 20409 2009-05-08 15:31:25Z herodoto $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -32,7 +32,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	if ($_GET['display_tool_options'] == 'true' OR $_GET['display_upload_form'] == 'true' )
 	{
 		if ($origin!='learnpath') {
-			echo '<a href="work.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png').' '.get_lang('BackToWorksList').'</a>';
+			echo '<a href="work.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToWorksList')).' '.get_lang('BackToWorksList').'</a>';
 		}
 	}
 	if (! $always_show_tool_options && api_is_allowed_to_edit() && $origin != 'learnpath') {
@@ -65,11 +65,11 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	
 			if ($columnStatus['Default'] == 1) {
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;make_invisible=all\">".
-						Display::return_icon('invisible.gif', get_lang('Invisible')).' '.get_lang('MakeInvisible').
+						Display::return_icon('visible.gif', get_lang('Visible')).' '.get_lang('MakeInvisible').
 						"</a>\n";
 			} else {
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;make_visible=all\">".
-						Display::return_icon('visible.gif', get_lang('Visible')).' '.get_lang('MakeVisible').
+						Display::return_icon('invisible.gif', get_lang('Invisible')).' '.get_lang('MakeVisible').
 						"</a>\n";
 			}
 		}			

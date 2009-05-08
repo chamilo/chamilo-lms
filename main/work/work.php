@@ -1,4 +1,4 @@
-<?php //$Id: work.php 20369 2009-05-06 16:12:55Z cfasanando $
+<?php //$Id: work.php 20409 2009-05-08 15:31:25Z herodoto $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 20369 2009-05-06 16:12:55Z cfasanando $
+*  	@version $Id: work.php 20409 2009-05-08 15:31:25Z herodoto $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1320,7 +1320,7 @@ function draw_date_picker($prefix,$default='') {
 		
 		$new_folder_text .= '<div class="row">
 								<div class="label">
-									<a href="#" onclick=" return plus();"><span id="plus">'.Display::return_icon('div_show.gif').' '.get_lang('AdvancedParameters').'</span></a>
+									<a href="#" onclick=" return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters')).' '.get_lang('AdvancedParameters').'</span></a>
 								</div>
 								<div class="formw">
 									'.$addtext.'

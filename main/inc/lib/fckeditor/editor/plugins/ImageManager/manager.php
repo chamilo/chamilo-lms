@@ -26,8 +26,7 @@
 <head>
 <title>Insert Image</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="assets/manager.css" rel="stylesheet" type="text/css" />	
-
+<link href="assets/manager.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 /*<![CDATA[*/
 
@@ -127,7 +126,7 @@
 				<table cellpadding="0" cellspacing="0" border="0">
                   <tr>
                     <td><input type="file" name="upload" id="upload"/></td>
-                    <td>&nbsp;<button type="submit" name="submit" onclick="doUpload();"/>Upload</button></td>
+                    <td>&nbsp;<button type="submit" class="upload" name="submit" onclick="doUpload();"/>Upload</button></td>
                   </tr>
                 </table>
 			</td>
@@ -186,9 +185,9 @@
 <!--// image properties -->
 	<div class="PopupButtons" style="width: 100%;">
 	<div style="text-align: right; margin-left: 15px; margin-right: 15px;">
-		  <button type="button" class="Button" onclick="return refresh();">Refresh</button>&nbsp;
-          <button type="button" class="Button" onclick="return onOK();">OK</button>&nbsp;
-          <button type="button" class="Button" onclick="return onCancel();">Cancel</button>
+		  <button type="button" class="refresh" onclick="return refresh();">Refresh</button>&nbsp;
+          <button type="button" class="save" onclick="return onOK();">Ok</button>&nbsp;
+          <button type="button" class="cancel" onclick="return onCancel();">Cancel</button>
     </div>
     </div>
 	<input type="hidden" id="f_file" name="f_file" />

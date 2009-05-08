@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20409 2009-05-08 15:31:25Z herodoto $
+<?php //$Id: work.lib.php 20410 2009-05-08 15:56:31Z herodoto $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20409 2009-05-08 15:31:25Z herodoto $
+* 	@version $Id: work.lib.php 20410 2009-05-08 15:56:31Z herodoto $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -37,7 +37,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	}
 	if (! $always_show_tool_options && api_is_allowed_to_edit() && $origin != 'learnpath') {
 		// Create dir		
-		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateDir').'" title ="'.get_lang('CreateDir').'" /> '.get_lang('CreateAssignment').' </a>';
+		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateAssignment').'" title ="'.get_lang('CreateAssignment').'" /> '.get_lang('CreateAssignment').' </a>';
 		// Options
 		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."&amp;gradebook=".$gradebook."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>";							
 	}
@@ -554,7 +554,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$action = '';
 		$row = array();
 		$class = '';										
-		$row[] = '<img src="../img/folder_document.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Folder').'" title="'.get_lang('Folder').'" />'; //image
+		$row[] = '<img src="../img/folder_document.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Assignment').'" title="'.get_lang('Assignment').'" />'; //image
 		//$a_count_directory=count_dir($work_dir.'/'.$dir,false);
 		
 		$cant_files=0;

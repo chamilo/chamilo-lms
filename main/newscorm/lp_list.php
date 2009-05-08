@@ -407,7 +407,7 @@ if (is_array($flat_list))
 	    				'<img src="../img/arrow_down_0.gif" border="0" alt="'.get_lang("MoveDown").'" title="'.get_lang("MoveDown").'"/>' .
 	    				'</a>&nbsp;';
 	    		$dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">' .
-	    				'<img src="../img/arrow_up_0.gif" border="0" alt="'.get_lang("MoveDown").'" title="'.get_lang("MoveDown").'"/>' .
+	    				'<img src="../img/arrow_up_0.gif" border="0" alt="'.get_lang("MoveUp").'" title="'.get_lang("MoveUp").'"/>' .
 	    				'</a></td>';
 	    	}
 	    }	// end if($is_allowedToEdit)

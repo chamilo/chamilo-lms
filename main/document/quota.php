@@ -1,4 +1,4 @@
-<?php // $Id: quota.php 19700 2009-04-10 11:07:37Z pcool $
+<?php // $Id: quota.php 20420 2009-05-08 20:11:57Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -111,7 +111,7 @@ function display_quota($course_quota, $already_consumed_space)
 // actions
 echo '<div class="actions">';
 // link back to the documents overview
-echo '<a href="document.php">'.Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>';
+echo '<a href="document.php">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>';
 echo '</div>';
 	
 // getting the course quota

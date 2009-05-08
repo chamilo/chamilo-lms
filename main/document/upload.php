@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 19852 2009-04-18 22:19:24Z ivantcholakov $
+<?php // $Id: upload.php 20420 2009-05-08 20:11:57Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -505,7 +505,7 @@ if(isset($_GET['createdir']))
 echo '<div class="actions">';
 
 // link back to the documents overview
-echo '<a href="document.php?curdirpath='.$path.'">'.Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>';
+echo '<a href="document.php?curdirpath='.$path.'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>';
 
 // link to create a folder
 if(!isset($_GET['createdir']))

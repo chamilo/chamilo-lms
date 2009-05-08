@@ -1,4 +1,4 @@
-<?php // $Id: subscribe_user.php 19824 2009-04-17 09:56:23Z pcool $
+<?php // $Id: subscribe_user.php 20412 2009-05-08 16:09:34Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -422,7 +422,7 @@ function active_filter($active, $url_params, $row) {
 // Build search-form
 echo '<div class="actions">';
 
-$actions .= '<a href="user.php">'.Display::return_icon('members.gif').' '.get_lang('BackToUserList').'</a>';
+$actions .= '<a href="user.php">'.Display::return_icon('members.gif',get_lang('BackToUserList')).' '.get_lang('BackToUserList').'</a>';
 if ($_POST['keyword'])
 {
 	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_GET['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';

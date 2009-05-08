@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 19988 2009-04-22 20:05:49Z iflorespaz $
+<?php //$Id: group_space.php 20421 2009-05-08 20:16:02Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -124,7 +124,7 @@ if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed
 	Display::display_normal_message(get_lang('StudentDeletesHimself'));
 }
 echo '<div class="actions">';
-echo '<a href="group.php">'.Display::return_icon('back.png').get_lang('BackToGroupList').'</a>';
+echo '<a href="group.php">'.Display::return_icon('back.png',get_lang('BackToGroupList')).get_lang('BackToGroupList').'</a>';
 /*
  * Edit the group
  */

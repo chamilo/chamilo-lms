@@ -1822,7 +1822,7 @@ function convert_mysql_date($last_post_datetime) {
 	list ($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
 	list ($year, $month, $day) = explode("-", $last_post_date);
 	list ($hour, $min, $sec) = explode(":", $last_post_time);
-	$announceDate = mktime($hour, $min, $sec, $month, $day, $year);
+	$announceDate = mktime((int)$hour, (int)$min, (int)$sec, (int)$month, (int)$day, (int)$year);
 	return $announceDate;
 }
 /**

@@ -69,19 +69,21 @@ if($_POST['formSent'] )
 	$session_id=$_POST['session_id'];
 	if(empty($session_id))
 	{
-		$sql = "SELECT id,name,id_coach,date_start,date_end FROM $tbl_session ORDER BY id";		
+		$sql = "SELECT id,name,id_coach,username,date_start,date_end FROM $tbl_session INNER JOIN $tbl_user
+					ON $tbl_user.user_id = $tbl_session.id_coach ORDER BY id";	
+			
 		global $_configuration;	
 		if ($_configuration['multiple_access_urls']==true) {	
 			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
-			$sql = "SELECT id, name,id_coach,date_start,date_end FROM $tbl_session s INNER JOIN $tbl_session_rel_access_url as session_rel_url 		
-				ON (s.id= session_rel_url.session_id)		
+			$sql = "SELECT id, name,id_coach,username,date_start,date_end FROM $tbl_session s INNER JOIN $tbl_session_rel_access_url as session_rel_url 		
+				ON (s.id= session_rel_url.session_id) INNER JOIN $tbl_user u ON (u.user_id = s.id_coach)		
 				WHERE access_url_id = $access_url_id
-				ORDER BY id";		
+				ORDER BY id";								
+						
 			}
-		} 
-
+		}				 		
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 	}
 	else
@@ -93,7 +95,7 @@ if($_POST['formSent'] )
 				WHERE id='$session_id'";
 
 		$result = api_sql_query($sql,__FILE__,__LINE__);
-
+		
 	}
 
 	if(Database::num_rows($result))
@@ -133,8 +135,6 @@ if($_POST['formSent'] )
 
 		while($row=Database::fetch_array($result))
 		{
-
-
 			$add = '';
 			$row['name'] = str_replace(';',',',$row['name']);
 			$row['username'] = str_replace(';',',',$row['username']);
@@ -174,9 +174,6 @@ if($_POST['formSent'] )
 				$users .= ';';
 
 			$add .= $users;
-
-
-
 
 			//courses
 			$sql = "SELECT DISTINCT $tbl_course.code, $tbl_user.username FROM $tbl_course
@@ -231,10 +228,14 @@ if($_POST['formSent'] )
 				$courses = substr($courses , 0, strlen($courses)-1);
 			$add .= $courses;
 
-			if($cvs)
-				$add .= ';';
-			else
+			
+
+			if($cvs) {				
+				$breakline = api_is_windows_os()?"\r\n":"\n";
+				$add .= ";$breakline";
+			} else {
 				$add .= "\t</Session>\n";
+			}
 
 			fputs($fp, $add);
 		}

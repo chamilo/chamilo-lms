@@ -130,6 +130,9 @@ $lib_path = api_get_path(LIBRARY_PATH);
 //ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.$lib_path.'pear');
 ini_set('include_path', api_create_include_path_setting());
 
+// This is for compatibility with MAC computers.
+ini_set('auto_detect_line_endings', '1');
+
 // Include the libraries that are necessary everywhere
 require_once($lib_path.'database.lib.php');
 require_once($lib_path.'display.lib.php');
@@ -158,6 +161,26 @@ unset($error_message_not_installed);
 api_sql_query("set session sql_mode='';", __FILE__, __LINE__);
 
 $selectResult = mysql_select_db($_configuration['main_database'],$dokeos_database_connection) or die ('<center>WARNING ! SYSTEM UNABLE TO SELECT THE MAIN DOKEOS DATABASE</center>');
+
+/*
+--------------------------------------------
+  Initialization of the default encodings
+--------------------------------------------
+*/
+// The platform's character set must be retrieved at this early moment.
+$sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
+$result = api_sql_query($sql, __FILE__, __LINE__);
+while ($row = @mysql_fetch_array($result)) {
+	$charset = $row[0];
+}
+if (empty($charset)) {
+	$charset = "ISO-8859-15";
+}
+api_mb_internal_encoding($charset);
+api_mb_regex_encoding($charset);
+api_iconv_set_encoding('iconv_internal_encoding', $charset);
+api_iconv_set_encoding('iconv_input_encoding', $charset);
+api_iconv_set_encoding('iconv_output_encoding', $charset);
 
 /*
 --------------------------------------------
@@ -500,6 +523,9 @@ if (is_array($language_files)) {
 //load the charset param after langs because the $charset variable in 
 //trad4all.inc.php might have set it and we don't want that
 $charset = api_get_setting('platform_charset');
+if (empty($charset)) {
+	$charset = 'ISO-8859-15';
+}
 
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 

@@ -30,6 +30,22 @@
 	Mail: info@dokeos.com
 ===============================================================================
 */
+
+/*
+==============================================================================
+		MAIN API EXTENSIONS
+==============================================================================
+*/
+
+// Including extensions to the main API works in two different ways:
+if (api_get_path(LIBRARY_PATH) == '/lib/') {
+	// when we are running the installer script.
+	require_once 'multibyte_string_functions.lib.php';
+} else {
+	// when the system has been already installed, this is the usual way.
+	require_once api_get_path(LIBRARY_PATH).'multibyte_string_functions.lib.php';
+}
+
 /**
 ==============================================================================
 *	This is a code library for Dokeos.

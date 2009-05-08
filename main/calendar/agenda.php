@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 20083 2009-04-24 18:54:49Z cfasanando $
+<?php //$Id: agenda.php 20413 2009-05-08 16:23:16Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -299,14 +299,17 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 							     	$course_info = api_get_course_info();
 								    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
 					                $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
-									$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$_POST['file_comment']);				
+					                $safe_title = Security::remove_XSS($_POST['title']);
+					                $safe_file_comment = Security::remove_XSS($_POST['file_comment']);
+					                
+									$id = agenda_add_item($course_info,$safe_title,$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$safe_file_comment);				
 					                if(!empty($_POST['repeat']))
 					                {
 					                	$end_y = intval($_POST['repeat_end_year']);
 					                    $end_m = intval($_POST['repeat_end_month']);
 					                    $end_d = intval($_POST['repeat_end_day']);
 					                    $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-					                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,$_POST['selectedform'],$_POST['file_comment']);
+					                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,$_POST['selectedform'],$safe_file_comment);
 					                }                 
 								}			
 								break;
@@ -314,9 +317,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id']) ) ) )
 								{ // a coach can only delete an element belonging to his session
 									if ($_POST['submit_event'])
-									{		$my_id_attach = (int)$_REQUEST['id_attach'];
-											$my_file_comment = Database::escape_string($_REQUEST['file_comment']);
-											store_edited_agenda_item($my_id_attach,$my_file_comment);						
+									{		$my_id_attach = (int)$_REQUEST['id_attach'];										
+											$safe_file_comment = Security::remove_XSS($_REQUEST['file_comment']);
+											store_edited_agenda_item($my_id_attach,$safe_file_comment);						
 									}				
 								}			
 								break;

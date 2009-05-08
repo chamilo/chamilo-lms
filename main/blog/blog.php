@@ -77,12 +77,15 @@ $current_page = $_GET['action'];
 */
 if (!empty($_POST['new_post_submit']) AND !empty($_POST['post_title']))
 {	
-	Blog :: create_post($_POST['post_title'], $_POST['post_full_text'], $_POST['post_file_comment'],$blog_id);
+	$safe_post_title = Security::remove_XSS($_POST['post_title']);
+	$safe_post_file_comment = Security::remove_XSS($_POST['post_file_comment']);
+	Blog :: create_post($safe_post_title, $_POST['post_full_text'], $safe_post_file_comment,$blog_id);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('BlogAdded'));
 }
 if (!empty($_POST['edit_post_submit']))
 {
-	Blog :: edit_post($_POST['post_id'], $_POST['post_title'], $_POST['post_full_text'], $blog_id);
+	$safe_post_title = Security::remove_XSS($_POST['post_title']);	
+	Blog :: edit_post($_POST['post_id'], $safe_post_title, $_POST['post_full_text'], $blog_id);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('BlogEdited'));
 }
 if (!empty($_POST['new_comment_submit']))

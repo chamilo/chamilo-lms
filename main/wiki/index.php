@@ -1027,7 +1027,7 @@ if ($_GET['action']=='links')
 		}		
 				
 		echo '<div id="wikititle">';
-		echo $LinksPagesFrom.': '.$ShowAssignment.' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$row['title'].'</a>';
+		echo $LinksPagesFrom.': '.$ShowAssignment.' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.Security::remove_XSS($page).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($row['title']).'</a>';
 		echo '</div>';
 		
 		//fix index to title Main page into linksto
@@ -1082,7 +1082,7 @@ if ($_GET['action']=='links')
 			
 				$row = array ();
 				$row[] =$ShowAssignment;
-				$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
+				$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($obj->title).'</a>';
 				$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';	
 				$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;					
 				$rows[] = $row;
@@ -1627,7 +1627,7 @@ if ($_GET['action']=='allpages')
 		
 			$row = array ();
 			$row[] =$ShowAssignment;
-			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
+			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($obj->title).'</a>';
 			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';	
 			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;					
 			$rows[] = $row;

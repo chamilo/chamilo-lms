@@ -23,4 +23,5 @@ $NoteConfirmDelete = "¿ Realmente desea borrar la nota ";
 $AddNote = "Añadir nota";
 $ModifyNote = "Modificar nota";
 $BackToNoteList = "Regresar a la lista de anotaciones";
+$NotebookManagement = "Administración de nota personal";
 ?>

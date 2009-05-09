@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langProfessors = "Profesores";
-$langExplanation = "Una vez que haya pulsado Aceptar se creará el sitio web de un curso, que contará con diversas herramientas: un gestor de documentos, un creador de lecciones en formato SCORM, un visualizador de lecciones; la posibilidad de realizar test y enviar trabajos, discutir en foros y chat, enviar anuncios y mensajes, disponer de una agenda, videoconferencia y pizarra digital, herramientas para el trabajo en grupo,  realizar encuestas y seguimiento de los alumnos, etc. Su identificación como creador de este sitio le permitirá modificarlo según sus necesidades.";
+$langExplanation = "Una vez que haya pulsado el botón \"Crear curso\" se creará el sitio web del curso, en el que dispondrá de múltiples herramientas que podrá configurar para dar al curso su aspecto definitivo: Test o Ejercicios, Proyectos o Blogs, Wikis, Tareas, Creador y visualizador de Lecciones en formato SCORM, Encuestas y mucho más. Su identificación como creador de este sitio automáticamente lo convierte en profesor del curso, lo cual le permitirá modificarlo según sus necesidades.";
 $langEmpty = "No ha rellenado todos los campos.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.<br>Si no conoce el código de su curso, consulte el programa del curso";
 $langCodeTaken = "Este código de curso ya es utilizado por otro curso.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.";
 $langFormula = "Atentamente";
@@ -43,7 +43,7 @@ $langCreateCourseGroups = "Grupos";
 $langCatagoryMain = "Principal";
 $langCatagoryGroup = "Foros de grupos";
 $langLn = "Idioma";
-$langCreateSite = "Crear el sitio de un curso";
+$langCreateSite = "Crear un curso";
 $langFieldsRequ = "Todos los campos son obligatorios";
 $langEx = "Por ej: <i>Gestión de la innovación</i>";
 $langFac = "Categoría";
@@ -99,7 +99,7 @@ $ExampleForum = "Ejemplo de foro";
 $ExampleThread = "Ejemplo de tema de debate";
 $ExampleThreadContent = "Ejemplo de contenido";
 $IntroductionWiki = "La palabra Wiki es una abreviatura de WikiWikiWeb. Wikiwiki es una palabra Hawaiana que significa rápido o veloz. En un Wiki sus usuarios pueden escribir páginas conjuntamente. Si una persona escribe algo mal, la siguiente puede corregir esto. Esta última persona también puede añadir nuevos elementos a la página. Así la página va mejorando con sucesivos cambios que quedan registrados en un historial.";
-$CreateCourseArea = "Crear este curso";
+$CreateCourseArea = "Crear curso";
 $CreateCourse = "Crear curso";
 $Create = "Crear";
 ?>

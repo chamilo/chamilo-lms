@@ -319,4 +319,6 @@ $langDefaultMathingQuestion = "Determina la relazione seguente";
 $langDefaultOpenQuestion = "Quando si celebra la \"Festa dei lavoratori\"?";
 $SaveSection = "Salva l\'elemento";
 $langMoreHotspotsImage = "Aggiungi/Modifica zone attive sull\'immagine";
+$ReachedTimeLimitAdmin = "Configura i limiti di tempo";
+$LastScoreTest = "Ultimo punteggio di un test";
 ?>

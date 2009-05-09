@@ -20,4 +20,5 @@ $YouMustEnterATermName = "Devi immettere il termine da definire";
 $YouMustEnterATermDefinition = "Devi immettere la definizione del termine";
 $TableView = "Vista tabella";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Voce del glossario già definita: cambia il nome";
+$GlossaryManagement  = "Gestione glossario";
 ?>

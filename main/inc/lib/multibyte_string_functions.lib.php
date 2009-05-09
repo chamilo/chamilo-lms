@@ -25,10 +25,10 @@ function api_convert_encoding($string, $to_encoding, $from_encoding) {
 		return $string;
 	}
 	if (api_mb_supports($to_encoding) && api_mb_supports($from_encoding)) {
-		return mb_convert_encoding($string, $to_encoding, $from_encoding);
+		return @mb_convert_encoding($string, $to_encoding, $from_encoding);
 	}
 	elseif (api_iconv_supports($to_encoding) && api_iconv_supports($from_encoding)) {
-		return iconv($from_encoding, $to_encoding, $string);
+		return @iconv($from_encoding, $to_encoding, $string);
 	} 
 	return $string;
 }
@@ -43,10 +43,10 @@ function api_utf8_encode($string, $from_encoding = null) {
 		return $string;
 	}
 	if (api_mb_supports($from_encoding)) {
-		return mb_convert_encoding($string, 'UTF-8', $from_encoding);
+		return @mb_convert_encoding($string, 'UTF-8', $from_encoding);
 	}
 	elseif (api_iconv_supports($from_encoding)) {
-		return iconv($from_encoding, 'UTF-8', $string);
+		return @iconv($from_encoding, 'UTF-8', $string);
 	}
 	return $string;
 }
@@ -61,10 +61,10 @@ function api_utf8_decode($string, $to_encoding = null) {
 		return $string;
 	}
 	if (api_mb_supports($to_encoding)) {
-		return mb_convert_encoding($string, $to_encoding, 'UTF-8');
+		return @mb_convert_encoding($string, $to_encoding, 'UTF-8');
 	}
 	elseif (api_iconv_supports($to_encoding)) {
-		return iconv('UTF-8', $to_encoding, $string);
+		return @iconv('UTF-8', $to_encoding, $string);
 	}
 	return $string;
 }
@@ -144,18 +144,18 @@ function api_ereg($pattern, $string, & $regs = null) {
 
 	if (api_mb_supports($encoding)) {
 		if ($count < 3) {
-			return mb_ereg($pattern, $string);
+			return @mb_ereg($pattern, $string);
 		} else {
-			$result = mb_ereg($pattern, $string, $regs);
+			$result = @mb_ereg($pattern, $string, $regs);
 			return $result;
 		}
 	}
 	elseif (api_iconv_supports($encoding)) {
 		api_mb_regex_encoding('UTF-8');
 		if ($count < 3) {
-			$result = mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
+			$result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
 		} else {
-			$result = mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
+			$result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
 			$regs = api_array_utf8_decode($regs, $encoding);
 		}
 		api_mb_regex_encoding($encoding);
@@ -176,18 +176,18 @@ function api_ereg_replace($pattern, $replacement, $string, $option = null) {
 
 	if (api_mb_supports($encoding)) {
 		if (is_null($option)) {
-			return mb_ereg_replace($pattern, $replacement, $string);
+			return @mb_ereg_replace($pattern, $replacement, $string);
 		} else {
-			return mb_ereg_replace($pattern, $replacement, $string, $option);
+			return @mb_ereg_replace($pattern, $replacement, $string, $option);
 		}
 	}
 	elseif (api_iconv_supports($encoding)) {
 		api_mb_regex_encoding('UTF-8');
 
 		if (is_null($option)) {
-			$result = api_utf8_decode(mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
+			$result = api_utf8_decode(@mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
 		} else {
-			$result = api_utf8_decode(mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
+			$result = api_utf8_decode(@mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
 		}
 		api_mb_regex_encoding($encoding);
 		return $result;
@@ -215,18 +215,18 @@ function api_eregi($pattern, $string, & $regs = null) {
 
 	if (api_mb_supports($encoding)) {
 		if ($count < 3) {
-			return mb_eregi($pattern, $string);
+			return @mb_eregi($pattern, $string);
 		} else {
-			return mb_eregi($pattern, $string, $regs);
+			return @mb_eregi($pattern, $string, $regs);
 		}
 	}
 	elseif (api_iconv_supports($encoding)) {
 		api_mb_regex_encoding('UTF-8');
 
 		if ($count < 3) {
-			$result = mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
+			$result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
 		} else {
-			$result = mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
+			$result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
 			$regs = api_array_utf8_decode($regs, $encoding);
 		}
 		api_mb_regex_encoding($encoding);
@@ -247,17 +247,17 @@ function api_eregi_replace($pattern, $replacement, $string, $option = null) {
 
 	if (api_mb_supports($encoding)) {
 		if (is_null($option)) {
-			return mb_eregi_replace($pattern, $replacement, $string);
+			return @mb_eregi_replace($pattern, $replacement, $string);
 		} else {
-			return mb_eregi_replace($pattern, $replacement, $string, $option);
+			return @mb_eregi_replace($pattern, $replacement, $string, $option);
 		}
 	}
 	elseif (api_iconv_supports($encoding)) {
 		api_mb_regex_encoding('UTF-8');
 		if (is_null($option)) {
-			$result = api_utf8_decode(mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
+			$result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
 		} else {
-			$result = api_utf8_decode(mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
+			$result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
 		}
 		api_mb_regex_encoding($encoding);
 		return $result;
@@ -314,18 +314,18 @@ function api_split($pattern, $string, $limit = null) {
 
 	if (api_mb_supports($encoding)) {
 		if (is_null($limit)) {
-			return mb_split($pattern, $string);
+			return @mb_split($pattern, $string);
 		} else {
-			return mb_split($pattern, $string, $limit);
+			return @mb_split($pattern, $string, $limit);
 		}
 	}
 	elseif (api_iconv_supports($encoding)) {
 		api_mb_regex_encoding('UTF-8');
 
 		if (is_null($limit)) {
-			$result = mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
+			$result = @mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
 		} else {
-			$result = mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $limit);
+			$result = @mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $limit);
 		}
 		$result = api_array_utf8_decode($result, $encoding);
 		api_mb_regex_encoding($encoding);
@@ -403,8 +403,8 @@ function api_str_split($string, $split_length = 1, $encoding = null) {
 	$result = array();
 
 	if (api_mb_supports($encoding)) {
-		for ($i = 0, $length = mb_strlen($string, $encoding); $i < $length; $i += $split_length) {
-			$result[] = mb_substr($string, $i, $split_length, $encoding);
+		for ($i = 0, $length = @mb_strlen($string, $encoding); $i < $length; $i += $split_length) {
+			$result[] = @mb_substr($string, $i, $split_length, $encoding);
 		}
 	}
 	elseif (api_iconv_supports($encoding)) {
@@ -436,9 +436,9 @@ function api_stripos($haystack, $needle, $offset = 0, $encoding = null) {
 		$encoding = api_mb_internal_encoding();
 	}
 	if (api_mb_supports($encoding)) {
-		return mb_stripos($haystack, $needle, $offset, $encoding);
+		return @mb_stripos($haystack, $needle, $offset, $encoding);
 	} elseif (api_iconv_supports($encoding)) {
-		return api_utf8_decode(mb_stripos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8'), $encoding);
+		return api_utf8_decode(@mb_stripos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8'), $encoding);
 	}
 	return stripos($haystack, $needle, $offset);
 }
@@ -450,10 +450,10 @@ function api_stristr($haystack, $needle, $part = false, $encoding = null) {
 		$encoding = api_mb_internal_encoding();
 	}
 	if (api_mb_supports($encoding)) {
-		return mb_stristr($haystack, $needle, $part, $encoding);
+		return @mb_stristr($haystack, $needle, $part, $encoding);
 	}
 	elseif (api_iconv_supports($encoding)) {
-		return api_utf8_decode(mb_stristr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'));
+		return api_utf8_decode(@mb_stristr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'));
 	}
 	return stristr($haystack, $needle, $part);
 }
@@ -465,10 +465,10 @@ function api_strlen($string, $encoding = null) {
 		$encoding = api_mb_internal_encoding();
 	}
 	if (api_mb_supports($encoding)) {
-		return mb_strlen($string, $encoding);
+		return @mb_strlen($string, $encoding);
 	}
 	elseif (api_iconv_supports($encoding)) {
-		return iconv_strlen($string, $encoding);
+		return @iconv_strlen($string, $encoding);
 	}
 	return strlen($string);
 }
@@ -480,10 +480,10 @@ function api_strpos($haystack, $needle, $offset = 0, $encoding = null) {
 		$encoding = api_mb_internal_encoding();
 	}
 	if (api_mb_supports($encoding)) {
-		return mb_strpos($haystack, $needle, $offset, $encoding);
+		return @mb_strpos($haystack, $needle, $offset, $encoding);
 	}
 	elseif (api_iconv_supports($encoding)) {
-		return api_utf8_decode(mb_strpos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8'), $encoding);
+		return api_utf8_decode(@mb_strpos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8'), $encoding);
 	}
 	return strpos($haystack, $needle, $offset);
 }
@@ -495,10 +495,10 @@ function api_strrchr($haystack, $needle, $part = false, $encoding = null) {
 		$encoding = api_mb_internal_encoding();
 	}
 	if (api_mb_supports($encoding)) {
-		return mb_strrchr($haystack, $needle, $part, $encoding);
+		return @mb_strrchr($haystack, $needle, $part, $encoding);
 	}
 	elseif (api_iconv_supports($encoding)) {
-		return api_utf8_decode(mb_strrchr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'), $encoding);
+		return api_utf8_decode(@mb_strrchr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'), $encoding);
 	}
 	return strrchr($haystack, $needle);
 }
@@ -526,10 +526,10 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
 		$encoding = api_mb_internal_encoding();
 	}
 	if (api_mb_supports($encoding)) {
-		return mb_strrpos($haystack, $needle, $offset, $encoding);
+		return @mb_strrpos($haystack, $needle, $offset, $encoding);
 	}
 	elseif (api_iconv_supports($encoding)) {
-		return api_utf8_decode(mb_strrpos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8'), $encoding);
+		return api_utf8_decode(@mb_strrpos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8'), $encoding);
 	}
 	return strrpos($haystack, $needle, $offset);
 }
@@ -541,10 +541,10 @@ function api_strstr($haystack, $needle, $part = false, $encoding = null) {
 		$encoding = api_mb_internal_encoding();
 	}
 	if (api_mb_supports($encoding)) {
-		return mb_strstr($haystack, $needle, $part, $encoding);
+		return @mb_strstr($haystack, $needle, $part, $encoding);
 	}
 	elseif (api_iconv_supports($encoding)) {
-		return api_utf8_decode(mb_strstr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'), $encoding);
+		return api_utf8_decode(@mb_strstr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'), $encoding);
 	}
 	return strstr($haystack, $needle, $part);
 }
@@ -556,10 +556,10 @@ function api_strtolower($string, $encoding = null) {
 		$encoding = api_mb_internal_encoding();
 	}
 	if (api_mb_supports($encoding)) {
-		return mb_strtolower($string, $encoding);
+		return @mb_strtolower($string, $encoding);
 	}
 	elseif (api_iconv_supports($encoding)) {
-		return api_utf8_decode(mb_strtolower(api_utf8_encode($string, $encoding), 'UTF-8'), $encoding);
+		return api_utf8_decode(@mb_strtolower(api_utf8_encode($string, $encoding), 'UTF-8'), $encoding);
 	}
 	return strtolower($string);
 }
@@ -571,10 +571,10 @@ function api_strtoupper($string, $encoding = null) {
 		$encoding = api_mb_internal_encoding();
 	}
 	if (api_mb_supports($encoding)) {
-		return mb_strtoupper($string, $encoding);
+		return @mb_strtoupper($string, $encoding);
 	}
 	elseif (api_iconv_supports($encoding)) {
-		return api_utf8_decode(mb_strtoupper(api_utf8_encode($string, $encoding), 'UTF-8'), $encoding);
+		return api_utf8_decode(@mb_strtoupper(api_utf8_encode($string, $encoding), 'UTF-8'), $encoding);
 	}
 	return strtoupper($string);
 }
@@ -637,10 +637,10 @@ function api_substr($string, $start, $length = null, $encoding = null) {
 		$length = api_strlen($string, $encoding);
 	}
 	if (api_mb_supports($encoding)) {
-		return mb_substr($string, $start, $length, $encoding);
+		return @mb_substr($string, $start, $length, $encoding);
 	}
 	elseif (api_iconv_supports($encoding)) {
-		return api_utf8_decode(mb_substr(api_utf8_encode($string, $encoding), $start, $length, 'UTF-8'), $encoding);
+		return api_utf8_decode(@mb_substr(api_utf8_encode($string, $encoding), $start, $length, 'UTF-8'), $encoding);
 	}
 	return substr($string, $start, $length);
 }
@@ -695,10 +695,10 @@ function api_ucwords($string, $encoding = null) {
 		$encoding = api_mb_internal_encoding();
 	}
     if (api_mb_supports($encoding)) {
-		return mb_convert_case($string, MB_CASE_TITLE, $encoding);
+		return @mb_convert_case($string, MB_CASE_TITLE, $encoding);
 	}
 	elseif (api_iconv_supports($encoding)) {
-		return api_utf8_decode(mb_convert_case(api_utf8_encode($string, $encoding), MB_CASE_TITLE, 'UTF-8'), $encoding);
+		return api_utf8_decode(@mb_convert_case(api_utf8_encode($string, $encoding), MB_CASE_TITLE, 'UTF-8'), $encoding);
 	}
 	return ucwords($string);
 }
@@ -841,13 +841,13 @@ function api_mb_internal_encoding($encoding = null) {
 	static $mb_internal_encoding = null;
 	if (empty($encoding)) {
 		if (is_null($mb_internal_encoding)) {
-			$mb_internal_encoding = mb_internal_encoding();
+			$mb_internal_encoding = @mb_internal_encoding();
 		}
 		return $mb_internal_encoding;
 	}
 	$mb_internal_encoding = $encoding;
 	if (api_mb_supports($encoding)) {
-		return mb_internal_encoding($encoding);
+		return @mb_internal_encoding($encoding);
 	}
 	return false;
 }
@@ -858,13 +858,13 @@ function api_mb_regex_encoding($encoding = null) {
 	static $mb_regex_encoding = null;
 	if (empty($encoding)) {
 		if (is_null($mb_regex_encoding)) {
-			$mb_regex_encoding = mb_regex_encoding();
+			$mb_regex_encoding = @mb_regex_encoding();
 		}
 		return $mb_regex_encoding;
 	}
 	$mb_regex_encoding = $encoding;
 	if (api_mb_supports($encoding)) {
-		return mb_regex_encoding($encoding);
+		return @mb_regex_encoding($encoding);
 	}
 	return false;
 }
@@ -890,12 +890,12 @@ function api_iconv_set_encoding($type, $encoding = null) {
 		case 'iconv_internal_encoding':
 			if (empty($encoding)) {
 				if (is_null($iconv_internal_encoding)) {
-					$iconv_internal_encoding = iconv_get_encoding($type);
+					$iconv_internal_encoding = @iconv_get_encoding($type);
 				}
 				return $iconv_internal_encoding;
 			}
 			if (api_iconv_supports($encoding)) {
-				if(iconv_set_encoding($type, $encoding)) {
+				if(@iconv_set_encoding($type, $encoding)) {
 					$iconv_internal_encoding = $encoding;
 					return true;
 				} else {
@@ -909,12 +909,12 @@ function api_iconv_set_encoding($type, $encoding = null) {
 		case 'iconv_input_encoding':
 			if (empty($encoding)) {
 				if (is_null($iconv_input_encoding)) {
-					$iconv_input_encoding = iconv_get_encoding($type);
+					$iconv_input_encoding = @iconv_get_encoding($type);
 				}
 				return $iconv_input_encoding;
 			}
 			if (api_iconv_supports($encoding)) {
-				if(iconv_set_encoding($type, $encoding)) {
+				if(@iconv_set_encoding($type, $encoding)) {
 					$iconv_input_encoding = $encoding;
 					return true;
 				} else {
@@ -928,12 +928,12 @@ function api_iconv_set_encoding($type, $encoding = null) {
 		case 'iconv_output_encoding':
 			if (empty($encoding)) {
 				if (is_null($iconv_output_encoding)) {
-					$iconv_output_encoding = iconv_get_encoding($type);
+					$iconv_output_encoding = @iconv_get_encoding($type);
 				}
 				return $iconv_output_encoding;
 			}
 			if (api_iconv_supports($encoding)) {
-				if(iconv_set_encoding($type, $encoding)) {
+				if(@iconv_set_encoding($type, $encoding)) {
 					$iconv_output_encoding = $encoding;
 					return true;
 				} else {
@@ -976,7 +976,7 @@ function api_iconv_supports($encoding) {
 			for ($i = 32; $i < 128; $i++) {
 				$test_string .= chr($i);
 			}
-			$supported[$encoding] = (iconv_strlen($test_string, $encoding)) ? true : false;
+			$supported[$encoding] = (@iconv_strlen($test_string, $encoding)) ? true : false;
 		} else {
 			$supported[$encoding] = false;
 		}
@@ -1223,7 +1223,7 @@ function api_is_valid_utf8($string) {
 
 // Checks whether a string contains 7bit ASCII characters only.
 function api_is_valid_ascii($string) {
-	return mb_detect_encoding($string, 'ASCII', true) == 'ASCII' ? true : false;
+	return @mb_detect_encoding($string, 'ASCII', true) == 'ASCII' ? true : false;
 }
 
 

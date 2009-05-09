@@ -99,7 +99,7 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
 
 // Converts all applicable characters to HTML entities.
 // See http://php.net/manual/en/function.htmlentities
-function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'ISO-8859-1') {
+function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'ISO-8859-15') {
 	if (!api_is_utf8($encoding) && api_html_entity_supports($encoding)) {
 		return htmlentities($string, $quote_style, $encoding);
 	}
@@ -121,7 +121,7 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'ISO-8
 
 // Decodes HTML entities into normal characters.
 // See http://php.net/html_entity_decode
-function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 'ISO-8859-1') {
+function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 'ISO-8859-15') {
 	if (!api_is_utf8($encoding) && api_html_entity_supports($encoding)) {
 		return html_entity_decode($string, $quote_style, $encoding);
 	}

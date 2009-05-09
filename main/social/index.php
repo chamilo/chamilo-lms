@@ -46,7 +46,7 @@ function register_friend(element_input) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("#id_response").html("'.get_lang('Loading').'"); },
+		$("#id_response").html("'.get_lang('Loading', '').'"); },
 		type: "POST",
 		url: "../social/register_friend.php",
 		data: "friend_id="+user_friend_id,
@@ -64,7 +64,7 @@ function denied_friend (element_input) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("#id_response").html("'.get_lang('Loading').'"); },
+		$("#id_response").html("'.get_lang('Loading', '').'"); },
 		type: "POST",
 		url: "../social/register_friend.php",
 		data: "denied_friend_id="+friend_user_id,
@@ -77,7 +77,7 @@ function denied_friend (element_input) {
 function delete_friend (element_div) {
 	id_image=$(element_div).attr("id");
 	user_id=id_image.split("_");
-	if (confirm("'.get_lang('Delete').'")) {
+	if (confirm("'.get_lang('Delete', '').'")) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
@@ -109,14 +109,14 @@ function set_qualify_friend() {
 	user_id_friend = $("#user_cod_qualify").attr("value");
 	type_friend    = $("input[@name=list_type_friend]:checked").val();
 	if (user_id_friend==0) {
-		alert("'.get_lang('SelectOneContact').'");
+		alert("'.get_lang('SelectOneContact', '').'");
 		return false;
 	}
 	if (type_friend==null) {
-		alert("'.get_lang('SelectOneGroup').'");
+		alert("'.get_lang('SelectOneGroup', '').'");
 		return false;		
 	}	
-	if (confirm("'.get_lang('AttachContactsPersonal').' ?")) {
+	if (confirm("'.get_lang('AttachContactsPersonal', '').' ?")) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
@@ -137,8 +137,8 @@ function show_icon_delete(element_html) {
 	id_elem=elem_id.split("_");
 	ident="#img_"+id_elem[1];
 	$(ident).attr("src","../img/delete.gif");
-	$(ident).attr("alt","'.get_lang('Delete').'");
-	$(ident).attr("title","'.get_lang('Delete').'");
+	$(ident).attr("alt","'.get_lang('Delete', '').'");
+	$(ident).attr("title","'.get_lang('Delete', '').'");
 }
 function hide_icon_delete(element_html)  {
 	elem_id=$(element_html).attr("id");
@@ -153,7 +153,7 @@ function search_image_social(element_html)  {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("#div_content_table").html("'.get_lang('Searching').'"); },
+		$("#div_content_table").html("'.get_lang('Searching', '').'"); },
 		type: "POST",
 		url: "../social/show_search_image.inc.php",
 		data: "search_name_q="+name_search,
@@ -197,21 +197,21 @@ function submit_form (path_submit) {
 	if (path_submit=="inbox") {
 		if (count_checkbox("inbox") > 0) {
 		   document.getElementById(\'form_send\').action="../social/index.php?inbox=true#remote-tab-2";		
-		   if (confirm("'.get_lang('ConfirmYourChoice').'")) {
+		   if (confirm("'.get_lang('ConfirmYourChoice', '').'")) {
 		   		$("#form_send").submit();
 		   }	
 		} else {
-			alert("'.get_lang('SelectTheCheckbox').'");
+			alert("'.get_lang('SelectTheCheckbox', '').'");
 		}
 
 	} else {
 		if (count_checkbox("outbox") > 0) {
 			document.getElementById(\'form_send_out\').action="../social/index.php?outbox=true#remote-tab-3";		
-		   if (confirm("'.get_lang('ConfirmYourChoice').'")) {			
+		   if (confirm("'.get_lang('ConfirmYourChoice', '').'")) {			
 				$("#form_send_out").submit();
 		   }
 		} else {
-			alert("'.get_lang('SelectedMoreOptions').'");
+			alert("'.get_lang('SelectedMoreOptions', '').'");
 		}			
 	}
 }
@@ -240,7 +240,7 @@ function get_action_url_and_show_messages (name_rs,name_id) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_response").html("'.get_lang('Loading').'"); },
+			$("#id_response").html("'.get_lang('Loading', '').'"); },
 			type: "GET",
 			url: "../messages/view_message.php",
 			data: "rs="+name_rs+"&id="+name_id,
@@ -255,7 +255,7 @@ function close_div_show (my_div) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_response").html("'.get_lang('Loading').'"); },
+			$("#id_response").html("'.get_lang('Loading', '').'"); },
 			type: "POST",
 			url: "../messages/inbox.php",
 			data:"",
@@ -271,7 +271,7 @@ function reply_to_messages (my_action,name_rs,name_id) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_response").html("'.get_lang('Loading').'"); },
+			$("#id_response").html("'.get_lang('Loading', '').'"); },
 			type: "GET",
 			url: "../messages/new_message.php",
 			data:"re_id="+name_rs+"&id="+name_id,
@@ -288,7 +288,7 @@ function compose_and_show_message (my_action,name_rs) {
 			$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_response").html("'.get_lang('Loading').'"); },
+			$("#id_response").html("'.get_lang('Loading', '').'"); },
 			type: "GET",
 			url: "../messages/new_message.php",
 			data:"rs="+name_rs,
@@ -360,7 +360,7 @@ function close_and_open_outbox() {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_response").html("'.get_lang('Loading').'"); },
+			$("#id_response").html("'.get_lang('Loading', '').'"); },
 			type: "POST",
 			url: "../messages/outbox.php",
 			data:"",

@@ -8,8 +8,8 @@ $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
 api_block_anonymous_users();
 $request=api_is_xml_http_request();
-$language_variable=($request===true) ? mb_convert_encoding(get_lang('PendingInvitations'),'UTF-8',$charset) : get_lang('PendingInvitations');
-$language_comment=($request===true) ? mb_convert_encoding(get_lang('SocialInvitesComment'),'UTF-8',$charset) : get_lang('SocialInvitesComment');
+$language_variable=($request===true) ? api_convert_encoding(get_lang('PendingInvitations'),'UTF-8',$charset) : get_lang('PendingInvitations');
+$language_comment=($request===true) ? api_convert_encoding(get_lang('SocialInvitesComment'),'UTF-8',$charset) : get_lang('SocialInvitesComment');
 //api_display_tool_title($language_variable);
 ?>
 <div id="id_response" align="center"></div>
@@ -21,7 +21,7 @@ $list_get_invitation=UserFriend::get_list_invitation_of_friends_by_user_id($user
 $list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id($user_id);
 $number_loop=count($list_get_invitation);
 if ($number_loop==0) {
-	Display::display_normal_message(mb_convert_encoding(get_lang('YouDontHaveInvites'),'UTF-8',$charset));
+	Display::display_normal_message(api_convert_encoding(get_lang('YouDontHaveInvites'),'UTF-8',$charset));
 	
 }
 for ($i=0;$i<$number_loop;$i++) {
@@ -32,7 +32,7 @@ for ($i=0;$i<$number_loop;$i++) {
     <td width="600" height="20" valign="top"><table width="100%" border="0"
 cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
       <tr>
-        <td width="600" height="20" valign="top"><div align="left"><?php echo mb_convert_encoding(get_lang('RequestContact'),'UTF-8',$charset); ?></div></td>
+        <td width="600" height="20" valign="top"><div align="left"><?php echo api_convert_encoding(get_lang('RequestContact'),'UTF-8',$charset); ?></div></td>
         </tr>
     </table></td>
   </tr>
@@ -65,7 +65,7 @@ width="100%" border="0" cellpadding="0" cellspacing="0">
                                 <?php 
                                 $user_id=$list_get_invitation[$i]['user_sender_id'];
                                 $user_info=api_get_user_info($user_id);
-                                echo mb_convert_encoding($user_info['firstName'],'UTF-8',$charset) .' '.mb_convert_encoding($user_info['lastName'],'UTF-8',$charset);
+                                echo api_convert_encoding($user_info['firstName'],'UTF-8',$charset) .' '.api_convert_encoding($user_info['lastName'],'UTF-8',$charset);
                                 ?></td>
                                 </tr>
                             </table></td>
@@ -86,7 +86,7 @@ border="0" cellpadding="0" cellspacing="0">
                                 <td width="500" height="22" valign="top"><?php
                                 $title=get_lang($list_get_invitation[$i]['title']);
                                 $content=get_lang($list_get_invitation[$i]['content']);
-                                echo mb_convert_encoding($title,'UTF-8',$charset).' : '.mb_convert_encoding($content,'UTF-8',$charset);
+                                echo api_convert_encoding($title,'UTF-8',$charset).' : '.api_convert_encoding($content,'UTF-8',$charset);
                                 ?> </td>
                                 </tr>
                             </table></td>
@@ -106,8 +106,8 @@ border="0" cellpadding="0" cellspacing="0">
 cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
               <tr>
                 <td width="600" height="25" valign="top"><div align="right">
-                  <input type="submit" name="btn_accepted" id="<?php echo "btn_accepted_".$user_id ?>" value="<?php echo mb_convert_encoding(get_lang('Accept'),'UTF-8',$charset); ?>" onclick="javascript:register_friend(this)"  />
-                  <input type="submit" name="btn_denied" id="<?php echo "btn_deniedst_".$user_id ?>" value="<?php echo mb_convert_encoding(get_lang('Deny'),'UTF-8',$charset); ?>" onclick="javascript:denied_friend(this)" />
+                  <input type="submit" name="btn_accepted" id="<?php echo "btn_accepted_".$user_id ?>" value="<?php echo api_convert_encoding(get_lang('Accept'),'UTF-8',$charset); ?>" onclick="javascript:register_friend(this)"  />
+                  <input type="submit" name="btn_denied" id="<?php echo "btn_deniedst_".$user_id ?>" value="<?php echo api_convert_encoding(get_lang('Deny'),'UTF-8',$charset); ?>" onclick="javascript:denied_friend(this)" />
                   </div></td>
                     </tr>
             </table></td>

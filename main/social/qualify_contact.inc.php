@@ -49,7 +49,7 @@ $user_friend_relation=UserFriend::get_relation_between_contacts(api_get_user_id(
 	   	 	<td width="50%"><br/>	   	 		
 	   	 		<img src="<?php echo $img_user[1]; ?>" />
 	   	 		<?php
-	   	 		echo '<br /><br />'.$name_user=mb_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset) ; 
+	   	 		echo '<br /><br />'.$name_user=api_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset) ; 
 	   	 		?>
 	   	 	</td>
 	   	 <td width="50%"><div align="left">
@@ -65,14 +65,14 @@ for ($k=0;$k<$number_list;$k++) {
 					    
 	<input <?php echo $check; ?> style="margin-left:50px" type="radio" class="radio" name="list_type_friend"  value="<?php echo $list_of_options[$k]['id']; ?>" />
 	<?php 
-	echo  mb_convert_encoding(get_lang($list_of_options[$k]['title']),'UTF-8',$charset); 
+	echo  api_convert_encoding(get_lang($list_of_options[$k]['title']),'UTF-8',$charset); 
 	echo '<br/>';
 	?>
 	<?php
 }
 echo '<br/>';
 ?>
-<input  style="margin-left:50px" type="button" value="<?php echo mb_convert_encoding(get_lang('AttachToGroup'),'UTF-8',$charset); ?>" onclick="set_qualify_friend()"/>
+<input  style="margin-left:50px" type="button" value="<?php echo api_convert_encoding(get_lang('AttachToGroup'),'UTF-8',$charset); ?>" onclick="set_qualify_friend()"/>
 			</div></td>
 			</td>
 		</tr>

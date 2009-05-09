@@ -63,7 +63,7 @@ if (count($list_path_friends)!=0) {
 		while ($j<$number_of_images) {
 			if ($list_friends_file[$j]<>"") {
 				$user_info=api_get_user_info($list_friends_id[$j]);
-				$user_name=mb_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset) ;
+				$user_name=api_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset) ;
 /*$friend_html.='&nbsp;<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$list_friends_id[$j].' style="float:left" >
 <img src="'.$list_friends_dir[$j]."/".$list_friends_file[$j].'" width="90" height="110" style="margin-left:3px ;margin-rigth:3px;margin-top:10px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$user_name.'" onclick="qualify_friend(this)"/>
 <img onclick="delete_friend (this)" id=img_'.$list_friends_id[$j].' src="../img/blank.gif" alt="" title=""  class="image-delete" /></div>&nbsp;';	*/

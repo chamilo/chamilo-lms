@@ -98,7 +98,7 @@ function toogle_function (element_html, course_code){
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){
 	$("input#id_btn_send_invitation").bind("click", function(){
-		if (confirm("'.get_lang('SendMessageInvitation').'")) {
+		if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
 			$("#form_register_friend").submit();
 		}
 	}); 
@@ -126,7 +126,7 @@ function action_database_panel (option_id,myuser_id) {
 	}
 		my_txt_content=$("#txt_area_invite").val();
 	if (my_txt_content.length==0 || my_txt_subject.length==0) {
-		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageInvitationNotSent').'");
+		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageInvitationNotSent', '').'");
 		setTimeout("message_information_display()",3000);
 		return false;
 	}
@@ -158,7 +158,7 @@ function hide_display_message () {
 	}
 }	
 function register_friend(element_input) {
- if(confirm("'.get_lang('AddToFriends').'")) {
+ if(confirm("'.get_lang('AddToFriends', '').'")) {
 		name_button=$(element_input).attr("id");
 		name_div_id="id_"+name_button.substring(13);
 		user_id=name_div_id.split("_");

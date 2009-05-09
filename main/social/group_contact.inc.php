@@ -12,7 +12,7 @@ $_SESSION['this_section']=$this_section;
 $list_path_friends=array();
 $list_groups=array();
 $request=api_is_xml_http_request();
-$language_variable=($request===true) ? mb_convert_encoding(get_lang('ContactsGroups'),'UTF-8',$charset) : get_lang('ContactsGroups');
+$language_variable=($request===true) ? api_convert_encoding(get_lang('ContactsGroups'),'UTF-8',$charset) : get_lang('ContactsGroups');
 //api_display_tool_title($language_variable);
 $user_id=api_get_user_id();
 $list_groups=UserFriend::show_list_type_friends();
@@ -58,7 +58,7 @@ for ($p=0;$p<count($list_groups);$p++) {
 		while ($j<$number_of_images) {
 			if ($list_friends_file[$j]<>"") {
 				$user_info=api_get_user_info($list_friends_id[$j]);				
-				$user_name=mb_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset) ;
+				$user_name=api_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset) ;
 				if($list_friends_file[$j]==='unknown.jpg') {
 					$big='';
 				} else {
@@ -73,7 +73,7 @@ for ($p=0;$p<count($list_groups);$p++) {
 	echo $friend_html; 
 		}  
 		else {
-			echo mb_convert_encoding(get_lang('YouDontHaveContactsInThisGroup'),'UTF-8',$charset);
+			echo api_convert_encoding(get_lang('YouDontHaveContactsInThisGroup'),'UTF-8',$charset);
 		}
 		?>
 		</div>

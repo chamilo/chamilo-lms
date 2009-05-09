@@ -24,7 +24,7 @@ for ($p=0;$p<count($list_groups);$p++) {
 
           <tr>
 		<th align="left" id="<?php echo 'td_'.$list_groups[$p]['id']; ?>" style="cursor:pointer" valign="top" onclick="toogle_function(this)">
-			<?php echo get_lang($list_groups[$p]['title']); ?>
+			<?php echo api_convert_encoding(get_lang($list_groups[$p]['title']),'UTF-8',$charset); ?>
 		</th>
 	    <th width="30" align="center">
     		<?php Display::display_icon('visible.gif',get_lang('ChangeVisibility'), array('id'=>'btn_'.$list_groups[$p]['id'])); ?>

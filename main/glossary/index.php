@@ -494,7 +494,7 @@ function actions_filter($glossary_id,$url_params,$row)
 		}
 		else
 		{
-			$return .= Display::return_icon('up_na.gif',get_lang('Up'));
+			$return .= Display::return_icon('up_na.gif','&nbsp;');
 			
 		}
 		if ($row[0] < $_SESSION['max_glossary_display'])
@@ -503,7 +503,7 @@ function actions_filter($glossary_id,$url_params,$row)
 		}
 		else
 		{
-			$return .= Display::return_icon('down_na.gif',get_lang('Down'));
+			$return .= Display::return_icon('down_na.gif','&nbsp;');
 			
 		}	
 	}

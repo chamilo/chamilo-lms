@@ -433,7 +433,7 @@ class Dropbox_Person
 		if ($sort == 'filesize') {	//filesize is not a string, so we use other comparison technique
 			return $aval<$bval ? -1 : 1;
 		} else {
-		    return strcasecmp($aval, $bval);
+		    return api_strcasecmp($aval, $bval);
 		}
 	}
 	

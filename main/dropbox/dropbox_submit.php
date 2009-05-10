@@ -317,11 +317,11 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
     $mailing_file = dropbox_cnf("sysPath") . '/' . $mailing_item->filename;
     $errormsg = '<b>' . $mailing_item->recipients[0]['name'] . ' ('
     	. "<a href='dropbox_download.php?origin=$origin&id=".urlencode($mailing_item->id)."'>"
-		. htmlspecialchars($mailing_title,ENT_QUOTES,$charset) . '</a>):</b><br><br>';
+		. htmlspecialchars($mailing_title,ENT_QUOTES,$charset) . '</a>):</b><br /><br />';
 
     if ( preg_match( dropbox_cnf("mailingZipRegexp"), $mailing_title, $nameParts))
 	{
-		$var = strtoupper($nameParts[2]);  // the variable part of the name
+		$var = api_strtoupper($nameParts[2]);  // the variable part of the name
 		$course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 		$sel = "SELECT u.user_id, u.lastname, u.firstname, cu.status
 				FROM `".$_configuration['main_database']."`.`user` u
@@ -357,7 +357,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
         }
 
 		$preFix = $nameParts[1]; $postFix = $nameParts[3];
-		$preLen = strlen($preFix); $postLen = strlen($postFix);
+		$preLen = api_strlen($preFix); $postLen = api_strlen($postFix);
 
 		function findRecipient($thisFile)
 		{
@@ -368,11 +368,11 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
             if ( preg_match(dropbox_cnf("mailingFileRegexp"), $thisFile, $matches))
             {
 	            $thisName = $matches[1];
-	            if ( substr($thisName, 0, $preLen) == $preFix)
+	            if ( api_substr($thisName, 0, $preLen) == $preFix)
 	            {
-		            if ( $postLen == 0 || substr($thisName, -$postLen) == $postFix)
+		            if ( $postLen == 0 || api_substr($thisName, -$postLen) == $postFix)
 		            {
-			            $thisRecip = substr($thisName, $preLen, strlen($thisName) - $preLen - $postLen);
+			            $thisRecip = api_substr($thisName, $preLen, api_strlen($thisName) - $preLen - $postLen);
 			            if ( $thisRecip) return getUser($thisRecip);
 			            return ' <'.dropbox_lang("mailingFileNoRecip", "noDLTT").'>';
 		            }
@@ -491,7 +491,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 		        {
 					$remainingUsers .= ', ' . htmlspecialchars($res[0].' '.$res[1],ENT_QUOTES,$charset);
 		        }
-		        $errormsg .= '<br>' . dropbox_lang("mailingNothingFor") . substr($remainingUsers, 1) . '.<br>';
+		        $errormsg .= '<br />' . dropbox_lang("mailingNothingFor") . api_substr($remainingUsers, 1) . '.<br />';
 	        }
 
 			if ( isset( $_GET['mailingSend']))

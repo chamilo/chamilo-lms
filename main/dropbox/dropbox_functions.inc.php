@@ -1261,7 +1261,7 @@ function zip_download_alternative($files)
 	// Step 2: we copy all the original dropbox files to the temp folder and change their name into the original name
 	foreach ($files as $key=>$value)
 	{
-		$value['title']=check_file_name(strtolower($value['title']));
+		$value['title']=check_file_name(api_strtolower($value['title']));
 		$files[$value['filename']]['title']=$value['title'];
 		copy(api_get_path(SYS_COURSE_PATH).$_course['path']."/dropbox/".$value['filename'], api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$value['title']);
 	}

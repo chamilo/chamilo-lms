@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: testheaderpage.php 20279 2009-05-04 15:55:58Z juliomontoya $
+* 	@version $Id: testheaderpage.php 20451 2009-05-10 12:02:22Z ivantcholakov $
 */
 
 // name of the language file that needs to be included

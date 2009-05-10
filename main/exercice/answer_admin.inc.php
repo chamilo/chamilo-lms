@@ -22,7 +22,7 @@
 *	This script allows to manage answers. It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer_admin.inc.php 19466 2009-03-31 20:18:12Z cvargas1 $
+* 	@version $Id: answer_admin.inc.php 20451 2009-05-10 12:02:22Z ivantcholakov $
 */
 
 
@@ -260,7 +260,7 @@ if($submitAnswers || $buttonBack)
                         $reponse.=$val.',';
                     }
 
-                    $reponse=substr($reponse,0,-1);
+                    $reponse=api_substr($reponse,0,-1);
 
                     $objAnswer->createAnswer($reponse,0,'',0,'');
                     $objAnswer->save();
@@ -290,7 +290,7 @@ if($submitAnswers || $buttonBack)
             {
                 $msgErr=get_lang('GiveText');
             }
-            elseif(!ereg('\[.+\]',$reponse))
+            elseif(!api_ereg('\[.+\]',$reponse))
             {
                 $msgErr=get_lang('DefineBlanks');
             }
@@ -308,12 +308,12 @@ if($submitAnswers || $buttonBack)
                 $temp=$reponse;
 
                 // 1. find everything between the [tex] and [/tex] tags
-                $startlocations=strpos($temp,'[tex]');
-                $endlocations=strpos($temp,'[/tex]');
+                $startlocations=api_strpos($temp,'[tex]');
+                $endlocations=api_strpos($temp,'[/tex]');
 
                 if($startlocations !== false && $endlocations !== false)
                 {
-                    $texstring=substr($temp,$startlocations,$endlocations-$startlocations+6);
+                    $texstring=api_substr($temp,$startlocations,$endlocations-$startlocations+6);
 
                     // 2. replace this by {texcode}
                     $temp=str_replace($texstring,"{texcode}",$temp);
@@ -328,25 +328,25 @@ if($submitAnswers || $buttonBack)
                 while(1)
                 {
                     // quits the loop if there are no more blanks
-                    if(($pos = strpos($temp,'[')) === false)
+                    if(($pos = api_strpos($temp,'[')) === false)
                     {
                         break;
                     }
 
                     // removes characters till '['
-                    $temp=substr($temp,$pos+1);
+                    $temp=api_substr($temp,$pos+1);
 
                     // quits the loop if there are no more blanks
-                    if(($pos = strpos($temp,']')) === false)
+                    if(($pos = api_strpos($temp,']')) === false)
                     {
                         break;
                     }
 
                     // stores the found blank into the array
-                    $blanks[$i++]=substr($temp,0,$pos);
+                    $blanks[$i++]=api_substr($temp,0,$pos);
 
                     // removes the character ']'
-                    $temp=substr($temp,$pos+1);
+                    $temp=api_substr($temp,$pos+1);
                 }
             }
         }
@@ -990,8 +990,8 @@ if($modifyAnswers)
 				}
 ?>
 
-  <td align="left"><textarea wrap="virtual" rows="7" cols="25" name="reponse[<?php echo $i; ?>]"><?php echo htmlentities($reponse[$i],ENT_QUOTES,$charset); ?></textarea></td>
-  <td align="left"><textarea wrap="virtual" rows="7" cols="25" name="comment[<?php echo $i; ?>]"><?php echo htmlentities($comment[$i],ENT_QUOTES,$charset); ?></textarea></td>
+  <td align="left"><textarea wrap="virtual" rows="7" cols="25" name="reponse[<?php echo $i; ?>]"><?php echo api_htmlentities($reponse[$i],ENT_QUOTES,$charset); ?></textarea></td>
+  <td align="left"><textarea wrap="virtual" rows="7" cols="25" name="comment[<?php echo $i; ?>]"><?php echo api_htmlentities($comment[$i],ENT_QUOTES,$charset); ?></textarea></td>
 
     <td valign="top"><input type="text" name="weighting[<?php echo $i; ?>]" size="5" value="<?php echo isset($weighting[$i])?$weighting[$i]:0; ?>"></td>
 </tr>
@@ -1005,7 +1005,7 @@ if($modifyAnswers)
 	<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>">
 	&nbsp;&nbsp;<input type="submit" name="lessAnswers" value="<?php echo get_lang('LessAnswers'); ?>">
 	&nbsp;&nbsp;<input type="submit" name="moreAnswers" value="<?php echo get_lang('MoreAnswers'); ?>">
-	<!-- &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"> //-->
+	<!-- &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"> //-->
   </td>
 </tr>
 </table>
@@ -1033,7 +1033,7 @@ if($modifyAnswers)
             {
 ?>
 
-<input type="hidden" name="weighting" value="<?php echo $submitAnswers?htmlentities($weighting,ENT_QUOTES,$charset):htmlentities(serialize($weighting),ENT_QUOTES,$charset); ?>">
+<input type="hidden" name="weighting" value="<?php echo $submitAnswers?api_htmlentities($weighting,ENT_QUOTES,$charset):api_htmlentities(serialize($weighting),ENT_QUOTES,$charset); ?>">
 
 <table border="0" cellpadding="5" width="500">
 
@@ -1071,11 +1071,11 @@ if($modifyAnswers)
   <td><?php echo get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank'); ?> :</td>
 </tr>
 <tr>
-  <td><textarea wrap="virtual" name="reponse" cols="65" rows="6"><?php if(!$submitAnswers && empty($reponse)) echo get_lang('DefaultTextInBlanks'); else echo htmlentities($reponse,ENT_QUOTES,$charset); ?></textarea></td>
+  <td><textarea wrap="virtual" name="reponse" cols="65" rows="6"><?php if(!$submitAnswers && empty($reponse)) echo get_lang('DefaultTextInBlanks'); else echo api_htmlentities($reponse,ENT_QUOTES,$charset); ?></textarea></td>
 </tr>
 <tr>
   <td colspan="5">
-	<!-- <input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;">
+	<!-- <input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;">
 	&nbsp;&nbsp; //--> <input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>">
   </td>
 </tr>
@@ -1086,8 +1086,8 @@ if($modifyAnswers)
  else
 {
 ?>
-<input type="hidden" name="blanks" value="<?php echo htmlentities(serialize($blanks),ENT_QUOTES,$charset); ?>">
-<input type="hidden" name="reponse" value="<?php echo htmlentities($reponse,ENT_QUOTES,$charset); ?>">
+<input type="hidden" name="blanks" value="<?php echo api_htmlentities(serialize($blanks),ENT_QUOTES,$charset); ?>">
+<input type="hidden" name="reponse" value="<?php echo api_htmlentities($reponse,ENT_QUOTES,$charset); ?>">
 <table border="0" cellpadding="5" width="500">
 <?php
                 if(!empty($msgErr))
@@ -1136,7 +1136,7 @@ if($modifyAnswers)
   <td colspan="2">
 	<input type="submit" name="buttonBack" value="&lt; <?php echo get_lang('Back'); ?>">
 	&nbsp;&nbsp;<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>">
-	<!-- &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"> //-->
+	<!-- &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"> //-->
   </td>
 </tr>
 </table>
@@ -1195,7 +1195,7 @@ if($modifyAnswers)
  			if(!$submitAnswers && empty($free_comment))
 				echo '';
 			else
-				echo htmlentities($free_comment,ENT_QUOTES,$charset); ?>
+				echo api_htmlentities($free_comment,ENT_QUOTES,$charset); ?>
    				<tr><td width="22%"><?php echo get_lang('QuestionWeighting'); ?></td>
 				<td width="78%"><input type="text" size="4" name="weighting" value="<?php if(!$submitAnswers && !isset($weighting)) echo '0'; else echo $weighting; ?>"></td>
 				</tr>
@@ -1274,7 +1274,7 @@ if($modifyAnswers)
 
 <tr>
   <td><?php echo $j; ?></td>
-  <td><input type="text" name="match[<?php echo $i; ?>]" size="58" value="<?php if(!$formSent && !isset($match[$i])) echo ${"langDefaultMakeCorrespond$j"}; else echo htmlentities($match[$i],ENT_QUOTES,$charset); ?>"></td>
+  <td><input type="text" name="match[<?php echo $i; ?>]" size="58" value="<?php if(!$formSent && !isset($match[$i])) echo ${"langDefaultMakeCorrespond$j"}; else echo api_htmlentities($match[$i],ENT_QUOTES,$charset); ?>"></td>
   <td align="center"><select name="sel[<?php echo $i; ?>]">
 
 <?php
@@ -1313,7 +1313,7 @@ if($modifyAnswers)
 
 <tr>
   <td><?php echo $val; ?></td>
-  <td colspan="3"><input type="text" name="option[<?php echo $key; ?>]" size="80" value="<?php if(!$formSent && !isset($option[$key])) echo get_lang("DefaultMatchingOpt$val"); else echo htmlentities($option[$key],ENT_QUOTES,$charset); ?>"></td>
+  <td colspan="3"><input type="text" name="option[<?php echo $key; ?>]" size="80" value="<?php if(!$formSent && !isset($option[$key])) echo get_lang("DefaultMatchingOpt$val"); else echo api_htmlentities($option[$key],ENT_QUOTES,$charset); ?>"></td>
 </tr>
 
 <?php
@@ -1331,7 +1331,7 @@ if($modifyAnswers)
 </tr>
 <tr>
   <td colspan="4">
-	<!-- <input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;">
+	<!-- <input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;">
 	&nbsp;&nbsp; //--> <input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>">
   </td>
 </tr>
@@ -1420,8 +1420,8 @@ if($modifyAnswers)
 
 					<tr>
 					  <td valign="top"><div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div></td>
-					  <td valign="top" align="left"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo htmlentities($reponse[$i],ENT_QUOTES,$charset); ?>" size="12" /></td>
-					  <td align="left"><textarea wrap="virtual" rows="3" cols="10" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo htmlentities($comment[$i],ENT_QUOTES,$charset); ?></textarea></td>
+					  <td valign="top" align="left"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo api_htmlentities($reponse[$i],ENT_QUOTES,$charset); ?>" size="12" /></td>
+					  <td align="left"><textarea wrap="virtual" rows="3" cols="10" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo api_htmlentities($comment[$i],ENT_QUOTES,$charset); ?></textarea></td>
 					  <td valign="top"><input type="text" name="weighting[<?php echo $i; ?>]" size="1" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 1); ?>" />
 					  <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
 					  <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>" /></td>
@@ -1437,7 +1437,7 @@ if($modifyAnswers)
 						<input type="submit" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />
 						<hr noshade="noshade" size="1" style="color: #4271b5" />
 						<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />
-						<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;" />
+						<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;" />
 					  </td>
 					</tr>
 				</table>

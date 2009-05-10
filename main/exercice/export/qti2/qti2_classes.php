@@ -174,8 +174,8 @@ class ImsAnswerFillInBlanks extends Answer
 	                {
 	                	$key = $answer['id'];
 	                	$answer = $answer['answer'];
-	                	$len = strlen($answer);
-	                    $text = str_replace('['.$answer.']','<textEntryInteraction responseIdentifier="fill_'.$key.'" expectedLength="'.strlen($answer).'"/>', $text);
+	                	$len = api_strlen($answer);
+	                    $text = str_replace('['.$answer.']','<textEntryInteraction responseIdentifier="fill_'.$key.'" expectedLength="'.api_strlen($answer).'"/>', $text);
 	                }
 				}
                 $out = $text;
@@ -394,7 +394,7 @@ class ImsAnswerHotspot extends Answer
 	        {
 	        	$key = $answer['id'];
 	        	$answerTxt = $answer['answer'];
-	        	$len = strlen($answerTxt);
+	        	$len = api_strlen($answerTxt);
 	        	//coords are transformed according to QTIv2 rules here: http://www.imsproject.org/question/qtiv2p1pd/imsqti_infov2p1pd.html#element10663
 	        	$coords = '';
 	        	$type = 'default';

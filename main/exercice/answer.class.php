@@ -23,7 +23,7 @@
 *	5 arrays are created to receive the attributes of each answer belonging to a specified question
 * 	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer.class.php 20308 2009-05-05 00:42:54Z cvargas1 $
+* 	@version $Id: answer.class.php 20451 2009-05-10 12:02:22Z ivantcholakov $
 */
 
 
@@ -446,7 +446,7 @@ class Answer
 			$sql.="('$i','$questionId','$answer','$correct','$comment',
 					'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 		}		
-		$sql = substr($sql,0,-1);	
+		$sql = api_substr($sql,0,-1);
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		// moves $new_* arrays
@@ -496,7 +496,7 @@ class Answer
 						"'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 			}
 
-			$sql=substr($sql,0,-1);
+			$sql=api_substr($sql,0,-1);
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 	}

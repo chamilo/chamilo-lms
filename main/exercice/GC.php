@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: GC.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: GC.php 20451 2009-05-10 12:02:22Z ivantcholakov $
 */
 
 
@@ -74,7 +74,7 @@
 						}
 					 else
 					  {
-					  	echo $folder."/".$val."<BR>";
+					  	echo $folder."/".$val."<br />";
 					  }
 				 }
 			}

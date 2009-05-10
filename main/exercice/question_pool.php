@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 20089 2009-04-24 21:12:54Z cvargas1 $
+<?php // $Id: question_pool.php 20451 2009-05-10 12:02:22Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -30,7 +30,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 20089 2009-04-24 21:12:54Z cvargas1 $
+* 	@version $Id: question_pool.php 20451 2009-05-10 12:02:22Z ivantcholakov $
 */
 
 // name of the language file that needs to be included
@@ -371,8 +371,8 @@ if($is_allowedToEdit)
                 echo '<a href="admin.php?'.api_get_cidreq().'&amp;editQuestion=',$row['id'],'"><img src="../img/edit.gif" border="0" alt="',get_lang('Modify'),'"></a>',
                     '</td>',
                     '<td align="center">',
-                    '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>';
-                    //'<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>';
+                    '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>';
+                    //'<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>';
 			} else {
                 //echo $row['level'],'</td>',
 //					'<td><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';

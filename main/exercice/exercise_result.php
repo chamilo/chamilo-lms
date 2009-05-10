@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 20357 2009-05-06 03:54:49Z cvargas1 $
+* 	@version $Id: exercise_result.php 20451 2009-05-10 12:02:22Z ivantcholakov $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -651,12 +651,12 @@ foreach ($questionList as $questionId) {
 
 					// TeX parsing
 					// 1. find everything between the [tex] and [/tex] tags
-					$startlocations=strpos($temp,'[tex]');
-					$endlocations=strpos($temp,'[/tex]');
+					$startlocations=api_strpos($temp,'[tex]');
+					$endlocations=api_strpos($temp,'[/tex]');
 
 					if($startlocations !== false && $endlocations !== false)
 					{
-						$texstring=substr($temp,$startlocations,$endlocations-$startlocations+6);
+						$texstring=api_substr($temp,$startlocations,$endlocations-$startlocations+6);
 						// 2. replace this by {texcode}
 						$temp=str_replace($texstring,'{texcode}',$temp);
 					}
@@ -672,7 +672,7 @@ foreach ($questionList as $questionId) {
 					while(1)
 					{
 						// quits the loop if there are no more blanks (detect '[')
-						if(($pos = strpos($temp,'[')) === false)
+						if(($pos = api_strpos($temp,'[')) === false)
 						{
 							// adds the end of the text
 							$answer=$temp;
@@ -684,23 +684,23 @@ foreach ($questionList as $questionId) {
 						}
 						// adds the piece of text that is before the blank 
                         //and ends with '[' into a general storage array
-                        $real_text[]=substr($temp,0,$pos+1);
-						$answer.=substr($temp,0,$pos+1);
+                        $real_text[]=api_substr($temp,0,$pos+1);
+						$answer.=api_substr($temp,0,$pos+1);
 						//take the string remaining (after the last "[" we found)
-						$temp=substr($temp,$pos+1);
+						$temp=api_substr($temp,$pos+1);
 						// quit the loop if there are no more blanks, and update $pos to the position of next ']'
-						if(($pos = strpos($temp,']')) === false)
+						if(($pos = api_strpos($temp,']')) === false)
 						{
 							// adds the end of the text
 							$answer.=$temp;
 							break;
 						}
 						$choice[$j]=trim($choice[$j]);
-						$user_tags[]=stripslashes(strtolower($choice[$j]));
+						$user_tags[]=stripslashes(api_strtolower($choice[$j]));
 						//put the contents of the [] answer tag into correct_tags[]
-                        $correct_tags[]=strtolower(substr($temp,0,$pos));
+                        $correct_tags[]=api_strtolower(api_substr($temp,0,$pos));
 						$j++;
-						$temp=substr($temp,$pos+1);
+						$temp=api_substr($temp,$pos+1);
                         //$answer .= ']';
 					}
 														

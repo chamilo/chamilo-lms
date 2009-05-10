@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.lib.php 20279 2009-05-04 15:55:58Z juliomontoya $
+* 	@version $Id: hotpotatoes.lib.php 20451 2009-05-10 12:02:22Z ivantcholakov $
 */
 
 
@@ -87,12 +87,12 @@ function GetQuizName($fname,$fpath)
 			$contents = fread($fp, filesize($fpath.$fname));
 			fclose($fp);
 	
-			$contents = strtolower($contents);
+			$contents = api_strtolower($contents);
 	
 			$pattern = array ( 1 => "title>", 2 => "/title>");
 	
-			$s_contents = substr($contents,0,strpos($contents,$pattern["2"])-1);
-			$e_contents = substr($s_contents,strpos($contents,$pattern["1"])+strlen($pattern["1"]),strlen($s_contents));
+			$s_contents = api_substr($contents,0,api_strpos($contents,$pattern["2"])-1);
+			$e_contents = api_substr($s_contents,api_strpos($contents,$pattern["1"])+api_strlen($pattern["1"]),api_strlen($s_contents));
 	
 			$title = $e_contents;
 		} else {

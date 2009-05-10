@@ -325,18 +325,18 @@ class ScormAnswerFillInBlanks extends Answer
 		$jstmpc = '';
 		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
-		$startlocations=strpos($answer,'[');
-		$endlocations=strpos($answer,']');
+		$startlocations=api_strpos($answer,'[');
+		$endlocations=api_strpos($answer,']');
 		while($startlocations !== false && $endlocations !== false)
 		{
-			$texstring=substr($answer,$startlocations,($endlocations-$startlocations)+1);
-			$answer = substr_replace($answer,'<input type="text" name="question_'.$this->questionJSId.'_fib_'.$i.'" id="question_'.$this->questionJSId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
+			$texstring=api_substr($answer,$startlocations,($endlocations-$startlocations)+1);
+			$answer = api_substr_replace($answer,'<input type="text" name="question_'.$this->questionJSId.'_fib_'.$i.'" id="question_'.$this->questionJSId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
 			$jstmp .= $i.',';
-			$jstmpc .= "'".htmlentities(substr($texstring,1,-1),ENT_QUOTES,$charset)."',";			
+			$jstmpc .= "'".api_htmlentities(api_substr($texstring,1,-1),ENT_QUOTES,$charset)."',";			
 	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$weights[$i-1].";\n";
 			$i++;
-			$startlocations=strpos($answer,'[');
-			$endlocations=strpos($answer,']');
+			$startlocations=api_strpos($answer,'[');
+			$endlocations=api_strpos($answer,']');
 		}
 
 		$html .= 	'<tr>' . "\n" 
@@ -345,8 +345,8 @@ class ScormAnswerFillInBlanks extends Answer
 	    		.	'</td>' . "\n"
 	    		.	'</tr>' . "\n";
 		$html .= '</table></td></tr>' . "\n";
-		$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
-    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
+		$js .= 'questions_answers['.$this->questionJSId.'] = new Array('.api_substr($jstmp,0,-1).');'."\n";
+    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array('.api_substr($jstmpc,0,-1).');'."\n";
     	$js .= 'questions_types['.$this->questionJSId.'] = \'fib\';'."\n";
     	$js .= $jstmpw;
         return array($js,$html);

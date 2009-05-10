@@ -182,9 +182,11 @@ class FillBlanks extends Question
 	 */
 	function processAnswersCreation($form) 
 	{
+		global $charset;
+
 		$answer = $form -> getSubmitValue('answer');
 		//Due the fckeditor transform the elements to their HTML value
-		$answer = html_entity_decode($answer);
+		$answer = api_html_entity_decode($answer, ENT_QUOTES, $charset);
 
 		//remove the :: eventually written by the user
 		$answer = str_replace('::','',$answer);
@@ -204,7 +206,7 @@ class FillBlanks extends Question
 				$answer .= $form -> getSubmitValue('weighting['.$i.']').',';
 				$this -> weighting += $form -> getSubmitValue('weighting['.$i.']');
 			}
-			$answer = substr($answer,0,-1);
+			$answer = api_substr($answer,0,-1);
 		}
 		$is_multiple = $form -> getSubmitValue('multiple_answer');
 		$answer.='@'.$is_multiple;

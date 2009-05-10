@@ -101,7 +101,7 @@ if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {
 	}
 }
 
-$output .= "&p_hotspot_answers=".substr($output2,0,-1)."&done=done";
+$output .= "&p_hotspot_answers=".api_substr($output2,0,-1)."&done=done";
 
 $explode = explode('&', $output);
 

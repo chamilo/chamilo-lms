@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 20411 2009-05-08 15:57:21Z juliomontoya $
+<?php // $Id: exercise.lib.php 20451 2009-05-10 12:02:22Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 20411 2009-05-08 15:57:21Z juliomontoya $
+* 	@version $Id: exercise.lib.php 20451 2009-05-10 12:02:22Z ivantcholakov $
 */
 
 /**
@@ -144,11 +144,11 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		
 				// because [] is parsed here we follow this procedure:
 				// 1. find everything between the [tex] and [/tex] tags
-				$startlocations=strpos($answer,'[tex]');
-				$endlocations=strpos($answer,'[/tex]');
+				$startlocations=api_strpos($answer,'[tex]');
+				$endlocations=api_strpos($answer,'[/tex]');
 
 				if($startlocations !== false && $endlocations !== false) {
-					$texstring=substr($answer,$startlocations,$endlocations-$startlocations+6);
+					$texstring=api_substr($answer,$startlocations,$endlocations-$startlocations+6);
 				// 2. replace this by {texcode}
 					$answer=str_replace($texstring,'{texcode}',$answer);
 				}
@@ -157,7 +157,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				// replaces [blank] by an input field			
 				
 				//getting the matches				
-				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10">',($answer));
+				$answer=api_ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10">',($answer));
 				
 				// Change input size 
 				/*

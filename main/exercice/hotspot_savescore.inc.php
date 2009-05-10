@@ -29,7 +29,7 @@ if ($_GET['answerId'] == "0") // click is NOT on a hotspot
 else // user clicked ON a hotspot
 {
 	$hit = 1;
-	$answerId = substr($_GET['answerId'],22,2);
+	$answerId = api_substr($_GET['answerId'],22,2);
 	// Save into session
 	$_SESSION['exerciseResult'][$questionId][$answerId] = $hit;
 }

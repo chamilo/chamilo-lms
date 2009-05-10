@@ -222,6 +222,7 @@ class ExerciseResult
 	 */
 	public function exportCompleteReportCSV($document_path='',$user_id=null, $export_user_fields)
 	{
+		global $charset;
 		$this->_getExercisesReporting($document_path,$user_id);
 		$filename = 'exercise_results_'.date('YmdGis').'.csv';
 		if(!empty($user_id))
@@ -242,7 +243,7 @@ class ExerciseResult
 			$num = count($extra_user_fields);
 			foreach($extra_user_fields as $field)
 			{
-				$data .= '"'.str_replace("\r\n",'  ',html_entity_decode(strip_tags($field[3]))).'";';
+				$data .= '"'.str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset)).'";';
 			}
 			$display_extra_user_fields = true;
 		}
@@ -256,7 +257,7 @@ class ExerciseResult
 		{
 			if(!empty($row['user']))
 			{
-				$data .= str_replace("\r\n",'  ',html_entity_decode(strip_tags($row['user']))).';';
+				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['user']), ENT_QUOTES, $charset)).';';
 			}
 			if($export_user_fields)
 			{
@@ -264,10 +265,10 @@ class ExerciseResult
 				$user_fields_values = UserManager::get_extra_user_data(intval($row['user_id']),false,false);
 				foreach($user_fields_values as $value)
 				{
-					$data .= '"'.str_replace('"','""',html_entity_decode(strip_tags($value))).'";';
+					$data .= '"'.str_replace('"','""',api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset)).'";';
 				}
 			}
-			$data .= str_replace("\r\n",'  ',html_entity_decode(strip_tags($row['title']))).';';
+			$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
 			$data .= str_replace("\r\n",'  ',$row['time']).';';
 			$data .= str_replace("\r\n",'  ',$row['result']).';';
 			$data .= str_replace("\r\n",'  ',$row['max']).';';
@@ -303,6 +304,7 @@ class ExerciseResult
 	 */
 	public function exportCompleteReportXLS($document_path='',$user_id=null, $export_user_fields)
 	{
+		global $charset;
 		$this->_getExercisesReporting($document_path,$user_id);
 		$filename = 'exercise_results_'.date('YmdGis').'.xls';
 		if(!empty($user_id))
@@ -327,7 +329,7 @@ class ExerciseResult
 			//show the fields names for user fields
 			foreach($extra_user_fields as $field)
 			{
-				$worksheet->write($line,$column,html_entity_decode(strip_tags($field[3])));
+				$worksheet->write($line,$column,api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset));
 				$column++;
 			}
 		}
@@ -345,17 +347,17 @@ class ExerciseResult
 			$column = 0;
 			if(!empty($row['user']))
 			{
-				$worksheet->write($line,$column,html_entity_decode(strip_tags($row['user'])));
+				$worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['user']), ENT_QUOTES, $charset));
 				$column++;
 			}
 			//show user fields data, if any, for this user
 			$user_fields_values = UserManager::get_extra_user_data(intval($row['user_id']),false,false);
 			foreach($user_fields_values as $value)
 			{
-				$worksheet->write($line,$column,html_entity_decode(strip_tags($value)));
+				$worksheet->write($line,$column,api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset));
 				$column++;
 			}
-			$worksheet->write($line,$column,html_entity_decode(strip_tags($row['title'])));
+			$worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset));
 			$column++;
 			$worksheet->write($line,$column,$row['time']);
 			$column++;

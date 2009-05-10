@@ -293,8 +293,8 @@ if($modifyAnswers)
 					?>
 					<tr>
 					  <td valign="top"><div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div></td>
-					  <td valign="top" align="left"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo htmlentities($reponse[$i]); ?>" size="45" /></td>
-					  <td align="left"><textarea wrap="virtual" rows="1" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo stripslashes(htmlentities($comment[$i])); ?></textarea></td>
+					  <td valign="top" align="left"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo api_htmlentities($reponse[$i], ENT_QUOTES, api_get_system_encoding()); ?>" size="45" /></td>
+					  <td align="left"><textarea wrap="virtual" rows="1" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo stripslashes(api_htmlentities($comment[$i], ENT_QUOTES, api_get_system_encoding())); ?></textarea></td>
 					  <td valign="top"><input type="text" name="weighting[<?php echo $i; ?>]" size="5" value="<?php echo (isset($weighting[$i]) ? float_format($weighting[$i],1) : 10); ?>" />
 					  <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
 					  <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>" /></td>

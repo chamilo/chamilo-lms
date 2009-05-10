@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20391 2009-05-07 17:02:18Z iflorespaz $
+* 	@version $Id: exercise_show.php 20451 2009-05-10 12:02:22Z ivantcholakov $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -641,10 +641,10 @@ if ($show_results) {
 		
 				// TeX parsing
 				// 1. find everything between the [tex] and [/tex] tags
-				$startlocations=strpos($temp,'[tex]');
-				$endlocations=strpos($temp,'[/tex]');
+				$startlocations=api_strpos($temp,'[tex]');
+				$endlocations=api_strpos($temp,'[/tex]');
 				if ($startlocations !== false && $endlocations !== false) {
-					$texstring=substr($temp,$startlocations,$endlocations-$startlocations+6);
+					$texstring=api_substr($temp,$startlocations,$endlocations-$startlocations+6);
 					// 2. replace this by {texcode}
 					$temp=str_replace($texstring,'{texcode}',$temp);
 				}
@@ -655,16 +655,16 @@ if ($show_results) {
 				if (!$switchable_answer_set) {
 					while (1) {
 						// quits the loop if there are no more blanks
-						if (($pos = strpos($temp,'[')) === false) {
+						if (($pos = api_strpos($temp,'[')) === false) {
 							// adds the end of the text
 							$answer.=$temp;				
 							// TeX parsing
 							$texstring = api_parse_tex($texstring);
 							break;
 						}
-					    $temp=substr($temp,$pos+1);
+					    $temp=api_substr($temp,$pos+1);
 						// quits the loop if there are no more blanks
-						if (($pos = strpos($temp,']')) === false) {
+						if (($pos = api_strpos($temp,']')) === false) {
 							break;
 						}
 						
@@ -676,7 +676,7 @@ if ($show_results) {
 						$choice = $arr[1];
 						$choice[$j]=trim($choice[$j]);
 						// if the word entered by the student IS the same as the one defined by the professor
-						if (strtolower(substr($temp,0,$pos)) == stripslashes(strtolower($choice[$j]))) {
+						if (api_strtolower(api_substr($temp,0,$pos)) == stripslashes(api_strtolower($choice[$j]))) {
 							// gives the related weighting to the student
 							$questionScore+=$answerWeighting[$j];
 							// increments total score
@@ -684,7 +684,7 @@ if ($show_results) {
 						}
 						// else if the word entered by the student IS NOT the same as the one defined by the professor
 						$j++;
-						$temp=substr($temp,$pos+1);
+						$temp=api_substr($temp,$pos+1);
 						$i=$i+1;
 					}
 					$answer = $str;
@@ -692,7 +692,7 @@ if ($show_results) {
 					//multiple fill in blank	
 					while (1) {
 						// quits the loop if there are no more blanks
-						if (($pos = strpos($temp,'[')) === false) {
+						if (($pos = api_strpos($temp,'[')) === false) {
 							// adds the end of the text
 							$answer.=$temp;
 							// TeX parsing
@@ -701,12 +701,12 @@ if ($show_results) {
 							break;
 						}
 						// adds the piece of text that is before the blank and ended by [
-						$real_text[]=substr($temp,0,$pos+1);
-						$answer.=substr($temp,0,$pos+1);					
-						$temp=substr($temp,$pos+1);
+						$real_text[]=api_substr($temp,0,$pos+1);
+						$answer.=api_substr($temp,0,$pos+1);					
+						$temp=api_substr($temp,$pos+1);
 
 						// quits the loop if there are no more blanks
-						if (($pos = strpos($temp,']')) === false) {
+						if (($pos = api_strpos($temp,']')) === false) {
 							// adds the end of the text
 							//$answer.=$temp;
 							break;
@@ -719,11 +719,11 @@ if ($show_results) {
 						$choice = $arr[1];
 						
 						$choice[$j]=trim($choice[$j]);					
-						$user_tags[]=stripslashes(strtolower($choice[$j]));
-						$correct_tags[]=strtolower(substr($temp,0,$pos));	
+						$user_tags[]=stripslashes(api_strtolower($choice[$j]));
+						$correct_tags[]=api_strtolower(api_substr($temp,0,$pos));	
 						
 						$j++;
-						$temp=substr($temp,$pos+1);
+						$temp=api_substr($temp,$pos+1);
 						$i=$i+1;
 					}
 					$answer='';

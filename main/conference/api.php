@@ -174,9 +174,9 @@ else if ($action == "service")
 		if (is_array($files)) foreach (array_keys($files) as $k)
 		{
 			// converting to UTF-8
-			$files[$k]['title'] = mb_convert_encoding(
-						strlen($files[$k]['title']) > 32 ? 
-							substr($files[$k]['title'],0, 32)."..." : 
+			$files[$k]['title'] = api_convert_encoding(
+						api_strlen($files[$k]['title']) > 32 ? 
+							api_substr($files[$k]['title'],0, 32)."..." : 
 							$files[$k]['title'],
 						'utf-8',api_get_setting('platform_charset')); 
 			// removing '<', '>' and '_'

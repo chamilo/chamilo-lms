@@ -36,7 +36,7 @@ printf('<dokeosobject>');
 
 printf('<courseobject>');
 foreach ($_SESSION['_course'] as $key => $val)	
-		printf('<%s>%s</%s>',$key,utf8_encode($val),$key);
+		printf('<%s>%s</%s>',$key,api_utf8_encode($val),$key);
 printf('</courseobject>');
 
 printf('<userobject>');
@@ -45,7 +45,7 @@ foreach ($_SESSION['_user'] as $key => $val)
 	{
 		if (( $key == "lastName" || $key == "firstName" ) && strlen($val) == 0)
 			$val = get_lang('Unknown');
-		printf('<%s>%s</%s>',$key,utf8_encode($val),$key);
+		printf('<%s>%s</%s>',$key,api_utf8_encode($val),$key);
 	}
 
 printf('<sid>%s</sid>', session_id());

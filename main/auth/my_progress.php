@@ -95,7 +95,7 @@ foreach($Courses as $enreg)
 
 <tr class='<?php echo $i?'row_odd':'row_even'; ?>'>
   	<td>
-		<?php echo html_entity_decode($enreg['title'],ENT_QUOTES,$charset); ?>
+		<?php echo api_html_entity_decode($enreg['title'],ENT_QUOTES,$charset); ?>
   	</td>
 
   	<td align='center'>

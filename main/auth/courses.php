@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 20343 2009-05-05 20:31:47Z juliomontoya $
+<?php // $Id: courses.php 20443 2009-05-10 08:41:46Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -472,7 +472,7 @@ function display_search_courses()
 					"</form>";
 	if (isset($_POST['search_course']))
 	{
-		echo "<p><b>".get_lang("SearchResultsFor")." ".htmlentities($_POST['search_term'],ENT_QUOTES,$charset)."</b><br />";
+		echo "<p><b>".get_lang("SearchResultsFor")." ".api_htmlentities($_POST['search_term'],ENT_QUOTES,$charset)."</b><br />";
 		$result_search_courses_array=search_courses($_POST['search_term']);
 		display_subscribe_to_courses($result_search_courses_array);
 	}
@@ -609,7 +609,7 @@ function store_course_category()
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	if (Database::num_rows($result) == 0)
 	{
-		$sql_insert="INSERT INTO $tucc (user_id, title,sort) VALUES ('".$_user['user_id']."', '".htmlentities($_POST['title_course_category'],ENT_QUOTES,$charset)."', '".$nextsort."')";
+		$sql_insert="INSERT INTO $tucc (user_id, title,sort) VALUES ('".$_user['user_id']."', '".api_htmlentities($_POST['title_course_category'],ENT_QUOTES,$charset)."', '".$nextsort."')";
 		api_sql_query($sql_insert,__FILE__,__LINE__);
 		Display::display_confirmation_message(get_lang("CourseCategoryStored"));
 	}
@@ -991,7 +991,7 @@ function display_course_icons($key, $number_of_courses, $course)
 	{
 		if ($course['unsubscr'] == 1)
 			{	// changed link to submit to avoid action by the search tool indexer
-				echo	"<form action=\"".api_get_self()."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmUnsubscribeFromCourse"),ENT_QUOTES,$charset))."')) return false;\">";
+				echo	"<form action=\"".api_get_self()."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"),ENT_QUOTES,$charset))."')) return false;\">";
 				echo    '<input type="hidden" name="sec_token" value="'.$stok.'">';
 				echo 	"<input type=\"hidden\" name=\"unsubscribe\" value=\"".$course['code']."\" />";
 				echo 	"<input type=\"image\" name=\"unsub\" src=\"../img/delete.gif\" alt=\"".get_lang("_unsubscribe")."\" /></form>";
@@ -1045,7 +1045,7 @@ function display_category_icons($current_category, $all_user_categories)
    		echo "</td>";
 		echo "<td rowspan=\"2\">";
 		echo " <a href=\"courses.php?action=deletecoursecategory&amp;id=".$current_category."&amp;sec_token=".$stok."\">";
-		Display::display_icon('delete.gif',get_lang('Delete'),array('onclick'=>"javascript:if(!confirm('".addslashes(htmlentities(get_lang("CourseCategoryAbout2bedeleted"),ENT_QUOTES,$charset))."')) return false;"));
+		Display::display_icon('delete.gif',get_lang('Delete'),array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("CourseCategoryAbout2bedeleted"),ENT_QUOTES,$charset))."')) return false;"));
 		echo "</a>";
 		echo "</td>";
  		echo "</tr>";
@@ -1112,7 +1112,7 @@ function display_unsubscribe_icons($course)
 	{
 		if ($course['unsubscribe'] == 1)
 			{	// changed link to submit to avoid action by the search tool indexer
-				echo	"<form action=\"".api_get_self()."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmUnsubscribeFromCourse"),ENT_QUOTES,$charset))."')) return false;\">";
+				echo	"<form action=\"".api_get_self()."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"),ENT_QUOTES,$charset))."')) return false;\">";
 				echo    '<input type="hidden" name="sec_token" value="'.$stok.'">';
 				echo 	"<input type=\"hidden\" name=\"unsubscribe\" value=\"".$course['code']."\" />";
 				echo 	"<input type=\"image\" name=\"unsub\" src=\"../img/delete.gif\" alt=\"".get_lang("_unsubscribe")."\" /></form>";
@@ -1235,7 +1235,7 @@ function store_edit_course_category()
 	global $_user, $_configuration, $charset;
 
 	$tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-	$sql_update="UPDATE $tucc SET title='".htmlentities($_POST['title_course_category'],ENT_QUOTES,$charset)."' WHERE id='".(int)$_POST['edit_course_category']."'";
+	$sql_update="UPDATE $tucc SET title='".api_htmlentities($_POST['title_course_category'],ENT_QUOTES,$charset)."' WHERE id='".(int)$_POST['edit_course_category']."'";
 	api_sql_query($sql_update,__FILE__,__LINE__);
 	return get_lang("CourseCategoryEditStored");
 }

@@ -1,4 +1,4 @@
-<?php // $Id: authldap.php 16978 2008-11-27 11:04:12Z pcool $
+<?php // $Id: authldap.php 20443 2009-05-10 08:41:46Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -532,8 +532,8 @@ function ldap_get_user_data($from, $number_of_items, $column, $direction)
 				//$user[] = $dn_array[0]; // uid is first key
 				$user[] = $info[$key]['uid'][0];
 				$user[] = $info[$key]['uid'][0];
-				$user[] = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]['sn'][0]);
-				$user[] = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]['givenname'][0]);
+				$user[] = api_convert_encoding($info[$key]['givenname'][0], api_get_system_encoding(), 'UTF-8');
+				$user[] = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
 				$user[] = $info[$key]['mail'][0];
 				$outab[] = $info[$key]['eduPersonPrimaryAffiliation'][0]; // Ici "student"
 				$users[] = $user;
@@ -559,7 +559,7 @@ function modify_filter($user_id,$url_params, $row)
 {
 	$url_params_id="id[]=".$row[0];
 	//$url_params_id="id=".$row[0];	
-	$result .= '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;id_session='.Security::remove_XSS($_GET['id_session']).'&amp;'.$url_params_id.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.Display::return_icon('add_user.gif', get_lang('AddUsers')).'</a>';
+	$result .= '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;id_session='.Security::remove_XSS($_GET['id_session']).'&amp;'.$url_params_id.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;">'.Display::return_icon('add_user.gif', get_lang('AddUsers')).'</a>';
 	return $result;
 }
 
@@ -585,8 +585,8 @@ function ldap_add_user($login)
 
 		for ($key = 0; $key < $info['count']; $key ++)
 		{
-			$lastname = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]['sn'][0]);
-			$firstname = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]['givenname'][0]);
+			$lastname = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
+			$firstname = api_convert_encoding($info[$key]['givenname'][0], api_get_system_encoding(), 'UTF-8');
 			$email = $info[$key]['mail'][0];
 			// Get uid from dn
 			$dn_array=ldap_explode_dn($info[$key]['dn'],1);

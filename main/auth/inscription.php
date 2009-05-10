@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 20290 2009-05-04 18:04:33Z iflorespaz $
+// $Id: inscription.php 20443 2009-05-10 08:41:46Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -294,7 +294,7 @@ if ($form->validate()) {
 	  -----------------------------------------------------*/
 	$values = $form->exportValues();
 	
-	$values['username'] = substr($values['username'],0,20); //make *sure* the login isn't too long
+	$values['username'] = api_substr($values['username'],0,20); //make *sure* the login isn't too long
 
 	if (get_setting('allow_registration_as_teacher') == 'false') {
 		$values['status'] = STUDENT;

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20101 2009-04-25 01:05:54Z yannoo $
+<?php //$Id: agenda.inc.php 20444 2009-05-10 09:18:51Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -2049,7 +2049,7 @@ function display_agenda_items()
 		{
             $month_bar = date("m",strtotime($myrow["start_date"])).date("Y",strtotime($myrow["start_date"]));
 			echo "\t<tr>\n\t\t<td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
-			ucfirst(format_locale_date("%B %Y",strtotime($myrow["start_date"]))).
+			api_ucfirst(format_locale_date("%B %Y",strtotime($myrow["start_date"]))).
 			"</td>\n\t</tr>\n";
 		}
 
@@ -2118,15 +2118,15 @@ function display_agenda_items()
          --------------------------------------------------*/
     	echo "<tr class='row_odd'>";
     	echo "\t\t<td>".get_lang("StartTimeWindow").": ";
-    	echo ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
-    	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
+    	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
+    	echo api_ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
     	echo "</td>\n";
     	echo "\t\t<td>";
     	if ($myrow["end_date"]<>"0000-00-00 00:00:00")
     	{
     		echo get_lang("EndTimeWindow").": ";
-    		echo ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
-    		echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
+    		echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
+    		echo api_ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
     	}
     	echo "</td>\n";
 
@@ -2148,7 +2148,7 @@ function display_agenda_items()
     			echo '<a href="'.$mylink.'&amp;action=edit&amp;id_attach='.$attachment_list['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
 	    		echo Display::return_icon('edit.gif', get_lang('ModifyCalendarItem'))."</a>";
 
-    			echo "<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
+    			echo "<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
 	    		echo Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
 
     			echo '<a href="'.$mylink.'&amp;action=announce" title="'.get_lang("AddAnnouncement").'">';
@@ -2213,7 +2213,7 @@ function display_agenda_items()
 				echo ' "> '.$user_filename.' </a>';
 				echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
 				if (api_is_allowed_to_edit()) {
-					echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';	
+					echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';	
 				}				
 
 			}
@@ -2254,7 +2254,7 @@ function display_agenda_items()
 
     if(!empty($event_list))
     {
-    	$event_list=substr($event_list,0,-1);
+    	$event_list=api_substr($event_list,0,-1);
     }
     else
     {
@@ -2410,12 +2410,12 @@ function display_one_agenda_item($agenda_id)
 	  --------------------------------------------------*/
 	echo "\t<tr class='row_odd'>\n";
 	echo "\t\t<td>".get_lang("StartTime").": ";
-	echo ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
+	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
+	echo api_ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
 	echo "</td>\n";
 	echo "\t\t<td>".get_lang("EndTime").": ";
-	echo ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
+	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
+	echo api_ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
 	echo "</td>\n";
 
 	/*--------------------------------------------------
@@ -2431,7 +2431,7 @@ function display_one_agenda_item($agenda_id)
 			$mylink = api_get_self()."?".api_get_cidreq()."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;id=".$myrow['id'];
 			echo 	"<a href=\"".$mylink."&amp;action=edit\">",
 					Display::return_icon('edit.gif', get_lang('ModifyCalendarItem')), "</a>",
-					"<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
+					"<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
 					Display::return_icon('delete.gif', get_lang('Delete')),"</a>";
 			if ($myrow['visibility']==1) {
 				$image_visibility="visible";
@@ -3462,7 +3462,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 			if ($setting_agenda_link == 'coursecode')
 			{
 				$title=$array_course_info['title'];
-				$agenda_link = substr($title, 0, 14);
+				$agenda_link = api_substr($title, 0, 14);
 			}
 			else
 			{
@@ -3580,7 +3580,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 			if ($setting_agenda_link == 'coursecode')
 			{
 				$title=$array_course_info['title'];
-				$agenda_link = substr($title, 0, 14);
+				$agenda_link = api_substr($title, 0, 14);
 			}
 			else
 			{
@@ -4650,9 +4650,9 @@ function agenda_import_ical($course_info,$file)
     $ve = $ical->getComponent(0);
     //print_r($ve);
     $ttitle = $ve->getProperty('summary');
-    $title = mb_convert_encoding($ttitle,$charset,'UTF-8');
+    $title = api_convert_encoding($ttitle,$charset,'UTF-8');
     $tdesc = $ve->getProperty('description');
-    $desc = mb_convert_encoding($tdesc,$charset,'UTF-8');
+    $desc = api_convert_encoding($tdesc,$charset,'UTF-8');
     $ts = $ve->getProperty('dtstart');
     $start_date = $ts['year'].'-'.$ts['month'].'-'.$ts['day'].' '.$ts['hour'].':'.$ts['min'].':'.$ts['sec'];
     $ts = $ve->getProperty('dtend');

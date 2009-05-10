@@ -41,7 +41,7 @@ $result			= api_sql_query($sql,__FILE__,__LINE__);
 <body style="margin: 15px; padding: 0px;">
 
 <center>
-<input type="button" value="<?php echo htmlentities(get_lang('Print'),ENT_QUOTES,$charset); ?>" onClick="javascript:window.print();" />
+<input type="button" value="<?php echo api_htmlentities(get_lang('Print'),ENT_QUOTES,$charset); ?>" onClick="javascript:window.print();" />
 </center>
 <br /><br />
 
@@ -60,15 +60,15 @@ while($row=Database::fetch_array($result))
 
 	echo get_lang('StartTime').' : ';
 
-	echo ucfirst(format_locale_date($dateFormatLong,strtotime($row["start_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo ucfirst(strftime($timeNoSecFormat,strtotime($row["start_date"])))."";
+	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($row["start_date"])))."&nbsp;&nbsp;&nbsp;";
+	echo api_ucfirst(strftime($timeNoSecFormat,strtotime($row["start_date"])))."";
 
 	echo '<br />';
 
 	echo get_lang('EndTime').' : ';
 
-	echo ucfirst(format_locale_date($dateFormatLong,strtotime($row["end_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo ucfirst(strftime($timeNoSecFormat,strtotime($row["end_date"])))."";
+	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($row["end_date"])))."&nbsp;&nbsp;&nbsp;";
+	echo api_ucfirst(strftime($timeNoSecFormat,strtotime($row["end_date"])))."";
 
 	echo '<br /><br />';
 
@@ -78,7 +78,7 @@ while($row=Database::fetch_array($result))
 
 <br /><br />
 <center>
-<input type="button" value="<?php echo htmlentities(get_lang('Print'),ENT_QUOTES,$charset); ?>" onClick="javascript:window.print();" />
+<input type="button" value="<?php echo api_htmlentities(get_lang('Print'),ENT_QUOTES,$charset); ?>" onClick="javascript:window.print();" />
 </center>
 
 </body>

@@ -139,7 +139,7 @@ function get_myagendaitems($courses_dbs, $month, $year)
 			if ($setting_agenda_link == 'coursecode')
 			{
 				$title=$array_course_info['title'];
-				$agenda_link = substr($title, 0, 14);
+				$agenda_link = api_substr($title, 0, 14);
 			}
 			else 
 			{
@@ -748,7 +748,7 @@ function show_personal_agenda()
 			// adding an internal anchor
 			echo "<a name=\"".$myrow["id"]."\"></a>";
 			echo date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
-			echo ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
+			echo api_ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
 			echo "</td>";
 			echo '<td class="'.$style.'">';
 			echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a>';
@@ -778,7 +778,7 @@ function show_personal_agenda()
 			  --------------------------------------------------*/
 			echo "\t<tr>\n\t\t<td class=\"".$text_style."\" colspan='2'>";
 			echo "<a href=\"myagenda.php?action=edit_personal_agenda_item&amp;id=".$myrow['id']."\">".Display::return_icon('edit.gif', get_lang('Edit'))."</a>";
-			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
+			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
 			echo "</td></tr>";
 		}
 	}

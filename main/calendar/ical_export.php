@@ -66,7 +66,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 			case 'personal':
 				require_once (api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php');
 				$ai = get_personal_agenda_item($_GET['id']);
-                $vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
+                $vevent->setProperty( 'summary', api_convert_encoding($ai['title'],'UTF-8',$charset));
 				if(empty($ai['date'])){header('location:'.$_SERVER['HTTP_REFERER']);}
 				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['date']);
 				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
@@ -81,7 +81,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				}
 				$vevent->setProperty('dtend',array('year'=>$y2,'month'=>$m2,'day'=>$d2,'hour'=>$h2,'min'=>$M2,'sec'=>$s2));
 				//$vevent->setProperty( 'LOCATION', get_lang('Unknown') ); // property name - case independent
-				$vevent->setProperty( 'description', mb_convert_encoding($ai['text'],'UTF-8',$charset));
+				$vevent->setProperty( 'description', api_convert_encoding($ai['text'],'UTF-8',$charset));
 				//$vevent->setProperty( 'comment', 'This is a comment' );
 				$user = api_get_user_info($ai['user']);
 				$vevent->setProperty('organizer',$user['mail']);
@@ -96,7 +96,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				$TABLE_ITEM_PROPERTY 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 				require_once (api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php');
 				$ai = get_agenda_item($_GET['id']);
-		        $vevent->setProperty( 'summary', mb_convert_encoding($ai['title'],'UTF-8',$charset));
+		        $vevent->setProperty( 'summary', api_convert_encoding($ai['title'],'UTF-8',$charset));
         		if(empty($ai['start_date'])){header('location:'.$_SERVER['HTTP_REFERER']);}
 				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['start_date']);
 				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
@@ -110,7 +110,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 					list($y2,$m2,$d2,$h2,$M2,$s2) = preg_split('/[\s:-]/',$ai['end_date']);
 				}
 				$vevent->setProperty('dtend',array('year'=>$y2,'month'=>$m2,'day'=>$d2,'hour'=>$h2,'min'=>$M2,'sec'=>$s2));
-				$vevent->setProperty( 'description', mb_convert_encoding($ai['content'],'UTF-8',$charset));
+				$vevent->setProperty( 'description', api_convert_encoding($ai['content'],'UTF-8',$charset));
 				//$vevent->setProperty( 'comment', 'This is a comment' );
 				$user = api_get_user_info($ai['user']);
 				$vevent->setProperty('organizer',$user['mail']);

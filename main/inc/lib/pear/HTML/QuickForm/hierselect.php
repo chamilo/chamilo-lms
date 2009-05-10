@@ -18,7 +18,7 @@
 // |          Alexey Borzov <avb@php.net>
 // +----------------------------------------------------------------------+
 //
-// $Id: hierselect.php 9612 2006-10-20 11:56:44Z bmol $
+// $Id: hierselect.php 20456 2009-05-10 17:27:44Z ivantcholakov $
 
 require_once('HTML/QuickForm/group.php');
 require_once('HTML/QuickForm/select.php');
@@ -480,8 +480,8 @@ JAVASCRIPT;
             // add onreset handler to form to properly reset hierselect (see bug #2970)
             if ('addElement' == $event) {
                 $onReset = $caller->getAttribute('onreset');
-                if (strlen($onReset)) {
-                    if (strpos($onReset, '_hs_setupOnReset')) {
+                if (api_strlen($onReset)) {
+                    if (api_strpos($onReset, '_hs_setupOnReset')) {
                         $caller->updateAttributes(array('onreset' => str_replace('_hs_setupOnReset(this, [', "_hs_setupOnReset(this, ['" . $this->_escapeString($this->getName()) . "', ", $onReset)));
                     } else {
                         $caller->updateAttributes(array('onreset' => "var temp = function() { {$onReset} } ; if (!temp()) { return false; } ; if (typeof _hs_setupOnReset != 'undefined') { return _hs_setupOnReset(this, ['" . $this->_escapeString($this->getName()) . "']); } "));

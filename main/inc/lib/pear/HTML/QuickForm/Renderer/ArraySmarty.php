@@ -18,7 +18,7 @@
 // |          Thomas Schulz <ths@4bconsult.de>                            |
 // +----------------------------------------------------------------------+
 //
-// $Id: ArraySmarty.php 9612 2006-10-20 11:56:44Z bmol $
+// $Id: ArraySmarty.php 20456 2009-05-10 17:27:44Z ivantcholakov $
 
 require_once 'HTML/QuickForm/Renderer/Array.php';
 
@@ -179,15 +179,15 @@ class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
             $ret['error'] = $error;
         }
         // create keys for elements grouped by native group or name
-        if (strstr($ret['name'], '[') or $this->_currentGroup) {
+        if (api_strstr($ret['name'], '[') or $this->_currentGroup) {
             // Fix for bug #8123: escape backslashes and quotes to prevent errors 
             // in eval(). The code below seems to handle the case where element
             // name has unbalanced square brackets. Dunno whether we really
             // need this after the fix for #8123, but I'm wary of making big
             // changes to this code.  
-            preg_match('/([^]]*)\\[([^]]*)\\]/', $ret['name'], $matches);
+            preg_match(api_add_pcre_unicode_modifier('/([^]]*)\\[([^]]*)\\]/'), $ret['name'], $matches);
             if (isset($matches[1])) {
-                $sKeysSub = substr_replace($ret['name'], '', 0, strlen($matches[1]));
+                $sKeysSub = api_substr_replace($ret['name'], '', 0, api_strlen($matches[1]));
                 $sKeysSub = str_replace(
                     array('\\',   '\'',   '['  ,   ']', '[\'\']'),
                     array('\\\\', '\\\'', '[\'', '\']', '[]'    ),
@@ -205,8 +205,8 @@ class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
                     return false;
                 }
                 // reduce string of keys by remove leading group keys
-                if (0 === strpos($sKeys, $this->_currentGroup['keys'])) {
-                    $sKeys = substr_replace($sKeys, '', 0, strlen($this->_currentGroup['keys']));
+                if (0 === api_strpos($sKeys, $this->_currentGroup['keys'])) {
+                    $sKeys = api_substr_replace($sKeys, '', 0, api_strlen($this->_currentGroup['keys']));
                 }
             }
         // element without a name
@@ -217,7 +217,7 @@ class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
             $sKeys = '[\'' . str_replace(array('\\', '\''), array('\\\\', '\\\''), $ret['name']) . '\']';
         }
         // for radios: add extra key from value
-        if ('radio' == $ret['type'] and substr($sKeys, -2) != '[]') {
+        if ('radio' == $ret['type'] and api_substr($sKeys, -2) != '[]') {
             $sKeys .= '[\'' . str_replace(array('\\', '\''), array('\\\\', '\\\''), $ret['value']) . '\']';
         }
         $this->_elementIdx++;

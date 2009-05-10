@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: element.php 9612 2006-10-20 11:56:44Z bmol $
+// $Id: element.php 20456 2009-05-10 17:27:44Z ivantcholakov $
 
 require_once('HTML/Common.php');
 
@@ -226,7 +226,8 @@ class HTML_QuickForm_element extends HTML_Common
     function getFrozenHtml()
     {
         $value = $this->getValue();
-        return ('' != $value? htmlspecialchars($value): '&nbsp;') .
+		global $charset;
+        return ('' != $value? htmlspecialchars($value, ENT_COMPAT, $charset): '&nbsp;') .
                $this->_getPersistantData();
     } //end func getFrozenHtml
     

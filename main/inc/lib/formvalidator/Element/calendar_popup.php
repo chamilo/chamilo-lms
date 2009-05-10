@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar_popup.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: calendar_popup.php 20456 2009-05-10 17:27:44Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -47,6 +47,7 @@ if (empty ($iso_lang) )
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $iso_lang; ?>" lang="<?php echo $iso_lang; ?>">
 <head>
 <title>Calendar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>/css/default.css"/>
 <style type="text/css">
 /*<![CDATA[*/

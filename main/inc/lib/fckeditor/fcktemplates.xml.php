@@ -62,7 +62,7 @@ function s($var)
 	global $charset;
     $search = array('&','<','>');
     $replace = array ('&amp;','&amp;lt;','&amp;gt;');
-    return str_replace($search,$replace,mb_convert_encoding(get_lang($var),'UTF-8',$charset));
+    return str_replace($search,$replace,api_convert_encoding(get_lang($var),'UTF-8',$charset));
 }
 
 /**
@@ -76,7 +76,7 @@ function s2($var)
 	global $charset;
     $search = array('&','<','>');
     $replace = array ('&amp;','&amp;lt;','&amp;gt;');
-    return str_replace($search,$replace,mb_convert_encoding($var,'UTF-8',$charset));
+    return str_replace($search,$replace,api_convert_encoding($var,'UTF-8',$charset));
 }
 
 /**

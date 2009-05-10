@@ -16,7 +16,7 @@
 // | Authors: Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: Range.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Range.php 20456 2009-05-10 17:27:44Z ivantcholakov $
 
 require_once('HTML/QuickForm/Rule.php');
 
@@ -36,7 +36,7 @@ class HTML_QuickForm_Rule_Range extends HTML_QuickForm_Rule
      */
     function validate($value, $options)
     {
-        $length = strlen($value);
+        $length = api_strlen($value);
         switch ($this->name) {
             case 'minlength': return ($length >= $options);
             case 'maxlength': return ($length <= $options);

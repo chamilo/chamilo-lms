@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: group.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: group.php 20456 2009-05-10 17:27:44Z ivantcholakov $
 
 require_once("HTML/QuickForm/element.php");
 
@@ -161,7 +161,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
 
             } else {
                 $elementName = $this->_elements[$key]->getName();
-                $index       = strlen($elementName) ? $elementName : $key;
+                $index       = api_strlen($elementName) ? $elementName : $key;
                 if (is_array($value)) {
                     if (isset($value[$index])) {
                         $this->_elements[$key]->onQuickFormEvent('setGroupValue', $value[$index], $this);
@@ -433,7 +433,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
             if ($this->_appendName) {
                 $elementName = $element->getName();
                 if (isset($elementName)) {
-                    $element->setName($name . '['. (strlen($elementName)? $elementName: $key) .']');
+                    $element->setName($name . '['. (api_strlen($elementName)? $elementName: $key) .']');
                 } else {
                     $element->setName($name);
                 }

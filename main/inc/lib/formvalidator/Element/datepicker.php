@@ -1,5 +1,5 @@
 <?php
-// $Id: datepicker.php 18078 2009-01-29 17:21:11Z cfasanando $
+// $Id: datepicker.php 20456 2009-05-10 17:27:44Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -59,7 +59,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 			$this->_locale[$editor_lang]['months_long'] = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
 		}
 		$this->_options['format'] = 'dFY '.$popup_link.'   H '.$hour_minute_devider.' i';
-		$this->_options['minYear'] = date('Y')-1;
+		$this->_options['minYear'] = date('Y')-7;
 		$this->_options['maxYear'] = date('Y')+15;
 		$this->_options['language'] = $editor_lang;
 		//$this->_options['addEmptyOption'] = true; 

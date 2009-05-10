@@ -1,5 +1,5 @@
 <?php
-// $Id: Filetype.php 6187 2005-09-07 10:23:57Z bmol $
+// $Id: Filetype.php 20456 2009-05-10 17:27:44Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,7 +42,7 @@ class HTML_QuickForm_Rule_Filetype extends HTML_QuickForm_Rule
 			return false;	
 		}
 		$ext = $parts[count($parts)-1];
-		return in_array($ext,$extensions);
+		return api_in_array_nocase($ext, $extensions);
 	}
 }
 ?>

@@ -33,7 +33,7 @@
  * @author     Richard Heyes <richard@phpguru.org>
  * @copyright  2003-2006 Lorenzo Alberton, Richard Heyes
  * @license    http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
- * @version    CVS: $Id: Common.php 12273 2007-05-03 14:49:21Z elixir_julian $
+ * @version    CVS: $Id: Common.php 20456 2009-05-10 17:27:44Z ivantcholakov $
  * @link       http://pear.php.net/package/Pager
  */
 
@@ -845,6 +845,7 @@ class Pager_Common
      */
     function _generateFormOnClickHelper($data, $prev = '')
     {
+		global $charset;
         $str = '';
         if (is_array($data) || is_object($data)) {
             // foreach key/visible member
@@ -864,8 +865,9 @@ class Pager_Common
             if (!$this->_isEncoded($escapedData)) {
                 $escapedData = urlencode($escapedData);
             }
-            $escapedData = htmlentities($escapedData, ENT_QUOTES, 'UTF-8');
-
+            //$escapedData = htmlentities($escapedData, ENT_QUOTES, 'UTF-8');
+            $escapedData = api_htmlentities($escapedData, ENT_QUOTES, $charset);
+  
             $str .= 'input = document.createElement("input"); ';
             $str .= 'input.type = "hidden"; ';
             $str .= sprintf('input.name = "%s"; ', $prev);
@@ -1292,6 +1294,7 @@ class Pager_Common
      */
     function __http_build_query($array, $name)
     {
+		global $charset;
         $tmp = array ();
         $separator = ini_get('arg_separator.output');
         if ($separator == '&amp;') {
@@ -1303,7 +1306,7 @@ class Pager_Common
                 array_push($tmp, $this->__http_build_query($value, $name.'%5B'.$key.'%5D'));
             } elseif (is_scalar($value)) {
                 //array_push($tmp, sprintf('%s[%s]=%s', $name, htmlentities($key), htmlentities($value)));
-                array_push($tmp, $name.'%5B'.htmlentities($key).'%5D='.htmlentities($value));
+                array_push($tmp, $name.'%5B'.api_htmlentities($key, ENT_QUOTES, $charset).'%5D='.api_htmlentities($value, ENT_QUOTES, $charset));
             } elseif (is_object($value)) {
                 //array_push($tmp, $this->__http_build_query(get_object_vars($value), sprintf('%s[%s]', $name, $key)));
                 array_push($tmp, $this->__http_build_query(get_object_vars($value), $name.'%5B'.$key.'%5D'));
@@ -1390,17 +1393,17 @@ class Pager_Common
             if (strncasecmp($this->_fileName, 'javascript', 10) != 0) {
                 $this->_url .= '/';
             }
-            if (!strstr($this->_fileName, '%d')) {
+            if (!api_strstr($this->_fileName, '%d')) {
                 trigger_error($this->errorMessage(ERROR_PAGER_INVALID_USAGE), E_USER_WARNING);
             }
         }
 
         $this->_classString = '';
-        if (strlen($this->_linkClass)) {
+        if (api_strlen($this->_linkClass)) {
             $this->_classString = 'class="'.$this->_linkClass.'"';
         }
 
-        if (strlen($this->_curPageLinkClassName)) {
+        if (api_strlen($this->_curPageLinkClassName)) {
             $this->_curPageSpanPre  = '<span class="'.$this->_curPageLinkClassName.'">';
             $this->_curPageSpanPost = '</span>';
         }

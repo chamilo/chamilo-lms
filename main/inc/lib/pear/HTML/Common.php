@@ -16,7 +16,7 @@
 // | Author: Adam Daniel <adaniel1@eesus.jnj.com>                         |
 // +----------------------------------------------------------------------+
 //
-// $Id: Common.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Common.php 20456 2009-05-10 17:27:44Z ivantcholakov $
 
 /**
  * Base class for all HTML classes
@@ -135,9 +135,10 @@ class HTML_Common {
     {
         $strAttr = '';
 
+		global $charset;
         if (is_array($attributes)) {
             foreach ($attributes as $key => $value) {
-                $strAttr .= ' ' . $key . '="' . htmlspecialchars($value) . '"';
+                $strAttr .= ' ' . $key . '="' . htmlspecialchars($value, ENT_QUOTES, $charset) . '"';
             }
         }
         return $strAttr;

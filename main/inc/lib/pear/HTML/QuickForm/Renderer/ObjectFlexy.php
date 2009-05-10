@@ -16,7 +16,7 @@
 // | Author: Ron McClain <ron@humaniq.com>                                |
 // +----------------------------------------------------------------------+
 //
-// $Id: ObjectFlexy.php 9612 2006-10-20 11:56:44Z bmol $
+// $Id: ObjectFlexy.php 20456 2009-05-10 17:27:44Z ivantcholakov $
 
 require_once("HTML/QuickForm/Renderer/Object.php");
 
@@ -139,7 +139,7 @@ class HTML_QuickForm_Renderer_ObjectFlexy extends HTML_QuickForm_Renderer_Object
         }
 
         // Create an element key from the name
-        if (false !== ($pos = strpos($ret->name, '[')) || is_object($this->_currentGroup)) {
+        if (false !== ($pos = api_strpos($ret->name, '[')) || is_object($this->_currentGroup)) {
             if (!$pos) {
                 $keys = '->{\'' . str_replace(array('\\', '\''), array('\\\\', '\\\''), $ret->name) . '\'}';
             } else {
@@ -156,17 +156,17 @@ class HTML_QuickForm_Renderer_ObjectFlexy extends HTML_QuickForm_Renderer_Object
                     return false;
                 }
                 // reduce string of keys by remove leading group keys
-                if (0 === strpos($keys, $this->_currentGroup->keys)) {
-                    $keys = substr_replace($keys, '', 0, strlen($this->_currentGroup->keys));
+                if (0 === api_strpos($keys, $this->_currentGroup->keys)) {
+                    $keys = api_substr_replace($keys, '', 0, api_strlen($this->_currentGroup->keys));
                 }
             }
-        } elseif (0 == strlen($ret->name)) {
+        } elseif (0 == api_strlen($ret->name)) {
             $keys = '->{\'element_' . $this->_elementIdx . '\'}';
         } else {
             $keys = '->{\'' . str_replace(array('\\', '\''), array('\\\\', '\\\''), $ret->name) . '\'}';
         }
         // for radios: add extra key from value
-        if ('radio' == $ret->type && '[]' != substr($keys, -2)) {
+        if ('radio' == $ret->type && '[]' != api_substr($keys, -2)) {
             $keys .= '->{\'' . str_replace(array('\\', '\''), array('\\\\', '\\\''), $ret->value) . '\'}';
         }
         $ret->keys = $keys;

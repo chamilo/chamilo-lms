@@ -79,15 +79,15 @@ if (!api_is_allowed_to_edit(false,true)) {
  */
 
 function sort_users($user_a, $user_b) {
-	$cmp = strcasecmp($user_a['lastname'], $user_b['lastname']);
+	$cmp = api_strcasecmp($user_a['lastname'], $user_b['lastname']);
 	if ($cmp !== 0) {
 		return $cmp;
 	} else {
-		$cmp = strcasecmp($user_a['firstname'], $user_b['firstname']);
+		$cmp = api_strcasecmp($user_a['firstname'], $user_b['firstname']);
 		if ($cmp !== 0) {
 			return $cmp;
 		} else {
-			return strcasecmp($user_a['username'], $user_b['username']);
+			return api_strcasecmp($user_a['username'], $user_b['username']);
 		}
 	}
 }

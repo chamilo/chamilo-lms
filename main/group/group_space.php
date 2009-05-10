@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 20421 2009-05-08 20:16:02Z herodoto $
+<?php //$Id: group_space.php 20455 2009-05-10 16:31:12Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -137,14 +137,14 @@ if (api_is_allowed_to_edit(false,true) or GroupManager :: is_tutor($_user['user_
  * Register to group
  */
 if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {	  
-	echo '<a href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('groupadd.gif').get_lang("RegIntoGroup").'</a>';
+	echo '<a href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('groupadd.gif').get_lang("RegIntoGroup").'</a>';
 }
 
 /*
  * Unregister from group
  */
 if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
-	echo '<a href="'.api_get_self().'?selfUnReg=1" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('group_delete.gif').get_lang("StudentUnsubscribe").'</a>';
+	echo '<a href="'.api_get_self().'?selfUnReg=1" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('group_delete.gif').get_lang("StudentUnsubscribe").'</a>';
 }
 echo '&nbsp;</div>';
 

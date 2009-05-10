@@ -35,7 +35,7 @@ event_access_tool(TOOL_GLOSSARY);
 
 if ( isset($_GET['action']) && ($_GET['action'] == 'addglossary' || $_GET['action'] == 'edit_glossary')) {
 $tool=get_lang('GlossaryManagement');
-$interbreadcrumb[] = array ("url"=>"index.php", "name"=> ucfirst(get_lang(TOOL_GLOSSARY)));
+$interbreadcrumb[] = array ("url"=>"index.php", "name"=> api_ucfirst(get_lang(TOOL_GLOSSARY)));
 }
 
 Display::display_header(get_lang(ucfirst($tool)));

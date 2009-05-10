@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 19639 2009-04-08 13:06:16Z pcool $
+<?php // $Id: configure_homepage.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -667,11 +667,11 @@ switch($action){
 		<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
 		<tr>
 		  <td nowrap="nowrap"><?php echo get_lang('NoticeTitle'); ?> :</td>
-		  <td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo htmlentities($notice_title,ENT_QUOTES,$charset); ?>" style="width: 350px;"/></td>
+		  <td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo api_htmlentities($notice_title,ENT_QUOTES,$charset); ?>" style="width: 350px;"/></td>
 		</tr>
 		<tr>
 		  <td nowrap="nowrap" valign="top"><?php echo get_lang('NoticeText'); ?> :</td>
-		  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo htmlentities($notice_text,ENT_QUOTES,$charset); ?></textarea></td>
+		  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo api_htmlentities($notice_text,ENT_QUOTES,$charset); ?></textarea></td>
 		</tr>
 		<tr>
 		  <td>&nbsp;</td>
@@ -705,12 +705,12 @@ switch($action){
 		$form->addElement('hidden', 'filename', $action == 'edit_link' ? $filename : '');
 
 		$form->addElement('html', '<tr><td nowrap="nowrap" style="width: 15%;">'.get_lang('LinkName').' :</td><td>');
-		$default['link_name'] = htmlentities($link_name, ENT_QUOTES, $charset);
+		$default['link_name'] = api_htmlentities($link_name, ENT_QUOTES, $charset);
 		$form->addElement('text', 'link_name', get_lang('LinkName'), array('size' => '30', 'maxlength' => '50'));
 		$form->addElement('html', '</td></tr>');
 		
 		$form->addElement('html', '<tr><td nowrap="nowrap">'.get_lang('LinkURL').' ('.get_lang('Optional').') :</td><td>');
-		$default['link_url'] = empty($link_url) ? 'http://' : htmlentities($link_url, ENT_QUOTES, $charset); 
+		$default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES, $charset); 
 		$form->addElement('text', 'link_url', get_lang('LinkName'), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
 		$form->addElement('html', '</td></tr>');
 		
@@ -956,7 +956,7 @@ switch($action){
 						if(!empty($enreg))
 						{
 							$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 
 							echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
 						}

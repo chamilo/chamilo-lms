@@ -1,4 +1,4 @@
-<?php // $Id: course_virtual.php 12272 2007-05-03 14:40:45Z elixir_julian $ 
+<?php // $Id: course_virtual.php 20441 2009-05-10 07:39:15Z ivantcholakov $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -188,6 +188,8 @@ function display_real_course_code_select($element_name)
 
 function display_create_virtual_course_form()
 {
+	global $charset;
+
 	$category_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
 	$message = make_strong(get_lang('AdminCreateVirtualCourse')) . "<br/>" . get_lang('AdminCreateVirtualCourseExplanation') . "<br/>This feature is in development phase, bug reports welcome.";
@@ -254,7 +256,7 @@ function display_create_virtual_course_form()
 	<td>
 		<?php
 			display_real_course_code_select(REAL_COURSE_SELECT_FORM_NAME);
-			//echo "<input type=\"Text\" name=\"real_course_code\" maxlength=\"".FORM_ELEMENT_CODE_SIZE."\" value=\"" . htmlentities($valueTitular) . "\"/>";
+			//echo "<input type=\"Text\" name=\"real_course_code\" maxlength=\"".FORM_ELEMENT_CODE_SIZE."\" value=\"" . api_htmlentities($valueTitular, ENT_COMPAT, $charset) . "\"/>";
 		?>
 	</td>
 	</tr>

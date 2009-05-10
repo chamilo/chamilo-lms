@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 19597 2009-04-07 14:38:36Z pcool $
+<?php // $Id: course_category.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -182,11 +182,11 @@ if($action == 'add' || $action == 'edit')
 	
 	<tr>
 	  <td nowrap="nowrap"><?php echo get_lang("CategoryCode"); ?> :</td>
-	  <td><input type="text" name="categoryCode" size="20" maxlength="20" value="<?php echo htmlentities(stripslashes($categoryCode),ENT_QUOTES,$charset); ?>" /></td>
+	  <td><input type="text" name="categoryCode" size="20" maxlength="20" value="<?php echo api_htmlentities(stripslashes($categoryCode),ENT_QUOTES,$charset); ?>" /></td>
 	</tr>
 	<tr>
 	  <td nowrap="nowrap"><?php echo get_lang("CategoryName"); ?> :</td>
-	  <td><input type="text" name="categoryName" size="20" maxlength="100" value="<?php echo htmlentities(stripslashes($categoryName),ENT_QUOTES,$charset); ?>" /></td>
+	  <td><input type="text" name="categoryName" size="20" maxlength="100" value="<?php echo api_htmlentities(stripslashes($categoryName),ENT_QUOTES,$charset); ?>" /></td>
 	</tr>
 	<tr>
 	  <td nowrap="nowrap"><?php echo get_lang("AllowCoursesInCategory"); ?></td>
@@ -248,7 +248,7 @@ if(count($Categories)>0)
 	  <li>
 		<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($enreg['code']); ?>"><?php Display::display_icon('folder_document.gif', get_lang('OpenNode')); ?></a>
 		<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=edit&amp;id=<?php echo Security::remove_XSS($enreg['code']); ?>"><?php Display::display_icon('edit.gif', get_lang('EditNode')); ?></a>
-		<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=delete&amp;id=<?php echo Security::remove_XSS($enreg['code']); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"><?php Display::display_icon('delete.gif', get_lang('DeleteNode'));?></a>
+		<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=delete&amp;id=<?php echo Security::remove_XSS($enreg['code']); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"><?php Display::display_icon('delete.gif', get_lang('DeleteNode'));?></a>
 		<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=moveUp&amp;id=<?php echo Security::remove_XSS($enreg['code']); ?>&amp;tree_pos=<?php echo $enreg['tree_pos']; ?>"><?php Display::display_icon('up.gif', get_lang('UpInSameLevel'));?></a>
 		<?php echo $enreg['name']; ?>
 		(<?php echo $enreg['children_count']; ?> <?php echo get_lang("Categories"); ?> - <?php echo $enreg['nbr_courses']; ?> <?php echo get_lang("Courses"); ?>)

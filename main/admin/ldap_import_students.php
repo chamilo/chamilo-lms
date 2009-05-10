@@ -223,7 +223,7 @@ elseif(!empty($annee) && empty($course))
 	$courses = CourseManager::get_courses_list();
 	foreach($courses as $row)
 	{
-		echo '<option value="'.$row['code'].'">'.htmlentities($row['title']).'</option>';
+		echo '<option value="'.$row['code'].'">'.api_htmlentities($row['title'], ENT_COMPAT, api_get_system_encoding()).'</option>';
 	}
 	echo '</select>';
 	echo '<input type="submit" value="'.get_lang('Submit').'">';

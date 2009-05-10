@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 20403 2009-05-08 08:35:16Z ndieschburg $
+<?php // $Id: user_list.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -82,7 +82,7 @@ function courses_of_user($arg)
     {
     	$newContent .= '- '.get_lang('None').' -<br />';
     }   
-    $newContent = mb_convert_encoding($newContent,'utf-8',api_get_setting('platform_charset'));
+    $newContent = api_convert_encoding($newContent,'utf-8',api_get_setting('platform_charset'));
      
 	// Instantiate the xajaxResponse object
 	$objResponse = new xajaxResponse();
@@ -447,7 +447,7 @@ function modify_filter($user_id,$url_params,$row)
 		$result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
 	
 		if ($row[0]<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-			$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+			$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 		} else {
 			$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
 		}

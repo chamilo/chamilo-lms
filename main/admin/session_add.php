@@ -67,7 +67,7 @@ function search_coachs($needle)
 	{
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
-		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
+		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		
 		// search users where username or firstname or lastname begins likes $needle
 		$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
@@ -101,7 +101,7 @@ function search_coachs($needle)
 			$return .= '<a href="#" onclick="fill_coach_field(\''.$user['username'].'\')">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</a><br />';
 		}
 	}
-	$xajax_response -> addAssign('ajax_list_coachs','innerHTML',utf8_encode($return));
+	$xajax_response -> addAssign('ajax_list_coachs','innerHTML',api_utf8_encode($return));
 	return $xajax_response;
 }
 $xajax -> processRequests();
@@ -167,7 +167,7 @@ if (!empty($return)) {
 <table border="0" cellpadding="5" cellspacing="0" width="550">
 <tr>
   <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
-  <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo htmlentities($name,ENT_QUOTES,$charset); ?>"></td>
+  <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>"></td>
 </tr>
 <tr>
   <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>

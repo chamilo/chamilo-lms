@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 20373 2009-05-06 19:54:44Z juliomontoya $
+<?php // $Id: session_import.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -61,11 +61,11 @@ if ($_POST['formSent']) {
 					//Creating - updating users
 					// from the <Sessions> <User> racine 		
 					foreach($racine->Users->User as $userNode) {
-						$username = mb_convert_encoding($userNode->Username,$charset,'utf-8');
+						$username = api_convert_encoding($userNode->Username,$charset,'utf-8');
 						$isCut = 0; // if the username given is too long
-						if(strlen($username)>20) {
+						if(api_strlen($username)>20) {
 							$user_name_dist = $username;
-							$username = substr($username,0,20);
+							$username = api_substr($username,0,20);
 							$isCut = 1;
 						}						
 						$user_exist = UserManager::is_username_available($username);												
@@ -73,16 +73,16 @@ if ($_POST['formSent']) {
 							if ($isCut) {
 								$errorMsg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$user_name_dist.' '.get_lang('To').' '.$username.' <br />';
 							}	
-							$lastname = mb_convert_encoding($userNode->Lastname,$charset,'utf-8');
-							$firstname = mb_convert_encoding($userNode->Firstname,$charset,'utf-8');
-							$password = mb_convert_encoding($userNode->Password,$charset,'utf-8');
+							$lastname = api_convert_encoding($userNode->Lastname,$charset,'utf-8');
+							$firstname = api_convert_encoding($userNode->Firstname,$charset,'utf-8');
+							$password = api_convert_encoding($userNode->Password,$charset,'utf-8');
 							if(empty($password)) {
 								$password = base64_encode(rand(1000,10000));
 	                        }
-							$email = mb_convert_encoding($userNode->Email,$charset,'utf-8');
-							$official_code = mb_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
-							$phone = mb_convert_encoding($userNode->Phone,$charset,'utf-8');
-							$status = mb_convert_encoding($userNode->Status,$charset,'utf-8');
+							$email = api_convert_encoding($userNode->Email,$charset,'utf-8');
+							$official_code = api_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
+							$phone = api_convert_encoding($userNode->Phone,$charset,'utf-8');
+							$status = api_convert_encoding($userNode->Status,$charset,'utf-8');
 							switch ($status) {
 								case 'student' : $status = 5; break;
 								case 'teacher' : $status = 1; break;
@@ -125,13 +125,13 @@ if ($_POST['formSent']) {
 								@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
 							}
 						} else {
-							$lastname = mb_convert_encoding($userNode->Lastname,$charset,'utf-8');
-							$firstname = mb_convert_encoding($userNode->Firstname,$charset,'utf-8');
-							$password = mb_convert_encoding($userNode->Password,$charset,'utf-8');
-							$email = mb_convert_encoding($userNode->Email,$charset,'utf-8');
-							$official_code = mb_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
-							$phone = mb_convert_encoding($userNode->Phone,$charset,'utf-8');
-							$status = mb_convert_encoding($userNode->Status,$charset,'utf-8');
+							$lastname = api_convert_encoding($userNode->Lastname,$charset,'utf-8');
+							$firstname = api_convert_encoding($userNode->Firstname,$charset,'utf-8');
+							$password = api_convert_encoding($userNode->Password,$charset,'utf-8');
+							$email = api_convert_encoding($userNode->Email,$charset,'utf-8');
+							$official_code = api_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
+							$phone = api_convert_encoding($userNode->Phone,$charset,'utf-8');
+							$status = api_convert_encoding($userNode->Status,$charset,'utf-8');
 							switch($status) {
 								case 'student' : $status = 5; break;
 								case 'teacher' : $status = 1; break;
@@ -157,11 +157,11 @@ if ($_POST['formSent']) {
 				// from the <Sessions> <Courses> racine
 				if (count($racine->Courses->Course) > 0) {			
 					foreach($racine->Courses->Course as $courseNode) {
-						$course_code = mb_convert_encoding($courseNode->CourseCode,$charset,'utf-8');
-						$title = mb_convert_encoding($courseNode->CourseTitle,$charset,'utf-8');
-						$description = mb_convert_encoding($courseNode->CourseDescription,$charset,'utf-8');
-						$language = mb_convert_encoding($courseNode->CourseLanguage,$charset,'utf-8');
-						$username = mb_convert_encoding($courseNode->CourseTeacher,$charset,'utf-8');
+						$course_code = api_convert_encoding($courseNode->CourseCode,$charset,'utf-8');
+						$title = api_convert_encoding($courseNode->CourseTitle,$charset,'utf-8');
+						$description = api_convert_encoding($courseNode->CourseDescription,$charset,'utf-8');
+						$language = api_convert_encoding($courseNode->CourseLanguage,$charset,'utf-8');
+						$username = api_convert_encoding($courseNode->CourseTeacher,$charset,'utf-8');
 						
 						//looking for the teacher
 						$sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
@@ -179,7 +179,7 @@ if ($_POST['formSent']) {
 							$currentCourseRepository = $keys['currentCourseRepository'];
 							//creating a course
 							
-							if($currentCourseId == strtoupper($course_code)) {
+							if($currentCourseId == api_strtoupper($course_code)) {
 								if (empty ($title)) {
 									$title = $keys['currentCourseCode'];
 								}																									
@@ -232,8 +232,8 @@ if ($_POST['formSent']) {
 						$countCourses = 0;
 						$countUsers = 0;
 	
-						$SessionName = mb_convert_encoding($sessionNode->SessionName,$charset,'utf-8');
-						$Coach = mb_convert_encoding($sessionNode->Coach,$charset,'utf-8');
+						$SessionName = api_convert_encoding($sessionNode->SessionName,$charset,'utf-8');
+						$Coach = api_convert_encoding($sessionNode->Coach,$charset,'utf-8');
 	
 						if (!empty($Coach)) {													
 							$coach_id = UserManager::get_user_id_from_username($Coach);
@@ -347,7 +347,7 @@ if ($_POST['formSent']) {
 						
 						// Adding users to the new session 
 						foreach ($sessionNode->User as $userNode){		
-							$username = mb_convert_encoding(substr($userNode,0,20),$charset,'utf-8');
+							$username = api_convert_encoding(api_substr($userNode,0,20),$charset,'utf-8');
 							$user_id = UserManager::get_user_id_from_username($username);					
 							if($user_id!==false){						
 								$sql = "INSERT IGNORE INTO $tbl_session_user SET
@@ -389,7 +389,7 @@ if ($_POST['formSent']) {
 									$countCourses++;
 									$countUsersCourses = 0;								
 									foreach ($courseNode->User as $userNode) {
-										$username = substr($userNode,0,20);
+										$username = api_substr($userNode,0,20);
 										$user_id = UserManager::get_user_id_from_username($username);																		
 										if ($user_id!==false) {
 											// adding to session_rel_user table
@@ -489,7 +489,7 @@ if ($_POST['formSent']) {
 			///////////////////
 						
 			$content=file($_FILES['import_file']['tmp_name']);
-			if(!strstr($content[0],';')) {
+			if(!api_strstr($content[0],';')) {
 				$errorMsg=get_lang('NotCSV');
 			} else {
 				$tag_names=array();
@@ -502,7 +502,7 @@ if ($_POST['formSent']) {
 						}
 					} else {
 						foreach($enreg as $tag_name) {
-							$tag_names[]=eregi_replace('[^a-z0-9_-]','',$tag_name);
+							$tag_names[]=api_eregi_replace('[^a-z0-9_-]','',$tag_name);
 						}
 						if(!in_array('SessionName',$tag_names) || !in_array('DateStart',$tag_names) || !in_array('DateEnd',$tag_names)) {
 							$errorMsg=get_lang('NoNeededData');
@@ -613,14 +613,14 @@ if ($_POST['formSent']) {
 					//var_dump($courses);
 					
 					foreach ($courses as $course) {			
-                        $CourseCode = strtoupper(substr($course,0,strpos($course,'[')));                                                               
+                        $CourseCode = api_strtoupper(api_substr($course,0,strpos($course,'[')));                                                               
                         if (CourseManager::course_exists($CourseCode)) {
                         	       	
                             // If the course exists we continue
                             $c_info = CourseManager::get_course_information($CourseCode);
 							
-    						$Coach = strstr($course,'[');
-    						$Coach = substr($Coach,1,strpos($Coach,']')-1);
+    						$Coach = api_strstr($course,'[');
+    						$Coach = api_substr($Coach,1,api_strpos($Coach,']')-1);
     
     						if(!empty($Coach)) {
     								$coach_id = UserManager::get_user_id_from_username($Coach);
@@ -638,7 +638,7 @@ if ($_POST['formSent']) {
     						$rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);    						
     						$countCourses++;
     						
-    						$users = substr($course , strpos($course,'[',1)+1 , strpos($course,']',1));
+    						$users = api_substr($course , api_strpos($course,'[',1)+1 , api_strpos($course,']',1));
     						$users = explode('|',$enreg['Users']);
     						$countUsersCourses = 0;    						
     						

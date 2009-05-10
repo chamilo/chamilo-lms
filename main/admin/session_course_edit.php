@@ -34,7 +34,7 @@ $tool_name=$course_info['name'];
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("SessionList"));
 $interbreadcrumb[]=array('url' => "../admin/resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']),"name" => get_lang('SessionOverview'));
-$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" =>htmlentities($session_name,ENT_QUOTES,$charset));
+$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" =>api_htmlentities($session_name,ENT_QUOTES,$charset));
 
 $result=api_sql_query("SELECT name,title FROM $tbl_session_course,$tbl_session,$tbl_course WHERE id_session=id AND course_code=code AND id_session='$id_session' AND course_code='".addslashes($course_code)."'",__FILE__,__LINE__);
 

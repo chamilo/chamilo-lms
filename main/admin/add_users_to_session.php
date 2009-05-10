@@ -105,7 +105,7 @@ function search_users($needle,$type)
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = Database::escape_string($needle);
-		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
+		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$user_anonymous=api_get_anonymous_id();
 		
 		$cond_user_id = '';
@@ -184,7 +184,7 @@ function search_users($needle,$type)
 	            $return .= '<option value="'.$user['user_id'].'">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</option>';				     	            
 			}
 			$return .= '</select>';
-			$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',utf8_encode($return));
+			$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
 		}
 	}
 

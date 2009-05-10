@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20155 2009-04-28 19:19:31Z cfasanando $
+<?php // $Id: index.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -126,7 +126,7 @@ if(api_is_platform_admin()) {
 			</button>
 		</form></li>
 		<li>
-		<a href="course_list.php?search=advanced"><?php echo ucfirst(get_lang('AdvancedSearch')); ?></a>
+		<a href="course_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a>
 	
 	</li>
 	<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
@@ -199,7 +199,7 @@ else if(api_is_platform_admin())
 ?>
 
 <div class="admin_section">
-<h4><?php Display::display_icon('group.gif', get_lang('AdminClasses')); ?> <?php echo ucfirst(get_lang('AdminClasses')); ?></h4>
+<h4><?php Display::display_icon('group.gif', get_lang('AdminClasses')); ?> <?php echo api_ucfirst(get_lang('AdminClasses')); ?></h4>
 <ul>
 <li style="list-style-type:none"><form method="get" action="class_list.php">
 
@@ -228,7 +228,7 @@ if(api_is_platform_admin()){
 
 
 <div class="admin_section">
- <h4><?php Display::display_icon('visio_meeting.gif', get_lang('ConfigureExtensions')); ?> <?php echo ucfirst(get_lang('ConfigureExtensions')); ?></h4>
+ <h4><?php Display::display_icon('visio_meeting.gif', get_lang('ConfigureExtensions')); ?> <?php echo api_ucfirst(get_lang('ConfigureExtensions')); ?></h4>
  <ul>
   <li><a href="configure_extensions.php?display=visio"><?php echo get_lang('Visioconf'); ?></a></li>
   <li><a href="configure_extensions.php?display=ppt2lp"><?php echo get_lang('Ppt2lp'); ?></a></li>

@@ -1,4 +1,4 @@
-<?php // $Id: user_import.php 19597 2009-04-07 14:38:36Z pcool $
+<?php // $Id: user_import.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -40,7 +40,7 @@ function validate_data($users) {
 				$errors[] = $user;
 			}
 			//2.3. check if username isn't longer than the 20 allowed characters
-			if (strlen($user['UserName']) > 20) {
+			if (api_strlen($user['UserName']) > 20) {
 				$user['error'] = get_lang('UserNameTooLong');
 				$errors[] = $user;
 			}
@@ -74,7 +74,7 @@ function validate_data($users) {
 function complete_missing_data($user) {
 	//1. Create a username if necessary
 	if (!isset ($user['UserName']) || strlen($user['UserName']) == 0) {
-		$username = strtolower(ereg_replace('[^a-zA-Z]', '', substr($user['FirstName'], 0, 3).' '.substr($user['LastName'], 0, 4)));
+		$username = api_strtolower(api_ereg_replace('[^a-zA-Z]', '', api_substr($user['FirstName'], 0, 3).' '.api_substr($user['LastName'], 0, 4)));
 		if (!UserManager :: is_username_available($username)) {
 			$i = 0;
 			$temp_username = $username.$i;

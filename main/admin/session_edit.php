@@ -116,7 +116,7 @@ if (!empty($return)) {
 
 <tr>
   <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
-  <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo htmlentities($name,ENT_QUOTES,$charset); else echo htmlentities($infos['name'],ENT_QUOTES,$charset); ?>"></td>
+  <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); else echo api_htmlentities($infos['name'],ENT_QUOTES,$charset); ?>"></td>
 </tr>
 <tr>
   <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
@@ -301,8 +301,8 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 			?>
 				;" id="options">
 			<br>
-			<input type="text" name="nb_days_access_before" value="<?php if($formSent) echo htmlentities($nb_days_access_before,ENT_QUOTES,$charset); else echo htmlentities($infos['nb_days_access_before_beginning'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?><br>
-			<input type="text" name="nb_days_access_after" value="<?php if($formSent) echo htmlentities($nb_days_access_after,ENT_QUOTES,$charset); else echo htmlentities($infos['nb_days_access_after_end'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
+			<input type="text" name="nb_days_access_before" value="<?php if($formSent) echo api_htmlentities($nb_days_access_before,ENT_QUOTES,$charset); else echo api_htmlentities($infos['nb_days_access_before_beginning'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?><br>
+			<input type="text" name="nb_days_access_after" value="<?php if($formSent) echo api_htmlentities($nb_days_access_after,ENT_QUOTES,$charset); else echo api_htmlentities($infos['nb_days_access_after_end'],ENT_QUOTES,$charset); ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
 			<br>
 		</div>
 	</td>

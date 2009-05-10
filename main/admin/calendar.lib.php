@@ -870,7 +870,7 @@ function display_agenda_items()
     			echo '<a href="'.$mylink.'&amp;action=edit&amp;title="'.get_lang("ModifyCalendarItem").'">';
 	    		echo Display::return_icon('edit.gif', get_lang('ModifyCalendarItem'))."</a>";
 
-    			echo "<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
+    			echo "<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
 	    		echo Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
 			}
 
@@ -919,7 +919,7 @@ function display_agenda_items()
 				echo ' "> '.$user_filename.' </a>';
 				echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
 				if (api_is_allowed_to_edit()) {
-					echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';	
+					echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';	
 				}				
 
 			}
@@ -1136,7 +1136,7 @@ function display_one_agenda_item($agenda_id)
 		$mylink = api_get_self()."?".api_get_cidreq()."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;id=".$myrow['id'];
 		echo 	"<a href=\"".$mylink."&amp;action=edit\">",
 				Display::return_icon('edit.gif', get_lang('ModifyCalendarItem')), "</a>",
-				"<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
+				"<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
 				Display::return_icon('delete.gif', get_lang('Delete')),"</a>";
 		if ($myrow['visibility']==1) {
 			$image_visibility="visible";

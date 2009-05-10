@@ -98,7 +98,7 @@ function search_courses($needle, $id)
             }
 		}
 	}
-	$xajax_response -> addAssign('ajax_list_courses','innerHTML',utf8_encode($return));
+	$xajax_response -> addAssign('ajax_list_courses','innerHTML',api_utf8_encode($return));
 	return $xajax_response;
 }
 

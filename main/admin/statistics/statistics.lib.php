@@ -139,9 +139,9 @@ class Statistics
 		foreach ($stats as $subtitle => $number)
 		{
 			$i = $i % 13;
-			if (strlen($subtitle) > 30)
+			if (api_strlen($subtitle) > 30)
 			{
-				$subtitle = '<acronym title="'.$subtitle.'">'.substr($subtitle, 0, 27).'...</acronym>';
+				$subtitle = '<acronym title="'.$subtitle.'">'.api_substr($subtitle, 0, 27).'...</acronym>';
 			}
 			if(!$is_file_size)
 			{

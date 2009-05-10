@@ -168,7 +168,7 @@ if($_POST['formSent'] )
 				}
 			}
 			if(!empty($users) && $cvs)
-				$users = substr($users , 0, strlen($users)-1);
+				$users = api_substr($users , 0, api_strlen($users)-1);
 
 			if($cvs)
 				$users .= ';';
@@ -216,7 +216,7 @@ if($_POST['formSent'] )
 				}
 				if($cvs){
 					if(!empty($userscourse))
-						$userscourse = substr($userscourse , 0, strlen($userscourse)-1);
+						$userscourse = api_substr($userscourse , 0, api_strlen($userscourse)-1);
 
 					$courses .= $userscourse.']|';
 				}
@@ -225,7 +225,7 @@ if($_POST['formSent'] )
 				}
 			}
 			if(!empty($courses) && $cvs)
-				$courses = substr($courses , 0, strlen($courses)-1);
+				$courses = api_substr($courses , 0, api_strlen($courses)-1);
 			$add .= $courses;
 
 			

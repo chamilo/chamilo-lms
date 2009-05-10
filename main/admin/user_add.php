@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 20075 2009-04-24 15:05:22Z cfasanando $
+<?php // $Id: user_add.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software

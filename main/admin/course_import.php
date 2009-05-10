@@ -54,7 +54,7 @@ function validate_data($courses) {
 			if (isset ($coursecodes[$course['Code']])) {
 				$course['error'] = get_lang('CodeTwiceInFile');
 				$errors[] = $course;
-			} elseif (strlen(($course['Code']) > $maxlength)) {
+			} elseif (api_strlen(($course['Code']) > $maxlength)) {
 				$course['error'] = get_lang('Max');
 				$errors[] = $course;
 			}

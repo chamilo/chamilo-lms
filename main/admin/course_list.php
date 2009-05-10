@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 19995 2009-04-22 20:32:11Z iflorespaz $
+<?php // $Id: course_list.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -135,7 +135,7 @@ function modify_filter($code)
 
 		'<a href="../tracking/courseLog.php?cidReq='.$code.'">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;'.
 		'<a href="course_edit.php?course_code='.$code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;'.
-		'<a href="course_list.php?delete_course='.$code.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+		'<a href="course_list.php?delete_course='.$code.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 }
 /**
  * Return an icon representing the visibility of the course

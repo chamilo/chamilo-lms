@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 20161 2009-04-28 20:31:39Z juliomontoya $
+<?php // $Id: settings.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -319,12 +319,12 @@ echo "\n<div class=\"actions\">";
 //while ($row = mysql_fetch_array($resultcategories))
 foreach($resultcategories as $row)
 {
-	echo "\n\t<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], ucfirst(get_lang($row['category']))).ucfirst(get_lang($row['category']))."</a>";
+	echo "\n\t<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category']))).api_ucfirst(get_lang($row['category']))."</a>";
 }
-echo "\n\t<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], ucfirst(get_lang('Plugins'))).ucfirst(get_lang('Plugins'))."</a>";
-echo "\n\t<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], ucfirst(get_lang('Stylesheets'))).ucfirst(get_lang('Stylesheets'))."</a>";
-echo "\n\t<a href=\"".api_get_self()."?category=Templates\">".Display::return_icon($action_images['templates'], ucfirst(get_lang('Templates'))).ucfirst(get_lang('Templates'))."</a>";
-echo "\n\t<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], ucfirst(get_lang('Search'))).ucfirst(get_lang('Search'))."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], api_ucfirst(get_lang('Plugins'))).api_ucfirst(get_lang('Plugins'))."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], api_ucfirst(get_lang('Stylesheets'))).api_ucfirst(get_lang('Stylesheets'))."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=Templates\">".Display::return_icon($action_images['templates'], api_ucfirst(get_lang('Templates'))).api_ucfirst(get_lang('Templates'))."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], api_ucfirst(get_lang('Search'))).api_ucfirst(get_lang('Search'))."</a>";
 echo "\n</div>";
 
 if (isset ($_GET['category']))
@@ -642,7 +642,7 @@ function handle_stylesheets()
 					{
 						$selected = '';
 					}
-					$show_name=get_lang($style_dir);
+					$show_name=get_lang($style_dir, '');
 					
 					if ($is_style_changeable)
 					{					
@@ -680,7 +680,7 @@ function handle_stylesheets()
 function upload_stylesheet($values,$picture)
 {
 	// valid name for the stylesheet folder
-	$style_name = ereg_replace("[^A-Za-z0-9]", "", $values['name_stylesheet'] );
+	$style_name = api_ereg_replace("[^A-Za-z0-9]", "", $values['name_stylesheet'] );
 	
 	// create the folder if needed
 	if(!is_dir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'))
@@ -1097,7 +1097,7 @@ function add_edit_template()
 				// resize image to max default and upload
 				require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 				$temp = new image($_FILES['template_image']['tmp_name']);	
-				$picture_infos=getimagesize($_FILES['template_image']['tmp_name']);
+				$picture_infos=@getimagesize($_FILES['template_image']['tmp_name']);
 				
 				$max_width_for_picture = 100;
 				

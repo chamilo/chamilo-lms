@@ -1,4 +1,4 @@
-<?php // $Id: course_edit.php 20157 2009-04-28 20:21:17Z juliomontoya $
+<?php // $Id: course_edit.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -165,7 +165,7 @@ $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),
 // Set some default values
 
 $course_db_name = $course['db_name'];
-$course['title']=html_entity_decode($course['title'],ENT_QUOTES,$charset);
+$course['title']=api_html_entity_decode($course['title'],ENT_QUOTES,$charset);
 $form->setDefaults($course);
 // Validate form
 if( $form->validate())

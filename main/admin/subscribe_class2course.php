@@ -1,6 +1,6 @@
 <?php
 
-// $Id: subscribe_class2course.php 12269 2007-05-03 14:17:37Z elixir_julian $
+// $Id: subscribe_class2course.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,7 +73,7 @@ if ($_POST['formSent'])
 		{
 			Display::display_error_message(get_lang('AtLeastOneClassAndOneCourse'));
 		}
-		elseif (substr($_POST['formSubmit'], -2) == '>>') // add classes to courses 
+		elseif (api_substr($_POST['formSubmit'], -2) == '>>') // add classes to courses 
 		{
 			foreach ($courses as $course_code)
 			{

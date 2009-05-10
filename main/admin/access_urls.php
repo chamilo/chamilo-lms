@@ -167,7 +167,7 @@ function modify_filter($active, $url_params, $row) {
 	$url_id = $row['0'];
 	$result .= '<a href="access_url_edit.php?url_id='.$url_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;';
 	if ($url_id != '1') {	
-		$result .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'&amp;sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+		$result .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'&amp;sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	}
 	return $result;
 }

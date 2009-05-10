@@ -98,7 +98,7 @@ elseif(!empty($annee) && empty($id_session))
 	$nbr_results=count($sessions);
 	foreach($sessions as $row)
 	{
-		echo '<option value="'.$row['id'].'">'.htmlentities($row['name']).' ('.$row['date_start'].' - '.$row['date_end'].')</option>';
+		echo '<option value="'.$row['id'].'">'.api_htmlentities($row['name'], ENT_COMPAT, api_get_system_encoding()).' ('.$row['date_start'].' - '.$row['date_end'].')</option>';
 	}
 	echo '</select>';
 	echo '<input type="submit" value="'.get_lang('Submit').'">';

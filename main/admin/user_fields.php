@@ -300,7 +300,7 @@ function edit_filter($id,$url_params,$row)
 {
 	global $charset;
 	$return = '<a href="user_fields_add.php?action=edit&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
-	$return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
+	$return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
 	return $return; 
 }
 /**

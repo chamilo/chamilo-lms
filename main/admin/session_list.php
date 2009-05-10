@@ -217,11 +217,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	
 		<tr class="<?php echo $i?'row_odd':'row_even'; ?>">
 		  <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>		  
-		  <td><a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php echo htmlentities($enreg['name'],ENT_QUOTES,$charset); ?></a></td>
+		  <td><a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php echo api_htmlentities($enreg['name'],ENT_QUOTES,$charset); ?></a></td>
 		  <td><a href="session_course_list.php?id_session=<?php echo $enreg['id']; ?>"><?php echo $nb_courses; ?> cours</a></td>
-		  <td><?php echo htmlentities($enreg['date_start'],ENT_QUOTES,$charset); ?></td>
-		  <td><?php echo htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
-		  <td><?php echo htmlentities($enreg['firstname'],ENT_QUOTES,$charset).' '.htmlentities($enreg['lastname'],ENT_QUOTES,$charset); ?></td>
+		  <td><?php echo api_htmlentities($enreg['date_start'],ENT_QUOTES,$charset); ?></td>
+		  <td><?php echo api_htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
+		  <td><?php echo api_htmlentities($enreg['firstname'],ENT_QUOTES,$charset).' '.api_htmlentities($enreg['lastname'],ENT_QUOTES,$charset); ?></td>
 		  <td>
 			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('add_user_big.gif', get_lang('SubscribeUsersToSession')); ?></a>
 			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('synthese_view.gif', get_lang('SubscribeCoursesToSession')); ?></a>

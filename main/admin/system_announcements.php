@@ -1,4 +1,4 @@
-<?php // $Id: system_announcements.php 20220 2009-04-30 15:37:30Z cfasanando $
+<?php // $Id: system_announcements.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -295,7 +295,7 @@ if ($show_announcement_list)
 		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_GUEST."&amp;action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest  ? 'visible.gif' : 'invisible.gif'), get_lang('show_hide'))."</a>";
 		$row[] = $announcement->title;
 		$row[] = $announcement->lang;
-		$row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.gif', get_lang('Edit'))."</a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
+		$row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.gif', get_lang('Edit'))."</a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
 		$announcement_data[] = $row;
 	}
 	$table = new SortableTableFromArray($announcement_data);

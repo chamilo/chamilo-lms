@@ -87,7 +87,7 @@ function search_courses($needle,$type)
 	if(!empty($needle) && !empty($type)) {
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
-		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
+		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		
 		$cond_course_code = '';
 		if (!empty($id_session)) {
@@ -168,7 +168,7 @@ function search_courses($needle,$type)
 			}
 			$return .= '</select>';
 			
-			$xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',utf8_encode($return));			
+			$xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',api_utf8_encode($return));			
 		}
 	}	
 	$_SESSION['course_list'] = $course_list;	

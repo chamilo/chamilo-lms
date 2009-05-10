@@ -171,8 +171,8 @@ class UserDataGenerator
 	}
 
 	function sort_by_course($item1, $item2) {
-		$name1 = strtolower($this->get_course_name_from_code_cached($item1->get_course_code()));
-		$name2 = strtolower($this->get_course_name_from_code_cached($item2->get_course_code()));
+		$name1 = api_strtolower($this->get_course_name_from_code_cached($item1->get_course_code()));
+		$name2 = api_strtolower($this->get_course_name_from_code_cached($item2->get_course_code()));
 		if ($name1 == $name2) {
 			return 0;
 		} else {
@@ -184,8 +184,8 @@ class UserDataGenerator
 		$cat1 = $this->get_category_cached($item1->get_category_id());
 		$cat2 = $this->get_category_cached($item2->get_category_id());
 
-		$name1 = strtolower($this->get_category_name_to_display($cat1));
-		$name2 = strtolower($this->get_category_name_to_display($cat2));
+		$name1 = api_strtolower($this->get_category_name_to_display($cat1));
+		$name2 = api_strtolower($this->get_category_name_to_display($cat2));
 		if ($name1 == $name2) {
 			return 0;
 		} else {
@@ -195,10 +195,10 @@ class UserDataGenerator
 
 
 	function sort_by_name($item1, $item2) {
-		if (strtolower($item1->get_name()) == strtolower($item2->get_name())) {
+		if (api_strtolower($item1->get_name()) == api_strtolower($item2->get_name())) {
 			return 0;
 		} else {
-			return (strtolower($item1->get_name()) < strtolower($item2->get_name()) ? -1 : 1);
+			return (api_strtolower($item1->get_name()) < api_strtolower($item2->get_name()) ? -1 : 1);
 		}		
 	}
 

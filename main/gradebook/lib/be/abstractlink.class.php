@@ -365,7 +365,7 @@ abstract class AbstractLink implements GradebookItem
 		$links = $rootcat[0]->get_links((api_is_allowed_to_create_course() ? null : api_get_user_id()), true);
 		$foundlinks = array();
 		foreach ($links as $link) {
-			if (!(strpos(strtolower($link->get_name()), strtolower($name_mask)) === false)) {
+			if (!(api_strpos(api_strtolower($link->get_name()), api_strtolower($name_mask)) === false)) {
 				$foundlinks[] = $link;				
 			}
 		}

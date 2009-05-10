@@ -303,22 +303,22 @@ if (isset ($_POST['action'])) {
 				$number_of_deleted_evaluations= 0;
 				$number_of_deleted_links= 0;
 				foreach ($_POST['id'] as $indexstr) {
-					if (substr($indexstr, 0, 4) == 'CATE') {
-						$cats= Category :: load(substr($indexstr, 4));
+					if (api_substr($indexstr, 0, 4) == 'CATE') {
+						$cats= Category :: load(api_substr($indexstr, 4));
 						if ($cats[0] != null) {
 							$cats[0]->delete_all();
 						}
 						$number_of_deleted_categories++;
 					}
-					if (substr($indexstr, 0, 4) == 'EVAL') {
-						$eval= Evaluation :: load(substr($indexstr, 4));
+					if (api_substr($indexstr, 0, 4) == 'EVAL') {
+						$eval= Evaluation :: load(api_substr($indexstr, 4));
 						if ($eval[0] != null) {
 						$eval[0]->delete_with_results();						
 						}
 						$number_of_deleted_evaluations++;
 					}
-					if (substr($indexstr, 0, 4) == 'LINK') {
-						$link= LinkFactory :: load(substr($indexstr, 4));
+					if (api_substr($indexstr, 0, 4) == 'LINK') {
+						$link= LinkFactory :: load(api_substr($indexstr, 4));
 						if ($link[0] != null) {
 							$link[0]->delete();							
 						}
@@ -331,22 +331,22 @@ if (isset ($_POST['action'])) {
 			case 'setvisible' :
 				foreach ($_POST['id'] as $indexstr)
 				{
-					if (substr($indexstr, 0, 4) == 'CATE')
+					if (api_substr($indexstr, 0, 4) == 'CATE')
 					{
-						$cats= Category :: load(substr($indexstr, 4));
+						$cats= Category :: load(api_substr($indexstr, 4));
 						$cats[0]->set_visible(1);
 						$cats[0]->save();
 						$cats[0]->apply_visibility_to_children();
 					}
-					if (substr($indexstr, 0, 4) == 'EVAL')
+					if (api_substr($indexstr, 0, 4) == 'EVAL')
 					{
-						$eval= Evaluation :: load(substr($indexstr, 4));
+						$eval= Evaluation :: load(api_substr($indexstr, 4));
 						$eval[0]->set_visible(1);
 						$eval[0]->save();
 					}
-					if (substr($indexstr, 0, 4) == 'LINK')
+					if (api_substr($indexstr, 0, 4) == 'LINK')
 					{
-						$link= LinkFactory :: load(substr($indexstr, 4));
+						$link= LinkFactory :: load(api_substr($indexstr, 4));
 						$link[0]->set_visible(1);
 						$link[0]->save();
 					}
@@ -357,22 +357,22 @@ if (isset ($_POST['action'])) {
 			case 'setinvisible' :
 				foreach ($_POST['id'] as $indexstr)
 				{
-					if (substr($indexstr, 0, 4) == 'CATE')
+					if (api_substr($indexstr, 0, 4) == 'CATE')
 					{
-						$cats= Category :: load(substr($indexstr, 4));
+						$cats= Category :: load(api_substr($indexstr, 4));
 						$cats[0]->set_visible(0);
 						$cats[0]->save();
 						$cats[0]->apply_visibility_to_children();
 					}
-					if (substr($indexstr, 0, 4) == 'EVAL')
+					if (api_substr($indexstr, 0, 4) == 'EVAL')
 					{
-						$eval= Evaluation :: load(substr($indexstr, 4));
+						$eval= Evaluation :: load(api_substr($indexstr, 4));
 						$eval[0]->set_visible(0);
 						$eval[0]->save();
 					}
-					if (substr($indexstr, 0, 4) == 'LINK')
+					if (api_substr($indexstr, 0, 4) == 'LINK')
 					{
-						$link= LinkFactory :: load(substr($indexstr, 4));
+						$link= LinkFactory :: load(api_substr($indexstr, 4));
 						$link[0]->set_visible(0);
 						$link[0]->save();
 					}

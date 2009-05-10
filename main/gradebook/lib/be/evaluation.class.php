@@ -573,7 +573,7 @@ class Evaluation implements GradebookItem
 		$evals = $rootcat[0]->get_evaluations((api_is_allowed_to_create_course() ? null : api_get_user_id()), true);
 		$foundevals = array();
 		foreach ($evals as $eval) {
-			if (!(strpos(strtolower($eval->get_name()), strtolower($name_mask)) === false)) {
+			if (!(api_strpos(api_strtolower($eval->get_name()), api_strtolower($name_mask)) === false)) {
 				$foundevals[] = $eval;				
 			}
 		}

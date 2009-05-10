@@ -111,7 +111,7 @@ class EvalForm extends FormValidator
 			'style' => 'width:250px'
 		));
 		foreach ($this->evaluation_object->get_not_subscribed_students() as $user) {
-			if ( (!isset($this->extra)) || empty($this->extra) || strtoupper(substr($user[1],0,1)) == $this->extra ) {
+			if ( (!isset($this->extra)) || empty($this->extra) || api_strtoupper(api_substr($user[1],0,1)) == $this->extra ) {
 				$select->addoption($user[1] . ' ' . $user[2] . ' (' . $user[3] . ')', $user[0]);
 			}	
 		}

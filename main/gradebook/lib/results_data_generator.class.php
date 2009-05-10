@@ -137,19 +137,19 @@ class ResultsDataGenerator
 
 	// Sort functions - used internally
 	function sort_by_last_name($item1, $item2) {
-		if (strtolower($item1['lastname']) == strtolower($item2['lastname'])) {
+		if (api_strtolower($item1['lastname']) == api_strtolower($item2['lastname'])) {
 			return 0;
 		} else {
-			return (strtolower($item1['lastname']) < strtolower($item2['lastname']) ? -1 : 1);			
+			return (api_strtolower($item1['lastname']) < api_strtolower($item2['lastname']) ? -1 : 1);			
 		}
 	}
 
 	function sort_by_first_name($item1, $item2) {
-		if (strtolower($item1['firstname']) == strtolower($item2['firstname'])) {
+		if (api_strtolower($item1['firstname']) == api_strtolower($item2['firstname'])) {
 			return 0;
 		}
 		else {
-			return (strtolower($item1['firstname']) < strtolower($item2['firstname']) ? -1 : 1);			
+			return (api_strtolower($item1['firstname']) < api_strtolower($item2['firstname']) ? -1 : 1);			
 		}
 
 	}

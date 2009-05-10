@@ -252,19 +252,19 @@ class FlatViewDataGenerator
 	// Sort functions - used internally
 
 	function sort_by_last_name($item1, $item2) {
-		if (strtolower($item1[1]) == strtolower($item2[1])) {
+		if (api_strtolower($item1[1]) == api_strtolower($item2[1])) {
 			return 0;			
 		} else {
-			return (strtolower($item1[1]) < strtolower($item2[1]) ? -1 : 1);			
+			return (api_strtolower($item1[1]) < api_strtolower($item2[1]) ? -1 : 1);			
 		}
 	}
 
 	function sort_by_first_name($item1, $item2)
 	{
-		if (strtolower($item1[2]) == strtolower($item2[2])) {
+		if (api_strtolower($item1[2]) == api_strtolower($item2[2])) {
 			return $this->sort_by_last_name($item1, $item2);			
 		} else {
-			return (strtolower($item1[2]) < strtolower($item2[2]) ? -1 : 1);			
+			return (api_strtolower($item1[2]) < api_strtolower($item2[2]) ? -1 : 1);			
 		}
 	}
 }

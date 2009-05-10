@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 20289 2009-05-04 17:57:08Z juliomontoya $
+<?php //$Id: announcements.php 20442 2009-05-10 08:24:45Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1316,7 +1316,7 @@ if ($display_announcement_list && !$surveyid) {
 			echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.$user_info['lastName'].'&nbsp;'.$user_info['firstName'];			
 			echo "\t\t\t\t\t</th>\n","\t\t\t\t</tr>\n";			
 			echo "\t\t\t\t<tr class='row_odd'>\n\t\t\t\t\t<td class=\"announcements_datum\" colspan=\"3\">";
-			echo get_lang('AnnouncementPublishedOn')," : ",ucfirst(format_locale_date($dateFormatLong,strtotime($last_post_date)));
+			echo get_lang('AnnouncementPublishedOn')," : ",api_ucfirst(format_locale_date($dateFormatLong,strtotime($last_post_date)));
 			echo "</td>\n\t\t\t\t</tr>\n";
 
 			/* CONTENT */
@@ -1342,7 +1342,7 @@ if ($display_announcement_list && !$surveyid) {
 						"</a>";
 
 				if (api_is_allowed_to_edit(false,true)) {
-					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">",
+					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">",
 						Display::return_icon('delete.gif', get_lang('Delete')),
 						"</a>";
 				}

@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 20263 2009-05-04 03:59:27Z cfasanando $
+<?php //$Id: announcements.inc.php 20442 2009-05-10 08:24:45Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -81,7 +81,7 @@ function display_announcement($announcement_id)
 	
 	echo "<table height=\"100\" width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">\n";
 	echo "<tr class=\"data\"><td>" . $title . "</td></tr>\n";
-	echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . ucfirst(format_locale_date($dateFormatLong,strtotime($last_post_date) ) ) . "</td></tr>\n";
+	echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_ucfirst(format_locale_date($dateFormatLong,strtotime($last_post_date) ) ) . "</td></tr>\n";
 	echo "<tr class=\"text\"><td>$content</td></tr>\n";
 	echo "</table>";
 }
@@ -898,6 +898,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to)
 */
 function send_announcement_email($user_list, $course_code, $_course, $mail_title, $mail_content)
 {
+	global $charset;
 	global $_user;
 			
 	foreach ($user_list as $this_user)
@@ -912,7 +913,7 @@ function send_announcement_email($user_list, $course_code, $_course, $mail_title
 		$mail_subject = get_lang('professorMessage').' - '.$_course['official_code'].' - '.$mail_title;
 
 		$mail_body = '['.$_course['official_code'].'] - ['.$_course['name']."]\n";
-		$mail_body .= $this_user['lastname'].' '.$this_user['firstname'].' <'.$this_user["email"]."> \n\n".stripslashes($mail_title)."\n\n".trim(stripslashes(html_entity_decode(strip_tags(str_replace(array('<p>','</p>','<br />'),array('',"\n","\n"),$mail_content)))))." \n\n-- \n";
+		$mail_body .= $this_user['lastname'].' '.$this_user['firstname'].' <'.$this_user["email"]."> \n\n".stripslashes($mail_title)."\n\n".trim(stripslashes(api_html_entity_decode(strip_tags(str_replace(array('<p>','</p>','<br />'),array('',"\n","\n"),$mail_content)), ENT_QUOTES, $charset)))." \n\n-- \n";
 		$mail_body .= $_user['firstName'].' '.$_user['lastName'].' ';
 		$mail_body .= '<'.$_user['mail'].">\n";
 		$mail_body .= $_course['official_code'].' '.$_course['name'];

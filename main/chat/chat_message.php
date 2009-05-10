@@ -264,7 +264,7 @@ if (!empty($course) && !empty($_user['user_id']))
 		}
 	}
 	?>
-	<form name="formMessage" method="post" action="<?php echo api_get_self().'?'.api_get_cidreq(); ?>" onsubmit="javascript:if(document.formMessage.message.value == '') { alert('<?php echo addslashes(htmlentities(get_lang('TypeMessage'),ENT_QUOTES,$charset)); ?>'); document.formMessage.message.focus(); return false; }" autocomplete="off">
+	<form name="formMessage" method="post" action="<?php echo api_get_self().'?'.api_get_cidreq(); ?>" onsubmit="javascript:if(document.formMessage.message.value == '') { alert('<?php echo addslashes(api_htmlentities(get_lang('TypeMessage'),ENT_QUOTES,$charset)); ?>'); document.formMessage.message.focus(); return false; }" autocomplete="off">
 	<input type="hidden" name="sent" value="1">
 	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tr>

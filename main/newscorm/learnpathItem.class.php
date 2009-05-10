@@ -1971,6 +1971,7 @@ function get_terms()
      * @return  boolean Always return true
      */
     function set_terms($terms) {
+		global $charset;
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
         $a_terms = split(',',$terms);
@@ -1982,7 +1983,7 @@ function get_terms()
         $new_terms_string = implode(',',$new_terms);
         $terms_update_sql='';
         //TODO: validate csv string
-        $terms_update_sql = "UPDATE $lp_item SET terms = '". Database::escape_string(htmlentities($new_terms_string)) . "' WHERE id=".$this->get_id();
+        $terms_update_sql = "UPDATE $lp_item SET terms = '". Database::escape_string(api_htmlentities($new_terms_string, ENT_QUOTES, $charset)) . "' WHERE id=".$this->get_id();
         $res = api_sql_query($terms_update_sql,__FILE__,__LINE__);
         // save it to search engine
         if (api_get_setting('search_enabled') == 'true') {

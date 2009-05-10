@@ -39,13 +39,13 @@ $defaults=array();
 $form = new FormValidator('form1', 'post', 'lp_controller.php');
 
 //Title
-$form -> addElement('text', 'lp_name', ucfirst(get_lang('_title')),array('size'=>43));
+$form -> addElement('text', 'lp_name', api_ucfirst(get_lang('_title')),array('size'=>43));
 $form-> applyFilter('lp_name', 'html_filter');
 //Encoding
 $encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));
 $encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP');
 foreach($encodings as $encoding){
-	if($encoding == $_SESSION['oLP']->encoding){
+	if (api_equal_encodings($encoding, $_SESSION['oLP']->encoding)) {
   		$s_selected_encoding = $encoding;
   	}
   	$encoding_select->addOption($encoding,$encoding);
@@ -148,7 +148,7 @@ if (api_get_setting('search_enabled') === 'true')
 $content_proximity_select -> setSelected($s_selected_proximity);
 $origin_select -> setSelected($s_selected_origin);
 $encoding_select -> setSelected($s_selected_encoding);
-$defaults['lp_name'] = 	html_entity_decode(utf8_decode(html_entity_decode($_SESSION['oLP']->get_name(), ENT_QUOTES, 'UTF-8')));
+$defaults['lp_name']=$_SESSION['oLP']->get_name();
 $defaults['lp_author'] = $_SESSION['oLP']->get_author();
 
 //Submit button

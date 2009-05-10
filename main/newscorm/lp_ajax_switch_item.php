@@ -225,7 +225,7 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
     $mylp->prerequisites_match(); //check the prerequisites are all complete
     if($debug>1){error_log('Prereq_match() returned '.htmlentities($mylp->error),0);}
     //$objResponse->addScript("update_message_frame('".str_replace("'","\'",htmlentities($mylp->error))."');");
-    $return .= "update_message_frame('".str_replace("'","\'",htmlentities($mylp->error))."');";
+    $return .= "update_message_frame('".str_replace("'","\'",api_htmlentities($mylp->error, ENT_QUOTES, api_get_system_encoding()))."');";
     $_SESSION['scorm_item_id'] = $new_item_id;//Save the new item ID for the exercise tool to use
     $_SESSION['lpobject'] = serialize($mylp);
     return $return;

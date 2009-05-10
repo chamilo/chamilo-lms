@@ -40,7 +40,7 @@ class learnpath {
 	var $current_time_start; //the time the user loaded this resource (this does not mean he can see it yet)
 	var $current_time_stop; //the time the user closed this resource
 	var $default_status = 'not attempted';
-	var $encoding = 'ISO-8859-1';
+	var $encoding = 'UTF-8';
 	var $error = '';
 	var $extra_information = ''; //this string can be used by proprietary SCORM contents to store data about the current learnpath
 	var $force_commit = false; //for SCORM only - if set to true, will send a scorm LMSCommit() request on each LMSSetValue()
@@ -369,9 +369,9 @@ class learnpath {
     	$max_time_allowed = $this->escape_string(htmlentities($max_time_allowed));
         if (empty($max_time_allowed)) { $max_time_allowed = 0; }
     	
-    	$title=htmlspecialchars($title,ENT_QUOTES);
-    	$title = $this->escape_string(mb_convert_encoding($title,$this->encoding,$charset));
-    	$description = $this->escape_string(mb_convert_encoding($description,$this->encoding,$charset)); 
+		$title = htmlspecialchars($title, ENT_QUOTES, $charset);  // TODO: To be checked for encoding problems.
+    	$title = $this->escape_string(api_convert_encoding($title, $this->encoding, $charset));
+    	$description = $this->escape_string(api_convert_encoding($description, $this->encoding, $charset));
     	$sql_count = "
     		SELECT COUNT(id) AS num
     		FROM " . $tbl_lp_item . "
@@ -595,13 +595,15 @@ class learnpath {
      */
     function add_lp($course,$name,$description='',$learnpath='guess',$origin='zip',$zipname='')
     {
+		global $charset;
+
 		//if($this->debug>0){error_log('New LP - In learnpath::add_lp()',0);}
     	//TODO
     	$tbl_lp = Database::get_course_table('lp');
     	//check course code exists
     	//check lp_name doesn't exist, otherwise append something
     	$i = 0;
-    	$name = learnpath::escape_string(htmlentities($name)); //Kevin Van Den Haute: added htmlentities()
+    	$name = learnpath::escape_string(api_htmlentities($name, ENT_QUOTES, $charset)); //Kevin Van Den Haute: added htmlentities()
     	$check_name = "SELECT * FROM $tbl_lp WHERE name = '$name'";
     	//if($this->debug>2){error_log('New LP - Checking the name for new LP: '.$check_name,0);}
     	$res_name = api_sql_query($check_name, __FILE__, __LINE__);
@@ -615,7 +617,7 @@ class learnpath {
     	}
     	//new name does not exist yet; keep it
     	//escape description
-    	$description = learnpath::escape_string(htmlentities($description)); //Kevin: added htmlentities()
+    	$description = learnpath::escape_string(api_htmlentities($description, ENT_QUOTES, $charset)); //Kevin: added htmlentities()
     	$type = 1;
     	switch($learnpath){
     		case 'guess':
@@ -954,6 +956,9 @@ class learnpath {
      * @return	boolean	True on success, false on error
      */
     function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0, $audio=NULL, $max_time_allowed=0) {
+
+		global $charset;
+
     	if($this->debug > 0){error_log('New LP - In learnpath::edit_item()', 0);}
         if(empty($max_time_allowed)) { $max_time_allowed = 0;}
     	if(empty($id) or ($id != strval(intval($id))) or empty($title)){ return false; }
@@ -989,17 +994,18 @@ class learnpath {
 
     	$same_parent	= ($row_select['parent_item_id'] == $parent) ? true : false;
     	$same_previous	= ($row_select['previous_item_id'] == $previous) ? true : false;
-    	
+
+    	//TODO: htmlspecialchars to be checked for encoding related problems.
     	if($same_parent && $same_previous) {
     		//only update title and description
     		$sql_update = "
     			UPDATE " . $tbl_lp_item . " 
     			SET 
-    				title = '" . $this->escape_string(htmlspecialchars($title,ENT_QUOTES)) . "',
+    				title = '" . $this->escape_string(htmlspecialchars($title, ENT_QUOTES, $charset)) . "',
 					prerequisite = '".$prerequisites."',
-    				description = '" . $this->escape_string(htmlentities($description)) . "'
+    				description = '" . $this->escape_string(api_htmlentities($description, ENT_QUOTES, $charset)) . "'
                     ". $audio_update_sql . ",
-                    max_time_allowed = '" . $this->escape_string(htmlentities($max_time_allowed)) . "'
+                    max_time_allowed = '" . $this->escape_string(api_htmlentities($max_time_allowed, ENT_QUOTES, $charset)) . "'
     			WHERE id = " . $id;
     		$res_update = api_sql_query($sql_update, __FILE__, __LINE__);
     	}
@@ -1106,13 +1112,14 @@ class learnpath {
 		    	$new_next	= $row_select_old['next_item_id'];
 		    	$new_order	= $row_select_old['display_order'] + 1;
     		}
-	    	
+
+	    	//TODO: htmlspecialchars to be checked for encoding related problems.
     		//update the current item with the new data
     		$sql_update = "
 	    		UPDATE " . $tbl_lp_item . "
 	    		SET
-	    			title = '" . $this->escape_string(htmlspecialchars($title,ENT_QUOTES)) . "',
-	    			description = '" . $this->escape_string(htmlentities($description)) . "',
+	    			title = '" . $this->escape_string(htmlspecialchars($title, ENT_QUOTES, $charset)) . "',
+	    			description = '" . $this->escape_string(api_htmlentities($description, ENT_QUOTES, $charset)) . "',
 	    			parent_item_id = " . $parent . ",
 	    			previous_item_id = " . $previous . ",
 	    			next_item_id = " . $new_next . ",
@@ -2410,6 +2417,9 @@ class learnpath {
 	 * @todo 	Translate labels 
 	 */
 	function get_iv_interactions_array($lp_iv_id=0){
+
+		global $charset;
+
 		$list = array();
 		$table = Database::get_course_table('lp_iv_interaction');
 		$sql = "SELECT * FROM $table WHERE lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
@@ -2417,14 +2427,14 @@ class learnpath {
 		$num = Database::num_rows($res);
 		if($num>0){
 			$list[] = array(
-				"order_id"=>htmlentities(get_lang('Order')),
-				"id"=>htmlentities(get_lang('InteractionID')),
-				"type"=>htmlentities(get_lang('Type')),
-				"time"=>htmlentities(get_lang('TimeFinished')),
-				"correct_responses"=>htmlentities(get_lang('CorrectAnswers')),
-				"student_response"=>htmlentities(get_lang('StudentResponse')),
-				"result"=>htmlentities(get_lang('Result')),
-				"latency"=>htmlentities(get_lang('LatencyTimeSpent')));
+				"order_id"=>api_htmlentities(get_lang('Order'), ENT_QUOTES, $charset),
+				"id"=>api_htmlentities(get_lang('InteractionID'), ENT_QUOTES, $charset),
+				"type"=>api_htmlentities(get_lang('Type'), ENT_QUOTES, $charset),
+				"time"=>api_htmlentities(get_lang('TimeFinished'), ENT_QUOTES, $charset),
+				"correct_responses"=>api_htmlentities(get_lang('CorrectAnswers'), ENT_QUOTES, $charset),
+				"student_response"=>api_htmlentities(get_lang('StudentResponse'), ENT_QUOTES, $charset),
+				"result"=>api_htmlentities(get_lang('Result'), ENT_QUOTES, $charset),
+				"latency"=>api_htmlentities(get_lang('LatencyTimeSpent'), ENT_QUOTES, $charset));
 			while ($row = Database::fetch_array($res)){
 				$list[] = array(
 					"order_id"=>($row['order_id']+1),
@@ -2464,6 +2474,9 @@ class learnpath {
 	 * @todo 	Translate labels 
 	 */
 	function get_iv_objectives_array($lp_iv_id=0){
+
+		global $chatset;
+
 		$list = array();
 		$table = Database::get_course_table('lp_iv_objective');
 		$sql = "SELECT * FROM $table WHERE lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
@@ -2471,12 +2484,12 @@ class learnpath {
 		$num = Database::num_rows($res);
 		if($num>0){
 			$list[] = array(
-				"order_id"=>htmlentities(get_lang('Order')),
-				"objective_id"=>htmlentities(get_lang('ObjectiveID')),
-				"score_raw"=>htmlentities(get_lang('ObjectiveRawScore')),
-				"score_max"=>htmlentities(get_lang('ObjectiveMaxScore')),
-				"score_min"=>htmlentities(get_lang('ObjectiveMinScore')),
-				"status"=>htmlentities(get_lang('ObjectiveStatus')));
+				"order_id"=>api_htmlentities(get_lang('Order'), ENT_QUOTES, $charset),
+				"objective_id"=>api_htmlentities(get_lang('ObjectiveID'), ENT_QUOTES, $charset),
+				"score_raw"=>api_htmlentities(get_lang('ObjectiveRawScore'), ENT_QUOTES, $charset),
+				"score_max"=>api_htmlentities(get_lang('ObjectiveMaxScore'), ENT_QUOTES, $charset),
+				"score_min"=>api_htmlentities(get_lang('ObjectiveMinScore'), ENT_QUOTES, $charset),
+				"status"=>api_htmlentities(get_lang('ObjectiveStatus'), ENT_QUOTES, $charset));
 			while ($row = Database::fetch_array($res)){
 				$list[] = array(
 					"order_id"=>($row['order_id']+1),
@@ -2650,13 +2663,14 @@ class learnpath {
      */
     function get_html_toc()
     {
+		$charset = api_get_setting('platform_charset');
+
 		if($this->debug>0){error_log('New LP - In learnpath::get_html_toc()',0);}
     	$list = $this->get_toc();
-        $mych = api_get_setting('platform_charset'); 
     	//echo $this->current;
     	//$parent = $this->items[$this->current]->get_parent();
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
-    	$html= '<div class="scorm_title"><div class="scorm_title_text">'.utf8_decode(html_entity_decode($this->get_name(), ENT_QUOTES, $this->encoding)).'</div></div>';
+    	$html = '<div class="scorm_title"><div class="scorm_title_text">'.api_convert_encoding($this->get_name(), $charset, $this->encoding).'</div></div>';
     	
     	// build, display
     	if(api_is_allowed_to_edit())
@@ -2664,20 +2678,19 @@ class learnpath {
     		$gradebook=Security::remove_XSS($_GET['gradebook']);
     		$html	.='<div class="actions_lp">';
     		//the icon it was removed in display (build)
-    		//$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=build&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_build.gif', get_lang('Build')).' '.mb_convert_encoding(get_lang('Build'),$this->encoding,$mych)."</a>";
-    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;gradebook=$gradebook&amp;action=build&amp;lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang('Build'),$this->encoding,$mych)."</a>";
+    		//$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=build&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_build.gif', get_lang('Build')).' '.get_lang('Build')."</a>";
+    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;gradebook=$gradebook&amp;action=build&amp;lp_id=".$this->lp_id."' target='_parent'>".get_lang('Build')."</a>";
     		//the icon it was removed in display (organize)
-    		//$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=admin_view&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_organize.gif', get_lang('BasicOverview')).' '.mb_convert_encoding(get_lang('BasicOverview'),$this->encoding,$mych)."</a>";
-    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=admin_view&amp;lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang('BasicOverview'),$this->encoding,$mych)."</a>";
+    		//$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=admin_view&amp;lp_id=".$this->lp_id."' target='_parent'>".Display::return_icon('learnpath_organize.gif', get_lang('BasicOverview')).' '.get_lang('BasicOverview')."</a>";
+    		$html 	.= "<a href='lp_controller.php?".api_get_cidreq()."&amp;action=admin_view&amp;lp_id=".$this->lp_id."' target='_parent'>".get_lang('BasicOverview')."</a>";
     		//the icon it was removed in display (display)
-    		//$html 	.= '<span>'.Display::return_icon('learnpath_view.gif', get_lang("Display")).' '.mb_convert_encoding(get_lang("Display"),$this->encoding,$mych).'</span>';
-    		$html 	.= '<span>'.mb_convert_encoding(get_lang("Display"),$this->encoding,$mych).'</span>';
+    		//$html 	.= '<span>'.Display::return_icon('learnpath_view.gif', get_lang("Display")).' '.get_lang("Display").'</span>';
+    		$html 	.= '<span>'.get_lang("Display").'</span>';
     		$html 	.= '</div>';
-			unset($mych);
     	}
-    	
+
     	$html.= '<div id="inner_lp_toc" class="inner_lp_toc">'."\n" ;
-    	//$html.= '<div class="scorm_title"><div class="scorm_title_text">'.mb_convert_encoding($this->get_name(),$this->encoding,$mych).'</div></div>';
+    	//$html.= '<div class="scorm_title"><div class="scorm_title_text">'.api_convert_encoding($this->get_name(), $charset, $this->encoding).'</div></div>';
     	
     
     	//		" onchange=\"javascript:document.getElementById('toc_$parent').focus();\">\n";
@@ -2743,7 +2756,7 @@ class learnpath {
     			$title = rl_get_resource_name(api_get_course_id(),$this->get_id(),$item['id']);    			
     		}
     		
-    		$title = utf8_decode(html_entity_decode($title,ENT_QUOTES,$this->encoding));	
+    		$title = api_html_entity_decode(api_convert_encoding($title, $charset, $this->encoding), ENT_QUOTES, $charset);
     	
     		if($item['type']!='dokeos_chapter' and $item['type']!='dir' AND $item['type']!='dokeos_module')
     		{
@@ -3007,11 +3020,18 @@ class learnpath {
 	    					if($this->debug>2){error_log('New LP - In learnpath::get_link() '.__LINE__.' - Found match for protocol in '.$lp_item_path,0);}
 	    					//distant url, return as is
 	    					$file = $lp_item_path;
+							// Enabled and modified by Ivan Tcholakov, 16-OCT-2008.
 	    					/*
 	    					if(stristr($file,'<servername>')!==false){
 	    						$file = str_replace('<servername>',$course_path.'/scorm/'.$lp_path.'/',$lp_item_path);
 	    					}
 	    					*/
+	    					if(stripos($file,'<servername>')!==false){
+	    						//$file = str_replace('<servername>',$course_path.'/scorm/'.$lp_path.'/',$lp_item_path);
+	    						$web_course_path = str_replace('https://', '', str_replace('http://', '', $course_path));
+	    						$file = str_replace('<servername>', $web_course_path.'/scorm/'.$lp_path, $lp_item_path);
+	    					}
+							//
 	    					$file .= $aicc_append;
 	    				}else{
 	    					if($this->debug>2){error_log('New LP - In learnpath::get_link() '.__LINE__.' - No starting protocol in '.$lp_item_path,0);}
@@ -3665,7 +3685,7 @@ class learnpath {
      * Sets the encoding
      * @param	string	New encoding
      */
-    function set_encoding($enc='ISO-8859-1'){
+    function set_encoding($enc='ISO-8859-15'){
 		if($this->debug>0){error_log('New LP - In learnpath::set_encoding()',0);}
     	$enc = strtoupper($enc);
 	 	$encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP','');
@@ -4386,7 +4406,7 @@ class learnpath {
 		while($row = Database::fetch_array($result))
 		{
 				
-			$row['title'] = mb_convert_encoding($row['title'], $mycharset,$this->encoding);
+			$row['title'] = api_convert_encoding($row['title'], $mycharset, $this->encoding);
 			
 			$arrLP[] = array(
 			'id' => $row['id'],
@@ -4448,7 +4468,7 @@ class learnpath {
 			
 			for($i = 0; $i < count($arrLP); $i++)
 			{
-				$title = utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding));
+				$title=$arrLP[$i]['title'];
 				
 				if($arrLP[$i]['description'] == '')
 					$arrLP[$i]['description'] = '&nbsp;';
@@ -4546,7 +4566,7 @@ class learnpath {
 							$return .= '</a>' . "\n";
 						}
 						
-						$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . utf8_decode(html_entity_decode(addslashes($title), ENT_QUOTES, $this->encoding)) . '\');">';
+						$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . addslashes($title). '\');">';
 						$return .= '<img style="margin:1px;" alt="" src="../img/delete.gif" title="' . get_lang('_delete_learnpath_module') . '" />';
 						$return .= '</a>' . "\n";
 						
@@ -4567,7 +4587,7 @@ class learnpath {
 		
 		if ($_GET['updateaudio'] == 'true')
 		{
-			$return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">'.get_lang('Save audio and organization').'</button></div>';
+			$return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">'.get_lang('Save audio and organization').'</button></div>';  // TODO: What kind of language variable is this?
 		}				
 				
 		
@@ -4605,6 +4625,8 @@ class learnpath {
 	 */
 	function build_tree()
 	{
+		global $charset;
+
 		$return = "<script type=\"text/javascript\">\n";		
 		$return .= "\tm = new dTree('m');\n\n";		
 		$return .= "\tm.config.folderLinks		= true;\n";
@@ -4617,7 +4639,7 @@ class learnpath {
 		$menu	= 0;
 		$parent	= '';
 		
-		$return .= "\tm.add(" . $menu . ", -1, '" . utf8_decode(html_entity_decode(addslashes($this->name), ENT_QUOTES, $this->encoding)) . "');\n";
+		$return .= "\tm.add(" . $menu . ", -1, '" . addslashes($this->name) . "');\n";
 		
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		
@@ -4634,10 +4656,7 @@ class learnpath {
 		while($row = Database::fetch_array($result))
 		{
 			
-			if($this->encoding!=$mycharset)
-			{
-				$row['title'] = mb_convert_encoding($row['title'], $mycharset, $this->encoding);
-			}		
+			$row['title'] = api_convert_encoding($row['title'], $mycharset, $this->encoding);
 			
 			$arrLP[] = array(
 				'id' => $row['id'],
@@ -4662,7 +4681,7 @@ class learnpath {
 		$title='';
 		for($i = 0; $i < count($arrLP); $i++)
 		{
-			$title = utf8_decode(html_entity_decode(addslashes($arrLP[$i]['title']), ENT_QUOTES, $this->encoding));
+			$title = api_html_entity_decode(addslashes($arrLP[$i]['title']), ENT_QUOTES, $charset);
 			$menu_page = api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $_SESSION['oLP']->lp_id;
 			$icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
 			if (file_exists("../img/lp_" . $icon_name . ".png"))
@@ -4696,6 +4715,8 @@ class learnpath {
 	 */
 	function create_document($_course)
 	{
+		global $charset;
+
 		$dir = isset($_GET['dir']) ? $_GET['dir'] : $_POST['dir']; // please do not modify this dirname formatting
 		
 		if(strstr($dir, '..'))
@@ -4781,7 +4802,7 @@ class learnpath {
 							$ct .= ", comment='" . $new_comment . "'";
 						
 						if($new_title)
-							$ct .= ", title='" . Database::escape_string(htmlspecialchars($new_title,ENT_QUOTES)) . ".html	'";
+							$ct .= ", title='" . Database::escape_string(htmlspecialchars($new_title, ENT_QUOTES, $charset)) . ".html	'";
 						
 						$sql_update = "
 							UPDATE " . $tbl_doc . "
@@ -4895,12 +4916,9 @@ class learnpath {
 				if($msg != '')
 					$return .= $msg;
 				
-				if($this->encoding=='UTF-8')
-				{
-					$row['title'] = utf8_decode($row['title']);
-				}		
+				$row['title'] = stripslashes(api_to_system_encoding(api_html_entity_decode($row['title'], ENT_QUOTES, $this->encoding), $this->encoding));
 				
-				$return .= '<p class="lp_title">' . $title = utf8_decode(html_entity_decode(stripslashes($row['title']),ENT_QUOTES,$this->encoding)) . '</p>';
+				$return .= '<p class="lp_title">' . $row['title'] . '</p>';
 				//$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';
 				
 				//$return .= '<hr />';
@@ -5069,7 +5087,7 @@ class learnpath {
 		
 			$return .= '<div class="sectiontitle">'.get_lang('CreateNewStep').'</div>';
 		
-			$return .= '<div class="sectioncomment"><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.'<img title="Nuevo documento" src="../img/new_doc.gif" alt="Nuevo documento"/> '.get_lang("NewDocument").'</a></div>';
+			$return .= '<div class="sectioncomment"><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.'<img title="Nuevo documento" src="../img/new_doc.gif" alt="Nuevo documento"/> '.get_lang("NewDocument").'</a></div>'; //TODO: A hardcoded Spanish text is here.
 		
 			$return .= '<div class="sectiontitle">'.get_lang('UseAnExistingResource').'</div>';
 			
@@ -5177,8 +5195,6 @@ class learnpath {
 			$item_title			= '';
 			$item_description	= '';
 		}
-		
-		//$item_title = mb_convert_encoding($item_title,$charset,$this->encoding);
 				
 		$return = '<div class="sectiontitle">';			
 			if($id != 0 && is_array($extra_info))
@@ -5249,20 +5265,20 @@ class learnpath {
 						
 							$return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . utf8_decode(html_entity_decode($this->name, ENT_QUOTES, $this->encoding)) . '</option>';
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
 								$arrHide = array($id);
 								$parent_item_id = $_SESSION['parent_item_id'];
 								for($i = 0; $i < count($arrLP); $i++) {
 									if($action != 'add') {
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'], $charset, $this->encoding) . '</option>';
 										} else {
 											$arrHide[] = $arrLP[$i]['id'];
 										}
 									} else {
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'], $charset, $this->encoding) . '</option>';
 									}
 								}
 								if (is_array($arrLP)) {
@@ -5291,7 +5307,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . api_convert_encoding($arrLP[$i]['title'], $charset, $this->encoding) . '"</option>';
 									}
 								}
 								
@@ -5416,8 +5432,8 @@ class learnpath {
 			$item_description	= '';
 		}
 				
-		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);
-		$item_description=mb_convert_encoding($item_description,$charset,$this->encoding);
+		$item_title = api_convert_encoding($item_title,$charset,$this->encoding);
+		$item_description = api_convert_encoding($item_description,$charset,$this->encoding);
 		
 		$return = '<div style="margin:3px 12px;">';
 
@@ -5741,7 +5757,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang('Title').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" size="44" name="title" type="text" value="' . utf8_decode(html_entity_decode($item_title, ENT_QUOTES, $this->encoding)) . '" class="learnpath_item_form" /></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" size="44" name="title" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 					}				
@@ -5753,7 +5769,7 @@ class learnpath {
 						
 							$return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . utf8_decode(html_entity_decode($this->name, ENT_QUOTES, $this->encoding)) . '</option>';
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
 								$arrHide = array($id);
 								
@@ -5765,7 +5781,7 @@ class learnpath {
 									{
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'], $charset, $this->encoding) . '</option>';
 										}
 										else
 										{
@@ -5775,7 +5791,7 @@ class learnpath {
 									else
 									{
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'], $charset, $this->encoding) . '</option>';
 									}
 								}
 								if (is_array($arrLP)) {								
@@ -5806,7 +5822,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . api_convert_encoding($arrLP[$i]['title'], $charset, $this->encoding) . '"</option>';
 									}
 								}
 								
@@ -5843,7 +5859,7 @@ class learnpath {
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
 									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);								
+								$arrHide[$arrLP[$i]['id']]['value']=api_convert_encoding($arrLP[$i]['title'], $charset, $this->encoding);
 							}
 						}
 
@@ -5941,8 +5957,8 @@ class learnpath {
 			$item_title			= '';
 			$item_description	= '';
 		}
-		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);
-		$item_description=mb_convert_encoding($item_description,$charset,$this->encoding);
+		$item_title=api_convert_encoding($item_title,$charset,$this->encoding);
+		$item_description=api_convert_encoding($item_description,$charset,$this->encoding);
 		
 		$return = '<div style="margin:3px 12px;">';
 			
@@ -6013,7 +6029,7 @@ class learnpath {
 									{
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 										}
 										else
 										{
@@ -6023,7 +6039,7 @@ class learnpath {
 									else
 									{
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 									}
 								}
 								if ($arrLP!=null) {
@@ -6103,7 +6119,7 @@ class learnpath {
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
 									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
+								$arrHide[$arrLP[$i]['id']]['value']=api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 								
 							}
 						}
@@ -6182,7 +6198,7 @@ class learnpath {
 	
 		if($id != 0 && is_array($extra_info))
 		{
-			$item_title			= html_entity_decode(utf8_decode(html_entity_decode($extra_info['title'], ENT_QUOTES, $this->encoding)));
+			$item_title			= $extra_info['title'];
 			$item_description	= $extra_info['description'];
 			$item_path = api_get_path(WEB_COURSE_PATH) . $_course['path'].'/scorm/'.$this->path.'/'.stripslashes($extra_info['path']);
 		}
@@ -6238,8 +6254,8 @@ class learnpath {
 		
 		require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');		
 		$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"]);
-		$defaults["title"] = $item_title;
-		$defaults["description"] = mb_convert_encoding($item_description,$charset,$this->encoding); 
+		$defaults["title"] = api_convert_encoding($item_title, $charset, $this->encoding);
+		$defaults["description"] = api_convert_encoding($item_description, $charset, $this->encoding);
 
 		$form->addElement('html',$return);
 					
@@ -6256,7 +6272,7 @@ class learnpath {
 				{
 					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 					{
-						$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
+						$arrHide[$arrLP[$i]['id']]['value'] = api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
 						if($parent == $arrLP[$i]['id'])
 						{
@@ -6268,7 +6284,7 @@ class learnpath {
 				{
 					if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
 					{
-						$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
+						$arrHide[$arrLP[$i]['id']]['value']=api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
 						if($parent == $arrLP[$i]['id'])
 						{
@@ -6293,7 +6309,7 @@ class learnpath {
 
 			foreach($arrHide as $key => $value)
 			{
-				$parent_select->addOption(utf8_decode(html_entity_decode($value['value'], ENT_QUOTES, $this->encoding)),$key,'style="padding-left:'.$value['padding'].'px;"');
+				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
 			$parent_select -> setSelected($s_selected_parent);			
 		}
@@ -6311,8 +6327,7 @@ class learnpath {
 				elseif($action == 'add')
 					$s_selected_position=$arrLP[$i]['id'];				
 
-				$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding));
-				
+				$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . api_convert_encoding($arrLP[$i]['title'], $charset, $this->encoding);
 			}
 		}
 		
@@ -6523,12 +6538,12 @@ class learnpath {
 			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			
 			$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"],'','enctype="multipart/form-data"');
-            $defaults["title"] = html_entity_decode(utf8_decode(html_entity_decode($defaults["title"], ENT_QUOTES, $this->encoding)));
+            $defaults["title"]= api_convert_encoding($defaults["title"], $charset, $this->encoding);
             if(empty($defaults["title"]))
             {
-                    $defaults["title"] = html_entity_decode(utf8_decode(html_entity_decode($item_title, ENT_QUOTES, $this->encoding)));
+            	$defaults["title"] = api_html_entity_decode(api_convert_encoding($item_title, $charset, $this->encoding), ENT_QUOTES, $charset);
             }
-			$defaults["description"] = mb_convert_encoding($item_description,$charset,$this->encoding);
+			$defaults["description"] = api_convert_encoding($item_description, $charset, $this->encoding);
 		
 			$form->addElement('html',$return);
 						
@@ -6547,7 +6562,7 @@ class learnpath {
 			{
 				if($action != 'add'){
 					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
-						$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
+						$arrHide[$arrLP[$i]['id']]['value']=api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
 						if($parent == $arrLP[$i]['id']){
 							$s_selected_parent=$arrHide[$arrLP[$i]['id']];
@@ -6556,7 +6571,7 @@ class learnpath {
 				}
 				else{
 					if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir'){
-						$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
+						$arrHide[$arrLP[$i]['id']]['value']=api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
 						if($parent == $arrLP[$i]['id']){
 							$s_selected_parent=$arrHide[$arrLP[$i]['id']];
@@ -6567,7 +6582,7 @@ class learnpath {
 			$parent_select = &$form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" style="width:40%;" onchange="load_cbo(this.value);"');
 						
 			foreach($arrHide as $key => $value) {		
-					$parent_select->addOption(utf8_decode(html_entity_decode($value['value'], ENT_QUOTES, $this->encoding)),$key,'style="padding-left:'.$value['padding'].'px;"');
+				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
 					
 			if (!empty($id)) {
@@ -6591,7 +6606,7 @@ class learnpath {
 					elseif($action == 'add')
 						$s_selected_position=$arrLP[$i]['id'];
 					
-					$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) .'"';
+					$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding).'"';
 					
 				}
 			}
@@ -6645,7 +6660,7 @@ class learnpath {
 						elseif($action == 'add')
 							$s_selected_position=$arrLP[$i]['id'];
 						
-						$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
+						$arrHide[$arrLP[$i]['id']]['value']=api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 						
 					}
 				}
@@ -6812,8 +6827,8 @@ class learnpath {
 			$item_description	= '';
 			$item_url			= '';
 		}
-		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);
-		$item_description=mb_convert_encoding($item_description,$charset,$this->encoding);				
+		$item_title=api_convert_encoding($item_title,$charset,$this->encoding);
+		$item_description=api_convert_encoding($item_description,$charset,$this->encoding);
 		$return = '<div class="sectiontitle">';
 			
 			if($id != 0 && is_array($extra_info))
@@ -6868,7 +6883,7 @@ class learnpath {
 						$return .= "\t\t" . '<tr>' . "\n";
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang('Title').'</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" size="44" type="text" value="' . utf8_decode(html_entity_decode($item_title, ENT_QUOTES, $this->encoding)) . '" class="learnpath_item_form"/></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" size="44" type="text" value="' . $item_title . '" class="learnpath_item_form"/></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 					}				
@@ -6880,7 +6895,7 @@ class learnpath {
 						
 							$return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onchange="load_cbo(this.value);" class="learnpath_item_form" size="1">';
 							
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . utf8_decode(html_entity_decode($this->name, ENT_QUOTES, $this->encoding)) . '</option>';
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 								
 								$arrHide = array($id);
 								
@@ -6890,13 +6905,13 @@ class learnpath {
 									if($action != 'add') {
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 										} else {
 											$arrHide[] = $arrLP[$i]['id'];
 										}
 									} else {
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 									}
 								}
 								
@@ -6930,7 +6945,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
 									}
 								}
 								
@@ -6974,7 +6989,7 @@ class learnpath {
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
 									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
+								$arrHide[$arrLP[$i]['id']]['value']=api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 								
 							}
 						}
@@ -7071,7 +7086,7 @@ class learnpath {
 			$item_title			= '';
 		}
 		
-		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);			
+		$item_title=api_convert_encoding($item_title,$charset,$this->encoding);
 		$return = '<div class="sectiontitle">';
 			
 			if($id != 0 && is_array($extra_info))
@@ -7154,7 +7169,7 @@ class learnpath {
 									{
 										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 										}
 										else
 										{
@@ -7164,7 +7179,7 @@ class learnpath {
 									else
 									{
 										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '</option>';
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding). '</option>';
 									}
 								}
 								
@@ -7199,7 +7214,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . utf8_decode(html_entity_decode($arrLP[$i]['title'], ENT_QUOTES, $this->encoding)) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
 									}
 								}
 								
@@ -7231,7 +7246,7 @@ class learnpath {
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
 									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
+								$arrHide[$arrLP[$i]['id']]['value']=api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 								
 							}
 						}
@@ -7354,7 +7369,7 @@ class learnpath {
 		
 		$row= mysql_fetch_assoc($result);
 		$s_title = $row['title'];
-		$s_title=mb_convert_encoding($s_title,$charset,$this->encoding);
+		$s_title=api_convert_encoding($s_title,$charset,$this->encoding);
 		
 		
 				// we display an audio player if needed
@@ -7379,7 +7394,7 @@ class learnpath {
 		{
 			$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang('Prerequisites').'"><img align="absbottom" alt="'.get_lang('Prerequisites').'" src="../img/right.gif" title="'.get_lang('Prerequisites').'" /> '.get_lang('Prerequisites').'</a>';
 		}
-		$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' .utf8_decode(html_entity_decode(addslashes($s_title), ENT_QUOTES, $this->encoding)). '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="'.get_lang("Delete").'" /> '.get_lang("Delete").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' .addslashes($s_title). '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="'.get_lang("Delete").'" /> '.get_lang("Delete").'</a>';
 		
 		//$return .= '<br><br><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang("NoDescription").'' : stripslashes(nl2br($s_description))) . '</p>';
 		
@@ -7448,7 +7463,7 @@ class learnpath {
 
 		while($row_zero = Database::fetch_array($res_zero))
 		{
-			$return .= 'child_name[0][' . $i . '] = "'.get_lang("After").' \"' . mb_convert_encoding($row_zero['title'],$charset,$this->encoding) . '\"";' . "\n";
+			$return .= 'child_name[0][' . $i . '] = "'.get_lang("After").' \"' . api_convert_encoding($row_zero['title'],$charset,$this->encoding) . '\"";' . "\n";
 			$return .= 'child_value[0][' . $i++ . '] = "' . $row_zero['id'] . '";' . "\n";
 		}
 		
@@ -7477,7 +7492,7 @@ class learnpath {
 			
 			while($row_parent = Database::fetch_array($res_parent))
 			{
-				$return .= 'child_name[' . $row['id'] . '][' . $i . '] = "'.get_lang("After").' \"' . mb_convert_encoding($row_parent['title'],$charset,$this->encoding) . '\"";' . "\n";
+				$return .= 'child_name[' . $row['id'] . '][' . $i . '] = "'.get_lang("After").' \"' . api_convert_encoding($row_parent['title'],$charset,$this->encoding) . '\"";' . "\n";
 				$return .= 'child_value[' . $row['id'] . '][' . $i++ . '] = "' . $row_parent['id'] . '";' . "\n";
 			}
 			
@@ -7679,7 +7694,7 @@ class learnpath {
 			$arrLP[] = array(
 				'id' => $row['id'],
 				'item_type' => $row['item_type'],
-				'title' => utf8_decode(html_entity_decode($row['title'], ENT_QUOTES, $this->encoding)),
+				'title' => api_convert_encoding($row['title'],$charset,$this->encoding),
 				'ref'   => $row['ref'],
 				'description' => $row['description'],
 				'parent_item_id' => $row['parent_item_id'],
@@ -8063,6 +8078,8 @@ class learnpath {
 	 function scorm_export()
 	 {
 	 	global $_course;
+		global $charset;
+
 	 	if (!class_exists('DomDocument'))
 	 	{
 	 		error_log('DOM functions not supported for PHP version below 5.0',0);
@@ -8166,8 +8183,7 @@ class learnpath {
 	 	//in the database. Then we convert it to HTML entities again as the "&" character
 	 	//alone is not authorized in XML (must be &amp;)
 	 	//The title is then decoded twice when extracting (see scorm::parse_manifest)
-	 	global $charset;
-	 	$org_title = $xmldoc->createElement('title',htmlentities(htmlentities($this->get_name(),ENT_QUOTES,$charset)));
+	 	$org_title = $xmldoc->createElement('title',htmlentities(api_htmlentities($this->get_name(),ENT_QUOTES,$charset)));
 	 	$organization->appendChild($org_title);
 	 	
 	 	//For each element, add it to the imsmanifest structure, then add it to the zip.
@@ -8189,7 +8205,7 @@ class learnpath {
 		 		$my_item->setAttribute('identifierref','RESOURCE_'.$my_item_id); 
 		 		$my_item->setAttribute('isvisible','true');
 		 		//give a child element <title> to the <item> element
-		 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
+		 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(), ENT_QUOTES, $this->encoding));
 		 		$my_item->appendChild($my_title);
 		 		//give a child element <adlcp:prerequisites> to the <item> element
 		 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisites',$this->get_scorm_prereq_string($my_item_id));
@@ -8230,9 +8246,9 @@ class learnpath {
 		 		//get the path of the file(s) from the course directory root
 				$my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
 				
-				$my_xml_file_path = htmlentities($my_file_path); 
+				$my_xml_file_path = api_htmlentities($my_file_path, ENT_QUOTES, $this->encoding);
 				$my_sub_dir = dirname($my_file_path); 
-				$my_xml_sub_dir = htmlentities($my_sub_dir);
+				$my_xml_sub_dir = api_htmlentities($my_sub_dir, ENT_QUOTES, $this->encoding);
 		 		//give a <resource> child to the <resources> element
 		 		$my_resource = $xmldoc->createElement('resource');
 		 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
@@ -8501,9 +8517,9 @@ class learnpath {
 	 					$url = $link['url'];
 	 					$title = stripslashes($link['title']);
 	 					$links_to_create[$my_file_path] = array('title'=>$title,'url'=>$url);
-						$my_xml_file_path = htmlentities($my_file_path); 
+						$my_xml_file_path = api_htmlentities($my_file_path, ENT_QUOTES, $this->encoding);
 						$my_sub_dir = dirname($my_file_path); 
-						$my_xml_sub_dir = htmlentities($my_sub_dir);
+						$my_xml_sub_dir = api_htmlentities($my_sub_dir, ENT_QUOTES, $this->encoding);
 				 		//give a <resource> child to the <resources> element
 				 		$my_resource = $xmldoc->createElement('resource');
 				 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
@@ -8531,7 +8547,7 @@ class learnpath {
 			 		$my_item->setAttribute('identifierref','RESOURCE_'.$item->get_id()); 
 			 		$my_item->setAttribute('isvisible','true');
 			 		//give a child element <title> to the <item> element
-			 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
+			 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(), ENT_QUOTES, $this->encoding));
 			 		$my_item->appendChild($my_title);
 			 		//give a child element <adlcp:prerequisites> to the <item> element
 			 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisites',$item->get_prereq_string());
@@ -8576,9 +8592,9 @@ class learnpath {
 			 		if($res === false){error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__,0);}
 			 		$files_cleanup[] = $tmp_file_path;
 			 		//error_log($tmp_path);die();
-					$my_xml_file_path = htmlentities($my_file_path); 
+					$my_xml_file_path = api_htmlentities($my_file_path, ENT_QUOTES, $this->encoding);
 					$my_sub_dir = dirname($my_file_path); 
-					$my_xml_sub_dir = htmlentities($my_sub_dir);
+					$my_xml_sub_dir = api_htmlentities($my_sub_dir, ENT_QUOTES, $this->encoding);
 			 		//give a <resource> child to the <resources> element
 			 		$my_resource = $xmldoc->createElement('resource');
 			 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
@@ -8732,9 +8748,9 @@ class learnpath {
 		 		
 			 		//get the path of the file(s) from the course directory root
 					$my_file_path = 'non_exportable.html';
-					$my_xml_file_path = htmlentities($my_file_path); 
+					$my_xml_file_path = api_htmlentities($my_file_path, ENT_COMPAT, $this->encoding);
 					$my_sub_dir = dirname($my_file_path); 
-					$my_xml_sub_dir = htmlentities($my_sub_dir);
+					$my_xml_sub_dir = api_htmlentities($my_sub_dir, ENT_COMPAT, $this->encoding);
 			 		//give a <resource> child to the <resources> element
 			 		$my_resource = $xmldoc->createElement('resource');
 			 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
@@ -8995,7 +9011,7 @@ EOD;
 					// resize the image
 					include_once (api_get_path(LIBRARY_PATH).'image.lib.php');		
 					$temp = new image($image_array['tmp_name']);
-					$picture_infos=getimagesize($image_array['tmp_name']); // $picture_infos[0]-> width
+					$picture_infos=@getimagesize($image_array['tmp_name']); // $picture_infos[0]-> width
 					if ($picture_infos[0]>240)
 						$thumbwidth=240;
 					else

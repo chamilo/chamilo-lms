@@ -113,9 +113,9 @@ if (!empty ($_GET['extend_all'])) {
 }
 
 if ($origin != 'tracking') {
-	$output .= "<tr><td><div class='title'>" . htmlentities(get_lang('ScormMystatus'), ENT_QUOTES, $dokeos_charset) . "</div></td></tr>";
+	$output .= "<tr><td><div class='title'>" . api_htmlentities(get_lang('ScormMystatus'), ENT_QUOTES, $dokeos_charset) . "</div></td></tr>";
 }
-$output .= "<tr><td>&nbsp;</td></tr>" . "<tr><td>" . "<table border='0' class='data_table'><tr>\n" . '<td width="16">' . $extend_all_link . '</td>' . '<td colspan="4" class="title"><div class="mystatusfirstrow">' . htmlentities(get_lang('ScormLessonTitle'), ENT_QUOTES, $dokeos_charset) . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . htmlentities(get_lang('ScormStatus'), ENT_QUOTES, $dokeos_charset) . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . htmlentities(get_lang('ScormScore'), ENT_QUOTES, $dokeos_charset) . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . htmlentities(get_lang('ScormTime'), ENT_QUOTES, $dokeos_charset) . "</div></td><td class='title'><div class='mystatusfirstrow'>" . htmlentities(get_lang('Actions'), ENT_QUOTES, $dokeos_charset) . "</div></td></tr>\n";
+$output .= "<tr><td>&nbsp;</td></tr>" . "<tr><td>" . "<table border='0' class='data_table'><tr>\n" . '<td width="16">' . $extend_all_link . '</td>' . '<td colspan="4" class="title"><div class="mystatusfirstrow">' . api_htmlentities(get_lang('ScormLessonTitle'), ENT_QUOTES, $dokeos_charset) . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . api_htmlentities(get_lang('ScormStatus'), ENT_QUOTES, $dokeos_charset) . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . api_htmlentities(get_lang('ScormScore'), ENT_QUOTES, $dokeos_charset) . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . api_htmlentities(get_lang('ScormTime'), ENT_QUOTES, $dokeos_charset) . "</div></td><td class='title'><div class='mystatusfirstrow'>" . api_htmlentities(get_lang('Actions'), ENT_QUOTES, $dokeos_charset) . "</div></td></tr>\n";
 //going through the items using the $items[] array instead of the database order ensures
 // we get them in the same order as in the imsmanifest file, which is rather random when using
 // the database table
@@ -340,7 +340,7 @@ foreach ($list as $my_item_id) {
 						$oddclass = "row_even";
 					}
 					$output .= "<tr class='$oddclass'>\n" . '<td></td>' . "\n" . '<td></td>' . "\n" . '<td>&nbsp;</td>' . "\n" . '<td>' . $interaction['order_id'] . '</td>' . "\n" . '<td>' . $interaction['id'] . '</td>' . "\n"
-					//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
+					//."<td><font color='$color'><div class='mystatus'>".api_htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 					 . '<td colspan="2">' . $interaction['type'] . "</td>\n"
 					//.'<td>'.$interaction['correct_responses']."</td>\n"
 					 . '<td>' . urldecode($interaction['student_response']) . "</td>\n" . '<td>' . $interaction['result'] . "</td>\n" . '<td>' . $interaction['latency'] . "</td>\n" . '<td>' . $interaction['time'] . "</td>\n<td></td>\n</tr>\n";
@@ -426,7 +426,7 @@ foreach ($list as $my_item_id) {
 		//$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
 		$scoIdentifier = $row['myid'];
 		$title = $row['mytitle'];
-		$title = stripslashes(html_entity_decode($title, ENT_QUOTES, $dokeos_charset));
+		$title = stripslashes(api_html_entity_decode($title, ENT_QUOTES, $dokeos_charset));
 		
 		
 		// selecting the exe_id from stats attempts tables in order to look the max score value
@@ -520,7 +520,7 @@ foreach ($list as $my_item_id) {
 			'not attempted' => 'ScormNotAttempted',
 
 		);
-		$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);		
+		$my_lesson_status = api_htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);
 		
 		if ($row['item_type'] != 'dokeos_chapter') {
 			if ($row['item_type'] == 'quiz') {
@@ -611,7 +611,7 @@ foreach ($list as $my_item_id) {
 					$oddclass = "row_even";
 				}
 				$output .= "<tr class='$oddclass'>\n" . '<td></td>' . "\n" . '<td></td>' . "\n" . '<td>&nbsp;</td>' . "\n" . '<td>' . $interaction['order_id'] . '</td>' . "\n" . '<td>' . $interaction['id'] . '</td>' . "\n"
-				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
+				//."<td><font color='$color'><div class='mystatus'>"api_htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 				 . '<td colspan="2">' . $interaction['type'] . "</td>\n"
 				//.'<td>'.$interaction['correct_responses']."</td>\n"
 				 . '<td>' . urldecode($interaction['student_response']) . "</td>\n" . '<td>' . $interaction['result'] . "</td>\n" . '<td>' . $interaction['latency'] . "</td>\n" . '<td>' . $interaction['time'] . "</td>\n<td></td>\n</tr>\n";
@@ -732,7 +732,7 @@ if (($counter % 2) == 0) {
 }
 
 if (empty($extend_all)) {
-	$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . '<td colspan="4"><div class="mystatus"><i>' . htmlentities(get_lang('AccomplishedStepsTotal'), ENT_QUOTES, $dokeos_charset) . "</i></div></td>\n"
+	$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . '<td colspan="4"><div class="mystatus"><i>' . api_htmlentities(get_lang('AccomplishedStepsTotal'), ENT_QUOTES, $dokeos_charset) . "</i></div></td>\n"
  			. '<td colspan="2"></td>' . "\n" . '<td colspan="2"><div class="mystatus" align="center">' . $final_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $total_time . '</div></td><td></td>' . "\n" . "</tr>\n";		
 }
 

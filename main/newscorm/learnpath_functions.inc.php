@@ -1709,7 +1709,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 					//3.1.1 Update the check value for the month bar
 					$barreMois = date("m", strtotime($myrow["start_date"]));
 					//3.1.2	Display the month bar
-					$expcontent .= "<tr><td id=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".ucfirst(format_locale_date("%B %Y", strtotime($myrow["start_date"])))."</td></tr>";
+					$expcontent .= "<tr><td id=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".api_ucfirst(format_locale_date("%B %Y", strtotime($myrow["start_date"])))."</td></tr>";
 				}
 
 				//3.2 Display the agenda items (of this month): the date, hour and title
@@ -1725,8 +1725,8 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 				//3.2.2 Mark an anchor for this date
 				$expcontent .= "<a name=\"".(int) date(d, strtotime($myrow["start_date"]))."\"></a>"; // anchoring
 				//3.2.3 Write the date and time of this event to the export string
-				$expcontent .= ucfirst(format_locale_date($dateFormatLong, strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
-				$expcontent .= ucfirst(strftime($timeNoSecFormat, strtotime($myrow["start_time"])))."";
+				$expcontent .= api_ucfirst(format_locale_date($dateFormatLong, strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
+				$expcontent .= api_ucfirst(strftime($timeNoSecFormat, strtotime($myrow["start_time"])))."";
 				//3.2.4 If a duration is set, write it, otherwise ignore
 				if ($myrow["duration"] == "")
 				{
@@ -1802,7 +1802,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 				}
 
 				//3.5 Write this content to the export string (formatted HTML array)
-				$expcontent .= "<tr>\n"."<td class=\"cell_header\">\n"."<font ".$colorBecauseNew.">".$langPubl." : ".ucfirst(format_locale_date($dateFormatLong, strtotime($last_post_date)))."</font>\n"."</td>\n"."</tr>\n"."<tr>\n"."<td>\n".$content."</td>\n"."</tr>\n";
+				$expcontent .= "<tr>\n"."<td class=\"cell_header\">\n"."<font ".$colorBecauseNew.">".$langPubl." : ".api_ucfirst(format_locale_date($dateFormatLong, strtotime($last_post_date)))."</font>\n"."</td>\n"."</tr>\n"."<tr>\n"."<td>\n".$content."</td>\n"."</tr>\n";
 
 			} // while loop
 

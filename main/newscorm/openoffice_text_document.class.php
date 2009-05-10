@@ -56,11 +56,11 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 		// the file is utf8 encoded and it seems to make problems with special quotes. 
 		// then we htmlentities that, we replace these quotes and html_entity_decode that in good charset
 		$charset = api_get_setting('platform_charset');
-		$content = htmlentities($content,ENT_COMPAT,$this->original_charset); 
+		$content = api_htmlentities($content,ENT_COMPAT,$this->original_charset);
 		$content = str_replace('&rsquo;','\'',$content);
-		$content = mb_convert_encoding($content, $charset, $this->original_charset);
+		$content = api_convert_encoding($content, $charset, $this->original_charset);
 		$content = str_replace($this->original_charset,$charset,$content);
-		$content = html_entity_decode($content);
+		$content = api_html_entity_decode($content, ENT_COMPAT, $charset);
 		
 		// set the path to pictures to absolute (so that it can be modified in fckeditor)
 		$content = preg_replace("|src=\"([^\"]*)|i", "src=\"".api_get_path(REL_COURSE_PATH).$_course['path'].'/document'.$this->created_dir."/\\1", $content);
@@ -125,7 +125,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 		}
 		
 		// add intro item
-		$intro_content = substr($content, 0, strpos($content, $matches[0][0]));
+		$intro_content = api_substr($content, 0, api_strpos($content, $matches[0][0]));
 		$items_to_create[get_lang('Introduction')] = $intro_content;
 
 		
@@ -134,10 +134,10 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 			if(empty($matches[1][$i]))
 				continue;
 			
-			$content = strstr($content,$matches[0][$i]);
+			$content = api_strstr($content, $matches[0][$i]);
 			if($i+1!==count($matches[0]))
 			{
-				$chapter_content = substr($content, 0, strpos($content, $matches[0][$i+1]));
+				$chapter_content = api_substr($content, 0, api_strpos($content, $matches[0][$i+1]));
 			}
 			else
 			{
@@ -168,7 +168,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 				$infos = pathinfo($this->filepath);
 				$slide_name = strip_tags(nl2br($item_title));
 				$slide_name = str_replace(array("\r\n", "\r", "\n"), "", $slide_name);
-				$slide_name = html_entity_decode($slide_name);
+				$slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_system_encoding());
 				$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
 				if($this->first_item == 0){
 					$this->first_item = $previous;
@@ -319,7 +319,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 			if(!$defined_width)
 			{
 			
-				list($img_width, $img_height, $type) = getimagesize($this->base_work_dir.$this->created_dir.'/'.$image);
+				list($img_width, $img_height, $type) = @getimagesize($this->base_work_dir.$this->created_dir.'/'.$image);
 				
 				$new_width = $max_width-10;
 				if($img_width > $new_width)

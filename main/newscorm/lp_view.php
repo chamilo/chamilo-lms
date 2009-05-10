@@ -48,7 +48,8 @@ if ($is_allowed_in_course == false) api_not_allowed();
 -----------------------------------------------------------
 */
 //$charset = 'UTF-8';
-$charset = 'ISO-8859-1';
+//$charset = 'ISO-8859-1';
+$charset = api_get_system_encoding();
 $oLearnpath = false;
 $course_code = api_get_course_id();
 $user_id = api_get_user_id();

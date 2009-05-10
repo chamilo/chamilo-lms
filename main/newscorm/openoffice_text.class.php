@@ -57,11 +57,11 @@ class OpenofficeText extends OpenofficeDocument {
 		// the file is utf8 encoded and it seems to make problems with special quotes. 
 		// then we htmlentities that, we replace these quotes and html_entity_decode that in good charset
 		$charset = api_get_setting('platform_charset');
-		$content = htmlentities($content,ENT_COMPAT,$this->original_charset); 
+		$content = api_htmlentities($content,ENT_COMPAT,$this->original_charset); 
 		$content = str_replace('&rsquo;','\'',$content);
-		$content = mb_convert_encoding($content, $charset, $this->original_charset);
+		$content = api_convert_encoding($content, $charset, $this->original_charset);
 		$content = str_replace($this->original_charset,$charset,$content);
-		$content = html_entity_decode($content);
+		$content = api_html_entity_decode($content, ENT_COMPAT, $charset);
 		
 		// set the path to pictures to absolute (so that it can be modified in fckeditor)
 		$content = preg_replace("|src=\"([^\"]*)|i", "src=\"".api_get_path(REL_COURSE_PATH).$_course['path'].'/document'.$this->created_dir."/\\1", $content);

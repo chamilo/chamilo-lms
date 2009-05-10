@@ -1,4 +1,4 @@
-<?php // $Id: import_backup.php 19948 2009-04-21 17:27:59Z juliomontoya $
+<?php // $Id: import_backup.php 20448 2009-05-10 10:17:22Z ivantcholakov $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -124,7 +124,7 @@ if((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (is
             Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin').
                 '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
         } else {
-			Display::display_error_message(ucfirst(get_lang('UploadError')).
+			Display::display_error_message(api_ucfirst(get_lang('UploadError')).
                 '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
 		}
 	}

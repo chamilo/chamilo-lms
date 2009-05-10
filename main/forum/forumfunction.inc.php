@@ -377,7 +377,7 @@ function show_add_forum_form($inputvalues=array()) {
 		}
 	} else {   // the default values when editing = the data in the table
 		$defaults['forum_id']=isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
-		$defaults['forum_title']=prepare4display(html_entity_decode(isset($inputvalues['forum_title']) ? $inputvalues['forum_title'] : null,ENT_QUOTES,$charset));
+		$defaults['forum_title']=prepare4display(api_html_entity_decode(isset($inputvalues['forum_title']) ? $inputvalues['forum_title'] : null,ENT_QUOTES,$charset));
 		$defaults['forum_comment']=prepare4display(isset($inputvalues['forum_comment'])?$inputvalues['forum_comment']:null);
 		$defaults['forum_category']=isset($inputvalues['forum_category']) ? $inputvalues['forum_category'] : null;
 		$defaults['allow_anonymous_group']['allow_anonymous']=isset($inputvalues['allow_anonymous']) ? $inputvalues['allow_anonymous'] :null;
@@ -463,7 +463,7 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 	// setting the default values
 	$defaultvalues['forum_category_id']=$inputvalues['cat_id'];
 
-	$defaultvalues['forum_category_title']=prepare4display(html_entity_decode($inputvalues['cat_title'],ENT_QUOTES,$charset));
+	$defaultvalues['forum_category_title']=prepare4display(api_html_entity_decode($inputvalues['cat_title'],ENT_QUOTES,$charset));
 	$defaultvalues['forum_category_comment']=prepare4display($inputvalues['cat_comment']);
 	$form->setDefaults($defaultvalues);
 
@@ -1983,7 +1983,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 
 		// if we are replying or are quoting then we display a default title.
  		$values=get_post_information($my_post); // note: this has to be cleaned first
-		$defaults['post_title']=get_lang('ReplyShort').html_entity_decode($values['post_title'],ENT_QUOTES,$charset);
+		$defaults['post_title']=get_lang('ReplyShort').api_html_entity_decode($values['post_title'],ENT_QUOTES,$charset);
 		// When we are quoting a message then we have to put that message into the wysiwyg editor.
 		// note: the style has to be hardcoded here because using class="quote" didn't work
 		if($action=='quote') {
@@ -2408,7 +2408,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	$form->addElement('style_submit_button', 'SubmitPost', get_lang('ModifyThread'), 'class="save"');
 	global $charset;
 	// setting the default values for the form elements
-	$defaults['post_title']=prepare4display(html_entity_decode($current_post['post_title'],ENT_QUOTES,$charset));
+	$defaults['post_title']=prepare4display(api_html_entity_decode($current_post['post_title'],ENT_QUOTES,$charset));
 	$defaults['post_text']=prepare4display($current_post['post_text']);
 	if ( $current_post['post_notification']==1 ) {
 		$defaults['post_notification']=true;
@@ -3269,8 +3269,8 @@ function display_forum_search_results($search_term) {
 			//$search_results_item .= '<a href="">THREAD</a> > ';
 			$search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;thread='.$row['thread_id'].'&amp;search='.urlencode($search_term).'">'.$row['post_title'].'</a>';
 			$search_results_item .= '<br />';
-			if (strlen($row['post_title']) > 200 ) {
-				$search_results_item .= substr(strip_tags($row['post_title']),0,200).'...';
+			if (api_strlen($row['post_title']) > 200 ) {
+				$search_results_item .= api_substr(strip_tags($row['post_title']),0,200).'...';
 			} else {
 				$search_results_item .= $row['post_title'];
 			}

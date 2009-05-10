@@ -275,7 +275,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 			echo '<th style="vertical-align: top;" align="center" >';
 			if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($session_id)!=0)) {
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=edit&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=delete&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=delete&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('forumcategory', prepare4display($forum_category['cat_id']), prepare4display($forum_category['visibility']));
 				display_lock_unlock_icon('forumcategory',prepare4display($forum_category['cat_id']), prepare4display($forum_category['locked']));
 				display_up_down_icon('forumcategory',prepare4display($forum_category['cat_id']), $forum_categories_list);
@@ -409,7 +409,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						if ($forum['forum_of_group']<>'0') {
 							$my_all_groups_forum_name=isset($all_groups[$forum['forum_of_group']]['name']) ? $all_groups[$forum['forum_of_group']]['name'] : null;
 							$my_all_groups_forum_id=isset($all_groups[$forum['forum_of_group']]['id']) ? $all_groups[$forum['forum_of_group']]['id'] : null;
-							$group_title=substr($my_all_groups_forum_name,0,30);
+							$group_title=api_substr($my_all_groups_forum_name,0,30);
 
 							$forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$forum['forum_of_group'].'" class="forum_group_link">'.get_lang('GoTo').' '.$group_title.'</a>)';
 
@@ -448,7 +448,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						echo "\t\t<td nowrap=\"nowrap\" align=\"center\">";
 						if (api_is_allowed_to_edit(false,true) && !($forum['session_id']==0 && intval($session_id)!=0)) {
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
-							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 							display_visible_invisible_icon('forum',$forum['forum_id'], $forum['visibility']);
 							display_lock_unlock_icon('forum',$forum['forum_id'], $forum['locked']);
 							display_up_down_icon('forum',$forum['forum_id'], $forums_in_category);

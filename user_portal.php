@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 20297 2009-05-04 20:32:16Z juliomontoya $
+<?php // $Id: user_portal.php 20476 2009-05-11 11:02:18Z ivantcholakov $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -340,9 +340,9 @@ function display_digest($toolsList, $digest, $orderKey, $courses) {
 						// // // LEVEL 4 (data) // // //
 						reset($digest[$key1][$key2][$key3]);
 						while (list ($key4, $dataFromCourse) = each($digest[$key1][$key2][$key3])) {
-							echo $level3title, ' &ndash; ', substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT);
+							echo $level3title, ' &ndash; ', api_substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT);
 							//adding ... (three dots) if the texts are too large and they are shortened
-							if (strlen($dataFromCourse) >= CONFVAL_NB_CHAR_FROM_CONTENT) {
+							if (api_strlen($dataFromCourse) >= CONFVAL_NB_CHAR_FROM_CONTENT) {
 								echo '...';
 							}
 						}
@@ -371,6 +371,7 @@ function display_digest($toolsList, $digest, $orderKey, $courses) {
  * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
  */
 function get_logged_user_course_html($my_course) {
+	global $charset;
 	global $nosession;
 
 	if (api_get_setting('use_session_mode')=='true' && !$nosession) {
@@ -507,7 +508,7 @@ function get_logged_user_course_html($my_course) {
 				reset($digest[$thisCourseSysCode][$key2][$key3]);
 				while (list ($key4, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2][$key3])) {
 					$result .= '<li>';
-					$result .= htmlspecialchars(substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT));
+					$result .= htmlspecialchars(api_substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT), ENT_QUOTES, $charset);
 					$result .= '</li>';
 				}
 				$result .= '</ul>';
@@ -751,7 +752,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 					$keyTools = "valvas";
 					$keyTime = $annoncement['publicationDate'];
 					$keyCourse = $thisCourseSysCode;
-					$digest[$$orderKey[0]][$$orderKey[1]][$$orderKey[2]][] = htmlspecialchars(substr(strip_tags($annoncement["content"]), 0, CONFVAL_NB_CHAR_FROM_CONTENT));
+					$digest[$$orderKey[0]][$$orderKey[1]][$$orderKey[2]][] = htmlspecialchars(api_substr(strip_tags($annoncement["content"]), 0, CONFVAL_NB_CHAR_FROM_CONTENT), ENT_QUOTES, $charset);
 					$nbDigestEntries ++; // summary has same order as advalvas
 				}
 			}
@@ -783,7 +784,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 					$keyTools = 'agenda';
 					$keyTime = $agendaEvent['start_date'];
 					$keyCourse = $thisCourseSysCode;
-					$digest[$$orderKey[0]][$$orderKey[1]][$$orderKey[2]][] = htmlspecialchars(substr(strip_tags($agendaEvent["content"]), 0, CONFVAL_NB_CHAR_FROM_CONTENT));
+					$digest[$$orderKey[0]][$$orderKey[1]][$$orderKey[2]][] = htmlspecialchars(api_substr(strip_tags($agendaEvent["content"]), 0, CONFVAL_NB_CHAR_FROM_CONTENT), ENT_QUOTES, $charset);
 					$nbDigestEntries ++; // summary has same order as advalvas
 				}
 			}

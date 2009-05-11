@@ -33,8 +33,7 @@ include(api_get_path(INCLUDE_PATH).'banner.inc.php');
         <td>
         <table>
             <tr>
-              <td width="220">
-              
+              <td width="220">              
               <table id="smallcalendar">
                   <tr id="title">
                     <td width="10%"><a href="#"><<</a></td>
@@ -118,22 +117,18 @@ include(api_get_path(INCLUDE_PATH).'banner.inc.php');
           </table>
           <table class="data_table" width="100%">
             <tr>
-              <th style="width:100px"><a href="#">firstname</a>&nbsp;&#8595; </th>
-              <th style="width:100px"><a href="#">lastname</a></th>
+              <th style="width:100px"><a href="#">Firstname</a>&nbsp;&#8595; </th>
+              <th style="width:100px"><a href="#">Lastname</a></th>
             </tr>
             <tr class="row_even">
               <td >Firstname</td>
               <td >Lastname</td>
             </tr>
             <tr class="row_odd">
-              <td >Patrick</td>
-              <td >Cool</td>
+              <td >Julio</td>
+              <td >Montoya</td>
             </tr>
             <tr class="row_even">
-              <td >Patrick</td>
-              <td >Cool</td>
-            </tr>
-            <tr class="row_odd">
               <td >Patrick</td>
               <td >Cool</td>
             </tr>
@@ -154,7 +149,7 @@ include(api_get_path(INCLUDE_PATH).'banner.inc.php');
       <input type="text" name="login" id="login" size="15" value="" />
       <label>Password</label>
       <input type="password" name="password" id="password" size="15" />
-      <input type="submit" value="OK" name="submitAuth" class="submitauth"/>
+  	  <button class="login" type="submit" name="submitAuth">Enter</button>
     </form>
     <div class="menusection"><span class="menusectioncaption">User</span>
       <ul class="menulist">

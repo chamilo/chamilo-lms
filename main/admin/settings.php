@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 20441 2009-05-10 07:39:15Z ivantcholakov $
+<?php // $Id: settings.php 20508 2009-05-11 22:14:38Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -619,7 +619,7 @@ function handle_stylesheets()
 	// Preview of the stylesheet
 	echo '<div><iframe src="style_preview.php" width="100%" height="300" name="preview"></iframe></div>';
 
-	echo '<form name="stylesheets" method="post" action="'.api_get_self().'?category='.$_GET['category'].'">';
+	echo '<form name="stylesheets" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
 	if ($handle = @opendir(api_get_path(SYS_PATH).'main/css/'))
 	{
 		$counter=1;
@@ -642,7 +642,7 @@ function handle_stylesheets()
 					{
 						$selected = '';
 					}
-					$show_name=get_lang($style_dir, '');
+					$show_name=ucwords(str_replace('_',' ', $style_dir));
 					
 					if ($is_style_changeable)
 					{					

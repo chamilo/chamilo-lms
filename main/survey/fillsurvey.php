@@ -325,7 +325,7 @@ if ($survey_data['form_fields']!='' && $survey_data['anonymous'] == 0 && is_arra
 		$field_value = explode(':', $field);
 		if ($field_value[1] == 1) {
 			if ($field_value[0] != '') {
-				$val = substr($field_value[0], 8, strlen($field_value[0]));
+				$val = api_substr($field_value[0], 8, api_strlen($field_value[0]));
 				$list[$val] = 1;
 			}
 		}

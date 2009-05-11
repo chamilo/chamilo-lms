@@ -1,4 +1,4 @@
-<?php // $Id: reporting.php 19004 2009-03-12 18:04:08Z juliomontoya $
+<?php // $Id: reporting.php 20470 2009-05-11 09:46:59Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,7 +26,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 19004 2009-03-12 18:04:08Z juliomontoya $
+* 	@version $Id: reporting.php 20470 2009-05-11 09:46:59Z ivantcholakov $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -120,8 +120,8 @@ if (empty($survey_data)) {
 	Display :: display_footer();
 	exit;
 }
-$urlname = strip_tags(substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
-if (strlen(strip_tags($survey_data['title'])) > 40)
+$urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
+if (api_strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$urlname .= '...';
 }

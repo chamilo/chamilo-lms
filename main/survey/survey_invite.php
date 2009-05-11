@@ -72,8 +72,8 @@ if (empty($survey_data)) {
 }
 
 
-$urlname =strip_tags(substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
-if (strlen(strip_tags($survey_data['title'])) > 40)
+$urlname =strip_tags(api_substr(api_html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
+if (api_strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$urlname .= '...';
 }

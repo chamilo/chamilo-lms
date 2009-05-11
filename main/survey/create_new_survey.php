@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 20345 2009-05-05 21:06:43Z cfasanando $
+* 	@version $Id: create_new_survey.php 20470 2009-05-11 09:46:59Z ivantcholakov $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -85,8 +85,8 @@ if (!api_is_allowed_to_edit())
 $survey_id  = Security::remove_XSS($_GET['survey_id']);
 $survey_data = survey_manager::get_survey($survey_id);
 
-$urlname =strip_tags(substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
-if (strlen(strip_tags($survey_data['title'])) > 40) {
+$urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
+if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
 }
 
@@ -151,7 +151,7 @@ $form->applyFilter('survey_code', 'html_filter');
 
 if ($_GET['action'] == 'edit') {
 	$survey_code->freeze();
-	$form->applyFilter('survey_code', 'strtoupper');
+	$form->applyFilter('survey_code', 'api_strtoupper');
 } 
 
 $fck_attribute['Width'] = '100%';

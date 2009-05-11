@@ -1,4 +1,4 @@
-<?php // $Id: survey.php 19829 2009-04-17 13:49:47Z pcool $
+<?php // $Id: survey.php 20470 2009-05-11 09:46:59Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 19829 2009-04-17 13:49:47Z pcool $
+* 	@version $Id: survey.php 20470 2009-05-11 09:46:59Z ivantcholakov $
 *
 * 	@todo use quickforms for the forms
 */
@@ -65,13 +65,13 @@ $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Surv
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
 
-if (substr($survey_data['title'],0,3)!='<p>'){
-	$tool_name = strip_tags(substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
+if (api_substr($survey_data['title'],0,3)!='<p>'){
+	$tool_name = strip_tags(api_substr(api_html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
 }else{
-	$tool_name = strip_tags(substr(html_entity_decode(substr($survey_data['title'],3,-4),ENT_QUOTES,$charset), 0, 40));
+	$tool_name = strip_tags(api_substr(api_html_entity_decode(substr($survey_data['title'],3,-4),ENT_QUOTES,$charset), 0, 40));
 }
 $is_survey_type_1 = ($survey_data['survey_type']==1)?true:false;
-if (strlen(strip_tags($survey_data['title'])) > 40)
+if (api_strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$tool_name .= '...';
 }
@@ -142,7 +142,7 @@ SurveyUtil::check_first_last_question($_GET['survey_id']);
 
 // Action links
 $survey_actions = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).' '.get_lang('EditSurvey').'</a>';
-$survey_actions .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$_GET['survey_id'].'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).' '.get_lang('DeleteSurvey').'</a>';
+$survey_actions .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$_GET['survey_id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).' '.get_lang('DeleteSurvey').'</a>';
 //$survey_actions .= '<a href="create_survey_in_another_language.php?id_survey='.$_GET['survey_id'].'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 $survey_actions .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('preview.gif', get_lang('Preview')).' '.get_lang('Preview').'</a>';
 $survey_actions .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).' '.get_lang('Publish').'</a>';
@@ -202,8 +202,8 @@ while ($row = Database::fetch_array($result,'ASSOC')) {
 	echo '<tr>';
 	echo '	<td>'.$question_counter.'</td>';
 	echo '	<td>';
-	if (strlen($row['survey_question']) > 100) {
-		echo substr(strip_tags($row['survey_question']),0, 100).' ... ';
+	if (api_strlen($row['survey_question']) > 100) {
+		echo api_substr(strip_tags($row['survey_question']),0, 100).' ... ';
 	} else {
 		echo $row['survey_question'];
 	}
@@ -212,7 +212,7 @@ while ($row = Database::fetch_array($result,'ASSOC')) {
 	echo '	<td>'.$row['number_of_options'].'</td>';
 	echo '	<td>';
 	echo '		<a href="question.php?'.api_get_cidreq().'&amp;action=edit&amp;type='.$row['type'].'&amp;survey_id='.$_GET['survey_id'].'&amp;question_id='.$row['question_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-	echo '		<a href="survey.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$_GET['survey_id'].'&amp;question_id='.$row['question_id'].'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurveyQuestion").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+	echo '		<a href="survey.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$_GET['survey_id'].'&amp;question_id='.$row['question_id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurveyQuestion").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	if ($question_counter > 1)
 	{
 		echo '		<a href="survey.php?'.api_get_cidreq().'&amp;action=moveup&amp;survey_id='.$_GET['survey_id'].'&amp;question_id='.$row['question_id'].'">'.Display::return_icon('up.gif', get_lang('MoveUp')).'</a>';
@@ -282,7 +282,7 @@ if($is_survey_type_1)
 		$grouplist .= '<tr><td>'.$row['name'].'</td><td>'.$row['description'].'</td><td>'.
 		'<a href="survey.php?survey_id='.(int)$_GET['survey_id'].'&gid='.$row['id'].'&action=editgroup">'.
 		Display::return_icon('edit.gif', get_lang('Edit')).'</a> '.
-		'<a href="survey.php?survey_id='.(int)$_GET['survey_id'].'&gid='.$row['id'].'&action=deletegroup" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(sprintf(get_lang('DeleteSurveyGroup'),$row['name']).'?',ENT_QUOTES,$charset)).'\')) return false;">'.
+		'<a href="survey.php?survey_id='.(int)$_GET['survey_id'].'&gid='.$row['id'].'&action=deletegroup" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('DeleteSurveyGroup'),$row['name']).'?',ENT_QUOTES,$charset)).'\')) return false;">'.
 		Display::return_icon('delete.gif', get_lang('Delete')).'</a>'.
 		'</td></tr>';
 	}				

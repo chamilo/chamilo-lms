@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 20377 2009-05-06 20:25:41Z juliomontoya $
+* 	@version $Id: survey.lib.php 20470 2009-05-11 09:46:59Z ivantcholakov $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -217,7 +217,7 @@ class survey_manager
 					else 
 					{	
 						$row = Database::fetch_array($rs,ASSOC);			
-						$pos = strpos($row['survey_version']);
+						$pos = api_strpos($row['survey_version']);
 						if($pos===false)
 						{ 
 							//$new_version= substr($row['survey_version'],$pos, count())
@@ -226,7 +226,7 @@ class survey_manager
 						} 
 						else 
 						{
-							$getlast= split('\.',$row['survey_version']);						
+							$getlast = api_split('\.',$row['survey_version']);						
 							$lastversion = array_pop($getlast);
 							$lastversion = $lastversion + 1;
 							$add=implode('.',$getlast);
@@ -1332,6 +1332,7 @@ class question
 	 */
 	function create_form($form_content)
 	{
+		global $charset;
 		global $fck_attribute;
 		global $survey_data;
 		
@@ -1343,8 +1344,8 @@ class question
 		if ($_GET['action'] == 'edit') {
 			$tool_name .= get_lang('EditQuestion');
 		}
-		$tool_name .= ': '.get_lang(ucfirst($_GET['type']));
-		
+		$tool_name .= ': '.get_lang(api_ucfirst($_GET['type']));
+
 		$this->html .= '<div class="row"><div class="form_header">'.$tool_name.'</div></div>';
 		$this->html .= '<form id="question_form" name="question_form" method="post" action="'.api_get_self().'?action='.$_GET['action'].'&type='.$_GET['type'].'&survey_id='.$_GET['survey_id'].'&question_id='.$_GET['question_id'].'">';
 		$this->html .= '		<input type="hidden" name="survey_id" id="survey_id" value="'.$_GET['survey_id'].'"/>';
@@ -1362,7 +1363,7 @@ class question
 		$this->html .= '			<span class="form_required">*</span> '.get_lang('Question');
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
-		$this->html .= api_return_html_area('question', html_entity_decode(stripslashes($form_content['question'])));
+		$this->html .= api_return_html_area('question', api_html_entity_decode(stripslashes($form_content['question']), ENT_QUOTES, $charset));
 		$this->html .= '		</div>';
 		$this->html .= '	</div>';		
 		
@@ -1703,6 +1704,8 @@ class multiplechoice extends question
 	 */
 	function create_form($form_content)
 	{
+		global $charset;
+
 		$this->html = parent::create_form($form_content);
 		// Horizontal or vertical
 		$this->html .= '	<div class="row">';
@@ -1737,7 +1740,7 @@ class multiplechoice extends question
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', html_entity_decode(stripslashes($form_content['answers'][$key]))).'</td>';
+			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset)).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1)
 			{
@@ -1895,6 +1898,8 @@ class multipleresponse extends question
 	 */
 	function create_form($form_content)
 	{
+		global $charset;
+
 		$this->html = parent::create_form($form_content);
 		// Horizontal or vertical
 		$this->html .= '	<div class="row">';
@@ -1930,7 +1935,7 @@ class multipleresponse extends question
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', html_entity_decode(stripslashes($form_content['answers'][$key]))).'</td>';
+			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset)).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1)
 			{
@@ -2002,6 +2007,8 @@ class dropdown extends question
 	 */
 	function create_form($form_content)
 	{
+		global $charset;
+
 		$this->html = parent::create_form($form_content);
 		// The answers
 		$this->html .= '	<div class="row">';
@@ -2015,7 +2022,7 @@ class dropdown extends question
 		{
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
-			$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.stripslashes(htmlentities($form_content['answers'][$key])).'" /></td>';
+			$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.stripslashes(api_htmlentities($form_content['answers'][$key], ENT_QUOTES, $charset)).'" /></td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1)
 			{
@@ -3232,6 +3239,8 @@ class SurveyUtil {
 	 */
 	function export_complete_report($user_id=0)
 	{
+		global $charset;
+
 		// Database table definitions
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -3271,13 +3280,13 @@ class SurveyUtil {
 				{
 					if($row['number_of_options'] == 0 && $row['type']=='open')
 					{
-							$return .= str_replace("\r\n",'  ',html_entity_decode(strip_tags($row['survey_question']))).';';					
+							$return .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['survey_question']), ENT_QUOTES, $charset)).';';					
 					}
 					else
 					{
 						for ($ii = 0; $ii < $row['number_of_options']; $ii ++)
 						{
-							$return .= str_replace("\r\n",'  ',html_entity_decode(strip_tags($row['survey_question']))).';';
+							$return .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['survey_question']), ENT_QUOTES, $charset)).';';
 						}
 					}
 				}
@@ -3294,7 +3303,7 @@ class SurveyUtil {
 			//show the fields names for user fields
 			foreach($extra_user_fields as $field)
 			{
-				$return .= '"'.str_replace("\r\n",'  ',html_entity_decode(strip_tags($field[3]))).'";';
+				$return .= '"'.str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset)).'";';
 			}
 		}
 		
@@ -3319,7 +3328,7 @@ class SurveyUtil {
 				if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak')
 				{
 					$row['option_text'] = str_replace(array("\r","\n"),array('',''),$row['option_text']);
-					$return .= html_entity_decode(strip_tags($row['option_text'])).';';
+					$return .= api_html_entity_decode(strip_tags($row['option_text']), ENT_QUOTES, $charset).';';
 					$possible_answers[$row['question_id']][$row['question_option_id']] =$row['question_option_id'];
 					$possible_answers_type[$row['question_id']] = $row['type'];
 				}
@@ -3376,6 +3385,8 @@ class SurveyUtil {
 	 */
 	function export_complete_report_row($possible_options, $answers_of_user, $user, $display_extra_user_fields=false)
 	{
+		global $charset;
+
 		global $survey_data;
 		$return = '';
 		if ($survey_data['anonymous'] == 0)
@@ -3412,7 +3423,7 @@ class SurveyUtil {
 			$user_fields_values = UserManager::get_extra_user_data(intval($user),false,false);
 			foreach($user_fields_values as $value)
 			{
-				$return .= '"'.str_replace('"','""',html_entity_decode(strip_tags($value))).'";';
+				$return .= '"'.str_replace('"','""',api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset)).'";';
 			}
 		}
 	
@@ -3429,7 +3440,7 @@ class SurveyUtil {
 						$key = array_keys($my_answer_of_user);
 						if(substr($key[0],0,4)=='open')
 						{
-							$return .= '"'.str_replace('"','""',html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']))).'"';
+							$return .= '"'.str_replace('"','""',api_html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']), ENT_QUOTES, $charset)).'"';
 						}
 						elseif (!empty($answers_of_user[$question_id][$option_id]))
 						{
@@ -3461,6 +3472,8 @@ class SurveyUtil {
 	 */
 	function export_complete_report_xls($filename, $user_id=0)
 	{
+		global $charset;
+
 		require_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php');
 		$workbook = new Spreadsheet_Excel_Writer();
 		$workbook->send($filename);
@@ -3508,14 +3521,14 @@ class SurveyUtil {
 				{
 					if($row['number_of_options'] == 0 && $row['type']=='open')
 					{
-							$worksheet->write($line,$column,html_entity_decode(strip_tags($row['survey_question'])));
+							$worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['survey_question']), ENT_QUOTES, $charset));
 							$column ++;					
 					}
 					else
 					{
 						for ($ii = 0; $ii < $row['number_of_options']; $ii ++)
 						{
-							$worksheet->write($line,$column,html_entity_decode(strip_tags($row['survey_question'])));
+							$worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['survey_question']), ENT_QUOTES, $charset));
 							$column ++;
 						}
 					}
@@ -3531,7 +3544,7 @@ class SurveyUtil {
 			//show the fields names for user fields
 			foreach($extra_user_fields as $field)
 			{
-				$worksheet->write($line,$column,html_entity_decode(strip_tags($field[3])));
+				$worksheet->write($line,$column,api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset));
 				$column++;
 			}
 		}
@@ -3557,7 +3570,7 @@ class SurveyUtil {
 				// we do not show comment and pagebreak question types
 				if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak')
 				{
-					$worksheet->write($line,$column,html_entity_decode(strip_tags($row['option_text'])));
+					$worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['option_text']), ENT_QUOTES, $charset));
 					$possible_answers[$row['question_id']][$row['question_option_id']] =$row['question_option_id'];
 					$possible_answers_type[$row['question_id']] = $row['type'];
 					$column++;
@@ -3629,6 +3642,8 @@ class SurveyUtil {
 	 */
 	function export_complete_report_row_xls($possible_options, $answers_of_user, $user, $display_extra_user_fields=false)
 	{
+		global $charset;
+
 		$return = array();
 		global $survey_data;
 		if ($survey_data['anonymous'] == 0)
@@ -3665,7 +3680,7 @@ class SurveyUtil {
 			$user_fields_values = UserManager::get_extra_user_data(intval($user),false,false);
 			foreach($user_fields_values as $value)
 			{
-				$return[] = html_entity_decode(strip_tags($value));
+				$return[] = api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset);
 			}
 		}
 
@@ -3681,7 +3696,7 @@ class SurveyUtil {
 						$key = array_keys($my_answers_of_user);
 						if(substr($key[0],0,4)=='open')
 						{
-							$return[] = html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']));
+							$return[] = api_html_entity_decode(strip_tags($answers_of_user[$question_id][$key[0]]['option_id']), ENT_QUOTES, $charset);
 						}
 						elseif (!empty($answers_of_user[$question_id][$option_id]))
 						{
@@ -3747,7 +3762,7 @@ class SurveyUtil {
 					{
 						echo ' selected="selected"';
 					}
-					echo '">'.substr(strip_tags($question['question']), 0, 50).'</option>';
+					echo '">'.api_substr(strip_tags($question['question']), 0, 50).'</option>';
 				}
 			}
 			
@@ -3766,7 +3781,7 @@ class SurveyUtil {
 				{
 					echo ' selected="selected"';
 				}
-				echo '">'.substr(strip_tags($question['question']), 0, 50).'</option>';
+				echo '">'.api_substr(strip_tags($question['question']), 0, 50).'</option>';
 			}
 		}
 		echo '</select><br /><br />';
@@ -4171,7 +4186,7 @@ class SurveyUtil {
             $text_link = '<a href="'.$survey_link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n".get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$survey_link;
 
             $replace_count = 0;
-            $full_invitation_text = str_ireplace('**link**', $text_link ,$invitation_text, $replace_count);
+            $full_invitation_text = api_str_ireplace('**link**', $text_link ,$invitation_text, $replace_count);
             if ($replace_count < 1) {
                 $full_invitation_text = $full_invitation_text . "<br />\r\n<br />\r\n".$text_link;
             }
@@ -4454,8 +4469,8 @@ class SurveyUtil {
 		if(api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id))
 		{
 			$return .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;';
-			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>&nbsp;';
-			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean_group.gif', get_lang('EmptySurvey')).'</a>&nbsp;';
+			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>&nbsp;';
+			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean_group.gif', get_lang('EmptySurvey')).'</a>&nbsp;';
 		}
 		//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 		//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
@@ -4471,12 +4486,12 @@ class SurveyUtil {
 		global $charset;
 		$survey_id = Security::remove_XSS($survey_id);		
 	//	$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-		//$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+		//$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?',ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 		//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 		//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
 		$return .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>&nbsp;';
 		$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>&nbsp;';
-		$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean_group.gif', get_lang('EmptySurvey')).'</a>&nbsp;';
+		$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES, $charset)).'\')) return false;">'.Display::return_icon('clean_group.gif', get_lang('EmptySurvey')).'</a>&nbsp;';
 		//$return .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
 		return $return;
 	}

@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 20424 2009-05-08 20:40:27Z herodoto $
+* 	@version $Id: question.php 20470 2009-05-11 09:46:59Z ivantcholakov $
 */
 
 // name of the language file that needs to be included
@@ -61,8 +61,8 @@ if (empty($survey_data)) {
 }
 
 
-$urlname = substr(html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
-if (strlen(strip_tags($survey_data['title'])) > 40) {
+$urlname = api_substr(api_html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40);
+if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
 }
 

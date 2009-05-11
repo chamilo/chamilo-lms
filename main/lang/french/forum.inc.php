@@ -138,4 +138,5 @@ $ModifyThread = "Modifier fil de discussion";
 $EditForum = "Éditer le forum";
 $BackToForum = "Retour au forum";
 $BackToForumOverview = "Retour à la vue globale du forum";
+$BackToThread = "Retour au fil de discussion";
 ?>

@@ -23,4 +23,5 @@ $NoteConfirmDelete = "Êtes-vous certain de vouloir supprimer cette note";
 $AddNote = "Enregistrer la note";
 $ModifyNote = "Modifier la note";
 $BackToNoteList = "Retour à la liste de notes";
+$NotebookManagement = "Gestion du cahier de notes";
 ?>

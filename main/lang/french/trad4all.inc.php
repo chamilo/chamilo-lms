@@ -33,6 +33,8 @@ $TheListIsEmpty = "La liste est vide.";
 $CreateCategory = "Créer dossier";
 $SendFile = "Importer le document";
 $SaveChanges = "Enregistrer les modifications";
+$SearchTerm = "Rechercher terme";
+$TooShort = "Trop court";
 $langCourseCreate = "Créer une formation";
 $langTodo = "Suggestions";
 $UserName = "Login";
@@ -711,4 +713,7 @@ $MakeVisible = "Rendre visible";
 $Image = "Image";
 $CourseName = "Nom de la formation";
 $SendAMessage = "Envoyer un message";
+$Menu = "Menu";
+$BackToUserList = "Retour à la liste d\'utilisateurs";
+$GraphicNotAvailable = "Graphique non disponible";
 ?>

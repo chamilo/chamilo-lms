@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $PublishSurvey = "Publier l\'enquête";
 $CompareQuestions = "Comparer les questions";
+$InformationUpdated = "Informations mises à jour";
 $SurveyTitle = "Nom de l\'enquête";
 $SurveyIntroduction = "Texte d\'intro";
 $CreateNewSurvey = "Nouvelle enquête";
@@ -199,4 +200,6 @@ $ModifySurvey = "Modifier l\'enquête";
 $CreateQuestionSurvey = "Enregistrer la question";
 $ModifyQuestionSurvey = "Modifier la question";
 $BackToSurvey = "Retour à l\'enquête";
+$UpdateInformation = "Mettre les informations à jour";
+$PleaseFillSurvey = "Veuillez compléter l\'enquête";
 ?>

@@ -69,4 +69,5 @@ $FileVisible = "Le travail est à présent visible";
 $ButtonCreateAssignment = "Créer";
 $AssignmentName = "Nom de la tâche";
 $CreateAssignment = "Créer tâche";
+$FolderEdited = "Répertoire mis à jour";
 ?>

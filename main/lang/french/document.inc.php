@@ -208,6 +208,7 @@ $TemplateTitleStopAndThink = "Faisons le point";
 $TemplateTitleListLeftListDescription = "Liste à gauche avec un instructeur";
 $TemplateTitleStopAndThinkDescription = "Présentation invitant à réfléchir";
 $CreateTheDocument = "Enregistrer le document";
+$CreateTemplate = "Créer un modèle";
 $SharedFolder = "Répertoire partagé";
 $CreateFolder = "Créer le dossier";
 $HelpDefaultDirDocuments = "Ce répertoire contient les fichiers par défaut. Vous pouvez supprimer des fichiers ou en ajouter de nouveaux, mais si un fichier invisible est inséré dans un document web, les apprenants ne pourront pas voir ce fichier dans le document. Lorsque vous insérez un fichier dans un document, assurez-vous qu\'il soit visible. Les répertoires, eux, peuvent rester invisibles.";

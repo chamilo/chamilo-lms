@@ -20,4 +20,5 @@ $YouMustEnterATermName = "Veuillez entrer un terme";
 $YouMustEnterATermDefinition = "Veuillez entrer la définition du terme";
 $TableView = "Tableau";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Ce terme de glossaire existe déjà. Veuillez modifier le nom du terme.";
+$GlossaryManagement  = "Gestion du glossaire";
 ?>

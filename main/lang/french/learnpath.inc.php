@@ -3,6 +3,9 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "Le nouveau forum a bien été créé.";
 $NewThreadCreated = "Le nouveau sujet de forum a bien été créé.";
+$AddHotpotatoes = "Ajouter un hotpotatoes";
+$HideAttemptView = "Cacher la vue des tentatives";
+$ExtendAttemptView = "Étendre la vue des tentatives";
 $lang_learning_path = "Cours";
 $lang_learning_path_builder = "Créer un cours (outil auteur)";
 $lang_description = "description";
@@ -231,4 +234,7 @@ $ObjectiveMinScore = "Score min";
 $LPName = "Nom du cours";
 $AuthoringOptions = "Options d\'authoring";
 $CourseSettings = "Paramètres du cours";
+$AddLinkToCourse = "Ajouter ce lien au cours";
+$AddAssignmentToCourse = "Ajouter ce travail au cours";
+$AddForumToCourse = "Ajouter ce forum au cours";
 ?>

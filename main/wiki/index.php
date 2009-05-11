@@ -610,7 +610,7 @@ if ($_GET['action']=='usercontrib')
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&view='.$obj->id.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
 			$row[] =$obj->version;	
 			$row[] =$obj->comment;		
-			//$row[] =strlen($obj->comment)>30 ? substr($obj->comment,0,30).'...' : $obj->comment;		
+			//$row[] = api_strlen($obj->comment)>30 ? api_substr($obj->comment,0,30).'...' : $obj->comment;		
 			$row[] =$obj->progress.' %';
 			$row[] =$obj->score;	
 			//if(api_is_allowed_to_edit() || api_is_platform_admin())
@@ -1027,7 +1027,7 @@ if ($_GET['action']=='links')
 		}		
 				
 		echo '<div id="wikititle">';
-		echo $LinksPagesFrom.': '.$ShowAssignment.' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.Security::remove_XSS($page).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($row['title']).'</a>';
+		echo get_lang('LinksPagesFrom').': '.$ShowAssignment.' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.Security::remove_XSS($page).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($row['title']).'</a>';
 		echo '</div>';
 		
 		//fix index to title Main page into linksto
@@ -1277,7 +1277,7 @@ if ($_GET['action']=='edit')
 				<option value="100">100</option>   
 				</select> %';	
 				echo '<br/><br/>'; 
-				echo '<input type="hidden" NAME="SaveWikiChange" value="'.get_lang('langSave').'">'; //for save icon
+				echo '<input type="hidden" name="SaveWikiChange" value="'.get_lang('langSave').'">'; //for save icon
 				echo '<button class="save" type="submit" name="SaveWikiChange">'.get_lang('langSave').'</button>';//for save button
 				echo '</form>';				
 				echo '</div>';			
@@ -1386,8 +1386,8 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 				
 				if (!empty($comment))
 				{ 
-					echo get_lang('Comments').': '.substr(htmlentities($row['comment']),0,100);
-					if (strlen($row['comment'])>100)
+					echo get_lang('Comments').': '.api_substr(api_htmlentities($row['comment'], ENT_QUOTES, $charset),0,100);
+					if (api_strlen($row['comment'])>100)
 					{
 						echo '... ';
 					}
@@ -1556,7 +1556,7 @@ if ($_GET['action']=='recentchanges')
 			$row[] =$ShowAssignment;
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&amp;view='.$obj->id.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
 			$row[] =$obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');	
-			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';	
+			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
 			$rows[] = $row;
 		}
 	
@@ -2223,8 +2223,8 @@ function make_wiki_link_clickable($input)
 **/
 function save_wiki()
 {
-
-	global $tbl_wiki;	
+	global $charset;
+	global $tbl_wiki;
 	
 	// NOTE: visibility, visibility_disc and ratinglock_disc changes are not made here, but through the interce buttons
 	
@@ -2232,7 +2232,7 @@ function save_wiki()
 
 	$_clean['reflink']=Database::escape_string($_POST['reflink']);
 	$_clean['title']=Database::escape_string($_POST['title']);
-	$_clean['content']= html_entity_decode(Database::escape_string(stripslashes($_POST['content'])));
+	$_clean['content']= api_html_entity_decode(Database::escape_string(stripslashes($_POST['content'])), ENT_QUOTES, $charset);
 	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
     $_clean['comment']=Database::escape_string($_POST['comment']);	
@@ -2319,7 +2319,7 @@ function delete_wiki()
 **/
 function save_new_wiki()
 {
-
+	global $charset;
 	global $tbl_wiki;
     global $assig_user_id; //need for assignments mode
 
@@ -2376,7 +2376,7 @@ function save_new_wiki()
 	$_clean['linksto'] = links_to($_clean['content']);	//check wikilinks
 	
 	//filter no _uass
-	if(eregi("_uass",$_POST['title']) || (strtoupper(trim($_POST['title']))==strtoupper ('index') || strtoupper(trim(htmlentities($_POST['title'])))==strtoupper(htmlentities(get_lang('DefaultTitle')))))
+	if (api_eregi('_uass', $_POST['title']) || (api_strtoupper(trim($_POST['title'])) == 'INDEX' || api_strtoupper(trim(api_htmlentities($_POST['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset))))
 	{
 		$message= get_lang('GoAndEditMainPage');
 		Display::display_warning_message($message,false);
@@ -2483,6 +2483,7 @@ function display_new_wiki_form()
 **/
 function display_wiki_entry()
 {
+	global $charset;
 	global $tbl_wiki;
 	global $groupfilter;
 	global $page;
@@ -2629,8 +2630,8 @@ function display_wiki_entry()
 		//page action: export to pdf
 		echo '<span style="float:right">';
 		echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">'; // also with  export_tcpdf.php
-		echo '<input type=hidden name="titlePDF" value="'.htmlentities($title).'">';
-		echo '<input type=hidden name="contentPDF" value="'.htmlentities($content).'">';
+		echo '<input type=hidden name="titlePDF" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
+		echo '<input type=hidden name="contentPDF" value="'.api_htmlentities($content, ENT_QUOTES, $charset).'">';
 		echo '<input type="image" src="../img/wiki/wexport2pdf.gif" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none;">';
 		echo '</form>';
 		echo '</span>';
@@ -2641,8 +2642,8 @@ function display_wiki_entry()
 			echo '<span style="float:right;">';				
 			echo '<form name="form_export2DOC" method="post" action="index.php">';
 			echo '<input type=hidden name="export2DOC" value="export2doc">';
-			echo '<input type=hidden name="titleDOC" value="'.htmlentities($title).'">';
-			echo '<input type=hidden name="contentDOC" value="'.htmlentities($content).'">';
+			echo '<input type=hidden name="titleDOC" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
+			echo '<input type=hidden name="contentDOC" value="'.api_htmlentities($content, ENT_QUOTES, $charset).'">';
 			echo '<input type="image" src="../img/wiki/wexport2doc.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'" style=" border:none;">';
 			echo '</form>';
 			echo '</span>';	
@@ -2662,7 +2663,7 @@ function display_wiki_entry()
         </script>
 		<?php				
 		echo '<span style="float:right; cursor: pointer;">';
-		echo '<img src="../img/wiki/wprint.gif" title="'.get_lang('Print').'" alt="'.get_lang('Print').'" onclick="goprint()">';
+		echo '<img src="../img/wiki/wprint.gif" title="'.get_lang('Print').'" alt="'.get_lang('Print').'" onclick="javascript: goprint();">';
 		echo '</span>';
 		
 

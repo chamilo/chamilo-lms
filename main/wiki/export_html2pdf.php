@@ -5,8 +5,8 @@ include("../inc/global.inc.php");
 api_block_anonymous_users();
 require('../plugin/html2fpdf/html2fpdf.php');
 
-$contentPDF=stripslashes(html_entity_decode($_POST['contentPDF'])); 
-$titlePDF=stripslashes(html_entity_decode($_POST['titlePDF'])); 
+$contentPDF=stripslashes(api_html_entity_decode($_POST['contentPDF'], ENT_QUOTES, $charset)); 
+$titlePDF=stripslashes(api_html_entity_decode($_POST['titlePDF'], ENT_QUOTES, $charset)); 
 
 //activate Output -Buffer:
 ob_start();

@@ -203,7 +203,7 @@ class SortableTable extends HTML_Table
 			$cols = $this->getColCount();
 			$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
 			if (api_is_xml_http_request()===true) {
-				$message_empty=utf8_encode(get_lang('TheListIsEmpty'));
+				$message_empty=api_utf8_encode(get_lang('TheListIsEmpty'));
 			} else {
 				$message_empty=get_lang('TheListIsEmpty');
 			}
@@ -265,7 +265,7 @@ class SortableTable extends HTML_Table
 					$html .= '<option value="'.$action.'">'.$label.'</option>';
 				}
 				$html .= '</select>';
-				$html .= '&nbsp;&nbsp;<button type="submit" class="save" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang('Select').'</button>';
+				$html .= '&nbsp;&nbsp;<button type="submit" class="save" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang('Select').'</button>';
 			}
 			else
 			{
@@ -354,7 +354,7 @@ class SortableTable extends HTML_Table
 		}
 		if ($total_number_of_items < 500)
 		{
-			$result[] = '<option value="'.$total_number_of_items.'" '. ($total_number_of_items == $this->per_page ? 'selected="selected"' : '').'>'.ucfirst(get_lang('All')).'</option>';
+			$result[] = '<option value="'.$total_number_of_items.'" '. ($total_number_of_items == $this->per_page ? 'selected="selected"' : '').'>'.api_ucfirst(get_lang('All')).'</option>';
 		}
 		$result[] = '</select>';
 		$result[] = '<noscript>';

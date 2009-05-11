@@ -1776,7 +1776,7 @@ class CourseManager
 				$s_course_title_precedent = $courses['title'];
 			}
 	
-			if(strcasecmp($s_course_title_precedent,$course_title)<0){
+			if(api_strcasecmp($s_course_title_precedent,$course_title)<0){
 				
 				$b_find_course = true;
 				$i_course_sort = $courses['sort'];

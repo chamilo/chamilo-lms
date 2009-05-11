@@ -89,8 +89,12 @@ class Export
      * @param string Name of the root element. A root element should always be given.
      * @param string Encoding in which the data is provided
 	 */
-	function export_table_xml($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null, $encoding='ISO-8859-1')
+	function export_table_xml($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null, $encoding=null)
 	{
+		if (empty($encoding))
+		{
+			$encoding = api_get_system_encoding();
+		}
 		$file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.xml';
 		$handle = fopen($file, 'a+');
 		fwrite($handle, '<?xml version="1.0" encoding="'.$encoding.'"?>'."\n");

@@ -254,7 +254,7 @@ class Security{
 			if (is_array($var)) {
 				if (count($var)>0) {
 					foreach ($var as &$value_var) {
-						$value_var=htmlentities($value_var,ENT_QUOTES,$charset);	
+						$value_var=api_htmlentities($value_var,ENT_QUOTES,$charset);	
 					}				
 				} else {
 					return '';
@@ -262,7 +262,7 @@ class Security{
 				return $var;
 	
 			} else {
-				return htmlentities($var,ENT_QUOTES,$charset);	
+				return api_htmlentities($var,ENT_QUOTES,$charset);	
 			}			
 		} else {
 		$purifier = new HTMLPurifier($config_purifier,$user_status);

@@ -370,7 +370,7 @@ class Display {
 		if($filter)
 		{
 			//filter message
-			$message = htmlentities($message,ENT_QUOTES,$charset);
+			$message = api_htmlentities($message,ENT_QUOTES,$charset);
 		}
 		if (!headers_sent())
 		{
@@ -401,7 +401,7 @@ class Display {
 		global $charset;
 		if($filter){
 			//filter message
-			$message = htmlentities($message,ENT_QUOTES,$charset);
+			$message = api_htmlentities($message,ENT_QUOTES,$charset);
 		}
 		if (!headers_sent())
 		{
@@ -431,7 +431,7 @@ class Display {
 		global $charset;
 		if($filter){
 			//filter message
-			$message = htmlentities($message,ENT_QUOTES,$charset);
+			$message = api_htmlentities($message,ENT_QUOTES,$charset);
 		}
 		if (!headers_sent())
 		{
@@ -464,7 +464,7 @@ class Display {
 		global $charset;
 		if($filter){
 			//filter message
-			$message = htmlentities($message,ENT_QUOTES,$charset);
+			$message = api_htmlentities($message,ENT_QUOTES,$charset);
 		}
 
 		if (!headers_sent())

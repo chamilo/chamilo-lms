@@ -954,13 +954,13 @@ function api_clear_anonymous($db_check=false) {
  * @param  boolean middle - if true, truncates on string middle
  */
 function api_trunc_str($text, $length = 30, $endStr = '...', $middle = false) {
-	if (strlen($text) <= $length) {
+	if (api_strlen($text) <= $length) {
 		return $text;
 	}
 	if ($middle) {
-		$text = rtrim(substr($text, 0, round($length / 2))).$endStr.ltrim(substr($text, -round($length / 2)));
+		$text = rtrim(api_substr($text, 0, round($length / 2))).$endStr.ltrim(api_substr($text, -round($length / 2)));
 	} else {
-		$text = rtrim(substr($text, 0, $length)).$endStr;
+		$text = rtrim(api_substr($text, 0, $length)).$endStr;
 	}
 	return $text;
 }

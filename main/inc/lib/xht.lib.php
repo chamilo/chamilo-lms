@@ -28,9 +28,13 @@
 
 function xht_htmlwchars($s)  // use only where ISO-8859-1 is not required!
 {
-    return ereg_replace('\[((/?(b|big|i|small|sub|sup|u))|br/)\]', '<\\1>', 
-        str_replace('@作', '&', 
-        htmlspecialchars(ereg_replace('&#([0-9]+);', '@作#\\1;', $s))));
+    //return ereg_replace('\[((/?(b|big|i|small|sub|sup|u))|br/)\]', '<\\1>', 
+    //    str_replace('@作', '&', 
+    //    htmlspecialchars(ereg_replace('&#([0-9]+);', '@作#\\1;', $s))));
+	global $charset;
+    return api_ereg_replace('\[((/?(b|big|i|small|sub|sup|u))|br/)\]', '<\\1>',
+        str_replace('@作', '&',
+        htmlspecialchars(api_ereg_replace('&#([0-9]+);', '@作#\\1;', $s), ENT_QUOTES, $charset)));
     // replaces htmlspecialchars for double-escaped xml chars like '&amp;#nnn;'
     // and                       when html tags <...> are represented as [...]
 }
@@ -44,10 +48,10 @@ function xht_explode_assoclist($s)
 {
     $result = array(); if (!xht_is_assoclist($s)) return $result;
     
-    foreach (explode(',,', substr($s, 1)) as $keyplusvalue)
-        if (($cp = strpos($keyplusvalue, $s{0})))
-            $result[trim(substr($keyplusvalue, 0, $cp))] = 
-                substr($keyplusvalue, $cp+1);
+    foreach (explode(',,', api_substr($s, 1)) as $keyplusvalue)
+        if ($cp = api_strpos($keyplusvalue, api_substr($s, 0, 1)))
+            $result[trim(api_substr($keyplusvalue, 0, $cp))] = 
+                api_substr($keyplusvalue, $cp+1);
     
     return $result;
 }
@@ -73,7 +77,7 @@ var $_prev_param;   // old parameter values
 function xht_fill_template($template_name, $cur_elem = 0)
 {
     $template_name = trim($template_name);
-    if (!$template_name || (strpos($template_name, ' ') !== FALSE)) return '';
+    if (!$template_name || (api_strpos($template_name, ' ') !== FALSE)) return '';
     if (!is_string($httext = $this->htt_array[$template_name]))     return '';
     
     if ($this->xht_dbgn) $this->xht_dbgo .= '<!-- ' . XHT_LP . $template_name . 
@@ -81,20 +85,20 @@ function xht_fill_template($template_name, $cur_elem = 0)
     
     $prev_lpp = 0; $prev_sub = ''; $scanpos = 0;
     
-    while (($rpp = strpos($httext, XHT_RP, $scanpos)) !== FALSE)  // first -}
+    while (($rpp = api_strpos($httext, XHT_RP, $scanpos)) !== FALSE)  // first -}
     {
-        if (($lpp = strpos($httext, XHT_LP)) === FALSE) break;  // no {- for -}
+        if (($lpp = api_strpos($httext, XHT_LP)) === FALSE) break;  // no {- for -}
         if ($lpp > $rpp) break;  // no {- preceding -}
         
-        while (($next_lpp = strpos($httext, XHT_LP, $lpp + XHT_PL)) !== FALSE)
+        while (($next_lpp = api_strpos($httext, XHT_LP, $lpp + XHT_PL)) !== FALSE)
             if ($next_lpp > $rpp) break;
             else $lpp = $next_lpp;  // find {- closest to -}
         
-        $subtext = substr($httext, $lpp + XHT_PL, $rpp - $lpp - XHT_PL);
+        $subtext = api_substr($httext, $lpp + XHT_PL, $rpp - $lpp - XHT_PL);
         
-        $httext = substr($httext, 0, $lpp) . 
+        $httext = api_substr($httext, 0, $lpp) . 
             $this->xht_substitute($subtext, $cur_elem, XHT_LP, XHT_RP) . 
-            substr($httext, $rpp + XHT_PL);  // substitute or leave intact
+            api_substr($httext, $rpp + XHT_PL);  // substitute or leave intact
         
         if ($lpp == $prev_lpp && $subtext == $prev_sub)  // prevent looping
         {
@@ -112,8 +116,10 @@ function xht_fill_template($template_name, $cur_elem = 0)
 
 function xht_substitute($subtext, $cur_elem = 0, $pre = '', $post = '')
 {
+	global $charset;
+
 	$regs = array(); // for use with ereg()
-    if (!ereg(XHT_SUBS2, $subtext, $regs) && !ereg(XHT_SUBS1, $subtext, $regs)) 
+    if (!api_ereg(XHT_SUBS2, $subtext, $regs) && !api_ereg(XHT_SUBS1, $subtext, $regs)) 
         return $pre . $subtext . $post;
     
     $type = $regs[1]; $text = $regs[2]; $result = ''; $subnum = FALSE;
@@ -123,7 +129,7 @@ function xht_substitute($subtext, $cur_elem = 0, $pre = '', $post = '')
     {
         $subnum = ++ $this->xht_dbgn; 
         $this->xht_dbgo .= '<!-- ' . XHT_LP . $type . $subnum . '+ ' . 
-            htmlspecialchars($text) . ' ' . XHT_RP . 
+            htmlspecialchars($text, ENT_QUOTES, $charset) . ' ' . XHT_RP . 
             $this->_show_param() .  " -->\n";
     }
     
@@ -196,7 +202,7 @@ function xht_substitute($subtext, $cur_elem = 0, $pre = '', $post = '')
     }
     elseif ($type == 'T')  // Test, e.g. {-T key1 == key2 text-}
     {
-        if (ereg('^(=|==|<=|<|!=|<>|>|>=) +([^ ]+) +(.*)$', $subtext, $regs))
+        if (api_ereg('^(=|==|<=|<|!=|<>|>|>=) +([^ ]+) +(.*)$', $subtext, $regs))
         {
             // Comparand= parameter value if set, else languagevar value
             
@@ -207,12 +213,12 @@ function xht_substitute($subtext, $cur_elem = 0, $pre = '', $post = '')
             $cmp = strcmp($cmp1, $cmp3); $op = ' ' . $regs[1] . ' ';
             
             if ($subnum) $this->xht_dbgo .= '<!-- ' . XHT_LP . $type . $subnum . 
-                    '  ' . htmlspecialchars($cmp1.$op.$cmp3.' = '.$cmp) . 
+                    '  ' . htmlspecialchars($cmp1.$op.$cmp3.' = '.$cmp, ENT_QUOTES, $charset) .
                     ' ' . XHT_RP . " -->\n";  // debugging output
             
-            if (    ($cmp <  0  &&  strpos('  <= < != <> ', $op)) || 
-                    ($cmp == 0  &&  strpos('  = == <= >= ', $op)) ||
-                    ($cmp >  0  &&  strpos('  != <> > >= ', $op))   )
+            if (    ($cmp <  0  &&  api_strpos('  <= < != <> ', $op)) || 
+                    ($cmp == 0  &&  api_strpos('  = == <= >= ', $op)) ||
+                    ($cmp >  0  &&  api_strpos('  != <> > >= ', $op))   )
                 $result = $this->xht_substitute($regs[3], $cur_elem);
             // else $result is empty
         }
@@ -223,12 +229,12 @@ function xht_substitute($subtext, $cur_elem = 0, $pre = '', $post = '')
     }
     else
     {
-        if (strpos('CLPVX', $type) !== FALSE)  // used to be always
+        if (api_strpos('CLPVX', $type) !== FALSE)  // used to be always
             $text = $this->xht_substitute($text, $cur_elem);  // nested escape
         
         if     ($type == 'C') // Call, e.g. {-C SUBTEMPLATE-}
                 $result = $this->xht_fill_template($text, $cur_elem);
-        elseif ($type == 'H') $result = htmlspecialchars($text);
+        elseif ($type == 'H') $result = htmlspecialchars($text, ENT_QUOTES, $charset);
         elseif ($type == 'L') $result = $this->_lang($text, $cur_elem);
         elseif ($type == 'P') $result = $this->xht_param[$text];
         elseif ($type == 'U') $result = urlencode($text);
@@ -240,10 +246,10 @@ function xht_substitute($subtext, $cur_elem = 0, $pre = '', $post = '')
         else // $type == 'V' or 'X'
         {
             
-            if (ereg('^(.*)=/(.+)$', $text, $regs))  // special resource-marker
+            if (api_ereg('^(.*)=/(.+)$', $text, $regs))  // special resource-marker
             {
                 $path = $regs[1]; $text = $regs[2];
-                if (substr($path, -1) == '/') $path = substr($path, 0, -1);
+                if (api_substr($path, -1) == '/') $path = api_substr($path, 0, -1);
                 
                 if ($path) $cur_elem = $this->xht_xmldoc->
                     xmd_select_single_element($path, $cur_elem);
@@ -259,8 +265,8 @@ function xht_substitute($subtext, $cur_elem = 0, $pre = '', $post = '')
     }
     
     if ($subnum) $this->xht_dbgo .= '<!-- ' . XHT_LP . $type . $subnum . '- ' . 
-            htmlspecialchars((strlen($result) <= 60) ? 
-                $result . ' ': substr($result, 0, 57).'...') . XHT_RP . " -->\n";
+            htmlspecialchars((api_strlen($result) <= 60) ? 
+                $result . ' ': api_substr($result, 0, 57).'...', ENT_QUOTES, $charset) . XHT_RP . " -->\n";
     
     return $result;
 }
@@ -285,21 +291,21 @@ function xhtdoc($htt_file_contents)
     $htt_file_contents =  // normalize \r (Mac) and \r\n (Windows) to \n
         str_replace("\r", "\n", str_replace("\r\n", "\n", $htt_file_contents));
     
-    while (substr($htt_file_contents, -1) == "\n")
-        $htt_file_contents = substr($htt_file_contents, 0, -1);
+    while (api_substr($htt_file_contents, -1) == "\n")
+        $htt_file_contents = api_substr($htt_file_contents, 0, -1);
     
-    $last_line = strrchr($htt_file_contents, "\n"); $this->htt_error = '';
+    $last_line = api_strrchr($htt_file_contents, "\n"); $this->htt_error = '';
     
-    if (strlen($last_line) < 12 or substr($last_line, 0, 6) != "\n<!-- " 
-        or strlen($last_line) % 2 != 0 or substr($last_line, -4) != " -->")
+    if (api_strlen($last_line) < 12 || api_substr($last_line, 0, 6) != "\n<!-- " 
+        || api_strlen($last_line) % 2 != 0 || api_substr($last_line, -4) != " -->")
     {
         $this->htt_error = 'last line must be of the form <!-- {--} -->';
         return;
     }
     
-    define('XHT_PL', (int) (strlen($last_line) - 10) / 2);    // Parentheses Lth
-    define('XHT_LP', substr($last_line, 6, XHT_PL));          // Left Par
-    define('XHT_RP', substr($last_line, 6 + XHT_PL, XHT_PL)); // Right Par
+    define('XHT_PL', (int) (api_strlen($last_line) - 10) / 2);    // Parentheses Lth
+    define('XHT_LP', api_substr($last_line, 6, XHT_PL));          // Left Par
+    define('XHT_RP', api_substr($last_line, 6 + XHT_PL, XHT_PL)); // Right Par
     
     if (XHT_LP == XHT_RP)  
     {
@@ -313,16 +319,16 @@ function xhtdoc($htt_file_contents)
     foreach (explode("\n<!-- " . XHT_LP, "\n" . $htt_file_contents) 
             as $name_and_text)
     {
-        if (($name_length = strpos($name_and_text, XHT_RP . " -->\n")))
+        if (($name_length = api_strpos($name_and_text, XHT_RP . " -->\n")))
         {
-            $template_name = trim(substr($name_and_text, 0, $name_length));
+            $template_name = trim(api_substr($name_and_text, 0, $name_length));
             
-            if (strpos($template_name, ' ') !== FALSE) give_up('Template ' . 
+            if (api_strpos($template_name, ' ') !== FALSE) give_up('Template ' . 
                 $template_name . ' has a space in its name');
-            $httext = substr($name_and_text, $name_length + XHT_PL + 5);
+            $httext = api_substr($name_and_text, $name_length + XHT_PL + 5);
             
-            while (substr($httext, 0, 1) == "\n") $httext = substr($httext, 1);
-            while (substr($httext, -1) == "\n") $httext = substr($httext,0,-1);
+            while (api_substr($httext, 0, 1) == "\n") $httext = api_substr($httext, 1);
+            while (api_substr($httext, -1) == "\n") $httext = api_substr($httext,0,-1);
             
             $this->xht_add_template($template_name, $httext);
         }
@@ -346,16 +352,18 @@ function xhtdoc($htt_file_contents)
 
 function _show_param()  // for debugging info
 {
+	global $charset;
+
     $result = '';
     
     foreach ($this->xht_param as $k => $v)
         if ($v !== $this->_prev_param[$k])
         {
             $this->_prev_param[$k] = $v; $result .= ', ' . $k . ': ' . 
-                ((strlen($v) <= 20) ? $v : substr($v, 0, 17).'...');
+                ((api_strlen($v) <= 20) ? $v : api_substr($v, 0, 17).'...');
         }
     
-    return $result ? htmlspecialchars(substr($result, 1)) : '';
+    return $result ? htmlspecialchars(api_substr($result, 1), ENT_QUOTES, $charset) : '';
 }
 
 

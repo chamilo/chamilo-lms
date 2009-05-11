@@ -87,7 +87,7 @@ function api_replace_parameter($upload_path, $buffer, $param_name="src")
  */
 function replace_accents($string){
 	global $charset;
-	$string = htmlentities($string,ENT_QUOTES,$charset);
+	$string = api_htmlentities($string,ENT_QUOTES,$charset);
 	$res = preg_replace("/&([a-z])[a-z]+;/i","$1",$string);
 	return $res;
 }
@@ -681,6 +681,28 @@ function add_ext_on_mime($fileName,$fileType)
 		$mimeType[] = "video/mpeg4-generic";            $extension[] =".mp4";
 		$mimeType[] = "video/quicktime";                $extension[] =".mov";
 		$mimeType[] = "video/x-msvideo";                $extension[] =".avi";
+
+		$mimeType[] = "video/x-ms-wmv";                	$extension[] =".wmv";
+		$mimeType[] = "video/x-flv";                    $extension[] =".flv";
+
+		$mimeType[] = "application/vnd.ms-word.document.macroEnabled.12";							$extension[] =".docm";
+		$mimeType[] = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";	$extension[] =".docx";
+		$mimeType[] = "application/vnd.ms-word.template.macroEnabled.12";							$extension[] =".dotm";
+		$mimeType[] = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";	$extension[] =".dotx";
+		$mimeType[] = "application/vnd.ms-powerpoint.template.macroEnabled.12";						$extension[] =".potm";
+		$mimeType[] = "application/vnd.openxmlformats-officedocument.presentationml.template";		$extension[] =".potx";
+		$mimeType[] = "application/vnd.ms-powerpoint.addin.macroEnabled.12";						$extension[] =".ppam";
+		$mimeType[] = "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";					$extension[] =".ppsm";
+		$mimeType[] = "application/vnd.openxmlformats-officedocument.presentationml.slideshow";		$extension[] =".ppsx";
+		$mimeType[] = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";					$extension[] =".pptm";
+		$mimeType[] = "application/vnd.openxmlformats-officedocument.presentationml.presentation";	$extension[] =".pptx";
+		$mimeType[] = "application/vnd.ms-excel.addin.macroEnabled.12";								$extension[] =".xlam";
+		$mimeType[] = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";						$extension[] =".xlsb";
+		$mimeType[] = "application/vnd.ms-excel.sheet.macroEnabled.12";								$extension[] =".xlsm";
+		$mimeType[] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";			$extension[] =".xlsx";
+		$mimeType[] = "application/vnd.ms-excel.template.macroEnabled.12";							$extension[] =".xltm";
+		$mimeType[] = "application/vnd.openxmlformats-officedocument.spreadsheetml.template";		$extension[] =".xltx";
+
 		//test on PC (files with no extension get application/octet-stream)
 		//$mimeType[] = "application/octet-stream";      $extension[] =".ext";
 
@@ -1168,11 +1190,12 @@ function filter_extension(&$filename)
  */
 function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL, $readonly=0)
 {
+	global $charset;
 	$table_document = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
 	$sql="INSERT INTO $table_document
 	(`path`,`filetype`,`size`,`title`, `comment`, readonly)
 	VALUES ('$path','$filetype','$filesize','".
-	Database::escape_string(htmlspecialchars($title,ENT_QUOTES))."', '$comment',$readonly)";
+	Database::escape_string(htmlspecialchars($title, ENT_QUOTES, $charset))."', '$comment',$readonly)";
 	if(api_sql_query($sql,__FILE__,__LINE__))
 	{
 		//display_message("Added to database (id ".mysql_insert_id().")!");
@@ -1360,10 +1383,10 @@ function search_img_from_html($htmlFile)
 		if (strlen($buffer)>=0 && !($buffer===false)) {
 			//
 		} else {
-			die('<center>can not read file</center>');
+			die('<center>Can not read file.</center>');
 		}
 	} else {
-		die('<center>can not read file</center>');
+		die('<center>Can not read file.</center>');
 	}
 	$matches = array();
 	if ( preg_match_all('~<[[:space:]]*img[^>]*>~i', $buffer, $matches) )

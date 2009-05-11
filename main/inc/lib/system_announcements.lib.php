@@ -436,7 +436,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		while($row = Database::fetch_array($result,'ASSOC'))
 		{
-			api_mail_html($row['firstname'].' '.$row['lastname'], $row['email'], html_entity_decode(stripslashes($title),ENT_QUOTES,$charset), html_entity_decode(stripslashes($content),ENT_QUOTES,$charset), $_user['firstName'].' '.$_user['lastName'], api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));
+			api_mail_html($row['firstname'].' '.$row['lastname'], $row['email'], api_html_entity_decode(stripslashes($title),ENT_QUOTES,$charset), api_html_entity_decode(stripslashes($content),ENT_QUOTES,$charset), $_user['firstName'].' '.$_user['lastName'], api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));
 		}
 	}
 }

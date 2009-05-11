@@ -81,22 +81,22 @@ function choose_image($file_name)
 	/* TABLES INITIALISATION */
 	if (!$type || !$image)
 	{
-		$type['word'      ] = array('doc', 'dot',  'rtf', 'mcw',  'wps');
-		$type['web'       ] = array('htm', 'html', 'htx', 'xml',  'xsl',  'php');
+		$type['word'      ] = array('doc', 'dot',  'rtf', 'mcw',  'wps', 'psw', 'docm', 'docx', 'dotm',  'dotx');
+		$type['web'       ] = array('htm', 'html', 'htx', 'xml',  'xsl',  'php', 'xhtml');
 		$type['image'     ] = array('gif', 'jpg',  'png', 'bmp',  'jpeg');
-		$type['audio'     ] = array('wav', 'mid',  'mp2', 'mp3',  'midi', 'sib');
-		$type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'au', 'flv', 'avi', 'wmv', 'asf');
-		$type['excel'     ] = array('xls', 'xlt',  'xls', 'xlt');
+		$type['audio'     ] = array('wav', 'mid',  'mp2', 'mp3',  'midi', 'sib', 'amr', 'kar');
+		$type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'au', 'flv', 'avi', 'wmv', 'asf', '3gp');
+		$type['excel'     ] = array('xls', 'xlt',  'xls', 'xlt', 'pxl', 'xlsx', 'xlsm', 'xlam', 'xlsb', 'xltm', 'xltx');
 		$type['compressed'] = array('zip', 'tar',  'rar', 'gz');
 		$type['code'      ] = array('js',  'cpp',  'c',   'java', 'phps');
 		$type['acrobat'   ] = array('pdf');
-		$type['powerpoint'] = array('ppt');
+		$type['powerpoint'] = array('ppt', 'pps', 'pptm', 'pptx', 'potm', 'potx', 'ppam', 'ppsm', 'ppsx');
 		$type['flash'     ] = array('fla', 'swf');
 		$type['text'      ] = array('txt','log');
-		$type['oo_writer' ] = array('odt','sxw');
-		$type['oo_calc'   ] = array('ods','sxc');
-		$type['oo_impress'] = array('odp','sxi');
-		$type['oo_draw'   ] = array('odg','sxd');
+		$type['oo_writer' ] = array('odt', 'ott', 'sxw', 'stw');
+		$type['oo_calc'   ] = array('ods', 'ots', 'sxc', 'stc');
+		$type['oo_impress'] = array('odp', 'otp', 'sxi', 'sti');
+		$type['oo_draw'   ] = array('odg', 'otg', 'sxd', 'std');
 
 		$image['word'      ] = 'word.gif';
 		$image['web'       ] = 'file_html.gif';
@@ -110,9 +110,12 @@ function choose_image($file_name)
 		$image['powerpoint'] = 'powerpoint.gif';
 		$image['flash'     ] = 'file_flash.gif';
 		$image['text'      ] = 'file_txt.gif';
-		$image['oo_writer' ] = 'word.gif';
-		$image['oo_calc'   ] = 'excel.gif';
-		$image['oo_impress'] = 'powerpoint.gif';
+		//$image['oo_writer' ] = 'word.gif';
+		//$image['oo_calc'   ] = 'excel.gif';
+		//$image['oo_impress'] = 'powerpoint.gif';
+		$image['oo_writer' ] = 'file_oo_writer.gif';
+		$image['oo_calc'   ] = 'file_oo_calc.gif';
+		$image['oo_impress'] = 'file_oo_impress.gif';
 		$image['oo_draw'   ] = 'file_oo_draw.gif';
 	}
 

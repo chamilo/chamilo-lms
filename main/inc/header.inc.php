@@ -1,4 +1,4 @@
-<?php // $Id: header.inc.php 16728 2008-11-12 15:49:54Z pcool $
+<?php // $Id: header.inc.php 20457 2009-05-11 04:03:35Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -177,8 +177,8 @@ echo '@import "'.$my_code_path.'css/'.$my_style.'/course.css";'."\n";
 </style>
 
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />
-<link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/courses.php" title="<?php echo htmlentities(get_lang('OtherCourses'),ENT_QUOTES,$charset); ?>" />
-<link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/profile.php" title="<?php echo htmlentities(get_lang('ModifyProfile'),ENT_QUOTES,$charset); ?>" />
+<link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/courses.php" title="<?php echo api_htmlentities(get_lang('OtherCourses'),ENT_QUOTES,$charset); ?>" />
+<link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/profile.php" title="<?php echo api_htmlentities(get_lang('ModifyProfile'),ENT_QUOTES,$charset); ?>" />
 <link href="http://www.dokeos.com/documentation.php" rel="Help" />
 <link href="http://www.dokeos.com/team.php" rel="Author" />
 <link href="http://www.dokeos.com" rel="Copyright" />

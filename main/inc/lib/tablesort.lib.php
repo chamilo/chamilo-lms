@@ -44,7 +44,9 @@ class TableSort
 	 */
 	function strtolower_keepaccents($txt)
 	{
-		return strtolower(strtr($txt, "������������������������������", "������������������������������"));
+		//return strtolower(strtr($txt, "������������������������������", "������������������������������"));
+
+		return api_strtolower($txt);
 	}
 	/**
 	 * String to lowercase.
@@ -58,6 +60,8 @@ class TableSort
 		return str_replace(array ("�", "�"), array ("ae", "ss"), strtr(TableSort::strtolower_keepaccents($txt), "�����������������������������", "aaaaaaceeeeiiiidnoooooouuuuyy"));
 		// do not replace "�" by "th", leave it at the end of the alphabet...
 		// do not replace any of "$&��������", though they resemble letters...
+
+		return api_strtolower($txt);
 	}
 	/**
 	 * Create a string to use in sorting.
@@ -71,7 +75,9 @@ class TableSort
 	 */
 	function orderingstring($txt)
 	{
-		return ereg_replace("[^0-9a-z�]", "", TableSort::strtolower_eorlatin($txt));
+		//return ereg_replace("[^0-9a-z�]", "", TableSort::strtolower_eorlatin($txt));
+
+		return api_strtolower($txt);
 	}
 	/**
 	 * Sort 2-dimensional table.
@@ -110,14 +116,16 @@ class TableSort
 				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
 				break;
 			case SORT_IMAGE :
-				$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
+				//$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
+				$compare_function = 'strcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
 				break;
 			case SORT_DATE :
 				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
 				break;
             case SORT_STRING :
             default:
-                $compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
+                //$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
+                $compare_function = 'strcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
                 break;
 		}
 		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return ('.$direction.' == SORT_ASC ? ('.$compare_function.') : !('.$compare_function.'));';

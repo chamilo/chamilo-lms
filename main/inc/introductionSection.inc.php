@@ -31,7 +31,6 @@ include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php')
 	Constants and variables
 -----------------------------------------------------------
 */
-
 $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
 $intro_editAllowed = $is_allowed_to_edit;
 
@@ -157,10 +156,10 @@ if ($intro_dispCommand) {
 		echo "<div id=\"courseintro_icons\"><p>\n";
 		if (!empty ($GLOBALS["_cid"])) {
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdEdit=1\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/edit.gif\" alt=\"".get_lang('Modify')."\" border=\"0\" /></a>\n";
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/delete.gif\" alt=\"".get_lang('Delete')."\" border=\"0\" /></a>\n";
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/delete.gif\" alt=\"".get_lang('Delete')."\" border=\"0\" /></a>\n";
 		} else {
 			echo "<a href=\"".api_get_self()."?intro_cmdEdit=1\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/edit.gif\" alt=\"".get_lang('Modify')."\" border=\"0\" /></a>\n";
-			echo "<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/delete.gif\" alt=\"".get_lang('Delete')."\" border=\"0\" /></a>\n";
+			echo "<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/delete.gif\" alt=\"".get_lang('Delete')."\" border=\"0\" /></a>\n";
 		}
 		echo "</p>\n</div>";
 		

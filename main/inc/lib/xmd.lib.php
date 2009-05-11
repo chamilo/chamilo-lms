@@ -201,7 +201,7 @@ class xmddoc
                 !is_string($text) || !is_string($xmPath)) return FALSE;
         
         $m = array();
-        if (ereg('^(.*)([~!@])(.*)$', $xmPath, $m))  // split on ~ or ! or @
+        if (api_ereg('^(.*)([~!@])(.*)$', $xmPath, $m))  // split on ~ or ! or @
         {
             $xmPath = $m[1]; $op = $m[2]; $name = $m[3];
         }
@@ -292,13 +292,13 @@ class xmddoc
         if (!is_string($name) || $name == '') return -1;
         
         if (($p = strrpos($name, ':')) !== FALSE)  // URI + ':' + name
-            if ($p == 0 || $p == strlen($name) - 1) return -1;
+            if ($p == 0 || $p == api_strlen($name) - 1) return -1;
         
         $child = ($this->_last += 1); $uris = array(); $uri = '';
         
         if ($p)
         {
-            $uri = substr($name, 0, $p); $name = substr($name, $p + 1);
+            $uri = api_substr($name, 0, $p); $name = api_substr($name, $p + 1);
             $uris[] = $uri;  // check uris after defining all attributes
         }
         
@@ -327,20 +327,20 @@ class xmddoc
         if (!is_string($name) || $name == '') return '';
         
         if (($p = strrpos($name, ':')) !== FALSE)  // URI + ':' + name
-            if ($p == 0 || $p == strlen($name) - 1) return '';
+            if ($p == 0 || $p == api_strlen($name) - 1) return '';
         
         $uri = '';  // beware of 'xmlns...', which is a namespace def!
         
-        if ($p) if (substr($name, 0, 6) != 'xmlns:')
+        if ($p) if (api_substr($name, 0, 6) != 'xmlns:')
         {
-            $uri = substr($name, 0, $p); $name = substr($name, $p + 1);
+            $uri = api_substr($name, 0, $p); $name = api_substr($name, $p + 1);
         }
         $this->attributes[$parent][$name] = $value;
         $this->atns[$parent][$name] = $uri ? $this->_lookup($uri) : 0;
         if ($checkurihaspfx) if ($uri) $this->_nsPfx($parent, $uri);
         
-        if (substr($name, 0, 6) == 'xmlns:')  // namespace def with prefix
-            $this->_nsp[substr($name, 6)] = $value;  // prefix is in use
+        if (api_substr($name, 0, 6) == 'xmlns:')  // namespace def with prefix
+            $this->_nsp[api_substr($name, 6)] = $value;  // prefix is in use
         
         return $uri;
     }
@@ -379,6 +379,8 @@ class xmddoc
     
     function xmd_xml($increase = '  ', $indent = '', $lbr = "\n", $parent = 0)
     {
+		global $charset;
+
         if ($parent < 0 || $parent > $this->_last) return '';
         
         $uri = $this->names[$this->ns[$parent]];
@@ -400,7 +402,7 @@ class xmddoc
                 $this->names[$atnsn] : '';
             $pfxc = ($uri == '') ? '' : $this->_nsPfx($parent, $uri);
             $result .= ' ' . $pfxc . $name 
-                . '="' . htmlspecialchars($value) . '"';
+                . '="' . htmlspecialchars($value, ENT_QUOTES, $charset) . '"';
         }
         
         if (count($this->children[$parent]) == 0)
@@ -409,7 +411,7 @@ class xmddoc
         $result .= '>';
         
         foreach ($this->children[$parent] as $child)
-            $result .= is_string($child) ? htmlspecialchars($child) : ($lbr . 
+            $result .= is_string($child) ? htmlspecialchars($child, ENT_QUOTES, $charset) : ($lbr . 
                 $this->xmd_xml($increase, $indent.$increase, $lbr, $child));
         
         if (!is_string($child)) $result .= $lbr . $indent;  // last $child
@@ -428,7 +430,7 @@ class xmddoc
         
         if (($p = strrpos($xmPath, '@')) !== FALSE)
         {
-            $attName = substr($xmPath, $p+1); $xmPath = substr($xmPath, 0, $p);
+            $attName = api_substr($xmPath, $p+1); $xmPath = api_substr($xmPath, 0, $p);
         }
         
         if (!($elems = $this->xmd_select_elements($xmPath, $parent))) return '';
@@ -437,17 +439,17 @@ class xmddoc
         
         foreach ($elems as $elem)
         {
-            $value = isset($attName) && strlen($attName) >= 1 ?
+            $value = isset($attName) && api_strlen($attName) >= 1 ?
                 ($attName == '.' ? $this->name[$elem] : 
                     ($attName{0} == '*' ? 
-                        $this->_sibnum($elem, substr($attName, 1)) :
+                        $this->_sibnum($elem, api_substr($attName, 1)) :
                         $this->attributes[$elem][$attName])) : 
                 $this->xmd_text($elem);
             $result .= $fixin . ($fun ? $fun($value) : $value);
         }
         
         return  (isset($fix['pre']) ? $fix['pre'] : '') . 
-                substr($result, strlen($fixin)) . 
+                api_substr($result, api_strlen($fixin)) . 
                 (isset($fix['post']) ? $fix['post'] : '');
     }
     
@@ -458,20 +460,20 @@ class xmddoc
         
         $fix = array();
         
-        if (($p = strpos($xmPath, ' -% ')) !== FALSE)
+        if (($p = api_strpos($xmPath, ' -% ')) !== FALSE)
         {
-            $fix['pre'] = substr($xmPath, 0, $p);
-            $xmPath = substr($xmPath, $p+4);
+            $fix['pre'] = api_substr($xmPath, 0, $p);
+            $xmPath = api_substr($xmPath, $p+4);
         }
-        if (($p = strpos($xmPath, ' %- ')) !== FALSE)
+        if (($p = api_strpos($xmPath, ' %- ')) !== FALSE)
         {
-            $fix['post'] = substr($xmPath, $p+4);
-            $xmPath = substr($xmPath, 0, $p);
+            $fix['post'] = api_substr($xmPath, $p+4);
+            $xmPath = api_substr($xmPath, 0, $p);
         }
-        if (($p = strpos($xmPath, ' ')) !== FALSE)
+        if (($p = api_strpos($xmPath, ' ')) !== FALSE)
         {
-            $fix['in'] = substr($xmPath, $p+1);
-            $xmPath = substr($xmPath, 0, $p);
+            $fix['in'] = api_substr($xmPath, $p+1);
+            $xmPath = api_substr($xmPath, 0, $p);
         }
         
         return $this->xmd_value($xmPath, $parent, $fix, $fun);
@@ -522,15 +524,15 @@ class xmddoc
         //                  e= -name or +name (sibling of specific name)
         //                  e= .. (stops at root, so too many doesn't matter)
         
-        if (substr($xmPath, 0, 3) == '/*/')
+        if (api_substr($xmPath, 0, 3) == '/*/')
         {
-            $xmPath = substr($xmPath, 3); $parent = 0;
+            $xmPath = api_substr($xmPath, 3); $parent = 0;
         }
         
         if ($parent < 0 || $parent > $this->_last) return array();
         
-        while (substr($xmPath, 0, 1) == '/') $xmPath = substr($xmPath, 1);
-        while (substr($xmPath, -1) == '/')   $xmPath = substr($xmPath, 0, -1);
+        while (api_substr($xmPath, 0, 1) == '/') $xmPath = api_substr($xmPath, 1);
+        while (api_substr($xmPath, -1) == '/')   $xmPath = api_substr($xmPath, 0, -1);
         
         if ($xmPath == '' || $xmPath == '.') return array($parent);
         
@@ -542,12 +544,12 @@ class xmddoc
         
         if ($xmPath{0} == '-' || $xmPath{0} == '+')
         {
-            $sib = $this->_sibnum($parent, substr($xmPath, 1), $xmPath{0});
+            $sib = $this->_sibnum($parent, api_substr($xmPath, 1), $xmPath{0});
             if ($sib == -1) return array(); return array($sib);
         }
         
         $m = array();
-        if (ereg('^(.+)/([^/]+)$', $xmPath, $m))  // split on last /
+        if (api_ereg('^(.+)/([^/]+)$', $xmPath, $m))  // split on last /
         {
             if (!($set = $this->xmd_select_elements($m[1], $parent))) 
                 return $set;  // which is empty array
@@ -563,7 +565,7 @@ class xmddoc
         
         $xmName = $xmPath; $xmNum = 0; $elems = array();
         
-        if (ereg('^(.+)\[(-?[0-9]+)\]$', $xmPath, $m))
+        if (api_ereg('^(.+)\[(-?[0-9]+)\]$', $xmPath, $m))
         {
             $xmName = $m[1]; $xmNum = (int) $m[2];
         }
@@ -602,7 +604,7 @@ class xmddoc
                 if (is_string($ch))
                 {
                     $this->numbers[] = 0; $this->_strings += 1;
-                    $this->numbers[] = strlen($ch); $this->textstring .= $ch;
+                    $this->numbers[] = strlen($ch); $this->textstring .= $ch; //!!! Here strlen() has not been changed to api_strlen(). To be investigated. Ivan Tcholakov, 29-AUG-2008.
                 }
                 else
                 {
@@ -616,7 +618,7 @@ class xmddoc
             {
                 $this->numbers[] = $this->_lookup($name);
                 $this->numbers[] = $this->atns[$n][$name];
-                $this->numbers[] = strlen($value); $this->textstring .= $value;
+                $this->numbers[] = strlen($value); $this->textstring .= $value; //!!! Here strlen() has not been changed to api_strlen(). To be investigated. Ivan Tcholakov, 29-AUG-2008.
             }
             
             $this->numbers[] = $this->_lookup($this->name[$n]);
@@ -626,7 +628,7 @@ class xmddoc
     }
     
 
-    function xmddoc($strings, $charset = 'ISO-8859-1', $textstring = '')
+    function xmddoc($strings, $charset = 'UTF-8', $textstring = '')
     { 
         $this->parent = array();      $this->name = array();
         $this->ns = array();          $this->attributes = array();
@@ -658,7 +660,7 @@ class xmddoc
      
         if (!is_array($strings)) $strings = array($strings);
         
-        if (count($strings) && (substr($strings[0], 0, 5) != '<?xml') &&
+        if (count($strings) && (api_substr($strings[0], 0, 5) != '<?xml') &&
             !xml_parse($xml_parser, 
                 '<?xml version="1.0" encoding="' . $charset . '"?>', FALSE))
         {
@@ -669,7 +671,7 @@ class xmddoc
         
         foreach ($strings as $s)
         {
-            if (substr($s, -1) != "\n") $s .= "\n";
+            if (api_substr($s, -1) != "\n") $s .= "\n";
             
             if (!xml_parse($xml_parser, $s, FALSE))
             {
@@ -734,7 +736,7 @@ class xmddoc
             {
                 if (($chc = $this->numbers[++$numptr]) == 0)
                 {
-                    $this->children[$n][] = substr($this->textstring, 
+                    $this->children[$n][] = api_substr($this->textstring, 
                         $txtptr, ($len = $this->numbers[++$numptr]));
                     $txtptr += $len;
                 }
@@ -752,7 +754,7 @@ class xmddoc
             {
                 $name = $this->names[$this->numbers[++$numptr]];
                 $this->atns[$n][$name] = $this->numbers[++$numptr];
-                $this->attributes[$n][$name] = substr($this->textstring, 
+                $this->attributes[$n][$name] = api_substr($this->textstring, 
                     $txtptr, ($len = $this->numbers[++$numptr]));
                 $txtptr += $len;
             }
@@ -796,7 +798,7 @@ class xmddoc
             $nc = count($this->children[$parent]);
             $pcs = ($nc > 0 && is_string($this->children[$parent][$nc - 1]));
             
-            if ($pcs && strlen($data) == 1) $this->_concat = TRUE;
+            if ($pcs && api_strlen($data) == 1) $this->_concat = TRUE;
             // expat parser puts &xx; in a separate cData, try to re-assemble
             
             if ($pcs && $data{0} > '~') $this->_concat = TRUE;
@@ -805,7 +807,7 @@ class xmddoc
             if ($this->_concat)
             {
                 $this->children[$parent][$nc - 1] .= $data;
-                $this->_concat = (strlen($data) == 1);
+                $this->_concat = (api_strlen($data) == 1);
             }
             else
                 $this->children[$parent][] = $pcs ? "\n" . $data : $data;
@@ -823,9 +825,9 @@ class xmddoc
         while ($ppar >= 0)
         {
             foreach ($this->attributes[$ppar] as $name => $value)
-                if (substr($name, 0, 5) == 'xmlns' && $value == $uri)
+                if (api_substr($name, 0, 5) == 'xmlns' && $value == $uri)
                 {
-                    $pfxc = substr($name, 6) . substr($name, 5, 1); break 2;
+                    $pfxc = api_substr($name, 6) . api_substr($name, 5, 1); break 2;
                 }
                 
             $ppar = $this->parent[$ppar];

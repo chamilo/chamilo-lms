@@ -60,15 +60,19 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
 
 function generate_course_code($course_title)
 {
+	global $charset;
+
 	//$wantedCode = strtr($course_title, "�����������������������������������������������������������", "AAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
 	//$wantedCode = substr(str_replace(
 	//	array('Á','À','Â','Ä','Ã','Å','Æ' ,'Ç','É','È','Ê','Ë','Í','Ì','Î','Ï','Ĩ','Ó','Ò','Ô','Ö','Õ','Ø' ,'Œ' ,'Ú','Ù','Û','Ü','Ũ','Ÿ','Ý','Ð','Ñ','ß' ,'à','á','â','ä','ã','å','æ' ,'ç','Š','é','è','ê','ë','ì','í','î','ï','ĩ','ò','ó','ô','ö','õ','ø' ,'œ' ,'ú','ù','û','ü','ũ','ÿ','ý','ñ','š','€'),
 	//	array('A','A','A','A','A','A','Ae','C','E','E','E','E','I','I','I','I','I','O','O','O','O','O','Oe','Oe','U','U','U','U','U','Y','Y','D','N','SS','a','a','a','a','a','a','ae','c','S','e','e','e','e','i','i','i','i','i','o','o','o','o','o','oe','oe','u','u','u','u','u','y','y','n','š','Euro'),
 	//	$course_title)
 	//	,0,20);
-	$string    = htmlentities(strtolower($course_title));
-   	$string    = strtoupper(preg_replace("/&(.)(acute|grave|cedil|circ|ring|tilde|uml|slash|elig|Elig|mp);/", "$1", $string));
-   	$string    = preg_replace("/[^A-Z0-9]/", "", html_entity_decode($string));
+
+	$string = api_htmlentities(api_strtolower($course_title, $charset), ENT_QUOTES, $charset);
+   	$string = strtoupper(preg_replace("/&(.)(acute|grave|cedil|circ|ring|tilde|uml|slash|elig|Elig|mp);/", "$1", $string));
+   	$string = preg_replace(api_add_pcre_unicode_modifier("/[^A-Z0-9]/", $charset), "", api_html_entity_decode($string, ENT_QUOTES, $charset));
+
 	return $string;
 }
 
@@ -1128,7 +1132,7 @@ function update_Db_course($courseDbName)
 		"path 			text	not null," . //path, starting at the platforms root (so all paths should start with 'courses/...' for now)
 		"force_commit  tinyint		unsigned not null default 0, " . //stores the default behaviour regarding SCORM information
 		"default_view_mod char(32) not null default 'embedded'," .//stores the default view mode (embedded or fullscreen)
-		"default_encoding char(32)	not null default 'ISO-8859-1', " . //stores the encoding detected at learning path reading
+		"default_encoding char(32)	not null default 'UTF-8', " . //stores the encoding detected at learning path reading
 		"display_order int		unsigned	not null default 0," . //order of learnpaths display in the learnpaths list - not really important
 		"content_maker tinytext  not null default ''," . //the content make for this course (ENI, Articulate, ...)
 		"content_local 	varchar(32)  not null default 'local'," . //content localisation ('local' or 'distant')

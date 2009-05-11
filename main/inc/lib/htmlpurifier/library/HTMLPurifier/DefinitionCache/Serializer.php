@@ -87,8 +87,8 @@ class HTMLPurifier_DefinitionCache_Serializer extends
      * serials
      * @todo Make protected
      */
-    public function generateBaseDirectoryPath($config) {
-    	$directory_in_garbage='../../main/garbage/Serializer';
+    public function generateBaseDirectoryPath($config) {    	
+    	$directory_in_garbage= api_get_path(GARBAGE_PATH).'Serializer';
     	//add directory Serializer, in choose not exist
     	if (!file_exists($directory_in_garbage)) {
     		mkdir($directory_in_garbage,0777);

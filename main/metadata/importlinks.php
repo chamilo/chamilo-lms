@@ -122,12 +122,12 @@ if (isset($lcn))  // category_title
             if (in_array($eid, $uceids)) $mceids[] = $eid;
         }
         
-        $hdrInfo = ' ' . get_lang('WorkOn') . ' ' . htmlspecialchars($lcn) . 
-            ', LC-id=&nbsp;' . htmlspecialchars($lci);
+        $hdrInfo = ' ' . get_lang('WorkOn') . ' ' . htmlspecialchars($lcn, ENT_QUOTES, $charset) . 
+            ', LC-id=&nbsp;' . htmlspecialchars($lci, ENT_QUOTES, $charset);
     }
     elseif ($lcn)
     {
-        $hdrInfo = ' (' . htmlspecialchars($lcn) . 
+        $hdrInfo = ' (' . htmlspecialchars($lcn, ENT_QUOTES, $charset) . 
             ': ' . get_lang('NotInDB') . ')';
     }
     else
@@ -142,7 +142,7 @@ if (isset($lcn))  // category_title
 
     $interbreadcrumb[]= array(
         'url' => api_get_self() . '?lcn=' . urlencode($lcn), 
-        'name'=> get_lang('Continue') . ' ' . htmlspecialchars($lcn));
+        'name'=> get_lang('Continue') . ' ' . htmlspecialchars($lcn, ENT_QUOTES, $charset));
 }
 
 $htmlHeadXtra[] = '
@@ -154,7 +154,7 @@ Display::display_header($nameTools);
 // OPERATIONS ----------------------------------------------------------------->
 
 if ($ufos) echo '<h3>', $ufos, ' ', get_lang('RemainingFor'), ' ', 
-        htmlspecialchars($lcn), '</h3>', "\n";
+        htmlspecialchars($lcn, ENT_QUOTES, $charset), '</h3>', "\n";
 
 if (isset($slo)) echo '<h3>', $slo, '</h3>', "\n";  // selected links op
 
@@ -169,8 +169,8 @@ if ($slo == get_lang('Create') && count($lceids))
         $xht->xht_xmldoc = new xmddoc(explode("\n", $mdt));
         $mdStore->mds_put($eid, $xht->xht_fill_template('INDEXABLETEXT'), 
             'indexabletext');
-        echo '<span class="lbs" onClick="', "makeWindow('index.php?eid=", 
-            urlencode($eid), "', '', '')\">", htmlspecialchars($eid), '</span> ';
+        echo '<span class="lbs" onClick="', "javascript: makeWindow('index.php?eid=", 
+            urlencode($eid), "', '', '')\">", htmlspecialchars($eid, ENT_QUOTES, $charset), '</span> ';
     }
     echo '<br>';
 }
@@ -180,13 +180,13 @@ elseif ($slo == get_lang('Remove') && count($lceids))
     
     echo $aff, ' MDEs/ ', count($lceids), ' ', get_lang('MdCallingTool'), 
         '<br><br><b>', get_lang('AllRemovedFor'), 
-        ' ', htmlspecialchars($lcn), '</b><br>';
+        ' ', htmlspecialchars($lcn, ENT_QUOTES, $charset), '</b><br />';
 }
 elseif ($slo == get_lang('Remove') && count($mceids))  // obsolete category
 {
     $mdStore->mds_delete_many($mceids);
     
-    echo get_lang('AllRemovedFor'), ' ', htmlspecialchars($lcn), '<br>';
+    echo get_lang('AllRemovedFor'), ' ', htmlspecialchars($lcn, ENT_QUOTES, $charset), '<br />';
 }
 elseif ($slo == get_lang('Index') && file_exists($phpDigIncCn) && count($mceids))
 {
@@ -234,9 +234,9 @@ elseif ($slo == get_lang('Index') && file_exists($phpDigIncCn) && count($mceids)
             else
             {
                 echo '<table>', "\n";
-                echo '<tr><td>', htmlspecialchars($url), 
-                    '</td><td>', htmlspecialchars($path), 
-                    '</td><td>', htmlspecialchars($file), '</td></tr>';
+                echo '<tr><td>', htmlspecialchars($url, ENT_QUOTES, $charset), 
+                    '</td><td>', htmlspecialchars($path, ENT_QUOTES, $charset), 
+                    '</td><td>', htmlspecialchars($file, ENT_QUOTES, $charset), '</td></tr>';
                 echo '</table>', "\n";
             }
         }
@@ -253,9 +253,9 @@ elseif ($slo == get_lang('Index') && file_exists($phpDigIncCn) && count($mceids)
             else
             {
                 echo '<table>', "\n";
-                echo '<tr><td>', htmlspecialchars($url), 
-                    '</td><td>', htmlspecialchars($path), 
-                    '</td><td>', htmlspecialchars($file), '</td></tr>';
+                echo '<tr><td>', htmlspecialchars($url, ENT_QUOTES, $charset), 
+                    '</td><td>', htmlspecialchars($path, ENT_QUOTES, $charset), 
+                    '</td><td>', htmlspecialchars($file, ENT_QUOTES, $charset), '</td></tr>';
                 echo '</table>', "\n";
             }
         }
@@ -290,7 +290,7 @@ if (count($perCat))
     echo '<table>', "\n";
     foreach ($perCat as $cat => $number)
     {
-        echo '<tr><td>', $cat == $lcn ? '' : '(', htmlspecialchars($cat), 
+        echo '<tr><td>', $cat == $lcn ? '' : '(', htmlspecialchars($cat, ENT_QUOTES, $charset), 
             $cat == $lcn ? '' : ')', ':</td><td align="right">', 
             $number, '</td></tr>', "\n";
     }
@@ -299,8 +299,8 @@ if (count($perCat))
 
 if (isset($lci))
 {
-    echo '<br><br>', htmlspecialchars($lcn), ' ', get_lang('MdCallingTool'), 
-        ': ', count($lceids), '<br>', "\n";
+    echo '<br><br>', htmlspecialchars($lcn, ENT_QUOTES, $charset), ' ', get_lang('MdCallingTool'), 
+        ': ', count($lceids), '<br />', "\n";
 }
 
 
@@ -322,14 +322,14 @@ if ($perCat[$lcn] && file_exists($phpDigIncCn)) echo
 echo '</form>', "\n";
 
 if (count($perCat)) foreach ($perCat as $cat => $number) 
-    $perCat[$cat] = '(' . htmlspecialchars($cat) . ')';
+    $perCat[$cat] = '(' . htmlspecialchars($cat, ENT_QUOTES, $charset) . ')';
 
 $linkcat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
 $result = api_sql_query("SELECT category_title FROM $linkcat_table", __FILE__, __LINE__);
 
 while ($row = mysql_fetch_array($result))
 {
-    $cat = $row['category_title']; $hcat = htmlspecialchars($cat);
+    $cat = $row['category_title']; $hcat = htmlspecialchars($cat, ENT_QUOTES, $charset);
     if ($perCat[$cat] == $hcat) $dups[] = $cat;
     else $perCat[$cat] = $hcat;
 }
@@ -348,10 +348,10 @@ echo '<h3>', get_lang('OrElse'), $warning, '</h3>', "\n",  // select new target
     '<option value=""></option>', "\n";
     
     foreach ($perCat as $cat => $text) echo '<option value="' . 
-        htmlspecialchars($cat) . '"' . 
+        htmlspecialchars($cat, ENT_QUOTES, $charset) . '"' . 
         ($cat == $lcn ? ' selected' : '') . '>' . $text . '</option>', "\n";
 
-echo '</select><input type="submit" value="', get_lang('Ok'), '">', "\n", 
+echo '</select><input type="submit" value="', '  '.get_lang('Ok').'  ', '">', "\n", 
     '</form>', "\n", '</td></tr></table>', "\n";
 
 Display::display_footer();

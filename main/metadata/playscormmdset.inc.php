@@ -176,6 +176,7 @@ else
     <head>
     <title>Scorm package
     </title>
+	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
     <link rel="stylesheet" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css" type="text/css" media="screen,projection" />
     <style type="text/css" media="screen, projection">
     /*<![CDATA[*/
@@ -202,7 +203,7 @@ echo "\n";
 
 $xhtDoc->xht_dbgn = DBG;  // for template debug info, set to e.g. 10000
 if (($ti = $xhtDoc->xht_param['traceinfo'])) $xhtDoc->xht_param['traceinfo'] = 
-    '<h5>Trace information</h5>' . htmlspecialchars($ti);
+    '<h5>Trace information</h5>' . htmlspecialchars($ti, ENT_QUOTES, $charset);
 
 echo $xhtDoc->xht_fill_template('METADATA'), "\n";
 

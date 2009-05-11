@@ -150,7 +150,7 @@ Display::display_header($nameTools);
 
 $xhtDoc->xht_dbgn = DBG;  // for template debug info, set to e.g. 10000
 if (($ti = $xhtDoc->xht_param['traceinfo'])) $xhtDoc->xht_param['traceinfo'] = 
-    '<b>' . get_lang('Search') . '</b>: ' . htmlspecialchars($ti);
+    '<b>' . get_lang('Search') . '</b>: ' . htmlspecialchars($ti, ENT_QUOTES, $charset);
 
 echo $xhtDoc->xht_fill_template('MDSEARCH'), "\n";
 

@@ -82,10 +82,10 @@ function mdo_generate_default_xml_metadata()
     
     $xhtDoc->xht_param['title'] = 
         $this->mdo_title ? $this->mdo_title : 
-            ($this->mdo_path ? $this->mdo_path : get_lang('MdTitle'));
+            ($this->mdo_path ? $this->mdo_path : get_lang('MdTitle', ''));
     $xhtDoc->xht_param['description'] = 
-        $this->mdo_comment ? $this->mdo_comment : get_lang('MdDescription');
-    $xhtDoc->xht_param['coverage'] = get_lang('MdCoverage');
+        $this->mdo_comment ? $this->mdo_comment : get_lang('MdDescription', '');
+    $xhtDoc->xht_param['coverage'] = get_lang('MdCoverage', '');
 
     if (isset($_user))
     {

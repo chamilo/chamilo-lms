@@ -6,7 +6,7 @@
 
 <!-- {-METADATA-} -->
 
-{-D TRUE TRUE-}{-D XML application/xml;iso-8859-1-}
+{-D TRUE TRUE-}{-D XML application/xml;utf-8-}
 
 <div id="indexabletext" class="dvc">
 {-H {-E md_indexabletext C METADATA_INDEXABLETEXT-}-}
@@ -22,7 +22,7 @@
 {-L NoScript-}
 </noscript>
 
-<div  onMouseUp="if ((kw = pU_clicked(event))) pU_select(kw); else pU_hide();">
+<div  onMouseUp="javascript: if ((kw = pU_clicked(event))) pU_select(kw); else pU_hide();">
 {-T dbrecord == empty <div class="lgr">-}
 {-E md_part1 C METADATA_PART1-}
 {-T dbrecord == empty </div>-}
@@ -33,17 +33,17 @@
 
 <form method="post" action="{-P self-}">
     <textarea rows="4" class="mda" name="mda" id="mda" title="{-L ConfirmDelete-}"></textarea>
-    <!--<input type="submit" value="{-L Store-}" onClick="return checkBeforeSubmit(event);"></input>-->
-    <button class="save" type="submit" value="{-L Store-}" onClick="return checkBeforeSubmit(event);">{-L Store-}</button>
+    <!--<input type="submit" value="{-L Store-}" onClick="javascript: return checkBeforeSubmit(event);"></input>-->
+    <button class="save" type="submit" value="{-L Store-}" onClick="javascript: return checkBeforeSubmit(event);">{-L Store-}</button>
     
     
     {-T dbrecord != empty 
-    <!--<input type="submit" value="{-L DeleteAll-}" onClick="return setPendingOperation('~~', event);"></input>-->
-    <button class="minus" type="submit" value="{-L DeleteAll-}" onClick="return setPendingOperation('~~', event);">{-L DeleteAll-}</button>
+    <!--<input type="submit" value="{-L DeleteAll-}" onClick="javascript: return setPendingOperation('~~', event);"></input>-->
+    <button class="minus" type="submit" value="{-L DeleteAll-}" onClick="javascript:return setPendingOperation('~~', event);">{-L DeleteAll-}</button>
     -}
-    <span onClick="document.getElementById('indexabletext').className ='dvo'">&#xa0;</span>
+    <span onClick="javascript: document.getElementById('indexabletext').className ='dvo'">&#xa0;</span>
 {-D techfmt {-V metadata/lom/technical/format-}-}{-T techfmt == XML 
-    <input type="submit" value="{-L CourseKwds-}" onClick="return setPendingOperation('!!', event);"></input>
+    <input type="submit" value="{-L CourseKwds-}" onClick="javascript: return setPendingOperation('!!', event);"></input>
  -}
 </form>
 
@@ -54,9 +54,9 @@
 {-T keywordscache != empty 
 
 <div noWrap="1" id="maindiv">
-    <input type="button" class="btn" value="+" onClick="if (this.value == '+') deselectAll(event, this); openOrClose(this);"/>
-    <input type="button" class="btm" id="btnOpenOrCloseAll" value="++" onClick="openOrCloseAll(this);"/>
-    <input type="button" class="btn" value="?" onClick="openOrCloseHelp(this)"/>
+    <input type="button" class="btn" value="+" onClick="javascript: if (this.value == '+') deselectAll(event, this); openOrClose(this);"/>
+    <input type="button" class="btm" id="btnOpenOrCloseAll" value="++" onClick="javascript: openOrCloseAll(this);"/>
+    <input type="button" class="btn" value="?" onClick="javascript: openOrCloseHelp(this)"/>
     &#xa0;{-L ClickKw-}
     {-P keywordscache-}
 </div>
@@ -68,11 +68,11 @@
  -}
 
 {-T keywordscache == empty 
-
+<!--
 <div noWrap="1" id="maindiv">
 {-L KwNote-}
 </div>
-
+-->
  -}
 
 <div id="popup" noWrap="1" class="pup">
@@ -97,7 +97,7 @@
         <td>{-D xpath metadata/lom/general/language-}{-C LANGSELECT-}</td>
         <td>{-D xpath metadata/lom/general/identifier/catalog-}{-D iclass disabled class="wd2" -}{-C INPUT-}</td>
         <td>{-D label Identifier-}{-C LABEL-}</td>
-        <td>{-D xpath metadata/lom/general/identifier/entry-}{-D iclass class="wd2" onKeyPress="return isValidChar(event, '[a-z0-9\x08\x25\x27\*\.\'\(\)_!-]', 'i');" -}{-C INPUT-}</td>
+        <td>{-D xpath metadata/lom/general/identifier/entry-}{-D iclass class="wd2" onKeyPress="javascript: return isValidChar(event, '[a-z0-9\x08\x25\x27\*\.\'\(\)_!-]', 'i');" -}{-C INPUT-}</td>
     </tr>
     <tr>
         <td>{-D label Title-}{-C LABEL-}</td>
@@ -134,8 +134,8 @@
     <tr>
         <td colspan="2">{-D label CreatedSize-}{-C LABEL-}</td>
         <td nowrap>
-            {-D xpath metadata/lom/lifeCycle/contribute[1]/date/dateTime-}{-D iclass class="wd1" onKeyUp="checkValid(this,'^[0-9]{4}-[0-9]{2}-[0-9]{2}$','i');" -}{-C INPUT-}
-            {-D xpath metadata/lom/technical/size-}{-D iclass class="wd1"  onKeyPress="return isValidChar(event, '[0-9\x08\x25\x27]', 'i');" -}{-C INPUT-}
+            {-D xpath metadata/lom/lifeCycle/contribute[1]/date/dateTime-}{-D iclass class="wd1" onKeyUp="javascript: checkValid(this,'^[0-9]{4}-[0-9]{2}-[0-9]{2}$','i');" -}{-C INPUT-}
+            {-D xpath metadata/lom/technical/size-}{-D iclass class="wd1"  onKeyPress="javascript: return isValidChar(event, '[0-9\x08\x25\x27]', 'i');" -}{-C INPUT-}
         </td>
         <td>{-D label Author-}{-C LABEL-}</td>
         <td>{-D xpath metadata/lom/lifeCycle/contribute[1]/entity-}{-C INPUTW-}</td>
@@ -176,7 +176,7 @@
 
 <!-- {-MDLANGSELECT-} -->
 
-<select onchange="spcSel('metadata/lom/general/description,metadata/lom/general/coverage,metadata/lom/general/keyword,metadata/lom/rights/description;string@language', this);">{-D selvalue {-V metadata/lom/general/description/string/@language-}-}{-R Langs C OPTION-}</select>
+<select onchange="javascript: spcSel('metadata/lom/general/description,metadata/lom/general/coverage,metadata/lom/general/keyword,metadata/lom/rights/description;string@language', this);">{-D selvalue {-V metadata/lom/general/description/string/@language-}-}{-R Langs C OPTION-}</select>
 
 
 <!-- {-LANGSELECT-} -->
@@ -186,7 +186,7 @@
 
 <!-- {-SELECT-} -->
 
-<select onchange="spcSel('{-H {-P xpath-}-}', this);">{-D selvalue {-V P xpath-}-}{-R {-P optionarray-} C OPTION-}</select>
+<select onchange="javascript: spcSel('{-H {-P xpath-}-}', this);">{-D selvalue {-V P xpath-}-}{-R {-P optionarray-} C OPTION-}</select>
 
 
 <!-- {-OPTION-} -->
@@ -201,23 +201,23 @@
 
 <!-- {-INPUT-} -->
 
-<input type="text" title="{-H {-P xpath-}-}" {-P iclass-}value="{-H {-V P xpath-}-}" onchange="spc(this.title, this.value);"/>
+<input type="text" title="{-H {-P xpath-}-}" {-P iclass-}value="{-H {-V P xpath-}-}" onchange="javascript: spc(this.title, this.value);"/>
 
 
 <!-- {-INPUT_ALLKWDS-} -->
 
 <input type="text" title="{-X metadata/lom/general/description/string/@language-}" 
  id="kwds_string" class="wide" value="{-X metadata/lom/general/keyword/string , -}" 
- onKeyUp="takeTypeIn(this, 150, -100, '150px'); return true;" 
- onKeyPress="return isValidChar(event, '[0-9a-z\xC0-\xFF\.\x08\x25\x27, -]', 'i');" />
+ onKeyUp="javascript: takeTypeIn(this, 150, -100, '150px'); return true;" 
+ onKeyPress="javascript: return isValidChar(event, '[0-9a-z\xC0-\xFF\.\x08\x25\x27, -]', 'i');" />
 
 
 <!-- {-HEAD-} -->
 
 <link rel="stylesheet" type="text/css" href="md_styles.css">
 
-<script language="JavaScript" src="md_script.js"></script>
-<script language="JavaScript">var kwdswere = "{-X metadata/lom/general/keyword/string , -}";</script>
+<script type="text/javascript" language="JavaScript" src="md_script.js"></script>
+<script type="text/javascript" language="JavaScript">var kwdswere = "{-X metadata/lom/general/keyword/string , -}";</script>
 
 
 <!-- {-HTTP-} -->
@@ -229,7 +229,7 @@ Expires: Mon, 26 Jul 1997 05:00:00 GMT
 
 <tr>
     <td>{-D label Keyword-}{-D tip {-L KeywordTip-}-}{-C LABEL-}</td>
-    <td nowrap><select onchange="spc('metadata/lom/general/keyword[{-P number-}]/string/@language', this.options[this.selectedIndex].value);">{-D selvalue {-V string/@language-}-}{-R Langs C OPTION-}</select>
+    <td nowrap><select onchange="javascript: spc('metadata/lom/general/keyword[{-P number-}]/string/@language', this.options[this.selectedIndex].value);">{-D selvalue {-V string/@language-}-}{-R Langs C OPTION-}</select>
     <input type="checkbox" title="{-L DeleteKw-}" id="keyword{-P number-}"/></td>
     <td colspan="3">{-D value {-X string-}-}{-D title metadata/lom/general/keyword[{-P number-}]/string-}{-C INPUTKWD-}</td>
 </tr>
@@ -246,7 +246,7 @@ Expires: Mon, 26 Jul 1997 05:00:00 GMT
 
 <!-- {-INPUTKWD-} -->
 
-<input type="text" title="{-P title-}" class="wide" value="{-H {-P value-}-}" onchange="spckwd(this.title, this.value, '{-P selvalue-}');"/>
+<input type="text" title="{-P title-}" class="wide" value="{-H {-P value-}-}" onchange="javascript: spckwd(this.title, this.value, '{-P selvalue-}');"/>
 
 
 <!-- {-Remarks-} -->

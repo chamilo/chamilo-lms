@@ -51,7 +51,7 @@ Display::display_header($nameTools);
 
 // OPERATIONS ----------------------------------------------------------------->
 
-echo '<h3>', htmlspecialchars(EID_TYPE), '</h3>', "\n";
+echo '<h3>', htmlspecialchars(EID_TYPE, ENT_QUOTES, $charset), '</h3>', "\n";
 
 $result = $mdStore->mds_get_many('eid,mdxmltext', "eid LIKE '" . EID_TYPE . ".%'");
 echo get_lang('TotalMDEs'), $total = mysql_num_rows($result), "<br><br>\n";
@@ -66,10 +66,10 @@ while ($row = mysql_fetch_array($result))
     $mdStore->mds_put($eid, 
         $xhtDoc->xht_fill_template('INDEXABLETEXT'), 'indexabletext');
     
-    echo htmlspecialchars($eid), ' ';
+    echo htmlspecialchars($eid, ENT_QUOTES, $charset), ' ';
 }
 
-echo '<h5>', htmlspecialchars(EID_TYPE), '</h5>', "\n";
+echo '<h5>', htmlspecialchars(EID_TYPE, ENT_QUOTES, $charset), '</h5>', "\n";
 
 Display::display_footer();
 ?>

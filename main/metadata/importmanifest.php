@@ -60,7 +60,7 @@ require('md_phpdig.php');
 if (isset($workWith))  // explicit in URL, or selected at bottom of screen
 {
     $scormdocument = Database::get_course_table('lp');
-    $sql = "SELECT id FROM $scormdocument WHERE path='". mysql_real_escape_string(substr($workWith,1)) . "' OR path='". mysql_real_escape_string(substr($workWith,1)) . "/.'";
+    $sql = "SELECT id FROM $scormdocument WHERE path='". Database::escape_string(api_substr($workWith,1)) . "' OR path='". Database::escape_string(substr($workWith,1)) . "/.'";
     $result = api_sql_query($sql, __FILE__, __LINE__);
 
     if (mysql_num_rows($result) == 1)
@@ -76,14 +76,14 @@ if (isset($sdi) && is_numeric($sdi) && $sdi > 0 && $sdi == (int) $sdi)
 {
     $mdObj = new mdobject($_course, $sdi); $workWith = $mdObj->mdo_path;
     $hdrInfo = ' ' . get_lang('WorkOn') . ' ' .
-        ($workWith ? htmlspecialchars($workWith) . ', ' : '') .
-        'SD-id= ' . htmlspecialchars($sdi) .
-        ($sdisub ? ' (' . htmlspecialchars($sdisub) . ')' : '');
+        ($workWith ? htmlspecialchars($workWith, ENT_QUOTES, $charset) . ', ' : '') .
+        'SD-id= ' . htmlspecialchars($sdi, ENT_QUOTES, $charset) .
+        ($sdisub ? ' (' . htmlspecialchars($sdisub, ENT_QUOTES, $charset) . ')' : '');
 }
 else
 {
     unset($sdi); $mdObj = new mdobject($_course, 0);
-    if ($workWith) $hdrInfo = ' (' . htmlspecialchars($workWith) .
+    if ($workWith) $hdrInfo = ' (' . htmlspecialchars($workWith, ENT_QUOTES, $charset) .
         ': ' . get_lang('NotInDB') . ')'; unset($workWith);
 }
 
@@ -117,7 +117,7 @@ function slurpmanifest()
             if (!$xht_doc->error) return '';  // keeping $mfContents and $xht_doc
 
             unset($mfContents);
-            return get_lang('ManifestSyntax') . ' ' . htmlspecialchars($xht_doc->error);
+            return get_lang('ManifestSyntax') . ' ' . htmlspecialchars($xht_doc->error, ENT_QUOTES, $charset);
         }
         else
         {
@@ -311,7 +311,7 @@ elseif ($smo == get_lang('Import'))
             $mdStore->mds_put(EID_TYPE . '.' . $mfdocId, $ixt, 'indexabletext');
         }
 
-        echo $level <= 1 ? '<br>'.$level.'/ ' : ' ', htmlspecialchars($itemId);
+        echo $level <= 1 ? '<br />'.$level.'/ ' : ' ', htmlspecialchars($itemId, ENT_QUOTES, $charset);
         flush(); $loopctr = 0;
 
         foreach ($xht_doc->xmd_select_elements(SUBITEM, $treeElem) as $subElem)
@@ -381,24 +381,24 @@ elseif ($smo == get_lang('Import'))
         @fwrite($fileHandler, content_for_index_php($sdi));
         @fclose($fileHandler);
 
-    	echo '<br>', htmlspecialchars($workWith);
+    	echo '<br>', htmlspecialchars($workWith, ENT_QUOTES, $charset);
     	if (file_exists($playIt)) echo '/index.php ',
-    	    htmlspecialchars(date('Y/m/d H:i:s', filemtime($playIt)));
+    	    htmlspecialchars(date('Y/m/d H:i:s', filemtime($playIt)), ENT_QUOTES, $charset);
 	}
 }
 elseif ($smo == get_lang('Remove') && $sdisub)
 {
     $screm = EID_TYPE . '.' . $sdi . '.' . $sdisub;
     $mdStore->mds_delete_offspring($screm, '\_');  // SQL LIKE underscore
-    echo htmlspecialchars($screm . '_*: ' . mysql_affected_rows()), '<br>';
+    echo htmlspecialchars($screm . '_*: ' . mysql_affected_rows(), ENT_QUOTES, $charset), '<br />';
 }
 elseif ($smo == get_lang('Remove'))  // remove all, regardless of $sdiall
 {
     $mdStore->mds_delete($screm = EID_TYPE . '.' . $sdi);
-    echo htmlspecialchars($screm . ': ' . mysql_affected_rows()), '<br>';
+    echo htmlspecialchars($screm . ': ' . mysql_affected_rows(), ENT_QUOTES, $charset), '<br />';
     $mdStore->mds_delete_offspring($screm);
-    echo htmlspecialchars($screm . '.*: ' . mysql_affected_rows()), '<br><br>',
-	'<b>' . get_lang('AllRemovedFor') . ' ' . $screm . '</b><br>';
+    echo htmlspecialchars($screm . '.*: ' . mysql_affected_rows(), ENT_QUOTES, $charset), '<br /><br />',
+	'<b>' . get_lang('AllRemovedFor') . ' ' . $screm . '</b><br />';
 }
 elseif ($smo == get_lang('Index') && file_exists($phpDigIncCn) &&
         ereg('^http://([^/]+)/(.+)/index\.php$', $mdObj->mdo_url, $regs))
@@ -448,7 +448,7 @@ elseif ($smo == get_lang('Index') && file_exists($phpDigIncCn) &&
 elseif ($smo == get_lang('Index'))
 {
     echo 'Problem! PhpDig connect.php has gone or else URL "' .
-        htmlspecialchars($mdObj->mdo_url) .
+        htmlspecialchars($mdObj->mdo_url, ENT_QUOTES, $charset) .
         '" is not like "http://xxxx/yyy.../zzz/index.php"';
 }
 
@@ -476,7 +476,7 @@ while ($row = mysql_fetch_array($result))
 if (isset($sdi))
 {
     $mdo = new mdobject($_course, $sdi);
-    echo '<br>', htmlspecialchars($mdo->mdo_path), ', SD-id ', $sdi, ': ',
+    echo '<br />', htmlspecialchars($mdo->mdo_path, ENT_QUOTES, $charset), ', SD-id ', $sdi, ': ',
         ($perId[$sdi] ? $perId[$sdi] : '0'), ' ',
         ($mdtmain[$sdi] ? '- <span class="lbs" onClick="' .
             "makeWindow('index.php?eid=" . EID_TYPE . '.' .$sdi . "', '', '')\">" .
@@ -493,8 +493,8 @@ if (count($perId))
             $pth = $mdtmain[$id];  // fetch something simple without parsing
             if ($ttopen = strpos($pth, '<title>'))
                 if ($ttclose = strpos($pth, '</title>', $ttopen))
-                     $pth = ' ' . html_entity_decode
-                        (substr($pth, $ttopen+7, $ttclose-$ttopen-7));
+                     $pth = ' ' . api_html_entity_decode
+                        (substr($pth, $ttopen+7, $ttclose-$ttopen-7), ENT_QUOTES, $charset);
                 else $pth = ' ' . substr($pth, $ttopen+7, 30);
             else     $pth = ' ' . substr($pth, 0, 30);
         }
@@ -509,8 +509,8 @@ if (count($perId))
     {
         $tmfdt = file_exists($tfmff = $baseWorkDir . $pth . '/' . MFFNAME . $sdisub . MFFDEXT) ?
             date('Y/m/d H:i:s', filemtime($tfmff)) : '-';
-        echo '<tr><td>', htmlspecialchars($tmfdt), '</td>',
-            '<td>', htmlspecialchars($pth),
+        echo '<tr><td>', htmlspecialchars($tmfdt, ENT_QUOTES, $charset), '</td>',
+            '<td>', htmlspecialchars($pth, ENT_QUOTES, $charset),
             '</td><td align="right">(SD-id ', $id,
             '):</td><td align="right">', $perId[$id], '</td></tr>', "\n";
     }
@@ -520,7 +520,7 @@ if (count($perId))
 if ($mfContents)
 {
     echo $workWith, '/', MFFNAME . $sdisub . MFFDEXT, ': ',
-        htmlspecialchars(date('Y/m/d H:i:s', filemtime($fmff))) , ", \n",
+        htmlspecialchars(date('Y/m/d H:i:s', filemtime($fmff)), ENT_QUOTES, $charset) , ", \n",
         substr_count($mfContents, "\n") + 1,
         ' ' . get_lang('Lines') . '.', "\n";
 
@@ -555,7 +555,7 @@ if (file_exists($baseWorkDir . $workWith . '/index.php'))
 
 if (file_exists($fhtf = $baseWorkDir . $workWith . '/' . HTF))
     echo '<br>', $workWith, '/', HTF, ': ',
-        htmlspecialchars(date('Y/m/d H:i:s', filemtime($fhtf))) , "\n";
+        htmlspecialchars(date('Y/m/d H:i:s', filemtime($fhtf)), ENT_QUOTES, $charset) , "\n";
 
 
 
@@ -613,7 +613,7 @@ function showSelectForm($label, $specifics)
     echo    '<tr><td align="right" class="alternativeBgDark">', "\n",
         	'<form action="', api_get_self(), '" method="post">', "\n",
             	get_lang($label), ' :', "\n", $specifics, "\n",
-                '<input type="submit" value="', get_lang('Ok'), '" />', "\n",
+                '<input type="submit" value="', '  '.get_lang('Ok').'  ', '" />', "\n",
             '</form></td></tr>', "\n";
 }
 
@@ -657,7 +657,7 @@ showSelectForm('SDI',
     '<input type="text" size="5" name="sdi" value="' .
         htmlspecialchars($sdi) . '" />' .
     '(<input type="text" size="4" name="sdisub" value="' .
-        ($sdiall ? UZYX : htmlspecialchars($sdisub)) . '" />)' . "\n");
+        ($sdiall ? UZYX : htmlspecialchars($sdisub, ENT_QUOTES, $charset)) . '" />)' . "\n");
 
 echo '</table>', "\n";
 

@@ -136,7 +136,8 @@ define("END_OF_LINE_MARKER","\r\n");             // End of line marker - keep do
 define('SEARCH_BOX_SIZE',15);                    // Search box size
 define('SEARCH_BOX_MAXLENGTH',50);               // Search box maxlength
 
-define('PHPDIG_ENCODING','iso-8859-1');  // encoding for interface, search and indexing.
+//define('PHPDIG_ENCODING','iso-8859-1');  // encoding for interface, search and indexing.
+define('PHPDIG_ENCODING', strtolower($charset));
                                          // iso-8859-1, iso-8859-2, iso-8859-7, tis-620,
                                          // and windows-1251 supported in this version.
 

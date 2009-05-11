@@ -97,7 +97,7 @@ if (count($idt) && file_exists($phpDigIncCn))
 }
 else
 {
-	echo 'No documents with metadata or no PhpDig in this course...<br>';
+	echo 'No documents with metadata or no PhpDig in this course...<br />';
 }
 
 if (false && file_exists($phpDigIncCn))  // future: buttons for operations

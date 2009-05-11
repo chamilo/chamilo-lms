@@ -49,20 +49,21 @@ function fgc($filename)
 
 function give_up($msg)
 {
-    echo '<p align="center">MetaData:<br><b>? ', 
-        htmlspecialchars($msg), '</b></p>'; exit;
+	global $charset;
+    echo '<p align="center">MetaData:<br /><b>? ', 
+        htmlspecialchars($msg, ENT_QUOTES, $charset), '</b></p>'; exit;
 } 
 
 
 function getpar($name, $description, $default = '')
 {
-    $value = isset($_GET[$value = strtolower($name)]) ? $_GET[$value] : '';
+    $value = isset($_GET[$value = api_strtolower($name)]) ? $_GET[$value] : '';
     $value = get_magic_quotes_gpc() ? stripslashes($value) : $value;
     if (!$value) $value = $default;
-    if ($value == '') give_up('URL parameter ' . strtoupper($name) . ' - ' . 
+    if ($value == '') give_up('URL parameter ' . api_strtoupper($name) . ' - ' . 
                 $description . ' - is required');
     
-    define(strtoupper($name), $value);
+    define(api_strtoupper($name), $value);
 }
 
 
@@ -81,6 +82,8 @@ function get_course_web()
 
 function define_htt($htt_file, $urlp, $course_path)
 {
+	global $charset;
+
     ($htt_file_contents = @fgc($htt_file))
         or give_up('Templates file "' . $htt_file . '" is missing...');
     
@@ -96,7 +99,7 @@ function define_htt($htt_file, $urlp, $course_path)
     define('KEYWORDS_CACHE', get_course_path() . $ckw);
     
     if (file_exists(KEYWORDS_CACHE)) $kcdt = 
-        htmlspecialchars(date('Y/m/d H:i:s', filemtime(KEYWORDS_CACHE)));
+        htmlspecialchars(date('Y/m/d H:i:s', filemtime(KEYWORDS_CACHE)), ENT_QUOTES, $charset);
     
     $xhtDoc->xht_param['keywordscache'] = $kcdt ?
         '<script type="text/javascript" src="' . get_course_web() . $ckw . '"></script>' . 
@@ -289,7 +292,7 @@ function mds_get_many($columns, $where_clause)
     foreach (explode(',', $columns) as $col) $cols .= "," . trim($col);
     if (!$cols) return;
     
-    return $this->_query("SELECT " . substr($cols, 1) . 
+    return $this->_query("SELECT " . api_substr($cols, 1) . 
         " FROM " . MDS_TABLE . " WHERE ". $where_clause);
 }
 
@@ -360,13 +363,13 @@ function mds_update_xml_and_mdt($mdo, &$xmlDoc, $mda, $eid, &$traceinfo,
         
         if (($nameLth = strpos($update, '=')))  // e.g. 'gen/tit/str=new'
         {
-            if (($text = substr($update, $nameLth + 1)) === FALSE) $text = '';
+            if (($text = api_substr($update, $nameLth + 1)) === FALSE) $text = '';
             
-            if (!($path = trim(substr($update, 0, $nameLth)))) continue;
+            if (!($path = trim(api_substr($update, 0, $nameLth)))) continue;
             
-            if (($sc = strpos($path, ';')))  // e.g. 'gen/tit,gen/des;str@lang'
-                $xmlDoc->xmd_update_many(substr($path, 0, $sc), 
-                    substr($path, $sc + 1), $text);
+            if (($sc = api_strpos($path, ';')))  // e.g. 'gen/tit,gen/des;str@lang'
+                $xmlDoc->xmd_update_many(api_substr($path, 0, $sc), 
+                    api_substr($path, $sc + 1), $text);
             else
                 $xmlDoc->xmd_update($path, $text);
         }

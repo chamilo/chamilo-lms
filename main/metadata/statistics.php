@@ -125,8 +125,8 @@ echo '<h4>', get_lang('NonCourseKwds'), '</h4>', "\n";
 
 foreach ($kwds as $kw)
     if ($kw{0} == '!')
-        echo '<b>', htmlspecialchars(substr($kw, 1)), '</b>: ', $kwcnt[$kw], 
-            ': <i>', htmlspecialchars($kwrefs[$kw]), ";</i> \n";
+        echo '<b>', htmlspecialchars(api_substr($kw, 1), ENT_QUOTES, $charset), '</b>: ', $kwcnt[$kw], 
+            ': <i>', htmlspecialchars($kwrefs[$kw], ENT_QUOTES, $charset), ";</i> \n";
     else break;
 
 echo '<h4>', get_lang('KwdsUse'), '</h4>', "\n";
@@ -134,8 +134,8 @@ echo '<h4>', get_lang('KwdsUse'), '</h4>', "\n";
 foreach ($kwds as $kw)
     if ($kw{0} != '!')
         if (!$kwcnt[$kw])
-            echo '<b>', htmlspecialchars($kw), "</b>; \n";
-        else echo htmlspecialchars($kw), ': ', $kwcnt[$kw], "; \n";
+            echo '<b>', htmlspecialchars($kw, ENT_QUOTES, $charset), "</b>; \n";
+        else echo htmlspecialchars($kw, ENT_QUOTES, $charset), ': ', $kwcnt[$kw], "; \n";
 
 Display::display_footer();
 ?>

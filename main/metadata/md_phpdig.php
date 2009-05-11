@@ -47,7 +47,8 @@ if (file_exists($phpDigIncCw))
             $common_words[trim($word)] = 1;
 
 define('SUMMARY_DISPLAY_LENGTH', 700);
-define('PHPDIG_ENCODING', 'iso-8859-1');
+//define('PHPDIG_ENCODING', 'iso-8859-1');
+define('PHPDIG_ENCODING', strtolower($charset));
 define('SMALL_WORDS_SIZE', 2);
 define('MAX_WORDS_SIZE',50);
 define('WORDS_CHARS_LATIN1', '[:alnum:]ðþßµ');
@@ -94,6 +95,8 @@ function find_site($url)
 
 function remove_engine_entries($url, $path, $file = '')
 {
+	global $charset;
+
     $and_path = " AND path = '" . addslashes($path) . "'";
     if ($file) $and_path .= " AND file LIKE '" . addslashes(
         str_replace(array('_', '%'), array('\_', '\%'), $file)) . "%'";
@@ -114,9 +117,9 @@ function remove_engine_entries($url, $path, $file = '')
         "spider WHERE site_id=" . $site_id . $and_path, 
         __FILE__, __LINE__);  // delete page
     
-    echo htmlspecialchars($url . $path . $file), ' (site_id ', 
+    echo htmlspecialchars($url . $path . $file, ENT_QUOTES, $charset), ' (site_id ', 
         $site_id, '): ', mysql_affected_rows(), $aff, 
-        ' pages + word references removed from index.<br>';
+        ' pages + word references removed from index.<br />';
     
     return $site_id;
 }
@@ -162,7 +165,7 @@ function index_words($site_id, $path, $file, $first_words, $keywords)
             __FILE__, __LINE__);
     }
         
-    echo '<tr><td>', htmlspecialchars($file), '</td><td>(spider_id ', 
+    echo '<tr><td>', htmlspecialchars($file, ENT_QUOTES, $charset), '</td><td>(spider_id ', 
         $spider_id, '):</td><td align="right">', count($keywords), ' kwds, ', 
         $new , ' new</td></tr>', "\n";
 }

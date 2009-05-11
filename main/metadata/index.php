@@ -22,6 +22,8 @@
 
 // PRELIMS -------------------------------------------------------------------->
 
+require_once '../inc/global.inc.php';
+
 require("md_funcs.php");
 
 getpar('EID', 'Entry IDentifier');           // e.g. 'Document.12' or 'Scorm.xx'
@@ -184,7 +186,7 @@ Display::display_header($nameTools); echo "\n";
 
 $xhtDoc->xht_dbgn = DBG;  // for template debug info, set to e.g. 10000
 if (($ti = $xhtDoc->xht_param['traceinfo'])) $xhtDoc->xht_param['traceinfo'] = 
-    '<h5>Trace information</h5>' . htmlspecialchars($ti);
+    '<h5>Trace information</h5>' . htmlspecialchars($ti, ENT_QUOTES, $charset);
 
 echo $xhtDoc->xht_fill_template('METADATA'), "\n";
 

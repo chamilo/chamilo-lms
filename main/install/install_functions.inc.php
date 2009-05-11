@@ -345,7 +345,7 @@ function display_language_selection_box()
 		else $option_end = '>';
 		echo "\t\t\t<option value=\"$value\"$option_end";
 
-		echo ucfirst($value);
+		echo api_ucfirst($value);
 		echo "</option>\n";
 	}
 
@@ -869,7 +869,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	//database prefix
 	display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, get_lang('DbPrefixCom'));
 	//fields for the four standard Dokeos databases
-	echo '<tr><td colspan="3"><a href="" onclick="show_hide_option();return false;"><img src="../img/add_na.gif" alt="show-hide" />'.get_lang('OptionalParameters','').'</a></td></tr>';
+	echo '<tr><td colspan="3"><a href="" onclick="javascript: show_hide_option();return false;"><img src="../img/add_na.gif" alt="show-hide" />'.get_lang('OptionalParameters','').'</a></td></tr>';
 	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;',null,'id="optional_param1" style="display:none;"');
 	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;',null,'id="optional_param2" style="display:none;"');
 	if($installType == 'update' && in_array($_POST['old_version'],$update_from_version_6))
@@ -954,15 +954,17 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 */
 function display_configuration_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $display_when_update = 'true')
 {
+	global $charset;
+
 	echo "<tr>\n";
 	echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
 	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update)
 	{
-		echo '<td><input type="hidden" name="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'.$parameter_value."</td>\n";
+		echo '<td><input type="hidden" name="'.$form_field_name.'" value="'.api_htmlentities($parameter_value, ENT_QUOTES, $charset).'" />'.$parameter_value."</td>\n";
 	}
 	else
 	{
-		echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'."</td>\n";
+		echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" value="'.api_htmlentities($parameter_value, ENT_QUOTES, $charset).'" />'."</td>\n";
 	}
 	echo "</tr>\n";
 }
@@ -972,6 +974,8 @@ function display_configuration_parameter($install_type, $parameter_name, $form_f
  */
 function display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm)
 {
+	global $charset;
+
 	if($installType != 'update' && empty($languageForm))
 	{
 		$languageForm = $_SESSION['install_language'];
@@ -988,7 +992,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>\n";
 	if($installType == 'update')
 	{		
-		echo '<td><input type="hidden" name="languageForm" value="'.htmlentities($languageForm).'" />'.$languageForm."</td>\n";
+		echo '<td><input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES, $charset).'" />'.$languageForm."</td>\n";
 	}
 	else // new installation
 	{
@@ -1040,8 +1044,8 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	echo "<tr>\n";
 	echo '<td>'.get_lang('DokeosURL').' (<font color="red">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>\n";
 	
-	if($installType == 'update') echo '<td>'.htmlentities($urlForm)."</td>\n";
-	else echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.htmlentities($urlForm).'" />'."</td>\n";
+	if($installType == 'update') echo '<td>'.api_htmlentities($urlForm, ENT_QUOTES, $charset)."</td>\n";
+	else echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.api_htmlentities($urlForm, ENT_QUOTES, $charset).'" />'."</td>\n";
 	
 	echo "</tr>\n";
 

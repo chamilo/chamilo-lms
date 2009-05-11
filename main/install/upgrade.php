@@ -468,6 +468,8 @@ class ActionDisplay extends HTML_QuickForm_Action_Display
 	 */
 	function _renderForm(& $current_page)
 	{
+		global $charset;
+
 		global $dokeos_version, $installType, $updateFromVersion;
 		$renderer = & $current_page->defaultRenderer();
 		$current_page->setRequiredNote('<font color="#FF0000">*</font> '.get_lang('ThisFieldIsRequired'));
@@ -482,6 +484,7 @@ class ActionDisplay extends HTML_QuickForm_Action_Display
 		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 		<head>
 		<title>-- Dokeos - upgrade to version <?php echo $dokeos_version; ?></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
 		<link rel="stylesheet" href="../css/public_admin/default.css" type="text/css"/>
 		</head>
 		<body dir="<?php echo get_lang('text_dir'); ?>">
@@ -539,6 +542,8 @@ class ActionProcess extends HTML_QuickForm_Action
 {
 	function perform(& $page, $actionName)
 	{
+		global $charset;
+
 		global $dokeos_version, $installType, $updateFromVersion;
 		$values = $page->controller->exportValues();
 		?>
@@ -546,6 +551,7 @@ class ActionProcess extends HTML_QuickForm_Action
 		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 		<head>
 		<title>-- Dokeos installation -- version <?php echo $dokeos_version; ?></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
 		<link rel="stylesheet" href="../css/public_admin/default.css" type="text/css"/>
 		</head>
 		<body dir="<?php echo get_lang('text_dir'); ?>">
@@ -643,7 +649,7 @@ function get_language_folder_list()
 			continue;
 		if (is_dir($dirname.$entries))
 		{
-			$language_list[$entries] = ucfirst($entries);
+			$language_list[$entries] = api_ucfirst($entries);
 		}
 	}
 	closedir($handle);

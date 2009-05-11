@@ -78,7 +78,7 @@ if (isset($install_language))
 {
 	if(in_array($install_language,$euro_langs))
 	{
-		$charset = 'ISO-8859-15';
+		$charset = 'ISO-8859-15'; // TODO: This should be UTF-8 for some languages.
 		header('Content-Type: text/html; charset='. $charset);
 	}
 }
@@ -451,54 +451,54 @@ if ($encryptPassForm=='1' ) {
 <table cellpadding="6" cellspacing="0" border="0" width="75%" align="center">
 <tr>
   <td>
-	<input type="hidden" name="updatePath"           value="<?php if(!$badUpdatePath) echo htmlentities($proposedUpdatePath); ?>" />
-	<input type="hidden" name="urlAppendPath"        value="<?php echo htmlentities($urlAppendPath); ?>" />
-	<input type="hidden" name="pathForm"             value="<?php echo htmlentities($pathForm); ?>" />
-	<input type="hidden" name="urlForm"              value="<?php echo htmlentities($urlForm); ?>" />
-	<input type="hidden" name="dbHostForm"           value="<?php echo htmlentities($dbHostForm); ?>" />
-	<input type="hidden" name="dbUsernameForm"       value="<?php echo htmlentities($dbUsernameForm); ?>" />
-	<input type="hidden" name="dbPassForm"           value="<?php echo htmlentities($dbPassForm); ?>" />
-	<input type="hidden" name="singleDbForm"         value="<?php echo htmlentities($singleDbForm); ?>" />
-	<input type="hidden" name="dbPrefixForm"         value="<?php echo htmlentities($dbPrefixForm); ?>" />
-	<input type="hidden" name="dbNameForm"           value="<?php echo htmlentities($dbNameForm); ?>" />
+	<input type="hidden" name="updatePath"           value="<?php if(!$badUpdatePath) echo api_htmlentities($proposedUpdatePath, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="urlAppendPath"        value="<?php echo api_htmlentities($urlAppendPath, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="pathForm"             value="<?php echo api_htmlentities($pathForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="urlForm"              value="<?php echo api_htmlentities($urlForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="dbHostForm"           value="<?php echo api_htmlentities($dbHostForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="dbUsernameForm"       value="<?php echo api_htmlentities($dbUsernameForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="dbPassForm"           value="<?php echo api_htmlentities($dbPassForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="singleDbForm"         value="<?php echo api_htmlentities($singleDbForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="dbPrefixForm"         value="<?php echo api_htmlentities($dbPrefixForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="dbNameForm"           value="<?php echo api_htmlentities($dbNameForm, ENT_QUOTES, $charset); ?>" />
 <?php
 	if($installType == 'update' OR $singleDbForm == 0)
 	{
 ?>
-	<input type="hidden" name="dbStatsForm"          value="<?php echo htmlentities($dbStatsForm); ?>" />
-	<input type="hidden" name="dbScormForm"          value="<?php echo htmlentities($dbScormForm); ?>" />
-	<input type="hidden" name="dbUserForm"           value="<?php echo htmlentities($dbUserForm); ?>" />
+	<input type="hidden" name="dbStatsForm"          value="<?php echo api_htmlentities($dbStatsForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="dbScormForm"          value="<?php echo api_htmlentities($dbScormForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="dbUserForm"           value="<?php echo api_htmlentities($dbUserForm, ENT_QUOTES, $charset); ?>" />
 <?php
 	}
 	else
 	{
 ?>
-	<input type="hidden" name="dbStatsForm"          value="<?php echo htmlentities($dbNameForm); ?>" />
-	<input type="hidden" name="dbUserForm"           value="<?php echo htmlentities($dbNameForm); ?>" />
+	<input type="hidden" name="dbStatsForm"          value="<?php echo api_htmlentities($dbNameForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="dbUserForm"           value="<?php echo api_htmlentities($dbNameForm, ENT_QUOTES, $charset); ?>" />
 <?php
 	}
 ?>
-	<input type="hidden" name="enableTrackingForm"   value="<?php echo htmlentities($enableTrackingForm); ?>" />
-	<input type="hidden" name="allowSelfReg"         value="<?php echo htmlentities($allowSelfReg); ?>" />
-	<input type="hidden" name="allowSelfRegProf"     value="<?php echo htmlentities($allowSelfRegProf); ?>" />
-	<input type="hidden" name="emailForm"            value="<?php echo htmlentities($emailForm); ?>" />
-	<input type="hidden" name="adminLastName"        value="<?php echo htmlentities($adminLastName); ?>" />
-	<input type="hidden" name="adminFirstName"       value="<?php echo htmlentities($adminFirstName); ?>" />
-	<input type="hidden" name="adminPhoneForm"       value="<?php echo htmlentities($adminPhoneForm); ?>" />
-	<input type="hidden" name="loginForm"            value="<?php echo htmlentities($loginForm); ?>" />
-	<input type="hidden" name="passForm"             value="<?php echo htmlentities($passForm); ?>" />
-	<input type="hidden" name="languageForm"         value="<?php echo htmlentities($languageForm); ?>" />
-	<input type="hidden" name="campusForm"           value="<?php echo htmlentities($campusForm); ?>" />
-	<input type="hidden" name="educationForm"        value="<?php echo htmlentities($educationForm); ?>" />
-	<input type="hidden" name="institutionForm"      value="<?php echo htmlentities($institutionForm); ?>" />
-	<input type="hidden" name="institutionUrlForm"   value="<?php echo stristr($institutionUrlForm,'http://')?htmlentities($institutionUrlForm):'http://'.htmlentities($institutionUrlForm); ?>" />
-	<input type="hidden" name="checkEmailByHashSent" value="<?php echo htmlentities($checkEmailByHashSent); ?>" />
-	<input type="hidden" name="ShowEmailnotcheckedToStudent" value="<?php echo htmlentities($ShowEmailnotcheckedToStudent); ?>" />
-	<input type="hidden" name="userMailCanBeEmpty"   value="<?php echo htmlentities($userMailCanBeEmpty); ?>" />
-	<input type="hidden" name="encryptPassForm"      value="<?php echo htmlentities($encryptPassForm); ?>" />
-	<input type="hidden" name="session_lifetime"  value="<?php echo htmlentities($session_lifetime); ?>" />
-	<input type="hidden" name="old_version"  value="<?php echo htmlentities($my_old_version); ?>" />
-	<input type="hidden" name="new_version"  value="<?php echo htmlentities($new_version); ?>" />
+	<input type="hidden" name="enableTrackingForm"   value="<?php echo api_htmlentities($enableTrackingForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="allowSelfReg"         value="<?php echo api_htmlentities($allowSelfReg, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="allowSelfRegProf"     value="<?php echo api_htmlentities($allowSelfRegProf, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="emailForm"            value="<?php echo api_htmlentities($emailForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="adminLastName"        value="<?php echo api_htmlentities($adminLastName, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="adminFirstName"       value="<?php echo api_htmlentities($adminFirstName, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="adminPhoneForm"       value="<?php echo api_htmlentities($adminPhoneForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="loginForm"            value="<?php echo api_htmlentities($loginForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="passForm"             value="<?php echo api_htmlentities($passForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="languageForm"         value="<?php echo api_htmlentities($languageForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="campusForm"           value="<?php echo api_htmlentities($campusForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="educationForm"        value="<?php echo api_htmlentities($educationForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="institutionForm"      value="<?php echo api_htmlentities($institutionForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="institutionUrlForm"   value="<?php echo api_stristr($institutionUrlForm, 'http://', false, $charset) ? api_htmlentities($institutionUrlForm, ENT_QUOTES, $charset) : api_stristr($institutionUrlForm, 'https://', false, $charset) ? api_htmlentities($institutionUrlForm, ENT_QUOTES, $charset) : 'http://'.api_htmlentities($institutionUrlForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="checkEmailByHashSent" value="<?php echo api_htmlentities($checkEmailByHashSent, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="ShowEmailnotcheckedToStudent" value="<?php echo api_htmlentities($ShowEmailnotcheckedToStudent, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="userMailCanBeEmpty"   value="<?php echo api_htmlentities($userMailCanBeEmpty, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="encryptPassForm"      value="<?php echo api_htmlentities($encryptPassForm, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="session_lifetime"  value="<?php echo api_htmlentities($session_lifetime, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="old_version"  value="<?php echo api_htmlentities($my_old_version, ENT_QUOTES, $charset); ?>" />
+	<input type="hidden" name="new_version"  value="<?php echo api_htmlentities($new_version, ENT_QUOTES, $charset); ?>" />
 
 
 
@@ -618,10 +618,10 @@ elseif($_POST['step5'])
 		echo '<br />';
 	}
 	?>
-	<?php echo get_lang('EnableTracking').' : '.($enableTrackingForm?$langYes:$langNo); ?><br />
-	<?php echo get_lang('SingleDb').' : '.($singleDbForm?$langOne:$langSeveral); ?><br /><br />
+	<?php echo get_lang('EnableTracking').' : '.($enableTrackingForm?get_lang('Yes'):get_lang('No')); ?><br />
+	<?php echo get_lang('SingleDb').' : '.($singleDbForm?get_lang('One'):get_lang('Several')); ?><br /><br />
 
-	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg?$langYes:$langNo); ?><br />
+	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg?get_lang('Yes'):get_lang('No')); ?><br />
 	<?php echo get_lang('EncryptMethodUserPass').' : ';
   	echo $encryptPassForm;
 	?><br /><br/>

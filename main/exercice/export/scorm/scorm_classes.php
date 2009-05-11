@@ -334,8 +334,6 @@ class ScormAnswerFillInBlanks extends Answer
 			$jstmp .= $i.',';
 			$jstmpc .= "'".api_htmlentities(api_substr($texstring,1,-1),ENT_QUOTES,$charset)."',";
 				$my_weight=explode('@',$weights[$i-1]);
-				error_log($weights[$i-1]);
-				error_log(print_r($my_weight,true));
 				if (count($my_weight)==2) {
 					$weight_db=$my_weight[0];	
 				} else {

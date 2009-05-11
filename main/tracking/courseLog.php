@@ -125,8 +125,8 @@ function count_student_in_course() {
 
 
 function sort_users($a,$b) {
-	$a = trim(strtolower($a[$_SESSION['tracking_column']]));
-	$b = trim(strtolower($b[$_SESSION['tracking_column']]));
+	$a = trim(api_strtolower($a[$_SESSION['tracking_column']]));
+	$b = trim(api_strtolower($b[$_SESSION['tracking_column']]));
 	if ($_SESSION['tracking_direction'] == 'DESC') {
 		return strcmp($b, $a);
     } else {

@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 20202 2009-04-29 22:31:20Z juliomontoya $
+<?php // $Id: userLog.php 20472 2009-05-11 10:02:06Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -87,7 +87,7 @@ $interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=$_gid", "name
 */
 
 if(isset($uInfo)) {
-	$interbreadcrumb[]= array ('url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo), "name"=> ucfirst(get_lang('Users')));
+	$interbreadcrumb[]= array ('url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo), "name"=> api_ucfirst(get_lang('Users')));
 }
 
 $nameTools = get_lang('ToolName');
@@ -188,7 +188,7 @@ $is_allowedToTrackEverybodyInCourse = $is_allowedToTrack; // allowed to track al
  */
 function myEnc($isostring,$supposed_encoding='ISO-8859-15')
 {
-	return htmlentities($isostring,ENT_QUOTES,$supposed_encoding);
+	return api_htmlentities($isostring,ENT_QUOTES,$supposed_encoding);
 }
 
 /**
@@ -781,7 +781,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
        							while ($ar3['status'] != '') {
 									require_once('../newscorm/learnpathItem.class.php');
 									$time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
-									$title = htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
+									$title = api_htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
        								echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
        								echo "$title</td><td align=right>{$ar3['status']}</td><td     align=right>{$ar3['score']}</td><td align=right>$time</td>";
        								echo "</tr>";

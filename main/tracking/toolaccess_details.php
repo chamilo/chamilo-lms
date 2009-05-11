@@ -1,4 +1,4 @@
-<?php // $Id: toolaccess_details.php 12263 2007-05-03 13:34:40Z elixir_julian $
+<?php // $Id: toolaccess_details.php 20472 2009-05-11 10:02:06Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -122,7 +122,7 @@ $reqdate=$_REQUEST['reqdate'];
                     <td>
                     ";
             if(isset($_cid)) echo "<b>$_cid : </b>";
-            echo "		<b>$langToolList</b>
+            echo "		<b>".get_lang('ToolList')."</b>
 					</td>
                 </tr>
             ";
@@ -151,7 +151,7 @@ $reqdate=$_REQUEST['reqdate'];
             else
             {
                 echo "<tr>"; 
-                echo "<td colspan='2'><center>".$langNoResult."</center></td>";
+                echo "<td colspan='2'><center>".get_lang('NoResult')."</center></td>";
                 echo"</tr>";
             }
             echo "</table></td></tr>";

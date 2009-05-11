@@ -485,7 +485,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 								while ($ar3['status'] != '') {
 									require_once('../newscorm/learnpathItem.class.php');
 									$time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
-									$title = htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
+									$title = api_htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
 									$line .= $title.";".$ar3['status'].";".$ar3['score'].";".$time;
 									$ar3=Database::fetch_array($result3);
 								}
@@ -538,8 +538,8 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 	header('Content-Description: '.$filename);
 	header('Content-transfer-encoding: binary');
 				
-	echo html_entity_decode($title_line);
-	echo html_entity_decode($line);
+	echo api_html_entity_decode($title_line, ENT_COMPAT, $charset);
+	echo api_html_entity_decode($line, ENT_COMPAT, $charset);
 	exit;
   
 

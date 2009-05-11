@@ -179,7 +179,7 @@ $is_allowedToTrackEverybodyInCourse = $is_allowedToTrack; // allowed to track al
  */
 function myEnc($isostring,$supposed_encoding='ISO-8859-15')
 {
-	return htmlentities($isostring,ENT_QUOTES,$supposed_encoding);
+	return api_htmlentities($isostring,ENT_QUOTES,$supposed_encoding);
 }
 
 /**
@@ -686,8 +686,8 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 	header('Content-Description: '.$filename);
 	header('Content-transfer-encoding: binary');
 				
-	echo html_entity_decode($title_line);
-	echo html_entity_decode($line);
+	echo api_html_entity_decode($title_line, ENT_QUOTES, $charset);
+	echo api_html_entity_decode($line, ENT_QUOTES, $charset);
 	exit;
   
 

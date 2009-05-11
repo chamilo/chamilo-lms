@@ -5605,8 +5605,8 @@ class learnpath {
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 
-							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							//$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
+							//$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 
 							foreach($arrHide as $key => $value){
 								if($key==$s_selected_position && $action == 'add'){
@@ -5635,8 +5635,8 @@ class learnpath {
 
 					$return .= "\t\t" . '<tr>' . "\n";
 
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok').'" /></td>' . "\n";
-
+						$return .= "\t\t\t" . '<td> &nbsp;</td><td><button class="save" name="submit_button" type="submit">'.get_lang('AddHotpotatoes').'</button></td>' . "\n";
+									
 					$return .= "\t\t" . '</tr>' . "\n";
 
 				$return .= "\t" . '</table>' . "\n";

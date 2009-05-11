@@ -47,7 +47,7 @@ $htmlHeadXtra[]='<script language="javascript">
 <!--
 function enviar(miforma) 
 { 
-	if(confirm("'.get_lang("SureYouWantToDeleteSelectedMessages").'"))
+	if(confirm("'.get_lang('SureYouWantToDeleteSelectedMessages', '').'"))
 		miforma.submit();
 } 
 function select_all(formita)
@@ -113,7 +113,7 @@ if( trim($info_delete_outbox[0])=='delete' ) {
 /**************************************************************/
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 echo '<div id="div_content_messages_sent">&nbsp;&nbsp;';
-//api_display_tool_title(mb_convert_encoding(get_lang('Outbox'),'UTF-8',$charset));
+//api_display_tool_title(api_convert_encoding(get_lang('Outbox'),'UTF-8',$charset));
 echo '</div>';
 $user_sender_id=api_get_user_id();
 if ($_REQUEST['action']=='delete') {

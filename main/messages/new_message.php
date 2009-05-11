@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 20301 2009-05-04 20:58:41Z iflorespaz $
+<?php // $Id: new_message.php 20460 2009-05-11 05:41:09Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -51,7 +51,7 @@ require_once'../messages/message.class.php';
 require_once(api_get_path(LIBRARY_PATH).'/text.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php');
 $request=api_is_xml_http_request();
-$nameTools=($request===true) ? mb_convert_encoding(get_lang('Messages'),'UTF-8',$charset) : get_lang('Messages');
+$nameTools=($request===true) ? api_convert_encoding(get_lang('Messages'),'UTF-8',$charset) : get_lang('Messages');
 /*
 -----------------------------------------------------------
 	Constants and variables
@@ -100,7 +100,7 @@ $(document).ready(function (){
 });
 	</script>';	
 
-$nameTools=($request===true) ? mb_convert_encoding(get_lang('ComposeMessage'),'UTF-8',$charset) : get_lang('ComposeMessage');
+$nameTools=($request===true) ? api_convert_encoding(get_lang('ComposeMessage'),'UTF-8',$charset) : get_lang('ComposeMessage');
 $fck_attribute['Height'] = "150";
 $fck_attribute['Width'] = "95%";
 $fck_attribute['ToolbarSet'] = "Profil";
@@ -132,7 +132,7 @@ function show_compose_reply_to_message ($message_id, $receiver_id) {
 		die();
 	}
 	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($row[1]).'</strong>';
-	$default['title'] =mb_convert_encoding(get_lang('EnterTitle'),'UTF-8',$charset);
+	$default['title'] =api_convert_encoding(get_lang('EnterTitle'),'UTF-8',$charset);
 	$default['user_list'] = $row[1];
 	manage_form($default);
 }
@@ -140,7 +140,7 @@ function show_compose_reply_to_message ($message_id, $receiver_id) {
 function show_compose_to_user ($receiver_id) {
 	global $charset;
 	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($receiver_id).'</strong>';
-	$default['title'] = mb_convert_encoding(get_lang('EnterTitle'),'UTF-8',$charset);
+	$default['title'] = api_convert_encoding(get_lang('EnterTitle'),'UTF-8',$charset);
 	$default['user_list'] = $receiver_id;
 	manage_form($default);
 }
@@ -167,13 +167,13 @@ function manage_form ($default, $select_from_user_list = null) {
 		}
 		$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 	}
-	$form->add_textfield('title', mb_convert_encoding(get_lang('Title'),'UTF-8',$charset));
+	$form->add_textfield('title', api_convert_encoding(get_lang('Title'),'UTF-8',$charset));
 	$form->add_html_editor('content', '',false,false);
 	if (isset($_GET['re_id'])) {
 		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');
 	}
-	$form->addElement('submit', 'compose',mb_convert_encoding(get_lang('Send'),'UTF-8',$charset));
+	$form->addElement('submit', 'compose',api_convert_encoding(get_lang('Send'),'UTF-8',$charset));
 	$form->setDefaults($default);
 	if ($form->validate()) {
 		$values = $form->exportValues();
@@ -220,7 +220,7 @@ if ($request===false) {
 
 //api_display_tool_title($nameTools);
 echo '<div class=actions>';
-echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',mb_convert_encoding(get_lang('BackToInbox'),'UTF-8',$charset)).mb_convert_encoding(get_lang('BackToInbox'),'UTF-8',$charset).'</a>';
+echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',api_convert_encoding(get_lang('BackToInbox'),'UTF-8',$charset)).api_convert_encoding(get_lang('BackToInbox'),'UTF-8',$charset).'</a>';
 echo '</div>';
 if (!isset($_POST['compose'])) {
 	if(isset($_GET['re_id'])) {
@@ -238,14 +238,14 @@ if (!isset($_POST['compose'])) {
 		
 	}
 	if (isset($_GET['re_id'])) {
-		$default['title'] = mb_convert_encoding($_POST['title'],'UTF-8',$charset);
-		$default['content'] = mb_convert_encoding($_POST['content'],'UTF-8',$charset);
+		$default['title'] = api_convert_encoding($_POST['title'],'UTF-8',$charset);
+		$default['content'] = api_convert_encoding($_POST['content'],'UTF-8',$charset);
 		//$default['user_list'] = $_POST['user_list'];
 		manage_form($default);	
 	} else {
 		if ($restrict) {
-			$default['title'] = mb_convert_encoding($_POST['title'],'UTF-8',$charset);
-			$default['id_text_name'] = mb_convert_encoding($_POST['id_text_name'],'UTF-8',$charset); 
+			$default['title'] = api_convert_encoding($_POST['title'],'UTF-8',$charset);
+			$default['id_text_name'] = api_convert_encoding($_POST['id_text_name'],'UTF-8',$charset); 
 			$default['user_list'] = $_POST['user_list'];
 			manage_form($default);
 		} else {

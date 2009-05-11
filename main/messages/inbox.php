@@ -156,9 +156,9 @@ if ($request===false) {
 }
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 echo '<div id="div_content_messages">&nbsp;&nbsp;';
-//api_display_tool_title(mb_convert_encoding(get_lang('Inbox'),'UTF-8',$charset));
+//api_display_tool_title(api_convert_encoding(get_lang('Inbox'),'UTF-8',$charset));
 echo '<div class=actions>';
-echo '<a onclick="compose_and_show_message(\'show\',\'1\')" href="javascript:void(0)">'.Display::return_icon('message_new.png',mb_convert_encoding(get_lang('ComposeMessage'),'UTF-8',$charset)).mb_convert_encoding(get_lang('ComposeMessage'),'UTF-8',$charset).'</a>';
+echo '<a onclick="compose_and_show_message(\'show\',\'1\')" href="javascript:void(0)">'.Display::return_icon('message_new.png',api_convert_encoding(get_lang('ComposeMessage'),'UTF-8',$charset)).api_convert_encoding(get_lang('ComposeMessage'),'UTF-8',$charset).'</a>';
 echo '</div>';
 echo '</div>';
 if (!isset($_GET['del_msg'])) {

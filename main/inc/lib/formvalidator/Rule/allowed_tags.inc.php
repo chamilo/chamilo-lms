@@ -359,7 +359,7 @@ $allowed_tags_student['q']['cite'] =  array();
 // S
 $allowed_tags_student['s'] =  array();
 // SPAN
-$allowed_tags_student['span'] =  array();
+$allowed_tags_student['span'] =  array();//style
 #$allowed_tags_student['span']['style'] =  array(); //filtered out for security (see kses security report)
 // STRIKE
 $allowed_tags_student['strike'] =  array();
@@ -513,6 +513,8 @@ $allowed_tags_teachers['body']['link'] =  array();
 $allowed_tags_teachers['body']['text'] =  array();
 $allowed_tags_teachers['body']['vlink'] =  array();
 
+$allowed_tags_teachers['span'] =  array();
+$allowed_tags_teachers['span']['style'] =  array();
 
 foreach ($allowed_tags_student as $student_index =>$student_value) {
 	if (count($allowed_tags_student[$student_index])==0) {

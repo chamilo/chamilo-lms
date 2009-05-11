@@ -249,8 +249,7 @@ class Security{
 	 */
 	function remove_XSS($var,$user_status=null) {
 		global $charset;
-		global $config_purifier;
-		if (is_null($user_status)) {
+		/*if (is_null($user_status)) {
 			if (is_array($var)) {
 				if (count($var)>0) {
 					foreach ($var as &$value_var) {
@@ -267,6 +266,13 @@ class Security{
 		} else {
 		$purifier = new HTMLPurifier($config_purifier,$user_status);
 		return $purifier->purify($var);
-		}		
+		}*/	
+		$purifier = new HTMLPurifier(null,$user_status);		
+		if (is_array($var)) {
+			return $purifier->purifyArray($var);				
+		} else {
+			return $purifier->purify($var);	
+		}
+			
 	}
 }

@@ -86,9 +86,14 @@ class HTMLPurifier
      *                HTMLPurifier_Config::create() supports.
      */
     public function __construct($config = null,$user_status) {
+    	global $charset;
+
+		$config = HTMLPurifier_Config::createDefault();
+		$config->set('Core', 'Encoding',$charset);
+		$config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');
+			    	
 		if ($user_status==STUDENT) {
-			
-			global $tag_student,$attribute_student;//$tag_student
+			global $tag_student,$attribute_student;//$tag_student			
 	   		$config->set('HTML', 'AllowedElements',$tag_student);//'a,em,blockquote,p,code,pre,strong,b,img,span'
 			$config->set('HTML', 'AllowedAttributes',$attribute_student);//'a.href,a.title,img.src'
 		} elseif ($user_status==COURSEMANAGER) {
@@ -101,11 +106,8 @@ class HTMLPurifier
 			$config->set('HTML', 'AllowedAttributes',$attribute_anonymous);//'a.href,a.title,img.src'			
 		}
 			$config->set('HTML', 'TidyLevel', 'light');
-
-        $this->config = HTMLPurifier_Config::create($config);
-
-        $this->strategy     = new HTMLPurifier_Strategy_Core();
-
+        	$this->config = HTMLPurifier_Config::create($config);
+        	$this->strategy     = new HTMLPurifier_Strategy_Core();
     }
 
     /**

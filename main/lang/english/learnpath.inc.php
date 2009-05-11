@@ -3,6 +3,8 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "A new forum has now been created";
 $NewThreadCreated = "A new forum thread has now been created";
+$HideAttemptView = "Hide attempt view";
+$ExtendAttemptView = "Extend attempt view";
 $lang_learning_path = "Courses";
 $lang_learning_path_builder = "Authoring tool";
 $lang_description = "Course settings";

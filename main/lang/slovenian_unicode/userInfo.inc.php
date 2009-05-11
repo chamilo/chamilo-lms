@@ -81,4 +81,7 @@ $UserNonRegisteredAtTheCourse = "Uporabnik ni vpisan v tečaj";
 $ChangeContactGroup = "Spremeni skupino kontaktov";
 $Friend = "Prijatelj";
 $ViewMySharedProfile = "Moj skupen profil";
+$UserStatistics = "Poročila o tem uporabniku";
+$EditUser = "Uredi tega uporabnika";
+$ViewUser = "Poglej tega uporabnika";
 ?>

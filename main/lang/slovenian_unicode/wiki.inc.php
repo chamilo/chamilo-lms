@@ -152,4 +152,5 @@ $CurrentVersion = "Trenutna različica";
 $LastVersion = "Zadnja različica";
 $PageRestored = "Stran je bila obnovljena. Vpogled lahko izvršite s klikom na";
 $RestoredFromVersion = "Obnovljeno iz različice";
+$HWiki = "Pomoč: Wiki";
 ?>

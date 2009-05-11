@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $PublishSurvey = "Publish survey";
 $CompareQuestions = "Compare questions";
+$InformationUpdated = "Information updated";
 $SurveyTitle = "Survey title";
 $SurveyIntroduction = "Survey introduction";
 $CreateNewSurvey = "Create survey";

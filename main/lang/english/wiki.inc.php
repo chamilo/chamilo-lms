@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$WikiSearchResults = "Wiki Search Results";
 $Wiki = "Wiki";
 $StartPage = "Main page";
 $EditThisPage = "Edit this page";

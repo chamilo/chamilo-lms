@@ -208,6 +208,7 @@ $TemplateTitleStopAndThink = "Zaustavi se in premisli";
 $TemplateTitleListLeftListDescription = "Seznam na levi z vodičem";
 $TemplateTitleStopAndThinkDescription = "Prodloga vzpodbude k zaustavitvi in razmisleku";
 $CreateTheDocument = "Shrani dokument";
+$CreateTemplate = "Ustvari predlogo";
 $SharedFolder = "Mapa v skupni rabi";
 $CreateFolder = "Ustvari mapo";
 $HelpDefaultDirDocuments = "Ta mapa vsebuje privzeti arhiv. Vsebino lahko odstranite ali pa dodate novo. V primeru, da so datoteke označene kot skrite in kot take vstavljene v spletni dokument, jih tečajniki ne bodo videli v svojem področju dokumentov. Ko vstavljate datoteko v spletni dokument, se najprej prepričajte, da je viden. Mape v splošnem lahko ostanejo skrite.";

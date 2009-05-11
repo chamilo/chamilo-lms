@@ -89,4 +89,5 @@ $GroupsFromClasses = "Skupine iz razredov";
 $GroupsFromClassesInfo = "Z uporabo te možnosti lahko ustvarite skupine iz razredov, vpisanih v vaš tečaj.";
 $Group = "Skupina";
 $ForumOfGroup = "Forum skupine:";
+$BackToGroupList = "Nazaj na seznam skupin";
 ?>

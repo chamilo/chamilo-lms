@@ -46,5 +46,5 @@ $General = "General";
 $SearchFeatureDoIndexLink = "¿Indexar título y descripción?";
 $langSaveLink = "Guardar el enlace";
 $langSaveCategory = "Guardar la categoría";
-$BackToLinksOverview = "Regresar a Principal Enlaces";
+$BackToLinksOverview = "Regresar a la lista de enlaces";
 ?>

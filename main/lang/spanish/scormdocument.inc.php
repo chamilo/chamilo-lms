@@ -9,7 +9,7 @@ $langEditDocument = "Editar";
 $langCreateDocument = "Crear un documento";
 $langMissingImagesDetected = "Se detectaron imágenes perdidas";
 $langPublish = "Publicar";
-$langScormcontentstudent = "Este es un curso con formato SCORM. Si desea verlo, pulse aquí : <input type=button name=scormbutton value=\'Comenzar\' onclick=\'openscorm()\'>";
+$langScormcontentstudent = "Esto es una lección en formato SCORM. Si desea visualizarla, pulse aquí : <input type=button name=scormbutton value=\'Comenzar\' onclick=\'openscorm()\'>";
 $langScormcontent = "Esto es un contenido scorm<br><input type=button name=scormbutton value=\'Comenzar\' onclick=\'openscorm()\'>";
 $langDownloadAndZipEnd = "archivo ZIP enviado y descomprimido";
 $langZipNoPhp = "El archivo zip no puede contener archivos .PHP";

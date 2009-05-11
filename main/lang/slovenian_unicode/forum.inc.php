@@ -135,4 +135,8 @@ $CreateForum = "Ustvari forum";
 $ModifyForum = "Spremeni forum";
 $CreateThread = "Ustvari nit";
 $ModifyThread = "Spremeni nit";
+$EditForum = "Uredi forum";
+$BackToForum = "Nazaj na forum";
+$BackToForumOverview = "Nazaj na pregled forumov";
+$BackToThread = "Nazaj na nit";
 ?>

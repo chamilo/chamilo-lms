@@ -3,6 +3,8 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "El foro ha sido añadido";
 $NewThreadCreated = "El tema del foro ha sido añadido";
+$HideAttemptView = "Ocultar la vista de intento(s)";
+$ExtendAttemptView = "Ver la vista de intento(s)";
 $lang_learning_path = "Lecciones";
 $lang_learning_path_builder = "Constructor de lecciones";
 $lang_description = "Descripción";
@@ -169,7 +171,7 @@ $NoPrerequisites = "Sin prerrequisitos";
 $NewExercise = "Crear un ejercicio";
 $CreateANewLink = "Crear un enlace";
 $CreateANewForum = "Crear un foro";
-$LinkAdd = "Añadir enlace";
+$LinkAdd = "Crear un enlace";
 $WoogieConversionPowerPoint = "Woogie: Conversión de Word";
 $WelcomeWoogieSubtitle = "Conversor de documentos Word en Lecciones";
 $WelcomeWoogieConverter = "Bienvenido al conversor Woogie<ul type=\\\"1\\\"><li>Elegir un archivo .doc, .sxw, .odt<li>Enviarlo a Woogie, que lo convertirá en una Lección SCORM <li>Podrá añadir comentarios de audio en cada página e insertar tests y otras actividades entre las páginas</ul>";

@@ -613,7 +613,7 @@ if ($from_learnpath != 'yes')
 }
 else
 {
-	echo "<form method=\"get\" action=\"../learnpath/learnpath_handler.php\" style=\"margin: 0px;\"><input type=\"hidden\" name=\"learnpath_id\" value=\"".htmlentities($learnpath_id)."\"><input type=\"submit\" value=\"".get_lang('Ok')."\"></form>";
+	echo "<form method=\"get\" action=\"../learnpath/learnpath_handler.php\" style=\"margin: 0px;\"><input type=\"hidden\" name=\"learnpath_id\" value=\"".htmlentities($learnpath_id)."\"><input type=\"submit\" value=\"".'  '.get_lang('Ok').'  '."\"></form>";
 }
 ?>
 
@@ -634,7 +634,7 @@ if ($resource_added)
 
 if ($from_learnpath != 'yes')
 {
-	echo count($addedresource)." ".strtolower(get_lang('ResourcesAdded'))."<br/>";
+	echo count($addedresource)." ".api_strtolower(get_lang('ResourcesAdded'))."<br/>";
 }
 //echo "<hr>";
 
@@ -657,8 +657,8 @@ if ($content == "Agenda")
 	{
 		echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\">";
 		echo "<img src='../img/agenda.gif' alt='agenda'>";
-		echo ucfirst(format_locale_date($dateFormatLong, strtotime($myrow["start_date"])))."&nbsp;";
-		echo ucfirst(strftime($timeNoSecFormat, strtotime($myrow["start_date"])))."<br>";
+		echo api_ucfirst(format_locale_date($dateFormatLong, strtotime($myrow["start_date"])))."&nbsp;";
+		echo api_ucfirst(strftime($timeNoSecFormat, strtotime($myrow["start_date"])))."<br />";
 		echo "<b>".$myrow["title"]."</b></td></tr><tr><td>";
 		echo $myrow["content"]."<br />";
 		showorhide_addresourcelink($content, $myrow["id"]);
@@ -727,7 +727,7 @@ if ($content == "Ad_Valvas")
 	{
 		echo "<table width=\"100%\"><tr><td>";
 		echo "<img src='../img/valves.gif' alt='advalvas'>";
-		echo ucfirst(format_locale_date($dateFormatLong, strtotime($myrow["end_date"])));
+		echo api_ucfirst(format_locale_date($dateFormatLong, strtotime($myrow["end_date"])));
 		echo "</td></tr><tr><td>";
 		echo $myrow["title"]."<br />";
 		showorhide_addresourcelink($content, $myrow["id"]);

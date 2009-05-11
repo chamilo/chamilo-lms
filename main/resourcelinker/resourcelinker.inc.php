@@ -1,4 +1,4 @@
-<?php // $Id: resourcelinker.inc.php 18093 2009-01-30 20:23:45Z herodoto $
+<?php // $Id: resourcelinker.inc.php 20468 2009-05-11 08:48:25Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1435,7 +1435,8 @@ function remove_resource($resource_key)
 */
 function show_addresource_button($additionalparameters = '')
 {
-	echo '<label for="addresources"><img src="../img/attachment.gif" /></label><input class="link_alike" type="submit" name="addresources" id="addresources" value="'.htmlentities(get_lang('Attachment')).'" '.$additionalparameters.' />';
+	global $charset;
+	echo '<label for="addresources"><img src="../img/attachment.gif" /></label><input class="link_alike" type="submit" name="addresources" id="addresources" value="'.api_htmlentities(get_lang('Attachment'), ENT_QUOTES, $charset).'" '.$additionalparameters.' />';
 }
 
 /**

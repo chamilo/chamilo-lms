@@ -1278,7 +1278,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			break;
 
 		case "Forum":
-			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";
+			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";  // TODO: This is the old table name, it should be corrected.
 			$result= api_sql_query("SELECT * FROM `$TBL_FORUMS` WHERE forum_id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
@@ -1462,7 +1462,8 @@ function remove_resource($resource_key)
 */
 function show_addresource_button($additionalparameters = '')
 {
-	echo '<label for="addresources"><img src="../img/attachment.gif" /></label><input class="link_alike" type="submit" name="addresources" id="addresources" value="'.htmlentities(get_lang('Attachment')).'" '.$additionalparameters.' />';
+	global $charset;
+	echo '<label for="addresources"><img src="../img/attachment.gif" /></label><input class="link_alike" type="submit" name="addresources" id="addresources" value="'.api_htmlentities(get_lang('Attachment'), ENT_QUOTES, $charset).'" '.$additionalparameters.' />';
 }
 
 /**

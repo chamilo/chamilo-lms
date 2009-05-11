@@ -577,7 +577,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 							$number_items2 = Database::num_rows($result_items2);
 							if ($number_items2 == 0)
 							{
-								echo $lang_prereq_deleted_error;
+								echo get_lang('prereq_deleted_error');
 							}
 							$row_items2 = mysql_fetch_array($result_items2);
 							display_addedresource_link_in_learnpath($row_items2["item_type"], $row_items2["ref"], '', $row_items2["id"], 'builder', '', 0);
@@ -2410,6 +2410,7 @@ function xmltagwrite($tagname, $which, $data, $linebreak = "yes")
  */
 function createimsmanifest($circle1_files, $learnpath_id)
 {
+	global $charset;
 	global $_course, $LPname, $expdir, $LPnamesafe;
 	//$tbl_learnpath_main, $tbl_learnpath_chapter, $tbl_learnpath_item, 
 	$tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
@@ -2425,7 +2426,8 @@ function createimsmanifest($circle1_files, $learnpath_id)
 
 	//1.2
 	//charset should be dependent on content
-	$mycharset = 'ISO-8859-1';
+	//$mycharset = 'ISO-8859-1';
+	$mycharset = $charset;
 	$header = '<?xml version="1.0" encoding="'.$mycharset.'"?>'."\n<manifest identifier='".$LPnamesafe."' version='1.1'\n xmlns='http://www.imsproject.org/xsd/imscp_rootv1p1p2'\n xmlns:adlcp='http://www.adlnet.org/xsd/adlcp_rootv1p2'\n xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'\n xsi:schemaLocation='http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd\n http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd\n http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd'>\n";
 
 	$org .= xmltagwrite('metadata', 'open');
@@ -2537,8 +2539,8 @@ function createimsmanifest($circle1_files, $learnpath_id)
 
 		$mds = new mdstore(TRUE); // RH: export metadata; if no table, create it
 		if (($mdt = $mds->mds_get($row['item_type'].'.'.$row['item_id'])))
-			if (($mdo = strpos($mdt, '<metadata>')) && ($mdc = strpos($mdt, '</metadata>')))
-				$org .= "    ".substr($mdt, $mdo, $mdc - $mdo +11)."\n";
+			if (($mdo = api_strpos($mdt, '<metadata>')) && ($mdc = api_strpos($mdt, '</metadata>')))
+				$org .= "    ".api_substr($mdt, $mdo, $mdc - $mdo +11)."\n";
 
 		$org .= "    ".xmltagwrite('item', 'close');
 		$i ++;

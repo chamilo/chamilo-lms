@@ -33,7 +33,9 @@ if(isset($_SESSION['lpobject'])){
 	$display_mode = $_SESSION['oLP']->mode;
 }
 if($debug>0){error_log('New LP - Loaded lp_message : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER['HTTP_REFERER'],0);}
-$charset = 'ISO-8859-1';
+if (empty($charset)) {
+	$charset = 'ISO-8859-15';
+}
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
   var dokeos_xajax_handler = window.parent.oxajax;

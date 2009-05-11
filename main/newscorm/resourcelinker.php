@@ -701,11 +701,11 @@ if ($from_learnpath != 'yes')
 
 if ($from_learnpath != 'yes')
 {
-	echo "<form method=\"post\" action=\"{$_SESSION['origintoolurl']}\" style=\"margin: 0px;\"><input type=\"submit\" value=\"".get_lang('Ok')."\"></form>";
+	echo "<form method=\"post\" action=\"{$_SESSION['origintoolurl']}\" style=\"margin: 0px;\"><input type=\"submit\" value=\"".'  '.get_lang('Ok').'  '."\"></form>";
 }
 else
 {
-	echo "<form method=\"get\" action=\"lp_controller.php\" style=\"margin: 0px;\"><input type=\"hidden\" name=\"lp_id\" value=\"".htmlentities($learnpath_id)."\"><input type=\"hidden\" name=\"action\" value=\"admin_view\"><input type=\"submit\" value=\"".get_lang('Ok')."\"></form>";
+	echo "<form method=\"get\" action=\"lp_controller.php\" style=\"margin: 0px;\"><input type=\"hidden\" name=\"lp_id\" value=\"".htmlentities($learnpath_id)."\"><input type=\"hidden\" name=\"action\" value=\"admin_view\"><input type=\"submit\" value=\"".'  '.get_lang('Ok').'  '."\"></form>";
 }
 ?>
 

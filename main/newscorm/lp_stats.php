@@ -243,7 +243,7 @@ foreach ($list as $my_item_id) {
 			$extend_link = '<a href="' . api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix . '"><img src="../img/visible.gif" alt="'.get_lang('HideAttemptView').'" title="'.get_lang('HideAttemptView').'"  border="0"></a>' . "\n";
 		}
 		$title = $row['mytitle'];
-		$title = stripslashes(html_entity_decode($title, ENT_QUOTES, $dokeos_charset));
+		$title = stripslashes(api_html_entity_decode($title, ENT_QUOTES, $dokeos_charset));
 
 		if (empty ($title)) {
 			$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
@@ -251,7 +251,7 @@ foreach ($list as $my_item_id) {
 		
 		if ($row['item_type'] != 'dokeos_chapter') {			
 			$correct_test_link = '-';						
-			$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4" class="content"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $lp_charset) . "</div></td>\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td><td class="content"></td>' . "\n" . "</tr>\n";
+			$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4" class="content"><div class="mystatus">' . api_htmlentities($title, ENT_QUOTES, $lp_charset) . "</div></td>\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td><td class="content"></td>' . "\n" . "</tr>\n";
 		}
 
 		$counter++;

@@ -12,7 +12,7 @@
  * Switching within the field to update
  */
 $msg = $_SESSION['oLP']->get_message();
-$charset = 'ISO-8859-1'; //not taken into account here as we don't include a header
+$charset = 'ISO-8859-15'; //not taken into account here as we don't include a header
 error_log('New LP - Loaded lp_save : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER['HTTP_REFERER'],0);
 ?>
 <!DOCTYPE html 

@@ -1,4 +1,4 @@
-<?php // $Id: survey.php 20470 2009-05-11 09:46:59Z ivantcholakov $
+<?php // $Id: survey.php 20486 2009-05-11 15:32:32Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 20470 2009-05-11 09:46:59Z ivantcholakov $
+* 	@version $Id: survey.php 20486 2009-05-11 15:32:32Z juliomontoya $
 *
 * 	@todo use quickforms for the forms
 */
@@ -174,7 +174,7 @@ echo '	<tr class="row_odd">';
 echo '		<th width="15">'.get_lang('QuestionNumber').'</th>';
 echo '		<th>'.get_lang('Title').'</th>';
 echo '		<th>'.get_lang('Type').'</th>';
-echo '		<th>'.get_lang('NumberOfOptions').'</th>';
+echo '		<th width="50" >'.get_lang('NumberOfOptions').'</th>';
 echo '		<th width="100">'.get_lang('Modify').'</th>';
 if($is_survey_type_1) { 
 	echo '<th width="100">'.get_lang('Condition').'</th>';

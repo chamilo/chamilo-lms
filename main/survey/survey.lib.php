@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 20483 2009-05-11 14:54:18Z juliomontoya $
+* 	@version $Id: survey.lib.php 20486 2009-05-11 15:32:32Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1435,12 +1435,14 @@ class question
 		} else {
 			$class="add";
 			$text=get_lang('CreateQuestionSurvey'); 
-		}		
-		
-		$this->html .= '	<div class="row">';
-		$this->html .= '		<div class="label">';
-		$this->html .= '		</div>';
-		$this->html .= '		<div class="formw">';
+		}	
+			
+		if ($_GET['type']=='yesno' || $_GET['type']=='open'|| $_GET['type']=='percentage' || $_GET['type']=='comment' || $_GET['type']=='pagebreak') {
+			$this->html .= '	<div class="row">';
+			$this->html .= '		<div class="label">';
+			$this->html .= '		</div>';
+			$this->html .= '		<div class="formw">';
+		}
 		$this->html .= '			<button class="'.$class.'"type="submit" name="save_question">'.$text.'</button>';
 		$this->html .= '		</div>';
 		$this->html .= '	</div>';
@@ -1514,7 +1516,7 @@ class question
 				
 				if ($config['survey']['debug']) {				
 					Display :: display_header();
-					Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="survey.php?survey_id='.$_GET['survey_id'].'">'.get_lang('Survey').'</a>', false);					
+					Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.get_lang('Survey').'</a>', false);					
 				} else {					
 					header('Location:survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'&message='.$message);
 					exit();
@@ -1570,13 +1572,21 @@ class question
 			$remove_answer_attribute = 'disabled="disabled"';
 		}
 
+		$return .= '	<div class="row">';
+		$return .= '		<div class="label">';
+		$return .= '		</div>';
+		$return .= '		<div class="formw">';
+		$return .= '			<button class="minus" type="submit" name="remove_answer" "'.$remove_answer_attribute.'">'.get_lang('RemoveAnswer').' </button>';
+		$return .= '			<button class="plus" type="submit" name="add_answer">'.get_lang('AddAnswer').'</button>';
+	
+		/*
 		$return .= '	<tr>';
 		$return .= '		<td align="right">&nbsp;</td>';
 		$return .= '		<td colspan="2">';
 		$return .= '			<button class="minus" type="submit" name="remove_answer" "'.$remove_answer_attribute.'">'.get_lang('RemoveAnswer').' </button>';
 		$return .= '			<button class="plus" type="submit" name="add_answer">'.get_lang('AddAnswer').'</button>';
 		$return .= '		</td>';
-		$return .= '	</tr>';
+		$return .= '	</tr>';*/
 		return $return;
 	}
 
@@ -1591,7 +1601,7 @@ class question
 	 */
 	function render_question($form_content)
 	{
-		$this->html = '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.$_GET['survey_id'].'">';
+		$this->html = '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.Security::remove_XSS($_GET['survey_id']).'">';
 		echo $this->html;
 	}
 }
@@ -1627,17 +1637,18 @@ class yesno extends question
 		$this->html .= '		</div>';
 		$this->html .= '	</div>';
 
-
+		
 		// The options
 		$this->html .= '	<div class="row">';
 		$this->html .= '		<div class="label">';
 		$this->html .= 				get_lang('AnswerOptions');
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
-		$this->html .= '			<table style="margin-left: 185px;">';	
+		$this->html .= '			<table>';	
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right"><label for="answers[0]">1</label></td>';
 		//$this->html .= '		<td><input type="text" name="answers[0]" id="answers[0]" value="'.$form_content['answers'][0].'" /></td>';
+		
 		$this->html .= '		<td width="550">'.api_return_html_area('answers[0]', stripslashes($form_content['answers'][0])).'</td>';
 		$this->html .= '		<td><input type="image" src="../img/down.gif"  value="move_down[0]" name="move_down[0]"/></td>';
 		$this->html .= '	</tr>';
@@ -1733,34 +1744,32 @@ class multiplechoice extends question
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
 		$total_number_of_answers = count($form_content['answers']);
-		$this->html .= ' 			<table style="margin-left: 185px;">';
-		foreach ($form_content['answers'] as $key=>$value)
-		{
+		$this->html .= ' 			<table>';
+		foreach ($form_content['answers'] as $key=>$value) {
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
 			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset)).'</td>';
 			$this->html .= '		<td>';
-			if ($key<$total_number_of_answers-1)
-			{
+			if ($key<$total_number_of_answers-1) {
 				$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
 			}
-			if ($key>0)
-			{
+			if ($key>0) {
 				$this->html .= '			<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
 			}
-			if ($total_number_of_answers> 2)
-			{
+			if ($total_number_of_answers> 2) {
 				$this->html .= '			<input type="image" src="../img/delete.gif"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
 			}
 			$this->html .= ' 		</td>';
 			$this->html .= '	</tr>';
 		}
-		// The buttons for adding or removing
-		$this->html .= parent :: add_remove_buttons($form_content);
+		// The buttons for adding or removing		
 		$this->html .= ' 			</table>';
 		$this->html .= '		</div>';
 		$this->html .= '	</div>';		
+		
+		$this->html .= parent :: add_remove_buttons($form_content);
+		
 
 	}
 
@@ -1928,34 +1937,32 @@ class multipleresponse extends question
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
 		$total_number_of_answers = count($form_content['answers']);
-		$this->html .= ' 			<table style="margin-left: 185px;">';
-		foreach ($form_content['answers'] as $key=>$value)
-		{
+		$this->html .= ' 			<table>';
+		foreach ($form_content['answers'] as $key=>$value) {
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
 			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset)).'</td>';
 			$this->html .= '		<td>';
-			if ($key<$total_number_of_answers-1)
-			{
+			if ($key<$total_number_of_answers-1) {
 				$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
 			}
-			if ($key>0)
-			{
+			
+			if ($key>0) {
 				$this->html .= '			<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
 			}
-			if ($total_number_of_answers> 2)
-			{
+			
+			if ($total_number_of_answers> 2) {
 				$this->html .= '			<input type="image" src="../img/delete.gif"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
 			}
 			$this->html .= ' 		</td>';
 			$this->html .= '	</tr>';
 		}
-		// The buttons for adding or removing
-		$this->html .= parent :: add_remove_buttons($form_content);
+		// The buttons for adding or removing		
 		$this->html .= ' 			</table>';
 		$this->html .= '		</div>';
-		$this->html .= '	</div>';			
+		$this->html .= '	</div>';		
+		$this->html .= parent :: add_remove_buttons($form_content);	
 	}
 
 	/**
@@ -2016,7 +2023,7 @@ class dropdown extends question
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
 		$total_number_of_answers = count($form_content['answers']);
-		$this->html .= ' 			<table style="margin-left: 185px;">';
+		$this->html .= ' 			<table>';
 		foreach ($form_content['answers'] as $key=>$value)
 		{
 			$this->html .= '	<tr>';
@@ -2038,11 +2045,11 @@ class dropdown extends question
 			$this->html .= ' 		</td>';
 			$this->html .= '	</tr>';
 		}
-		// The buttons for adding or removing
-		$this->html .= parent :: add_remove_buttons($form_content);
+		// The buttons for adding or removing		
 		$this->html .= ' 			</table>';
 		$this->html .= '		</div>';
 		$this->html .= '	</div>';		
+		$this->html .= parent :: add_remove_buttons($form_content);
 	}
 
 	/**
@@ -2235,7 +2242,7 @@ class score extends question
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
 		$total_number_of_answers = count($form_content['answers']);
-		$this->html .= ' 			<table style="margin-left: 185px;">';
+		$this->html .= ' 			<table>';
 		foreach ($form_content['answers'] as $key=>$value)
 		{
 			$this->html .= '	<tr>';
@@ -2259,10 +2266,10 @@ class score extends question
 			$this->html .= '	</tr>';
 		}
 		// The buttons for adding or removing
-		$this->html .= parent :: add_remove_buttons($form_content);
 		$this->html .= ' 			</table>';
 		$this->html .= '		</div>';
-		$this->html .= '	</div>';			
+		$this->html .= '	</div>';		
+		$this->html .= parent :: add_remove_buttons($form_content);	
 	}
 
 	function render_question($form_content, $answers=array())
@@ -2752,7 +2759,7 @@ class SurveyUtil {
 		{
 			if ($offset <> $i-1)
 			{
-				echo '<a href="reporting.php?action=questionreport&amp;survey_id='.(int)$_GET['survey_id'].'&amp;question='.($i-1).'">'.$i.'</a>';
+				echo '<a href="reporting.php?action=questionreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.($i-1).'">'.$i.'</a>';
 			}
 			else
 			{
@@ -2782,7 +2789,7 @@ class SurveyUtil {
 		echo ' | ';
 		if ($_GET['question'] < ($survey_data['number_of_questions']-1))
 		{
-			echo '<a href="reporting.php?action='.$_GET['action'].'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').'&gt;&gt; </a>';
+			echo '<a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').'&gt;&gt; </a>';
 		}
 		else
 		{
@@ -2887,7 +2894,7 @@ class SurveyUtil {
 	
 		if (isset($_GET['viewoption']))
 		{
-			echo get_lang('PeopleWhoAnswered').': '.$options[$_GET['viewoption']]['option_text'].'<br />';
+			echo get_lang('PeopleWhoAnswered').': '.$options[Security::remove_XSS($_GET['viewoption'])]['option_text'].'<br />';
 	
 			if (is_numeric($_GET['value']))
 			{
@@ -3745,7 +3752,7 @@ class SurveyUtil {
 		echo '<form id="form1" name="form1" method="get" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&xaxis='.Security::remove_XSS($_GET['xaxis']).'&y='.Security::remove_XSS($_GET['yaxis']).'">';
 		// survey_id
 		echo '<input type="hidden" name="action" value="'.Security::remove_XSS($_GET['action']).'"/>';
-		echo '<input type="hidden" name="survey_id" value="'.(int)$_GET['survey_id'].'"/>';
+		echo '<input type="hidden" name="survey_id" value="'.Security::remove_XSS($_GET['survey_id']).'"/>';
 		// X axis
 		echo get_lang('SelectXAxis').': ';
 		echo '<select name="xaxis">';

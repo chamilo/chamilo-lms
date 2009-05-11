@@ -1,4 +1,4 @@
-<?php // $Id: infocours.php 20343 2009-05-05 20:31:47Z juliomontoya $
+<?php // $Id: infocours.php 20496 2009-05-11 21:05:32Z cvargas1 $
 
 /*
 ==============================================================================
@@ -158,16 +158,16 @@ $form->applyFilter('tutor_name','html_filter');
 
 $prof -> setSelected($s_selected_tutor);
 $form->add_textfield('title', get_lang('Title'), true, array ('size' => '60'));
-$form->applyFilter('title','html_filter');
+//$form->applyFilter('title','html_filter');
 $form->applyFilter('title','trim');
 
 $form->addElement('select', 'category_code', get_lang('Fac'), $categories);
 $form->add_textfield('department_name', get_lang('Department'), false, array ('size' => '60'));
-$form->applyFilter('department_name','html_filter');
+//$form->applyFilter('department_name','html_filter');
 $form->applyFilter('department_name','trim');
 
 $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array ('size' => '60'));
-$form->applyFilter('department_url','html_filter');
+//$form->applyFilter('department_url','html_filter');
 
 $form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
@@ -305,12 +305,12 @@ if ($form->validate() && is_settings_editable()) {
 		$update_values[$index] = Database::escape_string($value);
 	}	
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$sql = "UPDATE $table_course SET title 			= '".$update_values['title']."',
+	$sql = "UPDATE $table_course SET title 			= '".Security::remove_XSS($update_values['title'])."',
 										 visual_code 	= '".$update_values['visual_code']."',
 										 course_language = '".$update_values['course_language']."',
 										 category_code  = '".$update_values['category_code']."',
-										 department_name  = '".$update_values['department_name']."',
-										 department_url  = '".$update_values['department_url']."',
+										 department_name  = '".Security::remove_XSS($update_values['department_name'])."',
+										 department_url  = '".Security::remove_XSS($update_values['department_url'])."',
 										 visibility  = '".$update_values['visibility']."',
 										 subscribe  = '".$update_values['subscribe']."',
 										 unsubscribe  = '".$update_values['unsubscribe']."',

@@ -94,7 +94,7 @@ Display::display_header(get_lang('SendEmail'));
 	</tr>
 	<tr>
 		<td colspan="2">
-			<input type="submit" name="submit_email" value="<?php echo get_lang('Send');?>" />
+			<button class="save" type="submit" name="submit_email" value="<?php echo get_lang('SendMail');?>"><?php echo get_lang('SendMail');?></button>
 		</td>
 	</tr>
 </form>

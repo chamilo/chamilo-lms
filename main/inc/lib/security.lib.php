@@ -245,9 +245,10 @@ class Security{
 	 * Filtering for XSS is very easily done by using the htmlentities() function.
 	 * This kind of filtering prevents JavaScript snippets to be understood as such.
 	 * @param	mixed	The variable to filter for XSS, this params can be a string or an array (example : array(x,y)) 
+	 * @param   integer The user status,constant allowed(STUDENT,COURSEMANAGER,ANONYMOUS)
 	 * @return	mixed	Filtered string or array
 	 */
-	function remove_XSS($var,$user_status=null) {
+	function remove_XSS($var,$user_status=ANONYMOUS) {
 		global $charset;
 		/*if (is_null($user_status)) {
 			if (is_array($var)) {

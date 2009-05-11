@@ -1,4 +1,4 @@
-<?php // $Id: link.php 20408 2009-05-08 15:23:06Z herodoto $
+<?php // $Id: link.php 20459 2009-05-11 05:19:49Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -213,7 +213,7 @@ if (is_allowed_to_edit() and isset($_GET['action'])) {
 						<span class="form_required">*</span> '.get_lang('Url').'
 					</div>
 					<div class="formw">
-						<input type="text" name="urllink" size="50" value="' . (empty($urllink)?'http://':htmlentities($urllink)) . '" />
+						<input type="text" name="urllink" size="50" value="' . (empty($urllink)?'http://':api_htmlentities($urllink, ENT_COMPAT, $charset)) . '" />
 					</div>
 				</div>';
 		
@@ -222,7 +222,7 @@ if (is_allowed_to_edit() and isset($_GET['action'])) {
 						'.get_lang('LinkName').'
 					</div>
 					<div class="formw">
-						<input type="text" name="title" size="50" value="' . htmlentities($title,ENT_QUOTES,$charset) . '" />
+						<input type="text" name="title" size="50" value="' . api_htmlentities($title,ENT_QUOTES,$charset) . '" />
 					</div>
 				</div>';
 
@@ -231,7 +231,7 @@ if (is_allowed_to_edit() and isset($_GET['action'])) {
 						'.get_lang('Description').'
 					</div>
 					<div class="formw">
-						<textarea rows="3" cols="50" name="description">' .	htmlentities($description,ENT_QUOTES,$charset) . '</textarea>
+						<textarea rows="3" cols="50" name="description">' .	api_htmlentities($description,ENT_QUOTES,$charset) . '</textarea>
 					</div>
 				</div>';
 
@@ -482,7 +482,7 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 				echo '<tr>';			
 					echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;"><a href="'.api_get_self()."?".api_get_cidreq()."&urlview=";
 					echo is_array($view)?implode('',$view):$view;
-					echo "\"><img src=../img/add.gif>&nbsp;&nbsp;".  htmlentities($myrow["category_title"],ENT_QUOTES,$charset);
+					echo "\"><img src=../img/add.gif>&nbsp;&nbsp;".  api_htmlentities($myrow["category_title"],ENT_QUOTES,$charset);
 					echo'</a><br />&nbsp;&nbsp;&nbsp;';
 					echo $myrow["description"];						
 						if (is_allowed_to_edit())

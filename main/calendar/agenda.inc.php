@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20444 2009-05-10 09:18:51Z ivantcholakov $
+<?php //$Id: agenda.inc.php 20478 2009-05-11 11:16:52Z ndieschburg $
 
 /*
 ==============================================================================
@@ -3588,7 +3588,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 			}
 
 			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
-			$items[$agendaday][$item['start_time']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$agenda_link."</a>  ".$item['title']."<br />";
+			$items[$agendaday][$item['start_date']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}
 	}
 	// sorting by hour for every day

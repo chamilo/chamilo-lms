@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20478 2009-05-11 11:16:52Z ndieschburg $
+<?php //$Id: agenda.inc.php 20491 2009-05-11 20:14:24Z cvargas1 $
 
 /*
 ==============================================================================
@@ -987,8 +987,8 @@ function store_new_agenda_item() {
 	$start_date=(int)$_POST['fyear']."-".(int)$_POST['fmonth']."-".(int)$_POST['fday']." ".(int)$_POST['fhour'].":".(int)$_POST['fminute'].":00";
 	$end_date=(int)$_POST['end_fyear']."-".(int)$_POST['end_fmonth']."-".(int)$_POST['end_fday']." ".(int)$_POST['end_fhour'].":".(int)$_POST['end_fminute'].":00";
 	
-	$title=Database::escape_string($title);
-	$content=Database::escape_string($content);
+	$title=Database::escape_string(Security::remove_XSS($title));
+	$content=Database::escape_string(Security::remove_XSS($content));
 	$start_date=Database::escape_string($start_date);
 	$end_date=Database::escape_string($end_date);
 	
@@ -1075,7 +1075,7 @@ function store_agenda_item_as_announcement($item_id){
 		//insert announcement
 
 		$sql_ins = "INSERT INTO $table_ann (title,content,end_date,display_order) " .
-				"VALUES ('".$row['title']."','$content','".$row['end_date']."','$max')";
+				"VALUES ('".Security::remove_XSS($row['title'])."','".Security::remove_XSS($content)."','".$row['end_date']."','$max')";
 		$res_ins = api_sql_query($sql_ins,__FILE__,__LINE__);
 		if($res > 0)
 		{
@@ -1640,8 +1640,8 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 {
 	$TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);
 	$id=Database::escape_string($id);
-	$title=Database::escape_string($title);
-	$content=Database::escape_string($content);
+	$title=Database::escape_string(Security::remove_XSS($title));
+	$content=Database::escape_string(Security::remove_XSS($content));
 	$start_date=Database::escape_string($start_date);
 	$end_date=Database::escape_string($end_date);
 
@@ -4331,8 +4331,8 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     $item_property 				=	Database::get_course_table(TABLE_ITEM_PROPERTY);
     
     // some filtering of the input data
-    $title      = Database::escape_string($title); // no html allowed in the title
-    $content    = Database::escape_string($content);
+    $title      = Database::escape_string(Security::remove_XSS($title)); // no html allowed in the title
+    $content    = Database::escape_string(Security::remove_XSS($content));
     $start_date = Database::escape_string($db_start_date);
     $end_date   = Database::escape_string($db_end_date);
     isset($_SESSION['id_session'])?$id_session=intval($_SESSION['id_session']):$id_session=null;

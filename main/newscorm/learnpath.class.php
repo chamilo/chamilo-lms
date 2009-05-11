@@ -1001,7 +1001,7 @@ class learnpath {
     		$sql_update = "
     			UPDATE " . $tbl_lp_item . " 
     			SET 
-    				title = '" . $this->escape_string(htmlspecialchars($title, ENT_QUOTES, $charset)) . "',
+    				title = '" . $this->escape_string(api_htmlentities($title, ENT_QUOTES, $charset)) . "',
 					prerequisite = '".$prerequisites."',
     				description = '" . $this->escape_string(api_htmlentities($description, ENT_QUOTES, $charset)) . "'
                     ". $audio_update_sql . ",
@@ -1118,7 +1118,7 @@ class learnpath {
     		$sql_update = "
 	    		UPDATE " . $tbl_lp_item . "
 	    		SET
-	    			title = '" . $this->escape_string(htmlspecialchars($title, ENT_QUOTES, $charset)) . "',
+	    			title = '" . $this->escape_string(api_htmlentities($title, ENT_QUOTES, $charset)) . "',
 	    			description = '" . $this->escape_string(api_htmlentities($description, ENT_QUOTES, $charset)) . "',
 	    			parent_item_id = " . $parent . ",
 	    			previous_item_id = " . $previous . ",
@@ -4681,7 +4681,7 @@ class learnpath {
 		$title='';
 		for($i = 0; $i < count($arrLP); $i++)
 		{
-			$title = api_html_entity_decode(addslashes($arrLP[$i]['title']), ENT_QUOTES, $charset);
+			$title = addslashes($arrLP[$i]['title']);
 			$menu_page = api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $_SESSION['oLP']->lp_id;
 			$icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
 			if (file_exists("../img/lp_" . $icon_name . ".png"))
@@ -6254,7 +6254,8 @@ class learnpath {
 		
 		require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');		
 		$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"]);
-		$defaults["title"] = api_convert_encoding($item_title, $charset, $this->encoding);
+		//$defaults["title"] = api_convert_encoding($item_title, $charset, $this->encoding);
+		$defaults["title"] = api_html_entity_decode(api_convert_encoding($item_title, $charset, $this->encoding), ENT_QUOTES, $charset);
 		$defaults["description"] = api_convert_encoding($item_description, $charset, $this->encoding);
 
 		$form->addElement('html',$return);
@@ -6538,11 +6539,13 @@ class learnpath {
 			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			
 			$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"],'','enctype="multipart/form-data"');
-            $defaults["title"]= api_convert_encoding($defaults["title"], $charset, $this->encoding);
-            if(empty($defaults["title"]))
-            {
+			
+            $defaults["title"] = api_html_entity_decode(api_convert_encoding($item_title, $charset, $this->encoding), ENT_QUOTES, $charset);
+            
+            if (empty($item_title)) {
             	$defaults["title"] = api_html_entity_decode(api_convert_encoding($item_title, $charset, $this->encoding), ENT_QUOTES, $charset);
             }
+            
 			$defaults["description"] = api_convert_encoding($item_description, $charset, $this->encoding);
 		
 			$form->addElement('html',$return);
@@ -7599,6 +7602,8 @@ class learnpath {
 	 */
 	function display_item_small_form($item_type, $title = '', $data)
 	{
+		global $charset;
+		
 		$return .= '<div class="lp_small_form">' . "\n";
 						
 			$return .= '<p class="lp_title">' . $title . '</p>';
@@ -7610,16 +7615,17 @@ class learnpath {
 					$return .= "\t\t" . '<tr>' . "\n";
 						
 						$return .= "\t\t\t" . '<td class="label"><label for="idTitle">Title&nbsp;:</label></td>' . "\n";
-						$return .= "\t\t\t" . '<td class="input"><input class="small_form" id="idTitle" name="title" type="text" value="' . $data['title'] . '" /></td>' . "\n";
-					
-					$return .= "\t\t" . '</tr>' . "\n";
-					
-					$return .= "\t\t" . '<tr>' . "\n";
+						$return .= "\t\t\t" . '<td class="input"><input class="small_form" id="idTitle" name="title" type="text" value="' . api_html_entity_decode(api_convert_encoding(htmlspecialchars($data['title']), $charset, $this->encoding), ENT_QUOTES, $charset) . '" /></td>' . "\n";
 						
-						$return .= "\t\t\t" . '<td class="label"><label for="idDescription">Description&nbsp;:</label></td>' . "\n";
-						$return .= "\t\t\t" . '<td class="input"><textarea class="small_form" id="idDescription" name="description" rows="4">' . $data['description'] . '</textarea></td>' . "\n";
-					
 					$return .= "\t\t" . '</tr>' . "\n";
+					
+					//it said these lines of code - see SVN#11724 and SVN#10770 
+					//$return .= "\t\t" . '<tr>' . "\n";
+						
+						//$return .= "\t\t\t" . '<td class="label"><label for="idDescription">Description&nbsp;:</label></td>' . "\n";
+						//$return .= "\t\t\t" . '<td class="input"><textarea class="small_form" id="idDescription" name="description" rows="4">' . $data['description'] . '</textarea></td>' . "\n";
+						
+					//$return .= "\t\t" . '</tr>' . "\n";
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 					

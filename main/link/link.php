@@ -1,4 +1,4 @@
-<?php // $Id: link.php 20459 2009-05-11 05:19:49Z ivantcholakov $
+<?php // $Id: link.php 20497 2009-05-11 21:07:26Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -402,17 +402,19 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
 	$resultcategories=api_sql_query($sqlcategories);
 	$aantalcategories = Database::num_rows($resultcategories);
-	echo Display::return_icon('remove.gif', $shownone)." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
-	for($j = 1; $j <= $aantalcategories; $j++) {
-		echo "0";
+	if ($aantalcategories > 0) {
+		echo Display::return_icon('remove.gif', $shownone)." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
+		for($j = 1; $j <= $aantalcategories; $j++) {
+			echo "0";
+		}
+		echo "\">$shownone</a>";
+		echo Display::return_icon('add.gif', $showall)." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
+		for($j = 1; $j <= $aantalcategories; $j++)
+		{
+		echo "1";
+		}
+		echo "\">$showall</a>";
 	}
-	echo "\">$shownone</a>";
-	echo Display::return_icon('add.gif', $showall)." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
-	for($j = 1; $j <= $aantalcategories; $j++)
-	{
-	echo "1";
-	}
-	echo "\">$showall</a>";
 	echo '</div>';
 
 	//Starting the table which contains the categories

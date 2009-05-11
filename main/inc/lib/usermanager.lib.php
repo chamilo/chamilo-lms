@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 20346 2009-05-05 21:12:37Z cfasanando $
+<?php // $Id: usermanager.lib.php 20488 2009-05-11 17:14:41Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,6 +73,10 @@ class UserManager
 	{
 		global $_user, $userPasswordCrypted;
 		
+		$firstName=Security::remove_XSS($firstName);
+		$lastName=Security::remove_XSS($lastName);
+		$loginName=Security::remove_XSS($loginName);
+		$phone=Security::remove_XSS($phone);
 		// database table definition
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		

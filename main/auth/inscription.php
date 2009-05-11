@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 20443 2009-05-10 08:41:46Z ivantcholakov $
+// $Id: inscription.php 20488 2009-05-11 17:14:41Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -447,7 +447,7 @@ if ($form->validate()) {
 				}
 			} 
 	
-			$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ".get_setting('siteName')." ".get_lang('Settings')." ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is')." : ".$portal_url."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n".get_lang('Manager')." ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n".get_lang('Email')." : ".get_setting('emailAdministrator');
+			$emailbody = get_lang('Dear')." ".stripslashes(Security::remove_XSS($firstname)." ".Security::remove_XSS($lastname)).",\n\n".get_lang('YouAreReg')." ".get_setting('siteName')." ".get_lang('Settings')." ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is')." : ".$portal_url."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n".get_lang('Manager')." ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n".get_lang('Email')." : ".get_setting('emailAdministrator');
 			
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last			
@@ -457,7 +457,7 @@ if ($form->validate()) {
 		}
 	}
 
-	echo "<p>".get_lang('Dear')." ".stripslashes("$recipient_name").",<br /><br />".get_lang('PersonalSettings').".</p>\n";
+	echo "<p>".get_lang('Dear')." ".stripslashes(Security::remove_XSS($recipient_name)).",<br /><br />".get_lang('PersonalSettings').".</p>\n";
 
 	if (!empty ($values['email']))
 	{

@@ -75,34 +75,41 @@ $current_page = $_GET['action'];
 	PROCESSING
 ==============================================================================
 */
+
+$safe_post_title = Security::remove_XSS($_POST['post_title']);
+$safe_post_file_comment = Security::remove_XSS($_POST['post_file_comment']);
+$safe_post_full_text = Security::remove_XSS($_POST['post_full_text']);
+$safe_comment_text = Security::remove_XSS($_POST['comment_text']);
+$safe_comment_title = Security::remove_XSS($_POST['comment_title']);  
+$safe_task_name = Security::remove_XSS($_POST['task_name']);
+$safe_task_description = Security::remove_XSS($_POST['task_description']);
+
 if (!empty($_POST['new_post_submit']) AND !empty($_POST['post_title']))
 {	
-	$safe_post_title = Security::remove_XSS($_POST['post_title']);
-	$safe_post_file_comment = Security::remove_XSS($_POST['post_file_comment']);
-	Blog :: create_post($safe_post_title, $_POST['post_full_text'], $safe_post_file_comment,$blog_id);
+	Blog :: create_post($safe_post_title, $safe_post_full_text, $safe_post_file_comment,$blog_id);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('BlogAdded'));
 }
 if (!empty($_POST['edit_post_submit']))
 {
-	$safe_post_title = Security::remove_XSS($_POST['post_title']);	
-	Blog :: edit_post($_POST['post_id'], $safe_post_title, $_POST['post_full_text'], $blog_id);
+	$safe_post_title = Security::remove_XSS($_POST['post_title']);
+	Blog :: edit_post($_POST['post_id'], $safe_post_title, $safe_post_full_text, $blog_id);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('BlogEdited'));
 }
 if (!empty($_POST['new_comment_submit']))
 {
-	Blog :: create_comment($_POST['comment_title'], $_POST['comment_text'], $_POST['post_file_comment'],$blog_id, (int)$_GET['post_id'], $_POST['comment_parent_id']);
+	Blog :: create_comment($safe_comment_title, $safe_comment_text, $safe_post_file_comment,$blog_id, (int)$_GET['post_id'], $_POST['comment_parent_id']);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('CommentAdded'));
 }
 
 if (!empty($_POST['new_task_submit']))
 {
-	Blog :: create_task($blog_id, $_POST['task_name'], $_POST['task_description'], $_POST['chkArticleDelete'], $_POST['chkArticleEdit'], $_POST['chkCommentsDelete'], $_POST['task_color']);
+	Blog :: create_task($blog_id, $safe_task_name, $safe_task_description, $_POST['chkArticleDelete'], $_POST['chkArticleEdit'], $_POST['chkCommentsDelete'], $_POST['task_color']);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskCreated'));
 }
 
 if (isset($_POST['edit_task_submit']))
 {
-	Blog :: edit_task($_POST['blog_id'], $_POST['task_id'], $_POST['task_name'], $_POST['task_description'], $_POST['chkArticleDelete'], $_POST['chkArticleEdit'],$_POST['chkCommentsDelete'], $_POST['task_color']);
+	Blog :: edit_task($_POST['blog_id'], $_POST['task_id'], $safe_task_name, $safe_task_description, $_POST['chkArticleDelete'], $_POST['chkArticleEdit'],$_POST['chkCommentsDelete'], $_POST['task_color']);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskEdited'));
 }
 if (!empty($_POST['assign_task_submit']))
@@ -118,7 +125,7 @@ if (isset($_POST['assign_task_edit_submit']))
 }
 if (!empty($_POST['new_task_execution_submit']))
 {
-	Blog :: create_comment($_POST['comment_title'], $_POST['comment_text'], $blog_id, (int)$_GET['post_id'], $_POST['comment_parent_id'], $_POST['task_id']);
+	Blog :: create_comment($safe_comment_title, $safe_comment_text, $blog_id, (int)$_GET['post_id'], $_POST['comment_parent_id'], $_POST['task_id']);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('CommentCreated'));
 }
 if (!empty($_POST['register']))

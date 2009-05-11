@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 20442 2009-05-10 08:24:45Z ivantcholakov $
+<?php //$Id: announcements.php 20500 2009-05-11 21:41:20Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -155,11 +155,15 @@ require_once(api_get_path(LIBRARY_PATH) . '/fckeditor/fckeditor.php');
 	POST TO
 -----------------------------------------------------------
 */
+
+$safe_emailTitle = Security::remove_XSS($_POST['emailTitle']);
+$safe_newContent = Security::remove_XSS($_POST['newContent'],COURSEMANAGER);
+
 if (!empty($_POST['To']))
 {
 	$display_form = true;
 
-	$form_elements= array ('emailTitle'=>$_POST['emailTitle'], 'newContent'=>$_POST['newContent'], 'id'=>$_POST['id'], 'emailoption'=>$_POST['email_ann']);
+	$form_elements= array ('emailTitle'=>$safe_emailTitle, 'newContent'=>$safe_newContent, 'id'=>$_POST['id'], 'emailoption'=>$_POST['email_ann']);
     $_SESSION['formelements']=$form_elements;
 
     $form_elements            	= $_SESSION['formelements'];
@@ -511,8 +515,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	*/
 	//if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 	
-	$emailTitle=(!empty($_POST['emailTitle'])?$_POST['emailTitle']:'');
-	$newContent=(!empty($_POST['newContent'])?$_POST['newContent']:'');
+	$emailTitle=(!empty($_POST['emailTitle'])?$safe_emailTitle:'');
+	$newContent=(!empty($_POST['newContent'])?$safe_newContent:'');
 	$submitAnnouncement=isset($_POST['submitAnnouncement'])?$_POST['submitAnnouncement']:0;
 
 	$id = 0;
@@ -541,10 +545,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					$result = api_sql_query("SELECT MAX(display_order) FROM $tbl_announcement WHERE session_id=".intval($_SESSION['id_session'])." OR session_id=0",__FILE__,__LINE__);
 					list($orderMax) = Database::fetch_row($result);
 					$order = $orderMax + 1;
-					if (!empty($_SESSION['toolgroup'])) {					
-						$insert_id=store_advalvas_group_item($_POST['emailTitle'],$_POST['newContent'],$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform']);
+					if (!empty($_SESSION['toolgroup'])) {
+						$insert_id=store_advalvas_group_item($safe_emailTitle,$safe_newContent,$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform']);
 					} else {
-						$insert_id=store_advalvas_item($_POST['emailTitle'],$_POST['newContent'],$order,$_POST['selectedform']);
+						$insert_id=store_advalvas_item($safe_emailTitle,$safe_newContent,$order,$_POST['selectedform']);
 					}
 				    store_resources($_SESSION['source_type'],$insert_id);
 				    $_SESSION['select_groupusers']="hide";
@@ -1045,7 +1049,7 @@ if ($display_form == true) {
 						'.get_lang('EmailAddress').'
 					</div>
 					<div class="formw">
-						<input type="text" name="emailsAdd" value="'.$emails_add.'" size="52">(Comma separated for multiple)
+						<input type="text" name="emailsAdd" value="'.Security::remove_XSS($emails_add).'" size="52">(Comma separated for multiple)
 					</div>
 				</div>';
 		echo '	<div class="row">
@@ -1066,7 +1070,7 @@ if ($display_form == true) {
 				</div>
 				<div class="formw">	
 												
-					<input type="text" id="emailTitle" name="emailTitle" value="'.$title_to_modify.'" size="60">
+					<input type="text" id="emailTitle" name="emailTitle" value="'.Security::remove_XSS($title_to_modify).'" size="60">
 				</div>
 			</div>';
 		

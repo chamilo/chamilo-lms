@@ -2530,8 +2530,8 @@ function display_wiki_entry()
 	}
 	else
 	{
-  		$content=$row['content'];
-		$title=$row['title'];
+  		$content=Security::remove_XSS($row['content'],COURSEMANAGER);
+		$title= Security::remove_XSS($row['title']);
 	}
 	
 

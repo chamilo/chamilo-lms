@@ -5509,27 +5509,29 @@ class learnpath {
 
 								$arrHide = array($id);
 
-								for($i = 0; $i < count($arrLP); $i++)
-								{
-									if($action != 'add')
+								if (count($arrLP) > 0) {
+									for($i = 0; $i < count($arrLP); $i++)
 									{
-										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
+										if($action != 'add')
 										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
+											if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
+											{
+												$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
+											}
+											else
+											{
+												$arrHide[] = $arrLP[$i]['id'];
+											}
 										}
 										else
 										{
-											$arrHide[] = $arrLP[$i]['id'];
+											if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
+												$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 										}
 									}
-									else
-									{
-										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
-									}
+	
+									reset($arrLP);
 								}
-
-								reset($arrLP);
 
 							$return .= "\t\t\t\t" . '</select>';
 
@@ -5578,27 +5580,29 @@ class learnpath {
 
 
 						$id_prerequisite=0;
-						foreach($arrLP as $key=>$value){
-							if($value['id']==$id){
-								$id_prerequisite=$value['prerequisite'];
-								break;
+						if (is_array($arrLP) && count($arrLP) > 0) {
+							foreach($arrLP as $key=>$value){
+								if($value['id']==$id){
+									$id_prerequisite=$value['prerequisite'];
+									break;
+								}
 							}
-						}
-
-						$arrHide=array();
-						for($i = 0; $i < count($arrLP); $i++)
-						{
-							if($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter')
+	
+							$arrHide=array();
+							for($i = 0; $i < count($arrLP); $i++)
 							{
-								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
-									$s_selected_position=$arrLP[$i]['id'];
-								elseif($action == 'add')
-									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
-
+								if($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter')
+								{
+									if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+										$s_selected_position=$arrLP[$i]['id'];
+									elseif($action == 'add')
+										$s_selected_position=0;
+									$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
+	
+								}
 							}
 						}
-
+						
 						$return .= "\t\t" . '<tr>' . "\n";
 
 							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";

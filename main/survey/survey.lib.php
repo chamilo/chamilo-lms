@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 20470 2009-05-11 09:46:59Z ivantcholakov $
+* 	@version $Id: survey.lib.php 20483 2009-05-11 14:54:18Z juliomontoya $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1337,21 +1337,21 @@ class question
 		global $survey_data;
 		
 		//$tool_name = '<img src="../img/'.survey_manager::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" />';
-		$tool_name = Display::return_icon(survey_manager::icon_question($_GET['type']),get_lang(ucfirst($_GET['type'])),array('align'=>'middle', 'height'=>'22px')).' ';
+		$tool_name = Display::return_icon(survey_manager::icon_question(Security::remove_XSS($_GET['type'])),get_lang(ucfirst(Security::remove_XSS($_GET['type']))),array('align'=>'middle', 'height'=>'22px')).' ';
 		if ($_GET['action'] == 'add') {
 			$tool_name .= get_lang('AddQuestion');
 		}
 		if ($_GET['action'] == 'edit') {
 			$tool_name .= get_lang('EditQuestion');
 		}
-		$tool_name .= ': '.get_lang(api_ucfirst($_GET['type']));
+		$tool_name .= ': '.get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
 
 		$this->html .= '<div class="row"><div class="form_header">'.$tool_name.'</div></div>';
-		$this->html .= '<form id="question_form" name="question_form" method="post" action="'.api_get_self().'?action='.$_GET['action'].'&type='.$_GET['type'].'&survey_id='.$_GET['survey_id'].'&question_id='.$_GET['question_id'].'">';
-		$this->html .= '		<input type="hidden" name="survey_id" id="survey_id" value="'.$_GET['survey_id'].'"/>';
-		$this->html .= '		<input type="hidden" name="question_id" id="question_id" value="'.$_GET['question_id'].'"/>';
-		$this->html .= '		<input type="hidden" name="shared_question_id" id="shared_question_id" value="'.$form_content['shared_question_id'].'"/>';
-		$this->html .= '		<input type="hidden" name="type" id="type" value="'.$_GET['type'].'"/>';
+		$this->html .= '<form id="question_form" name="question_form" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&question_id='.Security::remove_XSS($_GET['question_id']).'">';
+		$this->html .= '		<input type="hidden" name="survey_id" id="survey_id" value="'.Security::remove_XSS($_GET['survey_id']).'"/>';
+		$this->html .= '		<input type="hidden" name="question_id" id="question_id" value="'.Security::remove_XSS($_GET['question_id']).'"/>';
+		$this->html .= '		<input type="hidden" name="shared_question_id" id="shared_question_id" value="'.Security::remove_XSS($form_content['shared_question_id']).'"/>';
+		$this->html .= '		<input type="hidden" name="type" id="type" value="'.Security::remove_XSS($_GET['type']).'"/>';
 
 		// question field
 		$fck_attribute['Width'] = '100%';
@@ -1377,18 +1377,16 @@ class question
 		$this->html .= '	</tr>';
 		*/
 
-		$this->html .= '<table>';
+		//$this->html .= '<table>';
 
-		$this->html .='	<tr><td colspan="">&nbsp;</td></tr>'; 
+		//$this->html .='	<tr><td colspan="">&nbsp;</td></tr>'; 
 
-		if($survey_data['survey_type']==1)
-		{
+		if($survey_data['survey_type']==1) {
 			$table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 			$sql = 'SELECT id,name FROM '.$table_survey_question_group.' WHERE survey_id = '.(int)$_GET['survey_id'].' ORDER BY name';
 			$rs = api_sql_query($sql,__FILE__,__LINE__);
 			
-			while($row = Database::fetch_array($rs,NUM))
-			{
+			while($row = Database::fetch_array($rs,NUM)) {
 				$glist .= '<option value="'.$row[0].'" >'.$row[1].'</option>';
 			}	
 			
@@ -1447,7 +1445,8 @@ class question
 		$this->html .= '		</div>';
 		$this->html .= '	</div>';
 		
-
+		//$this->html .='	</table>';
+		 
 		$this->html .= '</form>';
 		echo $this->html;
 	}

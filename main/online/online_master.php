@@ -1,4 +1,4 @@
-<?php // $Id: online_master.php 13296 2007-09-27 02:19:40Z yannoo $
+<?php // $Id: online_master.php 20467 2009-05-11 08:38:29Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -126,10 +126,10 @@ include('header_frame.inc.php');
 <?php if($isMaster): ?>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-  <td width="1%" valign="middle"><a href="online_streaming.php"><img src="../img/conf.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Streaming'),ENT_QUOTES,$charset); ?>"></a></td>
+  <td width="1%" valign="middle"><a href="online_streaming.php"><img src="../img/conf.gif" border="0" alt="" title="<?php echo api_htmlentities(get_lang('Streaming'),ENT_QUOTES,$charset); ?>"></a></td>
   <td width="49%" align="left" nowrap="nowrap">&nbsp;<a href="online_streaming.php"><?php echo get_lang('Streaming'); ?></a></td>
   <td width="49%" align="right" nowrap="nowrap"><a href="online_htmlarea.php" target="online_working_area"><?php echo get_lang('WhiteBoard'); ?></a>&nbsp;</td>
-  <td width="1%" valign="middle"><a href="online_htmlarea.php" target="online_working_area"><img src="../img/works.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('WhiteBoard'),ENT_QUOTES,$charset); ?>"></a></td>
+  <td width="1%" valign="middle"><a href="online_htmlarea.php" target="online_working_area"><img src="../img/works.gif" border="0" alt="" title="<?php echo api_htmlentities(get_lang('WhiteBoard'),ENT_QUOTES,$charset); ?>"></a></td>
 </tr>
 </table>
 
@@ -199,10 +199,10 @@ if(!$isMaster && !empty($stream_url))
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-  <td width="1%" valign="middle"><a href="online_links.php"><img src="../img/links.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Links'),ENT_QUOTES,$charset); ?>"></a></td>
+  <td width="1%" valign="middle"><a href="online_links.php"><img src="../img/links.gif" border="0" alt="" title="<?php echo api_htmlentities(get_lang('Links'),ENT_QUOTES,$charset); ?>"></a></td>
   <td width="49%" align="left" nowrap="nowrap">&nbsp;<a href="online_links.php"><?php echo get_lang('Links'); ?></a></td>
   <td width="49%" align="right" nowrap="nowrap"><a href="online_working_area.php" target="online_working_area"><?php echo get_lang('Home'); ?></a>&nbsp;</td>
-  <td width="1%" valign="middle"><a href="online_working_area.php" target="online_working_area"><img src="../img/home.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Home'),ENT_QUOTES,$charset); ?>"></a></td>
+  <td width="1%" valign="middle"><a href="online_working_area.php" target="online_working_area"><img src="../img/home.gif" border="0" alt="" title="<?php echo api_htmlentities(get_lang('Home'),ENT_QUOTES,$charset); ?>"></a></td>
 </tr>
 </table>
 <?php endif; ?>

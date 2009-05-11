@@ -108,8 +108,8 @@ if($isMaster)
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-  <td width="1%" valign="middle"><a href="<?php echo api_get_self(); ?>?rand=<?php echo $rand; ?>&reset=1#bottom" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmReset'),ENT_QUOTES,$charset)); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('ClearList'),ENT_QUOTES,$charset); ?>"></a></td>
-  <td width="99%">&nbsp;<a href="<?php echo api_get_self(); ?>?rand=<?php echo $rand; ?>&reset=1#bottom" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmReset'),ENT_QUOTES,$charset)); ?>')) return false;"><?php echo get_lang('ClearList'); ?></a></td>
+  <td width="1%" valign="middle"><a href="<?php echo api_get_self(); ?>?rand=<?php echo $rand; ?>&reset=1#bottom" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmReset'),ENT_QUOTES,$charset)); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="" title="<?php echo api_htmlentities(get_lang('ClearList'),ENT_QUOTES,$charset); ?>"></a></td>
+  <td width="99%">&nbsp;<a href="<?php echo api_get_self(); ?>?rand=<?php echo $rand; ?>&reset=1#bottom" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmReset'),ENT_QUOTES,$charset)); ?>')) return false;"><?php echo get_lang('ClearList'); ?></a></td>
 </tr>
 </table>
 

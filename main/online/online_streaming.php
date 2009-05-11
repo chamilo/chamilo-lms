@@ -1,4 +1,4 @@
-<?php // $Id: online_streaming.php 13296 2007-09-27 02:19:40Z yannoo $
+<?php // $Id: online_streaming.php 20467 2009-05-11 08:38:29Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -95,7 +95,7 @@ include('header_frame.inc.php');
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-  <td width="1%" valign="middle"><a href="online_master.php"><img src="../img/home.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Back'),ENT_QUOTES,$charset); ?>"></a></td>
+  <td width="1%" valign="middle"><a href="online_master.php"><img src="../img/home.gif" border="0" alt="" title="<?php echo api_htmlentities(get_lang('Back'),ENT_QUOTES,$charset); ?>"></a></td>
   <td width="99%" align="left">&nbsp;<a href="online_master.php"><?php echo get_lang('Back'); ?></a></td>
 </tr>
 </table>
@@ -118,7 +118,7 @@ include('header_frame.inc.php');
   </td>
 </tr>
 <tr>
-  <td colspan="2" align="center"><input type="submit" value="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"></td>
+  <td colspan="2" align="center"><input type="submit" value="<?php echo api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"></td>
 </tr>
 </table>
 </form>

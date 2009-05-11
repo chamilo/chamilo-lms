@@ -1,4 +1,4 @@
-<?php // $Id: online.php 18433 2009-02-11 14:58:51Z cvargas1 $
+<?php // $Id: online.php 20467 2009-05-11 08:38:29Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -43,7 +43,7 @@ event_access_tool(TOOL_CONFERENCE);
 <!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
 <title>Online Conference</title>
 </head>
 

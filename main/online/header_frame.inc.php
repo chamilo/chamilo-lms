@@ -64,6 +64,7 @@ elseif(FRAME == 'message')
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<?php /* Encoding is directly set here, to be fixed. */ ?>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Online Conference</title>
 

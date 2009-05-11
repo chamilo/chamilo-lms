@@ -88,9 +88,14 @@ class HTMLPurifier_DefinitionCache_Serializer extends
      * @todo Make protected
      */
     public function generateBaseDirectoryPath($config) {
+    	$directory_in_garbage='../../main/garbage/Serializer';
+    	//add directory Serializer, in choose not exist
+    	if (!file_exists($directory_in_garbage)) {
+    		mkdir($directory_in_garbage,0777);
+    	} 
         $base = $config->get('Cache', 'SerializerPath');//main/garbage/Serializer
        // $base = is_null($base) ? HTMLPURIFIER_PREFIX . '/HTMLPurifier/DefinitionCache/Serializer' : $base;
-        $base = is_null($base) ? '../../main/garbage/Serializer' : $base;       
+        $base = is_null($base) ? $directory_in_garbage : $base;       
         return $base;
     }
 

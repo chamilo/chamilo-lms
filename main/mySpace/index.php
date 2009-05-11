@@ -609,7 +609,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 			$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 			
 			$csv_content[] = array(
-								api_html_entity_decode($course['title'], ENT_QUOTES, $charset),
+								html_entity_decode($course['title'], ENT_QUOTES, $charset),
 								$nb_students_in_course,
 								$avg_time_spent_in_course,
 								$avg_progress_in_course,
@@ -752,8 +752,8 @@ if(api_is_platform_admin() && $view=='admin')
 		$all_datas[] = $table_row;
 		
 		$csv_content[] = array(
-								api_html_entity_decode($a_coachs['firstname'], ENT_QUOTES, $charset),
-								api_html_entity_decode($a_coachs['lastname'], ENT_QUOTES, $charset),
+								html_entity_decode($a_coachs['firstname'], ENT_QUOTES, $charset),
+								html_entity_decode($a_coachs['lastname'], ENT_QUOTES, $charset),
 								$time_on_platform,
 								$last_connection,
 								$nb_courses,
@@ -939,6 +939,8 @@ function display_tracking_user_overview()
 
 	$table = new SortableTable('tracking_user_overview', 'get_number_of_users_tracking_overview', 'get_user_data_tracking_overview',1);
 
+	$addparams= array ('view' => 'admin','display' => 'useroverview');		
+	$table->additional_parameters = $addparams;				
 	$table->set_header(0, get_lang('OfficialCode'));
 	$table->set_header(1, get_lang('LastName'));
 	$table->set_header(2, get_lang('FirstName'));

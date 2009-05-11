@@ -730,15 +730,15 @@ function display_agenda_items()
     
     $repeats = array(); //placeholder for repeated events
 
-	if (is_allowed_to_edit() && !api_is_anonymous())
-	{
-			$sql="SELECT * FROM ".$TABLEAGENDA.' ORDER BY start_date '.$_SESSION['sort'];
-		
-	} // you are a student
+	if (is_allowed_to_edit() && !api_is_anonymous()) {
+		$sql="SELECT * FROM ".$TABLEAGENDA.' ORDER BY start_date '.$_SESSION['sort'];
+		//echo "<pre>".$sql."</pre>";
+		$result=api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
+		$number_items=Database::num_rows($result);		
+	} else {
+		$number_items = 0;
+	}
 
-//echo "<pre>".$sql."</pre>";
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
-	$number_items=Database::num_rows($result);
 
 	/*--------------------------------------------------
 			DISPLAY: NO ITEMS
@@ -2947,8 +2947,9 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 {
 	global $_user, $_course;
 	global $is_allowed_to_edit;
-		$month=Database::escape_string($month);
-		$year=Database::escape_string($year);
+	
+	$month=Database::escape_string($month);
+	$year=Database::escape_string($year);
 
 	// database variables
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
@@ -2956,10 +2957,11 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 
     $month_first_day = mktime(0,0,0,$month,1,$year);
     $month_last_day  = mktime(0,0,0,$month+1,1,$year)-1;
-    if($month==12) {
+    if ($month==12) {
         $month_last_day = mktime(0,0,0,1,1,$year+1)-1;
     }
     $repeats = array();
+    $data=array();
 	if (is_allowed_to_edit()) {
 		$sql="SELECT
 			DISTINCT *
@@ -2967,13 +2969,13 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 			WHERE MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 			GROUP BY id ".
 			"ORDER BY  start_date ";
-	}
-	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$data=array();
-	while ($row=Database::fetch_array($result)) {
-		$datum_item=(int)substr($row["start_date"],8,2);
-		$data[$datum_item][intval($datum_item)][] = $row;
-	}
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+	
+		while ($row=Database::fetch_array($result)) {
+			$datum_item=(int)substr($row["start_date"],8,2);
+			$data[$datum_item][intval($datum_item)][] = $row;
+		}
+	}	
 	return $data;
 }
  

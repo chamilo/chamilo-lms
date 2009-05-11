@@ -88,8 +88,9 @@ class HTMLPurifier_DefinitionCache_Serializer extends
      * @todo Make protected
      */
     public function generateBaseDirectoryPath($config) {
-        $base = $config->get('Cache', 'SerializerPath');
-        $base = is_null($base) ? HTMLPURIFIER_PREFIX . '/HTMLPurifier/DefinitionCache/Serializer' : $base;
+        $base = $config->get('Cache', 'SerializerPath');//main/garbage/Serializer
+       // $base = is_null($base) ? HTMLPURIFIER_PREFIX . '/HTMLPurifier/DefinitionCache/Serializer' : $base;
+        $base = is_null($base) ? '../../main/garbage/Serializer' : $base;       
         return $base;
     }
 
@@ -158,6 +159,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends
             trigger_error('Directory '.$dir.' not writable, '.
                 'please chmod to ' . $chmod,
                 E_USER_WARNING);
+               // chmod($dir,0777);
         } else {
             // generic error message
             trigger_error('Directory '.$dir.' not writable, '.

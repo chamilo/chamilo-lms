@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 20396 2009-05-07 21:23:22Z cfasanando $
+<?php //$Id: myStudents.php 20463 2009-05-11 07:27:07Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -672,7 +672,7 @@ if(!empty($_GET['student']))
 					
 					$i++;
 					
-					$csv_content[] = array(html_entity_decode(stripslashes($a_learnpath['name']),ENT_QUOTES,$charset),api_time_to_hms($total_time),$score.'%',$progress,date('Y-m-d',$start_time));
+					$csv_content[] = array(api_html_entity_decode(stripslashes($a_learnpath['name']),ENT_QUOTES,$charset),api_time_to_hms($total_time),$score.'%',$progress,date('Y-m-d',$start_time));
 										
 				?>
 					<tr class="<?php echo $s_css_class;?>">

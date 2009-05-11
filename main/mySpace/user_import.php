@@ -37,15 +37,15 @@ we give 2 variables to a possible sufix. Sufix means the last numbers of the use
 function make_login($firstname,$lastname)
 {
 	$desired_username='';	
-	if (strlen($lastname)<17)
+	if (api_strlen($lastname)<17)
 	{
-		$desired_username = substr($firstname,0,1).$lastname;
+		$desired_username = api_substr($firstname,0,1).$lastname;
 	}
 	else
 	{
-		$desired_username = substr($firstname,0,1).substr($lastname,0,16);
+		$desired_username = api_substr($firstname,0,1).substr($lastname,0,16);
 	}	
-	return strtolower($desired_username);
+	return api_strtolower($desired_username);
 }
 
 
@@ -275,7 +275,7 @@ function validate_data($users,$id_session)
 			}
 		}
 		// 2. check if the username is too long
-		if (strlen($user['UserName']) > 20)
+		if (api_strlen($user['UserName']) > 20)
 		{
 			$user['error'] = get_lang('UserNameTooLong');
 			$errors[] = $user;

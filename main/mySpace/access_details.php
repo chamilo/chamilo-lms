@@ -186,7 +186,7 @@ if (api_is_xml_http_request()) {
 		$DataSet->AddAllSeries();  
 		$DataSet->RemoveSerie('Date');  
 		$DataSet->SetAbsciseLabelSerie('Date');
-		$DataSet->SetYAxisName(ucfirst(get_lang('MinMinutes')));  
+		$DataSet->SetYAxisName(api_ucfirst(get_lang('MinMinutes')));  
 		$graph_id = api_get_user_id().'AccessDetails'.api_get_course_id();
 		$DataSet->AddAllSeries();
 		

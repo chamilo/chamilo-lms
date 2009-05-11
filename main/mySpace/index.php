@@ -86,8 +86,8 @@ function count_coaches()
 }
 
 function sort_users($a,$b){
-	$a = trim(strtolower($a[$_SESSION['tracking_column']]));
-	$b = trim(strtolower($b[$_SESSION['tracking_column']]));
+	$a = trim(api_strtolower($a[$_SESSION['tracking_column']]));
+	$b = trim(api_strtolower($b[$_SESSION['tracking_column']]));
 	if($_SESSION['tracking_direction'] == 'DESC')
 		return strcmp($b, $a);
 	else
@@ -206,7 +206,7 @@ if($nb_menu_items>1)
 	}
 }
 echo '
-		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
+		<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 		<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 ';
 echo '</div>';
@@ -609,7 +609,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 			$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 			
 			$csv_content[] = array(
-								html_entity_decode($course['title']),
+								api_html_entity_decode($course['title'], ENT_QUOTES, $charset),
 								$nb_students_in_course,
 								$avg_time_spent_in_course,
 								$avg_progress_in_course,
@@ -752,8 +752,8 @@ if(api_is_platform_admin() && $view=='admin')
 		$all_datas[] = $table_row;
 		
 		$csv_content[] = array(
-								html_entity_decode($a_coachs['firstname']),
-								html_entity_decode($a_coachs['lastname']),
+								api_html_entity_decode($a_coachs['firstname'], ENT_QUOTES, $charset),
+								api_html_entity_decode($a_coachs['lastname'], ENT_QUOTES, $charset),
 								$time_on_platform,
 								$last_connection,
 								$nb_courses,

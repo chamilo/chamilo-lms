@@ -162,7 +162,7 @@ if($export_csv) {
 	include_once('../newscorm/lp_stats.php');
 	$tracking_content = ob_get_contents();
 	ob_end_clean();
-	echo utf8_decode($tracking_content);
+	echo api_utf8_decode($tracking_content, $charset);
 }
 Display :: display_footer();
 ?>

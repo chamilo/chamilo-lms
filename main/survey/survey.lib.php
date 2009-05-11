@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 20486 2009-05-11 15:32:32Z juliomontoya $
+* 	@version $Id: survey.lib.php 20506 2009-05-11 22:10:18Z aportugal $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -4106,7 +4106,9 @@ class SurveyUtil {
          */
         function save_invitations($users_array, $invitation_title, $invitation_text,
             $reminder=0, $sendmail=0, $remindUnAnswered=0) {
-
+			
+			global $charset;
+			
             if (!is_array($users_array)) return 0; // should not happen
             // getting the survey information
             $survey_data = survey_manager::get_survey($_GET['survey_id']);
@@ -4154,6 +4156,7 @@ class SurveyUtil {
                 if (($newUser == true || $reminder == 1) && $sendmail <> 0) {
                 	// make a change for absolute url
                 	if (isset($invitation_text)) {
+                		$invitation_text = api_html_entity_decode(api_convert_encoding($invitation_text, $charset, $_SESSION['oLP']->encoding), ENT_QUOTES, $charset);
                 		$invitation_text = str_replace('src="../../','src="'.api_get_path(WEB_PATH).'', $invitation_text);
                 		$invitation_text = trim(stripslashes($invitation_text));
                 	}

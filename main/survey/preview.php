@@ -58,6 +58,7 @@ if (!isset($_GET['survey_id']) OR !is_numeric($_GET['survey_id'])){
 // getting the survey information
 $survey_id = Security::remove_XSS($_GET['survey_id']);
 $survey_data = survey_manager::get_survey($survey_id);
+
 if (empty($survey_data)) {
 	Display :: display_header(get_lang('SurveyPreview'));
 	Display :: display_error_message(get_lang('InvallidSurvey'), false);
@@ -81,13 +82,14 @@ Display :: display_header(get_lang('SurveyPreview'));
 SurveyUtil::check_first_last_question($survey_id, false);
 
 // only a course admin is allowed to preview a survey: you are NOT a course admin => error message
+
+/*
 if (!api_is_allowed_to_edit(false,true))
 {
 	Display :: display_error_message(get_lang('NotAllowed'), false);
-}
+}*/
 // only a course admin is allowed to preview a survey: you are a course admin
-else
-{
+if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='true')) {
 	// survey information
 	echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
 	echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
@@ -200,6 +202,8 @@ else
 		echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'  </button>';
 	}
 	echo '</form>';
+} else {
+	Display :: display_error_message(get_lang('NotAllowed'), false);
 }
 
 // Footer

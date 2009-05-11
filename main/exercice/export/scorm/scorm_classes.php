@@ -332,8 +332,16 @@ class ScormAnswerFillInBlanks extends Answer
 			$texstring=api_substr($answer,$startlocations,($endlocations-$startlocations)+1);
 			$answer = api_substr_replace($answer,'<input type="text" name="question_'.$this->questionJSId.'_fib_'.$i.'" id="question_'.$this->questionJSId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
 			$jstmp .= $i.',';
-			$jstmpc .= "'".api_htmlentities(api_substr($texstring,1,-1),ENT_QUOTES,$charset)."',";			
-	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$weights[$i-1].";\n";
+			$jstmpc .= "'".api_htmlentities(api_substr($texstring,1,-1),ENT_QUOTES,$charset)."',";
+				$my_weight=explode('@',$weights[$i-1]);
+				error_log($weights[$i-1]);
+				error_log(print_r($my_weight,true));
+				if (count($my_weight)==2) {
+					$weight_db=$my_weight[0];	
+				} else {
+					$weight_db=$my_weight[0];	
+				}						
+	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$weight_db.";\n";
 			$i++;
 			$startlocations=api_strpos($answer,'[');
 			$endlocations=api_strpos($answer,']');
@@ -371,8 +379,9 @@ class ScormAnswerMatching extends Answer
 		// - easiest display
 		// - easiest randomisation if needed one day 
 		// (here I use array_values to change array keys from $code1 $code2 ... to 0 1 ...)	
-		$displayedRightList = array_values($this->rightList);
-
+		if (is_array($this->rightList)) {
+			$displayedRightList = array_values($this->rightList);	
+		}
 		// get max length of displayed array
 		$arrayLength = max( count($this->leftList), count($this->rightList) );
 
@@ -422,6 +431,13 @@ class ScormAnswerMatching extends Answer
 				$s.="</td>\n</tr>\n";
 	
 				$jstmpc .= '['.$answerCorrect.','.$cpt2.'],';
+				
+				$my_weight=explode('@',$weight);
+				if (count($my_weight)==2) {
+					$weight=$my_weight[0];	
+				} else {
+					$weight=$my_weight[0];	
+				}
 		    	$jstmpw .= 'questions_answers_ponderation['.$qId.']['.$cpt2.'] = '.$weight.";\n";
 				$cpt2++;
 	
@@ -485,7 +501,7 @@ class ScormAnswerFree extends Answer
     	$js .= 'questions_types['.$this->questionJSId.'] = \'free\';'."\n";
 		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
-    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0'.";\n";
+    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'.";\n";
     	$js .= $jstmpw;
         return array($js,$html);
     }
@@ -626,7 +642,7 @@ class ScormAnswerHotspot extends Answer
     		$header .= 'questions_types['.$this->questionJSId.'] = \'hotspot\';'."\n";
 			$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
 			$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
-	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0'.";\n";
+	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'.";\n";
 	    	$header .= $jstmpw;
 		}
 		else

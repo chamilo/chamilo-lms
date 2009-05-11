@@ -1,4 +1,4 @@
-<?php // $Id: slideshowoptions.php 20286 2009-05-04 17:00:51Z ivantcholakov $ 
+<?php // $Id: slideshowoptions.php 20495 2009-05-11 21:03:56Z juliomontoya $ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -60,7 +60,7 @@ Description:
 */
 // including the language file
 // name of the language file that needs to be included 
-$language_file = "slideshow";
+$language_file = array ('slideshow', 'document');
 
 include('../inc/global.inc.php');
 

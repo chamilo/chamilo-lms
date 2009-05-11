@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 20302 2009-05-04 21:04:04Z ivantcholakov $
+<?php // $Id: slideshow.php 20495 2009-05-11 21:03:56Z juliomontoya $
 
 /*
 ==============================================================================
@@ -45,7 +45,7 @@ January 2008
 // including the language file
 
 // name of the language file that needs to be included 
-$language_file = "slideshow";
+$language_file = array ('slideshow', 'document');
 
 include ('../inc/global.inc.php');
 

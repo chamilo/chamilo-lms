@@ -168,7 +168,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 function reg_filter($class_id)
 {
 	global $charset;
-	$result = '<a href="'.api_get_self().'?'.api_get_cidreq().'&unsubscribe=yes&amp;class_id='.$class_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><img src="../img/delete.gif"/></a>';
+	$result = '<a href="'.api_get_self().'?'.api_get_cidreq().'&unsubscribe=yes&amp;class_id='.$class_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><img src="../img/delete.gif"/></a>';
 	return $result;
 }
 // Build search-form

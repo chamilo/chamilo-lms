@@ -1,4 +1,4 @@
-<?php // $Id: user.php 20426 2009-05-08 21:03:05Z herodoto $
+<?php // $Id: user.php 20473 2009-05-11 10:13:09Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -566,7 +566,7 @@ function modify_filter($user_id) {
 		$result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" ><img border="0" alt="'.get_lang('Edit').'" src="../img/edit.gif" /></a>&nbsp;';
 		// unregister
 		if ( $user_id != $_user['user_id']) {
-			$result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><img border="0" alt="'.get_lang("Unreg").'" src="../img/delete.gif"/></a>';
+			$result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><img border="0" alt="'.get_lang("Unreg").'" src="../img/delete.gif"/></a>';
 		} else {			
 			$result .= '<img border="0" alt="'.get_lang("Unreg").'" src="../img/delete_na.gif"/>';
 		}

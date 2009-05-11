@@ -302,19 +302,19 @@ if(!empty($message))
 </tr>
 <tr>
 <td align="right"><?php echo get_lang('FirstName'); ?> :</td>
-<td><input type="text" size="15" name="firstname_form" value="<?php echo htmlentities(stripslashes($firstname_form),ENT_QUOTES,$charset); ?>" /></td>
+<td><input type="text" size="15" name="firstname_form" value="<?php echo api_htmlentities(stripslashes($firstname_form),ENT_QUOTES,$charset); ?>" /></td>
 </tr>
 <tr>
 <td align="right"><?php echo get_lang('OfficialCode'); ?> :</td>
-<td><input type="text" size="15" name="official_code_form" value="<?php echo htmlentities(stripslashes($official_code_form)); ?>" /></td>
+<td><input type="text" size="15" name="official_code_form" value="<?php echo api_htmlentities(stripslashes($official_code_form),ENT_QUOTES,$charset); ?>" /></td>
 </tr>
 <tr>
 <td align="right"><?php echo  get_lang('UserName') ?> :</td>
-<td><input type="text" size="15" name="username_form" value="<?php echo htmlentities(stripslashes($username_form)); ?>" /></td>
+<td><input type="text" size="15" name="username_form" value="<?php echo api_htmlentities(stripslashes($username_form), ENT_QUOTES, $charset); ?>" /></td>
 </tr>
 <tr>
 <td align="right"><?php echo  get_lang('Pass') ?> :</td>
-<td><input type="password" size="15" name="password_form" value="<?php echo  htmlentities(stripslashes($password_form)) ?>" /></td>
+<td><input type="password" size="15" name="password_form" value="<?php echo api_htmlentities(stripslashes($password_form), ENT_QUOTES, $charset) ?>" /></td>
 </tr>
 <tr>
 <td align="right"><?php echo  get_lang('Email'); ?> :</td>

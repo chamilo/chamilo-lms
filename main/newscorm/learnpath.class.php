@@ -369,9 +369,10 @@ class learnpath {
     	$max_time_allowed = $this->escape_string(htmlentities($max_time_allowed));
         if (empty($max_time_allowed)) { $max_time_allowed = 0; }
     	
-		$title = htmlspecialchars($title, ENT_QUOTES, $charset);  // TODO: To be checked for encoding problems.
-    	$title = $this->escape_string(api_convert_encoding($title, $this->encoding, $charset));
-    	$description = $this->escape_string(api_convert_encoding($description, $this->encoding, $charset));
+		//$title = htmlspecialchars($title, ENT_QUOTES, $charset);  // TODO: To be checked for encoding problems.
+    	//$title = $this->escape_string(api_convert_encoding($title, $this->encoding, $charset));
+    	$title = $this->escape_string(api_htmlentities($title, ENT_QUOTES, $charset));
+    	$description = $this->escape_string(api_htmlentities($description, ENT_QUOTES, $charset));
     	$sql_count = "
     		SELECT COUNT(id) AS num
     		FROM " . $tbl_lp_item . "

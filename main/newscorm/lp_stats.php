@@ -428,8 +428,6 @@ if (is_array($list) && count($list) > 0){
 			//$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
 			$scoIdentifier = $row['myid'];
 			$title = $row['mytitle'];
-			$title = stripslashes(api_html_entity_decode($title, ENT_QUOTES, $dokeos_charset));
-			
 			
 			// selecting the exe_id from stats attempts tables in order to look the max score value
 			if ($origin != 'tracking') {
@@ -583,8 +581,8 @@ if (is_array($list) && count($list) > 0){
 				 			 
 				if (!empty($export_csv)) {
 					$temp = array ();
-					$temp[] = $title;
-					$temp[] = html_entity_decode($my_lesson_status);
+					$temp[] = api_html_entity_decode($title, ENT_QUOTES, $lp_charset);
+					$temp[] = api_html_entity_decode($my_lesson_status, ENT_QUOTES, $lp_charset);
 					if ($row['item_type'] == 'quiz') {
 						
 						if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {

@@ -159,6 +159,11 @@ class scormItem extends learnpathItem{
 						     					$this->title = $child->firstChild->nodeValue;
 						     				}
 						     				break;
+						     			case 'max_score':
+					     					if($tmp_children->length==1 and $child->firstChild->nodeValue!='' ) {
+						     					$this->max_score = $child->firstChild->nodeValue;
+						     				}						     			
+						     				break;
 				     					case 'maxtimeallowed':
 				     					case 'adlcp:maxtimeallowed':
 						     				$tmp_children = $child->childNodes;
@@ -275,7 +280,8 @@ class scormItem extends learnpathItem{
 			'prerequisites' => (!empty($this->prereq_string)?$this->prereq_string:''),
 			'rel_order' => $rel_order,
 			'timelimitaction' => $this->timelimitaction,
-			'title' => $this->title
+			'title' => $this->title,
+			'max_score' => $this->max_score			
 			);
 		$abs_order++;
 		$i = 1;

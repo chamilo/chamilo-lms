@@ -8560,6 +8560,8 @@ class learnpath {
 			 		//give a child element <title> to the <item> element
 			 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(), ENT_QUOTES, $this->encoding));
 			 		$my_item->appendChild($my_title);
+		 			$my_max_score = $xmldoc->createElement('max_score',$item->get_max());
+		 			$my_item->appendChild($my_max_score);				 		
 			 		//give a child element <adlcp:prerequisites> to the <item> element
 			 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisites',$item->get_prereq_string());
 			 		$my_prereqs->setAttribute('type','aicc_script');

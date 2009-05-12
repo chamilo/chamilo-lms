@@ -416,15 +416,27 @@ class Tracking {
 					//$rs = api_sql_query($sql, __FILE__, __LINE__);	
 					//$sql_max_score='SELECT max_score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" ';
 					$res_max_score=Database::query($sql_max_score,__FILE__,__LINE__);	
-					$count_total_loop=0;								
-					while ($row_max_score=Database::fetch_array($res_max_score)) {
-						if ($row_max_score['max_score']==0) {
-							$lp_scorm_result_score_total+=($row_max_score['score']/100)*100;
-						} else {
-							$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score'])*100;
-						}
-						$count_total_loop++;
-					}
+					$count_total_loop=0;
+					$num_rows_max_score=Database::num_rows($res_max_score);	
+					if ($num_rows_max_score==1) {
+						while ($row_max_score=Database::fetch_array($res_max_score)) {
+							if ($row_max_score['max_score']==0) {
+								$lp_scorm_result_score_total+=($row_max_score['score']/100);
+							} else {
+								$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score']);
+							}
+							$count_total_loop++;
+						}						
+					} elseif ($num_rows_max_score>1) {
+						while ($row_max_score=Database::fetch_array($res_max_score)) {
+							if ($row_max_score['max_score']==0) {
+								$lp_scorm_result_score_total+=($row_max_score['score']/100)*100;
+							} else {
+								$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score'])*100;
+							}
+							$count_total_loop++;
+						}						
+					}							
 					if ($count_total_loop==0) {
 						$count_total_loop=1;
 					}

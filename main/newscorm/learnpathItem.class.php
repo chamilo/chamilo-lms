@@ -1541,7 +1541,6 @@ function get_terms()
 	    	$reduced = true;
 	    }
 	    try {
-	    	
 	       //Find all occurences of something that looks like a URL
            // The structure of this regexp is:
            // (find protocol) then 
@@ -1576,9 +1575,8 @@ function get_terms()
 	            $name  = trim($regs[3][$i]);
 	            $check = trim($regs[0][$i]);
 	            $value = trim($regs[10][$i]);
-	            if(empty($value) and !empty($regs[13][$i]))
-	            {
-	            	$value = $regs[13][$i];
+	            if(empty($value) and !empty($regs[13][$i])){
+					$value = $regs[13][$i];
 	            }
 	            if(empty($name) && !empty($regs[16][$i]))
 	            {
@@ -1589,12 +1587,15 @@ function get_terms()
 	            {     
 					if(!$reduced OR in_array(strtolower($name),$wanted))
 		            {
-			            if ($name == $check) {
-		            		$attributes[strtolower($name)][] = strtolower($name);
-			            } else {
-			                if (!empty($value) && ($value[0] == '\'' || $value[0] == '"')) {
-			                    $value = substr($value, 1, -1);
+			            if ($name == $check) {		                	
+		            		$attributes[strtolower($name)][] = strtolower($name);				            	
+			            } else {			            	
+			                if (!empty($value) && ($value[0] == '\'' || $value[0] == '"')) {			                	
+			                    $value = substr($value, 1, -1);			                    
 			                }
+						    if ($value=='API.LMSGetValue(name') {
+						    	$value='API.LMSGetValue(name)';
+						    }		                			                
 			                $attributes[strtolower($name)][] = $value;
 			            }
 		            }

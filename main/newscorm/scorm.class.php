@@ -440,7 +440,11 @@ class scorm extends learnpath {
 					$field_add .= 'max_time_allowed, ';
 					$value_add .= "'".$item['maxtimeallowed']."',";
 				}
-				$title = mysql_real_escape_string($item['title']);
+				$title = Database::escape_string($item['title']);
+				$max_score = Database::escape_string($item['max_score']);
+				if ($max_score==0 || is_null($max_score) || $max_score=='') {
+					$max_score=100;
+				}				
 				//DOM in PHP5 is always recovering data as UTF-8, somehow, no matter what
 				//the XML document encoding is. This means that we have to convert
 				//the data to the declared encoding when it is not UTF-8
@@ -450,8 +454,8 @@ class scorm extends learnpath {
 				//if($this->manifest_encoding != $charset){
 		     	//	$title = mb_convert_encoding($title,$charset,$this->manifest_encoding);
 		     	//}
-				$identifier = mysql_real_escape_string($item['identifier']);
-				$prereq = mysql_real_escape_string($item['prerequisites']);
+				$identifier = Database::escape_string($item['identifier']);
+				$prereq = Database::escape_string($item['prerequisites']);
 				$sql_item = "INSERT INTO $new_lp_item " .
 						"(lp_id,item_type,ref,title," .
 						"path,min_score,max_score, $field_add" .
@@ -460,7 +464,7 @@ class scorm extends learnpath {
 						"parameters) " .
 						"VALUES " .
 						"($lp_id, '$type','".$identifier."','".$title."'," .
-						"'$path',0,100, $value_add" .
+						"'$path',0,'$max_score', $value_add" .
 						"$parent, $previous, 0, " .
 						"'$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."'," .
 						"'".$item['parameters']."'" .

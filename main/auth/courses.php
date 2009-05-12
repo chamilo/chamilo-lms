@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 20443 2009-05-10 08:41:46Z ivantcholakov $
+<?php // $Id: courses.php 20565 2009-05-12 20:39:59Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -410,7 +410,7 @@ function browse_course_categories()
 	}
 	echo "</ul>";
 	if ($_GET['category']) {
-		echo "<a href=\"".api_get_self()."?action=subscribe&amp;category=".Security::remove_XSS($_GET['up'])."&amp;sec_token=".$stok."\">&lt; ".get_lang('UpOneCategory')."</a>";
+		echo "<a href=\"".api_get_self()."?action=subscribe&amp;category=".Security::remove_XSS($_GET['up'])."&amp;sec_token=".$stok."\">".Display::return_icon('back.png',get_lang('UpOneCategory'),array('align'=>'absmiddle')).get_lang('UpOneCategory')."</a>";
 	}
 }
 

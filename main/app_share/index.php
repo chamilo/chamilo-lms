@@ -7,7 +7,7 @@
 */
 // name of the language file that needs to be included
 $language_file = array('create_course', 'course_info');
-require '../../main/inc/global.inc.php';
+require '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang("ModifInfo");
@@ -96,22 +96,22 @@ if ($_GET["client"] == 'true') {
 	<?php
 } else {
 
-if (api_is_allowed_to_edit()) {
-	$linkToFile = api_get_path(WEB_ARCHIVE_PATH).'app_share/'.$course_code.'/DokeosAppShare.exe';
-?>
-	 <h3><?php echo get_lang('PrerequisitesForAppShare'); ?></h3>
-	 <ul>
-	  <li>Microsoft .NET : <a target="top" href="http://www.microsoft.com/downloads/details.aspx?familyid=0856eacb-4362-4b0d-8edd-aab15c5e04f5&displaylang=en">install</a></li>
-	  <li style="margin-top: 5px;">Visual J# Redistributable Packages : <a target="top" href="http://msdn2.microsoft.com/en-us/vjsharp/bb188598.aspx">install</a></li>
-	 </ul>
-	 <form style="float: left;" id="view_screen" action="<?php echo($linkToFile);?>">
-	 <input style="width: 220px; font-size: 14px; font-weight: bold;" type="submit" value="Partager mon �cran" />
-	 </form>
-<?php
-}?>
+    if (api_is_allowed_to_edit()) {
+    	$linkToFile = api_get_path(WEB_ARCHIVE_PATH).'app_share/'.$course_code.'/DokeosAppShare.exe';
+    ?>
+    	 <h3><?php echo get_lang('PrerequisitesForAppShare'); ?></h3>
+    	 <ul>
+    	  <li>Microsoft .NET : <a target="top" href="http://www.microsoft.com/downloads/details.aspx?familyid=0856eacb-4362-4b0d-8edd-aab15c5e04f5&displaylang=en">install</a></li>
+    	  <li style="margin-top: 5px;">Visual J# Redistributable Packages : <a target="top" href="http://msdn2.microsoft.com/en-us/vjsharp/bb188598.aspx">install</a></li>
+    	 </ul>
+    	 <form style="float: left;" id="view_screen" action="<?php echo($linkToFile);?>">
+    	 <input style="width: 220px; font-size: 14px; font-weight: bold;" type="submit" value="<?php echo get_lang('ShareMyScreen'); ?>" />
+    	 </form>
+    <?php
+    }?>
 	 <form style="float: left;" id="view_screen" action="">
 	  <input type="hidden" name="client" value="true" />
-	  <input style="margin-left: 20px; width: 220px; font-size: 14px; font-weight: bold;" type="submit" value="Visualiser l'�cran partag�" />
+	  <input style="margin-left: 20px; width: 220px; font-size: 14px; font-weight: bold;" type="submit" value="<?php echo get_lang('SeeTheSharedScreen'); ?>" />
 	 </form><?php
 }
 
@@ -120,5 +120,4 @@ if (api_is_allowed_to_edit()) {
 		FOOTER
 ==============================================================================
 */
-Display::display_footer();?>
-
+Display::display_footer();

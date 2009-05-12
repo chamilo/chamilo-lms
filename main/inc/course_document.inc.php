@@ -317,12 +317,13 @@ if ($is_allowed_to_edit AND count($docs_and_folders)>1)
 	$table->set_header($column++,'',false);
 }
 */
-$table->set_header($column++,get_lang('Type'));
-$table->set_header($column++,get_lang('Title'));
+
+$table->set_header($column++, api_htmlentities(get_lang('Type'), ENT_QUOTES, $charset));
+$table->set_header($column++, api_htmlentities(get_lang('Title'), ENT_QUOTES, $charset));
 
 //$column_header[] = array(get_lang('Comment'),true);  => display comment under the document name
-$table->set_header($column++,get_lang('Size'));
-$table->set_header($column++,get_lang('Date'));
+$table->set_header($column++, api_htmlentities(get_lang('Size'), ENT_QUOTES, $charset));
+$table->set_header($column++, api_htmlentities(get_lang('Date'), ENT_QUOTES, $charset));
 
 //currently only delete action -> take only DELETE right into account
 /*

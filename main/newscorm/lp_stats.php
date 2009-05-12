@@ -319,7 +319,7 @@ if (is_array($list) && count($list) > 0){
 					
 				);
 				
-				$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);			
+				$my_lesson_status = api_htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);			
 	
 				if ($row['item_type'] != 'dokeos_chapter') {
 					if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
@@ -327,7 +327,7 @@ if (is_array($list) && count($list) > 0){
 					} else {
 						$view_score = ($score == 0 ? '-' : ($maxscore === 0 ? $score : $score . '/' . $maxscore));	
 					}				
-					$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $row['iv_view_count'] . "</td>\n"
+					$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . api_htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $row['iv_view_count'] . "</td>\n"
 					//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 					 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . $view_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';
 				}
@@ -555,7 +555,7 @@ if (is_array($list) && count($list) > 0){
 				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 	
 				if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {
-					$output .= "<tr class='$oddclass' >\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $lp_charset) . '</div></td>' . "\n";				
+					$output .= "<tr class='$oddclass' >\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . api_htmlentities($title, ENT_QUOTES, $lp_charset) . '</div></td>' . "\n";				
 					$output .= '<td colspan="2">&nbsp;</td><td colspan="2">&nbsp;</td><td colspan="2">&nbsp;</td><td>'.$correct_test_link.'</td></tr>';
 					$output .= "</tr>\n";						 
 				} else {
@@ -564,7 +564,7 @@ if (is_array($list) && count($list) > 0){
 					} else {
 						$output .= "<tr class='$oddclass'>\n";	
 					}
-					$output .= "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . htmlentities($title, ENT_QUOTES, $lp_charset) . '</div></td>' . "\n";							
+					$output .= "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . api_htmlentities($title, ENT_QUOTES, $lp_charset) . '</div></td>' . "\n";							
 					$output .= '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">';			  
 					 if ($row['item_type'] == 'quiz') {
 					 	
@@ -671,7 +671,7 @@ if (is_array($list) && count($list) > 0){
 									//$view_score = ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore));	
 								}
 																				
-								$output .= '<tr class="'.$oddclass.'" ><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $n . '</td>'				
+								$output .= '<tr class="'.$oddclass.'" ><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . api_htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $n . '</td>'				
 							 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . $view_score  . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
 							 	if ($origin != 'tracking') {
 							 		if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {

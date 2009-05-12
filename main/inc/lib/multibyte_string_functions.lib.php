@@ -131,6 +131,17 @@ function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 
 	return api_utf8_decode(html_entity_decode(api_convert_encoding($string, 'UTF-8', $encoding), $quote_style, 'UTF-8'), $encoding);
 }
 
+// This function encodes (conditionally) to UTF-8 a given string if XmlHttp-request has been detected.
+function api_xml_http_response_encode($string, $from_encoding = null) {
+	if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+		if (empty($from_encoding)) {
+			$from_encoding = api_mb_internal_encoding();
+		}
+		return api_convert_encoding($string, 'UTF-8', $from_encoding);
+	}
+	return $string;
+}
+
 
 //----------------------------------------------------------------------------
 //               Common multibyte string functions

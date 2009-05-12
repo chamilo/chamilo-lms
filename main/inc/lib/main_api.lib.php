@@ -3344,11 +3344,14 @@ if ( !function_exists('sys_get_temp_dir') )
  * This function allow know when request sent is XMLHttpRequest
  */
 function api_is_xml_http_request() {
+	/*
 	if ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') {
 		return true;
 	} else {
 		return false;
 	}
+	*/
+	return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') ? true : false;
 }
 /**
  * This function gets the hash in md5 or sha1 (it depends in the platform config) of a given password

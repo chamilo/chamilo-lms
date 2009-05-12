@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 20449 2009-05-10 10:24:11Z ivantcholakov $
+// $Id: add_course.php 20564 2009-05-12 20:29:25Z aportugal $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -132,7 +132,7 @@ if ($form->validate()) {
 		//$message .= "<br /><br /><br />";
 		//$message .= '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
 		Display :: display_confirmation_message($message,false);
-		echo '<div style="float:right; margin:6px 6px 0px 0px;">' .
+		echo '<div style="float:right; margin:0px; padding:0px;">' .
 				'<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .
 			 '</div>';
 	} else {

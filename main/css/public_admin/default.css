@@ -848,9 +848,11 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
     background-position:10px 50%;
     background-repeat:no-repeat;
     font-size:100%;
+    margin-top:1px;
     padding:5px 20px;
     vertical-align:middle;
     padding-left:30px;
+    display:block;  
 }
 .bottom-link:active {
 	border: 2px inset;

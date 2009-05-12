@@ -22,7 +22,7 @@
 *	This script shows the list of exercises for administrators and students.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: Hpdownload.php 20283 2009-05-04 16:42:52Z juliomontoya $
+* 	@version $Id: Hpdownload.php 20555 2009-05-12 14:01:40Z juliomontoya $
 */
 
 
@@ -35,16 +35,15 @@ include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
 
 $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 
-$doc_url=urldecode($_GET['doc_url']);
-
-$filename=basename(Security::remove_XSS($doc_url));
+$doc_url=str_replace(array('../','\\..','\\0'),array('','',''),urldecode($_GET['doc_url']));
+$filename=basename($doc_url);
 
 // launch event
 //event_download($doc_url);
 if (isset($_course['path'])) {
-	$full_file_name = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$doc_url;
+	$full_file_name = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.Security::remove_XSS($doc_url);
 } else {
-	$full_file_name = api_get_path(SYS_COURSE_PATH).$cid.'/document'.$doc_url;
+	$full_file_name = api_get_path(SYS_COURSE_PATH).$cid.'/document'.Security::remove_XSS($doc_url);
 }
 
 if(!is_file($full_file_name)) {

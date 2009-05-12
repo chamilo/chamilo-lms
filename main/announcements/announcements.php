@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 20500 2009-05-11 21:41:20Z cfasanando $
+<?php //$Id: announcements.php 20567 2009-05-12 21:10:13Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -156,8 +156,8 @@ require_once(api_get_path(LIBRARY_PATH) . '/fckeditor/fckeditor.php');
 -----------------------------------------------------------
 */
 
-$safe_emailTitle = Security::remove_XSS($_POST['emailTitle']);
-$safe_newContent = Security::remove_XSS($_POST['newContent'],COURSEMANAGER);
+$safe_emailTitle = $_POST['emailTitle'];
+$safe_newContent = $_POST['newContent'];
 
 if (!empty($_POST['To']))
 {

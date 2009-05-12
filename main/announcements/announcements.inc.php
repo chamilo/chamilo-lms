@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 20519 2009-05-12 00:27:20Z cvargas1 $
+<?php //$Id: announcements.inc.php 20567 2009-05-12 21:10:13Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -739,9 +739,9 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 
 	global $tbl_announcement;
 	global $tbl_item_property;
-
+	$newContent=stripslashes($newContent);
 	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
-	$newContent = Database::escape_string(Security::remove_XSS($newContent));
+	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGER));
 	$order = intval($order);
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
@@ -789,8 +789,9 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 	global $tbl_announcement;
 	global $tbl_item_property;
 
+	$newContent=stripslashes($newContent);
 	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
-	$newContent = Database::escape_string(Security::remove_XSS($newContent));
+	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGER));
 	$order = intval($order);
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
@@ -844,8 +845,9 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to)
 	global $tbl_announcement;
 	global $tbl_item_property;
 	
+	$newContent=stripslashes($newContent);
 	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
-	$newContent = Database::escape_string(Security::remove_XSS($newContent));
+	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGER));
 	
 	// store the modifications in the table announcement
 	$sql = "UPDATE $tbl_announcement SET content='$newContent', title = '$emailTitle' WHERE id='$id'";

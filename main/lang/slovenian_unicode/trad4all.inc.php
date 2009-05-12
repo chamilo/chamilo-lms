@@ -706,4 +706,5 @@ $Filter = "Filter";
 $Subject = "Predmet";
 $Message = "Sporočilo";
 $MoreInformation = "Več informacij";
+$SaveIntroText = "Shrani uvodno besedilo";
 ?>

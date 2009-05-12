@@ -709,6 +709,7 @@ $MoreInformation = "Ulteriori informazioni";
 $MakeInvisible = "Rendi invisibile";
 $MakeVisible = "Rendi visibile";
 $Image = "Immagine";
+$SaveIntroText = "Salva il testo introduttivo";
 $CourseName = "Titolo del corso";
 $SendAMessage = "Invia messaggio";
 $Menu = "Menù";

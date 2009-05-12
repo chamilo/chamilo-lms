@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20475 2009-05-11 10:52:26Z ivantcholakov $
+<?php //$Id: work.lib.php 20519 2009-05-12 00:27:20Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20475 2009-05-11 10:52:26Z ivantcholakov $
+* 	@version $Id: work.lib.php 20519 2009-05-12 00:27:20Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -205,16 +205,14 @@ function convert_date_to_array($date,$group)
 /**
 * get date from a group of date 
 */	
-function get_date_from_group($group)
-{
+function get_date_from_group($group) {
 	return $_POST[$group]['year'].'-'.two_digits($_POST[$group]['month']).'-'.two_digits($_POST[$group]['day']).' '.two_digits($_POST[$group]['hour']).':'.two_digits($_POST[$group]['minute']).':00';
 }
 
 /**
 * create a group of select from a date
 */		
-function create_group_date_select($prefix='')
-{
+function create_group_date_select($prefix='') {
 	$minute = range(10,59);
 	$d_year=date('Y');
 	array_unshift($minute,'00','01','02','03','04','05','06','07','08','09');
@@ -517,16 +515,20 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 					
 					}
 					//if($_POST['qualification']['qualification']!='')
-						api_sql_query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
+						api_sql_query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string(Security::remove_XSS($_POST['description']))."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
 						//api_sql_query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'',__FILE__,__LINE__);		
 					
 					Display::display_confirmation_message(get_lang('FolderEdited'));
 					
 					$values = $form_folder -> exportValues();
-					$values = $values['my_group'];			
-					$dir_name = disable_dangerous_file($values['dir_name']);		
-					$dir_name = replace_accents($values['dir_name']);
-					$dir_name = replace_dangerous_char($values['dir_name']);
+					$values = $values['my_group'];		
+					
+					/*$dir_name = disable_dangerous_file($values['dir_name']);*/
+				
+					$dir_name =disable_dangerous_file($values['dir_name']);
+					$dir_name =replace_accents($values['dir_name']);
+					$dir_name=Security::remove_XSS($dir_name);
+							
 					update_dir_name($mydir,$dir_name);
 					$mydir = $my_sub_dir.$dir_name;
 					$dir = $dir_name;
@@ -1027,7 +1029,6 @@ function update_dir_name($path, $new_name)
 	}else {
 		$path_to_dir .= '/';
 	}
-	
 	
 	$new_name=replace_accents($new_name);
 	$new_name=disable_dangerous_file($new_name);

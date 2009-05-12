@@ -1,4 +1,4 @@
-<?php //$Id: work.php 20499 2009-05-11 21:31:39Z juliomontoya $
+<?php //$Id: work.php 20519 2009-05-12 00:27:20Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 20499 2009-05-11 21:31:39Z juliomontoya $
+*  	@version $Id: work.php 20519 2009-05-12 00:27:20Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -527,10 +527,10 @@ if (api_is_allowed_to_edit(false,true)) {
 		
 			include_once (api_get_path(LIBRARY_PATH) . "fileUpload.lib.php");
 			$added_slash = (substr($cur_dir_path, -1, 1) == '/') ? '' : '/';	
-				
 			$directory =disable_dangerous_file($_POST['new_dir']);
 			$directory =replace_accents($_POST['new_dir']);
-			$dir_name = $cur_dir_path . $added_slash . replace_dangerous_char($directory);				
+			$directory=Security::remove_XSS($directory);
+			$dir_name = $cur_dir_path . $added_slash . $directory;				
 			$created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);
 			
 			// we insert here the directory in the table $work_table		
@@ -554,7 +554,7 @@ if (api_is_allowed_to_edit(false,true)) {
 					endif;
 										
 					$sql_add_publication = "INSERT INTO " . $work_table . " SET " .			
-										   "url         = '". $dir_name_sql ."',
+										   "url         = '".Database::escape_string($dir_name_sql)."',
 									       title        = '',
 						                   description 	= '".Database::escape_string(Security::remove_XSS($_POST['description']))."',
 						                   author      	= '',

@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20451 2009-05-10 12:02:22Z ivantcholakov $
+// $Id: exercice.php 20522 2009-05-12 00:43:47Z yannoo $
 
 /*
 ==============================================================================
@@ -453,9 +453,9 @@ if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 	$export = export_exercise($exerciseId, true);
 
 	require_once (api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php');
-	$garbage_path = api_get_path(GARBAGE_PATH);
+	$archive_path = api_get_path(SYS_ARCHIVE_PATH);
 	$temp_dir_short = uniqid();
-	$temp_zip_dir = $garbage_path . "/" . $temp_dir_short;
+	$temp_zip_dir = $archive_path . "/" . $temp_dir_short;
 	if (!is_dir($temp_zip_dir))
 		mkdir($temp_zip_dir);
 	$temp_zip_file = $temp_zip_dir . "/" . md5(time()) . ".zip";

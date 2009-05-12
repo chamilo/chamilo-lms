@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 20089 2009-04-24 21:12:54Z cvargas1 $
+<?php // $Id: admin.php 20522 2009-05-12 00:43:47Z yannoo $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 20089 2009-04-24 21:12:54Z cvargas1 $
+* 	@version $Id: admin.php 20522 2009-05-12 00:43:47Z yannoo $
 */
 
 
@@ -183,9 +183,9 @@ if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId']))
 	$export = export_question((int)$_GET['questionId'],true);
 	$qid = (int)$_GET['questionId'];
 	require_once(api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
-	$garbage_path = api_get_path(GARBAGE_PATH);
+	$archive_path = api_get_path(SYS_ARCHIVE_PATH);
 	$temp_dir_short = uniqid();
-	$temp_zip_dir = $garbage_path."/".$temp_dir_short;
+	$temp_zip_dir = $archive_path."/".$temp_dir_short;
 	if(!is_dir($temp_zip_dir)) mkdir($temp_zip_dir);
 	$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
 	$temp_xml_file = $temp_zip_dir."/qti2export_".$qid.'.xml';

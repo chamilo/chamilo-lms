@@ -402,7 +402,7 @@ class GroupManager
 		
 		
 		// define repository for deleted element
-		$group_garbage = api_get_path(GARBAGE_PATH).$course['path']."/group/";
+		$group_garbage = api_get_path(SYS_ARCHIVE_PATH).$course['path']."/group/";
 		$perm = api_get_setting('permissions_for_new_directories');
 		$perm = (!empty($perm)?$perm:'0770');
 		if (!file_exists($group_garbage))

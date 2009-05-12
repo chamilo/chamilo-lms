@@ -1594,8 +1594,8 @@ class CourseManager
 				}
 			}
 			$course_dir = api_get_path(SYS_COURSE_PATH).$course['directory'];
-			$garbage_dir = api_get_path(GARBAGE_PATH).$course['directory'].'_'.time();
-			rename($course_dir, $garbage_dir);
+			$archive_dir = api_get_path(SYS_ARCHIVE_PATH).$course['directory'].'_'.time();
+			rename($course_dir, $archive_dir);
 		}
 
 		// Unsubscribe all classes from the course

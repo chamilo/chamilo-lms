@@ -40,9 +40,9 @@ function my_get_time($time){
 }
 
 //open log file
-$fh = fopen('../garbage/newscorm_'.time().'.log','w');
-$fh_revert = fopen('../garbage/newscorm_'.time().'_revert.log','w');
-$fh_res = fopen('../garbage/newscorm_'.time().'_res.log','w');
+$fh = fopen('../../archive/newscorm_'.time().'.log','w');
+$fh_revert = fopen('../../archive/newscorm_'.time().'_revert.log','w');
+$fh_res = fopen('../../archive/newscorm_'.time().'_res.log','w');
 fwrite($fh,"-- Recording course homepages links changes to enable reverting\n");
 fwrite($fh_revert,"-- Recording reverted course homepages links changes to enable reverting\n");
 fwrite($fh_res,"-- Recording resulting course homepages links changes\n");

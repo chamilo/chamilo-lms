@@ -25,7 +25,7 @@ $htmlHeadXtra[] =
 "<script type=\"text/javascript\">
 function confirmation (name)
 {
-	if (confirm(\" ". get_lang("AreYouSureToDelete") ." \"+ name + \" ?\"))
+	if (confirm(\" ". api_convert_encoding(get_lang('AreYouSureToDelete'), 'UTF-8', $charset) ." \"+ name + \" ?\"))
 		{return true;}
 	else
 		{return false;}
@@ -203,11 +203,11 @@ if($is_allowed_to_edit) // TEACHER ONLY
 		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 		if(DocumentManager::delete_document($_course,$_GET['delete'],$base_work_dir))
 		{
-			Display::display_normal_message(get_lang('DocDeleted'));
+			Display::display_normal_message(api_convert_encoding(get_lang('DocDeleted'), 'UTF-8', $charset));
 		}
 		else 
 		{
-			Display::display_normal_message(get_lang('DocDeleteError'));
+			Display::display_normal_message(api_convert_encoding(get_lang('DocDeleteError'), 'UTF-8', $charset));
 		}
 	}
 
@@ -220,7 +220,7 @@ if($is_allowed_to_edit) // TEACHER ONLY
 				{
 					DocumentManager::delete_document($_course,$path,$base_work_dir);
 				}	
-				Display::display_normal_message(get_lang('DocDeleted'));
+				Display::display_normal_message(api_convert_encoding(get_lang('DocDeleted'), 'UTF-8', $charset));
 				break;
 		}	
 	}
@@ -337,8 +337,8 @@ if (count($docs_and_folders)>1)
 }
 */
 
-$table->display();
-echo $table_footer;	
+echo api_convert_encoding($table->get_table_html(), 'UTF-8', $charset);
+echo api_convert_encoding($table_footer, 'UTF-8', $charset);
 
 //////////  functions ////////////
 
@@ -408,7 +408,7 @@ function OpenFile( fileUrl, type )
 {
 	if(type=="audio")
 	{
-		ret = confirm('<?php echo get_lang('AutostartMp3') ?>');
+		ret = confirm('<?php echo api_convert_encoding(get_lang('AutostartMp3'), 'UTF-8', $charset); ?>');
 		if(ret==true)
 		{
 			GetE('autostart').checked = true;

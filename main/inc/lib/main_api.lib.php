@@ -1305,6 +1305,7 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 			return $lvv;
 		}
 		$lvv = str_replace("\\'", "'", $lvv);
+		$lvv = get_lang_to_system_encoding($lvv, $language);
 		$cache[$language][$dltt][$variable] = $lvv;
 		return $lvv;
 	}
@@ -1318,12 +1319,14 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 	@ eval ('$langvar = $'.$variable.';'); // Note (RH): $$var doesn't work with arrays, see PHP doc
 	if (isset ($langvar) && is_string($langvar) && strlen($langvar) > 0) {
 		$langvar = str_replace("\\'", "'", $langvar);
+		$langvar = get_lang_to_system_encoding($langvar, $language);
 		$cache[$language][$dltt][$variable] = $langvar;
 		return $langvar;
 	}
 	@ eval ('$langvar = $lang'.$variable.';');
 	if (isset ($langvar) && is_string($langvar) && strlen($langvar) > 0) {
 		$langvar = str_replace("\\'", "'", $langvar);
+		$langvar = get_lang_to_system_encoding($langvar, $language);
 		$cache[$language][$dltt][$variable] = $langvar;
 		return $langvar;
 	}
@@ -1339,6 +1342,26 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 	$cache[$language][$dltt][$variable] =
 		$ot.$variable.$ct."<a href=\"http://www.dokeos.com/DLTT/suggestion.php?file=".$language_file.".inc.php&amp;variable=$".$variable."&amp;language=".$language_interface."\" target=\"_blank\" style=\"color:#FF0000\"><strong>#</strong></a>";
 	return $cache[$language][$dltt][$variable];
+}
+
+// Coverting encoding of a translated string to the system's encoding.
+// This is needed when the system has been set to use UTF-8 encoding
+// with non-UTF-8 language files and vice versa.
+// Also htmlentities are converted into normal characters.
+// This API function is for internal use. Only get_lang should call it.
+function & get_lang_to_system_encoding(& $string, $language) {
+	$charset = api_get_system_encoding();
+	if (api_is_utf8($charset)) {
+		if (!api_is_valid_utf8($string)) {
+			$string = api_utf8_encode($string, api_get_non_utf8_encoding($language));
+		}
+	} else {
+		if (api_is_valid_utf8($string)) {
+			$string = api_utf8_decode($string, $charset);
+		}
+	}
+	$string = api_html_entity_decode($string, ENT_QUOTES, $charset);
+	return $string;
 }
 
 /**

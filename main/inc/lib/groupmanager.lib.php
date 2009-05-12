@@ -99,7 +99,7 @@ class GroupManager
 	function get_group_list($category = null, $course_code = null)
 	{
 		global $_user;
-		$isStudentView  = $_REQUEST['isStudentView'];
+		//$isStudentView  = $_REQUEST['isStudentView'];
 		$course_db = '';
 		$my_user_id=api_get_user_id();
 		$my_status_of_user_in_course='';
@@ -143,7 +143,7 @@ class GroupManager
 					LEFT JOIN ".$table_group_user." `ug2`
 					ON `ug2`.`group_id` = `g`.`id`";
 					
-		} elseif ($my_status_of_user_in_course==STUDENT || $is_student_in_session===true || $isStudentView == 'true') {
+		} elseif ($my_status_of_user_in_course==STUDENT || $is_student_in_session===true || $_SESSION['studentview'] == 'studentview') {
 						$sql = "SELECT  g.id ,
 						g.name ,
 						g.description ,

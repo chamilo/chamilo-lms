@@ -1237,7 +1237,12 @@ function get_forums($id='') {
 							GROUP BY threads.forum_id";
 			//echo $sql2.'<hr>';
 			// select the number of posts of the forum
-			$sql3="SELECT count(*) AS number_of_posts, forum_id FROM $table_posts GROUP BY forum_id";
+			$sql3="SELECT count(*) AS number_of_posts, posts.forum_id FROM $table_posts posts, $table_threads threads, ".$table_item_property." item_properties
+			WHERE posts.thread_id=threads.thread_id
+			AND threads.thread_id=item_properties.ref
+			AND item_properties.visibility=1
+			AND item_properties.tool='".TOOL_FORUM_THREAD."'
+			GROUP BY threads.forum_id";
 			//echo $sql3.'<hr>';
 		}
 

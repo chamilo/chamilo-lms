@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20224 2009-04-30 15:59:43Z cfasanando $
+<?php // $Id: question.class.php 20566 2009-05-12 20:50:00Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20224 2009-04-30 15:59:43Z cfasanando $
+* 	@version $Id: question.class.php 20566 2009-05-12 20:50:00Z juliomontoya $
 */
 
 
@@ -1047,7 +1047,8 @@ abstract class Question
 			case 3:	$this->question = get_lang('langDefaultFillBlankQuestion'); break;
 			case 4:	$this->question = get_lang('langDefaultMathingQuestion'); break;			
 			case 5:	$this->question = get_lang('langDefaultOpenQuestion');	break;
-		}		
+		}
+		$form->addElement('html','</div>');	 
 		// default values
 		$defaults = array();
 		$defaults['questionName'] = $this -> question;

@@ -1,46 +1,20 @@
-<?php
-// $Id: infocours.php 10902 2007-01-25 14:44:35Z elixir_julian $
+<?php // $Id: infocours.php 10902 2007-01-25 14:44:35Z elixir_julian $
+/* For licensing terms, see /dokeos_license.txt */
 /*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Hugues Peeters
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-
-
 ==============================================================================
 	   INIT SECTION
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array ('create_course', 'course_info');
-include ('../../main/inc/global.inc.php');
+$language_file = array('create_course', 'course_info');
+require '../../main/inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang("ModifInfo");
 
 $course_code = $_course["sysCode"];
 
-// WARNING : try to use GARBAGE_PATH ? but no WEB_GARBAGE ? (api_get_path)
-$app_share_tmp_dir_base = api_get_path(SYS_CODE_PATH).'garbage/app_share/';
+$app_share_tmp_dir_base = api_get_path(SYS_ARCHIVE_PATH).'app_share/';
 mkdir ($app_share_tmp_dir_base, 0700); 
 $app_share_tmp_dir = $app_share_tmp_dir_base.$course_code;
 $app_base_file = api_get_path(SYS_CODE_PATH).'app_share/DokeosAppShare.exe';
@@ -123,22 +97,21 @@ if ($_GET["client"] == 'true') {
 } else {
 
 if (api_is_allowed_to_edit()) {
-	// WARNING : try to use GARBAGE_PATH ? but no WEB_GARBAGE ? (api_get_path) 
-	$linkToFile = api_get_path(WEB_PATH).'main/garbage/app_share/'.$course_code.'/DokeosAppShare.exe';
+	$linkToFile = api_get_path(WEB_ARCHIVE_PATH).'app_share/'.$course_code.'/DokeosAppShare.exe';
 ?>
-	 <h3>prérequis pour DokeosAppShare :</h3>
+	 <h3><?php echo get_lang('PrerequisitesForAppShare'); ?></h3>
 	 <ul>
 	  <li>Microsoft .NET : <a target="top" href="http://www.microsoft.com/downloads/details.aspx?familyid=0856eacb-4362-4b0d-8edd-aab15c5e04f5&displaylang=en">install</a></li>
 	  <li style="margin-top: 5px;">Visual J# Redistributable Packages : <a target="top" href="http://msdn2.microsoft.com/en-us/vjsharp/bb188598.aspx">install</a></li>
 	 </ul>
 	 <form style="float: left;" id="view_screen" action="<?php echo($linkToFile);?>">
-	 <input style="width: 220px; font-size: 14px; font-weight: bold;" type="submit" value="Partager mon écran" />
+	 <input style="width: 220px; font-size: 14px; font-weight: bold;" type="submit" value="Partager mon ï¿½cran" />
 	 </form>
 <?php
 }?>
 	 <form style="float: left;" id="view_screen" action="">
 	  <input type="hidden" name="client" value="true" />
-	  <input style="margin-left: 20px; width: 220px; font-size: 14px; font-weight: bold;" type="submit" value="Visualiser l'écran partagé" />
+	  <input style="margin-left: 20px; width: 220px; font-size: 14px; font-weight: bold;" type="submit" value="Visualiser l'ï¿½cran partagï¿½" />
 	 </form><?php
 }
 

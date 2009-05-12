@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20563 2009-05-12 20:18:50Z aportugal $
+<?php // $Id: index.php 20569 2009-05-12 21:34:00Z aportugal $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 20563 2009-05-12 20:18:50Z aportugal $
+* 	@version $Id: index.php 20569 2009-05-12 21:34:00Z aportugal $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -565,7 +565,7 @@ function display_anonymous_course_list() {
 	//init
 	$user_identified = (api_get_user_id()>0 && !api_is_anonymous());
 	$web_course_path = api_get_path(WEB_COURSE_PATH);
-	$category = Databas::escape_string($_GET['category']);
+	$category = Database::escape_string($_GET['category']);
 	global $setting_show_also_closed_courses;
 
 	// Database table definitions

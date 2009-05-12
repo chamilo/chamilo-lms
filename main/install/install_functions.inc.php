@@ -517,10 +517,6 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 				<td class="requirements-value">'.check_writable('inc/conf/').'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">dokeos/main/garbage/</td>
-				<td class="requirements-value">'.check_writable('garbage/').'</td>
-			</tr>
-			<tr>
 				<td class="requirements-item">dokeos/main/upload/users/</td>
 				<td class="requirements-value">'.check_writable('upload/users/').'</td>
 			</tr>
@@ -600,12 +596,6 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 		{
 			$notwritable[] = realpath($curdir.'/../inc/conf');
 			@chmod('../inc/conf',$perm);
-		}
-
-		if(!is_writable('../garbage'))
-		{
-			$notwritable[] = realpath($curdir.'/../garbage');
-			@chmod('../garbage',$perm);
 		}
 
 		if(!is_writable('../upload/users'))

@@ -180,7 +180,6 @@ function write_dokeos_config_file($path)
     $seek = array('\\','//');
     $destroy = array('/','/');
 	$rootSys = str_replace($seek,$destroy,realpath($pathForm).'/');
-	$garbageDir = str_replace($seek,$destroy,realpath('../garbage/').'/');
 	
 	$file_path = dirname(__FILE__).'/'.DOKEOS_CONFIG_FILENAME;
 	$content = file_get_contents($file_path);
@@ -200,7 +199,6 @@ function write_dokeos_config_file($path)
 	$config['{ROOT_WEB}'] = $urlForm;
 	$config['{ROOT_SYS}'] = str_replace('\\', '/', $rootSys);
 	$config['{URL_APPEND_PATH}'] = $urlAppendPath;
-	$config['{GARBAGE_DIR}'] = str_replace("\\", '/', $garbageDir);
 	$config['{PLATFORM_LANGUAGE}'] = $languageForm;
 	$config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
 	$config['{ENCRYPT_PASSWORD}'] = $encryptPassForm; 

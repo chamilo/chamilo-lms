@@ -1,4 +1,4 @@
-<?php // $Id: user.php 20473 2009-05-11 10:13:09Z ivantcholakov $
+<?php // $Id: user.php 20561 2009-05-12 19:35:39Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -424,6 +424,8 @@ function search_keyword($firstname,$lastname,$username,$official_code,$keyword) 
  * Get the users to display on the current page.
  */
 function get_user_data($from, $number_of_items, $column, $direction) {
+	
+	global $origin;
 	$a_users=array();
 
 	// limit
@@ -451,21 +453,16 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 			if (api_is_allowed_to_edit()) {
 				$temp=array();
-				$temp[] = $user_id;
-				
-				$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);				
-				$image_repository = $image_path['dir'];
-				$existing_image = $image_path['file'];
-				if (!api_is_anonymous()) {
-					$photo= '<center><a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img src="'.$image_repository.$existing_image.'" alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'"  width="22" height="22" title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></a></center>';
-				}
-				else
-				{
-					$photo= '<center><img src="'.$image_repository.$existing_image.'" alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'"  width="22" height="22" title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></center>';
-				}												
-				$temp[] = $photo;
 
-				
+				$temp[] = $user_id;
+				$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);	
+				$user_profile = UserManager::get_picture_user($user_id, $image_path['file'], 22, 'small_', ' width="22" height="22" ');
+				if (!api_is_anonymous()) {
+					$photo= '<center><a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'"  title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></a></center>';
+				} else {
+					$photo= '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" title="'.$o_course_user['firstname'].' '.$o_course_user['lastname'].'" /></center>';
+				}
+				$temp[] = $photo;
 				$temp[] = $o_course_user['firstname'];
 				$temp[] = $o_course_user['lastname'];	
 							

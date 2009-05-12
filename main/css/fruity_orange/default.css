@@ -2163,19 +2163,10 @@ div.comments {
 	padding: 0px;
 }
 /*SOCIAL TOOL*/
-.image-social-content {
-	cursor:pointer;
-	text-align:left;
-	margin:1px auto;
-	background:#ffffff;
-	border:1px solid #B8C8DC;
-	padding:5px;
-	width:100px;
-	position:relative;
-	margin-right:3px;
-	margin-left:4px;
-	margin-bottom:2px;
-}
+div.image-social-content{float:left; border:1px solid #B8C8DC; margin:2px; padding: 8px 4px 4px 4px; background: #ffffff; height:125px; width:82px; z-index:5;  cursor:pointer;   position:relative;}
+div.image-social-content span{overflow:hidden; display:block; height:92px;}
+div.image-social-content img{vertical-align:middle;}
+div.image-social-content center.friend{overflow:hidden; height:30px;}
 .image-social-content .image-delete {
 	position: absolute;
 	top: 1px;
@@ -2364,3 +2355,13 @@ button.back {
 .question_menu {list-style:none; float:left; }
 .question_menu li{float:left; margin:0px;}
 #exercise_admin {margin: 0; padding: 0; border: 0; }
+
+div#friend-header{float:left; width:100%; line-height: 2.1em;}
+div#friend-header a{ padding-right:6px;}
+div#friend-container{float:left; }
+
+div.image_friend_network{float:left; border:1px solid #CCCCCC; margin:2px; padding:4px; background: #EFEFEF; height:125px; width:81px; z-index:5; }
+div.image_friend_network span{overflow:hidden; display:block; height:92px; margin: 0px 0px;}
+div.image_friend_network img{vertical-align:middle;}
+div.image_friend_network center.friend{overflow:hidden; height:30px;}
+.friend_invitations{float:left; margin: 0 0 4px 12px;}

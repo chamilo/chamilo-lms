@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 20174 2009-04-29 04:34:13Z ivantcholakov $
+<?php // $Id: profile.php 20561 2009-05-12 19:35:39Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -474,36 +474,36 @@ function upload_user_image($user_id)
 	} else {
 		$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? $user_id.'_' : '').uniqid('').'.'.$file_extension;
 	}
-
-	// get the picture and resize it 200x200 only if the picture is bigger than 200px (width) 
-	$temp = new image($_FILES['picture']['tmp_name']);	
-	$picture_infos=getimagesize($_FILES['picture']['tmp_name']);
-	$max_size_for_picture = 200; // in pixels
-	if ($picture_infos[0]>$max_size_for_picture) {		
-		$thumbwidth = $max_size_for_picture;
-		if (empty($thumbwidth) or $thumbwidth==0) {
-			$thumbwidth=$max_size_for_picture;
-		}
-		$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
-		$temp->resize($thumbwidth,$new_height,0);
-	}
-	$type=$picture_infos[2];
 	
-	// original picture
-	$big_temp = new image($_FILES['picture']['tmp_name']);
-		      
+	// get the picture and resize only if the picture is bigger width
+	$picture_infos=getimagesize($_FILES['picture']['tmp_name']);	
+	$type=$picture_infos[2];
+	$small_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 22); //small picture
+	$medium_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85); //medium picture
+	$temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 200); // normal picture
+	$big_temp = new image($_FILES['picture']['tmp_name']); // original picture
+	
     switch (!empty($type)) {
-            case 2 : $temp->send_image('JPG',$image_repository.$picture_filename);
-            		 $big_temp->send_image('JPG',$image_repository.'big_'.$picture_filename);
-            		 break;
-            case 3 : $temp->send_image('PNG',$image_repository.$picture_filename);
-            		 $big_temp->send_image('JPG',$image_repository.'big_'.$picture_filename);
-            		 break;
-            case 1 : $temp->send_image('GIF',$image_repository.$picture_filename);
-            		 $big_temp->send_image('JPG',$image_repository.'big_'.$picture_filename);
-            		 break;
+	    case 2 :
+	    	$small_temp->send_image('JPG',$image_repository.'small_'.$picture_filename); 
+	    	$medium_temp->send_image('JPG',$image_repository.'medium_'.$picture_filename);
+	    	$temp->send_image('JPG',$image_repository.$picture_filename);
+	    	$big_temp->send_image('JPG',$image_repository.'big_'.$picture_filename);	    		 
+	    	break;
+	    case 3 :
+	    	$small_temp->send_image('PNG',$image_repository.'small_'.$picture_filename);
+	    	$medium_temp->send_image('PNG',$image_repository.'medium_'.$picture_filename);
+	    	$temp->send_image('PNG',$image_repository.$picture_filename);
+	    	$big_temp->send_image('PNG',$image_repository.'big_'.$picture_filename);
+	    	break;
+	    case 1 :
+	    	$small_temp->send_image('GIF',$image_repository.'small_'.$picture_filename);
+	    	$medium_temp->send_image('GIF',$image_repository.'medium_'.$picture_filename);
+	    	$temp->send_image('GIF',$image_repository.$picture_filename);
+	    	$big_temp->send_image('GIF',$image_repository.'big_'.$picture_filename);	    		 
+	    	break;
     }
-    return $picture_filename;
+    return $picture_filename;    
 }
 
 /**

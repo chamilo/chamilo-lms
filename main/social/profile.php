@@ -484,7 +484,7 @@ echo '<div id="social-profile-wrapper">';
 					$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
 				if (api_get_user_id() == $user_id)	
 					$friend_html.= '<div style="float:right;"><a href="index.php?#remote-tab-6">'.get_lang('SeeAll').'</a></div>';													
-					$friend_html.= '</div><br/>'; // close div friend-header						
+					$friend_html.= '</div>'; // close div friend-header						
 								
 				for ($k=0;$k<$loop_friends;$k++) {				
 					if ($j==$number_of_images) {
@@ -494,26 +494,25 @@ echo '<div id="social-profile-wrapper">';
 						if ($list_friends_file[$j]<>"") {
 							$my_user_info=api_get_user_info($list_friends_id[$j]);
 							$name_user=$my_user_info['firstName'].' '.$my_user_info['lastName'];
-							//class="image-social-content"
-							$friend_html.='&nbsp;<div id=div_'.$list_friends_id[$j].' style="float:left;" >';
-							$margin_top = 10;
-							if ($k==0) $margin_top = 0;
+							$friend_html.='<div id=div_'.$list_friends_id[$j].' class="image_friend_network" ><span><center>';
+							// the height = 92 must be the sqme in the image_friend_network span style in default.css
+							$friends_profile = UserFriend::get_picture_user($list_friends_id[$j], $list_friends_file[$j], 92, 'medium_', 'width="85" height="90" ');
 							$friend_html.='<a href="profile.php?u='.$list_friends_id[$j].'&amp;'.$link_shared.'">';
-								$friend_html.='<img src="'.$list_friends_dir[$j]."/".$list_friends_file[$j].'" width="90px" height="110px" style="margin-left:3px;margin-right:3px;margin-top:'.$margin_top.'px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" />';
-								$friend_html.= '<br /><div style="margin-left:10px">'.$my_user_info['firstName'].'<br />'.$my_user_info['lastName'].'</div>';
-							$friend_html.= '</a>';
-							$friend_html.= '</div>&nbsp;';				
+							$friend_html.='<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" />';
+							$friend_html.= '</center></span>';
+							$friend_html.= '<center class="friend">'.$my_user_info['firstName'].' '.$my_user_info['lastName'].'</a></center>';
+							$friend_html.= '</div>';				
 						}
 						$j++; 
 					}				
 				}			
 			} else {
-					$friend_html .= '<div class="sectiontitle">'.get_lang('Friends').'</div>';
-					$friend_html.= '<div id="friend-container" class="social-friend-container">';					
-					$friend_html.= '<div id="friend-header">';
-					$friend_html.= '<div style="float:left;">'.get_lang('Friends').'</div>';
-					$friend_html.= '<div style="float:right;">'.get_lang('SeeAll').'</div>';
-					$friend_html.= '</div><br/><br/>'; // close div friend-header					
+				$friend_html .= '<div class="sectiontitle">'.get_lang('Friends').'</div>';
+				$friend_html.= '<div id="friend-container" class="social-friend-container">';
+				$friend_html.= '<div id="friend-header">';
+				$friend_html.= '<div style="float:left;">'.get_lang('Friends').'</div>';
+				$friend_html.= '<div style="float:right;">'.get_lang('SeeAll').'</div>';
+				$friend_html.= '</div><br/><br/>'; // close div friend-header					
 			}
 			$friend_html.= '</div>'; 		
 			echo $friend_html; 				
@@ -533,7 +532,7 @@ echo '<div id="social-profile-wrapper">';
 					echo '</div>';
 					for ($i=0;$i<$count_pending_invitations;$i++) {
 						//var_dump($invitations);
-						echo '<div id="dpending_'.$pending_invitations[$i]['user_sender_id'].'">'; 
+						echo '<div id="dpending_'.$pending_invitations[$i]['user_sender_id'].'" class="friend_invitations">'; 
 							echo '<div style="float:left;width:60px;" >';
 								echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
 							echo '</div>';

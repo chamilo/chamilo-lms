@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 20256 2009-05-02 23:37:09Z iflorespaz $
+<?php // $Id: whoisonline.php 20561 2009-05-12 19:35:39Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -147,8 +147,9 @@ function display_user_list($user_list, $_plugins)
 			$url = '?id='.$uid.$course_url;
             $image_array=UserManager::get_user_picture_path_by_id($uid,'web',false,true);
             
+            $friends_profile = UserFriend::get_picture_user($uid, $image_array['file'], 92, 'medium_', ' width="90" height="90" ');
             //reduce image
-            $table_row[] = '<a href="'.$url.'"><img src="'.$image_array['dir'].$image_array['file'].'" border="1" width="130"></a>';
+            $table_row[] = '<center><a href="'.$url.'"><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a></center>';
 			$table_row[] = '<a href="'.$url.'">'.$user_info['firstName'].' '.$user_info['lastName'].'</a>';
 			
 			//$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';

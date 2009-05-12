@@ -32,7 +32,7 @@ for ($i=0;$i<$number_loop;$i++) {
     <td width="600" height="20" valign="top"><table width="100%" border="0"
 cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
       <tr>
-        <td width="600" height="20" valign="top"><div align="left"><?php echo api_convert_encoding(get_lang('RequestContact'),'UTF-8',$charset); ?></div></td>
+        <td width="600" height="20" valign="top" style="padding:4px;"><div align="left"><b><?php echo mb_convert_encoding(get_lang('RequestContact'),'UTF-8',$charset); ?></b></div></td>
         </tr>
     </table></td>
   </tr>
@@ -49,19 +49,18 @@ cellpadding="0" cellspacing="0">
                 <td width="100" height="110" valign="top"><table width="100%"
 border="0" cellpadding="0" cellspacing="0" bgcolor="#C8D5E4">
                   <tr>
-                    <td width="100" height="110" valign="top">
-                    <img src="<?php echo $list_get_path_web[$i]['dir']."/".$list_get_path_web[$i]['file']; ?>" width="90" height="100" style="margin-left:5px ;margin-rigth:5px;margin-top:5px;margin-bottom:5px;" /></td>
-                          </tr>
-                  
+                    <td width="100" height="110" style="padding:4px;" >
+		                <?php $friends_profile = UserFriend::get_picture_user($list_get_invitation[$i]['user_sender_id'], $list_get_path_web[$i]['file'], 92); ?>
+                    	<center><img src="<?php echo $friends_profile['file']; ?>" <?php echo $friends_profile['style']; ?> /></center></td>
+                    </tr>
                   </table></td>
                       <td width="500" valign="top"><table width="100%" border="0"
 cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
                           <tr>
-                            <td width="500" height="22" valign="top"><table
-width="100%" border="0" cellpadding="0" cellspacing="0">
-                              
+                            <td width="500" height="22" valign="top">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
                               <tr>
-                                <td width="500" height="22" valign="top">
+                                <td width="500" height="22" valign="top" style="padding:2px;">
                                 <?php 
                                 $user_id=$list_get_invitation[$i]['user_sender_id'];
                                 $user_info=api_get_user_info($user_id);
@@ -83,7 +82,7 @@ border="0" cellpadding="0" cellspacing="0">
                             <td height="22" valign="top"><table width="100%"
 border="0" cellpadding="0" cellspacing="0">
                               <tr>
-                                <td width="500" height="22" valign="top"><?php
+                                <td width="500" height="22" valign="top" style="padding:2px;"><?php
                                 $title=get_lang($list_get_invitation[$i]['title']);
                                 $content=get_lang($list_get_invitation[$i]['content']);
                                 echo api_convert_encoding($title,'UTF-8',$charset).' : '.api_convert_encoding($content,'UTF-8',$charset);
@@ -92,7 +91,7 @@ border="0" cellpadding="0" cellspacing="0">
                             </table></td>
                           </tr>
                           <tr>
-                            <td height="61" valign="top"><?php
+                            <td height="61" valign="top" style="padding:2px;"><?php
                             $date=$list_get_invitation[$i]['send_date'];
                             echo get_lang('DateSend').' : '.$date;
                             ?></td>
@@ -105,7 +104,7 @@ border="0" cellpadding="0" cellspacing="0">
             <td height="25" valign="top"><table width="100%" border="0"
 cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
               <tr>
-                <td width="600" height="25" valign="top"><div align="right">
+                <td width="600" height="25" valign="top" style="padding:4px;"><div align="right">
                   <input type="submit" name="btn_accepted" id="<?php echo "btn_accepted_".$user_id ?>" value="<?php echo api_convert_encoding(get_lang('Accept'),'UTF-8',$charset); ?>" onclick="javascript:register_friend(this)"  />
                   <input type="submit" name="btn_denied" id="<?php echo "btn_deniedst_".$user_id ?>" value="<?php echo api_convert_encoding(get_lang('Deny'),'UTF-8',$charset); ?>" onclick="javascript:denied_friend(this)" />
                   </div></td>

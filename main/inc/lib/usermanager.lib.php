@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 20488 2009-05-11 17:14:41Z cvargas1 $
+<?php // $Id: usermanager.lib.php 20561 2009-05-12 19:35:39Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1866,5 +1866,66 @@ class UserManager
         	return (int) Database::result($res,0,0);
         }
         return false;    	
+    }
+    
+    /**
+	 * Resize a picture
+	 *
+	 * @param  string file picture 
+	 * @param  int size in pixels
+	 * @return obj image object 
+	 */ 
+	function resize_picture($file, $max_size_for_picture)
+	{
+	 	$temp = new image($file);
+	 	$picture_infos=getimagesize($file);
+		if ($picture_infos[0]>$max_size_for_picture) {		
+			$thumbwidth = $max_size_for_picture;
+			if (empty($thumbwidth) or $thumbwidth==0) {
+				$thumbwidth=$max_size_for_picture;
+			}
+			$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+			if($new_height > $max_size_for_picture)
+			$new_height = $thumbwidth;
+			$temp->resize($thumbwidth,$new_height,0);
+		}
+		return $temp;
+	}
+
+    /**
+     * Gets the current user image 
+     * @param string user id
+     * @param string picture user name
+     * @param string height 
+     * @param string picture size it can be small_,  medium_  or  big_ 
+     * @param string style css
+     * @return array with the file and the style of an image i.e $array['file'] $array['style']
+     */
+    function get_picture_user($user_id, $picture_file, $height, $size_picture = 'medium_', $style = '') {
+    	$patch_profile = 'upload/users/';
+    	$picture = array();    	
+    	$picture['style'] = $style;
+    	if ($picture_file == 'unknown.jpg') {
+    		$picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file; 
+    		return $picture;
+    	}
+    	$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$size_picture.$picture_file;
+    	if(file_exists($file)) {
+			$picture['file'] = api_get_path(WEB_CODE_PATH).$patch_profile.$user_id.'/'.$size_picture.$picture_file;
+			$picture['style']=''; 
+			if ($height > 0) {
+				$dimension = getimagesize($picture['file']);
+				$margin = (($height - $dimension[1])/2);
+				$picture['style'] = ' style="padding-top:'.$margin.'px;" ';
+			}
+		} else {
+			$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;
+			if (file_exists($file)) {
+				$picture['file'] = api_get_path(WEB_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;
+			} else {
+				$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';    		
+			}
+		}
+		return $picture;
     }
 }

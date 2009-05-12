@@ -64,8 +64,12 @@ for ($p=0;$p<count($list_groups);$p++) {
 				} else {
 					$big='big_';
 				}
-				$friend_html.='&nbsp;<div class="image-social-content" id=div_'.$list_friends_id[$j].' style="float:left;height:150px;" ><a href="javascript:void(0)" onclick=load_thick("'.$list_friends_dir[$j].$big.$list_friends_file[$j].'","") title="" class="thickbox">' .
-							  '<img src="'.$list_friends_dir[$j].$list_friends_file[$j].'" width="90" height="110" style="margin-left:3px ;margin-rigth:3px;margin-top:10px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$user_name.'" />'.$user_name.'</a></div>&nbsp;';
+				$friends_profile = UserFriend::get_picture_user($list_friends_id[$j], $list_friends_file[$j], 92);
+				$friend_html.='<div id="div_'.$list_friends_id[$j].'" class="image_friend_network">' .
+							  '<a href="javascript:void(0)" onclick=load_thick("'.$list_friends_dir[$j].$big.$list_friends_file[$j].'","") title="" class="thickbox">' .
+							  '<span><center><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$list_friends_id[$j].'" title="'.$user_name.'" /></center></span>'.
+							  '<center class="friend">'.$user_name.'</center>'.
+							  '</a></div>';
 			}
 			$j++;
 		}

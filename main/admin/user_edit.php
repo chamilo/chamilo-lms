@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 20035 2009-04-23 21:49:20Z cfasanando $
+<?php // $Id: user_edit.php 20561 2009-05-12 19:35:39Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -335,37 +335,32 @@ if( $form->validate())
         {
         	mkpath($picture_location);
         }
-		$picture_location .= $picture_uri;
-		$big_picture_location .= 'big_'.$picture_uri;
-		
-		// get the picture and resize it 100x150
-		$temp = new image($_FILES['picture']['tmp_name']);
-		
-		$picture_infos=getimagesize($_FILES['picture']['tmp_name']);
-		$thumbwidth = IMAGE_THUMBNAIL_WIDTH;
-		if (empty($thumbwidth) or $thumbwidth==0) {
-			$thumbwidth=150;
-		}
-		
-		$divizor = ($picture_infos[0] > 0)?$picture_infos[0]:1;
-		$new_height = round(($thumbwidth/$divizor)*$picture_infos[1]);
-	
-		$temp->resize($thumbwidth,$new_height,0);
+	    $picture_infos=getimagesize($_FILES['picture']['tmp_name']);
 		$type=$picture_infos[2];
-		
-		// original picture
-		$big_temp = new image($_FILES['picture']['tmp_name']);
+		$small_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 22); //small picture
+		$medium_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85); //medium picture
+		$temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 200); // normal picture
+		$big_temp = new image($_FILES['picture']['tmp_name']); // original picture
 		
 	    switch (!empty($type)) {
-	            case 2 : $temp->send_image('JPG',$picture_location);
-	            		 $big_temp->send_image('JPG',$big_picture_location);
-	            		 break;
-	            case 3 : $temp->send_image('PNG',$picture_location);
-	            		 $big_temp->send_image('JPG',$big_picture_location);
-	            		 break;
-	            case 1 : $temp->send_image('GIF',$picture_location);
-	            		 $big_temp->send_image('JPG',$big_picture_location);
-	            		 break;
+		    case 2 : 
+		    	$small_temp->send_image('JPG',$picture_location.'small_'.$picture_uri); 
+				$medium_temp->send_image('JPG',$picture_location.'medium_'.$picture_uri);
+	    		$temp->send_image('JPG',$picture_location.$picture_uri);
+	    		$big_temp->send_image('JPG',$picture_location.'big_'.$picture_uri);	    		 
+		    	break;
+		    case 3 :
+		    	$small_temp->send_image('PNG',$picture_location.'small_'.$picture_uri);
+		    	$medium_temp->send_image('PNG',$picture_location.'medium_'.$picture_uri);
+		    	$temp->send_image('PNG',$picture_location.$picture_uri);
+		    	$big_temp->send_image('PNG',$picture_location.'big_'.$picture_uri);
+		    	break;
+		    case 1 :
+		    	$small_temp->send_image('GIF',$picture_location.'small_'.$picture_uri);
+		    	$medium_temp->send_image('GIF',$picture_location.'medium_'.$picture_uri);
+		    	$temp->send_image('GIF',$picture_location.$picture_uri);
+		    	$big_temp->send_image('GIF',$picture_location.'big_'.$picture_uri);	    		 
+		    	break;
 	    }
 
 	}

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20297 2009-05-04 20:32:16Z juliomontoya $
+<?php // $Id: index.php 20563 2009-05-12 20:18:50Z aportugal $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 20297 2009-05-04 20:32:16Z juliomontoya $
+* 	@version $Id: index.php 20563 2009-05-12 20:18:50Z aportugal $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -445,6 +445,7 @@ function display_anonymous_right_menu() {
 	
 	// help ection
 	/*** hide right menu "general" and other parts on anonymous right menu  *****/
+	/** General -> Forum. Should disappear (not relevant for end user)
 	 echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
 	 echo "<ul class=\"menulist\">";
 
@@ -463,7 +464,7 @@ function display_anonymous_right_menu() {
 	}
 	echo '</ul>';
 	echo '</div>';
-
+	**/
 	if ($_user['user_id'] && api_number_of_plugins('campushomepage_menu') > 0) {
 		echo '<div class="note" style="background: none">';
 		api_plugin('campushomepage_menu');
@@ -534,7 +535,7 @@ function display_login_form()
 	$form = new FormValidator('formLogin');
 	$form->addElement('text','login',get_lang('UserName'),array('size'=>17));
 	$form->addElement('password','password',get_lang('Pass'),array('size'=>17));
-	$form->addElement('style_submit_button','submitAuth',get_lang('langEnter'),'class="login"');
+	$form->addElement('style_submit_button','submitAuth',get_lang('langEnter'), array('class'=>'login', 'style'=>'float:left'));
 	$renderer =& $form->defaultRenderer();
 	$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
 	$form->display();

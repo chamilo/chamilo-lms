@@ -6,11 +6,11 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**
- * Small function to list files in garbage/
+ * Small function to list files in archive/
  */
 function get_zip_files_in_garbage(){
 	$list = array();
-	$dh = opendir(api_get_path(SYS_CODE_PATH).'garbage/');
+	$dh = opendir(api_get_path(SYS_ARCHIVE_PATH));
 	if($dh === false){
 		//ignore
 	}else{
@@ -71,7 +71,7 @@ if(api_get_setting('search_enabled')=='true')
 }
 $form->addElement('style_submit_button','submit', get_lang('Send'),'class="save"');
 
-$form->addElement('html', '<br><br><br>');
+$form->addElement('html', '<br /><br /><br />');
 /*$list = get_zip_files_in_garbage();
 if(count($list)>0){
 	$select_file_name = &$form->addElement('select','file_name',get_lang('Or').' '.strtolower(get_lang('UploadLocalFileFromGarbageDir')));
@@ -94,7 +94,7 @@ $form->display();
 
 ?>
 
-<br/>
+<br />
 <?php
 /*
 ==============================================================================
@@ -102,4 +102,3 @@ $form->display();
 ==============================================================================
 */
 Display::display_footer();
-?>

@@ -8118,10 +8118,10 @@ class learnpath {
 		}
 
 	 	//Create the zip handler (this will remain available throughout the method)
-		$garbage_path = api_get_path(GARBAGE_PATH);
+		$archive_path = api_get_path(SYS_ARCHIVE_PATH);
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
 		$temp_dir_short = uniqid();
-		$temp_zip_dir = $garbage_path."/".$temp_dir_short;
+		$temp_zip_dir = $archive_path."/".$temp_dir_short;
 		$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
 		$zip_folder=new PclZip($temp_zip_file);
 		$current_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
@@ -8597,7 +8597,7 @@ class learnpath {
 			 		//write the contents of the exported exercise into a (big) html file
 			 		//to later pack it into the exported SCORM. The file will be removed afterwards
 			 		$contents = export_exercise($exe_id,true);
-			 		$tmp_file_path = $garbage_path.$temp_dir_short.'/'.$my_file_path;
+			 		$tmp_file_path = $archive_path.$temp_dir_short.'/'.$my_file_path;
 			 		$res = file_put_contents($tmp_file_path,$contents);
 			 		if($res === false){error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__,0);}
 			 		$files_cleanup[] = $tmp_file_path;
@@ -8792,9 +8792,9 @@ class learnpath {
 		{
 			if(empty($file_path)){continue;}
             //error_log(__LINE__.'getting document from '.$sys_course_path.$_course['path'].'/'.$file_path.' removing '.$sys_course_path.$_course['path'].'/',0);
-			$dest_file = $garbage_path.$temp_dir_short.'/'.$file_path;
+			$dest_file = $archive_path.$temp_dir_short.'/'.$file_path;
 			$this->create_path($dest_file);
-			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
+			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('SYS_ARCHIVE_PATH').$temp_dir_short.'/'.$file_path,0);
 			//echo $main_path.$file_path.'<br>';
 			@copy($sys_course_path.$_course['path'].'/'.$file_path,$dest_file);
 			//check if the file needs a link update
@@ -8827,10 +8827,10 @@ class learnpath {
 			//error_log(__LINE__.'checking existence of '.$main_path.$file_path.'',0);
             if(!is_file($main_path.$file_path) || !is_readable($main_path.$file_path)){continue;}
 			//error_log(__LINE__.'getting document from '.$main_path.$file_path.' removing '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/',0);
-			$dest_file = $garbage_path.$temp_dir_short.'/document/'.$file_path;
+			$dest_file = $archive_path.$temp_dir_short.'/document/'.$file_path;
 			$this->create_path($dest_file);
-			//error_log('Created path '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/document/'.$file_path,0);
-			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
+			//error_log('Created path '.api_get_path(SYS_ARCHIVE_PATH).$temp_dir_short.'/document/'.$file_path,0);
+			//error_log('copy '.api_get_path(SYS_COURSE_PATH).$_course['path'].'/'.$file_path.' to '.api_get_path(SYS_ARCHIVE_PATH).$temp_dir_short.'/'.$file_path,0);
 			//echo $main_path.$file_path.' - '.$dest_file.'<br>';
 			
 			copy($main_path.$file_path,$dest_file);
@@ -8860,7 +8860,7 @@ class learnpath {
 			foreach($links_to_create as $file=>$link)
 			{
 				$file_content = '<html><body><div style="text-align:center"><a href="'.$link['url'].'">'.$link['title'].'</a></div></body></html>';
-				file_put_contents($garbage_path.$temp_dir_short.'/'.$file, $file_content);
+				file_put_contents($archive_path.$temp_dir_short.'/'.$file, $file_content);
 			}
 		}
 		// add non exportable message explanation
@@ -8892,11 +8892,11 @@ class learnpath {
 	</body>
 </html>
 EOD;
-		if(!is_dir($garbage_path.$temp_dir_short.'/document'))
+		if(!is_dir($archive_path.$temp_dir_short.'/document'))
 		{
-			@mkdir($garbage_path.$temp_dir_short.'/document');
+			@mkdir($archive_path.$temp_dir_short.'/document');
 		}
-		file_put_contents($garbage_path.$temp_dir_short.'/document/non_exportable.html', $file_content);
+		file_put_contents($archive_path.$temp_dir_short.'/document/non_exportable.html', $file_content);
 		
 		//Add the extra files that go along with a SCORM package
 		$main_code_path = api_get_path(SYS_CODE_PATH).'newscorm/packaging/';
@@ -8906,7 +8906,7 @@ EOD;
 			if(strpos($extra_file,'.')===0) continue;
 			else
 			{
-				$dest_file = $garbage_path.$temp_dir_short.'/'.$extra_file;
+				$dest_file = $archive_path.$temp_dir_short.'/'.$extra_file;
 				$this->create_path($dest_file);
 				copy($main_code_path.$extra_file,$dest_file);				
 			}
@@ -8914,10 +8914,10 @@ EOD;
 		
 	 	//Finalize the imsmanifest structure, add to the zip, then return the zip
 	 	
-	 	$xmldoc->save($garbage_path.'/'.$temp_dir_short.'/imsmanifest.xml');
+	 	$xmldoc->save($archive_path.'/'.$temp_dir_short.'/imsmanifest.xml');
 		
 		
-		$zip_folder->add($garbage_path.'/'.$temp_dir_short, PCLZIP_OPT_REMOVE_PATH, $garbage_path.'/'.$temp_dir_short.'/');
+		$zip_folder->add($archive_path.'/'.$temp_dir_short, PCLZIP_OPT_REMOVE_PATH, $archive_path.'/'.$temp_dir_short.'/');
 
 		//clean possible temporary files
 		foreach($files_cleanup as $file)

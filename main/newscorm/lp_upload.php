@@ -112,7 +112,7 @@ elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 	$stopping_error = false;
 
 	//escape path with basename so it can only be directly into the claroline/upload directory
-	$s=api_get_path(SYS_CODE_PATH).'garbage/'.basename($_POST['file_name']);
+	$s=api_get_path(SYS_ARCHIVE_PATH).basename($_POST['file_name']);
 	//get name of the zip file without the extension
 	$info = pathinfo($s);
 	$filename = $info['basename'];

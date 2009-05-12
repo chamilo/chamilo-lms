@@ -200,7 +200,7 @@ if (api_is_xml_http_request()) {
 			//	echo 'in cache';
 			$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());			
 		} else  {		  
-		// if the image does not exist in the main/garbage/ folder		
+		// if the image does not exist in the archive/ folder		
 			// Initialise the graph  
 			$Test = new pChart(760,230);
 			 
@@ -245,7 +245,7 @@ if (api_is_xml_http_request()) {
 			ob_end_clean();				
 			$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());		
 		}
-		echo '<img src="'.api_get_path(WEB_CODE_PATH).'garbage/'.$img_file.'">';
+		echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
 	} else {
 		Display::display_warning_message (get_lang('GraphicNotAvailable'));
 	}

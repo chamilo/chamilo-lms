@@ -42,7 +42,7 @@ require_once dirname(__FILE__) . '/../../global.inc.php';
    /* Create the pCache object */
    function pCache($CacheFolder="Cache/")
     {
-     $this->CacheFolder = api_get_path(GARBAGE_PATH);
+     $this->CacheFolder = api_get_path(SYS_ARCHIVE_PATH);
     }
 
    /* This function is clearing the cache folder */

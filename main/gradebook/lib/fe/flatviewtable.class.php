@@ -114,7 +114,7 @@ class FlatViewTable extends SortableTable
 					//echo 'in cache';
 					$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());			
 				} else  {		  
-					// if the image does not exist in the main/garbage/ folder
+					// if the image does not exist in the archive/ folder
 					
 					// Initialise the graph  
 					$Test = new pChart(760,360); 
@@ -167,8 +167,8 @@ class FlatViewTable extends SortableTable
 				}
 			}		
 		}
-		return api_get_path(WEB_CODE_PATH).'garbage/'.$img_file;
-		//return '<div id="imageloaded" style="float:center;"><img src="'.api_get_path(WEB_CODE_PATH).'garbage/'.$img_file_generated_name.'" ></div>';
+		return api_get_path(WEB_ARCHIVE_PATH).$img_file;
+		//return '<div id="imageloaded" style="float:center;"><img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file_generated_name.'" ></div>';
 	}
 	
 	function display_graph_by_resource() 
@@ -272,7 +272,7 @@ class FlatViewTable extends SortableTable
 							//echo 'in cache';
 							$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());			
 						} else  {	  
-							// if the image does not exist in the main/garbage/ folder						
+							// if the image does not exist in the archive/ folder						
 							// Initialise the graph						
 							$chart_size_w= 480;
 							$chart_size_h= 250;  
@@ -321,7 +321,7 @@ class FlatViewTable extends SortableTable
 							ob_end_clean();				
 							$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());
 						}
-						echo '<img src="'.api_get_path(WEB_CODE_PATH).'garbage/'.$img_file.'" >';					
+						echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'" >';					
 						if ($i % 2 == 0 && $i!=0) {
 							echo '<br>';
 						}
@@ -380,7 +380,7 @@ class FlatViewTable extends SortableTable
 				$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",8);
 				
 				$Test->drawBarGraph($DataSet->GetData(),$DataSet->GetDataDescription(),TRUE);
-				$tmp_path = api_get_path(GARBAGE_PATH);
+				$tmp_path = api_get_path(SYS_ARCHIVE_PATH);
 					
 				$Test->drawBasicPieGraph($DataSet->GetData(),$DataSet->GetDataDescription(),120,100,70,PIE_PERCENTAGE,255,255,218);  
 				$Test->drawPieLegend(230,15,$DataSet->GetData(),$DataSet->GetDataDescription(),250,250,250);
@@ -392,7 +392,7 @@ class FlatViewTable extends SortableTable
 				if ($i % 2 == 0 && $i!= 0) {
 					echo '<br>';
 				}			
-				echo '<img src="'.api_get_path(WEB_CODE_PATH).'garbage/'.$img_file_generated_name.'">';								
+				echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file_generated_name.'">';								
 			}
 			*/
 		}

@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 20567 2009-05-12 21:10:13Z cvargas1 $
+<?php //$Id: announcements.php 20617 2009-05-13 23:46:58Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -820,7 +820,7 @@ $fck_attribute = null; // Clearing this global variable immediatelly after it ha
 
 /* DISPLAY LEFT COLUMN */
   
-if(api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) )  {
+if(api_is_allowed_to_edit(false,true))  {
  	// check teacher status
   	if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 
@@ -837,54 +837,80 @@ if(api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edi
 	}
 } else {
 	// students only get to see the visible announcements
-	if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
-		$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 
-		// the user is member of several groups => display personal announcements AND his group announcements AND the general announcements
-		if (is_array($group_memberships) && count($group_memberships)>0) {
-			$sql="SELECT
-				announcement.*, toolitemproperties.*
-				FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-				WHERE announcement.id = toolitemproperties.ref
-				AND toolitemproperties.tool='announcement'
-				AND toolitemproperties.visibility='1'
-				AND	( toolitemproperties.to_user_id='".$_user['user_id']."'" .
-					"OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-				AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
-				GROUP BY toolitemproperties.ref
-				ORDER BY display_order DESC
-				LIMIT 0,$maximum";
-		} else {
-			// the user is not member of any group
-			// this is an identified user => show the general announcements AND his personal announcements
-			if ($_user['user_id']) {
+				
+		if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
+			$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
+			
+			if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+				$cond_user_id = " AND (toolitemproperties.lastedit_user_id = '".api_get_user_id()."' OR ( toolitemproperties.to_user_id='".$_user['user_id']."'" .
+						"OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
+			} else {
+				$cond_user_id = " AND ( toolitemproperties.to_user_id='".$_user['user_id']."'" .
+						"OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
+			}
+			
+			// the user is member of several groups => display personal announcements AND his group announcements AND the general announcements
+			if (is_array($group_memberships) && count($group_memberships)>0) {
 				$sql="SELECT
 					announcement.*, toolitemproperties.*
 					FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 					WHERE announcement.id = toolitemproperties.ref
 					AND toolitemproperties.tool='announcement'
 					AND toolitemproperties.visibility='1'
-					AND ( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
+					$cond_user_id
 					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 					GROUP BY toolitemproperties.ref
 					ORDER BY display_order DESC
 					LIMIT 0,$maximum";
 			} else {
-				// the user is not identiefied => show only the general announcements
-				$sql="SELECT
-					announcement.*, toolitemproperties.*
-					FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-					WHERE announcement.id = toolitemproperties.ref
-					AND toolitemproperties.tool='announcement'
-					AND toolitemproperties.visibility='1'
-					AND toolitemproperties.to_group_id='0'
-					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
-					GROUP BY toolitemproperties.ref
-					ORDER BY display_order DESC
-					LIMIT 0,$maximum";
+				// the user is not member of any group
+				// this is an identified user => show the general announcements AND his personal announcements
+				if ($_user['user_id']) {
+					
+					if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+						$cond_user_id = " AND (toolitemproperties.lastedit_user_id = '".api_get_user_id()."' OR ( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')) ";
+					} else {
+						$cond_user_id = " AND ( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0') ";
+					}
+					
+					
+					$sql="SELECT
+						announcement.*, toolitemproperties.*
+						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+						WHERE announcement.id = toolitemproperties.ref
+						AND toolitemproperties.tool='announcement'
+						AND toolitemproperties.visibility='1'
+						$cond_user_id
+						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+						GROUP BY toolitemproperties.ref
+						ORDER BY display_order DESC
+						LIMIT 0,$maximum";
+				} else {
+					
+					if (api_get_course_setting('allow_user_edit_announcement')) {
+						$cond_user_id = " AND (toolitemproperties.lastedit_user_id = '".api_get_user_id()."' OR toolitemproperties.to_group_id='0') ";
+					} else {
+						$cond_user_id = " AND toolitemproperties.to_group_id='0' ";
+					}
+					
+					// the user is not identiefied => show only the general announcements
+					$sql="SELECT
+						announcement.*, toolitemproperties.*
+						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+						WHERE announcement.id = toolitemproperties.ref
+						AND toolitemproperties.tool='announcement'
+						AND toolitemproperties.visibility='1'
+						AND toolitemproperties.to_group_id='0'
+						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+						GROUP BY toolitemproperties.ref
+						ORDER BY display_order DESC
+						LIMIT 0,$maximum";
+				}
 			}
 		}
-	}
+	
+	
 }
 
 $result = api_sql_query($sql,__FILE__,__LINE__);
@@ -1213,39 +1239,61 @@ if ($display_announcement_list && !$surveyid) {
 			}
 		}
 	} else {  
-	//STUDENT
-		if (is_array($group_memberships) && count($group_memberships)>0) {
-			
-			$sql="SELECT
-				announcement.*, toolitemproperties.*
-				FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-				WHERE announcement.id = toolitemproperties.ref
-				AND toolitemproperties.tool='announcement'
-				AND	(toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-				AND toolitemproperties.visibility='1'
-				ORDER BY display_order DESC";
-		} else {
-			if ($_user['user_id']) {
-				$sql="SELECT 
-					announcement.*, toolitemproperties.*
-					FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-					WHERE announcement.id = toolitemproperties.ref
-					AND toolitemproperties.tool='announcement'
-					AND (toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
-					AND toolitemproperties.visibility='1'
-					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
-					ORDER BY display_order DESC";
-			} else {
+	//STUDENT			
+			if (is_array($group_memberships) && count($group_memberships)>0) {
+				
+				if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+					$cond_user_id = " AND (toolitemproperties.lastedit_user_id = '".api_get_user_id()."' OR (toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )) ";
+				} else {
+					$cond_user_id = " AND (toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
+				}
+				
 				$sql="SELECT
 					announcement.*, toolitemproperties.*
 					FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 					WHERE announcement.id = toolitemproperties.ref
 					AND toolitemproperties.tool='announcement'
-					AND toolitemproperties.to_group_id='0'
+					$cond_user_id
 					AND toolitemproperties.visibility='1'
-					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")";
+					ORDER BY display_order DESC";
+			} else {
+				
+				if ($_user['user_id']) {
+					
+					if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+						$cond_user_id = " AND (toolitemproperties.lastedit_user_id = '".api_get_user_id()."' OR (toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')) ";
+					} else {
+						$cond_user_id = " AND (toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0') ";
+					}
+					
+					$sql="SELECT 
+						announcement.*, toolitemproperties.*
+						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+						WHERE announcement.id = toolitemproperties.ref
+						AND toolitemproperties.tool='announcement'
+						$cond_user_id
+						AND toolitemproperties.visibility='1'
+						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+						ORDER BY display_order DESC";
+				} else {
+					
+					if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+						$cond_user_id = " AND (toolitemproperties.lastedit_user_id = '".api_get_user_id()."' OR toolitemproperties.to_group_id='0' ) ";
+					} else {
+						$cond_user_id = " AND toolitemproperties.to_group_id='0' ";
+					}
+					
+					$sql="SELECT
+						announcement.*, toolitemproperties.*
+						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+						WHERE announcement.id = toolitemproperties.ref
+						AND toolitemproperties.tool='announcement'
+						$cond_user_id
+						AND toolitemproperties.visibility='1'
+						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")";
+				}
 			}
-		}
+		
 	}
 
 	$result = api_sql_query($sql,__FILE__,__LINE__);

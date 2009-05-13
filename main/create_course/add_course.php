@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 20564 2009-05-12 20:29:25Z aportugal $
+// $Id: add_course.php 20583 2009-05-13 11:41:32Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -128,7 +128,7 @@ if ($form->validate()) {
 		}
         $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
 		$message = get_lang('JustCreated');
-		$message .= ' <a href="'.$link.'">'.$visual_code."</a>";
+		$message .= ' <a href="'.$link.'">'.$title."</a>";
 		//$message .= "<br /><br /><br />";
 		//$message .= '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
 		Display :: display_confirmation_message($message,false);

@@ -903,6 +903,7 @@ $EnablePlugins = "Habilitar os plugins seleccionados";
 $AtLeastOneCourseAndOneURL = "Debe escoller polo menos un curso e unha URL";
 $CoursesWereEdited = "Editáronse os cursos";
 $EditSessionToURL  = "Editar unha sesión";
+$ManageSessions = "Administrar sesións";
 $AllowSocialToolTitle = "Habilita a ferramenta de rede social";
 $SetLanguageAsDefault = "Definir como idioma establecido por defecto";
 $FieldFilter = "Filtro";

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langToolName = "Statistiche";
-$TrackingDisabled = "Il reporting è stato disabilitato dall\'Amministratore";
+$TrackingDisabled = "Le statistiche sono state disabilitate dall\'Amministratore";
 $InactivesStudents = "Corsisti inattivi";
 $AverageTimeSpentOnThePlatform = "Tempo medio di accesso";
 $AverageCoursePerStudent = "Numero medio di corsi per utente";
@@ -57,7 +57,7 @@ $langScormNeverOpened = "Questo oggetto non è mai stato aperto dall\'utente.";
 $langWorkTitle = "Titolo";
 $langWorkAuthors = "Autori";
 $langWorkDescription = "Descrizione";
-$informationsAbout = "Report su";
+$informationsAbout = "Statistiche su";
 $langNoEmail = "E-mail non specificata";
 $langNoResult = "Nessun risultato";
 $langCourse = "Corso";
@@ -184,7 +184,7 @@ $Print = "Stampa";
 $StudentDetails = "Dettagli corsista";
 $StudentDetailsInCourse = "Dettagli corsista nel corso stesso";
 $Learnpaths = "Moduli didattici";
-$OtherTools = "Altre sezioni";
+$OtherTools = "Statistiche sulle altre interazioni";
 $DetailsStudentInCourse = "Dettagli sul corsista nel corso";
 $CourseTitle = "Titolo del corso";
 $NbStudents = "Numero di corsisti";

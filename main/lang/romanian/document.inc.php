@@ -60,6 +60,7 @@ $langTocDown  = "Jos";
 $langTocUp  = "Sus";
 $lang_cut_paste_link = "Fara cadre";
 $langCreatePath = "Creaza o cale";
+$SendDocument = "Trimite documentul";
 $langOogieConversionPowerPoint = "Oogie : conversie PowerPoint";
 $langWelcomeOogieSubtitle = "Un convertor PowerPoint la Calea de Invatare";
 $langAddMetadata = "Vezi/Editeaza Metadata";
@@ -207,4 +208,5 @@ $TemplateTitleStopAndThink = "Stai si gandeste-te";
 $TemplateTitleListLeftListDescription = "Lista stanga cu un instructor";
 $TemplateTitleStopAndThinkDescription = "Aspectul ce incurajeaza \"stop si gandeste-te\"";
 $CreateTheDocument = "Salveaza documentul";
+$TemplateImage = "Icon pentru sablon";
 ?>

@@ -124,4 +124,6 @@ $NoFilesHere = "Nu exista fisiere aici";
 $NoFilesHere = "Nu exista fisiere aici";
 $NewDropboxFileUploaded = "A fost trimis un nou fisier in instrumentul \"dropbox\"";
 $NewDropboxFileUploadedContent = "A fost trimis un nou fisier in instrumentul \"dropbox\" al cursului dvs";
+$langAddEdit = "Adauga/modifica";
+$AddComment  = "Adauga comentariu";
 ?>

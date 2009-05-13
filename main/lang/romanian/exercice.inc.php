@@ -84,6 +84,7 @@ $langScore = "Punctaj";
 $langCorrespondsTo = "Corespunde la";
 $langExpectedChoice = "Alegerea asteptata";
 $langYourTotalScore = "Punctajul tau total este";
+$ReachedMaxAttemptsAdmin = "Ati atins numarul maxim de incercari pentru testul realizat. Puteti, totusi, pentru ca sunteti un administrator al acestui curs, testul inca o data efectua dar rezultatele nu vor fi incluse in pagina de rezultate.";
 $Build = "Versiunea";
 $langEvalSet = "parametrii de evaluare";
 $langActive = "activ ";
@@ -257,4 +258,9 @@ $ExeEndTime = "Data de sfarsit";
 $Value = "Valoare";
 $DeleteAttempt = "Sterge incercare?";
 $Duration = "Durata";
+$AddQuestionToExercise = "Adauga o intrebare la test";
+$UniqueAnswer = "Multiple choice";
+$MultipleAnswer = "Raspunsuri multiple";
+$FreeAnswer = "Intrebare deschisa";
+$HotSpot = "Hot Spot";
 ?>

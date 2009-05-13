@@ -63,6 +63,7 @@ $InBlog = "Nel Blog";
 $ViewPostsOfThisDay = "Leggi gli articoli pubblicati oggi.";
 $PostsOf = "Articoli di ";
 $NoArticleMatches = "Non ci sono articoli che corrispondono al criterio di ricerca. Verifica l\'ortografia o usa termini meno specifici. Cambia ed effettua una nuova ricerca.";
+$SaveProject = "Salva il blog";
 $langTask1 = "1° attività";
 $langTask2 = "2° attività";
 $langTask3 = "3° attività";

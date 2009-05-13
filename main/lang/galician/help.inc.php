@@ -47,4 +47,5 @@ $langHGroups = "Grupos";
 $langGroupsContent = "Contido dos grupos";
 $langGuide = "Manual";
 $HSurvey = "Axuda: Enquisas";
+$HBlogs = "Axuda: Blogs";
 ?>

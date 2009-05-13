@@ -93,4 +93,5 @@ $ForumSearchInformation = "Cautati pe mai multe cuvinte folosind semnul +";
 $YouWillBeNotifiedOfNewPosts = "Veti fi notificati asupra postarilor noi prin e-mail";
 $YouWillNoLongerBeNotifiedOfNewPosts = "Nu veti mai fi notificat asupra noilor postari prin email";
 $TooShort = "Prea scurt";
+$EditForum = "Schimbare forum";
 ?>

@@ -3,6 +3,9 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "Il forum è stato creato";
 $NewThreadCreated = "L\'argomento (Thread) è stato creato";
+$AddHotpotatoes = "Aggiungi file HotPotatoes";
+$HideAttemptView = "Nascondi la visualizzazione dei tentativi";
+$ExtendAttemptView = "Consenti la visualizzazione dei tentativi";
 $lang_learning_path = "Moduli didattici";
 $lang_learning_path_builder = "Sistema autore";
 $lang_description = "Proprietà";

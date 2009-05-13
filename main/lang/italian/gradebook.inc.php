@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $ModifyEvaluation = "Modifica il Registro";
-$CreateLink = "Crea collegamento";
+$CreateLink = "Collega l\'attività al Registro esami";
 $FlatView = "Per corsista";
 $ScoreEdit = "Regole assegnazione del livello";
 $ScoreColor = "Colore del livello";

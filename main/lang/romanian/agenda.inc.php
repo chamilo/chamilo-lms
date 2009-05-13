@@ -65,4 +65,8 @@ $RepeatYearly = "Anual";
 $RepeatEnd = "Repeta data de sfarsit";
 $RepeatedEventViewOriginalEvent = "Vizualizeaza evenimentul original";
 $ICalFileImport = "Importa un fisier iCal/ics";
+$AllUsersOfThePlatform = "Toti utilizatorii de pe platforma";
+$GlobalEvent = "Evenimente globale";
+$ModifyEvent = "Modifica eveniment";
+$IsNotiCalFormatFile = "Aceasta fisier nu este un fisier iCal.";
 ?>

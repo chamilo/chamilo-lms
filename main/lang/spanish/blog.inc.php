@@ -63,6 +63,7 @@ $InBlog = "en el blog";
 $ViewPostsOfThisDay = "Ver los artículos de este día";
 $PostsOf = "Artículos de";
 $NoArticleMatches = "No se encuentran artículos que se ajusten a sus criterios de búsqueda. Probablemente haya escrito incorrectamente algo o su búsqueda es poco concreta. Realice las modificaciones que estime oportunas y ejecute una nueva búsqueda.";
+$SaveProject = "Guardar blog";
 $langTask1 = "Tarea 1";
 $langTask2 = "Tarea 2";
 $langTask3 = "Tarea 3";

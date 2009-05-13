@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifyEvaluation = "Modificar evaluación";
 $CreateLink = "Añadir esta actividad a la evaluación";
+$AddResultNoStudents = "No hay resultados agregado a estudiantes";
 $FlatView = "Vista plana";
 $ScoreEdit = "Editar las reglas de puntuación";
 $ScoreColor = "Color de la puntuación";

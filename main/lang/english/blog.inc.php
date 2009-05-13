@@ -63,6 +63,7 @@ $InBlog = "in the project";
 $ViewPostsOfThisDay = "View tasks for today";
 $PostsOf = "Tasks by";
 $NoArticleMatches = "No tasks have been found. Check the word spelling or try another search.";
+$SaveProject = "Save project";
 $langTask1 = "Task 1";
 $langTask2 = "Task 2";
 $langTask3 = "Task 3";

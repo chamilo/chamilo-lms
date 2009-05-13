@@ -266,7 +266,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 				$session_displayed = '';
 			}
 			
-			echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
+			echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";
 			echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a><br />';
 			
 			if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;') {  
@@ -287,7 +287,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 		
 			// step 4: the interim headers (for the forum)
 			echo "\t<tr class=\"forum_header\">\n";
-			echo "\t\t<td colspan=\"3\">".get_lang('Forum')."</td>\n";
+			echo "\t\t<td colspan=\"2\">".get_lang('Forum')."</td>\n";
 			echo "\t\t<td>".get_lang('Topics')."</td>\n";
 			echo "\t\t<td>".get_lang('Posts')."</td>\n";
 			echo "\t\t<td>".get_lang('LastPosts')."</td>\n";
@@ -370,8 +370,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						$mywhatsnew_post_info=isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']]: null;
 						echo "\t<tr class=\"forum\">\n";
 						
-						// Showing the image
-						echo "\t\t<td width=\"50\">";	
+						// Showing the image	
 						if(!empty($forum['forum_image'])) {
 							$image_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$forum['forum_image'];												
 

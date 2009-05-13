@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 20455 2009-05-10 16:31:12Z ivantcholakov $
+<?php //$Id: group_space.php 20611 2009-05-13 22:21:08Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -218,11 +218,10 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 		//link to the wiki area of this group
 		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../wiki/index.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('wiki.gif', get_lang("GroupWiki"))."&nbsp;".get_lang("GroupWiki")."</a></div>"; 
 	}
-
-	echo '<b>'.get_lang("Tools").':</b>';
+	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang("Tools").':</b></div>';
 	if (!empty($tools))
 	{
-		echo '<blockquote>'.$tools.'</blockquote>';
+		echo '<div style="margin-left:5px;">'.$tools.'</div>';
 	}
 
 } else {
@@ -268,12 +267,12 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 		$tools .= "<a href=\"../wiki/index.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('wiki.gif', get_lang('GroupWiki'))."&nbsp;".get_lang('GroupWiki')."</a><br/>";
 	}
 		
-	
-	echo '<b>'.get_lang("Tools").':</b>';
-	if (!empty($tools))
-	{
-		echo '<blockquote>'.$tools.'</blockquote>';
-	}
+	echo '<br/>';
+		
+	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang("Tools").':</b></div>';
+	if (!empty($tools)) {
+		echo '<div style="margin-left:5px;">'.$tools.'</div>';
+	}	
 }
 
 /*
@@ -297,14 +296,12 @@ else
 		$tutor_info .= "<div style='margin-bottom: 5px;'><a href='../user/userInfo.php?origin=".$my_origin."&amp;uInfo=".$tutor['user_id']."'>".$photo."&nbsp;".$tutor['firstname']." ".$tutor['lastname']."</a></div>";
 	}
 }
-echo '<b>'.get_lang("GroupTutors").':</b>';
-if (!empty($tutor_info))
-{
-	echo '<blockquote>'.$tutor_info.'</blockquote>';
+
+echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang("GroupTutors").':</b></div>';
+if (!empty($tutor_info)) {
+	echo '<div style="margin-left:5px;">'.$tutor_info.'</div>';
 }
-
-
-
+echo '<br/>';
 
 /*
  * list all the members of the current group

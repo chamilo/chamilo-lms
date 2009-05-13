@@ -1,4 +1,4 @@
-<?php // $Id: group.php 20455 2009-05-10 16:31:12Z ivantcholakov $
+<?php // $Id: group.php 20611 2009-05-13 22:21:08Z iflorespaz $
  
 /*
 ==============================================================================
@@ -236,7 +236,7 @@ foreach ($group_cats as $index => $category)
 		else
 		{
 			echo '<img src="../img/folder_document.gif" alt=""/>';
-			echo ' <a href="group.php?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;category='.$category['id'].'">'.$category['title'].'</a>';
+			echo ' <a href="group.php?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'&amp;category='.$category['id'].'">'.$category['title'].'</a>';
 		}
 		$group_list = GroupManager :: get_group_list($category['id']);
 		echo ' ('.count($group_list).' '.get_lang('ExistingGroups').')';
@@ -255,11 +255,10 @@ foreach ($group_cats as $index => $category)
 		}
 		echo '<p style="margin: 0px;margin-left: 50px;">'.$category['description'].'</p><p/>';
 	}
-	else
-	{
-		$group_list = GroupManager :: get_group_list();
-		$in_category = true;
-	}
+	else {
+			$group_list = GroupManager :: get_group_list();
+			$in_category = true;
+		}
 
 	//if (count($group_list) > 0 && $in_category)
 	if ($in_category)

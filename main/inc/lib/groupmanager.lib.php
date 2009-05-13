@@ -170,8 +170,12 @@ class GroupManager
 		else if(!empty($session_condition))
 			$sql .= 'WHERE '.$session_condition;
 		$sql .= " GROUP BY `g`.`id` ORDER BY UPPER(g.name)";
+		if (!api_is_anonymous()) {
+			$groupList = api_sql_query($sql,__FILE__,__LINE__);
+		} else {
+			return array();
+		}
 
-		$groupList = api_sql_query($sql,__FILE__,__LINE__);
 		$groups = array ();
 		while ($thisGroup = Database::fetch_array($groupList))
 		{

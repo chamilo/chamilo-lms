@@ -181,18 +181,24 @@ class MessageManager {
 	 public static function send_message ($receiver_user_id, $title, $content) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		//message in inbox
-		$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
-				 " VALUES (".
-		 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '1', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
-		 		 ")";
-		//message in outbox
-		$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
-				 " VALUES (".
-		 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
-		 		 ")";
-		$rs = api_sql_query($sql,__FILE__,__LINE__);
-		$result = api_sql_query($query,__FILE__,__LINE__);
-		return $result;	
+		$sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".api_get_user_id()." AND user_receiver_id='".Database::escape_string($receiver_user_id)."' AND title = '".Database::escape_string($title)."' AND content ='".Database::escape_string($content)."' ";
+		$res_exist = api_sql_query($sql,__FILE__,__LINE__);
+		$row_exist = Database::fetch_array($res_exist,'ASSOC');
+		if ($row_exist['count'] ==0) {  
+			$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
+					 " VALUES (".
+			 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '1', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
+			 		 ")";
+			//message in outbox
+			$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
+					 " VALUES (".
+			 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
+			 		 ")";
+			$rs = api_sql_query($sql,__FILE__,__LINE__);
+			$result = api_sql_query($query,__FILE__,__LINE__);
+			return $result;
+		}
+		return false;
 	}
 	
 	 public static function delete_message_by_user_receiver ($user_receiver_id,$id) {	
@@ -365,7 +371,7 @@ class MessageManager {
 		        <TABLE height=209 width="100%" bgColor=#ffffff>
 		          <TBODY>
 		            <TR>
-		              <TD vAlign=top>'.api_xml_http_response_encode($row[6]).'</TD>
+		              <TD vAlign=top>'.str_replace("\\","",api_xml_http_response_encode($row[6])).'</TD>
 		            </TR>
 		          </TBODY>
 		        </TABLE>
@@ -414,7 +420,7 @@ class MessageManager {
 		        <TABLE height=209 width="100%" bgColor=#ffffff>
 		          <TBODY>
 		            <TR>
-		              <TD vAlign=top>'.api_xml_http_response_encode($row[6]).'</TD>
+		              <TD vAlign=top>'.str_replace("\\","",api_xml_http_response_encode($row[6])).'</TD>
 		            </TR>
 		          </TBODY>
 		        </TABLE>

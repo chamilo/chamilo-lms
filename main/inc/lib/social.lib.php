@@ -296,9 +296,13 @@ class UserFriend extends UserManager {
 		$user_info=api_get_user_info($userfriend_id);
 		$succes=get_lang('MessageSentTo');
 		$succes.= ' : '.$user_info['firstName'].' '.$user_info['lastName'];
-		if (isset($subject_message) && isset($content_message) && isset($userfriend_id)) {
-			MessageManager::send_message(Database::escape_string($userfriend_id),Database::escape_string($subject_message), Database::escape_string($content_message));
-			Display::display_confirmation_message($succes,true);	
+		if (isset($subject_message) && isset($content_message) && isset($userfriend_id)) {			
+			$send_message = MessageManager::send_message(Database::escape_string($userfriend_id),Database::escape_string($subject_message), Database::escape_string($content_message));
+			if($send_message) {
+				echo Display::display_confirmation_message($succes,true);
+			} else { 	
+				echo Display::display_error_message($succes,true);
+			}
 			exit;
 		} elseif(isset($userfriend_id) && !isset($subject_message)) {
 			$count_is_true=false;

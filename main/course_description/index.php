@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20496 2009-05-11 21:05:32Z cvargas1 $
+<?php // $Id: index.php 20590 2009-05-13 13:11:32Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -94,6 +94,7 @@ $default_description_titles[4]= get_lang('Methodology');
 $default_description_titles[5]= get_lang('CourseMaterial');
 $default_description_titles[6]= get_lang('HumanAndTechnicalResources');
 $default_description_titles[7]= get_lang('Assessment');
+$default_description_titles[8]= get_lang('Other');
 $default_description_icon = array();
 $default_description_icon[1]= 'edu_miscellaneous.gif';
 $default_description_icon[2]= 'spire.gif';
@@ -120,7 +121,7 @@ $information[5]= get_lang('CourseMaterialInformation');
 $information[6]= get_lang('HumanAndTechnicalResourcesInformation');
 $information[7]= get_lang('AssessmentInformation');
 $default_description_title_editable = array();
-$default_description_title_editable[1] = false;
+$default_description_title_editable[1] = true;
 $default_description_title_editable[2] = true;
 $default_description_title_editable[3] = true;
 $default_description_title_editable[4] = true;

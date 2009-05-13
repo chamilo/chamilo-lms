@@ -1376,9 +1376,9 @@ a.specialLink:hover,a.specialLink:focus {
 .confirmation-message,.error-message,.normal-message,.warning-message {
 	position: relative;
 	border: 1px solid #ddd;
-	margin: 6px 6px 10px 2px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	padding: 6px;
-	width: 98%;
 	color: #00407F;
 	//This image is wrong size, so is commented until one solution
 	//background: transparent url('images/alert.jpg') no-repeat 10px 5px;

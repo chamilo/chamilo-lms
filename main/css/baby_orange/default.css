@@ -333,7 +333,8 @@ form span.form_error {
 /* feedback messages */
 .confirmation-message,.error-message,.normal-message,.warning-message {
 	border: 1px solid #ddd;
-	margin: 6px 6px 10px 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	padding: 6px;
 	position: relative;
 	width: 98%;
@@ -347,7 +348,8 @@ form span.form_error {
 	{
 	float:left;
 	position: relative;
-	margin: 0 5px 5px 0;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
  .confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link
 {	

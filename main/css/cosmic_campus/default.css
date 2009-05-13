@@ -345,8 +345,8 @@ form span.form_error {
 /* feedback messages */
 .normal-message {
 	position: relative;
-	margin: 6px 6px 10px 4px;
-	width: 98%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 6px;
@@ -357,8 +357,8 @@ form span.form_error {
 }
 .warning-message {
 	position: relative;
-	margin: 6px 6px 10px 4px;
-	width: 98%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 6px;
@@ -369,8 +369,8 @@ form span.form_error {
 }
 .confirmation-message {
 	position: relative;
-	margin: 6px 6px 10px 4px;
-	width: 98%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 6px;
@@ -381,8 +381,8 @@ form span.form_error {
 }
 .error-message {
 	position: relative;
-	margin: 6px 6px 30px 4px;
-	width: 98%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 6px;

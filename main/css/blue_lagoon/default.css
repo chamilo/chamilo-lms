@@ -811,9 +811,8 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 /* normal and erro message-box */
 .normal-message {
 	position: relative;
-	margin: 10px auto 10px 10px;
-	width: 98%;
-	left: 0.1%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 5px;
@@ -824,11 +823,8 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 }
 .warning-message {
 	position: relative;
-	margin: 10px auto;
-	margin-left: -250px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 5px;
@@ -839,11 +835,8 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 }
 .confirmation-message {
 	position: relative;
-	margin: 5px 1px 0 10px;
- //margin-left: 2px;
- //margin: 10px auto 10px;
-	width: 98%;
- //right: 50%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 5px;
@@ -854,11 +847,8 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 }
 .error-message {
 	position: relative;
-	margin: 10px auto;
-	margin-left: -250px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 5px;

@@ -970,17 +970,17 @@ a.personal_agenda:hover  {
 .error-message {
 	border-width: 1px;
 	border-style: solid;
-	margin: 6px 6px 10px 6px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	min-height: 30px;
 	padding: 6px;
 	position: relative;
-	width: 98%;
 }
 
 .normal-message {
 	position: relative;
-	margin: 6px 6px 10px 6px;
-	width: 98%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 6px;
@@ -992,8 +992,8 @@ a.personal_agenda:hover  {
 
 .confirmation-message {
 	position: relative;
-	margin: 6px 6px 10px 6px;
-	width: 98%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 6px;

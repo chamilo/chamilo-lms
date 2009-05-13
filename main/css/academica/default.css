@@ -336,7 +336,8 @@ form span.form_error {
 .confirmation-message,.error-message,.normal-message,.warning-message {
 	position: relative;
 	border: 1px solid #ddd;
-	margin: 6px 6px 10px 4px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	padding: 6px;
 	width: 98%;
 	color: #00407F;
@@ -348,7 +349,8 @@ form span.form_error {
 .confirmation-message img,.error-message img,.normal-message img,.warning-message img
 	{
 	position: realtive;
-	margin: 0 5px 5px 0;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	float:left;	
 }
 

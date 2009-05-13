@@ -741,8 +741,8 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 /* normal and erro message-box */
 .normal-message {
 	position: relative;
-	margin: 6px 6px 10px 6px;
-	width: 98%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 6px;
@@ -753,8 +753,8 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 }
 .warning-message {
 	position: relative;
-	margin: 6px 6px 10px 6px;
-	width: 98%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 6px;
@@ -765,8 +765,8 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 }
 .confirmation-message {
 	position: relative;
-	margin: 6px 6px 10px 6px;
-	width: 98%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 6px;
@@ -777,8 +777,8 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 }
 .error-message {
 	position: relative;
-	margin: 6px 6px 10px 6px;
-	width: 98%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
 	padding: 6px;

@@ -262,13 +262,28 @@ if($modifyAnswers)
 
 <form method="post" action="<?php echo api_get_self(); ?>?hotspotadmin=<?php echo $modifyAnswers; ?>" name="frm_exercise">
 <table border="0" cellpadding="0" cellspacing="2" width="100%">
-
 	<tr>
 		<td colspan="2" valign="bottom">
+		<?php
+			$navigator_info = api_get_navigator();
+			//ie6 fix
+			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+		?>
+			<input type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" >
+			<input type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />
+			<input type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" >
+			<input type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />			 
+		<?php
+			} else {				
+		?>
 			<button type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" ><?php echo get_lang('LessHotspots'); ?></button>
 			<button type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" /><?php echo get_lang('langMoreHotspotsImage'); ?></button>
 			<button type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" ><?php echo get_lang('Cancel'); ?></button>
 			<button type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" /><?php echo get_lang('AddQuestionToExercise'); ?></button>
+		<?php
+			}
+		?>
+		
 		</td>
 	</tr>
 	<tr>

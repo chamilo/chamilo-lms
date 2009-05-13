@@ -150,12 +150,20 @@ class MultipleAnswer extends Question {
 		
 		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
 
-		$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
-		$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-		
-		global $text, $class;
-		// setting the save button here and not in the question class.php
-		$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+
+		$navigator_info = api_get_navigator();
+		global $text, $class;	
+		//ie6 fix			
+		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+			$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+			$form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
+			$form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');			
+		} else {
+			$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+			$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
+			// setting the save button here and not in the question class.php
+			$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+		}
 		
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');

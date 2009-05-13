@@ -406,6 +406,7 @@ if ($encryptPassForm=='1' ) {
 				document.getElementById('optional_param5').style.display = '';
 				document.getElementById('optional_param6').style.display = '';
 				init_visibility = 1;
+			document.getElementById('optionalparameters').innerHTML='<img src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
 			} else {
 				document.getElementById('optional_param1').style.display = 'none';
 				document.getElementById('optional_param2').style.display = 'none';
@@ -415,6 +416,7 @@ if ($encryptPassForm=='1' ) {
 				document.getElementById('optional_param4').style.display = 'none';
 				document.getElementById('optional_param5').style.display = 'none';
 				document.getElementById('optional_param6').style.display = 'none';
+			document.getElementById('optionalparameters').innerHTML='<img src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
 				init_visibility = 0;				
 			}
 		}
@@ -429,7 +431,11 @@ if ($encryptPassForm=='1' ) {
 <div id="header">
 	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').(is_array($update_from_version)?implode('|',$update_from_version):''); ?></div>
 	<div id="header2">&nbsp;</div>
-	<div id="header3">&nbsp;</div>
+	<div id="header3">
+		<ul>
+			<li id="current"><a href="#"><span>Installation</span></a></li>
+		</ul>	
+	</div>
 </div>
 
 

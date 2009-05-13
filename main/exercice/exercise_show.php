@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20604 2009-05-13 20:40:35Z cfasanando $
+* 	@version $Id: exercise_show.php 20608 2009-05-13 21:01:19Z cfasanando $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -1041,7 +1041,7 @@ if ($is_allowedToEdit) {
 }  		
 
 if ($origin=='student_progress') {?>				
-	<button type="button" class="save" onclick="top.location.href='../newscorm/lp_controller.php?cidReq=<?php echo api_get_course_id()?>&amp;action=view&amp;lp_id=<?php echo $learnpath_id ?>&amp;lp_item_id=<?php echo $learnpath_item_id ?>&amp;exeId=<?php echo $exeId ?>'" value="<?php echo get_lang('Finish'); ?>" ><?php echo get_lang('Finish');?></button>										
+	<button type="button" class="back" onclick="window.back();" value="<?php echo get_lang('Back'); ?>" ><?php echo get_lang('Back');?></button>										
 <?php 
 } else if($origin=='myprogress') {
 ?>

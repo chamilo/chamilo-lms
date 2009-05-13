@@ -1,4 +1,4 @@
-<?php // $Id: text.lib.php 20087 2009-04-24 20:44:55Z juliomontoya $
+<?php // $Id: text.lib.php 20573 2009-05-13 00:05:49Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -411,14 +411,18 @@ function date_to_str_ago($date)
 }
 /**
  * This functions cuts a paragraph 
- * i.e cut('Merry Xmas from Lima',13) = "Merry Xmas fr..." 
+ * i.e cut('Merry Xmas from Lima',13) = "Merry Xmas fr..."
  * @param string the text to "cut" 
  * @param int count of chars
+ * @param bool	Whether to embed in a <span title="...">...</span>
  * @return string 
  * */
-function cut($text,$maxchar)
+function cut($text,$maxchar,$embed=false)
 {
 	if (strlen($text) > $maxchar) {
+		if ($embed==true) {
+			return '<span title="'.$text.'">'.substr($text, 0, $maxchar).'...</span>';
+		}
 		return substr($text, 0, $maxchar).'...'	;
 	} else {
 		return $text;

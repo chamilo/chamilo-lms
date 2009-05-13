@@ -1,4 +1,4 @@
-<?php //$Id: work.php 20519 2009-05-12 00:27:20Z cvargas1 $
+<?php //$Id: work.php 20605 2009-05-13 20:44:24Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 20519 2009-05-12 00:27:20Z cvargas1 $
+*  	@version $Id: work.php 20605 2009-05-13 20:44:24Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -426,15 +426,17 @@ if (api_is_allowed_to_edit(false,true)) {
 		if (isset($delete) && $delete == "all") {
 			$queryString1 = "SELECT url FROM " . $work_table . "";
 			$queryString2 = "DELETE FROM  " . $work_table . "";
+			$queryString3 = "DELETE FROM  " . $TSTDPUBASG . "";
 						
 		} else {
 			$queryString1 = "SELECT url FROM  " . $work_table . "  WHERE id = '$delete'";
-			$queryString2 = "DELETE FROM  " . $work_table . "  WHERE id='$delete'";						
+			$queryString2 = "DELETE FROM  " . $work_table . "  WHERE id='$delete'";
+			$queryString3 = "DELETE FROM  " . $TSTDPUBASG . "  WHERE publication_id='$delete'";							
 		}
 
 		$result1 = api_sql_query($queryString1, __FILE__, __LINE__);
 		$result2 = api_sql_query($queryString2, __FILE__, __LINE__);
-
+		$result3 = api_sql_query($queryString3, __FILE__, __LINE__);	
 	}
 }
 
@@ -552,9 +554,8 @@ if (api_is_allowed_to_edit(false,true)) {
 						isset($course_info)?$course=$course_info:$course=null;							
 						$agenda_id = agenda_add_item($course,$_POST['new_dir'],$_POST['new_dir'],date('Y-m-d H:i:s'),get_date_from_select('ends'),null,0);						 
 					endif;
-										
 					$sql_add_publication = "INSERT INTO " . $work_table . " SET " .			
-										   "url         = '".Database::escape_string($dir_name_sql)."',
+										   "url         = '".Database::escape_string(Security::remove_XSS($dir_name_sql))."',
 									       title        = '',
 						                   description 	= '".Database::escape_string(Security::remove_XSS($_POST['description']))."',
 						                   author      	= '',
@@ -746,9 +747,11 @@ else {
 				//we found the current user is the author
 				$queryString1 = "SELECT url FROM  " . $work_table . "  WHERE id = '$delete'";
 				$queryString2 = "DELETE FROM  " . $work_table . "  WHERE id='$delete'";
+				$queryString3 = "DELETE FROM  " . $TSTDPUBASG . "  WHERE publication_id='$delete'";
 							
 				$result1 = api_sql_query($queryString1, __FILE__, __LINE__);
 				$result2 = api_sql_query($queryString2, __FILE__, __LINE__);
+				$result3 = api_sql_query($queryString3, __FILE__, __LINE__);
 				
 				if ($result1) {
 					api_item_property_update($_course, 'work', $delete, 'DocumentDeleted', $user_id);
@@ -820,30 +823,22 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 				//if (!$authors) {
 				$authors = $currentUserFirstName . " " . $currentUserLastName;
 				//}
-	
 				// compose a unique file name to avoid any conflict
-	
 				$new_file_name = uniqid('') . $new_file_name;
-	
 				if (isset ($_SESSION['toolgroup'])) {
 					$post_group_id = $_SESSION['toolgroup'];
 				} else {
 					$post_group_id = '0';
 				}
-				
 				//if we come from the group tools the groupid will be saved in $work_table
-	
 				@move_uploaded_file($_FILES['file']['tmp_name'], $updir . $my_cur_dir_path . $new_file_name);
-	
 				$url = "work/" . $my_cur_dir_path . $new_file_name;
-							
 				$result = api_sql_query("SHOW FIELDS FROM " . $work_table . " LIKE 'sent_date'", __FILE__, __LINE__);
 				
 				if (!Database::num_rows($result)) {
 					api_sql_query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL");
 				}			
 				$current_date = date('Y-m-d H:i:s');
-				
 				$parent_id = '';
 				$active = '';
 				$sql = api_sql_query('SELECT id FROM '.Database::get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE url = '."'/".Database::escape_string($_GET['curdirpath'])."' AND filetype='folder' LIMIT 1");

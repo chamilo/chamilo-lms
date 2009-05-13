@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20519 2009-05-12 00:27:20Z cvargas1 $
+<?php //$Id: work.lib.php 20605 2009-05-13 20:44:24Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20519 2009-05-12 00:27:20Z cvargas1 $
+* 	@version $Id: work.lib.php 20605 2009-05-13 20:44:24Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -411,9 +411,6 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir);
 
 				$group_name[] = FormValidator :: createElement('text','dir_name');
-				
-				//$group_name[] = FormValidator :: createElement('submit','submit_edit_dir',get_lang('Ok'));
-				
 				$form_folder -> addGroup($group_name,'my_group',get_lang('Title'));
 				$form_folder -> addGroupRule('my_group',get_lang('ThisFieldIsRequired'),'required');				
 				$defaults = array('my_group[dir_name]'=>html_entity_decode($dir),'description'=>html_entity_decode($row['description']));				
@@ -432,8 +429,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
 					}
 					$form_folder -> addRule(array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
-				}
-				else {									
+				} else {									
 						$form_folder -> addElement('html','<div class="row">
 	 	                         <div class="label">&nbsp;</div>
  	  	                         <div class="formw">
@@ -946,8 +942,7 @@ function create_unexisting_work_directory($base_work_dir,$desired_dir_name)
  * @param	string	The directory name as the bit after "work/", without trailing slash
  * @return	integer	-1 on error
  */
-function del_dir($base_work_dir,$dir,$id)
-{
+function del_dir($base_work_dir,$dir,$id) {
 	if(empty($dir) or $dir=='/') {
 		return -1;
 	}
@@ -1015,50 +1010,50 @@ function update_work_url($id,$new_path)
  * @param	string old path
  * @param	string new path
  */
-function update_dir_name($path, $new_name)
-{
-	global $base_work_dir; 
+function update_dir_name($path, $new_name) {
 	
-	include_once(api_get_path(LIBRARY_PATH) . "/fileManage.lib.php");
-	include_once(api_get_path(LIBRARY_PATH) . "/fileUpload.lib.php");
+	if (!empty($new_name)){
+		
+		global $base_work_dir; 
+		include_once(api_get_path(LIBRARY_PATH) . "/fileManage.lib.php");
+		include_once(api_get_path(LIBRARY_PATH) . "/fileUpload.lib.php");
+		$path_to_dir = dirname($path);
+		if($path_to_dir=='.') {
+			$path_to_dir = '';
+		} else {
+			$path_to_dir .= '/';
+		}
+		$new_name=replace_accents($new_name);
+		$new_name=disable_dangerous_file($new_name);
+		//$new_name=replace_dangerous_char($new_name);
+		
+		my_rename($base_work_dir.'/'.$path,$new_name);			
+		$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	
-	$path_to_dir = dirname($path);
+		//update all the files in the other directories according with the next query
+		$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE BINARY "work/'.$path.'/%"'; // like binary (Case Sensitive) 
+		
+		$rs = api_sql_query($sql, __FILE__, __LINE__);		
+		$work_len=strlen('work/'.$path);
+		
+		while($work = Database :: fetch_array($rs)) {		 				 
+			$new_dir=$work['url'];		
+			$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));				
+			$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];		
+			api_sql_query($sql, __FILE__, __LINE__);		
+		}
 	
-	if($path_to_dir=='.') {
-		$path_to_dir = '';
-	}else {
-		$path_to_dir .= '/';
-	}
-	
-	$new_name=replace_accents($new_name);
-	$new_name=disable_dangerous_file($new_name);
-	$new_name=replace_dangerous_char($new_name);
-	
-	my_rename($base_work_dir.'/'.$path,$new_name);			
-	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-
-	//update all the files in the other directories according with the next query
-	$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE BINARY "work/'.$path.'/%"'; // like binary (Case Sensitive) 
-	
-	$rs = api_sql_query($sql, __FILE__, __LINE__);		
-	$work_len=strlen('work/'.$path);
-	
-	while($work = Database :: fetch_array($rs)) {		 				 
-		$new_dir=$work['url'];		
-		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));				
-		$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];		
-		api_sql_query($sql, __FILE__, __LINE__);		
-	}
-
-	//update all the directory's children according with the next query 
-	$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE BINARY "/'.$path.'%"';
-	$rs = api_sql_query($sql, __FILE__, __LINE__);	
-	$work_len=strlen('/'.$path);	
-	while($work = Database :: fetch_array($rs)) {		
-		$new_dir=$work['url'];
-		$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));	
-		$sql = 'UPDATE '.$table.' SET url="/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];		
-		api_sql_query($sql, __FILE__, __LINE__);		
+		//update all the directory's children according with the next query 
+		$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE BINARY "/'.$path.'%"';
+		$rs = api_sql_query($sql, __FILE__, __LINE__);	
+		$work_len=strlen('/'.$path);	
+		while($work = Database :: fetch_array($rs)) {		
+			$new_dir=$work['url'];
+			$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));
+			$url=$path_to_dir.$new_name.$name_with_directory;
+			$sql = 'UPDATE '.$table.' SET url="/'.$url.'" WHERE id= '.$work['id'];		
+			api_sql_query($sql, __FILE__, __LINE__);		
+		}
 	}	
 }
 
@@ -1337,7 +1332,6 @@ function to_javascript_work() {
  * @param string $path
  * @return true if is found / false if not found
  */
- 
 function get_work_id($path) {
 	$TBL_STUDENT_PUBLICATION = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 	$TBL_PROP_TABLE = Database::get_course_table(TABLE_ITEM_PROPERTY);

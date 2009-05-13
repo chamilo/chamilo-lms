@@ -80,8 +80,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 	// settting the form elements	
 	$form->addElement('header', '', get_lang('NoteAddNew'));
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'95'));
-	$form->applyFilter('note_title', 'html_filter');
-	
+	//$form->applyFilter('note_title', 'html_filter');
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('AddNote'), 'class="add"');	
 	
@@ -125,7 +124,7 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 	$form->addElement('header', '', get_lang('ModifyNote'));
 	$form->addElement('hidden', 'notebook_id');
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'100'));
-	$form->applyFilter('note_title', 'html_filter');
+	//$form->applyFilter('note_title', 'html_filter');
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyNote'), 'class="save"');	
 	
@@ -207,8 +206,7 @@ function javascript_notebook()
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
  * @version januari 2009, dokeos 1.8.6
  */
-function save_note($values)
-{
+function save_note($values) {
 	// Database table definition
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 	
@@ -217,8 +215,8 @@ function save_note($values)
 				'".Database::escape_string(api_get_user_id())."', 
 				'".Database::escape_string(api_get_course_id())."',
 				'".Database::escape_string($_SESSION['id_session'])."',
-				'".Database::escape_string($values['note_title'])."',
-				'".Database::escape_string($values['note_comment'])."',
+				'".Database::escape_string(Security::remove_XSS($values['note_title']))."',
+				'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['note_comment'])),COURSEMANAGER))."',
 				'".Database::escape_string(date('Y-m-d H:i:s'))."', 
 				'".Database::escape_string(date('Y-m-d H:i:s'))."',		
 				'0')";
@@ -227,8 +225,7 @@ function save_note($values)
 	Display::display_confirmation_message(get_lang('NoteAdded'));	
 }
 
-function get_note_information($notebook_id)
-{
+function get_note_information($notebook_id) {
 	// Database table definition
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 	
@@ -250,8 +247,7 @@ function get_note_information($notebook_id)
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
  * @version januari 2009, dokeos 1.8.6
  */
-function update_note($values)
-{
+function update_note($values) {
 	// Database table definition
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 	
@@ -259,8 +255,8 @@ function update_note($values)
 				user_id = '".Database::escape_string(api_get_user_id())."', 
 				course = '".Database::escape_string(api_get_course_id())."',
 				session_id = '".Database::escape_string($_SESSION['id_session'])."',
-				title = '".Database::escape_string($values['note_title'])."',
-				description = '".Database::escape_string($values['note_comment'])."',
+				title = '".Database::escape_string(Security::remove_XSS($values['note_title']))."',
+				description = '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['note_comment'])),COURSEMANAGER))."',
 				update_date = '".Database::escape_string(date('Y-m-d H:i:s'))."'
 			WHERE notebook_id = '".Database::escape_string($values['notebook_id'])."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -268,8 +264,7 @@ function update_note($values)
 	Display::display_confirmation_message(get_lang('NoteUpdated'));	
 }
 
-function delete_note($notebook_id)
-{
+function delete_note($notebook_id) {
 	// Database table definition
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 
@@ -278,8 +273,7 @@ function delete_note($notebook_id)
 	Display::display_confirmation_message(get_lang('NoteDeleted'));		
 }
 
-function display_notes()
-{
+function display_notes() {
 	// action links
 	echo '<div class="actions" style="margin-bottom:20px">';
 	//if (api_is_allowed_to_edit())
@@ -295,8 +289,7 @@ function display_notes()
 	echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=title">'.Display::return_icon('comment.gif',get_lang('OrderByTitle')).get_lang('OrderByTitle').'</a>';
 	echo '</div>';	
 	
-	if (!in_array($_SESSION['notebook_view'],array('creation_date','update_date', 'title')))
-	{
+	if (!in_array($_SESSION['notebook_view'],array('creation_date','update_date', 'title'))) {
 		$_SESSION['notebook_view'] = 'creation_date';
 	}
 	
@@ -313,12 +306,10 @@ function display_notes()
 		
 	$sql = "SELECT * FROM $t_notebook WHERE user_id = '".Database::escape_string(api_get_user_id())."' $cond_extra $order_by";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	while ($row = Database::fetch_array($result))
-	{
+	while ($row = Database::fetch_array($result)) {
 		echo '<div class="sectiontitle">';
 		echo '<span style="float: right;"> ('.get_lang('CreationDate').': '.date_to_str_ago($row['creation_date']).'&nbsp;&nbsp;<span class="dropbox_date">'.$row['creation_date'].'</span>';
-		if ($row['update_date'] <> $row['creation_date'])
-		{
+		if ($row['update_date'] <> $row['creation_date']) {
 			echo ', '.get_lang('UpdateDate').': '.date_to_str_ago($row['update_date']).'&nbsp;&nbsp;<span class="dropbox_date">'.$row['update_date'].'</span>';
 		}
 		echo ')</span>';

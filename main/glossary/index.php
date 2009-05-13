@@ -33,7 +33,7 @@ event_access_tool(TOOL_GLOSSARY);
 
 // displaying the header
 
-if ( isset($_GET['action']) && ($_GET['action'] == 'addglossary' || $_GET['action'] == 'edit_glossary')) {
+if (isset($_GET['action']) && ($_GET['action'] == 'addglossary' || $_GET['action'] == 'edit_glossary')) {
 $tool=get_lang('GlossaryManagement');
 $interbreadcrumb[] = array ("url"=>"index.php", "name"=> api_ucfirst(get_lang(TOOL_GLOSSARY)));
 }
@@ -53,59 +53,46 @@ $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Glossary';
 
 
-if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('list','table')))
-{
+if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('list','table'))) {
 	$_SESSION['glossary_view'] = $_GET['view']; 
 }
 
-if (api_is_allowed_to_edit())
-{
+if (api_is_allowed_to_edit()) {
 	// Adding a glossary
-	if (isset($_GET['action']) && $_GET['action'] == 'addglossary') 
-	{
+	if (isset($_GET['action']) && $_GET['action'] == 'addglossary') {
 		// initiate the object
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 		// settting the form elements		
 		$form->addElement('header', '', get_lang('TermAddNew'));
 		$form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'95'));
-		$form->applyFilter('glossary_title', 'html_filter');
+		//$form->applyFilter('glossary_title', 'html_filter');
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="save"');	
-		
 		// setting the rules
 		$form->addRule('glossary_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
-		
 		// The validation or display
-		if ( $form->validate() ) 
-		{
+		if ($form->validate()) {
 			$check = Security::check_token('post');	
-			if ($check) 
-			{
+			if ($check) {
 		   		$values = $form->exportValues();
 		   		save_glossary($values);		   		
 			}
 			Security::clear_token();
 			display_glossary();
-		} 
-		else 
-		{
+		} else {
 			$token = Security::get_token();
 			$form->addElement('hidden','sec_token');
 			$form->setConstants(array('sec_token' => $token));		
 			$form->display();
 		}				
-	}
-	
-	// Editing a glossary
-	else if (isset($_GET['action']) && $_GET['action'] == 'edit_glossary' && is_numeric($_GET['glossary_id'])) 
-	{
+	}	else if (isset($_GET['action']) && $_GET['action'] == 'edit_glossary' && is_numeric($_GET['glossary_id']))  { // Editing a glossary
 		// initiate the object
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&glossary_id='.Security::remove_XSS($_GET['glossary_id']));
 		// settting the form elements		
 		$form->addElement('header', '', get_lang('TermEdit'));
 		$form->addElement('hidden', 'glossary_id');
 		$form->addElement('text', 'glossary_title', get_lang('TermName'),array('size'=>'100'));
-		$form->applyFilter('glossary_title', 'html_filter');
+		//$form->applyFilter('glossary_title', 'html_filter');
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermUpdateButton'), 'class="save"');	
 		
@@ -117,42 +104,27 @@ if (api_is_allowed_to_edit())
 		$form->addRule('glossary_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
 		
 		// The validation or display
-		if ( $form->validate() ) 
-		{
+		if ($form->validate()) {
 			$check = Security::check_token('post');	
-			if ($check) 
-			{
+			if ($check) {
 		   		$values = $form->exportValues();
 		   		update_glossary($values);		   		
 			}
 			Security::clear_token();
 			display_glossary();
-		} 
-		else 
-		{
+		} else {
 			$token = Security::get_token();
 			$form->addElement('hidden','sec_token');
 			$form->setConstants(array('sec_token' => $token));		
 			$form->display();
 		}				
-	}
-
-	// deleting a glossary
-	else if (isset($_GET['action']) && $_GET['action'] == 'delete_glossary' && is_numeric($_GET['glossary_id'])) 
-	{
+	} else if (isset($_GET['action']) && $_GET['action'] == 'delete_glossary' && is_numeric($_GET['glossary_id'])) 	{// deleting a glossary
 		delete_glossary(Security::remove_XSS($_GET['glossary_id']));
 		display_glossary();
-	}
-	
-	// moving a glossary term up
-	else if (isset($_GET['action']) && $_GET['action'] == 'moveup' && is_numeric($_GET['glossary_id'])) 
-	{
+	} else if (isset($_GET['action']) && $_GET['action'] == 'moveup' && is_numeric($_GET['glossary_id'])) {	// moving a glossary term up
 		move_glossary('up',$_GET['glossary_id']);
 		display_glossary();
-	}
-	// moving a glossary term up
-	else if (isset($_GET['action']) && $_GET['action'] == 'movedown' && is_numeric($_GET['glossary_id'])) 
-	{
+	} else if (isset($_GET['action']) && $_GET['action'] == 'movedown' && is_numeric($_GET['glossary_id'])) {// moving a glossary term up
 		move_glossary('down',$_GET['glossary_id']);
 		display_glossary();
 	} else {
@@ -188,13 +160,11 @@ function save_glossary($values)
 	{
 		// display the feedback message
 		Display::display_error_message('GlossaryTermAlreadyExistsYouShouldEditIt');
-	}
-	else 
-	{
+	} else {
 		$sql = "INSERT INTO $t_glossary (name, description,display_order) 
 				VALUES(
-					'".Database::escape_string($values['glossary_title'])."', 
-					'".Database::escape_string($values['glossary_comment'])."',
+					'".Database::escape_string(Security::remove_XSS($values['glossary_title']))."', 
+					'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGER))."',
 					'".(int)($max_glossary_item + 1)."')";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$id = Database::get_last_insert_id();
@@ -232,8 +202,8 @@ function update_glossary($values)
 	else 
 	{	
 		$sql = "UPDATE $t_glossary SET 
-						name 		= '".Database::escape_string($values['glossary_title'])."', 
-						description	= '".Database::escape_string($values['glossary_comment'])."'
+						name 		= '".Database::escape_string(Security::remove_XSS($values['glossary_title']))."', 
+						description	= '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGER))."'
 				WHERE glossary_id = ".Database::escape_string($values['glossary_id']);
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		//update glossary into item_property

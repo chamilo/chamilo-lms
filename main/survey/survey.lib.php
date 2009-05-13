@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 20506 2009-05-11 22:10:18Z aportugal $
+* 	@version $Id: survey.lib.php 20610 2009-05-13 21:53:48Z cvargas1 $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -239,26 +239,24 @@ class survey_manager
 					}
 				}
 			}
-			
-			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date, anonymous".$additional['columns'].", session_id) VALUES (
-						'".Database::escape_string($values['survey_code'])."',
-						'".Database::escape_string($values['survey_title'])."',
-						'".Database::escape_string($values['survey_subtitle'])."',
-						'".Database::escape_string($_user['user_id'])."',
-						'".Database::escape_string($values['survey_language'])."',
-						'".Database::escape_string($values['start_date'])."',
-						'".Database::escape_string($values['end_date'])."',
-						'".Database::escape_string($shared_survey_id)."',
-						'".Database::escape_string('template')."',
-						'".Database::escape_string($values['survey_introduction'])."',
-						'".Database::escape_string($values['survey_thanks'])."',
-						'".date('Y-m-d H:i:s')."',
-						'".Database::escape_string($values['anonymous'])."'".$additional['values'].",
-						".intval($_SESSION['id_session'])."
-						)";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$survey_id = Database::insert_id();
-			
+				$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date, anonymous".$additional['columns'].", session_id) VALUES (
+							'".Database::escape_string(Security::remove_XSS($values['survey_code']))."',
+							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_title'])),COURSEMANAGER))."',
+							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_subtitle'])),COURSEMANAGER))."',
+							'".Database::escape_string($_user['user_id'])."',
+							'".Database::escape_string($values['survey_language'])."',
+							'".Database::escape_string($values['start_date'])."',
+							'".Database::escape_string($values['end_date'])."',
+							'".Database::escape_string($shared_survey_id)."',
+							'".Database::escape_string('template')."',
+							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_introduction'])),COURSEMANAGER))."',
+							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_thanks'])),COURSEMANAGER))."',
+							'".date('Y-m-d H:i:s')."',
+							'".Database::escape_string($values['anonymous'])."'".$additional['values'].",
+							".intval($_SESSION['id_session'])."
+							)";
+				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$survey_id = Database::insert_id();
 			if($values['survey_type']==1 && !empty($values['parent_id'])){
 				survey_manager::copy_survey($values['parent_id'],$survey_id);
 			}

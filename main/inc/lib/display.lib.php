@@ -367,13 +367,9 @@ class Display {
 	public function display_normal_message($message,$filter=true)
 	{
 		global $charset;
-		if($filter)
-		{
+		if($filter) {
 			//filter message
 			$message = api_htmlentities($message,ENT_QUOTES,$charset);
-
-			// A possible non-filtered alternative, see FS#4070
-			//$message = api_xml_http_response_encode($message);
 		}
 		if (!headers_sent())
 		{
@@ -407,9 +403,6 @@ class Display {
 		if($filter){
 			//filter message
 			$message = api_htmlentities($message,ENT_QUOTES,$charset);
-
-			// A possible non-filtered alternative, see FS#4070
-			//$message = api_xml_http_response_encode($message);
 		}
 		if (!headers_sent())
 		{
@@ -442,9 +435,6 @@ class Display {
 		if($filter){
 			//filter message
 			$message = api_htmlentities($message,ENT_QUOTES,$charset);
-
-			// A possible non-filtered alternative, see FS#4070
-			//$message = api_xml_http_response_encode($message);
 		}
 		if (!headers_sent())
 		{
@@ -480,9 +470,6 @@ class Display {
 		if($filter){
 			//filter message
 			$message = api_htmlentities($message,ENT_QUOTES,$charset);
-
-			// A possible non-filtered alternative, see FS#4070
-			//$message = api_xml_http_response_encode($message);
 		}
 
 		if (!headers_sent())

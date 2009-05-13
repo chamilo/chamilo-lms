@@ -371,6 +371,9 @@ class Display {
 		{
 			//filter message
 			$message = api_htmlentities($message,ENT_QUOTES,$charset);
+
+			// A possible non-filtered alternative, see FS#4070
+			//$message = api_xml_http_response_encode($message);
 		}
 		if (!headers_sent())
 		{
@@ -383,7 +386,9 @@ class Display {
 		}
 		echo '<div class="normal-message">';
 		//Display :: display_icon('message_normal.gif', get_lang('InfoMessage'), array ('style' => 'float:left; margin-right:10px;'));
+		/*
 		get_lang('InfoMessage', array ('style' => 'float:left; margin-right:10px;'));
+		*/
 		echo $message.'</div>';
 	}
 
@@ -402,6 +407,9 @@ class Display {
 		if($filter){
 			//filter message
 			$message = api_htmlentities($message,ENT_QUOTES,$charset);
+
+			// A possible non-filtered alternative, see FS#4070
+			//$message = api_xml_http_response_encode($message);
 		}
 		if (!headers_sent())
 		{
@@ -414,7 +422,9 @@ class Display {
 		}
 		echo '<div class="warning-message">';
 		//Display :: display_icon('message_warning.png', get_lang('WarningMessage'), array ('style' => 'float:left; margin-right:10px;'));
+		/*
 		get_lang('WarningMessage', array ('style' => 'float:left; margin-right:10px;'));
+		*/
 		echo $message.'</div>';
 	}
 
@@ -432,6 +442,9 @@ class Display {
 		if($filter){
 			//filter message
 			$message = api_htmlentities($message,ENT_QUOTES,$charset);
+
+			// A possible non-filtered alternative, see FS#4070
+			//$message = api_xml_http_response_encode($message);
 		}
 		if (!headers_sent())
 		{
@@ -444,7 +457,9 @@ class Display {
 		}
 		echo '<div class="confirmation-message">';
 		//Display :: display_icon('message_confirmation.gif', get_lang('ConfirmationMessage'), array ('style' => 'float:left; margin-right:10px;margin-left:5px;'));
+		/*
 		get_lang('ConfirmationMessage', array ('style' => 'float:left; margin-right:10px;margin-left:5px;'));
+		*/
 		echo $message.'</div>';
 	}
 
@@ -465,6 +480,9 @@ class Display {
 		if($filter){
 			//filter message
 			$message = api_htmlentities($message,ENT_QUOTES,$charset);
+
+			// A possible non-filtered alternative, see FS#4070
+			//$message = api_xml_http_response_encode($message);
 		}
 
 		if (!headers_sent())
@@ -478,7 +496,9 @@ class Display {
 		}
 		echo '<div class="error-message">';
 		//Display :: display_icon('message_error.png', get_lang('ErrorMessage'), array ('style' => 'float:left; margin-right:10px;'));
+		/*
 		get_lang('ErrorMessage', array ('style' => 'float:left; margin-right:10px;'));
+		*/
 		echo $message.'</div>';
 	}
 	/**

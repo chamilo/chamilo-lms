@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 20583 2009-05-13 11:41:32Z pcool $
+// $Id: add_course.php 20588 2009-05-13 12:34:18Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -41,10 +41,7 @@ if (api_get_setting('allow_users_to_create_courses')=='false' && !api_is_platfor
 	api_not_allowed(true);
 }
 Display :: display_header($tool_name);
-// Displaying the tool title
-echo '<div class="actions-title">';
-echo $tool_name;
-echo '</div>';
+
 // Check access rights
 if (!api_is_allowed_to_create_course()) {
 	Display :: display_error_message(get_lang("NotAllowed"));
@@ -63,6 +60,8 @@ $maxlength = 40 - $dbnamelength;
 // Build the form
 $categories = array();
 $form = new FormValidator('add_course');
+// form title
+$form->addElement('header', '', $tool_name);
 //title
 $form->add_textfield('title',get_lang('CourseName'),true,array('size'=>'60'));
 $form->applyFilter('title', 'html_filter');

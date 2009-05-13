@@ -220,7 +220,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			} else {
 				if($is_new) {
 					echo '<div class="confirmation-message">';
-							echo get_lang("LearnPathAdded");
+							echo api_convert_encoding(get_lang("LearnPathAdded"), ENT_QUOTES, $charset);
 					echo '</div>';
 				}				
 				if($is_new) {
@@ -228,8 +228,8 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				} else {
 					// Display::display_normal_message(get_lang('LPCreatedAddChapterStep'), false);
 					echo '<div class="normal-message">';
-							echo get_lang("LearnPathAdded");
-					echo '</div>';					
+							echo api_convert_encoding(get_lang("LearnPathAdded"), ENT_QUOTES, $charset);
+					echo '</div>';
 				}								
 			}		
 		echo '</td>';			

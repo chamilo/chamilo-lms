@@ -63,7 +63,7 @@ if (count($list_path_friends)!=0) {
 		while ($j<$number_of_images) {
 			if ($list_friends_file[$j]<>"") {
 				$user_info=api_get_user_info($list_friends_id[$j]);
-				$user_name=api_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset) ;
+				$user_name=api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']) ;
 				$friends_profile = UserFriend::get_picture_user($list_friends_id[$j], $list_friends_file[$j], 92);
 				$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$list_friends_id[$j].'  >
 				<span><center><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$list_friends_id[$j].'" title="'.$user_name.'" onclick=load_thick(\'qualify_contact.inc.php?path_user="'.urlencode($list_friends_dir[$j].$list_friends_file[$j]).'&amp;id_user="'.$list_friends_id[$j].'"\',"") /></center></span>

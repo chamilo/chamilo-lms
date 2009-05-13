@@ -12,7 +12,7 @@ $_SESSION['this_section']=$this_section;
 $list_path_friends=array();
 $list_groups=array();
 $request=api_is_xml_http_request();
-$language_variable=($request===true) ? api_convert_encoding(get_lang('ContactsGroups'),'UTF-8',$charset) : get_lang('ContactsGroups');
+$language_variable=api_xml_http_response_encode(get_lang('ContactsGroups'));
 //api_display_tool_title($language_variable);
 $user_id=api_get_user_id();
 $list_groups=UserFriend::show_list_type_friends();
@@ -24,10 +24,10 @@ for ($p=0;$p<count($list_groups);$p++) {
 
           <tr>
 		<th align="left" id="<?php echo 'td_'.$list_groups[$p]['id']; ?>" style="cursor:pointer" valign="top" onclick="toogle_function(this)">
-			<?php echo api_convert_encoding(get_lang($list_groups[$p]['title']),'UTF-8',$charset); ?>
+			<?php echo api_xml_http_response_encode(get_lang($list_groups[$p]['title'])); ?>
 		</th>
 	    <th width="30" align="center">
-    		<?php Display::display_icon('visible.gif',get_lang('ChangeVisibility'), array('id'=>'btn_'.$list_groups[$p]['id'])); ?>
+    		<?php Display::display_icon('visible.gif',api_xml_http_response_encode(get_lang('ChangeVisibility')), array('id'=>'btn_'.$list_groups[$p]['id'])); ?>
     		<input type="hidden" class="hidden" id="id_hd_dame" name="hd_dame" value="0" />
 	    </th>
         </tr>
@@ -58,7 +58,7 @@ for ($p=0;$p<count($list_groups);$p++) {
 		while ($j<$number_of_images) {
 			if ($list_friends_file[$j]<>"") {
 				$user_info=api_get_user_info($list_friends_id[$j]);				
-				$user_name=api_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset) ;
+				$user_name=api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']) ;
 				if($list_friends_file[$j]==='unknown.jpg') {
 					$big='';
 				} else {
@@ -67,8 +67,8 @@ for ($p=0;$p<count($list_groups);$p++) {
 				$friends_profile = UserFriend::get_picture_user($list_friends_id[$j], $list_friends_file[$j], 92);
 				$friend_html.='<div id="div_'.$list_friends_id[$j].'" class="image_friend_network">' .
 							  '<a href="javascript:void(0)" onclick=load_thick("'.$list_friends_dir[$j].$big.$list_friends_file[$j].'","") title="" class="thickbox">' .
-							  '<span><center><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$list_friends_id[$j].'" title="'.$user_name.'" /></center></span>'.
-							  '<center class="friend">'.$user_name.'</center>'.
+							  '<span><center><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$list_friends_id[$j].'" title="'.api_xml_http_response_encode($user_name).'" /></center></span>'.
+							  '<center class="friend">'.api_xml_http_response_encode($user_name).'</center>'.
 							  '</a></div>';
 			}
 			$j++;
@@ -77,7 +77,7 @@ for ($p=0;$p<count($list_groups);$p++) {
 	echo $friend_html; 
 		}  
 		else {
-			echo api_convert_encoding(get_lang('YouDontHaveContactsInThisGroup'),'UTF-8',$charset);
+			echo api_xml_http_response_encode(get_lang('YouDontHaveContactsInThisGroup'));
 		}
 		?>
 		</div>

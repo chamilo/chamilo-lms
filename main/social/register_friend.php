@@ -30,21 +30,21 @@ if (isset($my_current_friend)) {
 	UserFriend::register_friend ($my_current_friend,$the_current_user_id,$relation_type);	
 	UserFriend::invitation_accepted ($my_current_friend,$the_current_user_id);
 	if (isset($is_my_friend)) {
-		echo get_lang('AddedContactToList');
+		echo api_xml_http_response_encode(get_lang('AddedContactToList'));
 	} else {
-		Display::display_normal_message(get_lang('AddedContactToList'));
+		Display::display_normal_message(api_xml_http_response_encode(get_lang('AddedContactToList')));
 	}
 
 }
 if (isset($my_denied_current_friend)) {
 	UserFriend::invitation_denied($my_denied_current_friend,$the_current_user_id);
-	Display::display_confirmation_message(get_lang('InvitationDenied'));	
+	Display::display_confirmation_message(api_xml_http_response_encode(get_lang('InvitationDenied')));	
 }
 if (isset($my_delete_friend)) {
 	UserFriend::removed_friend($my_delete_friend);
 }
 if(isset($friend_id_qualify) && isset($type_friend_qualify)) {
 	UserFriend::qualify_friend($friend_id_qualify,$type_friend_qualify);
-	echo get_lang('AttachContactsToGroupSuccesfuly');
+	echo api_xml_http_response_encode(get_lang('AttachContactsToGroupSuccesfuly'));
 }
 ?>

@@ -17,7 +17,7 @@ if (api_get_setting('allow_social_tool')=='true') {
 }  
 $res=api_sql_query($sql,__FILE__,__LINE__);
 while ($row=Database::fetch_array($res,'ASSOC')) {
-	$html_form.='<option value="'.$row['id'].'">'.$row['name'].'</option>';	
+	$html_form.='<option value="'.$row['id'].'">'.api_xml_http_response_encode($row['name']).'</option>';	
 }
 $html_form.='</select>';
 echo $html_form;

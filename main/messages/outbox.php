@@ -107,13 +107,13 @@ if( trim($info_delete_outbox[0])=='delete' ) {
 			<br><a href="../social/index.php?#remote-tab-3">'.
 			get_lang('BackToOutbox').
 			'</a>';
-		Display::display_normal_message($message_box,false);
+		Display::display_normal_message(api_xml_http_response_encode($message_box),false);
 	    exit;	
 }
 /**************************************************************/
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 echo '<div id="div_content_messages_sent">&nbsp;&nbsp;';
-//api_display_tool_title(api_convert_encoding(get_lang('Outbox'),'UTF-8',$charset));
+//api_display_tool_title(api_xml_http_response_encode(get_lang('Outbox')));
 echo '</div>';
 $user_sender_id=api_get_user_id();
 if ($_REQUEST['action']=='delete') {

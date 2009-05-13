@@ -108,13 +108,13 @@ if (isset($_POST['load_ajax'])) {
 } else {
 	// normal behavior
 $request=api_is_xml_http_request();
-$language_variable=($request===true) ? api_convert_encoding(get_lang('PersonalData'),'UTF-8',$charset) : get_lang('PersonalData');
+$language_variable=api_xml_http_response_encode(get_lang('PersonalData'));
 //api_display_tool_title($language_variable);
 
 	echo '<div class="actions">';
-	echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif',api_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset)).'&nbsp;'.api_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>&nbsp;&nbsp;';
+	echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif',api_xml_http_response_encode(get_lang('EditInformation'))).'&nbsp;'.api_xml_http_response_encode(get_lang('EditInformation')).'</a>&nbsp;&nbsp;';
 	if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
-		echo '<a href="../social/profile.php?shared=true">'.Display::return_icon('shared_profile.png',api_convert_encoding(get_lang('ViewSharedProfile'),'UTF-8',$charset)).'&nbsp;'.api_convert_encoding(get_lang('ViewSharedProfile'),'UTF-8',$charset).'</a>';		
+		echo '<a href="../social/profile.php?shared=true">'.Display::return_icon('shared_profile.png',api_xml_http_response_encode(get_lang('ViewSharedProfile'))).'&nbsp;'.api_xml_http_response_encode(get_lang('ViewSharedProfile')).'</a>';		
 	}
 	echo '</div>';	
 	echo '<div id="profile_container" style="width:550px;display:block;">';
@@ -122,18 +122,18 @@ $language_variable=($request===true) ? api_convert_encoding(get_lang('PersonalDa
 			echo '<img src='.$img_array['dir'].$img_array['file'].' />';
 		echo '</div>';	
 		echo '<div class="social-profile-info">';			
-			echo '<dt>'.api_convert_encoding(get_lang('UserName'),'UTF-8',$charset).'</dt>
-			<dd>'. api_convert_encoding($user_info['username'],'UTF-8',$charset).'	</dd>';
-			echo '<dt>'.api_convert_encoding(get_lang('FirstName'),'UTF-8',$charset).'</dt>
-			<dd>'. api_convert_encoding($user_info['firstname'],'UTF-8',$charset).'</dd>';
-			echo '<dt>'.api_convert_encoding(get_lang('LastName'),'UTF-8',$charset).'</dt>
-			<dd>'. api_convert_encoding($user_info['lastname'],'UTF-8',$charset).'</dd>';
-			echo '<dt>'.api_convert_encoding(get_lang('OfficialCode'),'UTF-8',$charset).'</dt>	
-			<dd>'. api_convert_encoding($user_info['official_code'],'UTF-8',$charset).'</dd>';
-			echo '<dt>'.api_convert_encoding(get_lang('Email'),'UTF-8',$charset).'</dt>
-			<dd>'. api_convert_encoding($user_info['email'],'UTF-8',$charset).'</dd>';
-			echo '<dt>'.api_convert_encoding(get_lang('Phone'),'UTF-8',$charset).'</dt>
-			<dd>'. api_convert_encoding($user_info['phone'],'UTF-8',$charset).'</dd>';			
+			echo '<dt>'.api_xml_http_response_encode(get_lang('UserName')).'</dt>
+			<dd>'. api_xml_http_response_encode($user_info['username']).'	</dd>';
+			echo '<dt>'.api_xml_http_response_encode(get_lang('FirstName')).'</dt>
+			<dd>'. api_xml_http_response_encode($user_info['firstname']).'</dd>';
+			echo '<dt>'.api_xml_http_response_encode(get_lang('LastName')).'</dt>
+			<dd>'. api_xml_http_response_encode($user_info['lastname']).'</dd>';
+			echo '<dt>'.api_xml_http_response_encode(get_lang('OfficialCode')).'</dt>	
+			<dd>'. api_xml_http_response_encode($user_info['official_code']).'</dd>';
+			echo '<dt>'.api_xml_http_response_encode(get_lang('Email')).'</dt>
+			<dd>'. api_xml_http_response_encode($user_info['email']).'</dd>';
+			echo '<dt>'.api_xml_http_response_encode(get_lang('Phone')).'</dt>
+			<dd>'. api_xml_http_response_encode($user_info['phone']).'</dd>';			
 		echo '</div>';
 	echo '</div>';	
 }

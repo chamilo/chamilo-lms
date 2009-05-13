@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 20460 2009-05-11 05:41:09Z ivantcholakov $
+<?php // $Id: new_message.php 20587 2009-05-13 12:26:56Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -51,7 +51,7 @@ require_once'../messages/message.class.php';
 require_once(api_get_path(LIBRARY_PATH).'/text.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php');
 $request=api_is_xml_http_request();
-$nameTools=($request===true) ? api_convert_encoding(get_lang('Messages'),'UTF-8',$charset) : get_lang('Messages');
+$nameTools = api_xml_http_response_encode(get_lang('Messages'));
 /*
 -----------------------------------------------------------
 	Constants and variables
@@ -100,7 +100,7 @@ $(document).ready(function (){
 });
 	</script>';	
 
-$nameTools=($request===true) ? api_convert_encoding(get_lang('ComposeMessage'),'UTF-8',$charset) : get_lang('ComposeMessage');
+$nameTools = api_xml_http_response_encode(get_lang('ComposeMessage'));
 $fck_attribute['Height'] = "150";
 $fck_attribute['Width'] = "95%";
 $fck_attribute['ToolbarSet'] = "Profil";
@@ -128,11 +128,11 @@ function show_compose_reply_to_message ($message_id, $receiver_id) {
 	$row = Database::fetch_array($result);
 
 	if (!isset($row[1])) {
-		echo get_lang('InvalidMessageId');
+		echo api_xml_http_response_encode(get_lang('InvalidMessageId'));
 		die();
 	}
-	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($row[1]).'</strong>';
-	$default['title'] =api_convert_encoding(get_lang('EnterTitle'),'UTF-8',$charset);
+	echo api_xml_http_response_encode(get_lang('To').':&nbsp;<strong>'.	GetFullUserName($row[1]).'</strong>');
+	$default['title'] = api_xml_http_response_encode(get_lang('EnterTitle'));
 	$default['user_list'] = $row[1];
 	manage_form($default);
 }
@@ -140,7 +140,7 @@ function show_compose_reply_to_message ($message_id, $receiver_id) {
 function show_compose_to_user ($receiver_id) {
 	global $charset;
 	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($receiver_id).'</strong>';
-	$default['title'] = api_convert_encoding(get_lang('EnterTitle'),'UTF-8',$charset);
+	$default['title'] = api_xml_http_response_encode(get_lang('EnterTitle'));
 	$default['user_list'] = $receiver_id;
 	manage_form($default);
 }
@@ -155,25 +155,26 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form = new FormValidator('compose_message');
 	}
 	if (isset($select_from_user_list)) {
-		$form->add_textfield('id_text_name',get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()'));
-		$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
+		$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()'));
+		$form->addRule('id_text_name', api_xml_http_response_encode(get_lang('ThisFieldIsRequired')), 'required');
 		$form->addElement('html','<div id="id_div_search" class="message-search">&nbsp;</div>');
 		$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 	} else {
 		if ($default['user_list']==0) {
-			$form->add_textfield('id_text_name',get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()'));
-			$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
+			$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()'));
+			$form->addRule('id_text_name', api_xml_http_response_encode(get_lang('ThisFieldIsRequired')), 'required');
 			$form->addElement('html','<div id="id_div_search" class="message-search">&nbsp;</div>');
 		}
 		$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 	}
-	$form->add_textfield('title', api_convert_encoding(get_lang('Title'),'UTF-8',$charset));
+	$form->add_textfield('title', api_xml_http_response_encode(get_lang('Title')));
 	$form->add_html_editor('content', '',false,false);
 	if (isset($_GET['re_id'])) {
 		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');
 	}
-	$form->addElement('submit', 'compose',api_convert_encoding(get_lang('Send'),'UTF-8',$charset));
+	$form->addElement('submit', 'compose', api_xml_http_response_encode(get_lang('Send')));
+	$form->setRequiredNote(api_xml_http_response_encode('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>'));
 	$form->setDefaults($default);
 	if ($form->validate()) {
 		$values = $form->exportValues();
@@ -220,7 +221,7 @@ if ($request===false) {
 
 //api_display_tool_title($nameTools);
 echo '<div class=actions>';
-echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',api_convert_encoding(get_lang('BackToInbox'),'UTF-8',$charset)).api_convert_encoding(get_lang('BackToInbox'),'UTF-8',$charset).'</a>';
+echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',api_xml_http_response_encode(get_lang('BackToInbox'))).api_xml_http_response_encode(get_lang('BackToInbox')).'</a>';
 echo '</div>';
 if (!isset($_POST['compose'])) {
 	if(isset($_GET['re_id'])) {
@@ -238,18 +239,18 @@ if (!isset($_POST['compose'])) {
 		
 	}
 	if (isset($_GET['re_id'])) {
-		$default['title'] = api_convert_encoding($_POST['title'],'UTF-8',$charset);
-		$default['content'] = api_convert_encoding($_POST['content'],'UTF-8',$charset);
+		$default['title'] = api_xml_http_response_encode($_POST['title']);
+		$default['content'] = api_xml_http_response_encode($_POST['content']);
 		//$default['user_list'] = $_POST['user_list'];
 		manage_form($default);	
 	} else {
 		if ($restrict) {
-			$default['title'] = api_convert_encoding($_POST['title'],'UTF-8',$charset);
-			$default['id_text_name'] = api_convert_encoding($_POST['id_text_name'],'UTF-8',$charset); 
+			$default['title'] = api_xml_http_response_encode($_POST['title']);
+			$default['id_text_name'] = api_xml_http_response_encode($_POST['id_text_name']); 
 			$default['user_list'] = $_POST['user_list'];
 			manage_form($default);
 		} else {
-			Display::display_error_message(get_lang('ErrorSendingMessage'));		
+			Display::display_error_message(api_xml_http_response_encode(get_lang('ErrorSendingMessage')));		
 		}	
 	}
 }

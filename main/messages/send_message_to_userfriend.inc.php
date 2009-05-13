@@ -33,7 +33,7 @@ if ( isset($_REQUEST['user_friend']) ) {
 			<img class="message-image-info" src="<?php echo $info_path_friend['dir'].$info_path_friend['file']; ?>"/>
 			<?php 
 			if ($panel != 1) {
-				echo '<br /><center>'.api_convert_encoding($info_user_friend['firstName'].' '.$info_user_friend['lastName'],'UTF-8',$charset).'</center>'; 					
+				echo '<br /><center>'.api_xml_http_response_encode($info_user_friend['firstName'].' '.$info_user_friend['lastName']).'</center>';
 			}
 			?>
 		</div>
@@ -45,19 +45,19 @@ if ( isset($_REQUEST['user_friend']) ) {
 			if ($panel == 1) {
                 //normal message
 		   		 $user_info=api_get_user_info($userfriend_id);
-		  		 echo api_convert_encoding(get_lang('To'),'UTF-8',$charset); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_convert_encoding($user_info['firstName'].' '.$user_info['lastName'],'UTF-8',$charset); ?>
+		  		 echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']); ?>
 		  		 <br/>
-		 		 <br/><?php echo api_convert_encoding(get_lang('Subject'),'UTF-8',$charset); ?> :<br/><input id="txt_subject_id" type="text" style="width:300px;"><br/>
-		   		 <br/><?php echo api_convert_encoding(get_lang('Message'),'UTF-8',$charset); ?> :<br/><textarea id="txt_area_invite" rows="4" cols="41"></textarea>
+		 		 <br/><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br/><input id="txt_subject_id" type="text" style="width:300px;"><br/>
+		   		 <br/><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br/><textarea id="txt_area_invite" rows="4" cols="41"></textarea>
 		   		 <br /><br />		    	  
-		   		 <input type="button" value="<?php echo get_lang('SendMessage'); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')" />
+		   		 <input type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')" />
 <?php
 			} else {
                 // friend invitation message
-				echo api_convert_encoding(get_lang('AddPersonalMessage'),'UTF-8',$charset);  ?> :<br/><br/>
+				echo api_xml_http_response_encode(get_lang('AddPersonalMessage'));  ?> :<br/><br/>
 				<textarea id="txt_area_invite" rows="5" cols="41"></textarea><br /><br />
 						    
-		    	<input type="button" value="<?php echo api_convert_encoding(get_lang('SocialAddToFriends'),'UTF-8',$charset); ?>" onclick="action_database_panel('4','<?php echo $userfriend_id;?>')" />
+		    	<input type="button" value="<?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')); ?>" onclick="action_database_panel('4','<?php echo $userfriend_id;?>')" />
 <?php					
 				}
 			}            

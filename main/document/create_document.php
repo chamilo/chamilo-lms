@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 20420 2009-05-08 20:11:57Z herodoto $
+<?php // $Id: create_document.php 20606 2009-05-13 20:50:17Z cvargas1 $
 
 /*
 ==============================================================================
@@ -197,13 +197,10 @@ $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '600';
 
 $fck_attribute['Config']['FullPage'] = true;
-if(!api_is_allowed_to_edit())
-{
+if(!api_is_allowed_to_edit()) {
 	$fck_attribute['Config']['UserStatus'] = 'student';
 	$fck_attribute['ToolbarSet'] = 'Documents_Student';
-}
-else
-{
+} else {
 	$fck_attribute['ToolbarSet'] = 'Documents';
 }
 
@@ -261,26 +258,21 @@ for($i=0;$i<($count_dir);$i++)
 }
 
 // we do this in order to avoid the condition in html_editor.php ==> if ($this -> fck_editor->Config['CreateDocumentWebDir']=='' || $this -> fck_editor->Config['CreateDocumentDir']== '')
-if ($relative_url== '')
-{
+if ($relative_url== '') {
 	$relative_url = '/';
 }
 $fck_attribute['Config']['InDocument'] = true;
 $fck_attribute['Config']['CreateDocumentDir'] = $relative_url;
-if (empty($group_properties['directory']))
-{
+if (empty($group_properties['directory'])) {
 	$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
-}
-else
-{
+} else {
 	$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document'.$group_properties['directory'].'/';
 }
 $fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir;
 
 $filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document'.$dir;
 
-if (!is_dir($filepath))
-{
+if (!is_dir($filepath)) {
 	$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
 	$dir = '/';
 }
@@ -291,16 +283,14 @@ if (!is_dir($filepath))
 /**************************************************/
 $to_group_id = 0;
 
-if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '')
-{
+if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
 	$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
 	$noPHP_SELF = true;
 	$to_group_id = $_SESSION['_gid'];
 	$group = GroupManager :: get_group_properties($to_group_id);
 	$path = explode('/', $dir);
-	if ('/'.$path[1] != $group['directory'])
-	{
+	if ('/'.$path[1] != $group['directory']) {
 		api_not_allowed(true);
 	}	
 }
@@ -310,8 +300,7 @@ if (!$is_allowed_in_course)
 	api_not_allowed(true);
 
 $is_allowedToEdit = api_is_allowed_to_edit();
-if (!($is_allowedToEdit || $_SESSION['group_member_with_upload_rights']))
-{
+if (!($is_allowedToEdit || $_SESSION['group_member_with_upload_rights'])) {
 	api_not_allowed(true);
 }
 /*
@@ -322,8 +311,7 @@ if (!($is_allowedToEdit || $_SESSION['group_member_with_upload_rights']))
 
 event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
-if (isset ($group))
-{
+if (isset ($group)) {
 	$display_dir = explode('/', $dir);
 	unset ($display_dir[0]);
 	unset ($display_dir[1]);
@@ -348,8 +336,7 @@ $form->addElement('hidden','title_edited','false','id="title_edited"');
 /**
  * Check if a document width the choosen filename allready exists
  */
-function document_exists($filename)
-{
+function document_exists($filename) {
 	global $filepath;
 	$filename = replace_dangerous_char($filename);
 	return !file_exists($filepath.$filename.'.html');
@@ -367,27 +354,23 @@ $renderer->setElementTemplate($filename_template, 'filename');
 $group = array();
 	
 // If allowed, add element for document title
-if (api_get_setting('use_document_title') == 'true')
-{	
+if (api_get_setting('use_document_title') == 'true') {	
 	//$group[]= $form->add_textfield('title', get_lang('Title'),true,'class="input_titles" id="title"');
 	// replace the 	add_textfield with this	
 	$group[]=$form->createElement('text','title',get_lang('Title'),'class="input_titles" id="title"');
 	//$form->applyFilter('title','trim');		
 	//$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');		
-}
-else
-{		
+} else {		
 	//$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
 	// replace the 	add_textfield with this 
 	$group[]=$form->createElement('text','filename',get_lang('FileName'),'class="input_titles" id="filename"  onblur="check_if_still_empty()"');		
-	$form->applyFilter('filename','trim');	
+	//$form->applyFilter('filename','trim');	
 	//$form->addRule('filename', get_lang('ThisFieldIsRequired'), 'required');				
 	//$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
 }
 
 /* Show read-only box only in groups */
-if(!empty($_SESSION['_gid']))
-{
+if(!empty($_SESSION['_gid'])) {
 	//$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
 	$group[]= $form->createElement('checkbox','readonly','',get_lang('ReadOnly'));
 }
@@ -395,17 +378,14 @@ if(!empty($_SESSION['_gid']))
 $form->addGroup($group, 'filename_group', get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
 $form->addRule('filename_group', get_lang('ThisFieldIsRequired'), 'required');
 
-if (api_get_setting('use_document_title') == 'true')
-{			
+if (api_get_setting('use_document_title') == 'true') {			
 	$form->addGroupRule('filename_group', array(
 	  'title' => array(
 	    array(get_lang('ThisFieldIsRequired'), 'required'),	   
 	    array(get_lang('FileExists'),'callback', 'document_exists')
 	    )
 	));
-}
-else
-{
+} else {
 	$form->addGroupRule('filename_group', array(
 	  'filename' => array(	   	    
 		array(get_lang('ThisFieldIsRequired'), 'required'),
@@ -431,8 +411,7 @@ $form->addElement('html','<div id="frmModel" style="display:block; height:525px;
 */
 
 // If form validates -> save the new document
-if ($form->validate())
-{
+if ($form->validate()) {
 	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
 	
@@ -440,6 +419,7 @@ if ($form->validate())
 
 	$clean_val=$values['filename']; 
 
+	$clean_val=Security::remove_XSS($clean_val);
 	$clean_val=replace_dangerous_char(($clean_val));
 	$clean_val=disable_dangerous_file($clean_val);
 	$clean_val=replace_accents($clean_val);
@@ -447,66 +427,49 @@ if ($form->validate())
 	
 	$values['filename']=$clean_val;
 	
-	if (api_get_setting('use_document_title') != 'true')
-	{
+	if (api_get_setting('use_document_title') != 'true') {
 		$values['title'] = $values['filename'];
-	}
-	else
-	{
+	} else	{
 		$values['filename'] = $values['title'];	
 	}
 	
 	$filename = replace_accents($values['filename']);
 	$texte = $values['content'];
+	$texte=Security::remove_XSS($texte,COURSEMANAGER);
 	$title = $values['filename'];
 	$extension = 'html';
-	if (!strstr($texte, '/css/frames.css'))
-	{
+	if (!strstr($texte, '/css/frames.css')) {
 		$texte = str_replace('</head>', '<link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $texte);
 	}
-	if ($fp = @ fopen($filepath.$filename.'.'.$extension, 'w'))
-	{
-		$texte = text_filter($texte);
-		
+	if ($fp = @ fopen($filepath.$filename.'.'.$extension, 'w')) {
+		$texte = text_filter($texte);		
 		$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'].'/courses/', $texte);
-		
-		
 		// change the path of mp3 to absolute
 		// first regexp deals with ../../../ urls
 		// Disabled by Ivan Tcholakov.
 		//$content = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
 		//second regexp deals with audio/ urls
 		// Disabled by Ivan Tcholakov.
-		//$content = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$content);		 
-		 
+		//$content = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$content);		 		 
 		fputs($fp, $content);
-
 		fclose($fp);
-		
 		$files_perm = api_get_setting('permissions_for_new_files');
 		$files_perm = octdec(!empty($files_perm)?$files_perm:'0770');
 		chmod($filepath.$filename.'.'.$extension,$files_perm);
-
 		$perm = api_get_setting('permissions_for_new_directories');
 		$perm = octdec(!empty($perm)?$perm:'0770');
-		if (!is_dir($filepath.'css'))
-		{
+		if (!is_dir($filepath.'css')) {
 			mkdir($filepath.'css');
 			chmod($filepath.'css', $perm);
 			$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
-
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
 		}
 
-		if (!is_file($filepath.'css/frames.css'))
-		{
+		if (!is_file($filepath.'css/frames.css')) {
 			//make a copy of the current css for the new document			
-			
 			copy(api_get_path(SYS_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css', $filepath.'css/frames.css');
-			
 			$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
-
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
 		}
@@ -515,17 +478,13 @@ if ($form->validate())
 		$save_file_path = $dir.$filename.'.'.$extension;
 
 		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $filename,null,$readonly);
-		if ($document_id)
-		{
+		if ($document_id) {
 			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id);
-
 			//update parent folders
 			item_property_update_on_folder($_course, $_GET['dir'], $_user['user_id']);
-
 			$new_comment = isset ($_POST['comment']) ? trim($_POST['comment']) : '';
 			$new_title = isset ($_POST['title']) ? trim($_POST['title']) : '';
-			if ($new_comment || $new_title)
-			{
+			if ($new_comment || $new_title) {
 				$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 				$ct = '';
 				if ($new_comment)
@@ -537,18 +496,18 @@ if ($form->validate())
 			$dir= substr($dir,0,-1);
 			header('Location: document.php?curdirpath='.urlencode($dir));
 			exit ();
+		} else {
+			Display :: display_header($nameTools, "Doc");
+			Display :: display_error_message(get_lang('Impossible'));
+			Display :: display_footer();		
 		}
-	}
-	else
-	{
+	} else {
 		Display :: display_header($nameTools, "Doc");
 		//api_display_tool_title($nameTools);
 		Display :: display_error_message(get_lang('Impossible'));
 		Display :: display_footer();
 	}
-}
-else
-{
+} else {
 	Display :: display_header($nameTools, "Doc");
 	//api_display_tool_title($nameTools);
 	// actions

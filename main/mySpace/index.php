@@ -938,22 +938,23 @@ function display_tracking_user_overview()
 	display_user_overview_export_options();
 	
 	
-	$t_head .= '	<table  class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+	
+	$t_head .= '	<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
 	$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';			
 	$t_head .=		'<tr>';
-	$t_head .= '		<th width="178px"><div>'.get_lang('Course').'</div></th>';
-	$t_head .= '		<th><div>'.get_lang('AvgTimeSpentInTheCourse').'</div></th>';
-	$t_head .= '		<th><div>'.get_lang('AvgStudentsProgress').'</div></th>';
-	$t_head .= '		<th><div>'.get_lang('AvgCourseScore').'</div></th>';
+	$t_head .= '		<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
+	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'),6,true).'</span></th>';
+	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'),6,true).'</span></th>';
+	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'),6,true).'</span></th>';
 	//$t_head .= '		<th><div style="width:40px">'.get_lang('AvgExercisesScore').'</div></th>';
-	$t_head .= '		<th><div>'.get_lang('AvgMessages').'</div></th>';
-	$t_head .= '		<th><div>'.get_lang('AvgAssignments').'</div></th>';
-	$t_head .= '		<th width="100px"><div>'.get_lang('TotalExercisesScoreObtained').'</div></th>';
+	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgMessages'),6,true).'</span></th>';
+	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgAssignments'),6,true).'</span></th>';
+	$t_head .= '		<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
 	//$t_head .= '		<th><div>'.get_lang('TotalExercisesScorePossible').'</div></th>';
-	$t_head .= '		<th><div>'.get_lang('TotalExercisesAnswered').'</div></th>';
+	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'),6,true).'</span></th>';
 	//$t_head .= '		<th><div>'.get_lang('TotalExercisesScorePercentage').'</div></th>';
 	//$t_head .= '		<th><div style="width:60px">'.get_lang('FirstLogin').'</div></th>';
-	$t_head .= '		<th><div>'.get_lang('LatestLogin').'</div></th>';
+	$t_head .= '		<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
 	$t_head .= '	</tr></table>';
 
 
@@ -1067,7 +1068,7 @@ function course_info_tracking_filter($user_id,$url_params,$row)
 	{
 		$return .= '<tr>';
 		// course code
-		$return .= '	<td width="180px"><div>'.$row[0].'</div></td>';
+		$return .= '	<td width="157px" >'.cut($row[0],20,true).'</td>';
 		// time spent in the course
 		$return .= '	<td><div>'.api_time_to_hms(Tracking :: get_time_spent_on_the_course ($user_id, $row[0])).'</div></td>';
 		// student progress in course
@@ -1082,7 +1083,7 @@ function course_info_tracking_filter($user_id,$url_params,$row)
 		$return .= '	<td><div>'.Tracking :: count_student_assignments ($user_id, $row[0]).'</div></td>';
 		// student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
 		$exercises_results = exercises_results($user_id, $row[0]);
-		$return .= '	<td width="100px"><div>'.$exercises_results['score_obtained'].'/'.$exercises_results['score_possible'].'('.$exercises_results['percentage'].'%)</div></td>';
+		$return .= '	<td width="105px"><div>'.$exercises_results['score_obtained'].'/'.$exercises_results['score_possible'].'('.$exercises_results['percentage'].'%)</div></td>';
 		//$return .= '	<td><div>'.$exercises_results['score_possible'].'</div></td>';
 		$return .= '	<td><div>'.$exercises_results['questions_answered'].'</div></td>';
 		//$return .= '	<td><div>'.$exercises_results['percentage'].'% </div></td>';

@@ -1,28 +1,9 @@
 <?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
-*/
-
-
+/* For licensing terms, see /dokeos_license.txt */
 /**
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: showinframes.php 13988 2007-12-14 05:05:51Z yannoo $
 */
 
 /*
@@ -30,13 +11,13 @@
 	Included libraries
 -----------------------------------------------------------
 */
-include('../inc/global.inc.php');
-include_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 $time=time();
-require_once(api_get_path(SYS_PATH).'main/exercice/hotpotatoes.lib.php');
+require_once api_get_path(SYS_PATH).'main/exercice/hotpotatoes.lib.php';
 
 // init
-$doc_url=urldecode($_GET['file']);
+$doc_url=str_replace(array('../','\\','\\0','..'),array('','','',''),urldecode($_GET['file']));
 $cid = api_get_course_id();
 $documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $documentWebPath= api_get_path(WEB_COURSE_PATH).$_course['path']."/document";
@@ -63,12 +44,12 @@ if ($content=="")
 				"			SaveScoreVariable = 1;\n".
 				"			if (C.ie)\n".
 				"			{\n".
-				"				document.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=$time&test=".$doc_url."&uid=".$_user['user_id']."&cid=".$cid."&score=\"+Score;\n".
+				"				document.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$_user['user_id']."&cid=".$cid."&score=\"+Score;\n".
 				"				//window.alert(Score);\n".
 				"			}\n".
 				"			else\n".
 				"			{\n".
-				"				window.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=$time&test=".$doc_url."&uid=".$_user['user_id']."&cid=".$cid."&score=\"+Score;\n".
+				"				window.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$_user['user_id']."&cid=".$cid."&score=\"+Score;\n".
 				"			}\n".
 				"		}\n".
 				"}\n".
@@ -116,8 +97,8 @@ $doc_url = GetFolderPath($doc_url).urlencode(GetFileName($doc_url));
 if ($origin!='learnpath') {
 	?>
 	<frameset rows="130,*" border="0" frameborder="no">
-		<frame name="top" scrolling="no" noresize target="contents" src="testheaderpage.php?file=<?php echo urlencode($_GET['file']); ?>">
-		<frame name="main" src="<?php echo $documentWebPath.$doc_url.$_user['user_id'].".t.html?time=$time"; ?>">
+		<frame name="top" scrolling="no" noresize target="contents" src="testheaderpage.php?file=<?php echo Security::remove_XSS(str_replace(array('../','\\','\\0','..'),array('','','',''),urldecode($_GET['file']))); ?>">
+		<frame name="main" src="<?php echo $documentWebPath.$doc_url.$_user['user_id'].".t.html?time=".Security::remove_XSS($time); ?>">
 	<noframes>
 	<body>
 		<p>This page uses frames, but your browser doesn't support them.
@@ -130,7 +111,7 @@ if ($origin!='learnpath') {
 } else {
 	?>
 	<script language='Javascript' type='text/javascript'>
-		s='<?php echo $documentWebPath.$doc_url.$_user['user_id']; ?>.t.html?time=<?php echo $time; ?>';
+		s='<?php echo $documentWebPath.$doc_url.$_user['user_id']; ?>.t.html?time=<?php echo Security::remove_XSS($time); ?>';
 		//document.write(s);
 		window.location=s;
 	</script>

@@ -129,6 +129,11 @@ echo '</div>';
 
 Display::display_normal_message(get_lang('AddLpIntro'),false);
 
+if ($_POST AND empty($_REQUEST['learnpath_name']))
+{
+	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
+}
+
 echo '<form method="post">';
 
 // form title
@@ -137,7 +142,7 @@ echo '<div class="row"><div class="form_header">'.get_lang('AddLpToStart').'</di
 // title field
 echo '<div class="row">';
 echo '<div class="label">';
-echo '<label for="idTitle">'.get_lang('LPName').' : </label>';
+echo '<label for="idTitle"><span class="form_required">*</span> '.get_lang('LPName').'</label>';
 echo '</div>';
 echo '<div class="formw">';
 echo '<input id="idTitle" name="learnpath_name" type="text" size="50" />';
@@ -154,6 +159,11 @@ echo '</div>';
 echo '</div>';
 echo '<input name="post_time" type="hidden" value="' . time() . '" />';
 echo '</form>';
+
+echo '<div class="row">';
+echo '<div class="label"></div>';
+echo '<div class="formw"><span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small></div>';
+echo '</div>';
 
 // footer
 Display::display_footer();

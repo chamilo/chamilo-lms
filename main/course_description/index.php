@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20590 2009-05-13 13:11:32Z pcool $
+<?php // $Id: index.php 20591 2009-05-13 13:16:48Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -188,6 +188,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 			WCAG_rendering::prepare_admin_form($description_content, $form);
 		} else {			
+			$fck_attribute['Height'] = '200';
 			$form->add_html_editor('contentDescription', get_lang('Content'));			
 		}
 		$form->addElement('style_submit_button', null, get_lang('SaveIntroText'), 'class="save"');

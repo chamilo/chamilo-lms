@@ -93,11 +93,15 @@ class HTMLPurifier
 		$config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');
 			    	
 		if ($user_status==STUDENT) {
-			global $tag_student,$attribute_student;//$tag_student			
+			global $tag_student,$attribute_student;//$tag_student
+	   		$config->set('HTML', 'SafeEmbed',true);			
+			$config->set('Filter', 'YouTube', true);						
 	   		$config->set('HTML', 'AllowedElements',$tag_student);//'a,em,blockquote,p,code,pre,strong,b,img,span'
 			$config->set('HTML', 'AllowedAttributes',$attribute_student);//'a.href,a.title,img.src'
 		} elseif ($user_status==COURSEMANAGER) {
-			global $tag_teacher,$attribute_teacher;			
+			global $tag_teacher,$attribute_teacher;
+	   		$config->set('HTML', 'SafeEmbed',true);				
+			$config->set('Filter', 'YouTube', true);						
 	   		$config->set('HTML', 'AllowedElements',$tag_teacher);
 			$config->set('HTML', 'AllowedAttributes', $attribute_teacher);//'a.href,a.title,img.src'				
 		} else {

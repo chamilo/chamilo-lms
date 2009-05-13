@@ -1,4 +1,4 @@
-<?php // $Id: infocours.php 20496 2009-05-11 21:05:32Z cvargas1 $
+<?php // $Id: infocours.php 20612 2009-05-13 22:24:52Z aportugal $
 
 /*
 ==============================================================================
@@ -248,7 +248,7 @@ if (api_get_setting('allow_course_theme') == 'true')
 
 if (is_settings_editable())
 	{
-	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+	$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 	}
 else
 {

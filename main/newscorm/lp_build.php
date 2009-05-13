@@ -206,13 +206,6 @@ echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 	echo '<tr>';			
 		echo '<td class="tree">';		
-			//links for adding a module, chapter or step
-			echo '<div class="lp_actions">';				
-				echo '<p class="lp_action">';	
-				echo '</p>';
-				echo '<p class="lp_action">';
-				echo '</p>';				
-			echo '</div>';			
 			echo '<div class="lp_tree">';					
 				//build the tree with the menu items in it
 				echo $_SESSION['oLP']->build_tree();			

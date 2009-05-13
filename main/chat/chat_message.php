@@ -127,14 +127,16 @@ if (!empty($course) && !empty($_user['user_id']))
 	if(!is_dir($chatPath)) {
 		if(is_file($chatPath)) {
 			@unlink($chatPath);
+		}
+		if (!api_is_anonymous()) {			
+			$perm = api_get_setting('permissions_for_new_directories');
+			$perm = octdec(!empty($perm)?$perm:'0770');
+			@mkdir($chatPath,$perm);
+			@chmod($chatPath,$perm);	
+			$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
+			$sql_insert = "INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)";
+			api_sql_query($sql_insert ,__FILE__,__LINE__);
 		}	
-		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm)?$perm:'0770');
-		@mkdir($chatPath,$perm);
-		@chmod($chatPath,$perm);	
-		$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
-		$sql_insert = "INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)";
-		api_sql_query($sql_insert ,__FILE__,__LINE__);		
 	}
 		
 	include('header_frame.inc.php');	
@@ -224,43 +226,44 @@ if (!empty($course) && !empty($_user['user_id']))
 		
 		
 		$timeNow=date('d/m/y H:i:s');		
-		
-		if(!empty($message))
-		{
-			$message=make_clickable($message);
-	
-			if(!file_exists($chatPath.'messages-'.$dateNow.'.log.html'))
+		if (!api_is_anonymous()) {		
+			if(!empty($message))
 			{
-				$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log.html','file',0,'messages-'.$dateNow.'.log.html');
-	
-				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
+				$message=make_clickable($message);
+		
+				if(!file_exists($chatPath.'messages-'.$dateNow.'.log.html'))
+				{
+					$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log.html','file',0,'messages-'.$dateNow.'.log.html');
+		
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
+					item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
+				}
+				else
+				{
+					$doc_id = DocumentManager::get_document_id($_course,'/chat_files/messages-'.$dateNow.'.log.html');
+				}
+		
+				$fp=fopen($chatPath.'messages-'.$dateNow.'.log.html','a');
+		
+				if($isMaster)
+				{
+					$photo= '<img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif" alt="'.get_lang('Teacher').'"  width="11" height="11" align="top"  title="'.get_lang('Teacher').'"  />';				
+					fputs($fp,'<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <span id="chat_login_name"><b>'.$firstname.' '.$lastname.'</b></span> : <i>'.$message.'</i><br>'."\n");	 		
+					
+				}
+				else
+				{
+					$photo= '<img src="'.api_get_path(WEB_IMG_PATH).'students.gif" alt="'.get_lang('Student').'"  width="11" height="11" align="top"  title="'.get_lang('Student').'"  />';
+					 fputs($fp,'<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <b>'.$firstname.' '.$lastname.'</b> : <i>'.$message.'</i><br>'."\n");
+				}
+		
+				fclose($fp);
+		
+				$chat_size=filesize($chatPath.'messages-'.$dateNow.'.log.html');
+		
+				update_existing_document($_course, $doc_id,$chat_size);
 				item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 			}
-			else
-			{
-				$doc_id = DocumentManager::get_document_id($_course,'/chat_files/messages-'.$dateNow.'.log.html');
-			}
-	
-			$fp=fopen($chatPath.'messages-'.$dateNow.'.log.html','a');
-	
-			if($isMaster)
-			{
-				$photo= '<img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif" alt="'.get_lang('Teacher').'"  width="11" height="11" align="top"  title="'.get_lang('Teacher').'"  />';				
-				fputs($fp,'<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <span id="chat_login_name"><b>'.$firstname.' '.$lastname.'</b></span> : <i>'.$message.'</i><br>'."\n");	 		
-				
-			}
-			else
-			{
-				$photo= '<img src="'.api_get_path(WEB_IMG_PATH).'students.gif" alt="'.get_lang('Student').'"  width="11" height="11" align="top"  title="'.get_lang('Student').'"  />';
-				 fputs($fp,'<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <b>'.$firstname.' '.$lastname.'</b> : <i>'.$message.'</i><br>'."\n");
-			}
-	
-			fclose($fp);
-	
-			$chat_size=filesize($chatPath.'messages-'.$dateNow.'.log.html');
-	
-			update_existing_document($_course, $doc_id,$chat_size);
-			item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 		}
 	}
 	?>

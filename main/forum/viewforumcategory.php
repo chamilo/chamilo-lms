@@ -399,7 +399,9 @@ if ($action_forums!='add') {
 						$iconnotify = 'send_mail_checked.gif';
 					}
 				}
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=notify&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
+				if (!api_is_anonymous()) {
+					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=notify&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
+				}
 				echo "</td>\n";
 				echo "\t</tr>";
 			}

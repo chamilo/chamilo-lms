@@ -48,7 +48,7 @@ if (!empty($course))
 	$query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 	$result=api_sql_query($query,__FILE__,__LINE__);
 	
-	list($pseudoUser)=mysql_fetch_row($result);
+	list($pseudoUser)=Database::fetch_row($result);
 	
 	$isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 	$isMaster=$is_courseAdmin?true:false;
@@ -67,25 +67,24 @@ if (!empty($course))
 			@unlink($chatPath);
 		}
 		
-		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm)?$perm:'0770');
-		@mkdir($chatPath,$perm);
-		@chmod($chatPath,$perm);
-	
-		$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
-	
-		api_sql_query("INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)");
-		
+		if (!api_is_anonymous()) {
+			$perm = api_get_setting('permissions_for_new_directories');
+			$perm = octdec(!empty($perm)?$perm:'0770');
+			@mkdir($chatPath,$perm);
+			@chmod($chatPath,$perm);			
+			$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
+			api_sql_query("INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_te,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)");
+		}
 	}
 	
 	if(!file_exists($chatPath.'messages-'.$dateNow.'.log.html'))
 	{
 		@fclose(fopen($chatPath.'messages-'.$dateNow.'.log.html','w'));
-	
-		$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log.html','file',0,'messages-'.$dateNow.'.log.html');
-	
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
-		item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
+		if (!api_is_anonymous()) {
+			$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log.html','file',0,'messages-'.$dateNow.'.log.html');
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
+			item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
+		}
 	}
 	
 	if($reset && $isMaster)

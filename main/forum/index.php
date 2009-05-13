@@ -214,10 +214,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 	$groups_of_user=array();
 	$groups_of_user=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 	// all groups in the course (and sorting them as the id of the group = the key of the array
-	$all_groups=GroupManager::get_group_list();
-	if(is_array($all_groups)) {
-		foreach ($all_groups as $group) {
-			$all_groups[$group['id']]=$group;
+	if (!api_is_anonymous()) {
+		$all_groups=GroupManager::get_group_list();
+		if(is_array($all_groups)) {
+			foreach ($all_groups as $group) {
+				$all_groups[$group['id']]=$group;
+			}
 		}
 	}
 	
@@ -460,7 +462,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 								$iconnotify = 'send_mail_checked.gif';
 							}
 						}
-						echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=notify&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
+						if (!api_is_anonymous()) {		
+							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=notify&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
+						}
 						echo "</td>\n";
 						echo "\t</tr>";
 					}

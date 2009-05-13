@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 20355 2009-05-06 03:46:06Z cvargas1 $
+<?php // $Id: events.lib.inc.php 20597 2009-05-13 17:17:35Z iflorespaz $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -520,7 +520,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	}
 	else // anonymous
 	{
-		$user_id = "NULL";
+		$user_id = api_get_anonymous_id();
 	}
 
 	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT

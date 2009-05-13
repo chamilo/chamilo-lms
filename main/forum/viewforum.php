@@ -322,8 +322,10 @@ if ($origin!='learnpath') {
 	// 2. the course member is here and new threads are allowed
 	// 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
 	if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
-		if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) { 
-			echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('forumthread_new.gif',get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+		if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
+			if (!api_is_anonymous()) {
+				echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('forumthread_new.gif',get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+			 }
 		} else {
 			echo get_lang('ForumLocked');
 		}
@@ -455,7 +457,10 @@ if(is_array($threads)) {
 				}
 			}
 			$icon_liststd = 'group.gif';
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&origin=".$origin."&amp;action=notify&amp;content=thread&amp;gidReq=".$_SESSION['toolgroup']."&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
+			if (!api_is_anonymous()) {
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&origin=".$origin."&amp;action=notify&amp;content=thread&amp;gidReq=".$_SESSION['toolgroup']."&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";				
+			}
+		
 			if (api_is_allowed_to_edit() && $origin != 'learnpath') {
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&origin='.$origin.'&amp;action=liststd&amp;content=thread&amp;gidReq='.$_SESSION['toolgroup'].'&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';			
 			}

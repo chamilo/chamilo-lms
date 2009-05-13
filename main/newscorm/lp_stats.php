@@ -213,13 +213,13 @@ if (is_array($list) && count($list) > 0){
 			" ORDER BY iv.view_count $qry_order ";
 		}
 		
-		
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$num = Database :: num_rows($result);	
 		$time_for_total = 'NaN';
+		
 		if (($extend_this || $extend_all) && $num > 0) {
 			$row = Database :: fetch_array($result);
-			$result_disabled_ext_all = false;		
+			$result_disabled_ext_all = false;
 			if($row['item_type'] == 'quiz') {
 				//check results_disabled in quiz table
 				$my_path = Database::escape_string($row['path']);  
@@ -245,8 +245,7 @@ if (is_array($list) && count($list) > 0){
 				$extend_link = '<a href="' . api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix . '"><img src="../img/visible.gif" alt="'.get_lang('HideAttemptView').'" title="'.get_lang('HideAttemptView').'"  border="0"></a>' . "\n";
 			}
 			$title = $row['mytitle'];
-			$title = stripslashes(api_html_entity_decode($title, ENT_QUOTES, $dokeos_charset));
-	
+			
 			if (empty ($title)) {
 				$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
 			}
@@ -320,19 +319,41 @@ if (is_array($list) && count($list) > 0){
 				);
 				
 				$my_lesson_status = api_htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);			
-	
+				
 				if ($row['item_type'] != 'dokeos_chapter') {
 					if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
-						$view_score = '-';
+						$view_score = '/';
 					} else {
-						$view_score = ($score == 0 ? '-' : ($maxscore === 0 ? $score : $score . '/' . $maxscore));	
-					}				
+						$view_score = ($score == 0 ? '/' : ($maxscore === 0 ? $score : $score . '/' . float_format($maxscore, 1)));
+					}
 					$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . api_htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset) . ' ' . $row['iv_view_count'] . "</td>\n"
 					//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 					 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . $view_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';
+					
+					if (!empty($export_csv)) {
+						$temp = array ();
+						$temp[] = api_html_entity_decode($title, ENT_QUOTES, $lp_charset);
+						$temp[] = api_html_entity_decode($my_lesson_status, ENT_QUOTES, $lp_charset);
+						
+						if ($row['item_type'] == 'quiz') {
+							
+							if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
+								$temp[] =  '/';
+							} else {
+								$temp[] = ($score == 0 ? '0/'.$maxscore : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
+							}
+							
+						} else {
+							$temp[] = ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
+						}
+						
+						$temp[] = $time;
+						$csv_content[] = $temp;
+					}				
 				}
-	
+				
 				$counter++;
+				
 				if ($extend_this_attempt OR $extend_all) {
 					$list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
 					foreach ($list1 as $id => $interaction) {
@@ -361,7 +382,7 @@ if (is_array($list) && count($list) > 0){
 						$counter++;
 					}
 				}
-			} while ($row = Database :: fetch_array($result));
+			} while ($row = Database :: fetch_array($result));	
 		}
 		elseif ($num > 0) {
 			$row = Database :: fetch_array($result);
@@ -435,7 +456,7 @@ if (is_array($list) && count($list) > 0){
 			} else {
 				$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $_GET['student_id'] . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
 			}
-	
+			
 			$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
 			$num = Database :: num_rows($resultLastAttempt);
 			if ($num > 0) {
@@ -499,7 +520,7 @@ if (is_array($list) && count($list) > 0){
 				}
 			}
 			$time_for_total = $subtotal_time;
-			$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
+			$time = learnpathItem :: get_scorm_time('js', $subtotal_time);			
 			if (empty ($title)) {
 				$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
 			}
@@ -549,7 +570,7 @@ if (is_array($list) && count($list) > 0){
 				} else {
 					$correct_test_link = '-';
 				}
-	
+				
 				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 	
 				if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {
@@ -567,41 +588,43 @@ if (is_array($list) && count($list) > 0){
 					 if ($row['item_type'] == 'quiz') {
 					 	
 					 	if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
-							$output .=  '-';
+							$output .=  '/';
 						} else {						
-							$output .= ($score == 0 ? '0/'.float_format( $maxscore, 1) : ($maxscore == 0 ? $score : float_format( $score, 1) . '/' . float_format($maxscore, 1)));	
+							$output .= ($score == 0 ? '0/'.float_format($maxscore, 1) : ($maxscore == 0 ? $score : float_format($score, 1) . '/' . float_format($maxscore, 1)));	
 						}
 						
 					 } else {
-					    $output .= ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));	
+					    $output .= ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));	
 					 }			 			  
 					 $output .= "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $time . "</div></td><td>$correct_test_link</td>\n";
 					 $output .= "</tr>\n";	
-				}			 
-				 			 
+				}
+				
 				if (!empty($export_csv)) {
 					$temp = array ();
 					$temp[] = api_html_entity_decode($title, ENT_QUOTES, $lp_charset);
 					$temp[] = api_html_entity_decode($my_lesson_status, ENT_QUOTES, $lp_charset);
+					
 					if ($row['item_type'] == 'quiz') {
 						
 						if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
-							$temp[] =  '-';
+							$temp[] =  '/';
 						} else {
-							$temp[] = ($score == 0 ? '0/'.$maxscore : ($maxscore == 0 ? $score : $score . '/' . $maxscore));	
+							$temp[] = ($score == 0 ? '0/'.$maxscore : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
 						}
 						
 					} else {
-						$temp[] = ($score == 0 ? '-' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));
+						$temp[] = ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
 					}
 					
 					$temp[] = $time;
 					$csv_content[] = $temp;
 				}
+				
 			}
-	
+			
 			$counter++;
-	
+			
 			if ($extend_this_attempt OR $extend_all) {
 				$list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
 				foreach ($list1 as $id => $interaction) {
@@ -630,7 +653,7 @@ if (is_array($list) && count($list) > 0){
 					$counter++;
 				}
 			}
-																																													
+																																									
 			// attempts list by exercise 
 			if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {
 	
@@ -692,15 +715,14 @@ if (is_array($list) && count($list) > 0){
 						$output .= '<tr><td colspan="12">&nbsp;</td></tr>';							
 					}								
 				}
-	
 		}
-	
+		
 		$total_time += $time_for_total;
 		//QUIZZ IN LP
 		$a_my_id = array();	
 		if (!empty($my_lp_id)) {
 			$a_my_id[] = $my_lp_id;	
-		}	    
+		}
 	}
 }
 

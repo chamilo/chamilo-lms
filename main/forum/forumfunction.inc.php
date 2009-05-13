@@ -158,9 +158,9 @@ function show_add_forumcategory_form($inputvalues=array()) {
 	// settting the form elements
 	$form->addElement('header', '', get_lang('AddForumCategory'));
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');	
-	$form->applyFilter('forum_category_title', 'html_filter');	
+	//$form->applyFilter('forum_category_title', 'html_filter');	
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
-	$form->applyFilter('forum_category_comment', 'html_filter');	
+	//$form->applyFilter('forum_category_comment', 'html_filter');	
 	$form->addElement('style_submit_button', 'SubmitForumCategory', get_lang('CreateCategory'), 'class="add"');
 
 	// setting the rules
@@ -197,12 +197,9 @@ function show_add_forum_form($inputvalues=array()) {
 	$form = new FormValidator('forumcategory', 'post', 'index.php?gradebook='.$gradebook.'');
 
 	// the header for the form
-	if (!empty($inputvalues))
-	{
+	if (!empty($inputvalues)) {
 		$form_title = get_lang('EditForum');
-	}
-	else 
-	{
+	} else {
 		$form_title = get_lang('AddForum');
 	}
 	$session_header = isset($_SESSION['session_name']) ? ' ('.$_SESSION['session_name'].') ' : '';
@@ -215,10 +212,10 @@ function show_add_forum_form($inputvalues=array()) {
 	}
 	// The title of the forum
 	$form->addElement('text', 'forum_title', get_lang('Title'),'class="input_titles"');
-	$form->applyFilter('forum_title', 'html_filter');
+	//$form->applyFilter('forum_title', 'html_filter');
 	// The comment of the forum
 	$form->addElement('html_editor', 'forum_comment', get_lang('Comment'));
-	$form->applyFilter('forum_comment', 'html_filter');
+	//$form->applyFilter('forum_comment', 'html_filter');
 	// dropdown list: Forum Categories
 	$forum_categories=get_forum_categories();
 	foreach ($forum_categories as $key=>$value) {
@@ -394,7 +391,7 @@ function show_add_forum_form($inputvalues=array()) {
 	if( $form->validate() ) {
 		$check = Security::check_token('post');	
 		if ($check) {
-			$values = $form->exportValues();
+			$values = $form->exportValues();		
 	   		$return_message = store_forum($values);
 	   		Display :: display_confirmation_message($return_message);
 		}
@@ -455,9 +452,9 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 	$form->addElement('header', '', get_lang('EditForumCategory'));
 	$form->addElement('hidden', 'forum_category_id');
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
-	$form->applyFilter('forum_category_title', 'html_filter');
+	//$form->applyFilter('forum_category_title', 'html_filter');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
-	$form->applyFilter('forum_category_comment', 'html_filter');	
+	//$form->applyFilter('forum_category_comment', 'html_filter');	
 	$form->addElement('style_submit_button', 'SubmitEditForumCategory',get_lang('ModifyCategory'), 'class="save"');
 	global $charset;
 	// setting the default values
@@ -508,16 +505,16 @@ function store_forumcategory($values) {
 	$row=Database::fetch_array($result);
 	$new_max=$row['sort_max']+1;
 	
-	$clean_cat_title=Security::remove_XSS(Database::escape_string($values['forum_category_title']));
+	$clean_cat_title=Database::escape_string(Security::remove_XSS($values['forum_category_title']));
 
 	if (isset($values['forum_category_id'])) { // storing an edit
-		$sql="UPDATE ".$table_categories." SET cat_title='".$clean_cat_title."', cat_comment='".Database::escape_string($values['forum_category_comment'])."' WHERE cat_id='".Database::escape_string($values['forum_category_id'])."'";
+		$sql="UPDATE ".$table_categories." SET cat_title='".$clean_cat_title."', cat_comment='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_category_comment'])),COURSEMANAGER))."' WHERE cat_id='".Database::escape_string($values['forum_category_id'])."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$last_id=Database::get_last_insert_id();
 		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $values['forum_category_id'],"ForumCategoryAdded", api_get_user_id());
 		$return_message=get_lang('ForumCategoryEdited');
 	} else {
-		$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".$clean_cat_title."','".Database::escape_string($values['forum_category_comment'])."','".Database::escape_string($new_max)."')";
+		$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".$clean_cat_title."','".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_category_comment'])),COURSEMANAGER))."','".Database::escape_string($new_max)."')";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$last_id=Database::get_last_insert_id();
 		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", api_get_user_id());
@@ -555,7 +552,7 @@ function store_forum($values) {
 	
 	$session_id = isset($_SESSION['id_session']) ? $_SESSION['id_session'] : 0;
 	
-	$clean_title=Security::remove_XSS(Database::escape_string(htmlspecialchars($values['forum_title'])));
+	$clean_title=Database::escape_string(Security::remove_XSS($values['forum_title']));
 
 	// forum images
 	
@@ -615,7 +612,7 @@ function store_forum($values) {
 		$sql="UPDATE ".$table_forums." SET
 				forum_title='".$clean_title."',
 				".$sql_image."		
-				forum_comment='".Database::escape_string($values['forum_comment'])."',
+				forum_comment='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_comment'])),COURSEMANAGER))."',
 				forum_category='".Database::escape_string($values['forum_category'])."',
 				allow_anonymous='".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
 				allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
@@ -634,12 +631,13 @@ function store_forum($values) {
 			$new_file_name=isset($new_file_name)?$new_file_name:'';
 			$sql_image="'".$new_file_name."', ";
 		}
-			
+$b=$values['forum_comment'];
+
 		$sql="INSERT INTO ".$table_forums."
 			(forum_title, forum_image, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
-			VALUES ('".$clean_title."',
+			VALUES ('".Security::remove_XSS($clean_title)."',
 				".$sql_image."	
-				'".Database::escape_string(isset($values['forum_comment'])?$values['forum_comment']:null)."',
+				'".Database::escape_string(isset($values['forum_comment'])?Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_comment'])),COURSEMANAGER):null)."',
 				'".Database::escape_string(isset($values['forum_category'])?$values['forum_category']:null)."',
 				'".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
 				'".Database::escape_string(isset($values['students_can_edit_group']['students_can_edit'])?$values['students_can_edit_group']['students_can_edit']:null)."',
@@ -1753,7 +1751,7 @@ function store_thread($values) {
 			$visible=1;
 		}
 		
-		$clean_post_title=Security::remove_XSS(Database::escape_string(htmlspecialchars($values['post_title'])));
+		$clean_post_title=Database::escape_string(Security::remove_XSS($values['post_title']));
 		
 		// We first store an entry in the forum_thread table because the thread_id is used in the forum_post table
 		$sql="INSERT INTO $table_threads (thread_title, forum_id, thread_poster_id, thread_poster_name, thread_date, thread_sticky,thread_title_qualify,thread_qualify_max,thread_weight,session_id)
@@ -1800,7 +1798,7 @@ function store_thread($values) {
 		// We now store the content in the table_post table
 		$sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id, poster_name, post_date, post_notification, post_parent_id, visible)
 				VALUES ('".$clean_post_title."',
-				'".Database::escape_string($values['post_text'])."',
+				'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGER))."',
 				'".Database::escape_string($last_thread_id)."',
 				'".Database::escape_string($values['forum_id'])."',
 				'".Database::escape_string($_user['user_id'])."',
@@ -1921,9 +1919,9 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	}
 
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
-	$form->applyFilter('post_title', 'html_filter');	
+	//$form->applyFilter('post_title', 'html_filter');	
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
-	$form->applyFilter('post_text', 'html_filter');	
+	//$form->applyFilter('post_text', 'html_filter');	
 	
 	$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
 	$form->addElement('html','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" /> '.get_lang('AdvancedParameters').'</span></a>','');
@@ -2237,8 +2235,8 @@ function store_reply($values) {
 	if ($upload_ok) {
 		// We first store an entry in the forum_post table
 		$sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id, post_date, post_notification, post_parent_id, visible)
-				VALUES ('".Database::escape_string($values['post_title'])."',
-						'".Database::escape_string(isset($values['post_text']) ? $values['post_text'] : null)."',
+				VALUES ('".Database::escape_string(Security::remove_XSS($values['post_title']))."',
+						'".Database::escape_string(isset($values['post_text']) ? Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGER) : null)."',
 						'".Database::escape_string($values['thread_id'])."',
 						'".Database::escape_string($values['forum_id'])."',
 						'".Database::escape_string($_user['user_id'])."',
@@ -2352,7 +2350,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');	
 	$form->applyFilter('post_title', 'html_filter');
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
-	$form->applyFilter('post_text', 'html_filter');	
+	//$form->applyFilter('post_text', 'html_filter');	
 		
 	$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
 	$form->addElement('HTML','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>','');
@@ -2420,8 +2418,8 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	}
 
 	if (!empty($form_values)) {
-		$defaults['post_title']=Security::remove_XSS($form_values['post_title']);
-		$defaults['post_text']=Security::remove_XSS($form_values['post_text']);
+		//$defaults['post_title']=Security::remove_XSS($form_values['post_title']);
+		//$defaults['post_text']=Security::remove_XSS($form_values['post_text']);
 		$defaults['post_notification']=Security::remove_XSS($form_values['post_notification']);
 		$defaults['thread_sticky']=Security::remove_XSS($form_values['thread_sticky']);
 	}
@@ -2470,10 +2468,9 @@ function store_edit_post($values) {
 		
 		api_sql_query($sql,__FILE__, __LINE__);
 	//}
-
 	// update the post_title and the post_text
-	$sql="UPDATE $table_posts SET post_title='".Database::escape_string($values['post_title'])."',
-				post_text='".Database::escape_string($values['post_text'])."',
+	$sql="UPDATE $table_posts SET post_title='".Database::escape_string(Security::remove_XSS($values['post_title']))."',
+				post_text='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGER))."',
 				post_notification='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
 				WHERE post_id='".Database::escape_string($values['post_id'])."'";
 				//error_log($sql);
@@ -3165,11 +3162,11 @@ function prepare4display($input='') {
 			}
 			$counter = 0;
 			foreach ($search_terms as $key=>$search_term) {
-				$input = str_replace(trim(html_entity_decode($search_term)),'<span style="background-color: '.$highlightcolors[$counter].'">'.trim(html_entity_decode($search_term)).'</span>',$input);
+				$input = str_replace(trim(api_html_entity_decode($search_term)),'<span style="background-color: '.$highlightcolors[$counter].'">'.trim(html_entity_decode($search_term)).'</span>',$input);
 				$counter++;
 			}
 		}
-		return html_entity_decode(stripslashes($input));
+		return api_html_entity_decode(stripslashes($input));
 	} else {
 		/*foreach ($input as $key=>$value)
 		{

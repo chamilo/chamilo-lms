@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$MessageEmptyMessageOrSubject = "Veuillez introduire un sujet ou message";
 $Inbox  = "Boîte de réception";
 $Messages = "Messages";
 $SendMessage = "Envoyer message";

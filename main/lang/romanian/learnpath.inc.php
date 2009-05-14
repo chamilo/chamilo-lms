@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$NewForumCreated = "Noul forum este facut";
 $lang_learning_path = "Calea de Invatare";
 $lang_learning_path_builder = "Creator Cale de Invatare";
 $lang_description = "descriere";

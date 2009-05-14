@@ -2732,7 +2732,7 @@ class Blog
 							// Add tasks to calendar
 							foreach ($tasks[$curday] as $task)
 							{
-								echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $task['blog_id'] . '&amp;task_id='.stripslashes($task['task_id']) . '" title="� ' . $task['title'] . ' � ' . get_lang('InBlog') . ' � ' . $task['blog_name'] . ' � - ' . get_lang('ExecuteThisTask') . '"><img src="../img/blog_task.gif" alt="Task" /></a>';
+								echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $task['blog_id'] . '&amp;task_id='.stripslashes($task['task_id']) . '" title="' . $task['title'] . ' : ' . get_lang('InBlog') . ' : ' . $task['blog_name'] . ' - ' . get_lang('ExecuteThisTask') . '"><img src="../img/blog_task.gif" alt="Task" title="' . get_lang('ExecuteThisTask') . '" /></a>';
 							}
 						}
 					}

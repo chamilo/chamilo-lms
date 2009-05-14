@@ -2,11 +2,11 @@
 /* For licensing terms, see /dokeos_license.txt */
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
-include_once ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 require_once '../messages/message.class.php';
-include_once(api_get_path(LIBRARY_PATH).'/usermanager.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'/message.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'/social.lib.php');
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 if (api_is_anonymous()) {
 	api_not_allowed();
 }
@@ -46,15 +46,15 @@ if ( isset($_REQUEST['user_friend']) ) {
                 //normal message
 		   		 $user_info=api_get_user_info($userfriend_id);
 		  		 echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']); ?>
-		  		 <br/>
-		 		 <br/><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br/><input id="txt_subject_id" type="text" style="width:300px;"><br/>
-		   		 <br/><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br/><textarea id="txt_area_invite" rows="4" cols="41"></textarea>
+		  		 <br />
+		 		 <br /><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br /><input id="txt_subject_id" type="text" style="width:300px;"><br/>
+		   		 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br /><textarea id="txt_area_invite" rows="4" cols="41"></textarea>
 		   		 <br /><br />		    	  
 		   		 <input type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')" />
 <?php
 			} else {
                 // friend invitation message
-				echo api_xml_http_response_encode(get_lang('AddPersonalMessage'));  ?> :<br/><br/>
+				echo api_xml_http_response_encode(get_lang('AddPersonalMessage'));  ?> :<br /><br />
 				<textarea id="txt_area_invite" rows="5" cols="41"></textarea><br /><br />
 						    
 		    	<input type="button" value="<?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')); ?>" onclick="action_database_panel('4','<?php echo $userfriend_id;?>')" />

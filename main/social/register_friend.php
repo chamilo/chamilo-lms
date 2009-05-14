@@ -1,27 +1,25 @@
-<?php
-/*
- * Created on 24/01/2009
- *
- * To change the template for this generated file go to
- * Window - Preferences - PHPeclipse - PHP - Code Templates
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
+/**
+ * Provides a short controller for friends registration
  */
- // name of the language file that needs to be included
+ // names of the language files that needs to be included
 $language_file = array('registration','messages','userInfo','admin');
 require '../inc/global.inc.php';
-include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'image.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 $the_current_user_id	 = api_get_user_id();
-$my_current_friend		 = $_POST['friend_id'];
-$my_denied_current_friend= $_POST['denied_friend_id'];
-$my_delete_friend        = $_POST['delete_friend_id'];
-$friend_id_qualify       = $_POST['user_id_friend_q'];
-$type_friend_qualify     = $_POST['type_friend_q'];
-$is_my_friend            = $_POST['is_my_friend'];
+$my_current_friend		 = intval($_POST['friend_id']);
+$my_denied_current_friend= intval($_POST['denied_friend_id']);
+$my_delete_friend        = intval($_POST['delete_friend_id']);
+$friend_id_qualify       = intval($_POST['user_id_friend_q']);
+$type_friend_qualify     = $_POST['type_friend_q']; //filtered?
+$is_my_friend            = $_POST['is_my_friend']; //filtered?
 if (isset($is_my_friend)) {
 	$relation_type='3';//my friend
 } else {
-	$relation_type='1';//Contact unknow	
+	$relation_type='1';//Contact unknown	
 }
 
 

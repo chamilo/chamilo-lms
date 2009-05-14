@@ -25,20 +25,20 @@
 */
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
-include_once ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 require_once '../messages/message.class.php';
-include_once(api_get_path(LIBRARY_PATH).'/usermanager.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'/message.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'/social.lib.php');
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
 if (api_is_anonymous()) {
 	api_not_allowed();
 }
 
-$user_id=$_POST['user_id'];
-$panel_id=$_POST['panel_id'];
-$content_message=$_POST['txt_content'];
-$subject_message=$_POST['txt_subject'];
+$user_id=intval($_POST['user_id']);
+$panel_id=intval($_POST['panel_id']);
+$content_message=$_POST['txt_content']; //check this is filtered on output
+$subject_message=$_POST['txt_subject']; //check this is filtered on output
 $user_info=array();
 $user_info=api_get_user_info($user_id);
 if ($panel_id==2) {
@@ -73,6 +73,6 @@ if ($panel_id==4) {
 	}
 	UserFriend::send_invitation_friend_user($user_id,$subject_message,$content_message);
 } elseif ($panel_id==5) {
-		UserFriend::send_invitation_friend_user($user_id,$subject_message,$content_message);	
+	UserFriend::send_invitation_friend_user($user_id,$subject_message,$content_message);	
 }
 ?>

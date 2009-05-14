@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20566 2009-05-12 20:50:00Z juliomontoya $
+<?php // $Id: question.class.php 20644 2009-05-14 16:42:28Z cvargas1 $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20566 2009-05-12 20:50:00Z juliomontoya $
+* 	@version $Id: question.class.php 20644 2009-05-14 16:42:28Z cvargas1 $
 */
 
 
@@ -572,8 +572,7 @@ abstract class Question
 	 * @author - Olivier Brouckaert
 	 * @param - integer $exerciseId - exercise ID if saving in an exercise
 	 */
-	function save($exerciseId=0)
-	{
+	function save($exerciseId=0) {
 		global $_course,$_user;
 		
 		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);		
@@ -589,11 +588,10 @@ abstract class Question
 		$level=$this->level; 
 
 		// question already exists		
-		if(!empty($id))
-		{
+		if(!empty($id)) {
 			$sql="UPDATE $TBL_QUESTIONS SET 
-					question 	='".Database::escape_string($question)."',
-					description	='".Database::escape_string($description)."',
+					question 	='".Database::escape_string(Security::remove_XSS($question))."',
+					description	='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($description)),COURSEMANAGER))."',
 					ponderation	='".Database::escape_string($weighting)."',
 					position	='".Database::escape_string($position)."',
 					type		='".Database::escape_string($type)."',
@@ -607,8 +605,7 @@ abstract class Question
             if (api_get_setting('search_enabled')=='true') {
                 if ($exerciseId != 0) {
                     $this -> search_engine_edit($exerciseId);
-                }
-                else {
+                } else {
                     /**
                      * actually there is *not* an user interface for
                      * creating questions without a relation with an exercise
@@ -616,10 +613,7 @@ abstract class Question
                 }
             }
 
-		}
-		// creates a new question
-		else
-		{
+		} else {// creates a new question
 			$sql="SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question WHERE question.id=test_question.question_id AND test_question.exercice_id='".Database::escape_string($exerciseId)."'";
 			$result=api_sql_query($sql);
 			$current_position=Database::result($result,0,0);
@@ -627,8 +621,8 @@ abstract class Question
 			$position = $this -> position;
 			
 			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture,level) VALUES(
-					'".Database::escape_string($question)."',
-					'".Database::escape_string($description)."',
+					'".Database::escape_string(Security::remove_XSS($question))."',
+					'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($description)),COURSEMANAGER))."',
 					'".Database::escape_string($weighting)."',
 					'".Database::escape_string($position)."',
 					'".Database::escape_string($type)."',
@@ -653,8 +647,7 @@ abstract class Question
             if (api_get_setting('search_enabled')=='true') {
                 if ($exerciseId != 0) {
                     $this -> search_engine_edit($exerciseId, TRUE);
-                }
-                else {
+                } else {
                     /**
                      * actually there is *not* an user interface for
                      * creating questions without a relation with an exercise
@@ -664,8 +657,7 @@ abstract class Question
 		}
 
 		// if the question is created in an exercise
-		if($exerciseId)
-		{
+		if($exerciseId) {
 			
 			$sql = 'UPDATE '.Database::get_course_table(TABLE_LP_ITEM).' 
 					SET max_score = '.intval($weighting).'
@@ -682,15 +674,13 @@ abstract class Question
         // update search engine and its values table if enabled
         if (api_get_setting('search_enabled')=='true') {
             $course_id = api_get_course_id();
-
             // get search_did
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
             if ($addQs || $rmQs) {
                 //there's only one row per question on normal db and one document per question on search engine db
                 $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_second_level=%s LIMIT 1';
                 $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
-            }
-            else {
+            } else {
               $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%s LIMIT 1';
               $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $exerciseId, $this->id);
             }
@@ -703,8 +693,7 @@ abstract class Question
                 $di = new DokeosIndexer();
                 if ($addQs) {
                 	$question_exercises = array((int)$exerciseId);
-                }
-                else {
+                } else {
                     $question_exercises = array();
                 }
                 isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
@@ -762,8 +751,7 @@ abstract class Question
                     if ($addQs || $rmQs) {
                     	$sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_second_level=\'%s\'';
                         $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
-                    }
-                    else {
+                    } else {
                         $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\' AND ref_id_second_level=\'%s\'';
                         $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $exerciseId, $this->id);
                     }
@@ -775,8 +763,7 @@ abstract class Question
                           $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, array_shift($question_exercises), $this->id, $did);
                           api_sql_query($sql,__FILE__,__LINE__);
                         }
-                    }
-                    else {
+                    } else {
                         $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
                             VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
                         $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $exerciseId, $this->id, $did);
@@ -796,8 +783,7 @@ abstract class Question
      * @param - integer $exerciseId - exercise ID
      * @param - boolean $fromSave - comming from $this->save() or not
 	 */
-	function addToList($exerciseId, $fromSave=FALSE)
-	{
+	function addToList($exerciseId, $fromSave=FALSE) {
 		global $TBL_EXERCICE_QUESTION;
 		$id=$this->id;
 		// checks if the exercise ID is not in the list		
@@ -819,8 +805,7 @@ abstract class Question
 	 * @param - integer $exerciseId - exercise ID
 	 * @return - boolean - true if removed, otherwise false
 	 */
-	function removeFromList($exerciseId)
-	{
+	function removeFromList($exerciseId) {
 		global $TBL_EXERCICE_QUESTION;
 
 		$id=$this->id;
@@ -829,12 +814,9 @@ abstract class Question
 		$pos=array_search($exerciseId,$this->exerciseList);
 
 		// exercise not found
-		if($pos === false)
-		{
+		if($pos === false) {
 			return false;
-		}
-		else
-		{
+		} else {
 			// deletes the position in the array containing the wanted exercise ID
 			unset($this->exerciseList[$pos]);
             //update order of other elements
@@ -863,8 +845,7 @@ abstract class Question
 	 * @author - Olivier Brouckaert
 	 * @param - integer $deleteFromEx - exercise ID if the question is only removed from one exercise
 	 */
-	function delete($deleteFromEx=0)
-	{
+	function delete($deleteFromEx=0) {
 		global $_course,$_user;
 		
 		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);		
@@ -987,7 +968,7 @@ abstract class Question
 		$form->addElement('html','<div class="form">');
 		// question name
 		$form->addElement('text','questionName','<span class="form_required">*</span> '.get_lang('Question'),'size="60"');
-		$form->applyFilter('questionName','html_filter');
+		//$form->applyFilter('questionName','html_filter');
 		
 		//$radios_results_enabled[] = $form->createElement('static', null, null, null);
 		//$test=FormValidator :: createElement ('text', 'questionName');

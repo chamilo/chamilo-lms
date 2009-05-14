@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 20200 2009-04-29 22:14:55Z cvargas1 $
+* 	@version $Id: exercise.class.php 20644 2009-05-14 16:42:28Z cvargas1 $
 */
 
 
@@ -537,11 +537,10 @@ class Exercise
         $start_time = Database::escape_string($this->start_time);
         $end_time = Database::escape_string($this->end_time);
 		// exercise already exists
-		if($id)
-		{
+		if($id) {
 			$sql="UPDATE $TBL_EXERCICES SET 
-						title='".Database::escape_string($exercise)."',
-						description='".Database::escape_string($description)."'";
+						title='".Database::escape_string(Security::remove_XSS($exercise))."',
+						description='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($description)),COURSEMANAGER))."'";
 				if ($type_e != 'simple') {					
 						$sql .= ", sound='".Database::escape_string($sound)."',
 						type='".Database::escape_string($type)."',
@@ -564,15 +563,12 @@ class Exercise
                 $this -> search_engine_edit();
             }
 
-		}
-		// creates a new exercise
-		else
-		{
+		} else {// creates a new exercise
 			$sql="INSERT INTO $TBL_EXERCICES(start_time,end_time,title,description,sound,type,random,active, results_disabled, max_attempt,feedback_type) 
 					VALUES(
 						'$start_time','$end_time',
-						'".Database::escape_string($exercise)."',
-						'".Database::escape_string($description)."',
+						'".Database::escape_string(Security::remove_XSS($exercise))."',
+						'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($description)),COURSEMANAGER))."',
 						'".Database::escape_string($sound)."',
 						'".Database::escape_string($type)."',
 						'".Database::escape_string($random)."',
@@ -859,7 +855,7 @@ class Exercise
 		$form->addElement('header', '', $form_title);
 		// title
 		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName'),'class="input_titles"');
-		$form->applyFilter('exerciseTitle','html_filter');
+		//$form->applyFilter('exerciseTitle','html_filter');
 		
 		// fck editor
 		global $fck_attribute;

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20591 2009-05-13 13:16:48Z pcool $
+<?php // $Id: index.php 20639 2009-05-14 15:41:56Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -47,7 +47,7 @@ if(intval($description_id) == 4) $interbreadcrumb[] = array ("url" => "#", "name
 if(intval($description_id) == 5) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('CourseMaterial'));
 if(intval($description_id) == 6) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('HumanAndTechnicalResources'));
 if(intval($description_id) == 7) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Assessment'));
-if(intval($description_id) == 8) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('NewBloc'));
+if(intval($description_id) >= 8) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('NewBloc'));
 
 api_protect_course_script(true);
 $nameTools = get_lang('CourseProgram');
@@ -196,9 +196,9 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		$default['title'] = $default_description_titles[$description_id];
 		$default['contentDescription'] = $description_content;
 		$default['description_id'] = $description_id;
-		if ($description_id == ADD_BLOCK) {
-			$default['description_id'] = ADD_BLOCK;
-		} 
+		//if ($description_id >= ADD_BLOCK) {
+			//$default['description_id'] = ADD_BLOCK;
+		//} 
 		$form->setDefaults($default);
 		// If form validates: save the description block
 		if ($form->validate()) {
@@ -210,29 +210,22 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 			}
 			$title = $description['title'];
 			if ($description['description_id'] >= ADD_BLOCK) {
-				if ($description['edit']=='1') {					
-					$sql = "UPDATE $tbl_course_description SET  title = '".Database::escape_string(Security::remove_XSS($title))."', content = '".Database::escape_string(Security::remove_XSS($content))."' WHERE id = '".$description_id."' ";				
-					api_sql_query($sql, __FILE__, __LINE__);					
-				} else {								
+				if ($description['add']=='1') { //if this element has been submitted for addition					
 					$result = api_sql_query($sql, __FILE__, __LINE__);
 					$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title))."', content = '".Database::escape_string(Security::remove_XSS($content))."'";				
 					api_sql_query($sql, __FILE__, __LINE__);
+				} else {								
+					$sql = "UPDATE $tbl_course_description SET  title = '".Database::escape_string(Security::remove_XSS($title))."', content = '".Database::escape_string(Security::remove_XSS($content))."' WHERE id = '".$description_id."' ";				
+					api_sql_query($sql, __FILE__, __LINE__);					
 				}
-				/*$sql = "SELECT id FROM $tbl_course_description WHERE id = ".ADD_BLOCK;
-				$result = api_sql_query($sql, __FILE__, __LINE__);
-                if (Database::num_rows($result)>0){
-                	$sqldel = "DELETE FROM $tbl_course_description WHERE id = ".ADD_BLOCK;
-                    $resultdel = api_sql_query($sqldel,__FILE__,__LINE__);
-                }
-				$sqlins = "INSERT INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string($title)."', content = '".Database::escape_string($content)."'";
-				api_sql_query($sqlins, __FILE__, __LINE__);*/
 			} else {
+				//if title is not editable, then use default title
 				if (!$default_description_title_editable[$description_id]) {
 					$title = $default_description_titles[$description_id];
 				}
 				$sql = "DELETE FROM $tbl_course_description WHERE id = '".$description_id."'";
 				api_sql_query($sql, __FILE__, __LINE__);
-				$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title))."', content = '".Database::escape_string(Security::remove_XSS($content))."'";
+				$sql = "INSERT INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title))."', content = '".Database::escape_string(Security::remove_XSS($content))."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 			Display :: display_confirmation_message(get_lang('CourseDescriptionUpdated'));

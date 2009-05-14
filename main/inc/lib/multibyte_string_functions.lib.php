@@ -1,49 +1,65 @@
 <?php
+/**
+ * ==============================================================================
+ * File: multibyte_string_functions.lib.php
+ * Main API extension library for Dokeos 1.8.6+ LMS
+ * A common purpose library for supporting multibyte string aware functions.
+ * License: GNU/GPL version 2 or later (Free Software Foundation)
+ * @author: Ivan Tcholakov, ivantcholakov@gmail.com
+ * October 2008 - initial implementation.
+ * May 2009 - refactoring and minor corrections have been implemented.
+ * @package dokeos.library
+ * ==============================================================================
+ */
 
-// File: multibyte_string_functions.lib.php
-// Main API extension for Dokeos 1.8.6 LMS
-// A common purpose library for supporting multibyte string aware functions.
-// License: GNU/GPL version 2 or later (Free Software Foundation)
-// Author: Ivan Tcholakov, ivantcholakov@gmail.com
-// October 2008.
-// May 2009 - refactoring and minor fixes have been implemented.
+/**
+ * Notes:
+ *
+ * 1. For all the functions from this library witn optional encoding
+ * parameters the system's encoding is assumed, i.e. the value that is
+ * returned by api_get_setting('platform_charset') or the value of the
+ * global variable $charset.
+ *
+ * 2. In other aspects, most of the functions in this library try to copy
+ * behaviour of some core PHP functions and some functions from the
+ * mbstring extension. Mostly they have similar names prefixed with "api_".
+ * For your convenience, links have been given to the documentation of the
+ * original PHP functions. Thus, you may exploit on your previous habits.
+ *
+ * 3. Why these function have been introduced? Because they are able to
+ * support more encodings than the original ones. And which is more
+ * important - they are UTF-8 aware. So, they should be used for strings
+ * in natural language. For internal system identificators of file names
+ * which are supposed to contain only English letters you may use the
+ * original PHP string functions.
+ *
+ * 4. This library requires PHP mbstring extension to be activated.
+ * When encodings to be used are not supported by mbstring, this library
+ * is able to exploit the PHP iconv extesion, which in this case should
+ * be activated too.
+ */
 
+/**
+ * ----------------------------------------------------------------------------
+ * Multibyte string conversion functions
+ * ----------------------------------------------------------------------------
+ */
 
-// Notes:
-//
-// 1. For all the functions from this library witn optional encoding
-// parameters the system's encoding is assumed, i.e. the value that is
-// returned by api_get_setting('platform_charset') or the value of the
-// global variable $charset.
-//
-// 2. In other aspets, most of the functions in this library try to copy
-// behaviour of some core PHP functions and some functions from the
-// mbstring extension. Mostly they have similar names prefixed with "api_".
-// For your convenience, links have been given to the documentation of the
-// original PHP functions. Thus, you may exploit on your previous habits.
-//
-// 3. Why these function have been introduced? Because they are able to
-// support more encodings than the original ones. And which is more
-// important - they are UTF-8 aware. So, they should be used for strings
-// in natural language. For internal system identificators of file names
-// which are supposed to contain only English letters you may use the
-// original PHP string functions.
-//
-// 4. This library requires PHP mbstring extension to be activated.
-// When encodings to be used are not supported by mbstring, this library
-// is able to exploit the PHP iconv extesion, which in this case should
-// be activated too.
-
-
-//----------------------------------------------------------------------------
-// Multibyte string conversion functions
-//----------------------------------------------------------------------------
-
-
-// Converts character encoding of a given string.
-// See http://php.net/manual/en/function.mb-convert-encoding
-function api_convert_encoding($string, $to_encoding, $from_encoding) {
+/**
+ * Converts character encoding of a given string.
+ * @param string $string			The string being converted.
+ * @param string $to_encoding		The encoding that $string is being converted to.
+ * @param string $from_encoding		The encoding that $string is being converted from. If it is omited, the platform character set is assumed.
+ * @return string					Returns the converted string.
+ * This function is aimed to replace mb_convert_encoding() for human-language strings.
+ * @link http://php.net/manual/en/function.mb-convert-encoding
+ */
+function api_convert_encoding($string, $to_encoding, $from_encoding = null) {
+	if (empty($from_encoding)) {
+		$from_encoding = api_mb_internal_encoding();
+	}
 	if (api_equal_encodings($to_encoding, $from_encoding)) {
+		// When conversion is not needed, the string is returned directly, without validation.
 		return $string;
 	}
 	if (api_mb_supports($to_encoding) && api_mb_supports($from_encoding)) {
@@ -52,22 +68,74 @@ function api_convert_encoding($string, $to_encoding, $from_encoding) {
 	elseif (api_iconv_supports($to_encoding) && api_iconv_supports($from_encoding)) {
 		return @iconv($from_encoding, $to_encoding, $string);
 	} 
+	// Here the function gives up.
 	return $string;
 }
 
-// Converts a given string into UTF-8 encoded string.
-// See http://php.net/manual/en/function.utf8-encode
+/**
+ * Converts a given string into UTF-8 encoded string.
+ * @param string $string			The string being converted.
+ * @param string $from_encoding		The encoding that $string is being converted from. If it is omited, the platform character set is assumed.
+ * @return string					Returns the converted string.
+ * This function is aimed to replace utf8_encode() for human-language strings.
+ * @link http://php.net/manual/en/function.utf8-encode
+ */
 function api_utf8_encode($string, $from_encoding = null) {
-	return api_convert_encoding($string, 'UTF-8', $from_encoding);
+	if (empty($from_encoding)) {
+		$from_encoding = api_mb_internal_encoding();
+	}
+	if (api_is_utf8($from_encoding)) {
+		// When conversion is not needed, the string is returned directly, without validation.
+		return $string;
+	}
+	if (api_mb_supports($from_encoding)) {
+		return @mb_convert_encoding($string, 'UTF-8', $from_encoding);
+	}
+	elseif (api_iconv_supports($from_encoding)) {
+		return @iconv($from_encoding, 'UTF-8', $string);
+	}
+	// Here the function gives up.
+	return $string;
 }
 
-// Converts a given string, from UTF-8 encoding to a specified encoding.
-// See http://php.net/manual/en/function.utf8-decode
+/**
+ * Converts a given string from UTF-8 encoding to a specified encoding.
+ * @param string $string			The string being converted.
+ * @param string $to_encoding		The encoding that $string is being converted to. If it is omited, the platform character set is assumed.
+ * @return string					Returns the converted string.
+ * This function is aimed to replace utf8_decode() for human-language strings.
+ * @link http://php.net/manual/en/function.utf8-decode
+ */
 function api_utf8_decode($string, $to_encoding = null) {
-	return api_convert_encoding($string, $to_encoding, 'UTF-8');
+	if (empty($to_encoding)) {
+		$to_encoding = api_mb_internal_encoding();
+	}
+	if (api_is_utf8($to_encoding)) {
+		// When conversion is not needed, the string is returned directly, without validation.
+		return $string;
+	}
+	if (api_mb_supports($to_encoding)) {
+		return @mb_convert_encoding($string, $to_encoding, 'UTF-8');
+	}
+	elseif (api_iconv_supports($to_encoding)) {
+		return @iconv('UTF-8', $to_encoding, $string);
+	}
+	// Here the function gives up.
+	return $string;
 }
 
-// Encodes a given string into the system ecoding if this conversion has been detected as necessary.
+/**
+ * Converts a given string into the system ecoding (or platform character set).
+ * When $from encoding is omited on UTF-8 platforms then language dependent encoding
+ * is guessed/assumed. On non-UTF-8 platforms omited $from encoding is assumed as UTF-8.
+ * When the parameter $check_utf8_validity is true the function checks string's
+ * UTF-8 validity and decides whether to try to convert it or not.
+ * This function is useful for problem detection or making workarounds.
+ * @param string $string			The string being converted.
+ * @param string $from_encoding		The encoding that $string is being converted from. It is guessed when it is omited.
+ * @param bool $check_utf8_validity	A flag for UTF-8 validity check as condition for making conversion.
+ * @return string					Returns the converted string.
+ */
 function api_to_system_encoding($string, $from_encoding = null, $check_utf8_validity = false) {
 	$charset = api_get_system_encoding();
 	if (empty($from_encoding)) {
@@ -95,8 +163,15 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
 	return api_convert_encoding($string, $charset, $from_encoding);
 }
 
-// Converts all applicable characters to HTML entities.
-// See http://php.net/manual/en/function.htmlentities
+/**
+ * Converts all applicable characters to HTML entities.
+ * @param string $string		The input string.
+ * @param int $quote_style		The quote style - ENT_COMPAT (default), ENT_QUOTES, ENT_NOQUOTES.
+ * @param string $encoding		The encoding (of the input string) used in conversion. If it is omited, the platform character set is assumed.
+ * @return string				Returns the converted string.
+ * This function is aimed to replace htmlentities() for human-language strings.
+ * @link http://php.net/manual/en/function.htmlentities
+ */
 function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) {
 	if (empty($encoding)) {
 		$encoding = api_mb_internal_encoding();
@@ -119,8 +194,15 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
 	return $string;
 }
 
-// Decodes HTML entities into normal characters.
-// See http://php.net/html_entity_decode
+/**
+ * Convers HTML entities into normal characters.
+ * @param string $string		The input string.
+ * @param int $quote_style		The quote style - ENT_COMPAT (default), ENT_QUOTES, ENT_NOQUOTES.
+ * @param string $encoding		The encoding (of the result) used in conversion. If it is omited, the platform character set is assumed.
+ * @return string				Returns the converted string.
+ * This function is aimed to replace html_entity_decode() for human-language strings.
+ * @link http://php.net/html_entity_decode
+ */
 function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = null) {
 	if (empty($encoding)) {
 		$encoding = api_mb_internal_encoding();
@@ -134,12 +216,14 @@ function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 
 	return api_utf8_decode(html_entity_decode(api_convert_encoding($string, 'UTF-8', $encoding), $quote_style, 'UTF-8'), $encoding);
 }
 
-// This function encodes (conditionally) to UTF-8 a given string if XmlHttp-request has been detected.
+/**
+ * This function encodes (conditionally) a given string to UTF-8 if XmlHttp-request has been detected.
+ * @param string $string			The string being converted.
+ * @param string $from_encoding		The encoding that $string is being converted from. If it is omited, the platform character set is assumed.
+ * @return string					Returns the converted string.
+ */
 function api_xml_http_response_encode($string, $from_encoding = null) {
 	if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-		if (empty($from_encoding)) {
-			$from_encoding = api_mb_internal_encoding();
-		}
 		return api_convert_encoding($string, 'UTF-8', $from_encoding);
 	}
 	return $string;

@@ -2055,6 +2055,10 @@ class learnpath {
     	return $progress;
     }
 	
+	/**
+	 * Returns the HTML necessary to print a mediaplayer block inside a page
+	 * @return string	The mediaplayer HTML 
+	 */
 	function get_mediaplayer()
 	{
 		global $_course;

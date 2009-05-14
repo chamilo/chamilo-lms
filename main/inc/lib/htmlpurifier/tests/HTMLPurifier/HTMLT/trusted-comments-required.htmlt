@@ -1,5 +1,0 @@
---INI--
-HTML.Trusted = true
---HTML--
-<ul><!-- Foo --></ul>
---EXPECT--

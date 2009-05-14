@@ -1,6 +1,0 @@
-HTML Purifier 3.3.0 is fixes a number of obscure bugs reported and fixed
-over a four month period.  It is probably the last release in the 3.x
-series.  Notable new features include support for the overflow CSS
-property; notable bugfixes include fixed YouTube rendering in certain
-versions of Firefox, CSSDefinition Printer, improved early PHP support
-and bugs in iconv.

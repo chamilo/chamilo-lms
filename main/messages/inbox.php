@@ -94,8 +94,12 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 	/***********************************************/
 
 	if ( isset($button_sent) ) {
-		$title     = urldecode($info_reply[0]);
-		$content   = urldecode($info_reply[1]);
+
+		$title     = api_convert_encoding(urldecode($info_reply[0]),'UTF-8',$charset);
+		$content   = api_convert_encoding(urldecode($info_reply[1]),'UTF-8',$charset);
+		//$title = urldecode($info_reply[0]);
+		//$content   = urldecode($info_reply[1]);
+		
 		$user_reply= $info_reply[2];
 		$user_email_base=str_replace(')','(',$info_reply[5]);
 		$user_email_prepare=explode('(',$user_email_base);

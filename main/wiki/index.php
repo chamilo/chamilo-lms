@@ -98,15 +98,12 @@ HEADER & TITLE
 -----------------------------------------------------------
 */
 // If it is a group wiki then the breadcrumbs will be different.
-if ($_SESSION['_gid'] OR $_GET['group_id'])
-{
+if ($_SESSION['_gid'] OR $_GET['group_id']) {
 
-	if (isset($_SESSION['_gid']))
-	{
+	if (isset($_SESSION['_gid'])) {
 		$_clean['group_id']=(int)$_SESSION['_gid'];
 	}
-	if (isset($_GET['group_id']))
-	{
+	if (isset($_GET['group_id'])) {
 		$_clean['group_id']=(int)Database::escape_string($_GET['group_id']);
 	} 
 	
@@ -2221,8 +2218,7 @@ function make_wiki_link_clickable($input)
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @return language string saying that the changes are stored
 **/
-function save_wiki()
-{
+function save_wiki() {
 	global $charset;
 	global $tbl_wiki;
 	
@@ -2230,12 +2226,12 @@ function save_wiki()
 	
 	// cleaning the variables
 
-	$_clean['reflink']=Database::escape_string($_POST['reflink']);
-	$_clean['title']=Database::escape_string($_POST['title']);
-	$_clean['content']= api_html_entity_decode(Database::escape_string(stripslashes($_POST['content'])), ENT_QUOTES, $charset);
+	$_clean['reflink']=Database::escape_string(Security::remove_XSS($_POST['reflink']));
+	$_clean['title']=Database::escape_string(Security::remove_XSS($_POST['title']));
+	$_clean['content']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['content'])),COURSEMANAGER));
 	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
-    $_clean['comment']=Database::escape_string($_POST['comment']);	
+    $_clean['comment']=Database::escape_string(Security::remove_XSS($_POST['comment']));	
     $_clean['progress']=Database::escape_string($_POST['progress']);	
 	$_clean['version']=Database::escape_string($_POST['version']);
 	$_clean['version']=$_clean['version']+1;//sum 1 here instead of adding in Database::escape_string($_POST['version']), to avoid failures in the sum when there is heavy use of the database
@@ -2317,31 +2313,23 @@ function delete_wiki()
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @todo consider merging this with the function save_wiki into one single function.
 **/
-function save_new_wiki()
-{
+function save_new_wiki() {
 	global $charset;
 	global $tbl_wiki;
     global $assig_user_id; //need for assignments mode
-
-	 
 	// cleaning the variables
-
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
 			
-	if($_clean['assignment']==2 || $_clean['assignment']==1) // Unlike ordinary pages of pages of assignments. Allow create a ordinary page although there is a assignment with the same name
-	{
-		$_clean['reflink']=Database::escape_string(str_replace(' ','_',$_POST['title']."_uass".$assig_user_id));			
-    }
-	else
-	{		
-	 	$_clean['reflink']=Database::escape_string(str_replace(' ','_',$_POST['title']));			
+	if($_clean['assignment']==2 || $_clean['assignment']==1) {// Unlike ordinary pages of pages of assignments. Allow create a ordinary page although there is a assignment with the same name
+		$_clean['reflink']=Database::escape_string(Security::remove_XSS(str_replace(' ','_',$_POST['title']."_uass".$assig_user_id)));			
+    } else {		
+	 	$_clean['reflink']=Database::escape_string(Security::remove_XSS(str_replace(' ','_',$_POST['title'])));			
 	}	
 
-	$_clean['title']=Database::escape_string($_POST['title']);		    
-	$_clean['content']= html_entity_decode(Database::escape_string(stripslashes($_POST['content'])));
+	$_clean['title']=Database::escape_string(Security::remove_XSS($_POST['title']));		    
+	$_clean['content']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['content'])),COURSEMANAGER));
 	
-	if($_clean['assignment']==2) //config by default for individual assignment (students)
-	{	 
+	if($_clean['assignment']==2)  {//config by default for individual assignment (students)	 
 	
 	 	$_clean['user_id']=(int)Database::escape_string($assig_user_id);//Identifies the user as a creator, not the teacher who created
 		
@@ -2349,9 +2337,7 @@ function save_new_wiki()
 		$_clean['visibility_disc']=0;
 		$_clean['ratinglock_disc']=0;
 		
-	}
-	else
-	{
+	} else {
 	 	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());
 		
 		$_clean['visibility']=1;
@@ -2360,7 +2346,7 @@ function save_new_wiki()
 		
 	}	
 
-	$_clean['comment']=Database::escape_string($_POST['comment']);
+	$_clean['comment']=Database::escape_string(Security::remove_XSS($_POST['comment']));
 	$_clean['progress']=Database::escape_string($_POST['progress']);
 	$_clean['version']=1;
 		
@@ -2376,35 +2362,24 @@ function save_new_wiki()
 	$_clean['linksto'] = links_to($_clean['content']);	//check wikilinks
 	
 	//filter no _uass
-	if (api_eregi('_uass', $_POST['title']) || (api_strtoupper(trim($_POST['title'])) == 'INDEX' || api_strtoupper(trim(api_htmlentities($_POST['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset))))
-	{
+	if (api_eregi('_uass', $_POST['title']) || (api_strtoupper(trim($_POST['title'])) == 'INDEX' || api_strtoupper(trim(api_htmlentities($_POST['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset)))) {
 		$message= get_lang('GoAndEditMainPage');
 		Display::display_warning_message($message,false);
-	}
-	else
-	{		
+	} else {		
 	
 		$var=$_clean['reflink'];
 	
 		$group_id=Security::remove_XSS($_GET['group_id']);
-		if(!checktitle($var))
-		{
+		if(!checktitle($var)) {
 		   return get_lang('WikiPageTitleExist').'<a href="index.php?action=edit&amp;title='.$var.'&group_id='.$group_id.'">'.$_POST['title'].'</a>'; 
-		} 
-		else 
-		{ 	
+		} else { 	
 			$dtime = date( "Y-m-d H:i:s" );
-			 
 			$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
-			   
 		   $result=api_sql_query($sql,__LINE__,__FILE__);
 		   $Id = Database::insert_id();	
 		   api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
-		  
 		   check_emailcue(0, 'A');
-		   
 		   return get_lang('NewWikiSaved').'<a href="index.php?action=showpage&amp;title='.$_clean['reflink'].'&group_id='.$group_id.'">'.$_POST['title'].'</a>'; 
-		   
 		} 
 	}//end filter no _uass
 }

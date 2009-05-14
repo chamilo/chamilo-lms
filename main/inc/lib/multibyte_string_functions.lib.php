@@ -99,7 +99,7 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
 // See http://php.net/manual/en/function.htmlentities
 function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) {
 	if (empty($encoding)) {
-		$from_encoding = api_mb_internal_encoding();
+		$encoding = api_mb_internal_encoding();
 	}
 	if (!api_is_utf8($encoding) && api_html_entity_supports($encoding)) {
 		return htmlentities($string, $quote_style, $encoding);
@@ -123,7 +123,7 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
 // See http://php.net/html_entity_decode
 function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = null) {
 	if (empty($encoding)) {
-		$from_encoding = api_mb_internal_encoding();
+		$encoding = api_mb_internal_encoding();
 	}
 	if (!api_is_utf8($encoding) && api_html_entity_supports($encoding)) {
 		return html_entity_decode($string, $quote_style, $encoding);

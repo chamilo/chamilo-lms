@@ -2872,33 +2872,40 @@ class Blog
 		while ($row_project=Database::fetch_row($result)) {
 			$list_info[]=$row_project;
 		}
-		$list_content_blog=array();
-		$list_body_blog=array();
+		
+		$list_content_blog = array();
+		$list_body_blog = array();
 		
 		if (is_array($list_info)) {
 			foreach($list_info as $key => $info_log) {
-			
-					$list_body_blog[]=$info_log[0];
-					$list_body_blog[]=$info_log[1];	
-					
-					$visibility_icon=($info_log[2]==0) ? 'invisible' : 'visible';
-					$visibility_info=($info_log[2]==0) ? 'Visible' : 'Invisible';
-				 	$my_image.='<a href="' .api_get_self(). '?action=edit&amp;blog_id=' . $info_log[3] . '">';
-					$my_image.='<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />';
-					$my_image.="</a>\n";
-					$my_image.='<a href="' .api_get_self(). '?action=delete&amp;blog_id=' . $info_log[3] . '" ';
-					$my_image.='onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >';
-					$my_image.='<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />';
-					$my_image.="</a>\n";
-					$my_image.='<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $info_log[3] . '">';
-					$my_image.='<img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang($visibility_info) . '" />';
-					$my_image.="</a>\n";
-											
-					$list_body_blog[]=$my_image;
-					$my_image='';
-			
-					$list_content_blog[]=$list_body_blog;
-					$list_body_blog=array();
+				
+				$url_start_blog = 'blog.php' ."?". "blog_id=".$info_log[3]. "&amp;".api_get_cidreq();
+				$title = $info_log[0];
+    			$image = '<img src="../img/blog.gif" border="0" align="absmiddle" alt="' . $title . '">'."\n";
+    			$list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">' . $image . '</a></div><a href="'.$url_start_blog.'">' .$title. '</a>' ."\n";
+				
+				$list_body_blog[] = $list_name;
+				$list_body_blog[] = $info_log[1];
+				
+				$visibility_icon=($info_log[2]==0) ? 'invisible' : 'visible';
+				$visibility_info=($info_log[2]==0) ? 'Visible' : 'Invisible';
+			 	$my_image.='<a href="' .api_get_self(). '?action=edit&amp;blog_id=' . $info_log[3] . '">';
+				$my_image.='<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />';
+				$my_image.="</a>\n";
+				$my_image.='<a href="' .api_get_self(). '?action=delete&amp;blog_id=' . $info_log[3] . '" ';
+				$my_image.='onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >';
+				$my_image.='<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />';
+				$my_image.="</a>\n";
+				$my_image.='<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $info_log[3] . '">';
+				$my_image.='<img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang($visibility_info) . '" />';
+				$my_image.="</a>\n";
+									
+				$list_body_blog[]=$my_image;
+				$my_image='';
+				
+				$list_content_blog[]=$list_body_blog;
+				$list_body_blog = array();
+				
 			}
 			$parameters='';
 			//$parameters=array('action'=>Security::remove_XSS($_GET['action']));			

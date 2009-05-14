@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 18799 2009-03-04 22:50:50Z juliomontoya $
+<?php // $Id: database.lib.php 20642 2009-05-14 16:28:14Z yannoo $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -479,12 +479,12 @@ class Database
 	*	@param the real (system) code of the course (ID from inside the main course table)
 	* 	@todo shouldn't this be in the course.lib.php script?
 	*/
-	function get_course_info($course_code)
-	{
+	function get_course_info($course_code) {
+        $course_code = Database::escape_string($course_code);
 		$table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $table WHERE `code` = '$course_code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
-		$result = mysql_fetch_array($sql_result);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
+		$result = Database::fetch_array($sql_result);
 		$result = Database::generate_abstract_course_field_names($result);
 		if ($result===false) {
 			$result['db_name']='';
@@ -500,17 +500,14 @@ class Database
 	*	@desc find all the information about a specified user. Without parameter this is the current user.
 	* 	@todo shouldn't this be in the user.lib.php script?
 	*/
-	function get_user_info_from_id($user_id = '')
-	{
+	function get_user_info_from_id($user_id = '') {
 		$table = Database::get_main_table(TABLE_MAIN_USER);
-		if ($user_id == '')
-		{
+		if ($user_id == '') {
 			return $GLOBALS["_user"];
-		}
-		else
-		{
-			$sql_query = "SELECT * FROM $table WHERE `user_id` = '$user_id'";
-			$result = api_sql_query($sql_query, __FILE__, __LINE__);
+		} else {
+            $user_id = Database::escape_string($user_id);
+			$sql_query = "SELECT * FROM $table WHERE user_id = '$user_id'";
+			$result = Database::query($sql_query, __FILE__, __LINE__);
 			$result_array = mysql_fetch_array($result);
 			$result_array = Database::generate_abstract_user_field_names($result_array);
 			return $result_array;
@@ -580,8 +577,7 @@ class Database
 	* 	@todo what's the use of this function. I think this is better removed.
 	* 		  There should be consistency in the variable names and the use throughout the scripts
 	*/
-	function generate_abstract_user_field_names($result_array)
-	{
+	function generate_abstract_user_field_names($result_array) {
 		$result_array['firstName'] 		= $result_array['firstname'];
 		$result_array['lastName'] 		= $result_array['lastname'];
 		$result_array['mail'] 			= $result_array['email'];

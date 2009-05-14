@@ -1,4 +1,5 @@
 <?php //$id: $
+//This file is probably deprecated - 2009-05-14 - ywarnier
 /*
 ==============================================================================
 	Dokeos - elearning and course management software

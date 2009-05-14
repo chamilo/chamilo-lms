@@ -3,14 +3,36 @@
 // File: multibyte_string_functions.lib.php
 // Main API extension for Dokeos 1.8.6 LMS
 // A common purpose library for supporting multibyte string aware functions.
-// This library requires PHP mbstring extension to be activated.
-// When encodings to be used are not supported by mbstring, this library
-// is able to exploit the PHP iconv extesion, which in this case should
-// activated too.
 // License: GNU/GPL version 2 or later (Free Software Foundation)
 // Author: Ivan Tcholakov, ivantcholakov@gmail.com
 // October 2008.
 // May 2009 - refactoring and minor fixes have been implemented.
+
+
+// Notes:
+//
+// 1. For all the functions from this library witn optional encoding
+// parameters the system's encoding is assumed, i.e. the value that is
+// returned by api_get_setting('platform_charset') or the value of the
+// global variable $charset.
+//
+// 2. In other aspets, most of the functions in this library try to copy
+// behaviour of some core PHP functions and some functions from the
+// mbstring extension. Mostly they have similar names prefixed with "api_".
+// For your convenience, links have been given to the documentation of the
+// original PHP functions. Thus, you may exploit on your previous habits.
+//
+// 3. Why these function have been introduced? Because they are able to
+// support more encodings than the original ones. And which is more
+// important - they are UTF-8 aware. So, they should be used for strings
+// in natural language. For internal system identificators of file names
+// which are supposed to contain only English letters you may use the
+// original PHP string functions.
+//
+// 4. This library requires PHP mbstring extension to be activated.
+// When encodings to be used are not supported by mbstring, this library
+// is able to exploit the PHP iconv extesion, which in this case should
+// be activated too.
 
 
 //----------------------------------------------------------------------------
@@ -36,37 +58,13 @@ function api_convert_encoding($string, $to_encoding, $from_encoding) {
 // Converts a given string into UTF-8 encoded string.
 // See http://php.net/manual/en/function.utf8-encode
 function api_utf8_encode($string, $from_encoding = null) {
-	if (empty($from_encoding)) {
-		$from_encoding = api_mb_internal_encoding();
-	}
-	if (api_is_utf8($from_encoding)) {
-		return $string;
-	}
-	if (api_mb_supports($from_encoding)) {
-		return @mb_convert_encoding($string, 'UTF-8', $from_encoding);
-	}
-	elseif (api_iconv_supports($from_encoding)) {
-		return @iconv($from_encoding, 'UTF-8', $string);
-	}
-	return $string;
+	return api_convert_encoding($string, 'UTF-8', $from_encoding);
 }
 
 // Converts a given string, from UTF-8 encoding to a specified encoding.
 // See http://php.net/manual/en/function.utf8-decode
 function api_utf8_decode($string, $to_encoding = null) {
-	if (empty($to_encoding)) {
-		$to_encoding = api_mb_internal_encoding();
-	}
-	if (api_is_utf8($to_encoding)){
-		return $string;
-	}
-	if (api_mb_supports($to_encoding)) {
-		return @mb_convert_encoding($string, $to_encoding, 'UTF-8');
-	}
-	elseif (api_iconv_supports($to_encoding)) {
-		return @iconv('UTF-8', $to_encoding, $string);
-	}
-	return $string;
+	return api_convert_encoding($string, $to_encoding, 'UTF-8');
 }
 
 // Encodes a given string into the system ecoding if this conversion has been detected as necessary.
@@ -99,14 +97,16 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
 
 // Converts all applicable characters to HTML entities.
 // See http://php.net/manual/en/function.htmlentities
-function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'ISO-8859-15') {
+function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) {
+	if (empty($encoding)) {
+		$from_encoding = api_mb_internal_encoding();
+	}
 	if (!api_is_utf8($encoding) && api_html_entity_supports($encoding)) {
 		return htmlentities($string, $quote_style, $encoding);
 	}
 	if (!api_is_encoding_supported($encoding)) {
 		return $string;
 	}
-
 	$string = api_convert_encoding(api_utf8_encode($string, $encoding), 'HTML-ENTITIES', 'UTF-8');
 	switch($quote_style) {
 		case ENT_COMPAT:
@@ -121,7 +121,10 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'ISO-8
 
 // Decodes HTML entities into normal characters.
 // See http://php.net/html_entity_decode
-function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 'ISO-8859-15') {
+function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = null) {
+	if (empty($encoding)) {
+		$from_encoding = api_mb_internal_encoding();
+	}
 	if (!api_is_utf8($encoding) && api_html_entity_supports($encoding)) {
 		return html_entity_decode($string, $quote_style, $encoding);
 	}
@@ -1040,6 +1043,11 @@ EUC-JP, EUCJP
 	}
 	return $supported[$encoding] ? true : false;
 }
+
+
+//----------------------------------------------------------------------------
+// String validation functions concerning some encodings
+//----------------------------------------------------------------------------
 
 
 // Returns true if the specified string is a valid UTF-8 one and false otherwise.

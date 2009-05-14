@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 20645 2009-05-14 17:05:48Z cfasanando $
+<?php //$Id: announcements.php 20650 2009-05-14 18:55:50Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -931,8 +931,7 @@ if (!$surveyid) {
 	if (api_is_allowed_to_edit() && $announcement_number > 1) {
 		if (!$show_actions)
 			echo '<div class="actions">';			
-		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('valves_delete.gif',get_lang('AnnouncementDeleteAll'), array ('style' => 'width:22px; height:22px;')).get_lang('AnnouncementDeleteAll')."</a>\n";
-	}	// if announcementNumber > 1
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('valvesdelete.gif',get_lang('AnnouncementDeleteAll')).get_lang('AnnouncementDeleteAll')."</a>\n";	}	// if announcementNumber > 1
 	if ($show_actions)
 		echo '</div>';		
 }

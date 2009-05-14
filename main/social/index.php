@@ -444,12 +444,12 @@ if ((api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_mess
 Display :: display_header('');
 if (isset($_GET['sendform'])) {
 	$form_reply=array();
-	$form_reply[]=urlencode($_POST['title']);
-	$form_reply[]=urlencode($_POST['content']);
+	$form_reply[]=urlencode(Security::remove_XSS($_POST['title']));
+	$form_reply[]=urlencode(Security::remove_XSS($_POST['content'],COURSEMANAGER));
 	$form_reply[]=$_POST['user_list'];
 	$form_reply[]=$_POST['re_id'];
 	$form_reply[]=urlencode($_POST['compose']);
-	$form_reply[]=urlencode($_POST['id_text_name']);
+	$form_reply[]=urlencode(Security::remove_XSS($_POST['id_text_name']));
 	$form_reply[]=urlencode($_POST['save_form']);
 	$form_info=implode(',',$form_reply);
 	$form_send_data_message='?form_reply='.$form_info;

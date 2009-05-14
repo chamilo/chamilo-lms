@@ -37,8 +37,8 @@ if (api_is_anonymous()) {
 
 $user_id=intval($_POST['user_id']);
 $panel_id=intval($_POST['panel_id']);
-$content_message=$_POST['txt_content']; //check this is filtered on output
-$subject_message=$_POST['txt_subject']; //check this is filtered on output
+$content_message=Security::remove_XSS($_POST['txt_content'],COURSEMANAGER); //check this is filtered on output
+$subject_message=Security::remove_XSS($_POST['txt_subject']); //check this is filtered on output
 $user_info=array();
 $user_info=api_get_user_info($user_id);
 if ($panel_id==2) {

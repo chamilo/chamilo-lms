@@ -483,7 +483,7 @@ echo '<div id="social-profile-wrapper">';
 				else 
 					$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
 				if (api_get_user_id() == $user_id)	
-					$friend_html.= '<div style="float:right;"><a href="index.php?#remote-tab-6">'.get_lang('SeeAll').'</a></div>';													
+					$friend_html.= '<div style="float:right; padding-left:280px;"><a href="index.php?#remote-tab-6">'.get_lang('SeeAll').'</a></div>';													
 					$friend_html.= '</div>'; // close div friend-header						
 								
 				for ($k=0;$k<$loop_friends;$k++) {				
@@ -510,8 +510,8 @@ echo '<div id="social-profile-wrapper">';
 				$friend_html .= '<div class="sectiontitle">'.get_lang('Friends').'</div>';
 				$friend_html.= '<div id="friend-container" class="social-friend-container">';
 				$friend_html.= '<div id="friend-header">';
-				$friend_html.= '<div style="float:left;">'.get_lang('Friends').'</div>';
-				$friend_html.= '<div style="float:right;">'.get_lang('SeeAll').'</div>';
+				$friend_html.= '<div style="float:left; padding:0px 8px 0px 8px;">'.get_lang('Friends').'</div>';
+				$friend_html.= '<div style="float:right; padding-left:280px;">'.get_lang('SeeAll').'</div>';
 				$friend_html.= '</div><br/><br/>'; // close div friend-header					
 			}
 			$friend_html.= '</div>'; 		

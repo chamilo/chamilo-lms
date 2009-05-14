@@ -456,9 +456,9 @@ unset($nosessionCourses);
   else
   {
   ?>
-	<input type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" value=">>" />
+  	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" value="onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
 	<br /><br />
-	<input type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" value="<<" />
+	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" value="onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
   <?php 
   } 
   ?>

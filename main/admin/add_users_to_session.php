@@ -561,9 +561,9 @@ if(!empty($errorMsg)) {
   <?php
   } else {
   ?>
-	<input type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" value=">>" />
+  	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" value="onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"></button>
 	<br /><br />
-	<input type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" value="<<" />
+	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" value="onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"></button>
 	<?php 
   } 
   ?>

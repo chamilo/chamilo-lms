@@ -78,8 +78,8 @@ $current_page = $_GET['action'];
 
 $safe_post_title = Security::remove_XSS($_POST['post_title']);
 $safe_post_file_comment = Security::remove_XSS($_POST['post_file_comment']);
-$safe_post_full_text = Security::remove_XSS($_POST['post_full_text']);
-$safe_comment_text = Security::remove_XSS($_POST['comment_text']);
+$safe_post_full_text = Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['post_full_text'])), COURSEMANAGER);
+$safe_comment_text = Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['comment_text'])), COURSEMANAGER);
 $safe_comment_title = Security::remove_XSS($_POST['comment_title']);  
 $safe_task_name = Security::remove_XSS($_POST['task_name']);
 $safe_task_description = Security::remove_XSS($_POST['task_description']);

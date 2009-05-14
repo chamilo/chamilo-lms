@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20567 2009-05-12 21:10:13Z cvargas1 $
+<?php //$Id: agenda.inc.php 20658 2009-05-14 20:12:43Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -419,13 +419,15 @@ function display_monthcalendar($month, $year)
 
 				$dayheader = "$curday";
 				
-				if (key_exists($curday,$data)) {
-					$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
+				if (key_exists($curday,$data)) {					
+					
+					//$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
 					foreach ($data[$curday] as $key=>$agenda_item)
 					{
 						foreach ($agenda_item as $key=>$value) {
 							$month_start_date = (int)substr($value['start_date'],5,2);
 							if ($month == $month_start_date) {
+								$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
 								$dayheader .= '<br /><b>'.substr($value['start_date'],11,8).'</b>';
 								$dayheader .= ' - ';
 								$dayheader .= $value['title'];

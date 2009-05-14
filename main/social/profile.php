@@ -640,10 +640,14 @@ echo '<div id="social-profile-container">';
     	  	echo '<div class="actions" style="margin-right:5px;">';
     	  	if (api_get_user_id() == $user_id) {
     	  		// if i'm me
+    	  		echo '<div>';
     	  		echo Display::return_icon('email.gif');
     	  		echo '&nbsp;<a href="../social/index.php#remote-tab-2">'.get_lang('MyInbox').'</a>&nbsp;'; 
+    	  		echo '</div>';
+    	  		echo '<div>';
     	  		echo Display::return_icon('edit.gif');
-    	  		echo '&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>&nbsp;';    	  			
+    	  		echo '&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>&nbsp;';  
+    	  		echo '</div>'; 	  			
     	  	} else {
     	  		echo '&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />'; 
     	  		//echo '&nbsp;&nbsp;<a href="#">'.get_lang('SendMessage').'</a>';	

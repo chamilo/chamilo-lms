@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 20617 2009-05-13 23:46:58Z cfasanando $
+<?php //$Id: announcements.php 20645 2009-05-14 17:05:48Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1062,7 +1062,7 @@ if ($display_form == true) {
 					<input class="checkbox" type="checkbox" value="1" name="email_ann" '.$checked.'>
 				  </div>
 				  <div class="formw">'.
-					get_lang('EmailOption').': '.get_lang('MyGroup').'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
+					get_lang('EmailOption').': '.get_lang('MyGroup').'&nbsp;&nbsp;<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
 			show_to_form_group($_SESSION['toolgroup']);
 			echo '</div></div>';	
 		}

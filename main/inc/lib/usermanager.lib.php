@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 20615 2009-05-13 23:00:33Z cfasanando $
+<?php // $Id: usermanager.lib.php 20641 2009-05-14 16:13:21Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1928,4 +1928,35 @@ class UserManager
 		}
 		return $picture;
     }
+    /**
+     * @author Isaac flores <isaac.flores@dokeos.com>
+     * @param string The email administrator
+     * @param integer The user id
+     * @param string The message title
+     * @param string The content message
+     */
+   	  function send_message_in_outbox ($email_administrator,$user_id,$title, $content) {
+        global $charset;
+		$table_message = Database::get_main_table(TABLE_MESSAGE);
+		$table_user = Database::get_main_table(TABLE_MAIN_USER);		
+        $title = mb_convert_encoding($title,$charset,'UTF-8');
+        $content = mb_convert_encoding($content,$charset,'UTF-8');
+		//message in inbox
+		$sql_message_outbox='SELECT user_id from '.$table_user.' WHERE email="'.$email_administrator.'" ';
+		//$num_row_query=Database::num_rows($sql_message_outbox);
+		$res_message_outbox=Database::query($sql_message_outbox,__FILE__,__LINE__);
+		$array_users_administrator=array();
+		while ($row_message_outbox=Database::fetch_array($res_message_outbox,'ASSOC')) {
+			$array_users_administrator[]=$row_message_outbox['user_id'];
+		}
+		//allow to insert messages in outbox
+		for ($i=0;$i<count($array_users_administrator);$i++) {
+			$sql_insert_outbox = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
+					" VALUES (".
+			 		"'".(int)$user_id."', '".(int)($array_users_administrator[$i])."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
+			 		")";
+			$rs = Database::query($sql_insert_outbox,__FILE__,__LINE__);
+		}
+
+	} 
 }

@@ -29,8 +29,8 @@
 // name of the language file that needs to be included 
 $language_file = "index";
 
-include_once("../inc/global.inc.php");
-
+require_once"../inc/global.inc.php";
+require_once"../inc/lib/usermanager.lib.php";
 if(empty($_user['user_id']))
 {
 	api_not_allowed(true);
@@ -46,11 +46,16 @@ if(empty($_SESSION['origin_url'])){
 /* Process the form and redirect to origin */
 if(!empty($_POST['submit_email']) && !empty($_POST['email_title']) && !empty($_POST['email_text']))
 {
-	$text = $_POST['email_text']."\n\n---\n".get_lang('EmailSentFromDokeos')." ".api_get_path(WEB_PATH);
+	$text = Security::remove_XSS($_POST['email_text'])."\n\n---\n".get_lang('EmailSentFromDokeos')." ".api_get_path(WEB_PATH);
+	$email_administrator=Security::remove_XSS($_POST['dest']);
+	$user_id=api_get_user_id();
+	$title=Security::remove_XSS($_POST['email_title']);
+	$content=Security::remove_XSS($_POST['email_text']);	
 	if(!empty($_user['mail'])){
-		api_send_mail($_POST['dest'],$_POST['email_title'],$text,"From: ".$_user['mail']."\r\n");
+		api_send_mail($email_administrator,$title,$text,"From: ".$_user['mail']."\r\n");
+		UserManager::send_message_in_outbox ($email_administrator,$user_id,$title, $content);		
 	}else{
-		api_send_mail($_POST['dest'],$_POST['email_title'],$text);
+		api_send_mail($email_administrator,$title,$text);
 	}
 	$orig = $_SESSION['origin_url'];
 	api_session_unregister('origin_url');
@@ -63,13 +68,13 @@ Display::display_header(get_lang('SendEmail'));
 ?>
 <table border="0">
 <form action="" method="POST">
-<input type="hidden" name="dest" value="<?php echo $_REQUEST['dest'];?>" />
+<input type="hidden" name="dest" value="<?php echo Security::remove_XSS($_REQUEST['dest']);?>" />
 	<tr>
 		<td>
 			<label for="email_address"><?php echo get_lang('EmailDestination');?></label>
 		</td>
 		<td>
-			<span id="email_address"><?php echo $_REQUEST['dest']; ?></span>
+			<span id="email_address"><?php echo Security::remove_XSS($_REQUEST['dest']); ?></span>
 		</td>
 	</tr>
 	<tr>
@@ -77,7 +82,7 @@ Display::display_header(get_lang('SendEmail'));
 			<label for="email_title"><?php echo get_lang('EmailTitle');?></label>
 		</td>
 		<td>
-			<input name="email_title" id="email_title" value="<?php echo $_POST['email_title'];?>" size="60"></input>
+			<input name="email_title" id="email_title" value="<?php echo Security::remove_XSS($_POST['email_title']);?>" size="60"></input>
 		</td>
 	</tr>
 	<tr>
@@ -86,7 +91,7 @@ Display::display_header(get_lang('SendEmail'));
 		</td>
 		<td>
 			<?php
-			  echo '<textarea id="email_text" name="email_text" rows="10" cols="80">'.$_POST['email_text'].'</textarea>';
+			  echo '<textarea id="email_text" name="email_text" rows="10" cols="80">'.Security::remove_XSS($_POST['email_text']).'</textarea>';
 			  //htmlarea is not used otherwise we have to deal with HTML e-mail and all the related probs
 			  //api_disp_html_area('email_text',$_POST['email_text'],'250px');
 			?>

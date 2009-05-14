@@ -72,7 +72,7 @@ for ($k=0;$k<$number_list;$k++) {
 }
 echo '<br/>';
 ?>
-<input  style="margin-left:50px" type="button" value="<?php echo api_xml_http_response_encode(get_lang('AttachToGroup')); ?>" onclick="set_qualify_friend()"/>
+<button style="margin-left:50px" type="button" class="save" value="<?php echo api_xml_http_response_encode(get_lang('AttachToGroup')); ?>" onclick="set_qualify_friend()"><?php echo api_xml_http_response_encode(get_lang('AttachToGroup')) ?></button>
 			</div></td>
 			</td>
 		</tr>

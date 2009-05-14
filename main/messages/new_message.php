@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 20587 2009-05-13 12:26:56Z ivantcholakov $
+<?php // $Id: new_message.php 20660 2009-05-14 20:47:57Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -173,7 +173,7 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');
 	}
-	$form->addElement('submit', 'compose', api_xml_http_response_encode(get_lang('Send')));
+	$form->addElement('style_submit_button','compose',api_xml_http_response_encode(get_lang('SendMessage')),'class="save"');
 	$form->setRequiredNote(api_xml_http_response_encode('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>'));
 	$form->setDefaults($default);
 	if ($form->validate()) {

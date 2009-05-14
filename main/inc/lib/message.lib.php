@@ -90,7 +90,8 @@ function inbox_display() {
 		if (get_number_of_messages_mask() > 0) {
 			echo '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
 			echo '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-			echo '<input name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'inbox\')"/>';
+			echo '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'inbox\')">'.get_lang('DeleteSelectedMessages').'</button>';
+			
 		}
 	} else {
 		$table->set_form_actions(array ('delete' => api_xml_http_response_encode(get_lang('DeleteSelectedMessages'))));
@@ -173,7 +174,7 @@ echo '<div id="div_content_table_data_sent">';
 		if (get_number_of_messages_send_mask() > 0) {
 			echo '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
 			echo '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-			echo '<input name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'outbox\')"/>';
+			echo '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'outbox\')">'.get_lang('DeleteSelectedMessages').'</button>';
 		}
 	} else {
 		$table->set_form_actions(array ('delete' => api_xml_http_response_encode(get_lang('DeleteSelectedMessages'))));

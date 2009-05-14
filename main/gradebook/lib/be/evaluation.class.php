@@ -222,13 +222,13 @@ class Evaluation implements GradebookItem
 			if (isset($this->eval_date)) {
 			  $sql .= ',date';
 			}
-			$sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
+			$sql .= ") VALUES ('".Database::escape_string(Security::remove_XSS($this->get_name()))."'"
 					.','.$this->get_user_id()
 					.','.$this->get_weight()
 					.','.$this->get_max()
 					.','.$this->is_visible();
 			if (isset($this->description)) {
-				 $sql .= ",'".Database::escape_string($this->get_description())."'";
+				 $sql .= ",'".Database::escape_string(Security::remove_XSS($this->get_description()))."'";
 			}
 			if (isset($this->course_code)) {
 				 $sql .= ",'".$this->get_course_code()."'";
@@ -267,10 +267,10 @@ class Evaluation implements GradebookItem
 	public function save() {
 		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql = 'UPDATE '.$tbl_grade_evaluations
-			." SET name = '".Database::escape_string($this->get_name())."'"
+			." SET name = '".Database::escape_string(Security::remove_XSS($this->get_name()))."'"
 			.', description = ';
 		if (isset($this->description)) {
-			$sql .= "'".Database::escape_string($this->get_description())."'";			
+			$sql .= "'".Database::escape_string(Security::remove_XSS($this->get_description()))."'";			
 		}else {
 			$sql .= 'null';		
 		}

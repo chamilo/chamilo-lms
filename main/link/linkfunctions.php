@@ -188,24 +188,19 @@ function addlinkcategory($type)
 
 			Display::display_confirmation_message(get_lang('LinkAdded'));
 		}
-	}
-	elseif ($type == "category")
-	{
+	} elseif ($type == "category") {
 		$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 
 		$category_title = trim($_POST['category_title']);
 		$description = trim($_POST['description']);
 
-		if (empty ($category_title))
-		{
+		if (empty ($category_title)) {
 			$msgErr = get_lang('GiveCategoryName');
 
 			Display::display_error_message(get_lang('GiveCategoryName'));
 
 			$ok = false;
-		}
-		else
-		{
+		} else {
 			// looking for the largest order number for this category
 			$result = api_sql_query("SELECT MAX(display_order) FROM  ".$tbl_categories."");
 
@@ -213,7 +208,7 @@ function addlinkcategory($type)
 
 			$order = $orderMax +1;
 
-			$sql = "INSERT INTO ".$tbl_categories." (category_title, description, display_order) VALUES ('$category_title','$description', '$order')";
+			$sql = "INSERT INTO ".$tbl_categories." (category_title, description, display_order) VALUES ('".Security::remove_XSS($category_title)."','".Security::remove_XSS($description)."', '$order')";
 			api_sql_query($sql, __FILE__, __LINE__);
 
 			$catlinkstatus = get_lang('CategoryAdded');

@@ -179,7 +179,10 @@ class MessageManager {
 	}
 	
 	 public static function send_message ($receiver_user_id, $title, $content) {
-		$table_message = Database::get_main_table(TABLE_MESSAGE); 
+        global $charset;
+		$table_message = Database::get_main_table(TABLE_MESSAGE);
+        $title = mb_convert_encoding($title,$charset,'UTF-8');
+        $content = mb_convert_encoding($content,$charset,'UTF-8');
 		//message in inbox
 		$sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".api_get_user_id()." AND user_receiver_id='".Database::escape_string($receiver_user_id)."' AND title = '".Database::escape_string($title)."' AND content ='".Database::escape_string($content)."' ";
 		$res_exist = api_sql_query($sql,__FILE__,__LINE__);

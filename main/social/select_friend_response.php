@@ -105,8 +105,8 @@ border="0" cellpadding="0" cellspacing="0">
 cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
               <tr>
                 <td width="600" height="25" valign="top" style="padding:4px;"><div align="right">
-       				<button class="save" name="btn_accepted" type="submit" id="<?php echo "btn_accepted_".$user_id ?>" value="<?php echo api_xml_http_response_encode(get_lang('Accept'));?>"onclick="javascript:register_friend(this)"><?php echo get_lang('Accept') ?></button>
-     				<button class="cancel" name="btn_denied" type="submit" id="<?php echo "btn_deniedst_".$user_id ?>" value="<?php echo api_xml_http_response_encode(get_lang('Deny')); ?>" onclick="javascript:denied_friend(this)" ><?php echo get_lang('Deny')?></button> 
+       				<button class="save" name="btn_accepted" type="submit" id="<?php echo "btn_accepted_".$user_id ?>" value="<?php echo api_xml_http_response_encode(get_lang('Accept'));?>"onclick="javascript:register_friend(this)"><?php echo api_xml_http_response_encode(get_lang('Accept')) ?></button>
+     				<button class="cancel" name="btn_denied" type="submit" id="<?php echo "btn_deniedst_".$user_id ?>" value="<?php echo api_xml_http_response_encode(get_lang('Deny')); ?>" onclick="javascript:denied_friend(this)" ><?php echo api_xml_http_response_encode(get_lang('Deny'))?></button> 
                   </div></td>
                     </tr>
             </table></td>

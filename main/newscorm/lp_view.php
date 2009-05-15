@@ -493,7 +493,7 @@ else
 					?>
 					
 					<div id="lp_navigation_elem" class="lp_navigation_elem" style="padding-left:130px;margin-top:9px;">
-						<div style="padding-top:20px;padding-bottom:50px;" ><?php echo $navigation_bar; ?></div> 
+						<div style="padding-top:15px;padding-bottom:50px;" ><?php echo $navigation_bar; ?></div> 
 						<div style="height:20px"><?php echo $progress_bar; ?></div>
 					</div>									
 				</div>		  	 				

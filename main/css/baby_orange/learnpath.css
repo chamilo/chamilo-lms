@@ -44,7 +44,11 @@ table.lp_build{font-size:12px; height:400px; width:100%;}
 
 table.lp_build td{vertical-align:top;}
 table.lp_build td.tree{border-right:1px solid #999999; width:240px;}
-table.lp_build td.workspace{padding:0; width:auto;}
+table.lp_build td.workspace {
+	padding: 0px;
+	padding-left:5px;
+	width:auto;
+}
 
 
 table.lp_form{

@@ -341,11 +341,10 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 #footer a {
 	color:#fff;
 }
-#footer #platformmanager{
-
+#footer #platformmanager {
 }
-#footer #coursemanager{
-	margin-left: 10px; 
+#footer #coursemanager {
+	margin-left: 10px;
 }
 .copyright {
 	display: inline;
@@ -2153,10 +2152,30 @@ div.comments {
 	padding: 0px;
 }
 /*SOCIAL TOOL*/
-div.image-social-content{float:left; border:1px solid #B8C8DC; margin:2px; padding: 8px 4px 4px 4px; background: #ffffff; height:125px; width:82px; z-index:5;  cursor:pointer;   position:relative;}
-div.image-social-content span{overflow:hidden; display:block; height:92px;}
-div.image-social-content img{vertical-align:middle;}
-div.image-social-content center.friend{overflow:hidden; height:30px;}
+div.image-social-content {
+	float:left;
+	border:1px solid #B8C8DC;
+	margin:2px;
+	padding: 8px 4px 4px 4px;
+	background: #ffffff;
+	height:125px;
+	width:82px;
+	z-index:5;
+	cursor:pointer;
+	position:relative;
+}
+div.image-social-content span {
+	overflow:hidden;
+	display:block;
+	height:92px;
+}
+div.image-social-content img {
+	vertical-align:middle;
+}
+div.image-social-content center.friend {
+	overflow:hidden;
+	height:30px;
+}
 .image-social-content .image-delete {
 	position: absolute;
 	top: 1px;
@@ -2204,7 +2223,6 @@ div.image-social-content center.friend{overflow:hidden; height:30px;}
 	border-right:1px #9DACBF solid;
 	border-bottom:1px #9DACBF solid;
 }
-
 .social-profile-info dt {
 	text-align:left;
 	clear:left;
@@ -2220,9 +2238,6 @@ div.image-social-content center.friend{overflow:hidden; height:30px;}
 	padding-left:10px;
 	width:200px;
 }
-
-
-
 /* general layout of the profile page */
 #social-profile-wrapper {
 	width: 1000px;
@@ -2246,8 +2261,6 @@ div.image-social-content center.friend{overflow:hidden; height:30px;}
 	width:290px;
 	margin-left: 4px;
 }
-
-
 /*****************************************************
  *  BUTTONS	                                         *
  *****************************************************/
@@ -2341,16 +2354,54 @@ button.back {
 	padding-bottom: 3px;
 	padding-left: 5px;
 }
-.question_menu {list-style:none; float:left; }
-.question_menu li{float:left; margin:0px;}
-#exercise_admin {margin: 0; padding: 0; border: 0; }
-
-div#friend-header{float:left; width:100%; line-height: 2.1em;}
-div#friend-header a{ padding-right:6px;}
-div#friend-container{float:left; }
-
-div.image_friend_network{float:left; border:1px solid #CCCCCC; margin:2px; padding:4px; background: #EFEFEF; height:125px; width:81px; z-index:5; }
-div.image_friend_network span{overflow:hidden; display:block; height:92px; margin: 0px 0px;}
-div.image_friend_network img{vertical-align:middle;}
-div.image_friend_network center.friend{overflow:hidden; height:30px;}
-.friend_invitations{float:left; margin: 0 0 4px 12px;}
+.question_menu {
+	list-style:none;
+	float:left;
+}
+.question_menu li {
+	float:left;
+	margin:0px;
+}
+#exercise_admin {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+div#friend-header {
+	float:left;
+	width:100%;
+	line-height: 2.1em;
+}
+div#friend-header a {
+	padding-right:6px;
+}
+div#friend-container {
+	float:left;
+}
+div.image_friend_network {
+	float:left;
+	border:1px solid #CCCCCC;
+	margin:2px;
+	padding:4px;
+	background: #EFEFEF;
+	height:125px;
+	width:81px;
+	z-index:5;
+}
+div.image_friend_network span {
+	overflow:hidden;
+	display:block;
+	height:92px;
+	margin: 0px 0px;
+}
+div.image_friend_network img {
+	vertical-align:middle;
+}
+div.image_friend_network center.friend {
+	overflow:hidden;
+	height:30px;
+}
+.friend_invitations {
+	float:left;
+	margin: 0 0 4px 12px;
+}

@@ -1,9 +1,7 @@
-.scormpage
-{
+.scormpage {
 	height: 100%;
 }
-.scormpage .menu
-{
+.scormpage .menu {
 	width: 180px;
 	float: left;
 	margin: 1px;
@@ -12,106 +10,84 @@
 	padding-top: 0px;
 	font-size: small;
 }
-.lp_toc{
+.lp_toc {
 	background-color: white;
 	height: 380px;
 	width: 99%;
 	border-right: 1px none;
 }
-.inner_lp_toc{
+.inner_lp_toc {
 	overflow: auto;
 	background-color: white;
-	height: 210px; 
+	height: 210px;
 	width: 94%;
 	border-left: 10px #FFF solid;
 }
-.inner_lp_toc .scorm_item{
-
+.inner_lp_toc .scorm_item {
 	font-size: 11px;
 	margin-left: 10px;
-	margin-right:10px;//cambiado era 20
-	padding-bottom: 2px;
+	margin-right:10px;
+//cambiado era 20  padding-bottom: 2px;
 	text-decoration: none;
 }
-
-.inner_lp_toc .scorm_item A
-{
+.inner_lp_toc .scorm_item A {
 	font-size: 11px;
 	margin-right: 1px;
 	padding-bottom: 2px;
 	text-decoration: none;
 	font-weight: normal;
 }
-
-.inner_lp_toc .scorm_item A.chapter_module{
+.inner_lp_toc .scorm_item A.chapter_module {
 	font-weight: normal;
 	margin-right: 10px;
 }
-
-
-.inner_lp_toc  .scorm_item_highlight
-{
-	font-size: 11px;
-	margin-right: 1px;
-	padding-bottom: 2px;
-	text-decoration: none;
-	font-weight: normal;	
-	
-	background:#aaa;
-}
-
-.inner_lp_toc  .scorm_item_highlight A
-{
-	font-size: 11px;
-	margin-right: 1px;
-	text-decoration: none;
-	font-weight: normal;			
-
-}
-.inner_lp_toc  .scorm_item_1
-{
-	font-size: 11px;
-	margin-right: 1px;
-	padding-bottom: 2px;
-	text-decoration: none;
-	font-weight: normal;	
-	
-	background:#ddd;
-}
-
-.inner_lp_toc  .scorm_item_2
-{
+.inner_lp_toc .scorm_item_highlight {
 	font-size: 11px;
 	margin-right: 1px;
 	padding-bottom: 2px;
 	text-decoration: none;
 	font-weight: normal;
-	
-	background:#eee;		
+	background:#aaa;
 }
-
-
-.inner_lp_toc .scorm_title
-{
+.inner_lp_toc .scorm_item_highlight A {
+	font-size: 11px;
+	margin-right: 1px;
+	text-decoration: none;
+	font-weight: normal;
+}
+.inner_lp_toc .scorm_item_1 {
+	font-size: 11px;
+	margin-right: 1px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	font-weight: normal;
+	background:#ddd;
+}
+.inner_lp_toc .scorm_item_2 {
+	font-size: 11px;
+	margin-right: 1px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	font-weight: normal;
+	background:#eee;
+}
+.inner_lp_toc .scorm_title {
 	font-weight: bold;
 	background:#ccc;
 	font-size: 14px;
-	color: #444;	
+	color: #444;
 }
-
-.inner_lp_toc .scorm_title_text
-{
+.inner_lp_toc .scorm_title_text {
 	margin-left: 10px;
-	//padding: 2px;
-	//cambiado no existe
+ //padding: 2px;
+ //cambiado no existe
 }
-
-.inner_lp_toc .scorm_status_img{
+.inner_lp_toc .scorm_status_img {
 	margin:0px;
 	margin-left: -10px;
 	width:10px;
 }
-.lp_navigation{
+.lp_navigation {
 	overflow: auto;
 	background-color: white;
 	height: 44px;
@@ -123,37 +99,33 @@
 	border-top: 1px dotted black;
 	border-bottom: 1px dotted black;
 }
-
-.lp_navigation_elem{
+.lp_navigation_elem {
 	padding-left: 15px;
 	padding-top: 0px;
 }
 /*.scormpage .menu */
-.lp_navigation_elem .progresstext{
+.lp_navigation_elem .progresstext {
 	margin-top: -20px;
-	margin-left: 40%; //em
-	font-size: normal;
+	margin-left: 40%;
+//em  font-size: normal;
 }
-
 /*.scormpage .menu */
-.lp_navigation_elem .buttons{
+.lp_navigation_elem .buttons {
 	margin-left: 0px;
 	margin-right: 0em;
 	margin-top: 0.4em;
 }
-
-.scormpage .menu .notification{
+.scormpage .menu .notification {
 	background-color: white;
 	height: 50px;
 }
-.scormpage .menu .notification .message{
+.scormpage .menu .notification .message {
 	background-color: white;
 	height: 50px;
 	width: 180px;
 	border: none;
 }
-
-.scormpage .content{
+.scormpage .content {
 	/*float: left;
 	width: 60%;*/
 	margin-top: 0px;
@@ -161,7 +133,7 @@
 	padding-left: 180px;
 	background-color: white;
 }
-.iframe{
+.iframe {
 	border: 0px solid black;
 	height: 580px;
 	width: 95%;
@@ -170,34 +142,28 @@
 	overflow: auto;
 	vertical-align: top;
 }
-.scormpage .footer{
-	clear: both;	
+.scormpage .footer {
+	clear: both;
 }
-
-#image_preview
-{
+#image_preview {
 	padding-left: 17px;
 }
-
-#author_name
-{
+#author_name {
 	padding-left: 5px;
 	padding-top: 5px;
 	font-size: 11px;
 	color:#888;
 }
-
-#msg_div_id{
+#msg_div_id {
 	padding-left: 17px;
 	padding-top: 4px;
 }
-
 .scorm_title_text {
 	margin-left: 10px;
 	font-weight: bold;
 	background:#ccc;
 	font-size: 14px;
-	color: #444;	
-	width: 89%;		
-	padding: 1px 5px 3px 8px;	
+	color: #444;
+	width: 89%;
+	padding: 1px 5px 3px 8px;
 }

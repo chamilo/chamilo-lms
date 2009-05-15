@@ -8,57 +8,48 @@
 	margin:1em auto;
 	text-align:center;
 }
-
 /*
 ------------------------------------------------------------------------------
 	Introductory title
 ------------------------------------------------------------------------------
 */ 
 
-#box_title1,#footer1 {
+#box_title1, #footer1 {
 	border:1px solid #4171b5;
 	padding:1em;
 	width:99%;
 	margin:1em auto;
 }
-
-#box_title1 h1{
-	font:bold 2.5em Arial,sans-serif,sans;
+#box_title1 h1 {
+	font:bold 2.5em Arial, sans-serif, sans;
 }
-
-#box_title h2{
-	font:bold 2em Arial,sans-serif,sans;
+#box_title h2 {
+	font:bold 2em Arial, sans-serif, sans;
 }
-
 #content1 {
 	width:99%;
 	clear:both;
 	text-align:justify;
 }
-
-#content1 img.icon{
+#content1 img.icon {
 	float:left;
 	margin:0 1em 1em 1em;
 	display:block;
 	vertical-align:top;
 }
-
 #email1 {
 	float:right;
 	clear:right;
 	text-align:right;
 }
-
-#email1, .manager1{
+#email1, .manager1 {
 	width:50%;
 }
-
 #footer1 {
 	font-weight:bold;
 	height: 1em;
-    line-height: 1em;
+	line-height: 1em;
 }
-
 #manager1 {
 	float:left;
 	clear:left;
@@ -77,28 +68,24 @@
 	text-align:justify;
 	margin-right:2em;
 }
-
 #content2 h1 {
 	padding:.5em;
-	font:bold 2em Arial,sans-serif,sans;
+	font:bold 2em Arial, sans-serif, sans;
 }
-
 #content2 h2 {
-	font:normal 1.1em Arial,sans-serif,sans;
+	font:normal 1.1em Arial, sans-serif, sans;
 	margin:.2em 0 3em .5em;
 }
-
-#content2 p{
+#content2 p {
 	margin:.5em;
 }
-
 #explanation {
 	text-align:center;
 	margin: 1em auto;
 	width:auto;
 	border:1px solid #4171b5;
 }
-#list2{
+#list2 {
 	width:10em;
 	border:1px solid #4171b5;
 	margin:2em auto;
@@ -107,7 +94,6 @@
 	text-align:left;
 	margin-left:.2em;
 }
-
 #list2 li {
 	margin:0 0 0 2em;
 	padding:0;
@@ -115,25 +101,21 @@
 	text-align:left;
 	list-style-position:inside;
 }
-#list2 ul{
+#list2 ul {
 	margin:0 0 .5em 0;
 	padding:0;
 	text-align:left;
 	list-style-position:inside;
 }
-
 #main2 {
 	border:1px solid #4171b5;
 }
-
-
 #nav2 {
 	position:absolute;
 	left:2em;
 	top:3em;
 	width:15em;
 }
-
 .template2 {
 	position:relative;
 }
@@ -142,16 +124,15 @@
 	Course objetives
 ------------------------------------------------------------------------------
 */
-#box_title3,#content3 {
+#box_title3, #content3 {
 	border:1px solid #4171b5;
 	padding:1em;
 	width:99%;
 	margin:1em auto;
 }
-#box_title3 h1{
-	font:bold 3.5em Arial,sans-serif,sans;
+#box_title3 h1 {
+	font:bold 3.5em Arial, sans-serif, sans;
 }
-
 #content3 {
 	position:relative;
 	padding-bottom:50px;
@@ -163,58 +144,53 @@
 	margin:0;
 	padding:0;
 }
-#content3 #primary li,#content3 #secondary li{
+#content3 #primary li, #content3 #secondary li {
 	margin:0 0 0 1em;
 	padding:0;
 }
-#content3 #primary .secondary{
-	font-weight:normal; 
+#content3 #primary .secondary {
+	font-weight:normal;
 	font-size:.8em;
 	margin:0 0 0 2em;
 	padding:0;
 }
-
 #footer3 {
 	position:absolute;
 	bottom:0;
 	right:0;
 }
-
 /*
 ==============================================================================
 	Styles for corporative version
 ==============================================================================
 */
 #corp {
-	font:normal .85em Lucida Grande,Arial,sans-serif,sans;
+	font:normal .85em Lucida Grande, Arial, sans-serif, sans;
 }
 #corp a {
 	text-decoration: none;
 	font: bold 100% Arial, sans-serif, sans;
 	color: #4170b4;
 }
-
-#corp a:hover,#corp a:focus {
+#corp a:hover, #corp a:focus {
 	color: #111;
 }
-
 /*
 ------------------------------------------------------------------------------
 	Introductory title
 ------------------------------------------------------------------------------
 */ 
 
-#corp #box_title1{
+#corp #box_title1 {
 	background:transparent url("images/alert.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 }
-#corp #box_title1 #bottom{
+#corp #box_title1 #bottom {
 	background:transparent url("images/alert.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
 }
-
 #corp #footer1 {
 	border: 1px solid #ddd;
 	background:#eee url("images/headertables.jpg") repeat-x top center;
@@ -227,25 +203,22 @@
 	Explanation
 ------------------------------------------------------------------------------
 */ 
-#corp #explanation{
+#corp #explanation {
 	background:transparent url("images/alert.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 }
-
-#corp #explanation #bottom{
+#corp #explanation #bottom {
 	background:transparent url("images/alert.jpg") no-repeat top center;
 	height:40px;
 	margin-top:-15px;
 	width:100%;
 }
-
-#corp #list2,#corp #main2 {
+#corp #list2, #corp #main2 {
 	border:1px solid #aaa;
 }
-
 #corp #content2 #main2 h2 {
-	font:bold 1.1em Arial,sans-serif,sans;
+	font:bold 1.1em Arial, sans-serif, sans;
 	margin:.2em 0 3em .5em;
 }
 /*
@@ -253,12 +226,12 @@
 	Course objetives
 ------------------------------------------------------------------------------
 */
-#corp #box_title3{
+#corp #box_title3 {
 	background:transparent url("images/alert.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 }
-#corp #box_title3 #bottom{
+#corp #box_title3 #bottom {
 	background:transparent url("images/alert.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
@@ -266,7 +239,6 @@
 #corp #content3 {
 	border:1px solid #bbb;
 }
-
 /*
 ==============================================================================
 	Styles for academic version
@@ -275,14 +247,13 @@
 #academic {
 	font-family:normal .85em trebuchet, verdana, Arial, sans-serif, sans;
 	color: #000915;
-}	
+}
 #academic a {
 	text-decoration: none;
 	font: bold 100% Arial, sans-serif, sans;
 	color: #4171b5;
 }
-
-#academic a:hover,a:focus {
+#academic a:hover, a:focus {
 	color: #000915;
 }
 /*
@@ -290,27 +261,24 @@
 	Introductory title
 ------------------------------------------------------------------------------
 */ 
-#academic #box_title1{
+#academic #box_title1 {
 	background:transparent url("images/alert_academic.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 	color: #00122B;
 }
-#academic #box_title1 #bottom{
+#academic #box_title1 #bottom {
 	background:transparent url("images/alert_academic.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
 }
-
-#academic #footer1{
+#academic #footer1 {
 	background: #8cafe1 url('images/crystal3.png') repeat-x;
 }
-
-#academic #footer1 a{
+#academic #footer1 a {
 	color:#fff;
 }
-
-#academic #footer1 a:hover,#academic #footer1 a:focus {
+#academic #footer1 a:hover, #academic #footer1 a:focus {
 	color: #000915;
 }
 /*
@@ -318,32 +286,29 @@
 	Explanation
 ------------------------------------------------------------------------------
 */
-#academic #explanation{
+#academic #explanation {
 	background:transparent url("images/alert_academic.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 	color: #00122B;
 }
-#academic #explanation #bottom{
+#academic #explanation #bottom {
 	background:transparent url("images/alert_academic.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
 }
-
-#academic #list2,#academic #main2{
+#academic #list2, #academic #main2 {
 	border: 1px solid #0049AF;
 }
-
 #academic #nav2 img {
 	margin-bottom:3em;
 }
 #academic #nav2 .logo {
 	margin-left:-1.2em;
 }
-
-#academic #nav2{
+#academic #nav2 {
 	top:5em;
-} 
+}
 /*
 ------------------------------------------------------------------------------
 	Course objetives
@@ -354,7 +319,7 @@
 	background: #b0c8eb url('images/crystal3.png') repeat-x;
 	color: #00122B;
 }
-#academic #content3{
+#academic #content3 {
 	border: 1px solid #0049AF;
 }
 /*
@@ -366,14 +331,12 @@
 	font:normal .85em 'Lucida Grande', verdana, Arial, sans-serif, sans;
 	color: #000;
 }
-
 #baby a {
 	text-decoration: none;
 	font: bold 100% Arial, sans-serif, sans;
 	color: #9a0;
 }
-
-#baby a:hover,a:focus {
+#baby a:hover, a:focus {
 	color: #470;
 }
 /*
@@ -382,18 +345,17 @@
 ------------------------------------------------------------------------------
 */
 
-#baby #box_title1{
+#baby #box_title1 {
 	background:transparent url("images/alert_baby.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 	color: #00122B;
 }
-#baby #box_title1 #bottom{
+#baby #box_title1 #bottom {
 	background:transparent url("images/alert_baby.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
 }
-
 #baby #footer1 {
 	background-color:transparent;
 	border: 1px solid #BFAF00;
@@ -405,27 +367,25 @@
 	Explanation
 ------------------------------------------------------------------------------
 */
-#baby #explanation{
+#baby #explanation {
 	background:transparent url("images/alert_baby.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 	color: #3F3A00;
 }
-#baby #explanation #bottom{
+#baby #explanation #bottom {
 	background:transparent url("images/alert_baby.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
 }
-
-#baby #list2,#baby #main2 {
+#baby #list2, #baby #main2 {
 	border: 1px solid #BFAF00;
 }
-
-#baby #nav2{
+#baby #nav2 {
 	top:0;
 }
 #baby #content2 #main2 h2 {
-	font:bold 1.1em Arial,sans-serif,sans;
+	font:bold 1.1em Arial, sans-serif, sans;
 	margin:.2em 0 3em .5em;
 }
 /*
@@ -434,18 +394,17 @@
 ------------------------------------------------------------------------------
 */
 
-#baby #box_title3{
+#baby #box_title3 {
 	background:transparent url("images/alert_baby.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 	color: #3F3A00;
 }
-#baby #box_title3 #bottom{
+#baby #box_title3 #bottom {
 	background:transparent url("images/alert_baby.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
 }
-
 #baby #content3 {
-	 border: 1px solid #BFAF00;
+	border: 1px solid #BFAF00;
 }

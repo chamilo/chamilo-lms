@@ -1,5 +1,4 @@
-body
-{
+body {
 	background-color: #FFFFFF;
 	color: #000000;
 	font-family: verdana, arial, helvetica, sans-serif;
@@ -7,116 +6,86 @@ body
 	margin: 3px;
 	padding: 0px;
 }
-
-td, p, li
-{
+td, p, li {
 	color: #000000;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 11px;
 }
-
-a:link
-{
+a:link {
 	color: #4171b5;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: bold;
 	text-decoration: underline;
 }
-
-a:visited
-{
+a:visited {
 	color: #4171b5;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: bold;
 	text-decoration: underline;
 }
-
-a:hover
-{
+a:hover {
 	color: #FF0000;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: bold;
 	text-decoration: underline;
 }
-
-a:active
-{
+a:active {
 	color: #4171b5;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: bold;
 	text-decoration: underline;
 }
-
-a.master:link
-{
+a.master:link {
 	color: #800080;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: bold;
 	text-decoration: underline;
 }
-
-a.master:visited
-{
+a.master:visited {
 	color: #800080;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: bold;
 	text-decoration: underline;
 }
-
-a.master:hover
-{
+a.master:hover {
 	color: #800080;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: bold;
 	text-decoration: underline;
 }
-
-a.master:active
-{
+a.master:active {
 	color: #800080;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: bold;
 	text-decoration: underline;
 }
-
-form
-{
+form {
 	margin: 0px;
 }
-
-input, select, textarea
-{
+input, select, textarea {
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 11px;
 }
-
-ul
-{
+ul {
 	list-style-position: inside;
 	list-style-type: square;
 	margin-left: 5px;
 	padding-left: 0px;
 }
-
-li
-{
+li {
 	padding-bottom: 5px;
 }
-
-.master
-{
+.master {
 	color: #800080;
 }
-
-.question
-{
+.question {
 	color: #FF8600;
 }

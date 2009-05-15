@@ -82,7 +82,7 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 	$info_delete=array();
 	/***********************************************/
 	if ( isset($_GET['form_reply']) ) {
-		$info_reply=explode(',',$_GET['form_reply']);
+		$info_reply=explode(base64_encode('&%ff..x'),$_GET['form_reply']);
 		$count_reply=count($info_reply);
 		$button_sent=urldecode($info_reply[4]);	
 	}
@@ -96,10 +96,11 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 	if ( isset($button_sent) ) {
 
 		$title     = api_convert_encoding(urldecode($info_reply[0]),'UTF-8',$charset);
-		$content   = api_convert_encoding(urldecode($info_reply[1]),'UTF-8',$charset);
+		$content   = api_convert_encoding(str_replace("\\","",urldecode($info_reply[1])),'UTF-8',$charset);
+		$title     = Security::remove_XSS($title);
+		$content   = Security::remove_XSS($content,COURSEMANAGER);
 		//$title = urldecode($info_reply[0]);
 		//$content   = urldecode($info_reply[1]);
-		
 		$user_reply= $info_reply[2];
 		$user_email_base=str_replace(')','(',$info_reply[5]);
 		$user_email_prepare=explode('(',$user_email_base);

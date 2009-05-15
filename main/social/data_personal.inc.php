@@ -24,6 +24,7 @@
 $language_file = array('registration','messages','userInfo','admin','forum','blog');
 require_once ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
 
 // @todo here we must show the user information as read only 
 //User picture size is calculated from SYSTEM path
@@ -117,11 +118,8 @@ $language_variable=api_xml_http_response_encode(get_lang('PersonalData'));
 		echo '<a href="../social/profile.php?shared=true">'.Display::return_icon('shared_profile.png',api_xml_http_response_encode(get_lang('ViewSharedProfile'))).'&nbsp;'.api_xml_http_response_encode(get_lang('ViewSharedProfile')).'</a>';		
 	}
 	echo '</div>';	
-	echo '<div id="profile_container" style="width:550px;display:block;">';
-		echo '<div id="picture" style="width:200px;float:right;position:relative;">'; 
-			echo '<img src='.$img_array['dir'].$img_array['file'].' />';
-		echo '</div>';	
-		echo '<div class="social-profile-info">';			
+	echo '<div id="profile_container">';			
+		echo '<div class="social-profile-info" style="float:left;position:relative">';			
 			echo '<dt>'.api_xml_http_response_encode(get_lang('UserName')).'</dt>
 			<dd>'. api_xml_http_response_encode($user_info['username']).'	</dd>';
 			echo '<dt>'.api_xml_http_response_encode(get_lang('FirstName')).'</dt>
@@ -135,6 +133,33 @@ $language_variable=api_xml_http_response_encode(get_lang('PersonalData'));
 			echo '<dt>'.api_xml_http_response_encode(get_lang('Phone')).'</dt>
 			<dd>'. api_xml_http_response_encode($user_info['phone']).'</dd>';			
 		echo '</div>';
-	echo '</div>';	
+		
+		echo '<div style="float:left;position:relative">';
+		echo '<div id="picture" style="width:200px;float:left;position:relative;margin-top:10px;">'; 
+			echo '<img src='.$img_array['dir'].$img_array['file'].' />';
+		echo '</div>';	
+		/*if (api_get_setting('allow_message_tool')=='true') {	
+			require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+			$number_of_new_messages = MessageManager::get_new_messages();
+			$number_of_outbox_message=MessageManager::get_number_of_messages_sent();
+			$cant_out_box=' ('.$number_of_outbox_message.')';
+			$cant_msg = ' ('.$number_of_new_messages.')';
+			$number_of_new_messages_of_friend=UserFriend::get_message_number_invitation_by_user_id(api_get_user_id());
+			//echo '<div class="message-view" style="display:none;">'.get_lang('ViewMessages').'</div>';
+			echo '<div class="message-content" style="float:right" >
+					<h2 class="message-title" style="margin-top:0">'.get_lang('Messages').'</h2>
+					<p>
+						<a href="../social/index.php#remote-tab-2" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />
+						<a href="../social/index.php#remote-tab-3" class="message-body">'.get_lang('Outbox').$cant_out_box.'</a><br />
+					</p>';		
+			echo '<img src="../img/delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" onclick="delete_message_js()" />';
+			if ($number_of_new_messages_of_friend>0) {
+				echo '<br/>';
+			}
+			echo '</div>';
+		}*/
+				
+		echo '</div>';
+			
 }
 ?>

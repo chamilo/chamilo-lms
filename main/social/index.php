@@ -300,29 +300,40 @@ function compose_and_show_message (my_action,name_rs) {
 }
 function send_request_and_search() {
 	cont=0;
-      $("#id_text_name").bind("keyup", function(){
+      //$("#id_text_name").bind("keyup", function(){
       	name=$("#id_text_name").get(0).value;
+      	if (name.length==0) {
+      		return false;
+      	}
 		$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {
-				/*$("#id_div_search").html("Searching...");*/ },
+				//$("#id_div_search").html("Searching...");
+					},
 				type: "POST",
 				url: "../social/select_options.php",
 				data: "search="+name,
 				success: function(datos){
-				$("#id_div_search").html(datos)
-				$("#id_search_name").bind("click", function() {
-					name_option=$("select#id_search_name option:selected").text();
-					code_option=$("select#id_search_name option:selected").val();
-					 $("#user_list").attr("value", code_option);
-					 $("#id_text_name").attr("value", name_option);
-					 
-					 $("#id_div_search").html("");
-					 cont++;
-				 });
+					
+					num_records=datos.split(\'</option>\');
+					if (num_records.length==1) {
+						$("#id_div_search").html("");					
+						return false;
+					}
+	
+					$("#id_div_search").html(datos)
+						$("#id_search_name").bind("click", function() {
+							name_option=$("select#id_search_name option:selected").text();
+							code_option=$("select#id_search_name option:selected").val();
+							 $("#user_list").attr("value", code_option);
+							 $("#id_text_name").attr("value", name_option);
+							 
+							 $("#id_div_search").html("");
+							 cont++;
+						 });
 				}
 		});
-      }); 
+      //});
 }
 function delete_one_message (num_id) {
 		$("div#div_content_messages").html("");
@@ -391,6 +402,14 @@ function hide_search_list () {
 	$("div#id_div_search").html("");
 }
 </script>';
+if (api_get_setting('allow_message_tool')=='true') {
+	$htmlHeadXtra[] ='<script type="text/javascript">
+		function delete_message_js() {
+			$(".message-content").animate({ opacity: "hide" }, "slow");
+			$(".message-view").animate({ opacity: "show" }, "slow");			
+		}
+	</script>';	
+}
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/jquery.tabs.css" type="text/css" media="print, projection, screen">';
 $htmlHeadXtra[] = '
@@ -444,14 +463,14 @@ if ((api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_mess
 Display :: display_header('');
 if (isset($_GET['sendform'])) {
 	$form_reply=array();
-	$form_reply[]=urlencode(Security::remove_XSS($_POST['title']));
-	$form_reply[]=urlencode(Security::remove_XSS($_POST['content'],COURSEMANAGER));
+	$form_reply[]=urlencode($_POST['title']);
+	$form_reply[]=urlencode($_POST['content']);
 	$form_reply[]=$_POST['user_list'];
 	$form_reply[]=$_POST['re_id'];
 	$form_reply[]=urlencode($_POST['compose']);
-	$form_reply[]=urlencode(Security::remove_XSS($_POST['id_text_name']));
+	$form_reply[]=urlencode($_POST['id_text_name']);
 	$form_reply[]=urlencode($_POST['save_form']);
-	$form_info=implode(',',$form_reply);
+	$form_info=implode(base64_encode('&%ff..x'),$form_reply);
 	$form_send_data_message='?form_reply='.$form_info;
 } elseif (isset($_GET['inbox'])) {
 	$form_delete=array();

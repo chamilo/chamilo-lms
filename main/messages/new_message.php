@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 20660 2009-05-14 20:47:57Z aportugal $
+<?php // $Id: new_message.php 20707 2009-05-15 17:58:05Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,7 +74,7 @@ function validate(form,list)
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){
-	cont=0;
+	cont=0;	
       $("#id_text_name").bind("keyup", function(){
       	name=$("#id_text_name").get(0).value;
 		$.ajax({
@@ -104,6 +104,7 @@ $nameTools = api_xml_http_response_encode(get_lang('ComposeMessage'));
 $fck_attribute['Height'] = "150";
 $fck_attribute['Width'] = "95%";
 $fck_attribute['ToolbarSet'] = "Profil";
+$fck_attribute['Config']['ToolbarStartExpanded']='false';
 /*
 ==============================================================================
 		FUNCTIONS
@@ -155,13 +156,13 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form = new FormValidator('compose_message');
 	}
 	if (isset($select_from_user_list)) {
-		$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()'));
+		$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()','autocomplete'=>'off'));
 		$form->addRule('id_text_name', api_xml_http_response_encode(get_lang('ThisFieldIsRequired')), 'required');
 		$form->addElement('html','<div id="id_div_search" class="message-search">&nbsp;</div>');
 		$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 	} else {
 		if ($default['user_list']==0) {
-			$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onclick'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()'));
+			$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()','autocomplete'=>'off'));
 			$form->addRule('id_text_name', api_xml_http_response_encode(get_lang('ThisFieldIsRequired')), 'required');
 			$form->addElement('html','<div id="id_div_search" class="message-search">&nbsp;</div>');
 		}

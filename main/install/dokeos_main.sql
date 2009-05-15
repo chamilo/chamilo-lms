@@ -1233,8 +1233,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 			</body>
 ');
 
-
-
+/*
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleCheckList', 'TemplateTitleCheckListDescription', 'checklist.gif', '
       <head>
@@ -1281,7 +1280,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 				</p>
 				</body>
 ');
-
+*/
 
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleTeacher', 'TemplateTitleTeacherDescription', 'yourinstructor.gif', '
@@ -1447,6 +1446,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 			</body>  
 ');
 
+/*
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleComparison', 'TemplateTitleComparisonDescription', 'compare.gif', '
 <head>
@@ -1471,6 +1471,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 			</tr>			
 			</body>
 ');
+*/
 
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleDiagram', 'TemplateTitleDiagramDescription', 'diagram.gif', '
@@ -1532,6 +1533,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 					</body>	
 ');
 
+/*
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleObjectives', 'TemplateTitleObjectivesDescription', 'courseobjectives.gif', '
 <head>
@@ -1570,6 +1572,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 				</p>
 				</body>		
 ');
+*/
 
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleCycle', 'TemplateTitleCycleDescription', 'cyclechart.gif', '
@@ -1635,6 +1638,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 				</body>	
 ');
 
+/*
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleLearnerWonder', 'TemplateTitleLearnerWonderDescription', 'learnerwonder.gif', '
 <head>
@@ -1674,6 +1678,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 			</p>
 			</body>
 ');
+*/
 
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleTimeline', 'TemplateTitleTimelineDescription', 'phasetimeline.gif', '
@@ -1739,6 +1744,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 			</body>
 ');
 
+/*
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleStopAndThink', 'TemplateTitleStopAndThinkDescription', 'stopthink.gif', '
 <head>
@@ -1770,6 +1776,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 			</p>
 			</body>
 ');
+*/
 
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleTable', 'TemplateTitleCheckListDescription', 'table.gif', '

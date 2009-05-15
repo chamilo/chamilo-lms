@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 19471 2009-03-31 23:28:53Z cvargas1 $
+<?php // $Id: update-db-1.8.5-1.8.6.inc.php 20713 2009-05-15 22:27:45Z cfasanando $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -230,7 +230,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}
 		
 		//Since the parser of the migration DB  does not work for this kind of inserts (HTML) we move it here	
-			
+		
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleCourseTitle\', \'TemplateTitleCourseTitleDescription\', \'coursetitle.gif\', \'
 		<head>
@@ -267,7 +267,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		\');';
 		$res = mysql_query($sql);
 		
-		
+		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleCheckList\', \'TemplateTitleCheckListDescription\', \'checklist.gif\', \'
 		      <head>
@@ -315,8 +315,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						</body>
 		\');';
 		
-		
 		$res = mysql_query($sql);
+		*/
 		
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleTeacher\', \'TemplateTitleTeacherDescription\', \'yourinstructor.gif\', \'
@@ -486,6 +486,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		\');';
 		$res = mysql_query($sql);
 		
+		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleComparison\', \'TemplateTitleComparisonDescription\', \'compare.gif\', \'
 		<head>
@@ -511,6 +512,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					</body>
 		\');';
 		$res = mysql_query($sql);
+		*/
 		
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleDiagram\', \'TemplateTitleDiagramDescription\', \'diagram.gif\', \'
@@ -546,6 +548,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		\');
 		';
 		$res = mysql_query($sql);
+		
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleDesc\', \'TemplateTitleCheckListDescription\', \'description.gif\', \'
 		<head>
@@ -574,6 +577,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		\');
 		';
 		$res = mysql_query($sql);
+		
+		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleObjectives\', \'TemplateTitleObjectivesDescription\', \'courseobjectives.gif\', \'
 		<head>
@@ -613,6 +618,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						</body>		
 		\');';
 		$res = mysql_query($sql);
+		*/
 		
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleCycle\', \'TemplateTitleCycleDescription\', \'cyclechart.gif\', \'
@@ -679,6 +685,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		\');';
 		$res = mysql_query($sql);
 		
+		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleLearnerWonder\', \'TemplateTitleLearnerWonderDescription\', \'learnerwonder.gif\', \'
 		<head>
@@ -720,6 +727,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		\');
 		';
 		$res = mysql_query($sql);
+		*/
+		
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleTimeline\', \'TemplateTitleTimelineDescription\', \'phasetimeline.gif\', \'
 		<head>
@@ -786,6 +795,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		';
 		$res = mysql_query($sql);
 		
+		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleStopAndThink\', \'TemplateTitleStopAndThinkDescription\', \'stopthink.gif\', \'
 		<head>
@@ -818,6 +828,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					</body>
 		\');';
 		$res = mysql_query($sql);
+		*/
 		
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleTable\', \'TemplateTitleCheckListDescription\', \'table.gif\', \'
@@ -1005,11 +1016,6 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					</body>
 		\'); ';
 		$res = mysql_query($sql);
-				
-		
-		
-		
-			
 		
         // Check if course_module exists, as it was not installed in Dokeos 1.8.5 because of a broken query, and $sql = 'INSERT it if necessary
         $query = "SELECT * FROM $dbNameForm.course_module";

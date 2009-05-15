@@ -43,7 +43,7 @@ function make_login($firstname,$lastname)
 	}
 	else
 	{
-		$desired_username = api_substr($firstname,0,1).substr($lastname,0,16);
+		$desired_username = api_substr($firstname,0,1).api_substr($lastname,0,16);
 	}	
 	return api_strtolower($desired_username);
 }

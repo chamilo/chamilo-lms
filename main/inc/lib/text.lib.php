@@ -1,4 +1,4 @@
-<?php // $Id: text.lib.php 20574 2009-05-13 00:06:48Z cfasanando $
+<?php // $Id: text.lib.php 20682 2009-05-15 11:11:07Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -398,11 +398,11 @@ function date_to_str_ago($date)
  * */
 function cut($text,$maxchar,$embed=false)
 {
-	if (strlen($text) > $maxchar) {
+	if (api_strlen($text) > $maxchar) {
 		if ($embed==true) {
-			return '<span title="'.$text.'">'.substr($text, 0, $maxchar).'...</span>';
+			return '<span title="'.$text.'">'.api_substr($text, 0, $maxchar).'...</span>';
 		}
-		return substr($text, 0, $maxchar).'...'	;
+		return api_substr($text, 0, $maxchar).'...'	;
 	} else {
 		return $text;
 	}	

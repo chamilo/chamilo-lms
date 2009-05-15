@@ -18,7 +18,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: date.php 20456 2009-05-10 17:27:44Z ivantcholakov $
+// $Id: date.php 20682 2009-05-15 11:11:07Z ivantcholakov $
 
 require_once 'HTML/QuickForm/group.php';
 require_once 'HTML/QuickForm/select.php';
@@ -299,7 +299,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         $backslash =  false;
         for ($i = 0, $length = api_strlen($this->_options['format']); $i < $length; $i++) {
             //$sign = $this->_options['format']{$i};
-            $sign = api_get_character($this->_options['format'], $i);
+            $sign = api_substr($this->_options['format'], $i, 1);
             if ($backslash) {
                 $backslash  = false;
                 $separator .= $sign;

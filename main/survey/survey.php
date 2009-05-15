@@ -1,4 +1,4 @@
-<?php // $Id: survey.php 20494 2009-05-11 20:41:53Z juliomontoya $
+<?php // $Id: survey.php 20682 2009-05-15 11:11:07Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 20494 2009-05-11 20:41:53Z juliomontoya $
+* 	@version $Id: survey.php 20682 2009-05-15 11:11:07Z ivantcholakov $
 *
 * 	@todo use quickforms for the forms
 */
@@ -78,7 +78,7 @@ if (isset($_GET['survey_id'])) {
 if (api_substr($survey_data['title'],0,3)!='<p>'){
 	$tool_name = strip_tags(api_substr(api_html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
 }else{
-	$tool_name = strip_tags(api_substr(api_html_entity_decode(substr($survey_data['title'],3,-4),ENT_QUOTES,$charset), 0, 40));
+	$tool_name = strip_tags(api_substr(api_html_entity_decode(api_substr($survey_data['title'],3,-4),ENT_QUOTES,$charset), 0, 40));
 }
 $is_survey_type_1 = ($survey_data['survey_type']==1)?true:false;
 if (api_strlen(strip_tags($survey_data['title'])) > 40)

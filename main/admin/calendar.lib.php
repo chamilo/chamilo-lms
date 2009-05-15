@@ -2008,7 +2008,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 			if ($setting_agenda_link == 'coursecode')
 			{
 				$title=$array_course_info['title'];
-				$agenda_link = substr($title, 0, 14);
+				$agenda_link = api_substr($title, 0, 14);
 			}
 			else 
 			{
@@ -2110,7 +2110,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 			if ($setting_agenda_link == 'coursecode')
 			{				
 				$title=$array_course_info['title'];
-				$agenda_link = substr($title, 0, 14);
+				$agenda_link = api_substr($title, 0, 14);
 			}
 			else 
 			{

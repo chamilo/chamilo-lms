@@ -888,34 +888,6 @@ div.admin_section h4 {
 	font-style: italic;
 	color: #666666;
 }
-/* Styles for user roles and rights */
-
-.role_right_true a:link, .role_right_true a:visited {
-	color: #00CC00;
-}
-a.role_right_true:link, a.role_right_true:visited {
-	color: #00CC00;
-}
-.role_right_true a:hover, .role_right_true a:hover {
-	color: #00CC00;
-}
-a.role_right_true:hover, a.role_right_true:hover {
-	color: #00CC00;
-	text-decoration:underline
-}
-.role_right_false a:link, .role_right_false a:visited {
-	color: #FF0000;
-}
-a.role_right_false:link, a.role_right_false:visited {
-	color: #FF0000;
-}
-.role_right_false a:hover, .role_right_false a:hover {
-	color: #FF0000;
-}
-a.role_right_false:hover, a.role_right_false:hover {
-	color: #FF0000;
-	text-decoration:underline
-}
 /* System announcements on homepage */
 div.system_announcements {
 }
@@ -930,9 +902,6 @@ div.system_announcement_content {
 	margin-left: 20px;
 	border-left: 1px solid gray;
 	padding-left: 5px;
-}
-.view_role_form {
-	display: inline;
 }
 /*****************************************************
  * special print ccs classes						 *

@@ -1,4 +1,4 @@
-<?php // $Id: session_import.php 20441 2009-05-10 07:39:15Z ivantcholakov $
+<?php // $Id: session_import.php 20699 2009-05-15 16:32:03Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -366,7 +366,7 @@ if ($_POST['formSent']) {
 	                        if (CourseManager::course_exists($CourseCode)) {
 							    // If the course exists we continue
 	                            $c_info = CourseManager::get_course_information($CourseCode);
-								$Coach = substr($courseNode->Coach,0,20);
+							$Coach = api_substr($courseNode->Coach,0,20);
 								// finding the user coach
 								if(!empty($Coach)){
 									$coach_id = UserManager::get_user_id_from_username($Coach);													
@@ -613,7 +613,7 @@ if ($_POST['formSent']) {
 					//var_dump($courses);
 					
 					foreach ($courses as $course) {			
-                        $CourseCode = api_strtoupper(api_substr($course,0,strpos($course,'[')));                                                               
+                        $CourseCode = api_strtoupper(api_substr($course,0,api_strpos($course,'[')));
                         if (CourseManager::course_exists($CourseCode)) {
                         	       	
                             // If the course exists we continue
@@ -670,8 +670,8 @@ if ($_POST['formSent']) {
 	                            if ($vcourse['code'] == $CourseCode) {
 	                                //ignore, this has already been inserted
 	                            } else {
-	                                $Coach = strstr($course,'[');
-	                                $Coach = substr($Coach,1,strpos($Coach,']')-1);
+                                    $Coach = api_strstr($course,'[');
+                                    $Coach = api_substr($Coach,1,api_strpos($Coach,']')-1);
 	        
 	                                if(!empty($Coach)){
 	                                    $sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
@@ -689,7 +689,7 @@ if ($_POST['formSent']) {
 	                                $rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
 	                                if(Database::affected_rows()){
 	                                    $countCourses++;
-	                                    $users = substr($course , strpos($course,'[',1)+1 , strpos($course,']',1));
+                                        $users = api_substr($course , api_strpos($course,'[',1)+1 , api_strpos($course,']',1));
 	                                    $users = explode('|',$enreg['Users']);
 	                                    $countUsersCourses = 0;
 	                                    foreach ($users as $user){

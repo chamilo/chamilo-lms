@@ -1,4 +1,4 @@
-<?php // $Id: document.php 19839 2009-04-17 19:55:53Z cvargas1 $
+<?php // $Id: document.php 20701 2009-05-15 16:54:36Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -499,7 +499,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	{
 		//needed for directory creation
 		include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-		$post_dir_name=$_POST['dirname'];
+		$post_dir_name=Security::remove_XSS($_POST['dirname']);
 		
 		if ($post_dir_name=='../' || $post_dir_name=='.' || $post_dir_name=='..') 
 		{

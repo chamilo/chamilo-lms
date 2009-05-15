@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 20606 2009-05-13 20:50:17Z cvargas1 $
+<?php // $Id: edit_document.php 20701 2009-05-15 16:54:36Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -336,9 +336,9 @@ function change_name($baseWorkDir, $sourceFile, $renameTo, $dir, $doc)
 if (isset($_POST['newComment']))
 {
 	//to try to fix the path if it is wrong
-	$commentPath = str_replace("//", "/", Database::escape_string($_POST['commentPath']));
-	$newComment = trim(Database::escape_string($_POST['newComment'])); // remove spaces
-	$newTitle = trim(Database::escape_string($_POST['newTitle'])); // remove spaces
+	$commentPath = str_replace("//", "/", Database::escape_string(Security::remove_XSS($_POST['commentPath'])));
+	$newComment = trim(Database::escape_string(Security::remove_XSS($_POST['newComment']))); // remove spaces
+	$newTitle = trim(Database::escape_string(Security::remove_XSS($_POST['newTitle']))); // remove spaces
 	// Check if there is already a record for this file in the DB
 	$result = api_sql_query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'",__FILE__,__LINE__);
 	while($row = Database::fetch_array($result, 'ASSOC'))

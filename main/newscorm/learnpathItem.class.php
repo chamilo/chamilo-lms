@@ -2200,7 +2200,45 @@ function get_terms()
    			//this info shouldn't be saved as the credit or lesson mode info prevent it
    			if($this->debug>1){error_log('New LP - In learnpathItem::write_to_db() - credit('.$credit.') or lesson_mode('.$mode.') prevent recording!',0);}
    		}else{
-      	//check the row exists
+      		//check the row exists
+      		$inserted = false;
+      		
+      		// this a special case for multiple attepmts and Dokeos exercises
+      		if ($this->type == 'quiz' && $this->get_prevent_reinit()==0 && $this->get_status()=='completed') {      			
+      			// we force the item to be restarted    		
+      			$this->restart();
+      			      		      	
+      			$sql = "INSERT INTO $item_view_table " .
+		     			"(total_time, " .
+		     			"start_time, " .
+		     			"score, " .
+		     			"status, " .
+		     			"max_score, ".
+		     			"lp_item_id, " .
+		     			"lp_view_id, " .
+		     			"view_count, " .
+		     			"suspend_data, " .
+		     			//"max_time_allowed," .
+		     			"lesson_location)" .
+		     			"VALUES" .
+		     			"(".$this->get_total_time()."," .
+		     			"".$this->current_start_time."," .
+		     			"".$this->get_score()."," .
+		     			"'".$this->get_status(false)."'," .
+		     			"'".$this->get_max()."'," .
+		     			"".$this->db_id."," .
+		     			"".$this->view_id."," .
+		     			"".$this->get_attempt_id()."," .
+		     			"'".Database::escape_string($this->current_data)."'," .
+		     			//"'".$this->get_max_time_allowed()."'," .
+		     			"'".$this->lesson_location."')";
+		     			
+      			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view forced: '.$sql,0);}
+		     	$res = api_sql_query($sql,__FILE__,__LINE__);
+		     	$this->db_item_view_id = Database::get_last_insert_id();	     	
+		     	$inserted = true;	
+		   }     		
+      		
 	     	$item_view_table = Database::get_course_table('lp_item_view');
 	     	$check = "SELECT * FROM $item_view_table " .
 	     			"WHERE lp_item_id = ".$this->db_id. " " .
@@ -2211,7 +2249,7 @@ function get_terms()
 	     	//depending on what we want (really), we'll update or insert a new row
 	     	//now save into DB
 	     	$res = 0;
-	     	if(Database::num_rows($check_res)<1){
+	     	if( $inserted==false && Database::num_rows($check_res)<1){
                 /*$my_status = '';
 	     		if ($this->type!=TOOL_QUIZ) {
 	     				$my_status = $this->get_status(false);

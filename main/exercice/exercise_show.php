@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20697 2009-05-15 15:42:37Z cvargas1 $
+* 	@version $Id: exercise_show.php 20704 2009-05-15 17:17:48Z cvargas1 $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -856,8 +856,8 @@ if ($show_results) {
 			$questionScore=0;
 			?>
 				<tr>
-					<td valign="top" align="left" style="padding-left:0px;" >
-						<table style="border: 1px solid #A4A4A4;border-bottom:none" width="500">
+					<td valign="top" align="center" style="padding-left:0px;" >
+						<table style="border: 1px solid #A4A4A4;border-bottom:none" width="470">
 			<?php 
 			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 				$answer=$objAnswerTmp->selectAnswer($answerId);

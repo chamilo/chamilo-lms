@@ -43,6 +43,7 @@
 $language_file[] = "document";
 $language_file[] = "scorm";
 $language_file[] = "scormdocument";
+$language_file[] = "learnpath";
 
 // global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)

@@ -42,6 +42,11 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 include('../newscorm/content_makers.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 
+echo '<div class="actions">';
+echo Display::return_icon('scorm.gif',get_lang('ReturnToLearningPaths')).' <a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.get_lang('ReturnToLearningPaths').'</a>';
+echo '</div>';
+
+
 $form = new FormValidator('','POST','upload.php','','id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 600px;"');
 $form->addElement('header', '', $nameTools);
 $form->addElement('hidden', 'curdirpath', $path);

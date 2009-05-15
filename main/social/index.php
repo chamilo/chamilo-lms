@@ -304,7 +304,7 @@ function send_request_and_search() {
       	name=$("#id_text_name").get(0).value;
       	if (name.length==0) {
       		return false;
-      	}
+      	}    		
 		$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {
@@ -319,9 +319,11 @@ function send_request_and_search() {
 					if (num_records.length==1) {
 						$("#id_div_search").html("");					
 						return false;
+					} else {
+						 $("#id_div_search").html(datos)
+						  list_search_hide();
 					}
 	
-					$("#id_div_search").html(datos)
 						$("#id_search_name").bind("click", function() {
 							name_option=$("select#id_search_name option:selected").text();
 							code_option=$("select#id_search_name option:selected").val();
@@ -396,7 +398,7 @@ function delete_one_message_outbox (num_id) {
 		});
 }
 function list_search_hide () {
-		setTimeout("hide_search_list()",1500);
+		setTimeout("hide_search_list()",2000);
 }
 function hide_search_list () {
 	$("div#id_div_search").html("");

@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 20561 2009-05-12 19:35:39Z juliomontoya $
+<?php // $Id: profile.php 20681 2009-05-15 11:05:56Z derrj $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -162,12 +162,10 @@ else
 
 //THEME
 if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
-	$form->addElement('select_theme', get_lang('Theme'),'theme');
+        $form->addElement('select_theme', 'theme', get_lang('Theme'));
 	if (api_get_setting('profile', 'theme') !== 'true')
 		$form->freeze('theme');
 	$form->applyFilter('theme', 'trim');
-	//if (api_get_setting('registration', 'openid') == 'true')
-	//	$form->addRule('openid', get_lang('ThisFieldIsRequired'), 'required');
 }
 
 //	LAST NAME and FIRST NAME

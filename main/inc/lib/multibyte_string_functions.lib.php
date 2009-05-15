@@ -636,6 +636,11 @@ function api_stristr($haystack, $needle, $part = false, $encoding = null) {
  * This function is aimed at replacing the functions strlen() and mb_strlen() for human-language strings.
  * @link http://php.net/manual/en/function.strlen
  * @link http://php.net/manual/en/function.mb-strlen
+ * Note: When you use strlen() to test for an empty string, you needn't change it to api_strlen().
+ * For example, in lines like the following:
+ * if (strlen($string) > 0)
+ * if (strlen($string) != 0)
+ * there is no need the original function strlen() to be changed, it works correctly and faster for these cases.
  */
 function api_strlen($string, $encoding = null) {
 	if (empty($encoding)) {

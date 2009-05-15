@@ -103,6 +103,8 @@ function get_number_of_messages_mask() {
 	return MessageManager::get_number_of_messages();
 }
 function get_message_data_mask($from, $number_of_items, $column, $direction) {
+	$column='3';
+	$direction='desc';	
 	return MessageManager::get_message_data($from, $number_of_items, $column, $direction);
 }
 function outbox_display() {
@@ -186,6 +188,8 @@ function get_number_of_messages_send_mask() {
 	return MessageManager::get_number_of_messages_sent();
 }
 function get_message_data_send_mask($from, $number_of_items, $column, $direction) {
+	$column='3';
+	$direction='desc';
 	return MessageManager::get_message_data_sent($from, $number_of_items, $column, $direction);
 }
 ?>

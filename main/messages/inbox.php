@@ -33,7 +33,7 @@ $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 require_once '../inc/global.inc.php';
 require_once '../messages/message.class.php';
-require_once(api_get_path(LIBRARY_PATH).'message.lib.php');
+require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 api_block_anonymous_users();
 if (isset($_GET['messages_page_nr'])) {
 	if (api_get_setting('allow_social_tool')=='true' &&  api_get_setting('allow_message_tool')=='true') {
@@ -94,7 +94,6 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 	/***********************************************/
 
 	if ( isset($button_sent) ) {
-
 		$title     = api_convert_encoding(urldecode($info_reply[0]),'UTF-8',$charset);
 		$content   = api_convert_encoding(str_replace("\\","",urldecode($info_reply[1])),'UTF-8',$charset);
 		$title     = Security::remove_XSS($title);

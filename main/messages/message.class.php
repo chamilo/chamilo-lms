@@ -277,6 +277,7 @@ class MessageManager {
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, user_receiver_id as col4, msg_status as col5 FROM $table_message " .
 					 "WHERE user_sender_id=".api_get_user_id()." AND msg_status=4 " .
 					 "ORDER BY col$column $direction LIMIT $from,$number_of_items";
+		
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 		$i = 0;
 		$message_list = array ();

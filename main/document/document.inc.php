@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 20088 2009-04-24 20:51:44Z iflorespaz $
+<?php // $Id: document.inc.php 20672 2009-05-15 08:02:19Z pcool $
 
 /*
 ==============================================================================
@@ -336,13 +336,13 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 		$modify_icons = Display::return_icon('edit_na.gif', get_lang('Modify'));		
         $modify_icons .= '&nbsp;'.Display::return_icon('delete.gif', get_lang('Delete'));
         $modify_icons .= '&nbsp;'.Display::return_icon('deplacer_fichier_na.gif', get_lang('Move'));
-        $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'_na.gif', get_lang('Visible'));
+        $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'_na.gif', get_lang('VisibilityCannotBeChanged'));
 	}
 	else
 	{
 		$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
         if (strcmp($path,'/audio')===0 or strcmp($path,'/flash')===0 or strcmp($path,'/images')===0 or strcmp($path,'/shared_folder')===0 or strcmp($path,'/video')===0) { 
-        	$modify_icons .= '&nbsp;<img src="../img/delete_na.gif" border="0" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'" /></a>';
+        	$modify_icons .= '&nbsp;'.Display::return_icon('delete_na.gif',get_lang('ThisFolderCannotBeDeleted'));
         } else {
         	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
         }

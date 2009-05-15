@@ -86,8 +86,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	
 } else {
 	
-	$limit=20;
-	$from=$page * $limit;
+	$limit = 20;
+	$from = $page * $limit;
 	
 	//if user is crfp admin only list its sessions
 	if(!api_is_platform_admin()) {
@@ -106,22 +106,25 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	
 	if (isset($_REQUEST['active']) && !isset($_REQUEST['inactive']) ){
 		$and .= ' AND ( (session.date_start <= CURDATE() AND session.date_end >= CURDATE()) OR session.date_start="0000-00-00" ) ';
+		$cond_url = '&amp;active='.Security::remove_XSS($_REQUEST['active']);
 	}
 	if (!isset($_REQUEST['active']) && isset($_REQUEST['inactive']) ){
 		$and .= ' AND ( (session.date_start > CURDATE() OR session.date_end < CURDATE()) AND session.date_start<>"0000-00-00" ) ';
+		$cond_url = '&amp;inactive='.Security::remove_XSS($_REQUEST['inactive']);
 	}
 	
-	$query= "SELECT id,name,nbr_courses,date_start,date_end, firstname, lastname 
+	$query= "SELECT id,name,nbr_courses,date_start,date_end, firstname, lastname
 			FROM $tbl_session, $tbl_user
 			$where
 			$and
-			ORDER BY $sort 
+			ORDER BY $sort
 			LIMIT $from,".($limit+1);
+	
 	//filtering the session list by access_url
 	if ($_configuration['multiple_access_urls']==true){
 		$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
 		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1) {				
+		if ($access_url_id != -1) {
 			$and.= " AND access_url_id = $access_url_id AND $table_access_url_rel_session.session_id = $tbl_session.id";
 			$query= "SELECT id,name,nbr_courses,date_start,date_end, firstname, lastname 
 				FROM $tbl_session, $tbl_user, $table_access_url_rel_session
@@ -129,12 +132,23 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 				$and
 				ORDER BY $sort 
 				LIMIT $from,".($limit+1);			
-		}	
-	}			
-	$result=api_sql_query($query,__FILE__,__LINE__);	
-	$num=Database::count_rows($tbl_session);
-	$Sessions=api_store_result($result);	
-	$nbr_results=sizeof($Sessions);	
+		}
+	}
+	
+	//query which allows me to get a record without taking into account the page
+	$query_rows= "SELECT count(*) as total_rows
+				FROM $tbl_session, $tbl_user
+				$where
+				$and
+				ORDER BY $sort";
+	
+	$result_rows = api_sql_query($query_rows,__FILE__,__LINE__);
+	$recorset = Database::fetch_array($result_rows);
+	$num = $recorset['total_rows'];
+	
+	$result = api_sql_query($query,__FILE__,__LINE__);
+	$Sessions = api_store_result($result);
+	$nbr_results = sizeof($Sessions);
 	$tool_name = get_lang('SessionList');	
 	Display::display_header($tool_name);	
 	//api_display_tool_title($tool_name);
@@ -159,37 +173,36 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		<button class="search" type="submit" name="name" value="<?php echo get_lang('Search') ?>"><?php echo get_lang('Search') ?></button>
 		<a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a>
 		</form>
-	<form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">	
+	<form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
+	 </div><br />
+	
 	<div align="left">	
-	<?php	
+	<?php
 	if(count($Sessions)==0 && isset($_POST['keyword'])) {
 		echo get_lang('NoSearchResults');
 	} else {
-		if($num>$limit){
-			if($page) {
-			?>	
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Previous'); ?></a>	
+		if ($num > $limit) {
+			if ($page) {
+			?>
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>	
 			<?php
 			} else {
 				echo get_lang('Previous');
 			}
 			?>	
-			|	
+			|
 			<?php
 			if($nbr_results > $limit) {
 				?>	
-				<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Next'); ?></a>	
+				<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>	
 				<?php
 			} else {
 				echo get_lang('Next');
 			}
 		}
 		?>	
-	</div>	
-	 </div>
-	
-		<br>
-	
+	</div>
+		<br />
 		<table class="data_table" width="100%">
 		<tr>
 		  <th>&nbsp;</th>
@@ -241,18 +254,18 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	
 		</table>
 	
-		<br>
+		<br />
 	
 		<div align="left">
 	
 		<?php
 		
-		if($num>$limit) {
-		if($page)
+		if ($num > $limit) {
+		if ($page)
 			{
 			?>
 		
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Previous'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
 		
 			<?php
 			}
@@ -269,7 +282,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			{
 			?>
 		
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?>"><?php echo get_lang('Next'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
 		
 			<?php
 			}
@@ -282,7 +295,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	
 		</div>
 	
-		<br>
+		<br />
 		<a href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll') ?></a>&nbsp;-&nbsp;
 		<a href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll') ?></a>
 		<select name="action">

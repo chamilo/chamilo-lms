@@ -22,9 +22,9 @@
 */
 
 $language_file = array('registration','messages','userInfo','admin','forum','blog');
-require_once ('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
 // @todo here we must show the user information as read only 
 //User picture size is calculated from SYSTEM path
@@ -33,8 +33,8 @@ $img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',tru
 
 
 if (isset($_POST['load_ajax'])) {
-	require_once (api_get_path(LIBRARY_PATH).'blog.lib.php');
-	require_once (api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php');	
+	require_once api_get_path(LIBRARY_PATH).'blog.lib.php';
+	require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';	
 	$user_id = $_SESSION['social_user_id'];
 	if ($_POST['action']) {$action = $_POST['action'];}
 	switch($action) {
@@ -58,7 +58,7 @@ if (isset($_POST['load_ajax'])) {
 				if ($forum_result !='') {					
 					api_display_tool_title(get_lang('Forum'));
 					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;" >';
-					echo $forum_result;
+					echo api_xml_http_response_encode($forum_result);
 					echo '</div>';	
 					echo '<br />';
 					$all_result_data++;
@@ -70,7 +70,7 @@ if (isset($_POST['load_ajax'])) {
 					echo '<div class="clear"></div><br />';
 					api_display_tool_title(get_lang('BlogPosts'));				
 					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
-					echo $result;
+					echo api_xml_http_response_encode($result);
 					echo '</div>';
 					echo '<br />';
 					$all_result_data++;				
@@ -81,7 +81,7 @@ if (isset($_POST['load_ajax'])) {
 				if (!empty($result)) {
 					api_display_tool_title(get_lang('BlogComments'));							
 					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
-					echo $result;
+					echo api_xml_http_response_encode($result);
 					echo '</div>';
 					echo '<br />';
 					$all_result_data++;		
@@ -157,9 +157,7 @@ $language_variable=api_xml_http_response_encode(get_lang('PersonalData'));
 				echo '<br/>';
 			}
 			echo '</div>';
-		}*/
-				
-		echo '</div>';
-			
+		}*/				
+		echo '</div>';			
 }
 ?>

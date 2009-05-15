@@ -1,11 +1,11 @@
 <?php
 $language_file = array('registration','messages','userInfo','admin');
-require ('../inc/global.inc.php');
-require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
-include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require '../inc/global.inc.php';
+require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'image.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once '../inc/lib/social.lib.php';
 $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
@@ -58,7 +58,6 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
 echo '<div id="div_content_table">';
 require_once 'show_search_image.inc.php';
 echo '</div>';
- 
 ?>
         </td>
         </tr>

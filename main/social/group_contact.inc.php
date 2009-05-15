@@ -1,11 +1,11 @@
 <?php
 $language_file = array('registration','messages','userInfo','admin');
-require ('../inc/global.inc.php');
-require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
-include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require '../inc/global.inc.php';
+require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'image.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once '../inc/lib/social.lib.php';
 $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
@@ -21,7 +21,6 @@ for ($p=0;$p<count($list_groups);$p++) {
 	$list_path_friends=UserFriend::get_list_path_web_by_user_id ($user_id,$list_groups[$p]['id']);
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="data_table">
-
           <tr>
 		<th align="left" id="<?php echo 'td_'.$list_groups[$p]['id']; ?>" style="cursor:pointer" valign="top" onclick="toogle_function(this)">
 			<?php echo api_xml_http_response_encode(get_lang($list_groups[$p]['title'])); ?>

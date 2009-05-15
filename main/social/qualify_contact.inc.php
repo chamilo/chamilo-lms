@@ -5,7 +5,7 @@
 
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) Julio Montoya Armas 
-
+	Copyright (c) Isaac Flores Paz
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
 
@@ -23,9 +23,9 @@
  
 $language_file=array('registration','messages','userInfo','admin');
 require_once '../inc/global.inc.php';
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once '../inc/lib/social.lib.php';
-$user_friend=$_POST['user_friend'];
+$user_friend=(int)$_POST['user_friend'];
 $list_of_options=array();
 $img_user=array();
 $img_info_user=array();
@@ -36,6 +36,7 @@ $number_list=count($list_of_options);
 $user_id  =urldecode($_GET['id_user']);
 $user_id  =str_replace("\\","",$user_id);
 $user_friend=str_replace('"',"",$user_id);
+$user_friend=Security::remove_XSS($user_friend);
 $user_info=api_get_user_info($user_friend);
 $user_friend_relation=UserFriend::get_relation_between_contacts(api_get_user_id(),$user_friend);
 ?>
@@ -47,7 +48,7 @@ $user_friend_relation=UserFriend::get_relation_between_contacts(api_get_user_id(
 	<tr>
 	   	 <td width="600" align="left">
 	   	 	<td width="50%"><br/>	   	 		
-	   	 		<img src="<?php echo $img_user[1]; ?>" />
+	   	 		<img src="<?php echo Security::remove_XSS($img_user[1]); ?>" />
 	   	 		<?php
 	   	 		echo '<br /><br />'.$name_user=api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']); 
 	   	 		?>
@@ -61,8 +62,7 @@ for ($k=0;$k<$number_list;$k++) {
    	} else {
    		$check='';
 	}
-	?>
-					    
+	?>					    
 	<input <?php echo $check; ?> style="margin-left:50px" type="radio" class="radio" name="list_type_friend"  value="<?php echo api_xml_http_response_encode($list_of_options[$k]['id']); ?>" />
 	<?php 
 	echo  api_xml_http_response_encode(get_lang($list_of_options[$k]['title'])); 

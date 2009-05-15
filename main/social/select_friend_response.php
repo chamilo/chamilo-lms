@@ -1,8 +1,8 @@
 <?php
 $language_file = array('registration','messages','userInfo','admin');
 require '../inc/global.inc.php';
-include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'image.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
@@ -22,7 +22,6 @@ $list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id($use
 $number_loop=count($list_get_invitation);
 if ($number_loop==0) {
 	Display::display_normal_message(api_xml_http_response_encode(get_lang('YouDontHaveInvites')));
-	
 }
 for ($i=0;$i<$number_loop;$i++) {
 ?>

@@ -12,8 +12,8 @@
 $language_file = array('registration','messages','userInfo','admin','forum','blog');
 $cidReset = true;	
 require '../inc/global.inc.php';
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 $user_id = api_get_user_id();
 $show_full_profile = true;
 
@@ -49,10 +49,10 @@ if (isset($_GET['u'])) {
 	$user_info	= UserManager::get_user_info_by_id($user_id);
 }
 
-require_once (api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php');
-require_once (api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 api_block_anonymous_users();
 

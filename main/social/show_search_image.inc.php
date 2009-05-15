@@ -24,15 +24,15 @@
 $cidReset = true;
 require '../inc/global.inc.php';
 $language_file = array('registration','messages','userInfo','admin');
-require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
-include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'image.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once '../inc/lib/social.lib.php';
 $list_path_friends=array();
 $user_id=api_get_user_id();
-$name_search=$_POST['search_name_q'];
+$name_search=Security::remove_XSS($_POST['search_name_q']);
 if (isset($name_search) && $name_search!='undefined') {
 	$list_path_friends=UserFriend::get_list_path_web_by_user_id($user_id,null,$name_search);		
 } else {

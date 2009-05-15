@@ -14,14 +14,13 @@ $my_current_friend		 = intval($_POST['friend_id']);
 $my_denied_current_friend= intval($_POST['denied_friend_id']);
 $my_delete_friend        = intval($_POST['delete_friend_id']);
 $friend_id_qualify       = intval($_POST['user_id_friend_q']);
-$type_friend_qualify     = $_POST['type_friend_q']; //filtered?
-$is_my_friend            = $_POST['is_my_friend']; //filtered?
+$type_friend_qualify     = Security::remove_XSS($_POST['type_friend_q']); //filtered?
+$is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
 if (isset($is_my_friend)) {
 	$relation_type='3';//my friend
 } else {
 	$relation_type='1';//Contact unknown	
 }
-
 
 if (isset($my_current_friend)) {
 	UserFriend::register_friend ($the_current_user_id,$my_current_friend,$relation_type);

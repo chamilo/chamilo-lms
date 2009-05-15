@@ -23,7 +23,7 @@
 $cidReset = true;
 $language_file = array('registration','messages','userInfo','admin');
 require '../inc/global.inc.php';
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
 api_block_anonymous_users();
@@ -493,7 +493,6 @@ if (isset($_GET['sendform'])) {
 }
 $form_url_send=isset($form_send_data_message) ? $form_send_data_message :'';
 ?>
-
 <div id="container-9">
     <ul>
         <li><a href="data_personal.inc.php"><span><?php Display :: display_icon('profile.png',get_lang('PersonalData')); echo '&nbsp;&nbsp;'.get_lang('PersonalData'); ?></span></a></li>
@@ -510,8 +509,7 @@ $form_url_send=isset($form_send_data_message) ? $form_send_data_message :'';
         <li><a href="group_contact.inc.php"><span><?php Display :: display_icon('group_contact.png',get_lang('ContactsGroups')); echo '&nbsp;&nbsp;'.get_lang('ContactsGroups'); ?></span></a></li>
         <?php
   	 	}
-        ?>   
-    
+        ?>     
     </ul>
     <?php echo '<div id="show">&nbsp;</div>';?>
 </div>

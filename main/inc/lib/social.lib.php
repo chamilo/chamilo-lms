@@ -281,7 +281,7 @@ class UserFriend extends UserManager {
 	public function qualify_friend($id_friend_qualify,$type_qualify) {
 		$tbl_user_friend=Database::get_main_table(TABLE_MAIN_USER_FRIEND);
 		$user_id=api_get_user_id();
-		$sql='UPDATE '.$tbl_user_friend.' SET relation_type='.$type_qualify.' WHERE user_id='.Database::escape_string($user_id).' AND friend_user_id='.Database::escape_string($id_friend_qualify).';';
+		$sql='UPDATE '.$tbl_user_friend.' SET relation_type='.Database::escape_string($type_qualify).' WHERE user_id='.Database::escape_string($user_id).' AND friend_user_id='.Database::escape_string($id_friend_qualify).';';
 		api_sql_query($sql,__FILE__,__LINE__);		
 	}
 	/**

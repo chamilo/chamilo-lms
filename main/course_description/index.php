@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20639 2009-05-14 15:41:56Z cvargas1 $
+<?php // $Id: index.php 20715 2009-05-15 23:42:57Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -311,7 +311,7 @@ if ($show_description_list) {
 			echo '<div class="sectiontitle">';
 			if (api_is_allowed_to_edit()) {
 				//delete
-				echo '<a href="'.api_get_self().'?action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
 				echo Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'));
 				echo '</a> ';
 				

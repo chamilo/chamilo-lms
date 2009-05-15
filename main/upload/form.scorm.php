@@ -74,14 +74,14 @@ $form->addElement('style_submit_button','submit', get_lang('Send'),'class="save"
 $form->addElement('html', '<br /><br /><br />');
 /*$list = get_zip_files_in_garbage();
 if(count($list)>0){
-	$select_file_name = &$form->addElement('select','file_name',get_lang('Or').' '.strtolower(get_lang('UploadLocalFileFromGarbageDir')));
+	$select_file_name = &$form->addElement('select','file_name',get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir')));
 	foreach($list as $file){
 		$select_file_name->addOption($file,$file);
 	}
 	$form->addElement('submit', 'submit', get_lang('Download'));
 }
 else{
-	$text_empty = &$form->addElement('text', 'empty', get_lang('Or').' '.strtolower(get_lang('UploadLocalFileFromGarbageDir')));
+	$text_empty = &$form->addElement('text', 'empty', get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir')));
 	$defaults["empty"] = get_lang('Empty');
 	$text_empty->freeze();
 }*/

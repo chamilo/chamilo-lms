@@ -142,8 +142,8 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
                 <tr>
                     <td id="operator-select">
                         '. get_lang('SearchCombineSearchWith') .':<br />
-                        <input type="radio" class="search-operator" name="operator" value="or" '. $or_checked .'>'. strtoupper(get_lang('Or')) .'</input>
-                        <input type="radio" class="search-operator" name="operator" value="and" '. $and_checked .'>'. strtoupper(get_lang('And')) .'</input>
+                        <input type="radio" class="search-operator" name="operator" value="or" '. $or_checked .'>'. api_strtoupper(get_lang('Or')) .'</input>
+                        <input type="radio" class="search-operator" name="operator" value="and" '. $and_checked .'>'. api_strtoupper(get_lang('And')) .'</input>
                     </td>
                     <td></td>
                     <td>
@@ -226,8 +226,8 @@ function search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, 
                 <tr>
                     <td id="operator-select">
                         '. get_lang('SearchCombineSearchWith') .':<br />
-                        <input type="radio" class="search-operator" name="operator" value="or" '. $or_checked .'>'. strtoupper(get_lang('Or')) .'</input>
-                        <input type="radio" class="search-operator" name="operator" value="and" '. $and_checked .'>'. strtoupper(get_lang('And')) .'</input>
+                        <input type="radio" class="search-operator" name="operator" value="or" '. $or_checked .'>'. api_strtoupper(get_lang('Or')) .'</input>
+                        <input type="radio" class="search-operator" name="operator" value="and" '. $and_checked .'>'. api_strtoupper(get_lang('And')) .'</input>
                     </td>
                     <td></td>
                     <td>

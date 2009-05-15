@@ -1,4 +1,4 @@
-<?php // $Id: survey.php 20682 2009-05-15 11:11:07Z ivantcholakov $
+<?php // $Id: survey.php 20693 2009-05-15 13:27:00Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 20682 2009-05-15 11:11:07Z ivantcholakov $
+* 	@version $Id: survey.php 20693 2009-05-15 13:27:00Z ivantcholakov $
 *
 * 	@todo use quickforms for the forms
 */
@@ -135,7 +135,7 @@ if (isset($_GET['action'])) {
 if (isset($_GET['message'])) {
 	// we have created the survey or updated the survey
 	if (in_array($_GET['message'], array('SurveyUpdatedSuccesfully','SurveyCreatedSuccesfully'))) {
-		Display::display_confirmation_message(get_lang($message_information).','.PHP_EOL.strtolower(get_lang('YouCanNowAddQuestionToYourSurvey')));
+		Display::display_confirmation_message(get_lang($message_information).','.PHP_EOL.api_strtolower(get_lang('YouCanNowAddQuestionToYourSurvey')));
 	}
 	// we have added a question
 	if (in_array($_GET['message'], array('QuestionAdded','QuestionUpdated'))) {

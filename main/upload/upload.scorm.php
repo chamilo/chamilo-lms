@@ -17,6 +17,7 @@ $error = api_failure::get_last_failure();
 if($error=='not_a_learning_path')
 {
         $msg = urlencode(get_lang('ScormUnknownPackageFormat'));
+		$dialogtype = 'error';
 }else{
 	if (api_get_setting('search_enabled')=='true') {
         require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
@@ -35,6 +36,7 @@ if($error=='not_a_learning_path')
     	}
     }
 	$msg = urlencode(get_lang('UplUploadSucceeded'));
+	$dialogtype = 'confirmation';
 }
-header('location: ../newscorm/lp_controller.php?action=list&dialog_box='.$msg);
+header('location: ../newscorm/lp_controller.php?action=list&dialog_box='.$msg.'&dialogtype='.$dialogtype);
 ?>

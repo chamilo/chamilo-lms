@@ -108,7 +108,21 @@ if(api_is_allowed_to_edit())
 
   if (!empty($dialog_box))
   {
-    Display::display_normal_message($dialog_box);
+	  switch ($_GET['dialogtype'])
+	  {
+	  	case 'confirmation':
+			Display::display_confirmation_message($dialog_box);
+			break;
+	  	case 'error':
+			Display::display_error_message($dialog_box);
+			break;
+	  	case 'warning':
+			Display::display_warning_message($dialog_box);
+			break;
+	  	default:
+    		Display::display_normal_message($dialog_box);
+			break;
+	  }
   }
   if (api_failure::get_last_failure())
   {

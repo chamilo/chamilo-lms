@@ -35,7 +35,7 @@ $nameTools = get_lang("FileUpload");
 $interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("Learnpath"));
 Display::display_header($nameTools,"Path");
 //show the title
-api_display_tool_title(get_lang("Learnpath")." - ".$nameTools.$add_group_to_title);
+//api_display_tool_title(get_lang("Learnpath")." - ".$nameTools.$add_group_to_title);
 //TODO: Include right language file
 
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
@@ -43,7 +43,7 @@ include('../newscorm/content_makers.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 
 $form = new FormValidator('','POST','upload.php','','id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 600px;"');
-
+$form->addElement('header', '', $nameTools);
 $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('hidden', 'tool', $my_tool);
 
@@ -88,17 +88,14 @@ else{
 
 $form->add_real_progress_bar('uploadScorm','user_file');
 
+// the rules for the form
+$form->addRule('user_file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+// the default values for the form
 $defaults = array('index_document'=>'checked="checked"');
 $form->setDefaults($defaults);
 $form->display();
 
-?>
 
-<br />
-<?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+// footer
 Display::display_footer();
+?>

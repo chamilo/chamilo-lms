@@ -1,4 +1,4 @@
-<?php //$Id: work.php 20605 2009-05-13 20:44:24Z cvargas1 $
+<?php //$Id: work.php 20700 2009-05-15 16:35:50Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 20605 2009-05-13 20:44:24Z cvargas1 $
+*  	@version $Id: work.php 20700 2009-05-15 16:35:50Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -529,10 +529,10 @@ if (api_is_allowed_to_edit(false,true)) {
 		
 			include_once (api_get_path(LIBRARY_PATH) . "fileUpload.lib.php");
 			$added_slash = (substr($cur_dir_path, -1, 1) == '/') ? '' : '/';	
-			$directory =disable_dangerous_file($_POST['new_dir']);
-			$directory =replace_accents($_POST['new_dir']);
-			$directory=Security::remove_XSS($directory);
-			$dir_name = $cur_dir_path . $added_slash . $directory;				
+			$filter_directoy=Security::remove_XSS($_POST['new_dir']);
+			$directory =disable_dangerous_file($filter_directoy);
+			$directory =replace_accents($filter_directoy);
+			$dir_name = $cur_dir_path . $added_slash . replace_dangerous_char($directory);				
 			$created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);
 			
 			// we insert here the directory in the table $work_table		
@@ -704,7 +704,7 @@ if (api_is_allowed_to_edit(false,true)) {
 			//Display::display_normal_message('We want to move '.$_POST['move_file'].' to '.$_POST['move_to']);
 			if (move($course_dir . '/' . $path, $base_work_dir . '/' . $move_to)) {
 				//update db
-				update_work_url($_POST['move_file'], 'work/' . $move_to);
+				update_work_url(Security::remove_XSS($_POST['move_file']), 'work/' . $move_to);
 				//set the current path
 				$cur_dir_path = $move_to;
 				$cur_dir_path_url = urlencode($move_to);

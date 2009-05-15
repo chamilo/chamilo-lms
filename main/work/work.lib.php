@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20605 2009-05-13 20:44:24Z cvargas1 $
+<?php //$Id: work.lib.php 20700 2009-05-15 16:35:50Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20605 2009-05-13 20:44:24Z cvargas1 $
+* 	@version $Id: work.lib.php 20700 2009-05-15 16:35:50Z cvargas1 $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -517,14 +517,10 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 					Display::display_confirmation_message(get_lang('FolderEdited'));
 					
 					$values = $form_folder -> exportValues();
-					$values = $values['my_group'];		
-					
-					/*$dir_name = disable_dangerous_file($values['dir_name']);*/
-				
-					$dir_name =disable_dangerous_file($values['dir_name']);
-					$dir_name =replace_accents($values['dir_name']);
-					$dir_name=Security::remove_XSS($dir_name);
-							
+					$values = $values['my_group'];			
+					$dir_name = disable_dangerous_file($values['dir_name']);		
+					$dir_name = replace_accents($values['dir_name']);
+					$dir_name = replace_dangerous_char($values['dir_name']);
 					update_dir_name($mydir,$dir_name);
 					$mydir = $my_sub_dir.$dir_name;
 					$dir = $dir_name;
@@ -1023,8 +1019,9 @@ function update_dir_name($path, $new_name) {
 		} else {
 			$path_to_dir .= '/';
 		}
-		$new_name=replace_accents($new_name);
-		$new_name=disable_dangerous_file($new_name);
+		$new_name_filter=Security::remove_XSS($new_name);
+		$new_name=replace_accents($new_name_filter);
+		$new_name=disable_dangerous_file($new_name_filter);
 		//$new_name=replace_dangerous_char($new_name);
 		
 		my_rename($base_work_dir.'/'.$path,$new_name);			

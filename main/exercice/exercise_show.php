@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20608 2009-05-13 21:01:19Z cfasanando $
+* 	@version $Id: exercise_show.php 20697 2009-05-15 15:42:37Z cvargas1 $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -848,10 +848,8 @@ if ($show_results) {
 			echo '</table>';	
 		} elseif ($answerType == HOT_SPOT) {
 			?>
-			<table width="355" border="0">		
-				<tr>
-					<td>&nbsp;</td>
-				</tr>
+			<table width="500" border="0">		
+
 			<?php
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
@@ -859,7 +857,7 @@ if ($show_results) {
 			?>
 				<tr>
 					<td valign="top" align="left" style="padding-left:0px;" >
-						<table style="border: 1px solid #A4A4A4;border-bottom:none" width="556px">
+						<table style="border: 1px solid #A4A4A4;border-bottom:none" width="500">
 			<?php 
 			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 				$answer=$objAnswerTmp->selectAnswer($answerId);
@@ -883,7 +881,7 @@ if ($show_results) {
 		 	echo '<tr>
 				<td colspan="2">'.
 					//<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="421">
-					'<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" width="556" height="421">
+					'<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" width="100%" height="400">
 						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" />
 					</object>
 

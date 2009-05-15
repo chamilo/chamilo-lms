@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 20604 2009-05-13 20:40:35Z cfasanando $
+* 	@version $Id: exercise_result.php 20697 2009-05-15 15:42:37Z cvargas1 $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -555,7 +555,7 @@ foreach ($questionList as $questionId) {
 			?>
 				<tr>
 					<td valign="top" colspan="2">
-						<table width="556" border="0">
+						<table width="510" border="0">
 							<tr>
 								<td width="40%" valign="top">
 									<i><?php echo get_lang("CorrectAnswer"); ?></i><br /><br />
@@ -924,7 +924,7 @@ foreach ($questionList as $questionId) {
 			<tr>
 				<td colspan="2">
 					<i><?php echo get_lang('Hotspot'); ?></i><br /><br />
-					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=&from_db=0" width="556" height="421">
+					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=&from_db=0" width="500" height="400">
 						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=&from_db=0" />
 					</object>
 				</td>

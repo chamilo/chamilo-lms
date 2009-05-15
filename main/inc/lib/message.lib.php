@@ -72,7 +72,7 @@ function inbox_display() {
 	}
 
 	// display sortable table with messages of the current user
-	$table = new SortableTable('messages', 'get_number_of_messages_mask', 'get_message_data_mask', 1);
+	$table = new SortableTable('messages', 'get_number_of_messages_mask', 'get_message_data_mask', 3, get_number_of_messages_mask(),'DESC');
 	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
 	$title=api_xml_http_response_encode(get_lang('Title'));
 	$action=api_xml_http_response_encode(get_lang('Actions'));
@@ -156,7 +156,7 @@ if (isset ($_REQUEST['action'])) {
 }
 
 // display sortable table with messages of the current user
-$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 1);
+$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 3,get_number_of_messages_send_mask(),'DESC');
 $title=api_xml_http_response_encode(get_lang('Title'));
 $action=api_xml_http_response_encode(get_lang('Actions'));
 $table->set_header(0, '', false,array ('style' => 'width:20px;'));

@@ -162,7 +162,7 @@ $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
 
 $form->setDefaults($defaults);
-echo '<table><tr><td width="500px">';
+echo '<table><tr><td width="550px">';
 	$form -> display();
 echo '</td><td valign="top"><img src="../img/course_setting_layout.png" /></td></tr></table>';
 

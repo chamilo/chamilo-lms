@@ -760,7 +760,7 @@ echo '<div id="social-profile-container">';
 				//echo '<pre>';
 				if ( is_array($list) ) {
 					echo '<div class="sectiontitle">';
-					echo ucfirst(get_lang('MyCourses'));
+					echo api_ucfirst(get_lang('MyCourses'));
 					echo '</div>';
 					echo '<div class="social-content-training">';
 					//Courses whithout sessions

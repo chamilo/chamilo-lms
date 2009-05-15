@@ -130,7 +130,7 @@ if ($gogogo&&!empty($_GET['cat'])) {
        ob_end_clean();
        
 
-       $legend=getBlock('green').' '.ucfirst(get_lang('OpenBooking')).' '.getBlock('blue').' '.get_lang('TimePicker').' '.getBlock('orange').' '.get_lang('OutPeriod').' '.getBlock('red').' '.get_lang('Reserved').' '.getBlock('grey').' '.get_lang('NoReservations').' '.getBlock('black').' '.get_lang('Blackout');
+       $legend=getBlock('green').' '.api_ucfirst(get_lang('OpenBooking')).' '.getBlock('blue').' '.get_lang('TimePicker').' '.getBlock('orange').' '.get_lang('OutPeriod').' '.getBlock('red').' '.get_lang('Reserved').' '.getBlock('grey').' '.get_lang('NoReservations').' '.getBlock('black').' '.get_lang('Blackout');
        echo '<br /><br /><div style="text-align:right; border-bottom: 2px dotted #666; margin: 0 0 0.2em 0; padding: 0.2em;clear:both;font-family: Verdana,sans-serif;font-size: 1.2em;color:#666;font-weight:bold">'.$GLOBALS['weekstart'].' - '.$GLOBALS['weekend'].'</div>'.$buffer.'<div style="clear:both;">&nbsp;</div><div style="background-color:#EEE;padding: 0.5em;font-family:Verdana;sans-serif;font-size:10px;text-align:center">'.$legend.'</div>';
 	}
 }

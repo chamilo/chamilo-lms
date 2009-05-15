@@ -296,7 +296,7 @@ echo '<strong>'.get_lang('User').': '.$mainUserInfo['firstName'].' '.$mainUserIn
 <div id="container-9">
     <ul>                
         <li><a href="access_details.php?type=day&course=<?php echo $course_code?>&student=<?php echo $user_id?>"><span> <?php echo get_lang('Day'); ?></span></a></li>
-        <li><a href="access_details.php?type=month&course=<?php echo $course_code?>&student=<?php echo $user_id?>"><span><?php echo ucfirst(get_lang('MinMonth')); ?></span></a></li>
+        <li><a href="access_details.php?type=month&course=<?php echo $course_code?>&student=<?php echo $user_id?>"><span><?php echo api_ucfirst(get_lang('MinMonth')); ?></span></a></li>
     </ul>
     <?php echo '<div id="show"></div>';?>
 </div>

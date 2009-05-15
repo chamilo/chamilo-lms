@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20441 2009-05-10 07:39:15Z ivantcholakov $
+<?php // $Id: index.php 20709 2009-05-15 19:12:37Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -83,7 +83,7 @@ if(api_is_platform_admin())
 if (api_is_platform_admin()) {
 	?>
 		<div class="admin_section">
-	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo ucfirst(get_lang('Users')); ?></h4>
+	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo api_ucfirst(get_lang('Users')); ?></h4>
 	<ul>
 		<li style="list-style-type:none"><form method="get" action="user_list.php">	
 			<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
@@ -91,7 +91,7 @@ if (api_is_platform_admin()) {
 			</button>
 			</form>
 		</li>
-		<li><a href="user_list.php?search=advanced"><?php echo ucfirst(get_lang('AdvancedSearch')); ?></a></li>
+		<li><a href="user_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li>
 		<li><a href="user_list.php">	<?php echo get_lang('UserList') ?></a></li>
 		<li><a href="user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
 		<li><a href="user_export.php">	<?php echo get_lang('ExportUserListXMLCSV') ?></a></li>
@@ -105,7 +105,7 @@ else
 {
 	?>
 	<div class="admin_section">
-	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo ucfirst(get_lang('Users')); ?></h4>
+	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo api_ucfirst(get_lang('Users')); ?></h4>
 	<ul>		
 		<li><a href="user_list.php">	<?php echo get_lang('UserList') ?></a></li>
 		<li><a href="../mySpace/user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
@@ -119,7 +119,7 @@ else
 if(api_is_platform_admin()) {
 ?>
 	<div class="admin_section">
-	<h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo ucfirst(get_lang('Courses')); ?></h4>
+<h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo api_ucfirst(get_lang('Courses')); ?></h4>
 		<ul><li style="list-style-type:none"><form method="get" action="course_list.php">	
 		<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 		<button class="search" type="submit"> <?php echo get_lang('Search');?>
@@ -143,7 +143,7 @@ if(api_is_platform_admin()) {
 	</div>
 	
 	<div class="admin_section">
-	 <h4><?php Display::display_icon('settings.gif', get_lang('Platform')); ?> <?php echo ucfirst(get_lang('Platform')); ?></h4>
+	 <h4><?php Display::display_icon('settings.gif', get_lang('Platform')); ?> <?php echo api_ucfirst(get_lang('Platform')); ?></h4>
 	 <ul>
 	  <li><a href="settings.php"><?php echo get_lang('DokeosConfigSettings') ?></a></li>
 	  <li><a href="system_announcements.php"><?php echo get_lang('SystemAnnouncements') ?></a></li>

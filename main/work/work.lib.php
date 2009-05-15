@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20700 2009-05-15 16:35:50Z cvargas1 $
+<?php //$Id: work.lib.php 20709 2009-05-15 19:12:37Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20700 2009-05-15 16:35:50Z cvargas1 $
+* 	@version $Id: work.lib.php 20709 2009-05-15 19:12:37Z ivantcholakov $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -622,7 +622,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		}	
 	
 		if ($direc_date!='' && $direc_date!='0000-00-00 00:00:00') {
-			$my_direc_date = ucfirst(format_locale_date($dateFormatShort,strtotime($direc_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
+			$my_direc_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($direc_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
 			$my_direc_date .= ucfirst(strftime($timeNoSecFormat,strtotime($direc_date)));	
 			$row[]= date_to_str_ago($direc_date).'<br><span class="dropbox_date">'.$my_direc_date.'</span>';
 		} else {
@@ -683,7 +683,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$row[]= build_document_icon_tag('file',$work->url);
 			$row[]= '<a href="download.php?file='.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
 			$row[]= display_user_link($row2['insert_user_id'],$work->author).$qualification_string;// $work->author;
-			$sent_date = ucfirst(format_locale_date($dateFormatShort,strtotime($work->sent_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
+			$sent_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($work->sent_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
 			$sent_date .= ucfirst(strftime($timeNoSecFormat,strtotime($work->sent_date)));			
 			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$sent_date.'</span>';
 			

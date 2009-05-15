@@ -753,7 +753,7 @@ function display_agenda_items()
 		{
             $month_bar = date("m",strtotime($myrow["start_date"])).date("Y",strtotime($myrow["start_date"]));
 			echo "\t<tr>\n\t\t<td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
-			ucfirst(format_locale_date("%B %Y",strtotime($myrow["start_date"]))).
+			api_ucfirst(format_locale_date("%B %Y",strtotime($myrow["start_date"]))).
 			"</td>\n\t</tr>\n";
 		}
 
@@ -822,14 +822,14 @@ function display_agenda_items()
          --------------------------------------------------*/
     	echo "<tr class='row_odd'>";
     	echo "\t\t<td>".get_lang("StartTimeWindow").": ";
-    	echo ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
+    	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
     	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
     	echo "</td>\n";
     	echo "\t\t<td>";
     	if ($myrow["end_date"]<>"0000-00-00 00:00:00")
     	{
     		echo get_lang("EndTimeWindow").": ";
-    		echo ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
+    		echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
     		echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
     	}
     	echo "</td>\n";
@@ -1067,11 +1067,11 @@ function display_one_agenda_item($agenda_id)
 	  --------------------------------------------------*/
 	echo "\t<tr class=\"".$stylenotbold."\">\n";
 	echo "\t\t<td>".get_lang("StartTime").": ";
-	echo ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
+	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
 	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
 	echo "</td>\n";
 	echo "\t\t<td>".get_lang("EndTime").": ";
-	echo ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
+	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
 	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
 	echo "</td>\n";
 	echo "\n\t</tr>\n";

@@ -36,7 +36,7 @@ event_access_tool(TOOL_NOTEBOOK);
 
 if ( isset($_GET['action']) && ($_GET['action'] == 'addnote' || $_GET['action'] == 'editnote')) {
 $tool=get_lang('NotebookManagement');
-$interbreadcrumb[] = array ("url"=>"index.php", "name"=> ucfirst(get_lang(TOOL_NOTEBOOK)));
+$interbreadcrumb[] = array ("url"=>"index.php", "name"=> api_ucfirst(get_lang(TOOL_NOTEBOOK)));
 }
 
 // displaying the header

@@ -839,7 +839,7 @@ function show_simple_personal_agenda($user_id)
 			  --------------------------------------------------*/					
 			// adding an internal anchor			
 			$content.= date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
-			$content.= ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
+			$content.= api_ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
 			
 			/*--------------------------------------------------
 			 			display: the title

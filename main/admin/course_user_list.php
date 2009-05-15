@@ -15,7 +15,7 @@ for ($i=0;$i<count($list_course_all_info);$i++) {
 if (count($list_course)==0) {
 ?>
 <tr>
-	<td><?php echo ucfirst((get_lang('HaveNoCourse'))); ?></td>
+	<td><?php echo api_ucfirst((get_lang('HaveNoCourse'))); ?></td>
 </tr>
 <?php
 }

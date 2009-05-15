@@ -1,4 +1,4 @@
-<?php //$Id: work.php 20700 2009-05-15 16:35:50Z cvargas1 $
+<?php //$Id: work.php 20709 2009-05-15 19:12:37Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 20700 2009-05-15 16:35:50Z cvargas1 $
+*  	@version $Id: work.php 20709 2009-05-15 19:12:37Z ivantcholakov $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1074,9 +1074,9 @@ if($is_special > 0):
 			Display :: display_normal_message($publication['description']);
 		}
 						
-		$ends_on = ucfirst(format_locale_date($dateFormatLong,strtotime($homework['ends_on']))).' ';
+		$ends_on = api_ucfirst(format_locale_date($dateFormatLong,strtotime($homework['ends_on']))).' ';
 		$ends_on .= ucfirst(strftime($timeNoSecFormat,strtotime($homework['ends_on'])));
-		$expires_on = ucfirst(format_locale_date($dateFormatLong,strtotime($homework['expires_on']))).' ';
+		$expires_on = api_ucfirst(format_locale_date($dateFormatLong,strtotime($homework['expires_on']))).' ';
 		$expires_on .= ucfirst(strftime($timeNoSecFormat,strtotime($homework['expires_on'])));		
 		if($has_ended) {
 			Display :: display_error_message(get_lang('EndDateAlreadyPassed').' '.$ends_on);	

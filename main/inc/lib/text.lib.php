@@ -1,4 +1,4 @@
-<?php // $Id: text.lib.php 20682 2009-05-15 11:11:07Z ivantcholakov $
+<?php // $Id: text.lib.php 20709 2009-05-15 19:12:37Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -286,8 +286,8 @@ function date_to_str_ago($date)
 	static $sec_time_time, $sec_time_sing, $sec_time_plu;
 
 	if (!$initialized) {
-		$today = ucfirst(get_lang('Today'));
-		$yesterday = ucfirst(get_lang('Yesterday'));
+		$today = api_ucfirst(get_lang('Today'));
+		$yesterday = api_ucfirst(get_lang('Yesterday'));
 
 		$min_decade=get_lang('MinDecade');
 		$min_year=get_lang('MinYear');

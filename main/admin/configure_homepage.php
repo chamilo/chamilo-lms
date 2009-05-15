@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 20441 2009-05-10 07:39:15Z ivantcholakov $
+<?php // $Id: configure_homepage.php 20709 2009-05-15 19:12:37Z ivantcholakov $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -924,8 +924,8 @@ switch($action){
 			<div class="menusection">
 				<span class="menusectioncaption"><?php echo get_lang('User'); ?></span>
 				<ul class="menulist">
-				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo ucfirst(get_lang('Registration')); ?></span></li>
-				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo ucfirst(get_lang('LostPassword')); ?></span></li>
+				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('Registration')); ?></span></li>
+				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('LostPassword')); ?></span></li>
 				</ul>
 			</div>
 			

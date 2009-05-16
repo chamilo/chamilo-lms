@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20709 2009-05-15 19:12:37Z ivantcholakov $
+<?php //$Id: work.lib.php 20716 2009-05-16 07:28:22Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20709 2009-05-15 19:12:37Z ivantcholakov $
+* 	@version $Id: work.lib.php 20716 2009-05-16 07:28:22Z ivantcholakov $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -52,7 +52,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	{
 		// delete all files
 		$display_output .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;delete=all\" ".
-			"onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
+			"onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
 			Display::return_icon('delete.gif', get_lang('Delete')).' '.get_lang('DeleteAllFiles')."</a>";
 
 		// make all files visible or invisible

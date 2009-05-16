@@ -50,7 +50,7 @@ function modify_filter($id) {
         $str.='<a href="m_item.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditItem2").'"><img alt="" src="../img/edit.gif" /></a>';
     }
     if(Rsys::item_allow($id,'m_rights')) $str.=' &nbsp;<a href="m_item.php?action=m_rights&amp;item_id='.$id.'" title="'.get_lang("MRights").'"><img alt="" src="../img/info_small.gif" /></a>';
-    if(Rsys::item_allow($id,'delete')) $str.=' <a href="m_item.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteItem").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteItem")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
+    if(Rsys::item_allow($id,'delete')) $str.=' <a href="m_item.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteItem").'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmDeleteItem")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
     if(Rsys::item_allow($id,'edit')){
         $number = Rsys :: get_item($id);
         $str.= ' <a href="m_item.php?action=blackout&amp;id='.$id.'" title="'.get_lang("Blackout").'"><img alt="" src="../img/blackout'.$number[5].'.gif" /></a>';

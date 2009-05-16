@@ -59,7 +59,7 @@ function modify_filter($id) {
         $str.='<a href="m_item.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditItem2").'"><img alt="" src="../img/edit.gif" /></a>';
     }
     //if(Rsys::item_allow($id,'m_rights')) $str.=' &nbsp;<a href="m_item.php?action=m_rights&amp;item_id='.$id.'" title="'.get_lang("MRights").'"><img alt="" src="../img/info_small.gif" /></a>';
-    if(Rsys::item_allow($id,'delete')) $str.=' <a href="m_item.php?action=delete&amp;id='.$id.'" title="'.get_lang('DeleteResource').'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteResource")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
+    if(Rsys::item_allow($id,'delete')) $str.=' <a href="m_item.php?action=delete&amp;id='.$id.'" title="'.get_lang('DeleteResource').'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmDeleteResource")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
  
     return $str;
 }
@@ -70,7 +70,7 @@ function modify_filter($id) {
  *  @param  -   int     $id     The item-rights-id's
  */
 function modify_rights_filter($id) {
-	return ' <a href="m_item.php?action=m_rights&amp;subaction=delete&amp;item_id='.substr($id, 0, strpos($id, '-')).'&amp;class_id='.substr($id, strrpos($id, '-') + 1).'" title="'.get_lang("RemoveClassRights").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteResource")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
+	return ' <a href="m_item.php?action=m_rights&amp;subaction=delete&amp;item_id='.substr($id, 0, strpos($id, '-')).'&amp;class_id='.substr($id, strrpos($id, '-') + 1).'" title="'.get_lang("RemoveClassRights").'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmDeleteResource")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
 }
 
 /**

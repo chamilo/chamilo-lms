@@ -134,7 +134,7 @@ if (!empty($course))
 	echo '<div style="margin-left: 5px;">';
 	foreach($content as $thisLine)
 	{
-		echo strip_tags(html_entity_decode($thisLine),'<br> <span> <b> <i> <img> <font>');
+		echo strip_tags(api_html_entity_decode($thisLine),'<br> <span> <b> <i> <img> <font>');
 	}
 	echo '</div>';
 	
@@ -147,7 +147,7 @@ if (!empty($course))
 	{
 		$rand=mt_rand(1,1000);		
 		echo '<div style="margin-left: 5px;">';
-		echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1&cidReq='.$_GET['cidReq'].'#bottom" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmReset'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('ClearList')).' '.get_lang('ClearList').'</a>';
+		echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1&cidReq='.$_GET['cidReq'].'#bottom" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmReset'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('ClearList')).' '.get_lang('ClearList').'</a>';
 		echo '</div>';
 	}
 }

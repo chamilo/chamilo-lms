@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20648 2009-05-14 17:34:11Z cvargas1 $
+// $Id: exercice.php 20716 2009-05-16 07:28:22Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -942,7 +942,7 @@ if ($show == 'test') {
 ?>
 
 <!--" /></a>-->	    
-			<a href="exercice.php?choice=delete&exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>					
+			<a href="exercice.php?choice=delete&exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>					
 			<?php
 
 				//if active

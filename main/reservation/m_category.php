@@ -51,7 +51,7 @@ $interbreadcrumb[] = array ("url" => "../admin/index.php", "name" => get_lang('P
  *  @param - int $id The ResourceType-id
  */
 function modify_filter($id) {
-	return '<a href="m_category.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditResourceType").'"><img alt="" src="../img/edit.gif" /></a>'.' <a href="m_category.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteResourceType").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteResourceType")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
+	return '<a href="m_category.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditResourceType").'"><img alt="" src="../img/edit.gif" /></a>'.' <a href="m_category.php?action=delete&amp;id='.$id.'" title="'.get_lang("DeleteResourceType").'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmDeleteResourceType")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
 }
 
 /**

@@ -181,8 +181,8 @@ class MessageManager {
 	 public static function send_message ($receiver_user_id, $title, $content) {
         global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
-        $title = mb_convert_encoding($title,$charset,'UTF-8');
-        $content = mb_convert_encoding($content,$charset,'UTF-8');
+        $title = api_convert_encoding($title,$charset,'UTF-8');
+        $content = api_convert_encoding($content,$charset,'UTF-8');
 		//message in inbox
 		$sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".api_get_user_id()." AND user_receiver_id='".Database::escape_string($receiver_user_id)."' AND title = '".Database::escape_string($title)."' AND content ='".Database::escape_string($content)."' ";
 		$res_exist = api_sql_query($sql,__FILE__,__LINE__);
@@ -300,7 +300,7 @@ class MessageManager {
 				$message[2] = '<a onclick="show_sent_message ('.$result[0].')" href="#../messages/view_message.php?id_send='.$result[0].'">'.GetFullUserName($result[4]).'</a>';
 				$message[3] = '<a onclick="show_sent_message ('.$result[0].')" href="#../messages/view_message.php?id_send='.$result[0].'">'.$result[2].'</a>';
 				$message[5] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
-						  '&nbsp;&nbsp;<a href="outbox.php?action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+						  '&nbsp;&nbsp;<a href="outbox.php?action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			}
 			$message[4] = $result[3]; //date stays the same
 			foreach($message as $key => $value) {

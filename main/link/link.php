@@ -1,4 +1,4 @@
-<?php // $Id: link.php 20497 2009-05-11 21:07:26Z juliomontoya $
+<?php // $Id: link.php 20716 2009-05-16 07:28:22Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -341,7 +341,7 @@ if (is_allowed_to_edit() and isset($_GET['action'])) {
 						<span class="form_required">*</span> '.get_lang('CategoryName').'
 					</div>
 					<div class="formw">
-						<input type="text" name="category_title" size="50" value="'.htmlentities($category_title,ENT_QUOTES,$charset).'" />
+						<input type="text" name="category_title" size="50" value="'.api_htmlentities($category_title,ENT_QUOTES,$charset).'" />
 					</div>
 				</div>';
 		
@@ -350,7 +350,7 @@ if (is_allowed_to_edit() and isset($_GET['action'])) {
 						'.get_lang('Description').'
 					</div>
 					<div class="formw">
-						<textarea rows="3" cols="50" name="description">'.htmlentities($description,ENT_QUOTES,$charset).'</textarea>
+						<textarea rows="3" cols="50" name="description">'.api_htmlentities($description,ENT_QUOTES,$charset).'</textarea>
 					</div>
 				</div>';
 		
@@ -407,13 +407,13 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 		for($j = 1; $j <= $aantalcategories; $j++) {
 			echo "0";
 		}
-		echo "\">$shownone</a>";
+		echo "\">".get_lang('shownone')."</a>";
 		echo Display::return_icon('add.gif', $showall)." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
 		for($j = 1; $j <= $aantalcategories; $j++)
 		{
 		echo "1";
 		}
-		echo "\">$showall</a>";
+		echo "\">".get_lang('showall')."</a>";
 	}
 	echo '</div>';
 
@@ -463,7 +463,7 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 				echo '<tr>';			
 					echo '<th width="81%"  style="font-weight: bold; text-align:left;padding-left: 5px;">';
 					echo '<a href="'.api_get_self()."?".api_get_cidreq()."&urlview=".Security::remove_XSS($newurlview)."\">";
-					echo "<img src=../img/remove.gif>&nbsp;&nbsp;".htmlentities($myrow["category_title"],ENT_QUOTES,$charset)."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
+					echo "<img src=../img/remove.gif>&nbsp;&nbsp;".api_htmlentities($myrow["category_title"],ENT_QUOTES,$charset)."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
 					
 					if (is_allowed_to_edit())
 						{	

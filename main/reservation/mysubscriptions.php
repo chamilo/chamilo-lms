@@ -44,7 +44,7 @@ $tool_name = get_lang('Booking');
  *  Filter to display the modify-buttons
  */
 function modify_filter($id){
-     return ' <a href="mysubscriptions.php?action=delete&amp;reservation_id='.substr($id,0,strpos($id,'-')).'&amp;dummy='.substr($id,strrpos($id,'-')+1).'" title="'.get_lang("DeleteSubscription").'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteSubscription")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';        
+     return ' <a href="mysubscriptions.php?action=delete&amp;reservation_id='.substr($id,0,strpos($id,'-')).'&amp;dummy='.substr($id,strrpos($id,'-')+1).'" title="'.get_lang("DeleteSubscription").'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmDeleteSubscription")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';        
 }
 
 /**

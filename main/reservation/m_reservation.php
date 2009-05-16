@@ -45,7 +45,7 @@ $tool_name = get_lang('BookingPeriodList');
 function modify_filter($id) {
 		$out = ' <a href="m_reservation.php?action=accept&amp;rid='.$id.'" alt="'.get_lang('AutoAccept').'"><img title="'.get_lang('AutoAccept').'"  alt="'.get_lang('AutoAccept').'" src="../img/students.gif" /></a>';
 		$out .= '<a href="m_reservation.php?action=edit&amp;id='.$id.'" alt="'.get_lang('EditBookingPeriod').'"><img title="'.get_lang('EditBookingPeriod').'" alt="'.get_lang('EditBookingPeriod').'" src="../img/edit.gif" /></a>';		
-		$out .= ' <a href="m_reservation.php?action=delete&amp;id='.$id.'" alt="'.get_lang('DeleteBookingPeriod').'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmDeleteBookingPeriod")))."'".')) return false;"><img title="'.get_lang('DeleteBookingPeriod').'" alt="'.get_lang('DeleteBookingPeriod').'" src="../img/delete.gif" /></a>';
+		$out .= ' <a href="m_reservation.php?action=delete&amp;id='.$id.'" alt="'.get_lang('DeleteBookingPeriod').'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmDeleteBookingPeriod")))."'".')) return false;"><img title="'.get_lang('DeleteBookingPeriod').'" alt="'.get_lang('DeleteBookingPeriod').'" src="../img/delete.gif" /></a>';
 		
 	return $out;
 }

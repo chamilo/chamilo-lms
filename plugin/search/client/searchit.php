@@ -81,7 +81,7 @@ $i = 1;
 $to_print = '';
 foreach($results->result as $res){
 	if(access_check($res->result_du)){
-		$to_print .= result_output($i,mb_convert_encoding(urldecode($res->result_dt),$charset,'utf-8'),$res->result_du,html_entity_decode(urldecode($res->result_de)),htmlentities(urldecode($res->result_dm)),$res->result_dr);
+		$to_print .= result_output($i,api_convert_encoding(urldecode($res->result_dt),$charset,'utf-8'),$res->result_du,api_html_entity_decode(urldecode($res->result_de)),api_htmlentities(urldecode($res->result_dm)),$res->result_dr);
 		$i++;
 	}
 }

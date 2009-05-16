@@ -94,7 +94,7 @@ if (count($term_array)) {
     }
 }
 
-list($count, $results) = dokeos_query_query(mb_convert_encoding($query,'UTF-8',$charset), 0, 1000, $fixed_queries);
+list($count, $results) = dokeos_query_query(api_convert_encoding($query,'UTF-8',$charset), 0, 1000, $fixed_queries);
 
 // prepare blocks to show
 $blocks = array();

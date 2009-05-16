@@ -102,7 +102,7 @@ function DokeosWSCourseListOfUser($username, $signature) {
     foreach ( $courses_list_tmp as $index => $course )
     {
         $course_info = CourseManager::get_course_information($course['code']);
-        $courses_list[] = array('code'=>$course['code'],'title'=>mb_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>mb_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
+        $courses_list[] = array('code'=>$course['code'],'title'=>api_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>api_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
     }
     return $courses_list;
 }
@@ -196,8 +196,8 @@ function DokeosWSEventsList($username,$signature,$datestart=0,$dateend=0) {
     foreach ( $events_list as $i => $event ) {
         $events_list[] = array(
             'date'=>$i,
-            'title' => mb_convert_encoding($event['title'],'UTF-8',$charset), 
-            'coursetitle' => mb_convert_encoding($event['coursetitle'],'UTF-8',$charset)
+            'title' => api_convert_encoding($event['title'],'UTF-8',$charset), 
+            'coursetitle' => api_convert_encoding($event['coursetitle'],'UTF-8',$charset)
         );
     }
     return $events_list;

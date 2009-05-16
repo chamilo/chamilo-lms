@@ -46,7 +46,7 @@ function courses_list($security_key,$visibilities='public') {
 		foreach ( $courses_list_tmp as $index => $course )
 		{
 			$course_info = CourseManager::get_course_information($course['code']);
-			$courses_list[$course['code']] = array('title'=>mb_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>mb_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
+			$courses_list[$course['code']] = array('title'=>api_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>api_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
 		}
 	}
 	return $courses_list;

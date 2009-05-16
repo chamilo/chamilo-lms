@@ -19,7 +19,7 @@ function get_suggestions_from_search_engine($q) {
 	$data = array();
     $i = 0;
     while ($row = Database::fetch_array($sql_result)) {
-        echo mb_convert_encoding($row['value'],'UTF-8',$charset)."| value\n";
+        echo api_convert_encoding($row['value'],'UTF-8',$charset)."| value\n";
         if ($i<20) {
             $data[ $row['course_code'] ] [ $row['tool_id'] ] [ $row['ref_id'] ] = 1;
         }
@@ -81,8 +81,8 @@ function get_suggestions_from_search_engine($q) {
                     }
                 }
                 foreach ($output as $i=>$out) {
-                    if (stristr($out,$q) === false) {continue;}
-                    $s = mb_convert_encoding(substr($out,0,-3),'UTF-8',$charset) . "| value\n";
+                    if (api_stristr($out,$q) === false) {continue;}
+                    $s = api_convert_encoding(substr($out,0,-3),'UTF-8',$charset) . "| value\n";
                     if (!in_array($s,$more_sugg)) {
         			    $more_sugg[] = $s;
                     }

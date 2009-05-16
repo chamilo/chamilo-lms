@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 20641 2009-05-14 16:13:21Z iflorespaz $
+<?php // $Id: usermanager.lib.php 20723 2009-05-16 13:45:06Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1939,8 +1939,8 @@ class UserManager
         global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);		
-        $title = mb_convert_encoding($title,$charset,'UTF-8');
-        $content = mb_convert_encoding($content,$charset,'UTF-8');
+        $title = api_convert_encoding($title,$charset,'UTF-8');
+        $content = api_convert_encoding($content,$charset,'UTF-8');
 		//message in inbox
 		$sql_message_outbox='SELECT user_id from '.$table_user.' WHERE email="'.$email_administrator.'" ';
 		//$num_row_query=Database::num_rows($sql_message_outbox);

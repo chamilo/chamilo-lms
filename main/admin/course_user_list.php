@@ -22,7 +22,7 @@ if (count($list_course)==0) {
 ?>
 <?php for($k=0;$k<count($list_course);$k++) { ?>
     <tr>
-        <td><?php echo mb_convert_encoding($list_course[$k],'UTF-8',$charset);?></td>
+        <td><?php echo api_convert_encoding($list_course[$k],'UTF-8',$charset);?></td>
     </tr>
 <?php }?>	
 </table>

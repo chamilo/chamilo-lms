@@ -78,7 +78,7 @@ function search_users($needle, $id)
 	if(!empty($needle)) {		
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
-		$needle = mb_convert_encoding($needle, $charset, 'utf-8');
+		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		// search users where username or firstname or lastname begins likes $needle
 		$sql = 'SELECT u.user_id, username, lastname, firstname FROM '.$tbl_user.' u 
 				WHERE (username LIKE "'.$needle.'%"

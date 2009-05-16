@@ -5341,7 +5341,7 @@ class learnpath {
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
 									$s_selected_position=0;
-								$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);								
+								$arrHide[$arrLP[$i]['id']]['value']=api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);								
 							}
 						}
 						/*//comented the prerequisites, only visible in edit (exercise)
@@ -5526,7 +5526,7 @@ class learnpath {
 										{
 											if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 											{
-												$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
+												$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 											}
 											else
 											{
@@ -5536,7 +5536,7 @@ class learnpath {
 										else
 										{
 											if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-												$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
+												$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '</option>';
 										}
 									}
 	
@@ -5569,7 +5569,7 @@ class learnpath {
 										else
 											$selected = '';
 
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
 									}
 								}
 
@@ -5607,7 +5607,7 @@ class learnpath {
 										$s_selected_position=$arrLP[$i]['id'];
 									elseif($action == 'add')
 										$s_selected_position=0;
-									$arrHide[$arrLP[$i]['id']]['value']=mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
+									$arrHide[$arrLP[$i]['id']]['value']=api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding);
 	
 								}
 							}
@@ -5713,8 +5713,8 @@ class learnpath {
 			$item_description 	= '';
 		}
 		
-		$item_title=mb_convert_encoding($item_title,$charset,$this->encoding);
-		$item_description=mb_convert_encoding($item_description,$charset,$this->encoding);
+		$item_title=api_convert_encoding($item_title,$charset,$this->encoding);
+		$item_description=api_convert_encoding($item_description,$charset,$this->encoding);
 				
 		$return = '<div class="sectiontitle">';
 			
@@ -6086,7 +6086,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . mb_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . api_convert_encoding($arrLP[$i]['title'],$charset,$this->encoding) . '"</option>';
 									}
 								}
 								

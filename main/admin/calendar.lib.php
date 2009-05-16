@@ -3079,9 +3079,9 @@ function agenda_import_ical($course_info,$file)
     //print_r($ve);
     $ttitle = $ve->getProperty('summary');
     //print_r($ttitle);
-    $title = mb_convert_encoding($ttitle,$charset,'UTF-8');
+    $title = api_convert_encoding($ttitle,$charset,'UTF-8');
     $tdesc = $ve->getProperty('description');
-    $desc = mb_convert_encoding($tdesc,$charset,'UTF-8');
+    $desc = api_convert_encoding($tdesc,$charset,'UTF-8');
     $ts = $ve->getProperty('dtstart');
     $start_date = $ts['year'].'-'.$ts['month'].'-'.$ts['day'].' '.$ts['hour'].':'.$ts['min'].':'.$ts['sec'];
     $ts = $ve->getProperty('dtend');

@@ -413,7 +413,7 @@ echo $s="<script>$(document).ready( function(){
 		});</script>";
 			
 //echo '<div id="actions">';
-//echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif').'&nbsp;'.mb_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>';
+//echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif').'&nbsp;'.api_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>';
 //echo '</div>';
 
 //Setting some course info 

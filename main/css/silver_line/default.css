@@ -1844,11 +1844,10 @@ div.system_announcement {
 }
 .message-select-box {
 	float:left;
-	width:350px;
 	display:inline;
 	position:absolute;
-	margin-top:20px;
-	margin-left:32px;
+	margin-top:23px;
+	margin-left:20px;
 }
 /* styles from the my.profile.php file */
 .message-content {

@@ -222,7 +222,7 @@ else if ($action == "service")
 			die();
 		}
 		DocumentManager::delete_document($_course, $path, $coursePath);
-		echo "<result>OK</result>"; // We have to returns something to OpenLaszlo 
+		echo "<result>OK</result>"; // We have to return something to OpenLaszlo 
 	}
 }
 else if ($action == "download")

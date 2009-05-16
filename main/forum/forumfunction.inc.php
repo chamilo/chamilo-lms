@@ -3162,7 +3162,7 @@ function prepare4display($input='') {
 			}
 			$counter = 0;
 			foreach ($search_terms as $key=>$search_term) {
-				$input = str_replace(trim(api_html_entity_decode($search_term)),'<span style="background-color: '.$highlightcolors[$counter].'">'.trim(html_entity_decode($search_term)).'</span>',$input);
+				$input = str_replace(trim(api_html_entity_decode($search_term)),'<span style="background-color: '.$highlightcolors[$counter].'">'.trim(api_html_entity_decode($search_term)).'</span>',$input);
 				$counter++;
 			}
 		}
@@ -3172,7 +3172,7 @@ function prepare4display($input='') {
 		{
 			$returnarray[$key]=stripslashes($value);
 		}*/
-		$returnarray=array_walk($input, 'html_entity_decode');
+		$returnarray=array_walk($input, 'api_html_entity_decode');
 		$returnarray=array_walk($input, 'stripslashes');
 		return $returnarray;
 	}

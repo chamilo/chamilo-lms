@@ -50,7 +50,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 			$slide_name = api_htmlentities($slide_name,ENT_COMPAT,$this->original_charset);
 			$slide_name = str_replace('&rsquo;','\'',$slide_name);
 			$slide_name = api_convert_encoding($slide_name, api_get_setting('platform_charset'), $this->original_charset);
-			$slide_name = html_entity_decode($slide_name, ENT_COMPAT, api_get_setting('platform_charset'));
+			$slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_setting('platform_charset'));
 			
 			if($this->take_slide_name === true)
 			{

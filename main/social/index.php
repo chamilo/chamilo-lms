@@ -466,7 +466,7 @@ Display :: display_header('');
 if (isset($_GET['sendform'])) {
 	$form_reply=array();
 	$form_reply[]=urlencode($_POST['title']);
-	$form_reply[]=urlencode(html_entity_decode($_POST['content']));
+	$form_reply[]=urlencode(api_html_entity_decode($_POST['content']));
 	$form_reply[]=$_POST['user_list'];
 	$form_reply[]=$_POST['re_id'];
 	$form_reply[]=urlencode($_POST['compose']);

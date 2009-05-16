@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 20610 2009-05-13 21:53:48Z cvargas1 $
+* 	@version $Id: survey.lib.php 20717 2009-05-16 10:32:10Z ivantcholakov $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1848,7 +1848,7 @@ class personality extends question
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', html_entity_decode(stripslashes($form_content['answers'][$key]))).'</td>';
+			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]))).'</td>';
 			$this->html .= '		<td>';
 			
 			if ($total_number_of_answers> 2)

@@ -212,7 +212,7 @@ class GradeBookResult
 	
 		foreach ($dato[0] as $header_col) {
 			if(!empty($header_col)) {
-				$data .= str_replace("\r\n",'  ',html_entity_decode(strip_tags($header_col))).';';
+				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($header_col))).';';
 			}			
 		}
 		
@@ -223,7 +223,7 @@ class GradeBookResult
 		for($i=0;$i<$cant_students;$i++) {
 			$column = 0;
 			foreach($dato[1][$i] as $col_name) {	
-				$data .= str_replace("\r\n",'  ',html_entity_decode(strip_tags($col_name))).';';					
+				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($col_name))).';';					
 			}
 			$data .="\r\n";
 		}

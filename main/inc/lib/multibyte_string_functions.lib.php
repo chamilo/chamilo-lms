@@ -1590,12 +1590,8 @@ function api_is_valid_ascii($string) {
  * @param string			The same purified or filtered language identificator, for example 'french'.
  */
 function api_refine_language_id($language) {
-	return (
-		str_replace('_unicode', '', strtolower(
-		str_replace('_latin', '',
-		str_replace('_corporate', '',
-		str_replace('_org', '',
-		str_replace('_KM', '', $language)))))));
+	static $search = array('_unicode', '_latin', '_corporate', '_org', '_KM');
+	return str_replace($search, '', $language);
 }
 
 /**

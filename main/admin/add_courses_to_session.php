@@ -156,7 +156,7 @@ function search_courses($needle,$type)
 				$return .= '<a href="#" onclick="add_course_to_session(\''.$course['code'].'\',\''.$course_title.' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
 			}
 			
-			$xajax_response -> addAssign('ajax_list_courses_single','innerHTML',utf8_encode($return));
+			$xajax_response -> addAssign('ajax_list_courses_single','innerHTML',api_utf8_encode($return));
 			
 		} else {
 	

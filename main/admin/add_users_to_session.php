@@ -175,7 +175,7 @@ function search_users($needle,$type)
 	            }
 			}
 			
-			$xajax_response -> addAssign('ajax_list_users_single','innerHTML',utf8_encode($return));
+			$xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
 				
 		} else {
 			global $nosessionUsersList;

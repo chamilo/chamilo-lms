@@ -23,18 +23,19 @@ class UserFriend extends UserManager {
 	public function register_friend ($friend_id,$my_user_id,$relation_type) {
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . Database::escape_string($friend_id).' AND user_id='.Database::escape_string($my_user_id);
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database :: fetch_array($result, 'ASSOC');
 		if ($row['count'] == 0) {
 			$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type)values(' . Database::escape_string($friend_id) . ','.Database::escape_string($my_user_id).','.Database::escape_string($relation_type).');';
 			api_sql_query($sql_i, __FILE__, __LINE__);
 		} else {
 			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . Database::escape_string($friend_id) . ' AND user_id='.Database::escape_string($my_user_id);
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$row = Database :: fetch_array($result, 'ASSOC');
 			if ($row['count'] == 1) {
 				$sql_i = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.$relation_type.' WHERE friend_user_id=' . Database::escape_string($friend_id).' AND user_id='.Database::escape_string($my_user_id);
-				api_sql_query($sql_i, __FILE__, __LINE__);
+				Database::query($sql_i, __FILE__, __LINE__);
 			}
 		}
 	}
@@ -50,13 +51,19 @@ class UserFriend extends UserManager {
 		$tbl_my_message = Database :: get_main_table(TABLE_MAIN_MESSAGE);
 		$user_id=api_get_user_id();
 		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . Database::escape_string($user_id) . ' AND relation_type<>6 AND friend_user_id='.Database::escape_string($friend_id);
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database :: fetch_array($result, 'ASSOC');
 		if ($row['count'] == 1) {
+			//Delete friend user
 			$sql_i = 'UPDATE ' . $tbl_my_friend . ' SET relation_type=6 WHERE user_id=' . Database::escape_string($user_id).' AND friend_user_id='.Database::escape_string($friend_id);
 			$sql_j = 'UPDATE ' . $tbl_my_message . ' SET msg_status=7 WHERE user_receiver_id=' . Database::escape_string($user_id).' AND user_sender_id='.Database::escape_string($friend_id);
-			api_sql_query($sql_i, __FILE__, __LINE__);
-			api_sql_query($sql_j, __FILE__, __LINE__);
+			//Delete user
+			$sql_ij = 'UPDATE ' . $tbl_my_friend . ' SET relation_type=6 WHERE user_id=' . Database::escape_string($friend_id).' AND friend_user_id='.Database::escape_string($user_id);
+			$sql_ji = 'UPDATE ' . $tbl_my_message . ' SET msg_status=7 WHERE user_receiver_id=' . Database::escape_string($friend_id).' AND user_sender_id='.Database::escape_string($user_id);			
+			Database::query($sql_i, __FILE__, __LINE__);
+			Database::query($sql_j, __FILE__, __LINE__);
+			Database::query($sql_ij, __FILE__, __LINE__);
+			Database::query($sql_ji, __FILE__, __LINE__);			
 		}
 	}
 	/**

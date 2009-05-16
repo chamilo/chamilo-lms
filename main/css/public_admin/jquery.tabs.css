@@ -28,25 +28,25 @@
 	min-width: 84px; /* be nice to Opera */
 }
 .tabs-nav a, .tabs-nav a span {
-	display: block;
-	padding: 0 10px;
-	background: url(images/tab.png) no-repeat;
+    display: block;
+    padding: 0 10px;
+    /*background: url(images/tab.png) no-repeat;*/
 }
 .tabs-nav a {
-	position: relative;
-	top: 1px;
-	z-index: 2;
-	padding-left: 0;
-	color: #fff;
-	font-size: 12px;
-	font-weight: bold;
-	line-height: 2;
-	text-align: center;
-	text-decoration: none;
-	white-space: nowrap; /* required in IE 6 */
+    position: relative;
+    top: 1px;
+    z-index: 2;
+    padding-left: 0;
+    /*color: #fff;*/
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 2;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap; /* required in IE 6 */    
 }
 .tabs-nav .tabs-selected a {
-	color: #fff;
+    /*color: #fff;*/
 }
 .tabs-nav .tabs-selected a, .tabs-nav a:hover, .tabs-nav a:focus, .tabs-nav a:active {
 	background-position: 100% -150px;
@@ -86,11 +86,11 @@
 	opacity: .4;
 }
 .tabs-container {
-	border-top: 1px solid #97a5b0;
-	padding: 1em 8px;
-	background: #fff; /* declare background color for container to avoid distorted fonts in IE while fading */
+    border-top: 1px solid #97a5b0;
+    padding: 1em 8px;
+    /*background: #fff; declare background color for container to avoid distorted fonts in IE while fading */
 }
 .tabs-loading em {
-	padding: 0 0 0 20px;
-	background: url(images/loading.gif) no-repeat 0 50%;
+    padding: 0 0 0 20px;
+    /*background: url(images/loading.gif) no-repeat 0 50%;*/
 }

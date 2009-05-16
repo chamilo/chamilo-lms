@@ -31,29 +31,13 @@ function inbox_display() {
 	if ($_SESSION['social_exist']===true) {
 		$redirect="#remote-tab-2";	
 		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-			$success= get_lang('SelectedMessagesDeleted').
-			"&nbsp;
-			<br /><a href=\"".
-			"../social/index.php?$redirect\">".
-			get_lang('BackToInbox').
-			"</a>";
+			$success= get_lang('SelectedMessagesDeleted')."&nbsp;<br /><a href=\""."../social/index.php?$redirect\">".get_lang('BackToInbox')."</a>";
 		} else {
-			$success= get_lang('SelectedMessagesDeleted').
-			"&nbsp;
-			<br /><a href=\"".
-			"../social/index.php?$redirect\">".
-			get_lang('BackToInbox').
-			"</a>";				
+			$success= get_lang('SelectedMessagesDeleted')."&nbsp;<br /><a href=\""."../social/index.php?$redirect\">".get_lang('BackToInbox')."</a>";				
 		}
 	} else {
-		$success= get_lang('SelectedMessagesDeleted').
-			"&nbsp;
-			<br /><a href=\"".
-			"inbox.php\">".
-			get_lang('BackToOutbox').
-			"</a>";
+		$success= get_lang('SelectedMessagesDeleted')."&nbsp;<br /><a href=\""."inbox.php\">".get_lang('BackToOutbox')."</a>";
 	}
-
 	if (isset ($_REQUEST['action'])) {
 		switch ($_REQUEST['action']) {
 			case 'delete' :
@@ -70,7 +54,6 @@ function inbox_display() {
     			break;
 		}
 	}
-
 	// display sortable table with messages of the current user
 	$table = new SortableTable('messages', 'get_number_of_messages_mask', 'get_message_data_mask', 3, get_number_of_messages_mask(),'DESC');
 	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
@@ -105,6 +88,8 @@ function get_number_of_messages_mask() {
 function get_message_data_mask($from, $number_of_items, $column, $direction) {
 	$column='3';
 	$direction='desc';	
+	//non set by SortableTable ?	
+	$number_of_items=get_number_of_messages_mask();
 	return MessageManager::get_message_data($from, $number_of_items, $column, $direction);
 }
 function outbox_display() {
@@ -114,29 +99,13 @@ function outbox_display() {
 	if ($_SESSION['social_exist']===true) {
 		$redirect="#remote-tab-3";	
 		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-			$success= get_lang('SelectedMessagesDeleted').
-			"&nbsp
-			<br><a href=\"".
-			"../social/index.php?$redirect\">".
-			get_lang('BackToOutbox').
-			"</a>";
+			$success= get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$redirect\">".get_lang('BackToOutbox')."</a>";
 		}else {
-			$success=get_lang('SelectedMessagesDeleted').
-			"&nbsp
-			<br><a href=\"".
-			"../social/index.php?$redirect\">".
-			get_lang('BackToOutbox').
-			"</a>";				
+			$success=get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$redirect\">".get_lang('BackToOutbox')."</a>";				
 		}
 			
 	} else {
-		$success= get_lang('SelectedMessagesDeleted').
-			"&nbsp
-			</b>".
-			"<br><a href=\"".
-			"outbox.php\">".
-			get_lang('BackToOutbox').
-			"</a>";
+		$success= get_lang('SelectedMessagesDeleted')."&nbsp</b>"."<br><a href=\""."outbox.php\">".get_lang('BackToOutbox')."</a>";
 	}
 if (isset ($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
@@ -190,6 +159,8 @@ function get_number_of_messages_send_mask() {
 function get_message_data_send_mask($from, $number_of_items, $column, $direction) {
 	$column='3';
 	$direction='desc';
+	//non set by SortableTable ?
+	$number_of_items=get_number_of_messages_send_mask();	
 	return MessageManager::get_message_data_sent($from, $number_of_items, $column, $direction);
 }
 ?>

@@ -7,7 +7,7 @@ $tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_my_user_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 $search=Security::remove_XSS($_POST['search']);
 $date_inter=date('Y-m-d H:i:s',time()-120); 
-$html_form='<select id="id_search_name" name="id_search_name" size="8"" class="message-select-box">';
+$html_form='<select id="id_search_name" name="id_search_name" size="8"" style="width:350px;">';
 $user_id = api_get_user_id();
 $sql = 'SELECT  u.user_id as id,concat(u.firstname," ",u.lastname," ","( ",u.email," )") as name ' .
 		'FROM '.$tbl_my_user_friend.' uf ' .

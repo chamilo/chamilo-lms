@@ -136,6 +136,8 @@ class SortableTable extends HTML_Table
 		$this->column = isset ($_GET[$this->param_prefix.'column']) ? $_GET[$this->param_prefix.'column'] : $this->column;
 		$this->direction = isset ($_SESSION[$this->param_prefix.'direction']) ? $_SESSION[$this->param_prefix.'direction'] : $default_order_direction;
 		$this->direction = isset ($_GET[$this->param_prefix.'direction']) ? $_GET[$this->param_prefix.'direction'] : $this->direction;
+		//allow to change paginate in multiples tabs
+		unset($_SESSION[$this->param_prefix.'per_page']);
 		$this->per_page = isset ($_SESSION[$this->param_prefix.'per_page']) ? $_SESSION[$this->param_prefix.'per_page'] : $default_items_per_page;
 		$this->per_page = isset ($_GET[$this->param_prefix.'per_page']) ? $_GET[$this->param_prefix.'per_page'] : $this->per_page;
 		$_SESSION[$this->param_prefix.'per_page'] = $this->per_page;

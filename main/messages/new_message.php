@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 20707 2009-05-15 17:58:05Z iflorespaz $
+<?php // $Id: new_message.php 20722 2009-05-16 13:22:42Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -156,15 +156,15 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form = new FormValidator('compose_message');
 	}
 	if (isset($select_from_user_list)) {
-		$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()','autocomplete'=>'off'));
+		$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));
 		$form->addRule('id_text_name', api_xml_http_response_encode(get_lang('ThisFieldIsRequired')), 'required');
-		$form->addElement('html','<div id="id_div_search" class="message-search">&nbsp;</div>');
+		$form->addElement('html','<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
 		$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 	} else {
 		if ($default['user_list']==0) {
-			$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','onmouseout'=>'list_search_hide ()','autocomplete'=>'off'));
+			$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));
 			$form->addRule('id_text_name', api_xml_http_response_encode(get_lang('ThisFieldIsRequired')), 'required');
-			$form->addElement('html','<div id="id_div_search" class="message-search">&nbsp;</div>');
+			$form->addElement('html','<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
 		}
 		$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 	}

@@ -412,21 +412,6 @@ function api_eregi_replace($pattern, $replacement, $string, $option = null) {
 }
 
 /**
- * Returns a string with the first character lowercased if that character is alphabetic.
- * @param string $string	The input string.
- * @param string $encoding	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return string			The result string.
- * This function is aimed at replacing the function lcfirst() for human-language strings.
- * @link http://php.net/manual/en/function.lcfirst
- */
-function api_lcfirst($string, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = api_mb_internal_encoding();
-	}
-    return api_strtolower(api_substr($string, 0, 1, $encoding), $encoding) . api_substr($string, 1, api_strlen($string, $encoding), $encoding);
-}
-
-/**
  * Splits a multibyte string using regular expression pattern and returns the result as an array.
  * By default this function uses the platform character set.
  * @param string $pattern	The regular expression pattern.

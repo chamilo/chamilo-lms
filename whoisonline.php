@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 20716 2009-05-16 07:28:22Z ivantcholakov $
+<?php // $Id: whoisonline.php 20740 2009-05-16 19:49:02Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -78,9 +78,9 @@ function action_database_panel(option_id,myuser_id) {
 	} else {
 		my_txt_subject="clear";
 	}
-		my_txt_content=$("#txt_area_invite").val();
+	my_txt_content=$("#txt_area_invite").val();
 	if (my_txt_content.length==0 || my_txt_subject.length==0) {
-		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageInformationBySendMessage').'");
+		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageEmptyMessageOrSubject').'");
 		setTimeout("message_information_display()",3000);
 		return false;
 	}

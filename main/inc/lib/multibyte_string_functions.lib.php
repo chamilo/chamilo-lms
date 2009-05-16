@@ -1006,8 +1006,9 @@ function api_add_pcre_unicode_modifier($pcre, $encoding = null) {
  */
 function api_get_non_utf8_encoding($language = null) {
 	if (empty($language)) {
-		$language = api_refine_language_id(api_get_interface_language());
+		$language = api_get_interface_language();
 	}
+	$language = api_refine_language_id($language);
 	$encodings = & api_non_utf8_encodings();
 	if (is_array($encodings[$language])) {
 		if (!empty($encodings[$language][0])) {

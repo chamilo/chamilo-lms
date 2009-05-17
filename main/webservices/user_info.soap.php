@@ -107,7 +107,7 @@ function DokeosWSCourseListOfUser($username, $signature) {
     return $courses_list;
 }
 
-/* Register DokeosWSCourseList function */
+/* Register DokeosWSEventsList function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
     'eventDetails',
@@ -116,8 +116,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'name'=>'date','type'=>'xsd:string',
+        'name'=>'datestart','type'=>'xsd:string',
+        'name'=>'dateend','type'=>'xsd:string',
         'name'=>'title','type'=>'xsd:string',
+        'name'=>'link','type'=>'xsd:string',
         'name'=>'coursetitle','type'=>'xsd:string',
     )
 );
@@ -193,13 +195,6 @@ function DokeosWSEventsList($username,$signature,$datestart=0,$dateend=0) {
     $ds = substr($datestart,0,4).'-'.substr($datestart,4,2).'-'.substr($datestart,6,2).' 00:00:00';
     $de = substr($dateend,0,4).'-'.substr($dateend,4,2).'-'.substr($dateend,6,2).' 00:00:00';
     $events_list = get_personal_agenda_items_between_dates($user_id, $ds, $de);
-    foreach ( $events_list as $i => $event ) {
-        $events_list[] = array(
-            'date'=>$i,
-            'title' => api_convert_encoding($event['title'],'UTF-8',$charset), 
-            'coursetitle' => api_convert_encoding($event['coursetitle'],'UTF-8',$charset)
-        );
-    }
     return $events_list;
 }
 // Use the request to (try to) invoke the service

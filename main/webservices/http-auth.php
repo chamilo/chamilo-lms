@@ -1,4 +1,4 @@
-<?php
+<?php //$id: $
 
 $realm = 'The batcave';
 

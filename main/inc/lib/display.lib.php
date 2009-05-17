@@ -369,7 +369,7 @@ class Display {
 		global $charset;
 		if($filter) {
 			//filter message
-			$message = api_htmlentities($message,ENT_QUOTES,$charset);
+			$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : $charset);
 		}
 		if (!headers_sent())
 		{
@@ -402,7 +402,7 @@ class Display {
 		global $charset;
 		if($filter){
 			//filter message
-			$message = api_htmlentities($message,ENT_QUOTES,$charset);
+			$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : $charset);
 		}
 		if (!headers_sent())
 		{
@@ -434,7 +434,7 @@ class Display {
 		global $charset;
 		if($filter){
 			//filter message
-			$message = api_htmlentities($message,ENT_QUOTES,$charset);
+			$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : $charset);
 		}
 		if (!headers_sent())
 		{
@@ -469,7 +469,7 @@ class Display {
 		global $charset;
 		if($filter){
 			//filter message
-			$message = api_htmlentities($message,ENT_QUOTES,$charset);
+			$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : $charset);
 		}
 
 		if (!headers_sent())

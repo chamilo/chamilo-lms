@@ -22,7 +22,7 @@
 *	This script allows to manage answers. It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer_admin.inc.php 20451 2009-05-10 12:02:22Z ivantcholakov $
+* 	@version $Id: answer_admin.inc.php 20748 2009-05-17 10:35:35Z ivantcholakov $
 */
 
 
@@ -1360,7 +1360,7 @@ if($modifyAnswers)
 ?>
 
 <h3>
-  <?php echo $langQuestion.": ".$questionName; ?>
+  <?php echo get_lang('Question').": ".$questionName; ?>
 </h3>
 <?php
 	if(!empty($msgErr))

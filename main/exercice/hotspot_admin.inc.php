@@ -250,7 +250,7 @@ if($modifyAnswers)
 ?>
 
 <h3>
-  <?php echo $langQuestion.": ".$questionName.' <img src="../img/info3.gif" title="'.strip_tags(get_lang('HotspotChoose')).'" alt="'.strip_tags(get_lang('HotspotChoose')).'" />'; ?>
+  <?php echo get_lang('Question').": ".$questionName.' <img src="../img/info3.gif" title="'.strip_tags(get_lang('HotspotChoose')).'" alt="'.strip_tags(get_lang('HotspotChoose')).'" />'; ?>
 </h3>
 <?php
 	if(!empty($msgErr))

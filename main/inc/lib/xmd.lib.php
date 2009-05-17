@@ -628,8 +628,13 @@ class xmddoc
     }
     
 
-    function xmddoc($strings, $charset = 'UTF-8', $textstring = '')
-    { 
+    function xmddoc($strings, $charset = null, $textstring = '')
+    {
+    	if (empty($charset))
+    	{
+    		$charset = api_get_system_encoding();
+    	}
+
         $this->parent = array();      $this->name = array();
         $this->ns = array();          $this->attributes = array();
         $this->atns = array();        $this->children = array();
@@ -648,7 +653,12 @@ class xmddoc
         
         $this->names = array(); $this->_lookup('');  // empty ns is number 0
         
-        $xml_parser = xml_parser_create_ns($charset, ':');
+        // This is a quick workaround.
+        // The xml-parser supports only ISO-8859-1, UTF-8 and US-ASCII.
+    	// See http://php.net/manual/en/function.xml-parser-create-ns.php
+        //$xml_parser = xml_parser_create_ns($charset, ':');
+        $xml_parser = xml_parser_create_ns(api_is_utf8($charset) ? 'UTF-8' : 'ISO-8859-1', ':');
+
         xml_set_object($xml_parser,$this);  // instead of ...,&$this
         // See PHP manual: Passing by Reference vs. xml_set_object
         xml_set_element_handler($xml_parser, '_startElement', '_endElement');

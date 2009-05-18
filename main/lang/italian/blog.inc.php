@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 $MyTasks = "Le mie attività";
 $FavoriteBlogs = "I miei blog";
 $Navigation = "Navigazione";
-$TopTen = "Classifica dei blog";
-$Subtitle = "Sottotitolo";
+$TopTen = "Classifica dei messaggi";
+$Subtitle = "Descrizione";
 $ThisBlog = "Questo blog";
 $NewPost = "Nuovo articolo";
 $TaskManager = "Gestione delle attività";

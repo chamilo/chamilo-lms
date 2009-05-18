@@ -135,4 +135,6 @@ $AverageResultsVsResource = "Povprečen rezultat / vir";
 $ToViewGraphScoreRuleMustBeEnabled = "Za ogled grafa mora biti pravilo prikaza rezultata omogočeno";
 $GradebookPreviousWeight = "Predhodne uteži resursov";
 $AddAssessment = "Shrani ocenjevanje";
+$FolderView = "Domača stran ocenjevanja";
+$SaveScoringRules = "Shrani pravila ocenjevanja";
 ?>

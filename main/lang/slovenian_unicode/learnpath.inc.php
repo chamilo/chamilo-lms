@@ -3,6 +3,9 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "Nov forum je bil ustvarjen";
 $NewThreadCreated = "Nova nit foruma je bila ustvarjena.";
+$AddHotpotatoes = "Dodaj Hotpotatoes";
+$HideAttemptView = "Skrij pogled poskusov";
+$ExtendAttemptView = "Razširi pogled poskusov";
 $lang_learning_path = "Učna pot";
 $lang_learning_path_builder = "Kreator učne poti";
 $lang_description = "opis";
@@ -96,7 +99,6 @@ $langNewStudentPublicationCreated = "Nov Izdelek tečajnikov je bil ustvarjen";
 $langNewModuleCreated = "Novo poglavje je bilo ustvarjeno. Sedaj vanj lahko dodate druga poglavja in korake.";
 $langNewExerciseCreated = "Nova vaja je bila ustvarjena.";
 $langItemRemoved = "Element je bil odstranjen";
-$langLearnPathAdded = "Vaša učna pot je bila uspešno ustvarjena in dodana v menu na levi strani. Sedaj lahko dodate poglavja in korake k vaši učni poti. Raba poglavij je opcijska.";
 $langConverting = "Pretvarjam...";
 $langPpt2lpError = "Napaka pri pretvorbi iz PowerPoint datoteke";
 $langBuild = "Zgradi";
@@ -223,4 +225,15 @@ $CreateLearningPath = "Ustvari učno pot";
 $AddExercise = "Dodaj vajo/test";
 $AddForum = "Dodaj forum";
 $LPCreateDocument = "Ustvari dokument";
+$ObjectiveID = "ID učnega cilja";
+$ObjectiveStatus = "Status učnega cilja";
+$ObjectiveRawScore = "raw rezultat učnega cilja";
+$ObjectiveMaxScore = "max rezutat učnega cilja";
+$ObjectiveMinScore = "min rezultat učnega cilja";
+$LPName = "Naziv tečaja";
+$AuthoringOptions = "Avtorske opcije";
+$CourseSettings = "Nastavitve tečaja";
+$AddLinkToCourse = "Dodaj povezavo k tečaju";
+$AddAssignmentToCourse = "Dodaj nalogo/zadolžitev tečaju";
+$AddForumToCourse = "Dodaj forum tečaju";
 ?>

@@ -706,5 +706,9 @@ $Filter = "Filter";
 $Subject = "Predmet";
 $Message = "Sporočilo";
 $MoreInformation = "Več informacij";
+$Image = "Slika";
 $SaveIntroText = "Shrani uvodno besedilo";
+$SendAMessage = "Pošlji sporočilo";
+$BackToUserList = "Nazaj na seznam uporabnikov";
+$GraphicNotAvailable = "Slika ni na voljo";
 ?>

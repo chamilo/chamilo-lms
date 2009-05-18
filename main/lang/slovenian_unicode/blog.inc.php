@@ -84,4 +84,16 @@ $NoTasks = "Ni opravil";
 $Shared = "Skupna raba";
 $PermissionGrantedByGroupOrRole = "Dovoljenje odobreno s skupino ali vlogo";
 $Reader = "Bralec";
+$SeeBlog = "Poglej blog";
+$CommentCreated = "Komentar je bil shranjen.";
+$BlogAdded = "Članek je bil dodan.";
+$TaskCreated = "Opravilo je bilo ustvarjeno";
+$TaskEdited = "Opravilo je bilo ažurirano.";
+$TaskAssigned = "Opravilo je bilo dodeljeno.";
+$AssignedTaskEdited = "Dodeljeno opravilo je bilo urejeno";
+$UserRegistered = "Uporabnik je bil registriran";
+$TaskDeleted = "Opravilo je bilo odstranjeno.";
+$TaskAssignmentDeleted = "Dodeljeno opravilo je bilo odstranjeno.";
+$CommentDeleted = "Komentar je bil odstranjen";
+$RatingAdded = "Ocena je bila dodana.";
 ?>

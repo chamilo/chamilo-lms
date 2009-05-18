@@ -94,7 +94,6 @@ $langNewStudentPublicationCreated = "La nueva publicacion del estudiante ha sido
 $langNewModuleCreated = "El nuevo módulo ha sido creado. Ahora puede agregar un capítulo o un paso.";
 $langNewExerciseCreated = "El nuevo ejercicio ha sido creado.";
 $langItemRemoved = "El ítem ha sido eliminado";
-$langLearnPathAdded = "Su itinerario formativo ha sido creado satisfactoriamente y ha sido añadido al menú lateral. Ahora puede agregar módulos y pasos al itinerario formativo. El uso de capítulos es opcional para una estructura más ordenada.";
 $langConverting = "Convirtiendo...";
 $langPpt2lpError = "Error durante la conversión de PowerPoint. Por favor verifique si hay carácteres especiales en el nombre de su PowerPoint.";
 $langBuild = "Construir";

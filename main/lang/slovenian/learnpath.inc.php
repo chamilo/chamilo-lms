@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "Nov Izdelek teèajnikov je bil ustvarjen";
 $langNewModuleCreated = "Nov modul je bil ustvarjen. Sedaj vanj lahko dodate poglavja in korake.";
 $langNewExerciseCreated = "Nova vaja je bila ustvarjena.";
 $langItemRemoved = "Element je bil odstranjen";
-$langLearnPathAdded = "Vaša uèna pot je bila uspešno ustvarjena in dodana v menu na levi strani. Sedaj lahko dodate poglavja in korake k vaši uèni poti. Raba poglavij je opcijska.";
 $langConverting = "Pretvarjam...";
 $langPpt2lpError = "Napaka pri pretvorbi iz PowerPoint datoteke";
 $langBuild = "Zgradi";

@@ -22,4 +22,6 @@ $NoteAdded = "Beležka je bila dodana";
 $NoteConfirmDelete = "Ste prepričani, da želite odstraniti beležko?";
 $AddNote = "Dodaj beležko";
 $ModifyNote = "Spremeni beležko";
+$BackToNoteList = "Nazaj na seznam beležk";
+$NotebookManagement = "Upravljanje beležk";
 ?>

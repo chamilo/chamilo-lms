@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "La nova publicació d\'estudiant ha estat cr
 $langNewModuleCreated = "El nou apartat ha estat creat. Ara podeu afegir-hi un recurs o bé crear un altre apartat.";
 $langNewExerciseCreated = "El nou exercici ha estat creat.";
 $langItemRemoved = "L\'element ha estat eliminat";
-$langLearnPathAdded = "El vostre itinerari formatiu ha estat creat i incorporat al menú de l\'esquerra. Ara podeu afegir-hi apartats i recursos. L\'ús d\'apartats és opcional però pot ajudar a aconseguir una estructura més ordenada.";
 $langConverting = "Convertint...";
 $langPpt2lpError = "S\'ha produït un error durant la conversió del PowerPoint. Si us plau, assegureu-vos que el nom del vostre PowerPoint no contingui caràcters especials.";
 $langBuild = "Construir";

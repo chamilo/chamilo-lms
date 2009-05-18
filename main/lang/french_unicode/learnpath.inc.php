@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "Le nouveau travail a bien été créé";
 $langNewModuleCreated = "Le nouveau chapitre a bien été créé. Vous pouvez maintenant ajouter un nouveau chapitre ou une nouvelle étape dans celui-ci.";
 $langNewExerciseCreated = "Le nouveau test a bien été créé.";
 $langItemRemoved = "L\'étape a bien été supprimée";
-$langLearnPathAdded = "Votre parcours pédagogique a bien été créé et il a été ajouté dans le menu de gauche. Vous pouvez maintenant ajouter des étapes à votre parcours. L\'utilisation des chapitres est optionnel pour une structure plus élaborée.";
 $langConverting = "Conversion en cours...";
 $langPpt2lpError = "Erreur durant la conversion du PowerPoint. Vérifiez qu\'il n\'y a pas de caractères spéciaux dans le nom de votre PowerPoint ou contactez votre administrateur système.";
 $langBuild = "Construire";

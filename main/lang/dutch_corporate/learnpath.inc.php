@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "De nieuwe gebruikerspublicatie is aangemaak
 $langNewModuleCreated = "De nieuwe module is aangemaakt. U kunt nu een nieuw hoofdstuk of een nieuwe stap toevoegen aan de zopas aangemaakte module.";
 $langNewExerciseCreated = "De nieuwe test is aangemaakt.";
 $langItemRemoved = "De stap is verwijderd.";
-$langLearnPathAdded = "Uw leerpad is aangemaakt en het is toegevoegd aan het linkermenu. U kunt nu stappen aan uw leerpad toevoegen. Het gebruik van hoofdstukken is optioneel en kan gebruikt worden voor een meer uitgewerkt structuur.";
 $langConverting = "Bezig met converteren...";
 $langPpt2lpError = "Er heeft zich een fout voorgedaan tijdens de conversie van het Powerpoint bestand. Gelieve te verifiëren dat er géén speciale karakters in uw Powerpoint bestand zitten.";
 $langBuild = "Bouwen";
@@ -192,4 +191,5 @@ $OogieBadExtension = "Gelieve enkel presentatie up te loaden. Bestandsnamen dien
 $WoogieBadExtension = "Gelieve enkel text bestanden up te loaden. De bestandsnaam dient te eindigen met .doc, .docx of .odt";
 $ShowAudioRecorder = "Geef de geluidsopnemer weer.";
 $SearchFeatureNotEnabledComment = "Full-text zoeken is niet geactiveerd in Dokeos. Gelieve de Dokeos beheerder te contacteren.";
+$ScormUnknownPackageFormat = "Ongekend SCORM formaat";
 ?>

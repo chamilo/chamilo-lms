@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "Creouse o novo traballo de alumno";
 $langNewModuleCreated = "Creouse o novo módulo. Agora pódelle engadir un capítulo ou un paso.";
 $langNewExerciseCreated = "Creouse o novo exercicio.";
 $langItemRemoved = "Eliminouse o elemento";
-$langLearnPathAdded = "Creouse a súa rota de aprendizaxe e engadiuse ao menú da esquerda. Agora pódelle engadir módulos e pasos á súa rota de aprendizaxe. O uso de capítulos é opcional e permite unha estrutura máis ordenada.";
 $langConverting = "Convertendo...";
 $langPpt2lpError = "Erro durante a conversión do PowerPoint. Verifique se hai caracteres especiais no nome do seu PowerPoint.";
 $langBuild = " 	Construír";

@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "學生作業已經創建";
 $langNewModuleCreated = "學習路徑已經創建，您可以添加章節或步驟。";
 $langNewExerciseCreated = "測驗已創建。";
 $langItemRemoved = "項目已經被刪除";
-$langLearnPathAdded = "您的學習路徑已成功創建並添加到左邊選單，您可以添加章節和步驟，章節是可選項。";
 $langConverting = "轉換中。。。";
 $langPpt2lpError = "轉換幻燈片時發生了錯誤，請檢查檔案名是否有特殊字符。";
 $langBuild = "進階";

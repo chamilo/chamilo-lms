@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "Az ú hallgatói publikáció létrehozása megtö
 $langNewModuleCreated = "Az új modul létrehozása sikerült. Mostantól hozzárendelhet fejezetet vagy lépést.";
 $langNewExerciseCreated = "Az új feladat létrejött.";
 $langItemRemoved = "Az elem törölve.";
-$langLearnPathAdded = "A tanulási útvonal létrejött, és sikerrel hozzáadódott a bal menühöz. Mostantól hozzárendelhet fejezeteket, lépéseket. A fejezetek használhata opcionális, de javasolt a struktúráltság kialakításához.";
 $langConverting = "Konvertálás...";
 $langPpt2lpError = "Hiba történt a Powerpoint prezentáció konverziója közben. Kérjük ellen&#337;rizze, hogy nincs-e különleges karakter (ékezetes bet&#369;k, szóköz, stb.)  a prezentációja nevében.";
 $langBuild = "Összeállít";

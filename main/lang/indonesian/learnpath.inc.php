@@ -94,7 +94,6 @@ $langNewStudentPublicationCreated = "Publikas baru siswa telah dibuat";
 $langNewModuleCreated = "Modul baru telah dibuat. Kini anda dapat menambah bab atau langkah padanya.";
 $langNewExerciseCreated = "Latihan baru telah dibuat.";
 $langItemRemoved = "Item tsb telah dihapus";
-$langLearnPathAdded = "Learning path telah berhasil dibuat dan ditambahkan ke menu sebelah kiri.  Anda kini dapat menambah modul dan langkah ke Learning path.  Penggunaan bab adalah opsional untuk struktur yang lebih halus.";
 $langConverting = "Sedang mengubah ...";
 $langPpt2lpError = "Error selama konversi ke PowerPoint. Silahkan periksa kalau-kalau ada karakter khusus di nama file PowerPoint tsb.";
 $langBuild = "Buat";

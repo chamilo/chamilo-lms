@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "Nauja studento publikacija sukurta";
 $langNewModuleCreated = "Naujas modulis sukurtas. Galite įterpti į jį naują skyrių arba žingsnį.";
 $langNewExerciseCreated = "Naujas pratimas sukurtas.";
 $langItemRemoved = "Įrašas ištrintas";
-$langLearnPathAdded = "Teorinė kurso medžiaga sėkmingai sukurta. Dabar galite kurti modulius ir žingsnius.";
 $langConverting = "Konvertuojama...";
 $langPpt2lpError = "Error during the conversion of PowerPoint. Please check if there are special characters in the name of your PowerPoint.";
 $langBuild = "Sudarymas";

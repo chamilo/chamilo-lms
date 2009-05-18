@@ -59,4 +59,15 @@ $EndDateAlreadyPassed = "Končni datum je že presežen";
 $MoveXTo = "Premakni %s v";
 $QualificationMustNotBeMoreThanQualificationOver = "Kvalifikacija ne more preseči največje podane vrednosti kvalifikacije.";
 $ModifyDirectory = "Spremeni mapo";
+$DeleteAllFiles = "Odstrani vse objave";
+$BackToWorksList = "Nazaj na seznam nalog/zadolžitev";
+$EditMedia = "Uredi in oceni objave";
+$AllFilesInvisible = "Vse objave so sedaj skrite";
+$FileInvisible = "Datoteka je sedaj skrita";
+$AllFilesVisible = "Vse objave so sedaj vidne";
+$FileVisible = "Datoteka je sedaj vidna";
+$ButtonCreateAssignment = "Ustvari nalogo/zadolžitev";
+$AssignmentName = "Ime naloge/zadolžitve";
+$CreateAssignment = "Ustvari nalogo/zadolžitev";
+$FolderEdited = "Mapa je bila ažurirana";
 ?>

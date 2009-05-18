@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "Nové zadanie bolo vytvorené";
 $langNewModuleCreated = "Nová kapitola bola vytvorená. Teraz môžete do nej vstúpi&#357; alebo prida&#357; kapitolu.";
 $langNewExerciseCreated = "Nové cvi&#269;enie bolo vytvorené.";
 $langItemRemoved = "Položka bola odstránená";
-$langLearnPathAdded = "Vaša u&#269;ebná osnova bola úspešne vytvorená a pridaná do &#318;avého menu. Teraz do nej môžete prida&#357; kapitoly a etapy. Použitie kapitol je volite&#318;né ale môže vytvori&#357; podrobnejšiu štruktúru.";
 $langConverting = "Konvertujem...";
 $langPpt2lpError = "Chyba po&#269;as konverzie z PowerPointu. Prosím skontrolujte, &#269;i v názve PowerPoint súboru nie sú špeciálne znaky.";
 $langBuild = "Vytvori&#357;";

@@ -94,7 +94,6 @@ $langNewStudentPublicationCreated = "学生作业已经创建";
 $langNewModuleCreated = "学习路径已经创建，您可以添加章节或步骤。";
 $langNewExerciseCreated = "测验已创建。";
 $langItemRemoved = "项目已经被删除";
-$langLearnPathAdded = "您的学习路径已成功创建并添加到左边菜单，您可以添加章节和步骤，章节是可选项。";
 $langConverting = "转换中。。。";
 $langPpt2lpError = "转换幻灯片时发生了错误，请检查文件名是否有特殊字符。";
 $langBuild = "高级";

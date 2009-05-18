@@ -55,4 +55,5 @@ $AnnounceSentByEmail = "Obvestila poslana preko e-pošte";
 $AnnounceSentToUserSelection = "Obvestila poslana izbranim uporabnikom";
 $SendAnnouncement = "Pošlji obvestilo";
 $ModifyAnnouncement = "Spremeni obvestilo";
+$ButtonPublishAnnouncement = "Pošlji obvestilo";
 ?>

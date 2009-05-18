@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "El trabayu nuevu creóse";
 $langNewModuleCreated = "El módulu nuevu creóse. Agora pue amestar un elementu o crear otru módulu.";
 $langNewExerciseCreated = "Creóse l\'exerciciu nuevu";
 $langItemRemoved = "Esborróse l\'item";
-$langLearnPathAdded = "El so itinerariu d\'aprendizaxe creóse ya insertóse nel menú de la izquierda. Agora pue amestar módulos y elementos.";
 $langConverting = "Convirtiendo...";
 $langPpt2lpError = "Erru de la que se convertía\'l PowerPoint. Por favor, asegúrese de que\'l nome del archivu PowerPoint nun tien carauteres especiales (tildes o ñ)";
 $langBuild = "Construir";

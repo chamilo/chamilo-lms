@@ -99,7 +99,6 @@ $langNewStudentPublicationCreated = "L\'espace de publication a bien été créé";
 $langNewModuleCreated = "La nouvelle section a bien été créée. Vous pouvez maintenant ajouter une sous-section ou une nouvelle étape dans celle-ci.";
 $langNewExerciseCreated = "Le nouveau test a bien été créé.";
 $langItemRemoved = "L\'étape a bien été supprimée";
-$langLearnPathAdded = "Votre cours a été créé et il a été ajouté dans le menu de gauche. Vous pouvez maintenant ajouter des étapes à votre cours. L\'utilisation des sections est optionnelle pour une table des matières plus élaborée.";
 $langConverting = "Conversion en cours...";
 $langPpt2lpError = "Erreur durant la conversion de la présentation. Vérifiez qu\'il n\'y a pas de caractères spéciaux dans le nom de votre présentation ou contactez votre administrateur système.";
 $langBuild = "Construire";

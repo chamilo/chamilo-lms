@@ -95,7 +95,6 @@ $langNewStudentPublicationCreated = "Noua publicatie a studentului a fost creata
 $langNewModuleCreated = "Noul modul a fost creat. Acum puteti sa-i adaugati un nou capitol sau pas.";
 $langNewExerciseCreated = "Noul exercitiu a fost creat.";
 $langItemRemoved = "Obiectul a fost inlaturat";
-$langLearnPathAdded = "Calea dumneavoastra de invatare a fost creata cu succes si a fost adaugata la meniul din partea stanga. Puteti acum sa adaugati module si pasii caii de invatare. Folosirea capitolelor este optionala pentru o structura mai subtila.";
 $langConverting = "Convertire...";
 $langPpt2lpError = "Eroare in timpul conversiei PowerPoint";
 $langBuild = "Construieste";

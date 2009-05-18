@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "Die neue Studenten Veröffentlichung wurde e
 $langNewModuleCreated = "Das neue Modul wurde erstellt. Sie können nun ein Kapitel oder einen Schritt hinzufügen";
 $langNewExerciseCreated = "Die neue Übung wurde erstellt";
 $langItemRemoved = "Der Punkt wurde entfernt";
-$langLearnPathAdded = "Ihr Lernpfad wurde erfolgreich erstellt und zum Menü links hinzugefügt. Sie können nun ein Modul oder Schritte zum Lernpfad hinzufügen. Die Verwendung von Kapiteln ist optional und erlaubt eine umfangreichere Struktur";
 $langConverting = "Konvertierung läuft ...";
 $langPpt2lpError = "Fehler während der Powerpoint Konvertierung. Bitte prüfen, ob es Sonderzeichen im Namen der PowerPoint Datei gibt";
 $langBuild = "Erstellen";

@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "Napravljen je novi studentski rad";
 $langNewModuleCreated = "Napravljen je novi modul. Sada mu možete pridodati sljede&#263;i modul ili korak.";
 $langNewExerciseCreated = "Napravljena je nova vježba.";
 $langItemRemoved = "Element je odstranjen";
-$langLearnPathAdded = "Put u&#269;enja je uspješno napravljen i dodan lijevom izborniku. Sada putu u&#269;enja možete dodavati poglavlja i korake. Upotreba poglavlja je neobavezna, ali pridonosi jasnijoj strukturi.";
 $langConverting = "Pretvorba...";
 $langPpt2lpError = "Pogreška prilikom pretvorbe PowerPoint datoteke. Molim provjerite imate li posebnih znakova u nazivu PowerPoint datoteke.";
 $langBuild = "Izgradi";

@@ -3,6 +3,12 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "Het nieuwe forum is aangemaakt";
 $NewThreadCreated = "Een nieuw forum thread werd aangemaakt.";
+$LearnPathAddedTitle = "Welkom in de Dokeos cursus auteursomgeving";
+$BuildComment  = "Voeg leerobjecten en activiteiten toe aan uw cursus";
+$BasicOverviewComment = "Voeg audio commentaar toe en wijzig de volgorde van de stappen in de inhoudstafel";
+$DisplayComment = "Bekijk de cursussen vanuit het standpunt van de cursist";
+$NewChapterComment = "Hoofdstuk 1, Hoofdstuk 2 of Week 1, Week 2, ...";
+$NewStepComment = "maak uw cursus stap voor stap met documenten, oefeningen, activiteiten en maak hierbij gebruik van de sjablonen, mascottes en mediagallerijen.";
 $lang_learning_path = "Leerpad";
 $lang_learning_path_builder = "Leerpadbouwer";
 $lang_description = "beschrijving";
@@ -96,7 +102,6 @@ $langNewStudentPublicationCreated = "De nieuwe studentenpublicatie is aangemaakt
 $langNewModuleCreated = "De nieuwe module is aangemaakt. U kunt nu een nieuw hoofdstuk of een nieuwe stap toevoegen aan de zopas aangemaakte module.";
 $langNewExerciseCreated = "De nieuwe test is aangemaakt.";
 $langItemRemoved = "De stap is verwijderd.";
-$langLearnPathAdded = "Uw leerpad is aangemaakt en het is toegevoegd aan het linkermenu. U kunt nu stappen aan uw leerpad toevoegen. Het gebruik van hoofdstukken is optioneel en kan gebruikt worden voor een meer uitgewerkt structuur.";
 $langConverting = "Bezig met converteren...";
 $langPpt2lpError = "Er heeft zich een fout voorgedaan tijdens de conversie van het Powerpoint bestand. Gelieve te verifiëren dat er géén speciale karakters in uw Powerpoint bestand zitten.";
 $langBuild = "Bouwen";
@@ -192,4 +197,5 @@ $OogieBadExtension = "Gelieve enkel presentatie up te loaden. Bestandsnamen dien
 $WoogieBadExtension = "Gelieve enkel text bestanden up te loaden. De bestandsnaam dient te eindigen met .doc, .docx of .odt";
 $ShowAudioRecorder = "Geef de geluidsopnemer weer.";
 $SearchFeatureNotEnabledComment = "Full-text zoeken is niet geactiveerd in Dokeos. Gelieve de Dokeos beheerder te contacteren.";
+$ScormUnknownPackageFormat = "Ongekend SCORM formaat";
 ?>

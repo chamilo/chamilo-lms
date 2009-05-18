@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "O novo trabalho foi criado";
 $langNewModuleCreated = "O novo módulo foi criado. Agora pode acrescentar um capítulo ou etapa.";
 $langNewExerciseCreated = "O novo exercício foi criado.";
 $langItemRemoved = "A etapa foi removida";
-$langLearnPathAdded = "A sua Sequência de Aprendizagem foi criada com sucesso e foi acrescentada ao menu da esquerda. Agora pode acrescentar etapas à sua Sequência de Aprendizagem. O uso de capítulos é opcional para uma estrutura mais ordenada.";
 $langConverting = "Em processo de conversão ...";
 $langPpt2lpError = "Erro ocorrido durante a conversão do PowerPoint";
 $langBuild = "Construir";

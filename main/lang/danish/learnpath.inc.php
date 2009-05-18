@@ -96,7 +96,6 @@ $langNewStudentPublicationCreated = "Afleveringen er tilføjet";
 $langNewModuleCreated = "Det nye kapitel er tilføjet. Du kan nu tilføje et nyt kapitel eller tilføje trin til kapitlet";
 $langNewExerciseCreated = "Den nye øvelse er tilføjet";
 $langItemRemoved = "Elementet er flyttet";
-$langLearnPathAdded = "Læringsstien er oprettet og kan ses i menuen til venstre. <br><br> Du har nu mulighed for at tilføje kapitler (overskrifter) og trin (indhold) til læringsstien. Det er valgfrit, om du vil anvende kapitler eller ej. Kapitler kan være med til at gøre læringsstien mere overskuelig for deltagerne.";
 $langConverting = "Konvertering i gang...";
 $langPpt2lpError = "Der opstod en fejl i forbindelse med konvertering af PowerPoint. Undersøg om der er specielle tegn i titlen på powerPointen, og omdøm den i såfald";
 $langBuild = "Opbyg";

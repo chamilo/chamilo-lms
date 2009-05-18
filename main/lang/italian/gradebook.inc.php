@@ -1,8 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$ModifyEvaluation = "Modifica il Registro";
-$CreateLink = "Collega l\'attività al Registro esami";
+$ModifyEvaluation = "Modifica le valutazioni";
+$CreateLink = "Collega l\'attività alla valutazione";
 $FlatView = "Per corsista";
 $ScoreEdit = "Regole assegnazione del livello";
 $ScoreColor = "Colore del livello";
@@ -58,7 +58,7 @@ $NoUser = "Nessun utente";
 $NoResultsInEvaluation = "Momentaneamente non c\'è alcun risultato per questa valutazione";
 $AddStudent = "Aggiungi utenti";
 $ImportResult = "Importa dei risultati";
-$Score = "Graduatoria";
+$Score = "Punteggi";
 $ImportFileLocation = "Percorso del file da importare";
 $Location = "Posizione";
 $FileType = "Tipo di file";
@@ -84,7 +84,7 @@ $ResultAdded = "Risultato aggiunto";
 $EvaluationStatistics = "Statistiche sulle valutazioni";
 $ExportResult = "Esporta i risultati";
 $EditResult = "Modifica i risultati";
-$GradebookWelcomeMessage = "Benvenuti al registro degli esami. Questo strumento vi permette di determinare un\'insieme di obiettivi rilevabili cui assegnare un punteggio (per uno o più corsi) e di aggiungere ulteriori valutazioni personalizzate.";
+$GradebookWelcomeMessage = "Benvenuti al registro delle valutazioni. Questo strumento vi permette di determinare un\'insieme di obiettivi rilevabili cui assegnare un punteggio (per uno o più corsi) e di aggiungere ulteriori valutazioni personalizzate.";
 $CreateAllCat = "Crea tutte le categorie di corso";
 $AddAllCat = "Categorie aggiunte";
 $StatsStudent = "Statistica di ";
@@ -109,9 +109,9 @@ $EditAllWeights = "Modifica tutti i pesi";
 $GradebookQualificationTotal = "Totale";
 $GradebookEvaluationDeleted = "La valutazione è stata eliminata come richiesto";
 $GradebookQualifyLog = "Storico del peso associato";
-$GradebookNameLog = "Titolo dell\'esame";
-$GradebookDescriptionLog = "Descrizione dell\'esame";
-$GradebookVisibilityLog = "Visibilità dell\'esame";
+$GradebookNameLog = "Titolo della valutazione";
+$GradebookDescriptionLog = "Descrizione della valutazione";
+$GradebookVisibilityLog = "Visibilità della valutazione";
 $ResourceType = "Tipo di risorsa";
 $GradebookWhoChangedItLog = "Cambiato da";
 $EvaluationEdited = "La valutazione è stata modificata come richiesto";
@@ -135,7 +135,7 @@ $AverageResultsVsResource = "Punteggio medio per risorsa";
 $ToViewGraphScoreRuleMustBeEnabled = "Per vedere il grafico devono essere attivate le regole sul punteggio";
 $GradebookPreviousWeight = "Peso precedentemente assegnato";
 $AddAssessment = "Salva la valutazione";
-$FolderView = "Registro";
+$FolderView = "Valutazioni";
 $GradebookSkillsRanking = "Valutazione competenze";
 $SaveScoringRules = "Salva le regole sul punteggio";
 ?>

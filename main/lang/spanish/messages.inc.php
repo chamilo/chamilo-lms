@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$MessageEmptyMessageOrSubject = "Por favor, escriba el título y el texto de su mensaje";
+$MessageInformationBySendMessage = "Mensaje de información por enviar mensaje";
 $Inbox  = "Bandeja de entrada";
 $Messages = "Mensajes instantáneos";
 $SendMessage = "Enviar mensaje instantáneo";

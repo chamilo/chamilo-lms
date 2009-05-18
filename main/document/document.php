@@ -1,4 +1,4 @@
-<?php // $Id: document.php 20701 2009-05-15 16:54:36Z cvargas1 $
+<?php // $Id: document.php 20789 2009-05-18 16:54:06Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -588,8 +588,8 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	   	  TEMPLATE ACTION
 	  ======================================*/
 	
-	if(isset($_GET['add_as_template']) && !isset($_POST['create_template']))
-	{		
+	if (isset($_GET['add_as_template']) && !isset($_POST['create_template'])) {
+		
 		$document_id_for_template = intval($_GET['add_as_template']);
 		
 		//create the form that asks for the directory name
@@ -598,48 +598,44 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$template_text .= '<table><tr><td>';
 		$template_text .= get_lang('TemplateName').' : </td>';
 		$template_text .= '<td><input type="text" name="template_title" /></td></tr>';
-		$template_text .= '<tr><td>'.get_lang('TemplateDescription').' : </td>';
-		$template_text .= '<td><textarea name="template_description"></textarea></td></tr>';
+		//$template_text .= '<tr><td>'.get_lang('TemplateDescription').' : </td>';
+		//$template_text .= '<td><textarea name="template_description"></textarea></td></tr>';
 		$template_text .= '<tr><td>'.get_lang('TemplateImage').' : </td>';
 		$template_text .= '<td><input type="file" name="template_image" id="template_image" /></td></tr>';
 		$template_text .= '</table>';
 		$template_text .= '<button type="submit" class="add" name="create_template">'.get_lang('CreateTemplate').'</button>';
 		$template_text .= '</form>';
 		//show the form
-		Display::display_normal_message($template_text,false);		
-	}	
-	elseif(isset($_GET['add_as_template']) && isset($_POST['create_template']))
-	{		
+		Display::display_normal_message($template_text,false);
+		
+	} elseif(isset($_GET['add_as_template']) && isset($_POST['create_template'])) {		
+		
 		$document_id_for_template = intval(Database::escape_string($_GET['add_as_template']));    
 			
 		$title=Security::remove_XSS($_POST['template_title']);				
-		$description = Security::remove_XSS($_POST['template_description']);		
+		//$description = Security::remove_XSS($_POST['template_description']);		
 		$course_code = api_get_course_id();
 		$user_id = api_get_user_id();
 		
 		// create the template_thumbnails folder in the upload folder (if needed)
-		if(!is_dir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'))
-		{
+		if (!is_dir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/')) {
 			$perm = api_get_setting('permissions_for_new_directories');
 			$perm = octdec(!empty($perm)?$perm:'0770');
 			$res = @mkdir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/',$perm);
 		}
 		
 		// upload the file
-		if (!empty($_FILES['template_image']['name']))
-		{
+		if (!empty($_FILES['template_image']['name'])) {
 			echo 'uploading';
 			include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 			$upload_ok = process_uploaded_file($_FILES['template_image']);
 			
-			if ($upload_ok)
-			{
+			if ($upload_ok) {
 				// Try to add an extension to the file if it hasn't one
 				$new_file_name = $_course['sysCode'].'-'.add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);	
 				
 				// upload dir
 				$upload_dir = api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/';
-				
 				
 				// resize image to max default and end upload
 				require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
@@ -648,8 +644,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 				
 				$max_width_for_picture = 100;
 				
-				if ($picture_infos[0]>$max_width_for_picture)
-				{		
+				if ($picture_infos[0]>$max_width_for_picture) {		
 					$thumbwidth = $max_width_for_picture;
 					if (empty($thumbwidth) or $thumbwidth==0) {
 					  $thumbwidth=$max_width_for_picture;
@@ -661,8 +656,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 				
 				$type=$picture_infos[2];
 						  
-				switch (!empty($type))
-				{
+				switch (!empty($type)) {
 					case 2 : $temp->send_image('JPG',$upload_dir.$new_file_name);							 
 							 break;
 					case 3 : $temp->send_image('PNG',$upload_dir.$new_file_name);							
@@ -674,11 +668,10 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	   }	
 		
 		DocumentManager::set_document_as_template($title, $description, $document_id_for_template, $course_code, $user_id, $new_file_name);		
-		Display::display_confirmation_message(get_lang('DocumentSetAsTemplate'));		
+		Display::display_confirmation_message(get_lang('DocumentSetAsTemplate'));
 	}
 		
-	if(isset($_GET['remove_as_template']))
-	{		
+	if(isset($_GET['remove_as_template'])) {		
 		$document_id_for_template = intval($_GET['remove_as_template']);
 		$course_code = api_get_course_id();
 		$user_id = api_get_user_id();		

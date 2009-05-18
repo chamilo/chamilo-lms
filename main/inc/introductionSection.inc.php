@@ -63,7 +63,7 @@ if ($intro_editAllowed) {
 		if ( $form->validate()) {
 			
 			$form_values = $form->exportValues();
-			$intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGER);
+			$intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);
 			
 			if ( ! empty($intro_content) ) {
 				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".Database::escape_string($intro_content)."'";

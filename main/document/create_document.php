@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 20606 2009-05-13 20:50:17Z cvargas1 $
+<?php // $Id: create_document.php 20794 2009-05-18 18:00:36Z iflorespaz $
 
 /*
 ==============================================================================
@@ -435,7 +435,7 @@ if ($form->validate()) {
 	
 	$filename = replace_accents($values['filename']);
 	$texte = $values['content'];
-	$texte=Security::remove_XSS($texte,COURSEMANAGER);
+	$texte=Security::remove_XSS($texte,COURSEMANAGERLOWSECURITY);
 	$title = $values['filename'];
 	$extension = 'html';
 	if (!strstr($texte, '/css/frames.css')) {

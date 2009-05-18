@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 20701 2009-05-15 16:54:36Z cvargas1 $
+<?php // $Id: edit_document.php 20794 2009-05-18 18:00:36Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -419,7 +419,7 @@ if($is_allowedToEdit)
 		$filename=stripslashes($_POST['filename']);
 
 		$texte=trim(str_replace(array("\r","\n"),"",stripslashes($_POST['texte'])));
-		$texte=Security::remove_XSS($texte,COURSEMANAGER);
+		$texte=Security::remove_XSS($texte,COURSEMANAGERLOWSECURITY);
 
 		if(!strstr($texte,'/css/frames.css'))
 		{

@@ -1,4 +1,4 @@
-<?php // $Id: slideshowoptions.php 20495 2009-05-11 21:03:56Z juliomontoya $ 
+<?php // $Id: slideshowoptions.php 20812 2009-05-18 21:47:23Z aportugal $ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -180,7 +180,7 @@ echo '</div>';
 		<div class="formw">
 			<?php echo get_lang('_resizing');?><br><?php echo get_lang('_resizing_comment');?><br>
         <?php echo get_lang('_width');?>: 
-	        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="width" type="text" id="width" 
+	    &nbsp;<input name="width" type="text" id="width" 
 		<?php 
 		if ($image_resizing=="resizing")
 			{

@@ -508,13 +508,13 @@ function store_forumcategory($values) {
 	$clean_cat_title=Database::escape_string(Security::remove_XSS($values['forum_category_title']));
 
 	if (isset($values['forum_category_id'])) { // storing an edit
-		$sql="UPDATE ".$table_categories." SET cat_title='".$clean_cat_title."', cat_comment='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_category_comment'])),COURSEMANAGER))."' WHERE cat_id='".Database::escape_string($values['forum_category_id'])."'";
+		$sql="UPDATE ".$table_categories." SET cat_title='".$clean_cat_title."', cat_comment='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_category_comment'])),COURSEMANAGERLOWSECURITY))."' WHERE cat_id='".Database::escape_string($values['forum_category_id'])."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$last_id=Database::get_last_insert_id();
 		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $values['forum_category_id'],"ForumCategoryAdded", api_get_user_id());
 		$return_message=get_lang('ForumCategoryEdited');
 	} else {
-		$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".$clean_cat_title."','".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_category_comment'])),COURSEMANAGER))."','".Database::escape_string($new_max)."')";
+		$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".$clean_cat_title."','".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_category_comment'])),COURSEMANAGERLOWSECURITY))."','".Database::escape_string($new_max)."')";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$last_id=Database::get_last_insert_id();
 		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", api_get_user_id());
@@ -612,7 +612,7 @@ function store_forum($values) {
 		$sql="UPDATE ".$table_forums." SET
 				forum_title='".$clean_title."',
 				".$sql_image."		
-				forum_comment='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_comment'])),COURSEMANAGER))."',
+				forum_comment='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_comment'])),COURSEMANAGERLOWSECURITY))."',
 				forum_category='".Database::escape_string($values['forum_category'])."',
 				allow_anonymous='".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
 				allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
@@ -637,7 +637,7 @@ $b=$values['forum_comment'];
 			(forum_title, forum_image, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
 			VALUES ('".Security::remove_XSS($clean_title)."',
 				".$sql_image."	
-				'".Database::escape_string(isset($values['forum_comment'])?Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_comment'])),COURSEMANAGER):null)."',
+				'".Database::escape_string(isset($values['forum_comment'])?Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_comment'])),COURSEMANAGERLOWSECURITY):null)."',
 				'".Database::escape_string(isset($values['forum_category'])?$values['forum_category']:null)."',
 				'".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
 				'".Database::escape_string(isset($values['students_can_edit_group']['students_can_edit'])?$values['students_can_edit_group']['students_can_edit']:null)."',
@@ -1798,7 +1798,7 @@ function store_thread($values) {
 		// We now store the content in the table_post table
 		$sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id, poster_name, post_date, post_notification, post_parent_id, visible)
 				VALUES ('".$clean_post_title."',
-				'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGER))."',
+				'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGERLOWSECURITY))."',
 				'".Database::escape_string($last_thread_id)."',
 				'".Database::escape_string($values['forum_id'])."',
 				'".Database::escape_string($_user['user_id'])."',
@@ -2236,7 +2236,7 @@ function store_reply($values) {
 		// We first store an entry in the forum_post table
 		$sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id, post_date, post_notification, post_parent_id, visible)
 				VALUES ('".Database::escape_string(Security::remove_XSS($values['post_title']))."',
-						'".Database::escape_string(isset($values['post_text']) ? Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGER) : null)."',
+						'".Database::escape_string(isset($values['post_text']) ? Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGERLOWSECURITY) : null)."',
 						'".Database::escape_string($values['thread_id'])."',
 						'".Database::escape_string($values['forum_id'])."',
 						'".Database::escape_string($_user['user_id'])."',
@@ -2470,7 +2470,7 @@ function store_edit_post($values) {
 	//}
 	// update the post_title and the post_text
 	$sql="UPDATE $table_posts SET post_title='".Database::escape_string(Security::remove_XSS($values['post_title']))."',
-				post_text='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGER))."',
+				post_text='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGERLOWSECURITY))."',
 				post_notification='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
 				WHERE post_id='".Database::escape_string($values['post_id'])."'";
 				//error_log($sql);

@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 20495 2009-05-11 21:03:56Z juliomontoya $
+<?php // $Id: slideshow.php 20785 2009-05-18 15:05:03Z juliomontoya $
 
 /*
 ==============================================================================
@@ -46,16 +46,11 @@ January 2008
 
 // name of the language file that needs to be included 
 $language_file = array ('slideshow', 'document');
-
 include ('../inc/global.inc.php');
-
 $noPHP_SELF = true;
-
 $path = Security::remove_XSS($_GET['curdirpath']);
 $pathurl = urlencode($path);
-
 $slide_id = Security::remove_XSS($_GET['slide_id']);
-
 if ($path <> '/') {
 	$folder = $path.'/';
 } else {
@@ -64,7 +59,7 @@ if ($path <> '/') {
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 
 // including the functions for the slideshow
-include ('slideshow.inc.php');
+require_once 'slideshow.inc.php';
 
 // breadcrumb navigation
 $url = "document.php?curdirpath=".$pathurl;
@@ -287,7 +282,7 @@ if ($slide_id !== "all") {
 		echo '</tr>';
 		echo '</table>';
 	} else {
-		Display::display_warning_message(get_lang('FileNotExist'));
+		Display::display_warning_message(get_lang('FileNotFound'));
 	}		
 } // if ($slide_id!=="all")
 

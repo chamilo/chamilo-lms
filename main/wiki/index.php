@@ -2228,7 +2228,7 @@ function save_wiki() {
 
 	$_clean['reflink']=Database::escape_string(Security::remove_XSS($_POST['reflink']));
 	$_clean['title']=Database::escape_string(Security::remove_XSS($_POST['title']));
-	$_clean['content']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['content'])),COURSEMANAGER));
+	$_clean['content']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['content'])),COURSEMANAGERLOWSECURITY));
 	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
     $_clean['comment']=Database::escape_string(Security::remove_XSS($_POST['comment']));	
@@ -2327,7 +2327,7 @@ function save_new_wiki() {
 	}	
 
 	$_clean['title']=Database::escape_string(Security::remove_XSS($_POST['title']));		    
-	$_clean['content']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['content'])),COURSEMANAGER));
+	$_clean['content']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['content'])),COURSEMANAGERLOWSECURITY));
 	
 	if($_clean['assignment']==2)  {//config by default for individual assignment (students)	 
 	
@@ -2505,7 +2505,7 @@ function display_wiki_entry()
 	}
 	else
 	{
-  		$content=Security::remove_XSS($row['content'],COURSEMANAGER);
+  		$content=Security::remove_XSS($row['content'],COURSEMANAGERLOWSECURITY);
 		$title= Security::remove_XSS($row['title']);
 	}
 	

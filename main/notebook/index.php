@@ -216,7 +216,7 @@ function save_note($values) {
 				'".Database::escape_string(api_get_course_id())."',
 				'".Database::escape_string($_SESSION['id_session'])."',
 				'".Database::escape_string(Security::remove_XSS($values['note_title']))."',
-				'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['note_comment'])),COURSEMANAGER))."',
+				'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['note_comment'])),COURSEMANAGERLOWSECURITY))."',
 				'".Database::escape_string(date('Y-m-d H:i:s'))."', 
 				'".Database::escape_string(date('Y-m-d H:i:s'))."',		
 				'0')";
@@ -256,7 +256,7 @@ function update_note($values) {
 				course = '".Database::escape_string(api_get_course_id())."',
 				session_id = '".Database::escape_string($_SESSION['id_session'])."',
 				title = '".Database::escape_string(Security::remove_XSS($values['note_title']))."',
-				description = '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['note_comment'])),COURSEMANAGER))."',
+				description = '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['note_comment'])),COURSEMANAGERLOWSECURITY))."',
 				update_date = '".Database::escape_string(date('Y-m-d H:i:s'))."'
 			WHERE notebook_id = '".Database::escape_string($values['notebook_id'])."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);

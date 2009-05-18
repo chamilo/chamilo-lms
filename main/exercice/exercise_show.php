@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20776 2009-05-18 12:43:44Z pcool $
+* 	@version $Id: exercise_show.php 20795 2009-05-18 18:05:02Z iflorespaz $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -263,7 +263,7 @@ function display_fill_in_blanks_answer($answer,$id,$questionId)
 	?>
 		<tr>
 		<td>
-			<?php echo Security::remove_XSS($answer,COURSEMANAGER); ?>
+			<?php echo Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY); ?>
 		</td><?php
 		if(!api_is_allowed_to_edit()) {?>
 			<td>
@@ -286,7 +286,7 @@ function display_free_answer($answer,$id,$questionId) {
 	?>
 		<tr>
 		<td>
-			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGER)); ?>
+			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
 		</td> <?php if(!api_is_allowed_to_edit()) {?>
         <td>
         <?php        

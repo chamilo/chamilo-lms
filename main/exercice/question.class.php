@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20776 2009-05-18 12:43:44Z pcool $
+<?php // $Id: question.class.php 20795 2009-05-18 18:05:02Z iflorespaz $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20776 2009-05-18 12:43:44Z pcool $
+* 	@version $Id: question.class.php 20795 2009-05-18 18:05:02Z iflorespaz $
 */
 
 
@@ -591,7 +591,7 @@ abstract class Question
 		if(!empty($id)) {
 			$sql="UPDATE $TBL_QUESTIONS SET 
 					question 	='".Database::escape_string(Security::remove_XSS($question))."',
-					description	='".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGER))."',
+					description	='".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY))."',
 					ponderation	='".Database::escape_string($weighting)."',
 					position	='".Database::escape_string($position)."',
 					type		='".Database::escape_string($type)."',
@@ -622,7 +622,7 @@ abstract class Question
 			
 			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture,level) VALUES(
 					'".Database::escape_string(Security::remove_XSS($question))."',
-					'".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGER))."',
+					'".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY))."',
 					'".Database::escape_string($weighting)."',
 					'".Database::escape_string($position)."',
 					'".Database::escape_string($type)."',

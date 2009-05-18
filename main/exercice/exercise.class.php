@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 20788 2009-05-18 16:18:01Z iflorespaz $
+* 	@version $Id: exercise.class.php 20795 2009-05-18 18:05:02Z iflorespaz $
 */
 
 
@@ -540,7 +540,7 @@ class Exercise
 		if($id) {
 		/*
 		title='".Database::escape_string(Security::remove_XSS($exercise))."',
-		description='".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGER))."'";
+		description='".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY))."'";
 		*/
 			$sql="UPDATE $TBL_EXERCICES SET 
 						title='".Database::escape_string($exercise)."',
@@ -578,7 +578,7 @@ class Exercise
 		} else {
 			//is anonymous user
 			$cond1=Database::escape_string(Security::remove_XSS($exercise));
-			$cond2=Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGER));		
+			$cond2=Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY));		
 		}*/
 			$sql="INSERT INTO $TBL_EXERCICES(start_time,end_time,title,description,sound,type,random,active, results_disabled, max_attempt,feedback_type) 
 					VALUES(

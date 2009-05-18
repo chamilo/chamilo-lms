@@ -409,7 +409,7 @@ function unloadPage(status)
 {
     if (exitPageStatus != true)
     {
-            doQuit( status );
+           // doQuit( status );
     }
 }
 /**
@@ -438,6 +438,7 @@ function checkAnswers(interrupted)
 			var interactionAnswers = '';
 			var interactionCorrectResponses = '';
 			var interactionType = '';
+
 			if (type == 'mcma')
 			{
 				var interactionType = 'choice';
@@ -449,7 +450,9 @@ function checkAnswers(interrupted)
 					if(answer.checked == true)
 					{
 						interactionAnswers += idAnswer+',';
-						for(k=0;k<questions_answers_correct[idQuestion].length;k++)
+						myScore +=questions_answers_ponderation[idQuestion][idAnswer];
+						
+						/*for(k=0;k<questions_answers_correct[idQuestion].length;k++)
 						{
 							if(questions_answers_correct[idQuestion][k] == idAnswer)
 							{
@@ -462,7 +465,7 @@ function checkAnswers(interrupted)
 									myScore ++;
 								}
 							}
-						}
+						}*/
 					}
 				}
 				interactionScore = myScore;

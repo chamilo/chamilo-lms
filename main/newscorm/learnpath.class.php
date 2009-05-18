@@ -8236,7 +8236,7 @@ class learnpath {
 		 		//give a child element <adlcp:datafromlms> to the <item> element - not yet supported
 		 		//$xmldoc->createElement('adlcp:datafromlms','');
 		 		//give a child element <adlcp:masteryscore> to the <item> element
-		 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->masteryscore);
+		 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->get_masteryscore());
 		 		$my_item->appendChild($my_masteryscore);
 		 		
 		 		
@@ -8574,7 +8574,7 @@ class learnpath {
 			 		$my_prereqs->setAttribute('type','aicc_script');
 			 		$my_item->appendChild($my_prereqs);
 			 		//give a child element <adlcp:masteryscore> to the <item> element
-			 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->masteryscore);
+			 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->get_mastery_score());
 			 		$my_item->appendChild($my_masteryscore);
 
 			 		//attach this item to the organization element or hits parent if there is one

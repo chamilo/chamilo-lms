@@ -72,6 +72,8 @@ define('SESSIONADMIN', 3);
 define('DRH', 4);
 /** global status of a user: human ressource manager */
 define('ANONYMOUS', 6);
+/** global status of a user: low security,it's necessary for inserting data from the teacher */
+define('COURSEMANAGERLOWSECURITY',10);
 
 // table of status
 $_status_list[STUDENT] = 'user';

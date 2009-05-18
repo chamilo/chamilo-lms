@@ -71,6 +71,8 @@ class HTMLPurifier
 
     protected $strategy, $generator;
 
+	/**allow set user status*/
+	 public $my_user_status;
     /**
      * Resultant HTMLPurifier_Context of last run purification. Is an array
      * of contexts if the last called method was purifyArray().
@@ -87,7 +89,10 @@ class HTMLPurifier
      */
     public function __construct($config = null,$user_status) {
     	global $charset;
-
+		if ($user_status==COURSEMANAGERLOWSECURITY) {
+			//non initialize object htmlpurifier
+			$this->my_user_status=COURSEMANAGERLOWSECURITY;
+		} else {
 		$config = HTMLPurifier_Config::createDefault();
 		$config->set('Core', 'Encoding',$charset);
 		$config->set('HTML', 'Doctype', 'XHTML 1.0 Transitional');
@@ -100,11 +105,11 @@ class HTMLPurifier
 			$config->set('HTML', 'AllowedAttributes',$attribute_student);
 		} elseif ($user_status==COURSEMANAGER) {
 			//activate in configuration setting 
-			/*global $tag_teacher,$attribute_teacher;
+			global $tag_teacher,$attribute_teacher;
 	   		$config->set('HTML', 'SafeEmbed',true);				
 			$config->set('Filter', 'YouTube', true);						
 	   		$config->set('HTML', 'AllowedElements',$tag_teacher);
-			$config->set('HTML', 'AllowedAttributes', $attribute_teacher);	*/			
+			$config->set('HTML', 'AllowedAttributes', $attribute_teacher);			
 		} else {
 			global $tag_anonymous,$attribute_anonymous;			
 	   		$config->set('HTML', 'AllowedElements', $tag_anonymous);
@@ -113,6 +118,7 @@ class HTMLPurifier
 			$config->set('HTML', 'TidyLevel', 'light');
         	$this->config = HTMLPurifier_Config::create($config);
         	$this->strategy     = new HTMLPurifier_Strategy_Core();
+        }
     }
 
     /**
@@ -136,79 +142,83 @@ class HTMLPurifier
      */
     public function purify($html, $config = null) {
 
-        // :TODO: make the config merge in, instead of replace
-        $config = $config ? HTMLPurifier_Config::create($config) : $this->config;
-
-        // implementation is partially environment dependant, partially
-        // configuration dependant
-        $lexer = HTMLPurifier_Lexer::create($config);
-
-        $context = new HTMLPurifier_Context();
-
-        // setup HTML generator
-        $this->generator = new HTMLPurifier_Generator($config, $context);
-        $context->register('Generator', $this->generator);
-
-        // set up global context variables
-        if ($config->get('Core', 'CollectErrors')) {
-            // may get moved out if other facilities use it
-            $language_factory = HTMLPurifier_LanguageFactory::instance();
-            $language = $language_factory->create($config, $context);
-            $context->register('Locale', $language);
-
-            $error_collector = new HTMLPurifier_ErrorCollector($context);
-            $context->register('ErrorCollector', $error_collector);
-        }
-
-        // setup id_accumulator context, necessary due to the fact that
-        // AttrValidator can be called from many places
-        $id_accumulator = HTMLPurifier_IDAccumulator::build($config, $context);
-        $context->register('IDAccumulator', $id_accumulator);
-
-        $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);
-
-        // setup filters
-        $filter_flags = $config->getBatch('Filter');
-        $custom_filters = $filter_flags['Custom'];
-        unset($filter_flags['Custom']);
-        $filters = array();
-        foreach ($filter_flags as $filter => $flag) {
-            if (!$flag) continue;
-            $class = "HTMLPurifier_Filter_$filter";
-            $filters[] = new $class;
-        }
-        foreach ($custom_filters as $filter) {
-            // maybe "HTMLPurifier_Filter_$filter", but be consistent with AutoFormat
-            $filters[] = $filter;
-        }
-        $filters = array_merge($filters, $this->filters);
-        // maybe prepare(), but later
-
-        for ($i = 0, $filter_size = count($filters); $i < $filter_size; $i++) {
-            $html = $filters[$i]->preFilter($html, $config, $context);
-        }
-
-        // purified HTML
-        $html =
-            $this->generator->generateFromTokens(
-                // list of tokens
-                $this->strategy->execute(
-                    // list of un-purified tokens
-                    $lexer->tokenizeHTML(
-                        // un-purified HTML
-                        $html, $config, $context
-                    ),
-                    $config, $context
-                )
-            );
-
-        for ($i = $filter_size - 1; $i >= 0; $i--) {
-            $html = $filters[$i]->postFilter($html, $config, $context);
-        }
-
-        $html = HTMLPurifier_Encoder::convertFromUTF8($html, $config, $context);
-        $this->context =& $context;
-        return $html;
+		if ($this->my_user_status==COURSEMANAGERLOWSECURITY) {
+			return $html;
+		} else {
+	        // :TODO: make the config merge in, instead of replace
+	        $config = $config ? HTMLPurifier_Config::create($config) : $this->config;
+	
+	        // implementation is partially environment dependant, partially
+	        // configuration dependant
+	        $lexer = HTMLPurifier_Lexer::create($config);
+	
+	        $context = new HTMLPurifier_Context();
+	
+	        // setup HTML generator
+	        $this->generator = new HTMLPurifier_Generator($config, $context);
+	        $context->register('Generator', $this->generator);
+	
+	        // set up global context variables
+	        if ($config->get('Core', 'CollectErrors')) {
+	            // may get moved out if other facilities use it
+	            $language_factory = HTMLPurifier_LanguageFactory::instance();
+	            $language = $language_factory->create($config, $context);
+	            $context->register('Locale', $language);
+	
+	            $error_collector = new HTMLPurifier_ErrorCollector($context);
+	            $context->register('ErrorCollector', $error_collector);
+	        }
+	
+	        // setup id_accumulator context, necessary due to the fact that
+	        // AttrValidator can be called from many places
+	        $id_accumulator = HTMLPurifier_IDAccumulator::build($config, $context);
+	        $context->register('IDAccumulator', $id_accumulator);
+	
+	        $html = HTMLPurifier_Encoder::convertToUTF8($html, $config, $context);
+	
+	        // setup filters
+	        $filter_flags = $config->getBatch('Filter');
+	        $custom_filters = $filter_flags['Custom'];
+	        unset($filter_flags['Custom']);
+	        $filters = array();
+	        foreach ($filter_flags as $filter => $flag) {
+	            if (!$flag) continue;
+	            $class = "HTMLPurifier_Filter_$filter";
+	            $filters[] = new $class;
+	        }
+	        foreach ($custom_filters as $filter) {
+	            // maybe "HTMLPurifier_Filter_$filter", but be consistent with AutoFormat
+	            $filters[] = $filter;
+	        }
+	        $filters = array_merge($filters, $this->filters);
+	        // maybe prepare(), but later
+	
+	        for ($i = 0, $filter_size = count($filters); $i < $filter_size; $i++) {
+	            $html = $filters[$i]->preFilter($html, $config, $context);
+	        }
+	
+	        // purified HTML
+	        $html =
+	            $this->generator->generateFromTokens(
+	                // list of tokens
+	                $this->strategy->execute(
+	                    // list of un-purified tokens
+	                    $lexer->tokenizeHTML(
+	                        // un-purified HTML
+	                        $html, $config, $context
+	                    ),
+	                    $config, $context
+	                )
+	            );
+	
+	        for ($i = $filter_size - 1; $i >= 0; $i--) {
+	            $html = $filters[$i]->postFilter($html, $config, $context);
+	        }
+	
+	        $html = HTMLPurifier_Encoder::convertFromUTF8($html, $config, $context);
+	        $this->context =& $context;
+	        return $html;
+      }
     }
 
     /**
@@ -218,13 +228,17 @@ class HTMLPurifier
      * @return Array of purified HTML
      */
     public function purifyArray($array_of_html, $config = null) {
-        $context_array = array();
-        foreach ($array_of_html as $key => $html) {
-            $array_of_html[$key] = $this->purify($html, $config);
-            $context_array[$key] = $this->context;
-        }
-        $this->context = $context_array;
-        return $array_of_html;
+ 		if ($this->my_user_status==COURSEMANAGERLOWSECURITY) {
+			return $array_of_html;
+		} else {   	
+	        $context_array = array();
+	        foreach ($array_of_html as $key => $html) {
+	            $array_of_html[$key] = $this->purify($html, $config);
+	            $context_array[$key] = $this->context;
+	        }
+	        $this->context = $context_array;
+	        return $array_of_html;
+ 		}
     }
 
     /**
@@ -252,7 +266,6 @@ class HTMLPurifier
     public static function getInstance($prototype = null) {
         return HTMLPurifier::instance($prototype);
     }
-
 }
 
 // vim: et sw=4 sts=4

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20715 2009-05-15 23:42:57Z juliomontoya $
+<?php // $Id: index.php 20790 2009-05-18 17:29:21Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -212,10 +212,10 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 			if ($description['description_id'] >= ADD_BLOCK) {
 				if ($description['add']=='1') { //if this element has been submitted for addition					
 					$result = api_sql_query($sql, __FILE__, __LINE__);
-					$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title))."', content = '".Database::escape_string(Security::remove_XSS($content))."'";				
+					$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."'";				
 					api_sql_query($sql, __FILE__, __LINE__);
 				} else {								
-					$sql = "UPDATE $tbl_course_description SET  title = '".Database::escape_string(Security::remove_XSS($title))."', content = '".Database::escape_string(Security::remove_XSS($content))."' WHERE id = '".$description_id."' ";				
+					$sql = "UPDATE $tbl_course_description SET  title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."' WHERE id = '".$description_id."' ";				
 					api_sql_query($sql, __FILE__, __LINE__);					
 				}
 			} else {
@@ -225,7 +225,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 				}
 				$sql = "DELETE FROM $tbl_course_description WHERE id = '".$description_id."'";
 				api_sql_query($sql, __FILE__, __LINE__);
-				$sql = "INSERT INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title))."', content = '".Database::escape_string(Security::remove_XSS($content))."'";
+				$sql = "INSERT INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 			Display :: display_confirmation_message(get_lang('CourseDescriptionUpdated'));

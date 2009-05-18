@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20790 2009-05-18 17:29:21Z iflorespaz $
+<?php // $Id: index.php 20806 2009-05-18 19:28:18Z herodoto $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -191,7 +191,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 			$fck_attribute['Height'] = '200';
 			$form->add_html_editor('contentDescription', get_lang('Content'));			
 		}
-		$form->addElement('style_submit_button', null, get_lang('SaveIntroText'), 'class="save"');
+		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		// Set some default values
 		$default['title'] = $default_description_titles[$description_id];
 		$default['contentDescription'] = $description_content;

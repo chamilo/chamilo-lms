@@ -4624,8 +4624,8 @@ class learnpath {
 		Display::display_icon('i.gif');
 		echo '<a href="lp_controller.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;action=edit&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'">'.Display::return_icon('edit.gif', get_lang('CourseSettings')).' '.get_lang('CourseSettings').'</a>';
 		echo '<a href="'.api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;action=admin_view&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('audio.gif', get_lang('UpdateAllAudioFragments')).' '.get_lang('UpdateAllAudioFragments').'</a>';
-		echo '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.gif" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
-		echo '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img alt="'.get_lang("NewStep").'" src="../img/new_test.gif" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
+		echo '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'">'.Display::return_icon('lp_dokeos_chapter_add.gif', get_lang('NewChapter')).' '.get_lang("NewChapter").'</a>';
+		echo '<a href="' .api_get_self(). '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'">'.Display::return_icon('new_test.gif', get_lang('NewStep')).' '.get_lang("NewStep").'</a>';
 		echo '</div>';
 	}
 	

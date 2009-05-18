@@ -37,8 +37,6 @@
  * When encodings to be used are not supported by mbstring, this library
  * is able to exploit the PHP iconv extesion, which in this case should
  * be activated too.
- * 
- * 5. TODO: Functions that were not used may be removed from this library.
  */
 
 /**

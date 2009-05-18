@@ -5208,7 +5208,8 @@ class learnpath {
 			$item_description	= '';
 		}
 				
-		$return = '<div class="sectiontitle">';			
+		$return = '	<div class="row">
+						<div class="form_header">';		
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
 			else
@@ -5254,7 +5255,8 @@ class learnpath {
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true') {
 				$return .= Display::return_warning_message('<p class="lp_title">'.get_lang("Warning").' !</p>'.get_lang("WarningEditingDocument"));
 			}
-			$return .= '</div>';
+			$return .= '	</div>
+						</div>';
 			$return .= '<div class="sectioncomment">';
 			
 			$return .= '<form method="POST">' . "\n";			
@@ -5710,7 +5712,8 @@ class learnpath {
 		$item_title=api_convert_encoding($item_title,$charset,$this->encoding);
 		$item_description=api_convert_encoding($item_description,$charset,$this->encoding);
 				
-		$return = '<div class="sectiontitle">';
+		$return = '	<div class="row">
+						<div class="form_header">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -5755,7 +5758,8 @@ class learnpath {
 			else
 				$return .= get_lang("EditCurrentForum").'&nbsp;:' . "\n";
 				
-			$return .= '</div>';
+			$return .= '	</div>
+						</div>';
 			$return .= '<div class="sectioncomment">';			
 			$return .= '<form method="POST">' . "\n";
 			
@@ -6216,7 +6220,9 @@ class learnpath {
 			$item_description	= '';
 		}
 		
-		$return = '<div class="sectiontitle">';
+		$return = '	<div class="row">
+						<div class="form_header">';
+
 			
 		if($id != 0 && is_array($extra_info))
 			$parent = $extra_info['parent_item_id'];
@@ -6257,8 +6263,8 @@ class learnpath {
 		unset($this->arrMenu);
 			
 		$return .= $title . "\n";
-		$return .= '</div>';
-		$return .= '<div class="sectioncomment">';
+		$return .= '	</div>
+					</div>';
 		
 		require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');		
 		$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"]);
@@ -6307,6 +6313,7 @@ class learnpath {
 			{
 				$form->addElement('text','title', get_lang('Title'),'id="idTitle" class="learnpath_chapter_form" size="40%"');
 				$form->applyFilter('title', 'html_filter');
+				$form->addRule('title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 				//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"');
 			}
 			else
@@ -6377,7 +6384,6 @@ class learnpath {
 		$form->addElement('hidden', 'type', 'dokeos_'.$item_type);
 		$form->addElement('hidden', 'post_time', time());		
 		$form->setDefaults($defaults);
-		$form->addElement('html','</div>');
 		return $form->return_form();
 	}
 	
@@ -6475,7 +6481,8 @@ class learnpath {
 			$item_description	= '';
 		}
 		
-		$return = '<div class="sectiontitle">';
+		$return = '	<div class="row">
+						<div class="form_header">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -6527,7 +6534,8 @@ class learnpath {
 				$return .= get_lang("EditTheCurrentDocument") . "\n";
 			}
 
-			$return .= '</div>';
+			$return .= '	</div>
+						</div>';
 
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
@@ -6830,7 +6838,8 @@ class learnpath {
 		}
 		$item_title=api_convert_encoding($item_title,$charset,$this->encoding);
 		$item_description=api_convert_encoding($item_description,$charset,$this->encoding);
-		$return = '<div class="sectiontitle">';
+		$return = '	<div class="row">
+						<div class="form_header">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -6874,7 +6883,8 @@ class learnpath {
 			else
 				$return .= get_lang("EditCurrentLink").'&nbsp;:' . "\n";
 			
-			$return .= '</div>';
+			$return .= '	</div>
+						</div>';
 			$return .= '<div class="sectioncomment">';
 			$return .= '<form method="POST">' . "\n";
 			
@@ -7088,7 +7098,8 @@ class learnpath {
 		}
 		
 		$item_title=api_convert_encoding($item_title,$charset,$this->encoding);
-		$return = '<div class="sectiontitle">';
+		$return = '	<div class="row">
+						<div class="form_header">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];
@@ -7133,7 +7144,8 @@ class learnpath {
 			else
 				$return .= get_lang("EditCurrentStudentPublication").'&nbsp;:' . "\n";
 			
-			$return .= '</div>';
+			$return .= '	</div>
+						</div>';
 			$return .= '<div class="sectioncomment">';
 			
 			$return .= '<form method="POST">' . "\n";
@@ -7667,9 +7679,11 @@ class learnpath {
 		//$preq_max = $row['max_score'];
 		
 		$return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
-		$return .= '<div class="sectiontitle">';
+		$return = '	<div class="row">
+						<div class="form_header">';
 		$return .= get_lang('AddEditPrerequisites');
-		$return .= '</div>';
+		$return .= '	</div>
+					</div>';
 		$return .= '<div class="sectioncomment">';
 		$return .= '<form method="POST">';
 		$return .= '<table class="lp_prerequisites">';

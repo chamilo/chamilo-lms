@@ -96,18 +96,19 @@ class HTMLPurifier
 			global $tag_student,$attribute_student;//$tag_student
 	   		$config->set('HTML', 'SafeEmbed',true);			
 			$config->set('Filter', 'YouTube', true);						
-	   		$config->set('HTML', 'AllowedElements',$tag_student);//'a,em,blockquote,p,code,pre,strong,b,img,span'
-			$config->set('HTML', 'AllowedAttributes',$attribute_student);//'a.href,a.title,img.src'
+	   		$config->set('HTML', 'AllowedElements',$tag_student);
+			$config->set('HTML', 'AllowedAttributes',$attribute_student);
 		} elseif ($user_status==COURSEMANAGER) {
-			global $tag_teacher,$attribute_teacher;
+			//activate in configuration setting 
+			/*global $tag_teacher,$attribute_teacher;
 	   		$config->set('HTML', 'SafeEmbed',true);				
 			$config->set('Filter', 'YouTube', true);						
 	   		$config->set('HTML', 'AllowedElements',$tag_teacher);
-			$config->set('HTML', 'AllowedAttributes', $attribute_teacher);//'a.href,a.title,img.src'				
+			$config->set('HTML', 'AllowedAttributes', $attribute_teacher);	*/			
 		} else {
 			global $tag_anonymous,$attribute_anonymous;			
 	   		$config->set('HTML', 'AllowedElements', $tag_anonymous);
-			$config->set('HTML', 'AllowedAttributes',$attribute_anonymous);//'a.href,a.title,img.src'			
+			$config->set('HTML', 'AllowedAttributes',$attribute_anonymous);			
 		}
 			$config->set('HTML', 'TidyLevel', 'light');
         	$this->config = HTMLPurifier_Config::create($config);

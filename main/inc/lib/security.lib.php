@@ -250,7 +250,7 @@ class Security{
 	 */
 	function remove_XSS($var,$user_status=ANONYMOUS) {
 		global $charset;
-		/*if (is_null($user_status)) {
+		if ($user_status==COURSEMANAGER) {
 			if (is_array($var)) {
 				if (count($var)>0) {
 					foreach ($var as &$value_var) {
@@ -265,15 +265,12 @@ class Security{
 				return api_htmlentities($var,ENT_QUOTES,$charset);	
 			}			
 		} else {
-		$purifier = new HTMLPurifier($config_purifier,$user_status);
-		return $purifier->purify($var);
-		}*/	
-		$purifier = new HTMLPurifier(null,$user_status);		
-		if (is_array($var)) {
-			return $purifier->purifyArray($var);				
-		} else {
-			return $purifier->purify($var);	
-		}
-			
+			$purifier = new HTMLPurifier(null,$user_status);		
+			if (is_array($var)) {
+				return $purifier->purifyArray($var);				
+			} else {
+				return $purifier->purify($var);	
+			}
+		}	
 	}
 }

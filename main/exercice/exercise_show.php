@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20704 2009-05-15 17:17:48Z cvargas1 $
+* 	@version $Id: exercise_show.php 20776 2009-05-18 12:43:44Z pcool $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -230,10 +230,10 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		{
 			if(!$answerCorrect)
 			{
-				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';
+				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
 			}
 			else{
-				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';
+				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
 			}
 		}
 		else
@@ -286,7 +286,7 @@ function display_free_answer($answer,$id,$questionId) {
 	?>
 		<tr>
 		<td>
-			<?php echo nl2br(stripslashes(Security::remove_XSS($answer,COURSEMANAGER))); ?>
+			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGER)); ?>
 		</td> <?php if(!api_is_allowed_to_edit()) {?>
         <td>
         <?php        
@@ -339,9 +339,9 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			<?php
 			$answerComment=api_parse_tex($answerComment);
 			if($studentChoice) {
-				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';							
+				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';							
 			} else {
-				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';				
+				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';				
 			} 
 			?>
 		</td>	
@@ -445,7 +445,7 @@ if ($show_results == true ) {
 				<?php echo '&nbsp;'.get_lang("Exercise").' :'; ?>
 			</td>
 			<td width="90%">
-			<?php echo stripslashes($test)?><br />
+			<?php echo $test; ?><br />
 			<?php echo $exerciseDescription; ?>
 			</td>
 		</tr>
@@ -676,7 +676,7 @@ if ($show_results) {
 						$choice = $arr[1];
 						$choice[$j]=trim($choice[$j]);
 						// if the word entered by the student IS the same as the one defined by the professor
-						if (api_strtolower(api_substr($temp,0,$pos)) == stripslashes(api_strtolower($choice[$j]))) {
+						if (api_strtolower(api_substr($temp,0,$pos)) == api_strtolower($choice[$j])) {
 							// gives the related weighting to the student
 							$questionScore+=$answerWeighting[$j];
 							// increments total score
@@ -719,7 +719,7 @@ if ($show_results) {
 						$choice = $arr[1];
 						
 						$choice[$j]=trim($choice[$j]);					
-						$user_tags[]=stripslashes(api_strtolower($choice[$j]));
+						$user_tags[]=api_strtolower($choice[$j]);
 						$correct_tags[]=api_strtolower(api_substr($temp,0,$pos));	
 						
 						$j++;

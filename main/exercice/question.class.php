@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20644 2009-05-14 16:42:28Z cvargas1 $
+<?php // $Id: question.class.php 20776 2009-05-18 12:43:44Z pcool $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20644 2009-05-14 16:42:28Z cvargas1 $
+* 	@version $Id: question.class.php 20776 2009-05-18 12:43:44Z pcool $
 */
 
 
@@ -579,19 +579,19 @@ abstract class Question
 		$TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION);
 		
 		$id=$this->id;
-		$question=addslashes($this->question);
-		$description=addslashes($this->description);
+		$question=$this->question;
+		$description=$this->description;
 		$weighting=$this->weighting;
 		$position=$this->position;
 		$type=$this->type;
-		$picture=addslashes($this->picture);
+		$picture=$this->picture;
 		$level=$this->level; 
 
 		// question already exists		
 		if(!empty($id)) {
 			$sql="UPDATE $TBL_QUESTIONS SET 
 					question 	='".Database::escape_string(Security::remove_XSS($question))."',
-					description	='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($description)),COURSEMANAGER))."',
+					description	='".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGER))."',
 					ponderation	='".Database::escape_string($weighting)."',
 					position	='".Database::escape_string($position)."',
 					type		='".Database::escape_string($type)."',
@@ -622,7 +622,7 @@ abstract class Question
 			
 			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture,level) VALUES(
 					'".Database::escape_string(Security::remove_XSS($question))."',
-					'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($description)),COURSEMANAGER))."',
+					'".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGER))."',
 					'".Database::escape_string($weighting)."',
 					'".Database::escape_string($position)."',
 					'".Database::escape_string($type)."',
@@ -904,8 +904,8 @@ abstract class Question
 	function duplicate() {
 		global $TBL_QUESTIONS, $picturePath;
 
-		$question=addslashes($this->question);
-		$description=addslashes($this->description);
+		$question=$this->question;
+		$description=$this->description;
 		$weighting=$this->weighting;
 		$position=$this->position;
 		$type=$this->type;

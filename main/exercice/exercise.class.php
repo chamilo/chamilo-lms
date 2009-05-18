@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 20644 2009-05-14 16:42:28Z cvargas1 $
+* 	@version $Id: exercise.class.php 20776 2009-05-18 12:43:44Z pcool $
 */
 
 
@@ -521,9 +521,9 @@ class Exercise
         $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
 
 		$id=$this->id;
-		$exercise=addslashes($this->exercise);
-		$description=addslashes($this->description);
-		$sound=addslashes($this->sound);
+		$exercise=$this->exercise;
+		$description=$this->description;
+		$sound=$this->sound;
 		$type=$this->type;
 		$attempts=$this->attempts;
 		$feedbacktype=$this->feedbacktype;
@@ -540,7 +540,7 @@ class Exercise
 		if($id) {
 			$sql="UPDATE $TBL_EXERCICES SET 
 						title='".Database::escape_string(Security::remove_XSS($exercise))."',
-						description='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($description)),COURSEMANAGER))."'";
+						description='".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGER))."'";
 				if ($type_e != 'simple') {					
 						$sql .= ", sound='".Database::escape_string($sound)."',
 						type='".Database::escape_string($type)."',
@@ -568,7 +568,7 @@ class Exercise
 					VALUES(
 						'$start_time','$end_time',
 						'".Database::escape_string(Security::remove_XSS($exercise))."',
-						'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($description)),COURSEMANAGER))."',
+						'".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGER))."',
 						'".Database::escape_string($sound)."',
 						'".Database::escape_string($type)."',
 						'".Database::escape_string($random)."',

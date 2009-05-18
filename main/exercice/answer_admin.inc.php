@@ -22,7 +22,7 @@
 *	This script allows to manage answers. It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer_admin.inc.php 20748 2009-05-17 10:35:35Z ivantcholakov $
+* 	@version $Id: answer_admin.inc.php 20776 2009-05-18 12:43:44Z pcool $
 */
 
 
@@ -570,7 +570,7 @@ if($submitAnswers || $buttonBack)
 		            if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is HOT_SPOT'."<br />\n";}
 
 		            $reponse[$i]=trim($reponse[$i]);
-		            $comment[$i]=addslashes(trim($comment[$i]));
+		            $comment[$i]=trim($comment[$i]);
 		            $weighting[$i]=intval($weighting[$i]);
 					if($weighting[$i])
 					{
@@ -1370,7 +1370,7 @@ if($modifyAnswers)
 ?>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 	<tr>
-		<td colspan="2" style="border:1px solid #4271b5; border-bottom:none;"><?php echo stripslashes(get_lang('HotspotChoose')); ?></td>
+		<td colspan="2" style="border:1px solid #4271b5; border-bottom:none;"><?php echo get_lang('HotspotChoose'); ?></td>
 	</tr>
 	<tr>
 		<td width="550" valign="top">

@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20716 2009-05-16 07:28:22Z ivantcholakov $
+// $Id: exercice.php 20776 2009-05-18 12:43:44Z pcool $
 
 /*
 ==============================================================================
@@ -352,7 +352,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$mess = str_replace("#test#", Security::remove_XSS($test), $message);
 	//$message= str_replace("#ques_name#",$ques_name,$mess);
 	$message = str_replace("#url#", $url, $mess);
-	$mess = stripslashes($message);
+	$mess = $message;
 	$headers = " MIME-Version: 1.0 \r\n";
 	$headers .= "User-Agent: Dokeos/1.6";
 	$headers .= "Content-Transfer-Encoding: 7bit";

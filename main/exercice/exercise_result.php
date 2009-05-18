@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 20697 2009-05-15 15:42:37Z cvargas1 $
+* 	@version $Id: exercise_result.php 20776 2009-05-18 12:43:44Z pcool $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -150,7 +150,6 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 // define basic exercise info to print on screen
 $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
-$exerciseDescription=stripslashes($exerciseDescription);
 
 $gradebook = '';
 if (isset($_SESSION['gradebook'])){
@@ -350,10 +349,10 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		{
 			if(!$answerCorrect)
 			{
-				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';
+				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
 			}
 			else{
-				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable(stripslashes($answerComment))).'</span>';
+				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
 			}
 		}
 		else
@@ -382,7 +381,7 @@ function display_free_answer($answer)
 	?>
 		<tr>
 		<td width="55%">
-			<?php echo nl2br(stripslashes(Security::remove_XSS($answer,COURSEMANAGER))); ?>
+			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGER)); ?>
 		</td>
    <td width="45%">
     <?php echo get_lang('notCorrectedYet');?>
@@ -428,7 +427,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 					} else {
 						echo '<span style="font-weight: bold; color: #FF0000;">';												
 					}					
-					echo stripslashes($answerComment);
+					echo $answerComment;
 					echo '</span>';				 
 					?>
 				</td>
@@ -696,7 +695,7 @@ foreach ($questionList as $questionId) {
 							break;
 						}
 						$choice[$j]=trim($choice[$j]);
-						$user_tags[]=stripslashes(api_strtolower($choice[$j]));
+						$user_tags[]=api_strtolower($choice[$j]);
 						//put the contents of the [] answer tag into correct_tags[]
                         $correct_tags[]=api_strtolower(api_substr($temp,0,$pos));
 						$j++;
@@ -723,13 +722,13 @@ foreach ($questionList as $questionId) {
 								// increments total score
 								$totalScore+=$answerWeighting[$i];
 								// adds the word in green at the end of the string
-								$answer.=stripslashes($correct_tags[$i]); 
+								$answer.=$correct_tags[$i]; 
 							}
 							// else if the word entered by the student IS NOT the same as the one defined by the professor											
 							elseif(!empty($user_tags[$i]))
 							{
 								// adds the word in red at the end of the string, and strikes it
-								$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
+								$answer.='<font color="red"><s>'.$user_tags[$i].'</s></font>'; 
 							}
 							else
 							{
@@ -747,12 +746,12 @@ foreach ($questionList as $questionId) {
 								// increments total score
 								$totalScore+=$answerWeighting[$i];
 								// adds the word in green at the end of the string
-								$answer.=stripslashes($user_tags[$i]);
+								$answer.=$user_tags[$i];
 							}													// else if the word entered by the student IS NOT the same as the one defined by the professor											
 							elseif(!empty($user_tags[$i]))
 							{
 								// adds the word in red at the end of the string, and strikes it
-								$answer.='<font color="red"><s>'.stripslashes($user_tags[$i]).'</s></font>'; 
+								$answer.='<font color="red"><s>'.$user_tags[$i].'</s></font>'; 
 							}
 							else
 							{
@@ -976,7 +975,6 @@ foreach ($questionList as $questionId) {
 				$val = $choice[$j];
 				if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
 					$val = $arr1[1][0];
-				$val=addslashes($val);
 				$val=strip_tags($val);
 				$sql = "SELECT position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
 				$res = api_sql_query($sql, __FILE__, __LINE__);
@@ -1137,7 +1135,7 @@ if(count($arrques)>0) {
 	<a href="#url#">#url#</a></span></body></html>';
 	
 		$msg1= str_replace("#url#",$url,$msg);
-		$mail_content = stripslashes($msg1);
+		$mail_content = $msg1;
 		$student_name = $_SESSION['_user']['firstName'].' '.$_SESSION['_user']['lastName'];
 		$subject = get_lang('OpenQuestionsAttempted');
 		

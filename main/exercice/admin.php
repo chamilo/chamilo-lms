@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 20522 2009-05-12 00:43:47Z yannoo $
+<?php // $Id: admin.php 20776 2009-05-18 12:43:44Z pcool $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 20522 2009-05-12 00:43:47Z yannoo $
+* 	@version $Id: admin.php 20776 2009-05-18 12:43:44Z pcool $
 */
 
 
@@ -95,29 +95,7 @@ define(ALLOWED_TO_INCLUDE,1);
 
 include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-/****************************/
-/*  stripslashes POST data  */
-/****************************/
 
-if($_SERVER['REQUEST_METHOD'] == 'POST')
-{
-	foreach($_POST as $key=>$val)
-	{
-		if(is_string($val))
-		{
-			$_POST[$key]=stripslashes($val);
-		}
-		elseif(is_array($val))
-		{
-			foreach($val as $key2=>$val2)
-			{
-				$_POST[$key][$key2]=stripslashes($val2);
-			}
-		}
-
-		$GLOBALS[$key]=$_POST[$key];
-	}
-}
 
 // get vars from GET
 if ( empty ( $exerciseId ) )
@@ -469,7 +447,7 @@ $description = $objExercise->selectDescription();
 echo '<div class="sectiontitle">'.$objExercise->selectTitle().'</div>';
 if(!empty($description))
 {
-	echo '<div class="sectioncomment">'.stripslashes($description).'</div>';
+	echo '<div class="sectioncomment">'.$description.'</div>';
 }
 */
 

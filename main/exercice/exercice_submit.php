@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice_submit.php 20369 2009-05-06 16:12:55Z cfasanando $
+// $Id: exercice_submit.php 20776 2009-05-18 12:43:44Z pcool $
 
 /*
 ==============================================================================
@@ -43,7 +43,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 20369 2009-05-06 16:12:55Z cfasanando $
+* 	@version $Id: exercice_submit.php 20776 2009-05-18 12:43:44Z pcool $
 */
 
 include ('exercise.class.php');
@@ -416,7 +416,7 @@ if ($formSent) {
 											break;
 										}
 										$choice[$j] = trim($choice[$j]);
-										$user_tags[] = stripslashes(strtolower($choice[$j]));
+										$user_tags[] = strtolower($choice[$j]);
 										//put the contents of the [] answer tag into correct_tags[]
 										$correct_tags[] = strtolower(substr($temp, 0, $pos));
 										$j++;
@@ -440,12 +440,12 @@ if ($formSent) {
 												// increments total score
 												$totalScore += $answerWeighting[$i];
 												// adds the word in green at the end of the string
-												$answer .= stripslashes($correct_tags[$i]);
+												$answer .= $correct_tags[$i];
 											}
 											// else if the word entered by the student IS NOT the same as the one defined by the professor
 											elseif (!empty ($user_tags[$i])) {
 												// adds the word in red at the end of the string, and strikes it
-												$answer .= '<font color="red"><s>' . stripslashes($user_tags[$i]) . '</s></font>';
+												$answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
 											} else {
 												// adds a tabulation if no word has been typed by the student
 												$answer .= '&nbsp;&nbsp;&nbsp;';
@@ -461,12 +461,12 @@ if ($formSent) {
 												// increments total score
 												$totalScore += $answerWeighting[$i];
 												// adds the word in green at the end of the string
-												$answer .= stripslashes($user_tags[$i]);
+												$answer .= $user_tags[$i];
 											}
 											elseif (!empty ($user_tags[$i])) {
 												// else if the word entered by the student IS NOT the same as the one defined by the professor
 												// adds the word in red at the end of the string, and strikes it
-												$answer .= '<font color="red"><s>' . stripslashes($user_tags[$i]) . '</s></font>';
+												$answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
 											} else {
 												// adds a tabulation if no word has been typed by the student
 												$answer .= '&nbsp;&nbsp;&nbsp;';
@@ -565,7 +565,7 @@ if ($formSent) {
 									if (preg_match_all('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1)) {
 										$val = $arr1[1][0];
 									}
-									$val = addslashes($val);
+									$val = $val;
 									$val = strip_tags($val);
 									$sql = "select position from $table_ans where question_id='" . Database :: escape_string($questionId) . "' and answer='" . Database :: escape_string($val) . "' AND correct=0";
 									$res = api_sql_query($sql, __FILE__, __LINE__);
@@ -682,7 +682,7 @@ $quizID = $objExercise->selectId();
 $exerciseAttempts = $objExercise->selectAttempts();
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
-$exerciseDescription = stripslashes($exerciseDescription);
+$exerciseDescription = $exerciseDescription;
 $exerciseSound = $objExercise->selectSound();
 $randomQuestions = $objExercise->isRandom();
 $exerciseType = $objExercise->selectType();

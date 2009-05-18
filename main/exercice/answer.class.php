@@ -23,7 +23,7 @@
 *	5 arrays are created to receive the attributes of each answer belonging to a specified question
 * 	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer.class.php 20644 2009-05-14 16:42:28Z cvargas1 $
+* 	@version $Id: answer.class.php 20776 2009-05-18 12:43:44Z pcool $
 */
 
 
@@ -241,7 +241,7 @@ class Answer
 	 		if(!empty($this->answer[$i])){
 	 			$list[] = array(
 						'id'=>$i,
-						'answer'=>addslashes($this->answer[$i]),
+						'answer'=>$this->answer[$i],
 						'comment'=>$this->comment[$i],
 						'grade' => $this->weighting[$i],
 						'hotspot_coord' => $this->hotspot_coordinates[$i],
@@ -401,8 +401,8 @@ class Answer
 		$questionId=$this->questionId;
 
 		$sql = "UPDATE $TBL_REPONSES SET " .
-				"answer = '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($answer)),COURSEMANAGER))."', " .
-				"comment = '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($comment)),COURSEMANAGER))."', " .
+				"answer = '".Database::escape_string(Security::remove_XSS(api_html_entity_decode($answer),COURSEMANAGER))."', " .
+				"comment = '".Database::escape_string(Security::remove_XSS(api_html_entity_decode($comment),COURSEMANAGER))."', " .
 				"ponderation = '".Database::escape_string($weighting)."', " .
 				"position = '".Database::escape_string($position)."', " .
 				"destination = '".Database::escape_string($destination)."' " .
@@ -434,9 +434,9 @@ class Answer
 
 		for($i=1;$i <= $this->new_nbrAnswers;$i++)
 		{
-			$answer					= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($this->new_answer[$i])),COURSEMANAGER));
+			$answer					= Database::escape_string(Security::remove_XSS(api_html_entity_decode($this->new_answer[$i]),COURSEMANAGER));
 			$correct				= Database::escape_string($this->new_correct[$i]);
-			$comment				= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($this->new_comment[$i])),COURSEMANAGER));
+			$comment				= Database::escape_string(Security::remove_XSS(api_html_entity_decode($this->new_comment[$i]),COURSEMANAGER));
 			$weighting				= Database::escape_string($this->new_weighting[$i]);
 			$position				= Database::escape_string($this->new_position[$i]);
 			$hotspot_coordinates	= Database::escape_string($this->new_hotspot_coordinates[$i]);
@@ -484,9 +484,9 @@ class Answer
 
 			for($i=1;$i <= $this->nbrAnswers;$i++)
 			{
-				$answer					= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($this->answer[$i])),COURSEMANAGER));
+				$answer					= Database::escape_string(Security::remove_XSS(api_html_entity_decode($this->answer[$i]),COURSEMANAGER));
 				$correct				= Database::escape_string($this->correct[$i]);
-				$comment				= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($this->comment[$i])),COURSEMANAGER));
+				$comment				= Database::escape_string(Security::remove_XSS(api_html_entity_decode($this->comment[$i]),COURSEMANAGER));
 				$weighting				= Database::escape_string($this->weighting[$i]);
 				$position				= Database::escape_string($this->position[$i]);
 				$hotspot_coordinates	= Database::escape_string($this->hotspot_coordinates[$i]);

@@ -164,7 +164,7 @@ function save_glossary($values)
 		$sql = "INSERT INTO $t_glossary (name, description,display_order) 
 				VALUES(
 					'".Database::escape_string(Security::remove_XSS($values['glossary_title']))."', 
-					'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGER))."',
+					'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGERLOWSECURITY))."',
 					'".(int)($max_glossary_item + 1)."')";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$id = Database::get_last_insert_id();
@@ -203,7 +203,7 @@ function update_glossary($values)
 	{	
 		$sql = "UPDATE $t_glossary SET 
 						name 		= '".Database::escape_string(Security::remove_XSS($values['glossary_title']))."', 
-						description	= '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGER))."'
+						description	= '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGERLOWSECURITY))."'
 				WHERE glossary_id = ".Database::escape_string($values['glossary_id']);
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		//update glossary into item_property

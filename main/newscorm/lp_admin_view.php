@@ -253,17 +253,27 @@ if (isset($_POST['save_audio']))
 
 			$check_file_path = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/audio/'.$clean_name;
 						
+			// if the file exists we generate a new name	
 			if (file_exists($check_file_path)) {
-				$file = $clean_name;	
-			} else {
-				// upload the file in the documents tool
-				include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-				$file_path = handle_uploaded_document($_course, $_FILES[$key],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);									
-								
-				// getting the filename only
-				$file_components = explode('/',$file_path);
-				$file = $file_components[count($file_components)-1];	
+				$filename_components = explode('.',$clean_name);
+				// gettting the extension of the file
+				$file_extension = $filename_components[count($filename_components)-1];
+				// adding something random to prevent overwriting
+				$filename_components[count($filename_components)-1] = time();
+				// reconstructing the new filename
+				$clean_name = implode($filename_components) . $file_extension;
+				// using the new name in the $_FILES superglobal
+				$_FILES[$key]['name'] = $clean_name;
+				
 			}
+			
+			// upload the file in the documents tool
+			include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+			$file_path = handle_uploaded_document($_course, $_FILES[$key],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);									
+								
+			// getting the filename only
+			$file_components = explode('/',$file_path);
+			$file = $file_components[count($file_components)-1];	
 
 			// store the mp3 file in the lp_item table
 			$tbl_lp_item = Database::get_course_table('lp_item');

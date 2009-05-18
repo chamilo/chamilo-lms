@@ -470,8 +470,8 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 			</tr>
 			<tr>
 				<td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-gpc">Magic Quotes GPC</a></td>
-				<td class="requirements-recommended">ON</td>
-				<td class="requirements-value">'.check_php_setting('magic_quotes_gpc','ON').'</td>
+				<td class="requirements-recommended">OFF</td>
+				<td class="requirements-value">'.check_php_setting('magic_quotes_gpc','OFF').'</td>
 			</tr>
 			<tr>
 				<td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-runtime">Magic Quotes Runtime</a></td>
@@ -490,8 +490,8 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 			</tr>
 			<tr>
 				<td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.short-open-tag">Short Open Tag</a></td>
-				<td class="requirements-recommended">ON</td>
-				<td class="requirements-value">'.check_php_setting('short_open_tag','ON').'</td>
+				<td class="requirements-recommended">OFF</td>
+				<td class="requirements-value">'.check_php_setting('short_open_tag','OFF').'</td>
 			</tr>
 			<tr>
 				<td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.upload-max-filesize">Maximum upload file size</a></td>

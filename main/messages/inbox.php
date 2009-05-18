@@ -99,7 +99,7 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 		$title     = api_convert_encoding(urldecode($info_reply[0]),'UTF-8',$charset);
 		$content   = api_convert_encoding(str_replace("\\","",urldecode($info_reply[1])),'UTF-8',$charset);
 		$title     = Security::remove_XSS($title);
-		$content   = Security::remove_XSS($content,COURSEMANAGER);
+		$content   = Security::remove_XSS($content,COURSEMANAGERLOWSECURITY);
 
 		$user_reply= $info_reply[2];
 		$user_email_base=str_replace(')','(',$info_reply[5]);

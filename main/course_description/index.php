@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20806 2009-05-18 19:28:18Z herodoto $
+<?php // $Id: index.php 20808 2009-05-18 19:49:10Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -167,8 +167,8 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 			} 			
 		}
 		//Se borro: echo ' <style> .row{} <\style> por que hacia conflicto en apartado personalizado con los estilos propios del formvalidator 		
-		// Build the form
-		$form = new FormValidator('course_description','POST','index.php','','style="width: 100%;"');
+		// Build the form		
+		$form = new FormValidator('course_description','POST','index.php?'.api_get_cidreq(),'','style="width: 100%;"');
 		$form->addElement('header', '', $default_description_titles[$description_id]);
 		$form->addElement('hidden', 'description_id');
 		

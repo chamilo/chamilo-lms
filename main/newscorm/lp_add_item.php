@@ -249,100 +249,49 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				{
 					
 					case 'chapter':
-						
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-						
-						echo '<div class="confirmation-message">';
-						
-							echo get_lang("NewChapterCreated");
-						
-						echo '</div>';
-						
+						Display::display_confirmation_message(get_lang('NewChapterCreated'));					
 						break;
 						
 					case TOOL_LINK:
-						
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-						
-						echo '<div class="confirmation-message">';
-						
-							echo get_lang("NewLinksCreated");
-						
-						echo '</div>';
-						
+						Display::display_confirmation_message(get_lang('NewLinksCreated'));	
 						break;
 					
 					case TOOL_STUDENTPUBLICATION:
 						
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-						
-						echo '<div class="confirmation-message">';
-						
-							echo get_lang("NewStudentPublicationCreated");
-						
-						echo '</div>';
-						
+						Display::display_confirmation_message(get_lang('NewStudentPublicationCreated'));
 						break;
 						
 					case 'module':
 						
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-						
-						echo '<div class="confirmation-message">';
-						
-							echo get_lang("NewModuleCreated");
-						
-						echo '</div>';
-						
+						Display::display_confirmation_message(get_lang('NewModuleCreated'));
 						break;
 						
 					case TOOL_QUIZ:
 					
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-						
-						echo '<div class="confirmation-message">';
-						
-							echo get_lang("NewExerciseCreated");
-						
-						echo '</div>';
-						
+						Display::display_confirmation_message(get_lang('NewExerciseCreated'));
 						break;
 					
 					
 					case TOOL_DOCUMENT:
-						
-						$msg = '<div class="confirmation-message">';
-						
-							$msg .= get_lang("NewDocumentCreated");
-						
-						$msg .= '</div>';
-						
+						Display::display_confirmation_message(get_lang('NewDocumentCreated'));
 						echo $_SESSION['oLP']->display_item($new_item_id, true, $msg);
-						
 						break;
 						
 						
 					case TOOL_FORUM:
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-						
-						echo '<div class="confirmation-message">';
-						
-							echo get_lang("NewForumCreated");
-						
-						echo '</div>';
-						
+						Display::display_confirmation_message(get_lang('NewForumCreated'));
 						break;
 					
 					
 					case 'thread':
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-						
-						echo '<div class="confirmation-message">';
-						
-							echo get_lang("NewThreadCreated");
-						
-						echo '</div>';
-						
+						Display::display_confirmation_message(get_lang('NewThreadCreated'));
 						break;
 					
 				}

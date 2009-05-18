@@ -180,11 +180,7 @@ switch($_GET['action'])
 		
 		if(isset($is_success) && $is_success === true)
 		{
-			echo '<div class="confirmation-message">';
-			
-				echo get_lang("_learnpath_item_edited");
-			
-			echo '</div>';
+			Display::display_confirmation_message(get_lang("_learnpath_item_edited"));
 		}
 		else
 		{
@@ -197,11 +193,7 @@ switch($_GET['action'])
 		
 		if(isset($is_success) && $is_success === true)
 		{
-			echo '<div class="confirmation-message">';
-			
-				echo get_lang("_learnpath_item_deleted");
-			
-			echo '</div>';
+			Display::display_confirmation_message(get_lang("_learnpath_item_deleted"));
 		}
 		
 		break;

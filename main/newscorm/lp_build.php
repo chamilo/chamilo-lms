@@ -214,9 +214,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 		echo '<td class="workspace">';
 		
 			if(isset($is_success) && $is_success === true) {
-				echo '<div class="confirmation-message">';			
-				echo get_lang("ItemRemoved");			
-				echo '</div>';
+				Display::display_confirmation_message(get_lang('ItemRemoved'));
 			} else {
 				if($is_new) {
 					Display::display_normal_message(get_lang('LearnPathAdded'), false);

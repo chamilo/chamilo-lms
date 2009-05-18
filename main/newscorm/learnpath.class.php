@@ -5252,10 +5252,7 @@ class learnpath {
 				$return .= get_lang("EditCurrentExecice").'&nbsp;:' . "\n";
 			
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true') {
-				$return .= '<div class="warning-message">';				
-					$return .= '<p class="lp_title">'.get_lang("Warning").' !</p>';
-					$return .= get_lang("WarningEditingDocument");				
-				$return .= '</div>';
+				$return .= Display::return_warning_message('<p class="lp_title">'.get_lang("Warning").' !</p>'.get_lang("WarningEditingDocument"));
 			}
 			$return .= '</div>';
 			$return .= '<div class="sectioncomment">';
@@ -5498,12 +5495,7 @@ class learnpath {
 
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
-				$return .= '<div class="warning-message">';
-
-					$return .= '<p class="lp_title">'.get_lang("Warning").' !</p>';
-					$return .= get_lang("WarningEditingDocument");
-
-				$return .= '</div>';
+				$return .= Display::return_warning_message('<p class="lp_title">'.get_lang("Warning").' !</p>'.get_lang("WarningEditingDocument"));
 			}
 
 			$return .= '<form method="POST">' . "\n";
@@ -6539,19 +6531,9 @@ class learnpath {
 
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
-				$return .= '<div class="warning-message">';				
-				$return .= '<strong>'.get_lang("Warning").' !</strong><br />';
-				$return .= get_lang("WarningEditingDocument");				
-				$return .= '</div>';
+				$return .= Display::return_warning_message('<strong>'.get_lang("Warning").' !</strong><br />'.get_lang("WarningEditingDocument"), false);
 			}
-			/*
-			if($no_display_add==true){
-				$return .= '<div class="warning-message">';
-				$return .= get_lang("CantEditDocument");
-				$return .= '</div>';
-				return $return;
-			}
-			*/
+
 			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			
 			$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"],'','enctype="multipart/form-data"');

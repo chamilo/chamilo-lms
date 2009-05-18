@@ -812,8 +812,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	position: relative;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	border-width: 1px;
-	border-style: solid;
 	padding: 5px;
 	border: 1px solid #5b975b;
 	color: #5b975b;
@@ -824,20 +822,16 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	position: relative;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	border-width: 1px;
-	border-style: solid;
 	padding: 5px;
-	border: 1px solid #FFB30F;
-	color: #FFB30F;
-	background-color: #EFEFEF;
+	border: 1px solid #FF6600;
+	color: #666666;
+	background-color: #FFCD82;
 	min-height: 30px;
 }
 .confirmation-message {
 	position: relative;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	border-width: 1px;
-	border-style: solid;
 	padding: 5px;
 	border: 1px solid #1F8323;
 	color: #1F8323;
@@ -848,8 +842,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	position: relative;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	border-width: 1px;
-	border-style: solid;
 	padding: 5px;
 	border: 1px solid #FF0000;
 	color: #FF0000;

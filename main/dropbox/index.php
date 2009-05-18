@@ -232,7 +232,7 @@ foreach ($dropbox_categories as $category) {
 
 
 // ACTIONS
-if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
+if ( $_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
 	//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
 
 	// This is for the categories
@@ -250,12 +250,12 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 		echo '<img src="../img/folder_up.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.get_lang('Root')."</a>\n";
         $movelist[0] = 'Root'; // move_received selectbox content
 	} else {
-	    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory"><img src="../img/folder_new.gif" align=\"absmiddle\"/> '.get_lang('AddNewCategory').'</a>';
+	    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.Security::remove_XSS($_GET['view']).'"><img src="../img/folder_new.gif" align=\"absmiddle\"/> '.get_lang('AddNewCategory').'</a>';
 	}
 
 	echo '</div>';
 }
-if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
+if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
 	//echo '<h3>'.get_lang('SentFiles').'</h3>';
 
 	// This is for the categories
@@ -289,8 +289,8 @@ if ($dropbox_cnf['sent_received_tabs']) {
 ?>
 <div id="tabbed_menu">
 	<ul id="tabbed_menu_tabs">
-		<li><a href="index.php?<?php echo api_get_cidreq();?>&view=received" <?php if (!$_GET['view'] OR $_GET['view']=='received'){echo 'class="active"';}?> ><?php echo get_lang('ReceivedFiles'); ?></a></li>
-		<li><a href="index.php?<?php echo api_get_cidreq();?>&view=sent" <?php if ($_GET['view']=='sent'){echo 'class="active"';}?>><?php echo get_lang('SentFiles'); ?></a></li>
+		<li><a href="index.php?<?php echo api_get_cidreq();?>&view=sent" <?php if (!$_GET['view'] OR $_GET['view']=='sent'){echo 'class="active"';}?>><?php echo get_lang('SentFiles'); ?></a></li>
+		<li><a href="index.php?<?php echo api_get_cidreq();?>&view=received" <?php if ($_GET['view']=='received'){echo 'class="active"';}?> ><?php echo get_lang('ReceivedFiles'); ?></a></li>
 	</ul>
 </div>
 <?php
@@ -301,7 +301,7 @@ if ($dropbox_cnf['sent_received_tabs']) {
 	RECEIVED FILES
 -----------------------------------------------------------
 */
-if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
+if ($_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
 	//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
 
 	// This is for the categories
@@ -444,7 +444,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	SENT FILES
 -----------------------------------------------------------
 */
-if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
+if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
 	//echo '<h3>'.get_lang('SentFiles').'</h3>';
 
 	// This is for the categories

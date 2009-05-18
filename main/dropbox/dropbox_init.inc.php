@@ -93,7 +93,8 @@ require_once(api_get_path(LIBRARY_PATH).'/document.lib.php');
 $user_id = api_get_user_id();
 $course_code = $_course['sysCode'];
 $course_info = Database::get_course_info($course_code);
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_info);
+
+$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code);
 
 
 /*

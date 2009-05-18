@@ -812,11 +812,9 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	position: relative;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	border-width: 1px;
-	border-style: solid;
 	padding: 5px;
-	border: 1px solid #fea404;
-	color: #fea404;
+	border: 1px solid #FF6600;
+	color: #FF6600;
 	background-color: #EFEFEF;
 	min-height: 30px;
 }

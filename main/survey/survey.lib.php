@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 20717 2009-05-16 10:32:10Z ivantcholakov $
+* 	@version $Id: survey.lib.php 20804 2009-05-18 19:22:35Z iflorespaz $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -241,16 +241,16 @@ class survey_manager
 			}
 				$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date, anonymous".$additional['columns'].", session_id) VALUES (
 							'".Database::escape_string(Security::remove_XSS($values['survey_code']))."',
-							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_title'])),COURSEMANAGER))."',
-							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_subtitle'])),COURSEMANAGER))."',
+							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_title'])),COURSEMANAGERLOWSECURITY))."',
+							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_subtitle'])),COURSEMANAGERLOWSECURITY))."',
 							'".Database::escape_string($_user['user_id'])."',
 							'".Database::escape_string($values['survey_language'])."',
 							'".Database::escape_string($values['start_date'])."',
 							'".Database::escape_string($values['end_date'])."',
 							'".Database::escape_string($shared_survey_id)."',
 							'".Database::escape_string('template')."',
-							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_introduction'])),COURSEMANAGER))."',
-							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_thanks'])),COURSEMANAGER))."',
+							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_introduction'])),COURSEMANAGERLOWSECURITY))."',
+							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_thanks'])),COURSEMANAGERLOWSECURITY))."',
 							'".date('Y-m-d H:i:s')."',
 							'".Database::escape_string($values['anonymous'])."'".$additional['values'].",
 							".intval($_SESSION['id_session'])."

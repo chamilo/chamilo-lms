@@ -5260,7 +5260,7 @@ class learnpath {
 			$return .= '<div class="sectioncomment">';
 			
 			$return .= '<form method="POST">' . "\n";			
-			$return .= "\t" . '<table>' . "\n";
+			$return .= "\t" . '<table class="lp_form">' . "\n";
 				
 					if($action != 'move') {
 						$return .= "\t\t" . '<tr>' . "\n";							
@@ -5365,7 +5365,7 @@ class learnpath {
 						$return .= "</select></td>";
 						*/
 						$return .= "\t\t" . '</tr>' . "\n";						
-						$return .= "\t\t" . '<tr>' . "\n";						
+						/*$return .= "\t\t" . '<tr>' . "\n";						
 						$return .= "\t\t\t" . '<td class="label"><label for="maxTimeAllowed">'.get_lang('MaxTimeAllowed').'</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input"><input name="maxTimeAllowed" style="width:98%;" id="maxTimeAllowed" value="' . $extra_info['max_time_allowed'] . '" /></td>';
 							
@@ -5373,7 +5373,7 @@ class learnpath {
 							//$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
 							//$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
-						$return .= "\t\t" . '</tr>' . "\n";
+						$return .= "\t\t" . '</tr>' . "\n";*/
 					}
 					
 					$return .= "\t\t" . '<tr>' . "\n";						
@@ -5763,7 +5763,7 @@ class learnpath {
 			$return .= '<div class="sectioncomment">';			
 			$return .= '<form method="POST">' . "\n";
 			
-				$return .= "\t" . '<table>' . "\n";
+				$return .= "\t" . '<table class="lp_form">' . "\n";
 				
 					if($action != 'move') {
 						$return .= "\t\t" . '<tr>' . "\n";
@@ -6161,7 +6161,9 @@ class learnpath {
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang('Ok').'" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td colspan="2">
+								
+								<button class="save" name="submit_button" type="submit" value="'.get_lang('Ok').'" />'.get_lang('Ok').'</button></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -6888,7 +6890,7 @@ class learnpath {
 			$return .= '<div class="sectioncomment">';
 			$return .= '<form method="POST">' . "\n";
 			
-				$return .= "\t" . '<table>' . "\n";
+				$return .= "\t" . '<table class="lp_form">' . "\n";
 				
 					if($action != 'move') {
 						$return .= "\t\t" . '<tr>' . "\n";
@@ -7150,7 +7152,7 @@ class learnpath {
 			
 			$return .= '<form method="POST">' . "\n";
 			
-				$return .= "\t" . '<table>' . "\n";
+				$return .= "\t" . '<table class="lp_form">' . "\n";
 				
 					if($action != 'move')
 					{

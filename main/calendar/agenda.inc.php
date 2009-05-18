@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20658 2009-05-14 20:12:43Z cfasanando $
+<?php //$Id: agenda.inc.php 20793 2009-05-18 17:56:23Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -973,7 +973,7 @@ function store_new_agenda_item() {
 	
 	$content=stripslashes($content);
 	$title=Database::escape_string(Security::remove_XSS($title));
-	$content = Database::escape_string(Security::remove_XSS($content,COURSEMANAGER));
+	$content = Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY));
 	$start_date=Database::escape_string($start_date);
 	$end_date=Database::escape_string($end_date);
 	
@@ -1627,7 +1627,7 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 	$id=Database::escape_string($id);
 	$title=Database::escape_string(Security::remove_XSS($title));
 	$content=stripslashes($content);
-	$content = Database::escape_string(Security::remove_XSS($content,COURSEMANAGER));
+	$content = Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY));
 	$start_date=Database::escape_string($start_date);
 	$end_date=Database::escape_string($end_date);
 
@@ -4319,7 +4319,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     // some filtering of the input data
     $content=stripslashes($content);
 	$title=Database::escape_string(Security::remove_XSS($title));
-	$content = Database::escape_string(Security::remove_XSS($content,COURSEMANAGER));   
+	$content = Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY));   
     $start_date = Database::escape_string($db_start_date);
     $end_date   = Database::escape_string($db_end_date);
     isset($_SESSION['id_session'])?$id_session=intval($_SESSION['id_session']):$id_session=null;

@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 20420 2009-05-08 20:11:57Z herodoto $
+<?php // $Id: upload.php 20798 2009-05-18 18:13:25Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -562,7 +562,7 @@ $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lan
 $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
 $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
 
-$form->addElement('style_submit_button', 'submitDocument', get_lang('SendDocument'),'class="save"');
+$form->addElement('style_submit_button', 'submitDocument', get_lang('SendDocument'),'class="upload"');
 
 $form->add_real_progress_bar('DocumentUpload','user_upload');
 

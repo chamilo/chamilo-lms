@@ -1,4 +1,4 @@
-<?php //$Id: work.php 20709 2009-05-15 19:12:37Z ivantcholakov $
+<?php //$Id: work.php 20798 2009-05-18 18:13:25Z cvargas1 $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 20709 2009-05-15 19:12:37Z ivantcholakov $
+*  	@version $Id: work.php 20798 2009-05-18 18:13:25Z cvargas1 $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1188,11 +1188,11 @@ if ($is_course_member) {
 		// fix the Ok button when we see the tool in the learn path
 		if ($origin== 'learnpath') {
 			$form->addElement('html', '<div style="margin-left:137px">');		
-			$form->addElement('style_submit_button','submitWork', get_lang('SendFile'),array('class="save"','value="submitWork"'));		
+			$form->addElement('style_submit_button','submitWork', get_lang('SendFile'),array('class="upload"','value="submitWork"'));		
 			$form->addElement('html', '</div>');
 		} else {
 			//$form->addElement('submit','submitWork', get_lang('SendFile'));
-			$form->addElement('style_submit_button', 'submitWork', get_lang('SendFile'),array('class="save"','value="submitWork"'));
+			$form->addElement('style_submit_button', 'submitWork', get_lang('SendFile'),array('class="upload"','value="submitWork"'));
 		}
 		
 		if (!empty($_POST['submitWork']) || $edit) {

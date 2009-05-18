@@ -22,7 +22,7 @@
 *	Code for Hotpotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.php 20234 2009-04-30 20:01:00Z cfasanando $
+* 	@version $Id: hotpotatoes.php 20798 2009-05-18 18:13:25Z cvargas1 $
 */
 
 
@@ -278,7 +278,7 @@ if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
 	
 	echo '<div style="float:left;padding:10px" >
 			<input type="file" name="userFile"><br /><br />
-			<button type="submit" class="save" name="submit" value="'.get_lang('Send').'">'.get_lang('SendFile').'</button>
+			<button type="submit" class="upload" name="submit" value="'.get_lang('Send').'">'.get_lang('SendFile').'</button>
 		 </div>';
 	echo '<div>'.Display::display_icon('hotpotatoes.jpg','').'</div>';		
 	echo '</div></div>';

@@ -1829,17 +1829,17 @@ button:hover {
 	border-style: inset;
 }
 /* button with image */
-button.add, button.save, button.cancel, button.search, button.login, button.plus, button.minus, button.next, button.back {
+button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
 	padding-left:30px;
 	background-position:10px;
 	background-repeat:no-repeat;
 }
 /* POSITIVE */
-button.save, button.add, button.search, button.login, button.plus, button.minus, button.next, button.back {
+button.save, button.add, button.search, button.refresh, button.upload, button.login, button.plus, button.minus, button.next, button.back {
 	background-color:#E5EDF9;
 	border-color: #D4E2F6;
 }
-button.save:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover {
+button.save:hover, button.refresh:hover, button.upload:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover {
 	border-color: #D4E2F6;
 	background-color:#D4E2F6;
 }
@@ -1871,6 +1871,7 @@ button.search {
 /*including "login" image*/
 button.login {
 	background-image:url(images/button_login.gif);
+	margin:2px 5px 3px 5px !important;
 }
 /*including "plus" image*/
 button.plus {
@@ -1888,6 +1889,15 @@ button.next {
 button.back {
 	background-image:url(images/button_back.gif);
 }
+/*including "refresh" image*/
+button.refresh {
+    background-image:url(images/button_refresh.gif);
+}
+/*including "upload" image*/
+button.upload {
+    background-image:url(images/button_upload.gif);
+}
+
 .icon_image_content {
 	width:70px;
 	cursor:hand;

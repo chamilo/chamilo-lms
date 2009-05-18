@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 20672 2009-05-15 08:02:19Z pcool $
+<?php // $Id: document.inc.php 20798 2009-05-18 18:13:25Z cvargas1 $
 
 /*
 ==============================================================================
@@ -431,7 +431,7 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 	$form .= '<div class="row">';
 	$form .= '	<div class="label"></div>';
 	$form .= '	<div class="formw">';	
-	$form .= '		<button type="submit" name="move_file_submit">'.get_lang('MoveFile').'</button>'."\n";
+	$form .= '		<button type="submit" class="next" name="move_file_submit">'.get_lang('MoveFile').'</button>'."\n";
 	$form .= '	</div>';	
 	$form .= '</div>';	
 

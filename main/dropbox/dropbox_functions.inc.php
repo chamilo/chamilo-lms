@@ -86,6 +86,9 @@ function handle_multiple_actions()
 
 		foreach ($checked_file_ids as $key=>$value)
 		{
+			var_dump($value);
+			var_dump($to_cat_id);
+			var_dump($part);
 			store_move($value, $to_cat_id, $part);
 		}
 		return get_lang('FilesMoved');
@@ -187,7 +190,7 @@ function display_move_form($part, $id, $target=array())
 			<div class="label">
 			</div>
 			<div class="formw">
-				<button class="save" type="submit" name="do_move" value="'.get_lang('Ok').'">'.get_lang('MoveFile').'</button>
+				<button class="next" type="submit" name="do_move" value="'.get_lang('Ok').'">'.get_lang('MoveFile').'</button>
 			</div>
 		</div>	
 	';
@@ -645,7 +648,7 @@ function display_add_form()
 			<div class="label">
 			</div>
 			<div class="formw">
-				<button type="Submit" class="save" name="submitWork">'.dropbox_lang("upload", "noDLTT").'</button>
+				<button type="Submit" class="upload" name="submitWork">'.dropbox_lang("upload", "noDLTT").'</button>
 			</div>
 		</div>
 	';		

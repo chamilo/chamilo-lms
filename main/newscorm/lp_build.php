@@ -219,17 +219,13 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				echo '</div>';
 			} else {
 				if($is_new) {
-					echo '<div class="confirmation-message">';
-							echo get_lang("LearnPathAdded");
-					echo '</div>';
+					Display::display_normal_message(get_lang('LearnPathAdded'), false);
 				}				
 				if($is_new) {
-					Display::display_normal_message(get_lang('LPCreatedToContinue'));
+					Display::display_normal_message(get_lang('LPCreatedToContinue'), false);
 				} else {
 					// Display::display_normal_message(get_lang('LPCreatedAddChapterStep'), false);
-					echo '<div class="normal-message">';
-							echo get_lang("LearnPathAdded");
-					echo '</div>';
+					Display::display_normal_message(get_lang('LearnPathAdded'), false);
 				}								
 			}		
 		echo '</td>';			

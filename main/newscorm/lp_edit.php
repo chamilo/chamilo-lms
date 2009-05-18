@@ -30,19 +30,34 @@ $interbreadcrumb[]= array ("url"=>api_get_self()."?action=admin_view&lp_id=$lear
 
 Display::display_header(null,'Path');
 
-//Page subtitle
-echo '<h4>'.get_lang('EditLPSettings').'</h4>';
-
 $fck_attribute['Width'] = '400px';
 $fck_attribute['Height'] = '150px';
 $fck_attribute['ToolbarSet'] = 'CommentLearningPath';
 
+// actions link
+echo '<div class="actions">';
+$gradebook = Security::remove_XSS($_GET['gradebook']);
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=build&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang("Build").'">'.Display::return_icon('learnpath_build.gif', get_lang('Build')).' '.get_lang('Build').'</a>';
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang("BasicOverview").'">'.Display::return_icon('learnpath_organize.gif', get_lang('BasicOverview')).' '.get_lang('BasicOverview').'</a>';
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=view&lp_id='.Security::remove_XSS($_GET['lp_id']).'">'.Display::return_icon('learnpath_view.gif', get_lang("Display")).' '.get_lang('Display').'</a> '.Display::return_icon('i.gif');
+echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('scorm.gif',get_lang('ReturnToLearningPaths')).' '.get_lang('ReturnToLearningPaths').'</a>';
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('audio.gif', get_lang('UpdateAllAudioFragments')).' '.get_lang('UpdateAllAudioFragments').'</a>';
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=chapter&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang("NewChapter").'"><img alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.gif" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang("NewStep").'"><img alt="'.get_lang("NewStep").'" src="../img/new_test.gif" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';			
+
+echo '</div>';
+
 $defaults=array();
 $form = new FormValidator('form1', 'post', 'lp_controller.php');
 
+// form title
+$form->addElement('header',null, get_lang('EditLPSettings'));
+
 //Title
-$form -> addElement('text', 'lp_name', api_ucfirst(get_lang('_title')),array('size'=>43));
-$form-> applyFilter('lp_name', 'html_filter');
+$form->addElement('text', 'lp_name', api_ucfirst(get_lang('_title')),array('size'=>43));
+$form->applyFilter('lp_name', 'html_filter');
+$form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
+
 //Encoding
 $encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));
 $encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP');
@@ -116,12 +131,7 @@ if( strlen($_SESSION['oLP']->get_preview_image() ) > 0)
 
 $form->addElement('file', 'lp_preview_image', ($_SESSION['oLP']->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
 
-	$div = '<div class="row">
-	<div class="label"></div>
-	<div class="formw">	'.get_lang('ImageWillResizeMsg').'
-	</div>
-	</div>';
-$form->addElement('html', $div);
+$form->addElement('static', null, null, get_lang('ImageWillResizeMsg'));
 
 /*
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));

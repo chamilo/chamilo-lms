@@ -118,7 +118,7 @@ $objExercise -> createForm ($form);
 if ($form -> validate()) {
 	$objExercise -> processCreation($form);
 	if ($form -> getSubmitValue('edit') == 'true') {
-		header('Location:admin.php?message=ExerciseEdited&exerciseId='.$objExercise->id);
+		header('Location:exercice.php?message=ExerciseEdited&'.api_get_cidreq());
 	} else {
 		header('Location:admin.php?message=ExerciseAdded&exerciseId='.$objExercise->id);
 	}

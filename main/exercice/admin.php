@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 20810 2009-05-18 21:16:22Z cfasanando $
+<?php // $Id: admin.php 20813 2009-05-18 21:49:17Z cfasanando $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 20810 2009-05-18 21:16:22Z cfasanando $
+* 	@version $Id: admin.php 20813 2009-05-18 21:49:17Z cfasanando $
 */
 
 
@@ -126,11 +126,6 @@ if ( empty ( $questionId ) )
 if ( empty ( $modifyExercise ) )
 {
     $modifyExercise = $_GET['modifyExercise'];
-}
-
-// it clean the session
-if (!empty($_SESSION)) {
-	unset($_SESSION);
 }
 
 // get from session

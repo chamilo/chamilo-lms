@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20709 2009-05-15 19:12:37Z ivantcholakov $
+<?php // $Id: index.php 20809 2009-05-18 20:52:17Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -189,7 +189,6 @@ if(api_get_setting('use_session_mode')=='true')
   <li><a href="session_import.php"><?php echo get_lang('ImportSessionListXMLCSV') ?></a></li>
   <li><a href="session_export.php"><?php echo get_lang('ExportSessionListXMLCSV') ?></a></li>
   </ul>
-  <br /><br />  <br /><br />
 </div>
 
 <?php
@@ -218,14 +217,9 @@ else if(api_is_platform_admin())
 </div>
 <?php
 }
-?>
 
-
-
-<?php
 if(api_is_platform_admin()){
 ?>
-
 
 <div class="admin_section">
  <h4><?php Display::display_icon('visio_meeting.gif', get_lang('ConfigureExtensions')); ?> <?php echo api_ucfirst(get_lang('ConfigureExtensions')); ?></h4>

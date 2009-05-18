@@ -261,7 +261,7 @@ if (isset($_POST['save_audio']))
 				// adding something random to prevent overwriting
 				$filename_components[count($filename_components)-1] = time();
 				// reconstructing the new filename
-				$clean_name = implode($filename_components) . $file_extension;
+				$clean_name = implode($filename_components) .'.'.$file_extension;
 				// using the new name in the $_FILES superglobal
 				$_FILES[$key]['name'] = $clean_name;
 				

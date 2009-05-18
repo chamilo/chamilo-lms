@@ -112,16 +112,15 @@ if(isset($_GET['exerciseId'])) {
 
 $objExercise -> createForm ($form);
 
-
 /*********************
  * VALIDATE FORM
  *********************/
-if($form -> validate()) {
-	$objExercise -> processCreation($form);	
+if ($form -> validate()) {
+	$objExercise -> processCreation($form);
 	if ($form -> getSubmitValue('edit') == 'true') {
 		header('Location:admin.php?message=ExerciseEdited&exerciseId='.$objExercise->id);
 	} else {
-		header('Location:admin.php?message=ExerciseStored&exerciseId='.$objExercise->id);
+		header('Location:admin.php?message=ExerciseAdded&exerciseId='.$objExercise->id);
 	}
 } else {
 	/*********************

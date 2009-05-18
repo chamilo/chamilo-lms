@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 20776 2009-05-18 12:43:44Z pcool $
+<?php // $Id: admin.php 20810 2009-05-18 21:16:22Z cfasanando $
  
 /*
 ==============================================================================
@@ -67,14 +67,13 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 20776 2009-05-18 12:43:44Z pcool $
+* 	@version $Id: admin.php 20810 2009-05-18 21:16:22Z cfasanando $
 */
 
 
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
-
 
 // name of the language file that needs to be included
 $language_file='exercice';
@@ -85,8 +84,7 @@ $this_section=SECTION_COURSES;
 
 $is_allowedToEdit=api_is_allowed_to_edit();
 
-if(!$is_allowedToEdit)
-{
+if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
 
@@ -95,7 +93,6 @@ define(ALLOWED_TO_INCLUDE,1);
 
 include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-
 
 // get vars from GET
 if ( empty ( $exerciseId ) )
@@ -129,6 +126,11 @@ if ( empty ( $questionId ) )
 if ( empty ( $modifyExercise ) )
 {
     $modifyExercise = $_GET['modifyExercise'];
+}
+
+// it clean the session
+if (!empty($_SESSION)) {
+	unset($_SESSION);
 }
 
 // get from session
@@ -434,12 +436,8 @@ echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exer
 
 echo '</div>';
 
-if(isset($_GET['message']))
-{
-	if (in_array($_GET['message'], array('ExerciseStored')))
-	{
-		Display::display_confirmation_message(get_lang($_GET['message']));
-	}
+if (isset($_GET['message'])) {
+	Display::display_confirmation_message(get_lang($_GET['message']));
 }
 
 /*		
@@ -476,8 +474,7 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 		if($form -> getSubmitValue('edit') == 'true')
 			Display::display_confirmation_message(get_lang('ExerciseEdited'));
 	}		
-	$form -> display (); 
-	echo '<br />';	
+	$form -> display ();
 	// question list management
 	include('question_list_admin.inc.php');
 }

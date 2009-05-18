@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 20716 2009-05-16 07:28:22Z ivantcholakov $
+<?php // $Id: question_list_admin.inc.php 20810 2009-05-18 21:16:22Z cfasanando $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 20716 2009-05-16 07:28:22Z ivantcholakov $
+* 	@version $Id: question_list_admin.inc.php 20810 2009-05-18 21:16:22Z cfasanando $
 */
 
 
@@ -113,7 +113,7 @@ if($nbrQuestions) {
 			  	<td align="center"><?php echo $objQuestionTmp->selectLevel(); ?></td>
 			  	<!--<td align="center"><a href="<?php echo api_get_self(); ?>?action=exportqti2&questionId=<?php echo $id; ?>"><img src="../img/export.png" border="0" align="absmiddle" alt="IMS/QTI" /></a></td>-->
 			  	<td> <a href="<?php echo api_get_self(); ?>?myid=1&ed
-					itQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo api_get_self(); ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a>
+					itQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo api_get_self(); ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo get_lang('Delete'); ?>" /></a>
 				<?php 
 				if($i != 1) { ?>		
 						<a href="<?php echo api_get_self(); ?>?moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" alt="<?php echo get_lang('MoveUp'); ?>"></a>		

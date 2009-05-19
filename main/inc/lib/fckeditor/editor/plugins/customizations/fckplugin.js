@@ -556,6 +556,51 @@ FCKToolbarItems.GetItem = function( itemName )
 }
 
 
+// A modification of the "Save" command in order "nice buttons" in Dokeos
+// forms to be supported (to be "clicked" when this command executes).
+FCKSaveCommand.prototype.Execute = function()
+{
+	// Get the linked field form.
+	var oForm = FCK.GetParentForm() ;
+
+	if ( typeof( oForm.onsubmit ) == 'function' )
+	{
+		var bRet = oForm.onsubmit() ;
+		if ( bRet != null && bRet === false )
+			return ;
+	}
+
+	// Next, we will try to scan all styled buttons within the form and to find
+	// the button that means "Save", "Ok" "Submit", or something similar.
+	// The way of searching may be not accurate enough, it will be made more
+	// precise if problems are reported.
+	for ( var i = 0 ; i < oForm.elements.length ; i++)
+	{
+		if ( oForm.elements[i].type == 'submit' )
+		{
+			// Let us check whether the buton is styled, i.e. whether it is "nice".
+			if ( oForm.elements[i].getAttribute( 'class' ) )
+			{
+				try
+				{
+					// "Clicking" the found button.
+					oForm.elements[i].click() ;
+				} catch ( ex ) { }
+				return ;
+			}
+		}
+	}
+
+	// An attempt for submitting the form that has no proper styled button detected.
+	// If there's a button named "submit" then the form.submit() function is masked and
+	// can't be called in Mozilla, so we call the click() method of that button.
+	if ( typeof( oForm.submit ) == 'function' )
+		oForm.submit() ;
+	else
+		oForm.submit.click() ;
+}
+
+
 /*
  **************************************************************************************
  * Dialog system

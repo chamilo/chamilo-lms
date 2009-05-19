@@ -214,10 +214,10 @@ switch($action)
 							$document_id = $_SESSION['oLP']->create_document($_course);
 							
 						}								
-						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $document_id, Security::remove_XSS($_POST['title']), $_POST['description'], $_POST['prerequisites']);
+						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $document_id, $_POST['title'], $_POST['description'], $_POST['prerequisites']);
 					} else {	
 						//for all other item types than documents, load the item using the item type and path rather than its ID
-						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], Security::remove_XSS($_POST['title']), $_POST['description'], $_POST['prerequisites'],$_POST['maxTimeAllowed']);
+						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites'],$_POST['maxTimeAllowed']);
 					}
 					
 					//display 					
@@ -359,7 +359,7 @@ switch($action)
 				//todo mp3 edit
 				$audio = array();
 				if (isset($_FILES['mp3'])) $audio = $_FILES['mp3'];
-				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], Security::remove_XSS($_POST['title']), $_POST['description'], $_POST['prerequisites'],$audio, $_POST['maxTimeAllowed']);
+				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'],$audio, $_POST['maxTimeAllowed']);
 				
 				if(isset($_POST['content_lp'])) {
 					$_SESSION['oLP']->edit_document($_course);
@@ -575,8 +575,8 @@ switch($action)
 		    $len = $auth_end - $auth_init + 4;
             }
 						
-		$author_fixed=substr($author,$auth_init, $len);
-		//$author_fixed = $author; 
+			$author_fixed=substr($author,$auth_init, $len);
+			//$author_fixed = $author; 
 					
 			$_SESSION['oLP']->set_author($author_fixed);
 			$_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);

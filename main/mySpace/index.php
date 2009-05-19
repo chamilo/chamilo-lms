@@ -518,10 +518,10 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 		$table->set_additional_parameters($parameters);
 		$table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
 		$table -> set_header(1, get_lang('NbStudents'), false);
-		$table -> set_header(2, get_lang('AvgTimeSpentInTheCourse').Display :: return_icon('info3.gif', get_lang('TimeOfActiveByTraining')),false);
-		$table -> set_header(3, get_lang('AvgStudentsProgress').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses')), false);
-		$table -> set_header(4, get_lang('AvgCourseScore').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses')), false);
-		$table -> set_header(5, get_lang('AvgExercisesScore').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses')), false);
+		$table -> set_header(2, get_lang('AvgTimeSpentInTheCourse').Display :: return_icon('info3.gif', get_lang('TimeOfActiveByTraining'), array('align' => 'absmiddle', 'hspace' => '3px')),false);
+		$table -> set_header(3, get_lang('AvgStudentsProgress').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+		$table -> set_header(4, get_lang('AvgCourseScore').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+		$table -> set_header(5, get_lang('AvgExercisesScore').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
 		$table -> set_header(6, get_lang('AvgMessages'), false);
 		$table -> set_header(7, get_lang('AvgAssignments'), false);
 		$table -> set_header(8, get_lang('Details'), false);

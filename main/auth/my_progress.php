@@ -69,7 +69,7 @@ $now=date('Y-m-d');
   <th><?php echo get_lang('Progress'); ?></th>
   <th><?php 
   echo get_lang('Score');
-  Display :: display_icon('info3.gif',get_lang('ScormAndLPTestTotalAverage') , array ('style' => 'margin-bottom:-3px;')); 
+  Display :: display_icon('info3.gif',get_lang('ScormAndLPTestTotalAverage') , array ('align' => 'absmiddle', 'hspace' => '3px')); 
   ?></th>
   <th><?php echo get_lang('LastConnexion'); ?></th>
   <th><?php echo get_lang('Details'); ?></th>

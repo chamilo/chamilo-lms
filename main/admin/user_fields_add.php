@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 19597 2009-04-07 14:38:36Z pcool $
+<?php // $Id: user_fields_add.php 20845 2009-05-19 17:27:22Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -131,7 +131,7 @@ $form->applyFilter('fieldtitle','html_filter');
 $form->applyFilter('fieldtitle','trim');
 $form->addRule('fieldtitle', get_lang('ThisFieldIsRequired'), 'required');
 // Field options
-$form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').' '.Display::return_icon('info3.gif', get_lang('FieldPossibleValuesComment')));
+$form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').Display::return_icon('info3.gif', get_lang('FieldPossibleValuesComment'), array('align' => 'absmiddle', 'hspace' => '3px')));
 $form->applyFilter('fieldoptions','trim');
 if (is_numeric($_GET['field_id']))
 {

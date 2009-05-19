@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 20463 2009-05-11 07:27:07Z ivantcholakov $
+<?php //$Id: myStudents.php 20845 2009-05-19 17:27:22Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -406,7 +406,7 @@ if(!empty($_GET['student']))
 						<td align="right">
 													<?php 
 													echo get_lang('Progress'); 
-													Display :: display_icon('info2.gif',get_lang('ScormAndLPProgressTotalAverage') , array ('style' => 'margin-bottom:-5px;'));
+													Display :: display_icon('info2.gif',get_lang('ScormAndLPProgressTotalAverage') , array ('align' => 'absmiddle', 'hspace' => '3px'));
 													?>
 												</td>
 						<td align="left">
@@ -417,7 +417,7 @@ if(!empty($_GET['student']))
 						<td align="right">
 													<?php 
 													echo get_lang('Score');
-													Display :: display_icon('info2.gif',get_lang('ScormAndLPTestTotalAverage') , array ('style' => 'margin-bottom:-5px;'));
+													Display :: display_icon('info2.gif',get_lang('ScormAndLPTestTotalAverage') , array ('align' => 'absmiddle', 'hspace' => '3px'));
 													?>
 												</td>
 						<td align="left">
@@ -565,25 +565,25 @@ if(!empty($_GET['student']))
 						<th>
 							<?php 
 							echo get_lang('Time');
-							Display :: display_icon('info3.gif',get_lang('TotalTimeByCourse') , array ('style' => 'margin-bottom:-5px;')); 
+							Display :: display_icon('info3.gif',get_lang('TotalTimeByCourse') , array ('align' => 'absmiddle', 'hspace' => '3px'));
 							?>
 						</th>
 						<th>
 							<?php 
 							echo get_lang('Score');
-							Display :: display_icon('info3.gif',get_lang('LPTestScore') , array ('style' => 'margin-bottom:-5px;')); 
+							Display :: display_icon('info3.gif',get_lang('LPTestScore') , array ('align' => 'absmiddle', 'hspace' => '3px'));
 							?>
 						</th>
 						<th>
 							<?php 
 							echo get_lang('Progress'); 
-							Display :: display_icon('info3.gif',get_lang('LPProgressScore') , array ('style' => 'margin-bottom:-5px;'));
+							Display :: display_icon('info3.gif',get_lang('LPProgressScore') , array ('align' => 'absmiddle', 'hspace' => '3px'));
 							?>
 						</th>
 						<th>
 							<?php 
 							echo get_lang('LastConnexion');
-							Display :: display_icon('info3.gif',get_lang('LastTimeTheCourseWasUsed') , array ('style' => 'margin-bottom:-5px;')); 
+							Display :: display_icon('info3.gif',get_lang('LastTimeTheCourseWasUsed') , array ('align' => 'absmiddle', 'hspace' => '3px'));
 							?>
 						</th>
 						<th>
@@ -748,7 +748,7 @@ if(!empty($_GET['student']))
 						<?php echo get_lang('Exercices'); ?>
 					</th>
 					<th>
-						<?php echo get_lang('Score').Display :: return_icon('info3.gif', get_lang('LastScoreTest')) ?>
+						<?php echo get_lang('Score').Display :: return_icon('info3.gif', get_lang('LastScoreTest'), array('align' => 'absmiddle', 'hspace' => '3px')) ?>
 					</th>
 					<th>
 						<?php echo get_lang('Attempts'); ?>

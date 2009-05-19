@@ -2341,7 +2341,7 @@ function api_time_to_hms($seconds) {
   
   //if seconds = -1, it means we have wrong datas in the db
   if($seconds==-1) {
-  	  return get_lang('Unknown').Display::return_icon('info2.gif',get_lang('WrongDatasForTimeSpentOnThePlatform'));
+  	  return get_lang('Unknown').Display::return_icon('info2.gif', get_lang('WrongDatasForTimeSpentOnThePlatform'), array('align' => 'absmiddle', 'hspace' => '3px'));
   }
   
   //How many hours ?

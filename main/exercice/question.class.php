@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20795 2009-05-18 18:05:02Z iflorespaz $
+<?php // $Id: question.class.php 20850 2009-05-19 19:01:30Z aportugal $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20795 2009-05-18 18:05:02Z iflorespaz $
+* 	@version $Id: question.class.php 20850 2009-05-19 19:01:30Z aportugal $
 */
 
 
@@ -1105,7 +1105,7 @@ abstract class Question
 		} else {
 			echo $url = '<a href="question_pool.php?fromExercise='.$exerciseId.'">';	
 		}
-		echo Display::return_icon('database.gif', get_lang('GetExistingQuestion'), '');		
+		echo Display::return_icon('database.png', get_lang('GetExistingQuestion'), '');		
 		echo '</a><br>';
 		echo $url;
 		echo get_lang('GetExistingQuestion');

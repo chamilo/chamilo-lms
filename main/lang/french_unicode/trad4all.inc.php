@@ -14,6 +14,7 @@ $langCreateDir = "Créer un répertoire";
 $Name = "Nom";
 $langComment = "Commentaire";
 $langVisible = "Visible/invisible";
+$langNewDir = "Nom du nouveau rÃ©pertoire";
 $langDirCr = "RÃ©pertoire crÃ©Ã©";
 $Download = "Transférer";
 $langGroup = "Groupes";

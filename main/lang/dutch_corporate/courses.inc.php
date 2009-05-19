@@ -27,6 +27,9 @@ $langCatList  = "Categorieën";
 $langCourseList  = "Modules";
 $Subscribe = "Inschrijven";
 $AlreadySubscribed = "Reeds ingeschreven";
+$CodeMandatory = "Code is een verplicht veld";
+$CourseCategoryMandatory = "Cursus categorie is een verplicht veld";
+$TeacherMandatory = "Lesgever is een verplicht veld";
 $CourseCategoryStored = "De nieuwe modulecategorie is aangemaakt";
 $langWithoutTimeLimits = "Zonder tijdslimiet";
 $lang_back_to_main_category_list = "Terug naar overzicht van categorieën";
@@ -69,4 +72,7 @@ $SubmitRegistrationCode = "Verstuur registratiecode";
 $CourseCategoryDeleted = "Modulecategorie verwijderd";
 $CategorySortingDone = "De categorieën zijn gesorteerd";
 $CourseCategoryEditStored = "Categorie bijgewerkt";
+$buttonCreateCourseCategory = "Trainingscategorie bewaren";
+$buttonSaveCategory = "Categorie bewaren";
+$buttonChangeCategory = "Categorie wijzigen";
 ?>

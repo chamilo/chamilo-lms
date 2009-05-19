@@ -14,6 +14,7 @@ $langCreateDir = "Crea cartella";
 $Name = "Nome";
 $langComment = "Commento";
 $langVisible = "Visibile";
+$langNewDir = "Nome della nuova cartella";
 $langDirCr = "Cartella creata";
 $Download = "Carica";
 $langGroup = "Gruppi";

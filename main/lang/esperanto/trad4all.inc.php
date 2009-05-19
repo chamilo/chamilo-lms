@@ -13,6 +13,7 @@ $langCreateDir = "Nova dosierujo ";
 $Name = "Nomo ";
 $langComment = "Komento";
 $langVisible = "Videbla/nevidebla";
+$langNewDir = "Nomo de nova dosierujo ";
 $langDirCr = "Dosierujo estas kreita ";
 $Download = "Sendi ";
 $langGroup = "Grupo";

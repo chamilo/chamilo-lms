@@ -11,7 +11,6 @@ $langTo = "pa";
 $langNoSpace = "L\'unvíu falló. Nun hai espaciu bastante nel so direutoriu";
 $langDownloadEnd = "L\'unvíu fízose bien";
 $langFileExists = "Operación imposible, esiste un archivu col mesmu nome.";
-$langNewDir = "Nome del direutoriu nuevu";
 $langImpossible = "Operación imposible";
 $langAddComment = "Amestar/cambiar un comentariu a";
 $langDocCopied = "Documentu copiáu";

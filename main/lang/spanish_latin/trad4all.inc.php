@@ -13,6 +13,7 @@ $langCreateDir = "Crear un directorio";
 $Name = "Nombre";
 $langComment = "Comentario";
 $langVisible = "Visible/Invisible";
+$langNewDir = "Nombre del directorio nuevo ";
 $langDirCr = "Directorio creado";
 $Download = "Enviar al servidor";
 $langGroup = "Grupo";

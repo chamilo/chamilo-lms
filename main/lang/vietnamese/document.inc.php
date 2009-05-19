@@ -10,7 +10,6 @@ $langTo = "đến";
 $langNoSpace = "Upload có lỗi. Không đủ chỗ trống trong thư mục";
 $langDownloadEnd = "Upload xong";
 $langFileExists = "Không được.<br>Trùng tên file.";
-$langNewDir = "Tên thư mục mới";
 $langImpossible = "Không được";
 $langAddComment = "Thêm/Sửa ghi chú";
 $langDocCopied = "Tài liệu đã được sao";

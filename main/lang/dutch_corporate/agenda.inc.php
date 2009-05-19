@@ -68,5 +68,9 @@ $ICalFileImport = "Importeer iCal/ics file";
 $AllUsersOfThePlatform = "Alle gebruikers van het platform";
 $GlobalEvent = "Globale gebeurtenis";
 $ModifyEvent = "Evenement wijzigen";
+$EndDateCannotBeBeforeTheStartDate = "De einddatum kan niet voor de startdatum liggen";
+$AgendaSortChronologicallyUp = "Oplopend";
+$AgendaSortChronologicallyDown = "Aflopend";
+$ItemForUserSelection = "Selecteer gebruikers";
 $IsNotiCalFormatFile = "Dit bestand is niet in het iCal formaat.";
 ?>

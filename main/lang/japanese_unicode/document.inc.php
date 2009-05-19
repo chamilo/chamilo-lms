@@ -10,7 +10,6 @@ $langTo = "to";
 $langNoSpace = "アップロ〖ドが己窃しました。ディスクスペ〖スの稍颅です。";
 $langDownloadEnd = "アップロ〖ド姜位";
 $langFileExists = "稍材墙な拎侯です<br />票じ叹涟のファイルが赂哼しています。";
-$langNewDir = "ディレクトリ侯喇";
 $langImpossible = "拎侯稍墙";
 $langAddComment = "肌のものにコメントに烧裁あるいはコメント饯赖する。";
 $langDocCopied = "矢今をコピ〖しました";

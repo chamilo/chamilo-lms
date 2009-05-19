@@ -13,6 +13,7 @@ $langCreateDir = "สร้างแฟ้มเก็บไฟล์";
 $Name = "ชื่อเอกสาร";
 $langComment = "ข้อคิดเห็น";
 $langVisible = "แสดง/ซ่อน";
+$langNewDir = "ชื่อแฟ้มเอกสารใหม่";
 $langDirCr = "สร้างdirectory เรียบร้อย";
 $Download = "การโอนย้ายไฟล์ขึ้น";
 $langGroup = "กลุ่ม";

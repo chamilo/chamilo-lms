@@ -10,7 +10,6 @@ $langTo = "ke";
 $langNoSpace = "Proses muatnaik gagal. Ruang tidak mencukupi";
 $langDownloadEnd = "Proses muatnaik selesai";
 $langFileExists = "Permintaan tidak dapat diproses<br>Nama fail telah wujud.";
-$langNewDir = "Nama direktori baru";
 $langImpossible = "Permintaan tidak dapat diproses";
 $langAddComment = "Tambah/ubahsuai komen ke";
 $langDocCopied = "Dokumen disalin";

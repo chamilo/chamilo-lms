@@ -13,6 +13,7 @@ $langCreateDir = "Vytvo&#345;it složku";
 $Name = "Název";
 $langComment = "Komentá&#345;";
 $langVisible = "Viditelné/skryté";
+$langNewDir = "Název nové složky";
 $langDirCr = "Složka vytvo&#345;ená";
 $langGroup = "Skupina";
 $langEdit = "Uprav";

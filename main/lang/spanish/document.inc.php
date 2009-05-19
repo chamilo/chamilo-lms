@@ -11,7 +11,6 @@ $langTo = "a";
 $langNoSpace = "El envio ha fallado. No hay suficiente espacio en su directorio";
 $langDownloadEnd = "Se ha realizado el envío";
 $langFileExists = "Operación imposible, existe un archivo con el mismo nombre.";
-$langNewDir = "Nombre del nuevo directorio";
 $langImpossible = "Operación imposible";
 $langAddComment = "Añadir/modificar un comentario a";
 $langDocCopied = "Documento copiado";

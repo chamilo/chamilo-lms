@@ -11,7 +11,6 @@ $langTo = "vers";
 $langNoSpace = "Le chargement a échoué. Il n\'y a plus assez de place dans votre répertoire";
 $langDownloadEnd = "Le chargement est terminé";
 $langFileExists = "Impossible d\'effectuer cette opération.<br>Un fichier portant ce nom existe dÃ©jà.";
-$langNewDir = "Nom du nouveau rÃ©pertoire";
 $langImpossible = "Impossible d\'effectuer cette opÃ©ration";
 $langAddComment = "Ajouter/modifier un commentaire Ã ";
 $langDocCopied = "Document copiÃ©";

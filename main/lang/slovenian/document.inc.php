@@ -11,7 +11,6 @@ $langTo = "na";
 $langNoSpace = "Nalaganje ni uspelo. V vaši mapi ni dovolj prostora ali pa ste prekoraèili dovoljeno kvoto.";
 $langDownloadEnd = "Nalaganje je konèano";
 $langFileExists = "Operacija ni možna.<br>Datoteka s tem imenom že obstaja.";
-$langNewDir = "Ime nove mape";
 $langImpossible = "Operacija ni možna";
 $langAddComment = "Dodaj/spremeni komentar";
 $langDocCopied = "Dokument je kopiran";

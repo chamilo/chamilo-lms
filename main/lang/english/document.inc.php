@@ -11,7 +11,6 @@ $langTo = "to";
 $langNoSpace = "The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.";
 $langDownloadEnd = "The upload is finished";
 $langFileExists = "The operation is impossible, a file with this name already exists.";
-$langNewDir = "Name of new folder";
 $langImpossible = "Operation impossible";
 $langAddComment = "Add/Edit a comment to";
 $langDocCopied = "Document copied";

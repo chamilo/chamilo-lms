@@ -11,7 +11,6 @@ $langTo = "till";
 $langNoSpace = "Uppladdningen har misslyckats. Det finns inte tillräckligt med diskutrymme i din mapp.";
 $langDownloadEnd = "Uppladdningen är klar.";
 $langFileExists = "Operationen är omöjlig.<br>En fil med detta namn existerar redan.";
-$langNewDir = "namn på ny mapp";
 $langImpossible = "Operation omöjlig";
 $langAddComment = "lägg till/modifiera kommentar till";
 $langDocCopied = "dokument kopierat";

@@ -14,6 +14,7 @@ $langCreateDir = "Crear un direutoriu";
 $Name = "Nome";
 $langComment = "Comentarios";
 $langVisible = "Visible";
+$langNewDir = "Nome del direutoriu nuevu";
 $langDirCr = "Direutoriu creau";
 $Download = "Unviar";
 $langGroup = "Grupos";

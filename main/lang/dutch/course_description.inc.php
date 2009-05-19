@@ -15,4 +15,5 @@ $langBackAndForget  = "Annuleren";
 $CourseDescriptionUpdated = "De cursusbeschrijving is bijgewerkt";
 $CourseDescriptionDeleted = "De cursusbeschrijving is verwijderd";
 $CourseDescriptionIntro = "Om een cursusbeschrijving aan te maken, klik op de hoofding en vul het juiste veld in.<br><br>Klik op OK of vul een andere hoofding in.";
+$langSaveDescription = "Beschrijving opslaan";
 ?>

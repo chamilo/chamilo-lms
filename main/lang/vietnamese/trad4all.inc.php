@@ -11,6 +11,7 @@ $langCreateDir = "Tạo thư mục";
 $Name = "Tên";
 $langComment = "Ghi chú";
 $langVisible = "Hiển thị/không hiển thị";
+$langNewDir = "Tên thư mục mới";
 $langDirCr = "Thư mục đã tạo";
 $langGroup = "Group";
 $langEdit = "Edit";

@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$WikiSearchResults = "Wiki zoekresultaten";
 $Wiki = "Wiki";
 $StartPage = "Startpagina";
 $EditThisPage = "Deze pagina wijzigen";
@@ -74,19 +75,49 @@ $AddedBy = "toegevoegd door";
 $EditedBy = "aangepast door";
 $DeletedBy = "gewist door";
 $WikiStandardMode = "Wiki mode";
+$GroupStandardMember = "Groepslid";
+$ConfigDefault = "Standaard configuratie";
 $UnlockPage = "Ontgrendelen";
+$LockPage = "Vergrendelen";
+$NotifyDiscussChanges = "Notificatie van discussie";
+$WikiDiffAddedTex = "Tekst toegevoegd";
+$WikiDiffDeletedTex = "Tekst verwijderd";
+$WordsDiff = "woord per woord";
+$LinesDiff = "lijn per lijn";
+$MustSelectPage = "U dient eerst een pagina te kiezen";
+$Export2ZIP = "Exporteer naar een ZIP bestand";
 $HidePage = "Verberg pagina";
 $ShowPage = "Toon pagina";
+$DiscussNotAvailable = "Discussie is niet beschikbaar";
+$UnlockDiscuss = "Discussie ontgrendelen";
+$LockDiscuss = "Discussie vergrendelen";
+$HideDiscuss = "Discussie verbergen";
+$ShowDiscuss = "Discussie weergeven";
+$UnlockRatingDiscuss = "Score activeren";
+$LockRatingDiscuss = "Score desactiveren";
+$HideDiscussExtra = "Discussies zijn nu enkel zichtbaar voor de trainers";
+$AssignmentDescExtra = "Deze pagina is een opdracht van een trainer";
+$AssignmentWorkExtra = "Deze pagina is het werk van een cursist";
 $AllowLaterSends = "Maak het sturen met vertraging mogelijk";
 $EmailWikiChanges = "Hou me op de hoogte van wijzigingen in de wiki";
 $EmailWikipageModified = "De wiki pagina is gewijzigd.";
 $EmailWikiPageAdded = "De pagina is toegevoegd.";
+$Visits = "bezoeken";
+$OrphanedPages = "Weespaginas";
 $WantedPages = "Gevraagde paginas";
 $MostVisitedPages = "Meest bezochte paginas";
+$MostChangedPages = "Meest gewijzigde paginas";
+$Changes = "wijzigingen";
 $MostActiveUsers = "Meest actieve gebruikers";
 $Contributions = "Bijdragen";
+$UserContributions = "Bijdragen van gebruikers";
 $MostActiveUsers = "Meest actieve gebruikers";
+$WarningDeleteMainPage = "Het verwijderen van de startpagina van een Wiki is niet aan te raden omdat het de toegangspagina is voor de wiki. <br />Als u om een of andere reden dit toch dient te doen, dan mag u niet vergeten om deze startpagina opnieuw aan te maken. Tot u dit doet zult u geen nieuwe pagina\'s kunnen toevoegen";
+$ConvertToLastVersion = "Om deze versie als de meest recente in te stellen kunt u klikken op";
 $Restore = "Herstellen";
+$CurrentVersion = "Huidige versie";
 $LastVersion = "Laatste versie";
+$PageRestored = "De pagina is hersteld. U kunt deze bekijken door te klikken op";
 $RestoredFromVersion = "Hersteld van versie";
+$HWiki = "Help: wiki";
 ?>

@@ -11,6 +11,7 @@ $langCreateDir = "Создать папку";
 $Name = "Название";
 $langComment = "Комментарий";
 $langVisible = "Видимая/скрытая";
+$langNewDir = "название новой папки";
 $langDirCr = "папка создана";
 $langGroup = "зТХРРБ";
 $langEdit = "тЕДБЛФЙТПЧБФШ";

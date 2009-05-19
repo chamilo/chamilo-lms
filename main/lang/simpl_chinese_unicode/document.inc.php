@@ -10,7 +10,6 @@ $langTo = "到";
 $langNoSpace = "上传失败！超过最大上传文件大小或磁盘空间不足.";
 $langDownloadEnd = "上传结束";
 $langFileExists = "操作失败，文件或目录已经存在.";
-$langNewDir = "新建目录";
 $langImpossible = "操作失败";
 $langAddComment = "添加/修改摘要";
 $langDocCopied = "文件已复制";

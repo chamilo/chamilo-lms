@@ -11,7 +11,6 @@ $langTo = "al ";
 $langNoSpace = "La al&#349;uto malsukcesis. La konservokvoto por via kurso estas superita a&#365; ne estas sufi&#265;a spaco sur via fiksita disko. ";
 $langDownloadEnd = "La al&#349;uto sukcesis.";
 $langFileExists = "Neeblas. <br>Jam ekzistas samnoma dosiero. ";
-$langNewDir = "Nomo de nova dosierujo ";
 $langImpossible = "Maleblas ";
 $langAddComment = "Aldoni/ modifi komentarion ";
 $langDocCopied = "La dosiero estas kopiita ";

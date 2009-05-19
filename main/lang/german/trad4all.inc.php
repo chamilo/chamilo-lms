@@ -14,6 +14,7 @@ $langCreateDir = "Verzeichnis erstellen";
 $Name = "Name";
 $langComment = "Kommentar";
 $langVisible = "sichtbar/unsichtbar";
+$langNewDir = "Name des neuen Verzeichnisses";
 $langDirCr = "Verzeichnis erstellt";
 $Download = "Hochladen";
 $langGroup = "Gruppe";

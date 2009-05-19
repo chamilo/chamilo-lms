@@ -11,7 +11,6 @@ $langTo = "vers";
 $langNoSpace = "L\'import a échoué. Il n\'y a plus assez de place dans votre dossier";
 $langDownloadEnd = "L\'import est terminé";
 $langFileExists = "Impossible d\'effectuer cette opération.<br>Un document portant ce nom existe déjà.";
-$langNewDir = "Nom du dossier";
 $langImpossible = "Impossible d\'effectuer cette opération";
 $langAddComment = "Ajouter/modifier un commentaire à";
 $langDocCopied = "Document copié";

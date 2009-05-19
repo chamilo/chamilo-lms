@@ -14,6 +14,7 @@ $langCreateDir = "Créer un dossier";
 $Name = "Nom";
 $langComment = "Commentaire";
 $langVisible = "Visible/invisible";
+$langNewDir = "Nom du dossier";
 $langDirCr = "Dossier créé";
 $Download = "Importer";
 $langGroup = "Groupes";

@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MessageEmptyMessageOrSubject = "Scrivi l\'oggetto del messaggio, prego";
+$MessageInformationBySendMessage = "Informazioni sull\'invio di un messaggio";
 $Inbox  = "In entrata";
 $Messages = "Messaggi";
 $SendMessage = "Invia un messaggio";

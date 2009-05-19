@@ -5,6 +5,7 @@ $langWorks = "作业论文";
 $langExercices = "测验";
 $langComment = "摘要";
 $langVisible = "显示/隐藏";
+$langNewDir = "新建目录";
 $langDirCr = "目录已经创建";
 $langGroup = "小组";
 $langEdit = "编辑";

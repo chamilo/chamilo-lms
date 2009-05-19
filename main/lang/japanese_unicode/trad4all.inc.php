@@ -10,6 +10,7 @@ $langExercices = "遍浆啼玛";
 $Name = "叹疚";
 $langComment = "コメント";
 $langVisible = "斧えるようにする/斧えないようにする";
+$langNewDir = "ディレクトリ侯喇";
 $langDirCr = "ディレクトリ侯喇";
 $Language = "&#35328;&#35486;";
 $Assignments = "Assignments";

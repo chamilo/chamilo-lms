@@ -13,6 +13,7 @@ $langCreateDir = "創建資料夾";
 $Name = "名稱";
 $langComment = "摘要";
 $langVisible = "顯示/隱藏";
+$langNewDir = "新資料夾名稱";
 $langDirCr = "目錄已經創建";
 $Download = "上傳";
 $langGroup = "小組";

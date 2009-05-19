@@ -14,6 +14,7 @@ $langCreateDir = "Könyvtár létrehozása";
 $Name = "Név";
 $langComment = "Megjegyzés";
 $langVisible = "Látható/rejtett";
+$langNewDir = "Az új könyvtár neve";
 $langDirCr = "Könyvtár létrehozva";
 $Download = "Feltöltés";
 $langGroup = "Csoport";

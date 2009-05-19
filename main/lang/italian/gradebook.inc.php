@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifyEvaluation = "Modifica le valutazioni";
 $CreateLink = "Collega l\'attività alla valutazione";
+$AddResultNoStudents = "Non ci sono risultati associati a corsisti";
 $FlatView = "Per corsista";
 $ScoreEdit = "Regole assegnazione del livello";
 $ScoreColor = "Colore del livello";

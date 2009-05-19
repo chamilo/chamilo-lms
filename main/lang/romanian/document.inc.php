@@ -11,7 +11,6 @@ $langTo = "la";
 $langNoSpace = "Transferul a esuat. Nu este destul spatiu pe disc.";
 $langDownloadEnd = "Transferul este finalizat";
 $langFileExists = "Operatia este imposibila, un fisier cu acelasi nume deja exista.";
-$langNewDir = "Numele noului director";
 $langImpossible = "Operatie imposibila";
 $langAddComment = "Adauga/modifica un comentariu catre";
 $langDocCopied = "Document copiat";

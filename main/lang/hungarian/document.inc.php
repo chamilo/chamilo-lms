@@ -11,7 +11,6 @@ $langTo = "ide";
 $langNoSpace = "A feltöltés sikertelen. Nincs elég hely a könyvtárban";
 $langDownloadEnd = "A feltöltés befejezõdött";
 $langFileExists = "Végrehajthatatlan m&#369;velet.<br>Már van ilyen nev&#369; fájl.";
-$langNewDir = "Az új könyvtár neve";
 $langImpossible = "Végrehajthatatlan m&#369;velet";
 $langAddComment = "Hozzáadni/módosítani egy megjegyzést";
 $langDocCopied = "Dokumentum átmásolva";

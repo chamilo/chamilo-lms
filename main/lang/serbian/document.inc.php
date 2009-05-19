@@ -11,7 +11,6 @@ $langTo = "u";
 $langNoSpace = "U&#269;itavanje na server nije uspelo. Ili ste premašili vašu maksimalnu kvotu ili nema dovoljno mesta na disku.";
 $langDownloadEnd = "U&#269;itavanje na server je završeno";
 $langFileExists = "Akcija je nemogu&#263;a, fajl sa takvim imenom ve&#263; postoji. ";
-$langNewDir = "Ime novog direktorijuma ";
 $langImpossible = "Akcija je nemogu&#263;a";
 $langAddComment = "Dodaj/modifikuj komentar u";
 $langDocCopied = "Dokument je iskopiran";

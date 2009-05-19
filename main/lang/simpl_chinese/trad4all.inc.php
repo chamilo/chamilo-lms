@@ -14,6 +14,7 @@ $langCreateDir = "创建目录";
 $Name = "名称";
 $langComment = "摘要";
 $langVisible = "显示/隐藏";
+$langNewDir = "新建目录名称";
 $langDirCr = "目录已创建";
 $Download = "上传";
 $langGroup = "小组";

@@ -14,6 +14,7 @@ $langCreateDir = "Tvori mapo";
 $Name = "Ime";
 $langComment = "Komentar";
 $langVisible = "Prikaži/skrij";
+$langNewDir = "Ime nove mape";
 $langDirCr = "Mapa je narejena";
 $Download = "Prenesi";
 $langGroup = "Skupine";

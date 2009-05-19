@@ -13,6 +13,7 @@ $langCreateDir = "Kreiraj direktorijum";
 $Name = "Ime";
 $langComment = "Komentar";
 $langVisible = "Vidljiv/Nevidljiv";
+$langNewDir = "Ime novog direktorijuma ";
 $langDirCr = "Direktorijum je kreiran";
 $Download = "U&#269;itavanje";
 $langGroup = "Grupa";

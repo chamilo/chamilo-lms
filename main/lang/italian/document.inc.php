@@ -11,7 +11,6 @@ $langTo = "verso";
 $langNoSpace = "Documento non caricato. Spazio insufficiente nella cartella";
 $langDownloadEnd = "Documento caricato";
 $langFileExists = "Non è possibile effettuare l\'operazione.<br>Esiste gi&agrave un elemento con questo nome.";
-$langNewDir = "Nome della nuova cartella";
 $langImpossible = "Non è possibile effettuare l\'operazione";
 $langAddComment = "Aggiungi/Modifica un commento";
 $langDocCopied = "Documento copiato";

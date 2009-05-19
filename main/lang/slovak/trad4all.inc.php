@@ -14,6 +14,7 @@ $langCreateDir = "Vytvori&#357; zložku";
 $Name = "Názov";
 $langComment = "Komentár";
 $langVisible = "Viditelný/neviditelný";
+$langNewDir = "Meno nového prie&#269;inka";
 $langDirCr = "Zložka vytvorená";
 $Download = "Nahra&#357;";
 $langGroup = "Skupina";

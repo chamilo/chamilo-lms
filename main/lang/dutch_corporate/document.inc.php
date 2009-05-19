@@ -11,7 +11,6 @@ $langTo = "naar";
 $langNoSpace = "Het uploaden is niet geslaagd. Het opslagquotum voor uw module is overschreden, of er is niet genoeg ruimte op de harde schijf.";
 $langDownloadEnd = "Het uploaden is geslaagd.";
 $langFileExists = "Onmogelijk.<br />Er bestaat al een bestand met dezelfde naam.";
-$langNewDir = "Naam van nieuwe map";
 $langImpossible = "Onmogelijk";
 $langAddComment = "Commentaar toevoegen/wijzigen";
 $langDocCopied = "Bestand is gekopieerd.";

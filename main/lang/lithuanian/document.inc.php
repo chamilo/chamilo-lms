@@ -11,7 +11,6 @@ $langTo = "į";
 $langNoSpace = "Įkėlimas nepavyko. Galbūt viršijote asmeninę kvotą arba nėra vietos diske.";
 $langDownloadEnd = "Įkėlimas baigtas";
 $langFileExists = "Operacija negalima, failas su tokiu vardu jau yra.";
-$langNewDir = "Naujo katalogo vardas";
 $langImpossible = "Operacija negalima";
 $langAddComment = "Įrašyti/modifikuoti komentarą ";
 $langDocCopied = "Dokumentas nukopijuotas";

@@ -11,7 +11,6 @@ $langTo = "nach";
 $langNoSpace = "Der Upload ist fehlgeschlagen. Sie haben nicht genug Platz im Verzeichnis";
 $langDownloadEnd = "Der Upload ist abgeschlossen";
 $langFileExists = "Aktion fehlgeschlagen.<br>Eine Datei mit dem gleichen Namen exisitiert bereits";
-$langNewDir = "Name des neuen Verzeichnisses";
 $langImpossible = "Vorgang nicht möglich";
 $langAddComment = "Kommentar hinzufügen/ändern";
 $langDocCopied = "Dokument kopiert";

@@ -14,6 +14,7 @@ $langCreateDir = "Opret en mappe";
 $Name = "Navn";
 $langComment = "Kommentar";
 $langVisible = "Synlig/usynlig";
+$langNewDir = "Navn på den nye mappe";
 $langDirCr = "Mappen er oprettet";
 $Download = "Upload";
 $langGroup = "Gruppe";

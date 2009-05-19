@@ -85,6 +85,7 @@ $langCorrespondsTo = "Corresponds to";
 $langExpectedChoice = "Expected choice";
 $langYourTotalScore = "Score for the test";
 $ReachedMaxAttemptsAdmin = "You have reached the maximum number of attempts for this test. Being a trainer, you can go on practicing but your Results will not be reported.";
+$langExerciseAdded = "Exercise added";
 $Build = "Build";
 $langEvalSet = "Assesment settings";
 $langActive = "active";

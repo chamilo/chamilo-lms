@@ -14,6 +14,7 @@ $langCreateDir = "إنشاء مجلد";
 $Name = "الإسم ";
 $langComment = "تعليق ";
 $langVisible = "ظاهر / مخفي";
+$langNewDir = "اسم المجلد الجديد (بالإنجليزي)";
 $langDirCr = "تم إنشاء مجلد ";
 $Download = "تنزيل ";
 $langGroup = "مجموعات";

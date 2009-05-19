@@ -13,6 +13,7 @@ $langCreateDir = "Creaza director";
 $Name = "Nume";
 $langComment = "Comentariu";
 $langVisible = "Vizibil/invizibil";
+$langNewDir = "Numele noului director";
 $langDirCr = "Director creat";
 $Download = "Transfera";
 $langGroup = "Grup";

@@ -11,7 +11,6 @@ $langTo = "ke";
 $langNoSpace = "Upload gagal. Tempat penyimpanan di direktori tidak cukup";
 $langDownloadEnd = "Upload selesai";
 $langFileExists = "Operasi tidak mungkin.<br>File dengan nama sama sudah ada terlebih dulu.";
-$langNewDir = "Nama direktori baru";
 $langImpossible = "Operasi tidak mungkin";
 $langAddComment = "Tambah/ubah komentar";
 $langDocCopied = "Dokumen di-copy";

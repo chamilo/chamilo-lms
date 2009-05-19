@@ -13,6 +13,7 @@ $langCreateDir = "Dizin yarat";
 $Name = "&#304;sim";
 $langComment = "Yorum";
 $langVisible = "Görünür/Görünmez";
+$langNewDir = "Yeni dizin adý";
 $langDirCr = "Dizin yaratýldý";
 $Download = "Gönder";
 $langGroup = "Grup";

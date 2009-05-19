@@ -55,4 +55,5 @@ $AnnounceSentByEmail = "De aankondiging is via email verstuurd.";
 $AnnounceSentToUserSelection = "De aankondiging is gestuurd naar de geslecteerde gebruikers.";
 $SendAnnouncement = "Stuur aankondiging";
 $ModifyAnnouncement = "Wijzig aankondiging";
+$ButtonPublishAnnouncement = "Plaats aankondiging";
 ?>

@@ -11,7 +11,6 @@ $langTo = "do";
 $langNoSpace = "&#321;adowanie pliku nie powiod&#322;o si&#281;. Nie ma wystarczaj&#261;cej przestrzeni w Twoim katalogu";
 $langDownloadEnd = "&#321;adowanie pliku zako&#324;czone";
 $langFileExists = "Czynno&#347;&#263; niemo&#380;liwa.<br>Plik o tej nazwie ju&#380; istnieje.";
-$langNewDir = "Nazwa nowego katalogu";
 $langImpossible = "Czynno&#347;&#263; niemo&#380;liwa";
 $langAddComment = "Dodaj/modyfikuj komentarz do";
 $langDocCopied = "Dokument skopiowany";

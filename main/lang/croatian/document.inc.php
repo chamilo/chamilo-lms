@@ -11,7 +11,6 @@ $langTo = "u";
 $langNoSpace = "U&#269;itavanje nije uspjelo. Prešli ste svoju maksimalnu kvotu ili nema dovoljno diskovnog prostora.";
 $langDownloadEnd = "U&#269;itavanje dovršeno";
 $langFileExists = "Greška.<br>Ve&#263; postoji datoteka s istim imenom";
-$langNewDir = "Ime nove mape";
 $langImpossible = "Greška. Nemogu&#263;a operacija";
 $langAddComment = "Dodaj/izmijeni opasku";
 $langDocCopied = "Dokument preslikan";

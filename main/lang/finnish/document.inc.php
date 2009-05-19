@@ -11,7 +11,6 @@ $langTo = "Hakemistoon";
 $langNoSpace = "Lataus ep‰onnistui, hakemistossa ei ole riitt‰v‰sti tilaa.";
 $langDownloadEnd = "Lataus on p‰‰ttynyt";
 $langFileExists = "Toiminto on mahdoton.<br>Samanniminen tiedosto on olemassa.";
-$langNewDir = "Uuden hakemiston nimi";
 $langImpossible = "Toiminto on mahdoton";
 $langAddComment = "Lis‰‰ kommentti:";
 $langDocCopied = "Dokumentti on kopioitu";

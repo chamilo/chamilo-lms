@@ -240,5 +240,17 @@ $DisableResults = "Resultaten niet weergeven aan de cursisten";
 $EnableResults = "Resultaten weergeven aan de cursisten";
 $ValidateAnswer = "Antwoorden valideren";
 $ExerciseAttempts = "Max aantal pogingen";
+$DoNotRandomize = "Niet randomiseren";
+$Infinite = "Onbeperkt";
+$BackToExercisesList = "Terug naar de oefeningen module";
+$ViewScoreChangeHistory = "Bekijke de historiek van de scores";
+$Duration = "Duur";
+$TryAgain = "Probeer opnieuw";
+$SeeTheory = "link naar de theorie";
+$EndActivity = "Einde van de activiteit";
+$GoToQuestion = "Ga naar vraag";
+$NoFeedback = "Examen (géén feedback)";
+$FeedbackType = "Feedback";
+$Scenario = "Scenario";
 $AddQuestionToExercise = "Voeg een vraag toe aan de test";
 ?>

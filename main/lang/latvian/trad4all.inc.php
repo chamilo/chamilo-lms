@@ -13,6 +13,7 @@ $langCreateDir = "Izveidot direktoriju";
 $Name = "V&#257;rds";
 $langComment = "Koment&#257;rs";
 $langVisible = "Redzams/neredzams";
+$langNewDir = "Jaun&#257;s direktorijas nosaukums";
 $langDirCr = "Direktorija izveidota";
 $Download = "Augšupl&#257;d&#275;t";
 $langGroup = "Grupa";

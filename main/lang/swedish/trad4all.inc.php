@@ -14,6 +14,7 @@ $langCreateDir = "Skapa ny mapp";
 $Name = "Namn";
 $langComment = "Kommentar";
 $langVisible = "Synlig/osynlig";
+$langNewDir = "namn på ny mapp";
 $langDirCr = "mapp skapad";
 $Download = "Ladda upp";
 $langGroup = "Grupp";

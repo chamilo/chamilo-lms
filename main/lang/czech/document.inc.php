@@ -11,7 +11,6 @@ $langTo = "do";
 $langNoSpace = "Uložení na server se nezda&#345;ilo. P&#345;ekro&#269;ili jste maximální kvótu, nebo tam není místo na disku.";
 $langDownloadEnd = "Uložení na server je dokon&#269;eno";
 $langFileExists = "Operaci není možné vykonat, protože soubor s takovým jménem již existuje.";
-$langNewDir = "Název nové složky";
 $langImpossible = "Operace není možná";
 $langAddComment = "P&#345;idat/upravit komentá&#345; k";
 $langDocCopied = "Dokument je zkopírovaný";

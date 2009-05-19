@@ -11,7 +11,6 @@ $langTo = "a";
 $langNoSpace = "La pujada de fitxers ha fallat. No hi ha prou espai en el vostre directori";
 $langDownloadEnd = "La pujada de fitxers ha finalitzat";
 $langFileExists = "Operació impossible.<br>Ja existeix un fitxer amb aquest nom.";
-$langNewDir = "Nom del nou directori";
 $langImpossible = "Operació impossible";
 $langAddComment = "Afegeix/modifica un comentari a";
 $langDocCopied = "Document copiat";

@@ -13,6 +13,7 @@ $langCreateDir = "Buat direktori";
 $Name = "Nama";
 $langComment = "Komentar";
 $langVisible = "Nampak/Sembunyi";
+$langNewDir = "Nama direktori baru";
 $langDirCr = "Direktori dibuat";
 $Download = "Upload";
 $langGroup = "Group";

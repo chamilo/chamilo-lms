@@ -14,6 +14,7 @@ $langCreateDir = "Create folder";
 $Name = "Name";
 $langComment = "Comment";
 $langVisible = "Visible";
+$langNewDir = "Name of new folder";
 $langDirCr = "Folder created";
 $Download = "Upload";
 $langGroup = "Groups";

@@ -14,6 +14,7 @@ $langCreateDir = "Create a folder";
 $Name = "Vardas";
 $langComment = "Komentaras";
 $langVisible = "Matomas/nematomas";
+$langNewDir = "Naujo katalogo vardas";
 $langDirCr = "Katalogas sukurtas";
 $Download = "Parsisiųsti";
 $langGroup = "Grupės";

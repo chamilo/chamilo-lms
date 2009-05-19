@@ -11,7 +11,6 @@ $langTo = "til";
 $langNoSpace = "Udlægningen mislykkedes. Enten fylder filen for meget, eller du har nået kursussidens loft for, hvor meget materialet på siden i alt må fylde.";
 $langDownloadEnd = "Udlægning er afsluttet";
 $langFileExists = "Udlægningen kan ikke gennemføres.<br>Der er allerede en fil med samme navn.";
-$langNewDir = "Navn på den nye mappe";
 $langImpossible = "Umulig handling";
 $langAddComment = "Tilføj/ret kommentar til";
 $langDocCopied = "Dokumentet er kopieret";

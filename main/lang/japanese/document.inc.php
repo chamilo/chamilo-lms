@@ -10,7 +10,6 @@ $langTo = "to";
 $langNoSpace = "アップロードが失敗しました。ディスクスペースの不足です。";
 $langDownloadEnd = "アップロード終了";
 $langFileExists = "不可能な操作です<br />同じ名前のファイルが存在しています。";
-$langNewDir = "ディレクトリ作成";
 $langImpossible = "操作不能";
 $langAddComment = "次のものにコメントに付加あるいはコメント修正する。";
 $langDocCopied = "文書をコピーしました";

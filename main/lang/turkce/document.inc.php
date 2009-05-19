@@ -11,7 +11,6 @@ $langTo = "kopyalanaca&#287;&#305; yer";
 $langNoSpace = "Yükleme baþarýsýz. Yeterli alan yok.";
 $langDownloadEnd = "Yükleme tamamlandý";
 $langFileExists = "Ýþlem yapýlamýyor.<br>Ayný isimde bir dosya var.";
-$langNewDir = "Yeni dizin adý";
 $langImpossible = "Ýþlem yapýlamýyor";
 $langAddComment = "Yorum ekle/deðiþtir";
 $langDocCopied = "Belge kopyalandý";

@@ -11,7 +11,6 @@ $langTo = "a";
 $langNoSpace = "Fallou o envío. Pode que excedese a cuota máxima asignada ou que non haxa espazo dabondo no disco.";
 $langDownloadEnd = "Realizouse o envío";
 $langFileExists = "Operación imposible: Xa existe un ficheiro co mesmo nome.";
-$langNewDir = "Nome do novo directorio";
 $langImpossible = "Operación imposible";
 $langAddComment = "Engadir/modificar un comentario a";
 $langDocCopied = "Documento copiado";

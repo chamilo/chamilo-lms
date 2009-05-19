@@ -11,7 +11,6 @@ $langTo = "uz";
 $langNoSpace = "Augšupiel&#257;de netika veikta. Iesp&#275;jams, ka: 1) J&#363;ms pieejam&#257; datu kvota ir p&#257;rsniegta; vai 2) ir beigusies datu vieta uz servera.";
 $langDownloadEnd = "Augšupiel&#257;de ir pabeigta";
 $langFileExists = "Veicam&#257; darb&#299;ba ir neiesp&#275;jama - fails ar t&#257;du nosaukumu jau eksist&#275;.";
-$langNewDir = "Jaun&#257;s direktorijas nosaukums";
 $langImpossible = "Darb&#299;ba ir neiesp&#275;jama";
 $langAddComment = "Pievienot/labot koment&#257;ru";
 $langDocCopied = "Dokuments nokop&#275;ts";

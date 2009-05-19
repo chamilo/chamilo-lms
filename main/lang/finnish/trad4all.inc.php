@@ -14,6 +14,7 @@ $langCreateDir = "Luo hakemisto";
 $Name = "Nimi";
 $langComment = "Kommentti";
 $langVisible = "Näkyvä/Näkymätön";
+$langNewDir = "Uuden hakemiston nimi";
 $langDirCr = "Hakemisto on luotu";
 $Download = "Lataa";
 $langGroup = "Ryhmä";

@@ -14,6 +14,7 @@ $langCreateDir = "Utwórz katalog";
 $Name = "Nazwa";
 $langComment = "Komentarz";
 $langVisible = "Poka&#380;/ukryj";
+$langNewDir = "Nazwa nowego katalogu";
 $langDirCr = "Katalog utworzony";
 $Download = "Za&#322;aduj";
 $langGroup = "Grupa";

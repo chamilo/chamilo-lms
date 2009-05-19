@@ -203,19 +203,15 @@ switch($_GET['action'])
 if (isset($_POST['save_audio']))
 {
 	// deleting the audio fragments
-	foreach ($_POST as $key=>$value)
-	{
-		if (substr($key,0,9) == 'removemp3')
-		{
-			$lp_items_to_remove_audio[] = str_ireplace('removemp3','',$key);
-			
+	foreach ($_POST as $key=>$value) {
+		if (substr($key,0,9) == 'removemp3') {
+			$lp_items_to_remove_audio[] = str_ireplace('removemp3','',$key);			
 			// removing the audio from the learning path item
 			$tbl_lp_item = Database::get_course_table('lp_item');
 			$in = implode(',',$lp_items_to_remove_audio);
 		}
 	}
-	if (count($lp_items_to_remove_audio)>0)
-	{
+	if (count($lp_items_to_remove_audio)>0) {
 		$sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE id IN (".$in.")";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 	}		

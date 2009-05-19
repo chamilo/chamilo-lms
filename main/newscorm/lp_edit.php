@@ -160,8 +160,8 @@ if (api_get_setting('search_enabled') === 'true')
 $content_proximity_select -> setSelected($s_selected_proximity);
 $origin_select -> setSelected($s_selected_origin);
 $encoding_select -> setSelected($s_selected_encoding);
-$defaults['lp_name'] = api_html_entity_decode(api_convert_encoding($_SESSION['oLP']->get_name(), $charset, $_SESSION['oLP']->encoding), ENT_QUOTES, $charset);
-$defaults['lp_author'] = $_SESSION['oLP']->get_author();
+$defaults['lp_name'] = Security::remove_XSS($_SESSION['oLP']->get_name());
+$defaults['lp_author'] = Security::remove_XSS($_SESSION['oLP']->get_author());
 
 //Submit button
 $form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');

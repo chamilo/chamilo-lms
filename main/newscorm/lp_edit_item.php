@@ -164,10 +164,8 @@ if (!empty($gradebook) && $gradebook=='view') {
 			'name' => get_lang('Gradebook')
 		);
 }
-
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
-
-$interbreadcrumb[]= array ("url"=>api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
+$interbreadcrumb[]= array ("url"=>api_get_self()."?action=build&lp_id=$learnpath_id", "name" =>stripslashes("{$therow['name']}"));
 //Theme calls
 $show_learn_path=true;
 $lp_theme_css=$_SESSION['oLP']->get_theme();
@@ -240,22 +238,14 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			echo '</div>';
 		}		
 		
-		echo '</td>';
-		
-		echo '<td class="workspace">';
-			
-			if(isset($is_success) && $is_success === true)
-			{
-				$msg = '<div class="lp_message" style="margin-bottom:10px;">';
-			
-					$msg .= 'The item has been edited.';
-			
-				$msg .= '</div>';
-				
+		echo '</td>';		
+		echo '<td class="workspace">';			
+			if(isset($is_success) && $is_success === true) {
+				$msg = '<div class="lp_message" style="margin-bottom:10px;">';			
+					$msg .= 'The item has been edited.';			
+				$msg .= '</div>';				
 				echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
-			}
-			else
-			{
+			} else {
 				echo $_SESSION['oLP']->display_edit_item($_GET['id']);
 			}		
 		echo '</td>';			

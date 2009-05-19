@@ -251,8 +251,10 @@ if (is_array($list) && count($list) > 0){
 			}
 			
 			if ($row['item_type'] != 'dokeos_chapter') {			
-				$correct_test_link = '-';						
-				$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4" class="content"><div class="mystatus">' . api_htmlentities($title, ENT_QUOTES, $lp_charset) . "</div></td>\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td><td class="content"></td>' . "\n" . "</tr>\n";
+				$correct_test_link = '-';
+				//api_htmlentities($title, ENT_QUOTES, $lp_charset)
+				$title = Security::remove_XSS($title);
+				$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4" class="content"><div class="mystatus">' . $title . "</div></td>\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td><td class="content"></td>' . "\n" . "</tr>\n";
 			}
 	
 			$counter++;
@@ -331,9 +333,9 @@ if (is_array($list) && count($list) > 0){
 					 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . $view_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';
 					
 					if (!empty($export_csv)) {
-						$temp = array ();
-						$temp[] = api_html_entity_decode($title, ENT_QUOTES, $lp_charset);
-						$temp[] = api_html_entity_decode($my_lesson_status, ENT_QUOTES, $lp_charset);
+						$temp = array ();						
+						$temp[] = $title = Security::remove_XSS($title); 
+						$temp[] = Security::remove_XSS($my_lesson_status);
 						
 						if ($row['item_type'] == 'quiz') {
 							
@@ -572,9 +574,9 @@ if (is_array($list) && count($list) > 0){
 				}
 				
 				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
-	
-				if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {
-					$output .= "<tr class='$oddclass' >\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . api_htmlentities($title, ENT_QUOTES, $lp_charset) . '</div></td>' . "\n";				
+				$title = Security::remove_XSS($title);
+				if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {					
+					$output .= "<tr class='$oddclass' >\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' .$title. '</div></td>' . "\n";				
 					$output .= '<td colspan="2">&nbsp;</td><td colspan="2">&nbsp;</td><td colspan="2">&nbsp;</td><td>'.$correct_test_link.'</td></tr>';
 					$output .= "</tr>\n";						 
 				} else {
@@ -583,7 +585,7 @@ if (is_array($list) && count($list) > 0){
 					} else {
 						$output .= "<tr class='$oddclass'>\n";	
 					}
-					$output .= "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' . api_htmlentities($title, ENT_QUOTES, $lp_charset) . '</div></td>' . "\n";							
+					$output .= "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' .$title. '</div></td>' . "\n";							
 					$output .= '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">';			  
 					 if ($row['item_type'] == 'quiz') {
 					 	

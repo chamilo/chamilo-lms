@@ -49,7 +49,17 @@ if ($is_allowed_in_course == false) api_not_allowed();
 */
 //$charset = 'UTF-8';
 //$charset = 'ISO-8859-1';
-$charset = api_get_system_encoding();
+
+// we set the encoding of the lp
+if (!empty($_SESSION['oLP']->encoding)) {
+	$charset = $_SESSION['oLP']->encoding;
+} else { 
+	$charset = api_get_system_encoding();
+}
+if (empty($charset)) {
+	$charset = 'ISO-8859-1';	
+}
+	
 $oLearnpath = false;
 $course_code = api_get_course_id();
 $user_id = api_get_user_id();
@@ -201,16 +211,15 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 }
 
 $_SESSION['oLP']->set_previous_item($lp_item_id);
-$nameTools = $_SESSION['oLP']->get_name();
+$nameTools = Security :: remove_XSS(api_convert_encoding($_SESSION['oLP']->get_name(), $charset, api_get_system_encoding()));
+
 $save_setting = get_setting("show_navigation_menu");
 global $_setting;
 $_setting['show_navigation_menu'] = 'false';
-
 $scorm_css_header=true; 	
 $lp_theme_css=$_SESSION['oLP']->get_theme(); //sets the css theme of the LP this call is also use at the frames (toc, nav, message)
  
-if($_SESSION['oLP']->mode == 'fullscreen')
-{
+if($_SESSION['oLP']->mode == 'fullscreen') {
 	$htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";	
 	include_once('../inc/reduced_header.inc.php');
 	
@@ -221,19 +230,20 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 <input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
 	
 <div id="learningPathMain"  style="width:100%;height:100%;" >
-
 	<div id="learningPathLeftZone" style="float:left;width:280px;height:100%">
-
 		<!-- header -->
 		<div id="header">
 		        <div id="learningPathHeader" style="font-size:14px;">
 		            <table>
 		                <tr>
 		                    <td>
-		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
+		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();">
+		                        	<img src="../img/lp_arrow.gif" />
+		                        </a>
 		                    </td>
 		                    <td>
-		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><?php echo get_lang('CourseHomepageLink'); ?></a>
+		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();">
+		                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
 		                    </td>
 		                </tr>
 		            </table>
@@ -244,9 +254,7 @@ if($_SESSION['oLP']->mode == 'fullscreen')
 <!-- Image preview Layout -->
 	<div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px">	
 		<?php $image = '../img/lp_author_background.gif'; ?>
-
-			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
-						       	   		       	
+			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">						       	   		       	
 		       	<div style="width:100; float:left;height:105;margin:5px">
 		       		<span>
 			        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
@@ -435,7 +443,8 @@ else
 		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
 		                    </td>
 		                    <td>
-		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><?php echo get_lang('CourseHomepageLink'); ?></a>
+		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();">
+		                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
 		                    </td>
 		                </tr>
 		            </table>
@@ -467,8 +476,7 @@ else
 						$scorm_css_header = true;
 						$lp_theme_css = $_SESSION['oLP']->get_theme();
 					
-						//Setting up the CSS theme if exists						
-					
+						//Setting up the CSS theme if exists
 						if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
 							global $lp_theme_css;
 						} else {

@@ -158,14 +158,12 @@ if (!empty($gradebook) && $gradebook=='view') {
 	);
 }
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
-
 $interbreadcrumb[]= array ("url"=>api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
 
 //Theme calls
 $lp_theme_css=$_SESSION['oLP']->get_theme();
 $show_learn_path=true;
 Display::display_header(null,'Path');
-
 
 //api_display_tool_title($therow['name']);
 
@@ -211,8 +209,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				echo $_SESSION['oLP']->build_tree();			
 			echo '</div>';					
 		echo '</td>';
-		echo '<td class="workspace">';
-		
+		echo '<td class="workspace">';		
 			if(isset($is_success) && $is_success === true) {
 				Display::display_confirmation_message(get_lang('ItemRemoved'));
 			} else {
@@ -231,8 +228,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 					$learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.Display::return_icon('learnpath_view.gif', get_lang('Display'),array('style'=> 'vertical-align: middle;')).' '.get_lang('Display').'</a>: '.get_lang('DisplayComment').'<br />';
 					$learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'">'.Display::return_icon('lp_dokeos_chapter_add.gif', get_lang('NewChapter'),array('style'=> 'vertical-align: middle;')).' '.get_lang('NewChapter').'</a>: '.get_lang('NewChapterComment').'<br />';
 					$learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'">'.Display::return_icon('new_test.gif', get_lang('NewStep'),array('style'=> 'vertical-align: middle;')).' '.get_lang('NewStep').'</a>: '.get_lang('NewStepComment').'<br />';
-					$learnpathadded .= '<br /><br /><br /><br /></p>';
-										
+					$learnpathadded .= '<br /><br /><br /><br /></p>';										
 					Display::display_normal_message($learnpathadded, false);
 				}								
 			}		

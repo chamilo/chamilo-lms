@@ -453,20 +453,26 @@ else
 		<!-- end header --> 
 
 <!-- Image preview Layout -->
-	<div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px">	
+	<div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px;">	
 		<?php $image = '../img/lp_author_background.gif'; ?>
 
 			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
 						       	   		       	
 		       	<div style="width:100; float:left;height:105;margin:5px">
-		       		<span>
-			        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-			        <img width="115" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
+		       		<span style="width:104px; height:96px; float:left; vertical-align:bottom;">
+			        <center><?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
+			        <?php
+			        	$picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
+			        	if($picture['1'] < 96) $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" ';
+			        	$size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
+			        	$flie = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); 
+			        	echo '<img '.$size.' src="'.$flie.'">'; 
+			        ?>
 			        <?php 
 						else
 						: echo Display :: display_icon('unknown_250_100.jpg', ' ');
 						endif;
-						?>
+						?></center>
 					</span>
 		       	</div>
 		       		       		       

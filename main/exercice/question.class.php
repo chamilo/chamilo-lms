@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20850 2009-05-19 19:01:30Z aportugal $
+<?php // $Id: question.class.php 20851 2009-05-19 19:27:29Z aportugal $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20850 2009-05-19 19:01:30Z aportugal $
+* 	@version $Id: question.class.php 20851 2009-05-19 19:27:29Z aportugal $
 */
 
 
@@ -955,10 +955,10 @@ abstract class Question
 			{
 			if(document.getElementById(\'media\').style.display == \'none\') {
 				document.getElementById(\'media\').style.display = \'block\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
 			} else {			
 				document.getElementById(\'media\').style.display = \'none\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';				
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';				
 			}	
 		}	
 			</script>';		
@@ -1008,7 +1008,7 @@ abstract class Question
 		$form -> addElement('html','<div class="row">
 		<div class="label"></div>
 		<div class="formw" style="height:50px">
-			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
+			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
 		</div>
 		</div>');
 		

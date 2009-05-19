@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 20813 2009-05-18 21:49:17Z cfasanando $
+<?php // $Id: admin.php 20841 2009-05-19 16:31:28Z cvargas1 $
  
 /*
 ==============================================================================
@@ -67,13 +67,14 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 20813 2009-05-18 21:49:17Z cfasanando $
+* 	@version $Id: admin.php 20841 2009-05-19 16:31:28Z cvargas1 $
 */
 
 
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
+
 
 // name of the language file that needs to be included
 $language_file='exercice';
@@ -84,7 +85,8 @@ $this_section=SECTION_COURSES;
 
 $is_allowedToEdit=api_is_allowed_to_edit();
 
-if (!$is_allowedToEdit) {
+if(!$is_allowedToEdit)
+{
 	api_not_allowed(true);
 }
 
@@ -93,6 +95,29 @@ define(ALLOWED_TO_INCLUDE,1);
 
 include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
+/****************************/
+/*  stripslashes POST data  */
+/****************************/
+
+if($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+	foreach($_POST as $key=>$val)
+	{
+		if(is_string($val))
+		{
+			$_POST[$key]=stripslashes($val);
+		}
+		elseif(is_array($val))
+		{
+			foreach($val as $key2=>$val2)
+			{
+				$_POST[$key][$key2]=stripslashes($val2);
+			}
+		}
+
+		$GLOBALS[$key]=$_POST[$key];
+	}
+}
 
 // get vars from GET
 if ( empty ( $exerciseId ) )
@@ -431,8 +456,12 @@ echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exer
 
 echo '</div>';
 
-if (isset($_GET['message'])) {
-	Display::display_confirmation_message(get_lang($_GET['message']));
+if(isset($_GET['message']))
+{
+	if (in_array($_GET['message'], array('ExerciseStored')))
+	{
+		Display::display_confirmation_message(get_lang($_GET['message']));
+	}
 }
 
 /*		
@@ -440,7 +469,7 @@ $description = $objExercise->selectDescription();
 echo '<div class="sectiontitle">'.$objExercise->selectTitle().'</div>';
 if(!empty($description))
 {
-	echo '<div class="sectioncomment">'.$description.'</div>';
+	echo '<div class="sectioncomment">'.stripslashes($description).'</div>';
 }
 */
 
@@ -469,7 +498,8 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 		if($form -> getSubmitValue('edit') == 'true')
 			Display::display_confirmation_message(get_lang('ExerciseEdited'));
 	}		
-	$form -> display ();
+	$form -> display (); 
+	echo '<br />';	
 	// question list management
 	include('question_list_admin.inc.php');
 }

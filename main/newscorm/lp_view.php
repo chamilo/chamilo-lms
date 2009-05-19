@@ -165,7 +165,7 @@ foreach($list as $toc) {
 }
 
 $ctok = $_SESSION['sec_token'];
-
+$autostart = 'true';
 // update status,total_time from lp_item_view table when you finish the exercises in learning path
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
 	global $src;
@@ -207,7 +207,8 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 		}
 	}
 	
-	$src = 'blank.php?msg=exerciseFinished';					
+	$src = 'blank.php?msg=exerciseFinished';
+	$autostart = 'false';
 }
 
 $_SESSION['oLP']->set_previous_item($lp_item_id);
@@ -283,7 +284,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 					
 						$progress_bar = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
 						$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-						$mediaplayer = $_SESSION['oLP']->get_mediaplayer();	
+						$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);	
 						
 						$tbl_lp_item	= Database::get_course_table('lp_item');
 						$show_audioplayer = false;
@@ -491,7 +492,7 @@ else
 					
 						$progress_bar = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
 						$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-						$mediaplayer = $_SESSION['oLP']->get_mediaplayer();	
+						$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);
 						
 						$tbl_lp_item	= Database::get_course_table('lp_item');
 						$show_audioplayer = false;

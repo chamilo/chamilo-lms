@@ -2088,29 +2088,55 @@ class learnpath {
 	 * Returns the HTML necessary to print a mediaplayer block inside a page
 	 * @return string	The mediaplayer HTML 
 	 */
-	function get_mediaplayer() {
+	function get_mediaplayer($autostart='true') {
+			
 		global $_course;
 
 		// Database table definition
 		$tbl_lp_item = Database :: get_course_table('lp_item');
-
+		$tbl_lp_item_view = Database :: get_course_table('lp_item_view');
+		
 		// getting all the information about the item
-		$sql = "SELECT * FROM " . $tbl_lp_item . " as lp WHERE lp.id = '" . $_SESSION['oLP']->current . "'";
+		$sql = "SELECT * FROM " . $tbl_lp_item . " as lp inner join " . $tbl_lp_item_view . " as lp_view on lp.id = lp_view.lp_item_id " .
+				"WHERE lp.id = '" . $_SESSION['oLP']->current . "'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$row = mysql_fetch_assoc($result);
 		$output = '';
+		
 		if (!empty ($row['audio'])) {
-			// the mp3 player	
-			$output = '<div id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
+			
+			$list = $_SESSION['oLP']->get_toc();
+			$type_quiz = false;
+			
+			foreach($list as $toc) {
+				if ($toc['id'] == $_SESSION['oLP']->current && ($toc['type']=='quiz') ) {
+					$type_quiz = true;		
+				}		
+			}
+			
+			if ($type_quiz) {
+				if ($_SESSION['oLP']->prevent_reinit == 1) {
+					$row['status'] === 'completed' ? $autostart_audio = 'false' : $autostart_audio = 'true';
+				} else {
+					$autostart_audio = $autostart;
+				}
+			} else {
+				$autostart_audio = 'true';
+			}
+			
+			// the mp3 player
+			$output  = '<div id="container">';
 			$output .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
 			$output .= '<script type="text/javascript">
 									var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
 									s1.addParam("allowscriptaccess","always");
-										s1.addParam("flashvars","file=' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=true");
+										s1.addParam("flashvars","file=' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=' . $autostart_audio.'");
 									s1.write("container");
-								</script>';
+								</script></div>';
+			
 		}
 		return $output;
+		
 	}
 
 	/**

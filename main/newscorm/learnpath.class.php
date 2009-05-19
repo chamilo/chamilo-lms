@@ -8357,7 +8357,7 @@ class learnpath {
 			 		//give a child element <adlcp:datafromlms> to the <item> element - not yet supported
 			 		//$xmldoc->createElement('adlcp:datafromlms','');
 			 		//give a child element <adlcp:masteryscore> to the <item> element			 		
-			 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->get_masteryscore());
+			 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->get_mastery_score());
 			 		$my_item->appendChild($my_masteryscore);
 			 		
 			 		

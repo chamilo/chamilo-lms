@@ -102,7 +102,7 @@ a:active {
 	font-weight : bold;
 	color : #808080;
 }
-select, textarea {
+select, textarea, input{
 	color : #000;
 	border: 1px solid #000;
 }

@@ -141,7 +141,7 @@ class Blog
 		$tbl_blogs_tasks 	= Database::get_course_table(TABLE_BLOGS_TASKS);
 
 		//verified if exist blog
-		$sql='SELECT COUNT(*) as count FROM '.$tbl_blogs.'  WHERE blog_name="'.$title.'" AND blog_subtitle="'.$subtitle.'";';
+		$sql='SELECT COUNT(*) as count FROM '.$tbl_blogs.'  WHERE blog_name="'.Database::escape_string($title).'" AND blog_subtitle="'.Database::escape_string($subtitle).'";';
 		$res=Database::query($sql,__FILE__,__LINE__);
 		$info_count=Database::result($res,0,0);
 		if ($info_count==0) {
@@ -1326,7 +1326,7 @@ class Blog
 			// article text
 			$oFCKeditor = new FCKeditor('post_full_text') ;
 			$oFCKeditor->Width		= '100%';
-			$oFCKeditor->Height		= '400';
+			$oFCKeditor->Height		= '200';
 			if(!api_is_allowed_to_edit()) {
 				$oFCKeditor->ToolbarSet = 'Blog_Student';
 			} else {
@@ -1426,7 +1426,7 @@ class Blog
 								$oFCKeditor = new FCKeditor('post_full_text') ;
 
 								$oFCKeditor->Width		= '100%';
-								$oFCKeditor->Height		= '400';
+								$oFCKeditor->Height		= '200';
 								
 								if(!api_is_allowed_to_edit())
 								{
@@ -2522,7 +2522,7 @@ class Blog
 		// comment text
 									$oFCKeditor = new FCKeditor('comment_text') ;													
 									$oFCKeditor->Width		= '100%';
-									$oFCKeditor->Height		= '300';
+									$oFCKeditor->Height		= '200';
 									if(!api_is_allowed_to_edit())
 									{
 										$oFCKeditor->ToolbarSet = 'BlogComment_Student';
@@ -2769,16 +2769,16 @@ class Blog
 						<span class="form_required">*</span>' . get_lang('Title') . '
 					</div>
 					<div class="formw">
-						<input name="blog_name" type="text" size="100" value="'.Security::remove_XSS($_POST['blog_name']).'" />
+						<input name="blog_name" type="text" size="50" value="'.Security::remove_XSS($_POST['blog_name']).'" />
 					</div>
 				</div>
 				
 				<div class="row">
 					<div class="label">
-						<span class="form_required">*</span>' . get_lang('Subtitle') . '
+						' . get_lang('Subtitle') . '
 					</div>
 					<div class="formw">
-						<input name="blog_subtitle" type="text" size="100" value="'.Security::remove_XSS($_POST['blog_subtitle']).'"/>
+						<input name="blog_subtitle" type="text" size="50" value="'.Security::remove_XSS($_POST['blog_subtitle']).'"/>
 					</div>
 				</div>	
 				
@@ -2828,16 +2828,16 @@ class Blog
 						<span class="form_required">*</span>' . get_lang('Title') . '
 					</div>
 					<div class="formw">
-						<input name="blog_name" type="text" size="100" value="' . $blog['blog_name'] . '" />
+						<input name="blog_name" type="text" size="50" value="' . $blog['blog_name'] . '" />
 					</div>
 				</div>
 				
 				<div class="row">
 					<div class="label">
-						<span class="form_required">*</span>' . get_lang('Subtitle') . '
+						' . get_lang('Subtitle') . '
 					</div>
 					<div class="formw">
-						<input name="blog_subtitle" type="text" size="100" value="' . $blog['blog_subtitle'] . '" />
+						<input name="blog_subtitle" type="text" size="50" value="' . $blog['blog_subtitle'] . '" />
 					</div>
 				</div>	
 				

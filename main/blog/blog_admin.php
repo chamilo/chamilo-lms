@@ -89,15 +89,15 @@ if (api_is_allowed_to_edit())
 	$get_blog_subtitle = Security::remove_XSS($_POST['blog_subtitle']);
 	$get_blog_id       = Security::remove_XSS($_POST['blog_id']);
 	
-	if (!empty($_POST['new_blog_submit']) AND !empty($_POST['blog_name']) AND !empty($_POST['blog_subtitle'])) {
-		if (strlen(trim($_POST['blog_name']))>0 && strlen(trim($_POST['blog_subtitle']))>0) {
+	if (!empty($_POST['new_blog_submit']) AND !empty($_POST['blog_name'])) {
+		if (strlen(trim($_POST['blog_name']))>0)  {
 			Blog::create_blog($get_blog_name,$get_blog_subtitle);
 			Display::display_confirmation_message(get_lang('BlogStored'));
 		}
 
 	}
-	if (!empty($_POST['edit_blog_submit']) AND !empty($_POST['blog_name']) AND !empty($_POST['blog_subtitle'])) {
-		if (strlen(trim($_POST['blog_name']))>0 && strlen(trim($_POST['blog_subtitle']))>0) {
+	if (!empty($_POST['edit_blog_submit']) AND !empty($_POST['blog_name'])) {
+		if (strlen(trim($_POST['blog_name']))>0) {
 			Blog::edit_blog($get_blog_id,$get_blog_name,$get_blog_subtitle);
 			Display::display_confirmation_message(get_lang('BlogEdited'));
 		}
@@ -123,14 +123,13 @@ if (api_is_allowed_to_edit())
 		if (isset($_GET['action']) && $_GET['action'] == 'add') {
 			// we show the form if 
 			// 1. no post data
-			// 2. there is post data and one of the three form elements is empty
-			if (!$_POST OR (!empty($_POST) AND (empty($_POST['Submit']) OR empty($_POST['blog_name']) OR empty($_POST['blog_subtitle'])))) {
+			// 2. there is post data and one of the required form elements is empty
+			if (!$_POST OR (!empty($_POST) AND (empty($_POST['new_blog_submit']) OR empty($_POST['blog_name'])))) {
 				// if there is post data there is certainly an error in the form
 				/*if ($_POST){
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}*/
-				
-			if (strlen($_POST['blog_name'])==0 || strlen($_POST['blog_subtitle'])==0 ) {
+				if (strlen($_POST['blog_name'])==0) {
 				if (count($_POST)>0) {
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
@@ -139,13 +138,13 @@ if (api_is_allowed_to_edit())
 			} 
 			Blog::display_new_blog_form();
 		}
-			
 		}
+			
 		if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 			// we show the form if 
 			// 1. no post data
 			// 2. there is post data and one of the three form elements is empty
-			if (!$_POST OR (!empty($_POST) AND (empty($_POST['edit_blog_submit']) OR empty($_POST['blog_name']) OR empty($_POST['blog_subtitle']))))
+			if (!$_POST OR (!empty($_POST) AND (empty($_POST['edit_blog_submit']) OR empty($_POST['blog_name']) )))
 			{
 				// if there is post data there is certainly an error in the form
 				if ($_POST) {

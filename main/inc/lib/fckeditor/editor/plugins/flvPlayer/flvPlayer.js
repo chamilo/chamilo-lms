@@ -446,7 +446,7 @@ Media.prototype.getInnerHTML = function (objectId){
 
 	var s = "";
 	//s+= '<p>\n';
-	s+= '<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
+	s+= '<div id="player' + randomnumber + '-parent" style="text-align: center;">\n'; //'<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
 	s+= '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); background-image: url(' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/flvPlayer.gif); background-repeat:no-repeat; background-position:center;' + cssalign + '">';
 
 	//s+= '<script src="' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/swfobject.js" type="text/javascript"></script>\n';

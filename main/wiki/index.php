@@ -3574,7 +3574,7 @@ function auto_add_page_users($assignment_type)
 	$link2teacher=$_POST['title']= $title_orig."_uass".api_get_user_id();
 	
 	//first: teacher name, photo, and assignment description (original content)	
-    $content_orig_A='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Teacher').': '.$userinfo['firstname'].$userinfo['lastname'].'</div><br/><div>';
+    $content_orig_A='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Teacher').': '.$userinfo['firstname'].' '.$userinfo['lastname'].'</div><br/><div>';
 	$content_orig_B='<h1>'.get_lang('AssignmentDescription').'</h1></div><br/>'.$_POST['content'];
 	
     //Second: student list (names, photo and links to their works).

@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 20860 2009-05-20 00:09:00Z cvargas1 $
+<?php // $Id: exercise.lib.php 20913 2009-05-20 16:48:25Z aportugal $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 20860 2009-05-20 00:09:00Z cvargas1 $
+* 	@version $Id: exercise.lib.php 20913 2009-05-20 16:48:25Z aportugal $
 */
 
 /**
@@ -205,11 +205,11 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 			} elseif($answerType == MULTIPLE_ANSWER) {
 			// multiple answers
-				$s.="<tr >
-				  <td ><div style='float:left;margin-top:10px;margin-right:10px;margin-left:5px'>
+				$s.="<tr>
+				  <td><div style='float:left;margin-top:2px;margin-right:10px;margin-left:5px'>
 				  	<input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
 				  	<input type='hidden' name='choice2[".$questionId."][0]' value='0'>
-				 </div><div style='float:rigth;margin-top:10px;margin-right:10px;margin-left:30px'>";
+				 </div><div style='float:rigth;margin-top:2px;margin-right:10px;margin-left:30px'>";
 				$answer = api_parse_tex($answer);
 				$s.=$answer;
 				$s.="</div></td></tr>";

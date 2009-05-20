@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice_submit.php 20776 2009-05-18 12:43:44Z pcool $
+// $Id: exercice_submit.php 20913 2009-05-20 16:48:25Z aportugal $
 
 /*
 ==============================================================================
@@ -43,7 +43,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 20776 2009-05-18 12:43:44Z pcool $
+* 	@version $Id: exercice_submit.php 20913 2009-05-20 16:48:25Z aportugal $
 */
 
 include ('exercise.class.php');
@@ -1077,6 +1077,7 @@ if (!empty ($error)) {
 	echo "	  	
 			 <!-- <button type='submit' name='buttonCancel' class='cancel'>" . get_lang('Cancel') . "</button>
 		   &nbsp;&nbsp; //--><br />";
+	echo '<div style="padding-left:10px; margin-top:-10px;">';
 	$submit_btn = "<button class='next' type='submit' name='submit'>";
 	//	$submit_btn.=get_lang('ValidateAnswer'); 
 	if ($objExercise->selectFeedbackType() == 1 && $_SESSION['objExercise']->selectType() == 2) {
@@ -1107,7 +1108,7 @@ if (!empty ($error)) {
 			</table></form>";
 	$b = 2;
 }
-
+echo '</div>';
 if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType != 1) {
 	//if($questionNum < 2){
 	if ($table_recorded_not_exist) {

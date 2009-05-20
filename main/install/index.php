@@ -356,7 +356,7 @@ if ($encryptPassForm=='1' ) {
 	<title>&mdash; <?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
-		@import "../css/public_admin/default.css";
+		@import "../css/dokeos_blue/default.css";
 		/*]]>*/
 	</style>
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.js"></script>
@@ -432,10 +432,16 @@ if ($encryptPassForm=='1' ) {
 	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').(is_array($update_from_version)?implode('|',$update_from_version):''); ?></div>
 	<div id="header2">&nbsp;</div>
 	<div id="header3">
+	 <ul id="logout">
+			<li><a href="" target="_top"><span>&nbsp;</span></a></li>
+	 </ul>
+	
 		<ul>
 			<li id="current"><a href="#"><span>Installation</span></a></li>
-		</ul>	
+		</ul>
+		<div style="clear: both;" class="clear"></div>
 	</div>
+	<div id="header4">&nbsp;</div>
 </div>
 
 

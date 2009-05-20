@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20909 2009-05-20 14:42:05Z pcool $
+// $Id: exercice.php 20910 2009-05-20 14:44:55Z pcool $
 
 /*
 ==============================================================================
@@ -796,7 +796,7 @@ if ($_configuration['tracking_enabled']) {
 if (($is_allowedToEdit) and ($origin != 'learnpath')) {
 	if ($_GET['show'] != 'result') {
 		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_test.gif', get_lang('NewEx')) . get_lang('NewEx') . '</a>';
-		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('question_add.gif', get_lang('NewEx')) . get_lang('NewEx') . '</a>';
+		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('question_add.gif', get_lang('AddQuestion')) . get_lang('AddQuestion') . '</a>';
 		echo '<a href="hotpotatoes.php">' . Display :: return_icon('jqz.gif', get_lang('ImportHotPotatoesQuiz')) . get_lang('ImportHotPotatoesQuiz') . '</a>';
 		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=result') . '">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
 	}

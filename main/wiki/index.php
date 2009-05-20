@@ -766,7 +766,7 @@ if ($_GET['action']=='wanted')
 	}
 	
 	//get name refs in last pages and make a unique list
-	$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink)';
+	$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')';
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
 	while ($row=Database::fetch_array($allpages))
 	{	
@@ -815,7 +815,7 @@ if ($_GET['action']=='orphaned')
 	}
 	
 	//get name refs in last pages and make a unique list	
-	$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink)';
+	$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')';
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
 	while ($row=Database::fetch_array($allpages))
 	{			
@@ -1037,11 +1037,11 @@ if ($_GET['action']=='links')
 		
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 		{				
-			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)"; //add blank space after like '%" " %' to identify each word. 						
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")"; //add blank space after like '%" " %' to identify each word. 						
 		}
 		else
 		{	
-			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND visibility=1 AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)"; //add blank space after like '%" " %' to identify each word		
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND visibility=1 AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")"; //add blank space after like '%" " %' to identify each word		
 		}		
 
 		$allpages=api_sql_query($sql,__LINE__,__FILE__);	
@@ -1582,11 +1582,11 @@ if ($_GET['action']=='allpages')
 
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 	{	
-		$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink)'; // warning don't use group by reflink because don't return the last version
+		$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version
 	}
 	else
 	{	
-		$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND visibility=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink)'; // warning don't use group by reflink because don't return the last version				
+		$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE '.$groupfilter.' AND visibility=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version				
 	}		
 
 	$allpages=api_sql_query($sql,__LINE__,__FILE__);	
@@ -3664,11 +3664,11 @@ function display_wiki_search_results($search_term, $search_content=0)
 	{
 		if($search_content=='1')
 		{
-			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)";// warning don't use group by reflink because don't return the last version
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")";// warning don't use group by reflink because don't return the last version
 		}
 		else
 		{
-			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND title LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)";// warning don't use group by reflink because don't return the last version
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND title LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")";// warning don't use group by reflink because don't return the last version
 		}
 	}
 	else
@@ -3676,11 +3676,11 @@ function display_wiki_search_results($search_term, $search_content=0)
 		if($search_content=='1')
 		{
 
-			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)";// warning don't use group by reflink because don't return the last version
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")";// warning don't use group by reflink because don't return the last version
 		}
 		else
 		{
-			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink)";// warning don't use group by reflink because don't return the last version
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE  ".$groupfilter." AND visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")";// warning don't use group by reflink because don't return the last version
 		}
 	}
 

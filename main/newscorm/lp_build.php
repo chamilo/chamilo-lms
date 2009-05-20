@@ -214,7 +214,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				Display::display_confirmation_message(get_lang('ItemRemoved'));
 			} else {
 				if($is_new) {
-					Display::display_normal_message(get_lang('LearnPathAdded'), false);
+					Display::display_normal_message(get_lang('LearnpathAdded'), false);
 				}				
 				if($is_new) {
 					Display::display_normal_message(get_lang('LPCreatedToContinue'), false);

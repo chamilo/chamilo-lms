@@ -399,6 +399,10 @@ if (is_array($flat_list))
 					//"</a>" .
 					"";
 			}
+			
+			//hide icon export scorm
+			$dsp_disk='';
+			
 			if($details['lp_display_order'] == 1 && $max != 1)
 	    	{
 	    		$dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">' .

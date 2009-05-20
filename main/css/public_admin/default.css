@@ -956,7 +956,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	right: 0.5em;
 }
 /* New training */
-
 .bottom-link {
 	border: 2px outset;
 	text-decoration: none;
@@ -969,7 +968,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	margin-top:1px;
 	padding:5px 20px;
 	vertical-align:middle;
-	padding-left:30px;
+	padding-left:35px;
 	display:block;
 }
 .bottom-link:active {

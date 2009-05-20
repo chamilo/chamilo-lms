@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20793 2009-05-18 17:56:23Z iflorespaz $
+<?php //$Id: agenda.inc.php 20920 2009-05-20 20:40:12Z aportugal $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -427,8 +427,10 @@ function display_monthcalendar($month, $year)
 						foreach ($agenda_item as $key=>$value) {
 							$month_start_date = (int)substr($value['start_date'],5,2);
 							if ($month == $month_start_date) {
+								$start_time= date("H:i",strtotime($value['start_date']));
+								$end_time= date("H:i",strtotime($value['end_date']));
 								$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
-								$dayheader .= '<br /><b>'.substr($value['start_date'],11,8).'</b>';
+								$dayheader .= '<br /><i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'</i>';
 								$dayheader .= ' - ';
 								$dayheader .= $value['title'];
 							}

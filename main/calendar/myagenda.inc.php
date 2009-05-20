@@ -132,9 +132,12 @@ function get_myagendaitems($courses_dbs, $month, $year)
 		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
 		while ($item = Database::fetch_array($result))
 		{
+			
 			$agendaday = date("j",strtotime($item['start_date']));
 			if(!isset($items[$agendaday])){$items[$agendaday]=array();}
+			
 			$time= date("H:i",strtotime($item['start_date']));
+			$end_time= date("H:i",strtotime($item['end_date']));
 			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			if ($setting_agenda_link == 'coursecode')
 			{
@@ -149,8 +152,9 @@ function get_myagendaitems($courses_dbs, $month, $year)
 			{
 				$items[$agendaday][$item['start_date']] = '';
 			}
-			$items[$agendaday][$item['start_date']] .= "<i>".$time."</i> <a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br />";
+				$items[$agendaday][$item['start_date']] .= "<i>".$time."</i>&nbsp;-&nbsp;<i>".$end_time."</i>&nbsp;<a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br />";
 		}
+		
 	}
 	// sorting by hour for every day
 	$agendaitems = array ();

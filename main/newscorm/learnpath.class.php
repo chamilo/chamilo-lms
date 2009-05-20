@@ -7034,7 +7034,7 @@ class learnpath {
 
 			$item_title = $row['title'];
 		} else {
-			$item_title = '';
+			$item_title = get_lang('Student_publication');
 		}
 
 		$item_title = api_convert_encoding($item_title, $charset, $this->encoding);

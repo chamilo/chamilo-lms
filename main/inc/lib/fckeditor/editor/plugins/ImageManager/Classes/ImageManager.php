@@ -206,8 +206,23 @@ class ImageManager
 		$in_group = api_is_in_group();
 		$user_id = api_get_user_id();
 
+		// check templates files in bd
+		$tbl_system_template = Database :: get_main_table(TABLE_MAIN_SYSTEM_TEMPLATE);
+			
+		$sql = "SELECT image FROM $tbl_system_template ";
+		$res = Database::query($sql,__FILE__,__LINE__);
+
+		$files_templates = array();	
+		
+		while ($row = Database::fetch_row($res)) {
+			$files_templates[] = $row[0];
+		}				
+		
 		while (false !== ($entry = $d->read())) 
 		{
+
+			if (in_array($entry,$files_templates)) continue;
+
 			if (substr($entry,0,1) != '.'          //not a dot file or directory
 				&& strpos($entry, '_DELETED_') === false
 				&& strpos($entry, 'chat_files') === false

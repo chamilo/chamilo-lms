@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 20642 2009-05-14 16:28:14Z yannoo $
+<?php // $Id: database.lib.php 20917 2009-05-20 18:47:47Z cfasanando $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -42,6 +42,7 @@ define('TABLE_MAIN_SHARED_SURVEY', 'shared_survey');
 define('TABLE_MAIN_SHARED_SURVEY_QUESTION', 'shared_survey_question');
 define('TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION', 'shared_survey_question_option');
 define('TABLE_MAIN_TEMPLATES', 'templates');
+define('TABLE_MAIN_SYSTEM_TEMPLATE', 'system_template');
 define('TABLE_MAIN_OPENID_ASSOCIATION','openid_association');
 //Gradebook
 define('TABLE_MAIN_GRADEBOOK_CATEGORY', 	'gradebook_category');

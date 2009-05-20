@@ -2638,11 +2638,9 @@ button.upload {
 .icon_image_content {
 	width:70px;
 	cursor:hand;
-	height:11em;
+	height:10em;
 	text-align: center;
-	padding-top: 3px;
-	padding-right: 5x;
-	padding-bottom: 3px;
+	padding-right: 5px;
 	padding-left: 5px;
 }
 #expire_session div {

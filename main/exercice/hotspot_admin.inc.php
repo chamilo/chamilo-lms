@@ -344,7 +344,7 @@ if($modifyAnswers)
 
 				// Check to see if the version meets the requirements for playback
 				if (hasReqestedVersion) {  // if we've detected an acceptable version
-				    var oeTags = '<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_admin.swf?modifyAnswers=<?php echo $modifyAnswers ?>" width="720" height="650">'
+				    var oeTags = '<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_admin.swf?modifyAnswers=<?php echo $modifyAnswers ?>" width="600" height="450">'
 								+ '<param name="movie" value="../plugin/hotspot/hotspot_admin.swf?modifyAnswers=<?php echo $modifyAnswers ?>" />'
 								+ '<param name="test" value="OOoowww fo shooww" />'
 								+ '</object>';

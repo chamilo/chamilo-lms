@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 20843 2009-05-19 17:19:12Z cvargas1 $
+* 	@version $Id: exercise_result.php 20937 2009-05-21 21:28:51Z cvargas1 $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -923,7 +923,7 @@ foreach ($questionList as $questionId) {
 			<tr>
 				<td colspan="2">
 					<i><?php echo get_lang('Hotspot'); ?></i><br /><br />
-					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=&from_db=0" width="560" height="382">
+					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=&from_db=0" width="552" height="352">
 						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=&from_db=0" />
 					</object>
 				</td>

@@ -135,7 +135,9 @@ function get_myagendaitems($courses_dbs, $month, $year)
 			{
 				$items[$agendaday][$item['start_date']] = '';
 			}
-				$items[$agendaday][$item['start_date']] .= "<i>".$time."</i>&nbsp;-&nbsp;<i>".$end_time."</i>&nbsp;<a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br />";
+				$items[$agendaday][$item['start_date']] .= "".get_lang('StartTimeWindow')."&nbsp;<i>".$time."</i>"."&nbsp;-&nbsp;".get_lang("EndTimeWindow")."&nbsp;<i>".$end_time."</i>&nbsp;";
+				$items[$agendaday][$item['start_date']] .= '<br />'."<a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br /> ";
+				$items[$agendaday][$item['start_date']] .= '<hr style="margin-top:3px;border-top:0; height:0; border-bottom:1px dotted #999999;" />';
 		}
 		
 	}

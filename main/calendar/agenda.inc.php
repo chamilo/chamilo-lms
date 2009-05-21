@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20920 2009-05-20 20:40:12Z aportugal $
+<?php //$Id: agenda.inc.php 20930 2009-05-21 16:42:15Z aportugal $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -419,20 +419,22 @@ function display_monthcalendar($month, $year)
 
 				$dayheader = "$curday";
 				
-				if (key_exists($curday,$data)) {					
-					
+				if (key_exists($curday,$data)) {
 					//$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
 					foreach ($data[$curday] as $key=>$agenda_item)
 					{
+						//var_dump($agenda_item);
 						foreach ($agenda_item as $key=>$value) {
 							$month_start_date = (int)substr($value['start_date'],5,2);
 							if ($month == $month_start_date) {
 								$start_time= date("H:i",strtotime($value['start_date']));
 								$end_time= date("H:i",strtotime($value['end_date']));
 								$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
-								$dayheader .= '<br /><i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'</i>';
-								$dayheader .= ' - ';
+								$dayheader .= '<br />'.get_lang("StartTimeWindow").'&nbsp;<i>'.$start_time.'</i>&nbsp;-&nbsp;'.get_lang("EndTimeWindow").'&nbsp;<i>'.$end_time.'&nbsp;</i>';
+								$dayheader .= '<br />';
 								$dayheader .= $value['title'];
+								$dayheader .= '<hr style="margin-top:3px;border-top:0; height:0; border-bottom:1px dotted #999999;" />';
+								
 							}
 								//$agendaitems = get_global_agenda_items($agendaitems, $curday, $month, $year, $startdayofweek, "month_view");
 								//echo $agendaitems['title'];
@@ -3352,7 +3354,6 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 		{
 			$class = "class=\"days_today\"";
 		}
-
 		echo "\t<td ".$class.">";
 		echo "<span class=\"agendaitem\">".$agendaitems[date('j', $value)]."&nbsp;</span> ";
 		echo "</td>\n";

@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 20913 2009-05-20 16:48:25Z aportugal $
+<?php // $Id: exercise.lib.php 20938 2009-05-21 22:08:42Z aportugal $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 20913 2009-05-20 16:48:25Z aportugal $
+* 	@version $Id: exercise.lib.php 20938 2009-05-21 22:08:42Z aportugal $
 */
 
 /**
@@ -195,10 +195,9 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			if($answerType == UNIQUE_ANSWER) {
 				$s.="<input type='hidden' name='choice2[".$questionId."]' value='0'>
 				<tr>
-				 <td><div style='float:left;margin-top:10px;margin-right:10px;margin-left:5px'>
-					<input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'>
-				  </div>
-				  <div style='float:rigth;margin-top:10px;margin-right:10px;margin-left:30px'>";
+				 <td>
+				 	<div class='u-m-answer'>
+					<p style='float:left; padding-right:4px;'><input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'></p>";
 				$answer=api_parse_tex($answer);
 				$s.=$answer;
 				$s.="</div></td></tr>";
@@ -206,10 +205,10 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			} elseif($answerType == MULTIPLE_ANSWER) {
 			// multiple answers
 				$s.="<tr>
-				  <td><div style='float:left;margin-top:2px;margin-right:10px;margin-left:5px'>
-				  	<input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
-				  	<input type='hidden' name='choice2[".$questionId."][0]' value='0'>
-				 </div><div style='float:rigth;margin-top:2px;margin-right:10px;margin-left:30px'>";
+				  <td>
+				  	<div class='u-m-answer'>
+				  	<p style='float:left; padding-right:4px;'><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
+				  	<input type='hidden' name='choice2[".$questionId."][0]' value='0'></p>";
 				$answer = api_parse_tex($answer);
 				$s.=$answer;
 				$s.="</div></td></tr>";

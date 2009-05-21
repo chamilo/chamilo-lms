@@ -2480,3 +2480,10 @@ button.arrowl {
 	background-image:url(images/2leftarrow.gif);
 	background-repeat:no-repeat;
 }
+.u-m-answer {
+	float:left;
+	width:100%;
+}
+.u-m-answer p {
+	margin:2px;
+}

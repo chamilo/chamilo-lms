@@ -1,4 +1,4 @@
-<?php //$Id: myagenda.php 20444 2009-05-10 09:18:51Z ivantcholakov $
+<?php //$Id: myagenda.php 20931 2009-05-21 16:51:30Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -77,11 +77,12 @@ $nameTools = get_lang('MyAgenda');
 
 // if we come from inside a course and click on the 'My Agenda' link we show a link back to the course
 // in the breadcrumbs
-if(!empty($_GET['coursePath'])) {
+//remove this if cause it was showing in agenda general
+/*if(!empty($_GET['coursePath'])) {
 	$course_path = api_htmlentities(strip_tags($_GET['coursePath']),ENT_QUOTES,$charset);
 	$course_path = str_replace(array('../','..\\'),array('',''),$course_path); 	
 }
-
+*/
 if (!empty ($course_path)) {
 	$interbreadcrumb[] = array ('url' => api_get_path(WEB_COURSE_PATH).urlencode($course_path).'/index.php', 'name' => Security::remove_XSS($_GET['courseCode']));
 }

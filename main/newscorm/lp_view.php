@@ -212,7 +212,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 }
 
 $_SESSION['oLP']->set_previous_item($lp_item_id);
-$nameTools = Security :: remove_XSS($_SESSION['oLP']->get_name());
+$nameTools = Security :: remove_XSS(api_convert_encoding($_SESSION['oLP']->get_name(), $charset, api_get_system_encoding()));
 
 $save_setting = get_setting("show_navigation_menu");
 global $_setting;
@@ -244,7 +244,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 		                    </td>
 		                    <td>
 		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();">
-		                        <?php echo get_lang('CourseHomepageLink'); ?></a>
+		                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
 		                    </td>
 		                </tr>
 		            </table>
@@ -445,7 +445,7 @@ else
 		                    </td>
 		                    <td>
 		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();">
-		                        <?php echo get_lang('CourseHomepageLink'); ?></a>
+		                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
 		                    </td>
 		                </tr>
 		            </table>

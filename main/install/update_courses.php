@@ -122,7 +122,7 @@ elseif($_POST['step1'])
 <html>
 <head>
 <title>-- Dokeos course update -- version <?php echo $dokeos_version; ?></title>
-<link rel="stylesheet" href="../css/dokeos_blue/default.css" type="text/css">
+<link rel="stylesheet" href="../css/public_admin/default.css" type="text/css">
 </head>
 <body bgcolor="white" dir="<?php echo $text_dir ?>">
 
@@ -217,7 +217,7 @@ else
 		</table>
 
 		<p align="center">
-		<input type="submit" name="step2" value="Update courses" onClick="javascript:if(this.value == 'Please Wait...') return false; else this.value='Please Wait...';" />
+		<input type="submit" name="step2" value="Update courses" onclick="javascript:if(this.value == 'Please Wait...') return false; else this.value='Please Wait...';" />
 		</p>
 	<?php
 }

@@ -1,22 +1,5 @@
 <?php //$Id: agenda.php 16490 2008-10-10 14:29:52Z elixir_inter $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
+/* For licensing terms, see /dokeos_license.txt
 ==============================================================================
 	@author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	@author: Toon Van Hoecke <toon.vanhoecke@ugent.be>, Ghent University
@@ -919,59 +902,54 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 		//databases of the courses
 		$t_a = Database :: get_course_table(TABLE_AGENDA, $course['db']);
 		$t_ip = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course['db']);
-
+        // get the groups to which the user belong
 		$group_memberships = GroupManager :: get_group_ids($course['db'], $user_id);
 		// if the user is administrator of that course we show all the agenda items
-		if ($course['status'] == '1')
-		{
+		if ($course['status'] == '1') {
 			//echo "course admin";
-			$sqlquery = "SELECT
-										DISTINCT agenda.*, item_property.*
-										FROM ".$t_a." agenda,
-											 ".$t_ip." item_property
-										WHERE agenda.id = item_property.ref 
-										AND agenda.start_date>='$date_start'
-										AND agenda.end_date<='$date_end'
-										AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-										AND item_property.visibility='1'
-										GROUP BY agenda.id
-										ORDER BY start_date ";
-		}
-		// if the user is not an administrator of that course
-		else
-		{
-			//echo "NOT course admin";
+			$sqlquery = "SELECT ".
+						" DISTINCT agenda.*, item_property.* ".
+						" FROM ".$t_a." agenda, ".
+						$t_ip." item_property ".
+                        " WHERE agenda.id = item_property.ref ". 
+						" AND agenda.start_date>='$date_start' ".
+						" AND agenda.end_date<='$date_end' ".
+						" AND item_property.tool='".TOOL_CALENDAR_EVENT."' ".
+						" AND item_property.visibility='1' ".
+						" GROUP BY agenda.id ".
+						" ORDER BY start_date ";
+		} else { 
+            // if the user is not an administrator of that course, then...
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
-				$sqlquery = "SELECT
-													agenda.*, item_property.*
-													FROM ".$t_a." agenda,
-														".$t_ip." item_property
-													WHERE agenda.id = item_property.ref
-													AND agenda.start_date>='$date_start'
-													AND agenda.end_date<='$date_end'
-													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-													AND	( item_property.to_user_id='".$user_id."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-													AND item_property.visibility='1'
-													ORDER BY start_date ";
+				$sqlquery = "SELECT " .
+							" agenda.*, item_property.* ".
+                            " FROM ".$t_a." agenda, ".
+			                $t_ip." item_property ".
+                            " WHERE agenda.id = item_property.ref ".
+							" AND agenda.start_date>='$date_start' ".
+							" AND agenda.end_date<='$date_end' ".
+							" AND item_property.tool='".TOOL_CALENDAR_EVENT."' ".
+							" AND	( item_property.to_user_id='".$user_id."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ".
+							" AND item_property.visibility='1' ".
+							" ORDER BY start_date ";
 			} else {
-				$sqlquery = "SELECT
-													agenda.*, item_property.*
-													FROM ".$t_a." agenda,
-														".$t_ip." item_property
-													WHERE agenda.id = item_property.ref
-													AND agenda.start_date>='$date_start'
-													AND agenda.end_date<='$date_end'
-													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-													AND ( item_property.to_user_id='".$user_id."' OR item_property.to_group_id='0')
-													AND item_property.visibility='1'
-													ORDER BY start_date ";
+				$sqlquery = "SELECT ".
+							" agenda.*, item_property.* ".
+							" FROM ".$t_a." agenda, ".
+							$t_ip." item_property ".
+							" WHERE agenda.id = item_property.ref ".
+							" AND agenda.start_date>='$date_start' ".
+							" AND agenda.end_date<='$date_end' ".
+							" AND item_property.tool='".TOOL_CALENDAR_EVENT."' ".
+							" AND ( item_property.to_user_id='".$user_id."' OR item_property.to_group_id='0') ".
+							" AND item_property.visibility='1' ".
+							" ORDER BY start_date ";
 			}
 		}
 
 		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
-		while ($item = Database::fetch_array($result))
-		{
+		while ($item = Database::fetch_array($result)) {
 			$agendaday = date("j",strtotime($item['start_date']));
 			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($course["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday";
 			list($year,$month,$day,$hour,$min,$sec) = split('[-: ]',$item['start_date']);

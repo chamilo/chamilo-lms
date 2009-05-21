@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20843 2009-05-19 17:19:12Z cvargas1 $
+* 	@version $Id: exercise_show.php 20933 2009-05-21 19:28:16Z yannoo $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -118,6 +118,8 @@ if($origin=='user_course') {
 
 if ($origin != 'learnpath') {
 	Display::display_header($nameTools,"Exercise");
+} else {
+	Display::display_reduced_header();
 }
 $emailId   = $_REQUEST['email'];
 $user_name = $_REQUEST['user'];
@@ -139,7 +141,6 @@ $id 	   = $_REQUEST['id'];
 
 -->
 </style>
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'; ?>" />
 <script language="javascript">
 function showfck(sid,marksid)
 {

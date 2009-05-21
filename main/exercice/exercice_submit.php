@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice_submit.php 20913 2009-05-20 16:48:25Z aportugal $
+// $Id: exercice_submit.php 20933 2009-05-21 19:28:16Z yannoo $
 
 /*
 ==============================================================================
@@ -43,7 +43,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 20913 2009-05-20 16:48:25Z aportugal $
+* 	@version $Id: exercice_submit.php 20933 2009-05-21 19:28:16Z yannoo $
 */
 
 include ('exercise.class.php');
@@ -882,32 +882,11 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 	if (empty ($charset)) {
 		$charset = 'ISO-8859-15';
 	}
-	header('Content-Type: text/html; charset=' . $charset);
-
-	@ $document_language = Database :: get_language_isocode($language_interface);
-	if (empty ($document_language)) {
-		//if there was no valid iso-code, use the english one
-		$document_language = 'en';
-	}
-	echo '<div style="height:10px">&nbsp;</div>';
 	/*
 	 * HTML HEADER
 	 */
-?>
-<!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $document_language; ?>" lang="<?php echo $document_language; ?>">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
-</head>
-
-<body>
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css'; ?>" />
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'; ?>" />
-
-<?php
-
+	Display::display_reduced_header();
+	echo '<div style="height:10px">&nbsp;</div>';
 }
 
 // I'm in a preview mode

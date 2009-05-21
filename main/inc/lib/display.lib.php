@@ -559,6 +559,16 @@ class Display {
 		include (api_get_path(INCLUDE_PATH)."header.inc.php");
 	}
 	/**
+	 * Display the reduced page header (without banner)
+	 */
+	public function display_reduced_header()
+	{
+		global $_plugins,$lp_theme_css,$mycoursetheme,$user_theme,$platform_theme;
+		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
+		global $menu_navigation;
+		include (api_get_path(INCLUDE_PATH)."reduced_header.inc.php");
+	}
+	/**
 	 * Display the page footer
 	 */
 	public function display_footer()

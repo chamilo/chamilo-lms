@@ -607,7 +607,7 @@ FCKSaveCommand.prototype.Execute = function()
  **************************************************************************************
  */
 
-// Making a new alternative command for prcessing Images.
+// Making a new alternative command for processing Images.
 var FCKImageCommand = function( name )
 {
 	this.Name = name ;
@@ -802,6 +802,18 @@ FCKCommands.GetCommand = function( commandName )
 	FCKCommands.LoadedCommands[ commandName ] = oCommand ;
 
 	return oCommand ;
+}
+
+// Upgrading the language subsystem, so it could be able to translate new nice buttons.
+FCKLanguageManager.TranslatePage = function( targetDocument )
+{
+	this.TranslateElements( targetDocument, 'INPUT', 'value' ) ;
+	this.TranslateElements( targetDocument, 'SPAN', 'innerHTML' ) ;
+	this.TranslateElements( targetDocument, 'LABEL', 'innerHTML' ) ;
+	this.TranslateElements( targetDocument, 'OPTION', 'innerHTML', true ) ;
+	this.TranslateElements( targetDocument, 'LEGEND', 'innerHTML' ) ;
+	// The following tag has been added for searching:
+	this.TranslateElements( targetDocument, 'BUTTON', 'innerHTML' ) ;
 }
 
 

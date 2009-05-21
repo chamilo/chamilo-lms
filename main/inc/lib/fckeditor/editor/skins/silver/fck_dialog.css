@@ -98,8 +98,14 @@ body, .BackColor
 
 #btnOk
 {
-	width: 100px;
+	width: 110px;
 }
+
+#btnCancel
+{
+	width: 110px;
+}
+
 
 .DarkBackground
 {

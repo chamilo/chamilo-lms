@@ -92,7 +92,6 @@ $ForumSearchResults = "resultaos de la busca nos foros";
 $ForumSearchInformation = "Pue buscar varies palabes usando\'l signu +";
 $YouWillBeNotifiedOfNewPosts = "Los mensaxes nuevos notificaránse-y per corréu electrónicu";
 $YouWillNoLongerBeNotifiedOfNewPosts = "Los mensaxes nuevos nun se-y van notificar más per corréu electrónicu";
-$TooShort = "Percurtiu";
 $AddImage = "Amestar imaxe";
 $QualifyThread = "Poner nota al tema";
 $ThreadUsersList = "Llistáu d\'usuarios del tema";

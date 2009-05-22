@@ -581,6 +581,7 @@ $ReorderOptions = "Znovu usporiada&#357; možnosti";
 $EditUserFields = "Upravi&#357; používate&#318;ské polia";
 $OptionText = "Text";
 $FieldTypeDoubleSelect = "Dvojitý výber";
+$TooShort = "Príliš krátke";
 $ResourceDeleted = "Zdroj zmazaný";
 $AdvancedParameters = "&#270;alšie parametre";
 $GoTo = "Ís&#357; na";

@@ -92,7 +92,6 @@ $ForumSearchResults = "Rezultati iskanja po forumu";
 $ForumSearchInformation = "Iskanje sestavljenih izrazov izvedete z uporabo + znaka";
 $YouWillBeNotifiedOfNewPosts = "O novih objavah boste obvešèeni preko e-pošte.";
 $YouWillNoLongerBeNotifiedOfNewPosts = "Obvestila o novih objavah preko e-pošte so preklicana";
-$TooShort = "Prekratko";
 $AddImage = "Dodaj sliko";
 $QualifyThread = "Oceni nit";
 $ThreadUsersList = "Uporabniki niti";

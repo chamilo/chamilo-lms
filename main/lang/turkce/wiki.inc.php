@@ -1,4 +1,58 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$WikiSearchResults = "WiKi Arama Sonuçlar&#305;";
+$Wiki = "Wiki";
+$StartPage = "Ana sayfa";
+$EditThisPage = "Sayfay&#305; düzenle";
+$ShowPageHistory = "Geçmi&#351;";
+$RecentChanges = "En son de&#287;i&#351;iklikler";
+$AllPages = "Tüm sayfalar";
+$AddNew = "Yeni sayfa ekle";
+$ChangesStored = "Ayarlar&#305;n&#305;z kaydedildi";
+$NewWikiSaved = "Wiki sayfas&#305; kay&#305;t edildi. Görmek için t&#305;klay&#305;n:";
+$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Dokeos\" /></p> <p align=\"center\">Bu sayfay&#305; düzenlemeye ba&#351;lay&#305;n ve bu yaz&#305;y&#305; silin.</p> ";
+$CourseWikiPages = "Wiki sayfalar&#305;";
+$GroupWikiPages = "Wiki grubu sayfalar&#305;";
+$NoWikiPageTitle = "Ayarlar&#305;n&#305;z kaydedildi. Hala sayfaya bir isim verebilirsiniz.";
+$Differences = "Farkl&#305;l&#305;klar";
+$Legend = "Kahraman";
+$ShowDifferences = "Seçilen versiyonlarla kar&#351;&#305;la&#351;t&#305;r.";
+$SearchPages = "Ara";
+$History = "Geçmi&#351;";
+$ShowThisPage = "Sayfay&#305; görüntüle";
+$DeleteThisPage = "Sayfay&#305; sil";
+$HomeWiki = "Wiki ev";
+$DeleteWiki = "Tümünü sil";
+$WikiDeleted = "Wiki\'niz silindi";
+$WikiPageDeleted = "Sayfa ve geçmi&#351;i silindi";
+$DeletePageHistory = "Sayfay&#305; ve tüm versiyonlar&#305;n&#305; sil";
+$ConfirmDeletePage = "Sayfay&#305; ve geçmi&#351;ini silmek istedi&#287;inize emin misiniz?";
+$PageLocked = "Sayfa korumal&#305;";
+$PageUnlocked = "Sayfa korumas&#305;z";
+$PageLockedExtra = "Bu sayfa korumal&#305;d&#305;r. Sadece e&#287;itimciler de&#287;i&#351;iklik yapabilir.";
+$PageUnlockedExtra = "Sayfa korumas&#305;zd&#305;r. Tüm grup elemnlar&#305; üyeler ve ders kat&#305;l&#305;mc&#305;lar de&#287;i&#351;iklik yapabilir.";
+$ShowAddOption = "Eklenen seçenekleri göster.";
+$HideAddOption = "Eklenen seçenekleri gizle";
+$LinksPages = "Referanslar";
+$MoreWikiOptions = "Daha fazla Wiki seçene&#287;i";
+$DefaultTitle = "Anasayfa";
+$Print = "Yad&#305;r";
+$Version = "Versiyon";
+$EditPage = "Düzenle";
+$ConfigDefault = "Varsay&#305;lan ayar";
+$WikiDiffAddedTex = "Yaz&#305; eklendi";
+$WikiDiffDeletedTex = "Yaz&#305; silindi";
+$MustSelectPage = "&#304;lk olarak bir sayfa seçmelisiniz";
+$HidePage = "Sayfay&#305; gizle";
+$ShowPage = "Sayfay&#305; göster";
+$Visits = "Ziyaretler";
+$MostVisitedPages = "En çok görüntülenen sayfalar";
+$MostChangedPages = "En çok de&#287;i&#351;tirilen sayfalar";
+$Changes = "De&#287;i&#351;iklikler";
+$MostActiveUsers = "Ençok aktif olan kullan&#305;c&#305;lar";
+$MostActiveUsers = "Ençok aktif olan kullan&#305;c&#305;lar";
+$Restore = "Geriye al";
+$CurrentVersion = "&#350;uanki versiyon";
+$LastVersion = "En son versiyon";
 ?>

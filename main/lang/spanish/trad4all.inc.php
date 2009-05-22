@@ -609,6 +609,7 @@ $EditUserFields = "Editar campos de usuario";
 $OptionText = "Opción de texto";
 $FieldTypeDoubleSelect = "Campo de tipo selección doble";
 $FieldTypeDivider = "Campo de tipo separador";
+$TooShort = "Muy corto";
 $ResourceDeleted = "Recurso eliminado";
 $AdvancedParameters = "Parámetros avanzados";
 $GoTo = "Ir a";

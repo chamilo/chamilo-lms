@@ -225,4 +225,9 @@ $TotalExercisesScoreObtained = "Totaal behaalde score van de oefeningen";
 $TotalExercisesScorePossible = "Totaal mogelijke score van de oefeningen";
 $TotalExercisesAnswered = "Aantal oefeningen beantwoord";
 $TotalExercisesScorePercentage = "Procentuele totale score van de oefeningen";
+$ForumForumsNumber = "Aantal fora";
+$ForumThreadsNumber = "aantal discussies";
+$ForumPostsNumber = "Aantal berichten";
+$CourseInformation = "Training informatie";
+$NoAdditionalFieldsWillBeExported = "De extra velden worden niet geëxporteerd";
 ?>

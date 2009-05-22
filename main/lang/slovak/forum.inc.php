@@ -85,7 +85,6 @@ $ForumSearchResults = "Výsledky vyh&#318;adávania vo fóre";
 $ForumSearchInformation = "Pre vyh&#318;adanie viacerých slov použite znak +";
 $YouWillBeNotifiedOfNewPosts = "Budete informovaný o nových správach e-mailom.";
 $YouWillNoLongerBeNotifiedOfNewPosts = "Už nebudete informovaný e-mailom o nových správach";
-$TooShort = "Príliš krátke";
 $AddImage = "Prida&#357; obrázok";
 $QualifyThread = "Posúdi&#357; tému";
 $ThreadUsersList = "Zoznam používate&#318;ov témy";

@@ -103,4 +103,6 @@ $AverageTotal = "Totaal gemiddelde";
 $Evaluation = "Evaluatie";
 $EvaluationAverage = "Gemiddelde van de evaluatie.";
 $GradebookQualificationTotal = "Totaal";
+$FileUploadComplete = "Bestand met succes geüpload";
+$NoResultsAvailable = "Géén resultaten beschikbaar";
 ?>

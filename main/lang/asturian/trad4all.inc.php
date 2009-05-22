@@ -604,6 +604,7 @@ $EditUserFields = "Editar campos d\'usuariu";
 $OptionText = "Opción de testu";
 $FieldTypeDoubleSelect = "Campos de tipu seleición doble";
 $FieldTypeDivider = "Campu de tipu separtador";
+$TooShort = "Percurtiu";
 $ResourceDeleted = "Recursu esborráu";
 $AdvancedParameters = "Parámetros avanzaos";
 $GoTo = "Dir a";

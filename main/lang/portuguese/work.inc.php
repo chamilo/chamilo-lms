@@ -34,4 +34,16 @@ $DirDelete = "Apagar directoria";
 $ValidateChanges = "Validar alterações";
 $FolderUpdated = "Pasta actualizada";
 $EndsAt = "Termina a (completamente encerrado)";
+$QualificationNumberOver = "Pontuação";
+$DatesAvailables = "Datas disponíveis";
+$ExpiresAt = "Expira a";
+$AddToCalendar = "Adicionar à agenda";
+$Assignment = "Tarefas";
+$SelectAFilter = "Seleccionar um filtro";
+$QualificationOver = "Pontuação";
+$MoveXTo = "Mover %s para";
+$ModifyDirectory = "Validar";
+$DeleteAllFiles = "Eliminar todos os trabalhos";
+$AllFilesInvisible = "Agora todos os trabalhos estão ocultos";
+$AssignmentName = "Nome da tarefa";
 ?>

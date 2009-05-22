@@ -92,7 +92,6 @@ $ForumSearchResults = "resultados da procura nos foros";
 $ForumSearchInformation = "Pode buscar varias palabras usando o signo +";
 $YouWillBeNotifiedOfNewPosts = "As novas mensaxes seranlle notificadas por correo electrónico ";
 $YouWillNoLongerBeNotifiedOfNewPosts = "As novas mensaxes xa non se lle notificarán por correo electrónico";
-$TooShort = "Moi curto";
 $AddImage = "Agregar imaxe";
 $QualifyThread = "Calificar o tema";
 $ThreadUsersList = "Lista de usuarios do tema";

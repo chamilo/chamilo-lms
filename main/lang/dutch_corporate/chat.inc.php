@@ -47,6 +47,7 @@ $Angry = "Boos";
 $Sad = "Droevig";
 $Silence = "Stilte";
 $Smile = "Lachen";
+$Arrow = "Pijl";
 $Question = "Vraag";
 $Idea = "Idee";
 $AskPermissionSpeak = "Vraag toestemming om te spreken";

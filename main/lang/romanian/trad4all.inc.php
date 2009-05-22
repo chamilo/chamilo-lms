@@ -376,5 +376,6 @@ $SelectFile = "Selecteaz&#259; un fi&#351;ier";
 $ListView = "Afiseaza ca lista";
 $DisplayOrder = "Ordinea de afisare";
 $SaveDocument = "Salveaza documentul";
+$TooShort = "Prea scurt";
 $NoParticipation = "Nu exista participan&#355;i";
 ?>

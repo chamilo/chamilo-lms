@@ -591,4 +591,5 @@ $WarningMessage = "Mensagem de alerta";
 $ErrorMessage = "Mensagem de erro";
 $Glossary = "Glossário";
 $Coach = "Tutor";
+$Validate = "Validar";
 ?>

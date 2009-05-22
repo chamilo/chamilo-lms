@@ -564,4 +564,5 @@ $Owner = "Tulajdonos";
 $DisplayOrder = "Megjelenés sorrendje";
 $SaveDocument = "Dokumentum mentése";
 $Phone = "Telefon";
+$TooShort = "Túl rövid";
 ?>

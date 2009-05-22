@@ -607,6 +607,7 @@ $EditUserFields = "Uredi uporabniška polja";
 $OptionText = "Besedilo";
 $FieldTypeDoubleSelect = "Dvojna izbira";
 $FieldTypeDivider = "Vizualni loèilec";
+$TooShort = "Prekratko";
 $ResourceDeleted = "Resurs je bil odstranjen";
 $AdvancedParameters = "Napredni parametri";
 $GoTo = "Pojdi na";

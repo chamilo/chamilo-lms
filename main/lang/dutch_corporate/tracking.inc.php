@@ -217,4 +217,9 @@ $FirstLogin = "Eerste login";
 $AccessDetails = "Toegangsdetails";
 $DateAndTimeOfAccess = "Datum en tijd van toegang";
 $Duration = "Duur";
+$ForumForumsNumber = "Aantal fora";
+$ForumThreadsNumber = "aantal discussies";
+$ForumPostsNumber = "Aantal berichten";
+$CourseInformation = "Training informatie";
+$NoAdditionalFieldsWillBeExported = "De extra velden worden niet geëxporteerd";
 ?>

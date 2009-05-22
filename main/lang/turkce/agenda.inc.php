@@ -53,4 +53,8 @@ $MyTextHere = "Benim metnim burada";
 $CopiedAsAnnouncement = "Duyuru olarak kopyaland&#305;";
 $NewAnnouncement = "Yeni duyuru";
 $AddAnnouncement = "Duyuru olarak ekle";
+$RepeatDaily = "Günlük";
+$RepeatWeekly = "Haftal&#305;k";
+$RepeatYearly = "Y&#305;ll&#305;k";
+$AllUsersOfThePlatform = "Tüm sistem kullan&#305;c&#305;lar&#305;";
 ?>

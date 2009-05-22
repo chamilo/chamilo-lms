@@ -609,6 +609,7 @@ $EditUserFields = "Modifier les profils";
 $OptionText = "Texte";
 $FieldTypeDoubleSelect = "Double boîte de sélection";
 $FieldTypeDivider = "Diviseur visuel";
+$TooShort = "Trop court";
 $ResourceDeleted = "Ressource supprimée";
 $AdvancedParameters = "Paramètres avancés ";
 $GoTo = "Aller à";

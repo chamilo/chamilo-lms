@@ -28,4 +28,8 @@ $CreateDirectory = "Crear directorio";
 $langCurrentDir = "carpeta actual";
 $UploadADocument = "Subir un documento";
 $EditToolOptions = "Editar las opciones de las herramientas";
+$DocumentDeleted = "Documento eliminado";
+$SendMailBody = "Un usuario envió un documento el la Barra de Tareas";
+$DirDelete = "Direcrorio de eliminación";
+$ValidateChanges = "Validar Cambios";
 ?>

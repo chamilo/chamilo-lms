@@ -104,4 +104,6 @@ $AllowUserImageForumDeactivate = "Foto gebruiker in forum verbergen";
 $AllowLearningPathTheme = "stijlblad voor leerpad toelaten";
 $AllowLearningPathThemeAllow = "Toegelaten";
 $AllowLearningPathThemeDisallow = "Niet toegelaten";
+$ConfigChat = "Chat instellingen";
+$AllowOpenchatWindow = "Open de chat in een nieuw venster";
 ?>

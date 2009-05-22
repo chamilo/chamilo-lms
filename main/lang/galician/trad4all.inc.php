@@ -568,4 +568,5 @@ $NoOfficialCode = "No Código oficial";
 $Owner = "Propietario";
 $SaveDocument = "Gardar documento";
 $Wiki = "Wiki";
+$TooShort = "Moi curto";
 ?>

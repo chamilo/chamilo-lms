@@ -63,6 +63,7 @@ $InBlog = "neste blog";
 $ViewPostsOfThisDay = "Ver artigos do dia de hoje";
 $PostsOf = "Artigos de";
 $NoArticleMatches = "Não encontrámos artigos que se ajustem aos seus critérios de busca. Pode ser que tenha escrito mal as palavras ou a sua pesquisa é pouco concreta. Altere o que desejar e inicie uma nova pesquisa.";
+$SaveProject = "Guardar projecto";
 $langTask1 = "Tarefa 1";
 $langTask2 = "Tarefa 2";
 $langTask3 = "Tarefa 3";
@@ -82,4 +83,5 @@ $EditBlog = "Editar título e subtítulo";
 $DeleteBlog = "Apagar este blog";
 $NoTasks = "Sem tarefas";
 $Shared = "Partilhado";
+$Reader = "Leitor";
 ?>

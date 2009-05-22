@@ -609,6 +609,7 @@ $EditUserFields = "Edit user fields";
 $OptionText = "Text";
 $FieldTypeDoubleSelect = "Double select";
 $FieldTypeDivider = "Visual divider";
+$TooShort = "Too short";
 $ResourceDeleted = "Resource deleted";
 $AdvancedParameters = "Advanced parameters";
 $GoTo = "Go to";

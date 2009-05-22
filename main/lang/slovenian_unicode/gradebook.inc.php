@@ -136,5 +136,6 @@ $ToViewGraphScoreRuleMustBeEnabled = "Za ogled grafa mora biti pravilo prikaza r
 $GradebookPreviousWeight = "Predhodne uteži resursov";
 $AddAssessment = "Shrani ocenjevanje";
 $FolderView = "Domača stran ocenjevanja";
+$GradebookSkillsRanking = "Težavnost";
 $SaveScoringRules = "Shrani pravila ocenjevanja";
 ?>

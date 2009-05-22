@@ -92,4 +92,16 @@ $ForumSearchResults = "Forum zoekresultaten";
 $ForumSearchInformation = "U kunt op meerdere zoektermen zoeken door gebruik te maken van het + teken";
 $YouWillBeNotifiedOfNewPosts = "U zal via email op de hoogte gebracht worden van nieuwe berichten.";
 $YouWillNoLongerBeNotifiedOfNewPosts = "U zal niet langer via email op de hoogte gebracht worden van nieuwe berichten.";
+$AddImage = "Voeg afbeelding toe";
+$StudentList = "lijst van cursisten";
+$CourseUsers = "Gebruikers in de training";
+$PostsNumber = "Aantal berichten";
+$ThreadStatistics = "Statistieken van de discussie";
+$Thread = "Discussie";
+$NotifyMe = "Hou me op de hoogte";
+$NotChanged = "Ongewijzigd";
+$QualifyNumeric = "Score";
+$EditAnAttachment = "Wijzig een bijlage";
+$BackToForum = "Terug naar het forum";
+$BackToForumOverview = "Terug naar het forum overzicht";
 ?>

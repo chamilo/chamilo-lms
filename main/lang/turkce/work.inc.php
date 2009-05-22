@@ -29,4 +29,17 @@ $langCurrentDir = "Aktif Dizin";
 $UploadADocument = "Belge gönder";
 $EditToolOptions = "Kelime i&#351;lemci araç seçenekleri";
 $DocumentDeleted = "Belge Silindi";
+$FolderUpdated = "Klasör güncellendi";
+$QualificationNumberOver = "Skor";
+$DatesAvailables = "Tarihler aktif";
+$AddToCalendar = "Takvime ekle";
+$SelectAFilter = "Filtre seç";
+$QualificationOver = "Skor";
+$DeleteAllFiles = "Tüm sayfalar&#305; sil";
+$EditMedia = "Say&#305; düzenle ve i&#351;aretle";
+$AllFilesInvisible = "Tüm sayfalar &#351;uan görünmez durumda";
+$FileInvisible = "Dosya &#351;uan görünmez";
+$AllFilesVisible = "Tüm sayfalar &#351;uan görülür durumda";
+$FileVisible = "Dosya &#351;u an görünür";
+$FolderEdited = "Düzenlenmi&#351; klasör";
 ?>

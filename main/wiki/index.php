@@ -2163,14 +2163,20 @@ function make_wiki_link_clickable($input)
 		if ($input_array[$key-1]=='[[' AND $input_array[$key+1]==']]') //now doubles brackets
 		{
 		
+		/////////// TODO: metawiki
+		/*
 		    if ($_clean['group_id']==0) 
 			{
 				$titleg_ex='';
 			}
 			else
 			{
-		   		$titleg_ex='<sup>(g'.$_clean['group_id'].')</sup>';
+				$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);	
+				$group_name= $group_properties['name'];
+				$titleg_ex='<sup><img src="css/wgroup.gif" alt="('.$group_name.')" title="Link to Wikigroup:'.$group_name.'"/></sup>';
 		    }	
+		*/
+		/////////
 					
 			//now full wikilink
 			if (strpos($value, "|") != false)

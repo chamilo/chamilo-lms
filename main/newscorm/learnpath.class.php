@@ -523,7 +523,7 @@ class learnpath {
 		if ($this->debug > 2) {
 			error_log('New LP - Inserting dokeos_chapter: ' . $sql_ins, 0);
 		}
-		error_log($sql_ins);
+		
 		$res_ins = api_sql_query($sql_ins, __FILE__, __LINE__);
 
 		if ($res_ins > 0) {

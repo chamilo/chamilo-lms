@@ -113,45 +113,37 @@ function get_myagendaitems($courses_dbs, $month, $year)
 		}
 
 		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
-		while ($item = Database::fetch_array($result))
-		{
-			
+		while ($item = Database::fetch_array($result)) {
 			$agendaday = date("j",strtotime($item['start_date']));
 			if(!isset($items[$agendaday])){$items[$agendaday]=array();}
 			
 			$time= date("H:i",strtotime($item['start_date']));
 			$end_time= date("H:i",strtotime($item['end_date']));
 			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
-			if ($setting_agenda_link == 'coursecode')
-			{
+			if ($setting_agenda_link == 'coursecode') {
 				$title=$array_course_info['title'];
 				$agenda_link = api_substr($title, 0, 14);
 			}
-			else 
-			{
+			else {
 				$agenda_link = Display::return_icon('course_home.gif');
 			}
-			if(!isset($items[$agendaday][$item['start_date']]))
-			{
+			if(!isset($items[$agendaday][$item['start_date']])) {
 				$items[$agendaday][$item['start_date']] = '';
 			}
-				$items[$agendaday][$item['start_date']] .= "".get_lang('StartTimeWindow')."&nbsp;<i>".$time."</i>"."&nbsp;-&nbsp;".get_lang("EndTimeWindow")."&nbsp;<i>".$end_time."</i>&nbsp;";
-				$items[$agendaday][$item['start_date']] .= '<br />'."<a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br /> ";
-				$items[$agendaday][$item['start_date']] .= '<hr style="margin-top:3px;border-top:0; height:0; border-bottom:1px dotted #999999;" />';
+			$items[$agendaday][$item['start_date']] .= "".get_lang('StartTimeWindow')."&nbsp;<i>".$time."</i>"."&nbsp;-&nbsp;".get_lang("EndTimeWindow")."&nbsp;<i>".$end_time."</i>&nbsp;";
+			$items[$agendaday][$item['start_date']] .= '<br />'."<a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br /> ";			
+			$items[$agendaday][$item['start_date']] .= '<br/>';
 		}
 		
 	}
 	// sorting by hour for every day
 	$agendaitems = array ();
-	while (list ($agendaday, $tmpitems) = each($items))
-	{
-		if(!isset($agendaitems[$agendaday]))
-		{
+	while (list ($agendaday, $tmpitems) = each($items)) {
+		if(!isset($agendaitems[$agendaday])) {
 			$agendaitems[$agendaday] = '';
 		}
 		sort($tmpitems);
-		while (list ($key, $val) = each($tmpitems))
-		{
+		while (list ($key, $val) = each($tmpitems)) {
 			$agendaitems[$agendaday] .= $val;
 		}
 	}

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20930 2009-05-21 16:42:15Z aportugal $
+<?php //$Id: agenda.inc.php 20946 2009-05-22 17:45:15Z aportugal $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -370,7 +370,7 @@ function display_monthcalendar($month, $year)
 	global $origin;
 
 	// grabbing all the calendar items for this year and storing it in a array
-	$data=get_calendar_items($month,$year);	
+	$data=get_calendar_items($month,$year);
 //	$data_global=get_global_calendar_items($month,$year);
 //	$data_global=get_global_agenda_items($agendaitems, $day, $month, $year, $week, $type);
 	//Handle leap year
@@ -420,21 +420,18 @@ function display_monthcalendar($month, $year)
 				$dayheader = "$curday";
 				
 				if (key_exists($curday,$data)) {
-					//$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
+					$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
 					foreach ($data[$curday] as $key=>$agenda_item)
 					{
-						//var_dump($agenda_item);
 						foreach ($agenda_item as $key=>$value) {
 							$month_start_date = (int)substr($value['start_date'],5,2);
 							if ($month == $month_start_date) {
 								$start_time= date("H:i",strtotime($value['start_date']));
 								$end_time= date("H:i",strtotime($value['end_date']));
-								$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
 								$dayheader .= '<br />'.get_lang("StartTimeWindow").'&nbsp;<i>'.$start_time.'</i>&nbsp;-&nbsp;'.get_lang("EndTimeWindow").'&nbsp;<i>'.$end_time.'&nbsp;</i>';
 								$dayheader .= '<br />';
 								$dayheader .= $value['title'];
-								$dayheader .= '<hr style="margin-top:3px;border-top:0; height:0; border-bottom:1px dotted #999999;" />';
-								
+								$dayheader .= '<br/>';
 							}
 								//$agendaitems = get_global_agenda_items($agendaitems, $curday, $month, $year, $startdayofweek, "month_view");
 								//echo $agendaitems['title'];

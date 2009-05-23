@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 20937 2009-05-21 21:28:51Z cvargas1 $
+* 	@version $Id: exercise_result.php 20952 2009-05-23 20:43:53Z cvargas1 $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -411,12 +411,13 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 	?>
 		<tr>
 				<td valign="top">
+				<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; display:inline; float:left; margin-top:3px;"></div>
 					<div style="float:left; padding-left:5px;">
+						
 						<div style="display:inline; float:left; width:80px;"><?php echo $answer ?></div>
-						<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; display:inline; float:left; margin-top:3px;"></div>
+						
 					</div>
 				</td>
-				<td valign="top"><?php echo $answerId; ?></td>
 				<td valign="top">
 					<?php $my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $my_choice; ?>
 				</td>
@@ -520,7 +521,7 @@ foreach ($questionList as $questionId) {
 				<td width="5%" valign="top" align="center" nowrap="nowrap">
 					<i><?php echo get_lang("Choice"); ?></i>
 				</td>
-				<td width="5%" valign="top" nowrap="nowrap">
+				<td width="5%"  align="center" nowrap="nowrap">
 					<i><?php echo get_lang("ExpectedChoice"); ?></i>
 				</td>
 				<td width="45%" valign="top">
@@ -554,18 +555,16 @@ foreach ($questionList as $questionId) {
 			?>
 				<tr>
 					<td valign="top" colspan="2">
-						<table width="510" border="0">
+						<table width="552" border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;">
 							<tr>
-								<td width="40%" valign="top">
+								<td width="152" valign="top">
 									<i><?php echo get_lang("CorrectAnswer"); ?></i><br /><br />
 								</td>
-								<td width="15%" valign="top">
-									<i><?php echo get_lang("ClickNumber"); ?></i><br /><br />
-								</td>
-								<td width="20%" valign="top">
+						
+								<td width="100" valign="top">
 									<i><?php echo get_lang('HotspotHit'); ?></i><br /><br />
 								</td>
-								<td width="25%" valign="top">
+								<td width="300" valign="top">
 									<i><?php echo get_lang("Comment"); ?></i><br /><br />
 								</td>
 							</tr>

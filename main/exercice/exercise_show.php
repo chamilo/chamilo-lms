@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20937 2009-05-21 21:28:51Z cvargas1 $
+* 	@version $Id: exercise_show.php 20952 2009-05-23 20:43:53Z cvargas1 $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -330,7 +330,6 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				<div><?php echo $answer ?></div>
 			</div>
 		</td>
-		<td valign="top" align="left"><?php echo $answerId; ?></td>
 		<td width="50px" style="padding-right:15px" valign="top" align="left">
 			<?php 
 			$my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $my_choice; ?>
@@ -858,7 +857,7 @@ if ($show_results) {
 			?>
 				<tr>
 					<td valign="top" align="center" style="padding-left:0px;" >
-						<table style="border: 1px solid #A4A4A4;border-bottom:none" width="552">
+						<table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">
 			<?php 
 			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 				$answer=$objAnswerTmp->selectAnswer($answerId);

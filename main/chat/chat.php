@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 18433 2009-02-11 14:58:51Z cvargas1 $
+<?php // $Id: chat.php 20950 2009-05-23 16:52:57Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,6 +50,7 @@ require_once('../inc/lib/events.lib.inc.php');
 event_access_tool(TOOL_CHAT);
 
 
+header('Content-Type: text/html; charset='. $charset);
 
 /*
  * Choose CSS style (platform's, user's, or course's) 
@@ -109,8 +110,9 @@ if (api_get_setting('show_navigation_menu')!='false') {
 }
 $cidreq=$_GET['cidReq'];
 
-echo '<html>';
-echo'<HEAD><TITLE>'.get_lang('Chat').' - '.$mycourseid.' - '.api_get_setting('siteName').'</TITLE>';
+echo '<html><head>';
+echo '<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'" />';
+echo'<title>'.get_lang('Chat').' - '.$mycourseid.' - '.api_get_setting('siteName').'</title>';
 
 if (empty($open_chat_window))
 {

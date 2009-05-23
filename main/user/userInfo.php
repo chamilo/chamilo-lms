@@ -1,4 +1,4 @@
-<?php // $Id: userInfo.php 20647 2009-05-14 17:12:42Z aportugal $
+<?php // $Id: userInfo.php 20951 2009-05-23 19:07:59Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -392,7 +392,7 @@ elseif ($displayMode == "viewMainInfoEdit")
 		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);			
 		// get the path,width and height from original picture
 		$big_image = $image_array['dir'].'big_'.$image_array['file'];
-		$big_image_size = @getimagesize($big_image);
+		$big_image_size = @getimagesize(api_url_to_local_path($big_image));
 		$big_image_width= $big_image_size[0];
 		$big_image_height= $big_image_size[1];
 		$url_big_image = $big_image.'?rnd='.time();
@@ -466,7 +466,7 @@ elseif ($displayMode == "viewContentList") // default display
 		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);	
 		// get the path,width and height from original picture
 		$big_image = $image_array['dir'].'big_'.$image_array['file'];
-		$big_image_size = @getimagesize($big_image);
+		$big_image_size = @getimagesize(api_url_to_local_path($big_image));
 		$big_image_width= $big_image_size[0];
 		$big_image_height= $big_image_size[1];
 		$url_big_image = $big_image.'?rnd='.time();

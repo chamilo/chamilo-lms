@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 20740 2009-05-16 19:49:02Z yannoo $
+<?php // $Id: whoisonline.php 20951 2009-05-23 19:07:59Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -238,7 +238,7 @@ function display_individual_user($user_id)
 			$window_name = 'window'.uniqid('');			
 			// get the path,width and height from original picture			
 			$big_image = $webdir.'big_'.$user_object->picture_uri;
-			$big_image_size = @getimagesize($big_image);
+			$big_image_size = @getimagesize(api_url_to_local_path($big_image));
 			$big_image_width= $big_image_size[0];
 			$big_image_height= $big_image_size[1];
 			$url_big_image = $big_image.'?rnd='.time();						

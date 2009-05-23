@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 20561 2009-05-12 19:35:39Z juliomontoya $
+<?php // $Id: user_edit.php 20951 2009-05-23 19:07:59Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -484,7 +484,7 @@ $image_path = UserManager::get_user_picture_path_by_id($user_id,'web');
 $image_dir = $image_path['dir'];
 $image = $image_path['file'];
 $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown.jpg');
-$image_size = @getimagesize($image_file);
+$image_size = @getimagesize(api_url_to_local_path($image_file));
 
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
     .'alt="'.$user_data['lastname'].' '.$user_data['firstname'].'" '
@@ -495,7 +495,7 @@ if ($image_size[0] > 300) //limit display width to 300px
 
 // get the path,width and height from original picture
 $big_image = $image_dir.'big_'.$image;
-$big_image_size = @getimagesize($big_image);
+$big_image_size = @getimagesize(api_url_to_local_path($big_image));
 $big_image_width= $big_image_size[0];
 $big_image_height= $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();

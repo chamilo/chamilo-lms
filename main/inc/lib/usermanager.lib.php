@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 20723 2009-05-16 13:45:06Z ivantcholakov $
+<?php // $Id: usermanager.lib.php 20951 2009-05-23 19:07:59Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1914,7 +1914,7 @@ class UserManager
 			$picture['file'] = api_get_path(WEB_CODE_PATH).$patch_profile.$user_id.'/'.$size_picture.$picture_file;
 			$picture['style']=''; 
 			if ($height > 0) {
-				$dimension = getimagesize($picture['file']);
+				$dimension = @getimagesize(api_url_to_local_path($picture['file']));
 				$margin = (($height - $dimension[1])/2);
 				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].';" ';
 			}

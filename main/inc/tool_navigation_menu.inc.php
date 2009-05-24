@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 19217 2009-03-23 21:44:29Z ivantcholakov $
+// $Id: tool_navigation_menu.inc.php 20959 2009-05-24 19:00:24Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -185,14 +185,20 @@ function show_navigation_menu()
 			if(toolnavlist_el.style.display == 'none')
 			{
 				toolnavlist_el.style.display = '';
-				center_el.style.margin = '0 190px 0 0';
+				if (center_el)
+				{
+					center_el.style.margin = '0 190px 0 0';
+				}
 				swap_menu_link_el.innerHTML = '<?php echo get_lang('Hide'); ?> &raquo;&raquo;';
 				createCookie('dokeos_menu_state',1,10);
 			}
 			else
 			{
 				toolnavlist_el.style.display = 'none';
-				center_el.style.margin = '0 0 0 0';
+				if (center_el)
+				{
+					center_el.style.margin = '0 0 0 0';
+				}
 				swap_menu_link_el.innerHTML = '&laquo;&laquo; <?php echo get_lang('Show'); ?>';
 				createCookie('dokeos_menu_state',0,10);
 			}
@@ -211,7 +217,7 @@ function show_navigation_menu()
 			
 			if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window',$course_id)==true)
 			{
-				echo '<a href="#" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
+				echo '<a href="javascript: void(0);" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
 			}			
 			else
 			{

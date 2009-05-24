@@ -12,8 +12,8 @@
 $language_file = array('notebook');
 
 // including the global dokeos file
-require_once('../inc/global.inc.php');
-require_once('../inc/lib/events.lib.inc.php');
+require_once '../inc/global.inc.php';
+require_once '../inc/lib/events.lib.inc.php';
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
@@ -23,7 +23,7 @@ $this_section=SECTION_COURSES;
 api_protect_course_script(true);
 
 // including additional libraries
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // additional javascript
 $htmlHeadXtra[] = javascript_notebook();
@@ -36,7 +36,7 @@ event_access_tool(TOOL_NOTEBOOK);
 
 if ( isset($_GET['action']) && ($_GET['action'] == 'addnote' || $_GET['action'] == 'editnote')) {
 $tool=get_lang('NotebookManagement');
-$interbreadcrumb[] = array ("url"=>"index.php", "name"=> api_ucfirst(get_lang(TOOL_NOTEBOOK)));
+$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Notebook'));
 }
 
 // displaying the header
@@ -259,7 +259,7 @@ function update_note($values) {
 				description = '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['note_comment'])),COURSEMANAGERLOWSECURITY))."',
 				update_date = '".Database::escape_string(date('Y-m-d H:i:s'))."'
 			WHERE notebook_id = '".Database::escape_string($values['notebook_id'])."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	// display the feedback message
 	Display::display_confirmation_message(get_lang('NoteUpdated'));	
 }
@@ -269,7 +269,7 @@ function delete_note($notebook_id) {
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 
 	$sql = "DELETE FROM $t_notebook WHERE notebook_id='".Database::escape_string($notebook_id)."' AND user_id = '".Database::escape_string(api_get_user_id())."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);	
+	$result = Database::query($sql, __FILE__, __LINE__);	
 	Display::display_confirmation_message(get_lang('NoteDeleted'));		
 }
 
@@ -305,7 +305,7 @@ function display_notes() {
 	$cond_extra = ($_SESSION['notebook_view']== 'update_date')?" AND update_date <> '0000-00-00 00:00:00'":" ";
 		
 	$sql = "SELECT * FROM $t_notebook WHERE user_id = '".Database::escape_string(api_get_user_id())."' $cond_extra $order_by";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result)) {
 		echo '<div class="sectiontitle">';
 		echo '<span style="float: right;"> ('.get_lang('CreationDate').': '.date_to_str_ago($row['creation_date']).'&nbsp;&nbsp;<span class="dropbox_date">'.$row['creation_date'].'</span>';

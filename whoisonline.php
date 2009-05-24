@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 20951 2009-05-23 19:07:59Z ivantcholakov $
+<?php // $Id: whoisonline.php 20961 2009-05-24 22:06:43Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -31,10 +31,10 @@ if (!isset($_GET['cidReq'])) {
 	$cidReset = true;	
 }
 // including necessary files
-require_once('./main/inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
+require_once './main/inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -137,7 +137,7 @@ function display_user_list($user_list, $_plugins)
 		$extra_params = array();
 		$course_url = '';
 		if(strlen($_GET['cidReq']) > 0) {
-			$extra_params['cidReq'] = Database::escape_string($_GET['cidReq']);
+			$extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
 			$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
 		}		
 		foreach ($user_list as $user) {
@@ -383,13 +383,13 @@ else
 	Display::display_error_message(get_lang('AccessNotAllowed'));
 }
 $referer = empty($_GET['referer'])?'index.php':api_htmlentities(strip_tags($_GET['referer']),ENT_QUOTES,$charset);
-echo '<div class="actions">';
+
 if (isset($_GET['id'])) {
 	echo '<a href="whoisonline.php" class="fake_button_back">'.get_lang('Back').'</a>';	
 } else {
 	echo '<a href="'.$referer.'" class="fake_button_back">'.get_lang('BackHome').'</a>';	
 } 
-echo '</div>';
+
 /*
 ==============================================================================
 		FOOTER

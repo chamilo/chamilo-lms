@@ -94,7 +94,7 @@ Display::display_header($nameTools,"Exercise");
 
 ?>
 <div class="actions">
-<a href="exercice.php?cidReq=<?php echo $_GET['cidReq'] ?>&show=result"><< <?php echo get_lang('Back') ?></a>
+<a href="exercice.php?cidReq=<?php echo $_GET['cidReq'] ?>&show=result"><img src="../img/back.png"/><?php echo get_lang('BackToResultList') ?></a>
 </div>
 <table class="data_table">
 		 <tr class="row_odd">

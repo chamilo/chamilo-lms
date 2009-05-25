@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20980 2009-05-25 21:24:28Z aportugal $
+// $Id: exercice.php 20982 2009-05-25 22:49:12Z aportugal $
 
 /*
 ==============================================================================
@@ -1319,18 +1319,19 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 				echo '<td>';
 				if ($is_allowedToEdit || $is_tutor) {
 					if ($revised) {
-						echo "<a href='exercise_show.php?action=edit&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>";
-						echo get_lang('Edit');
+						echo "<a href='exercise_show.php?action=edit&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".Display :: return_icon('edit.gif', get_lang('Edit'));
+						echo '&nbsp;';
 					} else {
-						echo "<a href='exercise_show.php?action=qualify&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>";
-						echo get_lang('Qualify');
+						echo "<a href='exercise_show.php?action=qualify&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".Display :: return_icon('quizz_small.gif', get_lang('Qualify'));
+						echo '&nbsp;';
 					}
 					echo "</a>";
 
 					if (api_is_platform_admin() || $is_tutor)
-						echo ' - <a href="exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">' . get_lang('Delete') . '</a>';
+						echo ' <a href="exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.gif', get_lang('Delete')).'</a>';
+						echo '&nbsp;';
 					if ($is_allowedToEdit)
-						echo ' - <a href="exercice_history.php?cidReq=' . security::remove_XSS($_GET['cidReq']) . '&exe_id=' . $id . '">' . get_lang('ViewHistoryChange') . '</a>';
+						echo ' <a href="exercice_history.php?cidReq=' . security::remove_XSS($_GET['cidReq']) . '&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
 				} else {
 					if ($revised)
 						echo "<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>" . get_lang('Show') . "</a> ";

@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20952 2009-05-23 20:43:53Z cvargas1 $
+* 	@version $Id: exercise_show.php 20982 2009-05-25 22:49:12Z aportugal $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -903,7 +903,7 @@ if ($show_results) {
 				echo get_lang('EditCommentsAndMarks'); 
 			} else {
 				if ($action=='edit') {
-					echo get_lang('EditIndividualComment');
+					echo '<img src="../img/edit.gif"/>'.get_lang('EditIndividualComment');
 				} else {
 					echo get_lang('AddComments');
 				}

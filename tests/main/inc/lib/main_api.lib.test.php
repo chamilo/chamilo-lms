@@ -1,12 +1,11 @@
-<?php
-require_once(api_get_path(LIBRARY_PATH).'main_api.lib.php');
+<?php //$id:$
+
 
 class TestMainApi extends UnitTestCase {
 	
 	function TestMainApi() {
         $this->UnitTestCase('Main API tests');
     }
-
 // todo function testApiProtectCourseScriptReturnsFalse()
 // todo function testApiProtectAdminScriptReturnsFalse()
 // todo function testApiBlockAnonymousUsers()
@@ -113,8 +112,44 @@ class TestMainApi extends UnitTestCase {
 // todo function testApiUrlToLocalPathReturnString()
 // todo function testApiResizeImage()
 // todo function testApiCalculateImageSizeReturnArray()
-	
-//	function testApiGetSettingReturnsRightValue() {
+	/**
+	 * Test out of a course context
+	 */
+/*	function testApiProtectCourseScriptReturnsFalseWhenOutOfCourseContext(){
+		$res= api_protect_course_script();
+		$this->assertTrue($res);
+		}
+	function testApiGetSettingReturnsRightValue() {
 	 	//$this->assertPattern('/\d/',$res);
-//	}
+	}
 }
+	/**
+	 * Test out of a Admin context
+	 
+	 function testApiProtectAdminScriptReturnsFalseWhenOutOfCourseContext(){
+	 	$res= api_protect_admin_script();
+	 	$this->assertTrue($res);
+	 }
+	 
+	 function testApiBlockAnonymousUsersReturnTrueWhenUserIsAnonymous(){
+	 	$res=api_block_anonymous_users();
+	 	$this->assertTrue($res);
+	 	
+	 }
+
+
+	 function testApiGetNavigator()
+	 {	
+	 	
+	 		
+	 }
+*/
+	function testApiIsSelfRegistrationAllowed()
+	{
+		$res = api_is_self_registration_allowed(); 
+		$this->assertFalse($res);
+	}
+	
+}
+
+?>

@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 20795 2009-05-18 18:05:02Z iflorespaz $
+* 	@version $Id: exercise.class.php 20975 2009-05-25 18:09:56Z cvargas1 $
 */
 
 
@@ -1035,9 +1035,9 @@ class Exercise
 				
 	  			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
 	            	$defaults['enabletimelimit'] = 1;
-			    
+	    
 			    $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00')? $this -> start_time : date('Y-m-d 12:00:00');
-	            $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00');
+	            $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00',time()+84600);
 	            
 			} else {
 				$defaults['exerciseType'] = 2;
@@ -1048,7 +1048,7 @@ class Exercise
 				$defaults['results_disabled'] = 0;
 				
 				$defaults['start_time'] = date('Y-m-d 12:00:00');
-				$defaults['end_time'] = date('Y-m-d 12:00:00');
+				$defaults['end_time'] = date('Y-m-d 12:00:00',time()+84600);
 			}
 		} else {
 			$defaults['exerciseTitle'] = $this -> selectTitle();

@@ -2074,3 +2074,10 @@ button.arrowl {
 	padding-left:20px;
 	padding-bottom:2px;
 }
+.portal {
+	background-image:url(images/portal.png);
+	background-repeat:no-repeat;
+	padding-left:28px;
+	padding-bottom:10px;
+	padding-top:8px;
+}

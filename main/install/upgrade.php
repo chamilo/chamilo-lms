@@ -588,7 +588,7 @@ class ActionProcess extends HTML_QuickForm_Action
 		echo '</pre>';
 		$page->controller->container(true);
 		?>
-		<a href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
+		<a class="portal" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
         </div>
 		</body>
 		</html>

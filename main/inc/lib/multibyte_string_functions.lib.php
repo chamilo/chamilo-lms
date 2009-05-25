@@ -1322,14 +1322,7 @@ function api_iconv_present() {
 	if (!is_null($iconv_present)) {
 		return $iconv_present;
 	}
-	// I don't want to spoil the code with ugly strings.
-	$test_string = '';
-	for ($i = 32; $i < 128; $i++) {
-		$test_string .= chr($i);
-	}
-	$iconv_present = (function_exists('iconv') &&
-		@iconv('UTF-16LE', 'ISO-8859-1',
-			@iconv('ISO-8859-1', 'UTF-16LE', $test_string)) == $test_string) ? true : false;
+	$iconv_present = function_exists('iconv') ? true : false;
 	return $iconv_present;
 }
 

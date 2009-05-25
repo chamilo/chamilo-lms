@@ -179,9 +179,6 @@ if (empty($charset)) {
 api_mb_internal_encoding($charset);
 api_mb_regex_encoding($charset);
 api_iconv_set_encoding('iconv_internal_encoding', $charset);
-// For now the following two lines have been identified as useless.
-//api_iconv_set_encoding('iconv_input_encoding', $charset);
-//api_iconv_set_encoding('iconv_output_encoding', $charset);
 
 /*
 --------------------------------------------
@@ -426,7 +423,6 @@ else
 		}
 	}
 }
-
 
 
 /*

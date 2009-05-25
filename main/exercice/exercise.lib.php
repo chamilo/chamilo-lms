@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 20952 2009-05-23 20:43:53Z cvargas1 $
+<?php // $Id: exercise.lib.php 20971 2009-05-25 14:41:11Z juliomontoya $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 20952 2009-05-23 20:43:53Z cvargas1 $
+* 	@version $Id: exercise.lib.php 20971 2009-05-25 14:41:11Z juliomontoya $
 */
 
 /**
@@ -164,25 +164,40 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				preg_match_all('/\[[^]]+]/',$answer,$matches);										
 				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="@@">',($answer));								
 				
-				// 4. resize the input				
-				foreach($matches[0] as $match) {					
-					$answer_len = strlen($match)-2;					
-					//we will only replace 1 item 
-					// echo implode("replace term", explode("search term", "input", $limit));					
-					if ($answer_len <= 5) {
-						$answer = (implode("5", explode("@@", $answer, 2)));												
-					} elseif($answer_len <= 10) {
-						$answer = (implode("10", explode("@@", $answer, 2)));												
-					} elseif($answer_len <= 20) {
-						$answer = (implode("20", explode("@@", $answer, 2)));
-					} elseif($answer_len <= 30) {
-						$answer = (implode("30", explode("@@", $answer, 2)));
-					} elseif($answer_len <= 40) {
-						$answer = (implode("40", explode("@@", $answer, 2)));						
-					} elseif($answer_len > 40) {
-						$answer = (implode("55", explode("@@", $answer, 2))); 
-					}			
+				// 4. resize the input		
+				
+				 
+				  foreach($matches[0] as $match) {
+				        $answer_len = strlen($match)-2;
+				        //we will only replace 1 item 
+				        // echo implode("replace term", explode("search term", "input", $limit));                                       
+				        if ($answer_len <= 5) {
+				                $answer = (implode("5", explode("@@", $answer, 2)));
+				        } elseif($answer_len <= 10) {
+				                $answer = (implode("10", explode("@@", $answer, 2)));
+				        } elseif($answer_len <= 20) {
+				                $answer = (implode("20", explode("@@", $answer, 2)));
+				        } elseif($answer_len <= 30) {
+				                $answer = (implode("30", explode("@@", $answer, 2)));
+				        } elseif($answer_len <= 40) {
+				                $answer = (implode("45", explode("@@", $answer, 2)));
+				        } elseif($answer_len <= 50) {
+				                $answer = (implode("60", explode("@@", $answer, 2)));
+				        } elseif($answer_len <= 60) {
+				                 $answer = (implode("70", explode("@@", $answer, 2)));
+				        } elseif($answer_len <= 70) {
+				                 $answer = (implode("80", explode("@@", $answer, 2)));
+				        } elseif($answer_len <= 80) {
+				                 $answer = (implode("90", explode("@@", $answer, 2)));
+				        } elseif($answer_len <= 90) {
+				                 $answer = (implode("100", explode("@@", $answer, 2)));
+				        } elseif($answer_len <= 100) {
+				                 $answer = (implode("110", explode("@@", $answer, 2)));
+				        } elseif($answer_len > 100 ) {
+				                $answer = (implode("120", explode("@@", $answer, 2)));
+				        }
 				}
+
 				*/
 				
 				// 5. replace the {texcode by the api_pare_tex parsed code}				

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 18330 2009-02-07 17:57:59Z iflorespaz $
+<?php // $Id: index.php 20962 2009-05-25 03:15:53Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -23,8 +23,8 @@
 ==============================================================================
 */
 $language_file= 'messages';
-include_once('../inc/global.inc.php');
-include (api_get_path(LIBRARY_PATH).'message.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 api_block_anonymous_users();
 
 if (api_get_setting('allow_message_tool')!='true'){

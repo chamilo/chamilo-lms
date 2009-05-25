@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 20722 2009-05-16 13:22:42Z iflorespaz $
+<?php // $Id: new_message.php 20962 2009-05-25 03:15:53Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -38,7 +38,7 @@
 // name of the language file that needs to be included
 $language_file= 'messages';
 $cidReset=true;
-include_once('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
 
@@ -48,8 +48,8 @@ if (api_get_setting('allow_message_tool')!='true'){
 
 
 require_once'../messages/message.class.php';
-require_once(api_get_path(LIBRARY_PATH).'/text.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH).'/text.lib.php';
+require_once api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php';
 $request=api_is_xml_http_request();
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 /*

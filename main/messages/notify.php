@@ -1,4 +1,4 @@
-<?php  // $Id: notify.php 17903 2009-01-21 19:50:57Z juliomontoya $
+<?php  // $Id: notify.php 20962 2009-05-25 03:15:53Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -22,8 +22,8 @@
     Mail: info@dokeos.com
 ==============================================================================
 */
-  include_once('../inc/global.inc.php');
-  require_once(api_get_path(LIBRARY_PATH).'message.lib.php');
+  require_once '../inc/global.inc.php';
+  require_once api_get_path(LIBRARY_PATH).'message.lib.php';
   header("Cache-Control: no-cache, must-revalidate");
   echo get_new_messages();
 ?>

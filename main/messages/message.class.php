@@ -21,8 +21,8 @@
 	
 ==============================================================================
 */
-include_once(api_get_path(LIBRARY_PATH).'/main_api.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'/online.inc.php');
+require_once api_get_path(LIBRARY_PATH).'/main_api.lib.php';
+require_once api_get_path(LIBRARY_PATH).'/online.inc.php';
 class MessageManager {	
 	function MessageManager() {
 		

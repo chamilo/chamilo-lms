@@ -46,7 +46,7 @@ function register_friend(element_input) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("#id_response").html("'.get_lang('Loading', '').'"); },
+		$("#id_response").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
 		url: "../social/register_friend.php",
 		data: "friend_id="+user_friend_id,
@@ -64,7 +64,7 @@ function denied_friend (element_input) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("#id_response").html("'.get_lang('Loading', '').'"); },
+		$("#id_response").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
 		url: "../social/register_friend.php",
 		data: "denied_friend_id="+friend_user_id,
@@ -153,7 +153,7 @@ function search_image_social(element_html)  {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("#div_content_table").html("'.get_lang('Searching', '').'"); },
+		$("#div_content_table").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
 		url: "../social/show_search_image.inc.php",
 		data: "search_name_q="+name_search,
@@ -240,7 +240,7 @@ function get_action_url_and_show_messages (name_rs,name_id) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_response").html("'.get_lang('Loading', '').'"); },
+			$("div#div_content_messages").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 			type: "GET",
 			url: "../messages/view_message.php",
 			data: "rs="+name_rs+"&id="+name_id,
@@ -255,7 +255,7 @@ function close_div_show (my_div) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_response").html("'.get_lang('Loading', '').'"); },
+			$("div#div_content_table_data").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 			type: "POST",
 			url: "../messages/inbox.php",
 			data:"",
@@ -271,7 +271,7 @@ function reply_to_messages (my_action,name_rs,name_id) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_response").html("'.get_lang('Loading', '').'"); },
+			$("div#div_content_messages").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 			type: "GET",
 			url: "../messages/new_message.php",
 			data:"re_id="+name_rs+"&id="+name_id,
@@ -288,7 +288,7 @@ function compose_and_show_message (my_action,name_rs) {
 			$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_response").html("'.get_lang('Loading', '').'"); },
+			$("div#div_content_messages").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 			type: "GET",
 			url: "../messages/new_message.php",
 			data:"rs="+name_rs,
@@ -343,7 +343,7 @@ function delete_one_message (num_id) {
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {
-				/*$("#id_div_search").html("Searching...");*/ },
+				$("#div_content_table_data").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 				type: "GET",
 				url: "../messages/inbox.php",
 				data: "action="+"deleteone"+"&id="+num_id,
@@ -358,7 +358,7 @@ function show_sent_message (id_sent) {
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {
-				/*$("#id_div_search").html("Searching...");*/ },
+				$("#div_content_table_data_sent").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 				type: "GET",
 				url: "../messages/view_message.php",
 				data: "rs="+"1"+"&id_send="+id_sent,
@@ -373,7 +373,7 @@ function close_and_open_outbox() {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_response").html("'.get_lang('Loading', '').'"); },
+			$("div#div_content_table_data_sent").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 			type: "POST",
 			url: "../messages/outbox.php",
 			data:"",
@@ -388,7 +388,7 @@ function delete_one_message_outbox (num_id) {
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {
-				/*$("#id_div_search").html("Searching...");*/ },
+				$("#div_content_table_data_sent").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 				type: "GET",
 				url: "../messages/outbox.php",
 				data: "action="+"deleteone"+"&id="+num_id,

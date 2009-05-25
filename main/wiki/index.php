@@ -1141,7 +1141,7 @@ if ($_GET['action']=='addnew')
 
 /////////////////////// show home page ///////////////////////
 
-if (!$_GET['action'] OR $_GET['action']=='show' AND !$_POST['SaveWikiNew'])
+if (!$_GET['action'] OR $_GET['action']=='show' AND !isset($_POST['SaveWikiNew']))
 {
 	display_wiki_entry();
 }
@@ -1149,7 +1149,7 @@ if (!$_GET['action'] OR $_GET['action']=='show' AND !$_POST['SaveWikiNew'])
 
 /////////////////////// show current page ///////////////////////
 
-if ($_GET['action']=='showpage' AND !$_POST['SaveWikiNew'])
+if ($_GET['action']=='showpage' AND !isset($_POST['SaveWikiNew']))
 {    
 	display_wiki_entry();	
 }
@@ -2398,21 +2398,6 @@ function save_new_wiki() {
 **/
 function display_new_wiki_form()
 {
-    
-	?>
-	<script language="JavaScript" type="text/JavaScript"> 
-    <!-- 
-    function Send(form) 
-    { 
-        if (form.title.value == "") 
-        {   
-            alert("<?php echo get_lang('NoWikiPageTitle');?>"); form.title.focus();return false; 
-        }   
-            form.submit(); 
-    } 
-    //--> 
-    </script>
-	<?php
 	echo '<form name="form1" method="post" action="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
 	echo '<div id="wikititle">';
 	echo  '<span class="form_required">*</span> '.get_lang(Title).': <input type="text" name="title" value="'.urldecode($_GET['title']).'">';
@@ -2452,7 +2437,7 @@ function display_new_wiki_form()
 	   </select> %';
 	echo '<br/><br/>'; 
 	echo '<input type="hidden" name="SaveWikiNew" value="'.get_lang('langSave').'">'; //for save icon
-	echo '<button class="save" type="submit" name="SaveWikiNew" " onClick="return Send(this.form)">'.get_lang('langSave').'</button>'; 	//for button icon
+	echo '<button class="save" type="submit" name="SaveWikiNew">'.get_lang('langSave').'</button>';//for button icon
 	echo '</div>';
 	echo '</form>';
 }

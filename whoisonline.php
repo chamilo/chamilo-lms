@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 20961 2009-05-24 22:06:43Z iflorespaz $
+<?php // $Id: whoisonline.php 20973 2009-05-25 17:35:02Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -349,7 +349,7 @@ if ((api_get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR 
 		echo '</div>';
 		echo '<div class="actions-message">'.get_lang('TotalOnLine').' : '.$total.'</div>';
 		if ($_GET['id']=='') {
-			echo '<p><a href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
+			echo '<p><a class="refresh" href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
 		} else {
 			if(0) // if ($_user['user_id'] && $_GET["id"] != $_user['user_id'])
 			{

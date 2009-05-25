@@ -2781,3 +2781,9 @@ button.arrowl {
 .u-m-answer p {
 	margin:2px;
 }
+.refresh {
+	background-image:url(images/refresh.png);
+	background-repeat:no-repeat;
+	padding-left:20px;
+	padding-bottom:2px;
+}

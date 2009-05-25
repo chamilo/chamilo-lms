@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Công cụ";
-$langDownloadFile = "Upload bài";
+$SendWork = "Upload bài";
 $langTooBig = "Bạn chưa chọn file hoặc file quá lớn.";
 $langListDeleted = "Đã xoá tất cả.";
 $langDocModif = "tên bài đã sửa";

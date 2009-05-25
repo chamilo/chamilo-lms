@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Værktøjer";
-$langDownloadFile = "Læg dokument ud";
+$SendWork = "Læg dokument ud";
 $langTooBig = "Du valgte ikke en fil, eller filen er for stor.";
 $langListDeleted = "Hele listen er blevet slettet.";
 $langDocModif = "dokumentets titel er blevet ændret";

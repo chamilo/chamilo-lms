@@ -112,4 +112,5 @@ $ExtensionMySQLNotAvailable = "Extensão MySQL não disponível";
 $DokeosArtLicense = "As imagens e a galeria de media de Dokeos são retiradas da galeria de ícones Crystal Clear e Tango. Outras imagens e media, tal como diagramas e animações em flash, foram cedidas por Wikimedia e pelos cursos de Ali Pakdel e Denis Hoa com o seu consentimento e disponibilizadas sob licença de BY-SA Creative Commons. Pode verificar mais detalhes desta licença em <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\"> CC website</a>, onde encontrará uma ligação no rodapé que o orientará para a versão integral da licença.";
 $PleasGoBackToStep1 = "Por favor, volte para a etapa 1";
 $OptionalParameters = "Parâmetros opcionais";
+$EncryptMethodUserPass = "Método de encriptação";
 ?>

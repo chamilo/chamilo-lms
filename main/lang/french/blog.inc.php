@@ -63,6 +63,7 @@ $InBlog = "dans le projet";
 $ViewPostsOfThisDay = "Regarder les articles du jour";
 $PostsOf = "Articles de";
 $NoArticleMatches = "Nous n\'avons pas trouvé d\'articles correspondant à vos critères de recherche. Vérifiez l\'orthographe  ou effectuez une recherche plus large.";
+$SaveProject = "Enregistrer le projet";
 $langTask1 = "Tâche 1";
 $langTask2 = "Tâche 2";
 $langTask3 = "Tâche 3";

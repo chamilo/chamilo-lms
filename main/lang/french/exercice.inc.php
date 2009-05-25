@@ -85,6 +85,7 @@ $langCorrespondsTo = "Correspond à";
 $langExpectedChoice = "Choix attendu";
 $langYourTotalScore = "Vous avez obtenu un total de";
 $ReachedMaxAttemptsAdmin = "Vous avez atteint le nombre maximum de tentatives pour cet exercice. En tant qu\'administrateur de ce cours, vous pouvez toutefois essayer à nouveau, mais veuillez noter que vos résultats ne s\'afficheront pas sur la page de résultats.";
+$langExerciseAdded = "Exercice ajouté";
 $Build = "Construire";
 $langEvalSet = "Paramètres d\'évaluation";
 $langActive = "actif";

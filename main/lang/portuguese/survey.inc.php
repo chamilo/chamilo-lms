@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$PublishSurvey = "Publicar questionário";
 $SurveyTitle = "Título do Questionário";
 $SurveyIntroduction = "Introdução do Questionário";
 $CreateNewSurvey = "Criar Questionário";
@@ -167,4 +168,15 @@ $IdenticalSurveycodeWarning = "O código do questionário já existe. Isso pode sig
 $ThisSurveyCodeSoonExistsInThisLanguage = "O código do questionário já existe neste idioma";
 $SurveyUserAnswersHaveBeenRemovedSuccessfully = "As respostas do utilizador foram removidas do questionário";
 $DeleteSurveyByUser = "Eliminar as respostas deste utilizador neste questionário";
+$SelectType = "Seleccionar tipo";
+$Conditional = "Condicional";
+$PersonalityQuestion = "Editar questão";
+$Create = "Criar";
+$Personality = "Personalizar";
+$Condition = "Condição";
+$Version = "Versão";
+$Normal = "Normal";
+$ModifySurvey = "Editar questionário";
+$CreateQuestionSurvey = "Criar questão";
+$ModifyQuestionSurvey = "Editar questão";
 ?>

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Alat Bantu";
-$langDownloadFile = "Muatnaik Tugasan";
+$SendWork = "Muatnaik Tugasan";
 $langTooBig = "Anda tidak memilih sebarang fail/saiz fail terlalu besar.";
 $langListDeleted = "Keseluruhan senarai telah dipadam.";
 $langDocModif = "Tajuk tugasan diubahsuai";

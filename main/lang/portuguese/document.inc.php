@@ -59,6 +59,7 @@ $langTocDown  = "Abaixo";
 $langTocUp  = "Acima";
 $lang_cut_paste_link = "Sem frames";
 $langCreatePath = "Criar uma rota";
+$SendDocument = "Enviar ficheiro";
 $langOogieConversionPowerPoint = "Oogie : conversão de PowerPoint";
 $langWelcomeOogieSubtitle = "Conversor de PowerPoint para Sequência de Aprendizagem";
 $langAddMetadata = "Ver/Editar Metadata";

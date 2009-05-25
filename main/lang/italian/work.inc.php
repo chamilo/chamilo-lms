@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Strumenti";
-$langDownloadFile = "Carica il documento";
+$SendWork = "Carica il documento";
 $langTooBig = "Non è stato selezionato nessun documento o la dimensione è eccessiva.";
 $langListDeleted = "L\'elenco è stato eliminato completamente.";
 $langDocModif = "Il titolo del documento è stato modificato";

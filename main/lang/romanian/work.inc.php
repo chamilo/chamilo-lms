@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Unelte";
-$langDownloadFile = "Incarcati fisierul";
+$SendWork = "Incarcati fisierul";
 $langTooBig = "Nu ati selectat nici un fisier, sau acesta este prea mare.";
 $langListDeleted = "Lista a fost stearsa";
 $langDocModif = "Titlul a fost modificat";

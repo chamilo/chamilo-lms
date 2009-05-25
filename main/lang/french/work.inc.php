@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Outils";
-$langDownloadFile = "Document";
+$SendWork = "Document";
 $langTooBig = "Vous n\'avez pas choisi de document à importer ou bien le document est trop gros.";
 $langListDeleted = "La liste a été complètement effacée";
 $langDocModif = "Le document a été modifié";
@@ -70,4 +70,5 @@ $ButtonCreateAssignment = "Créer";
 $AssignmentName = "Nom de la tâche";
 $CreateAssignment = "Créer tâche";
 $FolderEdited = "Répertoire mis à jour";
+$UpdateWork = "Mettre le document à jour";
 ?>

@@ -51,4 +51,9 @@ $SelectEverybody = "Valitse kaikki";
 $SelectedUsersGroups = "valitut käyttäjä ryhmät";
 $LearnerMessage = "Viesti opiskelijalta";
 $TitleIsRequired = "Otsikko täytyy olla";
+$AnnounceSentByEmail = "Ilmoitus lähetetty sähköpostilla";
+$AnnounceSentToUserSelection = "Ilmoitus lähetetty valituille käyttäjille";
+$SendAnnouncement = "Lähetä ilmoitus";
+$ModifyAnnouncement = "Muokkaa ilmoitusta";
+$ButtonPublishAnnouncement = "Lähetä ilmoitus";
 ?>

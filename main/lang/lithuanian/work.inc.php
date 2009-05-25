@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Įrankiai";
-$langDownloadFile = "Įkrauti failą";
+$SendWork = "Įkrauti failą";
 $langTooBig = "Jūs nepasirinkote failo arba failas per didelis.";
 $langListDeleted = "Visas sąrašas ištrintas.";
 $langDocModif = "dokumento pavadinimas modifikuotas";

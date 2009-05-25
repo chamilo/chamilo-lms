@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Eszközök";
-$langDownloadFile = "Fájl feltöltése";
+$SendWork = "Fájl feltöltése";
 $langTooBig = "Nem választott ki egy fájlt sem vagy a fájl mérete túl nagy.";
 $langListDeleted = "A teljes lista törölve.";
 $langDocModif = "papír címe megváltoztatva";

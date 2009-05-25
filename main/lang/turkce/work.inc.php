@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Araçlar";
-$langDownloadFile = "Belge yükle";
+$SendWork = "Belge yükle";
 $langTooBig = "Bir dosya seçmediniz veya çok büyük.";
 $langListDeleted = "Tüm liste silindi.";
 $langDocModif = "belge ba&#351;l&#305;&#287;&#305; de&#287;i&#351;tirildi";

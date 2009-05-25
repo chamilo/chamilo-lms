@@ -45,6 +45,7 @@ $langStudentsNotInThisGroups  = "Utilizadores que não fazem parte deste grupo";
 $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Cada utilizador pode fazer parte, no máximo, de ";
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " grupo(s)";
 $langGroupLimit = "Limites";
+$CreateGroup = "Criar grupo(s)";
 $langStudentRegAllowed = "Os estudantes podem inscrever-se no grupo que quiserem";
 $langGroupAllowStudentUnregistration = "Permitir anular inscrição";
 $langAllGroups = "Todos os grupos";

@@ -114,4 +114,5 @@ $ResourceType = "Tipo de recurso";
 $GradebookWhoChangedItLog = "Quem o alterou";
 $EvaluationEdited = "A avaliação foi alterada";
 $CategoryEdited = "Categoria actualizada";
+$OnlyNumbers = "Somente números";
 ?>

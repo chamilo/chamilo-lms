@@ -27,6 +27,9 @@ $langCatList  = "Aihealueet";
 $langCourseList  = "Kurssit";
 $Subscribe = "Ilmoittaudu";
 $AlreadySubscribed = "Olet jo ilmoittautunut";
+$CodeMandatory = "Koodi on pakollinen";
+$CourseCategoryMandatory = "Kurssi kategoria on pakollinen";
+$TeacherMandatory = "Opettaja on pakollinen";
 $CourseCategoryStored = "Aiheryhmä luotu";
 $langWithoutTimeLimits = "Ei aikarajoitusta";
 $lang_back_to_main_category_list = "Takaisin alkuun";
@@ -69,4 +72,7 @@ $SubmitRegistrationCode = "Syötä rekisteröinti koodi";
 $CourseCategoryDeleted = "Kurssi kategoria on poistettu";
 $CategorySortingDone = "Kategorioiden lajittelu valmis";
 $CourseCategoryEditStored = "Kategoria päivitetty";
+$buttonCreateCourseCategory = "Tallenna kategoria";
+$buttonSaveCategory = "Tallenna kategoria";
+$buttonChangeCategory = "Muuta kategoria";
 ?>

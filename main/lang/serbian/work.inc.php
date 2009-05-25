@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Alati";
-$langDownloadFile = "U&#269;itaj fajl";
+$SendWork = "U&#269;itaj fajl";
 $langTooBig = "Niste selektovali fajl ili je fajl preveliki";
 $langListDeleted = "Cela lista je obrisana.";
 $langDocModif = "naslov rada je izmenjen";

@@ -245,4 +245,6 @@ $RandomQuestionsHelp = "Número de questões aleatórias a mostrar; deixar o valor 
 $ExerciseAttempts = "Número máximo de tentativas";
 $DoNotRandomize = "Não desordenar";
 $Infinite = "Infinito";
+$Difficulty = "Dificuldade";
+$QuestionsPerPageOne = "Uma questão por página";
 ?>

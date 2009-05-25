@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Ferramientes";
-$langDownloadFile = "Unviar el documentu";
+$SendWork = "Unviar el documentu";
 $langTooBig = "Nun escoyó l\'archivu que quier unviar o l\'archivu ye más grande de la cuenta.";
 $langListDeleted = "El llistáu esborróse dafechu.";
 $langDocModif = "El documentu modificóse";

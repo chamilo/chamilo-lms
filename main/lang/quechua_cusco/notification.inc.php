@@ -12,10 +12,10 @@ $lang_new_exercise = "musuq llank\'ayna hapipanapaq";
 $lang_update_link = "wataq kunanyachisqa";
 $lang_new_link = "musuq mataq yapasqa";
 $lang_new_forum_topic = "musuq ima rimaymanta yapasqa";
-$lang_new_groupforum_topic = "musuq rimana yapakun huñusqakunaq rimarinaman";
+$lang_new_groupforum_topic = "musuq rimana yapakun huñusqakunaq k\'itirimanaman";
 $lang_new_dropbox_file = "musuq khipu chaskisqa";
 $lang_update_dropbox_file = "hoq khipu khipuykikuna t\'aqapasqaykimanta kunanyachikun";
-$ForumCategoryAdded = "Yapachikunña rimarinamanta hoq mita";
+$ForumCategoryAdded = "yapachikunña k\'itirimarinamanta hoq mita";
 $LearnpathAdded = "Yachana yapasqa";
 $GlossaryAdded = "Musuq simi yaspasqa Glosario nisqaman";
 ?>

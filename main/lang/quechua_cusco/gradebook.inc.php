@@ -1,4 +1,151 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ModifyEvaluation = "T\'ijray chaninchanata";
+$CreateLink = "Kamay waskhanata";
+$FlatView = "P\'alta qhawariy";
+$ScoreEdit = "Ruwapay markana kamachiykunanpaq";
+$ScoreColor = "Markaq llinphin";
+$ScoringSystem = "Sistema de puntuación";
+$EnableScoreColor = "Activar el coloreado de las puntuaciones";
+$Below = "Por debajo de";
+$WillColorRed = "pukaman lliphichikunqa";
+$EnableScoringSystem = "Activar el sistema de puntuación";
+$IncludeUpperLimit = "Incluir el límite superior";
+$ScoreInfo = "Markanamanta willa";
+$Between = "Entre";
+$CurrentCategory = "Kunan kaq mita";
+$RootCat = "Qallariq mita";
+$NewCategory = "Musuq mita";
+$NewEvaluation = "Musuq chaninchana";
+$Weight = "Peso";
+$PickACourse = "Ajllay hoq yachachinata";
+$CategoryName = "Mitaq sutin";
+$CourseIndependent = "Yachachinamanta aywaq";
+$CourseIndependentEvaluation = "Yachachinamanta aywaq chaninchana";
+$EvaluationName = "Chaninchanaq sutin";
+$Max = "Máx";
+$DateEval = "Chaninchanapaq pacha";
+$AddUserToEval = "Yapay yachaqeta chaninchanaman";
+$NewSubCategory = "Nueva subcalificación";
+$MakeLink = "Kamay hoq waskhanata";
+$DeleteSelected = "Pichay ajllasqata";
+$SetVisible = "Qhawarichiy";
+$SetInvisible = "Pakay";
+$ChooseLink = "Ajllay ima niraq wskhanata";
+$DokeosExercises = "Llank\'aynakuna";
+$DokeosDropbox = "T\'aqapay qelqa khipukunata";
+$DokeosStudentPublications = "Llank\'aykuna";
+$DokeosLearningPaths = "Yachanakuna";
+$ChooseExercise = "Ajllay hoq llank\'aynata";
+$AddResult = "Añadir resultados";
+$BackToOverview = "Kutin lliw Qhawanaman";
+$ExportPDF = "Apachiy PDF nisqaman";
+$Print = "Ñit\'iy";
+$ChooseOrientation = "Ajllay imayna kananpaq";
+$Portrait = "Vertical";
+$Landscape = "Horizontal";
+$FilterCategory = "Suysuy sapanka chaninchanata";
+$DeleteAll = "Pichay llapanta";
+$ScoringUpdated = "Marka kunanyachisqa";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifica que\\
+\\
+ %s \\
+\\
+ha realizado el curso \\
+\\
+ \'%s\' \\
+\\
+con la calificación de\\
+\\
+ \'%s\'";
+$CertificateMinScore = "Puntuación mínima de certificación";
+$CategoryAdded = "Mita yapasqa";
+$InViMod = "Este apartado ya no es visible";
+$ViMod = "El apartado ha sido hecho visible";
+$ViewResult = "Ver resultados";
+$NoUser = "Mana haykuqmasikunayuq";
+$NoResultsInEvaluation = "Kunanaqa manan kashanchu chaninchaymanta imakunapas";
+$AddStudent = "Yapay haykuqmasikunata";
+$ImportResult = "Importar resultados";
+$Score = "Puntuación";
+$ImportFileLocation = "Ubicación del fichero a importar";
+$Location = "Localización";
+$FileType = "Tipo de fichero";
+$ExampleCSVFile = "Fichero CSV de ejemplo";
+$ExampleXMLFile = "Fichero XML de ejemplo";
+$OverwriteScores = "Sobrescribir puntuaciones";
+$IgnoreErrors = "Saqey pantasqakunata";
+$ItemsVisible = "Los elementos han sido hechos visibles";
+$ItemsInVisible = "Los elementos han sido hechos invisibles";
+$NoItemsSelected = "No hay seleccionado ningún elemento";
+$DeletedCategories = "Mitakuna pichasqa";
+$DeletedEvaluations = "Chaninchanakuna pichasqa";
+$DeletedLinks = "Waskhanakuna pichasqa";
+$TotalItems = "Total de elementos";
+$LinkAdded = "Waskhana yapasqa";
+$LinkDeleted = "Waskhana pichasqa";
+$EditEvaluation = "Ruwapay chaninchanata";
+$DeleteResult = "Eliminar resultado";
+$Display = "T\'aqa";
+$Average = "Media";
+$ViewStatistics = "Qhaway yupanakunata";
+$ResultAdded = "Resultado añadido";
+$EvaluationStatistics = "Chaninchanamanta yupanakuna";
+$ExportResult = "Exportar resultados";
+$EditResult = "Editar resultados";
+$GradebookWelcomeMessage = "Bienvenido a la utilidad Cuaderno de calificaciones. Esta herramienta le permite establecer los objetivos que se deben alcanzar en un curso o conjunto de cursos, así como introducir puntuaciones externas en el sistema.";
+$CreateAllCat = "Generar calificaciones para todos mis cursos";
+$AddAllCat = "Llapan mitakuna yapachikun";
+$StatsStudent = "Estadísticas de";
+$Results = "Resultados";
+$Certificates = "Certificados";
+$Certificate = "Certificado";
+$ChooseUser = "Seleccionar usuarios para esta evaluación";
+$FirstLetter = "Primera letra del apellido";
+$UserAdded = "Haykuqmasi yapasqa";
+$ResultEdited = "Resultado actualizado";
+$ChooseFormat = "Ajllay formato nisqata";
+$OutputFileType = "Tipo de fichero de salida";
+$OverMax = "El valor que ha intentado guardar es superior al límite máximo establecido para esta evaluación.";
+$MoreInfo = "Más información";
+$ResultsPerUser = "Resultados por usuario";
+$TotalUser = "Total por usuario";
+$AverageTotal = "Media total";
+$Evaluation = "Chaninchana";
+$EvaluationAverage = "Media de la evaluación";
+$EditCategory = "Editar calificación";
+$EditAllWeights = "Ruwapay llapan llasakunata";
+$GradebookQualificationTotal = "Total";
+$GradebookEvaluationDeleted = "La evaluación ha sido eliminada";
+$GradebookQualifyLog = "Historial de pesos del cuaderno";
+$GradebookNameLog = "Pataraq sutin";
+$GradebookDescriptionLog = "Pataraq nisqaynin";
+$GradebookVisibilityLog = "Pataraq wha";
+$ResourceType = "Ima niraq yachachina";
+$GradebookWhoChangedItLog = "Pin t\'ijrapachiran";
+$EvaluationEdited = "La evaluación ha sido modificada";
+$CategoryEdited = "Calificación actualizada";
+$OnlyNumbers = "Yupakunallata";
+$IncorrectData = "Dato incorrecto";
+$Resource = "Yanapaysina";
+$PleaseEnableScoringSystem = "Porfavor activar sistema de puntuación";
+$AllResultDeleted = "Todos los resultados han sido eliminados";
+$ImportNoFile = "Mana apachimunkichu ima khiputapas";
+$ProblemUploadingFile = "Khipuyki apachiykiqa pantarunmi. Mana imapas chaskikunchu";
+$AllResultsEdited = "Todos los resultados han sido modificados";
+$UserInfoDoesNotMatch = "Manan kuskachakunchu haykuqmasiq willanwan";
+$ScoreDoesNotMatch = "Markaqa manan kuskachakunchu";
+$FileUploadComplete = "Khipuqa allintan wichachikun";
+$NoResultsAvailable = "No hay resultados disponibles";
+$CannotChangeTheMaxNote = "No se puede cambiar la nota máxima";
+$GradebookWeightUpdated = "Peso(s) modificado(s) correctamente";
+$ChooseItem = "Ajllay hoq item nisqata";
+$AverageResultsVsResource = "Promedio de resultados contra recursos";
+$ToViewGraphScoreRuleMustBeEnabled = "La vista de regla de puntuación gráfica debe estar habilitada";
+$GradebookPreviousWeight = "Peso anterior del recurso";
+$AddAssessment = "Añadir evaluación";
+$FolderView = "Principal Evaluaciones";
+$GradebookSkillsRanking = "Clasificación de habilidades";
+$SaveScoringRules = "Guardar reglas de puntuación";
 ?>

@@ -54,4 +54,5 @@ $NewMessageInForum = "Uusi viesti keskustelualueella";
 $FolderCreated = "Uusi kansio tehty";
 $LinkAdded = "Uusi linkki lisätty";
 $AnnouncementAdded = "Ilmoitus lisätty";
+$AgendaAdded = "Tapahtuma lisätty";
 ?>

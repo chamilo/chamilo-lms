@@ -37,5 +37,10 @@ $Send = "Enviar";
 $Connected = "Conectado";
 $Think = "Pensar.";
 $Amazing = "Fantástico.";
+$Confused = "Confuso";
 $Surprised = "Surpreendido.";
+$Neutral = "Neutral";
+$Sad = "Triste";
+$Arrow = "Seta";
+$Question = "Pergunta";
 ?>

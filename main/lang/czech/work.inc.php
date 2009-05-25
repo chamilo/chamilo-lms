@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Nástroje";
-$langDownloadFile = "Ulož soubor na server (upload)";
+$SendWork = "Ulož soubor na server (upload)";
 $langTooBig = "Nevybral jste soubor nebo je soubor p&#345;íliš velký.";
 $langListDeleted = "Celý seznam byl smazán.";
 $langDocModif = "název dokumentu upraven";

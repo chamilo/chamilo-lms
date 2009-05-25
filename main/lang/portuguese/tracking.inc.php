@@ -226,4 +226,7 @@ $TotalExercisesScoreObtained = "Pontuação total do exercício";
 $TotalExercisesScorePossible = "Máxima pontuação total possível";
 $TotalExercisesAnswered = "Número de exercícios respondidos";
 $TotalExercisesScorePercentage = "Percentagem total da pontuação dos exercícios";
+$langSendNotification = "Notificar";
+$TrainingTime = "Tempo no curso";
+$CourseProgress = "Progresso";
 ?>

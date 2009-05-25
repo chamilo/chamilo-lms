@@ -66,4 +66,8 @@ $RepeatEnd = "Data final da repetição";
 $RepeatedEventViewOriginalEvent = "Ver evento original";
 $ICalFileImport = "Importar ficheiro iCal/ics";
 $AllUsersOfThePlatform = "Todos os utilizadores da plataforma";
+$GlobalEvent = "Evento global";
+$ModifyEvent = "Editar evento";
+$AgendaSortChronologicallyUp = "Ascendente";
+$AgendaSortChronologicallyDown = "Descendente";
 ?>

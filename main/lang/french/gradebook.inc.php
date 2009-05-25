@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifyEvaluation = "Enregistrer l\'évaluation";
 $CreateLink = "Sélectionner";
+$AddResultNoStudents = "Il n\'y a aucun étudiant auquel ajouter des points";
 $FlatView = "Vue à plat";
 $ScoreEdit = "Règles de notation";
 $ScoreColor = "Couleur des notes";
@@ -75,7 +76,7 @@ $DeletedLinks = "Liens supprimés";
 $TotalItems = "Éléments au total";
 $LinkAdded = "Lien ajouté";
 $LinkDeleted = "Lien supprimé";
-$EditEvaluation = "Modificattion d\'évaluation";
+$EditEvaluation = "Modification d\'évaluation";
 $DeleteResult = "Supprimer résultats";
 $Display = "Note";
 $Average = "Moyenne";
@@ -137,5 +138,5 @@ $GradebookPreviousWeight = "Poids de la ressource précédemment";
 $AddAssessment = "Enregistrer l\'exercice";
 $FolderView = "Accueil des travaux";
 $GradebookSkillsRanking = "Cotation des compétences";
-$SaveScoringRules = "Sauver les règles de ponctuation";
+$SaveScoringRules = "Sauver les règles de pondération";
 ?>

@@ -149,5 +149,6 @@ $WarningDeleteMainPage = "Não se recomenda a eliminação da Página principal do W
 $Restore = "Restaurar";
 $CurrentVersion = "Versão actual";
 $LastVersion = "Última versão";
+$RestoredFromVersion = "Restaurada a partir da versão";
 $HWiki = "Ajuda: wiki";
 ?>

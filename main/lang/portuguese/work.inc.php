@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Ferramentas";
-$langDownloadFile = "Enviar documento";
+$SendWork = "Enviar documento";
 $langTooBig = "Não escolheu o ficheiro que pretende enviar, ou então é demasiado grande";
 $langListDeleted = "A lista foi apagada";
 $langDocModif = "O documento foi alterado";
@@ -38,6 +38,7 @@ $QualificationNumberOver = "Pontuação";
 $DatesAvailables = "Datas disponíveis";
 $ExpiresAt = "Expira a";
 $AddToCalendar = "Adicionar à agenda";
+$DirectoryCreated = "Directoria criada";
 $Assignment = "Tarefas";
 $SelectAFilter = "Seleccionar um filtro";
 $QualificationOver = "Pontuação";

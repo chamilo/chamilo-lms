@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifyEvaluation = "Modificar evaluación";
 $CreateLink = "Añadir esta actividad a la evaluación";
-$AddResultNoStudents = "No hay resultados agregado a estudiantes";
+$AddResultNoStudents = "No hay estudiantes para añadir resultados";
 $FlatView = "Vista plana";
 $ScoreEdit = "Editar las reglas de puntuación";
 $ScoreColor = "Color de la puntuación";
@@ -36,7 +36,7 @@ $SetInvisible = "Ocultar";
 $ChooseLink = "Elegir el tipo de enlace";
 $DokeosExercises = "Ejercicios";
 $DokeosDropbox = "Compartir documentos";
-$DokeosStudentPublications = "Trabajos";
+$DokeosStudentPublications = "Tareas";
 $DokeosLearningPaths = "Lecciones";
 $ChooseExercise = "Elegir un ejercicio";
 $AddResult = "Añadir resultados";

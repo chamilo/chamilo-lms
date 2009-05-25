@@ -9,6 +9,7 @@ $VisioHostLocal = "ビデオ会議サーバ";
 $langPresent   = "有効にする";
 $SearchUsers = "ユーザ検索";
 $CreateUser = "ユーザ作成";
+$ModifyUser = "ユーザ編集";
 $langPhoneNumber = "電話番号";
 $langAddToCourse = "&#12467;&#12540;&#12473;&#12434;&#36861;&#21152;";
 $langDeleteCourse = "&#36984;&#25246;&#12373;&#12428;&#12383;&#12467;&#12540;&#12473;&#12434;&#21066;&#38500;";

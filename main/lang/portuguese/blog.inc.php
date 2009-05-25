@@ -84,4 +84,5 @@ $DeleteBlog = "Apagar este blog";
 $NoTasks = "Sem tarefas";
 $Shared = "Partilhado";
 $Reader = "Leitor";
+$SeeBlog = "Ver blogue";
 ?>

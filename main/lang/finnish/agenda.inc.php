@@ -67,4 +67,10 @@ $RepeatedEventViewOriginalEvent = "Näytä alkuperäinen tapahtuma";
 $ICalFileImport = "Tuo iCal/ics tiedosto";
 $AllUsersOfThePlatform = "Kaikki käyttäjät";
 $GlobalEvent = "Yleinen tapahtuma";
+$ModifyEvent = "Muokkaa tapahtumaa";
+$EndDateCannotBeBeforeTheStartDate = "Päättymispäivä ei voi olla ennen alkamispäivää";
+$AgendaSortChronologicallyUp = "Nouseva";
+$AgendaSortChronologicallyDown = "Laskeva";
+$ItemForUserSelection = "Käyttäjien poiminta lista";
+$IsNotiCalFormatFile = "Tiedosto ei ole iCal formaatissa";
 ?>

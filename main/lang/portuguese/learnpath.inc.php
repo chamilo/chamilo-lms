@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "O novo fórum acaba de ser criado";
 $NewThreadCreated = "O novo assunto do fórum acaba de ser criado.";
+$AddHotpotatoes = "Adicionar HotPotatoes";
 $lang_learning_path = "Sequência de Aprendizagem";
 $lang_learning_path_builder = "Editor de Sequências de Aprendizagem";
 $lang_description = "Descrição";
@@ -192,4 +193,8 @@ $WoogieBadExtension = "Por favor envie somente documentos de texto. A extensão d
 $ShowAudioRecorder = "Mostrar gravador de áudio";
 $ViewLearningPath = "Ver Sequência de Aprendizagem";
 $SearchFeatureDocumentTagsIfIndexing = "Etiquetas para acrescentar ao documento, em caso de indexação";
+$SaveAudio = "Validar";
+$MoveDocument = "Mover documento";
+$AddForum = "Acrescentar fórum";
+$LPName = "Título do módulo";
 ?>

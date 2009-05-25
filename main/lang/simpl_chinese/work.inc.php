@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "工具";
-$langDownloadFile = "上传文件";
+$SendWork = "上传文件";
 $langTooBig = "没有选择文件或文件太大.";
 $langListDeleted = "整个列表已删除.";
 $langDocModif = "论文标题已修改";

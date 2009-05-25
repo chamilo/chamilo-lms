@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Tools  = "Tools";
-$langDownloadFile = "Upload paper";
+$SendWork = "Upload paper";
 $langTooBig = "You haven\'t selected a file or the file is too big.";
 $langListDeleted = "The whole list has been deleted.";
 $langDocModif = "paper title modified";
@@ -70,4 +70,5 @@ $ButtonCreateAssignment = "Create assignment";
 $AssignmentName = "Assignment name";
 $CreateAssignment = "Create assignment";
 $FolderEdited = "Folder edited";
+$UpdateWork = "Update this task";
 ?>

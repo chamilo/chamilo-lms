@@ -302,7 +302,7 @@ function show_new_personal_item_form($id = "")
 	// we are loading the information here (we do this after everything else
 	// to overwrite the default information)
 	
-	if ($id != strval(intval($id))) {
+	if (strlen($id) > 0 && $id != strval(intval($id))) {
 		return false; //potential SQL injection
 	}	
 	

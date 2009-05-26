@@ -191,5 +191,4 @@ $OogieBadExtension = "Gelieve enkel presentatie up te loaden. Bestandsnamen dien
 $WoogieBadExtension = "Gelieve enkel text bestanden up te loaden. De bestandsnaam dient te eindigen met .doc, .docx of .odt";
 $ShowAudioRecorder = "Geef de geluidsopnemer weer.";
 $SearchFeatureNotEnabledComment = "Full-text zoeken is niet geactiveerd in Dokeos. Gelieve de Dokeos beheerder te contacteren.";
-$ScormUnknownPackageFormat = "Ongekend SCORM formaat";
 ?>

@@ -610,6 +610,7 @@ $OptionText = "Besedilo";
 $FieldTypeDoubleSelect = "Dvojna izbira";
 $FieldTypeDivider = "Vizualni ločilec";
 $TooShort = "Prekratko";
+$ScormUnknownPackageFormat = "Neznan format paketa";
 $ResourceDeleted = "Resurs odstranjen";
 $AdvancedParameters = "Napredni parametri";
 $GoTo = "Pojdi na";

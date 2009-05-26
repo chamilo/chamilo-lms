@@ -195,6 +195,7 @@ $ViewLearningPath = "Ver Sequência de Aprendizagem";
 $SearchFeatureDocumentTagsIfIndexing = "Etiquetas para acrescentar ao documento, em caso de indexação";
 $SaveAudio = "Validar";
 $MoveDocument = "Mover documento";
+$ShowAllAttempts = "Mostrar todas as tentativas";
 $AddForum = "Acrescentar fórum";
 $LPName = "Título do módulo";
 ?>

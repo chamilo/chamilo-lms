@@ -610,6 +610,7 @@ $OptionText = "Text";
 $FieldTypeDoubleSelect = "Double select";
 $FieldTypeDivider = "Visual divider";
 $TooShort = "Too short";
+$ScormUnknownPackageFormat = "Unknown package format";
 $ResourceDeleted = "Resource deleted";
 $AdvancedParameters = "Advanced parameters";
 $GoTo = "Go to";

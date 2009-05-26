@@ -205,7 +205,6 @@ $ViewScoreChangeHistory = "Ver historial de cambios de puntos";
 $ImageWillResizeMsg = "La imaxe va axustase al tamañu predefiníu";
 $ImagePreview = "Vista previa de la imaxe";
 $UplAlreadyExists = "Yá esiste";
-$ScormUnknownPackageFormat = "Formatu desconocíu de paquete";
 $UplUnableToSaveFile = "Nun se pue guardar l\'archivu";
 $UnknownPackageFormat = "El formatu d\'esti paquete ye desconocíu. Por favor, compruebe que ye un paquete válidu.";
 $EditLPSettings = "Cambiar parámetros de la lleición";

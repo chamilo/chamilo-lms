@@ -322,4 +322,5 @@ $SaveSection = "Guardar capítulo";
 $langMoreHotspotsImage = "Agregar / editar hotspots en la imagen";
 $ReachedTimeLimitAdmin = "Ha alcanzado el límite de tiempo para realizar este ejercicio";
 $LastScoreTest = "Última puntuación de un ejercicio";
+$BackToResultList = "Volver a lista de resultados";
 ?>

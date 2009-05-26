@@ -605,6 +605,7 @@ $OptionText = "Opción de testu";
 $FieldTypeDoubleSelect = "Campos de tipu seleición doble";
 $FieldTypeDivider = "Campu de tipu separtador";
 $TooShort = "Percurtiu";
+$ScormUnknownPackageFormat = "Formatu desconocíu de paquete";
 $ResourceDeleted = "Recursu esborráu";
 $AdvancedParameters = "Parámetros avanzaos";
 $GoTo = "Dir a";

@@ -63,4 +63,5 @@ $ButtonCreateAssignment = "Opdracht aanmaken";
 $AssignmentName = "Titel van de opdracht";
 $CreateAssignment = "Opdracht aanmaken";
 $FolderEdited = "De folder is gewijzigd";
+$UpdateWork = "Werk taak bij";
 ?>

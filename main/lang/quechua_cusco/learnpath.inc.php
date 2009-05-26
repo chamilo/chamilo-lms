@@ -208,7 +208,6 @@ $ViewScoreChangeHistory = "Ver puntuacion de historial de cambio";
 $ImageWillResizeMsg = "Wankita tajsachikunqa allin sayayman";
 $ImagePreview = "Wankiq ñaupa qhawariynin";
 $UplAlreadyExists = "Ña kashan";
-$ScormUnknownPackageFormat = "Formato desconocido de paquete";
 $UplUnableToSaveFile = "Manapuni khipuqa allchakunqachu";
 $UnknownPackageFormat = "El formato de este paquete no ha sido reconocido. Por favor, compruebe este es un paquete válido.";
 $MoveDocument = "Kuchiy qelqa khiputa";

@@ -214,7 +214,6 @@ $ViewScoreChangeHistory = "Vedi lo storico dei punteggi";
 $ImageWillResizeMsg = "L\'immagine sarà ridimensionata";
 $ImagePreview = "Anteprima immagine";
 $UplAlreadyExists = "Il file esiste già";
-$ScormUnknownPackageFormat = "Formato sconosciuto";
 $UplUnableToSaveFile = "Impossibile salvare il file";
 $UnknownPackageFormat = "Il formato del pacchetto non è riconosciuto. Scegli un pacchetto valido.";
 $MoveDocument = "Sposta il documento";

@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $PublishSurvey = "Publicar questionário";
+$CompareQuestions = "Comparar questões";
 $SurveyTitle = "Título do Questionário";
 $SurveyIntroduction = "Introdução do Questionário";
 $CreateNewSurvey = "Criar Questionário";

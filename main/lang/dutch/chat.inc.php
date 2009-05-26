@@ -47,6 +47,7 @@ $Angry = "Boos";
 $Sad = "Droevig";
 $Silence = "Stilte";
 $Smile = "Lachen";
+$Exclamation = "Uitroep";
 $Arrow = "Pijl";
 $Question = "Vraag";
 $Idea = "Idee";

@@ -247,4 +247,6 @@ $DoNotRandomize = "Não desordenar";
 $Infinite = "Infinito";
 $Difficulty = "Dificuldade";
 $QuestionsPerPageOne = "Uma questão por página";
+$QuestionsPerPageAll = "Todas";
+$langDefaultMultipleAnswer1 = "Espanha";
 ?>

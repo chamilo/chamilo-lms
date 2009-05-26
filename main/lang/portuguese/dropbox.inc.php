@@ -124,6 +124,7 @@ $NoFilesHere = "Nenhum ficheiro";
 $NoFilesHere = "Nenhum ficheiro";
 $NewDropboxFileUploaded = "Um novo ficheiro foi enviado para a dropbox";
 $NewDropboxFileUploadedContent = "Um novo ficheiro foi enviado para a dropbox do seu curso";
+$langAddEdit = "Acrescentar / Editar";
 $ErrorNoFilesInFolder = "Esta pasta está vazia";
 $dropbox_lang["upload"] = "Enviar";
 $AddComment  = "Guardar comentário";

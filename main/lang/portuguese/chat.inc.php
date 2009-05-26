@@ -43,4 +43,5 @@ $Neutral = "Neutral";
 $Sad = "Triste";
 $Arrow = "Seta";
 $Question = "Pergunta";
+$Stop = "Parar";
 ?>

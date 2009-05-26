@@ -865,6 +865,7 @@ $CurrentLanguagesPortal = "Idioma actual do portal.";
 $SelectUrl = "Selecione um URL ( endereço )";
 $LPTestScore = "Pontuação total por lição";
 $ManageUsers = "Gerir utilizadores ";
+$UserListIn = "Utilizadores de";
 $EditUsers = "Editar utilizadores";
 $EditCourses = "Editar cursos";
 $EditSessionToURL  = "Editar sessão";

@@ -214,7 +214,6 @@ $ViewScoreChangeHistory = "View score change history";
 $ImageWillResizeMsg = "Trainer picture will resize if needed";
 $ImagePreview = "Image preview";
 $UplAlreadyExists = "File already exists";
-$ScormUnknownPackageFormat = "Unknown package format";
 $UplUnableToSaveFile = "Unable to save file";
 $UnknownPackageFormat = "The format of this package could not be recognized. Please check this is a valid package.";
 $MoveDocument = "Move document";

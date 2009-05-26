@@ -610,6 +610,7 @@ $OptionText = "Testo";
 $FieldTypeDoubleSelect = "Campo di selezione doppia";
 $FieldTypeDivider = "Separatore";
 $TooShort = "Troppo corto";
+$ScormUnknownPackageFormat = "Formato sconosciuto";
 $ResourceDeleted = "Risorsa eliminata";
 $AdvancedParameters = "Parametri avanzati";
 $GoTo = "Vai a";

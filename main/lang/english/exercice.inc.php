@@ -322,4 +322,5 @@ $SaveSection = "Save section";
 $langMoreHotspotsImage = "Add/edit hotspots on the image";
 $ReachedTimeLimitAdmin = "Reached time limit admin";
 $LastScoreTest = "Last score of a exercise";
+$BackToResultList = "Back to result list";
 ?>

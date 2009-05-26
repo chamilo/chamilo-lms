@@ -49,4 +49,8 @@ $AnnouncementMoved = "El anuncio ha sido movido";
 $NoAnnouncements = "No hay anuncios";
 $SelectEverybody = "Seleccionar Todos";
 $SelectedUsersGroups = "grupo de usuarios seleccionados";
+$LearnerMessage = "Mensaje de un estudiante";
+$TitleIsRequired = "El título es obligatorio";
+$AnnounceSentByEmail = "Anuncio enviado por correo electrónico";
+$AnnounceSentToUserSelection = "Anuncio enviado a los usuarios seleccionados";
 ?>

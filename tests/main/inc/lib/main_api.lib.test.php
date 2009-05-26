@@ -112,44 +112,109 @@ class TestMainApi extends UnitTestCase {
 // todo function testApiUrlToLocalPathReturnString()
 // todo function testApiResizeImage()
 // todo function testApiCalculateImageSizeReturnArray()
-	/**
+	/*
 	 * Test out of a course context
-	 */
-/*	function testApiProtectCourseScriptReturnsFalseWhenOutOfCourseContext(){
+    
+	 
+	function testApiProtectCourseScriptReturnsFalseWhenOutOfCourseContext(){
 		$res= api_protect_course_script();
 		$this->assertTrue($res);
-		}
-	function testApiGetSettingReturnsRightValue() {
-	 	//$this->assertPattern('/\d/',$res);
 	}
-}
-	/**
-	 * Test out of a Admin context
+    */
+    function testApiGetSettingReturnsTrueWhenIsRightValue(){
+	 	$res=api_get_setting();
+	 	$this->assertFalse($res);
+	}
+  
+	/*
+	/* Test out of a Admin context
+	/
 	 
-	 function testApiProtectAdminScriptReturnsFalseWhenOutOfCourseContext(){
+	function testApiProtectAdminScriptReturnsFalseWhenOutOfCourseContext(){
 	 	$res= api_protect_admin_script();
 	 	$this->assertTrue($res);
 	 }
 	 
-	 function testApiBlockAnonymousUsersReturnTrueWhenUserIsAnonymous(){
+	function testApiBlockAnonymousUsersReturnTrueWhenUserIsAnonymous(){
 	 	$res=api_block_anonymous_users();
 	 	$this->assertTrue($res);
-	 	
 	 }
-
-
-	 function testApiGetNavigator()
-	 {	
-	 	
-	 		
+   
+	function testApiGetNavigator(){	
+	 	$res=api_get_navigator();
+	 	$this->assertTrue($res);
 	 }
-*/
-	function testApiIsSelfRegistrationAllowed()
-	{
+    
+	function testApiIsSelfRegistrationAllowed(){
 		$res = api_is_self_registration_allowed(); 
 		$this->assertFalse($res);
 	}
 	
+	function testApiGetPath($path_type){
+		$res=api_get_path();
+	 	$this->assertTrue($res);
+	}
+	
+	function testApiGetUserId(){	
+		$res= api_get_user_id();		
+		$this->assertPattern('/\d/',$res);		
+	}
+
+    function testApiGetUserCoursesReturnTrueWhenOutOfCoursesContext(){
+    	$res = api_get_user_courses();
+    	$this->assertFalse($res);
+    }
+  
+    function testApiGetUserInfoReturnFalseWhenOutOfUserInfoContext(){
+    	$res = api_get_user_info();
+   		$this->assertTrue($res);
+    }
+   
+    function testApiGetUserInfoUsernameReturnTrueWhenOutOfUserInfoUsernameContext(){
+    	$res=api_get_user_info_from_username();
+    	$this->assertFalse($res);
+    }
+    
+    function testApiGetCourseIdReturnFalseWhenOutOfCourseIdContext(){
+    	$res =api_get_course_id();
+    	$this->assertTrue($res);
+    }
+
+    function testApiGetCoursePathReturnFalseWhenOutOfCoursePathContext(){
+    	$res = api_get_course_path();
+    	$this->assertTrue($res);	
+    }
+ 
+	function testApiGetCourseSettingReturnFalseWhenOutOfCourseSeetingContext(){
+		$res = api_get_course_setting();
+		$this->assertTrue($res);
+	}
+	
+	function testApiGetAnonymousId(){
+		$res = api_get_anonymous_id();
+		$this->assertTrue($res);
+	}
+		
+	function testApiGetCidreq(){
+		$res=api_get_cidreq();
+		$this->assertTrue($res);
+	}
+	
+	function testApiGetCourseInfo(){
+		$res=api_get_course_info();
+		$this->assertTrue($res);
+	}
+	
+	function testApiSqlQuery(){
+		$res = api_sql_query();
+		$this->assertFalse($res);
+	}
+	
+	function testApiStoreResult(){
+		$res = api_store_result();
+		$this->assertFalse($res);
+		
+	}*/
 }
 
 ?>

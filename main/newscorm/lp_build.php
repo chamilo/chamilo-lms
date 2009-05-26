@@ -216,9 +216,6 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				if($is_new) {
 					Display::display_normal_message(get_lang('LearnpathAdded'), false);
 				}				
-				if($is_new) {
-					Display::display_normal_message(get_lang('LPCreatedToContinue'), false);
-				} else {
 					// Display::display_normal_message(get_lang('LPCreatedAddChapterStep'), false);
 					$gradebook = Security::remove_XSS($_GET['gradebook']);
 					$learnpathadded = Display::return_icon('gallery/creative.gif','',array('align'=>'right'));
@@ -230,7 +227,6 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 					$learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'">'.Display::return_icon('new_test.gif', get_lang('NewStep'),array('style'=> 'vertical-align: middle;')).' '.get_lang('NewStep').'</a>: '.get_lang('NewStepComment').'<br />';
 					$learnpathadded .= '<br /><br /><br /><br /></p>';										
 					Display::display_normal_message($learnpathadded, false);
-				}								
 			}		
 		echo '</td>';			
 	echo '</tr>';		

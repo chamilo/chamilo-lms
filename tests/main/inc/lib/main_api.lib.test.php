@@ -262,7 +262,7 @@ class TestMainApi extends UnitTestCase {
 	}
 	*/
 	function testApiTruncStr(){
-		$res= api_trunc_str($text, $length = 30, $endStr = '...', $middle = false);
+		$res= api_trunc_str();
 		return $this->assertFalse($res);
 	}
 

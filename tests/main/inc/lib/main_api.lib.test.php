@@ -5,7 +5,8 @@ class TestMainApi extends UnitTestCase {
 	
 	function TestMainApi() {
         $this->UnitTestCase('Main API tests');
-    }
+
+	}
 // todo function testApiProtectCourseScriptReturnsFalse()
 // todo function testApiProtectAdminScriptReturnsFalse()
 // todo function testApiBlockAnonymousUsers()
@@ -222,13 +223,19 @@ class TestMainApi extends UnitTestCase {
 	}
 	
 	function testApiSessionRegister(){
-		$res = api_session_register($variable);
+		global $$variable;
+		$$variable[session_register]=false;
+		$res=api_session_register($variable);
 		$this->assertFalse($res);
+		$this->assertFalse($variable[session_register]);
 	}
 	
 	function testApiSessionUnregister(){
-		$res = api_session_unregister($variable);
+		$variable=strval($variable);
+		$res=api_session_unregister($variable);
 		$this->assertFalse($res);
+		$this->assertFalse(isset($GLOBALS[$variable]));
+		$this->assertFalse($_SESSION[$variable]=null);
 	}
 	
 	function testApiSessionClear(){
@@ -257,16 +264,130 @@ class TestMainApi extends UnitTestCase {
 	}
 	
 	function testApiClearAnonymous(){
+		global $_user;
+		$_user['user_id'] = 1;
 		$res = api_clear_anonymous($db_check=false);
-		return $this->assertFalse($res);
+		$this->assertFalse($res);
+		$this->assertTrue(isset($_user['user_id'] ));
 	}
-	*/
+	
 	function testApiTruncStr(){
 		$res= api_trunc_str();
 		return $this->assertFalse($res);
 	}
-
-
+	
+	
+	function testDomesticate(){
+		$res = domesticate($input);
+		return $this->assertFalse($res);
+	}
+	
+	function testGetStatusFromCode(){
+		$status_code = new $status_code;
+		$res=get_status_from_code($status_code);
+		return $this->assertFalse($res);
+	}
+	
+	function testApiSetFailure(){
+		$res = api_set_failure($failureType);
+		return $this->assertFalse($res);
+	}
+	
+	function testApiSetAnonymous(){
+		$res = api_set_anonymous();
+		return $this->assertFalse($res);
+	}
+	
+	function testApiLastFailure(){
+		$res= api_last_failure();
+		return $this->assertFalse($res);
+	}
+	
+	function testApiGetSessionId(){
+		$res = api_get_session_id();
+		return $this->assertFalse($res);
+	}
+	
+	function testApiGetSessionName(){
+		$res = api_get_session_name($session_id);
+		return $this->assertFalse($res);
+	}
+	
+	function testAPiGetSetting(){
+	    $res=api_get_setting($variable, $key= NULL);
+		return $this->assertFalse($res);
+	}
+	
+	function testApiGetSelf(){
+		$res = api_get_self();
+		return $this->assertTrue($res);
+	}
+    /**
+     * function still unproved 
+     
+   function testGetLang(){
+   global $language_interface, $language_interface_initial_value, $language_file;
+   static $cache=array();
+   		$language=$language_interface;	
+		$cache[$language]=array(false=> array(), true=>array());
+		$res = get_lang($variable, $notrans = 'DLTT', $language = null);
+		
+		
+	}
+	
+	function testApiIsAnonymous(){
+		$_user['user_id']=1;
+		$res=api_is_anonymous($user_id=null, $db_check=false);
+		$this->assertfalse($res);
+		$this->assertfalse(isset($_user_id));
+		$this->assertTrue($db_check=true);
+		$this->asserttrue(isset($res));
+	}
+	/**
+	 * function still unproved 
+	
+	function testGetLangToSystemEncoding(){
+		$language;
+		$res=&get_lang_to_system_encoding(& $string, $language);
+		
+		
+	}
+	
+	function testApiGetInterfaceLanguage(){
+		global $language_interface;
+		$language_interface=false;
+		$res=api_get_interface_language();
+		$this->assertFalse($res);
+		$this->assertTrue(isset($language_interface));
+	}
+	
+	function testApiIsPlatformAdmin(){
+		global $_user;
+		$_user['status']=true;
+		$allow_sessions_admins=true;
+		$res= api_is_platform_admin($allow_sessions_admins=true);
+		$this->assertTrue($res);
+		$this->assertTrue($_SESSION['is_platformAdmin']=true);
+		$this->assertTrue(isset($_user['status']));
+		
+	}
+	
+	function testApiIsAllowedToCreateCourse(){
+		$res=api_is_allowed_to_create_course();
+		$this->assertTrue($res);
+	}
+	*/
+	function testApiIsCourseAdmin(){
+		$res=api_is_course_admin();
+		$this->assertFalse($res);
+	}
+	
+	function testApiIsCourseCoach(){
+		$res=api_is_course_coach();
+		$this->assertFalse($res);
+	}
+	
+	
 }
 
 ?>

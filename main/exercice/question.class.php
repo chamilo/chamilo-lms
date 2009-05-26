@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20851 2009-05-19 19:27:29Z aportugal $
+<?php // $Id: question.class.php 20990 2009-05-26 14:20:05Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20851 2009-05-19 19:27:29Z aportugal $
+* 	@version $Id: question.class.php 20990 2009-05-26 14:20:05Z juliomontoya $
 */
 
 
@@ -658,13 +658,13 @@ abstract class Question
 
 		// if the question is created in an exercise
 		if($exerciseId) {
-			
+			/*
 			$sql = 'UPDATE '.Database::get_course_table(TABLE_LP_ITEM).' 
 					SET max_score = '.intval($weighting).'
 					WHERE item_type = "'.TOOL_QUIZ.'"
 					AND path='.intval($exerciseId);
 			api_sql_query($sql,__FILE__,__LINE__);
-			
+			*/
 			// adds the exercise into the exercise list of this question
 			$this->addToList($exerciseId, TRUE);
 		}

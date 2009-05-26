@@ -120,7 +120,7 @@ class TestMainApi extends UnitTestCase {
 		$res= api_protect_course_script();
 		$this->assertTrue($res);
 	}
-    */
+    
     function testApiGetSettingReturnsTrueWhenIsRightValue(){
 	 	$res=api_get_setting();
 	 	$this->assertFalse($res);
@@ -214,7 +214,60 @@ class TestMainApi extends UnitTestCase {
 		$res = api_store_result();
 		$this->assertFalse($res);
 		
-	}*/
+	}
+	
+	function testApiSessionStart(){
+		$res = api_session_start($already_sintalled=true);
+		$this->assertTrue($res);
+	}
+	
+	function testApiSessionRegister(){
+		$res = api_session_register($variable);
+		$this->assertFalse($res);
+	}
+	
+	function testApiSessionUnregister(){
+		$res = api_session_unregister($variable);
+		$this->assertFalse($res);
+	}
+	
+	function testApiSessionClear(){
+		$res=api_session_clear();
+		$this->assertFalse($res);
+	}
+	
+	function testApiSessionDestroy(){
+		$res=api_session_destroy();
+		$this->assertFalse($res);
+	}
+	
+	function testApiAddUrlParam(){
+		$res=api_add_url_param($url, $param, $filter_xss=true);
+		$this->assertFalse($res);
+	}
+	
+	function testApiGeneratePassword(){
+		$res = api_generate_password();
+	    $this->assertTrue($res);
+	}
+	
+	function testApiCheckPassword(){
+		$res = api_check_password($password);
+		return $this->assertFalse($res);
+	}
+	
+	function testApiClearAnonymous(){
+		$res = api_clear_anonymous($db_check=false);
+		return $this->assertFalse($res);
+	}
+	*/
+	function testApiTruncStr(){
+		$res= api_trunc_str($text, $length = 30, $endStr = '...', $middle = false);
+		return $this->assertFalse($res);
+	}
+	
+	
+
 }
 
 ?>

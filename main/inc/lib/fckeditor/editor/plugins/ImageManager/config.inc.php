@@ -63,8 +63,10 @@ else
 	if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin')
 	{
 		// 3. Platform administration activities.
-		$IMConfig['base_dir'] = $_configuration['root_sys'].'home/default_platform_document/';
-		$IMConfig['base_url'] = $_configuration['root_web'].'home/default_platform_document/';
+		//$IMConfig['base_dir'] = $_configuration['root_sys'].'home/default_platform_document/';
+		//$IMConfig['base_url'] = $_configuration['root_web'].'home/default_platform_document/';
+		$IMConfig['base_dir'] = $_configuration['root_sys'].'main/calendar/';
+		$IMConfig['base_url'] = $_configuration['root_web'].'main/calendar/';
 	}
 	else
 	{

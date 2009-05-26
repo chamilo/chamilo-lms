@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20946 2009-05-22 17:45:15Z aportugal $
+<?php //$Id: agenda.inc.php 20999 2009-05-26 20:38:01Z aportugal $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -3574,7 +3574,10 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 			}
 
 			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
-			$items[$agendaday][$item['start_date']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$agenda_link."</a>  ".$item['title']."<br />";
+			//Display the events in agenda
+			$items[$agendaday][$item['start_date']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$agenda_link."</a>";
+			$items[$agendaday][$item['start_date']] .= "<div>".$item['title']."</div><br>";
+			
 		}
 	}
 	// sorting by hour for every day
@@ -4748,7 +4751,10 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		// if we have a day_view we use a half hour as index => key 33 = 16h30
 		if ($type !== "day_view") // This is the array construction for the WEEK or MONTH view
 		{
-			$agendaitems[$day] .= "<div><i>$hour:$minute</i> <b>".get_lang('GlobalEvent'). ":  </b>".$item['title']."</div>";
+			//Display the Agenda global in the tab agenda (administrator)
+			$agendaitems[$day] .= "".get_lang('StartTimeWindow')."&nbsp;<i>$hour:$minute</i>&nbsp;-&nbsp;";
+			$agendaitems[$day] .= "<b>".get_lang('GlobalEvent')."</b>";
+			$agendaitems[$day] .= "<div>".$item['title']."</div><br>";
 		} else {
 			// this is the array construction for the DAY view
 			$halfhour = 2 * $agendatime['0'];

@@ -630,7 +630,8 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 		// if we have a day_view we use a half hour as index => key 33 = 16h30
 		if ($type !== "day_view") // This is the array construction for the WEEK or MONTH view
 		{
-			$agendaitems[$day] .= "<div><i>$hour:$minute</i> $course_link  <a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
+			//Display events in agenda
+			$agendaitems[$day] .= "<div><i>$hour:$minute</i> $course_link  <a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div><br>";
 		}
 		else // this is the array construction for the DAY view
 			{
@@ -639,6 +640,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 			{
 				$halfhour = $halfhour +1;
 			}
+			//Display events by list
 			$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> $course_link  <a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
 		}
 	}

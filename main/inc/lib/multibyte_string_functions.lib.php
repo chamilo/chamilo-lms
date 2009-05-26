@@ -1319,10 +1319,9 @@ function api_iconv_supports($encoding) {
  */
 function api_iconv_present() {
 	static $iconv_present = null;
-	if (!is_null($iconv_present)) {
-		return $iconv_present;
+	if (is_null($iconv_present)) {
+		$iconv_present = function_exists('iconv');
 	}
-	$iconv_present = function_exists('iconv') ? true : false;
 	return $iconv_present;
 }
 

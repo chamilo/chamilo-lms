@@ -4681,7 +4681,7 @@ class learnpath {
 				if (file_exists("../img/lp_" . $icon_name . ".gif")) {
 					$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.gif" style="margin-right:3px;" />' . $title . '</td>' . "\n";
 				} else {
-					$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_document.png" style="margin-right:3px;" />' . $title . '</td>' . "\n";
+					$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;">' . Display::display_icon('folder_document.gif','',array('style'=>'margin-right:3px;')) . $title . '</td>' . "\n";
 				}
 			//$return .= "\t\t" . '<td>' . stripslashes($arrLP[$i]['description']) . '</td>' . "\n";
 
@@ -4853,7 +4853,7 @@ class learnpath {
 				if (file_exists("../img/lp_" . $icon_name . ".gif")) {
 					$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $title . "', '" . $menu_page . "', '', '', '../img/lp_" . $icon_name . ".gif', '../img/lp_" . $icon_name . ".gif');\n";
 				} else {
-					$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $title . "', '" . $menu_page . "', '', '', '../img/lp_document.png', '../img/lp_document.png');\n";
+					$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $title . "', '" . $menu_page . "', '', '', '../img/folder_document.gif', '../img/folder_document.gif');\n";
 				}
 			if ($menu < $arrLP[$i]['id'])
 				$menu = $arrLP[$i]['id'];
@@ -7630,7 +7630,7 @@ class learnpath {
 				if (file_exists("../img/lp_" . $icon_name . ".gif")) {
 					$return .= '<img alt="" src="../img/lp_' . $icon_name . '.gif" style="margin-right:5px;" title="" />';
 				} else {
-					$return .= '<img alt="" src="../img/lp_document.png" style="margin-right:5px;" title="" />';
+					$return .= Display::return_icon('folder_document.gif','',array('style'=>'margin-right:5px;'));
 				}
 			$return .= '<label for="id' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</label>';
 			$return .= '</td>';
@@ -7686,7 +7686,7 @@ class learnpath {
 					ORDER BY path ASC";
 		$res_doc = api_sql_query($sql_doc, __FILE__, __LINE__);
 
-		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_DOCUMENT . '.gif" style="margin-right:5px;" title="" />' . get_lang("Documents") . '</div>';
+		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '>'.Display::return_icon('folder_document.gif',get_lang('Documents'),array('style'=>'margin-right:5px;', 'height' => '16px')).' '. get_lang('Documents') . '</div>';
 		$return .= '<div class="lp_resource_elements" id="resDoc">';
 
 		$resources = api_store_result($res_doc);

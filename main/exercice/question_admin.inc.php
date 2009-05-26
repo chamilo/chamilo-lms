@@ -27,7 +27,7 @@
 * 	It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_admin.inc.php 20331 2009-05-05 15:17:55Z juliomontoya $
+* 	@version $Id: question_admin.inc.php 20993 2009-05-26 16:09:29Z juliomontoya $
 */
 
 /*
@@ -53,9 +53,19 @@ if(isset($_GET['editQuestion']))
 {
 	$objQuestion = Question::read ($_GET['editQuestion']);
 	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
-}
-else
-{
+	
+	
+	if (isset($exerciseId) && !empty($exerciseId)) {
+		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
+		$sql="SELECT max_score FROM $TBL_LP_ITEM
+			  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
+		$result = api_sql_query($sql);
+		if (Database::num_rows($result) > 0) {			 
+			Display::display_warning_message('EditingScoreCauseProblemsToExercisesInLP');	
+		}
+	}
+	
+} else {
 	$objQuestion = Question :: getInstance($_REQUEST['answerType']);
 	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
 }

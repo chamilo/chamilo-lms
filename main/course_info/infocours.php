@@ -1,4 +1,4 @@
-<?php // $Id: infocours.php 20612 2009-05-13 22:24:52Z aportugal $
+<?php // $Id: infocours.php 21016 2009-05-27 14:40:06Z pcool $
 
 /*
 ==============================================================================
@@ -148,9 +148,11 @@ $linebreak = '<div class="row"><div class="label"></div><div class="formw" style
 
 // Build the form
 $form = new FormValidator('update_course');
-$form->addElement('html','<div class="sectiontitle">'.get_lang('CourseSettings').'</div>');
+
+// COURSE SETTINGS
+$form->addElement('html','<div class="sectiontitle"><a href="#header" style="float:right;">'.Display::return_icon('top.gif').'</a><a name="coursesettings" id="coursesettings"></a>'.Display::return_icon('settings.gif').' '.get_lang('CourseSettings').'</div>');
 $visual_code=$form->addElement('text','visual_code', get_lang('Code'));
-	$visual_code->freeze();
+$visual_code->freeze();
 $form->applyFilter('visual_code', 'strtoupper');
 //$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
 $prof = &$form->addElement('select', 'tutor_name', get_lang('Professors'), $a_profs);
@@ -173,9 +175,11 @@ $form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
 $form->addElement('static', null, '&nbsp;', get_lang('TipLang'));
 
+$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
 
-$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('CourseAccess').'</div>');
+// COURSE ACCESS
+$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif').'</a><a name="coursesaccess" id="coursesaccess"></a>'.Display::return_icon('course.gif').' '.get_lang('CourseAccess').'</div>');
 $form->addElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
 $form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $form->addElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
@@ -193,8 +197,12 @@ $form -> addElement('html',$linebreak);
 
 $form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array ('size' => '60'));
 
+$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
-$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('EmailNotifications').'</div>');
+
+
+// EMAIL NOTIFICATIONS
+$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif').'</a><a name="emailnotifications" id="emailnotifications"></a>'.Display::return_icon('mail.png').' '.get_lang('EmailNotifications').'</div>');
 
 $form->addElement('radio', 'email_alert_to_teacher_on_new_user_in_course', get_lang('NewUserEmailAlert'), get_lang('NewUserEmailAlertEnable'), 1);
 $form->addElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null,get_lang('NewUserEmailAlertToTeacharAndTutor'),2);
@@ -212,8 +220,12 @@ $form -> addElement('html',$linebreak);
 $form->addElement('radio', 'email_alert_manager_on_new_quiz', get_lang('QuizEmailAlert'), get_lang('QuizEmailAlertActivate'), 1);
 $form->addElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailAlertDeactivate'), 0);
 
+$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
-$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('UserRights').'</div>');
+
+
+// USER RIGHTS
+$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif').'</a><a name="userrights" id="userrights"></a>'.Display::return_icon('members.gif').' '.get_lang('UserRights').'</div>');
 $form->addElement('radio', 'allow_user_edit_agenda', get_lang('AllowUserEditAgenda'), get_lang('AllowUserEditAgendaActivate'), 1);
 $form->addElement('radio', 'allow_user_edit_agenda', null, get_lang('AllowUserEditAgendaDeactivate'), 0);
 $form -> addElement('html',$linebreak);
@@ -226,15 +238,20 @@ $form->addElement('radio', 'allow_user_image_forum', get_lang('AllowUserImageFor
 $form->addElement('radio', 'allow_user_image_forum', null, get_lang('AllowUserImageForumDeactivate'), 0);
 $form -> addElement('html',$linebreak);
 
-$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('ConfigChat').'</div>');
+
+
+// CHAT SETTINGS
+$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif').'</a><a name="chatsettings" id="chatsettings"></a>'.Display::return_icon('chat.gif').' '.get_lang('ConfigChat').'</div>');
 $form->addElement('radio', 'allow_open_chat_window', get_lang('AllowOpenchatWindow'), get_lang('AllowOpenChatWindowActivate'), 1);
 $form->addElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenChatWindowDeactivate'), 0);
-$form -> addElement('html',$linebreak);
+//$form -> addElement('html',$linebreak);
 
-// Course theme picker
+$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+
+// COURSE THEME PICKER
 if (api_get_setting('allow_course_theme') == 'true')
 {	
-	$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;">'.get_lang('Theming').'</div><div style="clear:both;"></div>');
+	$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif').'</a><a name="theme" id="theme"></a>'.Display::return_icon('theme.gif').' '.get_lang('Theming').'</div><div style="clear:both;"></div>');
 	
 	//Allow Learning path 
 	$form->addElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
@@ -247,9 +264,9 @@ if (api_get_setting('allow_course_theme') == 'true')
 }
 
 if (is_settings_editable())
-	{
+{
 	$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-	}
+}
 else
 {
 	// is it allowed to edit the course settings?
@@ -379,9 +396,23 @@ Display :: display_header($nameTools, MODULE_HELP_NAME);
 
 //api_display_tool_title($nameTools);
 if (isset ($_GET['action']) && $_GET['action'] == 'show_message')
-	{
+{
 	Display :: display_normal_message(get_lang('ModifDone'));
-	}
+}
+
+// actions bar
+echo '<div class="actions">';
+echo '<a href="#coursesettings">'.Display::return_icon('settings.gif').' '.get_lang('CourseSettings').'</a>';
+echo '<a href="#coursesaccess">'.Display::return_icon('course.gif').' '.get_lang('CourseAccess').'</a>';
+echo '<a href="#emailnotifications">'.Display::return_icon('mail.png').' '.get_lang('EmailNotifications').'</a>';
+echo '<a href="#userrights">'.Display::return_icon('members.gif').' '.get_lang('UserRights').'</a>';
+echo '<a href="#chatsettings">'.Display::return_icon('chat.gif').' '.get_lang('ConfigChat').'</a>';
+if (api_get_setting('allow_course_theme') == 'true')
+{
+	echo '<a href="#theme">'.Display::return_icon('theme.gif').' '.get_lang('Theming').'</a>';
+}
+echo '</div>';
+
 // Display the form
 $form->display();
 	if ($showDiskQuota && $currentCourseDiskQuota != "")

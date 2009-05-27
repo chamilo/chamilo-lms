@@ -237,6 +237,9 @@ function count_checkbox(status_type) {
 	}
 }
 function get_action_url_and_show_messages (name_rs,name_id) {
+	$(".confirmation-message").remove();
+	$(".normal-message").remove();
+	$(".error-message").remove();	
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
@@ -251,6 +254,9 @@ function get_action_url_and_show_messages (name_rs,name_id) {
 		});
 }
 function close_div_show (my_div) {
+	$(".confirmation-message").remove();
+	$(".normal-message").remove();
+	$(".error-message").remove();
 	$("div#"+my_div).html("");
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
@@ -265,6 +271,9 @@ function close_div_show (my_div) {
 		});
 }
 function reply_to_messages (my_action,name_rs,name_id) {
+	$(".confirmation-message").remove();
+	$(".normal-message").remove();
+	$(".error-message").remove();
 	if(my_action=="show") {
 		$("div#div_content_messages").html("");
 		$("div#div_content_table_data").html("");
@@ -285,6 +294,9 @@ function compose_and_show_message (my_action,name_rs) {
 	if(my_action=="show") {
 		$("div#div_content_messages").html("");
 		$("div#div_content_table_data").html("");
+		$(".confirmation-message").remove();
+		$(".normal-message").remove();
+		$(".error-message").remove();
 			$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
@@ -339,7 +351,10 @@ function send_request_and_search() {
 }
 function delete_one_message (num_id) {
 		$("div#div_content_messages").html("");
-		$("div#div_content_table_data").html("");	
+		$("div#div_content_table_data").html("");
+		$(".confirmation-message").remove();
+		$(".normal-message").remove();
+		$(".error-message").remove();				
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {

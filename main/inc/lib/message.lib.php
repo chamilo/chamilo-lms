@@ -25,62 +25,70 @@
 require_once api_get_path(LIBRARY_PATH).'online.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'messages/message.class.php';
 function inbox_display() {
-	$charset = api_get_setting('platform_charset');
-	$table_message = Database::get_main_table(TABLE_MESSAGE); 
-	$request=api_is_xml_http_request();
-	if ($_SESSION['social_exist']===true) {
-		$redirect="#remote-tab-2";	
-		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-			$success= get_lang('SelectedMessagesDeleted')."&nbsp;<br /><a href=\""."../social/index.php?$redirect\">".get_lang('BackToInbox')."</a>";
+	global $charset;
+	echo '<div id="div_content_messages">&nbsp;&nbsp;';
+	//api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
+	echo '<div class=actions>';
+	echo '<a onclick="compose_and_show_message(\'show\',\'1\')" href="javascript:void(0)">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
+	echo '<a class="refresh" href="javascript:window.location.reload()">'.api_convert_encoding(get_lang('Refresh'),'UTF-8',$charset).'</a>';
+	echo '</div>';
+	echo '</div>';	
+		$charset = api_get_setting('platform_charset');
+		$table_message = Database::get_main_table(TABLE_MESSAGE); 
+		$request=api_is_xml_http_request();
+		if ($_SESSION['social_exist']===true) {
+			$redirect="#remote-tab-2";	
+			if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
+				$success= get_lang('SelectedMessagesDeleted');
+			} else {
+				$success= get_lang('SelectedMessagesDeleted');				
+			}
 		} else {
-			$success= get_lang('SelectedMessagesDeleted')."&nbsp;<br /><a href=\""."../social/index.php?$redirect\">".get_lang('BackToInbox')."</a>";				
+			$success= get_lang('SelectedMessagesDeleted');
 		}
-	} else {
-		$success= get_lang('SelectedMessagesDeleted')."&nbsp;<br /><a href=\""."inbox.php\">".get_lang('BackToOutbox')."</a>";
-	}
-	if (isset ($_REQUEST['action'])) {
-		switch ($_REQUEST['action']) {
-			case 'delete' :
-    			$number_of_selected_messages = count($_POST['id']);
-    			foreach ($_POST['id'] as $index => $message_id) {
-    				MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
-    			}
-    			Display::display_normal_message(api_xml_http_response_encode($success),false);
-    			break;
-			case 'deleteone' :
-    			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
-    			Display::display_confirmation_message(api_xml_http_response_encode($success),false);
-    			echo '<br />';
-    			break;
+		if (isset ($_REQUEST['action'])) {
+			switch ($_REQUEST['action']) {
+				case 'delete' :
+	    			$number_of_selected_messages = count($_POST['id']);
+	    			foreach ($_POST['id'] as $index => $message_id) {
+	    				MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
+	    			}
+	    			Display::display_normal_message(api_xml_http_response_encode($success),false);
+	    			break;
+				case 'deleteone' :
+	    			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
+	    			Display::display_confirmation_message(api_xml_http_response_encode($success),false);
+	    			echo '<br />';
+	    			break;
+			}
 		}
-	}
-	// display sortable table with messages of the current user
-	$table = new SortableTable('messages', 'get_number_of_messages_mask', 'get_message_data_mask', 3, get_number_of_messages_mask(),'DESC');
-	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
-	$title=api_xml_http_response_encode(get_lang('Title'));
-	$action=api_xml_http_response_encode(get_lang('Actions'));
-	$table->set_header(1,api_xml_http_response_encode(get_lang('Status')),false,array('style' => 'width:30px;'));
-	$table->set_header(2,api_xml_http_response_encode(get_lang('From')),false);
-	$table->set_header(3,$title,false);
-	$table->set_header(4,api_xml_http_response_encode(get_lang('Date')),false,array('style' => 'width:150px;'));
-	$table->set_header(5,$action,false,array ('style' => 'width:100px;'));
-    echo '<div id="div_content_table_data">';
-	if ($request===true) {
-		echo '<form name="form_send" id="form_send" action="" method="post">';
-		echo '<input type="hidden" name="action" value="delete" />';
-		$table->display();
-		echo '</form>';
-		if (get_number_of_messages_mask() > 0) {
-			echo '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-			echo '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-			echo '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'inbox\')">'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'</button>';
-			
+		// display sortable table with messages of the current user
+		$table = new SortableTable('messages', 'get_number_of_messages_mask', 'get_message_data_mask', 3, get_number_of_messages_mask(),'DESC');
+		$table->set_header(0, '', false,array ('style' => 'width:20px;'));
+		$title=api_xml_http_response_encode(get_lang('Title'));
+		$action=api_xml_http_response_encode(get_lang('Actions'));
+		$table->set_header(1,api_xml_http_response_encode(get_lang('Status')),false,array('style' => 'width:30px;'));
+		$table->set_header(2,api_xml_http_response_encode(get_lang('From')),false);
+		$table->set_header(3,$title,false);
+		$table->set_header(4,api_xml_http_response_encode(get_lang('Date')),false,array('style' => 'width:150px;'));
+		$table->set_header(5,$action,false,array ('style' => 'width:100px;'));
+	    echo '<div id="div_content_table_data">';
+		if ($request===true) {
+			echo '<form name="form_send" id="form_send" action="" method="post">';
+			echo '<input type="hidden" name="action" value="delete" />';
+			$table->display();
+			echo '</form>';
+			if (get_number_of_messages_mask() > 0) {
+				echo '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
+				echo '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
+				echo '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'inbox\')">'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'</button>';
+				
+			}
+		} else {
+			$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
+			$table->display();
 		}
-	} else {
-		$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
-		$table->display();
-	}
-    echo '</div>';
+	    echo '</div>';
 }
 function get_number_of_messages_mask() {
 	return MessageManager::get_number_of_messages();

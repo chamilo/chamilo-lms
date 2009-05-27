@@ -49,31 +49,19 @@ class MessageManager {
 				$success=get_lang('MessageSentTo').
 				"&nbsp;<b>".
 				GetFullUserName($uid).
-				"</b>".
-				"<br><a href=\"".
-				"../social/index.php$redirect\">".
-				get_lang('BackToInbox').
-				"</a>";
+				"</b>";
 			}else {
-				$success= get_lang('MessageSentTo').
+				$success=get_lang('MessageSentTo').
 				"&nbsp;<b>".
 				GetFullUserName($uid).
-				"</b>".
-				"<br><a href=\"".
-				"../social/index.php$redirect\">".
-				get_lang('BackToInbox').
-				"</a>";				
+				"</b>";			
 			}
 				
 		} else {
-			$success= get_lang('MessageSentTo').
+				$success=get_lang('MessageSentTo').
 				"&nbsp;<b>".
 				GetFullUserName($uid).
-				"</b>".
-				"<br><a href=\"".
-				"inbox.php\">".
-				get_lang('BackToInbox').
-				"</a>";
+				"</b>";
 		}
 		Display::display_confirmation_message(api_xml_http_response_encode($success), false);
 	}

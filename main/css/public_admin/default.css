@@ -1362,19 +1362,29 @@ div.admin_section h4 {
 /*****************************************************
  *  SYSTEM ANNOUNCEMENTS						     *
  *****************************************************/
-div.system_announcements {
-}
-div.system_announcements h3 {
-}
 div.system_announcement {
-	margin: 5px;
+	padding: .2em;
+	border: 1px solid #ddd;
+	-moz-border-radius-topright : 5px;
+    -moz-border-radius-topleft : 5px;
+    -moz-border-radius-bottomright : 5px;
+    -moz-border-radius-bottomleft : 5px;
 }
-div.system_announcement_title {
+.system_announcement {
+	background: #ddd url('images/headertables.jpg') repeat-x top center;
+	font: bold 100% arial, sans-serif, sans;
 }
-div.system_announcement_content {
-	margin-left: 20px;
-	border-left: 1px solid gray;
-	padding-left: 5px;
+.system_announcement_content {
+	font: normal 100% 'Lucida Grande', verdana, Arial, sans-serif, sans;
+}
+.system_announcements {
+	background: transparent url('images/systemenouvelles.jpg') no-repeat top  left;
+	padding-top: 10px;
+	width: 50%;
+}
+.system_announcements h3 {
+	padding-left:70px;
+	padding-top: 30px;
 }
 /*****************************************************
  *  THE NEW FORUM					     *

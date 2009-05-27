@@ -65,8 +65,8 @@ else
 		// 3. Platform administration activities.
 		//$IMConfig['base_dir'] = $_configuration['root_sys'].'home/default_platform_document/';
 		//$IMConfig['base_url'] = $_configuration['root_web'].'home/default_platform_document/';
-		$IMConfig['base_dir'] = $_configuration['root_sys'].'main/calendar/';
-		$IMConfig['base_url'] = $_configuration['root_web'].'main/calendar/';
+		$IMConfig['base_dir'] = $_configuration['root_sys'].'main/upload/template_thumbnails';
+		$IMConfig['base_url'] = $_configuration['root_web'].'main/upload/template_thumbnails/';
 	}
 	else
 	{

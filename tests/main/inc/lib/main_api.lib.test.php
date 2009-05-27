@@ -113,9 +113,9 @@ class TestMainApi extends UnitTestCase {
 // todo function testApiUrlToLocalPathReturnString()
 // todo function testApiResizeImage()
 // todo function testApiCalculateImageSizeReturnArray()
-	/*
+	/**
 	 * Test out of a course context
-    
+    **/
 	 
 	function testApiProtectCourseScriptReturnsFalseWhenOutOfCourseContext(){
 		$res= api_protect_course_script();
@@ -127,9 +127,9 @@ class TestMainApi extends UnitTestCase {
 	 	$this->assertFalse($res);
 	}
   
-	/*
+	/**
 	/* Test out of a Admin context
-	/
+	**/
 	 
 	function testApiProtectAdminScriptReturnsFalseWhenOutOfCourseContext(){
 	 	$res= api_protect_admin_script();
@@ -153,7 +153,7 @@ class TestMainApi extends UnitTestCase {
 	
 	function testApiGetPath($path_type){
 		$res=api_get_path();
-	 	$this->assertTrue($res);
+	 	$this->assertFalse($res);
 	}
 	
 	function testApiGetUserId(){	
@@ -183,7 +183,7 @@ class TestMainApi extends UnitTestCase {
 
     function testApiGetCoursePathReturnFalseWhenOutOfCoursePathContext(){
     	$res = api_get_course_path();
-    	$this->assertTrue($res);	
+    	$this->assertFalse($res);	
     }
  
 	function testApiGetCourseSettingReturnFalseWhenOutOfCourseSeetingContext(){
@@ -219,7 +219,7 @@ class TestMainApi extends UnitTestCase {
 	
 	function testApiSessionStart(){
 		$res = api_session_start($already_sintalled=true);
-		$this->assertTrue($res);
+		$this->assertFalse($res);
 	}
 	
 	function testApiSessionRegister(){
@@ -283,7 +283,7 @@ class TestMainApi extends UnitTestCase {
 	}
 	
 	function testGetStatusFromCode(){
-		$status_code = new $status_code;
+		//$status_code = new $status_code;
 		$res=get_status_from_code($status_code);
 		return $this->assertFalse($res);
 	}
@@ -298,9 +298,9 @@ class TestMainApi extends UnitTestCase {
 		return $this->assertFalse($res);
 	}
 	
-	function testApiLastFailure(){
-		$res= api_last_failure();
-		return $this->assertFalse($res);
+	function testApiGetLastFailure(){
+		$res= api_Get_last_failure();
+		$this->assertFalse($res);
 	}
 	
 	function testApiGetSessionId(){
@@ -324,7 +324,7 @@ class TestMainApi extends UnitTestCase {
 	}
     /**
      * function still unproved 
-     
+    **/ 
    function testGetLang(){
    global $language_interface, $language_interface_initial_value, $language_file;
    static $cache=array();
@@ -334,23 +334,14 @@ class TestMainApi extends UnitTestCase {
 		
 		
 	}
-	
-	function testApiIsAnonymous(){
-		$_user['user_id']=1;
-		$res=api_is_anonymous($user_id=null, $db_check=false);
-		$this->assertfalse($res);
-		$this->assertfalse(isset($_user_id));
-		$this->assertTrue($db_check=true);
-		$this->asserttrue(isset($res));
-	}
-	/**
+	/*
 	 * function still unproved 
-	
+	*
 	function testGetLangToSystemEncoding(){
 		$language;
 		$res=&get_lang_to_system_encoding(& $string, $language);
 		
-		
+	**/	
 	}
 	
 	function testApiGetInterfaceLanguage(){
@@ -376,7 +367,7 @@ class TestMainApi extends UnitTestCase {
 		$res=api_is_allowed_to_create_course();
 		$this->assertTrue($res);
 	}
-	*/
+	
 	function testApiIsCourseAdmin(){
 		$res=api_is_course_admin();
 		$this->assertFalse($res);
@@ -387,7 +378,146 @@ class TestMainApi extends UnitTestCase {
 		$this->assertFalse($res);
 	}
 	
+	function testApiIsCoach(){
+		global $_user;
+		global $sessionIsCoach;
+		$_user['user_id']=1;
+		$sessionIsCoach=api_store_result($result=false);
+		$res=api_is_coach();
+		$this->assertTrue($res);
+		$this->assertTrue($_user['user_id']);
+		$this->assertTrue($sessionIsCoach);
 	
-}
+	}
+	
+	function testApiIsSessionAdmin(){
+		global $_user;
+		$_user['status']=true;
+		$res=api_is_session_admin();
+		$this->assertFalse($res);
+		$this->assertTrue($_user);
+	}
+		
+	function testApiDisplayToolTitle(){
+		$tit=true;
+		$titleElement['mainTitle']=$tit;
+		$res=api_display_tool_title($titleElement);
+		$this->assertFalse($res);
+		$this->assertTrue(isset($titleElement));
+		$this->assertTrue($titleElement['mainTitle']);
+		
+	}/**
+		untested
+	**/
+	/*	
+	function testApiDisplayToolViewOption(){
+		
+		$res=api_display_tool_view_option();
+		
+	}
+	*/	
+	
+	function testApiDisplayArray(){
+		$res=api_display_array($info_array);
+		$this->assertFalse($res);
+			
+	}
+		
+	function testApiDisplayDebugInfo()
+	{
+		$message = "mensaje de error"; // siempre que puedas, te conviene probar con valores creados al azar
+		$res=api_display_debug_info($message);
+		$this->assertFalse($res);
+		
+	}
+		
+	/**
+	 * function is_allowed_to_edit() is deprecated and have been instead by 
+	 * api_is_allowed_to_edit() 
+	**/
+	function testApiIsAllowedToEdit(){
+	 	$is_courseAdmin=false;
+	 	$res=api_is_allowed_to_edit($tutor=false,$scoach=false);
+	 	$this->assertTrue($res);
+	 	$this->assertTrue(isset($is_courseAdmin));
+	 	//$this->assertTrue($is_courseAdmin);	 	
+	}
+	 
+	function testApiIsAllowed(){
+	    global $_course;
+	 	global $_user;
+	 	$_user['user_id']=1;
+	 	$_course['code']=0;
+	  	$tool= true;
+	 	$action= api_get_setting();	 		 	
+	 	$res=api_is_allowed($task_id=0);
+	  	$this->assertFalse($res);
+	  	$this->assertFalse($action);
+	 	$this->assertTrue($_user['user_id']);
+	 	$this->assertFalse($_course['code']);
+	 }
+	 
+	 function testApiIsAnonymous(){
+	 	global $_user, $use_anonymous;
+	  	$_user['is_anonymous']=true;
+	 	
+	 	$res=api_is_anonymous($user_id=null, $db_check=false);
+	 	$this->assertFalse($res);
+	 	$this->assertFalse(isset($user_id));
+	 	$this->assertTrue(isset($_user['is_anonymous']));
+	 	$this->assertTrue(isset($use_anonymous));
+	 	$this->assertTrue($db_check);
+	 }
+	 
+	 /**
+	  * test was stopped because of errors in the interpretation of 
+	  * the role, find out more details.
+	 **/
+	 /*
+	 function testApiNotAllowed(){
+ 	  	$res=api_not_allowed($sprint_headers=false);
+	 	$this->assertFalse($res);
 
+	 }
+	 */
+	 
+	 function testConvertMysqlDate(){
+	 	$result=false;
+	 	$myrow = Database::fetch_array($result);
+	 	$last_post_datetime = $myrow['end_date'];
+	 	
+	 	$res=convert_mysql_date($last_post_datetime);
+	 	$this->assertTrue($res);
+	 	$this->assertFalse($result);
+	 	$this->assertFalse($myrow);
+	 } 
+	
+	 function testApiGetDatetime(){
+	 	$res=api_get_datetime($time=null);
+	 	$this->assertTrue($res);
+	 	$this->assertFalse(isset($time));
+	 }
+	 
+	 function testApiGetItemVisibility(){
+	 	$_course= -1;
+	 	$tool = Database::escape_string($tool);
+	 	$id=Database::escape_string($id);
+	 	$_course['dbName']=false;
+	 	$res =api_get_item_visibility($_course,$tool,$id);
+	 	$this->assertTrue($res);
+	 	$this->assertFalse(isset($_course['dbName']));
+	 
+	 /**
+	  * function very complex and analized test is empty
+	  */
+	  /*	
+	 function testApiItemPropertyUpdate(){
+	 	
+	 	$res=api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = NULL, $start_visible = 0, $end_visible = 0);
+	 	
+	 }
+	
+*/
+}
+ 		
 ?>

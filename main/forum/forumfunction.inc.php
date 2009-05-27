@@ -539,7 +539,7 @@ function store_forum($values) {
 	if (is_null($values['forum_category'])) {
 		$new_max=null;
 	} else {
-		$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".Database::escape_string($values['forum_category']);
+		$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category='".Database::escape_string($values['forum_category'])."'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
 		$new_max=$row['sort_max']+1;	

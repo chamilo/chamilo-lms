@@ -115,7 +115,8 @@ class TestMainApi extends UnitTestCase {
 // todo function testApiCalculateImageSizeReturnArray()
 	/**
 	 * Test out of a course context
-    **/
+    */
+
 	 
 	function testApiProtectCourseScriptReturnsFalseWhenOutOfCourseContext(){
 		$res= api_protect_course_script();

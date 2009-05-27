@@ -526,7 +526,7 @@ $form_url_send=isset($form_send_data_message) ? $form_send_data_message :'';
   	 	}
         ?>     
     </ul>
-    <?php echo '<div id="show">&nbsp;</div>';?>
+    <?php //echo '<div id="show">&nbsp;</div>';?>
 </div>
 <?php
 Display :: display_footer();

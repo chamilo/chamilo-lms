@@ -92,6 +92,17 @@ $ForumSearchResults = "Rezultatele cautarii in forum";
 $ForumSearchInformation = "Cautati pe mai multe cuvinte folosind semnul +";
 $YouWillBeNotifiedOfNewPosts = "Veti fi notificati asupra postarilor noi prin e-mail";
 $YouWillNoLongerBeNotifiedOfNewPosts = "Nu veti mai fi notificat asupra noilor postari prin email";
+$AddImage = "Adauga imagine";
+$StudentList = "Lista cursistilor";
+$CourseUsers = "Utilizatori in training";
 $PostsNumber = "numar mesaje";
+$ThreadStatistics = "Statisticile discutiei";
+$Thread = "Discutie";
+$NotifyMe = "Tine-ma la curent cu noutatile";
+$NotChanged = "Neschimbat";
+$QualifyNumeric = "Rezultat";
+$EditAnAttachment = "Modifica atasamentul";
 $EditForum = "Schimbare forum";
+$BackToForum = "Inapoi la forum";
+$BackToForumOverview = "Inapoi la forum";
 ?>

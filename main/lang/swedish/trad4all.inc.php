@@ -31,6 +31,7 @@ $Down = "ner";
 $Up = "upp";
 $Theme = "Tema";
 $TheListIsEmpty = "Listan är tom.";
+$langUniqueSelect = "Multipla val (Unika svar)";
 $CreateCategory = "Skapa mapp";
 $SendFile = "Bekräfta";
 $SaveChanges = "Spara ändringar";

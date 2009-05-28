@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Warning ! This question and its answers are used 
 $langModifyInAllExercises = "in all tests";
 $langModifyInThisExercise = "only in the current test";
 $langAnswerType = "Answer type";
-$langUniqueSelect = "Multiple choice";
 $langMultipleSelect = "Multiple answers";
 $langFillBlanks = "Fill blanks or form";
 $langMatching = "Matching";
@@ -323,4 +322,5 @@ $langMoreHotspotsImage = "Add/edit hotspots on the image";
 $ReachedTimeLimitAdmin = "Reached time limit admin";
 $LastScoreTest = "Last score of a exercise";
 $BackToResultList = "Back to result list";
+$EditingScoreCauseProblemsToExercisesInLP = "If you edit a question score, please remember that this Exercise was added in a Course";
 ?>

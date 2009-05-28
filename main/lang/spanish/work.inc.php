@@ -71,4 +71,6 @@ $AssignmentName = "Nombre de la tarea";
 $CreateAssignment = "Crear una tarea";
 $FolderEdited = "Tarea modificada";
 $UpdateWork = "Actualizar la tarea";
+$MakeAllPapersInvisible = "Ocultar todos los trabajos";
+$MakeAllPapersVisible = "Hacer todos los trabajos visibles";
 ?>

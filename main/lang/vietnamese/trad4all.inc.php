@@ -21,6 +21,7 @@ $Assignments = "Assignments";
 $Forum = "Forum";
 $langCode = "Mã khoá học";
 $langUp = "Up";
+$langUniqueSelect = "Một lựa chọn đúng";
 $langCourseCreate = "Khởi tạo khoá học mới";
 $langTodo = "Kiến nghị";
 $UserName = "Tên truy cập";

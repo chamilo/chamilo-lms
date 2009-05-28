@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Figyelmeztetés! Ez a kérdés és válaszai több tesz
 $langModifyInAllExercises = "az összes tesztben";
 $langModifyInThisExercise = "csak ebben a tesztben";
 $langAnswerType = "Válasz típusa";
-$langUniqueSelect = "Több válaszból egy helyes";
 $langMultipleSelect = "Több lehetségesbõl több helyes";
 $langFillBlanks = "Üres mez&#337;k kitöltése";
 $langMatching = "Megfeleltetés";

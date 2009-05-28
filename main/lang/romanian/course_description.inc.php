@@ -15,4 +15,5 @@ $langBackAndForget  = "Inapoi si uita";
 $CourseDescriptionUpdated = "Descrierea cursului a fost actualizata";
 $CourseDescriptionDeleted = "Descrierea cursului a fost eliminata";
 $CourseDescriptionIntro = "Pentru a crea o descriere de curs, click pe un antet si completati campul din formular. <br/><br/>. Click OK si completati un alt antet.";
+$langSaveDescription = "Salveaza descrierea";
 ?>

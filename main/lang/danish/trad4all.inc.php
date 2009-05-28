@@ -30,6 +30,7 @@ $langUp = "op";
 $Down = "ned";
 $Up = "op";
 $TheListIsEmpty = "Listen er tom.";
+$langUniqueSelect = "Liste (Et svar)";
 $langCourseCreate = "Opret kursusside";
 $langTodo = "Opgaver";
 $UserName = "Brugernavn";

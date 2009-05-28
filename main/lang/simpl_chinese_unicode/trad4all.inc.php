@@ -13,6 +13,7 @@ $langGroupForum = "小组论坛";
 $LoginName = "登录名";
 $langCode = "代码";
 $langUp = "向上";
+$langUniqueSelect = "单选题";
 $langCourseCreate = "新建课程";
 $langTodo = "您的建议";
 $lang_show_hide = "显示/隐藏";

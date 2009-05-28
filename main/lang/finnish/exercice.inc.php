@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Varoitus! Tämä kysymys on käytössä useissa harjoi
 $langModifyInAllExercises = "kaikissa harjoituksissa";
 $langModifyInThisExercise = "vain tässä harjoituksessa";
 $langAnswerType = "Vastaustyyppi";
-$langUniqueSelect = "Monivalinta (yksi oikea vastaus)";
 $langMultipleSelect = "Monivalinta (useita oikeita vastauksia)";
 $langFillBlanks = "Aukkotehtävä";
 $langMatching = "Yhdistä oikeat";

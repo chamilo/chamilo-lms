@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Paqtataq! Kay tapu llapan kutichikunawanqa kashan
 $langModifyInAllExercises = "llapan llank\'aynakunapi";
 $langModifyInThisExercise = "kay llank\'aynallapi";
 $langAnswerType = "Ima niraq kutichiy";
-$langUniqueSelect = "Sapa kutichiy";
 $langMultipleSelect = "Askha kutichiy";
 $langFillBlanks = "Hunt\'achiy yuraqkunata";
 $langMatching = "Masichay";

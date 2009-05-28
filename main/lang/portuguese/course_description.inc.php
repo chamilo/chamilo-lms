@@ -15,4 +15,5 @@ $langBackAndForget  = "Voltar atrás sem guardar alterações";
 $CourseDescriptionUpdated = "A descrição do curso foi actualizada";
 $CourseDescriptionDeleted = "A descrição do curso foi apagada";
 $CourseDescriptionIntro = "Para criar uma descrição do curso, clicar na respectiva rubrica e preencher o campo correcto associado.<br><br> Clicar OK e preencher uma nova rubrica.";
+$langSaveDescription = "Guardar descrição";
 ?>

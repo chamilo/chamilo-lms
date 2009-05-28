@@ -30,6 +30,7 @@ $langUp = "Monter";
 $Down = "descendre";
 $Up = "monter";
 $TheListIsEmpty = "La liste est vide.";
+$langUniqueSelect = "Choix multiple";
 $langCourseCreate = "Créer un cours";
 $langTodo = "Suggestions";
 $UserName = "Identifiant";

@@ -117,4 +117,6 @@ $CategoryEdited = "Categorie actualizata";
 $OnlyNumbers = "Doar numere";
 $IncorrectData = "Date incorecte";
 $Resource = "Resursa";
+$FileUploadComplete = "Fisier incarcat cu succes";
+$NoResultsAvailable = "Nici un rezultat disponibil";
 ?>

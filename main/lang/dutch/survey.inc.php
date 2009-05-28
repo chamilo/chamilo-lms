@@ -186,4 +186,5 @@ $Normal = "Normaal";
 $AutoInviteLink = "Gebruikers die niet uitgenodigd zijn kunnen deze link gebruiken om de enquete te doen:";
 $RemindUnanswered = "Stuur herinnering alleen naar personen die nog niet geantwoord hebben ";
 $ModifySurvey = "Enquête wijzigen";
+$ReportingOverview = "Rapportenoverzicht";
 ?>

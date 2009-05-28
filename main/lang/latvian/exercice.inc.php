@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Uzman&#299;bu! Šis jaut&#257;jums un t&#257; atbi
 $langModifyInAllExercises = "visos testos";
 $langModifyInThisExercise = "tikai šaj&#257; test&#257;";
 $langAnswerType = "Atbildes tips";
-$langUniqueSelect = "Vair&#257;kk&#257;rt&#299;ga izv&#275;le (unik&#257;la atbilde)";
 $langMultipleSelect = "Vair&#257;kk&#257;rt&#299;ga izv&#275;le (vair&#257;kas atbildes)";
 $langFillBlanks = "Aizpildiet tukšos lauci&#326;us";
 $langMatching = "Sakr&#299;toši";

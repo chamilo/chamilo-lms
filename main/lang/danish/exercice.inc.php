@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Advarsel ! Dette spørgsmål og dets svar anvendes 
 $langModifyInAllExercises = "i alle øvelser";
 $langModifyInThisExercise = "kun i denne øvelse";
 $langAnswerType = "Svartype";
-$langUniqueSelect = "Liste (Et svar)";
 $langMultipleSelect = "Multiple choice (Mange svar)";
 $langFillBlanks = "Udfyld rubrikker";
 $langMatching = "Matching";

@@ -28,7 +28,6 @@ $langUsedInSeveralExercises = "Coi chừng! Câu hỏi này dùng trong nhiều 
 $langModifyInAllExercises = "trong tất cả bài tập";
 $langModifyInThisExercise = "chỉ trong bài tập hiện hành";
 $langAnswerType = "Kiểu trả lời";
-$langUniqueSelect = "Một lựa chọn đúng";
 $langMultipleSelect = "Nhiều lựa chọn đúng";
 $langFillBlanks = "Điền vào chỗ trống";
 $langMatching = "Ghép cột";

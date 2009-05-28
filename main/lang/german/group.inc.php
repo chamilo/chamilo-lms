@@ -45,6 +45,8 @@ $langStudentsNotInThisGroups  = "Teilnehmer ist nicht in dieser Gruppe";
 $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Ein/e Teilnehmer/in kann höchstens in ";
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " Gruppen Mitglied sein";
 $langGroupLimit = "Gruppen-Limit";
+$CreateGroup = "Gruppe(n) erstellen";
+$ProceedToCreateGroup = "weiter zur Erstellung der Gruppe(n)";
 $langStudentRegAllowed = "Teilnehmer/innen können sich selber in den Gruppen eintragen";
 $langGroupAllowStudentUnregistration = "Nutzer dürfen sich selbst aus Gruppen austragen";
 $langAllGroups = "Alle Gruppen";
@@ -89,4 +91,5 @@ $GroupsFromClasses = "Gruppen aus Klassen";
 $GroupsFromClassesInfo = "Mit dieser Option können Sie Gruppen auf der Grundlage von Klassen erstellen, die für den Kurs angemeldet sind";
 $Group = "Gruppe";
 $ForumOfGroup = "Forum der Gruppe:";
+$BackToGroupList = "Zurück zur Gruppenliste";
 ?>

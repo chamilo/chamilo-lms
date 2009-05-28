@@ -31,6 +31,7 @@ $Down = "Na dó&#322;";
 $Up = "do góry";
 $Theme = "Temat";
 $TheListIsEmpty = "Ta lista jest pusta";
+$langUniqueSelect = "Wielokrotny wybór (jedna odpowied&#378; poprawna)";
 $langCourseCreate = "Tworzenie kursu";
 $langTodo = "Wolne wnioski";
 $UserName = "Nazwa u&#380;ytkownika";

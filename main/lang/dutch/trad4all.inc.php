@@ -31,6 +31,7 @@ $Down = "omlaag";
 $Up = "omhoog";
 $Theme = "Thema";
 $TheListIsEmpty = "De lijst is leeg.";
+$langUniqueSelect = "Meerkeuze (uniek antwoord)";
 $CreateCategory = "Categorie aanmaken";
 $SendFile = "Bestand uploaden";
 $SaveChanges = "Wijzigingen bewaren";

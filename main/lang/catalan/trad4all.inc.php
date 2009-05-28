@@ -27,6 +27,7 @@ $langUp = "Amunt";
 $Down = "Avall";
 $Up = "amunt";
 $TheListIsEmpty = "La llista és complerta";
+$langUniqueSelect = " Elecció múltiple (Resposta única)";
 $langCourseCreate = "Crea el lloc d\'un curs";
 $langTodo = "Activitats a fer";
 $UserName = "Nom d\'usuari";

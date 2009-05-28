@@ -31,6 +31,7 @@ $Down = "أسفل";
 $Up = "أعلى ";
 $Theme = "موضوع/شكل";
 $TheListIsEmpty = "القائمة فارغة ";
+$langUniqueSelect = "( اختيارات متعددة (جواب واحد فقط";
 $langCourseCreate = "إنشاء منطقة مقرر ";
 $langTodo = "مهام ";
 $UserName = "اسم المستخدم ";

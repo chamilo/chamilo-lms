@@ -31,6 +31,7 @@ $Down = "dolje";
 $Up = "gore";
 $Theme = "Tema";
 $TheListIsEmpty = "Popis prazan.";
+$langUniqueSelect = "Višestruki izbor (Jedan odgovor)";
 $langCourseCreate = "Izradi okruženje kolegija";
 $langTodo = "U&#269;initi";
 $UserName = "Korisni&#269;ko ime ";

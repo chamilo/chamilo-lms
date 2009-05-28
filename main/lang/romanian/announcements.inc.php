@@ -55,4 +55,5 @@ $AnnounceSentByEmail = "Anuntul este trimis prin e-mail.";
 $AnnounceSentToUserSelection = "Anuntul este trimis la utilizatorii selectati.";
 $SendAnnouncement = "Trimite anunt.";
 $ModifyAnnouncement = "Modifica anuntul.";
+$ButtonPublishAnnouncement = "Adauga anunt";
 ?>

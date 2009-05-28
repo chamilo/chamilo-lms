@@ -46,6 +46,7 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Cada utilizador pode fazer parte
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " grupo(s)";
 $langGroupLimit = "Limites";
 $CreateGroup = "Criar grupo(s)";
+$ProceedToCreateGroup = "Confirmar a criação de grupo(s)";
 $langStudentRegAllowed = "Os estudantes podem inscrever-se no grupo que quiserem";
 $langGroupAllowStudentUnregistration = "Permitir anular inscrição";
 $langAllGroups = "Todos os grupos";
@@ -90,4 +91,5 @@ $GroupsFromClasses = "Grupos de turmas";
 $GroupsFromClassesInfo = "Usando esta opção, pode criar grupos baseados nas turmas inscritas no curso.";
 $Group = "Grupo";
 $ForumOfGroup = "Fórum do grupo:";
+$BackToGroupList = "Voltar à lista de grupos";
 ?>

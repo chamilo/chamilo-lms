@@ -63,6 +63,7 @@ $InBlog = "In blog";
 $ViewPostsOfThisDay = "Afiseaza postarile acestei zile";
 $PostsOf = "Postari ale";
 $NoArticleMatches = "Nu a fost gasit nici un articol. Verificati textul si incercati o alta cautare.";
+$SaveProject = "Salveaza proiectul";
 $langTask1 = "Sarcina 1";
 $langTask2 = "Sarcina 2";
 $langTask3 = "Sarcina 3";

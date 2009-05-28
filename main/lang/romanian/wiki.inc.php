@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$WikiSearchResults = "Rezultatele cautarii Wiki";
 $Wiki = "Wiki";
 $StartPage = "pagina de inceput";
 $EditThisPage = "corecteaza aceasta pagina";
@@ -74,9 +75,29 @@ $AddedBy = "ad&#259;ugat de";
 $EditedBy = "Modificat de";
 $DeletedBy = "Sters de";
 $WikiStandardMode = "Mod Wiki";
+$GroupStandardMember = "Membru al grupului";
+$ConfigDefault = "Configurare standard";
 $UnlockPage = "Deblocare";
+$LockPage = "Blocare";
+$NotifyDiscussChanges = "Notificare a discutiei";
+$WikiDiffAddedTex = "Adauga text";
+$WikiDiffDeletedTex = "Text eliminat";
+$WordsDiff = "cuvant cu cuvant";
+$LinesDiff = "linie de linie";
+$MustSelectPage = "Trebuie sa alegeti pagina prima data";
+$Export2ZIP = "Exporta intr-un document ZIP";
 $HidePage = "Ascunde pagina";
 $ShowPage = "Arata pagina.";
+$DiscussNotAvailable = "Discutia nu este valabila";
+$UnlockDiscuss = "Deblocheaza discutia";
+$LockDiscuss = "Blocheaza discutia";
+$HideDiscuss = "Ascunde discutia";
+$ShowDiscuss = "Arata discutia";
+$UnlockRatingDiscuss = "Activeaza scorul";
+$LockRatingDiscuss = "Dezactiveaza scorul";
+$HideDiscussExtra = "Deliberarile sunt acum sunt vizibile doar pentru a formatorilor";
+$AssignmentDescExtra = "Aceasta pagina este o comanda de la un trainer";
+$AssignmentWorkExtra = "Aceasta pagina este activitatea unui elev";
 $AllowLaterSends = "Fa posibila trimiterea cu intarziere";
 $EmailWikiChanges = "Tine-ma la curent cu modificarile wiki.";
 $EmailWikipageModified = "Pagina wiki e modificata.";
@@ -93,7 +114,11 @@ $Contributions = "Contributii";
 $UserContributions = "Contributii ale utilizatorilor";
 $MostActiveUsers = "Cei mai activi utilizatori";
 $WarningDeleteMainPage = "Nu se recomanda stergerea pagini initiale din Wiki deoarece este accesul principal la structura ierarhica a sa.<br/> Daca totusi este necesar sa o faceti, nu uitati sa recreati pagina initiala. Pana atunci, utilizatorii nu vor putea adauga noi pagini.";
+$ConvertToLastVersion = "Pentru versiunea cea mai recenta, puteti sa face&#355;i clic pe";
 $Restore = "Restaurare";
+$CurrentVersion = "Versiunea actuala";
 $LastVersion = "Ultima versiune";
+$PageRestored = "Pagina a fost restaurata. Aveti posibilitatea de a vizualiza aceasta printr-un clic";
 $RestoredFromVersion = "Versiune restaurata";
+$HWiki = "Ajutor: wiki";
 ?>

@@ -15,4 +15,5 @@ $OrderBy = "Ordonare dupa";
 $CreationDate = "Data creerii";
 $UpdateDate = "Data actualizarii";
 $PreSelectedOrder = "Ordoneaza dupa selectie";
+$TableView = "Vezi tabelul";
 ?>

@@ -28,6 +28,7 @@ $langUp = "Ke Atas";
 $Down = "turun";
 $Up = "naik";
 $TheListIsEmpty = "Daftar kosong.";
+$langUniqueSelect = "Pilihan berganda (jawaban unik)";
 $langCourseCreate = "Buat situs mata kuliah";
 $langTodo = "Yang akan dilakukan";
 $UserName = "Nama user";

@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Averto: &#264;i-demando kaj ties respondoj estas 
 $langModifyInAllExercises = "en &#265;iuj ekzercoj ";
 $langModifyInThisExercise = "nur en la nuna ekzerco ";
 $langAnswerType = "Responda tipo ";
-$langUniqueSelect = "Plurelekta (ununura respondo) ";
 $langMultipleSelect = "Plurelekta (pluraj respondoj) ";
 $langFillBlanks = "Plenigi ";
 $langMatching = "Svati   XX";

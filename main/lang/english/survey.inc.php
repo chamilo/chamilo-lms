@@ -202,4 +202,5 @@ $ModifyQuestionSurvey = "Edit question";
 $BackToSurvey = "Back to survey";
 $UpdateInformation = "Update information";
 $PleaseFillSurvey = "Please fill survey";
+$ReportingOverview = "Reporting overview";
 ?>

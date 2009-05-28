@@ -112,4 +112,6 @@ $ExtensionMySQLNotAvailable = "MySQL Erweiterung ist nicht verfügbar";
 $DokeosArtLicense = "Die Bilder und Medien Gallerienin Dokeos nutzen Bilder der Nuvola, Crystal Clear und Tango Icongallerien. Andere Bilder und Medien wie Diagramme und Flash Animationen wurden entlehnt von Wikimedia und Ali Pakdels und Denis Hoas Kursen mit deren Erlaubnis und werden veröffentlicht unter BY-SA Creative Commons Lizenz. Die Lizenz Details gibt es unter <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>; dort wird am Ende der Seite ein Link zum vollständigen Text der Lizenz bereitgestellt. ";
 $PleasGoBackToStep1 = "Bitte zurück zu Schritt 1 gehen";
 $OptionalParameters = "Optionale Parameter";
+$FailedConectionDatabase = "Die Verbindung zur Datenbank schlug fehl. Dies ist meist ein falscher Benutzername oder Kennwort oder auch das Präfix ist falsch. Bitte prüfen Sie alle Daten und versuchen Sie es erneut.";
+$EncryptMethodUserPass = "Verschlüsselungs-Methode";
 ?>

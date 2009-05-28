@@ -30,6 +30,7 @@ $Down = "Urayachiy";
 $Up = "Wichachiy";
 $Theme = "Imamanta";
 $TheListIsEmpty = "Yupaychasqaqa chinmi kashan";
+$langUniqueSelect = "Sapa kutichiy";
 $CreateCategory = "Kamay mitata";
 $SendFile = "Apachiy khiputa";
 $SaveChanges = "Allachay t\'jrasqaykunata";

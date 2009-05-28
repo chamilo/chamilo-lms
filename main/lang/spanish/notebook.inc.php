@@ -24,4 +24,5 @@ $AddNote = "Añadir nota";
 $ModifyNote = "Modificar nota";
 $BackToNoteList = "Regresar a la lista de anotaciones";
 $NotebookManagement = "Administración de nota personal";
+$BackToNotesList = "Volver al listado de notas";
 ?>

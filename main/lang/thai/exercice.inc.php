@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "คำเตือน! คำถามและคำตอบนี้ จะถูกใช้ในแบบทดสอบหลายช
 $langModifyInAllExercises = "ในทุกแบบทดสอบ";
 $langModifyInThisExercise = "ใช้ในแบบทดสอบนี้เท่านั้น";
 $langAnswerType = "คำตอบประเภท";
-$langUniqueSelect = "แบบปรนัย(มีคำตอบที่ถูกเพียงข้อเดียว)";
 $langMultipleSelect = "แบบปรนัย(สามารถตอบได้หลายข้อ)";
 $langFillBlanks = "เติมคำในช่องว่าง";
 $langMatching = "แบบจับคู่";

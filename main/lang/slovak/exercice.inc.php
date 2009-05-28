@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Upozornenie ! Tto otázka a jej odpovede sú použit
 $langModifyInAllExercises = "vo všetkých testoch";
 $langModifyInThisExercise = "len v aktuálnom teste";
 $langAnswerType = "Typ odpovede";
-$langUniqueSelect = "Výber z viacerých možností (jediná správna odpove&#271;)";
 $langMultipleSelect = "Výber z viacerých možností (viac správnych odpovedí)";
 $langFillBlanks = "Vyplnenie prázdnych miest";
 $langMatching = "Párovanie";

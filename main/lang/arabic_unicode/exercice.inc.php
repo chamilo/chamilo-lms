@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "تحذير ! هذا السؤال وجوابه م�
 $langModifyInAllExercises = "في جميع الإختبارات ";
 $langModifyInThisExercise = "فقط في الإختبار الحالي ";
 $langAnswerType = "نوع الجواب";
-$langUniqueSelect = "( اختيارات متعددة (جواب واحد فقط";
 $langMultipleSelect = " ( اختيارات متعددة (أجوبة متعددة";
 $langFillBlanks = "ملأ الفراغات";
 $langMatching = "توافقي";

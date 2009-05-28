@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Peringatan! pertanyaan ini dan jawabannya dipakai
 $langModifyInAllExercises = "dalam seluruh latihan";
 $langModifyInThisExercise = "hanya dalam latihan ini";
 $langAnswerType = "Macam jawaban";
-$langUniqueSelect = "Pilihan berganda (jawaban unik)";
 $langMultipleSelect = "Pilihan berganda (Jawaban ganda)";
 $langFillBlanks = "Mengisintitik-titik";
 $langMatching = "Menjodohkan";

@@ -67,6 +67,7 @@ $RepeatedEventViewOriginalEvent = "Eredeti esemény megtekintése";
 $ICalFileImport = "iCal/ics állomány importálása";
 $AllUsersOfThePlatform = "A rendszer összes felhasználója";
 $GlobalEvent = "Globális esemény";
+$ModifyEvent = "Esemény szerkesztése";
 $EndDateCannotBeBeforeTheStartDate = "A befejezés dátuma nem lehet korábbi a kezdés dátumánál";
 $AgendaSortChronologicallyUp = "Növekv&#337; sorrend";
 $AgendaSortChronologicallyDown = "Csökken&#337; sorrend";

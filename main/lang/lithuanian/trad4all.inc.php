@@ -29,6 +29,7 @@ $langUp = "Aukštyn";
 $Down = "žemyn";
 $Up = "aukštyn";
 $TheListIsEmpty = "Sąrašas tuščias.";
+$langUniqueSelect = "Vieno atsakymo pasirinkimas";
 $langCourseCreate = "Sukurti kursus";
 $langTodo = "Ką daryti";
 $UserName = "Vartotojo vardas";

@@ -28,6 +28,7 @@ $langUp = "Augšup";
 $Down = "Lejup";
 $Up = "augšup";
 $TheListIsEmpty = "Saraksts ir tukšs.";
+$langUniqueSelect = "Vair&#257;kk&#257;rt&#299;ga izv&#275;le (unik&#257;la atbilde)";
 $langCourseCreate = "Izveidot kursa lapu";
 $langTodo = "Uzdevumi";
 $UserName = "Lietot&#257;jv&#257;rds";

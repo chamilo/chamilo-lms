@@ -43,4 +43,8 @@ $langOnHomepage = "A hivatkozás megjelenítése a kezd&#337;oldalon.";
 $langShowLinkOnHomepage = "A hivatkozás megjelenítése ikonként a kurzus kezd&#337;oldalán.";
 $langCsvImport = "CSV importálás";
 $General = "Általános";
+$SearchFeatureDoIndexLink = "Indexeli a hivatkozás címét és leírását?";
+$langSaveLink = "Hivatkozás mentése";
+$langSaveCategory = "Mappa mentése";
+$BackToLinksOverview = "Vissza a hivatkozások leírásához";
 ?>

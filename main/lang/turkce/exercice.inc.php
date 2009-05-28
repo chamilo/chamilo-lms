@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Dikkat ! Bu soru ve cevaplar&#305; bir kaç testte
 $langModifyInAllExercises = "bütün testlerde";
 $langModifyInThisExercise = "sadece geçerli testte";
 $langAnswerType = "Cevap türü";
-$langUniqueSelect = "Çoktan seçme (Tek cevap)";
 $langMultipleSelect = "Çoktan seçme (Çoklu cevap)";
 $langFillBlanks = "Bo&#351;luk doldurma";
 $langMatching = "E&#351;le&#351;tirme";

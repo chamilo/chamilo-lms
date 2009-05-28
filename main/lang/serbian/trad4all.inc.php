@@ -30,6 +30,7 @@ $Down = "dole";
 $Up = "gore";
 $Theme = "Tema";
 $TheListIsEmpty = "Lista je prazna.";
+$langUniqueSelect = "Više ponu&#273;enih odgovora (jedan ta&#269;an odgovor)";
 $langCourseCreate = "Kreiraj okruženje kursa";
 $langTodo = "Treba uraditi";
 $UserName = "Korisni&#269;ko ime";

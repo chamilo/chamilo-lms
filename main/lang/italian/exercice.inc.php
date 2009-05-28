@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Attenzione! Questo quesito e le rispettive rispos
 $langModifyInAllExercises = "in tutti i Test";
 $langModifyInThisExercise = "solo in questo Test";
 $langAnswerType = "Tipologia di risposta";
-$langUniqueSelect = "Risposta singola";
 $langMultipleSelect = "Risposta multipla";
 $langFillBlanks = "Riempimento";
 $langMatching = "Abbinamento";
@@ -322,4 +321,6 @@ $SaveSection = "Salva l\'elemento";
 $langMoreHotspotsImage = "Aggiungi/Modifica zone attive sull\'immagine";
 $ReachedTimeLimitAdmin = "Configura i limiti di tempo";
 $LastScoreTest = "Ultimo punteggio di un test";
+$BackToResultList = "Torna all\'elenco dei risultati";
+$EditingScoreCauseProblemsToExercisesInLP = "Se modifichi il punteggio di un quesito, ricorda che il Test è inserito in un modulo didattico: i punteggi del modulo potrebbero esserne influenzati ";
 ?>

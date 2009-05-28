@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Uwaga ! To pytanie i odpowied&#378; s&#261; u&#38
 $langModifyInAllExercises = "we wszystkicg testach";
 $langModifyInThisExercise = "tylko w bie&#380;&#261;cym te&#347;cie";
 $langAnswerType = "Typ odpowiedzi";
-$langUniqueSelect = "Wielokrotny wybór (jedna odpowied&#378; poprawna)";
 $langMultipleSelect = "Wielokrotny wybór (wiele odpowiedzi poprawnych)";
 $langFillBlanks = "Wype&#322;nij pole";
 $langMatching = "Dopasuj";

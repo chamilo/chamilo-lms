@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Προσοχή ! Αυτή η ερώτηση και οι απαντήσεις τις χρ
 $langModifyInAllExercises = "σε όλες τις ασκήσεις";
 $langModifyInThisExercise = "μόνο στην τρέχουσα άσκηση";
 $langAnswerType = "Τύπος Απάντησης";
-$langUniqueSelect = "Πολλαπλής Επιλογής (Μοναδική Απάντηση)";
 $langMultipleSelect = "Πολλαπλής Επιλογής (Πολλαπλές Απαντήσεις)";
 $langFillBlanks = "Συμπλήρωμα Κενών";
 $langMatching = "Ταίριασμα";

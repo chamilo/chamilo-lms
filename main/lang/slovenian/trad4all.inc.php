@@ -31,6 +31,7 @@ $Down = "dol";
 $Up = "gor";
 $Theme = "Tema";
 $TheListIsEmpty = "Seznam je prazen.";
+$langUniqueSelect = "Veèkratna izbira (En odgovor)";
 $CreateCategory = "Ustvari kategorijo";
 $SendFile = "Pošlji datoteko";
 $SaveChanges = "Shrani spremembe";

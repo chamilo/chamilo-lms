@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$lang_already_enrolled                      = "já está inscrito";
+$lang_already_enrolled                      = "já se encontra inscrito";
 $lang_my_personnal_course_list              = "A minha lista pessoal de cursos";
 $lang_course_enrollment                     = "Inscrição no curso";
 $lang_course_not_available                  = "Curso não disponível";
@@ -28,6 +28,7 @@ $langCatList  = "Lista de Categorias";
 $langCourseList  = "Lista de Cursos";
 $Subscribe = "Inscrever";
 $AlreadySubscribed = "Já está inscrito";
+$CodeMandatory = "Código obrigatório";
 $CourseCategoryStored = "Categoria do curso criada";
 $langWithoutTimeLimits = "Sem limite de tempo";
 $lang_back_to_main_category_list = "Voltar para a lista principal de categorias";

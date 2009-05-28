@@ -17,4 +17,5 @@ $lang_new_dropbox_file = "Új fájl érkezett";
 $lang_update_dropbox_file = "Egy fájl a Fájlposta eszközben frissítésre került.";
 $ForumCategoryAdded = "A fórumkategória létrehozva";
 $LearnpathAdded = "Tanösvény létrehozva";
+$GlossaryAdded = "Új kifejezés lett a Szójegyzékhez hozzáadva";
 ?>

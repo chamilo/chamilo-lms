@@ -28,6 +28,7 @@ $langUp = "Pli alta nivelo";
 $Down = "malsupren";
 $Up = "supren";
 $TheListIsEmpty = "La listo estas malplena.";
+$langUniqueSelect = "Plurelekta (ununura respondo) ";
 $langCourseCreate = "Ekkrei kurspa&#285;aron";
 $langTodo = "Sugestoj";
 $UserName = "Ensalutnomo";

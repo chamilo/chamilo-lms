@@ -31,6 +31,7 @@ $Down = "dole";
 $Up = "hore";
 $Theme = "Téma";
 $TheListIsEmpty = "Prázdny zoznam.";
+$langUniqueSelect = "Výber z viacerých možností (jediná správna odpove&#271;)";
 $langCourseCreate = "Vytvor priestor pre kurz";
 $langTodo = "Urobi&#357;";
 $UserName = "Prihlasovacie meno";

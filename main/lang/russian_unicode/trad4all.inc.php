@@ -30,6 +30,7 @@ $langUp = "Вверх";
 $Down = "вниз";
 $Up = "вверх";
 $TheListIsEmpty = "Список пустой.";
+$langUniqueSelect = "Множественный выбор";
 $langCourseCreate = "Создать курс";
 $langTodo = "Выполнять";
 $UserName = "Имя пользователя";

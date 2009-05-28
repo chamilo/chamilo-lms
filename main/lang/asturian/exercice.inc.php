@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "¡Cuidáu! Esta entruga y les sos rempuestes úsense
 $langModifyInAllExercises = "en tolos exercicios";
 $langModifyInThisExercise = "namás nesti exerciciu";
 $langAnswerType = "Tipu de rempuesta";
-$langUniqueSelect = "Eleición múltiple (Retruque únicu)";
 $langMultipleSelect = "Eleición múltiple (Retruque múltiple)";
 $langFillBlanks = "Enllenar los espacios en blancu";
 $langMatching = "Rellacionar";

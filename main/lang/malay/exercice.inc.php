@@ -28,7 +28,6 @@ $langUsedInSeveralExercises = "Peringatan ! Soalan ini telah digunakan beberapa 
 $langModifyInAllExercises = "pada semua latihan";
 $langModifyInThisExercise = "hanya pada latihan semasa";
 $langAnswerType = "Jenis Jawapan";
-$langUniqueSelect = "Pelbagai Jawapan (Satu Jawapan)";
 $langMultipleSelect = "Pelbagai Jawapan (Lebih dari satu jawapan)";
 $langFillBlanks = "Isikan Ruang Kosong";
 $langMatching = "Suaikan";

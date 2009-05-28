@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Precaución! Esta pregunta y sus respuestas son us
 $langModifyInAllExercises = "en todos los ejercicios";
 $langModifyInThisExercise = "sólo en este ejercicio";
 $langAnswerType = "Tipo de respuesta";
-$langUniqueSelect = "Respuesta única";
 $langMultipleSelect = "Respuesta múltiple";
 $langFillBlanks = "Rellenar blancos";
 $langMatching = "Relacionar";
@@ -323,4 +322,5 @@ $langMoreHotspotsImage = "Agregar / editar hotspots en la imagen";
 $ReachedTimeLimitAdmin = "Ha alcanzado el límite de tiempo para realizar este ejercicio";
 $LastScoreTest = "Última puntuación de un ejercicio";
 $BackToResultList = "Volver a lista de resultados";
+$EditingScoreCauseProblemsToExercisesInLP = "Si edita el puntaje de esta pregunta modificará el resultado del ejercicio, recuerde que este ejercicio está agregado también a una Lección";
 ?>

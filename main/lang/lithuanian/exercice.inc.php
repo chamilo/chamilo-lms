@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Dėmesio! Šis klausimas su atsakymais naudojamas
 $langModifyInAllExercises = "visuose testuose";
 $langModifyInThisExercise = "tik šiame teste";
 $langAnswerType = "Atsakymo tipas";
-$langUniqueSelect = "Vieno atsakymo pasirinkimas";
 $langMultipleSelect = "Daugelio atsakymų pasirinkimas";
 $langFillBlanks = "Tuščių laukelių užpildymas";
 $langMatching = "Atitinkantys atsakymai";

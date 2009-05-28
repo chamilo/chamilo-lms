@@ -27,6 +27,9 @@ $langCatList  = "Categorii";
 $langCourseList  = "Cursuri";
 $Subscribe = "Inscrie-te";
 $AlreadySubscribed = "Deja inscris";
+$CodeMandatory = "Codul este spatiu obligatoriu";
+$CourseCategoryMandatory = "Categoria cursului este un spatiu obligatoriu";
+$TeacherMandatory = "Profesorul este un camp obligatoriu";
 $CourseCategoryStored = "Categoria de cursuri a fost creata";
 $langWithoutTimeLimits = "Fara limite de timp";
 $lang_back_to_main_category_list = "Inapoi la lista principala de categorii";
@@ -69,4 +72,7 @@ $SubmitRegistrationCode = "Trimiteti codul de inregistrare";
 $CourseCategoryDeleted = "Categoria a fost stearsa";
 $CategorySortingDone = "S-a incheiat sortarea categoriei";
 $CourseCategoryEditStored = "Categorie actualizata";
+$buttonCreateCourseCategory = "Pastreaza categoria Trainingului";
+$buttonSaveCategory = "Pastreaza categoria";
+$buttonChangeCategory = "Modifica categoria";
 ?>

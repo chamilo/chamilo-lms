@@ -31,6 +31,7 @@ $Down = "descendre";
 $Up = "monter";
 $Theme = "Thème graphique";
 $TheListIsEmpty = "La liste est vide.";
+$langUniqueSelect = "Choix multiple";
 $CreateCategory = "Créer dossier";
 $SendFile = "Importer le document";
 $SaveChanges = "Enregistrer les modifications";

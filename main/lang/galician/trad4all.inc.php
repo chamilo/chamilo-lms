@@ -31,6 +31,7 @@ $Down = "Descargar";
 $Up = "Subir";
 $Theme = "Tema";
 $TheListIsEmpty = "A lista está valeira";
+$langUniqueSelect = "Elección múltiple (Resposta única)";
 $langCourseCreate = "Crear o sitio dun curso";
 $langTodo = "Suxestións";
 $UserName = "Nome de usuario";

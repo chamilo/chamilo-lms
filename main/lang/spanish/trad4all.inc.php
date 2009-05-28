@@ -31,6 +31,7 @@ $Down = "Bajar";
 $Up = "Subir";
 $Theme = "Tema";
 $TheListIsEmpty = "La lista está vacía";
+$langUniqueSelect = "Respuesta única";
 $CreateCategory = "Crear categoría";
 $SendFile = "Enviar archivo";
 $SaveChanges = "Guardar cambios";

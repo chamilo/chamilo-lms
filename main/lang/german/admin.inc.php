@@ -851,4 +851,9 @@ $ExtendRightsForCoachTitle = "Erweitere Rechte für Lehrer";
 $ExtendRightsForCoachComment = "Die Aktivierung dieser Option wird dem Lehrer die gleichen Rechte wie dem Trainer   in den Authoring Tools geben";
 $ExtendRightsForCoachOnSurveyComment = "Die Aktivierung dieser Option wird dem Lehrer das Erstellen und Editieren von Umfragen erlauben";
 $ExtendRightsForCoachOnSurveyTitle = "Erweitere Rechte für Lehrer bei Umfragen";
+$CannotDeleteUserBecauseOwnsCourse = "Dieser User kann nicht gelöscht werden, da er noch Trainer dieses Kurses ist.Entweder wird der Trainer-Status entfernt, anschließend kann der User entfernt werden; alternativ kann dieser Account auch einfach deaktiviert werden.";
+$AllowUsersToCreateCoursesTitle = "Erlaube Nicht-Administratoren Kurse zu erstellen";
+$YesWillDeletePermanently = "Ja (die Dateien werden permanent gelöscht, und sind unwiederbringlich verloren)";
+$NoWillDeletePermanently = "Nein (die Dateien werden aus der Applikation gelöscht, sind aber manuell durch den Server-Administrator wiederherzustellen)";
+$Templates = "Vorlagen";
 ?>

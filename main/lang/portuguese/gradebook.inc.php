@@ -115,4 +115,6 @@ $GradebookWhoChangedItLog = "Quem o alterou";
 $EvaluationEdited = "A avaliação foi alterada";
 $CategoryEdited = "Categoria actualizada";
 $OnlyNumbers = "Somente números";
+$IncorrectData = "Data incorrecta";
+$NoResultsAvailable = "Não há resultados disponíveis";
 ?>

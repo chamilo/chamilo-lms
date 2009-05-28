@@ -71,4 +71,6 @@ $AssignmentName = "Assignment name";
 $CreateAssignment = "Create assignment";
 $FolderEdited = "Folder edited";
 $UpdateWork = "Update this task";
+$MakeAllPapersInvisible = "Make all papers invisible";
+$MakeAllPapersVisible = "Make all papers visible";
 ?>

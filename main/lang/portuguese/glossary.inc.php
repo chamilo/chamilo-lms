@@ -11,5 +11,7 @@ $TermAddButton = "Acrescentar este termo";
 $TermUpdateButton = "Actualizar termo";
 $TermEdit = "Editar termo";
 $TermDeleteAction = "Eliminar termo";
+$OrderBy = "Ordenar por";
 $UpdateDate = "Última modificação";
+$TermAdded = "Termo acrescentado";
 ?>

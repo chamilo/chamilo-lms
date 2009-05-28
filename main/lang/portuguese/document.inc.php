@@ -60,6 +60,7 @@ $langTocUp  = "Acima";
 $lang_cut_paste_link = "Sem frames";
 $langCreatePath = "Criar uma rota";
 $SendDocument = "Enviar ficheiro";
+$ChangeVisibility = "Alterar visibilidade";
 $langOogieConversionPowerPoint = "Oogie : conversão de PowerPoint";
 $langWelcomeOogieSubtitle = "Conversor de PowerPoint para Sequência de Aprendizagem";
 $langAddMetadata = "Ver/Editar Metadata";
@@ -206,4 +207,8 @@ $TemplateTitleTimelineDescription = "3 listas relacionadas com setas";
 $TemplateTitleStopAndThink = "Pára e reflecte";
 $TemplateTitleListLeftListDescription = "Lista à esquerda com instrutor";
 $TemplateTitleStopAndThinkDescription = "Convite para parar e reflectir";
+$CreateTheDocument = "Validar";
+$CreateTemplate = "Criar modelo";
+$SharedFolder = "Pasta partilhada";
+$CreateFolder = "Criar uma pasta";
 ?>

@@ -1,6 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$PublishSurvey = "Kérd&#337;ív publikálása";
+$CompareQuestions = "Kérdések összehasonlítása";
+$InformationUpdated = "Információk módosítva";
 $SurveyTitle = "Kérd&#337;ív címe";
 $SurveyIntroduction = "Kérd&#337;ív bevezet&#337;je";
 $CreateNewSurvey = "Kérd&#337;ív létrehozása";
@@ -163,4 +166,41 @@ $PeopleAnswered = "személy válaszolt";
 $AnonymousSurveyCannotKnowWhoAnswered = "A felmérés anonim. Nem láthatja a válaszadók adatait.";
 $IllegalSurveyId = "Ismeretlen kérd&#337;ív azonosító";
 $SurveyQuestionMoved = "A kérdés áthelyezve";
+$IdenticalSurveycodeWarning = "A kérd&#337;ív azonosító már létezik. Ez valószín&#369;leg azt jelenti, hogy a kérd&#337;ív már egy másik nyelven létre lett hozva. A felkért személyek választhatnak az eltér&#337; nyelvek között.";
+$ThisSurveyCodeSoonExistsInThisLanguage = "A kérd&#337;ív kódja hamarosan létrejön ezen a nyelven";
+$SurveyUserAnswersHaveBeenRemovedSuccessfully = "A kérd&#337;ívre a felhasználók által adott válaszok sikeresen eltávolítva.";
+$DeleteSurveyByUser = "A felhasználó válaszainak törlése";
+$SelectType = "Válasszon típust";
+$Conditional = "Feltételes";
+$ParentSurvey = "Sz&#369;l&#337; kérd&#337;ív";
+$OneQuestionPerPage = "Oldalanként egy kérdés";
+$ActivateShuffle = "Összekeverés engedélyezése";
+$ShowFormProfile = "Profil oldal megjelenítése";
+$PersonalityQuestion = "Kérdés szerkesztése";
+$YouNeedToCreateGroups = "Létre kell hoznia csoportokat";
+$ManageGroups = "Csoportok kezelése";
+$Create = "Létrehoz";
+$GroupCreatedSuccessfully = "A csoport sikeresen létrejött";
+$GroupNeedName = "A csoportot el kell nevezni";
+$Personality = "Személyessé tétel";
+$Condition = "Feltétel";
+$Primary = "Els&#337;dleges";
+$Secondary = "Másodlagos";
+$CourseSettings = "Kurzus beállítások";
+$PleaseChooseACondition = "Kérem, válasszon feltételt";
+$ChooseDifferentCategories = "Válasszon különböz&#337; kategóriákat";
+$Version = "Verzió";
+$Normal = "Normál";
+$NoLogOfDuration = "Nincs az id&#337;tartamra vonatkozó információ";
+$AutoInviteLink = "Azok a felhasználók, akiket nem hívtak meg, a következ&#337; hivatkozáson érhetik el a kérd&#337;ívet:";
+$CompleteTheSurveysQuestions = "A kérd&#337;ív kitöltése";
+$SurveysDeleted = "Kérd&#337;ívek törölve";
+$RemindUnanswered = "Emlékeztesse csak azokat a felhasználókat, akik nem válaszoltak";
+$ModifySurvey = "Kérd&#337;ív szerkesztése";
+$CreateQuestionSurvey = "Kérdés létrehozása";
+$ModifyQuestionSurvey = "Kérdés szerkesztése";
+$BackToSurvey = "Vissza a kérd&#337;ívhez";
+$UpdateInformation = "Információ frissítése";
+$PleaseFillSurvey = "Kérem, töltse ki a kérd&#337;ívet";
+$ReportingOverview = "Jelentés összefoglaló";
 ?>

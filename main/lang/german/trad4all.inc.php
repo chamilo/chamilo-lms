@@ -31,6 +31,7 @@ $Down = "nach unten";
 $Up = "nach oben";
 $Theme = "Theme";
 $TheListIsEmpty = "Die Liste ist leer.";
+$langUniqueSelect = "Multiple choice (eine Antwort je Frage)";
 $langCourseCreate = "Kurs erstellen";
 $langTodo = "Noch zu tun";
 $UserName = "Benutzername";

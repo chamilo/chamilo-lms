@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "警告﹗這個題目和答案已經用於多個�
 $langModifyInAllExercises = "在所有測驗中";
 $langModifyInThisExercise = "僅在當前測驗中";
 $langAnswerType = "答案類型";
-$langUniqueSelect = "單一答案選擇題";
 $langMultipleSelect = "多答案選擇題";
 $langFillBlanks = "填空題";
 $langMatching = "配對題";

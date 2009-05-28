@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Pozor ! To vprašanje in njegovi odgovori so upor
 $langModifyInAllExercises = "v vseh vajah";
 $langModifyInThisExercise = "samo v trenutni vaji";
 $langAnswerType = "Tip odgovora";
-$langUniqueSelect = "Večkratna izbira (En odgovor)";
 $langMultipleSelect = "Večkratna izbira (Več odgovorov)";
 $langFillBlanks = "Zapolni prazna mesta";
 $langMatching = "Ujemanje";

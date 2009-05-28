@@ -21,6 +21,7 @@ $Assignments = "Assignments";
 $Forum = "Forum";
 $langCode = "лПД ЛХТУБ";
 $langUp = "вверх";
+$langUniqueSelect = "Множественный выбор (один правильный ответ)";
 $langCourseCreate = "Создать сайт курса";
 $langTodo = "Предложения";
 $UserName = "Имя пользователя";

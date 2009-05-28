@@ -53,4 +53,7 @@ $LearnerMessage = "Üzenet egy tanulótól";
 $TitleIsRequired = "A címet kötelez&#337; megadni";
 $AnnounceSentByEmail = "A hirdetmény e-mailben elküldve";
 $AnnounceSentToUserSelection = "A hirdetmény elküldve a kiválasztott felhasználóknak";
+$SendAnnouncement = "Felhívás elküldése";
+$ModifyAnnouncement = "Felhívás szerkesztése";
+$ButtonPublishAnnouncement = "Felhívás elküldése";
 ?>

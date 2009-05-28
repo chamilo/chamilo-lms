@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Attention ! Cette question et ses réponses sont u
 $langModifyInAllExercises = "pour l\'ensemble des tests";
 $langModifyInThisExercise = "uniquement pour le test courant";
 $langAnswerType = "Type de réponse";
-$langUniqueSelect = "Choix multiple";
 $langMultipleSelect = "Réponses multiples";
 $langFillBlanks = "Remplir les blancs";
 $langMatching = "Apparier";

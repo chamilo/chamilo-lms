@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$LinkMoved = "Linkul este mutat";
 $langLinkName = "Numele linkului";
 $langLinkAdd = "Adauga un link";
 $langLinkAdded = "Linkul a fost adaugat.";
@@ -41,4 +42,5 @@ $langAll_Link_Deleted = "Linkul a fost sters";
 $langOnHomepage = "Arata linkul pe pagina principala";
 $langShowLinkOnHomepage = "Arata acest link ca o icoana pe pagina principala a cursului";
 $langCsvImport = "Importa CSV";
+$General = "Generalitati";
 ?>

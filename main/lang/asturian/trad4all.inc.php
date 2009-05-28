@@ -31,6 +31,7 @@ $Down = "Baxar";
 $Up = "Pa enriba";
 $Theme = "Tema";
 $TheListIsEmpty = "El llistáu ta vacíu";
+$langUniqueSelect = "Eleición múltiple (Retruque únicu)";
 $langCourseCreate = "Crear un cursu";
 $langTodo = "Deberes por facer";
 $UserName = "Usuariu";

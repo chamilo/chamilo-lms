@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "Предупреждение! Этот вопро
 $langModifyInAllExercises = "во всех тестах";
 $langModifyInThisExercise = "только в текущем тесте";
 $langAnswerType = "Тип ответа";
-$langUniqueSelect = "Множественный выбор";
 $langMultipleSelect = "Множественные ответы";
 $langFillBlanks = "Заполнить пропуски";
 $langMatching = "Паросочетание";

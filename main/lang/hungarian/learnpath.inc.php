@@ -3,6 +3,12 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "Elkészült az új fórum";
 $NewThreadCreated = "Az új fórum téma létrejött.";
+$AddHotpotatoes = "Hotpotatoes teszt hozzáadása";
+$LearnPathAddedTitle = "A Dokeos kurzusszerkeszt&#337; eszköze köszönti Önt!";
+$BuildComment  = "Tanulási objektumok és tevékenységek hozzáadása a kurzusához";
+$BasicOverviewComment = "Hangos megjegyzések és tanulási objektumok hozzáf&#369;zése a tartalomjegyzékhez";
+$NewChapterComment = "1. Fejezet, 2. Fejezet vagy 1. hét, 2. hét...";
+$NewStepComment = "a kurzusát lépésr&#337;l lépésre építheti fel dokumentumok, tesztek és egyéb tevékenységek hozzáadásával a szerz&#337;i sablonok és média galéria segítségével.";
 $lang_learning_path = "Tanösvény";
 $lang_learning_path_builder = "Tanösvény szerkeszt&#337;";
 $lang_description = "Leírás";

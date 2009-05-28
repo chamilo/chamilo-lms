@@ -70,4 +70,5 @@ $ButtonCreateAssignment = "Crea";
 $AssignmentName = "Titolo dell\'elaborato";
 $CreateAssignment = "Crea l\'elaborato";
 $FolderEdited = "Cartella modificata";
+$UpdateWork = "Aggiorna l\'elaborato";
 ?>

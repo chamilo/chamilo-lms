@@ -44,4 +44,5 @@ $langShowLinkOnHomepage = "Mostrar esta ligação num ícone na página principal do
 $langCsvImport = "Importar ficheiro CSV";
 $General = "Geral";
 $langSaveLink = "Guardar ligação";
+$langSaveCategory = "Guardar pasta";
 ?>

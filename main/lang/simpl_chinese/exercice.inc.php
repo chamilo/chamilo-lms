@@ -32,7 +32,6 @@ $langUsedInSeveralExercises = "¾¯¸æ! Õâ¸öÎÊÌâºÍ´ğ°¸ÒÑ¾­ÓÃÓÚ¶à¸ö²âÑé. ÄãÕæµÃÒªĞŞ¸
 $langModifyInAllExercises = "ÔÚËùÓĞ²âÑéÖĞ";
 $langModifyInThisExercise = "½öÔÚµ±Ç°²âÑéÖĞ";
 $langAnswerType = "´ğ°¸ÀàĞÍ";
-$langUniqueSelect = "¶àÏîÑ¡Ôñ (Ö»ÓĞÒ»¸öÕıÈ·´ğ°¸)";
 $langMultipleSelect = "¶àÏîÑ¡Ôñ (¿ÉÓĞ¶à¸öÕıÈ·´ğ°¸) ";
 $langFillBlanks = "Ìî¿Õ";
 $langMatching = "Åä¶Ô";

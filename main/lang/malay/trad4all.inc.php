@@ -21,6 +21,7 @@ $Assignments = "Assignments";
 $Forum = "Forum";
 $langCode = "Kod Subjek";
 $langUp = "Atas";
+$langUniqueSelect = "Pelbagai Jawapan (Satu Jawapan)";
 $langCourseCreate = "Bina Laman Subjek";
 $langTodo = "Cadangan Penambahbaikan";
 $UserName = "ID Pengguna";

@@ -127,4 +127,5 @@ $NewDropboxFileUploadedContent = "Az új állomány el lett küldve a kurzusába a Fá
 $langAddEdit = "Hozzáad / szerkeszt";
 $ErrorNoFilesInFolder = "Ez a mappa üres";
 $dropbox_lang["upload"] = "Feltölt";
+$AddComment  = "Hozzászólás elmentése";
 ?>

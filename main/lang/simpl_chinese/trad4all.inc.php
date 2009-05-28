@@ -29,6 +29,7 @@ $langUp = "向上";
 $Down = "向下";
 $Up = "向上";
 $TheListIsEmpty = "列表为空.";
+$langUniqueSelect = "多项选择 (只有一个正确答案)";
 $langCourseCreate = "新建课程";
 $langTodo = "您的建议";
 $UserName = "用户名";

@@ -104,4 +104,5 @@ $AllowUserImageForumDeactivate = "Ocultar fotos dos estudantes no fórum";
 $AllowLearningPathTheme = "Permitir tema de Sequência de Aprendizagem";
 $AllowLearningPathThemeAllow = "Permitido";
 $AllowLearningPathThemeDisallow = "Não permitido";
+$ConfigChat = "Configurações do chat";
 ?>

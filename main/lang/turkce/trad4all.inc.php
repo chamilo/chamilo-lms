@@ -28,6 +28,7 @@ $langUp = "Yukarý";
 $Down = "a&#351;a&#287;&#305;";
 $Up = "yukar&#305;";
 $TheListIsEmpty = "Liste bo&#351;.";
+$langUniqueSelect = "Çoktan seçme (Tek cevap)";
 $langCourseCreate = "Ders sitesi yarat";
 $langTodo = "Yapýlacaklar";
 $UserName = "Kullan&#305;c&#305; ismi";

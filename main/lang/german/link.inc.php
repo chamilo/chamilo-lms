@@ -43,4 +43,7 @@ $langOnHomepage = "Link auf Homepage anzeigen";
 $langShowLinkOnHomepage = "Diesen Link als Icon auf der Kurs-Homepage anzeigen";
 $langCsvImport = "CSV Import";
 $General = "Allgemein";
+$langSaveLink = "Link speichern";
+$langSaveCategory = "Ordner speichern";
+$BackToLinksOverview = "Zurück zur Link-Übersicht";
 ?>

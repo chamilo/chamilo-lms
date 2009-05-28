@@ -28,6 +28,7 @@ $langUp = "Sus";
 $Down = "jos";
 $Up = "sus";
 $TheListIsEmpty = "Lista este goala.";
+$langUniqueSelect = "Alegere multipla (raspuns unic)";
 $langCourseCreate = "Creati o zona de curs";
 $langTodo = "De efectuat";
 $UserName = "Nume de utilizator";
@@ -377,5 +378,6 @@ $ListView = "Afiseaza ca lista";
 $DisplayOrder = "Ordinea de afisare";
 $SaveDocument = "Salveaza documentul";
 $TooShort = "Prea scurt";
+$FieldRequired = "Spatiu obligatoriu";
 $NoParticipation = "Nu exista participan&#355;i";
 ?>

@@ -28,7 +28,6 @@ $langUsedInSeveralExercises = "Внимание! Этот вопрос и ответы к нему используютс
 $langModifyInAllExercises = "для всех тестов";
 $langModifyInThisExercise = "только для текущего теста";
 $langAnswerType = "Тип ответа";
-$langUniqueSelect = "Множественный выбор (один правильный ответ)";
 $langMultipleSelect = "Множественный выбор (несколько правильных ответов)";
 $langFillBlanks = "Заполнение пропусков";
 $langMatching = "Соответствия";

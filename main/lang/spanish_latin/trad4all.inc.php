@@ -28,6 +28,7 @@ $langUp = "Subir";
 $Down = "abajo";
 $Up = "arriba";
 $TheListIsEmpty = "La lista está vacía";
+$langUniqueSelect = "Múltiple choice (respuesta única)";
 $langCourseCreate = "Crear el sitio web de un curso";
 $langTodo = "Sugerencias";
 $UserName = "Nombre de usuario";

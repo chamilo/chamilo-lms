@@ -68,5 +68,9 @@ $ICalFileImport = "Importa un fisier iCal/ics";
 $AllUsersOfThePlatform = "Toti utilizatorii de pe platforma";
 $GlobalEvent = "Evenimente globale";
 $ModifyEvent = "Modifica eveniment";
+$EndDateCannotBeBeforeTheStartDate = "Data finala nu poate fi inainte de data de inceput";
+$AgendaSortChronologicallyUp = "Ordine crescatoare";
+$AgendaSortChronologicallyDown = "Ordine descrescatoare";
+$ItemForUserSelection = "Selecteaza utilizatorii";
 $IsNotiCalFormatFile = "Aceasta fisier nu este un fisier iCal.";
 ?>

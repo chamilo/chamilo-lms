@@ -28,4 +28,17 @@ $langUnreg = "Renunta";
 $langGroupUserManagement = "Administrare grup";
 $langUnregister = "Neinregistrat";
 $langAddAUser = "Adauga utilizator";
+$ImagesUploaded = "Imagini incarcate";
+$ExtraInformation = "Extra informatie";
+$SearchContacts = "Cauta contacte";
+$SocialSeeContacts = "Vizualizare contacte";
+$MessageInvitationNotSent = "Invitatia dvs. nu este trimisa";
+$SocialAddToFriends = "Adauga la contactele mele";
+$UserNonRegisteredAtTheCourse = "Acest utilizator nu e inregistrat in acest training";
+$ChangeContactGroup = "Editare contact grup";
+$Friend = "Prieten";
+$ViewMySharedProfile = "Profilul meu";
+$UserStatistics = "Statisticile acestui utilizator";
+$EditUser = "Modifica acest utilizator";
+$ViewUser = "Uita-te la acest utilizator";
 ?>

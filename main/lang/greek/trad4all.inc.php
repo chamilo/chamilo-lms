@@ -27,6 +27,7 @@ $langUp = "Πάνω";
 $Down = "Κάτω";
 $Up = "Πάνω";
 $TheListIsEmpty = "Ο κατάλογος είναι κενός";
+$langUniqueSelect = "Πολλαπλής Επιλογής (Μοναδική Απάντηση)";
 $langCourseCreate = "Δημιουργία ενός μαθήματος";
 $langTodo = "Να γίνουν";
 $UserName = "Όνομα χρήστη";

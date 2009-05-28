@@ -34,9 +34,16 @@ $tool = TOOL_NOTEBOOK;
 // tracking
 event_access_tool(TOOL_NOTEBOOK);
 
-if ( isset($_GET['action']) && ($_GET['action'] == 'addnote' || $_GET['action'] == 'editnote')) {
-$tool=get_lang('NotebookManagement');
-$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Notebook'));
+// tool name
+if ( isset($_GET['action']) && $_GET['action'] == 'addnote')
+{
+	$tool = get_lang('NoteAddNew');
+	$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Notebook'));
+}
+if ( isset($_GET['action']) && $_GET['action'] == 'editnote')
+{
+	$tool = get_lang('ModifyNote');
+	$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Notebook'));
 }
 
 // displaying the header
@@ -102,6 +109,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 	} 
 	else 
 	{		
+		echo '<div class="actions">';
+		echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToNotesList').'</a>';
+		echo '</div>';
 		$token = Security::get_token();
 		$form->addElement('hidden','sec_token');
 		$form->setConstants(array('sec_token' => $token));		
@@ -149,6 +159,9 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 	} 
 	else 
 	{
+		echo '<div class="actions">';
+		echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToNotesList').'</a>';
+		echo '</div>';		
 		$token = Security::get_token();
 		$form->addElement('hidden','sec_token');
 		$form->setConstants(array('sec_token' => $token));		
@@ -166,6 +179,39 @@ else if (isset($_GET['action']) && $_GET['action'] == 'deletenote' && is_numeric
 // Action handling: changing the view (sorting order)
 else if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('creation_date','update_date', 'title')))
 {
+	switch ($_GET['view'])
+	{
+		case 'creation_date':
+			if (!$_GET['direction'] OR $_GET['direction'] == 'ASC')
+			{
+				Display::display_confirmation_message(get_lang('NotesSortedByCreationDateAsc'));
+			}
+			else 
+			{
+				Display::display_confirmation_message(get_lang('NotesSortedByCreationDateDESC'));
+			}
+			break;
+		case 'update_date':
+			if (!$_GET['direction'] OR $_GET['direction'] == 'ASC')
+			{
+				Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateAsc'));
+			}
+			else 
+			{
+				Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateDESC'));
+			}
+			break;
+		case 'title':
+			if (!$_GET['direction'] OR $_GET['direction'] == 'ASC')
+			{
+				Display::display_confirmation_message(get_lang('NotesSortedByTitleAsc'));
+			}
+			else 
+			{
+				Display::display_confirmation_message(get_lang('NotesSortedByTitleDESC'));
+			}
+			break;	
+	}
 	$_SESSION['notebook_view'] = $_GET['view']; 
 	display_notes();
 } else {
@@ -274,19 +320,37 @@ function delete_note($notebook_id) {
 }
 
 function display_notes() {
+	
+	if (!$_GET['direction'])
+	{
+		$sort_direction = 'ASC';
+		$link_sort_direction = 'DESC';
+	}
+	elseif ($_GET['direction'] == 'ASC')
+	{
+		$sort_direction = 'ASC';
+		$link_sort_direction = 'DESC';
+	}
+	else 
+	{
+		$sort_direction = 'DESC';
+		$link_sort_direction = 'ASC';
+	}
+	
+	
 	// action links
 	echo '<div class="actions" style="margin-bottom:20px">';
 	//if (api_is_allowed_to_edit())
 	//{
 		if (!api_is_anonymous()) {
-			echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
+			echo '<a href="index.php?'.api_get_cidreq().'&amp;action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
 		} else {
 			echo '<a href="javascript:void(0)">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
 		}
 	//}
-	echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date">'.Display::return_icon('calendar_select.gif',get_lang('OrderByCreationDate')).get_lang('OrderByCreationDate').'</a>';
-	echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=update_date">'.Display::return_icon('calendar_select.gif',get_lang('OrderByModificationDate')).get_lang('OrderByModificationDate').'</a>';
-	echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=title">'.Display::return_icon('comment.gif',get_lang('OrderByTitle')).get_lang('OrderByTitle').'</a>';
+	echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=creation_date&amp;direction='.$link_sort_direction.'">'.Display::return_icon('calendar_select.gif',get_lang('OrderByCreationDate')).get_lang('OrderByCreationDate').'</a>';
+	echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=update_date&amp;direction='.$link_sort_direction.'">'.Display::return_icon('calendar_select.gif',get_lang('OrderByModificationDate')).get_lang('OrderByModificationDate').'</a>';
+	echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=title&amp;direction='.$link_sort_direction.'">'.Display::return_icon('comment.gif',get_lang('OrderByTitle')).get_lang('OrderByTitle').'</a>';
 	echo '</div>';	
 	
 	if (!in_array($_SESSION['notebook_view'],array('creation_date','update_date', 'title'))) {
@@ -297,9 +361,9 @@ function display_notes() {
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);	
 	$order_by = "";
 	if ($_SESSION['notebook_view'] == 'creation_date' || $_SESSION['notebook_view'] == 'update_date') {
-		$order_by = " ORDER BY ".$_SESSION['notebook_view']." DESC ";
+		$order_by = " ORDER BY ".$_SESSION['notebook_view']." $sort_direction ";
 	} else {
-		$order_by = " ORDER BY ".$_SESSION['notebook_view']." ASC ";
+		$order_by = " ORDER BY ".$_SESSION['notebook_view']." $sort_direction ";
 	}
 		
 	$cond_extra = ($_SESSION['notebook_view']== 'update_date')?" AND update_date <> '0000-00-00 00:00:00'":" ";

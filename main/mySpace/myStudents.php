@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 21036 2009-05-28 12:12:08Z pcool $
+<?php //$Id: myStudents.php 21050 2009-05-28 19:09:21Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -294,7 +294,7 @@ if(!empty($_GET['student']))
 								// get the path,width and height from original picture
 								$image_file = $image_array['dir'].$image_array['file'];
 								$big_image = $image_array['dir'].'big_'.$image_array['file'];
-								$big_image_size = @getimagesize($big_image);
+								$big_image_size = @getimagesize(api_url_to_local_path($big_image));
 								$big_image_width= $big_image_size[0];
 								$big_image_height= $big_image_size[1];
 								$url_big_image = $big_image.'?rnd='.time();

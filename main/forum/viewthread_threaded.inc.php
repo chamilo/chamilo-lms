@@ -133,68 +133,51 @@ $max=count($prev_next_array);
 $next_id=$current_id+1;
 $prev_id=$current_id-1;
 
-$firs_message=get_lang('FirstMessage');
-$prev_message=get_lang('PrevMessage');
-
+// text
+$first_message=get_lang('FirstMessage');
+$last_message=get_lang('LastMessage');
 $next_message=get_lang('NextMessage');
 $prev_message=get_lang('PrevMessage');
 
-$prev_img = '<img src="'.api_get_path(WEB_CODE_PATH).'img/prev.png"  style="vertical-align: middle;"/>';
-$next_img = '<img src="'.api_get_path(WEB_CODE_PATH).'img/next.png"  style="vertical-align: middle;"/>';
+// images
+$first_img 	= Display::return_icon('first.png',get_lang(''),array('style'=>'vertical-align: middle;'));
+$last_img 	= Display::return_icon('last.png',get_lang(''),array('style'=>'vertical-align: middle;'));
+$prev_img 	= Display::return_icon('prev.png',get_lang(''),array('style'=>'vertical-align: middle;'));
+$next_img 	= Display::return_icon('next.png',get_lang(''),array('style'=>'vertical-align: middle;'));
 
-$first_page_text = '<img src="'.api_get_path(WEB_CODE_PATH).'img/first.png"  style="vertical-align: middle;"/>';
-$last_page_text	 = '<img src="'.api_get_path(WEB_CODE_PATH).'img/last.png"  style="vertical-align: middle;"/>';
-
-$href_prev='"viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$prev_next_array[$prev_id].'&amp;origin='. $origin .'&amp;gradebook='. $gradebook .'"';
-$href_next='"viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$prev_next_array[$next_id].'&amp;origin='. $origin .'&amp;gradebook='. $gradebook .'"';
-
-// the last message
-if ($next_id>=$max) 
-{
-	$next_id=0;
-	$class_next=' class="invisible"';
-	$href_next=1;			
-}
-
-// the first message
-if ($next_id==1) {
-	$class_prev=' class="invisible"';
-	$href_prev=1;
-}
+// links
+$first_href = 'viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;id=1&amp;post='.$prev_next_array[0];
+$last_href 	= 'viewthread.php?'.api_get_cidreq()."&amp;forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;gradebook='.$gradebook.'&amp;origin=".$origin."&amp;post=".$prev_next_array[$max-1];
+$prev_href	= 'viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$prev_id];
+$next_href	= 'viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$next_id];
 
 echo '<center>';
-// for the loop
-if ($prev_id<0)
+//go to: first and previous
+if ((int)$current_id > 0)
 {
-	$prev_id=$max-1;
+	echo '<a href="'.$first_href.'" '.$class.' title='.$first_message.'>'.$first_img.' '.$first_message.'</a>';
+	echo '<a href="'.$prev_href.'" '.$class_prev.' title='.$prev_message.'>'.$prev_img.' '.$prev_message.'</a>';
 }
-
-//first message img
-echo '<a title="'.get_lang('FirstMessage').'" href="viewthread.php?'.api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;gradebook=".$gradebook."&amp;origin=".$origin."&amp;id=1&amp;post=".$prev_next_array[0]."\" $class>".$first_page_text."</a>";
-// prev message link 
-if ($href_prev==1)
+else 
 {
-	echo '<b><span '.$class_prev.' >'.$prev_message.'</b></span>';
-	
+	echo '<b><span class="invisible">'.$first_img.' '.$first_message.'</b></span>';
+	echo '<b><span class="invisible">'.$prev_img.' '.$prev_message.'</b></span>';
 }
-else
-echo '<a href='.$href_prev.' '.$class_prev.' >'.$prev_message.'</a>';
 
 //  current counter
 echo  ' [ '.($current_id+1).' / '.$max.' ] ';
   
-// next message link
-
-if ($href_next==1)
+// go to: next and last
+if (($current_id+1) < $max)
 {
-	echo '<b><span '.$class_next.' >'.$next_message.'</span></b>';
+	echo '<a href="'.$next_href.'" '.$class_next.' title='.$next_message.'>'.$next_message.' '.$next_img.'</a>';
+	echo '<a href="'.$last_href.'" '.$class.' title='.$last_message.'>'.$last_message.' '.$last_img.'</a>';
 }
 else
-echo '<a href='.$href_next.' '.$class_next.' >'.$next_message.'</a>';
-
-//last message img
-echo '<a title="'.get_lang('LastMessage').'" href="viewthread.php?'.api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;origin=".$origin."&amp;post=".$prev_next_array[$max-1]."\" $class>".$last_page_text."</a>";
-
+{
+	echo '<b><span class="invisible">'.$next_message.' '.$next_img.'</b></span>';
+	echo '<b><span class="invisible">'.$last_message.' '.$last_img.'</b></span>';
+}
 echo '</center>';
 
 //--------------------------------------------------------------------------------------------

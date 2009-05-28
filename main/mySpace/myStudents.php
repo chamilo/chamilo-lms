@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 20845 2009-05-19 17:27:22Z cfasanando $
+<?php //$Id: myStudents.php 21036 2009-05-28 12:12:08Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -188,10 +188,24 @@ if(!empty($_GET['student']))
 	
 	$a_infosUser['name'] = $a_infosUser['firstname'].' '.$a_infosUser['lastname'];
 	
-	echo '<div class="actions">
-		<a href="#" onclick="window.print()"><img src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-		<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=csv"><img src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-	  </div>';
+	// Actions bar
+	echo '<div class="actions">';
+	echo '<a href="#" onclick="window.print()"><img src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>';
+	echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=csv"><img src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+	if(!empty($a_infosUser['email']))
+	{
+		$sendMail = Display::encrypted_mailto_link($a_infosUser['email'], /*Display::return_icon('send_mail.gif').' '.*/get_lang('SendMail'));
+	}
+	else 
+	{
+		$sendMail = Display::return_icon('send_mail.gif',get_lang('SendMail')).' '.get_lang('SendMail');
+	}
+	echo $sendMail;
+	if(!empty($_GET['student']) && !empty($_GET['course']))
+	{   //only show link to connection details if course and student were defined in the URL
+		echo '<a href="access_details.php?student='.Security::remove_XSS($_GET['student']).'&course='.Security::remove_XSS($_GET['course']).'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;cidReq='.Security::remove_XSS($_GET['course']).'">'.Display::return_icon('statistics.gif',get_lang('AccessDetails')).' '.get_lang('AccessDetails').'</a>';
+	}
+	echo '</div>';
 	  	  
 	// is the user online ?
 	$statistics_database = Database :: get_statistic_database();
@@ -426,48 +440,6 @@ if(!empty($_GET['student']))
 											</tr>
 										</table>
 									</td>
-					<?php
-							$sendMail = Display::encrypted_mailto_link($a_infosUser['email'], ' '.get_lang('SendMail'));
-					?>
-						<td class="borderLeft" width="15%" valign="top">
-				
-						
-				<table width="100%" class="data_table">
-								<tr>
-									<th>
-										<?php echo get_lang('Actions'); ?>
-									</th>
-								</tr>
-								<tr>
-									
-										<?php 
-											if(!empty($a_infosUser['email']))
-											{
-												echo "<td class='none'>";
-									echo '<img src="../img/send_mail.gif">&nbsp;'.$sendMail;
-												echo "</td>";
-											}
-											else
-											{
-												echo "<td class='noLink none'>";
-									echo '<img src="../img/send_mail.gif">&nbsp; <strong> > '.get_lang('SendMail').'</strong>';
-												echo "</td>";
-											}
-										?>
-								
-								</tr>
-                                <?php
-                                            if(!empty($_GET['student']) && !empty($_GET['course']))
-                                            {   //only show link to connection details if course and student were defined in the URL
-                                                echo '<tr>';
-                                                echo '<td class="noLink none">';
-												echo '<img src="../img/statistics.gif">&nbsp; <strong> <a href="access_details.php?student='.Security::remove_XSS($_GET['student']).'&course='.Security::remove_XSS($_GET['course']).'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;cidReq='.Security::remove_XSS($_GET['course']).'">'.get_lang('AccessDetails').'</a> </strong>';
-                                                echo '</td>';
-                                                echo '</tr>';
-                                            }
-                                ?>
-							</table>
-						</td>
 					</tr>
 				</table>
 

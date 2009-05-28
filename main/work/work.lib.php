@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 20975 2009-05-25 18:09:56Z cvargas1 $
+<?php //$Id: work.lib.php 21043 2009-05-28 14:35:45Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 20975 2009-05-25 18:09:56Z cvargas1 $
+* 	@version $Id: work.lib.php 21043 2009-05-28 14:35:45Z pcool $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -37,7 +37,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	}
 	if (! $always_show_tool_options && api_is_allowed_to_edit() && $origin != 'learnpath') {
 		// Create dir		
-		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'"><img src="../img/folder_new.gif" border="0" alt="'.get_lang('CreateAssignment').'" title ="'.get_lang('CreateAssignment').'" /> '.get_lang('CreateAssignment').' </a>';
+		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('folder_new.gif', get_lang('CreateAssignment')).' '.get_lang('CreateAssignment').' </a>';
 		// Options
 		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."&amp;gradebook=".$gradebook."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>";							
 	}
@@ -65,11 +65,11 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	
 			if ($columnStatus['Default'] == 1) {
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;make_invisible=all\">".
-						Display::return_icon('visible.gif', get_lang('Visible')).' '.get_lang('MakeInvisible').
+						Display::return_icon('invisible.gif', get_lang('MakeAllPapersInvisible')).' '.get_lang('MakeAllPapersInvisible').
 						"</a>\n";
 			} else {
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;make_visible=all\">".
-						Display::return_icon('invisible.gif', get_lang('Invisible')).' '.get_lang('MakeVisible').
+						Display::return_icon('visible.gif', get_lang('MakeAllPapersVisible')).' '.get_lang('MakeAllPapersVisible').
 						"</a>\n";
 			}
 		}			
@@ -1181,10 +1181,10 @@ function to_javascript_work() {
 			function plus() {
 				if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/div_hide.gif" alt="" />&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
+					document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif').'&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
 				} else {
 				document.getElementById(\'options\').style.display = \'none\';
-				document.getElementById(\'plus\').innerHTML=\'&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
+				document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
 				}	
 			}
 			

@@ -1,4 +1,4 @@
-<?php //$Id: work.php 20975 2009-05-25 18:09:56Z cvargas1 $
+<?php //$Id: work.php 21043 2009-05-28 14:35:45Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 20975 2009-05-25 18:09:56Z cvargas1 $
+*  	@version $Id: work.php 21043 2009-05-28 14:35:45Z pcool $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1271,12 +1271,12 @@ function draw_date_picker($prefix,$default='') {
 		$new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateAssignment').'</div></div>';
 		$new_folder_text .= '<input type="hidden" name="curdirpath" value="' . Security :: remove_XSS($cur_dir_path) . '"/>';
 		$new_folder_text .= '<input type="hidden" name="sec_token" value="'.$stok.'" />';
-		$new_folder_text .= '<div id="msg_error1" style="display:none;color:red"></div>';
 		$new_folder_text .= '<div class="row">
 								<div class="label">
-									<span class="form_required">*</span>'.get_lang('AssignmentName').'
+									<span class="form_required">*</span> '.get_lang('AssignmentName').'
 								</div>
 								<div class="formw">
+									<div id="msg_error1" style="display:none;color:red"></div>
 									<input type="text" name="new_dir" onfocus="document.getElementById(\'msg_error1\').style.display=\'none\';"/>
 								</div>
 							</div>';
@@ -1323,8 +1323,9 @@ function draw_date_picker($prefix,$default='') {
 		
 		$new_folder_text .= '<div class="row">
 								<div class="label">									
+								<a href="#" onclick=" return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters')).' '.get_lang('AdvancedParameters').'</span></a><br />
 								</div> 
-								<div class="formw"><br /><a href="#" onclick=" return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters')).' '.get_lang('AdvancedParameters').'</span></a><br />
+								<div class="formw">
 									'.$addtext.'
 								</div>
 							</div>';		

@@ -113,103 +113,122 @@ class TestMainApi extends UnitTestCase {
 // todo function testApiUrlToLocalPathReturnString()
 // todo function testApiResizeImage()
 // todo function testApiCalculateImageSizeReturnArray()
+	
 	/**
 	 * Test out of a course context
-    */
+    
 
-	 
+	 */
 	function testApiProtectCourseScriptReturnsFalseWhenOutOfCourseContext(){
 		$res= api_protect_course_script();
 		$this->assertTrue($res);
+	
 	}
     
     function testApiGetSettingReturnsTrueWhenIsRightValue(){
 	 	$res=api_get_setting();
-	 	$this->assertFalse($res);
+		$this->assertFalse($res);
+	
 	}
   
 	/**
 	/* Test out of a Admin context
-	**/
-	 
+	
+	 */
 	function testApiProtectAdminScriptReturnsFalseWhenOutOfCourseContext(){
 	 	$res= api_protect_admin_script();
 	 	$this->assertTrue($res);
-	 }
+	 
+	}
 	 
 	function testApiBlockAnonymousUsersReturnTrueWhenUserIsAnonymous(){
 	 	$res=api_block_anonymous_users();
 	 	$this->assertTrue($res);
-	 }
+	 
+	}
    
 	function testApiGetNavigator(){	
 	 	$res=api_get_navigator();
 	 	$this->assertTrue($res);
-	 }
+	 
+	}
     
 	function testApiIsSelfRegistrationAllowed(){
 		$res = api_is_self_registration_allowed(); 
 		$this->assertFalse($res);
+	
 	}
 	
 	function testApiGetPath($path_type){
 		$res=api_get_path();
 	 	$this->assertFalse($res);
+	
 	}
 	
 	function testApiGetUserId(){	
 		$res= api_get_user_id();		
 		$this->assertPattern('/\d/',$res);		
+	
 	}
 
     function testApiGetUserCoursesReturnTrueWhenOutOfCoursesContext(){
     	$res = api_get_user_courses();
     	$this->assertFalse($res);
+    
     }
   
     function testApiGetUserInfoReturnFalseWhenOutOfUserInfoContext(){
     	$res = api_get_user_info();
    		$this->assertTrue($res);
+    
     }
    
     function testApiGetUserInfoUsernameReturnTrueWhenOutOfUserInfoUsernameContext(){
     	$res=api_get_user_info_from_username();
     	$this->assertFalse($res);
+    
     }
     
     function testApiGetCourseIdReturnFalseWhenOutOfCourseIdContext(){
     	$res =api_get_course_id();
     	$this->assertTrue($res);
+    
     }
 
     function testApiGetCoursePathReturnFalseWhenOutOfCoursePathContext(){
     	$res = api_get_course_path();
     	$this->assertFalse($res);	
+    
     }
  
 	function testApiGetCourseSettingReturnFalseWhenOutOfCourseSeetingContext(){
 		$res = api_get_course_setting();
 		$this->assertTrue($res);
+	
 	}
 	
 	function testApiGetAnonymousId(){
 		$res = api_get_anonymous_id();
 		$this->assertTrue($res);
+	
 	}
 		
 	function testApiGetCidreq(){
 		$res=api_get_cidreq();
 		$this->assertTrue($res);
+	
 	}
 	
 	function testApiGetCourseInfo(){
 		$res=api_get_course_info();
 		$this->assertTrue($res);
+	
 	}
 	
 	function testApiSqlQuery(){
 		$res = api_sql_query();
 		$this->assertFalse($res);
+	
 	}
 	
 	function testApiStoreResult(){
@@ -221,14 +240,15 @@ class TestMainApi extends UnitTestCase {
 	function testApiSessionStart(){
 		$res = api_session_start($already_sintalled=true);
 		$this->assertFalse($res);
+	
 	}
 	
 	function testApiSessionRegister(){
-		global $$variable;
 		$$variable[session_register]=false;
-		$res=api_session_register($variable);
+		$res=api_session_register($$variable);
 		$this->assertFalse($res);
 		$this->assertFalse($variable[session_register]);
+	
 	}
 	
 	function testApiSessionUnregister(){
@@ -237,31 +257,40 @@ class TestMainApi extends UnitTestCase {
 		$this->assertFalse($res);
 		$this->assertFalse(isset($GLOBALS[$variable]));
 		$this->assertFalse($_SESSION[$variable]=null);
+	
 	}
 	
 	function testApiSessionClear(){
 		$res=api_session_clear();
 		$this->assertFalse($res);
+	
 	}
 	
 	function testApiSessionDestroy(){
 		$res=api_session_destroy();
 		$this->assertFalse($res);
+	
 	}
 	
 	function testApiAddUrlParam(){
+		global $url , $param ; 
 		$res=api_add_url_param($url, $param, $filter_xss=true);
 		$this->assertFalse($res);
+	
 	}
 	
 	function testApiGeneratePassword(){
 		$res = api_generate_password();
 	    $this->assertTrue($res);
+	
 	}
 	
 	function testApiCheckPassword(){
+		$lengthPass=strlen(5);
+		$password= $lengthPass;
 		$res = api_check_password($password);
 		return $this->assertFalse($res);
+	
 	}
 	
 	function testApiClearAnonymous(){
@@ -270,62 +299,79 @@ class TestMainApi extends UnitTestCase {
 		$res = api_clear_anonymous($db_check=false);
 		$this->assertFalse($res);
 		$this->assertTrue(isset($_user['user_id'] ));
+	
 	}
 	
 	function testApiTruncStr(){
 		$res= api_trunc_str();
 		return $this->assertFalse($res);
+	
 	}
 	
-	
 	function testDomesticate(){
+		$input= 'dome';
 		$res = domesticate($input);
-		return $this->assertFalse($res);
+		return $this->assertTrue($res);
+	
 	}
 	
 	function testGetStatusFromCode(){
-		//$status_code = new $status_code;
+		$status_code = 1;
 		$res=get_status_from_code($status_code);
-		return $this->assertFalse($res);
+		return $this->assertTrue($res);
+	
 	}
 	
 	function testApiSetFailure(){
+		global $api_failureList;
+		$failureType=true;
 		$res = api_set_failure($failureType);
-		return $this->assertFalse($res);
+		$this->assertFalse($res);
+		$this->assertTrue($api_failureList);
+	
 	}
 	
 	function testApiSetAnonymous(){
 		$res = api_set_anonymous();
 		return $this->assertFalse($res);
+	
 	}
 	
 	function testApiGetLastFailure(){
 		$res= api_Get_last_failure();
-		$this->assertFalse($res);
+		$this->assertTrue($res);
+	
 	}
 	
 	function testApiGetSessionId(){
 		$res = api_get_session_id();
 		return $this->assertFalse($res);
+	
 	}
 	
 	function testApiGetSessionName(){
+		$session_id['sesion_id']=1;
 		$res = api_get_session_name($session_id);
-		return $this->assertFalse($res);
+		$this->assertTrue($res);
+	
 	}
 	
 	function testAPiGetSetting(){
+		global $variable;
 	    $res=api_get_setting($variable, $key= NULL);
 		return $this->assertFalse($res);
+	
 	}
 	
 	function testApiGetSelf(){
 		$res = api_get_self();
 		return $this->assertTrue($res);
+	
 	}
+	
     /**
      * function still unproved 
-    **/ 
+     
    function testGetLang(){
    global $language_interface, $language_interface_initial_value, $language_file;
    static $cache=array();
@@ -333,24 +379,25 @@ class TestMainApi extends UnitTestCase {
 		$cache[$language]=array(false=> array(), true=>array());
 		$res = get_lang($variable, $notrans = 'DLTT', $language = null);
 		
-		
+	
 	}
-	/*
+	/**
 	 * function still unproved 
 	*
 	function testGetLangToSystemEncoding(){
 		$language;
 		$res=&get_lang_to_system_encoding(& $string, $language);
 		
-	**/	
+		
 	}
-	
+	*/
 	function testApiGetInterfaceLanguage(){
 		global $language_interface;
 		$language_interface=false;
 		$res=api_get_interface_language();
 		$this->assertFalse($res);
 		$this->assertTrue(isset($language_interface));
+	
 	}
 	
 	function testApiIsPlatformAdmin(){
@@ -366,17 +413,20 @@ class TestMainApi extends UnitTestCase {
 	
 	function testApiIsAllowedToCreateCourse(){
 		$res=api_is_allowed_to_create_course();
-		$this->assertTrue($res);
+		$this->assertFalse($res);
+	
 	}
 	
 	function testApiIsCourseAdmin(){
 		$res=api_is_course_admin();
 		$this->assertFalse($res);
+	
 	}
 	
 	function testApiIsCourseCoach(){
 		$res=api_is_course_coach();
 		$this->assertFalse($res);
+	
 	}
 	
 	function testApiIsCoach(){
@@ -395,8 +445,9 @@ class TestMainApi extends UnitTestCase {
 		global $_user;
 		$_user['status']=true;
 		$res=api_is_session_admin();
-		$this->assertFalse($res);
+		$this->assertTrue($res);
 		$this->assertTrue($_user);
+	
 	}
 		
 	function testApiDisplayToolTitle(){
@@ -409,7 +460,7 @@ class TestMainApi extends UnitTestCase {
 		
 	}/**
 		untested
-	**/
+	
 	/*	
 	function testApiDisplayToolViewOption(){
 		
@@ -419,13 +470,13 @@ class TestMainApi extends UnitTestCase {
 	*/	
 	
 	function testApiDisplayArray(){
+		global $info_array;
 		$res=api_display_array($info_array);
 		$this->assertFalse($res);
 			
 	}
 		
-	function testApiDisplayDebugInfo()
-	{
+	function testApiDisplayDebugInfo(){
 		$message = "mensaje de error"; // siempre que puedas, te conviene probar con valores creados al azar
 		$res=api_display_debug_info($message);
 		$this->assertFalse($res);
@@ -435,13 +486,15 @@ class TestMainApi extends UnitTestCase {
 	/**
 	 * function is_allowed_to_edit() is deprecated and have been instead by 
 	 * api_is_allowed_to_edit() 
-	**/
+	 * 
+	 */
 	function testApiIsAllowedToEdit(){
 	 	$is_courseAdmin=false;
 	 	$res=api_is_allowed_to_edit($tutor=false,$scoach=false);
 	 	$this->assertTrue($res);
 	 	$this->assertTrue(isset($is_courseAdmin));
 	 	//$this->assertTrue($is_courseAdmin);	 	
+	
 	}
 	 
 	function testApiIsAllowed(){
@@ -456,25 +509,27 @@ class TestMainApi extends UnitTestCase {
 	  	$this->assertFalse($action);
 	 	$this->assertTrue($_user['user_id']);
 	 	$this->assertFalse($_course['code']);
+	 
 	 }
 	 
 	 function testApiIsAnonymous(){
 	 	global $_user, $use_anonymous;
-	  	$_user['is_anonymous']=true;
-	 	
+	  	$_user['is_anonymous']=False;
 	 	$res=api_is_anonymous($user_id=null, $db_check=false);
 	 	$this->assertFalse($res);
 	 	$this->assertFalse(isset($user_id));
 	 	$this->assertTrue(isset($_user['is_anonymous']));
-	 	$this->assertTrue(isset($use_anonymous));
-	 	$this->assertTrue($db_check);
+	 	$this->assertFalse($use_anonymous);
+	 	$this->assertFalse($db_check);
+	 
 	 }
+	 
 	 
 	 /**
 	  * test was stopped because of errors in the interpretation of 
 	  * the role, find out more details.
-	 **/
-	 /*
+	 
+	 
 	 function testApiNotAllowed(){
  	  	$res=api_not_allowed($sprint_headers=false);
 	 	$this->assertFalse($res);
@@ -491,12 +546,14 @@ class TestMainApi extends UnitTestCase {
 	 	$this->assertTrue($res);
 	 	$this->assertFalse($result);
 	 	$this->assertFalse($myrow);
+	 
 	 } 
 	
 	 function testApiGetDatetime(){
 	 	$res=api_get_datetime($time=null);
 	 	$this->assertTrue($res);
 	 	$this->assertFalse(isset($time));
+	 
 	 }
 	 
 	 function testApiGetItemVisibility(){
@@ -508,17 +565,139 @@ class TestMainApi extends UnitTestCase {
 	 	$this->assertTrue($res);
 	 	$this->assertFalse(isset($_course['dbName']));
 	 
+	 }
 	 /**
 	  * function very complex and analized test is empty
-	  */
-	  /*	
-	 function testApiItemPropertyUpdate(){
-	 	
-	 	$res=api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = NULL, $start_visible = 0, $end_visible = 0);
+	  *	
+	  	function testApiItemPropertyUpdate(){
+	  	$res=api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = NULL, $start_visible = 0, $end_visible = 0);
 	 	
 	 }
+	*/	
+	function testApiGetLanguagesCombo(){
+		$platformLanguage = api_get_setting('platformLanguage');
+		$language_list = api_get_languages();
+		$res=api_get_languages_combo($name="language");
+		$this->assertTrue($res);
+		$this->assertTrue($platformLanguage);
+		$this->assertTrue($language_list['name']);
+		
+	}
 	
-*/
+	function testApiDisplayLanguageForm(){
+		
+		$res=api_display_language_form($hide_if_no_choice=false);
+		$this->assertFalse($res);
+	
+	}
+		
+	function testApiGetLanguages(){
+		$result=true;
+		$row = mysql_fetch_array($result);
+		$res= api_get_languages();
+		$this->assertTrue($res);
+		$this->assertFalse($row);
+	
+	}
+
+	function testApiGetLanguageIsocode(){
+		$sql= true;
+		$var=api_sql_query($sql,_FILE_,_LINE_);
+		$res=api_get_language_isocode();
+		$this->assertFalse($res);
+		$this->assertTrue(isset($var));
+	
+	}
+	
+	function testApiGetThemes(){
+		$cssdir= api_get_path(SYS_PATH).'main/css/';
+		$res=api_get_themes();
+		$this->assertTrue($res);
+		$this->assertTrue($cssdir);
+	
+	}
+
+	function testApiDispHtmlArea(){
+		$name = 'hola';
+		global $_configuration, $_course, $fck_attribute;
+		$res=api_disp_html_area($name, $content ='', $height='', $width='100%', $optAttrib='');
+		$this->assertFalse($res);
+		
+	}
+	
+	function testApiReturnHtmlArea(){
+		//require_once(dirname(__FILE__).'/formvalidator/Element/html_editor.php');
+		
+		$name = true;
+		global $_configuration, $_course, $fck_attribute;
+		$res=api_return_html_area($name, $content='', $height='', $width='100%', $optAttrib='');
+		$this->assertTrue($res);
+		
+	}
+	
+	function testApiSendMail(){
+		$to= 'ricardo.rodriguez@dokeos.com'; 
+		$subject='Hola'; 
+		$message="prueba de envio"; 
+		$send_mail=mail();
+		$res=api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null);
+		$this->assertTrue($res);
+		$this->assertFalse($send_mail);
+		
+	}
+	
+	function testApiMaxSortValue(){
+	    global $image, $target_width, $target_height;
+		$res= api_max_sort_value($image, $target_width, $target_height);
+		$this->assertFalse($res);
+		
+	}
+	
+	function testApiIsUserOfCourse(){
+		$course_id = 1;
+		$user_id = 1;
+		$tbl_course_rel_user =false;
+		$sql='SELECT user_id FROM '.$tbl_course_rel_user.' WHERE course_code="'.Database::escape_string($course_id).'" AND user_id="'.Database::escape_string($user_id).'"';
+		$res= api_is_user_of_course($course_id, $user_id);
+		$this->assertFalse($res);
+		$this->assertFalse($tbl_course_rel_user);
+		$this->assertTrue($sql);
+	
+	}
+	
+	function testApiIsWindowsOs(){
+		$res= api_is_windows_os();
+		$this->assertFalse($res);
+		$this->assertFalse(var_dump(api_is_windows_os()));
+	
+	}
+	
+		
+	function testApiUrlToLocalPath(){
+		global $url;
+		$cond= preg_match(false);
+		$res= api_url_to_local_path($url);
+		$this->assertFalse($res);
+		$this->assertFalse($cond);
+
+	}
+	
+	function testApiResizeImage(){
+		global $image, $target_width, $target_height;
+		$res = api_resize_image($image,$target_width,$target_height);
+		$this->assertTrue($res);
+	
+	}
+		
+	function testApiCalculateImageSize(){
+		global $image_width, $image_height, $target_width, $target_height;
+		$result = array($image_width, $image_height);
+		$res = api_calculate_image_size($image_width, $image_height, $target_width, $target_height);
+		$this->assertTrue($res);
+		$this->assertTrue($result);
+	
+	}
+	
 }
- 		
+		
 ?>

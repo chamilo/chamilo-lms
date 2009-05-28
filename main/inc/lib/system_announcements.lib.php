@@ -114,9 +114,8 @@ class SystemAnnouncementManager
 		return;
 	}
 
-	function display_all_announcements($visible, $id = -1,$start = 0,$user_id)
+	function display_all_announcements($visible, $id = -1,$start = 0,$user_id='')
 	{
-
 		$user_selected_language = api_get_interface_language();
 
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
@@ -135,18 +134,14 @@ class SystemAnnouncementManager
 				break;
 		}
 
-		if(!isset($_GET['start']) || $_GET['start'] == 0)
-		{
+		if(!isset($_GET['start']) || $_GET['start'] == 0) {
 			$sql .= " ORDER BY date_start DESC LIMIT ".$start.",20";
-		}
-		else
-		{
+		} else {
 			$sql .= " ORDER BY date_start DESC LIMIT ".($start+1).",20";
 		}
 		$announcements = api_sql_query($sql,__FILE__,__LINE__);
 
-		if (Database::num_rows($announcements))
-		{
+		if (Database::num_rows($announcements)) {
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
 			$query_string = ereg_replace('&$', '', $query_string);
 			$url = api_get_self();
@@ -160,8 +155,7 @@ class SystemAnnouncementManager
 				echo '</tr>';
 			echo '</table>';
 			echo '<table align="center" border="0" width="900px">';
-			while ($announcement = Database::fetch_object($announcements))
-			{
+			while ($announcement = Database::fetch_object($announcements)) {
 					echo '<tr><td>';
 					echo '<a name="'.$announcement->id.'"></a>
 							<div class="system_announcement">
@@ -197,21 +191,16 @@ class SystemAnnouncementManager
 		$next = ((int)$_GET['start']+19);
 		$prev = ((int)$_GET['start']-19);
 
-		if(!isset($_GET['start']) || $_GET['start'] == 0)
-		{
+		if(!isset($_GET['start']) || $_GET['start'] == 0) {
 
-			if($nb_announcement > 20)
-			{
+			if($nb_announcement > 20) {
 				echo '<a href="newsList.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 
-		}
-		else
-		{
+		} else {
 			echo '<a href="newsList.php?start='.$prev.'"> << '.get_lang('Prev').'</a>';
 
-			if($nb_announcement > 20)
-			{
+			if($nb_announcement > 20) {
 				echo '<a href="newsList.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 
@@ -227,8 +216,7 @@ class SystemAnnouncementManager
 		$sql = 'SELECT id
 				FROM '.$db_table.'
 				WHERE (lang="'.$user_selected_language.'" OR lang IS NULL) ';
-		if (isset($user_id))
- 		{
+		if (isset($user_id)) {
 			switch ($visibility)
 			{
 				case VISIBLE_GUEST :
@@ -292,18 +280,15 @@ class SystemAnnouncementManager
 
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
-		if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
-		{
+		if (!checkdate($date_start[1], $date_start[2], $date_start[0])) {
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
 			return false;
-		}
-		if (($date_end[1] || $date_end[2] || $date_end[0]) && !checkdate($date_end[1], $date_end[2], $date_end[0]))
-		{
+		} 
+		if (($date_end[1] || $date_end[2] || $date_end[0]) && !checkdate($date_end[1], $date_end[2], $date_end[0])) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
 		}
-		if( strlen(trim($title)) == 0)
-		{
+		if( strlen(trim($title)) == 0) {
 			Display::display_normal_message(get_lang('InvalidTitle'));
 			return false;
 		}
@@ -314,8 +299,7 @@ class SystemAnnouncementManager
 		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
 												VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
-		if ($send_mail==1)
-		{	
+		if ($send_mail==1) {	
 			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);	
 		}		
 		return api_sql_query($sql,__FILE__,__LINE__);
@@ -342,18 +326,15 @@ class SystemAnnouncementManager
 		$date_end = array_merge($a_arrayED,$a_arrayEH);
 		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
-		{
+if (!checkdate($date_start[1], $date_start[2], $date_start[0])) {
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
 			return false;
 		}
-		if (($date_end[1] || $date_end[2] || $date_end[0]) && !checkdate($date_end[1], $date_end[2], $date_end[0]))
-		{
+		if (($date_end[1] || $date_end[2] || $date_end[0]) && !checkdate($date_end[1], $date_end[2], $date_end[0])) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
 		}
-		if( strlen(trim($title)) == 0)
-		{
+		if( strlen(trim($title)) == 0) {
 			Display::display_normal_message(get_lang('InvalidTitle'));
 			return false;
 		}
@@ -365,8 +346,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		$sql = "UPDATE ".$db_table." SET lang=$lang,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
 		
-		if ($send_mail==1)
-		{
+		if ($send_mail==1) {
 			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);	
 		}
 		return api_sql_query($sql,__FILE__,__LINE__);
@@ -416,20 +396,16 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		global $_setting;
 		global $charset; 
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-		if ($teacher<>0 AND $student == '0')
-		{
+		if ($teacher<>0 AND $student == '0') {
 			$sql = "SELECT * FROM $user_table WHERE email<>'' AND status = '1'";
 		}
-		if ($teacher == '0' AND $student <> '0')
-		{
+		if ($teacher == '0' AND $student <> '0') {
 			$sql = "SELECT * FROM $user_table WHERE email<>'' AND status = '5'";
 		}
-		if ($teacher<>'0' AND $student <> '0')
-		{
+		if ($teacher<>'0' AND $student <> '0') {
 			$sql = "SELECT * FROM $user_table WHERE email<>''";
 		}
-		if ($teacher == '0' AND $student == '0')
-		{
+		if ($teacher == '0' AND $student == '0') {
 			return true;
 		}
 			

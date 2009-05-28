@@ -313,8 +313,7 @@ Display :: display_header($nameTools, "Group");
 <div class="actions">
 <a href="group_space.php"><?php  echo Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('GroupSpace') ?></a>
 </div>
-<br/>
-<br/>
+
 <?php
 
 if (isset($_GET['show_message'])) {

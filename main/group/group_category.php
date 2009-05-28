@@ -1,5 +1,5 @@
 <?php
-// $Id: group_category.php 20293 2009-05-04 19:28:21Z iflorespaz $
+// $Id: group_category.php 21044 2009-05-28 14:45:04Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -96,6 +96,7 @@ if (isset ($_GET['id']))
 	// Update settings of existing category
 	$action = 'update_settings';
 	$form = new FormValidator('group_category', 'post', '?id='.$category['id']);
+	$form->addElement('header','',$nameTools);
 	$form->addElement('hidden', 'id');
 }
 else
@@ -220,6 +221,12 @@ if ($form->validate())
 }
 // Else display the form
 Display :: display_header($nameTools, "Group");
+
+// actions bar
+echo '<div class="actions">';
+echo '<a href="group.php">'.Display::return_icon('back.png').' '.get_lang('BackTo').' '.strtolower(get_lang('GroupOverview')).'</a>';
+echo '</div>';
+
 $defaults = $category;
 $defaults['action'] = $action;
 if( $defaults['max_student'] == MEMBER_PER_GROUP_NO_LIMIT)

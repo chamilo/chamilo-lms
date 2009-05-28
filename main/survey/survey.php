@@ -1,4 +1,4 @@
-<?php // $Id: survey.php 20693 2009-05-15 13:27:00Z ivantcholakov $
+<?php // $Id: survey.php 21034 2009-05-28 11:45:43Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 20693 2009-05-15 13:27:00Z ivantcholakov $
+* 	@version $Id: survey.php 21034 2009-05-28 11:45:43Z pcool $
 *
 * 	@todo use quickforms for the forms
 */
@@ -161,15 +161,15 @@ echo '<div class="actions">'.$survey_actions.'</div>';
 
 if ($survey_data['survey_type']==0) {	
 	echo '<div class="actionsbig">';	
-	echo '<a style="padding-left:0px;" href="question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/yesno.gif" /><br/>'.get_lang('YesNo').'</a>';	 
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/mcua.gif" /><br />'.get_lang('MultipleChoice').'</a>';	
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multipleresponse&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/mcma.gif" /><br />'.get_lang('MultipleResponse').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=open&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/open_answer.gif" /><br />'.get_lang('Open').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=dropdown&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/dropdown.gif" /><br />'.get_lang('Dropdown').'</a>';	
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=percentage&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/percentagequestion.gif" /><br />'.get_lang('Percentage').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=score&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/scorequestion.gif" /><br />'.get_lang('Score').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=comment&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/commentquestion.gif" /><br />'.get_lang('Comment').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=pagebreak&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/page_end.gif" /><br />'.get_lang('Pagebreak').'</a>';
+	echo '<a style="padding-left:0px;" href="question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('yesno.gif').'<br/>'.get_lang('YesNo').'</a>';	 
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('mcua.gif').'<br />'.get_lang('MultipleChoice').'</a>';	
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multipleresponse&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('mcma.gif').'<br />'.get_lang('MultipleResponse').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=open&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('open_answer.gif').'<br />'.get_lang('Open').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=dropdown&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('dropdown.gif').'<br />'.get_lang('Dropdown').'</a>';	
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=percentage&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('percentagequestion.gif').'<br />'.get_lang('Percentage').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=score&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('scorequestion.gif').'<br />'.get_lang('Score').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=comment&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('commentquestion.gif').'<br />'.get_lang('Comment').'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=pagebreak&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('page_end.gif').'<br />'.get_lang('Pagebreak').'</a>';
 	echo '</div>';
 } else {	
 	echo '<div class="actionsbig">';
@@ -227,13 +227,13 @@ while ($row = Database::fetch_array($result,'ASSOC')) {
 	{
 		echo '		<a href="survey.php?'.api_get_cidreq().'&amp;action=moveup&amp;survey_id='.$_GET['survey_id'].'&amp;question_id='.$row['question_id'].'">'.Display::return_icon('up.gif', get_lang('MoveUp')).'</a>';
 	} else {
-		echo ' <img src="../img/up_na.gif"> ';	
+		Display::display_icon('up_na.gif');
 	}
 	if ($question_counter < $question_counter_max)
 	{
 		echo '		<a href="survey.php?'.api_get_cidreq().'&amp;action=movedown&amp;survey_id='.$_GET['survey_id'].'&amp;question_id='.$row['question_id'].'">'.Display::return_icon('down.gif', get_lang('MoveDown')).'</a>';
 	} else {
-		echo ' <img src="../img/down_na.gif"> ';		
+		Display::display_icon('down_na.gif');	
 	}
 	echo '	</td>';
 	$question_counter++;

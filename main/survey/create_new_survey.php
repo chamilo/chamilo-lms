@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 20610 2009-05-13 21:53:48Z cvargas1 $
+* 	@version $Id: create_new_survey.php 21034 2009-05-28 11:45:43Z pcool $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -41,10 +41,10 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 		function advanced_parameters() {
 			if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_minus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif').'&nbsp;'.get_lang('AdvancedParameters').'\';
 			} else {
 					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang('AdvancedParameters').'\';
 			}		
 		}
 	</script>';	
@@ -220,9 +220,11 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id) 
 	if ($survey_data['anonymous']==0  ) {
 		// Aditional Parameters
 		$form -> addElement('html','<div class="row">
-		<div class="label">&nbsp;</div>
+		<div class="label">
+			<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+		</div>
 		<div class="formw">
-			<a href="javascript://" onclick="advanced_parameters()" ><br /><span id="plus_minus">&nbsp;<img src="../img/nolines_plus.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+			&nbsp;	
 		</div>
 		</div>');
 		$form -> addElement('html','<div id="options" style="display:none">');		

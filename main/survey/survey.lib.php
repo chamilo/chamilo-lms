@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 20804 2009-05-18 19:22:35Z iflorespaz $
+* 	@version $Id: survey.lib.php 21034 2009-05-28 11:45:43Z pcool $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -2572,7 +2572,7 @@ class SurveyUtil {
 		if($result !== false) {			
 			$message = get_lang('SurveyUserAnswersHaveBeenRemovedSuccessfully').'<br />
 					<a href="reporting.php?action=userreport&survey_id='.Security::remove_XSS($survey_id).'">'.get_lang('GoBack').'</a>';	
-			Display::display_normal_message($message, false);	
+			Display::display_confirmation_message($message, false);	
 		}
 	}
 	
@@ -2593,6 +2593,29 @@ class SurveyUtil {
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 		$table_survey_answer 			= Database :: get_course_table(TABLE_SURVEY_ANSWER);
+	
+		// actions bar
+		echo '<div class="actions">';
+		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png').' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
+		if (isset($_GET['user']))		
+		{
+			// the delete link
+			echo '<a href="reporting.php?action=deleteuserreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;user='.Security::remove_XSS($_GET['user']).'" >'.Display::return_icon('delete.gif', get_lang('Delete')).' '.get_lang('DeleteSurveyByUser').'</a>';
+						
+			// export the user report
+			echo '<a href="#" onclick="document.form1a.submit();">'.Display::return_icon('csv.gif', get_lang('ExportAsCSV')).' '.get_lang('ExportAsCSV').'</a> ';
+			echo '<a href="#" onclick="document.form1b.submit();">'.Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' '.get_lang('ExportAsXLS').'</a> ';						
+			echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user_id='.Security::remove_XSS($_GET['user']).'">';
+			echo '<input type="hidden" name="export_report" value="export_report">';
+			echo '<input type="hidden" name="export_format" value="csv">';
+			echo '</form>';
+			echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user_id='.Security::remove_XSS($_GET['user']).'">';
+			echo '<input type="hidden" name="export_report" value="export_report">';
+			echo '<input type="hidden" name="export_format" value="xls">';
+			echo '</form>';
+			echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'">';	
+		}
+		echo '</div>';
 	
 		// step 1: selection of the user
 		echo "<script language=\"JavaScript\" type=\"text/JavaScript\">
@@ -2626,7 +2649,7 @@ class SurveyUtil {
 				$id = $person;
 			}
 			echo '<option value="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;user='.Security::remove_XSS($id).'" ';
-			if ($_GET['user'] == $person)
+			if ($_GET['user'] == $id)
 			{
 				echo 'selected="selected"';
 			}
@@ -2639,21 +2662,6 @@ class SurveyUtil {
 		{
 			Display::display_normal_message(get_lang('AllQuestionsOnOnePage'), false);
 			
-			// export the user report
-			echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user_id='.Security::remove_XSS($_GET['user']).'">';
-			echo '<input type="hidden" name="export_report" value="export_report">';
-			echo '<input type="hidden" name="export_format" value="csv">';
-			echo '</form>';
-			echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user_id='.Security::remove_XSS($_GET['user']).'">';
-			echo '<input type="hidden" name="export_report" value="export_report">';
-			echo '<input type="hidden" name="export_format" value="xls">';
-			echo '</form>';
-			echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'">';
-			//echo '<a class="survey_export_link" href="#" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a> ';
-			echo '<a class="survey_export_link" href="#" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a> ';			
-			
-			// the delete link
-			echo '<a href="reporting.php?action=deleteuserreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;user='.Security::remove_XSS($_GET['user']).'" ><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /> '.get_lang('DeleteSurveyByUser').'</a>';
 			// getting all the questions and options
 			$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.max_value, survey_question.sort, survey_question.type,
 							survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
@@ -2752,7 +2760,9 @@ class SurveyUtil {
 			$offset = Database::escape_string($_GET['question']);
 		}
 	
-		echo '<div id="question_report_questionnumbers">';
+		echo '<div class="actions">';
+		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png').' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
+		echo '<div id="question_report_questionnumbers">'.get_lang('GoToQuestion').': ';
 		for($i=1; $i<=($survey_data['number_of_questions']); $i++ )
 		{
 			if ($offset <> $i-1)
@@ -2778,22 +2788,22 @@ class SurveyUtil {
 		// navigate through the questions (next and previous)
 		if ($_GET['question'] <> 0)
 		{
-			echo '<a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.Security::remove_XSS($offset-1).'"> &lt;&lt; '.get_lang('PreviousQuestion').'</a>  ';
+			echo '<a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.Security::remove_XSS($offset-1).'">'.Display::return_icon('prev.png',get_lang('PreviousQuestion'),array('align'=>'middle')).' '.get_lang('PreviousQuestion').'</a>  ';
 		}
 		else
 		{
-			echo '&lt;&lt;'.get_lang('PreviousQuestion').' ';
+			echo Display::return_icon('prev.png',get_lang('PreviousQuestion'),array('align'=>'middle')).' '.get_lang('PreviousQuestion').' ';
 		}
 		echo ' | ';
 		if ($_GET['question'] < ($survey_data['number_of_questions']-1))
 		{
-			echo '<a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').'&gt;&gt; </a>';
+			echo '<a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').' '.Display::return_icon('next.png',get_lang('NextQuestion'),array('align'=>'middle')).'</a>';
 		}
 		else
 		{
-			echo get_lang('NextQuestion'). '&gt;&gt;';
+			echo get_lang('NextQuestion'). ' '.Display::return_icon('next.png',get_lang('NextQuestion'),array('align'=>'middle'));
 		}
-		echo '<br />';
+		echo '</div>';
 	
 		echo $question['survey_question'];
 	
@@ -2998,6 +3008,11 @@ class SurveyUtil {
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 		$table_survey_answer 			= Database :: get_course_table(TABLE_SURVEY_ANSWER);
+	
+		// actions bar
+		echo '<div class="actions">';
+		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png').' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
+		echo '</div>';		
 	
 		// the form
 		echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'">';
@@ -3742,6 +3757,11 @@ class SurveyUtil {
 	
 		// getting all the questions
 		$questions = survey_manager::get_questions($_GET['survey_id']);
+		
+		// actions bar
+		echo '<div class="actions">';
+		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png').' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';		
+		echo '</div>';
 	
 		// displaying an information message that only the questions with predefined answers can be used in a comparative report
 		Display::display_normal_message(get_lang('OnlyQuestionsWithPredefinedAnswers'), false);

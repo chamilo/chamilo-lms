@@ -1,4 +1,4 @@
-<?php // $Id: survey.php 21034 2009-05-28 11:45:43Z pcool $
+<?php // $Id: survey.php 21053 2009-05-28 22:59:15Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 21034 2009-05-28 11:45:43Z pcool $
+* 	@version $Id: survey.php 21053 2009-05-28 22:59:15Z cvargas1 $
 *
 * 	@todo use quickforms for the forms
 */
@@ -162,7 +162,7 @@ echo '<div class="actions">'.$survey_actions.'</div>';
 if ($survey_data['survey_type']==0) {	
 	echo '<div class="actionsbig">';	
 	echo '<a style="padding-left:0px;" href="question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('yesno.gif').'<br/>'.get_lang('YesNo').'</a>';	 
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('mcua.gif').'<br />'.get_lang('MultipleChoice').'</a>';	
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('mcua.gif').'<br />'.get_lang('UniqueSelect').'</a>';	
 	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multipleresponse&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('mcma.gif').'<br />'.get_lang('MultipleResponse').'</a>';
 	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=open&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('open_answer.gif').'<br />'.get_lang('Open').'</a>';
 	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=dropdown&amp;survey_id='.$_GET['survey_id'].'">'.Display::return_icon('dropdown.gif').'<br />'.get_lang('Dropdown').'</a>';	

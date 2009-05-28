@@ -242,15 +242,15 @@ function show_add_forum_form($inputvalues=array()) {
 	
 			/*		if (document.getElementById('id_qualify').style.display == 'none') {
 					document.getElementById('id_qualify').style.display = 'block';
-					document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+					document.getElementById('plus').innerHTML='&nbsp;'.Display::return_icon('div_hide.gif').'&nbsp;".get_lang('AddAnAttachment')."';
 				} else {
 				document.getElementById('options').style.display = 'none';
-				document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+				document.getElementById('plus').innerHTML='&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;".get_lang('AddAnAttachment')."';
 				}*/
 			
-	$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
-	$form->addElement('html', '<br /><div id="plus"><a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a></div>','');
-	$form->addElement('html','</div></div>');
+	$form->addElement('html', '<div class="row"><div class="label">');
+	$form->addElement('html', '<br /><div id="plus"><a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang('AdvancedParameters').'</span></a></div>','');
+	$form->addElement('html','</div><div class="formw"></div></div>');
 	$form->addElement('html','<div id="options" style="display:none">');
 	
 	
@@ -887,16 +887,16 @@ function display_up_down_icon($content, $id, $list) {
 		}
 	}
 	if ($position>1) {
-		$return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveUp').'"><img src="../img/up.gif" /></a>';
+		$return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveUp').'">'.Display::return_icon('up.gif').'</a>';
 	} else {
-		$return_value='<img src="../img/up_na.gif" />';
+		$return_value=Display::return_icon('up_na.gif');
 	}
 	
 	if ($position<$total_items) {
-		$return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" ><img src="../img/down.gif" /></a>';
+		$return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" >'.Display::return_icon('down.gif').'</a>';
 	} else {
 		
-	   $return_value.='<img src="../img/down_na.gif" />';
+	   $return_value.=Display::return_icon('down_na.gif');
 	}
 	echo $return_value;
 }
@@ -1919,9 +1919,9 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
 	//$form->applyFilter('post_text', 'html_filter');	
 	
-	$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
-	$form->addElement('html','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" /> '.get_lang('AdvancedParameters').'</span></a>','');
-	$form->addElement('html', '</div></div>');
+	$form->addElement('html', '<div class="row"><div class="label">');
+	$form->addElement('html','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">'.Display::return_icon('div_show.gif').' '.get_lang('AdvancedParameters').'</span></a>','');
+	$form->addElement('html', '</div><div class="formw"></div></div>');
 	$form->addElement('html','<div id="id_qualify" style="display:none">');
 	
 	if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ){
@@ -2348,9 +2348,9 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
 	//$form->applyFilter('post_text', 'html_filter');	
 		
-	$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
-	$form->addElement('HTML','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus"><img src="../img/div_show.gif" alt="" />'.get_lang('AdvancedParameters').'</span></a>','');
-	$form->addElement('html','</div></div>');
+	$form->addElement('html', '<div class="row"><div class="label">');
+	$form->addElement('HTML','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">'.Display::return_icon('div_show.gif').''.get_lang('AdvancedParameters').'</span></a>','');
+	$form->addElement('html','</div><div class="formw"></div></div>');
 	$form->addElement('html','<div id="id_qualify" style="display:none">');
 	
 	if (!isset($_GET['edit'])) {				

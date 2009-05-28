@@ -59,10 +59,10 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 		function advanced_parameters() {
 			if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;<img src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif').'&nbsp;'.get_lang('AdvancedParameters').'\';
 			} else {
 					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang('AdvancedParameters').'\';
 			}		
 		}
 	</script>';	

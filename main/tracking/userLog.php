@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 20472 2009-05-11 10:02:06Z ivantcholakov $
+<?php // $Id: userLog.php 21097 2009-05-29 21:36:26Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,10 +74,13 @@ require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 if (isset($_GET['scormcontopen'])) {
 	$tbl_lp = Database::get_course_table('lp');
 	$contopen = Database::escape_string($_GET['scormcontopen']);
-	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$row = Database::fetch_array($res);
-	$lp_charset = $row['default_encoding'];
+	if (is_numeric($contopen)) {
+		$contopen = intval($contopen);
+		$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$row = Database::fetch_array($res);
+		$lp_charset = $row['default_encoding'];
+	}	
 	//header('Content-Type: text/html; charset='. $row['default_encoding']);
 }
 

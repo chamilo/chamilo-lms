@@ -1,5 +1,5 @@
 <?php
-// $Id: group_category.php 21044 2009-05-28 14:45:04Z pcool $
+// $Id: group_category.php 21074 2009-05-29 15:48:32Z cvargas1 $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -102,7 +102,7 @@ if (isset ($_GET['id']))
 else
 {
     //Checks if the field was created in the table Category. It creates it if is neccesary
-    $table_category = Database :: get_course_table(GROUP_CATEGORY_TABLE);
+    $table_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 	if (Database::query("SELECT wiki_state FROM $table_category",__FILE__,__LINE__) == FALSE) {
     	Database::query("ALTER TABLE $table_category ADD `wiki_state` tinyint(3) UNSIGNED NOT NULL default '1';",__FILE__,__LINE__);
     }

@@ -71,4 +71,6 @@ $AssignmentName = "Titolo dell\'elaborato";
 $CreateAssignment = "Crea l\'elaborato";
 $FolderEdited = "Cartella modificata";
 $UpdateWork = "Aggiorna l\'elaborato";
+$MakeAllPapersInvisible = "Rendi tutti gli elaborati non visibili";
+$MakeAllPapersVisible = "Rendi tutti gli elaborati visibili";
 ?>

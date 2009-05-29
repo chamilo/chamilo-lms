@@ -128,4 +128,6 @@ $langAddEdit = "Adauga/modifica";
 $ErrorNoFilesInFolder = "Aceasta mapa este goala";
 $dropbox_lang["upload"] = "Incarcare";
 $AddComment  = "Adauga comentariu";
+$SentCatgoryDeleted = "Categoria este stearsa";
+$ReceivedCatgoryDeleted = "Categoria a fost stearsa";
 ?>

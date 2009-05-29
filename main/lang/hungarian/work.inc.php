@@ -71,4 +71,6 @@ $AssignmentName = "Feladat címe";
 $CreateAssignment = "Feladat létrehozása";
 $FolderEdited = "A mappa módosult";
 $UpdateWork = "Feladat módosítása";
+$MakeAllPapersInvisible = "Legyen az összes munka láthatatlan";
+$MakeAllPapersVisible = "Legyen az összes munka látható";
 ?>

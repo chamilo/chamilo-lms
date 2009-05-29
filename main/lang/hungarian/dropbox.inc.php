@@ -128,4 +128,6 @@ $langAddEdit = "Hozzáad / szerkeszt";
 $ErrorNoFilesInFolder = "Ez a mappa üres";
 $dropbox_lang["upload"] = "Feltölt";
 $AddComment  = "Hozzászólás elmentése";
+$SentCatgoryDeleted = "A mappa törölve lett";
+$ReceivedCatgoryDeleted = "A mappa törölve lett";
 ?>

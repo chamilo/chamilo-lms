@@ -10,6 +10,8 @@ $langUpdateImage = "Kép cseréje";
 $langImageWrong = "A fájl mérte nem lehet nagyobb, mint";
 $langAddImage = "Kép";
 $langCourseManager = "Tanár";
+$NewPass = "Új jelszó";
+$CurrentPasswordEmptyOrIncorrect = "A jelenlegi jelszó helytelenül lett megadva";
 $password_request = "Azt kérte, hogy állítsuk vissza a jelszavát.
 Ha nem kért ilyet, hagyja figyelmen kívül ezt a levelet.
 

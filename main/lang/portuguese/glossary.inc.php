@@ -12,6 +12,11 @@ $TermUpdateButton = "Actualizar termo";
 $TermEdit = "Editar termo";
 $TermDeleteAction = "Eliminar termo";
 $OrderBy = "Ordenar por";
+$CreationDate = "Data de criação";
 $UpdateDate = "Última modificação";
+$PreSelectedOrder = "Ordenar por selecção";
 $TermAdded = "Termo acrescentado";
+$YouMustEnterATermName = "Deve introduzir um termo";
+$YouMustEnterATermDefinition = "Tem de introduzir a definição do termo";
+$GlossaryManagement  = "Gestão do glossário";
 ?>

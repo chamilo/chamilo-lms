@@ -128,4 +128,6 @@ $langAddEdit = "Add / Edit";
 $ErrorNoFilesInFolder = "This folder is empty";
 $dropbox_lang["upload"] = "Upload";
 $AddComment  = "Save feedback";
+$SentCatgoryDeleted = "The folder has been deleted";
+$ReceivedCatgoryDeleted = "The folder has been deleted";
 ?>

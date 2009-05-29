@@ -45,4 +45,5 @@ $FileToUpload = "Fisier de incarcat";
 $ContentMaker = "Creator de continut";
 $ContentProximity = "Vecinatatea continutului	";
 $UploadLocalFileFromGarbageDir = "Incarca fisierul local din folderul principal/gunoi";
+$Attempt = "Incercare";
 ?>

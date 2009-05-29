@@ -11,6 +11,7 @@ $langImageWrong = "O tamanho do ficheiro deve ser menor que";
 $langAddImage = "Foto";
 $langCourseManager = "Responsável pelo curso";
 $NewPass = "Nova senha";
+$CurrentPasswordEmptyOrIncorrect = "Senha incorrecta";
 $password_request = "Pediu para recuperar a senha. Se não pediu, ignore esta mensagem. Para recuperar a senha clicar na ligação recuperar.";
 $YourPasswordHasBeenEmailed = "A senha foi-lhe enviada por email.";
 $lang_enter_email_and_well_send_you_password = "Escreva o endereço de email que usou quando se registou e ser-lhe-á enviada a senha.";
@@ -164,6 +165,7 @@ $NoUsersRead = "Por favor verifique o seu ficheiro XML/CVS";
 $UserImportFileMessage = "Se no ficheiro XML/CVS os nomes de utilizadores estão em falta, o primeiro e o último nome serão utilizados para recriar um Nome de Utilizador; por ex.: para o nome Julio Montoya, o Nome de Utilizador será jmontoya";
 $UserAlreadyRegisteredByOtherCreator = "Utilizador já resgistado por outro professor";
 $EditNormalProfile = "Editar perfil normal";
+$EditExtendProfile = "Editar perfil ampliado";
 $EditInformation = "Editar perfil";
 $RegisterUser = "Registar utilizador";
 ?>

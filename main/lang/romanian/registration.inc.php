@@ -132,5 +132,9 @@ $AccountExternalAuthSource = "Dokeos nu poate indeplini cererea automat deoarece
 $AccountsExternalAuthSource = "Dokeos nu poate indeplini cererea automat deoarece cel putin un cont are o sursa externa de autentificare. Va rugam luati masurile adecvate pentru toti utilizatorii(inclusiv pe aceia cu autentificare locala la platforma) si anuntati utilizatorul.";
 $RequestSentToPlatformAdmin = "Dokeos nu poate indeplini cererea automat pentru acest tip de cont. Cererea dumneavoastra a fost trimisa administratorului platformei, care va lua masurile adecvate si va va anunta raspunsul.";
 $langphone = "Telefon";
+$Select = "Alege";
 $ActiveAccount = "Cont activ";
+$FolderUpdated = "Dosarul a fost actualizat.";
+$UsersRegistered = "Acesti utilizatori sunt inscrisi la curs";
+$NoUsersRead = "Va rugam sa controlati XML/CVS";
 ?>

@@ -176,10 +176,13 @@ $PersonalityQuestion = "Editar questão";
 $Create = "Criar";
 $Personality = "Personalizar";
 $Condition = "Condição";
+$Primary = "Primeiro";
 $Secondary = "Secundário";
 $Version = "Versão";
 $Normal = "Normal";
+$SurveysDeleted = "Questionários apagados";
 $ModifySurvey = "Editar questionário";
 $CreateQuestionSurvey = "Criar questão";
 $ModifyQuestionSurvey = "Editar questão";
+$PleaseFillSurvey = "Por favor, preencha o questionário";
 ?>

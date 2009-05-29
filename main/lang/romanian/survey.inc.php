@@ -1,5 +1,53 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$SurveyTitle = "Titlul anchetei";
+$SurveyIntroduction = "Sondaj introductiv";
+$CreateNewSurvey = "Creaza o noua ancheta";
+$Survey = "Ancheta";
+$SurveyTemplate = "Ancheta sablon";
+$NotPublished = "Nepublicat";
+$BackToQuestions = "Inapoi la intrebari";
+$CreateInAnotherLanguage = "Creaza acesta ancheta intr-o alta limba";
+$Thanks = "Conexiune inversa";
+$CourseName = "Numele cursului";
+$UpdateQuestionType = "Modifica tipul intrebarii";
+$AddAnotherQuestion = "Adauga o intrebare noua";
+$CreateSurvey = "Creaza ancheta";
+$DeleteSurvey = "Anuleaza ancheta";
+$ViewAnswers = "Arata raspunsurile";
+$SurveyName = "Numele anchetei";
+$ShareSurvey = "Imparte ancheta";
+$SurveyThanks = "Cuvant de multumire";
+$AddQuestion = "Adauga intrebare";
+$EditQuestion = "Modifica intrebarea";
+$TypeDoesNotExist = "Acest tip nu exista";
+$QuestionAdded = "Intrebarea a fost adaugata";
+$YesNo = "Da/Nu";
+$Open = "Deschis";
+$QuestionNumber = "Numarul intrebarii";
+$SurveyInvitations = "Invitatiile pentru ancheta";
+$Answered = "Raspuns";
+$MailTitle = "Titlul mailului";
+$SubmitQuestionFilter = "Filtru";
+$SelectUser = "Selecteaza un utilizator";
 $VisualRepresentation = "Grafic";
+$AbsoluteTotal = "Totalul absolut";
+$NextQuestion = "Urmatoarea intrebare";
+$PreviousQuestion = "Intrebarea precedenta";
+$AdditonalUsers = "Utilizatori extra";
+$MailText = "Textul mailului";
+$Score = "Rezultat";
+$MaximumScore = "Scor maxim";
+$MoveUp = "Muta mai sus";
+$SurveyQuestionMoved = "Intrebarea a fost mutata";
+$SelectType = "Selecteaza tipul";
+$OneQuestionPerPage = "O intrebare pe pagina";
+$PersonalityQuestion = "Schimba intrebarea";
+$Create = "Creaza";
+$Primary = "primar";
+$Version = "Versiune";
+$Normal = "Normal";
+$ModifySurvey = "Modifica ancheta";
+$ReportingOverview = "Raportul de ansamblu";
 ?>

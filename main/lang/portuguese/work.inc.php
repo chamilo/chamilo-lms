@@ -41,6 +41,7 @@ $AddToCalendar = "Adicionar à agenda";
 $DirectoryCreated = "Directoria criada";
 $Assignment = "Tarefas";
 $AdvancedParameters = "Parâmetros avançados";
+$IsNotPosibleSaveTheDocument = "Impossível guardar documento";
 $SelectAFilter = "Seleccionar um filtro";
 $QualificationOver = "Pontuação";
 $MoveXTo = "Mover %s para";
@@ -48,6 +49,7 @@ $ModifyDirectory = "Validar";
 $DeleteAllFiles = "Eliminar todos os trabalhos";
 $AllFilesInvisible = "Agora todos os trabalhos estão ocultos";
 $FileInvisible = "O ficheiro agora está oculto";
+$FileVisible = "O ficheiro agora está visível";
 $AssignmentName = "Nome da tarefa";
 $FolderEdited = "Pasta alterada";
 ?>

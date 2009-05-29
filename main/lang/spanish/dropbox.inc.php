@@ -128,4 +128,6 @@ $langAddEdit = "Añadir / Editar";
 $ErrorNoFilesInFolder = "Este directorio está vacío";
 $dropbox_lang["upload"] = "Enviar";
 $AddComment  = "Añadir comentario";
+$SentCatgoryDeleted = "La carpeta ha sido eliminada";
+$ReceivedCatgoryDeleted = "La carpeta ha sido eliminada";
 ?>

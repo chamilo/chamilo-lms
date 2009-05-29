@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langToolName = "Urmariri";
 $TrackingDisabled = "Urmarirea a fost dezactivata de catre administratotrul sistemului";
+$NbActiveSessions = "Sectiuni active";
 $langShowNone = "Nu arata";
 $langCourseStats = "Situatia cursului";
 $langToolsAccess = "Acces la unelte";
@@ -144,5 +145,20 @@ $Administrators = "Administratori";
 $Tracks = "Urme";
 $Success = "Succes";
 $ExcelFormat = "Format Excel";
+$MyLearnpath = "Traiectul meu";
 $Time = "Timp";
+$Score = "Scor";
+$StudentSessions = "Sectiunile unui student";
+$Attempts = "Tentative";
+$Correction = "Corectie";
+$SentDate = "Data trimiterii";
+$NoProduction = "Nici o productie";
+$LinksMostClicked = "Cele mai cautate linkuri";
+$NumberOfSessions = "Numarul de sesiuni";
+$DateAndTimeOfAccess = "Data si ora de acces";
+$Duration = "Durata";
+$ForumThreadsNumber = "Numarul de discutii";
+$ForumPostsNumber = "Numarul de mesaje";
+$CourseInformation = "Informatia cursului";
+$NoAdditionalFieldsWillBeExported = "Rubricile extra nu au fost exportate";
 ?>

@@ -12,4 +12,5 @@ $langSendPage = "Feltöltendõ oldal";
 $langPageTitleModified = "Az oldal címe megváltoztatva";
 $langPageAdded = "Oldal hozzáadva";
 $langAddPage = "Oldalt hozzáadása";
+$Choose = "Kiválaszt";
 ?>

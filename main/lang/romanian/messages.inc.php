@@ -20,4 +20,5 @@ $Date = "Data";
 $InvalidMessageId = "Id-ul mesajului la care trebuie raspuns nu este valid.";
 $ErrorSendingMessage = "Eroare in timp ce incerca sa trimita mesajul.";
 $SureYouWantToDeleteSelectedMessages = "Sunteti sigur ca doriti sa stergeti mesajele selectate?";
+$SelectedMessagesDeleted = "Mesajele selectate vor fi sterse";
 ?>

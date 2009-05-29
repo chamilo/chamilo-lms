@@ -54,4 +54,5 @@ $ForumAddNewTopic = "Forum: adauga un subiect de discutie nou";
 $ForumEditTopic = "Forum: editeaza subiectul de discutie";
 $ExerciseAnswers = "Exercitiu: Raspunsuri";
 $ForumReply = "Forum: raspunde";
+$AgendaSortChronologicallyDown = "Sorteaza agenda cronologic";
 ?>

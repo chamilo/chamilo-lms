@@ -29,6 +29,8 @@ $langCourseList  = "Lista de Cursos";
 $Subscribe = "Inscrever";
 $AlreadySubscribed = "Já está inscrito";
 $CodeMandatory = "Código obrigatório";
+$CourseCategoryMandatory = "Categoria de curso obrigatória";
+$TeacherMandatory = "Nome de professor obrigatório";
 $CourseCategoryStored = "Categoria do curso criada";
 $langWithoutTimeLimits = "Sem limite de tempo";
 $lang_back_to_main_category_list = "Voltar para a lista principal de categorias";
@@ -71,4 +73,7 @@ $SubmitRegistrationCode = "Submeter código do registo";
 $CourseCategoryDeleted = "Categoria do curso apagada";
 $CategorySortingDone = "Ordenamento das categorias concluído";
 $CourseCategoryEditStored = "Categoria actualizada";
+$buttonCreateCourseCategory = "Criar categoria de curso";
+$buttonSaveCategory = "Guardar categoria";
+$buttonChangeCategory = "Alterar categoria";
 ?>

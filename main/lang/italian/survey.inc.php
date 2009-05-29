@@ -202,4 +202,5 @@ $ModifyQuestionSurvey = "Modifica item";
 $BackToSurvey = "Torna al questionario";
 $UpdateInformation = "Aggiorna informazione";
 $PleaseFillSurvey = "Riempi il questionario, grazie.";
+$ReportingOverview = "Report di sintesi";
 ?>

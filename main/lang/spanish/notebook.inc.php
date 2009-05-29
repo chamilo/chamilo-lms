@@ -25,4 +25,10 @@ $ModifyNote = "Modificar nota";
 $BackToNoteList = "Regresar a la lista de anotaciones";
 $NotebookManagement = "Administración de nota personal";
 $BackToNotesList = "Volver al listado de notas";
+$NotesSortedByTitleAsc = "Notas en orden ascendente por título";
+$NotesSortedByTitleDESC = "Notas en orden descendente por título";
+$NotesSortedByUpdateDateAsc = "Notas en orden ascendente por fecha de actualización";
+$NotesSortedByUpdateDateDESC = "Notas en orden descendente por fecha de actualización";
+$NotesSortedByCreationDateAsc = "Notas en orden ascendente por fecha de creación";
+$NotesSortedByCreationDateDESC = "Notas en orden descendente por fecha de creación";
 ?>

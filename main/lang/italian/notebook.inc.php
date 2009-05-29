@@ -24,4 +24,5 @@ $AddNote = "Aggiungi appunto";
 $ModifyNote = "Modifica appunto";
 $BackToNoteList = "Torna all\'elenco degli appunti";
 $NotebookManagement = "Gestione appunti";
+$BackToNotesList = "Torna all\'elenco degli appunti";
 ?>

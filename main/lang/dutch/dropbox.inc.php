@@ -128,4 +128,6 @@ $langAddEdit = "Toevoegen / wijzigen";
 $ErrorNoFilesInFolder = "Deze map is leeg";
 $dropbox_lang["upload"] = "Uploaden";
 $AddComment  = "Commentaar toevoegen";
+$SentCatgoryDeleted = "De categorie is verwijderd";
+$ReceivedCatgoryDeleted = "De categorie is verwijderd";
 ?>

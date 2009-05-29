@@ -227,6 +227,7 @@ $TotalExercisesScorePossible = "Máxima pontuação total possível";
 $TotalExercisesAnswered = "Número de exercícios respondidos";
 $TotalExercisesScorePercentage = "Percentagem total da pontuação dos exercícios";
 $ForumForumsNumber = "Número de fóruns";
+$ForumThreadsNumber = "Número de temas";
 $ForumPostsNumber = "Número de mensagens";
 $langSendNotification = "Notificar";
 $TrainingTime = "Tempo no curso";

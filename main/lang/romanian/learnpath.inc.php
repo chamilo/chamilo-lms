@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "Noul forum este facut";
 $NewThreadCreated = "Un nou forum thread a fost creat.";
+$LearnPathAddedTitle = "Bine ai venit in cursul Dokeos";
 $lang_learning_path = "Calea de Invatare";
 $lang_learning_path_builder = "Creator Cale de Invatare";
 $lang_description = "descriere";
@@ -147,6 +148,10 @@ $langNoDocuments = "Nu sunt documente";
 $langNoExercisesAvailable = "Niciun exercitiu disponibil";
 $langNoLinksAvailable = "Nici o legatura disponibila";
 $langNoItemsInLp = "Nu exista obiecte in calea de invatare in acest moment. Apasati pe \"Avansat\" pentru a crea obiectele caii de invatare.";
+$FirstPosition = "Primul loc";
+$Url = "Url";
+$NoPrerequisites = "Nici o cerinta";
 $NewExercise = "Test Nou";
+$Order = "Ordinea";
 $SaveAudio = "Salveaz&#259; ";
 ?>

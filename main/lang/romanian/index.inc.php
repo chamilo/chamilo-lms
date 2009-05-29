@@ -61,4 +61,5 @@ $UsageDatacreated = "Datele de utilizat create";
 $SessionView = "Afiseaza cursurile in ordinea sesiunilor";
 $CourseView = "Afiseaza lista intreaga de cursuri";
 $DropboxFileAdded = "Fisier Dropbox adaugat";
+$AgendaAdded = "Adauga agendei";
 ?>

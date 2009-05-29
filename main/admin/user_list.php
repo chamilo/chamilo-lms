@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 20441 2009-05-10 07:39:15Z ivantcholakov $
+<?php // $Id: user_list.php 21079 2009-05-29 17:04:19Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -381,6 +381,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {		
     		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();   	  
     }
+    
+    if (!in_array($direction, array('ASC','DESC'))) {
+    	$direction = 'ASC';    	
+    }  
+    $column = intval($column);
+    $from = intval($from);
+    $number_of_items = intval($number_of_items);
     
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";	

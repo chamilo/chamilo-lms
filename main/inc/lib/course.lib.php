@@ -195,28 +195,22 @@ class CourseManager
 		{
 			$sql .= " ORDER BY 1 ";
 		}
-		if(!empty($orderdirection))
-		{
-			$sql .= Database::escape_string($orderdirection);
-		}
-		else
-		{
+				
+		if (!in_array($orderdirection, array('ASC', 'DESC'))) {
 			$sql .= 'ASC';
-		}
-		if(!empty($howmany) and is_int($howmany) and $howmany>0)
-		{
+		} else {
+			$sql .= Database::escape_string($orderdirection);
+		}			
+	
+		if(!empty($howmany) and is_int($howmany) and $howmany>0) {
 			$sql .= ' LIMIT '.Database::escape_string($howmany);
-		}
-		else
-		{
+		} else {
 			$sql .= ' LIMIT 1000000'; //virtually no limit
 		}
-		if(!empty($from))
-		{
+		if(!empty($from)) {
+			$from = intval($from);
 			$sql .= ' OFFSET '.Database::escape_string($from);
-		}
-		else
-		{
+		} else {
 			$sql .= ' OFFSET 0';
 		}
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -253,6 +247,7 @@ class CourseManager
 	function get_user_in_course_status($user_id, $course_code)
 	{
         $course_code = Database::escape_string($course_code);
+        $user_id = Database::escape_string($user_id);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);		
 		$sql_query = "SELECT * FROM $course_user_table WHERE course_code = '$course_code' AND user_id = $user_id";	
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
@@ -306,23 +301,24 @@ class CourseManager
 		if(!empty($_SESSION["id_session"])) {
 			// delete in table session_rel_course_rel_user	
             // We suppose the session is safe!
+            $my_session_id = Database::escape_string ($_SESSION["id_session"]);
 			$add_session_course_rel = "DELETE FROM $tbl_session_rel_course_user 	
-										WHERE id_session ='".$_SESSION["id_session"]."'
-										AND course_code = '".$_SESSION['_course']['id']."'
+										WHERE id_session ='".$my_session_id."'
+										AND course_code = '".Database::escape_string($_SESSION['_course']['id'])."'
 										AND id_user  IN ($user_ids)";
 			$result = api_sql_query($add_session_course_rel,__FILE__, __LINE__);	
 			// delete in table session_rel_user			    
 			$add_session_rel_user = "DELETE FROM $tbl_session_rel_user 	
-									WHERE id_session ='".$_SESSION["id_session"]."'											  
+									WHERE id_session ='".$my_session_id."'											  
 									AND id_user  IN ($user_ids)";
 			$result = api_sql_query($add_session_rel_user,__FILE__, __LINE__);
 			// update the table session
-			$sql = "SELECT COUNT(*) from $tbl_session_rel_user WHERE id_session = '".$_SESSION["id_session"]."'";
+			$sql = "SELECT COUNT(*) from $tbl_session_rel_user WHERE id_session = '".$my_session_id."'";
 			$result = api_sql_query($sql,__FILE__, __LINE__);
 			$row = Database::fetch_array($result);						    			    	
 			$count = $row[0]; // number of users by session
 								 		
-			$update_user_session = "UPDATE $tbl_session set nbr_users = '$count' WHERE id = '".$_SESSION["id_session"]."'" ;  	
+			$update_user_session = "UPDATE $tbl_session set nbr_users = '$count' WHERE id = '".$my_session_id."'" ;  	
 			$result = api_sql_query($update_user_session,__FILE__,__LINE__);
 		} else {
 			$sql = "DELETE FROM $table_course_user WHERE user_id IN (".$user_ids.") AND course_code = '".$course_code."'";
@@ -1919,7 +1915,7 @@ class CourseManager
 		$course_list=array();
 		$tbl_course			 = Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-		$sql='SELECT c.code,c.db_name,c.title FROM '.$tbl_course.' c inner join '.$tbl_course_rel_user.' cru on c.code=cru.course_code  WHERE cru.user_id='.$user_id;
+		$sql='SELECT c.code,c.db_name,c.title FROM '.$tbl_course.' c inner join '.$tbl_course_rel_user.' cru on c.code=cru.course_code  WHERE cru.user_id='.Database::escape_string($user_id);
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 		while ($row=Database::fetch_array($result,'ASSOC')) {
 			$course_list[]=$row;			
@@ -2040,11 +2036,11 @@ class CourseManager
 			}
 			
 			$sql = "INSERT INTO $t_cf
-						                SET field_type = '$fieldtype',
-						                field_variable = '$fieldvarname',
-						                field_display_text = '$fieldtitle',
-						                field_order = '$order',									                									                							                
-						                tms = FROM_UNIXTIME($time)";
+	                SET field_type = '$fieldtype',
+	                field_variable = '$fieldvarname',
+	                field_display_text = '$fieldtitle',
+	                field_order = '$order',									                									                							                
+	                tms = FROM_UNIXTIME($time)";
 			$result = api_sql_query($sql,__FILE__,__LINE__);
 			
 			$field_id=Database::get_last_insert_id();	

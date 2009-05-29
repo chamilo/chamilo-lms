@@ -2941,7 +2941,7 @@ class learnpath {
 		if ($this->debug > 0) {
 			error_log('New LP - In learnpath::get_link(' . $type . ',' . $item_id . ')', 0);
 		}
-		if (empty ($item_id)) {
+		if (empty($item_id)) {
 			if ($this->debug > 2) {
 				error_log('New LP - In learnpath::get_link() - no item id given in learnpath::get_link(), using current: ' . $this->get_current_item_id(), 0);
 			}
@@ -2962,8 +2962,10 @@ class learnpath {
 		$lp_table = Database :: get_course_table(TABLE_LP_MAIN);
 		$lp_item_table = Database :: get_course_table(TABLE_LP_ITEM);
 		$lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+		$item_id = Database::escape_string($item_id); 
+		
 		$sel = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams " .
-		"FROM $lp_table l, $lp_item_table li WHERE li.id = $item_id AND li.lp_id = l.id";
+			   "FROM $lp_table l, $lp_item_table li WHERE li.id = $item_id AND li.lp_id = l.id";
 		if ($this->debug > 2) {
 			error_log('New LP - In learnpath::get_link() - selecting item ' . $sel, 0);
 		}
@@ -3038,6 +3040,7 @@ class learnpath {
 					if ($this->debug > 2) {
 						error_log('New LP - In learnpath::get_link() ' . __LINE__ . ' - Item type: ' . $lp_item_type, 0);
 					}
+					
 					if ($lp_item_type != 'dir') {
 						//Quite complex here:
 						//we want to make sure 'http://' (and similar) links can 
@@ -3752,30 +3755,23 @@ class learnpath {
 	/**
 	 * Saves the last item seen's ID only in case 
 	 */
-	function save_last() {
-
+	function save_last()
+	{
 		if ($this->debug > 0) {
 			error_log('New LP - In learnpath::save_last()', 0);
 		}
-
 		$table = Database :: get_course_table('lp_view');
-
 		if (isset ($this->current)) {
-
 			if ($this->debug > 2) {
 				error_log('New LP - Saving current item (' . $this->current . ') for later review', 0);
 			}
-
-			$sql = "UPDATE $table SET last_item = " . $this->get_current_item_id() . " " .
-
-			"WHERE lp_id = " . $this->get_id() . " AND user_id = " . $this->get_user_id();
+			$sql = "UPDATE $table SET last_item = " . Database::escape_string($this->get_current_item_id()). " " .
+					"WHERE lp_id = " . $this->get_id() . " AND user_id = " . $this->get_user_id();
 
 			if ($this->debug > 2) {
 				error_log('New LP - Saving last item seen : ' . $sql, 0);
 			}
-
 			$res = api_sql_query($sql, __FILE__, __LINE__);
-
 		}
 
 		//save progress
@@ -3787,18 +3783,13 @@ class learnpath {
 			$progress = (int) $progress;
 
 			$sql = "UPDATE $table SET progress = $progress " .
-
-			"WHERE lp_id = " . $this->get_id() . " AND " .
-
-			"user_id = " . $this->get_user_id();
-
+					"WHERE lp_id = " . $this->get_id() . " AND " .
+				  		  "user_id = " . $this->get_user_id();
 			$res = api_sql_query($sql, __FILE__, __LINE__); //ignore errors as some tables might not have the progress field just yet
-
 			$this->progress_db = $progress;
-
 		}
-
 	}
+	
 	/**
 	 * Sets the current item ID (checks if valid and authorized first)
 	 * @param	integer	New item ID. If not given or not authorized, defaults to current
@@ -3815,20 +3806,24 @@ class learnpath {
 		} else {
 			if ($this->debug > 2) {
 				error_log('New LP - New current item given is ' . $item_id . '...', 0);
-			}
-			$item_id = $this->escape_string($item_id);
-			//TODO check in database here
-			$this->last = $this->current;
-			$this->current = $item_id;
-			//TODO update $this->index as well
-			foreach ($this->ordered_items as $index => $item) {
-				if ($item == $this->current) {
-					$this->index = $index;
-					break;
+			}			
+			if (is_numeric($item_id)) {
+				$item_id = $this->escape_string($item_id);
+				//TODO check in database here
+				$this->last = $this->current;
+				$this->current = $item_id;
+				//TODO update $this->index as well
+				foreach ($this->ordered_items as $index => $item) {
+					if ($item == $this->current) {
+						$this->index = $index;
+						break;
+					}
 				}
-			}
-			if ($this->debug > 2) {
-				error_log('New LP - set_current_item(' . $item_id . ') done. Index is now : ' . $this->index, 0);
+				if ($this->debug > 2) {
+					error_log('New LP - set_current_item(' . $item_id . ') done. Index is now : ' . $this->index, 0);
+				}
+			} else {
+				error_log('New LP - set_current_item(' . $item_id . ') failed. Not a numeric value: ', 0);
 			}
 		}
 	}

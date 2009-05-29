@@ -93,10 +93,7 @@ if(isset($_SESSION['lpobject']))
 
 if($debug>0) error_log('New LP - Passed data remains check',0);
 
-if($lp_found == false
-	|| (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])
-	)
-{
+if($lp_found == false || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
 	if($debug>0) error_log('New LP - oLP is not object, has changed or refresh been asked, getting new',0);		
 	//regenerate a new lp object? Not always as some pages don't need the object (like upload?)
 	if(!empty($_REQUEST['lp_id']) || !empty($myrefresh_id)){
@@ -105,46 +102,52 @@ if($lp_found == false
 		//right object
 		$lp_table = Database::get_course_table('lp');
 		if(!empty($_REQUEST['lp_id'])){
-			$lp_id = learnpath::escape_string($_REQUEST['lp_id']);
-		}else{
+			$lp_id = $_REQUEST['lp_id'];
+		} else {
 			$lp_id = $myrefresh_id;
-		}
-		$sel = "SELECT * FROM $lp_table WHERE id = $lp_id";
-		if($debug>0) error_log('New LP - querying '.$sel,0);
-		$res = api_sql_query($sel);
-		if(Database::num_rows($res))
-		{
-			$row = Database::fetch_array($res);
-			$type = $row['lp_type'];
-			if($debug>0) error_log('New LP - found row - type '.$type. ' - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(),0);			
-			switch($type){
-				case 1:
-			if($debug>0) error_log('New LP - found row - type dokeos - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(),0);			
-					$oLP = new learnpath(api_get_course_id(),$lp_id,api_get_user_id());
-					if($oLP !== false){ $lp_found = true; }else{eror_log($oLP->error,0);}
-					break;
-				case 2:
-			if($debug>0) error_log('New LP - found row - type scorm - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(),0);			
-					$oLP = new scorm(api_get_course_id(),$lp_id,api_get_user_id());
-					if($oLP !== false){ $lp_found = true; }else{eror_log($oLP->error,0);}
-					break;
-				case 3:
-			if($debug>0) error_log('New LP - found row - type aicc - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(),0);			
-					$oLP = new aicc(api_get_course_id(),$lp_id,api_get_user_id());
-					if($oLP !== false){ $lp_found = true; }else{eror_log($oLP->error,0);}
-					break;					
-				default:
-			if($debug>0) error_log('New LP - found row - type other - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(),0);			
-					$oLP = new learnpath(api_get_course_id(),$lp_id,api_get_user_id());
-					if($oLP !== false){ $lp_found = true; }else{eror_log($oLP->error,0);}
-					break;
+		}		
+		if (is_numeric($lp_id)) {
+			$lp_id = Database::escape_string($lp_id);
+			$sel = "SELECT * FROM $lp_table WHERE id = $lp_id";			
+				
+			if($debug>0) error_log('New LP - querying '.$sel,0);
+			$res = api_sql_query($sel);
+			if(Database::num_rows($res)) {
+				$row = Database::fetch_array($res);
+				$type = $row['lp_type'];
+				if($debug>0) error_log('New LP - found row - type '.$type. ' - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(),0);			
+				switch($type){
+					case 1:
+				if($debug>0) error_log('New LP - found row - type dokeos - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(),0);			
+						$oLP = new learnpath(api_get_course_id(),$lp_id,api_get_user_id());
+						if($oLP !== false){ $lp_found = true; }else{eror_log($oLP->error,0);}
+						break;
+					case 2:
+				if($debug>0) error_log('New LP - found row - type scorm - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(),0);			
+						$oLP = new scorm(api_get_course_id(),$lp_id,api_get_user_id());
+						if($oLP !== false){ $lp_found = true; }else{eror_log($oLP->error,0);}
+						break;
+					case 3:
+				if($debug>0) error_log('New LP - found row - type aicc - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(),0);			
+						$oLP = new aicc(api_get_course_id(),$lp_id,api_get_user_id());
+						if($oLP !== false){ $lp_found = true; }else{eror_log($oLP->error,0);}
+						break;					
+					default:
+				if($debug>0) error_log('New LP - found row - type other - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(),0);			
+						$oLP = new learnpath(api_get_course_id(),$lp_id,api_get_user_id());
+						if($oLP !== false){ $lp_found = true; }else{eror_log($oLP->error,0);}
+						break;
+				}
 			}
+		} else {
+			if($debug>0) error_log('New LP - Request[lp_id] is not numeric',0);
 		}
-	}else{
+		
+		
+	} else {
 		if($debug>0) error_log('New LP - Request[lp_id] and refresh_id were empty',0);
 	}
-	if($lp_found)
-	{
+	if($lp_found) {
 		$_SESSION['oLP'] = $oLP;
 	}
 }

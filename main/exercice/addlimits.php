@@ -134,7 +134,7 @@ if ( empty ( $objExercise ) )
 {
     $objExercise = $_SESSION['objExercise'];
 }
-$exercise_id = $_GET['exercise_id'];
+$exercise_id = intval($_GET['exercise_id']);
 $is_allowedToEdit=$is_courseAdmin;
 
 if (isset($_SESSION['gradebook'])){
@@ -143,14 +143,12 @@ if (isset($_SESSION['gradebook'])){
 
 if (!empty($gradebook) && $gradebook=='view') {	
 	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
 			'name' => get_lang('Gradebook')
 		);
 }
 $nameTools=get_lang('Exercice');
-
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
-
 Display::display_header($nameTools,"Exercise");
 
 /*
@@ -165,9 +163,6 @@ if (isset($_POST['ok']))
 	Display::display_normal_message($message);
 }
 ?>
-
-
-
   <script type="text/javascript">
   function selectlimited()
   {
@@ -233,30 +228,23 @@ Time :
 /**
  * @todo shouldn't this be moved to the part above (around line 111: action handling)
  */
-if (isset($_POST['ok']))
-{
-	$exercise_id = $_POST['exe_id'];
-	if ($_POST['limit']==1)
-	{
-		$minutes = $_POST['minutes'];
-		$query = "update `".$TBL_EXERCICES."` set ques_time_limit= $minutes where id= $exercise_id";
+if (isset($_POST['ok'])) {
+	$exercise_id = Database::escape_string($_POST['exe_id']);	
+	if ($_POST['limit']==1) {
+		$minutes = Database::escape_string($_POST['minutes']);
+		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= $minutes where id= $exercise_id";
 		api_sql_query($query,__FILE__,__LINE__);
-	}
-	else
-	{
-		$query = "update `".$TBL_EXERCICES."` set ques_time_limit= 0 where id= $exercise_id";
+	} else {
+		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= 0 WHERE id= $exercise_id";
 		api_sql_query($query,__FILE__,__LINE__);
 	}
 
-	if ($_POST['attempt']==1)
-	{
-		$attempts = $_POST['attempts'];
-		$query = "update `".$TBL_EXERCICES."` set num_attempts = $attempts where id= $exercise_id";
+	if ($_POST['attempt']==1) {
+		$attempts = Database::escape_string($_POST['attempts']);
+		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = $attempts WHERE id= $exercise_id";
 		api_sql_query($query,__FILE__,__LINE__);
-	}
-	else
-	{
-		$query = "update`".$TBL_EXERCICES."` set num_attempts = 0 where id= $exercise_id";
+	} else {
+		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = 0 WHERE id= $exercise_id";
 		api_sql_query($query,__FILE__,__LINE__);
 	}
 }

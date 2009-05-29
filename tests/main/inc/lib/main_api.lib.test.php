@@ -647,15 +647,34 @@ class TestMainApi extends UnitTestCase {
 	}
 	
 	function testApiMaxSortValue(){
-	    global $image, $target_width, $target_height;
-		$res= api_max_sort_value($image, $target_width, $target_height);
+	    $user=array('user_course_category'=>21, 'user_id'=>1);
+		$res= api_max_sort_value($user['user_course_category'],$user['user_id']);
 		$this->assertFalse($res);
+		$this->assertTrue($user);
 		
 	}
 	
+	function testString2Boolean(){
+		global $string;
+		$res=string_2_boolean($string);
+		$this->assertFalse($res);
+	}
+	
 	*/
+	function testApiNumberOfPlugins(){
+		global $_plugins;
+		$location=2;
+		$_plugins[$location]=1;
+		$res=api_number_of_plugins($location);
+		$this->assertFalse($res);
+		$this->assertTrue($_plugins[$location]);	
+	}
+	
+	/*
 	function testApiCreateIncludePathSetting(){
 		
+		$res=api_create_include_path_setting();
+		$this->assertTrue($res);
 	}
 	/*
 	function testApiGetCurrentAccessUrlId(){

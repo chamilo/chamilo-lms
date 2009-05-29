@@ -357,18 +357,13 @@ class DisplayGradebook
 			// show navigation tree and buttons?
 			$header = '<div class="actions">';
 
-			if ($is_course_admin) 
-			{
-				$header .= '<a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('view_list.gif', get_lang('FlatView')).' '. get_lang('FlatView') . '</a>';
+			if ($is_course_admin) {
+				$header .= '<a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats_access.gif', get_lang('FlatView')).' '. get_lang('FlatView') . '</a>';
 				if ($is_platform_admin || $is_course_admin)
 					$header .= '<a href="gradebook_scoring_system.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('acces_tool.gif', get_lang('ScoreEdit')).' ' . get_lang('ScoreEdit') . '</a>';
-			}
-			elseif (!(isset ($_GET['studentoverview']))) 
-			{
+			} elseif (!(isset ($_GET['studentoverview']))) {
 				$header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('view_list.gif', get_lang('FlatView')).' ' . get_lang('FlatView') . '</a>';
-			} 
-			else 
-			{
+			} else {
 				$header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat=' . $catobj->get_id() . '" target="_blank">'.Display::return_icon('file_pdf.gif', get_lang('ExportPDF')).' ' . get_lang('ExportPDF') . '</a>';
 			}
 		$header.='</div>';

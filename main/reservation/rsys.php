@@ -1594,12 +1594,20 @@ class Rsys {
 	 *  @return -   Array               The returned rows
 	 */
 	function get_table_subscriptions($from, $per_page, $column, $direction) {
+		
+		$from = intval($from);
+		$per_page = intval($per_page);
+		$column = intval($column);		
+		if(!in_array($direction, array('ASC','DESC'))) {
+			$direction = 'ASC';
+		}
+		
 		$sql = "SELECT CONCAT(s.reservation_id,'-',s.dummy) AS col0, i.name AS col1, DATE_FORMAT(s.start_at ,'%Y-%m-%d %H:%i')  AS col2, DATE_FORMAT(s.end_at ,'%Y-%m-%d %H:%i') AS col3, CONCAT(s.reservation_id,'-',s.dummy) AS col4, DATE_FORMAT(r.start_at ,'%Y-%m-%d %H:%i') , DATE_FORMAT(r.end_at ,'%Y-%m-%d %H:%i') , s.accepted,i.blackout
-				                FROM ".Rsys :: getTable("subscription")." s 
-				                INNER JOIN ".Rsys :: getTable("reservation")." r ON r.id = s.reservation_id
-				                INNER JOIN ".Rsys :: getTable("item")." i ON i.id=r.item_id
-				                WHERE s.user_id = '".api_get_user_id()."'";
-		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
+                FROM ".Rsys :: getTable("subscription")." s 
+                INNER JOIN ".Rsys :: getTable("reservation")." r ON r.id = s.reservation_id
+                INNER JOIN ".Rsys :: getTable("item")." i ON i.id=r.item_id
+                WHERE s.user_id = '".api_get_user_id()."'";
+		$sql .= "ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($array = Database::fetch_array($result, 'NUM'))
 		{	$row = array();

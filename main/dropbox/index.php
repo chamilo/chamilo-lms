@@ -285,7 +285,7 @@ if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs'
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\">".Display::return_icon('folder_new.gif')." ".get_lang('AddNewCategory')."</a>\n";
 	}
 	if (empty($_GET['view_sent_category'])) {
-	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=add\">".Display::return_icon('folder_new.gif').' '.get_lang('UploadNewFile')."</a>&nbsp;\n";
+	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=add\">".Display::return_icon('submit_file.gif').' '.get_lang('UploadNewFile')."</a>&nbsp;\n";
 	}
 	echo '</div>';
 }

@@ -121,7 +121,7 @@ foreach($Courses as $enreg)
   	</td>
 
   	<td align='center'>
-		<a href="<?php echo api_get_self(); ?>?course=<?php echo $enreg['code']; ?>"> <?php Display::display_icon('2rightarrow.gif'); ?> </a>
+		<a href="<?php echo api_get_self(); ?>?course=<?php echo $enreg['code']; ?>"> <?php Display::display_icon('2rightarrow.gif', get_lang('Details')); ?> </a>
   	</td>
 </tr>
 

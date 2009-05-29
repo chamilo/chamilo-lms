@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.lib.php 20451 2009-05-10 12:02:22Z ivantcholakov $
+* 	@version $Id: hotpotatoes.lib.php 21086 2009-05-29 17:46:56Z juliomontoya $
 */
 
 
@@ -111,6 +111,7 @@ function GetQuizName($fname,$fpath)
 function GetComment($path)
 {
 	global $dbTable;
+	$path = Database::escape_string($path);
 	$query = "select comment from $dbTable where path='$path'";
 	$result = api_sql_query($query,__FILE__,__LINE__);
 	while($row = mysql_fetch_array($result))
@@ -129,7 +130,10 @@ function GetComment($path)
 function SetComment($path,$comment)
 {
 	global $dbTable;
-	$query = "update $dbTable set comment='$comment' where path='$path'";
+	$path = Database::escape_string($path);
+	$comment = Database::escape_string($comment);
+	
+	$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
 	$result = api_sql_query($query,__FILE__,__LINE__);
 	return "$result";
 }

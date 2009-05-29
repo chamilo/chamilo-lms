@@ -80,10 +80,10 @@ class DocumentManager
 	function get_course_quota()
 	{
 		global $_course, $maxFilledSpace;
-		$course_code = $_course['sysCode'];
+		$course_code = Database::escape_string($_course['sysCode']);
 		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
-		$sql_query = "SELECT `".DISK_QUOTA_FIELD."` FROM $course_table WHERE `code` = '$course_code'";
+		$sql_query = "SELECT ".DISK_QUOTA_FIELD." FROM $course_table WHERE code = '$course_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		$course_quota = $result[DISK_QUOTA_FIELD];
@@ -316,8 +316,10 @@ class DocumentManager
 		{
 			$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 			$tbl_item_property = $this_course.'item_property';
+			$doc_url = Database::escape_string($doc_url);
 			//$doc_url = addslashes($doc_url);
-			$query = "SELECT 1 FROM `$tbl_document` AS docs,`$tbl_item_property` AS props WHERE props.tool = 'document' AND docs.id=props.ref AND props.visibility <> '1' AND docs.path = '$doc_url'";
+			$query = "SELECT 1 FROM $tbl_document AS docs,$tbl_item_property AS props 
+					  WHERE props.tool = 'document' AND docs.id=props.ref AND props.visibility <> '1' AND docs.path = '$doc_url'";
 			//echo $query;
 			$result = api_sql_query($query, __FILE__, __LINE__);
 
@@ -577,7 +579,12 @@ class DocumentManager
 	{
 		$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-		if(empty($to_group_id)){$to_group_id = '0';} //avoid empty strings in $to_group_id
+		if(empty($doc_url)){
+			$to_group_id = '0';
+		} else {
+			$to_group_id = Database::escape_string($to_group_id);
+		}
+		
 		if ($can_see_invisible)
 		{
 			$sql = "SELECT path
@@ -696,8 +703,9 @@ class DocumentManager
 			{
 				if (!empty($file))
 				{
-					$path=$file;
-					$what_to_check_sql = "SELECT td.id, readonly, tp.insert_user_id  FROM ".$TABLE_DOCUMENT." td , $TABLE_PROPERTY tp WHERE tp.ref= td.id and (path='".$path."' OR path LIKE BINARY '".$path."/%' ) ";
+					$path = Database::escape_string($file);
+					$what_to_check_sql = "SELECT td.id, readonly, tp.insert_user_id FROM ".$TABLE_DOCUMENT." td , $TABLE_PROPERTY tp 
+									WHERE tp.ref= td.id and (path='".$path."' OR path LIKE BINARY '".$path."/%' ) ";
 					//get all id's of documents that are deleted
 					$what_to_check_result = api_sql_query($what_to_check_sql, __FILE__, __LINE__);
 					
@@ -734,7 +742,8 @@ class DocumentManager
 		
 		if (!empty($document_id))
 		{	
-			$sql= 'SELECT a.insert_user_id, b.readonly FROM '.$TABLE_PROPERTY.' a,'.$TABLE_DOCUMENT.' b WHERE a.ref = b.id and a.ref='.$document_id.' LIMIT 1';
+			$sql= 'SELECT a.insert_user_id, b.readonly FROM '.$TABLE_PROPERTY.' a,'.$TABLE_DOCUMENT.' b
+				   WHERE a.ref = b.id and a.ref='.$document_id.' LIMIT 1';
 			$resultans   =  api_sql_query($sql, __FILE__, __LINE__);
 			$doc_details =  Database ::fetch_array($resultans,'ASSOC');
 		
@@ -763,15 +772,12 @@ class DocumentManager
 	{	
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		//if (!empty($document_id))
-		
+		$document_id = Database::escape_string($document_id);
 		$resultans   =  api_sql_query('SELECT filetype FROM '.$TABLE_DOCUMENT.' WHERE id='.$document_id.'', __FILE__, __LINE__);		
 		$result=  Database::fetch_array($resultans,'ASSOC');
-		if ($result['filetype']=='folder')
-		{
+		if ($result['filetype']=='folder') {
 			return true;			
-		}
-		else
-		{
+		} else {
 			return false;
 		}		
 	}
@@ -962,18 +968,13 @@ class DocumentManager
 	function get_document_id($_course, $path)
 	{
 		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-
+		$path = Database::escape_string($path);		
 		$sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path LIKE BINARY '$path'";
-
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-
-		if ($result && Database::num_rows($result) == 1)
-		{
+		if ($result && Database::num_rows($result) == 1) {
 			$row = Database::fetch_array($result);
 			return $row[0];
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -1016,18 +1017,21 @@ class DocumentManager
 	 * @param string $couse_code
 	 * @param int $user_id
 	 */
-	function unset_document_as_template($document_id, $couse_code, $user_id){
+	function unset_document_as_template($document_id, $course_code, $user_id){
 		
 		$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
+		$course_code = Database::escape_string($course_code);
+		$user_id = Database::escape_string($user_id);
+		$document_id = Database::escape_string($document_id);
 		
-		$sql = 'SELECT id FROM '.$table_template.' WHERE course_code="'.$couse_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
+		$sql = 'SELECT id FROM '.$table_template.' WHERE course_code="'.$course_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
 		$result = api_sql_query($sql);
 		$template_id = Database::result($result,0,0);
 		
 		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 		my_delete(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'.$template_id.'.jpg');
 		
-		$sql = 'DELETE FROM '.$table_template.' WHERE course_code="'.$couse_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
+		$sql = 'DELETE FROM '.$table_template.' WHERE course_code="'.$course_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
 		
 		api_sql_query($sql);
 		
@@ -1043,6 +1047,8 @@ class DocumentManager
 		$propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
         //note the extra / at the end of doc_path to match every path in the
         // document table that is part of the document path
+        $doc_path = Database::escape_string($doc_path);
+        
         $sql = "SELECT path FROM $docTable d, $propTable ip " .
                 "where d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND d.filetype='file' AND visibility=0 AND ".
                 "locate(concat(path,'/'),'".$doc_path."/')=1";

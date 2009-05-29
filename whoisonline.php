@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 20973 2009-05-25 17:35:02Z aportugal $
+<?php // $Id: whoisonline.php 21075 2009-05-29 16:31:01Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -162,8 +162,8 @@ function display_user_list($user_list, $_plugins)
 				if ($user_info['user_id'] != api_get_user_id() && !api_is_anonymous($user_info['user_id'])) {
 					$user_relation=UserFriend::get_relation_between_contacts(api_get_user_id(),$user_info['user_id']);
 					if ($user_relation==0 || $user_relation==6) {
-						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SocialAddToFriends').'">'.get_lang('SocialAddToFriends').'</a><br />
-										<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.get_lang('SendAMessage').'</a>';
+						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SocialAddToFriends').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialAddToFriends')).'&nbsp;'.get_lang('SocialAddToFriends').'</a><br />
+										<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
 					} else {
 						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.get_lang('SendAMessage').'</a>';
 					}				
@@ -180,7 +180,7 @@ function display_user_list($user_list, $_plugins)
 		}
 		$user_anonymous=api_get_anonymous_id();
 		if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) {
-			$table_header[] = array(get_lang('Friends'),false,'width="130"');
+			$table_header[] = array(get_lang('Friends'),false,'width="150"');
 		}		
 		/*this feature is deprecated
 		if ( api_get_setting('allow_message_tool')=='true' && isset($_SESSION['_user'])) {

@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 21075 2009-05-29 16:31:01Z aportugal $
+<?php // $Id: whoisonline.php 21076 2009-05-29 16:36:04Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -165,13 +165,13 @@ function display_user_list($user_list, $_plugins)
 						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SocialAddToFriends').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialAddToFriends')).'&nbsp;'.get_lang('SocialAddToFriends').'</a><br />
 										<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
 					} else {
-						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.get_lang('SendAMessage').'</a>';
+						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
 					}				
 				}
 			}
 			$table_data[] = $table_row;
 		}
-		$table_header[] = array(get_lang('UserPicture'),false,'width="80"');
+		$table_header[] = array(get_lang('UserPicture'),false,'width="90"');
 		$table_header[] = array(get_lang('Name'),true);
 		//$table_header[] = array(get_lang('LastName'),true);
 		

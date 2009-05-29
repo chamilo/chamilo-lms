@@ -451,7 +451,7 @@ class GroupManager
 			return null;
 		}
 		$table_group = Database :: get_course_table(TABLE_GROUP);
-		$sql = 'SELECT   *  FROM '.$table_group.' WHERE id = '.$group_id;
+		$sql = 'SELECT   *  FROM '.$table_group.' WHERE id = '.Database::escape_string($group_id);
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
 
 			$db_object = Database::fetch_object($db_result);

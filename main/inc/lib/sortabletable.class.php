@@ -130,16 +130,47 @@ class SortableTable extends HTML_Table
 		$this->table_name = $table_name;
 		$this->additional_parameters = array ();
 		$this->param_prefix = $table_name.'_';
-		$this->page_nr = isset ($_SESSION[$this->param_prefix.'page_nr']) ? $_SESSION[$this->param_prefix.'page_nr'] : 1;
-		$this->page_nr = isset ($_GET[$this->param_prefix.'page_nr']) ? $_GET[$this->param_prefix.'page_nr'] : $this->page_nr;
-		$this->column = isset ($_SESSION[$this->param_prefix.'column']) ? $_SESSION[$this->param_prefix.'column'] : $default_column;
-		$this->column = isset ($_GET[$this->param_prefix.'column']) ? $_GET[$this->param_prefix.'column'] : $this->column;
-		$this->direction = isset ($_SESSION[$this->param_prefix.'direction']) ? $_SESSION[$this->param_prefix.'direction'] : $default_order_direction;
-		$this->direction = isset ($_GET[$this->param_prefix.'direction']) ? $_GET[$this->param_prefix.'direction'] : $this->direction;
+		
+		$this->page_nr = isset ($_SESSION[$this->param_prefix.'page_nr']) ? intval($_SESSION[$this->param_prefix.'page_nr']) : 1;
+		$this->page_nr = isset ($_GET[$this->param_prefix.'page_nr']) 	  ? intval($_GET[$this->param_prefix.'page_nr']) : $this->page_nr;
+		$this->column  = isset ($_SESSION[$this->param_prefix.'column'])  ? intval($_SESSION[$this->param_prefix.'column']) : $default_column;
+		$this->column  = isset ($_GET[$this->param_prefix.'column']) 	  ? intval($_GET[$this->param_prefix.'column']) : $this->column;
+		
+		//$this->direction = isset ($_SESSION[$this->param_prefix.'direction']) ? $_SESSION[$this->param_prefix.'direction'] : $default_order_direction;
+		
+				
+		if (isset($_SESSION[$this->param_prefix.'direction'])) {
+			$my_session_direction = $_SESSION[$this->param_prefix.'direction'];
+        	if(!in_array($my_session_direction, array('ASC','DESC'))){
+        		$this->direction = 'ASC'; 
+        	} else {
+        		if ($my_session_direction=='ASC') {
+					$this->direction = 'ASC';
+				} elseif ($my_session_direction=='DESC') {
+					$this->direction = 'DESC';
+				}
+        	}
+		}		
+		
+		if (isset($_GET[$this->param_prefix.'direction'])) {
+			$my_get_direction = $_GET[$this->param_prefix.'direction'];					
+			if(!in_array($my_get_direction, array('ASC','DESC'))){
+        		$this->direction = 'ASC'; 
+			} else {
+				if ($my_get_direction=='ASC') {
+					$this->direction = 'ASC';
+				} elseif ($my_get_direction=='DESC') {
+					$this->direction = 'DESC';
+				}
+			}
+		}
+
 		//allow to change paginate in multiples tabs
 		unset($_SESSION[$this->param_prefix.'per_page']);
-		$this->per_page = isset ($_SESSION[$this->param_prefix.'per_page']) ? $_SESSION[$this->param_prefix.'per_page'] : $default_items_per_page;
-		$this->per_page = isset ($_GET[$this->param_prefix.'per_page']) ? $_GET[$this->param_prefix.'per_page'] : $this->per_page;
+		
+		$this->per_page = isset ($_SESSION[$this->param_prefix.'per_page']) ? intval($_SESSION[$this->param_prefix.'per_page']) : $default_items_per_page;
+		$this->per_page = isset ($_GET[$this->param_prefix.'per_page'])		? intval($_GET[$this->param_prefix.'per_page']) : $this->per_page;
+				
 		$_SESSION[$this->param_prefix.'per_page'] = $this->per_page;
 		$_SESSION[$this->param_prefix.'direction'] = $this->direction ;
 		$_SESSION[$this->param_prefix.'page_nr'] = $this->page_nr;
@@ -262,8 +293,7 @@ class SortableTable extends HTML_Table
 				$html .= '<a href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript:setCheckbox(true);return false;">'.get_lang('SelectAll').'</a> - ';
 				$html .= '<a href="?'.$params.'" onclick="javascript:setCheckbox(false);return false;">'.get_lang('UnSelectAll').'</a> ';
 				$html .= '<select name="action">';
-				foreach ($this->form_actions as $action => $label)
-				{
+				foreach ($this->form_actions as $action => $label) {
 					$html .= '<option value="'.$action.'">'.$label.'</option>';
 				}
 				$html .= '</select>';
@@ -345,17 +375,14 @@ class SortableTable extends HTML_Table
 		$param[$this->param_prefix.'page_nr'] = $this->page_nr;
 		$param[$this->param_prefix.'column'] = $this->column;
 		$param = array_merge($param, $this->additional_parameters);
-		foreach ($param as $key => $value)
-		{
+		foreach ($param as $key => $value) {
 			$result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
 		}
 		$result[] = '<select name="'.$this->param_prefix.'per_page" onchange="javascript:this.form.submit();">';
-		for ($nr = 10; $nr <= min(50, $total_number_of_items); $nr += 10)
-		{
+		for ($nr = 10; $nr <= min(50, $total_number_of_items); $nr += 10) {
 			$result[] = '<option value="'.$nr.'" '. ($nr == $this->per_page ? 'selected="selected"' : '').'>'.$nr.'</option>';
 		}
-		if ($total_number_of_items < 500)
-		{
+		if ($total_number_of_items < 500) {
 			$result[] = '<option value="'.$total_number_of_items.'" '. ($total_number_of_items == $this->per_page ? 'selected="selected"' : '').'>'.api_ucfirst(get_lang('All')).'</option>';
 		}
 		$result[] = '</select>';
@@ -389,18 +416,15 @@ class SortableTable extends HTML_Table
 	function set_header($column, $label, $sortable = true, $th_attributes = null, $td_attributes = null)
 	{
 		$param['direction'] = 'ASC';
-		if ($this->column == $column && $this->direction == 'ASC')
-		{
+		if ($this->column == $column && $this->direction == 'ASC') {
 			$param['direction'] = 'DESC';
 		}
 		$param['page_nr'] = $this->page_nr;
 		$param['per_page'] = $this->per_page;
 		$param['column'] = $column;
-		if ($sortable)
-		{
+		if ($sortable) {
 			$link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;';
-			foreach ($param as $key => $value)
-			{
+			foreach ($param as $key => $value) {
 				$link .= $this->param_prefix.$key.'='.urlencode($value).'&amp;';
 			}
 			$link .= $this->get_additional_url_paramstring();
@@ -439,20 +463,25 @@ class SortableTable extends HTML_Table
 			}
 		}
 		$result = implode('&amp;', $param_string_parts);
-		foreach($this->other_tables as $index => $tablename)
-		{
+		foreach($this->other_tables as $index => $tablename) {
 			$param = array();
-			if( isset($_GET[$tablename.'_direction']))
-				$param[$tablename.'_direction'] = $_GET[$tablename.'_direction'];
+			if( isset($_GET[$tablename.'_direction'])) {
+				//$param[$tablename.'_direction'] = $_GET[$tablename.'_direction'];
+				$my_get_direction = $_GET[$tablename.'_direction'];
+				if(!in_array($my_get_direction ,array('ASC','DESC'))){
+				 	$param[$tablename.'_direction'] =  'ASC';
+				} else {
+					$param[$tablename.'_direction'] = $my_get_direction;
+				}						
+			}
 			if( isset($_GET[$tablename.'_page_nr']))
-				$param[$tablename.'_page_nr'] = $_GET[$tablename.'_page_nr'];
+				$param[$tablename.'_page_nr'] = intval($_GET[$tablename.'_page_nr']);
 			if( isset($_GET[$tablename.'_per_page']))
-				$param[$tablename.'_per_page'] = $_GET[$tablename.'_per_page'];
+				$param[$tablename.'_per_page'] = intval($_GET[$tablename.'_per_page']);
 			if( isset($_GET[$tablename.'_column']))
-				$param[$tablename.'_column'] = $_GET[$tablename.'_column'];
+				$param[$tablename.'_column'] = intval($_GET[$tablename.'_column']);
 			$param_string_parts = array ();
-			foreach ($param as $key => $value)
-			{
+			foreach ($param as $key => $value) {
 				$param_string_parts[] = urlencode($key).'='.urlencode($value);
 			}
 			if(count($param_string_parts) > 0)
@@ -471,8 +500,7 @@ class SortableTable extends HTML_Table
 		$param[$this->param_prefix.'per_page'] = $this->per_page;
 		$param[$this->param_prefix.'column'] = $this->column;
 		$param_string_parts = array ();
-		foreach ($param as $key => $value)
-		{
+		foreach ($param as $key => $value) {
 			$param_string_parts[] = urlencode($key).'='.urlencode($value);
 		}
 		$res = implode('&amp;', $param_string_parts);
@@ -538,20 +566,17 @@ class SortableTable extends HTML_Table
 		{
 			$row[$column] = call_user_func($function, $row[$column], $url_params, $row);
 		}
-		if (count($this->form_actions) > 0)
-		{
-			if (strlen($row[0]) > 0)
-			{
+		if (count($this->form_actions) > 0) {
+			if (strlen($row[0]) > 0) {
 				$row[0] = '<input type="checkbox" name="'.$this->checkbox_name.'[]" value="'.$row[0].'"';
-				if (isset ($_GET[$this->param_prefix.'selectall']))
-				{
+				if (isset ($_GET[$this->param_prefix.'selectall'])) {
 					$row[0] .= ' checked="checked"';
 				}
 				$row[0] .= '/>';
 			}
 		}
-		foreach ($row as $index => $value)
-		{
+		
+		foreach ($row as $index => $value) {
 			if (strlen($row[$index]) == 0)
 			{
 				$row[$index] = '-';
@@ -566,8 +591,7 @@ class SortableTable extends HTML_Table
 	 */
 	function get_total_number_of_items()
 	{
-		if ($this->total_number_of_items == -1 && !is_null($this->get_total_number_function))
-		{
+		if ($this->total_number_of_items == -1 && !is_null($this->get_total_number_function)) {
 			$this->total_number_of_items = call_user_func($this->get_total_number_function);
 		}
 		return $this->total_number_of_items;

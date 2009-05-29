@@ -1,4 +1,4 @@
-<?php // $Id: user.php 20561 2009-05-12 19:35:39Z juliomontoya $
+<?php // $Id: user.php 21077 2009-05-29 16:48:33Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -438,6 +438,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		case 5 :  $order_by = 'ORDER BY user.official_code';break;
 		default:  $order_by = 'ORDER BY user.lastname';break;
 	}
+	
+	if(!in_array($direction, array('ASC','DESC'))){
+		$direction = 'ASC';
+	}
+	
 	$order_by .= ' '.$direction;
 
 	if (!empty($_SESSION["id_session"])) {		

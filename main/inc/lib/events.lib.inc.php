@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 20597 2009-05-13 17:17:35Z iflorespaz $
+<?php // $Id: events.lib.inc.php 21091 2009-05-29 19:58:15Z juliomontoya $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -79,7 +79,7 @@ function event_open()
 						 open_date)
 						VALUES
 						('".$remhost."',
-						 '".Database::escape_string($_SERVER['HTTP_USER_AGENT'])."', '".$referer."', FROM_UNIXTIME($reallyNow) )";
+						 '".Database::escape_string($_SERVER['HTTP_USER_AGENT'])."', '".Database::escape_string($referer)."', FROM_UNIXTIME($reallyNow) )";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 	}
 	return 1;
@@ -97,14 +97,11 @@ function event_login()
 	global $TABLETRACK_LOGIN;
 
 	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled'])
-	{
+	if (!$_configuration['tracking_enabled']) {
 		return 0;
 	}
-
 	$reallyNow = time();
 	$sql = "INSERT INTO ".$TABLETRACK_LOGIN."
-
 				(login_user_id,
 				 login_ip,
 				 login_date)
@@ -154,7 +151,6 @@ function event_access_course()
 		$user_id = "NULL";
 	}
 	$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
-
 				(access_user_id,
 				 access_cours_code,
 				 access_date)
@@ -374,33 +370,29 @@ function event_link($link_id)
 	global $TABLETRACK_LINKS;
 
 	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled'])
-	{
+	if (!$_configuration['tracking_enabled']) {
 		return 0;
 	}
 
 	$reallyNow = time();
-	if ($_user['user_id'])
-	{
-		$user_id = "'".$_user['user_id']."'";
-	}
-	else // anonymous
-		{
+	if ($_user['user_id']) {
+		$user_id = "'".Database::escape_string($_user['user_id'])."'";
+	} else {
+		// anonymous
 		$user_id = "NULL";
 	}
+	
 	$sql = "INSERT INTO ".$TABLETRACK_LINKS."
-				(
-				 links_user_id,
+				( links_user_id,
 				 links_cours_id,
 				 links_link_id,
 				 links_date
 				)
-
 				VALUES
 				(
 				 ".$user_id.",
 				 '".$_cid."',
-				 '".$link_id."',
+				 '".Database::escape_string($link_id)."',
 				 FROM_UNIXTIME(".$reallyNow.")
 				)";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -422,24 +414,22 @@ function event_link($link_id)
 */
 function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$learnpath_id=0,$learnpath_item_id=0, $duration)
 {
-	if ($exeid!='')
-	{
+	if ($exeid!='') {
 		$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$reallyNow = time();
 		$sql = "UPDATE $TABLETRACK_EXERCICES SET
-				   exe_exo_id 	= 	'".$exo_id."',
-				   exe_result	=	  '".$score."',
-				   exe_weighting = '".$weighting."',
-				   session_id		= '".$session_id."',
-				   orig_lp_id = '".$learnpath_id."',		
-				   orig_lp_item_id = '".$learnpath_item_id."',
-				   exe_duration = '".$duration."',
-				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date =FROM_UNIXTIME(".$_SESSION['exercice_start_date'].")
-				 WHERE exe_id = '".$exeid."'";
+				   exe_exo_id 	= 	'".Database::escape_string($exo_id)."',
+				   exe_result	=	  '".Database::escape_string($score)."',
+				   exe_weighting = '".Database::escape_string($weighting)."',
+				   session_id		= '".Database::escape_string($session_id)."',
+				   orig_lp_id = '".Database::escape_string($learnpath_id)."',		
+				   orig_lp_item_id = '".Database::escape_string($learnpath_item_id)."',
+				   exe_duration = '".Database::escape_string($duration)."',
+				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date =FROM_UNIXTIME(".Database::escape_string($_SESSION['exercice_start_date']).")
+				 WHERE exe_id = '".Database::escape_string($exeid)."'";
 		$res = @api_sql_query($sql,__FILE__,__LINE__);
 		return $res;
-	}
-	else
+	} else
 		return false;
 }
 
@@ -455,18 +445,16 @@ function create_event_exercice($exo_id)
 	global $_user, $_cid, $_configuration;
 	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$reallyNow = time();
-	if ($_user['user_id'])
-	{
+	if ($_user['user_id']) {
 		$user_id = "'".$_user['user_id']."'";
-	}
-	else // anonymous
-		{
+	} else {
+		// anonymous
 		$user_id = "NULL";
 	}
 
 	if(defined('ENABLED_LIVE_EXERCISE_TRACKING')){
 		$condition = ' WHERE ' .
-				'exe_exo_id =   '."'".$exo_id."'".' AND ' .
+				'exe_exo_id =   '."'".Database::escape_string($exo_id)."'".' AND ' .
 				'exe_user_id =  '."'".api_get_user_id()."'".' AND ' .
 				'exe_cours_id = '."'".$_cid."'".' AND ' .
 				'status = '."'incomplete'".' AND '.
@@ -476,16 +464,8 @@ function create_event_exercice($exo_id)
 		return $row['exe_id'];
 	}
 
-	$sql = "INSERT INTO $TABLETRACK_EXERCICES
-			  (
-			   exe_user_id,
-			   exe_cours_id
-			  )
-			  VALUES
-			  (
-			  ".$user_id.",
-			   '".$_cid."'
-			  )";
+	$sql = "INSERT INTO $TABLETRACK_EXERCICES ( exe_user_id, exe_cours_id )
+			VALUES (  ".$user_id.",  '".$_cid."' )";
 	$res = @api_sql_query($sql,__FILE__,__LINE__);
 	$id= Database::get_last_insert_id();
 	return $id;
@@ -504,6 +484,12 @@ function create_event_exercice($exo_id)
  */
 function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 {
+	$score = Database::escape_string($score);
+	$answer = Database::escape_string($answer);
+	$quesId = Database::escape_string($quesId);
+	$exeId = Database::escape_string($exeId);
+	$j = Database::escape_string($j);
+	
 	global $_configuration, $_user, $_cid;
 	$TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -578,7 +564,6 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $coords)
 {
 	global $_configuration, $_user, $_cid;
-
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
 	{
@@ -613,6 +598,14 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	global $_configuration;
 	global $_user;
 	global $TABLETRACK_DEFAULT;
+	
+	$event_type = Database::escape_string($event_type);
+	$event_value_type = Database::escape_string($event_value_type);
+	$event_value = Database::escape_string($event_value);
+	$timestamp = Database::escape_string($timestamp);
+	$user_id = Database::escape_string($user_id);
+	$course_code = Database::escape_string($course_code);
+	
 
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
@@ -633,7 +626,6 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	}
 
 	$sql = "INSERT INTO ".$TABLETRACK_DEFAULT."
-
 				(default_user_id,
 				 default_cours_code,
 				 default_date, .

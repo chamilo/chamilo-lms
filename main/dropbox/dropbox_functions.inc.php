@@ -821,9 +821,10 @@ function removeMoreIfMailing($file_id)
 */
 function dropbox_lang($variable, $notrans = 'DLTT')
 {
+    global $charset;
     return (api_get_setting('server_type') == 'test' ?
         get_lang('dropbox_lang["'.$variable.'"]', $notrans) :
-        str_replace("\\'", "'", $GLOBALS['dropbox_lang'][$variable]));
+        api_html_entity_decode(api_to_system_encoding(str_replace("\\'", "'", $GLOBALS['dropbox_lang'][$variable]), null, true), ENT_QUOTES, $charset));
 }
 /**
 * Function that finds a given config setting

@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice_submit.php 20933 2009-05-21 19:28:16Z yannoo $
+// $Id: exercice_submit.php 21085 2009-05-29 17:38:35Z juliomontoya $
 
 /*
 ==============================================================================
@@ -43,7 +43,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 20933 2009-05-21 19:28:16Z yannoo $
+* 	@version $Id: exercice_submit.php 21085 2009-05-29 17:38:35Z juliomontoya $
 */
 
 include ('exercise.class.php');
@@ -110,7 +110,7 @@ if (empty ($exerciseType)) {
 	$exerciseType = $_REQUEST['exerciseType'];
 }
 if (empty ($exerciseId)) {
-	$exerciseId = intval($_REQUEST['exerciseId']);
+	$exerciseId = Database::escape_string(intval($_REQUEST['exerciseId']));
 }
 if (empty ($choice)) {
 	$choice = $_REQUEST['choice'];
@@ -186,13 +186,13 @@ if ($origin == 'builder') {
 $safe_lp_id = ($learnpath_id == '') ? 0 : (int) $learnpath_id;
 $safe_lp_item_id = ($learnpath_item_id == '') ? 0 : (int) $learnpath_item_id;
 $condition = ' WHERE ' .
-'exe_exo_id = ' . "'" . $exerciseId . "'" . ' AND ' .
-'exe_user_id = ' . "'" . api_get_user_id() . "'" . ' AND ' .
-'exe_cours_id = ' . "'" . $_course['id'] . "'" . ' AND ' .
-'status = ' . "'incomplete'" . ' AND ' .
-'orig_lp_id = ' . "'" . $safe_lp_id . "'" . ' AND ' .
-'orig_lp_item_id = ' . "'" . $safe_lp_item_id . "'" . ' AND ' .
-'session_id = ' . "'" . (int) $_SESSION['id_session'] . "'";
+	'exe_exo_id = ' . "'" . $exerciseId . "'" . ' AND ' .
+	'exe_user_id = ' . "'" . api_get_user_id() . "'" . ' AND ' .
+	'exe_cours_id = ' . "'" . $_course['id'] . "'" . ' AND ' .
+	'status = ' . "'incomplete'" . ' AND ' .
+	'orig_lp_id = ' . "'" . $safe_lp_id . "'" . ' AND ' .
+	'orig_lp_item_id = ' . "'" . $safe_lp_item_id . "'" . ' AND ' .
+	'session_id = ' . "'" . (int) $_SESSION['id_session'] . "'";
 
 $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
 $result = api_sql_query("SELECT type,feedback_type FROM $TBL_EXERCICES WHERE id=$exerciseId", __FILE__, __LINE__);
@@ -601,7 +601,7 @@ if ($formSent) {
 
 					//at loops over all questions
 					if (isset($exe_id)) {
-						$sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . $exe_id;
+						$sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . Database::escape_string($exe_id);
 						api_sql_query($sql_update, __FILE__, __LINE__);
 					}
 					//END of saving and qualifying
@@ -631,7 +631,7 @@ if ($formSent) {
 		} else {
 			if ($exe_id != '') {
 				//clean incomplete
-				$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "'" . ' WHERE exe_id = ' . $exe_id;
+				$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "'" . ' WHERE exe_id = ' . Database::escape_string($exe_id);
 				api_sql_query($update_query, __FILE__, __LINE__);
 			}
 			header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
@@ -961,7 +961,7 @@ if (!empty ($error)) {
 	Display :: display_error_message($error, false);
 } else {
 	if (!empty ($exerciseSound)) {
-		echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F" . $exerciseSound . "\" target=\"_blank\">", "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound') .
+		echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F" . Security::remove_XSS($exerciseSound) . "\" target=\"_blank\">", "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound') .
 		"\" /></a>";
 	}
 
@@ -1053,8 +1053,7 @@ if (!empty ($error)) {
 		}
 	}
 	// end foreach()
-	echo "	  	
-			 <!-- <button type='submit' name='buttonCancel' class='cancel'>" . get_lang('Cancel') . "</button>
+	echo "<!-- <button type='submit' name='buttonCancel' class='cancel'>" . get_lang('Cancel') . "</button>
 		   &nbsp;&nbsp; //--><br />";
 	echo '<div style="padding-left:10px; margin-top:-10px;">';
 	$submit_btn = "<button class='next' type='submit' name='submit'>";

@@ -133,9 +133,9 @@ function online_logout() {
  */
 function LoginDelete($user_id)
 {
-	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);	
     $user_id = (int) $user_id;
-	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".$user_id."'";
+	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".Database::escape_string($user_id)."'";
 	@api_sql_query($query,__FILE__,__LINE__);
 }
 
@@ -211,6 +211,7 @@ function WhoIsOnline($uid=0,$statistics_database='',$valid)
 function GetFullUserName($uid)
 {
 	$uid = (int) $uid;
+	$uid = Database::escape_string($uid);
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$query = "SELECT firstname,lastname FROM ".$user_table." WHERE user_id='$uid'";
 	$result = @api_sql_query($query,__FILE__,__LINE__);
@@ -292,6 +293,8 @@ function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 	if(empty($coursecode)) return false;
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$coursecode = Database::escape_string($coursecode);
+	$valid = Database::escape_string($valid);
+	
 	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";	
 	$result = api_sql_query($query,__FILE__,__LINE__);							
 	if (count($result)>0)

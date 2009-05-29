@@ -121,12 +121,14 @@ function delete_category($action, $id)
 		$sentreceived='received';
 		$entries_table=$dropbox_cnf['tbl_post'];
 		$id_field='file_id';
+		$return_message = get_lang('ReceivedCatgoryDeleted');
 	}
 	elseif ($action=='deletesentcategory')
 	{
 		$sentreceived='sent';
 		$entries_table=$dropbox_cnf['tbl_file'];
 		$id_field='id';
+		$return_message = get_lang('SentCatgoryDeleted');
 	}
 	else
 	{
@@ -153,6 +155,7 @@ function delete_category($action, $id)
 			$dropboxfile->deleteSentWork($row[$id_field]);
 		}
 	}
+	return $return_message;
 }
 
 /**
@@ -372,7 +375,7 @@ function store_addcategory()
 	// check if the category name is valid
 	if ($_POST['category_name']=='')
 	{
-		return get_lang('ErrorPleaseGiveCategoryName');
+		return array('type' => 'error', 'message'=>get_lang('ErrorPleaseGiveCategoryName'));
 	}
 
 	if (!$_POST['edit_id'])
@@ -388,11 +391,11 @@ function store_addcategory()
 			$sql="INSERT INTO ".$dropbox_cnf['tbl_category']." (cat_name, received, sent, user_id)
 					VALUES ('".Database::escape_string(Security::remove_XSS($_POST['category_name']))."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', '".Database::escape_string($_user['user_id'])."')";
 			api_sql_query($sql);
-			return get_lang('CategoryStored');
+			return array('type' => 'confirmation', 'message'=>get_lang('CategoryStored'));
 		}
 		else
 		{
-			return get_lang('CategoryAlreadyExistsEditIt');
+			return array('type' => 'error', 'message'=>get_lang('CategoryAlreadyExistsEditIt'));
 		}
 	}
 	else
@@ -401,7 +404,7 @@ function store_addcategory()
 				WHERE user_id='".Database::escape_string($_user['user_id'])."'
 				AND cat_id='".Database::escape_string(Security::remove_XSS($_POST['edit_id']))."'";
 		api_sql_query($sql);
-		return get_lang('CategoryModified');
+		return array('type' => 'confirmation', 'message'=>get_lang('CategoryModified'));
 	}
 }
 
@@ -414,7 +417,7 @@ function store_addcategory()
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function display_addcategory_form($category_name='', $id='')
+function display_addcategory_form($category_name='', $id='',$action)
 {
 	global $dropbox_cnf;
 
@@ -443,17 +446,17 @@ function display_addcategory_form($category_name='', $id='')
 
 	}
 
-	if ($_GET['action']=='addreceivedcategory') {
+	if ($action=='addreceivedcategory') {
 		$target='received';
 	}
-	if ($_GET['action']=='addsentcategory') {
+	if ($action=='addsentcategory') {
 		$target='sent';
 	}
 	
-	if ($_GET['action']=='editcategory') {
+	if ($action=='editcategory') {
 		$text=get_lang('ModifyCategory');
 		$class='save';
-	} else if ($_GET['action']=='addreceivedcategory' or $_GET['action']=='addsentcategory')  {
+	} else if ($action=='addreceivedcategory' or $action=='addsentcategory')  {
 		$text=get_lang('CreateCategory');
 		$class='add';
 	}
@@ -464,16 +467,25 @@ function display_addcategory_form($category_name='', $id='')
 	{
 		echo '<input name="edit_id" type="hidden" value="'.Security::remove_XSS($id).'">';
 	}
+	echo '<input name="action" type="hidden" value="'.Security::remove_XSS($action).'">';
 	echo '<input name="target" type="hidden" value="'.$target.'">';
 	
 	echo '<div class="row"><div class="form_header">'.$title.'</div></div>';
 	
 	echo '	<div class="row">
 				<div class="label">
-					<span class="form_required">*</span>'.get_lang('CategoryName').'
+					<span class="form_required">*</span> '.get_lang('CategoryName').'
 				</div>
-				<div class="formw">
-					<input type="text" name="category_name" value="'.$category_name.'" />
+				<div class="formw">';
+	if ($_POST AND empty($_POST['category_name']))
+	{
+		echo '<span class="form_error">'.get_lang('ThisFieldIsRequired').'. '.get_lang('ErrorPleaseGiveCategoryName').'<span><br />';
+	}
+	if ($_POST AND !empty($_POST['category_name']))
+	{
+		echo '<span class="form_error">'.get_lang('CategoryAlreadyExistsEditIt').'<span><br />';
+	}	
+	echo '			<input type="text" name="category_name" value="'.$category_name.'" />
 				</div>
 			</div>';
 	
@@ -482,6 +494,13 @@ function display_addcategory_form($category_name='', $id='')
 				</div>
 				<div class="formw">
 					<button class="'.$class.'" type="submit" name="StoreCategory">'.$text.'</button>
+				</div>
+			</div>';	
+	echo '	<div class="row">
+				<div class="label">
+				</div>
+				<div class="formw">
+					<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>
 				</div>
 			</div>';	
 	echo "</form>";

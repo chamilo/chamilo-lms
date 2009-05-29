@@ -191,11 +191,11 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 				$curday = 1;
 			}
 			if (($curday > 0) && ($curday <= $numberofdays[$month])) {
-				$bgcolor = $ii < 5 ? $class = "class=\"days_week\"" : $class = "class=\"days_weekend\"";
+				$bgcolor = $ii < 5 ? $class = "class=\"days_week\" style=\"width:10%;\"" : $class = "class=\"days_weekend\" style=\"width:10%;\"";
 				$dayheader = "<b>$curday</b><br />";
 				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
 					$dayheader = "<b>$curday - ".get_lang("Today")."</b><br />";
-					$class = "class=\"days_today\"";
+					$class = "class=\"days_today\" style=\"width:10%;\"";
 				}
 				echo "<td ".$class.">", "".$dayheader;
 				if (!empty($agendaitems[$curday])) {

@@ -46,12 +46,12 @@ $tool_name = get_lang('BookIt');
 Display :: display_header($tool_name);
 api_display_tool_title($tool_name);
 
-$reservationid = $_GET['rid'];
+$reservationid = Database::escape_string($_GET['rid']);
 $reservation = Rsys :: get_reservation($reservationid);
 $item = Rsys :: get_item($reservation[0][2]);
 if ($reservation[0][9] < $reservation[0][4]) {
 	ob_start();	
-	$form = new FormValidator('reservation', 'post', 'subscribe.php?rid='.$_GET['rid']);
+	$form = new FormValidator('reservation', 'post', 'subscribe.php?rid='.Security::remove_XSS($_GET['rid']));
 	$form->addElement('hidden', 'timepicker', $reservation[0][11]);
 	$form->addElement('hidden', 'accepted', $reservation[0][3]);
 	if ($reservation[0][11] == 1) {
@@ -86,7 +86,8 @@ if ($reservation[0][9] < $reservation[0][4]) {
 			$time_start = Rsys :: mysql_datetime_to_timestamp($res_start_at);
 		}
 		
-		$sql = "SELECT start_at, end_at FROM ".Rsys :: getTable('subscription')." WHERE reservation_id='".$reservationid."' and end_at > NOW() ORDER BY start_at";
+		$sql = "SELECT start_at, end_at FROM ".Rsys :: getTable('subscription')."
+				WHERE reservation_id='".$reservationid."' and end_at > NOW() ORDER BY start_at";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($result) != 0){
 			$start_end = "<ul>";

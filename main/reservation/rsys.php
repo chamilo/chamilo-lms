@@ -1167,7 +1167,7 @@ class Rsys {
 	 */
 	function delete_reservation($id) {
 		$id = Database::escape_string($id);
-		
+		 
 		$sql = "SELECT id FROM ".Rsys :: getTable("reservation")."WHERE id='".$id."' OR subid='".$id."'";
 		$result2 = api_sql_query($sql, __FILE__, __LINE__);
 		while ($arr = Database::fetch_array($result2, 'NUM')) {
@@ -1190,7 +1190,7 @@ class Rsys {
 
 	function is_owner_item($id) {
 		$id = Database::escape_string($id);
-		$sql = "SELECT creator FROM ".Rsys :: getTable('item')."i ,".Rsys :: getTable('reservation')." r
+		$sql = "SELECT creator FROM ".Rsys :: getTable('item')." i ,".Rsys :: getTable('reservation')." r
 			where i.id = r.item_id
 			and r.id = '".$id."'
 			and i.creator ='".api_get_user_id()."'";  

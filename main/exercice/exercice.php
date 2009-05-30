@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 20982 2009-05-25 22:49:12Z aportugal $
+// $Id: exercice.php 21110 2009-05-30 17:33:08Z iflorespaz $
 
 /*
 ==============================================================================
@@ -38,8 +38,8 @@
 $language_file = 'exercice';
 
 // including the global library
-require_once ('../inc/global.inc.php');
-require_once ('../gradebook/lib/be.inc.php');
+require_once '../inc/global.inc.php';
+require_once '../gradebook/lib/be.inc.php';
 // setting the tabs
 $this_section = SECTION_COURSES;
 
@@ -49,16 +49,16 @@ api_protect_course_script(true);
 $show = (isset ($_GET['show']) && $_GET['show'] == 'result') ? 'result' : 'test'; // moved down to fix bug: http://www.dokeos.com/forum/viewtopic.php?p=18609#18609
 
 // including additional libraries
-require_once ('exercise.class.php');
-require_once ('question.class.php');
-require_once ('answer.class.php');
-require_once (api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
-require_once (api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-require_once ('hotpotatoes.lib.php');
-require_once (api_get_path(LIBRARY_PATH) . 'document.lib.php');
-include (api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php');
-include (api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
-include_once (api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
+require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+require_once 'hotpotatoes.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'events.lib.inc.php';
 
 /*
 -----------------------------------------------------------
@@ -135,8 +135,8 @@ if (empty ($exerciseId)) {
 if (empty ($file)) {
 	$file = Database :: escape_string($_REQUEST['file']);
 }
-$learnpath_id = Database :: escape_string($_REQUEST['learnpath_id']);
-$learnpath_item_id = Database :: escape_string($_REQUEST['learnpath_item_id']);
+$learnpath_id = Database :: escape_string(Security::remove_XSS($_REQUEST['learnpath_id']));
+$learnpath_item_id = Database :: escape_string(Security::remove_XSS($_REQUEST['learnpath_item_id']));
 $page = Database :: escape_string($_REQUEST['page']);
 
 if ($origin == 'learnpath') {
@@ -147,7 +147,7 @@ if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !emp
 	$sql = 'DELETE FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES) . ' WHERE exe_id = ' . $_GET['did']; //_GET[did] filtered by entry condition
 	api_sql_query($sql, __FILE__, __LINE__);
 	$filter=Security::remove_XSS($_GET['filter']);
-	header('Location: exercice.php?cidReq=' . htmlentities($_GET['cidReq']) . '&show=result&filter=' . $filter . '');
+	header('Location: exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '');
 	exit;
 }
 

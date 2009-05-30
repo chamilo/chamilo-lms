@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice_submit.php 21085 2009-05-29 17:38:35Z juliomontoya $
+// $Id: exercice_submit.php 21110 2009-05-30 17:33:08Z iflorespaz $
 
 /*
 ==============================================================================
@@ -43,7 +43,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 21085 2009-05-29 17:38:35Z juliomontoya $
+* 	@version $Id: exercice_submit.php 21110 2009-05-30 17:33:08Z iflorespaz $
 */
 
 include ('exercise.class.php');
@@ -92,10 +92,10 @@ if (empty ($origin)) {
 	$origin = $_REQUEST['origin'];
 }
 if (empty ($learnpath_id)) {
-	$learnpath_id = Database :: escape_string($_REQUEST['learnpath_id']);
+	$learnpath_id = Security::remove_XSS($_REQUEST['learnpath_id']);
 }
 if (empty ($learnpath_item_id)) {
-	$learnpath_item_id = Database :: escape_string($_REQUEST['learnpath_item_id']);
+	$learnpath_item_id = Security::remove_XSS($_REQUEST['learnpath_item_id']);
 }
 if (empty ($formSent)) {
 	$formSent = $_REQUEST['formSent'];

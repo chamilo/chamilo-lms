@@ -876,7 +876,7 @@ function api_add_url_param($url, $param, $filter_xss=true) {
 		$url = $url.'?'.$param;
 	}
     if ($filter_xss === true) {
-    	$url = Security::remove_XSS($url);
+    	$url = Security::remove_XSS(urldecode($url));
     }
 	return $url;
 }

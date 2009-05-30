@@ -45,25 +45,36 @@ $csv_content = array();
 
 
 $user_id = intval($_GET['student_id']);
+
+if (isset($_GET['course'])) {
+	$cidReq = Security::remove_XSS($_GET['course']);
+}
+
 $user_infos = UserManager :: get_user_info_by_id($user_id);
 $name = $user_infos['firstname'].' '.$user_infos['lastname'];
 
-if(!api_is_platform_admin(true) && !CourseManager :: is_course_teacher($_user['user_id'], $_GET['course']) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && $user_infos['hr_dept_id']!==$_user['user_id']) {
+if(!api_is_platform_admin(true) && !CourseManager :: is_course_teacher($_user['user_id'], $cidReq) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && $user_infos['hr_dept_id']!==$_user['user_id']) {
 	Display::display_header('');
 	api_not_allowed();
 	Display::display_footer();
 }
 
-$_course = CourseManager :: get_course_information($_GET['course']);
+$course_exits = CourseManager::course_exists($cidReq);
+
+if (!empty($course_exits)) {
+	$_course = CourseManager :: get_course_information($cidReq);
+} else {
+	api_not_allowed();
+}
+
 $_course['dbNameGlu'] = $_configuration['table_prefix'] . $_course['db_name'] . $_configuration['db_glue'];
-$cidReq = Security::remove_XSS($_GET['course']);
 
 if(!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
 	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
-	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".Security::remove_XSS($_GET['course']), "name" => get_lang("Users"));
+	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$cidReq, "name" => get_lang("Users"));
 } else if(!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
 	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
-	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".Security::remove_XSS($_GET['course']).'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));
+	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));
 } else {
 	$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 	$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
@@ -71,7 +82,7 @@ if(!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
  	$nameTools=get_lang("DetailsStudentInCourse");
 }
 
-$interbreadcrumb[] = array("url" => "myStudents.php?student=".Security::remove_XSS($_GET['student_id'])."&course=".Security::remove_XSS($_GET['course'])."&details=true&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("DetailsStudentInCourse"));
+$interbreadcrumb[] = array("url" => "myStudents.php?student=".Security::remove_XSS($_GET['student_id'])."&course=".$cidReq."&details=true&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("DetailsStudentInCourse"));
 $nameTools = get_lang('LearningPathDetails');
 
 $htmlHeadXtra[] = '

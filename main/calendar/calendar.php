@@ -1,4 +1,4 @@
-<?php //$Id: calendar.php 16723 2008-11-12 15:41:34Z pcool $
+<?php //$Id: calendar.php 21101 2009-05-30 14:56:54Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -25,11 +25,11 @@
 // name of the language file that needs to be included
 $language_file = 'agenda';
 // including the claroline global 
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 //session
 if(isset($_GET['id_session']))
-	$_SESSION['id_session'] = $_GET['id_session'];
+	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']);
 
 // the variables for the days and the months
 // Defining the shorts for the days

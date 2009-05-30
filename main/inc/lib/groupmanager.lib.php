@@ -33,11 +33,11 @@
 *	@package dokeos.library
 ==============================================================================
 */
-require_once ('database.lib.php');
-require_once ('course.lib.php');
-require_once ('tablesort.lib.php');
-require_once ('fileManage.lib.php');
-require_once ('fileUpload.lib.php');
+require_once 'database.lib.php';
+require_once 'course.lib.php';
+require_once 'tablesort.lib.php';
+require_once 'fileManage.lib.php';
+require_once 'fileUpload.lib.php';
 /**
  * infinite
  */
@@ -973,11 +973,16 @@ class GroupManager
 		if (!$user_id > 0)
 			return false;
 		$table_group = Database :: get_course_table(TABLE_GROUP);
-		$group_id = Database::escape_string($group_id);
-		$sql = 'SELECT  self_registration_allowed FROM '.$table_group.' WHERE id = '.$group_id;
-		$db_result = api_sql_query($sql,__FILE__,__LINE__);
-		$db_object = Database::fetch_object($db_result);
+		$group_id=(int)$group_id;
+		if (isset($group_id)) {
+			$group_id = Database::escape_string($group_id);
+			$sql = 'SELECT  self_registration_allowed FROM '.$table_group.' WHERE id = "'.$group_id.'" ';
+			$db_result = api_sql_query($sql,__FILE__,__LINE__);
+			$db_object = Database::fetch_object($db_result);
 		return $db_object->self_registration_allowed == 1 && GroupManager :: can_user_subscribe($user_id, $group_id);
+		} else {
+			return false;
+		}
 	}
 	/**
 	 * Is sef-unregistration allowed?

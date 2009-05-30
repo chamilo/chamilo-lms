@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 20413 2009-05-08 16:23:16Z cfasanando $
+<?php //$Id: agenda.php 21101 2009-05-30 14:56:54Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -38,7 +38,7 @@ include('../inc/global.inc.php');
 //session
 if(isset($_GET['id_session']))
 {
-	$_SESSION['id_session'] = $_GET['id_session'];
+	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']);
 }
 
 $this_section=SECTION_COURSES;
@@ -58,25 +58,24 @@ api_protect_course_script();
 -----------------------------------------------------------
 */
 $_SESSION['source_type'] = 'Agenda';
-include('../resourcelinker/resourcelinker.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+require_once '../resourcelinker/resourcelinker.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 if (!empty($addresources)) // When the "Add Resource" button is clicked we store all the form data into a session
 {
-$form_elements= array ('day'=>$_POST['fday'], 'month'=>$_POST['fmonth'], 'year'=>$_POST['fyear'], 'hour'=>$_POST['fhour'], 'minutes'=>$_POST['fminute'],
-						'end_day'=>$_POST['end_fday'], 'end_month'=>$_POST['end_fmonth'], 'end_year'=>$_POST['end_fyear'], 'end_hours'=>$_POST['end_fhour'], 'end_minutes'=>$_POST['end_fminute'],
-						'title'=>stripslashes($_POST['title']), 'content'=>stripslashes($_POST['content']), 'id'=>$_POST['id'], 'action'=>$_POST['action'], 'to'=>$_POST['selectedform']);
+$form_elements= array ('day'=>Security::remove_XSS($_POST['fday']), 'month'=>Security::remove_XSS($_POST['fmonth']), 'year'=>Security::remove_XSS($_POST['fyear']), 'hour'=>Security::remove_XSS($_POST['fhour']), 'minutes'=>Security::remove_XSS($_POST['fminute']),
+						'end_day'=>Security::remove_XSS($_POST['end_fday']), 'end_month'=>Security::remove_XSS($_POST['end_fmonth']), 'end_year'=>Security::remove_XSS($_POST['end_fyear']), 'end_hours'=>Security::remove_XSS($_POST['end_fhour']), 'end_minutes'=>Security::remove_XSS($_POST['end_fminute']),
+						'title'=>Security::remove_XSS(stripslashes($_POST['title'])), 'content'=>Security::remove_XSS(stripslashes($_POST['content'])), 'id'=>Security::remove_XSS($_POST['id']), 'action'=>Security::remove_XSS($_POST['action']), 'to'=>Security::remove_XSS($_POST['selectedform']));
 $_SESSION['formelements']=$form_elements;
-if($id) // this is to correctly handle edits
-	{$action="edit";}
+// this is to correctly handle edits
+if($id){$action="edit";}
 //print_r($form_elements);
 header('Location: '.api_get_path(WEB_CODE_PATH)."resourcelinker/resourcelinker.php?source_id=1&action=$action&id=$id&originalresource=no");
 exit;
 }
 
-if (!empty($_GET['view']))
-{
-	$_SESSION['view'] = $_GET['view'];
+if (!empty($_GET['view'])) {
+	$_SESSION['view'] = Security::remove_XSS($_GET['view']);
 }
 
 /*
@@ -155,7 +154,7 @@ if ((!empty($_GET['user']) and $_GET['user']=="none") or (!empty($_GET['group'])
 if (!$is_courseAdmin){
 	if (!empty($_GET['toolgroup'])){
 		//$_SESSION['toolgroup']=$_GET['toolgroup'];
-		$toolgroup=$_GET['toolgroup'];
+		$toolgroup=Security::remove_XSS($_GET['toolgroup']);
 		api_session_register('toolgroup');
 	}
 }
@@ -178,11 +177,11 @@ $nameTools = get_lang('Agenda'); // language variable in trad4all.inc.php
 // showing the header if we are not in the learning path, if we are in
 // the learning path, we do not include the banner so we have to explicitly
 // include the stylesheet, which is normally done in the header
-if ($_GET['toolgroup']){
+if (isset($_GET['toolgroup']) && $_GET['toolgroup']==strval(intval($_GET['toolgroup']))  ){
 	$_clean['toolgroup']=(int)$_GET['toolgroup'];
 	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
-	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');	
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".Security::remove_XSS($_GET['toolgroup']), "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 	Display::display_header($nameTools,'Agenda');
 	
 } elseif (empty($_GET['origin']) or $_GET['origin'] != 'learnpath') {
@@ -309,7 +308,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					                    $end_m = intval($_POST['repeat_end_month']);
 					                    $end_d = intval($_POST['repeat_end_day']);
 					                    $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-					                    $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,$_POST['selectedform'],$safe_file_comment);
+					                    $res = agenda_add_repeat_item($course_info,$id,Security::remove_XSS($_POST['repeat_type']),$end,Security::remove_XSS($_POST['selectedform']),$safe_file_comment);
 					                }                 
 								}			
 								break;

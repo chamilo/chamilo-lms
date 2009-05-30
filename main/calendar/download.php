@@ -38,11 +38,11 @@
 
 session_cache_limiter('public');
 
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
-require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-include 'agenda.inc.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once 'agenda.inc.php';
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Cache-Control: public');
@@ -58,10 +58,9 @@ $doc_url = str_replace('///', '&', $doc_url);
 $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
 
-include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
+require_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
 
-if (! isset($_course))
-{
+if (!isset($_course)) {
 	api_not_allowed(true);	
 }
 

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 20999 2009-05-26 20:38:01Z aportugal $
+<?php //$Id: agenda.inc.php 21101 2009-05-30 14:56:54Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -283,8 +283,8 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 	$dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
 	//Start the week on monday
 	$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-	$backwardsURL = api_get_self()."?".api_get_cidreq()."&amp;coursePath=".(empty($_GET['coursePath'])?'':$_GET['coursePath'])."&amp;courseCode=".(empty($_GET['courseCode'])?'':$_GET['courseCode'])."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-	$forewardsURL = api_get_self()."?".api_get_cidreq()."&amp;coursePath=".(empty($_GET['coursePath'])?'':$_GET['coursePath'])."&amp;courseCode=".(empty($_GET['courseCode'])?'':$_GET['courseCode'])."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+	$backwardsURL = api_get_self()."?".api_get_cidreq()."&amp;coursePath=".(empty($_GET['coursePath'])?'':Security::remove_XSS($_GET['coursePath']))."&amp;courseCode=".(empty($_GET['courseCode'])?'':Security::remove_XSS($_GET['courseCode']))."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
+	$forewardsURL = api_get_self()."?".api_get_cidreq()."&amp;coursePath=".(empty($_GET['coursePath'])?'':Security::remove_XSS($_GET['coursePath']))."&amp;courseCode=".(empty($_GET['courseCode'])?'':Security::remove_XSS($_GET['courseCode']))."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
 	echo 	"<table class=\"data_table\">\n",
 			"<tr>\n",
@@ -1460,11 +1460,11 @@ function display_student_links()
 	global $show;
 	if ($_SESSION['sort'] == 'DESC')
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a> ";
 	}
 	else
 	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=desc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a> ";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=desc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a> ";
 	}
 
 	// showing the link to show all items or only those of the current month
@@ -4529,7 +4529,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$fil
 	$t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
     $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);
     //$sql = "SELECT title, content, UNIX_TIMESTAMP(start_date) as sd, UNIX_TIMESTAMP(end_date) as ed FROM $t_agenda WHERE id = $orig_id";
-    $sql = "SELECT title, content, start_date as sd, end_date as ed FROM $t_agenda WHERE id = $orig_id";
+    $sql = 'SELECT title, content, start_date as sd, end_date as ed FROM '. $t_agenda.' WHERE id ="'.Database::escape_string($orig_id).'" ';
     $res = Database::query($sql,__FILE__,__LINE__);
     if(Database::num_rows($res)!==1){return false;}
     $row = Database::fetch_array($res);

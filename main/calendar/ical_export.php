@@ -12,11 +12,11 @@ $language_file = 'agenda';
 // we are not inside a course, so we reset the course id
 $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
-require_once ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section = SECTION_MYAGENDA;
 api_block_anonymous_users();
-require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
 // setting the name of the tool
 $nameTools = get_lang('MyAgenda');
 
@@ -67,7 +67,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				require_once (api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php');
 				$ai = get_personal_agenda_item($_GET['id']);
                 $vevent->setProperty( 'summary', api_convert_encoding($ai['title'],'UTF-8',$charset));
-				if(empty($ai['date'])){header('location:'.$_SERVER['HTTP_REFERER']);}
+				if(empty($ai['date'])){header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));}
 				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['date']);
 				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
 				if(empty($ai['enddate']))
@@ -97,7 +97,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				require_once (api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php');
 				$ai = get_agenda_item($_GET['id']);
 		        $vevent->setProperty( 'summary', api_convert_encoding($ai['title'],'UTF-8',$charset));
-        		if(empty($ai['start_date'])){header('location:'.$_SERVER['HTTP_REFERER']);}
+        		if(empty($ai['start_date'])){header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));}
 				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['start_date']);
 				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
 				if(empty($ai['end_date']))
@@ -130,14 +130,14 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				$ical->returnCalendar();
 				break;
 			default:
-				header('location:'.$_SERVER['HTTP_REFERER']);
+				header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
 				die();	
 		}
 	}
 }
 else
 {
-	header('location:'.$_SERVER['HTTP_REFERER']);
+	header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
 	die();	
 }
 ?>

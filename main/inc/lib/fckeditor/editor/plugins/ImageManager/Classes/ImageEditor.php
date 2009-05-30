@@ -429,8 +429,8 @@ class ImageEditor
 	function getAction() 
 	{
 		$action = null;
-		if(isset($_GET['action']))
-			$action = $_GET['action'];
+		if(isset($_GET['action']))			 
+			$action = str_replace('"','',$_GET['action']);
 		Return $action;
 	}
 

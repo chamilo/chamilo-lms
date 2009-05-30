@@ -49,7 +49,7 @@
 <script type="text/javascript">
 // <![CDATA[
 
-	var processedAction = "<?php echo (isset($_GET['action']) ? $_GET['action'] : ''); ?>";
+	var processedAction = "<?php echo (isset($_GET['action']) ? str_replace('"','',$_GET['action']) : ''); ?>";
 
 	if (processedAction == 'replace' && parent.old)
 	{

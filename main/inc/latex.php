@@ -53,15 +53,18 @@ include("../inc/global.inc.php");
 		MAIN CODE
 ==============================================================================
 */ 
+
+$code = Security::remove_XSS($_GET['code']);
+
 echo '<div id="latex_code">';
 echo '<h3>'.get_lang('LatexCode').'</h3>';
-echo stripslashes($_GET['code']);
+echo stripslashes($code);
 echo '</div>';
 
 
 echo '<div id="latex_image">';
 echo '<h3>'.get_lang('LatexFormula').'</h3>';
-echo '<img src="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/temp/'.$_GET['filename'].'" alt="'.$latex_code.'"/>';
+echo '<img src="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/temp/'.$code.'" alt="'.get_lang('LatexCode').'"/>';
 echo '</div>';
 /*
 ==============================================================================

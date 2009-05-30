@@ -123,8 +123,8 @@ function calculHours($seconds)
 }
 
 /* MAIN */
-$user_id = Database::escape_string($_REQUEST['student']);
-$course_code=Database::escape_string($_REQUEST['course']);
+$user_id = Security::remove_XSS($_REQUEST['student']);
+$course_code=Security::remove_XSS($_REQUEST['course']);
 
 include_once(api_get_path(LIBRARY_PATH).'pchart/pData.class.php');
 include_once(api_get_path(LIBRARY_PATH).'pchart/pChart.class.php');
@@ -280,7 +280,7 @@ $(function() {
 
 Display :: display_header('');
 $TBL_USERINFO_DEF 	= Database :: get_course_table(TABLE_USER_INFO);
-$mainUserInfo 		= api_get_user_info($user_id, $course_code);
+$mainUserInfo 		= api_get_user_info($user_id);
 
 $result_to_print = '';
 $main_date_array = array();

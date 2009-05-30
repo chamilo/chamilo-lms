@@ -39,6 +39,12 @@ Display :: display_header($tool_name);
 api_display_tool_title($tool_name);
 
 
+if (isset($_GET['cat'])) {
+	$category_id = Security::remove_XSS($_GET['cat']);
+}
+
+
+
 echo '<div class="actions">';
 ///		echo '<a href="m_reservation.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewBookingPeriod').'</a>';
 //echo '&nbsp;&nbsp;&nbsp;<a href="m_reservation.php?action=overviewsubscriptions">'.get_lang('OverviewReservedPeriods').'</a>';
@@ -75,21 +81,21 @@ elseif((empty($_SESSION['swidth']))) {
 else 
 	$gogogo=true;
 
-echo '<div style="float: left;"><form id="cat_form" action="reservation.php" method="get"><input type="hidden" name="cat" value="'.$_GET['cat'].'" /><div style="float: left;">'.get_lang('ResourceType').': <select name="cat" onchange="this.form.submit();"><option value="0">'.get_lang('Select').'</option>';
+echo '<div style="float: left;"><form id="cat_form" action="reservation.php" method="get"><input type="hidden" name="cat" value="'.$category_id.'" /><div style="float: left;">'.get_lang('ResourceType').': <select name="cat" onchange="this.form.submit();"><option value="0">'.get_lang('Select').'</option>';
 $cats = Rsys :: get_category_with_items();
 
 if(count($cats)>0){
     foreach ($cats as $cat)
-	   echo '<option value="'.$cat['id'].'"'. ($cat['id'] == $_GET['cat'] ? ' selected="selected"' : '').'>'.$cat['name'].'</option>';
+	   echo '<option value="'.$cat['id'].'"'. ($cat['id'] == $category_id ? ' selected="selected"' : '').'>'.$cat['name'].'</option>';
 }
 
 echo '</select></div></form></div>';
 
-if ($gogogo&&!empty($_GET['cat'])) {
-	$itemlist = Rsys :: get_cat_items($_GET['cat']);
+if ($gogogo&&!empty($category_id)) {
+	$itemlist = Rsys :: get_cat_items($category_id);
     echo '<div style="float: left;">';
 	if (count($itemlist) != 0) {
-	echo '<form id="item_form" action="reservation.php?cat='.$_GET['cat'].'&amp;item=" method="get">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="hidden" name="cat" value="'.$_GET['cat'].'" />'.get_lang('Resource').': <select name="item" onchange="this.form.submit();"><option value="0">'.get_lang('Select').'</option>';
+	echo '<form id="item_form" action="reservation.php?cat='.$category_id.'&amp;item=" method="get">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="hidden" name="cat" value="'.$category_id.'" />'.get_lang('Resource').': <select name="item" onchange="this.form.submit();"><option value="0">'.get_lang('Select').'</option>';
 		foreach ($itemlist as $id => $item)
 			echo '<option value="'.$id.'"'. ($id == $_GET['item'] ? ' selected="selected"' : '').'>'.$item.'</option>';
 		echo '</select></form>';
@@ -103,10 +109,10 @@ if ($gogogo&&!empty($_GET['cat'])) {
 		ob_start();
         echo '<div style="float: left; margin-right: 10px">';
 		if(isset($_GET['changemonth'])) {
-			echo $calendar->get_mini_month(intval($time['month']),intval($time['year']),"&amp;cat=".$_GET['cat']."&amp;item=".$_GET['item']."&amp;changemonth=yes",$_GET['item']);
+			echo $calendar->get_mini_month(intval($time['month']),intval($time['year']),"&amp;cat=".$category_id."&amp;item=".$_GET['item']."&amp;changemonth=yes",$_GET['item']);
 		}
 		else
-			echo $calendar->get_mini_month(date('m'),date('Y'),"&amp;cat=".$_GET['cat']."&amp;item=".$_GET['item'],$_GET['item']);
+			echo $calendar->get_mini_month(date('m'),date('Y'),"&amp;cat=".$category_id."&amp;item=".$_GET['item'],$_GET['item']);
         echo '</div><div style="float: left" >';
         
         switch($_SESSION['swidth']) {
@@ -122,9 +128,9 @@ if ($gogogo&&!empty($_GET['cat'])) {
             default: $week_scale= 150; // 800x600    
         }
 		if(isset($_GET['date'])){
-			echo $calendar->get_week_view(intval($time['day']),intval($time['month']), $time['year'],$_GET['item'], $week_scale,$_GET['cat']);
+			echo $calendar->get_week_view(intval($time['day']),intval($time['month']), $time['year'],$_GET['item'], $week_scale,$category_id);
 		}else
-			echo $calendar->get_week_view(intval(date('d')), intval(date('m')), intval(date('Y')), $_GET['item'], $week_scale,$_GET['cat']);
+			echo $calendar->get_week_view(intval(date('d')), intval(date('m')), intval(date('Y')), $_GET['item'], $week_scale,$category_id);
 		echo '</div>';
        $buffer=ob_get_contents();
        ob_end_clean();

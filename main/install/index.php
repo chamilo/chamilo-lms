@@ -609,13 +609,6 @@ elseif($_POST['step5'])
 		}
 		echo '<br />';
 
-		echo get_lang('ScormDB').' : <b>'.$dbScormForm.'</b>';
-		if($installType == 'new')
-		{
-			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
-		}
-		echo '<br />';
-
 		echo get_lang('UserDB').' : <b>'.$dbUserForm.'</b>';
 		if($installType == 'new')
 		{
@@ -633,8 +626,8 @@ elseif($_POST['step5'])
 	?><br /><br/>
 
 	<?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
+    <?php echo get_lang('AdminFirstName').' : '.$adminFirstName; ?><br />
 	<?php echo get_lang('AdminLastName').' : '.$adminLastName; ?><br />
-	<?php echo get_lang('AdminFirstName').' : '.$adminFirstName; ?><br />
 	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
 
 	<?php if($installType == 'new'): ?>

@@ -989,7 +989,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 		
 	echo '<td>';
 	
-	$array_lang = array('asturian','english','italian','french','slovenian','slovenian_unicode','spanish');
+	$array_lang = array('asturian','english','italian','french','slovenian','spanish');
 
 	////Only display Language have 90% +
 	echo "\t\t<select name=\"languageForm\">\n";	
@@ -1042,11 +1042,11 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	//Parameter 3: administrator's email
 	display_configuration_parameter($installType, get_lang("AdminEmail"), "emailForm", $emailForm);
 
-	//Parameter 4: administrator's last name
-	display_configuration_parameter($installType, get_lang("AdminLastName"), "adminLastName", $adminLastName);
+    //Parameter 4: administrator's first name
+    display_configuration_parameter($installType, get_lang("AdminFirstName"), "adminFirstName", $adminFirstName);
 
-	//Parameter 5: administrator's first name
-	display_configuration_parameter($installType, get_lang("AdminFirstName"), "adminFirstName", $adminFirstName);
+	//Parameter 5: administrator's last name
+	display_configuration_parameter($installType, get_lang("AdminLastName"), "adminLastName", $adminLastName);
 
 	//Parameter 6: administrator's telephone
 	display_configuration_parameter($installType, get_lang("AdminPhone"), "adminPhoneForm", $adminPhoneForm);

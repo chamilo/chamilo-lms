@@ -1,4 +1,4 @@
-<?php // $Id: document_slideshow.inc.php 16755 2008-11-15 19:50:44Z yannoo $
+<?php // $Id: document_slideshow.inc.php 21106 2009-05-30 16:25:16Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -89,14 +89,14 @@ if ( count($all_files) > 0 )
 	}
 }
 
-$tablename_column = (isset($_GET['tablename_column'])?$_GET['tablename_column']:0);
+$tablename_column = (isset($_GET['tablename_column'])? Security::remove_XSS($_GET['tablename_column']):0);
 if($tablename_column==0){
 	$tablename_column=1;
 }
 else{
 	$tablename_column= intval($tablename_column)-1;
 }
-$tablename_direction = (isset($_GET['tablename_direction'])?$_GET['tablename_direction']:'ASC');
+$tablename_direction = (isset($_GET['tablename_direction'])? Security::remove_XSS($_GET['tablename_direction']):'ASC');
 
 $image_files_only = sort_files($array_to_search);
 $_SESSION["image_files_only"] = $image_files_only;

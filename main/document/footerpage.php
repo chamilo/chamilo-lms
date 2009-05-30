@@ -4,7 +4,7 @@
 *	@package dokeos.document
 ==============================================================================
 */
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 ?>
 
 <html>

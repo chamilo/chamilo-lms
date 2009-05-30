@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 20794 2009-05-18 18:00:36Z iflorespaz $
+<?php // $Id: edit_document.php 21106 2009-05-30 16:25:16Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -57,7 +57,7 @@ $language_file = 'document';
 	Included libraries
 ------------------------------------------------------------------------------
 */
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // Template's javascript
 $htmlHeadXtra[] = '
@@ -110,13 +110,13 @@ function FCKeditor_OnComplete( editorInstance )
 $_SESSION['whereami'] = 'document/create';
 $this_section=SECTION_COURSES;
 
-include(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-include(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
-include(api_get_path(LIBRARY_PATH).'document.lib.php');
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
-include_once(api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '600';
@@ -149,7 +149,7 @@ $file = $_GET['file'];
 //echo('file: '.$file.'<br>');
 $doc=basename($file);
 //echo('doc: '.$doc.'<br>');
-$dir=$_GET['curdirpath'];
+$dir=Security::remove_XSS($_GET['curdirpath']);
 //echo('dir: '.$dir.'<br>');
 $file_name = $doc;
 //echo('file_name: '.$file_name.'<br>');
@@ -233,8 +233,8 @@ if(!empty($_SESSION['_gid']))
 	$group_document = true;
 	$noPHP_SELF=true;
 }
-
-$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($_GET['curdirpath']).$req_gid, "name"=> get_lang('Documents'));
+$my_cur_dir_path=Security::remove_XSS($_GET['curdirpath']);
+$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($my_cur_dir_path).$req_gid, "name"=> get_lang('Documents'));
 
 $is_allowedToEdit = is_allowed_to_edit() || $_SESSION['group_member_with_upload_rights'];
 
@@ -631,8 +631,9 @@ $owner_id = Database::result($rs,0,'insert_user_id');
 
 if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_to_edit() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid'] ))
 {  
-	
-	$action =  api_get_self().'?sourceFile='.urlencode($file_name).'&curdirpath='.urlencode($_GET['curdirpath']).'&file='.urlencode($_GET['file']).'&doc='.urlencode($doc);
+	$get_cur_path=Security::remove_XSS($_GET['curdirpath']);
+	$get_file=Security::remove_XSS($_GET['file']);
+	$action =  api_get_self().'?sourceFile='.urlencode($file_name).'&curdirpath='.urlencode($get_cur_path).'&file='.urlencode($get_file).'&doc='.urlencode($doc);
 	$form = new FormValidator('formEdit','post',$action);
 
 	// form title
@@ -699,7 +700,7 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 			
 	$defaults['filename'] = $filename;
 	$defaults['extension'] = $extension;
-	$defaults['file_path'] = $_GET['file'];
+	$defaults['file_path'] = Security::remove_XSS($_GET['file']);
 	$defaults['commentPath'] = $file;
 	$defaults['renameTo'] = $file_name;
 	$defaults['newComment'] = $oldComment;

@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 20794 2009-05-18 18:00:36Z iflorespaz $
+<?php // $Id: create_document.php 21106 2009-05-30 16:25:16Z iflorespaz $
 
 /*
 ==============================================================================
@@ -186,11 +186,11 @@ function InnerDialogLoaded()
 
 </script>';
 
-include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include (api_get_path(LIBRARY_PATH).'document.lib.php');
-include (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-include (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
-include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $nameTools = get_lang('CreateDocument');
 
 $fck_attribute['Width'] = '100%';
@@ -210,7 +210,7 @@ if(!api_is_allowed_to_edit()) {
 	Constants and variables
 -----------------------------------------------------------
 */
-$dir = isset($_GET['dir']) ? $_GET['dir'] : $_POST['dir']; // please do not modify this dirname formatting
+$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']); // please do not modify this dirname formatting
 /*
 ==============================================================================
 		MAIN CODE

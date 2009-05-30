@@ -1,4 +1,4 @@
-<?php // $Id: document.php 20789 2009-05-18 16:54:06Z cfasanando $
+<?php // $Id: document.php 21106 2009-05-30 16:25:16Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -66,19 +66,19 @@
 $language_file[] = 'document';
 $language_file[] = 'slideshow';
 
-require("../inc/global.inc.php");
+require_once "../inc/global.inc.php";
 $this_section=SECTION_COURSES;
 
-require('document.inc.php');
+require_once 'document.inc.php';
 
 
-require('../inc/lib/usermanager.lib.php');
+require_once '../inc/lib/usermanager.lib.php';
 
 api_protect_course_script(true);
 
 //session
 if(isset($_GET['id_session']))
-	$_SESSION['id_session'] = $_GET['id_session'];
+	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']);
 
 // Is the document tool visible?
 // Check whether the tool is actually visible
@@ -112,16 +112,11 @@ function confirmation (name)
 
 //what's the current path?
 //we will verify this a bit further down
-if(isset($_GET['curdirpath']) && $_GET['curdirpath']!='')
-{
-	$curdirpath = $_GET['curdirpath'];
-}
-elseif (isset($_POST['curdirpath']) && $_POST['curdirpath']!='')
-{
-	$curdirpath = $_POST['curdirpath'];
-}
-else
-{
+if(isset($_GET['curdirpath']) && $_GET['curdirpath']!='') {
+	$curdirpath = Security::remove_XSS($_GET['curdirpath']);
+} elseif (isset($_POST['curdirpath']) && $_POST['curdirpath']!='') {
+	$curdirpath = Security::remove_XSS($_POST['curdirpath']);
+} else {
 	$curdirpath = '/';
 }
 $curdirpathurl = urlencode($curdirpath);
@@ -194,11 +189,11 @@ else
 //the main_api.lib.php, database.lib.php and display.lib.php
 //libraries are included by default
 
-include_once(api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php');
-include_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
-include_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
-include_once(api_get_path(LIBRARY_PATH) . 'tablesort.lib.php');
-include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+require_once api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'events.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'tablesort.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 
  
 //-----------------------------------------------------------
@@ -239,8 +234,9 @@ $course_quota = DocumentManager::get_course_quota();
 //-------------------------------------------------------------------//
 if (isset($_GET['action']) && $_GET['action']=="download")
 {
+	$my_get_id=Security::remove_XSS($_GET['id']);
 	//check if the document is in the database
-	if(!DocumentManager::get_document_id($_course,$_GET['id']))
+	if(!DocumentManager::get_document_id($_course,$my_get_id))
 	{
 		//file not found!
 		header('HTTP/1.0 404 Not Found');
@@ -256,15 +252,15 @@ if (isset($_GET['action']) && $_GET['action']=="download")
 		exit;
 	}  
 	// launch event
-	event_download($_GET['id']);
+	event_download($my_get_id);
 	
     // check visibility of document and paths
     if (!($is_allowed_to_edit || $group_member_with_upload_rights) &&
-        !DocumentManager::is_visible($_GET['id'], $_course)){        
+        !DocumentManager::is_visible($my_get_id, $_course)){        
         api_not_allowed();
     }
 
-    $doc_url=$_GET['id'];
+    $doc_url=$my_get_id;
 	$full_file_name = $base_work_dir.$doc_url;
 	DocumentManager::file_send_for_download($full_file_name,true);
 	exit;
@@ -368,22 +364,22 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	/*======================================
 				MOVE FILE OR DIRECTORY
 	  ======================================*/
-
+	$my_get_move=Security::remove_XSS($_GET['move']); 
 	if (isset($_GET['move']) && $_GET['move']!='')
-	{ 	
+	{	
 		if (!$is_allowed_to_edit)
 		{
-			if(DocumentManager::check_readonly($_course,$_user['user_id'],$_GET['move']))
+			if(DocumentManager::check_readonly($_course,$_user['user_id'],$my_get_move))
 			{
 				api_not_allowed();	 
 			}
 		}
 		
-		if(DocumentManager::get_document_id($_course,$_GET['move']))
+		if(DocumentManager::get_document_id($_course,$my_get_move))
 		{
 			$folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit || $group_member_with_upload_rights);
 			echo '<div class="row"><div class="form_header">'.get_lang('Move').'</div></div>';
-			echo build_move_to_selector($folders,$_GET['curdirpath'],$_GET['move'],$group_properties['directory']);
+			echo build_move_to_selector($folders,Security::remove_XSS($_GET['curdirpath']),$my_get_move,$group_properties['directory']);
 		}
 		
 		
@@ -393,7 +389,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	{
 		if (!$is_allowed_to_edit)
 		{
-			if(DocumentManager::check_readonly($_course,$_user['user_id'],$_GET['move']))
+			if(DocumentManager::check_readonly($_course,$_user['user_id'],$my_get_move))
 			{
 				api_not_allowed();	
 			}

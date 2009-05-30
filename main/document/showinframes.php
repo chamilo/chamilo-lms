@@ -1,4 +1,4 @@
-<?php // $Id: showinframes.php 17403 2008-12-20 15:27:21Z herodoto $ 
+<?php // $Id: showinframes.php 21106 2009-05-30 16:25:16Z iflorespaz $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -53,14 +53,14 @@
 ============================================================================== 
 */ 
 $language_file[] = 'document';
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 if (!empty($_GET['nopages']))
 {
 	$nopages=Security::remove_XSS($_GET['nopages']);
 	if ($nopages==1)
 	{		
-		require_once(api_get_path(INCLUDE_PATH) . 'reduced_header.inc.php');
+		require_once api_get_path(INCLUDE_PATH) . 'reduced_header.inc.php';
 		Display::display_error_message(get_lang('FileNotFound'));
 	}
 	exit();	
@@ -84,7 +84,7 @@ header('Last-Modified: Wed, 01 Jan 2100 00:00:00 GMT');
 header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
 
-$browser_display_title = "Dokeos Documents - " . $_GET['cidReq'] . " - " . $file;
+$browser_display_title = "Dokeos Documents - " . Security::remove_XSS($_GET['cidReq']) . " - " . $file;
 
 //only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
 $frameheight = 135;

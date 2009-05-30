@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 20798 2009-05-18 18:13:25Z cvargas1 $
+<?php // $Id: upload.php 21106 2009-05-30 16:25:16Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -59,15 +59,15 @@
 $language_file = 'document';
 
 // including the global Dokeos file
-include("../inc/global.inc.php");
+require_once "../inc/global.inc.php";
 
 // including additional libraries
-include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-include_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
-include_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include('document.inc.php');
+require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'events.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once 'document.inc.php';
 
 // adding extra javascript to the form
 $htmlHeadXtra[] =
@@ -324,8 +324,8 @@ if(isset($_FILES['user_upload']))
             $courseid = api_get_course_id();
             isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
 
-            require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
-            require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
+            require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+            require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 
             $ic_slide = new IndexableChunk();
             $ic_slide->addValue("title", $file_title);

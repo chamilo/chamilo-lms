@@ -1,4 +1,4 @@
-<?php // $Id: quota.php 20420 2009-05-08 20:11:57Z herodoto $
+<?php // $Id: quota.php 21106 2009-05-30 16:25:16Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -34,11 +34,11 @@
 $language_file = 'document';
  
 // including the global dokeos file
-include("../inc/global.inc.php"); 
+require_once "../inc/global.inc.php"; 
 
 // including additional libraries
-include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-include_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
+require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
 	
 // some constants and variables 
 $courseDir   = $_course['path']."/document";

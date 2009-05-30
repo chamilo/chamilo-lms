@@ -1,4 +1,4 @@
-<?php // $Id: download.php 20388 2009-05-07 12:38:12Z spyroux $
+<?php // $Id: download.php 21106 2009-05-30 16:25:16Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,10 +50,10 @@
 
 session_cache_limiter('none');
 
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
-include(api_get_path(LIBRARY_PATH).'document.lib.php');
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 $doc_url = $_GET['doc_url'];
 //change the '&' that got rewritten to '///' by mod_rewrite back to '&'
@@ -95,9 +95,9 @@ if (substr($refer_script,0,15) == "/fillsurvey.php") {
 		//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (Ren�)
 		while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
 		//group folder?
-		$gid_req = ($_GET['gidReq'])?'&gidReq='.$_GET['gidReq']:'';
+		$gid_req = ($_GET['gidReq'])?'&gidReq='.Security::remove_XSS($_GET['gidReq']):'';
 		//create the path
-		$document_explorer = api_get_path(WEB_CODE_PATH).'document/document.php?curdirpath='.urlencode($doc_url).'&cidReq='.$_GET['cidReq'].$gid_req;
+		$document_explorer = api_get_path(WEB_CODE_PATH).'document/document.php?curdirpath='.urlencode($doc_url).'&cidReq='.Security::remove_XSS($_GET['cidReq']).$gid_req;
 		//redirect
 		header('Location: '.$document_explorer);
 	}

@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 20798 2009-05-18 18:13:25Z cvargas1 $
+<?php // $Id: document.inc.php 21106 2009-05-30 16:25:16Z iflorespaz $
 
 /*
 ==============================================================================
@@ -310,19 +310,19 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 	$sort_params = array();
 	if( isset($_GET['column']))
 	{
-		$sort_params[] = 'column='.$_GET['column'];
+		$sort_params[] = 'column='.Security::remove_XSS($_GET['column']);
 	}
 	if( isset($_GET['page_nr']))
 	{
-		$sort_params[] = 'page_nr='.$_GET['page_nr'];
+		$sort_params[] = 'page_nr='.Security::remove_XSS($_GET['page_nr']);
 	}
 	if( isset($_GET['per_page']))
 	{
-		$sort_params[] = 'per_page='.$_GET['per_page'];
+		$sort_params[] = 'per_page='.Security::remove_XSS($_GET['per_page']);
 	}
 	if( isset($_GET['direction']))
 	{
-		$sort_params[] = 'direction='.$_GET['direction'];
+		$sort_params[] = 'direction='.Security::remove_XSS($_GET['direction']);
 	}	
 	$sort_params = implode('&amp;',$sort_params);
 	$visibility_icon = ($visibility==0)?'invisible':'visible';

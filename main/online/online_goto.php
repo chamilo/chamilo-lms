@@ -1,4 +1,4 @@
-<?php // $Id: online_goto.php 10863 2007-01-24 09:40:14Z bmol $
+<?php // $Id: online_goto.php 21112 2009-05-30 17:57:24Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,6 +36,9 @@ header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
 
 $url=$_GET['url'];
+
+$url = str_ireplace('javascript','',$url);
+
 ?>
 
 <html>

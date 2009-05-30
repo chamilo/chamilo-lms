@@ -19,6 +19,9 @@
 		$IMConfig['allow_upload']=false;
 	}	
 	*/
+	//clean injection string (XSS)
+	$base_url_alt = str_replace('"','',$_GET['base_url_alt']);		
+		
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -32,9 +35,8 @@
 
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getBaseURL(); ?>";
-
-	//var base_url_alt= "<?php echo $_GET['base_url_alt'].'images'; ?>";	
-	var base_url_alt= "<?php echo $_GET['base_url_alt'].'images/gallery/'; ?>";
+	
+	var base_url_alt= "<?php echo $base_url_alt.'images/gallery/'; ?>";
 
 	var server_name = "<?php echo $IMConfig['server_name']; ?>";
 

@@ -628,7 +628,7 @@ switch($action)
 			$_SESSION['refresh'] = 1;
 			if(!empty($_REQUEST['parent_item_id'])){
 				$_SESSION['from_learnpath']='yes';
-				$_SESSION['origintoolurl'] = 'lp_controller.php?action=admin_view&lp_id='.$_REQUEST['lp_id'];
+				$_SESSION['origintoolurl'] = 'lp_controller.php?action=admin_view&lp_id='.Security::remove_XSS($_REQUEST['lp_id']);
 				require('resourcelinker.php');
 				//$_SESSION['oLP']->add_sub_item($_REQUEST['parent_item_id'],$_REQUEST['previous'],$_REQUEST['type'],$_REQUEST['path'],$_REQUEST['title']);
 			}else{

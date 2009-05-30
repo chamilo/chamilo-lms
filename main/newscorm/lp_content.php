@@ -11,7 +11,7 @@ $debug = 0;
 if($debug>0){error_log('New lp - In lp_content.php',0);}
 if(empty($lp_controller_touched)){
 	if($debug>0){error_log('New lp - In lp_content.php - Redirecting to lp_controller',0);}
-	header('location: lp_controller.php?action=content&lp_id='.$_REQUEST['lp_id'].'&item_id='.$_REQUEST['item_id']);
+	header('location: lp_controller.php?action=content&lp_id='.Security::remove_XSS($_REQUEST['lp_id']).'&item_id='.Security::remove_XSS($_REQUEST['item_id']));
 }
 $_SESSION['oLP']->error = '';
 $lp_type = $_SESSION['oLP']->get_type();

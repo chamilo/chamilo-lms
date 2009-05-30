@@ -13,6 +13,10 @@ require_once('Classes/ImageEditor.php');
 
 $manager = new ImageManager($IMConfig);
 $editor = new ImageEditor($manager, $IMConfig);
+$clean_img = '';
+if (isset($_GET['img'])) {
+	$clean_img = Security::remove_XSS($_GET['img']);	
+}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -79,9 +83,9 @@ $editor = new ImageEditor($manager, $IMConfig);
 		<table>
 		<tr>
 			<td>
-				<form action="editorFrame.php?img=<?php echo $_GET['img']?>&action=replace" target='editor' id="uploadForm" method="post" enctype="multipart/form-data">
+				<form action="editorFrame.php?img=<?php echo $clean_img?>&action=replace" target='editor' id="uploadForm" method="post" enctype="multipart/form-data">
 					&nbsp;<input type="file" name="upload" id="upload"/>
-					<input type="hidden" name="dir" id="dir" value="<?php echo dirname($_GET['img'])?>" />
+					<input type="hidden" name="dir" id="dir" value="<?php echo dirname($clean_img)?>" />
 					&nbsp;
 <? if (count($IMConfig['maxWidth']) > 1){ ?>
 					<label for="uploadSize" style="white-space: nowrap;">Upload Size</label>
@@ -235,14 +239,14 @@ $editor = new ImageEditor($manager, $IMConfig);
 		<div id="tool_inputs">
 
 	<?php if($IMConfig['allow_newFileName'] == true) { ?>
-			<label for="save_filename">Filename:</label><input type="text" id="save_filename" value="<?php if($IMConfig['allow_overwrite'] == false){ echo $editor->getDefaultSaveFile(); }else{ echo basename($_GET['img']); } ?>" />
+			<label for="save_filename">Filename:</label><input type="text" id="save_filename" value="<?php if($IMConfig['allow_overwrite'] == false){ echo $editor->getDefaultSaveFile(); }else{ echo basename($clean_img); } ?>" />
 	<?php }else{ ?>
-			<input type="hidden" id="save_filename" value="<?php echo basename($_GET['img']); ?>" />
+			<input type="hidden" id="save_filename" value="<?php echo basename($clean_img); ?>" />
 	<?php } ?>
 
 	<?php
-	$pos = strrpos($_GET['img'], ".");
-	$ext = substr($_GET['img'], $pos + 1);
+	$pos = strrpos($clean_img, ".");
+	$ext = substr($clean_img, $pos + 1);
 	?>
 			<select name="format" id="save_format" style="margin-left: 10px; vertical-align: middle; <?php if($IMConfig['allow_newFileName'] != true && $ext != "jpg" && $ext != "jpeg") {echo "display: none;";} ?>" onchange="updateFormat(this)">
             <option value="" selected>Image Format</option>
@@ -299,7 +303,7 @@ $editor = new ImageEditor($manager, $IMConfig);
 </div>
 <div id="contents">
 <div id="messages" style="display: none;"><span id="message"></span><img src="img/dots.gif" width="22" height="12" alt="..." /></div>
-<iframe src="editorFrame.php?img=<?php if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>" name="editor" id="editor" scrolling="auto" title="Image Editor" frameborder="0"></iframe>
+<iframe src="editorFrame.php?img=<?php echo rawurlencode($clean_img); ?>" name="editor" id="editor" scrolling="auto" title="Image Editor" frameborder="0"></iframe>
 </div>
 <div id="bottom"></div>
 </body>

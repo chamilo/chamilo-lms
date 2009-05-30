@@ -1,4 +1,4 @@
-<?php //$Id: myagenda.php 20931 2009-05-21 16:51:30Z aportugal $
+<?php //$Id: myagenda.php 21102 2009-05-30 14:58:16Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -66,12 +66,12 @@ $language_file = 'agenda';
 // we are not inside a course, so we reset the course id
 $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
-require('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section = SECTION_MYAGENDA;
 api_block_anonymous_users();
-require_once(api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-require_once('agenda.inc.php');
-require_once('myagenda.inc.php');
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+require_once 'agenda.inc.php';
+require_once 'myagenda.inc.php';
 // setting the name of the tool
 $nameTools = get_lang('MyAgenda');
 

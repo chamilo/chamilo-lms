@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 21076 2009-05-29 16:36:04Z aportugal $
+<?php // $Id: whoisonline.php 21119 2009-05-30 22:58:11Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -117,12 +117,13 @@ if ($_GET['chatid'] != '') {
 	$time = time();
 	$time = date("Y-m-d H:i:s", $time);
 	$chatid = addslashes($_GET['chatid']);
-	$sql="update $track_user_table set chatcall_user_id = '".Database::escape_string($_user['user_id'])."', chatcall_date = '".Database::escape_string($time)."', chatcall_text = '' where (user_id = ".Database::escape_string($chatid).")";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
-
-	//redirect caller to chat
-	header("Location: ".$_configuration['code_append']."chat/chat.php?".api_get_cidreq()."&origin=whoisonline&target=".Security::remove_XSS($chatid));
-	exit();
+	if ($_GET['chatid']==strval(intval($_GET['chatid']))) {
+		$sql="update $track_user_table set chatcall_user_id = '".Database::escape_string($_user['user_id'])."', chatcall_date = '".Database::escape_string($time)."', chatcall_text = '' where (user_id = ".(int)Database::escape_string($chatid).")";
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+		//redirect caller to chat
+		header("Location: ".$_configuration['code_append']."chat/chat.php?".api_get_cidreq()."&origin=whoisonline&target=".Security::remove_XSS($chatid));
+		exit;		
+	}
 }
 
 

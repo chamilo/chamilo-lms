@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 20650 2009-05-14 18:55:50Z aportugal $
+<?php //$Id: announcements.php 21120 2009-05-30 23:07:10Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -57,7 +57,7 @@ $nameTools = get_lang('Announcement');
 
 //session
 if(isset($_GET['id_session'])) {
-	$_SESSION['id_session'] = $_GET['id_session'];
+	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']);
 }
 
 /* ------------	ACCESS RIGHTS ------------ */
@@ -273,7 +273,7 @@ if(!empty($_GET['remind_inactive']))
 $surveyid = 0;
 if(!empty($_REQUEST['publish_survey']))
 {
-	$surveyid=Database::escape_string($_REQUEST['publish_survey']);
+	$surveyid=Database::escape_string(Security::remove_XSS($_REQUEST['publish_survey']));
 }
 $cidReq=Database::escape_string($_REQUEST['cidReq']);
 if($surveyid)
@@ -790,7 +790,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		 $cidReq = $_REQUEST['cidReq'];
 		 ?>
 		<script>
-			window.location.href="../survey/survey_list.php?<?php echo  api_get_cidreq(); ?>&published=published&surveyid=<?php echo $_REQUEST['publish_survey']; ?>";
+			window.location.href="../survey/survey_list.php?<?php echo  api_get_cidreq(); ?>&published=published&surveyid=<?php echo Security::remove_XSS($_REQUEST['publish_survey']); ?>";
 		</script>
 		<?php
 		}		

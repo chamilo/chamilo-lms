@@ -324,7 +324,13 @@ if ($origin!='learnpath') {
 	if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
 		if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
 			if (!api_is_anonymous()) {
-				echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('forumthread_new.gif',get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+				if ($my_forum==strval(intval($my_forum))) {
+					echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('forumthread_new.gif',get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';	
+				} else {
+					$my_forum=strval(intval($my_forum));
+					echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.$my_forum.$origin_string.'">'.Display::return_icon('forumthread_new.gif',get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';						
+				}
+
 			 }
 		} else {
 			echo get_lang('ForumLocked');

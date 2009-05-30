@@ -185,7 +185,7 @@ if (($my_action=='lock' OR $my_action=='unlock') AND isset($_GET['content']) AND
 if ($my_action=='delete'  AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
 	$message=delete_forum_forumcategory_thread($_GET['content'],$_GET['id']); // note: this has to be cleaned first
 	//delete link
-	$sql_link='DELETE FROM '.$table_link.' WHERE ref_id='.Security::remove_XSS($_GET['id']).' and type=5 and course_code="'.api_get_course_id().'";';
+	$sql_link='DELETE FROM '.$table_link.' WHERE ref_id='.Database::escape_string(Security::remove_XSS($_GET['id'])).' and type=5 and course_code="'.api_get_course_id().'";';
 	api_sql_query($sql_link);
 }
 // moving

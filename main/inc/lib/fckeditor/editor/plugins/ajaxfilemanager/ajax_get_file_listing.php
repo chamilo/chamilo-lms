@@ -7,7 +7,7 @@
 	 * @since 22/May/2007
 	 *
 	 * Modify for Dokeos
-	 * @author Juan Carlos Raña
+	 * @author Juan Carlos Raï¿½a
 	 * @since 31/December/2008
 	 */
 	 
@@ -22,11 +22,14 @@
 		include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 		include_once(CLASS_PAGINATION);
 		$pagination = new pagination(false);
+						
+		$search_folder = str_replace("'","",$_GET['search_folder']);				
+		
 		if(!empty($_GET['search']))
 		{
 			include_once(CLASS_SEARCH);
 			
-			$search  = new Search($_GET['search_folder']);
+			$search  = new Search($search_folder);
 			$search->addSearchKeyword('recursive', @$_GET['search_recursively']);
 			$search->addSearchKeyword('mtime_from', @$_GET['search_mtime_from']);
 			$search->addSearchKeyword('mtime_to', @$_GET['search_mtime_to']);

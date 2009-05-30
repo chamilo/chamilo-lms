@@ -1,4 +1,4 @@
-<?php // $Id: slideshow.php 20785 2009-05-18 15:05:03Z juliomontoya $
+<?php // $Id: slideshow.php 21107 2009-05-30 16:27:09Z iflorespaz $
 
 /*
 ==============================================================================
@@ -46,7 +46,7 @@ January 2008
 
 // name of the language file that needs to be included 
 $language_file = array ('slideshow', 'document');
-include ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $noPHP_SELF = true;
 $path = Security::remove_XSS($_GET['curdirpath']);
 $pathurl = urlencode($path);

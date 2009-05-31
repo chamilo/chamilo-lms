@@ -198,9 +198,14 @@ else
 // saving a change
 if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'')
 {
+
 	if(empty($_POST['title']))
 	{ 		
 		Display::display_error_message(get_lang("NoWikiPageTitle"));
+	}
+	elseif(!double_post($_POST['wpost_id']))
+	{
+		//double post
 	}
 	else
 	{
@@ -215,6 +220,10 @@ if (isset($_POST['SaveWikiNew']))
 	if(empty($_POST['title']))
 	{
 		Display::display_error_message(get_lang("NoWikiPageTitle"));
+	}
+	elseif(!double_post($_POST['wpost_id']))
+	{
+		//double post
 	}
 	else
 	{	 
@@ -1259,7 +1268,8 @@ if ($_GET['action']=='edit')
 				//echo '<INPUT TYPE="hidden" NAME="enddate_assig" VALUE="'.stripslashes($row['enddate_assig']).'"/>'; //off for now	
 				//echo '<INPUT TYPE="hidden" NAME="delayedsubmit" VALUE="'.stripslashes($row['delayedsubmit']).'"/>'; //off for now					
 							 
-				echo '<INPUT TYPE="hidden" NAME="version" VALUE="'.stripslashes($row['version']).'"/>'; //get current version		   
+				echo '<INPUT TYPE="hidden" NAME="version" VALUE="'.stripslashes($row['version']).'"/>'; //get current version
+
 				echo get_lang('Progress').':&nbsp;&nbsp;<select name="progress" id="progress">';
 				echo '<option value="'.stripslashes($row['progress']).'" selected>'.stripslashes($row['progress']).'</option>';   
 				echo '<option value="10">10</option>
@@ -1274,6 +1284,7 @@ if ($_GET['action']=='edit')
 				<option value="100">100</option>   
 				</select> %';	
 				echo '<br/><br/>'; 
+				echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post
 				echo '<input type="hidden" name="SaveWikiChange" value="'.get_lang('langSave').'">'; //for save icon
 				echo '<button class="save" type="submit" name="SaveWikiChange">'.get_lang('langSave').'</button>';//for save button
 				echo '</form>';				
@@ -1771,6 +1782,7 @@ if ($_GET['action']=='discuss')
 				<table>
 					<tr>
 					<td valign="top" ><?php echo get_lang('Comments');?>:</td>
+                    <?php  echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post ?>
 					<td><textarea name="comment" cols="80" rows="5" id="comment"></textarea></td>
 					</tr>
                     
@@ -1812,7 +1824,7 @@ if ($_GET['action']=='discuss')
 				</form>
                 
 				<?php
-				if (isset($_POST['Submit']))
+				if (isset($_POST['Submit']) && double_post($_POST['wpost_id']))
 				{
 					$dtime = date( "Y-m-d H:i:s" );
 					$message_author=api_get_user_id();
@@ -2436,6 +2448,7 @@ function display_new_wiki_form()
 	   <option value="100">100</option>   
 	   </select> %';
 	echo '<br/><br/>'; 
+	echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post
 	echo '<input type="hidden" name="SaveWikiNew" value="'.get_lang('langSave').'">'; //for save icon
 	echo '<button class="save" type="submit" name="SaveWikiNew">'.get_lang('langSave').'</button>';//for button icon
 	echo '</div>';
@@ -3501,6 +3514,32 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 	$doc_id = add_document($_course, $groupPath.'/'.$wikiFileName,'file',filesize($exportPath),$wikiFileName);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);					              
     // TODO: link to go document area
+}
+
+
+/**
+ * Function prevent double post (reload or F5)
+ */
+
+function double_post($wpost_id)
+{
+	if(isset($_SESSION['wpost_id'])) 
+	{
+ 		if ($wpost_id == $_SESSION['wpost_id'])
+		{
+ 			return false;
+		}
+		else
+		{
+			$_SESSION['wpost_id'] = $wpost_id;
+			return true;
+		}
+	}
+	else
+	{
+		$_SESSION['wpost_id'] = $wpost_id;
+		return true;
+    }
 }
 
 

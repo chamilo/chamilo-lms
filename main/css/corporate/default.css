@@ -423,12 +423,9 @@ form span.form_error {
 /* actions */
 .actions_lp {
 	background:#F8F8F8;
- //border-bottom:1px solid #999999;
- //border-top:1px solid #999999;
 	height:29px;
 	padding-left: -17px;
 	margin: 5px 2px 1px 12px;
-	background:url(images/actions.jpg) repeat-x;
 	vertical-align:middle;
 	width: 90%;
 }
@@ -454,7 +451,6 @@ form span.form_error {
 	/*height:35px;*/
 	padding:2px;
 	margin-bottom: 5px;
-	/*background:url(images/actions.jpg) repeat-x;*/
 	vertical-align:middle;
 }
 .actions img {

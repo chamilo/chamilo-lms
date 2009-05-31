@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 21101 2009-05-30 14:56:54Z iflorespaz $
+<?php //$Id: agenda.inc.php 21134 2009-05-31 18:40:17Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -1437,7 +1437,7 @@ function change_visibility($tool,$id)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function display_courseadmin_links() {
-
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
 	if (empty ($_SESSION['toolgroup']))
 	{
 		echo get_lang('UserGroupFilter');
@@ -1445,7 +1445,6 @@ function display_courseadmin_links() {
 		show_user_group_filter_form();
 		echo "</form> ";
 	}
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
 	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('ical_icon.gif', get_lang('ICalFileImport'))." ".get_lang('ICalFileImport')."</a>";
 }
 

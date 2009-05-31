@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 21053 2009-05-28 22:59:15Z cvargas1 $
+<?php //$Id: work.lib.php 21126 2009-05-31 00:53:14Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 21053 2009-05-28 22:59:15Z cvargas1 $
+* 	@version $Id: work.lib.php 21126 2009-05-31 00:53:14Z cfasanando $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -22,8 +22,11 @@ require_once '../inc/lib/fileDisplay.lib.php';
 function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)  
 {
 	global $gradebook;
-	$display_output = "";
-	isset($_GET['origin'])?$origin = Security::remove_XSS($_GET['origin']):$origin='';
+	$display_output = "";	
+	$origin = isset($_GET['origin'])?Security::remove_XSS($_GET['origin']):'';
+	
+	$origin = api_get_tools_lists($origin);								
+				
 	if (strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
 		$parent_dir = dirname($cur_dir_path);
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif', get_lang('Up')).' '.get_lang('Up').'</a>';
@@ -625,7 +628,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		if ($direc_date!='' && $direc_date!='0000-00-00 00:00:00') {
 			$my_direc_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($direc_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
 			$my_direc_date .= ucfirst(strftime($timeNoSecFormat,strtotime($direc_date)));	
-			$row[]= date_to_str_ago($direc_date).'<br><span class="dropbox_date">'.$my_direc_date.'</span>';
+			$row[]= date_to_str_ago($direc_date).'<br /><span class="dropbox_date">'.$my_direc_date.'</span>';
 		} else {
 			$row[]='';			
 		}	
@@ -724,6 +727,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	if (isset($_GET['edit_dir'])) {
 		$my_params = array ('edit_dir' => Security::remove_XSS($_GET['edit_dir']));
 	}
+	$my_params['origin'] = $origin;
 	Display::display_sortable_config_table($table_header,$table_data,$sorting_options, $paging_options,$my_params,$column_show,$column_order);
 }  
 
@@ -1316,7 +1320,7 @@ function to_javascript_work() {
 							}			 				   	
 				 	}
 				 					
-					document.form1.action = "work.php?origin='.Security::remove_XSS($_REQUEST['origin']).'&gradebook='.Security::remove_XSS($_GET['gradebook']).'";
+					document.form1.action = "work.php?origin='.api_get_tools_lists($_REQUEST['origin']).'&gradebook='.(empty($_GET['gradebook'])?'':'view').'";
 					document.form1.submit();							
 				}					
 				

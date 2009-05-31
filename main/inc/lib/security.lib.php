@@ -54,7 +54,8 @@
 class Security {
 	public $clean = array();
 	/**
-	 * Checks if the absolute path given is really under the checker path
+	 * Checks if the absolute path (directory) given is really under the 
+     * checker path (directory)
 	 * @param	string	Absolute path to be checked (with trailing slash)
 	 * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
 	 * @return	bool	True if the path is under the checker, false otherwise
@@ -68,10 +69,11 @@ class Security {
 		if ($found===0) {
 			return true;
 		}
-		return false;
+        return false;
 	}
 	/**
-	 * Checks if the relative path given is really under the checker path
+	 * Checks if the relative path (directory) given is really under the 
+     * checker path (directory)
 	 * @param	string	Relative path to be checked (relative to the current directory) (with trailing slash)
 	 * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
 	 * @return	bool	True if the path is under the checker, false otherwise

@@ -498,7 +498,7 @@ function api_get_user_info($user_id = '') {
 		$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".Database::escape_string($user_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		if(Database::num_rows($result) > 0) {
-			$result_array = mysql_fetch_array($result);
+			$result_array = Database::fetch_array($result);
 			// this is done so that it returns the same array-index-names
 			// ideally the names of the fields of the user table are renamed so that they match $_user (or vice versa)
 			// $_user should also contain every field of the user table (except password maybe). This would make the
@@ -530,7 +530,7 @@ function api_get_user_info_from_username($username = '') {
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE username='".Database::escape_string($username)."'";
     $result = api_sql_query($sql, __FILE__, __LINE__);
     if (Database::num_rows($result) > 0) {
-        $result_array = mysql_fetch_array($result);
+        $result_array = Database::fetch_array($result);
         // this is done so that it returns the same array-index-names
         // ideally the names of the fields of the user table are renamed so that they match $_user (or vice versa)
         // $_user should also contain every field of the user table (except password maybe). This would make the
@@ -584,7 +584,7 @@ function api_get_course_setting($setting_name, $course_code = null) {
 	} else {
 		$table = Database::get_course_table(TABLE_COURSE_SETTING);
 	}
-	$setting_name = mysql_real_escape_string($setting_name);
+	$setting_name = Database::escape_string($setting_name);
 	$sql = "SELECT * FROM $table WHERE variable = '$setting_name'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if (Database::num_rows($res)>0) {
@@ -702,18 +702,18 @@ function api_get_course_info($course_code=null) {
 function api_sql_query($query, $file = '', $line = 0) {
 	$result = @mysql_query($query);
 
-	if ($line && !$result) {
+	if ($line && !$result && api_get_setting('server_type')!='production') {
 			$info = '<pre>';
-			$info .= '<b>MYSQL ERROR :</b><br/> ';
-			$info .= mysql_error();
+			$info .= '<b>DATABASE ERROR :</b><br /> ';
+			$info .= Security::remove_XSS(Database::error());
 			$info .= '<br/>';
-			$info .= '<b>QUERY       :</b><br/> ';
-			$info .= $query;
+			$info .= '<b>QUERY       :</b><br /> ';
+			$info .= Security::remove_XSS($query);
 			$info .= '<br/>';
-			$info .= '<b>FILE        :</b><br/> ';
+			$info .= '<b>FILE        :</b><br /> ';
 			$info .= ($file == '' ? ' unknown ' : $file);
 			$info .= '<br/>';
-			$info .= '<b>LINE        :</b><br/> ';
+			$info .= '<b>LINE        :</b><br /> ';
 			$info .= ($line == 0 ? ' unknown ' : $line);
 			$info .= '</pre>';
 			//@ mysql_close();
@@ -731,7 +731,7 @@ function api_sql_query($query, $file = '', $line = 0) {
  */
 function api_store_result($result) {
 	$tab = array ();
-	while ($row = mysql_fetch_array($result)) {
+	while ($row = Database::fetch_array($result)) {
 		$tab[] = $row;
 	}
 	return $tab;
@@ -1440,14 +1440,14 @@ function api_is_coach() {
 	 $sql = "SELECT DISTINCT id, name, date_start, date_end
 							FROM session
 							INNER JOIN session_rel_course
-								ON session_rel_course.id_coach = '".mysql_real_escape_string($_user['user_id'])."'
+								ON session_rel_course.id_coach = '".Database::escape_string($_user['user_id'])."'
 							ORDER BY date_start, date_end, name";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	$sessionIsCoach = api_store_result($result);
 
 	$sql = "SELECT DISTINCT id, name, date_start, date_end
 							FROM session
-							WHERE session.id_coach =  '".mysql_real_escape_string($_user['user_id'])."'
+							WHERE session.id_coach =  '".Database::escape_string($_user['user_id'])."'
 							ORDER BY date_start, date_end, name";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	$sessionIsCoach = array_merge($sessionIsCoach , api_store_result($result));
@@ -2119,7 +2119,7 @@ function api_get_languages() {
 	$tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 	$sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	while ($row = mysql_fetch_array($result)) {
+	while ($row = Database::fetch_array($result)) {
 		$language_list['name'][] = $row['original_name'];
 		$language_list['folder'][] = $row['dokeos_folder'];
 	}
@@ -2138,8 +2138,8 @@ function api_get_language_isocode() {
 	$tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 	$sql = "SELECT isocode FROM $tbl_language WHERE dokeos_folder = '".api_get_interface_language()."'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if(mysql_num_rows($res)) {
-		$row = mysql_fetch_array($res);
+	if(Database::num_rows($res)) {
+		$row = Database::fetch_array($res);
 		return $row['isocode'];
 	}
 	return null;

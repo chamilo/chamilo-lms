@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 21134 2009-05-31 18:40:17Z pcool $
+<?php //$Id: agenda.php 21139 2009-05-31 19:14:47Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -421,7 +421,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								display_agenda_items();				
 								break;
 		case 'showhide':
-								display_agenda_items();			
+								if(!empty($_GET['agenda_id']))
+								{
+									 display_one_agenda_item((int)$_GET['agenda_id']);
+								}
+								else
+								{            	
+									display_agenda_items();			
+								}		
 								break;
 		case 'announce': 		display_agenda_items();			
 								break;

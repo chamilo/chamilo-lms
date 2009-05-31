@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 21135 2009-05-31 18:52:15Z pcool $
+<?php //$Id: agenda.inc.php 21139 2009-05-31 19:14:47Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -2233,7 +2233,7 @@ function display_agenda_items()
          --------------------------------------------------*/
     	echo '<tr>';
         echo '<td colspan="3">';
-        if($is_repeated){echo get_lang('RepeatedEvent'),' <a href="',api_get_self(),'?',api_get_cidreq,'&amp;agenda_id=',$myrow['parent_event_id'],'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a>';}
+        if($is_repeated){echo get_lang('RepeatedEvent'),' <a href="',api_get_self(),'?',api_get_cidreq(),'&amp;agenda_id=',$myrow['parent_event_id'],'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a>';}
     	echo "<a href=\"#top\">".Display::return_icon('top.gif', get_lang('Top'))."</a></td></tr>";
     	echo "</table><br /><br />";
     } // end while ($myrow=Database::fetch_array($result))
@@ -2415,6 +2415,11 @@ function display_one_agenda_item($agenda_id)
 		if (!$repeat && api_is_allowed_to_edit(false,true))	{
 			// edit
 			$mylink = api_get_self()."?".api_get_cidreq()."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;id=".$myrow['id'];
+			if (!empty($_GET['agenda_id']))
+			{
+				// rather ugly hack because the id parameter is already set above but below we set it again
+				$mylink .= '&amp;agenda_id='.Security::remove_XSS($_GET['agenda_id']).'&amp;id='.Security::remove_XSS($_GET['agenda_id']);
+			}
 			echo 	"<a href=\"".$mylink."&amp;action=edit\">",
 					Display::return_icon('edit.gif', get_lang('ModifyCalendarItem')), "</a>",
 					"<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
@@ -2424,7 +2429,7 @@ function display_one_agenda_item($agenda_id)
 			} else {
 				$image_visibility="invisible";
 			}
-			echo 	'<a href="'.$mylink.'&amp;action=showhide">',Display::return_icon($image_visibility, get_lang('Visible')),'</a>';
+			echo 	'<a href="'.$mylink.'&amp;action=showhide">',Display::return_icon($image_visibility.'.gif', get_lang('Visible')),'</a>';
 		}
 	   	$mylink = 'ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'];
 	    echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';

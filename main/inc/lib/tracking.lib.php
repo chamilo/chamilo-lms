@@ -370,7 +370,7 @@ class Tracking {
 	 * @return string value (number %) Which represents a round integer explain in got in 3.
 	 */
 	function get_avg_student_score($student_id, $course_code, $lp_ids=array()) {
-		
+
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -401,6 +401,7 @@ class Tracking {
 				//Scorm test
 				while($a_learnpath = Database::fetch_array($sql_result_lp)){
 					
+error_log(__LINE__.'; '.print_r($a_learnpath,1));
 					//We get the last view id of this LP
 					$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
@@ -417,7 +418,8 @@ class Tracking {
 					//$sql_max_score='SELECT max_score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" ';
 					$res_max_score=Database::query($sql_max_score,__FILE__,__LINE__);	
 					$count_total_loop=0;
-					$num_rows_max_score=Database::num_rows($res_max_score);	
+					$num_rows_max_score=Database::num_rows($res_max_score);
+                    error_log(__LINE__.' '.$num_rows_max_score);
 					if ($num_rows_max_score==1) {
 						while ($row_max_score=Database::fetch_array($res_max_score)) {
 							if ($row_max_score['max_score']==0) {
@@ -430,9 +432,9 @@ class Tracking {
 					} elseif ($num_rows_max_score>1) {
 						while ($row_max_score=Database::fetch_array($res_max_score)) {
 							if ($row_max_score['max_score']==0) {
-								$lp_scorm_result_score_total+=($row_max_score['score']/100)*100;
+								$lp_scorm_result_score_total+=($row_max_score['score']/100);
 							} else {
-								$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score'])*100;
+								$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score']);
 							}
 							$count_total_loop++;
 						}						
@@ -440,7 +442,9 @@ class Tracking {
 					if ($count_total_loop==0) {
 						$count_total_loop=1;
 					}
+error_log(__LINE__.'; '.$lp_scorm_result_score_total.'/'.$count_total_loop.'*100');
 					$score_of_scorm_calculate=round((($lp_scorm_result_score_total/$count_total_loop)*100),2);
+error_log(__LINE__.'; '.$score_of_scorm_calculate);
 				}
 				//The next call to a MySQL fetch function, such as mysql_fetch_assoc(), would return that row. 
 				mysql_data_seek($sql_result_lp,0);

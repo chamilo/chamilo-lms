@@ -1,25 +1,5 @@
-<?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) Julio Montoya Armas 
-	Copyright (c) Isaac Flores Paz
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
  
 $language_file=array('registration','messages','userInfo','admin');
 require_once '../inc/global.inc.php';
@@ -30,13 +10,10 @@ $list_of_options=array();
 $img_user=array();
 $img_info_user=array();
 $list_of_options=UserFriend::show_list_type_friends();
-$path_user=str_replace('\\','',$_GET['path_user']);
+$path_user=str_replace(array('\\','../','\\0'),array('','',''),$_GET['path_user']);
 $img_user =explode('"',$path_user);
 $number_list=count($list_of_options);
-$user_id  =urldecode($_GET['id_user']);
-$user_id  =str_replace("\\","",$user_id);
-$user_friend=str_replace('"',"",$user_id);
-$user_friend=Security::remove_XSS($user_friend);
+$user_friend = $user_id  = (int)str_replace(array('\\','"'),array('',''),$_GET['id_user']);
 $user_info=api_get_user_info($user_friend);
 $user_friend_relation=UserFriend::get_relation_between_contacts(api_get_user_id(),$user_friend);
 ?>
@@ -56,7 +33,7 @@ $user_friend_relation=UserFriend::get_relation_between_contacts(api_get_user_id(
 	   	 <td width="50%"><div align="left">
 <?php
 for ($k=0;$k<$number_list;$k++) {
-	echo '<br/>';
+	echo '<br />';
 	if ($list_of_options[$k]['id']==$user_friend_relation) {
    		$check='checked="checked"';
    	} else {
@@ -66,11 +43,11 @@ for ($k=0;$k<$number_list;$k++) {
 	<input <?php echo $check; ?> style="margin-left:50px" type="radio" class="radio" name="list_type_friend"  value="<?php echo api_xml_http_response_encode($list_of_options[$k]['id']); ?>" />
 	<?php 
 	echo  api_xml_http_response_encode(get_lang($list_of_options[$k]['title'])); 
-	echo '<br/>';
+	echo '<br />';
 	?>
 	<?php
 }
-echo '<br/>';
+echo '<br />';
 ?>
 <button style="margin-left:50px" type="button" class="save" value="<?php echo api_xml_http_response_encode(get_lang('AttachToGroup')); ?>" onclick="set_qualify_friend()"><?php echo api_xml_http_response_encode(get_lang('AttachToGroup')) ?></button>
 			</div></td>

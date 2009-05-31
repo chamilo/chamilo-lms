@@ -382,8 +382,7 @@ class scorm extends learnpath {
 	     	//$this->manifest_encoding = 'UTF-8';
 	     	global $charset;
 	     	if(!empty($charset) && !empty($this->manifest_encoding) && $this->manifest_encoding != $charset){
-	     		$myname = mb_convert_encoding($myname,$charset,$this->manifest_encoding);
-	     		//error_log('New LP - Converting name from '.$this->manifest_encoding.' to ISO-8859-1',0);
+	     		$myname = api_convert_encoding($myname,$charset,$this->manifest_encoding);
 	     	}
 			$sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order)" .
 					"VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."','scorm_api.php',$dsp)";

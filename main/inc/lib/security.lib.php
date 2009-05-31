@@ -51,23 +51,21 @@
  * 
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
  */
-class Security{
-	var	$clean = array();
+class Security {
+	public $clean = array();
 	/**
 	 * Checks if the absolute path given is really under the checker path
 	 * @param	string	Absolute path to be checked (with trailing slash)
 	 * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
 	 * @return	bool	True if the path is under the checker, false otherwise
 	 */
-	function check_abs_path($abs_path,$checker_path)
-	{
-		if(empty($checker_path)){return false;} //checker path must be set
+	function check_abs_path($abs_path,$checker_path) {
+		if (empty($checker_path)) {return false;} //checker path must be set
 		
 		$true_path=str_replace("\\", "/", realpath($abs_path));
 		
 		$found = strpos($true_path.'/',$checker_path);
-		if($found===0)
-		{
+		if ($found===0) {
 			return true;
 		}
 		return false;
@@ -80,44 +78,50 @@ class Security{
 	 */
 	function check_rel_path($rel_path,$checker_path)
 	{
-		if(empty($checker_path)){return false;} //checker path must be set
+		if (empty($checker_path)){return false;} //checker path must be set
 		$current_path = getcwd(); //no trailing slash
-		if(substr($rel_path,-1,1)!='/'){
+		if (substr($rel_path,-1,1)!='/') {
 			$rel_path = '/'.$rel_path;
 		}
 		$abs_path = $current_path.$rel_path;
 		$true_path=str_replace("\\", "/", realpath($abs_path));
 		$found = strpos($true_path.'/',$checker_path);
-		if($found===0)
-		{
+		if ($found===0) {
 			return true;
 		}
 		return false;
 	}
+    /**
+     * Filters dangerous filenames (*.php[.]?* and .htaccess) and returns it in
+     * a non-executable form (for PHP and htaccess, this is still vulnerable to
+     * other languages' files extensions)
+     * @param   string  Unfiltered filename
+     * @param   string  Filtered filename
+     */
+    function filter_filename($filename) {
+    	require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+        return disable_dangerous_file($filename);
+    }
 	/**
 	 * This function checks that the token generated in get_token() has been kept (prevents
 	 * Cross-Site Request Forgeries attacks)
 	 * @param	string	The array in which to get the token ('get' or 'post')
 	 * @return	bool	True if it's the right token, false otherwise
 	 */
-	function check_token($array='post')
-	{
-		switch($array){
+	function check_token($array='post') {
+		switch ($array) {
 			case 'get':
-				if(isset($_SESSION['sec_token']) && isset($_GET['sec_token']) && $_SESSION['sec_token'] === $_GET['sec_token'])
-				{
+				if (isset($_SESSION['sec_token']) && isset($_GET['sec_token']) && $_SESSION['sec_token'] === $_GET['sec_token']) {
 					return true;
 				}
 				return false;
 			case 'post':
-				if(isset($_SESSION['sec_token']) && isset($_POST['sec_token']) && $_SESSION['sec_token'] === $_POST['sec_token'])
-				{
+				if (isset($_SESSION['sec_token']) && isset($_POST['sec_token']) && $_SESSION['sec_token'] === $_POST['sec_token']) {
 					return true;
 				}				
 				return false;
 			default:
-				if(isset($_SESSION['sec_token']) && isset($array) && $_SESSION['sec_token'] === $array)
-				{
+				if (isset($_SESSION['sec_token']) && isset($array) && $_SESSION['sec_token'] === $array) {
 					return true;
 				}
 				return false;
@@ -129,10 +133,8 @@ class Security{
 	 * most session hijacking attacks.
 	 * @return	bool	True if the user agent is the same, false otherwise
 	 */
-	function check_ua()
-	{
-		if(isset($_SESSION['sec_ua']) and $_SESSION['sec_ua'] === $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed'])
-		{
+	function check_ua() {
+		if (isset($_SESSION['sec_ua']) and $_SESSION['sec_ua'] === $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed']) {
 			return true;
 		}
 		return false;
@@ -141,8 +143,7 @@ class Security{
 	 * Clear the security token from the session
 	 * @return void
 	 */
-	function clear_token()
-	{
+	function clear_token() {
 		$_SESSION['sec_token'] = null;
 		unset($_SESSION['sec_token']);
 	}
@@ -155,8 +156,7 @@ class Security{
 	 * Check the token with check_token()
 	 * @return	string	Hidden-type input ready to insert into a form
 	 */
-	function get_HTML_token()
-	{
+	function get_HTML_token() {
 		$token = md5(uniqid(rand(),TRUE));
 		$string = '<input type="hidden" name="sec_token" value="'.$token.'"/>';
 		$_SESSION['sec_token'] = $token;
@@ -171,8 +171,7 @@ class Security{
 	 * Check the token with check_token()
 	 * @return	string	Token
 	 */
-	function get_token()
-	{
+	function get_token() {
 		$token = md5(uniqid(rand(),TRUE));
 		$_SESSION['sec_token'] = $token;
 		return $token;
@@ -182,8 +181,7 @@ class Security{
 	 * most cases of session hijacking.
 	 * @return void
 	 */
-	function get_ua()
-	{
+	function get_ua() {
 		$_SESSION['sec_ua_seed'] = uniqid(rand(),TRUE);
 		$_SESSION['sec_ua'] = $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed'];
 	}
@@ -194,8 +192,7 @@ class Security{
 	 * @param	array	Additional options
 	 * @return	bool	True if variable was filtered and added to the current object, false otherwise
 	 */
-	function filter($var,$type='string',$options=array())
-	{
+	function filter($var,$type='string',$options=array()) {
 		//This function is not finished! Do not use!
 		$result = false;
 		//get variable name and value
@@ -203,7 +200,7 @@ class Security{
 		$names =array_keys($args);
 		$name = $names[0];
 		$value = $args[$name];
-		switch($type){
+		switch ($type) {
 			case 'bool':
 				$result = (bool) $var;
 				break;
@@ -222,7 +219,7 @@ class Security{
 			default:
 				return false;
 		}
-		if(!empty($option['save'])){
+		if (!empty($option['save'])) {
 			$this->clean[$name]=$result;
 		}
 		return $result;
@@ -233,9 +230,8 @@ class Security{
 	 * @param	string	Variable name
 	 * @return	mixed	Variable or NULL on error
 	 */
-	function get($varname)
-	{
-		if(isset($this->clean[$varname])){
+	function get($varname) {
+		if (isset($this->clean[$varname])) {
 			return $this->clean[$varname];
 		}
 		return NULL;

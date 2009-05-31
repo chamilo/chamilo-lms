@@ -13,6 +13,9 @@ require '../inc/global.inc.php';
 require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 $documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $my_file = Security::remove_XSS($_GET['file']);
+
+$my_file=str_replace(array('../','\\..','\\0','..\\'),array('','','',''),urldecode($my_file));
+
 $title = GetQuizName($my_file,$documentPath);
 if ($title =='') {
 	$title = GetFileName($my_file);

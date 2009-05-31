@@ -1,34 +1,11 @@
-<?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
-*/
-
-
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
-* 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.lib.php 21086 2009-05-29 17:46:56Z juliomontoya $
+* 	@author Istvan Mandak (original author)
 */
-
-
-
 $dbTable     = Database::get_course_table(TABLE_DOCUMENT);
-
 /**
  * Creates a hotpotato directory
  *
@@ -36,14 +13,11 @@ $dbTable     = Database::get_course_table(TABLE_DOCUMENT);
  * @param	string	Wanted path
  * @return boolean	Always true so far
  */
-function hotpotatoes_init($baseWorkDir)
-{
+function hotpotatoes_init($baseWorkDir) {
 	//global $_course, $_user;
 	$documentPath=$baseWorkDir.'/';
-	if (!is_dir($documentPath))
-	{
-		if (is_file($documentPath))
-		{
+	if (!is_dir($documentPath)) {
+		if (is_file($documentPath)) {
 			@unlink($documentPath);
 		}
 		@mkdir($documentPath);
@@ -51,7 +25,7 @@ function hotpotatoes_init($baseWorkDir)
 		$perm = octdec(!empty($perm)?$perm:'0770');
 		chmod ($documentPath,$perm);
 		return true;
-	}else{
+	} else {
 		//if this directory already exists, return false
 		return false;
 	}
@@ -71,13 +45,12 @@ function hotpotatoes_init($baseWorkDir)
  * @param	string	File path
  * @return	string	The exercise title
  */
-function GetQuizName($fname,$fpath)
-{
+function GetQuizName($fname,$fpath) {
 
 	$title = "";
 	$title = GetComment($fname);
 
-	if($title=="") {
+	if ($title=="") {
 		if (file_exists($fpath.$fname)) {
 			if (!($fp = fopen($fpath.$fname, "r"))) {
 			//die("could not open Quiz input");
@@ -100,7 +73,6 @@ function GetQuizName($fname,$fpath)
 		}
 	}
 	return $title;
-
 }
 
 /**
@@ -108,14 +80,12 @@ function GetQuizName($fname,$fpath)
  * @param	string	File path
  * @return	string	Comment from the database record
  */
-function GetComment($path)
-{
+function GetComment($path) {
 	global $dbTable;
 	$path = Database::escape_string($path);
 	$query = "select comment from $dbTable where path='$path'";
 	$result = api_sql_query($query,__FILE__,__LINE__);
-	while($row = mysql_fetch_array($result))
-	{
+	while ($row = mysql_fetch_array($result)) {
 		return $row[0];
 	}
 	return "";
@@ -127,8 +97,7 @@ function GetComment($path)
  * @param	string	Comment to set
  * @return	string	Result of the database operation (api_sql_query will output some message directly on error anyway)
  */
-function SetComment($path,$comment)
-{
+function SetComment($path,$comment) {
 	global $dbTable;
 	$path = Database::escape_string($path);
 	$comment = Database::escape_string($comment);
@@ -145,8 +114,7 @@ function SetComment($path,$comment)
  * @param	string	Path
  * @return	string	File name
  */
-function GetFileName($fname)
-{
+function GetFileName($fname) {
 	$name = explode('/',$fname);
 	$name = $name[sizeof($name)-1];
 	return $name;
@@ -155,32 +123,42 @@ function GetFileName($fname)
 /**
  * Reads the file contents into a string
  * @param	string	Urlencoded path
- * @return	string	The file contents
+ * @return	string	The file contents or false on security error
  */
-function ReadFileCont($full_file_path)
-{
-  if(is_file($full_file_path)) {
-	if (!($fp = fopen(urldecode($full_file_path), "r"))) {
-		return "";
-	}
-	$contents = fread($fp, filesize($full_file_path));
-	fclose($fp);
-	return $contents;
-  }
+function ReadFileCont($full_file_path) {
+    if (Security::check_abs_path(dirname($full_file_path).'/',api_get_path(SYS_COURSE_PATH))) {
+        if (is_file($full_file_path)) {
+        	if (!($fp = fopen(urldecode($full_file_path), "r"))) {
+        		return "";
+        	}
+        	$contents = fread($fp, filesize($full_file_path));
+        	fclose($fp);
+        	return $contents;
+        }
+    }
+    return false;
 }
 
 /**
- * Writes the file contents into the file given
+ * Writes the file contents into the given filepath
  * @param	string	Urlencoded path
  * @param 	string	The file contents
+ * @return  boolean True on success, false on security error
  */
-function WriteFileCont($full_file_path,$content)
-{
-	if (!($fp = fopen(urldecode($full_file_path), "w"))) {
-		//die("could not open Quiz input");
-	}
-	fwrite($fp,$content);
-	fclose($fp);
+function WriteFileCont($full_file_path,$content) {
+    // check if this is not an attack, trying to get into other directories or something like that
+    global $_course;
+    if (Security::check_abs_path(dirname($full_file_path).'/',api_get_path(SYS_COURSE_PATH).$_course['path'].'/')) {
+        // check if this is not an attack, trying to upload a php file or something like that
+        if (basename($full_file_path) != Security::filter_filename(basename($full_file_path))) { return false; }
+        if (!($fp = fopen(urldecode($full_file_path), "w"))) {
+    		//die("could not open Quiz input");
+    	}
+    	fwrite($fp,$content);
+    	fclose($fp);
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -189,35 +167,28 @@ function WriteFileCont($full_file_path,$content)
  * @return	string	The image file name or an empty string
  * @uses GetFileName No comment
  */
-function GetImgName($imgtag)
-{	// select src tag from img tag
+function GetImgName($imgtag) {	
+    // select src tag from img tag
 	$match = array();
 	//preg_match('/(src=(["\'])1.*(["\'])1)/i',$imgtag,$match);  		  //src
 	preg_match('/src(\s)*=(\s)*[\'"]([^\'"]*)[\'"]/i',$imgtag,$match); //get the img src as contained between " or '
 	//list($key,$srctag)=each($match);
 	$src=$match[3];
 	//$src = substr($srctag,5,(strlen($srctag)-7));
-	if (stristr($src,"http")===false)															// valid or invalid image name
-	{
-		if($src=="")
-		{
+	if (stristr($src,"http")===false) {
+    // valid or invalid image name
+		if ($src=="") {
 			return "";
-		}
-		else
-		{
+		} else {
 			$tmp_src = GetFileName($src) ;
-			if ($tmp_src == "")
-			{
+			if ($tmp_src == "") {
 				return $src;
-			}
-			else
-			{
+			} else {
 				return $tmp_src;
 			}
 		}
-	}
-	else //the img tag contained "http", which means it is probably external. Ignore it.
-	{
+	} else { 
+        //the img tag contained "http", which means it is probably external. Ignore it.
 		return "";
 	}
 }
@@ -227,20 +198,17 @@ function GetImgName($imgtag)
  * @param	string	An image tag
  * @return	string	The image source or ""
  */
-function GetSrcName($imgtag)
-{	// select src tag from img tag
+function GetSrcName($imgtag) {	
+    // select src tag from img tag
 	$match = array();
 	preg_match("|(src=\".*\" )|U",$imgtag,$match);  		  //src
 	list($key,$srctag)=each($match);
 	$src = substr($srctag,5,(strlen($srctag)-7));
-	if (stristr($src,"http")==false)															// valid or invalid image name
-	{
+	if (stristr($src,"http")==false) {
+    // valid or invalid image name
 		return $src;
-	}
-	else
-	{
+	} else {
 		return '';
-
 	}
 }
 
@@ -251,21 +219,19 @@ function GetSrcName($imgtag)
  * @param  reference	Reference to a list of image parameters (emptied, then used to return results)
  * @param	reference	Reference to a counter of images (emptied, then used to return results)
  */
-function GetImgParams($fname,$fpath,&$imgparams,&$imgcount)
-{	//select img tags from context
+function GetImgParams($fname,$fpath,&$imgparams,&$imgcount) {	
+    //select img tags from context
 	$imgparams = array();
 	//phpinfo();
 	$contents = ReadFileCont("$fpath"."$fname");
 	$matches = array();
 	preg_match_all("(<img .*>)",$contents,$matches);
 	$imgcount = 0;
-	while (list($int,$match)=each($matches))
-	{
+	while (list($int,$match)=each($matches)) {
 		//each match consists of a key and a value
-		while(list($key,$imgtag)=each($match))
-		{
+		while (list($key,$imgtag)=each($match)) {
 			$imgname = GetImgName($imgtag);
-			if ($imgname!="" && !in_array($imgname,$imgparams)){
+			if ($imgname!="" && !in_array($imgname,$imgparams)) {
 				array_push($imgparams,$imgname);  // name (+ type) of the images in the html test
 				$imgcount = $imgcount + 1;   			// number of images in the html test
 			}
@@ -278,12 +244,10 @@ function GetImgParams($fname,$fpath,&$imgparams,&$imgcount)
  * @param	array		List of image parameters
  * @return	string	String containing the hidden parameters built from the list given
  */
-function GenerateHiddenList($imgparams)
-{
+function GenerateHiddenList($imgparams) {
 	$list = "";
-	if(is_array($imgparams)){
-	   while (list($int,$string)=each($imgparams))
-		{
+	if (is_array($imgparams)) {
+        while (list($int,$string)=each($imgparams)) {
 			$list .= "<input type=\"hidden\" name=\"imgparams[]\" value=\"$string\" />\n";
 		}
 	}
@@ -296,18 +260,15 @@ function GenerateHiddenList($imgparams)
  * @param	string		Node we are looking for in the array
  * @return	mixed			Node name or false if not found
  */
-function myarraysearch(&$array,$node)
-{
+function myarraysearch(&$array,$node) {
 	$match = FALSE;
 	$tmp_array = array();
-	for($i=0;$i<count($array);$i++)
-	{
-		if (!strcmp($array[$i],$node))
-			{
-				$match = $node;
-			}
-		else
-			{ array_push($tmp_array,$array[$i]); }
+	for($i=0;$i<count($array);$i++) {
+		if (!strcmp($array[$i],$node)) {
+			$match = $node;
+		} else { 
+            array_push($tmp_array,$array[$i]); 
+        }
 	}
 	$array = $tmp_array;
 	return $match;
@@ -331,16 +292,13 @@ function CheckImageName(&$imgparams,$string)
  * @param	string	The content to replace
  * @return	string	The modified content
  */
-function ReplaceImgTag($content)
-{
+function ReplaceImgTag($content) {
 	$newcontent = $content;
 	$matches = array();
 	preg_match_all("(<img .*>)",$content,$matches);
 	$imgcount = 0;
-	while (list($int,$match)=each($matches))
-	{
-		while(list($key,$imgtag)=each($match))
-		{
+	while (list($int,$match)=each($matches)) {
+		while (list($key,$imgtag)=each($match)) {
 			$imgname = GetSrcName($imgtag);
 			if ($imgname=="") {}								// valid or invalid image name
 			else {
@@ -360,11 +318,9 @@ function ReplaceImgTag($content)
  * @param	integer	Length to reach
  * @return	string	Modified folder name
  */
-function FillFolderName($name,$nsize)
-{
+function FillFolderName($name,$nsize) {
 	$str = "";
-	for($i=0;$i < $nsize-strlen($name);$i++)
-	{
+	for($i=0;$i < $nsize-strlen($name);$i++) {
 		$str .= "0";
 	}
 	$str .= $name;
@@ -376,17 +332,14 @@ function FillFolderName($name,$nsize)
  * @param	string	Folder path
  * @return	string	Folder name (modified)
  */
-function GenerateHpFolder($folder)
-{
+function GenerateHpFolder($folder) {
 	$filelist = array();
 	if ($dir = @opendir($folder)) {
 		while (($file = readdir($dir)) !== false) {
 			if ( $file != ".") {
-				if ($file != "..")
-				{
+				if ($file != "..") {
 					$full_name = $folder."/".$file;
-					if (is_dir($full_name))
-					{
+					if (is_dir($full_name)) {
 						$filelist[] = $file;
 					}
 			   }
@@ -410,8 +363,7 @@ function GenerateHpFolder($folder)
  * @param	string	Path
  *	@return	string	Folder name stripped down
  */
-function GetFolderName($fname)
-{
+function GetFolderName($fname) {
 	$name = explode('/',$fname);
 	$name = $name[sizeof($name)-2];
 	return $name;
@@ -422,12 +374,12 @@ function GetFolderName($fname)
  * @param	string	Path
  * @return	string	Path stripped down
  */
-function GetFolderPath($fname)
-{
+function GetFolderPath($fname) {
 	$str = "";
 	$name = explode('/',$fname);
-	for($i=0;$i < sizeof($name)-1; $i++)
-		{ $str = $str.$name[$i]."/"; }
+	for ($i=0;$i < sizeof($name)-1; $i++) { 
+        $str = $str.$name[$i]."/"; 
+    }
 	return $str;
 }
 
@@ -436,8 +388,7 @@ function GetFolderPath($fname)
  * @param	string	Path
  * @return	integer	1 if a subfolder was found, 0 otherwise
  */
-function CheckSubFolder($path)
-{
+function CheckSubFolder($path) {
 	$folder = GetFolderPath($path);
 	$dflag = 0;
 	if ($dir = @opendir($folder)) {
@@ -462,21 +413,17 @@ function CheckSubFolder($path)
  * @param	integer	User id
  * @return	void	No return value, but echoes results
  */
-function HotPotGCt($folder,$flag,$userID)
-{ // Garbage Collector
+function HotPotGCt($folder,$flag,$userID) { 
+    // Garbage Collector
 	$filelist = array();
 	if ($dir = @opendir($folder)) {
 		while (($file = readdir($dir)) !== false) {
 			if ( $file != ".") {
-				if ($file != "..")
-				{
+				if ($file != "..") {
 					$full_name = $folder."/".$file;
-					if (is_dir($full_name))
-					{
+					if (is_dir($full_name)) {
 						HotPotGCt($folder."/".$file,$flag,$userID);
-					}
-					else
-					{
+					} else {
 						$filelist[] = $file;
 					}
 			   }
@@ -484,19 +431,13 @@ function HotPotGCt($folder,$flag,$userID)
 		}
 		closedir($dir);
 	}
-	while (list ($key, $val) = each ($filelist))
-	{
-		if (stristr($val,$userID.".t.html"))
-		{
-			if ($flag == 1)
-			{
+	while (list ($key, $val) = each ($filelist)) {
+		if (stristr($val,$userID.".t.html")) {
+			if ($flag == 1) {
 				my_delete($folder."/".$val);
-			}
-			else
-			{
+			} else {
 				echo $folder."/".$val."<br />";
 			}
 		}
 	}
 }
-?>

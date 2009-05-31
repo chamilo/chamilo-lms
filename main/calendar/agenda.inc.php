@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 21134 2009-05-31 18:40:17Z pcool $
+<?php //$Id: agenda.inc.php 21135 2009-05-31 18:52:15Z pcool $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -694,10 +694,10 @@ function plus_attachment() {
 function plus_repeated_event() {
 				if (document.getElementById('options2').style.display == 'none') {
 					document.getElementById('options2').style.display = 'block';
-					document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('RepeatedEvent')."';
+					document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('RepeatEvent')."';
 				} else {
 				document.getElementById('options2').style.display = 'none';
-				document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('RepeatedEvent')."';
+				document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('RepeatEvent')."';
 				}
 }
 
@@ -2233,7 +2233,7 @@ function display_agenda_items()
          --------------------------------------------------*/
     	echo '<tr>';
         echo '<td colspan="3">';
-        if($is_repeated){echo get_lang('RepeatedEvent'),'<a href="',api_get_self(),'?',api_get_cidreq,'&amp;agenda_id=',$myrow['parent_event_id'],'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a>';}
+        if($is_repeated){echo get_lang('RepeatedEvent'),' <a href="',api_get_self(),'?',api_get_cidreq,'&amp;agenda_id=',$myrow['parent_event_id'],'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a>';}
     	echo "<a href=\"#top\">".Display::return_icon('top.gif', get_lang('Top'))."</a></td></tr>";
     	echo "</table><br /><br />";
     } // end while ($myrow=Database::fetch_array($result))
@@ -2900,13 +2900,13 @@ function show_add_form($id = '')
     {
 	echo '	<div class="row">
 				<div class="label">
-					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang('RepeatedEvent').'</span></a>
+					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang('RepeatEvent').'</span></a>
 				</div>
 				<div class="formw">';
 ?>
 					<table id="options2" style="display: none;">
 					<tr>
-							<td><label for="repeat"><?php echo get_lang('RepeatedEvent');?></label></td>
+							<td><label for="repeat"><?php echo get_lang('RepeatEvent');?></label></td>
 							<td><input type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/></td>
 			    </tr>
 			    <tr>

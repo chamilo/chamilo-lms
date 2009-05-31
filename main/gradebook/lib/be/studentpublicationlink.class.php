@@ -50,6 +50,7 @@ class StudentPublicationLink extends AbstractLink
 		// with the same title as the evaluation name
 
     	$eval = $this->get_evaluation();
+        $stud_id = (int) $stud_id;
 
 		$sql = 'SELECT pub.url'
 				.' FROM '.$this->get_itemprop_table().' prop, '
@@ -164,10 +165,10 @@ class StudentPublicationLink extends AbstractLink
     	}
     	$sql = 'SELECT * FROM '.$tbl_stats.' WHERE parent_id ="'.$v_assigment_id.'"';
     	if (isset($stud_id)){
-    		$sql1='SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER)." WHERE user_id = '".$stud_id."'";
+    		$sql1='SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER)." WHERE user_id = '".((int)$stud_id)."'";
      		$query = api_sql_query($sql1,__FILE__,__LINE__);
 			$student = Database::fetch_array($query);
-    		$sql .= ' AND author = '."'".$student['firstname'].' '.$student['lastname']."'";
+    		$sql .= ' AND author = '."'".Database::escape_string($student['firstname'].' '.$student['lastname'])."'";
     	}
     	// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY id';

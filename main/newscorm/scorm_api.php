@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 20394 2009-05-07 20:11:37Z iflorespaz $ 
+<?php // $Id: scorm_api.php 21137 2009-05-31 18:55:57Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -239,7 +239,7 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
 	G_LastError = G_NoError ;
 	G_LastErrorMessage = 'No error';
 	//reinit to list
-	reinit_updatatetable_list ()
+	reinit_update_table_list ()
 		
 	lms_initialized=0;
 	// if there are more parameters than ""		
@@ -727,7 +727,7 @@ function ProcessValueScorm () {
 	return variable_to_send;
 }
 
-function reinit_updatatetable_list () {
+function reinit_update_table_list () {
 	
 	for (i=0;i<variables_scorm.length;i++) {
 
@@ -804,7 +804,7 @@ function LMSCommit(val) {
 		G_LastErrorMessage = 'No error';
 		
 		savedata('commit');
-		reinit_updatatetable_list();
+		reinit_update_table_list();
 	    //commit = 'false' ; //now changes have been commited, no need to update until next SetValue()
 		return('true');
 }
@@ -829,7 +829,7 @@ function LMSFinish(val) {
 		//}
 		
 		//reinit to list
-		reinit_updatatetable_list()		
+		reinit_update_table_list()		
 		return('true');
 }
 

@@ -108,6 +108,9 @@ define('CONFIGURATION_PATH', 'CONFIGURATION_PATH');
 define('WEB_LIBRARY_PATH','WEB_LIBRARY_PATH');
 
 //CONSTANTS defining all tools, using the english version
+/*
+ When you add a new tool you must add it into function api_get_tools_lists()  too
+ */
 define('TOOL_DOCUMENT', 'document');
 define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
@@ -3571,4 +3574,32 @@ function api_calculate_image_size($image_width, $image_height, $target_width, $t
 		$result['height'] = ceil($target_height);
 	}
 	return $result;
+}
+
+
+/**
+ * return list of tools
+ * @author Isaac flores paz <florespaz@bidsoftperu.com>
+ * @param string The tool name to filter
+ * @return mixed Filtered string or array
+ */
+function api_get_tools_lists ($my_tool=null) {
+	$tools_list=array(TOOL_DOCUMENT,TOOL_THUMBNAIL,TOOL_HOTPOTATOES,
+	TOOL_CALENDAR_EVENT,TOOL_LINK,TOOL_COURSE_DESCRIPTION,TOOL_SEARCH,
+	TOOL_LEARNPATH,TOOL_ANNOUNCEMENT,TOOL_FORUM,TOOL_THREAD,TOOL_POST,
+	TOOL_DROPBOX,TOOL_QUIZ,TOOL_USER,TOOL_GROUP,TOOL_BLOGS,TOOL_CHAT,
+	TOOL_CONFERENCE,TOOL_STUDENTPUBLICATION,TOOL_TRACKING,TOOL_HOMEPAGE_LINK,
+	TOOL_COURSE_SETTING,TOOL_BACKUP,TOOL_COPY_COURSE_CONTENT,TOOL_RECYCLE_COURSE,
+	TOOL_COURSE_HOMEPAGE,TOOL_COURSE_RIGHTS_OVERVIEW,TOOL_UPLOAD,TOOL_COURSE_MAINTENANCE,
+	TOOL_VISIO,TOOL_VISIO_CONFERENCE,TOOL_VISIO_CLASSROOM,TOOL_SURVEY,TOOL_WIKI,
+	TOOL_GLOSSARY,TOOL_GRADEBOOK,TOOL_NOTEBOOK
+	);
+	if (is_null($my_tool)) {
+		return $tools_list;
+	} elseif (in_array($my_tool,$tools_list)) {
+		return $my_tool;
+	} else {
+		return '';
+	}
+
 }

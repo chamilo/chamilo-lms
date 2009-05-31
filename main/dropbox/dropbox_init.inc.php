@@ -287,7 +287,7 @@ if((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit())
 		BREADCRUMBS
 ==============================================================================
 */ 
-if (!$_GET['view'] OR $_GET['view']=='received')
+if ($_GET['view']=='received')
 {
 	$interbreadcrumb[] = array ("url" => "../dropbox/index.php", "name" => dropbox_lang("dropbox", "noDLTT"));
 	$nameTools = get_lang('ReceivedFiles');
@@ -298,7 +298,7 @@ if (!$_GET['view'] OR $_GET['view']=='received')
 		$nameTools = get_lang('AddNewCategory');		
 	}
 }
-if ($_GET['view']=='sent')
+if ($_GET['view']=='sent' OR empty($_GET['view']))
 {
 	$interbreadcrumb[] = array ("url" => "../dropbox/index.php", "name" => dropbox_lang("dropbox", "noDLTT"));
 	$nameTools = get_lang('SentFiles');

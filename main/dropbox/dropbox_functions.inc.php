@@ -50,12 +50,12 @@ function handle_multiple_actions()
 		$dropboxfile=new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 		foreach ($checked_file_ids as $key=>$value)
 		{
-			if ($_GET['view']=='received' OR !$_GET['view'])
+			if ($_GET['view']=='received')
 			{
 				$dropboxfile->deleteReceivedWork($value);
 				$message=get_lang('ReceivedFileDeleted');
 			}
-			if ($_GET['view']=='sent')
+			if ($_GET['view']=='sent' OR empty($_GET['view']))
 			{
 				$dropboxfile->deleteSentWork($value);
 				$message=get_lang('SentFileDeleted');

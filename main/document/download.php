@@ -1,4 +1,4 @@
-<?php // $Id: download.php 21106 2009-05-30 16:25:16Z iflorespaz $
+<?php // $Id: download.php 21124 2009-05-31 00:15:21Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -56,11 +56,15 @@ $this_section=SECTION_COURSES;
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 $doc_url = $_GET['doc_url'];
+
+
+
 //change the '&' that got rewritten to '///' by mod_rewrite back to '&'
 $doc_url = str_replace('///', '&', $doc_url);
 //still a space present? it must be a '+' (that got replaced by mod_rewrite)
 $doc_url = str_replace(' ', '+', $doc_url);
-$doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
+
+$doc_url = str_replace(array('../','\\..','\\0','..\\'),array('','','',''), $doc_url); //echo $doc_url;
 
 
 // dealing with image included into survey: when users receive a link towards a 

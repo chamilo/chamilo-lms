@@ -421,6 +421,7 @@ class Tracking {
 					if ($num_rows_max_score==1) {
 						while ($row_max_score=Database::fetch_array($res_max_score)) {
 							if ($row_max_score['max_score']==0) {
+                                //when there's no max score, we assume 100 as the max score, as the SCORM 1.2 says that the value should always be between 0 and 100.
 								$lp_scorm_result_score_total+=($row_max_score['score']/100);
 							} else {
 								$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score']);

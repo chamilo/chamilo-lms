@@ -45,6 +45,7 @@
 	'Speechi',
 	'Thomson-NETg',
 	'U&I Learning',
+    'Udutu',
 	'WebCT'
   );
 ?>

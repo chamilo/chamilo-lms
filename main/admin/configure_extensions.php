@@ -288,10 +288,10 @@ Display::display_header($nameTool);
 			<?php echo get_lang('VisioconfDescription') ?><br /><br />
 			<table width="100%">
 				<tr>
-					<td>
+					<td align="center">
 						<?php Display::display_icon('screenshot_conf.jpg', get_lang('Visioconf')); ?>
 					</td>
-					<td align="center" width="50%">
+					<!--td align="center" width="50%">
 						<?php 
 						$form = new FormValidator('visio');						
 						$form -> addElement('text', 'visio_host', get_lang('VisioHost'));
@@ -328,7 +328,7 @@ Display::display_header($nameTool);
 						$form -> setDefaults($defaults);
 						$form -> display();
 						?>
-					</td>
+					</td-->
 				</tr>
 			</table>
 		</div>
@@ -343,10 +343,10 @@ Display::display_header($nameTool);
 			<?php echo get_lang('Ppt2lpDescription').' '.get_lang('Ppt2lpVoiceRecordingNeedsRed5') ?><br /><br />
 			<table width="100%">
 				<tr>
-					<td width="50%" valign="top">
+					<td valign="top" align="center">
 						<?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Ppt2lp')); ?>
 					</td>
-					<td align="center" width="50%">
+					<!--td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<?php 
 						
@@ -401,7 +401,7 @@ Display::display_header($nameTool);
 						echo '<br />';
 						?>
 						</form>
-					</td>
+					</td-->
 				</tr>
 			</table>
 		</div>

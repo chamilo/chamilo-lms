@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 21139 2009-05-31 19:14:47Z pcool $
+<?php //$Id: agenda.inc.php 21177 2009-06-01 23:07:04Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -701,13 +701,14 @@ function plus_repeated_event() {
 				}
 }
 
+/*
 function plus_ical() {
 				if (document.getElementById('icalform').style.display == 'none') {
 					document.getElementById('icalform').style.display = 'block';
 					document.getElementById('plusical').innerHTML='';
 				}
 }
-
+*/
 
 //	End	-->
 </script>";
@@ -1445,7 +1446,7 @@ function display_courseadmin_links() {
 		show_user_group_filter_form();
 		echo "</form> ";
 	}
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('ical_icon.gif', get_lang('ICalFileImport'))." ".get_lang('ICalFileImport')."</a>";
+	//echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('ical_icon.gif', get_lang('ICalFileImport'))." ".get_lang('ICalFileImport')."</a>";
 }
 
 
@@ -2170,9 +2171,9 @@ function display_agenda_items()
     		$td_colspan= '<td colspan="2">';
     	}
     	$mylink = 'ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'];
-		echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
-    	echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
-    	echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
+		//echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
+    	//echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
+    	//echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
 	    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';
     	echo '</td>';
     	echo '</tr>';
@@ -2432,9 +2433,9 @@ function display_one_agenda_item($agenda_id)
 			echo 	'<a href="'.$mylink.'&amp;action=showhide">',Display::return_icon($image_visibility.'.gif', get_lang('Visible')),'</a>';
 		}
 	   	$mylink = 'ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'];
-	    echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
-	    	echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
-	    	echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
+	    //echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
+	    //echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
+	    //echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
 	    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';
 		echo "</td></tr>";
 	    if($repeat) {
@@ -4778,7 +4779,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 function display_ical_import_form()
 {
 	echo '<div class="row"><div class="form_header">'.get_lang('ICalFileImport').'</div></div>';
-	echo '<form enctype="multipart/form-data"  action="'.api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action'].'" method="post" name="frm_import_ical">';
+	echo '<form enctype="multipart/form-data"  action="'.api_get_self().'?origin='.Security::remove_XSS($_GET['origin']).'&amp;action='.Security::remove_XSS($_GET['action']).'" method="post" name="frm_import_ical">';
 	echo '<div class="row">
 				<div class="label">
 					<span class="form_required">*</span> '.get_lang('ICalFileImport').'

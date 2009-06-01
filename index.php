@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20569 2009-05-12 21:34:00Z aportugal $
+<?php // $Id: index.php 21176 2009-06-01 23:06:00Z aportugal $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 20569 2009-05-12 21:34:00Z aportugal $
+* 	@version $Id: index.php 21176 2009-06-01 23:06:00Z aportugal $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -804,7 +804,7 @@ function display_anonymous_course_list() {
 		echo $courses_list_string;
 	}
 	if ($category != "") {
-		echo "<p>", "<a href=\"".api_get_self()."\"><b>&lt;&lt;</b> ", get_lang("BackToHomePage"), "</a>", "</p>\n";
+		echo "<p>", "<a href=\"".api_get_self()."\"><b></b> ", Display :: return_icon('back.png', get_lang('BackToHomePage')),get_lang("BackToHomePage"), "</a>", "</p>\n";
 	}
 }
 

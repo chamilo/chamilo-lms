@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 21034 2009-05-28 11:45:43Z pcool $
+* 	@version $Id: survey.lib.php 21170 2009-06-01 20:53:44Z cfasanando $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1341,9 +1341,16 @@ class question
 		}
 		if ($_GET['action'] == 'edit') {
 			$tool_name .= get_lang('EditQuestion');
+		}				
+		
+		if ($_GET['type'] == 'yesno') {
+			$tool_name .= ': '.get_lang('YesNo');
+		} else if ($_GET['type'] == 'multiplechoice') {
+			$tool_name .= ': '.get_lang('UniqueSelect');
+		} else {		
+			$tool_name .= ': '.get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
 		}
-		$tool_name .= ': '.get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
-
+		
 		$this->html .= '<div class="row"><div class="form_header">'.$tool_name.'</div></div>';
 		$this->html .= '<form id="question_form" name="question_form" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&question_id='.Security::remove_XSS($_GET['question_id']).'">';
 		$this->html .= '		<input type="hidden" name="survey_id" id="survey_id" value="'.Security::remove_XSS($_GET['survey_id']).'"/>';

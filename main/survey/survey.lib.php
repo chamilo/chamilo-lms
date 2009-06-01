@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 21170 2009-06-01 20:53:44Z cfasanando $
+* 	@version $Id: survey.lib.php 21173 2009-06-01 20:58:59Z jhp1411 $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -239,24 +239,24 @@ class survey_manager
 					}
 				}
 			}
-				$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date, anonymous".$additional['columns'].", session_id) VALUES (
-							'".Database::escape_string(Security::remove_XSS($values['survey_code']))."',
-							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_title'])),COURSEMANAGERLOWSECURITY))."',
-							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_subtitle'])),COURSEMANAGERLOWSECURITY))."',
-							'".Database::escape_string($_user['user_id'])."',
-							'".Database::escape_string($values['survey_language'])."',
-							'".Database::escape_string($values['start_date'])."',
-							'".Database::escape_string($values['end_date'])."',
-							'".Database::escape_string($shared_survey_id)."',
-							'".Database::escape_string('template')."',
-							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_introduction'])),COURSEMANAGERLOWSECURITY))."',
-							'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_thanks'])),COURSEMANAGERLOWSECURITY))."',
-							'".date('Y-m-d H:i:s')."',
-							'".Database::escape_string($values['anonymous'])."'".$additional['values'].",
-							".intval($_SESSION['id_session'])."
-							)";
-				$result = api_sql_query($sql, __FILE__, __LINE__);
-				$survey_id = Database::insert_id();
+			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date, anonymous".$additional['columns'].", session_id) VALUES (
+						'".Database::escape_string(strtolower(generate_course_code(api_substr($values['survey_code']))))."',
+						'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_title'])),COURSEMANAGERLOWSECURITY))."',
+						'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_subtitle'])),COURSEMANAGERLOWSECURITY))."',
+						'".Database::escape_string($_user['user_id'])."',
+						'".Database::escape_string($values['survey_language'])."',
+						'".Database::escape_string($values['start_date'])."',
+						'".Database::escape_string($values['end_date'])."',
+						'".Database::escape_string($shared_survey_id)."',
+						'".Database::escape_string('template')."',
+						'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_introduction'])),COURSEMANAGERLOWSECURITY))."',
+						'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_thanks'])),COURSEMANAGERLOWSECURITY))."',
+						'".date('Y-m-d H:i:s')."',
+						'".Database::escape_string($values['anonymous'])."'".$additional['values'].",
+						".intval($_SESSION['id_session'])."
+						)";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$survey_id = Database::insert_id();
 			if($values['survey_type']==1 && !empty($values['parent_id'])){
 				survey_manager::copy_survey($values['parent_id'],$survey_id);
 			}
@@ -1368,7 +1368,7 @@ class question
 		$this->html .= '			<span class="form_required">*</span> '.get_lang('Question');
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
-		$this->html .= api_return_html_area('question', api_html_entity_decode(stripslashes($form_content['question']), ENT_QUOTES, $charset));
+		$this->html .= api_return_html_area('question', Security::remove_XSS(stripslashes($form_content['question'])));
 		$this->html .= '		</div>';
 		$this->html .= '	</div>';		
 		
@@ -1393,7 +1393,7 @@ class question
 			
 			while($row = Database::fetch_array($rs,NUM)) {
 				$glist .= '<option value="'.$row[0].'" >'.$row[1].'</option>';
-			}	
+			}
 			
 			$grouplist = $grouplist1 = $grouplist2 = $glist;
 			
@@ -1532,7 +1532,7 @@ class question
 					$_SESSION['temp_horizontalvertical'] = $form_content['horizontalvertical'];
 					$_SESSION['temp_sys_message']=$message;
 					$_SESSION['temp_answers']=$form_content['answers'];
-					$_SESSION['temp_values']=$form_content['values'];																								
+					$_SESSION['temp_values']=$form_content['values'];
 					header('location:question.php?'.api_get_cidreq().'&question_id='.Security::remove_XSS($_GET['question_id']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'');																  										
 				}				
 			}					

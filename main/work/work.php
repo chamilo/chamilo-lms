@@ -1,4 +1,4 @@
-<?php //$Id: work.php 21043 2009-05-28 14:35:45Z pcool $
+<?php //$Id: work.php 21161 2009-06-01 16:00:06Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 21043 2009-05-28 14:35:45Z pcool $
+*  	@version $Id: work.php 21161 2009-06-01 16:00:06Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -850,7 +850,7 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 										       "url         = '" . $url . "',
 										       title       = '" . Database::escape_string(Security::remove_XSS($title)) . "',
 							                   description = '" . Database::escape_string(Security::remove_XSS($description)) . "',
-							                   author      = '" . $authors . "',
+							                   author      = '" . Database::escape_string($authors) . "',
 											   active		= '" . $active . "',
 											   accepted		= '" . (api_is_allowed_to_edit()?$uploadvisibledisabled:(!$uploadvisibledisabled)) . "',
 											   post_group_id = '" . $post_group_id . "',
@@ -898,7 +898,7 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 					        	SET url        	= '" . $url . "',
 					            title       	= '" . Database::escape_string(Security::remove_XSS($title)) . "',
 					            description 	= '" . Database::escape_string(Security::remove_XSS($description)) . "',
-					            author      	= '" . $authors . "',					 
+					            author      	= '" . Database::escape_string($authors) . "',					 
 							    post_group_id = '".$post_group_id."',
 					            sent_date    	= '".$current_date."',
 					            session_id = ".intval($id_session);

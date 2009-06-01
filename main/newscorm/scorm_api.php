@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 21137 2009-05-31 18:55:57Z yannoo $ 
+<?php // $Id: scorm_api.php 21156 2009-06-01 05:32:44Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -740,48 +740,47 @@ function reinit_update_table_list () {
 }
 
 function savedata(origin) { 
-	my_get_value_scorm=new Array();
-	my_get_value_scorm=ProcessValueScorm();
 
 	//origin can be 'commit', 'finish' or 'terminate'	
     if ((lesson_status != 'completed') && (lesson_status != 'passed') && (mastery_score >=0) && (score >= mastery_score)) {
 		lesson_status = 'passed';
+        updatetable_to_list['cmi.core.lesson_status']='true';
     } else if( (mastery_score < 0) && (lms_lp_type != '2') && ( lesson_status == 'incomplete') && (score >= (0.8*max) ) ) {
     	//the status cannot be modified automatically by the LMS under SCORM 1.2's rules    	
     	<?php if ($autocomplete_when_80pct){ ?>
     	      lesson_status = 'completed';
+              updatetable_to_list['cmi.core.lesson_status']='true';
     	<?php }?>
     	; 	
     } else {
-    	if (origin== 'finish')  {
+    	if ((origin== 'finish' || origin == 'unload') && lesson_status != 'completed' && lesson_status != 'passed' && lesson_status != 'browsed')  {
 	    	/* 
 	    	 The SCORM1.2 Runtime object document says for the "cmi.core.lesson_status" variable:	    	 
 	    	 Upon receiving the LMSFinish() call or the user navigates away, 
 	    	 the LMS should set the cmi.core.lesson_status for the SCO to 'completed'	    	 
 	    	*/	   
-	    	
-	    	/*	   
-	    	if (mastery_score!= '' && score != '') {    	
+            logit_lms('the LMS did saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
+	    	if (mastery_score && mastery_score!= '' && score && score != '') {    	
 	    		if  (score >= mastery_score) {
 	    		  lesson_status = 'passed';
 	    		} else {
 	    		  lesson_status = 'failed';
 	    		}
-	    	} else if (mastery_score!= '') {
+                updatetable_to_list['cmi.core.lesson_status']='true';
+	    	} else if (mastery_score && mastery_score!= '') {
 	    		lesson_status = 'completed';
+                updatetable_to_list['cmi.core.lesson_status']='true';
 	    	}
-	    	*/
     	}
     }
 
+    my_get_value_scorm=new Array();
+    my_get_value_scorm=ProcessValueScorm();
     
 	logit_lms('saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
 	
 	old_item_id=info_lms_item[0];
 	//xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit);
-	
-
-	
 	
 	xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, old_item_id,my_get_value_scorm);	
 	//info_lms_item[0] is old_item_id and info_lms_item[1] is current_item_id
@@ -796,6 +795,9 @@ function savedata(origin) {
 	//clean array
 	variable_to_send=new Array();
 	my_get_value_scorm=new Array();
+}
+function savedata_onunload() {
+	savedata('unload');
 }
 
 function LMSCommit(val) {
@@ -947,6 +949,9 @@ function addListeners(){
 		addEvent(window,'unload',dokeos_save_asset,false);
 		logit_lms('Added event listener on content_id for unload',2);
 	}
+    if (lms_lp_type==2) {
+        addEvent(window,'unload',savedata_onunload,false);    	
+    }
 	logit_lms('Quitting addListeners()',2);
 }
 
@@ -1218,13 +1223,32 @@ function switch_item(current_item, next_item){
 	//(1) save the current item
 	
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
-	if(lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
+	if (lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
         xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
 		if(item_objectives.length>0) {
 			xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
 		}
-	}else{
-       // xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
+	} else {
+        /** 
+         * Because of SCORM 1.2's special rule about unsent commits and the fact
+         * that a SCO should be SET TO 'completed' IF NO STATUS WAS SENT (and 
+         * then some checks have to be done on score), we have to force a 
+         * special commit here to avoid getting to the next element with a
+         * missing prerequisite. The 'onunload' event is treated with
+         * savedata_onunload(), and doesn't need to be triggered at any 
+         * particular time, but here we are in the case of switching to another
+         * item, so this is particularly important to complete the element in
+         * time.
+         */
+        if (lms_item_type=='sco' && lesson_status != 'completed' && lesson_status != 'passed' && lesson_status != 'browsed' && lesson_status != 'incomplete' && lesson_status != 'failed') {
+            /** 
+             * savedata('finish') treats the special condition and saves the
+             * new status to the database, so switch_item_details() enjoys the
+             * new status
+             */
+        	savedata('finish');                                 
+        }
+        // xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
 	}
 	execute_stats=false;
 	//(2) Refresh all the values inside this SCORM API object - use AJAX

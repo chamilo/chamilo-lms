@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 21160 2009-06-01 15:44:49Z aportugal $
+* 	@version $Id: exercise_show.php 21172 2009-06-01 20:58:05Z darkvela $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -270,13 +270,12 @@ function display_fill_in_blanks_answer($answer,$id,$questionId)
 	?>
 		<tr>
 		<td>
-			<?php echo Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY); ?>
+			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
 		</td><?php
 		if(!api_is_allowed_to_edit()) {?>
 			<td>
 			<?php
 			$comm = get_comments($id,$questionId);
-			//echo $comm;
 			?>
 			</td>
 			</tr>
@@ -618,10 +617,10 @@ if ($show_results) {
 			$questionScore=0;
 			
 			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-				$answer=$objAnswerTmp->selectAnswer($answerId);
-				$answerComment=$objAnswerTmp->selectComment($answerId);
-				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+				$answer = $objAnswerTmp->selectAnswer($answerId);
+				$answerComment = $objAnswerTmp->selectComment($answerId);
+				$answerCorrect = $objAnswerTmp->isCorrect($answerId);
+				$answerWeighting = $objAnswerTmp->selectWeighting($answerId);
 				
 			    // the question is encoded like this
 			    // [A] B [C] D [E] F::10,10,10@1
@@ -679,9 +678,9 @@ if ($show_results) {
 						
 						$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 						$resfill = api_sql_query($queryfill, __FILE__, __LINE__);
-						$str=Database::result($resfill,0,"answer");
-						preg_match_all ('#\[([^[/]*)/#', $str, $arr);
-													
+						$str = Database::result($resfill,0,"answer");
+						preg_match_all('#\[([^[/]*)/#', $str, $arr);
+												
 						$choice = $arr[1];
 						$choice[$j]=trim($choice[$j]);
 						// if the word entered by the student IS the same as the one defined by the professor
@@ -696,7 +695,10 @@ if ($show_results) {
 						$temp=api_substr($temp,$pos+1);
 						$i=$i+1;
 					}
-					$answer = $str;
+					
+					$answer = stripslashes($str);
+					$answer = str_replace('rn', '', $answer);
+					
 				} else {	
 					//multiple fill in blank	
 					while (1) {
@@ -744,8 +746,9 @@ if ($show_results) {
 							$totalScore+=$answerWeighting[$i];
 						}					
 					}
-					$answer = $str;	
-				} 
+					$answer = stripslashes($str);
+					$answer = str_replace('rn', '', $answer);
+				}
 				//echo $questionScore."-".$totalScore;
 				echo '<tr><td>';	
 				display_fill_in_blanks_answer($answer,$id,$questionId);
@@ -753,7 +756,7 @@ if ($show_results) {
 				$i++;
 			}
 			echo '</table>';
-		} elseif ($answerType == FREE_ANSWER) {
+		} elseif ($answerType == FREE_ANSWER) {$answer = $str;
 			?>
 			<table width="100%" border="0" cellspacing="3" cellpadding="3">
 			<tr>
@@ -767,12 +770,15 @@ if ($show_results) {
 			</tr>
 
 			<?php
-			$objAnswerTmp=new Answer($questionId);
-			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-			$questionScore=0;
+			$objAnswerTmp = new Answer($questionId);
+			$nbrAnswers = $objAnswerTmp->selectNbrAnswers();
+			$questionScore = 0;
 			$query = "select answer, marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-			$resq=api_sql_query($query);
+			$resq = api_sql_query($query);
 			$choice = Database::result($resq,0,"answer");
+			$choice = stripslashes($choice);
+			$choice = str_replace('rn', '', $choice);
+			
 			$questionScore = Database::result($resq,0,"marks");
 			if ($questionScore==-1) {
 				$totalScore+=0;

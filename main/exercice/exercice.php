@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 21110 2009-05-30 17:33:08Z iflorespaz $
+// $Id: exercice.php 21179 2009-06-01 23:22:06Z aportugal $
 
 /*
 ==============================================================================
@@ -402,7 +402,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 
 			}
 		}
-		if ($origin == 'tracking_course') {
+		if ($origin == 'tracking_course' && !empty($_POST['lp_item_id'])) {
 			//Redirect to the course detail in lp		
 			header('location: ../mySpace/lp_tracking.php?course=' . Security :: remove_XSS($_GET['course']) . '&origin=' . $origin . '&lp_id=' . Security :: remove_XSS($_POST['lp_item_id']) . '&student_id=' . Security :: remove_XSS($_GET['student']));
 		} else {

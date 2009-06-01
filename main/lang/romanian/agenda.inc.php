@@ -73,4 +73,5 @@ $AgendaSortChronologicallyUp = "Ordine crescatoare";
 $AgendaSortChronologicallyDown = "Ordine descrescatoare";
 $ItemForUserSelection = "Selecteaza utilizatorii";
 $IsNotiCalFormatFile = "Aceasta fisier nu este un fisier iCal.";
+$RepeatEvent = "Repeta evenimentul";
 ?>

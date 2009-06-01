@@ -654,6 +654,7 @@ $ManageReservations = "Gerir reservas";
 $DestinationUsers = "Destinatários";
 $AttachmentFileDeleteSuccess = "O ficheiro anexado foi apagado";
 $MaxFileSize = "Tamanho máximo do ficheiro";
+$SendFileError = "Foi detectado um erro durante a recepção do seu ficheiro. Por favor, verifique se o seu ficheiro não está corrompido e tente novamente.";
 $Expired = "Expirado";
 $InvitationHasBeenSent = "O convite foi enviado";
 $InvitationHasBeenNotSent = "O convite não foi enviado";

@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifyEvaluation = "Shrani ocenjevanje";
 $CreateLink = "Ustvari povezavo";
+$AddResultNoStudents = "Ni tečajnikov za dodajanje rezultatov";
 $FlatView = "Ravninski pogled";
 $ScoreEdit = "Urejanje pravil ocen(jevanja)";
 $ScoreColor = "Barva ocene";

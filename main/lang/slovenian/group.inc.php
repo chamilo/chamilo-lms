@@ -45,6 +45,8 @@ $langStudentsNotInThisGroups  = "Uporabniki, ki niso v tej skupini";
 $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Uporabnik je èlan najveè ";
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " skupin";
 $langGroupLimit = "Omejitev";
+$CreateGroup = "Ustvari skupine";
+$ProceedToCreateGroup = "Nadaljuj z ustvarjanjem skupin";
 $langStudentRegAllowed = "Teèajniki se lahko sami vpišejo v skupino";
 $langGroupAllowStudentUnregistration = "Uporabnikom teèaja je dovoljeno, da se sami izpišejo iz skupin.";
 $langAllGroups = "Vse skupine";
@@ -89,4 +91,5 @@ $GroupsFromClasses = "Skupine iz razredov";
 $GroupsFromClassesInfo = "Z uporabo te možnosti lahko ustvarite skupine iz razredov, vpisanih v vaš teèaj.";
 $Group = "Skupina";
 $ForumOfGroup = "Forum skupine:";
+$BackToGroupList = "Nazaj na seznam skupin";
 ?>

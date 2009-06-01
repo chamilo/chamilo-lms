@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifyEvaluation = "Shrani ocenjevanje";
 $CreateLink = "Ustvari povezavo";
+$AddResultNoStudents = "Ni teèajnikov za dodajanje rezultatov";
 $FlatView = "Ravninski pogled";
 $ScoreEdit = "Urejanje pravil ocen(jevanja)";
 $ScoreColor = "Barva ocene";
@@ -134,4 +135,8 @@ $ChooseItem = "Izberi element";
 $AverageResultsVsResource = "Povpreèen rezultat / vir";
 $ToViewGraphScoreRuleMustBeEnabled = "Za ogled grafa mora biti pravilo prikaza rezultata omogoèeno ";
 $GradebookPreviousWeight = "Predhodna utež resursa";
+$AddAssessment = "Dodaj aktivnost te uèilnice k ocenjevanju";
+$FolderView = "Domaèa stran ocenjevanja";
+$GradebookSkillsRanking = "Težavnost";
+$SaveScoringRules = "Shrani uteži v poroèilo";
 ?>

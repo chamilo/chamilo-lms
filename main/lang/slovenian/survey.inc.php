@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $PublishSurvey = "Objavi vprašalnik";
 $CompareQuestions = "Primerjaj vprašanja";
+$InformationUpdated = "Informacija je bila ažurirana";
 $SurveyTitle = "Naslov vprašalnika";
 $SurveyIntroduction = "Vprašalnik : Uvodno besedilo";
 $CreateNewSurvey = "Ustvari evalvacijski vprašalnik";
@@ -198,4 +199,8 @@ $RemindUnanswered = "Opomni le uporabnike, ki niso odgovorili";
 $ModifySurvey = "Spremeni vprašalnik";
 $CreateQuestionSurvey = "Ustvari vprašanje";
 $ModifyQuestionSurvey = "Spremeni vprašanje";
+$BackToSurvey = "Nazaj na vprašalnik";
+$UpdateInformation = "Ažuriraj informacijo";
+$PleaseFillSurvey = "Prosim, izpolnite vprašalnik";
+$ReportingOverview = "Poroèila - pregled";
 ?>

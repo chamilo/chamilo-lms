@@ -102,6 +102,7 @@ $AllowLaterSends = "Maak het sturen met vertraging mogelijk";
 $EmailWikiChanges = "Hou me op de hoogte van wijzigingen in de wiki";
 $EmailWikipageModified = "De wiki pagina is gewijzigd.";
 $EmailWikiPageAdded = "De pagina is toegevoegd.";
+$EmailWikipageDedeleted = "Een pagina werd verwijderd uit de Wiki";
 $EmailWikiChangesExt_2 = "Als u niet meer op de hoogte gehouden wenst te worden van de wijzigingen in deze wiki kiest u de tabs <strong>Recente wijzigingen</strong>, <strong>Huidige pagina</strong>, <strong>Discussie</strong> en klikt u op de knop. ";
 $Visits = "bezoeken";
 $OrphanedPages = "Weespaginas";

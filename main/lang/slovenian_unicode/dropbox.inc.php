@@ -128,4 +128,6 @@ $langAddEdit = "Dodaj / Uredi";
 $ErrorNoFilesInFolder = "Ta mapa je prazna";
 $dropbox_lang["upload"] = "Naloži";
 $AddComment  = "Dodaj komentar";
+$SentCatgoryDeleted = "Mapa je bila odstranjena";
+$ReceivedCatgoryDeleted = "Mapa je bila odstranjena";
 ?>

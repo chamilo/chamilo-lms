@@ -47,6 +47,7 @@ $AttachContactsToGroupSuccesfuly = "De contacten zijn met succes aan de groep to
 $InvitationDenied = "Uw uitnodiging is geweigerd";
 $AddedContactToList = "U hebt contacten toegevoegd aan de lijst";
 $ContactsGroupsComment = "Dit scherm is een lijst van contacten gesorteerd per groep";
+$YouDontHaveInvites = "Leeg";
 $DateSend = "Verstuurdatum";
 $SocialUnknow = "Onbekend";
 $SocialParent = "Mijn ouders";

@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$MessageEmptyMessageOrSubject = "Prosim, podajte temo ali sporoèilo";
 $Inbox  = "Prispela sporoèila";
 $Messages = "Sporoèila";
 $SendMessage = "Pošlji sporoèilo";

@@ -6,6 +6,7 @@ $langSubTitle = "Voegt een link toe aan uw modulestartpagina.";
 $langAddPage            = "Pagina toevoegen";
 $langSendPage           = "Pagina om toe te voegen";
 $langCouldNot           = "Het bestand kon niet verzonden worden.";
+$langOkSentLink         = "Uw link werd toegevoegd. Hij is nu beschikbaar via de <a href=\"%s/index.php\">startpagina</a>";
 $langTooBig             = "U hebt geen bestand gekozen op te verzenden, of het bestand is te groot.";
 $langExplanation        = "Deze pagina moet in HTML-formaat zijn (bv. \"mijn_pagina.html\"). Die zal door een link verbonden worden met de modulestartpagina. Om een niet-HTML-document (PDF, OpenDocument, video...) op te sturen, gebruik de <a href=\"../document/document.php\">documentenmodule</a>.";
 $langPgTitle            = "Titel van de pagina";

@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$WikiSearchResults = "Rezultati iskanja wiki";
 $Wiki = "Wiki";
 $StartPage = "Glavna stran";
 $EditThisPage = "Uredi to stran";
@@ -152,4 +153,5 @@ $CurrentVersion = "Trenutna razlièica";
 $LastVersion = "Zadnja razlièica";
 $PageRestored = "Stran je bila obnovljena. Njeno vsebino lahko pogledate s klikom na";
 $RestoredFromVersion = "Obnovljeno iz razlièice";
+$HWiki = "Pomoè: wiki";
 ?>

@@ -138,5 +138,5 @@ $GradebookPreviousWeight = "Previous weight of resource";
 $AddAssessment = "Add this classroom activity to the assessment";
 $FolderView = "Assessment home";
 $GradebookSkillsRanking = "Skills ranking";
-$SaveScoringRules = "Save scoring rules";
+$SaveScoringRules = "Save weights in report";
 ?>

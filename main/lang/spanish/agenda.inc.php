@@ -73,4 +73,5 @@ $AgendaSortChronologicallyUp = "Ordenar eventos (antiguos / recientes)";
 $AgendaSortChronologicallyDown = "Ordenar eventos (recientes / antiguos)";
 $ItemForUserSelection = "Evento dirigido a una selección de usuarios";
 $IsNotiCalFormatFile = "No es un archivo de formato iCal";
+$RepeatEvent = "Repetir evento";
 ?>

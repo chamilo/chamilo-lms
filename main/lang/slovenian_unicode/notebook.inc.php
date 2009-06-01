@@ -24,4 +24,11 @@ $AddNote = "Dodaj beležko";
 $ModifyNote = "Spremeni beležko";
 $BackToNoteList = "Nazaj na seznam beležk";
 $NotebookManagement = "Upravljanje beležk";
+$BackToNotesList = "Nazaj na seznam beležk";
+$NotesSortedByTitleAsc = "Po naslovu naraščajoče";
+$NotesSortedByTitleDESC = "Po naslovu padajoče";
+$NotesSortedByUpdateDateAsc = "Po datumu ažuriranja naraščajoče";
+$NotesSortedByUpdateDateDESC = "Po datumu ažuriranja padajoče";
+$NotesSortedByCreationDateAsc = "Po datumu nastanka naraščajoče";
+$NotesSortedByCreationDateDESC = "Po datumu nastanka padajoče";
 ?>

@@ -120,4 +120,6 @@ $ReservationUnavailable = "Spoštovana gospa/gospod,\\n\\n element #ITEM# je zaèa
 $ReservationAvailable = "Spoštovana gospa/gospod,\\n\\nželimo vas obvestiti, da je #NAME# na voljo, in s tem je vaša rezervacija od #BEGIN# do #END# ponovno aktivna. ";
 $Resources = "Resursi";
 $EditBookingPeriod = "Uredi rezervacijsko obdobje";
+$CreateResourceType = "Ustvari tip resursa";
+$ModifyResourceType = "Uredi tip resursa";
 ?>

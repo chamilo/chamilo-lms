@@ -3,6 +3,15 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "Nov forum je bil ustvarjen";
 $NewThreadCreated = "Nova nit foruma je bila ustvarjena.";
+$AddHotpotatoes = "Dodaj HotPotatoes";
+$HideAttemptView = "Skrij pogled poskusov";
+$ExtendAttemptView = "Razširi pogled poskusov";
+$LearnPathAddedTitle = "Dobrodošli v avtorsko orodje Dokeos !";
+$BuildComment  = "Dodaj uène objekte in aktivnosti v tvoj teèaj";
+$BasicOverviewComment = "Dodaj zvoène komentarje in razvrsti uène objekte v kazalu vsebine";
+$DisplayComment = "Poglej teèaj, kot ga vidi teèajnik";
+$NewChapterComment = "Poglavje 1, Poglavje 2, ... ali Teden 1, Teden 2, ...";
+$NewStepComment = "Dodaj teste, aktivnosti in multimedijsko vsebino";
 $lang_learning_path = "Uèna pot";
 $lang_learning_path_builder = "Kreator uène poti";
 $lang_description = "opis";
@@ -220,4 +229,16 @@ $ModifyPrerequisites = "Spremeni predzahteve";
 $CreateLearningPath = "Ustvari uèno pot";
 $AddExercise = "Dodaj vajo/test";
 $AddForum = "Dodaj forum";
+$LPCreateDocument = "Dodaj ta dokument k teèaju";
+$ObjectiveID = "ID uènega cilja";
+$ObjectiveStatus = "Status uènega cilja";
+$ObjectiveRawScore = "Raw rezultat uènega cilja";
+$ObjectiveMaxScore = "Max rezultat uènega cilja";
+$ObjectiveMinScore = "Min rezultat uènega cilja";
+$LPName = "Naziv teèaja";
+$AuthoringOptions = "Avtorske možnosti";
+$CourseSettings = "Nastavitve teèaja";
+$AddLinkToCourse = "Dodaj povezavo k teèaju";
+$AddAssignmentToCourse = "Dodaj nalogo/zadolžitev k teèaju";
+$AddForumToCourse = "Dodaj forum v teèaj";
 ?>

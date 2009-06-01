@@ -20,4 +20,5 @@ $YouMustEnterATermName = "Vnesti je potrebno besedo";
 $YouMustEnterATermDefinition = "Vnesti je potrebno pomen besede";
 $TableView = "Prikaži kot tabelo";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Ta beseda že obstaja. Spremenite prosim ime besede.";
+$GlossaryManagement  = "Upravljanje glosarija";
 ?>

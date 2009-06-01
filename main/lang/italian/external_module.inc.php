@@ -6,6 +6,7 @@ $langSubTitle = "Aggiunge alla pagina principale del Corso un collegamento a un 
 $langAddPage            = "Aggiungi una pagina";
 $langSendPage           = "Pagina da inviare";
 $langCouldNot           = "Invio fallito";
+$langOkSentLink         = "Collegamento aggiunto e visibile anche nella <a href=\"%s/index.php\">Pagina iniziale</a> del corso";
 $langTooBig             = "Non è stato scelto alcun file oppure la sua dimensione è eccessiva";
 $langExplanation        = "La pagina deve essere in formato HTML (es. \"my_page.htm\"). Sarà collegata dalla pagina principale. Se desiderate inviare documenti in altro formato (PDF, Word, Power Point, Video, ecc.) utilizzate lo strumento <a href=../document/document.php>Documenti</a>";
 $langPgTitle            = "Titolo della pagina";

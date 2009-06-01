@@ -53,4 +53,7 @@ $LearnerMessage = "Sporoèilo teèajnika";
 $TitleIsRequired = "Naslov je zahtevan vnos";
 $AnnounceSentByEmail = "Obvestila poslana preko e-pošte";
 $AnnounceSentToUserSelection = "Obvestila poslana izbranim uporabnikom";
+$SendAnnouncement = "Pošlji obvestilo";
+$ModifyAnnouncement = "Uredi obvestilo";
+$ButtonPublishAnnouncement = "Pošlji obvestilo";
 ?>

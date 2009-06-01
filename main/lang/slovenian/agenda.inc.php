@@ -73,4 +73,5 @@ $AgendaSortChronologicallyUp = "Razvrsti agendo kronološko (narašèajoèe)";
 $AgendaSortChronologicallyDown = "Razvrsti agendo kronološko (padajoèe)";
 $ItemForUserSelection = "Izbira uporabnikov";
 $IsNotiCalFormatFile = "Datoteka ni v iCal obliki";
+$RepeatEvent = "Ponovi dogodek";
 ?>

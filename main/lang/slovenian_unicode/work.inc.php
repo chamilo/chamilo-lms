@@ -70,4 +70,7 @@ $ButtonCreateAssignment = "Ustvari nalogo/zadolžitev";
 $AssignmentName = "Ime naloge/zadolžitve";
 $CreateAssignment = "Ustvari nalogo/zadolžitev";
 $FolderEdited = "Mapa je bila ažurirana";
+$UpdateWork = "Ažuriraj to opravilo";
+$MakeAllPapersInvisible = "Naredi vse objave nevidne";
+$MakeAllPapersVisible = "Naredi vse objave vidne";
 ?>

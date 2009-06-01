@@ -214,5 +214,7 @@ $CreateTheDocument = "Validar";
 $CreateTemplate = "Criar modelo";
 $SharedFolder = "Pasta partilhada";
 $CreateFolder = "Criar uma pasta";
+$HelpDefaultDirDocuments = "Este diretório contém arquivos pré-definidos/padrão. Pode eliminar ou adicionar novos ficheiros, mas se um ficheiro está oculto/escondido quando é inserido num documento, os utilizadores não serão capazes de o visualizar nesse documento. Ao inserir um ficheiro num documento, certifique-se primeiro que se encontra visível. Os diretórios podem permanecer ocultos/escondidos.";
+$HelpSharedFolder = "Este diretório contém os arquivos que outros utilizadores (ou você mesmo) enviaram para um curso através do editor (se não realizaram a partir da ferramenta de grupos). Por pré-definição, serão visíveis para qualquer instrutor, mas estará oculto/escondido para outros utilizadores (desde que não acedam aos ficheiros directamente). Se tornar o directório de um utilizador visível, todos os outros utilizadores poderão visualizar o seu conteúdo.";
 $TemplateImage = "Imagem do modelo";
 ?>

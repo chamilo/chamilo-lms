@@ -46,4 +46,5 @@ $General = "Splošno";
 $SearchFeatureDoIndexLink = "Indeksiram naziv in opis povezave ? ";
 $langSaveLink = "Shrani povezavo";
 $langSaveCategory = "Shrani kategorijo";
+$BackToLinksOverview = "Nazaj na pregled povezav";
 ?>

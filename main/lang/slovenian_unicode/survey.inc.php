@@ -202,4 +202,5 @@ $ModifyQuestionSurvey = "Spremeni vprašanje";
 $BackToSurvey = "Nazaj na vprašalnik";
 $UpdateInformation = "Ažuriraj informacije";
 $PleaseFillSurvey = "Prosim, izpolnite vprašalnik";
+$ReportingOverview = "Poročila - pregled";
 ?>

@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 21154 2009-06-01 03:05:46Z cfasanando $
+* 	@version $Id: exercise_show.php 21160 2009-06-01 15:44:49Z aportugal $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -332,8 +332,11 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 	<tr>
 		<td width="100px" valign="top" align="left">
 			<div style="width:100%;">
-				<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; float:left; margin:3px;"></div>
-				<div><?php echo $answer ?></div>
+				<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; display:inline; float:left; margin-top:3px;"></div>
+				<div style="float:left; padding-left:5px;">
+				<?php echo $answerId; ?>
+				</div>
+				<div><?php echo '&nbsp;'.$answer ?></div>
 			</div>
 		</td>
 		<td width="50px" style="padding-right:15px" valign="top" align="left">

@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 21154 2009-06-01 03:05:46Z cfasanando $
+* 	@version $Id: exercise_result.php 21160 2009-06-01 15:44:49Z aportugal $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -419,6 +419,9 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		<tr>
 				<td valign="top">
 				<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; display:inline; float:left; margin-top:3px;"></div>
+				<div style="float:left; padding-left:5px;">
+				<?php echo $answerId; ?>
+				</div>
 					<div style="float:left; padding-left:5px;">
 						
 						<div style="display:inline; float:left; width:80px;"><?php echo $answer ?></div>

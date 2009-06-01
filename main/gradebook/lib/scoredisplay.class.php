@@ -199,7 +199,7 @@ class ScoreDisplay
 			if ($count > 0) {
 				$sql .= ',';				
 			}
-			$sql .= "(NULL, '".$display['score']."', '".$display['display']."')";
+			$sql .= "(NULL, '".$display['score']."', '".Database::escape_string($display['display'])."')";
 			$count++;
 		}
 		api_sql_query($sql, __FILE__, __LINE__);

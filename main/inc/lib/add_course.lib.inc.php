@@ -69,7 +69,7 @@ function generate_course_code($course_title)
 	//	$course_title)
 	//	,0,20);
 
-	$string = api_htmlentities(api_strtolower($course_title, $charset), ENT_QUOTES, $charset);
+	$string = api_htmlentities(api_strtolower(str_replace('"','',$course_title), $charset), ENT_QUOTES, $charset);
    	$string = strtoupper(preg_replace("/&(.)(acute|grave|cedil|circ|ring|tilde|uml|slash|elig|Elig|mp);/", "$1", $string));
    	$string = preg_replace(api_add_pcre_unicode_modifier("/[^A-Z0-9]/", $charset), "", api_html_entity_decode($string, ENT_QUOTES, $charset));
 

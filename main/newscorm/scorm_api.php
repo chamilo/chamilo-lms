@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 21158 2009-06-01 14:00:45Z yannoo $ 
+<?php // $Id: scorm_api.php 21159 2009-06-01 14:05:41Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -1340,10 +1340,10 @@ function switch_item(current_item, next_item) {
 		type: "GET",
 		url: "lp_nav.php",
 		data: "",
-		success: function(datos) {
-		 		$("#media").html(datos);							 				
+		success: function(tmp_data) {
+		 		$("#media").html(tmp_data);							 				
 				}		
-  	});			
+  	});
 
 	return true;
 }

@@ -164,7 +164,6 @@ foreach($list as $toc) {
 	}	
 }
 
-$ctok = $_SESSION['sec_token'];
 $autostart = 'true';
 // update status,total_time from lp_item_view table when you finish the exercises in learning path
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
@@ -205,9 +204,13 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 			$sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score,total_time = $mytime WHERE id='".$row_last_attempt[0]."'";
 			api_sql_query($sql_upd_score,__FILE__,__LINE__);
 		}
+	}			
+		
+	if(intval($_GET['fb_type']) > 0) {
+		$src = 'blank.php?msg=exerciseFinished';		
+	} else {
+		$src = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?id='.Security::remove_XSS($_REQUEST['exeId']).'&origin=learnpath&learnpath_id='.Security::remove_XSS($_GET['lp_id']).'&learnpath_item_id='.Security::remove_XSS($_GET['lp_id']).'&fb_type='.Security::remove_XSS($_GET['fb_type']);
 	}
-	
-	$src = 'blank.php?msg=exerciseFinished';
 	$autostart = 'false';
 }
 

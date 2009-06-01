@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 20952 2009-05-23 20:43:53Z cvargas1 $
+* 	@version $Id: exercise_result.php 21154 2009-06-01 03:05:46Z cfasanando $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -139,6 +139,13 @@ $from = $uinfo['mail'];
 $from_name = $uinfo['firstname'].' '.$uinfo['lastname'];
 $str = $_SERVER['REQUEST_URI'];
 $url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
+
+
+$sql_fb_type='SELECT feedback_type FROM '.$TBL_EXERCICES.' WHERE id ="'.Database::escape_string($objExercise->selectId()).'"';
+
+$res_fb_type=Database::query($sql_fb_type,__FILE__,__LINE__);
+$row_fb_type=Database::fetch_row($res_fb_type);
+$feedback_type = $row_fb_type[0]; 
 
  // if the above variables are empty or incorrect, we don't have any result to show, so stop the script
 if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise))
@@ -1043,7 +1050,7 @@ foreach ($questionList as $questionId) {
 if ($origin == 'learnpath') {	
 	//Display::display_normal_message(get_lang('ExerciseFinished'));
 	$lp_mode =  $_SESSION['lp_mode'];	
-	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId;
+	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
 	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';	 
 	echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
 }	

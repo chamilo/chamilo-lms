@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 20982 2009-05-25 22:49:12Z aportugal $
+* 	@version $Id: exercise_show.php 21154 2009-06-01 03:05:46Z cfasanando $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -127,6 +127,12 @@ $test 	   = $_REQUEST['test'];
 $dt	 	   = $_REQUEST['dt'];
 $marks 	   = $_REQUEST['res'];
 $id 	   = $_REQUEST['id'];
+
+$sql_fb_type='SELECT feedback_type FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
+$res_fb_type=Database::query($sql_fb_type,__FILE__,__LINE__);
+$row_fb_type=Database::fetch_row($res_fb_type);
+$feedback_type = $row_fb_type[0]; 
+
 ?>
 <style type="text/css">
 <!--
@@ -402,7 +408,7 @@ if (Database::num_rows($result)>0 && isset($id)) {
 	</tr>
 	</table>';
 }		
-if ($origin == 'learnpath') {
+if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 	$show_results = false;
 }
 	
@@ -990,7 +996,7 @@ if ($show_results) {
 	} // end of large foreach on questions
 } //end of condition if $show_results
 
-if ($origin!='learnpath') {
+if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
 	//$query = "update ".$TBL_TRACK_EXERCICES." set exe_result = $totalScore where exe_id = '$id'";
 	//api_sql_query($query,__FILE__,__LINE__);
 	if ($show_results) {
@@ -1051,14 +1057,19 @@ if ($origin != 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();
 } else {
-	$lp_mode =  $_SESSION['lp_mode'];
-	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId;
-	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';	 
-	echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
-
-	//record the results in the learning path, using the SCORM interface (API)
-	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
-	echo '</body></html>';
+	
+	if (!isset($_GET['fb_type'])) {
+		$lp_mode =  $_SESSION['lp_mode'];
+		$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
+		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';	 
+		echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
+	
+		//record the results in the learning path, using the SCORM interface (API)
+		echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
+		echo '</body></html>';
+	} else {
+		Display::display_normal_message(get_lang('ExerciseFinished'));
+	}
 }
 //destroying the session 
 api_session_unregister('questionList');

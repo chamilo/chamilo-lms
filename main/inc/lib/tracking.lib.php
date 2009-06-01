@@ -1302,7 +1302,7 @@ class Tracking {
 		}
 		
 		if ((int)$count_loop > 0) {
-			$avg_student_score = round(($average_data_sum / $count_loop)*100, 2);
+			$avg_student_score = round(($average_data_sum / $count_loop), 2);
 		}
 		
 		return $avg_student_score;

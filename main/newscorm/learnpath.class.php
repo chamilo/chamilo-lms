@@ -2503,7 +2503,7 @@ class learnpath {
 	 * This method can be used as static.
 	 * @param	integer	Learnpath Item View ID
 	 * @return	array
-	 * @todo 	Translate labels 
+	 * @todo 	Transcode labels instead of switching to HTML (which requires to know the encoding of the LP)
 	 */
 	function get_iv_interactions_array($lp_iv_id = 0) {
 

@@ -2507,7 +2507,7 @@ class learnpath {
 	 */
 	function get_iv_interactions_array($lp_iv_id = 0) {
 
-		global $charset;
+		$charset = api_get_setting('platform_charset');
 
 		$list = array ();
 		$table = Database :: get_course_table('lp_iv_interaction');
@@ -2529,7 +2529,7 @@ class learnpath {
 				$list[] = array (
 					"order_id" => ($row['order_id'] + 1),
 					"id" => urldecode($row['interaction_id']), //urldecode because they often have %2F or stuff like that
-	"type" => $row['interaction_type'],
+	                "type" => $row['interaction_type'],
 					"time" => $row['completion_time'],
 					//"correct_responses"=>$row['correct_responses'],
 	//hide correct responses from students

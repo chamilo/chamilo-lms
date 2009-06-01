@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 21159 2009-06-01 14:05:41Z yannoo $ 
+<?php // $Id: scorm_api.php 21162 2009-06-01 16:18:46Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -1059,13 +1059,11 @@ function logit_lms(message,priority){
  * @param	string	Action to be taken
  * @param	integer	Item id to update
  */
-function update_toc(update_action,update_id)
+function update_toc(update_action,update_id,change_ids)
 {
-	<?php //if($oLP->mode != 'fullscreen'){ ?>
-		//var myframe = frames["toc_name"];
-		//var myelem = myframe.document.getElementById("toc_"+update_id);
-		//var myelemimg = myframe.document.getElementById("toc_img_"+update_id);
-		
+        if (!change_ids || change_ids != 'no') {
+            change_ids = 'yes';
+        }
 		var myelem = $("#toc_"+update_id);		
 		var myelemimg = $("#toc_img_"+update_id);		
 		logit_lms('update_toc("'+update_action+'",'+update_id+')',2);				
@@ -1085,8 +1083,10 @@ function update_toc(update_action,update_id)
 					}
 					break;
 				case 'highlight':
-					lms_next_item = update_id;
-					lms_previous_item = update_id;						 				
+                    if (change_ids=='yes') {
+					   lms_next_item = update_id;
+					   lms_previous_item = update_id;
+                    }				 				
 					myelem.attr('class',"scorm_item_highlight");
 					break;
 				case 'not attempted':   					
@@ -1131,8 +1131,6 @@ function update_toc(update_action,update_id)
 			}
 		}
 		return true;
-    <?php //} ?>
-	//return true;
 }
 
 function update_stats() {	
@@ -1226,6 +1224,10 @@ function update_message_frame(msg_msg)
  */
  
 function switch_item(current_item, next_item) {
+    //backup these params
+    var orig_current_item = current_item;
+    var orig_next_item = next_item;
+    var orig_lesson_status = lesson_status;
 	//(1) save the current item	
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
 	if (lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
@@ -1344,7 +1346,17 @@ function switch_item(current_item, next_item) {
 		 		$("#media").html(tmp_data);							 				
 				}		
   	});
-
+/*
+    if ( lms_lp_type==2 && (orig_lesson_status == 'not attempted' || orig_lesson_status == '') && orig_current_item != orig_next_item) {
+        params = 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+orig_current_item;
+        $.ajax({
+        type:"GET",
+        data: params,
+        url: "lp_ajax_last_update_status.php", 
+        dataType: "script"
+        });
+    }
+*/
 	return true;
 }
 /**

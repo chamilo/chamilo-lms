@@ -16,7 +16,7 @@ $showUserPoints = "Montrer/cacher les clics";
 $showHotspots = "Montrer/cacher les zones cliquables";
 $labelPolyMenu = "Fermer le polygone";
 $triesleft = "Essais restants";
-$exeFinished = "Toutes les réponses ont été remplies. Modifiez vos choix ou envoyez vos réponses";
+$exeFinished = "Cliquez sur le bouton en bas de page pour valider vos réponses";
 $nextAnswer = "Cliquez maintenant sur : &done=done";
 $delineation = "Délinéation";
 $labelDelineationMenu = "Fermer la délinéation";

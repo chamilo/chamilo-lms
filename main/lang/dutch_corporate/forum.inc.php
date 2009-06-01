@@ -96,6 +96,7 @@ $AddImage = "Voeg afbeelding toe";
 $StudentList = "lijst van cursisten";
 $CourseUsers = "Gebruikers in de training";
 $PostsNumber = "Aantal berichten";
+$OrderBy = "sorteer op";
 $ThreadStatistics = "Statistieken van de discussie";
 $Thread = "Discussie";
 $NotifyMe = "Hou me op de hoogte";

@@ -229,7 +229,9 @@ $TotalExercisesScorePercentage = "Percentagem total da pontuação dos exercícios"
 $ForumForumsNumber = "Número de fóruns";
 $ForumThreadsNumber = "Número de temas";
 $ForumPostsNumber = "Número de mensagens";
+$ChatLastConnection = "Última ligação ao chat";
 $langSendNotification = "Notificar";
+$TimeOfActiveByTraining = "Tempo de uma actividade num curso";
 $TrainingTime = "Tempo no curso";
 $CourseProgress = "Progresso";
 ?>

@@ -6,7 +6,6 @@ $langSubTitle = "Adiciona um link para uma página na homepage do seu curso. Para
 $langAddPage            = "Adicionar uma página";
 $langSendPage           = "Página a ser publicada";
 $langCouldNot           = "O arquivo não pode ser enviado";
-$langOkSentLink         = "Seu link foi adicionado. Ele está acessível a partir da <a href=\\\"../../\".$_course[\'path\'].\"/index.php\\\">Homepage do Curso</a>";
 $langTooBig             = "Você não escolheu nenhum arquivo para enviar, ou ele é muito grande";
 $langExplanation        = "A página precisa estar no formato HTML (ex. \"minha_pagina.htm\"). Isso irá fazer com que ela possa ser acessada a partir da Homepage. Se você quiser enviar documentos em outros formatos (PDF, Word, Power Point, Vídeo, etc.) utilize a <a href=../document/document.php>ferramenta Documentos</a>";
 $langPgTitle            = "Título da página";

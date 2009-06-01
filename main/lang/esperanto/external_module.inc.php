@@ -6,7 +6,6 @@ $langSubTitle = "Aldonas ligilon al via kursa hejmpa&#285;o. ";
 $langAddPage            = "Aldoni pa&#285;on ";
 $langSendPage           = "Aldonenda pa&#285;o ";
 $langCouldNot           = "Dosiero ne povis esti sendata ";
-$langOkSentLink         = "La ligilo estas aldonita. &#284;i estas nun alirebla per <a href=\\\"\".api_get_path(WEB_COURSE_PATH). $_course[\'path\'] . \"/index.php\\\">kursa hejmpa&#285;o</a>";
 $langTooBig             = "Vi ne elektis sendotan dosieron a&#365; la dosiero estas tro granda. ";
 $langExplanation        = "La pa&#285;o estu html-formata, ekzemple \"mia_pagxo.html\"). &#284;i estas aldonota al la kursa hejmpa&#285;o. Por formatoj aliaj ol HTML (kiaj PDF, Word, Power Point, Video, ktp.) uzu <a href=../document/document.php>Dokumentan modulon</a>.";
 $langPgTitle            = "Pa&#285;a titolo ";

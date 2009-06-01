@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langProfessors = "Professores";
+$langProfessors = "Instrutores";
 $langExplanation = "Depois de carregar em \"Validar\", será criada uma web que incluirá Fórum, Lista de ligações, Exercícios, Agenda, Lista de documentos... Por meio do seu código de identificação, poderá alterar o seu conteúdo";
 $langEmpty = "Não preencheu todos os campos.<br>Volte atrás, carregando no botão correspondente do seu navegador, e preencha todos os campos.<br>Se não conhece o código do seu curso, consulte o programa do curso";
 $langCodeTaken = "Este código de curso está a ser utilizado noutro curso.<br>Volte atrás, carregando no botão correspondente do seu navegador, e escreva outro código.";

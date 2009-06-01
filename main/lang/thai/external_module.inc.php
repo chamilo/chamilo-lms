@@ -6,7 +6,6 @@ $langSubTitle = "การเพิ่มรายการเชื่อมโยงไปที่เมนูหลักของรายวิชาท่าน. คำแนะนำ : ถ
 $langAddPage            = "เพิ่มหน้า";
 $langSendPage           = "หน้าที่จะโอนไฟล์ขึ้น";
 $langCouldNot           = "ไม่สามารถโอนไฟล์ขึ้นระบบได้";
-$langOkSentLink         = "เพิ่มรายการเชื่อมโยงแล้ว สามารถเข้าใช้ได้ที่<a href=\\\"\".api_get_path(WEB_COURSE_PATH). $_course[\'path\'] . \"/index.php\\\">หน้าโฮมเพจ</a>";
 $langTooBig             = "คุณไม่ได้เลือกไฟล์ที่จะส่งหรือไฟล์มีขนาดใหญ่เกินไป";
 $langExplanation        = "ไฟล์เอกสารต้องเป็นรูปแบบ .html(เช่น \" tinnabutr.html\") ซึ่งจะเป้นรายการเชื่อมโยงไว้ในหน้าโฮมเพจ หากไม่ใช่เอกสาร html (PDF,Word,Power Point,VDO,หรือไฟล์รูปแบบอื่น)ให้ใช้คำสั่งอ้างอิงที่อยู่ a-link<a href=../document/document.php>Documents tool</a> เพื่อเชื่อมโยงถึงไฟล์ที่เก็บไว้ในเว็ป";
 $langPgTitle            = "ชื่อหัวเรื่องของเอกสาร ";

@@ -25,6 +25,7 @@ $EnterTitle = "Escrever um título";
 $TypeYourMessage = "Escrever a sua mensagem aqui";
 $DeleteMessage = "Apagar mensagem";
 $ReadMessage = "Ler mensagem";
+$SendMessageInvitation = "Tem a certeza que deseja enviar estes convites?";
 $SendMessage = "Enviar mensagem";
 $WriteAMessage = "Escrever uma mensagem";
 $MessageSent = "Mensagem enviada";

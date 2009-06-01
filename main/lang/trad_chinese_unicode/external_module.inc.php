@@ -6,7 +6,6 @@ $langSubTitle = "為課程主頁選單添加網站、網頁或者任何的網址
 $langAddPage            = "增加一個頁面";
 $langSendPage           = "要上傳的頁面";
 $langCouldNot           = "檔案上傳失敗";
-$langOkSentLink         = "已加入連結。現在可由<a href=\\\"\".api_get_path(WEB_COURSE_PATH). $_course[\'path\'] . \"/index.php\\\">首頁</a>進入";
 $langTooBig             = "你沒有選擇任何檔案，或者檔案太大";
 $langExplanation        = "這個頁面必須是 HTML 格式（例如: \"my_page.htm\"），它將在主頁上增加一個鏈接，假如你要發送一個不是 html 的檔案，而是其它文檔（PDF、Word、PowerPoint、Video等)，請使用<a href=../document/document.php>文檔工具</a>";
 $langPgTitle            = "網頁標題";

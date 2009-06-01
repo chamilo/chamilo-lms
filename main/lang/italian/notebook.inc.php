@@ -25,4 +25,10 @@ $ModifyNote = "Modifica appunto";
 $BackToNoteList = "Torna all\'elenco degli appunti";
 $NotebookManagement = "Gestione appunti";
 $BackToNotesList = "Torna all\'elenco degli appunti";
+$NotesSortedByTitleAsc = "Annotazioni in ordine ascendente per titolo";
+$NotesSortedByTitleDESC = "Annotazioni in ordine discendente per titolo";
+$NotesSortedByUpdateDateAsc = "Annotazioni in ordine ascendente per data di modifica";
+$NotesSortedByUpdateDateDESC = "Annotazioni in ordine discendente per data di modifica";
+$NotesSortedByCreationDateAsc = "Annotazioni in ordine ascendente per data di creazione";
+$NotesSortedByCreationDateDESC = "Annotazioni in ordine discendente per data di creazione";
 ?>

@@ -11,8 +11,12 @@ $SaveNote = "Guardar nota";
 $SearchByTitle = "Procurar por título";
 $WriteTheTitleHere = "Escrever o título aqui";
 $UpdateDate = "Última alteração";
+$OrderByCreationDate = "Ordenar por data de criação";
+$OrderByTitle = "Ordenar por título";
 $NoteTitle = "Título da nota";
 $NoteComment = "Comentários da nota";
 $NoteAdded = "Nota acrescentada";
 $AddNote = "Criar nota";
+$BackToNoteList = "Voltar à lista das notas";
+$NotebookManagement = "Gerir bloco de notas";
 ?>

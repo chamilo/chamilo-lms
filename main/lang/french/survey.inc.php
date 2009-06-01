@@ -109,8 +109,8 @@ $SurveyDeleted = "L\'enquête a été supprimée";
 $NoSurveysSelected = "Aucune enquête sélectionnée";
 $NumberOfQuestions = "Nombre de questions";
 $Invited = "Invité(s)";
-$SubmitQuestionFilter = "Filtre de soumission";
-$ResetQuestionFilter = "Recharger le filtre";
+$SubmitQuestionFilter = "Filtrer";
+$ResetQuestionFilter = "Réinitialiser";
 $ExportCurrentReport = "Exporter le rapport courant";
 $OnlyQuestionsWithPredefinedAnswers = "Seules les questions avec des réponses prédéfinies peuvent être utilisées";
 $SelectXAxis = "Sélectionnez la question sur l\'axe des X";
@@ -202,4 +202,5 @@ $ModifyQuestionSurvey = "Modifier la question";
 $BackToSurvey = "Retour à l\'enquête";
 $UpdateInformation = "Mettre les informations à jour";
 $PleaseFillSurvey = "Veuillez compléter l\'enquête";
+$ReportingOverview = "Vue globale du suivi";
 ?>

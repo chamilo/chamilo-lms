@@ -99,7 +99,7 @@ $ExampleForum = "Exemple de forum";
 $ExampleThread = "Exemple de sujet";
 $ExampleThreadContent = "Exemple de contenu";
 $IntroductionWiki = "Le mot \"Wiki\" est un raccourci pour WikiWikiWeb. Wikiwiki est un mot hawaïen signifiant rapide ou vitesse. Dans un wiki, les gens écrivent des pages ensemble. Si une personne fait une erreur, la personne suivante peut la corriger. La personne suivante peut également ajouter quelque chose de neuf à la page. Grâce à cela, la page s\'améliore à chaque fois que quelqu\'un la modifie.";
-$CreateCourseArea = "Créer une formation";
+$CreateCourseArea = "Créer cette formation";
 $CreateCourse = "Créer formation";
 $Create = "Créer";
 ?>

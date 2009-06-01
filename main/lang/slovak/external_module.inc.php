@@ -5,7 +5,6 @@ $langLinkSite = "Odkaz na web stránku";
 $langAddPage            = "Prida&#357; stránku";
 $langSendPage           = "Stránka na na&#269;ítanie";
 $langCouldNot           = "Súbor nie je možné na&#269;íta&#357;";
-$langOkSentLink         = "Váš odkaz bol pridaný. Teraz je prístupný z <a href=\\\"\".api_get_path(WEB_COURSE_PATH). $_course[\'path\'] . \"/index.php\\\">Domovskej stránky</a> ";
 $langTooBig             = "Bu&#271; ste nevybrali súbor na zaslanie, alebo je ve&#318;mi ve&#318;ký";
 $langExplanation        = "Stránka musí by&#357; v HTML formáte (napr. \"moja_stránka.htm\"). Bude dostupná z domovskej stránky. Ak chcete posla&#357; dokument v inom formáte ako HTML (PDF, Word, Power Point, Video, etc.) použite nástroj <a href=../document/document.php>Documenty</a>";
 $langPgTitle            = "Názov stránky";

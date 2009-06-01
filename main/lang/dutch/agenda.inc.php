@@ -54,7 +54,7 @@ $CopiedAsAnnouncement = "Gekopieerd als aankondiging";
 $NewAnnouncement = "Nieuwe aankondiging";
 $AddAnnouncement = "Toevoegen als aankondiging";
 $UpcomingEvent = "Komende gebeurtenis";
-$RepeatedEvent = "Herhaal gebeurtenis";
+$RepeatedEvent = "Herhaalde gebeurtenis";
 $RepeatType = "Herhaaltype";
 $RepeatDaily = "Dagelijks";
 $RepeatWeekly = "Wekelijks";
@@ -73,4 +73,5 @@ $AgendaSortChronologicallyUp = "Oplopend";
 $AgendaSortChronologicallyDown = "Aflopend";
 $ItemForUserSelection = "Selecteer gebruikers";
 $IsNotiCalFormatFile = "Dit bestand is geen iCal bestand. ";
+$RepeatEvent = "Herhaal gebeurtenis";
 ?>

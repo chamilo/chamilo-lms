@@ -64,7 +64,7 @@ $RepeatMonthlyByDayR = "Chaque mois, par jour, restreint";
 $RepeatYearly = "Chaque année";
 $RepeatEnd = "Fin de la répétition";
 $RepeatedEventViewOriginalEvent = "Evénement initial";
-$ICalFileImport = "Import iCal";
+$ICalFileImport = "Import Outlook";
 $AllUsersOfThePlatform = "Tous les utilisateurs du portail";
 $GlobalEvent = "Événement global";
 $ModifyEvent = "Modifier l\'évènement";
@@ -73,4 +73,5 @@ $AgendaSortChronologicallyUp = "Ascendant";
 $AgendaSortChronologicallyDown = "Descendant";
 $ItemForUserSelection = "Liste de sélection des utilisateurs";
 $IsNotiCalFormatFile = "Ce fichier n\'est pas au format iCal";
+$RepeatEvent = "Évènement répétitif";
 ?>

@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $dropbox_lang["help"]  = "Ajuda";
 $dropbox_lang["aliensNotAllowed"]  = "Somente membros registrados nessa área podem usar o dropbox. Você não é um membro dessa área.";
-$dropbox_lang["dropbox"]  = "Dropbox";
+$dropbox_lang["dropbox"]  = "Caixa de entrega";
 $dropbox_lang["queryError"]  = "Erro na base de dados. Por favor, contacte o administrador.";
 $dropbox_lang["generalError"]  = "Ocorreu um erro. Por favor, contacte o administrador.";
 $dropbox_lang["badFormData"]  = "Falha no envio: formato errado. Por favor contacte o administrador.";
@@ -128,4 +128,6 @@ $langAddEdit = "Acrescentar / Editar";
 $ErrorNoFilesInFolder = "Esta pasta está vazia";
 $dropbox_lang["upload"] = "Enviar";
 $AddComment  = "Guardar comentário";
+$SentCatgoryDeleted = "A pasta foi apagada";
+$ReceivedCatgoryDeleted = "A pasta foi apagada";
 ?>

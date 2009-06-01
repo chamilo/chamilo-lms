@@ -214,4 +214,5 @@ $CreateTheDocument = "Validar";
 $CreateTemplate = "Criar modelo";
 $SharedFolder = "Pasta partilhada";
 $CreateFolder = "Criar uma pasta";
+$TemplateImage = "Imagem do modelo";
 ?>

@@ -128,4 +128,6 @@ $langAddEdit = "Ajouter / Modifier";
 $ErrorNoFilesInFolder = "Aucun fichier dans ce répertoire";
 $dropbox_lang["upload"] = "Importer le fichier";
 $AddComment  = "Enregistrer le commentaire";
+$SentCatgoryDeleted = "Le dossier a été supprimé";
+$ReceivedCatgoryDeleted = "Le dossier a été supprimé";
 ?>

@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Ce login n\'est pas valide.";
 $langWelcome = "formations sont en libre accès ci-dessous. Les autres formations existantesnécessitent un login et un mot de passe que l\'on peut obtenir en cliquant sur la mention \'inscription\'. Les responsables des formations peuvent créer de nouvelles formations.";
-$langPass = "Mot de passe";
+$langPass = "Passe";
 $langEnter = "Entrer";
 $langReg = "Inscription";
 $langMenu  = "Menu";
@@ -31,7 +31,7 @@ $Englin = "Anglais";
 $langInvalidForSelfRegistration = "Échec du login - si vous n\'êtes pas enregistré, vous pouvez le faire en utilisant le <a href=main/auth/inscription.php>formulaire d\'enregistrement</a>";
 $langSubCat = "sous-catégories";
 $langMenuGeneral = "Général";
-$langMenuUser = "Utilisateur";
+$langMenuUser = "Mon compte";
 $langMenuAdmin = "Administration";
 $langUsersOnLineList = "Liste des utilisateurs en ligne";
 $langTotalOnLine = "Total en ligne";

@@ -6,7 +6,6 @@ $langSubTitle = "Добавить ссылку к странице на дома
 $langAddPage            = "Добавить страницу";
 $langSendPage           = "Страница для загрузки";
 $langCouldNot           = "Файл не может быть загружен";
-$langOkSentLink         = "Ваша связь добавлена. Доступ с <a href=\\\"\".api_get_path(WEB_COURSE_PATH). $_course[\'path\'] . \"/index.php\\\">Домашняя страница</a>";
 $langTooBig             = "Вы не выбрали ни одного файла для отсылки или он слишком большой";
 $langExplanation        = "Страница должна быть в HTML формате (например \"моя_страница.htm\"). Она будет доступна с Домашней страницы. Если Вы хотите послать документ в формате не HTML (PDF, Word, Power Point, Video, etc.) используйте <a href=../document/document.php>Документы</a>";
 $langPgTitle            = "Заголовок страницы";

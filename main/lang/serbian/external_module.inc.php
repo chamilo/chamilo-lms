@@ -6,7 +6,6 @@ $langSubTitle = "Dodaje link na po&#269;etnu stranicu vašeg kursa. Da biste urad
 $langAddPage            = "Dodaj stranicu";
 $langSendPage           = "Stranica za u&#269;itavanje na server";
 $langCouldNot           = "Fajl nije mogao da se u&#269;ita na server";
-$langOkSentLink         = "Vaš link je dodat. Sad mu je mogu&#263;e pristupiti sa <a href=\\\"\".api_get_path(WEB_COURSE_PATH). $_course[\'path\'] . \"/index.php\\\">Homepage</a>";
 $langTooBig             = "Niste izabrali nijedan fajl za slanje ili je prevelik";
 $langExplanation        = "Stranica mora da bude u HTML formatu (npr. „moja_stranica.htm“). Bi&#263;e napravljen link ka njoj sa po&#269;etne stranice. Ako želite da pošaljete nešto što nije u HTML formatu (PDF, Word, Power Point, Video, itd.) koristite <a href=../document/document.php>Alatka za Dokumente</a>";
 $langPgTitle            = "Naslov stranice";

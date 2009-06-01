@@ -1,28 +1,28 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langActivate = "Mostrar";
-$langDeactivate = "Ocultar";
+$langActivate = "Visualizar";
+$langDeactivate = "Ocultar/esconder";
 $langInLnk  = "Ferramentas e ligações ocultas";
-$langDelLk = "De certeza que quer apagar esta ligação?";
+$langDelLk = "Deseja mesmo eliminar esta ligação?";
 $langEnter  = "Entrar";
 $langCourseCreate  = "Criar um Curso";
 $langNameOfTheLink  = "Nome da ligação";
-$lang_main_categories_list                  = "Lista de categorias principais";
-$langCourseAdminOnly = "Reservado aos Professores";
-$PlatformAdminOnly = "Reservado ao Administrador da Plataforma";
+$lang_main_categories_list                  = "Lista principal de categorias";
+$langCourseAdminOnly = "Autorizado apenas a instrutores";
+$PlatformAdminOnly = "Autorizado apenas a administradores da plataforma/sistema";
 $langCombinedCourse = "Curso combinado";
-$ToolIsNowVisible = "Ferramenta visível";
-$ToolIsNowHidden = "Ferramenta invisível";
+$ToolIsNowVisible = "A ferramenta encontra-se agora visível.";
+$ToolIsNowHidden = "A ferramenta encontra-se agora invisível.";
 $EditLink = "Editar ligação";
-$Blog_management = "Gestão dos blogs";
+$Blog_management = "Blogs";
 $Forum = "Fóruns";
-$Course_maintenance = "Gestão do curso";
-$TOOL_SURVEY = "Inquéritos";
+$Course_maintenance = "Backup";
+$TOOL_SURVEY = "Inquéritos/questionários";
 $GreyIcons = "Ferramentas";
 $Interaction = "Interacção";
-$Authoring = "Criação de conteúdos";
+$Authoring = "Autoria";
 $Administration = "Administração";
-$IntroductionTextUpdated = "O texto de introdução foi actualizado";
-$IntroductionTextDeleted = "Texto de introdução apagado";
+$IntroductionTextUpdated = "A introdução foi actualizada";
+$IntroductionTextDeleted = "A introdução foi eliminada";
 ?>

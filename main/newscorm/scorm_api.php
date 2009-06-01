@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 21157 2009-06-01 05:41:16Z yannoo $ 
+<?php // $Id: scorm_api.php 21158 2009-06-01 14:00:45Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -753,12 +753,12 @@ function savedata(origin) {
     	<?php }?>
     	; 	
     } else {
+        /*
+         * See notes in switch_item for why this has been disabled
     	if ((origin== 'finish' || origin == 'unload') && lesson_status != 'completed' && lesson_status != 'passed' && lesson_status != 'browsed' && lesson_status != 'failed' && lesson_status != 'incomplete')  {
-	    	/* 
-	    	 The SCORM1.2 Runtime object document says for the "cmi.core.lesson_status" variable:	    	 
-	    	 Upon receiving the LMSFinish() call or the user navigates away, 
-	    	 the LMS should set the cmi.core.lesson_status for the SCO to 'completed'	    	 
-	    	*/	   
+	    	// The SCORM1.2 Runtime object document says for the "cmi.core.lesson_status" variable:	    	 
+	    	// Upon receiving the LMSFinish() call or the user navigates away, 
+	    	// the LMS should set the cmi.core.lesson_status for the SCO to 'completed'	    	 
             logit_lms('the LMS did saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
 	    	if (mastery_score && mastery_score!= '' && score && score != '') {    	
 	    		if  (score >= mastery_score) {
@@ -772,6 +772,7 @@ function savedata(origin) {
                 updatetable_to_list['cmi.core.lesson_status']='true';
 	    	}
     	}
+        */
     }
 
     my_get_value_scorm=new Array();
@@ -796,9 +797,12 @@ function savedata(origin) {
 	variable_to_send=new Array();
 	my_get_value_scorm=new Array();
 }
+/*
+ * See notes in switch_item for why this has been disabled 
 function savedata_onunload() {
 	savedata('unload');
 }
+*/
 
 function LMSCommit(val) {
 		logit_scorm('LMSCommit()',0);
@@ -949,9 +953,11 @@ function addListeners(){
 		addEvent(window,'unload',dokeos_save_asset,false);
 		logit_lms('Added event listener on content_id for unload',2);
 	}
+    /* See notes in switch_item() for why this has been disabled
     if (lms_lp_type==2) {
         addEvent(window,'unload',savedata_onunload,false);    	
     }
+    */
 	logit_lms('Quitting addListeners()',2);
 }
 
@@ -1219,9 +1225,8 @@ function update_message_frame(msg_msg)
  *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item  
  */
  
-function switch_item(current_item, next_item){
-	//(1) save the current item
-	
+function switch_item(current_item, next_item) {
+	//(1) save the current item	
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
 	if (lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
         xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
@@ -1239,15 +1244,21 @@ function switch_item(current_item, next_item){
          * particular time, but here we are in the case of switching to another
          * item, so this is particularly important to complete the element in
          * time.
+         * However, this cannot be initiated from the JavaScript, mainly
+         * because another onunload event can be triggered by the SCO itself,
+         * which can set, for example, the status to incomplete while the
+         * status has already been set to "completed" by the hand-made
+         * savedata(unload) (and then the status cannot be "incompleted" 
+         * anymore)
          */
-        if (lms_item_type=='sco' && lesson_status != 'completed' && lesson_status != 'passed' && lesson_status != 'browsed' && lesson_status != 'incomplete' && lesson_status != 'failed') {
+        //if (lms_item_type=='sco' && lesson_status != 'completed' && lesson_status != 'passed' && lesson_status != 'browsed' && lesson_status != 'incomplete' && lesson_status != 'failed') {
             /** 
              * savedata('finish') treats the special condition and saves the
              * new status to the database, so switch_item_details() enjoys the
              * new status
              */
-        	savedata('finish');                                 
-        }
+        	//savedata('finish');                                 
+        //}
         // xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
 	}
 	execute_stats=false;

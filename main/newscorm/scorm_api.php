@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 21156 2009-06-01 05:32:44Z yannoo $ 
+<?php // $Id: scorm_api.php 21157 2009-06-01 05:41:16Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -753,7 +753,7 @@ function savedata(origin) {
     	<?php }?>
     	; 	
     } else {
-    	if ((origin== 'finish' || origin == 'unload') && lesson_status != 'completed' && lesson_status != 'passed' && lesson_status != 'browsed')  {
+    	if ((origin== 'finish' || origin == 'unload') && lesson_status != 'completed' && lesson_status != 'passed' && lesson_status != 'browsed' && lesson_status != 'failed' && lesson_status != 'incomplete')  {
 	    	/* 
 	    	 The SCORM1.2 Runtime object document says for the "cmi.core.lesson_status" variable:	    	 
 	    	 Upon receiving the LMSFinish() call or the user navigates away, 

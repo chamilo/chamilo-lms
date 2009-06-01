@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Dokeos Changelog</title>
-  <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
+  
+  <title>Dokeos Changelog</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
   <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
   <style type="text/css">
 	<!--
@@ -11,19 +10,19 @@
 		pre { font-family: "Courier New", monospace }
 		p { margin-bottom: 0.21cm }
 		.code {margin: 1em 1em 1em 2em; padding: 0.5em; background-color: rgb(229, 229, 229); vertical-align: top; border: 1px solid #999999;}
-	--></style>
-</head>
+	--></style></head>
+
 <body>
 <div id="header1">
-<h1>Dokeos Changelog</h1>
+<h1>Dokeos&nbsp;Changelog</h1>
 </div>
 <a href="index.html">Documentation</a> &gt; Changelog 
 <div id="outerframe">
 <div id="main">
 <br />
-<h1>Dokeos 1.8.6 - May 2009</h1>
+<h1>Dokeos 1.8.6 <span style="font-style: italic;">Svalbard</span> - June 2009</h1>
 <h3>Release notes - summary</h3>
-<p>Dokeos 1.8.6 is a major debugging release but includes interesting new features as well.&nbsp;</p>
+<p>Dokeos 1.8.6 Svalbard is a major&nbsp;release including new features.&nbsp;</p>
 <h3>New Features</h3>
 <ul>
   <li>FCKEditor 2.6.4, build 21629 added (FS#2528 and FS#2867)</li>
@@ -81,7 +80,13 @@
   <li>Added Removed buggy audio recorder and added new MP3 player with easy upload (FS#3515)</li>
   <li>Improved Survey export (SVN#17927)</li>
   <li>Students can now view their uploaded works in Work tool (FS#3486)</li>  
-  <li>Implemented add to calendar an assignment with the date when it is completely closed, also when you remove it from assignment tool, it's removed into calendar too, the same case when it's edited, for that I had to change the value of add_calendar field into student_publication_assignment table, now when it's sent to calendar this value is the  id into calendar_event table, instead this value is 0.</li>
+  <li>Implemented
+add to calendar an assignment with the date when it is completely
+closed, also when you remove it from assignment tool, it's removed into
+calendar too, the same case when it's edited, for that I had to change
+the value of add_calendar field into student_publication_assignment
+table, now when it's sent to calendar this value is the id into
+calendar_event table, instead this value is 0.</li>
   <li>Added Social tool + friend list (FS#3383)</li>
   <li>Added introduction section to blog and course description (FS#3165)</li>
   <li>Added import/export (CSV/XML) of extra user fields</li>
@@ -122,32 +127,43 @@
   <li>Fixed bug preventing the activation of plugins (FS#2771)</li>
   <li>Fixed bug adding double comments in dropbox tool in IE only (FS#2757)</li>
   <li>Fixed IMS/QTI2 little export problem (FS#2634)</li>
-  <li>The learners can't send files anymore to other learners if "Do not allow students to send documents to other students within a course" is false (FS#2780)</li>
+  <li>The learners can't send files anymore to other learners if "Do not allow
+students to send documents to other students within a course" is false
+(FS#2780)</li>
   <li>The mails sent in exercises tool are sent from the address defined in admin (FS#2712)</li>
   <li>"Next" and "Previous" page now works when searching a session (FS#2721)</li>
   <li>Fixed bug when launching a quiz with one question per page (FS#2738)</li>
   <li>Fixed javascript bug with swap menu in ie6 (FS#2815)</li>
   <li>Fixed bug in surveys when we want to display answers of an invited person (FS#2731)</li>
-  <li>Fixed bug when copying a course with surveys. There is now a check for existing surveys with the same code and language (FS#2734)</li>
+  <li>Fixed
+bug when copying a course with surveys. There is now a check for
+existing surveys with the same code and language (FS#2734)</li>
   <li>Fixed bug when seeing matching results in quiz tool (SVN#15987)</li>
   <li>Added filtering of SCORM objectives when writing to DB (SVN#16437)</li>
   <li>Removed duplication of database write operations for SCORM objectives (SVN#16438)</li>
   <li>Fixed HTTP_REFERER bug in ical_export (FS#3041)</li>
   <li>Fixed bug in SQL queries for new installs, preventing the creation of the course_module table (FS#3040)</li>
-  <li>Fixed the fact that the password was never sent by e-mail when encrypted, even when it had just been changed for a user, causing a useless e-mail to be sent (SVN#16673)</li>
+  <li>Fixed
+the fact that the password was never sent by e-mail when encrypted,
+even when it had just been changed for a user, causing a useless e-mail
+to be sent (SVN#16673)</li>
   <li>Fixed bug in users pictures display when using the tuning setting of splitting users dirs (SVN#16673)</li>
   <li>Fixed bug in documents picture gallery preventing uppercase image extensions to be seen (SVN#16755)</li>
   <li>Fixed bug whereby the repeated agenda items in groups were visible to all (FS#3095)</li>
   <li>Fixed bug whereby e-mails sent did not have the standard syntax (SVN#16708)</li>
   <li>Fixed bug whereby an empty institution name gave a useless output in the header (SVN#16710)</li>
   <li>Fixed bug whereby questions ordering was broken when deleting one question in the middle (SVN#16879)</li>
-  <li>Fixed bug in user fields, not displayed the  default value in profile and add user, and you could modify this values(see FS#3307)  
-  <li>Fixed bug in link (see FS#3306)</li>
+  <li>Fixed
+bug in user fields, not displayed the default value in profile and add
+user, and you could modify this values(see FS#3307) </li><li>Fixed bug in link (see FS#3306)</li>
   <li>Improved display of human resource manager option (see FS#3304)</li>
   <li>Documents tool, folder selector: Fixed a bug that prevented Home (root) folder to be shown (FS#3089)</li>
   <li>Users tool: Fixed a bug preventing detailed information about a user to be shown or edited (FS#3009)</li>
   <li>Fixed a bug causing various problems due to improper priority order of loading PEAR packages (FS#3237)</li>
-  <li>The PclZip library has been upgraded to version 2.6. Additionally, a known bug has been fixed - improper processing of the option PCLZIP_OPT_REMOVE_PATH on Windows (FS#3243)</li>
+  <li>The
+PclZip library has been upgraded to version 2.6. Additionally, a known
+bug has been fixed - improper processing of the option
+PCLZIP_OPT_REMOVE_PATH on Windows (FS#3243)</li>
   <li>Fixed a bug causing improper numeric sorting of data displayed in various tables (FS#3282)</li>
   <li>Agenda tool: Fixed a wrong range for hour selection. The bug has been reported and solved in a forum by TL (FS#3324)</li>
   <li>Agenda tool: style changes - Align drop-down lists in date and time when you add a new calendar event and modify it</li>
@@ -181,8 +197,14 @@
   <li>Fixed XML user import for single courses import (related to FS#3552)</li>
   <li>Fixed bug with user image not showing in upgrade from previous versions</li>
   <li>Fixed bugs causing wrong attempts to translate some icons on course homepage when the server is in testing mode (FS#3285)</li>
-  <li>A fix for the Oogie converter to work on Windows OS has been applied. Initial code has been proposed in the Dokeos forums by Øyvind Johansen (oyvind) and wilbrod - see FS#3969</li>
-  <li>Fixed Windows-related bugs preventing creation of SCORM packages from presentations, see FS#3972. The problem has been reported in the Dokeos forums by irvienhooi</li>
+  <li>A
+fix for the Oogie converter to work on Windows OS has been applied.
+Initial code has been proposed in the Dokeos forums by Øyvind Johansen
+(oyvind) and wilbrod - see FS#3969</li>
+  <li>Fixed Windows-related
+bugs preventing creation of SCORM packages from presentations, see
+FS#3972. The problem has been reported in the Dokeos forums by
+irvienhooi</li>
   <li>Some minor bugs have been fixed in "Document Metadata" form (FS#4030)</li>
   <li>Fixed a bug preventing updating dates of group documents after edition. Many thanks to Ludwig Theunis, nickname: TL (FS#4072)</li>
 </ul>
@@ -191,57 +213,82 @@
 <ul>
   <li>Added classes glossary-term, glossary-term-title, glossary-term-desc, glossary-term-action-links for the glossary tool</li>
   <li>Added personal-notes tool-related styles</li>
-  <li>Changed many things in the public-admin style (Dokeos default) to improve design - will probably affect other styles a little despite efforts not to</li>
+  <li>Changed many things in the public-admin style (Dokeos default) to improve
+design - will probably affect other styles a little despite efforts not to</li>
+  <li>Added new styles</li>
   
 </ul>
 <br />
 <h3>Important language changes</h3>
 <ul>
-  <li>Changed "courses" to "trainings" in English and "Cours" to "Formations" in French. This change is likely to be very confusing to most users! Please either update your language files or warn your users if you are willing to keep that change.</li>
+  <li>Changed "courses" to "trainings" in English and "Cours" to
+"Formations" in French. This change is likely to be very confusing to
+most users! Please either update your language files or warn your users
+if you are willing to keep that change.</li>
   <li>Changed "Learning Path" link to "Course" in English and French</li>
   <li>Changed and unified work/assignment/student publications tool as "assignments"</li>
   <li>Changed "Dropbox" tool to "Documents sharing" (or "Documents sharing space" when referring to one's own space in the tool)</li>
-  <li>Changed "Student View" link to "Teacher view" and vice-versa</li>   
+  <li>Changed "Student View" link to "Teacher view" and vice-versa</li>
+  <li>Many buttons now have more defined action names</li>   
 </ul>
 <br />
 <h3>Known issues</h3>
 <ul>
+  <li>Inserting the same exercise twice in one learning path may generate score inconsistencies</li>
 </ul>
 <br />
 <h3>Deprecated files</h3>
 <ul>
+  <li>The whole main/inc/lib/xajax/tests/ should be removed</li> 
 </ul>
 <br />
-<h1>Dokeos 1.8.5 - May 2008</h1>
+<h1>Dokeos 1.8.5 <span style="font-style: italic;">Valparaiso</span>, June 2008</h1>
 <h3>Release notes - summary</h3>
 <p>Dokeos 1.8.5 is a major debugging release but includes interesting new features as well.&nbsp;</p>
 <h3>New Features</h3>
 
 <ul>
 	<li>Considerable security improvements - 2 major and 1 minor security patches have been applied since the latest stable version</li>
-	<li>SCORM export improvement (now generates SCORM 1.2 compliant packages and transforms Dokeos quizzes into SCO items, using interactions as a bonus)</li>
+	<li>SCORM
+export improvement (now generates SCORM 1.2 compliant packages and
+transforms Dokeos quizzes into SCO items, using interactions as a bonus)</li>
 	<li>Possibility to filter extension of submitted files all around Dokeos</li>
 	<li>OpenID authentication support</li>
 	<li>Possibility to import Word documents</li>
 	<li>Possibility to import docx and pptx documents (new MS-Office format)</li>
-	<li>Grades, evaluations and success certificates available thanks to the integration of the gradebook extension. Activating this module will clash with a gradebook extension installation made previously</li>
+	<li>Grades,
+evaluations and success certificates available thanks to the
+integration of the gradebook extension. Activating this module will
+clash with a gradebook extension installation made previously</li>
 	<li>Coloured icons added to courses list in administration panel to show access permissions</li>
 	<li>Logout button now shows the username of the current user</li>
 	<li>Student view re-activated and fully-functional</li>
-	<li>Searching the forum is now possible so you can use the forum as a knowledge base. The search results are highlighted throughout the forum and you can search on multiple words also. </li>
+	<li>Searching
+the forum is now possible so you can use the forum as a knowledge base.
+The search results are highlighted throughout the forum and you can
+search on multiple words also. </li>
     <li>Group members are now displayed in a sortable table</li>
 	<li>Possibility to export survey results in XLS format</li>
 	<li>Documents, Works and Dropbox tools usability has been improved in many ways</li>
     <li>In the agenda, you can display the X upcoming events (can be configured by the platform admin)</li>
     <li>The course agenda now has a month view like the my agenda</li>
-    <li>In the user list of the platform administration you can now quickly see for what courses the user is subscribed by hovering over the courses icon</li>
+    <li>In
+the user list of the platform administration you can now quickly see
+for what courses the user is subscribed by hovering over the courses
+icon</li>
     <li>The platform system announcements can now be sent through email also</li>
-	<li>User fields have been added globally, allowing you to add user data like birthdate, mother tongue, city or whatever data you want to ask your users</li>
+	<li>User
+fields have been added globally, allowing you to add user data like
+birthdate, mother tongue, city or whatever data you want to ask your
+users</li>
 	<li>LDAP
 		<ul>
 			<li>The LDAP code has changed. If you had some customisations there, you might want to save them and re-apply them after the upgrade</li>
 			<li>Functions renamed to respect coding conventions and use ldap_ namespace</li>
-			<li>Most parameters moved to the administration panel. You will need to configure the administration panel with the settings that were previously in ldap_var.inc.php</li>
+			<li>Most
+parameters moved to the administration panel. You will need to
+configure the administration panel with the settings that were
+previously in ldap_var.inc.php</li>
 			<li>Added non-anonymous mode (just add a login and a password in the configuration panel)</li>
 			<li>Added search domain configuration through panel</li>
 			<li>Added customizable field-check for student-teacher switch</li>
@@ -250,19 +297,34 @@
 	    </ul>
 	</li>
     <li>New stylesheets can be added through the platform administration interface</li>
-    <li>Notification by email has been improved in the forum. You can now indicate that you want to be informed of messages on the forum level or on the thread level, even if you did not participate in the discussion yet. </li>
-    <li>The platform administrator can decide to display the courses that are not open on the login page. When these courses are displayed on the campus startpage then the user that is logged in can quickly subscribe to this course.</li>
-    <li>When creating a new group you can decide to create a public or private forum or no forum at all. These are group category settings.</li>
+    <li>Notification
+by email has been improved in the forum. You can now indicate that you
+want to be informed of messages on the forum level or on the thread
+level, even if you did not participate in the discussion yet. </li>
+    <li>The
+platform administrator can decide to display the courses that are not
+open on the login page. When these courses are displayed on the campus
+startpage then the user that is logged in can quickly subscribe to this
+course.</li>
+    <li>When creating a new group you can decide to create
+a public or private forum or no forum at all. These are group category
+settings.</li>
     <li>Group forum is also displayed in the group space</li>
     <li>Surveys that are not based on invitation but open to all (or certain) members of the course are now available</li>
     <li>Agenda
     	<ul>
     		<li>iCal import and export of course events, with a choice of public, private or confidential markers</li>
-    		<li>Repetitive course events can be created (and exported to iCal). Repetitions types supported are: daily, weekly, monthly by date (e.g. the 5th of each month) and yearly by date</li>
+    		<li>Repetitive
+course events can be created (and exported to iCal). Repetitions types
+supported are: daily, weekly, monthly by date (e.g. the 5th of each
+month) and yearly by date</li>
    		</ul>
 	</li>
 	<li>Document templates have been greatly improved to speed-up custom course content creation</li>
-	<li>Audiorecorder (depending on streaming server) now records sounds in the document/audio directory, making them easily reusable by the course admin</li>
+	<li>Audiorecorder
+(depending on streaming server) now records sounds in the
+document/audio directory, making them easily reusable by the course
+admin</li>
 	<li>Audiorecorder is not loaded by default (took too long) and you can load it with a simple click</li>
 	<li>W3C - Compliance with XHTML 1.0 Transitional has been improved</li>
 	<li>Tracking - A new page to display access details by user is available under the Reporting tab, in the user details in a course</li>
@@ -280,7 +342,10 @@
 	<li>Fixes to the announcement tool (access by students)</li>
 	<li>Fixes to the group tool (default group settings)</li>
 	<li>Bugfix: complete export in survey tool displayed the question of all the surveys and not only those of the selected survey</li>
-    <li>Bugfix: registering a new user resulted in the language field of the user being empty which resulted in an english profile by default. This has now been changed to the platform language. </li>
+    <li>Bugfix:
+registering a new user resulted in the language field of the user being
+empty which resulted in an english profile by default. This has now
+been changed to the platform language. </li>
     <li>Performance improvement in the user list of the platform administration </li>
 	<li>Bugfix: group tutors were not migrated from 1.6 to 1.8</li>
 	<li>SCORM export: fixes in export method</li>
@@ -290,7 +355,9 @@
 <br />
 <h3>Known issues</h3>
 <ul>
-    <li>Audiorecorder takes a few seconds to write the audio file back to the document directory, so the page shouldn't be changed too quickly after recording a sound track</li>
+    <li>Audiorecorder takes a few seconds to write the audio file
+back to the document directory, so the page shouldn't be changed too
+quickly after recording a sound track</li>
     <li>When migrating from 1.6 to 1.8, some SCORM learning paths might need to be re-imported, which means their tracking is lost</li>
 </ul>
 <hr style="width: 100%; height: 2px;" />
@@ -413,7 +480,7 @@ a simple videoconferencing interface.</p>
 <ul>
 
 
-      <li> Ms-PowerPoint&reg; to Learning Path conversion</li>
+      <li> Ms-PowerPoint® to Learning Path conversion</li>
 
 
       <li>Integrated Live Conferencing&nbsp;</li>
@@ -707,13 +774,9 @@ a simple videoconferencing interface.</p>
 </ul>
   </div>
 </div>
-<hr/>
-    <a href="http://validator.w3.org/check?uri=referer"><img
-        src="http://www.w3.org/Icons/valid-xhtml10-blue"
-        alt="Valid XHTML 1.0 Transitional" height="31" width="88" style="float: right; margin: 1em;" /></a>
+<hr />
+    <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
 	<a href="http://jigsaw.w3.org/css-validator/">
-		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue"  style="float: right; margin: 1em;"
-        alt="Valid CSS" />
+		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
 	</a>
-</body>
-</html>
+</body></html>

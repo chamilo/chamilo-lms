@@ -199,21 +199,21 @@ if (api_get_path(LIBRARY_PATH) == '/lib/') {
 *
 * This is only the first proposal, test and improve!
 * @param	boolean	Option to print headers when displaying error message. Default: false
+* @return	boolean True if the user has access to the current course or is out of a course context, false otherwise
 * @todo replace global variable
 * @author Roan Embrechts
 */
 function api_protect_course_script($print_headers=false) {	
  	global $is_allowed_in_course; 	 	 	
-	//if (!isset ($_SESSION["_course"]) || !$is_allowed_in_course)	
 	if (!$is_allowed_in_course) {			
 		api_not_allowed($print_headers);
+		return false;
+	} else {
+		return true;
 	}
 }
 
-
-
-
-/**
+ /**
 * Function used to protect an admin script.
 * The function blocks access when the user has no platform admin rights.
 * This is only the first proposal, test and improve!
@@ -224,6 +224,9 @@ function api_protect_admin_script($allow_sessions_admins=false) {
 	if (!api_is_platform_admin($allow_sessions_admins)) {
 		include (api_get_path(INCLUDE_PATH)."header.inc.php");
 		api_not_allowed();
+		return false;
+	}else{
+		return true;
 	}
 }
 
@@ -238,6 +241,9 @@ function api_block_anonymous_users() {
 	if (!(isset ($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'],true)) {
 		include (api_get_path(INCLUDE_PATH)."header.inc.php");
 		api_not_allowed();
+		return false;
+	}else{
+		return true;
 	}
 }
 
@@ -830,7 +836,7 @@ function api_session_clear() {
  * Destroy the session
  *
  * @author Olivier Brouckaert
- */
+ **/
 function api_session_destroy() {
 	session_unset();
 	$_SESSION = array ();
@@ -1221,7 +1227,7 @@ function api_get_self() {
 * @author Patrick Cool
 * Reworked by Ivan Tcholakov, APR-2009
 */
-function get_lang($variable, $notrans = 'DLTT', $language = null) {
+    function get_lang($variable, $notrans = 'DLTT', $language = null) {
 
 	// We introduce the possibility to request specific language
 	// by the aditional parameter $language to this function.
@@ -2039,7 +2045,7 @@ function api_get_languages_combo($name="language") {
 		$default = $_SESSION['user_language_choice'];
     else
 		$default = $platformLanguage;
-	
+				
     $languages = $language_list['name'];
 	$folder = $language_list['folder']; 
     

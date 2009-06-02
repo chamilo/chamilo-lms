@@ -241,7 +241,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 		$session_id=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : false;
 		//if (api_is_allowed_to_edit() and !$_GET['action'])
 		echo '<div class="actions">';
-		echo '<span style="float:right;">'.search_link().'</span>';
+		echo '<span>'.search_link().'</span>';
 		if (api_is_allowed_to_edit(false,true)) {
 			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=add&amp;content=forumcategory"> '.Display::return_icon('forum_category_new.gif', get_lang('AddForumCategory')).' '.get_lang('AddForumCategory').'</a>';
 			if (is_array($forum_categories_list) and !empty($forum_categories_list)) {

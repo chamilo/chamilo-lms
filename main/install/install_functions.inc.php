@@ -671,10 +671,10 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 		//echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
 		//echo ' disabled="disabled"';
 		//end temp code
-		echo ' >Upgrade from Dokeos 1.8.x</button>';
+		echo ' >'.get_lang('UpgradeFromDokeos18x').'</button>';
 		echo '<button type="submit" class="save" name="step2_update_6" value="Upgrade from Dokeos 1.6.x"';
 		if($error) echo ' disabled="disabled"';
-		echo ' >Upgrade from Dokeos 1.6.x</button>';
+		echo ' >'.get_lang('UpgradeFromDokeos16x').'</button>';
 		echo '</p>';
 	}
 }

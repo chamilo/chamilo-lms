@@ -114,4 +114,6 @@ $PleasGoBackToStep1 = "Por favor, vuelva al paso 1";
 $OptionalParameters = "Parámetros opcionales";
 $FailedConectionDatabase = "La conexión con la base de datos ha fallado. Puede que el nombre de usuario, la contraseña o el prefijo de la base de datos sean incorrectos. Por favor, revise estos datos y vuelva a intentarlo.";
 $EncryptMethodUserPass = "Método de encriptación";
+$UpgradeFromDokeos16x = "Actualizar desde Dokeos 1.6.x";
+$UpgradeFromDokeos18x = "Actualizar desde Dokeos 1.8.x";
 ?>

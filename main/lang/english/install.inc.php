@@ -114,4 +114,6 @@ $PleasGoBackToStep1 = "Please go back to step 1";
 $OptionalParameters = "Optional parameters";
 $FailedConectionDatabase = "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.";
 $EncryptMethodUserPass = "Encryption method";
+$UpgradeFromDokeos16x = "Upgrade from Dokeos 1.6.x";
+$UpgradeFromDokeos18x = "Upgrade from Dokeos 1.8.x";
 ?>

@@ -641,7 +641,7 @@ function display_add_form()
 			{
 				if ($current_group['number_of_members'] > 0)
 				{
-					echo '<option value="group_'.$current_group['id'].'">G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.api_get_lang('Users').'</option>';
+					echo '<option value="group_'.$current_group['id'].'">G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.get_lang('Users').'</option>';
 				}
 			}
 		}

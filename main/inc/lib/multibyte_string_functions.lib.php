@@ -230,6 +230,32 @@ function api_xml_http_response_encode($string, $from_encoding = null) {
 }
 
 /**
+ * This function converts a given string to the encoding that filesystem uses for representing file/folder names.
+ * @param string $string			The string being converted.
+ * @param string $from_encoding		The encoding that $string is being converted from. If it is omited, the platform character set is assumed.
+ * @return string					Returns the converted string.
+ */
+function api_file_system_encode($string, $from_encoding = null) {
+	if (empty($from_encoding)) {
+		$from_encoding = api_mb_internal_encoding();
+	}
+	return api_convert_encoding($string, api_get_file_system_encoding(), $from_encoding);
+}
+
+/**
+ * This function converts a given string from the encoding that filesystem uses for representing file/folder names.
+ * @param string $string			The string being converted.
+ * @param string $from_encoding		The encoding that $string is being converted from. If it is omited, the platform character set is assumed.
+ * @return string					Returns the converted string.
+ */
+function api_file_system_decode($string, $to_encoding = null) {
+	if (empty($to_encoding)) {
+		$to_encoding = api_mb_internal_encoding();
+	}
+	return api_convert_encoding($string, $to_encoding, api_get_file_system_encoding());
+}
+
+/**
  * ----------------------------------------------------------------------------
  * Common multibyte string functions
  * ----------------------------------------------------------------------------

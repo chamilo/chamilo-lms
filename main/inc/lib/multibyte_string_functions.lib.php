@@ -1135,6 +1135,40 @@ function api_get_system_encoding() {
 }
 
 /**
+ * This function returns the encoding, currently used by the file system.
+ * @return string	The file system's encoding, it depends on the locale that OS currently uses.
+ * @link http://php.net/manual/en/function.setlocale.php
+ * Note: For Linux systems, to see all installed locales type in a terminal  locale -a
+ */
+function api_get_file_system_encoding() {
+	static $file_system_encoding;
+	if (!isset($file_system_encoding)) {
+		$locale = setlocale(LC_CTYPE, '0');
+		$seek_pos = strpos($locale, '.');
+		if ($seek_pos !== false) {
+			$file_system_encoding = substr($locale, $seek_pos + 1);
+			if (IS_WINDOWS_OS) {
+				$file_system_encoding = 'CP'.$file_system_encoding;
+			}
+		}
+		// Dealing with some aliases.
+		$file_system_encoding = str_ireplace('utf8', 'UTF-8', $file_system_encoding);
+		$file_system_encoding = preg_replace('/^CP(125[0-9])$/', 'WINDOWS-\1', $file_system_encoding);
+		$file_system_encoding = str_replace('WINDOWS-1252', 'ISO-8859-15', $file_system_encoding);
+		if (empty($file_system_encoding)) {
+			if (IS_WINDOWS_OS) {
+				// Not expected for Windows, this assignment is here just in case.
+				$file_system_encoding = api_get_system_encoding();
+			} else {
+				// For Ububntu and other UTF-8 enabled Linux systems this fits with the default settings.
+				$file_system_encoding = 'UTF-8';
+			}
+		}
+	}
+	return $file_system_encoding;
+}
+
+/**
  * Sets/Gets internal character encoding of the common string functions within the PHP mbstring extension.
  * @param string $encoding	When this parameter is given, the function sets the internal encoding.
  * @return string			When $encoding parameter is not given, the function returns the internal encoding.

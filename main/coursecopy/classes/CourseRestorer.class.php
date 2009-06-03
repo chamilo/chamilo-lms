@@ -1,4 +1,4 @@
-<?php // $Id: CourseRestorer.class.php 19948 2009-04-21 17:27:59Z juliomontoya $
+<?php // $Id: CourseRestorer.class.php 21245 2009-06-03 14:56:13Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -113,22 +113,21 @@ class CourseRestorer
 						// First check if there isn't allready a record for this resource
 						$sql = "SELECT * FROM $table WHERE tool = '".$property['tool']."' AND ref = '".$resource->destination_id."'";
 						$res = api_sql_query($sql,__FILE__,__LINE__);
-						if( Database::num_rows($res) == 0)
-						{
+						if( Database::num_rows($res) == 0) {
 							// The to_group_id and to_user_id are set to default values as users/groups possibly not exist in the target course
 							$sql = "INSERT INTO $table SET
-													tool = '".$property['tool']."',
-													insert_user_id = '".$property['insert_user_id']."',
-													insert_date = '".$property['insert_date']."',
-													lastedit_date = '".$property['lastedit_date']."',
-													ref = '".$resource->destination_id."',
-													lastedit_type = '".$property['lastedit_type']."',
-													lastedit_user_id = '".$property['lastedit_user_id']."',
-													visibility = '".$property['visibility']."',
-													start_visible = '".$property['start_visible']."',
-													end_visible = '".$property['end_visible']."',
-													to_user_id  = '".$property['to_user_id']."',
-													to_group_id = '0'";
+									tool 				= '".Database::escape_string($property['tool'])."',
+									insert_user_id 		= '".Database::escape_string($property['insert_user_id'])."',
+									insert_date 		= '".Database::escape_string($property['insert_date'])."',
+									lastedit_date 		= '".Database::escape_string($property['lastedit_date'])."',
+									ref 				= '".Database::escape_string($resource->destination_id)."',
+									lastedit_type 		= '".Database::escape_string($property['lastedit_type'])."',
+									lastedit_user_id 	= '".Database::escape_string($property['lastedit_user_id'])."',
+									visibility 			= '".Database::escape_string($property['visibility'])."',
+									start_visible 		= '".Database::escape_string($property['start_visible'])."',
+									end_visible 		= '".Database::escape_string($property['end_visible'])."',
+									to_user_id  		= '".Database::escape_string($property['to_user_id'])."',
+									to_group_id 		= '0'";
 													;
 							api_sql_query($sql, __FILE__, __LINE__);
 						}
@@ -842,8 +841,8 @@ class CourseRestorer
 	/**
 	 * Check availability of a survey code
 	 */
-	function is_survey_code_available($survey_code){
-		
+	function is_survey_code_available($survey_code)
+	{		
 		$table_sur = Database :: get_course_table(TABLE_SURVEY, $this->course->destination_db);
 		$sql = "SELECT * FROM $table_sur WHERE code='".Database::escape_string($survey_code)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -869,25 +868,26 @@ class CourseRestorer
 			}
 			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION, $this->course->destination_db);
 			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $this->course->destination_db);
+			
 			$sql = "INSERT INTO ".$table_que." " .
-					"SET survey_id = '".addslashes($question->survey_id)."', " .
-					"survey_question = '".addslashes($question->survey_question)."', " .
-					"survey_question_comment = '".addslashes($question->survey_question_comment)."', " .
-					"type = '".addslashes($question->survey_question_type)."', " .
-					"display = '".addslashes($question->display)."', " .
-					"sort = '".addslashes($question->sort)."', " .
-					"shared_question_id = '".addslashes($question->shared_question_id)."', " .
-					"max_value = '".addslashes($question->max_value)."' ";
+					"SET survey_id = 		'".Database::escape_string($question->survey_id)."', " .
+					"survey_question = 		'".Database::escape_string($question->survey_question)."', " .
+					"survey_question_comment = '".Database::escape_string($question->survey_question_comment)."', " .
+					"type = 				'".Database::escape_string($question->survey_question_type)."', " .
+					"display = 				'".Database::escape_string($question->display)."', " .
+					"sort = 				'".Database::escape_string($question->sort)."', " .
+					"shared_question_id = 	'".Database::escape_string($question->shared_question_id)."', " .
+					"max_value = 			'".Database::escape_string($question->max_value)."' ";
 			api_sql_query($sql, __FILE__, __LINE__);
+			
 			$new_id = Database::get_last_insert_id();
-			foreach ($question->answers as $index => $answer)
-			{
+			foreach ($question->answers as $index => $answer) {
 				$sql = "INSERT INTO ".$table_ans." " .
 						"SET " .
-						"question_id = '".addslashes($new_id)."', " .
-						"option_text = '".addslashes($answer['option_text'])."', " .
-						"sort = '".addslashes($answer['sort'])."', " .
-						"survey_id = '".addslashes($question->survey_id)."'";
+						"question_id = '".Database::escape_string($new_id)."', " .
+						"option_text = '".Database::escape_string($answer['option_text'])."', " .
+						"sort 		 = '".Database::escape_string($answer['sort'])."', " .
+						"survey_id 	 = '".Database::escape_string($question->survey_id)."'";
 
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
@@ -901,8 +901,7 @@ class CourseRestorer
 	 */
 	function restore_learnpaths()
 	{
-		if ($this->course->has_resources(RESOURCE_LEARNPATH))
-		{
+		if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
 			$table_main 	= Database :: get_course_table(TABLE_LP_MAIN, $this->course->destination_db);
 			$table_item 	= Database :: get_course_table(TABLE_LP_ITEM, $this->course->destination_db);
 			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST, $this->course->destination_db);
@@ -911,8 +910,7 @@ class CourseRestorer
 			$prereq_old = array ();
 			$item_old_id = array ();
 
-			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp)
-			{
+			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
 				$sql = "INSERT INTO ".$table_main." " .
 						"SET lp_type = '".$lp->lp_type."', " .
 								"name = '".Database::escape_string($lp->name)."', " .
@@ -933,8 +931,7 @@ class CourseRestorer
 
 				$new_lp_id = Database::get_last_insert_id();
 
-				if($lp->visibility)
-				{
+				if($lp->visibility) {
 					$sql = "INSERT INTO $table_tool SET name='".Database::escape_string($lp->name)."', link='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id', image='scormbuilder.gif', visibility='1', admin='0', address='squaregrey.gif'";
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
@@ -943,8 +940,10 @@ class CourseRestorer
 				$parent_item_ids = array();
 				$previous_item_ids = array();
 				$next_item_ids = array();
-				foreach ($lp->get_items() as $index => $item)
-				{
+				$old_prerequisite = array();
+				$old_refs = array();				
+				
+				foreach ($lp->get_items() as $index => $item) {
 					/*
 					if ($item['id'] != 0)
 					{
@@ -953,37 +952,43 @@ class CourseRestorer
 						 $item['id'] = $this->course->resources[$type_parts[0]][$item['id']]->destination_id;
 					}
 					*/
+					/*
 					//Get the new ref ID for all items that are not sco (dokeos quizzes, documents, etc)
 					$ref = '';
 					if(!empty($item['ref']) && $lp->lp_type!='2'){
 						$ref = $this->get_new_id($item['item_type'],$item['ref']);
-					}else{
+					} else {
 						$ref = $item['ref'];
-					}
+					}*/
+					
+					// we set the ref code here and then we update in a for loop
+					$ref = $item['ref'];
+					
 					//Dealing with path the same way as ref as some data has been put into path when it's a
 					//local resource
 					$path = Database::escape_string($item['path']);
-					if(strval(intval($path)) === $path)
-					{
+					if(strval(intval($path)) === $path) {
 						$path = $this->get_new_id($item['item_type'],$path);
 					}
+					
 					$sql = "INSERT INTO ".$table_item." SET " .
-							"lp_id = '".$new_lp_id."', " .
-							"item_type='".$item['item_type']."', " .
-							"ref = '".$ref."', " .
+							"lp_id = '".Database::escape_string($new_lp_id)."', " .
+							"item_type='".Database::escape_string($item['item_type'])."', " .
+							"ref = '".Database::escape_string($ref)."', " .
 							"title = '".Database::escape_string($item['title'])."', " .
 							"description ='".Database::escape_string($item['description'])."', " .
-							"path = '".$path."', " .
-							"min_score = '".$item['min_score']."', " .
-							"max_score = '".$item['max_score']."', " .
-							"mastery_score = '".$item['mastery_score']."', " .
-							"parent_item_id = '".$item['parent_item_id']."', " .
-							"previous_item_id = '".$item['previous_item_id']."', " .
-							"next_item_id = '".$item['next_item_id']."', " .
-							"display_order = '".$item['display_order']."', " .
+							"path = '".Database::escape_string($path)."', " .
+							"min_score = '".Database::escape_string($item['min_score'])."', " .
+							"max_score = '".Database::escape_string($item['max_score'])."', " .
+							"mastery_score = '".Database::escape_string($item['mastery_score'])."', " .
+							"parent_item_id = '".Database::escape_string($item['parent_item_id'])."', " .
+							"previous_item_id = '".Database::escape_string($item['previous_item_id'])."', " .
+							"next_item_id = '".Database::escape_string($item['next_item_id'])."', " .
+							"display_order = '".Database::escape_string($item['display_order'])."', " .
 							"prerequisite = '".Database::escape_string($item['prerequisite'])."', " .
 							"parameters='".Database::escape_string($item['parameters'])."', " .
 							"launch_data = '".Database::escape_string($item['launch_dataprereq_type'])."'";
+							
 					api_sql_query($sql, __FILE__, __LINE__);
 					$new_item_id = Database::get_last_insert_id();
 					//save a link between old and new item IDs
@@ -994,9 +999,44 @@ class CourseRestorer
 					$previous_item_ids[$new_item_id] = $item['previous_item_id'];
 					//save a reference of items that need a next_item_id refresh
 					$next_item_ids[$new_item_id] = $item['next_item_id'];
+					
+					if (!empty($item['prerequisite'])) {
+						if ($lp->lp_type =='2') {
+							// if is an sco
+							$old_prerequisite[$new_item_id]= $item['prerequisite'];
+						} else {
+							$old_prerequisite[$new_item_id]= $new_item_ids[$item['prerequisite']];
+						}
+					}
+					
+					if (!empty($ref)) {
+						if ($lp->lp_type =='2') {
+							// if is an sco
+							$old_refs[$new_item_id]= $ref;
+						} else {
+							$old_refs[$new_item_id]= $new_item_ids[$ref];
+						}
+					}
+					
+				}			
+						
+				// updating prerequisites
+				foreach ($old_prerequisite  as $key=>$my_old_prerequisite) {
+					if($my_old_prerequisite != ''){																	
+						$sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."' WHERE id = '".$key."'  ";			
+						api_sql_query($sql, __FILE__, __LINE__);					
+					}																		
 				}
-				foreach ($parent_item_ids as $new_item_id => $parent_item_old_id)
-				{
+				
+				//updating refs
+				foreach ($old_refs  as $key=>$my_old_ref) {					
+					if ($my_old_ref != '') {										
+						$sql = "UPDATE ".$table_item." SET ref = '".$my_old_ref."' WHERE id = '".$key."'  ";						
+						api_sql_query($sql, __FILE__, __LINE__);					
+					}																		
+				}
+				
+				foreach ($parent_item_ids as $new_item_id => $parent_item_old_id) {
 					$parent_new_id = 0;
 					if($parent_item_old_id != 0){
 						$parent_new_id = $new_item_ids[$parent_item_old_id];
@@ -1004,8 +1044,7 @@ class CourseRestorer
 					$sql = "UPDATE ".$table_item." SET parent_item_id = '".$parent_new_id."' WHERE id = '".$new_item_id."'";
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
-				foreach ($previous_item_ids as $new_item_id => $previous_item_old_id)
-				{
+				foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
 					$previous_new_id = 0;
 					if($previous_item_old_id != 0){
 						$previous_new_id = $new_item_ids[$previous_item_old_id];
@@ -1013,23 +1052,25 @@ class CourseRestorer
 					$sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."' WHERE id = '".$new_item_id."'";
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
-				foreach ($next_item_ids as $new_item_id => $next_item_old_id)
-				{
+				
+				foreach ($next_item_ids as $new_item_id => $next_item_old_id) {
 					$next_new_id = 0;
 					if($next_item_old_id != 0){
 						$next_new_id = $new_item_ids[$next_item_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."' WHERE id = '".$new_item_id."'";
 					api_sql_query($sql, __FILE__, __LINE__);
-				}
-				$this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
+				}				
+				$this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;				
 			}
+				
 		}
 	}
 	/**
 	 * restore works
 	 */
-	function restore_student_publication () {
+	function restore_student_publication ()
+	{
 		$my_course_id=api_get_course_id();
 		$my_course_info=api_get_course_info($my_course_id);//student_publication_assignment
 

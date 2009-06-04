@@ -14,6 +14,7 @@ class AllTests extends TestSuite {
         $this->TestSuite('All tests');
         //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php');
         $this->addFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');
+     //	$this->addFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
         //$this->assertTrue(file_exists('/temp/test.log'));
     }
 }

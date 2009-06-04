@@ -431,7 +431,7 @@ class TestMainApi extends UnitTestCase {
 	function testApiIsCoach(){
 		global $_user;
 		global $sessionIsCoach;
-		$_user['user_id']=1;
+		$_user['user_id']=2;
 		$sessionIsCoach=api_store_result($result=false);
 		$res=api_is_coach();
 		$this->assertFalse($res);
@@ -452,11 +452,14 @@ class TestMainApi extends UnitTestCase {
 	function testApiDisplayToolTitle(){
 		$tit=true;
 		$titleElement['mainTitle']=$tit;
-		$res=api_display_tool_title($titleElement);
-		$this->assertFalse($res);
+		ob_start();
+		api_display_tool_title($titleElement);
+		$res = ob_get_contents();
+		ob_end_clean();
+		$this->assertEqual($res,'<h3>1</h3>');
 		$this->assertTrue(isset($titleElement));
 		$this->assertTrue($titleElement['mainTitle']);
-		
+		$this->assertPattern('/<h3>1<\/h3>/', $res);
 	}/**
 		untested
 	
@@ -470,16 +473,22 @@ class TestMainApi extends UnitTestCase {
 	
 	function testApiDisplayArray(){
 		global $info_array;
-		$res=api_display_array($info_array);
-		$this->assertFalse($res);
-			
+		ob_start();
+		api_display_array($info_array);
+		$res = ob_get_contents();
+		ob_end_clean();
+		$this->assertNotEqual($res,'');
+		$this->assertPattern('/<div class="normal-message">.*<\/div>/',$res);
 	}
 		
 	function testApiDisplayDebugInfo(){
 		$message = "mensaje de error"; // siempre que puedas, te conviene probar con valores creados al azar
-		$res=api_display_debug_info($message);
-		$this->assertFalse($res);
-		
+		ob_start();
+		api_display_debug_info($message);
+		$res = ob_get_contents();
+		ob_end_clean();
+		$this->assertNotEqual($res,'');
+		$this->assertPattern('/<i>Debug info<\/i>.*/',$res);
 	}
 		
 		/**
@@ -564,14 +573,14 @@ class TestMainApi extends UnitTestCase {
 	 	$this->assertTrue($res);
 	 	$this->assertFalse(isset($_course['dbName']));
 	 
-	 }
-	  /*
+	 }/*
+	  
 	  * function very complex and analized test is empty
 	  *	
 	  	function testApiItemPropertyUpdate(){
 	  	$res=api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = NULL, $start_visible = 0, $end_visible = 0);
 	 	
-	 }*/
+	 }
 		
 	function testApiGetLanguagesCombo(){
 		$platformLanguage = api_get_setting('platformLanguage');
@@ -607,7 +616,7 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue(isset($var));
 	
 	}
-	
+	*/
 	function testApiGetThemes(){
 		$cssdir= api_get_path(SYS_PATH).'main/css/';
 		$res=api_get_themes();
@@ -617,10 +626,13 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiDispHtmlArea(){
-		$name = 'hola';
+		$name = 'name';
 		global $_configuration, $_course, $fck_attribute;
-		$res=api_disp_html_area($name, $content ='', $height='', $width='100%', $optAttrib='');
-		$this->assertFalse($res);
+		ob_start();
+		api_disp_html_area($name, $content ='', $height='', $width='100%', $optAttrib='');
+		$res = ob_get_contents();
+		ob_end_clean();
+		$this->assertNotEqual($res,'');
 		
 	}
 	
@@ -815,8 +827,6 @@ class TestMainApi extends UnitTestCase {
 	function testApiIsWindowsOs(){
 		$res= api_is_windows_os();
 		$this->assertFalse($res);
-		$this->assertFalse(var_dump(api_is_windows_os()));
-	
 	}
 	
 	function testApiUrlToLocalPath(){

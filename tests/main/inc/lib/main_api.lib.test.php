@@ -672,14 +672,60 @@ class TestMainApi extends UnitTestCase {
 		global $_plugins;
 		$location=2;
 		$_plugins[$location]=1;
-		$res = api_plugin($location);
-		$this->assertFalse($res);
+		$res1 = api_plugin($location);
+		$this->assertFalse($res1);
 		$this->assertTrue($_plugins[$location]);	
 	
 	} 
+	function testApiDeleteSetting(){
+		
+	}
 	
-	function testApiGetCurrentAccessUrlId(){
-		$res = api_get_current_access_url_id();
+	function testApiDeleteCategorySettings(){
+		$c= false;
+		$res = api_delete_category_settings($c,$a=1);
+		$this->assertFalse($res); 
+	}
+	
+	function testApiAddSetting(){
+		$sk=null;
+		$type='textfield';
+		$c=null;
+		$title='';
+		$com='';
+		$sc=null;
+		$skt=null;
+		$a=1;
+		$v=0;
+		$va=array('val'=>10, 'var'=>'name');
+		$res= api_add_setting($va['val'],$va['var'],null,null,null,null,null,null,null,null,null);
+		$this->assertFalse($res);
+	}
+	
+	function testApiIsCourseVisibleForUser(){
+		$res = api_is_course_visible_for_user($userid=null, $cid=null);
+		$this->assertFalse($res);
+		
+	}
+	
+	function testApiIsElementInTheSession(){
+		$_tool['tool'] = 'TOOL_SURVEY'; 
+		$_id['element_id']=3;
+		$res = api_is_element_in_the_session($_tool['tool'], $_id['element_id'], $session_id=null);
+		$this->assertFalse($res);
+		$this->assertTrue((isset($_tool['tool'],$_id['element_id'])));
+	}
+	
+	function testReplaceDangerousChar(){
+		$filename =ereg_replace("\.+$", "", substr(strtr(ereg_replace(
+	    "[^!-~\x80-\xFF]", "_", trim($filename)), '\/:*?"<>|\'',
+        /* Keep C1 controls for UTF-8 streams */  '-----_---_'), 0, 250));
+		$res = replace_dangerous_char($filename, $strict = 'loose');
+		$this->assertEqual($res,$filename, $message = 'no se pudo');
+	}
+	
+	function testApiRequestUri(){
+		$res = api_request_uri();
 		$this->assertTrue($res);
 	}
 	
@@ -688,13 +734,13 @@ class TestMainApi extends UnitTestCase {
 		$res=api_create_include_path_setting();
 		$this->assertTrue($res);
 	}
-	/*
+	
 	function testApiGetCurrentAccessUrlId(){
 		
 		$res=api_get_current_access_url_id();
 		$this->assertTrue($res);
-		
-	}*/
+	
+	}
 	
 	function testApiGetAccessUrlFromUser(){
 		$user_id=1;
@@ -703,7 +749,7 @@ class TestMainApi extends UnitTestCase {
 		
 	}
 		
-	function testApiGetStausOfUserInCourse(){
+	function testApiGetStatusOfUserInCourse(){
 		$id = array(
 					'course_code'=>'211',
 					'user_id'=>'112');
@@ -783,9 +829,11 @@ class TestMainApi extends UnitTestCase {
 	}
 	
 	function testApiResizeImage(){
-		global $image, $target_width, $target_height;
-		$res = api_resize_image($image,$target_width,$target_height);
+		//global $image, $target_width, $target_height;
+		$resize = array('image' =>'image.jpg', 'target_width'=>100, 'target_height'=>100);
+		$res = api_resize_image($resize['image'],$resize['target_width'],$resize['target_height']);
 		$this->assertTrue($res);
+		$this->assertWithinMargin($first = 10, $second=20,$margin=200, $message = 'no se pudo redimensionar imagen');
 	
 	}
 		
@@ -796,6 +844,14 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue($res);
 		$this->assertTrue($result);
 	
+	}
+	
+	function testApiGetToolsLists(){
+		$tool_list = 'false';
+		$res = api_get_tools_lists($my_tool =null);
+		$this->assertTrue($res);
+		$this->assertTrue($tool_list);
+
 	}
 
 }

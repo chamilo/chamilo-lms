@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 20917 2009-05-20 18:47:47Z cfasanando $
+<?php // $Id: database.lib.php 21250 2009-06-04 22:36:12Z aportugal $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -258,6 +258,7 @@ class Database
 	}
 	/**
 	*	Returns the name of the Dokeos SCORM database.
+	*	@deprecated
 	*/
 	function get_scorm_database()
 	{

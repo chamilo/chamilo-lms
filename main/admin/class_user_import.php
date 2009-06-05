@@ -73,7 +73,7 @@ function validate_data($user_classes)
 		{
 			if (UserManager :: is_username_available($user_class['UserName']))
 			{
-				$user_class['error'] = get_lang('UnknownUser');
+				$user_class['error'] = get_lang('UnknownUser').":".$user_class['UserName'];
 				$errors[] = $user_class;
 			}
 		}
@@ -185,13 +185,13 @@ Display :: display_header($tool_name);
 api_display_tool_title($tool_name);
 if (count($errors) != 0)
 {
-	$error_message = '<ul>';
+	$error_message = "\n";
 	foreach ($errors as $index => $error_class_user)
 	{
-		$error_message .= '<li>'.get_lang('Line').' '.$error_class_user['line'].': <b>'.$error_class_user['error'].'</b>: ';
-		$error_message .= '</li>';
+		$error_message .= get_lang('Line').' '.$error_class_user['line'].': '.$error_class_user['error'].'</b>: ';
+		$error_message .= "\n";
 	}
-	$error_message .= '</ul>';
+	$error_message .= "\n";
 	Display :: display_error_message($error_message);
 }
 

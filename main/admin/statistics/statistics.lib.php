@@ -270,8 +270,8 @@ class Statistics
 		$sql = "SELECT COUNT(*) AS n FROM $user_table WHERE LENGTH(picture_uri) > 0";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$count2 = mysql_fetch_object($res);
-		$result[get_lang('No')] = $count1->n;
-		$result[get_lang('Yes')] = $count2->n;
+		$result[get_lang('No')] = $count1->n - $count2->n; // #users without picture
+		$result[get_lang('Yes')] = $count2->n; // #users with picture
 		Statistics::print_stats(get_lang('CountUsers').' ('.get_lang('UserPicture').')',$result,true);
 	}
 	/**

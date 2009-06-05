@@ -3473,7 +3473,7 @@ function api_is_windows_os() {
 function api_url_to_local_path($url)
 {
 	// Check for a valid URL.
-	if (!preg_match('/https?:\/\/(.*?):{0,1}([0-9]*)(\/)(.*?)/', $url))
+	if (!preg_match('/https?:\/\/(.*?):{0,1}([0-9]*)(\/)(.*?)/i', $url))
 	{
 		return $url;	// Return non-URLs without modifications.
 	}

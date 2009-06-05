@@ -739,7 +739,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);        
 				$time = api_get_datetime();
 		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
-							"VALUES('".$_course['official_code']."', '".$_user['user_id']."', '$time', '$time', '1')";
+							"VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1')";
 		
 				api_sql_query($sql,__FILE__,__LINE__);
 			}
@@ -807,7 +807,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 				api_sql_query($sql,__FILE__,__LINE__);
 	   		} else {
 	            $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
-						"VALUES('".$_course['official_code']."', '".$_user['user_id']."', '$time', '$time', '1')";
+						"VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1')";
 				api_sql_query($sql,__FILE__,__LINE__);	
 	   		}		
 		}

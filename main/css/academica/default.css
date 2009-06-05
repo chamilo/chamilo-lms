@@ -200,14 +200,14 @@ a.breadcrumb0 {
 	padding-left: 30px;
 	position: relative;
 	min-height: 320px;
-	padding-left: 15px;
+	padding-left: 20px;
 	padding-right: 15px;
 	padding-bottom: 5px;
 }
 /* my courses styles */
-#maincontent {
-	float: left;
-	width: 80%;
+.maincontent {
+	/* float: left; */
+	width: 77%;
 	min-height: 333px;
 	margin-top:0;
 	float: right;

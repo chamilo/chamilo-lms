@@ -41,6 +41,32 @@
 
 /**
  * ----------------------------------------------------------------------------
+ * A safe way to calculate binary lenght of a string (as number of bytes)
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Calculates binary lenght of a string, as number of bytes, regardless the php-setting mbstring.func_overload.
+ * This function should work for all multi-byte related changes of PHP5 configuration.
+ * @param string $string	The input string.
+ * @return int				Returns the length of the input string (or binary data) as number of bytes.
+ */
+function api_byte_count($string) {
+	static $use_mb_strlen;
+	if (!isset($use_mb_strlen)) {
+		$use_mb_strlen = function_exists('mb_strlen') && ((int) ini_get('mbstring.func_overload') & 2);
+	}
+	if ($use_mb_strlen) {
+		return mb_strlen($string, '8bit');
+	}
+	return strlen($string);
+
+	// For PHP6 this function probably will contain:
+	//return strlen((binary)$string);
+}
+
+/**
+ * ----------------------------------------------------------------------------
  * Multibyte string conversion functions
  * ----------------------------------------------------------------------------
  */

@@ -3,7 +3,7 @@
  *
  *	Copyright (c) 2008-2009 Dokeos SPRL
  *	Copyright (c) 2008-2009 Julio Montoya
- *	Copyright (c) 2008-2009 Juan Carlos Ra�a
+ *	Copyright (c) 2008-2009 Juan Carlos Raña
  *	Copyright (c) 2008-2009 Ivan Tcholakov
  *
  *	For a full list of contributors, see "credits.txt".
@@ -416,7 +416,7 @@ FCKConfig.ToolbarSets["CommentAnswers"] = [
 
 //Wiki
 FCKConfig.ToolbarSets["Wiki"] = [
-	['NewPage','Templates','Save','PageBreak','Preview','FitWindow','-','PasteWord','-','Undo','Redo','-','SelectAll','-','Find'],
+	['NewPage','Templates','Save','PageBreak','Preview','FitWindow','-','PasteText','-','Undo','Redo','-','SelectAll','-','Find'],
 	['Wikilink','Link','Unlink','Anchor'],
 	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
 	['Table','Smiley','SpecialChar','googlemaps'],
@@ -427,7 +427,7 @@ FCKConfig.ToolbarSets["Wiki"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Wiki_Student"] = [
-	['NewPage','Save','PageBreak','Preview','FitWindow','-','PasteWord','-','Undo','Redo','-','SelectAll','-','Find'],
+	['NewPage','Save','PageBreak','Preview','FitWindow','-','PasteText','-','Undo','Redo','-','SelectAll','-','Find'],
 	['Wikilink','Link','Unlink','Anchor'],
 	['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
 	['Table','Smiley','SpecialChar','googlemaps'],

@@ -137,6 +137,7 @@ function api_mime_content_type($filename) {
  * @param string $filename		The filename of the uploaded file.
  * @param string $destination	The destination of the moved file.
  * @return bool					If the specified file is not a valid upload file or it cannot be moved for some reason, the function will return FALSE.
+ * @link http://php.net/move_uploaded_file
  */
 function api_move_uploaded_file($filename, $destination) {
 	return move_uploaded_file(api_file_system_encode($filename), api_file_system_encode($destination));

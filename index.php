@@ -1,4 +1,4 @@
-<?php // $Id: index.php 21281 2009-06-07 16:53:41Z herodoto $
+<?php // $Id: index.php 21283 2009-06-07 20:53:44Z herodoto $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 21281 2009-06-07 16:53:41Z herodoto $
+* 	@version $Id: index.php 21283 2009-06-07 20:53:44Z herodoto $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -466,7 +466,7 @@ function display_anonymous_right_menu() {
 		echo '</div>';
 	}
 
-	elseif(file_exists($home.'home_menu_'.$user_selected_language.'.html') && file_exists($home.'home_menu_'.$user_selected_language.'.html') && file_get_contents($home.'home_menu_'.$user_selected_language.'.html')!='')
+	elseif(file_exists($home.'home_menu_'.$user_selected_language.'.html') && file_get_contents($home.'home_menu_'.$user_selected_language.'.html')!='')
 	{	
 		echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
 	 	echo "<ul class=\"menulist\">";
@@ -491,7 +491,7 @@ function display_anonymous_right_menu() {
 			include ($home_old.'home_notice.html');
 		}
 		echo '</div>';
-	} elseif(file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_get_contents($home.'home_notice_'.$user_selected_language.'.html')!='') {
+	} elseif(file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_get_contents($home.'home_notice_'.$user_selected_language.'.html')!='') {
 		echo '<div class="note">';
 		include($home.'home_notice_'.$user_selected_language.'.html'); 
 		echo '</div>';

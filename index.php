@@ -1,4 +1,4 @@
-<?php // $Id: index.php 21277 2009-06-07 09:59:56Z herodoto $
+<?php // $Id: index.php 21281 2009-06-07 16:53:41Z herodoto $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 21277 2009-06-07 09:59:56Z herodoto $
+* 	@version $Id: index.php 21281 2009-06-07 16:53:41Z herodoto $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -449,10 +449,10 @@ function display_anonymous_right_menu() {
 	$user_selected_language = api_get_interface_language();
 	global $home, $home_old;
 	if (!isset ($user_selected_language))
-		{
+	{
 		$user_selected_language = $platformLanguage;
-		} 
-		
+	} 
+
 	if (!file_exists($home.'home_menu_'.$user_selected_language.'.html') && file_exists($home.'home_menu.html') && file_get_contents($home.'home_menu.html')!='')
 	{
 		echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
@@ -462,9 +462,10 @@ function display_anonymous_right_menu() {
 		else {
 			include ($home_old.'home_menu.html');
 		}
-		echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
-	 	echo "<ul class=\"menulist\">";		
+		echo '</ul>';
+		echo '</div>';
 	}
+
 	elseif(file_exists($home.'home_menu_'.$user_selected_language.'.html') && file_exists($home.'home_menu_'.$user_selected_language.'.html') && file_get_contents($home.'home_menu_'.$user_selected_language.'.html')!='')
 	{	
 		echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
@@ -484,7 +485,7 @@ function display_anonymous_right_menu() {
 	
 	if (!file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_exists($home.'home_notice.html') && file_get_contents($home.'home_notice.html')!='') {
 		echo '<div class="note">';
-		if (file_exists($home.'home_notice.html'))			
+		if (file_exists($home.'home_notice.html'))
 			include ($home.'home_notice.html');
 		else {
 			include ($home_old.'home_notice.html');

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 21176 2009-06-01 23:06:00Z aportugal $
+<?php // $Id: index.php 21277 2009-06-07 09:59:56Z herodoto $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 21176 2009-06-01 23:06:00Z aportugal $
+* 	@version $Id: index.php 21277 2009-06-07 09:59:56Z herodoto $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -443,28 +443,37 @@ function display_anonymous_right_menu() {
 		}
 	}
 	
-	// help ection
+	// help section
 	/*** hide right menu "general" and other parts on anonymous right menu  *****/
-	/** General -> Forum. Should disappear (not relevant for end user)
-	 echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
-	 echo "<ul class=\"menulist\">";
-
+	 
 	$user_selected_language = api_get_interface_language();
 	global $home, $home_old;
 	if (!isset ($user_selected_language))
-		$user_selected_language = $platformLanguage; 
-	if (!file_exists($home.'home_menu_'.$user_selected_language.'.html')) {
+		{
+		$user_selected_language = $platformLanguage;
+		} 
+		
+	if (!file_exists($home.'home_menu_'.$user_selected_language.'.html') && file_exists($home.'home_menu.html') && file_get_contents($home.'home_menu.html')!='')
+	{
+		echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
+	 	echo "<ul class=\"menulist\">";
 		if (file_exists($home.'home_menu.html'))
 			include ($home.'home_menu.html');
 		else {
 			include ($home_old.'home_menu.html');
-		}		
-	} else {
-		include($home.'home_menu_'.$user_selected_language.'.html');
+		}
+		echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
+	 	echo "<ul class=\"menulist\">";		
 	}
-	echo '</ul>';
-	echo '</div>';
-	**/
+	elseif(file_exists($home.'home_menu_'.$user_selected_language.'.html') && file_exists($home.'home_menu_'.$user_selected_language.'.html') && file_get_contents($home.'home_menu_'.$user_selected_language.'.html')!='')
+	{	
+		echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
+	 	echo "<ul class=\"menulist\">";
+		include($home.'home_menu_'.$user_selected_language.'.html');
+		echo '</ul>';
+		echo '</div>';
+	}	
+	
 	if ($_user['user_id'] && api_number_of_plugins('campushomepage_menu') > 0) {
 		echo '<div class="note" style="background: none">';
 		api_plugin('campushomepage_menu');

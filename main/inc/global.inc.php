@@ -322,6 +322,10 @@ foreach($result as $row)
 	$_plugins[$key][]=$row['selected_value'];
 }
 
+//load array Kses for Htmlpurifier
+require_once $includePath."/lib/formvalidator/Rule/allowed_tags.inc.php";
+//load htmpurifier 
+require_once $includePath."/lib/htmlpurifier/library/HTMLPurifier.auto.php";
 
 // include the local (contextual) parameters of this course or section
 require($includePath."/local.inc.php");
@@ -334,10 +338,7 @@ if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php'))
 {
 	LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '',$_configuration['statistics_database']);
 }
-//load array Kses for Htmlpurifier
-require_once $includePath."/lib/formvalidator/Rule/allowed_tags.inc.php";
-//load htmpurifier
-require_once $includePath."/lib/htmlpurifier/library/HTMLPurifier.auto.php";
+
 // ===== end "who is logged in?" module section =====
 
 if(get_setting('server_type') == 'test')

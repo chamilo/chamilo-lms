@@ -49,7 +49,7 @@ class TestAddCourse extends UnitTestCase {
 							 $course_datos['course_language'],$course_datos['course_admin_id'],
 							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
 							 
-		$this->assertPattern('/\d/', $res);
+		$this->assertFalse($res===0);
 		
     }
    

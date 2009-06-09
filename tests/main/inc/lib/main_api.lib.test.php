@@ -198,7 +198,7 @@ class TestMainApi extends UnitTestCase {
 	
 	function testApiGetAnonymousId(){
 		$res = api_get_anonymous_id();
-		$this->assertTrue($res);
+		$this->assertFalse($res);
 	
 	}
 		
@@ -357,7 +357,7 @@ class TestMainApi extends UnitTestCase {
     	$this->assertTrue($res);
    	
 	}
-   
+    
    	function testGetLang(){
         global $language_interface, $language_interface_initial_value, $language_file,$variable;
    	 	$res = get_lang($variable, $notrans = 'DLTT', $language = null);

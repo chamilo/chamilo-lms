@@ -40,6 +40,50 @@
 
 /*
 ==============================================================================
+		PHP VERSION CHECK
+==============================================================================
+*/
+
+if ( !function_exists('version_compare') || version_compare( phpversion(), '5', '<' ) )
+{
+	header('Content-Type: text/html; charset=UTF-8');
+	$error_message_php_version = <<<EOM
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+		<head>
+			<title>Wrong PHP version!</title>
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+			<style type="text/css" media="screen, projection">
+				/*<![CDATA[*/
+				@import "../css/public_admin/default.css";
+				/*]]>*/
+			</style>
+		</head>
+		<body>
+			<div id="header">
+				<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
+				<div class="clear"></div>
+				<div id="header2">&nbsp;</div>
+				<div id="header3">&nbsp;</div>
+			</div>
+
+			<div style="text-align: center;"><br /><br />
+					The version of scripting language on your server is wrong. Your server has to support PHP 5.x.x .<br />
+					<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide.</a><br /><br />
+			</div>
+
+			<div id="footer">
+				<div class="copyright">Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009 </div>
+				&nbsp;
+			</div>
+		</body>
+</html>
+EOM;
+	die($error_message_php_version);
+}
+
+/*
+==============================================================================
 		INIT SECTION
 ==============================================================================
 */

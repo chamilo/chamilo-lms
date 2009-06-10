@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 21357 2009-06-10 22:40:58Z aportugal $
+<?php // $Id: usermanager.lib.php 21358 2009-06-10 23:22:34Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1891,6 +1891,9 @@ class UserManager
 	 */ 
 	function resize_picture($file, $max_size_for_picture)
 	{
+		if (!class_exists('image')) {
+			require_once(api_get_path(LIBRARY_PATH).'image.lib.php');
+		}
 	 	$temp = new image($file);
 	 	$picture_infos=getimagesize($file);
 		if ($picture_infos[0]>$max_size_for_picture) {		

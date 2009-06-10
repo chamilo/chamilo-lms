@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 21353 2009-06-10 16:26:21Z aportugal $
+<?php // $Id: usermanager.lib.php 21357 2009-06-10 22:40:58Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1634,7 +1634,9 @@ class UserManager
 	
 	/**
 	 * Get the users files upload from his share_folder
-	 * @param	string	Username
+	 * @param	string	User ID
+	 * @param   string  course directory 
+	 * @param   int 	deprecated 
 	 * @return	int		User ID (or false if not found)
 	 */
 	function get_user_upload_files_by_course($user_id, $course, $column=2)

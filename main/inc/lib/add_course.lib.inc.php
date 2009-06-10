@@ -2265,6 +2265,7 @@ function string2binary($variable)
  * @param string	$uid				uid of owner
  * @param integer	Expiration date in unix time representation
  * @param array		Optional array of teachers' user ID
+ * @return	int		0
  */
 function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "", $teachers=array())
 {

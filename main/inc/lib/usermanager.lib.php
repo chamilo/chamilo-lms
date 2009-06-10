@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 20951 2009-05-23 19:07:59Z ivantcholakov $
+<?php // $Id: usermanager.lib.php 21353 2009-06-10 16:26:21Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1291,6 +1291,12 @@ class UserManager
 		return $extra_data;
 	}	
 	
+	/** Get extra user data by field
+	 * @param int	user ID
+	 * @param string the internal variable name of the field
+	 * @return array with extra data info of a user i.e array('field_variable'=>'value');
+	 */
+	
 	function get_extra_user_data_by_field($user_id, $field_variable, $prefix=false, $all_visibility = true, $splitmultiple=false)
 	{
 		$extra_data = array();
@@ -1307,6 +1313,7 @@ class UserManager
 		}
 			
 		$sql .= " ORDER BY f.field_order";
+		
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		if(Database::num_rows($res)>0)
 		{
@@ -1336,14 +1343,14 @@ class UserManager
 					$extra_data[$row['fvar']] = $fval; 
 				}
 			}
-		}		
+		}
+				
 		return $extra_data;
 	}
 		
 	/**
 	 * Get all the extra field information of a certain field (also the options)
-	 *
-	 * @param integer $field_name the name of the field we want to know everything of
+	 * @param Int $field_name the name of the field we want to know everything of
 	 * @return array $return containing all th information about the extra profile field 
 	 * @author Julio Montoya
 	 * @since Dokeos 1.8.6
@@ -1372,7 +1379,7 @@ class UserManager
 	/**
 	 * Get all the extra field information of a certain field (also the options)
 	 *
-	 * @param integer $field_name the name of the field we want to know everything of
+	 * @param int $field_name the name of the field we want to know everything of
 	 * @return array $return containing all th information about the extra profile field 
 	 * @author Julio Montoya
 	 * @since Dokeos 1.8.6
@@ -1397,6 +1404,11 @@ class UserManager
 		return $return;
 	}
 	
+	/** Get extra user data by value
+	 * @param string the internal variable name of the field
+	 * @param string the internal value of the field
+	 * @return array with extra data info of a user i.e array('field_variable'=>'value');
+	 */
 	
 	function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true)
 	{
@@ -1713,9 +1725,9 @@ class UserManager
     }
     /**
      * Regenerate an API key from the user's account
-     * @param   int     API key's internal ID
-     * @param   string  
-     * @return  int
+     * @param   int     user ID (defaults to the results of api_get_user_id())
+     * @param   string  API key's internal ID
+     * @return  int		num
      */
     function update_api_key($user_id,$api_service) {
     	if ($user_id != strval(intval($user_id))) return false;
@@ -1736,9 +1748,9 @@ class UserManager
         return $num;
     }
     /**
-     * @param   int     API key's internal ID
-     * @param   string  
-     * @return  int
+     * @param   int     user ID (defaults to the results of api_get_user_id())
+     * @param   string	API key's internal ID 
+     * @return  int		row ID, not return a boolean
      */
     function get_api_key_id($user_id,$api_service) {
     	if ($user_id != strval(intval($user_id))) return false;

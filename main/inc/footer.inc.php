@@ -1,4 +1,4 @@
-<?php // $Id: footer.inc.php 19990 2009-04-22 20:11:36Z cvargas1 $
+<?php // $Id: footer.inc.php 21359 2009-06-11 00:13:22Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -60,7 +60,7 @@ if(api_get_setting('show_navigation_menu') != 'false')
 <div id="bottom_corner"></div> 
  <div class="copyright">
   <?php global $_configuration; ?>
-  <?php echo get_lang("Platform") ?> <a href="http://www.dokeos.com">Dokeos <?php echo $_configuration['dokeos_version']; ?></a> &copy; <?php echo date('Y'); ?>
+  <?php echo get_lang("Platform") ?> <a href="http://www.dokeos.com" target="_blank">Dokeos <?php echo $_configuration['dokeos_version']; ?></a> &copy; <?php echo date('Y'); ?>
  </div>
 
 <?php

@@ -24,7 +24,6 @@
 // PHP version check
 if ( !function_exists('version_compare') || version_compare( phpversion(), '5', '<' ) )
 {
-	header('Content-Type: text/html; charset=UTF-8');
 	$error_message_php_version = <<<EOM
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -57,6 +56,7 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 		</body>
 </html>
 EOM;
+	header('Content-Type: text/html; charset=UTF-8');
 	die($error_message_php_version);
 }
 
@@ -96,7 +96,8 @@ $error_message_not_installed = <<<EOM
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 		<head>
-			<title>Dokeos not installed!</title>
+			<title>Dokeos has been not installed!</title>
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 			<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
 				@import "main/css/public_admin/default.css";
@@ -105,7 +106,7 @@ $error_message_not_installed = <<<EOM
 		</head>
 		<body>
 			<div id="header">
-				<div id="header1"><a href="http://www.dokeos.com">Dokeos Homepage</a></div>
+				<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
 				<div class="clear"></div>
 				<div id="header2">&nbsp;</div>
 				<div id="header3">&nbsp;</div>
@@ -117,7 +118,7 @@ $error_message_not_installed = <<<EOM
 			</div>
 
 			<div id="footer">
-				<div class="copyright">Platform <a href="http://www.dokeos.com"> Dokeos </a> &copy; 2008 </div>
+				<div class="copyright">Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009 </div>
 				&nbsp;
 			</div>
 		</body>
@@ -129,6 +130,7 @@ $error_message_db_problem = <<<EOM
 <html>
 		<head>
 			<title>Dokeos database unavailable!</title>
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 			<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
 				@import "main/css/public_admin/default.css";
@@ -137,7 +139,7 @@ $error_message_db_problem = <<<EOM
 		</head>
 		<body>
 			<div id="header">
-				<div id="header1"><a href="http://www.dokeos.com">Dokeos Homepage</a></div>
+				<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
 				<div class="clear"></div>
 				<div id="header2">&nbsp;</div>
 				<div id="header3">&nbsp;</div>
@@ -148,7 +150,7 @@ $error_message_db_problem .= '
 					This portal is currently experiencing database issues. Please report this to the portal administrator. Thank you for your help.</a>
 			</div>
 			<div id="footer">
-				<div class="copyright">Platform <a href="http://www.dokeos.com"> Dokeos </a> &copy; 2008 </div>
+				<div class="copyright">Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009 </div>
 				&nbsp;
 			</div>
 		</body>
@@ -157,6 +159,7 @@ $error_message_db_problem .= '
 
 if (!$already_installed)
 {
+	header('Content-Type: text/html; charset=UTF-8');
 	//require('installedVersion.inc.php');
 	die($error_message_not_installed);
 }
@@ -380,7 +383,7 @@ if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php'))
 
 // ===== end "who is logged in?" module section =====
 
-if(get_setting('server_type') == 'test')
+if(api_get_setting('server_type') == 'test')
 {
 	/*
 	--------------------------------------------
@@ -488,7 +491,7 @@ if (!empty($_POST["language_list"]))
 $valid_languages=api_get_languages();
 if (!in_array($user_language,$valid_languages['folder']))
 {
-	$user_language=get_setting('platformLanguage');
+	$user_language=api_get_setting('platformLanguage');
 }
 
 if (in_array($user_language,$valid_languages['folder']) and (isset($_GET['language']) OR isset($_POST['language_list'])))
@@ -497,7 +500,7 @@ if (in_array($user_language,$valid_languages['folder']) and (isset($_GET['langua
 	$_SESSION["user_language_choice"] = $user_selected_language;
 	$platformLanguage = $user_selected_language;
 }else{
-	$platformLanguage = get_setting('platformLanguage');
+	$platformLanguage = api_get_setting('platformLanguage');
 }
 
 
@@ -507,7 +510,7 @@ if (isset($_SESSION["user_language_choice"]))
 }
 else
 {
-	$language_interface = get_setting('platformLanguage');
+	$language_interface = api_get_setting('platformLanguage');
 }
 
 if (isset($_user['language']))

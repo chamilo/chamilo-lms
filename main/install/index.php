@@ -46,7 +46,6 @@
 
 if ( !function_exists('version_compare') || version_compare( phpversion(), '5', '<' ) )
 {
-	header('Content-Type: text/html; charset=UTF-8');
 	$error_message_php_version = <<<EOM
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -79,6 +78,7 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 		</body>
 </html>
 EOM;
+	header('Content-Type: text/html; charset=UTF-8');
 	die($error_message_php_version);
 }
 
@@ -786,7 +786,7 @@ else
 </form>
 <br style="clear:both;" />
 <div id="footer">
-	<div class="copyright"><?php echo get_lang('Platform');?> <a href="http://www.dokeos.com"> Dokeos <?php echo $new_version ?></a> &copy; <?php echo date('Y'); ?> </div>
+	<div class="copyright"><?php echo get_lang('Platform');?> <a href="http://www.dokeos.com" target="_blank"> Dokeos <?php echo $new_version ?></a> &copy; <?php echo date('Y'); ?> </div>
 	&nbsp;
 </div>
 </body>

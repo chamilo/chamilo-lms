@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20809 2009-05-18 20:52:17Z yannoo $
+<?php // $Id: index.php 21359 2009-06-11 00:13:22Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -254,9 +254,9 @@ if(api_is_platform_admin()){
 <div class="admin_section">
  <h4><?php Display::display_icon('dokeos.gif', 'Dokeos'); ?> Dokeos.com</h4>
  <ul>
-  <li><a href="http://www.dokeos.com/"><?php echo get_lang('DokeosHomepage'); ?></a></li>
-  <li><a href="http://www.dokeos.com/forum/"><?php echo get_lang('DokeosForum'); ?></a></li>  
-  <li><a href="http://www.dokeos.com/extensions/"><?php echo get_lang('DokeosExtensions'); ?></a></li>
+  <li><a href="http://www.dokeos.com/" target="_blank"><?php echo get_lang('DokeosHomepage'); ?></a></li>
+  <li><a href="http://www.dokeos.com/forum/" target="_blank"><?php echo get_lang('DokeosForum'); ?></a></li>  
+  <li><a href="http://www.dokeos.com/extensions/" target="_blank"><?php echo get_lang('DokeosExtensions'); ?></a></li>
   <li>
   <?php
   //try to display a maximum before we check the dokeos version and all that

@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 21361 2009-06-11 04:08:58Z ivantcholakov $
+<?php // $Id: settings.php 21362 2009-06-11 04:34:31Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -292,7 +292,7 @@ Display :: display_header($tool_name);
 // displaying the message that the settings have been stored
 if (!empty($_GET['action']) && $_GET['action'] == "stored")
 {
-	Display :: display_normal_message($SettingsStored);
+	Display :: display_normal_message(get_lang('SettingsStored'));
 }
 
 // the action images
@@ -396,7 +396,7 @@ function handle_plugins()
 	if (isset($_POST['submit_plugins']))
 	{
 		store_plugins();
-		Display :: display_normal_message($SettingsStored);
+		Display :: display_normal_message(get_lang('SettingsStored'));
 	}
 
 	echo get_lang('AvailablePlugins')."<br/><br/>";

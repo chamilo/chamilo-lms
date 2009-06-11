@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 21358 2009-06-10 23:22:34Z aportugal $
+<?php // $Id: usermanager.lib.php 21378 2009-06-11 17:33:14Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -479,7 +479,10 @@ class UserManager
 		}
 		return $user;
 	}
-
+	/** Get the teacher list
+	 * @param int the course ID
+	 * @param array Content the list ID of user_id selected
+	 */
 	//for survey
 	function get_teacher_list($course_id, $sel_teacher='')
 	{

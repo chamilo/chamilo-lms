@@ -672,6 +672,8 @@ class Blog
 	 *
 	 * @param Integer $blog_id
 	 * @param Integer $task_id
+	 * 
+	 * @return void
 	 */
 	function delete_task($blog_id, $task_id)
 	{
@@ -690,6 +692,8 @@ class Blog
 	 *
 	 * @param Integer $blog_id
 	 * @param Integer $assignment_id
+	 * 
+	 * @return void
 	 */
 	function delete_assigned_task($blog_id, $task_id,$user_id)
 	{
@@ -1066,7 +1070,15 @@ class Blog
 		}
 	}
 
-
+	/**
+	 * Shows the rating of user 
+	 * 
+	 * @param String $type 
+	 * @param Integer $blog_id
+	 * @param Integer $item_id
+	 * 
+	 * @return array()
+	 */
 	function display_rating($type, $blog_id, $item_id)
 	{
 		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
@@ -1086,6 +1098,7 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param Integer $item_id
 	 *
+	 *@return String
 	 */
 	function display_rating_form($type, $blog_id, $post_id, $comment_id = NULL)
 	{

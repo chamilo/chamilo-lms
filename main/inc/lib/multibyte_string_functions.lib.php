@@ -1461,10 +1461,22 @@ function api_is_valid_utf8($string) {
 	// Ivan Tcholakov, 05-OCT-2008: I do not trust mb_detect_encoding(). I have
 	// found a string with a single cyrillic letter (single byte), that is
 	// wrongly detected as UTF-8. Possibly, there would be problems with other
-	// languages too.
-	// An alternative implementation will be used:
+	// languages too. An alternative implementation will be used.
 
-	$len = strlen($string);
+	//$len = strlen($string); // mbstring.func_overload might change behaviour of the function strlen().
+	// Ivan Tcholakov, 11-JUN-2009: Let us calculate for sure the length in bytes.
+	static $use_mb_strlen;
+	if (!isset($use_mb_strlen)) {
+		$use_mb_strlen = function_exists('mb_strlen') && ((int) ini_get('mbstring.func_overload') & 2);
+	}
+	if ($use_mb_strlen) {
+		$len = mb_strlen($string, '8bit');
+	} else {
+		$len = strlen($string);
+	}
+	// For PHP6 all this fragment probably will contain:
+	//$len = strlen((binary)$string);
+
 	$i = 0;
 
 	while ($i < $len) {

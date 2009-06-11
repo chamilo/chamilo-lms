@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 20709 2009-05-15 19:12:37Z ivantcholakov $
+<?php // $Id: configure_homepage.php 21361 2009-06-11 04:08:58Z ivantcholakov $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -935,7 +935,7 @@ switch($action){
 			<a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
 			
 			<div class="menusection">
-				<span class="menusectioncaption"><?php echo ucfirst(get_lang('General')); ?></span>
+				<span class="menusectioncaption"><?php echo api_ucfirst(get_lang('General')); ?></span>
 				<ul class="menulist">
 
 				<?php

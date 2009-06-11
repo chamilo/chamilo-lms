@@ -609,7 +609,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 			$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 			
 			$csv_content[] = array(
-								html_entity_decode($course['title'], ENT_QUOTES, $charset),
+								api_html_entity_decode($course['title'], ENT_QUOTES, $charset),
 								$nb_students_in_course,
 								$avg_time_spent_in_course,
 								$avg_progress_in_course,
@@ -752,8 +752,8 @@ if(api_is_platform_admin() && $view=='admin')
 		$all_datas[] = $table_row;
 		
 		$csv_content[] = array(
-								html_entity_decode($a_coachs['firstname'], ENT_QUOTES, $charset),
-								html_entity_decode($a_coachs['lastname'], ENT_QUOTES, $charset),
+								api_html_entity_decode($a_coachs['firstname'], ENT_QUOTES, $charset),
+								api_html_entity_decode($a_coachs['lastname'], ENT_QUOTES, $charset),
 								$time_on_platform,
 								$last_connection,
 								$nb_courses,

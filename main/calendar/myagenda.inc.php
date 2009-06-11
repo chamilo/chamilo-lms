@@ -631,7 +631,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 		if ($type !== "day_view") // This is the array construction for the WEEK or MONTH view
 		{
 			//Display events in agenda
-			$agendaitems[$day] .= "<div><i>$hour:$minute</i> $course_link  <a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div><br>";
+			$agendaitems[$day] .= "<div><i>$hour:$minute</i> $course_link  <a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div><br />";
 		}
 		else // this is the array construction for the DAY view
 			{

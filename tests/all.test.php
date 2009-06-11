@@ -13,7 +13,8 @@ class AllTests extends TestSuite {
     function AllTests() {
         $this->TestSuite('All tests');
         //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php');
-          $this->addTestFile(dirname(__FILE__).'/main/inc/lib/classmanager.lib.test.php');
+        //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/classmanager.lib.test.php');
+          $this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php');
         //$this->addFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');
      	//$this->addFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
         //$this->assertTrue(file_exists('/temp/test.log'));

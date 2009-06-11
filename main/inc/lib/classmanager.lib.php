@@ -227,9 +227,11 @@ class ClassManager
 		$sql = "DELETE FROM $tbl_course_class WHERE course_code = '".mysql_real_escape_string($course_code)."' AND class_id = '".mysql_real_escape_string($class_id)."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
+	
 	/**
 	 * Get the class-id 
 	 * @param string $name The class name
+	 * @return int the ID of the class 
 	 */
 	function get_class_id($name)
 	{

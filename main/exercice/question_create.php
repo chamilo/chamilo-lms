@@ -147,7 +147,7 @@ $pictures_question_types[6] = 'hotspot.gif';
 foreach (Question::$questionTypes as $key=>$value)
 {
 	?>
-	ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],get_lang($value[1]),array('height'=>'40px;', 'style' => 'vertical-align:top;')); ?></td><td><span class="thistext"><?php echo get_lang($value[1]); ?></span><br/><sub><?php echo get_lang($value[1].'Comment'); ?></sub></td></tr></table>','');
+	ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],addslashes(get_lang($value[1])),array('height'=>'40px;', 'style' => 'vertical-align:top;')); ?></td><td><span class="thistext"><?php echo addslashes(get_lang($value[1])); ?></span><br/><sub><?php echo addslashes(get_lang($value[1].'Comment')); ?></sub></td></tr></table>','');
 	<?php
 }
 ?>

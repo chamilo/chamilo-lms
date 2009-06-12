@@ -42,6 +42,16 @@ require_once ('lib/fe/gradebooktable.class.php');
 require_once ('lib/fe/displaygradebook.php');
 require_once ('lib/fe/userform.class.php');
 require_once (api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php');
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+$(document).ready( function() { 
+	for (i=1;i<=$(".actions").length;i++) {
+		if ($(".actions:nth-child("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:nth-child("+i+")").html()=="") {
+			$(".actions:nth-child("+i+")").hide();
+		}		
+	}
+ } ); 
+ </script>';
 api_block_anonymous_users();
 
 $htmlHeadXtra[]= '<script type="text/javascript">

@@ -1377,10 +1377,14 @@ function & get_lang_to_system_encoding(& $string, $language) {
 
 /**
  * Gets the current interface language
+ * @param bool $purified	When it is true, a purified (refined) language value will be returned, for example 'french' instead of 'french_unicode'.
  * @return string The current language of the interface
  */
-function api_get_interface_language() {
+function api_get_interface_language($purified = false) {
 	global 	$language_interface;
+	if ($purified) {
+		return api_refine_language_id($language_interface);
+	}
 	return $language_interface;
 }
 

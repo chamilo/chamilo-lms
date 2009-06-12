@@ -1171,6 +1171,16 @@ function api_is_utf8($encoding) {
 }
 
 /**
+ * This function checks whether a given encoding represents (is an alias of) ISO Latin 1 character set.
+ * @param string $encoding		The tested encoding.
+ * @return bool					Returns TRUE if the given encoding id means Latin 1 character set, otherwise returns false.
+ */
+function api_is_latin1($encoding) {
+	static $latin1_encodings = array('ISO-8859-15', 'ISO-8859-1', 'WINDOWS-1252', 'CP1252', 'ISO8859-15', 'ISO8859-1', 'WIN-1252', '1252');
+	return in_array(api_refine_encoding_id($encoding), $latin1_encodings);
+}
+
+/**
  * This function returns the encoding, currently used by the system.
  * @return string	The system's encoding.
  * Note: The value of api_get_setting('platform_charset') is tried to be returned first,

@@ -36,7 +36,6 @@
 /*
 ==============================================================================
 List of functions
-replace_dangerous_char($filename, $strict = 'loose')
 function php2phps ($fileName)
 function htaccess2txt($filename)
 function disable_dangerous_file($filename)

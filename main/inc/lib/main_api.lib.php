@@ -3142,23 +3142,60 @@ function api_is_element_in_the_session($tool, $element_id, $session_id=null) {
 }
 
 /**
- * replaces "forbidden" characters in a filename string
+ * Replaces "forbidden" characters in a filename string.
  *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @author - Ren� Haentjens, UGent (RH)
- * @param  - string $filename
- * @param  - string $strict (optional) remove all non-ASCII
- * @return - the cleaned filename
+ * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ * @author Ren� Haentjens, UGent (RH)
+ * @author Ivan Tcholakov, JUN-2009.		Transliteration functionality has been added.
+ * @param  string $filename					The filename string.
+ * @param  string $strict (optional)		When it is 'strict', all non-ASCII charaters will be replaced. Additional ASCII replacemets will be done too.
+ * @return string							The cleaned filename.
  */
 
 function replace_dangerous_char($filename, $strict = 'loose')
 {
-	$filename = ereg_replace("\.+$", "", substr(strtr(ereg_replace(
-	    "[^!-~\x80-\xFF]", "_", trim($filename)), '\/:*?"<>|\'',
-        /* Keep C1 controls for UTF-8 streams */  '-----_---_'), 0, 250));
-	if ($strict != 'strict') return $filename;
+	static $search  = array(' ', '/', '\\', '"', '\'', '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#');
+	static $replace = array('_', '-', '-',  '-', '_',  '-', '-', '',  '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
+	static $search_strict  = array('-');
+	static $replace_strict = array('_');
 
-	return ereg_replace("[^!-~]", "x", $filename);
+	$system_encoding = api_get_file_system_encoding();
+
+	// Compatibility: we keep the previous behaviour (Dokeos 1.8.6) for Latin 1 platforms (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...).
+	if (api_is_latin1($system_encoding)) {
+		$filename = ereg_replace("\.+$", "", substr(strtr(ereg_replace(
+	    	"[^!-~\x80-\xFF]", "_", trim($filename)), '\/:*?"<>|\'',
+        	/* Keep C1 controls for UTF-8 streams */  '-----_---_'), 0, 250));
+		if ($strict != 'strict') return $filename;
+		return ereg_replace("[^!-~]", "x", $filename);
+	}
+
+	// For other platform encodings and various languages we use transliteration to ASCII filename string.
+	if (!api_is_valid_utf8($filename)) { 
+		// Here we need to convert the file name to UTF-8 string first. We will try to guess the input encoding.
+		$input_encoding = api_get_file_system_encoding();
+		if (api_is_utf8($input_encoding)) {
+			$input_encoding = $system_encoding;
+		}
+		if (api_is_utf8($input_encoding)) {
+			$input_encoding = api_get_non_utf8_encoding(api_get_interface_language()); // This is a "desperate" try.
+		}
+		$filename = api_utf8_encode($filename, $input_encoding);
+	}
+	// Transliteration.
+	$filename = api_transliterate($filename, 'x', 'UTF-8');
+	$filename = trim($filename);
+	// Trimming any leading/trailing dots.
+	$filename = trim($filename, '.');
+	$filename = trim($filename);
+	// Replacing other remaining dangerous characters.
+	$filename = str_replace($search, $replace, $filename);
+	if ($strict == 'strict') {
+		$filename = str_replace($search_strict, $replace_strict, $filename);
+		$filename = preg_replace('/[^0-9A-Za-z_.-]/', '', $filename);
+	}
+	// Length is limited, so the file name to be acceptable by some operating systems.
+	return substr($filename, 0, 250);
 }
 
 /**

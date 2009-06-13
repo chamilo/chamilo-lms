@@ -27,28 +27,29 @@ $language_file= 'gradebook';
 // basically, that we are inside a course, and many things depend from that
 $cidReset= false;
 $_in_course = true;
-require_once ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $course_code = api_get_course_id();
 //make sure the destination for scripts is index.php instead of gradebook.php
 $_SESSION['gradebook_dest'] = 'index.php';
 $this_section = SECTION_MYGRADEBOOK;
-require_once ('lib/be.inc.php');
-require_once ('lib/scoredisplay.class.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/catform.class.php');
-require_once ('lib/fe/evalform.class.php');
-require_once ('lib/fe/linkform.class.php');
-require_once ('lib/gradebook_data_generator.class.php');
-require_once ('lib/fe/gradebooktable.class.php');
-require_once ('lib/fe/displaygradebook.php');
-require_once ('lib/fe/userform.class.php');
-require_once (api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php');
+require_once 'lib/be.inc.php';
+require_once 'lib/scoredisplay.class.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/catform.class.php';
+require_once 'lib/fe/evalform.class.php';
+require_once 'lib/fe/linkform.class.php';
+require_once 'lib/gradebook_data_generator.class.php';
+require_once 'lib/fe/gradebooktable.class.php';
+require_once 'lib/fe/displaygradebook.php';
+require_once 'lib/fe/userform.class.php';
+require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready( function() { 
-	for (i=1;i<=$(".actions").length;i++) {
-		if ($(".actions:nth-child("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:nth-child("+i+")").html()=="") {
-			$(".actions:nth-child("+i+")").hide();
+$(document).ready( function() {
+	for (i=0;i<$(".actions").length;i++) {
+		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
+			//alert($(".actions:eq("+i+")").html());
+			$(".actions:eq("+i+")").hide();
 		}		
 	}
  } ); 

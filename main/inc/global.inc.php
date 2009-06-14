@@ -218,9 +218,7 @@ while ($row = @mysql_fetch_array($result)) {
 if (empty($charset)) {
 	$charset = "ISO-8859-15";
 }
-api_mb_internal_encoding($charset);
-api_mb_regex_encoding($charset);
-api_iconv_set_encoding('iconv_internal_encoding', $charset);
+api_initialize_internal_encoding($charset);
 
 /*
 --------------------------------------------

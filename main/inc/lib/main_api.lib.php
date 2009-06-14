@@ -3500,26 +3500,6 @@ function api_is_windows_os() {
 	return strtolower(substr($os, 0, 3 )) === 'win' ? true : false;
 }
 
-/**
- * Checks whether the server software is Apache or Apache compatible.
- * The check-condition has been taken from WordPress 2.8
- * @return bool		TRUE if the web-server is Apache or compatible, FALSE otherwise.
- * @link http://wordpress.org
- */
-function api_is_apache() {
-	return strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false || strpos($_SERVER['SERVER_SOFTWARE'], 'LiteSpeed') !== false;
-}
-
-/**
- * Checks whether the server software is Microsoft Internet Information Server.
- * The check-condition has been taken from WordPress 2.8
- * @return bool		TRUE if the web-server is Microsoft Internet Information Server, FALSE otherwise.
- * @link http://wordpress.org
- */
-function api_is_iis() {
-	return strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false || strpos($_SERVER['SERVER_SOFTWARE'], 'ExpressionDevServer') !== false;
-}
-
 // This function converts URLs into local file names.
 // Purpose: To help diagnosing or making workarounds concerning problems, caused by getimagesize().
 //

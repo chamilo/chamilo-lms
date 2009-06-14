@@ -359,7 +359,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
             } //end if is_array($extAuthSource)
 
         } //end else login failed
-    } elseif(api_get_setting('sso_authentication') &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
+    } elseif(api_get_setting('sso_authentication')==='true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
     	/**
     	 * TODO:
     	 * - Implement user interface for api_get_setting('sso_authentication')

@@ -642,8 +642,9 @@ function add_ext_on_mime($fileName,$fileType)
 	 * Check if the file has an extension AND if the browser has sent a MIME Type
 	 */
 
-	if(!ereg("([[:alnum:]]|[[[:punct:]])+\.[[:alnum:]]+$", $fileName)
-		&& $fileType)
+	//if(!ereg("([[:alnum:]]|[[[:punct:]])+\.[[:alnum:]]+$", $fileName) // TODO: This fails sometimes on non-ASCII encoded file names. To be removed.
+	//	&& $fileType)
+	if(!preg_match('/^.*\.[a-zA-Z_0-9]+$/', $fileName) && $fileType)
 	{
 		/*
 		 * Build a "MIME-types / extensions" connection table

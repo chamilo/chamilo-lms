@@ -664,7 +664,7 @@ function add_ext_on_mime($fileName,$fileType)
 		$mimeType[] = "application/x-tar";              $extension[] =".tar";
 		$mimeType[] = "application/zip";                $extension[] =".zip";
 		$mimeType[] = "application/x-tar";              $extension[] =".tar";
-		$mimeType[] = "text/html";                      $extension[] =".htm";
+		$mimeType[] = "text/html";                      $extension[] =".html";
 		$mimeType[] = "text/plain";                     $extension[] =".txt";
 		$mimeType[] = "text/rtf";                       $extension[] =".rtf";
 		$mimeType[] = "img/gif";                        $extension[] =".gif";

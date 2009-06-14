@@ -563,12 +563,15 @@ if (is_array($language_files)) {
 	}
 }
 
+/* 
+// TODO: This is a duplicate initialization of the global variable $charset, see above. To be removed.
 //load the charset param after langs because the $charset variable in 
 //trad4all.inc.php might have set it and we don't want that
 $charset = api_get_setting('platform_charset');
 if (empty($charset)) {
 	$charset = 'ISO-8859-15';
 }
+*/
 
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 

@@ -115,6 +115,7 @@ elseif ( isset($_SESSION['install_language']) && $_SESSION['install_language'] )
 $language_interface = $install_language;
 $language_interface_initial_value = $install_language;
 
+/* TODO: Obsolete logic, to be removed.
 $charset = '';
 //force ISO-8859-15 for European languages. Leave Apache determine the encoding for others (HTML declaring UTF-8)
 $euro_langs = array('english','french','french_KM','french_corporate','french_org','dutch','spanish','german','italian','greek','danish','swedish','norwegian','polish','galician','catalan','czech','finnish');
@@ -126,6 +127,20 @@ if (isset($install_language))
 		header('Content-Type: text/html; charset='. $charset);
 	}
 }
+*/
+
+// Character set during installation: ISO-8859-15 for Latin 1 languages, UTF-8 for other languages.
+$charset = 'UTF-8';
+if (isset($install_language))
+{
+	if (strpos($install_language, 'unicode') === false && api_is_latin1_compatible($install_language))
+	{
+		// TODO: This is for backward compatibility. Actually, all the languages may use UTF-8.
+		$charset = 'ISO-8859-15';
+	}
+}
+header('Content-Type: text/html; charset='. $charset);
+api_initialize_internal_encoding($charset); // Initialization of the multi-byte string library.
 
 require_once('install_upgrade.lib.php'); //also defines constants
 require_once('install_functions.inc.php');

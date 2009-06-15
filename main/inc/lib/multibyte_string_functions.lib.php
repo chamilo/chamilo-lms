@@ -1214,6 +1214,7 @@ function api_get_file_system_encoding() {
 		}
 		// Dealing with some aliases.
 		$file_system_encoding = str_ireplace('utf8', 'UTF-8', $file_system_encoding);
+		$file_system_encoding = preg_replace('/^CP65001$/', 'UTF-8', $file_system_encoding);
 		$file_system_encoding = preg_replace('/^CP(125[0-9])$/', 'WINDOWS-\1', $file_system_encoding);
 		$file_system_encoding = str_replace('WINDOWS-1252', 'ISO-8859-15', $file_system_encoding);
 		if (empty($file_system_encoding)) {

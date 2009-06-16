@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 21456 2009-06-16 21:01:54Z aportugal $
+<?php // $Id: database.lib.php 21458 2009-06-16 22:24:28Z aportugal $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -799,6 +799,15 @@ class Database
 			return mysql_affected_rows();
 		}
 	}
+	/**
+	 * @author Arthur Portugal, Olivier Brouckaert
+	 * This function return a resource 
+	 * @param  string $query - SQL query
+	 * @param  string $file - optional, the file path and name of the error (__FILE__)
+	 * @param  string $line - optional, the line of the error (__LINE__)
+	 * @return resource - the return value of the query
+	 */
+	
 	function query($sql,$file='',$line=0)
 	{
 		return 	api_sql_query($sql,$file,$line);

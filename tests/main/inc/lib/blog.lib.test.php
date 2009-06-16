@@ -1,5 +1,7 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'blog.lib.php');
+//require_once(api_get_path(SYS_CODE_PATH).'permissions/blog_permissions.inc.php');
+
 
 class TestBlog extends UnitTestCase 
 
@@ -15,7 +17,7 @@ class TestBlog extends UnitTestCase
 	 
 	 public function setUp()
 	 {
- 	 	$this->oblog = new Blog();
+ 	 	$this-> oblog = new Blog();
 	 }
 	 
 	 public function tearDown()
@@ -75,7 +77,7 @@ class TestBlog extends UnitTestCase
 	 /**
 	  * Test about get Title to a Blog
 	 */
-	 
+	
 	 public function testGetBlogTitle(){
 	 	$res = $this->oblog->get_Blog_title(11);
 	 	$this->assertFalse($this->oblog->get_Blog_title(11)===String);
@@ -267,7 +269,7 @@ class TestBlog extends UnitTestCase
 	 public function testAddRating(){
 	 	global $_user;
 	 	$res = $this->oblog->add_rating(null,11,2,5);
-	 	$this->assertTrue($this->oblog->add_rating(null,11,2,5));
+	 	$this->assertFalse($this->oblog->add_rating(null,11,2,5)=== bool);
 	 	$this->assertTrue(is_bool($res));
 	 	$this->assertFalse(null,$res);
 	 	
@@ -276,7 +278,7 @@ class TestBlog extends UnitTestCase
 	 public function testDisplayRating(){
 	 	ob_start();
 	 	$res = $this->oblog->display_rating('xxx',11,1);
-	 	$this->assertFalse($this->oblog->display_rating('xxx',11,1));
+	 	$this->assertFalse($this->oblog->display_rating('xxx',11,1)===null);
 	 	$this->assertTrue(is_numeric($res));
 	 	$this->assertFalse($res);
 	 	ob_end_clean();
@@ -286,29 +288,260 @@ class TestBlog extends UnitTestCase
 	 public function testDisplayRatingForm(){
 	 	global $_user;
 	 	$res = $this->oblog->display_rating_form('xxx',11,1,null);
-	 	$this->assertTrue($this->oblog->display_rating_form('xxx',11,1,null));
+	 	$this->assertFalse($this->oblog->display_rating_form('xxx',11,1,null)===null);
 	 	$this->assertTrue(is_string($res));
 	 	$this->assertNotNull($res,null);
 	 	
 	 	
 	 }
-	 /*
+	 
 	 public function testGetThreadedComments(){
+	 	ob_start();
+	 	global $charset, $dataFormatLong;
 	 	$res = $this->oblog->get_threaded_comments(null,null,11,2,null);
 	 	$this->assertFalse($res);
-	 	$this->assertTrue();
-	 	
-	 }*/
+	 	$this->assertTrue($this->oblog->get_threaded_comments(null,null,11,2,null)===null);
+	 	ob_end_clean();
+	 		 	
+	 }
 	 
+	 public function testDisplayFormNewPost(){
+	 	ob_start();
+	 	$res = ob_get_contents();
+	 	/*
+	 	$res = $this->oblog->display_form_new_post(12);
+	 	$this->assertTrue($this->oblog->display_form_new_post(12));
+	 	*/
+	 	$this->assertTrue(is_string($res));
+	 	$this->assertNotNull($res);
+	 	ob_end_clean();
+	 	
+	 } 
+	
+	 public function testDisplayFormEditPost(){
+	 	ob_start();
+	 	//display_form_edit_post(11,12);
+	 	$res = ob_get_contents();
+	 	$this->assertNotNull(is_null($res));
+	 	$this->assertFalse($res);
+	 	ob_end_clean();
+	 }	
+	 
+	 public function testDisplayTaskList(){
+	 	ob_start();
+	 	$res = $this->oblog->display_task_list(11);
+	 	$this->assertTrue($this->oblog->display_task_list(11)===null);
+	 	ob_end_clean();
+	 	
+	 }
+	 
+	 public function testDisplayAssignedTaskList(){
+	 	ob_start();
+	 	global $charset, $color2;
+	 	$res = $this->oblog->display_assigned_task_list(11);
+	 	$this->assertTrue($this->oblog->display_assigned_task_list(11)===null);
+	 	$this->assertFalse($res);
+	 	ob_end_clean();
+	  	
+	 }
+	 
+	 public function testDisplayNewTaskForm(){
+	 	ob_start();
+	 	$res = $this->oblog->display_new_task_form(11);
+	 	$this->assertTrue($this->oblog->display_new_task_form(11)===null);
+	 	$this->assertFalse($res);
+	 	ob_end_clean();
+	 	
+	 }
+	 
+	 public function testDisplayEditTaskForm(){
+	 	ob_start();
+	 	$res = $this->oblog->display_edit_task_form(11,12);
+	 	$this->assertTrue($this->oblog->display_edit_task_form(11,12)===null);
+	 	ob_end_clean();
+	 	$this->assertTrue(is_null($res));
+	 	$this->assertFalse($res);
+	 	
+	 }
+	
+	 public function testDisplayAssignTaskForm(){
+	 	ob_start();
+	 	$res = $this->oblog->display_assign_task_form(11);
+	 	$this->assertTrue($this->oblog->display_assign_task_form(11)===null);
+	 	$this->assertFalse($res);
+	 	$this->assertTrue(is_null($res));
+	 	ob_end_clean();
+	 } 	
+	 
+	 public function testDisplayEditAssignedTaskForm(){
+	 	global $MonthsLong;
+	 	ob_start();
+	 	$res = $this-> oblog->display_edit_assigned_task_form(11,12,1);
+	 	$this->assertTrue($this->oblog->display_edit_assigned_task_form(11,12,1)===null);
+	 	ob_end_clean();
+	 	$this->assertFalse($res);
+	 	
+	 }
+	 
+	 public function testAssignTask(){
+	 	ob_start();
+	 	$res = $this->oblog->assign_task(11,1,12,null);
+	 	$this->assertTrue($this->oblog->assign_task(11,1,12,null)===null);
+	 	$this->assertFalse(is_numeric($res)); 	
+	 	$this->assertNull(null,$res);
+	 	ob_end_clean();
+	 		
+	 }
 
+	 public function testEditAssignedTask(){
+	 	/*$task = array('blog_id'=>11, 
+					  'user_id'=>1, 
+                      'task_id'=>12,  
+                      'target_date'=>'xxxxxxx',  
+                 	  'old_user_id'=>10,
+                 	  'old_task_id'=>11,
+                 	  'old_target_date'=>'xxxzxxx'
+                 	 );*/
+        $res = $this->oblog->edit_assigned_task();
+        $this->assertTrue($this->oblog->edit_assigned_task()===null);
+        $this->assertTrue(is_null($res));
+	 	
+	 }
+	 
+	 public function testDisplaySelectTaskPost(){
+	 	ob_start();
+	 	$res = $this->oblog->display_select_task_post(11,12);
+	 	$this->assertTrue($this->oblog->display_select_task_post(11,12)===null);
+	 	$this->assertTrue(is_null($res));
+	 	$this->assertFalse($res);
+	 	ob_end_clean();
+			
+	 }
+	 
+	 public function testSetUserSubscribed(){
+	 	$res = $this->oblog->set_user_subscribed(11,12);
+	 	$this->assertTrue($this->oblog->set_user_subscribed(11,12)===null);
+	 	$this->assertFalse($res);
+	 	$this->assertTrue(is_null($res));
+	 	
+	 }
+	 
+	 public function testUserUnsubscribed(){
+	 	$res = $this->oblog->set_user_unsubscribed(11,12);
+	 	$this->assertTrue($this->oblog->set_user_unsubscribed(11,12)===null);
+	 	$this->assertFalse($res);
+	 	$this->assertTrue(is_null($res));
+	 	
+	 }
+	 
+	 public function testDisplayFormUserSubscribe(){
+	 	ob_start();
+	 	$res = $this->oblog->display_form_user_subscribe(12);
+	 	$this->assertTrue($this->oblog->display_form_user_subscribe(12)===null);
+	 	$this->assertNotNull(is_null($res));
+	 	$this->assertFalse($res);
+	 	ob_end_clean();
+	 }
 
-
-
-
-
-
-
-
-
+	public function testDisplayFormUserUnsubscribe(){
+		ob_start();
+		global $_user;
+		//$_user['blog_id']=12;
+		//$res = $this->oblog->display_form_user_unsubscribe($_user['blog_id']);
+		$res = ob_get_contents();
+		//$this->assertTrue($this->oblog->display_form_user_unsubscribe($_user['blog_id'])===null);
+		$this->assertTrue(is_string($res));
+		$this->assertNull(null,$res);
+		ob_end_clean();
+		
+	}
+	
+	
+	public function testDisplayFormUserRights(){
+		ob_start();
+		$res = $this->oblog->display_form_user_rights(12);
+		$this->assertTrue($this->oblog->display_form_user_rights(12)===null);
+		$this->assertFalse($res);
+		ob_end_clean();
+	}
+	
+	public function testDisplayNewCommentForm(){
+		ob_start();
+		$res = ob_get_contents();
+		//$res = $this->oblog->display_new_comment_form(12,1,'test');
+		//$this->assertTrue($this->oblog->display_new_comment_form(12,1,'comment_text')===null);
+		$this->assertFalse($res);
+		$this->assertNotNull(is_null($res));
+		ob_end_clean();
+	}
+	
+	public function testDisplayMinimonthcalendar(){
+		global $_user,$DaysShort, $MonthsLong;
+		ob_start();
+		$res = $this->oblog->display_minimonthcalendar();
+		$this->assertTrue($this->oblog->display_minimonthcalendar()=== null);
+		$this->assertTrue(is_null($res));
+		ob_end_clean();
+		
+	}
+		
+	public function testDisplayNewBlogForm(){
+		ob_start();
+		$res = $this->oblog->display_new_blog_form();
+		$this->assertFalse($res);
+		$this->assertTrue(is_null($res));
+		$this->assertTrue($this->oblog->display_new_blog_form()===null);
+		ob_end_clean();
+		
+	}
+	
+	public function testDisplayEditBlogForm(){
+		ob_start();
+		$res = $this->oblog->display_edit_blog_form(12);
+		$this->assertTrue($this->oblog->display_edit_blog_form(12)===null);
+		$this->assertTrue(is_null($res));
+		ob_end_clean();
+		
+	}
+	
+	public function testDisplayBlogList(){
+		ob_start();
+		$res = $this->oblog->display_blog_list();
+		$this->assertTrue($this->oblog->display_blog_list()===null);
+		$this->assertTrue(is_null($res));
+		ob_end_clean();
+	}
+	
+	public function testGetBlogAttachment(){
+		ob_start();
+		global $blog_table_attachment;
+		//$oblog_table_attachment = array('blog_id'=>12);
+		$res=get_blog_attachment();
+		$this->assertFalse($res);
+		$this->assertTrue(is_array($res));
+		ob_end_clean();
+		
+	}
+	
+	public function testDeleteAllBlogAttachment(){
+		global $blog_table_attachment, $_course;
+		$res = delete_all_blog_attachment(12,null,null);
+		$this->assertFalse($res);
+		$this->assertNull($res);
+		
+	}
+	
+	public function testGetBlogPostFromUser(){
+		$res = get_blog_post_from_user('mate',2);
+		$this->assertFalse($res);
+		$this->assertTrue(is_string($res));
+		
+	}
+	
+	public function testGetBlogCOmmentFromUser(){
+		$res = get_blog_comment_from_user('mate',2);
+		$this->assertFalse($res);
+		$this->assertTrue(is_string($res));
+	}
 }
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 21250 2009-06-04 22:36:12Z aportugal $
+<?php // $Id: database.lib.php 21456 2009-06-16 21:01:54Z aportugal $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -437,6 +437,7 @@ class Database
 		return Database::format_table_name($database, $short_table_name);
 	}
 	/**
+	 * @param string Name of the folder (e.g arabic, english)
 	 * Returns the isocode corresponding to the language directory given.
 	 * Returned codes are according to the following standards (in order of preference):
 	 * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)

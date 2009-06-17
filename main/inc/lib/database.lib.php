@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 21458 2009-06-16 22:24:28Z aportugal $
+<?php // $Id: database.lib.php 21467 2009-06-17 10:02:12Z ivantcholakov $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -439,21 +439,32 @@ class Database
 	/**
 	 * @param string Name of the folder (e.g arabic, english)
 	 * Returns the isocode corresponding to the language directory given.
+	 * @param string $language	This is the name of the folder containing translations for the corresponding language.
+	 * If $language is omitted, interface language is assumed then.
+	 * @return string			The found isocode or null on error..
 	 * Returned codes are according to the following standards (in order of preference):
 	 * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
 	 * -  RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
 	 *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
 	 * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
-	 * @return	string	The isocode
 	*/
-	function get_language_isocode($lang_folder)
-	{
-		$table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql_query = "SELECT isocode FROM $table WHERE dokeos_folder = '$lang_folder'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
-		$result = mysql_fetch_array($sql_result);
-		$result = $result['isocode'];
-		return $result;
+	function get_language_isocode($language) {
+		static $iso_code = array();
+		if (empty($language)) {
+			$language = api_get_interface_language();
+		}
+		if (!isset($iso_code[$language])) {
+			$table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+			$sql_query = "SELECT isocode FROM $table WHERE dokeos_folder = '$language'";
+			$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+			if (Database::num_rows($sql_result)) {
+				$result = Database::fetch_array($sql_result);
+				$iso_code[$language] = $result['isocode'];
+			} else {
+				$iso_code[$language] = null;
+			}
+		}
+		return $iso_code[$language];
 	}
 
 	/*

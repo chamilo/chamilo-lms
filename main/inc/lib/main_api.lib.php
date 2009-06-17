@@ -2137,22 +2137,17 @@ function api_get_languages() {
 }
 /**
  * Gets language isocode column from the language table, taking the current language as a query parameter.
+ * @param string $language	This is the name of the folder containing translations for the corresponding language.
+ * If $language is omitted, interface language is assumed then.
+ * @return string			The found isocode or null on error.
  * Returned codes are according to the following standards (in order of preference):
  * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
  * -  RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
  *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
  * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
- * @return	string	The isocode or null if error
  */
-function api_get_language_isocode() {
-	$tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-	$sql = "SELECT isocode FROM $tbl_language WHERE dokeos_folder = '".api_get_interface_language()."'";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if(Database::num_rows($res)) {
-		$row = Database::fetch_array($res);
-		return $row['isocode'];
-	}
-	return null;
+function api_get_language_isocode($language = null) {
+	return Database::get_language_isocode($language);
 }
 /**
  * Returns a list of CSS themes currently available in the CSS folder

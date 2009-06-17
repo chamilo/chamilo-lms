@@ -158,13 +158,13 @@ class TestUserManager extends UnitTestCase
 	function testGetExtraFieldInformation() {
 		$field_id='';
 		$res=UserManager::get_extra_field_information($field_id);
-		$this->assertTrue($res);
+		$this->assertFalse($res);
 	}
 	
 	function testGetExtraFieldInformationByName() {
 		$field_variable='';
 		$res=UserManager::get_extra_field_information_by_name($field_variable);
-		$this->assertTrue($res);
+		$this->assertFalse($res);
 	}
 	
 	function testGetExtraFieldOptions() {
@@ -181,7 +181,7 @@ class TestUserManager extends UnitTestCase
 	function testGetExtraUserData() {
 		$user_id=1;
 		$res=UserManager::get_extra_user_data($user_id, null,null,null);
-		$this->assertTrue($res);
+		$this->assertFalse($res);
 	}
 	
 	function testGetExtraUserDataByField() {

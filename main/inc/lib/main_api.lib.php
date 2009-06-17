@@ -2137,7 +2137,7 @@ function api_get_languages() {
 }
 /**
  * Gets language isocode column from the language table, taking the current language as a query parameter.
- * @param string $language	This is the name of the folder containing translations for the corresponding language.
+ * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
  * If $language is omitted, interface language is assumed then.
  * @return string			The found isocode or null on error.
  * Returned codes are according to the following standards (in order of preference):

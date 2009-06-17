@@ -218,7 +218,8 @@ while ($row = @mysql_fetch_array($result)) {
 if (empty($charset)) {
 	$charset = "ISO-8859-15";
 }
-api_initialize_internal_encoding($charset);
+// Initialization of the default encoding that will be used by the string routines.
+api_set_default_encoding($charset);
 
 /*
 --------------------------------------------

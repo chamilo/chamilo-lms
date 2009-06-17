@@ -1236,7 +1236,7 @@ function api_get_file_system_encoding() {
  * @return void
  * Note: This function should be called once the initialization. Please, avoid further manipulation of the internal default encodings.
  */
-function api_initialize_internal_encoding($encoding) {
+function api_set_default_encoding($encoding) {
 	api_mb_internal_encoding($encoding);
 	api_mb_regex_encoding($encoding);
 	api_iconv_set_encoding('iconv_internal_encoding', $encoding);

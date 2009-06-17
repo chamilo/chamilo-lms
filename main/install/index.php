@@ -140,7 +140,7 @@ if (isset($install_language))
 	}
 }
 header('Content-Type: text/html; charset='. $charset);
-api_initialize_internal_encoding($charset); // Initialization of the multi-byte string library.
+api_set_default_encoding($charset); // Initialization of the default encoding that will be used by the string routines.
 
 require_once('install_upgrade.lib.php'); //also defines constants
 require_once('install_functions.inc.php');

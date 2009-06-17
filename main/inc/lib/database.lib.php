@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 21467 2009-06-17 10:02:12Z ivantcholakov $
+<?php // $Id: database.lib.php 21471 2009-06-17 14:13:43Z ivantcholakov $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -437,9 +437,8 @@ class Database
 		return Database::format_table_name($database, $short_table_name);
 	}
 	/**
-	 * @param string Name of the folder (e.g arabic, english)
 	 * Returns the isocode corresponding to the language directory given.
-	 * @param string $language	This is the name of the folder containing translations for the corresponding language.
+	 * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
 	 * If $language is omitted, interface language is assumed then.
 	 * @return string			The found isocode or null on error..
 	 * Returned codes are according to the following standards (in order of preference):

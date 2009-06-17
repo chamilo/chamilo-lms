@@ -147,7 +147,7 @@ class TestUserManager extends UnitTestCase
 		$user_id= '1';
 		$api_service= 'Dokeos';
 		$res=UserManager::get_api_key_id($user_id,$api_service);
-		$this->assertTrue(!(bool)$res);
+		$this->assertTrue(is_numeric($res));
 	}
 	
 	function testGetApiKeys() {
@@ -158,13 +158,13 @@ class TestUserManager extends UnitTestCase
 	function testGetExtraFieldInformation() {
 		$field_id='';
 		$res=UserManager::get_extra_field_information($field_id);
-		$this->assertFalse($res);
+		$this->assertTrue(is_array($res));
 	}
 	
 	function testGetExtraFieldInformationByName() {
 		$field_variable='';
 		$res=UserManager::get_extra_field_information_by_name($field_variable);
-		$this->assertFalse($res);
+		$this->assertTrue(is_array($res));
 	}
 	
 	function testGetExtraFieldOptions() {

@@ -198,7 +198,7 @@ class TestMainApi extends UnitTestCase {
 	
 	function testApiGetAnonymousId(){
 		$res = api_get_anonymous_id();
-		$this->assertFalse($res);
+		$this->assertTrue(is_numeric($res));
 	
 	}
 		

@@ -1039,6 +1039,50 @@ function api_add_pcre_unicode_modifier($pcre, $encoding = null) {
 
 /**
  * ----------------------------------------------------------------------------
+ * Functions for string comparison
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Performs string comparison, case insensitive, language sensitive, replacement of strcmp().
+ * @param string $string1				The first string.
+ * @param string $string2				The second string.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @link http://php.net/manual/en/function.strcmp.php
+ * @link http://php.net/manual/en/collator.compare.php
+ */
+function api_strcmp($string1, $string2, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		$collator = api_get_collator($language);
+		if (is_object($collator)) {
+			$result = collator_compare($collator, api_utf8_encode($string1, $encoding), api_utf8_encode($string2, $encoding));
+			return $result === false ? 0 : $result;
+		}
+	}
+	return strcmp($string1, $string2);
+}
+
+/**
+ * Returns an instance of Collator class (ICU) created for a specified language.
+ * @param string $language (optional)	The specified language. If it is omitted, then the interface language is assumed.
+ * @return object						The corresponding instance of Collator class.
+ * @link http://php.net/manual/en/collator.create.php
+ */
+function api_get_collator($language = null) {
+	static $collator = array();
+	if (INTL_INSTALLED) {
+		if (!isset($collator[$language])) {
+			$locale = api_get_locale_from_language($language);
+			$collator[$language] = collator_create($locale);
+		}
+		return $collator[$language];
+	}
+	return null;
+}
+
+/**
+ * ----------------------------------------------------------------------------
  * Encoding management functions
  * ----------------------------------------------------------------------------
  */

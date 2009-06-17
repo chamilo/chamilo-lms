@@ -204,10 +204,11 @@ class ScormAnswerMultipleChoice extends Answer
 			foreach( $this->answer as $i => $answer )
 			{			
 	        	$identifier = 'question_'.$this->questionJSId.'_unique_'.$i;
+	        	$identifier_name = 'question_'.$this->questionJSId.'_unique_answer';        	
 				$html .=	
 		    		'<tr>' . "\n" 
 				.	'<td align="center" width="5%">' . "\n"
-		    	.	'<input name="'.$identifier.'" id="'.$identifier.'" value="'.$i.'" type="radio"/>' . "\n"
+		    	.	'<input name="'.$identifier_name.'" id="'.$identifier.'" value="'.$i.'" type="radio"/>' . "\n"
 		    	.	'</td>' . "\n"
 		    	.	'<td width="95%">' . "\n"
 		    	.	'<label for="'.$identifier.'">' . $this->answer[$i] . '</label>' . "\n"

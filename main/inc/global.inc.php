@@ -528,6 +528,9 @@ if ($_course['language'])
 // to use it within the function get_lang(...).
 $language_interface_initial_value = $language_interface;
 
+// Initialization the default ICU locale id based in the current interface language.
+api_set_default_locale(api_get_locale_from_language($language_interface));
+
 /*
  * Include all necessary language files
  * - trad4all

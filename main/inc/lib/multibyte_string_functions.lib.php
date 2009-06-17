@@ -41,6 +41,16 @@
 
 /**
  * ----------------------------------------------------------------------------
+ * Constants
+ * ----------------------------------------------------------------------------
+ */
+
+define('INTL_INSTALLED', function_exists('intl_get_error_code'));	// intl extension (from PECL), it is installed by default as of PHP 5.3.0
+define('ICONV_INSTALLED', function_exists('iconv'));				// iconv extension, for PHP5 on Windows it is installed by default.
+define('MBSTRING_INSTALLED', function_exists('mb_strlen'));			// mbstring extension.
+
+/**
+ * ----------------------------------------------------------------------------
  * A safe way to calculate binary lenght of a string (as number of bytes)
  * ----------------------------------------------------------------------------
  */
@@ -54,7 +64,7 @@
 function api_byte_count($string) {
 	static $use_mb_strlen;
 	if (!isset($use_mb_strlen)) {
-		$use_mb_strlen = function_exists('mb_strlen') && ((int) ini_get('mbstring.func_overload') & 2);
+		$use_mb_strlen = MBSTRING_INSTALLED && ((int) ini_get('mbstring.func_overload') & 2);
 	}
 	if ($use_mb_strlen) {
 		return mb_strlen($string, '8bit');
@@ -1166,7 +1176,11 @@ function api_equal_encodings($encoding1, $encoding2) {
  * @return bool					Returns TRUE if the given encoding id means UTF-8, otherwise returns false.
  */
 function api_is_utf8($encoding) {
-	return api_equal_encodings($encoding, 'UTF-8');
+	static $result = array();
+	if (!isset($result[$encoding])) {
+		$result[$encoding] = api_equal_encodings($encoding, 'UTF-8');
+	}
+	return $result[$encoding];
 }
 
 /**
@@ -1310,7 +1324,7 @@ function api_iconv_set_encoding($type, $encoding = null) {
 	static $iconv_internal_encoding = null;
 	static $iconv_input_encoding = null;
 	static $iconv_output_encoding = null;
-	if (!api_iconv_present()) {
+	if (!ICONV_INSTALLED) {
 		return false;
 	}
 	switch ($type) {
@@ -1407,7 +1421,7 @@ function api_iconv_supports($encoding) {
 	static $supported = array();
 	$encoding = api_refine_encoding_id($encoding);
 	if (!isset($supported[$encoding])) {
-		if (api_iconv_present()) {
+		if (ICONV_INSTALLED) {
 			$test_string = '';
 			for ($i = 32; $i < 128; $i++) {
 				$test_string .= chr($i);
@@ -1419,18 +1433,6 @@ function api_iconv_supports($encoding) {
 	}
 
 	return $supported[$encoding];
-}
-
-/**
- * Checks whether the PHP iconv extension is installed and it works.
- * @return bool				Returns TRUE when the iconv extension is detected, FALSE othewise.
- */
-function api_iconv_present() {
-	static $iconv_present = null;
-	if (is_null($iconv_present)) {
-		$iconv_present = function_exists('iconv');
-	}
-	return $iconv_present;
 }
 
 /**
@@ -1489,7 +1491,7 @@ function api_is_valid_utf8($string) {
 	// Ivan Tcholakov, 11-JUN-2009: Let us calculate for sure the length in bytes.
 	static $use_mb_strlen;
 	if (!isset($use_mb_strlen)) {
-		$use_mb_strlen = function_exists('mb_strlen') && ((int) ini_get('mbstring.func_overload') & 2);
+		$use_mb_strlen = MBSTRING_INSTALLED && ((int) ini_get('mbstring.func_overload') & 2);
 	}
 	if ($use_mb_strlen) {
 		$len = mb_strlen($string, '8bit');
@@ -1737,6 +1739,59 @@ function api_get_latin1_compatible_languages() {
 
 /**
  * ----------------------------------------------------------------------------
+ * ICU locales (accessible through intl extension).
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Returns isocode (see api_get_language_isocode()) which is purified accordingly to
+ * be used by the php intl extension (ICU library).
+ * @param string $language (optional)	This is the name of the folder containing translations for the corresponding language.
+ * If $language is omitted, interface language is assumed then.
+ * @return string						The found language locale id or null on error. Examples: bg, en, pt_BR, ...
+ */
+function api_get_locale_from_language($language = null) {
+	static $locale = array();
+	if (!isset($locale[$language])) {
+		$locale[$language] = Database::get_language_isocode($language);
+		if (!is_null($locale[$language])) {
+			$locale[$language] = str_replace('-', '_', $locale[$language]);
+		}
+	}
+	return $locale[$language];
+}
+
+/**
+ * Sets/gets the default internal value of the locale id (for the intl extension, ICU).
+ * @param string $locale (optional)	The locale id to be set. When it is omitted, the function returns (gets, reads) the default internal value.
+ * @return mixed						When the function sets the default value, it returns TRUE on success or FALSE on error. Otherwise the function returns as string the current default value.
+ */
+function api_set_default_locale($locale = null) {
+	static $default_locale = 'en';
+	if (!empty($language)) {
+		$default_locale = $locale;
+		if (INTL_INSTALLED) {
+			return @locale_set_default($locale);
+		}
+		return true;
+	} else {
+		if (INTL_INSTALLED) {
+			$default_locale = @locale_get_default();
+		}
+	}
+	return $default_locale;
+}
+
+/**
+ * Gets the default internal value of the locale id (for the intl extension, ICU).
+ * @return string		Returns as string the current default value.
+ */
+function api_get_default_locale() {
+	return api_set_default_locale();
+}
+
+/**
+ * ----------------------------------------------------------------------------
  * Array functions
  * ----------------------------------------------------------------------------
  */
@@ -1978,7 +2033,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
 // This is a multibyte replacement of strchr().
 // This function exists in PHP 5 >= 5.2.0
 // See http://php.net/manual/en/function.mb-strrchr
-if (!function_exists('mb_strchr')) {
+if (MBSTRING_INSTALLED && !function_exists('mb_strchr')) {
 	function mb_strchr($haystack, $needle, $part = false, $encoding = null) {
 		if (empty($encoding)) {
 			$encoding = mb_internal_encoding();
@@ -1990,7 +2045,7 @@ if (!function_exists('mb_strchr')) {
 // This is a multibyte replacement of stripos().
 // This function exists in PHP 5 >= 5.2.0
 // See http://php.net/manual/en/function.mb-stripos
-if (!function_exists('mb_stripos')) {
+if (MBSTRING_INSTALLED && !function_exists('mb_stripos')) {
 	function mb_stripos($haystack, $needle, $offset = 0, $encoding = null) {
 		if (empty($encoding)) {
 			$encoding = mb_internal_encoding();
@@ -2002,7 +2057,7 @@ if (!function_exists('mb_stripos')) {
 // This is a multibyte replacement of stristr().
 // This function exists in PHP 5 >= 5.2.0
 // See http://php.net/manual/en/function.mb-stristr
-if (!function_exists('mb_stristr')) {
+if (MBSTRING_INSTALLED && !function_exists('mb_stristr')) {
 	function mb_stristr($haystack, $needle, $part = false, $encoding = null) {
 		if (empty($encoding)) {
 			$encoding = mb_internal_encoding();
@@ -2022,7 +2077,7 @@ if (!function_exists('mb_stristr')) {
 // This is a multibyte replacement of strrchr().
 // This function exists in PHP 5 >= 5.2.0
 // See http://php.net/manual/en/function.mb-strrchr
-if (!function_exists('mb_strrchr')) {
+if (MBSTRING_INSTALLED && !function_exists('mb_strrchr')) {
 	function mb_strrchr($haystack, $needle, $part = false, $encoding = null) {
 		if (empty($encoding)) {
 			$encoding = mb_internal_encoding();
@@ -2042,7 +2097,7 @@ if (!function_exists('mb_strrchr')) {
 // This is a multibyte replacement of strstr().
 // This function exists in PHP 5 >= 5.2.0
 // See http://php.net/manual/en/function.mb-strstr
-if (!function_exists('mb_strstr')) {
+if (MBSTRING_INSTALLED && !function_exists('mb_strstr')) {
 	function mb_strstr($haystack, $needle, $part = false, $encoding = null) {
 		if (empty($encoding)) {
 			$encoding = mb_internal_encoding();

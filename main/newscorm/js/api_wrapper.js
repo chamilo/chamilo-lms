@@ -582,7 +582,7 @@ function checkAnswers(interrupted)
 					var answer = document.getElementById('question_'+(idQuestion)+'_matching_'+(idAnswer));
 					if(answer && answer.value)
 					{
-						interactionAnswers += answer.value+',';
+						interactionAnswers += answer.value+'__|';//changed by isaac flores
 						for(k=0;k<questions_answers_correct[idQuestion].length;k++)
 						{
 							var left = questions_answers_correct[idQuestion][k][0];

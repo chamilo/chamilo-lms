@@ -15,24 +15,7 @@ $file_url_sys=api_get_path(SYS_COURSE_PATH).$file_root;
 $file_url_web=api_get_path(WEB_COURSE_PATH).$file_root;
 
 $content_html=file_get_contents($file_url_sys);
-$array_glossary=GlossaryManager::get_glossary_terms();
-if (count($array_glossary)>0) {
-	foreach ($array_glossary as $index_glossary => $value_glossary) {
-		$to_be_replaced[]=$str_href='<a name="link'.$value_glossary['id'].'"  href="javascript:void(0)" >'.$value_glossary['name'].'</a>';		
-		$to_replaced[]=$value_glossary['name'];
-	}
-}	
-
-$new_file=str_replace($to_replaced,$to_be_replaced,$content_html);
 $new_file=str_replace('<head>','<head><script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script><script type="text/javascript">
-   function display_notebook_info(notebook_id) {
-   		data_notebook=notebook_id.split("link");
-   		$("#gls"+data_notebook[1]).attr("style","display:inline;float:left;position:absolute;background-color: white;border-bottom: 1px dashed #dddddd;border-right: 1px dashed #dddddd;border-left: 1px dashed #dddddd;border-top: 1px dashed #dddddd;color:#305582;margin-left:5px;margin-right:5px;");
-   }
-   function hide_notebook_info(notebook_id) {
-   	data_notebook=notebook_id.split("link");
-   	$("#gls"+data_notebook[1]).attr("style","display:none");   	
-   }
  $(document).ready(function() {
 	$("body a").toggle(function(){
 	  $(this).append("<div id=\"div_show_id\" >&nbsp;</div>");
@@ -57,6 +40,18 @@ $new_file=str_replace('<head>','<head><script src="'.api_get_path(WEB_LIBRARY_PA
 	    $("div#div_show_id").remove();
 	});
 });
-</script>',$new_file);
+</script>',$content_html);
+$content_html=explode('</head>',$new_file);
+$head_html=$content_html[0];
+$content_html=$content_html[1];
+$array_glossary=GlossaryManager::get_glossary_terms();
+if (count($array_glossary)>0) {
+	foreach ($array_glossary as $index_glossary => $value_glossary) {
+		$to_be_replaced[]=$str_href='<a name="link'.$value_glossary['id'].'"  href="javascript:void(0)" >'.$value_glossary['name'].'</a>';		
+		$to_replaced[]=$value_glossary['name'];
+	}
+}	
+$new_file=str_replace($to_replaced,$to_be_replaced,$content_html);
+$new_file=$head_html.$new_file;
 echo $new_file;
 ?>

@@ -607,22 +607,6 @@ function api_str_split($string, $split_length = 1, $encoding = null) {
 }
 
 /**
- * Case-insensitive string comparison wuth extended multibyte support.
- * @param string $string1				The first string.
- * @param string $string2				The second string.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return int							Returns < 0 if $string1 is less than $string2; > 0 if $string1 is greater than $string2; and 0 if the strings are equal. 
- * This function is aimed at replacing the function strcasecmp() for human-language strings.
- * @link http://php.net/manual/en/function.strcasecmp
- */
-function api_strcasecmp($string1, $string2, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = api_mb_internal_encoding();
-	}
-	return strcmp(api_strtolower($string1, $encoding), api_strtolower($string2, $encoding));
-}
-
-/**
  * Finds position of first occurrence of a string within another, case insensitive.
  * @param string $haystack				The string from which to get the position of the first occurrence.
  * @param string $needle				The string to be found.
@@ -1044,11 +1028,27 @@ function api_add_pcre_unicode_modifier($pcre, $encoding = null) {
  */
 
 /**
- * Performs string comparison, case insensitive, language sensitive, replacement of strcmp().
+ * Performs string comparison, case insensitive, language sensitive, with extended multibyte support.
  * @param string $string1				The first string.
  * @param string $string2				The second string.
  * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return int							Returns < 0 if $string1 is less than $string2; > 0 if $string1 is greater than $string2; and 0 if the strings are equal. 
+ * This function is aimed at replacing the function strcasecmp() for human-language strings.
+ * @link http://php.net/manual/en/function.strcasecmp
+ */
+function api_strcasecmp($string1, $string2, $language = null, $encoding = null) {
+	return api_strcmp(api_strtolower($string1, $encoding), api_strtolower($string2, $encoding), $language, $encoding);
+}
+
+/**
+ * Performs string comparison, case sensitive, language sensitive, with extended multibyte support.
+ * @param string $string1				The first string.
+ * @param string $string2				The second string.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return int							Returns < 0 if $string1 is less than $string2; > 0 if $string1 is greater than $string2; and 0 if the strings are equal. 
+ * This function is aimed at replacing the function strcmp() for human-language strings.
  * @link http://php.net/manual/en/function.strcmp.php
  * @link http://php.net/manual/en/collator.compare.php
  */

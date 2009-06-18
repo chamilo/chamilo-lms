@@ -8058,6 +8058,7 @@ class learnpath {
 	 	//Always call the learnpathItem->scorm_export() method to change it to the SCORM
 	 	//format
 	 	$link_updates = array();
+
 	 	foreach($this->items as $index => $item){
 	 		if(!in_array($item->type , array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK, TOOL_STUDENTPUBLICATION)))
 	 		{
@@ -8583,10 +8584,20 @@ class learnpath {
 					 					if(strstr($file_path,$main_path) !== false)
 					 					{//the calculated real path is really inside the dokeos root path
 					 						//reduce file path to what's under the DocumentRoot
+						 						
 					 						$file_path = substr($file_path,strlen($root_path));
+					 						$file_path_dest=$file_path;
+					 						
+											//file path is courses/DOKEOS/document/....
+											$info_file_path=explode('/',$file_path);
+											if ($info_file_path[0]=='courses') {//add character "/" in file path
+												 $file_path_dest='/'.$file_path;	
+											}
+
 					 						//error_log('Reduced path: '.$file_path,0);
 					 						$zip_files_abs[] = $file_path;
-					 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
+			 						
+					 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path_dest);
 							 				$my_dep_file->setAttribute('href','document/'.$file_path);
 					 			 			$my_dep->setAttribute('xml:base','');
 					 					}
@@ -8595,9 +8606,10 @@ class learnpath {
 						 				$my_dep_file->setAttribute('href',$doc_info[0]);
 				 			 			$my_dep->setAttribute('xml:base',$my_xml_sub_dir);
 					 				}
+
 			 						break;
 			 					default:
-					 				$my_dep_file->setAttribute('href',$doc_info[0]);
+					 				$my_dep_file->setAttribute('href',$doc_info[0]);// ../../courses/
 			 			 			$my_dep->setAttribute('xml:base','');
 			 						break;
 			 				}
@@ -8611,7 +8623,6 @@ class learnpath {
 			 		}
 			 		$resources->appendChild($my_resource);
 			 		$zip_files[] = $my_file_path;
-	 				
 				}
 	 			else
 	 			{

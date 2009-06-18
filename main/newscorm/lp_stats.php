@@ -368,11 +368,21 @@ if (is_array($list) && count($list) > 0){
 						} else {
 							$oddclass = "row_even";
 						}
+						$student_response=urldecode($interaction['student_response']);//code added by isaac flores
+						$content_student_response=array();
+						$content_student_response=explode('__|',$student_response);
+
+						if (count($content_student_response)>0) {
+							if (count($content_student_response)>=3) {
+								$new_content_student_response=array_pop($content_student_response);//Pop the element off the end of array
+							}
+							$student_response=implode(',',$content_student_response);
+						}
 						$output .= "<tr class='$oddclass'>\n" . '<td></td>' . "\n" . '<td></td>' . "\n" . '<td>&nbsp;</td>' . "\n" . '<td>' . $interaction['order_id'] . '</td>' . "\n" . '<td>' . $interaction['id'] . '</td>' . "\n"
 						//."<td><font color='$color'><div class='mystatus'>".api_convert_encoding($array_status[$lesson_status],$lp_charset,$lp_charset)."</div></font></td>\n"
 						 . '<td colspan="2">' . $interaction['type'] . "</td>\n"
 						//.'<td>'.$interaction['correct_responses']."</td>\n"
-						 . '<td>' . urldecode($interaction['student_response']) . "</td>\n" . '<td>' . $interaction['result'] . "</td>\n" . '<td>' . $interaction['latency'] . "</td>\n" . '<td>' . $interaction['time'] . "</td>\n<td></td>\n</tr>\n";
+						 . '<td>' . $student_response . "</td>\n" . '<td>' . $interaction['result'] . "</td>\n" . '<td>' . $interaction['latency'] . "</td>\n" . '<td>' . $interaction['time'] . "</td>\n<td></td>\n</tr>\n";
 						$counter++;
 					}
 					$list2 = learnpath :: get_iv_objectives_array($row['iv_id']);

@@ -449,7 +449,7 @@ function checkAnswers(interrupted)
 					var answer = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
 					if(answer.checked == true)
 					{
-						interactionAnswers += idAnswer+',';
+						interactionAnswers += idAnswer+'__|';// changed by isaac flores
 						myScore +=questions_answers_ponderation[idQuestion][idAnswer];
 						
 						/*for(k=0;k<questions_answers_correct[idQuestion].length;k++)

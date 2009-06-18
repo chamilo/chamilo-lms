@@ -401,7 +401,7 @@ if (is_array($flat_list))
 			}
 			
 			//hide icon export scorm
-			$dsp_disk='';
+			//$dsp_disk='';
 			
 			if($details['lp_display_order'] == 1 && $max != 1)
 	    	{

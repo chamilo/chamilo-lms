@@ -29,6 +29,8 @@ $interbreadcrumb[]= array ("url"=>"showinframes.php?file=".$header_file, "name"=
 Display::display_header(null,"Doc");
 
 echo "<div align=\"center\">";
-echo "<a href='".api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file."?".api_get_cidreq()."' target='blank'>".$lang_cut_paste_link."</a></div>";
+$file_url_web='document_with_glossary_terms.php?file='.urlencode(Security::remove_XSS($_GET['file']));
+$file_origin_url_web=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file."?".api_get_cidreq();
+echo "<a href='".$file_url_web."' target='blank'>".$lang_cut_paste_link."</a></div>";
 
 ?>

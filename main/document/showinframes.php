@@ -1,4 +1,4 @@
-<?php // $Id: showinframes.php 21106 2009-05-30 16:25:16Z iflorespaz $ 
+<?php // $Id: showinframes.php 21481 2009-06-18 04:47:18Z iflorespaz $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -54,7 +54,7 @@
 */ 
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
-
+require_once '../glossary/glossary.class.php';
 if (!empty($_GET['nopages']))
 {
 	$nopages=Security::remove_XSS($_GET['nopages']);
@@ -71,7 +71,6 @@ $_SESSION['whereami'] = 'document/view';
 $interbreadcrumb[]= array ('url'=>'./document.php', 'name'=> get_lang('Documents'));
 $nameTools = get_lang('Documents');
 $file = Security::remove_XSS(urldecode($_GET['file']));
-
 /*
 ============================================================================== 
 		Main section
@@ -92,15 +91,17 @@ if($is_courseAdmin)
 {
 	$frameheight = 165;	
 }
+
 $file_root=$_course['path'].'/document'.str_replace('%2F', '/',$file);
-$file_url_sys=api_get_path('SYS_COURSE_PATH').$file_root;
-$file_url_web=api_get_path('WEB_COURSE_PATH').$file_root;
-
-
+$file_url_sys=api_get_path(SYS_COURSE_PATH).$file_root;
+$file_url_web=api_get_path(WEB_COURSE_PATH).$file_root;
+$file_url_web='document_with_glossary_terms.php?file='.urlencode($_GET['file']);
 ?>
 <html>
 <head>
-<title><?php echo $browser_display_title;?></title>
+<title>
+<?php echo $browser_display_title;?>
+</title>
 </head>
 	<frameset rows="<?php echo $frameheight; ?>,*" border="0" frameborder="no" >
 		<frame name="top" scrolling="no" noresize target="contents" src="headerpage.php?file=<?php echo $file.'&amp;'.api_get_cidreq(); ?>">

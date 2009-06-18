@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 21362 2009-06-11 04:34:31Z ivantcholakov $
+<?php // $Id: settings.php 21487 2009-06-18 09:52:42Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -132,6 +132,10 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 	//while ($row = mysql_fetch_array($resultsettings))
 	$default_values = array();
 	foreach($settings as $row) {			
+
+		$anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
+		$form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
+
 		($countsetting['0']%10) < 5 ?$b=$countsetting['0']-10:$b=$countsetting['0'];		
 		if ($i % 10 == 0 and $i<$b){
 			if ($_GET['category'] <> "Languages"){
@@ -374,7 +378,7 @@ function get_settings_options($var)
 	$table_settings_options = Database :: get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
 	$sql = "SELECT * FROM $table_settings_options WHERE variable='$var'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	while ($row = mysql_fetch_array($result))
+	while ($row = Database::fetch_array($result))
 	{
 		$temp_array = array ('value' => $row['value'], 'display_text' => $row['display_text']);
 		$settings_options_array[] = $temp_array;

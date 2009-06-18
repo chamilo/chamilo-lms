@@ -38,7 +38,7 @@ function display_step_sequence()
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
  * @version Dokeos 1.8.1, May 2007
  */
-function check_extension($extension_name,$return_success='OK',$return_failure='KO',$optional=false)
+function check_extension($extension_name,$return_success='Yes',$return_failure='No',$optional=false)
 {
 	if(extension_loaded($extension_name))
 	{
@@ -405,36 +405,48 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 	echo '		</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">session '.get_lang('support').'</td>
-				<td class="requirements-value">'.check_extension('session',get_lang('OK'), get_lang('ExtensionSessionsNotAvailable')).'</td>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('session', get_lang('Yes'), get_lang('ExtensionSessionsNotAvailable')).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">MySQL '.get_lang('support').'</td>
-				<td class="requirements-value">'.check_extension('mysql',get_lang('OK'), get_lang('ExtensionMySQLNotAvailable')).'</td>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">MySQL</a> '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable')).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">zlib '.get_lang('support').'</td>
-				<td class="requirements-value">'.check_extension('zlib',get_lang('OK'), get_lang('ExtensionZlibNotAvailable')).'</td>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('zlib', get_lang('Yes'), get_lang('ExtensionZlibNotAvailable')).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">Regular Expressions '.get_lang('support').'</td>
-				<td class="requirements-value">'.check_extension('pcre',get_lang('OK'), get_lang('ExtensionPCRENotAvailable')).'</td>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.pcre.php" target="_blank">Perl-compatible regular expressions</a> '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('pcre', get_lang('Yes'), get_lang('ExtensionPCRENotAvailable')).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">XML '.get_lang('support').'</td>
-				<td class="requirements-value">'.check_extension('xml',get_lang('OK'), get_lang('ExtensionZlibNotAvailable')).'</td>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.xml.php" target="_blank">XML</a> '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('xml', get_lang('Yes'), get_lang('No')).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">MultiByteString '.get_lang('support').'</td>
-				<td class="requirements-value">'.check_extension('mbstring',get_lang('OK'), get_lang('ExtensionMBStringNotAvailable')).'</td>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable')).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">GD '.get_lang('support').'</td>
-				<td class="requirements-value">'.check_extension('gd',get_lang('OK'), get_lang('ExtensionGDNotAvailable')).'</td>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
+				<td class="requirements-value">'.check_extension('iconv', get_lang('Yes'), get_lang('No'), true).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">LDAP '.get_lang('support').' ('.get_lang('Optional').')</td>
-				<td class="requirements-value">'.check_extension('ldap',get_lang('OK'), get_lang('ExtensionLDAPNotAvailable'),true).'</td>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
+				<td class="requirements-value">'.check_extension('intl', get_lang('Yes'), get_lang('No'), true).'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('gd', get_lang('Yes'), get_lang('ExtensionGDNotAvailable')).'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
+				<td class="requirements-value">'.check_extension('ldap', get_lang('Yes'), get_lang('ExtensionLDAPNotAvailable'), true).'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
+				<td class="requirements-value">'.check_extension('xapian', get_lang('Yes'), get_lang('No'), true).'</td>
 			</tr>
 				
 		  </table>';

@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 21378 2009-06-11 17:33:14Z aportugal $
+<?php // $Id: usermanager.lib.php 21523 2009-06-19 21:47:55Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1510,7 +1510,7 @@ class UserManager
 										ON course_rel_user.user_course_cat = user_course_category.id
 										$join_access_url
 										WHERE  course_rel_user.user_id = '".$user_id."'  $where_access_url
-										ORDER BY i, user_course_category.sort, course_rel_user.sort ASC";
+										ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
 		
 		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 		//var_dump($course_list_sql_result); exit;

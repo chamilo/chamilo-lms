@@ -38,22 +38,25 @@ function dokeos_get_boolean_query($term) {
 function dokeos_preprocess_results($results) {
     // group by toolid
     $results_by_tool = array();
-    foreach ($results as $key => $row) {
-        $results_by_tool[$row['toolid']][] = $row;
+    if (count($results)>0) {
+	
+	    foreach ($results as $key => $row) {
+	        $results_by_tool[$row['toolid']][] = $row;
+	    }
+	
+	    $processed_results = array();
+	    foreach ($results_by_tool as $toolid => $rows) {
+	        $tool_processor_class = $toolid .'_processor';
+	        $tool_processor_path = api_get_path(LIBRARY_PATH) .'search/tool_processors/'. $tool_processor_class .'.class.php';
+	        if (file_exists($tool_processor_path)) {
+	            require_once($tool_processor_path);
+	            $tool_processor = new $tool_processor_class($rows);
+	            $processed_results = array_merge($tool_processor->process(), $processed_results);
+	        }
+	    }
+	
+	    return array(count($processed_results), $processed_results);
     }
-
-    $processed_results = array();
-    foreach ($results_by_tool as $toolid => $rows) {
-        $tool_processor_class = $toolid .'_processor';
-        $tool_processor_path = api_get_path(LIBRARY_PATH) .'search/tool_processors/'. $tool_processor_class .'.class.php';
-        if (file_exists($tool_processor_path)) {
-            require_once($tool_processor_path);
-            $tool_processor = new $tool_processor_class($rows);
-            $processed_results = array_merge($tool_processor->process(), $processed_results);
-        }
-    }
-
-    return array(count($processed_results), $processed_results);
 }
 
 /**

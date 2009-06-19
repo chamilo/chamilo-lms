@@ -105,8 +105,8 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10,
         return array($count, $results);
     }
     catch (Exception $e) {
-      Display::display_error_message('xapian error message: '. $e->getMessage());
-        return NULL;
+     display_xapian_error($e->getMessage());
+     return NULL;
     }
 }
 
@@ -149,7 +149,7 @@ function xapian_get_all_terms($count=0, $prefix, $db=NULL) {
     return $terms;
   }
   catch (Exception $e) {
-    Display::display_error_message('xapian error message: '. $e->getMessage());
+    display_xapian_error($e->getMessage());
     return NULL;
   }
 }
@@ -183,7 +183,7 @@ function xapian_get_doc_terms($doc=NULL, $prefix) {
     return $terms;
   }
   catch (Exception $e) {
-    Display::display_error_message('xapian error message: '. $e->getMessage());
+    display_xapian_error($e->getMessage());
     return NULL;
   }
 }
@@ -218,4 +218,32 @@ function xapian_join_queries($query1, $query2=NULL, $op='or') {
 	
 	return new XapianQuery($op, array_merge($query1, $query2));
 }
+/**
+ * @author Isaac flores paz <florespaz@bidsoftperu.com>
+ * @param String The xapian error message
+ * @return String The dokeos error message
+ */
+ function display_xapian_error($xapian_error_message) {
+ 	$message=explode(':',$xapian_error_message);
+    $type_error_message=$message[0];
+    if ($type_error_message=='DatabaseOpeningError') {
+    	$message_error=get_lang('SearchDatabaseOpeningError');
+    } elseif ($type_error_message=='DatabaseVersionError') {
+     	$message_error=get_lang('SearchDatabaseVersionError');   	
+    }  elseif ($type_error_message=='DatabaseModifiedError') {
+      	$message_error=get_lang('SearchDatabaseModifiedError');   	
+    }  elseif ($type_error_message=='DatabaseLockError') {
+      	$message_error=get_lang('SearchDatabaseLockError');     	
+    }  elseif ($type_error_message=='DatabaseCreateError') {
+      	$message_error=get_lang('SearchDatabaseCreateError');       	
+    }  elseif ($type_error_message=='DatabaseCorruptError') {
+       	$message_error=get_lang('SearchDatabaseCorruptError');    	
+    }  elseif ($type_error_message=='NetworkTimeoutError') {
+       	$message_error=get_lang('SearchNetworkTimeoutError');     	
+    } else {
+        $message_error=get_lang('SearchOtherXapianError');    	
+    }
+    $display_message=get_lang('Error').' : '. $message_error;
+    Display::display_error_message($display_message);
+ }
 ?>

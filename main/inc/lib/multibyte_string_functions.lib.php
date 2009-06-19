@@ -1122,7 +1122,7 @@ function _api_get_collator($language = null) {
  * SORT_NUMERIC - items will be compared as numbers;
  * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
  * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
- * This function is aimed at replacing the function sort() for sorting human-language strings.
+ * This function is aimed at replacing the function asort() for sorting human-language strings.
  * @link http://php.net/manual/en/function.asort.php
  * @link http://php.net/manual/en/collator.asort.php
  */
@@ -1160,7 +1160,7 @@ function api_asort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
  * SORT_NUMERIC - items will be compared as numbers;
  * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
  * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
- * This function is aimed at replacing the function rsort() for sorting human-language strings.
+ * This function is aimed at replacing the function arsort() for sorting human-language strings.
  * @link http://php.net/manual/en/function.arsort.php
  */
 function api_arsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
@@ -1179,6 +1179,72 @@ function api_arsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encod
 		}
 	}
 	return arsort($array, $sort_flag);
+}
+
+/**
+ * Sorts an array by keys, elements will be arranged from the lowest key to the highest key.
+ * @param array $array					The input array.
+ * @param int $sort_flag (optional)		Shows how keys of the array to be compared.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ * Note: $sort_flag may have the following values:
+ * SORT_REGULAR - for simple byte ordered ASCII comparison without changing types;
+ * SORT_NUMERIC - keys will be compared as numbers;
+ * SORT_STRING - keys will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
+ * SORT_LOCALE_STRING - keys will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
+ * This function is aimed at replacing the function ksort() for sorting human-language key strings.
+ * @link http://php.net/manual/en/function.ksort.php
+ */
+function api_ksort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_collator($language);
+		if (is_object($collator)) {
+			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+				global $_api_collator, $_api_encoding;
+				$_api_collator = $collator;
+				$_api_encoding = $encoding;
+				return uksort($array, '_api_cmp');
+			}
+		}
+	}
+	return ksort($array, $sort_flag);
+}
+
+/**
+ * Sorts an array by keys, elements will be arranged from the highest key to the lowest key (in reverse order).
+ * @param array $array					The input array.
+ * @param int $sort_flag (optional)		Shows how keys of the array to be compared.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ * Note: $sort_flag may have the following values:
+ * SORT_REGULAR - for simple byte ordered ASCII comparison without changing types;
+ * SORT_NUMERIC - keys will be compared as numbers;
+ * SORT_STRING - keys will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
+ * SORT_LOCALE_STRING - keys will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
+ * This function is aimed at replacing the function ksort() for sorting human-language key strings.
+ * @link http://php.net/manual/en/function.ksort.php
+ */
+function api_krsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_collator($language);
+		if (is_object($collator)) {
+			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+				global $_api_collator, $_api_encoding;
+				$_api_collator = $collator;
+				$_api_encoding = $encoding;
+				return uksort($array, '_api_rcmp');
+			}
+		}
+	}
+	return krsort($array, $sort_flag);
 }
 
 /**

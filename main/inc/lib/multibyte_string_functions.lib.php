@@ -1064,6 +1064,42 @@ function api_strcmp($string1, $string2, $language = null, $encoding = null) {
 }
 
 /**
+ * Performs string comparison in so called "natural order", case insensitive, language sensitive, with extended multibyte support.
+ * @param string $string1				The first string.
+ * @param string $string2				The second string.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return int							Returns < 0 if $string1 is less than $string2; > 0 if $string1 is greater than $string2; and 0 if the strings are equal. 
+ * This function is aimed at replacing the function strnatcasecmp() for human-language strings.
+ * @link http://php.net/manual/en/function.strnatcasecmp
+ */
+function api_strnatcasecmp($string1, $string2, $language = null, $encoding = null) {
+	return api_strnatcmp(api_strtolower($string1, $encoding), api_strtolower($string2, $encoding), $language, $encoding);
+}
+
+/**
+ * Performs string comparison in so called "natural order", case sensitive, language sensitive, with extended multibyte support.
+ * @param string $string1				The first string.
+ * @param string $string2				The second string.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return int							Returns < 0 if $string1 is less than $string2; > 0 if $string1 is greater than $string2; and 0 if the strings are equal. 
+ * This function is aimed at replacing the function strnatcmp() for human-language strings.
+ * @link http://php.net/manual/en/function.strnatcmp.php
+ * @link http://php.net/manual/en/collator.compare.php
+ */
+function api_strnatcmp($string1, $string2, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		$collator = _api_get_alpha_numerical_collator($language);
+		if (is_object($collator)) {
+			$result = collator_compare($collator, api_utf8_encode($string1, $encoding), api_utf8_encode($string2, $encoding));
+			return $result === false ? 0 : $result;
+		}
+	}
+	return strnatcmp($string1, $string2);
+}
+
+/**
  * Checks if a value exists in an array, a case insensitive version of in_array() function with extended multibyte support.
  * @param mixed $needle					The searched value. If needle is a string, the comparison is done in a case-insensitive manner.
  * @param array $haystack				The array.
@@ -1100,6 +1136,20 @@ function _api_get_collator($language = null) {
 	if (!isset($collator[$language])) {
 		$locale = api_get_locale_from_language($language);
 		$collator[$language] = collator_create($locale);
+	}
+	return $collator[$language];
+}
+
+// Returns an instance of Collator class (ICU) created for a specified language, for internal use.
+// This collator treats substrings of digits as numbers.
+function _api_get_alpha_numerical_collator($language = null) {
+	static $collator = array();
+	if (!isset($collator[$language])) {
+		$locale = api_get_locale_from_language($language);
+		$collator[$language] = collator_create($locale);
+		if (is_object($collator[$language])) {
+			collator_set_attribute($collator[$language], Collator::NUMERIC_COLLATION, Collator::ON);
+		}
 	}
 	return $collator[$language];
 }

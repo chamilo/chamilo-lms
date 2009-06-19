@@ -1136,6 +1136,9 @@ function _api_get_collator($language = null) {
 	if (!isset($collator[$language])) {
 		$locale = api_get_locale_from_language($language);
 		$collator[$language] = collator_create($locale);
+		if (is_object($collator[$language])) {
+			collator_set_attribute($collator[$language], Collator::CASE_FIRST, Collator::UPPER_FIRST);
+		}
 	}
 	return $collator[$language];
 }
@@ -1148,6 +1151,7 @@ function _api_get_alpha_numerical_collator($language = null) {
 		$locale = api_get_locale_from_language($language);
 		$collator[$language] = collator_create($locale);
 		if (is_object($collator[$language])) {
+			collator_set_attribute($collator[$language], Collator::CASE_FIRST, Collator::UPPER_FIRST);
 			collator_set_attribute($collator[$language], Collator::NUMERIC_COLLATION, Collator::ON);
 		}
 	}
@@ -1368,6 +1372,56 @@ function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
 	return rsort($array, $sort_flag);
 }
 
+/**
+ * Sorts an array using natural order algorithm.
+ * @param array $array					The input array.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ * This function is aimed at replacing the function natsort() for sorting human-language strings.
+ * @link http://php.net/manual/en/function.natsort.php
+ */
+function api_natsort(&$array, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_alpha_numerical_collator($language);
+		if (is_object($collator)) {
+			global $_api_collator, $_api_encoding;
+			$_api_collator = $collator;
+			$_api_encoding = $encoding;
+			return uasort($array, '_api_cmp');
+		}
+	}
+	return natsort($array);
+}
+
+/**
+ * Sorts an array using natural order algorithm, case-insensitive.
+ * @param array $array					The input array.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ * This function is aimed at replacing the function natcasesort() for sorting human-language strings.
+ * @link http://php.net/manual/en/function.natcasesort.php
+ */
+function api_natcasesort(&$array, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_alpha_numerical_collator($language);
+		if (is_object($collator)) {
+			global $_api_collator, $_api_encoding;
+			$_api_collator = $collator;
+			$_api_encoding = $encoding;
+			return uasort($array, '_api_casecmp');
+		}
+	}
+	return natcasesort($array);
+}
+
 // Global variables used by the sorting functions, for internal use.
 $_api_collator = null;
 $_api_encoding = null;
@@ -1383,6 +1437,13 @@ function _api_cmp($string1, $string2) {
 function _api_rcmp($string1, $string2) {
 	global $_api_collator, $_api_encoding;
 	$result = collator_compare($_api_collator, api_utf8_encode($string2, $_api_encoding), api_utf8_encode($string1, $_api_encoding));
+	return $result === false ? 0 : $result;
+}
+
+// A case-insensitive string comparison function that serves sorting functions, for internal use.
+function _api_casecmp($string1, $string2) {
+	global $_api_collator, $_api_encoding;
+	$result = collator_compare($_api_collator, api_strtolower(api_utf8_encode($string1, $_api_encoding), 'UTF-8'), api_strtolower(api_utf8_encode($string2, $_api_encoding), 'UTF-8'));
 	return $result === false ? 0 : $result;
 }
 

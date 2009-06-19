@@ -1023,7 +1023,7 @@ function api_add_pcre_unicode_modifier($pcre, $encoding = null) {
 
 /**
  * ----------------------------------------------------------------------------
- * Functions for string comparison
+ * String comparison
  * ----------------------------------------------------------------------------
  */
 
@@ -1079,6 +1079,338 @@ function api_get_collator($language = null) {
 		return $collator[$language];
 	}
 	return null;
+}
+
+/**
+ * Checks if a value exists in an array, a case insensitive version of in_array() function with extended multibyte support.
+ * @param mixed $needle					The searched value. If needle is a string, the comparison is done in a case-insensitive manner.
+ * @param array $haystack				The array.
+ * @param bool $strict (optional)		If is set to TRUE then the function will also check the types of the $needle in the $haystack. The default value if FALSE.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE if $needle is found in the array, FALSE otherwise.
+ * @link http://php.net/manual/en/function.in-array.php
+ */
+function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = null) {
+	if (is_array($needle)) {
+		foreach ($needle as $item) {
+			if (api_in_array_nocase($item, $haystack, $strict, $encoding)) return true;
+		}
+		return false;
+	}
+	if (!is_string($needle)) {
+		return in_array($needle, $haystack, $strict);
+	}
+	$needle = api_strtolower($needle, $encoding);
+	foreach ($haystack as $item) {
+		if ($strict && !is_string($item)) {
+			continue;
+		}
+		if (api_strtolower($item, $encoding) == $needle) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * ----------------------------------------------------------------------------
+ * Sorting arrays
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Sorts an array, elements will be arranged from the lowest to the highest.
+ * @param array $array					The input array.
+ * @param int $sort_flag (optional)		Shows how elements of the array to be compared.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ * Note: $sort_flag may have the following values:
+ * SORT_REGULAR - for simple byte ordered ASCII comparison without changing types;
+ * SORT_NUMERIC - items will be compared as numbers;
+ * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
+ * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
+ * This function is aimed at replacing the function sort() for sorting human-language strings.
+ * @link http://php.net/manual/en/function.sort.php
+ * @link http://php.net/manual/en/collator.sort.php
+ */
+function api_sort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = api_get_collator($language);
+		if (is_object($collator)) {
+			if (api_is_utf8($encoding)) {
+				$sort_flag = ($sort_flag == SORT_LOCALE_STRING) ? SORT_STRING : $sort_flag;
+				return collator_sort($collator, $array, _api_get_collator_sort_flag($sort_flag));
+			}
+			elseif ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+				global $_api_collator, $_api_encoding;
+				$_api_collator = $collator;
+				$_api_encoding = $encoding;
+				return usort($array, '_api_cmp');
+			}
+		}
+	}
+	return sort($array, $sort_flag);
+}
+
+/**
+ * Sorts an array, elements will be arranged from the highest to the lowest (in reverse order).
+ * @param array $array					The input array.
+ * @param int $sort_flag (optional)		Shows how elements of the array to be compared.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ * Note: $sort_flag may have the following values:
+ * SORT_REGULAR - for simple byte ordered ASCII comparison without changing types;
+ * SORT_NUMERIC - items will be compared as numbers;
+ * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
+ * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
+ * This function is aimed at replacing the function rsort() for sorting human-language strings.
+ * @link http://php.net/manual/en/function.rsort.php
+ * @link http://php.net/manual/en/collator.sort.php
+ */
+function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = api_get_collator($language);
+		if (is_object($collator)) {
+			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+				global $_api_collator, $_api_encoding;
+				$_api_collator = $collator;
+				$_api_encoding = $encoding;
+				return usort($array, '_api_rcmp');
+			}
+		}
+	}
+	return rsort($array, $sort_flag);
+}
+
+// Global variables used by the sorting functions, for internal use.
+$_api_collator = null;
+$_api_encoding = null;
+
+// A string comparison function that serves sorting functions, for internal use.
+function _api_cmp($string1, $string2) {
+	global $_api_collator, $_api_encoding;
+	$result = collator_compare($_api_collator, api_utf8_encode($string1, $_api_encoding), api_utf8_encode($string2, $_api_encoding));
+	return $result === false ? 0 : $result;
+}
+
+// A reverse string comparison function that serves sorting functions, for internal use.
+function _api_rcmp($string1, $string2) {
+	global $_api_collator, $_api_encoding;
+	$result = collator_compare($_api_collator, api_utf8_encode($string2, $_api_encoding), api_utf8_encode($string1, $_api_encoding));
+	return $result === false ? 0 : $result;
+}
+
+// A fuction that translates sorting flag constants from php core to correspondent constants from intl extension, for internal use.
+function _api_get_collator_sort_flag($sort_flag = SORT_REGULAR) {
+	switch ($sort_flag) {
+		case SORT_STRING:
+		case SORT_SORT_LOCALE_STRING:
+			return Collator::SORT_STRING;
+		case SORT_NUMERIC:
+			return Collator::SORT_NUMERIC;
+	}
+	return Collator::SORT_REGULAR;
+}
+
+//----------------------------------------------------------------------------
+// Transliteration, converting ANSI and UTF-8 strings to ASCII strings
+//----------------------------------------------------------------------------
+
+/**
+ * Transliterates a string to a plain ASCII string.
+ *
+ * Example:
+ * echo api_transliterate(api_html_entity_decode(
+ * 	'&#1060;&#1105;&#1076;&#1086;&#1088; '.
+ * 	'&#1052;&#1080;&#1093;&#1072;&#1081;&#1083;&#1086;&#1074;&#1080;&#1095; '.
+ * 	'&#1044;&#1086;&#1089;&#1090;&#1086;&#1077;&#1074;&#1082;&#1080;&#1081;',
+ * 	ENT_QUOTES, 'UTF-8'), 'UTF-8');
+ * The output should be: Fyodor Mihaylovich Dostoevkiy
+ *
+ * @param string $string					The input string.
+ * @param string $unknown (optional)		Replacement character for unknown characters and illegal UTF-8 sequences.
+ * @param string $from_encoding (optional)	The encoding of the input string. If it is omited, the platform character set is assumed.
+ * @return string							Plain ASCII output.
+ *
+ * Based on Drupal's module "Transliteration", version 6.x-2.1, 09-JUN-2009:
+ * @author Stefan M. Kudwien (smk-ka)
+ * @author Daniel F. Kudwien (sun)
+ * @link http://drupal.org/project/transliteration
+ *
+ * See also MediaWiki's UtfNormal.php and CPAN's Text::Unidecode library
+ * @link http://www.mediawiki.org
+ * @link http://search.cpan.org/~sburke/Text-Unidecode-0.04/lib/Text/Unidecode.pm).
+ *
+ * Adaptation for the Dokeos 1.8.6.1, 12-JUN-2009:
+ * @author Ivan Tcholakov
+ */
+function api_transliterate($string, $unknown = '?', $from_encoding = null) {
+	static $map = array();
+
+	$string = api_utf8_encode($string, $from_encoding);
+
+	// Screen out some characters that eg won't be allowed in XML.
+	$string = preg_replace('/[\x00-\x08\x0b\x0c\x0e-\x1f]/', $unknown, $string);
+
+	// ASCII is always valid NFC!
+	// If we're only ever given plain ASCII, we can avoid the overhead
+	// of initializing the decomposition tables by skipping out early.
+	if (!preg_match('/[\x80-\xff]/', $string)) {
+		return $string;
+	}
+
+	static $tail_bytes;
+
+	if (!isset($tail_bytes)) {
+		// Each UTF-8 head byte is followed by a certain
+		// number of tail bytes.
+		$tail_bytes = array();
+		for ($n = 0; $n < 256; $n++) {
+			if ($n < 0xc0) {
+				$remaining = 0;
+			}
+			elseif ($n < 0xe0) {
+				$remaining = 1;
+			}
+			elseif ($n < 0xf0) {
+				$remaining = 2;
+			}
+			elseif ($n < 0xf8) {
+				$remaining = 3;
+			}
+			elseif ($n < 0xfc) {
+				$remaining = 4;
+			}
+			elseif ($n < 0xfe) {
+				$remaining = 5;
+			} else {
+				$remaining = 0;
+			}
+			$tail_bytes[chr($n)] = $remaining;
+		}
+	}
+
+	// Chop the text into pure-ASCII and non-ASCII areas;
+	// large ASCII parts can be handled much more quickly.
+	// Don't chop up Unicode areas for punctuation, though,
+	// that wastes energy.
+	preg_match_all('/[\x00-\x7f]+|[\x80-\xff][\x00-\x40\x5b-\x5f\x7b-\xff]*/', $string, $matches);
+
+	$result = '';
+	foreach ($matches[0] as $str) {
+		if ($str{0} < "\x80") {
+			// ASCII chunk: guaranteed to be valid UTF-8
+			// and in normal form C, so skip over it.
+			$result .= $str;
+			continue;
+		}
+
+		// We'll have to examine the chunk byte by byte to ensure
+		// that it consists of valid UTF-8 sequences, and to see
+		// if any of them might not be normalized.
+		//
+		// Since PHP is not the fastest language on earth, some of
+		// this code is a little ugly with inner loop optimizations.
+
+		$head = '';
+		$chunk = api_byte_count($str);
+		// Counting down is faster. I'm *so* sorry.
+		$len = $chunk + 1;
+
+		for ($i = -1; --$len; ) {
+			$c = $str{++$i};
+			if ($remaining = $tail_bytes[$c]) {
+				// UTF-8 head byte!
+				$sequence = $head = $c;
+				do {
+					// Look for the defined number of tail bytes...
+					if (--$len && ($c = $str{++$i}) >= "\x80" && $c < "\xc0") {
+					// Legal tail bytes are nice.
+					$sequence .= $c;
+					} else {
+						if ($len == 0) {
+							// Premature end of string!
+							// Drop a replacement character into output to
+							// represent the invalid UTF-8 sequence.
+							$result .= $unknown;
+							break 2;
+						} else {
+							// Illegal tail byte; abandon the sequence.
+							$result .= $unknown;
+							// Back up and reprocess this byte; it may itself
+							// be a legal ASCII or UTF-8 sequence head.
+							--$i;
+							++$len;
+							continue 2;
+						}
+					}
+				} while (--$remaining);
+
+				$n = ord($head);
+				if ($n <= 0xdf) {
+					$ord = ($n - 192) * 64 + (ord($sequence{1}) - 128);
+				}
+				else if ($n <= 0xef) {
+					$ord = ($n - 224) * 4096 + (ord($sequence{1}) - 128) * 64 + (ord($sequence{2}) - 128);
+				}
+				else if ($n <= 0xf7) {
+					$ord = ($n - 240) * 262144 + (ord($sequence{1}) - 128) * 4096 + (ord($sequence{2}) - 128) * 64 + (ord($sequence{3}) - 128);
+				}
+				else if ($n <= 0xfb) {
+					$ord = ($n - 248) * 16777216 + (ord($sequence{1}) - 128) * 262144 + (ord($sequence{2}) - 128) * 4096 + (ord($sequence{3}) - 128) * 64 + (ord($sequence{4}) - 128);
+				}
+				else if ($n <= 0xfd) {
+					$ord = ($n - 252) * 1073741824 + (ord($sequence{1}) - 128) * 16777216 + (ord($sequence{2}) - 128) * 262144 + (ord($sequence{3}) - 128) * 4096 + (ord($sequence{4}) - 128) * 64 + (ord($sequence{5}) - 128);
+				}
+
+				// Lookup and replace a character from the transliteration database.
+				$bank = $ord >> 8;
+				// Check if we need to load a new bank
+				if (!isset($map[$bank])) {
+					if (api_get_path(LIBRARY_PATH) == '/lib/') {
+						// Include the bank when we are running the installer script.
+						$file = 'transliteration_database/' . sprintf('x%02x', $bank) . '.php';
+					} else {
+						// Include the bank when the system has been already installed, this is the usual way.
+						$file = api_get_path(LIBRARY_PATH).'transliteration_database/' . sprintf('x%02x', $bank) . '.php';
+					}
+					if (file_exists($file)) {
+						$map[$bank] = include ($file);
+					} else {
+						$map[$bank] = array('en' => array());
+					}
+				}
+				$ord = $ord & 255;
+				$result .= isset($map[$bank]['en'][$ord]) ? $map[$bank]['en'][$ord] : $unknown;
+				
+				$head = '';
+			}
+			elseif ($c < "\x80") {
+				// ASCII byte.
+				$result .= $c;
+				$head = '';
+			}
+			elseif ($c < "\xc0") {
+				// Illegal tail bytes.
+				if ($head == '') {
+					$result .= $unknown;
+				}
+			} else {
+				// Miscellaneous freaks.
+				$result .= $unknown;
+				$head = '';
+			}
+		}
+	}
+	return $result;
 }
 
 /**
@@ -1834,243 +2166,9 @@ function api_get_default_locale() {
 	return api_set_default_locale();
 }
 
-/**
- * ----------------------------------------------------------------------------
- * Array functions
- * ----------------------------------------------------------------------------
- */
-
-/**
- * Checks if a value exists in an array, a case insensitive version of in_array() function with extended multibyte support.
- * @param mixed $needle					The searched value. If needle is a string, the comparison is done in a case-insensitive manner.
- * @param array $haystack				The array.
- * @param bool $strict (optional)		If is set to TRUE then the function will also check the types of the $needle in the $haystack. The default value if FALSE.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool							Returns TRUE if $needle is found in the array, FALSE otherwise.
- * @link http://php.net/manual/en/function.in-array.php
- */
-function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = null) {
-	if (is_array($needle)) {
-		foreach ($needle as $item) {
-			if (api_in_array_nocase($item, $haystack, $strict, $encoding)) return true;
-		}
-		return false;
-	}
-	if (!is_string($needle)) {
-		return in_array($needle, $haystack, $strict);
-	}
-	$needle = api_strtolower($needle, $encoding);
-	foreach ($haystack as $item) {
-		if ($strict && !is_string($item)) {
-			continue;
-		}
-		if (api_strtolower($item, $encoding) == $needle) {
-			return true;
-		}
-	}
-	return false;
-}
-
-
-//----------------------------------------------------------------------------
-// Transliteration, converting ANSI and UTF-8 strings to ASCII strings
-//----------------------------------------------------------------------------
-
-
-/**
- * Transliterates a string to a plain ASCII string.
- *
- * Example:
- * echo api_transliterate(api_html_entity_decode(
- * 	'&#1060;&#1105;&#1076;&#1086;&#1088; '.
- * 	'&#1052;&#1080;&#1093;&#1072;&#1081;&#1083;&#1086;&#1074;&#1080;&#1095; '.
- * 	'&#1044;&#1086;&#1089;&#1090;&#1086;&#1077;&#1074;&#1082;&#1080;&#1081;',
- * 	ENT_QUOTES, 'UTF-8'), 'UTF-8');
- * The output should be: Fyodor Mihaylovich Dostoevkiy
- *
- * @param string $string					The input string.
- * @param string $unknown (optional)		Replacement character for unknown characters and illegal UTF-8 sequences.
- * @param string $from_encoding (optional)	The encoding of the input string. If it is omited, the platform character set is assumed.
- * @return string							Plain ASCII output.
- *
- * Based on Drupal's module "Transliteration", version 6.x-2.1, 09-JUN-2009:
- * @author Stefan M. Kudwien (smk-ka)
- * @author Daniel F. Kudwien (sun)
- * @link http://drupal.org/project/transliteration
- *
- * See also MediaWiki's UtfNormal.php and CPAN's Text::Unidecode library
- * @link http://www.mediawiki.org
- * @link http://search.cpan.org/~sburke/Text-Unidecode-0.04/lib/Text/Unidecode.pm).
- *
- * Adaptation for the Dokeos 1.8.6.1, 12-JUN-2009:
- * @author Ivan Tcholakov
- */
-function api_transliterate($string, $unknown = '?', $from_encoding = null) {
-	static $map = array();
-
-	$string = api_utf8_encode($string, $from_encoding);
-
-	// Screen out some characters that eg won't be allowed in XML.
-	$string = preg_replace('/[\x00-\x08\x0b\x0c\x0e-\x1f]/', $unknown, $string);
-
-	// ASCII is always valid NFC!
-	// If we're only ever given plain ASCII, we can avoid the overhead
-	// of initializing the decomposition tables by skipping out early.
-	if (!preg_match('/[\x80-\xff]/', $string)) {
-		return $string;
-	}
-
-	static $tail_bytes;
-
-	if (!isset($tail_bytes)) {
-		// Each UTF-8 head byte is followed by a certain
-		// number of tail bytes.
-		$tail_bytes = array();
-		for ($n = 0; $n < 256; $n++) {
-			if ($n < 0xc0) {
-				$remaining = 0;
-			}
-			elseif ($n < 0xe0) {
-				$remaining = 1;
-			}
-			elseif ($n < 0xf0) {
-				$remaining = 2;
-			}
-			elseif ($n < 0xf8) {
-				$remaining = 3;
-			}
-			elseif ($n < 0xfc) {
-				$remaining = 4;
-			}
-			elseif ($n < 0xfe) {
-				$remaining = 5;
-			} else {
-				$remaining = 0;
-			}
-			$tail_bytes[chr($n)] = $remaining;
-		}
-	}
-
-	// Chop the text into pure-ASCII and non-ASCII areas;
-	// large ASCII parts can be handled much more quickly.
-	// Don't chop up Unicode areas for punctuation, though,
-	// that wastes energy.
-	preg_match_all('/[\x00-\x7f]+|[\x80-\xff][\x00-\x40\x5b-\x5f\x7b-\xff]*/', $string, $matches);
-
-	$result = '';
-	foreach ($matches[0] as $str) {
-		if ($str{0} < "\x80") {
-			// ASCII chunk: guaranteed to be valid UTF-8
-			// and in normal form C, so skip over it.
-			$result .= $str;
-			continue;
-		}
-
-		// We'll have to examine the chunk byte by byte to ensure
-		// that it consists of valid UTF-8 sequences, and to see
-		// if any of them might not be normalized.
-		//
-		// Since PHP is not the fastest language on earth, some of
-		// this code is a little ugly with inner loop optimizations.
-
-		$head = '';
-		$chunk = api_byte_count($str);
-		// Counting down is faster. I'm *so* sorry.
-		$len = $chunk + 1;
-
-		for ($i = -1; --$len; ) {
-			$c = $str{++$i};
-			if ($remaining = $tail_bytes[$c]) {
-				// UTF-8 head byte!
-				$sequence = $head = $c;
-				do {
-					// Look for the defined number of tail bytes...
-					if (--$len && ($c = $str{++$i}) >= "\x80" && $c < "\xc0") {
-					// Legal tail bytes are nice.
-					$sequence .= $c;
-					} else {
-						if ($len == 0) {
-							// Premature end of string!
-							// Drop a replacement character into output to
-							// represent the invalid UTF-8 sequence.
-							$result .= $unknown;
-							break 2;
-						} else {
-							// Illegal tail byte; abandon the sequence.
-							$result .= $unknown;
-							// Back up and reprocess this byte; it may itself
-							// be a legal ASCII or UTF-8 sequence head.
-							--$i;
-							++$len;
-							continue 2;
-						}
-					}
-				} while (--$remaining);
-
-				$n = ord($head);
-				if ($n <= 0xdf) {
-					$ord = ($n - 192) * 64 + (ord($sequence{1}) - 128);
-				}
-				else if ($n <= 0xef) {
-					$ord = ($n - 224) * 4096 + (ord($sequence{1}) - 128) * 64 + (ord($sequence{2}) - 128);
-				}
-				else if ($n <= 0xf7) {
-					$ord = ($n - 240) * 262144 + (ord($sequence{1}) - 128) * 4096 + (ord($sequence{2}) - 128) * 64 + (ord($sequence{3}) - 128);
-				}
-				else if ($n <= 0xfb) {
-					$ord = ($n - 248) * 16777216 + (ord($sequence{1}) - 128) * 262144 + (ord($sequence{2}) - 128) * 4096 + (ord($sequence{3}) - 128) * 64 + (ord($sequence{4}) - 128);
-				}
-				else if ($n <= 0xfd) {
-					$ord = ($n - 252) * 1073741824 + (ord($sequence{1}) - 128) * 16777216 + (ord($sequence{2}) - 128) * 262144 + (ord($sequence{3}) - 128) * 4096 + (ord($sequence{4}) - 128) * 64 + (ord($sequence{5}) - 128);
-				}
-
-				// Lookup and replace a character from the transliteration database.
-				$bank = $ord >> 8;
-				// Check if we need to load a new bank
-				if (!isset($map[$bank])) {
-					if (api_get_path(LIBRARY_PATH) == '/lib/') {
-						// Include the bank when we are running the installer script.
-						$file = 'transliteration_database/' . sprintf('x%02x', $bank) . '.php';
-					} else {
-						// Include the bank when the system has been already installed, this is the usual way.
-						$file = api_get_path(LIBRARY_PATH).'transliteration_database/' . sprintf('x%02x', $bank) . '.php';
-					}
-					if (file_exists($file)) {
-						$map[$bank] = include ($file);
-					} else {
-						$map[$bank] = array('en' => array());
-					}
-				}
-				$ord = $ord & 255;
-				$result .= isset($map[$bank]['en'][$ord]) ? $map[$bank]['en'][$ord] : $unknown;
-				
-				$head = '';
-			}
-			elseif ($c < "\x80") {
-				// ASCII byte.
-				$result .= $c;
-				$head = '';
-			}
-			elseif ($c < "\xc0") {
-				// Illegal tail bytes.
-				if ($head == '') {
-					$result .= $unknown;
-				}
-			} else {
-				// Miscellaneous freaks.
-				$result .= $unknown;
-				$head = '';
-			}
-		}
-	}
-	return $result;
-}
-
-
 //----------------------------------------------------------------------------
 // Multibyte string functions designed to upgrade the PHP5 mbstring extension
 //----------------------------------------------------------------------------
-
 
 // ---------- Multibyte string functions implemented in PHP 5.2.0+ -----------
 

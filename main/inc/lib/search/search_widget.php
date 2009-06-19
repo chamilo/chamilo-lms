@@ -115,6 +115,10 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
      * SortableTableFromArray pagination is done with simple links, so now we
      * could not send a form in pagination
      */
+
+	if (isset($_GET['action']) && strcmp(trim($_GET['action']),'search')===0) {
+		$action='index.php';
+	}
     $form = '
         <form id="dokeos_search" action="'. $action .'" method="GET">
             <input type="text" id="query" name="query" size="40" />
@@ -178,6 +182,9 @@ function search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, 
      * SortableTableFromArray pagination is done with simple links, so now we
      * could not send a form in pagination
      */
+	if (isset($_GET['action']) && strcmp(trim($_GET['action']),'search')===0) {
+		$action='index.php';
+	}
     $form = '
         <form id="dokeos_search" action="'. $action .'" method="GET">
             <input type="text" id="query" name="query" size="40" />

@@ -39,44 +39,27 @@ class TableSort
 	 * String to lowercase (keep accents).
 	 * @param string $txt The string to convert
 	 * @author Ren� Haentjens
-	 * This  function is 8859-1 specific and should be adapted when Dokeos is
-	 * used with other charsets. 
 	 */
 	function strtolower_keepaccents($txt)
 	{
-		//return strtolower(strtr($txt, "������������������������������", "������������������������������"));
-
 		return api_strtolower($txt);
 	}
 	/**
 	 * String to lowercase.
 	 * @param string $txt The string to convert
 	 * @author Ren� Haentjens
-	 * This  function is 8859-1 specific and should be adapted when Dokeos is
-	 * used with other charsets.
 	 */
 	function strtolower_eorlatin($txt)
 	{
-		return str_replace(array ("�", "�"), array ("ae", "ss"), strtr(TableSort::strtolower_keepaccents($txt), "�����������������������������", "aaaaaaceeeeiiiidnoooooouuuuyy"));
-		// do not replace "�" by "th", leave it at the end of the alphabet...
-		// do not replace any of "$&��������", though they resemble letters...
-
 		return api_strtolower($txt);
 	}
 	/**
 	 * Create a string to use in sorting.
 	 * @param string $txt The string to convert
 	 * @author Ren� Haentjens
-	 * This  function is 8859-1 specific and should be adapted when Dokeos is
-	 * used with other charsets. 
-	 * See http://anubis.dkuug.dk/CEN/TC304/EOR/eorhome.html 
-	 * Function 'orderingstring' can be used to implement EOR level 1 ordering,
-	 * for 8859- 1.
 	 */
 	function orderingstring($txt)
 	{
-		//return ereg_replace("[^0-9a-z�]", "", TableSort::strtolower_eorlatin($txt));
-
 		return api_strtolower($txt);
 	}
 	/**
@@ -120,18 +103,14 @@ class TableSort
 				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
 				break;
 			case SORT_IMAGE :
-				////$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
-				//$compare_function = 'strcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
-				$compare_function = 'api_strcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
+				$compare_function = 'api_strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
 				break;
 			case SORT_DATE :
 				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
 				break;
             case SORT_STRING :
             default:
-                ////$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
-                //$compare_function = 'strcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
-                $compare_function = 'api_strcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
+                $compare_function = 'api_strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
                 break;
 		}
 		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return ('.$direction.' == SORT_ASC ? ('.$compare_function.') : !('.$compare_function.'));';

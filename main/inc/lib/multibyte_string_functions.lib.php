@@ -1226,8 +1226,8 @@ function api_ksort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
  * SORT_NUMERIC - keys will be compared as numbers;
  * SORT_STRING - keys will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
  * SORT_LOCALE_STRING - keys will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
- * This function is aimed at replacing the function ksort() for sorting human-language key strings.
- * @link http://php.net/manual/en/function.ksort.php
+ * This function is aimed at replacing the function krsort() for sorting human-language key strings.
+ * @link http://php.net/manual/en/function.krsort.php
  */
 function api_krsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
 	if (INTL_INSTALLED) {

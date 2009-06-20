@@ -122,16 +122,8 @@ function count_student_in_course() {
 	return $nbStudents;
 }
 
-
-
-function sort_users($a,$b) {
-	$a = trim(api_strtolower($a[$_SESSION['tracking_column']]));
-	$b = trim(api_strtolower($b[$_SESSION['tracking_column']]));
-	if ($_SESSION['tracking_direction'] == 'DESC') {
-		return api_strcmp($b, $a);
-    } else {
-		return api_strcmp($a, $b);
-    }
+function sort_users($a, $b) {
+	return api_strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
 }
 
 /*

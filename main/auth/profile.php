@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 20951 2009-05-23 19:07:59Z ivantcholakov $
+<?php // $Id: profile.php 21534 2009-06-20 17:08:24Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -812,7 +812,7 @@ $big_image_width= $big_image_size[0];
 $big_image_height= $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
 
-echo '<div id="image-message-container" style="float:right;padding:5px;width:250px;" >';
+echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:5px;width:250px;" >';
 if ($image=='unknown.jpg') {
 	echo '<img '.$img_attributes.' />';
 } else {

@@ -1236,143 +1236,6 @@ function api_arsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encod
 }
 
 /**
- * Sorts an array by keys, elements will be arranged from the lowest key to the highest key.
- * @param array $array					The input array.
- * @param int $sort_flag (optional)		Shows how keys of the array to be compared.
- * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool							Returns TRUE on success, FALSE on error.
- * Note: $sort_flag may have the following values:
- * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
- * SORT_NUMERIC - keys will be compared as numbers;
- * SORT_STRING - keys will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
- * SORT_LOCALE_STRING - keys will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
- * This function is aimed at replacing the function ksort() for sorting human-language key strings.
- * @link http://php.net/manual/en/function.ksort.php
- */
-function api_ksort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = api_mb_internal_encoding();
-		}
-		$collator = _api_get_collator($language);
-		if (is_object($collator)) {
-			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-				global $_api_collator, $_api_encoding;
-				$_api_collator = $collator;
-				$_api_encoding = $encoding;
-				return uksort($array, '_api_cmp');
-			}
-		}
-	}
-	return ksort($array, $sort_flag);
-}
-
-/**
- * Sorts an array by keys, elements will be arranged from the highest key to the lowest key (in reverse order).
- * @param array $array					The input array.
- * @param int $sort_flag (optional)		Shows how keys of the array to be compared.
- * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool							Returns TRUE on success, FALSE on error.
- * Note: $sort_flag may have the following values:
- * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
- * SORT_NUMERIC - keys will be compared as numbers;
- * SORT_STRING - keys will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
- * SORT_LOCALE_STRING - keys will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
- * This function is aimed at replacing the function krsort() for sorting human-language key strings.
- * @link http://php.net/manual/en/function.krsort.php
- */
-function api_krsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = api_mb_internal_encoding();
-		}
-		$collator = _api_get_collator($language);
-		if (is_object($collator)) {
-			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-				global $_api_collator, $_api_encoding;
-				$_api_collator = $collator;
-				$_api_encoding = $encoding;
-				return uksort($array, '_api_rcmp');
-			}
-		}
-	}
-	return krsort($array, $sort_flag);
-}
-
-/**
- * Sorts an array, elements will be arranged from the lowest to the highest.
- * @param array $array					The input array.
- * @param int $sort_flag (optional)		Shows how elements of the array to be compared.
- * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool							Returns TRUE on success, FALSE on error.
- * Note: $sort_flag may have the following values:
- * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
- * SORT_NUMERIC - items will be compared as numbers;
- * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
- * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
- * This function is aimed at replacing the function sort() for sorting human-language strings.
- * @link http://php.net/manual/en/function.sort.php
- * @link http://php.net/manual/en/collator.sort.php
- */
-function api_sort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = api_mb_internal_encoding();
-		}
-		$collator = _api_get_collator($language);
-		if (is_object($collator)) {
-			if (api_is_utf8($encoding)) {
-				$sort_flag = ($sort_flag == SORT_LOCALE_STRING) ? SORT_STRING : $sort_flag;
-				return collator_sort($collator, $array, _api_get_collator_sort_flag($sort_flag));
-			}
-			elseif ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-				global $_api_collator, $_api_encoding;
-				$_api_collator = $collator;
-				$_api_encoding = $encoding;
-				return usort($array, '_api_cmp');
-			}
-		}
-	}
-	return sort($array, $sort_flag);
-}
-
-/**
- * Sorts an array, elements will be arranged from the highest to the lowest (in reverse order).
- * @param array $array					The input array.
- * @param int $sort_flag (optional)		Shows how elements of the array to be compared.
- * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool							Returns TRUE on success, FALSE on error.
- * Note: $sort_flag may have the following values:
- * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
- * SORT_NUMERIC - items will be compared as numbers;
- * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
- * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
- * This function is aimed at replacing the function rsort() for sorting human-language strings.
- * @link http://php.net/manual/en/function.rsort.php
- */
-function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = api_mb_internal_encoding();
-		}
-		$collator = _api_get_collator($language);
-		if (is_object($collator)) {
-			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-				global $_api_collator, $_api_encoding;
-				$_api_collator = $collator;
-				$_api_encoding = $encoding;
-				return usort($array, '_api_rcmp');
-			}
-		}
-	}
-	return rsort($array, $sort_flag);
-}
-
-/**
  * Sorts an array using natural order algorithm.
  * @param array $array					The input array.
  * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
@@ -1466,6 +1329,235 @@ function api_natcasersort(&$array, $language = null, $encoding = null) {
 		}
 	}
 	return uasort($array, '_api_strnatcasercmp');
+}
+
+/**
+ * Sorts an array by keys, elements will be arranged from the lowest key to the highest key.
+ * @param array $array					The input array.
+ * @param int $sort_flag (optional)		Shows how keys of the array to be compared.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ * Note: $sort_flag may have the following values:
+ * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
+ * SORT_NUMERIC - keys will be compared as numbers;
+ * SORT_STRING - keys will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
+ * SORT_LOCALE_STRING - keys will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
+ * This function is aimed at replacing the function ksort() for sorting human-language key strings.
+ * @link http://php.net/manual/en/function.ksort.php
+ */
+function api_ksort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_collator($language);
+		if (is_object($collator)) {
+			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+				global $_api_collator, $_api_encoding;
+				$_api_collator = $collator;
+				$_api_encoding = $encoding;
+				return uksort($array, '_api_cmp');
+			}
+		}
+	}
+	return ksort($array, $sort_flag);
+}
+
+/**
+ * Sorts an array by keys, elements will be arranged from the highest key to the lowest key (in reverse order).
+ * @param array $array					The input array.
+ * @param int $sort_flag (optional)		Shows how keys of the array to be compared.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ * Note: $sort_flag may have the following values:
+ * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
+ * SORT_NUMERIC - keys will be compared as numbers;
+ * SORT_STRING - keys will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
+ * SORT_LOCALE_STRING - keys will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
+ * This function is aimed at replacing the function krsort() for sorting human-language key strings.
+ * @link http://php.net/manual/en/function.krsort.php
+ */
+function api_krsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_collator($language);
+		if (is_object($collator)) {
+			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+				global $_api_collator, $_api_encoding;
+				$_api_collator = $collator;
+				$_api_encoding = $encoding;
+				return uksort($array, '_api_rcmp');
+			}
+		}
+	}
+	return krsort($array, $sort_flag);
+}
+
+/**
+ * Sorts an array by keys using natural order algorithm.
+ * @param array $array					The input array.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ */
+function api_knatsort(&$array, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_alpha_numerical_collator($language);
+		if (is_object($collator)) {
+			global $_api_collator, $_api_encoding;
+			$_api_collator = $collator;
+			$_api_encoding = $encoding;
+			return uksort($array, '_api_cmp');
+		}
+	}
+	return uksort($array, 'strnatcmp');
+}
+
+/**
+ * Sorts an array by keys using natural order algorithm in reverse order.
+ * @param array $array					The input array.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ */
+function api_knatrsort(&$array, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_alpha_numerical_collator($language);
+		if (is_object($collator)) {
+			global $_api_collator, $_api_encoding;
+			$_api_collator = $collator;
+			$_api_encoding = $encoding;
+			return uksort($array, '_api_rcmp');
+		}
+	}
+	return uksort($array, '_api_strnatrcmp');
+}
+
+/**
+ * Sorts an array by keys using natural order algorithm, case insensitive.
+ * @param array $array					The input array.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ */
+function api_knatcasesort(&$array, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_alpha_numerical_collator($language);
+		if (is_object($collator)) {
+			global $_api_collator, $_api_encoding;
+			$_api_collator = $collator;
+			$_api_encoding = $encoding;
+			return uksort($array, '_api_casecmp');
+		}
+	}
+	return uksort($array, 'strnatcasecmp');
+}
+
+/**
+ * Sorts an array by keys using natural order algorithm, case insensitive, reverse order.
+ * @param array $array					The input array.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ */
+function api_knatcasersort(&$array, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_alpha_numerical_collator($language);
+		if (is_object($collator)) {
+			global $_api_collator, $_api_encoding;
+			$_api_collator = $collator;
+			$_api_encoding = $encoding;
+			return uksort($array, '_api_casercmp');
+		}
+	}
+	return uksort($array, '_api_strnatcasercmp');
+}
+
+/**
+ * Sorts an array, elements will be arranged from the lowest to the highest.
+ * @param array $array					The input array.
+ * @param int $sort_flag (optional)		Shows how elements of the array to be compared.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ * Note: $sort_flag may have the following values:
+ * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
+ * SORT_NUMERIC - items will be compared as numbers;
+ * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
+ * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
+ * This function is aimed at replacing the function sort() for sorting human-language strings.
+ * @link http://php.net/manual/en/function.sort.php
+ * @link http://php.net/manual/en/collator.sort.php
+ */
+function api_sort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_collator($language);
+		if (is_object($collator)) {
+			if (api_is_utf8($encoding)) {
+				$sort_flag = ($sort_flag == SORT_LOCALE_STRING) ? SORT_STRING : $sort_flag;
+				return collator_sort($collator, $array, _api_get_collator_sort_flag($sort_flag));
+			}
+			elseif ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+				global $_api_collator, $_api_encoding;
+				$_api_collator = $collator;
+				$_api_encoding = $encoding;
+				return usort($array, '_api_cmp');
+			}
+		}
+	}
+	return sort($array, $sort_flag);
+}
+
+/**
+ * Sorts an array, elements will be arranged from the highest to the lowest (in reverse order).
+ * @param array $array					The input array.
+ * @param int $sort_flag (optional)		Shows how elements of the array to be compared.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ * Note: $sort_flag may have the following values:
+ * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
+ * SORT_NUMERIC - items will be compared as numbers;
+ * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
+ * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
+ * This function is aimed at replacing the function rsort() for sorting human-language strings.
+ * @link http://php.net/manual/en/function.rsort.php
+ */
+function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_collator($language);
+		if (is_object($collator)) {
+			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+				global $_api_collator, $_api_encoding;
+				$_api_collator = $collator;
+				$_api_encoding = $encoding;
+				return usort($array, '_api_rcmp');
+			}
+		}
+	}
+	return rsort($array, $sort_flag);
 }
 
 // Global variables used by the sorting functions, for internal use.

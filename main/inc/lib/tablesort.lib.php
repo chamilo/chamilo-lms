@@ -36,24 +36,6 @@ define('SORT_IMAGE',4);
 class TableSort
 {
 	/**
-	 * String to lowercase (keep accents).
-	 * @param string $txt The string to convert
-	 * @author Ren� Haentjens
-	 */
-	function strtolower_keepaccents($txt)
-	{
-		return api_strtolower($txt);
-	}
-	/**
-	 * String to lowercase.
-	 * @param string $txt The string to convert
-	 * @author Ren� Haentjens
-	 */
-	function strtolower_eorlatin($txt)
-	{
-		return api_strtolower($txt);
-	}
-	/**
 	 * Create a string to use in sorting.
 	 * @param string $txt The string to convert
 	 * @author Ren� Haentjens

@@ -603,7 +603,10 @@ class DocumentManager
 				{
 					$document_folders[] = $row['path'];
 				}
-				sort($document_folders);
+
+				//sort($document_folders);
+				natsort($document_folders);
+
 				//return results
 				return $document_folders;
 			}
@@ -661,13 +664,18 @@ class DocumentManager
 			if (is_array($visiblefolders) && is_array($invisiblefolders))
 			{
 				$document_folders = array_diff($visiblefolders, $invisiblefolders);
-				sort($document_folders);
+
+				//sort($document_folders);
+				natsort($document_folders);
+
 				return $document_folders;
 			}
 			//only visible folders found
 			elseif (is_array($visiblefolders))
 			{
-				sort($visiblefolders);
+				//sort($visiblefolders);
+				natsort($visiblefolders);
+
 				return $visiblefolders;
 			}
 			//no visible folders found

@@ -1042,18 +1042,6 @@ function api_strcasecmp($string1, $string2, $language = null, $encoding = null) 
 }
 
 /**
- * Performs reverse string comparison, case insensitive, language sensitive, with extended multibyte support.
- * @param string $string1				The first string.
- * @param string $string2				The second string.
- * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return int							Returns < 0 if $string2 is less than $string1; > 0 if $string2 is greater than $string1; and 0 if the strings are equal.
- */
-function api_strcasercmp($string1, $string2, $language = null, $encoding = null) {
-	return api_strcasecmp($string2, $string1, $language, $encoding);
-}
-
-/**
  * Performs string comparison, case sensitive, language sensitive, with extended multibyte support.
  * @param string $string1				The first string.
  * @param string $string2				The second string.
@@ -1076,18 +1064,6 @@ function api_strcmp($string1, $string2, $language = null, $encoding = null) {
 }
 
 /**
- * Performs reverse string comparison, case sensitive, language sensitive, with extended multibyte support.
- * @param string $string1				The first string.
- * @param string $string2				The second string.
- * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return int							Returns < 0 if $string2 is less than $string1; > 0 if $string2 is greater than $string1; and 0 if the strings are equal.
- */
-function api_strrcmp($string1, $string2, $language = null, $encoding = null) {
-	return api_strcmp($string2, $string1, $language, $encoding);
-}
-
-/**
  * Performs string comparison in so called "natural order", case insensitive, language sensitive, with extended multibyte support.
  * @param string $string1				The first string.
  * @param string $string2				The second string.
@@ -1099,18 +1075,6 @@ function api_strrcmp($string1, $string2, $language = null, $encoding = null) {
  */
 function api_strnatcasecmp($string1, $string2, $language = null, $encoding = null) {
 	return api_strnatcmp(api_strtolower($string1, $encoding), api_strtolower($string2, $encoding), $language, $encoding);
-}
-
-/**
- * Performs reverse string comparison in so called "natural order", case insensitive, language sensitive, with extended multibyte support.
- * @param string $string1				The first string.
- * @param string $string2				The second string.
- * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return int							Returns < 0 if $string2 is less than $string1; > 0 if $string2 is greater than $string1; and 0 if the strings are equal.
- */
-function api_strnatcasercmp($string1, $string2, $language = null, $encoding = null) {
-	return api_strnatcmp(api_strtolower($string2, $encoding), api_strtolower($string1, $encoding), $language, $encoding);
 }
 
 /**
@@ -1133,18 +1097,6 @@ function api_strnatcmp($string1, $string2, $language = null, $encoding = null) {
 		}
 	}
 	return strnatcmp($string1, $string2);
-}
-
-/**
- * Performs reverse string comparison in so called "natural order", case sensitive, language sensitive, with extended multibyte support.
- * @param string $string1				The first string.
- * @param string $string2				The second string.
- * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return int							Returns < 0 if $string2 is less than $string1; > 0 if $string2 is greater than $string1; and 0 if the strings are equal. 
- */
-function api_strnatrcmp($string1, $string2, $language = null, $encoding = null) {
-	return api_strnatcmp($string2, $string1, $language, $encoding);
 }
 
 /**

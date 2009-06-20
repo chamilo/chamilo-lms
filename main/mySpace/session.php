@@ -71,7 +71,16 @@ function count_sessions_coached()
 function sort_sessions($a, $b)
 {
 	global $tracking_column;
-	if($a[$tracking_column] > $b[$tracking_column])
+	if ($a[$tracking_column] > $b[$tracking_column])
+		return 1;
+	else 
+		return -1;
+}
+
+function rsort_sessions($a, $b)
+{
+	global $tracking_column;
+	if ($b[$tracking_column] > $a[$tracking_column])
 		return 1;
 	else 
 		return -1;
@@ -150,17 +159,18 @@ if($nb_sessions > 0)
 		$tracking_column = 0;
 	}
 		
-	usort($all_datas, 'sort_sessions');
-	
+	if($_GET['tracking_direction'] == 'DESC')
+	{
+		usort($all_datas, 'rsort_sessions');
+	}
+	else
+	{
+		usort($all_datas, 'sort_sessions');
+	}
 	
 	if($export_csv)
 	{
 		usort($csv_content, 'sort_sessions');
-	}
-	
-	if($_GET['tracking_direction'] == 'DESC')
-	{
-		rsort($all_datas);
 	}
 	
 	foreach($all_datas as $row)

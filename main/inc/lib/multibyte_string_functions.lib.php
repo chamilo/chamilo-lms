@@ -1172,7 +1172,7 @@ function _api_get_alpha_numerical_collator($language = null) {
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return bool							Returns TRUE on success, FALSE on error.
  * Note: $sort_flag may have the following values:
- * SORT_REGULAR - for simple byte ordered ASCII comparison without changing types;
+ * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
  * SORT_NUMERIC - items will be compared as numbers;
  * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
  * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
@@ -1210,7 +1210,7 @@ function api_asort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return bool							Returns TRUE on success, FALSE on error.
  * Note: $sort_flag may have the following values:
- * SORT_REGULAR - for simple byte ordered ASCII comparison without changing types;
+ * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
  * SORT_NUMERIC - items will be compared as numbers;
  * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
  * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
@@ -1243,7 +1243,7 @@ function api_arsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encod
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return bool							Returns TRUE on success, FALSE on error.
  * Note: $sort_flag may have the following values:
- * SORT_REGULAR - for simple byte ordered ASCII comparison without changing types;
+ * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
  * SORT_NUMERIC - keys will be compared as numbers;
  * SORT_STRING - keys will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
  * SORT_LOCALE_STRING - keys will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
@@ -1276,7 +1276,7 @@ function api_ksort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return bool							Returns TRUE on success, FALSE on error.
  * Note: $sort_flag may have the following values:
- * SORT_REGULAR - for simple byte ordered ASCII comparison without changing types;
+ * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
  * SORT_NUMERIC - keys will be compared as numbers;
  * SORT_STRING - keys will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
  * SORT_LOCALE_STRING - keys will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
@@ -1309,7 +1309,7 @@ function api_krsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encod
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return bool							Returns TRUE on success, FALSE on error.
  * Note: $sort_flag may have the following values:
- * SORT_REGULAR - for simple byte ordered ASCII comparison without changing types;
+ * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
  * SORT_NUMERIC - items will be compared as numbers;
  * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
  * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
@@ -1347,7 +1347,7 @@ function api_sort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodin
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return bool							Returns TRUE on success, FALSE on error.
  * Note: $sort_flag may have the following values:
- * SORT_REGULAR - for simple byte ordered ASCII comparison without changing types;
+ * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
  * SORT_NUMERIC - items will be compared as numbers;
  * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
  * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.

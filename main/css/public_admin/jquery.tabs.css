@@ -86,7 +86,7 @@
 	opacity: .4;
 }
 .tabs-container {
-    border-top: 1px solid #97a5b0;
+    /*border-top: 1px solid #97a5b0;*/
     padding: 1em 8px;
     /*background: #fff; declare background color for container to avoid distorted fonts in IE while fading */
 }

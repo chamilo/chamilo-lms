@@ -86,14 +86,12 @@ function count_coaches()
 }
 
 function sort_users($a,$b){
-	$a = trim(api_strtolower($a[$_SESSION['tracking_column']]));
-	$b = trim(api_strtolower($b[$_SESSION['tracking_column']]));
-	if($_SESSION['tracking_direction'] == 'DESC')
-		return api_strcmp($b, $a);
-	else
-		return api_strcmp($a, $b);
+	return api_strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
 }
 
+function rsort_users($a,$b) {
+	return api_strcmp(trim(api_strtolower($b[$_SESSION['tracking_column']])), trim(api_strtolower($a[$_SESSION['tracking_column']])));
+}
 
 
 /**************************
@@ -763,9 +761,11 @@ if(api_is_platform_admin() && $view=='admin')
 	}
 	
 	if($tracking_column != 3){
-		usort($all_datas, 'sort_users');
-		if($tracking_direction == 'DESC')
-			rsort($all_datas);
+		if ($tracking_direction == 'DESC') {
+			usort($all_datas, 'rsort_users');
+		} else {
+			usort($all_datas, 'sort_users');
+		}
 	}
 		
 	if($export_csv && $tracking_column != 3)

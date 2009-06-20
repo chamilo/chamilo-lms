@@ -80,6 +80,15 @@ function sort_users($a, $b)
 		return -1;
 }
 
+function rsort_users($a, $b)
+{
+	global $tracking_column;
+	if($b[$tracking_column] > $a[$tracking_column])
+		return 1;
+	else 
+		return -1;
+}
+
 /*
  ===============================================================================
  	MAIN CODE
@@ -209,9 +218,14 @@ if($isCoach || api_is_platform_admin() || $_user['status']==DRH)
 	
 		}
 		
-		usort($all_datas, 'sort_users');
 		if($tracking_direction == 'ASC')
-			rsort($all_datas);
+		{
+			usort($all_datas, 'rsort_users');
+		}
+		else
+		{
+			usort($all_datas, 'sort_users');
+		}
 		
 		if($export_csv)
 		{

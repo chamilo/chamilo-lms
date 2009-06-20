@@ -1398,6 +1398,29 @@ function api_natsort(&$array, $language = null, $encoding = null) {
 }
 
 /**
+ * Sorts an array using natural order algorithm in reverse order.
+ * @param array $array					The input array.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ */
+function api_natrsort(&$array, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_alpha_numerical_collator($language);
+		if (is_object($collator)) {
+			global $_api_collator, $_api_encoding;
+			$_api_collator = $collator;
+			$_api_encoding = $encoding;
+			return uasort($array, '_api_rcmp');
+		}
+	}
+	return uasort($array, '_api_strnatrcmp');
+}
+
+/**
  * Sorts an array using natural order algorithm, case-insensitive.
  * @param array $array					The input array.
  * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
@@ -1420,6 +1443,29 @@ function api_natcasesort(&$array, $language = null, $encoding = null) {
 		}
 	}
 	return natcasesort($array);
+}
+
+/**
+ * Sorts an array using natural order algorithm, case-insensitive, reverse order.
+ * @param array $array					The input array.
+ * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ */
+function api_natcasersort(&$array, $language = null, $encoding = null) {
+	if (INTL_INSTALLED) {
+		if (empty($encoding)) {
+			$encoding = api_mb_internal_encoding();
+		}
+		$collator = _api_get_alpha_numerical_collator($language);
+		if (is_object($collator)) {
+			global $_api_collator, $_api_encoding;
+			$_api_collator = $collator;
+			$_api_encoding = $encoding;
+			return uasort($array, '_api_casercmp');
+		}
+	}
+	return uasort($array, '_api_strnatcasercmp');
 }
 
 // Global variables used by the sorting functions, for internal use.
@@ -1445,6 +1491,23 @@ function _api_casecmp($string1, $string2) {
 	global $_api_collator, $_api_encoding;
 	$result = collator_compare($_api_collator, api_strtolower(api_utf8_encode($string1, $_api_encoding), 'UTF-8'), api_strtolower(api_utf8_encode($string2, $_api_encoding), 'UTF-8'));
 	return $result === false ? 0 : $result;
+}
+
+// A reverse case-insensitive string comparison function that serves sorting functions, for internal use.
+function _api_casercmp($string1, $string2) {
+	global $_api_collator, $_api_encoding;
+	$result = collator_compare($_api_collator, api_strtolower(api_utf8_encode($string2, $_api_encoding), 'UTF-8'), api_strtolower(api_utf8_encode($string1, $_api_encoding), 'UTF-8'));
+	return $result === false ? 0 : $result;
+}
+
+// A reverse function from strnatcmp(), for internal use.
+function _api_strnatrcmp($string1, $string2) {
+	return strnatcmp($string2, $string1);
+}
+
+// A reverse function from strnatcasecmp(), for internal use.
+function _api_strnatcasercmp($string1, $string2) {
+	return strnatcasecmp($string2, $string1);
 }
 
 // A fuction that translates sorting flag constants from php core to correspondent constants from intl extension, for internal use.

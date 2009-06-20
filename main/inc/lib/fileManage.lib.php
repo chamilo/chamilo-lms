@@ -1,4 +1,4 @@
-<?php # $Id: fileManage.lib.php 17213 2008-12-10 20:52:35Z cfasanando $
+<?php # $Id: fileManage.lib.php 21531 2009-06-20 16:03:29Z ivantcholakov $
 
 /* vim: set expandtab tabstop=4 shiftwidth=4:
 ===============================================================================
@@ -456,7 +456,9 @@ function index_and_sort_dir($path)
 
 	if ($dir_list)
 	{
-		sort($dir_list);
+		//sort($dir_list);
+		natsort($dir_list);
+
 		return $dir_list;
 	}
 	else

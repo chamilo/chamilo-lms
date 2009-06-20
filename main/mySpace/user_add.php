@@ -172,7 +172,11 @@ if (api_is_session_admin()) {
 			$session_list[$session['id']]=$session['name'];
 		}
 	}
-	asort($session_list);	
+
+	//asort($session_list);
+	//api_asort($session_list, SORT_STRING);
+	api_natsort($session_list);
+
 	$form->addElement('select','session_id',get_lang('Session'),$session_list);
 }		
 

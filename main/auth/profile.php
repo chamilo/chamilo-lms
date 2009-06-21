@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 21534 2009-06-20 17:08:24Z iflorespaz $
+<?php // $Id: profile.php 21554 2009-06-21 20:58:47Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -16,14 +16,14 @@
 // name of the language file that needs to be included
 $language_file = array('registration','messages','userInfo');
 $cidReset = true;
-require ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 if (!isset($_GET['show'])) {
 	 if (api_get_setting('allow_social_tool')=='true' || api_get_setting('allow_message_tool')=='true') {
 		header('Location:../social/index.php');
 		exit;
 	}
 }
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
 api_block_anonymous_users();
@@ -93,18 +93,18 @@ if(!empty($_GET['cp'])) {
 	Configuration file
 -----------------------------------------------------------
 */
-require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
+require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 
 /*
 -----------------------------------------------------------
 	Libraries
 -----------------------------------------------------------
 */
-require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'social.lib.php');
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'image.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
 if (is_profile_editable())
 	$tool_name = get_lang('ModifProfile');
@@ -245,7 +245,6 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
 $form->addElement('select_language', 'language', get_lang('Language'));
 if (api_get_setting('profile', 'language') !== 'true')
 	$form->freeze('language');
-
 
 //	EXTENDED PROFILE  this make the page very slow!
 if (api_get_setting('extended_profile') == 'true') {
@@ -812,7 +811,7 @@ $big_image_width= $big_image_size[0];
 $big_image_height= $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
 
-echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:5px;width:250px;" >';
+echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
 if ($image=='unknown.jpg') {
 	echo '<img '.$img_attributes.' />';
 } else {

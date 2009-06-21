@@ -483,7 +483,7 @@ echo '<div id="social-profile-wrapper">';
 				else 
 					$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
 				if (api_get_user_id() == $user_id)	
-					$friend_html.= '<div style="float:right; padding-left:280px;"><a href="index.php?#remote-tab-6">'.get_lang('SeeAll').'</a></div>';													
+					$friend_html.= '<div style="float:right;"><a href="index.php?#remote-tab-6">'.get_lang('SeeAll').'</a></div>';													
 					$friend_html.= '</div>'; // close div friend-header						
 								
 				for ($k=0;$k<$loop_friends;$k++) {				

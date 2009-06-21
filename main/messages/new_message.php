@@ -1,11 +1,11 @@
-<?php // $Id: new_message.php 20962 2009-05-25 03:15:53Z iflorespaz $
+<?php // $Id: new_message.php 21554 2009-06-21 20:58:47Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) Facultad de Matematicas, UADY (M�xico)
+	Copyright (c) Facultad de Matematicas, UADY (México)
 	Copyright (c) Evie, Free University of Brussels (Belgium)		
 	Copyright (c) 2009 Isaac Flores Paz <isaac.flores.paz@gmail.com>
 	For a full list of contributors, see "credits.txt".
@@ -101,7 +101,7 @@ $(document).ready(function (){
 	</script>';	
 
 $nameTools = api_xml_http_response_encode(get_lang('ComposeMessage'));
-$fck_attribute['Height'] = "150";
+$fck_attribute['Height'] = "250";
 $fck_attribute['Width'] = "95%";
 $fck_attribute['ToolbarSet'] = "Profil";
 $fck_attribute['Config']['ToolbarStartExpanded']='false';

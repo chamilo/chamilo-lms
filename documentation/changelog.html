@@ -27,6 +27,7 @@
 <ul>
   <li>Improvements in document tool, allow see terms of glossary (FS#4337)</li>
   <li>Improvements in SCORM export(FS#4300)</li>
+  <li>At the beginning of the installation script an imperative check for PHP 5 has been added. (FS#4296)</li>
   <li>When the system Dokeos is switched into "Test server" mode, a clickable indicator appears in the footer. This indicator is visible by platform administrators only. (FS#4341)</li>
   <li>A transliteration function has been added. Currently, it is used in uploading files. Files with non-English names get names that contain ASCII letters only, remaining readable in the corresponding language. Rationale: The PHP5 run-time environment does not manage file name encodings, adding such a non-native feature involves too much work. For avoiding character encoding problems, transliteration of file names is the possible solution. (FS#306)</li>
   <li>An internationalization option has been added for improving sorting in arbitrary language. When the <a href="http://php.net/manual/en/book.intl.php" target="_blank">intl</a> php-extension has been installed, various sorting routines exploit it for better sorting. Rationale: The PHP5 run-time environment does not provide native and reliable way for sorting UTF-8 strings. (FS#306)</li>

@@ -432,6 +432,8 @@ class Dropbox_Person
 		}
 		if ($sort == 'filesize') {	//filesize is not a string, so we use other comparison technique
 			return $aval<$bval ? -1 : 1;
+		} elseif ($sort == 'title') { // natural order for sorting titles is more "human-friendly"
+			return api_strnatcmp($aval, $bval);
 		} else {
 		    return api_strcasecmp($aval, $bval);
 		}

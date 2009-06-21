@@ -173,33 +173,20 @@ class UserDataGenerator
 	function sort_by_course($item1, $item2) {
 		$name1 = api_strtolower($this->get_course_name_from_code_cached($item1->get_course_code()));
 		$name2 = api_strtolower($this->get_course_name_from_code_cached($item2->get_course_code()));
-		if ($name1 == $name2) {
-			return 0;
-		} else {
-			return ($name1 < $name2 ? -1 : 1);
-		}
+		return api_strnatcmp($name1, $name2);
 	}
 
 	function sort_by_category($item1, $item2) {
 		$cat1 = $this->get_category_cached($item1->get_category_id());
 		$cat2 = $this->get_category_cached($item2->get_category_id());
-
 		$name1 = api_strtolower($this->get_category_name_to_display($cat1));
 		$name2 = api_strtolower($this->get_category_name_to_display($cat2));
-		if ($name1 == $name2) {
-			return 0;
-		} else {
-			return ($name1 < $name2 ? -1 : 1);
-		}
+		return api_strnatcmp($name1, $name2);
 	}
 
 
 	function sort_by_name($item1, $item2) {
-		if (api_strtolower($item1->get_name()) == api_strtolower($item2->get_name())) {
-			return 0;
-		} else {
-			return (api_strtolower($item1->get_name()) < api_strtolower($item2->get_name()) ? -1 : 1);
-		}		
+		return api_strnatcmp($item1->get_name(),$item2->get_name());
 	}
 
 

@@ -146,11 +146,7 @@ class GradebookDataGenerator
 // Make sure to only use functions as defined in the GradebookItem interface !
 
 	function sort_by_name($item1, $item2) {
-		if (api_strtolower($item1->get_name()) == api_strtolower($item2->get_name())) {
-			return 0;			
-		} else {
-			return (api_strtolower($item1->get_name()) < api_strtolower($item2->get_name()) ? -1 : 1);			
-		}
+		return api_strnatcmp($item1->get_name(), $item2->get_name());
 	}
 
 	function sort_by_type($item1, $item2) {
@@ -159,16 +155,14 @@ class GradebookDataGenerator
 		} else {
 			return ($item1->get_item_type() < $item2->get_item_type() ? -1 : 1);			
 		}
-
 	}
 	
 	function sort_by_description($item1, $item2) {
-		if (api_strtolower($item1->get_description()) == api_strtolower($item2->get_description())) {
-			return $this->sort_by_name($item1,$item2);			
-		} else {
-			return (api_strtolower($item1->get_description()) < api_strtolower($item2->get_description()) ? -1 : 1);			
+		$result = api_strcmp($item1->get_description(), $item2->get_description());
+		if ($result == 0) {
+			return $this->sort_by_name($item1,$item2);
 		}
-
+		return $result;
 	}
 	
 	function sort_by_weight($item1, $item2) {

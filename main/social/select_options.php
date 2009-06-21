@@ -13,8 +13,7 @@ if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_messa
 	$sql = 'SELECT  u.user_id as id,concat(u.firstname," ",u.lastname," ","( ",u.email," )") as name 
 	FROM '.$tbl_my_user_friend.' uf ' .
  	'INNER JOIN '.$tbl_my_user.' AS u  ON uf.friend_user_id = u.user_id ' .
- 	'WHERE relation_type<>6 AND friend_user_id<>'.(int)$user_id.' AND uf.user_id<>'.(int)$user_id.
- 	' AND concat(u.firstName,u.lastName) like CONCAT("%","'.$search.'","%") ';
+ 	'WHERE relation_type<>6 AND friend_user_id<>'.(int)$user_id.' AND concat(u.firstName,u.lastName) like CONCAT("%","'.$search.'","%") ';
 } elseif (api_get_setting('allow_social_tool')=='false' && api_get_setting('allow_message_tool')=='true') {
 	$valid=api_get_setting('time_limit_whosonline');
 	$sql='SELECT DISTINCT u.user_id as id,concat(u.firstname," ",u.lastname," ","( ",u.email," )") as name

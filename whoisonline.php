@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 21119 2009-05-30 22:58:11Z iflorespaz $
+<?php // $Id: whoisonline.php 21549 2009-06-21 14:02:37Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -181,7 +181,7 @@ function display_user_list($user_list, $_plugins)
 		}
 		$user_anonymous=api_get_anonymous_id();
 		if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) {
-			$table_header[] = array(get_lang('Friends'),false,'width="150"');
+			$table_header[] = array(get_lang('Friends'),false,'width="200"');
 		}		
 		/*this feature is deprecated
 		if ( api_get_setting('allow_message_tool')=='true' && isset($_SESSION['_user'])) {

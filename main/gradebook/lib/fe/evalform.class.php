@@ -379,10 +379,10 @@ class EvalForm extends FormValidator
 	function sort_by_user ($item1, $item2) {
 		$user1 = $item1['user'];
 		$user2 = $item2['user'];
-		if ($user1['lastname'] == $user2['lastname']) {
-			return 0;
-		} else {
-			return ($user1['lastname'] < $user2['lastname'] ? -1 : 1);
-		}	
+		$result = api_strcmp($user1['lastname'], $user2['lastname']);
+		if ($result == 0) {
+			return api_strcmp($user1['firstname'], $user2['firstname']);
+		}
+		return $result;
 	}
 }

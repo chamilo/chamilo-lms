@@ -169,6 +169,11 @@ define('DIR_HOTPOTATOES','/HotPotatoes_files');
 // true whether the server runs on Windows OS, false otherwise.
 define ('IS_WINDOWS_OS', api_is_windows_os());
 
+// Checks for installed optional php-extensions.
+define('INTL_INSTALLED', function_exists('intl_get_error_code'));	// intl extension (from PECL), it is installed by default as of PHP 5.3.0
+define('ICONV_INSTALLED', function_exists('iconv'));				// iconv extension, for PHP5 on Windows it is installed by default.
+define('MBSTRING_INSTALLED', function_exists('mb_strlen'));			// mbstring extension.
+
 /*
 ==============================================================================
 		MAIN API EXTENSIONS

@@ -37,17 +37,10 @@
  * When encodings to be used are not supported by mbstring, this library
  * is able to exploit the PHP iconv extesion, which in this case should
  * be activated too.
+ * 
+ * 5. For improved sorting of multibyte strings the library uses the intl
+ * php-extension if it is installed.
  */
-
-/**
- * ----------------------------------------------------------------------------
- * Constants
- * ----------------------------------------------------------------------------
- */
-
-define('INTL_INSTALLED', function_exists('intl_get_error_code'));	// intl extension (from PECL), it is installed by default as of PHP 5.3.0
-define('ICONV_INSTALLED', function_exists('iconv'));				// iconv extension, for PHP5 on Windows it is installed by default.
-define('MBSTRING_INSTALLED', function_exists('mb_strlen'));			// mbstring extension.
 
 /**
  * ----------------------------------------------------------------------------

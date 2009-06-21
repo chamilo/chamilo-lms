@@ -28,6 +28,9 @@
   <li>Improvements in document tool, allow see terms of glossary (FS#4337)</li>
   <li>Improvements in SCORM export(FS#4300)</li>
   <li>When the system Dokeos is switched into "Test server" mode, a clickable indicator appears in the footer. This indicator is visible by platform administrators only. (FS#4341)</li>
+  <li>A transliteration function has been added. Currently, it is used in uploading files. Files with non-English names get names that contain ASCII letters only, remaining readable in the corresponding language. Rationale: The PHP5 run-time environment does not manage file name encodings, adding such a non-native feature involves too much work. For avoiding character encoding problems, transliteration of file names is the possible solution. (FS#306)</li>
+  <li>An internationalization option has been added for improving sorting in arbitrary language. When the <a href="http://php.net/manual/en/book.intl.php" target="_blank">intl</a> php-extension has been installed, various sorting routines exploit it for better sorting. Rationale: The PHP5 run-time environment does not provide native and reliable way for sorting UTF-8 strings. (FS#306)</li>
+  <li>The installation sript: The page about system requilements has been updated. Also, at the very beginning, a check has been added whether the <a href="http://php.net/manual/en/book.mbstring.php" target="_blank">mbstring</a> php-extension is installed - see <a href="http://dokeos.com/forum/viewtopic.php?t=29548" target="_blank">the related forum topic</a>. (FS#306)</li>
 </ul>
 <br />
 <h1>Dokeos 1.8.6 <span style="font-style: italic;">Svalbard</span> - June 2009</h1>

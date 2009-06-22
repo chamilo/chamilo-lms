@@ -1904,13 +1904,13 @@ class learnpath {
 		$filename = $file_info['basename']; //name including extension
 		$extension = $file_info['extension']; //extension only
 
-		if (!empty ($_POST['ppt2lp']) && !in_array($extension, array (
+		if (!empty ($_POST['ppt2lp']) && !in_array(strtolower($extension), array (
 				'dll',
 				'exe'
 			))) {
 			return 'oogie';
 		}
-		if (!empty ($_POST['woogie']) && !in_array($extension, array (
+		if (!empty ($_POST['woogie']) && !in_array(strtolower($extension), array (
 				'dll',
 				'exe'
 			))) {

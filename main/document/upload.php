@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 21106 2009-05-30 16:25:16Z iflorespaz $
+<?php // $Id: upload.php 21563 2009-06-22 10:49:59Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -304,7 +304,7 @@ if(isset($_FILES['user_upload']))
           if (empty($doc_mime)) {
           	$allowed_extensions = array('ppt', 'pps', 'xls');
             $extensions = preg_split("/[\/\\.]/", $doc_path) ;
-            $doc_ext = $extensions[count($extensions)-1];
+            $doc_ext = strtolower($extensions[count($extensions)-1]);
             if (in_array($doc_ext, $allowed_extensions)) {
             	switch ($doc_ext) {
                     case 'ppt':

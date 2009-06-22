@@ -143,7 +143,7 @@ else
 		//no information about filetype: force a download dialog window in browser
 		header( "Content-type: application/octet-stream\n");
 	}
-	if(!in_array($fileparts [$filepartscount - 1],array('doc','xls','ppt','pps','sxw','sxc','sxi')))
+	if (!in_array(strtolower($fileparts [$filepartscount - 1]), array('doc','xls','ppt','pps','sxw','sxc','sxi')))
 	{
 		header('Content-Disposition: inline; filename='.$file); // bugs with open office
 	}
@@ -383,7 +383,7 @@ else
 	header( "Content-type: application/octet-stream\n");
 }
 
-if(!in_array($fileparts [$filepartscount - 1],array('doc','xls','ppt','pps','sxw','sxc','sxi')))
+if (!in_array(strtolower($fileparts [$filepartscount - 1]), array('doc','xls','ppt','pps','sxw','sxc','sxi')))
 {
 	header('Content-Disposition: inline; filename='.$file); // bugs with open office
 }

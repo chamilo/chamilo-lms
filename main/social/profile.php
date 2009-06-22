@@ -438,7 +438,7 @@ echo '<div class="actions-title">';
 if ($user_id == api_get_user_id())
 	echo get_lang('ViewMySharedProfile');
 else 
-	echo $user_info['firstname'].' '.$user_info['lastname'].' '.get_lang('Profile');
+	echo get_lang('ViewSharedProfile').' - '.ucfirst($user_info['firstname']).' '.$user_info['lastname'];
 		
 echo '</div>';					
 

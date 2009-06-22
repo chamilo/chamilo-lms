@@ -1,4 +1,4 @@
-<?php // $Id: download.php 14848 2008-04-11 13:21:04Z elixir_inter $
+<?php // $Id: download.php 21562 2009-06-22 10:38:38Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -29,31 +29,27 @@ $this_section=SECTION_COURSES;
 
 include_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 
-$archivePath=api_get_path(SYS_PATH).$archiveDirName.'/';
-$archiveFile=$_GET['archive'];
+$archivePath = api_get_path(SYS_PATH).$archiveDirName.'/';
+$archiveFile = $_GET['archive'];
 
-$archiveFile=str_replace(array('..','/','\\'),'',$archiveFile);
+$archiveFile = str_replace(array('..', '/', '\\'), '', $archiveFile);
 
-list($extension)=getextension($archiveFile);
+list($extension) = getextension($archiveFile);
 
-if(empty($extension) || !file_exists($archivePath.$archiveFile))
-{
+if (empty($extension) || !file_exists($archivePath.$archiveFile)) {
 	exit();
 }
 
-$content_type='';
+$content_type = '';
 
-if(in_array($extension,array('xml','csv')) && api_is_platform_admin(true))
-{
+if (in_array(strtolower($extension), array('xml','csv')) && api_is_platform_admin(true)) {
 	$content_type='application/force-download';
 }
-elseif($extension == 'zip' && $_cid && $is_courseAdmin)
-{
+elseif (strtolower($extension) == 'zip' && $_cid && $is_courseAdmin) {
 	$content_type='application/force-download';
 }
 
-if(empty($content_type))
-{
+if (empty($content_type)) {
 	api_not_allowed(true);
 }
 

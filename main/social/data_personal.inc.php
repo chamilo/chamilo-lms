@@ -87,7 +87,7 @@ if (isset($_POST['load_ajax'])) {
 					$all_result_data++;		
 				}
 				if ($all_result_data == 0) {
-					echo get_lang('NoDataAvailable');
+					echo api_xml_http_response_encode(get_lang('NoDataAvailable'));
 				}
 				
 			} else {

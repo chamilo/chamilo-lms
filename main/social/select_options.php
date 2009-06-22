@@ -10,7 +10,7 @@ $current_date=date('Y-m-d H:i:s',time());
 $html_form='<select id="id_search_name" name="id_search_name" size="8"" style="width:350px;">';
 $user_id = api_get_user_id();
 if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-	$sql = 'SELECT  u.user_id as id,concat(u.firstname," ",u.lastname," ","( ",u.email," )") as name 
+	$sql = 'SELECT DISTINCT u.user_id as id,concat(u.firstname," ",u.lastname," ","( ",u.email," )") as name 
 	FROM '.$tbl_my_user_friend.' uf ' .
  	'INNER JOIN '.$tbl_my_user.' AS u  ON uf.friend_user_id = u.user_id ' .
  	'WHERE relation_type<>6 AND friend_user_id<>'.(int)$user_id.' AND concat(u.firstName,u.lastName) like CONCAT("%","'.$search.'","%") ';

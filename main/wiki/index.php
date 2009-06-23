@@ -2502,7 +2502,7 @@ function display_wiki_entry()
 
 
 	// if both are empty and we are displaying the index page then we display the default text.
-	if ($row['content']=='' AND $row['title']=='' AND $page='index')
+	if ($row['content']=='' AND $row['title']=='' AND $page=='index')
 	{
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
 		{
@@ -2806,7 +2806,7 @@ function check_addnewpagelock()
 	 		
 	//show status				
 				
-	if ($row['addlock']==1 || ($row['content']=='' AND $row['title']=='' AND $page='index'))
+	if ($row['addlock']==1 || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
 	{
 		return false;		
 	}

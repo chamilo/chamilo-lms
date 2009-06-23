@@ -380,6 +380,9 @@ dTree.prototype.s = function(id) {
 
 	var cn = this.aNodes[id];
 
+	// Added by Ivan Tcholakov to prevent javascript error when the tree is empty.
+	if (!cn) return;
+
 	if (cn._hc && !this.config.folderLinks) return;
 
 	if (this.selectedNode != id) {

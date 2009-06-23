@@ -25,7 +25,7 @@
 // Modifications by Ivan Tcholakov, JAN-2009.
 
 // Loading the global initialization file, Dokeos LMS.
-require_once '../../../../../../../../global.inc.php';
+require_once '../../../../../../global.inc.php';
 
 // Initialization of the repositories.
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repositories_config.php' ;

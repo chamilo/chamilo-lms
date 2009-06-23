@@ -378,22 +378,22 @@ class FCKeditor
 			// URLs for opening the file browser for different resource types (file types):
 
 			// for images
-			$this->Config['ImageBrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=Images&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$this->Config['ImageBrowserURL'] = $this->BasePath."editor/filemanager/browser/default/browser.html?Type=Images&Connector=".$this->BasePath."editor/filemanager/connectors/php/connector.php&ServerPath=$upload_path";
 
 			// for flash
-			$this->Config['FlashBrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$this->Config['FlashBrowserURL'] = $this->BasePath."editor/filemanager/browser/default/browser.html?Type=Flash&Connector=".$this->BasePath."editor/filemanager/connectors/php/connector.php&ServerPath=$upload_path";
 	
 			// for audio files (mp3)
-			$this->Config['MP3BrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$this->Config['MP3BrowserURL'] = $this->BasePath."editor/filemanager/browser/default/browser.html?Type=MP3&Connector=".$this->BasePath."editor/filemanager/connectors/php/connector.php&ServerPath=$upload_path";
 
 			// for videos
-			$this->Config['VideoBrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$this->Config['VideoBrowserURL'] = $this->BasePath."editor/filemanager/browser/default/browser.html?Type=Video&Connector=".$this->BasePath."editor/filemanager/connectors/php/connector.php&ServerPath=$upload_path";
 
 			// for videos (flv)
-			$this->Config['MediaBrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$this->Config['MediaBrowserURL'] = $this->BasePath."editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector=".$this->BasePath."editor/filemanager/connectors/php/connector.php&ServerPath=$upload_path";
 
 			// for links (any resource type)
-			$this->Config['LinkBrowserURL'] = $this->BasePath . "editor/filemanager/browser/default/browser.html?Type=File&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+			$this->Config['LinkBrowserURL'] = $this->BasePath."editor/filemanager/browser/default/browser.html?Type=File&Connector=".$this->BasePath."editor/filemanager/connectors/php/connector.php&ServerPath=$upload_path";
 		}
 
 		// URLs for making quick uplods for different resource types (file types).

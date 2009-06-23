@@ -1174,7 +1174,14 @@ if ($_GET['action']=='edit')
 	$result=api_sql_query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version				
 
-	if ($row['content']=='' AND $row['title']=='' AND $page=='index')
+	
+	
+	if ($row['content']=='' AND $row['title']=='' AND $page=='')
+	{
+		Display::display_error_message(get_lang('FirstSelectOnepage'));
+		exit;
+	}
+	elseif ($row['content']=='' AND $row['title']=='' AND $page=='index')
 	{
 		$content=sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH));
 		$title=get_lang('DefaultTitle');

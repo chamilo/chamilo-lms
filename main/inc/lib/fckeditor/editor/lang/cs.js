@@ -308,11 +308,11 @@ DlgTableCellSpace	: "Vzdálenost buněk",
 DlgTableCellPad		: "Odsazení obsahu",
 DlgTableCaption		: "Popis",
 DlgTableSummary		: "Souhrn",
-DlgTableHeaders		: "Záhlaví",
-DlgTableHeadersNone		: "Žádné",
-DlgTableHeadersColumn	: "První sloupec",
-DlgTableHeadersRow		: "První řádek",
-DlgTableHeadersBoth		: "Oboje",
+DlgTableHeaders		: "Headers",	//MISSING
+DlgTableHeadersNone		: "None",	//MISSING
+DlgTableHeadersColumn	: "First column",	//MISSING
+DlgTableHeadersRow		: "First Row",	//MISSING
+DlgTableHeadersBoth		: "Both",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "Vlastnosti buňky",
@@ -335,9 +335,9 @@ DlgCellVerAlignTop	: "Nahoru",
 DlgCellVerAlignMiddle	: "Doprostřed",
 DlgCellVerAlignBottom	: "Dolů",
 DlgCellVerAlignBaseline	: "Na účaří",
-DlgCellType		: "Typ buňky",
-DlgCellTypeData		: "Data",
-DlgCellTypeHeader	: "Zálaví",
+DlgCellType		: "Cell Type",	//MISSING
+DlgCellTypeData		: "Data",	//MISSING
+DlgCellTypeHeader	: "Header",	//MISSING
 DlgCellRowSpan		: "Sloučené řádky",
 DlgCellCollSpan		: "Sloučené sloupce",
 DlgCellBackColor	: "Barva pozadí",

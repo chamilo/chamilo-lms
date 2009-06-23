@@ -448,7 +448,7 @@ function Doc_OnMouseDown( evt )
 	// Radio buttons and checkboxes should not be allowed to be triggered in IE
 	// in editable mode. Otherwise the whole browser window may be locked by
 	// the buttons. (#1782)
-	if ( e.nodeName && e.nodeName.IEquals( 'input' ) && e.type.IEquals( ['radio', 'checkbox'] ) && !e.disabled )
+	if ( e.nodeName.IEquals( 'input' ) && e.type.IEquals( ['radio', 'checkbox'] ) && !e.disabled )
 	{
 		e.disabled = true ;
 		FCKTools.SetTimeout( _FCK_RemoveDisabledAtt, 1, e ) ;

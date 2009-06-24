@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 21172 2009-06-01 20:58:05Z darkvela $
+* 	@version $Id: exercise_show.php 21605 2009-06-24 16:08:45Z ndieschburg $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -679,10 +679,14 @@ if ($show_results) {
 						$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 						$resfill = api_sql_query($queryfill, __FILE__, __LINE__);
 						$str = Database::result($resfill,0,"answer");
-						preg_match_all('#\[([^[/]*)/#', $str, $arr);
-												
+
+						preg_match_all('#\[([^[]*)\]#', $str, $arr);
 						$choice = $arr[1];
+						$tmp=strrpos($choice[$j],' / ');
+						$choice[$j]=substr($choice[$j],0,$tmp);
 						$choice[$j]=trim($choice[$j]);
+
+												
 						// if the word entered by the student IS the same as the one defined by the professor
 						if (api_strtolower(api_substr($temp,0,$pos)) == api_strtolower($choice[$j])) {
 							// gives the related weighting to the student

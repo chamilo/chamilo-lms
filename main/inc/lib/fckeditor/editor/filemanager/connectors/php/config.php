@@ -22,7 +22,10 @@
  * Configuration file for the File Manager Connector for PHP.
  */
 
-// Modifications by Ivan Tcholakov, JAN-2009.
+// Modifications by Ivan Tcholakov, JUN-2009.
+
+// Some language variables are needed.
+$language_file = array('create_course');
 
 // Loading the global initialization file, Dokeos LMS.
 require_once '../../../../../../global.inc.php';

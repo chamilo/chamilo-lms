@@ -22,7 +22,7 @@
  * This is the File Manager Connector for PHP.
  */
 
-// Modifications by Ivan Tcholakov, JAN-2009.
+// Modifications by Ivan Tcholakov, JUN-2009.
 
 function CombinePaths( $sBasePath, $sFolder )
 {
@@ -60,11 +60,11 @@ function GetResourceTypeDirectory( $resourceType, $sCommand )
 }
 
 /*
- * this is the function that is call to change the URL in the fckeditor source view
+ * This function is called to change the URL in the fckeditor source view.
 */
 function GetUrlFromPath( $resourceType, $folderPath, $sCommand )
 {
-	$resourceType =strtolower($resourceType); 
+	$resourceType = strtolower($resourceType); 
 	return $resourceType . $folderPath;
 }
 
@@ -76,10 +76,7 @@ function RemoveExtension( $fileName )
 function ServerMapFolder( $resourceType, $folderPath, $sCommand )
 {
 	// Get the resource type directory.
-	//this should be fixed
 	$resourceType = strtolower($resourceType);
-
-	// Get the resource type directory.
 	if ( $resourceType != 'file' )
 	{
 		$sResourceTypePath = $GLOBALS["UserFilesDirectory"] . $resourceType . '/' ;
@@ -90,8 +87,6 @@ function ServerMapFolder( $resourceType, $folderPath, $sCommand )
 	}
 	
 	// Ensure that the directory exists.
-	// Modified by Ivan Tcholakov.
-	//CreateServerFolder( $sResourceTypePath ) ;
 	if ( $resourceType != 'file' )
 	{
 		CreateServerFolder( $sResourceTypePath ) ;
@@ -191,10 +186,26 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 
 function GetRootPath()
 {
+	if (!isset($_SERVER)) {
+		global $_SERVER;
+	}
 	$sRealPath = realpath( './' ) ;
-	$sSelfPath = htmlentities($_SERVER['PHP_SELF']);
-	$sSelfPath = substr( $sSelfPath, 0, strrpos( $sSelfPath, '/' ) ) ;	
-	return substr( $sRealPath, 0, strlen( $sRealPath ) - strlen( $sSelfPath ) ) ;
+	// #2124 ensure that no slash is at the end
+	$sRealPath = rtrim($sRealPath,"\\/");
+
+	$sSelfPath = $_SERVER['PHP_SELF'] ;
+	$sSelfPath = substr( $sSelfPath, 0, strrpos( $sSelfPath, '/' ) ) ;
+
+	$sSelfPath = str_replace( '/', DIRECTORY_SEPARATOR, $sSelfPath ) ;
+
+	$position = strpos( $sRealPath, $sSelfPath ) ;
+
+	// This can check only that this script isn't run from a virtual dir
+	// But it avoids the problems that arise if it isn't checked
+	if ( $position === false || $position <> strlen( $sRealPath ) - strlen( $sSelfPath ) )
+		SendError( 1, 'Sorry, the physical root path of the file repository can not be resolved (the function GetRootPath() failed).' ) ;
+
+	return substr( $sRealPath, 0, $position ) ;
 }
 
 // Emulate the asp Server.mapPath function.
@@ -311,8 +322,9 @@ function SendUploadResults( $errorNumber, $fileUrl = '', $fileName = '', $custom
 (function(){var d=document.domain;while (true){try{var A=window.parent.document.domain;break;}catch(e) {};d=d.replace(/.*?(?:\.|$)/,'');if (d.length==0) break;try{document.domain=d;}catch (e){break;}}})();
 EOF;
 
-	$rpl = array( '\\' => '\\\\', '"' => '\\"' ) ;
-	echo 'window.parent.OnUploadCompleted(' . $errorNumber . ',"' . strtr( $fileUrl, $rpl ) . '","' . strtr( $fileName, $rpl ) . '", "' . strtr( $customMsg, $rpl ) . '") ;' ;
+	$search = array( '\\', '"' );
+	$replace = array( '\\\\', '\\"' );
+	echo 'window.parent.OnUploadCompleted(' . $errorNumber . ',"' . str_replace( $search, $replace, $fileUrl ) . '","' . str_replace( $search, $replace, $fileName ) . '", "' . str_replace( $search, $replace, $customMsg ) . '") ;' ;
 	echo '</script>' ;
 	exit ;
 }

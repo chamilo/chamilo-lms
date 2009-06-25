@@ -256,6 +256,8 @@ while ($row = @mysql_fetch_array($result)) {
 if (empty($charset)) {
 	$charset = "ISO-8859-15";
 }
+// Preserving the value of the global variable $charset.
+$charset_initial_value = $charset;
 // Initialization of the default encoding that will be used by the string routines.
 api_set_default_encoding($charset);
 
@@ -603,15 +605,9 @@ if (is_array($language_files)) {
 	}
 }
 
-/* 
-// TODO: This is a duplicate initialization of the global variable $charset, see above. To be removed.
-//load the charset param after langs because the $charset variable in 
-//trad4all.inc.php might have set it and we don't want that
-$charset = api_get_setting('platform_charset');
-if (empty($charset)) {
-	$charset = 'ISO-8859-15';
-}
-*/
+// The global variable $charset has been defined in a language file too (trad4all.inc.php), this is legacy situation.
+// So, we have to reassign this variable again in order to keep its value right.
+$charset = $charset_initial_value;
 
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 

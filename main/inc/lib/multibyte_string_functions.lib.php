@@ -166,19 +166,19 @@ function api_utf8_decode($string, $to_encoding = null) {
  * @return string								Returns the converted string.
  */
 function api_to_system_encoding($string, $from_encoding = null, $check_utf8_validity = false) {
-	$charset = api_get_system_encoding();
+	$system_encoding = api_get_system_encoding();
 	if (empty($from_encoding)) {
-		if (api_is_utf8($charset)) {
+		if (api_is_utf8($system_encoding)) {
 			$from_encoding = api_get_non_utf8_encoding();
 		} else {
 			$from_encoding = 'UTF-8';
 		}
 	}
-	if (api_equal_encodings($charset, $from_encoding)) {
+	if (api_equal_encodings($system_encoding, $from_encoding)) {
 		return $string;
 	}
 	if ($check_utf8_validity) {
-		if (api_is_utf8($charset)) {
+		if (api_is_utf8($system_encoding)) {
 			if (api_is_valid_utf8($string)) {
 				return $string;
 			}
@@ -189,7 +189,7 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
 			}
 		}
 	}
-	return api_convert_encoding($string, $charset, $from_encoding);
+	return api_convert_encoding($string, $system_encoding, $from_encoding);
 }
 
 /**

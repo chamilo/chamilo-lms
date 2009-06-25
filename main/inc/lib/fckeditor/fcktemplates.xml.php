@@ -59,7 +59,6 @@ function loadCSS($css_name)
  */
 function s($var)
 {
-	global $charset;
     $search = array('&','<','>');
     $replace = array ('&amp;','&amp;lt;','&amp;gt;');
     return str_replace($search, $replace, api_utf8_encode(get_lang($var)));
@@ -73,7 +72,6 @@ function s($var)
  */
 function s2($var)
 {
-	global $charset;
     $search = array('&','<','>');
     $replace = array ('&amp;','&amp;lt;','&amp;gt;');
     return str_replace($search, $replace, api_utf8_encode($var));

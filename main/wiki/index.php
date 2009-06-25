@@ -610,7 +610,7 @@ if ($_GET['action']=='usercontrib')
 			}		
 		
 			$row = array ();
-			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;	
+			$row[] = $year.'-'.$MonthsLong[$month-1].'-'.$day.' '.$hours.":".$minutes.":".$seconds;			
 			$row[] =$ShowAssignment;
 			
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&view='.$obj->id.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
@@ -1090,7 +1090,7 @@ if ($_GET['action']=='links')
 				$row[] =$ShowAssignment;
 				$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($obj->title).'</a>';
 				$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';	
-				$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;					
+				$row[] = $year.'-'.$MonthsLong[$month-1].'-'.$day.' '.$hours.":".$minutes.":".$seconds;		
 				$rows[] = $row;
 			}
 		
@@ -1383,7 +1383,7 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 				echo '<a href="'.api_get_self().'?action=showpage&amp;title='.$page.'&amp;view='.$row['id'].'">';
 				echo '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&amp;view='.$row['id'].'&group_id='.$group_id.'">';
 				
-				echo $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;					
+				echo $year.'-'.$MonthsLong[$month-1].'-'.$day.' '.$hours.":".$minutes.":".$seconds;					
 				echo '</a>';				
 				echo ' ('.get_lang('Version').' '.$row['version'].')';
 				echo ' '.get_lang('By').' ';
@@ -1567,7 +1567,7 @@ if ($_GET['action']=='recentchanges')
 			}		
 		
 			$row = array ();
-			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.':'.$minutes.":".$seconds;	
+			$row[] = $year.'-'.$MonthsLong[$month-1].'-'.$day.' '.$hours.':'.$minutes.":".$seconds;	
 			$row[] =$ShowAssignment;
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&amp;view='.$obj->id.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
 			$row[] =$obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');	
@@ -1643,8 +1643,8 @@ if ($_GET['action']=='allpages')
 			$row = array ();
 			$row[] =$ShowAssignment;
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($obj->title).'</a>';
-			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';	
-			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;					
+			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
+			$row[] = $year.'-'.$MonthsLong[$month-1].'-'.$day.' '.$hours.":".$minutes.":".$seconds;					
 			$rows[] = $row;
 		}
 	
@@ -3758,7 +3758,7 @@ function display_wiki_search_results($search_term, $search_content=0)
 			$row[] =$ShowAssignment;
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
 			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
-			$row[] = $day.' '.$MonthsLong[$month-1].' '.$year.' '.$hours.":".$minutes.":".$seconds;
+			$row[] = $year.'-'.$MonthsLong[$month-1].'-'.$day.' '.$hours.":".$minutes.":".$seconds;
 			$rows[] = $row;
 		}
 

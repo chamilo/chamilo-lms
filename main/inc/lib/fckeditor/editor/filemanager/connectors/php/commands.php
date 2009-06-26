@@ -22,8 +22,6 @@
  * This is the File Manager Connector for PHP.
  */
 
-// Modifications by Ivan Tcholakov, JAN-2009.
-
 function GetFolders( $resourceType, $currentFolder )
 {
 	// Map the virtual path to the local server path.
@@ -185,8 +183,6 @@ function CreateFolder( $resourceType, $currentFolder )
 
 function FileUpload( $resourceType, $currentFolder, $sCommand )
 {
-	// TODO: System's black and white lists to be taken into account.
-
 	if (!isset($_FILES)) {
 		global $_FILES;
 	}

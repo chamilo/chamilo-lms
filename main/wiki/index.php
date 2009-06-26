@@ -1644,7 +1644,8 @@ if ($_GET['action']=='allpages')
 			$row[] =$ShowAssignment;
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($obj->title).'</a>';
 			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
-			$row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;					
+			$row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
+			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=edit&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/lp_quiz.png" title="'.get_lang('EditPage').'" alt="'.get_lang('EditPage').'" /></a>';				
 			$rows[] = $row;
 		}
 	
@@ -1653,7 +1654,8 @@ if ($_GET['action']=='allpages')
 		$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
 		$table->set_header(1,get_lang('Title'), true);
 		$table->set_header(2,get_lang('Author'), true);
-		$table->set_header(3,get_lang('Date'), true);		
+		$table->set_header(3,get_lang('Date'), true);
+		$table->set_header(4,get_lang('Actions'), true, array ('style' => 'width:30px;'));	
 		$table->display();
 	}
 }

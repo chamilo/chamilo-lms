@@ -1662,8 +1662,8 @@ if ($_GET['action']=='allpages')
 		$table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'group_id'=>Security::remove_XSS($_GET['group_id'])));		
 		$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
 		$table->set_header(1,get_lang('Title'), true);
-		$table->set_header(2,get_lang('Author'), true);
-		$table->set_header(3,get_lang('Date'), true);
+		$table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', true);
+		$table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', true);
 		$table->set_header(4,get_lang('Actions'), true, array ('style' => 'width:100px;'));	
 		$table->display();
 	}
@@ -3794,8 +3794,8 @@ function display_wiki_search_results($search_term, $search_content=0)
 
 		$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
 		$table->set_header(1,get_lang('Title'), true);
-		$table->set_header(2,get_lang('Author'), true);
-		$table->set_header(3,get_lang('Date'), true);
+		$table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', true);
+		$table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', true);
 
 		$table->display();
 	}

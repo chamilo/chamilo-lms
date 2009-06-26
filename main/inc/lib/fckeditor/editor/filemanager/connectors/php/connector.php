@@ -29,46 +29,10 @@ require('./util.php') ;
 require('./io.php') ;
 require('./basexml.php') ;
 require('./commands.php') ;
-//require('./phpcompat.php') ;
+require('./phpcompat.php') ;
 
 if ( !$Config['Enabled'] )
 	SendError( 1, 'This connector is disabled. Please check the "editor/filemanager/connectors/php/config.php" file' ) ;
-
-// Get the "UserFiles" path.
-$GLOBALS["UserFilesPath"] = '' ;
-
-if ( isset( $Config['UserFilesPath'] ) )
-{
-	$GLOBALS["UserFilesPath"] = $Config['UserFilesPath'] ;
-}
-else if ( isset( $_GET['ServerPath'] ) )
-{
-	$GLOBALS["UserFilesPath"] = $_GET['ServerPath'] ;
-}
-else
-{
-	$GLOBALS["UserFilesPath"] = '/UserFiles/' ;
-}
-
-if ( ! ereg( '/$', $GLOBALS["UserFilesPath"] ) )
-{
-	$GLOBALS["UserFilesPath"] .= '/' ;
-}
-
-if ( strlen( $Config['UserFilesAbsolutePath'] ) > 0 ) 
-{
-	$GLOBALS["UserFilesDirectory"] = $Config['UserFilesAbsolutePath'] ;
-
-	if ( ! ereg( '/$', $GLOBALS["UserFilesDirectory"] ) )
-	{
-		$GLOBALS["UserFilesDirectory"] .= '/' ;
-	}
-}
-else 
-{
-	// Map the "UserFiles" path to a local directory.
-	$GLOBALS["UserFilesDirectory"] = GetRootPath() . $GLOBALS["UserFilesPath"] ;	
-}
 
 DoResponse() ;
 
@@ -83,9 +47,7 @@ function DoResponse()
 	// Get the main request informaiton.
 	$sCommand		= $_GET['Command'] ;
 	$sResourceType	= $_GET['Type'] ;
-
-	//$sCurrentFolder	= GetCurrentFolder() ;
-	$sCurrentFolder	= $_GET['CurrentFolder'] ;
+	$sCurrentFolder	= GetCurrentFolder() ;
 
 	// Check if it is an allowed command
 	if ( ! IsAllowedCommand( $sCommand ) )

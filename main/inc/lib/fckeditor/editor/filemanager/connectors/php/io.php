@@ -22,12 +22,11 @@
  * This is the File Manager Connector for PHP.
  */
 
-// Modifications by Ivan Tcholakov, JUN-2009.
-
 function CombinePaths( $sBasePath, $sFolder )
 {
 	return RemoveFromEnd( $sBasePath, '/' ) . '/' . RemoveFromStart( $sFolder, '/' ) ;
 }
+
 function GetResourceTypePath( $resourceType, $sCommand )
 {
 	global $Config ;
@@ -59,13 +58,9 @@ function GetResourceTypeDirectory( $resourceType, $sCommand )
 	}
 }
 
-/*
- * This function is called to change the URL in the fckeditor source view.
-*/
 function GetUrlFromPath( $resourceType, $folderPath, $sCommand )
 {
-	$resourceType = strtolower($resourceType); 
-	return $resourceType . $folderPath;
+	return CombinePaths( GetResourceTypePath( $resourceType, $sCommand ), $folderPath ) ;
 }
 
 function RemoveExtension( $fileName )
@@ -76,24 +71,15 @@ function RemoveExtension( $fileName )
 function ServerMapFolder( $resourceType, $folderPath, $sCommand )
 {
 	// Get the resource type directory.
-	$resourceType = strtolower($resourceType);
-	if ( $resourceType != 'file' )
-	{
-		$sResourceTypePath = $GLOBALS["UserFilesDirectory"] . $resourceType . '/' ;
-	}
-	else
-	{
-		$sResourceTypePath = $GLOBALS["UserFilesDirectory"];
-	}
+	$sResourceTypePath = GetResourceTypeDirectory( $resourceType, $sCommand ) ;
 	
 	// Ensure that the directory exists.
-	if ( $resourceType != 'file' )
-	{
-		CreateServerFolder( $sResourceTypePath ) ;
-	}
+	$sErrorMsg = CreateServerFolder( $sResourceTypePath ) ;
+	if ( $sErrorMsg != '' )
+		SendError( 1, "Error creating folder \"{$sResourceTypePath}\" ({$sErrorMsg})" ) ;
 
 	// Return the resource type directory combined with the required path.
-	return $sResourceTypePath . RemoveFromStart( $folderPath, '/' ) ;	
+	return CombinePaths( $sResourceTypePath , $folderPath ) ;
 }
 
 function GetParentFolder( $folderPath )
@@ -186,9 +172,6 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 
 function GetRootPath()
 {
-	return str_replace('/', DIRECTORY_SEPARATOR, rtrim(api_get_path(SYS_SERVER_ROOT_PATH), '/'));
-
-	/*
 	if (!isset($_SERVER)) {
 		global $_SERVER;
 	}
@@ -209,7 +192,6 @@ function GetRootPath()
 		SendError( 1, 'Sorry, can\'t map "UserFilesPath" to a physical path. You must set the "UserFilesAbsolutePath" value in "editor/filemanager/connectors/php/config.php".' ) ;
 
 	return substr( $sRealPath, 0, $position ) ;
-	*/
 }
 
 // Emulate the asp Server.mapPath function.

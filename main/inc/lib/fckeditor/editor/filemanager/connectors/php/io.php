@@ -186,15 +186,9 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 
 function GetRootPath()
 {
-	// First, let the system Dokeos tries to determine the system document root path.
+	return str_replace('/', DIRECTORY_SEPARATOR, rtrim(api_get_path(SYS_SERVER_ROOT_PATH), '/'));
 
-	if (preg_match('@'.api_get_path(REL_PATH).'$@', api_get_path(SYS_PATH))) // Sanity check.
-	{
-		return str_replace('/', DIRECTORY_SEPARATOR, preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(SYS_PATH)));
-	}
-
-	// Next, the original algorithm will try alone to determine the system document root path.
-
+	/*
 	if (!isset($_SERVER)) {
 		global $_SERVER;
 	}
@@ -215,6 +209,7 @@ function GetRootPath()
 		SendError( 1, 'Sorry, can\'t map "UserFilesPath" to a physical path. You must set the "UserFilesAbsolutePath" value in "editor/filemanager/connectors/php/config.php".' ) ;
 
 	return substr( $sRealPath, 0, $position ) ;
+	*/
 }
 
 // Emulate the asp Server.mapPath function.

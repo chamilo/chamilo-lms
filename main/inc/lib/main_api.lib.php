@@ -84,6 +84,8 @@ define('UNSUBSCRIBE_ALLOWED', 1);
 define('UNSUBSCRIBE_NOT_ALLOWED', 0);
 
 //CONSTANTS FOR api_get_path FUNCTION
+define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
+define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
 define('WEB_PATH', 'WEB_PATH');
 define('SYS_PATH', 'SYS_PATH');
 define('REL_PATH', 'REL_PATH');
@@ -98,7 +100,7 @@ define('WEB_IMG_PATH', 'WEB_IMG_PATH');
 define('WEB_CSS_PATH', 'WEB_CSS_PATH');
 define('GARBAGE_PATH', 'GARBAGE_PATH');
 define('SYS_PLUGIN_PATH', 'SYS_PLUGIN_PATH');
-define('PLUGIN_PATH', 'PLUGIN_PATH');
+define('PLUGIN_PATH', 'SYS_PLUGIN_PATH'); // deprecated
 define('WEB_PLUGIN_PATH', 'WEB_PLUGIN_PATH');
 define('SYS_ARCHIVE_PATH', 'SYS_ARCHIVE_PATH');
 define('WEB_ARCHIVE_PATH', 'WEB_ARCHIVE_PATH');
@@ -218,7 +220,7 @@ function api_protect_course_script($print_headers=false) {
 	}
 }
 
- /**
+/**
 * Function used to protect an admin script.
 * The function blocks access when the user has no platform admin rights.
 * This is only the first proposal, test and improve!
@@ -302,33 +304,40 @@ function api_is_self_registration_allowed() {
 *	to alter the WEB_COURSE_PATH and SYS_COURSE_PATH parameters.
 *
 *	@param one of the following constants:
+*	WEB_SERVER_ROOT_PATH, SYS_SERVER_ROOT_PATH,
 *	WEB_PATH, SYS_PATH, REL_PATH, WEB_COURSE_PATH, SYS_COURSE_PATH,
 *	REL_COURSE_PATH, REL_CODE_PATH, WEB_CODE_PATH, SYS_CODE_PATH,
-*	SYS_LANG_PATH, WEB_IMG_PATH, GARBAGE_PATH, PLUGIN_PATH, SYS_ARCHIVE_PATH,
-*	INCLUDE_PATH, LIBRARY_PATH, CONFIGURATION_PATH
+*	SYS_LANG_PATH, WEB_IMG_PATH, GARBAGE_PATH, WEB_PLUGIN_PATH, SYS_PLUGIN_PATH, WEB_ARCHIVE_PATH, SYS_ARCHIVE_PATH,
+*	INCLUDE_PATH, WEB_LIBRARY_PATH, LIBRARY_PATH, CONFIGURATION_PATH
 *
 * 	@example assume that your server root is /var/www/ dokeos is installed in a subfolder dokeos/ and the URL of your campus is http://www.mydokeos.com
 * 	The other configuration paramaters have not been changed.
 * 	The different api_get_paths will give
-* 	WEB_PATH			http://www.mydokeos.com
-* 	SYS_PATH			/var/www/
+*	WEB_SERVER_ROOT_PATH	http://www.mydokeos.com/
+*	SYS_SERVER_ROOT_PATH	/var/www/ - This is the physical folder where the system Dokeos has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
+* 	WEB_PATH				http://www.mydokeos.com/dokeos/
+* 	SYS_PATH				/var/www/dokeos/
 * 	REL_PATH			dokeos/
-* 	WEB_COURSE_PATH		http://www.mydokeos.com/courses/
+* 	WEB_COURSE_PATH			http://www.mydokeos.com/dokeos/courses/
 * 	SYS_COURSE_PATH		/var/www/dokeos/courses/
-*	REL_COURSE_PATH
-* 	REL_CODE_PATH
-* 	WEB_CODE_PATH
-* 	SYS_CODE_PATH
-* 	SYS_LANG_PATH
-* 	WEB_IMG_PATH
+*	REL_COURSE_PATH			/dokeos/courses/
+* 	REL_CODE_PATH			/dokeos/main/
+* 	WEB_CODE_PATH			http://www.mydokeos.com/dokeos/main/
+* 	SYS_CODE_PATH			/var/www/dokeos/main/
+* 	SYS_LANG_PATH			/var/www/dokeos/main/lang/
+* 	WEB_IMG_PATH			http://www.mydokeos.com/dokeos/main/img/
 * 	GARBAGE_PATH
-* 	PLUGIN_PATH
-* 	SYS_ARCHIVE_PATH
-*	INCLUDE_PATH
-* 	LIBRARY_PATH
-* 	CONFIGURATION_PATH
+* 	WEB_PLUGIN_PATH			http://www.mydokeos.com/dokeos/plugin/
+* 	SYS_PLUGIN_PATH			/var/www/dokeos/plugin/
+* 	WEB_ARCHIVE_PATH		http://www.mydokeos.com/dokeos/archive/
+* 	SYS_ARCHIVE_PATH		/var/www/dokeos/archive/
+*	INCLUDE_PATH			/var/www/dokeos/main/inc/
+* 	WEB_LIBRARY_PATH		http://www.mydokeos.com/dokeos/main/inc/lib/
+* 	LIBRARY_PATH			/var/www/dokeos/main/inc/lib/
+* 	CONFIGURATION_PATH		/var/www/dokeos/main/inc/conf/
 */
 function api_get_path($path_type) {
+
 	global $_configuration;
 	if (!isset($_configuration['access_url']) || $_configuration['access_url']==1 || $_configuration['access_url']=='') {
 		//by default we call the $_configuration['root_web'] we don't query to the DB
@@ -347,8 +356,28 @@ function api_get_path($path_type) {
 	}
 	 
 	switch ($path_type) {
+
+		case WEB_SERVER_ROOT_PATH:
+			// example: http://www.mydokeos.com/
+			$result = preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(WEB_PATH));
+			if (substr($result, -1) == '/') {
+				return $result;
+			} else {
+				return $result.'/';
+			}
+			break;
+
+		case SYS_SERVER_ROOT_PATH:
+			$result = preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(SYS_PATH));
+			if (substr($result, -1) == '/') {
+				return $result;
+			} else {
+				return $result.'/';
+			}
+			break;
+
 		case WEB_PATH :
-			// example: http://www.mydokeos.com/ or http://www.mydokeos.com/portal/ if you're using
+			// example: http://www.mydokeos.com/ or http://www.mydokeos.com/dokeos/ if you're using
 			// a subdirectory of your document root for Dokeos
 			if (substr($root_web,-1) == '/') {
 				return $root_web;
@@ -358,7 +387,7 @@ function api_get_path($path_type) {
 			break;
 
 		case SYS_PATH :
-			// example: /var/www/
+			// example: /var/www/dokeos/
 			if (substr($_configuration['root_sys'],-1) == '/') {
 				return $_configuration['root_sys'];
 			} else {
@@ -389,64 +418,79 @@ function api_get_path($path_type) {
 			// example: courses/ or dokeos/courses/
 			return api_get_path(REL_PATH).$_configuration['course_folder'];
 			break;
+
 		case REL_CODE_PATH :
 			// example: main/ or dokeos/main/
 			return api_get_path(REL_PATH).$_configuration['code_append'];
 			break;
+
 		case WEB_CODE_PATH :
 			// example: http://www.mydokeos.com/main/
 			//return $GLOBALS['clarolineRepositoryWeb']; // this was changed
 			return $root_web.$_configuration['code_append'];
 			break;
+
 		case SYS_CODE_PATH :
 			// example: /var/www/dokeos/main/
 			return $GLOBALS['clarolineRepositorySys'];
 			break;
+
 		case SYS_LANG_PATH :
 			// example: /var/www/dokeos/main/lang/
 			return api_get_path(SYS_CODE_PATH).'lang/';
 			break;
+
 		case WEB_IMG_PATH :
 			// example: http://www.mydokeos.com/main/img/
 			return api_get_path(WEB_CODE_PATH).'img/';
 			break;
+
 		case GARBAGE_PATH :
 			// example: /var/www/dokeos/main/garbage/
 			return $GLOBALS['garbageRepositorySys'];
 			break;
+
 		case SYS_PLUGIN_PATH :
 			// example: /var/www/dokeos/plugin/
 			return api_get_path(SYS_PATH).'plugin/';
 			break;
+
 		case WEB_PLUGIN_PATH :
 			// example: http://www.mydokeos.com/plugin/
 			return api_get_path(WEB_PATH).'plugin/';
 			break;
+
 		case SYS_ARCHIVE_PATH :
 			// example: /var/www/dokeos/archive/
 			return api_get_path(SYS_PATH).'archive/';
 			break;
-        case WEB_ARCHIVE_PATH :
-            // example: http://www.mydokeos.com/archive/
-            return api_get_path(WEB_PATH).'archive/';
-            break;
+
+		case WEB_ARCHIVE_PATH :
+			// example: http://www.mydokeos.com/archive/
+			return api_get_path(WEB_PATH).'archive/';
+			break;
+
 		case INCLUDE_PATH :
 			// Generated by main/inc/global.inc.php 
 			// example: /var/www/dokeos/main/inc/
 			return str_replace('\\', '/', $GLOBALS['includePath']).'/';
 			break;
+
 		case LIBRARY_PATH :
 			// example: /var/www/dokeos/main/inc/lib/
 			return api_get_path(INCLUDE_PATH).'lib/';
 			break;
+
 		case WEB_LIBRARY_PATH :
 			// example: http://www.mydokeos.com/main/inc/lib/
 			return api_get_path(WEB_CODE_PATH).'inc/lib/';
 			break;
+
 		case CONFIGURATION_PATH :
 			// example: /var/www/dokeos/main/inc/conf/
 			return api_get_path(INCLUDE_PATH).'conf/';
 			break;
+
 		default :
 			return;
 			break;

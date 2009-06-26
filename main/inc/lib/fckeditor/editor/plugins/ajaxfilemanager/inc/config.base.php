@@ -177,21 +177,12 @@
 		 *   4. run it via http://www.domain-name.com/document_root.php or http://localhost/docuent_root.php if localhost computer, the url has to be exactly like that 
 		 *   5. the value shown on the screen is CONFIG_WEBSITE_DOCUMENT_ROOT should be
 		 *   6. enjoy it
-
-		        
 		 * 		
 		 */
 		
-	// Modified by Ivan Tcholakov.
+	// Modified by Ivan Tcholakov, JUN-2009.
 	//define('CONFIG_WEBSITE_DOCUMENT_ROOT', '');
-	if (preg_match('@'.api_get_path(REL_PATH).'$@', api_get_path(SYS_PATH))) // Sanity check.
-	{
-		define('CONFIG_WEBSITE_DOCUMENT_ROOT', preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(SYS_PATH)));
-	}
-	else
-	{
-		define('CONFIG_WEBSITE_DOCUMENT_ROOT', ''); // Let the ajaxfilemanager try alone to find the document root.
-	}
+	define('CONFIG_WEBSITE_DOCUMENT_ROOT', rtrim(api_get_path(SYS_SERVER_ROOT_PATH), '/'));
 
 	//theme related setting
 			/*

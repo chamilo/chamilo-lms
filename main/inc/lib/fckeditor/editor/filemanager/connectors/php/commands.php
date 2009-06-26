@@ -200,7 +200,7 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 
 		// Get the uploaded file name.
 		$sFileName = $oFile['name'] ;
-		$sFileName = SanitizeFileName( $sFileName ) ;
+		$sFileName = SanitizeFileName( $sFileName, $oFile['type'] ) ;
 
 		$sOriginalFileName = $sFileName ;
 

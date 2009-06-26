@@ -282,18 +282,28 @@ function SanitizeFolderName( $sNewFolderName )
 }
 
 // Do a cleanup of the file name to avoid possible problems
-function SanitizeFileName( $sNewFileName )
+function SanitizeFileName( $sNewFileName, $sMimeType = null )
 {
 	global $Config ;
 
-	$sNewFileName = stripslashes( $sNewFileName ) ;
+	if ( empty( $sMimeType ) )
+	{
+		$sNewFileName = stripslashes( $sNewFileName ) ;
+	}
+	else
+	{
+		$sNewFileName = add_ext_on_mime( stripslashes( $sNewFileName ), $sMimeType );
+	}
 
 	// Replace dots in the name with underscores (only one dot can be there... security issue).
 	if ( $Config['ForceSingleExtension'] )
 		$sNewFileName = preg_replace( '/\\.(?![^.]*$)/', '_', $sNewFileName ) ;
 
 	// Remove \ / | : ? * " < >
-	$sNewFileName = preg_replace( '/\\\\|\\/|\\||\\:|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFileName ) ;
+	//$sNewFileName = preg_replace( '/\\\\|\\/|\\||\\:|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFileName ) ;
+	$sNewFileName = replace_dangerous_char( $sNewFileName, 'strict' ) ;
+
+	$sNewFileName = php2phps( $sNewFileName ) ;
 
 	return $sNewFileName ;
 }

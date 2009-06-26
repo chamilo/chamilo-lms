@@ -42,13 +42,13 @@ $Config['Enabled'] = true ;
 
 
 // Path to user files relative to the document root.
-//$Config['UserFilesPath'] = '/userfiles/' ;
+$Config['UserFilesPath'] = $_GET['ServerPath'] ;
 
 // Fill the following value it you prefer to specify the absolute path for the
 // user files directory. Useful if you are using a virtual directory, symbolic
 // link or alias. Examples: 'C:\\MySite\\userfiles\\' or '/root/mysite/userfiles/'.
 // Attention: The above 'UserFilesPath' must point to the same directory.
-$Config['UserFilesAbsolutePath'] = '' ;
+$Config['UserFilesAbsolutePath'] = rtrim(api_get_path(SYS_SERVER_ROOT_PATH), '/') . $Config['UserFilesPath'] ;
 
 // Due to security issues with Apache modules, it is recommended to leave the
 // following setting enabled.
@@ -62,24 +62,21 @@ $Config['SecureImageUploads'] = true;
 $Config['ConfigAllowedCommands'] = array('QuickUpload', 'FileUpload', 'GetFolders', 'GetFoldersAndFiles', 'CreateFolder') ;
 
 // Allowed Resource Types.
-//$Config['ConfigAllowedTypes'] = array('File', 'Image', 'Flash', 'Media') ;
-$Config['ConfigAllowedTypes'] = array('File', 'Audio', 'Images', 'Flash', 'Media', 'MP3', 'Video', 'Video/flv') ;  
+$Config['ConfigAllowedTypes'] = array('File', 'Audio', 'Images', 'Flash', 'Media', 'MP3', 'Video', 'Video/flv') ;
 
 // For security, HTML is allowed in the first Kb of data for files having the
 // following extensions only.
-$Config['HtmlExtensions'] = array("html", "htm", "xml", "xsd", "txt", "js") ;
+$Config['HtmlExtensions'] = array("html", "htm", "xhtml", "xml", "xsd", "txt", "js") ;
 
 // After file is uploaded, sometimes it is required to change its permissions
 // so that it was possible to access it at the later time.
 // If possible, it is recommended to set more restrictive permissions, like 0755.
 // Set to 0 to disable this feature.
 // Note: not needed on Windows-based servers.
-//$Config['ChmodOnUpload'] = 0777 ;
 $Config['ChmodOnUpload'] = $permissions_for_new_files ;
 
 // See comments above.
 // Used when creating folders that does not exist.
-//$Config['ChmodOnFolderCreate'] = 0777 ;
 $Config['ChmodOnFolderCreate'] = $permissions_for_new_directories ;
 
 /*
@@ -134,64 +131,64 @@ $Config['ChmodOnFolderCreate'] = $permissions_for_new_directories ;
 
 */
 
-// TODO: Dokeos system's balck and white lists have to be taken into account here.
 
 // Files
-$Config['AllowedExtensions']['File']	= array('7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip') ;
-$Config['DeniedExtensions']['File']		= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
+$Config['AllowedExtensions']['File']			= array('7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip') ;
+$Config['DeniedExtensions']['File']				= array('php', 'php3', 'php4', 'php5', 'phtml', 'asp', 'aspx', 'ascx', 'jsp', 'cfm', 'cfc', 'pl', 'bat', 'exe', 'dll', 'reg', 'cgi') ;
+$Config['FileTypesPath']['File']				= $Config['UserFilesPath'] ;
+$Config['FileTypesAbsolutePath']['File']		= $Config['UserFilesAbsolutePath'] ;
+$Config['QuickUploadPath']['File']				= $Config['UserFilesPath'] ;
+$Config['QuickUploadAbsolutePath']['File']		= $Config['UserFilesAbsolutePath'] ;
 
 // Audio (MP3 is an alias)
-$Config['AllowedExtensions']['Audio']	= array('mp3') ;
-$Config['DeniedExtensions']['Audio']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
-
+$Config['AllowedExtensions']['Audio']			= array('mp3') ;
+$Config['DeniedExtensions']['Audio']			= $Config['DeniedExtensions']['File'] ;
+$Config['DeniedExtensions']['Audio']			= array() ;
+$Config['FileTypesPath']['Audio']				= $Config['UserFilesPath'] . 'audio/' ;
+$Config['FileTypesAbsolutePath']['Audio']		= $Config['UserFilesAbsolutePath'] . 'audio/' ;
+$Config['QuickUploadPath']['Audio']				= $Config['UserFilesPath'] . 'audio/' ;
+$Config['QuickUploadAbsolutePath']['Audio']		= $Config['UserFilesAbsolutePath'] . 'audio/' ;
 
 // Images
-$Config['AllowedExtensions']['Images']	= array('jpg','gif','jpeg','png') ;
-$Config['DeniedExtensions']['Images']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
+$Config['AllowedExtensions']['Images']			= array('bmp', 'gif', 'jpg', 'jpeg', 'png') ;
+$Config['DeniedExtensions']['Images']			= $Config['DeniedExtensions']['File'] ;
+$Config['FileTypesPath']['Images']				= $Config['UserFilesPath'] . 'images/' ;
+$Config['FileTypesAbsolutePath']['Images']		= $Config['UserFilesAbsolutePath'] . 'images/' ;
+$Config['QuickUploadPath']['Images']			= $Config['UserFilesPath'] . 'images/' ;
+$Config['QuickUploadAbsolutePath']['Images']	= $Config['UserFilesAbsolutePath'] . 'images/' ;
 
 // Flash
-$Config['AllowedExtensions']['Flash']	= array('swf') ;
-$Config['DeniedExtensions']['Flash']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
+$Config['AllowedExtensions']['Flash']			= array('swf') ;
+$Config['DeniedExtensions']['Flash']			= $Config['DeniedExtensions']['File'] ;
+$Config['FileTypesPath']['Flash']				= $Config['UserFilesPath'] . 'flash/' ;
+$Config['FileTypesAbsolutePath']['Flash']		= $Config['UserFilesAbsolutePath'] . 'flash/' ;
+$Config['QuickUploadPath']['Flash']				= $Config['UserFilesPath'] . 'flash/' ;
+$Config['QuickUploadAbsolutePath']['Flash']		= $Config['UserFilesAbsolutePath'] . 'flash/' ;
 
 // MP3 (audio)
-$Config['AllowedExtensions']['MP3']	= array('mp3') ;
-$Config['DeniedExtensions']['MP3']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
+$Config['AllowedExtensions']['MP3']				= $Config['AllowedExtensions']['Audio'] ;
+$Config['DeniedExtensions']['MP3']				= $Config['DeniedExtensions']['Audio'] ;
+$Config['FileTypesPath']['MP3']					= $Config['FileTypesPath']['Audio'] ;
+$Config['FileTypesAbsolutePath']['MP3']			= $Config['FileTypesAbsolutePath']['Audio'] ;
+$Config['QuickUploadPath']['MP3']				= $Config['QuickUploadPath']['Audio'] ;
+$Config['QuickUploadAbsolutePath']['MP3']		= $Config['QuickUploadAbsolutePath']['Audio'] ;
 
 // Video
-$Config['AllowedExtensions']['Video']	= array('avi','mpg','mpeg','mp4','mov','wmv','asf') ;
-$Config['DeniedExtensions']['Video']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
+$Config['AllowedExtensions']['Video']			= array('asf', 'avi', 'mpg', 'mpeg', 'mp4', 'mov', 'wmv') ;
+$Config['DeniedExtensions']['Video']			= $Config['DeniedExtensions']['File'] ;
+$Config['FileTypesPath']['Video']				= $Config['UserFilesPath'] . 'video/' ;
+$Config['FileTypesAbsolutePath']['Video']		= $Config['UserFilesAbsolutePath'] . 'video/' ;
+$Config['QuickUploadPath']['Video']				= $Config['UserFilesPath'] . 'video/' ;
+$Config['QuickUploadAbsolutePath']['Video']		= $Config['UserFilesAbsolutePath'] . 'video/' ;
 
 // Video/flv
-$Config['AllowedExtensions']['Video/flv']	= array('flv','mp4') ;
-$Config['DeniedExtensions']['Video/flv']	= array('php','php3','php4','php5','phtml','asp','aspx','ascx','jsp','cfm','cfc','pl','bat','exe','dll','reg','cgi') ;
+$Config['AllowedExtensions']['Video/flv']		= array('flv', 'mp4' ) ;
+$Config['DeniedExtensions']['Video/flv']		= $Config['DeniedExtensions']['File'] ;
+$Config['FileTypesPath']['Video/flv']			= $Config['UserFilesPath'] . 'video/flv/' ;
+$Config['FileTypesAbsolutePath']['Video/flv']	= $Config['UserFilesAbsolutePath'] . 'video/flv/' ;
+$Config['QuickUploadPath']['Video/flv']			= $Config['UserFilesPath'] . 'video/flv/' ;
+$Config['QuickUploadAbsolutePath']['Video/flv']	= $Config['UserFilesAbsolutePath'] . 'video/flv/' ;
 
-/*
-$Config['AllowedExtensions']['File']	= array('7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip') ;
-$Config['DeniedExtensions']['File']		= array() ;
-$Config['FileTypesPath']['File']		= $Config['UserFilesPath'] . 'file/' ;
-$Config['FileTypesAbsolutePath']['File']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'file/' ;
-$Config['QuickUploadPath']['File']		= $Config['UserFilesPath'] ;
-$Config['QuickUploadAbsolutePath']['File']= $Config['UserFilesAbsolutePath'] ;
+// TODO: Dokeos system's balck and white lists have to be taken into account here.
 
-$Config['AllowedExtensions']['Image']	= array('bmp','gif','jpeg','jpg','png') ;
-$Config['DeniedExtensions']['Image']	= array() ;
-$Config['FileTypesPath']['Image']		= $Config['UserFilesPath'] . 'image/' ;
-$Config['FileTypesAbsolutePath']['Image']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'image/' ;
-$Config['QuickUploadPath']['Image']		= $Config['UserFilesPath'] ;
-$Config['QuickUploadAbsolutePath']['Image']= $Config['UserFilesAbsolutePath'] ;
-
-$Config['AllowedExtensions']['Flash']	= array('swf','flv') ;
-$Config['DeniedExtensions']['Flash']	= array() ;
-$Config['FileTypesPath']['Flash']		= $Config['UserFilesPath'] . 'flash/' ;
-$Config['FileTypesAbsolutePath']['Flash']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'flash/' ;
-$Config['QuickUploadPath']['Flash']		= $Config['UserFilesPath'] ;
-$Config['QuickUploadAbsolutePath']['Flash']= $Config['UserFilesAbsolutePath'] ;
-
-$Config['AllowedExtensions']['Media']	= array('aiff', 'asf', 'avi', 'bmp', 'fla', 'flv', 'gif', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'png', 'qt', 'ram', 'rm', 'rmi', 'rmvb', 'swf', 'tif', 'tiff', 'wav', 'wma', 'wmv') ;
-$Config['DeniedExtensions']['Media']	= array() ;
-$Config['FileTypesPath']['Media']		= $Config['UserFilesPath'] . 'media/' ;
-$Config['FileTypesAbsolutePath']['Media']= ($Config['UserFilesAbsolutePath'] == '') ? '' : $Config['UserFilesAbsolutePath'].'media/' ;
-$Config['QuickUploadPath']['Media']		= $Config['UserFilesPath'] ;
-$Config['QuickUploadAbsolutePath']['Media']= $Config['UserFilesAbsolutePath'] ;
-*/
 ?>

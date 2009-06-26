@@ -411,32 +411,15 @@ if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recen
 	
 	//menu show page
 	echo '<a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('showpage').'>'.Display::display_icon('lp_document.png',get_lang('ShowThisPage')).' '.get_lang('Page').'</a>';	
-	
-	//menu edit page
-	if ($_clean['group_id'])
-	{
-		echo '<a href="index.php?cidReq='.$_course[id].'&action=edit&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('edit').'>'.Display::display_icon('lp_quiz.png',get_lang('EditThisPage')).' '.get_lang('EditPage').'</a>';		
 
-	}
-	else
-	{
-		echo '<a href="index.php?cidReq='.$_course[id].'&action=edit&amp;title='.$page.'"'.is_active_navigation_tab('edit').'>'.Display::display_icon('lp_quiz.png',get_lang('EditThisPage')).' '.get_lang('EditPage').'</a>';
-	
-	}
+	//menu edit page
+	echo '<a href="index.php?cidReq='.$_course[id].'&action=edit&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('edit').'>'.Display::display_icon('lp_quiz.png',get_lang('EditThisPage')).' '.get_lang('EditPage').'</a>';
+
 	//menu discuss page
 	echo '<a href="index.php?action=discuss&amp;title='.$page.'"'.is_active_navigation_tab('discuss').'>'.Display::display_icon('comment_bubble.gif',get_lang('DiscussThisPage')).' '.get_lang('Discuss').'</a>';
 	
 	//menu history
-	if ($_clean['group_id']!=0)
-	{
-		echo '<a href="index.php?cidReq='.$_course[id].'&action=history&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('history').'>'.Display::display_icon('history.gif',get_lang('ShowPageHistory')).' '.get_lang('History').'</a>';
-
-	}
-	else
-	{
-		echo '<a href="index.php?cidReq='.$_course[id].'&action=history&amp;title='.$page.'"'.is_active_navigation_tab('history').'>'.Display::display_icon('history.gif',get_lang('ShowPageHistory')).' '.get_lang('History').'</a>';
-	
-	}
+	echo '<a href="index.php?cidReq='.$_course[id].'&action=history&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('history').'>'.Display::display_icon('history.gif',get_lang('ShowPageHistory')).' '.get_lang('History').'</a>';
 	//menu linkspages
 	echo '<a href="index.php?action=links&amp;title='.$page.'"'.is_active_navigation_tab('links').'>'.Display::display_icon('lp_link.png',get_lang('ShowLinksPages')).' '.get_lang('LinksPages').'</a>';
 	

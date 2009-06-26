@@ -873,6 +873,13 @@ if ($_GET['action']=='orphaned')
 
 if ($_GET['action']=='delete')
 {
+
+	if(!$_GET['title'])
+	{
+		Display::display_error_message(get_lang('MustSelectPage'));
+		exit;
+	}	
+
 	echo '<div style="overflow:hidden">';
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{
@@ -979,11 +986,9 @@ if ($_GET['action']=='searchpages')
 
 if ($_GET['action']=='links')
 {
-
 	
 	if (!$_GET['title'])
 	{
-		echo '<div id="wikititle"> </div>';
 		Display::display_error_message(get_lang("MustSelectPage"));
     }
 	else
@@ -1138,12 +1143,18 @@ if (!$_GET['action'] OR $_GET['action']=='show' AND !isset($_POST['SaveWikiNew']
 	display_wiki_entry();
 }
 
-
 /////////////////////// show current page ///////////////////////
 
 if ($_GET['action']=='showpage' AND !isset($_POST['SaveWikiNew']))
 {    
-	display_wiki_entry();	
+	if($_GET['title'])
+	{
+		display_wiki_entry();
+	}
+	else
+	{
+		Display::display_error_message(get_lang('MustSelectPage'));
+	}	
 }
 
 
@@ -1161,18 +1172,20 @@ if ($_GET['action']=='edit')
 	
 	if ($row['content']=='' AND $row['title']=='' AND $page=='')
 	{
-		Display::display_error_message(get_lang('FirstSelectOnepage'));
+		Display::display_error_message(get_lang('MustSelectPage'));
 		exit;
 	}
 	elseif ($row['content']=='' AND $row['title']=='' AND $page=='index')
 	{
 		$content=sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH));
 		$title=get_lang('DefaultTitle');
+		$page_id=0;
 	}
 	else
 	{
 		$content=$row['content'];
 		$title=$row['title'];
+		$page_id=$row['page_id'];
 	}
 	echo '<div id="wikititle">';
 	echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.$title.'</div>';
@@ -1242,6 +1255,7 @@ if ($_GET['action']=='edit')
 
 				echo '<div id="wikicontent">'; 
 				echo '<form name="form1" method="post" action="'.api_get_self().'?action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
+				echo '<input type="hidden" name="page_id" value="'.$page_id.'">';
 				echo '<input type="hidden" name="reflink" value="'.$page.'">';
 				echo '<input type="hidden" name="title" value="'.stripslashes($title).'">'; 
 				
@@ -1289,6 +1303,12 @@ if ($_GET['action']=='edit')
 
 if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifferences']))
 {
+	if (!$_GET['title'])
+	{
+		Display::display_error_message(get_lang("MustSelectPage"));
+		exit;
+    }
+
 	echo '<div style="overflow:hidden">';
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
@@ -1551,9 +1571,9 @@ if ($_GET['action']=='recentchanges')
 		
 			$row = array ();
 			$row[] = $year.'-'.$month.'-'.$day.' '.$hours.':'.$minutes.":".$seconds;	
-			$row[] =$ShowAssignment;
+			$row[] = $ShowAssignment;
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&amp;view='.$obj->id.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
-			$row[] =$obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');	
+			$row[] = $obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');	
 			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
 			$rows[] = $row;
 		}
@@ -1628,7 +1648,13 @@ if ($_GET['action']=='allpages')
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($obj->title).'</a>';
 			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
 			$row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
-			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=edit&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/lp_quiz.png" title="'.get_lang('EditPage').'" alt="'.get_lang('EditPage').'" /></a>';				
+			
+			if(api_is_allowed_to_edit()|| api_is_platform_admin())
+			{
+				$showdelete=' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=delete&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/delete.gif" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'" />';
+			}			
+			
+			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=edit&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/lp_quiz.png" title="'.get_lang('EditPage').'" alt="'.get_lang('EditPage').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=discuss&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/comment_bubble.gif" title="'.get_lang('Discuss').'" alt="'.get_lang('Discuss').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=history&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/history.gif" title="'.get_lang('History').'" alt="'.get_lang('History').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=links&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/lp_link.png" title="'.get_lang('LinksPages').'" alt="'.get_lang('LinksPages').'" /></a>'.$showdelete;
 			$rows[] = $row;
 		}
 	
@@ -1638,7 +1664,7 @@ if ($_GET['action']=='allpages')
 		$table->set_header(1,get_lang('Title'), true);
 		$table->set_header(2,get_lang('Author'), true);
 		$table->set_header(3,get_lang('Date'), true);
-		$table->set_header(4,get_lang('Actions'), true, array ('style' => 'width:30px;'));	
+		$table->set_header(4,get_lang('Actions'), true, array ('style' => 'width:100px;'));	
 		$table->display();
 	}
 }
@@ -1648,7 +1674,12 @@ if ($_GET['action']=='allpages')
 
 if ($_GET['action']=='discuss')
 {
-
+	if (!$_GET['title'])
+	{
+		Display::display_error_message(get_lang("MustSelectPage"));
+		exit;
+    }
+	
 	//first extract the date of last version
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id DESC';
 	$result=api_sql_query($sql,__LINE__,__FILE__);
@@ -2235,7 +2266,7 @@ function save_wiki() {
 	// NOTE: visibility, visibility_disc and ratinglock_disc changes are not made here, but through the interce buttons
 	
 	// cleaning the variables
-
+	$_clean['page_id']=Database::escape_string($_POST['page_id']);
 	$_clean['reflink']=Database::escape_string(Security::remove_XSS($_POST['reflink']));
 	$_clean['title']=Database::escape_string(Security::remove_XSS($_POST['title']));
 	$_clean['content']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['content'])),COURSEMANAGERLOWSECURITY));
@@ -2243,8 +2274,7 @@ function save_wiki() {
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
     $_clean['comment']=Database::escape_string(Security::remove_XSS($_POST['comment']));	
     $_clean['progress']=Database::escape_string($_POST['progress']);	
-	$_clean['version']=Database::escape_string($_POST['version']);
-	$_clean['version']=$_clean['version']+1;//sum 1 here instead of adding in Database::escape_string($_POST['version']), to avoid failures in the sum when there is heavy use of the database
+	$_clean['version']=Database::escape_string($_POST['version'])+1;
 	$_clean['linksto'] = links_to($_clean['content']); //and check links content	
 	$dtime = date( "Y-m-d H:i:s" );
 
@@ -2257,10 +2287,17 @@ function save_wiki() {
  	   	$_clean['group_id']=Database::escape_string($_GET['group_id']);
     }
 	
-	$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
+	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
 	
 	$result=api_sql_query($sql);	
-    $Id = Database::insert_id();		
+    $Id = Database::insert_id();
+	
+	if ($_clean['page_id']	==0)   
+	{	    
+		$sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';		 	
+		api_sql_query($sql,__FILE__,__LINE__);
+	}
+				
 	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
 	
 	check_emailcue($_clean['reflink'], 'P', $dtime, $_clean['user_id']);
@@ -2327,6 +2364,7 @@ function save_new_wiki() {
 	global $charset;
 	global $tbl_wiki;
     global $assig_user_id; //need for assignments mode
+	
 	// cleaning the variables
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
 			
@@ -2386,7 +2424,11 @@ function save_new_wiki() {
 			$dtime = date( "Y-m-d H:i:s" );
 			$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
 		   $result=api_sql_query($sql,__LINE__,__FILE__);
-		   $Id = Database::insert_id();	
+		   $Id = Database::insert_id();
+		   
+		   $sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';		 	
+	       api_sql_query($sql,__FILE__,__LINE__);
+		   	
 		   api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
 		   check_emailcue(0, 'A');
 		   return get_lang('NewWikiSaved').' <a href="index.php?action=showpage&amp;title='.$_clean['reflink'].'&group_id='.$group_id.'">'.$_POST['title'].'</a>'; 

@@ -133,7 +133,7 @@ $Config['ChmodOnFolderCreate'] = $permissions_for_new_directories ;
 
 
 // Files
-$Config['AllowedExtensions']['File']			= array('7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'html', 'htm', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xhtml', 'xls', 'xml', 'zip') ;
+$Config['AllowedExtensions']['File']			= array('7z', 'aiff', 'asf', 'avi', 'bmp', 'csv', 'doc', 'fla', 'flv', 'gif', 'gz', 'gzip', 'jpeg', 'jpg', 'mid', 'mov', 'mp3', 'mp4', 'mpc', 'mpeg', 'mpg', 'ods', 'odt', 'pdf', 'png', 'ppt', 'pxd', 'qt', 'ram', 'rar', 'rm', 'rmi', 'rmvb', 'rtf', 'sdc', 'sitd', 'swf', 'sxc', 'sxw', 'tar', 'tgz', 'tif', 'tiff', 'txt', 'vsd', 'wav', 'wma', 'wmv', 'xls', 'xml', 'zip') ;
 $Config['DeniedExtensions']['File']				= array('php', 'php3', 'php4', 'php5', 'php6', 'phps', 'phtml', 'asp', 'aspx', 'ascx', 'jsp', 'cfm', 'cfc', 'pl', 'bat', 'exe', 'dll', 'reg', 'cgi') ;
 $Config['FileTypesPath']['File']				= $Config['UserFilesPath'] ;
 $Config['FileTypesAbsolutePath']['File']		= $Config['UserFilesAbsolutePath'] ;
@@ -188,7 +188,5 @@ $Config['FileTypesPath']['Video/flv']			= $Config['UserFilesPath'] . 'video/flv/
 $Config['FileTypesAbsolutePath']['Video/flv']	= $Config['UserFilesAbsolutePath'] . 'video/flv/' ;
 $Config['QuickUploadPath']['Video/flv']			= $Config['UserFilesPath'] . 'video/flv/' ;
 $Config['QuickUploadAbsolutePath']['Video/flv']	= $Config['UserFilesAbsolutePath'] . 'video/flv/' ;
-
-// TODO: Dokeos system's balck and white lists have to be taken into account here.
 
 ?>

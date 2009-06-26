@@ -223,6 +223,10 @@ function IsAllowedExt( $sExtension, $resourceType )
 	if ( count($arDenied) > 0 && in_array( $sExtension, $arDenied ) )
 		return false ;
 
+	// Adding a check using the Dokeos system's white or black list.
+	if ( !filter_extension( $sExtension ) )
+		return false ;
+
 	return true ;
 }
 

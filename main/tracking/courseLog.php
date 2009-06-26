@@ -21,15 +21,22 @@ $language_file[] = 'admin';
 $language_file[] = 'tracking';
 $language_file[] = 'scorm';
 
+// including the global Dokeos file
 require '../inc/global.inc.php';
+
+// the section (for the tabs)
+$this_section = "session_my_space";
+
+
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
 if (!$is_allowedToTrack) {
 	Display :: display_header(null);
 	api_not_allowed();
 	Display :: display_footer();
+	exit;
 }
-//includes for SCORM and LP
+// including additional libraries
 require_once '../newscorm/learnpath.class.php';
 require_once '../newscorm/learnpathItem.class.php';
 require_once '../newscorm/learnpathList.class.php';

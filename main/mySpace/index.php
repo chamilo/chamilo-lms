@@ -27,12 +27,20 @@
  */
 // name of the language file that needs to be included 
 $language_file = array ('registration', 'index','tracking');
+
+// resetting the course id
 $cidReset=true;
 
+// including the global Dokeos file
 require ('../inc/global.inc.php');
+
+// including additional libraries
 require (api_get_path(LIBRARY_PATH).'tracking.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
+
+// the section (for the tabs)
+$this_section = "session_my_space";
 
 ob_start();
 
@@ -40,7 +48,7 @@ $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $csv_content = array();
 
 $nameTools= get_lang("MySpace");
-$this_section = "session_my_space";
+
  
 // access control
 api_block_anonymous_users();

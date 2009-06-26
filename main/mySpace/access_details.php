@@ -33,102 +33,28 @@
 * @param string $course_code the course code
 *	Funzione scritta da Mario per testare cose 
 */
+
+// name of the language file that needs to be included 
 $language_file = array ('registration', 'index', 'tracking');
+
+// including the global Dokeos file
 require_once('../inc/global.inc.php');
 
+// including additional libraries
+include_once(api_get_path(LIBRARY_PATH).'pchart/pData.class.php');
+include_once(api_get_path(LIBRARY_PATH).'pchart/pChart.class.php');
+include_once(api_get_path(LIBRARY_PATH).'pchart/pCache.class.php');
 
-/**
- * Gets the connections to a course as an array of login and logout time
- */	 
-function get_connections_to_course($user_id, $course_code) {
-    $course_code = Database::escape_string($course_code);
-    
-    $tbl_track_course = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $tbl_main=Database::get_main_table(TABLE_MAIN_COURSE);
-    $sql_query='SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.$course_code.'";';
-    $result=api_sql_query($sql_query,__FILE__,__LINE__);
-    $row_query=Database::fetch_array($result,'ASSOC');
-    $course_true=isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
-
-    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . ' 
-    				WHERE user_id = ' . intval($user_id) . '
-    				AND course_code="' . $course_true . '" ORDER BY login_course_date ASC';
-
-    $rs = api_sql_query($sql);
-    $connections  = array();
-    
-    while ($a_connections = Database::fetch_array($rs)) {
-    
-        $s_login_date = $a_connections['login_course_date'];
-        $s_logout_date = $a_connections['logout_course_date'];
-        
-        $i_timestamp_login_date = strtotime($s_login_date);
-        $i_timestamp_logout_date = strtotime($s_logout_date);
-        
-        $connections[] = array('login'=>$i_timestamp_login_date, 'logout'=>$i_timestamp_logout_date);
-        
-    }
-    
-    return $connections;
-}
+// the section (for the tabs)
+$this_section = "session_my_space";
 
 
-function get_connections_to_course_by_time($user_id, $course_code, $year='', $month='', $day='') {
-    $course_code = Database::escape_string($course_code);    
-    $tbl_track_course = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $tbl_main=Database::get_main_table(TABLE_MAIN_COURSE);
-    $sql_query='SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.$course_code.'";';
-    $result=api_sql_query($sql_query,__FILE__,__LINE__);
-    $row_query=Database::fetch_array($result,'ASSOC');
-    $course_true=isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
-
-    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . ' 
-    				WHERE user_id = ' . intval($user_id) . '
-    				AND course_code="' . $course_true . '"    				 
-    				ORDER BY login_course_date DESC';
-    
-    $rs = api_sql_query($sql);
-    $connections  = array();    
-    while ($a_connections = Database::fetch_array($rs)) {    
-        $s_login_date = $a_connections['login_course_date'];
-        $s_logout_date = $a_connections['logout_course_date'];        
-        $i_timestamp_login_date = strtotime($s_login_date);
-        $i_timestamp_logout_date = strtotime($s_logout_date);        
-        $connections[] = array('login'=>$i_timestamp_login_date, 'logout'=>$i_timestamp_logout_date);        
-    }    
-    return $connections;
-}
-
-	
-/**
- * Transforms seconds into a time format
- */
-function calculHours($seconds)
-{	
-  //How many hours ?
-  $hours = floor($seconds / 3600);
-
-  //How many minutes ?
-  $min = floor(($seconds - ($hours * 3600)) / 60);
-  if ($min < 10)
-    $min = '0'.$min;
-
-  //How many seconds
-  $sec = $seconds - ($hours * 3600) - ($min * 60);
-  if ($sec < 10)
-    $sec = '0'.$sec;
-
-  return $hours.get_lang('HourShort').' '.$min.':'.$sec;
-
-}
 
 /* MAIN */
 $user_id = Security::remove_XSS($_REQUEST['student']);
 $course_code=Security::remove_XSS($_REQUEST['course']);
 
-include_once(api_get_path(LIBRARY_PATH).'pchart/pData.class.php');
-include_once(api_get_path(LIBRARY_PATH).'pchart/pChart.class.php');
-include_once(api_get_path(LIBRARY_PATH).'pchart/pCache.class.php');
+
 $connections = get_connections_to_course($user_id, $course_code);	
 if (api_is_xml_http_request()) {
 	$type  = Security::remove_XSS($_GET['type']);	
@@ -320,4 +246,113 @@ foreach ($connections as $key=>$data)
 echo ("</table>");
 */
 Display:: display_footer();
+
+
+/*
+-----------------------------------------------------------
+	Functions
+-----------------------------------------------------------
+*/
+
+/**
+ * Gets the connections to a course as an array of login and logout time
+ *
+ * @param unknown_type $user_id
+ * @param unknown_type $course_code
+ * @return unknown
+ */
+function get_connections_to_course($user_id, $course_code) {
+	// Database table definitions
+    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $tbl_main			= Database :: get_main_table(TABLE_MAIN_COURSE);
+    
+    $sql_query='SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database::escape_string($course_code).'";';
+    $result=api_sql_query($sql_query,__FILE__,__LINE__);
+    $row_query=Database::fetch_array($result,'ASSOC');
+    $course_true=isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
+
+    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . ' 
+    				WHERE user_id = ' . intval($user_id) . '
+    				AND course_code="' . Database::escape_string($course_true) . '" ORDER BY login_course_date ASC';
+
+    $rs = api_sql_query($sql);
+    $connections  = array();
+    
+    while ($a_connections = Database::fetch_array($rs)) {
+    
+        $s_login_date = $a_connections['login_course_date'];
+        $s_logout_date = $a_connections['logout_course_date'];
+        
+        $i_timestamp_login_date = strtotime($s_login_date);
+        $i_timestamp_logout_date = strtotime($s_logout_date);
+        
+        $connections[] = array('login'=>$i_timestamp_login_date, 'logout'=>$i_timestamp_logout_date);
+        
+    }
+    
+    return $connections;
+}
+
+/**
+ * Enter description here...
+ *
+ * @param unknown_type $user_id
+ * @param unknown_type $course_code
+ * @param unknown_type $year
+ * @param unknown_type $month
+ * @param unknown_type $day
+ * @return unknown
+ */
+function get_connections_to_course_by_time($user_id, $course_code, $year='', $month='', $day='') {
+	// Database table definitions
+    $tbl_track_course 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $tbl_main				= Database :: get_main_table(TABLE_MAIN_COURSE);
+    
+    $sql_query='SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database :: escape_string($course_code).'";';
+    $result=api_sql_query($sql_query,__FILE__,__LINE__);
+    $row_query=Database::fetch_array($result,'ASSOC');
+    $course_true=isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
+
+    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . ' 
+    				WHERE user_id = ' . intval($user_id) . '
+    				AND course_code="' . Database::escape_string($course_true) . '"    				 
+    				ORDER BY login_course_date DESC';
+    
+    $rs = api_sql_query($sql);
+    $connections  = array();    
+    while ($a_connections = Database::fetch_array($rs)) {    
+        $s_login_date 				= $a_connections['login_course_date'];
+        $s_logout_date 				= $a_connections['logout_course_date'];        
+        $i_timestamp_login_date 	= strtotime($s_login_date);
+        $i_timestamp_logout_date 	= strtotime($s_logout_date);        
+        $connections[] = array('login'=>$i_timestamp_login_date, 'logout'=>$i_timestamp_logout_date);        
+    }    
+    return $connections;
+}
+
+	
+/**
+ * Transforms seconds into a time format
+ *
+ * @param unknown_type $seconds
+ * @return unknown
+ */
+function calculHours($seconds)
+{	
+  //How many hours ?
+  $hours = floor($seconds / 3600);
+
+  //How many minutes ?
+  $min = floor(($seconds - ($hours * 3600)) / 60);
+  if ($min < 10)
+    $min = '0'.$min;
+
+  //How many seconds
+  $sec = $seconds - ($hours * 3600) - ($min * 60);
+  if ($sec < 10)
+    $sec = '0'.$sec;
+
+  return $hours.get_lang('HourShort').' '.$min.':'.$sec;
+
+}
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 21097 2009-05-29 21:36:26Z juliomontoya $
+<?php // $Id: userLog.php 21626 2009-06-26 12:19:41Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,23 +36,20 @@
 */
 $uInfo = $_REQUEST['uInfo'];
 $view  = $_REQUEST['view'];
+
 // name of the language file that needs to be included 
 $language_file = 'tracking';
 
+// including the global Dokeos file
 include('../inc/global.inc.php');
 
-// Roles and rights system
+// the section (for the tabs)
+$this_section = "session_my_space";
+
+// variables
 $user_id = api_get_user_id();
 $course_id = api_get_course_id();
 
-/*
-$role_id = RolesRights::get_local_user_role_id($user_id, $course_id);
-$location_id = RolesRights::get_course_tool_location_id($course_id, TOOL_TRACKING);
-$is_allowed = RolesRights::is_allowed_which_rights($role_id, $location_id);
-
-//block users without view right
-RolesRights::protect_location($role_id, $location_id);
-*/
 //YW Hack security to quick fix RolesRights bug
 $is_allowed = true;
 /*

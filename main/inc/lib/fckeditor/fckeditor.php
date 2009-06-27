@@ -33,6 +33,23 @@
  *
  * @return boolean
  */
+
+// Configuration constants.
+
+// For debugging purposes the editor may run using original source version of its javascripts, not "compressed" versions.
+// Change the value to true for this case.
+define ( 'RUN_EDITOR_USING_ORIGINAL_SOURCE', false ) ;
+
+// The MimeTeX plugin support, a check whether the server executable file has been installed.
+define ( 'CHECK_MIMETEX_PLUGIN_INSTALLED', true ) ; // Change to false in case of unexpected problems. Then installed state will be assumed.
+define ( 'CHECK_MIMETEX_PLUGIN_INSTALLED_TIMEOUT', 0.05 ) ; // Response timeout in seconds. Keep this value as low as possible on Windows servers.
+define ( 'CHECK_MIMETEX_PLUGIN_INSTALLED_URL_BASE', // This setting is about how to check mimetex executable presense. Possible values: 'ip' and 'domain_name'
+	IS_WINDOWS_OS
+	? 'ip'				// http://127.0.0.1/mimetex.exe will be checked for presense,
+						// this is a preferable setting for Windows Vista, because its firewall does not block this address by default.
+	: 'domain_name'		// http://www.mydokeos.com/mimetex.cgi will be checked for presense. If DNS has problems (if it is slow for example). try using the 'ip' setting.
+) ;
+
 function FCKeditor_IsCompatibleBrowser()
 {
 	if ( isset( $_SERVER ) ) {
@@ -421,43 +438,30 @@ class FCKeditor
 		$this->Config['UserIsCourseAdmin'] = api_is_allowed_to_edit() ? true : false;
 		$this->Config['UserIsPlatformAdmin'] = api_is_platform_admin() ? true : false;
 
-
 		// The MimeTeX plugin support.
-
-		$check_mimetex_installed = true; // Change to false in case of unexpected problems. The installed state will be assumed.
-		$check_mimetex_timeout = 0.05; // In seconds. Keep this value as low as possible on Windows servers.
-		//----------------------------------------------------------------------------------------------------------------------
-
-    	static $is_mimetex_installed = null;
-		$server_base = explode('/', api_get_path(WEB_PATH));
-        $server_base_ip = $server_base[0].'/'.$server_base[1].'/127.0.0.1/'; // To avoid problems on Windows Vista.
-		$server_base = $server_base[0].'/'.$server_base[1].'/'.$server_base[2].'/';
-		if (IS_WINDOWS_OS)
+    	static $is_mimetex_installed = null ;
+		$server_base = explode( '/', api_get_path( WEB_PATH ) ) ;
+		$server_base_ip = $server_base[0] . '/' . $server_base[1] . '/127.0.0.1' ;
+		$server_base = $server_base[0]. '/' . $server_base[1]. '/' . $server_base[2] ;
+		$url_relative = '/cgi-bin/mimetex' . ( IS_WINDOWS_OS ? '.exe' : '.cgi' ) ;
+		$this->Config['MimetexUrl'] = $server_base . $url_relative ;
+		if ( CHECK_MIMETEX_PLUGIN_INSTALLED )
 		{
-			$this->Config['MimetexUrl'] = $server_base.'cgi-bin/mimetex.exe';
-			$check_mimetex_url = $server_base_ip.'cgi-bin/mimetex.exe';
-		}
-		else
-		{
-            $this->Config['MimetexUrl'] = $server_base.'cgi-bin/mimetex.cgi';
-			$check_mimetex_url = $server_base.'cgi-bin/mimetex.cgi';
-		}
-		if ($check_mimetex_installed)
-		{
-			if (!isset($is_mimetex_installed))
+			if ( !isset( $is_mimetex_installed ) )
 			{
-                $this->Config['IsMimetexInstalled'] = $this->url_exists($check_mimetex_url.'?'.rand(), $check_mimetex_timeout);
+				$check_mimetex_url = ( CHECK_MIMETEX_PLUGIN_INSTALLED_URL_BASE == 'ip' ? $server_base_ip : $server_base ) . $url_relative . '?' . rand() ;
+				$this->Config['IsMimetexInstalled'] = $this->url_exists( $check_mimetex_url, CHECK_MIMETEX_PLUGIN_INSTALLED_TIMEOUT ) ;
 			}
 			else
 			{
-				$this->Config['IsMimetexInstalled'] = $is_mimetex_installed;
+				$this->Config['IsMimetexInstalled'] = $is_mimetex_installed ;
 			}
 		}
 		else
 		{
-			$this->Config['IsMimetexInstalled'] = true;
+			$this->Config['IsMimetexInstalled'] = true ;
 		}
-		$is_mimetex_installed = $this->Config['IsMimetexInstalled'];
+		$is_mimetex_installed = $this->Config['IsMimetexInstalled'] ;
 
 
 		/*
@@ -470,7 +474,7 @@ class FCKeditor
 
 		if ( $this->IsCompatible() )
 		{
-			if ( isset( $_GET['fcksource'] ) && $_GET['fcksource'] == "true" )
+			if ( RUN_EDITOR_USING_ORIGINAL_SOURCE )
 				$File = 'fckeditor.original.html' ;
 			else
 				$File = 'fckeditor.html' ;

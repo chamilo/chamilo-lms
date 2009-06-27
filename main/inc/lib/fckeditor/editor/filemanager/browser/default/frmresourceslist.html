@@ -108,7 +108,7 @@ function OpenFolder( folderPath )
 
 function OpenFile( fileUrl )
 {
-	window.top.opener.SetUrl( encodeURI( fileUrl ).replace( '#', '%23' ) ) ;
+	window.top.opener.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
 	window.top.close() ;
 	window.top.opener.focus() ;
 }

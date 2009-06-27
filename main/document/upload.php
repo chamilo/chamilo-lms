@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 21563 2009-06-22 10:49:59Z ivantcholakov $
+<?php // $Id: upload.php 21653 2009-06-27 20:12:55Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -180,7 +180,7 @@ $noPHP_SELF=true;
 if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='') //if the group id is set, check if the user has the right to be here
 {
 	//needed for group related stuff
-	include_once(api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php');
+	require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 	//get group info
 	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
 	$noPHP_SELF=true;
@@ -234,7 +234,7 @@ if($to_group_id!=0 && $path=='/')
 //if we want to unzip a file, we need the library
 if (isset($_POST['unzip']) && $_POST['unzip'] == 1)
 {
-	include(api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
+	require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 }
 
 // variables

@@ -59,18 +59,9 @@ function FindBadUtf8( $string )
 
 function ConvertToXmlAttribute( $value )
 {
-	if ( defined( 'PHP_OS' ) )
+	if ( IS_WINDOWS_OS || FindBadUtf8( $value ) )
 	{
-		$os = PHP_OS ;
-	}
-	else
-	{
-		$os = php_uname() ;
-	}
-
-	if ( strtoupper( substr( $os, 0, 3 ) ) === 'WIN' || FindBadUtf8( $value ) )
-	{
-		return ( utf8_encode( htmlspecialchars( $value ) ) ) ;
+		return ( api_utf8_encode( htmlspecialchars( $value ) ) ) ;
 	}
 	else
 	{

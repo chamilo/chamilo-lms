@@ -432,15 +432,7 @@ class FCKeditor
 		$server_base = explode('/', api_get_path(WEB_PATH));
         $server_base_ip = $server_base[0].'/'.$server_base[1].'/127.0.0.1/'; // To avoid problems on Windows Vista.
 		$server_base = $server_base[0].'/'.$server_base[1].'/'.$server_base[2].'/';
-		if (defined('PHP_OS'))
-		{
-			$os = PHP_OS;
-		}
-		else
-		{
-			$os = php_uname();
-		}
-		if (strtoupper(substr($os, 0, 3 )) === 'WIN')
+		if (IS_WINDOWS_OS)
 		{
 			$this->Config['MimetexUrl'] = $server_base.'cgi-bin/mimetex.exe';
 			$check_mimetex_url = $server_base_ip.'cgi-bin/mimetex.exe';

@@ -1,4 +1,4 @@
-<?php // $Id: reporting.php 21034 2009-05-28 11:45:43Z pcool $
+<?php // $Id: reporting.php 21652 2009-06-27 17:07:35Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,7 +26,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 21034 2009-05-28 11:45:43Z pcool $
+* 	@version $Id: reporting.php 21652 2009-06-27 17:07:35Z herodoto $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -167,10 +167,10 @@ echo '</div>';
 // content
 if (!$_GET['action'] OR $_GET['action'] == 'overview') {
 	$myweb_survey_id = $survey_id;
-	echo '<div class="sectiontitle"><a href="reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_question.gif').' '.get_lang('DetailedReportByQuestion').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByQuestionDetail').' </div>';
-	echo '<div class="sectiontitle"><a href="reporting.php?action=userreport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_user.gif').' '.get_lang('DetailedReportByUser').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByUserDetail').'.</div>';
-	echo '<div class="sectiontitle"><a href="reporting.php?action=comparativereport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_comparative.gif').' '.get_lang('ComparativeReport').'</a></div><div class="sectioncomment">'.get_lang('ComparativeReportDetail').'.</div>';
-	echo '<div class="sectiontitle"><a href="reporting.php?action=completereport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_complete.gif').' '.get_lang('CompleteReport').'</a></div><div class="sectioncomment">'.get_lang('CompleteReportDetail').'</div>';
+	echo '<div class="sectiontitle"><a href="reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_question.gif',get_lang('DetailedReportByQuestion')).' '.get_lang('DetailedReportByQuestion').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByQuestionDetail').' </div>';
+	echo '<div class="sectiontitle"><a href="reporting.php?action=userreport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_user.gif',get_lang('DetailedReportByUser')).' '.get_lang('DetailedReportByUser').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByUserDetail').'.</div>';
+	echo '<div class="sectiontitle"><a href="reporting.php?action=comparativereport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_comparative.gif',get_lang('ComparativeReport')).' '.get_lang('ComparativeReport').'</a></div><div class="sectioncomment">'.get_lang('ComparativeReportDetail').'.</div>';
+	echo '<div class="sectiontitle"><a href="reporting.php?action=completereport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_complete.gif',get_lang('CompleteReport')).' '.get_lang('CompleteReport').'</a></div><div class="sectioncomment">'.get_lang('CompleteReportDetail').'</div>';
 }
 
 

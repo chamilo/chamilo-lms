@@ -153,7 +153,7 @@
 	define('CONFIG_OVERWRITTEN', false); //overwirte when processing paste
 	define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,png,bmp,tif,psd,zip,sit,rar,gz,tar,htm,html,mov,mpg,avi,asf,mpeg,wmv,aif,aiff,wav,mp3,swf, flv, mp4, aac, ppt,rtf,doc, pdf,xls,txt,flv,odt,ods,odp,odg,odc,odf,odb,odi,pps,docx,pptx,xlsx,accdb,xml');//For Dokeos updated
 	define("CONFIG_VIEWABLE_VALID_EXTS", 'gif,bmp,txt,jpg,png,tif,html,htm,mp3, wav,wmv,wma,rm,rmvb,mov,swf,flv,mp4,aac,avi,mpg,mpeg,asf');//For Dokeos updated
-	define('CONFIG_UPLOAD_INVALID_EXTS', 'php,jar,sh,cgi,js,exe,com,bat,pif,scr,msi,ws,wsc,wsf,vb,vbe,vbs,reg,dll'); //For Dokeos added.
+	define('CONFIG_UPLOAD_INVALID_EXTS', 'php,php3,php4,php5,php6,phps,phtml,asp,aspx,jsp,cfm,cfc,pl,jar,sh,cgi,js,exe,com,bat,pif,scr,msi,ws,wsc,wsf,vb,vbe,vbs,reg,dll'); //For Dokeos added.
 	//Preview
 	define('CONFIG_IMG_THUMBNAIL_MAX_X', 100);
 	define('CONFIG_IMG_THUMBNAIL_MAX_Y', 100);

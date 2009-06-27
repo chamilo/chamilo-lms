@@ -127,26 +127,26 @@ EOM;
 */
 session_start();
 // Including necessary files
-@include('../inc/installedVersion.inc.php');
-require('../inc/lib/main_api.lib.php');
+@include '../inc/installedVersion.inc.php';
+require '../inc/lib/main_api.lib.php';
 
-require('../lang/english/trad4all.inc.php');
-require('../lang/english/install.inc.php');
+require '../lang/english/trad4all.inc.php';
+require '../lang/english/install.inc.php';
 
 if (!empty($_POST['language_list']))
 {
 	$search = array('../','\\0');
 	$install_language = str_replace($search,'',urldecode($_POST['language_list']));
 	if(!is_dir('../lang/'.$install_language)){$install_language = 'english';}
-	include_once("../lang/$install_language/trad4all.inc.php");
-	include_once("../lang/$install_language/install.inc.php");
+	include_once "../lang/$install_language/trad4all.inc.php";
+	include_once "../lang/$install_language/install.inc.php";
 	api_session_register('install_language');
 }
 elseif ( isset($_SESSION['install_language']) && $_SESSION['install_language'] )
 {
 	$install_language = $_SESSION['install_language'];
-	include_once("../lang/$install_language/trad4all.inc.php");
-	include_once("../lang/$install_language/install.inc.php");
+	include_once "../lang/$install_language/trad4all.inc.php";
+	include_once "../lang/$install_language/install.inc.php";
 }
 
 // These global variables must be set for proper working of the function get_lang(...) during the installation.
@@ -180,8 +180,8 @@ if (isset($install_language))
 header('Content-Type: text/html; charset='. $charset);
 api_set_default_encoding($charset); // Initialization of the default encoding that will be used by the string routines.
 
-require_once('install_upgrade.lib.php'); //also defines constants
-require_once('install_functions.inc.php');
+require_once 'install_upgrade.lib.php'; //also defines constants
+require_once 'install_functions.inc.php';
 
 // Some constants
 define('DOKEOS_INSTALL',1);
@@ -224,6 +224,17 @@ $new_version_stable = true;
 		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT
 ==============================================================================
 */
+
+//Is valid request
+$is_valid_request=$_REQUEST['is_executable'];
+foreach ($_POST as $request_index=>$request_value) {
+	if (substr($request_index,0,4)=='step') {
+		if ($request_index<>$is_valid_request) {
+			unset($_POST[$request_index]);
+		}
+	}
+}
+
 $badUpdatePath=false;
 $emptyUpdatePath=true;
 $proposedUpdatePath = '';
@@ -325,7 +336,7 @@ else
 
 if($installType=='update' && in_array($my_old_version,$update_from_version_8))
 {
-	include_once('../inc/conf/configuration.php');
+	include_once '../inc/conf/configuration.php';
 }
 
 if(!isset($_GET['running']))
@@ -470,7 +481,12 @@ if ($encryptPassForm=='1' ) {
 					$('#dbUserForm').attr('disabled','disabled');
 					$('#dbStatsForm').attr('value','dokeos_main');
 					$('#dbUserForm').attr('value','dokeos_main');												
-			}	
+			}
+		//Allow dokeos install in IE
+		$("button").click(function() {
+			$("#is_executable").attr("value",$(this).attr("name"));
+		});
+			
 	 	} ); 	
 	</script>
 	<script type="text/javascript">
@@ -607,7 +623,6 @@ if ($encryptPassForm=='1' ) {
 
 
 <?php
-
 if($_POST['step2'])
 {
 	//STEP 3 : LICENSE
@@ -620,6 +635,7 @@ elseif($_POST['step3'])
 }
 elseif($_POST['step4'])
 {
+
 	//STEP 5 : CONFIGURATION SETTINGS
 	//if update, try getting settings from the database...
 	if($installType == 'update')
@@ -753,7 +769,7 @@ elseif($_POST['step5'])
 	<table width="100%">
 	<tr>
 	  <td><button type="submit" class="back" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" /><?php echo get_lang('Previous'); ?></button></td>
-	  <td align="right"><button class="save" type="submit" name="step6" value="<?php echo get_lang('InstallDokeos'); ?> &gt;" onclick="javascript:if(this.value == '<?php $msg = get_lang('PleaseWait');?>...') return false; else this.value='<?php $msg = get_lang('InstallDokeos');?>...';" ><?php echo $msg; ?></button></td>
+	  <td align="right"><input type="hidden" name="is_executable" id="is_executable" value="-" /><button class="save" type="submit" name="step6" value="<?php echo get_lang('InstallDokeos'); ?> &gt;" onclick="javascript:if(this.value == '<?php $msg = get_lang('PleaseWait');?>...') return false; else this.value='<?php $msg = get_lang('InstallDokeos');?>...';" ><?php echo $msg; ?></button></td>
 	</tr>
 	</table>
 

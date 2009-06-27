@@ -364,6 +364,7 @@ function display_language_selection()
 	<form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
 <?php display_language_selection_box(); ?>
 	<button type="submit" name="step1" class="next" value="<?php get_lang('Next');?> &gt;"><?php echo get_lang('Next');?></button>
+	<input type="hidden" name="is_executable" id="is_executable" value="-" />
 	</form>
 <?php }
 
@@ -585,6 +586,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 			<tr>
 			<td colspan="2" align="center">
 				<button type="submit" class="back" name="step1" value="&lt; <?php echo get_lang('Back');?>" ><?php echo get_lang('Back');?></button>
+				<input type="hidden" name="is_executable" id="is_executable" value="-" />	
 				<button type="submit" class="next" name="<?php echo (isset($_POST['step2_update_6'])?'step2_update_6':'step2_update_8');?>" value="<?php echo get_lang('Next');?> &gt;" ><?php echo get_lang('Next');?></button>
 			</td>
 			</tr>
@@ -674,7 +676,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 		<p align="center">
 		<button type="submit" name="step1" class="back" onclick="window.location='index.php';return false;" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
 		<button type="submit" name="step2_install" class="add" value="<?php echo get_lang("NewInstallation"); ?>" <?php if($error) if($error)echo 'disabled="disabled"'; ?> ><?php echo get_lang('NewInstallation'); ?></button>
-
+		<input type="hidden" name="is_executable" id="is_executable" value="-" />
 		<?php
 		//real code
 		echo '<button type="submit" class="save" name="step2_update_8" value="Upgrade from Dokeos 1.8.x"';
@@ -717,6 +719,7 @@ function display_license_agreement()
 				<td></td>
 				<td align="center">
 					<button type="submit" class="back" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
+					<input type="hidden" name="is_executable" id="is_executable" value="-" />
 					<button type="submit" class="next" name="step3" value="<?php echo get_lang('IAccept'); ?> &gt;" ><?php echo get_lang('IAccept'); ?></button>
 				</td>
 			</tr>
@@ -918,11 +921,11 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 				<!--<div  style="float:left; margin-right:10px;">
 				<img src="../img/message_confirmation.png" alt="Confirmation" />
 				</div>-->
-				<div style="float:left;">
+				<!--<div style="float:left;">-->
 				MySQL host info: <?php echo mysql_get_host_info(); ?><br />
 				MySQL server version: <?php echo mysql_get_server_info(); ?><br />
 				MySQL protocol version: <?php echo mysql_get_proto_info(); ?>
-			</div>
+				<!--</div>-->
 				<div style="clear:both;"></div>
 			</div>
 		</td>
@@ -944,7 +947,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	<tr>
 	  <td><button type="submit" name="step2" class="back" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button></td>
 	  <td>&nbsp;</td>
-	  <td align="right"><button type="submit" class="next" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button></td>
+	  <td align="right"><input type="hidden" name="is_executable" id="is_executable" value="-" /><button type="submit" class="next" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button></td>
 	</tr>
 	</table>
 	<?php
@@ -1143,7 +1146,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	</tr>
 	<tr>
 	  <td><button type="submit" class="back" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" /><?php echo get_lang('Previous'); ?></button></td>
-	  <td align="right"><button class="next" type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button></td>
+	  <td align="right"><input type="hidden" name="is_executable" id="is_executable" value="-" /><button class="next" type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button></td>
 	</tr>
 	</table>
 	<?php

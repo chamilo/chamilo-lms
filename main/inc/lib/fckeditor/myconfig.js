@@ -22,6 +22,35 @@
 
 
 /*
+ * Custom editor configuration settings.
+ *
+ * Follow this link for more information:
+ * http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
+ *
+ * Please, do not modify the file fckconfig.js in order to make upgrades easy.
+ * Just create your desired settings in this file, myconfig.js.
+ */
+
+FCKConfig.EditorAreaCSS = FCKConfig.BasePath + '../../../../css/public_admin/course.css' ;
+FCKConfig.DocType = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' ;
+FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/silver/' ;
+
+FCKConfig.ProtectedSource.Add( /<script[\s\S]*?\/script>/gi ) ;	// To protect <script> tags.
+
+FCKConfig.AutoDetectLanguage = false ;
+FCKConfig.DefaultLanguage = 'en' ;
+FCKConfig.ContentLangDirection	= 'ltr' ;
+
+FCKConfig.ContextMenu = ['Generic','Link','Anchor','Image','Flash','Select','Textarea','Checkbox','Radio','TextField','HiddenField','ImageButton','Button','BulletedList','NumberedList','Table','Form'] ;
+FCKConfig.TemplatesXmlPath	= FCKConfig.EditorPath + 'fcktemplates.xml.php' ;
+
+FCKConfig.DisableFFTableHandles = false ;
+
+FCKConfig.SmileyWindowWidth = 450 ;
+FCKConfig.SmileyWindowHeight = 250 ;
+
+
+/*
  * Editor's toolbar definitions.
  */
 
@@ -278,7 +307,7 @@ FCKConfig.ToolbarSets["Documents_Student"] = [
 	['Bold','Italic','Underline'],
 	['JustifyLeft','JustifyCenter','JustifyRight'],
 	['ShowBlocks']
-];
+] ;
 
 //Forum
 FCKConfig.ToolbarSets["ForumLight"] = [
@@ -295,7 +324,7 @@ FCKConfig.ToolbarSets["Forum"] = [
     ['Style','FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline'],
     ['JustifyLeft','JustifyCenter','JustifyRight']
-];
+] ;
 
 FCKConfig.ToolbarSets["Forum_Student"] = [
 	['Save','FitWindow','PasteWord','-','Undo','Redo'],
@@ -662,7 +691,7 @@ FCKConfig.MediaUploadDeniedExtensions	= "" ;
 // If you wish to alter some of the settings above and to make them
 // specific for the advanced file manager mode, you may do this within
 // the following "if" block.
-if (FCK.AdvancedFileManager)
+if ( FCK.AdvancedFileManager )
 {
 	FCKConfig.LinkUpload = false ;
 	FCKConfig.ImageUpload = false ;

@@ -129,7 +129,7 @@ if ( FCKConfig.BaseHref.length > 0 )
  */
 
 // The icon for the image properties button/command.
-if (!FCKConfig.ImagesIcon)
+if ( !FCKConfig.ImagesIcon )
 {
 	// This is the original icon from a chosen skin.
 	//FCKConfig.ImagesIcon = 37 ;
@@ -1704,3 +1704,34 @@ FCK.GetServerBase = function ( url )
 
 	return url ;
 } ;
+
+
+/*
+ **************************************************************************************
+ * Patches.
+ **************************************************************************************
+ */
+
+if ( FCKBrowserInfo.IsIE )
+{
+
+	function Doc_OnMouseDown( evt )
+	{
+		var e = evt.srcElement ;
+
+		/* A patch by Ivan Tcholakov, 27-JUN-2009, for suppressing javascript errors under IE8: */
+		if ( !e ) return ;
+		if ( !e.nodeName ) return ;
+		/* End of patch */
+
+		// Radio buttons and checkboxes should not be allowed to be triggered in IE
+		// in editable mode. Otherwise the whole browser window may be locked by
+		// the buttons. (#1782)
+		if ( e.nodeName.IEquals( 'input' ) && e.type.IEquals( ['radio', 'checkbox'] ) && !e.disabled )
+		{
+			e.disabled = true ;
+			FCKTools.SetTimeout( _FCK_RemoveDisabledAtt, 1, e ) ;
+		}
+	}
+
+}

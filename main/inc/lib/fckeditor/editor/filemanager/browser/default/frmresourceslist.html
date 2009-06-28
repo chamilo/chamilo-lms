@@ -177,6 +177,9 @@ function GetFoldersAndFilesCallBack( fckXml )
 	oHtml.Append( '<\/table>' ) ;
 
 	document.body.innerHTML = oHtml.ToString() ;
+
+//	window.top.document.title = 'Finished processing in ' + ( ( ( new Date() ) - dTimer ) / 1000 ) + ' seconds' ;
+
 }
 
 window.onload = function()

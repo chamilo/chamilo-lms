@@ -131,11 +131,9 @@ function LoadTemplatesXml()
 			if ( (oPart = oXml.SelectSingleNode( 'Description', oNode )) )
 				oTemplate.Description = oPart.text ? oPart.text : oPart.textContent ;
 
-			
 			// Get the Template Image.
 			if ( (oPart = oNode.attributes.getNamedItem('image')) )
 				oTemplate.Image = sImagesBasePath + oPart.value ;
-			
 
 			// Get the Template HTML.
 			if ( (oPart = oXml.SelectSingleNode( 'Html', oNode )) )
@@ -167,20 +165,15 @@ function LoadTemplatesXml()
 			// Build the inner HTML of our new item DIV.
 			var sInner = '<table><tr>' ;
 
-			
 			if ( oTemplate.Image )
 				sInner += '<td valign="top"><img src="' + oTemplate.Image + '"><br />' ;
 			else
 			    sInner += '<td valign="top"><img src="fck_template/images/noimage.gif"><br />' ;
-				
-			
 
 			sInner += '<div class="TplTitle"><a href="javascript:void(0);" title="'+oTemplate.Description+'" >' + oTemplate.Title + '<\/a><\/div>';			
 
-
 			if ( oTemplate.Description )
 				sInner += '<div>' + oTemplate.Description + '<\/div>' ;
-			
 
 			sInner += '<\/td><\/tr><\/table>' ;
 

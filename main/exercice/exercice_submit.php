@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice_submit.php 21110 2009-05-30 17:33:08Z iflorespaz $
+// $Id: exercice_submit.php 21656 2009-06-28 01:01:54Z iflorespaz $
 
 /*
 ==============================================================================
@@ -43,13 +43,13 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 21110 2009-05-30 17:33:08Z iflorespaz $
+* 	@version $Id: exercice_submit.php 21656 2009-06-28 01:01:54Z iflorespaz $
 */
 
-include ('exercise.class.php');
-include ('question.class.php');
-include ('answer.class.php');
-include ('exercise.lib.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
+require_once 'exercise.lib.php';
 
 // debug var. Set to 0 to hide all debug display. Set to 1 to display debug messages.
 $debug = 0;
@@ -66,14 +66,14 @@ define('HOT_SPOT_ORDER', 	7);
 // name of the language file that needs to be included
 $language_file = 'exercice';
 
-include_once ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 /* ------------	ACCESS RIGHTS ------------ */
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-include_once (api_get_path(LIBRARY_PATH) . 'text.lib.php');
+require_once api_get_path(LIBRARY_PATH) . 'text.lib.php';
 
 $is_allowedToEdit = api_is_allowed_to_edit();
 
@@ -142,7 +142,7 @@ if ($buttonCancel) {
 if ($origin == 'learnpath' && isset ($_GET['not_multiple_attempt']) && $_GET['not_multiple_attempt'] == strval(intval($_GET['not_multiple_attempt']))) {
 	$not_multiple_attempt = (int) $_GET['not_multiple_attempt'];
 	if ($not_multiple_attempt === 1) {
-		include_once ('../inc/reduced_header.inc.php');
+		require_once '../inc/reduced_header.inc.php';
 		echo '<div style="height:10px">&nbsp;</div>';
 		Display :: display_warning_message(get_lang('ReachedOneAttempt'));
 		exit;
@@ -277,7 +277,7 @@ if ($formSent) {
 					define('ENABLED_LIVE_EXERCISE_TRACKING', 1);
 					require_once 'question.class.php';
 					require_once 'answer.class.php';
-					require_once (api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
+					require_once api_get_path(LIBRARY_PATH) . 'events.lib.inc.php';
 					$counter = 0;
 					$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 					$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);

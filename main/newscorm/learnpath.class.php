@@ -3005,7 +3005,7 @@ class learnpath {
 						// check how much attempts of a exercise exits in lp    						    					    					    			
 						$lp_item_id = $this->get_current_item_id();
 						$lp_view_id = $this->get_view_id();
-						$prevent_reinit = $this->items[$this->current]->prevent_reinit;
+						$prevent_reinit = $this->items[$this->current]->get_prevent_reinit();
 						$list = $this->get_toc();
 						$type_quiz = false;
 

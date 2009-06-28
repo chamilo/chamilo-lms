@@ -1,4 +1,4 @@
-<?php // $Id: showinframes.php 21481 2009-06-18 04:47:18Z iflorespaz $ 
+<?php // $Id: showinframes.php 21660 2009-06-28 21:41:31Z iflorespaz $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -23,6 +23,7 @@
 	Mail: info@dokeos.com
 ============================================================================== 
 */
+
 /**
 ============================================================================== 
 *	This file will show documents in a separate frame.
@@ -55,15 +56,13 @@
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
 require_once '../glossary/glossary.class.php';
-if (!empty($_GET['nopages']))
-{
+if (!empty($_GET['nopages'])) {
 	$nopages=Security::remove_XSS($_GET['nopages']);
-	if ($nopages==1)
-	{		
-		require_once api_get_path(INCLUDE_PATH) . 'reduced_header.inc.php';
+	if ($nopages==1) {		
+		require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 		Display::display_error_message(get_lang('FileNotFound'));
 	}
-	exit();	
+	exit;	
 }
 
 $_SESSION['whereami'] = 'document/view';
@@ -87,15 +86,14 @@ $browser_display_title = "Dokeos Documents - " . Security::remove_XSS($_GET['cid
 
 //only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
 $frameheight = 135;
-if($is_courseAdmin)
-{
+if($is_courseAdmin) {
 	$frameheight = 165;	
 }
 
 $file_root=$_course['path'].'/document'.str_replace('%2F', '/',$file);
 $file_url_sys=api_get_path(SYS_COURSE_PATH).$file_root;
 $file_url_web=api_get_path(WEB_COURSE_PATH).$file_root;
-$file_url_web='document_with_glossary_terms.php?file='.urlencode($_GET['file']);
+$file_url_web='document_with_glossary_terms.php?file='.urlencode($file);
 ?>
 <html>
 <head>
@@ -104,16 +102,13 @@ $file_url_web='document_with_glossary_terms.php?file='.urlencode($_GET['file']);
 </title>
 </head>
 	<frameset rows="<?php echo $frameheight; ?>,*" border="0" frameborder="no" >
-		<frame name="top" scrolling="no" noresize target="contents" src="headerpage.php?file=<?php echo $file.'&amp;'.api_get_cidreq(); ?>">
+		<frame name="top" scrolling="no" noresize target="contents" src="headerpage.php?file=<?php echo $file.'&amp;'.api_get_cidreq(); ?>" />
 		<?php
-		if (file_exists($file_url_sys))
-		{								
-			echo '<frame name="main" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'">';		
+		if (file_exists($file_url_sys)) {								
+			echo '<frame name="main" id="framemain" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'" />';		
+		} else {
+			echo '<frame name="main" id="framemain" src=showinframes.php?nopages=1 />';				
 		}
-		else
-		{
-			echo '<frame name="main" src=showinframes.php?nopages=1>';				
-		}		
 		?>
 	<noframes>
 	<body>
@@ -121,5 +116,5 @@ $file_url_web='document_with_glossary_terms.php?file='.urlencode($_GET['file']);
 			We suggest you try Mozilla, Firefox, Safari, Opera, or other browsers updated this millenium.</p>
 	</body>
 	</noframes>
-	<frame src="UntitledFrame-1"></frameset>
+	<!--<frame src="#"></frameset>-->
 </html>

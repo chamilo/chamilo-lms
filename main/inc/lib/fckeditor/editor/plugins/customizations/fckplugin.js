@@ -444,9 +444,75 @@ var FCKDialog = ( function()
 
 /*
  **************************************************************************************
- * Customizations for better integration of all the plugins with the editor.
+ * Blocking copy/pase feature.
  **************************************************************************************
  */
+
+FCK.BlockCopyPasteKeystrokes = function()
+{
+	var Keystrokes = [] ;
+
+	for ( var i = 0 ; i < FCKConfig.Keystrokes.length ; i++ )
+	{
+		switch ( FCKConfig.Keystrokes[i][0] )
+		{
+			case CTRL + 67 : // Ctrl + C, 'Copy'
+			case CTRL + 86 : // Ctrl + V, 'Paste'
+			case CTRL + 88 : // Ctrl + X, 'Cut'
+				break ;
+			default :
+				Keystrokes.push( FCKConfig.Keystrokes[i] ) ;
+				break ;
+		}
+	}
+
+	FCKConfig.Keystrokes = Keystrokes ;
+}
+
+if ( FCKConfig.BlockCopyPaste )
+{
+	FCK.BlockCopyPasteKeystrokes() ;
+}
+
+FCK.GetNamedCommandState = function( commandName )
+{
+	// This is a modification of the original code.
+	if ( FCKConfig.BlockCopyPaste )
+	{
+		switch ( commandName )
+		{
+			case 'Cut' :
+			case 'Copy' :
+			case 'Paste' :
+			case 'PasteText' :
+			case 'PasteWord' :
+				return FCK_TRISTATE_DISABLED ;
+				break ;
+			default :
+				break ;
+		}
+	}
+	//
+
+	try
+	{
+
+		// Bug #50 : Safari never returns positive state for the Paste command, override that.
+		if ( FCKBrowserInfo.IsSafari && FCK.EditorWindow && commandName.IEquals( 'Paste' ) )
+			return FCK_TRISTATE_OFF ;
+
+		if ( !FCK.EditorDocument.queryCommandEnabled( commandName ) )
+			return FCK_TRISTATE_DISABLED ;
+		else
+		{
+			return FCK.EditorDocument.queryCommandState( commandName ) ? FCK_TRISTATE_ON : FCK_TRISTATE_OFF ;
+		}
+	}
+	catch ( e )
+	{
+		return FCK_TRISTATE_OFF ;
+	}
+}
 
 
 /*

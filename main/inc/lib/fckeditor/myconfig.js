@@ -492,11 +492,11 @@ FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
  * Helper variables.
  */
 
-// At this moment of loading editor's javascripts, the setting FCKConfig.AdvancedFileManager
-// has not been read yet from the php-integration file. We are able to detect which file manager
-// will be used in another way. The following property has pure boolean type: true/false.
-FCK.AdvancedFileManager = FCKConfig.PageConfig.AdvancedFileManager ;
+// At this moment of loading editor's javascripts, the configuration settings FCKConfig.*
+// have not been read yet from the php-integration file. We are able to access them anyway.
+FCK.AdvancedFileManager = FCKConfig.PageConfig.AdvancedFileManager ; // true or false
 
+// TODO: To be checked for removal.
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;
 
 
@@ -701,7 +701,38 @@ if ( FCK.AdvancedFileManager )
 
 
 /*
+ * Blocking copy/pase - configuration.
+ */
+
+// Blocking is for learners only.
+if ( !( FCKConfig.PageConfig.UserIsCourseAdmin || FCKConfig.PageConfig.UserIsPlatformAdmin ) )
+{
+	// And blocking is for enumerated places only, which are identified through the name of the assigned toolbar set.
+	switch ( FCKURLParams['Toolbar'] )
+	{
+		case '' :
+		case 'Default' :
+		// Add here these toolbar sets for blocking copy/paste:
+		// case 'Toolbar1' :
+		// case 'Toolbar2' :
+		// ...
+		case 'FreeAnswer' :
+			FCKConfig.BlockCopyPaste = true ;
+			break ;
+
+		default :
+			FCKConfig.BlockCopyPaste = false ;
+	}
+}
+else
+{
+	FCKConfig.BlockCopyPaste = false ;
+}
+
+
+/*
  * Other settings.
  */
 
+// TODO: This setting seems obsolete. To be checked for removal.
 FCKConfig.UserStatus = 'teacher' ;

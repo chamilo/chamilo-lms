@@ -710,15 +710,29 @@ if ( !( FCKConfig.PageConfig.UserIsCourseAdmin || FCKConfig.PageConfig.UserIsPla
 	// And blocking is for enumerated places only, which are identified through the name of the assigned toolbar set.
 	switch ( FCKURLParams['Toolbar'] )
 	{
-		case '' :
-		case 'Default' :
+		// lock=true / unlock=false
 		// Add here these toolbar sets for blocking copy/paste:
 		// case 'Toolbar1' :
 		// case 'Toolbar2' :
 		// ...
 		case 'FreeAnswer' :
-			FCKConfig.BlockCopyPaste = true ;
+			FCKConfig.BlockCopyPaste = false ;
 			break ;
+		case 'Documents_Student' :
+			FCKConfig.BlockCopyPaste = false ; //document group
+			break ;
+		case 'Blog_Student' :
+			FCKConfig.BlockCopyPaste = false ;
+			break ;
+        case 'BlogComment_Student' :
+			FCKConfig.BlockCopyPaste = false ;
+			break ;
+		 case 'Forum_Student' :
+			FCKConfig.BlockCopyPaste = false ;
+			break ;	
+		case 'Wiki_Student' :
+			FCKConfig.BlockCopyPaste = true ;
+			break ;	
 
 		default :
 			FCKConfig.BlockCopyPaste = false ;

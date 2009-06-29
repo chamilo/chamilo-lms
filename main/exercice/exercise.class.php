@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 20975 2009-05-25 18:09:56Z cvargas1 $
+* 	@version $Id: exercise.class.php 21662 2009-06-29 14:55:09Z iflorespaz $
 */
 
 
@@ -598,7 +598,7 @@ class Exercise
         	// insert into the item_property table
         	
         	api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizAdded',$_user['user_id']);
-			if (api_get_setting('search_enabled')=='true') {
+			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
 				$this -> search_engine_save();
 			}
 
@@ -846,7 +846,7 @@ class Exercise
 		api_sql_query($sql);
 		api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizDeleted',$_user['user_id']);
 		
-		if (api_get_setting('search_enabled')=='true') {
+		if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian') ) {
 			$this -> search_engine_delete();
 		}
 	}
@@ -1156,7 +1156,7 @@ class Exercise
 
     function search_engine_edit() {
         // update search enchine and its values table if enabled
-        if (api_get_setting('search_enabled')=='true') {
+        if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
             $course_id = api_get_course_id();
 
             // actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one 
@@ -1230,7 +1230,7 @@ class Exercise
 
     function search_engine_delete() {
 	    // remove from search engine if enabled
-	    if (api_get_setting('search_enabled') == 'true') {
+	    if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian') ) {
 		    $course_id = api_get_course_id();
 		    $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 		    $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL LIMIT 1';

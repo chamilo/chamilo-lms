@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 20990 2009-05-26 14:20:05Z juliomontoya $
+<?php // $Id: question.class.php 21662 2009-06-29 14:55:09Z iflorespaz $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 20990 2009-05-26 14:20:05Z juliomontoya $
+* 	@version $Id: question.class.php 21662 2009-06-29 14:55:09Z iflorespaz $
 */
 
 
@@ -672,7 +672,7 @@ abstract class Question
 
     function search_engine_edit($exerciseId, $addQs=FALSE, $rmQs=FALSE) {
         // update search engine and its values table if enabled
-        if (api_get_setting('search_enabled')=='true') {
+        if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
             $course_id = api_get_course_id();
             // get search_did
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
@@ -887,7 +887,7 @@ abstract class Question
 		else
 		{
 			$this->removeFromList($deleteFromEx);
-            if (api_get_setting('search_enabled')=='true') {
+            if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
                 // disassociate question with this exercise
                 $this -> search_engine_edit($deleteFromEx, FALSE, TRUE);
             }

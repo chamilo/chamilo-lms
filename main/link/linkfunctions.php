@@ -115,7 +115,8 @@ function addlinkcategory($type)
 			api_sql_query($sql, __FILE__, __LINE__);
 			$link_id = Database::insert_id();
 
-			if ( (api_get_setting('search_enabled')=='true') && $link_id) {
+
+			if ( (api_get_setting('search_enabled')=='true') && $link_id && extension_loaded('xapian')) {
 				require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
 				require_once(api_get_path(LIBRARY_PATH) .'search/IndexableChunk.class.php');
 				require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');

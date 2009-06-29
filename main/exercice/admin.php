@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 20841 2009-05-19 16:31:28Z cvargas1 $
+<?php // $Id: admin.php 21662 2009-06-29 14:55:09Z iflorespaz $
  
 /*
 ==============================================================================
@@ -67,7 +67,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 20841 2009-05-19 16:31:28Z cvargas1 $
+* 	@version $Id: admin.php 21662 2009-06-29 14:55:09Z iflorespaz $
 */
 
 
@@ -497,7 +497,10 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 		$objExercise -> processCreation($form,'simple');
 		if($form -> getSubmitValue('edit') == 'true')
 			Display::display_confirmation_message(get_lang('ExerciseEdited'));
-	}		
+	}
+	if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
+			Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
+	}			
 	$form -> display (); 
 	echo '<br />';	
 	// question list management

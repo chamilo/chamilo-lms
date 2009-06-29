@@ -141,6 +141,9 @@ if ($form -> validate()) {
 	Display::display_header($nameTools,"Exercise");	
 	if ($objExercise->feedbacktype==1)
 		Display::display_normal_message(get_lang("DirectFeedbackCantModifyTypeQuestion"));
+		if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
+				Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
+		}
 	$form -> display ();
 }
 Display::display_footer();

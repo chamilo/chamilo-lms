@@ -1,4 +1,4 @@
-<?php // $Id: link.php 20716 2009-05-16 07:28:22Z ivantcholakov $
+<?php // $Id: link.php 21662 2009-06-29 14:55:09Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -45,12 +45,12 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = "link";
+$language_file = array('link','admin');
 
 // including libraries
-include("../inc/global.inc.php");
-include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
-include("linkfunctions.php");
+require_once "../inc/global.inc.php";
+require_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
+require_once "linkfunctions.php";
 
 
 $this_section=SECTION_COURSES;
@@ -189,7 +189,11 @@ if (is_allowed_to_edit() and isset($_GET['action'])) {
 	echo '<div class="actions">';
 	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png',get_lang('BackToLinksOverview')).get_lang('BackToLinksOverview').'</a>';
 	echo '</div>';
-	
+if(api_get_setting('search_enabled')=='true') {
+	if (!extension_loaded('xapian')) {
+		Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
+	}
+}	
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
 	// has been submitted yet, hence !isset($submitLink)
 	if (($_GET['action']=="addlink" or $_GET['action']=="editlink") and empty($_POST['submitLink'])) {
@@ -271,6 +275,7 @@ if (is_allowed_to_edit() and isset($_GET['action'])) {
 						<input class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('Yes').'</label>
 					</div>
 				</div>';		
+
 
 		if(api_get_setting('search_enabled')=='true')
 		{

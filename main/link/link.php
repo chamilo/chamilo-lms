@@ -1,4 +1,4 @@
-<?php // $Id: link.php 21662 2009-06-29 14:55:09Z iflorespaz $
+<?php // $Id: link.php 21666 2009-06-30 00:20:57Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -54,9 +54,17 @@ require_once "linkfunctions.php";
 
 
 $this_section=SECTION_COURSES;
-
 api_protect_course_script();
-
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+$(document).ready( function() {
+	for (i=0;i<$(".actions").length;i++) {
+		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
+			$(".actions:eq("+i+")").hide();
+		}		
+	}
+ } ); 
+ </script>';
 // @todo change the $_REQUEST into $_POST or $_GET
 // @todo remove this code
 $link_submitted = (isset($_POST['submitLink'])?true:false);

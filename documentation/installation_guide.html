@@ -43,7 +43,6 @@
   <li>Quick preview of <a href="http://www.dokeos.com/en/node/58">Dokeos features&nbsp;</a></li>
 
   <li>Test Dokeos on <a href="http://campus.dokeos.com">Free Campus</a></li>
-
 </ul>
 
 
@@ -67,7 +66,6 @@
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
   
   <li><a href="#7._Mathematical_formulas">Mathematical formulas with LaTeX</a></li>
-
 </ol>
 
 
@@ -104,7 +102,6 @@ For instance, on a Ubuntu server,&nbsp;use Shell or Synaptic following the
     <a href="http://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">Ubuntuguide on Apache</a> and the following sections</li>
 
   <li>To install <span style="font-weight: bold;">MAMP</span> (AMP on Mac OS X), refer to the <a href="http://www.mamp.info/en/index.php">MAMP</a> dedicated website<a href="http://www.mamp.info/en/index.php"></a></li>
-
 </ul>
 
 
@@ -140,7 +137,6 @@ the installation.<span style="font-weight: bold;"><br />
 
   <li>Follow the web installation process. You can accept all default
 values. Consider changing the admin password to remember it.&nbsp;</li>
-
 </ul>
 
 
@@ -155,7 +151,6 @@ The following directories need to be readable, writeable and executable for ever
   <li>dokeos/archive/</li>
   <li>dokeos/courses/</li>
   <li>dokeos/home/</li>
-
 </ul>
 
 (where 'dokeos' is the directory in which you installed Dokeos)
@@ -163,18 +158,15 @@ The following directories need to be readable, writeable and executable for ever
 777 command for this (although we recommend you seek advice from an
 experienced system administrator).
 In Windows, you may need to check the properties of the folders (by
-right-clicking on them).
-</p>
+right-clicking on them).</p>
 
 <p>
 2.5. The following files need to be readable and writeable for the web browser, 
-only during the installation process:
-</p>
+only during the installation process:</p>
 
 <ul>
 
   <li>dokeos/main/inc/conf/configuration.php (if present)</li>
-
 </ul>
 
 
@@ -182,8 +174,7 @@ only during the installation process:
 666 command for this (although we recommend you seek advice from an
 experienced system administrator).
 In Windows, you may need to check the properties of the files and
-folders (by right-clicking on them).
-</p>
+folders (by right-clicking on them).</p>
 
 
 
@@ -233,8 +224,6 @@ in the administration section of Dokeos, you can use the Dokeos Config Settings 
 most of Dokeos uses the mail settings from the php.ini file. However,
 the announcements tool uses phpMailer (another free software project)
 and the settings for this tool can be adjusted in <em>(dokeos folder)</em>/main/inc/conf/mail.conf.php.</li>
-
-
 </ul>
 
 <br />
@@ -252,7 +241,6 @@ To get the best of Dokeos, you need to finetune PHP settings. Consider : <br />
   <li>search the word "max" and increase values to optimise the server</li>
 
   <li>you may want to end up&nbsp;with the following values : </li>
-
 </ul>
 
 
@@ -266,8 +254,7 @@ To get the best of Dokeos, you need to finetune PHP settings. Consider : <br />
 
 			  post_max_size = 64M<br />
 
-			  upload_max_filesize = 100M
-</div>
+			  upload_max_filesize = 100M</div>
 
 
 
@@ -284,15 +271,13 @@ these ones:</p>
   <li>magic_quotes_gpc     = On</li>
 
   <li>magic_quotes_runtime = Off</li>
-
 </ul>
 
 
 
 <p>
 Past Dokeos versions required register_globals to be set to On. This is
-no longer necessary, this can be set to Off and Dokeos will work fine.
-</p>
+no longer necessary, this can be set to Off and Dokeos will work fine.</p>
 
 
 <p><strong>BSD users:</strong> these php libraries have to be included during php installation:</p>
@@ -309,13 +294,10 @@ no longer necessary, this can be set to Off and Dokeos will work fine.
   <li>php-zlib The zlib shared extension for php</li>
 
   <li>(optional) php-ldap if you want to be able to use LDAP authentication</li>
-
 </ul>
 
 
 <p><a href="http://dev.mysql.com/doc/mysql/en/index.html"></a><br />
-
-
 </p>
 
 
@@ -402,19 +384,16 @@ all the 1.8.x versions
 
 Do not delete the previous Dokeos installation directory before installing
 the new one. When the update is successfully finished, you can remove
-the old path.
-</p>
+the old path.</p>
 
 
 <p>
 <b>NOTE:</b><br />
 
 Do not modify the home_*.html files directly. Instead,
-choose "Configure the homepage" in the Dokeos administration section.
-</p>
+choose "Configure the homepage" in the Dokeos administration section.</p>
 
-<p>
-</p>
+<p></p>
 <h3>3.3 In both cases</h3>
 
 The following directories need to be readable, writeable and executable for the web server:
@@ -431,8 +410,7 @@ On Linux, Mac OS X and BSD operating systems you can quick-fix this using the
 CHMOD 777 command, but if you are unsure, we recommend you seek advice for 
 your own OS on <a href="http://www.dokeos.com/en/node/66">our forum</a>.
 In Windows, you may need to check the properties of the folders.
-<p>
-</p>
+<p></p>
 <h3>3.4 Quick-upgrade from 1.6.x guide for Linux</h3>
 
 
@@ -483,8 +461,7 @@ Then:
 <p>If you have&nbsp;problems, go to the <a href="http://www.dokeos.com">Dokeos website</a> and ask a question on the
 <a href="http://www.dokeos.com/en/node/66">support forum</a>. Please read the previous messages first to see if there is
 already an answer to your question. We also maintain a list of
-<a href="http://www.dokeos.com/wiki/index.php/FAQ">Frequently Asked Questions</a>.
-</p>
+<a href="http://www.dokeos.com/wiki/index.php/FAQ">Frequently Asked Questions</a>.</p>
 
 
 <h2></h2>
@@ -499,24 +476,21 @@ Then you will see a "Platform admin section" link in the header of the
 web page. There you can manage users, courses, sessions, portal look
 and feel, homepage content, course categories etc.&nbsp;</p>
 
-<p>
-</p>
+<p></p>
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="6._LDAP"></a>6. LDAP</h2>
 
 <p>
 <i>This part is optional, only organisations with an LDAP server will need to read this.</i><br />
 
-An LDAP module is already provided in Dokeos, but it has to be configured to make it work.
-</p>
+An LDAP module is already provided in Dokeos, but it has to be configured to make it work.</p>
 
 
 <h3><b>Compiling</b></h3>
 
 <p>
 Linux servers: It's possible that you have to recompile php with ldap support.
-Newer distributions also allow downloading rpms for additional packages.
-</p>
+Newer distributions also allow downloading rpms for additional packages.</p>
 
 
 <h3><b>Activating LDAP in Dokeos</b></h3>
@@ -536,15 +510,13 @@ In (dokeos folder)/main/inc/conf/configuration.php, around line 90, you see<br /
 <br />
 
 remove the // from the last two lines to activate LDAP.<br />
-
 </p>
 
 
 <h3><b>Settings</b></h3>
 
 <p>
-Ask the LDAP server admin for the settings:
-</p>
+Ask the LDAP server admin for the settings:</p>
 
 <ul>
 
@@ -553,7 +525,6 @@ Ask the LDAP server admin for the settings:
   <li>ldap server port (usually 389)</li>
 
   <li>ldap dc</li>
-
 </ul>
 Since 1.8.5, you have to change the LDAP settings inside the "Portal
 administration" panel, under "Dokeos configuration settings", section
@@ -580,8 +551,7 @@ consider this user as being a teacher.<br />
 If you want to change this behaviour, you can edit main/auth/ldap/authldap.php, function ldap_put_user_info_locally(),
 and change the <em>if (empty($info_array[$tutor_field]))</em> condition to whatever suits you.<br />
 
-You can also remove this check by removing the condition and leaving only the <em>$status = STUDENT;</em> line.
-</p>
+You can also remove this check by removing the condition and leaving only the <em>$status = STUDENT;</em> line.</p>
 
 
 <h3><b>Protected LDAP servers</b></h3>
@@ -602,7 +572,6 @@ from LDAP directly into a Dokeos session. This, however, relies on a
 set of static choices in the LDAP contact attributes.<br />
 
 The fields used intensively by the Dokeos module are:<br />
-
 </p>
 
 <ul>
@@ -622,7 +591,6 @@ that criteria</li>
 	<li>givenName is used as the firstname field in Dokeos</li>
 
 	<li>mail is used as the email field in Dokeos</li>
-
 </ul>
 
 
@@ -654,61 +622,56 @@ FCKConfig.ToolbarSets lines where you want the LaTeX icon to appear
 
 				You can add it to all the tools, or only to the document and tests tools, for example<br />
         <br />
-
 			</li>
-
-		
     </ul>
-
 		</li>
 
-	<li>4. For Windows servers only, update <i>dokeos/main/inc/lib/fckeditor/editor/plugins/mimetex/mimetex.html</i> to replace <b>mimetex.cgi</b> by <b>mimetex.exe</b></li>
+	<li>4. In very rare cases (only if problems are detected), some configuration options   about MimeTeX at the beginning of the file   <em>dokeos/main/inc/lib/fckeditor/fckeditor.php</em> might need to be revised and   twicked. See the acccompanying comments about these options within the same file</li>
 
 	<li>5. Clear your browser's cache to test it (very important). This can be done using your browser's settings page</li>
+    <li>6. Make these changes:      </li>
+    </ul>
 
-</ul>
-
-<i>Adding the corresponding cgi-bin directory to your Apache configuration could be done, in Apache 2, like this:</i>
-	
+<p><i>Adding the corresponding cgi-bin directory to your Apache configuration could be done, in Apache 2, like this:</i>
+  
+    </p>
 <div class="code">
-		  ScriptAlias /cgi-bin/ /var/www/cgi-bin/<br />
-
-  &lt;Directory "/var/www/cgi-bin"&gt;<br />
-
-        &nbsp;&nbsp;AllowOverride None<br />
-
-        &nbsp;&nbsp;Options ExecCGI -MultiViews +SymLinksIfOwnerMatch<br />
-
-        &nbsp;&nbsp;Order allow,deny<br />
-
-        &nbsp;&nbsp;Allow from all<br />
-
-  &lt;/Directory&gt;<br />
-
-	</div>
+      ScriptAlias /cgi-bin/ /var/www/cgi-bin/<br />
+&lt;Directory "/var/www/cgi-bin"&gt;<br />
+&nbsp;&nbsp;AllowOverride None<br />
+&nbsp;&nbsp;Options ExecCGI -MultiViews +SymLinksIfOwnerMatch<br />
+&nbsp;&nbsp;Order allow,deny<br />
+&nbsp;&nbsp;Allow from all<br />
+&lt;/Directory&gt;<br />
+    </div>
 
 
-<i>Adding a symbolic link can be done, under Windows, by creating a
-shortcut to the mimetex.exe file from the cgi-bin directory, or under
-Linux by issuing the following command:</i>
-	
-<div class="code">ln -s /var/www/dokeos/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</div>
-This procedure should make a new icon available in your Dokeos online
-editor, which will make it possible to insert mathematical formulas
-into your documents.<br />
-
-
-				  
-<br />
-<br />
-
-Contact address: Dokeos, Rue Victor Hugo, 201,&nbsp;B-1030 Brussels, Belgium<br />
-
-Mail: info@dokeos.com<br />
-
-Tel. +32 (0)2 669 69 55<br />
-<br />
-
+<p><i>Adding a symbolic link can be done, under Windows, by creating a
+  shortcut to the mimetex.exe file from the cgi-bin directory, or under
+  Linux by issuing the following command:</i>
+  
+</p>
+<div class="code">
+  <p>ln -s /var/www/dokeos/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</p>
+</div>
+<p>If you don't want modify your Apache, alternately you can make at this point 6: copy mimetex.exe (for windows) or mimetex.cgi (for linux) to your cgi-bin/ </p>
+<p>&nbsp;</p>
+<p>This procedure should make a new icon available in your Dokeos online
+  editor, which will make it possible to insert mathematical formulas
+  into your documents.<br />
+  
+  
+  
+  <br />
+  <br />
+  Contact address: Dokeos, Rue Victor Hugo, 201,&nbsp;B-1030 Brussels, Belgium<br />
+  
+  Mail: info@dokeos.com<br />
+  
+  Tel. +32 (0)2 669 69 55<br />
+  <br />
+  
+</p>
 <hr />
 </div>
 

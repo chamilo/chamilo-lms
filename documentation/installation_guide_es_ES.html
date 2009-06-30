@@ -694,18 +694,15 @@ FCKConfig.ToolbarSets donde usted desee que el icono de LaTeX aparezca
 
 				Usted puede agregarlo a todas las herramientas, o solamente a las herramientas de documentos y pruebas, por ejemplo<br />
         <br />
-
 			</li>
-
-		
     </ul>
+	  </li>
 
-		</li>
-
-	<li>4. Para servidores Windows solamente, actualizar <i>dokeos/main/inc/lib/fckeditor/editor/plugins/mimetex/mimetex.html</i> para reemplazar <b>mimetex.cgi</b> por <b>mimetex.exe</b></li>
+	<li>4. En raras ocasiones (sólo si se detecta algún problema), las opciones de configuración del fichero /dokeos/main/inc/lib/fckeditor/fckeditor.php tendrán que ser editadas manualmente</li>
 
 	<li>5. Limpiar la cache de su navegador para probarlo (muy importante). Esto se puede hacer mediante el uso de la página de configuraciones de su navegador</li>
 
+    <li>6. Realice estos cambios:</li>
 </ul>
 
 <i>Agregar el directorio cgi-bin correspondiente a su configuración de Apache puede ser lograda de esta manera, en Apache 2:</i>
@@ -733,22 +730,25 @@ acceso directo al archivo mimetex.exe desde el directorio cgi-bin, o bajo
 Linux usando el siguiente comando:</i>
 	
 <div class="code">ln -s /var/www/dokeos/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</div>
-Este procedimiento creará un nuevo icono disponible en su editor en linea de Dokeos
-, el cual hara posible la inserción de formulas matemáticas en sus documentos.<br />
-<br />
-
-
-				  
-<br />
-<br />
-
-Dirección de Contacto: Dokeos, Rue du Corbeau, 108, B-1030 Brussels, Belgium<br />
-
-Correo: info@dokeos.com<br />
-
-Tel. +32 (0)2 669 69 55<br />
-<br />
-
+<p>Si no quiere modificar su Apache, alternativamente a  este punto 6: copie mimetex.exe (para Windows) o mimetex.cgi (para Linux) en su cgi-bin/ </p>
+<p>&nbsp;</p>
+<p>Este procedimiento creará un nuevo icono disponible en su editor en linea de Dokeos
+  , el cual hara posible la inserción de formulas matemáticas en sus documentos.<br />
+  <br />
+  
+  
+  
+  <br />
+  <br />
+  
+  Dirección de Contacto: Dokeos, Rue du Corbeau, 108, B-1030 Brussels, Belgium<br />
+  
+  Correo: info@dokeos.com<br />
+  
+  Tel. +32 (0)2 669 69 55<br />
+  <br />
+  
+</p>
 <hr />
 </div>
 

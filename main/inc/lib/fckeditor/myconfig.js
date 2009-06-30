@@ -496,9 +496,6 @@ FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
 // have not been read yet from the php-integration file. We are able to access them anyway.
 FCK.AdvancedFileManager = FCKConfig.PageConfig.AdvancedFileManager ; // true or false
 
-// TODO: To be checked for removal.
-var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;
-
 
 /*
  * Plugins.

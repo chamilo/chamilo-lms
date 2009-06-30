@@ -489,15 +489,6 @@ FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
 
 
 /*
- * Helper variables.
- */
-
-// At this moment of loading editor's javascripts, the configuration settings FCKConfig.*
-// have not been read yet from the php-integration file. We are able to access them anyway.
-FCK.AdvancedFileManager = FCKConfig.PageConfig.AdvancedFileManager ; // true or false
-
-
-/*
  * Plugins.
  * If you want to add a non-existing language code in some of the pligin
  * declarations, it is mandatory a corresponding language file to be opened
@@ -520,7 +511,7 @@ FCKConfig.Plugins.Add('MP3', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk
 //FCKConfig.Plugins.Add('audio', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
 
 // A specialised browser/editor for images.
-if (!FCK.AdvancedFileManager)
+if (!FCKConfig.PageConfig.AdvancedFileManager)
 {
 	// It is not needed in the advanced file manager mode.
 	// The laanguage sub-system of the Image Manager is different.
@@ -688,7 +679,7 @@ FCKConfig.MediaUploadDeniedExtensions	= "" ;
 // If you wish to alter some of the settings above and to make them
 // specific for the advanced file manager mode, you may do this within
 // the following "if" block.
-if ( FCK.AdvancedFileManager )
+if (FCKConfig.PageConfig.AdvancedFileManager)
 {
 	FCKConfig.LinkUpload = false ;
 	FCKConfig.ImageUpload = false ;

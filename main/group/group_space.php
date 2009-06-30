@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 20611 2009-05-13 22:21:08Z iflorespaz $
+<?php //$Id: group_space.php 21665 2009-06-30 00:14:57Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -38,24 +38,24 @@
 */
 // name of the language file that needs to be included
 $language_file = "group";
-include ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 /*
 -----------------------------------------------------------
 	Libraries & config files
 -----------------------------------------------------------
 */
-include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
-require_once (api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php');
-require_once (api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php');
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 /*
 ==============================================================================
 		MAIN CODE
 ==============================================================================
 */
 $current_group = GroupManager :: get_group_properties($_SESSION['_gid']);
-if(!is_array($current_group) ) {
+if (!is_array($current_group) ) {
 //display some error message
 }
 

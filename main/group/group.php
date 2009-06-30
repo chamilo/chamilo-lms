@@ -1,4 +1,4 @@
-<?php // $Id: group.php 20611 2009-05-13 22:21:08Z iflorespaz $
+<?php // $Id: group.php 21665 2009-06-30 00:14:57Z iflorespaz $
  
 /*
 ==============================================================================
@@ -46,12 +46,21 @@
 */
 // name of the language file that needs to be included
 $language_file = 'group';
-include ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
 // notice for unauthorized people.
 api_protect_course_script(true); 
- 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+$(document).ready( function() {
+	for (i=0;i<$(".actions").length;i++) {
+		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
+			$(".actions:eq("+i+")").hide();
+		}		
+	}
+ } ); 
+ </script>';
 $nameTools = get_lang('GroupManagement');
 
 /*

@@ -157,9 +157,9 @@ class GroupManager
 						ug.user_id is_member,
 						COUNT(ug2.id) number_of_members
 					FROM ".$table_group." `g`
-					INNER JOIN ".$table_group_user." `ug`
+					LEFT JOIN ".$table_group_user." `ug`
 					ON `ug`.`group_id` = `g`.`id` AND `ug`.`user_id` = '".$_user['user_id']."'
-					INNER JOIN ".$table_group_user." `ug2`
+					LEFT JOIN ".$table_group_user." `ug2`
 					ON `ug2`.`group_id` = `g`.`id`";
 		}
 							

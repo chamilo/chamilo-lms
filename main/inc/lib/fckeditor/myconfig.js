@@ -490,25 +490,27 @@ FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
 
 /*
  * Plugins.
- * If you want to add a non-existing language code in some of the pligin
- * declarations, it is mandatory a corresponding language file to be opened
- * in the plugin's "lang" directory.
  */
+
+// If you want to add a non-existing language code in some of the pligin
+// declarations, it is mandatory a corresponding language file to be opened
+// in the plugin's "lang" directory.
+FCK.AvailableLanguages = 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh' ;
 
 // The "customizations" plugin modifies some internal functionalities of the editor.
 // It should be loaded before the other plugins.
-FCKConfig.Plugins.Add('customizations', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
+FCKConfig.Plugins.Add('customizations', FCK.AvailableLanguages) ;
 
 // These plugins improve table-operations.
 FCKConfig.Plugins.Add('dragresizetable') ;
 FCKConfig.Plugins.Add('tablecommands') ;
 
 // Audio files insertion.
-FCKConfig.Plugins.Add('MP3', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
+FCKConfig.Plugins.Add('MP3', FCK.AvailableLanguages) ;
 
 // Another dialog for insertion audio files.
 // If you wish to use it, disable the "MP3" plugin first.
-//FCKConfig.Plugins.Add('audio', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
+//FCKConfig.Plugins.Add('audio', FCK.AvailableLanguages) ;
 
 // A specialised browser/editor for images.
 if (!FCKConfig.PageConfig.AdvancedFileManager)
@@ -523,16 +525,16 @@ if (!FCKConfig.PageConfig.AdvancedFileManager)
 //FCKConfig.Plugins.Add('Flash', 'en') ;
 
 // Embeding video files.
-FCKConfig.Plugins.Add('fckEmbedMovies', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh');
+FCKConfig.Plugins.Add('fckEmbedMovies', FCK.AvailableLanguages);
 
 // flv video files insertion.
-FCKConfig.Plugins.Add('flvPlayer', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
+FCKConfig.Plugins.Add('flvPlayer', FCK.AvailableLanguages) ;
 
 // Video streams insertion, YouTube service.
-FCKConfig.Plugins.Add('youtube', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
+FCKConfig.Plugins.Add('youtube', FCK.AvailableLanguages) ;
 
 // Digital maps insertion, GoogleMaps service.
-FCKConfig.Plugins.Add('googlemaps', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
+FCKConfig.Plugins.Add('googlemaps', FCK.AvailableLanguages) ;
 // This key is for http://localhost. You must get one for each server where you want to use the plugin,
 // just get the key for free here after agreeing to the Terms of Use of the GoogleMaps API:
 // http://www.google.com/apis/maps/signup.html. // If you leave an empty string then the toolbar icon won't be shown.
@@ -541,13 +543,13 @@ FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE
 // Mathematical formulas insertion.
 // In order the "mimetex" plugin to work prpoperly, preliminary changes
 // in your server configuration have to be done. See the installation guide.
-FCKConfig.Plugins.Add('mimetex', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
+FCKConfig.Plugins.Add('mimetex', FCK.AvailableLanguages) ;
 
 // Wiki-formatted links insertion.
-FCKConfig.Plugins.Add('wikilink', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh') ;
+FCKConfig.Plugins.Add('wikilink', FCK.AvailableLanguages) ;
 
 // A dialog for assigning hyperlinks to specified image areas.
-FCKConfig.Plugins.Add('imgmap', 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh');
+FCKConfig.Plugins.Add('imgmap', FCK.AvailableLanguages);
 
 
 /*

@@ -214,7 +214,7 @@ DlgImgAlignMiddle	: "По средата",
 DlgImgAlignRight	: "Отдясно",
 DlgImgAlignTextTop	: "Върху текста",
 DlgImgAlignTop		: "Отгоре",
-DlgImgPreview		: "Изглед",
+DlgImgPreview		: "Преглед",
 DlgImgAlertUrl		: "Моля, въведете адреса (URL) на изображението",
 DlgImgLinkTab		: "Връзка",
 
@@ -509,7 +509,7 @@ DlgDocMeIndex		: "Ключови думи за документа (раздел�
 DlgDocMeDescr		: "Описание на документа",
 DlgDocMeAuthor		: "Автор",
 DlgDocMeCopy		: "Авторски права",
-DlgDocPreview		: "Изглед",
+DlgDocPreview		: "Преглед",
 
 // Templates Dialog
 Templates			: "Шаблони",

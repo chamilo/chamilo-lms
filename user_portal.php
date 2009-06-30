@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 20476 2009-05-11 11:02:18Z ivantcholakov $
+<?php // $Id: user_portal.php 21667 2009-06-30 00:23:23Z iflorespaz $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -996,9 +996,10 @@ if (api_get_setting('search_enabled') == 'true') {
     $search_btn = get_lang('Search');
     $search_text_default = get_lang('YourTextHere');
 echo <<<EOD
+<br/>
 <form action="main/search/" method="post">
-<input type="text" id="query" name="query" value="$search_text_default" />
-<input type="submit" name="submit" value="$search_btn" />
+&nbsp;&nbsp;<input type="text" id="query" name="query" value="$search_text_default" />
+&nbsp;&nbsp;<input type="submit" name="submit" value="$search_btn" />
 </form>
 EOD;
     echo '</div>';

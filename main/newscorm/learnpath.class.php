@@ -6546,10 +6546,17 @@ class learnpath {
 			}
 		}
 		$parent_select = & $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" style="width:40%;" onchange="load_cbo(this.value);"');
-
+		$my_count=0;
 		foreach ($arrHide as $key => $value) {
-			$value['value'] = Security :: remove_XSS(api_convert_encoding($value['value'], api_get_system_encoding(), $this->encoding));
-			$parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
+			if ($my_count!=0) {
+				// the LP name is also the first section and is not in the same charset like the other sections  
+				$value['value'] = Security :: remove_XSS(api_convert_encoding($value['value'], api_get_system_encoding(), $this->encoding));
+				$parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
+			} else {
+				$value['value'] = Security :: remove_XSS($value['value']);
+				$parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
+			}
+			$my_count++;
 		}
 
 		if (!empty ($id)) {

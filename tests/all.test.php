@@ -20,7 +20,8 @@ class AllTests extends TestSuite {
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/display.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/document.lib.test.php');   
+        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/document.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/events.lib.inc.test.php');   
         //$this->assertTrue(file_exists('/temp/test.log'));
     }
 }

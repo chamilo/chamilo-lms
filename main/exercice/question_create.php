@@ -46,14 +46,14 @@ api_protect_course_script(true);
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 
 // Tool name
-$nameTools=get_lang('AddQuestion');
+$nameTools=get_lang('AddQuestionToExercise');
 
 
 
 // The form
 $form = new FormValidator('add_question','post');
 // form title
-$form->addElement('header','',get_lang('AddQuestion'));
+$form->addElement('header','',get_lang('AddQuestionToExercise'));
 
 // the question types (normal form element)
 /*

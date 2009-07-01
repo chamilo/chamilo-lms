@@ -1,4 +1,4 @@
-<?php // $Id: document.php 21106 2009-05-30 16:25:16Z iflorespaz $
+<?php // $Id: document.php 21696 2009-07-01 17:42:04Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -75,7 +75,16 @@ require_once 'document.inc.php';
 require_once '../inc/lib/usermanager.lib.php';
 
 api_protect_course_script(true);
-
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+$(document).ready( function() {
+	for (i=0;i<$(".actions").length;i++) {
+		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
+			$(".actions:eq("+i+")").hide();
+		}		
+	}
+ } ); 
+ </script>';
 //session
 if(isset($_GET['id_session']))
 	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']);

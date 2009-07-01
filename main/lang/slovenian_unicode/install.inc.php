@@ -114,4 +114,6 @@ $PleasGoBackToStep1 = "Prosim, pojdite nazaj na korak 1";
 $OptionalParameters = "Opcijski parametri";
 $FailedConectionDatabase = "Povezava s podatkovno bazo ni uspela. V splošnem se ta napaka pojavi zaradi napačnega uporabniškega imena, gesla, imena podatkovne baze ali njene predpone. Preverite nastavitve in poskusite ponovno.";
 $EncryptMethodUserPass = "Način kriptiranja";
+$UpgradeFromDokeos16x = "Nadgradi Dokeos 1.6.x";
+$UpgradeFromDokeos18x = "Nadgradi Dokeos 1.8.x";
 ?>

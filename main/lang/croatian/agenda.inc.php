@@ -65,4 +65,13 @@ $RepeatYearly = "Godišnje";
 $RepeatEnd = "Ponovi zaklju&#269;ni nadnevak";
 $RepeatedEventViewOriginalEvent = "Pogledaj po&#269;etni doga&#273;aj";
 $ICalFileImport = "Preuzmi iCal/ics dokument";
+$AllUsersOfThePlatform = "Svi korisnici sustava";
+$GlobalEvent = "Globalni doga&#273;aj";
+$ModifyEvent = "Uredi element";
+$EndDateCannotBeBeforeTheStartDate = "Zaklju&#269;ni nadnevak ne može biti prije nadnevka po&#269;etka ";
+$AgendaSortChronologicallyUp = "Sortiraj zapise rasporeda kronološki uzlazno";
+$AgendaSortChronologicallyDown = "Sortiraj zapise rasporeda kronološki silazno";
+$ItemForUserSelection = "Korisni&#269;ki popis odabira";
+$IsNotiCalFormatFile = "Ova datoteka nije u formatu iCal";
+$RepeatEvent = "Ponovi doga&#273;aj";
 ?>

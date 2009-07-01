@@ -288,4 +288,5 @@ $QuestionsPerPageOne = "Unu";
 $QuestionsPerPageAll = "Toate";
 $EditIndividualComment = "Modifica feedback individual";
 $langDefaultMultipleAnswer2 = "Peru";
+$BackToResultList = "Inapoi la lista de rezultate";
 ?>

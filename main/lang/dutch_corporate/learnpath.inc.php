@@ -204,6 +204,7 @@ $ShowAllAttemptsByExercise = "Alle pogingen per test weergeven";
 $ShowAttempt = "Poging weergeven";
 $ShowAndQualifyAttempt = "Toon en evalueer poging";
 $langAddEdit = "Toevoegen / wijzigen";
+$SaveSection = "Bewaar sectie";
 $AddLinkToCourse = "Voeg een link toe aan de cursus";
 $AddAssignmentToCourse = "Voeg een taak toe aan de cursus";
 $AddForumToCourse = "Voeg een forum toe aan de cursus";

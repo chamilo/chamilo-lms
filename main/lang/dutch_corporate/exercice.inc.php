@@ -277,6 +277,5 @@ $QuestionsPerPageOne = "één";
 $QuestionsPerPageAll = "Allemaal";
 $EditIndividualComment = "Individuele feedback wijzigen";
 $langDefaultMultipleAnswer2 = "Peru";
-$SaveSection = "Bewaar sectie";
 $BackToResultList = "Terg naar resultatenlijst";
 ?>

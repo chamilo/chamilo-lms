@@ -15,5 +15,6 @@ $lang_new_forum_topic = "subiect de discutie nou adaugat";
 $lang_new_groupforum_topic = "subiect de discutie nou adaugat la forumul grupului";
 $lang_new_dropbox_file = "fisier nou primit";
 $lang_update_dropbox_file = "fisierul din dropbox tau a fost actualizat";
+$ForumCategoryAdded = "Adauga categorie forum";
 $LearnpathAdded = "Adauga curs";
 ?>

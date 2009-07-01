@@ -6,6 +6,7 @@ $langSubTitle = "Adauga linkul unei pagini pe pagina principala a cursului. Pent
 $langAddPage            = "Adauga o pagina";
 $langSendPage           = "Pagina de transferat";
 $langCouldNot           = "Fisierul nu a putut fi transferat";
+$langOkSentLink         = "Linkul este adaugat.Este valabil prin <a href=\"%s/index.php\">pagina de start</a>";
 $langTooBig             = "Nu ai ales sa trimti nici un fisier, sau este prea mare.";
 $langExplanation        = "Pagina trebuie sa fie in format HTML (ex. \"pagina_mea.htm\"). Va fi linkata de pe Pagina Principala. Daca doresti sa trimiti documente non HTML (PDF, Word, Power Point, Video, etc.) foloseste <a href=../document/document.php>unealta Documente</a>";
 $langPgTitle            = "Titlul paginii";

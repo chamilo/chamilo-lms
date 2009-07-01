@@ -45,6 +45,7 @@ $langStudentsNotInThisGroups  = "Käyttäjät jotka eivät ole tässä ryhmässä";
 $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Käyttäjä voi kuulu maksimissaan ";
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " ryhmään";
 $langGroupLimit = "Rajoitus";
+$CreateGroup = "Luo ryhmä(t)";
 $langStudentRegAllowed = "Opiskelijat voivat itse rekisteröityä ryhmiin";
 $langGroupAllowStudentUnregistration = "Käyttäjät on sallitu itse poistua ryhmistä";
 $langAllGroups = "Kaikki ryhmät";
@@ -60,4 +61,8 @@ $langSameForAll = "sama kaikille";
 $langNoLimit = "Ei rajoituksia";
 $langPleaseEnterValidNumber = "Montako ryhmää haluat muodostaa";
 $langCreateGroupsFromVirtualCourses = "Muodosta ryhmät kaikista kurssilla olijoista";
+$Empty = "Tyhjä";
+$FillGroup = "Lisää käyttäjiä";
+$GroupAnnouncements = "Ilmoitukset";
+$Group = "Ryhmä";
 ?>

@@ -238,6 +238,7 @@ $ObjectiveMinScore = "Score min";
 $LPName = "Nom du cours";
 $AuthoringOptions = "Options d\'authoring";
 $CourseSettings = "Paramètres du cours";
+$SaveSection = "Enregistrer la section";
 $AddLinkToCourse = "Ajouter ce lien au cours";
 $AddAssignmentToCourse = "Ajouter cette tâche au cours";
 $AddForumToCourse = "Ajouter ce forum au cours";

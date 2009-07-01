@@ -12,4 +12,5 @@ $langSendPage = "Stranica za u&#269;itavanje";
 $langPageTitleModified = "Naslov ove stranice je izmijenjen";
 $langPageAdded = "Stranica dodana";
 $langAddPage = "Dodaj stranicu";
+$Choose = "Pretraživanje";
 ?>

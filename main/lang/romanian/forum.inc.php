@@ -96,6 +96,7 @@ $AddImage = "Adauga imagine";
 $StudentList = "Lista cursistilor";
 $CourseUsers = "Utilizatori in training";
 $PostsNumber = "numar mesaje";
+$OrderBy = "Sorteaza dupa";
 $ThreadStatistics = "Statisticile discutiei";
 $Thread = "Discutie";
 $NotifyMe = "Tine-ma la curent cu noutatile";

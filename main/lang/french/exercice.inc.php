@@ -317,7 +317,6 @@ $langDefaultMultipleComment2 = "La vitamine A intervient dans la production de .
 $langDefaultFillBlankQuestion = "Calculer l\'Indice de Masse Corporelle";
 $langDefaultMathingQuestion = "Mode opératoire";
 $langDefaultOpenQuestion = "Quelles sont, selon vous, les 10 qualités d\'un bon gestionnaire de projet?";
-$SaveSection = "Enregistrer la section";
 $langMoreHotspotsImage = "Ajouter/éditer les zones sur l\'image";
 $ReachedTimeLimitAdmin = "Limite de temps dépassée.";
 $LastScoreTest = "Dernier résultat de l\'exercice";

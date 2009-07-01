@@ -238,6 +238,7 @@ $ObjectiveMinScore = "Min rezultat uènega cilja";
 $LPName = "Naziv teèaja";
 $AuthoringOptions = "Avtorske možnosti";
 $CourseSettings = "Nastavitve teèaja";
+$SaveSection = "Shrani razdelek";
 $AddLinkToCourse = "Dodaj povezavo k teèaju";
 $AddAssignmentToCourse = "Dodaj nalogo/zadolžitev k teèaju";
 $AddForumToCourse = "Dodaj forum v teèaj";

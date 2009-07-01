@@ -82,6 +82,8 @@ $langElementList = "Luettelo";
 $langScore = "Pisteet";
 $langExpectedChoice = "Oikea vastaus";
 $langYourTotalScore = "Yhteispistemääräsi on";
+$langExerciseAdded = "Harjoitus lisätty";
+$Build = "Muokkaa";
 $langEvalSet = "Pisteytys määritykset";
 $langActive = "Toimiva";
 $langInactive = "Toimimaton";
@@ -189,4 +191,7 @@ $ExerciseFinished = "Harjoitus valmis";
 $DisableResults = "Älä näytä tuloksia oppilaille";
 $EnableResults = "Näytä tulokset oppilaille";
 $ValidateAnswer = "Tarkista vastaukset";
+$AdvancedParameters = "Lisäasetukset";
+$TryAgain = "Yritä uudelleen";
+$QuestionsPerPage = "Kysymys per sivu";
 ?>

@@ -238,6 +238,7 @@ $ObjectiveMinScore = "Objective min score";
 $LPName = "Course name";
 $AuthoringOptions = "Authoring options";
 $CourseSettings = "Course settings";
+$SaveSection = "Save section";
 $AddLinkToCourse = "Add link to course";
 $AddAssignmentToCourse = "Add assignment to course";
 $AddForumToCourse = "Add forum to course";

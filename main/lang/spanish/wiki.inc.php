@@ -62,7 +62,7 @@ $Rating = "Puntuación";
 $RatingMedia = "La puntuación media de la página es";
 $NumComments = "El número de comentarios a esta página es";
 $NumCommentsScore = "El número de comentarios que la han evaluado es";
-$AddPagesLocked = "La opción añadir páginas ha sido desactivada temporalmente por el reponsable del curso";
+$AddPagesLocked = "La opción añadir páginas ha sido desactivada temporalmente por el profesor";
 $LinksPages = "Referencias";
 $ShowLinksPages = "Muestra las páginas que tienen enlaces a esta página";
 $MoreWikiOptions = "Más opciones del Wiki";
@@ -154,4 +154,5 @@ $LastVersion = "Última versión";
 $PageRestored = "La página ha sido restaurada. Puede verla haciendo clic en";
 $RestoredFromVersion = "Página restaurada desde la versión";
 $HWiki = "Ayuda: Wiki";
+$FirstSelectOnepage = "Primero seleccione una página";
 ?>

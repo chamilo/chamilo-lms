@@ -238,6 +238,7 @@ $ObjectiveMinScore = "Punteggio minimo Obiettivo";
 $LPName = "Titolo del modulo";
 $AuthoringOptions = "Opzioni di authoring";
 $CourseSettings = "Configurazione del modulo";
+$SaveSection = "Salva l\'elemento";
 $AddLinkToCourse = "Includi collegamento nel modulo";
 $AddAssignmentToCourse = "Includi pagina elaborati nel modulo";
 $AddForumToCourse = "Includi Forum nel modulo";

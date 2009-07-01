@@ -238,6 +238,7 @@ $ObjectiveMinScore = "Puntuación mínima del objetivo";
 $LPName = "Título de la lección";
 $AuthoringOptions = "Autorización de opciones";
 $CourseSettings = "Configuración de la lección";
+$SaveSection = "Guardar sección";
 $AddLinkToCourse = "Agregar el enlace a la lección";
 $AddAssignmentToCourse = "Agregar la tarea a la lección";
 $AddForumToCourse = "Agregar el foro a la lección";

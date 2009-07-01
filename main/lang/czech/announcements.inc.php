@@ -48,4 +48,12 @@ $AnnouncementDeletedAll = "Všechna oznámení byla smazána";
 $AnnouncementMoved = "Oznámení bylo p&#345;esunuto";
 $NoAnnouncements = "Tam nejsou žádné oznámení.";
 $SelectEverybody = "Vyber všechny";
+$SelectedUsersGroups = "Vybrané skupiny uživatel&#367;";
+$LearnerMessage = "Zpráva od studenta";
+$TitleIsRequired = "Název je povinný";
+$AnnounceSentByEmail = "Oznámení zasláno emailem";
+$AnnounceSentToUserSelection = "Oznámení zasláno zvoleným uživatel&#367;m";
+$SendAnnouncement = "Poslat oznámení";
+$ModifyAnnouncement = "Upravit oznámení";
+$ButtonPublishAnnouncement = "Poslat oznámení";
 ?>

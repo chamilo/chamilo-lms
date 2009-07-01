@@ -102,6 +102,7 @@ $AllowLaterSends = "Fa posibila trimiterea cu intarziere";
 $EmailWikiChanges = "Tine-ma la curent cu modificarile wiki.";
 $EmailWikipageModified = "Pagina wiki e modificata.";
 $EmailWikiPageAdded = "Pagina a fost adaugata.";
+$EmailWikipageDedeleted = "O pagina a fost stearsa de pe Wiki";
 $EmailWikiChangesExt_2 = "Daca doriti sa nu mai primiti notificari cu privire la modificarile din Wiki, selectati taburile <strong> Recent Changes</ strong>, <strong>Current page</ strong>, <strong>Talk</ strong> si apoi apasati butonul";
 $Visits = "Vizite";
 $OrphanedPages = "Pagini orfane";

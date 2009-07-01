@@ -317,7 +317,6 @@ $langDefaultMultipleComment2 = "Vitamin A je odgovoren za ...";
 $langDefaultFillBlankQuestion = "Izraèunaj indeks telesne mase (BMI)";
 $langDefaultMathingQuestion = "Razvrstite operacije";
 $langDefaultOpenQuestion = "Naštejte 10 lastnosti dobrega upravljanja projektov";
-$SaveSection = "Shrani razdelek";
 $langMoreHotspotsImage = "Dodaj/Uredi vroèo toèko na sliki";
 $ReachedTimeLimitAdmin = "Nastavitev èasovne omejitve";
 $LastScoreTest = "Zadnji rezultat testa";

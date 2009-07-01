@@ -69,4 +69,5 @@ $SubmitRegistrationCode = "Submeter código do registo";
 $CourseCategoryDeleted = "Categoria do curso apagada";
 $CategorySortingDone = "Ordenamento das categorias concluído";
 $CourseCategoryEditStored = "Categoria atualizada";
+$buttonCreateCourseCategory = "Salvar categoria de curso";
 ?>

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langOnlineConference  = "Conferinta";
-$langWash  = "Wash";
+$langWash  = "Sterge";
 $langReset  = "Restart";
 $langSave  = "Salveaza";
 $langRefresh  = "Reactualizeara";
@@ -10,12 +10,12 @@ $langIsNowInYourDocDir  = "se afla acum in uneltele Document. <br><B>Acest fisie
 $langCopyFailed  = "Tiparire esuata";
 $langTypeMessage  = "Te rog scrie mesajul !";
 $langConfirmReset  = "Esti sigur(a) ca doresti sa stergi toate mesajele?";
-$langHasResetChat  = "sa restartat Chatul";
+$langHasResetChat  = "Chatul s-a restartat";
 $langNoOnlineConference  = "Nu este nici o conferinta pentru moment ...";
-$langMediaFile  = "Live audio or video ";
+$langMediaFile  = "Live audio sau video ";
 $langContentFile  = "Prezentare";
 $langListOfParticipants  = "Lista de participanti";
-$langYourPicture  = "Poza ta";
+$langYourPicture  = "Fotografia ta";
 $langOnlineDescription  = "Descrierea conferintei";
 $langOnlyCheckForImportantQuestion = "Te rog bifeaza aceasta casuta pentru o intrebare importanta !";
 $langQuestion = "intrebare";

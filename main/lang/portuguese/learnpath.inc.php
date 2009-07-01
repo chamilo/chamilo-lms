@@ -216,6 +216,7 @@ $CreateLearningPath = "Continuar >";
 $AddForum = "Acrescentar fórum";
 $LPName = "Título do módulo";
 $CourseSettings = "Configurações do curso";
+$SaveSection = "Guardar secção";
 $AddLinkToCourse = "Acrescentar ligação";
 $AddForumToCourse = "Acrescentar fórum ao curso";
 ?>

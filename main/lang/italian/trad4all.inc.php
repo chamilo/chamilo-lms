@@ -721,4 +721,5 @@ $SendAMessage = "Invia messaggio";
 $Menu = "Menù";
 $BackToUserList = "Torna all\'elenco dei corsisti";
 $GraphicNotAvailable = "Grafico non disponibile";
+$BackTo = "Torna a";
 ?>

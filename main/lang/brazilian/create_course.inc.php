@@ -98,4 +98,5 @@ $ExampleForumCategory = "Exemplo de categoria de fórum";
 $ExampleForum = "Exemplo de Fórum";
 $ExampleThread = "Exemplo de mensagem";
 $ExampleThreadContent = "Exemplo de conteúdo";
+$CreateCourseArea = "Criar este curso";
 ?>

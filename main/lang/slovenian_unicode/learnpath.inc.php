@@ -238,6 +238,7 @@ $ObjectiveMinScore = "min rezultat učnega cilja";
 $LPName = "Naziv tečaja";
 $AuthoringOptions = "Avtorske opcije";
 $CourseSettings = "Nastavitve tečaja";
+$SaveSection = "Shrani razdelek";
 $AddLinkToCourse = "Dodaj povezavo k tečaju";
 $AddAssignmentToCourse = "Dodaj nalogo/zadolžitev tečaju";
 $AddForumToCourse = "Dodaj forum tečaju";

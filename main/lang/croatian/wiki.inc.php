@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$WikiSearchResults = "Rezultat Wiki pretrage";
 $Wiki = "Wiki";
 $StartPage = "Po&#269;etna stranica";
 $EditThisPage = "Uredi ovu stranicu";
@@ -77,4 +78,9 @@ $WikiStandardMode = "Wiki oblik rada";
 $GroupTutorAndMember = "Tutor i &#269;lan skupine";
 $GroupTutor = "Tutor skupine";
 $GroupStandardMember = "&#268;lan skupine";
+$AssignmentMode = "Individualni na&#269;in rada";
+$ConfigDefault = "Temeljna postavka";
+$UnlockPage = "Ukloni zaštitu";
+$LockPage = "Zaštiti";
+$HWiki = "Pomo&#263;: Wiki";
 ?>

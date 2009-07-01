@@ -979,4 +979,13 @@ $SoberBrown = "Sober brown";
 $SteelGrey = "Steel grey";
 $TastyOlive = "Tasty olive";
 $AddNews  = "Aggiungi avvisi";
+$SearchDatabaseOpeningError = "Non è possibile accedere al database di indicizzazione dei contenuti";
+$SearchDatabaseVersionError = "Il formato del database non è supportato";
+$SearchDatabaseModifiedError = "Database di indicizzazione modificato";
+$SearchDatabaseLockError = "Non è possibile bloccare il database";
+$SearchDatabaseCreateError = "Non è stato possibile creare il database di indicizzazione";
+$SearchDatabaseCorruptError = "Il database di indicizzazione è corrotto";
+$SearchNetworkTimeoutError = "Errore di timeout nella connessione al database remoto di indicizzazione";
+$SearchOtherXapianError = "Errore nel motore di ricerca";
+$SearchXapianModuleNotInstaled = "Il modulo Xapian non risulta installato";
 ?>

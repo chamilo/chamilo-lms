@@ -43,4 +43,7 @@ $langOnHomepage = "Näytä linkki kotisivulla";
 $langShowLinkOnHomepage = "Näytä tämä linkki kuvakkeena kurssin etusivulla";
 $langCsvImport = "CSV tiedoston tuonti";
 $General = "Yleinen";
+$langSaveLink = "Tallenna linkki";
+$langSaveCategory = "Tallenna kansio";
+$BackToLinksOverview = "Palaa linkkien johdantoon";
 ?>

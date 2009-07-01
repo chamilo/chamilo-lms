@@ -42,4 +42,9 @@ $langBackup = "Záloha";
 $langImportBackupInfo = "Import zálohy. Budete schopni nahrát soubor z vašeho lokálního disku nebo m&#367;žete použít zálohu dostupnou na serveru.";
 $langCreateBackupInfo = "Vytvo&#345;it zálohu tohoto kurzu. M&#367;žete zvolit obsah kurzu a vložit ho zálohovacího souboru.";
 $ToolIntro = "P&#345;edstavení nástroje";
+$UploadError = "Nahrání neúsp&#283;šné, prosím zkontrolujte maximální povolenou velikost souboru a práva adresá&#345;e";
+$DocumentsWillBeAddedToo = "Dokumenty budou také p&#345;idány";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Pokud chcete exportovat kurz, který obsahuje test, pak si musíte být jisti, že odpovídající testy jsou sou&#269;ástí exportu, tak že jej musíte ozna&#269;it v seznamu test&#367;";
+$ArchivesDirectoryNotWriteableContactAdmin = "Archivní katalog používaný tímto nástrojem není možné p&#345;epsat. Kontaktujte prosím svého admina platformy.";
+$DestinationCourse = "Cílový kurz";
 ?>

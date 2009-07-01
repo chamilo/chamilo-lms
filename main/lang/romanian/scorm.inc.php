@@ -45,5 +45,11 @@ $FileToUpload = "Fisier de incarcat";
 $ContentMaker = "Creator de continut";
 $ContentProximity = "Vecinatatea continutului	";
 $UploadLocalFileFromGarbageDir = "Incarca fisierul local din folderul principal/gunoi";
+$ThisItemIsNotExportable = "Acest termen nu este compatibil in SCORM. Nu poate fi exportat.";
+$MoveCurrentChapter = "Mutati acest capitol";
+$GenericScorm = "Scorm generic";
+$UnknownPackageFormat = "Pachetul nu poate fi recunoscut. Asigurati-va ca este creat in mod corect si fara erori. Problemele sunt posibile datorita formatului Zip sau marimii prea mari a documentelor. Utilizati minim optiunile zip daca nu sunteti sigur de ZIP.";
 $Attempt = "Incercare";
+$MoveTheCurrentForum = "Muta forumul actual";
+$WarningWhenEditingScorm = "Atentie! In cazul in care schimati continutul SCORM, puteti provoca daune cursului.";
 ?>

@@ -979,4 +979,13 @@ $SoberBrown = "Sober brown";
 $SteelGrey = "Steel grey";
 $TastyOlive = "Tasty olive";
 $AddNews  = "Add news ";
+$SearchDatabaseOpeningError = "Failure to open a database";
+$SearchDatabaseVersionError = "Database is in an unsupported format";
+$SearchDatabaseModifiedError = "The database was modified";
+$SearchDatabaseLockError = "Failure to lock a database";
+$SearchDatabaseCreateError = "Failure to create a database";
+$SearchDatabaseCorruptError = "Database corruption was detected";
+$SearchNetworkTimeoutError = "Timeout expired while communicating with a remote database";
+$SearchOtherXapianError = "Error in search engine";
+$SearchXapianModuleNotInstaled = "Xapian module not is instaled";
 ?>

@@ -269,7 +269,7 @@ $NewScore = "Nieuwe score";
 $NewComment = "Nieuw commentaar";
 $CantShowResults = "Niet beschikbaar";
 $ShowCorrectedOnly = "Met individuele feedback";
-$ShowUnCorrectedOnly = "Alle resultaten";
+$ShowUnCorrectedOnly = "Niet gecorrigeerd resultaten";
 $HideResultsToStudents = "resultaten verbergen";
 $ShowResultsToStudents = "Score tonen aan cursist";
 $AddQuestionToExercise = "Voeg een vraag toe aan de test";
@@ -281,6 +281,5 @@ $QuestionsPerPageOne = "één";
 $QuestionsPerPageAll = "Allemaal";
 $EditIndividualComment = "Individuele feedback wijzigen";
 $langDefaultMultipleAnswer2 = "Peru";
-$SaveSection = "Bewaar sectie";
 $BackToResultList = "Terg naar resultatenlijst";
 ?>

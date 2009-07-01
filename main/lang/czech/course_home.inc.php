@@ -23,4 +23,6 @@ $GreyIcons = "Sada nástroj&#367;";
 $Interaction = "Interakce";
 $Authoring = "Auto&#345;i";
 $Administration = "Administrace";
+$IntroductionTextUpdated = "Úvodní text aktualizován";
+$IntroductionTextDeleted = "Úvodní text smazán";
 ?>

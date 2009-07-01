@@ -50,4 +50,10 @@ $NoAnnouncements = "Nema obavijesti";
 $SelectEverybody = "Odaberi sve";
 $SelectedUsersGroups = "odabrani korisnik skupine";
 $LearnerMessage = "Poruka studenta";
+$TitleIsRequired = "Naslov je obavezan";
+$AnnounceSentByEmail = "Obavijest poslana e-poštom";
+$AnnounceSentToUserSelection = "Obavijest poslana odabranim korisnicima";
+$SendAnnouncement = "Pošalji obavijest";
+$ModifyAnnouncement = "Uredi obavijest";
+$ButtonPublishAnnouncement = "Pošalji obavijest ";
 ?>

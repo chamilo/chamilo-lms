@@ -20,4 +20,5 @@ $NoteTitle = "Muistiinpanon otsikko";
 $NoteComment = "Muistiinpanon yksityiskohdat";
 $NoteAdded = "Muistiinpano lisätty";
 $NoteConfirmDelete = "Haluatko varmasti poistaa tämän muistiinpanon?";
+$AddNote = "Lisää muistiinpano";
 ?>

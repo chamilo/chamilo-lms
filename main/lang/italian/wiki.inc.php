@@ -154,4 +154,5 @@ $LastVersion = "Ultima versione";
 $PageRestored = "La pagina è stata ripristinata, puoi vederla cliccando";
 $RestoredFromVersion = "Ripristino dalla versione";
 $HWiki = "Aiuto: Wiki";
+$FirstSelectOnepage = "Seleziona prima una pagina, grazie.";
 ?>

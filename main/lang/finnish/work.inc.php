@@ -31,6 +31,10 @@ $EditToolOptions = "Muokkaa työkaluja";
 $DocumentDeleted = "Tiedosto poistettu";
 $SendMailBody = "Käyttäjä on tehnyt dokumentin kurssisi julkaisu työkalulla.";
 $DirDelete = "Poista hakemisto";
+$ValidateChanges = "Tallenna muutokset";
 $FolderUpdated = "Kansio päivitetty";
 $AddToCalendar = "Lisää kalenteriin";
+$ButtonCreateAssignment = "Luo testi";
+$AssignmentName = "Testin nimi";
+$CreateAssignment = "Luo testi";
 ?>

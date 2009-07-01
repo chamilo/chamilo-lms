@@ -73,4 +73,5 @@ $AgendaSortChronologicallyUp = "Nouseva";
 $AgendaSortChronologicallyDown = "Laskeva";
 $ItemForUserSelection = "Käyttäjien poiminta lista";
 $IsNotiCalFormatFile = "Tiedosto ei ole iCal formaatissa";
+$RepeatEvent = "Toista tapahtuma";
 ?>

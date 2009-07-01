@@ -317,7 +317,6 @@ $langDefaultMultipleComment2 = "A vitamina A é responsável por ...";
 $langDefaultFillBlankQuestion = "Calcular IMC?";
 $langDefaultMathingQuestion = "Determinar a seguinte relação";
 $langDefaultOpenQuestion = "Identifique o que considera serem as 10 principais qualidades de um bom gestor de projecto?";
-$SaveSection = "Guardar secção";
 $langMoreHotspotsImage = "Adicionar/editar hotspots/áreas clicáveis na imagem";
 $ReachedTimeLimitAdmin = "Atingido o tempo limite de admin";
 $LastScoreTest = "Última pontuação de uma actividade/exercício";

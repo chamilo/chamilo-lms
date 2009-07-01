@@ -177,8 +177,8 @@ class TestMainApi extends UnitTestCase {
   	
     function testApiGetUserInfoReturnFalseWhenOutOfUserInfoContext(){
     	$res = api_get_user_info();
-   		$this->assertTrue($res);
-    
+   		$this->assertTrue(is_null($res));
+   		//var_dump($res);
     }
    	
     function testApiGetUserInfoUsernameReturnTrueWhenOutOfUserInfoUsernameContext(){

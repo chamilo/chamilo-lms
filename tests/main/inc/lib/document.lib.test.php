@@ -219,7 +219,7 @@ class TestDocumentManager extends UnitTestCase {
 		$user_id=Database::escape_string($user_id);
 		$res=DocumentManager::unset_document_as_template($document_id, $course_code, $user_id);
 		$this->assertTrue(is_null($res));
-		var_dump($res);
+		//var_dump($res);
 	}
 }
 ?>

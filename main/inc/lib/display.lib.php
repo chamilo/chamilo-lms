@@ -90,7 +90,8 @@ class Display {
 	* Displays the tool introduction of a tool.
 	*
 	* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	* @param string $tool These are the constants that are used for indicating the tools
+	* @param string $tool These are the constants that are used for indicating the tools.
+	* @return $tool return a string array list with the "define" in main_api.lib 
 	* @return html code for adding an introduction
 	*/
 	public function display_introduction_section($tool)
@@ -103,15 +104,13 @@ class Display {
 		}
 	}
 
-	/*
+	/**
 	*	Displays a localised html file
-	*
 	*	tries to show the file "$full_file_name"."_".$language_interface.".html"
 	*	and if this does not exist, shows the file "$full_file_name".".html"
-	*
 	*	warning this public function defines a global
-	*
 	*	@param $full_file_name, the (path) name of the file, without .html
+	*	@return return a string with the path
 	*/
 	public function display_localised_html_file($full_file_name)
 	{
@@ -146,10 +145,10 @@ class Display {
 	*	"class"	 - the class to use for the table, e.g. "class=\"data_table\""
 	*   "cellpadding"  - the extra border in each cell, e.g. "8",default is 4
 	*   "cellspacing"  - the extra space between cells, default = 0
-	*
 	*	@param column_header, array with the header elements.
 	*	@author Roan Embrechts
 	*	@version 1.01
+	*	@return return type string, bgcolor
 	*/
 	public function display_complex_table_header($properties, $column_header)
 	{

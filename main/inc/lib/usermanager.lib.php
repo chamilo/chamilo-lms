@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 21523 2009-06-19 21:47:55Z iflorespaz $
+<?php // $Id: usermanager.lib.php 21700 2009-07-01 19:05:11Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -55,7 +55,7 @@ class UserManager
 	  * @param	string	Login
 	  * @param	string	Password
 	  * @param	string	Any official code (optional)
-	  * @param	int	  	User language	(optional)
+	  * @param	string	User language	(optional)
 	  * @param	string	Phone number	(optional)
 	  * @param	string	Picture URI		(optional)
 	  * @param	string	Authentication source	(optional, defaults to 'platform', dependind on constant)

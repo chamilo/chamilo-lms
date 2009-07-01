@@ -72,6 +72,7 @@ $Import = "Importál";
 $AddAnother = "Újabb hozzáadása";
 $Author = "Készít&#337;";
 $TrueFalse = "Igaz / Hamis";
+$QuestionType = "Kérdés típus";
 $NoSearchResults = "A keresés nem járt eredménnyel";
 $SelectQuestion = "Kérdés kiválasztása";
 $AddNewQuestionType = "Új kérdéstípus hozzáadása";

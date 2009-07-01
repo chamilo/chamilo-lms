@@ -55,7 +55,6 @@ $DeleteSurvey = "刪除統計調查";
 $SurveyCode = "統計調查編號";
 $SurveyList = "統計調查列表";
 $SurveyAttached = "已附加調查問卷";
-$QuestionType = "問題類型";
 $QuestionByType = "以類型定問題";
 $SelectQuestionByType = "以類型選擇問題";
 $PleaseEnterAQuestion = "請輸入問題 ";

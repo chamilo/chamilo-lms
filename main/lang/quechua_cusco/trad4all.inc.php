@@ -71,6 +71,7 @@ $Import = "Apachimuy";
 $AddAnother = "Hoqta yapay";
 $Author = "Ruwaq";
 $TrueFalse = "Cheqay / Llulla";
+$QuestionType = "Ima kay tapu";
 $NoSearchResults = "Mana tarisqayuq maskhay";
 $SelectQuestion = "Ajllay huy tapuyta";
 $AddNewQuestionType = "Yapay hoqniraq tapukuyta";

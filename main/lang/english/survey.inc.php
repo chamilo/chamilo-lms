@@ -58,7 +58,6 @@ $DeleteSurvey = "Delete survey";
 $SurveyCode = "Code";
 $SurveyList = "Survey list";
 $SurveyAttached = "Survey attached";
-$QuestionType = "Question type";
 $QuestionByType = "Question by type";
 $SelectQuestionByType = "Select question by type";
 $PleaseEnterAQuestion = "Please enter a question";

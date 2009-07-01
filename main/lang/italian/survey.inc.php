@@ -58,7 +58,6 @@ $DeleteSurvey = "Elimina il questionario";
 $SurveyCode = "Codice";
 $SurveyList = "Elenco dei questionari";
 $SurveyAttached = "Questionario allegato";
-$QuestionType = "Tipo di domanda";
 $QuestionByType = "Domanda per tipo";
 $SelectQuestionByType = "Seleziona le domande per tipo";
 $PleaseEnterAQuestion = "Immetti una domanda";

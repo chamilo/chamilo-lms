@@ -55,7 +55,6 @@ $DeleteSurvey = "Borrar enquisa";
 $SurveyCode = "Código da enquisa";
 $SurveyList = "Listado de enquisas";
 $SurveyAttached = "Enquisa engadida";
-$QuestionType = "Tipo de pregunta";
 $QuestionByType = "Preguntas por tipo";
 $SelectQuestionByType = "Seleccionar pregunta por tipo";
 $PleaseEnterAQuestion = "Introduza unha pregunta, por favor";

@@ -55,7 +55,6 @@ $DeleteSurvey = "Ištrinti apklausą";
 $SurveyCode = "Apklausos kodas";
 $SurveyList = "Apklausų sąrašas";
 $SurveyAttached = "Apklausa prijungta";
-$QuestionType = "Klausimo tipas";
 $QuestionByType = "Klausimai pagal tipą";
 $SelectQuestionByType = "Išrinkti klausimą pagal tipą";
 $PleaseEnterAQuestion = "Įrašykite klausimą";

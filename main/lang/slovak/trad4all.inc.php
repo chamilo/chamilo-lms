@@ -66,6 +66,7 @@ $Import = "Import";
 $AddAnother = "Prida&#357; &#271;a&#318;ší";
 $Author = "Autor";
 $TrueFalse = "Pravda/Nepravda";
+$QuestionType = "Typ otázky";
 $NoSearchResults = "Žiadne výsledky vyh&#318;adávania";
 $SelectQuestion = "Vyberte otázku";
 $AddNewQuestionType = "Pridaj nový typ otázky";

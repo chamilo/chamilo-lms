@@ -65,6 +65,7 @@ $Import = "Importavimas";
 $AddAnother = "Įrašyti kitą";
 $Author = "Autorius";
 $TrueFalse = "Taip / Ne";
+$QuestionType = "Klausimo tipas";
 $NoSearchResults = "Paieškos rezultatų nėra";
 $SelectQuestion = "Išrinkti klausimą";
 $AddNewQuestionType = "Įrašyti naują klausimo tipą";

@@ -58,7 +58,6 @@ $DeleteSurvey = "Pichay tapukuyta";
 $SurveyCode = "Tapukuypa chinpun";
 $SurveyList = "Tapukuykuna";
 $SurveyAttached = "Tapukuy yapasqa";
-$QuestionType = "Ima kay tapu";
 $QuestionByType = "Ima niraqmanta tapukuna";
 $SelectQuestionByType = "Ajllay ima niraqmanta hoq taputa";
 $PleaseEnterAQuestion = "Ama hinakaychu, haykuchiy hoq taputa";

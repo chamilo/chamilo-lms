@@ -72,6 +72,7 @@ $Import = "Import";
 $AddAnother = "Mai adauga unul";
 $Author = "Autor";
 $TrueFalse = "Adevarat / Fals";
+$QuestionType = "Tipul de intrebare";
 $NoSearchResults = "Nici un rezultat";
 $SelectQuestion = "Selectati intrebarea";
 $AddNewQuestionType = "Adauga un nou tip de intrebare";

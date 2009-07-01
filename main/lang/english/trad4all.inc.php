@@ -72,6 +72,7 @@ $Import = "Validate";
 $AddAnother = "Add another";
 $Author = "Author";
 $TrueFalse = "True / False";
+$QuestionType = "Question type";
 $NoSearchResults = "No search results";
 $SelectQuestion = "Select question";
 $AddNewQuestionType = "Add new question type";

@@ -55,7 +55,6 @@ $DeleteSurvey = "Umfrage löschen";
 $SurveyCode = "Umfrage Code";
 $SurveyList = "Umfrage Liste";
 $SurveyAttached = "Umfrage ist angehängt";
-$QuestionType = "Fragetyp";
 $QuestionByType = "Fragen nach Typ sortiert";
 $SelectQuestionByType = "Frage nach Typ auswählen";
 $PleaseEnterAQuestion = "Bitte eine Frage eingeben";

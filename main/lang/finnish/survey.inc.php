@@ -58,7 +58,6 @@ $DeleteSurvey = "Poista kysely";
 $SurveyCode = "Koodi";
 $SurveyList = "Lista kyselyistä";
 $SurveyAttached = "Kysely liitetty";
-$QuestionType = "Kysymyksen tyyppi";
 $QuestionByType = "Kysymykset tyypeittäin";
 $PleaseEnterAQuestion = "Syötä kysymys";
 $NoOfQuestions = "Kysymysten määrä";

@@ -55,7 +55,6 @@ $DeleteSurvey = "Anuleaza ancheta";
 $SurveyCode = "Codul anchetei";
 $SurveyList = "Lista cu anchete";
 $SurveyAttached = "Adauga ancheta";
-$QuestionType = "Tipul de intrebare";
 $QuestionByType = "Tip de intrebari";
 $SelectQuestionByType = "Selecteaza intrebarile pe tip";
 $PleaseEnterAQuestion = "Va rugam puneti o intrebare.";

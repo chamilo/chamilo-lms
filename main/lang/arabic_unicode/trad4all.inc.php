@@ -67,6 +67,7 @@ $Import = "استيراد ";
 $AddAnother = "أضف أخر ";
 $Author = "الكاتب ";
 $TrueFalse = "صح / خطأ ";
+$QuestionType = "نوع السؤال";
 $NoSearchResults = "لا يوجد نتائج بحث ";
 $SelectQuestion = "حدد سؤال ";
 $AddNewQuestionType = "أضف نوع سؤال جديد ";

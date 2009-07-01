@@ -72,6 +72,7 @@ $Import = "Importar";
 $AddAnother = "Añadir otra";
 $Author = "Autor";
 $TrueFalse = "Verdadero / Falso";
+$QuestionType = "Tipo de pregunta";
 $NoSearchResults = "Búsqueda sin resultados";
 $SelectQuestion = "Seleccionar una pregunta";
 $AddNewQuestionType = "Añadir un nuevo tipo de pregunta";

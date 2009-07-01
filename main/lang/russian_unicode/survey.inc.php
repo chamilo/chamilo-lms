@@ -55,7 +55,6 @@ $DeleteSurvey = "Удалить опросник";
 $SurveyCode = "Код опроса";
 $SurveyList = "Список опроса";
 $SurveyAttached = "Опросник присоединен";
-$QuestionType = "Тип вопроса";
 $QuestionByType = "Вопрос по типу";
 $SelectQuestionByType = "Выбрать вопрос по типу";
 $PleaseEnterAQuestion = "Пожалуйста, введите вопрос";

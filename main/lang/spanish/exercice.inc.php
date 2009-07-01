@@ -322,4 +322,5 @@ $ReachedTimeLimitAdmin = "Ha alcanzado el límite de tiempo para realizar este ej
 $LastScoreTest = "Última puntuación de un ejercicio";
 $BackToResultList = "Volver a lista de resultados";
 $EditingScoreCauseProblemsToExercisesInLP = "Si edita el puntaje de esta pregunta modificará el resultado del ejercicio, recuerde que este ejercicio está agregado también a una Lección";
+$SelectExercice = "Seleccionar ejercicio";
 ?>

@@ -72,6 +72,7 @@ $Import = "Tuo";
 $AddAnother = "Lis‰‰ toinen";
 $Author = "Tekij‰";
 $TrueFalse = "Tosi / Ep‰tosi";
+$QuestionType = "Kysymyksen tyyppi";
 $NoSearchResults = "Ei hakutuloksia";
 $SelectQuestion = "Valitse kysymys";
 $AddNewQuestionType = "Lis‰‰ uusi kysymys tyyppi";

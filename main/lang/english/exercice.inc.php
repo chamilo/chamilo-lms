@@ -322,4 +322,5 @@ $ReachedTimeLimitAdmin = "Reached time limit admin";
 $LastScoreTest = "Last score of a exercise";
 $BackToResultList = "Back to result list";
 $EditingScoreCauseProblemsToExercisesInLP = "If you edit a question score, please remember that this Exercise was added in a Course";
+$SelectExercice = "Select exercice";
 ?>

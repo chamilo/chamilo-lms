@@ -58,7 +58,6 @@ $DeleteSurvey = "Odstrani vprašalnik";
 $SurveyCode = "Koda vprašalnika";
 $SurveyList = "Seznam evalvacijskih vprašalnikov";
 $SurveyAttached = "Vprašalnik pripet";
-$QuestionType = "Tip vprašanja";
 $QuestionByType = "Vprašanja po vrsti";
 $SelectQuestionByType = "Izberi vprašanje glede na tip";
 $PleaseEnterAQuestion = "Vpišite vprašanje";

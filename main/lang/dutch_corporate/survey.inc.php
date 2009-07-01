@@ -55,7 +55,6 @@ $DeleteSurvey = "Enquete verwijderen";
 $SurveyCode = "Enquetecode";
 $SurveyList = "Lijst van enquetes";
 $SurveyAttached = "Enquete toegevoegd";
-$QuestionType = "Vraagtype";
 $QuestionByType = "Vragen per type";
 $SelectQuestionByType = "Selecteer vragen per type";
 $PleaseEnterAQuestion = "Gelieve een vraag in te geven.";

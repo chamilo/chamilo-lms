@@ -72,6 +72,7 @@ $Import = "Uvozi";
 $AddAnother = "Dodaj naslednjega";
 $Author = "Avtor";
 $TrueFalse = "Pravilno / Nepravilno";
+$QuestionType = "Tip vprašanja";
 $NoSearchResults = "Ni rezultatov iskanja";
 $SelectQuestion = "Izberi vprašanje";
 $AddNewQuestionType = "Dodaj nov tip vprašanja";

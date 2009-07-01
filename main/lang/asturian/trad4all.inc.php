@@ -67,6 +67,7 @@ $Import = "Importar";
 $AddAnother = "Amestar otra ";
 $Author = "Autor";
 $TrueFalse = "Verdaderi / Falsu";
+$QuestionType = "Tipu d\'entruga";
 $NoSearchResults = "Busca ensin resultaos";
 $SelectQuestion = "Escoyer una entruga";
 $AddNewQuestionType = "Amestar un tipu nuevu d\'entruga";

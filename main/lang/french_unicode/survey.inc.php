@@ -55,7 +55,6 @@ $DeleteSurvey = "Supprimer enquête";
 $SurveyCode = "Code de l\'enquête";
 $SurveyList = "Liste d\'enquêtes";
 $SurveyAttached = "Enquête jointe";
-$QuestionType = "Type de question";
 $QuestionByType = "Question par type";
 $SelectQuestionByType = "Sélectionner question par type";
 $PleaseEnterAQuestion = "Veuillez entrer une question";

@@ -66,6 +66,7 @@ $Import = "Importer";
 $AddAnother = "Tilføj ekstra";
 $Author = "Forfatter";
 $TrueFalse = "Sandt/falsk";
+$QuestionType = "Spørgsmålstype";
 $NoSearchResults = "Søgningen gav ikke et resultat";
 $SelectQuestion = "Vælg spørgsmål";
 $AddNewQuestionType = "Tilføj ny spørgsmålstype";

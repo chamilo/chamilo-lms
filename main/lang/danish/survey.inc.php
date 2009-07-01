@@ -55,7 +55,6 @@ $DeleteSurvey = "Slet evaluering";
 $SurveyCode = "Evalueringskode";
 $SurveyList = "Oversigt over evalueringer";
 $SurveyAttached = "Evaluering vedhæftet";
-$QuestionType = "Spørgsmålstype";
 $QuestionByType = "Spørgsmål for spørgsmål";
 $SelectQuestionByType = "Vælg spørgsmål ud fra type";
 $PleaseEnterAQuestion = "Indtast et spørgsmål";

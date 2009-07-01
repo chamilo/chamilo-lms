@@ -55,7 +55,6 @@ $DeleteSurvey = "حذف الاستطلاع";
 $SurveyCode = " رمز الاستطلاع";
 $SurveyList = "قائمة الاستطلاع";
 $SurveyAttached = "لقد تم ارفاق استطلاع";
-$QuestionType = "نوع السؤال";
 $QuestionByType = "السؤال بالنوع";
 $SelectQuestionByType = " اختر سؤالا بالنوع";
 $PleaseEnterAQuestion = "فضلا، أكتب سؤالا";

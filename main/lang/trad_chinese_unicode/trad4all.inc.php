@@ -65,6 +65,7 @@ $Import = "匯入";
 $AddAnother = "加入另一個";
 $Author = "作者";
 $TrueFalse = "是 / 否";
+$QuestionType = "問題類型";
 $NoSearchResults = "沒有搜尋結果";
 $SelectQuestion = "選擇問題";
 $AddNewQuestionType = "加入新問題類型";

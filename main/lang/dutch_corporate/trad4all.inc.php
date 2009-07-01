@@ -72,6 +72,7 @@ $Import = "Importeer";
 $AddAnother = "Nog een toevoegen";
 $Author = "Auteur";
 $TrueFalse = "Waar / Onwaar";
+$QuestionType = "Vraagtype";
 $NoSearchResults = "Niks gevonden";
 $SelectQuestion = "Vraag selecteren";
 $AddNewQuestionType = "Nieuw vraagtype toevoegen";

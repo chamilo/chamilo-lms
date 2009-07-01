@@ -58,7 +58,6 @@ $DeleteSurvey = "Kérd&#337;ív törlése";
 $SurveyCode = "Kérd&#337;ív kódja";
 $SurveyList = "Kérd&#337;ív lista";
 $SurveyAttached = "Kérd&#337;ív csatolva";
-$QuestionType = "Kérdés típus";
 $QuestionByType = "Kérdés típusonként";
 $SelectQuestionByType = "Kérdés kiválasztása típus szerint";
 $PleaseEnterAQuestion = "Kérem, tegyen fel egy kérdést";

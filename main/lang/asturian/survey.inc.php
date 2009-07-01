@@ -55,7 +55,6 @@ $DeleteSurvey = "Esborrar encuesta ";
 $SurveyCode = "Códigu de la encuesta";
 $SurveyList = "Encuestes";
 $SurveyAttached = "Encuesta axunta";
-$QuestionType = "Tipu d\'entruga";
 $QuestionByType = "PEntrugues per tipu";
 $SelectQuestionByType = "Escoyer una entruga per tipu";
 $PleaseEnterAQuestion = "Por favor, escriba una entruga";

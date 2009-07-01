@@ -55,7 +55,6 @@ $DeleteSurvey = "Zmaza&#357; prieskum";
 $SurveyCode = "Kód prieskumu";
 $SurveyList = "Zoznam prieskumov";
 $SurveyAttached = "Prieskum pripojený";
-$QuestionType = "Typ otázky";
 $QuestionByType = "Otázky pod&#318;a typu";
 $SelectQuestionByType = "Vybra&#357; otázku pod&#318;a typu";
 $PleaseEnterAQuestion = "Prosím zadajte otázku";

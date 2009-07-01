@@ -66,6 +66,7 @@ $Import = "Импортировать";
 $AddAnother = "Добавить другой";
 $Author = "Автор";
 $TrueFalse = "Верно/Неверно";
+$QuestionType = "Тип вопроса";
 $NoSearchResults = "Поиск не дал результатов";
 $SelectQuestion = "Выбрать вопрос";
 $AddNewQuestionType = "Добавить новый тип вопроса";

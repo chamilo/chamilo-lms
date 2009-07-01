@@ -67,6 +67,7 @@ $Import = "Prijenos";
 $AddAnother = "Dodaj sljede&#263;i";
 $Author = "Autor";
 $TrueFalse = "To&#269;no / Neto&#269;no";
+$QuestionType = "Vrsta pitanja";
 $NoSearchResults = "Pretraga nema rezultata";
 $SelectQuestion = "Odaberi pitanje";
 $AddNewQuestionType = "Dodaj novi tip pitanja";

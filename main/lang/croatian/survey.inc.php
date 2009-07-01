@@ -55,7 +55,6 @@ $DeleteSurvey = "Obriši anketu";
 $SurveyCode = "Šifra ankete";
 $SurveyList = "Lista anketa";
 $SurveyAttached = "Anketa priložena";
-$QuestionType = "Vrsta pitanja";
 $QuestionByType = "Pitanje po vrsti";
 $SelectQuestionByType = "Odaberi pitanje prema vrsti";
 $PleaseEnterAQuestion = "Molim unesite pitanje";

@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 20470 2009-05-11 09:46:59Z ivantcholakov $
+* 	@version $Id: question.php 21701 2009-07-01 19:12:25Z aportugal $
 */
 
 // name of the language file that needs to be included
@@ -36,12 +36,35 @@ require ('../inc/global.inc.php');
 //require_once (api_get_path(LIBRARY_PATH)."/survey.lib.php");
 require_once('survey.lib.php');
 
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+						$(document).ready( function() {
+							//Allow dokeos install in IE
+							$("button").click(function() {
+								$("#is_executable").attr("value",$(this).attr("name"));
+							});		
+		 				} ); </script>';
+
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false,true)) {
 	Display :: display_header();
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
 	exit;
+}
+
+//Is valid request
+$is_valid_request=$_REQUEST['is_executable'];
+foreach ($_POST as $request_index=>$request_value) {
+		if ($request_index<>$is_valid_request) {
+			if ($request_index=='save_question') {
+				unset($_POST[$request_index]);
+			} elseif ($request_index=='add_answer') {
+				unset($_POST[$request_index]);			
+			} elseif($request_index=='remove_answer') {
+				unset($_POST[$request_index]);		
+			}
+		} 
 }
 
 // Database table definitions

@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 21173 2009-06-01 20:58:59Z jhp1411 $
+* 	@version $Id: survey.lib.php 21701 2009-07-01 19:12:25Z aportugal $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -585,7 +585,7 @@ class survey_manager
 		$icon_question = array
 				(
 				'yesno' 			=> 'yesno.gif',
-				'personality' 			=> 'yesno.gif',
+				'personality' 		=> 'yesno.gif',
 				'multiplechoice' 	=> 'mcua.gif',
 				'multipleresponse' 	=> 'mcma.gif',
 				'open' 				=> 'open_answer.gif',
@@ -1581,17 +1581,10 @@ class question
 		$return .= '		<div class="label">';
 		$return .= '		</div>';
 		$return .= '		<div class="formw">';
+		$return .= '		<input type="hidden" name="is_executable" id="is_executable" value="-" />';
 		$return .= '			<button class="minus" type="submit" name="remove_answer" "'.$remove_answer_attribute.'">'.get_lang('RemoveAnswer').' </button>';
 		$return .= '			<button class="plus" type="submit" name="add_answer">'.get_lang('AddAnswer').'</button>';
 	
-		/*
-		$return .= '	<tr>';
-		$return .= '		<td align="right">&nbsp;</td>';
-		$return .= '		<td colspan="2">';
-		$return .= '			<button class="minus" type="submit" name="remove_answer" "'.$remove_answer_attribute.'">'.get_lang('RemoveAnswer').' </button>';
-		$return .= '			<button class="plus" type="submit" name="add_answer">'.get_lang('AddAnswer').'</button>';
-		$return .= '		</td>';
-		$return .= '	</tr>';*/
 		return $return;
 	}
 
@@ -2633,8 +2626,7 @@ class SurveyUtil {
 		  if (restore) selObj.selectedIndex=0;
 		}
 		//-->
-		</script>
-		";
+		</script>";
 		echo get_lang('SelectUserWhoFilledSurvey').'<br />';
 		echo '<select name="user" onchange="jumpMenu(\'parent\',this,0)">';
 		echo '<option value="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.get_lang('SelectUser').'</option>';

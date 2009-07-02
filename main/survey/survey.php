@@ -1,4 +1,4 @@
-<?php // $Id: survey.php 21053 2009-05-28 22:59:15Z cvargas1 $
+<?php // $Id: survey.php 21734 2009-07-02 17:12:41Z cvargas1 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 21053 2009-05-28 22:59:15Z cvargas1 $
+* 	@version $Id: survey.php 21734 2009-07-02 17:12:41Z cvargas1 $
 *
 * 	@todo use quickforms for the forms
 */
@@ -217,8 +217,18 @@ while ($row = Database::fetch_array($result,'ASSOC')) {
 	} else {
 		echo $row['survey_question'];
 	}
+	
+	if ($row['type'] == 'yesno') {
+		$tool_name = get_lang('YesNo');
+	} else if ($row['type'] == 'multiplechoice') {
+		$tool_name = get_lang('UniqueSelect');
+	} else {		
+		$tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));
+	}
+	
+	
 	echo '</td>';
-	echo '	<td>'.get_lang(ucfirst($row['type'])).'</td>';
+	echo '	<td>'.$tool_name.'</td>';
 	echo '	<td>'.$row['number_of_options'].'</td>';
 	echo '	<td>';
 	echo '		<a href="question.php?'.api_get_cidreq().'&amp;action=edit&amp;type='.$row['type'].'&amp;survey_id='.$_GET['survey_id'].'&amp;question_id='.$row['question_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';

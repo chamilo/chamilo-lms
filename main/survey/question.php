@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 21701 2009-07-01 19:12:25Z aportugal $
+* 	@version $Id: question.php 21734 2009-07-02 17:12:41Z cvargas1 $
 */
 
 // name of the language file that needs to be included
@@ -55,17 +55,15 @@ if (!api_is_allowed_to_edit(false,true)) {
 
 //Is valid request
 $is_valid_request=$_REQUEST['is_executable'];
-foreach ($_POST as $request_index=>$request_value) {
-		if ($request_index<>$is_valid_request) {
-			if ($request_index=='save_question') {
-				unset($_POST[$request_index]);
-			} elseif ($request_index=='add_answer') {
-				unset($_POST[$request_index]);			
-			} elseif($request_index=='remove_answer') {
-				unset($_POST[$request_index]);		
-			}
-		} 
-}
+if ($request_index<>$is_valid_request) {
+	if ($request_index=='save_question') {
+		unset($_POST[$request_index]);
+	} elseif ($request_index=='add_answer') {
+		unset($_POST[$request_index]);			
+	} elseif($request_index=='remove_answer') {
+		unset($_POST[$request_index]);		
+	}
+} 
 
 // Database table definitions
 $table_survey 					= Database :: get_course_table(TABLE_SURVEY);

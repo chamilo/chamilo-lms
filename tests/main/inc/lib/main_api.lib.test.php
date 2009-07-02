@@ -781,7 +781,7 @@ class TestMainApi extends UnitTestCase {
 		$d = Database::escape_string($d);
 		$res = api_add_access_url($u,$d='',$a=1);
 		$this->assertTrue(is_numeric($res));
-		var_dump($res);
+		//var_dump($res);
 	}
 	
 	function testApiGetSettings(){

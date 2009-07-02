@@ -1,4 +1,4 @@
-// Reworks and improvements by Ivan Tcholakov, FEB-2009.
+// Reworks and improvements by Ivan Tcholakov, JUL-2009.
 
 var dialog		= window.parent ;
 var oEditor		= dialog.InnerDialogLoaded() ;
@@ -28,6 +28,22 @@ window.document.dir = FCKLang.Dir ;
 
 // Set the dialog tabs.
 dialog.AddTab( 'Info', FCKLang.DlgInfoTab ) ;
+dialog.AddTab( 'Preview', FCKLang.DlgImgPreview ) ;
+
+// This function is called when a dialog tab has been selected.
+function OnDialogTabChange( tabCode )
+{
+	ShowE( 'divInfo', ( tabCode == 'Info' ) ) ;
+	ShowE( 'divPreview', ( tabCode == 'Preview' ) ) ;
+	if ( tabCode == 'Preview' )
+	{
+		UpdatePreview() ;
+	}
+	else
+	{
+		ClearPreview() ;
+	}
+}
 
 // Get the selected video (if available).
 var oFakeImage = FCK.Selection.GetSelectedElement() ;
@@ -205,4 +221,100 @@ function GetQuality ( url )
 	}
 
 	return quality ;
+}
+
+var ePreview ;
+
+function IsValidMedia( e )
+{
+	if ( !e )
+		return false ;
+
+	var src = GetAttribute( e, 'src', '' ) ;
+	var width = GetAttribute( e, 'width', '' ) ;
+	var height = GetAttribute( e, 'height', '' ) ;
+
+	if ( src.length == 0 )
+		return false ;
+
+	if ( isNaN( width ) )
+		return false ;
+
+	if ( parseInt( width, 10 ) <= 0 )
+		return false ;
+
+	if ( isNaN( height ) )
+		return false ;
+
+	if ( parseInt( height, 10 ) <= 0 )
+		return false ;
+
+	return true ;
+}
+
+function SetPreviewElement( previewEl )
+{
+	ePreview = previewEl ;
+
+	if ( IsValidMedia( oEmbed ) )
+		UpdatePreview() ;
+}
+
+function UpdatePreview()
+{
+	if ( !ePreview )
+		return ;
+
+	while ( ePreview.firstChild )
+		ePreview.removeChild( ePreview.firstChild ) ;
+
+	var oDoc = ePreview.ownerDocument || ePreview.document ;
+	var e = oDoc.createElement( 'EMBED' ) ;
+	UpdateEmbed( e ) ;
+
+	if ( !IsValidMedia( e ) )
+	{
+		e = null ;
+		ePreview.innerHTML = '&nbsp;' ;
+	}
+	else
+	{
+		var max_width = 515 ;
+		var max_height = 245 ;
+		var width = GetAttribute( e, 'width', 425 ) ;
+		var height = GetAttribute( e, 'height', 344 ) ;
+		var new_size = FCK.ResizeToFit( width, height, max_width, max_height ) ;
+		width = new_size[0] ;
+		height = new_size[1] ;
+		SetAttribute( e, 'width' , width ) ;
+		SetAttribute( e, 'height', height ) ;
+
+		ePreview.appendChild( e ) ;
+
+		var margin_left = parseInt( ( max_width - width ) / 2, 10 ) ;
+		var margin_top = parseInt( ( max_height - height ) / 2, 10 ) ;
+
+		if ( ePreview.currentStyle )
+		{
+			// IE
+			ePreview.style.marginLeft = margin_left ;
+			ePreview.style.marginTop = margin_top ;
+		}
+		else
+		{
+			// Other browsers
+			SetAttribute( ePreview, 'style', 'margin-left: ' + margin_left + 'px; margin-top: ' + margin_top + 'px;' ) ;
+		}
+	}
+}
+
+function ClearPreview()
+{
+	if ( !ePreview )
+		return ;
+
+	while ( ePreview.firstChild )
+		ePreview.removeChild( ePreview.firstChild ) ;
+
+	ePreview.innerHTML = '&nbsp;' ;
 }

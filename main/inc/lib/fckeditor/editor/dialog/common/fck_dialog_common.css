@@ -58,6 +58,16 @@
 	background-color: #ffffff;
 }
 
+.YouTubePreviewArea
+{
+	border: #000000 1px solid;
+	padding: 5px;
+	overflow: auto;
+	width: 100%;
+	height: 100%;
+	background-color: #ffffff;
+}
+
 .BtnReset
 {
 	float: left;

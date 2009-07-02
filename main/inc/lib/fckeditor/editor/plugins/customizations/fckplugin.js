@@ -882,6 +882,36 @@ FCKLanguageManager.TranslatePage = function( targetDocument )
 	this.TranslateElements( targetDocument, 'BUTTON', 'innerHTML' ) ;
 }
 
+// Calculating size of rectangular object so it to fit within other rectangular object
+// with preserving aspect ratio.
+FCK.ResizeToFit = function( width, height, max_width, max_height )
+{
+	var result = [0, 0] ;
+
+	result[0] = width;
+	result[1] = height ;
+
+	if ( width <= max_width && height <= max_height )
+		return result ;
+
+	if ( width > max_width )
+	{
+		height = height * max_width / width ;
+		width = max_width ;
+	}
+
+	if ( height > max_height )
+	{
+		width = width * max_height / height ;
+		height = max_height ;
+	}
+
+	result[0] = parseInt ( width, 10 );
+	result[1] = parseInt ( height, 10 ) ;
+
+	return result ;
+}
+
 
 /*
  **************************************************************************************

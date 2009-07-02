@@ -37,7 +37,7 @@ if ( isset($httpHeadXtra) && $httpHeadXtra )
 }
 
 // Get language iso-code for this page - ignore errors
-// The error ignorance is due to the non compatibility of function_exists() 
+// The error ignorance is due to the non compatibility of function_exists()
 // with the object syntax of Database::get_language_isocode()
 @$document_language = Database::get_language_isocode($language_interface);
 if(empty($document_language))
@@ -64,20 +64,20 @@ if(!empty($_course['official_code']))
 	echo $_course['official_code'].' - ';
 }
 
-echo get_setting('siteName');
+echo api_get_setting('siteName');
 ?>
 </title>
 
 <?php
 
 /*
- * Choose CSS style platform's, user's, course's, or Learning path CSS 
+ * Choose CSS style platform's, user's, course's, or Learning path CSS
  */
- 
+
 $platform_theme = api_get_setting('stylesheets'); 	// plataform's css
 $my_style=$platform_theme;
-if(api_get_setting('user_selected_theme') == 'true') 
-{		
+if(api_get_setting('user_selected_theme') == 'true')
+{
 	$useri = api_get_user_info();
 	$user_theme = $useri['theme'];
 	if(!empty($user_theme) && $user_theme != $my_style)
@@ -86,34 +86,34 @@ if(api_get_setting('user_selected_theme') == 'true')
 	}
 }
 $mycourseid = api_get_course_id();
-if (!empty($mycourseid) && $mycourseid != -1) 
-{	
-	if (api_get_setting('allow_course_theme') == 'true') 
-	{	
-		$mycoursetheme=api_get_course_setting('course_theme');			
-		if (!empty($mycoursetheme) && $mycoursetheme!=-1)		 
-		{							
+if (!empty($mycourseid) && $mycourseid != -1)
+{
+	if (api_get_setting('allow_course_theme') == 'true')
+	{
+		$mycoursetheme=api_get_course_setting('course_theme');
+		if (!empty($mycoursetheme) && $mycoursetheme!=-1)
+		{
 			if(!empty($mycoursetheme) && $mycoursetheme != $my_style)
-			{				
+			{
 				$my_style = $mycoursetheme;		// course's css
-			}			
+			}
 		}
-				
+
 		$mycourselptheme=api_get_course_setting('allow_learning_path_theme');
-		if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1)		 
-		{				
-			global $lp_theme_css; //  it comes from the lp_controller.php 
+		if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1)
+		{
+			global $lp_theme_css; //  it comes from the lp_controller.php
 			global $lp_theme_config; // it comes from the lp_controller.php
-							
-			if (!empty($lp_theme_css)) 
+
+			if (!empty($lp_theme_css))
 				{
-					$theme=$lp_theme_css;						
+					$theme=$lp_theme_css;
 					if(!empty($theme) && $theme != $my_style)
-					{								
+					{
 						$my_style = $theme;	 // LP's css
 					}
-				}				
-			
+				}
+
 		}
 	}
 }
@@ -123,21 +123,21 @@ if (!empty($lp_theme_log)){
 }
 
 // Sets the css reference it is call from lp_nav.php, lp_toc.php, lp_message, lp_log.php
-if (!empty($scorm_css_header)) 
-{	
-	if (!empty($my_style)) 
+if (!empty($scorm_css_header))
+{
+	if (!empty($my_style))
 	{
 		$scorm_css=api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/scorm.css';
 		$scormfs_css=api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/scormfs.css';
 	}
-	else 
+	else
 	{
 		$scorm_css='scorm.css';
-		$scormfs_css='scormfs.css';		
-	}	
-		
+		$scormfs_css='scormfs.css';
+	}
+
 	if(!empty($display_mode) && $display_mode == 'fullscreen')
-	{	
+	{
 		$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
 							/*<![CDATA[*/
 							@import "'.$scormfs_css.'";
@@ -151,7 +151,7 @@ if (!empty($scorm_css_header))
 							@import "'.$scorm_css.'";
 							/*]]>*/
 							</style>';
-	}	
+	}
 }
 
 
@@ -168,13 +168,41 @@ if($my_style!='')
 ?>
 
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />
-<link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/courses.php" title="<?php echo htmlentities(get_lang('OtherCourses'),ENT_QUOTES,$charset); ?>" />
-<link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/profile.php" title="<?php echo htmlentities(get_lang('ModifyProfile'),ENT_QUOTES,$charset); ?>" />
+<link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/courses.php" title="<?php echo api_htmlentities(get_lang('OtherCourses'),ENT_QUOTES,$charset); ?>" />
+<link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/profile.php" title="<?php echo api_htmlentities(get_lang('ModifyProfile'),ENT_QUOTES,$charset); ?>" />
 <link href="http://www.dokeos.com/documentation.php" rel="Help" />
 <link href="http://www.dokeos.com/team.php" rel="Author" />
 <link href="http://www.dokeos.com" rel="Copyright" />
 <link rel="shortcut icon" href="<?php echo api_get_path(WEB_PATH); ?>favicon.ico" type="image/x-icon" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>" />
+
+<script type="text/javascript">
+//<![CDATA[
+// This is a patch for the "__flash__removeCallback" bug, see FS#4378.
+if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf( 'opera' ) == -1 ) )
+{
+	window.attachEvent( 'onunload', function()
+		{
+			window['__flash__removeCallback'] = function ( instance, name )
+			{ 
+				try
+				{ 
+					if ( instance )
+					{ 
+						instance[name] = null ; 
+					} 
+				}
+				catch ( flashEx )
+				{
+
+				} 
+			} ;
+		}
+	) ;
+}
+//]]>
+</script>
+
 <?php
 if ( isset($htmlHeadXtra) && $htmlHeadXtra )
 {

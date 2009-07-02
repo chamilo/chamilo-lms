@@ -1,3 +1,5 @@
+// Reworks and improvements by Ivan Tcholakov, JUL-2009.
+
 var dialog = window.parent ;
 var oEditor = dialog.InnerDialogLoaded() ;
 var FCK = oEditor.FCK ;
@@ -730,34 +732,6 @@ function IsValidMedia( oMedia )
 	return true ;
 }
 
-function ResizeToFit( width, height, max_width, max_height )
-{
-	var result = [0, 0] ;
-
-	result[0] = width;
-	result[1] = height ;
-
-	if ( width <= max_width && height <= max_height )
-		return result ;
-
-	if ( width > max_width )
-	{
-		height = height * max_width / width ;
-		width = max_width ;
-	}
-
-	if ( height > max_height )
-	{
-		width = width * max_height / height ;
-		height = max_height ;
-	}
-
-	result[0] = parseInt ( width, 10 );
-	result[1] = parseInt ( height, 10 ) ;
-
-	return result ;
-}
-
 function SetPreviewElement( previewEl )
 {
 	ePreview = previewEl ;
@@ -786,7 +760,7 @@ function UpdatePreview()
 	{
 		var max_width = 710 ;
 		var max_height = 400 ;
-		var new_size =  ResizeToFit( oMedia.width, oMedia.height, max_width, max_height ) ;
+		var new_size = FCK.ResizeToFit( oMedia.width, oMedia.height, max_width, max_height ) ;
 		oMedia.width = new_size[0] ;
 		oMedia.height = new_size[1] ;
 		oMedia.play = false ;

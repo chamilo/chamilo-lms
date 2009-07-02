@@ -25,10 +25,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title></title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="robots" content="noindex, nofollow" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="robots" content="noindex, nofollow" />
 		<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
-	<script type="text/javascript">
+		<script type="text/javascript">
 
 var FCKTools	= window.parent.FCKTools ;
 var FCKConfig	= window.parent.FCKConfig ;
@@ -45,7 +45,24 @@ window.onload = function()
 	window.parent.SetPreviewElement( document.body ) ;
 }
 
+// This is a patch for the "__flash__removeCallback" bug, see FS#4378.
+function ClearPreviewElement()
+{
+	if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf( 'opera' ) == -1 ) )
+	{
+		if ( document.body.firstChild )
+		{
+			try
+			{
+				document.body.removeChild( document.body.firstChild ) ;
+			}
+			catch ( ex )
+			{
+			}
+		}
+	}
+} ;
 		</script>
 	</head>
-	<body style="color: #000000; background-color: #ffffff; padding-top: 35px;"></body>
+	<body style="color: #000000; background-color: #ffffff; padding-top: 35px;" onbeforeunload="javascript: ClearPreviewElement();"></body>
 </html>

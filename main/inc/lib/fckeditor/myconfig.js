@@ -186,7 +186,7 @@ FCKConfig.ToolbarSets["Agenda"] = [
     ['Style','FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline'],
     ['JustifyLeft','JustifyCenter','JustifyRight','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
-    ['Source']
+	['Source']
 ] ;
 
 FCKConfig.ToolbarSets["Agenda_Student"] = [
@@ -198,13 +198,13 @@ FCKConfig.ToolbarSets["Agenda_Student"] = [
     ['FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline'],
     ['JustifyLeft','JustifyCenter','JustifyRight','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
-    ['ShowBlocks']
+	['ShowBlocks']
 ] ;
 
 //Announcements
 FCKConfig.ToolbarSets["Announcements"] = [
 	['Save','FitWindow','PasteWord','-','Undo','Redo'],
-    ['Link','Unlink','Anchor'],
+	['Link','Unlink','Anchor'],
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor','-','Source'],
@@ -216,7 +216,7 @@ FCKConfig.ToolbarSets["Announcements"] = [
 
 FCKConfig.ToolbarSets["Announcements_Student"] = [
 	['Save','FitWindow','PasteWord','-','Undo','Redo'],
-    ['Link','Unlink','Anchor'],
+	['Link','Unlink','Anchor'],
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
@@ -316,7 +316,7 @@ FCKConfig.ToolbarSets["ForumLight"] = [
 
 FCKConfig.ToolbarSets["Forum"] = [
     ['Save','FitWindow','PasteWord','-','Undo','Redo'],
-    ['Link','Unlink','Anchor'],
+	['Link','Unlink','Anchor'],
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor','Source'],
@@ -328,7 +328,7 @@ FCKConfig.ToolbarSets["Forum"] = [
 
 FCKConfig.ToolbarSets["Forum_Student"] = [
 	['Save','FitWindow','PasteWord','-','Undo','Redo'],
-    ['Link','Unlink','Anchor'],
+	['Link','Unlink','Anchor'],
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
@@ -342,7 +342,7 @@ FCKConfig.ToolbarSets["Forum_Student"] = [
 //Glossary
 FCKConfig.ToolbarSets["Glossary"] = [
 	['Save','FitWindow','PasteWord','-','Undo','Redo'],
-    ['Link','Unlink','Anchor'],
+	['Link','Unlink','Anchor'],
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor','-','Source'],
@@ -370,7 +370,7 @@ FCKConfig.ToolbarSets["CommentLearningPath"] = [
 //Notebook
 FCKConfig.ToolbarSets["Notebook"] = [
 	['Save','FitWindow','-','PasteWord','-','Undo','Redo'],
-    ['Link','Unlink','Anchor'],
+	['Link','Unlink','Anchor'],
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor','-','Source'],
@@ -382,14 +382,14 @@ FCKConfig.ToolbarSets["Notebook"] = [
 
 FCKConfig.ToolbarSets["Notebook_Student"] = [
 	['Save','FitWindow','-','PasteWord','-','Undo','Redo'],
-    ['Link','Unlink','Anchor'],
+	['Link','Unlink','Anchor'],
     ['Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'],
     ['Table','SpecialChar'],
     ['OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'],
     '/',    
     ['Style','FontFormat','FontName','FontSize'],
     ['Bold','Italic','Underline'],
-    ['JustifyLeft','JustifyCenter','JustifyRight'],    
+    ['JustifyLeft','JustifyCenter','JustifyRight'],
 	['ShowBlocks']
 ] ;
 
@@ -506,11 +506,12 @@ FCKConfig.Plugins.Add('dragresizetable') ;
 FCKConfig.Plugins.Add('tablecommands') ;
 
 // Audio files insertion.
-FCKConfig.Plugins.Add('MP3', FCK.AvailableLanguages) ;
+FCKConfig.Plugins.Add('audio', FCK.AvailableLanguages) ;
 
-// Another dialog for insertion audio files.
-// If you wish to use it, disable the "MP3" plugin first.
-//FCKConfig.Plugins.Add('audio', FCK.AvailableLanguages) ;
+// This is the old dialog for insertion audio files.
+// Probably this plugin will be removed at the next release.
+// If you wish to use it, disable the "audio" plugin first.
+//FCKConfig.Plugins.Add('MP3', FCK.AvailableLanguages) ;
 
 // A specialised browser/editor for images.
 if (!FCKConfig.PageConfig.AdvancedFileManager)
@@ -522,6 +523,7 @@ if (!FCKConfig.PageConfig.AdvancedFileManager)
 }
 
 // This is the old flash plugin. Now the editor has a built-in flash dialog.
+// Probably this plugin will be removed at the next release.
 //FCKConfig.Plugins.Add('Flash', 'en') ;
 
 // Embeding video files.
@@ -722,7 +724,7 @@ if ( !( FCKConfig.PageConfig.UserIsCourseAdmin || FCKConfig.PageConfig.UserIsPla
 			break ;	
 		case 'Wiki_Student' :
 			FCKConfig.BlockCopyPaste = true ;
-			break ;	
+			break ;
 
 		default :
 			FCKConfig.BlockCopyPaste = false ;

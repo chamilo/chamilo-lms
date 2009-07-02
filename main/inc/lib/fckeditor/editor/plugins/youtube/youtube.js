@@ -24,6 +24,11 @@ var LowQualityString = '%26hl=en%26fs=1%26rel=0' ;
 // Set the language direction.
 window.document.dir = FCKLang.Dir ;
 
+FCKLang['DlgYouTubeURLTipContent1'] = FCKLang['DlgYouTubeURLTipContent1'] ? FCKLang['DlgYouTubeURLTipContent1'] : '' ;
+FCKLang['DlgYouTubeURLTipContent3'] = FCKLang['DlgYouTubeURLTipContent3'] ? FCKLang['DlgYouTubeURLTipContent3'] : '' ;
+FCKLang['DlgYouTubeURLTipContent1'] = FCKLang['DlgYouTubeURLTipContent1'].toString().replace( '%s', '<a href="http://www.youtube.com/" target="_blank">http://www.youtube.com/<\/a>' ) ;
+FCKLang['DlgYouTubeURLTipContent3'] = FCKLang['DlgYouTubeURLTipContent3'].toString().replace( '%s', 'http://www.youtube.com/watch?v=XXXXXXXXXXX...' ) ;
+	
 //#### Dialog Tabs
 
 // Set the dialog tabs.
@@ -237,6 +242,9 @@ function IsValidMedia( e )
 	if ( src.length == 0 )
 		return false ;
 
+	if ( src.toString().toLowerCase().indexOf( 'youtube.com/v/%' ) != -1 )
+		return false ;
+
 	if ( isNaN( width ) )
 		return false ;
 
@@ -274,8 +282,7 @@ function UpdatePreview()
 
 	if ( !IsValidMedia( e ) )
 	{
-		e = null ;
-		ePreview.innerHTML = '&nbsp;' ;
+		ClearPreview() ;
 	}
 	else
 	{

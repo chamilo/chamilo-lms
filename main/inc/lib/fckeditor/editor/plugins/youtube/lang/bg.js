@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Translator: Ivan Tcholakov, ivantcholakov@gmail.com
  *
  * Bulgarian language file.
@@ -14,3 +14,7 @@ FCKLang['DlgYouTubeHeight']	    = 'Височина' ;
 FCKLang['DlgYouTubeQuality']    = 'Качество' ;
 FCKLang['DlgYouTubeLow']	    = 'Ниско' ;
 FCKLang['DlgYouTubeHigh']	    = 'Високо (ако е достъпно)' ;
+FCKLang['DlgYouTubeURLTip']		= 'Съвет:' ;
+FCKLang['DlgYouTubeURLTipContent1']  = 'Отидете на %s. Намерете в сайта вашето видео.' ;
+FCKLang['DlgYouTubeURLTipContent2']  = 'Копирайте адреса на видеото от адресното поле на браузъра в този диалог, в полето "URL".' ;
+FCKLang['DlgYouTubeURLTipContent3']  = 'Копираният адрес трябва да изглежда така: %s.' ;

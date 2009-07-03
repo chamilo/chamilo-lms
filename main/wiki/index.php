@@ -2644,11 +2644,11 @@ function display_wiki_entry()
 		echo '<span style="float:right">';
 		echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">'; // also with  export_tcpdf.php
 		echo '<input type=hidden name="titlePDF" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
-		echo '<input type=hidden name="contentPDF" value="'.api_htmlentities($content, ENT_QUOTES, $charset).'">';
+		echo '<input type=hidden name="contentPDF" value="'.api_htmlentities(trim(preg_replace("/\[\[|\]\]/", " ", $content)), ENT_QUOTES, $charset).'">';
 		echo '<input type="image" src="../img/wiki/wexport2pdf.gif" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none;">';
 		echo '</form>';
 		echo '</span>';
-		
+
 		//page action: copy last version to doc area
 		if(api_is_allowed_to_edit() || api_is_platform_admin())
 		{

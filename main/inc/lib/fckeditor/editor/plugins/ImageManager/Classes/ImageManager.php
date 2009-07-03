@@ -525,7 +525,7 @@ class ImageManager
 	 */
 	function _processFiles($relative, $file)
 	{
-		
+		global $_course; 
 		if($file['error']!=0)
 		{
 			return false;
@@ -583,12 +583,13 @@ class ImageManager
 		//now copy the file
 		$path = Files::makePath($this->getBaseDir(),$relative);		
 		$result = Files::copyFile($file['tmp_name'], $path, $file['name']);
-
+		
 		//no copy error
        if (!is_int($result)) {
-	   	    if (isset($_course['dbName']) && $_course<>'-1') {
+       	     	
+	   	    if (isset($_course['dbName']) && $_course<>'-1') {	   	    	
 				//adding the document to the DB
-				global $_course, $to_group_id;
+				global $to_group_id; 
 				
 				// looking for the /document/ folder
 				$document_path = substr($path, strpos($path,'/document/')+9, strlen($path)); //   /shared_folder/4/name

@@ -23,16 +23,28 @@ FCKLang['UploadError'] = FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Erro
 
 // Set the dialog tabs.
 dialog.AddTab( 'Info', FCKLang.DlgInfoTab ) ;
-
+dialog.AddTab( 'Preview', FCKLang.DlgImgPreview ) ;
 if ( FCKConfig.VideoUpload )
+{
 	dialog.AddTab( 'Upload', FCKLang.DlgLnkUpload ) ;
+}
 
 
 // Function called when a dialog tag is selected.
 function OnDialogTabChange( tabCode )
 {
 	ShowE( 'divInfo', ( tabCode == 'Info' ) ) ;
+	ShowE( 'divPreview', ( tabCode == 'Preview' ) ) ;
 	ShowE( 'divUpload', ( tabCode == 'Upload' ) ) ;
+
+	if ( tabCode == 'Preview' )
+	{
+		UpdatePreview() ;
+	}
+	else
+	{
+		ClearPreview() ;
+	}
 }
 
 // <object><param><embed> alternative does not working properly
@@ -141,9 +153,9 @@ window.onload = function ()
 	dialog.SetOkButton( true ) ;
 
 	SelectField( 'txtUrl' ) ;
-} 
+}
 
-function CreateEmbeddedMovie( e, url )
+function CreateEmbeddedMovie( url )
 {
 	var sType, pluginspace, codebase, classid ;
 	var sExt = url.match( /\.(mpg|mpeg|mp4|avi|wmv|mov|asf)$/i ) ;
@@ -219,9 +231,6 @@ function CreateEmbeddedMovie( e, url )
 			html += '></embed>' ;
 		}
 
-		//e.innerHTML = html ;
-		//FCK.InsertHtml( html ) ;
-
 		return html;
 	}
 }
@@ -239,30 +248,23 @@ function Ok()
 		return false ;
 	}
 
-	// Disabled by Ivan Tcholakov.
-	//if ( !oContainerDiv )
-	//{
-	//	oContainerDiv = FCK.CreateElement( 'DIV' ) ;
-	//}
-
 	if ( !oEmbed )
 	{
-		oEmbed = FCK.EditorDocument.createElement( 'EMBED' ) ;		
+		oEmbed = FCK.EditorDocument.createElement( 'EMBED' ) ;
 		oFakeImage = null ;
 	}
 
-	url = GetE( 'txtUrl' ).value ; 
+	url = GetE( 'txtUrl' ).value ;
 
 	if ( !oFakeImage )
 	{	
 		oFakeImage = oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', oEmbed ) ;
 		oFakeImage.setAttribute( '_fckvideo', 'true', 0 ) ;
-		//oFakeImage = FCK.InsertElement( oFakeImage ) ;
 	}
 
 	oEditor.FCKEmbedAndObjectProcessor.RefreshView( oFakeImage, oEmbed ) ;	
 
-	html = CreateEmbeddedMovie( oContainerDiv, url ) ;	
+	html = CreateEmbeddedMovie( url ) ;	
 	FCK.InsertHtml( html ) ;
 
 	oEditor.FCKUndo.SaveUndoStep() ;
@@ -282,6 +284,86 @@ function SetUrl( url )
 	GetE( 'txtUrl' ).value = url ;
 
 	dialog.SetSelectedTab( 'Info' ) ;
+}
+
+var ePreview ;
+
+function SetPreviewElement( previewEl )
+{
+	ePreview = previewEl ;
+}
+
+function UpdatePreview()
+{
+	if ( !ePreview )
+		return ;
+
+	while ( ePreview.firstChild )
+		ePreview.removeChild( ePreview.firstChild ) ;
+
+	url = GetE( 'txtUrl' ).value ;
+
+	if ( url && url.length > 0 )
+	{
+		url = FCK.GetUrl( url, FCK.ABSOLUTE_URL ) ;
+		html = CreateEmbeddedMovie( url ) ;
+
+		ePreview.innerHTML = html ;
+		e = ePreview.firstChild ;
+		if ( !e )
+		{
+			return ;
+		}
+
+		SetAttribute ( e, 'autostart', 'false' ) ;
+		var autosize = GetAttribute( e, 'autosize', 'false' ).toLowerCase() ;
+
+		var max_width = 515 ;
+		var max_height = 275 ;
+		var width = parseInt( GetAttribute( e, 'width', 0 ), 10 ) ;
+		var height = parseInt( GetAttribute( e, 'height', 0 ), 10 ) ;
+		var margin_left = parseInt( ( max_width - width ) / 2, 10 ) ;
+		var margin_top = parseInt( ( max_height - height ) / 2, 10 ) ;
+
+		if ( !( ( autosize != 'true' ) && ( width > 0 ) && ( height > 0 ) ) )
+		{
+			margin_left = 0 ;
+			margin_top = 0 ;
+		}
+
+		if ( margin_left < 0 )
+		{
+			margin_left = 0 ;
+		}
+
+		if ( margin_top < 0 )
+		{
+			margin_top = 0 ;
+		}
+
+		if ( ePreview.currentStyle )
+		{
+			// IE
+			ePreview.style.marginLeft = margin_left ;
+			ePreview.style.marginTop = margin_top ;
+		}
+		else
+		{
+			// Other browsers
+			SetAttribute( ePreview, 'style', 'margin-left: ' + margin_left + 'px; margin-top: ' + margin_top + 'px;' ) ;
+		}
+	}
+}
+
+function ClearPreview()
+{
+	if ( !ePreview )
+		return ;
+
+	while ( ePreview.firstChild )
+		ePreview.removeChild( ePreview.firstChild ) ;
+
+	ePreview.innerHTML = '&nbsp;' ;
 }
 
 function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
@@ -319,7 +401,7 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 	}
 	
 	SetUrl( fileUrl ) ;
-	GetE('frmUpload').reset() ;
+	GetE( 'frmUpload' ).reset() ;
 }
 
 var oUploadAllowedExtRegex = new RegExp( FCKConfig.VideoUploadAllowedExtensions, 'i' ) ;

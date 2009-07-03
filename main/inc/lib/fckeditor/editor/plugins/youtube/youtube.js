@@ -297,7 +297,7 @@ function UpdatePreview()
 	else
 	{
 		var max_width = 515 ;
-		var max_height = 245 ;
+		var max_height = 275 ;
 		var width = GetAttribute( e, 'width', 425 ) ;
 		var height = GetAttribute( e, 'height', 344 ) ;
 		var new_size = FCK.ResizeToFit( width, height, max_width, max_height ) ;

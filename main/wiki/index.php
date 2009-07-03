@@ -3539,11 +3539,13 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 	$exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
 	$exportFile = replace_dangerous_char(replace_accents($wikiTitle), 'strict' ) . $groupPart;
 	
+	$wikiContents = stripslashes($wikiContents);	
+	$wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
+	
 	$i = 1;
 	while ( file_exists($exportDir . '/' .$exportFile.'_'.$i.'.html') ) $i++; //only export last version, but in new export new version in document area
 	$wikiFileName = $exportFile . '_' . $i . '.html';
 	$exportPath = $exportDir . '/' . $wikiFileName;
-	$wikiContents = stripslashes($wikiContents);
 	file_put_contents( $exportPath, $wikiContents );		 
 	$doc_id = add_document($_course, $groupPath.'/'.$wikiFileName,'file',filesize($exportPath),$wikiFileName);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);					              

@@ -1,8 +1,10 @@
-var dialog			= window.parent ;
+// Reworks and improvements by Ivan Tcholakov, JUL-2009.
+
+var dialog		= window.parent ;
 var oEditor		= dialog.InnerDialogLoaded() ;
-var FCK				= oEditor.FCK; 
-var FCKLang			= oEditor.FCKLang ;
-var FCKConfig		= oEditor.FCKConfig ;
+var FCK			= oEditor.FCK ; 
+var FCKLang		= oEditor.FCKLang ;
+var FCKConfig	= oEditor.FCKConfig ;
 var FCKTools	= oEditor.FCKTools ;
 
 // Set the language direction.
@@ -29,18 +31,17 @@ if ( FCKConfig.VideoUpload )
 // Function called when a dialog tag is selected.
 function OnDialogTabChange( tabCode )
 {
-	ShowE('divInfo'		, ( tabCode == 'Info' ) ) ;
-	ShowE('divUpload'	, ( tabCode == 'Upload' ) ) ;
+	ShowE( 'divInfo', ( tabCode == 'Info' ) ) ;
+	ShowE( 'divUpload', ( tabCode == 'Upload' ) ) ;
 }
 
-// <object><param><embed> alternative not working properly
-// for reasons only microsoft can know)
-var EmbedInObject = false; 
+// <object><param><embed> alternative does not working properly
+// for reasons only microsoft can know.
+var EmbedInObject = false ; 
 
 // Get the selected embedded movie and its container div (if available).
-var oMovie = null;
-var oContainerDiv = FCK.Selection.GetSelectedElement();
-
+var oMovie = null ;
+var oContainerDiv = FCK.Selection.GetSelectedElement() ;
 
 // Get the selected video embed (if available).
 var oFakeImage = dialog.Selection.GetSelectedElement() ;
@@ -54,83 +55,85 @@ if ( oFakeImage )
 		oFakeImage = null ;
 }
 
-if (oContainerDiv)
+if ( oContainerDiv )
 {
-	if(oContainerDiv.tagName == 'DIV' && 
+	if ( oContainerDiv.tagName == 'DIV' && 
 		 oContainerDiv.childNodes.length > 0 &&
-		 oContainerDiv.childNodes[0].tagName == (EmbedInObject ? 'OBJECT' : 'EMBED'))
-	 oMovie = oContainerDiv.childNodes[0];
-	else if (oContainerDiv.tagName == (EmbedInObject ? 'OBJECT' : 'EMBED') &&
-	         oContainerDiv.parentNode.tagName == 'DIV')
+		 oContainerDiv.childNodes[0].tagName == ( EmbedInObject ? 'OBJECT' : 'EMBED' ) )
 	{
-		oMovie = oContainerDiv;
-		oContainerDiv  = oContainerDiv.parentNode;
+		oMovie = oContainerDiv.childNodes[0] ;
+	}
+	else if ( oContainerDiv.tagName == ( EmbedInObject ? 'OBJECT' : 'EMBED' ) &&
+	         oContainerDiv.parentNode.tagName == 'DIV' )
+	{
+		oMovie = oContainerDiv ;
+		oContainerDiv = oContainerDiv.parentNode ;
 	}
 	else
-		oContainerDiv = null;
+		oContainerDiv = null ;
 }
 
 // Added by Ivan Tcholakov.
-if (!EmbedInObject)
+if ( !EmbedInObject )
 {
-	oMovie = oEmbed;
+	oMovie = oEmbed ;
 }
 
-function GetParam(e, pname, defvalue)
+function GetParam( e, pname, defvalue )
 {
-	if (!e) return defvalue;
-	if (EmbedInObject)
+	if ( !e ) return defvalue ;
+	if ( EmbedInObject )
 	{
-		for (var i = 0; i < e.childNodes.length; i++)
+		for ( var i = 0; i < e.childNodes.length; i++ )
 		{
-			if (e.childNodes[i].tagName == 'PARAM' && GetAttribute(e.childNodes[i], 'name') == pname)
+			if ( e.childNodes[i].tagName == 'PARAM' && GetAttribute( e.childNodes[i], 'name' ) == pname )
 			{
-				var retval = GetAttribute(e.childNodes[i], 'value');
-				if (retval == "false") return false;
-				return retval;
+				var retval = GetAttribute( e.childNodes[i], 'value' ) ;
+				if ( retval == 'false' ) return false ;
+				return retval ;
 			}
 		}
-		return defvalue;
+		return defvalue ;
 	}
 	else
 	{
-		var retval = GetAttribute(e, pname, defvalue);
-		if (retval == "false") return false;
-		return retval;
+		var retval = GetAttribute( e, pname, defvalue ) ;
+		if ( retval == 'false' ) return false ;
+		return retval ;
 	}
 }
 
 window.onload = function ()	
 {
 	// Translate the dialog box texts.
-	oEditor.FCKLanguageManager.TranslatePage(document);
+	oEditor.FCKLanguageManager.TranslatePage( document ) ;
 	
 	// Read settings from existing embedded movie or set to default.
 
-	GetE('txtUrl').value = GetParam( oMovie, ( EmbedInObject ? 'url' : 'src' ), '' ) ;
+	GetE( 'txtUrl' ).value = GetParam( oMovie, ( EmbedInObject ? 'url' : 'src' ), '' ) ;
 
-	GetE('chkAutosize').checked      = GetParam(oMovie,  'autosize',     true);
-	GetE('txtWidth').value           = GetParam(oMovie,  'width',        320  );
-	GetE('txtHeight').value          = GetParam(oMovie,  'height',       240  );
-	GetE('chkAutostart').checked     = GetParam(oMovie, 'autostart',     false);
-	GetE('chkShowgotobar').checked   = GetParam(oMovie, 'showgotobar',   false);
-	GetE('chkShowstatusbar').checked = GetParam(oMovie, 'showstatusbar', false);
-	GetE('chkShowcontrols').checked  = GetParam(oMovie, 'showcontrols',  true );
-	GetE('chkShowtracker').checked   = GetParam(oMovie, 'showtracker',   true );
-	GetE('chkShowaudiocontrols').checked    = GetParam(oMovie, 'showaudiocontrols',    true);
-	GetE('chkShowpositioncontrols').checked = GetParam(oMovie, 'showpositioncontrols', true);
+	GetE( 'chkAutosize' ).checked = GetParam( oMovie, 'autosize', true ) ;
+	GetE( 'txtWidth' ).value = GetParam( oMovie, 'width', 320 ) ;
+	GetE( 'txtHeight' ).value = GetParam( oMovie, 'height', 240 ) ;
+	GetE( 'chkAutostart' ).checked = GetParam( oMovie, 'autostart', false ) ;
+	GetE( 'chkShowgotobar' ).checked = GetParam( oMovie, 'showgotobar', false ) ;
+	GetE( 'chkShowstatusbar' ).checked = GetParam( oMovie, 'showstatusbar', false ) ;
+	GetE( 'chkShowcontrols' ).checked = GetParam( oMovie, 'showcontrols', true ) ;
+	GetE( 'chkShowtracker' ).checked = GetParam( oMovie, 'showtracker', true ) ;
+	GetE( 'chkShowaudiocontrols' ).checked = GetParam( oMovie, 'showaudiocontrols', true ) ;
+	GetE( 'chkShowpositioncontrols' ).checked = GetParam( oMovie, 'showpositioncontrols', true ) ;
 
 	// Show/Hide according to settings.
-	ShowE('divSize',  !GetE('chkAutosize').checked);
-	ShowE('tdBrowse', FCKConfig.LinkBrowser);
-	ShowE('divControlsettings', GetE('chkShowcontrols').checked)
+	ShowE( 'divSize', !GetE( 'chkAutosize' ).checked ) ;
+	ShowE( 'tdBrowse', FCKConfig.LinkBrowser ) ;
+	ShowE( 'divControlsettings', GetE( 'chkShowcontrols' ).checked ) ;
 
 	// Show/Hide the "Browse Server" button.
-	GetE('tdBrowse').style.display = FCKConfig.VideoBrowser ? '' : 'none' ;
+	GetE( 'tdBrowse' ).style.display = FCKConfig.VideoBrowser ? '' : 'none' ;
 
 	// Set the actual uploader URL.
 	if ( FCKConfig.VideoUpload )
-		GetE('frmUpload').action = FCKConfig.VideoUploadURL ;
+		GetE( 'frmUpload' ).action = FCKConfig.VideoUploadURL ;
 
 	dialog.SetAutoSize( true ) ;
 
@@ -140,85 +143,84 @@ window.onload = function ()
 	SelectField( 'txtUrl' ) ;
 } 
 
-function CreateEmbeddedMovie(e, url)
+function CreateEmbeddedMovie( e, url )
 {
-	var sType, pluginspace, codebase, classid;
-	var sExt = url.match(/\.(mpg|mpeg|mp4|avi|wmv|mov|asf)$/i);
+	var sType, pluginspace, codebase, classid ;
+	var sExt = url.match( /\.(mpg|mpeg|mp4|avi|wmv|mov|asf)$/i ) ;
 
-	if (sExt ==null)
+	if ( sExt == null )
 	{
-		alert( FCKLang["DlgEmbedMoviesExtensionSupported"] )
-		return false;
+		alert( FCKLang["DlgEmbedMoviesExtensionSupported"] ) ;
+		return false ;
 	}
 	else
 	{
-		if (sExt.length && sExt.length > 0)
-			sExt = sExt[0];
+		if ( sExt.length && sExt.length > 0 )
+			sExt = sExt[0] ;
 		else
-			sExt = '';
-			
-		sType = (sExt=="mpg"||sExt=="mpeg") ? "video/mpeg" :
-				(sExt=="avi"||sExt=="wmv"||sExt=="asf") ? "video/x-msvideo" :
-				(sExt=="mov") ? "video/quicktime" :
-				(sExt=="mp4") ? "video/mpeg4-generic" :
-				"video/x-msvideo" ;
-		
-		// window media player?
-		var wmp = sExt != "mov";
-		if (wmp)
+			sExt = '' ;
+
+		sType = ( sExt == 'mpg' || sExt == 'mpeg' ) ? 'video/mpeg' :
+				( sExt == 'avi' || sExt == 'wmv' || sExt == 'asf' ) ? 'video/x-msvideo' :
+				( sExt == 'mov' ) ? 'video/quicktime' :
+				( sExt == 'mp4' ) ? 'video/mpeg4-generic' :
+				'video/x-msvideo' ;
+
+		// Windows Media Player?
+		var wmp = sExt != 'mov' ;
+		if ( wmp )
 		{
-			pluginspace = "http://www.microsoft.com/Windows/MediaPlayer/";
-			codebase    = "http://www.microsoft.com/Windows/MediaPlayer/";
-			classid     = 'classid="CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95"';
+			pluginspace = 'http://www.microsoft.com/Windows/MediaPlayer/' ;
+			codebase = 'http://www.microsoft.com/Windows/MediaPlayer/' ;
+			classid = 'classid="CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95"' ;
 		}
 		else
 		{
-			pluginspace = "http://www.apple.com/quicktime/download/";
-			codebase    = "http://www.apple.com/qtactivex/qtplugin.cab";
-			classid     = "";
+			pluginspace = 'http://www.apple.com/quicktime/download/' ;
+			codebase = 'http://www.apple.com/qtactivex/qtplugin.cab' ;
+			classid = '' ;
 		}
 
-	
-		var html;
-		if (EmbedInObject)
+		var html ;
+		if ( EmbedInObject )
 		{
-			html  = '<object '+ classid +'>';
-			html += '<param name="url" value="'+ url +'" />';
-			html += '<param name="filename" value="'+ url +'" />';
-			html += '<param name="autostart" value="'+ (GetE('chkAutostart').checked?"true":"false") +'" />';
-			html += '<param name="showcontrols" value="'+ (GetE('chkShowcontrols').checked?"true":"false") +'" />';
-			html += '<param name="showpositioncontrols" value="'+ (GetE('chkShowpositioncontrols').checked?"true":"false") +'" />';
-			html += '<param name="showtracker" value="'+ (GetE('chkShowtracker').checked?"true":"false") +'" />';
-			html += '<param name="showaudiocontrols" value="'+ (GetE('chkShowaudiocontrols').checked?"true":"false") +'" />';
-			html += '<param name="showgotobar" value="'+ (GetE('chkShowgotobar').checked?"true":"false") +'" />';
-			html += '<param name="showstatusbar" value="'+ (GetE('chkShowstatusbar').checked?"true":"false") +'" />';
-			html += '<param name="standby" value="Loading Video..." />';
-			html += '<param name="pluginspace" value="'+ pluginspace +'" />';
-			html += '<param name="codebase" value="'+ codebase +'" />'; 
-			html += '<embed type="'+ sType +'" src="'+ url +'"></embed>';
-			html += '<noembed>Download movie: <a href="'+ url +'">'+ url +'</a></noembed>';
+			html  = '<object ' + classid + '>' ;
+			html += '<param name="url" value="' + url + '" />' ;
+			html += '<param name="filename" value="' + url + '" />' ;
+			html += '<param name="autostart" value="' + ( GetE( 'chkAutostart' ).checked ? 'true' : 'false' ) + '" />' ;
+			html += '<param name="showcontrols" value="' + ( GetE( 'chkShowcontrols' ).checked ? 'true' : 'false' ) + '" />' ;
+			html += '<param name="showpositioncontrols" value="' + ( GetE( 'chkShowpositioncontrols' ).checked ? 'true' : 'false' ) + '" />' ;
+			html += '<param name="showtracker" value="' + ( GetE( 'chkShowtracker' ).checked ? 'true' : 'false' ) + '" />' ;
+			html += '<param name="showaudiocontrols" value="' + ( GetE( 'chkShowaudiocontrols' ).checked ? 'true' : 'false' ) + '" />' ;
+			html += '<param name="showgotobar" value="' + ( GetE( 'chkShowgotobar' ).checked ? 'true' : 'false' ) + '" />' ;
+			html += '<param name="showstatusbar" value="' + ( GetE( 'chkShowstatusbar' ).checked ? 'true' : 'false' ) + '" />' ;
+			html += '<param name="standby" value="Loading Video..." />' ;
+			html += '<param name="pluginspace" value="' + pluginspace + '" />' ;
+			html += '<param name="codebase" value="' + codebase + '" />' ; 
+			html += '<embed type="' + sType + '" src="' + url + '"></embed>' ;
+			html += '<noembed>Download movie: <a href="' + url + '">' + url + '</a></noembed>' ;
 			html += '</object>';
 		}
 		else
 		{
-			html = '<embed type="'+ sType +'" src="'+ url +'" '+
-			       'autosize="'+ (GetE('chkAutosize').checked?"true":"false") +'" '+
-			       'autostart="'+ (GetE('chkAutostart').checked?"true":"false") +'" '+
-			       'showcontrols="'+ (GetE('chkShowcontrols').checked?"true":"false") +'" '+
-			       'showpositioncontrols="'+ (GetE('chkShowpositioncontrols').checked?"true":"false") +'" '+
-			       'showtracker="'+ (GetE('chkShowtracker').checked?"true":"false") +'" '+
-			       'showaudiocontrols="'+ (GetE('chkShowaudiocontrols').checked?"true":"false") +'" '+
-			       'showgotobar="'+ (GetE('chkShowgotobar').checked?"true":"false") +'" '+
-			       'showstatusbar="'+ (GetE('chkShowstatusbar').checked?"true":"false") +'" '+
-			       'pluginspace="'+ pluginspace +'" '+
-			       'codebase="'+ codebase +'"';
-			if (!GetE('chkAutosize').checked)	
-				html += 'width="'+ GetE('txtWidth').value +'" height="'+ GetE('txtHeight').value +'"';
-			html += '></embed>';
+			html = '<embed type="' + sType + '" src="' + url + '" ' +
+			       'autosize="' + ( GetE( 'chkAutosize' ).checked ? 'true' : 'false' ) + '" ' +
+			       'autostart="' + ( GetE( 'chkAutostart' ).checked ? 'true' : 'false' ) + '" ' +
+			       'showcontrols="' + ( GetE( 'chkShowcontrols' ).checked ? 'true' : 'false' ) + '" ' +
+			       'showpositioncontrols="' + ( GetE( 'chkShowpositioncontrols' ).checked ? 'true' : 'false' ) + '" ' +
+			       'showtracker="' + ( GetE( 'chkShowtracker' ).checked ? 'true' : 'false' ) + '" ' +
+			       'showaudiocontrols="' + ( GetE( 'chkShowaudiocontrols' ).checked ? 'true' : 'false' ) + '" ' +
+			       'showgotobar="' + ( GetE( 'chkShowgotobar' ).checked ? 'true' : 'false' ) + '" ' +
+			       'showstatusbar="' + ( GetE( 'chkShowstatusbar' ).checked ? 'true' : 'false' ) + '" ' +
+			       'pluginspace="' + pluginspace + '" ' +
+			       'codebase="' + codebase + '"' ;
+			if ( !GetE( 'chkAutosize' ).checked )	
+				html += 'width="' + GetE( 'txtWidth' ).value + '" height="' + GetE( 'txtHeight' ).value + '"' ;
+			html += '></embed>' ;
 		}
 
-		//e.innerHTML = html;
-		//FCK.InsertHtml(html);
+		//e.innerHTML = html ;
+		//FCK.InsertHtml( html ) ;
 
 		return html;
 	}
@@ -227,10 +229,10 @@ function CreateEmbeddedMovie(e, url)
 //#### The OK button was hit.
 function Ok()
 {
-	if ( GetE('txtUrl').value.length == 0 )
+	if ( GetE( 'txtUrl' ).value.length == 0 )
 	{
 		dialog.SetSelectedTab( 'Info' ) ;
-		GetE('txtUrl').focus() ;
+		GetE( 'txtUrl' ).focus() ;
 
 		alert( FCKLang.DlgAlertUrl ) ;
 
@@ -238,34 +240,34 @@ function Ok()
 	}
 
 	// Disabled by Ivan Tcholakov.
-	//if (!oContainerDiv)
+	//if ( !oContainerDiv )
 	//{
-	//	oContainerDiv = FCK.CreateElement('DIV');
+	//	oContainerDiv = FCK.CreateElement( 'DIV' ) ;
 	//}
 
 	if ( !oEmbed )
 	{
-		oEmbed		= FCK.EditorDocument.createElement( 'EMBED' ) ;		
-		oFakeImage  = null ;
+		oEmbed = FCK.EditorDocument.createElement( 'EMBED' ) ;		
+		oFakeImage = null ;
 	}
 
 	url = GetE( 'txtUrl' ).value ; 
 
 	if ( !oFakeImage )
 	{	
-		oFakeImage	= oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', oEmbed ) ;
+		oFakeImage = oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', oEmbed ) ;
 		oFakeImage.setAttribute( '_fckvideo', 'true', 0 ) ;
-		//oFakeImage	= FCK.InsertElement( oFakeImage ) ;
+		//oFakeImage = FCK.InsertElement( oFakeImage ) ;
 	}
 
 	oEditor.FCKEmbedAndObjectProcessor.RefreshView( oFakeImage, oEmbed ) ;	
 
-	html = CreateEmbeddedMovie(oContainerDiv, url )	
-	FCK.InsertHtml(html) ;
+	html = CreateEmbeddedMovie( oContainerDiv, url ) ;	
+	FCK.InsertHtml( html ) ;
 
-	oEditor.FCKUndo.SaveUndoStep();
+	oEditor.FCKUndo.SaveUndoStep() ;
 
-	return true;
+	return true ;
 }
 
 function BrowseServer()
@@ -277,7 +279,7 @@ function SetUrl( url )
 {
 	url = FCK.GetSelectedUrl( url ) ;
 
-	GetE('txtUrl').value = url;
+	GetE( 'txtUrl' ).value = url ;
 
 	dialog.SetSelectedTab( 'Info' ) ;
 }
@@ -286,7 +288,7 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 {
 	// Remove animation
 	window.parent.Throbber.Hide() ;
-	GetE( 'divUpload' ).style.display  = '' ;
+	GetE( 'divUpload' ).style.display = '' ;
 
 	switch ( errorNumber )
 	{
@@ -320,12 +322,12 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 	GetE('frmUpload').reset() ;
 }
 
-var oUploadAllowedExtRegex	= new RegExp( FCKConfig.VideoUploadAllowedExtensions, 'i' ) ;
-var oUploadDeniedExtRegex	= new RegExp( FCKConfig.VideoUploadDeniedExtensions, 'i' ) ;
+var oUploadAllowedExtRegex = new RegExp( FCKConfig.VideoUploadAllowedExtensions, 'i' ) ;
+var oUploadDeniedExtRegex = new RegExp( FCKConfig.VideoUploadDeniedExtensions, 'i' ) ;
 
 function CheckUpload()
 {
-	var sFile = GetE('txtUploadFile').value ;
+	var sFile = GetE( 'txtUploadFile' ).value ;
 
 	if ( sFile.length == 0 )
 	{

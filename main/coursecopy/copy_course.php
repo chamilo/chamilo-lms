@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 19948 2009-04-21 17:27:59Z juliomontoya $
+// $Id: copy_course.php 21776 2009-07-03 23:05:34Z iflorespaz $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -38,11 +38,11 @@
 */ 
 // name of the language file that needs to be included 
 $language_file = array('coursebackup','admin');
-include ('../inc/global.inc.php');
-include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
-require_once ('classes/CourseBuilder.class.php');
-require_once ('classes/CourseRestorer.class.php');
-require_once ('classes/CourseSelectForm.class.php');
+require_once '../inc/global.inc.php';
+include_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
+require_once 'classes/CourseBuilder.class.php';
+require_once 'classes/CourseRestorer.class.php';
+require_once 'classes/CourseSelectForm.class.php';
 
 if (!api_is_allowed_to_edit())
 {
@@ -99,7 +99,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 	}
 	$sql .= ' AND target_course_code IS NULL AND cu.user_id = '.$user_info['user_id'].' AND c.code != '."'".$course_info['sysCode']."'".' ORDER BY title ASC';
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if( mysql_num_rows($res) == 0) {
+	if( Database::num_rows($res) == 0) {
 		Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));	
 	} else {
 ?>

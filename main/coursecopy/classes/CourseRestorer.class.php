@@ -1,4 +1,4 @@
-<?php // $Id: CourseRestorer.class.php 21245 2009-06-03 14:56:13Z juliomontoya $
+<?php // $Id: CourseRestorer.class.php 21776 2009-07-03 23:05:34Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -571,11 +571,23 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION))
 		{
+			
+						
+						
 			$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_COURSEDESCRIPTION] as $id => $cd)
 			{
-				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($cd->title)."', content = '".Database::escape_string($cd->content)."'";
+			
+				if (isset($_POST['destination_course'])) {
+					$course_destination=Security::remove_XSS($_POST['destination_course']);
+				} else {
+					$course_destination=$this->course->destination_path;
+				}
+				$search='../courses/'.api_get_course_id().'/document';
+				$replace_search_by='../courses/'.$course_destination.'/document';
+				$description_content=str_replace($search,$replace_search_by,$cd->content);
+				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($cd->title)."', content = '".Database::escape_string($description_content)."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 				$this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = Database::get_last_insert_id();
 			}

@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 21126 2009-05-31 00:53:14Z cfasanando $
+<?php //$Id: work.lib.php 21759 2009-07-03 09:57:09Z herodoto $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 21126 2009-05-31 00:53:14Z cfasanando $
+* 	@version $Id: work.lib.php 21759 2009-07-03 09:57:09Z herodoto $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -68,11 +68,11 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	
 			if ($columnStatus['Default'] == 1) {
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;make_invisible=all\">".
-						Display::return_icon('invisible.gif', get_lang('MakeAllPapersInvisible')).' '.get_lang('MakeAllPapersInvisible').
+						Display::return_icon('visible.gif', get_lang('MakeAllPapersInvisible')).' '.get_lang('MakeAllPapersInvisible').
 						"</a>\n";
 			} else {
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;make_visible=all\">".
-						Display::return_icon('visible.gif', get_lang('MakeAllPapersVisible')).' '.get_lang('MakeAllPapersVisible').
+						Display::return_icon('invisible.gif', get_lang('MakeAllPapersVisible')).' '.get_lang('MakeAllPapersVisible').
 						"</a>\n";
 			}
 		}			

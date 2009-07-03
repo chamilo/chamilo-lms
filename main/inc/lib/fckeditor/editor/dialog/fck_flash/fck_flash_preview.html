@@ -47,13 +47,16 @@ window.onload = function()
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.
 function ClearPreviewElement()
 {
-	if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf( 'opera' ) == -1 ) )
+	if ( ( navigator.userAgent.toLowerCase().indexOf( 'msie' ) != -1 ) && ( navigator.userAgent.toLowerCase().indexOf( 'opera' ) == -1 ) )
 	{
 		if ( document.body.firstChild )
 		{
 			try
 			{
-				document.body.removeChild( document.body.firstChild ) ;
+				while ( document.body.firstChild )
+				{
+					document.body.removeChild( document.body.firstChild ) ;
+				}
 			}
 			catch ( ex )
 			{

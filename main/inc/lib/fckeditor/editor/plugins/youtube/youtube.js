@@ -39,6 +39,7 @@ dialog.AddTab( 'Preview', FCKLang.DlgImgPreview ) ;
 function OnDialogTabChange( tabCode )
 {
 	ShowE( 'divInfo', ( tabCode == 'Info' ) ) ;
+
 	ShowE( 'divPreview', ( tabCode == 'Preview' ) ) ;
 	if ( tabCode == 'Preview' )
 	{

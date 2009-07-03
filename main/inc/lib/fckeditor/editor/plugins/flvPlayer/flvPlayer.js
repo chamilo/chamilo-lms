@@ -29,16 +29,21 @@ if ( FCKConfig.MediaUpload )
 	dialog.AddTab( 'Upload', FCKLang.DlgLnkUpload ) ;
 }
 
-// This function is called when a dialog tag has been selected.
+// This function is called when a dialog tab has been selected.
 function OnDialogTabChange( tabCode )
 {
 	ShowE( 'divInfo', ( tabCode == 'Info' ) ) ;
 	ShowE( 'divPreview', ( tabCode == 'Preview' ) ) ;
 	ShowE( 'divUpload', ( tabCode == 'Upload' ) ) ;
+
 	if ( tabCode == 'Preview' )
+	{
 		UpdatePreview() ;
+	}
 	else
+	{
 		ClearPreview() ;
+	}
 }
 
 function OnDialogModeChange( mode )

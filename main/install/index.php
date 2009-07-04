@@ -1,28 +1,5 @@
-<?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 * GOAL : Dokeos installation
@@ -201,7 +178,7 @@ error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 //upgrading from any subversion of 1.6 is just like upgrading from 1.6.5 
 $update_from_version_6=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5');
 //upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
-$update_from_version_8=array('1.8','1.8.2','1.8.3','1.8.4','1.8.5');
+$update_from_version_8=array('1.8','1.8.2','1.8.3','1.8.4','1.8.5','1.8.6');
 $my_old_version = '';
 $tmp_version = get_config_param('dokeos_version');
 if(!empty($_POST['old_version']))
@@ -217,8 +194,9 @@ elseif(!empty($dokeos_version)) //variable coming from installedVersion, normall
 	$my_old_version = $dokeos_version;
 }
 
-$new_version = '1.8.6';
-$new_version_stable = true;
+$new_version = '1.8.6.1';
+$new_version_stable = false;
+$new_version_major = false;
 /*
 ==============================================================================
 		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT
@@ -780,7 +758,7 @@ elseif($_POST['step6'])
 	//STEP 6 : INSTALLATION PROCESS
 	if($installType == 'update')
 	{
-		if(empty($my_old_version)){$my_old_version='1.8.5';} //we guess
+		if(empty($my_old_version)){$my_old_version='1.8.6';} //we guess
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
         error_log('Starting migration process from '.$my_old_version.' ('.time().')',0);
@@ -819,6 +797,9 @@ elseif($_POST['step6'])
 			case '1.8.5':
 				include('update-db-1.8.5-1.8.6.inc.php');
                 include('update-files-1.8.5-1.8.6.inc.php'); 
+            case '1.8.6':
+                include('update-db-1.8.6-1.8.6.1.inc.php');
+                include('update-files-1.8.6-1.8.6.1.inc.php'); 
             default:
                 
 				break;

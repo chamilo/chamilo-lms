@@ -867,8 +867,8 @@ function update_Db_course($courseDbName)
 	$sql = "CREATE TABLE `".$TABLETOOLWIKI . "` (
 		id int NOT NULL auto_increment,
 		page_id int NOT NULL default 0,
-		reflink varchar(250) NOT NULL default 'index',
-		title text NOT NULL,
+		reflink varchar(255) NOT NULL default 'index',
+		title varchar(255) NOT NULL,
 		content mediumtext NOT NULL,
 		user_id int NOT NULL default 0,
 		group_id int DEFAULT NULL,
@@ -885,11 +885,14 @@ function update_Db_course($courseDbName)
 		score int NULL default 0,
 		version int default NULL,
 		is_editing int NOT NULL default 0,
+		time_edit datetime NOT NULL default '0000-00-00 00:00:00',
 		hits int default 0,
 		linksto text NOT NULL,	
 		tag text NOT NULL,		
 		user_ip varchar(39) NOT NULL,		
-		PRIMARY KEY (id)
+		PRIMARY KEY (id),
+		KEY reflink (reflink),
+		KEY group_id (group_id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
 		

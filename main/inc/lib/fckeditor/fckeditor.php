@@ -34,6 +34,8 @@
  * @return boolean
  */
 
+require_once api_get_path(LIBRARY_PATH).'/media.lib.php';
+
 // Configuration constants.
 
 // For debugging purposes the editor may run using original source version of its javascripts, not "compressed" versions.

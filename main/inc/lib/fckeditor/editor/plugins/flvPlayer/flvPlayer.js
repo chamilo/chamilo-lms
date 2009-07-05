@@ -473,9 +473,9 @@ Media.prototype.getInnerHTML = function ( objectId )
 	var s = "" ;
 	//s += '<p>\n' ;
 	s += '<div id="player' + randomnumber + '-parent" style="text-align: center;">\n'; //'<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
-	s += '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); background-image: url(' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/flvPlayer.gif); background-repeat:no-repeat; background-position:center;' + cssalign + '">' ;
+	s += '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); /* background-image: url(' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/flvPlayer.gif); background-repeat:no-repeat; background-position:center; */' + cssalign + '">' ;
 
-	s += '<script src="' + FCK.GetUrl( oEditor.FCKConfig.PluginsPath + 'flvPlayer/swfobject.js', FCK.SEMI_ABSOLUTE_URL ) + '" type="text/javascript"></script>\n' ;
+	s += '<script src="' + FCKConfig.ScriptSWFObject + '" type="text/javascript"></script>\n' ;
 
 	s += '<div id="player' + randomnumber + '">' ;
 	s += '<a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.' ;
@@ -495,7 +495,7 @@ Media.prototype.getInnerHTML = function ( objectId )
 	s += '<script type="text/javascript">\n' ;
 	//s += '	//NOTE: FOR LIST OF POSSIBLE SETTINGS GOTO http://www.jeroenwijering.com/extras/readme.html\n' ;
 
-	s += '	var s1 = new SWFObject("' + FCK.GetUrl( oEditor.FCKConfig.PluginsPath + 'flvPlayer/mediaplayer.swf', FCK.SEMI_ABSOLUTE_URL ) + '","' + thisMediaType + '","' + thisWidth + '","' + thisHeight + '","7");\n' ;
+	s += '	var s1 = new SWFObject("' + FCKConfig.FlashPlayerVideo + '","' + thisMediaType + '","' + thisWidth + '","' + thisHeight + '","7");\n' ;
 
 	s += '	s1.addVariable("width","' + thisWidth + '");\n' ;
 	s += '	s1.addVariable("height","' + thisHeight + '");\n' ;

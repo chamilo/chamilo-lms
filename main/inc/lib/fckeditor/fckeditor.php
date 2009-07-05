@@ -436,6 +436,11 @@ class FCKeditor
 		// for links (any resource type)
 		$this->Config['LinkUploadURL'] = $this->BasePath.'editor/filemanager/connectors/php/upload.php?Type=File&ServerPath='.$upload_path;
 
+		// Passing the paths of some resource files for multi-media support.
+		$this->Config['FlashPlayerAudio'] = Media::get_path(FLASH_PLAYER_AUDIO, REL_PATH);
+		$this->Config['FlashPlayerVideo'] = Media::get_path(FLASH_PLAYER_VIDEO, REL_PATH);
+		$this->Config['ScriptSWFObject'] = Media::get_path(SCRIPT_SWFOBJECT, REL_PATH);
+
 		// Passing user status related data to the editor.
 		$this->Config['UserIsCourseAdmin'] = api_is_allowed_to_edit() ? true : false;
 		$this->Config['UserIsPlatformAdmin'] = api_is_platform_admin() ? true : false;

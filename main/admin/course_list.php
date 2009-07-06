@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 20441 2009-05-10 07:39:15Z ivantcholakov $
+<?php // $Id: course_list.php 21814 2009-07-06 16:37:11Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -72,7 +72,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	$users_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	
-	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9, visibility AS col10 FROM $course_table";
+	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9, visibility AS col10,directory as col11 FROM $course_table";
 	
 	global $_configuration;
     if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
@@ -109,9 +109,8 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	while ($course = Database::fetch_row($res))
 	{
 		//place colour icons in front of courses
-
 		//$course[1] = get_course_visibility_icon($course[10]).'<a href="../course_home/course_home.php?cidReq='.$course[0].'">'.$course[1].'</a>'; // This is not the preferable way to go to the homepage.
-		$course[1] = get_course_visibility_icon($course[10]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[0].'/index.php">'.$course[1].'</a>';
+		$course[1] = get_course_visibility_icon($course[10]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[11].'/index.php">'.$course[1].'</a>';
 
 		$course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');

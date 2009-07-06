@@ -1,4 +1,4 @@
-<?php // $Id: CourseRestorer.class.php 21776 2009-07-03 23:05:34Z iflorespaz $
+<?php // $Id: CourseRestorer.class.php 21814 2009-07-06 16:37:11Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -82,6 +82,7 @@ class CourseRestorer
 	 */
 	function restore($destination_course_code = '')
 	{
+		
 		if ($destination_course_code == '') {
 			$course_info = api_get_course_info();
 			$this->course->destination_db = $course_info['dbName'];
@@ -578,15 +579,19 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_COURSEDESCRIPTION] as $id => $cd)
 			{
-			
 				if (isset($_POST['destination_course'])) {
 					$course_destination=Security::remove_XSS($_POST['destination_course']);
+					$course_destination=api_get_course_info($course_destination);
+					$course_destination=$course_destination['path'];
 				} else {
 					$course_destination=$this->course->destination_path;
 				}
-				$search='../courses/'.api_get_course_id().'/document';
+				
+				$course_info=api_get_course_info(api_get_course_id());
+				$search='../courses/'.$course_info['path'].'/document';
 				$replace_search_by='../courses/'.$course_destination.'/document';
 				$description_content=str_replace($search,$replace_search_by,$cd->content);
+
 				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($cd->title)."', content = '".Database::escape_string($description_content)."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 				$this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = Database::get_last_insert_id();
@@ -1107,9 +1112,10 @@ class CourseRestorer
 		'parent_id,qualificator_id,session_id FROM '.$my_tbl_db_origin.' WHERE filetype="folder" ';
 		//var_dump($query_sql_ini_sp);
 		$destination='../../courses/'.$this->course->destination_path.'/work/';
-		$origin='../../courses/'.api_get_course_id().'/work/';
+		$course_info=api_get_course_info(api_get_course_id());
+		$origin='../../courses/'.$course_info['path'].'/work/';
 
-		self::api_create_all_directory($origin,$destination,false);
+		self::allow_create_all_directory($origin,$destination,false);
 		
 		//query in item property
 		
@@ -1141,8 +1147,12 @@ class CourseRestorer
 	
 /**
  * copy all directory and sub directory
+ * @param string The path origin
+ * @param string The path destination
+ * @param boolean Option Overwrite
+ * @return void()
  */
-	function api_create_all_directory($source, $dest, $overwrite = false){		
+	function allow_create_all_directory($source, $dest, $overwrite = false){		
    		if(!is_dir($dest)) {
     		mkdir($dest);
     	}
@@ -1159,7 +1169,7 @@ class CourseRestorer
 	                } elseif(is_dir($path)) {
 	                    if (!is_dir($dest . '/' . $file))
 	                    mkdir($dest . '/' . $file);
-	                   self:: api_create_all_directory($path, $dest . '/' . $file, $overwrite);
+	                   self:: allow_create_all_directory($path, $dest . '/' . $file, $overwrite);
 	                }
 	            }
 	        }

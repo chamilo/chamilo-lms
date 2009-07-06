@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 20971 2009-05-25 14:41:11Z juliomontoya $
+<?php // $Id: exercise.lib.php 21815 2009-07-06 16:45:39Z cvargas1 $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 20971 2009-05-25 14:41:11Z juliomontoya $
+* 	@version $Id: exercise.lib.php 21815 2009-07-06 16:45:39Z cvargas1 $
 */
 
 /**
@@ -39,7 +39,7 @@
  * @param int current item from the list of questions
  * @param int number of total questions 
  * */
-require("../inc/lib/fckeditor/fckeditor.php") ;
+//require_once ("../inc/lib/fckeditor/fckeditor.php") ;
 function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_item, $total_item)
 {
 	if (!ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) {

@@ -15,7 +15,7 @@
 	require_once '../../../../../../inc/global.inc.php';
 
 	// Loading document repositories settings.
-	require_once api_get_path(LIBRARY_PATH).'fckeditor/repositories_config.php' ;
+	require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php' ;
 
 	//FILESYSTEM CONFIG	<br>
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.auth.php");

@@ -31,7 +31,7 @@ $language_file = array('create_course');
 require_once '../../../../../../global.inc.php';
 
 // Initialization of the repositories.
-require_once api_get_path(LIBRARY_PATH).'fckeditor/repositories_config.php' ;
+require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php' ;
 
 global $Config ;
 

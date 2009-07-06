@@ -30,7 +30,7 @@ $language_file = array('document');
 include ('../../../../../../inc/global.inc.php');
 
 // Initialization of the repositories.
-require_once api_get_path(LIBRARY_PATH).'fckeditor/repositories_config.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php';
 
 // Choosing the repository to be used.
 if (api_is_in_course())

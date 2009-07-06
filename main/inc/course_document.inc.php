@@ -8,7 +8,7 @@ include_once('global.inc.php');
 */
 // name of the language file that needs to be included 
 
-require_once api_get_path(INCLUDE_PATH).'lib/fckeditor/repositories_config.php';
+require_once api_get_path(INCLUDE_PATH).'lib/fckeditor/repository.php';
 
 include(api_get_path(SYS_CODE_PATH).'document/document.inc.php');
 

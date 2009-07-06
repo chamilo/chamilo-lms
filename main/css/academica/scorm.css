@@ -16,6 +16,75 @@
 	width: 99%;
 	border-right: 1px none;
 }
+.inner_lp_toc {
+	overflow: auto;
+	background-color: white;
+	height: 210px;
+	width: 94%;
+	border-left: 10px #FFF solid;
+}
+.inner_lp_toc .scorm_item {
+	font-size: 11px;
+	margin-left: 10px;
+	margin-right:10px;
+	padding-bottom: 2px;
+	text-decoration: none;
+}
+.inner_lp_toc .scorm_item A {
+	font-size: 11px;
+	margin-right: 1px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	font-weight: normal;
+}
+.inner_lp_toc .scorm_item A.chapter_module {
+	font-weight: normal;
+	margin-right: 10px;
+}
+.inner_lp_toc .scorm_item_highlight {
+	font-size: 11px;
+	margin-right: 1px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	font-weight: normal;
+	background:#aaa;
+}
+.inner_lp_toc .scorm_item_highlight A {
+	font-size: 11px;
+	margin-right: 1px;
+	text-decoration: none;
+	font-weight: normal;
+}
+.inner_lp_toc .scorm_item_1 {
+	font-size: 11px;
+	margin-right: 1px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	font-weight: normal;
+	background:#ddd;
+}
+.inner_lp_toc .scorm_item_2 {
+	font-size: 11px;
+	margin-right: 1px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	font-weight: normal;
+	background:#eee;
+}
+.inner_lp_toc .scorm_title {
+	font-weight: bold;
+	background:#ccc;
+	font-size: 12px;
+	color: #444;
+}
+.inner_lp_toc .scorm_title_text {
+	margin-left: 10px;
+}
+.inner_lp_toc .scorm_status_img {
+	margin:0px;
+	margin-left: -10px;
+	width:10px;
+}
 .lp_navigation {
 	overflow: auto;
 	background-color: white;
@@ -56,8 +125,8 @@
 }
 .scormpage .content {
 	/*float: left;
-width: 60%;*/
-margin-top: 0px;
+	width: 60%;*/
+	margin-top: 0px;
 	padding-top: 0px;
 	padding-left: 180px;
 	background-color: white;

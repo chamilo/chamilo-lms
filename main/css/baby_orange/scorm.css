@@ -69,9 +69,9 @@
 }
 .inner_lp_toc .scorm_title {
 	font-weight: bold;
-	background:#EE4C03;
+	background:#ccc;
 	font-size: 12px;
-	color: #fff;
+	color: #444;
 }
 .inner_lp_toc .scorm_title_text {
 	margin-left: 10px;

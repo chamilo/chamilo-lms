@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 21079 2009-05-29 17:04:19Z juliomontoya $
+<?php // $Id: user_list.php 21826 2009-07-06 20:18:25Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -134,13 +134,13 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);	
 
 /**
-*	Make sure this function is protected
-*	because it does NOT check password!
+*	Make sure this function is protected because it does NOT check password!
 *
 *	This function defines globals.
 *   @param  int     User ID
 *   @return bool    False on failure, redirection on success
-*	@author Roan Embrechts
+*	@author Evie Embrechts
+*   @author Yannick Warnier <yannick.warnier@dokeos.com>
 */
 function login_user($user_id) {	
 	//init ---------------------------------------------------------------------
@@ -153,8 +153,7 @@ function login_user($user_id) {
 
 	//logic --------------------------------------------------------------------
 	unset($_user['user_id']); // uid not in session ? prevent any hacking
-	if (!isset ($user_id))
-	{
+	if (!isset ($user_id)) {
 		$uidReset = true;
 		return;
 	}
@@ -165,10 +164,14 @@ function login_user($user_id) {
 	$sql_query = "SELECT * FROM $main_user_table WHERE user_id='$user_id'";
 	$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 	$result = Database :: fetch_array($sql_result);
+    
+    // check if the user is allowed to 'login_as'
+    $can_login_as = (api_is_platform_admin() OR (api_is_session_admin() && $result['status'] == 5 ));
+    if (!$can_login_as) { return false; }
 	
-	$firstname = $result["firstname"];
-	$lastname = $result["lastname"];
-	$user_id = $result["user_id"];
+	$firstname = $result['firstname'];
+	$lastname = $result['lastname'];
+	$user_id = $result['user_id'];
 
 	//$message = "Attempting to login as ".$firstname." ".$lastname." (id ".$user_id.")";
 	$message = sprintf(get_lang('AttemptingToLoginAs'),$firstname,$lastname,$user_id);
@@ -176,10 +179,8 @@ function login_user($user_id) {
 	$loginFailed = false;
 	$uidReset = false;
 
-	if ($user_id) // a uid is given (log in succeeded)
-	{
-		if ($_configuration['tracking_enabled'])
-		{
+	if ($user_id) { // a uid is given (log in succeeded)
+		if ($_configuration['tracking_enabled']) {
 			$sql_query = "SELECT user.*, a.user_id is_admin,
 				UNIX_TIMESTAMP(login.login_date) login_date
 				FROM $main_user_table
@@ -189,9 +190,7 @@ function login_user($user_id) {
 				ON user.user_id = login.login_user_id
 				WHERE user.user_id = '".$user_id."'
 				ORDER BY login.login_date DESC LIMIT 1";
-		}
-		else
-		{
+		} else {
 			$sql_query = "SELECT user.*, a.user_id is_admin
 				FROM $main_user_table
 				LEFT JOIN $main_admin_table a
@@ -199,11 +198,10 @@ function login_user($user_id) {
 				WHERE user.user_id = '".$user_id."'";
 		}
 
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 
 
-		if (Database::num_rows($sql_result) > 0)
-		{
+		if (Database::num_rows($sql_result) > 0) {
 			// Extracting the user data
 
 			$user_data = Database::fetch_array($sql_result);
@@ -245,10 +243,8 @@ function login_user($user_id) {
 			Display :: display_normal_message($message,false);
 			Display :: display_footer();
 			exit;
-		}
-		else
-		{
-			exit ("<br/>WARNING UNDEFINED UID !! ");
+		} else {
+			exit ("<br />WARNING UNDEFINED UID !! ");
 		}
 	}
 }
@@ -438,9 +434,14 @@ function modify_filter($user_id,$url_params,$row)
 	if (api_is_platform_admin()) {
 		$result .= '<a href="user_information.php?user_id='.$user_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
 	}
-	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
 
 	$statusname = api_get_status_langvars();
+    //only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
+    if (api_is_platform_admin() or (api_is_session_admin() && $row['6'] == $statusname[STUDENT])) {
+        $result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+    } else {
+    	$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
+    }
 	if ($row['6'] != $statusname[STUDENT])
 	{
 		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';

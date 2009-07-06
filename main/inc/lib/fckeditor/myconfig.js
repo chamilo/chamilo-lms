@@ -54,6 +54,10 @@ FCKConfig.SmileyWindowHeight = 250 ;
  * Editor's toolbar definitions.
  */
 
+/*
+
+// TODO: These definitions have been moved in myconfig.php, they will be removed from here.
+
 FCKConfig.ToolbarSets["Full"] = [
 	['FitWindow','PasteWord','Link','Unlink','Anchor','-','Image','flvPlayer','Flash','EmbedMovies','MP3','YouTube','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontFormat','Style','FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
 ] ;
@@ -479,6 +483,8 @@ FCKConfig.ToolbarSets["Gradebook"] = [
     ['Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
     ['Source']
 ] ;
+
+*/
 
 /*
  * Toolbar drop-down lists customizations.

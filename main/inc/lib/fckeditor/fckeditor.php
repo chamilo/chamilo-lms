@@ -197,7 +197,7 @@ class FCKeditor
 		$config = $this->get_default_configuration();
 		$this->read_configuration($config);
 
-		if ((api_is_allowed_to_edit() || api_is_platform_admin()) && ($this->Config['BlockCopyPaste'] === true)) {
+		if ((api_is_allowed_to_edit() || api_is_platform_admin()) && isset($this->Config['BlockCopyPaste'])) {
 			$this->Config['BlockCopyPaste'] = false;
 		}
 

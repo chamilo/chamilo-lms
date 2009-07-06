@@ -48,4 +48,17 @@ $config['ToolbarSets']['EditHomePage'] =
 		)
 	) ;
 
+// These are temporary settings for experimental purposes.
+$config['ToolbarCanCollapse']['EditHomePage'] = true; // true (default), false
+$config['ToolbarStartExpanded']['EditHomePage'] = true; // true (default) , false
+$config['ToolbarLocation']['EditHomePage'] = 'In'; // 'In' (default) , 'None' , 'Out:[TargetId]' , 'Out:[TargetWindow]([TargetId])'
+$config['BlockCopyPaste']['EditHomePage'] = false; // true , false (default)
+
+
+
+
+
+
+
+
 // To be continued ...

@@ -176,17 +176,36 @@ class FCKeditor
 	 */
 	public function CreateHtml()
 	{
-		// Adaptation for the Dokeos LMS. -------------------------------------
+		// Adaptation for the Dokeos LMS ---------------------------------------------------------
 
 		$this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
 
+		// Configuration data comes from different sources. To resolve conflicts between
+		// options with a same name, these differnt sources have assigned priorities.
+		
+		// 1-st level (the highest priority)
+		// Conficuration settings that are created during the initialization of
+		// an editor's instance, they are "hardcoded" by a developer.
+
+		// 2-nd level
+		// Configuration settings from myconfig.php.
 		$config = self::get_custom_configuration();
 		$this->read_configuration($config);
 
+		// 3-rd level
+		// Default configuration settings that are determined automatically here, on the php-side.
 		$config = $this->get_default_configuration();
 		$this->read_configuration($config);
 
-		//---------------------------------------------------------------------
+		// 4-th level
+		// Configuration settings from myconfig.js.
+		// This file may be modified for customization purposes.
+
+		// 5-th level (the lowest priority)
+		// Configuration settings from myconfig.js. This file is "as is" in the original source.
+		// It is not recommended modifying myconfig.js.
+
+		//----------------------------------------------------------------------------------------
 
 		$HtmlValue = htmlspecialchars( $this->Value ) ;
 
@@ -330,7 +349,7 @@ class FCKeditor
 
 	/**
 	 * This method reads configuration data for the current editor's instance without overriding settings that already exist.  
-	 * @return array	Custom configuration data.
+	 * @return array
 	 */
 	function read_configuration(& $config) {
 		$toolbar_set = $this->ToolbarSet;
@@ -343,6 +362,32 @@ class FCKeditor
 							if ($toolbar_set == $toolbar_name || $toolbar_set_maximized == $toolbar_name) {		
 								if (!isset($this->Config[$key][$toolbar_name])) {
 									$this->Config[$key][$toolbar_name] = $toolbar_data;
+								}
+								break;
+							}
+						}
+					}
+					break;
+				case 'BlockCopyPaste':
+				case 'ToolbarCanCollapse':
+				case 'ToolbarStartExpanded':
+					if (!empty($toolbar_set) && $toolbar_set != 'Default') {
+						foreach ($value as $toolbar_name => $toolbar_data) {
+							if ($toolbar_set == $toolbar_name) {		
+								if (!isset($this->Config[$key][$toolbar_name])) {
+									$this->Config[$key] = (boolean) $toolbar_data;
+								}
+								break;
+							}
+						}
+					}
+					break;
+				case 'ToolbarLocation':
+					if (!empty($toolbar_set) && $toolbar_set != 'Default') {
+						foreach ($value as $toolbar_name => $toolbar_data) {
+							if ($toolbar_set == $toolbar_name) {		
+								if (!isset($this->Config[$key][$toolbar_name])) {
+									$this->Config[$key] = (string) $toolbar_data;
 								}
 								break;
 							}
@@ -370,45 +415,47 @@ class FCKeditor
 	}
 
 	/**
-	 * This method returns some editor's configuration settings that are determined automatically.  
-	 * @return array	Default configuration data.
+	 * This method returns automatically determined editor's configuration settings (default settings).  
+	 * @return array
 	 */
 	private function & get_default_configuration() {
+		return array_merge(
+			self::get_javascript_custom_configuration_file(),
+			self::get_css_configuration_paths(),
+			self::get_editor_language(),
+			$this->get_repository_configuration(),
+			self::get_media_configuration(),
+			self::get_user_configuration_data(),
+			self::get_mimetex_plugin_configuration()
+		);
+	}
 
-		// Document repository configuration data.
-		$config = $this->get_repository_configuration();
+	/**
+	 * This method returns the path to the javascript custom configuration file.
+	 * @return array
+	 */
+	private function & get_javascript_custom_configuration_file() {
+		return array('CustomConfigurationsPath' => api_get_path(REL_PATH).'main/inc/lib/fckeditor/myconfig.js');
+	}
 
-		// Path to the javascript custom configuration file.
-		$config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-
-		// Editor's language.
-		$config['DefaultLanguage'] = self::get_editor_language();
-
+	/**
+	 * This method returns CSS-related configuration data (paths to style files).
+	 * @return array
+	 */
+	private function & get_css_configuration_paths() {
 		// CSS should come from the system.
-		$config['EditorAreaCSS'] = $config['ToolbarComboPreviewCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
-
-		// Passing the paths of some resource files for multi-media support.
-		$config['FlashPlayerAudio'] = Media::get_path(FLASH_PLAYER_AUDIO, REL_PATH);
-		$config['FlashPlayerVideo'] = Media::get_path(FLASH_PLAYER_VIDEO, REL_PATH);
-		$config['ScriptSWFObject'] = Media::get_path(SCRIPT_SWFOBJECT, REL_PATH);
-
-		// Passing user status related data to the editor.
-		$config['UserIsCourseAdmin'] = api_is_allowed_to_edit() ? true : false;
-		$config['UserIsPlatformAdmin'] = api_is_platform_admin() ? true : false;
-
-		// MimeTeX plugin support.
-		$config = array_merge($config, self::get_mimetex_plugin_configuration());
-
+		$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
+		$config['ToolbarComboPreviewCSS'] = $config['EditorAreaCSS'];
 		return $config;
 	}
 
 	/**
-	 * This method determines editor's interface language.
-	 * @return string	Compatible with the editor langiage code.
+	 * This method determines editor's interface language and returns it as compatible with the editor langiage code.
+	 * @return array
 	 */
-	private function get_editor_language() {
-		static $editor_lang;
-		if (!isset($editor_lang)) {
+	private function & get_editor_language() {
+		static $config;
+		if (!is_array($config)) {
 			global $language_interface;
 			@ $editor_lang = Database :: get_language_isocode($language_interface);
 			$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
@@ -420,13 +467,14 @@ class FCKeditor
 				// If there was no language file, use the English one.
 				$editor_lang = 'en';
 			}
+			$config['DefaultLanguage'] = $editor_lang;
 		}
-		return $editor_lang;
+		return $config;
 	}
 	
 	/**
 	 * This method returns default configuration for document repository that is to be used by the editor.
-	 * @return array	Default repository configuration data.
+	 * @return array
 	 */
 	private function & get_repository_configuration() {
 
@@ -544,10 +592,31 @@ class FCKeditor
 	}
 
 	/**
-	 * This method returns detected configuration data about editor's MimeTeX plugin.  
-	 * @return array	Configuration data.
+	 * This method returns multi-media related configuration data.
+	 * @return array
 	 */
-	private function get_mimetex_plugin_configuration() {
+	private function & get_media_configuration() {
+		$config['FlashPlayerAudio'] = Media::get_path(FLASH_PLAYER_AUDIO, REL_PATH);
+		$config['FlashPlayerVideo'] = Media::get_path(FLASH_PLAYER_VIDEO, REL_PATH);
+		$config['ScriptSWFObject'] = Media::get_path(SCRIPT_SWFOBJECT, REL_PATH);
+		return $config;
+	}
+
+	/**
+	 * This method returns current user specific configuration data.
+	 * @return array
+	 */
+	private function & get_user_configuration_data() {
+		$config['UserIsCourseAdmin'] = api_is_allowed_to_edit() ? true : false;
+		$config['UserIsPlatformAdmin'] = api_is_platform_admin() ? true : false;
+		return $config;
+	}
+
+	/**
+	 * This method returns detected configuration data about editor's MimeTeX plugin.  
+	 * @return array
+	 */
+	private function & get_mimetex_plugin_configuration() {
 		static $config ;
 		if ( !is_array( $config ) ) {
 			$server_base = explode( '/', api_get_path( WEB_PATH ) ) ;
@@ -573,8 +642,7 @@ class FCKeditor
 	 * 
 	 * @author Ivan Tcholakov, FEB-2009
 	 */
-	private function url_exists($url, $timeout = 30)
-	{
+	private function url_exists($url, $timeout = 30) {
 		$parsed = parse_url($url);
 		$scheme = isset($parsed['scheme']) ? $parsed['scheme'] : 'http';
 		$host = $parsed['host'];
@@ -582,18 +650,15 @@ class FCKeditor
 
 		$file_exists = false;
 		$fp = @fsockopen($host, $port, $errno, $errstr, $timeout);
-		if ($fp)
-		{
+		if ($fp) {
 			$request = "HEAD ".$url." / HTTP/1.1\r\n";
 			$request .= "Host: ".$host."\r\n";
 			$request .= "Connection: Close\r\n\r\n";
 
 			@fwrite($fp, $request);
-			while (!@feof($fp))
-			{
+			while (!@feof($fp)) {
 				$header = @fgets($fp, 128);
-				if(@preg_match('#HTTP/1.1 200 OK#', $header))
-				{
+				if(@preg_match('#HTTP/1.1 200 OK#', $header)) {
 					$file_exists = true;
 					break;
 				}

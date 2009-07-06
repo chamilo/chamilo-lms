@@ -195,6 +195,35 @@ else
 -----------------------------------------------------------
 */
 
+//release of blocked pages to prevent concurrent editions
+$sql='SELECT * FROM '.$tbl_wiki.'WHERE is_editing!="0"';
+$result=api_sql_query($sql,__LINE__,__FILE__);
+while ($is_editing_block=Database::fetch_array($result))
+{
+	$max_edit_time=1200; // 20 minutes
+	$timestamp_edit=convert_date_to_number($is_editing_block['time_edit']);	
+	$time_editing=time()-$timestamp_edit;	
+
+
+	//first prevent concurrent users and double version
+	if($is_editing_block['is_editing']==$_user['user_id'])
+	{
+		$_SESSION['_version']=$is_editing_block['version'];
+	}
+	else
+	{
+		unset ( $_SESSION['_version'] );
+	}
+	//second checks if has exceeded the time that a page may be available or if a page was edited and saved by its author
+	if ($time_editing>$max_edit_time || ($is_editing_block['is_editing']==$_user['user_id'] && $_GET['action']!='edit'))
+	{
+		$sql='UPDATE '.$tbl_wiki.' SET is_editing="0", time_edit="0000-00-00 00:00:00" WHERE is_editing="'.$is_editing_block['is_editing'].'"';
+		api_sql_query($sql,__FILE__,__LINE__);
+	}	
+	
+}
+
+
 // saving a change
 if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'')
 {
@@ -207,6 +236,12 @@ if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'')
 	{
 		//double post
 	}
+	elseif ($_POST['version']!=$_SESSION['_version'])
+	{
+		//prevent concurrent users and double version
+		Display::display_error_message(get_lang("EditedByAnotherUser"));
+	}	
+
 	else
 	{
 		$return_message=save_wiki();	
@@ -267,6 +302,19 @@ if ($_GET['view'])
 		{	  
 			Display::display_normal_message(get_lang('OnlyEditPagesCourseManager'));	  
 		}
+		elseif($last_row['is_editing']!=0 && $last_row['is_editing']!=$_user['user_id'])
+		{
+			//checking for concurrent users
+			$timestamp_edit=convert_date_to_number($last_row['time_edit']);
+			$time_editing=time()-$timestamp_edit;
+			$max_edit_time=1200; // 20 minutes
+			$rest_time=$max_edit_time-$time_editing;
+					
+			$userinfo=Database::get_user_info_from_id($last_row['is_editing']);
+				
+			$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
+			Display::display_normal_message($is_being_edited);
+		}	
 		else
 		{	
 			$PassEdit=false;		
@@ -1187,8 +1235,6 @@ if ($_GET['action']=='edit')
 		$title=$row['title'];
 		$page_id=$row['page_id'];
 	}
-	echo '<div id="wikititle">';
-	echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.$title.'</div>';
 
 	//Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher
 	if(($row['reflink']=='index' || $row['reflink']=='' || $row['assignment']==1) && (!api_is_allowed_to_edit()))
@@ -1253,6 +1299,31 @@ if ($_GET['action']=='edit')
 			else
 			{			
 
+			//previous checking for concurrent editions
+				if($row['is_editing']==0)
+				{
+					Display::display_normal_message(get_lang('WarningMaxEditingTime'));
+			
+					$time_edit = date("Y-m-d H:i:s");
+					$sql='UPDATE '.$tbl_wiki.' SET is_editing="'.$_user['user_id'].'", time_edit="'.$time_edit.'" WHERE id="'.$row['id'].'"';
+					api_sql_query($sql,__FILE__,__LINE__);
+				}
+				elseif($row['is_editing']!=$_user['user_id'])
+				{		
+					$timestamp_edit=convert_date_to_number($row['time_edit']);
+					$time_editing=time()-$timestamp_edit;
+					$max_edit_time=1200; // 20 minutes
+					$rest_time=$max_edit_time-$time_editing;
+							
+					$userinfo=Database::get_user_info_from_id($row['is_editing']);
+					
+					$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
+					Display::display_normal_message($is_being_edited);
+					exit;
+				}
+					
+				echo '<div id="wikititle">';
+				echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.$title.'</div>';
 				echo '<div id="wikicontent">'; 
 				echo '<form name="form1" method="post" action="'.api_get_self().'?action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
 				echo '<input type="hidden" name="page_id" value="'.$page_id.'">';
@@ -3578,6 +3649,17 @@ function double_post($wpost_id)
     }
 }
 
+/**
+ * Function convert date to number
+ * 2008-10-12 00:00:00 ---to--> 12345672218 (timestamp)
+ */
+function convert_date_to_number($default)
+{
+	$parts = split(' ',$default);
+	list($d_year,$d_month,$d_day) = split('-',$parts[0]);
+	list($d_hour,$d_minute,$d_second) = split(':',$parts[1]);	
+	return mktime($d_hour, $d_minute, $d_second, $d_month, $d_day, $d_year);
+}
 
 /**
  * Function wizard individual assignment

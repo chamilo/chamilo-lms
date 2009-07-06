@@ -39,10 +39,6 @@ require_once dirname(__FILE__).'/../media.lib.php';
 
 // Configuration constants.
 
-// For debugging purposes the editor may run using original source version of its javascripts, not "compressed" versions.
-// Change the value to true for this case.
-define ( 'RUN_EDITOR_USING_ORIGINAL_SOURCE', false ) ;
-
 // The MimeTeX plugin support, a check whether the server executable file has been installed.
 define ( 'CHECK_MIMETEX_PLUGIN_INSTALLED', true ) ; // Change to false in case of unexpected problems. Then installed state will be assumed.
 define ( 'CHECK_MIMETEX_PLUGIN_INSTALLED_TIMEOUT', 0.05 ) ; // Response timeout in seconds. Keep this value as low as possible on Windows servers.
@@ -190,7 +186,7 @@ class FCKeditor
 
 		// 2-nd level
 		// Configuration settings from myconfig.php.
-		$config = self::get_custom_configuration();
+		$config = $this->get_custom_configuration();
 		$this->read_configuration($config);
 
 		// 3-rd level
@@ -218,7 +214,10 @@ class FCKeditor
 
 		if ( $this->IsCompatible() )
 		{
-			if ( RUN_EDITOR_USING_ORIGINAL_SOURCE )
+			// For debugging purposes the editor may run using original source versions of its javascripts,
+			// not "compressed" versions. When you want use this feature, go to the platform administration
+			// settings page and switch the system into "test server" mode.
+			if ( api_get_setting('server_type') == 'test' )
 				$File = 'fckeditor.original.html' ;
 			else
 				$File = 'fckeditor.html' ;
@@ -641,10 +640,9 @@ class FCKeditor
 
 	/*
 	 * Checks whether a given url exists.
-	 * 
-	 * @url string
+	 * @param string $url
+	 * @param int $timeout
 	 * @return boolean
-	 * 
 	 * @author Ivan Tcholakov, FEB-2009
 	 */
 	private function url_exists($url, $timeout = 30) {
@@ -671,5 +669,14 @@ class FCKeditor
 		}
 		@fclose($fp);
 		return $file_exists;
+	}
+
+	/*
+	 * Convers a string from camel case to underscore.
+	 * @param string $string
+	 * @return string
+	 */
+	private function camel_case_to_underscore($string) {
+		return strtolower(preg_replace('/([a-z])([A-Z])/', "$1_$2", $string));
 	}
 }

@@ -34,7 +34,8 @@
  * @return boolean
  */
 
-require_once api_get_path(LIBRARY_PATH).'/media.lib.php';
+//require_once api_get_path(LIBRARY_PATH).'/media.lib.php';  // This fails in some pages (Tests).
+require_once dirname(__FILE__).'/../media.lib.php';
 
 // Configuration constants.
 

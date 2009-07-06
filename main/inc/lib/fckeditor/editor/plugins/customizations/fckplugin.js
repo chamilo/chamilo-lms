@@ -51,6 +51,12 @@
  **************************************************************************************
  */
 
+// Data about available toolbar sets should be unserialized when it comes from php-side.
+if ( typeof FCKConfig.ToolbarSets == 'string' || FCKConfig.ToolbarSets instanceof ( String ) )
+{
+	FCKConfig.ToolbarSets = eval( '(' + FCKConfig.ToolbarSets + ')' ) ;
+}
+
 // Reading a setting which tells whether simple or advanced file manager is to be used.
 FCKConfig.AdvancedFileManager = null ;
 if ( FCKConfig.AdvancedFileManager )

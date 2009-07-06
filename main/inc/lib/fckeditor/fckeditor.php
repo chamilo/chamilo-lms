@@ -176,304 +176,17 @@ class FCKeditor
 	 */
 	public function CreateHtml()
 	{
-		/*
-		 * Adaptation for the Dokeos LMS.
-		 */
-
-		// Default configuration settings will be calculated when the editor
-		// is (still) created directly, without using the formvalidator module.
-		// These default settings might not cover all possible cases.
-
-		global $language_interface;
+		// Adaptation for the Dokeos LMS. -------------------------------------
 
 		$this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
 
-		@ $editor_lang = Database :: get_language_isocode($language_interface);
+		$config = self::get_custom_configuration();
+		$this->read_configuration($config);
 
-		// Making a compatible code in order it to be accepted by the editor.
-		$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
+		$config = $this->get_default_configuration();
+		$this->read_configuration($config);
 
-		if (empty ($editor_lang))
-		{
-			$editor_lang = 'en';
-		}
-
-		// Checking for availability of a corresponding language file.
-		$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
-		if (!file_exists($language_file))
-		{
-			// If there was no language file, use the english one.
-			$editor_lang = 'en';
-		}
-
-		$this->Config['DefaultLanguage'] = $editor_lang;
-
-		// css should be dokeos ones
-		$this->Config['EditorAreaCSS'] = $this->Config['ToolbarComboPreviewCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
-
-		// we should set the $fck_attribute['ToolbarStartExpanded']= false to hide the toolbar by default we show the toolbar
-		if (is_string($this->Config['ToolbarStartExpanded']))
-		{
-			$this->Config['ToolbarStartExpanded'] = (empty($this->Config['ToolbarStartExpanded']) || $this->Config['ToolbarStartExpanded'] == 'false') ? false : true;
-		}
-
-		// Default configuration settings for document repositories.
-
-		// Preliminary calculations for assembling required paths.
-		$script_name = substr($_SERVER['PHP_SELF'], strlen(api_get_path(REL_PATH)));
-		$script_path = explode('/', $script_name);
-		$script_path[count($script_path) - 1] = '';
-		if (api_is_in_course())
-		{
-			$relative_path_prefix = str_repeat('../', count($script_path) - 1);
-		}
-		else
-		{
-			$relative_path_prefix = str_repeat('../', count($script_path) - 2);
-		}
-		$script_path = implode('/', $script_path);
-		$script_path = api_get_path(WEB_PATH).$script_path;
-
-		$use_advanced_filemanager = api_get_setting('advanced_filemanager') == 'true';
-
-		if (api_is_in_course())
-		{
-			if (!api_is_in_group())
-			{
-				// 1. We are inside a course and not in a group.
-
-				if (api_is_allowed_to_edit())
-				{
-					// 1.1. Teacher (tutor and coach are not authorized to change anything in the "content creation" tools)
-
-					if (empty($this->Config['CreateDocumentWebDir']))
-					{
-						$this->Config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/';
-					}
-
-					if (is_null($this->Config['CreateDocumentDir']))
-					{
-						$this->Config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/';
-					}
-
-					if (empty($this->Config['BaseHref']))
-					{
-						$this->Config['BaseHref'] = $script_path;
-					}
-
-					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
-				}
-				else
-				{
-					// 1.2. Student
-
-					if (empty($this->Config['CreateDocumentWebDir']))
-					{
-						$this->Config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
-					}
-
-					if (is_null($this->Config['CreateDocumentDir']))
-					{
-						$this->Config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
-					}
-
-					if (empty($this->Config['BaseHref']))
-					{
-						$this->Config['BaseHref'] = $script_path;
-					}
-
-					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
-				}
-			}
-			else
-			{
-				// 2. Inside a course and inside a group.
-
-				global $group_properties;
-
-				if (empty($this->Config['CreateDocumentWebDir']))
-				{
-					$this->Config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
-				}
-
-				if (is_null($this->Config['CreateDocumentDir']))
-				{
-					$this->Config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document'.$group_properties['directory'].'/';
-				}
-
-				if (empty($this->Config['BaseHref']))
-				{
-					$this->Config['BaseHref'] = $script_path;
-				}
-
-				$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
-			}
-		}
-		else
-		{
-			if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin')
-			{
-				// 3. Platform administration activities.
-
-				if (empty($this->Config['CreateDocumentWebDir']))
-				{
-					$this->Config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'home/default_platform_document/';
-				}
-
-				if (is_null($this->Config['CreateDocumentDir']))
-				{
-					$this->Config['CreateDocumentDir'] = api_get_path(WEB_PATH).'home/default_platform_document/'; // A side-effect is in use here.
-				}
-
-				if (empty($this->Config['BaseHref']))
-				{
-					$this->Config['BaseHref'] = api_get_path(WEB_PATH).'home/default_platform_document/';
-				}
-
-				$upload_path = api_get_path(REL_PATH).'home/default_platform_document/';
-			}
-			else
-			{
-				// 4. The user is outside courses.
-
-				if (empty($this->Config['CreateDocumentWebDir']))
-				{
-					$this->Config['CreateDocumentWebDir'] = api_get_path('WEB_PATH').'main/upload/users/'.api_get_user_id().'/my_files/';
-				}
-
-				if (is_null($this->Config['CreateDocumentDir']))
-				{
-					$this->Config['CreateDocumentDir'] = $relative_path_prefix.'upload/users/'.api_get_user_id().'/my_files/';
-				}
-
-				if (empty($this->Config['BaseHref']))
-				{
-					$this->Config['BaseHref'] = $script_path;
-				}
-
-				$upload_path = api_get_path(REL_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
-			}
-		}
-
-		// Setting hyperlinks used to call file managers.
-
-		if ($use_advanced_filemanager)
-		{
-			// Let javascripts "know" which file manager has been chosen.
-			$this->Config['AdvancedFileManager'] = true;
-
-			// Configuration path when advanced file manager is used.
-			$this->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-			//$this->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig_afm.js";
-
-			// URLs for opening the file browser for different resource types (file types):
-
-			// for images
-			$this->Config['ImageBrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-
-			// for flash
-			$this->Config['FlashBrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-
-			// for audio files (mp3)
-			$this->Config['MP3BrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-
-			// for videos
-			$this->Config['VideoBrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-
-			// for videos (flv)
-			$this->Config['MediaBrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-
-			// for links (any resource type)
-			$this->Config['LinkBrowserURL'] = $this->BasePath.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
-		}
-		else
-		{
-			// Passing the file manager setting to the editor's javascripts.
-			$this->Config['AdvancedFileManager'] = false;
-
-			// Configuration path when simple file manager is used.
-			$this->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-
-			// URLs for opening the file browser for different resource types (file types):
-
-			// for images
-			$this->Config['ImageBrowserURL'] = $this->BasePath.'editor/filemanager/browser/default/browser.html?Type=Images&Connector='.$this->BasePath.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
-
-			// for flash
-			$this->Config['FlashBrowserURL'] = $this->BasePath.'editor/filemanager/browser/default/browser.html?Type=Flash&Connector='.$this->BasePath.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
-	
-			// for audio files (mp3)
-			$this->Config['MP3BrowserURL'] = $this->BasePath.'editor/filemanager/browser/default/browser.html?Type=MP3&Connector='.$this->BasePath.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
-
-			// for videos
-			$this->Config['VideoBrowserURL'] = $this->BasePath.'editor/filemanager/browser/default/browser.html?Type=Video&Connector='.$this->BasePath.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
-
-			// for videos (flv)
-			$this->Config['MediaBrowserURL'] = $this->BasePath.'editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector='.$this->BasePath.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
-
-			// for links (any resource type)
-			$this->Config['LinkBrowserURL'] = $this->BasePath.'editor/filemanager/browser/default/browser.html?Type=File&Connector='.$this->BasePath.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
-		}
-
-		// URLs for making quick uplods for different resource types (file types).
-		// These URLs are used by the dialogs' quick upload tabs:
-
-		// for images
-		$this->Config['ImageUploadURL'] = $this->BasePath.'editor/filemanager/connectors/php/upload.php?Type=Images&ServerPath='.$upload_path;
-
-		// for flash
-		$this->Config['FlashUploadURL'] = $this->BasePath.'editor/filemanager/connectors/php/upload.php?Type=Flash&ServerPath='.$upload_path;
-	
-		// for audio files (mp3)
-		$this->Config['MP3UploadURL'] = $this->BasePath.'editor/filemanager/connectors/php/upload.php?Type=MP3&ServerPath='.$upload_path;
-
-		// for videos
-		$this->Config['VideoUploadURL'] = $this->BasePath.'editor/filemanager/connectors/php/upload.php?Type=Video&ServerPath='.$upload_path;
-
-		// for videos (flv)
-		$this->Config['MediaUploadURL'] = $this->BasePath.'editor/filemanager/connectors/php/upload.php?Type=Video/flv&ServerPath='.$upload_path;
-
-		// for links (any resource type)
-		$this->Config['LinkUploadURL'] = $this->BasePath.'editor/filemanager/connectors/php/upload.php?Type=File&ServerPath='.$upload_path;
-
-		// Passing the paths of some resource files for multi-media support.
-		$this->Config['FlashPlayerAudio'] = Media::get_path(FLASH_PLAYER_AUDIO, REL_PATH);
-		$this->Config['FlashPlayerVideo'] = Media::get_path(FLASH_PLAYER_VIDEO, REL_PATH);
-		$this->Config['ScriptSWFObject'] = Media::get_path(SCRIPT_SWFOBJECT, REL_PATH);
-
-		// Passing user status related data to the editor.
-		$this->Config['UserIsCourseAdmin'] = api_is_allowed_to_edit() ? true : false;
-		$this->Config['UserIsPlatformAdmin'] = api_is_platform_admin() ? true : false;
-
-		// The MimeTeX plugin support.
-    	static $is_mimetex_installed = null ;
-		$server_base = explode( '/', api_get_path( WEB_PATH ) ) ;
-		$server_base_ip = $server_base[0] . '/' . $server_base[1] . '/127.0.0.1' ;
-		$server_base = $server_base[0]. '/' . $server_base[1]. '/' . $server_base[2] ;
-		$url_relative = '/cgi-bin/mimetex' . ( IS_WINDOWS_OS ? '.exe' : '.cgi' ) ;
-		$this->Config['MimetexUrl'] = $server_base . $url_relative ;
-		if ( CHECK_MIMETEX_PLUGIN_INSTALLED )
-		{
-			if ( !isset( $is_mimetex_installed ) )
-			{
-				$check_mimetex_url = ( CHECK_MIMETEX_PLUGIN_INSTALLED_URL_BASE == 'ip' ? $server_base_ip : $server_base ) . $url_relative . '?' . rand() ;
-				$this->Config['IsMimetexInstalled'] = $this->url_exists( $check_mimetex_url, CHECK_MIMETEX_PLUGIN_INSTALLED_TIMEOUT ) ;
-			}
-			else
-			{
-				$this->Config['IsMimetexInstalled'] = $is_mimetex_installed ;
-			}
-		}
-		else
-		{
-			$this->Config['IsMimetexInstalled'] = true ;
-		}
-		$is_mimetex_installed = $this->Config['IsMimetexInstalled'] ;
-
-
-		/*
-		 * The original code starts from here.
-		 */
+		//---------------------------------------------------------------------
 
 		$HtmlValue = htmlspecialchars( $this->Value ) ;
 
@@ -541,20 +254,11 @@ class FCKeditor
 
 		foreach ( $this->Config as $sKey => $sValue )
 		{
-			if ( $bFirst == false )
+			if ( $bFirst == false ) {
 				$sParams .= '&amp;' ;
-			else
+			} else {
 				$bFirst = false ;
-
-			/*
-			if ( $sValue === true )
-				$sParams .= $this->EncodeConfig( $sKey ) . '=true' ;
-			else if ( $sValue === false )
-				$sParams .= $this->EncodeConfig( $sKey ) . '=false' ;
-			else
-				$sParams .= $this->EncodeConfig( $sKey ) . '=' . $this->EncodeConfig( $sValue ) ;
-			*/
-
+			}
 			if ( is_string( $sValue ) ) {
 				$sParams .= $this->EncodeConfig( $sKey ) . '=' . $this->EncodeConfig( $sValue ) ;
 			} else {
@@ -591,7 +295,7 @@ class FCKeditor
 	 * Note: This function is similar to json_encode(), in addition it produces HTML-safe strings, i.e. with <, > and & escaped.
 	 * @link http://drupal.org/
 	 */
-	public function to_js( $var ) {
+	private function to_js( $var ) {
 		switch ( gettype( $var ) ) {
 			case 'boolean' :
 				return $var ? 'true' : 'false' ; // Lowercase necessary!
@@ -622,6 +326,243 @@ class FCKeditor
 			default:
 				return 'null' ;
 		}
+	}
+
+	/**
+	 * This method reads configuration data for the current editor's instance without overriding settings that already exist.  
+	 * @return array	Custom configuration data.
+	 */
+	function read_configuration(& $config) {
+		$toolbar_set = $this->ToolbarSet;
+		$toolbar_set_maximized = $this->ToolbarSet.'Maximized';
+		foreach ($config as $key => $value) {
+			switch ($key) {
+				case 'ToolbarSets':
+					if (!empty($toolbar_set) && $toolbar_set != 'Default') {
+						foreach ($value as $toolbar_name => $toolbar_data) {
+							if ($toolbar_set == $toolbar_name || $toolbar_set_maximized == $toolbar_name) {		
+								if (!isset($this->Config[$key][$toolbar_name])) {
+									$this->Config[$key][$toolbar_name] = $toolbar_data;
+								}
+								break;
+							}
+						}
+					}
+					break;
+				default:
+					if (!isset($this->Config[$key])) {
+						$this->Config[$key] = $value;
+					}
+			}
+		}
+	}
+
+	/**
+	 * This method returns editor's custom configuration settings read from a php-file.  
+	 * @return array	Custom configuration data.
+	 */
+	private function & get_custom_configuration() {
+		static $config;
+		if (!isset($config)) {
+			require api_get_path(LIBRARY_PATH).'fckeditor/myconfig.php';
+		}
+		return $config;
+	}
+
+	/**
+	 * This method returns some editor's configuration settings that are determined automatically.  
+	 * @return array	Default configuration data.
+	 */
+	private function & get_default_configuration() {
+
+		// Document repository configuration data.
+		$config = $this->get_repository_configuration();
+
+		// Path to the javascript custom configuration file.
+		$config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+
+		// Editor's language.
+		$config['DefaultLanguage'] = self::get_editor_language();
+
+		// CSS should come from the system.
+		$config['EditorAreaCSS'] = $config['ToolbarComboPreviewCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
+
+		// Passing the paths of some resource files for multi-media support.
+		$config['FlashPlayerAudio'] = Media::get_path(FLASH_PLAYER_AUDIO, REL_PATH);
+		$config['FlashPlayerVideo'] = Media::get_path(FLASH_PLAYER_VIDEO, REL_PATH);
+		$config['ScriptSWFObject'] = Media::get_path(SCRIPT_SWFOBJECT, REL_PATH);
+
+		// Passing user status related data to the editor.
+		$config['UserIsCourseAdmin'] = api_is_allowed_to_edit() ? true : false;
+		$config['UserIsPlatformAdmin'] = api_is_platform_admin() ? true : false;
+
+		// MimeTeX plugin support.
+		$config = array_merge($config, self::get_mimetex_plugin_configuration());
+
+		return $config;
+	}
+
+	/**
+	 * This method determines editor's interface language.
+	 * @return string	Compatible with the editor langiage code.
+	 */
+	private function get_editor_language() {
+		static $editor_lang;
+		if (!isset($editor_lang)) {
+			global $language_interface;
+			@ $editor_lang = Database :: get_language_isocode($language_interface);
+			$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
+			if (empty ($editor_lang)) {
+				$editor_lang = 'en';
+			}
+			$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
+			if (!file_exists($language_file)) {
+				// If there was no language file, use the English one.
+				$editor_lang = 'en';
+			}
+		}
+		return $editor_lang;
+	}
+	
+	/**
+	 * This method returns default configuration for document repository that is to be used by the editor.
+	 * @return array	Default repository configuration data.
+	 */
+	private function & get_repository_configuration() {
+
+		// Preliminary calculations for assembling required paths.
+		$base_path = $this->BasePath;
+		$script_name = substr($_SERVER['PHP_SELF'], strlen(api_get_path(REL_PATH)));
+		$script_path = explode('/', $script_name);
+		$script_path[count($script_path) - 1] = '';
+		if (api_is_in_course()) {
+			$relative_path_prefix = str_repeat('../', count($script_path) - 1);
+		} else {
+			$relative_path_prefix = str_repeat('../', count($script_path) - 2);
+		}
+		$script_path = implode('/', $script_path);
+		$script_path = api_get_path(WEB_PATH).$script_path;
+
+		$use_advanced_filemanager = api_get_setting('advanced_filemanager') == 'true';
+		// Let javascripts "know" which file manager has been chosen.
+		$config['AdvancedFileManager'] = $use_advanced_filemanager;
+
+		if (api_is_in_course()) {
+			if (!api_is_in_group()) {
+
+				// 1. We are inside a course and not in a group.
+				if (api_is_allowed_to_edit()) {
+
+					// 1.1. Teacher (tutor and coach are not authorized to change anything in the "content creation" tools)
+					$config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/';
+					$config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/';
+					$config['BaseHref'] = $script_path;
+					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
+
+				} else {
+
+					// 1.2. Student
+					$config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+					$config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+					$config['BaseHref'] = $script_path;
+					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+				}
+			} else {
+
+				// 2. Inside a course and inside a group.
+				global $group_properties;
+				$config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
+				$config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document'.$group_properties['directory'].'/';
+				$config['BaseHref'] = $script_path;
+				$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
+			}
+		} else {
+
+			if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin') {
+
+				// 3. Platform administration activities.
+				$config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'home/default_platform_document/';
+				$config['CreateDocumentDir'] = api_get_path(WEB_PATH).'home/default_platform_document/'; // A side-effect is in use here.
+				$config['BaseHref'] = api_get_path(WEB_PATH).'home/default_platform_document/';
+				$upload_path = api_get_path(REL_PATH).'home/default_platform_document/';
+
+			} else {
+
+				// 4. The user is outside courses.
+				$config['CreateDocumentWebDir'] = api_get_path('WEB_PATH').'main/upload/users/'.api_get_user_id().'/my_files/';
+				$config['CreateDocumentDir'] = $relative_path_prefix.'upload/users/'.api_get_user_id().'/my_files/';
+				$config['BaseHref'] = $script_path;
+				$upload_path = api_get_path(REL_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
+			}
+		}
+
+		// URLs for opening the file browser for different resource types (file types):
+		if ($use_advanced_filemanager) {
+			// for images
+			$config['ImageBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			// for flash
+			$config['FlashBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			// for audio files (mp3)
+			$config['MP3BrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			// for video
+			$config['VideoBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			// for video (flv)
+			$config['MediaBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			// for links (any resource type)
+			$config['LinkBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+		} else {
+			// for images
+			$config['ImageBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Images&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+			// for flash
+			$config['FlashBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Flash&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+			// for audio files (mp3)
+			$config['MP3BrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=MP3&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+			// for video
+			$config['VideoBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Video&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+			// for video (flv)
+			$config['MediaBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+			// for links (any resource type)
+			$config['LinkBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=File&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+		}
+
+		// URLs for making quick uplods for different resource types (file types).
+		// These URLs are used by the dialogs' quick upload tabs:
+		// for images
+		$config['ImageUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Images&ServerPath='.$upload_path;
+		// for flash
+		$config['FlashUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Flash&ServerPath='.$upload_path;
+		// for audio files (mp3)
+		$config['MP3UploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=MP3&ServerPath='.$upload_path;
+		// for video
+		$config['VideoUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Video&ServerPath='.$upload_path;
+		// for video (flv)
+		$config['MediaUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Video/flv&ServerPath='.$upload_path;
+		// for links (any resource type)
+		$config['LinkUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=File&ServerPath='.$upload_path;
+
+		return $config;
+	}
+
+	/**
+	 * This method returns detected configuration data about editor's MimeTeX plugin.  
+	 * @return array	Configuration data.
+	 */
+	private function get_mimetex_plugin_configuration() {
+		static $config ;
+		if ( !is_array( $config ) ) {
+			$server_base = explode( '/', api_get_path( WEB_PATH ) ) ;
+			$server_base_ip = $server_base[0] . '/' . $server_base[1] . '/127.0.0.1' ;
+			$server_base = $server_base[0]. '/' . $server_base[1]. '/' . $server_base[2] ;
+			$url_relative = '/cgi-bin/mimetex' . ( IS_WINDOWS_OS ? '.exe' : '.cgi' ) ;
+			if ( CHECK_MIMETEX_PLUGIN_INSTALLED ) {
+				$check_mimetex_url = ( CHECK_MIMETEX_PLUGIN_INSTALLED_URL_BASE == 'ip' ? $server_base_ip : $server_base ) . $url_relative . '?' . rand() ;
+				$config['IsMimetexInstalled'] = self::url_exists( $check_mimetex_url, CHECK_MIMETEX_PLUGIN_INSTALLED_TIMEOUT ) ;
+			} else {
+				$config['IsMimetexInstalled'] = true ;
+			}
+			$config['MimetexUrl'] = $server_base . $url_relative ;
+		}
+		return $config;
 	}
 
 	/*

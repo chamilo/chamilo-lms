@@ -635,8 +635,8 @@ class TestMainApi extends UnitTestCase {
 	function testApiMaxSortValue(){
 	    $user=array('user_course_category'=>1, 'user_id'=>1);
 		$res= api_max_sort_value($user['user_course_category'],$user['user_id']);
-		$this->assertFalse($res);
-		$this->assertTrue($user);	
+		$this->assertTrue(is_string($res));
+		//var_dump($res);	
 	}
 	
 	function testString2Boolean(){

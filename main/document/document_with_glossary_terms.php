@@ -22,11 +22,11 @@ $new_file=preg_replace('/<head>/','<head><script src="'.api_get_path(WEB_LIBRARY
 		 		data_terms=datos.split("[|.|_|.|-|.|]");	
 		 		for(i=0;i<data_terms.length;i++) {
 		 			specific_terms=data_terms[i].split("__|__|");
-		 	     	new_html=my_text.replace(specific_terms[1],"<a href=\"javascript:void(0)\" name=\"link"+specific_terms[0]+"\" onclick=\"\">"+specific_terms[1]+"</a>");
+		 	     	new_html=my_text.replace(specific_terms[1],"<a href=\"javascript:void(0)\" class=\"glossary-ajax\" name=\"link"+specific_terms[0]+"\" onclick=\"\">"+specific_terms[1]+"</a>");
 		 	     	$("body").html(new_html);
 		 	     	my_text=$("body").html();
 		 		}
-				$("body a").toggle(function(){
+				$("body .glossary-ajax").toggle(function(){
 					random_id=Math.round(Math.random()*100);
 					div_show_id="div_show_id"+random_id;
 					div_content_id="div_content_id"+random_id;

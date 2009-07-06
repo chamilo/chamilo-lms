@@ -33,21 +33,38 @@
  * Editor's toolbar definitions.
  */
 
+/*
+ * Platform administrator's tools
+ */
+
+// Edit platform home page.
 $config['ToolbarSets']['EditHomePage'] =
 	array(
 		array(
-			'FitWindow', 'PasteWord', 'Link', 'Unlink', 'Anchor', '-',
-			'Image', 'flvPlayer', 'Flash', 'EmbedMovies', 'MP3', 'YouTube', 'Table', 'Rule', '-',
-			'Subscript', 'Superscript', '-', 'OrderedList', 'UnorderedList', 'Outdent', 'Indent', '-',
-			'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyFull'
+			'NewPage', 'Templates', 'Save', 'Print', 'PageBreak', 'FitWindow', '-', 'PasteWord', '-', 'Undo', 'Redo', '-', 'SelectAll', '-', 'Find'
 		),
-		'/',
 		array(
-			'FontFormat', 'Style', 'FontName', 'FontSize', 'Bold', 'Italic', 'Underline', 'StrikeThrough', 'TextColor', 'BGColor', '-',
-			'Source', 'mimetex'
+			'Link', 'Unlink', 'Anchor'
+		),
+		array(
+			'Image', 'flvPlayer', 'Flash', 'EmbedMovies', 'YouTube', 'MP3'
+		),
+		array(
+			'Table', 'Smiley', 'SpecialChar', 'googlemaps'
+		),
+		array(
+			'FontFormat', 'FontName', 'FontSize'
+		),
+		array(
+			'Bold', 'Italic', 'Underline'
+		),
+		array(
+			'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', '-', 'TextColor', 'BGColor'
+		),
+		array(
+			'Source'
 		)
-	) ;
-
+	);
 // These are temporary settings for experimental purposes.
 $config['ToolbarCanCollapse']['EditHomePage'] = true; // true (default), false
 $config['ToolbarStartExpanded']['EditHomePage'] = true; // true (default) , false
@@ -55,10 +72,32 @@ $config['ToolbarLocation']['EditHomePage'] = 'In'; // 'In' (default) , 'None' , 
 $config['BlockCopyPaste']['EditHomePage'] = false; // true , false (default)
 
 
+// Insert or Edit a page link in the platform home page.
+$config['ToolbarSets']['LinksHomePage'] =
+	array(
+		array(
+			'NewPage', 'Templates', 'Save', 'Print', 'PageBreak', 'FitWindow', '-', 'PasteWord', '-', 'Undo', 'Redo', '-', 'SelectAll', '-', 'Find'
+		),
+		array(
+			'Link', 'Unlink', 'Anchor'
+		),
+		array(
+			'Image', 'flvPlayer', 'Flash', 'EmbedMovies', 'YouTube', 'MP3'
+		),
+		array(
+			'Table', 'Smiley', 'SpecialChar', 'googlemaps'
+		),
+		array(
+			'FontFormat', 'FontName', 'FontSize'
+		),
+		array(
+			'Bold', 'Italic', 'Underline'
+		),
+		array(
+			'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', '-', 'TextColor', 'BGColor'
+		),
+		array(
+			'Source'
+		)
+	);
 
-
-
-
-
-
-// To be continued ...

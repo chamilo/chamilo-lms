@@ -21,10 +21,17 @@ if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='') {
 
 $interbreadcrumb[]= array ("url"=>"./document.php?curdirpath=".dirname($header_file).$req_gid, "name"=> get_lang('Documents'));
 $interbreadcrumb[]= array ("url"=>"showinframes.php?file=".$header_file, "name"=>$header_file);
+$file_url_sys=api_get_path(SYS_COURSE_PATH).'document'.$header_file;
+$path_info= pathinfo($file_url_sys);
 
 Display::display_header(null,"Doc");
 echo "<div align=\"center\">";
-$file_url_web='document_with_glossary_terms.php?file='.urlencode(Security::remove_XSS($header_file));
-//$file_origin_url_web=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file."?".api_get_cidreq();
+
+if ($path_info['extension']=='html') {
+	$file_url_web='document_with_glossary_terms.php?file='.urlencode($header_file);
+}  else {
+	$file_url_web=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file."?".api_get_cidreq();	
+}
+
 echo "<a href='".$file_url_web."' target='blank'>".get_lang('_cut_paste_link')."</a></div>";
 ?>

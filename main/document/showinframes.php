@@ -1,4 +1,4 @@
-<?php // $Id: showinframes.php 21660 2009-06-28 21:41:31Z iflorespaz $ 
+<?php // $Id: showinframes.php 21820 2009-07-06 17:25:46Z iflorespaz $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -93,7 +93,11 @@ if($is_courseAdmin) {
 $file_root=$_course['path'].'/document'.str_replace('%2F', '/',$file);
 $file_url_sys=api_get_path(SYS_COURSE_PATH).$file_root;
 $file_url_web=api_get_path(WEB_COURSE_PATH).$file_root;
-$file_url_web='document_with_glossary_terms.php?file='.urlencode($file);
+$path_info= pathinfo($file_url_sys);
+if ($path_info['extension']=='html') {
+	$file_url_web='document_with_glossary_terms.php?file='.urlencode($file);
+} 
+
 ?>
 <html>
 <head>
@@ -116,5 +120,5 @@ $file_url_web='document_with_glossary_terms.php?file='.urlencode($file);
 			We suggest you try Mozilla, Firefox, Safari, Opera, or other browsers updated this millenium.</p>
 	</body>
 	</noframes>
-	<!--<frame src="#"></frameset>-->
+	<frame src="#"></frameset>
 </html>

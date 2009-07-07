@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 21814 2009-07-06 16:37:11Z iflorespaz $
+<?php // $Id: course_list.php 21854 2009-07-07 18:10:11Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -264,6 +264,19 @@ else
 	// Create a sortable table with the course data
 	$table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data',2);
 	$parameters=array();
+	
+	if (isset ($_GET['keyword'])) {
+		$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
+	} elseif (isset ($_GET['keyword_code'])) {
+		$parameters['keyword_code'] =  Security::remove_XSS($_GET['keyword_code']);
+		$parameters['keyword_title'] = Security::remove_XSS($_GET['keyword_title']);
+		$parameters['keyword_category'] = Security::remove_XSS($_GET['keyword_category']);
+		$parameters['keyword_language'] = Security::remove_XSS($_GET['keyword_language']);
+		$parameters['keyword_visibility'] = intval($_GET['keyword_visibility']);
+		$parameters['keyword_subscribe'] = Security::remove_XSS($_GET['keyword_subscribe']);
+		$parameters['keyword_unsubscribe'] = Security::remove_XSS($_GET['keyword_unsubscribe']);
+	}
+		
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('Code'));

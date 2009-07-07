@@ -1,4 +1,4 @@
-<?php // $Id: course_list.php 21854 2009-07-07 18:10:11Z juliomontoya $
+<?php // $Id: course_list.php 21855 2009-07-07 18:26:10Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -269,10 +269,10 @@ else
 		$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
 	} elseif (isset ($_GET['keyword_code'])) {
 		$parameters['keyword_code'] =  Security::remove_XSS($_GET['keyword_code']);
-		$parameters['keyword_title'] = Security::remove_XSS($_GET['keyword_title']);
+	 	$parameters['keyword_title'] = Security::remove_XSS($_GET['keyword_title']);
 		$parameters['keyword_category'] = Security::remove_XSS($_GET['keyword_category']);
 		$parameters['keyword_language'] = Security::remove_XSS($_GET['keyword_language']);
-		$parameters['keyword_visibility'] = intval($_GET['keyword_visibility']);
+		$parameters['keyword_visibility'] = Security::remove_XSS($_GET['keyword_visibility']);
 		$parameters['keyword_subscribe'] = Security::remove_XSS($_GET['keyword_subscribe']);
 		$parameters['keyword_unsubscribe'] = Security::remove_XSS($_GET['keyword_unsubscribe']);
 	}

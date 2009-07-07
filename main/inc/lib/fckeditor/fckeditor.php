@@ -362,12 +362,14 @@ class FCKeditor
 			switch ($key) {
 				case 'ToolbarSets':
 					if (!empty($toolbar_set) && $toolbar_set != 'Default') {
-						foreach ($value as $toolbar_name => $toolbar_data) {
-							if ($toolbar_set == $toolbar_name || $toolbar_set_maximized == $toolbar_name) {		
-								if (!isset($this->Config[$key][$toolbar_name])) {
-									$this->Config[$key][$toolbar_name] = $toolbar_data;
+						if (is_array($value)) {
+							foreach ($value as $toolbar_name => $toolbar_data) {
+								if ($toolbar_set == $toolbar_name || $toolbar_set_maximized == $toolbar_name) {		
+									if (!isset($this->Config[$key][$toolbar_name])) {
+										$this->Config[$key][$toolbar_name] = $toolbar_data;
+									}
+									break;
 								}
-								break;
 							}
 						}
 					}
@@ -376,24 +378,28 @@ class FCKeditor
 				case 'ToolbarCanCollapse':
 				case 'ToolbarStartExpanded':
 					if (!empty($toolbar_set) && $toolbar_set != 'Default') {
-						foreach ($value as $toolbar_name => $toolbar_data) {
-							if ($toolbar_set == $toolbar_name) {		
-								if (!isset($this->Config[$key][$toolbar_name])) {
-									$this->Config[$key] = (boolean) $toolbar_data;
+						if (is_array($value)) {
+							foreach ($value as $toolbar_name => $toolbar_data) {
+								if ($toolbar_set == $toolbar_name) {		
+									if (!isset($this->Config[$key][$toolbar_name])) {
+										$this->Config[$key] = (boolean) $toolbar_data;
+									}
+									break;
 								}
-								break;
 							}
 						}
 					}
 					break;
 				case 'ToolbarLocation':
 					if (!empty($toolbar_set) && $toolbar_set != 'Default') {
-						foreach ($value as $toolbar_name => $toolbar_data) {
-							if ($toolbar_set == $toolbar_name) {		
-								if (!isset($this->Config[$key][$toolbar_name])) {
-									$this->Config[$key] = (string) $toolbar_data;
+						if (is_array($value)) {
+							foreach ($value as $toolbar_name => $toolbar_data) {
+								if ($toolbar_set == $toolbar_name) {		
+									if (!isset($this->Config[$key][$toolbar_name])) {
+										$this->Config[$key] = (string) $toolbar_data;
+									}
+									break;
 								}
-								break;
 							}
 						}
 					}

@@ -27,8 +27,9 @@
  * http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
  */
 
+
 /*
- * Editor's toolbar definitions.
+ * Toolbar definitions.
  */
 
 // The following setting is the directory where the online editor's toobar definitions reside in correspondent php-files.
@@ -40,3 +41,51 @@
 // $config['ToolbarSets']['Directory'] = 'toolbars_custom';
 // Then you may modify the newly copied toolbar definitions at your will, just keep correct php-syntax.
 $config['ToolbarSets']['Directory'] = 'toolbars';
+
+
+/*
+ * Plugins.
+ */
+
+// customizations : This plugin has been developed by the Dokeos team for editor's integration within the Dokeos LMS.
+// Please, do not disable it.
+$config['LoadPlugin'][] = 'customizations';
+
+// dragresizetable & tablecommands : Plugins for improvement table-related operations.
+$config['LoadPlugin'][] = 'dragresizetable';
+$config['LoadPlugin'][] = 'tablecommands';
+
+// audio: Adds a dialog for inserting audio files (.mp3).
+$config['LoadPlugin'][] = 'audio';
+
+// MP3 : This is the old plugin for inserting audio files.
+// Probably this plugin will be removed at the next release.
+// If you wish to use it, disable the "audio" plugin first.
+//$config['LoadPlugin'][] = 'MP3';
+
+// ImageManager : Adds a dialog (image gallery) for inserting images.
+// The advanced file manager has its own functionality for previewing images.
+// This is why we load this plugin only in case when the simple file manager is used.
+if (!(api_get_setting('advanced_filemanager') == 'true')) {
+	$config['LoadPlugin'][] = 'ImageManager';
+}
+
+// fckEmbedMovies : Adds a dilog for inserting video files (.flv, .mp4).
+$config['LoadPlugin'][] = 'fckEmbedMovies';
+
+// youtube : Adds a dilog for inserting YouTube video-streams.
+$config['LoadPlugin'][] = 'youtube';
+
+// googlemaps : Adds a dilog for inserting Google maps.
+$config['LoadPlugin'][] = 'googlemaps';
+
+// mimetex : // Adds a dilog for inserting mathematical formulas.
+// In order this plugin to work prpoperly, preliminary changes
+// in your server configuration have to be done. See the installation guide.
+$config['LoadPlugin'][] = 'mimetex';
+
+// wikilink : Adds a dialog for inserting wiki-formatted links.
+$config['LoadPlugin'][] = 'wikilink';
+
+// imgmap : Adds a dialog for assigning hyperlinks to specified image areas.
+$config['LoadPlugin'][] = 'imgmap';

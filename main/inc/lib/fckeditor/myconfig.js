@@ -20,7 +20,6 @@
  * Mail: info@dokeos.com
  */
 
-
 /*
  * Custom editor configuration settings.
  *
@@ -29,6 +28,7 @@
  *
  * Please, do not modify the file fckconfig.js in order to make upgrades easy.
  * Just create your desired settings in this file, myconfig.js.
+ * Also, some configuration options may be created/modified within the file myconfig.php.
  */
 
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + '../../../../css/public_admin/course.css' ;
@@ -49,80 +49,33 @@ FCKConfig.DisableFFTableHandles = false ;
 FCKConfig.SmileyWindowWidth = 450 ;
 FCKConfig.SmileyWindowHeight = 250 ;
 
-
-/*
- * Toolbar drop-down lists customizations.
- */
-
 // Reduction of the format list.
 FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
-
 
 /*
  * Plugins.
  */
 
-// If you want to add a non-existing language code in some of the pligin
-// declarations, it is mandatory a corresponding language file to be opened
-// in the plugin's "lang" directory.
-FCK.AvailableLanguages = 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh' ;
-
-// The "customizations" plugin modifies some internal functionalities of the editor.
-// It should be loaded before the other plugins.
-FCKConfig.Plugins.Add('customizations', FCK.AvailableLanguages) ;
-
-// These plugins improve table-operations.
-FCKConfig.Plugins.Add('dragresizetable') ;
-FCKConfig.Plugins.Add('tablecommands') ;
-
-// Audio files insertion.
-FCKConfig.Plugins.Add('audio', FCK.AvailableLanguages) ;
-
-// This is the old dialog for insertion audio files.
-// Probably this plugin will be removed at the next release.
-// If you wish to use it, disable the "audio" plugin first.
-//FCKConfig.Plugins.Add('MP3', FCK.AvailableLanguages) ;
-
-// A specialised browser/editor for images.
-if (!FCKConfig.PageConfig.AdvancedFileManager)
-{
-	// It is not needed in the advanced file manager mode.
-	// The laanguage sub-system of the Image Manager is different.
-	// There is no need available languages to be enumerated.
-	FCKConfig.Plugins.Add('ImageManager') ;
+// Loading the integrated by the Dokeos team plugins, see myconfig.php.
+FCKConfig.AvailableLanguages = 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh' ;
+FCKConfig.LoadPlugin = eval( '(' + FCKConfig.PageConfig.LoadPlugin + ')' ) ;
+for ( var i = 0 ; i < FCKConfig.LoadPlugin.length ; i++ ) {
+	FCKConfig.Plugins.Add( FCKConfig.LoadPlugin[i], FCKConfig.AvailableLanguages ) ;
 }
+
+// API-key for the "googlemaps" plugin.
+// The following key is valid for http://localhost. You must get one for each server where you want to use
+// the plugin, just get the key for free here after agreeing to the Terms of Use of the GoogleMaps API:
+// http://www.google.com/apis/maps/signup.html.
+// If you leave an empty string then the toolbar icon won't be shown.
+FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSy5hTGQdsosYD3dz6faZHVrO-02A' ;
 
 // This is the old flash plugin. Now the editor has a built-in flash dialog.
 // Probably this plugin will be removed at the next release.
 //FCKConfig.Plugins.Add('Flash', 'en') ;
 
-// Embeding video files.
-FCKConfig.Plugins.Add('fckEmbedMovies', FCK.AvailableLanguages);
-
-// flv video files insertion.
-FCKConfig.Plugins.Add('flvPlayer', FCK.AvailableLanguages) ;
-
-// Video streams insertion, YouTube service.
-FCKConfig.Plugins.Add('youtube', FCK.AvailableLanguages) ;
-
-// Digital maps insertion, GoogleMaps service.
-FCKConfig.Plugins.Add('googlemaps', FCK.AvailableLanguages) ;
-// This key is for http://localhost. You must get one for each server where you want to use the plugin,
-// just get the key for free here after agreeing to the Terms of Use of the GoogleMaps API:
-// http://www.google.com/apis/maps/signup.html. // If you leave an empty string then the toolbar icon won't be shown.
-FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSy5hTGQdsosYD3dz6faZHVrO-02A' ;
-
-// Mathematical formulas insertion.
-// In order the "mimetex" plugin to work prpoperly, preliminary changes
-// in your server configuration have to be done. See the installation guide.
-FCKConfig.Plugins.Add('mimetex', FCK.AvailableLanguages) ;
-
-// Wiki-formatted links insertion.
-FCKConfig.Plugins.Add('wikilink', FCK.AvailableLanguages) ;
-
-// A dialog for assigning hyperlinks to specified image areas.
-FCKConfig.Plugins.Add('imgmap', FCK.AvailableLanguages);
-
+// You may add your own plugins here, i.e. write something as follows:
+// FCKConfig.Plugins.Add('my_plugin', 'en') ;
 
 /*
  * Settings for browsing the server.

@@ -13,3 +13,4 @@ $config['ToolbarSets']['Forum_Student'] = array(
     array('JustifyLeft','JustifyCenter','JustifyRight'),
 	array('ShowBlocks')
 );
+$config['BlockCopyPaste']['Forum_Student'] = true;

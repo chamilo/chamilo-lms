@@ -11,3 +11,4 @@ $config['ToolbarSets']['Wiki_Student'] = array(
 	array('Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'),
 	array('ShowBlocks')
 );
+$config['Wiki_Student']['FreeAnswer'] = true;

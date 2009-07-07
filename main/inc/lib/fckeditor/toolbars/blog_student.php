@@ -11,3 +11,4 @@ $config['ToolbarSets']['Blog_Student'] = array(
 	array('JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList','-','TextColor','BGColor'),
 	array('ShowBlocks')
 );
+$config['BlockCopyPaste']['Blog_Student'] = true;

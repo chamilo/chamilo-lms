@@ -76,41 +76,45 @@ function GetFoldersAndFiles( $resourceType, $currentFolder )
 	$aFolders	= array() ;
 	$aFiles		= array() ;
 
-	$oCurrentFolder = opendir( $sServerDir ) ;
+	$oCurrentFolder = @opendir( $sServerDir ) ;
 
 	$in_group = api_is_in_group();
 	$in_shared_folder = $currentFolder == '/shared_folder/';
 	$user_id = api_get_user_id();
 
-	while ( $sFile = readdir( $oCurrentFolder ) )
+	if ($oCurrentFolder !== false)
 	{
-		$is_dir = @is_dir( $sServerDir . $sFile );
-		if ( $sFile != '.' && $sFile != '..'
-			&& strpos( $sFile, '_DELETED_' ) === false
-			&& strpos( $sFile, 'chat_files' ) === false
-			&& strpos( $sFile, 'HotPotatoes_files' ) === false
-			&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
-			&& (!$in_shared_folder || ($in_shared_folder && (!$is_dir || ($is_dir && $sFile == $user_id))))
-			&& $sFile != '.thumbs'
-			&& $sFile != '.svn' )
+		while ( $sFile = readdir( $oCurrentFolder ) )
 		{
-			if ( $is_dir )
-				$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;
-			else
+			$is_dir = @is_dir( $sServerDir . $sFile );
+			if ( $sFile != '.' && $sFile != '..'
+				&& strpos( $sFile, '_DELETED_' ) === false
+				&& strpos( $sFile, 'chat_files' ) === false
+				&& strpos( $sFile, 'HotPotatoes_files' ) === false
+				&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
+				&& (!$in_shared_folder || ($in_shared_folder && (!$is_dir || ($is_dir && $sFile == $user_id))))
+				&& $sFile != '.thumbs'
+				&& $sFile != '.svn' )
 			{
-				$iFileSize = @filesize( $sServerDir . $sFile ) ;
-				if ( !$iFileSize ) {
-					$iFileSize = 0 ;
-				}
-				if ( $iFileSize > 0 )
+				if ( $is_dir )
+					$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;
+				else
 				{
-					$iFileSize = round( $iFileSize / 1024 ) ;
-					if ( $iFileSize < 1 ) $iFileSize = 1 ;
-				}
+					$iFileSize = @filesize( $sServerDir . $sFile ) ;
+					if ( !$iFileSize ) {
+						$iFileSize = 0 ;
+					}
+					if ( $iFileSize > 0 )
+					{
+						$iFileSize = round( $iFileSize / 1024 ) ;
+						if ( $iFileSize < 1 ) $iFileSize = 1 ;
+					}
 
-				$aFiles[] = '<File name="' . ConvertToXmlAttribute( $sFile ) . '" size="' . $iFileSize . '" />' ;
+					$aFiles[] = '<File name="' . ConvertToXmlAttribute( $sFile ) . '" size="' . $iFileSize . '" />' ;
+				}
 			}
 		}
+		closedir( $oCurrentFolder ) ;
 	}
 
 	// Send the folders

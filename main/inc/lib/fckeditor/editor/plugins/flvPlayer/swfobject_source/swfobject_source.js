@@ -15,7 +15,7 @@
  * The solution:
  *
  * ... is simly merging sources of 1.5 and 2.2 scripts into one. Javsscript is
- * a case-sensitive language, and fortunately there is no name-conflicts between
+ * a case-sensitive language, and fortunately there are no name-conflicts between
  * both versions of the script. So, version 2.2 part of this combined script
  * is to be used for creation of new pages, while the version 1.5 part is to
  * provide the desired compatibility for old pages. Also, the "compressed"

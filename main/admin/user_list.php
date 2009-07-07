@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 21826 2009-07-06 20:18:25Z yannoo $
+<?php // $Id: user_list.php 21862 2009-07-07 23:14:13Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -684,15 +684,15 @@ else
 	$form->display();
 	echo '</div>';
 	if (isset ($_GET['keyword'])) {
-		$parameters = array ('keyword' => $_GET['keyword']);
-	} elseif (isset ($_GET['keyword_firstname'])) {
-		$parameters['keyword_firstname'] = $_GET['keyword_firstname'];
-		$parameters['keyword_lastname'] = $_GET['keyword_lastname'];
-		$parameters['keyword_email'] = $_GET['keyword_email'];
-		$parameters['keyword_officialcode'] = $_GET['keyword_officialcode'];
-		$parameters['keyword_status'] = $_GET['keyword_status'];
-		$parameters['keyword_active'] = $_GET['keyword_active'];
-		$parameters['keyword_inactive'] = $_GET['keyword_inactive'];
+		$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
+	} elseif (isset ($_GET['keyword_firstname'])) { 
+		$parameters['keyword_firstname'] 	= Security::remove_XSS($_GET['keyword_firstname']);
+		$parameters['keyword_lastname']	 	= Security::remove_XSS($_GET['keyword_lastname']);
+		$parameters['keyword_email'] 	 	= Security::remove_XSS($_GET['keyword_email']);
+		$parameters['keyword_officialcode'] = Security::remove_XSS($_GET['keyword_officialcode']);
+		$parameters['keyword_status'] 		= Security::remove_XSS($_GET['keyword_status']);
+		$parameters['keyword_active'] 		= Security::remove_XSS($_GET['keyword_active']);
+		$parameters['keyword_inactive'] 	= Security::remove_XSS($_GET['keyword_inactive']);
 	}
 	// Create a sortable table with user-data
 	$parameters['sec_token'] = Security::get_token();

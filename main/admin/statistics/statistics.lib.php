@@ -51,7 +51,7 @@ class Statistics
 		$sql = "SELECT COUNT(*) AS number FROM ".$course_table." ";
 		if (isset ($category_code))
 		{
-			$sql .= " WHERE category_code = '".mysql_real_escape_string($category_code)."'";
+			$sql .= " WHERE category_code = '".Database::escape_string($category_code)."'";
 		}
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$obj = mysql_fetch_object($res);
@@ -74,7 +74,7 @@ class Statistics
 		$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(mysql_real_escape_string($status))." ";
 		if (isset ($category_code))
 		{
-			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(mysql_real_escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".mysql_real_escape_string($category_code)."'";
+			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'";
 		}
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$obj = mysql_fetch_object($res);
@@ -215,10 +215,10 @@ class Statistics
 	{
 		$total_logins = array();
 		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-		$sql[get_lang('Thisday')] = "SELECT count(login_user_id) AS number FROM $table WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW()";
-		$sql[get_lang('Last7days')] = "SELECT count(login_user_id) AS number  FROM $table WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW()";
+		$sql[get_lang('Thisday')] 	 = "SELECT count(login_user_id) AS number FROM $table WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW()";
+		$sql[get_lang('Last7days')]  = "SELECT count(login_user_id) AS number  FROM $table WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW()";
 		$sql[get_lang('Last31days')] = "SELECT count(login_user_id) AS number  FROM $table WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= NOW()";
-		$sql[get_lang('Total')] = "SELECT count(login_user_id) AS number  FROM $table";
+		$sql[get_lang('Total')] 	 = "SELECT count(login_user_id) AS number  FROM $table";
 		foreach($sql as $index => $query)
 		{
 			$res = api_sql_query($query,__FILE__,__LINE__);
@@ -283,11 +283,15 @@ class Statistics
 		$columns[1] = 'access_date';
 		$sql_order[SORT_ASC] = 'ASC';
 		$sql_order[SORT_DESC] = 'DESC';
-		$per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 10;
-		$page_nr = isset($_GET['page_nr']) ? $_GET['page_nr'] : 1;
-		$column = isset($_GET['column']) ? $_GET['column'] : 0;
-		$date_diff = isset($_GET['date_diff']) ? $_GET['date_diff'] : 60;
-		$direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
+		$per_page 	= isset($_GET['per_page']) ? intval($_GET['per_page']) : 10;
+		$page_nr 	= isset($_GET['page_nr'])  ? intval($_GET['page_nr']) : 1;
+		$column 	= isset($_GET['column'])   ? intval($_GET['column']) : 0;
+		$date_diff 	= isset($_GET['date_diff'])? intval($_GET['date_diff']) : 60;
+	    if(!in_array($direction,array(SORT_ASC,SORT_DESC))){
+	    	$direction = SORT_ASC;
+	    } else {
+	    	$direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
+	    }		
 		$form = new FormValidator('courselastvisit','get');
 		$form->addElement('hidden','action','courselastvisit');
 		$form->add_textfield('date_diff',get_lang('Days'),true);
@@ -295,8 +299,7 @@ class Statistics
 		$form->addElement('submit','ok',get_lang('Ok'));
 		$defaults['date_diff'] = 60;
 		$form->setDefaults($defaults);
-		if($form->validate())
-		{
+		if($form->validate()) {
 			$form->display();
 			$values = $form->exportValues();
 			$date_diff = $values['date_diff'];

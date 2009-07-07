@@ -30,29 +30,31 @@ function GetFolders( $resourceType, $currentFolder )
 	// Array that will hold the folders names.
 	$aFolders	= array() ;
 
-	$oCurrentFolder = opendir( $sServerDir ) ;
+	$oCurrentFolder = @opendir( $sServerDir ) ;
 
 	$in_group = api_is_in_group();
 	$in_shared_folder = $currentFolder == '/shared_folder/';
 	$user_id = api_get_user_id();
 
-	while ( $sFile = readdir( $oCurrentFolder ) )
-	{
-		if ( $sFile != '.' && $sFile != '..'
-			&& strpos( $sFile, '_DELETED_' ) === false
-			&& strpos( $sFile, 'chat_files' ) === false
-			&& strpos( $sFile, 'HotPotatoes_files' ) === false
-			&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
-			&& (!$in_shared_folder || ($in_shared_folder && $sFile == 'sf_user_'.$user_id))
-			&& $sFile != '.thumbs'
-			&& $sFile != '.svn'
-			&& is_dir( $sServerDir . $sFile ) )
+	if ($oCurrentFolder !== false) {
+		while ( $sFile = readdir( $oCurrentFolder ) )
 		{
-			$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;
+			if ( $sFile != '.' && $sFile != '..'
+				&& strpos( $sFile, '_DELETED_' ) === false
+				&& strpos( $sFile, 'chat_files' ) === false
+				&& strpos( $sFile, 'HotPotatoes_files' ) === false
+				&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
+				&& (!$in_shared_folder || ($in_shared_folder && $sFile == 'sf_user_'.$user_id))
+				&& $sFile != '.thumbs'
+				&& $sFile != '.svn'
+				&& is_dir( $sServerDir . $sFile ) )
+			{
+				$aFolders[] = '<Folder name="' . ConvertToXmlAttribute( $sFile ) . '" />' ;
+			}
 		}
+		closedir( $oCurrentFolder ) ;
 	}
 
-	closedir( $oCurrentFolder ) ;
 
 	// Open the "Folders" node.
 	echo "<Folders>" ;
@@ -178,7 +180,7 @@ function CreateFolder( $resourceType, $currentFolder )
 		$sErrorNumber = '102' ;
 
 	// Create the "Error" node.
-	echo '<Error number="' . $sErrorNumber . '" originalDescription="' . ConvertToXmlAttribute( $sErrorMsg ) . '" />' ;
+	echo '<Error number="' . $sErrorNumber . '" />' ;
 }
 
 function FileUpload( $resourceType, $currentFolder, $sCommand )

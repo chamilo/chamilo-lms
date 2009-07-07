@@ -270,6 +270,8 @@ function GetCurrentFolder()
 	// Check for invalid folder paths (..)
 	if ( strpos( $sCurrentFolder, '..' ) || strpos( $sCurrentFolder, "\\" ))
 		SendError( 102, '' ) ;
+	if ( preg_match(",(/\.)|[[:cntrl:]]|(//)|(\\\\)|([\:\*\?\"\<\>\|]),", $sCurrentFolder))
+                SendError( 102, '' ) ;
 
 	return $sCurrentFolder ;
 }
@@ -322,9 +324,14 @@ function SendUploadResults( $errorNumber, $fileUrl = '', $fileName = '', $custom
 (function(){var d=document.domain;while (true){try{var A=window.parent.document.domain;break;}catch(e) {};d=d.replace(/.*?(?:\.|$)/,'');if (d.length==0) break;try{document.domain=d;}catch (e){break;}}})();
 EOF;
 
-	$search = array( '\\', '"' );
-	$replace = array( '\\\\', '\\"' );
-	echo 'window.parent.OnUploadCompleted(' . $errorNumber . ',"' . str_replace( $search, $replace, $fileUrl ) . '","' . str_replace( $search, $replace, $fileName ) . '", "' . str_replace( $search, $replace, $customMsg ) . '") ;' ;
+        if ($errorNumber && $errorNumber != 201) {
+                $fileUrl = "";
+                $fileName = "";
+        }
+
+        $rpl = array( '\\' => '\\\\', '"' => '\\"' ) ;
+        echo 'window.parent.OnUploadCompleted(' . $errorNumber . ',"' . strtr( $fileUrl, $rpl ) . '","' . strtr( $fileName, $rpl ) . '", "' . strtr( $customMsg, $rpl ) . '") ;' ;
+
 	echo '</script>' ;
 	exit ;
 }

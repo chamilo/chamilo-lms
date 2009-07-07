@@ -415,6 +415,12 @@ class FCKeditor
 		if (!isset($config)) {
 			require api_get_path(LIBRARY_PATH).'fckeditor/myconfig.php';
 		}
+		if (!isset($config['ToolbarSets'][$this->ToolbarSet])) {
+			@include api_get_path(LIBRARY_PATH).'fckeditor/'.$config['ToolbarSets']['Directory'].'/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
+			if (!isset($config['ToolbarSets'][$this->ToolbarSet])) {
+				$this->ToolbarSet = 'Default';
+			}
+		}
 		return $config;
 	}
 

@@ -70,8 +70,11 @@ if (!(api_get_setting('advanced_filemanager') == 'true')) {
 	$config['LoadPlugin'][] = 'ImageManager';
 }
 
-// fckEmbedMovies : Adds a dilog for inserting video files (.flv, .mp4).
+// fckEmbedMovies : Adds a dilog for inserting video files.
 $config['LoadPlugin'][] = 'fckEmbedMovies';
+
+// flvPlayer : Adds a dilog for inserting video files (.flv, .mp4), so they to be viewed through a flash-based player.
+$config['LoadPlugin'][] = 'flvPlayer';
 
 // youtube : Adds a dilog for inserting YouTube video-streams.
 $config['LoadPlugin'][] = 'youtube';

@@ -280,7 +280,7 @@ function Error($msg)
 	border: 1px solid #FF0000;
 	color: #000;
 	background-color: #FFD1D1;
-	min-height: 30px;"><b>'.get_lang("ConvesionFailled").'</b></br>'.get_lang("FPDFerror").'</br></br></div>');
+	min-height: 30px;"><b>'.get_lang("ConvesionFailled").'</b></br>'.get_lang("FPDFerror").'</div>');
 	
 }
 

@@ -13,4 +13,4 @@ $config['ToolbarSets']['Documents_Student'] = array(
 	array('JustifyLeft','JustifyCenter','JustifyRight'),
 	array('ShowBlocks')
 );
-$config['BlockCopyPaste']['Documents_Student'] = true;
+$config['BlockCopyPaste'] = true;

@@ -10,4 +10,4 @@ $config['ToolbarSets']['BlogComment_Student'] = array(
 	array('JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList','-','TextColor','BGColor'),
 	array('ShowBlocks')
 );
-$config['BlockCopyPaste']['BlogComment_Student'] = true;
+$config['BlockCopyPaste'] = true;

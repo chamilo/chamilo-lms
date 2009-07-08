@@ -375,7 +375,6 @@ class FCKeditor
 						}
 					}
 					break;
-				case 'BlockCopyPaste':
 				case 'ToolbarCanCollapse':
 				case 'ToolbarStartExpanded':
 					if (!empty($toolbar_set) && $toolbar_set != 'Default') {

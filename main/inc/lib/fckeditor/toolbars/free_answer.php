@@ -4,4 +4,4 @@
 $config['ToolbarSets']['FreeAnswer'] = array(
     array('FitWindow','Bold','Image','Link','PasteWord','MP3','Table','Subscript','Superscript','ShowBlocks')	
 );
-$config['BlockCopyPaste']['FreeAnswer'] = true;
+$config['BlockCopyPaste'] = true;

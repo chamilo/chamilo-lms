@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 21177 2009-06-01 23:07:04Z yannoo $
+<?php //$Id: agenda.inc.php 21905 2009-07-08 17:42:29Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -103,15 +103,15 @@ function get_calendar_items($month, $year)
 	$user_id=$_user['user_id'];
 	if ($_SESSION['user']!==null)
 	{
-		$user_id=$_SESSION['user'];
+		$user_id=intval($_SESSION['user']);
 	}
 	if ($_SESSION['group']!==null)
 	{
-		$group_id=$_SESSION['group'];
+		$group_id=intval($_SESSION['group']);
 	}
 	if ($_SESSION['toolgroup']!==null)
 	{
-		$group_id=$_SESSION['toolgroup'];
+		$group_id=intval($_SESSION['toolgroup']);
 	}
 
     $repeats = array(); //placeholder for repeated events
@@ -742,40 +742,38 @@ function MM_jumpMenu(targ,selObj,restore){
 */
 function get_course_users()
 {
-global $tbl_user;
-global $tbl_courseUser, $tbl_session_course_user;
-global $_cid;
-
-// not 100% if this is necessary, this however prevents a notice
-if (!isset($courseadmin_filter))
-	{$courseadmin_filter='';}
-
-$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName
-		FROM $tbl_user as u, $tbl_courseUser as cu
-		WHERE cu.course_code = '".$_cid."'
-			AND cu.user_id = u.user_id $courseadmin_filter
-		ORDER BY u.lastname, u.firstname";
-$result = api_sql_query($sql,__FILE__,__LINE__);
-while($user=Database::fetch_array($result)){
-	$users[$user[0]] = $user;
-}
-
-if(!empty($_SESSION['id_session'])){
-	$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstName firstName
-			FROM $tbl_session_course_user AS session_course_user
-			INNER JOIN $tbl_user u
-				ON u.user_id = session_course_user.id_user
-			WHERE id_session='".$_SESSION['id_session']."'
-			AND course_code='$_cid'";
-
+	global $tbl_user;
+	global $tbl_courseUser, $tbl_session_course_user;
+	global $_cid;
+	
+	// not 100% if this is necessary, this however prevents a notice
+	if (!isset($courseadmin_filter))
+		{$courseadmin_filter='';}
+	
+	$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName
+			FROM $tbl_user as u, $tbl_courseUser as cu
+			WHERE cu.course_code = '".$_cid."'
+				AND cu.user_id = u.user_id $courseadmin_filter
+			ORDER BY u.lastname, u.firstname";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while($user=Database::fetch_array($result)){
 		$users[$user[0]] = $user;
 	}
-
-}
-
-return $users;
+	
+	if(!empty($_SESSION['id_session'])){
+		$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstName firstName
+				FROM $tbl_session_course_user AS session_course_user
+				INNER JOIN $tbl_user u
+					ON u.user_id = session_course_user.id_user
+				WHERE id_session='".intval($_SESSION['id_session'])."'
+				AND course_code='$_cid'";
+	
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		while($user=Database::fetch_array($result)){
+			$users[$user[0]] = $user;
+		}	
+	}	
+	return $users;
 
 }
 
@@ -788,7 +786,6 @@ return $users;
 function get_course_groups()
 {
 	$group_list = array();
-
 	$group_list = CourseManager::get_group_list_of_course(api_get_course_id(), intval($_SESSION['id_session']));
 	return $group_list;
 }
@@ -801,34 +798,34 @@ function get_course_groups()
 */
 function show_to_form($to_already_selected)
 {
-$user_list=get_course_users();
-$group_list=get_course_groups();
-
-echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
-	echo "\t<tr>\n";
-	// the form containing all the groups and all the users of the course
-	echo "\t\t<td>\n";
-	echo "<strong>".get_lang('Users')."</strong><br />";
-		construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
-	echo "\t\t</td>\n";
-	// the buttons for adding or removing groups/users
-	echo "\n\t\t<td valign=\"middle\">\n";
-	echo "\t\t<input type=\"button\" ",
-				"onclick=\"move(document.getElementById('not_selected_form'),document.getElementById('selected_form'))\" ",
-				"value=\"   &gt;&gt;   \" />",
-
-				"\n\t\t<p>&nbsp;</p>",
-
-				"\n\t\t<input type=\"button\" ",
-				"onclick=\"move(document.getElementById('selected_form'),document.getElementById('not_selected_form'))\" ",
-				"value=\"   &lt;&lt;   \" />";
-	echo "\t\t</td>\n";
-	echo "\n\t\t<td>\n";
-	echo "<strong>".get_lang('DestinationUsers')."</strong><br />";
-		construct_selected_select_form($group_list,$user_list,$to_already_selected);
-	echo "\t\t</td>\n";
-	echo "\t</tr>\n";
-echo "</table>";
+	$user_list=get_course_users();
+	$group_list=get_course_groups();
+	
+	echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
+		echo "\t<tr>\n";
+		// the form containing all the groups and all the users of the course
+		echo "\t\t<td>\n";
+		echo "<strong>".get_lang('Users')."</strong><br />";
+			construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
+		echo "\t\t</td>\n";
+		// the buttons for adding or removing groups/users
+		echo "\n\t\t<td valign=\"middle\">\n";
+		echo "\t\t<input type=\"button\" ",
+					"onclick=\"move(document.getElementById('not_selected_form'),document.getElementById('selected_form'))\" ",
+					"value=\"   &gt;&gt;   \" />",
+	
+					"\n\t\t<p>&nbsp;</p>",
+	
+					"\n\t\t<input type=\"button\" ",
+					"onclick=\"move(document.getElementById('selected_form'),document.getElementById('not_selected_form'))\" ",
+					"value=\"   &lt;&lt;   \" />";
+		echo "\t\t</td>\n";
+		echo "\n\t\t<td>\n";
+		echo "<strong>".get_lang('DestinationUsers')."</strong><br />";
+			construct_selected_select_form($group_list,$user_list,$to_already_selected);
+		echo "\t\t</td>\n";
+		echo "\t</tr>\n";
+	echo "</table>";
 }
 
 
@@ -1146,38 +1143,38 @@ function separate_users_groups($to)
 */
 function sent_to($tool, $id)
 {
-global $_course;
-$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-$tool=Database::escape_string($tool);
-$id=Database::escape_string($id);
-
-$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".$tool."' AND ref='".$id."'";
-$result=api_sql_query($sql,__FILE__,__LINE__);
-while ($row=Database::fetch_array($result))
-	{
-	// if to_group_id is null then it is sent to a specific user
-	// if to_group_id = 0 then it is sent to everybody
-	if (!is_null($row['to_group_id']) )
+	global $_course;
+	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	
+	$tool=Database::escape_string($tool);
+	$id=Database::escape_string($id);
+	
+	$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".$tool."' AND ref='".$id."'";
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	while ($row=Database::fetch_array($result))
 		{
-		$sent_to_group[]=$row['to_group_id'];
-		//echo $row['to_group_id'];
+		// if to_group_id is null then it is sent to a specific user
+		// if to_group_id = 0 then it is sent to everybody
+		if (!is_null($row['to_group_id']) )
+			{
+			$sent_to_group[]=$row['to_group_id'];
+			//echo $row['to_group_id'];
+			}
+		// if to_user_id <> 0 then it is sent to a specific user
+		if ($row['to_user_id']<>0)
+			{
+			$sent_to_user[]=$row['to_user_id'];
+			}
 		}
-	// if to_user_id <> 0 then it is sent to a specific user
-	if ($row['to_user_id']<>0)
+	if (isset($sent_to_group))
 		{
-		$sent_to_user[]=$row['to_user_id'];
+		$sent_to['groups']=$sent_to_group;
 		}
-	}
-if (isset($sent_to_group))
-	{
-	$sent_to['groups']=$sent_to_group;
-	}
-if (isset($sent_to_user))
-	{
-	$sent_to['users']=$sent_to_user;
-	}
-return $sent_to;
+	if (isset($sent_to_user))
+		{
+		$sent_to['users']=$sent_to_user;
+		}
+	return $sent_to;
 }
 
 
@@ -1274,18 +1271,18 @@ function sent_to_form($sent_to_array)
 */
 function show_group_filter_form()
 {
-$group_list=get_course_groups();
-
-echo "<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
-echo "<option value=\"agenda.php?group=none\">show all groups</option>";
-foreach($group_list as $this_group)
-	{
-	// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
-	echo "<option value=\"agenda.php?group=".$this_group['id']."\" ";
-	echo ($this_group['id']==$_SESSION['group'])? " selected":"" ;
-	echo ">".$this_group['name']."</option>";
-	}
-echo "</select>";
+	$group_list=get_course_groups();
+	
+	echo "<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
+	echo "<option value=\"agenda.php?group=none\">show all groups</option>";
+	foreach($group_list as $this_group)
+		{
+		// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
+		echo "<option value=\"agenda.php?group=".$this_group['id']."\" ";
+		echo ($this_group['id']==$_SESSION['group'])? " selected":"" ;
+		echo ">".$this_group['name']."</option>";
+		}
+	echo "</select>";
 }
 
 
@@ -1296,18 +1293,18 @@ echo "</select>";
 */
 function show_user_filter_form()
 {
-$user_list=get_course_users();
-
-echo "<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
-echo "<option value=\"agenda.php?user=none\">show all users</option>";
-foreach($user_list as $this_user)
-	{
-	// echo "<option value=\"agenda.php?isStudentView=true&amp;user=".$this_user['uid']."\">".$this_user['lastName']." ".$this_user['firstName']."</option>";
-	echo "<option value=\"agenda.php?user=".$this_user['uid']."\" ";
-	echo ($this_user['uid']==$_SESSION['user'])? " selected":"" ;
-	echo ">".$this_user['lastName']." ".$this_user['firstName']."</option>";
-	}
-echo "</select>";
+	$user_list=get_course_users();
+	
+	echo "<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
+	echo "<option value=\"agenda.php?user=none\">show all users</option>";
+	foreach($user_list as $this_user)
+		{
+		// echo "<option value=\"agenda.php?isStudentView=true&amp;user=".$this_user['uid']."\">".$this_user['lastName']." ".$this_user['firstName']."</option>";
+		echo "<option value=\"agenda.php?user=".$this_user['uid']."\" ";
+		echo ($this_user['uid']==$_SESSION['user'])? " selected":"" ;
+		echo ">".$this_user['lastName']." ".$this_user['firstName']."</option>";
+		}
+	echo "</select>";
 }
 
 
@@ -1374,32 +1371,32 @@ function show_user_group_filter_form()
 */
 function load_edit_users($tool, $id)
 {
-global $_course;
-$tool=Database::escape_string($tool);
-$id=Database::escape_string($id);
-$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='$tool' AND ref='$id'";
-$result=api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
-while ($row=Database::fetch_array($result))
-	{
-	$to_group=$row['to_group_id'];
-	switch ($to_group)
+	global $_course;
+	$tool=Database::escape_string($tool);
+	$id=Database::escape_string($id);
+	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	
+	$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='$tool' AND ref='$id'";
+	$result=api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+	while ($row=Database::fetch_array($result))
 		{
-		// it was send to one specific user
-		case null:
-			$to[]="USER:".$row['to_user_id'];
-			break;
-		// it was sent to everyone
-		case 0:
-			 return "everyone";
-			 exit;
-			break;
-		default:
-			$to[]="GROUP:".$row['to_group_id'];
+		$to_group=$row['to_group_id'];
+		switch ($to_group)
+			{
+			// it was send to one specific user
+			case null:
+				$to[]="USER:".$row['to_user_id'];
+				break;
+			// it was sent to everyone
+			case 0:
+				 return "everyone";
+				 exit;
+				break;
+			default:
+				$to[]="GROUP:".$row['to_group_id'];
+			}
 		}
-	}
-return $to;
+	return $to;
 }
 
 
@@ -1776,15 +1773,15 @@ function display_agenda_items()
 	$user_id=$_user['user_id'];
 	if ($_SESSION['user']!==null)
 	{
-		$user_id=$_SESSION['user'];
+		$user_id=intval($_SESSION['user']);
 	}
 	if ($_SESSION['group']!==null)
 	{
-		$group_id=$_SESSION['group'];
+		$group_id=intval($_SESSION['group']);
 	}
 	if ($_SESSION['toolgroup']!==null)
 	{
-		$group_id=$_SESSION['toolgroup'];
+		$group_id=intval($_SESSION['toolgroup']);
 	}
 
     $repeats = array(); //placeholder for repeated events
@@ -2298,7 +2295,8 @@ function display_one_agenda_item($agenda_id)
 	/*--------------------------------------------------
 			CONSTRUCT THE SQL STATEMENT
 	  --------------------------------------------------*/
-
+	$agenda_id = Database::escape_string($agenda_id);
+	
 	$sql="SELECT agenda.*, toolitemproperties.*
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
 					WHERE agenda.id = toolitemproperties.ref
@@ -2609,7 +2607,7 @@ function show_add_form($id = '')
 	// selecting the users / groups
 	if (isset ($_SESSION['toolgroup']))
 	{
-		echo '<input type="hidden" name="selectedform[0]" value="GROUP:'.$_SESSION['toolgroup'].'"/>' ;
+		echo '<input type="hidden" name="selectedform[0]" value="GROUP:'.intval($_SESSION['toolgroup']).'"/>' ;
 		echo '<input type="hidden" name="To" value="true"/>' ;
 	}
 	else
@@ -3010,16 +3008,18 @@ function get_agendaitems($month, $year)
 	global $_configuration;
 
 	$items = array ();
-
+	$month = Database::escape_string($month);
+	$year = Database::escape_string($year);	
+	
 	//databases of the courses
 	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
 	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 	$group_memberships = GroupManager :: get_group_ids(Database::get_current_course_database(), $_user['user_id']);
 	// if the user is administrator of that course we show all the agenda items
-	if (api_is_allowed_to_edit(false,true))
-	{
+	if (api_is_allowed_to_edit(false,true)) {
 		//echo "course admin";
+		
 		$sqlquery = "SELECT
 						DISTINCT agenda.*, item_property.*
 						FROM ".$TABLEAGENDA." agenda,
@@ -3390,15 +3390,15 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		{
 			//echo "course admin";
 			$sqlquery = "SELECT
-										DISTINCT agenda.*, item_property.*
-										FROM ".$TABLEAGENDA." agenda,
-											".$TABLE_ITEMPROPERTY." item_property
-										WHERE agenda.id = item_property.ref
-										AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
-										AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-										AND item_property.visibility='1'
-										GROUP BY agenda.id
-										ORDER BY start_date ";
+							DISTINCT agenda.*, item_property.*
+							FROM ".$TABLEAGENDA." agenda,
+								".$TABLE_ITEMPROPERTY." item_property
+							WHERE agenda.id = item_property.ref
+							AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
+							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+							AND item_property.visibility='1'
+							GROUP BY agenda.id
+							ORDER BY start_date ";
 		}
 		// if the user is not an administrator of that course
 		else
@@ -3407,28 +3407,28 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sqlquery = "SELECT
-													agenda.*, item_property.*
-													FROM ".$TABLEAGENDA." agenda,
-														".$TABLE_ITEMPROPERTY." item_property
-													WHERE agenda.id = item_property.ref
-													AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
-													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-													AND	( item_property.to_user_id='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
-													AND item_property.visibility='1'
-													ORDER BY start_date ";
+								agenda.*, item_property.*
+								FROM ".$TABLEAGENDA." agenda,
+									".$TABLE_ITEMPROPERTY." item_property
+								WHERE agenda.id = item_property.ref
+								AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
+								AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+								AND	( item_property.to_user_id='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
+								AND item_property.visibility='1'
+								ORDER BY start_date ";
 			}
 			else
 			{
 				$sqlquery = "SELECT
-													agenda.*, item_property.*
-													FROM ".$TABLEAGENDA." agenda,
-														".$TABLE_ITEMPROPERTY." item_property
-													WHERE agenda.id = item_property.ref
-													AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
-													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-													AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
-													AND item_property.visibility='1'
-													ORDER BY start_date ";
+								agenda.*, item_property.*
+								FROM ".$TABLEAGENDA." agenda,
+									".$TABLE_ITEMPROPERTY." item_property
+								WHERE agenda.id = item_property.ref
+								AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
+								AND item_property.tool='".TOOL_CALENDAR_EVENT."'
+								AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
+								AND item_property.visibility='1'
+								ORDER BY start_date ";
 			}
 		}
 		//$sqlquery = "SELECT * FROM $agendadb WHERE DAYOFMONTH(day)='$day' AND month(day)='$month' AND year(day)='$year'";
@@ -3517,15 +3517,15 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		{
 			//echo "course admin";
 			$sqlquery = "SELECT
-										DISTINCT a.*, i.*
-										FROM ".$TABLEAGENDA." a,
-											".$TABLE_ITEMPROPERTY." i
-										WHERE a.id = i.ref
-										AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
-										AND i.tool='".TOOL_CALENDAR_EVENT."'
-										AND i.visibility='1'
-										GROUP BY a.id
-										ORDER BY a.start_date";
+							DISTINCT a.*, i.*
+							FROM ".$TABLEAGENDA." a,
+								".$TABLE_ITEMPROPERTY." i
+							WHERE a.id = i.ref
+							AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
+							AND i.tool='".TOOL_CALENDAR_EVENT."'
+							AND i.visibility='1'
+							GROUP BY a.id
+							ORDER BY a.start_date";
 		}
 		// if the user is not an administrator of that course
 		else
@@ -3534,28 +3534,28 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sqlquery = "SELECT
-													a.*, i.*
-													FROM ".$TABLEAGENDA." a,
-														 ".$TABLE_ITEMPROPERTY." i
-													WHERE a.id = i.`ref`
-													AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
-													AND i.tool='".TOOL_CALENDAR_EVENT."'
-													AND	( i.to_user_id='".$_user['user_id']."' OR i.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-													AND i.visibility='1'
-													ORDER BY a.start_date";
+									a.*, i.*
+									FROM ".$TABLEAGENDA." a,
+										 ".$TABLE_ITEMPROPERTY." i
+									WHERE a.id = i.`ref`
+									AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
+									AND i.tool='".TOOL_CALENDAR_EVENT."'
+									AND	( i.to_user_id='".$_user['user_id']."' OR i.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+									AND i.visibility='1'
+									ORDER BY a.start_date";
 			}
 			else
 			{
 				$sqlquery = "SELECT
-													a.*, i.*
-													FROM ".$TABLEAGENDA." a,
-														 ".$TABLE_ITEMPROPERTY." i
-													WHERE a.id = i.ref
-													AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
-													AND i.tool='".TOOL_CALENDAR_EVENT."'
-													AND ( i.to_user_id='".$_user['user_id']."' OR i.to_group_id='0')
-													AND i.visibility='1'
-													ORDER BY a.start_date";
+									a.*, i.*
+									FROM ".$TABLEAGENDA." a,
+										 ".$TABLE_ITEMPROPERTY." i
+									WHERE a.id = i.ref
+									AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
+									AND i.tool='".TOOL_CALENDAR_EVENT."'
+									AND ( i.to_user_id='".$_user['user_id']."' OR i.to_group_id='0')
+									AND i.visibility='1'
+									ORDER BY a.start_date";
 			}
 		}
 		//echo "<pre>".$sqlquery."</pre>";

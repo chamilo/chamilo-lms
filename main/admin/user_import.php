@@ -1,4 +1,4 @@
-<?php // $Id: user_import.php 20441 2009-05-10 07:39:15Z ivantcholakov $
+<?php // $Id: user_import.php 21895 2009-07-08 15:51:31Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -10,6 +10,10 @@
 /**
  * validate the imported data
  */
+ 
+require '../inc/global.inc.php';
+require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php'; 
+
 function validate_data($users) {
 	global $defined_auth_sources;
 	$errors = array ();

@@ -53,9 +53,9 @@ class Blog
 			$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 
 			$sql = "
-				SELECT `blog_name`
+				SELECT blog_name
 				FROM " . $tbl_blogs . "
-				WHERE `blog_id` = " . Database::escape_string((int)$blog_id);
+				WHERE blog_id = " . Database::escape_string((int)$blog_id);
 
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$blog = Database::fetch_array($result);
@@ -146,13 +146,13 @@ class Blog
 		$info_count=Database::result($res,0,0);
 		if ($info_count==0) {
 			// Create the blog
-			$sql = "INSERT INTO $tbl_blogs (`blog_name`, `blog_subtitle`, `date_creation`, `visibility` )
+			$sql = "INSERT INTO $tbl_blogs (blog_name, blog_subtitle, date_creation, visibility )
 						VALUES ('".Database::escape_string($title)."', '".Database::escape_string($subtitle)."', '".$current_date."', '1');";
 			api_sql_query($sql, __FILE__, __LINE__);
 			$this_blog_id = Database::get_last_insert_id();
 	
 			// Make first post. :)
-			$sql = "INSERT INTO $tbl_blogs_posts (`title`, `full_text`, `date_creation`, `blog_id`, `author_id` )
+			$sql = "INSERT INTO $tbl_blogs_posts (title, full_text, date_creation, blog_id, author_id )
 						VALUES ('".get_lang("Welcome")."', '" . get_lang('FirstPostText')."','".$current_date."', '".Database::escape_string((int)$this_blog_id)."', '".Database::escape_string((int)$_user['user_id'])."');";
 			api_sql_query($sql, __FILE__, __LINE__);
 	
@@ -280,7 +280,7 @@ class Blog
 			$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 	
 			// Create the post
-			$sql = "INSERT INTO " . $tbl_blogs_posts." (`title`, `full_text`, `date_creation`, `blog_id`, `author_id` )
+			$sql = "INSERT INTO " . $tbl_blogs_posts." (title, full_text, date_creation, blog_id, author_id )
 					VALUES ('".Database::escape_string($title)."', '".Database::escape_string($full_text)."','".$current_date."', '".(int)$blog_id."', '".(int)$_user['user_id']."');";
 						
 			api_sql_query($sql, __FILE__, __LINE__);
@@ -372,11 +372,11 @@ class Blog
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		// Delete the post
-		$sql = "DELETE FROM $tbl_blogs_posts WHERE `post_id` = '".(int)$post_id."'";
+		$sql = "DELETE FROM $tbl_blogs_posts WHERE post_id = '".(int)$post_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		// Delete the comments
-		$sql = "DELETE FROM $tbl_blogs_comments WHERE `post_id` = '".(int)$post_id."' AND `blog_id` = '".(int)$blog_id."'";
+		$sql = "DELETE FROM $tbl_blogs_comments WHERE post_id = '".(int)$post_id."' AND blog_id = '".(int)$blog_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 					
 		// Delete posts and attachments
@@ -420,7 +420,7 @@ class Blog
 			$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 	
 			// Create the comment
-			$sql = "INSERT INTO $tbl_blogs_comments (`title`, `comment`, `author_id`, `date_creation`, `blog_id`, `post_id`, `parent_comment_id`, `task_id` )
+			$sql = "INSERT INTO $tbl_blogs_comments (title, comment, author_id, date_creation, blog_id, post_id, parent_comment_id, task_id )
 						VALUES ('".Database::escape_string($title)."', '".Database::escape_string($full_text)."', '".(int)$_user['user_id']."','".$current_date."', '".(int)$blog_id."', '".(int)$post_id."', '".(int)$parent_id."', '".(int)$task_id."')";
 			api_sql_query($sql, __FILE__, __LINE__);
 	
@@ -484,6 +484,10 @@ class Blog
 		// Init
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
+		$blog_id = Database::escape_string($blog_id);
+		$post_id = Database::escape_string($post_id);
+		$comment_id = Database::escape_string($comment_id);
+		
 		
 		delete_all_blog_attachment($blog_id,$post_id,$comment_id);
 		
@@ -496,13 +500,12 @@ class Blog
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 			
 		// Delete them recursively
-		while($comment = Database::fetch_array($result))
-		{					
+		while($comment = Database::fetch_array($result)) {					
 			Blog::delete_comment($blog_id,$post_id,$comment['comment_id']);					
 		}		
 
 		// Finally, delete the selected comment to
-		$sql = "DELETE FROM $tbl_blogs_comments WHERE `comment_id` = '".(int)$comment_id."'";				
+		$sql = "DELETE FROM $tbl_blogs_comments WHERE comment_id = '".(int)$comment_id."'";				
 		api_sql_query($sql, __FILE__, __LINE__);
 		return void;
 	}
@@ -525,7 +528,7 @@ class Blog
 		$tbl_tasks_permissions = Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
 
 		// Create the task
-		$sql = "INSERT INTO $tbl_blogs_tasks (`blog_id`, `title`, `description`, `color`, `system_task` )
+		$sql = "INSERT INTO $tbl_blogs_tasks (blog_id, title, description, color, system_task )
 					VALUES ('".(int)$blog_id."', '" . Database::escape_string($title)."', '" . Database::escape_string($description)."', '" . Database::escape_string($color)."', '0');";
 		api_sql_query($sql, __FILE__, __LINE__);
 
@@ -536,9 +539,9 @@ class Blog
 		{
 			$sql = "
 				INSERT INTO " . $tbl_tasks_permissions . " (
-					`task_id`,
-					`tool`,
-					`action`
+					task_id,
+					tool,
+					action
 				) VALUES (
 					'" . (int)$task_id . "',
 					'" . Database::escape_string($tool) . "',
@@ -552,9 +555,9 @@ class Blog
 		{
 			$sql = "
 				INSERT INTO " . $tbl_tasks_permissions . " (
-					`task_id`,
-					`tool`,
-					`action`
+					task_id,
+					tool,
+					action
 				) VALUES (
 					'" . (int)$task_id . "',
 					'" . Database::escape_string($tool) . "',
@@ -568,9 +571,9 @@ class Blog
 		{
 			$sql = "
 				INSERT INTO " . $tbl_tasks_permissions . " (
-					`task_id`,
-					`tool`,
-					`action`
+					task_id,
+					tool,
+					action
 				) VALUES (
 					'" . (int)$task_id . "',
 					'" . Database::escape_string($tool) . "',
@@ -612,7 +615,7 @@ class Blog
 
 		$sql = "
 			DELETE FROM " . $tbl_tasks_permissions . "
-			WHERE `task_id` = '" . (int)$task_id."'";
+			WHERE task_id = '" . (int)$task_id."'";
 
 		api_sql_query($sql, __FILE__, __LINE__);
 
@@ -620,9 +623,9 @@ class Blog
 		{
 			$sql = "
 				INSERT INTO " . $tbl_tasks_permissions . " (
-					`task_id`,
-					`tool`,
-					`action`
+					task_id,
+					tool,
+					action
 				) VALUES (
 					'" . (int)$task_id . "',
 					'" . Database::escape_string($tool) . "',
@@ -636,9 +639,9 @@ class Blog
 		{
 			$sql = "
 				INSERT INTO " . $tbl_tasks_permissions . " (
-					`task_id`,
-					`tool`,
-					`action`
+					task_id,
+					tool,
+					action
 				) VALUES (
 					'" . (int)$task_id . "',
 					'" . Database::escape_string($tool) . "',
@@ -652,9 +655,9 @@ class Blog
 		{
 			$sql = "
 				INSERT INTO " . $tbl_tasks_permissions . " (
-					`task_id`,
-					`tool`,
-					`action`
+					task_id,
+					tool,
+					action
 				) VALUES (
 					'" . (int)$task_id . "',
 					'" . Database::escape_string($tool) . "',
@@ -681,7 +684,7 @@ class Blog
 		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 
 		// Delete posts
-		$sql = "DELETE FROM $tbl_blogs_tasks WHERE `blog_id` = '".(int)$blog_id."' AND `task_id` = '".(int)$task_id."'";
+		$sql = "DELETE FROM $tbl_blogs_tasks WHERE blog_id = '".(int)$blog_id."' AND task_id = '".(int)$task_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		return void;
@@ -700,7 +703,7 @@ class Blog
 		// Init
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 		// Delete posts
-		$sql = "DELETE FROM $tbl_blogs_tasks_rel_user WHERE `blog_id` = '".(int)$blog_id."' AND `task_id` = '".(int)$task_id."' AND `user_id` = '".(int)$user_id."'";
+		$sql = "DELETE FROM $tbl_blogs_tasks_rel_user WHERE blog_id = '".(int)$blog_id."' AND task_id = '".(int)$task_id."' AND user_id = '".(int)$user_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		return void;
@@ -727,7 +730,7 @@ class Blog
 			INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 			INNER JOIN $tbl_blogs blog ON task_rel_user.blog_id = blog.blog_id
 			AND blog.blog_id = ".intval($_GET['blog_id'])."
-			WHERE task_rel_user.user_id = ".(int)$_user['user_id']." ORDER BY `target_date` ASC";
+			WHERE task_rel_user.user_id = ".(int)$_user['user_id']." ORDER BY target_date ASC";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 
 			if(mysql_numrows($result) > 0)
@@ -764,7 +767,7 @@ class Blog
 		// Init
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-
+				
 		// Get blog properties
 		$sql = "SELECT blog_name, visibility FROM $tbl_blogs WHERE blog_id='".(int)$blog_id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -775,7 +778,7 @@ class Blog
 		if($visibility == 1)
 		{
 			// Change visibility state, remove from course home.
-			$sql = "UPDATE $tbl_blogs SET `visibility` = '0' WHERE `blog_id` ='".(int)$blog_id."' LIMIT 1";
+			$sql = "UPDATE $tbl_blogs SET visibility = '0' WHERE blog_id ='".(int)$blog_id."' LIMIT 1";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 
 			$sql = "DELETE FROM $tbl_tool WHERE name = '".Database::escape_string($title)."' LIMIT 1";
@@ -784,10 +787,10 @@ class Blog
 		else
 		{
 			// Change visibility state, add to course home.
-			$sql = "UPDATE $tbl_blogs SET `visibility` = '1' WHERE `blog_id` ='".(int)$blog_id."' LIMIT 1";
+			$sql = "UPDATE $tbl_blogs SET visibility = '1' WHERE blog_id ='".(int)$blog_id."' LIMIT 1";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 
-			$sql = "INSERT INTO $tbl_tool (`name`, `link`, `image`, `visibility`, `admin`, `address`, `added_tool`, `target` )
+			$sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool, target )
 					VALUES ('".Database::escape_string($title)."', 'blog/blog.php?blog_id=".(int)$blog_id."', 'blog.gif', '1', '0', 'pastillegris.gif', '0', '_self')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 		}
@@ -906,6 +909,7 @@ class Blog
 	function display_search_results($blog_id, $query_string)
 	{
 		// Init
+		$query_string = Database::escape_string($query_string);
 		$query_string_parts = explode(' ',$query_string);
 		$query_string = array();
 		foreach ($query_string_parts as $query_part)
@@ -930,7 +934,7 @@ class Blog
 		// Init
 		$date_output = $query_string;
 		$date = explode('-',$query_string);
-		$query_string = ' DAYOFMONTH(`date_creation`) =' . $date[2] . ' AND MONTH(`date_creation`) =' . $date[1] . ' AND YEAR(`date_creation`) =' . $date[0];
+		$query_string = ' DAYOFMONTH(date_creation) =' . $date[2] . ' AND MONTH(date_creation) =' . $date[1] . ' AND YEAR(date_creation) =' . $date[0];
 		global $dateFormatLong;
 
 		// Put date in correct output format
@@ -976,7 +980,7 @@ class Blog
 		$blog_post_time = date('H:m',strtotime($blog_post['date_creation']));
 		$blog_post_actions = "";
 
-		$task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
+		$task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? intval($_GET['task_id']) : 0;
 
 		if(api_is_allowed('BLOG_' . $blog_id, 'article_edit', $task_id))
 			$blog_post_actions .= '<a href="blog.php?action=edit_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;article_id=' . $blog_post['post_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('EditThisPost') . '"><img src="../img/edit.gif" /></a>';
@@ -1059,7 +1063,7 @@ class Blog
 
 		if(Database::num_rows($result) == 0) // Add rating
 		{
-			$sql = "INSERT INTO $tbl_blogs_rating ( `blog_id`, `rating_type`, `item_id`, `user_id`, `rating` )
+			$sql = "INSERT INTO $tbl_blogs_rating ( blog_id, rating_type, item_id, user_id, rating )
 						VALUES ('".(int)$blog_id."', '".Database::escape_string($type)."', '".(int)$item_id."', '".(int)$_user['user_id']."', '".Database::escape_string($rating)."')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			return true;
@@ -1512,18 +1516,18 @@ class Blog
 
 			$sql = "
 				SELECT
-					`blog_id`,
-					`task_id`,
-					`blog_id`,
-					`title`,
-					`description`,
-					`color`,
-					`system_task`
+					blog_id,
+					task_id,
+					blog_id,
+					title,
+					description,
+					color,
+					system_task
 				FROM " . $tbl_blogs_tasks . "
-				WHERE `blog_id` = " . (int)$blog_id . "
+				WHERE blog_id = " . (int)$blog_id . "
 				ORDER BY
-					`system_task`,
-					`title`";
+					system_task,
+					title";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 
 
@@ -1584,7 +1588,7 @@ class Blog
 		$sql = "SELECT task_rel_user.*, task.title, user.firstname, user.lastname, task.description, task.system_task, task.blog_id, task.task_id FROM $tbl_blogs_tasks_rel_user task_rel_user
 		INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 		INNER JOIN $tbl_users user ON task_rel_user.user_id = user.user_id
-		WHERE task_rel_user.blog_id = '".(int)$blog_id."' ORDER BY `target_date` ASC";
+		WHERE task_rel_user.blog_id = '".(int)$blog_id."' ORDER BY target_date ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 
@@ -1744,10 +1748,10 @@ class Blog
 
 						$sql = "
 							SELECT
-								`id`,
-								`action`
+								id,
+								action
 							FROM " . $tbl_tasks_permissions . "
-							WHERE `task_id` = '" . (int)$task_id."'";
+							WHERE task_id = '" . (int)$task_id."'";
 						$result = api_sql_query($sql, __FILE__, __LINE__);
 
 						$arrPermissions = array();
@@ -1836,18 +1840,18 @@ class Blog
 		// Get tasks in this blog / make select list of it
 		$sql = "
 			SELECT
-				`blog_id`,
-				`task_id`,
-				`blog_id`,
-				`title`,
-				`description`,
-				`color`,
-				`system_task`
+				blog_id,
+				task_id,
+				blog_id,
+				title,
+				description,
+				color,
+				system_task
 			FROM " . $tbl_blogs_tasks . "
-			WHERE `blog_id` = " . (int)$blog_id . "
+			WHERE blog_id = " . (int)$blog_id . "
 			ORDER BY
-				`system_task`,
-				`title`";
+				system_task,
+				title";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$select_task_list = '<select name="task_task_id">';
 
@@ -2018,17 +2022,17 @@ class Blog
 		// Get tasks in this blog / make select list of it
 		$sql = "
 			SELECT
-				`blog_id`,
-				`task_id`,
-				`title`,
-				`description`,
-				`color`,
-				`system_task`
+				blog_id,
+				task_id,
+				title,
+				description,
+				color,
+				system_task
 			FROM " . $tbl_blogs_tasks . "
-			WHERE `blog_id` = " . (int)$blog_id . "
+			WHERE blog_id = " . (int)$blog_id . "
 			ORDER BY
-				`system_task`,
-				`title`";
+				system_task,
+				title";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		$select_task_list = '<select name="task_task_id">';
@@ -2127,9 +2131,9 @@ class Blog
 		$sql = "
 			SELECT COUNT(*) as 'number'
 			FROM " . $tbl_blogs_tasks_rel_user . "
-			WHERE `blog_id` = " . (int)$blog_id . "
-			AND	`user_id` = " . (int)$user_id . "
-			AND	`task_id` = " . (int)$task_id . "
+			WHERE blog_id = " . (int)$blog_id . "
+			AND	user_id = " . (int)$user_id . "
+			AND	task_id = " . (int)$task_id . "
 		";
 
 		$result = @api_sql_query($sql, __FILE__, __LINE__);
@@ -2139,10 +2143,10 @@ class Blog
 		{
 			$sql = "
 				INSERT INTO " . $tbl_blogs_tasks_rel_user . " (
-					`blog_id`,
-					`user_id`,
-					`task_id`,
-					`target_date`
+					blog_id,
+					user_id,
+					task_id,
+					target_date
 				) VALUES (
 					'" . (int)$blog_id . "',
 					'" . (int)$user_id . "',
@@ -2163,9 +2167,9 @@ class Blog
 			SELECT COUNT(*) as 'number'
 			FROM " . $tbl_blogs_tasks_rel_user . "
 			WHERE
-				`blog_id` = " . (int)$blog_id . " AND
-				`user_id` = " . (int)$user_id . " AND
-				`task_id` = " . (int)$task_id . "
+				blog_id = " . (int)$blog_id . " AND
+				user_id = " . (int)$user_id . " AND
+				task_id = " . (int)$task_id . "
 		";
 
 		$result = @api_sql_query($sql, __FILE__, __LINE__);
@@ -2176,14 +2180,14 @@ class Blog
 			$sql = "
 				UPDATE " . $tbl_blogs_tasks_rel_user . "
 				SET
-					`user_id` = " . (int)$user_id . ",
-					`task_id` = " . (int)$task_id . ",
-					`target_date` = '" . Database::escape_string($target_date) . "'
+					user_id = " . (int)$user_id . ",
+					task_id = " . (int)$task_id . ",
+					target_date = '" . Database::escape_string($target_date) . "'
 				WHERE
-					`blog_id` = " . (int)$blog_id . " AND
-					`user_id` = " . (int)$old_user_id . " AND
-					`task_id` = " . (int)$old_task_id . " AND
-					`target_date` = '" . Database::escape_string($old_target_date) . "'
+					blog_id = " . (int)$blog_id . " AND
+					user_id = " . (int)$old_user_id . " AND
+					task_id = " . (int)$old_task_id . " AND
+					target_date = '" . Database::escape_string($old_target_date) . "'
 			";
 			
 			$result = @api_sql_query($sql, __FILE__, __LINE__);
@@ -2252,7 +2256,7 @@ class Blog
 		$tbl_user_permissions 	= Database::get_course_table(TABLE_PERMISSION_USER);
 
 		// Subscribe the user
-		$sql = "INSERT INTO $tbl_blogs_rel_user ( `blog_id`, `user_id` ) VALUES ('".(int)$blog_id."', '".(int)$user_id."');";
+		$sql = "INSERT INTO $tbl_blogs_rel_user ( blog_id, user_id ) VALUES ('".(int)$blog_id."', '".(int)$user_id."');";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		// Give this user basic rights
@@ -2276,7 +2280,7 @@ class Blog
 		$tbl_user_permissions 	= Database::get_course_table(TABLE_PERMISSION_USER);
 
 		// Unsubscribe the user
-		$sql = "DELETE FROM $tbl_blogs_rel_user WHERE `blog_id` = '".(int)$blog_id."' AND `user_id` = '".(int)$user_id."'";
+		$sql = "DELETE FROM $tbl_blogs_rel_user WHERE blog_id = '".(int)$blog_id."' AND user_id = '".(int)$user_id."'";
 		$result = @api_sql_query($sql, __FILE__, __LINE__);
 
 		// Remove this user's permissions.
@@ -2310,7 +2314,7 @@ class Blog
 		$sql = "SELECT user.user_id FROM $tbl_users user
 				INNER JOIN $tbl_blogs_rel_user blogs_rel_user
 				ON user.user_id = blogs_rel_user.user_id
-				WHERE blogs_rel_user.blog_id = '".(int)$blog_id."'";
+				WHERE blogs_rel_user.blog_id = '".intval($blog_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		
 		$blog_member_ids = array ();
@@ -2330,21 +2334,18 @@ class Blog
 		include_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 		
 		if(isset($_SESSION['session_id'])){
-			$session_id = $_SESSION['session_id'];
+			$session_id = intval($_SESSION['session_id']);
 		}
 		else{
 			$session_id = 0;
 		}
 		
-		$student_list = CourseManager :: get_student_list_from_course_code($currentCourse, true, $session_id);
-		
+		$student_list = CourseManager :: get_student_list_from_course_code($currentCourse, true, $session_id);		
 		$user_data = array ();
-
+		
 		// Add users that are not in this blog to the list.
-		foreach($student_list as $key=>$user)
-		{
-			if(isset($user['id_user']))
-			{
+		foreach($student_list as $key=>$user) {
+			if(isset($user['id_user'])) {
 				$user['user_id'] = $user['id_user'];
 			}
 			if(!in_array($user['user_id'],$blog_member_ids)) {
@@ -2369,16 +2370,13 @@ class Blog
 
 		// Display
 		$query_vars['action'] = 'manage_members';
-		$query_vars['blog_id'] = $blog_id;
+		$query_vars['blog_id'] = $blog_id; 
 		echo '<form method="post" action="blog.php?action=manage_members&amp;blog_id=' . $blog_id . '">';
 			Display::display_sortable_table($column_header, $user_data,null,null,$query_vars);
 			$link = '';
-			$link .= isset ($_GET['action']) ? 'action=' . $_GET['action'] . '&amp;' : '';
+			$link .= isset ($_GET['action']) ? 'action=' . Security::remove_XSS($_GET['action']) . '&amp;' : '';
 			$link .= "blog_id=$blog_id&amp;";
-			$link .= isset ($_GET['page_nr']) ? 'page_nr=' . (int)$_GET['page_nr'] . '&amp;' : '';
-			$link .= isset ($_GET['per_page']) ? 'per_page=' . (int)$_GET['per_page'] . '&amp;' : '';
-			$link .= isset ($_GET['column']) ? 'column=' . (int)$_GET['column'] . '&amp;' : '';
-			$link .= isset ($_GET['direction']) ? 'direction=' . $_GET['direction'] . '&amp;' : '';;
+			
 			echo '<a href="blog.php?' . $link . 'selectall=subscribe">' . get_lang('SelectAll') . '</a> - ';
 			echo '<a href="blog.php?' . $link . '">' . get_lang('UnSelectAll') . '</a> ';
 			echo get_lang('WithSelected') . ' : ';
@@ -2440,8 +2438,8 @@ class Blog
 			$row[] = Display::encrypted_mailto_link($myrow["email"]);
 
 			$sql = "SELECT bt.title task
-			FROM " . Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER) . " `btu`
-			INNER JOIN " . Database::get_course_table(TABLE_BLOGS_TASKS) . " `bt` ON `btu`.`task_id` = `bt`.`task_id`
+			FROM " . Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER) . " btu
+			INNER JOIN " . Database::get_course_table(TABLE_BLOGS_TASKS) . " bt ON btu.task_id = bt.task_id
 			WHERE btu.blog_id = $blog_id AND btu.user_id = " . $myrow['user_id'] . "";
 
 			$sql_res = mysql_query($sql) or die(mysql_error());
@@ -2471,11 +2469,7 @@ class Blog
 		Display::display_sortable_table($column_header, $user_data,null,null,$query_vars);
 		$link = '';
 		$link .= isset ($_GET['action']) ? 'action=' . Security::remove_XSS($_GET['action']). '&amp;' : '';
-		$link .= "blog_id=$blog_id&amp;";
-		$link .= isset ($_GET['page_nr']) ? 'page_nr=' . (int)$_GET['page_nr'] . '&amp;' : '';
-		$link .= isset ($_GET['per_page']) ? 'per_page=' . (int)$_GET['per_page'] . '&amp;' : '';
-		$link .= isset ($_GET['column']) ? 'column=' . (int)$_GET['column'] . '&amp;' : '';
-		$link .= isset ($_GET['direction']) ? 'direction=' . $_GET['direction'] . '&amp;' : '';
+		$link .= "blog_id=$blog_id&amp;"; 
 		
 		echo '<a href="blog.php?' . $link . 'selectall=unsubscribe">' . get_lang('SelectAll') . '</a> - ';
 		echo '<a href="blog.php?' . $link . '">' . get_lang('UnSelectAll') . '</a> ';
@@ -2515,7 +2509,7 @@ class Blog
 	 */
 	function display_new_comment_form($blog_id, $post_id, $title)
 	{
-		echo '<form name="add_post" enctype="multipart/form-data" method="post" action="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '">';
+		echo '<form name="add_post" enctype="multipart/form-data" method="post" action="blog.php?action=view_post&amp;blog_id=' . intval($blog_id) . '&amp;post_id=' . intval($post_id) . '">';
 		
 		// form title
 		echo '<div class="row"><div class="form_header">';
@@ -2533,18 +2527,18 @@ class Blog
 				</div>';
 
 		// comment text
-									$oFCKeditor = new FCKeditor('comment_text') ;													
-									$oFCKeditor->Width		= '100%';
-									$oFCKeditor->Height		= '200';
-									if(!api_is_allowed_to_edit())
-									{
-										$oFCKeditor->ToolbarSet = 'BlogComment_Student';
-									}
-									else
-									{
-										$oFCKeditor->ToolbarSet = 'BlogComment';
-									}		
-									$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
+		$oFCKeditor = new FCKeditor('comment_text') ;													
+		$oFCKeditor->Width		= '100%';
+		$oFCKeditor->Height		= '200';
+		if(!api_is_allowed_to_edit())
+		{
+			$oFCKeditor->ToolbarSet = 'BlogComment_Student';
+		}
+		else
+		{
+			$oFCKeditor->ToolbarSet = 'BlogComment';
+		}		
+		$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
 		echo '	<div class="row">
 					<div class="label">
 						' . get_lang('Comment') . '
@@ -2584,7 +2578,7 @@ class Blog
 									if(isset($_GET['task_id']))
 									{
 										echo ' <input type="hidden" name="new_task_execution_submit" value="true" />';
-										echo ' <input type="hidden" name="task_id" value="' . (int)$_GET['task_id'] . '" />';
+										echo ' <input type="hidden" name="task_id" value="' . intval($_GET['task_id']) . '" />';
 									}
 									else
 									{
@@ -2637,11 +2631,11 @@ class Blog
 
 		//Start the week on monday
 		$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-		$backwardsURL = api_get_self()."?blog_id=" . (int)$_GET['blog_id']."&amp;filter=" . $_GET['filter']."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-		$forewardsURL = api_get_self()."?blog_id=" . (int)$_GET['blog_id']."&amp;filter=" . $_GET['filter']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+		$backwardsURL = api_get_self()."?blog_id=" . (int)$_GET['blog_id']."&amp;filter=" . Security::remove_XSS($_GET['filter'])."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
+		$forewardsURL = api_get_self()."?blog_id=" . (int)$_GET['blog_id']."&amp;filter=" . Security::remove_XSS($_GET['filter'])."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
 		// Get posts for this month
-		$sql = "SELECT post.*, DAYOFMONTH(`date_creation`) as post_day, user.lastname, user.firstname FROM $tbl_blogs_posts post
+		$sql = "SELECT post.*, DAYOFMONTH(date_creation) as post_day, user.lastname, user.firstname FROM $tbl_blogs_posts post
 				INNER JOIN $tbl_users user
 				ON post.author_id = user.user_id
 				WHERE post.blog_id = '".(int)$blog_id."'
@@ -2667,16 +2661,16 @@ class Blog
 			$sql = "
 				SELECT
 					task_rel_user.*,
-					DAYOFMONTH(`target_date`) as task_day,
+					DAYOFMONTH(target_date) as task_day,
 					task.title,
 					blog.blog_name
 				FROM $tbl_blogs_tasks_rel_user task_rel_user
 				INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 				INNER JOIN $tbl_blogs blog ON task_rel_user.blog_id = blog.blog_id
 				WHERE task_rel_user.user_id = '".(int)$_user['user_id']."'
-				AND	MONTH(`target_date`) = '".(int)$month."'
-				AND	YEAR(`target_date`) = '".(int)$year."'
-				ORDER BY `target_date` ASC";
+				AND	MONTH(target_date) = '".(int)$month."'
+				AND	YEAR(target_date) = '".(int)$year."'
+				ORDER BY target_date ASC";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 
 			if(mysql_numrows($result) > 0)
@@ -2826,8 +2820,8 @@ class Blog
 		// the form contained errors but we do not want to lose the changes the user already did
 		if ($_POST)
 		{
-			$blog['blog_name'] 		= $_POST['blog_name'];
-			$blog['blog_subtitle'] 	= $_POST['blog_subtitle'];
+			$blog['blog_name'] 		= Security::remove_XSS($_POST['blog_name']);
+			$blog['blog_subtitle'] 	= Security::remove_XSS($_POST['blog_subtitle']);
 		}
 		echo '<form name="edit_blog" method="post" action="blog_admin.php?action=edit&blog_id='.Security::remove_XSS($_GET['blog_id']).'">
 				<div class="row">
@@ -2930,7 +2924,7 @@ class Blog
 			$table->display();
 		}
 	
-		/*$sql = "SELECT `blog_id`, `blog_name`, `blog_subtitle`, `visibility` FROM $tbl_blogs ORDER BY `blog_name`";
+		/*$sql = "SELECT blog_id, blog_name, blog_subtitle, visibility FROM $tbl_blogs ORDER BY blog_name";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		while($blog = Database::fetch_array($result))
@@ -2976,24 +2970,28 @@ class Blog
 function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 {	
 	global $blog_table_attachment;
+	$blog_id = Database::escape_string($blog_id);
+	$comment_id = Database::escape_string($comment_id);
+	$post_id = Database::escape_string($post_id);	
+	
 	$row=array();
 	$where='';
 	
-	if (!empty ($post_id))
+	if (!empty ($post_id) && is_numeric($post_id))
 	{
 		$where.=' AND post_id ="'.$post_id.'" ';
 	}
 		
-	if (!empty ($comment_id) )
+	if (!empty ($comment_id) && is_numeric($comment_id) )
 	{
 		if (!empty ($post_id) )
 		{
 			$where.= ' AND ';
 		}
 		$where.=' comment_id ="'.$comment_id.'" ';
-	}
+	} 
 	
-	$sql = 'SELECT path, filename, comment FROM '. $blog_table_attachment.' WHERE blog_id ="'.$blog_id.'"  '.$where;
+	$sql = 'SELECT path, filename, comment FROM '. $blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;
 	
 	$result=api_sql_query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result)!=0)
@@ -3017,13 +3015,17 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 	global $blog_table_attachment;
 	global $_course;
 	
+	$blog_id = Database::escape_string($blog_id);
+	$comment_id = Database::escape_string($comment_id);
+	$post_id = Database::escape_string($post_id);		
+	
 	// delete files in DB	
-	if (!empty ($post_id))
+	if (!empty ($post_id) && is_numeric($post_id) )
 	{
 		$where.=' AND post_id ="'.$post_id.'" ';
 	}
 		
-	if (!empty ($comment_id) )
+	if (!empty ($comment_id) && is_numeric($comment_id)   )
 	{
 		if (!empty ($post_id) )
 		{
@@ -3037,7 +3039,7 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);		
 	$updir = $sys_course_path.$courseDir;
 	
-	$sql= 'SELECT path FROM '.$blog_table_attachment.' WHERE blog_id ="'.$blog_id.'"  '.$where;	
+	$sql= 'SELECT path FROM '.$blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;	
 	$result=api_sql_query($sql, __FILE__, __LINE__);
 	
 	while ($row=Database::fetch_row($result))
@@ -3048,7 +3050,7 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 			@ unlink($file);
 		}		
 	}	
-	$sql = 'DELETE FROM '. $blog_table_attachment.' WHERE blog_id ="'.$blog_id.'"  '.$where;	
+	$sql = 'DELETE FROM '. $blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;	
 	api_sql_query($sql, __FILE__, __LINE__);
 }
 /**
@@ -3090,6 +3092,8 @@ function get_blog_comment_from_user($course_db_name, $user_id) {
 	
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS,$course_db_name);
 		$tbl_blog_comment = Database::get_course_table(TABLE_BLOGS_COMMENTS,$course_db_name);
+		$user_id = Database::escape_string($user_id);
+		
 		$sql = "SELECT DISTINCT blog.blog_id, comment_id, title, comment, comment.date_creation
 				FROM $tbl_blogs blog INNER JOIN  $tbl_blog_comment comment 
 				ON (blog.blog_id = comment.blog_id)

@@ -41,14 +41,12 @@ class TestFileManager extends UnitTestCase {
 	//todo public function testSetDefaultSettings
 	//todo public function testMkdirs
 	
-	
 	public function testUpdatedbInfo(){
 		$action ='';
 		$oldPath ='';
 		$res = update_db_info($action, $oldPath, $newPath="");
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
-		
 	}
 	
 	public function testCheckNameExist(){
@@ -170,32 +168,38 @@ class TestFileManager extends UnitTestCase {
 		$dirArray='documents';
 		$res = $this->fmanager->list_all_files($dirArray);
 		$this->assertFalse($res);
-		$this->assertTrue(is_numeric($res));
-		$this->assertTrue($res ===0);
-		var_dump($res);
+		$this->assertTrue(is_null($res));
+		$this->assertTrue($res ===null);
+		//var_dump($res);
 	}
 	
 	public function testCompatLoadFile(){
-		$file_name='';
+		$file_name='images';
 		$res = $this->fmanager->compat_load_file($file_name);
 		$this->assertFalse($res);
-		$this->assertTrue(is_string($res));
-		var_dump($res);
+		$this->assertTrue(is_bool($res));
+		//var_dump($res);
 	}
 	
 	public function testSetDefaultSettings(){
-		$upload_path='';
-		$filename='';
-		$glued_table='';
+		$upload_path='documents';
+		$filename='doc';
+		$glued_table='xxx';
 		$res = $this->fmanager->set_default_settings($upload_path, $filename, $filetype="file", $glued_table, $default_visibility='v');
+		$this->assertTrue(is_null($res));
+		//var_dump($res);
 	}
-	/*
-	public function testMkdirs(){
-		$path='';
-		$res = $this->fmanager->mkdirs($path, $mode = '0770');
-
-	}*/
 	
+	public function testMkdirs(){
+		$path='document';
+		$res = $this->fmanager->mkdirs($path);
+		$this->assertTrue($res);
+		$this->assertTrue(is_bool($res));
+		$this->assertTrue($res === true);
+		//var_dump($res);
+
+	}
+
 }
 
 

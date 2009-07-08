@@ -77,7 +77,7 @@ class TestBlog extends UnitTestCase
 	 /**
 	  * Test about get Title to a Blog
 	 */
-	
+		
 	 public function testGetBlogTitle(){
 	 	$res = $this->oblog->get_Blog_title(11);
 	 	$this->assertFalse($this->oblog->get_Blog_title(11)===String);
@@ -304,28 +304,31 @@ class TestBlog extends UnitTestCase
 	 	ob_end_clean();
 	 		 	
 	 }
-	 
+	 /**
+	  * this function have will be testing with mocks
+	  */ /* usando mock
 	 public function testDisplayFormNewPost(){
+	 	// $mock = new Mock('FCKeditor');
 	 	ob_start();
-	 	$res = ob_get_contents();
-	 	/*
 	 	$res = $this->oblog->display_form_new_post(12);
+	 	//$res = ob_get_contents();
+	 	// $mock->expectOnce('FCKeditor','post_full_text');
 	 	$this->assertTrue($this->oblog->display_form_new_post(12));
-	 	*/
 	 	$this->assertTrue(is_string($res));
 	 	$this->assertNotNull($res);
 	 	ob_end_clean();
 	 	
-	 } 
-	
+	 } */
+	/* usando mock
 	 public function testDisplayFormEditPost(){
 	 	ob_start();
-	 	//display_form_edit_post(11,12);
-	 	$res = ob_get_contents();
+	 	$res = $this->oblog->display_form_edit_post(11,12);
+	 	
 	 	$this->assertNotNull(is_null($res));
 	 	$this->assertFalse($res);
 	 	ob_end_clean();
-	 }	
+	 
+	 }	*/
 	 
 	 public function testDisplayTaskList(){
 	 	ob_start();
@@ -394,14 +397,14 @@ class TestBlog extends UnitTestCase
 	 }
 
 	 public function testEditAssignedTask(){
-	 	/*$task = array('blog_id'=>11, 
+	 	$task = array('blog_id'=>11, 
 					  'user_id'=>1, 
                       'task_id'=>12,  
                       'target_date'=>'xxxxxxx',  
                  	  'old_user_id'=>10,
                  	  'old_task_id'=>11,
                  	  'old_target_date'=>'xxxzxxx'
-                 	 );*/
+                 	 );
         $res = $this->oblog->edit_assigned_task();
         $this->assertTrue($this->oblog->edit_assigned_task()===null);
         $this->assertTrue(is_null($res));
@@ -441,21 +444,24 @@ class TestBlog extends UnitTestCase
 	 	$this->assertNotNull(is_null($res));
 	 	$this->assertFalse($res);
 	 	ob_end_clean();
-	 }
-
+	}
+/**
+ * this function have been tested modified the function 
+ * display_form_user_unsubscribe in the blog.lib.php
+ * main_table and course_table.
+ * 
+ */ /* usando mocks 
 	public function testDisplayFormUserUnsubscribe(){
 		ob_start();
 		global $_user;
-		//$_user['blog_id']=12;
-		//$res = $this->oblog->display_form_user_unsubscribe($_user['blog_id']);
-		$res = ob_get_contents();
-		//$this->assertTrue($this->oblog->display_form_user_unsubscribe($_user['blog_id'])===null);
-		$this->assertTrue(is_string($res));
-		$this->assertNull(null,$res);
+		$blog_id = '1';
+		$course_id='0001';
+		$res = $this->oblog->display_form_user_unsubscribe($blog_id,$course_id);
+		$this->assertFalse($this->oblog->display_form_user_unsubscribe($blog_id,$course_id)==='');
+		$this->assertTrue(is_null($res));
 		ob_end_clean();
 		
-	}
-	
+	}*/
 	
 	public function testDisplayFormUserRights(){
 		ob_start();
@@ -464,16 +470,20 @@ class TestBlog extends UnitTestCase
 		$this->assertFalse($res);
 		ob_end_clean();
 	}
-	
+	/* usando mocks 
 	public function testDisplayNewCommentForm(){
+		$blog_id = '12';
+		$post_id='1';
+		$title='test';
 		ob_start();
-		$res = ob_get_contents();
-		//$res = $this->oblog->display_new_comment_form(12,1,'test');
+		$res =$this->oblog->display_new_comment_form($blog_id,$post_id,$title);
+		//$res = ob_get_contents();
 		//$this->assertTrue($this->oblog->display_new_comment_form(12,1,'comment_text')===null);
 		$this->assertFalse($res);
 		$this->assertNotNull(is_null($res));
 		ob_end_clean();
-	}
+		var_dump($res);
+	}*/
 	
 	public function testDisplayMinimonthcalendar(){
 		global $_user,$DaysShort, $MonthsLong;
@@ -515,7 +525,7 @@ class TestBlog extends UnitTestCase
 	public function testGetBlogAttachment(){
 		ob_start();
 		global $blog_table_attachment;
-		//$oblog_table_attachment = array('blog_id'=>12);
+		$oblog_table_attachment = array('blog_id'=>12);
 		$res=get_blog_attachment();
 		$this->assertFalse($res);
 		$this->assertTrue(is_array($res));

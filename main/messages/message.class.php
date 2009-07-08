@@ -23,7 +23,9 @@
 */
 require_once api_get_path(LIBRARY_PATH).'/main_api.lib.php';
 require_once api_get_path(LIBRARY_PATH).'/online.inc.php';
-class MessageManager {	
+
+class MessageManager 
+{	
 	function MessageManager() {
 		
 	}
@@ -55,8 +57,7 @@ class MessageManager {
 				"&nbsp;<b>".
 				GetFullUserName($uid).
 				"</b>";			
-			}
-				
+			}				
 		} else {
 				$success=get_lang('MessageSentTo').
 				"&nbsp;<b>".
@@ -120,6 +121,12 @@ class MessageManager {
 	 */
 	public static function get_message_data ($from, $number_of_items, $column, $direction) {
 		global $charset;
+		$from = intval($from);
+		$number_of_items = intval($number_of_items);
+		$column = intval($column);
+		if (!in_array($direction, array('ASC', 'DESC')))
+			$direction = 'ASC'; 
+			 
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		$request=api_is_xml_http_request();
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, msg_status as col4 FROM $table_message " .
@@ -168,38 +175,44 @@ class MessageManager {
 	
 	 public static function send_message ($receiver_user_id, $title, $content) {
         global $charset;
-		$table_message = Database::get_main_table(TABLE_MESSAGE);
-        $title = api_convert_encoding($title,$charset,'UTF-8');
-        $content = api_convert_encoding($content,$charset,'UTF-8');
-		//message in inbox
-		$sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".api_get_user_id()." AND user_receiver_id='".Database::escape_string($receiver_user_id)."' AND title = '".Database::escape_string($title)."' AND content ='".Database::escape_string($content)."' ";
-		$res_exist = api_sql_query($sql,__FILE__,__LINE__);
-		$row_exist = Database::fetch_array($res_exist,'ASSOC');
-		if ($row_exist['count'] ==0) {  
-			$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
-					 " VALUES (".
-			 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '1', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
-			 		 ")";
-			//message in outbox
-			$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
-					 " VALUES (".
-			 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
-			 		 ")";
-			$rs = api_sql_query($sql,__FILE__,__LINE__);
-			$result = api_sql_query($query,__FILE__,__LINE__);
-			return $result;
-		}
+        if (is_numeric($receiver_user_id)) {
+			$table_message = Database::get_main_table(TABLE_MESSAGE);
+	        $title = api_convert_encoding($title,$charset,'UTF-8');
+	        $content = api_convert_encoding($content,$charset,'UTF-8');
+			//message in inbox
+			$sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".api_get_user_id()." AND user_receiver_id='".Database::escape_string($receiver_user_id)."' AND title = '".Database::escape_string($title)."' AND content ='".Database::escape_string($content)."' ";
+			$res_exist = api_sql_query($sql,__FILE__,__LINE__);
+			$row_exist = Database::fetch_array($res_exist,'ASSOC');
+			if ($row_exist['count'] ==0) {  
+				$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
+						 " VALUES (".
+				 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '1', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
+				 		 ")";
+				//message in outbox
+				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
+						 " VALUES (".
+				 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
+				 		 ")";
+				$rs = api_sql_query($sql,__FILE__,__LINE__);
+				$result = api_sql_query($query,__FILE__,__LINE__);
+				return $result;
+			}
+        } else {
+        	return false;
+        }
+        
 		return false;
 	}
 	
 	 public static function delete_message_by_user_receiver ($user_receiver_id,$id) {	
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
+		$id = Database::escape_string($id);
 		$sql="SELECT COUNT(*) as count FROM $table_message WHERE id=".$id." AND msg_status<>4;";
 		$rs=api_sql_query($sql,__FILE__,__LINE__);
 		$row=Database::fetch_array($rs,'ASSOC');
 		if ($row['count']==1) {
 			$query = "DELETE FROM $table_message " .
-			"WHERE user_receiver_id=".Database::escape_string($user_receiver_id)." AND id=".Database::escape_string($id);
+			"WHERE user_receiver_id=".Database::escape_string($user_receiver_id)." AND id=".$id;
 			$result = api_sql_query($query,__FILE__,__LINE__);
 			return $result;	
 		} else {
@@ -214,10 +227,9 @@ class MessageManager {
 	 * @return array
 	 */
 	public static function delete_message_by_user_sender ($user_sender_id,$id) {
-		$table_message = Database::get_main_table(TABLE_MESSAGE); 
+		$table_message = Database::get_main_table(TABLE_MESSAGE);		
 		$query = "DELETE FROM $table_message " .
-				 "WHERE user_sender_id=".Database::escape_string($user_sender_id)." AND id=".Database::escape_string($id);
-		
+				 "WHERE user_sender_id=".Database::escape_string($user_sender_id)." AND id=".Database::escape_string($id);		
 		$result = api_sql_query($query,__FILE__,__LINE__);
 		return $result;		
 	}
@@ -252,7 +264,7 @@ class MessageManager {
 	}
 	/**
 	 * Gets information about messages sent
-	 * @author Isaac FLores Paz <isaac.flores@dokeos.com>
+	 * @author Isaac FLores Paz <isaac.flores@dokeos.com> 
 	 * @param  integer
 	 * @param  integer
 	 * @param  string
@@ -260,6 +272,13 @@ class MessageManager {
 	 */
 	 public static function get_message_data_sent ($from, $number_of_items, $column, $direction) {
 	 	global $charset;
+	 	
+	 	$from = intval($from);
+		$number_of_items = intval($number_of_items);
+		$column = intval($column);
+		if (!in_array($direction, array('ASC', 'DESC')))
+			$direction = 'ASC'; 
+			
 		$table_message = Database::get_main_table(TABLE_MESSAGE); 
 		$request=api_is_xml_http_request();
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, user_receiver_id as col4, msg_status as col5 FROM $table_message " .
@@ -315,15 +334,17 @@ class MessageManager {
 	public static function show_message_box () {
 		global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
-		if (isset($_GET['id_send'])) {
-			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".$_GET['id_send']." AND msg_status=4;";
+		if (isset($_GET['id_send']) && is_numeric($_GET['id_send'])) {			
+			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".Database::escape_string($_GET['id_send'])." AND msg_status=4;";
 			$result = api_sql_query($query,__FILE__,__LINE__);
 		    $path='outbox.php';
 		} else {
-			$query = "UPDATE $table_message SET msg_status = '0' WHERE user_receiver_id=".api_get_user_id()." AND id='".Database::escape_string($_GET['id'])."';";
-			$result = api_sql_query($query,__FILE__,__LINE__);
-			$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".Database::escape_string($_GET['id'])."';";
-			$result = api_sql_query($query,__FILE__,__LINE__);
+			if (is_numeric($_GET['id'])) {
+				$query = "UPDATE $table_message SET msg_status = '0' WHERE user_receiver_id=".api_get_user_id()." AND id='".Database::escape_string($_GET['id'])."';";
+				$result = api_sql_query($query,__FILE__,__LINE__);
+				$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".Database::escape_string($_GET['id'])."';";
+				$result = api_sql_query($query,__FILE__,__LINE__);
+			}
 			$path='inbox.php';
 		}
 		$row = Database::fetch_array($result);
@@ -334,7 +355,9 @@ class MessageManager {
 			if ($row[1]==$user_con[$i])
 				$band=1;	
 		if ($band==1 && !isset($_GET['id_send'])) {
-			$reply = '<a onclick="reply_to_messages(\'show\','.$_GET['id'].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',api_xml_http_response_encode(get_lang('ReplyToMessage'))).api_xml_http_response_encode(get_lang('ReplyToMessage')).'</a>';
+			if (is_numeric($_GET['id'])) {
+				$reply = '<a onclick="reply_to_messages(\'show\','.Security::remove_XSS($_GET['id']).',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',api_xml_http_response_encode(get_lang('ReplyToMessage'))).api_xml_http_response_encode(get_lang('ReplyToMessage')).'</a>';
+			}
 		}
 		echo '<div class=actions>';
 		echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',api_xml_http_response_encode(get_lang('BackToInbox'))).api_xml_http_response_encode(get_lang('BackToInbox')).'</a>';
@@ -375,8 +398,10 @@ class MessageManager {
 	public static function show_message_box_sent () {
 		global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
-		$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".$_GET['id_send']." AND msg_status=4;";
-		$result = api_sql_query($query,__FILE__,__LINE__);
+		if (is_numeric($_GET['id_send'])) {
+			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".Database::escape_string($_GET['id_send'])." AND msg_status=4;";		
+			$result = api_sql_query($query,__FILE__,__LINE__);
+		}
 		$path='outbox.php';
 		
 		$row = Database::fetch_array($result);

@@ -50,7 +50,7 @@ include('../inc/global.inc.php');
 $this_section=SECTION_COURSES; 
 
 // including additional library scripts
-require_once 'wiki.inc.php';
+
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'text.lib.php');
@@ -60,6 +60,7 @@ require_once (api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 require_once (api_get_path(INCLUDE_PATH).'conf/mail.conf.php');
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once 'wiki.inc.php';
 
 // additional style information
 $htmlHeadXtra[] ='<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'wiki/css/default.css"/>';

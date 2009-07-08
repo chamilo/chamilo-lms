@@ -418,10 +418,11 @@ class TestCourse extends UnitTestCase{
 	}
 	
 	public function testGetCourseIdFromPath(){
-		$path = '0001';
+		$path = '/var/www/path';
 		$res = $this->tcourse->get_course_id_from_path($path);
-		$this->assertTrue(is_string($res));
-		//$this->assertTrue( $this->tcourse->get_course_id_from_path()===false);
+		$this->assertTrue(is_bool($res));
+		$this->assertTrue($res === false);
+		$this->assertTrue( $this->tcourse->get_course_id_from_path()===false);
 	}
 	
 	public function testGetCoursesInfoFromVisualCode(){

@@ -102,7 +102,7 @@ class FlatViewTable extends SortableTable
 			// Cache definition   
 			$Cache = new pCache();
 			// the graph id
-			$gradebook_id = Security::remove_XSS($_GET['selectcat']);			
+			$gradebook_id = intval($_GET['selectcat']);			
 			$graph_id = api_get_user_id().'AverageResultsVsResource'.$gradebook_id.api_get_course_id();
 			$data = $DataSet->GetData();
 		
@@ -262,7 +262,7 @@ class FlatViewTable extends SortableTable
 					// Cache definition   
 					$Cache = new pCache();
 					// the graph id
-					$gradebook_id = Security::remove_XSS($_GET['selectcat']);			
+					$gradebook_id = intval($_GET['selectcat']);		 	
 					$graph_id = api_get_user_id().'ByResource'.$gradebook_id.api_get_course_id();
 										
 					if ($show_draw) {			

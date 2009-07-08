@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 20791 2009-05-18 17:47:11Z iflorespaz $
+<?php //$Id: announcements.inc.php 21903 2009-07-08 17:28:02Z juliomontoya $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -340,6 +340,9 @@ function load_edit_users($tool, $id)
 	global $_course;
 	global $tbl_item_property;
 	
+	$tool = Database::escape_string($tool);
+	$id = Database::escape_string($id);
+	
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 	$result=api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
 	while ($row=Database::fetch_array($result))
@@ -632,12 +635,9 @@ function sent_to_form($sent_to_array)
 */
 function separate_users_groups($to)
 {
-	foreach($to as $to_item)
-	{
+	foreach($to as $to_item) {
 		list($type, $id) = explode(':', $to_item);
-
-		switch($type)
-		{
+		switch($type) {
 			case 'GROUP':
 				$grouplist[] =$id;
 				break;
@@ -665,12 +665,18 @@ function sent_to($tool, $id)
 {
 	global $_course;
 	global $tbl_item_property;
-
+	
+	$tool = Database::escape_string($tool);
+	$id = Database::escape_string($id);
+	
+	$sent_to_group = array();
+	$sent_to = array();	
+	
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='".$id."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 
-	while ($row=Database::fetch_array($result))
-	{
+	
+	while ($row=Database::fetch_array($result)) {
 		// if to_group_id is null then it is sent to a specific user
 		// if to_group_id = 0 then it is sent to everybody
 		if (!is_null($row['to_group_id']))
@@ -707,7 +713,10 @@ function change_visibility_announcement($tool,$id)
 {
 	global $_course;
 	global $tbl_item_property;	
-
+	
+	$tool = Database::escape_string($tool);
+	$id = Database::escape_string($id);
+	
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 
 	$result=api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
@@ -766,7 +775,7 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 		{
 			foreach ($send_to['users'] as $user)
 			{
-					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], '', $user);
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], '', $user);
 			}
 		}
 	}
@@ -793,7 +802,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
 	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGERLOWSECURITY));
 	$order = intval($order);
-	// store in the table announcement
+	// store in the table announcement	
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
 	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
 	$last_id= Database::get_last_insert_id();
@@ -901,14 +910,11 @@ function send_announcement_email($user_list, $course_code, $_course, $mail_title
 	global $charset;
 	global $_user;
 			
-	foreach ($user_list as $this_user)
-	{
-		/*    Header : Bericht van uw lesgever - GES ($course_code) - Morgen geen les! ($mail_title)
-				Body :   John Doe (prenom + nom) <john_doe@hotmail.com> (email)
-
-						Morgen geen les! ($mail_title)
-
-						Morgen is er geen les, de les wordt geschrapt wegens vergadering (newContent)
+	foreach ($user_list as $this_user) {
+		/*  Header : Bericht van uw lesgever - GES ($course_code) - Morgen geen les! ($mail_title)
+			Body :  John Doe (prenom + nom) <john_doe@hotmail.com> (email)
+					Morgen geen les! ($mail_title)
+					Morgen is er geen les, de les wordt geschrapt wegens vergadering (newContent)
 		*/
 		$mail_subject = get_lang('professorMessage').' - '.$_course['official_code'].' - '.$mail_title;
 
@@ -931,41 +937,52 @@ function update_mail_sent($insert_id)
 {
 	global $_course;
 	global $tbl_announcement;
-
+	if ($insert_id != strval(intval($insert_id))) { return false; } 
+	$insert_id = Database::escape_string($insert_id);
 	// store the modifications in the table tbl_annoucement
 	$sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE id='$insert_id'";
 	api_sql_query($sql,__FILE__,__LINE__);
 }
 
+/**
+ * Gets all announcements from a user by course 
+ * @param	string course db
+ * @param	int user id 
+ * @return	string an html with the content
+ */
 function get_all_annoucement_by_user_course($course_db, $user_id)
 {	
 	$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db);
 	$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
-
-	$sql="SELECT announcement.*, toolitemproperties.*
-					FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-					WHERE announcement.id = toolitemproperties.ref
-					AND toolitemproperties.tool='announcement'
-					AND (toolitemproperties.insert_user_id='".$user_id."' AND toolitemproperties.to_group_id='0')
-					AND toolitemproperties.visibility='1'
-					AND announcement.session_id  = 0
-					ORDER BY display_order DESC";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
-	$num_rows = Database::num_rows($result);
-	$content = '';
-	$i=0;
-	if (Database::num_rows($result)>0) {
-		while ($myrow = Database::fetch_array($result)) {
-			if ($i<=4) {
-				$content.= '<strong>'.$myrow['title'].'</strong><br /><br />';
-				$content.= $myrow['content'];
-			} else {
-				break;
+	if (!empty($user_id) && is_numeric($user_id)) {
+		$user_id = Database::escape_string($user_id);
+		$sql="SELECT announcement.*, toolitemproperties.*
+						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+						WHERE announcement.id = toolitemproperties.ref
+						AND toolitemproperties.tool='announcement'
+						AND (toolitemproperties.insert_user_id='".$user_id."' AND toolitemproperties.to_group_id='0')
+						AND toolitemproperties.visibility='1'
+						AND announcement.session_id  = 0
+						ORDER BY display_order DESC";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$num_rows = Database::num_rows($result);
+		$content = '';
+		$i=0;
+		if (Database::num_rows($result)>0) {
+			while ($myrow = Database::fetch_array($result)) {
+				if ($i<=4) {
+					$content.= '<strong>'.$myrow['title'].'</strong><br /><br />';
+					$content.= $myrow['content'];
+				} else {
+					break;
+				}
+				$i++;
 			}
-			$i++;
+			return $content;
+		} else {
+			return $content;
 		}
-		return $content;
 	} else {
-		return $content;
+		return '';
 	}
 }

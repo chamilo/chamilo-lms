@@ -9,6 +9,8 @@
 * You may use, modify and redistribute this software as you wish.              *
 *******************************************************************************/
 
+include('../inc/global.inc.php');
+
 // Modified by Renato A.C. [html2fpdf.sf.net]
 // (look for 'EDITEI' in the code)
 
@@ -267,7 +269,19 @@ function AliasNbPages($alias='{nb}')
 function Error($msg)
 {
 	//Fatal error
-	die('<B>FPDF error: </B>'.$msg);
+	//die('<B>FPDF error: </B>'.$msg); // more info for debug
+		//Fatal error
+	die('<div style="position: relative;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-width: 1px;
+	border-style: solid;
+	padding: 5px;
+	border: 1px solid #FF0000;
+	color: #000;
+	background-color: #FFD1D1;
+	min-height: 30px;"><b>'.get_lang("ConvesionFailled").'</b></br>'.get_lang("FPDFerror").'</br></br></div>');
+	
 }
 
 function Open()

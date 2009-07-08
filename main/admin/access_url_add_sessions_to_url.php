@@ -46,7 +46,6 @@ if (!$_configuration['multiple_access_urls'])
 -----------------------------------------------------------
 */
 
-$users = $_GET['users'];
 $form_sent = 0;
 $first_letter_session = '';
 $sessions = array ();

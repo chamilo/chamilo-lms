@@ -66,7 +66,7 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 
 $access_url_id=1;
 if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
-	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']); 
+	$access_url_id = Security::remove_XSS(intval($_REQUEST['access_url_id'])); 
 }
 
 function search_sessions($needle, $id)

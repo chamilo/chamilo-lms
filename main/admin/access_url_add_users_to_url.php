@@ -45,7 +45,6 @@ if (!$_configuration['multiple_access_urls'])
 -----------------------------------------------------------
 */
 
-$users = $_GET['users'];
 $form_sent = 0;
 $first_letter_user = '';
 $first_letter_course = '';

@@ -305,7 +305,9 @@ class FCKeditor
 		$chars = array(
 			'&' => '%26',
 			'=' => '%3D',
-			'"' => '%22' ) ;
+			'"' => '%22',
+			'%' => '%25'
+		 ) ;
 
 		return strtr( $valueToEncode,  $chars ) ;
 	}
@@ -401,6 +403,18 @@ class FCKeditor
 								}
 							}
 						}
+					}
+					break;
+				case 'Width':
+					if (!isset($this->Config[$key])) {
+						$this->Config[$key] = (string) $value;
+						$this->Width = $this->Config[$key];
+					}
+					break;
+				case 'Height':
+					if (!isset($this->Config[$key])) {
+						$this->Config[$key] = (string) $value;
+						$this->Height = $this->Config[$key];
 					}
 					break;
 				default:

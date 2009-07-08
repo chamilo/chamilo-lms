@@ -12,9 +12,12 @@ $config['ToolbarSets']['Introduction'] = array(
 	array('Bold','Italic','Underline'),
 	array('JustifyLeft','JustifyCenter','JustifyRight')
 );
+
 /*
 $config['ToolbarSets']['IntroductionMaximized'] = array(
-	array('NewPage','FitWindow','-','PasteWord','-','Undo','Redo','-','SelectAll'),
-	...
+	array('FitWindow','-') // ...
 );
 */
+
+//$config['Width'] = '100%';
+//$config['Height'] = '300';

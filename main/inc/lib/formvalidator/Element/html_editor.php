@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 18283 2009-02-06 13:24:32Z ivantcholakov $
+// $Id: html_editor.php 21910 2009-07-08 19:49:15Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,7 +39,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 	 * @param   string  HTML editor  label
 	 * @param   string  Attributes for the textarea
 	 */
-	function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null)
+	function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null, $config = null)
 	{
 		global $fck_attribute;
 
@@ -54,9 +54,24 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$this->fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'] ;
 		$this -> fck_editor->Width = !empty($fck_attribute['Width']) ? $fck_attribute['Width'] : '990';
 		$this -> fck_editor->Height = !empty($fck_attribute['Height']) ? $fck_attribute['Height'] : '400';
-		
 		//We get the optionnals config parameters in $fck_attribute array
 		$this -> fck_editor->Config = !empty($fck_attribute['Config']) ? $fck_attribute['Config'] : array();
+
+		// This is an alternative (a better) way to pass configuration data to the editor.
+		if (is_array($config)) {
+			foreach ($config as $key => $value) {
+				$this->fck_editor->Config[$key] = $config[$key];
+			}
+			if (isset($config['ToolbarSet'])) {
+				$this->fck_editor->ToolbarSet = $config['ToolbarSet'];
+			}
+			if (isset($config['Width'])) {
+				$this->fck_editor->Width = $config['Width'];
+			}
+			if (isset($config['Height'])) {
+				$this->fck_editor->Height = $config['Height'];
+			}
+		}
 	}
 	
 	/**

@@ -56,11 +56,21 @@ FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
  * Plugins.
  */
 
-// Loading the integrated by the Dokeos team plugins, see myconfig.php.
+// Loading integrated by the Dokeos team plugins. To enable/disable them, see myconfig.php.
 FCKConfig.AvailableLanguages = 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh' ;
 FCKConfig.LoadPlugin = eval( '(' + FCKConfig.PageConfig.LoadPlugin + ')' ) ;
 for ( var i = 0 ; i < FCKConfig.LoadPlugin.length ; i++ ) {
-	FCKConfig.Plugins.Add( FCKConfig.LoadPlugin[i], FCKConfig.AvailableLanguages ) ;
+	switch ( FCKConfig.LoadPlugin[i] ) {
+		// These plugins do not need language files or they load lannguage files in their own way.
+		case 'dragresizetable':
+		case 'tablecommands':
+		case 'ImageManager':
+			FCKConfig.Plugins.Add( FCKConfig.LoadPlugin[i] ) ;
+			break ;
+		default:
+			// The rest of the plugins require loading language files.
+			FCKConfig.Plugins.Add( FCKConfig.LoadPlugin[i], FCKConfig.AvailableLanguages ) ;
+	}
 }
 
 // API-key for the "googlemaps" plugin.
@@ -203,15 +213,15 @@ FCKConfig.MediaUploadDeniedExtensions	= "" ;
  * Alternative settings for the advanced file manager mode.
  */
 
-// If you wish to alter some of the settings above and to make them
-// specific for the advanced file manager mode, you may do this within
-// the following "if" block.
 if (FCKConfig.PageConfig.AdvancedFileManager)
 {
+	// Hiding quick-upload tabs, so users not to get confused.
 	FCKConfig.LinkUpload = false ;
 	FCKConfig.ImageUpload = false ;
 	FCKConfig.MP3Upload = false ;
-	//FCKConfig.FlashUpload = false ; //See plugin
+	FCKConfig.FlashUpload = false ;
+	FCKConfig.VideoUpload = false ;
+	FCKConfig.MediaUpload = false ;
 }
 
 

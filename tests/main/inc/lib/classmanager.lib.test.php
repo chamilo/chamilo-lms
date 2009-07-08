@@ -86,5 +86,6 @@ class TestClassManager extends UnitTestCase {
 		$res=ClassManager::unsubscribe_user($user_id, $class_id);
 		$this->assertTrue(is_null($res));
 	}
+	
 }
 ?>

@@ -708,7 +708,7 @@ var FCKImageCommand = function( name )
 	this.Name = name ;
 	this.ImageProperties = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
 	this.ImageManager = null ;
-	FCK.Plugins.IsLoaded( 'ImageManager' )
+	if ( FCK.Plugins.IsLoaded( 'ImageManager' ) )
 	{
 		this.ImageManager = new FCKImageManager('ImageManager') ;
 	}

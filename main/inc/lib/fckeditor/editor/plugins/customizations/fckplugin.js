@@ -146,6 +146,29 @@ if ( !FCKConfig.ImagesIcon )
 
 /*
  **************************************************************************************
+ * Plugins.
+ **************************************************************************************
+ */
+
+// Checks whether a specified plugin has been loaded.
+FCK.Plugins.IsLoaded = function( name )
+{
+	if ( name )
+	{
+		for ( var i = 0 ; i < FCKConfig.Plugins.Items.length ; i++ )
+		{
+			if ( FCKConfig.Plugins.Items[i][0] == name )
+			{
+				return true ;
+			}
+		}
+	}
+	return false ;
+}
+
+
+/*
+ **************************************************************************************
  * Customizations by Julio Montoya for enabling the external template selection dialog.
  * December, 2008
  **************************************************************************************
@@ -685,15 +708,9 @@ var FCKImageCommand = function( name )
 	this.Name = name ;
 	this.ImageProperties = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
 	this.ImageManager = null ;
-	// Checking whether ImageManager plugin has been loaded or not.
-	// Thus, a platform administrator will be free safelly to turn this plugin off.
-	for ( var i = 0 ; i < FCKConfig.Plugins.Items.length ; i++ )
+	FCK.Plugins.IsLoaded( 'ImageManager' )
 	{
-		if ( FCKConfig.Plugins.Items[i][0] == 'ImageManager' )
-		{
-			this.ImageManager = new FCKImageManager('ImageManager') ;
-			break ;
-		}
+		this.ImageManager = new FCKImageManager('ImageManager') ;
 	}
 }
 
@@ -1128,8 +1145,11 @@ FCK.ContextMenu.RegisterListener( {
 
 		if ( tagName == 'IMG' && tag.getAttribute( '_fckmp3' ) )
 		{
-			menu.AddSeparator() ;
-			menu.AddItem( 'MP3', AudioTitle, AudioIcon ) ;
+			if ( FCK.Plugins.IsLoaded( 'audio' ) || FCK.Plugins.IsLoaded( 'MP3' ) )
+			{
+				menu.AddSeparator() ;
+				menu.AddItem( 'MP3', AudioTitle, AudioIcon ) ;
+			}
 		}
 	} }
 ) ;
@@ -1143,16 +1163,25 @@ FCK.ContextMenu.RegisterListener( {
 			switch ( FCK.GetVideoType( tag ) )
 			{
 				case 'embedded_video' :
-					menu.AddSeparator() ;
-					menu.AddItem( 'EmbedMovies', FCKLang.DlgEmbedMoviesTitle, FCKConfig.PluginsPath + 'fckEmbedMovies/embedmovies.gif' ) ;
+					if ( FCK.Plugins.IsLoaded( 'fckEmbedMovies' ) )
+					{
+						menu.AddSeparator() ;
+						menu.AddItem( 'EmbedMovies', FCKLang.DlgEmbedMoviesTitle, FCKConfig.PluginsPath + 'fckEmbedMovies/embedmovies.gif' ) ;
+					}
 					break ;
 				case 'youtube' :
-					menu.AddSeparator() ;
-					menu.AddItem( 'YouTube', FCKLang.YouTubeTip, FCKConfig.PluginsPath + 'youtube/youtube.gif' ) ;
+					if ( FCK.Plugins.IsLoaded( 'youtube' ) )
+					{
+						menu.AddSeparator() ;
+						menu.AddItem( 'YouTube', FCKLang.YouTubeTip, FCKConfig.PluginsPath + 'youtube/youtube.gif' ) ;
+					}
 					break ;
 				case 'flv' :
-					menu.AddSeparator() ;
-					menu.AddItem( 'flvPlayer', FCKLang.DlgFLVPlayerTitle, FCKConfig.PluginsPath + 'flvPlayer/flvPlayer.gif' ) ;
+					if ( FCK.Plugins.IsLoaded( 'flvPlayer' ) )
+					{
+						menu.AddSeparator() ;
+						menu.AddItem( 'flvPlayer', FCKLang.DlgFLVPlayerTitle, FCKConfig.PluginsPath + 'flvPlayer/flvPlayer.gif' ) ;
+					}
 					break ;
 				default :
 					break ;
@@ -1198,7 +1227,10 @@ FCK.RegisterDoubleClickHandler(
 	{
 		if ( tag.tagName == 'IMG' && tag.getAttribute( '_fckmp3' ) )
 		{
-			FCKCommands.GetCommand( 'MP3' ).Execute() ;
+			if ( FCK.Plugins.IsLoaded( 'audio' ) || FCK.Plugins.IsLoaded( 'MP3' ) )
+			{
+				FCKCommands.GetCommand( 'MP3' ).Execute() ;
+			}
 		}
 	}, 'IMG'
 ) ;	
@@ -1212,13 +1244,22 @@ FCK.RegisterDoubleClickHandler(
 			switch ( FCK.GetVideoType( tag ) )
 			{
 				case 'embedded_video' :
-					FCKCommands.GetCommand( 'EmbedMovies' ).Execute() ;
+					if ( FCK.Plugins.IsLoaded( 'fckEmbedMovies' ) )
+					{
+						FCKCommands.GetCommand( 'EmbedMovies' ).Execute() ;
+					}
 					break ;
 				case 'youtube' :
-					FCKCommands.GetCommand( 'YouTube' ).Execute() ;
+					if ( FCK.Plugins.IsLoaded( 'youtube' ) )
+					{
+						FCKCommands.GetCommand( 'YouTube' ).Execute() ;
+					}
 					break ;
 				case 'flv':
-					FCKCommands.GetCommand( 'flvPlayer' ).Execute() ;
+					if ( FCK.Plugins.IsLoaded( 'flvPlayer' ) )
+					{
+						FCKCommands.GetCommand( 'flvPlayer' ).Execute() ;
+					}
 					break ;
 				default :
 					break ;

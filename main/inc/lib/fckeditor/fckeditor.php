@@ -183,6 +183,7 @@ class FCKeditor
 		// 1-st level (the highest priority)
 		// Conficuration settings that are created during the initialization of
 		// an editor's instance, they are "hardcoded" by a developer.
+		// 'Width' and 'Height' might be exception of this rule.
 
 		// 2-nd level
 		// Configuration settings from myconfig.php.
@@ -370,20 +371,6 @@ class FCKeditor
 									if (!isset($this->Config[$key][$toolbar_name])) {
 										$this->Config[$key][$toolbar_name] = $toolbar_data;
 									}
-								}
-							}
-						}
-					}
-					break;
-				case 'ToolbarLocation':
-					if (!empty($toolbar_set) && $toolbar_set != 'Default') {
-						if (is_array($value)) {
-							foreach ($value as $toolbar_name => $toolbar_data) {
-								if ($toolbar_set == $toolbar_name) {		
-									if (!isset($this->Config[$key][$toolbar_name])) {
-										$this->Config[$key] = (string) $toolbar_data;
-									}
-									break;
 								}
 							}
 						}

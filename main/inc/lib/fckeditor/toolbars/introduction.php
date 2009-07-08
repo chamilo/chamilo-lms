@@ -31,6 +31,10 @@ $config['ToolbarSets']['IntroductionMaximized'] = array(
 // Possible values: true , false
 //$config['ToolbarStartExpanded'] = true;
 
+//This option sets the location of the toolbar.
+// Possible values: 'In' , 'None' , 'Out:[TargetId]' , 'Out:[TargetWindow]([TargetId])'
+//$config['ToolbarLocation'] = 'In';
+
 // A setting for blocking copy/paste functions of the editor.
 // This setting activates on leaners only. For users with other statuses there is no blocking copy/paste.
 // Possible values: true , false

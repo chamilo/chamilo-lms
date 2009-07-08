@@ -2,8 +2,10 @@
 // Course tools
 // Course introduction
 
-// The toolbar set that is visible when the editor has "normal" size.
-$config['ToolbarSets']['Introduction'] = array(
+// For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
+
+// This is the visible toolbar set when the editor has "normal" size.
+$config['ToolbarSets']['Normal'] = array(
 	array('NewPage','FitWindow','-','PasteWord','-','Undo','Redo','-','SelectAll'),
 	array('Link','Unlink','Anchor'),
 	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'),
@@ -15,10 +17,10 @@ $config['ToolbarSets']['Introduction'] = array(
 	array('JustifyLeft','JustifyCenter','JustifyRight')
 );
 
-/*
-// The toolbar set that is visible when the editor is maximized.
+// This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
-$config['ToolbarSets']['IntroductionMaximized'] = array(
+/*
+$config['ToolbarSets']['Maximized'] = array(
 	array('FitWindow','-') // ...
 );
 */

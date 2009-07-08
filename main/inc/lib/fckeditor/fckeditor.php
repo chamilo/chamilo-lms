@@ -366,11 +366,14 @@ class FCKeditor
 				case 'ToolbarSets':
 					if (!empty($toolbar_set) && $toolbar_set != 'Default') {
 						if (is_array($value)) {
-							foreach ($value as $toolbar_name => $toolbar_data) {
-								if ($toolbar_set == $toolbar_name || $toolbar_set_maximized == $toolbar_name) {
-									if (!isset($this->Config[$key][$toolbar_name])) {
-										$this->Config[$key][$toolbar_name] = $toolbar_data;
-									}
+							if (isset($value['Normal'])) {
+								if (!isset($this->Config[$key][$toolbar_set])) {
+									$this->Config[$key][$toolbar_set] = $value['Normal'];
+								}
+							}
+							if (isset($value['Maximized'])) {
+								if (!isset($this->Config[$key][$toolbar_set_maximized])) {
+									$this->Config[$key][$toolbar_set_maximized] = $value['Maximized'];
 								}
 							}
 						}
@@ -408,7 +411,7 @@ class FCKeditor
 		if (!isset($config['ToolbarSets'][$this->ToolbarSet])) {
 			if (preg_match('/[a-zA-Z_]+/', $config['ToolbarSets']['Directory']) && preg_match('/[a-zA-Z_]+/', $this->ToolbarSet)) { // Checks for increased security.
 				@include api_get_path(LIBRARY_PATH).'fckeditor/'.$config['ToolbarSets']['Directory'].'/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
-				if (!isset($config['ToolbarSets'][$this->ToolbarSet])) {
+				if (!isset($config['ToolbarSets']['Normal'])) {
 					$this->ToolbarSet = 'Default';
 				}
 			}

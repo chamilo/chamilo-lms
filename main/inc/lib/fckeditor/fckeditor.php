@@ -364,11 +364,10 @@ class FCKeditor
 					if (!empty($toolbar_set) && $toolbar_set != 'Default') {
 						if (is_array($value)) {
 							foreach ($value as $toolbar_name => $toolbar_data) {
-								if ($toolbar_set == $toolbar_name || $toolbar_set_maximized == $toolbar_name) {		
+								if ($toolbar_set == $toolbar_name || $toolbar_set_maximized == $toolbar_name) {
 									if (!isset($this->Config[$key][$toolbar_name])) {
 										$this->Config[$key][$toolbar_name] = $toolbar_data;
 									}
-									break;
 								}
 							}
 						}

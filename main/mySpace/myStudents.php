@@ -1,4 +1,4 @@
-<?php //$Id: myStudents.php 21050 2009-05-28 19:09:21Z ivantcholakov $
+<?php //$Id: myStudents.php 21874 2009-07-08 08:45:18Z herodoto $
 /* For licensing terms, see /dokeos_license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
@@ -194,7 +194,7 @@ if(!empty($_GET['student']))
 	echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=csv"><img src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 	if(!empty($a_infosUser['email']))
 	{
-		$sendMail = Display::encrypted_mailto_link($a_infosUser['email'], /*Display::return_icon('send_mail.gif').' '.*/get_lang('SendMail'));
+		$sendMail = Display::return_icon('send_mail.gif',get_lang('SendMail')).' '.Display::encrypted_mailto_link($a_infosUser['email'], get_lang('SendMail'));
 	}
 	else 
 	{

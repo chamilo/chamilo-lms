@@ -23,10 +23,20 @@ $config['ToolbarSets']['IntroductionMaximized'] = array(
 );
 */
 
+// Sets whether the toolbar can be collapsed/expanded or not.
+// Possible values: true , false
+//$config['ToolbarCanCollapse'] = true;
+
+// Sets how the editor's toolbar should start - expanded or collapsed.
+// Possible values: true , false
+//$config['ToolbarStartExpanded'] = true;
+
+// A setting for blocking copy/paste functions of the editor.
+// This setting activates on leaners only. For users with other statuses there is no blocking copy/paste.
+// Possible values: true , false
+//$config['BlockCopyPaste'] = false;
+
 // Here new width and height of the editor may be set.
+// Possible values, examples: 300 , '250' , '100%' , ...
 //$config['Width'] = '100%';
 //$config['Height'] = '300';
-
-// This setting activates on leaners only.
-// For users with other statuses there is no blocking copy/paste.
-//$config['BlockCopyPaste'] = false;

@@ -334,11 +334,15 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
     }
+	/** If there is not a session name not return nothing, return null
+	 * @author aportugal
+	 */
 	
     function testApiGetSessionName(){
-   		$session_id['sesion_id']=1;
+   		$session_id='';
    		$res = api_get_session_name($session_id);
-   		$this->assertTrue(is_string($res));
+   		//$this->assertTrue(is_string($res));
+   		$this->assertTrue(is_null($res));
    		//var_dump($res);
     }
    			

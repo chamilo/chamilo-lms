@@ -338,7 +338,7 @@ class TestMainApi extends UnitTestCase {
     function testApiGetSessionName(){
    		$session_id['sesion_id']=1;
    		$res = api_get_session_name($session_id);
-   		$this->assertTrue(is_null($res));
+   		$this->assertTrue(is_string($res));
    		//var_dump($res);
     }
    			
@@ -633,9 +633,10 @@ class TestMainApi extends UnitTestCase {
 	}
 	
 	function testApiMaxSortValue(){
-	    $user=array('user_course_category'=>1, 'user_id'=>1);
-		$res= api_max_sort_value($user['user_course_category'],$user['user_id']);
-		$this->assertTrue(is_string($res));
+	    $user_course_category=1;
+	    $user_id =1;
+		$res= api_max_sort_value($user_course_category,$user_id);
+		$this->assertTrue(is_null($res));
 		//var_dump($res);	
 	}
 	

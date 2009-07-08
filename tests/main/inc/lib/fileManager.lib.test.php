@@ -1,5 +1,5 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'classmanager.lib.php');
+//require_once(api_get_path(LIBRARY_PATH).'classManager.lib.php');
 
 
 class TestFileManager extends UnitTestCase {
@@ -103,7 +103,7 @@ class TestFileManager extends UnitTestCase {
 	}
 	
 	public function testIndexDir(){ 
-		$path='course';
+		$path='/var/www/path/';
 	  	$res = index_dir($path);
 		$this->assertFalse(is_array($res));
 		$this->assertNull($res);
@@ -111,7 +111,7 @@ class TestFileManager extends UnitTestCase {
 	}
 	
 	public function testIndexAndSortDir(){
-		$path='documents';
+		$path='/var/www/path/';
 		$res = index_and_sort_dir($path);
 		$this->assertFalse($res);
 		$this->assertFalse(is_array($res));
@@ -132,7 +132,7 @@ class TestFileManager extends UnitTestCase {
 	} 
 	
 	public function testMkpath(){
-		$path='document';
+		$path='/var/www/path/';
 		$res =mkpath($path, $verbose=false);
 		$this->assertFalse($res);
 		$this->assertNull($res);
@@ -157,7 +157,7 @@ class TestFileManager extends UnitTestCase {
 	}
 	
 	public function testListAllDirectories(){
-		$path="document";
+		$path='/var/www/path/';
 		$res = $this->fmanager->list_all_directories($path);
 		$this->assertFalse($res);
 		$this->assertTrue(is_null($res));
@@ -182,7 +182,7 @@ class TestFileManager extends UnitTestCase {
 	}
 	
 	public function testSetDefaultSettings(){
-		$upload_path='documents';
+		$upload_path='/var/www/path/ruta';
 		$filename='doc';
 		$glued_table='xxx';
 		$res = $this->fmanager->set_default_settings($upload_path, $filename, $filetype="file", $glued_table, $default_visibility='v');
@@ -191,11 +191,11 @@ class TestFileManager extends UnitTestCase {
 	}
 	
 	public function testMkdirs(){
-		$path='document';
+		$path='/var/www/path/ruta';
 		$res = $this->fmanager->mkdirs($path);
-		$this->assertTrue($res);
+		$this->assertFalse($res);
 		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res === true);
+		$this->assertTrue($res === false);
 		//var_dump($res);
 
 	}

@@ -54,7 +54,7 @@ class Statistics
 			$sql .= " WHERE category_code = '".Database::escape_string($category_code)."'";
 		}
 		$res = api_sql_query($sql, __FILE__, __LINE__);
-		$obj = mysql_fetch_object($res);
+		$obj = Database::fetch_object($res);
 		return $obj->number;
 	}
 	/**
@@ -71,13 +71,13 @@ class Statistics
 		$course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 		$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 		
-		$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(mysql_real_escape_string($status))." ";
+		$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(Database::escape_string($status))." ";
 		if (isset ($category_code))
 		{
 			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'";
 		}
 		$res = api_sql_query($sql, __FILE__, __LINE__);
-		$obj = mysql_fetch_object($res);
+		$obj = Database::fetch_object($res);
 		return $obj->number;
 	}
 	/**
@@ -90,7 +90,7 @@ class Statistics
 		$sql = "SELECT * FROM $category_table ORDER BY tree_pos";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$categories = array ();
-		while ($category = mysql_fetch_object($res))
+		while ($category = Database::fetch_object($res))
 		{
 			$categories[$category->code] = $category->name;
 		}
@@ -202,7 +202,7 @@ class Statistics
 		}
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$result = array();
-		while($obj = mysql_fetch_object($res))
+		while($obj = Database::fetch_object($res))
 		{
 			$result[$obj->stat_date] = $obj->number_of_logins;
 		}
@@ -222,7 +222,7 @@ class Statistics
 		foreach($sql as $index => $query)
 		{
 			$res = api_sql_query($query,__FILE__,__LINE__);
-			$obj = mysql_fetch_object($res);
+			$obj = Database::fetch_object($res);
 			$total_logins[$index] = $obj->number;
 		}
 		Statistics::print_stats(get_lang('Logins'),$total_logins,false);
@@ -237,7 +237,7 @@ class Statistics
 		$sql = "SELECT access_tool, count( access_id ) AS number_of_logins FROM $table WHERE access_tool IN ('".implode("','",$tools)."') GROUP BY access_tool ";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$result = array();
-		while($obj = mysql_fetch_object($res))
+		while($obj = Database::fetch_object($res))
 		{
 			$result[$obj->access_tool] = $obj->number_of_logins;
 		}
@@ -252,7 +252,7 @@ class Statistics
 		$sql = "SELECT course_language, count( code ) AS number_of_courses FROM $table GROUP BY course_language ";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$result = array();
-		while($obj = mysql_fetch_object($res))
+		while($obj = Database::fetch_object($res))
 		{
 			$result[$obj->course_language] = $obj->number_of_courses;
 		}
@@ -266,10 +266,10 @@ class Statistics
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT COUNT(*) AS n FROM $user_table";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$count1 = mysql_fetch_object($res);
+		$count1 = Database::fetch_object($res);
 		$sql = "SELECT COUNT(*) AS n FROM $user_table WHERE LENGTH(picture_uri) > 0";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$count2 = mysql_fetch_object($res);
+		$count2 = Database::fetch_object($res);
 		$result[get_lang('No')] = $count1->n - $count2->n; // #users without picture
 		$result[get_lang('Yes')] = $count2->n; // #users with picture
 		Statistics::print_stats(get_lang('CountUsers').' ('.get_lang('UserPicture').')',$result,true);
@@ -287,7 +287,7 @@ class Statistics
 		$page_nr 	= isset($_GET['page_nr'])  ? intval($_GET['page_nr']) : 1;
 		$column 	= isset($_GET['column'])   ? intval($_GET['column']) : 0;
 		$date_diff 	= isset($_GET['date_diff'])? intval($_GET['date_diff']) : 60;
-	    if(!in_array($direction,array(SORT_ASC,SORT_DESC))){
+	    if(!in_array($_GET['direction'],array(SORT_ASC,SORT_DESC))){
 	    	$direction = SORT_ASC;
 	    } else {
 	    	$direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
@@ -306,16 +306,16 @@ class Statistics
 			$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 			$sql = "SELECT * FROM $table GROUP BY access_cours_code HAVING access_cours_code <> '' AND DATEDIFF( NOW() , access_date ) >= ". $date_diff;
 			$res = api_sql_query($sql,__FILE__,__LINE__);
-			$number_of_courses = mysql_num_rows($res);
+			$number_of_courses = Database::num_rows($res);
 			$sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
 			$from = ($page_nr -1) * $per_page;
 			$sql .= ' LIMIT '.$from.','.$per_page;
 			echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
 			$res = api_sql_query($sql, __FILE__, __LINE__);
-			if (mysql_num_rows($res) > 0)
+			if (Database::num_rows($res) > 0)
 			{
 				$courses = array ();
-				while ($obj = mysql_fetch_object($res))
+				while ($obj = Database::fetch_object($res))
 				{
 					$course = array ();
 					$course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';

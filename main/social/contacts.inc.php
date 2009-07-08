@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /dokeos_license.txt */
+
 $language_file = array('registration','messages','userInfo','admin');
 require '../inc/global.inc.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';

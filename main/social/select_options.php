@@ -1,11 +1,12 @@
 <?php
+/* For licensing terms, see /dokeos_license.txt */
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset = true;
 require '../inc/global.inc.php';
 $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 $tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_my_user_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
-$search=Security::remove_XSS($_POST['search']);
+$search=Database::escape_string(Security::remove_XSS($_POST['search'])); 
 $current_date=date('Y-m-d H:i:s',time()); 
 $html_form='<select id="id_search_name" name="id_search_name" size="8"" style="width:350px;">';
 $user_id = api_get_user_id();

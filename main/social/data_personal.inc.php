@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) Julio Montoya Armas
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 
 $language_file = array('registration','messages','userInfo','admin','forum','blog');
 require_once '../inc/global.inc.php';
@@ -31,11 +11,10 @@ require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 $user_info= UserManager::get_user_info_by_id(api_get_user_id());
 $img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);
 
-
 if (isset($_POST['load_ajax'])) {
 	require_once api_get_path(LIBRARY_PATH).'blog.lib.php';
 	require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';	
-	$user_id = $_SESSION['social_user_id'];
+	$user_id = intval($_SESSION['social_user_id']);
 	if ($_POST['action']) {$action = $_POST['action'];}
 	switch($action) {
 		case 'load_course' :

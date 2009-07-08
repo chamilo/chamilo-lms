@@ -6,6 +6,7 @@
 * @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
 * @package dokeos.social
 */
+
 /**
  * Init
  */
@@ -193,8 +194,8 @@ $interbreadcrumb[]= array (
 	'name' => get_lang('ViewMySharedProfile')
 );
 
-if (isset($_GET['u'])) {
-	$info_user=api_get_user_info(Security::remove_XSS($_GET['u']));	
+if (isset($_GET['u']) && is_numeric($_GET['u'])) {
+	$info_user=api_get_user_info($_GET['u']);	
 	$interbreadcrumb[]= array (
 		'url' => '#',
 		'name' => $info_user['firstName'].' '.$info_user['lastName']

@@ -1,5 +1,5 @@
 <?php
-
+require_once(api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 class TestFileDisplay extends UnitTestCase {
 	
 	public function TestFileDisplay(){
@@ -26,15 +26,12 @@ class TestFileDisplay extends UnitTestCase {
 	}
 	
 	public function testChooseImage(){
-		//$file_name='';
-		ob_start();
-		$res =choose_image();
-		//$res =ob_get_contents();
-		ob_end_clean();
+		static $type, $image;
+		$file_name = '';
+		$res = choose_image($file_name);
 		$this->assertEqual($res,'defaut.gif');
 		$this->assertTrue(is_string($res));
-		//var_dump($res);
-
+		//var_dump($file_name);		
 	}
 	
 	public function testFormatFileSize(){

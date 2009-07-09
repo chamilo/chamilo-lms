@@ -1,4 +1,4 @@
-<?php // $Id: link.php 21666 2009-06-30 00:20:57Z iflorespaz $
+<?php // $Id: link.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -186,11 +186,7 @@ if(isset($_GET['action'])) {
 	Introduction section
 -----------------------------------------------------------
 */
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
-Display::display_introduction_section(TOOL_LINK,'left');
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+Display::display_introduction_section(TOOL_LINK);
 
 
 if (is_allowed_to_edit() and isset($_GET['action'])) {	

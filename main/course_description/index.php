@@ -1,4 +1,4 @@
-<?php // $Id: index.php 20808 2009-05-18 19:49:10Z juliomontoya $
+<?php // $Id: index.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -69,11 +69,7 @@ $nameTools = get_lang(TOOL_COURSE_DESCRIPTION);
 	Introduction section
 -----------------------------------------------------------
 */
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
 Display::display_introduction_section(TOOL_COURSE_DESCRIPTION);
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 
 // These settings are for the other instances of the online editor.

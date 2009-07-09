@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 21139 2009-05-31 19:14:47Z pcool $
+<?php //$Id: agenda.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -232,11 +232,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false,true) OR (api_get_course_sett
 //api_display_tool_title($nameTools);
 
 // Tool introduction
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
 Display::display_introduction_section(TOOL_CALENDAR_EVENT);
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 // insert an anchor (top) so one can jump back to the top of the page
 echo '<a name="top"></a>';

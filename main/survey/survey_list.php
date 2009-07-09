@@ -1,4 +1,4 @@
-<?php // $Id: survey_list.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+<?php // $Id: survey_list.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey_list.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+* 	@version $Id: survey_list.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 *
 * 	@todo use quickforms for the forms
 */
@@ -80,11 +80,7 @@ Display :: display_header($tool_name,'Survey');
 //api_display_tool_title($tool_name);
 
 // Tool introduction
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
 Display::display_introduction_section('survey', 'left');
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 // Action handling: searching
 if (isset ($_GET['search']) AND $_GET['search'] == 'advanced')

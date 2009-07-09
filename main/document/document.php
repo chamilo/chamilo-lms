@@ -1,4 +1,4 @@
-<?php // $Id: document.php 21696 2009-07-01 17:42:04Z iflorespaz $
+<?php // $Id: document.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -353,18 +353,14 @@ if($to_group_id !=0) //add group name after for group documents
 	(editable by course admins)
 -----------------------------------------------------------
 */
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
 if(!empty($_SESSION['_gid']))
 {
-	Display::display_introduction_section(TOOL_DOCUMENT.$_SESSION['_gid'],'left');
+	Display::display_introduction_section(TOOL_DOCUMENT.$_SESSION['_gid']);
 }
 else
 {
-	Display::display_introduction_section(TOOL_DOCUMENT,'left');
+	Display::display_introduction_section(TOOL_DOCUMENT);
 }
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 /*============================================================================*/
 

@@ -323,17 +323,13 @@ function search_widget_show($action='index.php') {
 
     
 	// Tool introduction
-   	$fck_attribute['Width'] = '100%';
-	$fck_attribute['Height'] = '300';
-	$fck_attribute['ToolbarSet'] = 'Introduction';
-    // TODO: Settings for the FCKEditor to be checked (insert an image for example). Probably this is a special case here.
+    // TODO: Settings for the online editor to be checked (insert an image for example). Probably this is a special case here.
     if (api_get_course_id() !== -1)
     if (!empty($_SESSION['_gid'])) {
-        Display::display_introduction_section(TOOL_SEARCH.$_SESSION['_gid'],'left');
+        Display::display_introduction_section(TOOL_SEARCH.$_SESSION['_gid']);
     } else {
-        Display::display_introduction_section(TOOL_SEARCH,'left');
+        Display::display_introduction_section(TOOL_SEARCH);
     }
-	$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 
     $op = 'or';

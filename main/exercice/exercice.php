@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 21708 2009-07-01 20:43:00Z iflorespaz $
+// $Id: exercice.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -531,11 +531,7 @@ include_once (api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 event_access_tool(TOOL_QUIZ);
 
 // Tool introduction
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
 Display :: display_introduction_section(TOOL_QUIZ);
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 // selects $limitExPage exercises at the same time
 $from = $page * $limitExPage;

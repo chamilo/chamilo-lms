@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 21120 2009-05-30 23:07:10Z iflorespaz $
+<?php //$Id: announcements.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -802,14 +802,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		     	Tool introduction
 ====================================================*/
 
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
 if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 	//api_display_tool_title($nameTools);
 	Display::display_introduction_section(TOOL_ANNOUNCEMENT);
 }
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 
 /*

@@ -1,4 +1,4 @@
-<?php //$Id: group_space.php 21665 2009-06-30 00:14:57Z iflorespaz $
+<?php //$Id: group_space.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -97,11 +97,7 @@ Display::display_header($nameTools.' '.stripslashes($current_group['name']),"Gro
 	(editable by course admin)
 -----------------------------------------------------------
 */
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
 Display::display_introduction_section(group_space_.$_SESSION['_gid']);
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 /*
 -----------------------------------------------------------

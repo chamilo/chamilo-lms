@@ -1,4 +1,4 @@
-<?php // $Id: group.php 21665 2009-06-30 00:14:57Z iflorespaz $
+<?php // $Id: group.php 21933 2009-07-09 06:08:22Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -98,11 +98,7 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath')
 Display::display_header(get_lang('Groups'));
 
 // Tool introduction
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
-Display::display_introduction_section(TOOL_GROUP,'left');
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+Display::display_introduction_section(TOOL_GROUP);
 
 /*
  * Self-registration and unregistration

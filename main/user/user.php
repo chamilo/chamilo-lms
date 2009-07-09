@@ -1,4 +1,4 @@
-<?php // $Id: user.php 21077 2009-05-29 16:48:33Z juliomontoya $
+<?php // $Id: user.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -326,11 +326,7 @@ $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) && $_configuration['
 
 
 // Tool introduction
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
 Display::display_introduction_section(TOOL_USER, 'left');
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 
 if ( api_is_allowed_to_edit()) {

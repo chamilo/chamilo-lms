@@ -1,4 +1,4 @@
-<?php //$Id: work.php 21161 2009-06-01 16:00:06Z cfasanando $
+<?php //$Id: work.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 21161 2009-06-01 16:00:06Z cfasanando $
+*  	@version $Id: work.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -407,11 +407,7 @@ if ($origin=='learnpath') {
 	echo '<div style="height:15px">&nbsp;</div>';
 }
 
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
-Display :: display_introduction_section(TOOL_STUDENTPUBLICATION,'left');
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
 
 /*
 -----------------------------------------------------------

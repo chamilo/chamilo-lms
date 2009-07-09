@@ -116,14 +116,8 @@ if ($origin=='learnpath') {
 // Display the tool title
 // api_display_tool_title($nameTools);
 
-// tool introduction
-
 // Tool introduction
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
-Display::display_introduction_section(TOOL_FORUM,'left');
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+Display::display_introduction_section(TOOL_FORUM);
 
 // tracking
 event_access_tool(TOOL_FORUM);

@@ -1,4 +1,4 @@
-<?php // $Id: languages.php 19999 2009-04-23 00:14:09Z yannoo $
+<?php // $Id: languages.php 21947 2009-07-09 13:10:37Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -26,7 +26,7 @@ $language_file = 'admin';
 $cidReset = true;
 
 // include global script
-include ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -39,6 +39,29 @@ $tbl_settings_current 	= Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT)
 		STORING THE CHANGES
 ============================================================================== 
 */
+//Add function
+function check_if_language_is_sub_language ($language_id) {
+	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
+	$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE id="'.$language_id.'" AND NOT ISNULL(parent_id)';
+    $rs=Database::query($sql,__FILE__,__LINE__);
+
+    if (Database::num_rows($rs)>0 && Database::result($rs,'0','count')==1) {
+    	return true;
+    } else {
+    	return false;
+    }
+}
+function check_if_language_is_father ($language_id) {
+	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
+	$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE parent_id="'.$language_id.'" AND NOT ISNULL(parent_id);';
+    $rs=Database::query($sql,__FILE__,__LINE__);
+
+    if (Database::num_rows($rs)>0 && Database::result($rs,'0','count')==1) {
+    	return true;
+    } else {
+    	return false;
+    }
+}
 // we change the availability
 if ($_GET['action'] == 'makeunavailable')
 {
@@ -104,6 +127,7 @@ elseif (isset($_POST['action']))
 	}
 }
 
+
 /*
 ============================================================================== 
 		MAIN CODE
@@ -164,12 +188,34 @@ while ($row = Database::fetch_array($result_select)) {
 		$setplatformlanguage = Display::return_icon('links.gif', get_lang('CurrentLanguagesPortal'));
 	} else {		
 		$setplatformlanguage = "<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault'))."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('link_na.gif',get_lang('SetLanguageAsDefault'))."</a>";
-	}		
-	if ($row['available'] == 1) {
-		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage;
+	}	
+	if (api_get_setting('allow_use_sub_language')=='true') {
+
+		$verified_if_is_sub_language=check_if_language_is_sub_language($row['id']);
+
+		if ($verified_if_is_sub_language===false) {
+			$verified_if_is_father=check_if_language_is_father ($row['id']);
+			$allow_use_sub_language = "&nbsp;<a href='new_sub_language.php?action=definenewsublanguage&id=".$row['id']."'>".Display::return_icon('mas.gif', get_lang('MakeAvailable'),array('width'=>'22','height'=>'22'))."</a>";		
+			if ($verified_if_is_father===true) {
+				$allow_add_term_sub_language = "&nbsp;<a href='register_sub_language.php?action=registersublanguage&id=".$row['id']."'>".Display::return_icon('2rightarrow.gif', get_lang('MakeAvailable'),array('width'=>'22','height'=>'22'))."</a>";						
+			} else {
+				$allow_add_term_sub_language='';
+			}
+		} else {
+			$allow_use_sub_language='';
+			$allow_add_term_sub_language='';			
+		}
+		
 	} else {
-		$row_td[] = "<a href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.gif', get_lang('MakeAvailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage;
+		$allow_use_sub_language='';
+		$allow_add_term_sub_language='';
+	}	
+	if ($row['available'] == 1) {
+		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language;
+	} else {
+		$row_td[] = "<a href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.gif', get_lang('MakeAvailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language;
 	}
+
 	$language_data[] = $row_td;
 }
 

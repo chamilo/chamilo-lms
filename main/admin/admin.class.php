@@ -23,8 +23,8 @@ class AdminManager {
 	   $content_dir=array();
 	    if (is_dir($dokeos_path_folder)) {
 		    if ($dh = opendir($dokeos_path_folder)) {
-		        while (($file = readdir($dh)) !== false && $file != '.' && $file != '..') {
-		           if ($file{0}<>'.') {
+		        while (($file = readdir($dh)) !== false) {
+		           if ($file[0]<>'.' && substr($file,-4,strlen($file))=='.php') {
 		           	  $content_dir[]=$file;
 		           }
 		           

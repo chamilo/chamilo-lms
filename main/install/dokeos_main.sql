@@ -2130,3 +2130,8 @@ VALUES
 (4,'SocialGoodFriend'),
 (5,'SocialEnemy'),
 (6,'SocialDeleted');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_use_sub_language', NULL, 'radio', 'Platform', 'false', 'AllowUseSubLanguageTitle', 'AllowUseSubLanguageComment', NULL, NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_use_sub_language', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_use_sub_language', 'false', 'No');
+ALTER TABLE language ADD COLUMN parent_id tinyint unsigned;
+ALTER TABLE language ADD INDEX idx_dokeos_folder(dokeos_folder);

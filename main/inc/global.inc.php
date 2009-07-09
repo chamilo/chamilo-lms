@@ -597,7 +597,7 @@ $langpath = api_get_path(SYS_CODE_PATH).'lang/';
 
 if (is_array($language_files)) {
 	if (api_get_setting('allow_use_sub_language')=='true') {
-			foreach($language_files as $index => $language_file) {		
+		foreach ($language_files as $index => $language_file) {		
 			include $langpath.'english/'.$language_file.'.inc.php';
 			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
 			
@@ -616,7 +616,7 @@ if (is_array($language_files)) {
 			}
 		}	
 	} else {
-		foreach($language_files as $index => $language_file) {		
+		foreach ($language_files as $index => $language_file) {		
 			include $langpath.'english/'.$language_file.'.inc.php';
 			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
 			if (file_exists($langfile)) {

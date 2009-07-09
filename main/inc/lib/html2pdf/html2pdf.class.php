@@ -8,6 +8,17 @@
  * @author		Laurent MINGUET <webmaster@spipu.net>
  * @version		3.22a - 15/06/2009
  */
+ 
+ 
+/**
+* 	Author: Juan Carlos Raña.
+* 	forced to read first because another similar library (but different version) can be found elsewhere in the system
+*/
+ 
+$configurationPearPath = $configuration['root_sys'].'/main/inc/lib/html2pdf';
+ini_set('include_path', $configurationPearPath);
+
+/////
 
 if (!defined('__CLASS_HTML2PDF__'))
 {

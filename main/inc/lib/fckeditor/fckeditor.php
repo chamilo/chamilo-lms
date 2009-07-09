@@ -510,7 +510,6 @@ class FCKeditor
 					$config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/';
 					$config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/';
 					$config['BaseHref'] = $script_path;
-					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
 
 				} else {
 
@@ -518,7 +517,6 @@ class FCKeditor
 					$config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 					$config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 					$config['BaseHref'] = $script_path;
-					$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 				}
 			} else {
 
@@ -527,7 +525,6 @@ class FCKeditor
 				$config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
 				$config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document'.$group_properties['directory'].'/';
 				$config['BaseHref'] = $script_path;
-				$upload_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
 			}
 		} else {
 
@@ -537,7 +534,6 @@ class FCKeditor
 				$config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'home/default_platform_document/';
 				$config['CreateDocumentDir'] = api_get_path(WEB_PATH).'home/default_platform_document/'; // A side-effect is in use here.
 				$config['BaseHref'] = api_get_path(WEB_PATH).'home/default_platform_document/';
-				$upload_path = api_get_path(REL_PATH).'home/default_platform_document/';
 
 			} else {
 
@@ -545,7 +541,6 @@ class FCKeditor
 				$config['CreateDocumentWebDir'] = api_get_path('WEB_PATH').'main/upload/users/'.api_get_user_id().'/my_files/';
 				$config['CreateDocumentDir'] = $relative_path_prefix.'upload/users/'.api_get_user_id().'/my_files/';
 				$config['BaseHref'] = $script_path;
-				$upload_path = api_get_path(REL_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
 			}
 		}
 
@@ -564,34 +559,35 @@ class FCKeditor
 			// for links (any resource type)
 			$config['LinkBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 		} else {
+
 			// for images
-			$config['ImageBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Images&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+			$config['ImageBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Images&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php';
 			// for flash
-			$config['FlashBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Flash&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+			$config['FlashBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Flash&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php';
 			// for audio files (mp3)
-			$config['MP3BrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=MP3&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+			$config['MP3BrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=MP3&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php';
 			// for video
-			$config['VideoBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Video&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+			$config['VideoBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Video&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php';
 			// for video (flv)
-			$config['MediaBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+			$config['MediaBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Video/flv&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php';
 			// for links (any resource type)
-			$config['LinkBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=File&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php&ServerPath='.$upload_path;
+			$config['LinkBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=File&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php';
 		}
 
 		// URLs for making quick uplods for different resource types (file types).
 		// These URLs are used by the dialogs' quick upload tabs:
 		// for images
-		$config['ImageUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Images&ServerPath='.$upload_path;
+		$config['ImageUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Images';
 		// for flash
-		$config['FlashUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Flash&ServerPath='.$upload_path;
+		$config['FlashUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Flash';
 		// for audio files (mp3)
-		$config['MP3UploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=MP3&ServerPath='.$upload_path;
+		$config['MP3UploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=MP3';
 		// for video
-		$config['VideoUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Video&ServerPath='.$upload_path;
+		$config['VideoUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Video';
 		// for video (flv)
-		$config['MediaUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Video/flv&ServerPath='.$upload_path;
+		$config['MediaUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=Video/flv';
 		// for links (any resource type)
-		$config['LinkUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=File&ServerPath='.$upload_path;
+		$config['LinkUploadURL'] = $base_path.'editor/filemanager/connectors/php/upload.php?Type=File';
 
 		return $config;
 	}

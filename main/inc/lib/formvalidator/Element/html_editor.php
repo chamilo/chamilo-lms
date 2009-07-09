@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 21910 2009-07-08 19:49:15Z ivantcholakov $
+// $Id: html_editor.php 21931 2009-07-09 04:38:48Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -38,6 +38,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 	 * @param   string  HTML editor name/id
 	 * @param   string  HTML editor  label
 	 * @param   string  Attributes for the textarea
+	 * @param array $editor_config	Optional configuration settings for the online editor.
 	 */
 	function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null, $config = null)
 	{

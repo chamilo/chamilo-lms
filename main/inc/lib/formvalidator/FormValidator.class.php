@@ -139,10 +139,12 @@ EOT;
 	 * @param string $label The label for the form-element
 	 * @param string $name The element name
 	 * @param boolean $required Is the form-element required (default=true)
+	 * @param boolean $full_page When it is true, the editor loads completed html code for a full page.
+	 * @param array $editor_config	Optional configuration settings for the online editor.
 	 */
-	function add_html_editor($name, $label, $required = true, $full_page = false)
+	function add_html_editor($name, $label, $required = true, $full_page = false, $config = null)
 	{
-		$this->addElement('html_editor',$name,$label,'rows="15" cols="80"');
+		$this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
 		$this->applyFilter($name,'trim');
 		$html_type = STUDENT_HTML;
 		if(!empty($_SESSION['status']))

@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 19694 2009-04-09 21:45:33Z ivantcholakov $
+<?php // $Id: course_home.php 21931 2009-07-09 04:38:48Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -179,15 +179,13 @@ $reqdate="&reqdate=$temps";
 	(editable by course admins)
 -----------------------------------------------------------
 */
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Introduction';
-// A special case, some default settings do not fit. These settings should stay.
-$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
-$fck_attribute['Config']['CreateDocumentDir'] = 'document/';
-$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
-Display::display_introduction_section(TOOL_COURSE_HOMEPAGE);
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
+Display::display_introduction_section(TOOL_COURSE_HOMEPAGE, array(
+		'ToolbarSet' => 'Introduction',
+		'CreateDocumentWebDir' => api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/',
+		'CreateDocumentDir' => 'document/',
+		'BaseHref' => api_get_path('WEB_COURSE_PATH').api_get_course_path().'/'
+	)
+);
 
 /*
 -----------------------------------------------------------

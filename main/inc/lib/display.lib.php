@@ -91,10 +91,11 @@ class Display {
 	*
 	* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	* @param string $tool These are the constants that are used for indicating the tools.
+	* @param array $editor_config Optional configuration settings for the online editor.
 	* @return $tool return a string array list with the "define" in main_api.lib 
 	* @return html code for adding an introduction
 	*/
-	public function display_introduction_section($tool)
+	public function display_introduction_section($tool, $editor_config = null)
 	{
 		$is_allowed_to_edit = api_is_allowed_to_edit();
 		$moduleId = $tool;

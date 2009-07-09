@@ -48,7 +48,7 @@ if (!empty ($GLOBALS["_cid"])) {
 $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<div style="width: 80%; margin: 0px auto; padding-bottom: 10px; ">{element}</div>');
 
-$form->add_html_editor('intro_content',null,null,false);
+$form->add_html_editor('intro_content', null, null, false, $editor_config);
 $form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroText'), 'class="save"');
 
 

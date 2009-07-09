@@ -596,24 +596,35 @@ if( isset($language_file) )
 $langpath = api_get_path(SYS_CODE_PATH).'lang/';
 
 if (is_array($language_files)) {
-	foreach($language_files as $index => $language_file) {		
-		include $langpath.'english/'.$language_file.'.inc.php';
-		$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
-		
-		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
-		$sql_sub_language='SELECT dokeos_folder FROM '.$tbl_admin_languages.' WHERE parent_id=(SELECT id FROM '.$tbl_admin_languages.' WHERE dokeos_folder="'.Database::escape_string($language_interface).'" AND  ISNULL(parent_id))';
-		$rs_sub_language=Database::query($sql_sub_language,__FILE__,__LINE__);
-		$row_sub_language=Database::result($rs_sub_language,0,'dokeos_folder');
-		
-		$sub_langfile = $langpath.$row_sub_language.'/'.$language_file.'.inc.php';
-		
-		if (file_exists($langfile)) {
-			include $langfile;
-			if (file_exists($sub_langfile)) {
-				include $sub_langfile;
+	if (api_get_setting('allow_use_sub_language')=='true') {
+			foreach($language_files as $index => $language_file) {		
+			include $langpath.'english/'.$language_file.'.inc.php';
+			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
+			
+			$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
+			$sql_sub_language='SELECT dokeos_folder FROM '.$tbl_admin_languages.' WHERE parent_id=(SELECT id FROM '.$tbl_admin_languages.' WHERE dokeos_folder="'.Database::escape_string($language_interface).'" AND  ISNULL(parent_id))';
+			$rs_sub_language=Database::query($sql_sub_language,__FILE__,__LINE__);
+			$row_sub_language=Database::result($rs_sub_language,0,'dokeos_folder');
+			
+			$sub_langfile = $langpath.$row_sub_language.'/'.$language_file.'.inc.php';
+			
+			if (file_exists($langfile)) {
+				include $langfile;
+				if (file_exists($sub_langfile)) {
+					include $sub_langfile;
+				}
+			}
+		}	
+	} else {
+		foreach($language_files as $index => $language_file) {		
+			include $langpath.'english/'.$language_file.'.inc.php';
+			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
+			if (file_exists($langfile)) {
+				include $langfile;
 			}
 		}
 	}
+
 }
 
 // The global variable $charset has been defined in a language file too (trad4all.inc.php), this is legacy situation.

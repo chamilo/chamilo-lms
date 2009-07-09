@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 21931 2009-07-09 04:38:48Z ivantcholakov $
+<?php // $Id: course_home.php 21932 2009-07-09 05:07:14Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -180,7 +180,6 @@ $reqdate="&reqdate=$temps";
 -----------------------------------------------------------
 */
 Display::display_introduction_section(TOOL_COURSE_HOMEPAGE, array(
-		'ToolbarSet' => 'Introduction',
 		'CreateDocumentWebDir' => api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/',
 		'CreateDocumentDir' => 'document/',
 		'BaseHref' => api_get_path('WEB_COURSE_PATH').api_get_course_path().'/'

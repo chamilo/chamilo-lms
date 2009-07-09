@@ -48,6 +48,19 @@ if (!empty ($GLOBALS["_cid"])) {
 $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<div style="width: 80%; margin: 0px auto; padding-bottom: 10px; ">{element}</div>');
 
+$toolbar_set = 'Introduction';
+global $fck_attribute;
+if (is_array($fck_attribute) && isset($fck_attribute['Config']['ToolbarSet'])) {
+	$toolbar_set = $fck_attribute['Config']['ToolbarSet'];
+}
+if (is_array($editor_config)) {
+	if (!isset($editor_config['ToolbarSet'])) {
+		$editor_config['ToolbarSet'] = $toolbar_set;
+	}
+} else {
+	$editor_config = array('ToolbarSet' => 'Introduction');
+}
+
 $form->add_html_editor('intro_content', null, null, false, $editor_config);
 $form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroText'), 'class="save"');
 

@@ -1,4 +1,4 @@
-<?php //$Id: work.php 21933 2009-07-09 06:08:22Z ivantcholakov $
+<?php //$Id: work.php 21976 2009-07-10 19:06:28Z herodoto $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 21933 2009-07-09 06:08:22Z ivantcholakov $
+*  	@version $Id: work.php 21976 2009-07-10 19:06:28Z herodoto $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -1148,7 +1148,7 @@ if ($is_course_member) {
 			$form->addElement('html', $html);
 		} else {
 			// else standard upload option 
-			$form->addElement('file', 'file', get_lang('DownloadFile'), 'size="40" onchange="updateDocumentTitle(this.value)"');
+			$form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
 		}
 
 		$titleWork = $form->addElement('text', 'title', get_lang("TitleWork"), 'id="file_upload"  style="width: 350px;"');

@@ -40,7 +40,19 @@
 		// Test if we can access a parent property.
 		try
 		{
-			var test = window.opener.document.domain ;
+			// Modified by Ivan Tcholakov, July 11, 2009.
+			//var test = window.opener.document.domain ;
+			if ( window.opener )
+			{
+				// The file manager has been opened in a separate window.
+				var test = window.opener.document.domain ;
+			}
+			else
+			{
+				// The file manager in inside a dialog.
+				var test = window.parent.document.domain ;
+			}
+			//
 			break ;
 		}
 		catch( e )

@@ -29,8 +29,8 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript">
 
-//Initialization of some language variables.
-var FCKLang = window.parent.FCKLang ;
+// Initialization of some language variables.
+var FCKLang = window_top.FCKLang ;
 if ( !FCKLang['CreateNewFolder'] ) { FCKLang['CreateNewFolder'] = 'Create a folder' ; }
 FCKLang['NewFoderName'] = FCKLang['NewFoderName'] ? FCKLang['NewFoderName'] : 'Type the name of the new folder:' ;
 FCKLang['NewFoderNameRequest'] = FCKLang['NewFoderNameRequest'] ? FCKLang['NewFoderNameRequest'] : 'Please, type the folder name.' ;
@@ -97,8 +97,6 @@ function CreateFolderCallBack( fckXml )
 	}
 	*/
 }
-
-var window_top = window.parent ;
 
 window.onload = function()
 {

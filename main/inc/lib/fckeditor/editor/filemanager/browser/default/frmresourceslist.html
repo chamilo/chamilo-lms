@@ -30,7 +30,7 @@
 	<script type="text/javascript">
 
 //Initialization of some language variables.
-var FCKLang = window.parent.FCKLang ;
+var FCKLang = window_top.FCKLang ;
 FCKLang['ServerDidNotReturnProperXmlData'] = FCKLang['ServerDidNotReturnProperXmlData'] ? FCKLang['ServerDidNotReturnProperXmlData'] : 'The server didn\'t reply with a proper XML data. Please check your configuration.' ;
 
 var oListManager = new Object() ;
@@ -90,8 +90,6 @@ function OpenFolder( folderPath )
 	// Load the resources list for this folder.
 	window.parent.frames['frmFolders'].LoadFolders( folderPath ) ;
 }
-
-var window_top = window.parent ;
 
 function OpenFile( fileUrl )
 {

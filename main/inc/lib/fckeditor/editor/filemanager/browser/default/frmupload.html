@@ -30,7 +30,7 @@
 		<script type="text/javascript">
 
 // Initialization of some language variables.
-var FCKLang = window.parent.FCKLang ;
+var FCKLang = window_top.FCKLang ;
 if ( !FCKLang['UploadFile'] ) { FCKLang['UploadFile'] = 'Upload a file' ; }
 if ( !FCKLang['Upload'] ) { FCKLang['Upload'] = 'Upload' ; }
 if ( !FCKLang['UploadSelectFileFirst'] ) { FCKLang['UploadSelectFileFirst'] = 'Please, select a file before pressing the upload button.' ; }
@@ -100,8 +100,6 @@ function OnUploadCompleted( errorNumber, data )
 			break ;
 	}
 }
-
-var window_top = window.parent ;
 
 window.onload = function()
 {

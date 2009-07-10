@@ -22,6 +22,8 @@
  * File Browser dialog window.
  */
 
+var window_top = window.parent ;
+
 // Automatically detect the correct document.domain (#1919).
 (function()
 {
@@ -32,7 +34,19 @@
 		// Test if we can access a parent property.
 		try
 		{
-			var test = window.top.opener.document.domain ;
+			// Modified by Ivan Tcholakov, July 11, 2009.
+			//var test = window.top.opener.document.domain ;
+			if ( window.opener )
+			{
+				// The file manager has been opened in a separate window.
+				var test = window_top.opener.document.domain ;
+			}
+			else
+			{
+				// The file manager in inside a dialog.
+				var test = window_top.parent.document.domain ;
+			}
+			//
 			break ;
 		}
 		catch( e )

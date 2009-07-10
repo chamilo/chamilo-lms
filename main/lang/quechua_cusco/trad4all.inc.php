@@ -619,6 +619,7 @@ $Reserved = "Waqaychasqa";
 $SharedDocumentsDirectory = "Wayaqa qelqa khipukuna t\\\'aqapasqamanta";
 $Gallery = "Galería";
 $Audio = "Uyarina";
+$GoToQuestion = "Riy rapuyman";
 $Level = "T\'aqa";
 $Duration = "Unayñin ";
 $SearchPrefilterPrefix = "Campo específico para prefiltrado";

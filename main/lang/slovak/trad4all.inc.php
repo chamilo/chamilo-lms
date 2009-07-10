@@ -639,6 +639,7 @@ $Reserved = "Rezervovaný";
 $SharedDocumentsDirectory = "Katalóg zdie&#318;aných dokumentov";
 $Gallery = "Galéria";
 $Audio = "Audio";
+$GoToQuestion = "Cho&#271; na otázku";
 $Level = "Úrove&#328;";
 $Duration = "Trvanie";
 $MaxTimeAllowed = "Maximálny povolený &#269;as (min)";

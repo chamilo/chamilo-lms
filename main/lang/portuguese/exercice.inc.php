@@ -267,7 +267,6 @@ $ReachedTimeLimit = "Tempo limite atingido";
 $TryAgain = "Tentar novamente";
 $SeeTheory = "Ligação/link para a Teoria";
 $EndActivity = "Fim da actividade";
-$GoToQuestion = "Ir para a questão";
 $NoFeedback = "Exames (sem resposta/feedback)";
 $DirectFeedback = "Auto-avaliação (resposta/feedback imediato)";
 $FeedbackType = "Comentário";

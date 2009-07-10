@@ -675,6 +675,7 @@ $Reserved = "Reserved";
 $SharedDocumentsDirectory = "Shared documents directory";
 $Gallery = "Gallery";
 $Audio = "Audio";
+$GoToQuestion = "Go to question";
 $Level = "Level";
 $Duration = "Duration";
 $SearchPrefilterPrefix = "Specific Field for prefilter";
@@ -723,4 +724,8 @@ $Menu = "Menu";
 $BackToUserList = "Back to user list";
 $GraphicNotAvailable = "Graphic not available";
 $BackTo = "Back to";
+$ConversionFailled = "Conversion failled";
+$AlreadyExists = "Already exists";
+$TheNewWordHasBeenAdded = "The new word has been added";
+$CommentErrorExportDocument = "Some documents are too complex to be threated automatically by the document converter ";
 ?>

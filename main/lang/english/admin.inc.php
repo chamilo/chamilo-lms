@@ -988,4 +988,14 @@ $SearchDatabaseCorruptError = "Database corruption was detected";
 $SearchNetworkTimeoutError = "Timeout expired while communicating with a remote database";
 $SearchOtherXapianError = "Error in search engine";
 $SearchXapianModuleNotInstaled = "Xapian module not is instaled";
+$TheNewSubLanguageHasBeenAdd = "The new sub language has been add";
+$DeleteSubLanguage = "Delete sub language";
+$CreateSubLanguageForLanguage = "Create sub language for language";
+$DeleteSubLanguageFromLanguage = "Delete sub language from language";
+$CreateSubLanguage = "Create sub language";
+$RegisterTermsOfSubLanguageForLanguage = "Register terms of sub language for language";
+$AddTermsOfThisSubLanguage = "Add new terms for this sub language";
+$LoadLanguageFile = "Load language file";
+$AllowUseSubLanguageTitle = "Allow define sub-language";
+$AllowUseSubLanguageComment = "By enabling this option, you will be able to rename the variables that appear in the language selected for your portal";
 ?>

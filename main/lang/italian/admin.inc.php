@@ -988,4 +988,12 @@ $SearchDatabaseCorruptError = "Il database di indicizzazione è corrotto";
 $SearchNetworkTimeoutError = "Errore di timeout nella connessione al database remoto di indicizzazione";
 $SearchOtherXapianError = "Errore nel motore di ricerca";
 $SearchXapianModuleNotInstaled = "Il modulo Xapian non risulta installato";
+$TheNewSubLanguageHasBeenAdd = "La nuova articolazione della lingua è stata aggiunta";
+$DeleteSubLanguage = "Elimina articolazione della lingua";
+$CreateSubLanguageForLanguage = "Crea una articolazione della lingua";
+$DeleteSubLanguageFromLanguage = "Elimina una articolazione della lingua";
+$CreateSubLanguage = "Crea un\'articolazione della lingua";
+$RegisterTermsOfSubLanguageForLanguage = "Registra i termini specifici dell\'articolazione della lingua";
+$AddTermsOfThisSubLanguage = "Aggiungi dei termini all\'articolazione della lingua";
+$LoadLanguageFile = "Carica il file della lingua";
 ?>

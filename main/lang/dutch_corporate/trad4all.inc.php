@@ -558,6 +558,7 @@ $CreationDate = "Aanmaakdatum";
 $LastUpdateDate = "laatste aanpassing";
 $ViewHistoryChange = "Bekijk de historiek van wijzigingen";
 $FieldRequired = "Verplicht veld";
+$GoToQuestion = "Ga naar vraag";
 $SocialNetwork = "Sociaal netwerk";
 $TemplatePreview = "Voorbeeldweergave van het sjabloon";
 $NoTemplatePreview = "Voorbeeldweergave is niet beschikbaar";

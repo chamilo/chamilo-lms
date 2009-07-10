@@ -264,7 +264,6 @@ $ReachedTimeLimit = "Limita de timp atinsa";
 $TryAgain = "Incearca din nou";
 $SeeTheory = "Link la teorie";
 $EndActivity = "Sfarsitul activitatii";
-$GoToQuestion = "Mergi la intrebare";
 $NoFeedback = "Examen (nici un feedback)";
 $FeedbackType = "Reactie inversa";
 $Scenario = "Scenariu";

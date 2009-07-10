@@ -6,6 +6,7 @@ $langSubTitle = "Adds to your Course Homepage Main Menu a link to a site, a page
 $langAddPage            = "Sayfa ekle";
 $langSendPage           = "Gönderilecek sayfa";
 $langCouldNot           = "Dosya gönderilemedi";
+$langOkSentLink         = "Ba&#287;lant&#305;n&#305;z eklendi. &#350;imdi <a href=\"%s/index.php\">Anasayfa</a>dan eri&#351;ilebilir";
 $langTooBig             = "Gönderilecek dosyay&#305; seçmediniz veya dosya boyutu çok büyük";
 $langExplanation        = "Sayfa HTML format&#305;nda olmal&#305;d&#305;r (örnek: \"ilk_sayfa.htm\" . Bu sayfaya AnaSayfadan ba&#287;lant&#305; kurulacakt&#305;r, e&#287;er HTML olmayan (PDF, Word, Power Point, görüntüdosyas&#305; vb) bir dosya göndermek istiyorsan&#305;z <a href=../document/document.php>Belgeler</a> arac&#305;n&#305; kullan&#305;n.";
 $langPgTitle            = "Sayfa ismi";
@@ -20,4 +21,7 @@ $langEditLink = "Ders AnaSayfa ba&#287;lant&#305;s&#305;n&#305; düzenle";
 $langChangePress = "De&#287;i&#351;tir ve OK ye t&#305;kla";
 $langLinkChanged = "Ders anasayfas&#305;n&#305;n ba&#287;lant&#305;s&#305; de&#287;i&#351;ti. Ana menüye dönmek için yukar&#305;daki menüyü kullanabilirsiniz.";
 $NoLinkName = "Ba&#287;lant&#305; ismi yok";
+$NoLinkURL = "URL ba&#287;lant&#305;s&#305; yok";
+$LinkChanged = "Ba&#287;lant&#305; de&#287;i&#351;tirildi";
+$OkSentLink = "Ba&#287;lant&#305; gönderildi";
 ?>

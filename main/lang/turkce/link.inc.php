@@ -1,7 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinkName = "Baðlantý adý";
+$LinkMoved = "Ba&#287;lant&#305; ta&#351;&#305;nd&#305;";
+$langLinkName = "Ba&#287;lant&#305; Ad&#305;";
 $langLinkAdd = "Ba&#287;lant&#305; ekle";
 $langLinkAdded = "Ba&#287;lant&#305; eklendi";
 $langLinkMod = "Ba&#287;lant&#305; düzenle";
@@ -24,7 +25,7 @@ $langNoCategory = "Herhangi bir kategori bulunmuyor.";
 $showall = "Bütün kategorileri göster";
 $shownone = "Kategorileri gösterme";
 $langListDeleted = "Liste silindi";
-$langAddLink = "Baðlantý ekle";
+$langAddLink = "Ba&#287;lant&#305; ekle";
 $langDelList = "Tüm listeyi sil";
 $langModifyLink = "Ba&#287;lant&#305; düzenle";
 $langCsvImport = "Sunucuya bir CSV dosyas&#305; gönder";
@@ -41,4 +42,9 @@ $langAll_Link_Deleted = "Ba&#287;lant&#305; silindi";
 $langOnHomepage = "Ba&#287;lant&#305;y&#305; AnaSayfada göster";
 $langShowLinkOnHomepage = "Bu ba&#287;lant&#305;y&#305; Ders AnaSayfas&#305;nda simge olarak göster";
 $langCsvImport = "CSV al";
+$General = "Genel";
+$SearchFeatureDoIndexLink = "Ba&#287;lant&#305; ad&#305; ve tan&#305;m&#305;n&#305; indeksleBaðlantý ekle";
+$langSaveLink = "Ba&#287;lant&#305;y&#305; kaydet";
+$langSaveCategory = "Dizini kaydet";
+$BackToLinksOverview = "Ba&#287;lant&#305; görünümüne geri dön";
 ?>

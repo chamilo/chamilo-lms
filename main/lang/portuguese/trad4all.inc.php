@@ -645,6 +645,7 @@ $Accept = "Aceitar";
 $Reserved = "Reservado";
 $Gallery = "Galeria";
 $Audio = "Áudio";
+$GoToQuestion = "Ir para a questão";
 $Level = "Nível";
 $Duration = "Duração";
 $MaxTimeAllowed = "Tempo máximo permitido (minutos)";

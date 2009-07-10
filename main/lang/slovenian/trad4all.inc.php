@@ -675,6 +675,7 @@ $Reserved = "Rezervirano";
 $SharedDocumentsDirectory = "Mapa dokumentov v skupni rabi";
 $Gallery = "Galerija";
 $Audio = "Avdio";
+$GoToQuestion = "Pojdi na vprašanje";
 $Level = "Nivo";
 $Duration = "Trajanje";
 $SearchPrefilterPrefix = "Posebno polje za predfilter";

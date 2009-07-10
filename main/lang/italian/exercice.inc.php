@@ -267,7 +267,6 @@ $ReachedTimeLimit = "Limiti di tempo superati";
 $TryAgain = "Tenta di nuovo";
 $SeeTheory = "Vedi la teoria";
 $EndActivity = "Fine dell\'attività";
-$GoToQuestion = "Vai al quesito";
 $NoFeedback = "Esame (senza feedback)";
 $DirectFeedback = "Autovalutazione (feedback immediato)";
 $FeedbackType = "Valutazione:";
@@ -322,4 +321,6 @@ $ReachedTimeLimitAdmin = "Configura i limiti di tempo";
 $LastScoreTest = "Ultimo punteggio di un test";
 $BackToResultList = "Torna all\'elenco dei risultati";
 $EditingScoreCauseProblemsToExercisesInLP = "Se modifichi il punteggio di un quesito, ricorda che il Test è inserito in un modulo didattico: i punteggi del modulo potrebbero esserne influenzati ";
+$SelectExercice = "Seleziona un quesito";
+$YouHaveToSelectATest = "Devi selezionare un quesito";
 ?>

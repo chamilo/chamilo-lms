@@ -675,6 +675,7 @@ $Reserved = "Reservado";
 $SharedDocumentsDirectory = "Directorio de documentos compartidos";
 $Gallery = "Galería";
 $Audio = "Audio";
+$GoToQuestion = "Ir a la pregunta";
 $Level = "Nivel";
 $Duration = "Duración ";
 $SearchPrefilterPrefix = "Campo específico para prefiltrado";
@@ -723,4 +724,8 @@ $Menu = "Menú";
 $BackToUserList = "Regresar a lista de usurios";
 $GraphicNotAvailable = "Gráfico no disponible";
 $BackTo = "Volver a";
+$ConversionFailled = "Conversión fallida";
+$AlreadyExists = "Ya existe";
+$TheNewWordHasBeenAdded = "La nueva palabra ha sido añadida al subconjunto del idioma principal";
+$CommentErrorExportDocument = "Algunos documentos son demasiado complejos para su tratamiento automático mediante el conversor de documentos";
 ?>

@@ -267,7 +267,6 @@ $ReachedTimeLimit = "Limite de temps atteinte";
 $TryAgain = "Réessayer";
 $SeeTheory = "Voir la théorie";
 $EndActivity = "Fin de l\'activité";
-$GoToQuestion = "Aller à la question";
 $NoFeedback = "Pas de feedback";
 $DirectFeedback = "Immédiat en popup";
 $FeedbackType = "Feedback";

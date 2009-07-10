@@ -247,7 +247,6 @@ $Duration = "Trvanie";
 $TryAgain = "Skúste znova";
 $SeeTheory = "Odkaz na teóriu";
 $EndActivity = "Koniec aktivity";
-$GoToQuestion = "Cho&#271; na otázku";
 $NoFeedback = "Skúška (bez spätnej väzby)";
 $DirectFeedback = "Samo-hodnotenie (okamžitá spätná väzba)";
 $FeedbackType = "Hodnotenie :";

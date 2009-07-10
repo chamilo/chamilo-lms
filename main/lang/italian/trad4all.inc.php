@@ -675,6 +675,7 @@ $Reserved = "Prenotato";
 $SharedDocumentsDirectory = "Documenti condivisi";
 $Gallery = "Galleria";
 $Audio = "Audio";
+$GoToQuestion = "Vai al quesito";
 $Level = "Livello";
 $Duration = "Durata";
 $SearchPrefilterPrefix = "Campo specifico per pre-filtrare";
@@ -723,4 +724,8 @@ $Menu = "Menù";
 $BackToUserList = "Torna all\'elenco dei corsisti";
 $GraphicNotAvailable = "Grafico non disponibile";
 $BackTo = "Torna a";
+$ConversionFailled = "Conversione fallita";
+$AlreadyExists = "Già esistente";
+$TheNewWordHasBeenAdded = "Il nuovo termine è stato aggiunto";
+$CommentErrorExportDocument = "Alcuni documenti sono troppo complessi per essere trattati automaticamente dal sistema di conversione";
 ?>

@@ -988,4 +988,14 @@ $SearchDatabaseCorruptError = "Se detectó graves errores en la base de datos";
 $SearchNetworkTimeoutError = "Tiempo expirado mientras se conectaba a una base de datos remota";
 $SearchOtherXapianError = "Se ha producido un error relacionado al motor de indexación";
 $SearchXapianModuleNotInstaled = "El modulo xapian de php no está configurado en su servidor,póngase en contacto con su administrador";
+$TheNewSubLanguageHasBeenAdd = "El nuevo sub-idioma ha sido añadido con las siguientes referencias";
+$DeleteSubLanguage = "Eliminar sub-idioma";
+$CreateSubLanguageForLanguage = "Crear sub-idioma para el idioma";
+$DeleteSubLanguageFromLanguage = "Eliminar sub-idioma de idioma";
+$CreateSubLanguage = "Crear sub-idioma";
+$RegisterTermsOfSubLanguageForLanguage = "registrar términos del sub-idioma para el idioma";
+$AddTermsOfThisSubLanguage = "Añada sus nuevos términos para éste sub-idioma";
+$LoadLanguageFile = "Cargar fichero de idiomas";
+$AllowUseSubLanguageTitle = "Permite definir sub-idiomas";
+$AllowUseSubLanguageComment = "Al activar ésta opción,podrá renombrar las palabras que aparecen en el idioma seleccionado de  su portal dokeos";
 ?>

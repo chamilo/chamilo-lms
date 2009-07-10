@@ -586,6 +586,7 @@ $LastUpdateDate = "Ultima actualizare";
 $ViewHistoryChange = "Vizualizati istoricul modificarilor";
 $FieldRequired = "Spatiu obligatoriu";
 $NoParticipation = "Nu exista participan&#355;i";
+$GoToQuestion = "Mergi la intrebare";
 $SocialNetwork = "Retea sociala";
 $TemplatePreview = "Previzualizarea sablonului";
 $NoTemplatePreview = "Previzualizare nu este disponibila";

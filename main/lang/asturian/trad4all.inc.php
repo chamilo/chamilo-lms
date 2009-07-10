@@ -670,6 +670,7 @@ $Reserved = "Reserváu";
 $SharedDocumentsDirectory = "Direutoriu de documentos compartíos";
 $Gallery = "Galería";
 $Audio = "Audio";
+$GoToQuestion = "Dir a entruga";
 $Level = "Nivel";
 $Duration = "Duración";
 $SearchPrefilterPrefix = "Campu específicu pa prefiltráu";

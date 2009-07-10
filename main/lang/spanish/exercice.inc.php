@@ -267,7 +267,6 @@ $ReachedTimeLimit = "Ha llegado al tiempo límite";
 $TryAgain = "Intenta otra vez";
 $SeeTheory = "Revisar la teoría";
 $EndActivity = "Fin de la actividad";
-$GoToQuestion = "Ir a la pregunta";
 $NoFeedback = " Examen (sin feedback)";
 $DirectFeedback = "Autoevaluación (feedback inmediato)";
 $FeedbackType = "Evaluación";
@@ -323,4 +322,5 @@ $LastScoreTest = "Última puntuación de un ejercicio";
 $BackToResultList = "Volver a lista de resultados";
 $EditingScoreCauseProblemsToExercisesInLP = "Si edita el puntaje de esta pregunta modificará el resultado del ejercicio, recuerde que este ejercicio está agregado también a una Lección";
 $SelectExercice = "Seleccionar ejercicio";
+$YouHaveToSelectATest = "Debes seleccionar un ejercicio";
 ?>

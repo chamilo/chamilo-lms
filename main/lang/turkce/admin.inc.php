@@ -712,6 +712,7 @@ $FieldPossibleValues = "Olas&#305; de&#287;erler";
 $FieldPossibleValuesComment = "Yaln&#305;zca takrarlayan alanlar için verilir, noktal&#305; virgül (;) ile ay&#305;r&#305;n";
 $FieldTypeDate = "Tarih";
 $FieldTypeDatetime = "Tarih ve zaman";
+$UserFieldsAddHelp = "Bir kullan&#305;c&#305; alan&#305; eklemek çok basittir:<br />- bir kelime seçin, küçük harflerle tan&#305;mlay&#305;n,<br />- tipini seçin,<br />- kullan&#305;c&#305;ya gösterilecek bir metin girilmelidir (e&#287;er var olan bir isim seçerseniz BirthDate yada UserSex gibi, otomatik olarak di&#287;er diillere çevrilecektir.),<br />- e&#287;er çoklu tip seçerseniz (radio, select, multiple select), muhtemel seçenekleri de belirtmelisiniz (tekrarl&#305;yorum, Dokeos taki dil de&#287;i&#351;kenlerini kullan&#305;n&#305;z), noktal&#305; virgül ile ay&#305;r&#305;n,<br />- metin tipleri için, sabit bir de&#287;er seçebilirsiniz.<br /><br />Tamamlad&#305;ktan sonra, alan&#305; ekleyin ve görünür ve de&#287;i&#351;tirilip de&#287;i&#351;tirilemeyece&#287;ini belirtin. De&#287;i&#351;tirilebilir ama görünmez yapmak anlaml&#305; de&#287;ildir.";
 $AllowCourseThemeTitle = "Ders temalar&#305;na izin ver";
 $DisplayMiniMonthCalendarTitle = "Ajanda arac&#305;ndaki küçük ay takvimini görüntüle";
 $DisplayMiniMonthCalendarComment = "Bu özellik ders ajanda arac&#305;n&#305;n sol sutununda görünen küçük ay takvimini etkinle&#351;tirir ya da etkisiz k&#305;lar.";
@@ -773,4 +774,5 @@ $DokeosBlue = "Dokeos Mavi";
 $FruityOrange = "Meyve Turuncusu";
 $Medical = "Medikal";
 $AddNews  = "Haber ekle";
+$LoadLanguageFile = "Dil dosyas&#305;n&#305; yükle";
 ?>

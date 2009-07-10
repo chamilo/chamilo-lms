@@ -257,7 +257,6 @@ $ReachedTimeLimit = "Tijdslimiet bereikt";
 $TryAgain = "Probeer opnieuw";
 $SeeTheory = "link naar de theorie";
 $EndActivity = "Einde van de activiteit";
-$GoToQuestion = "Ga naar vraag";
 $NoFeedback = "Examen (géén feedback)";
 $FeedbackType = "Feedback";
 $Scenario = "Scenario";

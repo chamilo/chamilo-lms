@@ -267,7 +267,6 @@ $ReachedTimeLimit = "Časovna omejitev je dosežena";
 $TryAgain = "Poskusi ponovno";
 $SeeTheory = "Povezava na teoretične vsebine";
 $EndActivity = "Konec aktivnosti";
-$GoToQuestion = "Pojdi na vprašanje";
 $NoFeedback = "Test (brez povratnih informacij)";
 $DirectFeedback = "Samo-evalvacija (takojšna povratna informacija";
 $FeedbackType = "Povratna informacija";

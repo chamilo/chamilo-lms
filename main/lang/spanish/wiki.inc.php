@@ -155,4 +155,8 @@ $PageRestored = "La página ha sido restaurada. Puede verla haciendo clic en";
 $RestoredFromVersion = "Página restaurada desde la versión";
 $HWiki = "Ayuda: Wiki";
 $FirstSelectOnepage = "Primero seleccione una página";
+$ThisPageisBeginEditedBy = "En este momento esta página está siendo editada por";
+$ThisPageisBeginEditedTryLater = "Por favor, inténtelo más tarde. Si el usuario que actualmente está editando la página no la guarda, esta página quedará disponible en un máximo de";
+$EditedByAnotherUser = "sus cambios no serán guardados debido a que otro usuario modificó la página mientras Vd. la editaba";
+$WarningMaxEditingTime = "Tiene 20 minutos para editar esta página. Transcurrido este tiempo, si Vd. no ha guardado la página, otro usuario podrá modificarla y Vd. podrá perder sus cambios";
 ?>

@@ -266,7 +266,6 @@ $ReachedTimeLimit = "Chayarunki pacha tukukuyman";
 $TryAgain = "Hoqmanta ruway";
 $SeeTheory = "Revisar la teoría";
 $EndActivity = "Fin de la actividad";
-$GoToQuestion = "Riy rapuyman";
 $NoFeedback = " Examen (sin feedback)";
 $DirectFeedback = "Autoevaluación (feedback inmediato)";
 $FeedbackType = "Chaninchana:";

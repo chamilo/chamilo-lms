@@ -2,17 +2,18 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langCourseProgram  = "Descrição do curso";
-$langThisCourseDescriptionIsEmpty  = "Esse curso atualmente não está descrito";
-$langEditCourseProgram  = "Criar e editar uma descrição de curso";
-$QuestionPlan  = "Questão principal";
+$langThisCourseDescriptionIsEmpty  = "Descrição do curso não disponível.";
+$langEditCourseProgram  = "Criar ou editar uma descrição do curso";
+$QuestionPlan  = "Ajuda";
 $langInfo2Say  = "Informações para os usuários";
 $langOuAutreTitre  = "Título";
 $langNewBloc  = "Outro";
-$langAddCat  = "Adicionar Categoria";
+$langAddCat  = "Adicionar uma Categoria";
 $langAdd  = "Adicionar";
-$langValid  = "Validar";
-$langBackAndForget  = "Voltar e abandonar";
+$langValid  = "OK";
+$langBackAndForget  = "Cancelar";
 $CourseDescriptionUpdated = "A descrição do curso foi atualizada";
-$CourseDescriptionDeleted = "A descrição do curso foi apagada";
-$CourseDescriptionIntro = "Para criar uma descrição do curso, clique na respectiva rubrica e preencha o campo correto associado.<br><br> Clique em OK e preencha uma nova rubrica.";
+$CourseDescriptionDeleted = "A descrição do curso foi excluida";
+$CourseDescriptionIntro = " Para criar uma descrição do curso, clique em um título e preencha o campo associado.<br><br> Clique em OK para continuar.";
+$langSaveDescription = "Salvar descrição";
 ?>

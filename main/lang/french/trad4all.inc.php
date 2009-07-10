@@ -675,6 +675,7 @@ $Reserved = "Réservé";
 $SharedDocumentsDirectory = "Répertoire partagé";
 $Gallery = "Galerie";
 $Audio = "Audio";
+$GoToQuestion = "Aller à la question";
 $Level = "Niveau";
 $Duration = "Durée";
 $SearchPrefilterPrefix = "Pré-filtre";

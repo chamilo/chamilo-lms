@@ -29,39 +29,34 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript">
 
-// Initialization of some language variables.
-var FCKLang = [];
-
 if ( window.parent.opener )
 {
+	var FCKLang = [];
 	try
 	{
 		FCKLang = window.parent.opener.FCKLang ;
 	}
 	catch ( ex ) { }
 }
-
+else
+{
+	try
+	{
+		var dialog = window.parent.parent ;
+		var oEditor = dialog.InnerDialogLoaded() ;
+		var FCKLang = oEditor.FCKLang ;
+	}
+	catch ( ex ) { }
+}
 if ( !FCKLang )
 {
-	FCKLang = [] ;
+	var FCKLang = [] ;
 }
 
-// We have to avoid javascript errors if some language variables have not been defined. 
-if ( !FCKLang['UploadFile'] )
-{
-	FCKLang['UploadFile'] = 'Upload a file' ;
-}
-
-if ( !FCKLang['Upload'] )
-{
-	FCKLang['Upload'] = 'Upload' ;
-}
-
-if ( !FCKLang['UploadSelectFileFirst'] )
-{
-	FCKLang['UploadSelectFileFirst'] = 'Please, select a file before pressing the upload button.' ;
-}
-
+// Initialization of some language variables.
+if ( !FCKLang['UploadFile'] ) { FCKLang['UploadFile'] = 'Upload a file' ; }
+if ( !FCKLang['Upload'] ) { FCKLang['Upload'] = 'Upload' ; }
+if ( !FCKLang['UploadSelectFileFirst'] ) { FCKLang['UploadSelectFileFirst'] = 'Please, select a file before pressing the upload button.' ; }
 FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
 FCKLang['InvalidFileType'] = FCKLang['InvalidFileType'] ? FCKLang['InvalidFileType'] : 'Invalid file type.' ;
 FCKLang['UploadError'] = FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Error on file upload. Error number: ' ;

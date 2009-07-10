@@ -191,9 +191,13 @@ function OpenFileBrowser( url, width, height )
 		{
 			var FCKDialog = oEditor.FCKDialog ;
 		}
+		if ( !FCKLang )
+		{
+			var FCKLang = oEditor.FCKLang ;
+		}
 	}
 
-	// Otherwise FCK, FCKConfig and FCKDialog must be defined.
+	// Otherwise FCK, FCKConfig, FCKDialog and FCKLang must be defined.
 
 	if ( ( FCKConfig.OpenSimpleFileManagerInANewWindow && FCKConfig.OpenSimpleFileManagerInANewWindow.toString() == 'true' ) &&
 		( !FCKConfig.AdvancedFileManager || FCKConfig.AdvancedFileManager.toString() != 'true' ) )
@@ -211,7 +215,7 @@ function OpenFileBrowser( url, width, height )
 	}
 	else
 	{
-		FCKDialog.OpenDialog( 'FCKDialog_FileManager' , 'File Manager', url, width, height, '', window, true ) ;
+		FCKDialog.OpenDialog( 'FCKDialog_FileManager' , FCKLang['BrowseServer'], url, width, height, '', window, true ) ;
 	}
 }
 

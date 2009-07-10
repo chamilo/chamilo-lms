@@ -75,22 +75,21 @@ if ( window.opener )
 }
 else
 {
-	var dialog = window.parent ;
-	var oEditor = dialog.InnerDialogLoaded() ;
-	var FCK = oEditor.FCK ;
-	var FCKLang = oEditor.FCKLang ;
-	var FCKConfig = oEditor.FCKConfig ;
+	try
+	{
+		var dialog = window.parent ;
+		var oEditor = dialog.InnerDialogLoaded() ;
+		var FCKLang = oEditor.FCKLang ;
+	}
+	catch ( ex ) { }
+}
+if ( !FCKLang )
+{
+	var FCKLang = [] ;
 }
 
 // Initialization of some language variables.
-if ( !FCKLang )
-{
-	FCKLang = [] ;
-}
-if ( !FCKLang['BrowseServer'] )
-{
-	FCKLang['BrowseServer'] = 'Browse Server' ;
-}
+if ( !FCKLang['BrowseServer'] ) { FCKLang['BrowseServer'] = 'Browse Server' ; }
 FCKLang['FolderAlreadyExists'] = FCKLang['FolderAlreadyExists'] ? FCKLang['FolderAlreadyExists'] : 'Folder already exists.' ;
 FCKLang['InvalidFolderName'] = FCKLang['InvalidFolderName'] ? FCKLang['InvalidFolderName'] : 'Invalid folder name.' ;
 FCKLang['NoPermissionsToCreateFolder'] = FCKLang['NoPermissionsToCreateFolder'] ? FCKLang['NoPermissionsToCreateFolder'] : 'You have no permissions to create the folder.' ;

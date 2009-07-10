@@ -29,52 +29,37 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript">
 
-// Initialization of some language variables.
-var FCKLang = [];
-
 if ( window.parent.opener )
 {
+	var FCKLang = [];
 	try
 	{
 		FCKLang = window.parent.opener.FCKLang ;
 	}
 	catch ( ex ) { }
 }
-
+else
+{
+	try
+	{
+		var dialog = window.parent.parent ;
+		var oEditor = dialog.InnerDialogLoaded() ;
+		var FCKLang = oEditor.FCKLang ;
+	}
+	catch ( ex ) { }
+}
 if ( !FCKLang )
 {
-	FCKLang = [] ;
+	var FCKLang = [] ;
 }
 
-if ( !FCKLang['Folder'] )
-{
-	FCKLang['Folder'] = 'Folder' ;
-}
-
-if ( !FCKLang['ResourceTypeRoot'] )
-{
-	FCKLang['ResourceTypeRoot'] = 'Root' ;
-}
-
-if ( !FCKLang['ResourceTypeAudio'] )
-{
-	FCKLang['ResourceTypeAudio'] = 'Audio' ;
-}
-
-if ( !FCKLang['ResourceTypeImages'] )
-{
-	FCKLang['ResourceTypeImages'] = 'Images' ;
-}
-
-if ( !FCKLang['ResourceTypeFlash'] )
-{
-	FCKLang['ResourceTypeFlash'] = 'Flash' ;
-}
-
-if ( !FCKLang['ResourceTypeVideo'] )
-{
-	FCKLang['ResourceTypeVideo'] = 'Video' ;
-}
+// Initialization of some language variables.
+if ( !FCKLang['Folder'] ) { FCKLang['Folder'] = 'Folder' ; }
+if ( !FCKLang['ResourceTypeRoot'] ) { FCKLang['ResourceTypeRoot'] = 'Root' ; }
+if ( !FCKLang['ResourceTypeAudio'] ) { FCKLang['ResourceTypeAudio'] = 'Audio' ; }
+if ( !FCKLang['ResourceTypeImages'] ) { FCKLang['ResourceTypeImages'] = 'Images' ; }
+if ( !FCKLang['ResourceTypeFlash'] ) { FCKLang['ResourceTypeFlash'] = 'Flash' ; }
+if ( !FCKLang['ResourceTypeVideo'] ) { FCKLang['ResourceTypeVideo'] = 'Video' ; }
 
 function SetResourceType( type )
 {

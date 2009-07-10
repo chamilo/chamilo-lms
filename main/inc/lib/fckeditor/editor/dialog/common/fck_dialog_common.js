@@ -199,8 +199,8 @@ function OpenFileBrowser( url, width, height )
 
 	// Otherwise FCK, FCKConfig, FCKDialog and FCKLang must be defined.
 
-	if ( ( FCKConfig.OpenSimpleFileManagerInANewWindow && FCKConfig.OpenSimpleFileManagerInANewWindow.toString() == 'true' ) &&
-		( !FCKConfig.AdvancedFileManager || FCKConfig.AdvancedFileManager.toString() != 'true' ) )
+	if ( ( FCKConfig.OpenSimpleFileManagerInANewWindow && FCKConfig.OpenSimpleFileManagerInANewWindow.toString() == 'true' ) ||
+		( FCKConfig.AdvancedFileManager && FCKConfig.AdvancedFileManager.toString() == 'true' ) )
 	{
 		var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
 		var iTop  = ( FCKConfig.ScreenHeight - height ) / 2 ;

@@ -993,9 +993,10 @@ $DeleteSubLanguage = "Eliminar sub-idioma";
 $CreateSubLanguageForLanguage = "Crear sub-idioma para el idioma";
 $DeleteSubLanguageFromLanguage = "Eliminar sub-idioma de idioma";
 $CreateSubLanguage = "Crear sub-idioma";
-$RegisterTermsOfSubLanguageForLanguage = "registrar términos del sub-idioma para el idioma";
+$RegisterTermsOfSubLanguageForLanguage = "Registrar términos del sub-idioma para el idioma";
 $AddTermsOfThisSubLanguage = "Añada sus nuevos términos para éste sub-idioma";
 $LoadLanguageFile = "Cargar fichero de idiomas";
 $AllowUseSubLanguageTitle = "Permite definir sub-idiomas";
-$AllowUseSubLanguageComment = "Al activar ésta opción,podrá renombrar las palabras que aparecen en el idioma seleccionado de  su portal dokeos";
+$AllowUseSubLanguageComment = "Al activar esta opción, usted podrá definir variaciones para cada término del lenguaje usado para la interfaz de la plataforma, en la forma de un nuevo lenguaje basado en un lenguaje existente.Podrá encontrar esta opción en el menu de idiomas de su página de administración.";
+$AddWordForTheSubLanguage = "Añadir palabras al sub-idioma";
 ?>

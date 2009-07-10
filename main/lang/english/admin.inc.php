@@ -997,5 +997,6 @@ $RegisterTermsOfSubLanguageForLanguage = "Register terms of sub language for lan
 $AddTermsOfThisSubLanguage = "Add new terms for this sub language";
 $LoadLanguageFile = "Load language file";
 $AllowUseSubLanguageTitle = "Allow define sub-language";
-$AllowUseSubLanguageComment = "By enabling this option, you will be able to rename the variables that appear in the language selected for your portal";
+$AllowUseSubLanguageComment = "By enabling this option, you will be able to define variations for each of the language terms used in the platform interface, in the form of a new language based on and extending an existing language. You\'ll find this option in the languages section of the administration panel.";
+$AddWordForTheSubLanguage = "Add words to the sub-language";
 ?>

@@ -97,15 +97,27 @@ function OpenFile( fileUrl )
 {
 	if ( window_top.opener )
 	{
-		window_top.opener.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
+		if ( typeof ( window_top.opener.SetUrl ) == 'function' )
+		{
+			window_top.opener.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
+		}
 		window_top.close() ;
 		window_top.opener.focus() ;
 	}
 	else if ( window_top.parent )
 	{
-		window_top.parent.Args().ParentWindow.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
-		window_top.parent.Args().ParentWindow.focus() ;
-		window_top.parent.CloseDialog() ;
+		if ( ( typeof ( window_top.parent.Args ) == 'function' ) && window_top.parent.Args().ParentWindow )
+		{
+			if ( typeof ( window_top.parent.Args().ParentWindow.SetUrl ) == 'function' )
+			{
+				window_top.parent.Args().ParentWindow.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
+			}
+			window_top.parent.Args().ParentWindow.focus() ;
+		}
+		if ( typeof ( window_top.parent.CloseDialog ) == 'function' )
+		{
+			window_top.parent.CloseDialog() ;
+		}
 	}
 	return true ;
 }

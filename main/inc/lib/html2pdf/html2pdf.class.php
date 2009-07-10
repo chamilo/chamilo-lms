@@ -4646,7 +4646,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 					break;	
 			}
 			
-			$Dokeosmsg = '<div style="position: relative; margin-top: 10px; margin-bottom: 10px; border-width: 1px; border-style: solid; padding: 5px; border: 1px solid #FF0000; color: #000; background-color: #FFD1D1; min-height: 30px;"><b>'.get_lang("ConvesionFailled").'</b></br>'.get_lang("CommentErrorExportDocument").'</div>';
+			$Dokeosmsg = '<div style="position: relative; margin-top: 10px; margin-bottom: 10px; border-width: 1px; border-style: solid; padding: 5px; border: 1px solid #FF0000; color: #000; background-color: #FFD1D1; min-height: 30px;"><b>'.get_lang("ConversionFailled").'</b></br>'.get_lang("CommentErrorExportDocument").'</div>';
 			echo $Dokeosmsg;		
 			/*
 			////uncomment for debug

@@ -91,12 +91,14 @@ oListManager.ShowUpFolder = function( upFolderPath )
 	}
 }
 
+var window_top = window.parent ;
+
 function CheckLoaded()
 {
-	if ( window.top.IsLoadedActualFolder
-		&& window.top.IsLoadedCreateFolder
-		&& window.top.IsLoadedUpload
-		&& window.top.IsLoadedResourcesList )
+	if ( window_top.IsLoadedActualFolder
+		&& window_top.IsLoadedCreateFolder
+		&& window_top.IsLoadedUpload
+		&& window_top.IsLoadedResourcesList )
 	{
 		window.clearInterval( iIntervalId ) ;
 		bIsLoaded = true ;

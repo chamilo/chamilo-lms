@@ -129,12 +129,14 @@ function OnUploadCompleted( errorNumber, data )
 	}
 }
 
+var window_top = window.parent ;
+
 window.onload = function()
 {
 	document.getElementById('eUploadMessage').innerHTML = FCKLang['UploadFile'] ;
 	document.getElementById('btnUpload').value = FCKLang['Upload'] ;
 
-	window.top.IsLoadedUpload = true ;
+	window_top.IsLoadedUpload = true ;
 }
 		</script>
 	</head>

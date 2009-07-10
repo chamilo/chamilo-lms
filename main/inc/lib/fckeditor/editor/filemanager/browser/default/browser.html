@@ -30,36 +30,6 @@
 		<script type="text/javascript" src="js/fckxml.js"></script>
 		<script type="text/javascript">
 
-//Initialization of some language variables.
-var FCKLang = [];
-
-if ( window.opener )
-{
-	try
-	{
-		FCKLang = window.opener.FCKLang ;
-	}
-	catch ( ex ) { }
-}
-
-if ( !FCKLang )
-{
-	FCKLang = [] ;
-}
-
-if ( !FCKLang['BrowseServer'] )
-{
-	FCKLang['BrowseServer'] = 'Browse Server' ;
-}
-
-FCKLang['FolderAlreadyExists'] = FCKLang['FolderAlreadyExists'] ? FCKLang['FolderAlreadyExists'] : 'Folder already exists.' ;
-FCKLang['InvalidFolderName'] = FCKLang['InvalidFolderName'] ? FCKLang['InvalidFolderName'] : 'Invalid folder name.' ;
-FCKLang['NoPermissionsToCreateFolder'] = FCKLang['NoPermissionsToCreateFolder'] ? FCKLang['NoPermissionsToCreateFolder'] : 'You have no permissions to create the folder.' ;
-FCKLang['UnknownErrorCreatingFolder'] = FCKLang['UnknownErrorCreatingFolder'] ? FCKLang['UnknownErrorCreatingFolder'] : 'Unknown error creating folder.' ;
-FCKLang['ErrorCreatingFolder'] = FCKLang['ErrorCreatingFolder'] ? FCKLang['ErrorCreatingFolder'] : 'Error creating folder. Error number: ' ;
-
-document.title = FCKLang['BrowseServer'] ;
-
 // Automatically detect the correct document.domain (#1919).
 (function()
 {
@@ -93,10 +63,48 @@ document.title = FCKLang['BrowseServer'] ;
 	}
 })() ;
 
+// Initialization depending on how the browser has been opened.
+if ( window.opener )
+{
+	var FCKLang = [];
+	try
+	{
+		FCKLang = window.opener.FCKLang ;
+	}
+	catch ( ex ) { }
+}
+else
+{
+	var dialog = window.parent ;
+	var oEditor = dialog.InnerDialogLoaded() ;
+	var FCK = oEditor.FCK ;
+	var FCKLang = oEditor.FCKLang ;
+	var FCKConfig = oEditor.FCKConfig ;
+}
+
+// Initialization of some language variables.
+if ( !FCKLang )
+{
+	FCKLang = [] ;
+}
+if ( !FCKLang['BrowseServer'] )
+{
+	FCKLang['BrowseServer'] = 'Browse Server' ;
+}
+FCKLang['FolderAlreadyExists'] = FCKLang['FolderAlreadyExists'] ? FCKLang['FolderAlreadyExists'] : 'Folder already exists.' ;
+FCKLang['InvalidFolderName'] = FCKLang['InvalidFolderName'] ? FCKLang['InvalidFolderName'] : 'Invalid folder name.' ;
+FCKLang['NoPermissionsToCreateFolder'] = FCKLang['NoPermissionsToCreateFolder'] ? FCKLang['NoPermissionsToCreateFolder'] : 'You have no permissions to create the folder.' ;
+FCKLang['UnknownErrorCreatingFolder'] = FCKLang['UnknownErrorCreatingFolder'] ? FCKLang['UnknownErrorCreatingFolder'] : 'Unknown error creating folder.' ;
+FCKLang['ErrorCreatingFolder'] = FCKLang['ErrorCreatingFolder'] ? FCKLang['ErrorCreatingFolder'] : 'Error creating folder. Error number: ' ;
+
+document.title = FCKLang['BrowseServer'] ;
+
+var window_top = this ;
+
 function GetUrlParam( paramName )
 {
 	var oRegex = new RegExp( '[\?&]' + paramName + '=([^&]+)', 'i' ) ;
-	var oMatch = oRegex.exec( window.top.location.search ) ;
+	var oMatch = oRegex.exec( window_top.location.search ) ;
 
 	if ( oMatch && oMatch.length > 1 )
 		return decodeURIComponent( oMatch[1] ) ;

@@ -92,3 +92,9 @@ $config['LoadPlugin'][] = 'wikilink';
 
 // imgmap : Adds a dialog for assigning hyperlinks to specified image areas.
 $config['LoadPlugin'][] = 'imgmap';
+
+// Simple File Manager
+// This setting defines how the simple file manager to be opened:
+// true  - in a new browser window, or
+// false - as a dialog whithin the page (recommended).
+$config['OpenSimpleFileManagerInANewWindow'] = false;

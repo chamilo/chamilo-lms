@@ -177,17 +177,42 @@ String.prototype.ReplaceAll = function( searchArray, replaceArray )
 function OpenFileBrowser( url, width, height )
 {
 	// oEditor must be defined.
+	if ( oEditor )
+	{
+		if ( !FCK )
+		{
+			var FCK = oEditor.FCK ;
+		}
+		if ( !FCKConfig )
+		{
+			var FCKConfig = oEditor.FCKConfig ;
+		}
+		if ( !FCKDialog )
+		{
+			var FCKDialog = oEditor.FCKDialog ;
+		}
+	}
 
-	var iLeft = ( oEditor.FCKConfig.ScreenWidth  - width ) / 2 ;
-	var iTop  = ( oEditor.FCKConfig.ScreenHeight - height ) / 2 ;
+	// Otherwise FCK, FCKConfig and FCKDialog must be defined.
 
-	var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes" ;
-	sOptions += ",width=" + width ;
-	sOptions += ",height=" + height ;
-	sOptions += ",left=" + iLeft ;
-	sOptions += ",top=" + iTop ;
+	if ( ( FCKConfig.OpenSimpleFileManagerInANewWindow && FCKConfig.OpenSimpleFileManagerInANewWindow.toString() == 'true' ) &&
+		( !FCKConfig.AdvancedFileManager || FCKConfig.AdvancedFileManager.toString() != 'true' ) )
+	{
+		var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
+		var iTop  = ( FCKConfig.ScreenHeight - height ) / 2 ;
 
-	window.open( url, 'FCKBrowseWindow', sOptions ) ;
+		var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes" ;
+		sOptions += ",width=" + width ;
+		sOptions += ",height=" + height ;
+		sOptions += ",left=" + iLeft ;
+		sOptions += ",top=" + iTop ;
+
+		window.open( url, 'FCKBrowseWindow', sOptions ) ;
+	}
+	else
+	{
+		FCKDialog.OpenDialog( 'FCKDialog_FileManager' , 'File Manager', url, width, height, '', window, true ) ;
+	}
 }
 
 /**

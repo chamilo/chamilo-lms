@@ -31,7 +31,6 @@
 
 // Initialization of some language variables.
 var FCKLang = [];
-
 if ( window.parent.opener )
 {
 	try
@@ -40,12 +39,18 @@ if ( window.parent.opener )
 	}
 	catch ( ex ) { }
 }
-
+else
+{
+	try
+	{
+		FCKLang = window.parent.FCKLang ;
+	}
+	catch ( ex ) { }	
+}
 if ( !FCKLang )
 {
 	FCKLang = [] ;
 }
-
 FCKLang['ServerDidNotReturnProperXmlData'] = FCKLang['ServerDidNotReturnProperXmlData'] ? FCKLang['ServerDidNotReturnProperXmlData'] : 'The server didn\'t reply with a proper XML data. Please check your configuration.' ;
 
 var oListManager = new Object() ;
@@ -106,11 +111,23 @@ function OpenFolder( folderPath )
 	window.parent.frames['frmFolders'].LoadFolders( folderPath ) ;
 }
 
+var window_top = window.parent ;
+
 function OpenFile( fileUrl )
 {
-	window.top.opener.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
-	window.top.close() ;
-	window.top.opener.focus() ;
+	if ( window_top.opener )
+	{
+		window_top.opener.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
+		window_top.close() ;
+		window_top.opener.focus() ;
+	}
+	else if ( window_top.parent )
+	{
+		window_top.parent.Args().ParentWindow.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
+		window_top.parent.CloseDialog() ;
+		window_top.parent.Args().ParentWindow.focus() ;
+	}
+	return true ;
 }
 
 function LoadResources( resourceType, folderPath )
@@ -178,13 +195,13 @@ function GetFoldersAndFilesCallBack( fckXml )
 
 	document.body.innerHTML = oHtml.ToString() ;
 
-//	window.top.document.title = 'Finished processing in ' + ( ( ( new Date() ) - dTimer ) / 1000 ) + ' seconds' ;
+//	window_top.document.title = 'Finished processing in ' + ( ( ( new Date() ) - dTimer ) / 1000 ) + ' seconds' ;
 
 }
 
 window.onload = function()
 {
-	window.top.IsLoadedResourcesList = true ;
+	window_top.IsLoadedResourcesList = true ;
 }
 	</script>
 </head>

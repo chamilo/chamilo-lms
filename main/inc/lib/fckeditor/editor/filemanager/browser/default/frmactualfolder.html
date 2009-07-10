@@ -65,9 +65,11 @@ function SetCurrentFolder( resourceType, folderPath )
 	document.getElementById('tdName').innerHTML = folderPath ;
 }
 
+var window_top = window.parent ;
+
 window.onload = function()
 {
-	window.top.IsLoadedActualFolder = true ;
+	window_top.IsLoadedActualFolder = true ;
 }
 
 		</script>

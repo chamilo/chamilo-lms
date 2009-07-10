@@ -28,33 +28,9 @@
 		<link href="browser.css" type="text/css" rel="stylesheet" >
 		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript">
-/*
-if ( window.parent.opener )
-{
-	var FCKLang = [];
-	try
-	{
-		FCKLang = window.parent.opener.FCKLang ;
-	}
-	catch ( ex ) { }
-}
-else
-{
-	try
-	{
-		var dialog = window.parent.parent ;
-		var oEditor = dialog.InnerDialogLoaded() ;
-		var FCKLang = oEditor.FCKLang ;
-	}
-	catch ( ex ) { }
-}
-*/
-if ( !FCKLang )
-{
-	var FCKLang = [] ;
-}
 
 // Initialization of some language variables.
+var FCKLang = window.parent.FCKLang ;
 if ( !FCKLang['UploadFile'] ) { FCKLang['UploadFile'] = 'Upload a file' ; }
 if ( !FCKLang['Upload'] ) { FCKLang['Upload'] = 'Upload' ; }
 if ( !FCKLang['UploadSelectFileFirst'] ) { FCKLang['UploadSelectFileFirst'] = 'Please, select a file before pressing the upload button.' ; }

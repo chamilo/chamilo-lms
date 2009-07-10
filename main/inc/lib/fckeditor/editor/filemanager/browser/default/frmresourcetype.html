@@ -29,33 +29,8 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript">
 
-/*
-if ( window.parent.opener )
-{
-	var FCKLang = [];
-	try
-	{
-		FCKLang = window.parent.opener.FCKLang ;
-	}
-	catch ( ex ) { }
-}
-else
-{
-	try
-	{
-		var dialog = window.parent.parent ;
-		var oEditor = dialog.InnerDialogLoaded() ;
-		var FCKLang = oEditor.FCKLang ;
-	}
-	catch ( ex ) { }
-}
-*/
-if ( !FCKLang )
-{
-	var FCKLang = [] ;
-}
-
 // Initialization of some language variables.
+var FCKLang = window.parent.FCKLang ;
 if ( !FCKLang['Folder'] ) { FCKLang['Folder'] = 'Folder' ; }
 if ( !FCKLang['ResourceTypeRoot'] ) { FCKLang['ResourceTypeRoot'] = 'Root' ; }
 if ( !FCKLang['ResourceTypeAudio'] ) { FCKLang['ResourceTypeAudio'] = 'Audio' ; }

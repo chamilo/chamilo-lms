@@ -19,6 +19,8 @@ $configurationPearPath = $configuration['root_sys'].'/main/inc/lib/html2pdf';
 ini_set('include_path', $configurationPearPath);
 
 /////
+include('../../inc/global.inc.php');
+
 
 if (!defined('__CLASS_HTML2PDF__'))
 {
@@ -4609,7 +4611,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			{
 				case 1:
 					$msg = (HTML2PDF::textGET('err01'));
-					$msg = str_replace('[[OTHER]]', $other, $msg); 
+					$msg = str_replace('[[OTHER]]', $other, $msg);
 					break;
 					
 				case 2:
@@ -4643,12 +4645,18 @@ if (!defined('__CLASS_HTML2PDF__'))
 					$msg = (HTML2PDF::textGET('err07'));
 					break;	
 			}
-			echo '<span style="color: #AA0000; font-weight: bold;">'.(HTML2PDF::textGET('txt01')).$err.'</span><br>';
-			echo (HTML2PDF::textGET('txt02')).' '.$file.'<br>';
-			echo (HTML2PDF::textGET('txt03')).' '.$line.'<br>';
-			echo '<br>';
-			echo $msg;
-			exit;	
+			
+			$Dokeosmsg = '<div style="position: relative; margin-top: 10px; margin-bottom: 10px; border-width: 1px; border-style: solid; padding: 5px; border: 1px solid #FF0000; color: #000; background-color: #FFD1D1; min-height: 30px;"><b>'.get_lang("ConvesionFailled").'</b></br>'.get_lang("CommentErrorExportDocument").'</div>';
+			echo $Dokeosmsg;		
+			/*
+			////uncomment for debug
+				echo '<span style="color: #AA0000; font-weight: bold;">'.(HTML2PDF::textGET('txt01')).$err.'</span><br>';
+				echo (HTML2PDF::textGET('txt02')).' '.$file.'<br>';
+				echo (HTML2PDF::textGET('txt03')).' '.$line.'<br>';
+				echo '<br>';
+				echo $msg;
+			*/
+			exit;
 		}
 	}
 }

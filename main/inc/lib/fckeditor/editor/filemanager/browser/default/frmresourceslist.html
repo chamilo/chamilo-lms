@@ -124,8 +124,8 @@ function OpenFile( fileUrl )
 	else if ( window_top.parent )
 	{
 		window_top.parent.Args().ParentWindow.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
-		window_top.parent.CloseDialog() ;
 		window_top.parent.Args().ParentWindow.focus() ;
+		window_top.parent.CloseDialog() ;
 	}
 	return true ;
 }

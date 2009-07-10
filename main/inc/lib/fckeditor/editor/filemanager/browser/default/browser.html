@@ -64,28 +64,23 @@
 })() ;
 
 // Establishing access to FCKLang object for making translations.
+var FCKLang = [] ;
 if ( window.opener )
 {
-	var FCKLang = [];
-	try
+	if ( window.opener.FCKLang )
 	{
 		FCKLang = window.opener.FCKLang ;
 	}
-	catch ( ex ) { }
 }
-else
+else if ( window.parent )
 {
-	try
+	if ( typeof ( window.parent.InnerDialogLoaded ) == 'function' )
 	{
-		var dialog = window.parent ;
-		var oEditor = dialog.InnerDialogLoaded() ;
-		var FCKLang = oEditor.FCKLang ;
+		if ( window.parent.InnerDialogLoaded().FCKLang )
+		{
+			FCKLang = window.parent.InnerDialogLoaded().FCKLang ;
+		}
 	}
-	catch ( ex ) { }
-}
-if ( !FCKLang )
-{
-	var FCKLang = [] ;
 }
 
 // Initialization of some language variables.

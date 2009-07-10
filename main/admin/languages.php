@@ -1,4 +1,4 @@
-<?php // $Id: languages.php 21947 2009-07-09 13:10:37Z iflorespaz $
+<?php // $Id: languages.php 21974 2009-07-10 16:01:42Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -195,9 +195,9 @@ while ($row = Database::fetch_array($result_select)) {
 
 		if ($verified_if_is_sub_language===false) {
 			$verified_if_is_father=check_if_language_is_father ($row['id']);
-			$allow_use_sub_language = "&nbsp;<a href='new_sub_language.php?action=definenewsublanguage&id=".$row['id']."'>".Display::return_icon('mas.gif', get_lang('MakeAvailable'),array('width'=>'22','height'=>'22'))."</a>";		
+			$allow_use_sub_language = "&nbsp;<a href='new_sub_language.php?action=definenewsublanguage&id=".$row['id']."'>".Display::return_icon('mas.gif', get_lang('CreateSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";		
 			if ($verified_if_is_father===true) {
-				$allow_add_term_sub_language = "&nbsp;<a href='register_sub_language.php?action=registersublanguage&id=".$row['id']."'>".Display::return_icon('2rightarrow.gif', get_lang('MakeAvailable'),array('width'=>'22','height'=>'22'))."</a>";						
+				$allow_add_term_sub_language = "&nbsp;<a href='register_sub_language.php?action=registersublanguage&id=".$row['id']."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";						
 			} else {
 				$allow_add_term_sub_language='';
 			}

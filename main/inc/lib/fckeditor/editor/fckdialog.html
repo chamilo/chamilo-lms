@@ -718,7 +718,13 @@ var onReadyRegister = function()
 
 	window.Ok = function()
 	{
-		Selection.EnsureSelection() ;
+		// Try-catch block added temporarily by Ivan Tcholakov, July 11, 2009.
+		try
+		{
+			Selection.EnsureSelection() ;
+		}
+		catch ( ex ) { }
+		//
 
 		var frmMain = window.frames["frmMain"] ;
 
@@ -730,7 +736,14 @@ var onReadyRegister = function()
 
 	window.Cancel = function( dontFireChange )
 	{
-		Selection.EnsureSelection() ;
+		// Try-catch block added temporarily by Ivan Tcholakov, July 11, 2009.
+		try
+		{
+			Selection.EnsureSelection() ;
+		}
+		catch ( ex ) { }
+		//
+
 		return CloseDialog( dontFireChange ) ;
 	} ;
 

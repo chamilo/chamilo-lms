@@ -29,17 +29,7 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript">
 
-// Initialization of some language variables.
-var FCKLang = window.parent.FCKLang ;
-if ( !FCKLang['UploadFile'] ) { FCKLang['UploadFile'] = 'Upload a file' ; }
-if ( !FCKLang['Upload'] ) { FCKLang['Upload'] = 'Upload' ; }
-if ( !FCKLang['UploadSelectFileFirst'] ) { FCKLang['UploadSelectFileFirst'] = 'Please, select a file before pressing the upload button.' ; }
-FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
-FCKLang['InvalidFileType'] = FCKLang['InvalidFileType'] ? FCKLang['InvalidFileType'] : 'Invalid file type.' ;
-FCKLang['UploadError'] = FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Error on file upload. Error number: ' ;
-FCKLang['UploadInProgress'] = FCKLang['UploadInProgress'] ? FCKLang['UploadInProgress'] : '(Upload in progress, please wait...)' ;
-FCKLang['UploadInProgress'] = '(Upload in progress, please wait...)' ;
-
+var FCKLang = [] ;
 
 function SetCurrentFolder( resourceType, folderPath )
 {
@@ -103,6 +93,17 @@ function OnUploadCompleted( errorNumber, data )
 
 window.onload = function()
 {
+	// Initialization of some language variables.
+	FCKLang = window.parent.FCKLang ;
+	if ( !FCKLang['UploadFile'] ) { FCKLang['UploadFile'] = 'Upload a file' ; }
+	if ( !FCKLang['Upload'] ) { FCKLang['Upload'] = 'Upload' ; }
+	if ( !FCKLang['UploadSelectFileFirst'] ) { FCKLang['UploadSelectFileFirst'] = 'Please, select a file before pressing the upload button.' ; }
+	FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
+	FCKLang['InvalidFileType'] = FCKLang['InvalidFileType'] ? FCKLang['InvalidFileType'] : 'Invalid file type.' ;
+	FCKLang['UploadError'] = FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Error on file upload. Error number: ' ;
+	FCKLang['UploadInProgress'] = FCKLang['UploadInProgress'] ? FCKLang['UploadInProgress'] : '(Upload in progress, please wait...)' ;
+	FCKLang['UploadInProgress'] = '(Upload in progress, please wait...)' ;
+
 	document.getElementById('eUploadMessage').innerHTML = FCKLang['UploadFile'] ;
 	document.getElementById('btnUpload').value = FCKLang['Upload'] ;
 

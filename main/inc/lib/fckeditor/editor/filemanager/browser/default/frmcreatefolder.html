@@ -29,15 +29,7 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript">
 
-// Initialization of some language variables.
-var FCKLang = window.parent.FCKLang ;
-if ( !FCKLang['CreateNewFolder'] ) { FCKLang['CreateNewFolder'] = 'Create a folder' ; }
-FCKLang['NewFoderName'] = FCKLang['NewFoderName'] ? FCKLang['NewFoderName'] : 'Type the name of the new folder:' ;
-FCKLang['NewFoderNameRequest'] = FCKLang['NewFoderNameRequest'] ? FCKLang['NewFoderNameRequest'] : 'Please, type the folder name.' ;
-FCKLang['FolderAlreadyExists'] = FCKLang['FolderAlreadyExists'] ? FCKLang['FolderAlreadyExists'] : 'Folder already exists.' ;
-FCKLang['NoPermissionsToCreateFolder'] = FCKLang['NoPermissionsToCreateFolder'] ? FCKLang['NoPermissionsToCreateFolder'] : 'You have no permissions to create the folder.' ;
-FCKLang['UnknownErrorCreatingFolder'] = FCKLang['UnknownErrorCreatingFolder'] ? FCKLang['UnknownErrorCreatingFolder'] : 'Unknown error creating folder.' ;
-FCKLang['ErrorCreatingFolder'] = FCKLang['ErrorCreatingFolder'] ? FCKLang['ErrorCreatingFolder'] : 'Error creating folder. Error number: ' ;
+var FCKLang = [] ;
 
 function SetCurrentFolder( resourceType, folderPath )
 {
@@ -100,6 +92,16 @@ function CreateFolderCallBack( fckXml )
 
 window.onload = function()
 {
+	// Initialization of some language variables.
+	FCKLang = window.parent.FCKLang ;
+	if ( !FCKLang['CreateNewFolder'] ) { FCKLang['CreateNewFolder'] = 'Create a folder' ; }
+	FCKLang['NewFoderName'] = FCKLang['NewFoderName'] ? FCKLang['NewFoderName'] : 'Type the name of the new folder:' ;
+	FCKLang['NewFoderNameRequest'] = FCKLang['NewFoderNameRequest'] ? FCKLang['NewFoderNameRequest'] : 'Please, type the folder name.' ;
+	FCKLang['FolderAlreadyExists'] = FCKLang['FolderAlreadyExists'] ? FCKLang['FolderAlreadyExists'] : 'Folder already exists.' ;
+	FCKLang['NoPermissionsToCreateFolder'] = FCKLang['NoPermissionsToCreateFolder'] ? FCKLang['NoPermissionsToCreateFolder'] : 'You have no permissions to create the folder.' ;
+	FCKLang['UnknownErrorCreatingFolder'] = FCKLang['UnknownErrorCreatingFolder'] ? FCKLang['UnknownErrorCreatingFolder'] : 'Unknown error creating folder.' ;
+	FCKLang['ErrorCreatingFolder'] = FCKLang['ErrorCreatingFolder'] ? FCKLang['ErrorCreatingFolder'] : 'Error creating folder. Error number: ' ;
+
 	document.getElementById('lblCreateFolder').innerHTML = FCKLang['CreateNewFolder'] ;
 
 	window.parent.IsLoadedCreateFolder = true ;

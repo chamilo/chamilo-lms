@@ -29,9 +29,7 @@
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 
-//Initialization of some language variables.
-var FCKLang = window.parent.FCKLang ;
-FCKLang['ServerDidNotReturnProperXmlData'] = FCKLang['ServerDidNotReturnProperXmlData'] ? FCKLang['ServerDidNotReturnProperXmlData'] : 'The server didn\'t reply with a proper XML data. Please check your configuration.' ;
+var FCKLang = [] ;
 
 var oListManager = new Object() ;
 
@@ -181,6 +179,10 @@ function GetFoldersAndFilesCallBack( fckXml )
 
 window.onload = function()
 {
+	//Initialization of some language variables.
+	FCKLang = window.parent.FCKLang ;
+	FCKLang['ServerDidNotReturnProperXmlData'] = FCKLang['ServerDidNotReturnProperXmlData'] ? FCKLang['ServerDidNotReturnProperXmlData'] : 'The server didn\'t reply with a proper XML data. Please check your configuration.' ;
+
 	window.parent.IsLoadedResourcesList = true ;
 }
 	</script>

@@ -403,7 +403,7 @@ class FCKeditor
 	private function & get_default_configuration() {
 		return array_merge(
 			self::get_javascript_custom_configuration_file(),
-			self::get_css_configuration_paths(),
+			self::get_css_configuration(),
 			self::get_editor_language(),
 			$this->get_repository_configuration(),
 			self::get_media_configuration(),
@@ -421,12 +421,19 @@ class FCKeditor
 	}
 
 	/**
-	 * This method returns CSS-related configuration data (paths to style files).
+	 * This method returns CSS-related configuration data that has been determined by the system.
 	 * @return array
 	 */
-	private function & get_css_configuration_paths() {
-		// CSS should come from the system.
+	private function & get_css_configuration() {
 		$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
+		/*
+		if (file_exists(api_get_path(SYS_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css')) {
+			$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css';
+		} else {
+			$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/public_admin/course.css';
+		}
+		*/
+
 		$config['ToolbarComboPreviewCSS'] = $config['EditorAreaCSS'];
 		return $config;
 	}

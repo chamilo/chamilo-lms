@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 21993 2009-07-11 21:26:40Z herodoto $
+<?php // $Id: settings.php 21994 2009-07-11 22:11:42Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1138,7 +1138,7 @@ function add_edit_template()
 		   	
 		   	// display a feedback message
 		   	Display::display_confirmation_message('TemplateAdded');
-		   	echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('add_template.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
+		   	echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('template_add.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
 	   } else {
 		   	$sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."',
 											   		  content = '".Database::escape_string($values['template_text'])."'";

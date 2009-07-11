@@ -93,9 +93,9 @@ function load_platform_templates() {
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result)) {
         if (!empty($row['image'])) {
-            $image = api_get_path(WEB_PATH).'home/default_platform_document/'.$row['image'];
+            $image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$row['image'];
         } else {
-            $image = api_get_path(WEB_PATH).'home/default_platform_document/empty.gif';
+            $image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/empty.gif';
         }        
       	$row['content'] =  str_replace('{CSS}',$css, $row['content']);
       	$row['content'] =  str_replace('{IMG_DIR}',$img_dir, $row['content']);
@@ -159,7 +159,7 @@ function load_personal_templates($user_id=0) {
 		{
 			$image = api_get_path(WEB_CODE_PATH).'upload/template_thumbnails/'.$row['image'];
 		} else {			
-			$image = api_get_path(WEB_PATH).'home/default_platform_document/noimage.gif';
+			$image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif';
 		}
 		
 		
@@ -178,7 +178,7 @@ function load_empty_template()
 {
 	global $css;			
 	?>
-<Template title="<?php echo s2('Empty'); ?>" image="<?php echo api_get_path(WEB_PATH).'home/default_platform_document/empty.gif'; ?>">
+<Template title="<?php echo s2('Empty'); ?>" image="<?php echo api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/empty.gif'; ?>">
     <Description></Description>
     <Html>
 	    <![CDATA[

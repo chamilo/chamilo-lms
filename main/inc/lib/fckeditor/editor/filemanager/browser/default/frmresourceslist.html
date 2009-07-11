@@ -95,27 +95,17 @@ function OpenFile( fileUrl )
 {
 	if ( window.parent.opener )
 	{
-		if ( typeof ( window.parent.opener.SetUrl ) == 'function' )
-		{
-			window.parent.opener.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
-		}
+		// The file manager has been opened in a new window.
+		window.parent.opener.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
 		window.parent.close() ;
 		window.parent.opener.focus() ;
 	}
 	else if ( window.parent.parent )
 	{
-		if ( ( typeof ( window.parent.parent.Args ) == 'function' ) && window.parent.parent.Args().ParentWindow )
-		{
-			if ( typeof ( window.parent.parent.Args().ParentWindow.SetUrl ) == 'function' )
-			{
-				window.parent.parent.Args().ParentWindow.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
-			}
-			window.parent.parent.Args().ParentWindow.focus() ;
-		}
-		if ( typeof ( window.parent.parent.CloseDialog ) == 'function' )
-		{
-			window.parent.parent.CloseDialog() ;
-		}
+		// The file manager is inside a dialog.
+		window.parent.parent.Args().ParentWindow.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
+		window.parent.parent.Args().ParentWindow.focus() ;
+		window.parent.parent.CloseDialog() ;
 	}
 	return true ;
 }

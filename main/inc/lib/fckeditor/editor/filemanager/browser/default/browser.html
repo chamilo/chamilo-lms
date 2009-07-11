@@ -75,10 +75,12 @@
 	}
 })() ;
 
-// Establishing access to FCKLang object for making translations.
+// Initialization, establishing access to FCKLang object for making translations.
+var oEditor = null ;
 var FCKLang = [] ;
 if ( window.opener )
 {
+	// The file manager has been opened in a new window.
 	if ( window.opener.FCKLang )
 	{
 		FCKLang = window.opener.FCKLang ;
@@ -86,13 +88,9 @@ if ( window.opener )
 }
 else if ( window.parent )
 {
-	if ( typeof ( window.parent.InnerDialogLoaded ) == 'function' )
-	{
-		if ( window.parent.InnerDialogLoaded().FCKLang )
-		{
-			FCKLang = window.parent.InnerDialogLoaded().FCKLang ;
-		}
-	}
+	// The file manager is inside a dialog.
+	oEditor = window.parent.InnerDialogLoaded() ;
+	FCKLang	= oEditor.FCKLang ;
 }
 
 // Initialization of some language variables.

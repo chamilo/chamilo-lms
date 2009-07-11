@@ -120,7 +120,7 @@ $config['LoadPlugin'][] = 'imgmap';
  */
 
 // Set true/false to enable/disable the file manager for different resource types:
-$config['LinkBrowser'] = true;    // for all acceptable types of files;
+$config['LinkBrowser']  = true;   // for any type of files;
 $config['ImageBrowser'] = true;   // for images;
 $config['FlashBrowser'] = true ;  // for flash objects;
 $config['MP3Browser'] = true ;    // for audio files;
@@ -131,6 +131,29 @@ $config['MediaBrowser'] = true ;  // for video (flv) files.
 // true  - in a new browser window, or
 // false - as a dialog whithin the page (recommended).
 $config['OpenSimpleFileManagerInANewWindow'] = false;
+
+
+/*
+ * Quick-upload tabs.
+ */
+
+// Set true/false to enable/disable the quick-upload tabs for different resource types:
+$config['LinkUpload']  = true;  // for any type of files;
+$config['ImageUpload'] = true;  // for images;
+$config['FlashUpload'] = true;  // for flash objects;
+$config['MP3Upload']   = true;  // for audio files;
+$config['VideoUpload'] = true;  // for video files;
+$config['MediaUpload'] = true;  // for video (flv) files.
+
+// For advanced file manager mode: Hiding quick-upload tabs, so users not to get confused.
+if ((api_get_setting('advanced_filemanager') == 'true')) {
+	$config['LinkUpload']  = false;
+	$config['ImageUpload'] = false;
+	$config['MP3Upload']   = false;
+	$config['FlashUpload'] = false;
+	$config['VideoUpload'] = false;
+	$config['MediaUpload'] = false;
+}
 
 
 /*

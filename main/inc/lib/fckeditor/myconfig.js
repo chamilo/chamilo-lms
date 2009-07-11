@@ -28,7 +28,7 @@
  *
  * Please, do not modify the file fckconfig.js in order to make upgrades easy.
  * Just create your desired settings in this file, myconfig.js.
- * Also, some configuration options may be created/modified within the file myconfig.php.
+ * Also, configuration options (with higher priority) may be created/modified within the file myconfig.php.
  */
 
 FCKConfig.DocType = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' ;
@@ -86,8 +86,8 @@ FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE
  * File Manager.
  */
 
-// Window size of file manager:
-// for all acceptable types of files;
+// Window size of the file manager:
+// for any type of files;
 FCKConfig.LinkBrowserWindowWidth	= 782 ;
 FCKConfig.LinkBrowserWindowHeight	= 490 ;
 // for images;
@@ -114,75 +114,26 @@ FCKConfig.IMUploadPath = '' ;
  * Quick-upload tabs.
  */
 
-// For all acceptable types of resources (files).
-
-// true/false to enable/disable the quick-upload tab.
-FCKConfig.LinkUpload = true ;
-
-// To be moved in the php-integration file.
-FCKConfig.LinkUploadAllowedExtensions	= ".(7z|aiff|asf|avi|bmp|csv|doc|fla|flv|gif|gz|gzip|jpeg|jpg|mid|mov|mp3|mp4|mpc|mpeg|mpg|ods|odt|pdf|png|ppt|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|sdc|sitd|swf|sxc|sxw|tar|tgz|tif|tiff|txt|vsd|wav|wma|wmv|xls|xml|zip)$" ;			// empty for all
-FCKConfig.LinkUploadDeniedExtensions	= "" ;
-
-// For images.
-
-// true/false to enable/disable the quick-upload tab.
-FCKConfig.ImageUpload = true ;
-
-// To be moved in the php-integration file.
-FCKConfig.ImageUploadAllowedExtensions	= ".(jpg|gif|jpeg|png|bmp)$" ;
-FCKConfig.ImageUploadDeniedExtensions	= "" ;
-
-// For flash objects.
-
-// true/false to enable/disable the quick-upload tab.
-FCKConfig.FlashUpload = true ;
-
-// To be moved in the php-integration file.
-FCKConfig.FlashUploadAllowedExtensions	= ".(swf)$" ;
-FCKConfig.FlashUploadDeniedExtensions	= "" ;
-
-// For audio files.
-
-// true/false to enable/disable the quick-upload tab.
-FCKConfig.MP3Upload = true ;
-
-// To be moved in the php-integration file.
-FCKConfig.MP3UploadAllowedExtensions	= ".(mp3)$" ;
-FCKConfig.MP3UploadDeniedExtensions	= "" ;
-
-// For video files.
-
-// true/false to enable/disable the quick-upload tab.
-FCKConfig.VideoUpload = true ;
-
-// To be moved in the php-integration file.
-FCKConfig.VideoUploadAllowedExtensions	= ".(mpg|mpeg|mp4|avi|wmv|mov|asf)$" ;
-FCKConfig.VideoUploadDeniedExtensions	= "" ;
-
-// For video (flv) files.
-
-// true/false to enable/disable the quick-upload tab.
-FCKConfig.MediaUpload = true ;
-
-// To be moved in the php-integration file.
-FCKConfig.MediaUploadAllowedExtensions	= ".(flv)$" ;
-FCKConfig.MediaUploadDeniedExtensions	= "" ;
-
-
-/*
- * Alternative settings for the advanced file manager mode.
- */
-
-if (FCKConfig.PageConfig.AdvancedFileManager)
-{
-	// Hiding quick-upload tabs, so users not to get confused.
-	FCKConfig.LinkUpload = false ;
-	FCKConfig.ImageUpload = false ;
-	FCKConfig.MP3Upload = false ;
-	FCKConfig.FlashUpload = false ;
-	FCKConfig.VideoUpload = false ;
-	FCKConfig.MediaUpload = false ;
-}
+// Lists of allowed and denied name extensions of files to be uploaded.
+// for all acceptable types of files;
+FCKConfig.LinkUploadAllowedExtensions	= '.(7z|aiff|asf|avi|bmp|csv|doc|fla|flv|gif|gz|gzip|jpeg|jpg|mid|mov|mp3|mp4|mpc|mpeg|mpg|ods|odt|pdf|png|ppt|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|sdc|sitd|swf|sxc|sxw|tar|tgz|tif|tiff|txt|vsd|wav|wma|wmv|xls|xml|zip)$' ;			// empty for all
+FCKConfig.LinkUploadDeniedExtensions	= '' ;
+// for images;
+FCKConfig.ImageUploadAllowedExtensions	= '.(jpg|gif|jpeg|png|bmp)$' ;
+FCKConfig.ImageUploadDeniedExtensions	= '' ;
+// for flash objects;
+FCKConfig.FlashUploadAllowedExtensions	= '.(swf)$' ;
+FCKConfig.FlashUploadDeniedExtensions	= '' ;
+// for audio files;
+FCKConfig.MP3UploadAllowedExtensions	= '.(mp3)$' ;
+FCKConfig.MP3UploadDeniedExtensions		= '' ;
+// for video files;
+FCKConfig.VideoUploadAllowedExtensions	= '.(mpg|mpeg|mp4|avi|wmv|mov|asf)$' ;
+FCKConfig.VideoUploadDeniedExtensions	= '' ;
+// for video (flv) files.
+FCKConfig.MediaUploadAllowedExtensions	= '.(flv|mp4)$' ;
+FCKConfig.MediaUploadDeniedExtensions	= '' ;
+// Note: These lists get combined with the platform's white and black lists.
 
 
 /*

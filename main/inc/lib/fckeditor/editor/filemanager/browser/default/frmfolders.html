@@ -93,10 +93,10 @@ oListManager.ShowUpFolder = function( upFolderPath )
 
 function CheckLoaded()
 {
-	if ( window_top.IsLoadedActualFolder
-		&& window_top.IsLoadedCreateFolder
-		&& window_top.IsLoadedUpload
-		&& window_top.IsLoadedResourcesList )
+	if ( window.parent.IsLoadedActualFolder
+		&& window.parent.IsLoadedCreateFolder
+		&& window.parent.IsLoadedUpload
+		&& window.parent.IsLoadedResourcesList )
 	{
 		window.clearInterval( iIntervalId ) ;
 		bIsLoaded = true ;

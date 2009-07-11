@@ -30,7 +30,7 @@
 		<script type="text/javascript">
 
 // Initialization of some language variables.
-var FCKLang = window_top.FCKLang ;
+var FCKLang = window.parent.FCKLang ;
 if ( !FCKLang['CreateNewFolder'] ) { FCKLang['CreateNewFolder'] = 'Create a folder' ; }
 FCKLang['NewFoderName'] = FCKLang['NewFoderName'] ? FCKLang['NewFoderName'] : 'Type the name of the new folder:' ;
 FCKLang['NewFoderNameRequest'] = FCKLang['NewFoderNameRequest'] ? FCKLang['NewFoderNameRequest'] : 'Please, type the folder name.' ;
@@ -102,7 +102,7 @@ window.onload = function()
 {
 	document.getElementById('lblCreateFolder').innerHTML = FCKLang['CreateNewFolder'] ;
 
-	window_top.IsLoadedCreateFolder = true ;
+	window.parent.IsLoadedCreateFolder = true ;
 }
 		</script>
 	</head>

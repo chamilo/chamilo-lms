@@ -30,7 +30,7 @@
 	<script type="text/javascript">
 
 //Initialization of some language variables.
-var FCKLang = window_top.FCKLang ;
+var FCKLang = window.parent.FCKLang ;
 FCKLang['ServerDidNotReturnProperXmlData'] = FCKLang['ServerDidNotReturnProperXmlData'] ? FCKLang['ServerDidNotReturnProperXmlData'] : 'The server didn\'t reply with a proper XML data. Please check your configuration.' ;
 
 var oListManager = new Object() ;
@@ -93,28 +93,28 @@ function OpenFolder( folderPath )
 
 function OpenFile( fileUrl )
 {
-	if ( window_top.opener )
+	if ( window.parent.opener )
 	{
-		if ( typeof ( window_top.opener.SetUrl ) == 'function' )
+		if ( typeof ( window.parent.opener.SetUrl ) == 'function' )
 		{
-			window_top.opener.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
+			window.parent.opener.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
 		}
-		window_top.close() ;
-		window_top.opener.focus() ;
+		window.parent.close() ;
+		window.parent.opener.focus() ;
 	}
-	else if ( window_top.parent )
+	else if ( window.parent.parent )
 	{
-		if ( ( typeof ( window_top.parent.Args ) == 'function' ) && window_top.parent.Args().ParentWindow )
+		if ( ( typeof ( window.parent.parent.Args ) == 'function' ) && window.parent.parent.Args().ParentWindow )
 		{
-			if ( typeof ( window_top.parent.Args().ParentWindow.SetUrl ) == 'function' )
+			if ( typeof ( window.parent.parent.Args().ParentWindow.SetUrl ) == 'function' )
 			{
-				window_top.parent.Args().ParentWindow.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
+				window.parent.parent.Args().ParentWindow.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
 			}
-			window_top.parent.Args().ParentWindow.focus() ;
+			window.parent.parent.Args().ParentWindow.focus() ;
 		}
-		if ( typeof ( window_top.parent.CloseDialog ) == 'function' )
+		if ( typeof ( window.parent.parent.CloseDialog ) == 'function' )
 		{
-			window_top.parent.CloseDialog() ;
+			window.parent.parent.CloseDialog() ;
 		}
 	}
 	return true ;
@@ -185,13 +185,13 @@ function GetFoldersAndFilesCallBack( fckXml )
 
 	document.body.innerHTML = oHtml.ToString() ;
 
-//	window_top.document.title = 'Finished processing in ' + ( ( ( new Date() ) - dTimer ) / 1000 ) + ' seconds' ;
+//	window.parent.document.title = 'Finished processing in ' + ( ( ( new Date() ) - dTimer ) / 1000 ) + ' seconds' ;
 
 }
 
 window.onload = function()
 {
-	window_top.IsLoadedResourcesList = true ;
+	window.parent.IsLoadedResourcesList = true ;
 }
 	</script>
 </head>

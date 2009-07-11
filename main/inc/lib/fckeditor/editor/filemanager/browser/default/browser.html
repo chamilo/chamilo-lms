@@ -105,12 +105,12 @@ FCKLang['ErrorCreatingFolder'] = FCKLang['ErrorCreatingFolder'] ? FCKLang['Error
 
 document.title = FCKLang['BrowseServer'] ;
 
-var window_top = this ;
+var window_main = this ;
 
 function GetUrlParam( paramName )
 {
 	var oRegex = new RegExp( '[\?&]' + paramName + '=([^&]+)', 'i' ) ;
-	var oMatch = oRegex.exec( window_top.location.search ) ;
+	var oMatch = oRegex.exec( window_main.location.search ) ;
 
 	if ( oMatch && oMatch.length > 1 )
 		return decodeURIComponent( oMatch[1] ) ;

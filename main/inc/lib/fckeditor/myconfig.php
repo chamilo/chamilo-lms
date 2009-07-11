@@ -114,8 +114,20 @@ $config['LoadPlugin'][] = 'wikilink';
 // imgmap : Adds a dialog for assigning hyperlinks to specified image areas.
 $config['LoadPlugin'][] = 'imgmap';
 
-// Simple File Manager
-// This setting defines how the simple file manager to be opened:
+
+/*
+ * File manager.
+ */
+
+// Set true/false to enable/disable the file manager for different resource types:
+$config['LinkBrowser'] = true;    // for all acceptable types of files;
+$config['ImageBrowser'] = true;   // for images;
+$config['FlashBrowser'] = true ;  // for flash objects;
+$config['MP3Browser'] = true ;    // for audio files;
+$config['VideoBrowser'] = true ;  // for video files;
+$config['MediaBrowser'] = true ;  // for video (flv) files.
+
+// The following setting defines how the simple file manager to be opened:
 // true  - in a new browser window, or
 // false - as a dialog whithin the page (recommended).
 $config['OpenSimpleFileManagerInANewWindow'] = false;

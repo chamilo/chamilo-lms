@@ -83,70 +83,35 @@ FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE
 // FCKConfig.Plugins.Add('my_plugin', 'en') ;
 
 /*
- * Settings for browsing the server.
+ * File Manager.
  */
 
-// For all acceptable types of resources (files).
-
-// true/false to enable/disable the browser.
-FCKConfig.LinkBrowser = true ;
-
-// Browser window sizes.
+// Window size of file manager:
+// for all acceptable types of files;
 FCKConfig.LinkBrowserWindowWidth	= 782 ;
 FCKConfig.LinkBrowserWindowHeight	= 490 ;
-
-// For images.
-
-// true/false to enable/disable the browser.
-FCKConfig.ImageBrowser = true ;
-
-// Browser window sizes.
+// for images;
 FCKConfig.ImageBrowserWindowWidth   = 782 ;
 FCKConfig.ImageBrowserWindowHeight  = 490 ;
-
-// Upload path for the Image manager. Leave it empty.
-FCKConfig.IMUploadPath = '' ;
-
-// For flash objects.
-
-// true/false to enable/disable the browser.
-FCKConfig.FlashBrowser = true ;
-
-// Browser window sizes.
+// for flash objects;
 FCKConfig.FlashBrowserWindowWidth   = 782 ;
 FCKConfig.FlashBrowserWindowHeight  = 490 ;
-
-// For audio files.
-
-// true/false to enable/disable the browser.
-FCKConfig.MP3Browser = true ;
-
-// Browser window sizes.
+// for audio files;
 FCKConfig.MP3BrowserWindowWidth     = 782 ;
 FCKConfig.MP3BrowserWindowHeight    = 490 ;
-
-// For video files.
-
-// true/false to enable/disable the browser.
-FCKConfig.VideoBrowser = true ;
-
-// Browser window sizes.
+// for video files;
 FCKConfig.VideoBrowserWindowWidth   = 782 ;
 FCKConfig.VideoBrowserWindowHeight  = 490 ;
-
-// For video (flv) files.
-
-// true/false to enable/disable the browser.
-FCKConfig.MediaBrowser = true ;
-
-// Browser window sizes.
+// for video (flv) files.
 FCKConfig.MediaBrowserWindowWidth   = 782 ;
 FCKConfig.MediaBrowserWindowHeight  = 490 ;
 
+//Upload path for the Image manager. Leave it empty.
+FCKConfig.IMUploadPath = '' ;
+
 
 /*
- * Settings for direct uploads on the server, without using browsers.
- * Some of the editor's dialogs have quick-upload tabs for this purpose.
+ * Quick-upload tabs.
  */
 
 // For all acceptable types of resources (files).

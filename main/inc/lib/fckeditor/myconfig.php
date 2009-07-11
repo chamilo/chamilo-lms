@@ -122,6 +122,15 @@ $config['OpenSimpleFileManagerInANewWindow'] = false;
 
 
 /*
+ * Miscellaneous settings.
+ */
+
+// The items in the format drop-down list.
+//$config['FontFormats'] = 'p;h1;h2;h3;h4;h5;h6;pre;address;div';
+$config['FontFormats'] = 'p;h1;h2;h3;h4;h5'; // A reduced format list.
+
+
+/*
  * Additional note:
  * For debugging purposes the editor may run using original source versions of its javascripts, not the "compressed" versions.
  * In case of problems, when you need to use this feature, go to the platform administration settings page and switch the system

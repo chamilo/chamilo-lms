@@ -37,8 +37,6 @@ FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/silver/' ;
 FCKConfig.ProtectedSource.Add( /<script[\s\S]*?\/script>/gi ) ;	// To protect <script> tags.
 
 FCKConfig.AutoDetectLanguage = false ;
-FCKConfig.DefaultLanguage = 'en' ;
-FCKConfig.ContentLangDirection	= 'ltr' ;
 
 FCKConfig.ContextMenu = ['Generic','Link','Anchor','Image','Flash','Select','Textarea','Checkbox','Radio','TextField','HiddenField','ImageButton','Button','BulletedList','NumberedList','Table','Form'] ;
 FCKConfig.TemplatesXmlPath	= FCKConfig.EditorPath + 'fcktemplates.xml.php' ;
@@ -48,8 +46,6 @@ FCKConfig.DisableFFTableHandles = false ;
 FCKConfig.SmileyWindowWidth = 450 ;
 FCKConfig.SmileyWindowHeight = 250 ;
 
-// Reduction of the format list.
-FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5' ;
 
 /*
  * Plugins.

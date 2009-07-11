@@ -31,7 +31,6 @@
  * Also, some configuration options may be created/modified within the file myconfig.php.
  */
 
-FCKConfig.EditorAreaCSS = FCKConfig.BasePath + '../../../../css/public_admin/course.css' ;
 FCKConfig.DocType = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' ;
 FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/silver/' ;
 

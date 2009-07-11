@@ -21,10 +21,34 @@
  * Mail: info@dokeos.com
  */
 
+
 /*
  * Custom editor configuration settings, php-side.
- * Follow this link for more information:
- * http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
+ * See http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
+ *
+ * Configuration data for the editor comes from different sources which are prioritised.
+ *
+ * 1-st level (the highest priority)
+ * "Hardcoded" options by developers. 'Width' and 'Height' might be exception of this rule.
+ *
+ * 2-nd level
+ * Configuration settings from myconfig.php (this file).
+ *
+ * 3-rd level
+ * Default configuration settings that are determined (calculated) by the system..
+ *
+ * 4-th level
+ * Configuration settings from myconfig.js. This file may be modified for customization purposes too.
+ * You may choose to create there options or to transfer options from here (not all) which have low probability of future changes.
+ * Thus, you will gain performance by exploiting caching, but changes in myconfig.js do not enforce immediatelly.
+ * Here is the mapping rule:
+ *
+ * myconfig.php                                      myconfig.js
+ * ---------------------------------------------------------------------------------------------
+ * $config['FontFormats'] = 'p;h1;h2;h3;h4;h5';      FCKConfig.FontFormats = 'p;h1;h2;h3;h4;h5';
+ *
+ * 5-th level (the lowest priority)
+ * Configuration settings from myconfig.js. This file is "as is" in the original source, modifying it is not recommended.
  */
 
 
@@ -39,7 +63,7 @@
 // from .../dokeos/main/inc/lib/fckeditor/toolbars/ to the new one. Change the following configuration setting, so it to
 // point to the new directory:
 // $config['ToolbarSets']['Directory'] = 'toolbars_custom';
-// Then you may modify the newly copied toolbar definitions at your will, just keep correct php-syntax.
+// Then, you may modify the newly copied toolbar definitions at your will, just keep correct php-syntax.
 $config['ToolbarSets']['Directory'] = 'toolbars';
 
 
@@ -47,7 +71,7 @@ $config['ToolbarSets']['Directory'] = 'toolbars';
  * Plugins.
  */
 
-// customizations : This plugin has been developed by the Dokeos team for editor's integration within the Dokeos LMS.
+// customizations : This plugin has been developed by the Dokeos team for editor's integration within the system.
 // Please, do not disable it.
 $config['LoadPlugin'][] = 'customizations';
 
@@ -58,14 +82,12 @@ $config['LoadPlugin'][] = 'tablecommands';
 // audio: Adds a dialog for inserting audio files (.mp3).
 $config['LoadPlugin'][] = 'audio';
 
-// MP3 : This is the old plugin for inserting audio files.
-// Probably this plugin will be removed at the next release.
+// MP3 : This is the old plugin for inserting audio files. Probably this plugin will be removed at the next release.
 // If you wish to use it, disable the "audio" plugin first.
 //$config['LoadPlugin'][] = 'MP3';
 
-// ImageManager : Adds a dialog (image gallery) for inserting images.
-// The advanced file manager has its own functionality for previewing images.
-// This is why we load this plugin only in case when the simple file manager is used.
+// ImageManager : Adds a dialog (image gallery) for inserting images. The advanced file manager has its own functionality
+// for previewing images. This is why we load this plugin only in case when the simple file manager is used.
 if (!(api_get_setting('advanced_filemanager') == 'true')) {
 	$config['LoadPlugin'][] = 'ImageManager';
 }
@@ -82,8 +104,7 @@ $config['LoadPlugin'][] = 'youtube';
 // googlemaps : Adds a dilog for inserting Google maps.
 $config['LoadPlugin'][] = 'googlemaps';
 
-// mimetex : // Adds a dilog for inserting mathematical formulas.
-// In order this plugin to work prpoperly, preliminary changes
+// mimetex : // Adds a dilog for inserting mathematical formulas. In order this plugin to work prpoperly, preliminary changes
 // in your server configuration have to be done. See the installation guide.
 $config['LoadPlugin'][] = 'mimetex';
 
@@ -98,3 +119,11 @@ $config['LoadPlugin'][] = 'imgmap';
 // true  - in a new browser window, or
 // false - as a dialog whithin the page (recommended).
 $config['OpenSimpleFileManagerInANewWindow'] = false;
+
+
+/*
+ * Additional note:
+ * For debugging purposes the editor may run using original source versions of its javascripts, not the "compressed" versions.
+ * In case of problems, when you need to use this feature, go to the platform administration settings page and switch the system
+ * into "test server" mode. Don't forged to switch it back to "production server" mode after testing.
+ */

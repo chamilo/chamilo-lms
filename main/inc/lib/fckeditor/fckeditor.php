@@ -177,35 +177,15 @@ class FCKeditor
 
 		$this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
 
-		// Configuration data comes from different sources. To resolve conflicts between
-		// options with a same name, these differnt sources have assigned priorities.
-		
-		// 1-st level (the highest priority)
-		// Conficuration settings that are created during the initialization of
-		// an editor's instance, they are "hardcoded" by a developer.
-		// 'Width' and 'Height' might be exception of this rule.
-
-		// 2-nd level
-		// Configuration settings from myconfig.php.
 		$config = $this->get_custom_configuration();
 		$this->read_configuration($config);
 
-		// 3-rd level
-		// Default configuration settings that are determined automatically here, on the php-side.
 		$config = $this->get_default_configuration();
 		$this->read_configuration($config);
 
 		if ((api_is_allowed_to_edit() || api_is_platform_admin()) && isset($this->Config['BlockCopyPaste'])) {
 			$this->Config['BlockCopyPaste'] = false;
 		}
-
-		// 4-th level
-		// Configuration settings from myconfig.js.
-		// This file may be modified for customization purposes.
-
-		// 5-th level (the lowest priority)
-		// Configuration settings from myconfig.js. This file is "as is" in the original source.
-		// It is not recommended modifying myconfig.js.
 
 		//----------------------------------------------------------------------------------------
 
@@ -215,9 +195,6 @@ class FCKeditor
 
 		if ( $this->IsCompatible() )
 		{
-			// For debugging purposes the editor may run using original source versions of its javascripts,
-			// not "compressed" versions. When you want use this feature, go to the platform administration
-			// settings page and switch the system into "test server" mode.
 			if ( api_get_setting('server_type') == 'test' )
 				$File = 'fckeditor.original.html' ;
 			else
@@ -502,24 +479,19 @@ class FCKeditor
 
 		if (api_is_in_course()) {
 			if (!api_is_in_group()) {
-
 				// 1. We are inside a course and not in a group.
 				if (api_is_allowed_to_edit()) {
-
 					// 1.1. Teacher (tutor and coach are not authorized to change anything in the "content creation" tools)
 					$config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/';
 					$config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/';
 					$config['BaseHref'] = $script_path;
-
 				} else {
-
 					// 1.2. Student
 					$config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 					$config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 					$config['BaseHref'] = $script_path;
 				}
 			} else {
-
 				// 2. Inside a course and inside a group.
 				global $group_properties;
 				$config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
@@ -527,16 +499,12 @@ class FCKeditor
 				$config['BaseHref'] = $script_path;
 			}
 		} else {
-
 			if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin') {
-
 				// 3. Platform administration activities.
 				$config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'home/default_platform_document/';
 				$config['CreateDocumentDir'] = api_get_path(WEB_PATH).'home/default_platform_document/'; // A side-effect is in use here.
 				$config['BaseHref'] = api_get_path(WEB_PATH).'home/default_platform_document/';
-
 			} else {
-
 				// 4. The user is outside courses.
 				$config['CreateDocumentWebDir'] = api_get_path('WEB_PATH').'main/upload/users/'.api_get_user_id().'/my_files/';
 				$config['CreateDocumentDir'] = $relative_path_prefix.'upload/users/'.api_get_user_id().'/my_files/';
@@ -559,7 +527,6 @@ class FCKeditor
 			// for links (any resource type)
 			$config['LinkBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 		} else {
-
 			// for images
 			$config['ImageBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Images&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php';
 			// for flash

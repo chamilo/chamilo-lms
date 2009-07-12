@@ -224,8 +224,8 @@ $table->set_additional_parameters($parameters);
 $table->set_header(0, get_lang('LanguageVariable'));
 $table->set_header(1, get_lang('EnglishName'));
 $table->set_header(2, get_lang('OriginalName'));
-$table->set_header(3, get_lang('SubLanguage'));
-$table->set_header(4, get_lang('Register'));
+$table->set_header(3, get_lang('SubLanguage'),false);
+$table->set_header(4, get_lang('Edit'),false);
 /*$form_actions = array ();
 $form_actions['addsublanguage'] = get_lang('AddSubLanguage');
 $table->set_form_actions($form_actions);*/

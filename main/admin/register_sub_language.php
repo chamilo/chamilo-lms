@@ -178,7 +178,7 @@ if (isset($_GET['original_file']) && $_GET['original_file']!='') {
 }
 
 $form = new FormValidator('Loadlanguage', 'post', 'register_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&original_file='.$request_file);
-$class='add';
+$class='plus';
 $form->addElement('header', '', $language_name);			
 $form->addElement('select', 'original_file', get_lang('File'),$load_array_in_select,array('id'=>'sl_original_file'));
 $form->addElement('hidden','id_hidden_original_file',Security::remove_XSS($_REQUEST['id']),array('id'=>'id_hidden_original_file'));

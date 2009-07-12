@@ -170,7 +170,7 @@ class AdminManager {
 	 */
 	public static function check_if_language_is_sub_language ($language_id) {
 	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
-	$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE id="'.$language_id.'" AND NOT ISNULL(parent_id)';
+	$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE id="'.Database::escape_string($language_id).'" AND NOT ISNULL(parent_id)';
     $rs=Database::query($sql,__FILE__,__LINE__);
 
     if (Database::num_rows($rs)>0 && Database::result($rs,'0','count')==1) {
@@ -186,7 +186,7 @@ class AdminManager {
 	 */
 	public static function check_if_language_is_father ($language_id) {
 		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
-		$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE parent_id="'.$language_id.'" AND NOT ISNULL(parent_id);';
+		$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($language_id).'" AND NOT ISNULL(parent_id);';
 	    $rs=Database::query($sql,__FILE__,__LINE__);
 	
 	    if (Database::num_rows($rs)>0 && Database::result($rs,'0','count')==1) {

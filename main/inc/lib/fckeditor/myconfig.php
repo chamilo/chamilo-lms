@@ -105,10 +105,10 @@ $config['LoadPlugin'][] = 'youtube';
 $config['LoadPlugin'][] = 'googlemaps';
 
 //
-// mimetex : // Adds a dilog for inserting mathematical formulas. In order this plugin to work prpoperly, preliminary changes
+// mimetex : Adds a dilog for inserting mathematical formulas. In order this plugin to work prpoperly, preliminary changes
 // in your server configuration have to be done. The MimeTex executable file has to be installed, see the installation guide.
 //
-// Uncomment the line below (remove the double slash) to enable the 'mimetex' plugin:
+// Uncomment the line below (remove the double slash at the beginning) to enable the 'mimetex' plugin:
 //$config['LoadPlugin'][] = 'mimetex';
 //
 // Some additional settings become active only when the 'mimetex' plugin has been enabled:

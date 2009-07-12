@@ -25,7 +25,8 @@
  * instances in PHP pages on server side.
  */
 
-// Code to adapt the editor to the Dokeos LMS has been added by the Dokeos team, FEB-2009.
+// Code about adaptation of the editor and its plugins has been added by the Dokeos team, February - July 2009.
+// For modifying configuration options see myconfig.php and myconfig.js.
 
 /**
  * Check if browser is compatible with FCKeditor.
@@ -36,18 +37,6 @@
 
 //require_once api_get_path(LIBRARY_PATH).'/media.lib.php';  // This fails in some pages (Tests).
 require_once dirname(__FILE__).'/../media.lib.php';
-
-// Configuration constants.
-
-// The MimeTeX plugin support, a check whether the server executable file has been installed.
-define ( 'CHECK_MIMETEX_PLUGIN_INSTALLED', true ) ; // Change to false in case of unexpected problems. Then installed state will be assumed.
-define ( 'CHECK_MIMETEX_PLUGIN_INSTALLED_TIMEOUT', 0.05 ) ; // Response timeout in seconds. Keep this value as low as possible on Windows servers.
-define ( 'CHECK_MIMETEX_PLUGIN_INSTALLED_URL_BASE', // This setting is about how to check mimetex executable presense. Possible values: 'ip' and 'domain_name'
-	IS_WINDOWS_OS
-	? 'ip'				// http://127.0.0.1/mimetex.exe will be checked for presense,
-						// this is a preferable setting for Windows Vista, because its firewall does not block this address by default.
-	: 'domain_name'		// http://www.mydokeos.com/mimetex.cgi will be checked for presense. If DNS has problems (if it is slow for example). try using the 'ip' setting.
-) ;
 
 function FCKeditor_IsCompatibleBrowser()
 {
@@ -408,7 +397,7 @@ class FCKeditor
 			$this->get_repository_configuration(),
 			self::get_media_configuration(),
 			self::get_user_configuration_data(),
-			self::get_mimetex_plugin_configuration()
+			$this->get_mimetex_plugin_configuration()
 		);
 	}
 
@@ -592,19 +581,43 @@ class FCKeditor
 	 * @return array
 	 */
 	private function & get_mimetex_plugin_configuration() {
-		static $config ;
-		if ( !is_array( $config ) ) {
-			$server_base = explode( '/', api_get_path( WEB_PATH ) ) ;
-			$server_base_ip = $server_base[0] . '/' . $server_base[1] . '/127.0.0.1' ;
-			$server_base = $server_base[0]. '/' . $server_base[1]. '/' . $server_base[2] ;
-			$url_relative = '/cgi-bin/mimetex' . ( IS_WINDOWS_OS ? '.exe' : '.cgi' ) ;
-			if ( CHECK_MIMETEX_PLUGIN_INSTALLED ) {
-				$check_mimetex_url = ( CHECK_MIMETEX_PLUGIN_INSTALLED_URL_BASE == 'ip' ? $server_base_ip : $server_base ) . $url_relative . '?' . rand() ;
-				$config['IsMimetexInstalled'] = self::url_exists( $check_mimetex_url, CHECK_MIMETEX_PLUGIN_INSTALLED_TIMEOUT ) ;
-			} else {
-				$config['IsMimetexInstalled'] = true ;
+		static $config;
+		if (!isset($config)) {
+			$config = array();
+			if (is_array($this->Config['LoadPlugin']) && in_array('mimetex', $this->Config['LoadPlugin'])) {
+				$server_base = api_get_path(WEB_SERVER_ROOT_PATH);
+				$server_base_parts = explode('/', $server_base);
+				$url_relative = 'cgi-bin/mimetex' . ( IS_WINDOWS_OS ? '.exe' : '.cgi' );
+				if (!isset($this->Config['MimetexExecutableInstalled'])) {
+					$this->Config['MimetexExecutableDetectionMethod'] = 'detect';
+				}
+				if ($this->Config['MimetexExecutableInstalled'] == 'detect') {
+					$detection_method = isset($this->Config['MimetexExecutableDetectionMethod']) ? $this->Config['MimetexExecutableDetectionMethod'] : 'bootstrap_ip';
+					$detection_timeout = isset($this->Config['MimetexExecutableDetectionTimeout']) ? $this->Config['MimetexExecutableDetectionTimeout'] : 0.05;
+					switch ($detection_method) {
+						case 'bootstrap_ip':
+							$detection_url = $server_base_parts[0] . '//127.0.0.1/';
+							break;
+						case 'localhost':
+							$detection_url = $server_base_parts[0] . '//localhost/';
+							break;
+						case 'ip':
+							$detection_url = $server_base_parts[0] . '//' . $_SERVER['SERVER_ADDR'] . '/';
+							break;
+						default:
+							$detection_url = $server_base_parts[0] . '//' . $_SERVER['SERVER_NAME'] . '/';
+					}
+					$detection_url .= $url_relative . '?' . rand();
+					$config['IsMimetexInstalled'] = self::url_exists($detection_url, $detection_timeout);
+				} else {
+					$config['IsMimetexInstalled'] = $this->Config['MimetexExecutableInstalled'];
+				}
+				$config['MimetexUrl'] = $server_base . $url_relative;
 			}
-			$config['MimetexUrl'] = $server_base . $url_relative ;
+			// Cleaning detection related settings, we don't need them anymore.
+			unset($this->Config['MimetexExecutableInstalled']);
+			unset($this->Config['MimetexExecutableDetectionMethod']);
+			unset($this->Config['MimetexExecutableDetectionTimeout']);
 		}
 		return $config;
 	}

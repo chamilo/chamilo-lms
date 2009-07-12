@@ -183,7 +183,7 @@ if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 $language_name=get_lang('CreateSubLanguageForLanguage').' ( '.strtolower($language_name).' )';
 
 if (ckeck_if_is_parent_of_sub_language ($parent_id)===true ) {
-	$language_name=get_lang('DeleteSubLanguageForLanguage');
+	$language_name=get_lang('DeleteSubLanguage');
 }
 
 Display :: display_header($language_name);

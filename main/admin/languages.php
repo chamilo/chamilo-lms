@@ -1,4 +1,4 @@
-<?php // $Id: languages.php 21997 2009-07-12 05:33:19Z iflorespaz $
+<?php // $Id: languages.php 21998 2009-07-12 05:44:30Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -40,34 +40,22 @@ $tbl_settings_current 	= Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT)
 		STORING THE CHANGES
 ============================================================================== 
 */
-//Add function
-function check_if_language_is_sub_language ($language_id) {
-	return AdminManager::check_if_language_is_sub_language($language_id);
-}
-function check_if_language_is_father ($language_id) {
-	return AdminManager::check_if_language_is_father($language_id); 
-}
+
 // we change the availability
 if ($_GET['action'] == 'makeunavailable') {
-	/*$sql_make_unavailable = "UPDATE $tbl_admin_languages SET available='0' WHERE id='{$_GET['id']}'";
-	$result = api_sql_query($sql_make_unavailable);*/
+
 	if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 		AdminManager::make_unavailable_language($_GET['id']);
 	}
 }
 if ($_GET['action'] == 'makeavailable') {
-	/*$sql_make_available = "UPDATE $tbl_admin_languages SET available='1' WHERE id='{$_GET['id']}'";
-	$result = api_sql_query($sql_make_available);*/
+
 	if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 		AdminManager::make_available_language($_GET['id']);
 	}
 }
 if ($_GET['action'] == 'setplatformlanguage') {
-	/*$sql_update = "SELECT english_name FROM ". $tbl_admin_languages." WHERE id='".$_GET['id']."'";
-	$result = api_sql_query($sql_update,__FILE__,__LINE__);
-	$lang=Database::fetch_array($result);
-	$sql_update_2 = "UPDATE ".$tbl_settings_current." SET selected_value='".$lang['english_name']."' WHERE variable='platformLanguage'";
-	$result_2 = api_sql_query($sql_update_2);*/
+
 	if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 		AdminManager::set_platform_language($_GET['id']);		
 	}
@@ -183,10 +171,10 @@ while ($row = Database::fetch_array($result_select)) {
 	}	
 	if (api_get_setting('allow_use_sub_language')=='true') {
 
-		$verified_if_is_sub_language=check_if_language_is_sub_language($row['id']);
+		$verified_if_is_sub_language=AdminManager::check_if_language_is_sub_language($row['id']);
 
 		if ($verified_if_is_sub_language===false) {
-			$verified_if_is_father=check_if_language_is_father ($row['id']);
+			$verified_if_is_father=AdminManager::check_if_language_is_father($row['id']);
 			$allow_use_sub_language = "&nbsp;<a href='new_sub_language.php?action=definenewsublanguage&id=".$row['id']."'>".Display::return_icon('mas.gif', get_lang('CreateSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";		
 			if ($verified_if_is_father===true) {
 				$allow_add_term_sub_language = "&nbsp;<a href='register_sub_language.php?action=registersublanguage&id=".$row['id']."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";						

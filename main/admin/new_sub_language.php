@@ -44,7 +44,7 @@ function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_av
 	Database::query($sql,__FILE__,__LINE__);
 }
 /**
- * check if language exist
+ * check if language exists
  */
 function check_if_language_exist ($original_name,$english_name,$isocode,$sublanguage_available) {
 	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
@@ -262,7 +262,7 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
 	} else {
 		$text=$language_name;
 		$form = new FormValidator('deletesublanguage', 'post', 'new_sub_language.php?id='.Security::remove_XSS($_GET['id']));
-		$class='save';
+		$class='minus';
 		$form->addElement('header', '', $text);
 		$form->addElement('static', '', get_lang('OriginalName'),$original_name);
 		$form->addElement('static', '', get_lang('EnglishName'),$english_name);

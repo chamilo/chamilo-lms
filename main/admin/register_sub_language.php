@@ -89,24 +89,11 @@ $interbreadcrumb[] = array ('url' => 'languages.php', 'name' => get_lang('Platfo
 require_once api_get_path(LIBRARY_PATH).'text.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
-/*declare functions*/
-/**
- * Get name of language by id
- */
-function get_name_of_language_by_id ($language_id) {
-	return AdminManager::get_name_of_language_by_id($language_id);
-}
-function check_if_exist_language_by_id ($language_id) {
-	return AdminManager::check_if_exist_language_by_id($language_id); 
-}
-/*end declare functions*/
-
-
 if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
-	$language_name=get_name_of_language_by_id($_GET['id']);
+	$language_name=AdminManager::get_name_of_language_by_id ($_GET['id']);
 	$all_data_of_language=AdminManager::get_all_information_of_language($_GET['id']);
 	$my_language=$language_name;
-	if (check_if_exist_language_by_id ($_GET['id'])===true) {
+	if (AdminManager::check_if_exist_language_by_id($_GET['id'])===true) {
 		$parent_id=$_GET['id'];
 		$language_id_exist=true;
 	} else {
@@ -117,40 +104,10 @@ if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 	$language_id_exist=false;	
 }
 
-
 $language_name=get_lang('RegisterTermsOfSubLanguageForLanguage').' ( '.strtolower($language_name).' )';
 
 // including the header file (which includes the banner itself)
 
-//ADD ALL SUB LANGUAGE
-if (isset($_POST['action']) && $_POST['action']=='addsublanguage') {
-	/*$all_data_of_sub_language=AdminManager::get_all_information_of_sub_language($_POST['code_language_id']);
-	$dokeos_sub_language_path_folder=api_get_path('SYS_LANG_PATH').$all_data_of_sub_language['dokeos_folder'].'/'.Security::remove_XSS($_REQUEST['original_file']);
-	$all_file_of_directory=AdminManager::get_all_language_variable_in_file($dokeos_sub_language_path_folder);
-	//AdminManager::add_file_in_language_directory ($dokeos_path_folder);
-
-	foreach ($_POST['id'] as $index_post_id =>$value_post_id) {
-		foreach ($_POST as $index_post_txt =>$value_post_txt) {
-			if (is_string($index_post_txt) && strlen($index_post_txt)>4) {
-				if ($value_post_id==substr($index_post_txt,4,strlen($index_post_txt))) {
-					$new_language=$value_post_txt;
-					$index_variable_of_sub_language='$'.$index_post_txt;
-					$all_file_of_directory[$index_variable_of_sub_language]="\"".$new_language."\";";
-				}
-			}
-		}
-	}
-*/
-	//var_dump($all_file_of_directory);
-	//update variable language
-	
-	
-	
-	/*foreach ($all_file_of_directory as $key_value=>$value_info) {
-		AdminManager::write_data_in_file ($dokeos_path_folder,$value_info,$key_value);
-	}*/
-}
-//END ALL SUB LANGUAGE
 
 $dokeos_path_folder=api_get_path('SYS_LANG_PATH').$all_data_of_language['dokeos_folder'];
 //get file name example : forum.inc.php,gradebook.inc.php

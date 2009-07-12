@@ -117,11 +117,11 @@ class AdminManager {
 			return false;
 		}
    }
-     /**
-     * Delete sub-language
-     * @param Integer The parent id
-     * @return void()
-     */   
+	 /**
+	 * Delete sub-language
+	 * @param Integer The parent id
+	 * @return void()
+	 */   
    public static function removed_sub_language ($parent_id) {
    		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);		
 		$sql='DELETE FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($parent_id).'"';
@@ -129,6 +129,8 @@ class AdminManager {
    }
    	/**
 	 * check if language exist by id
+	 * @param Integer The language id
+	 * @return Boolean
 	 */
 	public static function check_if_exist_language_by_id ($language_id) {
 		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
@@ -147,8 +149,10 @@ class AdminManager {
 
 	/**
 	 * Get name of language by id
+	 * @param Integer The language id
+	 * @return String The original name of language
 	 */	
-	function get_name_of_language_by_id ($language_id) {
+	public static function get_name_of_language_by_id ($language_id) {
 		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
 		$sql='SELECT original_name FROM '.$tbl_admin_languages.' WHERE id="'.Database::escape_string($language_id).'"';
 		$rs=Database::query($sql,__FILE__,__LINE__);
@@ -158,6 +162,38 @@ class AdminManager {
 			return '';
 		}
 	
+	}
+	/**
+	 * Verified if language is sub-language
+	 * @param Integer The language id
+	 * @return Boolean 
+	 */
+	public static function check_if_language_is_sub_language ($language_id) {
+	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
+	$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE id="'.$language_id.'" AND NOT ISNULL(parent_id)';
+    $rs=Database::query($sql,__FILE__,__LINE__);
+
+    if (Database::num_rows($rs)>0 && Database::result($rs,'0','count')==1) {
+    	return true;
+    	} else {
+    	return false;
+     }
+	}
+	/**
+	 * Verified if language is father of an sub-language
+	 * @param Integer The language id
+	 * @return Boolean
+	 */
+	public static function check_if_language_is_father ($language_id) {
+		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
+		$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE parent_id="'.$language_id.'" AND NOT ISNULL(parent_id);';
+	    $rs=Database::query($sql,__FILE__,__LINE__);
+	
+	    if (Database::num_rows($rs)>0 && Database::result($rs,'0','count')==1) {
+	    	return true;
+	    } else {
+	    	return false;
+	    }
 	}	
 }
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: languages.php 21974 2009-07-10 16:01:42Z iflorespaz $
+<?php // $Id: languages.php 21995 2009-07-12 04:44:15Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -27,6 +27,7 @@ $cidReset = true;
 
 // include global script
 require_once '../inc/global.inc.php';
+require_once 'admin.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -41,26 +42,10 @@ $tbl_settings_current 	= Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT)
 */
 //Add function
 function check_if_language_is_sub_language ($language_id) {
-	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
-	$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE id="'.$language_id.'" AND NOT ISNULL(parent_id)';
-    $rs=Database::query($sql,__FILE__,__LINE__);
-
-    if (Database::num_rows($rs)>0 && Database::result($rs,'0','count')==1) {
-    	return true;
-    } else {
-    	return false;
-    }
+	return AdminManager::check_if_language_is_sub_language($language_id);
 }
 function check_if_language_is_father ($language_id) {
-	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
-	$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE parent_id="'.$language_id.'" AND NOT ISNULL(parent_id);';
-    $rs=Database::query($sql,__FILE__,__LINE__);
-
-    if (Database::num_rows($rs)>0 && Database::result($rs,'0','count')==1) {
-    	return true;
-    } else {
-    	return false;
-    }
+	return AdminManager::check_if_language_is_father($language_id); 
 }
 // we change the availability
 if ($_GET['action'] == 'makeunavailable')

@@ -8,7 +8,7 @@
 $config['ToolbarSets']['Normal'] = array(
 	array('Save','FitWindow','-','PasteWord','-','Undo','Redo'),
 	array('Link','Unlink','Anchor'),
-    array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'),
+    array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
     array('Table','SpecialChar'),
     array('OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'),
     '/',   

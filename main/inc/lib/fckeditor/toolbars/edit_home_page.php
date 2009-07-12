@@ -8,7 +8,7 @@
 $config['ToolbarSets']['Normal'] = array(
 	array('NewPage','Templates','Save','Print','PageBreak','FitWindow','-','PasteWord','-','Undo','Redo','-','SelectAll','-','Find'),
 	array('Link','Unlink','Anchor'),
-	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3'),
+	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
 	array('Table','Smiley','SpecialChar','googlemaps'),
 	array('FontFormat','FontName','FontSize'),
 	array('Bold','Italic','Underline'),

@@ -1,4 +1,4 @@
-<?php // $Id: languages.php 21995 2009-07-12 04:44:15Z iflorespaz $
+<?php // $Id: languages.php 21997 2009-07-12 05:33:19Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -48,23 +48,30 @@ function check_if_language_is_father ($language_id) {
 	return AdminManager::check_if_language_is_father($language_id); 
 }
 // we change the availability
-if ($_GET['action'] == 'makeunavailable')
-{
-	$sql_make_unavailable = "UPDATE $tbl_admin_languages SET available='0' WHERE id='{$_GET['id']}'";
-	$result = api_sql_query($sql_make_unavailable);
+if ($_GET['action'] == 'makeunavailable') {
+	/*$sql_make_unavailable = "UPDATE $tbl_admin_languages SET available='0' WHERE id='{$_GET['id']}'";
+	$result = api_sql_query($sql_make_unavailable);*/
+	if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
+		AdminManager::make_unavailable_language($_GET['id']);
+	}
 }
-if ($_GET['action'] == 'makeavailable')
-{
-	$sql_make_available = "UPDATE $tbl_admin_languages SET available='1' WHERE id='{$_GET['id']}'";
-	$result = api_sql_query($sql_make_available);
+if ($_GET['action'] == 'makeavailable') {
+	/*$sql_make_available = "UPDATE $tbl_admin_languages SET available='1' WHERE id='{$_GET['id']}'";
+	$result = api_sql_query($sql_make_available);*/
+	if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
+		AdminManager::make_available_language($_GET['id']);
+	}
 }
-if ($_GET['action'] == 'setplatformlanguage')
-{
-	$sql_update = "SELECT english_name FROM ". $tbl_admin_languages." WHERE id='".$_GET['id']."'";
+if ($_GET['action'] == 'setplatformlanguage') {
+	/*$sql_update = "SELECT english_name FROM ". $tbl_admin_languages." WHERE id='".$_GET['id']."'";
 	$result = api_sql_query($sql_update,__FILE__,__LINE__);
 	$lang=Database::fetch_array($result);
 	$sql_update_2 = "UPDATE ".$tbl_settings_current." SET selected_value='".$lang['english_name']."' WHERE variable='platformLanguage'";
-	$result_2 = api_sql_query($sql_update_2);
+	$result_2 = api_sql_query($sql_update_2);*/
+	if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
+		AdminManager::set_platform_language($_GET['id']);		
+	}
+
 }
 
 
@@ -91,7 +98,7 @@ elseif (isset($_POST['action']))
 				$ids = array ();
 				foreach ($_POST['id'] as $index => $id)
 				{
-					$ids[] = mysql_real_escape_string($id);
+					$ids[] = Database::escape_string($id);
 				}
 				$sql = "UPDATE $tbl_admin_languages SET available='1' WHERE id IN ('".implode("','", $ids)."')";
 				api_sql_query($sql,__FILE__,__LINE__);
@@ -103,7 +110,7 @@ elseif (isset($_POST['action']))
 				$ids = array ();
 				foreach ($_POST['id'] as $index => $id)
 				{
-					$ids[] = mysql_real_escape_string($id);
+					$ids[] = Database::escape_string($id);
 				}
 				$sql = "UPDATE $tbl_admin_languages SET available='0' WHERE id IN ('".implode("','", $ids)."')";
 				api_sql_query($sql,__FILE__,__LINE__);

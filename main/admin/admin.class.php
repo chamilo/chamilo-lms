@@ -194,6 +194,40 @@ class AdminManager {
 	    } else {
 	    	return false;
 	    }
-	}	
+	}
+	/**
+	 * Make unavailable the language
+	 * @param Integer The language id
+	 * @return void()
+	 */
+	public static function make_unavailable_language ($language_id) {
+		$tbl_admin_languages= Database :: get_main_table(TABLE_MAIN_LANGUAGE);		
+		$sql_make_unavailable = "UPDATE $tbl_admin_languages SET available='0' WHERE id='".Database::escape_string($language_id)."'";
+		$result = Database::query($sql_make_unavailable,__FILE__,__LINE__);		
+	}
+	/**
+	 * Make available the language
+	 * @param Integer The language id
+	 * @return void()
+	 */
+	 public static function make_available_language ($language_id) {
+	 	$tbl_admin_languages= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+	 	$sql_make_available = "UPDATE $tbl_admin_languages SET available='1' WHERE id='".Database::escape_string($language_id)."'";
+		$result = Database::query($sql_make_available,__FILE__,__LINE__);
+	 }
+	 /**
+	  * Set platform language
+	  * @param Integer The language id
+	  * @return void()
+	  */
+	  public static function set_platform_language ($language_id) {
+		$tbl_admin_languages= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+		$tbl_settings_current 	= Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);	
+		$sql_update = "SELECT english_name FROM ". $tbl_admin_languages." WHERE id='".Database::escape_string($language_id)."'";
+		$result = Database::query($sql_update,__FILE__,__LINE__);
+		$lang=Database::fetch_array($result);
+		$sql_update_2 = "UPDATE ".$tbl_settings_current." SET selected_value='".$lang['english_name']."' WHERE variable='platformLanguage'";
+		$result_2 = Database::query($sql_update_2);	  	
+	  }
 }
 ?>

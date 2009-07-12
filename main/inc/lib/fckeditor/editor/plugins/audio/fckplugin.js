@@ -1,7 +1,7 @@
 // Register the command.
 FCKCommands.RegisterCommand( 'MP3',
 	new FCKDialogCommand( FCKLang['DlgAudioTitle'], FCKLang['DlgAudioTitle'] + ' (mp3)',
-	FCKConfig.PluginsPath + 'audio/fck_audio.html', 600, 300 )
+	FCKConfig.PluginsPath + 'audio/fck_audio.html', 600, 320 )
 ) ;
 
 // Create and register the Audio toolbar button.

@@ -104,16 +104,20 @@ $config['LoadPlugin'][] = 'youtube';
 // googlemaps : Adds a dilog for inserting Google maps.
 $config['LoadPlugin'][] = 'googlemaps';
 
+//
 // mimetex : // Adds a dilog for inserting mathematical formulas. In order this plugin to work prpoperly, preliminary changes
 // in your server configuration have to be done. The MimeTex executable file has to be installed, see the installation guide.
-$config['LoadPlugin'][] = 'mimetex';
-// ***** Additional settings that are active only when the 'mimetex' plugin has been loaded. *****
-// The following setting determines whether MimeTex executable file has been installed or not. It should be accessible for browsers at
-// address http://mysite.com/cgi-bin/mimetex.cgi (Linux) or at address http://mysite.com/cgi-bin/mimetex.exe (Windows).
+//
+// Uncomment the line below (remove the double slash) to enable the 'mimetex' plugin:
+//$config['LoadPlugin'][] = 'mimetex';
+//
+// Some additional settings become active only when the 'mimetex' plugin has been enabled:
+//
+// The following setting determines whether MimeTeX executable file has been installed on the server or not. This file should be accessible
+// for browsers at address http://mysite.com/cgi-bin/mimetex.cgi (Linux) or at address http://mysite.com/cgi-bin/mimetex.exe (Windows).
 // How to test manually: Open your browser and enter in the address bar something like http://mysite.com/cgi-bin/mimetex.cgi?hello
-// By default, the system tries to detect MimeTex executable automatically.
-// In case that detection fails for some reason, but you are sure that the MimeTeX executable has been correctly installed -
-// set this option to boolean true value.
+// By default, the system tries to detect the MimeTeX executable file automatically.
+// If you are sure that the MimeTeX executable has been correctly installed, you may set this option to boolean true value.
 $config['MimetexExecutableInstalled'] = 'detect'; // 'detect' (default), true, false
 // Sometimes detection fails (due to slow DNS service, security restrictions, ...). For better probability of success,
 // the following methods for detection have been defined:
@@ -122,12 +126,13 @@ $config['MimetexExecutableInstalled'] = 'detect'; // 'detect' (default), true, f
 // 'ip'             - detection is tried at ip address, for example http://192.168.0.1/cgi-bin/mimetex.cgi
 // 'server_name'    - detection is tried at address based on server's name, for example http://mysite.com/cgi-bin/mimetex.cgi
 if (IS_WINDOWS_OS) {
-	$config['MimetexExecutableDetectionMethod'] = 'bootstrap_ip'; // This has better chance on Windows (there is no firewall blocking).
+	$config['MimetexExecutableDetectionMethod'] = 'bootstrap_ip'; // 'bootstrap_ip' for better chance on Windows (no firewall blocking).
 } else {
 	$config['MimetexExecutableDetectionMethod'] = 'server_name';
 }
-// Timeout for mimetex executable detection - keep this value as low as possible, especially on Windows servers.
+// Timeout for MimeTeX executable file detection - keep this value as low as possible, especially on Windows servers.
 $config['MimetexExecutableDetectionTimeout'] = 0.05;
+//
 
 // wikilink : Adds a dialog for inserting wiki-formatted links.
 $config['LoadPlugin'][] = 'wikilink';

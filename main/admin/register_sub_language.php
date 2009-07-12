@@ -140,7 +140,7 @@ $form->addElement('hidden','id_hidden_original_file',Security::remove_XSS($_REQU
 $select_level = array (); 	
 $radios_results_enabled[] = FormValidator :: createElement ('select', 'original_file', get_lang('File'),$load_array_in_select,array('id'=>'sl_original_file'));
 $radios_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'SubmitLoadLanguage', get_lang('LoadLanguageFile'), 'class="'.$class.'"');
-$form->addGroup($radios_results_enabled,'group_load_file');
+$form->addGroup($radios_results_enabled);
 echo '<div class="actions-message">';
 echo $language_name;
 echo '</div>';

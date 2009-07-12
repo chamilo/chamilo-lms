@@ -38,6 +38,7 @@ FUNCTIONS FOR WIKI
 ==============================================================================
 */
 
+// including the global dokeos file
 
 /**
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
@@ -334,7 +335,7 @@ function save_wiki() {
 * This function restore a wikipage
 * @author Juan Carlos Raña <herodoto@telefonica.net>
 **/
-function restore_wikipage($r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_progress, $c_version, $r_version, $r_linksto)
+function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_progress, $c_version, $r_version, $r_linksto)
 {
 
 	global $tbl_wiki;
@@ -344,7 +345,7 @@ function restore_wikipage($r_reflink, $r_title, $r_content, $r_group_id, $r_assi
 	$r_version = $r_version+1;
 	$r_comment = get_lang('RestoredFromVersion').': '.$c_version;
 	
-	$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
+	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$r_page_id."','".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
 	
 	$result=api_sql_query($sql);	
     $Id = Database::insert_id();		
@@ -525,6 +526,7 @@ function display_wiki_entry()
 	global $tbl_wiki;
 	global $groupfilter;
 	global $page;
+
    
 	$_clean['group_id']=(int)$_SESSION['_gid']; 
 	if ($_GET['view'])
@@ -556,7 +558,7 @@ function display_wiki_entry()
 	// if both are empty and we are displaying the index page then we display the default text.
 	if ($row['content']=='' AND $row['title']=='' AND $page=='index')
 	{
-		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
+		if(api_is_allowed_to_edit() || api_is_platform_admin() || GroupManager :: is_user_in_group(api_get_user_id(),$_SESSION['_gid'])) 
 		{
 			$content=sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH));
 			$title=get_lang('DefaultTitle');

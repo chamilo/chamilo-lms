@@ -88,6 +88,7 @@ $html2pdf->pdf->SetAuthor('Wiki Dokeos');
 $html2pdf->pdf->SetTitle($titlePDF);
 $html2pdf->pdf->SetSubject('Exported from Dokeos Wiki');
 $html2pdf->pdf->SetKeywords('Dokeos Wiki');
-$html2pdf->WriteHTML(utf8_decode($htmlbuffer));
+//$html2pdf->WriteHTML(utf8_decode($htmlbuffer));
+$html2pdf->WriteHTML($htmlbuffer);
 $html2pdf->Output($titlePDF.'.pdf', 'D');
 ?>

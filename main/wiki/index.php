@@ -234,7 +234,7 @@ if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'')
 	{
 		//double post
 	}
-	elseif ($_POST['version']!=$_SESSION['_version'])
+	elseif ($_POST['version']!='' && $_POST['version']!=$_SESSION['_version'])
 	{
 		//prevent concurrent users and double version
 		Display::display_error_message(get_lang("EditedByAnotherUser"));
@@ -296,23 +296,10 @@ if ($_GET['view'])
 	if ($_GET['action']=='restorepage')
 	{	    
 		//Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher
-		if(($current_row['reflink']=='index' || $current_row['reflink']=='' || $current_row['assignment']==1) && (!api_is_allowed_to_edit()))
+		if(($current_row['reflink']=='index' || $current_row['reflink']=='' || $current_row['assignment']==1) && (!api_is_allowed_to_edit() && $_clean['group_id']==0))
 		{	  
 			Display::display_normal_message(get_lang('OnlyEditPagesCourseManager'));	  
 		}
-		elseif($last_row['is_editing']!=0 && $last_row['is_editing']!=$_user['user_id'])
-		{
-			//checking for concurrent users
-			$timestamp_edit=convert_date_to_number($last_row['time_edit']);
-			$time_editing=time()-$timestamp_edit;
-			$max_edit_time=1200; // 20 minutes
-			$rest_time=$max_edit_time-$time_editing;
-					
-			$userinfo=Database::get_user_info_from_id($last_row['is_editing']);
-				
-			$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
-			Display::display_normal_message($is_being_edited);
-		}	
 		else
 		{	
 			$PassEdit=false;		
@@ -370,7 +357,24 @@ if ($_GET['view'])
 				}
 				else
 				{
-					Display::display_confirmation_message(restore_wikipage($current_row['reflink'], $current_row['title'], $current_row['content'], $current_row['group_id'], $current_row['assignment'], $current_row['progress'], $current_row['version'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'">'.$last_row['title'].'</a>',false);
+					if($last_row['is_editing']!=0 && $last_row['is_editing']!=$_user['user_id'])
+					{
+						//checking for concurrent users
+						$timestamp_edit=convert_date_to_number($last_row['time_edit']);
+						$time_editing=time()-$timestamp_edit;
+						$max_edit_time=1200; // 20 minutes
+						$rest_time=$max_edit_time-$time_editing;
+								
+						$userinfo=Database::get_user_info_from_id($last_row['is_editing']);
+							
+						$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
+						Display::display_normal_message($is_being_edited);
+						
+					}
+					else
+					{
+					 	Display::display_confirmation_message(restore_wikipage($current_row['page_id'], $current_row['reflink'], $current_row['title'], $current_row['content'], $current_row['group_id'], $current_row['assignment'], $current_row['progress'], $current_row['version'], $last_row['version'], $current_row['linksto']).': <a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$last_row['reflink'].'&group_id='.$last_row['group_id'].'">'.$last_row['title'].'</a>',false);
+					}
 				}						
 			}
 		}
@@ -1169,7 +1173,7 @@ if ($_GET['action']=='addnew')
 	//first, check if page index was created. chektitle=false
 	if (checktitle('index'))
 	{		
-		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
+		if(api_is_allowed_to_edit() || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid'])) 
 		{
 			Display::display_normal_message(get_lang('GoAndEditMainPage'));
 		}
@@ -1251,8 +1255,8 @@ if ($_GET['action']=='edit')
 		$page_id=$row['page_id'];
 	}
 
-	//Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher
-	if(($row['reflink']=='index' || $row['reflink']=='' || $row['assignment']==1) && (!api_is_allowed_to_edit()))
+	//Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher. And users in groups
+	if(($row['reflink']=='index' || $row['reflink']=='' || $row['assignment']==1) && (!api_is_allowed_to_edit() && $_clean['group_id']==0))
 	{
 		Display::display_error_message(get_lang('OnlyEditPagesCourseManager'));
 	}

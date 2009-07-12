@@ -597,42 +597,43 @@ that criteria</li>
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="7._Mathematical_formulas"></a>7. Mathematical formulas with LaTeX</h2>
 		  
-<i>This part is optional, only organisations wanting to use mathematical formulas inside the online editor might want to read this.</i><br />
+<i>This part is optional, only organisations planning to use mathematical formulas inside the online editor might want to read this.</i><br /><br />
 
 You can enable mathematical equations writing inside the Dokeos online editor (FCKEditor) by applying the following steps:
 <ul>
 
-	<li>1. Configure your Apache installation to add a cgi-bin directory that contains a symbolic link to the mimetex.cgi in <i>dokeos/main/inc/lib/mimetex/</i>(*see below)</li>
+	<li>1. Configure your Apache installation to add a cgi-bin directory that contains a symbolic link to the mimetex.cgi in
+<i>dokeos/main/inc/lib/mimetex/</i> (*see below, step 4)</li>
 
 	<li>2. Reload your Apache configuration</li>
 
-	<li>3. Edit the <i>dokeos/main/inc/lib/fckeditor/myconfig.js</i> and
+	<li>3. Edit the online editor's configuration file <i>dokeos/main/inc/lib/fckeditor/myconfig.php</i> and
 		
     <ul>
+			<li>3.1. Enable the mimetex plugin, find the line //$config['LoadPlugin'][] = 'mimetex'; and modify it to be:
+<b>$config['LoadPlugin'][] = 'mimetex';</b> (remove the double slash)</li>
 
-			<li>3.1. Add <b>FCKConfig.Plugins.Add("mimetex", "en", sOtherPluginPath ) ;</b> at the end of the file</li>
+			<li>3.2. The additional settings <b>$config['MimetexExecutableInstalled']</b> , <b>$config['MimetexExecutableDetectionMethod']</b>
+and <b>$config['MimetexExecutableDetectionTimeout']</b> are configured for best probability
+of automatic detection of the installed on the server file <i>mimetex.cgi</i> or <i>mimetex.exe</i>.
+In rare cases these options might need to be twicked, see the acccompanying comments abou
+these options within the file <i>myconfig.php</i></li>
 
-			<li>3.2. Add <b>'mimetex'</b> at the end of the
-FCKConfig.ToolbarSets lines where you want the LaTeX icon to appear
-(there is one FCKConfig.ToolbarSets by tool). For example:
-        <div class="code">FCKConfig.ToolbarSets["Test"] = [<br />
-&nbsp;&nbsp;['Bold','Italic','Underline','StrikeThrough','Subscript','Superscript','Link','Unlink','ImageManager','MP3','OrderedList','UnorderedList','Table','mimetex']<br />
+			<li>3.3. Once the plugin has been activated, almost in all toolbars the corresponding button appears.
+If you need to edit some toolbars, see the configuration files (php) within the directory <i>dokeos/main/inc/lib/fckeditor/toolbars/</i> .
+Here is an example:
+        <div class="code">$config['ToolbarSets']['Normal'] = array(<br />
+&nbsp;&nbsp;array('FitWindow','Bold','Image','Link','PasteWord','MP3',<b>'mimetex'</b>,'Table','Subscript','Superscript','ShowBlocks')<br />
+);</div>
 
-] ;</div>
-
-				You can add it to all the tools, or only to the document and tests tools, for example<br />
-        <br />
+				The item <b>'mimetex'</b> represents the button, you may add it to or remove it from any toolbar.<br /><br />
 			</li>
     </ul>
-		</li>
 
-	<li>4. In very rare cases (only if problems are detected), some configuration options   about MimeTeX at the beginning of the file   <em>dokeos/main/inc/lib/fckeditor/fckeditor.php</em> might need to be revised and   twicked. See the acccompanying comments about these options within the same file</li>
-
-	<li>5. Clear your browser's cache to test it (very important). This can be done using your browser's settings page</li>
-    <li>6. Make these changes:      </li>
+    <li>4. To install mimetex executable file, make these changes:</li>
     </ul>
 
-<p><i>Adding the corresponding cgi-bin directory to your Apache configuration could be done, in Apache 2, like this:</i>
+<p>Add the corresponding cgi-bin directory to your Apache configuration could be done, in Apache 2, like this:
   
     </p>
 <div class="code">
@@ -646,22 +647,21 @@ FCKConfig.ToolbarSets lines where you want the LaTeX icon to appear
     </div>
 
 
-<p><i>Adding a symbolic link can be done, under Windows, by creating a
+<p>Adding a symbolic link can be done, under Windows, by creating a
   shortcut to the mimetex.exe file from the cgi-bin directory, or under
-  Linux by issuing the following command:</i>
+  Linux by issuing the following command:
   
 </p>
 <div class="code">
   <p>ln -s /var/www/dokeos/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</p>
 </div>
-<p>If you don't want modify your Apache, alternately you can make at this point 6: copy mimetex.exe (for windows) or mimetex.cgi (for linux) to your cgi-bin/ </p>
-<p>&nbsp;</p>
-<p>This procedure should make a new icon available in your Dokeos online
-  editor, which will make it possible to insert mathematical formulas
-  into your documents.<br />
-  
-  
-  
+<p>If you are reluctant to modify your Apache configuration, alternately you may do at step 4 the following:
+copy mimetex.exe (for windows) or mimetex.cgi (for linux) from <i>dokeos/main/inc/lib/mimetex/</i> directory to your <i>cgi-bin/</i></p>
+
+<p>As a result of this procedure, a new button becomes available in your Dokeos online editor, that gives you possibility
+to insert mathematical formulas into your documents.<br />
+
+
   <br />
   <br />
   Contact address: Dokeos, Rue Victor Hugo, 201,&nbsp;B-1030 Brussels, Belgium<br />

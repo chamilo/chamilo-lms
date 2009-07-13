@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 21931 2009-07-09 04:38:48Z ivantcholakov $
+// $Id: html_editor.php 22027 2009-07-13 11:03:41Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -71,6 +71,9 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 			}
 			if (isset($config['Height'])) {
 				$this->fck_editor->Height = $config['Height'];
+			}
+			if (isset($config['FullPage'])) {
+				$this->fullPage = $config['FullPage'];
 			}
 		}
 	}

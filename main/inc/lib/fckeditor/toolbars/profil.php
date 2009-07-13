@@ -31,7 +31,7 @@ $config['ToolbarSets']['Maximized'] = array(
 
 // Sets how the editor's toolbar should start - expanded or collapsed.
 // Possible values: true , false
-//$config['ToolbarStartExpanded'] = false;
+$config['ToolbarStartExpanded'] = false;
 
 //This option sets the location of the toolbar.
 // Possible values: 'In' , 'None' , 'Out:[TargetId]' , 'Out:[TargetWindow]([TargetId])'

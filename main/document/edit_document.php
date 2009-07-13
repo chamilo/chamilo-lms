@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 21106 2009-05-30 16:25:16Z iflorespaz $
+<?php // $Id: edit_document.php 22027 2009-07-13 11:03:41Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -118,21 +118,6 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '600';
-
-$fck_attribute['Config']['FullPage'] = true;
-
-if(!api_is_allowed_to_edit())
-{
-	$fck_attribute['Config']['UserStatus'] = 'student';
-	$fck_attribute['ToolbarSet'] = 'Documents_Student';
-}
-else
-{
-	$fck_attribute['ToolbarSet'] = 'Documents';
-}
-
 
 /*
 ------------------------------------------------------------------------------
@@ -172,17 +157,19 @@ for($i=0;$i<($count_dir);$i++)
 {
 	$relative_url.='../';	
 }
-$fck_attribute['Config']['InDocument'] = true;
-$fck_attribute['Config']['CreateDocumentDir'] = $relative_url;
-if (empty($group_properties['directory']))
-{
-	$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
-}
-else
-{
-	$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document'.$group_properties['directory'].'/';
-}
-$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir;
+
+$html_editor_config = array(
+	'ToolbarSet' => (api_is_allowed_to_edit() ? 'Documents' :'Documents_Student'),
+	'Width' => '100%',
+	'Height' => '600',
+	'FullPage' => true,
+	'InDocument' => true,
+	'CreateDocumentDir' => $relative_url,
+	'CreateDocumentWebDir' => (empty($group_properties['directory']))
+		? api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/'
+		: api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document'.$group_properties['directory'].'/',
+	'BaseHref' =>  api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir
+);
 
 $use_document_title = (get_setting('use_document_title')=='true')?true:false;
 $noPHP_SELF=true;
@@ -673,7 +660,7 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 		{	
 			$_SESSION['showedit']=1;
 			$renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div>', 'texte');
-			$form->add_html_editor('texte','',false,true);
+			$form->add_html_editor('texte', '', false, true, $html_editor_config);
 		}			
 	}
 			

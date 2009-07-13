@@ -1,4 +1,4 @@
-<?php // $Id: index.php 21933 2009-07-09 06:08:22Z ivantcholakov $
+<?php // $Id: index.php 22027 2009-07-13 11:03:41Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -71,11 +71,6 @@ $nameTools = get_lang(TOOL_COURSE_DESCRIPTION);
 */
 Display::display_introduction_section(TOOL_COURSE_DESCRIPTION);
 
-
-// These settings are for the other instances of the online editor.
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'CourseDescription';
 
 $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 $show_description_list = true;
@@ -184,8 +179,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 			WCAG_rendering::prepare_admin_form($description_content, $form);
 		} else {			
-			$fck_attribute['Height'] = '200';
-			$form->add_html_editor('contentDescription', get_lang('Content'));			
+			$form->add_html_editor('contentDescription', get_lang('Content'), true, false, array('ToolbarSet' => 'CourseDescription', 'Width' => '100%', 'Height' => '200'));
 		}
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		// Set some default values

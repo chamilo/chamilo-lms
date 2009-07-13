@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 21106 2009-05-30 16:25:16Z iflorespaz $
+<?php // $Id: create_document.php 22027 2009-07-13 11:03:41Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -193,17 +193,6 @@ require_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $nameTools = get_lang('CreateDocument');
 
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '600';
-
-$fck_attribute['Config']['FullPage'] = true;
-if(!api_is_allowed_to_edit()) {
-	$fck_attribute['Config']['UserStatus'] = 'student';
-	$fck_attribute['ToolbarSet'] = 'Documents_Student';
-} else {
-	$fck_attribute['ToolbarSet'] = 'Documents';
-}
-
 
 /*
 -----------------------------------------------------------
@@ -211,6 +200,7 @@ if(!api_is_allowed_to_edit()) {
 -----------------------------------------------------------
 */
 $dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']); // please do not modify this dirname formatting
+
 /*
 ==============================================================================
 		MAIN CODE
@@ -261,14 +251,19 @@ for($i=0;$i<($count_dir);$i++)
 if ($relative_url== '') {
 	$relative_url = '/';
 }
-$fck_attribute['Config']['InDocument'] = true;
-$fck_attribute['Config']['CreateDocumentDir'] = $relative_url;
-if (empty($group_properties['directory'])) {
-	$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/';
-} else {
-	$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document'.$group_properties['directory'].'/';
-}
-$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir;
+
+$html_editor_config = array(
+	'ToolbarSet' => (api_is_allowed_to_edit() ? 'Documents' :'Documents_Student'),
+	'Width' => '100%',
+	'Height' => '600',
+	'FullPage' => true,
+	'InDocument' => true,
+	'CreateDocumentDir' => $relative_url,
+	'CreateDocumentWebDir' => (empty($group_properties['directory']))
+		? api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/'
+		: api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document'.$group_properties['directory'].'/',
+	'BaseHref' => api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir
+);
 
 $filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document'.$dir;
 
@@ -398,7 +393,7 @@ if (api_get_setting('use_document_title') == 'true') {
 
 // HTML-editor
 $renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div>', 'content');
-$form->add_html_editor('content','', false, false);
+$form->add_html_editor('content','', false, false, $html_editor_config);
 // Comment-field
 
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));

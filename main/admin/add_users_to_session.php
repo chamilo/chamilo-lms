@@ -149,14 +149,14 @@ function search_users($needle,$type)
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 					WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
 					OR firstname LIKE "'.$needle.'%"
-					OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'" 
+					OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'" 
 					ORDER BY lastname, firstname, username
 					LIMIT 11';
 				} else {
 					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user 
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 					WHERE access_url_id = '.$access_url_id.'  
-					AND lastname LIKE "'.$needle.'%" AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.'  
+					AND lastname LIKE "'.$needle.'%" AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.'  
 					ORDER BY lastname, firstname, username';					
 				}				
 				

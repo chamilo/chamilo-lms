@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 21862 2009-07-07 23:14:13Z juliomontoya $
+<?php // $Id: user_list.php 22041 2009-07-13 18:29:45Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -266,7 +266,7 @@ function get_number_of_users()
     
 	if ( isset ($_GET['keyword'])) {
 		$keyword = Database::escape_string($_GET['keyword']);
-		$sql .= " WHERE u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.email LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%'";
+		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%') ";
 	} elseif (isset ($_GET['keyword_firstname'])) {
 		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
@@ -284,7 +284,7 @@ function get_number_of_users()
 		$keyword_active = isset($_GET['keyword_active']);
 		$keyword_inactive = isset($_GET['keyword_inactive']);
 		$sql .= $query_admin_table .
-				" WHERE u.firstname LIKE '%".$keyword_firstname."%' " .
+				" WHERE (u.firstname LIKE '%".$keyword_firstname."%' " .
 				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
 				"AND u.username LIKE '%".$keyword_username."%'  " .
 				"AND u.email LIKE '%".$keyword_email."%'   " .
@@ -296,6 +296,7 @@ function get_number_of_users()
 		} elseif($keyword_inactive && !$keyword_active) {
 			$sql .= " AND u.active='0'";
 		}
+		$sql .= " ) ";
 	}
 	
     // adding the filter to see the user's only of the current access_url
@@ -340,7 +341,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                  
 	if (isset ($_GET['keyword'])) {
 		$keyword = Database::escape_string($_GET['keyword']);
-		$sql .= " WHERE u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%'";
+		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%' )";
 	} elseif (isset ($_GET['keyword_firstname'])) {
 		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
@@ -358,7 +359,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		}
 		$keyword_active = isset($_GET['keyword_active']);
 		$keyword_inactive = isset($_GET['keyword_inactive']);
-		$sql .= $query_admin_table." WHERE u.firstname LIKE '%".$keyword_firstname."%' " .
+		$sql .= $query_admin_table." WHERE (u.firstname LIKE '%".$keyword_firstname."%' " .
 				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
 				"AND u.username LIKE '%".$keyword_username."%'  " .
 				"AND u.email LIKE '%".$keyword_email."%'   " .
@@ -371,6 +372,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		} elseif($keyword_inactive && !$keyword_active) {
 			$sql .= " AND u.active='0'";
 		}
+		$sql .= " ) ";
 	}
 	
     // adding the filter to see the user's only of the current access_url

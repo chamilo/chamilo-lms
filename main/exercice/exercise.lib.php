@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 21815 2009-07-06 16:45:39Z cvargas1 $
+<?php // $Id: exercise.lib.php 22044 2009-07-13 23:40:48Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -29,8 +29,11 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 21815 2009-07-06 16:45:39Z cvargas1 $
+* 	@version $Id: exercise.lib.php 22044 2009-07-13 23:40:48Z ivantcholakov $
 */
+
+// The initialization class for the online editor is needed here.
+require_once '../inc/lib/fckeditor/fckeditor.php';
 
 /**
  * @param int question id
@@ -39,7 +42,6 @@
  * @param int current item from the list of questions
  * @param int number of total questions 
  * */
-//require_once ("../inc/lib/fckeditor/fckeditor.php") ;
 function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_item, $total_item)
 {
 	if (!ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) {

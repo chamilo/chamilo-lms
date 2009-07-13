@@ -47,8 +47,7 @@ $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/java
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
 	for (i=0;i<$(".actions").length;i++) {
-		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
-			//alert($(".actions:eq("+i+")").html());
+		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null || $(".actions:eq("+i+")").html().split("<TBODY></TBODY>").length==2) {
 			$(".actions:eq("+i+")").hide();
 		}		
 	}

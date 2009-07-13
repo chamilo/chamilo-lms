@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 20488 2009-05-11 17:14:41Z cvargas1 $
+// $Id: inscription.php 22024 2009-07-13 09:21:43Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -60,10 +60,6 @@ if (get_setting('allow_registration')=='approval') {
 if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 	Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));	
 }
-
-$fck_attribute['Height'] = "150";
-$fck_attribute['Width'] = "450";
-$fck_attribute['ToolbarSet'] = "Profil";
 
 $form = new FormValidator('registration');
 //	LAST NAME and FIRST NAME
@@ -129,19 +125,19 @@ if (get_setting('allow_registration_as_teacher') <> 'false') {
 //	EXTENDED FIELDS
 if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mycomptetences') == 'true')
 {
-	$form->add_html_editor('competences', get_lang('MyCompetences'), false);
+	$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 }
 if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mydiplomas') == 'true')
 {
-	$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false);
+	$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 }
 if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
 {
-	$form->add_html_editor('teach', get_lang('MyTeach'), false);
+	$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 }
 if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true')
 {
-	$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false);
+	$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 }
 if (api_get_setting('extended_profile') == 'true')
 {
@@ -177,7 +173,7 @@ foreach ($extra as $id => $field_details) {
 			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 		case USER_FIELD_TYPE_TEXTAREA:
-			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false);
+			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 			//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
 			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
 			$form->applyFilter('extra_'.$field_details[1], 'trim');

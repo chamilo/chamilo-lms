@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 21361 2009-06-11 04:08:58Z ivantcholakov $
+<?php // $Id: configure_homepage.php 22018 2009-07-13 05:32:58Z ivantcholakov $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -131,8 +131,7 @@ $ext 	 = '.html'; //ext for HTML Extension - when used frequently, variables are
 $homef = array($menuf,$newsf,$topf,$noticef);
 
 // If language-specific file does not exist, create it by copying default file
-foreach($homef as $my_file)
-{
+foreach($homef as $my_file) {
 	if ($_configuration['multiple_access_urls']==true) {
 		if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
 			copy($homep.$my_file.$ext,$homep_new.$my_file.'_'.$lang.$ext);
@@ -155,12 +154,10 @@ if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 
 // Filter link param
 $link = '';
-if(!empty($_GET['link']))
-{
+if(!empty($_GET['link'])) {
 	$link=$_GET['link'];
 	// If the link parameter is suspicious, empty it
-	if(strstr($link,'/') || !strstr($link,'.html') || strstr($link,'\\'))
-	{
+	if(strstr($link,'/') || !strstr($link,'.html') || strstr($link,'\\')) {
 		$link='';
 		$action='';
 	}
@@ -169,8 +166,7 @@ if(!empty($_GET['link']))
 global $_configuration;
 
 // Start analysing requested actions
-if(!empty($action))
-{
+if(!empty($action)) {
 	if($_POST['formSent']) {
 		//variables used are $homep for home path, $menuf for menu file, $newsf
 		// for news file, $topf for top file, $noticef for noticefile,
@@ -240,11 +236,9 @@ if(!empty($action))
 			case 'edit_news':
 				//Filter
 				//$s_languages_news=$_POST["news_languages"];
-				if (api_get_setting('wcag_anysurfer_public_pages')=='true')
-				{
+				if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 					$home_news=WCAG_rendering::prepareXHTML();
-				} else
-				{
+				} else {
 					$home_news=trim(stripslashes($_POST['home_news']));
 				}
 				//Write
@@ -309,66 +303,52 @@ if(!empty($action))
 				$filename=trim(stripslashes($_POST['filename']));
 				$target_blank=$_POST['target_blank']?true:false;
 
-				if($link_url == 'http://')
-				{
+				if($link_url == 'http://') {
 					$link_url='';
 				}
-				elseif(!empty($link_url) && !strstr($link_url,'://'))
-				{
+				elseif(!empty($link_url) && !strstr($link_url,'://')) {
 					$link_url='http://'.$link_url;
 				}
 
-				if(!is_writable($homep.$menuf.'_'.$lang.$ext))
-				{
+				if(!is_writable($homep.$menuf.'_'.$lang.$ext)) {
 					$errorMsg=get_lang('HomePageFilesNotWritable');
 				}
-				elseif(empty($link_name))
-				{
+				elseif(empty($link_name)) {
 					$errorMsg=get_lang('PleaseEnterLinkName');
-				}
-				else
-				{
+				} else {
 					// New links are added as new files in the home/ directory
-					if($action == 'insert_link' || empty($filename) || strstr($filename,'/') || !strstr($filename,'.html'))
-					{
+					if($action == 'insert_link' || empty($filename) || strstr($filename,'/') || !strstr($filename,'.html')) {
 						$filename=replace_dangerous_char($link_name,'strict').'.html';
 					}
 					// "home_" prefix for links are renamed to "user_" prefix (to avoid name clash with existing home page files)
-					if(!empty($filename))
-					{
+					if(!empty($filename)) {
 						$filename=str_replace('home_','user_',$filename);
 					}
 					// If the typical language suffix is not found in the file name,
 					// replace the ".html" suffix by "_en.html" or the active menu language
-					if(!strstr($filename,'_'.$lang.$ext))
-					{
+					if(!strstr($filename,'_'.$lang.$ext)) {
 						$filename=str_replace($ext,'_'.$lang.$ext,$filename);
 					}
 					// Get the contents of home_menu_en.html (or active menu language
 					// version) into $home_menu as an array of one entry per line
 					$home_menu=file($homep.$menuf.'_'.$lang.$ext);
 					// Prepare place to insert the new link into (default is end of file)
-					if($insert_where < -1 || $insert_where > (sizeof($home_menu) - 1))
-					{
+					if($insert_where < -1 || $insert_where > (sizeof($home_menu) - 1)) {
 						$insert_where=sizeof($home_menu) - 1;
 					}
 					// For each line of the file, remove trailing spaces and special chars
-					foreach($home_menu as $key=>$enreg)
-					{
+					foreach($home_menu as $key=>$enreg) {
 						$home_menu[$key]=trim($enreg);
 					}
 					// If the given link url is empty, then replace the link url by a link to the link file created
-					if(empty($link_url))
-					{
+					if(empty($link_url)) {
 						$link_url=api_get_path(WEB_PATH).'index.php?include='.urlencode($filename);
 						// If the file doesn't exist, then create it and
 						// fill it with default text
-						if(!file_exists(api_get_path(SYS_PATH).'home/'.$filename))
-						{
+						if(!file_exists(api_get_path(SYS_PATH).'home/'.$filename)) {
 							$fp=@fopen(api_get_path(SYS_PATH).'home/'.$filename,'w');
 
-							if($fp)
-							{
+							if($fp) {
 								fputs($fp,get_lang('MyTextHere'));
 
 								fclose($fp);
@@ -377,12 +357,10 @@ if(!empty($action))
 					}
 					// If the requested action is to edit a link, open the file and
 					// write to it (if the file doesn't exist, create it)
-					if($action == 'edit_link' && !empty($link_html))
-					{
+					if($action == 'edit_link' && !empty($link_html)) {
 						$fp=@fopen(api_get_path(SYS_PATH).'home/'.$filename,'w');
 
-						if($fp)
-						{
+						if($fp) {
 							fputs($fp,$link_html);
 							fclose($fp);
 						}
@@ -390,16 +368,11 @@ if(!empty($action))
 					// If the requested action is to create a link, make some room
 					// for the new link in the home_menu array at the requested place
 					// and insert the new link there
-					if($action == 'insert_link')
-					{
-						for($i=sizeof($home_menu);$i;$i--)
-						{
-							if($i > $insert_where)
-							{
+					if($action == 'insert_link') {
+						for($i=sizeof($home_menu);$i;$i--) {
+							if($i > $insert_where) {
 								$home_menu[$i]=$home_menu[$i-1];
-							}
-							else
-							{
+							} else {
 								break;
 							}
 						}
@@ -440,8 +413,7 @@ if(!empty($action))
 				break;
 		} //end of switch($action)
 
-		if(empty($errorMsg))
-		{
+		if(empty($errorMsg)) {
 			header('Location: '.api_get_self());
 			exit();
 		}
@@ -459,14 +431,10 @@ if(!empty($action))
 
 				$home_menu=file($homep.$menuf.'_'.$lang.$ext);
 
-				foreach($home_menu as $key=>$enreg)
-				{
-					if($key == $link_index)
-					{
+				foreach($home_menu as $key=>$enreg) {
+					if($key == $link_index) {
 						unset($home_menu[$key]);
-					}
-					else
-					{
+					} else {
 						$home_menu[$key]=trim($enreg);
 					}
 				}
@@ -577,15 +545,12 @@ if(!empty($action))
 				$link_url='';
 
 				// For each line of the home_menu file
-				foreach($home_menu as $key=>$enreg)
-				{
+				foreach($home_menu as $key=>$enreg) {
 					// Check if the current item is the one we want to update
-					if($key == $link_index)
-					{
+					if($key == $link_index) {
 						// This is the link we want to update
 						// Check if the target should be "_blank"
-						if(strstr($enreg,'target="_blank"'))
-						{
+						if(strstr($enreg,'target="_blank"')) {
 							$target_blank=true;
 						}
 						// Remove dangerous HTML tags from the link itself (this is an
@@ -599,21 +564,17 @@ if(!empty($action))
 
 						// If the link contains the web root of this portal, then strip
 						// it off and keep only the name of the file that needs edition
-						if(strstr($link_url,$_configuration['root_web']) && strstr($link_url,'?include='))
-						{
+						if(strstr($link_url,$_configuration['root_web']) && strstr($link_url,'?include=')) {
 							$link_url=explode('?include=',$link_url);
 
 							$filename=$link_url[sizeof($link_url)-1];
 
-							if(!strstr($filename,'/') && strstr($filename,'.html'))
-							{
+							if(!strstr($filename,'/') && strstr($filename,'.html')) {
 								// Get oonly the contents of the link file
 								$link_html=file(api_get_path(SYS_PATH).'home/'.$filename);
 								$link_html=implode('',$link_html);
 								$link_url='';
-							}
-							else
-							{
+							} else {
 								$filename='';
 							}
 						}
@@ -654,8 +615,7 @@ switch($action){
 		<input type="hidden" name="formSent" value="1"/>
 
 		<?php
-		if(!empty($errorMsg))
-		{
+		if(!empty($errorMsg)) {
 			//echo '<tr><td colspan="2">';
 			Display::display_normal_message($errorMsg);
 			//echo '</td></tr>';
@@ -684,14 +644,9 @@ switch($action){
 	case 'insert_link':
 	case 'edit_link':
 
-		if(!empty($errorMsg))
-		{
+		if(!empty($errorMsg)) {
 			Display::display_normal_message($errorMsg); //main API
 		}
-
-		$fck_attribute['ToolbarSet'] = "LinksHomePage";
-		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '400';
 
 		$default = array();
 		$form = new FormValidator('configure_homepage_'.$action, 'post', api_get_self().'?action='.$action, '', array('style' => 'margin: 0px;'));
@@ -714,12 +669,10 @@ switch($action){
 		$form->addElement('text', 'link_url', get_lang('LinkName'), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
 		$form->addElement('html', '</td></tr>');
 		
-		if($action == 'insert_link')
-		{
+		if($action == 'insert_link') {
 			$form->addElement('html', '<tr><td nowrap="nowrap">'.get_lang('InsertThisLink').' :</td>');
 			$form->addElement('html', '<td><select name="insert_where"><option value="-1">'.get_lang('FirstPlace').'</option>');
-			foreach($home_menu as $key=>$enreg)
-			{
+			foreach($home_menu as $key=>$enreg) {
 				$form->addElement('html', '<option value="'.$key.'" '.($formSent && $insert_where == $key ? 'selected="selected"' : '').' >'.get_lang('After').' &quot;'.trim(strip_tags($enreg)).'&quot;</option>');
 			}
 			$form->addElement('html', '</select></td></tr>');
@@ -731,25 +684,19 @@ switch($action){
 		$form->addElement('html', '</td></tr>');
 
 		//if($action == 'edit_link' && empty($link_url))
-		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://'))
-		{
+		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://')) {
 			$form->addElement('html', '</table><table border="0" cellpadding="5" cellspacing="0" width="100%"><tr><td>');
 			$form->addElement('html', '</td></tr><tr><td>');
-			if (api_get_setting('wcag_anysurfer_public_pages')=='true')
-			{
+			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 				$form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html));
-			}
-			else
-			{
+			} else {
 				$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
-				$form->add_html_editor('link_html', '');
+				$form->add_html_editor('link_html', '', true, false, array('ToolbarSet' => 'LinksHomePage', 'Width' => '100%', 'Height' => '400'));
 			}
 			$form->addElement('html', '</td></tr><tr><td>');
 			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 			$form->addElement('html', '</td></tr>');
-		}
-		else
-		{
+		} else {
 			$form->addElement('html', '<tr><td>&nbsp;</td><td>');
 			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 			$form->addElement('html', '</td></tr>');
@@ -758,31 +705,21 @@ switch($action){
 		$form->setDefaults($default);
 		$form->display();
 
-		$fck_attribute = null;
-
 		break;
 	case 'edit_top':
 	case 'edit_news':
-		if($action == 'edit_top')
-		{
+		if($action == 'edit_top') {
 			$name= $topf;
 			$open = $home_top;
-		}
-		else
-		{
+		} else {
 			$name = $newsf;
 			$open=@file_get_contents($homep.$newsf.'_'.$lang.$ext);
 
 		}
 
-		if(!empty($errorMsg))
-		{
+		if(!empty($errorMsg)) {
 			Display::display_normal_message($errorMsg); //main API
 		}
-
-		$fck_attribute['ToolbarSet'] = "EditHomePage";
-		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '400';
 
 		$default = array();
 		$form = new FormValidator('configure_homepage_'.$action, 'post', api_get_self().'?action='.$action, '', array('style' => 'margin: 0px;'));
@@ -809,24 +746,20 @@ switch($action){
 			$html .= '</select></td></tr>';
 			$form->addElement('html', $html);
 		}
-		if (api_get_setting('wcag_anysurfer_public_pages')=='true')
-		{
+		if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 			//TODO: review these lines
 			// Print WCAG-specific HTML editor
 			$html = '<tr><td>';
-			//$html .= '<script type="text/javascript" src="'.api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/plugins/ImageManagerStandalone/generic_dialog_common.js'.'" />';
 			$html .= WCAG_Rendering::create_xhtml($open);
 			$html .= '</td></tr>';
 			$form->addElement('html', $html);
 		} else {
 			$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
-			$form->add_html_editor($name, '');
+			$form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'EditHomePage', 'Width' => '100%', 'Height' => '400'));
 		}
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		$form->setDefaults($default);
 		$form->display();
-
-		$fck_attribute = null;
 
 		break;
 	default: // When no action applies, default page to update campus homepage
@@ -940,21 +873,16 @@ switch($action){
 
 				<?php
 					$home_menu = '';
-					if(file_exists($homep.$menuf.'_'.$lang.$ext))
-					{
+					if(file_exists($homep.$menuf.'_'.$lang.$ext)) {
 						$home_menu = file($homep.$menuf.'_'.$lang.$ext);
-					}
-					else
-					{
+					} else {
 						$home_menu = file ($homep.$menuf.$ext);
 					}
 
-					foreach($home_menu as $key=>$enreg)
-					{
+					foreach($home_menu as $key=>$enreg) {
 						$enreg=trim($enreg);
 
-						if(!empty($enreg))
-						{
+						if(!empty($enreg)) {
 							$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 
@@ -973,12 +901,9 @@ switch($action){
 
 			<?php
 			$home_notice = '';
-			if(file_exists($homep.$noticef.'_'.$lang.$ext))
-			{
+			if(file_exists($homep.$noticef.'_'.$lang.$ext)) {
 				$home_notice = @file_get_contents($homep.$noticef.'_'.$lang.$ext);
-			}
-			else
-			{
+			} else {
 				$home_notice = @file_get_contents($homep.$noticef.$ext);
 			}
 			echo $home_notice

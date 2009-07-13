@@ -29,7 +29,7 @@
  * Configuration data for the editor comes from different sources which are prioritised.
  *
  * 1-st level (the highest priority)
- * "Hardcoded" options by developers. 'Width' and 'Height' might be exception of this rule.
+ * "Hardcoded" options by developers. 'Width' and 'Height' are exception of this rule.
  *
  * 2-nd level
  * Configuration settings from myconfig.php (this file).

@@ -346,16 +346,12 @@ class FCKeditor
 					}
 					break;
 				case 'Width':
-					if (!isset($this->Config[$key])) {
-						$this->Config[$key] = (string) $value;
-						$this->Width = $this->Config[$key];
-					}
+					$this->Config[$key] = (string) $value;
+					$this->Width = $this->Config[$key];
 					break;
 				case 'Height':
-					if (!isset($this->Config[$key])) {
-						$this->Config[$key] = (string) $value;
-						$this->Height = $this->Config[$key];
-					}
+					$this->Config[$key] = (string) $value;
+					$this->Height = $this->Config[$key];
 					break;
 				default:
 					if (!isset($this->Config[$key])) {

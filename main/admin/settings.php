@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 21994 2009-07-11 22:11:42Z herodoto $
+<?php // $Id: settings.php 22019 2009-07-13 06:16:38Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,11 +74,6 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 
 // setting the name of the tool
 $tool_name = get_lang('DokeosConfigSettings');
-
-// setting for templates
-$fck_attribute['ToolbarSet'] = "AdminTemplates";
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
 
 // Build the form
 if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search')))
@@ -1027,7 +1022,7 @@ function add_edit_template()
 	$form->add_textfield('title', get_lang('Title'), false);
 	
 	// settting the form elements: the content of the template (wysiwyg editor)
-	$form->addElement('html_editor', 'template_text', get_lang('Text'));
+	$form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
 	
 	// settting the form elements: the form to upload an image to be used with the template
 	$form->addElement('file','template_image',get_lang('Image'),'');

@@ -151,6 +151,21 @@ EOT;
 		{
 			$html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML : STUDENT_HTML;
 		}
+		if (is_array($config))
+		{
+			if (isset($config['FullPage']))
+			{
+				$full_page = is_bool($config['FullPage']) ? $config['FullPage'] : ($config['FullPage'] === 'true');
+			}
+			else
+			{
+				$config['FullPage'] = $full_page;
+			}
+		}
+		else
+		{
+			$config = array('FullPage' => (bool) $full_page);
+		}
 		if($full_page)
 		{
 			$html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML_FULLPAGE : STUDENT_HTML_FULLPAGE;

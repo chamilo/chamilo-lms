@@ -727,5 +727,5 @@ $BackTo = "Volver a";
 $ConversionFailled = "Conversión fallida";
 $AlreadyExists = "Ya existe";
 $TheNewWordHasBeenAdded = "La nueva palabra ha sido añadida al subconjunto del idioma principal";
-$CommentErrorExportDocument = "Algunos documentos son demasiado complejos para su tratamiento automático mediante el conversor de documentos";
+$CommentErrorExportDocument = "Algunos documentos contienen etiquetas internas no válidas o son demasiado complejos para su tratamiento automático mediante el conversor de documentos";
 ?>

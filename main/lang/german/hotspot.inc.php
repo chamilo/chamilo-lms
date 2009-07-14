@@ -18,4 +18,6 @@ $labelPolyMenu = "Schliesse Polygon";
 $triesleft = "Verbleibende Versuche";
 $exeFinished = "Alle Antworten sind definiert. Sie können jetzt die Hotspots neuanordnen oder auf senden klicken.";
 $nextAnswer = "Jetzt klicke auf: &done=done";
+$delineation = "Skizze";
+$labelDelineationMenu = "Skizze schliessen";
 ?>

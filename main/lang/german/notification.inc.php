@@ -17,4 +17,5 @@ $lang_new_dropbox_file = "Neue Datei angekommen";
 $lang_update_dropbox_file = "Datei in der Dropbox wurde aktualisiert";
 $ForumCategoryAdded = "Forum Kategorie wurde hinzugefügt";
 $LearnpathAdded = "Lernpfad wurde hinzugefügt";
+$GlossaryAdded = "Neuer Begriff ins Wörterbuch aufgenommen";
 ?>

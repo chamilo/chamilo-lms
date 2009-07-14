@@ -50,4 +50,10 @@ $NoAnnouncements = "Es gibt keine Ankündigungen";
 $SelectEverybody = "Alle auswählen";
 $SelectedUsersGroups = "Ausgewählte Benutzer Gruppen";
 $LearnerMessage = "Nachricht von einem Studenten";
+$TitleIsRequired = "Überschrift fehlt";
+$AnnounceSentByEmail = "Ankündigung via Email versendet";
+$AnnounceSentToUserSelection = "Ankündigung wurde an die ausgewählten User versendet";
+$SendAnnouncement = "Ankündigung versenden";
+$ModifyAnnouncement = "Ankündigung ändern";
+$ButtonPublishAnnouncement = "Ankündigung versenden";
 ?>

@@ -124,4 +124,10 @@ $NoFilesHere = "Hier gibt es keine Dateien";
 $NoFilesHere = "Hier gibt es keine Dateien ";
 $NewDropboxFileUploaded = "Eine neue Datei wurde im Dropbox Tool gesendet";
 $NewDropboxFileUploadedContent = "Eine neue Datei wurde im Dropbox Tool ihres Kurses gesendet";
+$langAddEdit = "Hinzufügen / Ändern";
+$ErrorNoFilesInFolder = "Dieses Verzeichnis ist leer";
+$dropbox_lang["upload"] = "Upload";
+$AddComment  = "Feedback speichern";
+$SentCatgoryDeleted = "Der Ordner wurde gelöscht";
+$ReceivedCatgoryDeleted = "Der Ordner wurde gelöscht";
 ?>

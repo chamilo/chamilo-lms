@@ -996,4 +996,7 @@ $CreateSubLanguage = "Crea un\'articolazione della lingua";
 $RegisterTermsOfSubLanguageForLanguage = "Registra i termini specifici dell\'articolazione della lingua";
 $AddTermsOfThisSubLanguage = "Aggiungi dei termini all\'articolazione della lingua";
 $LoadLanguageFile = "Carica il file della lingua";
+$AllowUseSubLanguageTitle = "Consenti la definizione di articolazioni di una lingua";
+$AllowUseSubLanguageComment = "Abilitando questa opzione, possono essere introdotti termini alternativi a quelli usati da una lingua principale, adattandoli all\'uso locale. L\'opzione di attivazione è presente nel pannello di controllo dell\'amministrazione.";
+$AddWordForTheSubLanguage = "Aggiungi termini all\'articolazione della lingua";
 ?>

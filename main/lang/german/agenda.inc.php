@@ -65,4 +65,13 @@ $RepeatYearly = "Jährlich";
 $RepeatEnd = "Enddatum für Wiederholungen";
 $RepeatedEventViewOriginalEvent = "Ursprüngliches Ereignis";
 $ICalFileImport = "iCal/ics Datei importieren";
+$AllUsersOfThePlatform = "Alle User der Plattform";
+$GlobalEvent = "globaler Termin";
+$ModifyEvent = "Termin ändern";
+$EndDateCannotBeBeforeTheStartDate = "Das End-Datum kann nicht vor dem Start-Datum liegen";
+$AgendaSortChronologicallyUp = "aufsteigend";
+$AgendaSortChronologicallyDown = "absteigend";
+$ItemForUserSelection = "ausgewählte Objekte";
+$IsNotiCalFormatFile = "Diese Datei ist nicht im iCal-Format gespeichert";
+$RepeatEvent = "Termin wiederholen";
 ?>

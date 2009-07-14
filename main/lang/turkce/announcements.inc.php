@@ -51,4 +51,9 @@ $SelectEverybody = "Herkesi seç";
 $SelectedUsersGroups = "seçilen kullan&#305;c&#305; gruplar&#305;";
 $LearnerMessage = "Bir ö&#287;renciden mesaj";
 $TitleIsRequired = "Ba&#351;l&#305;k gerekli";
+$AnnounceSentByEmail = "E-posta ile gönderilen duyuru";
+$AnnounceSentToUserSelection = "Seçili kullan&#305;c&#305;lara gönderilmi&#351; duyuru";
+$SendAnnouncement = "Duyuruyu gönder";
+$ModifyAnnouncement = "Duyuruyu düzenle";
+$ButtonPublishAnnouncement = "Duyuruyu gönder";
 ?>

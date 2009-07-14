@@ -38,7 +38,7 @@ $langTrackingContent = "<p>Das Tracking Werkzeug ....";
 $langHSettings = "Hilfe - Einstellungen";
 $langSettingsContent = "<p>Mittels der Kurseinstellungen .... <</p>";
 $langHExternal = "Hilfe - Link hinzufügen";
-$langExternalContent = "<p>Dokeos ist ein modulares Werkzeug ... </p>";
+$langExternalContent = "<p>Dokeos ist ein modulares System. Werkzeuge können jederzeit sichtbar und unsichtbar gemacht werden, je nach Anspruch des Projektes oder des zeitlichen Ablaufes. Ebenso können diese Werkzeuge aber auch außerhalb der Plattform zur Verfügung gestellt werden. Dadurch wird eine Kurs-Seite zur Haupt-Seite.</p><p>Um dies zu ermöglichen, werden einfach Links auf dieser Seite platziert. Diese können wie folgt definiert sein:<ul><li><b>externer Link</b>: es wird ein Link auf eine Seite außerhalb des Kurses gesetzt. In diesem Fall sollte Ziel=\"in neuem Fenster\" gewählt werden, da man ja nicht möchte, daß diese Seite den Kurs ersetzt.</li><li><b>interner Link</b>: Hier wird auf ein Ziel im Kurs verlinkt. Um dies zu erreichen, einfach die URL aus der Adresszeile des Browsers kopieren (STRG+C), dann mittels \"Link hinzufügen\" einfach wieder diese URL in das vorgegebene Feld einfügen und einen passenden Namen vergeben. In diesem Falle sollte Ziel=\"gleiches Fenster\" gewählt werden, da man lediglich eine Einbindung in das bestehende Design wünscht</li></ul>Einmal erstellt können diese Links nicht mehr angeändert werden. Die einzige Lösung sie zu modifizieren besteht darin, sie zu deaktiveren, zu löschen, und dann neu zu erstellen.</p>";
 $langClarContent3 = "</p><p><b>Blended Learning-Didaktik</b><p>Für die Trainer/innen, die einen Lehrgang anbieten, ist die Didaktik des elektronischen Fernlernens in der der Verbindung von Präsenzlernen mit elektronischen Tools wichtig.";
 $langClarContent4 = "steht zu Ihrer Verfügung während der verschiedenen Schritte in denen Ihr Projekt sich entwickelt: vom Tooldesign bis zur Integration in eine klare und verständliche Strategie sowie einer objektiven Einschätzung der Auswirkungen auf das Lernverhalten der Studenten.</p>";
 $langClarContent1 = "ist der virtuelle Campus von";
@@ -48,4 +48,5 @@ $langGroupsContent = "Inhalt von Gruppen";
 $langGuide = "Führer";
 $HSurvey = "Umfrage Hilfe";
 $HBlogs = "Blog Hilfe";
+$BlogsContent = "<p>Das Projekt-Werkzeug ermöglicht es Lernenden, Wissen kollaborativ durch Rollen, Aufgaben und Fristen zu erwerben.";
 ?>

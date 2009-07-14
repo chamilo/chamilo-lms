@@ -6,6 +6,7 @@ $langSubTitle = "Fügt dem Hauptmenü Ihrer Seminarhomepage einen Link zu einer Se
 $langAddPage            = "Seite hinzufügen";
 $langSendPage           = "Seite hochladen";
 $langCouldNot           = "Datei kann nicht hochgeladen werden";
+$langOkSentLink         = "Der Link wurde hinzugefügt und ist nun auf der <a href=\"%s/index.php\">Homepage</a> verfügbar";
 $langTooBig             = "Sie haben keine Datei ausgewählt oder die Datei ist zu groß";
 $langExplanation        = "Die Seite muß im HTML-Format vorliegen (z.B. \"seite.htm\"). Sie wird von der Startseite verlinkt. Dokumente in anderen Formaten (PDF, Word, Power Point, Video, etc.) können als <a href=../document/document.php>Dokument</a> hinterlegt werden";
 $langPgTitle            = "Seitenname";

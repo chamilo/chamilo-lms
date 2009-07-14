@@ -78,4 +78,12 @@ $langNotAllowedToUnsubscribe = "Kullan&#305;c&#305;lar bu dersten kay&#305;tlar&
 $langCourseVisibilityClosed = "Tamamen kapal&#305;, sadece yetkili taraf&#305;ndan eri&#351;ime aç&#305;k";
 $CourseVisibilityClosed = "Kapal&#305; - bu derse eri&#351;im yok";
 $CourseVisibilityModified = "De&#287;i&#351;tirildi (roller-haklar sisteminden, daha fazla detayl&#305; ayarlar)";
+$WorkEmailAlert = "Ödev sunumunda e-posta ile uyar";
+$WorkEmailAlertActivate = "Yeni ödev sunumunda e-posta ile uyar&#305;y&#305; aktifle&#351;tir";
+$WorkEmailAlertDeactivate = "Yeni ödev sunumunda e-posta ile uyar&#305;y&#305; kald&#305;r";
+$DropboxEmailAlert = "Dropbox sunumunda e-posta ile uyar";
+$DropboxEmailAlertActivate = "Dropbox sunumunda e-posta ile uyar&#305;y&#305; aktifle&#351;tir";
+$DropboxEmailAlertDeactivate = "Dropbox sunumunda e-posta ile uyar&#305;y&#305; kald&#305;r";
+$AllowUserEditAgenda = "Ö&#287;rencilerin ajanday&#305; düzenlemesine izin ver";
+$AllowUserEditAgendaActivate = "E&#287;itim ajandas&#305;n&#305;n kullan&#305;c&#305; taraf&#305;ndan düzenlenmesini aktifle&#351;tir";
 ?>

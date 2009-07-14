@@ -727,5 +727,5 @@ $BackTo = "Back to";
 $ConversionFailled = "Conversion failled";
 $AlreadyExists = "Already exists";
 $TheNewWordHasBeenAdded = "The new word has been added";
-$CommentErrorExportDocument = "Some documents are too complex to be threated automatically by the document converter ";
+$CommentErrorExportDocument = "Some of the documents are too complex to be treated automatically by the document converter";
 ?>

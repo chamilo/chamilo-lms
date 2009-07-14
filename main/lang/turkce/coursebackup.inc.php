@@ -42,4 +42,9 @@ $langBackup = "Yedekle";
 $langImportBackupInfo = "Import a backup. You will be able to upload a backup file from you local drive or you can use a backup file available on the server.";
 $langCreateBackupInfo = "Create a backup of this course. You can select the course contents to put in the backup file.";
 $ToolIntro = "Tool introduction";
+$UploadError = "Yükleme ba&#351;ar&#305;s&#305;z oldu. Lütfen maksimum dosya boyutunu ve klasör haklar&#305;n&#305; kontrol ediniz";
+$DocumentsWillBeAddedToo = "Belgeler de eklenecektir";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Bir test içeren bir dersi d&#305;&#351;a aktarmak isterseniz, ilgili testin d&#305;&#351;a aktar&#305;laca&#287;&#305;ndan emin olmal&#305;s&#305;n&#305;z. Bu yüzden test listesinden seçmeniz gerekir.";
+$ArchivesDirectoryNotWriteableContactAdmin = "Bu araç taraf&#305;ndan kullan&#305;lan ar&#351;iv dizininin yazma hakk&#305; yok. Lütfen platform yöneticinizle ba&#287;lant&#305; kurun";
+$DestinationCourse = "Hedef e&#287;itim";
 ?>

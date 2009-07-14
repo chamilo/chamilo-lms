@@ -261,8 +261,8 @@ function show_tools_category($course_tool_category)
 				{
 					if(empty($toolsRow['adminlink']))
 					{
-							//echo "<a href=\"" .api_get_self(). "?".api_get_cidreq()."&amp;id=" . $toolsRow["id"] . "&amp;" . $this_link['cmd'] . "\">" .	$this_link['name'] . "</a>";
-							echo "<a  class=\"make_visible_and_invisible\" href=\"javascript:void(0)\" >" .	$this_link['name'] . "</a>";
+							echo "<a class=\"make_visible_and_invisible\"  href=\"" .api_get_self(). "?".api_get_cidreq()."&amp;id=" . $toolsRow["id"] . "&amp;" . $this_link['cmd'] . "\">" .	$this_link['name'] . "</a>";
+							//echo "<a  class=\"make_visible_and_invisible\" href=\"javascript:void(0)\" >" .	$this_link['name'] . "</a>";
 
 					}
 				}

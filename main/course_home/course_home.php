@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 22084 2009-07-14 19:29:34Z iflorespaz $
+<?php // $Id: course_home.php 22086 2009-07-14 20:11:38Z iflorespaz $
 
 /*
 ==============================================================================
@@ -62,10 +62,15 @@
 $language_file[] = "course_home";
 $use_anonymous = true;
 // inlcuding the global file
-include('../../main/inc/global.inc.php');
+include '../../main/inc/global.inc.php';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
+ 
+ 	$(window).load(function () { 
+      $(".make_visible_and_invisible").attr("href","javascript:void(0)");
+	});
+	
  	$("td .make_visible_and_invisible > img").click(function () { 
 		make_visible="visible.gif";
 		make_invisible="invisible.gif";
@@ -82,19 +87,13 @@ $htmlHeadXtra[] ='<script type="text/javascript">
        list_new_image=image_for_replace.split(".");
        		
       if (image_for_replace.split("_na").length==2){
-       		
 			list_image_na=image_for_replace.split("_na");
 			list_image_na=list_image_na[0]+".gif";
 			new_current_tool_image=current_tool_image.replace(image_for_replace,list_image_na);
-			$("#tooldesc_"+my_tool_id).attr("class","");
-					
-					
+			$("#tooldesc_"+my_tool_id).attr("class","");		
        } else {
        	    new_image_to_replace=list_new_image[0]+"_na.gif";
-            
 			new_current_tool_image=current_tool_image.replace(image_for_replace,new_image_to_replace);	
-
-
 			$("#tooldesc_"+my_tool_id).attr("class","invisible");
        	}
 		$("#toolimage_"+my_tool_id).attr("src",new_current_tool_image);
@@ -134,14 +133,9 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('ToolIsNowHidden').'</div>");					
 				}
 				
-				
-				
 		} }); 		
 				
-				
-
 	}); 	
-
 
  });
 </script>';	

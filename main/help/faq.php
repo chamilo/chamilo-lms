@@ -70,16 +70,6 @@ if(api_get_setting('stylesheets')<>'')
 <?php 
 echo get_lang('Faq'); 
 
-/*
------------------------------------------------------------
-	FAQ configuration settings
------------------------------------------------------------
-*/
-
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'FAQ';
-//
 
 if(api_is_platform_admin())
 {
@@ -92,7 +82,7 @@ $faq_file = 'faq.html';
 if(!empty($_GET['edit']) && $_GET['edit']=='true' && api_is_platform_admin())
 {
 	$form = new FormValidator('set_faq','post','faq.php?edit=true');
-	$form -> add_html_editor('faq_content',null, false);
+	$form -> add_html_editor('faq_content', null, false, false, array('ToolbarSet' => 'FAQ', 'Width' => '100%', 'Height' => '300'));
 	$form -> addElement('submit','faq_submit', get_lang('Ok'));
 	$form -> setDefaults(array('faq_content'=>file_get_contents(api_get_path(SYS_PATH).'home/faq.html')));
 	if($form -> validate())

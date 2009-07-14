@@ -61,18 +61,9 @@ class UniqueAnswer extends Question {
 	function createAnswersForm ($form) {
 		// getting the exercise list	
 		$obj_ex =$_SESSION['objExercise'];
-		// multiple 
-		global $fck_attribute;
 
-		$fck_attribute = array();
-		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '125px';
-		
-		$fck_attribute['ToolbarSet'] = 'Answer';
+		$editor_config = array('ToolbarSet' => 'Answer', 'Width' => '100%', 'Height' => '125');
 
-		// we collapse the fckeditor toolbar
-		$fck_attribute['Config']['ToolbarStartExpanded']='false';		
-		
 		//this line define how many question by default appear when creating a choice question
 		$nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -90,8 +81,8 @@ class UniqueAnswer extends Question {
 		if ($obj_ex->selectFeedbackType()==0) {
 			$comment_title = '<th>'.get_lang('Comment').'</th>';			
 		} elseif ($obj_ex->selectFeedbackType()==1) {						
-			$fck_attribute['Width'] = '250px';
-			$fck_attribute['Height'] = '110px';			
+			$editor_config['Width'] = '250';
+			$editor_config['Height'] = '110';
 			$comment_title = '<th width="500" >'.get_lang('Comment').'</th>';
 			$feedback_title = '<th width="350px" >'.get_lang('Scenario').'</th>';			
 		} 
@@ -230,14 +221,14 @@ class UniqueAnswer extends Question {
 			$answer_number->freeze();
 			
 			$form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
-			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"');
+			$form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 			
 			if ($obj_ex->selectFeedbackType()==0) // feedback
-				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"');
+				$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 			elseif ($obj_ex->selectFeedbackType()==1) // direct feedback
 			{								
-				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"');
+				$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 				//Adding extra feedback fields  
 				$group = array(); 				
 				$group['try'.$i] =&$form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );								

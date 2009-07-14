@@ -26,12 +26,16 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 	$("#sl_original_file").change(function () { 
 	
 		current_action=$("#Loadlanguage").attr("action");
-		//current_action=current_action+"&original_file="+$(this).attr("value")
 		current_action=current_action.split("original_file");
 		current_action=current_action[0];
 		current_action=current_action+"original_file="+$(this).attr("value")
 		$("#Loadlanguage").attr("action",current_action);
-	
+		//
+		current_action=$("#Searchlanguage").attr("action");
+		current_action=current_action.split("original_file");
+		current_action=current_action[0];
+		current_action=current_action+"original_file="+$(this).attr("value")
+		$("#Searchlanguage").attr("action",current_action);	
 	 }); 
 	
 	$(window).load(function () { 
@@ -184,7 +188,7 @@ echo '<div id="div_message_information_id">&nbsp;</div>';
 echo '<div class="actions-message"><strong>';
 echo get_lang('AddTermsOfThisSubLanguage');
 echo '</strong></div>';
-
+echo '<br/>';
 
 //allow see data in sortetable
 if ($_REQUEST['original_file']) {

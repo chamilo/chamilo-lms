@@ -71,11 +71,11 @@ $lp_theme_css=$_SESSION['oLP']->get_theme();
 include('../inc/reduced_header.inc.php');
 echo '<div style="font-size:14px;padding-left: 17px;">';
 echo '<table ><tr><td>';
-echo '<a href="./lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();">';
+echo '<a href="./lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">';
 echo '<img src="../img/lp_arrow.gif">';
 echo '<a>';
 echo '</td><td>';
-echo '<a class="link" href="./lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();">'.get_lang('CourseHomepageLink').'</a>';
+echo '<a class="link" href="./lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">'.get_lang('CourseHomepageLink').'</a>';
 echo '</td></tr><table>';
 echo '</div>';
 ?>

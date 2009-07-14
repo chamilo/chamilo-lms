@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 21106 2009-05-30 16:25:16Z iflorespaz $
+<?php // $Id: document.inc.php 22074 2009-07-14 16:28:37Z jhp1411 $
 
 /*
 ==============================================================================
@@ -172,7 +172,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		$prevent_multiple_click =($filetype=='folder')?" onclick=\"javascript:if(typeof clic_$dbl_click_id == 'undefined' || clic_$dbl_click_id == false) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"":'';
 	}
 
-	$target='_top';
+	$target='_self';
 	if($filetype=='file') {
 		//check the extension
 		$ext=explode('.',$path);

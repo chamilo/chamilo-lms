@@ -241,12 +241,12 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 		            <table>
 		                <tr>
 		                    <td>
-		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();">
+		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">
 		                        	<img src="../img/lp_arrow.gif" />
 		                        </a>
 		                    </td>
 		                    <td>
-		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();">
+		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">
 		                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
 		                    </td>
 		                </tr>
@@ -444,10 +444,10 @@ else
 		            <table>
 		                <tr>
 		                    <td>
-		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
+		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
 		                    </td>
 		                    <td>
-		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_top" onclick="window.parent.API.save_asset();">
+		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">
 		                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
 		                    </td>
 		                </tr>

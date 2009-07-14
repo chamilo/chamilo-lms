@@ -41,12 +41,7 @@ $interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Glossary'));
 Display::display_header(get_lang(ucfirst($tool)));
 
 // Tool introduction
-Display::display_introduction_section(TOOL_GLOSSARY,'left');
-
-// Glossary FckEditor setting
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Glossary';
+Display::display_introduction_section(TOOL_GLOSSARY);
 
 
 if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('list','table'))) {
@@ -62,7 +57,7 @@ if (api_is_allowed_to_edit()) {
 		$form->addElement('header', '', get_lang('TermAddNew'));
 		$form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'95'));
 		//$form->applyFilter('glossary_title', 'html_filter');
-		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
+		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '100%', 'Height' => '300'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="save"');	
 		// setting the rules
 		$form->addRule('glossary_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
@@ -89,7 +84,7 @@ if (api_is_allowed_to_edit()) {
 		$form->addElement('hidden', 'glossary_id');
 		$form->addElement('text', 'glossary_title', get_lang('TermName'),array('size'=>'100'));
 		//$form->applyFilter('glossary_title', 'html_filter');
-		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'));
+		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '100%', 'Height' => '300'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermUpdateButton'), 'class="save"');	
 		
 		// setting the defaults

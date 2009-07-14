@@ -1591,7 +1591,8 @@ class CourseManager
 			}
 			$course_dir = api_get_path(SYS_COURSE_PATH).$course['directory'];
 			$archive_dir = api_get_path(SYS_ARCHIVE_PATH).$course['directory'].'_'.time();
-			rename($course_dir, $archive_dir);
+			if (is_dir($course_dir))
+				rename($course_dir, $archive_dir);
 		}
 
 		// Unsubscribe all classes from the course
@@ -1728,13 +1729,15 @@ class CourseManager
 				$sql_dump .= "\nINSERT INTO $table[0] SET ".implode(', ', $row).';';
 			}
 		}
-		$file_name = api_get_path(SYS_COURSE_PATH).$course['directory'].'/mysql_dump.sql';
-		$handle = fopen($file_name, 'a+');
-		if($handle!==false){
-			fwrite($handle, $sql_dump);
-			fclose($handle);
-		}else{
-			//TODO trigger exception in a try-catch
+		if (is_dir(api_get_path(SYS_COURSE_PATH).$course['directory'])) {
+			$file_name = api_get_path(SYS_COURSE_PATH).$course['directory'].'/mysql_dump.sql';
+			$handle = fopen($file_name, 'a+');
+			if($handle!==false){
+				fwrite($handle, $sql_dump);
+				fclose($handle);
+			}else{
+				//TODO trigger exception in a try-catch
+			}
 		}
 	}
 	

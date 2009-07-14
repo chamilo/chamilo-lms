@@ -25,7 +25,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 21662 2009-06-29 14:55:09Z iflorespaz $
+* 	@version $Id: exercise.class.php 22046 2009-07-14 01:45:19Z ivantcholakov $
 */
 
 
@@ -872,13 +872,6 @@ class Exercise
 		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName'),'class="input_titles"');
 		//$form->applyFilter('exerciseTitle','html_filter');
 		
-		// fck editor
-		global $fck_attribute;
-		$fck_attribute = array();		
-		$fck_attribute['Width'] 	= '100%'; 
-		$fck_attribute['Height'] 	= '200px';
-		$fck_attribute['ToolbarSet'] = 'TestDescription';
-		
 		$form -> addElement('html','<div class="row">
 		<div class="label"></div>
 		<div class="formw" style="height:50px">
@@ -887,7 +880,7 @@ class Exercise
 		</div>');
 	
 		$form -> addElement ('html','<div id="media" style="display:none;">');
-		$form -> addElement ('html_editor', 'exerciseDescription');
+		$form -> addElement ('html_editor', 'exerciseDescription', null, null, array('ToolbarSet' => 'TestDescription', 'Width' => '100%', 'Height' => '200'));
 		$form -> addElement ('html','</div>');
 		
 		$form -> addElement('html','<div class="row">

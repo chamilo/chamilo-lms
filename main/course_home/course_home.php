@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 21932 2009-07-09 05:07:14Z ivantcholakov $
+<?php // $Id: course_home.php 22084 2009-07-14 19:29:34Z iflorespaz $
 
 /*
 ==============================================================================
@@ -63,7 +63,88 @@ $language_file[] = "course_home";
 $use_anonymous = true;
 // inlcuding the global file
 include('../../main/inc/global.inc.php');
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] ='<script type="text/javascript">
+ $(document).ready(function() {
+ 	$("td .make_visible_and_invisible > img").click(function () { 
+		make_visible="visible.gif";
+		make_invisible="invisible.gif";
+		path_name=$(this).attr("src");
+		list_path_name=path_name.split("/");
+		image_link=list_path_name[list_path_name.length-1];
+		tool_id=$(this).attr("id");
+		tool_info=tool_id.split("_");
+		my_tool_id=tool_info[1];
+    
+       current_tool_image=$("#toolimage_"+my_tool_id).attr("src");
+	   list_current_tool_image=current_tool_image.split("/");
+	   image_for_replace=list_current_tool_image[list_current_tool_image.length-1];
+       list_new_image=image_for_replace.split(".");
+       		
+      if (image_for_replace.split("_na").length==2){
+       		
+			list_image_na=image_for_replace.split("_na");
+			list_image_na=list_image_na[0]+".gif";
+			new_current_tool_image=current_tool_image.replace(image_for_replace,list_image_na);
+			$("#tooldesc_"+my_tool_id).attr("class","");
+					
+					
+       } else {
+       	    new_image_to_replace=list_new_image[0]+"_na.gif";
+            
+			new_current_tool_image=current_tool_image.replace(image_for_replace,new_image_to_replace);	
 
+
+			$("#tooldesc_"+my_tool_id).attr("class","invisible");
+       	}
+		$("#toolimage_"+my_tool_id).attr("src",new_current_tool_image);
+
+		if (image_link=="visible.gif") {
+			mew_path_name=path_name.replace(make_visible,make_invisible);
+			my_visibility=0;
+		} else {
+			mew_path_name=path_name.replace(make_invisible,make_visible);
+			my_visibility=1;
+		}
+
+		$.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+				$("#id_content_message").html("<div class=\"normal-message\"><img src=\'/main/inc/lib/javascript/indicator.gif\' /></div>");
+			
+			},
+			type: "GET",
+			url: "/main/course_home/activity.php",
+			data: "id="+my_tool_id+"&visibility="+my_visibility+"&sent_http_request=1",
+			success: function(datos) {
+				
+				$("#"+tool_id).attr("src",mew_path_name);
+				
+				if (image_link=="visible.gif") {
+					$("#"+tool_id).attr("alt","'.get_lang('Activate').'");
+					$("#"+tool_id).attr("title","'.get_lang('Activate').'");
+				} else {
+					$("#"+tool_id).attr("alt","'.get_lang('Deactivate').'");
+					$("#"+tool_id).attr("title","'.get_lang('Deactivate').'");							
+				}
+				//$("#id_content_message").html(datos);
+				if (datos=="ToolIsNowVisible") {
+					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('ToolIsNowVisible').'</div>");
+				} else {
+					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('ToolIsNowHidden').'</div>");					
+				}
+				
+				
+				
+		} }); 		
+				
+				
+
+	}); 	
+
+
+ });
+</script>';	
 if(!isset($cidReq))
 {
 	$cidReq = api_get_course_id(); // to provide compatibility. with previous system

@@ -36,9 +36,7 @@
 *	@package dokeos.course_home
 ==============================================================================
 */
-
-
-
+require_once '../../main/inc/global.inc.php';
 /*
 ==============================================================================
 		FUNCTIONS
@@ -226,7 +224,7 @@ function show_tools_category($course_tool_category)
 				if($toolsRow['visibility'] == '1' && $toolsRow['admin'] !='1')
 				{
 
-					$link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'));
+					$link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'),array('id'=>'linktool_'.$toolsRow["id"]));
 
 					$link['cmd'] = "hide=yes";
 					$lnk[] = $link;
@@ -234,7 +232,7 @@ function show_tools_category($course_tool_category)
 
 				if($toolsRow['visibility'] == '0' && $toolsRow['admin'] !='1')
 				{
-					$link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'));
+					$link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'),array('id'=>'linktool_'.$toolsRow["id"]));
 					$link['cmd'] = "restore=yes";
 					$lnk[] = $link;
 				}
@@ -263,7 +261,9 @@ function show_tools_category($course_tool_category)
 				{
 					if(empty($toolsRow['adminlink']))
 					{
-							echo "<a href=\"" .api_get_self(). "?".api_get_cidreq()."&amp;id=" . $toolsRow["id"] . "&amp;" . $this_link['cmd'] . "\">" .	$this_link['name'] . "</a>";
+							//echo "<a href=\"" .api_get_self(). "?".api_get_cidreq()."&amp;id=" . $toolsRow["id"] . "&amp;" . $this_link['cmd'] . "\">" .	$this_link['name'] . "</a>";
+							echo "<a  class=\"make_visible_and_invisible\" href=\"javascript:void(0)\" >" .	$this_link['name'] . "</a>";
+
 					}
 				}
 			}
@@ -311,8 +311,12 @@ function show_tools_category($course_tool_category)
 				{
 					if (count(explode('type=classroom',$toolsRow['link']))==2 || count(explode('type=conference',$toolsRow['link']))==2) {					
 						$toollink = "\t" . '<a ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';							
+						$my_tool_link = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';							
+					
 					} else {					
 						$toollink = "\t" . '<a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';	
+						$my_tool_link = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';	
+					
 					}
 
 				}
@@ -332,10 +336,10 @@ function show_tools_category($course_tool_category)
 				{
 					$tool_name = get_lang(ucfirst($toolsRow['name']));
 				}
-				Display::display_icon($toolsRow['image'], $tool_name, array('class'=>'tool-icon'));
+				Display::display_icon($toolsRow['image'], $tool_name, array('class'=>'tool-icon','id'=>'toolimage_'.$toolsRow["id"]));
 				echo '</a> ';
 					
-				echo $toollink;	
+				echo $my_tool_link;	
 				/*	
 					echo ($toolsRow['image'] == 'file_html_na.gif' || $toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif' || $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif' || $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif') ? '  '.stripslashes($toolsRow['name']) : '  '.get_lang(ucfirst($toolsRow['name']));
 				*/
@@ -371,29 +375,64 @@ function show_tools_category($course_tool_category)
 	Work with data post askable by admin of course (franglais, clean this)
 -----------------------------------------------------------
 */
-if(api_is_allowed_to_edit())
-{
- 	/*
-	-----------------------------------------------------------
-		HIDE
-	-----------------------------------------------------------
-	*/
-	if(!empty($_GET['hide'])) // visibility 1 -> 0
-	{
-		api_sql_query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
-		Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
+if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
+	if(api_is_allowed_to_edit()) {
+		$tool_table = Database::get_course_table(TABLE_TOOL_LIST);
+	 	/*
+		-----------------------------------------------------------
+			HIDE
+		-----------------------------------------------------------
+		*/
+		if(isset($_GET['visibility']) && $_GET['visibility']==0) // visibility 1 -> 0
+		{
+			if ($_GET["id"]==strval(intval($_GET["id"]))) {
+				$sql="UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'";
+	
+				api_sql_query($sql,__FILE__,__LINE__);
+				echo 'ToolIsNowHidden';
+			}
+		}
+	
+	  /*
+		-----------------------------------------------------------
+			REACTIVATE
+		-----------------------------------------------------------
+		*/
+		elseif(isset($_GET['visibility'])&& $_GET['visibility']==1) // visibility 0,2 -> 1
+		{
+			if ($_GET["id"]==strval(intval($_GET["id"]))) {
+				api_sql_query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+				echo 'ToolIsNowVisible';
+			}
+		}
+		exit;
 	}
-
-  /*
-	-----------------------------------------------------------
-		REACTIVATE
-	-----------------------------------------------------------
-	*/
-	elseif(!empty($_GET['restore'])) // visibility 0,2 -> 1
-	{
-		api_sql_query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
-		Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
+} else {
+	
+	if(api_is_allowed_to_edit()) {
+	 	/*
+		-----------------------------------------------------------
+			HIDE
+		-----------------------------------------------------------
+		*/
+		if(!empty($_GET['hide'])) // visibility 1 -> 0
+		{
+			api_sql_query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+			Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
+		}
+	
+	  /*
+		-----------------------------------------------------------
+			REACTIVATE
+		-----------------------------------------------------------
+		*/
+		elseif(!empty($_GET['restore'])) // visibility 0,2 -> 1
+		{
+			api_sql_query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+			Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
+		}
 	}
+	
 }
 
 // work with data post askable by admin of course
@@ -436,6 +475,7 @@ if(api_is_platform_admin())
 if(api_is_allowed_to_edit())
 {
 	?>
+	<div id="id_content_message"></div>
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang("Authoring") ?></span>
 		<table width="100%">

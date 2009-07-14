@@ -53,20 +53,6 @@ Display::display_header(get_lang(ucfirst($tool)));
 Display::display_introduction_section(TOOL_NOTEBOOK);
 
 
-// Config notebook FckEditor buttons bar
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '300';
-if(!api_is_allowed_to_edit())
-{
-	$fck_attribute['Config']['UserStatus'] = 'student';
-	$fck_attribute['ToolbarSet'] = 'Notebook_Student';
-}
-else
-{
-	$fck_attribute['ToolbarSet'] = 'Notebook';
-}
-
-
 // Action handling: Adding a note
 if (isset($_GET['action']) && $_GET['action'] == 'addnote') 
 {			
@@ -84,7 +70,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 	$form->addElement('header', '', get_lang('NoteAddNew'));
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'95'));
 	//$form->applyFilter('note_title', 'html_filter');
-	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
+	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'), null, api_is_allowed_to_edit()
+		? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
+		: array('ToolbarSet' => 'Notebook_Student', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
+	);
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('AddNote'), 'class="add"');	
 	
 	// setting the rules
@@ -131,7 +120,10 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 	$form->addElement('hidden', 'notebook_id');
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'100'));
 	//$form->applyFilter('note_title', 'html_filter');
-	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'));
+	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'), null, api_is_allowed_to_edit()
+		? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
+		: array('ToolbarSet' => 'Notebook_Student', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
+	);
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyNote'), 'class="save"');	
 	
 	// setting the defaults

@@ -631,7 +631,6 @@ Here is an example:
     </ul>
 
     <li>4. To install mimetex executable file, make these changes:</li>
-    </ul>
 
 <p>Add the corresponding cgi-bin directory to your Apache configuration could be done, in Apache 2, like this:
   
@@ -657,6 +656,11 @@ Here is an example:
 </div>
 <p>If you are reluctant to modify your Apache configuration, alternately you may do at step 4 the following:
 copy mimetex.exe (for windows) or mimetex.cgi (for linux) from <i>dokeos/main/inc/lib/mimetex/</i> directory to your <i>cgi-bin/</i></p>
+    <li>5. Make sure that the file mimetex.cgi (or mimetex.exe) has right to be executed by the web-server process. For example, on a Ubuntu Linux system you may write a command like the following:</li>
+<div class="code">
+  <p>sudo chmod a+x mimetex.cgi</p>
+</div>
+	</ul>
 
 <p>As a result of this procedure, a new button becomes available in your Dokeos online editor, that gives you possibility
 to insert mathematical formulas into your documents.<br />

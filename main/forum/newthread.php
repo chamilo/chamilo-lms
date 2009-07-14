@@ -62,18 +62,6 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 $nameTools=get_lang('Forum');
 
-// configuration for FCKeditor
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
-		
-if(!api_is_allowed_to_edit(false,true)) {
-	$fck_attribute['Config']['UserStatus'] = 'student';
-	$fck_attribute['ToolbarSet'] = 'Forum_Student';
-}
-else
-{
-	$fck_attribute['ToolbarSet'] = 'Forum';
-}
 
 /*
 -----------------------------------------------------------

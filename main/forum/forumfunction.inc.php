@@ -159,7 +159,7 @@ function show_add_forumcategory_form($inputvalues=array()) {
 	$form->addElement('header', '', get_lang('AddForumCategory'));
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');	
 	//$form->applyFilter('forum_category_title', 'html_filter');	
-	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
+	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 	//$form->applyFilter('forum_category_comment', 'html_filter');	
 	$form->addElement('style_submit_button', 'SubmitForumCategory', get_lang('CreateCategory'), 'class="add"');
 
@@ -214,7 +214,7 @@ function show_add_forum_form($inputvalues=array()) {
 	$form->addElement('text', 'forum_title', get_lang('Title'),'class="input_titles"');
 	//$form->applyFilter('forum_title', 'html_filter');
 	// The comment of the forum
-	$form->addElement('html_editor', 'forum_comment', get_lang('Comment'));
+	$form->addElement('html_editor', 'forum_comment', get_lang('Comment'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 	//$form->applyFilter('forum_comment', 'html_filter');
 	// dropdown list: Forum Categories
 	$forum_categories=get_forum_categories();
@@ -449,7 +449,7 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 	$form->addElement('hidden', 'forum_category_id');
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
 	//$form->applyFilter('forum_category_title', 'html_filter');
-	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
+	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 	//$form->applyFilter('forum_category_comment', 'html_filter');	
 	$form->addElement('style_submit_button', 'SubmitEditForumCategory',get_lang('ModifyCategory'), 'class="save"');
 	global $charset;
@@ -1916,7 +1916,11 @@ function show_add_post_form($action='', $id='', $form_values='') {
 
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
 	//$form->applyFilter('post_title', 'html_filter');	
-	$form->addElement('html_editor', 'post_text', get_lang('Text'));
+	$form->addElement('html_editor', 'post_text', get_lang('Text'), null,
+		api_is_allowed_to_edit()
+			? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '400')
+			: array('ToolbarSet' => 'Forum_Student', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
+	);
 	//$form->applyFilter('post_text', 'html_filter');	
 	
 	$form->addElement('html', '<div class="row"><div class="label">');
@@ -2345,7 +2349,11 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	}
 	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');	
 	$form->applyFilter('post_title', 'html_filter');
-	$form->addElement('html_editor', 'post_text', get_lang('Text'));
+	$form->addElement('html_editor', 'post_text', get_lang('Text'), null,
+		api_is_allowed_to_edit()
+			? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '400')
+			: array('ToolbarSet' => 'Forum_Student', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
+	);
 	//$form->applyFilter('post_text', 'html_filter');	
 		
 	$form->addElement('html', '<div class="row"><div class="label">');

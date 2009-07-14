@@ -54,18 +54,6 @@ $this_section=SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-// configuration for FCKeditor
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
-
-if(!api_is_allowed_to_edit(false,true)) {
-	$fck_attribute['Config']['UserStatus'] = 'student';
-	$fck_attribute['ToolbarSet'] = 'Forum_Student';
-}
-else
-{
-	$fck_attribute['ToolbarSet'] = 'Forum';
-}
 
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');

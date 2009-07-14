@@ -26,7 +26,10 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 	$("#sl_original_file").change(function () { 
 	
 		current_action=$("#Loadlanguage").attr("action");
-		current_action=current_action+"&original_file="+$(this).attr("value")
+		//current_action=current_action+"&original_file="+$(this).attr("value")
+		current_action=current_action.split("original_file");
+		current_action=current_action[0];
+		current_action=current_action+"original_file="+$(this).attr("value")
 		$("#Loadlanguage").attr("action",current_action);
 	
 	 }); 
@@ -37,10 +40,9 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		$("#Loadlanguage").attr("action",current_action);*/
 	});
 
- 	$("#sl_original_file option[@value='.Security::remove_XSS(($_REQUEST['original_file'])).']").attr("selected","selected"); 
+ 	$("#sl_original_file option[@value='.Security::remove_XSS($_REQUEST['original_file']).']").attr("selected","selected"); 
 
-	$(".save").click(function() {
-		
+	$(".save").click(function() {		
 		button_name=$(this).attr("name");	
 		button_name=button_name.split("_");
 		button_name=button_name[1];
@@ -50,7 +52,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		if (is_new_language=="undefined") {
 			is_new_language="_";
 		}
-		is_file_language="'.Security::remove_XSS(($_REQUEST['original_file'])).'";
+		is_file_language="'.Security::remove_XSS($_REQUEST['original_file']).'";
 		if (is_new_language.length>0 && is_new_language!="_") {
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
@@ -134,25 +136,52 @@ if (isset($_GET['original_file']) && $_GET['original_file']!='') {
 	$request_file=Security::remove_XSS($_GET['original_file']);
 }
 
-$form = new FormValidator('Loadlanguage', 'post', 'register_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&original_file='.$request_file);
+/*$form = new FormValidator('Loadlanguage', 'post', 'register_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&original_file='.$request_file);
 $class='plus';
 $form->addElement('hidden','id_hidden_original_file',Security::remove_XSS($_REQUEST['id']),array('id'=>'id_hidden_original_file'));
 $select_level = array (); 	
 $radios_results_enabled[] = FormValidator :: createElement ('select', 'original_file', get_lang('File'),$load_array_in_select,array('id'=>'sl_original_file'));
 $radios_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'SubmitLoadLanguage', get_lang('LoadLanguageFile'), 'class="'.$class.'"');
-$form->addGroup($radios_results_enabled);
-echo '<div class="actions-message">';
+$radios_results_enabled[] = FormValidator :: createElement ('text', 'txt_search_word');
+$radios_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'SubmitSearchLanguage', get_lang('Search'), 'class="search"');
+$form->addGroup($radios_results_enabled);*/
+echo '<div class="actions-message" >';
 echo $language_name;
 echo '</div>';
 echo '<br/>';
-echo '<div class="actions" >';
+/*echo '<div class="actions">';
 $form->display();
-echo '</div>';
+echo '</div>';*/
 
+$html.='<div style="float:left" class="actions" >';
+$html.='<form style="float:left" id="Loadlanguage" name="Loadlanguage" method="post" action="register_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&original_file='.$request_file.'" >';
+$html.='<input  type="hidden" name="id_hidden_original_file" id="id_hidden_original_file" value="'.Security::remove_XSS($_REQUEST['id']).'" />';
+$html.='<select id="sl_original_file" name="original_file">';
+//$html.='<option value="0">'.get_lang('SelectAChoice').'</option>';
+foreach ($load_array_in_select as $index_radios_results_enabled=>$value_radios_results_enabled) {
+$html.='<option value="'.$value_radios_results_enabled.'">'.$value_radios_results_enabled.'</option>';
+}
+$html.='</select>';
+$html.='<button class="plus" name="SubmitLoadLanguage" type="submit">'.get_lang('LoadLanguageFile').'</button>';
+$html.='</form>';
+$html.='</div>';
 
+$html.='<div style="float:left" class="actions">';
+$html.='<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="post" action="register_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&original_file='.$request_file.'" >';
+$html.='&nbsp;'.get_lang('OriginalName').'&nbsp; :&nbsp;';
+$html.='<input name="txt_search_word" type="text" size="30"  id="txt_search_word" value="" />';
+$html.='<button name="SubmitSearchLanguage" class="search">'.get_lang('Search').'</button>';
+$html.='</form>';
+$html.='</div>';
+
+echo $html;
+
+echo '<br/>';
+echo '<br/>';
+echo '<br/>';
 //id
 echo '<div id="div_message_information_id">&nbsp;</div>';
-echo '<div class="actions"><strong>';
+echo '<div class="actions-message"><strong>';
 echo get_lang('AddTermsOfThisSubLanguage');
 echo '</strong></div>';
 
@@ -193,7 +222,7 @@ if ($_REQUEST['original_file']) {
 		}
 		$value_sub_language=strlen($value_sub_language)>0 ? $value_sub_language : '';
 		
-		$obj_text='<input name="txt_'.$use_field_name.'" id="txtid_'.$use_field_name.'" value="'.substr($value_sub_language,1,(strlen($value_sub_language)-3)).'">';
+		$obj_text='<textarea tabindex="1" rows="4" cols="40" name="txt_'.$use_field_name.'" id="txtid_'.$use_field_name.'" >'.substr($value_sub_language,1,(strlen($value_sub_language)-3)).'</textarea>';
 		
 		$obj_button='<button class="save" type="button" name="btn_'.$use_field_name.'" id="btnid_'.$use_field_name.'"  />'.get_lang('Save').'</button>';		
 		

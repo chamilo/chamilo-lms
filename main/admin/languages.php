@@ -1,4 +1,4 @@
-<?php // $Id: languages.php 21998 2009-07-12 05:44:30Z iflorespaz $
+<?php // $Id: languages.php 22085 2009-07-14 19:49:59Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -31,6 +31,85 @@ require_once 'admin.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+
+//Ajax request
+if (isset($_POST['sent_http_request'])) {
+	if (isset($_POST['visibility']) && $_POST['visibility']==strval(intval($_POST['visibility'])) && $_POST['visibility']==0) {
+		if (isset($_POST['id'])&& $_POST['id']==strval(intval($_POST['id']))) {
+			AdminManager::make_unavailable_language($_POST['id']);
+			echo 'set_hidden';	
+		}
+	} 
+	if (isset($_POST['visibility']) && $_POST['visibility']==strval(intval($_POST['visibility'])) && $_POST['visibility']==1) {
+		if (isset($_POST['id'])&& $_POST['id']==strval(intval($_POST['id']))) {
+			AdminManager::make_available_language($_POST['id']);
+			echo 'set_visible';			
+		}
+	} 	
+	exit;
+}
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] ='<script type="text/javascript">
+ $(document).ready(function() {
+ 	$("td .make_visible_and_invisible").click(function () { 
+		make_visible="visible.gif";
+		make_invisible="invisible.gif";
+		id_link_tool=$(this).attr("id");
+		id_img_link_tool="img"+id_link_tool;
+		path_name_of_imglinktool=$("#"+id_img_link_tool).attr("src");
+		link_info_id=id_link_tool.split("linktool_");
+		link_id=link_info_id[1];
+				
+		link_tool_info=path_name_of_imglinktool.split("/");
+		my_image_tool=link_tool_info[link_tool_info.length-1];
+    
+
+		if (my_image_tool=="visible.gif") {
+			path_name_of_imglinktool=path_name_of_imglinktool.replace(make_visible,make_invisible);
+			my_visibility=0;
+		} else {
+			path_name_of_imglinktool=path_name_of_imglinktool.replace(make_invisible,make_visible);
+			my_visibility=1;
+		}
+		
+		$.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+				$("#id_content_message").html("<div class=\"normal-message\"><img src=\'/main/inc/lib/javascript/indicator.gif\' /></div>");
+			
+			},
+			type: "POST",
+			url: "../admin/languages.php",
+			data: "id="+link_id+"&visibility="+my_visibility+"&sent_http_request=1",
+			success: function(datos) {
+				
+				$("#"+id_img_link_tool).attr("src",path_name_of_imglinktool);
+				
+				if (my_image_tool=="visible.gif") {
+					$("#"+id_img_link_tool).attr("alt","'.get_lang('MakeAvailable').'");
+					$("#"+id_img_link_tool).attr("title","'.get_lang('MakeAvailable').'");
+				} else {
+					$("#"+id_img_link_tool).attr("alt","'.get_lang('MakeUnavailable').'");
+					$("#"+id_img_link_tool).attr("title","'.get_lang('MakeUnavailable').'");							
+				}
+
+				if (datos=="set_visible") {
+					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('LanguageIsNowVisible').'</div>");
+				} else {
+					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('LanguageIsNowHidden').'</div>");					
+				}
+				
+				
+				
+		} }); 		
+				
+				
+
+	}); 	
+
+
+ });
+</script>';	
 // setting the table that is needed for the styles management (there is a check if it exists later in this code)
 $tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 $tbl_settings_current 	= Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
@@ -191,9 +270,11 @@ while ($row = Database::fetch_array($result_select)) {
 		$allow_add_term_sub_language='';
 	}	
 	if ($row['available'] == 1) {
-		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language;
+		//$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language;
+		$row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='javascript:void(0)'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'),array('id'=>'imglinktool_'.$row['id']))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language;
 	} else {
-		$row_td[] = "<a href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.gif', get_lang('MakeAvailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language;
+		//$row_td[] = "<a href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.gif', get_lang('MakeAvailable'))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language;
+		$row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='javascript:void(0)'>".Display::return_icon('invisible.gif', get_lang('MakeAvailable'),array('id'=>'imglinktool_'.$row['id']))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language;
 	}
 
 	$language_data[] = $row_td;
@@ -209,6 +290,7 @@ $form_actions = array ();
 $form_actions['makeavailable'] = get_lang('MakeAvailable');
 $form_actions['makeunavailable'] = get_lang('MakeUnavailable');
 $table->set_form_actions($form_actions);
+echo '<div id="id_content_message">&nbsp;</div>';
 $table->display();
 
 /*

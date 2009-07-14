@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 21605 2009-06-24 16:08:45Z ndieschburg $
+* 	@version $Id: exercise_show.php 22045 2009-07-14 00:44:49Z ivantcholakov $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -936,19 +936,15 @@ if ($show_results) {
 			}
 			echo '</div><div id="'.$name.'" style="display:none">';
 			$arrid[] = $questionId;
-			$fck_attribute['Width'] = '100%';
-			$fck_attribute['Height'] = '120';
-			$fck_attribute['ToolbarSet'] = 'CommentAnswers';
-			$fck_attribute['Config']['ToolbarStartExpanded']='false';							
 	
 			$feedback_form = new FormValidator('frmcomments'.$questionId,'post','');
 			$feedback_form->addElement('html','<br>');
 			$renderer =& $feedback_form->defaultRenderer();
 			$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
-			$comnt =get_comments($id,$questionId);
+			$comnt = get_comments($id,$questionId);
 			${user.$questionId}['comments_'.$questionId] = $comnt;
-			$feedback_form->addElement('html_editor','comments_'.$questionId,false);
+			$feedback_form->addElement('html_editor', 'comments_'.$questionId, null, null, array('ToolbarSet' => 'CommentAnswers', 'Width' => '100%', 'Height' => '120'));
 			$feedback_form->addElement('html','<br>');
 			//$feedback_form->addElement('submit','submitQuestion',get_lang('Ok'));
 			$feedback_form->setDefaults(${user.$questionId});							

@@ -1646,15 +1646,15 @@ function api_display_tool_view_option() {
 			// we have to remove the isStudentView=true from the $sourceurl
 			$sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
 			$sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-			$output_string .= '<a href="'.$sourceurl.'&isStudentView=false" target="_top">'.get_lang("CourseManagerview").'</a>';
+			$output_string .= '<a href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang("CourseManagerview").'</a>';
 		} elseif ($_SESSION['studentview']=='teacherview') {
 			//switching to teacherview
 			$sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
 			$sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-			$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
+			$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang("StudentView").'</a>';
 		}
 	} else {
-		$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
+		$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang("StudentView").'</a>';
 	}
 	echo $output_string;
 }

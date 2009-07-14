@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 20959 2009-05-24 19:00:24Z ivantcholakov $
+// $Id: tool_navigation_menu.inc.php 22072 2009-07-14 15:14:42Z jhp1411 $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -221,7 +221,7 @@ function show_navigation_menu()
 			}			
 			else
 			{
-				echo '<a href="'.$navigation_item['link'].'" target="_top" ';		
+				echo '<a href="'.$navigation_item['link'].'" target="_self" ';		
 			}			
 			
 			if (stristr($url_item['path'],$url_current['path']))
@@ -284,7 +284,7 @@ function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
 		{
 			echo ' id="here"';
 		}
-		echo ' target="_top" title="'.$navigation_item['name'].'">';
+		echo ' target="_self" title="'.$navigation_item['name'].'">';
 		echo '<img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/>';
 		echo '</a>';
 		if($orientation == SHORTCUTS_VERTICAL)

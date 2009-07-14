@@ -2536,7 +2536,7 @@ function store_edit_post($values) {
 */
 function display_user_link($user_id, $name, $origin='') {
 	if ($user_id<>0) {
-		return '<a href="../user/userInfo.php?uInfo='.$user_id.'" '. (!empty($origin)? 'target="_top"': '') .'>'.$name.'</a>';
+		return '<a href="../user/userInfo.php?uInfo='.$user_id.'" '. (!empty($origin)? 'target="_self"': '') .'>'.$name.'</a>';
 	} else {
 		return $name.' ('.get_lang('Anonymous').')';
 	}
@@ -2551,7 +2551,7 @@ function display_user_link($user_id, $name, $origin='') {
 */
 
 function display_user_image($user_id,$name, $origin='') {
-	$link='<a href="../user/userInfo.php?uInfo='.$user_id.'" '. (!empty($origin)? 'target="_top"': '') .'>';
+	$link='<a href="../user/userInfo.php?uInfo='.$user_id.'" '. (!empty($origin)? 'target="_self"': '') .'>';
 	$attrb=array();
 	if ($user_id<>0) {		
 		$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);

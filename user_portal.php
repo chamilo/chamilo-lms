@@ -1,4 +1,4 @@
-<?php // $Id: user_portal.php 21667 2009-06-30 00:23:23Z iflorespaz $
+<?php // $Id: user_portal.php 22072 2009-07-14 15:14:42Z jhp1411 $
   
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -956,7 +956,7 @@ if (!empty($menu_navigation)) {
 	foreach ($menu_navigation as $section => $navigation_info) {
 		$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
 		echo '<li'.$current.'>';
-		echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+		echo '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
 		echo '</li>';
 		echo "\n";
 	}

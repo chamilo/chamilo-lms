@@ -13,13 +13,13 @@
 	<div id="header1">
 		<div id="top_corner"></div> 
 		<div id="institution">
-			<a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
+			<a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_self"><?php echo api_get_setting('siteName') ?></a>
 			<?php
 			$iurl = api_get_setting('InstitutionUrl');
 			$iname = api_get_setting('Institution');
 			if (!empty($iname))
 			{
-	           echo '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
+	           echo '-&nbsp;<a href="'.$iurl.'" target="_self">'.$iname.'</a>';
 			}
 			?>
 		</div>
@@ -32,12 +32,12 @@
 if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	//Put the name of the course in the header
 ?>
-	<div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_top">
+	<div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_self">
 <?php
 	echo $_course['name']." ";
 	/*echo '
 		<div id="my_courses">
-			<a href="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/index.php" target="_top">'.$_course['name'].' ';*/
+			<a href="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/index.php" target="_self">'.$_course['name'].' ';*/
 	if (api_get_setting("display_coursecode_in_courselist") == "true") {
 		echo $_course['official_code'];
 	}
@@ -57,7 +57,7 @@ if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	if (!isset ($_user['user_id'])) {
 		echo " ";
 	} elseif(!$noPHP_SELF) {
-		echo "<div id=\"my_courses\"><a href=\"".api_get_self()."?".api_get_cidreq(), "\" target=\"_top\">", $nameTools, "</a></div>", "\n";
+		echo "<div id=\"my_courses\"><a href=\"".api_get_self()."?".api_get_cidreq(), "\" target=\"_self\">", $nameTools, "</a></div>", "\n";
 	} else {
 		echo "<div id=\"my_courses\">$nameTools</div>\n";
 	}
@@ -81,7 +81,7 @@ $web_course_path = api_get_path(WEB_COURSE_PATH);
 if (isset($_course['extLink']) && $_course['extLink']['name'] != "") {
 	echo "<span class=\"extLinkSeparator\"> / </span>";
 	if ($_course['extLink']['url'] != "") {
-		echo "<a class=\"extLink\" href=\"".$_course['extLink']['url']."\" target=\"_top\">";
+		echo "<a class=\"extLink\" href=\"".$_course['extLink']['url']."\" target=\"_self\">";
 		echo $_course['extLink']['name'];
 		echo "</a>";
 	} else {
@@ -97,7 +97,7 @@ if (isset($_course['extLink']) && $_course['extLink']['name'] != "") {
 <?php 
 if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id']) OR (api_get_setting('showonline','course') == "true" AND $_user['user_id'] AND $_cid)) {
 	if (api_get_setting("use_session_mode") == "true" && isset($_user['user_id']) && api_is_coach()) {
-	    echo '  <li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
+	    echo '  <li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_self">'.get_lang('UsersConnectedToMySessions').'</a></li>';
 	}
 
 	$statistics_database = Database :: get_statistic_database();
@@ -112,13 +112,13 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
  	echo "<li>";
 	// Display the who's online of the platform
 	if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id'])) {
-		//echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top">'.$number.'</a>';
-		echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top">'.get_lang('UsersOnline').': '.$number.'</a>';
+		//echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self">'.$number.'</a>';
+		echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self">'.get_lang('UsersOnline').': '.$number.'</a>';
 	}
 
 	// Display the who's online for the course
 	if (is_array($_course) AND api_get_setting('showonline','course') == "true" AND isset($_course['sysCode'])) {
-		echo "(<a href='".api_get_path(WEB_PATH)."whoisonline.php?cidReq=".$_course['sysCode']."' target='_top'>$number_online_in_course ".get_lang('InThisCourse')."</a>)";
+		echo "(<a href='".api_get_path(WEB_PATH)."whoisonline.php?cidReq=".$_course['sysCode']."' target='_self'>$number_online_in_course ".get_lang('InThisCourse')."</a>)";
 	}
 	echo '</li>';
 }
@@ -166,7 +166,7 @@ if ($_user['user_id']) {
 	 <!-- start user section line with name, my course, my profile, scorm info, etc -->
 
 	 <ul id="logout">
-				<li><a href="<?php echo api_get_path(WEB_PATH); ?>index.php?logout=logout&uid=<?php echo $_user['user_id']; ?>" target="_top"><span><?php echo get_lang('Logout').' '.$login; ?></span></a></li>
+				<li><a href="<?php echo api_get_path(WEB_PATH); ?>index.php?logout=logout&uid=<?php echo $_user['user_id']; ?>" target="_self"><span><?php echo get_lang('Logout').' '.$login; ?></span></a></li>
 	 </ul>
 <?php
 }
@@ -247,7 +247,7 @@ foreach($navigation as $section => $navigation_info) {
 	} else {
 		$current = '';
 	}
-	echo '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_top"><span>'.$navigation_info['title'].'</span></a></li>'."\n";
+	echo '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_self"><span>'.$navigation_info['title'].'</span></a></li>'."\n";
 }
 ?>
 		</ul>
@@ -303,7 +303,7 @@ if (isset ($nameTools) AND $language_file<>"course_home") {
 $final_navigation = array();
 foreach($navigation as $index => $navigation_info) {
 	if(!empty($navigation_info['title'])) {
-		$final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="breadcrumb breadcrumb'.$index.'" target="_top">'.$navigation_info['title'].'</a>';
+		$final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="breadcrumb breadcrumb'.$index.'" target="_self">'.$navigation_info['title'].'</a>';
 	}
 }
 echo implode(' &gt; ',$final_navigation);

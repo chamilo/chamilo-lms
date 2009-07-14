@@ -64,13 +64,6 @@ class FillBlanks extends Question
 	function createAnswersForm ($form) 
 	{
 		$defaults = array();		
-		global $fck_attribute;
-		$fck_attribute = array();
-		//$fck_attribute['Width'] = '348px';
-		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '350px';
-		$fck_attribute['ToolbarSet'] = 'Full';
-
 	
 		if(!empty($this->id)) {
 			$objAnswer = new answer($this->id);
@@ -156,8 +149,8 @@ class FillBlanks extends Question
 
 		// answer
 		$form -> addElement ('html', '<br /><br /><div class="row"><div class="label"></div><div class="formw">'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank').'</div></div>');						
-		$form -> addElement ('html_editor', 'answer','<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="updateBlanks(this)"');
-			
+		$form -> addElement ('html_editor', 'answer', '<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="javascript: updateBlanks(this);"', array('ToolbarSet' => 'QuestionDescription', 'Width' => '100%', 'Height' => '350'));
+
 		$form -> addRule ('answer',get_lang('GiveText'),'required');
 		$form -> addRule ('answer',get_lang('DefineBlanks'),'regex','/\[.*\]/');
  

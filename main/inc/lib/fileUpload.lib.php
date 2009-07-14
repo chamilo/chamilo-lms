@@ -1605,7 +1605,7 @@ function api_replace_links_in_html($upload_path, $full_file_name)
 	Replace the a href tags so they are displayed correctly.
 	- works for files in root and subdirectories
 	- replace relative hyperlinks to use showinframes.php?file= ...
-	- add target="_top" to all absolute hyperlinks
+	- add target="_self" to all absolute hyperlinks
 	- leave local anchors untouched (e.g. #CHAPTER1)
 	- leave links with download.php and showinframes.php untouched
 
@@ -1643,7 +1643,7 @@ function api_replace_links_in_string($upload_path, $buffer)
 				   		 $this_tag, $matches) )
 			{
 				$file_path_list[] = $matches[1];//older
-				$href_list[] = $matches[0];//to also add target="_top"
+				$href_list[] = $matches[0];//to also add target="_self"
 			}
 		}
 
@@ -1667,7 +1667,7 @@ function api_replace_links_in_string($upload_path, $buffer)
 				)
 			{
 				//fix the link to use showinframes.php
-				$replaceBy[$count] = "a href = \"showinframes.php?file=" . $upload_path."/".$file_path_list[$count]."\" target=\"_top\"";
+				$replaceBy[$count] = "a href = \"showinframes.php?file=" . $upload_path."/".$file_path_list[$count]."\" target=\"_self\"";
 			}
 			else
 			{
@@ -1677,7 +1677,7 @@ function api_replace_links_in_string($upload_path, $buffer)
 		}
 		else if ($is_absolute_hyperlink)
 		{
-			$replaceBy[$count] = "a href=\"" . $file_path_list[$count] . "\" target =\"_top\"";
+			$replaceBy[$count] = "a href=\"" . $file_path_list[$count] . "\" target =\"_self\"";
 		}
 		else
 		{
@@ -1718,7 +1718,7 @@ function api_replace_links_in_string($upload_path, $buffer)
 		* OK if the src|href param contains http://, it's absolute --> leave it alone
 
 		Special for hyperlinks (a href...)
-		* OK add target="_top"
+		* OK add target="_self"
 		* OK use showinframes.php instead of download.php
 
 	@author Roan Embrechts
@@ -1760,7 +1760,7 @@ function api_replace_parameter($upload_path, $buffer, $param_name="src")
 
 			{
 				$file_path_list[] = $matches[1];//older
-				$href_list[] = $matches[0];//to also add target="_top"
+				$href_list[] = $matches[0];//to also add target="_self"
 			}
 		}
 	}
@@ -1785,7 +1785,7 @@ function api_replace_parameter($upload_path, $buffer, $param_name="src")
 				//fix the link to use download.php or showinframes.php
 				if ( preg_match("/<a([\s]*[\"\/:'=a-z0-9]*){5}href[^<]*>/i", $tag_list[$count]) )
 				{
-					$replaceBy[$count] = " $param_name =\"showinframes.php?file=" . $upload_path.$file_path_list[$count]."\" target=\"_top\" ";
+					$replaceBy[$count] = " $param_name =\"showinframes.php?file=" . $upload_path.$file_path_list[$count]."\" target=\"_self\" ";
 				}
 				else
 				{
@@ -1801,8 +1801,8 @@ function api_replace_parameter($upload_path, $buffer, $param_name="src")
 		}
 		else if ($is_absolute_hyperlink)
 		{
-			//$message .= "Absolute hyperlink, don't change, add target=_top: ";
-			$replaceBy[$count] = " $param_name=\"" . $file_path_list[$count] . "\" target =\"_top\"";
+			//$message .= "Absolute hyperlink, don't change, add target=_self: ";
+			$replaceBy[$count] = " $param_name=\"" . $file_path_list[$count] . "\" target =\"_self\"";
 		}
 		else
 		{

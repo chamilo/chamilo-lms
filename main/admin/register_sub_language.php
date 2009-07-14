@@ -174,7 +174,7 @@ $html.='<div style="float:left" class="actions">';
 $html.='<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="post" action="register_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&original_file='.$request_file.'" >';
 $html.='&nbsp;'.get_lang('OriginalName').'&nbsp; :&nbsp;';
 $html.='<input name="txt_search_word" type="text" size="30"  id="txt_search_word" value="" />';
-$html.='<button name="SubmitSearchLanguage" class="search">'.get_lang('Search').'</button>';
+$html.='<button name="SubmitSearchLanguage" class="search" type="submit">'.get_lang('Search').'</button>';
 $html.='</form>';
 $html.='</div>';
 
@@ -193,6 +193,13 @@ echo '<br/>';
 //allow see data in sortetable
 if ($_REQUEST['original_file']) {
 
+if (isset($_REQUEST['txt_search_word']) && strlen(trim($_REQUEST['txt_search_word']))==0) {
+	unset($list_info);
+	$search_data=false;
+} else {
+	$search_data=true;	
+}
+if($search_data===true) { 
 	$parent_id=Security::remove_XSS($_REQUEST['id']);
 	$get_all_info_of_sub_language=AdminManager::get_all_information_of_sub_language ($parent_id);
 	$dokeos_path_file=api_get_path('SYS_LANG_PATH').$all_data_of_language['dokeos_folder'].'/'.$request_file;	
@@ -248,9 +255,21 @@ if ($_REQUEST['original_file']) {
 	$i++;
 	}
 }
-
-
+if (isset($_REQUEST['txt_search_word']) && strlen(trim($_REQUEST['txt_search_word']))>0) {
+	foreach ($list_info as $index_list_info=>$value_list_info) {
+			$search='/'.Security::remove_XSS(trim($_REQUEST['txt_search_word'])).'/i';
+			if (preg_match($search,$value_list_info[2])===0) {
+				unset($list_info[$index_list_info]);
+			}
+	
+	}
+}
+}
 $parameters=array('id'=>Security::remove_XSS($_GET['id']),'original_file'=>$request_file);
+if (isset($_REQUEST['txt_search_word']) && strlen($_REQUEST['txt_search_word'])>0) {
+	$parameters['txt_search_word']=Security::remove_XSS($_REQUEST['txt_search_word']);
+}
+
 $table = new SortableTableFromArrayConfig($list_info, 1,20,'data_info');
 $table->set_additional_parameters($parameters);
 //$table->set_header(0, '');	

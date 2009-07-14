@@ -1,4 +1,4 @@
-<?php // $Id: index.php 21283 2009-06-07 20:53:44Z herodoto $
+<?php // $Id: index.php 22073 2009-07-14 15:49:30Z darkvela $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 21283 2009-06-07 20:53:44Z herodoto $
+* 	@version $Id: index.php 22073 2009-07-14 15:49:30Z darkvela $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -434,7 +434,7 @@ function display_anonymous_right_menu() {
 			foreach($menu_navigation as $section => $navigation_info) {
 				$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
 				echo '<li'.$current.'>';
-				echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+				echo '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
 				echo '</li>';
 				echo "\n";
 			}

@@ -139,8 +139,6 @@ class Matching extends Question {
 					</tr>';
 		$form -> addElement ('html', $html);
 		
-		//$form -> addElement ('html_editor', 'answer','<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="updateBlanks(this)"');
-
 		for($i = 1 ; $i <= $nb_matches ; ++$i) {
 			$form -> addElement ('html', '<tr><td>');
 			$group = array();

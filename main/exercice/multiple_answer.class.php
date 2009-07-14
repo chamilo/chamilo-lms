@@ -63,15 +63,6 @@ class MultipleAnswer extends Question {
 	 */
 	function createAnswersForm ($form) {
 
-		global $fck_attribute;
-
-		$fck_attribute = array();
-		//$fck_attribute['Width'] = '348px';
-		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '100px';
-		$fck_attribute['ToolbarSet'] = 'Answer';
-		$fck_attribute['Config']['ToolbarStartExpanded']='false';			
-
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
@@ -140,9 +131,9 @@ class MultipleAnswer extends Question {
 			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
 			$boxes_names[] = 'correct['.$i.']';
 			
-			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"');
+			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'Answer', 'Width' => '100%', 'Height' => '100'));
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-			$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"');
+			$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'Answer', 'Width' => '100%', 'Height' => '100'));
 			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
 			$form -> addElement ('html', '</tr>');
 		}

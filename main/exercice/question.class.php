@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 21662 2009-06-29 14:55:09Z iflorespaz $
+<?php // $Id: question.class.php 22051 2009-07-14 04:50:33Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 21662 2009-06-29 14:55:09Z iflorespaz $
+* 	@version $Id: question.class.php 22051 2009-07-14 04:50:33Z ivantcholakov $
 */
 
 
@@ -990,20 +990,13 @@ abstract class Question
 		// question type
 		$answerType= intval($_REQUEST['answerType']);
 		$form->addElement('hidden','answerType',$_REQUEST['answerType']);
-		
-		
+
 		// html editor
-		global $fck_attribute;
-		$fck_attribute = array();
-		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '150px';
-		$fck_attribute['ToolbarSet'] = 'QuestionDescription';
-		
+		$editor_config = array('ToolbarSet' => 'QuestionDescription', 'Width' => '100%', 'Height' => '150');
 		if(is_array($fck_config)){
-			$fck_attribute = array_merge($fck_attribute,$fck_config);
+			$editor_config = array_merge($editor_config, $fck_config);
 		}		
-		
-		if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
+		if(!api_is_allowed_to_edit()) $editor_config['UserStatus'] = 'student';
 
 		$form -> addElement('html','<div class="row">
 		<div class="label"></div>
@@ -1011,12 +1004,12 @@ abstract class Question
 			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
 		</div>
 		</div>');
-		
+
 		$form -> addElement ('html','<div id="media" style="display:none;">');
-				
-		$form->add_html_editor('questionDescription', get_lang('langQuestionDescription'), false);
+
+		$form->add_html_editor('questionDescription', get_lang('langQuestionDescription'), false, false, $editor_config);
 		$form -> addElement ('html','</div>');
-		
+
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionDescription');
 
 		// hidden values

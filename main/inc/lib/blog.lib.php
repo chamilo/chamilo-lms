@@ -35,8 +35,7 @@
  * @author Julio Montoya - Cleaning code
  *
  */
-class Blog
-{
+class Blog {
 	/**
 	 * Get the title of a blog
 	 * @author Toon Keppens
@@ -45,8 +44,7 @@ class Blog
 	 *
 	 * @return String Blog Title
 	 */
-	function get_blog_title($blog_id)
-	{
+	public static function get_blog_title ($blog_id) {
 		if(is_numeric($blog_id))
 		{
 			// init
@@ -72,8 +70,7 @@ class Blog
 	 *
 	 * @return String Blog description
 	 */
-	function get_blog_subtitle($blog_id)
-	{
+	public static function get_blog_subtitle ($blog_id) {
 		// init
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		$sql = "SELECT blog_subtitle FROM $tbl_blogs WHERE blog_id ='".Database::escape_string((int)$blog_id)."'";
@@ -92,8 +89,7 @@ class Blog
 	 *
 	 * @return Array Returns an array with [userid]=>[username]
 	 */
-	function get_blog_users($blog_id)
-	{
+	public static function get_blog_users ($blog_id) {
 		// Database table definitions
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
@@ -130,8 +126,7 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function create_blog($title, $subtitle)
-	{
+	public static function create_blog ($title, $subtitle) {
 		global $_user;
 		$current_date=date('Y-m-d H:i:s',time());
 		// Tabel definitions
@@ -178,8 +173,7 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function edit_blog($blog_id, $title, $subtitle)
-	{
+	public static function edit_blog ($blog_id, $title, $subtitle) {
 		global $_user;
 
 		// Table definitions
@@ -206,8 +200,7 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function delete_blog($blog_id)
-	{
+	public static function delete_blog ($blog_id) {
 		// Init
 		$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
 		$tbl_blogs_posts 	= Database::get_course_table(TABLE_BLOGS_POSTS);
@@ -257,8 +250,7 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function create_post($title, $full_text, $file_comment, $blog_id)
-	{
+	public static function create_post ($title, $full_text, $file_comment, $blog_id) {
 		global $_user;
 		global $_course;
 		global $blog_table_attachment;
@@ -339,8 +331,7 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function edit_post($post_id, $title, $full_text, $blog_id)
-	{
+	public static function edit_post ($post_id, $title, $full_text, $blog_id) {
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 
@@ -360,8 +351,7 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function delete_post($blog_id, $post_id)
-	{
+	public static function delete_post($blog_id, $post_id) {
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
@@ -397,8 +387,7 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function create_comment($title, $full_text, $file_comment,$blog_id, $post_id, $parent_id, $task_id = 'NULL')
-	{
+	public static function create_comment($title, $full_text, $file_comment,$blog_id, $post_id, $parent_id, $task_id = 'NULL') {
 		global $_user;		
 		global $_course;				
 		global $blog_table_attachment;
@@ -479,8 +468,7 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function delete_comment($blog_id, $post_id, $comment_id)
-	{
+	public static function delete_comment ($blog_id, $post_id, $comment_id) {
 		// Init
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
@@ -521,8 +509,7 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function create_task($blog_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color)
-	{
+	public static function create_task ($blog_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color) {
 		// Init
 		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 		$tbl_tasks_permissions = Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
@@ -597,8 +584,7 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function edit_task($blog_id, $task_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color)
-	{
+	public static function edit_task($blog_id, $task_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color) {
 		// Init
 		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 		$tbl_tasks_permissions = Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
@@ -678,8 +664,7 @@ class Blog
 	 * 
 	 * @return void
 	 */
-	function delete_task($blog_id, $task_id)
-	{
+	public static function delete_task ($blog_id, $task_id) {
 		// Init
 		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 
@@ -698,8 +683,7 @@ class Blog
 	 * 
 	 * @return void
 	 */
-	function delete_assigned_task($blog_id, $task_id,$user_id)
-	{
+	public static function delete_assigned_task ($blog_id, $task_id,$user_id) {
 		// Init
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 		// Delete posts
@@ -715,8 +699,7 @@ class Blog
 	 *
 	 * @return Returns an unsorted list (<ul>) with the users' tasks
 	 */
-	function get_personal_task_list()
-	{
+	public static function get_personal_task_list () {
 		global $_user;
 
 		// Init
@@ -762,8 +745,7 @@ class Blog
 	 *
 	 * @return void
 	 */
-	function change_blog_visibility($blog_id)
-	{
+	public static function change_blog_visibility ($blog_id) {
 		// Init
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
@@ -805,8 +787,7 @@ class Blog
 	 *
 	 * @param Integer $blog_id
 	 */
-	function display_blog_posts($blog_id, $filter = '1=1', $max_number_of_posts = 20)
-	{
+	public static function display_blog_posts ($blog_id, $filter = '1=1', $max_number_of_posts = 20) {
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
@@ -906,8 +887,7 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param String $query_string
 	 */
-	function display_search_results($blog_id, $query_string)
-	{
+	public static function display_search_results ($blog_id, $query_string) {
 		// Init
 		$query_string = Database::escape_string($query_string);
 		$query_string_parts = explode(' ',$query_string);
@@ -929,8 +909,7 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param String $query_string
 	 */
-	function display_day_results($blog_id, $query_string)
-	{
+	public static function display_day_results ($blog_id, $query_string) {
 		// Init
 		$date_output = $query_string;
 		$date = explode('-',$query_string);
@@ -951,8 +930,7 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param Integer $post_id
 	 */
-	function display_post($blog_id, $post_id)
-	{
+	public static function display_post ($blog_id, $post_id) {
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
@@ -1046,8 +1024,7 @@ class Blog
 	 *
 	 * @return Boolean success
 	 */
-	function add_rating($type, $blog_id, $item_id, $rating)
-	{
+	public static function add_rating ($type, $blog_id, $item_id, $rating) {
 		global $_user;
 
 		// Init
@@ -1083,8 +1060,7 @@ class Blog
 	 * 
 	 * @return array()
 	 */
-	function display_rating($type, $blog_id, $item_id)
-	{
+	public static function display_rating ($type, $blog_id, $item_id) {
 		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
 
 		// Calculate rating
@@ -1104,8 +1080,7 @@ class Blog
 	 *
 	 *@return String
 	 */
-	function display_rating_form($type, $blog_id, $post_id, $comment_id = NULL)
-	{
+	public static function display_rating_form ($type, $blog_id, $post_id, $comment_id = NULL) {
 		global $_user;
 
 		// Init
@@ -1159,8 +1134,7 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param Integer $post_id
 	 */
-	function get_threaded_comments($current = 0, $current_level = 0, $blog_id, $post_id, $task_id = 0)
-	{
+	public static function get_threaded_comments ($current = 0, $current_level = 0, $blog_id, $post_id, $task_id = 0) {
 		// Init
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
@@ -1241,8 +1215,7 @@ class Blog
 	 *
 	 * @param Integer $blog_id
 	 */
-	function display_form_new_post($blog_id)
-	{
+	public static function display_form_new_post ($blog_id) {
 		if(api_is_allowed('BLOG_' . $blog_id, 'article_add')) {
 			echo '<script type="text/javascript">
 					function FCKeditor_OnComplete( editorInstance )
@@ -1406,8 +1379,7 @@ class Blog
 	 *
 	 * @param Integer $blog_id
 	 */
-	function display_form_edit_post($blog_id, $post_id)
-	{
+	public static function display_form_edit_post ($blog_id, $post_id) {
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
@@ -1486,8 +1458,7 @@ class Blog
 	 *
 	 * @param Integer $blog_id
 	 */
-	function display_task_list($blog_id)
-	{
+	public static function display_task_list ($blog_id) {
 		global $charset;
 		if(api_is_allowed('BLOG_' . $blog_id, 'article_add'))
 		{
@@ -1565,8 +1536,7 @@ class Blog
 	 *
 	 * @param Integer $blog_id
 	 */
-	function display_assigned_task_list($blog_id)
-	{
+	public static function display_assigned_task_list ($blog_id) {
 		// Init
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
@@ -1625,8 +1595,7 @@ class Blog
 	 * @author Toon Keppens
 	 *
 	 */
-	function display_new_task_form($blog_id)
-	{
+	public static function display_new_task_form ($blog_id) {
 		// Init
 		$colors = array('FFFFFF','FFFF99','FFCC99','FF9933','FF6699','CCFF99','CC9966','66FF00', '9966FF', 'CF3F3F', '990033','669933','0033FF','003366','000000');
 
@@ -1720,8 +1689,7 @@ class Blog
 	 * @author Toon Keppens
 	 *
 	 */
-	function display_edit_task_form($blog_id, $task_id)
-	{
+	public static function display_edit_task_form ($blog_id, $task_id) {
 		// Init
 		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 		$colors = array('FFFFFF','FFFF99','FFCC99','FF9933','FF6699','CCFF99','CC9966','66FF00', '9966FF', 'CF3F3F', '990033','669933','0033FF','003366','000000');
@@ -1812,8 +1780,7 @@ class Blog
 	 * @author Toon Keppens
 	 *
 	 */
-	function display_assign_task_form($blog_id)
-	{
+	public static function display_assign_task_form ($blog_id) {
 		// Init
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
@@ -1955,8 +1922,7 @@ class Blog
 	 * @author Toon Keppens
 	 *
 	 */
-	function display_edit_assigned_task_form($blog_id, $task_id, $user_id)
-	{
+	public static function display_edit_assigned_task_form ($blog_id, $task_id, $user_id) {
 		//$parameters = explode('_', $assignment_id);
 		//$task_id = $parameters[0];
 		//$user_id = $parameters[1];
@@ -2123,8 +2089,7 @@ class Blog
 	 * @param Integer $task_id
 	 * @param Date $target_date
 	 */
-	function assign_task($blog_id, $user_id, $task_id, $target_date)
-	{
+	public static function assign_task ($blog_id, $user_id, $task_id, $target_date) {
 		// Init
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 
@@ -2158,8 +2123,7 @@ class Blog
 		}
 	}
 
-	function edit_assigned_task($blog_id, $user_id, $task_id, $target_date, $old_user_id, $old_task_id, $old_target_date)
-	{
+	public static function edit_assigned_task ($blog_id, $user_id, $task_id, $target_date, $old_user_id, $old_task_id, $old_target_date) {
 		// Init
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 
@@ -2200,8 +2164,7 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param unknown_type $task_id
 	 */
-	function display_select_task_post($blog_id, $task_id)
-	{
+	public static function display_select_task_post ($blog_id, $task_id) {
 		// Init
 		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
@@ -2249,8 +2212,7 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param Integer $user_id
 	 */
-	function set_user_subscribed($blog_id,$user_id)
-	{
+	public static function set_user_subscribed ($blog_id,$user_id) {
 		// Init
 		$tbl_blogs_rel_user 	= Database::get_course_table(TABLE_BLOGS_REL_USER);
 		$tbl_user_permissions 	= Database::get_course_table(TABLE_PERMISSION_USER);
@@ -2273,8 +2235,7 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param Integer $user_id
 	 */
-	function set_user_unsubscribed($blog_id, $user_id)
-	{
+	public static function set_user_unsubscribed ($blog_id, $user_id) {
 		// Init
 		$tbl_blogs_rel_user 	= Database::get_course_table(TABLE_BLOGS_REL_USER);
 		$tbl_user_permissions 	= Database::get_course_table(TABLE_PERMISSION_USER);
@@ -2297,8 +2258,7 @@ class Blog
 	 *
 	 * @return Html Form with sortable table with users to subcribe in a blog, in a course.
 	 */
-	function display_form_user_subscribe($blog_id)
-	{
+	public static function display_form_user_subscribe ($blog_id) {
 		// Init
 		global $_course;
 		$currentCourse = $_course['sysCode'];
@@ -2398,8 +2358,7 @@ class Blog
 	 *
 	 * @return Html Form with sortable table with users to unsubcribe from a blog.
 	 */
-	function display_form_user_unsubscribe($blog_id)
-	{
+	public static function display_form_user_unsubscribe ($blog_id) {
 		global $_user;
 
 		// Init
@@ -2488,8 +2447,7 @@ class Blog
 	 *
 	 * @param Integer $blog_id
 	 */
-	function display_form_user_rights($blog_id)
-	{
+	public static function display_form_user_rights ($blog_id) {
 		// Init
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
@@ -2507,8 +2465,7 @@ class Blog
 	 *
 	 * @param Integer $blog_id
 	 */
-	function display_new_comment_form($blog_id, $post_id, $title)
-	{
+	public static function display_new_comment_form ($blog_id, $post_id, $title) {
 		echo '<form name="add_post" enctype="multipart/form-data" method="post" action="blog.php?action=view_post&amp;blog_id=' . intval($blog_id) . '&amp;post_id=' . intval($post_id) . '">';
 		
 		// form title
@@ -2603,8 +2560,7 @@ class Blog
 	 *
 	 * @return html code
 	*/
-	function display_minimonthcalendar($month, $year, $blog_id)
-	{
+	public static function display_minimonthcalendar ($month, $year, $blog_id) {
 		// Init
 		global $_user;
 		global $DaysShort;
@@ -2762,8 +2718,7 @@ class Blog
 	 * Blog admin | Display the form to add a new blog.
 	 *
 	 */
-	function display_new_blog_form()
-	{
+	public static function display_new_blog_form () {
 		echo '<form name="add_blog" method="post" action="blog_admin.php?action=add">
 				<div class="row">
 					<div class="form_header">
@@ -2808,8 +2763,7 @@ class Blog
 	 * Blog admin | Display the form to edit a blog.
 	 *
 	 */
-	function display_edit_blog_form($blog_id)
-	{
+	public static function display_edit_blog_form ($blog_id) {
 		// Init
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 
@@ -2866,8 +2820,7 @@ class Blog
 	/**
 	 * Blog admin | Returns table with blogs in this course
 	 */
-	function display_blog_list()
-	{
+	public static function display_blog_list () {
 		global $charset;
 		// Init
 		$counter = 0;
@@ -2956,7 +2909,11 @@ class Blog
 
 }
 
-
+/**
+ * 
+ * END CLASS BLOG
+ * 
+ */
 
 /**
  * Show a list with all the attachments according the parameter's

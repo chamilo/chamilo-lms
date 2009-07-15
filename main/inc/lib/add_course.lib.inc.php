@@ -892,24 +892,27 @@ function update_Db_course($courseDbName)
 		user_ip varchar(39) NOT NULL,		
 		PRIMARY KEY (id),
 		KEY reflink (reflink),
-		KEY group_id (group_id)
+		KEY group_id (group_id),
+		KEY page_id (page_id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
 		
 	//
 	$sql = "CREATE TABLE `".$TABLEWIKICONF . "` (
-		id int NOT NULL auto_increment,
 		page_id int NOT NULL default 0,		
 		feedback1 text NOT NULL,
 		feedback2 text NOT NULL,
 		feedback3 text NOT NULL,
+		fprogress1 varchar(3) NOT NULL,
+		fprogress2 varchar(3) NOT NULL,
+		fprogress3 varchar(3) NOT NULL,
 		max_size int default NULL,
 		max_text int default NULL,
 		max_version int default NULL,
 		startdate_assig datetime NOT NULL default '0000-00-00 00:00:00',
 		enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',
 		delayedsubmit int NOT NULL default 0,
-		PRIMARY KEY (id)
+		KEY page_id (page_id)
 		)";	
 	api_sql_query($sql, __FILE__, __LINE__);
 	

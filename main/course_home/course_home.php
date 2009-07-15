@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 22086 2009-07-14 20:11:38Z iflorespaz $
+<?php // $Id: course_home.php 22105 2009-07-15 11:58:05Z iflorespaz $
 
 /*
 ==============================================================================
@@ -67,9 +67,9 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqu
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
  
- 	$(window).load(function () { 
+ 	//$(window).load(function () { 
       $(".make_visible_and_invisible").attr("href","javascript:void(0)");
-	});
+	//});
 	
  	$("td .make_visible_and_invisible > img").click(function () { 
 		make_visible="visible.gif";

@@ -1,4 +1,4 @@
-<?php // $Id: languages.php 22087 2009-07-14 20:48:49Z iflorespaz $
+<?php // $Id: languages.php 22105 2009-07-15 11:58:05Z iflorespaz $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -52,9 +52,9 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqu
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
 
- 	$(window).load(function () { 
+ 	//$(window).load(function () { 
       $(".make_visible_and_invisible").attr("href","javascript:void(0)");
-	});
+	//});
  		
  	$("td .make_visible_and_invisible").click(function () { 
 		make_visible="visible.gif";

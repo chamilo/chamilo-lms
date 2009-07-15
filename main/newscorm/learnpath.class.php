@@ -6364,8 +6364,7 @@ class learnpath {
 			}
 			$renderer = $form->defaultRenderer();
 			$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
-			$form->addElement('html_editor', 'content_lp', '');
-			//$form->addElement('html_editor','content_lp','');
+			$form->addElement('html_editor', 'content_lp', '', null, array('ToolbarSet' => 'LearnPath', 'Width' => '100%', 'Height' => '400', 'FullPage' => true));
 			$defaults["content_lp"] = file_get_contents($item_path);
 		}
 
@@ -6666,11 +6665,6 @@ class learnpath {
 						// (on the root or in subfolders).
 						// For documents in native scorm packages it is unclear whether the
 						// online editor should be activated or not.
-						global $fck_attribute;
-						$fck_attribute['Width'] = '100%';
-						$fck_attribute['Height'] = '700';
-						$fck_attribute['ToolbarSet'] = 'LearnPath';
-						$fck_attribute['Config']['FullPage'] = true;
 						$relative_path = $extra_info['dir'];
 						if ($relative_path == 'n/') {
 							// A new document, it is in the root of the repository.
@@ -6690,9 +6684,11 @@ class learnpath {
 								$relative_path = $relative_path . '/';
 							}
 						}
-						$fck_attribute['Config']['CreateDocumentDir'] = $relative_prefix;
-						$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH') . api_get_course_path() . '/document/';
-						$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH') . api_get_course_path() . '/document/' . $relative_path;
+						$editor_config = array('ToolbarSet' => 'LearnPath', 'Width' => '100%', 'Height' => '700', 'FullPage' => true,
+							'CreateDocumentDir' => $relative_prefix,
+							'CreateDocumentWebDir' => api_get_path('WEB_COURSE_PATH') . api_get_course_path() . '/document/',
+							'BaseHref' => api_get_path('WEB_COURSE_PATH') . api_get_course_path() . '/document/' . $relative_path
+						);
 
 						if ($_GET['action'] == 'add_item') {
 							$class = 'add';
@@ -6708,7 +6704,7 @@ class learnpath {
 						$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
 
 						$form->addElement('html', '<div style="margin:3px 12px">');
-						$form->addElement('html_editor', 'content_lp', '');
+						$form->addElement('html_editor', 'content_lp', '', null, $editor_config);
 						$form->addElement('html', '</div>');
 						$defaults["content_lp"] = $content;
 					}

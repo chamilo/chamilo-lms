@@ -160,13 +160,6 @@ if($debug>0) error_log('New LP - Passed oLP creation check',0);
 $_SESSION['oLP']->update_queue = array(); //reinitialises array used by javascript to update items in the TOC
 $_SESSION['oLP']->message = ''; //should use ->clear_message() method but doesn't work
 
-// Some common default settings for the online editor. Other settings are calculated in formvalidator module.
-// For editing document type lp-items specific settings are set/calculated, see learnpath.class.php
-//TODO: check, see if we need, it seems not working here
-$fck_attribute['ToolbarSet'] = 'LearnPath';
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
-
 if(isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true')
 {
 	if($_REQUEST['action'] != 'list' AND $_REQUEST['action'] != 'view')

@@ -27,7 +27,7 @@
 * 	It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_admin.inc.php 20993 2009-05-26 16:09:29Z juliomontoya $
+* 	@version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
 */
 
 /*
@@ -61,7 +61,7 @@ if(isset($_GET['editQuestion']))
 			  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
 		$result = api_sql_query($sql);
 		if (Database::num_rows($result) > 0) {			 
-			Display::display_warning_message('EditingScoreCauseProblemsToExercisesInLP');	
+			Display::display_warning_message(get_lang('EditingScoreCauseProblemsToExercisesInLP'));	
 		}
 	}
 	

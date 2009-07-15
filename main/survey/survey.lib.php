@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 21701 2009-07-01 19:12:25Z aportugal $
+* 	@version $Id: survey.lib.php 22096 2009-07-15 03:43:25Z ivantcholakov $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -1331,7 +1331,6 @@ class question
 	function create_form($form_content)
 	{
 		global $charset;
-		global $fck_attribute;
 		global $survey_data;
 		
 		//$tool_name = '<img src="../img/'.survey_manager::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" />';
@@ -1359,16 +1358,12 @@ class question
 		$this->html .= '		<input type="hidden" name="type" id="type" value="'.Security::remove_XSS($_GET['type']).'"/>';
 
 		// question field
-		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '120';
-		
-		$fck_attribute['ToolbarSet'] = 'Survey';
 		$this->html .= '	<div class="row">';
 		$this->html .= '		<div class="label">';
 		$this->html .= '			<span class="form_required">*</span> '.get_lang('Question');
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
-		$this->html .= api_return_html_area('question', Security::remove_XSS(stripslashes($form_content['question'])));
+		$this->html .= api_return_html_area('question', Security::remove_XSS(stripslashes($form_content['question'])), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'));
 		$this->html .= '		</div>';
 		$this->html .= '	</div>';		
 		
@@ -1647,13 +1642,13 @@ class yesno extends question
 		$this->html .= '		<td align="right"><label for="answers[0]">1</label></td>';
 		//$this->html .= '		<td><input type="text" name="answers[0]" id="answers[0]" value="'.$form_content['answers'][0].'" /></td>';
 		
-		$this->html .= '		<td width="550">'.api_return_html_area('answers[0]', stripslashes($form_content['answers'][0])).'</td>';
+		$this->html .= '		<td width="550">'.api_return_html_area('answers[0]', stripslashes($form_content['answers'][0]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
 		$this->html .= '		<td><input type="image" src="../img/down.gif"  value="move_down[0]" name="move_down[0]"/></td>';
 		$this->html .= '	</tr>';
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right"><label for="answers[1]">2</label></td>';
 		//$this->html .= '		<td><input type="text" name="answers[1]" id="answers[1]" value="'.$form_content['answers'][1].'" /></td>';
-		$this->html .= '		<td width="550">'.api_return_html_area('answers[1]', stripslashes($form_content['answers'][1])).'</td>';
+		$this->html .= '		<td width="550">'.api_return_html_area('answers[1]', stripslashes($form_content['answers'][1]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
 		$this->html .= '		<td><input type="image" src="../img/up.gif" value="move_up[1]" name="move_up[1]" /></td>';
 		$this->html .= '	</tr>';
 		$this->html .= '			</table>';
@@ -1747,7 +1742,7 @@ class multiplechoice extends question
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset)).'</td>';
+			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1) {
 				$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
@@ -1848,7 +1843,7 @@ class personality extends question
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]))).'</td>';
+			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key])), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
 			$this->html .= '		<td>';
 			
 			if ($total_number_of_answers> 2)
@@ -1940,7 +1935,7 @@ class multipleresponse extends question
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset)).'</td>';
+			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1) {
 				$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
@@ -2246,7 +2241,7 @@ class score extends question
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', stripslashes($form_content['answers'][$key])).'</td>';
+			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', stripslashes($form_content['answers'][$key]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1)
 			{

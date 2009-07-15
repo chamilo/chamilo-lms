@@ -141,10 +141,7 @@ $form->addElement('static', null, null, get_lang('AdditonalUsersComment'));
 // the title of the mail
 $form->addElement('text', 'mail_title', get_lang('MailTitle'),array('size' => '80'));
 // the text of the mail
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '150';
-$fck_attribute['ToolbarSet'] = 'Survey';
-$form->addElement('html_editor', 'mail_text', get_lang('MailText'));
+$form->addElement('html_editor', 'mail_text', get_lang('MailText'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '150'));
 // some explanation of the mail
 $form->addElement('static', null, null, get_lang('UseLinkSyntax'));
 $form->addElement('checkbox', 'send_mail', '', get_lang('SendMail'));

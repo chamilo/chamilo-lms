@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 22048 2009-07-14 03:34:42Z ivantcholakov $
+// $Id: html_editor.php 22096 2009-07-15 03:43:25Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,6 +42,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 	 */
 	function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null, $config = null)
 	{
+		// The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
 		global $fck_attribute;
 
 		HTML_QuickForm_element :: HTML_QuickForm_element($elementName, $elementLabel, $attributes);

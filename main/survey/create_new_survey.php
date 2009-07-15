@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 21034 2009-05-28 11:45:43Z pcool $
+* 	@version $Id: create_new_survey.php 22096 2009-07-15 03:43:25Z ivantcholakov $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -154,13 +154,8 @@ if ($_GET['action'] == 'edit') {
 	$form->applyFilter('survey_code', 'api_strtoupper');
 } 
 
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '200';
-$fck_attribute['ToolbarSet'] = 'Survey';
-$form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'));
-$fck_attribute['Config']['ToolbarStartExpanded']='false';
-$fck_attribute['Height'] = '100';
-$form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'));
+$form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200'));
+$form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '100', 'ToolbarStartExpanded' => false));
 /*
 $lang_array = api_get_languages();
 foreach ($lang_array['name'] as $key=>$value) {
@@ -176,11 +171,10 @@ $form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form
 /** TODO maybe it is better to change this into false instead see line 95 in survey.lib.php */
 //$group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('No'),0);
 
-$fck_attribute['Height'] = '130';
 //$form->addGroup($group, 'survey_share', get_lang('ShareSurvey'), '&nbsp;');
 $form->addElement('checkbox', 'anonymous', get_lang('Anonymous'));
-$form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'));
-$form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'));
+$form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
+$form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
 
 /*

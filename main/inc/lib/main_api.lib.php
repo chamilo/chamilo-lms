@@ -2240,38 +2240,47 @@ function api_get_themes() {
 		functions for the WYSIWYG html editor, TeX parsing...
 ==============================================================================
 */
+
 /**
 * Displays the FckEditor WYSIWYG editor for online editing of html
 * @param string $name The name of the form-element
 * @param string $content The default content of the html-editor
 * @param int $height The height of the form element
 * @param int $width The width of the form element
-* @param string $optAttrib optional attributes for the form element
+* @param string $attributes (optional) attributes for the form element
+* @param array $editor_config (optional) Configuration options for the html-editor
 */
-function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $optAttrib = '') {
+function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
 	global $_configuration, $_course, $fck_attribute;
 	require_once(dirname(__FILE__).'/formvalidator/Element/html_editor.php');
-	$editor = new HTML_QuickForm_html_editor($name);
+	$editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
 	$editor->setValue($content);
+
+	// The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
 	if( $height != '') {
 		$fck_attribute['Height'] = $height;
 	}
 	if( $width != '') {
 		$fck_attribute['Width'] = $width;
 	}
+
 	echo $editor->toHtml();
 }
-function api_return_html_area($name, $content = '', $height = '', $width = '100%', $optAttrib = '') {
+
+function api_return_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
 	global $_configuration, $_course, $fck_attribute;
 	require_once(dirname(__FILE__).'/formvalidator/Element/html_editor.php');
-	$editor = new HTML_QuickForm_html_editor($name);
+	$editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
 	$editor->setValue($content);
+
+	// The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
 	if( $height != '') {
 		$fck_attribute['Height'] = $height;
 	}
 	if( $width != '') {
 		$fck_attribute['Width'] = $width;
 	}
+
 	return $editor->toHtml();
 }
 

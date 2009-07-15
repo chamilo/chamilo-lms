@@ -49,10 +49,13 @@ $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<div style="width: 80%; margin: 0px auto; padding-bottom: 10px; ">{element}</div>');
 
 $toolbar_set = 'Introduction';
+
+// The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
 global $fck_attribute;
 if (is_array($fck_attribute) && isset($fck_attribute['Config']['ToolbarSet'])) {
 	$toolbar_set = $fck_attribute['Config']['ToolbarSet'];
 }
+
 if (is_array($editor_config)) {
 	if (!isset($editor_config['ToolbarSet'])) {
 		$editor_config['ToolbarSet'] = $toolbar_set;

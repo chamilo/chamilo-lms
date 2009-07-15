@@ -339,7 +339,7 @@ function show_tools_category($course_tool_category)
 				Display::display_icon($toolsRow['image'], $tool_name, array('class'=>'tool-icon','id'=>'toolimage_'.$toolsRow["id"]));
 				echo '</a> ';
 					
-				echo $my_tool_link;	
+				echo $toollink;	
 				/*	
 					echo ($toolsRow['image'] == 'file_html_na.gif' || $toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif' || $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif' || $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif') ? '  '.stripslashes($toolsRow['name']) : '  '.get_lang(ucfirst($toolsRow['name']));
 				*/

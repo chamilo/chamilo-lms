@@ -192,21 +192,12 @@ api_display_tool_title($nameTools);
 	(editable by course admins)
 -----------------------------------------------------------
 */
-//TODO: check see if we need, it seems not working here
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'LearnPath';
-// TODO: These settings to be checked when it is possible.
-$fck_attribute['Config']['InDocument'] = false;
-$fck_attribute['Config']['CreateDocumentWebDir'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/';
-$fck_attribute['Config']['CreateDocumentDir'] = '../../courses/'.api_get_course_path().'/document/';
-$fck_attribute['Config']['BaseHref'] = api_get_path('WEB_COURSE_PATH').api_get_course_path().'/';
+
 if($my_version=='1.8'){
 	Display::display_introduction_section(TOOL_LEARNPATH);
 }else{
 	api_introductionsection(TOOL_LEARNPATH);
 }
-$fck_attribute = null; // Clearing this global variable immediatelly after it has been used.
 
 
 if(api_is_allowed_to_edit())

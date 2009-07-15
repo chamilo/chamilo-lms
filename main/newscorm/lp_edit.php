@@ -30,10 +30,6 @@ $interbreadcrumb[]= array ("url"=>api_get_self()."?action=admin_view&lp_id=$lear
 
 Display::display_header(null,'Path');
 
-$fck_attribute['Width'] = '400px';
-$fck_attribute['Height'] = '150px';
-$fck_attribute['ToolbarSet'] = 'CommentLearningPath';
-
 // actions link
 echo '<div class="actions">';
 $gradebook = Security::remove_XSS($_GET['gradebook']);
@@ -109,11 +105,9 @@ if (api_get_setting('allow_course_theme') == 'true')
 }
 
 //Author
-//$form -> addElement('text', 'lp_author', api_ucfirst(get_lang('Author')));
-//$form->add_html_editor('lp_author', get_lang('Author')); 
-
-$form->addElement('html_editor','lp_author',get_lang('Author'),array('size'=>80) ); 
+$form->addElement('html_editor', 'lp_author', get_lang('Author'), array('size'=>80), array('ToolbarSet' => 'CommentLearningPath', 'Width' => '100%', 'Height' => '150px') ); 
 $form->applyFilter('lp_author', 'html_filter');
+
 // LP image	
 $form->add_progress_bar();
 if( strlen($_SESSION['oLP']->get_preview_image() ) > 0)

@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 22027 2009-07-13 11:03:41Z ivantcholakov $
+<?php // $Id: user_add.php 22116 2009-07-15 19:19:59Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -32,14 +32,14 @@ $language_file = array('admin','registration');
 $cidReset = true;
 
 // including necessary libraries
-require ('../inc/global.inc.php');
+require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once ($libpath.'fileManage.lib.php');
-require_once ($libpath.'fileUpload.lib.php');
-require_once ($libpath.'usermanager.lib.php');
-require_once ($libpath.'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
+require_once $libpath.'fileManage.lib.php';
+require_once $libpath.'fileUpload.lib.php';
+require_once $libpath.'usermanager.lib.php';
+require_once $libpath.'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'image.lib.php';
+require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
 
 // section for the tabs
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -316,8 +316,15 @@ $defaults['status'] = STUDENT;
 $defaults = array_merge($defaults,$extra_data);
 $form->setDefaults($defaults);
 // Submit button
+/*
 $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"') ;
 $form->addElement('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
+*/
+$select_level = array (); 	
+$html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
+$html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
+$form->addGroup($html_results_enabled);
+
 // Validate form
 if( $form->validate())
 {

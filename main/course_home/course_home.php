@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 22105 2009-07-15 11:58:05Z iflorespaz $
+<?php // $Id: course_home.php 22113 2009-07-15 16:07:21Z iflorespaz $
 
 /*
 ==============================================================================
@@ -68,7 +68,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
  
  	//$(window).load(function () { 
-      $(".make_visible_and_invisible").attr("href","javascript:void(0)");
+      $(".make_visible_and_invisible").attr("href","javascript:void(0);");
 	//});
 	
  	$("td .make_visible_and_invisible > img").click(function () { 
@@ -90,11 +90,13 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 			list_image_na=image_for_replace.split("_na");
 			list_image_na=list_image_na[0]+".gif";
 			new_current_tool_image=current_tool_image.replace(image_for_replace,list_image_na);
-			$("#tooldesc_"+my_tool_id).attr("class","");		
+			$("#tooldesc_"+my_tool_id).attr("class","");
+			$("#istooldesc_"+my_tool_id).attr("class","");					
        } else {
        	    new_image_to_replace=list_new_image[0]+"_na.gif";
 			new_current_tool_image=current_tool_image.replace(image_for_replace,new_image_to_replace);	
 			$("#tooldesc_"+my_tool_id).attr("class","invisible");
+			$("#istooldesc_"+my_tool_id).attr("class","invisible");		
        	}
 		$("#toolimage_"+my_tool_id).attr("src",new_current_tool_image);
 

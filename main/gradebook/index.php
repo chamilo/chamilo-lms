@@ -727,10 +727,10 @@ if (( count($allcat) == 0) && ( count($alleval) == 0 ) && ( count($alllink) == 0
 //here we are in a sub category
 if ($category != '0') {
 	$cat=new Category();
-	$dblib=new Database();
+	//$dblib=new Database();
 		
 	$category_id=Security::remove_XSS($_GET['selectcat']);
-	$course_id=$dblib->get_course_by_category($category_id);
+	$course_id=Database::get_course_by_category($category_id);
 	$show_message=$cat->show_message_resource_delete($course_id);
 	if ($show_message=='') {
 		DisplayGradebook :: display_header_gradebook($cats[0], 0, $category_id, $is_course_admin, $is_platform_admin, $simple_search_form, false, true);

@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 22018 2009-07-13 05:32:58Z ivantcholakov $
+<?php // $Id: configure_homepage.php 22099 2009-07-15 10:49:42Z ivantcholakov $
 /*
 ===== =========================================================================
 	Dokeos - elearning and course management software
@@ -691,7 +691,7 @@ switch($action){
 				$form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html));
 			} else {
 				$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
-				$form->add_html_editor('link_html', '', true, false, array('ToolbarSet' => 'LinksHomePage', 'Width' => '100%', 'Height' => '400'));
+				$form->add_html_editor('link_html', '', true, false, array('ToolbarSet' => 'PlatformHomePage', 'Width' => '100%', 'Height' => '400'));
 			}
 			$form->addElement('html', '</td></tr><tr><td>');
 			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
@@ -755,7 +755,7 @@ switch($action){
 			$form->addElement('html', $html);
 		} else {
 			$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
-			$form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'EditHomePage', 'Width' => '100%', 'Height' => '400'));
+			$form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PlatformHomePage', 'Width' => '100%', 'Height' => '400'));
 		}
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		$form->setDefaults($default);

@@ -268,10 +268,10 @@ private function build_id_column ($item) {
 			// evaluation
 			case 'E' :
 				$cat=new Category();
-				$dblib=new Database();
+				//$dblib=new Database();
 		
 				$category_id=Security::remove_XSS($_GET['selectcat']);
-				$course_id=$dblib->get_course_by_category($category_id);
+				$course_id=Database::get_course_by_category($category_id);
 				$show_message=$cat->show_message_resource_delete($course_id);
 				
 				// course/platform admin can go to the view_results page
@@ -300,10 +300,10 @@ private function build_id_column ($item) {
 			// link
 			case 'L' :
 				$cat=new Category();
-				$dblib=new Database();
+				//$dblib=new Database();
 		
 				$category_id=Security::remove_XSS($_GET['selectcat']);
-				$course_id=$dblib->get_course_by_category($category_id);
+				$course_id=Database::get_course_by_category($category_id);
 				$show_message=$cat->show_message_resource_delete($course_id);
 				
 				$url = $item->get_link();				

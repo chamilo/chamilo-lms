@@ -190,8 +190,8 @@ class DisplayGradebook
 		//student
 		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		$objcat=new Category();
-		$objdat=new Database();
-		$course_id=$objdat->get_course_by_category($selectcat);
+		//$objdat=new Database();
+		$course_id=Database::get_course_by_category($selectcat);
 		$message_resource=$objcat->show_message_resource_delete($course_id);
 		
 		if (!$is_course_admin && $status<>1 && $selectcat<>0) {

@@ -221,10 +221,14 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 			$isocode=str_replace(' ','_',$isocode);			
 			$str_info='<br/>'.get_lang('OriginalName').' : '.$original_name.'<br/>'.get_lang('EnglishName').' : '.$english_name.'<br/>'.get_lang('Isocode').' : '.$isocode;
 			$path=api_get_path('SYS_LANG_PATH').$english_name;
-			add_directory_of_sub_language ($path);
-			add_sub_language($original_name,$english_name,$isocode,$sublanguage_available,$parent_id);
 			
-			Display::display_confirmation_message(get_lang('TheNewSubLanguageHasBeenAdd').$str_info);
+			$mkdir_result=add_directory_of_sub_language($path);
+			if ($mkdir_result===true) {
+			  	add_sub_language($original_name,$english_name,$isocode,$sublanguage_available,$parent_id);
+			  	Display::display_confirmation_message(get_lang('TheNewSubLanguageHasBeenAdd').$str_info);
+			} else {
+				  Display::display_error_message(get_lang('LanguageDirectoryNotWriteableContactAdmin'));			
+			}
 		} else {
 			if ($language_id_exist===false) {
 				Display::display_error_message(get_lang('LanguageParentNotExist'));	

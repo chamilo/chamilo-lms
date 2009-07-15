@@ -490,7 +490,10 @@ function display_new_wiki_form()
 	}
 	echo '</div>';
 	echo '<div id="wikicontent">';
-	api_disp_html_area('content','','300px'); 	
+	api_disp_html_area('content', '', '', '', null, api_is_allowed_to_edit()
+		? array('ToolbarSet' => 'Wiki', 'Width' => '100%', 'Height' => '400')
+		: array('ToolbarSet' => 'Wiki_Student', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
+	); 	
 	echo '<br/>';
 	echo '<br/>'; 	
 	echo get_lang('Comments').':&nbsp;&nbsp;<input type="text" name="comment" value="'.stripslashes($row['comment']).'"><br /><br />';

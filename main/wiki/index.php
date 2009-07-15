@@ -168,23 +168,6 @@ MAIN CODE
 // Tool introduction
 Display::display_introduction_section(TOOL_WIKI);
 
-/*
------------------------------------------------------------
-Wiki configuration settings
------------------------------------------------------------
-*/
-
-$fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
-if(!api_is_allowed_to_edit())
-{
-	$fck_attribute['Config']['UserStatus'] = 'student';
-	$fck_attribute['ToolbarSet'] = 'Wiki_Student';
-}
-else
-{
-	$fck_attribute['ToolbarSet'] = 'Wiki';
-}
 
 /*
 -----------------------------------------------------------
@@ -1349,7 +1332,10 @@ if ($_GET['action']=='edit')
 				echo '<input type="hidden" name="reflink" value="'.$page.'">';
 				echo '<input type="hidden" name="title" value="'.stripslashes($title).'">'; 
 				
-				api_disp_html_area('content',stripslashes($content),'300px');	
+				api_disp_html_area('content', stripslashes($content), '', '', null, api_is_allowed_to_edit()
+					? array('ToolbarSet' => 'Wiki', 'Width' => '100%', 'Height' => '400')
+					: array('ToolbarSet' => 'Wiki_Student', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
+				); 	
 				echo '<br/>';
 	            echo '<br/>'; 	
 				//if(api_is_allowed_to_edit() || api_is_platform_admin()) //off for now

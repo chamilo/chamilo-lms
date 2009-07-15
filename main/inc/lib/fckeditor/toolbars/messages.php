@@ -6,13 +6,15 @@
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('FitWindow','Undo','Redo'),
-	array('Link','Unlink'),
+	array('FitWindow','-','PasteWord','-','Undo','Redo'),							   
+	array('Link','Unlink','Anchor'),
 	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
-	array('Table','Smiley','googlemaps'),
+	array('Table','Smiley'),
+	'/',
+	array('FontName','FontSize'),
 	array('Bold','Italic','Underline'),
-	array('OrderedList','UnorderedList','-','Blockquote','-','TextColor'),
-	array('ShowBlocks')
+	array('JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList','-','TextColor','BGColor'),
+	array('Source')
 );
 
 // This is the visible toolbar set when the editor is maximized.
@@ -29,7 +31,7 @@ $config['ToolbarSets']['Maximized'] = array(
 
 // Sets how the editor's toolbar should start - expanded or collapsed.
 // Possible values: true , false
-//$config['ToolbarStartExpanded'] = true;
+$config['ToolbarStartExpanded'] = false;
 
 //This option sets the location of the toolbar.
 // Possible values: 'In' , 'None' , 'Out:[TargetId]' , 'Out:[TargetWindow]([TargetId])'
@@ -42,5 +44,5 @@ $config['ToolbarSets']['Maximized'] = array(
 
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...
-//$config['Width'] = '100%';
-//$config['Height'] = '300';
+//$config['Width'] = '95%';
+//$config['Height'] = '250';

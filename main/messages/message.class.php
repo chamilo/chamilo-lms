@@ -70,8 +70,8 @@ class MessageManager
 	/**
 	* Displays the wysiwyg html editor.
 	*/
-	public static function display_html_editor_area($name,$resp) {
-		api_disp_html_area($name, get_lang('TypeYourMessage'), '', '100%');
+	public static function display_html_editor_area($name, $resp) {
+		api_disp_html_area($name, get_lang('TypeYourMessage'), '', '100%', null, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
 	}
 	
 	/**

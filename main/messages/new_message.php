@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 21554 2009-06-21 20:58:47Z iflorespaz $
+<?php // $Id: new_message.php 22097 2009-07-15 04:30:05Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -101,10 +101,7 @@ $(document).ready(function (){
 	</script>';	
 
 $nameTools = api_xml_http_response_encode(get_lang('ComposeMessage'));
-$fck_attribute['Height'] = "250";
-$fck_attribute['Width'] = "95%";
-$fck_attribute['ToolbarSet'] = "Profil";
-$fck_attribute['Config']['ToolbarStartExpanded']='false';
+
 /*
 ==============================================================================
 		FUNCTIONS
@@ -169,7 +166,7 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 	}
 	$form->add_textfield('title', api_xml_http_response_encode(get_lang('Title')));
-	$form->add_html_editor('content', '',false,false);
+	$form->add_html_editor('content', '', false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
 	if (isset($_GET['re_id'])) {
 		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');

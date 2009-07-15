@@ -1005,4 +1005,5 @@ $TemplateDeleted = "Plantilla eliminada";
 $SubLanguage = "Sub-idioma";
 $LanguageIsNowVisible = "El idioma ahora es visible";
 $LanguageIsNowHidden = "El idioma ahora no es visible";
+$LanguageDirectoryNotWriteableContactAdmin = "El directorio /main/lang usado en éste portal,no tiene permisos de escritura. Por favor contacte con su administrador";
 ?>

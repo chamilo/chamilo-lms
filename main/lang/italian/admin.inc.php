@@ -999,4 +999,10 @@ $LoadLanguageFile = "Carica il file della lingua";
 $AllowUseSubLanguageTitle = "Consenti la definizione di articolazioni di una lingua";
 $AllowUseSubLanguageComment = "Abilitando questa opzione, possono essere introdotti termini alternativi a quelli usati da una lingua principale, adattandoli all\'uso locale. L\'opzione di attivazione è presente nel pannello di controllo dell\'amministrazione.";
 $AddWordForTheSubLanguage = "Aggiungi termini all\'articolazione della lingua";
+$TemplateAdded = "Modello aggiunto";
+$TemplateEdited = "Modello modificato";
+$TemplateDeleted = "Modello eliminato";
+$SubLanguage = "Articolazione della lingua";
+$LanguageIsNowVisible = "Ora la lingua è visibile";
+$LanguageIsNowHidden = "Ora la lingua è non visibile";
 ?>

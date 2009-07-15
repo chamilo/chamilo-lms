@@ -1005,4 +1005,5 @@ $TemplateDeleted = "Template deleted";
 $SubLanguage = "Sub language";
 $LanguageIsNowVisible = "The language is now visible";
 $LanguageIsNowHidden = "The language is now hidden";
+$LanguageDirectoryNotWriteableContactAdmin = "The /main/lang directory, used by this portal, is not writeable. Please contact your platform administrator.";
 ?>

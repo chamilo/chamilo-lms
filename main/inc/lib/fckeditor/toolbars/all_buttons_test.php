@@ -1,21 +1,28 @@
 <?php
-// Course tools
-// Test, question description
+// This toolbar has been created for testing purposes.
+// It contains all the buttons that may be used in the Dokeos LMS.
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('FitWindow','-','PasteWord','-','Undo','Redo'),
-    array('Link','Unlink'),
-    array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
-    array('Table','SpecialChar'),
-    array('OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor','-','Source'),
-    '/',   
-    array('Style','FontFormat','FontName','FontSize'),
-    array('Bold','Italic','Underline'),
-    array('JustifyLeft','JustifyCenter','JustifyRight')
+	array('FitWindow','DocProps','-','Save','NewPage','Preview'),
+	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
+	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
+	array('Link','Unlink','Anchor','Wikilink'),
+	array('mimetex','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','YouTube','googlemaps','Smiley'),
+	'/',
+	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
+	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
+	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+	array('Rule','SpecialChar','PageBreak'),
+	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableCellProp'),
+	'/',
+	array('Style','FontFormat','FontName','FontSize'),
+	array('TextColor','BGColor'),
+	array('Source','ShowBlocks','-','About')
 );
+
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
@@ -45,4 +52,4 @@ $config['ToolbarSets']['Maximized'] = array(
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...
 //$config['Width'] = '100%';
-//$config['Height'] = '150';
+//$config['Height'] = '300';

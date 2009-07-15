@@ -142,16 +142,14 @@ $coursesRepositories = $_configuration['root_sys'];
 /**
  *	@package dokeos.library
  */
-class CourseManager
-{
+class CourseManager {
 	/**
 	* Returns all the information of a given coursecode
 	* @param string $course_code, the course code
 	* @return an array with all the fields of the course table
 	* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	*/
-	function get_course_information($course_code)
-	{
+	public static function get_course_information ($course_code) {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $course_code = Database::escape_string($course_code);
 		$sql="SELECT * FROM ".$course_table." WHERE code='".$course_code."'";
@@ -168,8 +166,7 @@ class CourseManager
 	 * @param	string	The visibility of the course, or all by default.
 	 * @param	string	If defined, only return results for which the course *title* begins with this string
 	 */
-	function get_courses_list($from=0,$howmany=0,$orderby=1,$orderdirection='ASC',$visibility=-1,$startwith='')
-	{
+	public static function get_courses_list ($from=0,$howmany=0,$orderby=1,$orderdirection='ASC',$visibility=-1,$startwith='') {
 		$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT code, title " .
 				"FROM $tbl_course ";
@@ -228,8 +225,7 @@ class CourseManager
 	* @todo for more consistency: use course_info call from database API
 	* @return an array with int fields "visibility", "subscribe", "unsubscribe"
 	*/
-	function get_access_settings($course_code)
-	{
+	public static function get_access_settings ($course_code) {
         $course_code = Database::escape_string($course_code);
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT visibility, subscribe, unsubscribe from ".$course_table." where code = '".$course_code."'";
@@ -244,8 +240,7 @@ class CourseManager
     * @param   string   Course code
 	* @return int the status of the user in that course
 	*/
-	function get_user_in_course_status($user_id, $course_code)
-	{
+	public static function get_user_in_course_status ($user_id, $course_code) {
         $course_code = Database::escape_string($course_code);
         $user_id = Database::escape_string($user_id);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);		
@@ -261,8 +256,7 @@ class CourseManager
 	 * @param int|array $user_id
 	 * @param string $course_code
 	 */
-	function unsubscribe_user($user_id, $course_code)
-	{
+	public static function unsubscribe_user ($user_id, $course_code) {
 		$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -336,7 +330,7 @@ class CourseManager
      * @return  bool    True on success, false on failure
 	 * @see add_user_to_course
 	 */
-	function subscribe_user($user_id, $course_code, $status = STUDENT) {
+	public static function subscribe_user ($user_id, $course_code, $status = STUDENT) {
         if ( $user_id != strval(intval($user_id))) {
         	return false; //detected possible SQL injection
         }
@@ -410,7 +404,7 @@ class CourseManager
 							$result = @api_sql_query($update_user_session,__FILE__,__LINE__);
 						}					
 					} else {
-					$course_sort = CourseManager :: userCourseSort($user_id,$course_code);
+					$course_sort = self :: userCourseSort($user_id,$course_code);
 					$add_course_user_entry_sql = "INSERT INTO ".$course_user_table."
 										SET course_code = '$course_code',
 										user_id    = '$user_id',
@@ -440,8 +434,7 @@ class CourseManager
 	* @return boolean true if subscription succeeds, boolean false otherwise.
 	* @todo script has ugly ifelseifelseifelseif structure, improve
 	*/
-	function add_user_to_course($user_id, $course_code, $status = STUDENT)
-	{
+	public static function add_user_to_course ($user_id, $course_code, $status = STUDENT) {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -508,12 +501,11 @@ class CourseManager
 	*	@return a string containing html code for a form select element.
 	* @deprecated Function not in use
 	*/
-	function get_real_course_code_select_html($element_name, $has_size = true, $only_current_user_courses = true, $user_id)
-	{
+	public static function get_real_course_code_select_html ($element_name, $has_size = true, $only_current_user_courses = true, $user_id) {
 		if ($only_current_user_courses == true) {
-			$real_course_list = CourseManager :: get_real_course_list_of_user_as_course_admin($user_id);
+			$real_course_list = self :: get_real_course_list_of_user_as_course_admin($user_id);
         } else {
-			$real_course_list = CourseManager :: get_real_course_list();
+			$real_course_list = self :: get_real_course_list();
 		}
 
 		if ($has_size == true) {
@@ -540,8 +532,7 @@ class CourseManager
 	*	@return true if parameter is set and not empty, false otherwise
 	*	@todo move function to better place, main_api ?
 	*/
-	function check_parameter($parameter, $error_message)
-	{
+	public static function check_parameter ($parameter, $error_message) {
 		if (!isset ($parameter) || empty ($parameter))
 		{
 			Display :: display_normal_message($error_message);
@@ -554,9 +545,8 @@ class CourseManager
 	*	Lets the script die when a parameter check fails.
 	*	@todo move function to better place, main_api ?
 	*/
-	function check_parameter_or_fail($parameter, $error_message)
-	{
-		if (!CourseManager :: check_parameter($parameter, $error_message))
+	public static function check_parameter_or_fail ($parameter, $error_message) {
+		if (!self :: check_parameter($parameter, $error_message))
 			die();
 	}
 
@@ -564,8 +554,7 @@ class CourseManager
 	*	@return true if there already are one or more courses
 	*	with the same code OR visual_code (visualcode), false otherwise
 	*/
-	function is_existing_course_code($wanted_course_code)
-	{
+	public static function is_existing_course_code ($wanted_course_code) {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $wanted_course_code = Database::escape_string($wanted_course_code);
 		$sql_query = "SELECT COUNT(*) as number FROM ".$course_table."WHERE code = '$wanted_course_code' OR visual_code = '$wanted_course_code' ";
@@ -585,8 +574,7 @@ class CourseManager
 	/**
 	*	@return an array with the course info of all real courses on the platform
 	*/
-	function get_real_course_list()
-	{
+	public static function get_real_course_list () {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $course_table WHERE target_course_code IS NULL";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
@@ -602,8 +590,7 @@ class CourseManager
 	/**
 	*	@return an array with the course info of all virtual courses on the platform
 	*/
-	function get_virtual_course_list()
-	{
+	public static function get_virtual_course_list () {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $course_table WHERE target_course_code IS NOT NULL";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
@@ -619,8 +606,7 @@ class CourseManager
 	*	@return an array with the course info of the real courses of which
 	*	the current user is course admin
 	*/
-	function get_real_course_list_of_user_as_course_admin($user_id)
-	{
+	public static function get_real_course_list_of_user_as_course_admin ($user_id) {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         if ($user_id != strval(intval($user_id))) { return array(); }
@@ -648,8 +634,7 @@ class CourseManager
 	*	@return an array with the course info of all the courses (real and virtual) of which
 	*	the current user is course admin
 	*/
-	function get_course_list_of_user_as_course_admin($user_id)
-	{
+	public static function get_course_list_of_user_as_course_admin ($user_id) {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         if ($user_id != strval(intval($user_id))) { return array(); }
@@ -691,8 +676,7 @@ class CourseManager
 	*    $return_result["title"] - the course title of the combined courses
 	*    $return_result["code"]  - the course code of the combined courses
 	*/
-	function determine_course_title_from_course_info($user_id, $course_info)
-	{
+	public static function determine_course_title_from_course_info ($user_id, $course_info) {
 		$real_course_id = $course_info['system_code'];
 		$real_course_info = Database :: get_course_info($real_course_id);
 		$real_course_name = $real_course_info["title"];
@@ -717,7 +701,7 @@ class CourseManager
 		//get a list of virtual courses linked to the current real course
 		//and to which the current user is subscribed
 
-		$user_subscribed_virtual_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_id);
+		$user_subscribed_virtual_course_list = self :: get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_id);
 
 		if (count($user_subscribed_virtual_course_list) > 0)
 		{
@@ -732,8 +716,8 @@ class CourseManager
 
 		if ($user_is_registered_in_real_course && $virtual_courses_exist)
 		{
-			$course_info["name"] = CourseManager :: create_combined_name($user_is_registered_in_real_course, $real_course_name, $user_subscribed_virtual_course_list);
-			$course_info['official_code'] = CourseManager :: create_combined_code($user_is_registered_in_real_course, $real_course_visual_code, $user_subscribed_virtual_course_list);
+			$course_info["name"] = self :: create_combined_name($user_is_registered_in_real_course, $real_course_name, $user_subscribed_virtual_course_list);
+			$course_info['official_code'] = self :: create_combined_code($user_is_registered_in_real_course, $real_course_visual_code, $user_subscribed_virtual_course_list);
 		}
 		else
 			if ($user_is_registered_in_real_course)
@@ -745,8 +729,8 @@ class CourseManager
 			else
 				if ($virtual_courses_exist)
 				{
-					$course_info["name"] = CourseManager :: create_combined_name($user_is_registered_in_real_course, $real_course_name, $user_subscribed_virtual_course_list);
-					$course_info['official_code'] = CourseManager :: create_combined_code($user_is_registered_in_real_course, $real_course_visual_code, $user_subscribed_virtual_course_list);
+					$course_info["name"] = self :: create_combined_name($user_is_registered_in_real_course, $real_course_name, $user_subscribed_virtual_course_list);
+					$course_info['official_code'] = self :: create_combined_code($user_is_registered_in_real_course, $real_course_visual_code, $user_subscribed_virtual_course_list);
 				}
 				else
 				{
@@ -766,8 +750,7 @@ class CourseManager
 	* @param string $real_course_name, the title of the real course
 	* @param array $virtual_course_list, the list of virtual courses
 	*/
-	function create_combined_name($user_is_registered_in_real_course, $real_course_name, $virtual_course_list)
-	{
+	public static function create_combined_name ($user_is_registered_in_real_course, $real_course_name, $virtual_course_list) {
 		if ($user_is_registered_in_real_course || count($virtual_course_list) > 1)
 		{
 			$complete_course_name_before = get_lang("CombinedCourse")." "; //from course_home lang file
@@ -793,8 +776,7 @@ class CourseManager
 	/**
 	*	Create a course code based on all real and virtual courses the user is registered in.
 	*/
-	function create_combined_code($user_is_registered_in_real_course, $real_course_code, $virtual_course_list)
-	{
+	public static function create_combined_code ($user_is_registered_in_real_course, $real_course_code, $virtual_course_list) {
 		$complete_course_code .= "";
 
 		if ($user_is_registered_in_real_course)
@@ -821,8 +803,7 @@ class CourseManager
 	*
 	*	@param $real_course_code, the id of the real course which the virtual course is linked to
 	*/
-	function get_virtual_course_info($real_course_code)
-	{
+	public static function get_virtual_course_info ($real_course_code) {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $real_course_code = Database::escape_string($real_course_code);
 		$sql_query = "SELECT * FROM $table WHERE target_course_code = '$real_course_code'";
@@ -839,8 +820,7 @@ class CourseManager
 	*	@param string $system_code, the system code of the course
 	*	@return true if the course is a virtual course, false otherwise
 	*/
-	function is_virtual_course_from_system_code($system_code)
-	{
+	public static function is_virtual_course_from_system_code ($system_code) {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $system_code = Database::escape_string($system_code);
 		$sql_query = "SELECT * FROM $table WHERE code = '$system_code'";
@@ -863,8 +843,7 @@ class CourseManager
     *   @param  string  Visual course code
 	*	@return true if the course is a virtual course, false otherwise
 	*/
-	function is_virtual_course_from_visual_code($visual_code)
-	{
+	public static function is_virtual_course_from_visual_code ($visual_code) {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $visual_code = Database::escape_string($visual_code);
 		$sql_query = "SELECT * FROM $table WHERE visual_code = '$visual_code'";
@@ -885,9 +864,8 @@ class CourseManager
 	/**
 	* @return true if the real course has virtual courses that the user is subscribed to, false otherwise
 	*/
-	function has_virtual_courses_from_code($real_course_code, $user_id)
-	{		
-		$user_subscribed_virtual_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code);
+	public static function has_virtual_courses_from_code ($real_course_code, $user_id) {		
+		$user_subscribed_virtual_course_list = self :: get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code);
 		$number_of_virtual_courses = count($user_subscribed_virtual_course_list);
 
 		if (count($user_subscribed_virtual_course_list) > 0)
@@ -907,8 +885,7 @@ class CourseManager
 	*	@param string The id of the real course which the virtual courses are linked to
     *   @return array List of courses details
 	*/
-	function get_virtual_courses_linked_to_real_course($real_course_code)
-	{
+	public static function get_virtual_courses_linked_to_real_course ($real_course_code) {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $table WHERE target_course_code = '$real_course_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
@@ -928,8 +905,7 @@ class CourseManager
 	* @param the course code of the virtual course
 	* @return the course code of the real course
 	*/
-	function get_target_of_linked_course($virtual_course_code)
-	{
+	public static function get_target_of_linked_course ($virtual_course_code) {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $virtual_course_code = Database::escape_string($virtual_course_code);
 		//get info about the virtual course
@@ -955,8 +931,7 @@ class CourseManager
 	*
 	* @return true if the user is registered in the course, false otherwise
 	*/
-	function is_user_subscribed_in_course($user_id, $course_code, $in_a_session=false)
-	{
+	public static function is_user_subscribed_in_course ($user_id, $course_code, $in_a_session=false) {
 		$user_id = intval($user_id);
 		$course_code = Database::escape_string($course_code);
 		
@@ -1004,7 +979,7 @@ class CourseManager
 	*
 	*	@return true if the user is a teacher in the course, false otherwise
 	*/
-	function is_course_teacher($user_id,$course_code) {
+	public static function is_course_teacher ($user_id,$course_code) {
 		$tbl_course_user	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
         if ($user_id != strval(intval($user_id))) { return false; }
         $course_code = Database::escape_string($course_code);
@@ -1025,7 +1000,7 @@ class CourseManager
 	*
 	*	@return true if the user is registered in the real course or linked courses, false otherwise
 	*/
-	function is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id='') {
+	public static function is_user_subscribed_in_real_or_linked_course ($user_id, $course_code, $session_id='') {
         if ($user_id != strval(intval($user_id))) { return false; }
         $course_code = Database::escape_string($course_code);
 		if ($session_id=='') {
@@ -1101,7 +1076,7 @@ class CourseManager
 	*	@param string $course_code
 	*	@return array with user info
 	*/
-	function get_user_list_from_course_code($course_code, $with_session=true, $session_id=0, $limit='', $order_by='') {		
+	public static function get_user_list_from_course_code ($course_code, $with_session=true, $session_id=0, $limit='', $order_by='') {		
 		$session_id = intval($session_id);
 		$a_users = array();
 		$table_users = Database :: get_main_table(TABLE_MAIN_USER);		
@@ -1168,7 +1143,7 @@ class CourseManager
      * @param   int     Session ID
      * @return  array   List of users
 	 */
-	function get_coach_list_from_course_code($course_code,$session_id){
+	public static function get_coach_list_from_course_code ($course_code,$session_id){
 		if ($session_id != strval(intval($session_id))) { return array(); }
         $course_code = Database::escape_string($course_code);       
 		$table_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -1214,8 +1189,7 @@ class CourseManager
 	*	@param boolean $full list to true if we want sessions students too
 	*	@return array with user id
 	*/
-	function get_student_list_from_course_code($course_code, $with_session=false, $session_id=0)
-	{
+	public static function get_student_list_from_course_code ($course_code, $with_session=false, $session_id=0) {
 		$a_students = array();
 		
 		$session_id = intval($session_id);
@@ -1257,8 +1231,7 @@ class CourseManager
 	*	@param string $course_code
 	*	@return array with user id
 	*/
-	function get_teacher_list_from_course_code($course_code)
-	{
+	public static function get_teacher_list_from_course_code ($course_code) {
 		$a_teachers = array();
 		// teachers directly subscribed to the course
 		$t_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1284,13 +1257,12 @@ class CourseManager
 	*	@param array $course_info
 	*	@return array with user info
 	*/
-	function get_real_and_linked_user_list($course_code, $with_sessions = true, $session_id=0)
-	{
+	public static function get_real_and_linked_user_list ($course_code, $with_sessions = true, $session_id=0) {
 		//get list of virtual courses
-		$virtual_course_list = CourseManager :: get_virtual_courses_linked_to_real_course($course_code);
+		$virtual_course_list = self :: get_virtual_courses_linked_to_real_course($course_code);
 
 		//get users from real course
-		$user_list = CourseManager :: get_user_list_from_course_code($course_code, $with_sessions, $session_id);
+		$user_list = self :: get_user_list_from_course_code($course_code, $with_sessions, $session_id);
 		foreach ($user_list as $this_user)
 		{
 			$complete_user_list[] = $this_user;
@@ -1300,7 +1272,7 @@ class CourseManager
 		foreach ($virtual_course_list as $this_course)
 		{
 			$course_code = $this_course["code"];
-			$user_list = CourseManager :: get_user_list_from_course_code($course_code, $with_sessions, $session_id);
+			$user_list = self :: get_user_list_from_course_code($course_code, $with_sessions, $session_id);
 			foreach ($user_list as $this_user)
 			{
 				$complete_user_list[] = $this_user;
@@ -1319,8 +1291,7 @@ class CourseManager
 	*
 	*	@return array of course info arrays
 	*/
-	function get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code)
-	{
+	public static function get_list_of_virtual_courses_for_specific_user_and_real_course ($user_id, $real_course_code) {
 		$result_array = array();
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1355,8 +1326,7 @@ class CourseManager
      * @param   int     Session ID (optional)
      * @return  array   List of groups info
      */
-	function get_group_list_of_course($course_code, $session_id=0)
-	{
+	public static function get_group_list_of_course ($course_code, $session_id=0) {
 		$course_info = Database :: get_course_info($course_code);
 		$database_name = $course_info['db_name'];
 		$group_table = Database :: get_course_table(TABLE_GROUP, $database_name);
@@ -1391,15 +1361,15 @@ class CourseManager
     *   @param  string  Course category 
     *   @return bool    True on success, false on error
 	*/
-	function attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category) {
+	public static function attempt_create_virtual_course ($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category) {
 		//better: create parameter list, check the entire list, when false display errormessage
-		CourseManager :: check_parameter_or_fail($real_course_code, "Unspecified parameter: real course id.");
-		CourseManager :: check_parameter_or_fail($course_title, "Unspecified parameter: course title.");
-		CourseManager :: check_parameter_or_fail($wanted_course_code, "Unspecified parameter: wanted course code.");
-		CourseManager :: check_parameter_or_fail($course_language, "Unspecified parameter: course language.");
-		CourseManager :: check_parameter_or_fail($course_category, "Unspecified parameter: course category.");
+		self :: check_parameter_or_fail($real_course_code, "Unspecified parameter: real course id.");
+		self :: check_parameter_or_fail($course_title, "Unspecified parameter: course title.");
+		self :: check_parameter_or_fail($wanted_course_code, "Unspecified parameter: wanted course code.");
+		self :: check_parameter_or_fail($course_language, "Unspecified parameter: course language.");
+		self :: check_parameter_or_fail($course_category, "Unspecified parameter: course category.");
 
-		$creation_success = CourseManager :: create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category);
+		$creation_success = self :: create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category);
 
 		return $creation_success;
 	}
@@ -1421,8 +1391,7 @@ class CourseManager
 	*	@return true if the course creation succeeded, false otherwise
 	*	@todo research: expiration date of a course
 	*/
-	function create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category)
-	{
+	public static function create_virtual_course ($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category) {
 		global $firstExpirationDelay;
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$user_id = api_get_user_id();
@@ -1431,7 +1400,7 @@ class CourseManager
 
 		//check: virtual course creation fails if another course has the same
 		//code, real or fake.
-		if (CourseManager :: is_existing_course_code($wanted_course_code))
+		if (self :: is_existing_course_code($wanted_course_code))
 		{
 			Display :: display_error_message($wanted_course_code." - ".get_lang("CourseCodeAlreadyExists"));
 			return false;
@@ -1481,8 +1450,7 @@ class CourseManager
 	 * that real course.
 	 * @todo Remove globals
 	 */
-	function delete_course($code)
-	{
+	public static function delete_course ($code) {
 		global $_configuration;
 		
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1519,10 +1487,10 @@ class CourseManager
 		}
 		$this_course = Database::fetch_array($res);
 		$db_name = $this_course['db_name'];
-		CourseManager :: create_database_dump($code);
-		if (!CourseManager :: is_virtual_course_from_system_code($code)) {
+		self :: create_database_dump($code);
+		if (!self :: is_virtual_course_from_system_code($code)) {
 			// If this is not a virtual course, look for virtual courses that depend on this one, if any
-			$virtual_courses = CourseManager :: get_virtual_courses_linked_to_real_course($code);
+			$virtual_courses = self :: get_virtual_courses_linked_to_real_course($code);
 			foreach ($virtual_courses as $index => $virtual_course) {
 				// Unsubscribe all classes from the virtual course
 				$sql = "DELETE FROM $table_course_class WHERE course_code='".$virtual_course['code']."'";
@@ -1700,8 +1668,7 @@ class CourseManager
 	 * @param $course_code The code of the course
 	 * @todo Implementation for single database
 	 */
-	function create_database_dump($course_code)
-	{
+	public static function create_database_dump ($course_code) {
 		global $_configuration;
 		
 		if ($_configuration['single_database'])
@@ -1748,7 +1715,7 @@ class CourseManager
      * @return  int     Minimum course order
      * @todo Review documentation    
      */
-	function userCourseSort($user_id,$course_code){
+	public static function userCourseSort ($user_id,$course_code) {
 	    if ($user_id != strval(intval($user_id))) { return false; }
         $course_code = Database::escape_string($course_code);
 		$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1821,8 +1788,7 @@ class CourseManager
 	 * @param string $parent_code the parent category of the categories added (default=null for root category)
 	 * @param string $padding the indent param (you shouldn't indicate something here)
 	 */
-	function select_and_sort_categories($select_element, $category_selected_code="", $parent_code=null , $padding="")
-	{
+	public static function select_and_sort_categories ($select_element, $category_selected_code="", $parent_code=null , $padding="") {
 		$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 		$sql = "SELECT code, name, auth_course_child, auth_cat_child
 				FROM ".$table_course_category." 
@@ -1839,7 +1805,7 @@ class CourseManager
 			$select_element->addOption($padding.'('.$cat['code'].') '.$cat['name'], $cat['code'], $params);
 			if($cat['auth_cat_child'])
 			{
-				CourseManager::select_and_sort_categories($select_element, $category_selected_code, $cat['code'], $new_padding);
+				self::select_and_sort_categories($select_element, $category_selected_code, $cat['code'], $new_padding);
 			}
 		}
 	}
@@ -1850,7 +1816,7 @@ class CourseManager
      * @param string whether to accept virtual course codes or not
 	 * @return true if exists, false else
 	 */
-	function course_exists($course_code, $accept_virtual=false) {
+	public static function course_exists ($course_code, $accept_virtual=false) {
 		if ($accept_virtual === true) {
             $sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_COURSE).' WHERE code="'.Database::escape_string($course_code).'" OR visual_code="'.Database::escape_string($course_code).'"';
 		} else {
@@ -1867,7 +1833,7 @@ class CourseManager
      * @param  string $send_to_tutor_also 
 	 * @return string we return the message that is displayed when the action is succesfull
 	 */
-	function email_to_tutor($user_id,$course_code,$send_to_tutor_also=false) {
+	public static function email_to_tutor ($user_id,$course_code,$send_to_tutor_also=false) {
 		
 		$TABLECOURS=Database::get_main_table(TABLE_MAIN_COURSE);
 		$TABLE_USER= Database::get_main_table(TABLE_MAIN_USER);
@@ -1879,7 +1845,7 @@ class CourseManager
 		$sql_me="SELECT * FROM ".$TABLE_USER." WHERE user_id='".$user_id."'";
 		$result_me=api_sql_query($sql_me,__FILE__,__LINE__);
 		$student = Database::fetch_array($result_me);
-		$information =  CourseManager::get_course_information($course_code);
+		$information =  self::get_course_information($course_code);
 		$name_course=$information['title'];
 		$sql="SELECT * FROM ".$TABLECOURSUSER." WHERE course_code='".$course_code."'";
 		if($send_to_tutor_also=true) {
@@ -1914,7 +1880,7 @@ class CourseManager
      * @return array    List of codes and db names
      * @author isaac flores paz
      */
-	function get_courses_list_by_user_id($user_id) {
+	public static function get_courses_list_by_user_id ($user_id) {
 		$course_list=array();
 		$tbl_course			 = Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1930,7 +1896,7 @@ class CourseManager
      * @param   string  Course directory (without any slash)
      * @return  string  Course code, or false if not found
      */
-    function get_course_id_from_path($path) {
+    public static function get_course_id_from_path ($path) {
     	$path = str_replace('/','',$path);
         $path = str_replace('.','',$path);
         $path = Database::escape_string($path);
@@ -1947,7 +1913,7 @@ class CourseManager
      * @param   string  Visual code
      * @return  array   List of codes for the given visual code
      */
-    function get_courses_info_from_visual_code ($code) {
+    public static function get_courses_info_from_visual_code ($code) {
     	$table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $code = Database::escape_string($code);
         $sql_query = "SELECT * FROM $table WHERE visual_code = '$code'";
@@ -1965,7 +1931,7 @@ class CourseManager
 	 * @return array List of emails of tutors to course
 	 * @author @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
 	 * */
-	function get_emails_of_tutors_to_course($code) {
+	public static function get_emails_of_tutors_to_course ($code) {
 		$users = Database :: get_main_table(TABLE_MAIN_USER);
 		$course_rel_users = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$code = Database::escape_string($code);        
@@ -1988,7 +1954,7 @@ class CourseManager
 	 * @return string email of tutor to session
 	 * @author @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
 	 * */
-	function get_email_of_tutor_to_session($session) {
+	public static function get_email_of_tutor_to_session ($session) {
 		$users = Database :: get_main_table(TABLE_MAIN_USER);
 		$session_rel_users = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$session = Database::escape_string($session);        
@@ -2011,8 +1977,7 @@ class CourseManager
   * @param	string	Field's language var name 
   * @return int     new extra field id
   */
-	function create_course_extra_field($fieldvarname, $fieldtype, $fieldtitle)
-	{		
+	public static function create_course_extra_field ($fieldvarname, $fieldtype, $fieldtitle) {		
 		// database table definition		
 		$t_cfv			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 		$t_cf 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);			
@@ -2058,8 +2023,7 @@ class CourseManager
  * @param	string	Field value
  * @return	boolean	true if field updated, false otherwise
  */
-	function update_course_extra_field_value($course_code,$fname,$fvalue='')
-	{
+	public static function update_course_extra_field_value ($course_code,$fname,$fvalue='') {
 
 		$t_cfv			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 		$t_cf 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);

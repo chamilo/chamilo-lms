@@ -123,7 +123,7 @@ else
     if ($toolid)  // RH: new section
     {
     	$sql =  "SELECT name,link,target FROM $tbl_courseHome" .
-        " WHERE id='" . Database::escape_string($id) . "'";
+        " WHERE id='" . Database::escape_string($toolid) . "'";
 
     	$result = api_sql_query($sql, __FILE__, __LINE__);
 

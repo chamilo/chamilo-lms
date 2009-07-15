@@ -64,6 +64,8 @@
 // point to the new directory:
 // $config['ToolbarSets']['Directory'] = 'toolbars_custom';
 // Then, you may modify the newly copied toolbar definitions at your will, just keep correct php-syntax.
+// It is not mandatory you to create custom files for all the toolbars. In case of missing file in the directory with the
+// custom toobar definitions the system would read the correspondent "factory" toolbar definition (form 'toolbars' directory).
 $config['ToolbarSets']['Directory'] = 'toolbars';
 
 

@@ -370,11 +370,27 @@ class FCKeditor
 		if (!isset($config)) {
 			require api_get_path(LIBRARY_PATH).'fckeditor/myconfig.php';
 		}
+		// Seeking the toolbar.
+		$toolbar_dir = 'toolbars'; // A directory where "factory" toolbars reside.
+		if (isset($config['ToolbarSets']['Directory'])) {
+			$toolbar_dir = $config['ToolbarSets']['Directory'];
+		}
 		if (!isset($config['ToolbarSets'][$this->ToolbarSet])) {
-			if (preg_match('/[a-zA-Z_]+/', $config['ToolbarSets']['Directory']) && preg_match('/[a-zA-Z_]+/', $this->ToolbarSet)) { // Checks for increased security.
-				@include api_get_path(LIBRARY_PATH).'fckeditor/'.$config['ToolbarSets']['Directory'].'/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
+			if (preg_match('/[a-zA-Z_]+/', $toolbar_dir) && preg_match('/[a-zA-Z_]+/', $this->ToolbarSet)) { // A security check.
+				@include api_get_path(LIBRARY_PATH).'fckeditor/'.$toolbar_dir.'/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
 				if (!isset($config['ToolbarSets']['Normal'])) {
-					$this->ToolbarSet = 'Default';
+					// No toolbar has been found yet.
+					if ($toolbar_dir == 'toolbars') {
+						// It does not exist in "factory" toolbar definitions, giving up.
+						$this->ToolbarSet = 'Default';
+					} else {
+						// The custom toolbar does not exist, then trying to load the "factory" one.
+						@include api_get_path(LIBRARY_PATH).'fckeditor/toolbars/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
+						if (!isset($config['ToolbarSets']['Normal'])) {
+							// It does not exist in "factory" toolbar definitions too, giving up.
+							$this->ToolbarSet = 'Default';
+						}
+					}
 				}
 			}
 		}
@@ -412,6 +428,7 @@ class FCKeditor
 	private function & get_css_configuration() {
 		$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
 		/*
+		// TODO: Check whether these CSS are appropriate.
 		if (file_exists(api_get_path(SYS_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css')) {
 			$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css';
 		} else {

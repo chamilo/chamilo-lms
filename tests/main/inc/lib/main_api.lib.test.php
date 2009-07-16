@@ -169,7 +169,9 @@ class TestMainApi extends UnitTestCase {
     	$userid=1;
     	$fetch_session=true;
     	$res = api_get_user_courses($userid,$fetch_session);
-    	$this->assertTrue(is_array($res));
+    	if(!is_null($res)) :
+    	$this->assertTrue(is_array($res));	
+    	endif;    	
     	//var_dump($res);
     }
   	

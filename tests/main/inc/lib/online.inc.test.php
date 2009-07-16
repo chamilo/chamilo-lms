@@ -1,4 +1,7 @@
 <?php
+/**
+ * To can test this file you need commet the line 125 in "online.inc.php"
+ */
 require_once(api_get_path(LIBRARY_PATH).'online.inc.php');
 
 class TestOnline extends UnitTestCase {

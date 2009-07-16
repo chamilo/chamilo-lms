@@ -26,11 +26,6 @@ $path_info= pathinfo($file_url_sys);
 
 Display::display_header(null,"Doc");
 echo "<div align=\"center\">";
-
-if ($path_info['extension']=='html' && false) { //should be added in the platform admin
-	$file_url_web='document_with_glossary_terms.php?file='.urlencode($header_file);
-}  else {
-	$file_url_web=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file."?".api_get_cidreq();	
-}
+$file_url_web=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file."?".api_get_cidreq();	
 echo "<a href='".$file_url_web."' target='blank'>".get_lang('_cut_paste_link')."</a></div>";
 ?>

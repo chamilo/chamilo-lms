@@ -1,4 +1,4 @@
-<?php // $Id: showinframes.php 21822 2009-07-06 18:07:52Z iflorespaz $ 
+<?php // $Id: showinframes.php 22177 2009-07-16 22:30:39Z iflorespaz $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -94,10 +94,6 @@ $file_root=$_course['path'].'/document'.str_replace('%2F', '/',$file);
 $file_url_sys=api_get_path(SYS_COURSE_PATH).$file_root;
 $file_url_web=api_get_path(WEB_COURSE_PATH).$file_root;
 $path_info= pathinfo($file_url_sys);
-if ($path_info['extension']=='html' && false) {//should be added in the platform admin
-	$file_url_web='document_with_glossary_terms.php?file='.urlencode($file);
-} 
-
 ?>
 <html>
 <head>

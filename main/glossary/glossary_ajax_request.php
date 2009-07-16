@@ -7,15 +7,19 @@ require_once '../glossary/glossary.class.php';
 /*
  * search a term and return description from a glossary
  */
- $glossary_id=Security::remove_XSS($_POST['glossary_id']);
+global $charset; 
+$glossary_id=Security::remove_XSS($_POST['glossary_id']);
 $glossary_description=GlossaryManager::get_glossary_term_by_glossary_id($glossary_id);
 $glossary_data=GlossaryManager::get_glossary_terms();
+$my_glossary_name=Security::remove_XSS($_POST['glossary_name']);
+$my_glossary_name=api_convert_encoding($my_glossary_name,$charset,'UTF-8');
+$my_glossary_name=trim($my_glossary_name);
 
+$glossary_description=GlossaryManager::get_glossary_term_by_glossary_name($my_glossary_name);
 $glossary_all_data=array();
 foreach ($glossary_data as $glossary_index=>$glossary_value) {
 	$glossary_all_data[]=$glossary_value['id'].'__|__|'.$glossary_value['name'];
 }
-
 $glossary_all_data=implode('[|.|_|.|-|.|]',$glossary_all_data);
 
 //get_glossary_terms
@@ -23,6 +27,13 @@ $glossary_all_data=implode('[|.|_|.|-|.|]',$glossary_all_data);
   	echo api_xml_http_response_encode($glossary_description);	
  } elseif (isset($_POST['glossary_data']) && $_POST['glossary_data']=='true') {
    	echo api_xml_http_response_encode($glossary_all_data);	
+ } elseif(isset($_POST['glossary_name'])) {
+ 	if (is_null($glossary_description)) {
+ 		echo api_xml_http_response_encode(get_lang('NoResults'));
+ 	} else {
+ 	 	echo api_xml_http_response_encode($glossary_description);	
+ 	}
+ 	
  } else {
- 	echo '';
+ 	echo api_xml_http_response_encode(get_lang('NoResults'));
  }

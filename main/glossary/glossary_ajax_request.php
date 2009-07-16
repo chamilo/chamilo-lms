@@ -9,7 +9,7 @@ require_once '../glossary/glossary.class.php';
  */
 global $charset; 
 $glossary_id=Security::remove_XSS($_POST['glossary_id']);
-$glossary_description=GlossaryManager::get_glossary_term_by_glossary_id($glossary_id);
+$glossary_description_by_id=GlossaryManager::get_glossary_term_by_glossary_id($glossary_id);
 $glossary_data=GlossaryManager::get_glossary_terms();
 $my_glossary_name=Security::remove_XSS($_POST['glossary_name']);
 $my_glossary_name=api_convert_encoding($my_glossary_name,$charset,'UTF-8');
@@ -24,7 +24,7 @@ $glossary_all_data=implode('[|.|_|.|-|.|]',$glossary_all_data);
 
 //get_glossary_terms
  if (isset($_POST['glossary_id']) && $_POST['glossary_id']==strval(intval($_POST['glossary_id']))) {
-  	echo api_xml_http_response_encode($glossary_description);	
+  	echo api_xml_http_response_encode($glossary_description_by_id);	
  } elseif (isset($_POST['glossary_data']) && $_POST['glossary_data']=='true') {
    	echo api_xml_http_response_encode($glossary_all_data);	
  } elseif(isset($_POST['glossary_name'])) {

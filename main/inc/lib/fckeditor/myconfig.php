@@ -105,8 +105,14 @@ $config['LoadPlugin'][] = 'youtube';
 
 // googlemaps : Adds a dilog for inserting Google maps.
 $config['LoadPlugin'][] = 'googlemaps';
+// API-key for the "googlemaps" plugin.
+// The following key is valid for http://localhost (see myconfig.js where this key has been activated by default).
+// You must get a new for each server where you intend to use the plugin 'googlemaps'. Just get the key for free after
+// agreeing with the Terms of Use of the GoogleMaps API from here: http://www.google.com/apis/maps/signup.html.
+// At you choice, you may activate the newly obtained API-key using the following setting or using the same setting in myconfig.js.
+// Activated here API-key is not cached by browsers and overrides the key from the configuration file myconfig.js.
+//$config['GoogleMaps_Key'] = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSy5hTGQdsosYD3dz6faZHVrO-02A';
 
-//
 // mimetex : Adds a dilog for inserting mathematical formulas. In order this plugin to work prpoperly, preliminary changes
 // in your server configuration have to be done. The MimeTex executable file has to be installed, see the installation guide.
 //
@@ -134,7 +140,6 @@ if (IS_WINDOWS_OS) {
 }
 // Timeout for MimeTeX executable file detection - keep this value as low as possible, especially on Windows servers.
 $config['MimetexExecutableDetectionTimeout'] = 0.05;
-//
 
 // wikilink : Adds a dialog for inserting wiki-formatted links.
 $config['LoadPlugin'][] = 'wikilink';

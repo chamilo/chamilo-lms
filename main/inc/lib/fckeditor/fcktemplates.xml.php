@@ -21,8 +21,12 @@ $css = loadCSS(api_get_setting('stylesheets'));
 // load libreries js
 $js = '';
 if (api_get_setting('show_glossary_in_documents') != 'none') { 
-	$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"/>'.PHP_EOL;	
-	$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary.js"/>';
+	$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"/>'.PHP_EOL;
+	if (api_get_setting('show_glossary_in_documents') == 'ismanual') {	
+		$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"/>';
+	} else {
+		$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"/>';
+	}
 }
 
 // setting some paths

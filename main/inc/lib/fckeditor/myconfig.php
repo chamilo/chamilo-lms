@@ -84,6 +84,9 @@ $config['LoadPlugin'][] = 'tablecommands';
 // audio: Adds a dialog for inserting audio files (.mp3).
 $config['LoadPlugin'][] = 'audio';
 
+// glossary: this plugin add a term from glossary tool in dokeos 
+$config['LoadPlugin'][] = 'glossary';
+
 // MP3 : This is the old plugin for inserting audio files. Probably this plugin will be removed at the next release.
 // If you wish to use it, disable the "audio" plugin first.
 //$config['LoadPlugin'][] = 'MP3';

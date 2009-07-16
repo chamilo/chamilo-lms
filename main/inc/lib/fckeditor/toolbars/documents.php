@@ -5,6 +5,8 @@
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
+
+if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 $config['ToolbarSets']['Normal'] = array(
 	array('Save','FitWindow','PasteWord','-','Undo','Redo'),
 	array('Link','Unlink','Anchor'),
@@ -14,8 +16,26 @@ $config['ToolbarSets']['Normal'] = array(
 	'/',	
 	array('Style','FontFormat','FontName','FontSize'),
 	array('Bold','Italic','Underline'),
-	array('JustifyLeft','JustifyCenter','JustifyRight')
+	array('JustifyLeft','JustifyCenter','JustifyRight'),
+	array('Glossary')		
 );
+} else {
+	
+$config['ToolbarSets']['Normal'] = array(
+	array('Save','FitWindow','PasteWord','-','Undo','Redo'),
+	array('Link','Unlink','Anchor'),
+	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
+	array('Table','SpecialChar'),
+	array('Outdent','Indent','-','TextColor','BGColor','-','OrderedList','UnorderedList','-','Source'),
+	'/',	
+	array('Style','FontFormat','FontName','FontSize'),
+	array('Bold','Italic','Underline'),
+	array('JustifyLeft','JustifyCenter','JustifyRight')		
+);	
+	
+}
+
+
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.

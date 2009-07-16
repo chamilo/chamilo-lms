@@ -17,6 +17,14 @@ $IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
 // load a stylesheet
 $css = loadCSS(api_get_setting('stylesheets'));
 
+
+// load libreries js
+$js = '';
+if (api_get_setting('show_glossary_in_documents') != 'none') { 
+	$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"/>'.PHP_EOL;	
+	$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary.js"/>';
+}
+
 // setting some paths
 $img_dir = api_get_path(REL_CODE_PATH).'img/';
 $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
@@ -87,7 +95,7 @@ function s2($var)
 function load_platform_templates() {
 	// Database table definition
 	$table_template = Database::get_main_table('system_template');	
-	global $css, $img_dir, $default_course_dir;
+	global $css, $img_dir, $default_course_dir,$js;
 	$sql = "SELECT title, image, comment, content FROM $table_template";
 	
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -97,7 +105,8 @@ function load_platform_templates() {
         } else {
             $image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/empty.gif';
         }        
-      	$row['content'] =  str_replace('{CSS}',$css, $row['content']);
+        
+      	$row['content'] =  str_replace('{CSS}',$css.$js, $row['content']);      	
       	$row['content'] =  str_replace('{IMG_DIR}',$img_dir, $row['content']);
       	$row['content'] =  str_replace('{REL_PATH}', api_get_path(REL_PATH), $row['content']);
       	$row['content'] =  str_replace('{COURSE_DIR}',$default_course_dir, $row['content']);
@@ -176,7 +185,7 @@ function load_personal_templates($user_id=0) {
 
 function load_empty_template()
 {
-	global $css;			
+	global $css,$js;			
 	?>
 <Template title="<?php echo s2('Empty'); ?>" image="<?php echo api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/empty.gif'; ?>">
     <Description></Description>
@@ -184,7 +193,8 @@ function load_empty_template()
 	    <![CDATA[
 		   <html>
 		   <head>
-			<?php echo $css ?>   
+			<?php echo $css ?>
+			<?php echo $js ?>			  
 		   <body></body>
 		   </head>
 		   </html>

@@ -55,6 +55,11 @@
 	<Style name="Italic" element="i">
 		<Override element="em" />
 	</Style>
+	
+	<Style name="Glossary" element="span">
+    <Attribute name="class" value="glossary" />
+  	</Style >
+	
 	<Style name="Underline" element="u" />
 	<Style name="Strikethrough" element="strike" />
 	<Style name="Subscript" element="sub" />

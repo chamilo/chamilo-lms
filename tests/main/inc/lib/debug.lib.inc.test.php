@@ -22,7 +22,9 @@ class TestDebug extends UnitTestCase {
 		$res=ob_get_contents();
 		ob_end_clean();
 		//print_r($res);
-		$this->assertTrue(is_numeric($_course));
+		$this->assertTrue(is_string($res));
+		//var_dump($res);
+		
 	}
 	
 	function testDebugPaths() {

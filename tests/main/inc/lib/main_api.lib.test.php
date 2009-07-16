@@ -4,8 +4,8 @@ class TestMainApi extends UnitTestCase {
 	
 	function TestMainApi() {
         $this->UnitTestCase('Main API tests');
-
 	}
+	
 // todo function testApiProtectCourseScriptReturnsFalse()
 // todo function testApiProtectAdminScriptReturnsFalse()
 // todo function testApiBlockAnonymousUsers()
@@ -165,13 +165,17 @@ class TestMainApi extends UnitTestCase {
 	}
 
     function testApiGetUserCoursesReturnTrueWhenOutOfCoursesContext(){
-    	$res = api_get_user_courses();
+    	global $tbl_user;
+    	$userid=1;
+    	$fetch_session=true;
+    	$res = api_get_user_courses($userid,$fetch_session);
     	$this->assertTrue(is_array($res));
     	//var_dump($res);
     }
   	
     function testApiGetUserInfoReturnFalseWhenOutOfUserInfoContext(){
-    	$res = api_get_user_info();
+    	$user_id= 1;
+    	$res = api_get_user_info($user_id);
    		$this->assertTrue(is_array($res));
    		//var_dump($res);
     }
@@ -189,7 +193,9 @@ class TestMainApi extends UnitTestCase {
 	
     function testApiGetCoursePathReturnFalseWhenOutOfCoursePathContext(){
     	$res = api_get_course_path();
-    	$this->assertTrue(is_null($res));
+    	if(!is_null($res)) :
+    	$this->assertTrue(is_string($res));
+    	endif;
     	//var_dump($res);	
     }
     		

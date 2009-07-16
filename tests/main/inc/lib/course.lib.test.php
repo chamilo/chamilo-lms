@@ -1,6 +1,6 @@
 <?php
 /*
- * To can run this test you need comment this line or "die(mysql_error())" in 1374 course.lib.php
+ * To can run this test you need comment this line or "die(mysql_error())" in 1345 course.lib.php
  *
  */
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php'); 
@@ -81,7 +81,7 @@ class TestCourse extends UnitTestCase{
 	 *todo public function testCreateCourseExtrField()
 	 *todo public function testUpdateCourseExtraFieldValue()
 	 */
-	
+	/*
 	 public function testGetCourseInformation(){
 	  	$res = $this->tcourse->get_course_information(1211);
 	 	$this->assertFalse($res);
@@ -157,7 +157,7 @@ class TestCourse extends UnitTestCase{
 	
 	/** Return a array() but now its empty, with this test is cheking is get the list course
 	 * @author Arthur Portugal <arthur.portugal@dokeos.com>
-	 */
+	 * /
 	
 	public function testGetRealCourseList(){
 		$realgrouplist = new MockDatabase();
@@ -326,7 +326,7 @@ class TestCourse extends UnitTestCase{
 		$this->assertFalse($res);
 		$this->assertTrue(is_array($res));
 	}
-		
+	*/	
 	public function testGetGroupListOfCourse(){
 		$grouplist = new MockDatabase();
 		$course_code = 'TEST';
@@ -338,10 +338,10 @@ class TestCourse extends UnitTestCase{
 		$res=$this->courseManager->get_group_list_of_course($course_code);
 		$grouplist->expectOnce($group_list = array());
 		$this->assertTrue(is_object($this->courseManager));
-		//var_dump($res);
+		var_dump($res);
 	}
 	
-	
+	/*
 	public function testAttemptCreateVirtualCourse(){
 	     $createvirtual = new MockDisplay();
 	     $real_course_code = 'TEST';
@@ -496,7 +496,7 @@ class TestCourse extends UnitTestCase{
 		$this->assertTrue(is_bool($res));
 		$this->assertFalse(is_null($res));
 	
-	}
+	}*/
 } 
 
 ?>

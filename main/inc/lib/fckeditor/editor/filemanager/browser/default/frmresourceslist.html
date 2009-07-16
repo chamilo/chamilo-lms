@@ -101,15 +101,7 @@ function OpenFile( fileUrl )
 	else if ( window.parent.parent && typeof (window.parent.parent.ParentDialog) == 'function' )
 	{
 		// The file manager is inside a dialog.
-
-		// See http://dev.fckeditor.net/ticket/3925
-
-		// Accessing the function SetUrl() : A proposed way by Ivan Tcholakov, 10-JUL-2009.
-		//window.parent.parent.Args().ParentWindow.SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
-
-		// Accessing the function SetUrl() : A proposed way by martinkou (the FCKEditor team), 14-JUL-2009.
 		window.parent.parent.ParentDialog().contentWindow.frames['frmMain'].SetUrl( encodeURI( fileUrl ).replace( /#/g, '%23' ) ) ;
-
 		window.parent.parent.CloseDialog() ;
 	}
 	return true ;

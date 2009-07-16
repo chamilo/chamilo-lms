@@ -256,9 +256,6 @@ var FCKDialog = ( function()
 				Editor : window,
 				CustomValue : customValue,		// Optional
 				TopWindow : topWindow,
-				// This is a fix, Ivan Tcholakov, July 2009, see ticket #3925
-				ParentWindow : parentWindow
-				//
 			}
 
 			FCK.ToolbarSet.CurrentInstance.Selection.Save( true ) ;
@@ -320,9 +317,6 @@ var FCKDialog = ( function()
 				Editor: window,
 				CustomValue: customValue,
 				TopWindow : topWindow,
-				// This is a fix, Ivan Tcholakov, July 2009, see ticket #3925
-				ParentWindow : parentWindow
-				//
 			} ;
 
 			//FCK.ToolbarSet.CurrentInstance.Selection.Save();

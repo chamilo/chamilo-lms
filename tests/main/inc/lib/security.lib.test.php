@@ -71,7 +71,28 @@ class TestSecurity extends UnitTestCase {
 			//var_dump($res);
 	 }
 	
+	function testget_token() {
+			$res=Security::get_token();
+			$this->assertTrue(is_string($res));
+			//var_dump($res);
+	}
 	
+	function testget_ua() {
+			$res=Security::get_ua();
+			$this->assertTrue(is_null($res));
+			//var_dump($res);
+	}
 	
+	function testremove_XSS() {
+			global $charset;
+			$var='';
+			$res=Security::remove_XSS();
+			if(!empty($res)) {
+				$this->assertTrue(is_array($res));	
+			} else {
+				$this->assertTrue(is_string($res));	
+			}
+			var_dump($res);
+	}
 }
 ?>

@@ -6,7 +6,7 @@
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('FitWindow','DocProps','-','Save','NewPage','Preview'),
+	array('FitWindow','DocProps','-','Save','NewPage','Preview','-','Templates'),
 	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
 	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink','Anchor','Wikilink'),

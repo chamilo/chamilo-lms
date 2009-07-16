@@ -4758,7 +4758,7 @@ class learnpath {
 		// we need to close the form when we are updating the mp3 files
 
 		if ($_GET['updateaudio'] == 'true') {
-			$return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">' . get_lang('Save audio and organization') . '</button></div>'; // TODO: What kind of language variable is this?
+			$return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
 		}
 
 		// we need to close the form when we are updating the mp3 files

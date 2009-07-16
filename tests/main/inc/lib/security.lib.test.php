@@ -92,7 +92,7 @@ class TestSecurity extends UnitTestCase {
 			} else {
 				$this->assertTrue(is_string($res));	
 			}
-			var_dump($res);
+			//var_dump($res);
 	}
 }
 ?>

@@ -17,6 +17,10 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_use_
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_use_sub_language', 'false', 'No');
 ALTER TABLE language ADD COLUMN parent_id tinyint unsigned;
 ALTER TABLE language ADD INDEX idx_dokeos_folder(dokeos_folder);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('show_glossary_in_documents', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInDocumentsTitle', 'ShowGlossaryInDocumentsComment', NULL, NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'none', 'None');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'ismanual', 'IsManual');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'isautomatic', 'IsAutomatic');
 -- xxSTATSxx
 
 -- xxUSERxx

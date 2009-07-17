@@ -161,11 +161,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 	-----------------------------------------------------------
 	  			TRACKING
 	-----------------------------------------------------------
-	*/
-	
-	include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
-	event_access_tool(TOOL_FORUM);
-	
+	*/		
+	event_access_tool(TOOL_FORUM);	
 	
 	/*
 	------------------------------------------------------------------------------------------------------

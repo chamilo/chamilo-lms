@@ -1,4 +1,4 @@
-<?php // $Id: login.php 16001 2008-08-15 14:46:02Z yannoo $
+<?php // $Id: login.php 22201 2009-07-17 19:57:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -60,10 +60,7 @@ if ($loginLdapSucces)
 	$uidReset = true;
 	$_user['user_id'] = $uData['user_id'];
 	api_session_register('_uid');
-    // Jand: copied from event_login in events.lib.php to enable login statistics:
-    if(!function_exists('event_login')){
-        include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
-    }
+    // Jand: copied from event_login in events.lib.php to enable login statistics:    
     event_login(); 
 }
 else

@@ -75,9 +75,6 @@ require_once(api_get_path(LIBRARY_PATH).'/tablesort.lib.php');
 // including the library for the dropbox
 require_once( "dropbox_class.inc.php");
 
-// including the library to do the tracking
-require_once(api_get_path(LIBRARY_PATH).'/events.lib.inc.php');
-
 // including some libraries that are also used in the documents tool
 require_once('../document/document.inc.php');  // we use a function build_document_icon_tag
 require_once(api_get_path(LIBRARY_PATH).'/fileDisplay.lib.php'); // the function choose_image is used 

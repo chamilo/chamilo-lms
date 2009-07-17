@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 21653 2009-06-27 20:12:55Z iflorespaz $
+<?php // $Id: upload.php 22201 2009-07-17 19:57:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -63,7 +63,6 @@ require_once "../inc/global.inc.php";
 
 // including additional libraries
 require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'events.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';

@@ -142,7 +142,6 @@ $req_gid = '';
 //libraries are included by default
 
 include_once(api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php');
-include_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 include_once(api_get_path(LIBRARY_PATH) . 'tablesort.lib.php');
 

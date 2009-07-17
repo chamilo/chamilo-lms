@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 21933 2009-07-09 06:08:22Z ivantcholakov $
+<?php //$Id: agenda.php 22201 2009-07-17 19:57:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -193,7 +193,6 @@ if (isset($_GET['toolgroup']) && $_GET['toolgroup']==strval(intval($_GET['toolgr
 /* ==============================================================================
   			TRACKING
 ==============================================================================  */
-require_once '../inc/lib/events.lib.inc.php';
 event_access_tool(TOOL_CALENDAR_EVENT);
 
 /* ==============================================================================

@@ -18,7 +18,6 @@
 //many useful functions in main_api.lib.php, by default included
 if(!function_exists('api_get_path')){header('location: upload.php');die;}
 require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 require_once('../document/document.inc.php');
 

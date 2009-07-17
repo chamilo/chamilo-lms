@@ -7,7 +7,6 @@
  * @package dokeos.learnpath
  */
 require_once('../inc/global.inc.php');
-require_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'database.lib.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 require_once(api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php');

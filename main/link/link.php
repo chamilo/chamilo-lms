@@ -1,4 +1,4 @@
-<?php // $Id: link.php 21933 2009-07-09 06:08:22Z ivantcholakov $
+<?php // $Id: link.php 22201 2009-07-17 19:57:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,7 +49,6 @@ $language_file = array('link','admin');
 
 // including libraries
 require_once "../inc/global.inc.php";
-require_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
 require_once "linkfunctions.php";
 
 

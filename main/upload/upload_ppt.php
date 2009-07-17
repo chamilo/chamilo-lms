@@ -17,7 +17,6 @@ $language_file[] = "scormdocument";
 // also provides access to main api (inc/lib/main_api.lib.php)
 include("../inc/global.inc.php");
 require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 		

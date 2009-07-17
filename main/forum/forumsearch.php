@@ -63,7 +63,6 @@ api_protect_course_script(true);
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include('forumfunction.inc.php');
 include('forumconfig.inc.php');
 

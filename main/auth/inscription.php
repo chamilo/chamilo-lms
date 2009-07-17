@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 22027 2009-07-13 11:03:41Z ivantcholakov $
+// $Id: inscription.php 22201 2009-07-17 19:57:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -412,8 +412,7 @@ if ($form->validate()) {
 		api_session_register('_user');
 		api_session_register('is_allowedCreateCourse');
 
-		//stats
-		include (api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+		//stats		
 		event_login();
 		// last user login date is now
 		$user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970

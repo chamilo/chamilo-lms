@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 21933 2009-07-09 06:08:22Z ivantcholakov $
+<?php //$Id: announcements.php 22201 2009-07-17 19:57:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -135,7 +135,6 @@ if (!empty($_POST['addresources'])) // When the "Add Resource" button is clicked
 	Tracking
 -----------------------------------------------------------
 */
-include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 event_access_tool(TOOL_ANNOUNCEMENT);
 
 /*

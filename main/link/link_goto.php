@@ -1,4 +1,4 @@
-<?php // $Id: link_goto.php 19491 2009-04-02 00:15:47Z iflorespaz $ 
+<?php // $Id: link_goto.php 22201 2009-07-17 19:57:03Z cfasanando $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -45,8 +45,6 @@
 
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
-
-include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
 
 $link_url = Security::remove_XSS($_GET['link_url']);
 $link_id = Security::remove_XSS($_GET['link_id']);

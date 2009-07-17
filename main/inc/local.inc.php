@@ -247,10 +247,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 					if (in_array($current_access_url_id, $my_url_list)) {                						
                 						$_user['user_id'] = $uData['user_id'];
 										api_session_register('_user');
-										if (!function_exists('event_login')){
-											include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
-											event_login();
-										}                						
+										
+										event_login();
+										                						
                 					} else {
 	                					$loginFailed = true;
 										api_session_unregister('_uid');
@@ -266,10 +265,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 			} else {           				
                 				$_user['user_id'] = $uData['user_id'];
 								api_session_register('_user');
-								if (!function_exists('event_login')){
-									include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+								
 									event_login();
-								}							
+								
                 			}
                 		} else {
 							$loginFailed = true;
@@ -435,10 +433,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                                   // the user has permission to enter at this site
                                                   $_user['user_id'] = $uData['user_id'];
                                                   api_session_register('_user');
-                                                  if (!function_exists('event_login')){
-                                                      include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+                                                    
                                                       event_login();
-                                                  }
+
                                                   // Redirect to homepage
                                                   $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
                                                   header('Location: '. $sso_target);
@@ -460,10 +457,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                             //single URL access
                                             $_user['user_id'] = $uData['user_id'];
                                             api_session_register('_user');
-                                            if (!function_exists('event_login')){
-                                                include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+                                           
                                                 event_login();
-                                            }
+                                           
                                             // Redirect to homepage
                                             $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
                                             header('Location: '. $sso_target);           
@@ -547,10 +543,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		                		if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
 									$_user['user_id'] = $uData['user_id'];
 									api_session_register('_user');
-									if (!function_exists('event_login')){
-										include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+								
 										event_login();
-									}
+								
 		                		} else {
 									$loginFailed = true;
 									api_session_unregister('_uid');

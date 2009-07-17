@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 22027 2009-07-13 11:03:41Z ivantcholakov $
+<?php // $Id: edit_document.php 22201 2009-07-17 19:57:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -112,7 +112,6 @@ $this_section=SECTION_COURSES;
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';

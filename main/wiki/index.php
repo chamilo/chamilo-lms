@@ -54,7 +54,6 @@ $this_section=SECTION_COURSES;
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'text.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php'); 
 require_once (api_get_path(LIBRARY_PATH).'security.lib.php'); 
 require_once (api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 require_once (api_get_path(INCLUDE_PATH).'conf/mail.conf.php');

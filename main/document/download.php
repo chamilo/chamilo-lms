@@ -1,4 +1,4 @@
-<?php // $Id: download.php 21124 2009-05-31 00:15:21Z cfasanando $
+<?php // $Id: download.php 22201 2009-07-17 19:57:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -81,9 +81,7 @@ if (substr($refer_script,0,15) == "/fillsurvey.php") {
 	$_course['path']=$_course['directory'];
 } else {
 	//protection
-	api_protect_course_script();
-
-	include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
+	api_protect_course_script();	
 
 	if (! isset($_course))
 	{

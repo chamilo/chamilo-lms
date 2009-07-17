@@ -1629,8 +1629,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 	include_once ("../lang/".$language_interface."/exercice.inc.php");
 
 	include_once (api_get_path(LIBRARY_PATH).'text.lib.php');
-	include_once ("../resourcelinker/resourcelinker.inc.php");
-	include_once (api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+	include_once ("../resourcelinker/resourcelinker.inc.php");	
 
 	$LPname = display_addedresource_link_in_learnpath($item_type, $item_id, '', $id, 'builder', 'nolink');
 

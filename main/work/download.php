@@ -1,4 +1,4 @@
-<?php // $Id: download.php 17989 2009-01-25 05:51:54Z yannoo $
+<?php // $Id: download.php 22201 2009-07-17 19:57:03Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -23,7 +23,6 @@ require '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-require (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 //include 'agenda.inc.php';
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');

@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 20950 2009-05-23 16:52:57Z ivantcholakov $
+<?php // $Id: chat.php 22201 2009-07-17 19:57:03Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -46,7 +46,6 @@ else
 /* ============================================================================== 
   			TRACKING
 ==============================================================================  */
-require_once('../inc/lib/events.lib.inc.php');
 event_access_tool(TOOL_CHAT);
 
 

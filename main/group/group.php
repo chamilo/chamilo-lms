@@ -1,4 +1,4 @@
-<?php // $Id: group.php 21933 2009-07-09 06:08:22Z ivantcholakov $
+<?php // $Id: group.php 22201 2009-07-17 19:57:03Z cfasanando $
  
 /*
 ==============================================================================
@@ -70,7 +70,6 @@ $nameTools = get_lang('GroupManagement');
 */
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
 //Create default category if it doesn't exist when group categories aren't allowed
 if( api_get_setting('allow_group_categories') == 'false')

@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 22027 2009-07-13 11:03:41Z ivantcholakov $
+<?php // $Id: create_document.php 22201 2009-07-17 19:57:03Z cfasanando $
 
 /*
 ==============================================================================
@@ -189,7 +189,6 @@ function InnerDialogLoaded()
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $nameTools = get_lang('CreateDocument');
 

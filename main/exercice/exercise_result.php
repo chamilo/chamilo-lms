@@ -29,7 +29,7 @@
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: exercise_result.php 21160 2009-06-01 15:44:49Z aportugal $
+* 	@version $Id: exercise_result.php 22201 2009-07-17 19:57:03Z cfasanando $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -60,7 +60,6 @@ $this_section=SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-require_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 

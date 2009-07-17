@@ -58,8 +58,6 @@ $doc_url = str_replace('///', '&', $doc_url);
 $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
 
-require_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
-
 if (!isset($_course)) {
 	api_not_allowed(true);	
 }

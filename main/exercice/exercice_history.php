@@ -88,8 +88,6 @@ Display::display_header($nameTools,"Exercise");
 		}
 	}
 
-//include_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
-
 //event_access_tool(TOOL_QUIZ);
 
 ?>

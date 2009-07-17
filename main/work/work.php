@@ -1,4 +1,4 @@
-<?php //$Id: work.php 21976 2009-07-10 19:06:28Z herodoto $
+<?php //$Id: work.php 22201 2009-07-17 19:57:03Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 21976 2009-07-10 19:06:28Z herodoto $
+*  	@version $Id: work.php 22201 2009-07-17 19:57:03Z cfasanando $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -84,7 +84,6 @@ isset($_SESSION['id_session'])?$id_session=$_SESSION['id_session']:$id_session=n
 require_once 'work.lib.php';
 require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'debug.lib.inc.php');
-require_once (api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once (api_get_path(LIBRARY_PATH) . 'security.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');

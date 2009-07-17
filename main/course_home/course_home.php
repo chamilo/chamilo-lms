@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 22113 2009-07-15 16:07:21Z iflorespaz $
+<?php // $Id: course_home.php 22201 2009-07-17 19:57:03Z cfasanando $
 
 /*
 ==============================================================================
@@ -229,8 +229,7 @@ Display::display_header($course_title, "Home");
 -----------------------------------------------------------
 */
 if(!isset($coursesAlreadyVisited[$_cid]) )
-{
-	include(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
+{	
 	event_access_course();
 	$coursesAlreadyVisited[$_cid] = 1;
 	api_session_register('coursesAlreadyVisited');

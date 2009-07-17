@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice.php 21933 2009-07-09 06:08:22Z ivantcholakov $
+// $Id: exercice.php 22201 2009-07-17 19:57:03Z cfasanando $
 
 /*
 ==============================================================================
@@ -58,7 +58,6 @@ require_once 'hotpotatoes.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'events.lib.inc.php';
 
 /*
 -----------------------------------------------------------
@@ -524,9 +523,6 @@ if ($origin != 'learnpath') {
 } else {
 	echo '<link rel="stylesheet" type="text/css" href="' . api_get_path(WEB_CODE_PATH) . 'css/default.css"/>';
 }
-
-// used for stats
-include_once (api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 
 event_access_tool(TOOL_QUIZ);
 

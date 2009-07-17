@@ -1,4 +1,4 @@
-<?php // $Id: group_overview.php 20095 2009-04-24 22:24:33Z juliomontoya $
+<?php // $Id: group_overview.php 22201 2009-07-17 19:57:03Z cfasanando $
  
 /*
 ==============================================================================
@@ -58,7 +58,6 @@ $nameTools = get_lang("GroupOverview");
 include_once (api_get_path(LIBRARY_PATH).'course.lib.php'); //necessary
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'export.lib.inc.php');
-include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php'); //necessary for statistics
 
 if( isset($_GET['action']))
 {

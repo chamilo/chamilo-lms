@@ -1,5 +1,5 @@
 <?php
-// $Id: exercice_submit.php 21656 2009-06-28 01:01:54Z iflorespaz $
+// $Id: exercice_submit.php 22201 2009-07-17 19:57:03Z cfasanando $
 
 /*
 ==============================================================================
@@ -43,7 +43,7 @@
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya multiple fill in blank option added
-* 	@version $Id: exercice_submit.php 21656 2009-06-28 01:01:54Z iflorespaz $
+* 	@version $Id: exercice_submit.php 22201 2009-07-17 19:57:03Z cfasanando $
 */
 
 require_once 'exercise.class.php';
@@ -276,8 +276,7 @@ if ($formSent) {
 					//
 					define('ENABLED_LIVE_EXERCISE_TRACKING', 1);
 					require_once 'question.class.php';
-					require_once 'answer.class.php';
-					require_once api_get_path(LIBRARY_PATH) . 'events.lib.inc.php';
+					require_once 'answer.class.php';					
 					$counter = 0;
 					$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 					$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);

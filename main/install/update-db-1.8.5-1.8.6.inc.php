@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 22183 2009-07-17 08:28:11Z ivantcholakov $
+<?php // $Id: update-db-1.8.5-1.8.6.inc.php 22197 2009-07-17 17:49:44Z ivantcholakov $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -945,26 +945,23 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 					<div style="text-align: center;" id="player810625-parent">
 					<div style="border-style: none; overflow: hidden; width: 320px; height: 240px; background-color: rgb(220, 220, 220);">
-						<script src="{REL_PATH}main/inc/lib/swfobject/swfobject.js" type="text/javascript"></script>
-						<div id="player810625"><a href="http://www.macromedia.com/go/getflashplayer" target="_blank">Get the Flash Player</a> to see this video.
+
+						<div id="player810625">
 							<div id="player810625-config" style="overflow: hidden; display: none; visibility: hidden; width: 0px; height: 0px;">url={REL_PATH}main/default_course_document/video/flv/example.flv width=320 height=240 loop=false play=false downloadable=false fullscreen=true displayNavigation=true displayDigits=true align=left dispPlaylist=none playlistThumbs=false</div>
 						</div>
-						<script type="text/javascript">
-							var s1 = new SWFObject("{REL_PATH}main/inc/lib/mediaplayer/player.swf","single","320","240","7");
-							s1.addVariable("width","320");
-							s1.addVariable("height","240");
-							s1.addVariable("autostart","false");
-							s1.addVariable("file","{REL_PATH}main/default_course_document/video/flv/example.flv");
-							s1.addVariable("repeat","false");
-							s1.addVariable("image","");
-							s1.addVariable("showdownload","false");
-							s1.addVariable("link","{REL_PATH}main/default_course_document/video/flv/example.flv");
-							s1.addParam("allowfullscreen","true");
-							s1.addVariable("showdigits","true");
-							s1.addVariable("shownavigation","true");
-							s1.addVariable("logo","");
-							s1.write("player810625");
-						</script>
+
+						<embed
+							type="application/x-shockwave-flash"
+							src="{REL_PATH}main/inc/lib/mediaplayer/player.swf"
+							width="320"
+							height="240"
+							id="single"
+							name="single"
+							quality="high"
+							allowfullscreen="true"
+							flashvars="width=320&height=240&autostart=false&file={REL_PATH}main/default_course_document/video/flv/example.flv&repeat=false&image=&showdownload=false&link={REL_PATH}main/default_course_document/video/flv/example.flv&showdigits=true&shownavigation=true&logo="
+						/>
+
 					</div>
 					</div>
 

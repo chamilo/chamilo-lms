@@ -1,4 +1,4 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 22182 2009-07-17 08:09:30Z ivantcholakov $
+<?php // $Id: update-db-1.8.5-1.8.6.inc.php 22183 2009-07-17 08:28:11Z ivantcholakov $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -944,7 +944,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					<td style="width: 50%; vertical-align: top;">
 
 					<div style="text-align: center;" id="player810625-parent">
-					<div style="border-style: none; overflow: hidden; width: 320px; height: 240px; background-color: rgb(220, 220, 220); background-repeat: no-repeat; background-position: center center;">
+					<div style="border-style: none; overflow: hidden; width: 320px; height: 240px; background-color: rgb(220, 220, 220);">
 						<script src="{REL_PATH}main/inc/lib/swfobject/swfobject.js" type="text/javascript"></script>
 						<div id="player810625"><a href="http://www.macromedia.com/go/getflashplayer" target="_blank">Get the Flash Player</a> to see this video.
 							<div id="player810625-config" style="overflow: hidden; display: none; visibility: hidden; width: 0px; height: 0px;">url={REL_PATH}main/default_course_document/video/flv/example.flv width=320 height=240 loop=false play=false downloadable=false fullscreen=true displayNavigation=true displayDigits=true align=left dispPlaylist=none playlistThumbs=false</div>

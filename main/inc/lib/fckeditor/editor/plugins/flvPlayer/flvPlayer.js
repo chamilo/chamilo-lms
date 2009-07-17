@@ -471,14 +471,14 @@ Media.prototype.getInnerHTML = function ( objectId )
 	}
 
 	var s = "" ;
-	//s += '<p>\n' ;
+	s += '\n' ;
 	s += '<div id="player' + randomnumber + '-parent" style="text-align: center;">\n'; //'<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
-	s += '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); /* background-image: url(' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/flvPlayer.gif); background-repeat:no-repeat; background-position:center; */' + cssalign + '">' ;
+	s += '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); ' + cssalign + '">' ;
 
 	s += '<script src="' + FCKConfig.ScriptSWFObject + '" type="text/javascript"></script>\n' ;
 
 	s += '<div id="player' + randomnumber + '">' ;
-	s += '<a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.' ;
+	s += '<a href="http://www.macromedia.com/go/getflashplayer" target="_blank">Get the Flash Player</a> to see this video.' ;
 	// Moved after info - Added width,height,overflow for MSIE7
 	s += '<div id="player' + randomnumber + '-config" style="display: none;visibility: hidden;width: 0px;height:0px;overflow: hidden;">' ;
 	// Save settings
@@ -650,7 +650,7 @@ Media.prototype.getInnerHTML = function ( objectId )
 	s += '</script>\n' ;
 	s += '</div>\n' ;
 	s += '</div>\n' ;
-	//s += '</p>\n' ;
+	s += '\n' ;
 
 	return s ;
 } ;

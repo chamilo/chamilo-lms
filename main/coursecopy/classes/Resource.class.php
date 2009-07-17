@@ -1,5 +1,5 @@
 <?php
-// $Id: Resource.class.php 11784 2007-03-29 14:45:54Z yannoo $
+// $Id: Resource.class.php 22200 2009-07-17 19:47:58Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,6 +27,7 @@
  * All possible resource-types
  */
 define('RESOURCE_DOCUMENT', 'document');
+define('RESOURCE_GLOSSARY', 'glossary');
 define('RESOURCE_EVENT', 'calendar_event');
 define('RESOURCE_LINK', 'link');
 define('RESOURCE_COURSEDESCRIPTION', 'course_description');
@@ -176,6 +177,8 @@ class Resource
 			//	return TOOL_SURVEY_QUESTION;
 			//case RESOURCE_SURVEYINVITATION:
 			//	return TOOL_SURVEY_INVITATION;
+			case RESOURCE_GLOSSARY:
+				return TOOL_GLOSSARY;
 			default:
 				return null;
 		}

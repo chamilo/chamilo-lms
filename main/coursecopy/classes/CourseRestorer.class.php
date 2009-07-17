@@ -1,4 +1,4 @@
-<?php // $Id: CourseRestorer.class.php 21814 2009-07-06 16:37:11Z iflorespaz $
+<?php // $Id: CourseRestorer.class.php 22200 2009-07-17 19:47:58Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,6 +37,7 @@ require_once ('Survey.class.php');
 require_once ('SurveyQuestion.class.php');
 require_once ('mkdirr.php');
 require_once ('rmdirr.php');
+require_once ('Glossary.class.php');
 include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 
 define('FILE_SKIP', 1);
@@ -104,6 +105,7 @@ class CourseRestorer
 		$this->restore_learnpaths();
 		$this->restore_surveys();
 		$this->restore_student_publication();
+		$this->restore_glossary();
 		// Restore the item properties
 		$table = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
 		foreach ($this->course->resources as $type => $resources) {
@@ -113,6 +115,7 @@ class CourseRestorer
 					{
 						// First check if there isn't allready a record for this resource
 						$sql = "SELECT * FROM $table WHERE tool = '".$property['tool']."' AND ref = '".$resource->destination_id."'";
+
 						$res = api_sql_query($sql,__FILE__,__LINE__);
 						if( Database::num_rows($res) == 0) {
 							// The to_group_id and to_user_id are set to default values as users/groups possibly not exist in the target course
@@ -1192,5 +1195,23 @@ class CourseRestorer
 		}
 		return '';
 	}
+	/**
+	 * Restore glossary
+	 */
+	function restore_glossary()
+	{
+		if ($this->course->has_resources(RESOURCE_GLOSSARY))
+		{
+			$table_glossary = Database :: get_course_table(TABLE_GLOSSARY, $this->course->destination_db);
+			$t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
+			$resources = $this->course->resources;
+			foreach ($resources[RESOURCE_GLOSSARY] as $id => $glossary) {
+				$this->course->resources[RESOURCE_GLOSSARY][$id]->destination_id = $glossary->glossary_id;
+ 			    $sql = "INSERT INTO ".$table_glossary." SET glossary_id = '".Database::escape_string($glossary->glossary_id)."', name = '".Database::escape_string($glossary->name)."', description = '".Database::escape_string($glossary->description)."', display_order='".Database::escape_string($glossary->display_order)."'";
+			 	Database::query($sql, __FILE__, __LINE__);
+
+			}
+		}
+	}	
 }
 ?>

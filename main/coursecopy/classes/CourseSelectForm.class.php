@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 19948 2009-04-21 17:27:59Z juliomontoya $
+// $Id: CourseSelectForm.class.php 22200 2009-07-17 19:47:58Z iflorespaz $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -49,6 +49,7 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_SCORM] = 'SCORM';
 		$resource_titles[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
 		$resource_titles[RESOURCE_SURVEY] = get_lang('Survey');
+		$resource_titles[RESOURCE_GLOSSARY] = get_lang('Glossary');
 ?>
 		<script language="JavaScript" type="text/javascript">
 			function exp(item) {

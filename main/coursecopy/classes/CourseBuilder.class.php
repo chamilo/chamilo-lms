@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 19948 2009-04-21 17:27:59Z juliomontoya $
+<?php // $Id: CourseBuilder.class.php 22200 2009-07-17 19:47:58Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,6 +39,7 @@ require_once ('QuizQuestion.class.php');
 require_once ('Learnpath.class.php');
 require_once ('Survey.class.php');
 require_once ('SurveyQuestion.class.php');
+require_once ('Glossary.class.php');
 /**
  * Class which can build a course-object from a Dokeos-course.
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -85,7 +86,7 @@ class CourseBuilder
 		$this->build_quizzes();
 		$this->build_learnpaths();
 		$this->build_surveys();
-		
+		$this->build_glossarys();
 		//TABLE_LINKED_RESOURCES is the "resource" course table, which is deprecated, apparently
 		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 		foreach ($this->course->resources as $type => $resources)
@@ -482,5 +483,24 @@ class CourseBuilder
 			closedir($dir);
 		}
 	}
+	
+	/**
+	 * Build the glossarys
+	 */
+	function build_glossarys() {
+		$table_glossary = Database :: get_course_table(TABLE_GLOSSARY);
+		
+        if (!empty($this->course->type) && $this->course->type=='partial')        	
+        	$sql = 'SELECT * FROM '.$table_glossary.' g ';
+        else
+        	$sql = 'SELECT * FROM '.$table_glossary.' g ';
+		
+		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		while ($obj = Database::fetch_object($db_result))
+		{
+			$doc = new Glossary($obj->glossary_id, $obj->name, $obj->description, $obj->display_order);
+			$this->course->add_resource($doc);
+		}
+	}	
 }
 ?>

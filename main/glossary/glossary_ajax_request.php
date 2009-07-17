@@ -22,8 +22,12 @@ foreach ($glossary_data as $glossary_index=>$glossary_value) {
 }
 $glossary_all_data=implode('[|.|_|.|-|.|]',$glossary_all_data);
 
+//replace image path
+$path_image=api_get_path(WEB_COURSE_PATH).api_get_course_path();
+$path_image_search='../../courses/'.api_get_course_path();
 //get_glossary_terms
  if (isset($_POST['glossary_id']) && $_POST['glossary_id']==strval(intval($_POST['glossary_id']))) {
+		$glossary_description_by_id=str_replace($path_image_search,$path_image,$glossary_description_by_id); 	
   	echo api_xml_http_response_encode($glossary_description_by_id);	
  } elseif (isset($_POST['glossary_data']) && $_POST['glossary_data']=='true') {
    	echo api_xml_http_response_encode($glossary_all_data);	
@@ -31,6 +35,7 @@ $glossary_all_data=implode('[|.|_|.|-|.|]',$glossary_all_data);
  	if (is_null($glossary_description)) {
  		echo api_xml_http_response_encode(get_lang('NoResults'));
  	} else {
+		$glossary_description=str_replace($path_image_search,$path_image,$glossary_description);
  	 	echo api_xml_http_response_encode($glossary_description);	
  	}
  	

@@ -15,4 +15,8 @@ $langCombinedCourse = "Kombinovani kurs";
 $ToolIsNowVisible = "Alatka je sada vidljiva";
 $ToolIsNowHidden = "Alatka je sada nevidljiva";
 $EditLink = "Izmeni link";
+$Blog_management = "Projekti";
+$Forum = "Forumi";
+$TOOL_SURVEY = "Ankete";
+$Administration = "Administracija";
 ?>

@@ -242,4 +242,5 @@ $SaveSection = "Save section";
 $AddLinkToCourse = "Add link to course";
 $AddAssignmentToCourse = "Add assignment to course";
 $AddForumToCourse = "Add forum to course";
+$SaveAudioAndOrganization = "Save audio and organization";
 ?>

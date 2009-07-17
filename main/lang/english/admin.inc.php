@@ -1006,4 +1006,10 @@ $SubLanguage = "Sub language";
 $LanguageIsNowVisible = "The language is now visible";
 $LanguageIsNowHidden = "The language is now hidden";
 $LanguageDirectoryNotWriteableContactAdmin = "The /main/lang directory, used by this portal, is not writeable. Please contact your platform administrator.";
+$ShowGlossaryInDocumentsTitle = "Show terms of glossary in documents";
+$ShowGlossaryInDocumentsComment = "From here you can setting how add glossary\'s term to documents";
+$ShowGlossaryInDocumentsIsAutomatic = "Automatically, to enable this option will add to documents all term than is defined in the glossary and are in the document";
+$ShowGlossaryInDocumentsIsManual = "Manual, to enable this option this will show a glossary icon in the tool fckeditor, you should shading the words than are marked like glossary term";
+$ShowGlossaryInDocumentsIsNone = "None, to have enable this option, will not add glosarry term to documents";
+$LanguageVariable = "Language variable";
 ?>

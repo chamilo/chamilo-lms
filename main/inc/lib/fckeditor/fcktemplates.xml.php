@@ -73,7 +73,7 @@ function s($var)
 {
     $search = array('&','<','>');
     $replace = array ('&amp;','&amp;lt;','&amp;gt;');
-    return str_replace($search, $replace, api_utf8_encode(get_lang($var)));
+    return str_replace($search, $replace, api_utf8_encode(get_lang($var, '')));
 }
 
 /**
@@ -115,8 +115,8 @@ function load_platform_templates() {
       	$row['content'] =  str_replace('{REL_PATH}', api_get_path(REL_PATH), $row['content']);
       	$row['content'] =  str_replace('{COURSE_DIR}',$default_course_dir, $row['content']);
 
-		echo '	<Template title="'.s(get_lang($row['title'])).'" image="'.$image.'">
-					<Description>'.s(get_lang($row['comment'])).'</Description>
+		echo '	<Template title="'.s(get_lang($row['title']), '').'" image="'.$image.'">
+					<Description>'.s(get_lang($row['comment']), '').'</Description>
 					<Html>
 						<![CDATA[
 							    '.$row['content'].'

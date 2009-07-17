@@ -9,7 +9,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('FitWindow','DocProps','-','Save','NewPage','Preview','-','Templates'),
 	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
 	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
-	array('Link','Unlink','Anchor','Wikilink'),
+	array('Link','Unlink','Anchor','Glossary','Wikilink'),
 	array('mimetex','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','YouTube','googlemaps','Smiley'),
 	'/',
 	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),

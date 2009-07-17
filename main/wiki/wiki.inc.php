@@ -470,7 +470,23 @@ function save_new_wiki() {
 **/
 function display_new_wiki_form()
 {
-	echo '<form name="form1" method="post" action="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
+
+?>
+<script type="text/javascript">
+function CheckSend()
+{
+	if(document.form1.title.value == "")
+	{
+		alert("<?php echo get_lang('NoWikiPageTitle');?>");
+		document.form1.title.focus();
+		return false;
+	}
+return true;
+}	
+</script>
+<?php	
+	
+	echo '<form name="form1" method="post" onsubmit="return CheckSend()" action="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
 	echo '<div id="wikititle">';
 	echo  '<span class="form_required">*</span> '.get_lang(Title).': <input type="text" name="title" value="'.urldecode($_GET['title']).'">';
 	

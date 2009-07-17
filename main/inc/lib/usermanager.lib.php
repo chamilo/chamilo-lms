@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 21700 2009-07-01 19:05:11Z aportugal $
+<?php // $Id: usermanager.lib.php 22205 2009-07-17 21:11:52Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -132,7 +132,13 @@ class UserManager
 			} else {
 				//we are adding by default the access_url_user table with access_url_id = 1
 				UrlManager::add_user_to_url($return, 1);				
-			}			
+			}
+			
+			// add event to system log
+			$time = time();
+			$user_id_manager = api_get_user_id();				
+			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, $time, $user_id_manager);			
+						
 		} else {
 			//echo "false - failed" ;
 			$return=false;
@@ -179,6 +185,7 @@ class UserManager
 	 */
 	function delete_user($user_id)
 	{
+		global $_configuration;
 		if (!UserManager :: can_delete_user($user_id))
 		{
 			return false;
@@ -252,7 +259,7 @@ class UserManager
 		$sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
 		$resv = api_sql_query($sqlv,__FILE__,__LINE__);
 		
-		global $_configuration;
+		
 		if ($_configuration['multiple_access_urls']) {
 			require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 			$url_id=1;				
@@ -260,6 +267,11 @@ class UserManager
 				$url_id=api_get_current_access_url_id();											
 			UrlManager::delete_url_rel_user($user_id,$url_id);	
 		}
+		
+		// add event to system log
+		$time = time();
+		$user_id_manager = api_get_user_id();				
+		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, $time, $user_id_manager);				
 		
 		return true;
 	}

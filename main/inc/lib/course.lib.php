@@ -79,7 +79,7 @@
 		Configuration files
 -----------------------------------------------------------
 */
-include_once (api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
+require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 
 /*
 -----------------------------------------------------------
@@ -88,8 +88,8 @@ include_once (api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
 -----------------------------------------------------------
 */
 
-include_once (api_get_path(LIBRARY_PATH).'database.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
+require_once api_get_path(LIBRARY_PATH).'database.lib.php';
+require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 
 /*
 -----------------------------------------------------------
@@ -317,6 +317,12 @@ class CourseManager {
 		} else {
 			$sql = "DELETE FROM $table_course_user WHERE user_id IN (".$user_ids.") AND course_code = '".$course_code."'";
 			api_sql_query($sql, __FILE__, __LINE__);
+			
+			// add event to system log		
+			$time = time();
+			$user_id = api_get_user_id();				
+			event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_COURSE_CODE, $course_code, $time, $user_id);
+			
 		}
 	}
 
@@ -411,6 +417,12 @@ class CourseManager {
 											status    = '".$status."',
 											sort  =   '". ($course_sort)."'";
 					$result = @api_sql_query($add_course_user_entry_sql, __FILE__, __LINE__);
+					
+					
+					// add event to system log		
+					$time = time();
+					$user_id = api_get_user_id();				
+					event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, $time, $user_id);										
 					}
 					if ($result) {
 						return true;
@@ -1661,6 +1673,12 @@ class CourseManager {
 				}
 			}
 		}
+		
+		// add event to system log		
+		$time = time();
+		$user_id = api_get_user_id();				
+		event_system(LOG_COURSE_DELETE, LOG_COURSE_CODE, $code, $time, $user_id, $code);
+		
 	}
 
 	/**

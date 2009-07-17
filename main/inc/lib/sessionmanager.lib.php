@@ -75,6 +75,12 @@ class SessionManager {
 			} else {
 				api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".Database::escape_string($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")",__FILE__,__LINE__);
 				$id_session=Database::get_last_insert_id();	
+								
+				// add event to system log		
+				$time = time();
+				$user_id = api_get_user_id();				
+				event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $id_session, $time, $user_id);
+
 				return $id_session; 
 			}
 		}
@@ -231,6 +237,12 @@ class SessionManager {
 				}	
 			}			
 		}
+		
+		// add event to system log		
+		$time = time();
+		$user_id = api_get_user_id();				
+		event_system(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, $time, $user_id);
+		
 	}	
 	
 	

@@ -80,6 +80,62 @@ class Statistics
 		$obj = Database::fetch_object($res);
 		return $obj->number;
 	}
+	
+		/**
+	 * Count activities from track_e_default_table 
+	 * @return int Number of activities counted
+	 */
+	function get_number_of_activities()
+	{		
+		// Database table definitions
+		$track_e_default 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);		
+		
+		$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default ";				
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$obj = Database::fetch_object($res);
+		return $obj->total_number_of_items;
+	}
+		
+	/**
+	 * Get activities data to display
+	 */
+	function get_activities_data($from, $number_of_items, $column, $direction)
+	{
+		global $dateTimeFormatLong;
+		$track_e_default 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+		$table_user = Database::get_main_table(TABLE_MAIN_USER);
+		$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+		
+		$sql = "SELECT
+				 	default_event_type  as col0,
+					default_value_type	as col1,
+					default_value		as col2,																
+					user.username 	as col3, 					
+					default_date 	as col4									
+				FROM $track_e_default track_default, $table_user user
+				WHERE track_default.default_user_id = user.user_id ";
+				
+		if (isset($_GET['keyword'])) {
+		$keyword = Database::escape_string($_GET['keyword']);
+		$sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
+		}		
+						 				 
+		if (!empty($column) && !empty($direction)) {						 				 
+			$sql .=	" ORDER BY col$column $direction"; 
+		} else {
+			$sql .=	" ORDER BY col4 DESC ";
+		}
+		$sql .=	" LIMIT $from,$number_of_items ";				
+											
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$activities = array ();
+		while ($row = Database::fetch_row($res)) {
+			$row[4] = api_ucfirst(format_locale_date($dateTimeFormatLong,strtotime($row[4])));
+			$activities[] = $row;
+		}		
+		return $activities;
+	}
+		
 	/**
 	 * Get all course categories
 	 * @return array All course categories (code => name)
@@ -159,7 +215,7 @@ class Statistics
 								<td align="right">'.$number_label.'</td>';
 			if($show_total)
 			{
-				echo '<td align="right"> '.number_format(100*$number/$total, 1, ',', '.').'%</td>';
+				echo '<td align="right"> '.($total>0?number_format(100*$number/$total, 1, ',', '.'):'0').'%</td>';
 			}
 			echo '</tr>';
 			$i ++;
@@ -274,6 +330,43 @@ class Statistics
 		$result[get_lang('Yes')] = $count2->n; // #users with picture
 		Statistics::print_stats(get_lang('CountUsers').' ('.get_lang('UserPicture').')',$result,true);
 	}
+	
+	function print_activities_stats() {				
+		
+		echo '<h4>'.get_lang('ImportantActivities').'</h4>';
+				
+		// Create a search-box
+		$form = new FormValidator('search_simple','get',api_get_path(WEB_CODE_PATH).'admin/statistics/index.php?action=activities','','width=200px',false);
+		$renderer =& $form->defaultRenderer();
+		$renderer->setElementTemplate('<span>{element}</span> ');
+		$form->addElement('hidden','action','activities');
+		$form->addElement('hidden','activities_direction','DESC');
+		$form->addElement('hidden','activities_column','4');		
+		$form->addElement('text','keyword',get_lang('keyword'));
+		$form->addElement('style_submit_button', 'submit', get_lang('SearchActivities'),'class="search"');							 
+		echo '<div class="actions">';		
+			$form->display();				
+		echo '</div>';
+		
+				
+		$table = new SortableTable('activities', array('Statistics','get_number_of_activities'), array('Statistics','get_activities_data'),4,50,'DESC');
+		$parameters = array();
+		
+		$parameters['action'] = 'activities';		
+		if (isset($_GET['keyword'])) {
+			$parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
+		}
+		
+		$table->set_additional_parameters($parameters);											
+		$table->set_header(0, get_lang('EventType'));
+		$table->set_header(1, get_lang('DataType'));
+		$table->set_header(2, get_lang('Value'));		
+		$table->set_header(3, get_lang('Username'));
+		$table->set_header(4, get_lang('Date'));		
+		$table->display();
+		
+	}
+	
 	/**
 	 * Shows statistics about the time of last visit to each course.
 	 */

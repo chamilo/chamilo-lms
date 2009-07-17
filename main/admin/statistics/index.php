@@ -49,6 +49,7 @@ require_once ('statistics.lib.php');
 
 $strCourse  = get_lang('Courses');
 $strUsers = get_lang('Users');
+$strSystem = get_lang('System');
 
 
 $tools[$strCourse]['action=courses'] = get_lang('CountCours');
@@ -64,6 +65,7 @@ $tools[$strUsers]['action=logins&amp;type=day'] = get_lang('Logins').' ('.get_la
 $tools[$strUsers]['action=logins&amp;type=hour'] = get_lang('Logins').' ('.get_lang('PeriodHour').')';
 $tools[$strUsers]['action=pictures'] = get_lang('CountUsers').' ('.get_lang('UserPicture').')';
 
+$tools[$strSystem]['action=activities'] = get_lang('ImportantActivities');
 
 
 echo '<table><tr>';
@@ -132,6 +134,9 @@ switch($_GET['action'])
 		break;
 	case 'pictures':
 		statistics::print_user_pictures_stats();
+		break;
+	case 'activities':	 		
+		statistics::print_activities_stats();		
 		break;
 }
 

@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 22019 2009-07-13 06:16:38Z ivantcholakov $
+<?php // $Id: settings.php 22205 2009-07-17 21:11:52Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -279,7 +279,14 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 				}
 			}
 		}
-		header('Location: settings.php?action=stored&category='.$_GET['category']);
+		
+		// add event to system log		
+		$time = time();
+		$user_id = api_get_user_id();		
+		$category = $_GET['category']; 		
+		event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
+		
+		header('Location: settings.php?action=stored&category='.Security::remove_XSS($_GET['category']));
 		exit;
 	}
 }
@@ -394,7 +401,13 @@ function handle_plugins()
 
 	if (isset($_POST['submit_plugins']))
 	{
-		store_plugins();
+		store_plugins();		
+		// add event to system log		
+		$time = time();
+		$user_id = api_get_user_id();		
+		$category = $_GET['category']; 		
+		event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
+
 		Display :: display_normal_message(get_lang('SettingsStored'));
 	}
 
@@ -581,6 +594,13 @@ function handle_stylesheets()
 		$picture_element = & $form->getElement('new_stylesheet');
 		$picture = $picture_element->getValue();
 		upload_stylesheet($values, $picture);
+		
+		// add event to system log		
+		$time = time();
+		$user_id = api_get_user_id();		
+		$category = $_GET['category']; 		
+		event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
+		
 		Display::display_confirmation_message(get_lang('StylesheetAdded'));
 	}
 	else 
@@ -874,9 +894,22 @@ function handle_templates()
 
 	if ($_GET['action'] == 'add' OR ( $_GET['action'] == 'edit' AND is_numeric($_GET['id']))) {
 		add_edit_template();
+		
+		// add event to system log		
+		$time = time();
+		$user_id = api_get_user_id();		
+		$category = $_GET['category']; 		
+		event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
+		
 	} else {
 		if ($_GET['action'] == 'delete' and is_numeric($_GET['id'])) {
 			delete_template($_GET['id']);
+			
+			// add event to system log		
+			$time = time();
+			$user_id = api_get_user_id();		
+			$category = $_GET['category']; 		
+			event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
 		}
 		display_templates();
 	}

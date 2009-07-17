@@ -2381,6 +2381,13 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		} else {
 			UrlManager::add_course_to_url($courseSysCode,1);
 		}
+		
+		// add event to system log		
+		$time = time();
+		$user_id = api_get_user_id();				
+		event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $courseSysCode, $time, $user_id, $courseSysCode);
+		
+		
 	}
 	return 0;
 }

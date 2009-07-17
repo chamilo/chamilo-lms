@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 21091 2009-05-29 19:58:15Z juliomontoya $
+<?php // $Id: events.lib.inc.php 22205 2009-07-17 21:11:52Z cfasanando $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -625,21 +625,21 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 		$course_code = '';
 	}
 
-	$sql = "INSERT INTO ".$TABLETRACK_DEFAULT."
+	$sql = "INSERT INTO $TABLETRACK_DEFAULT
 				(default_user_id,
 				 default_cours_code,
-				 default_date, .
+				 default_date,
 				 default_event_type,
 				 default_value_type,
 				 default_value
 				 )
 				 VALUES
-					('".$user_id."',
-					'".$course_code."',
-					FROM_UNIXTIME(".$timestamp.")," .
-					"'$event_type'," .
-					"'$event_value_type'," .
-					"'$event_value')";
+					('$user_id.',
+					'$course_code',
+					FROM_UNIXTIME($timestamp),
+					'$event_type',
+					'$event_value_type',
+					'$event_value')";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	return true;
 }

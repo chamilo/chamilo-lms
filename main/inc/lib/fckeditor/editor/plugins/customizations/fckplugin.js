@@ -255,7 +255,7 @@ var FCKDialog = ( function()
 				Page : dialogPage,
 				Editor : window,
 				CustomValue : customValue,		// Optional
-				TopWindow : topWindow,
+				TopWindow : topWindow
 			}
 
 			FCK.ToolbarSet.CurrentInstance.Selection.Save( true ) ;
@@ -316,7 +316,7 @@ var FCKDialog = ( function()
 				Page: dialogPage,
 				Editor: window,
 				CustomValue: customValue,
-				TopWindow : topWindow,
+				TopWindow : topWindow
 			} ;
 
 			//FCK.ToolbarSet.CurrentInstance.Selection.Save();

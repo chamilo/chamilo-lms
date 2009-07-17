@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 21776 2009-07-03 23:05:34Z iflorespaz $
+// $Id: copy_course.php 22204 2009-07-17 20:31:35Z iflorespaz $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -81,6 +81,9 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 } elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
 	// Else, if a CourseSelectForm is requested, show it
 	Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
+	if (api_get_setting('show_glossary_in_documents') != 'none') { 
+		Display::display_normal_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'));
+	}
 	$cb = new CourseBuilder();
 	$course = $cb->build();
 	//echo get_lang('SelectItemsToCopy');

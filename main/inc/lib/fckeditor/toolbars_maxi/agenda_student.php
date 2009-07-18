@@ -9,7 +9,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('FitWindow','Save'),
 	array('Bold','Italic','Underline','StrikeThrough'),
 	array('OrderedList','UnorderedList','-','Outdent','Indent'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+	array('JustifyLeft','JustifyCenter','JustifyRight'),
 	array('Undo','Redo','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink'),
 	'/',

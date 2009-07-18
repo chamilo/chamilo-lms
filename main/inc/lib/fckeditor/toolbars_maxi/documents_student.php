@@ -1,6 +1,6 @@
 <?php
 // Course tools
-// Documents
+// Documents (student)
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
@@ -16,18 +16,17 @@ $config['ToolbarSets']['Normal'] = array(
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
-	array('Rule','Table','SpecialChar','mimetex'),
-	array('Source')
+	array('Rule','Table','SpecialChar','mimetex')
 );
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
 $config['ToolbarSets']['Maximized'] = array(
 	array('FitWindow','DocProps','-','Save','NewPage','Preview','-','Templates'),
-	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
+	array('Cut','Copy','Paste','PasteText','PasteWord'),
 	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink','Anchor','Glossary'),
-	array('mimetex','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','YouTube','googlemaps','Smiley'),
+	array('mimetex','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
 	'/',
 	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
 	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
@@ -37,7 +36,7 @@ $config['ToolbarSets']['Maximized'] = array(
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
-	array('ShowBlocks','Source')
+	array('ShowBlocks')
 );
 
 // Sets whether the toolbar can be collapsed/expanded or not.
@@ -55,7 +54,7 @@ $config['ToolbarSets']['Maximized'] = array(
 // A setting for blocking copy/paste functions of the editor.
 // This setting activates on leaners only. For users with other statuses there is no blocking copy/paste.
 // Possible values: true , false
-//$config['BlockCopyPaste'] = false;
+$config['BlockCopyPaste'] = true;
 
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...

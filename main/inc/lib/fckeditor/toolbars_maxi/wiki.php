@@ -1,11 +1,28 @@
 <?php
-// This toolbar has been created for testing purposes.
-// It contains all the buttons that may be used in the Dokeos LMS.
+// Course tools
+// Wiki
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
+	array('FitWindow','Save','Preview'),
+	array('Bold','Italic','Underline'),
+	array('OrderedList','UnorderedList','-','Outdent','Indent'),
+	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+	array('Undo','Redo','-','Find','-','SelectAll','RemoveFormat'),
+	array('Link','Unlink','Anchor','Wikilink','Glossary'),
+	array('Image','Flash','MP3'),
+	'/',
+	array('Style','FontFormat','FontName','FontSize'),
+	array('TextColor','BGColor'),
+	array('Rule','Table','SpecialChar','mimetex'),
+	array('Source')
+);
+
+// This is the visible toolbar set when the editor is maximized.
+// If it has not been defined, then the toolbar set for the "normal" size is used.
+$config['ToolbarSets']['Maximized'] = array(
 	array('FitWindow','DocProps','-','Save','NewPage','Preview','-','Templates'),
 	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
 	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
@@ -20,17 +37,8 @@ $config['ToolbarSets']['Normal'] = array(
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
-	array('Source','ShowBlocks','-','About')
+	array('ShowBlocks','Source')
 );
-
-
-// This is the visible toolbar set when the editor is maximized.
-// If it has not been defined, then the toolbar set for the "normal" size is used.
-/*
-$config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow','-') // ...
-);
-*/
 
 // Sets whether the toolbar can be collapsed/expanded or not.
 // Possible values: true , false
@@ -52,4 +60,4 @@ $config['ToolbarSets']['Maximized'] = array(
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...
 //$config['Width'] = '100%';
-//$config['Height'] = '300';
+//$config['Height'] = '400';

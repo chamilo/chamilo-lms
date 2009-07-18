@@ -106,7 +106,9 @@ $config['LoadPlugin'][] = 'fckEmbedMovies';
 $config['LoadPlugin'][] = 'flvPlayer';
 
 // youtube : Adds a dilog for inserting YouTube video-streams.
-$config['LoadPlugin'][] = 'youtube';
+if (api_is_allowed_to_edit() || api_is_platform_admin()) { // (not for students)
+	$config['LoadPlugin'][] = 'youtube';
+}
 
 // googlemaps : Adds a dilog for inserting Google maps.
 $config['LoadPlugin'][] = 'googlemaps';

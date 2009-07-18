@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 22205 2009-07-17 21:11:52Z cfasanando $
+<?php // $Id: settings.php 22210 2009-07-18 16:17:37Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1055,7 +1055,7 @@ function add_edit_template()
 	$form->add_textfield('title', get_lang('Title'), false);
 	
 	// settting the form elements: the content of the template (wysiwyg editor)
-	$form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
+	$form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400', 'FullPage' => true));
 	
 	// settting the form elements: the form to upload an image to be used with the template
 	$form->addElement('file','template_image',get_lang('Image'),'');

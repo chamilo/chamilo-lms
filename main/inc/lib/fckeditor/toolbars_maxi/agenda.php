@@ -1,29 +1,26 @@
 <?php
-// Admin tools
-// Admin Templates
+// Course tools
+// Agenda
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('FitWindow','Save','Preview'),
-	array('Bold','Italic','Underline'),
+	array('FitWindow','Save'),
+	array('Bold','Italic','Underline','StrikeThrough'),
 	array('OrderedList','UnorderedList','-','Outdent','Indent'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
-	array('Undo','Redo','-','Find','-','SelectAll','RemoveFormat'),
-	array('Link','Unlink','Anchor'),
-	array('Image','Flash','MP3'),
+	array('Undo','Redo','-','SelectAll','RemoveFormat'),
+	array('Link','Unlink'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor'),
-	array('Rule','Table','SpecialChar'),
-	array('Source')
+	array('TextColor','BGColor')
 );
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
 $config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow','DocProps','-','Save','NewPage','Preview','-','Templates'),
+	array('FitWindow','-','Save','NewPage','Preview'),
 	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
 	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink','Anchor'),
@@ -60,4 +57,4 @@ $config['ToolbarSets']['Maximized'] = array(
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...
 //$config['Width'] = '100%';
-//$config['Height'] = '400';
+//$config['Height'] = '300';

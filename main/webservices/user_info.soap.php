@@ -53,8 +53,7 @@ $server->wsdl->addComplexType(
 // Register the method to expose
 $server->register('DokeosWSCourseListOfUser',   // method name
     array('username' => 'xsd:string',
-          'signature' => 'xsd:string',
-          'visibilities' => 'xsd:string'),      // input parameters
+          'signature' => 'xsd:string'),         // input parameters
     array('return' => 'xsd:Array'),             // output parameters
     'urn:WSUserInfo',                           // namespace
     'urn:WSUserInfo#DokeosWSUserInfo',          // soapaction

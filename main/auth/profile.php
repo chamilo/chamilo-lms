@@ -1,4 +1,4 @@
-<?php // $Id: profile.php 22027 2009-07-13 11:03:41Z ivantcholakov $
+<?php // $Id: profile.php 22217 2009-07-19 06:59:14Z yannoo $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -26,7 +26,10 @@ if (!isset($_GET['show'])) {
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
-api_block_anonymous_users();
+
+if (!(isset ($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'],true)) {
+    api_not_allowed(true);
+}
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">

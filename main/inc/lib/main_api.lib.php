@@ -1857,6 +1857,7 @@ function api_not_allowed($print_headers = false) {
 	$home_url = api_get_path(WEB_PATH);
 	$user = api_get_user_id();
 	$course = api_get_course_id();
+    global $this_section;
 	
 	$origin = isset($_GET['origin'])?$_GET['origin']:'';
 	
@@ -1882,7 +1883,7 @@ function api_not_allowed($print_headers = false) {
 		echo '</div>';
 		if ($print_headers && $origin != 'learnpath'){Display::display_footer();}
 		die();
-	} elseif (!empty($_SERVER['REQUEST_URI']) && !empty($_GET['cidReq'])) {
+	} elseif (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
 		//only display form and return to the previous URL if there was a course ID included
 		if (!empty($user) && !api_is_anonymous()) {
 			if ((!headers_sent() or $print_headers) && $origin != 'learnpath') { Display::display_header('');}

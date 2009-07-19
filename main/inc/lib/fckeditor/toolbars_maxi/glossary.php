@@ -1,6 +1,6 @@
 <?php
 // Course tools
-// Forum
+// Glossary
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
@@ -60,4 +60,4 @@ $config['ToolbarSets']['Maximized'] = array(
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...
 //$config['Width'] = '100%';
-//$config['Height'] = '400';
+//$config['Height'] = '300';

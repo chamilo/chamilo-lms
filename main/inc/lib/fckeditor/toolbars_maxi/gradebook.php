@@ -1,6 +1,6 @@
 <?php
 // Course tools
-// Forum
+// Gradebook
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
@@ -16,7 +16,7 @@ $config['ToolbarSets']['Normal'] = array(
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
-	array('Rule','Table','SpecialChar','mimetex'),
+	array('Rule','Table','SpecialChar'),
 	array('Source')
 );
 
@@ -27,7 +27,7 @@ $config['ToolbarSets']['Maximized'] = array(
 	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
 	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink','Anchor'),
-	array('mimetex','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','YouTube','googlemaps','Smiley'),
+	array('mimetex','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
 	'/',
 	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
 	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
@@ -60,4 +60,4 @@ $config['ToolbarSets']['Maximized'] = array(
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...
 //$config['Width'] = '100%';
-//$config['Height'] = '400';
+//$config['Height'] = '300';

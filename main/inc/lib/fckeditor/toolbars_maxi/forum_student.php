@@ -11,7 +11,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('OrderedList','UnorderedList','-','Outdent','Indent'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('Undo','Redo','-','Find','-','SelectAll','RemoveFormat'),
-	array('Link','Unlink','Anchor'),
+	array('Link','Unlink'),
 	array('Image','Flash'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),

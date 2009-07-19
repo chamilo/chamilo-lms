@@ -27,11 +27,11 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $this_section = SECTION_MYPROFILE;
 $_SESSION['this_section']=$this_section;
 api_block_anonymous_users();
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery-1.1.3.1.pack.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.history_remote.pack.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.tabs.pack.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.1.3.1.pack.js" type="text/javascript"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.history_remote.pack.js" type="text/javascript"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.tabs.pack.js" type="text/javascript"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
 //$htmlHeadXtra[] = '<style rel="stylesheet" href="../inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
 $htmlHeadXtra[]='<style type="text/css" media="all">@import "'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css";</style>';
 $htmlHeadXtra[] = '<script type="text/javascript">

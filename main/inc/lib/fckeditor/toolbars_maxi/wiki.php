@@ -12,7 +12,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('Undo','Redo','-','Find','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink','Anchor','Wikilink','Glossary'),
-	array('Image','Flash','MP3'),
+	array('Image','Flash'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),

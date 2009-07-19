@@ -367,15 +367,15 @@ class FCKeditor
 	 */
 	private function & get_custom_configuration() {
 		static $config;
+		static $toobar_sets = array();
 		if (!isset($config)) {
 			require api_get_path(LIBRARY_PATH).'fckeditor/myconfig.php';
 		}
 		// Seeking the toolbar.
-		$toolbar_dir = 'toolbars'; // A directory where "factory" toolbars reside.
-		if (isset($config['ToolbarSets']['Directory'])) {
-			$toolbar_dir = $config['ToolbarSets']['Directory'];
-		}
-		if (!isset($config['ToolbarSets'][$this->ToolbarSet])) {
+		$toolbar_dir = isset($config['ToolbarSets']['Directory']) ? $config['ToolbarSets']['Directory'] : 'toolbars';
+		$config['ToolbarSets']['Normal'] = null;
+		$config['ToolbarSets']['Maximized'] = null;
+		if (!isset($toobar_sets[$this->ToolbarSet])) {
 			if (preg_match('/[a-zA-Z_]+/', $toolbar_dir) && preg_match('/[a-zA-Z_]+/', $this->ToolbarSet)) { // A security check.
 				@include api_get_path(LIBRARY_PATH).'fckeditor/'.$toolbar_dir.'/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
 				if (!isset($config['ToolbarSets']['Normal'])) {
@@ -389,10 +389,21 @@ class FCKeditor
 						if (!isset($config['ToolbarSets']['Normal'])) {
 							// It does not exist in "factory" toolbar definitions too, giving up.
 							$this->ToolbarSet = 'Default';
+						} else {
+							$toobar_sets[$this->ToolbarSet]['Normal'] = $config['ToolbarSets']['Normal'];
+							$toobar_sets[$this->ToolbarSet]['Maximized'] = $config['ToolbarSets']['Maximized'];
 						}
 					}
+				} else {
+					$toobar_sets[$this->ToolbarSet]['Normal'] = $config['ToolbarSets']['Normal'];
+					$toobar_sets[$this->ToolbarSet]['Maximized'] = $config['ToolbarSets']['Maximized'];
 				}
+			} else {
+				$this->ToolbarSet = 'Default';
 			}
+		} else {
+			$config['ToolbarSets']['Normal'] = $toobar_sets[$this->ToolbarSet]['Normal'];
+			$config['ToolbarSets']['Maximized'] = $toobar_sets[$this->ToolbarSet]['Maximized'];
 		}
 		return $config;
 	}

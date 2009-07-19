@@ -1,6 +1,6 @@
 <?php
 // Course tools
-// Announcements (student)
+// Blog comment
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
@@ -21,10 +21,10 @@ $config['ToolbarSets']['Normal'] = array(
 // If it has not been defined, then the toolbar set for the "normal" size is used.
 $config['ToolbarSets']['Maximized'] = array(
 	array('FitWindow','-','Save','NewPage','Preview'),
-	array('Cut','Copy','Paste','PasteText','PasteWord'),
+	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
 	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink','Anchor'),
-	array('Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
+	array('Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','YouTube','googlemaps','Smiley'),
 	'/',
 	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
 	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
@@ -34,7 +34,7 @@ $config['ToolbarSets']['Maximized'] = array(
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
-	array('ShowBlocks')
+	array('ShowBlocks','Source')
 );
 
 // Sets whether the toolbar can be collapsed/expanded or not.

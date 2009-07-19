@@ -21,7 +21,7 @@ $config['ToolbarSets']['Normal'] = array(
 // If it has not been defined, then the toolbar set for the "normal" size is used.
 $config['ToolbarSets']['Maximized'] = array(
 	array('FitWindow','-','Save','NewPage','Preview'),
-	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
+	array('Cut','Copy','Paste','PasteText','PasteWord'),
 	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink','Anchor'),
 	array('Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),

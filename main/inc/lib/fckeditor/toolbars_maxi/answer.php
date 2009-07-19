@@ -1,36 +1,30 @@
 <?php
-// This toolbar has been created for testing purposes.
-// It contains all the buttons that may be used in the Dokeos LMS.
+// Course tools
+// Test, answer to a question
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('FitWindow','DocProps','-','Save','NewPage','Preview','-','Templates'),
-	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
-	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
-	array('Link','Unlink','Anchor','Wikilink','Glossary'),
-	array('mimetex','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','YouTube','googlemaps','Smiley'),
-	'/',
-	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
-	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
-	array('Rule','SpecialChar','PageBreak'),
-	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
-	'/',
-	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor'),
-	array('Source','ShowBlocks','-','About')
+	array('FitWindow'),
+	array('Bold','Italic','Underline','-','Subscript','Superscript'),
+	array('Undo','Redo'),
+	array('SpecialChar','mimetex')	
 );
-
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
-/*
 $config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow','-') // ...
+	array('FitWindow'),
+	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
+	array('OrderedList','UnorderedList','-','Outdent','Indent'),
+	array('JustifyLeft','JustifyCenter','JustifyRight'),
+	array('Undo','Redo','-','SelectAll','RemoveFormat'),
+	array('SpecialChar','mimetex'),
+	'/',
+	array('Style','FontFormat','FontName','FontSize'),
+	array('TextColor','BGColor')
 );
-*/
 
 // Sets whether the toolbar can be collapsed/expanded or not.
 // Possible values: true , false
@@ -38,7 +32,7 @@ $config['ToolbarSets']['Maximized'] = array(
 
 // Sets how the editor's toolbar should start - expanded or collapsed.
 // Possible values: true , false
-//$config['ToolbarStartExpanded'] = true;
+$config['ToolbarStartExpanded'] = false;
 
 //This option sets the location of the toolbar.
 // Possible values: 'In' , 'None' , 'Out:[TargetId]' , 'Out:[TargetWindow]([TargetId])'

@@ -1,12 +1,16 @@
 <?php
-// Course tools
-// Learning path - comment
+// FAQ
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('Link','Unlink','Bold','Italic','TextColor','BGColor','Source')
+	array('Save'),
+	array('Bold','Italic','Underline'),
+	array('Undo','Redo'),
+	array('TextColor','BGColor'),
+	array('Link','Unlink'),
+	array('Source')
 );
 
 // This is the visible toolbar set when the editor is maximized.
@@ -37,4 +41,4 @@ $config['ToolbarSets']['Maximized'] = array(
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...
 //$config['Width'] = '100%';
-//$config['Height'] = '150';
+//$config['Height'] = '300';

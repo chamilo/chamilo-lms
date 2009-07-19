@@ -6,7 +6,11 @@
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('Link','Unlink','Bold','Italic','TextColor','BGColor','Source')
+	//array('FitWindow'),
+	array('Bold','Italic','Underline'),
+	array('Undo','Redo'),
+	array('TextColor','BGColor'),
+	array('Link','Unlink')
 );
 
 // This is the visible toolbar set when the editor is maximized.
@@ -23,7 +27,7 @@ $config['ToolbarSets']['Maximized'] = array(
 
 // Sets how the editor's toolbar should start - expanded or collapsed.
 // Possible values: true , false
-//$config['ToolbarStartExpanded'] = true;
+$config['ToolbarStartExpanded'] = false;
 
 //This option sets the location of the toolbar.
 // Possible values: 'In' , 'None' , 'Out:[TargetId]' , 'Out:[TargetWindow]([TargetId])'

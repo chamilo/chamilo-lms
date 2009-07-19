@@ -57,10 +57,10 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 api_block_anonymous_users();
 
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.corners.min.js" type="text/javascript" language="javascript"></script>'; //jQuery corner
-$htmlHeadXtra[] = '<script type="text/javascript" src="../inc/lib/javascript/thickbox.js"></script>';
-$htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript" language="javascript"></script>'; //jQuery corner
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function toogle_function (element_html, course_code){

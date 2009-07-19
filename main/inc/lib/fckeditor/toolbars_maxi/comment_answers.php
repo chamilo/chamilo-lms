@@ -1,6 +1,6 @@
 <?php
 // Course tools
-// Test, answer to a question
+// Test, comment to an answer
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
@@ -9,6 +9,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('FitWindow'),
 	array('Bold','Italic','Underline','-','Subscript','Superscript'),
 	array('Undo','Redo'),
+	array('TextColor','BGColor'),
 	array('SpecialChar','mimetex')
 );
 
@@ -46,4 +47,4 @@ $config['ToolbarStartExpanded'] = false;
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...
 //$config['Width'] = '100%';
-//$config['Height'] = '300';
+//$config['Height'] = '120';

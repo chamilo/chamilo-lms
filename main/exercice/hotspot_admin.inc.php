@@ -313,7 +313,7 @@ if($modifyAnswers)
 						require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 						$oFCKeditor = new FCKeditor("comment[$i]") ;
 						$content = $comment[$i];
-						$oFCKeditor->ToolbarSet = 'Answer';	
+						$oFCKeditor->ToolbarSet = 'TestProposedAnswer';	
 						$oFCKeditor->Config['ToolbarStartExpanded'] = 'false';		
 						$oFCKeditor->Width		= '100%';
 						$oFCKeditor->Height		= '100';

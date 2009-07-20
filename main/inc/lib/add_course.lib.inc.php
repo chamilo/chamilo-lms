@@ -844,6 +844,7 @@ function update_Db_course($courseDbName)
 		category_id smallint unsigned default NULL,
 		display_order smallint unsigned NOT NULL default 0,
 		on_homepage enum('0','1') NOT NULL default '0',
+		target char(10) default '_self',
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -2156,7 +2157,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		-----------------------------------------------------------
 		*/
 		$add_google_link_sql = "	INSERT INTO `".$TABLETOOLLINK . "`
-							VALUES ('1','http://www.google.com','Google','".lang2db(get_lang('Google')) . "','0','0','0')";
+							VALUES ('1','http://www.google.com','Google','".lang2db(get_lang('Google')) . "','0','0','0','_self')";
 		api_sql_query($add_google_link_sql, __FILE__, __LINE__);
 		//we need to add the item properties too!
 		$insert_id = Database :: get_last_insert_id();
@@ -2164,7 +2165,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		$add_wikipedia_link_sql = "	INSERT INTO `".$TABLETOOLLINK . "`
-							VALUES ('', 'http://www.wikipedia.org','Wikipedia','".lang2db(get_lang('Wikipedia')) . "','0','1','0')";
+							VALUES ('', 'http://www.wikipedia.org','Wikipedia','".lang2db(get_lang('Wikipedia')) . "','0','1','0','_self')";
 		api_sql_query($add_wikipedia_link_sql, __FILE__, __LINE__);
 		//we need to add the item properties too!
 		$insert_id = Database :: get_last_insert_id();

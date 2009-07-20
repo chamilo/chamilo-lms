@@ -12,16 +12,15 @@ $config['ToolbarSets']['Normal'] = array(
 	array('FitWindow','Save','Preview'),
 	array('Bold','Italic','Underline'),
 	array('OrderedList','UnorderedList','-','Outdent','Indent'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+	array('JustifyLeft','JustifyCenter','JustifyRight'),
 	array('Undo','Redo','-','Find','-','SelectAll','RemoveFormat'),
-	array('Link','Unlink','Anchor','Wikilink','Glossary'),
+	array('Link','Unlink','Wikilink','Glossary'),
 	array('Image','Flash'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
 	array('Rule','Table','SpecialChar','mimetex')
 );
-
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
@@ -30,16 +29,16 @@ $config['ToolbarSets']['Maximized'] = array(
 	array('Cut','Copy','Paste','PasteText','PasteWord'),
 	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink','Anchor','Wikilink','Glossary'),
-	array('mimetex','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
 	'/',
 	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
 	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('Rule','SpecialChar','PageBreak'),
-	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
+	array('mimetex','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
+	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
 	array('ShowBlocks')
 );
 

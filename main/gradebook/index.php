@@ -82,7 +82,7 @@ if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['st
 	Display :: display_header(get_lang('Details'));
 
 	//Introduction tool: student view
-	Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'Gradebook'));	
+	Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));	
 
 	$category= $_GET['selectcat'];
 	$stud_id=api_get_user_id();
@@ -103,7 +103,7 @@ if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['st
 		Display :: display_header(get_lang('Gradebook'));
 
 		//Introduction tool: student view
-		Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'Gradebook'));	
+		Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));	
 
 		$stud_id=api_get_user_id();
 		$course_code=api_get_course_id();
@@ -749,7 +749,7 @@ if (api_is_platform_admin() || api_is_allowed_to_create_course()  || $status==1)
 */
 
 	// Tool introduction
-	Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'Gradebook'));
+	Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
 
 	if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0) ) {
 	//

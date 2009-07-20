@@ -57,16 +57,18 @@
  */
 
 // The following setting is the directory where the online editor's toobar definitions reside in correspondent php-files.
-// By default, the directory name is 'toolbars' and it has been created at .../dokeos/main/inc/lib/fckeditor/ .
-// For using your customized toolbars, crate another directory 'toolbars_custom' at the same path, i.e.
-// create .../dokeos/main/inc/lib/fckeditor/toolbars_custom/ . Then, copy the original php-definition files
-// from .../dokeos/main/inc/lib/fckeditor/toolbars/ to the new one. Change the following configuration setting, so it to
+// By default, the directory name is 'default' and it has been created at .../dokeos/main/inc/lib/fckeditor/toolbars/ .
+// For using your customized toolbars, crate another directory, for example 'custom' at the same path, i.e.
+// create .../dokeos/main/inc/lib/fckeditor/toolbars/custom/ . Then, copy the original php-definition files
+// from .../dokeos/main/inc/lib/fckeditor/toolbars/default/ to the new one. Change the following configuration setting, so it to
 // point to the new directory:
-// $config['ToolbarSets']['Directory'] = 'toolbars_custom';
+// $config['ToolbarSets']['Directory'] = 'custom';
 // Then, you may modify the newly copied toolbar definitions at your will, just keep correct php-syntax.
 // It is not mandatory you to create custom files for all the toolbars. In case of missing file in the directory with the
-// custom toobar definitions the system would read the correspondent "factory" toolbar definition (form 'toolbars' directory).
-$config['ToolbarSets']['Directory'] = 'toolbars';
+// custom toobar definitions the system would read the correspondent "factory" toolbar definition (form 'default' directory).
+$config['ToolbarSets']['Directory'] = 'default';
+// You may try this provided example of custom toolbars:
+//$config['ToolbarSets']['Directory'] = 'extended';
 
 
 /*

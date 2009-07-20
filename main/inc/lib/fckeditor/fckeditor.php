@@ -372,20 +372,20 @@ class FCKeditor
 			require api_get_path(LIBRARY_PATH).'fckeditor/myconfig.php';
 		}
 		// Seeking the toolbar.
-		$toolbar_dir = isset($config['ToolbarSets']['Directory']) ? $config['ToolbarSets']['Directory'] : 'toolbars';
+		$toolbar_dir = isset($config['ToolbarSets']['Directory']) ? $config['ToolbarSets']['Directory'] : 'default';
 		$config['ToolbarSets']['Normal'] = null;
 		$config['ToolbarSets']['Maximized'] = null;
 		if (!isset($toobar_sets[$this->ToolbarSet])) {
 			if (preg_match('/[a-zA-Z_]+/', $toolbar_dir) && preg_match('/[a-zA-Z_]+/', $this->ToolbarSet)) { // A security check.
-				@include api_get_path(LIBRARY_PATH).'fckeditor/'.$toolbar_dir.'/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
+				@include api_get_path(LIBRARY_PATH).'fckeditor/toolbars/'.$toolbar_dir.'/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
 				if (!isset($config['ToolbarSets']['Normal'])) {
 					// No toolbar has been found yet.
-					if ($toolbar_dir == 'toolbars') {
+					if ($toolbar_dir == 'default') {
 						// It does not exist in "factory" toolbar definitions, giving up.
 						$this->ToolbarSet = 'Default';
 					} else {
 						// The custom toolbar does not exist, then trying to load the "factory" one.
-						@include api_get_path(LIBRARY_PATH).'fckeditor/toolbars/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
+						@include api_get_path(LIBRARY_PATH).'fckeditor/toolbars/default/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
 						if (!isset($config['ToolbarSets']['Normal'])) {
 							// It does not exist in "factory" toolbar definitions too, giving up.
 							$this->ToolbarSet = 'Default';

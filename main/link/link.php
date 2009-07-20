@@ -1,4 +1,4 @@
-<?php // $Id: link.php 22248 2009-07-20 16:10:14Z iflorespaz $
+<?php // $Id: link.php 22251 2009-07-20 16:56:54Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -62,8 +62,32 @@ $(document).ready( function() {
 			$(".actions:eq("+i+")").hide();
 		}		
 	}
+	
+	$("#div_target").attr("style","display:none;")//hide
+	
+	$("#id_check_target").click(function () { 
+      if($(this).attr("checked")==true) {
+      	$("#div_target").attr("style","display:block;")//show
+      } else {
+     	 $("#div_target").attr("style","display:none;")//hide
+      }
+    });
+	
+    $(window).load(function () { 
+      if($("#id_check_target").attr("checked")==true) {
+      	$("#div_target").attr("style","display:block;")//show
+      } else {
+     	 $("#div_target").attr("style","display:none;")//hide
+      }
+    });
+	
+	
  } ); 
+
  </script>';
+
+
+//   div_target
 // @todo change the $_REQUEST into $_POST or $_GET
 // @todo remove this code
 $link_submitted = (isset($_POST['submitLink'])?true:false);
@@ -265,9 +289,6 @@ if(api_get_setting('search_enabled')=='true') {
 			echo '		</div>
 					</div>';			
 			
-
-
-
 		}
 
 		echo '	<div class="row">
@@ -275,10 +296,22 @@ if(api_get_setting('search_enabled')=='true') {
 						'.get_lang('OnHomepage').'?
 					</div>
 					<div class="formw">
-						<input class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('Yes').'</label>
+						<input id="id_check_target" class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('Yes').'</label>
 					</div>
 				</div>';		
-
+		echo '	<div class="row" id="div_target">
+					<div class="label">
+						'.get_lang('AddTargetOfLinkOnHomepage').'
+					</div>
+					<div class="formw" >
+						<select  name="target_link" id="target_link">
+						<option value="_self">_self</option>
+						<option value="_blank">_blank</option>
+						<option value="_parent">_parent</option>
+						<option value="_top">_top</option>
+						</select>
+					</div>
+				</div>';
 
 		if(api_get_setting('search_enabled')=='true')
 		{
@@ -401,7 +434,9 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 		Action Links
 	-----------------------------------------------------------
 	*/
-	echo '<br/><br/><br/>';
+	if ((isset($_GET['action'] ) &&  $_GET['action']=='editcategory' && isset($_GET['id'])) || (isset($_GET['action']) && $_GET['action']=='addcategory')) {
+			echo '<br/><br/><br/>';
+	}
 	echo '<div class="actions">';
 	if(is_allowed_to_edit()) {
 		$urlview = Security::remove_XSS($urlview);

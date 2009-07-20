@@ -67,13 +67,13 @@ function addlinkcategory($type)
 		$urllink = Security::remove_XSS($_POST['urllink']);
 		$description = Security::remove_XSS($_POST['description']);
 		$selectcategory = Security::remove_XSS($_POST['selectcategory']);
-		if ($_POST['onhomepage'] == '')
-		{
+
+		if ($_POST['onhomepage'] == '') {
 			$onhomepage = 0;
-		}
-		else
-		{
+			$target='_self';//default target
+		} else {
 			$onhomepage = Security::remove_XSS($_POST['onhomepage']);
+			$target = Security::remove_XSS($_POST['target_link']);
 		}
 
 		$urllink = trim($urllink);
@@ -110,7 +110,7 @@ function addlinkcategory($type)
 
 			$order = $orderMax +1;
 
-			$sql = "INSERT INTO ".$tbl_link." (url, title, description, category_id,display_order, on_homepage) VALUES ('$urllink','$title','$description','$selectcategory','$order', '$onhomepage')";
+			$sql = "INSERT INTO ".$tbl_link." (url, title, description, category_id,display_order,on_homepage,target) VALUES ('$urllink','$title','$description','$selectcategory','$order', '$onhomepage','$target')";
 			$catlinkstatus = get_lang('LinkAdded');
 			api_sql_query($sql, __FILE__, __LINE__);
 			$link_id = Database::insert_id();
@@ -354,13 +354,13 @@ function editlinkcategory($type)
 		// this is used to put the modified info of the link-form into the database
 		if ($_POST['submitLink'])
 		{
-			if ($_POST['onhomepage'] == '')
-			{
+			if ($_POST['onhomepage'] == '') {
 				$onhomepage = 0;
-			}
-			else
-			{
+				$mytarget='';
+			} else {
 				$onhomepage = Security::remove_XSS($_POST['onhomepage']);
+				$target = Security::remove_XSS($_POST['target_link']);
+				$mytarget=",target='".$target."'";
 			}
 
 			// finding the old category_id
@@ -369,19 +369,16 @@ function editlinkcategory($type)
 			$row = Database::fetch_array($result);
 			$category_id = $row['category_id'];
 
-			if ($category_id <> $_POST['selectcategory'])
-			{
+			if ($category_id <> $_POST['selectcategory']) {
 				$sql = "SELECT MAX(display_order) FROM ".$tbl_link." WHERE category_id='".$_POST['selectcategory']."'";
 				$result = api_sql_query($sql);
 				list ($max_display_order) = Database::fetch_row($result);
 				$max_display_order ++;
-			}
-			else
-			{
+			} else {
 				$max_display_order = $row['display_order'];
 			}
 
-			$sql = "UPDATE ".$tbl_link." set url='".Database::escape_string(Security::remove_XSS($_POST['urllink']))."', title='".Database::escape_string(Security::remove_XSS($_POST['title']))."', description='".Database::escape_string(Security::remove_XSS($_POST['description']))."', category_id='".Database::escape_string(Security::remove_XSS($_POST['selectcategory']))."', display_order='".$max_display_order."', on_homepage='".Database::escape_string(Security::remove_XSS($_POST['onhomepage']))."' WHERE id='".Database::escape_string(Security::remove_XSS($_POST['id']))."'";
+			$sql = "UPDATE ".$tbl_link." set url='".Database::escape_string(Security::remove_XSS($_POST['urllink']))."', title='".Database::escape_string(Security::remove_XSS($_POST['title']))."', description='".Database::escape_string(Security::remove_XSS($_POST['description']))."', category_id='".Database::escape_string(Security::remove_XSS($_POST['selectcategory']))."', display_order='".$max_display_order."', on_homepage='".Database::escape_string(Security::remove_XSS($onhomepage))." ' $mytarget WHERE id='".Database::escape_string(Security::remove_XSS($_POST['id']))."'";
 			api_sql_query($sql, __FILE__, __LINE__);
 
             // update search enchine and its values table if enabled
@@ -629,7 +626,7 @@ function showcategoryadmintools($categoryid)
 	global $urlview;
 	global $aantalcategories;
 	global $catcounter;
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=editcategory&amp;id='.$categoryid.'&amp;urlview='.$urlview.'  title='.get_lang('Modify').' "><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').' "/></a>';
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=editcategory&amp;id='.$categoryid.'&amp;urlview='.$urlview.'"  title='.get_lang('Modify').' "><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').' "/></a>';
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=deletecategory&amp;id=", $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript:if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\"/>", "</a>";
 
 	// DISPLAY MOVE UP COMMAND only if it is not the top link	

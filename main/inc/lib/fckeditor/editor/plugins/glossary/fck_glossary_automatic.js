@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $(window).load(function () { 
      var my_text=$("body").html();
+
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
         beforeSend: function(objeto) {
@@ -9,6 +10,9 @@ $(document).ready(function() {
         url: "../../../main/glossary/glossary_ajax_request.php",
         data: "glossary_data=true",
         success: function(datos) {
+			  if (datos.length==0) {
+			  	return false;
+			  }
                 data_terms=datos.split("[|.|_|.|-|.|]");  
                 for(i=0;i<data_terms.length;i++) {
                     specific_terms=data_terms[i].split("__|__|");

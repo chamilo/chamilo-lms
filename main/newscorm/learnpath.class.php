@@ -6364,7 +6364,7 @@ class learnpath {
 			}
 			$renderer = $form->defaultRenderer();
 			$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
-			$form->addElement('html_editor', 'content_lp', '', null, array('ToolbarSet' => 'LearnPath', 'Width' => '100%', 'Height' => '400', 'FullPage' => true));
+			$form->addElement('html_editor', 'content_lp', '', null, array('ToolbarSet' => 'LearningPathDocuments', 'Width' => '100%', 'Height' => '400', 'FullPage' => true));
 			$defaults["content_lp"] = file_get_contents($item_path);
 		}
 
@@ -6684,7 +6684,7 @@ class learnpath {
 								$relative_path = $relative_path . '/';
 							}
 						}
-						$editor_config = array('ToolbarSet' => 'LearnPath', 'Width' => '100%', 'Height' => '700', 'FullPage' => true,
+						$editor_config = array('ToolbarSet' => 'LearningPathDocuments', 'Width' => '100%', 'Height' => '700', 'FullPage' => true,
 							'CreateDocumentDir' => $relative_prefix,
 							'CreateDocumentWebDir' => api_get_path('WEB_COURSE_PATH') . api_get_course_path() . '/document/',
 							'BaseHref' => api_get_path('WEB_COURSE_PATH') . api_get_course_path() . '/document/' . $relative_path

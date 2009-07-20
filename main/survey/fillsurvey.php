@@ -432,7 +432,7 @@ if ($survey_data['form_fields']!='' && $survey_data['anonymous'] == 0 && is_arra
 						$form->freeze('extra_' . $field_details[1]);
 					break;
 				case USER_FIELD_TYPE_TEXTAREA :
-					$form->add_html_editor('extra_' . $field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130'));
+					$form->add_html_editor('extra_' . $field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 					$form->applyFilter('extra_' . $field_details[1], 'stripslashes');
 					$form->applyFilter('extra_' . $field_details[1], 'trim');
 

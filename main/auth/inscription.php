@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 22201 2009-07-17 19:57:03Z cfasanando $
+// $Id: inscription.php 22233 2009-07-20 09:54:05Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -125,19 +125,19 @@ if (get_setting('allow_registration_as_teacher') <> 'false') {
 //	EXTENDED FIELDS
 if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mycomptetences') == 'true')
 {
-	$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130'));
+	$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 }
 if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mydiplomas') == 'true')
 {
-	$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130'));
+	$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 }
 if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
 {
-	$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130'));
+	$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 }
 if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true')
 {
-	$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130'));
+	$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 }
 if (api_get_setting('extended_profile') == 'true')
 {
@@ -173,7 +173,7 @@ foreach ($extra as $id => $field_details) {
 			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 		case USER_FIELD_TYPE_TEXTAREA:
-			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130'));
+			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 			//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
 			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
 			$form->applyFilter('extra_'.$field_details[1], 'trim');

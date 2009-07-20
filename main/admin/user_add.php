@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 22116 2009-07-15 19:19:59Z iflorespaz $
+<?php // $Id: user_add.php 22233 2009-07-20 09:54:05Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -209,7 +209,7 @@ foreach($extra as $id => $field_details)
 			$form->applyFilter('extra_'.$field_details[1], 'trim');
 			break;
 		case USER_FIELD_TYPE_TEXTAREA:
-			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profil', 'Width' => '100%', 'Height' => '130'));
+			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 			//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
 			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
 			$form->applyFilter('extra_'.$field_details[1], 'trim');

@@ -1,4 +1,4 @@
-<?php // $Id: link.php 22201 2009-07-17 19:57:03Z cfasanando $
+<?php // $Id: link.php 22248 2009-07-20 16:10:14Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -333,10 +333,13 @@ if(api_get_setting('search_enabled')=='true') {
 		echo '</form>';
 	} elseif(($_GET['action']=="addcategory" or $_GET['action']=="editcategory") and !$submitCategory) {
 		echo '<div class="row">';
-		if ($_GET['action']=="addcategory")
-			{echo '<div class="form_header">'.get_lang('CategoryAdd').'</div>';}
-		else
-			{echo '<div class="form_header">'.get_lang('CategoryMod').'</div>';}
+		if ($_GET['action']=="addcategory") {
+			echo '<div class="form_header">'.get_lang('CategoryAdd').'</div>';
+			$my_cat_title=get_lang('CategoryAdd');
+			} else {
+			echo '<div class="form_header">'.get_lang('CategoryMod').'</div>';
+			$my_cat_title=get_lang('CategoryMod');
+		}
 		echo "</div>\n\n";
 		echo "<form method=\"post\" action=\"".api_get_self()."?action=".Security::remove_XSS($_GET['action'])."&amp;urlview=".Security::remove_XSS($urlview)."\">";
 		if ($_GET['action']=="editcategory")
@@ -366,7 +369,7 @@ if(api_get_setting('search_enabled')=='true') {
 					<div class="label">
 					</div>
 					<div class="formw">
-						<button class="save" type="submit" name="submitCategory">'.get_lang('CreateCategory').' </button>
+						<button class="save" type="submit" name="submitCategory">'.$my_cat_title.' </button>
 					</div>
 				</div>';		
 		
@@ -398,6 +401,7 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 		Action Links
 	-----------------------------------------------------------
 	*/
+	echo '<br/><br/><br/>';
 	echo '<div class="actions">';
 	if(is_allowed_to_edit()) {
 		$urlview = Security::remove_XSS($urlview);

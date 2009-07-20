@@ -629,7 +629,7 @@ function showcategoryadmintools($categoryid)
 	global $urlview;
 	global $aantalcategories;
 	global $catcounter;
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=editcategory&amp;id='.$categoryid.'&amp;urlview='.$urlview.'"  title='.get_lang('Modify').' "><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').' "/></a>';
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=editcategory&amp;id='.$categoryid.'&amp;urlview='.$urlview.'  title='.get_lang('Modify').' "><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').' "/></a>';
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=deletecategory&amp;id=", $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript:if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\"/>", "</a>";
 
 	// DISPLAY MOVE UP COMMAND only if it is not the top link	

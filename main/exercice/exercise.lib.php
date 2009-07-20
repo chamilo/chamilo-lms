@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 22044 2009-07-13 23:40:48Z ivantcholakov $
+<?php // $Id: exercise.lib.php 22247 2009-07-20 15:57:25Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -29,7 +29,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 22044 2009-07-13 23:40:48Z ivantcholakov $
+* 	@version $Id: exercise.lib.php 22247 2009-07-20 15:57:25Z ivantcholakov $
 */
 
 // The initialization class for the online editor is needed here.
@@ -126,7 +126,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 			$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
 
-			$oFCKeditor->ToolbarSet = "FreeAnswer";
+			$oFCKeditor->ToolbarSet = 'TestFreeAnswer';
 			$oFCKeditor->Width  = '100%';
 			$oFCKeditor->Height = '200';
 			$oFCKeditor->Value	= '' ;

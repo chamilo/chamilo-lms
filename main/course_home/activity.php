@@ -161,7 +161,7 @@ function show_tools_category($course_tool_category)
 			$properties['visibility'] = $links_row['visibility'];
 			$properties['image'] = ($links_row['visibility']== '0') ? "file_html.gif" : "file_html.gif";
 			$properties['adminlink'] = api_get_path(WEB_CODE_PATH) . "link/link.php?action=editlink&id=".$links_row['id'];
-
+			$properties['target'] = $links_row['target'];
 			$tmp_all_tools_list[] = $properties;
 		}
 	}

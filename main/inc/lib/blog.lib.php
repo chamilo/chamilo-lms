@@ -1318,9 +1318,9 @@ class Blog {
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Height		= '200';
 			if(!api_is_allowed_to_edit()) {
-				$oFCKeditor->ToolbarSet = 'Blog_Student';
+				$oFCKeditor->ToolbarSet = 'ProjectStudent';
 			} else {
-				$oFCKeditor->ToolbarSet = 'Blog';
+				$oFCKeditor->ToolbarSet = 'Project';
 			}	
 			$oFCKeditor->Value = isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
 		
@@ -1419,11 +1419,11 @@ class Blog {
 								
 								if(!api_is_allowed_to_edit())
 								{
-									$oFCKeditor->ToolbarSet = 'Blog_Student';
+									$oFCKeditor->ToolbarSet = 'ProjectStudent';
 								}
 								else
 								{
-									$oFCKeditor->ToolbarSet = 'Blog';
+									$oFCKeditor->ToolbarSet = 'Project';
 								}								
 								$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
 		echo '	<div class="row">
@@ -2489,11 +2489,11 @@ class Blog {
 		$oFCKeditor->Height		= '200';
 		if(!api_is_allowed_to_edit())
 		{
-			$oFCKeditor->ToolbarSet = 'BlogComment_Student';
+			$oFCKeditor->ToolbarSet = 'ProjectCommentStudent';
 		}
 		else
 		{
-			$oFCKeditor->ToolbarSet = 'BlogComment';
+			$oFCKeditor->ToolbarSet = 'ProjectComment';
 		}		
 		$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
 		echo '	<div class="row">

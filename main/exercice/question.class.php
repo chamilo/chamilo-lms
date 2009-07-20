@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 22051 2009-07-14 04:50:33Z ivantcholakov $
+<?php // $Id: question.class.php 22250 2009-07-20 16:41:20Z ivantcholakov $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 22051 2009-07-14 04:50:33Z ivantcholakov $
+* 	@version $Id: question.class.php 22250 2009-07-20 16:41:20Z ivantcholakov $
 */
 
 
@@ -992,7 +992,7 @@ abstract class Question
 		$form->addElement('hidden','answerType',$_REQUEST['answerType']);
 
 		// html editor
-		$editor_config = array('ToolbarSet' => 'QuestionDescription', 'Width' => '100%', 'Height' => '150');
+		$editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
 		if(is_array($fck_config)){
 			$editor_config = array_merge($editor_config, $fck_config);
 		}		

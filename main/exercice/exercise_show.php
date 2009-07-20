@@ -4,7 +4,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 22045 2009-07-14 00:44:49Z ivantcholakov $
+* 	@version $Id: exercise_show.php 22240 2009-07-20 13:35:37Z ivantcholakov $
 *
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
@@ -944,7 +944,7 @@ if ($show_results) {
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
 			$comnt = get_comments($id,$questionId);
 			${user.$questionId}['comments_'.$questionId] = $comnt;
-			$feedback_form->addElement('html_editor', 'comments_'.$questionId, null, null, array('ToolbarSet' => 'CommentAnswers', 'Width' => '100%', 'Height' => '120'));
+		$feedback_form->addElement('html_editor', 'comments_'.$questionId, null, null, array('ToolbarSet' => 'TestAnswerAttachedComment', 'Width' => '100%', 'Height' => '120'));
 			$feedback_form->addElement('html','<br>');
 			//$feedback_form->addElement('submit','submitQuestion',get_lang('Ok'));
 			$feedback_form->setDefaults(${user.$questionId});							

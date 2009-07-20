@@ -2201,6 +2201,22 @@ function api_get_languages() {
 	}
 	return $language_list;
 }
+
+/**
+* Return the id of a language 
+* @param string language name (dokeos_folder)
+* @return int id of the language 
+*/
+function api_get_language_id($language) {
+	$tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+	$language = Database::escape_string($language);
+	$sql = "SELECT id FROM $tbl_language WHERE available='1' AND dokeos_folder = '$language' ORDER BY dokeos_folder ASC";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$row = Database::fetch_array($result);
+	return $row['id'];
+}
+
+
 /**
  * Gets language isocode column from the language table, taking the current language as a query parameter.
  * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
@@ -3721,4 +3737,29 @@ function api_get_tools_lists ($my_tool=null) {
 		return '';
 	}
 
+}
+
+function api_check_term_condition($user_id){
+	if (get_setting('allow_terms_conditions')=='true') {
+		require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
+		//getting user info
+		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);									
+		$sqlv = "SELECT field_value FROM $t_ufv ufv inner join $t_uf uf on ufv.field_id= uf.id WHERE field_variable = 'legal_accept' AND user_id = ".$user_id." ";
+		$resv = api_sql_query($sqlv,__FILE__,__LINE__);
+		if(Database::num_rows($resv)>0) {
+		//	There should be only one value for a field and a user
+			$rowv = Database::fetch_row($resv);
+			$rowv = $rowv[0];
+			$user_conditions = explode(':',$rowv);	
+			$version = $user_conditions[0];
+			$lang_id= $user_conditions[1]; 
+			$real_version = LegalManager::get_last_version($lang_id);
+			if ($version<$real_version){
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}
 }

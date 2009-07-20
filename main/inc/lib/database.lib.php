@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 22122 2009-07-15 21:19:20Z iflorespaz $
+<?php // $Id: database.lib.php 22265 2009-07-20 23:26:43Z juliomontoya $
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -85,6 +85,9 @@ define('TABLE_MAIN_SESSION_FIELD_VALUES',	'session_field_values');
 
 //Message
 define('TABLE_MAIN_MESSAGE','message');
+
+//Term and conditions
+define('TABLE_MAIN_LEGAL','legal');
 
 //statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');

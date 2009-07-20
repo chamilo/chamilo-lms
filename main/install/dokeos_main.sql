@@ -2139,3 +2139,25 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'none', 'ShowGlossaryInDocumentsIsNone');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'ismanual', 'ShowGlossaryInDocumentsIsManual');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'isautomatic', 'ShowGlossaryInDocumentsIsAutomatic');
+
+--
+-- Table structure for table legal (Terms & Conditions)
+--
+
+CREATE TABLE  legal (
+  legal_id int NOT NULL auto_increment,
+  language_id int NOT NULL,
+  date int NOT NULL default 0,
+  content text,
+  type int NOT NULL,
+  changes text NOT NULL,  
+  version int,
+  PRIMARY KEY (legal_id,language_id)
+);
+
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'legal_accept','Legal',0,0);
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'false', 'No');
+

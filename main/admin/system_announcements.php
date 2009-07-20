@@ -1,4 +1,4 @@
-<?php // $Id: system_announcements.php 22019 2009-07-13 06:16:38Z ivantcholakov $
+<?php // $Id: system_announcements.php 22243 2009-07-20 15:08:31Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -183,7 +183,7 @@ if ($action_todo)
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 		$form->addElement('textarea', 'content', get_lang('Content'));
 	} else {
-		$form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'SystemAnnouncements', 'Width' => '100%', 'Height' => '300'));
+		$form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'PortalNews', 'Width' => '100%', 'Height' => '300'));
 	}
 	$form->add_timewindow('start','end',get_lang('StartTimeWindow'),get_lang('EndTimeWindow'));
 	$form->addElement('checkbox', 'visible_teacher', get_lang('Visible'), get_lang('Teacher'));

@@ -1,4 +1,4 @@
-<?php // $Id: create_document.php 22201 2009-07-17 19:57:03Z cfasanando $
+<?php // $Id: create_document.php 22259 2009-07-20 18:56:45Z ivantcholakov $
 
 /*
 ==============================================================================
@@ -252,7 +252,7 @@ if ($relative_url== '') {
 }
 
 $html_editor_config = array(
-	'ToolbarSet' => (api_is_allowed_to_edit() ? 'Documents' :'Documents_Student'),
+	'ToolbarSet' => (api_is_allowed_to_edit() ? 'Documents' :'DocumentsStudent'),
 	'Width' => '100%',
 	'Height' => '600',
 	'FullPage' => true,

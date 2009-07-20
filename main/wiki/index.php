@@ -1333,7 +1333,7 @@ if ($_GET['action']=='edit')
 				
 				api_disp_html_area('content', stripslashes($content), '', '', null, api_is_allowed_to_edit()
 					? array('ToolbarSet' => 'Wiki', 'Width' => '100%', 'Height' => '400')
-					: array('ToolbarSet' => 'Wiki_Student', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
+					: array('ToolbarSet' => 'WikiStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
 				); 	
 				echo '<br/>';
 	            echo '<br/>'; 	

@@ -1919,7 +1919,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$form->addElement('html_editor', 'post_text', get_lang('Text'), null,
 		api_is_allowed_to_edit()
 			? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '400')
-			: array('ToolbarSet' => 'Forum_Student', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
+			: array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
 	);
 	//$form->applyFilter('post_text', 'html_filter');	
 	
@@ -2352,7 +2352,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	$form->addElement('html_editor', 'post_text', get_lang('Text'), null,
 		api_is_allowed_to_edit()
 			? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '400')
-			: array('ToolbarSet' => 'Forum_Student', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
+			: array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
 	);
 	//$form->applyFilter('post_text', 'html_filter');	
 		

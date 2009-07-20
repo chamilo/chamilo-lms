@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 21905 2009-07-08 17:42:29Z juliomontoya $
+<?php //$Id: agenda.inc.php 22259 2009-07-20 18:56:45Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -2844,7 +2844,7 @@ function show_add_form($id = '')
 
 			if(!api_is_allowed_to_edit())
 			{
-				$oFCKeditor->ToolbarSet = 'Agenda_Student';
+				$oFCKeditor->ToolbarSet = 'AgendaStudent';
 			}
 			else
 			{

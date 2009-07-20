@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 22201 2009-07-17 19:57:03Z cfasanando $
+<?php //$Id: announcements.php 22259 2009-07-20 18:56:45Z ivantcholakov $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1115,7 +1115,7 @@ if ($display_form == true) {
 	$oFCKeditor->Height		= '300';
 	
 	if(!api_is_allowed_to_edit()) {
-		$oFCKeditor->ToolbarSet = "Announcements_Student";
+		$oFCKeditor->ToolbarSet = "AnnouncementsStudent";
 	} else {
 		$oFCKeditor->ToolbarSet = "Announcements";
 	}		

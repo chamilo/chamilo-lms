@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 22250 2009-07-20 16:41:20Z ivantcholakov $
+<?php // $Id: question.class.php 22257 2009-07-20 17:50:09Z juliomontoya $
  
 /*
 ==============================================================================
@@ -28,7 +28,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 22250 2009-07-20 16:41:20Z ivantcholakov $
+* 	@version $Id: question.class.php 22257 2009-07-20 17:50:09Z juliomontoya $
 */
 
 
@@ -967,7 +967,7 @@ abstract class Question
 		$renderer = $form->defaultRenderer();
 		$form->addElement('html','<div class="form">');
 		// question name
-		$form->addElement('text','questionName','<span class="form_required">*</span> '.get_lang('Question'),'size="60"');
+		$form->addElement('text','questionName','<span class="form_required">*</span> '.get_lang('Question'),'size="80"');
 		//$form->applyFilter('questionName','html_filter');
 		
 		//$radios_results_enabled[] = $form->createElement('static', null, null, null);

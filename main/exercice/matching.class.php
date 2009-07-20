@@ -147,7 +147,7 @@ class Matching extends Question {
 			$puce->freeze();
 			$group[] = $puce;			
 			
-			$group[] = FormValidator :: createElement ('text', 'answer['.$i.']',null, 'size="40" style="margin-left: 0em;"');
+			$group[] = FormValidator :: createElement ('text', 'answer['.$i.']',null, 'size="60" style="margin-left: 0em;"');
 			$group[] = FormValidator :: createElement ('select', 'matches['.$i.']',null,$a_matches);			
 			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
 			$form -> addGroup($group, null, null, '</td><td width="0">');
@@ -195,7 +195,7 @@ class Matching extends Question {
 			$puce = FormValidator :: createElement ('text', null,null,'value="'.chr(64+$i).'"');
 			$puce->freeze();
 			$group[] = $puce;
-			$group[] = FormValidator :: createElement ('text', 'option['.$i.']',null, 'size="40" style="margin-left: 0em;"');
+			$group[] = FormValidator :: createElement ('text', 'option['.$i.']',null, 'size="60" style="margin-left: 0em;"');
 			$form -> addGroup($group, null, null, '</td><td width="0">');
 			$form -> addElement ('html', '</td></tr>');
 		}

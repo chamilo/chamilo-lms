@@ -1,4 +1,4 @@
-<?php // $Id: index.php 22027 2009-07-13 11:03:41Z ivantcholakov $
+<?php // $Id: index.php 22253 2009-07-20 17:03:48Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -179,7 +179,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 			WCAG_rendering::prepare_admin_form($description_content, $form);
 		} else {			
-			$form->add_html_editor('contentDescription', get_lang('Content'), true, false, array('ToolbarSet' => 'CourseDescription', 'Width' => '100%', 'Height' => '200'));
+			$form->add_html_editor('contentDescription', get_lang('Content'), true, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
 		}
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		// Set some default values

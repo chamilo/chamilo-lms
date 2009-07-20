@@ -1,6 +1,9 @@
 <?php
+// Dokeos - elearning and course management software
+// See license terms in dokeos/documentation/license.txt
+
 // Admin tools
-// System announcements
+// Portal news
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 

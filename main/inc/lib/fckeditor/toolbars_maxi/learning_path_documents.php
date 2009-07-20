@@ -1,6 +1,9 @@
 <?php
-// Course tools
-// Learning Path
+// Dokeos - elearning and course management software
+// See license terms in dokeos/documentation/license.txt
+
+// Training tools
+// Course (learning path) - documents
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 

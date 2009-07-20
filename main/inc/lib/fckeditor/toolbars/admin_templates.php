@@ -1,4 +1,7 @@
 <?php
+// Dokeos - elearning and course management software
+// See license terms in dokeos/documentation/license.txt
+
 // Admin tools
 // Admin Templates
 

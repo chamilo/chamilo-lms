@@ -105,7 +105,7 @@ if (api_get_setting('allow_course_theme') == 'true')
 }
 
 //Author
-$form->addElement('html_editor', 'lp_author', get_lang('Author'), array('size'=>80), array('ToolbarSet' => 'CommentLearningPath', 'Width' => '100%', 'Height' => '150px') ); 
+$form->addElement('html_editor', 'lp_author', get_lang('Author'), array('size'=>80), array('ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '150px') ); 
 $form->applyFilter('lp_author', 'html_filter');
 
 // LP image	

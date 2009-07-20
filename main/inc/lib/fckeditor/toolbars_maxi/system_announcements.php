@@ -7,14 +7,17 @@
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
 	array('FitWindow','Save','Preview'),
-	array('Bold','Italic','Underline','StrikeThrough'),
+	array('Bold','Italic','Underline'),
 	array('OrderedList','UnorderedList','-','Outdent','Indent'),
-	array('JustifyLeft','JustifyCenter','JustifyRight'),
-	array('Undo','Redo','-','SelectAll','RemoveFormat'),
+	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+	array('Undo','Redo','-','Find','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink'),
+	array('Image','Flash'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor')
+	array('TextColor','BGColor'),
+	array('Rule','Table','SpecialChar'),
+	array('Source')
 );
 
 // This is the visible toolbar set when the editor is maximized.

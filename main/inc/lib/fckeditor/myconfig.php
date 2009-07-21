@@ -66,9 +66,9 @@
 // Then, you may modify the newly copied toolbar definitions at your will, just keep correct php-syntax.
 // It is not mandatory you to create custom files for all the toolbars. In case of missing file in the directory with the
 // custom toobar definitions the system would read the correspondent "factory" toolbar definition (form 'default' directory).
-$config['ToolbarSets']['Directory'] = 'default';
+//$config['ToolbarSets']['Directory'] = 'default';
 // You may try this provided example of custom toolbars:
-//$config['ToolbarSets']['Directory'] = 'extended';
+$config['ToolbarSets']['Directory'] = 'extended';
 
 
 /*

@@ -12,14 +12,14 @@ $config['ToolbarSets']['Normal'] = array(
 	array('FitWindow','Save','Preview'),
 	array('Bold','Italic','Underline'),
 	array('OrderedList','UnorderedList','-','Outdent','Indent'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+	array('JustifyLeft','JustifyCenter','JustifyRight'),
 	array('Undo','Redo','-','Find','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink'),
 	array('Image','Flash'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
-	array('Rule','Table','SpecialChar','mimetex'),
+	array('Rule','Table','SpecialChar'),
 	array('Source')
 );
 
@@ -30,16 +30,16 @@ $config['ToolbarSets']['Maximized'] = array(
 	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
 	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink','Anchor'),
-	array('mimetex','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','YouTube','googlemaps','Smiley'),
 	'/',
 	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
 	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
-	array('Rule','SpecialChar','PageBreak'),
-	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
+	array('Rule','SpecialChar'),
+	array('Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','YouTube','googlemaps','Smiley'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
+	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
 	array('ShowBlocks','Source')
 );
 

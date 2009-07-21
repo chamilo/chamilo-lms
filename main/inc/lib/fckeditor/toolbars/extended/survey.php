@@ -20,7 +20,6 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Image','Flash')
 );
 
-
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
 $config['ToolbarSets']['Maximized'] = array(
@@ -28,16 +27,16 @@ $config['ToolbarSets']['Maximized'] = array(
 	array('Cut','Copy','Paste','PasteText','PasteWord'),
 	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
 	array('Link','Unlink','Anchor'),
-	array('Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
 	'/',
 	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
 	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('Rule','SpecialChar'),
-	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
+	array('Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
+	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
 	array('ShowBlocks','Source')
 );
 

@@ -9,7 +9,7 @@
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	//array('FitWindow'),
+	array('FitWindow'),
 	array('Bold','Italic','Underline'),
 	array('Undo','Redo'),
 	array('TextColor','BGColor'),
@@ -18,11 +18,23 @@ $config['ToolbarSets']['Normal'] = array(
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
-/*
 $config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow','-') // ...
+	array('FitWindow','NewPage','Preview'),
+	array('Cut','Copy','Paste','PasteText','PasteWord'),
+	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
+	array('Link','Unlink','Anchor'),
+	'/',
+	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
+	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
+	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+	array('Rule','SpecialChar'),
+	array('Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
+	'/',
+	array('Style','FontFormat','FontName','FontSize'),
+	array('TextColor','BGColor'),
+	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
+	array('ShowBlocks')
 );
-*/
 
 // Sets whether the toolbar can be collapsed/expanded or not.
 // Possible values: true , false

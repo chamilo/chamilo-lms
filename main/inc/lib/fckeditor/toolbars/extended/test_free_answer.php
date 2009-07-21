@@ -24,10 +24,10 @@ $config['ToolbarSets']['Maximized'] = array(
 	array('OrderedList','UnorderedList','-','Outdent','Indent'),
 	array('JustifyLeft','JustifyCenter','JustifyRight'),
 	array('Undo','Redo','-','SelectAll','RemoveFormat'),
-	array('SpecialChar','mimetex'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor')
+	array('TextColor','BGColor'),
+	array('SpecialChar','mimetex')
 );
 
 // Sets whether the toolbar can be collapsed/expanded or not.

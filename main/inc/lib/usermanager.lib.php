@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 22205 2009-07-17 21:11:52Z cfasanando $
+<?php // $Id: usermanager.lib.php 22276 2009-07-21 22:45:39Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -41,8 +41,10 @@ define('USER_FIELD_TYPE_DATETIME',7);
 define('USER_FIELD_TYPE_DOUBLE_SELECT',8);
 define('USER_FIELD_TYPE_DIVIDER',9);
 
-class UserManager
-{
+class UserManager {
+	private function __construct () {
+		
+	}
 	/**
 	  * Creates a new user for the platform
 	  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
@@ -69,8 +71,7 @@ class UserManager
 	  * if it exists, $_user['user_id'] is the creator id       If       a problem arises,
 	  * it stores the error message in global $api_failureList
 	  */
-	function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language='', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id=0, $extra=null)
-	{
+	public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language='', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id=0, $extra=null) {
 		global $_user, $userPasswordCrypted;
 		
 		$firstName=Security::remove_XSS($firstName);
@@ -95,7 +96,7 @@ class UserManager
 			$creator_id = '';
 		}
 		// First check wether the login already exists
-		if (! UserManager::is_username_available($loginName))
+		if (! self::is_username_available($loginName))
 			return api_set_failure('login-pass already taken');
 		//$password = "PLACEHOLDER";
 		$password = api_get_encrypted_password($password); 
@@ -147,7 +148,7 @@ class UserManager
 		if(is_array($extra) AND count($extra)>0) {
 			$res = true;
 			foreach($extra as $fname => $fvalue) {
-				$res = $res && UserManager::update_extra_field($return,$fname,$fvalue);
+				$res = $res && self::update_extra_field($return,$fname,$fvalue);
 			}
 		}
 		return $return;
@@ -161,8 +162,7 @@ class UserManager
 	 * @param int $user_id The user id
 	 * @return boolean true if user can be deleted
 	 */
-	function can_delete_user($user_id)
-	{
+	public static function can_delete_user ($user_id) {
 		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -183,10 +183,9 @@ class UserManager
 	 * @param int $user_id The user id
 	 * @return boolean true if user is succesfully deleted, false otherwise
 	 */
-	function delete_user($user_id)
-	{
+	public static function delete_user ($user_id) {
 		global $_configuration;
-		if (!UserManager :: can_delete_user($user_id))
+		if (!self :: can_delete_user($user_id))
 		{
 			return false;
 		}
@@ -282,8 +281,7 @@ class UserManager
 	 * @param string $openid
 	 * @return boolean true if the user information was updated
 	 */
-	function update_openid($user_id, $openid)
-	{
+	public static function update_openid ($user_id, $openid) {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "UPDATE $table_user SET
 				openid='".Database::escape_string($openid)."'";
@@ -308,8 +306,7 @@ class UserManager
 	 * @param	array	A series of additional fields to add to this user as extra fields (optional, defaults to null)
 	 * @return boolean true if the user information was updated
 	 */
-	function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id= null, $hr_dept_id=0, $extra=null,$language='english')
-	{
+	public static function update_user ($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id= null, $hr_dept_id=0, $extra=null,$language='english') {
 		global $userPasswordCrypted;
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "UPDATE $table_user SET
@@ -347,7 +344,7 @@ class UserManager
 			$res = true;
 			foreach($extra as $fname => $fvalue)
 			{
-				$res = $res && UserManager::update_extra_field($user_id,$fname,$fvalue);
+				$res = $res && self::update_extra_field($user_id,$fname,$fvalue);
 			}
 		}
 
@@ -359,8 +356,7 @@ class UserManager
 	 * @param string the wanted username
 	 * @return boolean true if the wanted username is available
 	 */
-	function is_username_available($username)
-	{
+	public static function is_username_available ($username) {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT username FROM $table_user WHERE username = '".addslashes($username)."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -374,7 +370,7 @@ class UserManager
 	* @return array An array with all users of the platform.
 	* @todo optional course code parameter, optional sorting parameters...
 	*/
-	function get_user_list($conditions = array(), $order_by = array()) {
+	public static function get_user_list ($conditions = array(), $order_by = array()) {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$return_array = array();
 		$sql_query = "SELECT * FROM $user_table";
@@ -430,8 +426,7 @@ class UserManager
 	 * @param 	string 	The username
 	 * @return array All user information as an associative array
 	 */
-	function get_user_info($username)
-	{
+	public static function get_user_info ($username) {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT * FROM $user_table WHERE username='".$username."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -452,8 +447,7 @@ class UserManager
 	 * @param	boolean	Whether to return the user's extra fields (defaults to false)
 	 * @return	array 	All user information as an associative array
 	 */
-	function get_user_info_by_id($user_id,$user_fields=false)
-	{
+	public static function get_user_info_by_id ($user_id,$user_fields=false) {
 		$user_id = intval($user_id);
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT * FROM $user_table WHERE user_id=".$user_id;
@@ -496,8 +490,7 @@ class UserManager
 	 * @param array Content the list ID of user_id selected
 	 */
 	//for survey
-	function get_teacher_list($course_id, $sel_teacher='')
-	{
+	public static function get_teacher_list ($course_id, $sel_teacher='') {
 		$user_course_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql_query = "SELECT * FROM $user_table a, $user_course_table b where a.user_id=b.user_id AND b.status=1 AND b.course_code='$course_id'";
@@ -523,8 +516,7 @@ class UserManager
 	 * @param	bool	If we want that the function returns the /main/img/unknown.jpg image set it at true 
 	 * @return	array 	Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty array
 	 */
-	function get_user_picture_path_by_id($id,$type='none',$preview=false,$anonymous=false)
-	{
+	public static function get_user_picture_path_by_id ($id,$type='none',$preview=false,$anonymous=false) {
 		if(empty($id) or empty($type))
 		{
 			if ($anonymous) 
@@ -674,8 +666,7 @@ class UserManager
 	 * @param	$force	Optional parameter to force building after a removal request
 	 * @return	A string containing the XHTML code to dipslay the production list, or FALSE
 	 */
-	function build_production_list($user_id, $force = false, $showdelete=false)
-	{
+	public static function build_production_list ($user_id, $force = false, $showdelete=false) {
 		if (!$force && !empty($_POST['remove_production']))
 			return true; // postpone reading from the filesystem
 	
@@ -709,9 +700,8 @@ class UserManager
 	 * @param	$user_id	User id
 	 * @return	An array containing the user's productions
 	 */
-	function get_user_productions($user_id)
-	{
-		$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
+	public static function get_user_productions ($user_id) {
+		$production_path = self::get_user_picture_path_by_id($user_id,'system',true);
 		$production_repository = $production_path['dir'].$user_id.'/';
 		$productions = array();
 	
@@ -737,9 +727,8 @@ class UserManager
 	 * @param	$user_id		User id
 	 * @param	$production	The production to remove
 	 */
-	function remove_user_production($user_id, $production)
-	{
-		$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
+	public static function remove_user_production ($user_id, $production) {
+		$production_path = self::get_user_picture_path_by_id($user_id,'system',true);
 		unlink($production_path['dir'].$user_id.'/'.$production);
 	}
 	/**
@@ -750,8 +739,7 @@ class UserManager
 	 * @param	array	Database columns and their new value
 	 * @return	boolean	true if field updated, false otherwise
 	 */
-	function update_extra_field($fid,$columns) 
-	{
+	public static function update_extra_field ($fid,$columns)  {
 		//TODO check that values added are values proposed for enumerated field types
 		$t_uf 	= Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$fid 	= Database::escape_string($fid);
@@ -776,8 +764,7 @@ class UserManager
 	 * @param	string	Field value
 	 * @return	boolean	true if field updated, false otherwise
 	 */
-	function update_extra_field_value($user_id,$fname,$fvalue='')
-	{
+	public static function update_extra_field_value ($user_id,$fname,$fvalue='') {
 		//TODO check that values added are values proposed for enumerated field types
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufo = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -900,8 +887,7 @@ class UserManager
 	 * @param	boolean	Optional. Whether we get all the fields or just the visible ones
 	 * @return	array	Extra fields details (e.g. $list[2]['type'], $list[4]['options'][2]['title']
 	 */
-	function get_extra_fields($from=0, $number_of_items=0, $column=5, $direction='ASC', $all_visibility=true)
-	{
+	public static function get_extra_fields($from=0, $number_of_items=0, $column=5, $direction='ASC', $all_visibility=true) {
 		$fields = array();
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);		
@@ -962,8 +948,7 @@ class UserManager
 	 * @param string $fieldname the name of the field
 	 * @return array the list of options
 	 */
-	function get_extra_field_options($field_name)
-	{
+	public static function get_extra_field_options ($field_name) {
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 		
@@ -982,8 +967,7 @@ class UserManager
 	 * @param	boolean	Optional switch. true (default) returns all fields, false returns only visible fields
 	 * @return	integer	Number of fields
 	 */
-	function get_number_of_extra_fields($all_visibility=true)
-	{
+	public static function get_number_of_extra_fields ($all_visibility=true) {
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
 		$sqlf = "SELECT * FROM $t_uf ";
 		if($all_visibility == false)
@@ -1003,14 +987,13 @@ class UserManager
 	  * @param	string	Optional comma-separated list of options to provide for select and radio
 	  * @return int     new user id - if the new user creation succeeds, false otherwise
 	  */
-	function create_extra_field($fieldvarname, $fieldtype, $fieldtitle, $fielddefault, $fieldoptions='')
-	{		
+	public static function create_extra_field ($fieldvarname, $fieldtype, $fieldtitle, $fielddefault, $fieldoptions='') {		
 		// database table definition
 		$table_field 		= Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$table_field_options= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 		
 		// First check wether the login already exists
-		if (UserManager::is_extra_field_available($fieldvarname)) 
+		if (self::is_extra_field_available($fieldvarname)) 
 			return api_set_failure('login-pass already taken');
 		$sql = "SELECT MAX(field_order) FROM $table_field";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -1129,8 +1112,7 @@ class UserManager
 	  * @version July 2008
 	  * @since Dokeos 1.8.6
 	  */
-	function save_extra_field_changes($fieldid, $fieldvarname, $fieldtype, $fieldtitle, $fielddefault, $fieldoptions='')
-	{		
+	public static function save_extra_field_changes ($fieldid, $fieldvarname, $fieldtype, $fieldtitle, $fielddefault, $fieldoptions='') {		
 		// database table definition
 		$table_field 				= Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$table_field_options		= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -1223,8 +1205,7 @@ class UserManager
 	 * @param	string	the wanted fieldname
 	 * @return	boolean	true if the wanted username is available
 	 */
-	function is_extra_field_available($fieldname)
-	{
+	public static function is_extra_field_available ($fieldname) {
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
 		$sql = "SELECT * FROM $t_uf WHERE field_variable = '".Database::escape_string($fieldname)."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -1238,8 +1219,7 @@ class UserManager
 	 * @param	boolean	Whether to split multiple-selection fields or not
 	 * @return	array	Array of fields => value for the given user
 	 */
-	function get_extra_user_data($user_id, $prefix=false, $all_visibility = true, $splitmultiple=false)
-	{
+	public static function get_extra_user_data ($user_id, $prefix=false, $all_visibility = true, $splitmultiple=false) {
 		$extra_data = array();
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
@@ -1312,8 +1292,7 @@ class UserManager
 	 * @return array with extra data info of a user i.e array('field_variable'=>'value');
 	 */
 	
-	function get_extra_user_data_by_field($user_id, $field_variable, $prefix=false, $all_visibility = true, $splitmultiple=false)
-	{
+	public static function get_extra_user_data_by_field ($user_id, $field_variable, $prefix=false, $all_visibility = true, $splitmultiple=false) {
 		$extra_data = array();
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
@@ -1370,8 +1349,7 @@ class UserManager
 	 * @author Julio Montoya
 	 * @since Dokeos 1.8.6
 	 */
-	function get_extra_field_information_by_name($field_variable)
-	{
+	public static function get_extra_field_information_by_name ($field_variable) {
 		// database table definition
 		$table_field 			= Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$table_field_options	= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -1399,8 +1377,7 @@ class UserManager
 	 * @author Julio Montoya
 	 * @since Dokeos 1.8.6
 	 */
-	function get_extra_field_information($field_id)
-	{
+	public static function get_extra_field_information ($field_id) {
 		// database table definition
 		$table_field 			= Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$table_field_options	= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -1425,8 +1402,7 @@ class UserManager
 	 * @return array with extra data info of a user i.e array('field_variable'=>'value');
 	 */
 	
-	function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true)
-	{
+	public static function get_extra_user_data_by_value ($field_variable, $field_value, $all_visibility = true) {
 		$extra_data = array();		
 		$table_user_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$table_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
@@ -1474,8 +1450,7 @@ class UserManager
 	 * @param integer $user_id
 	 * @return array  list of statuses (session_id-course_code => status)
 	 */
-	function get_personal_session_course_list($user_id)
-	{
+	public static function get_personal_session_course_list ($user_id) {
 		// Database Table Definitions
 		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1636,7 +1611,7 @@ class UserManager
 	 * @param	string	Username
 	 * @return	int		User ID (or false if not found)
 	 */
-	function get_user_id_from_username($username) {
+	public static function get_user_id_from_username ($username) {
 		$username = Database::escape_string($username);
 		$t_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT user_id FROM $t_user WHERE username = '$username'";
@@ -1654,8 +1629,7 @@ class UserManager
 	 * @param   int 	deprecated 
 	 * @return	int		User ID (or false if not found)
 	 */
-	function get_user_upload_files_by_course($user_id, $course, $column=2)
-	{
+	public static function get_user_upload_files_by_course ($user_id, $course, $column=2) {
 		$path = api_get_path(SYS_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
 		$web_path = api_get_path(WEB_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';    	    	
 		$file_list= array();	
@@ -1683,7 +1657,7 @@ class UserManager
      * @param   int     Optional user id (defaults to the result of api_get_user_id())
      * @result  array   Non-indexed array containing the list of API keys for this user, or FALSE on error
      */
-    function get_api_keys($user_id=null,$api_service='dokeos') {
+    public static function get_api_keys ($user_id=null,$api_service='dokeos') {
     	if ($user_id != strval(intval($user_id))) return false;
         if (empty($user_id)) { $user_id = api_get_user_id(); }
         if ($user_id === false) return false;
@@ -1706,7 +1680,7 @@ class UserManager
      * @param   int     Optional user ID (defaults to the results of api_get_user_id())
      * @return  boolean True on success, false on failure
      */
-    function add_api_key($user_id=null,$api_service='dokeos') {
+    public static function add_api_key ($user_id=null,$api_service='dokeos') {
         if ($user_id != strval(intval($user_id))) return false;
         if (empty($user_id)) { $user_id = api_get_user_id(); }
         if ($user_id === false) return false;
@@ -1726,7 +1700,7 @@ class UserManager
      * @param   int     API key's internal ID
      * @return  boolean True on success, false on failure
      */
-    function delete_api_key($key_id) {
+    public static function delete_api_key ($key_id) {
         if ($key_id != strval(intval($key_id))) return false;
         if ($key_id === false) return false;
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
@@ -1746,7 +1720,7 @@ class UserManager
      * @param   string  API key's internal ID
      * @return  int		num
      */
-    function update_api_key($user_id,$api_service) {
+    public static function update_api_key ($user_id,$api_service) {
     	if ($user_id != strval(intval($user_id))) return false;
     	if ($user_id === false) return false;
         $service_name=Database::escape_string($api_service);
@@ -1769,7 +1743,7 @@ class UserManager
      * @param   string	API key's internal ID 
      * @return  int		row ID, not return a boolean
      */
-    function get_api_key_id($user_id,$api_service) {
+    public static function get_api_key_id ($user_id,$api_service) {
     	if ($user_id != strval(intval($user_id))) return false;
     	if ($user_id === false) return false;
         $service_name=Database::escape_string($api_service);
@@ -1787,7 +1761,7 @@ class UserManager
      * @param	bool	Whether to unsubscribe existing users (true, default) or not (false)
      * @return	void	Nothing, or false on error  
      */
-    function suscribe_users_to_session($id_session,$UserList,$empty_users=true){
+    public static function suscribe_users_to_session ($id_session,$UserList,$empty_users=true) {
     	
     	if ($id_session!= strval(intval($id_session))) return false;
     	foreach($UserList as $intUser){
@@ -1887,7 +1861,7 @@ class UserManager
      * Get the total count of users
      * @return	mixed	Number of users or false on error
      */
-    function get_number_of_users() {
+    public static function get_number_of_users () {
         $t_u = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT count(*) FROM $t_u";
         $res = Database::query($sql);
@@ -1904,8 +1878,7 @@ class UserManager
 	 * @param  int size in pixels
 	 * @return obj image object 
 	 */ 
-	function resize_picture($file, $max_size_for_picture)
-	{
+	public static function resize_picture ($file, $max_size_for_picture) {
 		if (!class_exists('image')) {
 			require_once(api_get_path(LIBRARY_PATH).'image.lib.php');
 		}
@@ -1933,7 +1906,7 @@ class UserManager
      * @param string style css
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
-    function get_picture_user($user_id, $picture_file, $height, $size_picture = 'medium_', $style = '') {
+   public static function get_picture_user ($user_id, $picture_file, $height, $size_picture = 'medium_', $style = '') {
     	$patch_profile = 'upload/users/';
     	$picture = array();    	
     	$picture['style'] = $style;
@@ -1942,7 +1915,7 @@ class UserManager
     		return $picture;
     	}
     	$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$size_picture.$picture_file;
-    	if(file_exists($file)) {
+    	if (file_exists($file)) {
 			$picture['file'] = api_get_path(WEB_CODE_PATH).$patch_profile.$user_id.'/'.$size_picture.$picture_file;
 			$picture['style']=''; 
 			if ($height > 0) {
@@ -1967,7 +1940,7 @@ class UserManager
      * @param string The message title
      * @param string The content message
      */
-   	  function send_message_in_outbox ($email_administrator,$user_id,$title, $content) {
+   	  public static function send_message_in_outbox ($email_administrator,$user_id,$title, $content) {
         global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);		

@@ -2833,3 +2833,9 @@ button.arrowl {
 	padding-bottom:10px;
 	padding-top:8px;
 }
+.legal-terms {
+	height:150px;
+	overflow:auto;
+	background-color:#eee;
+	width:500px;
+}

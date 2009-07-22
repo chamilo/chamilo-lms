@@ -474,7 +474,8 @@ if(api_is_platform_admin())
 if(api_is_allowed_to_edit())
 {
 	?>
-	<div id="id_content_message"></div>
+	<div class="normal-message" id="id_normal_message" style="display:none"><?php echo get_lang("PleaseStandBy")."<br/>"; ?></div>
+	<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>		
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang("Authoring") ?></span>
 		<table width="100%">

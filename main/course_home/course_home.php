@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 22201 2009-07-17 19:57:03Z cfasanando $
+<?php // $Id: course_home.php 22294 2009-07-22 19:27:47Z iflorespaz $
 
 /*
 ==============================================================================
@@ -70,8 +70,10 @@ $htmlHeadXtra[] ='<script type="text/javascript">
  	//$(window).load(function () { 
       $(".make_visible_and_invisible").attr("href","javascript:void(0);");
 	//});
-	
- 	$("td .make_visible_and_invisible > img").click(function () { 
+	cont=0;
+ 	$("td .make_visible_and_invisible > img").click(function () {
+ 		cont=cont+1;
+
 		make_visible="visible.gif";
 		make_invisible="invisible.gif";
 		path_name=$(this).attr("src");
@@ -111,8 +113,9 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-				$("#id_content_message").html("<div class=\"normal-message\"><img src=\'/main/inc/lib/javascript/indicator.gif\' /></div>");
-			
+				$(".normal-message").append("<img src=\'/main/inc/lib/javascript/indicator.gif\'/>");
+				$(".normal-message").show();
+				$("#id_confirmation_message").hide();
 			},
 			type: "GET",
 			url: "/main/course_home/activity.php",
@@ -128,13 +131,19 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 					$("#"+tool_id).attr("alt","'.get_lang('Deactivate').'");
 					$("#"+tool_id).attr("title","'.get_lang('Deactivate').'");							
 				}
-				//$("#id_content_message").html(datos);
+
 				if (datos=="ToolIsNowVisible") {
-					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('ToolIsNowVisible').'</div>");
+					$("#id_confirmation_message").html("'.get_lang('ToolIsNowVisible').'");
+					$(".normal-message>img:first").remove();	
 				} else {
-					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('ToolIsNowHidden').'</div>");					
+					$("#id_confirmation_message").html("'.get_lang('ToolIsNowHidden').'");
+					$("#id_confirmation_message").show();
+					$(".normal-message>img:first").remove();				
 				}
-				
+				if ($(".normal-message>img:first").length==0) {
+					$(".normal-message").hide();
+					$("#id_confirmation_message").show();
+				}
 		} }); 		
 				
 	}); 	

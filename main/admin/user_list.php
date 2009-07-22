@@ -1,4 +1,4 @@
-<?php // $Id: user_list.php 22041 2009-07-13 18:29:45Z juliomontoya $
+<?php // $Id: user_list.php 22292 2009-07-22 18:32:32Z herodoto $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -272,6 +272,7 @@ function get_number_of_users()
 		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
 		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
 		$keyword_email = Database::escape_string($_GET['keyword_email']);
+		$keyword_officialcode = Database::escape_string($_GET['keyword_officialcode']);		
 		$keyword_username = Database::escape_string($_GET['keyword_username']);
 		$keyword_status = Database::escape_string($_GET['keyword_status']);
 		$query_admin_table = '';
@@ -288,7 +289,7 @@ function get_number_of_users()
 				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
 				"AND u.username LIKE '%".$keyword_username."%'  " .
 				"AND u.email LIKE '%".$keyword_email."%'   " .
-				//"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
+				"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
 				"AND u.status LIKE '".$keyword_status."'" .
 				$keyword_admin;
 		if($keyword_active && !$keyword_inactive) {
@@ -347,6 +348,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
 		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
 		$keyword_email = Database::escape_string($_GET['keyword_email']);
+		$keyword_officialcode = Database::escape_string($_GET['keyword_officialcode']);
 		$keyword_username = Database::escape_string($_GET['keyword_username']);
 		$keyword_status = Database::escape_string($_GET['keyword_status']);
 		$query_admin_table = '';
@@ -363,7 +365,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
 				"AND u.username LIKE '%".$keyword_username."%'  " .
 				"AND u.email LIKE '%".$keyword_email."%'   " .
-				//"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
+				"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
 				"AND u.status LIKE '".$keyword_status."'" .
 				$keyword_admin;
 

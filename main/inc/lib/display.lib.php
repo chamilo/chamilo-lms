@@ -86,6 +86,9 @@
 */
 require_once 'sortabletable.class.php';
 class Display {
+	private function __construct() {
+		
+	}
 	/**
 	* Displays the tool introduction of a tool.
 	*
@@ -95,8 +98,7 @@ class Display {
 	* @return $tool return a string array list with the "define" in main_api.lib 
 	* @return html code for adding an introduction
 	*/
-	public function display_introduction_section($tool, $editor_config = null)
-	{
+	public static function display_introduction_section ($tool, $editor_config = null) {
 		$is_allowed_to_edit = api_is_allowed_to_edit();
 		$moduleId = $tool;
 		if (api_get_setting('enable_tool_introduction') == 'true' || $tool==TOOL_COURSE_HOMEPAGE)
@@ -113,8 +115,7 @@ class Display {
 	*	@param $full_file_name, the (path) name of the file, without .html
 	*	@return return a string with the path
 	*/
-	public function display_localised_html_file($full_file_name)
-	{
+	public static function display_localised_html_file ($full_file_name) {
 		global $language_interface;
 		$localised_file_name = $full_file_name."_".$language_interface.".html";
 		$default_file_name = $full_file_name.".html";
@@ -131,8 +132,7 @@ class Display {
 	/**
 	*	Display simple html header of table.
 	*/
-	public function display_table_header()
-	{
+	public static function display_table_header () {
 		$bgcolor = "bgcolor='white'";
 		echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"4\" width=\"85%\"><tbody>";
 		return $bgcolor;
@@ -151,8 +151,7 @@ class Display {
 	*	@version 1.01
 	*	@return return type string, bgcolor
 	*/
-	public function display_complex_table_header($properties, $column_header)
-	{
+	public static function display_complex_table_header ($properties, $column_header) {
 		$width = $properties["width"];
 		if (!isset ($width))
 			$width = "85%";
@@ -187,8 +186,7 @@ class Display {
 	*	@param $table_row an array with the row elements
 	*	@param $is_alternating true: the row colours alternate, false otherwise
 	*/
-	public function display_table_row($bgcolor, $table_row, $is_alternating = true)
-	{
+	public static function display_table_row ($bgcolor, $table_row, $is_alternating = true) {
 		echo "<tr $bgcolor>";
 		foreach ($table_row as $table_element)
 		{
@@ -222,8 +220,7 @@ class Display {
 	*	["align_row"] - an array with, per cell, left|center|right
 	*	@todo add valign property
 	*/
-	public function display_complex_table_row($properties, $table_row)
-	{
+	public static function display_complex_table_row ($properties, $table_row) {
 		$bgcolor = $properties["bgcolor"];
 		$is_alternating = $properties["is_alternating"];
 		$align_row = $properties["align_row"];
@@ -250,8 +247,7 @@ class Display {
 	/**
 	*	display html footer of table
 	*/
-	public function display_table_footer()
-	{
+	public static function display_table_footer() {
 		echo "</tbody></table>";
 	}
 
@@ -276,8 +272,7 @@ class Display {
 	 * @param array $query_vars Additional variables to add in the query-string
 	 * @author bart.mollet@hogent.be
 	 */
-	public function display_sortable_table($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $form_actions=array())
-	{
+	public static function display_sortable_table ($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $form_actions=array()) {
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
@@ -323,8 +318,7 @@ class Display {
 	 * @author Julio Montoya
 	 */
 	 
-	public function display_sortable_config_table($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $column_show=array(),$column_order=array(),$form_actions=array())
-	{
+	public static function display_sortable_config_table ($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $column_show=array(),$column_order=array(),$form_actions=array()) {
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
@@ -364,8 +358,7 @@ class Display {
 	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	public function display_normal_message($message,$filter=true)
-	{
+	public static function display_normal_message ($message,$filter=true) {
 		global $charset;
 		if($filter) {
 			//filter message
@@ -397,8 +390,7 @@ class Display {
 	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	public function display_warning_message($message,$filter=true)
-	{
+	public static function display_warning_message ($message,$filter=true) {
 		global $charset;
 		if($filter){
 			//filter message
@@ -429,8 +421,7 @@ class Display {
 	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	public function display_confirmation_message($message,$filter=true)
-	{
+	public static function display_confirmation_message ($message,$filter=true) {
 		global $charset;
 		if($filter){
 			//filter message
@@ -464,8 +455,7 @@ class Display {
 	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	public function display_error_message($message,$filter=true)
-	{
+	public static function display_error_message ($message,$filter=true) {
 		global $charset;
 		if($filter){
 			//filter message
@@ -496,8 +486,7 @@ class Display {
 	 * @param - $style_class (string) - optional, class from stylesheet
 	 * @return - encrypted mailto hyperlink
 	 */
-	public function encrypted_mailto_link($email, $clickable_text = null, $style_class = '')
-	{
+	public static function encrypted_mailto_link ($email, $clickable_text = null, $style_class = '') {
 		global $charset;		
 		if (is_null($clickable_text))
 		{
@@ -537,8 +526,7 @@ class Display {
 	*	@param string $name, the visible name of the hyperlink, default is sitename
 	*	@return string with html code for hyperlink
 	*/
-	public function get_platform_home_link_html($name = '')
-	{
+	public static function get_platform_home_link_html ($name = '') {
 		if ($name == '')
 		{
 			$name = api_get_setting('siteName');
@@ -550,8 +538,7 @@ class Display {
 	 * @param string The name of the page (will be showed in the page title)
 	 * @param string Optional help file name
 	 */
-	public function display_header($tool_name, $help = NULL)
-	{
+	public static function display_header ($tool_name, $help = NULL) {
 		$nameTools = $tool_name;
 		global $_plugins,$lp_theme_css,$mycoursetheme,$user_theme,$platform_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
@@ -561,8 +548,7 @@ class Display {
 	/**
 	 * Display the reduced page header (without banner)
 	 */
-	public function display_reduced_header()
-	{
+	public static function display_reduced_header () {
 		global $_plugins,$lp_theme_css,$mycoursetheme,$user_theme,$platform_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
 		global $menu_navigation;
@@ -571,8 +557,7 @@ class Display {
 	/**
 	 * Display the page footer
 	 */
-	public function display_footer()
-	{
+	public static function display_footer () {
 		global $dokeos_version; //necessary to have the value accessible in the footer
 		global $_plugins;
 		include (api_get_path(INCLUDE_PATH)."footer.inc.php");
@@ -582,8 +567,7 @@ class Display {
 	 * Print an <option>-list with all letters (A-Z).
 	 * @param char $selected_letter The letter that should be selected
 	 */
-	public function get_alphabet_options($selected_letter = '')
-	{
+	public static function get_alphabet_options ($selected_letter = '') {
 		$result = '';
 		for ($i = 65; $i <= 90; $i ++) {
 			$letter = chr($i);
@@ -596,8 +580,7 @@ class Display {
 		return $result;
 	}
 	
-	public function get_numeric_options($min,$max, $selected_num = 0)
-	{
+	public static function get_numeric_options ($min,$max, $selected_num = 0) {
 		$result = '';
 		for ($i = $min; $i <= $max; $i ++) {			
 			$result .= '<option value="'.$i.'"';
@@ -613,8 +596,7 @@ class Display {
 	/**
 	* Show the so-called "left" menu for navigating
 	*/
-	public function show_course_navigation_menu($isHidden = false)
-	{
+	public static function show_course_navigation_menu ($isHidden = false) {
 		global $output_string_menu;
 		global $_setting;
 
@@ -672,7 +654,7 @@ class Display {
 	 * @param string $alt_text the alt text (probably a language variable)
 	 * @param array additional attributes (for instance height, width, onclick, ...)
 	*/
-	public function display_icon($image, $alt_text = '', $additional_attributes = array ()) {
+	public static function display_icon ($image, $alt_text = '', $additional_attributes = array ()) {
 		echo Display::return_icon($image,$alt_text,$additional_attributes);
 	}
 
@@ -686,8 +668,7 @@ class Display {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version October 2006
 	*/
-	public function return_icon($image,$alt_text='',$additional_attributes=array())
-	{
+	public static function return_icon ($image,$alt_text='',$additional_attributes=array()) {
 		$attribute_list = '';
 		// alt text = the image if there is none provided (for XHTML compliance)
 		if ($alt_text=='')
@@ -715,7 +696,7 @@ class Display {
 	 * @param string Optional format string (e.g. '%t. %l, %f')
 	 * @author Carlos Vargas <carlos.vargas@dokeos.com>
 	 */
-	 public function user_name($fname,$lname,$title='',$format=null) {
+	 public static function user_name($fname,$lname,$title='',$format=null) {
 		 if (empty($format)){	 	
 			 	if (empty($fname) or empty($lname)) {
 			 		$user_name = $fname.$lname;

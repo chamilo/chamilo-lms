@@ -98,7 +98,7 @@ overflow-x: hidden;
     height:100%;
 }
 /*      forms                */
-.inputMtime{width:55px; height:14px; font-size:9px;}
+.inputMtime{width:75px; height:14px; font-size:9px;}
 .radio{
 	background-color:none;
 }
@@ -173,6 +173,7 @@ float:left;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: #b3b3b4;
+	cursor: default;
 }
 
 #currentFolderInfo dl{

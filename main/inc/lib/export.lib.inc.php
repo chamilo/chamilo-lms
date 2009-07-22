@@ -33,15 +33,16 @@
 ==============================================================================
 */
 require_once ('document.lib.php');
-class Export
-{
+class Export {
+	private function __construct() {
+		
+	}
 	/**
 	 * Export tabular data to CSV-file
 	 * @param array $data
 	 * @param string $filename
 	 */
-	function export_table_csv($data, $filename = 'export')
-	{			
+	public static function export_table_csv ($data, $filename = 'export') {			
 		$file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
 		$handle = @fopen($file, 'a+');		
 		
@@ -69,8 +70,7 @@ class Export
 	 * @param array $data
 	 * @param string $filename
 	 */
-	function export_table_xls($data, $filename = 'export')
-	{
+	public static function export_table_xls ($data, $filename = 'export') {
 		$file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
 		$handle = @fopen($file, 'a+');		
 		foreach ($data as $index => $row)	
@@ -89,8 +89,7 @@ class Export
      * @param string Name of the root element. A root element should always be given.
      * @param string Encoding in which the data is provided
 	 */
-	function export_table_xml($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null, $encoding=null)
-	{
+	public static function export_table_xml ($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null, $encoding=null) {
 		if (empty($encoding))
 		{
 			$encoding = api_get_system_encoding();
@@ -129,8 +128,7 @@ class Export
      * @param string Encoding in which the data is provided
      * @return void  Prompts the user for a file download
      */
-    function export_complex_table_xml($data, $filename = 'export', $wrapper_tagname, $encoding='ISO-8859-1')
-    {
+    public static function export_complex_table_xml ($data, $filename = 'export', $wrapper_tagname, $encoding='ISO-8859-1') {
         $file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.xml';
         $handle = fopen($file, 'a+');
         fwrite($handle, '<?xml version="1.0" encoding="'.$encoding.'"?>'."\n");
@@ -139,7 +137,7 @@ class Export
         {
             fwrite($handle, '<'.$wrapper_tagname.'>');
         }
-        $s = Export::_export_complex_table_xml_helper($data);
+        $s = self::_export_complex_table_xml_helper($data);
         fwrite($handle,$s);
         if (!is_null($wrapper_tagname))
         {
@@ -155,14 +153,14 @@ class Export
      * @param   int     Level of recursivity. Allows the XML to be finely presented
      * @return string   The XML string to be inserted into the root element
      */
-    function _export_complex_table_xml_helper($data,$level=1) {
+    public static function _export_complex_table_xml_helper ($data,$level=1) {
     	if (count($data)<1) { return '';}
         $string = '';
         foreach ($data as $index => $row)
         {
             $string .= "\n".str_repeat("\t",$level).'<'.$row['name'].'>';
             if (is_array($row['value'])) {
-            	$string .= Export::_export_complex_table_xml_helper($row['value'],$level+1)."\n";
+            	$string .= self::_export_complex_table_xml_helper($row['value'],$level+1)."\n";
                 $string .= str_repeat("\t",$level).'</'.$row['name'].'>';
             } else {
                 $string .= $row['value'];
@@ -196,7 +194,7 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 	$errorCode = "";
 	if (!is_resource($link))
 	{
-		GLOBAL $error_msg, $error_no;
+		global $error_msg, $error_no;
 		$error_msg["backup"][] = "[".basename(__FILE__)."][".__LINE__."] link is not a ressource";
 		$error_no["backup"][] = "1";
 		return false;

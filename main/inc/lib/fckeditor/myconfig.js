@@ -82,29 +82,10 @@ FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE
 // You may add your own plugins here, i.e. write something as follows:
 // FCKConfig.Plugins.Add('my_plugin', 'en') ;
 
+
 /*
  * File Manager.
  */
-
-// Window size of the file manager:
-// for any type of files;
-FCKConfig.LinkBrowserWindowWidth	= 800 ;
-FCKConfig.LinkBrowserWindowHeight	= 600 ;
-// for images;
-FCKConfig.ImageBrowserWindowWidth   = 800 ;
-FCKConfig.ImageBrowserWindowHeight  = 600 ;
-// for flash objects;
-FCKConfig.FlashBrowserWindowWidth   = 800 ;
-FCKConfig.FlashBrowserWindowHeight  = 600 ;
-// for audio files;
-FCKConfig.MP3BrowserWindowWidth     = 800 ;
-FCKConfig.MP3BrowserWindowHeight    = 600 ;
-// for video files;
-FCKConfig.VideoBrowserWindowWidth   = 800 ;
-FCKConfig.VideoBrowserWindowHeight  = 600 ;
-// for video (flv) files.
-FCKConfig.MediaBrowserWindowWidth   = 800 ;
-FCKConfig.MediaBrowserWindowHeight  = 600 ;
 
 //Upload path for the Image manager. Leave it empty.
 FCKConfig.IMUploadPath = '' ;

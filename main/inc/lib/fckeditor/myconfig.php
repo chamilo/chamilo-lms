@@ -181,25 +181,71 @@ $config['OpenAdvancedFileManagerInANewWindow'] = false;
 
 
 /*
- * Quick-upload tabs.
+ * Separate settings for the simple and the advanced file manager modes.
  */
 
-// Set true/false to enable/disable the quick-upload tabs for different resource types:
-$config['LinkUpload']  = true;  // for any type of files;
-$config['ImageUpload'] = true;  // for images;
-$config['FlashUpload'] = true;  // for flash objects;
-$config['MP3Upload']   = true;  // for audio files;
-$config['VideoUpload'] = true;  // for video files;
-$config['MediaUpload'] = true;  // for video (flv) files.
-
-// For advanced file manager mode: Hiding quick-upload tabs, so users not to get confused.
 if ((api_get_setting('advanced_filemanager') == 'true')) {
-	$config['LinkUpload']  = false;
-	$config['ImageUpload'] = false;
-	$config['MP3Upload']   = false;
-	$config['FlashUpload'] = false;
-	$config['VideoUpload'] = false;
-	$config['MediaUpload'] = false;
+
+	// For the advanced file manager.
+
+	// Dialog/window size for browsing:
+	// any type of files;
+	$config['LinkBrowserWindowWidth']	= 800 ;
+	$config['LinkBrowserWindowHeight']	= 600 ;
+	// images;
+	$config['ImageBrowserWindowWidth']	= 800 ;
+	$config['ImageBrowserWindowHeight']	= 600 ;
+	// flash objects;
+	$config['FlashBrowserWindowWidth']	= 800 ;
+	$config['FlashBrowserWindowHeight']	= 600 ;
+	// audio files;
+	$config['MP3BrowserWindowWidth']	= 800 ;
+	$config['MP3BrowserWindowHeight']	= 600 ;
+	// video files;
+	$config['VideoBrowserWindowWidth']	= 800 ;
+	$config['VideoBrowserWindowHeight']	= 600 ;
+	// video (flv) files.
+	$config['MediaBrowserWindowWidth']	= 800 ;
+	$config['MediaBrowserWindowHeight']	= 600 ;
+
+	// Set true/false to enable/disable the quick-upload tabs for different resource types:
+	$config['LinkUpload']  = false;  // for any type of files;
+	$config['ImageUpload'] = false;  // for images;
+	$config['FlashUpload'] = false;  // for flash objects;
+	$config['MP3Upload']   = false;  // for audio files;
+	$config['VideoUpload'] = false;  // for video files;
+	$config['MediaUpload'] = false;  // for video (flv) files.
+} else {
+
+	// For the simple file manager.
+
+	// Dialog/window size for browsing:
+	// any type of files;
+	$config['LinkBrowserWindowWidth']	= 780 ;
+	$config['LinkBrowserWindowHeight']	= 500 ;
+	// images;
+	$config['ImageBrowserWindowWidth']	= 780 ;
+	$config['ImageBrowserWindowHeight']	= 500 ;
+	// flash objects;
+	$config['FlashBrowserWindowWidth']	= 780 ;
+	$config['FlashBrowserWindowHeight']	= 500 ;
+	// audio files;
+	$config['MP3BrowserWindowWidth']	= 780 ;
+	$config['MP3BrowserWindowHeight']	= 500 ;
+	// video files;
+	$config['VideoBrowserWindowWidth']	= 780 ;
+	$config['VideoBrowserWindowHeight']	= 500 ;
+	// video (flv) files.
+	$config['MediaBrowserWindowWidth']	= 780 ;
+	$config['MediaBrowserWindowHeight']	= 500 ;
+
+	// Set true/false to enable/disable the quick-upload tabs for different resource types:
+	$config['LinkUpload']  = true;  // for any type of files;
+	$config['ImageUpload'] = true;  // for images;
+	$config['FlashUpload'] = true;  // for flash objects;
+	$config['MP3Upload']   = true;  // for audio files;
+	$config['VideoUpload'] = true;  // for video files;
+	$config['MediaUpload'] = true;  // for video (flv) files.
 }
 
 

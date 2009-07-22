@@ -174,6 +174,11 @@ $config['MediaBrowser'] = true ;  // for video (flv) files.
 // false - as a dialog whithin the page (recommended).
 $config['OpenSimpleFileManagerInANewWindow'] = false;
 
+// How the advanced file manager to be opened:
+// true  - in a new browser window, or
+// false - as a dialog whithin the page (recommended).
+$config['OpenAdvancedFileManagerInANewWindow'] = false;
+
 
 /*
  * Quick-upload tabs.

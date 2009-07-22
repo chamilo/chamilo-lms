@@ -25,7 +25,7 @@
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 *	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: create_new_survey.php 22096 2009-07-15 03:43:25Z ivantcholakov $
+* 	@version $Id: create_new_survey.php 22297 2009-07-22 22:08:30Z cfasanando $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -146,7 +146,7 @@ if ($_GET['action'] == 'edit' AND isset($survey_id) AND is_numeric($survey_id))
 	$form->addElement('hidden', 'survey_id');
 }
 
-$survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '40'));
+$survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20','maxlength'=>'20'));
 //$form->applyFilter('survey_code', 'html_filter');
 
 if ($_GET['action'] == 'edit') {
@@ -277,6 +277,7 @@ $form->addElement('style_submit_button', 'submit_survey', $text, 'class="'.$clas
 if ($_GET['action'] == 'add')
 {
 	$form->addRule('survey_code', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('survey_code', '', 'maxlength',20);
 }
 $form->addRule('survey_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('start_date', get_lang('InvalidDate'), 'date');

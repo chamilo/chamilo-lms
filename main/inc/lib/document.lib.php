@@ -71,14 +71,15 @@ $baseWorkDir = $sys_course_path.(!empty($courseDir)?$courseDir:'');
 /**
  *	@package dokeos.library
  */
-class DocumentManager
-{
+class DocumentManager {
+	private function __construct() {
+		
+	}
 	/**
 	* @return the document folder quuta of the current course, in bytes
 	* @todo eliminate globals
 	*/
-	function get_course_quota()
-	{
+	public static function get_course_quota () {
 		global $_course, $maxFilledSpace;
 		$course_code = Database::escape_string($_course['sysCode']);
 		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -108,8 +109,7 @@ class DocumentManager
 	*	@author Bert Vanderkimpen
 	*
 	*/
-	function file_get_mime_type($filename)
-	{
+	public static function file_get_mime_type ($filename) {
 		//all mime types in an array (from 1.6, this is the authorative source)
 		//please keep this alphabetical if you add something to this list!!!
 	    $mime_types=array(
@@ -306,8 +306,7 @@ class DocumentManager
 	*	@author Roan Embrechts, bugfix
 	*   @todo ??not only check if a file is visible, but also check if the user is allowed to see the file??
 	*/
-	function file_visible_to_user($this_course, $doc_url)
-	{
+	public static function file_visible_to_user ($this_course, $doc_url) {
 		if (api_is_allowed_to_edit())
 		{
 			return true;
@@ -335,8 +334,7 @@ class DocumentManager
 	* @param string $name
 	* @return false if file doesn't exist, true if stream succeeded
 	*/
-	function file_send_for_download($full_file_name, $forced = false, $name = '')
-	{
+	public static function file_send_for_download ($full_file_name, $forced = false, $name = '') {
 		if (!is_file($full_file_name))
 		{
 			return false;
@@ -376,7 +374,7 @@ class DocumentManager
 		{
 			//no forced download, just let the browser decide what to do according to the mimetype
 
-			$content_type = DocumentManager::file_get_mime_type($filename);
+			$content_type = self::file_get_mime_type($filename);
 			header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 			header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
             // Commented to avoid double caching declaration when playing with IE and HTTPS
@@ -409,8 +407,7 @@ class DocumentManager
 	* @param string The name of the file in the end (including extension)
 	* @return false if file doesn't exist, true if stream succeeded
 	*/
-	function string_send_for_download($full_string, $forced = false, $name = '')
-	{
+	public static function string_send_for_download ($full_string, $forced = false, $name = '') {
 		$filename = $name;
 		$len = strlen($full_string);
 
@@ -450,7 +447,7 @@ class DocumentManager
 		{
 			//no forced download, just let the browser decide what to do according to the mimetype
 
-			$content_type = DocumentManager::file_get_mime_type($filename);
+			$content_type = self::file_get_mime_type($filename);
 			header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 			header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 			header('Cache-Control: no-cache, must-revalidate');
@@ -484,8 +481,7 @@ class DocumentManager
 	* @param boolean $can_see_invisible
 	* @return array with all document data 
 	*/
-	function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false)
-	{
+	public static function get_all_document_data ($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false) {
 		$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 
@@ -575,8 +571,7 @@ class DocumentManager
 	 * @param int $to_group_id
 	 * @return array with paths
 	 */
-	function get_all_document_folders($_course, $to_group_id = '0', $can_see_invisible = false)
-	{
+	public static function get_all_document_folders ($_course, $to_group_id = '0', $can_see_invisible = false) {
 		$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		if(empty($doc_url)){
@@ -695,11 +690,10 @@ class DocumentManager
 	 * @param int    $document_id in case you dont have the file path ,insert the id of the file here and leave $file in blank ''
 	 * @return boolean true/false	 
 	 **/
-	function check_readonly($_course,$user_id,$file,$document_id='',$to_delete=false)
-	{
+	public static function check_readonly ($_course,$user_id,$file,$document_id='',$to_delete=false) {
 		if(!(!empty($document_id) && is_numeric($document_id)))
 		{			
-			$document_id = DocumentManager::get_document_id($_course, $file);
+			$document_id = self::get_document_id($_course, $file);
 		}		
 		
 		$TABLE_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
@@ -707,7 +701,7 @@ class DocumentManager
 		
 		if ($to_delete)
 		{
-			if (DocumentManager::is_folder($_course, $document_id))
+			if (self::is_folder($_course, $document_id))
 			{
 				if (!empty($file))
 				{
@@ -776,8 +770,7 @@ class DocumentManager
 	 * @param int    $document_id of the item
 	 * @return boolean true/false	 
 	 **/
-	function is_folder($_course, $document_id)
-	{	
+	public static function is_folder ($_course, $document_id) {	
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		//if (!empty($document_id))
 		$document_id = Database::escape_string($document_id);
@@ -800,12 +793,11 @@ class DocumentManager
 	 * @return boolean true/false
 	 * @todo now only files/folders in a folder get visibility 2, we should rename them too.
 	 */
-	function delete_document($_course, $path, $base_work_dir)
-	{
+	public static function delete_document ($_course, $path, $base_work_dir) {
 		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		//first, delete the actual document...
-		$document_id = DocumentManager :: get_document_id($_course, $path);
+		$document_id = self :: get_document_id($_course, $path);
 		$new_path = $path.'_DELETED_'.$document_id;
 		if ($document_id)
 		{
@@ -833,7 +825,7 @@ class DocumentManager
 																								
 						//query to delete from document table
 						$remove_from_document_sql = "DELETE FROM ".$TABLE_DOCUMENT." WHERE id = ".$row['id']."";
- 						DocumentManager::unset_document_as_template($row['id'],$_course, api_get_user_id());
+ 						self::unset_document_as_template($row['id'],$_course, api_get_user_id());
 						//echo($remove_from_item_property_sql.'<br>');
 						//api_sql_query($remove_from_item_property_sql, __FILE__, __LINE__);
 						//echo($remove_from_document_sql.'<br>');
@@ -845,7 +837,7 @@ class DocumentManager
 						$mdStore->mds_delete_offspring($eid);
 
 					}
-					DocumentManager::delete_document_from_search_engine(api_get_course_id(), $document_id);
+					self::delete_document_from_search_engine(api_get_course_id(), $document_id);
 					//delete documents, do it like this so metadata get's deleted too
 					//update_db_info('delete', $path);
 					//throw it away
@@ -867,7 +859,7 @@ class DocumentManager
                     {
                         if(rename($base_work_dir.$path, $base_work_dir.$new_path))
     					{
-    						 DocumentManager::unset_document_as_template($document_id, api_get_course_id(), api_get_user_id());	
+    						 self::unset_document_as_template($document_id, api_get_course_id(), api_get_user_id());	
     						 $sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE id='".$document_id."'";
     						if (api_sql_query($sql, __FILE__, __LINE__))
     						{
@@ -891,14 +883,14 @@ class DocumentManager
     									echo "<br>";echo "<br>";
 										rename($base_work_dir.$old_item_path, $base_work_dir.$new_item_path);
 										*/
-    									DocumentManager::unset_document_as_template($deleted_items['id'], api_get_course_id(), api_get_user_id());
+    									self::unset_document_as_template($deleted_items['id'], api_get_course_id(), api_get_user_id());
     									$sql = "UPDATE $TABLE_DOCUMENT set path = '".$new_item_path."' WHERE id = ".$deleted_items['id'];
 	
     									api_sql_query($sql, __FILE__, __LINE__);  									
     								}
     							}
     							
-                                DocumentManager::delete_document_from_search_engine(api_get_course_id(), $document_id);
+                                self::delete_document_from_search_engine(api_get_course_id(), $document_id);
     							return true;
     						}
     					}
@@ -918,13 +910,13 @@ class DocumentManager
                         $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path='".$path."' OR path LIKE BINARY '".$path."/%'";
                         $res = Database::query($sql,__FILE__,__LINE__);
 
-                        DocumentManager::delete_document_from_search_engine(api_get_course_id(), $document_id);
+                        self::delete_document_from_search_engine(api_get_course_id(), $document_id);
 
                         while ( $row = Database::fetch_array($res) ) 
                         {
                         	$sqlipd = "DELETE FROM $TABLE_ITEMPROPERTY WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
                             $resipd = Database::query($sqlipd,__FILE__,__LINE__);
-                            DocumentManager::unset_document_as_template($row['id'],api_get_course_id(), api_get_user_id());
+                            self::unset_document_as_template($row['id'],api_get_course_id(), api_get_user_id());
                             $sqldd = "DELETE FROM $TABLE_DOCUMENT WHERE id = ".$row['id'];
                             $resdd = Database::query($sqldd,__FILE__,__LINE__); 
                         }
@@ -943,7 +935,7 @@ class DocumentManager
 	 * @param string $course_id Course code
 	 * @param int $document_id Document id to delete
 	 */
-	function delete_document_from_search_engine($course_id, $document_id) {
+	public static function delete_document_from_search_engine ($course_id, $document_id) {
 		// remove from search engine if enabled
 		if (api_get_setting('search_enabled') == 'true') {
 			$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
@@ -973,8 +965,7 @@ class DocumentManager
 	 * @param string $path
 	 * @return int id of document / false if no doc found
 	 */
-	function get_document_id($_course, $path)
-	{
+	public static function get_document_id ($_course, $path) {
 		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		$path = Database::escape_string($path);		
 		$sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path LIKE BINARY '$path'";
@@ -997,8 +988,7 @@ class DocumentManager
 	 * @param string $couse_code
 	 * @param int $user_id
 	 */
-	function set_document_as_template($title, $description, $document_id_for_template, $couse_code, $user_id, $image)
-	{
+	public static function set_document_as_template ($title, $description, $document_id_for_template, $couse_code, $user_id, $image) {
 		// Database table definition
 		$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
 		
@@ -1025,7 +1015,7 @@ class DocumentManager
 	 * @param string $couse_code
 	 * @param int $user_id
 	 */
-	function unset_document_as_template($document_id, $course_code, $user_id){
+	public static function unset_document_as_template ($document_id, $course_code, $user_id) {
 		
 		$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
 		$course_code = Database::escape_string($course_code);
@@ -1050,7 +1040,7 @@ class DocumentManager
 	 * @param string $document_path the relative complete path of the document
      * @param array  $course the _course array info of the document's course
 	 */
-	function is_visible($doc_path, $course){
+	public static function is_visible ($doc_path, $course) {
        	$docTable  = Database::get_course_table(TABLE_DOCUMENT, $course['dbName']);
 		$propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
         //note the extra / at the end of doc_path to match every path in the

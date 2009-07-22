@@ -537,17 +537,17 @@ class FCKeditor
 		// URLs for opening the file browser for different resource types (file types):
 		if ($use_advanced_filemanager) {
 			// for images
-			$config['ImageBrowserURL'] = $base_path.'editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			$config['ImageBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 			// for flash
-			$config['FlashBrowserURL'] = $base_path.'editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			$config['FlashBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 			// for audio files (mp3)
-			$config['MP3BrowserURL'] = $base_path.'editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			$config['MP3BrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 			// for video
-			$config['VideoBrowserURL'] = $base_path.'editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			$config['VideoBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 			// for video (flv)
-			$config['MediaBrowserURL'] = $base_path.'editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			$config['MediaBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 			// for links (any resource type)
-			$config['LinkBrowserURL'] = $base_path.'editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
+			$config['LinkBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 		} else {
 			// for images
 			$config['ImageBrowserURL'] = $base_path.'editor/filemanager/browser/default/browser.html?Type=Images&Connector='.$base_path.'editor/filemanager/connectors/php/connector.php';

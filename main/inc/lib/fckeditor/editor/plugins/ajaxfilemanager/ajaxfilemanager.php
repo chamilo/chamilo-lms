@@ -79,6 +79,15 @@
 <script type="text/javascript" src="jscripts/ajaxfileupload.js"></script>
 <script type="text/javascript" src="jscripts/ajaxfilemanager.js"></script>-->
 <script type="text/javascript">
+
+	// Added by Ivan Tcholakov, 22-JUL-2009.
+	// For integration with the editor's dialig system.
+	var oEditor = null ;
+	if ( !window.opener && window.parent ) {
+		// The file manager is inside a dialog.
+		oEditor = window.parent.InnerDialogLoaded() ;
+	}
+
 	var globalSettings = {'upload_init':false};
 	var queryString = '<?php echo makeQueryString(array('path')); ?>';
 	var paths = {'root':'<?php echo addTrailingSlash(backslashToSlash(CONFIG_SYS_ROOT_PATH)); ?>', 'root_title':'<?php echo LBL_FOLDER_ROOT; ?>'};

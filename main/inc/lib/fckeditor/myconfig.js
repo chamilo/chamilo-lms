@@ -88,23 +88,23 @@ FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE
 
 // Window size of the file manager:
 // for any type of files;
-FCKConfig.LinkBrowserWindowWidth	= 782 ;
-FCKConfig.LinkBrowserWindowHeight	= 490 ;
+FCKConfig.LinkBrowserWindowWidth	= 800 ;
+FCKConfig.LinkBrowserWindowHeight	= 600 ;
 // for images;
-FCKConfig.ImageBrowserWindowWidth   = 782 ;
-FCKConfig.ImageBrowserWindowHeight  = 490 ;
+FCKConfig.ImageBrowserWindowWidth   = 800 ;
+FCKConfig.ImageBrowserWindowHeight  = 600 ;
 // for flash objects;
-FCKConfig.FlashBrowserWindowWidth   = 782 ;
-FCKConfig.FlashBrowserWindowHeight  = 490 ;
+FCKConfig.FlashBrowserWindowWidth   = 800 ;
+FCKConfig.FlashBrowserWindowHeight  = 600 ;
 // for audio files;
-FCKConfig.MP3BrowserWindowWidth     = 782 ;
-FCKConfig.MP3BrowserWindowHeight    = 490 ;
+FCKConfig.MP3BrowserWindowWidth     = 800 ;
+FCKConfig.MP3BrowserWindowHeight    = 600 ;
 // for video files;
-FCKConfig.VideoBrowserWindowWidth   = 782 ;
-FCKConfig.VideoBrowserWindowHeight  = 490 ;
+FCKConfig.VideoBrowserWindowWidth   = 800 ;
+FCKConfig.VideoBrowserWindowHeight  = 600 ;
 // for video (flv) files.
-FCKConfig.MediaBrowserWindowWidth   = 782 ;
-FCKConfig.MediaBrowserWindowHeight  = 490 ;
+FCKConfig.MediaBrowserWindowWidth   = 800 ;
+FCKConfig.MediaBrowserWindowHeight  = 600 ;
 
 //Upload path for the Image manager. Leave it empty.
 FCKConfig.IMUploadPath = '' ;

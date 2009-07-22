@@ -176,7 +176,7 @@ String.prototype.ReplaceAll = function( searchArray, replaceArray )
 
 function OpenFileBrowser( url, width, height )
 {
-	// oEditor must be defined.
+	// oEditor must be defined. Otherwise FCK, FCKConfig, FCKDialog and FCKLang must be defined.
 	if ( oEditor )
 	{
 		if ( !FCK )
@@ -197,10 +197,11 @@ function OpenFileBrowser( url, width, height )
 		}
 	}
 
-	// Otherwise FCK, FCKConfig, FCKDialog and FCKLang must be defined.
+	var open_in_a_new_window = ( FCKConfig.AdvancedFileManager && FCKConfig.AdvancedFileManager.toString() == 'true' )
+		? ( FCKConfig.OpenAdvancedFileManagerInANewWindow && FCKConfig.OpenAdvancedFileManagerInANewWindow.toString() == 'true' )
+		: ( FCKConfig.OpenSimpleFileManagerInANewWindow && FCKConfig.OpenSimpleFileManagerInANewWindow.toString() == 'true' ) ;
 
-	if ( ( FCKConfig.OpenSimpleFileManagerInANewWindow && FCKConfig.OpenSimpleFileManagerInANewWindow.toString() == 'true' ) ||
-		( FCKConfig.AdvancedFileManager && FCKConfig.AdvancedFileManager.toString() == 'true' ) )
+	if ( open_in_a_new_window )
 	{
 		var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
 		var iTop  = ( FCKConfig.ScreenHeight - height ) / 2 ;

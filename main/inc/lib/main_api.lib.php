@@ -3739,27 +3739,33 @@ function api_get_tools_lists ($my_tool=null) {
 
 }
 
-function api_check_term_condition($user_id){
+/**
+ * Checks if we already approved the last version term and condition 
+ * @param int user id
+ * @return bool true if we pass false otherwise
+ */
+function api_check_term_condition($user_id) {
+	$return = false;
 	if (get_setting('allow_terms_conditions')=='true') {
 		require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
-		//getting user info
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);									
-		$sqlv = "SELECT field_value FROM $t_ufv ufv inner join $t_uf uf on ufv.field_id= uf.id WHERE field_variable = 'legal_accept' AND user_id = ".$user_id." ";
+		$sqlv = "SELECT field_value FROM $t_ufv ufv inner join $t_uf uf on ufv.field_id= uf.id
+				 WHERE field_variable = 'legal_accept' AND user_id = ".intval($user_id);
 		$resv = api_sql_query($sqlv,__FILE__,__LINE__);
-		if(Database::num_rows($resv)>0) {
-		//	There should be only one value for a field and a user
+		if (Database::num_rows($resv) > 0) {
 			$rowv = Database::fetch_row($resv);
 			$rowv = $rowv[0];
 			$user_conditions = explode(':',$rowv);	
 			$version = $user_conditions[0];
 			$lang_id= $user_conditions[1]; 
 			$real_version = LegalManager::get_last_version($lang_id);
-			if ($version<$real_version){
-				return false;
+			if ($version < $real_version) {
+				$return = false;
 			} else {
-				return true;
+				$return = true;
 			}
-		}
+		}		
 	}
+	return $return;
 }

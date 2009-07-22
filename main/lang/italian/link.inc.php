@@ -47,4 +47,5 @@ $SearchFeatureDoIndexLink = "Indicizzare il titolo e la descrizione?";
 $langSaveLink = "Salva il collegamento";
 $langSaveCategory = "Salva la categoria";
 $BackToLinksOverview = "Torna all\'elenco dei collegamenti";
+$AddTargetOfLinkOnHomepage = "Aggiungi il modo (target) in cui il collegamento sarà visto dalla pagina principale";
 ?>

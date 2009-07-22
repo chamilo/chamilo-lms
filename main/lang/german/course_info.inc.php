@@ -104,4 +104,12 @@ $AllowUserImageForumDeactivate = "keine Benutzer-Bilder im Forum";
 $AllowLearningPathTheme = "Lernpfad Theme erlauben";
 $AllowLearningPathThemeAllow = "Erlaubt";
 $AllowLearningPathThemeDisallow = "Nicht erlaubt";
+$ConfigChat = "Chat-Einstellungen";
+$AllowOpenchatWindow = "Chat in neuem Fenster öffnen";
+$AllowOpenChatWindowActivate = "Chat in neuem Fenster aktivieren";
+$AllowOpenChatWindowDeactivate = "Chat in neuem Fenster deaktivieren";
+$NewUserEmailAlert = "Kursleiter per Email über neue Kursteilnehmer unterrichten";
+$NewUserEmailAlertEnable = "Email-Benachrichtigung des Kursleiters über neue Kursteilnehmer aktivieren";
+$NewUserEmailAlertToTeacharAndTutor = "Email-Benachrichtigung für Kursleiter und Tutoren über neue Kursteilnehmer aktivieren";
+$NewUserEmailAlertDisable = "Email-Benachrichtigung über neue Kursteilnehmer deaktivieren";
 ?>

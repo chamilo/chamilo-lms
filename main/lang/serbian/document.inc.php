@@ -59,6 +59,7 @@ $langTocDown  = "Dole";
 $langTocUp  = "Gore";
 $lang_cut_paste_link = "Nema ramova";
 $langCreatePath = "Kreiraj putanju";
+$ThisFolderCannotBeDeleted = "Ovaj folder ne može biti obrisan";
 $langAddMetadata = "Pogledaj/Izmeni opisnu definiciju";
 $langGoMetadata = "Kreni";
 $langQuotaForThisCourseIs = "Kvota za ovaj kurs je";

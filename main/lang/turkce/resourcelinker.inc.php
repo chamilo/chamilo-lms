@@ -54,4 +54,5 @@ $ForumAddNewTopic = "Forum: yeni ba&#351;l&#305;k ekle";
 $ForumEditTopic = "Forum: ba&#351;l&#305;k düzenle";
 $ExerciseAnswers = "Al&#305;&#351;t&#305;rma: cevaplar";
 $ForumReply = "Forum: cevapla";
+$AgendaSortChronologicallyDown = "Kronolojik olarak s&#305;rala (azalan)kto";
 ?>

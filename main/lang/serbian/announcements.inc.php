@@ -47,4 +47,13 @@ $MsgText = "Poruka";
 $AnnouncementDeletedAll = "Sva obaveštenja su obrisana";
 $AnnouncementMoved = "Obaveštenje je premešteno";
 $NoAnnouncements = "Nema obaveštenja";
+$SelectEverybody = "Izaberi sve";
+$SelectedUsersGroups = "Izabrane korisni&#269;ke grupe";
+$LearnerMessage = "Poruka polaznika";
+$TitleIsRequired = "Naslov je obavezan";
+$AnnounceSentByEmail = "Obaveštenje poslato e-mailom";
+$AnnounceSentToUserSelection = "Obaveštenje poslato izabranim korisnicima";
+$SendAnnouncement = "Pošalji obaveštenje";
+$ModifyAnnouncement = "Izmeni obaveštenje";
+$ButtonPublishAnnouncement = "Pošalji obaveštenje";
 ?>

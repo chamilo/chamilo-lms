@@ -36,7 +36,7 @@ $langCsvFileLine1 = "... - Zeile 1 = ";
 $langCsvLinesFailed = "Link aus Zeile(n) wurde(n) nicht importiert (keine URL oder kein Titel vorhanden)";
 $langCsvLinesOld = "existierende Link(s) wurden aktualisiert (gleiche URL und Kategorie)";
 $langCsvLinesNew = "Neue Links wurden erstellt";
-$langCsvExplain = " Die Datei sollte wie folgt aufgebaut sein:URL;Kategorie;Titel;Beschreibung;http://www.aaa.org/...;Wichtige Links;Name 1;Beschreibung 1;http://www.bbb.net/...;;Name 2;\"Beschreibung 2\";WEnn URL und Kategorie mit einem existierenen Link übereinstimmen, werden dessen Titel und Beschreibung aktualisiert. In allen anderen Fällen wird ein neuer Link erstellt.Fett = erforderlich. Reihenfolge der Felder ist frei wählbar, Namen in Griß- oder Kleinschreibung. Weitere Felder werden der Beschreibung hinzugefügt. Separator: Komma oder Semikolon. Werte können zitiert werden, Feldnamen aber nicht. Einige [b]HTML Tags[/b] können im Beschreibungsfeld einbezogen werden.";
+$langCsvExplain = "Die Datei sollte wie folgt aufgebaut sein:<blockquote><pre>URL;Kategorie;Titel;Beschreibung;http://www.aaa.org/...;Wichtige Links;Name 1;Beschreibung 1;http://www.bbb.net/...;;Name 2;\"Beschreibung 2\";</pre></blockquote>Wenn URL und Kategorie mit einem existierenen Link übereinstimmen, werden dessen Titel und Beschreibung aktualisiert. In allen anderen Fällen wird ein neuer Link erstellt.Fett = erforderlich. Reihenfolge der Felder ist frei wählbar, Namen in Griß- oder Kleinschreibung. Weitere Felder werden der Beschreibung hinzugefügt. Separator: Komma oder Semikolon. Werte können zitiert werden, Feldnamen aber nicht. Einige [b]HTML Tags[/b] können im Beschreibungsfeld einbezogen werden.";
 $langLinkUpdated = "Link wurde aktualisiert";
 $langAll_Link_Deleted = "Link wurde gelöscht";
 $langOnHomepage = "Link auf Homepage anzeigen";
@@ -47,4 +47,5 @@ $SearchFeatureDoIndexLink = "Link-Name und Beschreibung in den Suchindex aufnehm
 $langSaveLink = "Link speichern";
 $langSaveCategory = "Ordner speichern";
 $BackToLinksOverview = "Zurück zur Link-Übersicht";
+$AddTargetOfLinkOnHomepage = "Ziel für den Link auf der Kurshomepage auswählen";
 ?>

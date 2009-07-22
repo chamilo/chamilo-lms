@@ -128,5 +128,6 @@ $SearchButton = "Traži";
 $SearchNoResultsFound = "Nema rezultata za ovu pretragu";
 $UsernameWrong = "Vaše korisni&#263;ko ime može da sadrži samo slova, brojeve i _.-";
 $langphone = "Telefon";
+$MyProgress = "Moj napredak";
 $EditInformation = "Izmeni profil";
 ?>

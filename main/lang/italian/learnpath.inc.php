@@ -242,4 +242,5 @@ $SaveSection = "Salva l\'elemento";
 $AddLinkToCourse = "Includi collegamento nel modulo";
 $AddAssignmentToCourse = "Includi pagina elaborati nel modulo";
 $AddForumToCourse = "Includi Forum nel modulo";
+$SaveAudioAndOrganization = "Salva audio e ordinamento";
 ?>

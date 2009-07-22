@@ -1012,4 +1012,5 @@ $ShowGlossaryInDocumentsIsAutomatic = "Automatically, to enable this option will
 $ShowGlossaryInDocumentsIsManual = "Manual, to enable this option this will show a glossary icon in the tool fckeditor, you should shading the words than are marked like glossary term";
 $ShowGlossaryInDocumentsIsNone = "None, to have enable this option, will not add glosarry term to documents";
 $LanguageVariable = "Language variable";
+$ToExportDocumentsWithGlossaryYouHaveToSelectGlossary = "To export a document than has term glossary of terms, will have sure than this term has been included in the exportation; to do this will have choose it in the list glossary";
 ?>

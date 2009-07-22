@@ -12,4 +12,8 @@ $langAddCat  = "dodaj kategoriju";
 $langAdd  = "Dodavanje";
 $langValid  = "Važe&#263;e";
 $langBackAndForget  = "Nazad i zaboravi";
+$CourseDescriptionUpdated = "Opis kursa je ažuriran";
+$CourseDescriptionDeleted = "Opis kursa je obrisan";
+$CourseDescriptionIntro = "Da kreirate opis kursa, odaberite naslov i popunite polje. <br><br> kliknite OK za nastavak.";
+$langSaveDescription = "Snimi opis";
 ?>

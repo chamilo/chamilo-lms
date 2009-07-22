@@ -1005,4 +1005,12 @@ $TemplateDeleted = "Modello eliminato";
 $SubLanguage = "Articolazione della lingua";
 $LanguageIsNowVisible = "Ora la lingua è visibile";
 $LanguageIsNowHidden = "Ora la lingua è non visibile";
+$LanguageDirectoryNotWriteableContactAdmin = "La directory /main/lang è protetta da scrittura, per problemi contattare l\'amministratore";
+$ShowGlossaryInDocumentsTitle = "Mostra le voci del glossario nei documenti";
+$ShowGlossaryInDocumentsComment = "Qui puoi configurare la visibilità delle voci del glossario nei documenti";
+$ShowGlossaryInDocumentsIsAutomatic = "Visibilità automatica: le definizioni delle parole elencate nel glossario saranno sempre visibili";
+$ShowGlossaryInDocumentsIsManual = "Visibilità manuale: le definizioni delle parole elencate nel glossario saranno visibili se marcate tramite l\'icona sulla barra degli strumenti dell\'editor";
+$ShowGlossaryInDocumentsIsNone = "Non visibili: le definizioni delle parole elencate nel glossario non saranno mai mostrate";
+$LanguageVariable = "Variante linguistica";
+$ToExportDocumentsWithGlossaryYouHaveToSelectGlossary = "Se vuoi vedere le definizioni di termini del glossario in un documento esportato, assicurati di averle selezionate nella sezione Glossario";
 ?>

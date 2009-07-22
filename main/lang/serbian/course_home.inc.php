@@ -19,4 +19,6 @@ $Blog_management = "Projekti";
 $Forum = "Forumi";
 $TOOL_SURVEY = "Ankete";
 $Administration = "Administracija";
+$IntroductionTextUpdated = "Ažuriran uvodni tekst";
+$IntroductionTextDeleted = "Obrisan uvodni tekst";
 ?>

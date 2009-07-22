@@ -15,4 +15,7 @@ $lang_new_forum_topic = "yeni ba&#351;l&#305;k eklendi";
 $lang_new_groupforum_topic = "grup forumuna yeni ba&#351;l&#305;k eklendi";
 $lang_new_dropbox_file = "yeni dosya al&#305;nd&#305;";
 $lang_update_dropbox_file = "gelen kutusundaki dosyanÄ±z gÃ¼ncellendi";
+$ForumCategoryAdded = "Forum kategorisi eklendi";
+$LearnpathAdded = "Ders eklendi";
+$GlossaryAdded = "Sözlü&#287;e yeni terim eklendi";
 ?>

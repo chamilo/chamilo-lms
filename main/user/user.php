@@ -1,4 +1,4 @@
-<?php // $Id: user.php 22201 2009-07-17 19:57:03Z cfasanando $
+<?php // $Id: user.php 22291 2009-07-22 17:39:20Z herodoto $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -424,6 +424,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	$a_users=array();
 
 	// limit
+	if (!isset($_GET['keyword']) || empty($_GET['keyword']))
 	$limit = 'LIMIT '.intval($from).','.intval($number_of_items);
 
 	// order by

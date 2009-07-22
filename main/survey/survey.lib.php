@@ -24,7 +24,7 @@
 *	@package dokeos.survey
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
 	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modification and rewriting large parts of the code
-* 	@version $Id: survey.lib.php 22096 2009-07-15 03:43:25Z ivantcholakov $
+* 	@version $Id: survey.lib.php 22296 2009-07-22 22:05:50Z cfasanando $
 *
 * 	@todo move this file to inc/lib
 * 	@todo use consistent naming for the functions (save vs store for instance)
@@ -240,7 +240,7 @@ class survey_manager
 				}
 			}
 			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date, anonymous".$additional['columns'].", session_id) VALUES (
-						'".Database::escape_string(strtolower(generate_course_code(api_substr($values['survey_code']))))."',
+						'".Database::escape_string(strtolower(generate_course_code(api_substr($values['survey_code'],0))))."',
 						'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_title'])),COURSEMANAGERLOWSECURITY))."',
 						'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['survey_subtitle'])),COURSEMANAGERLOWSECURITY))."',
 						'".Database::escape_string($_user['user_id'])."',

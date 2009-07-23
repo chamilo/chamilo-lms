@@ -52,7 +52,7 @@
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
  */
 class Security {
-	public $clean = array();
+	public static $clean = array();
 	/**
 	 * Checks if the absolute path (directory) given is really under the 
      * checker path (directory)
@@ -232,8 +232,8 @@ class Security {
 	 * @return	mixed	Variable or NULL on error
 	 */
 	public static function get ($varname) {
-		if (isset($this->clean[$varname])) {
-			return $this->clean[$varname];
+		if (isset(self::$clean[$varname])) {
+			return self::$clean[$varname];
 		}
 		return NULL;
 	}

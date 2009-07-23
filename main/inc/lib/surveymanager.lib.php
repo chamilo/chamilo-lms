@@ -30,13 +30,15 @@
 *	@package dokeos.library
 ==============================================================================
 */
-class SurveyManager
-{
+class SurveyManager {
+	private function __construct() {
+		
+	}
 	/**
 	  * Creates a new survey for the platform
+	  * Possible  deprecated method
 	  */
-	function select_survey_list($seleced_surveyid='', $extra_script='')
-	{
+	public static function select_survey_list ($seleced_surveyid='', $extra_script='') {
 		$survey_table = Database :: get_course_table('survey');
 		$sql = "SELECT * FROM $survey_table";// WHERE is_shared='1'";
 		$sql_result = api_sql_query($sql,__FILE__,__LINE__);
@@ -76,7 +78,9 @@ class SurveyManager
 	}
 */
 
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function create_group($survey_id,$group_title,$introduction,$table_group)
 	{		
 		
@@ -101,7 +105,9 @@ class SurveyManager
 
 	}
 
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function get_survey_author($authorid)
 	{
 			$user_table = Database :: get_main_table(TABLE_MAIN_USER);
@@ -112,7 +118,9 @@ class SurveyManager
 			return $firstname;
 	}
 
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function get_author($db_name,$survey_id)
 	{
 	    //$table_survey = Database :: get_course_table('survey');
@@ -122,7 +130,9 @@ class SurveyManager
 		$author=@mysql_result($res,0,'author');
 		return $author;
 	}
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function get_surveyid($db_name,$group_id)
 	{
 	    //$group_table = Database :: get_course_table('survey_group');
@@ -133,27 +143,19 @@ class SurveyManager
 		return $surveyid;
 	}
 
-	/*function get_survey_code($table_survey,$survey_code)
-	{
-			$sql="SELECT code FROM $table_survey where code='$survey_code'";
-			$result=api_sql_query($sql);
-			$code=mysql_result($result,0,'code');
-			return($code);
-	}*/
-
-	function get_groupname($db_name,$gid)
-	{
+	public static function get_groupname ($db_name,$gid) {
 		//$grouptable = Database :: get_course_table('survey_group');
 		$gid = Database::escape_string($gid);
 		$sql = "SELECT * FROM $db_name.survey_group WHERE group_id='$gid'";
 		$res=api_sql_query($sql);
-		$code=@mysql_result($res,0,'groupname');
+		$code=@Database::result($res,0,'groupname');
 		return($code);
 	}
 
-
-	function insert_into_group($survey_id,$group_title,$introduction,$tb)
-	{				
+	/**
+	 * Possible  deprecated method
+	 */
+	function insert_into_group ($survey_id,$group_title,$introduction,$tb) {				
 		$survey_id = Database::escape_string($survey_id);
 		$group_title = Database::escape_string($group_title);
 		$introduction = Database::escape_string($introduction);	
@@ -162,8 +164,10 @@ class SurveyManager
 		$result=api_sql_query($sql);
 		return mysql_insert_id();
 	}
-
-	function get_survey_code($table_survey,$survey_code)
+	/**
+	 * Possible  deprecated method
+	 */
+	function get_survey_code ($table_survey,$survey_code)
 	{
 		$survey_code = Database::escape_string($survey_code);
 		$sql="SELECT code FROM $table_survey where code='$survey_code'";
@@ -174,7 +178,9 @@ class SurveyManager
 		//echo $code;exit;
 		return($code);
 	}
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function get_survey_list()
 	{
 		$survey_table = Database :: get_course_table('survey');
@@ -188,8 +194,10 @@ class SurveyManager
 		}
 		echo "</select>";
 	}
-
-	function create_survey($surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $table_survey, $table_group)
+	/**
+	 * Possible  deprecated method
+	 */
+	function create_survey ($surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $table_survey, $table_group)
 		{
 			//$table_survey = Database :: get_course_table('survey');
 			$sql = "INSERT INTO $table_survey (code,title, subtitle, author,lang,avail_from,avail_till, is_shared,template,intro,surveythanks,creation_date) values('$surveycode','$surveytitle','$surveysubtitle','$author','$survey_language','$availablefrom','$availabletill','$isshare','$surveytemplate','$surveyintroduction','$surveythanks',curdate())";
@@ -200,12 +208,14 @@ class SurveyManager
 			$result = api_sql_query($sql2, __FILE__, __LINE__);
 			return $survey_id;
 		}
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function create_survey_in_another_language($id, $lang){
 
 		global $_course;
 
-		$original_survey = SurveyManager::get_all_datas($id);
+		$original_survey = self::get_all_datas($id);
 
 		// copy the survey itself
 		$sql = 'INSERT INTO '.$_course['dbName'].'.survey SET
@@ -226,14 +236,16 @@ class SurveyManager
 		$new_survey_id = mysql_insert_id();
 
 		// copy the groups
-		$groups = SurveyManager::listGroups($id);
+		$groups = self::listGroups($id);
 		foreach($groups as $group)
 		{
-			SurveyManager::import_group($new_survey_id, $group['group_id'], $_course['dbName'], $_course['dbName']);
+			self::import_group($new_survey_id, $group['group_id'], $_course['dbName'], $_course['dbName']);
 		}
 
 	}
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function create_survey_attach($surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $table_survey, $table_group)
 	{
 			//$table_survey = Database :: get_course_table('survey');
@@ -242,7 +254,9 @@ class SurveyManager
 			$survey_id = mysql_insert_id();
 			return $survey_id;
 	}
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function update_survey($surveyid,$surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $cidReq,$table_course)
 	{
           $sql_course = "SELECT * FROM $table_course WHERE code = '$cidReq'";
@@ -296,7 +310,9 @@ class SurveyManager
 		return($code);
 	}
 	*/
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function create_question($gid,$surveyid,$qtype,$caption,$alignment,$answers,$open_ans,$answerT,$answerD,$rating,$curr_dbname)
 	{
     	$sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
@@ -342,7 +358,9 @@ class SurveyManager
 
 		}
 
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function update_question($qid,$qtype,$caption,$alignment,$answers,$open_ans,$curr_dbname)
 	{
       	for($i=0;$i<10;$i++)
@@ -357,7 +375,9 @@ class SurveyManager
 		return mysql_insert_id();
 	}
 
-
+	/**
+	 * Possible  deprecated method
+	 */
 	 function get_question_type($questionid)
 	 {
 	  $table_question = Database :: get_course_table('questions');
@@ -368,7 +388,9 @@ class SurveyManager
 			return($code);
 	 }
 
-
+	/**
+	 * Possible  deprecated method
+	 */
 	 function no_of_question($db_name,$gid)
 	 {
 	  //$table_question = Database :: get_course_table('questions');
@@ -379,7 +401,9 @@ class SurveyManager
 			return($code);
 	 }
 
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function get_question_data($qid,$curr_dbname)
 	{
 			$qid = Database::escape_string($qid);
@@ -393,7 +417,9 @@ class SurveyManager
 			}
 			return $rs;
 	 }
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function get_data($id, $field)
 	{
 		global $_course;
@@ -403,7 +429,9 @@ class SurveyManager
 		return($code);
 
 	}
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function get_all_datas($id)
 	{
 		global $_course;
@@ -411,7 +439,9 @@ class SurveyManager
 		$res=api_sql_query($sql);
 		return mysql_fetch_object($res);
 	}
-
+	/**
+	 * Possible  deprecated method
+	 */
 	function get_surveyname($db_name,$sid)
 	{
 			//$surveytable=Database:: get_course_table('survey');
@@ -421,7 +451,9 @@ class SurveyManager
 			$code=@mysql_result($res,0,'title');
 			return($code);
 	}
-	
+	/**
+	 * Possible  deprecated method
+	 */	
 	function get_surveyname_display($sid)
 	{
 			$sid = Database::escape_string($sid);
@@ -444,7 +476,9 @@ class SurveyManager
 		  return ($result);
 		  }
 		  */
-
+	/**
+	 * Possible  deprecated method
+	 */	
 	function import_questions($import_type, $ids)
 	{
 			//$groupname=surveymanager::get_groupname($gid_arr[$index]);
@@ -516,8 +550,8 @@ class SurveyManager
 	}
 
 	/**
+	 *  Possible  deprecated method
 	 * This function deletes a
-	 *
 	 * @param unknown_type $group_id
 	 * @param unknown_type $curr_dbname
 	 *
@@ -537,7 +571,9 @@ class SurveyManager
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
 
-
+	/**
+	 *  Possible  deprecated method
+	 */
 	function ques_id_group_name($qid)
 	{
 		$ques_table=Database::get_course_table('questions');
@@ -547,7 +583,9 @@ class SurveyManager
 		$gname=surveymanager::get_groupname($id);
 		return($gname);
 	}
-
+	/**
+	 *  Possible  deprecated method
+	 */
 	function insert_questions($sid,$newgid,$gid,$table_group)
 	{
 		$sql_select = "SELECT * FROM $table_group WHERE group_id IN (".$gid.")";
@@ -561,7 +599,9 @@ class SurveyManager
 			$i++;
 		}
 	}
-
+	/**
+	 *  Possible  deprecated method
+	 */
 	function select_group_list($survey_id, $seleced_groupid='', $extra_script='')
 	{
 		$group_table = Database :: get_course_table('survey_group');
@@ -590,7 +630,9 @@ class SurveyManager
 	}
 
 
-
+	/**
+	 *  Possible  deprecated method
+	 */
 //For importing the groups to new survey
 	function insert_groups($sid,$newgid,$gids,$table_group,$table_question)
 		{
@@ -679,7 +721,9 @@ class SurveyManager
 
 
 
-
+	/**
+	 *  Possible  deprecated method
+	 */
 	function display_imported_group($sid,$table_group,$table_question)
 	{
 
@@ -715,10 +759,12 @@ class SurveyManager
 			Display :: display_sortable_table($table_header, $displays, array (), array (), $parameters);
 	}
 
-
-function attach_survey($surveyid,$newsurveyid,$db_name,$curr_dbname)
-//For attaching the whole survey with its groups and questions
-  {
+	/**
+	 *  Possible  deprecated method
+	 */
+	function attach_survey($surveyid,$newsurveyid,$db_name,$curr_dbname)
+	//For attaching the whole survey with its groups and questions
+	  {
 	 $sql = "SELECT *  FROM $db_name.survey_group WHERE survey_id = '$surveyid'";
      $res = api_sql_query($sql,__FILE__,__LINE__);
 	 while($obj=@mysql_fetch_object($res))
@@ -903,7 +949,9 @@ function insert_old_groups($sid,$gids,$table_group,$table_question)
 	return ($flag);
 }
 */
-
+	/**
+	 *  Possible  deprecated method
+	 */
 function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cidReq)
 {
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1037,7 +1085,9 @@ function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cid
 	return ($flag);
 }
 
-
+	/**
+	 *  Possible  deprecated method
+	 */
 function import_question($surveyid,$qids,$table_group,$table_question,$db_name,$cidReq,$yes)
  {
    $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1089,7 +1139,9 @@ function import_question($surveyid,$qids,$table_group,$table_question,$db_name,$
   }
   return $message;
 }
-
+	/**
+	 *  Possible  deprecated method
+	 */
 function create_course_survey_rel($cidReq,$survey_id,$table_course,$table_course_survey_rel)
 {
  $sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
@@ -1101,7 +1153,9 @@ function create_course_survey_rel($cidReq,$survey_id,$table_course,$table_course
  api_sql_query($sql,__FILE__,__LINE__);
  return $db_name;
 }
-
+	/**
+	 *  Possible  deprecated method
+	 */
 function import_existing_question($surveyid,$qids,$table_group,$table_question,$yes)
 {
   $qid=explode(",",$qids);
@@ -1148,8 +1202,10 @@ function import_existing_question($surveyid,$qids,$table_group,$table_question,$
   }
   return $message;
 }
-
-function insert_existing_groups($sid,$gids,$table_group,$table_question)
+	/**
+	 *  Possible  deprecated method
+	 */
+function insert_existing_groups ($sid,$gids,$table_group,$table_question)
   {
 	$gid_arr = explode(",",$gids);
 	$index = count($gid_arr);
@@ -1275,7 +1331,9 @@ function insert_existing_groups($sid,$gids,$table_group,$table_question)
 	}
 	return ($flag);
  }
-
+	/**
+	 *  Possible  deprecated method
+	 */
  function pick_surveyname($sid)
 		{
 			$surveytable=Database:: get_course_table('survey');
@@ -1284,7 +1342,9 @@ function insert_existing_groups($sid,$gids,$table_group,$table_question)
 			$code=@mysql_result($res,0,'title');
 			return($code);
 		}
-
+	/**
+	 *  Possible  deprecated method
+	 */
 function pick_author($survey_id)
 	{
 	    $survey_table = Database :: get_course_table('survey');
@@ -1293,7 +1353,9 @@ function pick_author($survey_id)
 		$author=@mysql_result($res,0,'author');
 		return $author;
 	}
-
+	/**
+	 *  Possible  deprecated method
+	 */
 function question_import($surveyid,$qids,$db_name,$curr_dbname)
  {
   $qid=explode(",",$qids);
@@ -1420,7 +1482,9 @@ function import_group($surveyid,$gids,$db_name,$curr_dbname)
 
 */
 
-
+	/**
+	 *  Possible  deprecated method
+	 */
 function import_group($sid,$gids,$db_name,$curr_dbname)
 {
 	$gid_arr = explode(",",$gids);
@@ -1550,6 +1614,7 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 
 
 /**
+ * Possible  deprecated method
  * Enter description here...
  *
  * @return unknown
@@ -1567,12 +1632,13 @@ function get_status()
 	return $ss;
 }
 
-
-
+/**
+ * Possible  deprecated method
+ */
 function move_question($direction,$qid,$sort,$curr_dbname)
 {
 
-	$questions=SurveyManager::get_questions_move($curr_dbname);
+	$questions=self::get_questions_move($curr_dbname);
 
 	foreach ($questions as $key=>$value)
 		{
@@ -1594,7 +1660,9 @@ function move_question($direction,$qid,$sort,$curr_dbname)
 	mysql_query($sql_update1);
 	//return ;
 }
-
+/**
+ * Possible  deprecated method
+ */
 function get_questions_move($curr_dbname)
 {
 	$sql_select_questions="SELECT  * from $curr_dbname.questions order by `sortby` asc";
@@ -1606,7 +1674,9 @@ function get_questions_move($curr_dbname)
 		}
 	return $question1;
 }
-
+/**
+ * Possible  deprecated method
+ */
 function listGroups($id_survey, $fields = '*')
 {
 	$groups_table = Database :: get_course_table(TABLE_MAIN_GROUP);
@@ -1619,7 +1689,9 @@ function listGroups($id_survey, $fields = '*')
 	}
 	return $groups;
 }
-
+/**
+ * Possible  deprecated method
+ */
 function listQuestions($id_survey, $fields = '*')
 {
 
@@ -1643,7 +1715,9 @@ function listQuestions($id_survey, $fields = '*')
 	return $questions;
 
 }
-
+/**
+ * Possible  deprecated method
+ */
 function listAnswers($qid){
 
 	$answers_table = Database :: get_course_table('survey_report');
@@ -1661,7 +1735,9 @@ function listAnswers($qid){
 	return $answers;
 }
 
-
+/**
+ * Possible  deprecated method
+ */
 function listUsers($survey_id, $dbname, $fields='id, user_id, firstname, lastname, email, organization') {
 
 	$tbl_survey_users = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
@@ -1678,7 +1754,9 @@ function listUsers($survey_id, $dbname, $fields='id, user_id, firstname, lastnam
 	return $users;
 
 }
-
+/**
+ * Possible  deprecated method
+ */
 function getUserAnswersDetails($id_userAnswers, $params=''){
 
 	$table_answers = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
@@ -1699,17 +1777,15 @@ function getUserAnswersDetails($id_userAnswers, $params=''){
  * Manage the "versioning" of a conditional survey
  * 
  * */
-class SurveyTree
-{
-	var $surveylist;	 
-	var $plainsurveylist;
-	var $numbersurveys;
+class SurveyTree {
+	public $surveylist;	 
+	public $plainsurveylist;
+	public $numbersurveys;
 	
 	/**
 	 * Sets the surveylist and the plainsurveylist
 	 */
-	function __construct()
-    {        
+	public function __construct() {        
         // Database table definitions
 		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -1823,8 +1899,7 @@ class SurveyTree
 	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos 
 	 * @version September 2008
 	 */
-	function get_children($list,$id)
-	{			
+	public function get_children ($list,$id) {			
 		$result=array();
 		foreach ($list as $key=>$node)
 		{
@@ -1836,7 +1911,7 @@ class SurveyTree
 			if (is_array($node['children']))
 			{		
 				//echo $key; echo '--<br>';					
-				$re=SurveyTree::get_children($node['children'],$id);
+				$re=self::get_children($node['children'],$id);
 				if (!empty($re))
 				{
 					$result=$re;
@@ -1859,8 +1934,7 @@ class SurveyTree
 	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos 
 	 * @version September 2008
 	 */
-	function getParentId($id)
-	{	
+	public function getParentId ($id) {	
 		$node = $this->plainsurveylist[$id];
 		if (is_array($node)&& !empty($node['parent_id']))
 			return $node['parent_id'];
@@ -1878,11 +1952,10 @@ class SurveyTree
 	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos 
 	 * @version September 2008
 	 */
-	function nextSibling($id)
-    {
+	public function nextSibling($id) {
 		$result=array();
-		$parent_id = SurveyTree::getParentId($id);			
-		$siblings  = SurveyTree::get_children($this->surveylist ,$parent_id);
+		$parent_id = self::getParentId($id);			
+		$siblings  = self::get_children($this->surveylist ,$parent_id);
 		//print_r($siblings);  
 		if (count($siblings) > 1) 
 		{			
@@ -1906,11 +1979,10 @@ class SurveyTree
 	 * @version September 2008
 	 * 
 	 */
-	function lastSibling($id)
-    {	
+	public function lastSibling($id) {	
 		$result=array();
-		$parent_id = SurveyTree::getParentId($id);			
-		$siblings  = SurveyTree::get_children($this->surveylist ,$parent_id);
+		$parent_id = self::getParentId($id);			
+		$siblings  = self::get_children($this->surveylist ,$parent_id);
 		//print_r($siblings);  
 		if (count($siblings) > 1) 
 		{			
@@ -1938,8 +2010,7 @@ class SurveyTree
 	 * @version September 2008
 	 * 
 	 */
-	function get_last_children_from_branch($list)
-	{	
+	public function get_last_children_from_branch($list) {	
 		$result=array();		
 		foreach ($list as $key=>$node)
 		{			 
@@ -1947,7 +2018,7 @@ class SurveyTree
 			//print_r($node);
 			if ($node['parent_id']!=0)
 			{				
-				$list_bros = SurveyTree::lastSibling($key);				
+				$list_bros = self::lastSibling($key);				
 				//echo '   list_bro <br>';	
 				//print_r($list_bros);
 				if (is_array($list_bros) && !empty($list_bros))					
@@ -1958,7 +2029,7 @@ class SurveyTree
 						if (is_array($bro['children']))
 						{
 							//print_r($bro['children']);							
-							return $result[]=SurveyTree::get_last_children_from_branch($bro['children']);
+							return $result[]=self::get_last_children_from_branch($bro['children']);
 						}
 						else
 						{	
@@ -1974,11 +2045,11 @@ class SurveyTree
 					//SurveyTree::get_last_children_from_branch($list_bros);
 					//echo 'sss';
 					//if if (is_array($node['children']))
-					$children = SurveyTree::get_children($node,$key);
+					$children = self::get_children($node,$key);
 					//return $result[]=SurveyTree::get_last_children_from_branch($node);
 					if (is_array($node['children']))
 					{
-						return $result[]=SurveyTree::get_last_children_from_branch($node['children']);
+						return $result[]=self::get_last_children_from_branch($node['children']);
 					}
 					else											
 					{					
@@ -1993,7 +2064,7 @@ class SurveyTree
 				//print_r($key);print_r($node['children']);
 				if (is_array($node['children']))
 				{
-					$result[]=SurveyTree::get_last_children_from_branch($node['children']);
+					$result[]=self::get_last_children_from_branch($node['children']);
 				}
 				else	
 				{
@@ -2042,8 +2113,7 @@ class SurveyTree
 	 * @version September 2008
 	 * 
 	 */
-	function createList($list)
-	{
+	public function createList ($list) {
 		$result=array();				
 		foreach ($list as $key=>$node)
 		{			
@@ -2053,7 +2123,7 @@ class SurveyTree
 				//print_r($node);
 				//echo '<br>';
 				$result[$key]= $node['name'];		
-				$re=SurveyTree::createList($node['children']);
+				$re=self::createList($node['children']);
 				if (!empty($re))
 				{				
 					if (is_array($re))

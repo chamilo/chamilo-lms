@@ -38,8 +38,7 @@ class TestSessionManager extends UnitTestCase {
 		$coach_username='';
 		$id_session=Database::get_last_insert_id();
 		ob_start();	
-		$this->sessionmanager = new SessionManager();
-		$res=$this->sessionmanager->create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username);
+		$res=SessionManager::create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username);
 		$idsesion->expectOnce(Database::get_last_insert_id());
 		$this->assertTrue(is_object($idsesion));
 		$this->assertTrue(is_numeric($id_session));
@@ -89,8 +88,7 @@ class TestSessionManager extends UnitTestCase {
 		$nb_days_acess_after='';
 		$nolimit='';
 		$id_coach='';
-		$this->sessionmanager = new SessionManager();
-		$res=$this->sessionmanager->edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach);
+		$res=SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach);
 		$idsesion->expectOnce(Database::escape_string($name));
 		$this->assertTrue(is_object($idsesion));
 		$this->assertTrue(is_numeric($id));

@@ -323,7 +323,7 @@ class DisplayGradebook
                 	$my_file= substr($_SESSION['gradebook_dest'],0,5);
                 	if (($my_file!='index' || $status_user==1) || api_is_platform_admin()) {
 	                	$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats_access.gif', get_lang('FlatView')).' ' . get_lang('FlatView') . '</a>';
-						if (($is_course_admin && $message_resource===false && $status_user==1) || api_is_platform_admin()) {
+						if (/*($is_course_admin && $message_resource===false && $status_user==1) ||*/ api_is_platform_admin()) {
 							$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('acces_tool.gif', get_lang('ScoreEdit')).' ' . get_lang('ScoreEdit') . '</a>';
 						}
 					}
@@ -359,7 +359,7 @@ class DisplayGradebook
 
 			if ($is_course_admin) {
 				$header .= '<a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats_access.gif', get_lang('FlatView')).' '. get_lang('FlatView') . '</a>';
-				if ($is_platform_admin || $is_course_admin)
+				if ( api_is_platform_admin() /*$is_platform_admin || $is_course_admin*/)
 					$header .= '<a href="gradebook_scoring_system.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('acces_tool.gif', get_lang('ScoreEdit')).' ' . get_lang('ScoreEdit') . '</a>';
 			} elseif (!(isset ($_GET['studentoverview']))) {
 				$header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('view_list.gif', get_lang('FlatView')).' ' . get_lang('FlatView') . '</a>';

@@ -205,7 +205,7 @@ class TestXmd extends UnitTestCase{
     	$parent = 0;
     	$res = $this->Xmddoc-> xmd_select_elements($xmPath, $parent);
     	$this->assertTrue(is_array($res));
-    	var_dump($res);
+    	//var_dump($res);
     }
 }
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: settings.php 22210 2009-07-18 16:17:37Z ivantcholakov $
+<?php // $Id: settings.php 22316 2009-07-23 16:18:33Z cfasanando $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -261,31 +261,60 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 		//$sql = "UPDATE $table_settings_current SET selected_value='false' WHERE category='$my_category' AND type='checkbox'";
 		//$result = api_sql_query($sql, __FILE__, __LINE__);
 		// Save the settings
+		$keys = array();
 		foreach ($values as $key => $value)
 		{
 			if (!is_array($value))
 			{
 				//$sql = "UPDATE $table_settings_current SET selected_value='".mysql_real_escape_string($value)."' WHERE variable='$key'";
 				//$result = api_sql_query($sql, __FILE__, __LINE__);
-				$result = api_set_setting($key,$value,null,null,$_configuration['access_url']);
+				
+				if (api_get_setting($key) != $value) $keys[] = $key;	
+																
+				$result = api_set_setting($key,$value,null,null,$_configuration['access_url']);												
+
 			}
 			else
 			{
+				
+				$sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
+				$res = api_sql_query($sql,__FILE__,__LINE__);
+				$subkeys = array();
+				while ($row_subkeys = Database::fetch_array($res)) {
+					// if subkey is changed					
+					if ( (isset($value[$row_subkeys['subkey']]) && api_get_setting($key,$row_subkeys['subkey']) == 'false') ||
+						 (!isset($value[$row_subkeys['subkey']]) && api_get_setting($key,$row_subkeys['subkey']) == 'true')) {
+						$keys[] = $key;
+						break;	
+					} 																		
+				}
+
 				foreach ($value as $subkey => $subvalue)
 				{
+
 					//$sql = "UPDATE $table_settings_current SET selected_value='true' WHERE variable='$key' AND subkey = '$subkey'";
 					//$result = api_sql_query($sql, __FILE__, __LINE__);
-					$result = api_set_setting($key,'true',$subkey,null,$_configuration['access_url']);				
+
+					$result = api_set_setting($key,'true',$subkey,null,$_configuration['access_url']);
+
 				}
 			}
 		}
-		
-		// add event to system log		
+
+		// add event configuration settings category to system log		
 		$time = time();
 		$user_id = api_get_user_id();		
 		$category = $_GET['category']; 		
 		event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
 		
+
+		// add event configuration settings variable to system log				
+		if (is_array($keys) && count($keys) > 0) {			
+			foreach($keys as $variable) {																	
+					event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_VARIABLE, $variable, $time, $user_id);				
+			}
+		}			
+
 		header('Location: settings.php?action=stored&category='.Security::remove_XSS($_GET['category']));
 		exit;
 	}

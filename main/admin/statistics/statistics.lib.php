@@ -361,7 +361,7 @@ class Statistics
 		$table->set_header(0, get_lang('EventType'));
 		$table->set_header(1, get_lang('DataType'));
 		$table->set_header(2, get_lang('Value'));		
-		$table->set_header(3, get_lang('Username'));
+		$table->set_header(3, get_lang('UserName'));
 		$table->set_header(4, get_lang('Date'));		
 		$table->display();
 		

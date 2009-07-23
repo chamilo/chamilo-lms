@@ -192,6 +192,7 @@ define('LOG_COURSE_CODE', 'course_code');
 define('LOG_USER_ID', 'user_id');
 define('LOG_SESSION_ID', 'session_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
+define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
 /*
 ==============================================================================
 		MAIN API EXTENSIONS

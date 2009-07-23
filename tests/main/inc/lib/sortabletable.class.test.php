@@ -127,13 +127,6 @@ class TestSortableTable extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
-	function testSortableTablee() {
-		$instancia = new SortableTable();
-		$res=$instancia->SortableTable($table_name = 'table', $get_total_number_function = null, $get_data_function = null, $default_column = 1, $default_items_per_page = 20, $default_order_direction = 'ASC');
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}	
 }
 
 class TestSortableTableFromArray extends UnitTestCase { 
@@ -148,13 +141,6 @@ class TestSortableTableFromArray extends UnitTestCase {
 		$res=SortableTableFromArray::get_total_number_of_items();
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
-	}
-	
-	function testSortableTableFromArrayy() {
-		$instancia = new SortableTableFromArray();
-		$res=$instancia->SortableTableFromArray();
-		$this->assertTrue(is_null($res));
-		//var_dump($res);	
 	}
 }
 
@@ -171,13 +157,5 @@ class TestSortableTableFromArrayConfig extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}		
-	
-	public function testSortableTableFromArrayConfigg() {
-		$instancia = new SortableTableFromArrayConfig();
-		$table_data='';
-		$res=$instancia->SortableTableFromArrayConfig($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename',$column_show=null,$column_order=null,$direction='ASC');
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}	
 }
 ?>

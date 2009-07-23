@@ -10,6 +10,9 @@
 */
 require_once('display.lib.php');
 class SessionManager {
+	private function __construct() {
+		
+	}
 	 /** 
 	  * Create a session 
 	  * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
@@ -26,7 +29,7 @@ class SessionManager {
 	  * @param 	string		coach_username
 	  * @return $id_session;
 	  **/
-	function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username) {
+	public static function create_session ($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username) {
 		global $_user;
 		$name= trim($sname);
 		$year_start= intval($syear_start); 
@@ -103,7 +106,7 @@ class SessionManager {
 	 * @return $id;
 	 * The parameter id is a primary key
 	**/
-	function edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach) {
+	public static function edit_session ($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach) {
 		global $_user;
 		$name=trim(stripslashes($name));
 		$year_start=intval($year_start);
@@ -178,7 +181,7 @@ class SessionManager {
      * @return	void	Nothing, or false on error 
 	 * The parameters is a array to delete sessions 
 	 **/
-	function delete_session($id_checked) {
+	public static function delete_session ($id_checked) {
 		$tbl_session=						Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_course=			Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_rel_course_rel_user=	Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -254,7 +257,7 @@ class SessionManager {
 	  * @param	bool		Whether to unsubscribe existing users (true, default) or not (false)
 	  * @return	void		Nothing, or false on error
 	  **/
-	function suscribe_users_to_session($id_session,$user_list,$empty_users=true){
+	public static function suscribe_users_to_session ($id_session,$user_list,$empty_users=true) {
 	 	
 	  	if ($id_session!= strval(intval($id_session))) return false;
 	   	foreach($user_list as $intUser){
@@ -339,7 +342,7 @@ class SessionManager {
      * @param	bool	Whether to unsubscribe existing users (true, default) or not (false)
      * @return	void	Nothing, or false on error  
      **/
-     function add_courses_to_session($id_session, $course_list, $empty_courses=true){
+     public static function add_courses_to_session ($id_session, $course_list, $empty_courses=true) {
      	// security checks
      	if ($id_session!= strval(intval($id_session))) { return false; }
 	   	foreach($course_list as $intCourse){
@@ -419,8 +422,7 @@ class SessionManager {
   * @param	string	Field's language var name 
   * @return int     new extra field id
   */
-	function create_session_extra_field($fieldvarname, $fieldtype, $fieldtitle)
-	{		
+	public static function create_session_extra_field ($fieldvarname, $fieldtype, $fieldtitle) {		
 		// database table definition		
 		$t_sf 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);					
 		$fieldvarname 	= Database::escape_string($fieldvarname);
@@ -465,8 +467,7 @@ class SessionManager {
  * @param	string	Field value
  * @return	boolean	true if field updated, false otherwise
  */
-	function update_session_extra_field_value($session_id,$fname,$fvalue='')
-	{
+	public static function update_session_extra_field_value ($session_id,$fname,$fvalue='') {
 				
 		$t_sf 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);		
 		$t_sfv 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
@@ -548,8 +549,7 @@ class SessionManager {
 	* @param int url id
 	* @return int num_rows or false if there are not fields 
 	* */
-	function relation_session_course_exist ($session_id, $course_id)
-	{		
+	public static function relation_session_course_exist ($session_id, $course_id) {		
 		$tbl_session_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$return_value = false;					
 		$sql= "SELECT course_code FROM $tbl_session_course WHERE id_session = ".Database::escape_string($session_id)." AND course_code = '".Database::escape_string($course_id)."'";
@@ -566,8 +566,7 @@ class SessionManager {
 	* @param string session name
 	* @return mixed false if the session does not exist, array if the session exist  
 	* */	
-	function get_session_by_name($session_name)
-	{
+	public static function get_session_by_name ($session_name) {
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 		$sql = 'SELECT id, id_coach, date_start, date_end FROM '.$tbl_session.' WHERE name="'.Database::escape_string($session_name).'"';
 		$result = api_sql_query($sql,  __FILE__, __LINE__);

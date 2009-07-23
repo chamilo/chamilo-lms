@@ -79,7 +79,7 @@ class TestXht extends UnitTestCase {
 		$result = '';
 		$res = xhtdoc::_show_param();
 		$this->assertTrue(is_string($res));
-		var_dump($res);
+		//var_dump($res);
 	}
 }
 ?>

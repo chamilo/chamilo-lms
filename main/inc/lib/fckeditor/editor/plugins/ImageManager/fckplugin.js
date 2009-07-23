@@ -166,7 +166,8 @@ ImageManager.prototype.insert = function(outparam)
 			lastSlashPosition = sElm.src.lastIndexOf('/') + 1;
 			imgFileName = sElm.src.substring(lastSlashPosition);
 			var url = FCKConfig.PluginsPath + 'ImageManager/editor.php?img=' + "/" + imgFileName;
-			Dialog(url, null, outparam);
+			//Dialog(url, null, outparam);
+			OpenDialog( url, null, outparam, 'FCKDialog_ImageEditor', 'Image Editor', 600, 600 );
 		}
 		// no image selected - stop
 		else
@@ -181,7 +182,8 @@ ImageManager.prototype.insert = function(outparam)
 
 		var manager = FCKConfig.PluginsPath+'ImageManager/manager.php?base_url_alt='+FCKConfig.CreateDocumentDir;
 
-		Dialog(manager, function(param) {
+		//Dialog(manager, function(param) {
+		OpenDialog( manager, function(param) {
 
 			if (!param) return false; // user must have pressed cancel
 			var sElm = FCK.Selection.GetSelectedElement();
@@ -206,9 +208,29 @@ ImageManager.prototype.insert = function(outparam)
 			setAttrib(im, 'className', param.f_className, true);
 			return;
 
-		}, outparam);
+		//}, outparam);
+		}, outparam, 'FCKDialog_ImageManager', 'Image Manager', 800, 600 );
 	}
 };
+
+// Added by Ivan Tcholakov, 23-JUL-2009.
+function OpenDialog( url, action, init, dialogName, dialogTitle, width, height )
+{
+	if ( FCKConfig.OpenImageManagerInANewWindow && FCKConfig.OpenImageManagerInANewWindow.toString() == 'true' ) {
+		Dialog(url, action, init);
+	} else {
+		if (typeof init == "undefined") {
+			init = window;	// pass this window object by default
+		}
+		FCKDialog.OpenDialog(  dialogName,  dialogTitle, url, width, height ) ;
+		Dialog._arguments = init;
+		Dialog._return = function (val) {
+			if (val && action) {
+				action(val);
+			}
+		};
+	}
+}
 
 // Dialog v3.0 - Copyright (c) 2003-2004 interactivetools.com, inc.
 // This copyright notice MUST stay intact for use (see license.txt).
@@ -229,17 +251,7 @@ function Dialog(url, action, init) {
 	if (typeof init == "undefined") {
 		init = window;	// pass this window object by default
 	}
-	if ( FCKConfig.OpenImageManagerInANewWindow && FCKConfig.OpenImageManagerInANewWindow.toString() == 'true' ) {
-		Dialog._geckoOpenModal(url, action, init);
-	} else {
-		Dialog._return = function (val) {
-			if (val && action) {
-				action(val);
-			}
-		};
-		Dialog._arguments = init;
-		FCKDialog.OpenDialog( 'FCKDialog_ImageManager', 'Image Manager', url, 800, 600 ) ;
-	}
+	Dialog._geckoOpenModal(url, action, init);
 };
 
 Dialog._parentEvent = function(ev) {

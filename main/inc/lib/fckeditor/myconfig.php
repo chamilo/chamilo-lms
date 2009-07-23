@@ -99,6 +99,10 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 // for previewing images. This is why we load this plugin only in case when the simple file manager is used.
 if (!(api_get_setting('advanced_filemanager') == 'true')) {
 	$config['LoadPlugin'][] = 'ImageManager';
+	// The following setting defines how the simple file manager to be opened:
+	// true  - in a new browser window, or
+	// false - as a dialog whithin the page (recommended).
+	$config['OpenImageManagerInANewWindow'] = true; // true while developing this feature.
 }
 
 // fckEmbedMovies : Adds a dilog for inserting video files.

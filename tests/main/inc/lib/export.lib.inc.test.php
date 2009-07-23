@@ -15,22 +15,20 @@ class TestExport extends UnitTestCase {
         $docman = new MockDocumentManager();
 		$data = array();
 		$filename = 'export';
-		$this->export = new Export();
-		$res=$this->export->export_table_csv($data,$filename);
+		$res=Export::export_table_csv($data,$filename);
         $docman->expectOnce('DocumentManager::file_send_for_download',array($filename,true,$filename.'.csv'));
-		$this->assertTrue(is_object($this->export));
+		$this->assertTrue(is_null($res));
         //var_dump($docman);
-        //var_dump($export);
+        //var_dump($res);
     }
  
  	function testExportTableXls() {
  		$docman = new MockDocumentManager();
 		$data = array();
 		$filename = 'export';
-		$this->export = new Export();
-		$res=$this->export->export_table_xls($data,$filename);
+		$res=Export::export_table_xls($data,$filename);
         $docman->expectOnce('DocumentManager::file_send_for_download',array($filename,true,$filename.'.xls'));
-		$this->assertTrue(is_object($this->export));
+		$this->assertTrue(is_null($res));
         //var_dump($docman);
         //var_dump($export);
  	}
@@ -42,10 +40,9 @@ class TestExport extends UnitTestCase {
 		$item_tagname = 'item';
 		$wrapper_tagname = null;
 		$encoding=null;
-		$this->export = new Export();
-		$res=$this->export->export_table_xml($data,$filename,$item_tagname,$wrapper_tagname,$encoding);
+		$res=Export::export_table_xml($data,$filename,$item_tagname,$wrapper_tagname,$encoding);
  		$docman->expectOnce('DocumentManager::file_send_for_download',array($filename,true,$filename.'.xml'));
-		$this->assertTrue(is_object($this->export));
+		$this->assertTrue(is_null($res));
 		//var_dump($docman);
         //var_dump($export);
  	}
@@ -56,28 +53,14 @@ class TestExport extends UnitTestCase {
 		$filename = 'export';
 		$wrapper_tagname=null;
  		$encoding='ISO-8859-1';
- 		$this->export = new Export();
-		$res=$this->export->export_complex_table_xml($data,$filename,$wrapper_tagname,$encoding);
+ 		$res=Export::export_complex_table_xml($data,$filename,$wrapper_tagname,$encoding);
  		$docman->expectOnce('DocumentManager::file_send_for_download',array($filename,true,$filename.'.xml'));
-		$this->assertTrue(is_object($this->export));
+		$this->assertTrue(is_null($res));
 		//var_dump($docman);
  	}
  
   	function testExportComplexTableXmlHelper() {
-  		/** Here not use mock cause use the same class.
-  		 * 
-  		 */
-  		/*
-  		$docman = new MockExport();
   		$data = array();
-		$level=1;
- 		$this->export = new Export();
-		$res=$this->export->_export_complex_table_xml_helper($data,$level);
- 		$docman->expectOnce('Export::_export_complex_table_xml_helper',array());
-		$this->assertTrue(is_object($this->export));
-		//var_dump($docman);*/ 		
-	
-		$data = array();
 		$level=1;
 		$res=Export::_export_complex_table_xml_helper($data,$level);
 		$this->assertTrue(is_string($res));
@@ -98,13 +81,12 @@ class TestExport extends UnitTestCase {
  		$this->assertTrue(is_bool($res));
  		//var_dump($res);
  	}
- 	/*
+ 	/* DEPRECATED
  	function testCopydir() {
- 		
  		$origine='';
  		$destination='';
  		$verbose = '';
- 		$res =$this->exception(copydir($origine));
+ 		$res =Export::copydir($origine, $destination, $verbose = false);
  		$this->assertTrue($res);
  		var_dump($verbose);
  	}*/
@@ -116,9 +98,7 @@ class TestExport extends UnitTestCase {
 		$exportedCourseId='';
 		$res=makeTheBackup($exportedCourseId);
 		$this->assertTrue(is_bool($res));
-		//var_dump($res);
-				
-				
+		//var_dump($res);		
  	}
 }	
 ?>

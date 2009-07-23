@@ -1,32 +1,25 @@
 <?php
-/*
- * error generate 
- * Fatal error: Call to undefined 
- * function uploadprogress_get_info() in 
- * /var/www/dokeossvn186/main/inc/lib/upload.xajax.php 
- * on line 17
- *
+/** To can run this test you need change the line 17 in upload.xajax.php by:
+ * $ul_info = array();
+ *	if(function_exists('uploadprogress_get_info'))
+ *	{
+ *		$ul_info = uploadprogress_get_info($upload_id);
+ *	}
  */
-/*  
+
 require_once(api_get_path(LIBRARY_PATH).'upload.xajax.php');
-require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';	
+require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
+require_once api_get_path(LIBRARY_PATH).'xajax/xajaxResponse.inc.php';	
 
-//require_once('main/inc/lib/xajax/xajax.inc.php');
+	
 
+class TestUpdateXajax extends UnitTestCase {
 
-class TestUpdateProgress extends UnitTestCase {
-
-	public function TestUpdateProgress1(){
-		$this->UnitTestCase('Update Progress test');
-	}
-	public function  testUpdateProgress(){
+	function testUpdateProgress(){
 		$div_id='';
 		$upload_id='';
-		$waitAfterupload=false;
-		//$res1=uploadprogress_get_info($upload_id);
-		$res = updateProgress($div_id, $upload_id, $waitAfterupload);
-
+		$res = updateProgress($div_id, $upload_id, $waitAfterupload=false);
 		$this->assertTrue($res);
 	}
-}*/
+}
 ?>

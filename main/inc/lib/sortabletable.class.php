@@ -36,78 +36,77 @@ require_once 'main_api.lib.php';
  * - choose how many items you see per page
  * - navigate through all data-pages
  */
-class SortableTable extends HTML_Table
-{
+class SortableTable extends HTML_Table {
 	/**
 	 * A name for this table
 	 */
-	var $table_name;
+	public $table_name;
 	/**
 	 * The page to display
 	 */
-	var $page_nr;
+	public $page_nr;
 	/**
 	 * The column to sort the data
 	 */
-	var $column;
+	public $column;
 	/**
 	 * The sorting direction (ASC or DESC)
 	 */
-	var $direction;
+	public $direction;
 	/**
 	 * Number of items to display per page
 	 */
-	var $per_page;
+	public $per_page;
 	/**
 	 * The default number of items to display per page
 	 */
-	var $default_items_per_page;
+	public $default_items_per_page;
 	/**
 	 * A prefix for the URL-parameters, can be used on pages with multiple
 	 * SortableTables
 	 */
-	var $param_prefix;
+	public $param_prefix;
 	/**
 	 * The pager object to split the data in several pages
 	 */
-	var $pager;
+	public $pager;
 	/**
 	 * The total number of items in the table
 	 */
-	var $total_number_of_items;
+	public $total_number_of_items;
 	/**
 	 * The function to get the total number of items
 	 */
-	var $get_total_number_function;
+	public $get_total_number_function;
 	/**
 	 * The function to the the data to display
 	 */
-	var $get_data_function;
+	public $get_data_function;
 	/**
 	 * An array with defined column-filters
 	 */
-	var $column_filters;
+	public $column_filters;
 	/**
 	 * A list of actions which will be available through a select list
 	 */
-	var $form_actions;
+	public $form_actions;
 	/**
 	 * Additional parameters to pass in the URL
 	 */
-	var $additional_parameters;
+	public $additional_parameters;
 	/**
 	 * Additional attributes for the th-tags
 	 */
-	var $th_attributes;
+	public $th_attributes;
 	/**
 	 * Additional attributes for the td-tags
 	 */
-	var $td_attributes;
+	public $td_attributes;
 	/**
 	 * Array with names of the other tables defined on the same page of this
 	 * table
 	 */
-	var $other_tables;
+	public $other_tables;
 	
 
 	/**
@@ -124,9 +123,8 @@ class SortableTable extends HTML_Table
 	 * @param string $default_order_direction The default order direction;
 	 * either the constant 'ASC' or 'DESC'
 	 */
-	function SortableTable($table_name = 'table', $get_total_number_function = null, $get_data_function = null, $default_column = 1, $default_items_per_page = 20, $default_order_direction = 'ASC')
-	{
-		parent :: HTML_Table(array ('class' => 'data_table'));
+	public function __construct ($table_name = 'table', $get_total_number_function = null, $get_data_function = null, $default_column = 1, $default_items_per_page = 20, $default_order_direction = 'ASC') {
+		parent :: __construct (array ('class' => 'data_table'));
 		$this->table_name = $table_name;
 		$this->additional_parameters = array ();
 		$this->param_prefix = $table_name.'_';
@@ -190,8 +188,7 @@ class SortableTable extends HTML_Table
 	/**
 	 * Get the Pager object to split the showed data in several pages
 	 */
-	function get_pager()
-	{
+	public function get_pager () {
 		if (is_null($this->pager))
 		{
 			$total_number_of_items = $this->get_total_number_of_items();
@@ -226,8 +223,7 @@ class SortableTable extends HTML_Table
 	 * Displays the table, complete with navigation buttons to browse through
 	 * the data-pages.
 	 */
-	function display()
-	{
+	public function display () {
 		global $charset;
 		$empty_table = false;
 		$html = '';
@@ -320,8 +316,7 @@ class SortableTable extends HTML_Table
 	 * Get the HTML-code with the navigational buttons to browse through the
 	 * data-pages.
 	 */
-	function get_navigation_html()
-	{
+	public function get_navigation_html () {
 		$pager = $this->get_pager();
 		$pager_links = $pager->getLinks();
 		$showed_items = $pager->getOffsetByPageId();
@@ -333,8 +328,7 @@ class SortableTable extends HTML_Table
 	/**
 	 * Get the HTML-code with the data-table.
 	 */
-	function get_table_html()
-	{
+	public function get_table_html () {
 		$pager = $this->get_pager();
 		$val = $pager->getOffsetByPageId();
 		$offset = $pager->getOffsetByPageId();
@@ -363,8 +357,7 @@ class SortableTable extends HTML_Table
 	 * Get the HTML-code wich represents a form to select how many items a page
 	 * should contain.
 	 */
-	function get_page_select_form()
-	{
+	public function get_page_select_form () {
 		$total_number_of_items = $this->get_total_number_of_items();
 		if ($total_number_of_items <= $this->default_items_per_page)
 		{
@@ -396,8 +389,7 @@ class SortableTable extends HTML_Table
 	/**
 	 * Get the table title.
 	 */
-	function get_table_title()
-	{
+	public function get_table_title () {
 		$pager = $this->get_pager();
 		$showed_items = $pager->getOffsetByPageId();
 		return $showed_items[0].' - '.$showed_items[1].' / '.$this->get_total_number_of_items();
@@ -413,8 +405,7 @@ class SortableTable extends HTML_Table
 	 * @param string $td_attributes Additional attributes for the td-tags of the
 	 * column
 	 */
-	function set_header($column, $label, $sortable = true, $th_attributes = null, $td_attributes = null)
-	{
+	public function set_header ($column, $label, $sortable = true, $th_attributes = null, $td_attributes = null) {
 		$param['direction'] = 'ASC';
 		if ($this->column == $column && $this->direction == 'ASC') {
 			$param['direction'] = 'DESC';
@@ -452,8 +443,7 @@ class SortableTable extends HTML_Table
 	 * Get the parameter-string with additional parameters to use in the URLs
 	 * generated by this SortableTable
 	 */
-	function get_additional_url_paramstring()
-	{
+	public function get_additional_url_paramstring () {
 		$param_string_parts = array ();
 		if(is_array($this->additional_parameters) && count($this->additional_parameters)>0)
 		{
@@ -493,8 +483,7 @@ class SortableTable extends HTML_Table
 	 * Get the parameter-string with the SortableTable-related parameters to use
 	 * in URLs
 	 */
-	function get_sortable_table_param_string()
-	{
+	public function get_sortable_table_param_string () {
 		$param[$this->param_prefix.'direction'] = $this->direction;
 		$param[$this->param_prefix.'page_nr'] = $this->page_nr;
 		$param[$this->param_prefix.'per_page'] = $this->per_page;
@@ -514,8 +503,7 @@ class SortableTable extends HTML_Table
 	 * @param string $function The name of the filter-function. This should be a
 	 * function wich requires 1 parameter and returns the filtered value.
 	 */
-	function set_column_filter($column, $function)
-	{
+	public function set_column_filter ($column, $function) {
 		$this->column_filters[$column] = $function;
 	}
 	/**
@@ -527,8 +515,7 @@ class SortableTable extends HTML_Table
 	 * @param string $checkbox_name The name of the generated checkboxes. The
 	 * value of the checkbox will be the value of the first column.
 	 */
-	function set_form_actions($actions, $checkbox_name = 'id')
-	{
+	public function set_form_actions ($actions, $checkbox_name = 'id') {
 		$this->form_actions = $actions;
 		$this->checkbox_name = $checkbox_name;
 	}
@@ -536,8 +523,7 @@ class SortableTable extends HTML_Table
 	 * Define a list of additional parameters to use in the generated URLs
 	 * @param array $parameters
 	 */
-	function set_additional_parameters($parameters)
-	{
+	public function set_additional_parameters ($parameters) {
 		$this->additional_parameters = $parameters;
 	}
 	/**
@@ -548,8 +534,7 @@ class SortableTable extends HTML_Table
 	 * to their default state when sorting this table.
 	 * @param array $tablenames An array of table names.
 	 */
-	function set_other_tables($tablenames)
-	{
+	public function set_other_tables ($tablenames) {
 		$this->other_tables = $tablenames;
 	}
 	/**
@@ -559,8 +544,7 @@ class SortableTable extends HTML_Table
 	 * converted into a checkbox
 	 * @param array $row A row from the table.
 	 */
-	function filter_data($row)
-	{
+	public function filter_data ($row) {
 		$url_params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
 		foreach ($this->column_filters as $column => $function)
 		{
@@ -589,8 +573,7 @@ class SortableTable extends HTML_Table
 	 * 2nd argument in the constructor of a SortableTable. Make sure your
 	 * function has the same parameters as defined here.
 	 */
-	function get_total_number_of_items()
-	{
+	public function get_total_number_of_items () {
 		if ($this->total_number_of_items == -1 && !is_null($this->get_total_number_function)) {
 			$this->total_number_of_items = call_user_func($this->get_total_number_function);
 		}
@@ -607,8 +590,7 @@ class SortableTable extends HTML_Table
 	 * @param string $direction In which order should the data be sorted (ASC
 	 * or DESC)
 	 */
-	function get_table_data($from = null, $per_page = null, $column = null, $direction = null)
-	{
+	public function get_table_data ($from = null, $per_page = null, $column = null, $direction = null) {
 		if (!is_null($this->get_data_function))
 		{
 			return call_user_func($this->get_data_function, $from, $this->per_page, $this->column, $this->direction);
@@ -619,29 +601,26 @@ class SortableTable extends HTML_Table
 /**
  * Sortable table which can be used for data available in an array
  */
-class SortableTableFromArray extends SortableTable
-{
+class SortableTableFromArray extends SortableTable {
 	/**
 	 * The array containing all data for this table
 	 */
-	var $table_data;
+	public $table_data;
 	/**
 	 * Constructor
 	 * @param array $table_data
 	 * @param int $default_column
 	 * @param int $default_items_per_page
 	 */
-	function SortableTableFromArray($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename')
-	{
-		parent :: SortableTable($tablename, null, null, $default_column, $default_items_per_page);
+	public function __construct ($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename') {
+		parent :: __construct ($tablename, null, null, $default_column, $default_items_per_page);
 		$this->table_data = $table_data;
 	}
 	/**
 	 * Get table data to show on current page
 	 * @see SortableTable#get_table_data
 	 */
-	function get_table_data($from = 1)
-	{
+	public function get_table_data ($from = 1) {
 		$content = TableSort :: sort_table($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC);
 		return array_slice($content, $from, $this->per_page);
 	}
@@ -649,8 +628,7 @@ class SortableTableFromArray extends SortableTable
 	 * Get total number of items
 	 * @see SortableTable#get_total_number_of_items
 	 */
-	function get_total_number_of_items()
-	{
+	public function get_total_number_of_items() {
 		return count($this->table_data);
 	}
 }
@@ -666,8 +644,7 @@ class SortableTableFromArray extends SortableTable
  * These means that the 3th column (letter "c") will be sort like the order we use in the 5th column 
  */
  
-class SortableTableFromArrayConfig extends SortableTable
-{	
+class SortableTableFromArrayConfig extends SortableTable {	
 	/**
 	 * The array containing the columns that will be show i.e $column_show=array('1','0','0'); we will show only the 1st column
 	 */
@@ -691,12 +668,11 @@ class SortableTableFromArrayConfig extends SortableTable
 	 * @param array $column_show An array with binary values 1: we show the column 2: we don't show it 
 	 * @param array $column_order An array of integers that let us decide how the columns are going to be sort.   
 	 */ 
-	public function SortableTableFromArrayConfig($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename',$column_show=null,$column_order=null,$direction='ASC')
-	{
+	public function __construct ($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename',$column_show=null,$column_order=null,$direction='ASC') {
 		$this->column_show=$column_show;
 		$this->column_order=$column_order;
 		
-		parent :: SortableTable($tablename, null, null, $default_column, $default_items_per_page,$direction);
+		parent :: __construct ($tablename, null, null, $default_column, $default_items_per_page,$direction);
 		
 		$this->table_data = $table_data;
 	}
@@ -704,8 +680,7 @@ class SortableTableFromArrayConfig extends SortableTable
 	 * Get table data to show on current page
 	 * @see SortableTable#get_table_data
 	 */
-	public function get_table_data($from = 1)
-	{			
+	public function get_table_data($from = 1) {			
 		$content = TableSort :: sort_table_config($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC ,$this->column_show, $this->column_order);
 		return array_slice($content, $from, $this->per_page);
 	}
@@ -714,8 +689,7 @@ class SortableTableFromArrayConfig extends SortableTable
 	 * Get total number of items
 	 * @see SortableTable#get_total_number_of_items
 	 */
-	public function get_total_number_of_items()
-	{
+	public function get_total_number_of_items () {
 		return count($this->table_data);
 	}	
 }

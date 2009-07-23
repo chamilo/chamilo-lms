@@ -45,7 +45,8 @@
 
 	function selectImage(filename, alt, width, height) 
 	{
-		var topDoc = window.top.document;
+		//var topDoc = window.top.document;
+		var topDoc = window.parent.document;
 		
 		var obj = topDoc.getElementById('f_file');  obj.value = filename;
 		var obj = topDoc.getElementById('f_url');  obj.value = filename;		

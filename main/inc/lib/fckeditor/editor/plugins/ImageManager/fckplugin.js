@@ -232,6 +232,11 @@ function Dialog(url, action, init) {
 	if ( FCKConfig.OpenImageManagerInANewWindow && FCKConfig.OpenImageManagerInANewWindow.toString() == 'true' ) {
 		Dialog._geckoOpenModal(url, action, init);
 	} else {
+		Dialog._return = function (val) {
+			if (val && action) {
+				action(val);
+			}
+		};
 		Dialog._arguments = init;
 		FCKDialog.OpenDialog( 'FCKDialog_ImageManager', 'Image Manager', url, 800, 600 ) ;
 	}

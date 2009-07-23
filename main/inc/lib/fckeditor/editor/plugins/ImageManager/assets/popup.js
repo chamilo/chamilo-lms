@@ -133,8 +133,16 @@ function __dlg_translate(i18n) {
 
 // closes the dialog and passes the return info upper.
 function __dlg_close(val) {
-	opener.Dialog._return(val);
-	window.close();
+	if ( opener )
+	{
+		opener.Dialog._return(val);
+		window.close();
+	}
+	else if ( window.parent )
+	{
+		oEditor.Dialog._return(val);
+		window.parent.CloseDialog() ;
+	}
 };
 
 function __dlg_close_on_esc(ev) {

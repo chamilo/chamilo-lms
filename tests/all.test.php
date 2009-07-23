@@ -72,9 +72,12 @@ class AllTests extends TestSuite {
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/urlmanager.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
-      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
+
      
-      /*
+      
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/blog.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/classmanager.lib.test.php');
@@ -115,12 +118,7 @@ class AllTests extends TestSuite {
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/urlmanager.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
-     */
-      
-     
-      
-      //$this->addTestFile(dirname(__FILE__).'/run_me.php');   
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
       //$this->assertTrue(file_exists('/temp/test.log'));
     }
 }

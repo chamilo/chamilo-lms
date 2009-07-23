@@ -62,9 +62,11 @@ class AllTests extends TestSuite {
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/tablesort.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/text.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/tracking.lib.test.php');
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/upload.xajax.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/upload.xajax.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/urlmanager.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
      
       /*
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
@@ -103,9 +105,11 @@ class AllTests extends TestSuite {
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/tablesort.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/text.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/tracking.lib.test.php');
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/upload.xajax.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/upload.xajax.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/urlmanager.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
      */
       
      

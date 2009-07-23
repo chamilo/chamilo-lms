@@ -136,7 +136,8 @@ function drawErrorBase(&$manager)
 
 	function hideMessage()
 	{
-		var topDoc = window.top.document;
+		//var topDoc = window.top.document;
+		var topDoc = window.parent.document;
 		var messages = topDoc.getElementById('messages');
 		if(messages)
 			messages.style.display = "none";
@@ -145,7 +146,8 @@ function drawErrorBase(&$manager)
 	init = function()
 	{
 		hideMessage();
-		var topDoc = window.top.document;
+		//var topDoc = window.top.document;
+		var topDoc = window.parent.document;
 
 <?php 
 	//we need to refesh the drop directory list

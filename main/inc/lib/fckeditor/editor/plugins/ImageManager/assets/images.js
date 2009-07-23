@@ -27,7 +27,8 @@
 	//update the dir list in the parent window.
 	function updateDir(newDir)
 	{
-		var selection = window.top.document.getElementById('dirPath');
+		//var selection = window.top.document.getElementById('dirPath');
+		var selection = window.parent.document.getElementById('dirPath');
 		if(selection)
 		{
 			for(var i = 0; i < selection.length; i++)
@@ -60,7 +61,8 @@
 
 	function showMessage(newMessage) 
 	{
-		var topDoc = window.top.document;
+		//var topDoc = window.top.document;
+		var topDoc = window.parent.document;
 
 		var message = topDoc.getElementById('message');
 		var messages = topDoc.getElementById('messages');

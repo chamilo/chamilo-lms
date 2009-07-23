@@ -1,4 +1,4 @@
-<?php // $Id: session_handler.class.php 16653 2008-11-03 22:49:07Z ivantcholakov $
+<?php // $Id: session_handler.class.php 22310 2009-07-23 15:36:19Z iflorespaz $
 /*
 ===============================================================================
 	Dokeos - elearning and course management software
@@ -36,17 +36,15 @@
 ==============================================================================
 */
 
-class session_handler
-{
-	var $connexion;
-	var $idConnexion;
+class session_handler {
+	public $connexion;
+	public $idConnexion;
 
-	var $lifetime;
+	public $lifetime;
 
-	var $sessionName;
+	public $sessionName;
 
-	function session_handler()
-	{
+	public function session_handler () {
 		global $_configuration;
 
 		$this->lifetime=60; // 60 minutes
@@ -56,8 +54,7 @@ class session_handler
 		$this->idConnexion=false;
 	}
 
-	function sqlConnect()
-	{
+	public function sqlConnect () {
 		if(!$this->idConnexion)
 		{
 			$this->idConnexion=@mysql_connect($this->connexion['server'],$this->connexion['login'],$this->connexion['password'],true);
@@ -69,8 +66,7 @@ class session_handler
 		return $this->idConnexion?true:false;
 	}
 
-	function sqlClose()
-	{
+	public function sqlClose() {
 		if($this->idConnexion)
 		{
 			mysql_close($this->idConnexion);
@@ -83,8 +79,7 @@ class session_handler
 		return false;
 	}
 
-	function sqlQuery($query,$die_on_error=true)
-	{
+	public function sqlQuery ($query,$die_on_error=true) {
 		$result=mysql_query($query,$this->idConnexion);
 
 		if($die_on_error && !$result)
@@ -97,20 +92,17 @@ class session_handler
 		return $result;
 	}
 
-	function open($path,$name)
-	{
+	public function open ($path,$name) {
 		$this->sessionName=$name;
 
 		return true;
 	}
 
-	function close()
-	{
+	public function close () {
 		return $this->garbage(0)?true:false;
 	}
 
-	function read($sess_id)
-	{
+	public function read ($sess_id) {
 		if($this->sqlConnect())
 		{
 			$result=$this->sqlQuery("SELECT session_value FROM ".$this->connexion['base'].".php_session WHERE session_id='$sess_id'");
@@ -124,8 +116,7 @@ class session_handler
 		return '';
 	}
 
-	function write($sess_id,$sess_value)
-	{
+	public function write ($sess_id,$sess_value) {
 		$time=time();
 
 		if($this->sqlConnect())
@@ -143,8 +134,7 @@ class session_handler
 		return false;
 	}
 
-	function destroy($sess_id)
-	{
+	public function destroy ($sess_id) {
 		if($this->sqlConnect())
 		{
 			$this->sqlQuery("DELETE FROM ".$this->connexion['base'].".php_session WHERE session_id='$sess_id'");
@@ -155,8 +145,7 @@ class session_handler
 		return false;
 	}
 
-	function garbage($lifetime)
-	{
+	public function garbage ($lifetime) {
 		if($this->sqlConnect())
 		{
 			$result=$this->sqlQuery("SELECT COUNT(session_id) FROM ".$this->connexion['base'].".php_session");

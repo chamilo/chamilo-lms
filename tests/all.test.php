@@ -14,6 +14,7 @@ require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'social.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'upload.xajax.php');
 require_once(api_get_path(LIBRARY_PATH).'xht.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'xmd.lib.php');
 require_once('main/inc/lib/fileDisplay.lib.test.php');
 require_once('main/inc/lib/fileManager.lib.test.php');
 require_once('main/inc/lib/geometry.lib.test.php');
@@ -70,8 +71,8 @@ class AllTests extends TestSuite {
 	  //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/upload.xajax.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/urlmanager.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php');
-      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
      
       /*
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');

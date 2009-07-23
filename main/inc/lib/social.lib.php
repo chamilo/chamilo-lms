@@ -10,7 +10,7 @@ define(SOCIALDELETED,6);
 
 class UserFriend extends UserManager {	
 	
-	function __construct() {
+	private function __construct() {
 		
 	}
 	/**
@@ -21,7 +21,7 @@ class UserFriend extends UserManager {
 	 * @param int kind of relation between users
 	 * @return void
 	 */
-	public function register_friend ($friend_id,$my_user_id,$relation_type) {
+	public static function register_friend ($friend_id,$my_user_id,$relation_type) {
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . ((int)$friend_id).' AND user_id='.((int)$my_user_id);
 
@@ -47,7 +47,7 @@ class UserFriend extends UserManager {
 	 *@param int user friend id
 	 *@return void
 	 */
-	public function removed_friend ($friend_id) {
+	public static function removed_friend ($friend_id) {
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		$tbl_my_message = Database :: get_main_table(TABLE_MAIN_MESSAGE);
 		$user_id=api_get_user_id();
@@ -72,7 +72,7 @@ class UserFriend extends UserManager {
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @return array
 	 */
-	public function show_list_type_friends () {
+	public static function show_list_type_friends () {
 		$friend_relation_list=array();
 		$count_list=0;
 		$tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
@@ -95,7 +95,7 @@ class UserFriend extends UserManager {
 	 * @param string names of the kind of relation 
 	 * @return int
 	 */
-	public function get_relation_type_by_name ($relation_type_name) {
+	public static function get_relation_type_by_name ($relation_type_name) {
 		$list_type_friend=array();
 		$list_type_friend=self::show_list_type_friends();
 		foreach ($list_type_friend as $value_type_friend) {
@@ -111,7 +111,7 @@ class UserFriend extends UserManager {
 	 * @param int user friend id
 	 * @param string
 	 */
-	public function get_relation_between_contacts ($user_id,$user_friend) {
+	public static function get_relation_between_contacts ($user_id,$user_friend) {
 		$tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		$sql= 'SELECT rt.id as id FROM '.$tbl_my_friend_relation_type.' rt ' .
@@ -132,7 +132,7 @@ class UserFriend extends UserManager {
 	 * @param string name to search
 	 * @return array
 	 */
-	public function get_list_id_friends_by_user_id ($user_id,$id_group=null,$search_name=null) {
+	public static function get_list_id_friends_by_user_id ($user_id,$id_group=null,$search_name=null) {
 		$list_ids_friends=array();
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		$tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);		
@@ -157,7 +157,7 @@ class UserFriend extends UserManager {
 	 * @param string name to search
 	 * @param array 
 	 */
-	public function get_list_path_web_by_user_id ($user_id,$id_group=null,$search_name=null) {
+	public static function get_list_path_web_by_user_id ($user_id,$id_group=null,$search_name=null) {
 		$list_paths=array();
 		$list_path_friend=array();
 		$array_path_user=array();
@@ -177,7 +177,7 @@ class UserFriend extends UserManager {
 	 * @param int user id
 	 * @return array
 	 */
-	public function get_list_web_path_user_invitation_by_user_id ($user_id) {
+	public static function get_list_web_path_user_invitation_by_user_id ($user_id) {
 		$list_paths=array();
 		$list_path_friend=array();
 		$list_ids = self::get_list_invitation_of_friends_by_user_id((int)$user_id);
@@ -195,7 +195,7 @@ class UserFriend extends UserManager {
 	 * @param string content of the message
 	 * @return boolean
 	 */
-	public function send_invitation_friend ($user_id,$friend_id,$message_title,$message_content) {
+	public static function send_invitation_friend ($user_id,$friend_id,$message_title,$message_content) {
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$current_date=date('Y-m-d H:i:s',time());
 		$status_invitation=5;//status of pending invitation
@@ -229,7 +229,7 @@ class UserFriend extends UserManager {
 	 * @param int user receiver id
 	 * @return int
 	 */
-	public function get_message_number_invitation_by_user_id ($user_receiver_id) {
+	public static function get_message_number_invitation_by_user_id ($user_receiver_id) {
 		$status_invitation=5;//status of pending invitation
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$sql='SELECT COUNT(*) as count_message_in_box FROM '.$tbl_message.' WHERE user_receiver_id='.((int)$user_receiver_id).' AND msg_status=5;';
@@ -243,7 +243,7 @@ class UserFriend extends UserManager {
 	 * @param int user id
 	 * @return array()
 	 */
-	public function get_list_invitation_of_friends_by_user_id ($user_id) {
+	public static function get_list_invitation_of_friends_by_user_id ($user_id) {
 		$list_friend_invitation=array();
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$sql='SELECT user_sender_id,send_date,title,content FROM '.$tbl_message.' WHERE user_receiver_id='.((int)$user_id).' AND msg_status=5;';
@@ -260,7 +260,7 @@ class UserFriend extends UserManager {
 	 * @param int user receiver id
 	 * @return void()
 	 */
-	public function invitation_accepted ($user_send_id,$user_receiver_id) {
+	public static function invitation_accepted ($user_send_id,$user_receiver_id) {
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$msg_status=6;// friend accepted
 		$sql='UPDATE '.$tbl_message.' SET msg_status='.$msg_status.' WHERE user_sender_id='.((int)$user_send_id).' AND user_receiver_id='.((int)$user_receiver_id).';';
@@ -273,7 +273,7 @@ class UserFriend extends UserManager {
 	 * @param int user receiver id
 	 * @return void()
 	 */
-	public function invitation_denied($user_send_id,$user_receiver_id) {
+	public static function invitation_denied ($user_send_id,$user_receiver_id) {
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$msg_status=7;
 		$sql='UPDATE '.$tbl_message.' SET msg_status='.$msg_status.' WHERE user_sender_id='.((int)$user_send_id).' AND user_receiver_id='.((int)$user_receiver_id).';';
@@ -286,7 +286,7 @@ class UserFriend extends UserManager {
 	 * @param int kind of rating
 	 * @return void()
 	 */
-	public function qualify_friend($id_friend_qualify,$type_qualify) {
+	public static function qualify_friend ($id_friend_qualify,$type_qualify) {
 		$tbl_user_friend=Database::get_main_table(TABLE_MAIN_USER_FRIEND);
 		$user_id=api_get_user_id();
 		$sql='UPDATE '.$tbl_user_friend.' SET relation_type='.((int)$type_qualify).' WHERE user_id='.((int)$user_id).' AND friend_user_id='.((int)$id_friend_qualify).';';
@@ -298,7 +298,7 @@ class UserFriend extends UserManager {
 	 * @param void
 	 * @return string message invitation
 	 */
-	function send_invitation_friend_user($userfriend_id,$subject_message='',$content_message='') {
+	public static function send_invitation_friend_user ($userfriend_id,$subject_message='',$content_message='') {
 		//$id_user_friend=array();
 		$user_info=array();
 		$user_info=api_get_user_info($userfriend_id);
@@ -312,7 +312,7 @@ class UserFriend extends UserManager {
 				echo Display::display_error_message($succes,true);
 			}
 			exit;
-		} elseif(isset($userfriend_id) && !isset($subject_message)) {
+		} elseif (isset($userfriend_id) && !isset($subject_message)) {
 			$count_is_true=false;
 			$count_number_is_true=0;
 			if (isset($userfriend_id) && $userfriend_id>0) {

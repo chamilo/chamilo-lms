@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 22259 2009-07-20 18:56:45Z ivantcholakov $
+<?php //$Id: agenda.inc.php 22324 2009-07-23 17:44:22Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /*
 ==============================================================================
@@ -332,7 +332,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 					}										
 														
 					if (!empty($month_curday)) {										
-						echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."\">".$dayheader."</a>";
+						echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."#".$curday."\">".$dayheader."</a>";
 					} else {
 						echo $dayheader;
 					}

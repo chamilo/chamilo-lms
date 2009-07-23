@@ -1,4 +1,4 @@
-<?php // $Id: session_handler.class.php 22310 2009-07-23 15:36:19Z iflorespaz $
+<?php // $Id: session_handler.class.php 22311 2009-07-23 15:39:23Z iflorespaz $
 /*
 ===============================================================================
 	Dokeos - elearning and course management software
@@ -44,7 +44,7 @@ class session_handler {
 
 	public $sessionName;
 
-	public function session_handler () {
+	public function __construct () {
 		global $_configuration;
 
 		$this->lifetime=60; // 60 minutes

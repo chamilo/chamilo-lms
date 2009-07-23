@@ -30,7 +30,6 @@ class TestSocial extends UnitTestCase{
 		$friend_id=4;
 		$my_user_id=1;
 		$relation_type=2;
-		$this->social=new UserFriend();
 		$res= UserFriend::register_friend ($friend_id,$my_user_id,$relation_type);
 		$instans->expectCallCount(Database);
 		$this->assertTrue(is_object($instans));
@@ -44,7 +43,6 @@ class TestSocial extends UnitTestCase{
 		$instans= new MockDatabase();
 		$instans1= new MockDatabase();
 		$friend_id=4;
-		$this->social = new UserFriend();
 		$res = UserFriend::removed_friend ($friend_id);
 		$instans->expectCallCount(Database,8,'' );
 		$instans1->expectMaximumCallCount(Database,10,'');

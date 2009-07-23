@@ -41,7 +41,7 @@ class UserTable extends SortableTable
 	 * Constructor
 	 */
     function UserTable ($userid, $evals = array(), $links = array(), $addparams = null) {
-    	parent :: SortableTable ('userlist', null, null, 0);
+    	parent :: __construct ('userlist', null, null, 0);
 
 		$this->userid = $userid;
 

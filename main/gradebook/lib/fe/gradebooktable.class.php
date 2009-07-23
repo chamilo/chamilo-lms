@@ -43,7 +43,7 @@ class GradebookTable extends SortableTable
     function GradebookTable ($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null) {
   		
   		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
-    	parent :: SortableTable ('gradebooklist', null, null, (api_is_allowed_to_create_course()?1:0));
+    	parent :: __construct ('gradebooklist', null, null, (api_is_allowed_to_create_course()?1:0));
 		$this->evals_links = array_merge($evals, $links);
 		$this->currentcat = $currentcat;
 		$this->datagen = new GradebookDataGenerator($cats, $evals, $links);

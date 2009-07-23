@@ -43,7 +43,7 @@ class ResultTable extends SortableTable
 	 * Constructor
 	 */
     function ResultTable ($evaluation, $results = array(), $iscourse, $addparams = null,$forprint = false) {
-    	parent :: SortableTable ('resultlist', null, null, 1);
+    	parent :: __construct ('resultlist', null, null, 1);
 
 		$this->datagen = new ResultsDataGenerator($evaluation, $results, true);
 

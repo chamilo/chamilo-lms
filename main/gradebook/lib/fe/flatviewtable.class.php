@@ -44,7 +44,7 @@ class FlatViewTable extends SortableTable
 	 * Constructor
 	 */
 	function FlatViewTable ($selectcat, $users= array (), $evals= array (), $links= array (), $limit_enabled = false, $offset = 0, $addparams = null) {
-		parent :: SortableTable ('flatviewlist', null, null, 0);
+		parent :: __construct ('flatviewlist', null, null, 0);
 		$this->datagen = new FlatViewDataGenerator($users, $evals, $links);
 		$this->selectcat = $selectcat;		
 		$this->limit_enabled = $limit_enabled;

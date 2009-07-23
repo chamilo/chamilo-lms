@@ -60,7 +60,7 @@ class Security {
 	 * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
 	 * @return	bool	True if the path is under the checker, false otherwise
 	 */
-	function check_abs_path($abs_path,$checker_path) {
+	public static function check_abs_path ($abs_path,$checker_path) {
 		if (empty($checker_path)) {return false;} //checker path must be set
 		
 		$true_path=str_replace("\\", "/", realpath($abs_path));
@@ -78,8 +78,7 @@ class Security {
 	 * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
 	 * @return	bool	True if the path is under the checker, false otherwise
 	 */
-	function check_rel_path($rel_path,$checker_path)
-	{
+	public static function check_rel_path ($rel_path,$checker_path) {
 		if (empty($checker_path)){return false;} //checker path must be set
 		$current_path = getcwd(); //no trailing slash
 		if (substr($rel_path,-1,1)!='/') {
@@ -100,7 +99,7 @@ class Security {
      * @param   string  Unfiltered filename
      * @param   string  Filtered filename
      */
-    function filter_filename($filename) {
+    public static function filter_filename ($filename) {
     	require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
         return disable_dangerous_file($filename);
     }
@@ -110,7 +109,7 @@ class Security {
 	 * @param	string	The array in which to get the token ('get' or 'post')
 	 * @return	bool	True if it's the right token, false otherwise
 	 */
-	function check_token($array='post') {
+	public static function check_token ($array='post') {
 		switch ($array) {
 			case 'get':
 				if (isset($_SESSION['sec_token']) && isset($_GET['sec_token']) && $_SESSION['sec_token'] === $_GET['sec_token']) {
@@ -135,7 +134,7 @@ class Security {
 	 * most session hijacking attacks.
 	 * @return	bool	True if the user agent is the same, false otherwise
 	 */
-	function check_ua() {
+	public static function check_ua () {
 		if (isset($_SESSION['sec_ua']) and $_SESSION['sec_ua'] === $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed']) {
 			return true;
 		}
@@ -145,7 +144,7 @@ class Security {
 	 * Clear the security token from the session
 	 * @return void
 	 */
-	function clear_token() {
+	public static function clear_token () {
 		$_SESSION['sec_token'] = null;
 		unset($_SESSION['sec_token']);
 	}
@@ -158,7 +157,7 @@ class Security {
 	 * Check the token with check_token()
 	 * @return	string	Hidden-type input ready to insert into a form
 	 */
-	function get_HTML_token() {
+	public static function get_HTML_token () {
 		$token = md5(uniqid(rand(),TRUE));
 		$string = '<input type="hidden" name="sec_token" value="'.$token.'"/>';
 		$_SESSION['sec_token'] = $token;
@@ -173,7 +172,7 @@ class Security {
 	 * Check the token with check_token()
 	 * @return	string	Token
 	 */
-	function get_token() {
+	public static function get_token () {
 		$token = md5(uniqid(rand(),TRUE));
 		$_SESSION['sec_token'] = $token;
 		return $token;
@@ -183,7 +182,7 @@ class Security {
 	 * most cases of session hijacking.
 	 * @return void
 	 */
-	function get_ua() {
+	public static function get_ua () {
 		$_SESSION['sec_ua_seed'] = uniqid(rand(),TRUE);
 		$_SESSION['sec_ua'] = $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed'];
 	}
@@ -194,7 +193,7 @@ class Security {
 	 * @param	array	Additional options
 	 * @return	bool	True if variable was filtered and added to the current object, false otherwise
 	 */
-	function filter($var,$type='string',$options=array()) {
+	public static function filter ($var,$type='string',$options=array()) {
 		//This function is not finished! Do not use!
 		$result = false;
 		//get variable name and value
@@ -232,7 +231,7 @@ class Security {
 	 * @param	string	Variable name
 	 * @return	mixed	Variable or NULL on error
 	 */
-	function get($varname) {
+	public static function get ($varname) {
 		if (isset($this->clean[$varname])) {
 			return $this->clean[$varname];
 		}
@@ -246,7 +245,7 @@ class Security {
 	 * @param   integer The user status,constant allowed(STUDENT,COURSEMANAGER,ANONYMOUS,COURSEMANAGERLOWSECURITY)
 	 * @return	mixed	Filtered string or array
 	 */
-	function remove_XSS($var,$user_status=ANONYMOUS) {
+	public static function remove_XSS ($var,$user_status=ANONYMOUS) {
 		global $charset;
 		$purifier = new HTMLPurifier(null,$user_status);		
 		if (is_array($var)) {

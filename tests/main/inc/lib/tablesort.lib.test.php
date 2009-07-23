@@ -83,7 +83,7 @@ class TestTablesort extends UnitTestCase{
 		$type = SORT_REGULAR;
 		$res =  TableSort::sort_table_config($data, $column, $direction, $column_show, $column_order,$type);
 		$this->assertTrue(is_array($res));
-		var_dump($res);
+		//var_dump($res);
 	}
 }
 ?>

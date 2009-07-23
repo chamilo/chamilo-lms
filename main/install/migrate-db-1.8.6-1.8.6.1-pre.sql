@@ -28,6 +28,17 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'false', 'No');
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_tutor_data',NULL,'radio','Platform','true','ShowTutorDataTitle','ShowTutorDataComment',NULL,NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_teacher_data',NULL,'radio','Platform','true','ShowTeacherDataTitle','ShowTeacherDataComment',NULL,NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_tutor_data','true','Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_tutor_data','false','No');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_teacher_data','true','Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_teacher_data','false','No');
+
+
+
+
+
 
 -- xxSTATSxx
 

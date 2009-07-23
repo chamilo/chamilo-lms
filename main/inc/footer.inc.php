@@ -1,4 +1,4 @@
-<?php // $Id: footer.inc.php 21487 2009-06-18 09:52:42Z ivantcholakov $
+<?php // $Id: footer.inc.php 22315 2009-07-23 16:12:54Z cvargas1 $
  
 /*
 ==============================================================================
@@ -82,26 +82,16 @@ if (get_setting('show_administrator_data')=='true') {
 	// Platform manager
 	echo '<span id="platformmanager">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(get_setting('emailAdministrator'), get_setting('administratorName').' '.get_setting('administratorSurname'));
 
+}
+
+if (get_setting('show_tutor_data')=='true'){
+	
 	// course manager
 	$id_course=api_get_course_id();
 	$id_session=api_get_session_id();
 	if (isset($id_course) && $id_course!=-1) {
 		echo '<span id="coursemanager">';
-		if ($id_session==0){
-			$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
-			if (count($mail)>1){
-				$bar='&nbsp;|&nbsp;';
-				echo '&nbsp;'.get_lang('Teachers').' : ';
-			} else {
-				$bar='';
-				echo '&nbsp;'.get_lang('Teacher').' : ';
-			}
-			foreach ($mail as $value=>$key) {
-				foreach ($key as $email=>$name){
-					echo Display::encrypted_mailto_link($email,$name).$bar;		
-				}
-			}
-		} else {
+		if ($id_session!=0){
 			$mail=CourseManager::get_email_of_tutor_to_session($id_session);
 			echo '&nbsp;'.get_lang('Tutor')." : ";
 			foreach ($mail as $v=>$k) {
@@ -110,7 +100,34 @@ if (get_setting('show_administrator_data')=='true') {
 		}
 		echo '</span>';
 	} 
+	
 }
+
+if (get_setting('show_teacher_data')=='true'){
+	
+	// course manager
+	$id_course=api_get_course_id();
+	if (isset($id_course) && $id_course!=-1) {
+		echo '<span id="coursemanager">';
+		$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
+		if (count($mail)>1){
+			$bar='&nbsp;|&nbsp;';
+			echo '&nbsp;'.get_lang('Teachers').' : ';
+		} else {
+			$bar='';
+			echo '&nbsp;'.get_lang('Teacher').' : ';
+		}
+		foreach ($mail as $value=>$key) {
+			foreach ($key as $email=>$name){
+				echo Display::encrypted_mailto_link($email,$name).$bar;		
+			}
+		}
+		echo '</span>';
+	} 
+	
+}
+
+
 ?>&nbsp;
 </div> <!-- end of #footer -->
 </body>

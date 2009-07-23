@@ -536,6 +536,7 @@ class FCKeditor
 
 		// URLs for opening the file browser for different resource types (file types):
 		if ($use_advanced_filemanager) {
+			// Double slashes within the following URLs for the advanced file manager are put intentionally. Please, keep them.
 			// for images
 			$config['ImageBrowserURL'] = $base_path.'/editor/plugins/ajaxfilemanager/ajaxfilemanager.php';
 			// for flash

@@ -1013,4 +1013,8 @@ $ShowGlossaryInDocumentsIsManual = "Manual,al activar está opción se mostrará un
 $ShowGlossaryInDocumentsIsNone = "Ninguno, al tener habilitada ésta opción,no se añadirá ningun término del glosario a los documentos.";
 $LanguageVariable = "Variable de idioma";
 $ToExportDocumentsWithGlossaryYouHaveToSelectGlossary = "Si quiere exportar un documento que contenga términos del glosario, tendrá que asegurarse de que estos términos han sido incluidos en la exportación; para eso tendrá que haberlos seleccionado en la lista del glosario.";
+$ShowTutorDataTitle = "Información del tutor de sesion en el pie";
+$ShowTutorDataComment = "¿ Mostrar la información del tutor de sesion en el pie ?";
+$ShowTeacherDataTitle = "Información del profesor en el pie";
+$ShowTeacherDataComment = "¿ Mostrar la información del profesor en el pie ?";
 ?>

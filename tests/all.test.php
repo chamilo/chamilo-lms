@@ -58,10 +58,13 @@ class AllTests extends TestSuite {
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/stats.lib.inc.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/statsUtils.lib.inc.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/surveymanager.lib.test.php');
-        //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/system_announcements.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/tablesort.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/text.lib.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/tracking.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php');
      
-      
+      /*
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/blog.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/classmanager.lib.test.php');
@@ -94,8 +97,12 @@ class AllTests extends TestSuite {
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/stats.lib.inc.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/statsUtils.lib.inc.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/surveymanager.lib.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/system_announcements.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/tablesort.lib.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/text.lib.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/tracking.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php');
-     
+     */
       
      
       

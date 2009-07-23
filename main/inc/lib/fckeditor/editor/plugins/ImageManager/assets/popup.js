@@ -50,49 +50,60 @@ function __dlg_init(bottom) {
 		var pos = getAbsolutePos(bottom);
 		body_height = pos.y + bottom.offsetHeight;
 	}
-	if(opener && opener.Dialog && opener.Dialog._arguments)
+
+	if (opener && opener.Dialog && opener.Dialog._arguments)
+	{
 		window.dialogArguments = opener.Dialog._arguments;
-	if (!document.all) {
-		//window.sizeToContent();
-		//window.sizeToContent();	// for reasons beyond understanding,
-					// only if we call it twice we get the
-					// correct size.
-		window.addEventListener("unload", __dlg_onclose, true);
-		// center on parent
-		var x = opener.screenX + (opener.outerWidth - window.outerWidth) / 2;
-		var y = opener.screenY + (opener.outerHeight - window.outerHeight) / 2;
-		
-		// Avoiding being in the center of the page.
-		/*
-		window.moveTo(x, y);
-		*/
-
-		//window.innerWidth = body.offsetWidth + 5;
-		//window.innerHeight = body_height + 2;
-	} else {
-		// window.dialogHeight = body.offsetHeight + 50 + "px";
-		// window.dialogWidth = body.offsetWidth + "px";
-		//window.resizeTo(body.offsetWidth, body_height);
-		var ch = body.clientHeight;
-		var cw = body.clientWidth;
-		//window.resizeBy(body.offsetWidth - cw, body_height - ch);
-		var W = body.offsetWidth;
-		var H = 2 * body_height - ch;
-		if(ch <= 0) H = body_height;
-		var x = (screen.availWidth - W) / 2;
-		var y = (screen.availHeight - H) / 2;
-		//alert('x:'+x+' y:'+y+' ch:'+ch);
-
-		// Avoiding being in the center of the page.
-		/*
-		if(Dialog.is_ie)
-			window.moveTo(x, y);
-		else //opera
-			window.moveTo(x, y - H/4);
-		*/
-
 	}
-	document.body.onkeypress = __dlg_close_on_esc;
+	else if ( !opener && window.parent )
+	{
+		window.dialogArguments = oEditor.Dialog._arguments;
+	}
+
+	if ( opener )
+	{
+		if (!document.all) {
+			//window.sizeToContent();
+			//window.sizeToContent();	// for reasons beyond understanding,
+						// only if we call it twice we get the
+						// correct size.
+			window.addEventListener("unload", __dlg_onclose, true);
+			// center on parent
+			var x = opener.screenX + (opener.outerWidth - window.outerWidth) / 2;
+			var y = opener.screenY + (opener.outerHeight - window.outerHeight) / 2;
+		
+			// Avoiding being in the center of the page.
+			/*
+			window.moveTo(x, y);
+			*/
+
+			//window.innerWidth = body.offsetWidth + 5;
+			//window.innerHeight = body_height + 2;
+		} else {
+			// window.dialogHeight = body.offsetHeight + 50 + "px";
+			// window.dialogWidth = body.offsetWidth + "px";
+			//window.resizeTo(body.offsetWidth, body_height);
+			var ch = body.clientHeight;
+			var cw = body.clientWidth;
+			//window.resizeBy(body.offsetWidth - cw, body_height - ch);
+			var W = body.offsetWidth;
+			var H = 2 * body_height - ch;
+			if(ch <= 0) H = body_height;
+			var x = (screen.availWidth - W) / 2;
+			var y = (screen.availHeight - H) / 2;
+			//alert('x:'+x+' y:'+y+' ch:'+ch);
+
+			// Avoiding being in the center of the page.
+			/*
+			if(Dialog.is_ie)
+				window.moveTo(x, y);
+			else //opera
+				window.moveTo(x, y - H/4);
+			*/
+		}
+
+		document.body.onkeypress = __dlg_close_on_esc;
+	}
 };
 
 function __dlg_translate(i18n) {

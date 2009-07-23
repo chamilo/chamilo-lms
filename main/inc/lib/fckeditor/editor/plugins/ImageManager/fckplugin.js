@@ -71,7 +71,7 @@
 	FCKToolbarItems.RegisterItem( 'ImageManager', oImageManagerItem ) ;
 
 	FCKImageManager.prototype.Execute = function() {
-		ImageManager_click(FCK, null)
+		ImageManager_click(FCK, null);
 	}
 
 	function ImageManager_click(editor, sender) {
@@ -229,7 +229,12 @@ function Dialog(url, action, init) {
 	if (typeof init == "undefined") {
 		init = window;	// pass this window object by default
 	}
-	Dialog._geckoOpenModal(url, action, init);
+	if ( FCKConfig.OpenImageManagerInANewWindow && FCKConfig.OpenImageManagerInANewWindow.toString() == 'true' ) {
+		Dialog._geckoOpenModal(url, action, init);
+	} else {
+		Dialog._arguments = init;
+		FCKDialog.OpenDialog( 'FCKDialog_ImageManager', 'Image Manager', url, 800, 600 ) ;
+	}
 };
 
 Dialog._parentEvent = function(ev) {

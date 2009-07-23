@@ -33,6 +33,13 @@
 <script type="text/javascript">
 /*<![CDATA[*/
 
+	var oEditor = null ;
+	if ( !window.opener && window.parent )
+	{
+		// The image manager is inside a dialog.
+		oEditor = window.parent.InnerDialogLoaded() ;
+	}
+	
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getBaseURL(); ?>";
 	
@@ -40,18 +47,34 @@
 
 	var server_name = "<?php echo $IMConfig['server_name']; ?>";
 
-	window.resizeTo(800, 500);
-
-	if(window.opener.ImageManager && window.opener.ImageManager.I18N)
+	var _editor_lang = 'en' ;
+	if ( window.opener )
 	{
-		I18N = window.opener.ImageManager.I18N;
+		window.resizeTo( 800, 500 ) ;
+
+		if ( window.opener.ImageManager && window.opener.ImageManager.I18N )
+		{
+			I18N = window.opener.ImageManager.I18N ;
+		}
+		if ( window.opener._editor_lang )
+		{
+			_editor_lang = window.opener._editor_lang ;
+		}
+	}
+	else if ( window.parent )
+	{
+		_editor_lang = oEditor._editor_lang ;
+		if ( oEditor.ImageManager && oEditor.ImageManager.I18N )
+		{
+			I18N = oEditor.ImageManager.I18N ;
+		}
 	}
 
-	// language object not found?
+	// Language object not found?
 	if (!this.I18N)
 	{
 		// Read it now - copy in next script block
-		document.write('<script type="text/javascript" src="lang/' + window.opener._editor_lang + '.js"><\/script>');
+		document.write( '<script type="text/javascript" src="lang/' + _editor_lang + '.js"><\/script>' );
 	}
 
 /*]]>*/
@@ -92,9 +115,9 @@
 		<?php } ?>	
 <?php } ?>
 	</select>
-	<a href="#" onclick="javascript: goUpDir();" title="Directory Up"><img src="img/btnFolderUp.gif" height="15" width="15" alt="Directory Up" />&nbsp;<span>Directory Up</span></a>
+	<a href="javascript: void(0);" onclick="javascript: goUpDir();" title="Directory Up"><img src="img/btnFolderUp.gif" height="15" width="15" alt="Directory Up" />&nbsp;<span>Directory Up</span></a>
 <?php if($IMConfig['safe_mode'] == false && $IMConfig['allow_new_dir']) { ?>
-	<a href="#" onclick="newFolder();" title="New Folder"><img src="img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
+	<a href="javascript: void(0);" onclick="newFolder();" title="New Folder"><img src="img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
 <?php } ?>
 	<div id="messages" style="display: none;"><span id="message"></span><img SRC="img/dots.gif" width="22" height="12" alt="..." /></div>
 	<iframe src="images.php" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>

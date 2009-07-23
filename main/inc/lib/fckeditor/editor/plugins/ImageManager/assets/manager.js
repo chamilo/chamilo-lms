@@ -5,8 +5,14 @@
  * @package ImageManager
  */
 
-	// Added by Ivan Tcholakov
-	var FCK = window.opener.FCK ;
+	if ( window.opener )
+	{
+		var FCK = window.opener.FCK ;
+	}
+	else if ( window.parent )
+	{
+		var FCK = oEditor.FCK ;
+	}
 	
 	//Translation
 	function i18n(str) {

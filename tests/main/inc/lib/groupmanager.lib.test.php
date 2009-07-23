@@ -21,16 +21,7 @@ class TestGroupManager extends UnitTestCase {
 	 * file manager, course manager and table sort.
 	 * @author Ricardo Rodriguez Salazar
 	 */
-	public $gManager;
-	public function TestGroupManager(){
-		$this->UnitTestCase('Group Manager test');
-	}
-	public function setUp(){
-		$this->gManager = new GroupManager();
-	}
-	public function tearDown(){
-		$this->gManager = null;
-	}
+
 	/*
 	  function testExportTableCsv() {
         $docman = new MockDocumentManager();
@@ -46,7 +37,7 @@ class TestGroupManager extends UnitTestCase {
 	 */
 	public function testGetGroupList(){
 		global $_user;
-		$res = $this->gManager->get_group_list();
+		$res = GroupManager::get_group_list();
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
@@ -57,7 +48,7 @@ class TestGroupManager extends UnitTestCase {
 		$tutor='';
 		$places='1';
 		global $_course, $_user;
-		$res = $this->gManager->create_group($name, $category_id, $tutor, $places);
+		$res = GroupManager::create_group($name, $category_id, $tutor, $places);
 		$this->assertTrue(is_numeric($res));
 		$this->assertTrue($res);
 		//var_dump($res);
@@ -66,14 +57,14 @@ class TestGroupManager extends UnitTestCase {
 	public function testCreateSubgroups(){
 		$group_id = 2;
 		$number_of_groups=3;
-		$res = $this->gManager->create_subgroups($group_id, $number_of_groups);
+		$res = GroupManager::create_subgroups($group_id, $number_of_groups);
 		$this->assertTrue(is_null($res));
-		$this->assertTrue($this->gManager->create_subgroups($res)===null);
+		$this->assertTrue(GroupManager::create_subgroups($res)===null);
 		//var_dump($res);
 	}
 	
 	public function testCreateGroupsFromVirtualCourses(){
-		$res = $this->gManager->create_groups_from_virtual_courses();
+		$res = GroupManager::create_groups_from_virtual_courses();
 		$this->assertTrue($res);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
@@ -81,9 +72,9 @@ class TestGroupManager extends UnitTestCase {
 	
 	public function testCreateClassGroups(){
 		$category_id=2;
-		$res = $this->gManager->create_class_groups($category_id);
+		$res =GroupManager::create_class_groups($category_id);
 		$this->assertTrue(is_array($res));
-		$this->assertTrue($this->gManager->create_class_groups($category_id) === array());
+		$this->assertTrue(GroupManager::create_class_groups($category_id) === array());
 		//var_dump($res);
 	}
 	
@@ -92,7 +83,7 @@ class TestGroupManager extends UnitTestCase {
 		$dbase = new MockDatabase();
 		$group_ids='01';
 		$course_code=null;
-		$res =$this->gManager->delete_groups($group_ids, $course_code = null);
+		$res =GroupManager::delete_groups($group_ids, $course_code = null);
 		$fmanager->expectOnce('FileManager :: mkdirs($group_garbage, $perm);');
 		$dbase->expectOnce('Database::affected_rows()');
 		$this->assertTrue(is_numeric($res));
@@ -101,7 +92,7 @@ class TestGroupManager extends UnitTestCase {
 	
 	public function testGetGroupProperties(){
 		$group_id=01;
-		$res = $this->gManager->get_group_properties($group_id);
+		$res = GroupManager::get_group_properties($group_id);
 		$this->assertTrue($res);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
@@ -120,7 +111,7 @@ class TestGroupManager extends UnitTestCase {
 					  'wiki_state'=>'',
 					  'self_registration_allowed'=>'',
 					  'self_unregistration_allowed'=>'');
-		$res = $this-> gManager->set_group_properties($group['group_id'], $group['name'], $group['description'], 
+		$res = GroupManager::set_group_properties($group['group_id'], $group['name'], $group['description'], 
 													  $group['maximum_number_of_students'], $group['doc_state'], 
 													  $group['work_state'], $group['calendar_state'], $group['announcements_state'], 
 													  $group['forum_state'],$group['wiki_state'], $group['self_registration_allowed'], 
@@ -131,11 +122,11 @@ class TestGroupManager extends UnitTestCase {
 	
 	public function testGetNumberOfGroups(){
 		$dbase = new MockDataBase();
-		$res = $this->gManager->get_number_of_groups();
+		$res = GroupManager::get_number_of_groups();
 		$dbase->expectOnce('Database :: get_course_table(TABLE_GROUP)');
 		$dbase->expectOnce('Database::fetch_object($res)');
 		$dbase->expectOnce('$obj->number_of_groups');
-		$this->assertTrue(is_object($this->gManager));
+		$this->assertTrue(is_null($res));
 		//$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
@@ -143,7 +134,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testGetCategories(){
 		$course_code ='COD128983';
 		$course_db = '';
-		$res = $this->gManager->get_categories($course_code);
+		$res = GroupManager::get_categories($course_code);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
@@ -152,10 +143,9 @@ class TestGroupManager extends UnitTestCase {
 		$dbase = new MockDataBase();
 		$id =2;
 		$course_code =null;
-		$res = $this->gManager->get_category($id,$course_code);
+		$res = GroupManager::get_category($id,$course_code);
 		$dbase->expectOnce('Database::fetch_array($res)');
 		$this->assertTrue(is_bool($res));
-		$this->assertTrue(is_object($this->gManager));
 		//var_dump($res);
 	}
 	
@@ -166,7 +156,7 @@ class TestGroupManager extends UnitTestCase {
 		$sql = "SELECT 1 ";
 		$res = api_sql_query($sql);
 		$cat = Database::fetch_array($res);
-		$resu = $this->gManager->get_category_from_group($group_id,$course_code);
+		$resu = GroupManager::get_category_from_group($group_id,$course_code);
 		$this->assertTrue(is_bool($resu));
 		$this->assertTrue(is_array($cat));
 		//var_dump($res);
@@ -177,7 +167,7 @@ class TestGroupManager extends UnitTestCase {
 		$cat_id=1;
 		$course_code =null;
 		$course_db = 'z22COD12A945';
-		$res = $this->gManager->delete_category($cat_id, $course_code);
+		$res = GroupManager::delete_category($cat_id, $course_code);
 		$this->assertTrue(is_null($res));
 		$this->assertNull($res);
 		//var_dump($res);
@@ -197,7 +187,7 @@ class TestGroupManager extends UnitTestCase {
 		'self_unregistration_allowed'=>'', 
 		'maximum_number_of_students'=>'', 
 		'groups_per_user'=>'0');
-		$res = $this->gManager->create_category($categ['title'], $categ['description'], 
+		$res = GroupManager::create_category($categ['title'], $categ['description'], 
 		$categ['doc_state'], $categ['work_state'], $categ['calendar_state'], $categ['announcements_state'], 
 		$categ['forum_state'],$categ['wiki_state'],$categ['self_registration_allowed'],$categ['self_unregistration_allowed'],
 		$categ['maximum_number_of_students'],$categ['groups_per_user']);
@@ -221,7 +211,7 @@ class TestGroupManager extends UnitTestCase {
 		'self_unregistration_allowed'=>'', 
 		'maximum_number_of_students'=>'', 
 		'groups_per_user'=>'0');
-		$res = $this->gManager->update_category($categ['id'], $categ['title'], $categ['description'], 
+		$res = GroupManager::update_category($categ['id'], $categ['title'], $categ['description'], 
 		$categ['doc_state'], $categ['work_state'], $categ['calendar_state'], $categ['announcements_state'], 
 		$categ['forum_state'],$categ['wiki_state'],$categ['self_registration_allowed'],$categ['self_unregistration_allowed'],
 		$categ['maximum_number_of_students'],$categ['groups_per_user']);
@@ -234,7 +224,7 @@ class TestGroupManager extends UnitTestCase {
 		$category_id = null;
 		$course_code = null;
 		$course_db='';
-		$res = $this->gManager->get_current_max_groups_per_user($category_id = null, $course_code = null);
+		$res =GroupManager::get_current_max_groups_per_user($category_id = null, $course_code = null);
 		$this->assertTrue(is_Null($res));
 		//var_dump($res);
 	}
@@ -242,7 +232,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testSwapCategoryOrder(){
 		$id1='2';
 		$id2=null;
-		$res = $this->gManager->swap_category_order($id1,$id2);
+		$res = GroupManager::swap_category_order($id1,$id2);
 		$this->assertFalse($res);
 		$this->assertNull($res,true);
 		//var_dump($res); 
@@ -250,7 +240,7 @@ class TestGroupManager extends UnitTestCase {
 	
 	public function testGetUsers(){
 		$group_id='1';
-		$res = $this->gManager->get_users($group_id);
+		$res =GroupManager::get_users($group_id);
 		$this->assertTrue(is_array($res));
 		$this->assertTrue($res ===array());
 		//var_dump($res);
@@ -259,7 +249,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testFillGroups(){
 		$group_ids='2';
 		global $_course;
-		$res = $this->gManager->fill_groups($group_ids);
+		$res = GroupManager::fill_groups($group_ids);
 		$this->assertNull($res);
 		$this->assertEqual($res,0);
 		//var_dump($res);
@@ -284,7 +274,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testMaximumNumberOfStudents(){
 		$group_id ='2';
 		$_course = api_get_course_info('0001');
-		$res = $this->gManager->maximum_number_of_students($group_id);
+		$res =GroupManager::maximum_number_of_students($group_id);
 		$this->assertTrue($res);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
@@ -294,7 +284,7 @@ class TestGroupManager extends UnitTestCase {
 		$user_id='1';
 		$cat_id = '6';
 		//$_course = api_get_course_info('0001');
-		$res = $this->gManager->user_in_number_of_groups($user_id,$cat_id);
+		$res = GroupManager::user_in_number_of_groups($user_id,$cat_id);
 		$this->assertTrue(is_numeric($cat_id));
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
@@ -303,7 +293,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testIsSelfRegistrationAllowed(){
 		$user_id='1';
 		$group_id='6';
-		$res = $this->gManager->is_self_registration_allowed($user_id,$group_id);
+		$res = GroupManager::is_self_registration_allowed($user_id,$group_id);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		//var_dump($res);
@@ -312,7 +302,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testIsSelfUnregistrationAllowed(){
 		$user_id='2';
 		$group_id='6';
-		$res = $this->gManager->is_self_unregistration_allowed($user_id,$group_id);
+		$res =GroupManager::is_self_unregistration_allowed($user_id,$group_id);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		//var_dump($res);
@@ -323,10 +313,9 @@ class TestGroupManager extends UnitTestCase {
 		$db_result ='2';
 		$user_id='2';
 		$group_id='6';
-		$res = $this->gManager->is_subscribed($user_id, $group_id);
+		$res = GroupManager::is_subscribed($user_id, $group_id);
 		$dbase->expectOnce('Database::fetch_array($res)');
 		$this->assertTrue(is_bool($res));
-		$this->assertTrue(is_object($this->gManager));
 		//var_dump($res);
 	} 
 	
@@ -334,7 +323,7 @@ class TestGroupManager extends UnitTestCase {
 		$user_id='2';
 		$group_id='2';
 		global $_course;
-		$res = $this->gManager->can_user_subscribe($user_id, $group_id);
+		$res = GroupManager::can_user_subscribe($user_id, $group_id);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
@@ -342,7 +331,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testCanUserUnsubscribe(){
 		$user_id ='6';
 		$group_id='6';
-		$res = $this->gManager->can_user_unsubscribe($user_id, $group_id);
+		$res = GroupManager::can_user_unsubscribe($user_id, $group_id);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		//var_dump($res);
@@ -350,14 +339,14 @@ class TestGroupManager extends UnitTestCase {
 	
 	public function testGetSubscribedUsers(){
 		$group_id='2';
-		$res = $this->gManager->get_subscribed_users($group_id);
+		$res = GroupManager::get_subscribed_users($group_id);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
 	
 	public function testGetSubscribedTutors(){
 		$group_id='2';
-		$res = $this->gManager->get_subscribed_tutors($group_id);
+		$res = GroupManager::get_subscribed_tutors($group_id);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
@@ -365,7 +354,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testSubscribeUsers(){
 		$user_ids = '2';
 		$group_id= '2';
-		$res = $this->gManager->subscribe_users($user_ids, $group_id);
+		$res = GroupManager::subscribe_users($user_ids, $group_id);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
@@ -373,7 +362,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testSubscribeTutors(){
 		$user_ids='2'; 
 		$group_id='6';
-		$res &= $this->gManager->subscribe_tutors($user_ids, $group_id);
+		$res &= GroupManager::subscribe_tutors($user_ids, $group_id);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
@@ -381,21 +370,21 @@ class TestGroupManager extends UnitTestCase {
 	public function testUnsubscribeUsers(){
 		$user_ids = array(5);
 		$group_id = 5;
-		$res &= $this->gManager->unsubscribe_users($user_ids, $group_id);
+		$res &= GroupManager::unsubscribe_users($user_ids, $group_id);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
 	
 	public function testUnsubscribeAllUsers(){
 		$group_ids=array(2,);
-		$res = $this->gManager->unsubscribe_all_users($group_ids);
+		$res = GroupManager::unsubscribe_all_users($group_ids);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
 	
 	public function testUnsubscribeAllTutors(){
 		$group_ids =array(6,9,10,11,14,15,16,19);
-		$res = $this->gManager->unsubscribe_all_tutors($group_ids);
+		$res = GroupManager::unsubscribe_all_tutors($group_ids);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
@@ -403,7 +392,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testIsTutorOfGroup(){
 		$user_id=2;
 		$group_id=2;
-		$res = $this->gManager->is_tutor_of_group($user_id,$group_id);
+		$res = GroupManager::is_tutor_of_group($user_id,$group_id);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
@@ -411,7 +400,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testIsUserInGroup(){
 		$user_id=  2;
 		$group_id= 4;
-		$res = $this->gManager->is_user_in_group($user_id, $group_id);
+		$res =GroupManager::is_user_in_group($user_id, $group_id);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		$this->assertFalse($res);
@@ -419,7 +408,7 @@ class TestGroupManager extends UnitTestCase {
 	}
 	
 	public function testGetAllTutors(){
-		$res = $this->gManager->get_all_tutors();
+		$res =GroupManager::get_all_tutors();
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
@@ -427,7 +416,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testIsTutor(){
 		$user_id = 2;
 		global $_course;
-		$res = $this->gManager->is_tutor($user_id);
+		$res = GroupManager::is_tutor($user_id);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		//var_dump($res);
@@ -437,7 +426,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testGetGroupIds(){
 		$course_db='';
 		$user_id=2;
-		$res = $this->gManager->get_group_ids($course_db,$user_id);
+		$res = GroupManager::get_group_ids($course_db,$user_id);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
@@ -446,7 +435,7 @@ class TestGroupManager extends UnitTestCase {
 		global $_course, $_user;
 		$course_code=0001;
 		$group_id=2;
-		$res = $this->gManager->get_complete_list_of_users_that_can_be_added_to_group($course_code, $group_id);
+		$res = GroupManager::get_complete_list_of_users_that_can_be_added_to_group($course_code, $group_id);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
@@ -454,7 +443,7 @@ class TestGroupManager extends UnitTestCase {
 	public function testfilter_duplicates(){
 		$user_array_in='';
 		$compare_field='';
-		$res = $this->gManager->filter_duplicates($user_array_in, $compare_field);
+		$res = GroupManager::filter_duplicates($user_array_in, $compare_field);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
@@ -469,7 +458,7 @@ class TestGroupManager extends UnitTestCase {
 	
 	public function testFilterOnlyStudents(){
 		$user_array_in='';
-		$res= $this->gManager->filter_only_students($user_array_in);
+		$res= GroupManager::filter_only_students($user_array_in);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
@@ -478,7 +467,7 @@ class TestGroupManager extends UnitTestCase {
 		$user_id='2'; 
 		$group_id='5';
 		$tool='wiki_state';
-		$res = $this->gManager->user_has_access($user_id, $group_id, $tool);
+		$res = GroupManager::user_has_access($user_id, $group_id, $tool);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		//var_dump($res);
@@ -486,17 +475,9 @@ class TestGroupManager extends UnitTestCase {
 	
 	public function testGetUserGroupName(){
 		$user_id='';
-		$res=$this->gManager->get_user_group_name($user_id);
+		$res=GroupManager::get_user_group_name($user_id);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 }
 ?>

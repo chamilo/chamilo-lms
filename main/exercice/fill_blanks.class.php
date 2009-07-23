@@ -100,8 +100,13 @@ class FillBlanks extends Question
 		echo '
 		<script type="text/javascript">
 			function FCKeditor_OnComplete( editorInstance )
-			{				
-				editorInstance.EditorDocument.addEventListener( \'keyup\', updateBlanks, true ) ;
+			{								
+				if (window.attachEvent) {		
+					editorInstance.EditorDocument.attachEvent("onkeyup", updateBlanks) ;
+				} else {
+					editorInstance.EditorDocument.addEventListener("keyup",updateBlanks,true);
+				}		
+										
 			}
 		
 		var firstTime = true;

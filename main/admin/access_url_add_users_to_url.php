@@ -127,6 +127,8 @@ if(empty($first_letter_user)) {
 	}
 	unset($result);
 }
+$first_letter_user = Database::escape_string($first_letter_user);
+
 $sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user 
 	    WHERE lastname LIKE '".$first_letter_user."%' OR lastname LIKE '".strtolower($first_letter_user)."%' 
 		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." lastname";

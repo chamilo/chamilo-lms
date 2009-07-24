@@ -123,7 +123,7 @@ if(empty($first_letter_user)) {
 	unset($result);
 }
 */
-
+$first_letter_session = Database::escape_string($first_letter_session); 
 $sql = "SELECT id, name FROM $tbl_session
 		WHERE name LIKE '".$first_letter_session."%' OR name LIKE '".strtolower($first_letter_session)."%'
 		ORDER BY name DESC ";

@@ -49,18 +49,13 @@
 * @todo complete the missing phpdoc the correct order should be
 *
 * 				some explanation of the function
-*
 * 				@param
 * 				@return
-*
- 				@todo
-*
+* 				@todo
 * 				@author firstname lastname <email>, organisation
 * 				@version (day) month year
-*
 * 				@deprecated
 */
-
 /**
  **************************************************************************
  *						IMPORTANT NOTICE
@@ -413,7 +408,7 @@ function show_add_forum_form($inputvalues=array()) {
 function delete_forum_image($forum_id)
 {
 	$table_forums = Database::get_course_table(TABLE_FORUM);        
-	echo '<br />';
+	$forum_id = Database::escape_string($forum_id);
 	$sql="SELECT forum_image FROM $table_forums WHERE forum_id = '".$forum_id."' ";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$row=Database::fetch_array($result);
@@ -3429,6 +3424,7 @@ function edit_forum_attachment_file($file_comment,$post_id,$id_attach) {
 function get_attachment($post_id) {	
 	global $forum_table_attachment;
 	$row=array();	
+	$post_id = intval($post_id);
 	$sql = 'SELECT id, path, filename,comment FROM '. $forum_table_attachment.' WHERE post_id ="'.$post_id.'"';
 	$result=api_sql_query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result)!=0) {

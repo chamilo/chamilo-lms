@@ -442,6 +442,7 @@ class Rsys {
 	 *  @return -   Array               The returned rows
 	 */
 	function get_item($id = null, $orderby = "name ASC") {
+		$id = Database::escape_string($id);
 		$sql = "SELECT i.* FROM ".Rsys :: getTable("item")." i";
 		if (!empty ($id)) {
 			if (!Rsys :: item_allow($id, 'view'))
@@ -546,22 +547,7 @@ class Rsys {
                             WHERE ( 1=". (api_is_platform_admin() ? 1 : 0)." 
 							OR ((cu.user_id='".api_get_user_id()."' AND (ir.edit_right=1 OR ir.delete_right=1)) OR i.creator='".api_get_user_id()."' ))";
 
-        //if (!empty ($_GET['cat']) && $_GET['cat'] <> 0) {
-        //    $sql .= " AND ca.id = '".$_GET['cat']."' ";
-        //}
-        
-        /*$sql .= "   LEFT JOIN ".Rsys :: getTable("item_rights")." ir ON ir.item_id=i.id 
-         
-		                    LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = i.id 
-		                    LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
-                          WHERE ((cu.user_id='".api_get_user_id()."' AND (ir.edit_right=1 OR ir.delete_right=1)) OR i.creator='".api_get_user_id()."'  OR 1=". (api_is_platform_admin() ? 1 : 0).")";
-
-		if (isset ($_GET['keyword']) != 0) {
-			$keyword = Database::escape_string($_GET['keyword']);
-			$sql .= " WHERE i.category_id  LIKE '%".$keyword."%'";
-		}*/
-		//$sql .= " GROUP BY i.id";
-		return @ Database::result(api_sql_query($sql, __FILE__, __LINE__), 0, 0);
+ 		return @ Database::result(api_sql_query($sql, __FILE__, __LINE__), 0, 0);
 	}
 
 	/**
@@ -636,7 +622,6 @@ class Rsys {
 		$class_id = Database::escape_string($class_id);
 		$value = Database::escape_string($value);
 		$column = Database::escape_string($column);
-
 		
 		$sql = "SELECT item_id FROM ".Rsys :: getTable("item_rights")."WHERE item_id=".$item_id." AND class_id=".$class_id;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -668,7 +653,8 @@ class Rsys {
 	 */
 	function get_itemfiltered_class($item_id) {
 		$item_id = Database::escape_string($item_id);
-		$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_CLASS)." WHERE id NOT IN (SELECT class_id  FROM ".Rsys :: getTable("item_rights")." WHERE item_id='".$item_id."') ORDER BY name ASC, code ASC";
+		$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_CLASS)."
+				WHERE id NOT IN (SELECT class_id  FROM ".Rsys :: getTable("item_rights")." WHERE item_id='".$item_id."') ORDER BY name ASC, code ASC";
 		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
 		return $arr;
 	}
@@ -944,13 +930,13 @@ class Rsys {
 	function get_cat_items($category) {
 		$category = Database::escape_string($category);
 		$sql = "SELECT i.id,i.name as catitem
-		                                FROM ".Rsys :: getTable('item')." i
-		                                INNER JOIN ".Rsys :: getTable('category')." cat ON cat.id=i.category_id  
-		                                LEFT JOIN ".Rsys :: getTable('item_rights')." ir ON ir.item_id=i.id 
-		                                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = i.id 
-		                                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
-		                                WHERE ((cu.user_id='".api_get_user_id()."' AND ir.view_right=1 ) OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).") AND (category_id =".$category.") 
-		                                ORDER BY cat.name ASC, i.name ASC";
+                FROM ".Rsys :: getTable('item')." i
+                INNER JOIN ".Rsys :: getTable('category')." cat ON cat.id=i.category_id  
+                LEFT JOIN ".Rsys :: getTable('item_rights')." ir ON ir.item_id=i.id 
+                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = i.id 
+                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
+                WHERE ((cu.user_id='".api_get_user_id()."' AND ir.view_right=1 ) OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).") AND (category_id =".$category.") 
+                ORDER BY cat.name ASC, i.name ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($array = Database::fetch_array($result))
 			$arr[$array['id']] = $array['catitem'];
@@ -968,13 +954,13 @@ class Rsys {
 	 */
 	function get_table_reservations($from, $per_page, $column, $direction) {
 		$sql = "SELECT DISTINCT r.id AS col0, i.name AS col1,  DATE_FORMAT(r.start_at,'%Y-%m-%d %H:%i') AS col2, DATE_FORMAT(r.end_at,'%Y-%m-%d %H:%i') AS col3," .
-			   "				DATE_FORMAT(r.subscribe_from,'%Y-%m-%d %k:%i') AS col4, DATE_FORMAT(r.subscribe_until,'%Y-%m-%d %k:%i') AS col5,IF(timepicker <> 0, '".get_lang('TimePicker')."',CONCAT(r.subscribers,'/',r.max_users)) AS col6, r.notes AS col7, r.id as col8  
-						                FROM ".Rsys :: getTable('reservation')." r
-						                INNER JOIN ".Rsys :: getTable('item')." i ON r.item_id=i.id 
-						                LEFT JOIN ".Rsys :: getTable('item_rights')." ir ON ir.item_id=i.id 
-						                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = i.id 
-						                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
-						                WHERE ((ir.m_reservation=1 AND cu.user_id='".api_get_user_id()."') OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).")";
+   				"DATE_FORMAT(r.subscribe_from,'%Y-%m-%d %k:%i') AS col4, DATE_FORMAT(r.subscribe_until,'%Y-%m-%d %k:%i') AS col5,IF(timepicker <> 0, '".get_lang('TimePicker')."',CONCAT(r.subscribers,'/',r.max_users)) AS col6, r.notes AS col7, r.id as col8  
+                FROM ".Rsys :: getTable('reservation')." r
+                INNER JOIN ".Rsys :: getTable('item')." i ON r.item_id=i.id 
+                LEFT JOIN ".Rsys :: getTable('item_rights')." ir ON ir.item_id=i.id 
+                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = i.id 
+                LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id 
+                WHERE ((ir.m_reservation=1 AND cu.user_id='".api_get_user_id()."') OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).")";
 		if (isset ($_GET['keyword'])) {
 			$keyword = Database::escape_string($_GET['keyword']);
 			$sql .= "AND (i.name LIKE '%".$keyword."%' OR i.description LIKE '%".$keyword."%' OR r.notes LIKE '%".$keyword."%')";
@@ -1172,10 +1158,10 @@ class Rsys {
 		$result2 = api_sql_query($sql, __FILE__, __LINE__);
 		while ($arr = Database::fetch_array($result2, 'NUM')) {
 			$sql = "SELECT s.dummy, s.user_id, i.name, r.start_at, r.end_at
-											FROM ".Rsys :: getTable("subscription")." s 
-											INNER JOIN ".Rsys :: getTable("reservation")." r ON s.reservation_id = r.id
-											INNER JOIN ".Rsys :: getTable("item")." i ON r.item_id = i.id
-											WHERE s.reservation_id='".$arr[0]."'";
+					FROM ".Rsys :: getTable("subscription")." s 
+					INNER JOIN ".Rsys :: getTable("reservation")." r ON s.reservation_id = r.id
+					INNER JOIN ".Rsys :: getTable("item")." i ON r.item_id = i.id
+					WHERE s.reservation_id='".$arr[0]."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			while ($array = Database::fetch_array($result, 'NUM')) {
 				$user_info = api_get_user_info($array[1]);
@@ -1314,7 +1300,7 @@ class Rsys {
 	function get_num_waiting_users() {
 		$sql = "SELECT COUNT(DISTINCT dummy) FROM ".Rsys :: getTable('subscription');
 		if (isset ($_GET['rid'])) {
-			$sql .= " WHERE reservation_id = '".$_GET['rid']."'";
+			$sql .= " WHERE reservation_id = '".intval($_GET['rid'])."'";
 		}
 		return Database::result(api_sql_query($sql, __FILE__, __LINE__), 0, 0);
 	}
@@ -1401,9 +1387,9 @@ class Rsys {
 		api_sql_query($sql, __FILE__, __LINE__);
 		$user_info = api_get_user_info($subscription[0]);
 		$sql = "SELECT name FROM ".Rsys :: getTable('subscription')." s
-								INNER JOIN ".Rsys :: getTable('reservation')." r ON s.reservation_id = r.id
-								INNER JOIN ".Rsys :: getTable('item')." i ON r.item_id = i.id
-								WHERE dummy='".$id."'";
+					INNER JOIN ".Rsys :: getTable('reservation')." r ON s.reservation_id = r.id
+					INNER JOIN ".Rsys :: getTable('item')." i ON r.item_id = i.id
+					WHERE dummy='".$id."'";
 		$items = api_sql_query($sql, __FILE__, __LINE__);
 		$item = Database::fetch_array($items);
 		$item_name = $item[0];
@@ -1537,10 +1523,10 @@ class Rsys {
 			$sql = "UPDATE ".Rsys :: getTable("reservation")." SET subscribers=subscribers+1 WHERE id='".$reservation_id."'";
 			api_sql_query($sql, __FILE__, __LINE__);
 			$sql = "SELECT s.user_id, i.name, r.start_at, r.end_at
-										FROM ".Rsys :: getTable("subscription")." s
-										INNER JOIN ".Rsys :: getTable("reservation")." r ON s.reservation_id = r.id 
-										INNER JOIN ".Rsys :: getTable("item")." i ON r.item_id = i.id
-										WHERE reservation_id='".$reservation_id."' AND user_id='".$user_id."'";
+					FROM ".Rsys :: getTable("subscription")." s
+					INNER JOIN ".Rsys :: getTable("reservation")." r ON s.reservation_id = r.id 
+					INNER JOIN ".Rsys :: getTable("item")." i ON r.item_id = i.id
+					WHERE reservation_id='".$reservation_id."' AND user_id='".$user_id."'";
 			$result = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
 			$user_info = api_get_user_info();
 			$titel = str_replace('#ITEM#', $result[0][1], get_lang("ReservationMadeTitle"));

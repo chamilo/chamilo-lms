@@ -1,4 +1,4 @@
-<?php //$Id: work.lib.php 21759 2009-07-03 09:57:09Z herodoto $
+<?php //$Id: work.lib.php 22357 2009-07-24 17:44:17Z juliomontoya $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package dokeos.work
@@ -6,7 +6,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-* 	@version $Id: work.lib.php 21759 2009-07-03 09:57:09Z herodoto $
+* 	@version $Id: work.lib.php 22357 2009-07-24 17:44:17Z juliomontoya $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
@@ -1067,21 +1067,23 @@ function update_dir_name($path, $new_name) {
  * @version April 2008
  */
   
- function get_parent_directories($my_cur_dir_path)
-{
-			$list_parents = explode('/', $my_cur_dir_path);						
-			$dir_acum = '';
-			global $work_table;			
-			$list_id=array();
-			for ($i = 0; $i < count($list_parents) - 1; $i++) {			
-				$where_sentence = "url  LIKE BINARY '" . $dir_acum . "/" . $list_parents[$i]."'";							
-				$dir_acum .= '/' . $list_parents[$i];							
-				$sql = "SELECT id FROM ". $work_table . " WHERE ". $where_sentence;								
-				$result = api_sql_query($sql, __FILE__, __LINE__);
-				$row= Database::fetch_array($result);									
-				$list_id[]=$row['id'];	
-			}			
-			return $list_id;
+function get_parent_directories($my_cur_dir_path) {
+	$list_id = array();
+	if (!empty($my_cur_dir_path)) {
+		$list_parents = explode('/', $my_cur_dir_path);						
+		$dir_acum = '';
+		global $work_table;		
+		for ($i = 0; $i < count($list_parents) - 1; $i++) {			
+			$item = Database::escape_string($list_parents[$i]);
+			$where_sentence = "url  LIKE BINARY '" . $dir_acum . "/" . $item."'";							
+			$dir_acum .= '/' . $list_parents[$i];							
+			$sql = "SELECT id FROM ". $work_table . " WHERE ". $where_sentence;								
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$row= Database::fetch_array($result);									
+			$list_id[]=$row['id'];	
+		}			
+	}
+	return $list_id;
 }
 
 /**
@@ -1117,8 +1119,7 @@ function directory_to_array($directory)
  * @version April 2008
  */ 
  
-function insert_all_directory_in_course_table($base_work_dir)
-{	
+function insert_all_directory_in_course_table($base_work_dir) {	
 	$dir_to_array =directory_to_array($base_work_dir,true);	
 	$only_dir=array();	
 	
@@ -1135,7 +1136,7 @@ function insert_all_directory_in_course_table($base_work_dir)
 							   active		= '0',
 							   accepted		= '1',
 							   filetype		= 'folder',
-							   post_group_id = '".$_GET['toolgroup']."',
+							   post_group_id = '".intval($_GET['toolgroup'])."',
 							   sent_date	= '0000-00-00 00:00:00' ";
         api_sql_query($sql_insert_all, __FILE__, __LINE__);
 	}	

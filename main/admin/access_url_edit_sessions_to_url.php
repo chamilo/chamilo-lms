@@ -79,6 +79,7 @@ function search_sessions($needle, $id)
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
+		$needle = Database::escape_string($needle);
 		// search sessiones where username or firstname or lastname begins likes $needle
 		$sql = 'SELECT id, name FROM '.$tbl_session.' u 
 				WHERE (name LIKE "'.$needle.'%") 

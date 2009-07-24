@@ -252,6 +252,15 @@ a.breadcrumb0 {
 	margin: 0px;
 	padding: 5px;
 }
+
+.session_course_item {
+	/* padding: 0px; */
+	margin: 0px;
+}
+.session_course_item .courses {
+	height:22px;
+}
+
 .menu {
 	float: right;
 	width: 200px;

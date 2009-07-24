@@ -235,6 +235,15 @@ a.breadcrumb0 {
 	padding: 5px;
 	padding-left: 130px;
 }
+
+.session_course_item {
+	/* padding: 0px; */
+	margin: 0px;
+}
+.session_course_item .courses {
+	height:22px;
+}
+
 .menu {
 	background: url('images/bglogin.jpg') repeat-y top center;
 	float: left;

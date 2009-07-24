@@ -905,6 +905,15 @@ div.lp_resource_elements {
 	height:490px;
 	width:95%;
 }
+
+.session_course_item {
+	/* padding: 0px; */
+	margin: 0px;
+}
+.session_course_item .courses {
+	height:22px;
+}
+
 /* exercices styles */
 .exercice_form {
 	width: 300px;

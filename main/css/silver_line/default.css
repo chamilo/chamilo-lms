@@ -146,8 +146,11 @@ ul {
 .session_box_coach {
 }
 .session_course_item {
-	padding: 0px;
+	/* padding: 0px; */
 	margin: 0px;
+}
+.session_course_item .courses {
+	height:22px;
 }
 /*
 ==============================================================================

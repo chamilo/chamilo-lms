@@ -117,8 +117,8 @@ class TestLegal extends UnitTestCase{
 		$instans->expectCallCount(Database);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue(is_object($instans));
-		var_dump($res);
-		var_dump($instans);
+		//var_dump($res);
+		//var_dump($instans);
 	}
 }
 ?>

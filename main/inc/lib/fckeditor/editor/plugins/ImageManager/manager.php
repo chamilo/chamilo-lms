@@ -97,6 +97,14 @@
 <script type="text/javascript" src="assets/dialog.js"></script>
 <script type="text/javascript" src="assets/manager.js"></script>
 
+<style type="text/css" media="screen, projection">
+/*<![CDATA[*/
+body {
+	padding: 0px;
+}
+/*]]>*/
+</style>
+
 </head>
 
 <body>

@@ -1,5 +1,4 @@
 html, body {  background-color: #f7f7f7;  color: #000000; font-size: 11px; font-family: 'Microsoft Sans Serif', Arial, Helvetica, Verdana; margin: 0; padding: 0; overflow-x: hidden; }
-/* body { padding: 5px; } */
 fieldset { padding: 0; }
 .title { background-color: #dedede; color: #000000; font-weight: bold; font-size: 120%; padding: 3px 10px; margin-bottom: 10px; border-bottom: 1px  solid #cec6b5; letter-spacing: 2px; }
 form { padding: 0px; padding-bottom: 0px;  margin: 0 auto; width: 100%; }

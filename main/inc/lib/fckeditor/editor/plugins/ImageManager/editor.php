@@ -84,6 +84,14 @@ if (isset($_GET['img'])) {
 <script type="text/javascript" src="assets/popup.js"></script>
 <script type="text/javascript" src="assets/editor.js"></script>
 
+<style type="text/css" media="screen, projection">
+/*<![CDATA[*/
+body {
+	padding: 0px;
+}
+/*]]>*/
+</style>
+
 </head>
 
 <body>

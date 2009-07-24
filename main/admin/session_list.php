@@ -119,6 +119,14 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			$and
 			ORDER BY $sort
 			LIMIT $from,".($limit+1);
+			
+	//query which allows me to get a record without taking into account the page
+	$query_rows= "SELECT count(*) as total_rows
+				FROM $tbl_session, $tbl_user
+				$where
+				$and
+				ORDER BY $sort";
+				
 	
 	//filtering the session list by access_url
 	if ($_configuration['multiple_access_urls']==true){
@@ -131,17 +139,18 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 				$where
 				$and
 				ORDER BY $sort 
-				LIMIT $from,".($limit+1);			
-		}
-	}
-	
-	//query which allows me to get a record without taking into account the page
-	$query_rows= "SELECT count(*) as total_rows
-				FROM $tbl_session, $tbl_user
+				LIMIT $from,".($limit+1);
+				
+			$query_rows= "SELECT count(*) as total_rows
+				FROM $tbl_session, $tbl_user,$table_access_url_rel_session
 				$where
 				$and
 				ORDER BY $sort";
+		}
+	}
 	
+
+
 	$result_rows = api_sql_query($query_rows,__FILE__,__LINE__);
 	$recorset = Database::fetch_array($result_rows);
 	$num = $recorset['total_rows'];

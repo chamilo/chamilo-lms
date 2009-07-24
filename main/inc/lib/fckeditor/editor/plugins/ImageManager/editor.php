@@ -29,11 +29,19 @@ if (isset($_GET['img'])) {
 <script type="text/javascript">
 /*<![CDATA[*/
 
-	window.resizeTo(673, 531);
+	var oEditor = null ;
 
-	// find language object
+	if ( !window.opener && window.parent )
+	{
+		// The image editor is inside a dialog.
+		oEditor = window.parent.InnerDialogLoaded() ;
+	}
+
+	var _editor_lang = 'en' ;
 	if(window.opener)
 	{
+		window.resizeTo(673, 531);
+
 		if (window.opener.I18N)
 		{
 			I18N = window.opener.I18N;
@@ -43,13 +51,18 @@ if (isset($_GET['img'])) {
 		{
 			I18N = window.opener.ImageManager.I18N;
 		}
+
+		if ( window.opener._editor_lang )
+		{
+			_editor_lang = window.opener._editor_lang ;
+		}
 	}
 
 	// language object not found?
 	if (!this.I18N)
 	{
 		// Read it now - copy in next script block
-		document.write('<script type="text/javascript" src="lang/' + window.opener._editor_lang + '.js"><\/script>');
+		document.write('<script type="text/javascript" src="lang/' + _editor_lang + '.js"><\/script>');
 	}
 
 /*]]>*/

@@ -33,19 +33,19 @@
 <script type="text/javascript">
 /*<![CDATA[*/
 
-	var oEditor = null ;
-	if ( !window.opener && window.parent )
-	{
-		// The image manager is inside a dialog.
-		oEditor = window.parent.InnerDialogLoaded() ;
-	}
-	
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getBaseURL(); ?>";
 	
 	var base_url_alt= "<?php echo $base_url_alt.'images/gallery/'; ?>";
 
 	var server_name = "<?php echo $IMConfig['server_name']; ?>";
+
+	var oEditor = null ;
+	if ( !window.opener && window.parent )
+	{
+		// The image manager is inside a dialog.
+		oEditor = window.parent.InnerDialogLoaded() ;
+	}
 
 	var _editor_lang = 'en' ;
 	if ( window.opener )
@@ -56,6 +56,7 @@
 		{
 			I18N = window.opener.ImageManager.I18N ;
 		}
+
 		if ( window.opener._editor_lang )
 		{
 			_editor_lang = window.opener._editor_lang ;

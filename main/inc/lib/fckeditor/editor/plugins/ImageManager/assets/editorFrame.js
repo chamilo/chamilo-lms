@@ -6,7 +6,8 @@
  * @package ImageManager
  */
 
-var topDoc = window.top.document;
+//var topDoc = window.top.document;
+var topDoc = window.parent.document;
 
 var t_cx = topDoc.getElementById('cx');
 var t_cy = topDoc.getElementById('cy');

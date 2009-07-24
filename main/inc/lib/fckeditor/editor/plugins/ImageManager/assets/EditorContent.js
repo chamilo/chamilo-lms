@@ -98,7 +98,8 @@ initEditor = function ()
 {
     init_crop();
     init_resize();
-    var markerImg = MM_findObj('markerImg', window.top.document);
+    //var markerImg = MM_findObj('markerImg', window.top.document);
+    var markerImg = MM_findObj('markerImg', window.parent.document);
 
     if (markerImg.src.indexOf("img/t_white.gif")>0)
         toggleMarker() ;
@@ -237,7 +238,7 @@ function moveContent(e)
     }
 }
 
-//Code add for constraints by Frédéric Klee <fklee@isuisse.com>
+//Code add for constraints by FrÃ©dÃ©ric Klee <fklee@isuisse.com>
 function moveHandle(e) 
 {
     if (dragapproved)
@@ -245,7 +246,8 @@ function moveHandle(e)
         var w = ns6? e.clientX - x : event.clientX - x;
         var h = ns6? e.clientY - y : event.clientY - y;
         
-		var constrained = MM_findObj('constProp', window.top.document);
+		//var constrained = MM_findObj('constProp', window.top.document);
+		var constrained = MM_findObj('constProp', window.parent.document);
         var orginal_height = document.theImage.height ;
         var orginal_width = document.theImage.width ;
         rapp = orginal_width/orginal_height ;

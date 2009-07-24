@@ -131,8 +131,9 @@ function drawErrorBase(&$manager)
 <script type="text/javascript">
 /*<![CDATA[*/
 
-	if(window.top)
-		I18N = window.top.I18N;
+	//if(window.top)
+	//	I18N = window.top.I18N;
+	I18N = window.parent.I18N;
 
 	function hideMessage()
 	{
@@ -183,16 +184,23 @@ function drawErrorBase(&$manager)
 
 	function editImage(image) 
 	{
-		var url = "editor.php?img="+image;
-		Dialog(url, function(param) 
+		var url = "<?php echo api_get_path(REL_CODE_PATH).'inc/lib/fckeditor/editor/plugins/ImageManager/'; ?>editor.php?img="+image;
+		if ( window.parent.opener )
 		{
-			if (!param) // user must have pressed Cancel
-				return false;
-			else
+			Dialog(url, function(param) 
 			{
-				return true;
-			}
-		}, null);		
+				if (!param) // user must have pressed Cancel
+					return false;
+				else
+				{
+					return true;
+				}
+			}, null);
+		}
+		else if ( window.parent.oEditor )
+		{
+			window.parent.oEditor.OpenDialog( url, null, null, 'FCKDialog_ImageEditor', 'Edit Image', 750, 600 );
+		}
 	}
 
 /*]]>*/

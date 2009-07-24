@@ -102,7 +102,7 @@ if (!(api_get_setting('advanced_filemanager') == 'true')) {
 	// The following setting defines how the simple file manager to be opened:
 	// true  - in a new browser window, or
 	// false - as a dialog whithin the page (recommended).
-	$config['OpenImageManagerInANewWindow'] = true; // true while developing this feature.
+	$config['OpenImageManagerInANewWindow'] = false;
 }
 
 // fckEmbedMovies : Adds a dilog for inserting video files.

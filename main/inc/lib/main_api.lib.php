@@ -2742,15 +2742,17 @@ function api_get_access_urls($from=0,$to=1000000,$order='url',$direction='ASC') 
  */
 function api_get_access_url($id) {
 	global $_configuration;
+	$id = Database::escape_string(intval($id));
 	$result = array();
 	// calling the Database:: library dont work this is handmade
 	//$table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 	$table='access_url';
 	$database = $_configuration['main_database'];
-	$table_access_url =  "`".$database."`.`".$table."`";
-	$sql = "SELECT url, description, active, created_by, tms FROM $table_access_url WHERE id = '$id' ";
+	$table_access_url =  "`".$database."`.`".$table."`";	
+	$sql = "SELECT url, description, active, created_by, tms
+			FROM $table_access_url WHERE id = '$id' ";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$result = @mysql_fetch_array($res);
+	$result = @Database::fetch_array($res);
 	return $result;
 }
 
@@ -3367,6 +3369,7 @@ function api_get_current_access_url_id()
  */
 function api_get_access_url_from_user($user_id) 
 {
+	$user_id = intval($user_id);
 	$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$table_url	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);		
 	$sql = "SELECT access_url_id FROM $table_url_rel_user url_rel_user INNER JOIN $table_url u 
@@ -3389,7 +3392,10 @@ function api_get_access_url_from_user($user_id)
  */
 function api_get_status_of_user_in_course ($user_id,$course_code) {
 	$tbl_rel_course_user=Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$sql='SELECT status FROM '.$tbl_rel_course_user.' WHERE user_id='.$user_id.' AND course_code="'.$course_code.'";';
+	$user_id 	 = Database::escape_string(intval($user_id));
+	$course_code = Database::escape_string($course_code);
+	$sql='SELECT status FROM '.$tbl_rel_course_user.'
+		  WHERE user_id='.$user_id.' AND course_code="'.$course_code.'";';
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$row_status=Database::fetch_array($result,'ASSOC');
 	return $row_status['status'];
@@ -3504,32 +3510,32 @@ function api_get_encrypted_password($password,$salt = '')
 	global $userPasswordCrypted;
 	switch ($userPasswordCrypted){
 		case 'md5':
-					if (!empty($salt)) {
-						$passwordcrypted = md5($password.$salt);	
-					} else {
-						$passwordcrypted = md5($password);
-					}		 
-					return $passwordcrypted;
-					break;
+				if (!empty($salt)) {
+					$passwordcrypted = md5($password.$salt);	
+				} else {
+					$passwordcrypted = md5($password);
+				}		 
+				return $passwordcrypted;
+				break;
 		case 'sha1':
-					if (!empty($salt)) {
-						$passwordcrypted = sha1($password.$salt);	
-					} else {
-						$passwordcrypted = sha1($password);
-					}		 
-					return $passwordcrypted;
-					break;
+				if (!empty($salt)) {
+					$passwordcrypted = sha1($password.$salt);	
+				} else {
+					$passwordcrypted = sha1($password);
+				}		 
+				return $passwordcrypted;
+				break;
 		case 'none':
-					return $password;
-					break;
+				return $password;
+				break;
 		default:
-					if (!empty($salt)) {
-						$passwordcrypted = md5($password.$salt);	
-					} else {
-						$passwordcrypted = md5($password);
-					}
-					return $passwordcrypted;
-					break; 
+				if (!empty($salt)) {
+					$passwordcrypted = md5($password.$salt);	
+				} else {
+					$passwordcrypted = md5($password);
+				}
+				return $passwordcrypted;
+				break; 
 	}
 
 }
@@ -3750,7 +3756,8 @@ function api_check_term_condition($user_id) {
 	if (get_setting('allow_terms_conditions')=='true') {
 		require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);									
+		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		//check the last user version_id passed									
 		$sqlv = "SELECT field_value FROM $t_ufv ufv inner join $t_uf uf on ufv.field_id= uf.id
 				 WHERE field_variable = 'legal_accept' AND user_id = ".intval($user_id);
 		$resv = api_sql_query($sqlv,__FILE__,__LINE__);

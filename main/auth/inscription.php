@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 22233 2009-07-20 09:54:05Z ivantcholakov $
+// $Id: inscription.php 22368 2009-07-24 23:25:57Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,12 +39,45 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
 require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
+require_once(api_get_path(INCLUDE_PATH).'lib/legal.lib.php');
+
 //require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 //require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 //require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 
+// Load terms & conditions from the current lang
+if (get_setting('allow_terms_conditions')=='true') {	
+	$get = array_keys($_GET);
+	if (isset($get)) {
+		if ($get[0]=='legal'){				
+			//$language = api_get_setting('platformLanguage');
+			$language = api_get_interface_language();
+			$language = api_get_language_id($language);
+			$term_preview= LegalManager::get_last_condition($language);
+			if ($term_preview==false) {
+				//look for the default language
+				$language = api_get_setting('platformLanguage');				
+				$language = api_get_language_id($language);
+				$term_preview= LegalManager::get_last_condition($language);
+			}					
+			$tool_name = get_lang('TermsAndConditions');
+			Display :: display_header('');
+			echo '<div class="actions-title">';
+			echo $tool_name;
+			echo '</div>';
+			if (!empty($term_preview['content']))
+				echo $term_preview['content'];
+			else 
+				echo get_lang('ComingSoon');
+			Display :: display_footer();
+			exit;
+		}
+	}
+}
+
 $tool_name = get_lang('Registration');
 Display :: display_header($tool_name);
+
 echo '<div class="actions-title">';
 echo $tool_name;
 echo '</div>';
@@ -62,6 +95,17 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 }
 
 $form = new FormValidator('registration');
+if (get_setting('allow_terms_conditions')=='true') {
+	if (!isset($_SESSION['update_term_and_condition'][1])) {
+		$display_all_form=true;
+	} else {
+		$display_all_form=false;
+	}
+} else {
+	$display_all_form=true;
+}
+if ($display_all_form===true) {
+	
 //	LAST NAME and FIRST NAME
 $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
 $form->applyFilter('lastname','trim');
@@ -256,7 +300,47 @@ foreach ($extra as $id => $field_details) {
 			break;
 	}
 }
+
+}
+//------------ Terms and conditions
+if (get_setting('allow_terms_conditions')=='true') {	
+	//$language = api_get_setting('platformLanguage');
+	$language = api_get_interface_language();
+	$language = api_get_language_id($language);
+	$term_preview= LegalManager::get_last_condition($language);	
+	if ($term_preview==false) { 
+		//we load from the platform
+		$language = api_get_setting('platformLanguage');
+		$language = api_get_language_id($language);
+		$term_preview= LegalManager::get_last_condition($language);						
+	}
+	
+	// Version and language //password
+	$form->addElement('hidden', 'legal_accept_type',$term_preview['version'].':'.$term_preview['language_id']);
+	if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
+		$form->addElement('hidden', 'login',$_SESSION['info_current_user'][1]);
+		$form->addElement('hidden', 'password',$_SESSION['info_current_user'][2]);		
+	}
+	if($term_preview['type'] == 1) {
+		$form->addElement('checkbox', 'legal_accept', null, get_lang('IhaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');		
+		$form->addRule('extra_legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
+	} else {
+		if (!empty($term_preview['content'])) {			
+			$preview = LegalManager::show_last_condition($term_preview);
+			$term_preview  = '<div class="row">
+					<div class="label">'.get_lang('Conditions').'</div>
+					<div class="formw">
+					'.$preview.'
+					<br />				
+					</div>
+					</div>';		
+			$form->addElement('html', $term_preview);
+		}		
+	}
+}
+
 $form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'),'class="save"');
+
 if(isset($_SESSION["user_language_choice"]) && $_SESSION["user_language_choice"]!=""){
 	$defaults['language'] = $_SESSION["user_language_choice"];
 }
@@ -297,7 +381,20 @@ if ($form->validate()) {
 	}
 	
 	// creating a new user
-	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language'],$values['phone'],$picture_uri);
+	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language'],$values['phone'],$picture_uri);	
+
+		// Terms & Conditions
+	if (get_setting('allow_terms_conditions')=='true') {	
+		// update the terms & conditions
+		if (isset($values['legal_accept_type'])) {
+			$cond_array = explode(':',$values['legal_accept_type']);
+			if (!empty($cond_array[0]) && !empty($cond_array[1])){
+				$time = time();
+				$condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
+				UserManager::update_extra_field_value($user_id,'legal_accept',$condition_to_save);
+			}	
+		}
+	}
 
 	/****** register extra fields*************/
 	$extras=array();

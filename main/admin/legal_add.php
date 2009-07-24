@@ -27,7 +27,7 @@ if( $form->validate()) {
 			$content = $values['content'];
 			$changes = $values['changes'];
 			$submit  = $values['send'];		
-			
+			$default[content]=$content;
 			if (isset($values['language'])){
 				if($submit=='back') {
 					header('Location: legal_add.php');
@@ -82,7 +82,7 @@ if( $form->validate()) {
 		$defaults['changes']=$term_preview['changes'];
 	}*/
 }
-
+$form->setDefaults($default);
 //var_dump($term_preview);
 if(isset($_POST['send'])) { 
 	Security::clear_token();
@@ -108,7 +108,8 @@ if (isset($_POST['language'])) {
 //$form->addElement('html_editor', 'content', null, null, array('ToolbarSet' => 'Basic', 'Width' => '100%', 'Height' => '250'));
 	$form->addElement('static', $_POST['language']);
 	$form->addElement('hidden', 'language',$_POST['language']);
-	$form->addElement('textarea', 'content', get_lang('Content'),array('cols'=>'120','rows'=>'10'));	
+	$form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'simple', 'Width' => '65%', 'Height' => '250'));
+	//$form->addElement('textarea', 'content', get_lang('Content'),array('cols'=>'120','rows'=>'10'));	
 	$form->addElement('radio', 'type', '', get_lang('HTMLText') ,'0');
 	$form->addElement('radio', 'type', '', get_lang('PageLink') ,'1');
 	$form->addElement('textarea', 'changes', get_lang('ExplainChanges'),array('width'=>'20'));

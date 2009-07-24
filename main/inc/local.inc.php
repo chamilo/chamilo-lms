@@ -156,7 +156,10 @@ The course id is stored in $_cid session variable.
 		variables should be initialised here
 ==============================================================================
 */
-
+// verified if exists the username and password in session current 
+if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
+	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+}
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
 $gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : '';
@@ -198,8 +201,36 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	if (isset($_user['user_id'])) {	
 		unset($_user['user_id']); 
 	}
+	
+//$_SESSION['info_current_user'][1] is user name
+//$_SESSION['info_current_user'][2] is current password encrypted
+//$_SESSION['update_term_and_condition'][1] is current user id, of user in session
+if (get_setting('allow_terms_conditions')=='true') {
+	if (isset($_POST['login']) && isset($_POST['password']) && isset($_SESSION['update_term_and_condition'][1])) {
+	
+	 	$user_id=$_SESSION['update_term_and_condition'][1];	// user id
+		// update the terms & conditions
+		if ((isset($_POST['legal_accept']) && $_POST['legal_accept']=='1') || !isset($_POST['legal_accept'])) {
+			$legal_option=true;
+		} else {
+			$legal_option=false;
 
-    if (isset($_POST['login']) && isset($_POST['password'])) {
+		}
+		
+		if (isset($_POST['legal_accept_type']) && $legal_option===true) {
+			$cond_array = explode(':',$_POST['legal_accept_type']);
+			if (!empty($cond_array[0]) && !empty($cond_array[1])){
+				$time = time();
+				$condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
+				UserManager::update_extra_field_value($user_id,'legal_accept',$condition_to_save);
+			
+			}	
+		}
+	} 
+
+}
+
+	if ((isset($_POST['login']) && isset($_POST['password']))) {
     	// $login && $password are given to log in
 		$login = $_POST['login'];
 		$password = $_POST['password'];
@@ -211,24 +242,46 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 WHERE username = '".trim(addslashes($login))."'";
 					
         $result = api_sql_query($sql,__FILE__,__LINE__);
-
+		
         if (Database::num_rows($result) > 0) {
             $uData = Database::fetch_array($result);
 
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
                 //the authentification of this user is managed by Dokeos itself
-
                 $password = trim(stripslashes($password));
-
                 // determine if the password needs to be encrypted before checking
                 // $userPasswordCrypted is set in an external configuration file
 
                 /*if ($userPasswordCrypted) {
                 	$password = md5($password);
                 } */
-                $password = api_get_encrypted_password($password);                
-                
-                // check the user's password
+                if (get_setting('allow_terms_conditions')=='true') {
+	                if (isset($_POST['password']) && isset($_SESSION['info_current_user'][2]) && $_POST['password']==$_SESSION['info_current_user'][2]) {
+	                	$password=$_POST['password'];
+	                } else {
+	                	  $password = api_get_encrypted_password($password); 
+	                } 
+                } else {
+                	$password = api_get_encrypted_password($password); 
+                }
+				if (get_setting('allow_terms_conditions')=='true') {
+			       if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
+						$temp_user_id = $uData['user_id'];
+						$term_and_condition_status=api_check_term_condition($temp_user_id);//false or true
+						if ($term_and_condition_status===false) {
+							$_SESSION['update_term_and_condition']=array(true,$temp_user_id);
+							$_SESSION['info_current_user']=array(true,$login,$password);
+							header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php');
+					    	exit;	
+						} else {
+							unset($_SESSION['update_term_and_condition']);
+							unset($_SESSION['info_current_user']);
+						}
+			
+					} 
+				}
+				       		
+               // check the user's password
                 if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
                 	// check if the account is active (not locked)
                 	if ($uData['active']=='1') {
@@ -246,10 +299,8 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 					// the user have the permissions to enter at this site
                 					if (in_array($current_access_url_id, $my_url_list)) {                						
                 						$_user['user_id'] = $uData['user_id'];
-										api_session_register('_user');
-										
-										event_login();
-										                						
+										api_session_register('_user');										
+										event_login();										                						
                 					} else {
 	                					$loginFailed = true;
 										api_session_unregister('_uid');
@@ -257,6 +308,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 										exit;
                 					}                				
                 				} else {
+                					
                 					$loginFailed = true;
 									api_session_unregister('_uid');
 									header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
@@ -317,11 +369,14 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
       	        unset($_SESSION['request_uri']);
       	        header('location: '.$req);
     	    } else {
-    	    	if (isset($param)) {    	    	
+    	    	if (isset($param)) {  	    	
     	    		header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login').$param);
     	    	} else {
+
+    	    		// here is the main redirect of a *normal* login page in Dokeos
     	    		header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login'));
     	    	}
+
     	    	
     	    }
         } else {
@@ -433,8 +488,8 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                                   // the user has permission to enter at this site
                                                   $_user['user_id'] = $uData['user_id'];
                                                   api_session_register('_user');
-                                                    
-                                                      event_login();
+                                                  event_login();
+													
 
                                                   // Redirect to homepage
                                                   $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
@@ -457,7 +512,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                             //single URL access
                                             $_user['user_id'] = $uData['user_id'];
                                             api_session_register('_user');
-                                           
+                                  
                                                 event_login();
                                            
                                             // Redirect to homepage

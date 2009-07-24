@@ -1,4 +1,4 @@
-<?php // $Id: index.php 22352 2009-07-24 12:44:02Z herodoto $
+<?php // $Id: index.php 22368 2009-07-24 23:25:57Z iflorespaz $
  
 /*
 ==============================================================================
@@ -27,7 +27,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 22352 2009-07-24 12:44:02Z herodoto $
+* 	@version $Id: index.php 22368 2009-07-24 23:25:57Z iflorespaz $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -76,6 +76,7 @@ $this_section = SECTION_CAMPUS;
  * 			will see it.
  */
  $my_user_id=api_get_user_id();
+
 if (!empty($_GET['logout'])) {
 	logout();
 }
@@ -118,13 +119,18 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
 	session_destroy();
 	die();
 }
-
+//Delete session neccesary for legal terms
+if (get_setting('allow_terms_conditions')=='true') {
+	unset($_SESSION['update_term_and_condition']);
+	unset($_SESSION['info_current_user']);
+}
 /**
  * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.
  * @todo check if this code is used. I think this code is never executed because after clicking the submit button
  * 		 the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
  * 		 on api_get_setting('page_after_login')
  */
+
 if (!empty($_POST["submitAuth"])) {
 	// the user is already authenticated, we now find the last login of the user.
 	if (isset ($_user['user_id'])) {
@@ -148,9 +154,11 @@ if (!empty($_POST["submitAuth"])) {
 			decodeOpenInfos();
 		}
 	}
+
 } // end login -- if($_POST["submitAuth"])
 else {
 	// only if login form was not sent because if the form is sent the user was already on the page.
+
 	event_open();
 }
 

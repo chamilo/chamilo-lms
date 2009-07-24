@@ -77,7 +77,7 @@ class AllTests extends TestSuite {
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
 
      
-      
+     
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/blog.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/classmanager.lib.test.php');
@@ -95,6 +95,7 @@ class AllTests extends TestSuite {
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/groupmanager.lib.test.php'); 
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/image.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/import.lib.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/legal.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/mail.lib.inc.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/media.lib.test.php');

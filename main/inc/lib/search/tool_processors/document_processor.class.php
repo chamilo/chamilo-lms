@@ -60,7 +60,7 @@ class document_processor extends search_processor {
     private function get_information($course_id, $doc_id) {
         $doc_table = Database::get_course_table_from_code($course_id, TABLE_DOCUMENT);
         $item_property_table = Database::get_course_table_from_code($course_id, TABLE_ITEM_PROPERTY);
-
+		$doc_id = Database::escape_string($doc_id);
         $sql = "SELECT *
           FROM       $doc_table
           WHERE      $doc_table.id = $doc_id
@@ -82,7 +82,8 @@ class document_processor extends search_processor {
             include_once api_get_path(LIBRARY_PATH). 'fileDisplay.lib.php';
             $icon = choose_image(basename($row['path']));
             $thumbnail = api_get_path(WEB_CODE_PATH) .'img/'. $icon;
-            $image = $thumbnail; //FIXME: use big images
+            $image = $thumbnail; 
+            //FIXME: use big images
             // get author
             $author = '';
             $item_result = api_sql_query ($sql);

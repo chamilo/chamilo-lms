@@ -81,6 +81,7 @@ class learnpath_processor extends search_processor {
         $lpi_table = Database::get_course_table_from_code($course_id, TABLE_LP_ITEM);
         $lp_table = Database::get_course_table_from_code($course_id, TABLE_LP_MAIN);
         $doc_table = Database::get_course_table_from_code($course_id, TABLE_DOCUMENT);
+        $lp_id = Database::escape_string($lp_id);        
 
         if ($has_document_id) {
 	        $sql = "SELECT $lpi_table.id, $lp_table.name, $lp_table.author, $doc_table.path

@@ -98,11 +98,10 @@ class quiz_processor extends search_processor {
     private function get_information($course_id, $exercise_id) {
         $exercise_table = Database::get_course_table_from_code($course_id, TABLE_QUIZ_TEST);
         $item_property_table = Database::get_course_table_from_code($course_id, TABLE_ITEM_PROPERTY);
-
-        $sql = "SELECT *
-          FROM       $exercise_table
-          WHERE      id = $exercise_id
-          LIMIT 1";
+		$exercise_id = Database::escape_string($exercise_id);
+        $sql = "SELECT * FROM $exercise_table
+        		WHERE id = $exercise_id
+				LIMIT 1";
         $dk_result = api_sql_query ($sql);
 
         //actually author isn't saved on exercise tool, but prepare for when it's ready

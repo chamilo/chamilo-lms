@@ -30,6 +30,7 @@ function search_widget_prepare(&$htmlHeadXtra) {
  * Get one term html select
  */
 function format_one_specific_field_select($prefix, $sf_term_array, $op, $extra_select_attr='size="7" class="sf-select-multiple"') {
+	global $charset;
     $multiple_select .= '<select '. $extra_select_attr .' title="'. $prefix .'" id="sf-'. $prefix .'" name="sf_'. $prefix .'[]">';
 
     $all_selected = '';

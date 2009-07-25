@@ -50,7 +50,7 @@
 	var _editor_lang = 'en' ;
 	if ( window.opener )
 	{
-		window.resizeTo( 850, 535 ) ;
+		window.resizeTo( 900, 535 ) ;
 
 		if ( window.opener.ImageManager && window.opener.ImageManager.I18N )
 		{

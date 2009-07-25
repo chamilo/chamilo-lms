@@ -209,7 +209,7 @@ ImageManager.prototype.insert = function(outparam)
 			return;
 
 		//}, outparam);
-		}, outparam, 'FCKDialog_ImageManager', 'Insert Image', 850, 535 );
+		}, outparam, 'FCKDialog_ImageManager', 'Insert Image', 900, 535 );
 	}
 };
 

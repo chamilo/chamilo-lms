@@ -35,7 +35,7 @@
 
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getBaseURL(); ?>";
-	
+
 	var base_url_alt= "<?php echo $base_url_alt.'images/gallery/'; ?>";
 
 	var server_name = "<?php echo $IMConfig['server_name']; ?>";
@@ -50,7 +50,7 @@
 	var _editor_lang = 'en' ;
 	if ( window.opener )
 	{
-		window.resizeTo( 800, 500 ) ;
+		window.resizeTo( 850, 500 ) ;
 
 		if ( window.opener.ImageManager && window.opener.ImageManager.I18N )
 		{
@@ -72,7 +72,7 @@
 	}
 
 	// Language object not found?
-	if (!this.I18N)
+	if ( !this.I18N )
 	{
 		// Read it now - copy in next script block
 		document.write( '<script type="text/javascript" src="lang/' + _editor_lang + '.js"><\/script>' );
@@ -90,6 +90,14 @@
 		I18N = this.ImageManager.I18N;
 	}
 
+	function Init()
+	{
+		if (window.opener)
+		{
+			document.getElementById('dialog_title').style.visibility = '' ;
+		}
+	}
+
 /*]]>*/
 </script>
 
@@ -101,26 +109,27 @@
 /*<![CDATA[*/
 body {
 	padding: 0px;
+	overflow: hidden;
 }
 /*]]>*/
 </style>
 
 </head>
 
-<body>
-<div class="PopupTitle">Insert Image</div>
+<body onload='javascript: Init();'>
+<div id="dialog_title" class="PopupTitle" style="visibility: hidden;">Insert Image</div>
 <form action="images.php" id="uploadForm" method="post" enctype="multipart/form-data">
 <fieldset style="margin-left: 15px; margin-right: 15px;"><legend>Image Manager</legend>
 <div class="dirs">
 	<label for="dirPath">Directory</label>
-	<select name="dir" class="dirWidth" id="dirPath" onchange="updateDir(this)" style="width: 400px;">
+	<select name="dir" class="dirWidth" id="dirPath" onchange="javascript: updateDir(this);" style="width: 400px;">
 	<option value="/">/</option>
 <?php 		
 	  foreach($dirs as $relative=>$fullpath) { ?>
 	  	<?php if($relative == '/images/gallery/') {?>	    
 		<option value="<?php echo rawurlencode($relative); ?>" selected="selected"><?php echo $relative; ?></option>
 		<?php } else {?>
-		<option value="<?php echo rawurlencode($relative); ?>"><?php echo $relative; ?></option>	
+		<option value="<?php echo rawurlencode($relative); ?>"><?php echo $relative; ?></option>
 		<?php } ?>	
 <?php } ?>
 	</select>
@@ -139,7 +148,7 @@ body {
 			<td><input type="text" id="f_url" class="largelWidth" value="" /></td>
 			<td rowspan="3" align="right">&nbsp;</td>
 			<td align="right"><label for="f_width">Width</label></td>
-			<td><input type="text" id="f_width" class="smallWidth" value="" onchange="javascript:checkConstrains('width');"/></td>
+			<td><input type="text" id="f_width" class="smallWidth" value="" onchange="javascript: checkConstrains('width');"/></td>
 			<td rowspan="2" align="right"><img src="img/locked.gif" id="imgLock" width="25" height="32" alt="Constrained Proportions" /></td>
 			<td rowspan="3" align="right">&nbsp;</td>
 			<td align="right"><label for="f_vert">V Space</label></td>
@@ -149,7 +158,7 @@ body {
 			<td align="right"><label for="f_alt">Alt</label></td>
 			<td><input type="text" id="f_alt" class="largelWidth" value="" /></td>
 			<td align="right"><label for="f_height">Height</label></td>
-			<td><input type="text" id="f_height" class="smallWidth" value="" onchange="javascript:checkConstrains('height');"/></td>
+			<td><input type="text" id="f_height" class="smallWidth" value="" onchange="javascript: checkConstrains('height');"/></td>
 			<td align="right"><label for="f_horiz">H Space</label></td>
 			<td><input type="text" id="f_horiz" class="smallWidth" value="" /></td>
 		</tr>
@@ -160,7 +169,7 @@ body {
 				<table cellpadding="0" cellspacing="0" border="0">
                   <tr>
                     <td><input type="file" name="upload" id="upload"/></td>
-                    <td>&nbsp;<button type="submit" class="upload" name="submit" onclick="doUpload();"/>Upload</button></td>
+                    <td>&nbsp;<button type="submit" class="upload" name="submit" onclick="javascript: doUpload();"/>Upload</button></td>
                   </tr>
                 </table>
 			</td>
@@ -169,7 +178,7 @@ body {
 <?php } ?>
 			<td align="right"><label for="f_align">Align</label></td>
 			<td colspan="2">
-				<select size="1" id="f_align"  title="Positioning of this image">
+				<select size="1" id="f_align"  title="Positioning of this image" style="width: 130px;">
 				  <option value=""                             >Not Set</option>
 				  <option value="left"                         >Left</option>
 				  <option value="right"                        >Right</option>
@@ -211,17 +220,17 @@ body {
 <?php } ?>
 				<input type="hidden" id="orginal_width" />
 				<input type="hidden" id="orginal_height" />
-				<input type="checkbox" id="constrain_prop" checked="checked" onclick="javascript:toggleConstrains(this);" />
+				<input type="checkbox" id="constrain_prop" checked="checked" onclick="javascript: toggleConstrains(this);" />
 			</td>
 			<td colspan="5"><label for="constrain_prop">Constrain Proportions</label></td>
 		</tr>
 	</table>
 <!--// image properties -->
 	<div class="PopupButtons" style="width: 100%;">
-	<div style="text-align: right; margin-left: 15px; margin-right: 15px;">
-		  <button type="button" class="refresh" onclick="return refresh();">Refresh</button>&nbsp;
-          <button type="button" class="save" onclick="return onOK();">Ok</button>&nbsp;
-          <button type="button" class="cancel" onclick="return onCancel();">Cancel</button>
+	<div style="float: right; white-space: nowrap; margin-right: 25px;">
+		  <button type="button" class="refresh" onclick="javascript: return refresh();">Refresh</button>&nbsp;
+          <button type="button" class="save" onclick="javascript: return onOK();">Ok</button>&nbsp;
+          <button type="button" class="cancel" onclick="javascript: return onCancel();">Cancel</button>
     </div>
     </div>
 	<input type="hidden" id="f_file" name="f_file" />

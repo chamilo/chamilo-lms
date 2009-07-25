@@ -25,14 +25,14 @@ select, input, button { font: 11px Tahoma,Verdana,sans-serif; }
 	border-bottom: #cec6b5 1px solid;
 	background-color: #dedede;
 	padding: 3px 10px 3px 10px;
-	margin-bottom: 15px;
+	/* margin-bottom: 15px; */
 }
 
 .PopupButtons
 {
 	position: absolute;
-	/* right: 0px;
-	left: 0px; */
+	right: 0px;
+	left: 0px;
 	bottom: 0px;
 	border-top: #cec6b5 1px solid;
 	background-color: #dedede;

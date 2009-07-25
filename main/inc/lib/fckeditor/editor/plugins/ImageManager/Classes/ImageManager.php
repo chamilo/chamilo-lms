@@ -84,7 +84,7 @@ class ImageManager
 		{
 			$dirs = $this->_dirs($this->getBaseDir(),'/');
 			ksort($dirs);
-			
+
 			$this->dirs = $dirs;
 		}
 		return $this->dirs;
@@ -116,7 +116,7 @@ class ImageManager
 			$group_directory = $group_directory[count($group_directory) - 1];
 		}
 
-		$user_id = api_get_user_id();		
+		$user_id = api_get_user_id();
 		while (false !== ($entry = $d->read())) 
 		{
 			//If it is a directory, and it doesn't start with
@@ -148,10 +148,10 @@ class ImageManager
 				//Teachers can access to hidden files and directories as they can in the tool documents
 			    /*				
 				if ($visible_status=='0' || $visible_status=='-1') {					 
-					continue;				
+					continue;
 				}				
 				*/
-				
+
 				/* if (strpos($fullpath, '/shared_folder/') !== false) {
 					if (!preg_match('/.*\/shared_folder\/$/', $fullpath)) {
 						//all students can see the shared_folder
@@ -159,8 +159,8 @@ class ImageManager
 							continue;
 						}
 					}
-				}	
-				*/		
+				}
+				*/
 				$dirs[$relative] = $fullpath;
 				$dirs = array_merge($dirs, $this->_dirs($fullpath, $relative));
 			}
@@ -195,14 +195,14 @@ class ImageManager
 
 
 		$d = @dir($fullpath);
-		
-		if(empty($d)) {						
+
+		if(empty($d)) {
 			$path = Files::fixPath('/');
 			$base = Files::fixPath($this->getBaseDir());
-			$fullpath = Files::makePath($base,$path);	
-			$d = @dir($fullpath);							
+			$fullpath = Files::makePath($base,$path);
+			$d = @dir($fullpath);
 		}
-		
+
 		$in_group = api_is_in_group();
 		$user_id = api_get_user_id();
 
@@ -247,9 +247,9 @@ class ImageManager
 						}
 					}
 					*/
-				}				
+				}
 
-				if($is_dir && $this->isThumbDir($entry) == false) {	
+				if($is_dir && $this->isThumbDir($entry) == false) {
 				    global $_course;
 					if (isset($_course['dbName']) && $_course<>'-1') {
 						//checking visibility		
@@ -262,9 +262,9 @@ class ImageManager
 					//Teachers can access to hidden files and directories as they can in the tool documents
 					/*
 					if ($visible_status=='0' || $visible_status=='-1') {					 
-						continue;			
+						continue;
 					}
-					*/				
+					*/
 					$relative = Files::fixPath($path.$entry);
 					$full = Files::fixPath($fullpath.$entry);
 					$count = $this->countFiles($full);
@@ -284,15 +284,15 @@ class ImageManager
 							$doc_id = DocumentManager::get_document_id($_course, $new_dir );
 							$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);										
 						}
-						
+
 						//Teachers can access to hidden files and directories as they can in the tool documents
 					    /*
 						if ($visible_status=='0' || $visible_status=='-1') {					 
-							continue;		
+							continue;
 						}
 						*/
-						
-						$file['url'] = Files::makePath($this->config['base_url'],$path).$entry;	
+
+						$file['url'] = Files::makePath($this->config['base_url'],$path).$entry;
 						$file['relative'] = $path.$entry;
 						$file['fullpath'] = $fullpath.$entry;
 						$file['image'] = $img;
@@ -581,15 +581,15 @@ class ImageManager
 		}
 
 		//now copy the file
-		$path = Files::makePath($this->getBaseDir(),$relative);		
+		$path = Files::makePath($this->getBaseDir(),$relative);
 		$result = Files::copyFile($file['tmp_name'], $path, $file['name']);
-		
+
 		//no copy error
-       if (!is_int($result)) {
+		if (!is_int($result)) {
        	     	
-	   	    if (isset($_course['dbName']) && $_course<>'-1') {	   	    	
+	   	    if (isset($_course['dbName']) && $_course<>'-1') {
 				//adding the document to the DB
-				global $to_group_id; 
+				global $to_group_id;
 				
 				// looking for the /document/ folder
 				$document_path = substr($path, strpos($path,'/document/')+9, strlen($path)); //   /shared_folder/4/name
@@ -609,7 +609,7 @@ class ImageManager
 			if (!(api_is_platform_admin() || api_is_course_admin())) {
 				//setting invisible by default for the students
 				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());					
-			}										
+			}
 			*/
 		   $dimensionsIndex = isset($_REQUEST['uploadSize']) ? $_REQUEST['uploadSize'] : 0;
 		   // If maximum size is specified, constrain image to it.

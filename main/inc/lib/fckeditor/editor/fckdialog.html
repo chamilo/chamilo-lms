@@ -416,7 +416,10 @@ var Selection =
 		// Move the focus to the Cancel button so even if the dialog contains a 
 		// contentEditable element the selection is properly restored in the editor #2496
 		window.focus() ;
-		$( 'btnCancel' ).focus() ;
+		if ( $( 'btnCancel' ) )
+		{
+			$( 'btnCancel' ).focus() ;
+		}
 
 		FCK.Selection.Restore() ;
 	},
@@ -583,6 +586,21 @@ var onReadyRegister = function()
 	window.Init = function()
 	{
 		$( 'contents' ).dir = langDir;
+
+		var src = Args().Page ;
+		if ( src.indexOf( 'manager.php' ) != -1 )
+		{
+			var PopupButtons = $( 'PopupButtons' ) ;
+			while ( PopupButtons && PopupButtons.firstChild )
+			{
+				PopupButtons.removeChild( PopupButtons.firstChild ) ;
+			}
+			PopupButtons.style.border = '0px';
+			if ( FCKBrowserInfo.IsIE && !FCKBrowserInfo.IsIE7 )
+			{
+				PopupButtons.style.width = '100%';
+			}
+		}
 
 		// Start the throbber timer.
 		Throbber.Show( 1000 ) ;
@@ -789,7 +807,7 @@ var onReadyRegister = function()
 // ]]>
 		</script>
 	</head>
-	<body onload="Init();" class="PopupBody">
+	<body onload="javascript: Init();" class="PopupBody">
 		<div class="contents" id="contents">
 			<div id="header">
 				<div id="TitleArea" class="PopupTitle PopupTitleBorder">
@@ -810,14 +828,14 @@ document.write( Args().Title ) ;
 				</div>
 			</div>
 			<div id="innerContents"></div>
-			<div id="PopupButtons" class="PopupButtons">
+			<div id="PopupButtons" class="PopupButtons" style="visibility: hidden;">
 				<table border="0" cellpadding="0" cellspacing="0">
 					<tr>
 						<td width="100%">&nbsp;</td>
 						<td nowrap="nowrap">
-							<button id="btnOk" style="visibility: hidden;" value="Ok" class="save" onclick="Ok();" fckLang="DlgBtnOK" >Ok</button>
+							<button id="btnOk" style="visibility: hidden;" value="Ok" class="save" onclick="javascript: Ok();" fckLang="DlgBtnOK" >Ok</button>
 							&nbsp;
-							<button id="btnCancel" value="Cancel" class="cancel" onclick="Cancel();" fckLang="DlgBtnCancel" >Cancel</button>
+							<button id="btnCancel" value="Cancel" class="cancel" onclick="javascript: Cancel();" fckLang="DlgBtnCancel" >Cancel</button>
 						</td>
 					</tr>
 				</table>
@@ -832,7 +850,7 @@ document.write( Args().Title ) ;
 		<div class="bc"></div>
 		<div class="br"></div>
 		<div class="cover" id="cover" style="display:none"></div>
-		<div id="throbberBlock" style="position: absolute; visibility: hidden"></div>
+		<div id="throbberBlock" style="position: absolute; visibility: hidden;"></div>
 		<script type="text/javascript">
 // <![CDATA[
 			// Set the class name for language direction.

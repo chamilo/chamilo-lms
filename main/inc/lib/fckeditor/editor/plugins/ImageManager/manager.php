@@ -50,7 +50,7 @@
 	var _editor_lang = 'en' ;
 	if ( window.opener )
 	{
-		window.resizeTo( 850, 500 ) ;
+		window.resizeTo( 850, 535 ) ;
 
 		if ( window.opener.ImageManager && window.opener.ImageManager.I18N )
 		{
@@ -64,6 +64,8 @@
 	}
 	else if ( window.parent )
 	{
+		window.parent.SetAutoSize( true ) ;
+
 		_editor_lang = oEditor._editor_lang ;
 		if ( oEditor.ImageManager && oEditor.ImageManager.I18N )
 		{

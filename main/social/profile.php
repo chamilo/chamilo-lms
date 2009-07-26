@@ -50,10 +50,12 @@ if (isset($_GET['u'])) {
 	$user_info	= UserManager::get_user_info_by_id($user_id);
 }
 
+$libpath = api_get_path(LIBRARY_PATH);
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once $libpath.'course.lib.php';
+require_once $libpath.'formvalidator/FormValidator.class.php';
+require_once $libpath.'magpierss/rss_fetch.inc';
 
 api_block_anonymous_users();
 
@@ -397,6 +399,42 @@ function get_logged_user_course_html($my_course, $count) {
 	}	
 	//$my_course['creation_date'];
 	return $output;
+}
+/**
+ * Get user's feeds
+ * @param   int User ID
+ * @param   int Limit of posts per feed
+ * @return  string  HTML section with all feeds included
+ * @author  Yannick Warnier
+ * @since   Dokeos 1.8.6.1
+ */
+function get_user_feeds($user,$limit=5) {
+    if (!function_exists('fetch_rss')) { return '';}
+	$fields = UserManager::get_extra_fields();
+    $feed_fields = array();
+    $feeds = array();
+    $res = '<div class="sectiontitle">'.get_lang('RSSFeeds').'</div>';
+    $res .= '<div class="social-content-training">';
+    $feed = UserManager::get_extra_user_data_by_field($user,'rssfeeds');
+    $feeds = split(';',$feed['rssfeeds']);
+    if (count($feeds)==0) { return ''; }
+    foreach ($feeds as $url) {
+        $rss = fetch_rss($url);
+    	$res .= '<h2>'.$rss->channel['title'].'</h2>';
+        $res .= '<div class="social-rss-channel-items">';
+        $i = 1;
+        foreach ($rss->items as $item) {
+            if ($limit>=0 and $i>$limit) {break;}
+        	$res .= '<h3><a href="'.$item['link'].'">'.$item['title'].'</a></h3>';
+            $res .= '<div class="social-rss-item-date">'.api_get_datetime($item['date_timestamp']).'</div>';
+            $res .= '<div class="social-rss-item-content">'.$item['description'].'</div><br />';
+            $i++;
+        }
+        $res .= '</div>';
+    }
+    $res .= '</div>';
+    $res .= '<div class="clear"></div><br />';
+    return $res;
 }
 /**
  * Display
@@ -754,7 +792,7 @@ echo '<div id="social-profile-container">';
 			}
 						
 			echo '<div class="clear"></div><br />';
-			echo '</div>';		
+            echo '</div>';
 			// COURSES LIST
 			if ($show_full_profile) {							
 				//print_r($personal_course_list);		
@@ -813,15 +851,13 @@ echo '<div id="social-profile-container">';
 					}
 					*/
 				}
-				echo '</ul>';				
-				echo '<br />';				            
-		echo '</div>';
-		}
-	echo '</div>';
-	echo '</div>';
-echo '</div>';
-
+				echo '</ul><br />';
+                echo get_user_feeds($user_id);
+        		echo '</div>';
+		    }
+            echo '</div>';
+        echo '</div>';
+    echo '</div>';
 echo '</div>'; //from the main
 echo '<form id="id_reload" action="#"></form>';
 Display :: display_footer();
-?>

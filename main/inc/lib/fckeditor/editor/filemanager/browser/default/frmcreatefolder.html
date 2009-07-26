@@ -102,7 +102,7 @@ window.onload = function()
 	FCKLang['UnknownErrorCreatingFolder'] = FCKLang['UnknownErrorCreatingFolder'] ? FCKLang['UnknownErrorCreatingFolder'] : 'Unknown error creating folder.' ;
 	FCKLang['ErrorCreatingFolder'] = FCKLang['ErrorCreatingFolder'] ? FCKLang['ErrorCreatingFolder'] : 'Error creating folder. Error number: ' ;
 
-	document.getElementById('lblCreateFolder').innerHTML = FCKLang['CreateNewFolder'] ;
+	document.getElementById('btnCreateFolder').value = FCKLang['CreateNewFolder'] ;
 
 	window.parent.IsLoadedCreateFolder = true ;
 }
@@ -112,15 +112,8 @@ window.onload = function()
 		<table class="fullHeight" cellSpacing="0" cellPadding="0" width="100%" border="0">
 			<tr>
 				<td>
-					<button type="add" style="width: 100%" onclick="CreateFolder();">
-						<table cellSpacing="0" cellPadding="0" border="0">
-							<tr>
-								<td><img height="16" alt="" src="images/Folder.gif" width="16"></td>
-								<td>&nbsp;</td>
-								<td nowrap><span id="lblCreateFolder">Create New Folder</span></td>
-							</tr>
-						</table>
-					</button>
+					&nbsp;<br />
+					<input id="btnCreateFolder" type="button" style="width: 100%" onclick="javascript: CreateFolder();" value="Create New Folder"/>
 				</td>
 			</tr>
 		</table>

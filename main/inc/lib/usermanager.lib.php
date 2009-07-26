@@ -1,4 +1,4 @@
-<?php // $Id: usermanager.lib.php 22276 2009-07-21 22:45:39Z iflorespaz $
+<?php // $Id: usermanager.lib.php 22378 2009-07-26 19:58:38Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1343,13 +1343,13 @@ class UserManager {
 	}
 		
 	/**
-	 * Get all the extra field information of a certain field (also the options)
-	 * @param Int $field_name the name of the field we want to know everything of
-	 * @return array $return containing all th information about the extra profile field 
+	 * Get the extra field information for a certain field (the options as well)
+	 * @param  int     The name of the field we want to know everything about
+	 * @return array   Array containing all the information about the extra profile field (first level of array contains field details, then 'options' sub-array contains options details, as returned by the database) 
 	 * @author Julio Montoya
-	 * @since Dokeos 1.8.6
+	 * @since  Dokeos 1.8.6
 	 */
-	public static function get_extra_field_information_by_name ($field_variable) {
+	public static function get_extra_field_information_by_name ($field_variable, $fuzzy=false) {
 		// database table definition
 		$table_field 			= Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$table_field_options	= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);

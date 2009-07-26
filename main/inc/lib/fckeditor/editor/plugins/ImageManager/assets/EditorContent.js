@@ -362,7 +362,7 @@ function drags(e)
     var firedobj=ns6? e.target : event.srcElement
     var topelement=ns6? "HTML" : "BODY"
 
-    while (firedobj.tagName!=topelement&&
+    while (firedobj.tagName && firedobj.tagName != topelement &&
             !(firedobj.className=="crop" 
                 || firedobj.className=="handleBox" 
                 || firedobj.className=="selection" || firedobj.className=="selectionWhite"))

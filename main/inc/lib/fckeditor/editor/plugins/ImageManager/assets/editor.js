@@ -1,7 +1,7 @@
 /**
  * Functions for the ImageEditor interface, used by editor.php only	
  * @author $Author: Wei Zhuo $
- * @author $Author: Frédéric Klee <fklee@isuisse.com> $ - constraints toggle and check
+ * @author $Author: FrÃ©dÃ©ric Klee <fklee@isuisse.com> $ - constraints toggle and check
  * @author $Author: Paul Moers <mail@saulmade.nl> $ - watermarking and replace code + several small enhancements <http://www.saulmade.nl/FCKeditor/FCKPlugins.php>
  * @version $Id: editor.js 2006-04-09 $
  * @package ImageManager
@@ -65,7 +65,7 @@
 			}
 
 			//constraints on the scale,
-			//code by Frédéric Klee <fklee@isuisse.com>
+			//code by FrÃ©dÃ©ric Klee <fklee@isuisse.com>
 			if(action == 'scale') 
 			{
 				var theImage = editor.window.document.getElementById('theImage');
@@ -313,9 +313,10 @@
 	init = function()
 	{
 		var bottom = document.getElementById('bottom');
-		if(window.opener)
+		__dlg_init(bottom);
+
+		if(I18N)
 		{
-			__dlg_init(bottom);
 			__dlg_translate(I18N);
 		}
 	}

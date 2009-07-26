@@ -167,7 +167,7 @@ ImageManager.prototype.insert = function(outparam)
 			imgFileName = sElm.src.substring(lastSlashPosition);
 			var url = FCKConfig.PluginsPath + 'ImageManager/editor.php?img=' + "/" + imgFileName;
 			//Dialog(url, null, outparam);
-			OpenDialog( url, null, outparam, 'FCKDialog_ImageEditor', 'Edit Image', 750, 600 );
+			OpenDialog( url, null, outparam, 'FCKDialog_ImageEditor', 'Edit Image', 713, 596 );
 		}
 		// no image selected - stop
 		else

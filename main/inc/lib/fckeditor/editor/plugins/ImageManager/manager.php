@@ -44,6 +44,7 @@
 	if ( !window.opener && window.parent )
 	{
 		// The image manager is inside a dialog.
+		window.parent.SetAutoSize( true ) ;
 		oEditor = window.parent.InnerDialogLoaded() ;
 	}
 
@@ -64,8 +65,6 @@
 	}
 	else if ( window.parent )
 	{
-		window.parent.SetAutoSize( true ) ;
-
 		_editor_lang = oEditor._editor_lang ;
 		if ( oEditor.ImageManager && oEditor.ImageManager.I18N )
 		{
@@ -115,6 +114,20 @@ body {
 }
 /*]]>*/
 </style>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+
+	function Init()
+	{
+		if (window.opener)
+		{
+			document.getElementById('dialog_title').style.visibility = '' ;
+		}
+	}
+
+/*]]>*/
+</script>
 
 </head>
 

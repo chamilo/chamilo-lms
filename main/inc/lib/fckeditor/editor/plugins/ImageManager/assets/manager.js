@@ -42,8 +42,10 @@
 	{
 		__dlg_init();
 
-		if(I18N)
+		if( I18N)
+		{
 			__dlg_translate(I18N);
+		}
 
 		var uploadForm = document.getElementById('uploadForm');
 		if(uploadForm) uploadForm.target = 'imgManager';

@@ -34,13 +34,14 @@ if (isset($_GET['img'])) {
 	if ( !window.opener && window.parent )
 	{
 		// The image editor is inside a dialog.
+		window.parent.SetAutoSize( true ) ;
 		oEditor = window.parent.InnerDialogLoaded() ;
 	}
 
 	var _editor_lang = 'en' ;
 	if(window.opener)
 	{
-		window.resizeTo(673, 531);
+		window.resizeTo(702, 600);
 
 		if (window.opener.I18N)
 		{
@@ -55,6 +56,14 @@ if (isset($_GET['img'])) {
 		if ( window.opener._editor_lang )
 		{
 			_editor_lang = window.opener._editor_lang ;
+		}
+	}
+	else if ( window.parent )
+	{
+		_editor_lang = oEditor._editor_lang ;
+		if ( oEditor.ImageManager && oEditor.ImageManager.I18N )
+		{
+			I18N = oEditor.ImageManager.I18N ;
 		}
 	}
 

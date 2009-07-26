@@ -4,9 +4,12 @@
 */
 class LegalManager
 {
+	private function __construct() {
+		//void
+	}
 	function add($language, $content, $type, $changes) {
 		$legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);		
-		$last = LegalManager::get_last_condition($language);				
+		$last = self::get_last_condition($language);				
 		$language = Database::escape_string($language);
 		$content  = Database::escape_string($content);
 		$type     = intval($type);

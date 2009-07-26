@@ -3757,6 +3757,10 @@ function api_check_term_condition($user_id) {
 		require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		//check if exists terms and conditions
+		if (LegalManager::count()==0) {
+			return true;
+		}
 		//check the last user version_id passed									
 		$sqlv = "SELECT field_value FROM $t_ufv ufv inner join $t_uf uf on ufv.field_id= uf.id
 				 WHERE field_variable = 'legal_accept' AND user_id = ".intval($user_id);

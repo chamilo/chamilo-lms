@@ -108,7 +108,7 @@ if (isset($_POST['language'])) {
 //$form->addElement('html_editor', 'content', null, null, array('ToolbarSet' => 'Basic', 'Width' => '100%', 'Height' => '250'));
 	$form->addElement('static', $_POST['language']);
 	$form->addElement('hidden', 'language',$_POST['language']);
-	$form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'simple', 'Width' => '65%', 'Height' => '250'));
+	$form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'simple', 'Width' => '100%', 'Height' => '250'));
 	//$form->addElement('textarea', 'content', get_lang('Content'),array('cols'=>'120','rows'=>'10'));	
 	$form->addElement('radio', 'type', '', get_lang('HTMLText') ,'0');
 	$form->addElement('radio', 'type', '', get_lang('PageLink') ,'1');

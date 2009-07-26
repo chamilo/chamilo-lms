@@ -38,7 +38,6 @@ FUNCTIONS FOR WIKI
 ==============================================================================
 */
 
-// including the global dokeos file
 
 /**
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
@@ -288,6 +287,7 @@ function make_wiki_link_clickable($input)
 function save_wiki() {
 	global $charset;
 	global $tbl_wiki;
+	global $tbl_wiki_conf;
 	
 	// NOTE: visibility, visibility_disc and ratinglock_disc changes are not made here, but through the interce buttons
 	
@@ -313,6 +313,18 @@ function save_wiki() {
  	   	$_clean['group_id']=Database::escape_string($_GET['group_id']);
     }
 	
+	//cleaning config variables
+	
+	$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));	
+	$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
+	$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
+	$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
+	$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));	
+	$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS($_POST['startdate_assig']));
+	$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS($_POST['enddate_assig']));	
+	$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
+
+	
 	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
 	
 	$result=api_sql_query($sql);	
@@ -323,7 +335,11 @@ function save_wiki() {
 		$sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';		 	
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
-				
+	
+	//update wiki config
+	$sql='UPDATE'.$tbl_wiki.' SET page_id="'.$Id.'", feedback1="'.$_clean['feedback1'].'", feedback2="'.$_clean['feedback2'].'", feedback3="'.$_clean['feedback3'].'", max_text="'.$_clean['max_text'].'", max_version="'.$_clean['max_version'].'", startdate_assig="'.$_clean['startdate_assig'].'", enddate_assig="'.$_clean['enddate_assig'].'", delayedsubmit="'.$_clean['delayedsubmit'].'" WHERE id="'.$Id.'"';		 	
+	api_sql_query($sql,__FILE__,__LINE__);	
+	
 	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
 	
 	check_emailcue($_clean['reflink'], 'P', $dtime, $_clean['user_id']);
@@ -364,7 +380,7 @@ function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group
 function delete_wiki()
 {
 
-	global $tbl_wiki, $tbl_wiki_discuss, $tbl_wiki_mailcue, $groupfilter;
+	global $tbl_wiki, $tbl_wiki_conf, $tbl_wiki_discuss, $tbl_wiki_mailcue, $groupfilter;
 	//identify the first id by group = identify wiki
 	$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' ORDER BY id DESC';
 	$allpages=api_sql_query($sql,__FILE__,__LINE__);
@@ -372,9 +388,11 @@ function delete_wiki()
 	while ($row=Database::fetch_array($allpages))	{
 		$id 		= $row['id'];
 		$group_id	= $row['group_id'];
+		$page_id	= $row['page_id'];
+		api_sql_query('DELETE FROM '.$tbl_wiki_conf.' WHERE page_id="'.$id.'"' ,__FILE__,__LINE__);
+		api_sql_query('DELETE FROM '.$tbl_wiki_discuss.' WHERE publication_id="'.$id.'"' ,__FILE__,__LINE__);
 	}
-
-	api_sql_query('DELETE FROM '.$tbl_wiki_discuss.' WHERE publication_id="'.$id.'"' ,__FILE__,__LINE__);
+	
 	api_sql_query('DELETE FROM '.$tbl_wiki_mailcue.' WHERE group_id="'.$group_id.'"' ,__FILE__,__LINE__);	
 	api_sql_query('DELETE FROM '.$tbl_wiki.' WHERE '.$groupfilter.'',__FILE__,__LINE__);	
 	return get_lang('WikiDeleted');
@@ -390,6 +408,7 @@ function save_new_wiki() {
 	global $charset;
 	global $tbl_wiki;
     global $assig_user_id; //need for assignments mode
+	global $tbl_wiki_conf;
 	
 	// cleaning the variables
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
@@ -435,6 +454,19 @@ function save_new_wiki() {
 	
 	$_clean['linksto'] = links_to($_clean['content']);	//check wikilinks
 	
+	//cleaning config variables	
+	$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));	
+	$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
+	$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
+	$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));	
+	$_clean['fprogress2']=Database::escape_string(Security::remove_XSS($_POST['fprogress2']));
+	$_clean['fprogress3']=Database::escape_string(Security::remove_XSS($_POST['fprogress3']));
+	$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
+	$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));	
+	$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('startdate_assig')));
+	$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));	
+	$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
+	
 	//filter no _uass
 	if (api_eregi('_uass', $_POST['title']) || (api_strtoupper(trim($_POST['title'])) == 'INDEX' || api_strtoupper(trim(api_htmlentities($_POST['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset)))) {
 		$message= get_lang('GoAndEditMainPage');
@@ -455,7 +487,12 @@ function save_new_wiki() {
 		   $sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';		 	
 	       api_sql_query($sql,__FILE__,__LINE__);
 		   	
+			//insert wiki config		 
+		   $sql="INSERT INTO ".$tbl_wiki_conf." (page_id, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
+		   api_sql_query($sql,__LINE__,__FILE__);
+			
 		   api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
+		   
 		   check_emailcue(0, 'A');
 		   return get_lang('NewWikiSaved').' <a href="index.php?action=showpage&amp;title='.$_clean['reflink'].'&group_id='.$group_id.'">'.$_POST['title'].'</a>'; 
 		} 
@@ -488,21 +525,102 @@ return true;
 	
 	echo '<form name="form1" method="post" onsubmit="return CheckSend()" action="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
 	echo '<div id="wikititle">';
-	echo  '<span class="form_required">*</span> '.get_lang(Title).': <input type="text" name="title" value="'.urldecode($_GET['title']).'">';
+	echo  '<span class="form_required">*</span> '.get_lang(Title).': <input type="text" name="title" value="'.urldecode($_GET['title']).'" size="40">';
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin())
 	{	
 	
 		$_clean['group_id']=(int)$_SESSION['_gid']; // TODO: check if delete ?
+				
+	//	echo'<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus" style="float:right">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>'; // TODO: under develop, uncoment and activate later
+		echo '<div id="options" style="display:none; margin: 20px;" >';					
+
+		//time limit
+		echo  '<input type="checkbox" value="1" name="type1" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;'.get_lang('PutATimeLimit').'';		
+		echo  '&nbsp;&nbsp;&nbsp;<span id="msg_error1" style="display:none;color:red"></span>';		
+		echo  '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">&nbsp;&nbsp;';			
+		echo  '<div>'.get_lang('StartDate').'&nbsp;:'.draw_date_picker('startdate_assig').'</div>';
+		echo  '<div>'.get_lang('EndDate').'&nbsp;:'.draw_date_picker('enddate_assig').'</div>';
+		echo  get_lang('AllowLaterSends').'&nbsp;<input type="checkbox" name="delayedsubmit" value="1">';
+		echo '</div>';				
 		
-		echo '&nbsp;<img src="../img/wiki/assignment.gif" />&nbsp;'.get_lang('DefineAssignmentPage').'&nbsp;<input type="checkbox" name="assignment" value="1">'; // 1= teacher 2 =student
-			
-			//by now turned off			
-			//echo'<div style="border:groove">';			
-			//echo '&nbsp;'.get_lang('StartDate').': <INPUT TYPE="text" NAME="startdate_assig" VALUE="0000-00-00 00:00:00">(yyyy-mm-dd hh:mm:ss)'; //by now turned off
-			//echo '&nbsp;'.get_lang('EndDate').': <INPUT TYPE="text" NAME="enddate_assig" VALUE="0000-00-00 00:00:00">(yyyy-mm-dd hh:mm:ss)'; //by now turned off				
-		    //echo '<br />&nbsp;'.get_lang('AllowLaterSends').'&nbsp;<INPUT TYPE="checkbox" NAME="delayedsubmit" VALUE="0">'; //by now turned off		
-			//echo'</div>';			
+		//feedback
+		echo '<input type="checkbox" value="1" name="type2" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;'.get_lang('AddAutomaticFeedbacks').'';		
+		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';		
+		echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">&nbsp;&nbsp;';			
+
+		echo '<table border="0">';
+		echo '<tr>';
+		echo '<td colspan="2">'.get_lang('Feedback1').'</td>';
+		echo '<td colspan="2">'.get_lang('Feedback2').'</td>';
+		echo '<td colspan="2">'.get_lang('Feedback3').'</td>';
+	  	echo '</tr>';
+	 	echo '<tr>';
+		echo '<td colspan="2"><textarea name="feedback1" cols="23" rows="4"></textarea></td>';
+		echo '<td colspan="2"><textarea name="feedback2" cols="23" rows="4"></textarea></td>';
+		echo '<td colspan="2"><textarea name="feedback3" cols="23" rows="4"></textarea></td>';
+	 	echo '</tr>';
+		echo '<tr>';
+		echo '<td>'.get_lang('FProgress').':</td>';
+		echo '<td><select name="fprogress3">
+		   <option value="0" selected>0</option>	   
+		   <option value="10">10</option>
+		   <option value="20">20</option>
+		   <option value="30">30</option>
+		   <option value="40">40</option>
+		   <option value="50">50</option>
+		   <option value="60">60</option>
+		   <option value="70">70</option>
+		   <option value="80">80</option>
+		   <option value="90">90</option>
+		   <option value="100">100</option>   
+		   </select> %</td>';
+		echo '<td>'.get_lang('FProgress').':</td>';
+		echo '<td><select name="fprogress3">
+		   <option value="0" selected>0</option>	   
+		   <option value="10">10</option>
+		   <option value="20">20</option>
+		   <option value="30">30</option>
+		   <option value="40">40</option>
+		   <option value="50">50</option>
+		   <option value="60">60</option>
+		   <option value="70">70</option>
+		   <option value="80">80</option>
+		   <option value="90">90</option>
+		   <option value="100">100</option>   
+		   </select> %</td>';
+		echo '<td>'.get_lang('FProgress').':</td>';
+		echo '<td><select name="fprogress3">
+		   <option value="0" selected>0</option>	   
+		   <option value="10">10</option>
+		   <option value="20">20</option>
+		   <option value="30">30</option>
+		   <option value="40">40</option>
+		   <option value="50">50</option>
+		   <option value="60">60</option>
+		   <option value="70">70</option>
+		   <option value="80">80</option>
+		   <option value="90">90</option>
+		   <option value="100">100</option>   
+		   </select> %</td>';
+	  	echo '</tr>';	  
+		echo '</table>';
+		echo '</div>';
+		
+	//other max limit
+		echo '<input type="checkbox" value="1" name="type3" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;'.get_lang('SettingOtherLimitations').'';		
+		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
+		echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">&nbsp;&nbsp;';			
+		echo get_lang('Max_text').'&nbsp;<input type="text" name="max_text" size="3">'.get_lang('Max_version').'&nbsp;<input type="text" name="max_version" size="3">';
+		echo '</div>';	
+		
+		//to define as an individual assignment
+		echo '<div style= "border : 1px dotted; padding:4px; margin:20px;"><input type="checkbox" name="assignment" value="1">&nbsp;'.get_lang('DefineAssignmentPage').'</div>'; // 1= teacher 2 =student
+	
+		echo'</div>';
+
+		echo '<div>&nbsp;</div>';
+	
 	}
 	echo '</div>';
 	echo '<div id="wikicontent">';
@@ -512,7 +630,7 @@ return true;
 	); 	
 	echo '<br/>';
 	echo '<br/>'; 	
-	echo get_lang('Comments').':&nbsp;&nbsp;<input type="text" name="comment" value="'.stripslashes($row['comment']).'"><br /><br />';
+	echo get_lang('Comments').':&nbsp;&nbsp;<input type="text" name="comment" size="40"><br /><br />';
 	echo get_lang('Progress').':&nbsp;&nbsp;<select name="progress" id="progress">
 	   <option value="0" selected>0</option>	   
 	   <option value="10">10</option>
@@ -1575,7 +1693,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 	$exportPath = $exportDir . '/' . $wikiFileName;
 	file_put_contents( $exportPath, $wikiContents );		 
 	$doc_id = add_document($_course, $groupPath.'/'.$wikiFileName,'file',filesize($exportPath),$wikiFileName);
-	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);					              
+	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);
     // TODO: link to go document area
 }
 
@@ -1740,7 +1858,7 @@ function auto_add_page_users($assignment_type)
 		if($o_user_to_add['user_id'] == api_get_user_id())
 		{		
 			$assig_user_id=$o_user_to_add['user_id'];			
-			if($assignment_type==1)			
+			if($assignment_type==1)	
 			 {					 
 				$_POST['title']= $title_orig;	
 				$_POST['comment']=get_lang('AssignmentDesc');
@@ -1756,6 +1874,10 @@ function auto_add_page_users($assignment_type)
 	} //end foreach to teacher
 }
 
+/**
+ * Enter description here...
+ *
+ */
 function display_wiki_search_results($search_term, $search_content=0)
 {
 	global $tbl_wiki, $groupfilter, $MonthsLong; 
@@ -1851,5 +1973,82 @@ function display_wiki_search_results($search_term, $search_content=0)
 	{
 		echo get_lang('NoSearchResults');
 	}
+}
+
+/**
+ * Enter description here...
+ *
+ */
+function draw_date_picker($prefix,$default='') {
+	//$default = 2008-10-01 10:00:00
+	if(empty($default)) {
+	$default = date('Y-m-d H:i:s');	
+	}
+	$parts = split(' ',$default);
+	list($d_year,$d_month,$d_day) = split('-',$parts[0]);
+	list($d_hour,$d_minute) = split(':',$parts[1]);
+	
+	$month_list = array(
+	1=>get_lang('JanuaryLong'),
+	2=>get_lang('FebruaryLong'),
+	3=>get_lang('MarchLong'),
+	4=>get_lang('AprilLong'),
+	5=>get_lang('MayLong'),
+	6=>get_lang('JuneLong'),
+	7=>get_lang('JulyLong'),
+	8=>get_lang('AugustLong'),
+	9=>get_lang('SeptemberLong'),
+	10=>get_lang('OctoberLong'),
+	11=>get_lang('NovemberLong'),
+	12=>get_lang('DecemberLong')
+	);
+		
+	$minute = range(10,59);
+	array_unshift($minute,'00','01','02','03','04','05','06','07','08','09');
+	$date_form = make_select($prefix.'_day', array_combine(range(1,31),range(1,31)), $d_day);
+	$date_form .= make_select($prefix.'_month', $month_list, $d_month);
+	$date_form .= make_select($prefix.'_year', array( $d_year=> $d_year, $d_year+1=>$d_year+1), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
+	$date_form .= make_select($prefix.'_hour', array_combine(range(0,23),range(0,23)), $d_hour).' : ';
+	$date_form .= make_select($prefix.'_minute', $minute, $d_minute);
+	return $date_form;
+}
+
+/**
+ * Enter description here...
+ *
+ */
+function make_select($name,$values,$checked='') {
+	$output = '<select name="'.$name.'" id="'.$name.'">';
+ 	foreach($values as $key => $value) {
+ 		$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
+ 	}
+ 	$output .= '</select>';	
+ 	return $output;
+}
+
+/**
+ * Enter description here...
+ *
+ */
+function make_checkbox($name,$checked='') {
+		return '' .
+			'<input type="checkbox" value="1" name="'.$name.'" '.((!empty($checked))?'checked="checked"':'').'/>';
+}
+
+/**
+ * Enter description here...
+ *
+ */
+function get_date_from_select($prefix) {
+				return $_POST[$prefix.'_year'].'-'.two_digits($_POST[$prefix.'_month']).'-'.two_digits($_POST[$prefix.'_day']).' '.two_digits($_POST[$prefix.'_hour']).':'.two_digits($_POST[$prefix.'_minute']).':00';
+}
+
+/**
+* converts 1-9 to 01-09
+*/
+function two_digits($number)
+{
+	$number = (int)$number;
+	return ($number < 10) ? '0'.$number : $number;
 }
 ?>

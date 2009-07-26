@@ -64,11 +64,25 @@ require_once 'wiki.inc.php';
 // additional style information
 $htmlHeadXtra[] ='<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'wiki/css/default.css"/>';
 
+// javascript for advanced parameters menu
+$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
+function advanced_parameters() {
+	if(document.getElementById(\'options\').style.display == \'none\') {
+					document.getElementById(\'options\').style.display = \'block\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+	} else {
+					document.getElementById(\'options\').style.display = \'none\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+	}
+}
+</script>';
+
+
 // Database table definition
 $tbl_wiki = Database::get_course_table(TABLE_WIKI);
 $tbl_wiki_discuss = Database::get_course_table(TABLE_WIKI_DISCUSS);
 $tbl_wiki_mailcue = Database::get_course_table(TABLE_WIKI_MAILCUE);
-
+$tbl_wiki_conf = Database::get_course_table(TABLE_WIKI_CONF);
 /*
 -----------------------------------------------------------
 Constants and variables
@@ -236,6 +250,10 @@ if (isset($_POST['SaveWikiNew']))
 	{
 		Display::display_error_message(get_lang("NoWikiPageTitle"));
 	}
+	elseif (strtotime(get_date_from_select('startdate_assig')) > strtotime(get_date_from_select('enddate_assig')))
+	{
+		Display::display_error_message(get_lang("EndDateCannotBeBeforeTheStartDate"));
+	}	
 	elseif(!double_post($_POST['wpost_id']))
 	{
 		//double post

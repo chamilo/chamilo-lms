@@ -416,6 +416,7 @@ function get_user_feeds($user,$limit=5) {
     $res = '<div class="sectiontitle">'.get_lang('RSSFeeds').'</div>';
     $res .= '<div class="social-content-training">';
     $feed = UserManager::get_extra_user_data_by_field($user,'rssfeeds');
+    if(empty($feed)) { return ''; }
     $feeds = split(';',$feed['rssfeeds']);
     if (count($feeds)==0) { return ''; }
     foreach ($feeds as $url) {

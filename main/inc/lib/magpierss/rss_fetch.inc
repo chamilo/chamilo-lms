@@ -33,7 +33,7 @@ require_once( MAGPIE_DIR . 'rss_cache.inc' );
 // for including 3rd party libraries
 define('MAGPIE_EXTLIB', MAGPIE_DIR . 'extlib' . DIR_SEP);
 require_once( MAGPIE_EXTLIB . 'Snoopy.class.inc');
-
+define('MAGPIE_CACHE_DIR', api_get_path(SYS_ARCHIVE_PATH));
 
 /* 
  * CONSTANTS - redefine these in your script to change the
@@ -319,7 +319,7 @@ function _response_to_rss ($resp) {
         if ($rss) {
             $errormsg .= " (" . $rss->ERROR . ")";
         }
-        error($errormsg);
+        error($errormsg,E_USER_NOTICE);
         
         return false;
     } // end if ($rss and !$rss->error)

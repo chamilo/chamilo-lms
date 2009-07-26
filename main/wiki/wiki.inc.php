@@ -340,7 +340,7 @@ function save_wiki() {
 	$sql='UPDATE'.$tbl_wiki.' SET page_id="'.$Id.'", feedback1="'.$_clean['feedback1'].'", feedback2="'.$_clean['feedback2'].'", feedback3="'.$_clean['feedback3'].'", max_text="'.$_clean['max_text'].'", max_version="'.$_clean['max_version'].'", startdate_assig="'.$_clean['startdate_assig'].'", enddate_assig="'.$_clean['enddate_assig'].'", delayedsubmit="'.$_clean['delayedsubmit'].'" WHERE id="'.$Id.'"';		 	
 	api_sql_query($sql,__FILE__,__LINE__);	
 	
-	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
+	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
 	
 	check_emailcue($_clean['reflink'], 'P', $dtime, $_clean['user_id']);
 	
@@ -365,7 +365,7 @@ function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group
 	
 	$result=api_sql_query($sql);	
     $Id = Database::insert_id();		
-	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
+	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $r_group_id);
 	
 	check_emailcue($r_reflink, 'P', $r_dtime, $r_user_id);
 	
@@ -491,7 +491,7 @@ function save_new_wiki() {
 		   $sql="INSERT INTO ".$tbl_wiki_conf." (page_id, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
 		   api_sql_query($sql,__LINE__,__FILE__);
 			
-		   api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id());
+		   api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
 		   
 		   check_emailcue(0, 'A');
 		   return get_lang('NewWikiSaved').' <a href="index.php?action=showpage&amp;title='.$_clean['reflink'].'&group_id='.$group_id.'">'.$_POST['title'].'</a>'; 
@@ -854,7 +854,7 @@ if ($_POST['export2DOC'])
 { 
 	$titleDOC=$_POST['titleDOC'];
 	$contentDOC=$_POST['contentDOC'];
-	$groupIdDOC=$_clean['group_id'];
+	$groupIdDOC=(int)$_SESSION['_gid'];
 	export2doc($titleDOC,$contentDOC,$groupIdDOC); 
 }
 
@@ -1671,7 +1671,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 
 	if ( 0 != $groupId)
 	{
-		$groupPart = '_group' . $groupId; // and add groupId to put the same title document in different groups
+		$groupPart = '_group' . $groupId; // and add groupId to put the same document title in different groups
 		$group_properties  = GroupManager :: get_group_properties($groupId);
 		$groupPath = $group_properties['directory'];
 	}

@@ -62,6 +62,7 @@ $Organisation = "Szervezet";
 $Reporting = "Jelentés";
 $Code = "Kód";
 $Update = "Frissít";
+$SelectQuestionType = "Válasszon kérdés típust";
 $CurrentCourse = "Jelenlegi kurzus";
 $Back = "Vissza";
 $Info = "Információ";

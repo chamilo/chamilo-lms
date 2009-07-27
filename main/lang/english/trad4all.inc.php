@@ -62,6 +62,7 @@ $Organisation = "Company";
 $Reporting = "Reporting";
 $Code = "Code";
 $Update = "Update";
+$SelectQuestionType = "Select question type";
 $CurrentCourse = "Current course";
 $Back = "Back";
 $Info = "Information";
@@ -728,4 +729,9 @@ $ConversionFailled = "Conversion failled";
 $AlreadyExists = "Already exists";
 $TheNewWordHasBeenAdded = "The new word has been added";
 $CommentErrorExportDocument = "Some of the documents are too complex to be treated automatically by the document converter";
+$EventType = "Event type";
+$DataType = "Data type";
+$Value = "Value";
+$System = "System";
+$ImportantActivities = "Important activities";
 ?>

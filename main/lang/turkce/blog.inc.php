@@ -90,4 +90,14 @@ $BlogDeleted = "Proje silindi";
 $BlogEdited = "Proje düzenlendi";
 $BlogStored = "Proje eklendi";
 $CommentCreated = "Yorum kaydedildi";
+$BlogAdded = "Makale eklendi";
+$TaskCreated = "Görev yarat&#305;ld&#305;";
+$TaskEdited = "Görev düzenlendi";
+$TaskAssigned = "Görev atand&#305;";
+$AssignedTaskEdited = "Atanan görev düzenlendi";
+$UserRegistered = "Kullan&#305;c&#305; kaydedildi";
+$TaskDeleted = "Görev silindi";
+$TaskAssignmentDeleted = "Görevdeki i&#351; silindi";
+$CommentDeleted = "Yorum silindi";
+$RatingAdded = "Derece eklendi";
 ?>

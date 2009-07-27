@@ -62,6 +62,7 @@ $Organisation = "Instelling";
 $Reporting = "Rapportering ";
 $Code = "Code";
 $Update = "Updaten";
+$SelectQuestionType = "Vraagtype selecteren";
 $CurrentCourse = "Huidige cursus";
 $Back = "Vorige";
 $Info = "Informatie";

@@ -154,9 +154,9 @@ $LastVersion = "Latest version";
 $PageRestored = "The page has been restored. You can view it by clicking";
 $RestoredFromVersion = "Restored from version";
 $HWiki = "Help: wiki";
-$FirstSelectOnepage = "First select one page please";
-$ThisPageisBeginEditedBy = "At this moment this page is being edited by";
-$ThisPageisBeginEditedTryLater = "Please try later. If the user is currently editing the page not saves it, this page will be available to you at a maximum of";
-$EditedByAnotherUser = "Your changes will not be saved because another user has modified the page while you are editing";
-$WarningMaxEditingTime = "You have 20 minutes to edit this page. After this, if you have not saved the page, another user can edit and you will be able to lose your changes";
+$FirstSelectOnepage = "Please select a page first";
+$ThisPageisBeginEditedBy = "At this time, this page is being edited by";
+$ThisPageisBeginEditedTryLater = "Please try again later. If the user who is currently editing the page does not save it, this page will be available to you around ";
+$EditedByAnotherUser = "Your changes will not be saved because another user has modified and saved the page while you were editing it yourself";
+$WarningMaxEditingTime = "You have 20 minutes to edit this page. After this time, if you have not saved the page, another user will be able to edit it, and you might lose your changes";
 ?>

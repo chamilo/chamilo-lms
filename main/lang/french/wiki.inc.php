@@ -154,4 +154,9 @@ $LastVersion = "Dernière version";
 $PageRestored = "Cette page a été restaurée. Vous pouvez la visualiser en cliquant sur";
 $RestoredFromVersion = "Restauré depuis la version";
 $HWiki = "Aide: wiki";
+$FirstSelectOnepage = "Veuillez d\'abord sélectionner une page";
+$ThisPageisBeginEditedBy = "En ce moment, cette page est éditée par";
+$ThisPageisBeginEditedTryLater = "Veuillez essayer de nouveau plus tard. Si l\'utilisateur qui édite actuellement la page ne l\'enregistre pas, cette page sera disponible pour vous dans peu de temps: ";
+$EditedByAnotherUser = "Vos modifications ne seront pas enregistrées car un autre utilisateur a modifié et enregistré la page pendant que vous l\'éditiez vous-même";
+$WarningMaxEditingTime = "Vous avez 20 minutes pour éditer cette page. Après cet intervalle, si vous n\'avez pas enregistrer la page, un autre utilisateur pourra l\'éditer, et vous pourriez perdre vos modifications";
 ?>

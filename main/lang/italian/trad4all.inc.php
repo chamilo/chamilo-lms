@@ -62,6 +62,7 @@ $Organisation = "Organizzazione";
 $Reporting = "Registro";
 $Code = "Codice";
 $Update = "Aggiorna";
+$SelectQuestionType = "Seleziona il tipo di domanda";
 $CurrentCourse = "Corso attivo";
 $Back = "Indietro";
 $Info = "Informazioni";

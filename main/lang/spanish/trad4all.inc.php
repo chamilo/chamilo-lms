@@ -62,6 +62,7 @@ $Organisation = "Organización";
 $Reporting = "Informes";
 $Code = "Código";
 $Update = "Actualizar";
+$SelectQuestionType = "Seleccionar tipo de pregunta";
 $CurrentCourse = "Curso actual";
 $Back = "Volver";
 $Info = "Información";
@@ -728,4 +729,9 @@ $ConversionFailled = "Conversión fallida";
 $AlreadyExists = "Ya existe";
 $TheNewWordHasBeenAdded = "La nueva palabra ha sido añadida al subconjunto del idioma principal";
 $CommentErrorExportDocument = "Algunos documentos contienen etiquetas internas no válidas o son demasiado complejos para su tratamiento automático mediante el conversor de documentos";
+$EventType = "Tipo de evento";
+$DataType = "Tipo de dato";
+$Value = "Valor";
+$System = "Sistema";
+$ImportantActivities = "Actividades importantes";
 ?>

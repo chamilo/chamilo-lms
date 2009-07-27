@@ -62,6 +62,7 @@ $Organisation = "Organizacija";
 $Reporting = "Poroèila";
 $Code = "Koda";
 $Update = "Ažuriraj";
+$SelectQuestionType = "Izberi tip vprašanja";
 $CurrentCourse = "Trenuten teèaj";
 $Back = "Nazaj";
 $Info = "Informacije";

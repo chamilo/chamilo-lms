@@ -321,4 +321,6 @@ $ReachedTimeLimitAdmin = "Limite de temps dépassée.";
 $LastScoreTest = "Dernier résultat de l\'exercice";
 $BackToResultList = "Retourner à la liste";
 $EditingScoreCauseProblemsToExercisesInLP = "Si vous éditez le score d\'une question, le score total de l\'exercice sera modifié lui aussi. N\'oubliez pas que cet exercice a déjà été ajouté à un parcours.";
+$SelectExercice = "Sélectionnez un exercice";
+$YouHaveToSelectATest = "Veuillez sélectionner un test";
 ?>

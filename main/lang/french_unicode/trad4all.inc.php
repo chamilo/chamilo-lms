@@ -56,6 +56,7 @@ $Organisation = "Organisation";
 $Reporting = "Suivi";
 $Code = "Code";
 $Update = "Actualiser";
+$SelectQuestionType = "Sélectionner type de question";
 $CurrentCourse = "Cours actif";
 $Back = "Retour";
 $Info = "Information";

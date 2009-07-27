@@ -12,4 +12,5 @@ $langSendPage = "Gönderilecek sayfa";
 $langPageTitleModified = "Sayfa baþlýðý deðiþtirildi";
 $langPageAdded = "Sayfa eklendi";
 $langAddPage = "Sayfa ekle";
+$Choose = "Seç";
 ?>

@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
 /**
-==============================================================================
-	@author Isaac flores - Added 9 july of 2009
-==============================================================================
+==================================================================================
+	@author Isaac flores paz <florespaz@bidsoftperu.com> - Added 9 july of 2009
+==================================================================================
 */
 /*
 ==============================================================================
@@ -12,7 +12,8 @@
 */
 class AdminManager {
 
-    function __construct() {
+    private function __construct() {
+    	//void
     }
     /**
      * Get all data of dokeos folder (forum.inc.php,gradebook.inc.php,notebook.inc.php)

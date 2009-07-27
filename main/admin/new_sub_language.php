@@ -182,7 +182,7 @@ if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 
 $language_name=get_lang('CreateSubLanguageForLanguage').' ( '.strtolower($language_name).' )';
 
-if (ckeck_if_is_parent_of_sub_language ($parent_id)===true ) {
+if (ckeck_if_is_parent_of_sub_language ($parent_id)===true && isset($_GET['action']) && $_GET['action']=='deletesublanguage') {
 	$language_name=get_lang('DeleteSubLanguage');
 }
 
@@ -264,15 +264,20 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
 		$form->addElement('style_submit_button', 'SubmitAddNewLanguage', get_lang('CreateSubLanguage'), 'class="'.$class.'"');
 		$form->display();
 	} else {
-		$text=$language_name;
-		$form = new FormValidator('deletesublanguage', 'post', 'new_sub_language.php?id='.Security::remove_XSS($_GET['id']));
-		$class='minus';
-		$form->addElement('header', '', $text);
-		$form->addElement('static', '', get_lang('OriginalName'),$original_name);
-		$form->addElement('static', '', get_lang('EnglishName'),$english_name);
-		$form->addElement('static', '', get_lang('Isocode'),$isocode);				
-		$form->addElement('style_submit_button', 'SubmitAddDeleteLanguage', get_lang('DeleteSubLanguage'), 'class="'.$class.'"');
-		$form->display();		
+		if (isset($_GET['action']) && $_GET['action']=='deletesublanguage') {
+			$text=$language_name;
+			$form = new FormValidator('deletesublanguage', 'post', 'new_sub_language.php?id='.Security::remove_XSS($_GET['id']));
+			$class='minus';
+			$form->addElement('header', '', $text);
+			$form->addElement('static', '', get_lang('OriginalName'),$original_name);
+			$form->addElement('static', '', get_lang('EnglishName'),$english_name);
+			$form->addElement('static', '', get_lang('Isocode'),$isocode);				
+			$form->addElement('style_submit_button', 'SubmitAddDeleteLanguage', get_lang('DeleteSubLanguage'), 'class="'.$class.'"');
+			$form->display();		
+		}
+		if (isset($_GET['action']) && $_GET['action']=='definenewsublanguage') {
+			Display::display_normal_message(get_lang('TheSubLanguageForThisLanguageHasBeenAdd'));
+		}
 	}
 	
 /*

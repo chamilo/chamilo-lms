@@ -32,35 +32,35 @@ require_once (MAGPIE_DIR . 'rss_utils.inc');
 *
 */
 class MagpieRSS {
-    var $parser;
+    public $parser;
     
-    var $current_item   = array();  // item currently being parsed
-    var $items          = array();  // collection of parsed items
-    var $channel        = array();  // hash of channel fields
-    var $textinput      = array();
-    var $image          = array();
-    var $feed_type;
-    var $feed_version;
-    var $encoding       = '';       // output encoding of parsed rss
+    public $current_item   = array();  // item currently being parsed
+    public $items          = array();  // collection of parsed items
+    public $channel        = array();  // hash of channel fields
+    public $textinput      = array();
+    public $image          = array();
+    public $feed_type;
+    public $feed_version;
+    public $encoding       = '';       // output encoding of parsed rss
     
-    var $_source_encoding = '';     // only set if we have to parse xml prolog
+    private $_source_encoding = '';     // only set if we have to parse xml prolog
     
-    var $ERROR = "";
-    var $WARNING = "";
+    public $ERROR = "";
+    public $WARNING = "";
     
     // define some constants
     
-    var $_CONTENT_CONSTRUCTS = array('content', 'summary', 'info', 'title', 'tagline', 'copyright');
-    var $_KNOWN_ENCODINGS    = array('UTF-8', 'US-ASCII', 'ISO-8859-1');
+    private $_CONTENT_CONSTRUCTS = array('content', 'summary', 'info', 'title', 'tagline', 'copyright');
+    private $_KNOWN_ENCODINGS    = array('UTF-8', 'US-ASCII', 'ISO-8859-1');
 
     // parser variables, useless if you're not a parser, treat as private
-    var $stack              = array(); // parser stack
-    var $inchannel          = false;
-    var $initem             = false;
-    var $incontent          = false; // if in Atom <content mode="xml"> field 
-    var $intextinput        = false;
-    var $inimage            = false;
-    var $current_namespace  = false;
+    public $stack              = array(); // parser stack
+    public $inchannel          = false;
+    public $initem             = false;
+    public $incontent          = false; // if in Atom <content mode="xml"> field 
+    public $intextinput        = false;
+    public $inimage            = false;
+    public $current_namespace  = false;
     
 
     /**
@@ -91,7 +91,7 @@ class MagpieRSS {
      *                                  source encoding. (caveat emptor)
      *
      */
-    function MagpieRSS ($source, $output_encoding='ISO-8859-1', 
+    public function MagpieRSS ($source, $output_encoding='ISO-8859-1', 
                         $input_encoding=null, $detect_encoding=true) 
     {   
         # if PHP xml isn't compiled in, die
@@ -143,7 +143,7 @@ class MagpieRSS {
         $this->normalize();
     }
     
-    function feed_start_element($p, $element, &$attrs) {
+    public function feed_start_element($p, $element, &$attrs) {
         $el = $element = strtolower($element);
         $attrs = array_change_key_case($attrs, CASE_LOWER);
         
@@ -257,7 +257,7 @@ class MagpieRSS {
     
 
     
-    function feed_cdata ($p, $text) {
+    public function feed_cdata ($p, $text) {
         if ($this->feed_type == ATOM and $this->incontent) 
         {
             $this->append_content( $text );
@@ -268,7 +268,7 @@ class MagpieRSS {
         }
     }
     
-    function feed_end_element ($p, $el) {
+    public function feed_end_element ($p, $el) {
         $el = strtolower($el);
         
         if ( $el == 'item' or $el == 'entry' ) 
@@ -313,7 +313,7 @@ class MagpieRSS {
         $this->current_namespace = false;
     }
     
-    function concat (&$str1, $str2="") {
+    public function concat (&$str1, $str2="") {
         if (!isset($str1) ) {
             $str1="";
         }
@@ -322,7 +322,7 @@ class MagpieRSS {
     
     
     
-    function append_content($text) {
+    public function append_content($text) {
         if ( $this->initem ) {
             $this->concat( $this->current_item[ $this->incontent ], $text );
         }
@@ -332,7 +332,7 @@ class MagpieRSS {
     }
     
     // smart append - field and namespace aware
-    function append($el, $text) {
+    public function append($el, $text) {
         if (!$el) {
             return;
         }
@@ -376,7 +376,7 @@ class MagpieRSS {
         }
     }
     
-    function normalize () {
+    public function normalize () {
         // if atom populate rss fields
         if ( $this->is_atom() ) {
             $this->channel['description'] = $this->channel['tagline'];
@@ -426,7 +426,7 @@ class MagpieRSS {
     }
     
     
-    function is_rss () {
+    public function is_rss () {
         if ( $this->feed_type == RSS ) {
             return $this->feed_version; 
         }
@@ -435,7 +435,7 @@ class MagpieRSS {
         }
     }
     
-    function is_atom() {
+    public function is_atom() {
         if ( $this->feed_type == ATOM ) {
             return $this->feed_version;
         }
@@ -448,7 +448,7 @@ class MagpieRSS {
     * return XML parser, and possibly re-encoded source
     *
     */
-    function create_parser($source, $out_enc, $in_enc, $detect) {
+    public function create_parser($source, $out_enc, $in_enc, $detect) {
         if ( substr(phpversion(),0,1) == 5) {
             $parser = $this->php5_create_parser($in_enc, $detect);
         }
@@ -472,7 +472,7 @@ class MagpieRSS {
     * All hail libxml2!
     *
     */
-    function php5_create_parser($in_enc, $detect) {
+    public function php5_create_parser($in_enc, $detect) {
         // by default php5 does a fine job of detecting input encodings
         if(!$detect && $in_enc) {
             return xml_parser_create($in_enc);
@@ -497,7 +497,7 @@ class MagpieRSS {
     * @see http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss
     *
     */
-    function php4_create_parser($source, $in_enc, $detect) {
+    public function php4_create_parser($source, $in_enc, $detect) {
         if ( !$detect ) {
             return array(xml_parser_create($in_enc), $source);
         }
@@ -546,7 +546,7 @@ class MagpieRSS {
         return array(xml_parser_create(), $source);
     }
     
-    function known_encoding($enc) {
+    public function known_encoding($enc) {
         $enc = strtoupper($enc);
         if ( in_array($enc, $this->_KNOWN_ENCODINGS) ) {
             return $enc;
@@ -556,7 +556,7 @@ class MagpieRSS {
         }
     }
 
-    function error ($errormsg, $lvl=E_USER_WARNING) {
+    public function error ($errormsg, $lvl=E_USER_WARNING) {
         // append PHP's error message if track_errors enabled
         if ( isset($php_errormsg) ) { 
             $errormsg .= " ($php_errormsg)";
@@ -601,5 +601,3 @@ if (!function_exists('array_change_key_case')) {
 	}
 
 }
-
-?>

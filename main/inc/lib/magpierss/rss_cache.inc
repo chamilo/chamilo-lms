@@ -17,11 +17,11 @@
  */
 
 class RSSCache {
-    var $BASE_CACHE = './cache';    // where the cache files are stored
-    var $MAX_AGE    = 3600;         // when are files stale, default one hour
-    var $ERROR      = "";           // accumulate error messages
+    public $BASE_CACHE = './cache';    // where the cache files are stored
+    public $MAX_AGE    = 3600;         // when are files stale, default one hour
+    public $ERROR      = "";           // accumulate error messages
     
-    function RSSCache ($base='', $age='') {
+    public function RSSCache ($base='', $age='') {
         if ( $base ) {
             $this->BASE_CACHE = $base;
         }
@@ -48,7 +48,7 @@ class RSSCache {
     Input:      url from wich the rss file was fetched
     Output:     true on sucess  
 \*=======================================================================*/
-    function set ($url, $rss) {
+    public function set ($url, $rss) {
         $this->ERROR = "";
         $cache_file = $this->file_name( $url );
         $fp = @fopen( $cache_file, 'w' );
@@ -74,7 +74,7 @@ class RSSCache {
     Input:      url from wich the rss file was fetched
     Output:     cached object on HIT, false on MISS 
 \*=======================================================================*/ 
-    function get ($url) {
+    public function get ($url) {
         $this->ERROR = "";
         $cache_file = $this->file_name( $url );
         
@@ -110,7 +110,7 @@ class RSSCache {
     Input:      url from wich the rss file was fetched
     Output:     cached object on HIT, false on MISS 
 \*=======================================================================*/     
-    function check_cache ( $url ) {
+    public function check_cache ( $url ) {
         $this->ERROR = "";
         $filename = $this->file_name( $url );
         
@@ -134,8 +134,8 @@ class RSSCache {
         }
     }
 
-	function cache_age( $cache_key ) {
-		$filename = $this->file_name( $url );
+	public function cache_age( $url ) {
+		$filename = $this->file_name( $url);
 		if ( file_exists( $filename ) ) {
 			$mtime = filemtime( $filename );
             $age = time() - $mtime;
@@ -149,14 +149,14 @@ class RSSCache {
 /*=======================================================================*\
     Function:   serialize
 \*=======================================================================*/     
-    function serialize ( $rss ) {
+    public function serialize ( $rss ) {
         return serialize( $rss );
     }
 
 /*=======================================================================*\
     Function:   unserialize
 \*=======================================================================*/     
-    function unserialize ( $data ) {
+    public function unserialize ( $data ) {
         return unserialize( $data );
     }
     
@@ -166,7 +166,7 @@ class RSSCache {
     Input:      url from wich the rss file was fetched
     Output:     a file name
 \*=======================================================================*/     
-    function file_name ($url) {
+    public function file_name ($url) {
         $filename = md5( $url );
         return join( DIRECTORY_SEPARATOR, array( $this->BASE_CACHE, $filename ) );
     }
@@ -175,7 +175,7 @@ class RSSCache {
     Function:   error
     Purpose:    register error
 \*=======================================================================*/         
-    function error ($errormsg, $lvl=E_USER_WARNING) {
+    public function error ($errormsg, $lvl=E_USER_WARNING) {
         // append PHP's error message if track_errors enabled
         if ( isset($php_errormsg) ) { 
             $errormsg .= " ($php_errormsg)";
@@ -189,12 +189,10 @@ class RSSCache {
         }
     }
     
-    function debug ($debugmsg, $lvl=E_USER_NOTICE) {
+    public function debug ($debugmsg, $lvl=E_USER_NOTICE) {
         if ( MAGPIE_DEBUG ) {
             $this->error("MagpieRSS [debug] $debugmsg", $lvl);
         }
     }
 
 }
-
-?>

@@ -60,6 +60,7 @@ for ( var i = 0 ; i < FCKConfig.LoadPlugin.length ; i++ ) {
 		case 'dragresizetable':
 		case 'tablecommands':
 		case 'ImageManager':
+		case 'prompt':
 			FCKConfig.Plugins.Add( FCKConfig.LoadPlugin[i] ) ;
 			break ;
 		default:

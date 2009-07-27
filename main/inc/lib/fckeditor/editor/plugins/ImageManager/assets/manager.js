@@ -315,6 +315,29 @@
 		var selection = document.getElementById('dirPath');
 		var dir = selection.options[selection.selectedIndex].value;
 
+		if ( !window.opener && window.parent && oEditor )
+		{
+			if ( oEditor.FCK.Plugins.IsLoaded && oEditor.FCK.Plugins.IsLoaded( 'prompt' ) )
+			{
+				oEditor.FCKDialog.Prompt( i18n( 'Folder Name:' ), '',
+					function( folder )
+					{
+						if (folder == thumbdir)
+						{
+							alert(i18n('Invalid folder name, please choose another folder name.'));
+							return false;
+						}
+
+						if (folder && folder != '' && typeof imgManager != 'undefined')
+						{
+							imgManager.newFolder(dir, encodeURI(folder));
+						}
+					},
+					i18n( 'New Folder' ) ) ;
+				return ;
+			}
+		}
+
 		Dialog("newFolder.html", function(param) 
 		{
 			if (!param) // user must have pressed Cancel

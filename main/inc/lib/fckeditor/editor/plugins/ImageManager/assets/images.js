@@ -21,7 +21,14 @@
 
 	function newFolder(dir, newDir) 
 	{
-		location.href = "images.php?dir="+dir+"&newDir="+newDir;
+		if ( !window.parent.opener && window.parent.oEditor )
+		{
+			location.href = window.parent.oEditor.FCKConfig.PluginsPath + 'ImageManager/images.php?dir=' + dir + '&newDir=' + newDir ;
+		}
+		else
+		{
+			location.href = 'images.php?dir=' + dir + '&newDir=' + newDir ;
+		}
 	}
 
 	//update the dir list in the parent window.

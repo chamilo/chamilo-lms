@@ -83,6 +83,10 @@ $config['LoadPlugin'][] = 'customizations';
 $config['LoadPlugin'][] = 'dragresizetable';
 $config['LoadPlugin'][] = 'tablecommands';
 
+// prompt : This plugin is a dialog implementation as a replacemet of the javascript function prompt().
+// It provides consistent appearance and avoiding activation of browser's blocking features.
+$config['LoadPlugin'][] = 'prompt';
+
 // audio: Adds a dialog for inserting audio files (.mp3).
 $config['LoadPlugin'][] = 'audio';
 

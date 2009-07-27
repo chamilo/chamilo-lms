@@ -29,7 +29,9 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript">
 
+var FCK = null ;
 var FCKLang = [] ;
+var FCKDialog = null ;
 
 function SetCurrentFolder( resourceType, folderPath )
 {
@@ -39,6 +41,30 @@ function SetCurrentFolder( resourceType, folderPath )
 
 function CreateFolder()
 {
+	if ( !window.parent.opener && window.parent.parent && FCK )
+	{
+		if ( FCK.Plugins.IsLoaded && FCK.Plugins.IsLoaded( 'prompt' ) )
+		{
+			FCKDialog.Prompt( FCKLang['NewFoderName'], '',
+				function( sFolderName )
+				{
+					if ( sFolderName == null )
+					{
+						return ;
+					}
+					else if ( sFolderName.length == 0 )
+					{
+						alert( FCKLang['NewFoderNameRequest'] ) ;
+						return ;
+					}
+
+					oConnector.SendCommand( 'CreateFolder', 'NewFolderName=' + encodeURIComponent( sFolderName), CreateFolderCallBack ) ;
+				},
+				FCKLang['CreateNewFolder'] ) ;
+			return ;
+		}
+	}
+
 	var sFolderName ;
 
 	while ( true )
@@ -53,7 +79,7 @@ function CreateFolder()
 			break ;
 	}
 
-	oConnector.SendCommand( 'CreateFolder', 'NewFolderName=' + encodeURIComponent( sFolderName) , CreateFolderCallBack ) ;
+	oConnector.SendCommand( 'CreateFolder', 'NewFolderName=' + encodeURIComponent( sFolderName), CreateFolderCallBack ) ;
 }
 
 function CreateFolderCallBack( fckXml )
@@ -103,6 +129,12 @@ window.onload = function()
 	FCKLang['ErrorCreatingFolder'] = FCKLang['ErrorCreatingFolder'] ? FCKLang['ErrorCreatingFolder'] : 'Error creating folder. Error number: ' ;
 
 	document.getElementById('btnCreateFolder').value = FCKLang['CreateNewFolder'] ;
+
+	if ( window.parent.oEditor )
+	{
+		FCK = window.parent.oEditor.FCK ;
+		FCKDialog = window.parent.oEditor.FCKDialog ;
+	}
 
 	window.parent.IsLoadedCreateFolder = true ;
 }

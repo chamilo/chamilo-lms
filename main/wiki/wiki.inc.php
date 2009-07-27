@@ -332,12 +332,20 @@ function save_wiki() {
 	
 	if ($_clean['page_id']	==0)   
 	{	    
-		$sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';		 	
+		$sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
 	
 	//update wiki config
-	$sql='UPDATE'.$tbl_wiki.' SET page_id="'.$Id.'", feedback1="'.$_clean['feedback1'].'", feedback2="'.$_clean['feedback2'].'", feedback3="'.$_clean['feedback3'].'", max_text="'.$_clean['max_text'].'", max_version="'.$_clean['max_version'].'", startdate_assig="'.$_clean['startdate_assig'].'", enddate_assig="'.$_clean['enddate_assig'].'", delayedsubmit="'.$_clean['delayedsubmit'].'" WHERE id="'.$Id.'"';		 	
+
+	if ($_clean['reflink']=='index' && $_clean['version']==1)
+	{	
+		$sql="INSERT INTO ".$tbl_wiki_conf." (page_id, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
+	}
+	else
+	{
+		$sql='UPDATE'.$tbl_wiki_conf.' SET page_id="'.$Id.'", feedback1="'.$_clean['feedback1'].'", feedback2="'.$_clean['feedback2'].'", feedback3="'.$_clean['feedback3'].'", max_text="'.$_clean['max_text'].'", max_version="'.$_clean['max_version'].'", startdate_assig="'.$_clean['startdate_assig'].'", enddate_assig="'.$_clean['enddate_assig'].'", delayedsubmit="'.$_clean['delayedsubmit'].'" WHERE page_id="'.$Id.'"';
+	}
 	api_sql_query($sql,__FILE__,__LINE__);	
 	
 	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
@@ -454,18 +462,27 @@ function save_new_wiki() {
 	
 	$_clean['linksto'] = links_to($_clean['content']);	//check wikilinks
 	
-	//cleaning config variables	
-	$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));	
-	$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
-	$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
-	$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));	
-	$_clean['fprogress2']=Database::escape_string(Security::remove_XSS($_POST['fprogress2']));
-	$_clean['fprogress3']=Database::escape_string(Security::remove_XSS($_POST['fprogress3']));
-	$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
-	$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));	
-	$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('startdate_assig')));
-	$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));	
-	$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
+	//cleaning config variables
+	if(Security::remove_XSS($_POST['timelimit']==1))
+	{
+		$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('startdate_assig')));
+		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));	
+		$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
+	}
+	if(Security::remove_XSS($_POST['feedback']==1))
+	{
+		$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));	
+		$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
+		$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
+		$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));	
+		$_clean['fprogress2']=Database::escape_string(Security::remove_XSS($_POST['fprogress2']));
+		$_clean['fprogress3']=Database::escape_string(Security::remove_XSS($_POST['fprogress3']));
+	}
+	if(Security::remove_XSS($_POST['otherlimit']==1))
+	{
+		$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
+		$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));
+	}	
 	
 	//filter no _uass
 	if (api_eregi('_uass', $_POST['title']) || (api_strtoupper(trim($_POST['title'])) == 'INDEX' || api_strtoupper(trim(api_htmlentities($_POST['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset)))) {
@@ -532,27 +549,38 @@ return true;
 	
 		$_clean['group_id']=(int)$_SESSION['_gid']; // TODO: check if delete ?
 				
-	//	echo'<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus" style="float:right">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>'; // TODO: under develop, uncoment and activate later
+		//echo'<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus" style="float:right">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>'; // TODO: under develop, uncoment and activate later
 		echo '<div id="options" style="display:none; margin: 20px;" >';					
 
 		//time limit
-		echo  '<input type="checkbox" value="1" name="type1" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;'.get_lang('PutATimeLimit').'';		
-		echo  '&nbsp;&nbsp;&nbsp;<span id="msg_error1" style="display:none;color:red"></span>';		
-		echo  '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">&nbsp;&nbsp;';			
-		echo  '<div>'.get_lang('StartDate').'&nbsp;:'.draw_date_picker('startdate_assig').'</div>';
-		echo  '<div>'.get_lang('EndDate').'&nbsp;:'.draw_date_picker('enddate_assig').'</div>';
-		echo  get_lang('AllowLaterSends').'&nbsp;<input type="checkbox" name="delayedsubmit" value="1">';
-		echo '</div>';				
+		echo  '<input type="checkbox" value="1" name="timelimit" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;'.get_lang('PutATimeLimit').'';		
+		echo  '&nbsp;&nbsp;&nbsp;<span id="msg_error1" style="display:none;color:red"></span>';	
+		echo  '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
+		echo '<table width="100%" border="0" style="font-weight:normal">';
+  		echo '<tr>';
+    	echo '<td align="right">'.get_lang("StartDate").':</td>';
+    	echo '<td>'.draw_date_picker('startdate_assig').'</td>';
+		echo '</tr>';
+		echo '<tr>';
+		echo '<td align="right">'.get_lang("EndDate").':</td>';
+		echo '<td>'.draw_date_picker('enddate_assig').'</td>';
+		echo '</tr>';
+		echo '<tr>';
+		echo '<td align="right">'.get_lang('AllowLaterSends').':</td>';
+		echo '<td><input type="checkbox" name="delayedsubmit" value="1"></td>';
+		echo '</tr>';
+		echo'</table>';
+		echo '</div>';
 		
 		//feedback
-		echo '<input type="checkbox" value="1" name="type2" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;'.get_lang('AddAutomaticFeedbacks').'';		
-		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';		
-		echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">&nbsp;&nbsp;';			
+		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="feedback" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;'.get_lang('AddFeedback').'';		
+		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
+		echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
 
-		echo '<table border="0">';
+		echo '<table border="0" style="font-weight:normal" align="center">';
 		echo '<tr>';
 		echo '<td colspan="2">'.get_lang('Feedback1').'</td>';
-		echo '<td colspan="2">'.get_lang('Feedback2').'</td>';
+		echo '<td colspan="2" >'.get_lang('Feedback2').'</td>';
 		echo '<td colspan="2">'.get_lang('Feedback3').'</td>';
 	  	echo '</tr>';
 	 	echo '<tr>';
@@ -607,15 +635,15 @@ return true;
 		echo '</table>';
 		echo '</div>';
 		
-	//other max limit
-		echo '<input type="checkbox" value="1" name="type3" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;'.get_lang('SettingOtherLimitations').'';		
+		//other limit
+		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="otherlimit" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;'.get_lang('OtherSettings').'';		
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
-		echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">&nbsp;&nbsp;';			
-		echo get_lang('Max_text').'&nbsp;<input type="text" name="max_text" size="3">'.get_lang('Max_version').'&nbsp;<input type="text" name="max_version" size="3">';
+		echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
+		echo '<div style="font-weight:normal"; align="center">'.get_lang('Max_text').':&nbsp;<input type="text" name="max_text" size="3">&nbsp;&nbsp;'.get_lang('Max_version').':&nbsp;<input type="text" name="max_version" size="3"></div>';
 		echo '</div>';	
 		
 		//to define as an individual assignment
-		echo '<div style= "border : 1px dotted; padding:4px; margin:20px;"><input type="checkbox" name="assignment" value="1">&nbsp;'.get_lang('DefineAssignmentPage').'</div>'; // 1= teacher 2 =student
+		echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;"><img src="../img/wiki/assignment.gif" />&nbsp;'.get_lang('DefineAssignmentPage').': <input type="checkbox" name="assignment" value="1"></div>'; // 1= teacher 2 =student
 	
 		echo'</div>';
 

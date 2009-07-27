@@ -91,14 +91,6 @@
 		I18N = this.ImageManager.I18N;
 	}
 
-	function Init()
-	{
-		if (window.opener)
-		{
-			document.getElementById('dialog_title').style.visibility = '' ;
-		}
-	}
-
 /*]]>*/
 </script>
 
@@ -124,6 +116,14 @@ body {
 		{
 			document.getElementById('dialog_title').style.visibility = '' ;
 		}
+		else if ( window.parent )
+		{
+			var title = window.parent.document.getElementById( 'TitleArea' ).innerHTML ;
+			if ( title )
+			{
+				window.parent.document.getElementById( 'TitleArea' ).innerHTML = title.replace( 'Insert Image', i18n( 'Insert Image' ) ) ;
+			}
+		}
 	}
 
 /*]]>*/
@@ -131,7 +131,7 @@ body {
 
 </head>
 
-<body onload='javascript: Init();'>
+<body onload="javascript: Init();">
 <div id="dialog_title" class="PopupTitle" style="visibility: hidden;">Insert Image</div>
 <form action="images.php" id="uploadForm" method="post" enctype="multipart/form-data">
 <fieldset style="margin-left: 15px; margin-right: 15px;"><legend>Image Manager</legend>
@@ -244,7 +244,7 @@ body {
 	<div class="PopupButtons" style="width: 100%;">
 	<div style="float: right; white-space: nowrap; margin-right: 25px;">
 		  <button type="button" class="refresh" onclick="javascript: return refresh();">Refresh</button>&nbsp;
-          <button type="button" class="save" onclick="javascript: return onOK();">Ok</button>&nbsp;
+          <button type="button" class="save" onclick="javascript: return onOK();">OK</button>&nbsp;
           <button type="button" class="cancel" onclick="javascript: return onCancel();">Cancel</button>
     </div>
     </div>

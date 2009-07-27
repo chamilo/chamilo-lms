@@ -199,7 +199,7 @@ function drawErrorBase(&$manager)
 		}
 		else if ( window.parent.oEditor )
 		{
-			window.parent.oEditor.OpenDialog( url, null, null, 'FCKDialog_ImageEditor', 'Edit Image', 713, 596 );
+			window.parent.oEditor.OpenDialog( url, null, null, 'FCKDialog_ImageEditor', 'Edit image', 713, 596 );
 		}
 	}
 

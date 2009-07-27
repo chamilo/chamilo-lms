@@ -101,9 +101,27 @@ body {
 /*]]>*/
 </style>
 
+<script type="text/javascript">
+/*<![CDATA[*/
+
+	function Init()
+	{
+		if ( !window.opener && window.parent )
+		{
+			var title = window.parent.document.getElementById( 'TitleArea' ).innerHTML ;
+			if ( title )
+			{
+				window.parent.document.getElementById( 'TitleArea' ).innerHTML = title.replace( 'Edit image', i18n( 'Edit image' ) ) ;
+			}
+		}
+	}
+
+/*]]>*/
+</script>
+
 </head>
 
-<body>
+<body onload="javascript: Init();">
 <div id="indicator">
 <img src="img/spacer.gif" id="indicator_image" height="20" width="20" alt="" />
 </div>

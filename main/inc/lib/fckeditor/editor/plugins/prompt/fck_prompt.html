@@ -48,8 +48,8 @@ function Ok()
 
 window.onload = function()
 {
-	message = dialog.Args().CustomValue.message ;
-	default_value = dialog.Args().CustomValue.default_value ;
+	var message = dialog.Args().CustomValue.message ;
+	var default_value = dialog.Args().CustomValue.default_value ;
 	document.getElementById( 'message' ).innerHTML = message ;
 	document.getElementById( 'inputfield' ).value = default_value ;
 
@@ -60,7 +60,7 @@ window.onload = function()
 		</script>
 	</head>
 	<body scroll="no" style="overflow: hidden;">
-		<div style="margin-top: 30px; margin-bottom: 30px; margin-right: auto; margin-left: auto; width: 90%;" align="center">
+		<div style="margin-top: 30px; margin-bottom: 30px; margin-right: auto; margin-left: auto; width: 100%;" align="center">
 			<span id="message"></span><br />
 			<input id="inputfield" type="text" style="width: 100%;"/>
 		</div>

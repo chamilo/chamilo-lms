@@ -5,7 +5,7 @@ require_once '../inc/lib/course.lib.php';
 $user_id=intval($_POST['user_id']);
 $list_course_all_info=array();
 $list_course=array();
-$list_course_all_info=CourseManager::get_courses_list_by_user_id($user_id);
+$list_course_all_info=CourseManager::get_courses_list_by_user_id($user_id,true);
 for ($i=0;$i<count($list_course_all_info);$i++) {
 	$list_course[]=$list_course_all_info[$i]['title'];
 }

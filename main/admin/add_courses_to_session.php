@@ -1,26 +1,5 @@
-<?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	@package dokeos.admin
@@ -35,11 +14,11 @@ $language_file='admin';
 $cidReset=true;
 
 // including some necessary dokeos files
-require('../inc/global.inc.php');
+require '../inc/global.inc.php';
 
 // including additonal libraries
-require_once ('../inc/lib/xajax/xajax.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
+require_once '../inc/lib/xajax/xajax.inc.php';
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_courses');
@@ -164,7 +143,7 @@ function search_courses($needle,$type)
 			while($course = Database :: fetch_array($rs)) {	
 				$course_list[] = $course['code'];
 				$course_title=str_replace("'","\'",$course_title);				
-				$return .= '<option value="'.$course['code'].'">'.$course['title'].' ('.$course['visual_code'].')</option>';				
+				$return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'].' ('.$course['visual_code'].')',ENT_QUOTES).'">'.$course['title'].' ('.$course['visual_code'].')</option>';				
 			}
 			$return .= '</select>';
 			
@@ -436,7 +415,7 @@ else
 	foreach($nosessionCourses as $enreg)
 	{
 		?>
-		<option value="<?php echo $enreg['code']; ?>" <?php if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
+		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
 		<?php
 	}
 	?>  </select></div> <?php
@@ -447,8 +426,7 @@ unset($nosessionCourses);
   </select></td>
   <td width="10%" valign="middle" align="center">
   <?php
-  if($ajax_search)
-  {
+  if ($ajax_search) {
   ?>
   	<input type="button" onclick="remove_item(document.getElementById('destination'))" value="<<" />
   <?php
@@ -480,7 +458,7 @@ unset($nosessionCourses);
 foreach($sessionCourses as $enreg)
 {	
 ?>	
-	<option value="<?php echo $enreg['code']; ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
+	<option value="<?php echo $enreg['code']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
 
 <?php 
 }

@@ -280,8 +280,9 @@ echo '<div class="actions">';
 echo $link_add_type_unique.$link_add_type_multiple;
 echo '</div>';
 
-// the form header 
-echo '<div class="row"><div class="form_header">'.$tool_name.'</div></div>';
+// the form header
+$session_info = SessionManager::fetch($id_session);
+echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info['name'].')</div></div>';
 
 
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_course;

@@ -86,3 +86,5 @@ body, td, input, select
 .fullHeight {
 	height: 100%;
 }
+
+body, td, input, textarea, select, label { font-family: Arial, Verdana, Geneva, helvetica, sans-serif; font-size: 11px; }

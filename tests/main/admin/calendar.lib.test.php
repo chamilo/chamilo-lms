@@ -2,7 +2,7 @@
 
 require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
+require_once(api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
 Mock::generate('Database');
 Mock::generate('Display');
 class TestCalendar extends UnitTestCase {
@@ -549,17 +549,18 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($res);
  	}
  /**
-  * para poder realizar esta prueba, se tuvo que comentar el die hubicado en la
-  * linea 2877 para que la prueba resultara exitosa.
+  * para poder realizar esta prueba, se tuvo que comentar el "die" ubicado en la
+  * linea 2877 para que la prueba pudiera ejecutarse de manera exitosa.
   */
  	public function testAgendaAddItem(){
+ 		
  		$realagenda = new MockDatabase();
  		global $_course;
- 		$course_info='';
- 		$title='';
- 		$content='';
- 		$db_start_date='';
- 		$db_end_date='';
+ 		$course_info='null';
+ 		$title='test';
+ 		$content='test function';
+ 		$db_start_date='07/11/2009';
+ 		$db_end_date='07/20/2009';
  		$to=array();
  		$parent_id=null;
  		$t_agenda   = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
@@ -570,23 +571,90 @@ class TestCalendar extends UnitTestCase {
     	$sql = "SELECT * FROM $t_agenda WHERE title='$title' AND content = '$content' AND start_date = '$start_date'
     		    AND end_date = '$end_date' ".(!empty($parent_id)? "AND parent_event_id = '$parent_id'":"");
     	$result = api_sql_query($sql,__FILE__,__LINE__);
-    	$count = Database::num_rows($result);
- 		$sql1 = "INSERT INTO ".$t_agenda."
-                            (title,content, start_date, end_date)
-                            VALUES
-                            ('".$title."','".$content."', '".$start_date."','".$end_date."')";
- 		$result = api_sql_query($sql1,__FILE__,__LINE__);
+    	$sql1 = "INSERT INTO ".$t_agenda."(title,content, start_date, end_date)VALUES
+                ('".$title."','".$content."', '".$start_date."','".$end_date."')";
+ 		$result1 = api_sql_query($sql1,__FILE__,__LINE__);
  		$real_agenda[]= $result;
+ 		$real_agenda1[]= $result1;
  		//$res = agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date, $to, $parent_id);
  		$realagenda->expectOnce($real_agenda);
+ 		$realagenda->expectOnce($real_agenda1);
  		//$this->assertTrue(is_numeric($res));
  		$this->assertTrue(is_array($real_agenda));
- 		$this->assertTrue($realagenda);
+ 		$this->assertTrue(is_array($real_agenda1));
  		//var_dump($res);
- 		var_dump($real_agenda);
- 		var_dump($realagenda);
+ 		//var_dump($real_agenda);
+ 		//var_dump($real_agenda1);
  	}
  	
+ 	public function testGetCalendarItems(){
+ 		$realgetcalendar = new MockDatabase();
+ 		global $_user, $_course;
+		global $is_allowed_to_edit;
+ 		$month='march';
+ 		$year='2009';
+		$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
+ 		$sql="SELECT
+			  DISTINCT *
+			  FROM ".$TABLEAGENDA." agenda
+			  WHERE MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
+			  GROUP BY id ".
+			 "ORDER BY  start_date ";
+		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$row=Database::fetch_array($result);
+ 		$res = get_calendar_items($month, $year);
+ 		$real_get_calendar[]= $row;
+ 		$realgetcalendar->expectOnce($real_get_calendar);
+ 		$realgetcalendar->expectCallCount($real_get_calendar);
+ 		$this->assertTrue(is_bool($row));
+ 		$this->assertTrue(is_array($real_get_calendar));
+ 		$this->assertTrue(is_array($res));
+ 		//var_dump($real_get_calendar);
+ 		//var_dump($row);
+ 		//var_dump($res);
+ 	}
+ 	
+ 	public function testAgendaAddRepeatItem(){
+ 		$realagenda = new MockDatabase();
+ 		$course_info='course of test';
+ 		$orig_id=001;
+ 		$type='daily';
+ 		$end=10;
+ 		$orig_dest='monday';
+ 		$t_agenda   = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR,$course_info['dbName']);
+ 		$sql = "SELECT title, content, start_date as sd, end_date as ed FROM $t_agenda WHERE id = $orig_id";
+ 		$res = Database::query($sql,__FILE__,__LINE__);
+ 		$row = Database::fetch_array($res);
+ 		$sql1 = "INSERT INTO $t_agenda_r (cal_id, cal_type, cal_end)" .
+            " VALUES ($orig_id,'$type',$end)";
+        $res1 = Database::query($sql1,__FILE__,__LINE__);
+ 		$resu= agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest);
+ 		$real_agenda[] = $row;
+ 		$realagenda->expectOnce($real_agenda);
+ 		$realagenda->expectCallCount($real_agenda);
+ 		$realagenda->expectOnce($t_agenda);
+ 		$realagenda->expectOnce($res1);
+ 		$this->assertTrue(is_bool($resu));
+ 		$this->assertTrue(is_array($real_agenda));
+ 		$this->assertTrue($row);
+ 		//var_dump($resu);
+ 		//var_dump($res);
+ 		//var_dump($res1);
+ 		//var_dump($real_agenda);
+ 	}
+ 	
+ 	public function testAgendaImportIcal(){
+ 		$course_info='course_test';
+ 		$file='';
+ 		$res = agenda_import_ical($course_info,$file);
+ 		if(is_bool($res)){
+ 		$this->assertTrue(is_bool($res));
+ 		$this->assertTrue($res===false || $res === true);
+ 		}else{
+ 			$this->assertTrue($res);
+ 		}
+ 		var_dump($res);
+ 	}
  	
  	
  	

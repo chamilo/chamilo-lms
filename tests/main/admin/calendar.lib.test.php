@@ -634,7 +634,11 @@ class TestCalendar extends UnitTestCase {
  		$realagenda->expectCallCount($real_agenda);
  		$realagenda->expectOnce($t_agenda);
  		$realagenda->expectOnce($res1);
+ 		if(is_bool($resu)){
  		$this->assertTrue(is_bool($resu));
+ 		$this->assertTrue($resu === true || $resu===false);
+ 		}else
+ 		$this->assertTrue(is_null($resu));
  		$this->assertTrue(is_array($real_agenda));
  		$this->assertTrue($row);
  		//var_dump($resu);
@@ -653,7 +657,7 @@ class TestCalendar extends UnitTestCase {
  		}else{
  			$this->assertTrue($res);
  		}
- 		var_dump($res);
+ 		//var_dump($res);
  	}
  	
  	

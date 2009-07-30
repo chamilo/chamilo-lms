@@ -369,15 +369,14 @@ class Tracking {
 	 * @param Array limit average to listed lp ids
 	 * @return string value (number %) Which represents a round integer explain in got in 3.
 	 */
-	function get_avg_student_score($student_id, $course_code, $lp_ids=array()) {
-
+	function get_avg_student_score($student_id, $course_code, $lp_ids=array()) {	
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		
 		$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);	
-		$course = CourseManager :: get_course_information($course_code);
+		$course = CourseManager :: get_course_information($course_code);		
 		if (!empty($course['db_name'])) {
 			
 			$tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION,$course['db_name']);		
@@ -387,67 +386,108 @@ class Tracking {
 			$lp_item_view_table = Database  :: get_course_table(TABLE_LP_ITEM_VIEW,$course['db_name']);
 	
 			$sql_course_lp = 'SELECT id FROM '.$lp_table;
-			if(count($lp_ids)!=0)
-			{
+			if(count($lp_ids)!=0) {
 				$sql_course_lp.=' WHERE id IN ('.implode(',',$lp_ids).')';
 			}
+			
 			$sql_result_lp = api_sql_query($sql_course_lp, __FILE__, __LINE__);
-
 			$lp_scorm_score_total = 0;
 			$lp_scorm_weighting_total = 0;
 			$lp_scorm_result_score_total = 0;
 			$lp_scorm_loop=0;
+			$lp_count = 0;
+			$progress = 0;
+						
 			if(Database::num_rows($sql_result_lp)>0){
-				//Scorm test
-				while($a_learnpath = Database::fetch_array($sql_result_lp)){
+				//Scorm test				
+				while($a_learnpath = Database::fetch_array($sql_result_lp)) {
 					
-					//We get the last view id of this LP
-					$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
+					//We get the last view id of this LP (with the higher id)							
+					$sql='SELECT max(id) as id FROM '.$lp_view_table.' 
+						  WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';				
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
-					$lp_view_id = Database::result($rs_last_lp_view_id,0,'id');					
+					$lp_view_id = Database::result($rs_last_lp_view_id,0,'id'); // THE view
 					
-					$sql_max_score='SELECT lp_iv.score as score,lp_i.max_score 
-							FROM '.$lp_item_view_table.' as lp_iv
-							INNER JOIN '.$lp_item_table.' as lp_i
-								ON lp_i.id = lp_iv.lp_item_id
-								AND lp_i.item_type="sco"
-							WHERE lp_view_id="'.$lp_view_id.'"';
-							
-					//$rs = api_sql_query($sql, __FILE__, __LINE__);	
-					//$sql_max_score='SELECT max_score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" ';
-					$res_max_score=Database::query($sql_max_score,__FILE__,__LINE__);	
-					$count_total_loop=0;
-					$num_rows_max_score=Database::num_rows($res_max_score);
-					if ($num_rows_max_score==1) {
-						while ($row_max_score=Database::fetch_array($res_max_score)) {
-							if ($row_max_score['max_score']==0) {
-                                //when there's no max score, we assume 100 as the max score, as the SCORM 1.2 says that the value should always be between 0 and 100.
-								$lp_scorm_result_score_total+=($row_max_score['score']/100);
-							} else {
-								$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score']);
-							}
-							$count_total_loop++;
-						}						
-					} elseif ($num_rows_max_score>1) {
-						while ($row_max_score=Database::fetch_array($res_max_score)) {
-							if ($row_max_score['max_score']==0) {
-								$lp_scorm_result_score_total+=($row_max_score['score']/100);
-							} else {
-								$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score']);
-							}
-							$count_total_loop++;
-						}						
-					}							
-					if ($count_total_loop==0) {
-						$count_total_loop=1;
-					}
-					$score_of_scorm_calculate=round((($lp_scorm_result_score_total/$count_total_loop)*100),2);
+					if ($lp_view_id != '') {
+						// we get the progress 
+						$sql='SELECT progress FROM '.$lp_view_table.' WHERE id="'.$lp_view_id.'"';						  
+						$rs = api_sql_query($sql, __FILE__, __LINE__);
+						$progress = Database::result($rs,0,'progress');
+						 
+						// item's list of an scorm 
+						$sql_max_score='SELECT lp_iv.score as score,lp_i.max_score 
+								FROM '.$lp_item_view_table.' as lp_iv
+								INNER JOIN '.$lp_item_table.' as lp_i
+									ON lp_i.id = lp_iv.lp_item_id
+									AND lp_i.item_type="sco"
+								WHERE lp_view_id="'.$lp_view_id.'"';
+																	
+						//$rs = api_sql_query($sql, __FILE__, __LINE__);	
+						//$sql_max_score='SELECT max_score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" ';
+						$res_max_score=Database::query($sql_max_score,__FILE__,__LINE__);	
+						$count_total_loop=0;
+						$num_rows_max_score=Database::num_rows($res_max_score);						
+												
+						if ($num_rows_max_score==1) {
+							while ($row_max_score=Database::fetch_array($res_max_score)) {
+								echo $row_max_score['score'].'  - '.$row_max_score['max_score'];
+								if ($row_max_score['max_score']==0) {
+	                                //when there's no max score, we assume 100 as the max score, as the SCORM 1.2 says that the value should always be between 0 and 100.
+	                       			$lp_scorm_result_score_total+=($row_max_score['score']/100);
+									$current_value = $row_max_score['score']/100;
+									
+								} else {						
+									$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score']);
+									$current_value = $row_max_score['score']/$row_max_score['max_score'];
+								} 
+								$count_total_loop++;								
+							}						
+						} elseif ($num_rows_max_score > 1) {
+							//echo ' ---- <br>';
+							while ($row_max_score=Database::fetch_array($res_max_score)) {
+								//echo $row_max_score['score'].'  - '.$row_max_score['max_score'];
+								//echo '<br>';							
+								if ($row_max_score['max_score']==0) {
+									$lp_scorm_result_score_total+=($row_max_score['score']/100);									
+									$current_value = $row_max_score['score']/100;
+								} else {
+	                                //when there's no max score, we assume 100 as the max score, as the SCORM 1.2 says that the value should always be between 0 and 100.									
+									$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score']);									
+									$current_value = $row_max_score['score']/$row_max_score['max_score'];
+								}
+								$count_total_loop++;
+							}						
+						}	
+						
+						if ($num_rows_max_score > 0 && ($progress > 0 || $current_value > 0 )) {
+							$lp_count++;											
+						}
+														
+						if ($count_total_loop==0) {
+							$count_total_loop=1;
+						}
+						$score_of_scorm_calculate=round((($lp_scorm_result_score_total/$count_total_loop)*100),2);						
+						
+						} else {
+							$score_of_scorm_calculate = 0; 
+					}										
 				}
+				
 				//The next call to a MySQL fetch function, such as mysql_fetch_assoc(), would return that row. 
 				mysql_data_seek($sql_result_lp,0);
-
+				
+				if ($lp_count==0) {
+                	$lp_count=1;
+                }                		
+                		
+				if(count($lp_ids)==0 ) {					
+					$score_of_scorm_calculate=round((($score_of_scorm_calculate/$lp_count)),2);
+				}
+			
+				$lp_scorm_score_total = $score_of_scorm_calculate;								
+				
 				//Quizz in a LP
-				while($a_learnpath = Database::fetch_array($sql_result_lp)){
+				while($a_learnpath = Database::fetch_array($sql_result_lp)) {
 					//we got the maxscore this is wrong			
 					/*
 					echo $sql = 'SELECT id as item_id, max_score 
@@ -528,8 +568,8 @@ class Tracking {
 								$total_weighting += $maxscore;								
 								if($total_weighting>0 && $maxscore>0) {
 									//echo $total_score.' -  '.$maxscore; echo '<br>';
-									//echo $lp_scorm_score_total += ($total_score/$total_weighting)*100;
-									$lp_scorm_score_total += ($total_score/$maxscore)*100; 										
+									//echo $lp_scorm_score_total += ($total_score/$total_weighting)*100;								
+									$lp_scorm_score_total += ($total_score/$maxscore)*100;															
 									$lp_scorm_weighting_total+=100;
 								}
 							}					
@@ -538,14 +578,14 @@ class Tracking {
 				}
 			}
 	
-			$totalScore = $lp_scorm_score_total;
-	
+			$totalScore = $lp_scorm_score_total;			
 			$pourcentageScore = 0;
 			if($lp_scorm_weighting_total>0) {
 				//i.e 10.52
 				$pourcentageScore = round( (($totalScore * 100) / $lp_scorm_weighting_total),2);
 				return $pourcentageScore;
 			} elseif ($score_of_scorm_calculate>0) {
+				//echo '<br>'.$score_of_scorm_calculate;
 				return $score_of_scorm_calculate;
 			} else {
 				return null;

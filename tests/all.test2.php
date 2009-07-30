@@ -7,6 +7,7 @@ require_once('simpletest/web_tester.php');
 require_once('simpletest/mock_objects.php');
 require_once('simpletest/autorun.php');
 require_once(api_get_path(SYS_CODE_PATH).'admin/calendar.lib.php');
+
 $_SESSION['_user']['user_id'] = 1;
 $_user= 1;
 

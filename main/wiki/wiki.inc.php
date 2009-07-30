@@ -314,16 +314,46 @@ function save_wiki() {
     }
 	
 	//cleaning config variables
-	
-	$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));	
-	$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
-	$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
-	$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
-	$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));	
-	$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS($_POST['startdate_assig']));
-	$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS($_POST['enddate_assig']));	
-	$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
+			
+	if(!empty($_POST['task']))
+	{
+		$_clean['task']=Database::escape_string(Security::remove_XSS($_POST['task']));
+	}
+	if(!empty($_POST['feedback1']) || !empty($_POST['feedback2']) || !empty($_POST['feedback3']))
+	{
+		$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));	
+		$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
+		$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
+		$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));	
+		$_clean['fprogress2']=Database::escape_string(Security::remove_XSS($_POST['fprogress2']));
+		$_clean['fprogress3']=Database::escape_string(Security::remove_XSS($_POST['fprogress3']));
+	}
 
+		if(Security::remove_XSS($_POST['initstartdate']==1))
+		{
+			$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('startdate_assig')));
+		}
+		else
+		{
+			$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS($_POST['startdate_assig']));
+		}
+		
+		if(Security::remove_XSS($_POST['initenddate']==1))	
+		{
+			$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));	
+		}
+		else
+		{
+			$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS($_POST['enddate_assig']));
+		}
+		
+		$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
+
+	if(!empty($_POST['max_text']) || !empty($_POST['max_version']))
+	{
+		$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
+		$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));	
+	}
 	
 	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
 	
@@ -340,11 +370,11 @@ function save_wiki() {
 
 	if ($_clean['reflink']=='index' && $_clean['version']==1)
 	{	
-		$sql="INSERT INTO ".$tbl_wiki_conf." (page_id, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
+		$sql="INSERT INTO ".$tbl_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
 	}
 	else
 	{
-		$sql='UPDATE'.$tbl_wiki_conf.' SET page_id="'.$Id.'", feedback1="'.$_clean['feedback1'].'", feedback2="'.$_clean['feedback2'].'", feedback3="'.$_clean['feedback3'].'", max_text="'.$_clean['max_text'].'", max_version="'.$_clean['max_version'].'", startdate_assig="'.$_clean['startdate_assig'].'", enddate_assig="'.$_clean['enddate_assig'].'", delayedsubmit="'.$_clean['delayedsubmit'].'" WHERE page_id="'.$Id.'"';
+		$sql='UPDATE'.$tbl_wiki_conf.' SET task="'.$_clean['task'].'", feedback1="'.$_clean['feedback1'].'", feedback2="'.$_clean['feedback2'].'", feedback3="'.$_clean['feedback3'].'",  fprogress1="'.$_clean['fprogress1'].'",  fprogress2="'.$_clean['fprogress2'].'",  fprogress3="'.$_clean['fprogress3'].'", max_text="'.$_clean['max_text'].'", max_version="'.$_clean['max_version'].'", startdate_assig="'.$_clean['startdate_assig'].'", enddate_assig="'.$_clean['enddate_assig'].'", delayedsubmit="'.$_clean['delayedsubmit'].'" WHERE page_id="'.$_clean['page_id'].'"';
 	}
 	api_sql_query($sql,__FILE__,__LINE__);	
 	
@@ -463,27 +493,36 @@ function save_new_wiki() {
 	$_clean['linksto'] = links_to($_clean['content']);	//check wikilinks
 	
 	//cleaning config variables
-	if(Security::remove_XSS($_POST['timelimit']==1))
+	$_clean['task']=Database::escape_string(Security::remove_XSS($_POST['task']));
+	$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));	
+	$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
+	$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
+	$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));	
+	$_clean['fprogress2']=Database::escape_string(Security::remove_XSS($_POST['fprogress2']));
+	$_clean['fprogress3']=Database::escape_string(Security::remove_XSS($_POST['fprogress3']));
+
+	if(Security::remove_XSS($_POST['initstartdate']==1))
 	{
 		$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('startdate_assig')));
-		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));	
-		$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
 	}
-	if(Security::remove_XSS($_POST['feedback']==1))
+	else
 	{
-		$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));	
-		$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
-		$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
-		$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));	
-		$_clean['fprogress2']=Database::escape_string(Security::remove_XSS($_POST['fprogress2']));
-		$_clean['fprogress3']=Database::escape_string(Security::remove_XSS($_POST['fprogress3']));
+		$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS($_POST['startdate_assig']));
 	}
-	if(Security::remove_XSS($_POST['otherlimit']==1))
-	{
-		$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
-		$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));
-	}	
 	
+	if(Security::remove_XSS($_POST['initenddate']==1))	
+	{
+		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));	
+	}
+	else
+	{
+		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS($_POST['enddate_assig']));
+	}
+	
+	$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
+	$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
+	$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));
+
 	//filter no _uass
 	if (api_eregi('_uass', $_POST['title']) || (api_strtoupper(trim($_POST['title'])) == 'INDEX' || api_strtoupper(trim(api_htmlentities($_POST['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset)))) {
 		$message= get_lang('GoAndEditMainPage');
@@ -505,7 +544,7 @@ function save_new_wiki() {
 	       api_sql_query($sql,__FILE__,__LINE__);
 		   	
 			//insert wiki config		 
-		   $sql="INSERT INTO ".$tbl_wiki_conf." (page_id, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
+		   $sql="INSERT INTO ".$tbl_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
 		   api_sql_query($sql,__LINE__,__FILE__);
 			
 		   api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
@@ -539,7 +578,7 @@ return true;
 }	
 </script>
 <?php	
-	
+	//form
 	echo '<form name="form1" method="post" onsubmit="return CheckSend()" action="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
 	echo '<div id="wikititle">';
 	echo  '<span class="form_required">*</span> '.get_lang(Title).': <input type="text" name="title" value="'.urldecode($_GET['title']).'" size="40">';
@@ -548,39 +587,34 @@ return true;
 	{	
 	
 		$_clean['group_id']=(int)$_SESSION['_gid']; // TODO: check if delete ?
-				
-		//echo'<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus" style="float:right">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>'; // TODO: under develop, uncoment and activate later
+	
+		echo'<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus" style="float:right">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>';
 		echo '<div id="options" style="display:none; margin: 20px;" >';					
 
-		//time limit
-		echo  '<input type="checkbox" value="1" name="timelimit" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;'.get_lang('PutATimeLimit').'';		
-		echo  '&nbsp;&nbsp;&nbsp;<span id="msg_error1" style="display:none;color:red"></span>';	
-		echo  '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
-		echo '<table width="100%" border="0" style="font-weight:normal">';
-  		echo '<tr>';
-    	echo '<td align="right">'.get_lang("StartDate").':</td>';
-    	echo '<td>'.draw_date_picker('startdate_assig').'</td>';
+		//task
+		echo '<input type="checkbox" value="1" name="checktask" onclick="if(this.checked==true){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" />'.get_lang('DescriptionOfTheTask').'';		
+		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error4" style="display:none;color:red"></span>';
+		echo '<div id="option4" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
+		
+		echo '<table border="0" style="font-weight:normal" align="center">';
+		echo '<tr>';
+		echo '<td>'.get_lang('DescriptionOfTheTask').'</td>';
 		echo '</tr>';
 		echo '<tr>';
-		echo '<td align="right">'.get_lang("EndDate").':</td>';
-		echo '<td>'.draw_date_picker('enddate_assig').'</td>';
+		echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';
 		echo '</tr>';
-		echo '<tr>';
-		echo '<td align="right">'.get_lang('AllowLaterSends').':</td>';
-		echo '<td><input type="checkbox" name="delayedsubmit" value="1"></td>';
-		echo '</tr>';
-		echo'</table>';
+		echo '</table>';
 		echo '</div>';
 		
 		//feedback
-		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="feedback" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;'.get_lang('AddFeedback').'';		
+		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkfeedback" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;'.get_lang('AddFeedback').'';		
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
 		echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
 
 		echo '<table border="0" style="font-weight:normal" align="center">';
 		echo '<tr>';
 		echo '<td colspan="2">'.get_lang('Feedback1').'</td>';
-		echo '<td colspan="2" >'.get_lang('Feedback2').'</td>';
+		echo '<td colspan="2">'.get_lang('Feedback2').'</td>';
 		echo '<td colspan="2">'.get_lang('Feedback3').'</td>';
 	  	echo '</tr>';
 	 	echo '<tr>';
@@ -590,7 +624,7 @@ return true;
 	 	echo '</tr>';
 		echo '<tr>';
 		echo '<td>'.get_lang('FProgress').':</td>';
-		echo '<td><select name="fprogress3">
+		echo '<td><select name="fprogress1">
 		   <option value="0" selected>0</option>	   
 		   <option value="10">10</option>
 		   <option value="20">20</option>
@@ -604,7 +638,7 @@ return true;
 		   <option value="100">100</option>   
 		   </select> %</td>';
 		echo '<td>'.get_lang('FProgress').':</td>';
-		echo '<td><select name="fprogress3">
+		echo '<td><select name="fprogress2">
 		   <option value="0" selected>0</option>	   
 		   <option value="10">10</option>
 		   <option value="20">20</option>
@@ -635,20 +669,42 @@ return true;
 		echo '</table>';
 		echo '</div>';
 		
+		//time limit
+		echo  '<div>&nbsp;</div><input type="checkbox" value="1" name="checktimelimit" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;'.get_lang('PutATimeLimit').'';		
+		echo  '&nbsp;&nbsp;&nbsp;<span id="msg_error1" style="display:none;color:red"></span>';	
+		echo  '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
+		echo '<table width="100%" border="0" style="font-weight:normal">';
+  		echo '<tr>';
+    	echo '<td align="right">'.get_lang("StartDate").':</td>';
+		echo '<td>';
+		echo draw_date_picker('startdate_assig').' <input type="checkbox" name="initstartdate" value="1"> '.get_lang('Yes').'/'.get_lang('No').'';
+		echo '</td>';
+		echo '</tr>';
+		echo '<tr>';
+		echo '<td align="right">'.get_lang("EndDate").':</td>';
+		echo '<td>';
+		echo draw_date_picker('enddate_assig').' <input type="checkbox" name="initenddate" value="1"> '.get_lang('Yes').'/'.get_lang('No').'';
+		echo '</td>';
+		echo '</tr>';
+		echo '<tr>';
+		echo '<td align="right">'.get_lang('AllowLaterSends').':</td>';
+		echo '<td><input type="checkbox" name="delayedsubmit" value="1"></td>';
+		echo '</tr>';
+		echo'</table>';
+		echo '</div>';		
+		
 		//other limit
-		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="otherlimit" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;'.get_lang('OtherSettings').'';		
+		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkotherlimit" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;'.get_lang('OtherSettings').'';		
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
 		echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
 		echo '<div style="font-weight:normal"; align="center">'.get_lang('Max_text').':&nbsp;<input type="text" name="max_text" size="3">&nbsp;&nbsp;'.get_lang('Max_version').':&nbsp;<input type="text" name="max_version" size="3"></div>';
-		echo '</div>';	
-		
+		echo '</div>';
+
 		//to define as an individual assignment
 		echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;"><img src="../img/wiki/assignment.gif" />&nbsp;'.get_lang('DefineAssignmentPage').': <input type="checkbox" name="assignment" value="1"></div>'; // 1= teacher 2 =student
-	
+		//
 		echo'</div>';
 
-		echo '<div>&nbsp;</div>';
-	
 	}
 	echo '</div>';
 	echo '<div id="wikicontent">';
@@ -689,6 +745,7 @@ function display_wiki_entry()
 {
 	global $charset;
 	global $tbl_wiki;
+	global $tbl_wiki_conf;
 	global $groupfilter;
 	global $page;
 
@@ -697,7 +754,8 @@ function display_wiki_entry()
 	if ($_GET['view'])
 	{
 		$_clean['view']=(int)Database::escape_string($_GET['view']);
-		$filter=" AND id='".$_clean['view']."'";
+		
+		$filter=' AND '.$tbl_wiki.'.id="'.$_clean['view'].'"';
 	}	
 
 	//first, check page visibility in the first page version
@@ -707,9 +765,9 @@ function display_wiki_entry()
 		$KeyVisibility=$row['visibility'];	
 
 	// second, show the last version
-	$sql="SELECT * FROM ".$tbl_wiki."WHERE reflink='".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))."' AND $groupfilter $filter ORDER BY id DESC";
-		$result=api_sql_query($sql,__LINE__,__FILE__);
-		$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version	
+	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' '.$filter.' ORDER BY id DESC';
+	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
 
 
 	//update visits 
@@ -740,7 +798,7 @@ function display_wiki_entry()
 	}
 	
 
-	//assignment mode: for identify page type
+	//assignment mode: identify page type
 	if(stripslashes($row['assignment'])==1)
 	{
 		$icon_assignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
@@ -749,8 +807,13 @@ function display_wiki_entry()
 	{
 		$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
 	}
-
-
+	
+	//task mode
+	
+	if (!empty($row['task']))
+	{
+		$icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('TaskExtra').'" alt="'.get_lang('TaskExtra').'" />';
+	}
 
 	//Show page. Show page to all users if isn't hide page. Mode assignments: if student is the author, can view
 	if($KeyVisibility=="1" || api_is_allowed_to_edit() || api_is_platform_admin() || ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id'])))
@@ -861,7 +924,7 @@ function display_wiki_entry()
 
 		if (wiki_exist($title))
 		{
-			echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.stripslashes($title);
+			echo $icon_assignment.'&nbsp;'.$icon_task.'&nbsp;'.stripslashes($title);
 		}
 		else
 		{
@@ -1751,17 +1814,6 @@ function double_post($wpost_id)
     }
 }
 
-/**
- * Function convert date to number
- * 2008-10-12 00:00:00 ---to--> 12345672218 (timestamp)
- */
-function convert_date_to_number($default)
-{
-	$parts = split(' ',$default);
-	list($d_year,$d_month,$d_day) = split('-',$parts[0]);
-	list($d_hour,$d_minute,$d_second) = split(':',$parts[1]);	
-	return mktime($d_hour, $d_minute, $d_second, $d_month, $d_day, $d_year);
-}
 
 /**
  * Function wizard individual assignment
@@ -2008,7 +2060,7 @@ function display_wiki_search_results($search_term, $search_content=0)
  *
  */
 function draw_date_picker($prefix,$default='') {
-	//$default = 2008-10-01 10:00:00
+
 	if(empty($default)) {
 	$default = date('Y-m-d H:i:s');	
 	}
@@ -2035,7 +2087,7 @@ function draw_date_picker($prefix,$default='') {
 	array_unshift($minute,'00','01','02','03','04','05','06','07','08','09');
 	$date_form = make_select($prefix.'_day', array_combine(range(1,31),range(1,31)), $d_day);
 	$date_form .= make_select($prefix.'_month', $month_list, $d_month);
-	$date_form .= make_select($prefix.'_year', array( $d_year=> $d_year, $d_year+1=>$d_year+1), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
+	$date_form .= make_select($prefix.'_year', array($d_year-2=>$d_year-2, $d_year-1=>$d_year-1, $d_year=> $d_year, $d_year+1=>$d_year+1, $d_year+2=>$d_year+2), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
 	$date_form .= make_select($prefix.'_hour', array_combine(range(0,23),range(0,23)), $d_hour).' : ';
 	$date_form .= make_select($prefix.'_minute', $minute, $d_minute);
 	return $date_form;
@@ -2054,14 +2106,6 @@ function make_select($name,$values,$checked='') {
  	return $output;
 }
 
-/**
- * Enter description here...
- *
- */
-function make_checkbox($name,$checked='') {
-		return '' .
-			'<input type="checkbox" value="1" name="'.$name.'" '.((!empty($checked))?'checked="checked"':'').'/>';
-}
 
 /**
  * Enter description here...
@@ -2079,4 +2123,5 @@ function two_digits($number)
 	$number = (int)$number;
 	return ($number < 10) ? '0'.$number : $number;
 }
+
 ?>

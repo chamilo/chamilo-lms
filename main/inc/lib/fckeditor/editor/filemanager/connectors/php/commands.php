@@ -94,6 +94,7 @@ function GetFoldersAndFiles( $resourceType, $currentFolder )
 				&& ( $in_group || ( !$in_group && strpos( $sFile, '_groupdocs' ) === false ) )
 				&& (!$in_shared_folder || ($in_shared_folder && (!$is_dir || ($is_dir && $sFile == $user_id))))
 				&& $sFile != '.thumbs'
+				&& strpos( $sFile, '.editor_' ) === false
 				&& $sFile != '.svn' )
 			{
 				if ( $is_dir )

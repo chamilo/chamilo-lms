@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 22368 2009-07-24 23:25:57Z iflorespaz $
+// $Id: inscription.php 22567 2009-08-02 23:10:29Z iflorespaz $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -317,9 +317,10 @@ if (get_setting('allow_terms_conditions')=='true') {
 	
 	// Version and language //password
 	$form->addElement('hidden', 'legal_accept_type',$term_preview['version'].':'.$term_preview['language_id']);
+	$form->addElement('hidden', 'legal_info',$term_preview['legal_id'].':'.$term_preview['language_id']);	
 	if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
 		$form->addElement('hidden', 'login',$_SESSION['info_current_user'][1]);
-		$form->addElement('hidden', 'password',$_SESSION['info_current_user'][2]);		
+		$form->addElement('hidden', 'password',$_SESSION['info_current_user'][2]);	
 	}
 	if($term_preview['type'] == 1) {
 		$form->addElement('checkbox', 'legal_accept', null, get_lang('IhaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');		

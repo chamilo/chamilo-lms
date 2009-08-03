@@ -44,3 +44,6 @@ search_did INT NOT NULL
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_message_tool', 'false', 'No');
+
+-- to make a DRH have the same rights as a tutor
+-- INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('drhCourseManagerRights',null,'radio','Platform','true','DrhCourseManagerRightsTitle','DrhCoursManagerRightsComment',null,null,1,0);

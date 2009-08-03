@@ -22,7 +22,7 @@
 //   The use of this software is at the risk of the user.
 //
 // --------------------------------------------------------------------------------
-// $Id: pclzip.lib.php 21315 2009-06-09 13:50:25Z ndieschburg $
+// $Id: pclzip.lib.php 22578 2009-08-03 04:32:32Z yannoo $
 // --------------------------------------------------------------------------------
 
   // ----- Constants
@@ -63,7 +63,7 @@
   // define( 'PCLZIP_TEMPORARY_DIR', '/temp/' );
   // define( 'PCLZIP_TEMPORARY_DIR', 'C:/Temp/' );
   if (!defined('PCLZIP_TEMPORARY_DIR')) {
-    define( 'PCLZIP_TEMPORARY_DIR', $garbageRepositorySys );
+    define( 'PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH) );
   }
 
 // --------------------------------------------------------------------------------

@@ -5,6 +5,7 @@ $language_file = array('registration','messages','userInfo','admin','forum','blo
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 // @todo here we must show the user information as read only 
 //User picture size is calculated from SYSTEM path
@@ -21,8 +22,8 @@ if (isset($_POST['load_ajax'])) {
 			$course_db =  $_POST['course_code'];
 			// @todo goto the course link							
 			//echo '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.get_lang('GotoCourse').'</a>';
-			$my_course_info_db=explode('_',$course_db);
-			$course_id=$my_course_info_db[1];
+			$course_id=CourseManager::get_course_id_by_database_name($course_db);
+	
 			if (api_is_user_of_course($course_id,api_get_user_id())) {
 				
 				$table_forums 			= Database :: get_course_table(TABLE_FORUM,$course_db);
@@ -31,7 +32,8 @@ if (isset($_POST['load_ajax'])) {
 				$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_db);
 				$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 				
-				//------Forum messages							
+				//------Forum messages
+						
 				$forum_result = get_all_post_from_user($user_id, $course_db);
 				$all_result_data = 0;
 				if ($forum_result !='') {					
@@ -47,7 +49,7 @@ if (isset($_POST['load_ajax'])) {
 				$result = get_blog_post_from_user($course_db, $user_id); 
 				if (!empty($result)) {
 					echo '<div class="clear"></div><br />';
-					api_display_tool_title(get_lang('BlogPosts'));				
+					api_display_tool_title(api_xml_http_response_encode(get_lang('BlogPosts')));				
 					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
 					echo api_xml_http_response_encode($result);
 					echo '</div>';
@@ -58,7 +60,7 @@ if (isset($_POST['load_ajax'])) {
 				//------Blog comments			
 				$result = get_blog_comment_from_user($course_db, $user_id); 
 				if (!empty($result)) {
-					api_display_tool_title(get_lang('BlogComments'));							
+					api_display_tool_title(api_xml_http_response_encode(get_lang('BlogComments')));							
 					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
 					echo api_xml_http_response_encode($result);
 					echo '</div>';
@@ -71,9 +73,9 @@ if (isset($_POST['load_ajax'])) {
 				
 			} else {
 					echo '<div class="clear"></div><br />';
-					api_display_tool_title(get_lang('Details'));	
+					api_display_tool_title(api_xml_http_response_encode(get_lang('Details')));	
 					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
-					echo get_lang('UserNonRegisteredAtTheCourse');
+					echo api_xml_http_response_encode(get_lang('UserNonRegisteredAtTheCourse'));
 					echo '<div class="clear"></div><br />';
 					echo '</div>';
 					echo '<div class="clear"></div><br />';

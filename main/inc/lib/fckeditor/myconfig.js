@@ -116,11 +116,3 @@ FCKConfig.VideoUploadDeniedExtensions	= '' ;
 FCKConfig.MediaUploadAllowedExtensions	= '.(flv|mp4)$' ;
 FCKConfig.MediaUploadDeniedExtensions	= '' ;
 // Note: These lists get combined with the platform's white and black lists.
-
-
-/*
- * Other settings.
- */
-
-// TODO: This setting seems obsolete. To be checked for removal.
-FCKConfig.UserStatus = 'teacher' ;

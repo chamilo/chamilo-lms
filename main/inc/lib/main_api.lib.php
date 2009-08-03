@@ -183,7 +183,6 @@ define('LOG_USER_DELETE', 'user_deleted');
 define('LOG_USER_CREATE', 'user_created');
 define('LOG_SESSION_CREATE', 'session_created');
 define('LOG_SESSION_DELETE', 'session_deleted');
-define('LOG_SESSION_DELETE', 'session_deleted');
 define('LOG_CONFIGURATION_SETTINGS_CHANGE', 'settings_changed');
 define('LOG_SUBSCRIBE_USER_TO_COURSE', 'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE', 'user_unsubscribed');
@@ -462,11 +461,6 @@ function api_get_path($path_type) {
 			return api_get_path(WEB_CODE_PATH).'img/';
 			break;
 
-		case GARBAGE_PATH :
-			// example: /var/www/dokeos/main/garbage/
-			return $GLOBALS['garbageRepositorySys'];
-			break;
-
 		case SYS_PLUGIN_PATH :
 			// example: /var/www/dokeos/plugin/
 			return api_get_path(SYS_PATH).'plugin/';
@@ -477,6 +471,7 @@ function api_get_path($path_type) {
 			return api_get_path(WEB_PATH).'plugin/';
 			break;
 
+        case GARBAGE_PATH : //now set to be same as archive
 		case SYS_ARCHIVE_PATH :
 			// example: /var/www/dokeos/archive/
 			return api_get_path(SYS_PATH).'archive/';

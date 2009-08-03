@@ -901,6 +901,7 @@ function update_Db_course($courseDbName)
 	//
 	$sql = "CREATE TABLE `".$TABLEWIKICONF . "` (
 		page_id int NOT NULL default 0,		
+		task text NOT NULL,
 		feedback1 text NOT NULL,
 		feedback2 text NOT NULL,
 		feedback3 text NOT NULL,

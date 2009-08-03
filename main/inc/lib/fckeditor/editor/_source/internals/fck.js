@@ -955,6 +955,38 @@ function _FCK_EditingArea_OnLoad()
 	FCKTools.AddEventListener( FCK.EditorDocument, 'mousemove', _FCK_MouseEventsListener ) ;
 	FCKTools.AddEventListener( FCK.EditorDocument, 'mousedown', _FCK_MouseEventsListener ) ;
 	FCKTools.AddEventListener( FCK.EditorDocument, 'mouseup', _FCK_MouseEventsListener ) ;
+	if ( FCKBrowserInfo.IsSafari )
+	{
+		// #3481: WebKit has a bug with paste where the paste contents may leak
+		// outside table cells. So add padding nodes before and after the paste.
+		FCKTools.AddEventListener( FCK.EditorDocument, 'paste', function( evt )
+		{
+			var range = new FCKDomRange( FCK.EditorWindow );
+			var nodeBefore = FCK.EditorDocument.createTextNode( '\ufeff' );
+			var nodeAfter = FCK.EditorDocument.createElement( 'a' );
+			nodeAfter.id = 'fck_paste_padding';
+			nodeAfter.innerHTML = '&#65279;';
+			range.MoveToSelection();
+			range.DeleteContents();
+
+			// Insert padding nodes.
+			range.InsertNode( nodeBefore );
+			range.Collapse();
+			range.InsertNode( nodeAfter );
+
+			// Move the selection to between the padding nodes.
+			range.MoveToPosition( nodeAfter, 3 );
+			range.Select();
+
+			// Remove the padding nodes after the paste is done.
+			setTimeout( function()
+				{
+					nodeBefore.parentNode.removeChild( nodeBefore );
+					nodeAfter = FCK.EditorDocument.getElementById( 'fck_paste_padding' );
+					nodeAfter.parentNode.removeChild( nodeAfter );
+				}, 0 );
+		} );
+	}
 
 	// Most of the CTRL key combos do not work under Safari for onkeydown and onkeypress (See #1119)
 	// But we can use the keyup event to override some of these...

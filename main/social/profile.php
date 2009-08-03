@@ -551,7 +551,7 @@ echo '<div id="social-profile-wrapper">';
 				$friend_html.= '<div id="friend-container" class="social-friend-container">';
 				$friend_html.= '<div id="friend-header">';
 				$friend_html.= '<div style="float:left; padding:0px 8px 0px 8px;">'.get_lang('Friends').'</div>';
-				$friend_html.= '<div style="float:right; padding-left:280px;">'.get_lang('SeeAll').'</div>';
+				$friend_html.= '<div style="float:right;padding:0px 8px 0px 8px;">'.get_lang('SeeAll').'</div>';
 				$friend_html.= '</div><br/><br/>'; // close div friend-header					
 			}
 			$friend_html.= '</div>'; 		
@@ -568,7 +568,7 @@ echo '<div id="social-profile-wrapper">';
 				echo '<div id="social-profile-invitations" >';
 				if ($count_pending_invitations > 0) {
 					echo '<div class="sectiontitle">';
-					echo get_lang('PendingInvitations');
+					echo api_convert_encoding(get_lang('PendingInvitations'),$charset,'UTF-8'); 
 					echo '</div>';
 					for ($i=0;$i<$count_pending_invitations;$i++) {
 						//var_dump($invitations);
@@ -577,7 +577,7 @@ echo '<div id="social-profile-wrapper">';
 								echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
 							echo '</div>';
 							echo '<div style="padding-left:70px;">';
-								echo ' '.substr($pending_invitations[$i]['content'],0,50);
+								echo ' '.api_convert_encoding(substr($pending_invitations[$i]['content'],0,50),$charset,'UTF-8');
 								echo '<br />';
 								echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
 								echo '<div id="id_response">&nbsp;</div>';
@@ -701,17 +701,49 @@ echo '<div id="social-profile-container">';
     	  	}*/
 
     	  	if ($show_full_profile) {    	  		
-				//-- Extra Data							
+				//-- Extra Data
+				$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
+				$t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 				$extra_user_data = UserManager::get_extra_user_data($user_id);
 				if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
 					echo '<div class="sectiontitle">';
 					echo get_lang('ExtraInformation');
 					echo '</div>';
 					echo '<div class="social-background-content">';
-						foreach($extra_user_data as $key=>$data) {
-							echo ucfirst($key).': '.$data;
-							echo '<br />';
+
+					foreach($extra_user_data as $key=>$data) {
+
+						// get display text, visibility and type from user_field table
+						$field_variable = str_replace('extra_','',$key);
+						$sql = "SELECT field_display_text,field_visible,field_type FROM $t_uf WHERE field_variable ='$field_variable'";
+						$res_field = Database::query($sql,__FILE__,__LINE__);
+						$row_field = Database::fetch_row($res_field);
+						$field_display_text = $row_field[0];
+						$field_visible = $row_field[1];
+						$field_type = $row_field[2];												
+						
+						if ($field_visible == 1) {
+							if (is_array($data)) {																																
+								echo '<strong>'.ucfirst($field_display_text).':</strong> '.implode(',',$data).'<br />';								
+							} else {								
+								if ($field_type == 8) {							
+									$id_options = explode(';',$data);
+									$value_options = array();							
+									// get option display text from user_field_options table
+									foreach ($id_options as $id_option) {														
+										$sql = "SELECT option_display_text FROM $t_ufo WHERE id = '$id_option'";
+										$res_options = Database::query($sql,__FILE__,__LINE__);
+										$row_options = Database::fetch_row($res_options);
+										$value_options[] = $row_options[0];
+									}
+									echo '<strong>'.ucfirst($field_display_text).':</strong> '.implode(' ',$value_options).'<br />'; 							
+								}
+								else {
+									echo '<strong>'.ucfirst($field_display_text).':</strong> '.$data.'<br />';
+								}								
+							}
 						}
+					}
 					echo '</div>';			
 					echo '<br /><br />';
 				}

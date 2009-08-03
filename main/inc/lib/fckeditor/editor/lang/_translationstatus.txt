@@ -53,7 +53,7 @@ is.js      Found: 428   Missing: 0
 it.js      Found: 410   Missing: 18
 ja.js      Found: 420   Missing: 8
 km.js      Found: 370   Missing: 58
-ko.js      Found: 390   Missing: 38
+ko.js      Found: 391   Missing: 37
 lt.js      Found: 428   Missing: 0
 lv.js      Found: 381   Missing: 47
 mn.js      Found: 411   Missing: 17
@@ -61,7 +61,7 @@ ms.js      Found: 352   Missing: 76
 nb.js      Found: 414   Missing: 14
 nl.js      Found: 420   Missing: 8
 no.js      Found: 414   Missing: 14
-pl.js      Found: 411   Missing: 17
+pl.js      Found: 412   Missing: 16
 pt-br.js   Found: 411   Missing: 17
 pt.js      Found: 381   Missing: 47
 ro.js      Found: 410   Missing: 18

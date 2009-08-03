@@ -196,7 +196,7 @@ class ExerciseResult
 				$title = GetQuizName($hpresults[$i][1],$document_path);
 				if ($title =='')
 				{
-					$title = GetFileName($hpresults[$i][1]);
+					$title = basename($hpresults[$i][1]);
 				}
 				if(empty($user_id))
 				{

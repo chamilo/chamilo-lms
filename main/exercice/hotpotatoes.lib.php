@@ -54,7 +54,7 @@ function GetQuizName($fname,$fpath) {
 		if (file_exists($fpath.$fname)) {
 			if (!($fp = fopen($fpath.$fname, "r"))) {
 			//die("could not open Quiz input");
-				return GetFileName($fname);
+				return basename($fname);
 			}
 	
 			$contents = fread($fp, filesize($fpath.$fname));
@@ -108,19 +108,6 @@ function SetComment($path,$comment) {
 }
 
 /**
- * Get the name of the file from a path (without the extension)
- *
- * This assumes the path is made of elements split by '/', not '\' or '\\'
- * @param	string	Path
- * @return	string	File name
- */
-function GetFileName($fname) {
-	$name = explode('/',$fname);
-	$name = $name[sizeof($name)-1];
-	return $name;
-}
-
-/**
  * Reads the file contents into a string
  * @param	string	Urlencoded path
  * @return	string	The file contents or false on security error
@@ -165,7 +152,6 @@ function WriteFileCont($full_file_path,$content) {
  * Gets the name of an img whose path is given (without directories or extensions)
  * @param	string	An image tag (<img src="...." ...>)
  * @return	string	The image file name or an empty string
- * @uses GetFileName No comment
  */
 function GetImgName($imgtag) {	
     // select src tag from img tag
@@ -180,7 +166,7 @@ function GetImgName($imgtag) {
 		if ($src=="") {
 			return "";
 		} else {
-			$tmp_src = GetFileName($src) ;
+			$tmp_src = basename($src) ;
 			if ($tmp_src == "") {
 				return $src;
 			} else {
@@ -304,7 +290,7 @@ function ReplaceImgTag($content) {
 			else {
 
 				$prehref = $imgname;
-				$posthref = GetFileName($imgname);
+				$posthref = basename($imgname);
 				$newcontent = str_replace($prehref,$posthref,$newcontent);
 			}
 		}

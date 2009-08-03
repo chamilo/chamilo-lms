@@ -2129,5 +2129,16 @@ class CourseManager {
 		} else {
 			return false; //field not found
 		}
+	}
+	/**
+	 * Get the course id of an course by the database name
+	 * @param string The database name
+	 * @return string The course id
+	 */
+	public static function get_course_id_by_database_name ($db_name) {
+	   $t_course = Database::get_main_table(TABLE_MAIN_COURSE);	
+	   $sql='SELECT code FROM '.$t_course.' WHERE db_name="'.Database::escape_string($db_name).'"';
+	   $rs=Database::query($sql,__FILE__,__LINE__);
+	   return Database::result($rs,0,'code');
 	}	
 } //end class CourseManager

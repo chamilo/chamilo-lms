@@ -47,3 +47,6 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_mess
 
 -- to make a DRH have the same rights as a tutor
 -- INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('drhCourseManagerRights',null,'radio','Platform','true','DrhCourseManagerRightsTitle','DrhCoursManagerRightsComment',null,null,1,0);
+
+-- enable RSS feeds in social page
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'rssfeeds','RSS feeds',0,0);

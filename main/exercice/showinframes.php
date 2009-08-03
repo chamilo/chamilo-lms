@@ -84,7 +84,7 @@ WriteFileCont($full_file_path.$_user['user_id'].".t.html",$newcontent);
 	$newcontent = str_replace($prehref,$posthref,$newcontent);
 */
 
-$doc_url = GetFolderPath($doc_url).urlencode(GetFileName($doc_url));
+$doc_url = GetFolderPath($doc_url).urlencode(basename($doc_url));
 //	echo $documentWebPath.$doc_url.$_user['user_id'].".t.html";
 //	exit;
 ?>

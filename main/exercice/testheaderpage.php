@@ -18,7 +18,7 @@ $my_file=str_replace(array('../','\\..','\\0','..\\'),array('','','',''),urldeco
 
 $title = GetQuizName($my_file,$documentPath);
 if ($title =='') {
-	$title = GetFileName($my_file);
+	$title = basename($my_file);
 }
 $nameTools = $title;
 $noPHP_SELF=true;

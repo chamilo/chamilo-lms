@@ -551,7 +551,7 @@ echo '<div id="social-profile-wrapper">';
 				$friend_html.= '<div id="friend-container" class="social-friend-container">';
 				$friend_html.= '<div id="friend-header">';
 				$friend_html.= '<div style="float:left; padding:0px 8px 0px 8px;">'.get_lang('Friends').'</div>';
-				$friend_html.= '<div style="float:right; padding-left:280px;">'.get_lang('SeeAll').'</div>';
+				$friend_html.= '<div style="float:right;padding:0px 8px 0px 8px;">'.get_lang('SeeAll').'</div>';
 				$friend_html.= '</div><br/><br/>'; // close div friend-header					
 			}
 			$friend_html.= '</div>'; 		

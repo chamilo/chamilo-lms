@@ -137,13 +137,13 @@ function delete_category($action, $id)
 
 	// step 1: delete the category
 	$sql="DELETE FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id='".Database::escape_string($id)."' AND $sentreceived='1'";
-	$result=api_sql_query($sql);
+	$result=Database::query($sql);
 
 	// step 2: delete all the documents in this category
 	$sql="SELECT * FROM ".$entries_table." WHERE cat_id='".Database::escape_string($id)."'";
-	$result=api_sql_query($sql);
+	$result=Database::query($sql);
 
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		$dropboxfile=new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 		if ($action=='deletereceivedcategory')
@@ -170,8 +170,8 @@ function display_move_form($part, $id, $target=array())
 {
 	echo '<div class="row"><div class="form_header">'.get_lang('MoveFileTo').'</div></div>';
 	echo '<form name="form1" method="post" action="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&view_sent_category='.$_GET['view_sent_category'].'&view='.$_GET['view'].'">';
-	echo '<input type="hidden" name="id" value="'.$id.'">';
-	echo '<input type="hidden" name="part" value="'.$part.'">';
+	echo '<input type="hidden" name="id" value="'.Security::remove_XSS($id).'">';
+	echo '<input type="hidden" name="part" value="'.Security::remove_XSS($part).'">';
 	echo '
 			<div class="row">
 				<div class="label">
@@ -278,7 +278,7 @@ function display_action_options($part, $categories, $current_category=0)
 		echo '</optgroup>';
 	}
 	echo '</select>';
-	echo '<input type="submit" name="do_actions_'.$part.'" value="'.get_lang('Ok').'" />';
+	echo '<input type="submit" name="do_actions_'.Security::remove_XSS($part).'" value="'.get_lang('Ok').'" />';
 }
 
 /**
@@ -299,7 +299,7 @@ function display_file_checkbox($id, $part)
 	{
 		$checked='checked';
 	}
-	$return_value='<input type="checkbox" name="'.$part.'_'.$id.'" value="'.$id.'" '.$checked.' />';
+	$return_value='<input type="checkbox" name="'.Security::remove_XSS($part).'_'.Security::remove_XSS($id).'" value="'.Security::remove_XSS($id).'" '.$checked.' />';
 	return $return_value;
 }
 
@@ -485,7 +485,7 @@ function display_addcategory_form($category_name='', $id='',$action)
 	{
 		echo '<span class="form_error">'.get_lang('CategoryAlreadyExistsEditIt').'<span><br />';
 	}	
-	echo '			<input type="text" name="category_name" value="'.$category_name.'" />
+	echo '			<input type="text" name="category_name" value="'.Security::remove_XSS($category_name).'" />
 				</div>
 			</div>';
 	
@@ -503,7 +503,7 @@ function display_addcategory_form($category_name='', $id='',$action)
 					<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>
 				</div>
 			</div>';	
-	echo "</form>";
+	echo '</form>';
 	echo '<div style="clear: both;"></div>';
 }
 
@@ -520,7 +520,7 @@ function display_add_form()
 	$token = Security::get_token();
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 	?>
-	<form method="post" action="index.php?view_received_category=<?php echo $_GET['view_received_category']; ?>&view_sent_category=<?php echo $_GET['view_sent_category']; ?>&view=<?php echo $_GET['view']; ?>&<?php echo "origin=$origin"."&".api_get_cidreq(); ?>" enctype="multipart/form-data" onsubmit="return checkForm(this)">
+	<form method="post" action="index.php?view_received_category=<?php echo Security::remove_XSS($_GET['view_received_category']); ?>&view_sent_category=<?php echo Security::remove_XSS($_GET['view_sent_category']); ?>&view=<?php echo Security::remove_XSS($_GET['view']); ?>&<?php echo "origin=$origin"."&".api_get_cidreq(); ?>" enctype="multipart/form-data" onsubmit="return checkForm(this)">
 	
 	<div class="row"><div class="form_header"><?php echo get_lang('UploadNewFile'); ?></div></div>
 	
@@ -536,7 +536,7 @@ function display_add_form()
 				<?php
 				if ($origin=='learnpath')
 				{
-					echo "<input type='hidden' name='origin' value='learnpath' />";
+					echo '<input type="hidden" name="origin" value="learnpath" />';
 				}
 				?>
 		</div>
@@ -686,10 +686,10 @@ function getUserNameFromId ( $id)  // RH: Mailing: return 'Mailing ' + id
     {
 	    return dropbox_lang("mailingAsUsername", "noDLTT") . $mailingId;
     }
-
+    $id = intval($id);
     $sql = "SELECT CONCAT(lastname,' ', firstname) AS name
 			FROM " . dropbox_cnf("tbl_user") . "
-			WHERE user_id='" . addslashes( $id) . "'";
+			WHERE user_id='$id'";
     $result = api_sql_query($sql,__FILE__,__LINE__);
     $res = mysql_fetch_array( $result);
 
@@ -703,9 +703,10 @@ function getUserNameFromId ( $id)  // RH: Mailing: return 'Mailing ' + id
 */
 function getLoginFromId ( $id)
 {
+    $id = intval($id);
     $sql = "SELECT username
 			FROM " . dropbox_cnf("tbl_user") . "
-			WHERE user_id='" . addslashes( $id) . "'";
+			WHERE user_id='$id'";
     $result =api_sql_query($sql,__FILE__,__LINE__);
     $res = mysql_fetch_array( $result);
     if ( $res == FALSE) return FALSE;
@@ -759,12 +760,13 @@ function removeUnusedFiles( )
 * Mailing content files have uploader_id == mailing pseudo_id, a normal recipient,
 * and are visible initially to recipient and pseudo_id.
 *
-* @author Ren� Haentjens, Ghent University
+* @author René Haentjens, Ghent University
 *
 * @todo check if this function is still necessary.
 */
 function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
 {
+    $mailingPseudoId = intval($mailingPseudoId);
     $sql = "SELECT f.uploader_id
 			FROM " . dropbox_cnf("tbl_file") . " f
 			LEFT JOIN " . dropbox_cnf("tbl_post") . " p ON f.id = p.file_id
@@ -791,7 +793,7 @@ function removeMoreIfMailing($file_id)
     //    for all content files, delete mailingPseudoId from person-table
     // 2. finding the owner (getUserOwningThisMailing) is no longer possible, so
     //    for all content files, replace mailingPseudoId by owner as uploader
-
+    $file_id = intval($file_id);
     $sql = "SELECT p.dest_user_id
 			FROM " . dropbox_cnf("tbl_post") . " p
 			WHERE p.file_id = '" . $file_id . "'";
@@ -817,7 +819,7 @@ function removeMoreIfMailing($file_id)
 *
 * @todo check if this function is still necessary.
 *
-* @author Ren� Haentjens, Ghent University
+* @author René Haentjens, Ghent University
 */
 function dropbox_lang($variable, $notrans = 'DLTT')
 {
@@ -1061,7 +1063,8 @@ function display_user_link($user_id, $name='')
 		}
 		else
 		{
-			return "<a href=\"../user/userInfo.php?uInfo=".$user_id."\">".$name."</a>";
+            $user_id = intval($user_id);
+			return "<a href=\"../user/userInfo.php?uInfo=".$user_id."\">".Security::remove_XSS($name)."</a>";
 		}
 	}
 	else
@@ -1101,8 +1104,8 @@ function feedback($array)
 function format_feedback($feedback)
 {
 	$output.=display_user_link($feedback['author_user_id']);
-	$output.='&nbsp;&nbsp;['.$feedback['feedback_date'].']<br>';
-	$output.='<div style="padding-top:6px">'.nl2br($feedback['feedback']).'</div><hr size="1" noshade/><br>';
+	$output.='&nbsp;&nbsp;['.$feedback['feedback_date'].']<br />';
+	$output.='<div style="padding-top:6px">'.nl2br($feedback['feedback']).'</div><hr size="1" noshade/><br />';
 	return $output;
 }
 
@@ -1530,4 +1533,3 @@ function get_last_tool_access($tool, $course_code='', $user_id='')
 	$row=mysql_fetch_array($result);
 	return $row['access_date'];
 }
-?>

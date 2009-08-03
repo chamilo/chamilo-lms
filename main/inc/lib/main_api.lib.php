@@ -461,11 +461,6 @@ function api_get_path($path_type) {
 			return api_get_path(WEB_CODE_PATH).'img/';
 			break;
 
-		case GARBAGE_PATH :
-			// example: /var/www/dokeos/main/garbage/
-			return $GLOBALS['garbageRepositorySys'];
-			break;
-
 		case SYS_PLUGIN_PATH :
 			// example: /var/www/dokeos/plugin/
 			return api_get_path(SYS_PATH).'plugin/';
@@ -476,6 +471,7 @@ function api_get_path($path_type) {
 			return api_get_path(WEB_PATH).'plugin/';
 			break;
 
+        case GARBAGE_PATH : //now set to be same as archive
 		case SYS_ARCHIVE_PATH :
 			// example: /var/www/dokeos/archive/
 			return api_get_path(SYS_PATH).'archive/';

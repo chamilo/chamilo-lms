@@ -1466,11 +1466,11 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
             for (j in interactions[i]) {            	
             	temp = interactions[i][j];
             	temp = ''+temp; // if temp == 1 there are problems with indexOf and an integer number
-            	//this fix when an interaction have ',' i.e:             	
+            	//this fix when an interaction have ',' i.e:   {a,b,c,d} is replace to {a@@b@@c@@d} see DT#4444          	
 				while(temp.indexOf(',') >= 0){				
 					temp = temp.replace(',','@@');					
 				};
-            	interact_temp +=temp+','; 
+            	interact_temp +=temp+',';
             }
             interact_temp = interact_temp.substr(0,(interact_temp.length-2)) + ']';
           //  interact_string += encodeURIComponent(interact_temp);

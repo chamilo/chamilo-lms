@@ -568,7 +568,7 @@ echo '<div id="social-profile-wrapper">';
 				echo '<div id="social-profile-invitations" >';
 				if ($count_pending_invitations > 0) {
 					echo '<div class="sectiontitle">';
-					echo get_lang('PendingInvitations');
+					echo api_convert_encoding(get_lang('PendingInvitations'),$charset,'UTF-8'); 
 					echo '</div>';
 					for ($i=0;$i<$count_pending_invitations;$i++) {
 						//var_dump($invitations);
@@ -577,7 +577,7 @@ echo '<div id="social-profile-wrapper">';
 								echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
 							echo '</div>';
 							echo '<div style="padding-left:70px;">';
-								echo ' '.substr($pending_invitations[$i]['content'],0,50);
+								echo ' '.api_convert_encoding(substr($pending_invitations[$i]['content'],0,50),$charset,'UTF-8');
 								echo '<br />';
 								echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
 								echo '<div id="id_response">&nbsp;</div>';

@@ -105,6 +105,7 @@ function GetComment($path,$course_code='') {
  */
 function SetComment($path,$comment) {
 	global $dbTable;
+	
 	$path = Database::escape_string($path);
 	$comment = Database::escape_string($comment);
 	

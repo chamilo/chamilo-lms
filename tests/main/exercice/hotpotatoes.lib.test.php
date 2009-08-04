@@ -40,19 +40,16 @@ class TestHotpotatoes extends UnitTestCase {
 		$res=GenerateHpFolder($folder);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
-	}
-	
+	} 
+	 
 	function testGetComment() {
 		global $dbTable;
 		$path = 'test';
-		$query = "select 1";
-		$result = api_sql_query($query,__FILE__,__LINE__);
-		$row = mysql_fetch_array($result);
-		$res=GetComment($path);
+		$course_code='test';
+		$query ="select comment from $dbTable where path='$path'";
+		$res=GetComment($path,$course_code);
 		$this->assertTrue(is_string($res));
-		$this->assertTrue(is_array($row));
 		//var_dump($res);
-		//var_dump($row);
 	}
 	
 	/*  Deprecated 
@@ -85,10 +82,10 @@ class TestHotpotatoes extends UnitTestCase {
 	}	
 	
 	function testGetImgParams() {
-		$fname='test.jpg';
-		$fpath='main/exercice/test.jpg';
-		$imgparams=array();
-		$imgcount=$imgcount + 1;;	
+		$fname='/main/css/academica/images/bg.jpg';
+		$fpath='main/css/academica/images/';
+		$imgparams= array();
+		$imgcount='';	
 		$res=GetImgParams($fname,$fpath,&$imgparams,&$imgcount);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
@@ -97,15 +94,6 @@ class TestHotpotatoes extends UnitTestCase {
 	function testGetQuizName() {
 		$fname='exercice_submit.php';
 		$fpath='main/exercice/exercice_submit.php';
-		$title = GetComment($fname);
-		$fp = fopen($fpath.$fname, "r");
-		$pattern = array ( 1 => "title>", 2 => "/title>");
-		$contents = fread($fp, filesize($fpath.$fname));
-		fclose($fp);
-		$contents = api_strtolower($contents);
-		$s_contents = api_substr($contents,0,api_strpos($contents,$pattern["2"])-1);
-		$e_contents = api_substr($s_contents,api_strpos($contents,$pattern["1"])+api_strlen($pattern["1"]),api_strlen($s_contents));
-		$title = $e_contents;
 		$res=GetQuizName($fname,$fpath);
 		$this->assertTrue(is_string($res));
 		//var_dump($e_contents);	

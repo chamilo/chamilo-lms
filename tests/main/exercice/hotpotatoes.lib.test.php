@@ -149,15 +149,31 @@ class TestHotpotatoes extends UnitTestCase {
 		//var_dump($res);
 	}
 	
+	function testReplaceImgTag() {
+		$content='src="test2.jpg"';
+		$res=ReplaceImgTag($content);
+		$this->assertTrue(is_string($res));
+		//var_dump($res);
+	}
 	
+	function testSetComment() {
+		global $dbTable;
+		$path='/main/exercice';
+		$comment='testing this function';
+		$comment = Database::escape_string($comment);
+		$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
+		$result = api_sql_query($query,__FILE__,__LINE__);
+		$res=SetComment($path,$comment);
+		$this->assertTrue(is_string($res));
+		//var_dump($resu);
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	function testWriteFileCont() {
+		$full_file_path='/main/exercice/';
+		$content='test test test';
+		$res=WriteFileCont($full_file_path,$content);
+		$this->assertTrue(is_bool($res));
+		//var_dump($res);
+	}
 }
 ?>

@@ -107,10 +107,20 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 	
 	function testhotpotatoes_init() {
-		$baseWorkDir='/main/exercice';
+		$base = api_get_path(SYS_CODE_PATH);
+		$baseWorkDir=$base.'exercice/';
 		$res=hotpotatoes_init($baseWorkDir);
-		$this->assertTrue(is_bool($res));
+		$this->assertFalse($res);
 		//var_dump($res);	
+	}
+	
+	function testhotpotatoes_initWithRemoveFolder() {
+		$base = '/tmp/';
+		$baseWorkDir=$base.'test123/';
+		$res=hotpotatoes_init($baseWorkDir);
+		$this->assertTrue($res);
+		rmdir($baseWorkDir);
+		//var_dump($res);
 	}
 	
 	function testHotPotGCt() { 

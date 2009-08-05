@@ -740,7 +740,6 @@ function reinit_update_table_list () {
 }
 
 function savedata(origin) { 
-
 	//origin can be 'commit', 'finish' or 'terminate'	
     if ((lesson_status != 'completed') && (lesson_status != 'passed') && (mastery_score >=0) && (score >= mastery_score)) {
 		lesson_status = 'passed';
@@ -781,6 +780,7 @@ function savedata(origin) {
 	logit_lms('saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
 	
 	old_item_id=info_lms_item[0];
+	// xajax_save_item is replaced to xajax_save_item_scorm for scorm LP's
 	//xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit);
 	
 	xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, old_item_id,my_get_value_scorm);	
@@ -1231,7 +1231,13 @@ function switch_item(current_item, next_item) {
 	//(1) save the current item	
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
 	if (lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
-        xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
+		if (lms_lp_type==1) {
+        	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
+		} else {
+			my_get_value_scorm=new Array();
+    		my_get_value_scorm=ProcessValueScorm();
+        	xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,my_get_value_scorm);
+        }
 		if(item_objectives.length>0) {
 			xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
 		}
@@ -1262,6 +1268,7 @@ function switch_item(current_item, next_item) {
         	//savedata('finish');                                 
         //}
         // xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
+
 	}
 	execute_stats=false;
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
@@ -1410,8 +1417,6 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
             }
         );     	
        }
-
-        
 }
 
 function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,info_get_lms) {

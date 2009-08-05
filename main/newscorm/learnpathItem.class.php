@@ -2195,19 +2195,19 @@ function get_terms()
    			$save=true;
    		}
 
-   		if(($save===false && $this->type == 'sco') ||(($this->type == 'sco') && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse')))
+   		if (($save===false && $this->type == 'sco') ||(($this->type == 'sco') && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse')))
    		{
    			//this info shouldn't be saved as the credit or lesson mode info prevent it
    			if($this->debug>1){error_log('New LP - In learnpathItem::write_to_db() - credit('.$credit.') or lesson_mode('.$mode.') prevent recording!',0);}
-   		}else{
+   		} else {
       		//check the row exists
       		$inserted = false;
       		
-      		// this a special case for multiple attepmts and Dokeos exercises
-      		if ($this->type == 'quiz' && $this->get_prevent_reinit()==0 && $this->get_status()=='completed') {      			
+      		// this a special case for multiple attempts and Dokeos exercises
+      		if ($this->type == 'quiz' && $this->get_prevent_reinit()==0 && $this->get_status()=='completed') {     			
       			// we force the item to be restarted    		
       			$this->restart();
-      			      		      	
+      			      		
       			$sql = "INSERT INTO $item_view_table " .
 		     			"(total_time, " .
 		     			"start_time, " .
@@ -2281,10 +2281,10 @@ function get_terms()
 		     	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view: '.$sql,0);}
 		     	$res = api_sql_query($sql,__FILE__,__LINE__);
 		     	$this->db_item_view_id = Database::get_last_insert_id();
-	     	}else{
+	     	} else {
 	     		$sql = '';
-	     		if($this->type=='hotpotatoes')
-	     		{	//make an exception for HotPotatoes, don't update the score
+	     		if($this->type=='hotpotatoes') {
+	     			//make an exception for HotPotatoes, don't update the score
 		     		//because it has been saved outside of this tool
 			     	$sql = "UPDATE $item_view_table " .
 			     			"SET total_time = ".$this->get_total_time().", " .
@@ -2297,43 +2297,39 @@ function get_terms()
 			     			"WHERE lp_item_id = ".$this->db_id." " .
 			     			"AND lp_view_id = ".$this->view_id." " .
 			     			"AND view_count = ".$this->attempt_id;
-	     		}
-	     		else
-	     		{	//for all other content types...
+	     		} else {
+	     			//for all other content types...	
 	     			if ($this->type=='quiz') {
 	     				$my_status = ' ';	
 	     				$total_time = ' ';	     				 
 	     				if (!empty($_REQUEST['exeId'])) {
-						$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-						
-						$safe_exe_id = Database::escape_string($_REQUEST['exeId']);
-	     				$sql = 'SELECT start_date,exe_date FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.(int)$safe_exe_id;
-						$res = api_sql_query($sql,__FILE__,__LINE__);
-						$row_dates = Database::fetch_array($res);		
-
-						$time_start_date = convert_mysql_date($row_dates['start_date']);
-						$time_exe_date 	 = convert_mysql_date($row_dates['exe_date']);
-						$mytime = ((int)$time_exe_date-(int)$time_start_date);
-						$total_time =" total_time = ".$mytime.", ";
-	     				}
-						
-																							     				    					     			
-	     			}else {
+							$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+							
+							$safe_exe_id = Database::escape_string($_REQUEST['exeId']);
+		     				$sql = 'SELECT start_date,exe_date FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.(int)$safe_exe_id;
+							$res = api_sql_query($sql,__FILE__,__LINE__);
+							$row_dates = Database::fetch_array($res);		
+	
+							$time_start_date = convert_mysql_date($row_dates['start_date']);
+							$time_exe_date 	 = convert_mysql_date($row_dates['exe_date']);
+							$mytime = ((int)$time_exe_date-(int)$time_start_date);
+							$total_time =" total_time = ".$mytime.", ";
+	     				}																							     				    					     			
+	     			} else {
 	     				$my_type_lp=learnpath::get_type_static($this->lp_id);
 	     				// this is a array containing values finished
 	     				$case_completed=array('completed','passed','browsed');
 
 	     				//is not multiple attempts
-	     				if ($this->get_prevent_reinit()==1) {    				
-		  		     	// process of status verified into data base
-	     				
-	     				$sql_verified='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
-	     				$rs_verified=api_sql_query($sql_verified,__FILE__,__LINE__);
-	     				$row_verified=Database::fetch_array($rs_verified);
-	     				
-	     				    //get type lp i.e 2=scorm and 1=lp dokeos	
-		    				// if not is completed or passed or browsed and learnig path is scorm
+	     				if ($this->get_prevent_reinit()==1) {				
+			  		     	// process of status verified into data base
 		     				
+		     				$sql_verified='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+		     				$rs_verified=api_sql_query($sql_verified,__FILE__,__LINE__);
+		     				$row_verified=Database::fetch_array($rs_verified);
+		     				
+		     				//get type lp: 1=lp dokeos and  2=scorm 	
+			    			// if not is completed or passed or browsed and learning path is scorm			     			
 		     				if(!in_array($this->get_status(false),$case_completed) && $my_type_lp==2 ) {//&& $this->type!='dir'
 		     					$total_time =" total_time = total_time +".$this->get_total_time().", "; 
 		     					$my_status = " status = '".$this->get_status(false)."' ,"; 
@@ -2346,31 +2342,28 @@ function get_terms()
 		     	 					$total_time =" total_time = total_time +".$this->get_total_time().", ";
 		     	 					$my_status = " status = '".$this->get_status(false)."' ,"; 
 		     					}else {
-		     	 				//&& !in_array($row_verified['status'],$case_completed)
-		     	 				
+		     	 				//&& !in_array($row_verified['status'],$case_completed)			     	 				
 		     	 				//is lp dokeos
 		     	 					if ($my_type_lp==1 && $this->type!='chapter') {
 	     								$total_time =" total_time = total_time + ".$this->get_total_time().", ";
 	     								$my_status = " status = '".$this->get_status(false)."' ,"; 
 	     							}	
-		     	 				} 
-		     					
+		     	 				}		     					
 		     				}
 	     				} else {
-	     					// is multipe attempts 
+	     					// is multiple attempts
 	     					if (in_array($this->get_status(false),$case_completed) &&  $my_type_lp==2) {
-	     						//reset zero new attempt ?
+	     						//reset zero new attempt ?	     						
+	     						$my_status = " status = '".$this->get_status(false)."' ,";
 	     					} elseif (!in_array($this->get_status(false),$case_completed) &&  $my_type_lp==2){
 	     						$total_time =" total_time = ".$this->get_total_time().", ";
-	     						$my_status = " status = '".$this->get_status(false)."' ,"; 
+	     						$my_status = " status = '".$this->get_status(false)."' ,";	     						
 	     					} else {
-	     						//is lp dokeos
+	     						//is dokeos LP
 	     						$total_time =" total_time = total_time +".$this->get_total_time().", ";
 	     						$my_status = " status = '".$this->get_status(false)."' ,"; 
-	     					}
-	     					
-	     				}
-	     						
+	     					}	     					
+	     				}	     						
 	     				/*if ($my_type_lp==1 && !in_array($row_verified['status'],$case_completed)) {
 	     					$total_time =" total_time = total_time + ".$this->get_total_time().", ";
 	     				}*/
@@ -2442,7 +2435,7 @@ function get_terms()
 		     					"latency = '".Database::escape_string($interaction[7])."'" .
 		     					"WHERE id = $iva_id";
 		     				$ivau_res = api_sql_query($ivau_sql,__FILE__,__LINE__);
-		     			}else{
+		     			} else {
 		     				//insert new one
 		     				$ivai_sql = "INSERT INTO $iva_table " .
 		     						"(order_id, lp_iv_id, interaction_id, interaction_type, " .

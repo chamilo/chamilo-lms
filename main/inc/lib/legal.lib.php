@@ -101,7 +101,7 @@ class LegalManager {
 			// html
 			case 0:				
 				$preview = '<div class="legal-terms">		'.$term_preview['content'].'		</div>';
-				$preview .= '<br/>'.get_lang('ByClickingAccept');
+				$preview .= '<br/>'.get_lang('ByClickingRegisterYouAgreeTermsAndConditions');
 			break;
 			// page link
 			case 1:				

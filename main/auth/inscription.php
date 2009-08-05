@@ -323,7 +323,7 @@ if (get_setting('allow_terms_conditions')=='true') {
 		$form->addElement('hidden', 'password',$_SESSION['info_current_user'][2]);	
 	}
 	if($term_preview['type'] == 1) {
-		$form->addElement('checkbox', 'legal_accept', null, get_lang('IhaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');		
+		$form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');		
 		$form->addRule('extra_legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
 	} else {
 		if (!empty($term_preview['content'])) {			

@@ -1895,18 +1895,32 @@ class CourseManager {
     /**
      * Get list of courses for a given user
      * @param int       user ID
+     * @param boolean   Whether to include courses from session or not
      * @return array    List of codes and db names
      * @author isaac flores paz
      */
-	public static function get_courses_list_by_user_id ($user_id) {
+	public static function get_courses_list_by_user_id ($user_id, $include_sessions=false) {
 		$course_list=array();
+        $codes = array();
+        $user_id = intval($user_id);
 		$tbl_course			 = Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-		$sql='SELECT c.code,c.db_name,c.title FROM '.$tbl_course.' c inner join '.$tbl_course_rel_user.' cru on c.code=cru.course_code  WHERE cru.user_id='.Database::escape_string($user_id);
+		$sql='SELECT c.code,c.db_name,c.title FROM '.$tbl_course.' c inner join '.$tbl_course_rel_user.' cru on c.code=cru.course_code  WHERE cru.user_id='.$user_id;
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 		while ($row=Database::fetch_array($result,'ASSOC')) {
-			$course_list[]=$row;			
+			$course_list[]=$row;
+            $codes[] = $row['code'];
 		}
+        if ($include_sessions === true) {
+            $tbl_csu = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            $s = "SELECT distinct(c.code),c.db_name,c.title FROM $tbl_csu s, $tbl_course c WHERE id_user = $user_id AND s.course_code=c.code";
+        	$r = Database::query($s,__FILE__,__LINE__);
+            while ($row=Database::fetch_array($r,'ASSOC')) {
+                if (!in_array($row['code'],$codes)) {
+                    $course_list[]=$row;
+                }
+            }
+        }
 		return $course_list;
 	}
     /**
@@ -2115,5 +2129,16 @@ class CourseManager {
 		} else {
 			return false; //field not found
 		}
+	}
+	/**
+	 * Get the course id of an course by the database name
+	 * @param string The database name
+	 * @return string The course id
+	 */
+	public static function get_course_id_by_database_name ($db_name) {
+	   $t_course = Database::get_main_table(TABLE_MAIN_COURSE);	
+	   $sql='SELECT code FROM '.$t_course.' WHERE db_name="'.Database::escape_string($db_name).'"';
+	   $rs=Database::query($sql,__FILE__,__LINE__);
+	   return Database::result($rs,0,'code');
 	}	
 } //end class CourseManager

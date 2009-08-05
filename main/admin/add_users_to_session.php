@@ -1,26 +1,5 @@
-<?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	@package dokeos.admin
@@ -275,8 +254,9 @@ if($_POST['form_sent']) {
 	}
 }
 
+$session_info = SessionManager::fetch($id_session);
 Display::display_header($tool_name);
-api_display_tool_title($tool_name);
+api_display_tool_title($tool_name.' ('.$session_info['name'].')');
 
 $nosessionUsersList = $sessionUsersList = array();
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_user;

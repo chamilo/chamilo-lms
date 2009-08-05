@@ -307,7 +307,7 @@ DlgTableHeight		: "높이",
 DlgTableCellSpace	: "셀 간격",
 DlgTableCellPad		: "셀 여백",
 DlgTableCaption		: "캡션",
-DlgTableSummary		: "Summary",	//MISSING
+DlgTableSummary		: "요약",
 DlgTableHeaders		: "Headers",	//MISSING
 DlgTableHeadersNone		: "None",	//MISSING
 DlgTableHeadersColumn	: "First column",	//MISSING

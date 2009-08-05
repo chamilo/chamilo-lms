@@ -1,26 +1,5 @@
-<?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php //$id: $
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 * GOAL: Updates courses separately
@@ -42,15 +21,14 @@
 		INIT SECTION
 ==============================================================================
 */
+@include '../inc/installedVersion.inc.php';
+require '../inc/lib/main_api.lib.php';
 
-require('../inc/installedVersion.inc.php');
-require('../inc/lib/main_api.lib.php');
-
-require('../lang/english/trad4all.inc.php');
-require('../lang/english/install.inc.php');
+require '../lang/english/trad4all.inc.php';
+require '../lang/english/install.inc.php';
 
 //load for get_config_param()
-require_once('install_functions.inc.php');
+require_once 'install_functions.inc.php';
 
 define('DOKEOS_COURSE_UPDATE',1);
 define('MAX_COURSE_TRANSFER',100);

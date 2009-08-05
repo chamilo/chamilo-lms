@@ -308,7 +308,7 @@ DlgTableCellSpace	: "Odstęp pomiędzy komórkami",
 DlgTableCellPad		: "Margines wewnętrzny komórek",
 DlgTableCaption		: "Tytuł",
 DlgTableSummary		: "Podsumowanie",
-DlgTableHeaders		: "Headers",	//MISSING
+DlgTableHeaders		: "Nagłówki",
 DlgTableHeadersNone		: "None",	//MISSING
 DlgTableHeadersColumn	: "First column",	//MISSING
 DlgTableHeadersRow		: "First Row",	//MISSING
@@ -512,7 +512,7 @@ DlgDocMeCopy		: "Prawa autorskie",
 DlgDocPreview		: "Podgląd",
 
 // Templates Dialog
-Templates			: "Sablony",
+Templates			: "Szablony",
 DlgTemplatesTitle	: "Szablony zawartości",
 DlgTemplatesSelMsg	: "Wybierz szablon do otwarcia w edytorze<br>(obecna zawartość okna edytora zostanie utracona):",
 DlgTemplatesLoading	: "Ładowanie listy szablonów. Proszę czekać...",

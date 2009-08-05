@@ -333,7 +333,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 			for($i = 0; $i < sizeof($hpresults); $i++) {
 				$title = GetQuizName($hpresults[$i][0],'');
 				if ($title == '')
-					$title = GetFileName($hpresults[$i][0]);
+					$title = basename($hpresults[$i][0]);
 				$display_date = format_locale_date(get_lang('dateTimeFormatLong'), $hpresults[$i][3]);
 ?>
 				<tr>

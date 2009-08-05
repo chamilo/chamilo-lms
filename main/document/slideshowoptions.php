@@ -1,4 +1,4 @@
-<?php // $Id: slideshowoptions.php 21107 2009-05-30 16:27:09Z iflorespaz $ 
+<?php // $Id: slideshowoptions.php 22565 2009-08-02 21:12:59Z yannoo $ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -158,7 +158,7 @@ echo '</div>';
 		}
 			?>>
 		</div>
-		<div class="formw"><?php echo get_lang('_no_resizing');?><br><?php echo get_lang('_no_resizing_comment');?>
+		<div class="formw"><?php echo get_lang('_no_resizing');?><br /><?php echo get_lang('_no_resizing_comment');?>
 		</div>
 	</div>
 	
@@ -178,32 +178,28 @@ echo '</div>';
 			?>>
 		</div>
 		<div class="formw">
-			<?php echo get_lang('_resizing');?><br><?php echo get_lang('_resizing_comment');?><br>
+			<?php echo get_lang('_resizing');?><br /><?php echo get_lang('_resizing_comment');?><br />
         <?php echo get_lang('_width');?>: 
 	    &nbsp;<input name="width" type="text" id="width" 
 		<?php 
-		if ($image_resizing=="resizing")
-			{
+		if ($image_resizing=="resizing") {
 			echo " value='".$width."'";
 			echo " class=\"enabled_input\"";
-			}
-		else
-			{echo " class=\"disabled_input\""; }
+	    } else {
+            echo " class=\"disabled_input\""; 
+        }
 		?> >        
-        <br>
+        <br />
         <?php echo get_lang('_height');?>: 
         &nbsp;&nbsp;&nbsp;&nbsp;<input name="height" type="text" id="height"
 		<?php 
-		if ($image_resizing=="resizing")
-			{
+		if ($image_resizing=="resizing") {
 			echo " value='".$height."'";
 			echo " class=\"enabled_input\"";
-			}
-		else
-			{echo " class=\"disabled_input\""; }
-
-		?>
-			>
+		} else {
+            echo " class=\"disabled_input\""; 
+        }
+		?> >
 		</div>
 	</div>	
 	<div class="row">
@@ -217,4 +213,3 @@ echo '</div>';
 </form>
 <?php
 Display::display_footer();
-?>

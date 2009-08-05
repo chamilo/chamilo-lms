@@ -1066,7 +1066,7 @@ if ($show == 'test') {
 
 				$title = GetQuizName($path, $documentPath);
 				if ($title == '') {
-					$title = GetFileName($path);
+					$title = basename($path);
 				}
 				// prof only
 				if ($is_allowedToEdit) {
@@ -1345,7 +1345,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 		for ($i = 0; $i < sizeof($hpresults); $i++) {
 			$title = GetQuizName($hpresults[$i][1], $documentPath);
 			if ($title == '') {
-				$title = GetFileName($hpresults[$i][1]);
+				$title = basename($hpresults[$i][1]);
 			}
 			echo '<tr>';
 			if ($is_allowedToEdit) {

@@ -7,7 +7,7 @@
 	Copyright (c) Denes Nagy (darkden@freemail.hu)
 	
 	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+	The full license can be read in "license.txt". 
 	
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -616,7 +616,7 @@ function LMSSetValue(param, val) {
 						return_value='true';
 						break;
 					case "student_response":
-						interactions[elem_id][5] = val;
+						interactions[elem_id][5] = ''+val;
 						logit_scorm("Interaction "+elem_id+"'s student_response updated",2);
 						return_value='true';
 						break;
@@ -740,7 +740,6 @@ function reinit_update_table_list () {
 }
 
 function savedata(origin) { 
-
 	//origin can be 'commit', 'finish' or 'terminate'	
     if ((lesson_status != 'completed') && (lesson_status != 'passed') && (mastery_score >=0) && (score >= mastery_score)) {
 		lesson_status = 'passed';
@@ -781,6 +780,7 @@ function savedata(origin) {
 	logit_lms('saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
 	
 	old_item_id=info_lms_item[0];
+	// xajax_save_item is replaced to xajax_save_item_scorm for scorm LP's
 	//xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit);
 	
 	xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, old_item_id,my_get_value_scorm);	
@@ -1231,7 +1231,13 @@ function switch_item(current_item, next_item) {
 	//(1) save the current item	
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
 	if (lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
-        xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
+		if (lms_lp_type==1) {
+        	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
+		} else {
+			my_get_value_scorm=new Array();
+    		my_get_value_scorm=ProcessValueScorm();
+        	xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,my_get_value_scorm);
+        }
 		if(item_objectives.length>0) {
 			xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
 		}
@@ -1262,6 +1268,7 @@ function switch_item(current_item, next_item) {
         	//savedata('finish');                                 
         //}
         // xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
+
 	}
 	execute_stats=false;
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
@@ -1410,8 +1417,6 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
             }
         );     	
        }
-
-        
 }
 
 function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,info_get_lms) {
@@ -1454,21 +1459,32 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
 			is_interactions='false';
 		}
 	}
-		 
+ 
+ 
  if (is_interactions=='true')  {
-         interact_string = '';
+        interact_string = '';
+  		temp = '';
         for (i in interactions){
+        	
         	interact_string += '&interact['+i+']=';
             interact_temp = '[';
-            for (j in interactions[i]) {
-            	interact_temp += interactions[i][j]+',';
+            for (j in interactions[i]) {            	
+            	temp = interactions[i][j];
+            	temp = ''+temp; // if temp == 1 there are problems with indexOf and an integer number
+            	//this fix when an interaction have ',' i.e:   {a,b,c,d} is replace to {a@@b@@c@@d} see DT#4444          	
+				while(temp.indexOf(',') >= 0){				
+					temp = temp.replace(',','@@');					
+				};
+            	interact_temp +=temp+',';
             }
             interact_temp = interact_temp.substr(0,(interact_temp.length-2)) + ']';
-            interact_string += encodeURIComponent(interact_temp);
+          //  interact_string += encodeURIComponent(interact_temp);
+          
+      	
+           interact_string += interact_temp;        
         }
-        //interact_string = encodeURIComponent(interact_string.substr(0,(interact_string.length-1)));
-        
-        params += interact_string;	
+        //interact_string = encodeURIComponent(interact_string.substr(0,(interact_string.length-1)));         
+        params += interact_string;               
         is_interactions='false';
  }
 

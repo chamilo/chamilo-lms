@@ -177,7 +177,7 @@ class GradeBookResult
 				$return[$j+$i] = array();
 				$title = GetQuizName($hpresults[$i][1],$document_path);
 				if ($title =='') {
-					$title = GetFileName($hpresults[$i][1]);
+					$title = basename($hpresults[$i][1]);
 				}
 				if (empty($user_id)) {
 					$return[$j+$i]['user'] = $hpresults[$i][0];

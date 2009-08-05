@@ -119,6 +119,10 @@ body {
 /*]]>*/
 </script>
 
+<style type="text/css">
+	body, td, input, textarea, select, label { font-family: Arial, Verdana, Geneva, helvetica, sans-serif; font-size: 11px; }
+</style>
+
 </head>
 
 <body onload="javascript: Init();">

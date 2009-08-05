@@ -182,7 +182,7 @@ FCKToolbarButton.prototype.ClickFrame = function()
 
 FCKDialogCommand.prototype.ExecuteFrame = function()
 {
-	return FCKDialog.OpenDialogFrame( 'FCKDialog_' + this.Name, this.Title, this.Url, this.Width, this.Height, this.CustomValue, null, this.Resizable ) ;
+	return FCKDialog.OpenDialogFrame( 'FCKDialog_' + this.Name, this.Title, this.Url, this.Width, this.Height, this.CustomValue, this.Resizable ) ;
 };
 
 var FCKDialog = ( function()
@@ -243,7 +243,7 @@ var FCKDialog = ( function()
 		/**
 		 * Opens a dialog window using the standard dialog template.
 		 */
-		OpenDialog : function( dialogName, dialogTitle, dialogPage, width, height, customValue, parentWindow, resizable )
+		OpenDialog : function( dialogName, dialogTitle, dialogPage, width, height, customValue, resizable )
 		{
 			if ( !topDialog )
 				this.DisplayMainCover() ;
@@ -305,7 +305,7 @@ var FCKDialog = ( function()
 		 ***************************************************************************************
 		 */
 
-		OpenDialogFrame: function( dialogName, dialogTitle, dialogPage, width, height, customValue, parentWindow, resizable )
+		OpenDialogFrame: function( dialogName, dialogTitle, dialogPage, width, height, customValue, resizable )
 		{
 			//if ( !topDialog )
 			//	this.DisplayMainCover() ;

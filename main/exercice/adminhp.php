@@ -134,18 +134,12 @@ $lstrComment = GetComment($hotpotatoesName);
 if($lstrComment=="")
 	$lstrComment = GetQuizName($hotpotatoesName,$documentPath);
 if($lstrComment=="")
-	$lstrComment = GetFileName($hotpotatoesName,$documentPath);
+	$lstrComment = basename($hotpotatoesName,$documentPath);
 
 echo $lstrComment;
 echo "\" size=40>&nbsp;";
 echo "<button type=\"submit\" class=\"save\" name=\"submit\" value=\"".get_lang('Ok')."\">".get_lang('Ok')."</button>";
 echo "<button type=\"button\" class=\"cancel\" name=\"cancel\" value=\"".get_lang('Cancel')."\" onclick=\"javascript:document.form1.newName.value='';\">".get_lang('Cancel')."</button>";
-
 echo "</form>";
 
-?>
-<?php
-
 Display::display_footer();
-
-?>

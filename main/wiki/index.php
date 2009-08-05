@@ -195,9 +195,8 @@ $result=api_sql_query($sql,__LINE__,__FILE__);
 while ($is_editing_block=Database::fetch_array($result))
 {
 	$max_edit_time=1200; // 20 minutes
-	$timestamp_edit=convert_date_to_number($is_editing_block['time_edit']);	
-	$time_editing=time()-$timestamp_edit;	
-
+	$timestamp_edit=strtotime($is_editing_block['time_edit']);	
+	$time_editing=time()-$timestamp_edit;
 
 	//first prevent concurrent users and double version
 	if($is_editing_block['is_editing']==$_user['user_id'])
@@ -234,8 +233,7 @@ if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'')
 	{
 		//prevent concurrent users and double version
 		Display::display_error_message(get_lang("EditedByAnotherUser"));
-	}	
-
+	}
 	else
 	{
 		$return_message=save_wiki();	
@@ -360,7 +358,7 @@ if ($_GET['view'])
 					if($last_row['is_editing']!=0 && $last_row['is_editing']!=$_user['user_id'])
 					{
 						//checking for concurrent users
-						$timestamp_edit=convert_date_to_number($last_row['time_edit']);
+						$timestamp_edit=strtotime($last_row['time_edit']);
 						$time_editing=time()-$timestamp_edit;
 						$max_edit_time=1200; // 20 minutes
 						$rest_time=$max_edit_time-$time_editing;
@@ -1230,11 +1228,10 @@ if ($_GET['action']=='showpage' AND !isset($_POST['SaveWikiNew']))
 if ($_GET['action']=='edit')
 { 	
 	$_clean['group_id']=(int)$_SESSION['_gid'];				
-				
-	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id DESC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
-	$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version				
 
+	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' ORDER BY id DESC';
+	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
 	
 	
 	if ($row['content']=='' AND $row['title']=='' AND $page=='')
@@ -1316,9 +1313,82 @@ if ($_GET['action']=='edit')
     		       Display::display_normal_message(get_lang('PageLockedExtra'));
 		    }
 			else
-			{			
-
-			//previous checking for concurrent editions
+			{	
+				//check tasks
+				if (!empty($row['startdate_assig']) && $row['startdate_assig']!='0000-00-00 00:00:00' && time()<strtotime($row['startdate_assig']))
+				{
+					$message=get_lang('TheTaskDoesNotBeginUntil').': '.$row['startdate_assig'];
+					Display::display_warning_message($message);
+					if(!api_is_allowed_to_edit())
+					{
+						exit;
+					}
+				}
+				
+				//
+				if (!empty($row['enddate_assig']) && $row['enddate_assig']!='0000-00-00 00:00:00' && time()>strtotime($row['enddate_assig']) && $row['enddate_assig']!='0000-00-00 00:00:00' && $row['delayedsubmit']==0)
+				{
+					$message=get_lang('TheDeadlineHasBeenCompleted').': '.$row['enddate_assig'];
+					Display::display_warning_message($message);
+					if(!api_is_allowed_to_edit())
+					{
+						exit;
+					}	
+				}
+				
+				//
+				if(!empty($row['max_version']) && $row['version']>=$row['max_version'])
+				{
+					$message=get_lang('HasReachedMaxiNumVersions');
+					Display::display_warning_message($message);
+					if(!api_is_allowed_to_edit())
+					{
+						exit;
+					}
+				}
+				
+				//
+				if (!empty($row['max_text']) && $row['max_text']>=word_count($row['content']))
+				{
+					$message=get_lang('HasReachedMaxNumWords');
+					Display::display_warning_message($message);
+					if(!api_is_allowed_to_edit())
+					{
+						exit;
+					}
+					
+				}
+				
+				////
+				if (!empty($row['task']))
+				{
+					$message_task='<b>'.get_lang('DescriptionOfTheTask').'</b><p>'.$row['task'].'</p><hr>';
+					$message_task.='<p>'.get_lang('StartDate').': '.$row['startdate_assig'].'</p>';
+					$message_task.='<p>'.get_lang('EndDate').': '.$row['enddate_assig'];
+					$message_task.=' ('.get_lang('AllowLaterSends').') '.$row['delayedsubmit'].'</p>';
+					$message_task.='<p>'.get_lang('OtherRequirements').': '.get_lang('NMaxVersion').': '.$row['max_version'];
+					$message_task.=' '.get_lang('NMaxWords').': '.$row['max_text'];
+					
+					Display::display_normal_message($message_task);				
+				}
+				
+				if($row['progress']==$row['fprogress1'] && !empty($row['fprogress1']))
+				{
+					$feedback_message='<b>'.get_lang('Feedback').'</b><p>'.$row['feedback1'].'</p>';
+					Display::display_normal_message($feedback_message);
+				}
+				elseif($row['progress']==$row['fprogress2'] && !empty($row['fprogress2']))
+				{
+					$feedback_message='<b>'.get_lang('Feedback').'</b><p>'.$row['feedback2'].'</p>';
+					Display::display_normal_message($feedback_message);
+				}
+				elseif($row['progress']==$row['fprogress3'] && !empty($row['fprogress3']))
+				{
+					$feedback_message='<b>'.get_lang('Feedback').'</b><p>'.$row['feedback3'].'</p>';
+					Display::display_normal_message($feedback_message);
+				}		
+		
+				//previous checking for concurrent editions
 				if($row['is_editing']==0)
 				{
 					Display::display_normal_message(get_lang('WarningMaxEditingTime'));
@@ -1329,7 +1399,7 @@ if ($_GET['action']=='edit')
 				}
 				elseif($row['is_editing']!=$_user['user_id'])
 				{		
-					$timestamp_edit=convert_date_to_number($row['time_edit']);
+					$timestamp_edit=strtotime($row['time_edit']);
 					$time_editing=time()-$timestamp_edit;
 					$max_edit_time=1200; // 20 minutes
 					$rest_time=$max_edit_time-$time_editing;
@@ -1339,12 +1409,155 @@ if ($_GET['action']=='edit')
 					$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
 					Display::display_normal_message($is_being_edited);
 					exit;
-				}
-					
-				echo '<div id="wikititle">';
-				echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.$title.'</div>';
-				echo '<div id="wikicontent">'; 
+				}	
+				//form
 				echo '<form name="form1" method="post" action="'.api_get_self().'?action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
+				echo '<div id="wikititle">';
+				echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.$title;				
+				//
+				
+				if((api_is_allowed_to_edit() || api_is_platform_admin()) && $_SESSION['_gid']!=0)
+				{
+
+					echo'<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus" style="float:right">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>';
+					
+					echo '<div id="options" style="display:none; margin: 20px;" >';					
+					
+					//task
+					echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checktask" onclick="if(this.checked==true){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" />'.get_lang('DescriptionOfTheTask').'';		
+					echo '&nbsp;&nbsp;&nbsp;<span id="msg_error4" style="display:none;color:red"></span>';
+					echo '<div id="option4" style="padding:4px; margin:5px; border:1px dotted; display:none;">';				
+
+					echo '<table border="0" style="font-weight:normal" align="center">';
+					echo '<tr>';
+					echo '<td>'.get_lang('DescriptionOfTheTask').'</td>';
+					echo '</tr>';
+					echo '<tr>';					
+					echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';
+					echo '</tr>';
+					echo '</table>';
+					echo '</div>';
+					
+					//feedback
+					echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkfeedback" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;'.get_lang('AddFeedback').'';		
+					echo '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
+					echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
+			
+					echo '<table border="0" style="font-weight:normal" align="center">';
+					echo '<tr>';
+					echo '<td colspan="2">'.get_lang('Feedback1').'</td>';
+					echo '<td colspan="2">'.get_lang('Feedback2').'</td>';
+					echo '<td colspan="2">'.get_lang('Feedback3').'</td>';
+					echo '</tr>';
+					echo '<tr>';
+					echo '<td colspan="2"><textarea name="feedback1" cols="23" rows="4" >'.stripslashes($row['feedback1']).'</textarea></td>';
+					echo '<td colspan="2"><textarea name="feedback2" cols="23" rows="4" >'.stripslashes($row['feedback2']).'</textarea></td>';
+					echo '<td colspan="2"><textarea name="feedback3" cols="23" rows="4" >'.stripslashes($row['feedback3']).'</textarea></td>';
+					echo '</tr>';
+					echo '<tr>';
+					echo '<td>'.get_lang('FProgress').':</td>';
+					echo '<td><select name="fprogress1">';
+				 	echo '<option value="'.stripslashes($row['fprogress1']).'" selected>'.stripslashes($row['fprogress1']).'</option>';	   
+					echo '<option value="10">10</option>
+					   <option value="20">20</option>
+					   <option value="30">30</option>
+					   <option value="40">40</option>
+					   <option value="50">50</option>
+					   <option value="60">60</option>
+					   <option value="70">70</option>
+					   <option value="80">80</option>
+					   <option value="90">90</option>
+					   <option value="100">100</option>   
+					   </select> %</td>';
+					echo '<td>'.get_lang('FProgress').':</td>';
+					echo '<td><select name="fprogress2">';
+				 	echo '<option value="'.stripslashes($row['fprogress2']).'" selected>'.stripslashes($row['fprogress2']).'</option>';	   
+					echo '<option value="10">10</option>   
+					   <option value="20">20</option>
+					   <option value="30">30</option>
+					   <option value="40">40</option>
+					   <option value="50">50</option>
+					   <option value="60">60</option>
+					   <option value="70">70</option>
+					   <option value="80">80</option>
+					   <option value="90">90</option>
+					   <option value="100">100</option>   
+					   </select> %</td>';
+					echo '<td>'.get_lang('FProgress').':</td>';
+					echo '<td><select name="fprogress3">';
+				 	echo '<option value="'.stripslashes($row['fprogress3']).'" selected>'.stripslashes($row['fprogress3']).'</option>';	   
+					echo '<option value="10">10</option>
+					   <option value="20">20</option>
+					   <option value="30">30</option>
+					   <option value="40">40</option>
+					   <option value="50">50</option>
+					   <option value="60">60</option>
+					   <option value="70">70</option>
+					   <option value="80">80</option>
+					   <option value="90">90</option>
+					   <option value="100">100</option>   
+					   </select> %</td>';
+					echo '</tr>';	  
+					echo '</table>';
+					echo '</div>';
+					
+					//time limit
+					echo  '<div>&nbsp;</div><input type="checkbox" value="1" name="checktimelimit" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\'; $pepe=\'a\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;'.get_lang('PutATimeLimit').'';		
+					echo  '&nbsp;&nbsp;&nbsp;<span id="msg_error1" style="display:none;color:red"></span>';	
+					echo  '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
+					echo '<table width="100%" border="0" style="font-weight:normal">';
+					echo '<tr>';
+					echo '<td align="right">'.get_lang("StartDate").':</td>';
+					echo '<td>';
+					if ($row['startdate_assig']=='0000-00-00 00:00:00')
+					{
+						echo draw_date_picker('startdate_assig').' <input type="checkbox" name="initstartdate" value="1"> '.get_lang('Yes').'/'.get_lang('No').'';
+						
+					}
+					else
+					{
+						echo draw_date_picker('startdate_assig', $row['startdate_assig']).' <input type="checkbox" name="initstartdate" value="1"> '.get_lang('Yes').'/'.get_lang('No').'';
+					}
+					echo '</td>';
+					echo '</tr>';
+					echo '<tr>';
+					echo '<td align="right">'.get_lang("EndDate").':</td>';
+					echo '<td>';					
+					if ($row['enddate_assig']=='0000-00-00 00:00:00')
+					{
+						echo draw_date_picker('enddate_assig').' <input type="checkbox" name="initenddate" value="1"> '.get_lang('Yes').'/'.get_lang('No').'';
+					}
+					else
+					{
+						echo draw_date_picker('enddate_assig', $row['enddate_assig']).' <input type="checkbox" name="initenddate" value="1"> '.get_lang('Yes').'/'.get_lang('No').'';
+					}
+					echo '</td>';					
+					echo '</tr>';
+					echo '<tr>';
+					echo '<td align="right">'.get_lang('AllowLaterSends').':</td>';
+					if (stripslashes($row['delayedsubmit'])==1)
+					{
+						$check_uncheck='checked';
+					}				
+					echo '<td><input type="checkbox" name="delayedsubmit" value="1" '.$check_uncheck.'></td>';							 																			
+					echo '</tr>';
+					echo'</table>';
+					echo '</div>';
+					
+					//other limit
+					echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkotherlimit" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;'.get_lang('OtherSettings').'';		
+					echo '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
+					echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
+					echo '<div style="font-weight:normal"; align="center">'.get_lang('NMaxWords').':&nbsp;<input type="text" name="max_text" size="3" value="'.stripslashes($row['max_text']).'">&nbsp;&nbsp;'.get_lang('NMaxVersion').':&nbsp;<input type="text" name="max_version" size="3" value="'.stripslashes($row['max_version']).'"></div>';
+					echo '</div>';
+
+					//
+					echo '</div>';
+				}
+
+				echo '</div>';
+				echo '<div id="wikicontent">';
+				
 				echo '<input type="hidden" name="page_id" value="'.$page_id.'">';
 				echo '<input type="hidden" name="reflink" value="'.$page.'">';
 				echo '<input type="hidden" name="title" value="'.stripslashes($title).'">'; 
@@ -1354,19 +1567,19 @@ if ($_GET['action']=='edit')
 					: array('ToolbarSet' => 'WikiStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
 				); 	
 				echo '<br/>';
-	            echo '<br/>'; 	
+	            echo '<br/>'; 
 				//if(api_is_allowed_to_edit() || api_is_platform_admin()) //off for now
 				//{ 
-				echo get_lang('Comments').':&nbsp;&nbsp;<input type="text" name="comment">&nbsp;&nbsp;&nbsp;';											 
-				//}												
-								
+				echo get_lang('Comments').':&nbsp;&nbsp;<input type="text" name="comment" size="40">&nbsp;&nbsp;&nbsp;';	
+				//}
 				echo '<INPUT TYPE="hidden" NAME="assignment" VALUE="'.stripslashes($row['assignment']).'"/>';
-			    //echo '<INPUT TYPE="hidden" NAME="startdate_assig" VALUE="'.stripslashes($row['startdate_assig']).'"/>'; //off for now
-				//echo '<INPUT TYPE="hidden" NAME="enddate_assig" VALUE="'.stripslashes($row['enddate_assig']).'"/>'; //off for now	
-				//echo '<INPUT TYPE="hidden" NAME="delayedsubmit" VALUE="'.stripslashes($row['delayedsubmit']).'"/>'; //off for now					
-							 
-				echo '<INPUT TYPE="hidden" NAME="version" VALUE="'.stripslashes($row['version']).'"/>'; //get current version
-
+				echo '<INPUT TYPE="hidden" NAME="version" VALUE="'.stripslashes($row['version']).'"/>';
+				
+				//hack date for edit
+				echo '<INPUT TYPE="hidden" NAME="startdate_assig" VALUE="'.stripslashes($row['startdate_assig']).'"/>';
+				echo '<INPUT TYPE="hidden" NAME="enddate_assig" VALUE="'.stripslashes($row['enddate_assig']).'"/>';
+				
+				//
 				echo get_lang('Progress').':&nbsp;&nbsp;<select name="progress" id="progress">';
 				echo '<option value="'.stripslashes($row['progress']).'" selected>'.stripslashes($row['progress']).'</option>';   
 				echo '<option value="10">10</option>
@@ -1384,8 +1597,8 @@ if ($_GET['action']=='edit')
 				echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post
 				echo '<input type="hidden" name="SaveWikiChange" value="'.get_lang('langSave').'">'; //for save icon
 				echo '<button class="save" type="submit" name="SaveWikiChange">'.get_lang('langSave').'</button>';//for save button
-				echo '</form>';				
-				echo '</div>';			
+				echo '</div>';
+				echo '</form>';	
 			} 	
 		}   
 	}

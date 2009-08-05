@@ -317,7 +317,7 @@ function save_wiki() {
 			
 	if(!empty($_POST['task']))
 	{
-		$_clean['task']=Database::escape_string(Security::remove_XSS($_POST['task']));
+		$_clean['task']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['task'])),COURSEMANAGERLOWSECURITY));
 	}
 	if(!empty($_POST['feedback1']) || !empty($_POST['feedback2']) || !empty($_POST['feedback3']))
 	{
@@ -493,7 +493,7 @@ function save_new_wiki() {
 	$_clean['linksto'] = links_to($_clean['content']);	//check wikilinks
 	
 	//cleaning config variables
-	$_clean['task']=Database::escape_string(Security::remove_XSS($_POST['task']));
+	$_clean['task']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['task'])),COURSEMANAGERLOWSECURITY));
 	$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));	
 	$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
 	$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
@@ -596,12 +596,13 @@ return true;
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error4" style="display:none;color:red"></span>';
 		echo '<div id="option4" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 		
-		echo '<table border="0" style="font-weight:normal" align="center">';
+		echo '<table border="0" style="font-weight:normal">';
 		echo '<tr>';
 		echo '<td>'.get_lang('DescriptionOfTheTask').'</td>';
 		echo '</tr>';
 		echo '<tr>';
-		echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';
+		//echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';	// TODO: ¿delete?				
+		echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'project_comment', 'Width' => '600', 'Height' => '200')).'</td>'; //TODO:create a new tolbarset
 		echo '</tr>';
 		echo '</table>';
 		echo '</div>';

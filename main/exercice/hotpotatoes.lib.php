@@ -79,6 +79,7 @@ function GetQuizName($fname,$fpath) {
  * Gets the comment about a file from the corresponding database record
  * @param	string	File path
  * @return	string	Comment from the database record
+ * Added conditional to the table if is empty.
  */
 function GetComment($path,$course_code='') {
 	global $dbTable;
@@ -105,10 +106,8 @@ function GetComment($path,$course_code='') {
  */
 function SetComment($path,$comment) {
 	global $dbTable;
-	
 	$path = Database::escape_string($path);
 	$comment = Database::escape_string($comment);
-	
 	$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
 	$result = api_sql_query($query,__FILE__,__LINE__);
 	return "$result";

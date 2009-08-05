@@ -146,7 +146,7 @@ function display_user_list($user_list, $_plugins)
 			$user_info = api_get_user_info($uid);
 			$table_row = array();
 			$url = '?id='.$uid.$course_url;
-            $image_array=UserManager::get_user_picture_path_by_id($uid,'web',false,true);
+            $image_array=UserManager::get_user_picture_path_by_id($uid,'system',false,true);
             
             $friends_profile = UserFriend::get_picture_user($uid, $image_array['file'], 92, 'medium_', ' width="90" height="90" ');
             //reduce image

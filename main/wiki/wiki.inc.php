@@ -68,7 +68,7 @@ function checktitle($paramwk)
 	global $groupfilter;
 
 	$sql='SELECT * FROM '.$tbl_wiki.' WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($paramwk)))).'" AND '.$groupfilter.''; // TODO: check if need entity
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$numberofresults=Database::num_rows($result);
 
 	if ($numberofresults==0) // the value has not been found and is this available
@@ -357,13 +357,13 @@ function save_wiki() {
 	
 	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
 	
-	$result=api_sql_query($sql);	
+	$result=Database::query($sql);	
     $Id = Database::insert_id();
 	
 	if ($_clean['page_id']	==0)   
 	{	    
 		$sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 	
 	//update wiki config
@@ -376,7 +376,7 @@ function save_wiki() {
 	{
 		$sql='UPDATE'.$tbl_wiki_conf.' SET task="'.$_clean['task'].'", feedback1="'.$_clean['feedback1'].'", feedback2="'.$_clean['feedback2'].'", feedback3="'.$_clean['feedback3'].'",  fprogress1="'.$_clean['fprogress1'].'",  fprogress2="'.$_clean['fprogress2'].'",  fprogress3="'.$_clean['fprogress3'].'", max_text="'.$_clean['max_text'].'", max_version="'.$_clean['max_version'].'", startdate_assig="'.$_clean['startdate_assig'].'", enddate_assig="'.$_clean['enddate_assig'].'", delayedsubmit="'.$_clean['delayedsubmit'].'" WHERE page_id="'.$_clean['page_id'].'"';
 	}
-	api_sql_query($sql,__FILE__,__LINE__);	
+	Database::query($sql,__FILE__,__LINE__);	
 	
 	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
 	
@@ -401,7 +401,7 @@ function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group
 	
 	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$r_page_id."','".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
 	
-	$result=api_sql_query($sql);	
+	$result=Database::query($sql);	
     $Id = Database::insert_id();		
 	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $r_group_id);
 	
@@ -421,18 +421,18 @@ function delete_wiki()
 	global $tbl_wiki, $tbl_wiki_conf, $tbl_wiki_discuss, $tbl_wiki_mailcue, $groupfilter;
 	//identify the first id by group = identify wiki
 	$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' ORDER BY id DESC';
-	$allpages=api_sql_query($sql,__FILE__,__LINE__);
+	$allpages=Database::query($sql,__FILE__,__LINE__);
 		
 	while ($row=Database::fetch_array($allpages))	{
 		$id 		= $row['id'];
 		$group_id	= $row['group_id'];
 		$page_id	= $row['page_id'];
-		api_sql_query('DELETE FROM '.$tbl_wiki_conf.' WHERE page_id="'.$id.'"' ,__FILE__,__LINE__);
-		api_sql_query('DELETE FROM '.$tbl_wiki_discuss.' WHERE publication_id="'.$id.'"' ,__FILE__,__LINE__);
+		Database::query('DELETE FROM '.$tbl_wiki_conf.' WHERE page_id="'.$id.'"' ,__FILE__,__LINE__);
+		Database::query('DELETE FROM '.$tbl_wiki_discuss.' WHERE publication_id="'.$id.'"' ,__FILE__,__LINE__);
 	}
 	
-	api_sql_query('DELETE FROM '.$tbl_wiki_mailcue.' WHERE group_id="'.$group_id.'"' ,__FILE__,__LINE__);	
-	api_sql_query('DELETE FROM '.$tbl_wiki.' WHERE '.$groupfilter.'',__FILE__,__LINE__);	
+	Database::query('DELETE FROM '.$tbl_wiki_mailcue.' WHERE group_id="'.$group_id.'"' ,__FILE__,__LINE__);	
+	Database::query('DELETE FROM '.$tbl_wiki.' WHERE '.$groupfilter.'',__FILE__,__LINE__);	
 	return get_lang('WikiDeleted');
 }
 
@@ -537,15 +537,15 @@ function save_new_wiki() {
 		} else { 	
 			$dtime = date( "Y-m-d H:i:s" );
 			$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
-		   $result=api_sql_query($sql,__LINE__,__FILE__);
+		   $result=Database::query($sql,__LINE__,__FILE__);
 		   $Id = Database::insert_id();
 		   
 		   $sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';		 	
-	       api_sql_query($sql,__FILE__,__LINE__);
+	       Database::query($sql,__FILE__,__LINE__);
 		   	
 			//insert wiki config		 
 		   $sql="INSERT INTO ".$tbl_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
-		   api_sql_query($sql,__LINE__,__FILE__);
+		   Database::query($sql,__LINE__,__FILE__);
 			
 		   api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
 		   
@@ -602,7 +602,7 @@ return true;
 		echo '</tr>';
 		echo '<tr>';
 		//echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';	// TODO: ¿delete?				
-		echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'project_comment', 'Width' => '600', 'Height' => '200')).'</td>'; //TODO:create a new tolbarset
+		echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'project_comment', 'Width' => '600', 'Height' => '200')).'</td>'; //TODO: create a new tolbarset
 		echo '</tr>';
 		echo '</table>';
 		echo '</div>';
@@ -761,13 +761,13 @@ function display_wiki_entry()
 
 	//first, check page visibility in the first page version
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-		$result=api_sql_query($sql,__LINE__,__FILE__);	
+		$result=Database::query($sql,__LINE__,__FILE__);	
 		$row=Database::fetch_array($result);		
 		$KeyVisibility=$row['visibility'];	
 
 	// second, show the last version
 	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' '.$filter.' ORDER BY id DESC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
 
 
@@ -775,7 +775,7 @@ function display_wiki_entry()
 	if($row['id'])
 	{
 		$sql='UPDATE '.$tbl_wiki.' SET hits=(hits+1) WHERE id='.$row['id'].'';
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 
 
@@ -997,7 +997,7 @@ function wiki_exist($title)
 	global $tbl_wiki;
 	global $groupfilter;
 	$sql='SELECT id FROM '.$tbl_wiki.'WHERE title="'.Database::escape_string($title).'" AND '.$groupfilter.' ORDER BY id ASC'; 
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$cant=Database::num_rows($result);
 	if ($cant>0)
 		return true;
@@ -1044,7 +1044,7 @@ function check_addnewpagelock()
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 		
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE '.$groupfilter.' ORDER BY id ASC'; 
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result); 
 							
 	$status_addlock=$row['addlock'];
@@ -1061,10 +1061,10 @@ function check_addnewpagelock()
 			$status_addlock=1; 
 		}       
 		
-		api_sql_query('UPDATE '.$tbl_wiki.' SET addlock="'.Database::escape_string($status_addlock).'" WHERE '.$groupfilter.'',__LINE__,__FILE__);	
+		Database::query('UPDATE '.$tbl_wiki.' SET addlock="'.Database::escape_string($status_addlock).'" WHERE '.$groupfilter.'',__LINE__,__FILE__);	
 	  
 		$sql='SELECT * FROM '.$tbl_wiki.'WHERE '.$groupfilter.' ORDER BY id ASC'; 
-		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$result=Database::query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
 	} 
 	 		
@@ -1095,7 +1095,7 @@ function check_protect_page()
 
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 		
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 			
 	$status_editlock=$row['editlock'];
@@ -1114,11 +1114,11 @@ function check_protect_page()
 	 	}
 		
 		$sql='UPDATE '.$tbl_wiki.' SET editlock="'.Database::escape_string($status_editlock).'" WHERE id="'.$id.'"';			   
-	    api_sql_query($sql,__FILE__,__LINE__); 
+	    Database::query($sql,__FILE__,__LINE__); 
 	  
 	    $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 		
-	    $result=api_sql_query($sql,__LINE__,__FILE__);
+	    $result=Database::query($sql,__LINE__,__FILE__);
 	    $row=Database::fetch_array($result); 
 
 	}
@@ -1150,7 +1150,7 @@ function check_visibility_page()
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 				
 	$status_visibility=$row['visibility'];
@@ -1169,11 +1169,11 @@ function check_visibility_page()
 		}       
 				
 		$sql='UPDATE '.$tbl_wiki.' SET visibility="'.Database::escape_string($status_visibility).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter; 
-	    api_sql_query($sql,__FILE__,__LINE__); 
+	    Database::query($sql,__FILE__,__LINE__); 
 		
 	    //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
 	    $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-	    $result=api_sql_query($sql,__LINE__,__FILE__);
+	    $result=Database::query($sql,__LINE__,__FILE__);
 	    $row=Database::fetch_array($result); 
 
      } 
@@ -1205,7 +1205,7 @@ function check_visibility_discuss()
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 				
 	$status_visibility_disc=$row['visibility_disc'];
@@ -1224,11 +1224,11 @@ function check_visibility_discuss()
 		}       
 		
 		$sql='UPDATE '.$tbl_wiki.' SET visibility_disc="'.Database::escape_string($status_visibility_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter;
-	    api_sql_query($sql,__FILE__,__LINE__); 
+	    Database::query($sql,__FILE__,__LINE__); 
 		
 	   //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
 	    $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-	    $result=api_sql_query($sql,__LINE__,__FILE__);
+	    $result=Database::query($sql,__LINE__,__FILE__);
 	    $row=Database::fetch_array($result); 
 
 	}
@@ -1260,7 +1260,7 @@ function check_addlock_discuss()
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 				
 	$status_addlock_disc=$row['addlock_disc'];
@@ -1279,11 +1279,11 @@ function check_addlock_discuss()
 		}       
 		
 		$sql='UPDATE '.$tbl_wiki.' SET addlock_disc="'.Database::escape_string($status_addlock_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter;		
-	    api_sql_query($sql,__FILE__,__LINE__); 
+	    Database::query($sql,__FILE__,__LINE__); 
 		
 	  	//Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
 	    $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-	    $result=api_sql_query($sql,__LINE__,__FILE__);
+	    $result=Database::query($sql,__LINE__,__FILE__);
 	    $row=Database::fetch_array($result); 
 
 	}
@@ -1316,7 +1316,7 @@ function check_ratinglock_discuss()
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 				
 	$status_ratinglock_disc=$row['ratinglock_disc'];
@@ -1335,11 +1335,11 @@ function check_ratinglock_discuss()
 		}       
 		
 		$sql='UPDATE '.$tbl_wiki.' SET ratinglock_disc="'.Database::escape_string($status_ratinglock_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter; //Visibility. Value to all,not only for the first	
-	    api_sql_query($sql,__FILE__,__LINE__); 
+	    Database::query($sql,__FILE__,__LINE__); 
 		
 	  	//Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
 	    $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-	    $result=api_sql_query($sql,__LINE__,__FILE__);
+	    $result=Database::query($sql,__LINE__,__FILE__);
 	    $row=Database::fetch_array($result); 
 
 	}
@@ -1370,13 +1370,13 @@ function check_notify_page($reflink)
 	
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$reflink.'" AND '.$groupfilter.' ORDER BY id ASC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 	
 	$id=$row['id'];		
 		
 	$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="P"';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 			
 	$idm=$row['id'];
@@ -1398,14 +1398,14 @@ function check_notify_page($reflink)
 	    {		
 		   	  
 			$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id, type, group_id) VALUES ('".$id."','".api_get_user_id()."','P','".$_clean['group_id']."')";
-			api_sql_query($sql,__FILE__,__LINE__);		
+			Database::query($sql,__FILE__,__LINE__);		
 			
 	    	$status_notify=1;			
 	    }
 	    else
 		{					
 		    $sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="P"'; //$_clean['group_id'] not necessary
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 			
 		    $status_notify=0;				
 	    } 			
@@ -1435,13 +1435,13 @@ function check_notify_discuss($reflink)
 	
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$reflink.'" AND '.$groupfilter.' ORDER BY id ASC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 	
 	$id=$row['id'];	
 			
 	$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 			
 	$idm=$row['id'];
@@ -1467,7 +1467,7 @@ function check_notify_discuss($reflink)
 			{	  
 								
 				$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id, type, group_id) VALUES ('".$id."','".api_get_user_id()."','D','".$_clean['group_id']."')";
-				api_sql_query($sql,__FILE__,__LINE__);		
+				Database::query($sql,__FILE__,__LINE__);		
 				
 				$status_notify_disc=1;
 			}
@@ -1481,7 +1481,7 @@ function check_notify_discuss($reflink)
 			if (!$_POST['Submit'])
 			{				
 				$sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"'; //$_clean['group_id'] not necessary
-				api_sql_query($sql,__FILE__,__LINE__);
+				Database::query($sql,__FILE__,__LINE__);
 				
 				$status_notify_disc=0;
 			}
@@ -1517,7 +1517,7 @@ function check_notify_all()
 	$_clean['group_id']=(int)$_SESSION['_gid'];	
 		
 	$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE user_id="'.api_get_user_id().'" AND type="F" AND group_id="'.$_clean['group_id'].'"';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 			
 	$idm=$row['user_id'];
@@ -1538,14 +1538,14 @@ function check_notify_all()
 		if ($status_notify_all==0)
 	    {	
 			$sql="INSERT INTO ".$tbl_wiki_mailcue." (user_id, type, group_id) VALUES ('".api_get_user_id()."','F','".$_clean['group_id']."')";
-			api_sql_query($sql,__FILE__,__LINE__);		
+			Database::query($sql,__FILE__,__LINE__);		
 			
 			$status_notify_all=1;				
 	    }
 	    else
 		{								
 			$sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE user_id="'.api_get_user_id().'" AND type="F" AND group_id="'.$_clean['group_id'].'"';
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 		
 			$status_notify_all=0;			
 	    } 					
@@ -1603,7 +1603,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 		//second, extract data from first reg
 	 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$id_or_ref.'" AND '.$groupfilter.' ORDER BY id ASC'; //id_or_ref is reflink from tblwiki
 		
-		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$result=Database::query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
 		
 		$id=$row['id'];
@@ -1615,7 +1615,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 			$allow_send_mail=true; //if visibility off - notify off	
 		
 			$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full.		
-			$result=api_sql_query($sql,__LINE__,__FILE__);
+			$result=Database::query($sql,__LINE__,__FILE__);
 			
 			$emailtext=get_lang('EmailWikipageModified').' <strong>'.$email_page_name.'</strong> '.get_lang('Wiki');
 		}
@@ -1645,7 +1645,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 		
 		$sql='SELECT * FROM '.$tbl_wiki.'WHERE id="'.$id.'" ORDER BY id ASC';
 		
-		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$result=Database::query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
 		
 		$email_page_name=$row['title'];
@@ -1656,7 +1656,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 			$allow_send_mail=true; //if visibility off - notify off				
 				
 			$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
-			$result=api_sql_query($sql,__LINE__,__FILE__);			
+			$result=Database::query($sql,__LINE__,__FILE__);			
 			
 			$emailtext=get_lang('EmailWikiPageDiscAdded').' <strong>'.$email_page_name.'</strong> '.get_lang('Wiki');
 		}
@@ -1668,7 +1668,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 	
 		$sql='SELECT * FROM '.$tbl_wiki.' ORDER BY id DESC'; //the added is always the last
 		
-		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$result=Database::query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
 		
 		$email_page_name=$row['title'];
@@ -1702,7 +1702,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 		}		
 		
 		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
-		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$result=Database::query($sql,__LINE__,__FILE__);
 	
 		$emailtext=get_lang('EmailWikiPageAdded').' <strong>'.$email_page_name.'</strong> '.get_lang('In').' '. get_lang('Wiki');
 	}
@@ -1722,7 +1722,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 		$email_date_changes=$today;	
 		
 		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=wiki
-		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$result=Database::query($sql,__LINE__,__FILE__);
 				
 		$emailtext=get_lang('EmailWikipageDedeleted');
 	}			
@@ -1857,7 +1857,7 @@ function auto_add_page_users($assignment_type)
 
 	//data about teacher
 	$userinfo=Database::get_user_info_from_id(api_get_user_id());
-	require_once(api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php');
+	require_once api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php';
 	if (api_get_user_id()<>0)
 	{		
 		$image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',false, true);
@@ -1991,7 +1991,7 @@ function display_wiki_search_results($search_term, $search_content=0)
 		}
 	}
 
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 
 	//show table
 	if (mysql_num_rows($result) > 0)

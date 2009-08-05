@@ -51,14 +51,14 @@ $this_section=SECTION_COURSES;
 
 // including additional library scripts
 
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'text.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'security.lib.php'); 
-require_once (api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
-require_once (api_get_path(INCLUDE_PATH).'conf/mail.conf.php');
-require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'text.lib.php';
+require_once api_get_path(LIBRARY_PATH).'security.lib.php'; 
+require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
+require_once api_get_path(INCLUDE_PATH).'conf/mail.conf.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once 'wiki.inc.php';
 
 // additional style information
@@ -191,7 +191,7 @@ Display::display_introduction_section(TOOL_WIKI);
 
 //release of blocked pages to prevent concurrent editions
 $sql='SELECT * FROM '.$tbl_wiki.'WHERE is_editing!="0"';
-$result=api_sql_query($sql,__LINE__,__FILE__);
+$result=Database::query($sql,__LINE__,__FILE__);
 while ($is_editing_block=Database::fetch_array($result))
 {
 	$max_edit_time=1200; // 20 minutes
@@ -211,7 +211,7 @@ while ($is_editing_block=Database::fetch_array($result))
 	if ($time_editing>$max_edit_time || ($is_editing_block['is_editing']==$_user['user_id'] && $_GET['action']!='edit'))
 	{
 		$sql='UPDATE '.$tbl_wiki.' SET is_editing="0", time_edit="0000-00-00 00:00:00" WHERE is_editing="'.$is_editing_block['is_editing'].'"';
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}	
 	
 }
@@ -276,11 +276,11 @@ if (isset($_POST['SaveWikiNew']))
 if ($_GET['view'])
 {
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE id="'.Database::escape_string($_GET['view']).'"'; //current view
-		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$result=Database::query($sql,__LINE__,__FILE__);
 		$current_row=Database::fetch_array($result);
 	
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id DESC'; //last version
-		$result=api_sql_query($sql,__LINE__,__FILE__);
+		$result=Database::query($sql,__LINE__,__FILE__);
 		$last_row=Database::fetch_array($result);
 		
 	if ($_GET['view']<$last_row['id'])
@@ -534,43 +534,43 @@ if ($_GET['action']=='more')
 		
 	
 	//Submenu Most linked pages
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mostlinked&group_id='.$_clean['group_id'].'">'.get_lang('MostLinkedPages').'</a></li>';//TODO
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mostlinked&group_id='.$_clean['group_id'].'">'.get_lang('MostLinkedPages').'</a></li>';//TODO:
 	
 	//Submenu Dead end pages
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=deadend&group_id='.$_clean['group_id'].'">'.get_lang('DeadEndPages').'</a></li>';//TODO	
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=deadend&group_id='.$_clean['group_id'].'">'.get_lang('DeadEndPages').'</a></li>';//TODO:	
 	
 	//Submenu Most new pages (not versions)
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mnew&group_id='.$_clean['group_id'].'">'.get_lang('MostNewPages').'</a></li>';//TODO
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mnew&group_id='.$_clean['group_id'].'">'.get_lang('MostNewPages').'</a></li>';//TODO:
 	
 	//Submenu Most long pages
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mnew&group_id='.$_clean['group_id'].'">'.get_lang('MostLongPages').'</a></li>';//TODO
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mnew&group_id='.$_clean['group_id'].'">'.get_lang('MostLongPages').'</a></li>';//TODO:
 	
 	//Submenu Protected pages
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=protected&group_id='.$_clean['group_id'].'">'.get_lang('ProtectedPages').'</a></li>';//TODO
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=protected&group_id='.$_clean['group_id'].'">'.get_lang('ProtectedPages').'</a></li>';//TODO:
 	
 	//Submenu Hidden pages
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=hidden&group_id='.$_clean['group_id'].'">'.get_lang('HiddenPages').'</a></li>';//TODO	
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=hidden&group_id='.$_clean['group_id'].'">'.get_lang('HiddenPages').'</a></li>';//TODO:	
 	
 	//Submenu Most discuss pages
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mdiscuss&group_id='.$_clean['group_id'].'">'.get_lang('MostDiscussPages').'</a></li>';//TODO	
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mdiscuss&group_id='.$_clean['group_id'].'">'.get_lang('MostDiscussPages').'</a></li>';//TODO:	
 	
 	//Submenu Best scored pages
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mscored&group_id='.$_clean['group_id'].'">'.get_lang('BestScoredPages').'</a></li>';//TODO	
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mscored&group_id='.$_clean['group_id'].'">'.get_lang('BestScoredPages').'</a></li>';//TODO:	
 	
 	//Submenu Pages with more progress
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mprogress&group_id='.$_clean['group_id'].'">'.get_lang('MProgressPages').'</a></li>';//TODO	
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mprogress&group_id='.$_clean['group_id'].'">'.get_lang('MProgressPages').'</a></li>';//TODO:	
 		
 	//Submenu Most active users in discuss
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mactiveusers&group_id='.$_clean['group_id'].'">'.get_lang('MostDiscussUsers').'</a></li>';//TODO
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mactiveusers&group_id='.$_clean['group_id'].'">'.get_lang('MostDiscussUsers').'</a></li>';//TODO:
 	
 	//Submenu Individual assignments
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=assignments&group_id='.$_clean['group_id'].'">'.get_lang('Assignments').'</a></li>';//TODO
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=assignments&group_id='.$_clean['group_id'].'">'.get_lang('Assignments').'</a></li>';//TODO:
 	
 	//Submenu Delayed assignments
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=delayed&group_id='.$_clean['group_id'].'">'.get_lang('DelayedAssignments').'</a></li>';//TODO
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=delayed&group_id='.$_clean['group_id'].'">'.get_lang('DelayedAssignments').'</a></li>';//TODO:
 	
 	//Submenu Random page
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mrandom&group_id='.$_clean['group_id'].'">'.get_lang('RandomPage').'</a></li>';//TODO
+	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mrandom&group_id='.$_clean['group_id'].'">'.get_lang('RandomPage').'</a></li>';//TODO:
 
 }
 
@@ -581,7 +581,7 @@ if ($_GET['action']=='mactiveusers')
 	echo '<div class="actions">'.get_lang('MostActiveUsers').'</div>';
 	
 	$sql='SELECT *, COUNT(*) AS NUM_EDIT FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY user_id';
-	$allpages=api_sql_query($sql,__FILE__,__LINE__);		
+	$allpages=Database::query($sql,__FILE__,__LINE__);		
 
 	//show table
 	if (mysql_num_rows($allpages) > 0)
@@ -624,7 +624,7 @@ if ($_GET['action']=='usercontrib')
 		$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND user_id="'.Security::remove_XSS($_GET['user_id']).'" AND visibility=1';	
 	}	
 	
-	$allpages=api_sql_query($sql,__FILE__,__LINE__);
+	$allpages=Database::query($sql,__FILE__,__LINE__);
 		
 	//show table
 	if (mysql_num_rows($allpages) > 0)
@@ -711,7 +711,7 @@ if ($_GET['action']=='mostchanged')
 		$sql='SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND visibility=1 GROUP BY reflink';
 	}	
 	
-	$allpages=api_sql_query($sql,__FILE__,__LINE__);
+	$allpages=Database::query($sql,__FILE__,__LINE__);
 		
 	//show table
 	if (mysql_num_rows($allpages) > 0)
@@ -765,7 +765,7 @@ if ($_GET['action']=='mvisited')
 		$sql='SELECT *, SUM(hits) AS tsum FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' AND visibility=1 GROUP BY reflink';
 	}		
 	
-	$allpages=api_sql_query($sql,__FILE__,__LINE__);
+	$allpages=Database::query($sql,__FILE__,__LINE__);
 
 	//show table
 	if (mysql_num_rows($allpages) > 0)
@@ -815,7 +815,7 @@ if ($_GET['action']=='wanted')
 
 	//get name pages
 	$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY reflink ASC';
-	$allpages=api_sql_query($sql,__FILE__,__LINE__);
+	$allpages=Database::query($sql,__FILE__,__LINE__);
 		
 	while ($row=Database::fetch_array($allpages))
 	{
@@ -823,14 +823,14 @@ if ($_GET['action']=='wanted')
 	}
 	
 	//get name refs in last pages and make a unique list
-	//$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; //old version TODO:¿ delete ?
+	$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; //old version TODO: Replace by the bottom line
 	
-	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE visibility=1 AND '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter; // new version
+	//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE visibility=1 AND '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter; // new version
 	
-	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
+	$allpages=Database::query($sql,__FILE__,__LINE__);	
 	while ($row=Database::fetch_array($allpages))
 	{	
-		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO check
+		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO: check
 		$rf = explode(" ", trim($row["linksto"]));//wanted pages without /n only blank " "  			
 		$refs = array_merge($refs, $rf);
 		if ($n++ > 299)
@@ -868,18 +868,18 @@ if ($_GET['action']=='orphaned')
 	
 	//get name pages	
 	$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' GROUP BY reflink ORDER BY reflink ASC';
-	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
+	$allpages=Database::query($sql,__FILE__,__LINE__);	
 	while ($row=Database::fetch_array($allpages))
 	{			   
 		$pages[] = $row['reflink'];
 	}
 	
 	//get name refs in last pages and make a unique list	
-	//$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; //old version TODO:¿ delete ?
+	$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; //old version TODO: Replace by the bottom line
 	
-	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' '; // new version
+	//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' '; // new version
 
-	$allpages=api_sql_query($sql,__FILE__,__LINE__);	
+	$allpages=Database::query($sql,__FILE__,__LINE__);	
 	while ($row=Database::fetch_array($allpages))
 	{			
 		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO: check
@@ -914,7 +914,7 @@ if ($_GET['action']=='orphaned')
 			$sql='SELECT  *  FROM   '.$tbl_wiki.' WHERE '.$groupfilter.' AND reflink="'.$vshow.'" AND visibility=1 GROUP BY reflink';		
 		}			
 		
-		$allpages=api_sql_query($sql,__FILE__,__LINE__);		
+		$allpages=Database::query($sql,__FILE__,__LINE__);		
 		
 		echo '<ul>';
 		while ($row=Database::fetch_array($allpages))
@@ -971,13 +971,13 @@ if ($_GET['action']=='delete')
 		if ($_GET['delete'] == 'yes')
 		{
 			$sql='DELETE '.$tbl_wiki_discuss.' FROM '.$tbl_wiki.', '.$tbl_wiki_discuss.' WHERE '.$tbl_wiki.'.reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' AND '.$tbl_wiki_discuss.'.publication_id='.$tbl_wiki.'.id';
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 			
 			$sql='DELETE '.$tbl_wiki_mailcue.' FROM '.$tbl_wiki.', '.$tbl_wiki_mailcue.' WHERE '.$tbl_wiki.'.reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' AND '.$tbl_wiki_mailcue.'.id='.$tbl_wiki.'.id';
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 			
 			$sql='DELETE FROM '.$tbl_wiki.' WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.'';
-	  		api_sql_query($sql,__FILE__,__LINE__);		
+	  		Database::query($sql,__FILE__,__LINE__);		
 			
 			check_emailcue(0, 'E');
 			
@@ -1066,7 +1066,7 @@ if ($_GET['action']=='links')
 	{	
 	
 		$sql='SELECT * FROM '.$tbl_wiki.' WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.'';		
-		$result=api_sql_query($sql,__FILE__,__LINE__);	
+		$result=Database::query($sql,__FILE__,__LINE__);	
 		$row=Database::fetch_array($result);		
 		
 		//get type assignment icon
@@ -1105,20 +1105,20 @@ if ($_GET['action']=='links')
 		
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 		{				
-			//$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")"; //add blank space after like '%" " %' to identify each word. //Old version TODO:¿delete?
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")"; //add blank space after like '%" " %' to identify each word. //Old version TODO: Replace by the bottom line
 			
-			$sql="SELECT * FROM ".$tbl_wiki.", ".$tbl_wiki_conf." WHERE linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND ".$tbl_wiki_conf.".page_id=".$tbl_wiki.".page_id AND ".$tbl_wiki.".".$groupfilter.""; //add blank space after like '%" " %' to identify each word. // new version			
+			//$sql="SELECT * FROM ".$tbl_wiki.", ".$tbl_wiki_conf." WHERE linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND ".$tbl_wiki_conf.".page_id=".$tbl_wiki.".page_id AND ".$tbl_wiki.".".$groupfilter.""; //add blank space after like '%" " %' to identify each word. // new version			
 			
 		}
 		else
 		{	
-			//$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE visibility=1 AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")"; //add blank space after like '%" " %' to identify each word //old version TODO:¿delete?
+			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE visibility=1 AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")"; //add blank space after like '%" " %' to identify each word //old version TODO: Replace by the bottom line
 			
-			$sql="SELECT * FROM ".$tbl_wiki.", ".$tbl_wiki_conf." WHERE visibility=1 AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND ".$tbl_wiki_conf.".page_id=".$tbl_wiki.".page_id AND ".$tbl_wiki.".".$groupfilter.""; //add blank space after like '%" " %' to identify each word // new version			
+			//$sql="SELECT * FROM ".$tbl_wiki.", ".$tbl_wiki_conf." WHERE visibility=1 AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND ".$tbl_wiki_conf.".page_id=".$tbl_wiki.".page_id AND ".$tbl_wiki.".".$groupfilter.""; //add blank space after like '%" " %' to identify each word // new version			
 			
 		}		
 
-		$allpages=api_sql_query($sql,__LINE__,__FILE__);	
+		$allpages=Database::query($sql,__LINE__,__FILE__);	
 	
 		//show table
 		if (mysql_num_rows($allpages) > 0)
@@ -1242,7 +1242,7 @@ if ($_GET['action']=='edit')
 	$_clean['group_id']=(int)$_SESSION['_gid'];				
 
 	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' ORDER BY id DESC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
 	
 	
@@ -1453,7 +1453,7 @@ if ($_GET['action']=='edit')
 			
 					$time_edit = date("Y-m-d H:i:s");
 					$sql='UPDATE '.$tbl_wiki.' SET is_editing="'.$_user['user_id'].'", time_edit="'.$time_edit.'" WHERE id="'.$row['id'].'"';
-					api_sql_query($sql,__FILE__,__LINE__);
+					Database::query($sql,__FILE__,__LINE__);
 				}
 				elseif($row['is_editing']!=$_user['user_id'])
 				{		
@@ -1490,9 +1490,8 @@ if ($_GET['action']=='edit')
 					echo '<tr>';
 					echo '<td>'.get_lang('DescriptionOfTheTask').'</td>';
 					echo '</tr>';
-					echo '<tr>';
-					//echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';	// TODO: ¿delete?				
-					echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'project_comment', 'Width' => '600', 'Height' => '200')).'</td>'; //TODO:create a new tolbarset
+					echo '<tr>';	
+					echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'project_comment', 'Width' => '600', 'Height' => '200')).'</td>'; //TODO: create a new tolbarset
 					echo '</tr>';
 					echo '</table>';
 					echo '</div>';
@@ -1680,7 +1679,7 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
     //First, see the property visibility that is at the last register and therefore we should select descending order. But to give ownership to each record, this is no longer necessary except for the title. TODO: check this
 
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id DESC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 		
 	while ($row=Database::fetch_array($result))
 	{
@@ -1710,7 +1709,7 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 		{
 	
 			$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id DESC';
-			$result=api_sql_query($sql,__LINE__,__FILE__);
+			$result=Database::query($sql,__LINE__,__FILE__);
 			
 			$title		= Security::remove_XSS($_GET['title']);
 			$group_id	= Security::remove_XSS($_GET['group_id']);
@@ -1792,12 +1791,12 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 		else
 		{
 			$sql_old="SELECT * FROM $tbl_wiki WHERE id='".Database::escape_string($_POST['old'])."'";
-			$result_old=api_sql_query($sql_old,__LINE__,__FILE__);
+			$result_old=Database::query($sql_old,__LINE__,__FILE__);
 			$version_old=Database::fetch_array($result_old);
 			
 
 			$sql_new="SELECT * FROM $tbl_wiki WHERE id='".Database::escape_string($_POST['new'])."'";
-			$result_new=api_sql_query($sql_new,__LINE__,__FILE__);
+			$result_new=Database::query($sql_new,__LINE__,__FILE__);
 			$version_new=Database::fetch_array($result_new);	
 		
 		    if(isset($_POST['HistoryDifferences']))
@@ -1872,7 +1871,7 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 /////////////////////// recent changes ///////////////////////
 
 //
-//rss feed. TODO
+//rss feed. TODO:
 //
 
 if ($_GET['action']=='recentchanges')
@@ -1894,19 +1893,19 @@ if ($_GET['action']=='recentchanges')
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 	{	
-		//$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' ORDER BY dtime DESC'; // old version TODO:¿delete?
+		$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' ORDER BY dtime DESC'; // old version TODO: Replace by the bottom line
 		
-		$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' ORDER BY dtime DESC'; // new version		
+		//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' ORDER BY dtime DESC'; // new version		
 		
 	}
 	else
 	{	
-		//$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' AND visibility=1 ORDER BY dtime DESC';	// old version TODO:¿delete?
+		$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' AND visibility=1 ORDER BY dtime DESC';	// old version TODO: Replace by the bottom line
 		
-		$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND visibility=1 AND '.$tbl_wiki.'.'.$groupfilter.' ORDER BY dtime DESC'; // new version
+		//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND visibility=1 AND '.$tbl_wiki.'.'.$groupfilter.' ORDER BY dtime DESC'; // new version
 	}		
 
-	$allpages=api_sql_query($sql,__LINE__,__FILE__);
+	$allpages=Database::query($sql,__LINE__,__FILE__);
 
 	//show table
 	if (mysql_num_rows($allpages) > 0)
@@ -1984,19 +1983,19 @@ if ($_GET['action']=='allpages')
 
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 	{	
-		//$sql='SELECT  *  FROM  '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version// old version TODO:¿ delete ?
+		$sql='SELECT  *  FROM  '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version// old version TODO: Replace by the bottom line
 		
-		$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' GROUP BY '.$tbl_wiki.'.page_id'; // new version
+		//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' GROUP BY '.$tbl_wiki.'.page_id'; // new version
 	}
 	else
 	{	
-		//$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE visibility=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version	// old version TODO:¿ delete ?
+		$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE visibility=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version	// old version TODO: Replace by the bottom line
 		
-		$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE visibility=1 AND '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' GROUP BY '.$tbl_wiki.'.page_id'; // new version
+		//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE visibility=1 AND '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' GROUP BY '.$tbl_wiki.'.page_id'; // new version
 		
 	}		
 
-	$allpages=api_sql_query($sql,__LINE__,__FILE__);	
+	$allpages=Database::query($sql,__LINE__,__FILE__);	
 
 	//show table
 	if (mysql_num_rows($allpages) > 0)
@@ -2078,14 +2077,14 @@ if ($_GET['action']=='discuss')
 	
 	//first extract the date of last version
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id DESC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 	$lastversiondate=$row['dtime'];
 	$lastuserinfo=Database::get_user_info_from_id($row['user_id']);
 	
 	//select page to discuss
     $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
 	$id=$row['id'];
 	$firstuserid=$row['user_id'];
@@ -2249,7 +2248,7 @@ if ($_GET['action']=='discuss')
 					$message_author=api_get_user_id();
 					
 					$sql="INSERT INTO $tbl_wiki_discuss (publication_id, userc_id, comment, p_score, dtime) VALUES ('".$id."','".$message_author."','".$_POST['comment']."','".$_POST['rating']."','".$dtime."')";
-					$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());					
+					$result=Database::query($sql,__FILE__,__LINE__) or die(mysql_error());					
 					
 					check_emailcue($id, 'D', $dtime, $message_author);			
 										
@@ -2260,17 +2259,17 @@ if ($_GET['action']=='discuss')
 			$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 			
 			$sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user  WHERE reviews.publication_id='".$id."' AND user.user_id='".$firstuserid."' ORDER BY id DESC";
-			$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
+			$result=Database::query($sql,__FILE__,__LINE__) or die(mysql_error());
 			
 			$countWPost = Database::num_rows($result); 
 			echo get_lang('NumComments').": ".$countWPost; //comment's numbers 
 			
 			$sql="SELECT SUM(p_score) as sumWPost FROM $tbl_wiki_discuss WHERE publication_id='".$id."' AND NOT p_score='-' ORDER BY id DESC"; 
-			$result2=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
+			$result2=Database::query($sql,__FILE__,__LINE__) or die(mysql_error());
 			$row2=Database::fetch_array($result2);
 			
 			$sql="SELECT * FROM $tbl_wiki_discuss WHERE publication_id='".$id."' AND NOT p_score='-'"; 
-			$result3=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
+			$result3=Database::query($sql,__FILE__,__LINE__) or die(mysql_error());
 			$countWPost_score= Database::num_rows($result3);
 			
 			echo ' - '.get_lang('NumCommentsScore').': '.$countWPost_score;//
@@ -2286,8 +2285,8 @@ if ($_GET['action']=='discuss')
 			
 			echo ' - '.get_lang('RatingMedia').': '.$avg_WPost_score; // average rating
 	
-			$sql='UPDATE '.$tbl_wiki.' SET score="'.Database::escape_string($avg_WPost_score).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter;	// check if work ok. TODO			
-				api_sql_query($sql,__FILE__,__LINE__); 
+			$sql='UPDATE '.$tbl_wiki.' SET score="'.Database::escape_string($avg_WPost_score).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter;	// check if work ok. TODO:			
+				Database::query($sql,__FILE__,__LINE__); 
 	
 			echo '<hr noshade size="1">';
 			//echo '<div style="overflow:auto; height:170px;">';
@@ -2304,7 +2303,7 @@ if ($_GET['action']=='discuss')
 					$author_status=get_lang('Teacher');
 				}			
 				
-				require_once(api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php');
+				require_once api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php';
 				$user_id=$row['userc_id'];
 				$name=$userinfo['lastname']." ".$userinfo['firstname'];
 				$attrb=array();		

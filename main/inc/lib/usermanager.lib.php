@@ -1914,9 +1914,11 @@ class UserManager {
     		$picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file; 
     		return $picture;
     	}
-    	$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$size_picture.$picture_file;
+        $image_array_sys=UserManager::get_user_picture_path_by_id($user_id,'system',false,true);
+        $image_array=UserManager::get_user_picture_path_by_id($user_id,'web',false,true);
+        $file = $image_array_sys['dir'].$size_picture.$picture_file;
     	if (file_exists($file)) {
-			$picture['file'] = api_get_path(WEB_CODE_PATH).$patch_profile.$user_id.'/'.$size_picture.$picture_file;
+            $picture['file'] = $image_array['dir'].$size_picture.$picture_file; 
 			$picture['style']=''; 
 			if ($height > 0) {
 				$dimension = @getimagesize(api_url_to_local_path($picture['file']));
@@ -1924,13 +1926,15 @@ class UserManager {
 				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].';" ';
 			}
 		} else {
-			$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;
+			//$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;
+            $file = $image_array_sys['dir'].$picture_file;
 			if (file_exists($file)) {
-				$picture['file'] = api_get_path(WEB_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;
+				$picture['file'] = $image_array['dir'].$picture_file;
 			} else {
 				$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';    		
 			}
 		}
+       
 		return $picture;
     }
     /**

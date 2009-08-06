@@ -375,20 +375,30 @@ if($_GET['studentlist'] == 'false') {
 	 * DOCUMENTS
 	 ***************************/
 	 
-	 echo '<div class="admin_section">
+	if ($_GET['num']==0 or empty($_GET['num'])){
+		$num=3;	
+		$link='&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&studentlist=false&num=1#ancle">'.get_lang('SeeDetail').'</a>';
+	} else {
+		$num=1000;
+		$link='&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&studentlist=false&num=0#ancle">'.get_lang('ViewMinus').'</a>';
+	}
+	 
+	 
+	 echo '<a name="ancle" id="a"></a><div class="admin_section">
 				<h4>
-					<img src="../img/documents.gif" align="absbottom">&nbsp;'.get_lang('DocumentsMostDownloaded').'
+					<img src="../img/documents.gif" align="absbottom">&nbsp;'.get_lang('DocumentsMostDownloaded').$link.'
 				</h4>
-			<table class="data_table">';
+			<table class="data_table">';			
+			
 			
 	$sql = "SELECT down_doc_path, COUNT(DISTINCT down_user_id), COUNT(down_doc_path) as count_down
-            FROM $TABLETRACK_DOWNLOADS
+            FROM $TABLETRACK_DOWNLOADS 
             WHERE down_cours_id = '$_cid'
             GROUP BY down_doc_path
 			ORDER BY count_down DESC
-			LIMIT 0, 3";
+			LIMIT 0,  $num";
     $rs = api_sql_query($sql, __FILE__, __LINE__);
-    
+
     if ($export_csv) {
     	$temp=array(get_lang('DocumentsMostDownloaded'),'');
     	$csv_content[] = array('','');

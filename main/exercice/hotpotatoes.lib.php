@@ -79,12 +79,19 @@ function GetQuizName($fname,$fpath) {
  * Gets the comment about a file from the corresponding database record
  * @param	string	File path
  * @return	string	Comment from the database record
+ * Added conditional to the table if is empty.
  */
-function GetComment($path) {
+function GetComment($path,$course_code='') {
 	global $dbTable;
+	
+	if (!empty($course_code)) {		
+		$course_info = api_get_course_info($course_code);
+		$dbTable     = Database::get_course_table(TABLE_DOCUMENT,$course_info['dbName']);	
+	}
 	$path = Database::escape_string($path);
-	$query = "select comment from $dbTable where path='$path'";
+	$query = "select comment from $dbTable where path='$path'";		
 	$result = api_sql_query($query,__FILE__,__LINE__);
+	
 	while ($row = mysql_fetch_array($result)) {
 		return $row[0];
 	}
@@ -101,7 +108,6 @@ function SetComment($path,$comment) {
 	global $dbTable;
 	$path = Database::escape_string($path);
 	$comment = Database::escape_string($comment);
-	
 	$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
 	$result = api_sql_query($query,__FILE__,__LINE__);
 	return "$result";

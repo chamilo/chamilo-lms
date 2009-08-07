@@ -111,7 +111,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
             foreach($interactions as $index=>$interaction){
                 //$mylpi->add_interaction($index,$interactions[$index]);
                 //fix DT#4444  
-                $clean_interaction = str_replace('@@',',',$interactions[$index]);
+                $clean_interaction = str_replace('@.|@',',',$interactions[$index]);
                 $mylpi->add_interaction($index,$clean_interaction);          
             }
         }

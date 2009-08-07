@@ -1275,11 +1275,6 @@ function switch_item(current_item, next_item) {
 	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);		
 
 	status_info.push(lesson_status);
-	/*$my_new_old_item=$("#old_item").val();
-	$my_new_current_item=$("#current_item_id").val();*/
-	
-	$my_new_old_item=info_lms_item[0];
-	$my_new_current_item=info_lms_item[1];
 	
 	//current item
 
@@ -1471,9 +1466,9 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
             for (j in interactions[i]) {            	
             	temp = interactions[i][j];
             	temp = ''+temp; // if temp == 1 there are problems with indexOf and an integer number
-            	//this fix when an interaction have ',' i.e:   {a,b,c,d} is replace to {a@@b@@c@@d} see DT#4444          	
+            	//this fix when an interaction have ',' i.e:   {a,b,c,d} is replace to {a@.|@b@.|@c@.|@d} see DT#4444          	
 				while(temp.indexOf(',') >= 0){				
-					temp = temp.replace(',','@@');					
+					temp = temp.replace(',','@.|@');					
 				};
             	interact_temp +=temp+',';
             }

@@ -38,9 +38,10 @@ include_once('./main/inc/global.inc.php');
 
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
-
-$sql="update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='DENIED' where (user_id = ".$_user['user_id'].")";
-$result=api_sql_query($sql,__FILE__,__LINE__);
+if (isset($_user['user_id']) && $_user['user_id']!='') {
+	$sql="update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='DENIED' where (user_id = ".$_user['user_id'].")";
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+}
 
 Display::display_header();
 

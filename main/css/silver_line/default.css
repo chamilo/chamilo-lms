@@ -81,12 +81,20 @@ ul {
 }
 /* user_portal course list */
 .courses {
-	font-weight: bold;
-	list-style: none;
-	margin-bottom: .2em;
-	font-family: arial, sans-serif, sans;
-	font-size: 110%;
+	list-style-type: none;
+	margin-bottom: 5px;
+	height: 30px;	
 }
+/* user_portal session list */
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}
+.session_course_item {
+	/* padding: 0px; */
+	margin: 0px;
+}
+
 #main {
 	font-size: 89%;
 	width: 96%;
@@ -144,13 +152,6 @@ ul {
 .session_box_title {
 }
 .session_box_coach {
-}
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-}
-.session_course_item .courses {
-	height:22px;
 }
 /*
 ==============================================================================

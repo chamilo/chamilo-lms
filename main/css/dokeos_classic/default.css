@@ -150,7 +150,18 @@ input[text] {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
+	height: 30px;	
 }
+/* user_portal session list */
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}
+.session_course_item {
+	/* padding: 0px; */
+	margin: 0px;
+}
+
 /*****************************************************
  *  HEADER STYLES                                    *
  *****************************************************/
@@ -1326,14 +1337,6 @@ div.admin_section h4 {
 .session_box_title {
 }
 .session_box_coach {
-}
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-}
-
-.session_course_item .courses {
-	height:22px;
 }
 /***************************************************************
  *  DOKEOS CONFIG SETTINGS OF THE PLATFORM ADMIN SECTION 	   *

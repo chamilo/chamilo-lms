@@ -1,7 +1,7 @@
 <?php //$id:$
 /**
  * Container for the scormItem class that deals with <item> elements in an imsmanifest file
- * @package	dokeos.learnpath
+ * @package	dokeos.learnpath.scorm
  * @author	Yannick Warnier	<ywarnier@beeznest.org>
  */
 /**

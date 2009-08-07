@@ -57,7 +57,7 @@ class Exercise
 	{
 		$this->id=0;
 		$this->exercise='';
-		$this->description='';
+		$this->description='hola';
 		$this->sound='';
 		$this->type=1;
 		$this->random=0;
@@ -520,6 +520,7 @@ class Exercise
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);        
         $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
 
+		
 		$id=$this->id;
 		$exercise=$this->exercise;
 		$description=$this->description;
@@ -528,7 +529,8 @@ class Exercise
 		$attempts=$this->attempts;
 		$feedbacktype=$this->feedbacktype;
 		$random=$this->random;
-		$active=$this->active;
+		$active=$this->active;				
+		
 		if ($feedbacktype==1){
 			$results_disabled = 1;
 		} else {
@@ -580,7 +582,7 @@ class Exercise
 			$cond1=Database::escape_string(Security::remove_XSS($exercise));
 			$cond2=Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY));		
 		}*/
-			$sql="INSERT INTO $TBL_EXERCICES(start_time,end_time,title,description,sound,type,random,active, results_disabled, max_attempt,feedback_type) 
+			$sql="INSERT INTO $TBL_EXERCICES (start_time,end_time,title,description,sound,type,random,active, results_disabled, max_attempt,feedback_type) 
 					VALUES(
 						'$start_time','$end_time',
 						'".Database::escape_string($exercise)."',
@@ -593,6 +595,7 @@ class Exercise
 						'".Database::escape_string($attempts)."',
 						'".Database::escape_string($feedbacktype)."'
 						)";
+			//var_dump($description);
 			api_sql_query($sql,__FILE__,__LINE__);			
 			$this->id=Database::insert_id();		
         	// insert into the item_property table
@@ -875,14 +878,25 @@ class Exercise
 		$form -> addElement('html','<div class="row">
 		<div class="label"></div>
 		<div class="formw" style="height:50px">
-			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'</span></a>
+			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'</span></a>
 		</div>
 		</div>');
-	
-		$form -> addElement ('html','<div id="media" style="display:none;">');
-		$form -> addElement ('html_editor', 'exerciseDescription', null, null, array('ToolbarSet' => 'TestDescription', 'Width' => '100%', 'Height' => '200'));
-		$form -> addElement ('html','</div>');
 		
+		$editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
+		if(is_array($type)){
+			$editor_config = array_merge($editor_config, $type);
+		}	
+		/*
+		$form -> addElement ('html','<div id="media" style="display:none;">');
+		$form -> add_html_editor ('exerciseDescription', get_lang('langQuestionDescription'), null, null, array('ToolbarSet' => 'TestDescription', 'Width' => '100%', 'Height' => '200'));
+		$form -> addElement ('html','</div>');		
+		*/
+				
+		$form -> addElement ('html','<div id="media" style="display:block;">');
+		$form -> add_html_editor('exerciseDescription', get_lang('langExerciseDescription'), false, false, $editor_config);
+		$form -> addElement ('html','</div>');
+
+
 		$form -> addElement('html','<div class="row">
 			<div class="label">&nbsp;</div>
 			<div class="formw">

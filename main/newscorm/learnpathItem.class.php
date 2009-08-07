@@ -1006,18 +1006,16 @@ class learnpathItem{
      * @param	boolean	Do or don't update the local attribute value with what's been found in DB
      * @return	string	Current status or 'Nnot attempted' if no status set yet
      */
-    function get_status($check_db=true,$update_local=false)
-    {
+    function get_status($check_db=true,$update_local=false) {
     	if($this->debug>0){error_log('New LP - In learnpathItem::get_status() on item '.$this->db_id,0);}
-    	if($check_db)
-    	{
+    	if($check_db) {
     		if($this->debug>2){error_log('New LP - In learnpathItem::get_status(): checking db',0);}
     		$table = Database::get_course_table('lp_item_view');
     		$sql = "SELECT * FROM $table WHERE id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";
     		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Checking DB: '.$sql,0);}
-    		//error_log($sql);
+
     		$res = api_sql_query($sql);
-    		if(Database::num_rows($res)==1){
+    		if (Database::num_rows($res)==1) {
     			$row = Database::fetch_array($res);
     			if($update_local==true){
     				$this->set_status($row['status']);
@@ -1025,12 +1023,9 @@ class learnpathItem{
 	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'],0);}
     			return $row['status'];
     		}
-    	}
-    	else
-    	{
+    	} else {
     		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - in get_status: using attrib',0);}
-	    	if(!empty($this->status))
-	    	{
+	    	if(!empty($this->status)) {
 	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning attrib: '.$this->status,0);}
 	    		return $this->status;
 	    	}
@@ -2188,7 +2183,7 @@ function get_terms()
 		$rs_verified=api_sql_query($sql_verified,__FILE__,__LINE__);
 		$row_verified=Database::fetch_array($rs_verified);
 					
-   		$my_case_completed=array('completed','passed','browsed');
+   		$my_case_completed=array('completed','passed','browsed','failed');//added by isaac flores
    		if (in_array($sql_verified['status'],$my_case_completed)) {
    			$save=false;
    		} else {
@@ -2355,14 +2350,29 @@ function get_terms()
 	     					if (in_array($this->get_status(false),$case_completed) &&  $my_type_lp==2) {
 	     						//reset zero new attempt ?	     						
 	     						$my_status = " status = '".$this->get_status(false)."' ,";
-	     					} elseif (!in_array($this->get_status(false),$case_completed) &&  $my_type_lp==2){
+	     					}  elseif (!in_array($this->get_status(false),$case_completed) &&  $my_type_lp==2){
 	     						$total_time =" total_time = ".$this->get_total_time().", ";
 	     						$my_status = " status = '".$this->get_status(false)."' ,";	     						
 	     					} else {
 	     						//is dokeos LP
 	     						$total_time =" total_time = total_time +".$this->get_total_time().", ";
 	     						$my_status = " status = '".$this->get_status(false)."' ,"; 
-	     					}	     					
+	     					}	
+	     					
+	     					//code added by isaac flores
+	     					//this code line fix the problem of wrong status
+	     					if ( $my_type_lp==2) {
+				     			//verify current status in multiples attempts
+				     			$sql_status='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ';
+						     	$rs_status=Database::query($sql_status,__FILE__,__LINE__);
+						     	$current_status=Database::result($rs_status,0,'status');
+						     	if (in_array($current_status,$case_completed)) {
+						     		$my_status='';
+						     		$total_time='';
+						     	} else {
+						     		$total_time =" total_time = total_time +".$this->get_total_time().", ";
+						     	}
+	     					}     					
 	     				}	     						
 	     				/*if ($my_type_lp==1 && !in_array($row_verified['status'],$case_completed)) {
 	     					$total_time =" total_time = total_time + ".$this->get_total_time().", ";

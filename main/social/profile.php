@@ -161,7 +161,7 @@ function hide_display_message () {
 	}
 }	
 function register_friend(element_input) {
- if(confirm("'.get_lang('AddToFriends', '').'")) {
+ if(confirm("'.get_lang('AddToFriends').'")) {
 		name_button=$(element_input).attr("id");
 		name_div_id="id_"+name_button.substring(13);
 		user_id=name_div_id.split("_");
@@ -174,8 +174,7 @@ function register_friend(element_input) {
 			url: "../social/register_friend.php",
 			data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
 			success: function(datos) {
-			// $("div#dpending_"+user_friend_id).html(datos);
-			 $("#id_reload").submit();
+				$("form").submit()
 			}
 		});
  }
@@ -894,5 +893,5 @@ echo '<div id="social-profile-container">';
         echo '</div>';
     echo '</div>';
 echo '</div>'; //from the main
-echo '<form id="id_reload" action="#"></form>';
+echo '<form id="id_reload" name="id_reload" action="profile.php">&nbsp;</form>';
 Display :: display_footer();

@@ -1,27 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) 2004 Bart Mollet (HoGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 define('VISIBLE_GUEST', 1);
 define('VISIBLE_STUDENT', 2);
 define('VISIBLE_TEACHER', 3);
@@ -210,6 +188,7 @@ class SystemAnnouncementManager
 
 	function count_nb_announcement($start = 0,$user_id = '')
 	{
+		$start = intval($start);
 		$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
@@ -326,7 +305,7 @@ class SystemAnnouncementManager
 		$date_end = array_merge($a_arrayED,$a_arrayEH);
 		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-if (!checkdate($date_start[1], $date_start[2], $date_start[0])) {
+		if (!checkdate($date_start[1], $date_start[2], $date_start[0])) {
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
 			return false;
 		}
@@ -385,6 +364,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0])) {
 	function set_visibility($announcement_id, $user, $visible)
 	{
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+		$announcement_id = intval($announcement_id);
 		$field = ($user == VISIBLE_TEACHER ? 'visible_teacher' : ($user == VISIBLE_STUDENT ? 'visible_student' : 'visible_guest'));
 		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."' WHERE id='".$announcement_id."'";
 		return api_sql_query($sql,__FILE__,__LINE__);

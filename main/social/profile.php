@@ -603,8 +603,10 @@ echo '<div id="social-profile-wrapper">';
 			
 			// Images uploaded by course			
 			$file_list = '';
-			foreach ($course_list_code as $course) { 
-				$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code']);
+			if (is_array($course_list_code) && count($course_list_code)>0) {
+				foreach ($course_list_code as $course) { 
+					$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code']);
+				}
 			}
 			
 			if (!empty($file_list)) {

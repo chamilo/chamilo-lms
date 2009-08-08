@@ -532,7 +532,7 @@ if ($encryptPassForm=='1' ) {
 
 <form style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 
-<div id="installation_steps">
+<div id="installation_steps" style="width:240px">
 	<img src="../img/bluelogo.gif" hspace="10" vspace="10" alt="Dokeos logo" />
 	<ol>
 		<li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
@@ -545,7 +545,7 @@ if ($encryptPassForm=='1' ) {
 	</ol>
 </div>
 
-<table cellpadding="6" cellspacing="0" border="0" width="75%" align="center">
+<table cellpadding="6" cellspacing="0" border="0" width="72%" align="center">
 <tr>
   <td>
 	<input type="hidden" name="updatePath"           value="<?php if(!$badUpdatePath) echo api_htmlentities($proposedUpdatePath, ENT_QUOTES, $charset); ?>" />

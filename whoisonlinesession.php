@@ -1,5 +1,5 @@
 <?php
-// Dokeos Header here
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
  * @todo variables are sometimes in cammelcase, or even worse a mixture of CammelCase and udnerscoring: $a_userList
@@ -49,6 +49,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 <?php
 	$sessionIsCoach = array();
 	if (isset($_user['user_id']) && $_user['user_id']!='') {
+		$_user['user_id'] = intval($_user['user_id']);
 		$result = api_sql_query("SELECT DISTINCT id, 
 										name, 
 										date_start, 

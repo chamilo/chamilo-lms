@@ -715,7 +715,7 @@ VALUES
 ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,0),
 ('allow_social_tool', NULL, 'radio', 'Tools', 'false', 'AllowSocialToolTitle', 'AllowSocialToolComment', NULL, NULL, 0),
 ('allow_students_to_browse_courses',NULL,'radio','Platform','true','AllowStudentsToBrowseCoursesTitle','AllowStudentsToBrowseCoursesComment',NULL,NULL, 1),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.7940','DokeosDatabaseVersion','',NULL,NULL,0); 
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.7945','DokeosDatabaseVersion','',NULL,NULL,0); 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -2087,6 +2087,7 @@ CREATE TABLE user_friend(
 ALTER TABLE user_friend ADD INDEX idx_user_friend_user (user_id);
 ALTER TABLE user_friend ADD INDEX idx_user_friend_friend_user(friend_user_id);
 ALTER TABLE user_friend ADD INDEX idx_user_friend_user_friend_user(user_id,friend_user_id);
+ALTER TABLE user_friend ADD COLUMN last_edit DATETIME;
 
 --
 -- Table structure for table user_friend_relation_type

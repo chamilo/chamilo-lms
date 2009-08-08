@@ -34,9 +34,8 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_tutor
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_tutor_data','false','No');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_teacher_data','true','Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_teacher_data','false','No');
-INSERT IGNORE INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.1.7940','DokeosDatabaseVersion','',NULL,NULL,1,0);
-
-
+INSERT IGNORE INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.1.7945','DokeosDatabaseVersion','',NULL,NULL,1,0);
+ALTER TABLE user_friend ADD COLUMN last_edit DATETIME;
 
 -- xxSTATSxx
 

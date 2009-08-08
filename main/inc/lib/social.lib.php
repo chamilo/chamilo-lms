@@ -28,7 +28,8 @@ class UserFriend extends UserManager {
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database :: fetch_array($result, 'ASSOC');
 		if ($row['count'] == 0) {
-			$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type)values(' . ((int)$friend_id) . ','.((int)$my_user_id).','.((int)$relation_type).');';
+			$current_date=date('Y-m-d H:i:s'); 
+			$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . ((int)$friend_id) . ','.((int)$my_user_id).','.((int)$relation_type).',"'.$current_date.'");';			
 			Database::query($sql_i, __FILE__, __LINE__);
 		} else {
 			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . ((int)$friend_id) . ' AND user_id='.((int)$my_user_id);

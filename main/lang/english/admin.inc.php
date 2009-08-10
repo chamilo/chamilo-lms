@@ -1018,4 +1018,17 @@ $ShowTutorDataComment = "Show the session\'s tutor reference (name and e-mail if
 $ShowTeacherDataTitle = "Show teacher information in footer";
 $ShowTeacherDataComment = "Show the teacher reference (name and e-mail if available) in the footer?";
 $TermsAndConditions = "Terms and conditions";
+$HTMLText = "HTML";
+$PageLink = "Page Link";
+$DisplayTermsConditions = "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register.";
+$AllowTermsAndConditionsComment = "Allow terms and conditions comment";
+$AllowTermsAndConditionsTitle = "Allow Terms and Conditions";
+$AllowTermsAndConditionsComment = "This option will display the Terms and Conditions in the register form for new users";
+$Load = "Load";
+$AllVersions = "All versions";
+$EditTermsAndConditions = "Edit terms and conditions";
+$Changes = "Changes";
+$ExplainChanges = "Explain changes";
+$TermAndConditionNotSaved = "Term and condition not saved";
+$TheSubLanguageHasBeenRemoved = "The sub language has been removed";
 ?>

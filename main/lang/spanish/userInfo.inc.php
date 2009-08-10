@@ -84,4 +84,5 @@ $ViewMySharedProfile = "Mi perfil compartido";
 $UserStatistics = "Informes de este usuario";
 $EditUser = "Editar usuario";
 $ViewUser = "Ver usuario";
+$RSSFeeds = "Agregador RSS";
 ?>

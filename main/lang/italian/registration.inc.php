@@ -171,4 +171,6 @@ $EditNormalProfile = "Modifica il profilo normale";
 $EditExtendProfile = "Modifica il profilo esteso";
 $EditInformation = "Modifica le informazioni";
 $RegisterUser = "Iscrivi utente";
+$IHaveReadAndAgree = "Do il mio assenso.";
+$ByClickingRegisterYouAgreeTermsAndConditions = "Cliccando sul pulsante qui sotto fornisci l\'assenso relativamente alla privacy, ai termini e alle condizioni d\'uso.";
 ?>

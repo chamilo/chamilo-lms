@@ -170,4 +170,6 @@ $EditNormalProfile = "Edit normal profile";
 $EditExtendProfile = "Edit extended profile";
 $EditInformation = "Edit profile";
 $RegisterUser = "Register";
+$IHaveReadAndAgree = "I have read and agree to the";
+$ByClickingRegisterYouAgreeTermsAndConditions = "By clicking on \'Register\' below you are agreeing to the Terms and Conditions";
 ?>

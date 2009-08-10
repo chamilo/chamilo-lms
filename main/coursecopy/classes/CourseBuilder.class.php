@@ -1,27 +1,5 @@
-<?php // $Id: CourseBuilder.class.php 22200 2009-07-17 19:47:58Z iflorespaz $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /dokeos_license.txt */
 require_once ('Course.class.php');
 require_once ('Event.class.php');
 require_once ('Link.class.php');
@@ -62,6 +40,7 @@ class CourseBuilder
 		$this->course->type = $type;
 		$this->course->path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
 		$this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
+		$this->course->encoding = api_get_system_encoding(); //current platform encoding 
 	}
 	/**
 	 * Get the created course
@@ -89,14 +68,11 @@ class CourseBuilder
 		$this->build_glossarys();
 		//TABLE_LINKED_RESOURCES is the "resource" course table, which is deprecated, apparently
 		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES);
-		foreach ($this->course->resources as $type => $resources)
-		{
-			foreach ($resources as $id => $resource)
-			{
+		foreach ($this->course->resources as $type => $resources) {
+			foreach ($resources as $id => $resource) {
 				$sql = "SELECT * FROM ".$table." WHERE source_type = '".$resource->get_type()."' AND source_id = '".$resource->get_id()."'";
 				$res = api_sql_query($sql, __FILE__, __LINE__);
-				while ($link = Database::fetch_object($res))
-				{
+				while ($link = Database::fetch_object($res)) {
 					$this->course->resources[$type][$id]->add_linked_resource($link->resource_type, $link->resource_id);
 				}
 			}

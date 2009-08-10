@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /dokeos_license.txt */
 $language_file=array('exercice');
 include_once('../inc/global.inc.php');
 include api_get_path(INCLUDE_PATH) . 'reduced_header.inc.php';
@@ -25,15 +26,15 @@ if ( empty ( $exerciseResult ) ) {
     $exerciseResult = $_SESSION['exerciseResult'];
 }
 
-if ( empty ( $exerciseResultCoordinates ) ) {
+if (empty($exerciseResultCoordinates)) {
     $exerciseResultCoordinates = $_REQUEST['exerciseResultCoordinates'];
 }
-if ( empty ( $origin ) ) {
-    $origin = $_REQUEST['origin'];
+if (empty($origin)) {
+    $origin = Security::remove_XSS($_REQUEST['origin']);
 }
 
 $_SESSION['hotspot_coord']=array();
-$newquestionList=$_SESSION['newquestionList'];
+$newquestionList= $_SESSION['newquestionList'];
 $questionList 	= $_SESSION['questionList'];
 $exerciseId		= intval($_GET['exerciseId']);
 $exerciseType	= intval($_GET['exerciseType']);
@@ -43,19 +44,19 @@ $nbrQuestions	= intval($_GET['nbrQuestions']);
 //round-up the coordinates
 $coords = explode('/',$_GET['hotspot']);
 $user_array = '';
-foreach ($coords as $coord) {
-    list($x,$y) = explode(';',$coord);
-    $user_array .= round($x).';'.round($y).'/';
+if (is_array($coords) && count($coords)>0){
+	foreach ($coords as $coord) {
+	   	list($x,$y) = explode(';',$coord);
+    	$user_array .= round($x).';'.round($y).'/';
+	}
 }
 $user_array = substr($user_array,0,-1);
 
-if ( isset (  $_GET['choice'] ) ) 
-{ 
+if (isset( $_GET['choice'])){ 
     $choice_value = $_GET['choice'];
 }
 // getting the options by js
-if (empty($choice_value) )
-{
+if (empty($choice_value)) {
 	echo '<script type="text/javascript">'."		
 		// this works for only radio buttons		
 		var f= self.parent.window.document.frm_exercise;
@@ -111,21 +112,16 @@ if(!is_array($exerciseResult))
 
 
 // if the user has answered at least one question
-if(is_array($choice))
-{
-    if($exerciseType == 1)
-    {
+if(is_array($choice)) {
+    if($exerciseType == 1) {
         // $exerciseResult receives the content of the form.
         // Each choice of the student is stored into the array $choice
         $exerciseResult=$choice; 
-    }
-    else
-    {
+    } else {
         // gets the question ID from $choice. It is the key of the array
         list($key)=array_keys($choice);
         // if the user didn't already answer this question
-        if(!isset($exerciseResult[$key]))
-        {
+        if(!isset($exerciseResult[$key])) {
             // stores the user answer into the array
             $exerciseResult[$key]=$choice[$key];   
         }
@@ -242,8 +238,8 @@ if (!empty($choice_value))
 						//$_SESSION['exerciseResultCoordinates'][$questionId]=$exerciseResultCoordinates;
 						
 						// we compare only the delineation not the other points
-						$answer_question= $_SESSION['hotspot_coord'][1];	
-						$answerDestination=  $_SESSION['hotspot_dest'][1];
+						$answer_question	= $_SESSION['hotspot_coord'][1];	
+						$answerDestination	= $_SESSION['hotspot_dest'][1];
 						
                         $poly_user = convert_coordinates($user_answer,'/');
                         $poly_answer = convert_coordinates($answer_question,'|');
@@ -419,8 +415,7 @@ if (!empty($choice_value))
 
 $_SESSION['newquestionList']=$newquestionList;
 
-if ($choice_value==-1)
-{		
+if ($choice_value==-1) {		
 	$links. '<a href="#" onclick="self.parent.tb_remove();">'.get_lang('ChooseAnAnswer').'</a>';
 }
 
@@ -557,15 +552,11 @@ if ($links!='')
 	//echo '<a onclick="self.parent.tb_remove();" href="#" style="float:right;">'.get_lang('Close').'</a>';
 	echo '</div>';
 	$_SESSION['hot_spot_result']=$message; 
-}
-else
-{
-
+} else {
 	$questionNum++;
 	echo '<script>
 			self.parent.window.location.href = "exercice_submit.php?exerciseId='.$exerciseId.'&questionNum='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'";	  		 	
    			//self.parent.tb_remove();	  	
- 	 	</script>';
-	
+ 	 	</script>';	
 }
 ?>

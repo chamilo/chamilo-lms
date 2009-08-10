@@ -22,12 +22,12 @@ require_once('question.class.php');
 require_once('answer.class.php');
 require_once('exercise.lib.php');
 
-if ( empty ( $exerciseResult ) ) {
+if (empty ($exerciseResult)) {
     $exerciseResult = $_SESSION['exerciseResult'];
 }
 
 if (empty($exerciseResultCoordinates)) {
-    $exerciseResultCoordinates = $_REQUEST['exerciseResultCoordinates'];
+    //$exerciseResultCoordinates = $_REQUEST['exerciseResultCoordinates'];
 }
 if (empty($origin)) {
     $origin = Security::remove_XSS($_REQUEST['origin']);
@@ -53,7 +53,7 @@ if (is_array($coords) && count($coords)>0){
 $user_array = substr($user_array,0,-1);
 
 if (isset( $_GET['choice'])){ 
-    $choice_value = $_GET['choice'];
+    $choice_value = intval($_GET['choice']);
 }
 // getting the options by js
 if (empty($choice_value)) {

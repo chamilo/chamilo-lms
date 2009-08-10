@@ -109,15 +109,10 @@ function ckeck_if_is_parent_of_sub_language ($parent_id) {
 /**
  * Get all information of sub-language
  */
-function allow_get_all_information_of_sub_language ($parent_id) {
-	return AdminManager::get_all_information_of_sub_language($parent_id); 
+function allow_get_all_information_of_sub_language ($parent_id,$sub_language_id) {
+	return AdminManager::get_all_information_of_sub_language($parent_id,$sub_language_id); 
 }
-/**
- * Delete sub-language
- */
-function removed_sub_language ($parent_id) {
-	AdminManager::removed_sub_language($parent_id);
-}
+
 /**
  * Add directory for sub-language 
  */
@@ -153,7 +148,19 @@ function remove_directory_of_sub_language ($path) {
 }
 /*end declare functions*/
 
-//add register
+//add data
+
+if (isset($_GET['sub_language_id']) && $_GET['sub_language_id']==strval(intval($_GET['sub_language_id']))) {
+	$language_name=get_name_of_language_by_id($_GET['sub_language_id']);
+		if (check_if_exist_language_by_id ($_GET['sub_language_id'])===true) {
+			$sub_language_id=$_GET['sub_language_id'];
+			$sub_language_id_exist=true;
+		} else {
+			$sub_language_id_exist=false;
+		}
+		
+}
+
 if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 	$language_name=get_name_of_language_by_id($_GET['id']);
 		if (check_if_exist_language_by_id ($_GET['id'])===true) {
@@ -170,9 +177,9 @@ if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 
 //removed and register
 
-if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
-	if (check_if_exist_language_by_id($_GET['id'])===true) {
-	 	$get_all_information=allow_get_all_information_of_sub_language ($_GET['id']);
+if ((isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) && (isset($_GET['sub_language_id']) && $_GET['sub_language_id']==strval(intval($_GET['sub_language_id'])))) {
+	if (check_if_exist_language_by_id($_GET['id'])===true && check_if_exist_language_by_id($_GET['sub_language_id'])===true) {
+	 	$get_all_information=allow_get_all_information_of_sub_language ($_GET['id'],$_GET['sub_language_id']);
 		$original_name=$get_all_information['original_name'];
 		$english_name=$get_all_information['english_name'];
 		$isocode=$get_all_information['isocode'];
@@ -243,15 +250,17 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
 	if (is_dir($path)) {
 		$rs=remove_directory_of_sub_language($path);
 		if ($rs===true) {
-			removed_sub_language($parent_id);
+			AdminManager::removed_sub_language($parent_id,$sub_language_id);
+			Display::display_confirmation_message(get_lang('TheSubLanguageHasBeenRemoved'));
 		}
 		
 	}
 }
-	
-	if (ckeck_if_is_parent_of_sub_language ($parent_id)===false ) {
+     // ckeck_if_is_parent_of_sub_language($parent_id)===false
+	//
+	if (isset($_GET['action']) && $_GET['action']=='definenewsublanguage') {
 		$text=$language_name;
-		$form = new FormValidator('addsublanguage', 'post', 'new_sub_language.php?id='.Security::remove_XSS($_GET['id']));
+		$form = new FormValidator('addsublanguage', 'post', 'new_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&action=definenewsublanguage');
 		$class='add';
 		$form->addElement('header', '', $text);			
 		$form->addElement('text', 'original_name', get_lang('OriginalName'),'class="input_titles"');
@@ -266,7 +275,7 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
 	} else {
 		if (isset($_GET['action']) && $_GET['action']=='deletesublanguage') {
 			$text=$language_name;
-			$form = new FormValidator('deletesublanguage', 'post', 'new_sub_language.php?id='.Security::remove_XSS($_GET['id']));
+			$form = new FormValidator('deletesublanguage', 'post', 'new_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&sub_language_id='.Security::remove_XSS($_GET['sub_language_id']));
 			$class='minus';
 			$form->addElement('header', '', $text);
 			$form->addElement('static', '', get_lang('OriginalName'),$original_name);

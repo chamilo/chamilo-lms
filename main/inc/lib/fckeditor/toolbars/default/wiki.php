@@ -11,7 +11,7 @@
 $config['ToolbarSets']['Normal'] = array(
 	array('NewPage','Templates','Save','PageBreak','Preview','FitWindow','-','PasteText','-','Undo','Redo','-','SelectAll','-','Find'),
 	array('Wikilink','Link','Unlink','Anchor'),
-	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
+	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath'),
 	array('Table','Smiley','SpecialChar','googlemaps'),
 	array('FontFormat','FontName','FontSize'),
 	array('Bold','Italic','Underline'),

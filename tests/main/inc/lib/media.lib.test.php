@@ -1,17 +1,14 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'media.lib.php');
-define('FLASH_PLAYER_AUDIO', 'FLASH_PLAYER_AUDIO');
-define('FLASH_PLAYER_VIDEO', 'FLASH_PLAYER_VIDEO');
-define('SCRIPT_SWFOBJECT', 'SCRIPT_SWFOBJECT');
-
 
 class TestMedia extends UnitTestCase {
 	
 		public function testget_path() {
-			$media_resource='';
-			$res=Media::get_path($media_resource,$path_type = REL_PATH);
-			$this->assertTrue(is_string($res));
-			//var_dump($res);
+			$result1 = Media::get_path(FLASH_PLAYER_AUDIO, REL_PATH);
+			$result2 = Media::get_path(FLASH_PLAYER_VIDEO, WEB_PATH);
+			$result3 = Media::get_path(SCRIPT_SWFOBJECT, SYS_PATH);
+			$result4 = Media::get_path(SCRIPT_ASCIIMATHML, REL_PATH);
+			$this->assertTrue(!empty($result1) && !empty($result2) && !empty($result3) && !empty($result4));
 		}
 }
 ?>

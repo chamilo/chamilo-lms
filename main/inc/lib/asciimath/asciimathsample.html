@@ -1,0 +1,38 @@
+<html xmlns:mml="http://www.w3.org/1998/Math/MathML">
+<head>
+<script type="text/javascript" src="ASCIIMathML.js"></script>
+<title>ASCIIMathML sample page</title>
+</head>
+<body>
+
+<h2>ASCIIMathML.js sample page</h2>
+
+<p>
+Use auto-math-recognize mode (amath here x^2 and text is 
+mixed endamath) or surround ASCIIMath formulas 
+with left-quotes: 
+`sum_(i=1)^n i=(n(n+1))/2` or LaTeX formulas with \$-signs 
+$\int_0^{\pi/2} \sin x\,dx=1$.
+</p>
+
+<p>
+And here is a simple graph:
+
+agraph plot(sin(x)) endagraph
+
+followed by a more elaborate graph (try double-clicking it, also 
+while holding down shift or alt)
+
+agraph
+width=300; height=200; xmin=-5; xmax=5; xscl=1;
+plot((x-2)*(x-1)*x*(x+1)*(x+2)/2,-2.5,2.5);
+endagraph
+</p>
+
+<p>
+Note: this page uses a relative link to ASCIIMathML.js, 
+so the script should be in the same folder as this sample file.
+</p>
+
+</body>
+</html>

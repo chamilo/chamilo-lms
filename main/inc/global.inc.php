@@ -604,16 +604,20 @@ if (is_array($language_files)) {
 			
 			$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
 			$sql_sub_language='SELECT dokeos_folder FROM '.$tbl_admin_languages.' WHERE parent_id=(SELECT id FROM '.$tbl_admin_languages.' WHERE dokeos_folder="'.Database::escape_string($language_interface).'" AND  ISNULL(parent_id))';
+	
 			$rs_sub_language=Database::query($sql_sub_language,__FILE__,__LINE__);
-			$row_sub_language=Database::result($rs_sub_language,0,'dokeos_folder');
-			
-			$sub_langfile = $langpath.$row_sub_language.'/'.$language_file.'.inc.php';
+			$num_row_sub_language=Database::num_rows($rs_sub_language);
 			
 			if (file_exists($langfile)) {
-				include $langfile;
-				if (file_exists($sub_langfile)) {
-					include $sub_langfile;
+				include_once $langfile;
+				for ($i=0;$i<$num_row_sub_language;$i++) {
+					$row_sub_language=Database::result($rs_sub_language,$i,'dokeos_folder');
+					$sub_langfile = $langpath.$row_sub_language.'/'.$language_file.'.inc.php';
+					if (file_exists($sub_langfile)) {
+						include_once $sub_langfile;
+					}
 				}
+				
 			}
 		}	
 	} else {

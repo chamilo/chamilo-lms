@@ -33,12 +33,12 @@ if ( empty ( $origin ) ) {
 }
 
 $_SESSION['hotspot_coord']=array();
-$newquestionList=$_SESSION['newquestionList'];
-$questionList = $_SESSION['questionList'];
-$exerciseId=$_GET['exerciseId'];
-$exerciseType=$_GET['exerciseType'];
-$questionNum=$_GET['questionnum'];
-$nbrQuestions=$_GET['nbrQuestions'];
+$newquestionList= $_SESSION['newquestionList'];
+$questionList 	= $_SESSION['questionList'];
+$exerciseId		= intval($_GET['exerciseId']);
+$exerciseType	= intval($_GET['exerciseType']);
+$questionNum	= intval($_GET['questionnum']);
+$nbrQuestions	= intval($_GET['nbrQuestions']);
 
 //round-up the coordinates
 $coords = explode('/',$_GET['hotspot']);
@@ -49,13 +49,11 @@ foreach ($coords as $coord) {
 }
 $user_array = substr($user_array,0,-1);
 
-if ( isset (  $_GET['choice'] ) ) 
-{ 
+if (isset($_GET['choice'])) { 
     $choice_value = $_GET['choice'];
 }
 // getting the options by js
-if (empty($choice_value) )
-{
+if (empty($choice_value)) {
 	echo '<script type="text/javascript">'."		
 		// this works for only radio buttons		
 		var f= self.parent.window.document.frm_exercise;
@@ -64,18 +62,15 @@ if (empty($choice_value) )
 		var hotspot = new Array();
 		var hotspotcoord = new Array();
 		var counter=0;
-		for( var i = 0; i < f.elements.length; i++ ) 
-		{ 					
-			if (f.elements[i].type=='radio' && f.elements[i].checked)
-			{				
+		for( var i = 0; i < f.elements.length; i++ ) { 					
+			if (f.elements[i].type=='radio' && f.elements[i].checked) {				
 				//alert( f.elements[i].name);				
 				choice_js = f.elements[i].value;
                 counter ++;				
 			}															
 																	
 																	
-			if (f.elements[i].type=='hidden' )
-			{	
+			if (f.elements[i].type=='hidden' ) {	
 				name = f.elements[i].name;
 					
 				if (name.substr(0,7)=='hotspot')
@@ -83,19 +78,14 @@ if (empty($choice_value) )
 			
 				if (name.substr(0,20)=='hotspot_coordinates')
 					hotspotcoord.push(f.elements[i].value);			
-				//hotspot = f.elements[i].value;			
-														
-			}														
-																		
+				//hotspot = f.elements[i].value;		
+			}															
 		}					
-		if (counter==0)					
-		{
+		if (counter==0) {
 			choice_js=-1; // this is an error	
 		}				
-		//alert(choice_js);						
-								
-	";		
-	echo 'window.location.href = "exercise_submit_modal.php?hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'gradebook='.$gradebook.'";</script>';
+		//alert(choice_js);";		
+	echo 'window.location.href = "exercise_submit_modal.php?hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.Security::remove_XSS($origin).'&gradebook='.$gradebook.'";</script>';
 }
 
 $choice=array();
@@ -104,23 +94,18 @@ $questionid= $questionList[$questionNum];
 $choice[$questionid]=$choice_value;
 	
 // initializing
-if(!is_array($exerciseResult))
-{
+if(!is_array($exerciseResult)) {
     $exerciseResult=array();
 }
 
 
 // if the user has answered at least one question
-if(is_array($choice))
-{
-    if($exerciseType == 1)
-    {
+if(is_array($choice)) {
+    if($exerciseType == 1) {
         // $exerciseResult receives the content of the form.
         // Each choice of the student is stored into the array $choice
         $exerciseResult=$choice; 
-    }
-    else
-    {
+    } else {
         // gets the question ID from $choice. It is the key of the array
         list($key)=array_keys($choice);
         // if the user didn't already answer this question
@@ -151,8 +136,7 @@ if($questionNum >= $nbrQuestions)
 //print_r($choice); echo "<br>";
 
 // creates a temporary Question object
-if (in_array($questionid,$questionList))
-{ 
+if (in_array($questionid,$questionList)) { 
 	$objQuestionTmp = Question :: read($questionid);
 	$questionName=$objQuestionTmp->selectTitle();
 	$questionDescription=$objQuestionTmp->selectDescription();
@@ -177,8 +161,7 @@ $_SESSION['hotspot_dest']=array();
 $overlap_color=$missing_color=$excess_color=false;
 $organs_at_risk_hit=0;
 
-if (!empty($choice_value))
-{	
+if (!empty($choice_value)) {	
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {		
 		$answer=$objAnswerTmp->selectAnswer($answerId);
 		$answerComment=$objAnswerTmp->selectComment($answerId);	
@@ -471,16 +454,14 @@ foreach($pre_list_destination as $value)
 //echo '<pre>';print_r($destination);
 $links='';
 
-// the link to retry the question
-if ($try==1)
-{	
+// Try again link 
+if ($try==1) {	
 	$num_value_array= (array_keys($questionList, $questionid));	
-	$links.= Display :: return_icon('reload.gif', '', array ('style' => 'padding-left:0px;padding-right:5px;')).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('TryAgain').'</a><br /><br />';
+	$links.= Display :: return_icon('reload.gif', '', array ('style' => 'padding-left:0px;padding-right:5px;')).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('TryAgain').$origin.'</a><br /><br />';
 }
 
-// the link to theory (a learning path)
-if (!empty($lp))
-{	
+// Theory link (to a learning path)
+if (!empty($lp)) {	
 	$lp_url= api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp;
 	require_once('../newscorm/learnpathList.class.php');
 	$list = new LearnpathList(api_get_user_id());	
@@ -490,21 +471,17 @@ if (!empty($lp))
 $links.='<br />';
 
 
-// the link to an external website or link
+// Go to link - external website or link
 if (!empty($url)) {
 	$links.= Display :: return_icon('link.gif', '', array ('style' => 'padding-left:0px;padding-right:5px;')).'<a target="_blank" href="'.$url.'">'.get_lang('VisitUrl').'</a><br /><br />';
 }
 
-// the link to finish the test
-if ($destinationid==-1)
-{
+// Finish activity - the link to finish the test
+if ($destinationid==-1) {
 	$links.= Display :: return_icon('finish.gif', '', array ('style' => 'width:22px; height:22px; padding-left:0px;padding-right:5px;')).'<a onclick="SendEx(-1);" href="#">'.get_lang('EndActivity').'</a><br /><br />';
-}
-// the link to other question
-else
-{
-	if (in_array($destinationid,$questionList))
-	{ 
+} else {
+	// the link to other question
+	if (in_array($destinationid,$questionList)) { 
 		$objQuestionTmp = Question :: read($destinationid);
 		$questionName=$objQuestionTmp->selectTitle();
 		$num_value_array= (array_keys($questionList, $destinationid));																	
@@ -512,17 +489,12 @@ else
 	}
 }
 
-
-
 echo '<script> function SendEx(num) 	
 	  { 		  
-	  	if (num==-1)
-	  	{	  	
+	  	if (num==-1) {	  	
 	  		self.parent.window.location.href = "exercise_result.php?origin='.$origin.'"; 	
 	   		self.parent.tb_remove();  	
-	  	}
-	  	else
-	  	{
+	  	} else {
 	  		self.parent.window.location.href = "exercice_submit.php?tryagain=1&exerciseId='.$exerciseId.'&questionNum="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'"; 	
 	   		self.parent.tb_remove();
 	  	}
@@ -531,15 +503,13 @@ echo '<script> function SendEx(num)
 
 api_protect_course_script();
 	  	  
-if ($links!='')
-{
+if ($links!='') {
 	echo '<div id="ModalContent" style="padding-bottom:30px;padding-top:10px;padding-left:20px;padding-right:20px;">
     <a onclick="self.parent.tb_remove();" href="#" style="float:right; margin-top:-10px;" id="exercise_close_link">'.get_lang('Close').'</a>
 	<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>
 	<p style="text-align:center">';
 	
-	if ($answerType == HOT_SPOT_DELINEATION)
-	{
+	if ($answerType == HOT_SPOT_DELINEATION) {
 		$message='<p>'.get_lang('YourDelineation').'</p>';
 		$message.=$table_resume;	
 		$message.='<br />'.get_lang('ResultIs').' '.$result_comment.'<br />';	
@@ -557,15 +527,11 @@ if ($links!='')
 	//echo '<a onclick="self.parent.tb_remove();" href="#" style="float:right;">'.get_lang('Close').'</a>';
 	echo '</div>';
 	$_SESSION['hot_spot_result']=$message; 
-}
-else
-{
-
+} else {
 	$questionNum++;
 	echo '<script>
 			self.parent.window.location.href = "exercice_submit.php?exerciseId='.$exerciseId.'&questionNum='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'";	  		 	
    			//self.parent.tb_remove();	  	
- 	 	</script>';
-	
+ 	 	</script>';	
 }
 ?>

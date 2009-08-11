@@ -1,24 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2009 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 
 $cidReset = true;
 $language_file = array('registration','messages','userInfo','admin');
@@ -433,32 +414,7 @@ $htmlHeadXtra[] = '
         <!-- Additional IE/Win specific style sheet (Conditional Comments) -->
         <!--[if lte IE 7]>
         <link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs-ie.css" type="text/css" media="projection, screen">
-        <![endif]-->
-        ';
-$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
-/* Not required for Tabs, just to make this demo look better... */
-
-* html body {
-    font-size: 100%; /* @ IE */
-}
-h1 {
-    margin: 1em 0 1.5em;
-    font-size: 18px;
-}
-h2 {
-    margin: 2em 0 1.5em;
-    font-size: 16px;
-}
-p {
-    margin: 0;
-}
-pre, pre+p, p+p {
-    margin: 1em 0 0;
-}
-code {
-    font-family: "Courier New", Courier, monospace;
-}
-</style>';
+        <![endif]-->';
 $_SESSION['social_exist']=true;
 $_SESSION['social_dest'] = 'index.php';
 $interbreadcrumb[]= array (

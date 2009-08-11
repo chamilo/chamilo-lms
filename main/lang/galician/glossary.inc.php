@@ -20,4 +20,6 @@ $YouMustEnterATermName = "Debe introducir un termo";
 $YouMustEnterATermDefinition = "Debe introducir a definición do termo";
 $TableView = "Ver como tabla";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Este termo do glosario xa existe, por favor cámbieo por outro nome";
+$GlossaryManagement  = "Administración do glosario";
+$TermMoved = "Moveuse o termo";
 ?>

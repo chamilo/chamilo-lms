@@ -35,4 +35,6 @@ $ValidateChanges = "Confirmar os cambios";
 $FolderUpdated = "Cartafol actualizado";
 $EndDateAlreadyPassed = "A data final xa pasou";
 $MoveXTo = "Mover %s A";
+$ButtonCreateAssignment = "Crear";
+$MakeAllPapersVisible = "Facer todos os documentos visibles ";
 ?>

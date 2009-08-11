@@ -100,4 +100,6 @@ $TaskDeleted = "Attività eliminata";
 $TaskAssignmentDeleted = "Assegnazione attività eliminata";
 $CommentDeleted = "Commento eliminato";
 $RatingAdded = "Valutazione aggiunta";
+$BlogPosts = "Messaggi del blog";
+$BlogComments = "Commenti ai messaggi";
 ?>

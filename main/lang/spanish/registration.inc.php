@@ -172,4 +172,6 @@ $EditNormalProfile = "Edición básica del perfil";
 $EditExtendProfile = "Edición ampliada del perfil";
 $EditInformation = "Editar información";
 $RegisterUser = "Registrar usuario";
+$IHaveReadAndAgree = "He leido y estoy de acuerdo con los";
+$ByClickingRegisterYouAgreeTermsAndConditions = "Al hacer clic en el botón \'Registrar\' que aparece a continuación, acepta los Términos y Condiciones";
 ?>

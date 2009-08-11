@@ -33,16 +33,27 @@
   <li>An internationalization option has been added for improving sorting in arbitrary language. When the <a href="http://php.net/manual/en/book.intl.php" target="_blank">intl</a> php-extension has been installed, various sorting routines exploit it for better sorting. Rationale: The PHP5 run-time environment does not provide native and reliable way of sorting UTF-8 strings. (FS#306)</li>
   <li>The installation sript: The page about system requilements has been updated. Also, at the very beginning, a check has been added whether the <a href="http://php.net/manual/en/book.mbstring.php" target="_blank">mbstring</a> php-extension is installed - see <a href="http://dokeos.com/forum/viewtopic.php?t=29548" target="_blank">the related forum topic</a>. (FS#306)</li>
   <li>A new php-based configuration for the online editor has been implemented, see <i>dokeos/main/inc/lib/fckeditor/myconfig.php</i>. Also, toolbar definitions have been split in separate php-files within the directory <i>dokeos/main/inc/lib/fckeditor/toolbars/</i> . Customization of the editor is more convenient and flexible now. (FS#2867)</li>
-  <li>The online editor: A upgrade from FCKEditor 2.6.4 to <b>FCKEditor 2.6.4.1</b> has been implemented. (FS#4383)</li>
-  <li>The online editor: Several known bug-fixes from FCKEditor 2.6.5 SVN have been implemented, tickets <a href="http://dev.fckeditor.net/ticket/2821" target="_blank">#2821</a>, <a href="http://dev.fckeditor.net/ticket/2856" target="_blank">#2856</a>, <a href="http://dev.fckeditor.net/ticket/2915" target="_blank">#2915</a>, <a href="http://dev.fckeditor.net/ticket/3120" target="_blank">#3120</a>, <a href="http://dev.fckeditor.net/ticket/3181" target="_blank">#3181</a>, <a href="http://dev.fckeditor.net/ticket/3429" target="_blank">#3429</a>, <a href="http://dev.fckeditor.net/ticket/3439" target="_blank">#3439</a>, <a href="http://dev.fckeditor.net/ticket/3880" target="_blank">#3880</a>. (FS#2867)</li>
-  <li>The online editor: The simple file manager, the advanced file manager and the image manager have been integrated by default with the editor's dialog system. Thus, they work faster and in a more secure way. (FS#2867)</li>
-  <li>The online editor: Blocking copy/paste for trainees has been added. The feature is configurable through editing the toolbar definition files within the directory <i>dokeos/main/inc/lib/fckeditor/toolbars/</i> . (FS#2867)</li>
-  <li>The online editor: Preview tabs have been added to the dialogs for inserting video, flv-video, and YouTube video. (FS#2867)</li>
-  <li>The online editor: The <b>audio</b> plugin has been activated by default as an implementation of the "Insert audio / Audio properties" dialog. This new plugin is intended to replace the "MP3" plugin. (FS#2867)</li>
-  <li>The online editor: Configuration of the <b>mimetex</b> plugin has been reworked to gain simplicity. The procedure for configuration has been updated, see <a href="http://www.dokeos.com/forum/viewtopic.php?t=29594" target="_blank">the related forum topic</a>. (FS#2867)</li>
-  <li>The online editor: The toolbar icons have been upgraded to those from CKEditor 3.0. (FS#2867)</li>
+  <li>Online editor: A upgrade from FCKEditor 2.6.4 to <b>FCKEditor 2.6.4.1</b> has been implemented. (FS#4383)</li>
+  <li>Online editor: Several known bug-fixes from FCKEditor 2.6.5 SVN have been implemented, tickets <a href="http://dev.fckeditor.net/ticket/1537" target="_blank">#1537</a>, <a href="http://dev.fckeditor.net/ticket/2156" target="_blank">#2156</a>, <a href="http://dev.fckeditor.net/ticket/2689" target="_blank">#2689</a>, <a href="http://dev.fckeditor.net/ticket/2821" target="_blank">#2821</a>, <a href="http://dev.fckeditor.net/ticket/2856" target="_blank">#2856</a>, <a href="http://dev.fckeditor.net/ticket/2874" target="_blank">#2874</a>, <a href="http://dev.fckeditor.net/ticket/2915" target="_blank">#2915</a>, <a href="http://dev.fckeditor.net/ticket/3120" target="_blank">#3120</a>, <a href="http://dev.fckeditor.net/ticket/3181" target="_blank">#3181</a>, <a href="http://dev.fckeditor.net/ticket/3427" target="_blank">#3427</a>, <a href="http://dev.fckeditor.net/ticket/3429" target="_blank">#3429</a>, <a href="http://dev.fckeditor.net/ticket/3439" target="_blank">#3439</a>, <a href="http://dev.fckeditor.net/ticket/3446" target="_blank">#3446</a>, <a href="http://dev.fckeditor.net/ticket/3481" target="_blank">#3481</a>, <a href="http://dev.fckeditor.net/ticket/3677" target="_blank">#3677</a>, <a href="http://dev.fckeditor.net/ticket/3818" target="_blank">#3818</a>, <a href="http://dev.fckeditor.net/ticket/3880" target="_blank">#3880</a>, <a href="http://dev.fckeditor.net/ticket/3925" target="_blank">#3925</a>. (FS#2867)</li>
+  <li>Online editor: The simple file manager, the advanced file manager and the image manager have been integrated by default with the editor's dialog system. Thus, they work faster and in a more secure way. (FS#2867)</li>
+  <li>Online editor: Blocking copy/paste for trainees has been added. The feature is configurable through editing the toolbar definition files within the directory <i>dokeos/main/inc/lib/fckeditor/toolbars/</i> . (FS#2867)</li>
+  <li>Online editor: Preview tabs have been added to the dialogs for inserting video, flv-video, and YouTube video. (FS#2867)</li>
+  <li>Online editor: The <b>audio</b> plugin has been activated by default as an implementation of the "Insert audio / Audio properties" dialog. This new plugin is intended to replace the "MP3" plugin. (FS#2867)</li>
+  <li>Online editor: Configuration of the <b>mimetex</b> plugin has been reworked to gain simplicity. The procedure for configuration has been updated, see <a href="http://www.dokeos.com/forum/viewtopic.php?t=29594" target="_blank">the related forum topic</a>. (FS#2867)</li>
+  <li>Online editor: A new <b>asciimath</b> plugin for inserting mathematical formulas has been added. It is based on the <a href="http://mathcs.chapman.edu/~jipsen/mathml/asciimath.html" target="_blank">ASCIIMathML.js</a> library. (FS#2867)</li>
+  <li>Online editor: The toolbar icons have been upgraded to those from CKEditor 3.0. (FS#2867)</li>
   <li>A solution has been implemented for fixing the <a href="http://bugs.adobe.com/jira/browse/FP-529" target="_blank">"__flash__removeCallback" bug</a>, which affects the media player on Internet Explorer browser. (FS#4378 and FS#2867)</li>
   <li>Implement new sub-language feature by which language terms redefinition becomes possible through the admin section (FS#4321)</li>
+  <li>Social: Added possibility to define RSS feeds inside personal page of social network (need to define an 'rssfeeds' extra user text field)</li>
+  <li>Admin: Added courses from sessions inside AJAX popup of courses list in users list (SVN#22398)</li>
+  <li>Admin: Showing full-length course titles in list of courses while adding to sessions(SVN#22399)</li>
+  <li>Admin: Added session name in title of session edition pages(SVN#22400)</li>
+</ul>
+<br />
+<h3>Known issues</h3>
+<ul>
+  <li></li>
+  <li></li>
 </ul>
 <br />
 <h3>Known issues</h3>

@@ -1,4 +1,4 @@
-<?php
+<?php //$id: $
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -13,6 +13,19 @@ class SessionManager {
 	private function __construct() {
 		
 	}
+    /**
+     * Fetches a session from the database
+     * @param   int     Session ID
+     * @return  array   Session details (id, id_coach, name, nbr_courses, nbr_users, nbr_classes, date_start, date_end, nb_days_access_before_beginning,nb_days_access_after_end, session_admin_id)
+     */
+    public static function fetch($id) {
+    	$t = Database::get_main_table(TABLE_MAIN_SESSION);
+        if ($id != strval(intval($id))) { return array(); }
+        $s = "SELECT * FROM $t WHERE id = $id";
+        $r = Database::query($s,__FILE__,__LINE__);
+        if (Database::num_rows($r) != 1) { return array(); }
+        return Database::fetch_array($r,'ASSOC');
+    }
 	 /** 
 	  * Create a session 
 	  * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code

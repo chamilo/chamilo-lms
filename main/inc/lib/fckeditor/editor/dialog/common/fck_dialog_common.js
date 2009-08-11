@@ -216,7 +216,7 @@ function OpenFileBrowser( url, width, height )
 	}
 	else
 	{
-		FCKDialog.OpenDialog( 'FCKDialog_FileManager' , FCKLang['BrowseServer'], url, width, height, '', window, true ) ;
+		FCKDialog.OpenDialog( 'FCKDialog_FileManager' , FCKLang['BrowseServer'], url, width, height, '', true ) ;
 	}
 }
 

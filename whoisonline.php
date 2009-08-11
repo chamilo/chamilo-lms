@@ -1,24 +1,5 @@
 <?php // $Id: whoisonline.php 21549 2009-06-21 14:02:37Z iflorespaz $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
 ==============================================================================
@@ -146,7 +127,7 @@ function display_user_list($user_list, $_plugins)
 			$user_info = api_get_user_info($uid);
 			$table_row = array();
 			$url = '?id='.$uid.$course_url;
-            $image_array=UserManager::get_user_picture_path_by_id($uid,'web',false,true);
+            $image_array=UserManager::get_user_picture_path_by_id($uid,'system',false,true);
             
             $friends_profile = UserFriend::get_picture_user($uid, $image_array['file'], 92, 'medium_', ' width="90" height="90" ');
             //reduce image

@@ -41,7 +41,7 @@ FCKDialog.Prompt = function( message, default_value, action, title, width, heigh
 
 	if ( !height )
 	{
-		height = 235 ;
+		height = 200 ;
 	}
 
 	var custom_value = {} ;

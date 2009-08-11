@@ -82,8 +82,7 @@ class CourseRestorer
 	 * which the resources should be stored. Default: Current Dokeos-course.
 	 */
 	function restore($destination_course_code = '')
-	{
-		
+	{		
 		if ($destination_course_code == '') {
 			$course_info = api_get_course_info();
 			$this->course->destination_db = $course_info['dbName'];
@@ -93,6 +92,9 @@ class CourseRestorer
 			$this->course->destination_db = $course_info['database'];
 			$this->course->destination_path = $course_info['directory'];
 		}
+		// platform encoding
+		$course_charset = $this->course->encoding; 
+		
 		$this->restore_links();
 		$this->restore_tool_intro();
 		$this->restore_events();

@@ -10,7 +10,8 @@
 	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
 	Copyright (c) Patrick Cool
 	Copyright (c) Julio Montoya Armas
-	
+	Copyright (c) Isaac flores paz
+		
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
 	
@@ -159,6 +160,7 @@ The course id is stored in $_cid session variable.
 // verified if exists the username and password in session current 
 if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
 	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+	require_once (api_get_path(LIBRARY_PATH).'legal.lib.php');	
 }
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
@@ -210,11 +212,23 @@ if (get_setting('allow_terms_conditions')=='true') {
 	
 	 	$user_id=$_SESSION['update_term_and_condition'][1];	// user id
 		// update the terms & conditions
-		if ((isset($_POST['legal_accept']) && $_POST['legal_accept']=='1') || !isset($_POST['legal_accept'])) {
-			$legal_option=true;
-		} else {
-			$legal_option=false;
+		
+		//verify type of terms and conditions
+		$info_legal = explode(':',$_POST['legal_info']);
+		$legal_type=LegalManager::get_type_of_terms_and_conditions($info_legal[0],$info_legal[1]); 
 
+		//is necessary verify check
+		if ($legal_type==1) {
+			if ((isset($_POST['legal_accept']) && $_POST['legal_accept']=='1')) {
+				$legal_option=true;
+			} else {
+				$legal_option=false;
+	
+			}
+		}
+		//no is check option
+		if ($legal_type==0) {
+			$legal_option=true;
 		}
 		
 		if (isset($_POST['legal_accept_type']) && $legal_option===true) {

@@ -237,10 +237,23 @@ a.breadcrumb0 {
 .courseslist {
 	margin-left: -25px;
 }
+
+/* user_portal course list */
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
+	height: 30px;	
 }
+/* user_portal session list */
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}
+.session_course_item {
+	/* padding: 0px; */
+	margin: 0px;
+}
+
 .courses a {
 }
 .user_course_category {
@@ -251,14 +264,6 @@ a.breadcrumb0 {
 	list-style-type: none;
 	margin: 0px;
 	padding: 5px;
-}
-
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-}
-.session_course_item .courses {
-	height:22px;
 }
 
 .menu {

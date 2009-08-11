@@ -35,9 +35,6 @@
  * @return boolean
  */
 
-//require_once api_get_path(LIBRARY_PATH).'/media.lib.php';  // This fails in some pages (Tests).
-require_once dirname(__FILE__).'/../media.lib.php';
-
 function FCKeditor_IsCompatibleBrowser()
 {
 	if ( isset( $_SERVER ) ) {
@@ -590,6 +587,7 @@ class FCKeditor
 		$config['FlashPlayerAudio'] = Media::get_path(FLASH_PLAYER_AUDIO, REL_PATH);
 		$config['FlashPlayerVideo'] = Media::get_path(FLASH_PLAYER_VIDEO, REL_PATH);
 		$config['ScriptSWFObject'] = Media::get_path(SCRIPT_SWFOBJECT, REL_PATH);
+		$config['ScriptASCIIMathML'] = Media::get_path(SCRIPT_ASCIIMATHML, REL_PATH);
 		return $config;
 	}
 

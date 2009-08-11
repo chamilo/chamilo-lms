@@ -109,7 +109,10 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
         //id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
         if(is_array($interactions) && count($interactions)>0){
             foreach($interactions as $index=>$interaction){
-                $mylpi->add_interaction($index,$interactions[$index]);
+                //$mylpi->add_interaction($index,$interactions[$index]);
+                //fix DT#4444  
+                $clean_interaction = str_replace('@.|@',',',$interactions[$index]);
+                $mylpi->add_interaction($index,$clean_interaction);          
             }
         }
         $mylpi->set_core_exit($core_exit);

@@ -54,7 +54,7 @@ function GetQuizName($fname,$fpath) {
 		if (file_exists($fpath.$fname)) {
 			if (!($fp = fopen($fpath.$fname, "r"))) {
 			//die("could not open Quiz input");
-				return GetFileName($fname);
+				return basename($fname);
 			}
 	
 			$contents = fread($fp, filesize($fpath.$fname));
@@ -79,12 +79,19 @@ function GetQuizName($fname,$fpath) {
  * Gets the comment about a file from the corresponding database record
  * @param	string	File path
  * @return	string	Comment from the database record
+ * Added conditional to the table if is empty.
  */
-function GetComment($path) {
+function GetComment($path,$course_code='') {
 	global $dbTable;
+	
+	if (!empty($course_code)) {		
+		$course_info = api_get_course_info($course_code);
+		$dbTable     = Database::get_course_table(TABLE_DOCUMENT,$course_info['dbName']);	
+	}
 	$path = Database::escape_string($path);
-	$query = "select comment from $dbTable where path='$path'";
+	$query = "select comment from $dbTable where path='$path'";		
 	$result = api_sql_query($query,__FILE__,__LINE__);
+	
 	while ($row = mysql_fetch_array($result)) {
 		return $row[0];
 	}
@@ -101,23 +108,9 @@ function SetComment($path,$comment) {
 	global $dbTable;
 	$path = Database::escape_string($path);
 	$comment = Database::escape_string($comment);
-	
 	$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
 	$result = api_sql_query($query,__FILE__,__LINE__);
 	return "$result";
-}
-
-/**
- * Get the name of the file from a path (without the extension)
- *
- * This assumes the path is made of elements split by '/', not '\' or '\\'
- * @param	string	Path
- * @return	string	File name
- */
-function GetFileName($fname) {
-	$name = explode('/',$fname);
-	$name = $name[sizeof($name)-1];
-	return $name;
 }
 
 /**
@@ -165,7 +158,6 @@ function WriteFileCont($full_file_path,$content) {
  * Gets the name of an img whose path is given (without directories or extensions)
  * @param	string	An image tag (<img src="...." ...>)
  * @return	string	The image file name or an empty string
- * @uses GetFileName No comment
  */
 function GetImgName($imgtag) {	
     // select src tag from img tag
@@ -180,7 +172,7 @@ function GetImgName($imgtag) {
 		if ($src=="") {
 			return "";
 		} else {
-			$tmp_src = GetFileName($src) ;
+			$tmp_src = basename($src) ;
 			if ($tmp_src == "") {
 				return $src;
 			} else {
@@ -304,7 +296,7 @@ function ReplaceImgTag($content) {
 			else {
 
 				$prehref = $imgname;
-				$posthref = GetFileName($imgname);
+				$posthref = basename($imgname);
 				$newcontent = str_replace($prehref,$posthref,$newcontent);
 			}
 		}

@@ -3026,11 +3026,12 @@ function get_blog_post_from_user($course_db_name, $user_id) {
 				ORDER BY post.date_creation DESC ";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$return_data = '';
-		$my_course_info=explode('_',$course_db_name);
+		//$my_course_info=explode('_',$course_db_name);
+		$my_course_id=CourseManager::get_course_id_by_database_name($course_db_name);	
 		if (Database::num_rows($result)!=0) {
 			while ($row=Database::fetch_array($result)) {
 				$return_data.=  '<div class="clear"></div><br />';
-	 			$return_data.=  '<div class="actions" style="margin-left:5px;margin-right:5px;">'.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.$my_course_info[1].' " >'.get_lang('SeeBlog').'</a></div></div>';
+	 			$return_data.=  '<div class="actions" style="margin-left:5px;margin-right:5px;"><img src="../img/blog.gif" />'.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.$my_course_id.' " >'.get_lang('SeeBlog').'</a></div></div>';
 	 			$return_data.=  '<br / >';
 				//$return_data.= '<strong>'.$row['title'].'</strong>'; echo '<br>';
 				$return_data.= $row['full_text'];

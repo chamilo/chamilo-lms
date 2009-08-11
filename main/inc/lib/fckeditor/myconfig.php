@@ -76,7 +76,7 @@ $config['ToolbarSets']['Directory'] = 'default';
  */
 
 // customizations : This plugin has been developed by the Dokeos team for editor's integration within the system.
-// Please, do not disable it.
+// The plugin should be loaded first, before all other plugins. Please, do not disable it.
 $config['LoadPlugin'][] = 'customizations';
 
 // dragresizetable & tablecommands : Plugins for improvement table-related operations.
@@ -157,6 +157,13 @@ if (IS_WINDOWS_OS) {
 }
 // Timeout for MimeTeX executable file detection - keep this value as low as possible, especially on Windows servers.
 $config['MimetexExecutableDetectionTimeout'] = 0.05;
+
+// asciimath : Yet another plugin for inserting mathematical formulas.
+// An additional javascript library ASCIIMathML.js has to be inserted within the pages with formulas.
+// After enabling it, this plugin is configured to work with full-page html documents out-of-the box.
+// You may try it in the "Documents" and "Wiki" tools.
+// Browser compatibility: Internet Explorer 6.0+ with MathPlayer plugin, Mozilla Firefox 2.0+, Opera 9.5+
+//$config['LoadPlugin'][] = 'asciimath';
 
 // wikilink : Adds a dialog for inserting wiki-formatted links.
 $config['LoadPlugin'][] = 'wikilink';

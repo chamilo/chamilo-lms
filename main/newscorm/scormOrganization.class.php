@@ -1,7 +1,7 @@
 <?php //$id:$
 /**
  * Container for the scormOrganization class
- * @package	scorm.learnpath
+ * @package dokeos.learnpath.scorm
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  */
 /**

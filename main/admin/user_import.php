@@ -11,6 +11,7 @@
  * validate the imported data
  */
  
+$language_file = array ('admin', 'registration');
 require '../inc/global.inc.php';
 require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php'; 
 
@@ -257,10 +258,8 @@ function parse_xml_data($file) {
 	return $users;
 }
 // name of the language file that needs to be included
-$language_file = array ('admin', 'registration');
 
 $cidReset = true;
-include ('../inc/global.inc.php');
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
@@ -284,11 +283,11 @@ $extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC',false);
 $user_id_error=array();
 if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
-	if (strcmp($file_type,'csv')===0 && strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
+	if (strcmp($file_type,'csv')===0){ //&& strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
 		$users = parse_csv_data($_FILES['import_file']['tmp_name']);
 		$errors = validate_data($users);
 		$error_kind_file=false;
-	} elseif (strcmp($file_type,'xml')===0 && strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
+	} elseif (strcmp($file_type,'xml')===0){// && strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
 		$users = parse_xml_data($_FILES['import_file']['tmp_name']);
 		$errors = validate_data($users);
 		$error_kind_file=false;
@@ -297,42 +296,51 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	}
 	
 	//list user id whith error
-    if (is_array($errors) && is_array($users)) {
+	$user_id_error=array();
+	if (is_array($errors)){ 
 		foreach ($errors as $my_errors) {
-			$user_id_error[]=$my_errors['UserId'];
-		}
-	
+			$user_id_error[]=$my_errors['UserName'];
+		}	
+	}
+	if  (is_array($users)) {
 		foreach ($users as $my_user) {
-			if (!in_array($my_user['UserId'],$user_id_error)) {
-				$users_to_insert[]=$my_user;
+		if (!in_array($my_user['UserName'],$user_id_error)) {
+			$users_to_insert[]=$my_user;
+				}
 			}
 		}
-    }
-	if ( count($users_to_insert)>0 && $error_kind_file===false ) {
-		$errors=array();
-		$users=$users_to_insert;
+        $inserted_in_course = array();
+	save_data($users_to_insert);
+	if ( count($errors)>0 ) {
 		$see_message_import=get_lang('FileImportedJustUsersThatAreNotRegistered');
 	} else {
 		$see_message_import=get_lang('FileImported');
 	}
-	
-	if ( count($errors) == 0 && $error_kind_file===false ) {
-        $inserted_in_course = array();
-		save_data($users);
         $msg2 = '';
-        if (count($inserted_in_course)>1) {
-        	$msg2 .= get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').':';
+	if (count($inserted_in_course)>1) {
+        	$msg2 .="<br>".get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').':';
             foreach ($inserted_in_course as $course) {
             	$msg2 .= ' '.$course.',';
             }
             $msg2 = substr($msg2,0,-1);
+	    $msg2 .= "</br>";
         }
+	if (count($errors) != 0) {
+	$error_message = '<ul>';
+	foreach ($errors as $index => $error_user) {
+	$error_message .= '<li><b>'.$error_user['error'].'</b>: ';
+	$error_message .= $error_user['UserName'].'&nbsp;('.$error_user['FirstName'].' '.$error_user['LastName'].')';
+		$error_message .= '</li>';
+		}
+		$error_message .= '</ul>';
+	}
+
+ 
         Security::clear_token();
         $tok = Security::get_token();       
-		header('Location: user_list.php?action=show_message&message='.urlencode($see_message_import).'&warn='.urlencode($msg2).'&sec_token='.$tok);
+		header('Location: user_list.php?action=show_message&message='.urlencode($see_message_import).'&warn='.urlencode($error_message).'&sec_token='.$tok);
 		exit ();
 	}
-}
 Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 
@@ -340,16 +348,6 @@ if($_FILES['import_file']['size'] == 0 AND $_POST) {
 	Display::display_error_message(get_lang('ThisFieldIsRequired'));
 }
 
-if (count($errors) != 0) {
-	$error_message = '<ul>';
-	foreach ($errors as $index => $error_user) {
-		$error_message .= '<li><b>'.$error_user['error'].'</b>: ';
-		$error_message .= $error_user['UserName'].'&nbsp;('.$error_user['FirstName'].' '.$error_user['LastName'].')';
-		$error_message .= '</li>';
-	}
-	$error_message .= '</ul>';
-	Display :: display_error_message($error_message, false);
-}
 if ($error_kind_file===true) {
 	Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
 }

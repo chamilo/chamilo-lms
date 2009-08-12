@@ -1,9 +1,9 @@
-/*
-==============================================================================
-	GLOBAL STYLES - REDEFINED HTML TAGS
-==============================================================================
-*/
-
+/*****************************************************
+ *  MAIN - DOKEOS CLASSIC 2D                         *
+ *****************************************************/
+html {
+	height: 100%;
+}
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
     behavior:url("/main/css/csshover3.htc");
@@ -13,6 +13,13 @@ body {
 	font-size: 12px;
 	margin: 0;
 	padding: 0;
+	height: 100%; /* stick */		
+}
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -4em;
 }
 img {
 	border: none;
@@ -95,8 +102,7 @@ input.link_alike:hover {
 	background-color: #fff;
 	margin: 0px auto;
 	margin-top: 10px;
-	min-height: 320px;
-	padding: 0px 10px 10px 10px;
+	min-height: 320px;	
 	position: relative; /* to avoid the IE peekabo bug*/
 	width: 98%;
 }
@@ -352,13 +358,24 @@ input.link_alike:hover {
 */
 
 #footer {
+	height: 3.9em;
 	background-color: #E5EDF9;
 	border-top: 1px solid #4171B5;
-	font-size: 12px;
-	padding: 8px;
+	font-size: 12px;			
 }
+.push {
+	height: 4em; /* Very important */
+}
+
 #footer .copyright {
 	float: right;
+	padding-top:20px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:20px;
+	margin-left:10px;
 }
 #myprofilefooter {
 	clear:both;

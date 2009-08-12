@@ -1,28 +1,5 @@
-<?php // $Id: header.inc.php 21717 2009-07-02 03:27:31Z ivantcholakov $
- 
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
 ==============================================================================

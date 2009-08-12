@@ -1,6 +1,12 @@
 /*****************************************************
  *  MAIN  - PUBLIC ADMIN CSS		                 *                   
  *****************************************************/
+ 
+/* the sticky effect */
+html {
+	height: 100%;
+}
+
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
     behavior:url("/main/css/csshover3.htc");
@@ -9,8 +15,17 @@ body {
 	color: #000;
 	margin: 0;
 	padding: 0;
-	background-color: #ffffff;
+	background-color: #ffffff;	
+	height: 100%; /* stick */
 }
+
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -8em;
+}
+
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
 }
@@ -393,22 +408,34 @@ input[text] {
  *  FOOTER STYLES                                    *
  *****************************************************/
 #footer {
-	padding: 50px 20px 10px 20px;
-	height: 30px;
+	height: 8em;
 	background-color: #305582;
 	background-image: url(images/footer.jpg);
 	background-repeat: no-repeat;
 	font-size: 12px;
 	color:#ffffff;
 }
+.push {
+	height: 8em; /* Very important */
+}
 #footer .copyright {
 	float: right;
+	padding-top:60px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:60px;
+	margin-left:10px;
 }
 #footer a {
 	color:#f1d40d;
 }
 #bottom_corner {
 }
+
+
+
 /*
 ==============================================================================
     NAVIGATION MENU

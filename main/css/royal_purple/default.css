@@ -1,6 +1,9 @@
 /*****************************************************
- *  MAIN		                                    *
+ *  MAIN ROYAL PURPLE                                *
  *****************************************************/
+html {
+	height: 100%;
+}
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
      behavior:url("/main/css/csshover3.htc");
@@ -10,6 +13,13 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
+	height: 100%; /* stick */
+}
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -3em;
 }
 #outerframe {
 	position: relative;  /* do not remove, fixes a bug in IE */
@@ -340,27 +350,31 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
  *  FOOTER STYLES                                    *
  *****************************************************/
 #footer {
-	height:auto;
+	height:3em;
 	background-image: url(images/tab-repeat.png);
 	background-repeat: repeat-x;
 	color:#fff;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
-	background-position: center -15px;
+	/* background-position: center -15px; */
+	background-color: #434343;
+}
+.push {
+	height: 3em; /* Very important */
+}
+#footer .copyright {
+	float: right;
+	padding-top:25px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:25px;
+	margin-left:10px;
 }
 #footer a {
 	color:#fff;
 }
-#footer #platformmanager {
-}
 #footer #coursemanager {
 	margin-left: 10px;
-}
-.copyright {
-	display: inline;
-	float: right;
-	padding-right: 5px;
 }
 #bottom_corner {
 }

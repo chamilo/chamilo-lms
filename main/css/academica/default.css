@@ -1,12 +1,8 @@
-/* Styles that should disappear */
-.row {
-	width:100%;
-}
-div.row div.label {
-	width: 0%;
-}
-div.row div.formw {
-	width: 100%;
+/*****************************************************
+ *  MAIN - ACADEMICA	                             *
+ *****************************************************/
+html {
+	height: 100%;
 }
 /* Redefining html styles */
 body {
@@ -16,6 +12,13 @@ body {
 	font-size: 12px;
 	margin: 0;
 	padding: 0;
+	height: 100%; /* stick */	
+}
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -22em;
 }
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
@@ -106,11 +109,22 @@ input[type=button], input[type=submit] {
 	margin: 0;
 	padding: 0;
 }
-#header3 ul {
-	list-style:none;
+
+#header3 UL {
+	PADDING-RIGHT: 2px;
+	PADDING-LEFT: 10px;
+	PADDING-BOTTOM: 0px;
+	MARGIN: 0px;
+	LIST-STYLE-TYPE: none;
+	display: inline;
 }
-#header3 li {
-	display:inline;
+#header3 LI {
+	PADDING-RIGHT: 0px;
+	PADDING-LEFT: 9px;
+	FLOAT: left;
+	PADDING-BOTTOM: 0px;
+	MARGIN: 0px;
+	PADDING-TOP: 0px;/*border-bottom: 1px solid #dcdcdc;*/
 	cursor: pointer;
 }
 #header3 a {
@@ -145,25 +159,18 @@ input[type=button], input[type=submit] {
 #header3 #current a span {
 	float:left;
 }
-#logout li a {
+
+#header3 #logout {
+	margin-top: 0px;
+}
+#logout {
 	display: inline;
 	float: right;
-	vertical-align:top;
-	margin-right:5px;
-	text-decoration:none;
+	width: auto;
+	text-align: right;
+	font-size: 1.0em;
 }
-#logout li a:hover {
-	float: right;
-	vertical-align:top;
-	text-decoration:none;
-	margin-right:5px;
-}
-#logout li a span {
-	float:left;
-	cursor: pointer;
-}
-#logout li a:hover span {
-}
+
 /* header 4 styles */ 
 #header4 {
 	background-color: #fff;
@@ -179,10 +186,24 @@ a.breadcrumb0 {
 }
 /* footer styles */
 #footer {
-	background: #4171b5 url('images/bg.jpg') no-repeat 50% 100%;
-	color: #b0c8eb;
-	padding: 82px 0 .8em 2%;
-	border-bottom: 1px solid #4171b5;
+	height: 22em;
+	background-color: #4171b5;
+	background: url(images/bg.jpg) 50% 100%;
+	color: #B0C8EB;
+	font-weight:bold;	
+}
+.push {
+	height: 22em; /* Very important */
+}
+#footer .copyright {
+	float: right;
+	padding-top:235px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:235px;
+	margin-left:10px;
 }
 #footerright {
 	margin-top: 10px;
@@ -193,7 +214,7 @@ a.breadcrumb0 {
 	padding-top: 10px;
 }
 #footer a {
-	color: #FFFFFF;
+	color: #fff;
 }
 /* main styles */
 #main {
@@ -226,6 +247,16 @@ a.breadcrumb0 {
 	list-style-type: none;
 	margin-bottom: 5px;
 }
+/* user_portal session list */
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}
+.session_course_item {
+	/* padding: 0px; */
+	margin: 0px;
+}
+
 .courses a {
 	text-decoration:underline;
 }
@@ -904,14 +935,6 @@ div.lp_resource_elements {
 	border:1px solid #CCCCCC;
 	height:490px;
 	width:95%;
-}
-
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-}
-.session_course_item .courses {
-	height:22px;
 }
 
 /* exercices styles */

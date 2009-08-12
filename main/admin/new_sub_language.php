@@ -214,7 +214,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 			Display::display_error_message(get_lang('AlreadyExists').' "'.get_lang('EnglishName').'" '.'('.$english_name.')');			
 		}
 		if ($index_information=='isocode') {
-			Display::display_error_message(get_lang('AlreadyExists').' "'.get_lang('Isocode').'" '.'('.$isocode.')');			
+			Display::display_error_message(get_lang('AlreadyExists').' "'.get_lang('PlatformCharsetTitle').'" '.'('.$isocode.')');			
 		}	
 		if ($index_information=='execute_add' && $value_information===true) {
 			$allow_insert_info=true;
@@ -226,7 +226,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 		if ($allow_insert_info===true && $language_id_exist===true) {
 			$english_name=str_replace(' ','_',$english_name);
 			$isocode=str_replace(' ','_',$isocode);			
-			$str_info='<br/>'.get_lang('OriginalName').' : '.$original_name.'<br/>'.get_lang('EnglishName').' : '.$english_name.'<br/>'.get_lang('Isocode').' : '.$isocode;
+			$str_info='<br/>'.get_lang('OriginalName').' : '.$original_name.'<br/>'.get_lang('EnglishName').' : '.$english_name.'<br/>'.get_lang('PlatformCharsetTitle').' : '.$isocode;
 			$path=api_get_path('SYS_LANG_PATH').$english_name;
 			
 			$mkdir_result=add_directory_of_sub_language($path);
@@ -267,7 +267,7 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
 		$form->addRule('original_name', get_lang('ThisFieldIsRequired'), 'required');	
 		$form->addElement('text', 'english_name', get_lang('EnglishName'),'class="input_titles"');
 		$form->addRule('english_name', get_lang('ThisFieldIsRequired'), 'required');	
-		$form->addElement('text', 'isocode', get_lang('Isocode'),'class="input_titles"');
+		$form->addElement('text', 'isocode', get_lang('PlatformCharsetTitle'),'class="input_titles"');
 		$form->addRule('isocode', get_lang('ThisFieldIsRequired'), 'required');	
 		$form->addElement('checkbox', 'sub_language_is_visible', '', get_lang('Visibility'));	
 		$form->addElement('style_submit_button', 'SubmitAddNewLanguage', get_lang('CreateSubLanguage'), 'class="'.$class.'"');
@@ -280,7 +280,7 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
 			$form->addElement('header', '', $text);
 			$form->addElement('static', '', get_lang('OriginalName'),$original_name);
 			$form->addElement('static', '', get_lang('EnglishName'),$english_name);
-			$form->addElement('static', '', get_lang('Isocode'),$isocode);				
+			$form->addElement('static', '', get_lang('PlatformCharsetTitle'),$isocode);				
 			$form->addElement('style_submit_button', 'SubmitAddDeleteLanguage', get_lang('DeleteSubLanguage'), 'class="'.$class.'"');
 			$form->display();		
 		}

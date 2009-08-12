@@ -28,15 +28,15 @@ class LegalManager {
 		$type     = intval($type);
 		$changes  = Database::escape_string($changes);
 		$time = time();
-		
+
 		if ($last['content'] != $content) {
 			$version = intval(Legalmanager::get_last_condition_version($language));
 			$version++;
 			 $sql = "INSERT INTO $legal_table
 						SET language_id = '".Database::escape_string($language)."',
-							content = '".Database::escape_string($content)."',
-							changes= '".Database::escape_string($changes)."',
-							type = '".Database::escape_string($type)."',
+							content = '".$content."',
+							changes= '".$changes."',
+							type = '".$type."',
 							version = '".Database::escape_string($version)."',
 							date = '".$time."'";
 			$result = Database::query($sql, __FILE__, __LINE__);
@@ -45,8 +45,8 @@ class LegalManager {
 			//update
 			$id = $last['legal_id'];
 			$sql = "UPDATE $legal_table
-					SET  changes= '".Database::escape_string($changes)."',
-					type = '".Database::escape_string($type)."',
+					SET  changes= '".$changes."',
+					type = '".$type."',
 					date = '".$time."'
 					WHERE legal_id= $id  ";
 			$result = Database::query($sql, __FILE__, __LINE__);

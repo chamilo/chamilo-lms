@@ -309,16 +309,17 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 				global $group_properties;
 				$to_group_id = $group_properties['id'];
 			}
-
-			$file_path = substr($sFilePath, strpos($sFilePath, $repository_path) + strlen($repository_path) - 1);
-			$path = explode('/', $file_path);
-			$file_name = $path[count($path) - 1];
-			$path[count($path) - 1] = '';
-			$folder_path = '/' + implode('/', $path);
-			$file_size = @filesize($sFilePath);
-			$doc_id = add_document($_course, $file_path, 'file', $file_size, $file_name);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $to_group_id);
-			item_property_update_on_folder($_course, $folder_path, $_user['user_id']);
+			if ( file_exists( $sFilePath ) ) {
+				$file_path = substr($sFilePath, strpos($sFilePath, $repository_path) + strlen($repository_path) - 1);
+				$path = explode('/', $file_path);
+				$file_name = $path[count($path) - 1];
+				$path[count($path) - 1] = '';
+				$folder_path = '/' + implode('/', $path);
+				$file_size = @filesize($sFilePath);
+				$doc_id = add_document($_course, $file_path, 'file', $file_size, $file_name);
+				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $to_group_id);
+				item_property_update_on_folder($_course, $folder_path, $_user['user_id']);
+			}
 		}
 	}
 

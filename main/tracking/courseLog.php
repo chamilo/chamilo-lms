@@ -162,7 +162,7 @@ if($_GET['studentlist'] == 'false') {
 	 * LEARNING PATHS
 	 ***************************/
 	 
-	 echo '<div class="admin_section">
+	 echo '<div class="report_section">
 				<h4>
 					<img src="../img/scormbuilder.gif" align="absbottom">&nbsp;'.get_lang('AverageProgressInLearnpath').'
 				</h4>
@@ -208,7 +208,7 @@ if($_GET['studentlist'] == 'false') {
 	/***************************
 	 * EXERCICES
 	 ***************************/
-	 echo '<div class="admin_section">
+	 echo '<div class="report_section">
 				<h4>
 					<img src="../img/quiz.gif" align="absbottom">&nbsp;'.get_lang('AverageResultsToTheExercices').' &nbsp;-&nbsp;<a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a>
 				</h4>
@@ -292,7 +292,7 @@ if($_GET['studentlist'] == 'false') {
 	 * FORUMS
 	 **********************/
 	 
-	 echo '<div class="admin_section">
+	 echo '<div class="report_section">
 				<h4>
 					<img src="../img/forum.gif" align="absbottom">&nbsp;'.get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a>
 				</h4>
@@ -316,7 +316,7 @@ if($_GET['studentlist'] == 'false') {
 	 * CHAT
 	 **********************/
 	 
-	 echo '<div class="admin_section">
+	 echo '<div class="report_section">
 				<h4>
 					<img src="../img/chat.gif" align="absbottom">&nbsp;'.get_lang('Chat').'</a>
 				</h4>
@@ -335,7 +335,7 @@ if($_GET['studentlist'] == 'false') {
 	/**********************
 	 * TOOLS
 	 **********************/
-	echo '<div class="admin_section">
+	echo '<div class="report_section">
 				<h4>
 					<img src="../img/acces_tool.gif" align="absbottom">&nbsp;'.get_lang('ToolsMostUsed').'
 				</h4>
@@ -384,7 +384,7 @@ if($_GET['studentlist'] == 'false') {
 	}
 	 
 	 
-	 echo '<a name="ancle" id="a"></a><div class="admin_section">
+	 echo '<a name="ancle" id="a"></a><div class="report_section">
 				<h4>
 					<img src="../img/documents.gif" align="absbottom">&nbsp;'.get_lang('DocumentsMostDownloaded').$link.'
 				</h4>
@@ -433,7 +433,7 @@ if($_GET['studentlist'] == 'false') {
 	 * LINKS
 	 ***************************/
 	 
-	 echo '<div class="admin_section">
+	 echo '<div class="report_section">
 				<h4>
 					<img src="../img/link.gif" align="absbottom">&nbsp;'.get_lang('LinksMostClicked').'
 				</h4>

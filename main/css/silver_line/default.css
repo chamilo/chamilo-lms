@@ -760,6 +760,7 @@ div.row div.label {
 	border: 1px solid #999;
 	padding: .5em .7em .5em .7em;
 	line-height: 120%;
+	min-height:200px;
 }
 .admin_section h4 {
 	margin: 0;
@@ -771,6 +772,28 @@ div.row div.label {
 .admin_section input {
 	margin: .5em;
 }
+
+/* Report section */
+
+.report_section {
+	float: left;
+	margin: 1em 1em;
+	width: 40%;
+	border: 1px solid #999;
+	padding: .5em .7em .5em .7em;
+	line-height: 120%;
+}
+.report_section h4 {
+	margin: 0;
+	width: 100%;
+	font-size: 120%;
+	font-family: Arial, sans, sans-serif;
+	font-weight: bold;
+}
+.report_section input {
+	margin: .5em;
+}
+
 /*
 ==============================================================================
     COURSE ADMIN

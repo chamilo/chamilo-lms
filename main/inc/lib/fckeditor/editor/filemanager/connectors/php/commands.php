@@ -214,7 +214,7 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 		// Get the extension.
 		$sExtension = substr( $sFileName, ( strrpos($sFileName, '.') + 1 ) ) ;
 		$sExtension = strtolower( $sExtension ) ;
-
+		
 		if ( isset( $Config['SecureImageUploads'] ) )
 		{
 			if ( ( $isImageValid = IsImageValid( $oFile['tmp_name'], $sExtension ) ) === false )
@@ -245,7 +245,7 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 				{
 					$iCounter++ ;
 					$sFileName = RemoveExtension( $sOriginalFileName ) . '(' . $iCounter . ').' . $sExtension ;
-					$sErrorNumber = '201' ;
+					$sErrorNumber = '0' ; //Change sErrorNumber $ 201 to 0 to allow create record files renamed
 				}
 				else
 				{
@@ -273,7 +273,6 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 					break ;
 				}
 			}
-
 			if ( file_exists( $sFilePath ) )
 			{
 				//previous checks failed, try once again
@@ -294,7 +293,6 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 	}
 	else
 		$sErrorNumber = '202' ;
-
 	if ($sErrorNumber == '0')
 	{
 		// While we are in a course: Registering the newly uploaded file in the course's database.

@@ -21,8 +21,7 @@
 ==============================================================================
 */
 
-if ( !function_exists('version_compare') || version_compare( phpversion(), '5', '<' ) )
-{
+if ( !function_exists('version_compare') || version_compare( phpversion(), '5', '<' )) {
 	$error_message_php_version = <<<EOM
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -36,22 +35,26 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 			</style>
 		</head>
 		<body>
-			<div id="header">
-				<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
-				<div class="clear"></div>
-				<div id="header2">&nbsp;</div>
-				<div id="header3">&nbsp;</div>
-			</div>
+			<div id="wrapper">
+				<div id="header">
+					<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
+					<div class="clear"></div>
+					<div id="header2">&nbsp;</div>
+					<div id="header3">&nbsp;</div>
+				</div>
 
-			<div style="text-align: center;"><br /><br />
-					The version of scripting language on your server is wrong. Your server has to support PHP 5.x.x .<br />
-					<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide.</a><br /><br />
-			</div>
-
+				<div style="text-align: center;"><br /><br />
+						The version of scripting language on your server is wrong. Your server has to support PHP 5.x.x .<br />
+						<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide.</a><br /><br />
+				</div>
+				<div id="push"></div>
+				</div>
+				
 			<div id="footer">
 				<div class="copyright">Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009 </div>
 				&nbsp;
 			</div>
+			
 		</body>
 </html>
 EOM;
@@ -59,8 +62,7 @@ EOM;
 	die($error_message_php_version);
 }
 
-if (!function_exists('mb_strlen'))
-{
+if (!function_exists('mb_strlen')) {
 	$error_message_mbstring = <<<EOM
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -74,23 +76,26 @@ if (!function_exists('mb_strlen'))
 			</style>
 		</head>
 		<body>
-			<div id="header">
-				<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
-				<div class="clear"></div>
-				<div id="header2">&nbsp;</div>
-				<div id="header3">&nbsp;</div>
+			<div id="wrapper">
+				<div id="header">
+					<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
+					<div class="clear"></div>
+					<div id="header2">&nbsp;</div>
+					<div id="header3">&nbsp;</div>
+				</div>
+	
+				<div style="text-align: center;"><br /><br />
+						The Dokeos system needs PHP extension <strong>mbstring</strong> to be installed.<br />
+						See <a href="http://php.net/manual/en/mbstring.installation.php" target="_blank">http://php.net/manual/en/book.mbstring.php</a> for more information<br /><br />
+				</div>
+				<div id="push"></div>
 			</div>
-
-			<div style="text-align: center;"><br /><br />
-					The Dokeos system needs PHP extension <strong>mbstring</strong> to be installed.<br />
-					See <a href="http://php.net/manual/en/mbstring.installation.php" target="_blank">http://php.net/manual/en/book.mbstring.php</a> for more information<br /><br />
-			</div>
-
 			<div id="footer">
 				<div class="copyright">Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009 </div>
 				&nbsp;
 			</div>
-		</body>
+			
+			</body>
 </html>
 EOM;
 	header('Content-Type: text/html; charset=UTF-8');
@@ -110,17 +115,14 @@ require '../inc/lib/main_api.lib.php';
 require '../lang/english/trad4all.inc.php';
 require '../lang/english/install.inc.php';
 
-if (!empty($_POST['language_list']))
-{
+if (!empty($_POST['language_list'])) {
 	$search = array('../','\\0');
 	$install_language = str_replace($search,'',urldecode($_POST['language_list']));
 	if(!is_dir('../lang/'.$install_language)){$install_language = 'english';}
 	include_once "../lang/$install_language/trad4all.inc.php";
 	include_once "../lang/$install_language/install.inc.php";
 	api_session_register('install_language');
-}
-elseif ( isset($_SESSION['install_language']) && $_SESSION['install_language'] )
-{
+} elseif ( isset($_SESSION['install_language']) && $_SESSION['install_language'] ) {
 	$install_language = $_SESSION['install_language'];
 	include_once "../lang/$install_language/trad4all.inc.php";
 	include_once "../lang/$install_language/install.inc.php";
@@ -146,8 +148,7 @@ if (isset($install_language))
 
 // Character set during installation: ISO-8859-15 for Latin 1 languages, UTF-8 for other languages.
 $charset = 'UTF-8';
-if (isset($install_language))
-{
+if (isset($install_language)) {
 	if (strpos($install_language, 'unicode') === false && api_is_latin1_compatible($install_language))
 	{
 		// TODO: This is for backward compatibility. Actually, all the languages may use UTF-8.
@@ -181,12 +182,9 @@ $update_from_version_6=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5');
 $update_from_version_8=array('1.8','1.8.2','1.8.3','1.8.4','1.8.5','1.8.6');
 $my_old_version = '';
 $tmp_version = get_config_param('dokeos_version');
-if(!empty($_POST['old_version']))
-{
+if(!empty($_POST['old_version'])) {
 	$my_old_version = $_POST['old_version'];
-}
-elseif(!empty($tmp_version))
-{
+} elseif(!empty($tmp_version)) {
     $my_old_version = $tmp_version;
 }
 elseif(!empty($dokeos_version)) //variable coming from installedVersion, normally
@@ -221,16 +219,12 @@ if(!empty($_POST['updatePath']))
 	$proposedUpdatePath = $_POST['updatePath'];	
 }
 
-if($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_6'])
-{
-	if($_POST['step2_install'])
-	{
+if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_6']) {
+	if ($_POST['step2_install']) {
 		$installType='new';
 
 		$_POST['step2']=1;
-	}
-	else
-	{
+	} else {
 		$installType='update';
 		if($_POST['step2_update_8'])
 		{
@@ -518,6 +512,7 @@ if ($encryptPassForm=='1' ) {
 </head>
 <body dir="<?php echo $text_dir ?>">
 
+<div id="wrapper">
 
 <div id="header">
 	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').(is_array($update_from_version)?implode('|',$update_from_version):''); ?></div>
@@ -826,15 +821,13 @@ else
 	display_language_selection();
 }
 ?>
-
   </td>
 </tr>
 </table>
-
-
-
 </form>
 <br style="clear:both;" />
+<div class="push"></div>
+</div><!-- wrapper end-->
 <div id="footer">
 	<div class="copyright"><?php echo get_lang('Platform');?> <a href="http://www.dokeos.com" target="_blank"> Dokeos <?php echo $new_version ?></a> &copy; <?php echo date('Y'); ?> </div>
 	&nbsp;

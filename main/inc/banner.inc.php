@@ -363,8 +363,9 @@ if (!$chat) {
 -----------------------------------------------------------------------------
 */
 if(api_get_setting('show_navigation_menu') != 'false' && api_get_setting('show_navigation_menu') != 'icons') {
-	Display::show_course_navigation_menu($_GET['isHidden']);
-	if (isset($_cid) ) {
+	Display::show_course_navigation_menu($_GET['isHidden']);	
+	$course_id = api_get_course_id();   
+   if (!empty($course_id) && ($course_id != -1)) {
 		echo '<div id="menuButton">';
  		echo $output_string_menu;
  		echo '</div>';

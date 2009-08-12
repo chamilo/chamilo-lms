@@ -1,32 +1,10 @@
 <?php
-// $Id: lost_password.lib.php 18942 2009-03-10 23:42:21Z juliomontoya $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
- * Enter description here...
+ * Get email headers
  *
- * @return unknown
+ * @return string
  * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
  */
 function get_email_headers()
@@ -45,7 +23,7 @@ function get_email_headers()
  * Enter description here...
  *
  * @param unknown_type $user
- * @param unknown_type $reset
+ * @param boolean $reset
  * @return unknown
  * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
  */
@@ -59,24 +37,26 @@ function get_user_account_list($user, $reset = false)
 			$url = api_get_access_url($access_url_id);
 			$portal_url = $url['url'];
 		}
-	}	
-			
-	foreach ($user as $thisUser) {
-		$secretword = get_secret_word($thisUser["email"]);
-		if ($reset)	{
-								
-			$reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secretword."&id=".$thisUser['uid'];
-			
-		}
-		else
-		{
-			$reset_link = get_lang('Pass')." : $thisUser[password]";
-		}
-		$userAccountList[] = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$thisUser["loginName"]."\n".get_lang('ResetLink').' : '.$reset_link.'';
 	}
-	if ($userAccountList)
-	{
-		$userAccountList = implode("\n------------------------\n", $userAccountList);
+		
+	if ($reset==true) {		 	
+		foreach ($user as $thisUser) {
+			$secretword = get_secret_word($thisUser["email"]);
+			if ($reset)	{								
+				$reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secretword."&id=".$thisUser['uid'];			
+			} else {
+				$reset_link = get_lang('Pass')." : $thisUser[password]";
+			}
+			$userAccountList[] = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$thisUser['loginName']."\n".get_lang('ResetLink').' : '.$reset_link.'';
+		}
+		if ($userAccountList)
+		{
+			$userAccountList = implode("\n------------------------\n", $userAccountList);
+		}
+	} else {		 
+	    $user = $user[0];
+	    $reset_link = get_lang('Pass')." : $user[password]";
+       	$userAccountList = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".$reset_link.'';	
 	}
 	return $userAccountList;
 }
@@ -108,12 +88,9 @@ function send_password_to_user($user)
 	$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
     $email_admin = get_setting('emailAdministrator');			
 				
-	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin)==1)
-	{
+	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin)==1) {
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
-	}
-	else
-	{
+	} else {
 		$message = get_lang('SystemUnableToSendEmailContact') . Display :: encrypted_mailto_link(get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
 		Display::display_error_message($message, false);
 	}
@@ -185,10 +162,6 @@ function reset_password($secret, $id)
 		$user[0]["password"] = api_generate_password();
 		$crypted = $user[0]["password"];
 		$crypted = api_get_encrypted_password($crypted);
-		/*if( $userPasswordCrypted)
-		{
-			$crypted = md5($crypted);
-		}*/
 		api_sql_query("UPDATE ".$tbl_user." SET password='$crypted' WHERE user_id=$id");
 		return send_password_to_user($user, $your_password_has_been_reset);
 	}

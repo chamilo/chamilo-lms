@@ -97,7 +97,7 @@ function toogle_function (element_html, course_code){
 		 $("div#"+content).html(datos);
 		}
 	});		
-}
+} 
 </script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){

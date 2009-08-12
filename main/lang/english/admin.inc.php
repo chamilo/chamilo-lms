@@ -1031,4 +1031,5 @@ $TermAndConditionNotSaved = "Term and condition not saved";
 $TheSubLanguageHasBeenRemoved = "The sub language has been removed";
 $AddTermsAndConditions = "Add terms and conditions";
 $TermAndConditionSaved = "Term and condition saved";
+$Visibility = "Visibility";
 ?>

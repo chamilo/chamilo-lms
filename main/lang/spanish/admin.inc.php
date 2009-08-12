@@ -1031,4 +1031,5 @@ $TermAndConditionNotSaved = "Términos y condiciones no guardados.";
 $TheSubLanguageHasBeenRemoved = "El sub-idioma ha sido eliminado";
 $AddTermsAndConditions = "Añadir términos y condiciones";
 $TermAndConditionSaved = "Términos y condiciones guardados.";
+$Visibility = "Visible";
 ?>

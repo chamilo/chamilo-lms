@@ -237,8 +237,8 @@ function login_user($user_id) {
 			$_SESSION['login_as'] = true; // will be usefull later to know if the user is actually an admin or not (example reporting)s
 
 			$target_url = api_get_path(WEB_PATH)."user_portal.php";
-			//$message .= "<br/>Login successful. Go to <a href=\"$target_url\">$target_url</a>";
-			$message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'),'<a href="'.$target_url.'">'.$target_url.'</a>');
+			//$message .= "<br/>Login successful. Go to <a href=\"$target_url\">$target_url</a>";			
+			$message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'),'<a href="'.$target_url.'">'.$target_url.'</a>');				
 			Display :: display_header(get_lang('UserList'));
 			Display :: display_normal_message($message,false);
 			Display :: display_footer();
@@ -429,36 +429,53 @@ function modify_filter($user_id,$url_params,$row)
 {
 	global $charset;
 	global $_user;
-
-	$result .= '<a  href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')">
-				<img onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" onmouseout="clear_course_list (\'div_'.$user_id.'\')" src="../img/course.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
-				<div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
-				</a>&nbsp;&nbsp;';
-				
-	if (api_is_platform_admin()) {
-		$result .= '<a href="user_information.php?user_id='.$user_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
-	}
-
 	$statusname = api_get_status_langvars();
+	$user_is_anonymous = false;
+	if ($row['6'] == $statusname[ANONYMOUS]) {
+		$user_is_anonymous =true;
+	}
+	if (!$user_is_anonymous) {
+		$result .= '<a  href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')">
+					<img onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" onmouseout="clear_course_list (\'div_'.$user_id.'\')" src="../img/course.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
+					<div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
+					</a>&nbsp;&nbsp;';
+	} else {
+		$result .= Display::return_icon('course_na.gif').'&nbsp;&nbsp;';
+	}
+	
+	if (api_is_platform_admin()) {
+		if (!$user_is_anonymous) {
+			$result .= '<a href="user_information.php?user_id='.$user_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;&nbsp;';
+		} else {
+			$result .= Display::return_icon('synthese_view_na.gif', get_lang('Info')).'&nbsp;&nbsp;';
+		}
+	}	
+	
     //only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
-    if (api_is_platform_admin() or (api_is_session_admin() && $row['6'] == $statusname[STUDENT])) {
-        $result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+    if (api_is_platform_admin() || (api_is_session_admin() && $row['6'] == $statusname[STUDENT])) {
+    	if (!$user_is_anonymous) {
+        	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';        	
+    	} else {
+    		$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';	
+    	}
     } else {
     	$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
     }
-	if ($row['6'] != $statusname[STUDENT])
-	{
+	if ($row['6'] != $statusname[STUDENT]) {
 		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';
-	}
-	else
-	{
+	} else {
 		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;&nbsp;';
 	}
 	
 	if (api_is_platform_admin()) {
-		$result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
+		if (!$user_is_anonymous) {
+			$result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
+		} else {
+				$result .= Display::return_icon('edit_na.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
+		}
 	
-		if ($row[0]<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
+		if ($row[0]<>$_user['user_id'] && $user_is_anonymous == false) { 
+			// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 			$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 		} else {
 			$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));

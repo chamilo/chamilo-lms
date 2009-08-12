@@ -937,7 +937,6 @@ $SilverLine = "Liña plateada";
 $SoberBrown = "Marrón sobrio";
 $SteelGrey = "Gris aceiro";
 $TastyOlive = "Sabor oliva";
-$TemplateAdded = "Plantilla engadida";
 $TemplateEdited = "Plantilla modificada";
 $SubLanguage = "Sub-idioma ";
 $LanguageIsNowVisible = "O idioma agora é visible";

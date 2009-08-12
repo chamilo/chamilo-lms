@@ -350,12 +350,12 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 #footer .copyright {
 	float: right;
-	padding-top:25px;
+	padding-top:18px;
 	margin-right:10px;
 }
 #footer #platformmanager {
 	float: left;
-	padding-top:25px;
+	padding-top:18px;
 	margin-left:10px;
 }
 #footer a {

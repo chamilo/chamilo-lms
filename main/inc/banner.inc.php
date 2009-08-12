@@ -9,6 +9,8 @@
 ==============================================================================
 */
 ?>
+<div id="wrapper">
+
 <div id="header">
 	<div id="header1">
 		<div id="top_corner"></div> 
@@ -253,15 +255,13 @@ foreach($navigation as $section => $navigation_info) {
 		</ul>
 		<div style="clear: both;" class="clear"> </div>
 	</div>	
-
-	<div id="header4">
-			<?php
-			/*
+<?php
+/*
  * if the user is a coach he can see the users who are logged in its session
  */
 $navigation = array();
 // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
-		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
+//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
 $session_id     = api_get_session_id();
 $session_name   = api_get_session_name($my_session_id);
 $my_session_name= ($session_name==null) ? '' : '&nbsp;('.$session_name.')';
@@ -306,12 +306,12 @@ foreach($navigation as $index => $navigation_info) {
 		$final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="breadcrumb breadcrumb'.$index.'" target="_top">'.$navigation_info['title'].'</a>';
 	}
 }
-echo implode(' &gt; ',$final_navigation);
-?>
 
-	</div>
-
-<?php
+if (!empty($final_navigation)) {
+	echo '<div id="header4">';	
+	echo implode(' &gt; ',$final_navigation);
+	echo '</div>';
+}
 if(api_get_setting('show_toolshortcuts')=='true') {
 	echo '<div id="toolshortcuts">';
 	require_once('tool_navigation_menu.inc.php');

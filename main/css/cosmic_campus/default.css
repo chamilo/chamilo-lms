@@ -1,11 +1,8 @@
-.row {
-	width:100%;
-}
-div.row div.label {
-	width: 0%;
-}
-div.row div.formw {
-	width: 100%;
+/*****************************************************
+ *  MAIN   - COSMIC CAMPUS                           *
+ *****************************************************/
+html {
+	height: 100%;
 }
 /* Redefining html styles */
 body {
@@ -17,7 +14,24 @@ body {
 	background-color: #fff;
 	margin: 0;
 	padding: 0;
+	height: 100%; /* stick */
 }
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -7em;
+}
+.row {
+	width:100%;
+}
+div.row div.label {
+	width: 0%;
+}
+div.row div.formw {
+	width: 100%;
+}
+
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
 }
@@ -194,13 +208,27 @@ a.breadcrumb0 {
 }
 /* footer styles */
 #footer {
-	padding: 60px;
-	height: 10px;
-	background-color: #ffffff;
+	height: 7em;
+	background-color: #fff;
 	background-image: url(images/footer.jpg);
 	background-repeat: no-repeat;
-	color:#ffffff;
+	color:#fff;
 }
+.push {
+	height: 7em; /* Very important */
+}
+
+#footer .copyright {
+	float: right;
+	padding-top:55px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:55px;
+	margin-left:10px;
+}
+
 #footerright {
 	margin-top: 10px;
 	float: right;
@@ -219,7 +247,7 @@ a.breadcrumb0 {
 	min-height: 320px;
 }
 /* my courses styles */
-#maincontent {
+.maincontent {
 	float: left;
 	width: 68%;
 	padding: 0 20px 0 20px;

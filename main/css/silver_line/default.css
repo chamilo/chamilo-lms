@@ -1,23 +1,8 @@
-/*
-==============================================================================
-							CORPORATIVE STYLESHEET
-==============================================================================
-*/
-/*
-==============================================================================
-	GLOBAL STYLES - REDEFINED HTML TAGS
-==============================================================================
-*/
-a {
-	text-decoration: none;
-	font: bold 100% Arial, sans-serif, sans;
-	color: #900;
-}
-a:hover, a:focus {
-	color: #990;
-}
-blockquote {
-	font: 1.1em arial, sans, sans-serif;
+/*****************************************************
+ *  MAIN  - CORPORATE
+ *****************************************************/
+html {
+	height: 100%;
 }
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
@@ -28,6 +13,25 @@ body {
 	font-family: 'Lucida Grande', verdana, Arial, sans-serif, sans;
 	color: #000;
 	background-color: #fff;
+	height: 100%; /* stick */
+}
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -4em;
+}
+
+a {
+	text-decoration: none;
+	font: bold 100% Arial, sans-serif, sans;
+	color: #900;
+}
+a:hover, a:focus {
+	color: #990;
+}
+blockquote {
+	font: 1.1em arial, sans, sans-serif;
 }
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
@@ -98,12 +102,11 @@ ul {
 #main {
 	font-size: 89%;
 	width: 96%;
-	padding: 0 1% 15px 3%;
-	background: transparent url('images/bg.jpg') no-repeat 100% 100%;
+	padding: 0 1% 15px 3%;	
 	/* min-height hack for ie6 or older*/
 	min-height: 400px;
 	height: auto !important;
-	height: 400px;
+	height: 320px;
 	clear: both;
 	float: left;
 }
@@ -265,6 +268,7 @@ ul {
 	float: right;
 	clear: right;
 }
+
 #header3 ul {
 	list-style: none;
 	margin: 0 0 0 3.9em;
@@ -347,21 +351,24 @@ ul {
     FOOTER STYLES
 ==============================================================================
 */
-
 #footer {
+	height: 4em;
 	background: url('images/headerbg.jpg') repeat-y top right;
 	font-family: Arial, sans-serif, sans;
-	font-weight: bold;
-	width: 98%;
-	float: left;
-	clear: both;
-	padding: .2em 0 .6em 2%;
-	border-bottom: 1px solid #999;
+	font-weight: bold;	
+}
+.push {
+	height: 4em; /* Very important */
 }
 #footer .copyright {
 	float: right;
-	clear: right;
-	margin: 0 2em 0 0;
+	padding-top:25px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:25px;
+	margin-left:10px;
 }
 #bottom_corner {
 }

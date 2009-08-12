@@ -1310,8 +1310,21 @@ div.admin_section {
 	margin: 10px 20px;
 	padding: 5px;
 	width: 40%;
+	min-height:200px;
 }
 div.admin_section h4 {
+	border-bottom: 1px solid gray;
+	margin: 0;
+	width: 100%;
+}
+/* Report Section */
+div.report_section {
+	float: left;
+	margin: 10px 20px;
+	padding: 5px;
+	width: 40%;
+}
+div.report_section h4 {
 	border-bottom: 1px solid gray;
 	margin: 0;
 	width: 100%;

@@ -1287,12 +1287,25 @@ form br {
 	color: #f00;
 	font-weight: bold;
 }
+/* Report section */
+div.report_section {
+	width: 40%;
+	float: left;
+	padding: 5px;
+	margin: 10px 20px;
+}
+div.report_section h4 {
+	margin: 0;
+	border-bottom: 1px solid gray;
+	width: 100%;
+}
 /* Admin section */
 div.admin_section {
 	width: 40%;
 	float: left;
 	padding: 5px;
 	margin: 10px 20px;
+	min-height:200px;
 }
 div.admin_section h4 {
 	margin: 0;

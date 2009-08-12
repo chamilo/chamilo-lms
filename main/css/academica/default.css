@@ -799,8 +799,25 @@ div.admin_section {
 	float: left;
 	padding: 5px;
 	margin: 10px 20px;
+	min-height:210px;
 }
 div.admin_section h4 {
+	background-color: #EFEFEF;
+	border: 1px solid #4171b5;
+	font-weight: bold;
+	color: #4171b5;
+	list-style-type: none;
+	margin: 5px;
+	padding: 5px;
+}
+/* Report section */
+div.report_section {
+	width: 40%;
+	float: left;
+	padding: 5px;
+	margin: 10px 20px;
+}
+div.report_section h4 {
 	background-color: #EFEFEF;
 	border: 1px solid #4171b5;
 	font-weight: bold;

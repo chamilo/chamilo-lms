@@ -350,12 +350,12 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 #footer .copyright {
 	float: right;
-	padding-top:25px;
+	padding-top:18px;
 	margin-right:10px;
 }
 #footer #platformmanager {
 	float: left;
-	padding-top:25px;
+	padding-top:18px;
 	margin-left:10px;
 }
 #footer a {
@@ -1258,8 +1258,21 @@ div.admin_section {
 	float: left;
 	padding: 5px;
 	margin: 10px 20px;
+	min-height:200px;
 }
 div.admin_section h4 {
+	margin: 0;
+	border-bottom: 1px solid gray;
+	width: 100%;
+}
+/* Report section */
+div.report_section {
+	width: 40%;
+	float: left;
+	padding: 5px;
+	margin: 10px 20px;
+}
+div.report_section h4 {
 	margin: 0;
 	border-bottom: 1px solid gray;
 	width: 100%;

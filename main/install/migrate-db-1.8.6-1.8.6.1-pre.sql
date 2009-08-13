@@ -43,5 +43,5 @@ ALTER TABLE user_friend ADD COLUMN last_edit DATETIME;
 
 -- xxCOURSExx
 ALTER TABLE wiki CHANGE title title varchar(255), CHANGE reflink reflink varchar(255), ADD time_edit datetime NOT NULL default '0000-00-00 00:00:00' AFTER is_editing, ADD INDEX (title), ADD INDEX (reflink), ADD INDEX (group_id), ADD INDEX (page_id);
-ALTER TABLE wiki_conf DROP id, ADD task text NOT NULL BEFORE feedback1, ADD fprogress3 varchar(3) NOT NULL AFTER feedback3, ADD fprogress2 varchar(3) NOT NULL AFTER feedback3, ADD fprogress1 varchar(3) NOT NULL AFTER feedback3, ADD INDEX(page_id);
+ALTER TABLE wiki_conf DROP id, ADD task text NOT NULL AFTER page_id, ADD fprogress3 varchar(3) NOT NULL AFTER feedback3, ADD fprogress2 varchar(3) NOT NULL AFTER feedback3, ADD fprogress1 varchar(3) NOT NULL AFTER feedback3, ADD INDEX(page_id);
 ALTER TABLE link ADD COLUMN target char(10) DEFAULT '_self';

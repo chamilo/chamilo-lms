@@ -3571,7 +3571,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 			if ($setting_agenda_link == 'coursecode')
 			{
 				$title=$array_course_info['title'];
-				$agenda_link = api_substr($title, 0, 14);
+				$agenda_link = cut($title, 14, true);
 			}
 			else
 			{

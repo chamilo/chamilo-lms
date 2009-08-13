@@ -1,17 +1,17 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$ModifInfo = "Ders bilgilerini deðiþtir";
-$langModifDone = "Bilgiler deðiþti";
+$ModifInfo = "Ders bilgilerini de&#287;i&#351;tir";
+$langModifDone = "Bilgiler de&#287;i&#351;ti";
 $langDelCourse = "Ders sitesini sil";
 $langProfessors = "Ö&#287;retmenler";
 $langFaculty = "Kategori";
 $langConfidentiality = "Gizlilik";
-$langPublic = "Kayýtlý olmadan da Ana Sayfadan giriþ yapýlabilir";
+$langPublic = "Kay&#305;tl&#305; olmadan da Ana Sayfadan giri&#351; yap&#305;labilir";
 $langUnsubscription = "Kayd&#305; sil";
-$langPrivOpen = "Özel giriþ, kayýtlar açýktýr";
-$langPrivate = "Özel giriþ, kayýtlar kapalýdýr (bu dersin sitesine sadece <a href=../user/user.php>bu listedeki kullanýcýlar girebilir</a>)";
-$langForbidden = "Ýzinli deðil";
+$langPrivOpen = "Özel giri&#351;, kay&#305;tlar aç&#305;kt&#305;r";
+$langPrivate = "Özel giri&#351;, kay&#305;tlar kapal&#305;d&#305;r (bu dersin sitesine sadece <a href=../user/user.php>bu listedeki kullan&#305;c&#305;lar girebilir</a>)";
+$langForbidden = "&#304;zinli de&#287;il";
 $CourseAccessConfigTip = "Varsayýlan olarak, dersinizin web sitesine sadece kayýtlý kullanýcýlar girebilir. Eðer gizlilik istiyorsanýz, öðrencilerin kendiliklerinden kaydolabilecekleri bir süre kayýtlarý açýk tutunuz, sonra kapatarak kullanýcý listesinden istemediklerinizi siliniz.";
 $langOpenToTheWorld = "Aç&#305;k - genel eri&#351;ime aç&#305;k";
 $OpenToThePlatform = "Aç&#305;k - sadece platforma kay&#305;tl&#305; kullan&#305;c&#305;lara eri&#351;im hakk&#305;";
@@ -86,4 +86,20 @@ $DropboxEmailAlertActivate = "Dropbox sunumunda e-posta ile uyar&#305;y&#305; ak
 $DropboxEmailAlertDeactivate = "Dropbox sunumunda e-posta ile uyar&#305;y&#305; kald&#305;r";
 $AllowUserEditAgenda = "Ö&#287;rencilerin ajanday&#305; düzenlemesine izin ver";
 $AllowUserEditAgendaActivate = "E&#287;itim ajandas&#305;n&#305;n kullan&#305;c&#305; taraf&#305;ndan düzenlenmesini aktifle&#351;tir";
+$AllowUserEditAgendaDeactivate = "Ö&#287;renciler taraf&#305;ndan ajanda düzenlemeyi iptal et";
+$AllowUserEditAnnouncement = "Ö&#287;rencilerin bildirileri düzenlemesine izin ver";
+$AllowUserEditAnnouncementActivate = "Kullan&#305;c&#305;lar taraf&#305;ndan yay&#305;nlamaya izin";
+$AllowUserEditAnnouncementDeactivate = "Kullan&#305;c&#305;lar taraf&#305;nda yay&#305;nlamay&#305; kald&#305;r";
+$CourseRegistrationPassword = "E&#287;itim kay&#305;t &#351;ifresi";
+$langDescriptionDeleteCourse = "Ana makinadan e&#287;itimi kald&#305;rmak içn bu ba&#287;lant&#305; üzerine t&#305;klay&#305;n<br><br>Dikkatli olun, geri dönü&#351; yoktur!";
+$AllowUserImageForum = "Forumda kullan&#305;c&#305; resmine izin ver";
+$AllowUserImageForumActivate = "Forumda kullan&#305;c&#305;lar&#305;n resimlerini göster";
+$AllowUserImageForumDeactivate = "Forumda kullan&#305;c&#305;lar&#305;n resimlerini gizle";
+$AllowLearningPathTheme = "E&#287;itim temas&#305;na izin ver";
+$AllowLearningPathThemeAllow = "&#304;zin verildi";
+$AllowLearningPathThemeDisallow = "&#304;zin kald&#305;r&#305;ld&#305;";
+$ConfigChat = "Sohbet ayarlar&#305;";
+$AllowOpenchatWindow = "Sohbeti yeni pencerede aç";
+$AllowOpenChatWindowActivate = "Sohbeti yeni pencerede açmay&#305; aktifle&#351;tir";
+$AllowOpenChatWindowDeactivate = "Sohbeti yeni pencerede açmay&#305; pasifle&#351;tir";
 ?>

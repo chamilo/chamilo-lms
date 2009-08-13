@@ -1,29 +1,5 @@
 <?php
-// $Id: inscription.php 22567 2009-08-02 23:10:29Z iflorespaz $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	This script displays a form for registering new users.
@@ -31,7 +7,7 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array("registration");
+$language_file = array('registration','admin');
 
 include ("../inc/global.inc.php");
 
@@ -308,13 +284,18 @@ if (get_setting('allow_terms_conditions')=='true') {
 	$language = api_get_interface_language();
 	$language = api_get_language_id($language);
 	$term_preview= LegalManager::get_last_condition($language);	
+	
 	if ($term_preview==false) { 
 		//we load from the platform
 		$language = api_get_setting('platformLanguage');
 		$language = api_get_language_id($language);
-		$term_preview= LegalManager::get_last_condition($language);						
-	}
-	
+		$term_preview= LegalManager::get_last_condition($language);
+		//if is false we load from english
+		if ($term_preview==false){
+			$language = api_get_language_id('english'); //this must work
+			$term_preview= LegalManager::get_last_condition($language);	
+		}					
+	}	
 	// Version and language //password
 	$form->addElement('hidden', 'legal_accept_type',$term_preview['version'].':'.$term_preview['language_id']);
 	$form->addElement('hidden', 'legal_info',$term_preview['legal_id'].':'.$term_preview['language_id']);	
@@ -521,8 +502,7 @@ if ($form->validate()) {
 		             EMAIL NOTIFICATION
 		  --------------------------------------*/
 
-		if (strstr($values['email'], '@'))
-		{
+		if (strstr($values['email'], '@')) {
 			// Lets predefine some variables. Be sure to change the from address!
 			$recipient_name = $values['firstname'].' '.$values['lastname'];	
 			$email = $values['email'];
@@ -540,7 +520,7 @@ if ($form->validate()) {
 				}
 			} 
 	
-			$emailbody = get_lang('Dear')." ".stripslashes(Security::remove_XSS($firstname)." ".Security::remove_XSS($lastname)).",\n\n".get_lang('YouAreReg')." ".get_setting('siteName')." ".get_lang('Settings')." ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is')." : ".$portal_url."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n".get_lang('Manager')." ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n".get_lang('Email')." : ".get_setting('emailAdministrator');
+			$emailbody = get_lang('Dear')." ".stripslashes(Security::remove_XSS($recipient_name)).",\n\n".get_lang('YouAreReg')." ".get_setting('siteName')." ".get_lang('Settings')." ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is')." : ".$portal_url."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n".get_lang('Manager')." ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n".get_lang('Email')." : ".get_setting('emailAdministrator');
 			
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last			
@@ -552,8 +532,7 @@ if ($form->validate()) {
 
 	echo "<p>".get_lang('Dear')." ".stripslashes(Security::remove_XSS($recipient_name)).",<br /><br />".get_lang('PersonalSettings').".</p>\n";
 
-	if (!empty ($values['email']))
-	{
+	if (!empty ($values['email'])) {
 		echo "<p>".get_lang('MailHasBeenSent').".</p>";
 	}
 

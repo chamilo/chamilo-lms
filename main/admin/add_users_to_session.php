@@ -158,7 +158,7 @@ function search_users($needle,$type)
 				
 		} else {
 			global $nosessionUsersList;
-			$return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:300px;">';
+			$return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
 			while ($user = Database :: fetch_array($rs)) {				
 	            $return .= '<option value="'.$user['user_id'].'">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</option>';				     	            
 			}
@@ -256,7 +256,8 @@ if($_POST['form_sent']) {
 
 $session_info = SessionManager::fetch($id_session);
 Display::display_header($tool_name);
-api_display_tool_title($tool_name.' ('.$session_info['name'].')');
+//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
+
 
 $nosessionUsersList = $sessionUsersList = array();
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_user;
@@ -423,29 +424,28 @@ if ($ajax_search) {
 }
 
 if ($add_type == 'multiple') {
-	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.get_lang('SessionAddTypeUnique').'</a>';
-	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
+	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
-	$link_add_type_unique = get_lang('SessionAddTypeUnique');
-	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.get_lang('SessionAddTypeMultiple').'</a>';
+	$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
+	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 
 ?>
 
-<div style="text-align: left;">
+<div class="actions">
 	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
 </div>
-<br><br>
+<?php echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info['name'].')</div></div><br/>'; ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 
 <?php
-if ($add_type=='multiple') { 
+if ($add_type=='multiple') {	
 	if (is_array($extra_field_list)) {
-		echo '<h3>'.get_lang('FilterUsers').'</h3>';
-		
 		if (is_array($new_field_list) && count($new_field_list)>0 ) {
+			echo '<h3>'.get_lang('FilterUsers').'</h3>';
 			foreach ($new_field_list as $new_field) {
 				echo $new_field['name'];
 				$varname = 'field_'.$new_field['variable'];						
@@ -517,7 +517,7 @@ if(!empty($errorMsg)) {
   	  } else {
   	  ?>  	
   	  <div id="ajax_list_users_multiple">    	 	  
-	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:300px;">
+	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">
 		<?php
 		foreach($nosessionUsersList as $enreg) {
 		?>			
@@ -537,20 +537,20 @@ if(!empty($errorMsg)) {
   <?php
   if ($ajax_search) {
   ?>
-  	<input type="button" onclick="remove_item(document.getElementById('destination_users'))" value="<<" />
+  	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination_users'))" ></button>
   <?php
   } else {
   ?>
-  	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" value="onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"></button>
+  	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"></button>
 	<br /><br />
-	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" value="onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"></button>
+	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"></button>
 	<?php 
   } 
   ?>
 	<br /><br /><br /><br /><br /><br />
   </td>
   <td align="center">
-  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:300px;">
+  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:360px;">
 
 <?php
 foreach($sessionUsersList as $enreg) {

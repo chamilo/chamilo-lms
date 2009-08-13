@@ -134,4 +134,8 @@ $CreateForum = "Crear foro";
 $ModifyForum = "Modificar foro";
 $CreateThread = "Crear tema";
 $ModifyThread = "Modificar tema";
+$EditForum = "Editar foro";
+$BackToForum = "Volver ó foro";
+$BackToForumOverview = "Volver á vista xeral do foro";
+$BackToThread = "Regresar ó tema";
 ?>

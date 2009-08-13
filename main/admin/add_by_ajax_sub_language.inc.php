@@ -12,8 +12,9 @@ $new_language=Security::remove_XSS($_POST['new_language']);
 $language_variable=Security::remove_XSS($_POST['variable_language']);
 $file_language=Security::remove_XSS($_POST['file_language']);
 $id_language=Security::remove_XSS($_POST['id']);
+$sub_language_id=Security::remove_XSS($_POST['sublanguage_id']);
  
-$all_data_of_language=AdminManager::get_all_information_of_sub_language($_POST['id']);
+$all_data_of_language=AdminManager::get_all_information_of_sub_language($id_language,$sub_language_id);
 $dokeos_path_folder=api_get_path('SYS_LANG_PATH').$all_data_of_language['dokeos_folder'].'/'.$file_language;
 $all_file_of_directory=AdminManager::get_all_language_variable_in_file($dokeos_path_folder);
 AdminManager::add_file_in_language_directory ($dokeos_path_folder);

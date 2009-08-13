@@ -1,11 +1,8 @@
-.row {
-	width:100%;
-}
-div.row div.label {
-	width: 0%;
-}
-div.row div.formw {
-	width: 100%;
+/*****************************************************
+ *  MAIN   - COSMIC CAMPUS                           *
+ *****************************************************/
+html {
+	height: 100%;
 }
 /* Redefining html styles */
 body {
@@ -17,7 +14,24 @@ body {
 	background-color: #fff;
 	margin: 0;
 	padding: 0;
+	height: 100%; /* stick */
 }
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -7em;
+}
+.row {
+	width:100%;
+}
+div.row div.label {
+	width: 0%;
+}
+div.row div.formw {
+	width: 100%;
+}
+
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
 }
@@ -194,13 +208,27 @@ a.breadcrumb0 {
 }
 /* footer styles */
 #footer {
-	padding: 60px;
-	height: 10px;
-	background-color: #ffffff;
+	height: 7em;
+	background-color: #fff;
 	background-image: url(images/footer.jpg);
 	background-repeat: no-repeat;
-	color:#ffffff;
+	color:#fff;
 }
+.push {
+	height: 7em; /* Very important */
+}
+
+#footer .copyright {
+	float: right;
+	padding-top:55px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:55px;
+	margin-left:10px;
+}
+
 #footerright {
 	margin-top: 10px;
 	float: right;
@@ -219,9 +247,9 @@ a.breadcrumb0 {
 	min-height: 320px;
 }
 /* my courses styles */
-#maincontent {
+.maincontent {
 	float: left;
-	width: 68%;
+	width: 65%;
 	padding: 0 20px 0 20px;
 	background-color: transparent;
 	min-height: 333px;
@@ -237,10 +265,23 @@ a.breadcrumb0 {
 .courseslist {
 	margin-left: -25px;
 }
+
+/* user_portal course list */
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
+	height: 30px;	
 }
+/* user_portal session list */
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}
+.session_course_item {
+	/* padding: 0px; */
+	margin: 0px;
+}
+
 .courses a {
 }
 .user_course_category {
@@ -251,14 +292,6 @@ a.breadcrumb0 {
 	list-style-type: none;
 	margin: 0px;
 	padding: 5px;
-}
-
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-}
-.session_course_item .courses {
-	height:22px;
 }
 
 .menu {
@@ -804,8 +837,23 @@ div.admin_section {
 	float: left;
 	margin: 10px 20px;
 	border: 1px solid #EE4C03;
+	min-height:210px;
 }
 div.admin_section h4 {
+	background-color: #FDDEAA;
+	font-weight: bold;
+	list-style-type: none;
+	margin: 0px;
+	padding: 5px;
+}
+/* Report section */
+div.report_section {
+	width: 40%;
+	float: left;
+	margin: 10px 20px;
+	border: 1px solid #EE4C03;
+}
+div.report_section h4 {
 	background-color: #FDDEAA;
 	font-weight: bold;
 	list-style-type: none;
@@ -1759,30 +1807,33 @@ div.image-social-content center.friend {
 	padding-left:10px;
 	width:200px;
 }
+/* general layout of the profile page */
 #social-profile-wrapper {
 	width: 100%;
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}
+}	
 #social-profile-container {
-/*width: 100%;*/
+	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;
+	width:21%;	
+}
+#social-profile-content {
+	float:right;
+	width:46%;
+	margin-left: 2px;
+}
+#social-profile-right {
+	float:right;
+	width:32%;
+	margin-left: 2px;
 }
 .left-side {
 	min-width: 198px;
 	margin: 0px;
-}
-#social-profile-content {
-	float:right;
-	width:48%;
-}
-#social-profile-right {
-	float:right;
-	width:30%;
 }
 .social-profile-post {
 	width: 450px;

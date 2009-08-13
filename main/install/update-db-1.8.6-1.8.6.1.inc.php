@@ -300,6 +300,45 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							}
 						}
 					}
+					
+					$t_wiki = $row_course['db_name'].".wiki";
+                    $t_wiki_conf = $row_course['db_name'].".wiki_conf";
+                    
+                    if($singleDbForm)
+                    {                        
+                        $t_wiki = "$prefix{$row_course['db_name']}_wiki";
+                        $t_wiki_conf = "$prefix{$row_course['db_name']}_wiki_conf";
+                    }
+                    
+                    //update page_id from wiki table
+                    $query = "SELECT id, reflink FROM $t_wiki";
+                    $res_page = mysql_query($query);
+                    $wiki_id = $reflink = array(); 
+                    
+                    while ($row_page = mysql_fetch_row($res_page)) {                    	
+                    	$wiki_id[] = $row_page[0];
+                    	$reflink[] = $row_page[1];                    	 
+                    }
+                                        
+                    $reflink_unique = array_unique($reflink);
+                    $reflink_flip = array_flip($reflink_unique);
+                     					 
+                    foreach ($wiki_id as $key=>$wiki_page) {                   	                    	
+                    	$pag_id = $reflink_flip[$reflink[$key]];
+                    	$sql= "UPDATE $t_wiki SET page_id='".($pag_id + 1)."' WHERE id = '$wiki_page'";
+                    	$res_update = mysql_query($sql);		                     		       					       				                        	
+                    }					
+                    
+                    //insert page_id into wiki config					
+				   	$query = "SELECT DISTINCT page_id FROM $t_wiki ORDER BY page_id";	
+				   	
+				   	$myres_wiki = mysql_query($query);					
+				   	while ($row_wiki = mysql_fetch_row($myres_wiki)) {
+				   		$page_id = $row_wiki[0];
+				   		$query="INSERT INTO ".$t_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3) VALUES ('".$page_id."','','','','','','','')";				   
+                   		$myres_wiki_conf = mysql_query($query); 					   	
+				   }
+					
    				}
 			}
 		}

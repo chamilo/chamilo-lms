@@ -1,9 +1,9 @@
-/*
-==============================================================================
-	GLOBAL STYLES - REDEFINED HTML TAGS
-==============================================================================
-*/
-
+/*****************************************************
+ *  MAIN - DOKEOS CLASSIC 2D                         *
+ *****************************************************/
+html {
+	height: 100%;
+}
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
     behavior:url("/main/css/csshover3.htc");
@@ -13,6 +13,13 @@ body {
 	font-size: 12px;
 	margin: 0;
 	padding: 0;
+	height: 100%; /* stick */		
+}
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -4em;
 }
 img {
 	border: none;
@@ -95,8 +102,7 @@ input.link_alike:hover {
 	background-color: #fff;
 	margin: 0px auto;
 	margin-top: 10px;
-	min-height: 320px;
-	padding: 0px 10px 10px 10px;
+	min-height: 320px;	
 	position: relative; /* to avoid the IE peekabo bug*/
 	width: 98%;
 }
@@ -130,7 +136,18 @@ input.link_alike:hover {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
+	height: 30px;	
 }
+/* user_portal session list */
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}
+.session_course_item {
+	/* padding: 0px; */
+	margin: 0px;
+}
+
 /*
 ==============================================================================
 	HEADER STYLES
@@ -341,13 +358,24 @@ input.link_alike:hover {
 */
 
 #footer {
+	height: 3.9em;
 	background-color: #E5EDF9;
 	border-top: 1px solid #4171B5;
-	font-size: 12px;
-	padding: 8px;
+	font-size: 12px;			
 }
+.push {
+	height: 4em; /* Very important */
+}
+
 #footer .copyright {
 	float: right;
+	padding-top:20px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:20px;
+	margin-left:10px;
 }
 #myprofilefooter {
 	clear:both;
@@ -1282,8 +1310,21 @@ div.admin_section {
 	margin: 10px 20px;
 	padding: 5px;
 	width: 40%;
+	min-height:200px;
 }
 div.admin_section h4 {
+	border-bottom: 1px solid gray;
+	margin: 0;
+	width: 100%;
+}
+/* Report Section */
+div.report_section {
+	float: left;
+	margin: 10px 20px;
+	padding: 5px;
+	width: 40%;
+}
+div.report_section h4 {
 	border-bottom: 1px solid gray;
 	margin: 0;
 	width: 100%;
@@ -1317,14 +1358,6 @@ div.admin_section h4 {
 .session_box_title {
 }
 .session_box_coach {
-}
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-}
-
-.session_course_item .courses {
-	height:22px;
 }
 /*
 ==============================================================================
@@ -2514,30 +2547,33 @@ div.image-social-content center.friend {
 	padding-left:10px;
 	width:200px;
 }
+/* general layout of the profile page */
 #social-profile-wrapper {
 	width: 100%;
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}
+}	
 #social-profile-container {
-/*width: 100%;*/
+	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;
+	width:21%;	
+}
+#social-profile-content {
+	float:right;
+	width:46%;
+	margin-left: 2px;
+}
+#social-profile-right {
+	float:right;
+	width:32%;
+	margin-left: 2px;
 }
 .left-side {
 	min-width: 198px;
 	margin: 0px;
-}
-#social-profile-content {
-	float:right;
-	width:48%;
-}
-#social-profile-right {
-	float:right;
-	width:30%;
 }
 .social-profile-post {
 	width: 450px;

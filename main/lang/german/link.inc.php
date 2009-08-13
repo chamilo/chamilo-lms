@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $LinkMoved = "Der Link wurde verschoben";
 $langLinkName = "Linkname";
-$langLinkAdd = "Link wurde hinzugefügt";
+$langLinkAdd = "Link hinzufügen";
 $langLinkAdded = "Der Link wurde hinzugefügt";
 $langLinkMod = "Link wurde geändert";
 $langLinkModded = "Der Link wurde bearbeitet";

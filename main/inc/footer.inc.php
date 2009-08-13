@@ -1,28 +1,5 @@
-<?php // $Id: footer.inc.php 22315 2009-07-23 16:12:54Z cvargas1 $
- 
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
 ==============================================================================
@@ -52,6 +29,9 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 ?>
  <div class="clear">&nbsp;</div> <!-- 'clearing' div to make sure that footer stays below the main and right column sections -->
 </div> <!-- end of #main" started at the end of banner.inc.php -->
+
+<div class="push"></div>
+</div> <!-- end of #wrapper section -->
 
 <div id="footer"> <!-- start of #footer section -->
 <div id="bottom_corner"></div> 
@@ -103,17 +83,16 @@ if (get_setting('show_tutor_data')=='true'){
 	
 }
 
-if (get_setting('show_teacher_data')=='true'){
-	
+if (get_setting('show_teacher_data')=='true') {	
 	// course manager
 	$id_course=api_get_course_id();
 	if (isset($id_course) && $id_course!=-1) {
 		echo '<span id="coursemanager">';
-		$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
+		$mail=CourseManager::get_emails_of_tutors_to_course($id_course);		
 		if (count($mail)>1){
 			$bar='&nbsp;|&nbsp;';
 			echo '&nbsp;'.get_lang('Teachers').' : ';
-		} else {
+			} else {
 			$bar='';
 			echo '&nbsp;'.get_lang('Teacher').' : ';
 		}

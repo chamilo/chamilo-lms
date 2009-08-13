@@ -85,4 +85,6 @@ $UserStatistics = "Reporting for this user";
 $EditUser = "Edit this user";
 $ViewUser = "View this user";
 $RSSFeeds = "RSS feed";
+$NoFriendsInYourContactList = "No friends in your contact list";
+$TryAndFindSomeFriends = "Try and find some friends";
 ?>

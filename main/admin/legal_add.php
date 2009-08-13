@@ -13,7 +13,7 @@ require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 //var_dump($_POST);	
 // Create the form
 $form = new FormValidator('addlegal');
-//var_dump($_POST); var_dump($_GET); 
+//var_dump($_POST);// var_dump($_GET); 
 $defaults=array();
 if( $form->validate()) {
 	$check = Security::check_token('post');			
@@ -26,7 +26,21 @@ if( $form->validate()) {
 			$type 	 = $values['type'];
 			$content = $values['content'];
 			$changes = $values['changes'];
-			$submit  = $values['send'];		
+			$navigator_info = api_get_navigator();
+			
+			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+				if (isset($values['preview'])) {
+					$submit	='preview';
+				} elseif (isset($values['save'])) {
+					$submit	='save';
+				} elseif (isset($values['back'])) {
+					$submit	='back';
+				}
+			}else {
+				$submit  = $values['send'];	
+			
+			}		
+
 			$default[content]=$content;
 			if (isset($values['language'])){
 				if($submit=='back') {
@@ -125,14 +139,38 @@ if (isset($_POST['language'])) {
 		$form->addElement('html',$term_preview);
 	}
 	// Submit & preview button
-	$buttons = '<div class="row">
+	
+		$navigator_info = api_get_navigator();
+		//ie6 fix
+	if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+		
+	$buttons = '<div class="row" align="center">
+			<div class="formw">
+			<input type="submit" name="back"  value="'.get_lang('Back').'"/>
+			<input type="submit" name="preview"  value="'.get_lang('Preview').'"/>
+			<input type="submit" name="save"  value="'.get_lang('Save').'"/>
+			</div>
+		</div>';
+		$form->addElement('html',$buttons);
+	} else {				
+	$buttons = '<div class="row" align="center">
 					<div class="formw">
 					<button type="submit" class="back" 	 name="send" value="back">'.get_lang('Back').'</button>
 					<button type="submit" class="search" name="send" value="preview">'.get_lang('Preview').'</button>
 					<button type="submit" class="save" 	 name="send" value="save">'.get_lang('Save').'</button>
 					</div>
-				</div>';	
-	$form->addElement('html',$buttons);
+				</div>';
+		$form->addElement('html',$buttons);
+	}
+	
+/*	$buttons = '<div class="row">
+					<div class="formw">
+					<button type="submit" class="back" 	 name="send" value="back">'.get_lang('Back').'</button>
+					<button type="submit" class="search" name="send" value="preview">'.get_lang('Preview').'</button>
+					<button type="submit" class="save" 	 name="send" value="save">'.get_lang('Save').'</button>
+					</div>
+				</div>';	*/
+	
 } else {
 	$form->addElement('select_language', 'language', get_lang('Language'),null,array());
 	$buttons = '<div class="row">

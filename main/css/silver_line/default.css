@@ -1,23 +1,8 @@
-/*
-==============================================================================
-							CORPORATIVE STYLESHEET
-==============================================================================
-*/
-/*
-==============================================================================
-	GLOBAL STYLES - REDEFINED HTML TAGS
-==============================================================================
-*/
-a {
-	text-decoration: none;
-	font: bold 100% Arial, sans-serif, sans;
-	color: #900;
-}
-a:hover, a:focus {
-	color: #990;
-}
-blockquote {
-	font: 1.1em arial, sans, sans-serif;
+/*****************************************************
+ *  MAIN  - CORPORATE
+ *****************************************************/
+html {
+	height: 100%;
 }
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
@@ -28,6 +13,25 @@ body {
 	font-family: 'Lucida Grande', verdana, Arial, sans-serif, sans;
 	color: #000;
 	background-color: #fff;
+	height: 100%; /* stick */
+}
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -4em;
+}
+
+a {
+	text-decoration: none;
+	font: bold 100% Arial, sans-serif, sans;
+	color: #900;
+}
+a:hover, a:focus {
+	color: #990;
+}
+blockquote {
+	font: 1.1em arial, sans, sans-serif;
 }
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
@@ -81,21 +85,28 @@ ul {
 }
 /* user_portal course list */
 .courses {
-	font-weight: bold;
-	list-style: none;
-	margin-bottom: .2em;
-	font-family: arial, sans-serif, sans;
-	font-size: 110%;
+	list-style-type: none;
+	margin-bottom: 5px;
+	height: 30px;	
 }
+/* user_portal session list */
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}
+.session_course_item {
+	/* padding: 0px; */
+	margin: 0px;
+}
+
 #main {
 	font-size: 89%;
 	width: 96%;
-	padding: 0 1% 15px 3%;
-	background: transparent url('images/bg.jpg') no-repeat 100% 100%;
+	padding: 0 1% 15px 3%;	
 	/* min-height hack for ie6 or older*/
 	min-height: 400px;
 	height: auto !important;
-	height: 400px;
+	height: 320px;
 	clear: both;
 	float: left;
 }
@@ -144,13 +155,6 @@ ul {
 .session_box_title {
 }
 .session_box_coach {
-}
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-}
-.session_course_item .courses {
-	height:22px;
 }
 /*
 ==============================================================================
@@ -264,6 +268,7 @@ ul {
 	float: right;
 	clear: right;
 }
+
 #header3 ul {
 	list-style: none;
 	margin: 0 0 0 3.9em;
@@ -346,21 +351,24 @@ ul {
     FOOTER STYLES
 ==============================================================================
 */
-
 #footer {
+	height: 4em;
 	background: url('images/headerbg.jpg') repeat-y top right;
 	font-family: Arial, sans-serif, sans;
-	font-weight: bold;
-	width: 98%;
-	float: left;
-	clear: both;
-	padding: .2em 0 .6em 2%;
-	border-bottom: 1px solid #999;
+	font-weight: bold;	
+}
+.push {
+	height: 4em; /* Very important */
 }
 #footer .copyright {
 	float: right;
-	clear: right;
-	margin: 0 2em 0 0;
+	padding-top:25px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:25px;
+	margin-left:10px;
 }
 #bottom_corner {
 }
@@ -752,6 +760,7 @@ div.row div.label {
 	border: 1px solid #999;
 	padding: .5em .7em .5em .7em;
 	line-height: 120%;
+	min-height:200px;
 }
 .admin_section h4 {
 	margin: 0;
@@ -763,6 +772,28 @@ div.row div.label {
 .admin_section input {
 	margin: .5em;
 }
+
+/* Report section */
+
+.report_section {
+	float: left;
+	margin: 1em 1em;
+	width: 40%;
+	border: 1px solid #999;
+	padding: .5em .7em .5em .7em;
+	line-height: 120%;
+}
+.report_section h4 {
+	margin: 0;
+	width: 100%;
+	font-size: 120%;
+	font-family: Arial, sans, sans-serif;
+	font-weight: bold;
+}
+.report_section input {
+	margin: .5em;
+}
+
 /*
 ==============================================================================
     COURSE ADMIN
@@ -2148,30 +2179,33 @@ div.image-social-content center.friend {
 	padding-left:10px;
 	width:200px;
 }
+/* general layout of the profile page */
 #social-profile-wrapper {
 	width: 100%;
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}
+}	
 #social-profile-container {
-/*width: 100%;*/
+	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;
+	width:20%;	
+}
+#social-profile-content {
+	float:right;
+	width:46%;
+	margin-left: 2px;
+}
+#social-profile-right {
+	float:right;
+	width:32%;
+	margin-left: 2px;
 }
 .left-side {
 	min-width: 198px;
 	margin: 0px;
-}
-#social-profile-content {
-	float:right;
-	width:48%;
-}
-#social-profile-right {
-	float:right;
-	width:30%;
 }
 .social-profile-post {
 	width: 450px;

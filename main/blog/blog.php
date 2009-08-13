@@ -1,5 +1,5 @@
 <?php //$Id: announcements.php 16702 2008-11-10 13:02:30Z elixir_inter $
-/*
+/*     
 ==============================================================================
 	Dokeos - elearning and course management software
 

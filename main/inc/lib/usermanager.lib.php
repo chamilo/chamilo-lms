@@ -1,27 +1,5 @@
 <?php // $Id: usermanager.lib.php 22378 2009-07-26 19:58:38Z yannoo $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	This library provides functions for user management.
@@ -1630,25 +1608,29 @@ class UserManager {
 	 * @return	int		User ID (or false if not found)
 	 */
 	public static function get_user_upload_files_by_course ($user_id, $course, $column=2) {
-		$path = api_get_path(SYS_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
-		$web_path = api_get_path(WEB_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';    	    	
-		$file_list= array();	
 		$return = '';
-		if (is_dir($path)) {
-			$handle = opendir($path);	
-			while ($file = readdir($handle)) {
-				if ($file == '.' || $file == '..' || $file == '.htaccess' || is_dir($path.$file))
-					continue; // skip current/parent directory and .htaccess	
-				$file_list[] = $file;
-			}			
-			if (count($file_list)>0) {
-				$return = $course;
-				$return .= '<ul>';		
+		if (!empty($user_id) && !empty($course)) {
+			$user_id = intval($user_id);
+			$path = api_get_path(SYS_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
+			$web_path = api_get_path(WEB_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';    	    	
+			$file_list= array();	
+			
+			if (is_dir($path)) {
+				$handle = opendir($path);	
+				while ($file = readdir($handle)) {
+					if ($file == '.' || $file == '..' || $file == '.htaccess' || is_dir($path.$file))
+						continue; // skip current/parent directory and .htaccess	
+					$file_list[] = $file;
+				}			
+				if (count($file_list)>0) {
+					$return = $course;
+					$return .= '<ul>';		
+				}
+				foreach ($file_list as $file) {
+					$return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';			
+				}	
+				$return .= '</ul>';		
 			}
-			foreach ($file_list as $file) {
-				$return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';			
-			}	
-			$return .= '</ul>';		
 		}		
 		return $return;
 	}

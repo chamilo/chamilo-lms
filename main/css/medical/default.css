@@ -1,6 +1,9 @@
 /*****************************************************
  *  MAIN - MEDICAL CSS		                         *
  *****************************************************/
+html {
+	height: 100%;
+} 
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
         behavior:url("/main/css/csshover3.htc");
@@ -9,15 +12,22 @@ body {
 	color: #000;
 	margin: 0;
 	padding: 0;
-	background-color: #ffffff;
+	background-color: #fff;
+	height: 100%; /* stick */
 }
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-	background-image:url(images/shadow.gif);
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -5em;
 }
 #outerframe {
 	position: relative;  /* do not remove, fixes a bug in IE */
 	background-color: #fff;
 	background-repeat:no-repeat;
+}
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+	background-image:url(images/shadow.gif);
 }
 /* Hides from IE5-mac \*/
 * html #outerframe {
@@ -168,7 +178,18 @@ input[text] {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
+	height: 30px;	
 }
+/* user_portal session list */
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}
+.session_course_item {
+	/* padding: 0px; */
+	margin: 0px;
+}
+
 /*****************************************************
  *  HEADER STYLES                                    *
  *****************************************************/
@@ -382,17 +403,26 @@ input[text] {
  *  FOOTER STYLES                                    *
  *****************************************************/
 #footer {
-	padding: 20px;
-	height: 30px;
-	background-color: #ffffff;
+	height:5em;
+	background-color: #fff;
 	background-image: url(images/footer.jpg);
 	background-repeat: no-repeat;
 	font-size: 12px;
 	font-weight:bold;
-	color:#666666;
+	color:#666;
+}
+.push {
+	height: 5em; /* Very important */
 }
 #footer .copyright {
 	float: right;
+	padding-top:25px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:25px;
+	margin-left:10px;
 }
 #footer a {
 	color:#999999;
@@ -405,6 +435,11 @@ input[text] {
 
 /*NAVIGATION MENU BAR*/
 
+.menu {
+	float: right;
+	width: 20%;
+	padding: 0 0 6px 0;
+}
 
 .menucaption {
 	font-size: 12px;
@@ -1273,8 +1308,21 @@ div.admin_section {
 	float: left;
 	padding: 5px;
 	margin: 10px 20px;
+	min-height:200px;
 }
 div.admin_section h4 {
+	margin: 0;
+	border-bottom: 1px solid gray;
+	width: 100%;
+}
+/* Report section */
+div.report_section {
+	width: 40%;
+	float: left;
+	padding: 5px;
+	margin: 10px 20px;
+}
+div.report_section h4 {
 	margin: 0;
 	border-bottom: 1px solid gray;
 	width: 100%;
@@ -1309,13 +1357,7 @@ div.admin_section h4 {
 }
 .session_box_coach {
 }
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-}
-.session_course_item .courses {
-	height:22px;
-}
+
 /***************************************************************
  *  DOKEOS CONFIG SETTINGS OF THE PLATFORM ADMIN SECTION 	   *
  ***************************************************************/
@@ -2427,30 +2469,33 @@ div.image-social-content center.friend {
 	padding-left:10px;
 	width:200px;
 }
+/* general layout of the profile page */
 #social-profile-wrapper {
 	width: 100%;
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}
+}	
 #social-profile-container {
-/*width: 100%;*/
+	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;
+	width:21%;	
+}
+#social-profile-content {
+	float:right;
+	width:46%;
+	margin-left: 2px;
+}
+#social-profile-right {
+	float:right;
+	width:32%;
+	margin-left: 2px;
 }
 .left-side {
 	min-width: 198px;
 	margin: 0px;
-}
-#social-profile-content {
-	float:right;
-	width:48%;
-}
-#social-profile-right {
-	float:right;
-	width:30%;
 }
 .social-profile-post {
 	width: 450px;

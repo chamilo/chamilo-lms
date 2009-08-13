@@ -51,6 +51,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		button_name=button_name.split("_");
 		button_name=button_name[1];
 		is_id=$("#id_hidden_original_file").attr("value");
+		is_sublanguage_id=$("#id_hidden_sublanguage").attr("value");
 		is_variable_language="$"+button_name;
 		is_new_language=$("#txtid_"+button_name).attr("value");
 		if (is_new_language=="undefined") {
@@ -66,7 +67,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 				},
 				type: "POST",
 				url: "../admin/add_by_ajax_sub_language.inc.php",
-				data: "new_language="+is_new_language+"&variable_language="+is_variable_language+"&file_language="+is_file_language+"&id="+is_id,
+				data: "new_language="+is_new_language+"&variable_language="+is_variable_language+"&file_language="+is_file_language+"&id="+is_id+"&sublanguage_id="+is_sublanguage_id,
 				success: function(datos) {
 					$("#div_message_information_id").html("<div class=\"confirmation-message\">'.get_lang('TheNewWordHasBeenAdded').'</div>");
 				
@@ -158,8 +159,9 @@ $form->display();
 echo '</div>';*/
 
 $html.='<div style="float:left" class="actions" >';
-$html.='<form style="float:left" id="Loadlanguage" name="Loadlanguage" method="post" action="register_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&original_file='.$request_file.'" >';
+$html.='<form style="float:left" id="Loadlanguage" name="Loadlanguage" method="post" action="register_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&sub_language_id='.Security::remove_XSS($_GET['sub_language_id']).'&original_file='.$request_file.'" >';
 $html.='<input  type="hidden" name="id_hidden_original_file" id="id_hidden_original_file" value="'.Security::remove_XSS($_REQUEST['id']).'" />';
+$html.='<input  type="hidden" name="id_hidden_sublanguage" id="id_hidden_sublanguage" value="'.Security::remove_XSS($_REQUEST['sub_language_id']).'" />';
 $html.='<select id="sl_original_file" name="original_file">';
 //$html.='<option value="0">'.get_lang('SelectAChoice').'</option>';
 foreach ($load_array_in_select as $index_radios_results_enabled=>$value_radios_results_enabled) {
@@ -171,7 +173,7 @@ $html.='</form>';
 $html.='</div>';
 
 $html.='<div style="float:left" class="actions">';
-$html.='<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="post" action="register_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&original_file='.$request_file.'" >';
+$html.='<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="post" action="register_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&sub_language_id='.Security::remove_XSS($_GET['sub_language_id']).'&original_file='.$request_file.'" >';
 $html.='&nbsp;'.get_lang('OriginalName').'&nbsp; :&nbsp;';
 $html.='<input name="txt_search_word" type="text" size="30"  id="txt_search_word" value="" />';
 $html.='<button name="SubmitSearchLanguage" class="search" type="submit">'.get_lang('Search').'</button>';
@@ -201,7 +203,8 @@ if (isset($_REQUEST['txt_search_word']) && strlen(trim($_REQUEST['txt_search_wor
 }
 if($search_data===true) { 
 	$parent_id=Security::remove_XSS($_REQUEST['id']);
-	$get_all_info_of_sub_language=AdminManager::get_all_information_of_sub_language ($parent_id);
+	$sub_language_id=Security::remove_XSS($_REQUEST['sub_language_id']);
+	$get_all_info_of_sub_language=AdminManager::get_all_information_of_sub_language ($parent_id,$sub_language_id);
 	$dokeos_path_file=api_get_path('SYS_LANG_PATH').$all_data_of_language['dokeos_folder'].'/'.$request_file;	
 
 	$dokeos_english_path_file=api_get_path('SYS_LANG_PATH').'english/'.$request_file;
@@ -265,7 +268,7 @@ if (isset($_REQUEST['txt_search_word']) && strlen(trim($_REQUEST['txt_search_wor
 	}
 }
 }
-$parameters=array('id'=>Security::remove_XSS($_GET['id']),'original_file'=>$request_file);
+$parameters=array('id'=>Security::remove_XSS($_GET['id']),'original_file'=>$request_file,'sub_language_id'=>Security::remove_XSS($_GET['sub_language_id']));
 if (isset($_REQUEST['txt_search_word']) && strlen($_REQUEST['txt_search_word'])>0) {
 	$parameters['txt_search_word']=Security::remove_XSS($_REQUEST['txt_search_word']);
 }

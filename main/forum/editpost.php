@@ -123,7 +123,7 @@ $htmlHeadXtra[] = '<script>
 $current_thread=get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
 $current_forum=get_forum_information($_GET['forum']); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
-$current_post=get_post_information($_GET['thread']);
+$current_post=get_post_information($_GET['post']);
 /*
 -----------------------------------------------------------
 	Header and Breadcrumbs

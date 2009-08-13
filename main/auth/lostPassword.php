@@ -1,28 +1,5 @@
 <?php
-
-// $Id: lostPassword.php 20254 2009-05-02 21:24:08Z iflorespaz $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
  * SCRIPT PURPOSE :
@@ -57,16 +34,11 @@ echo '<div class="actions-title">';
 echo $tool_name;
 echo '</div>';
 $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-if (isset ($_GET["reset"]) && isset ($_GET["id"]))
-{
-	$msg = reset_password($_GET["reset"], $_GET["id"]);
-	$msg .= '. <br/>'.get_lang('YourPasswordHasBeenEmailed');
+if (isset ($_GET["reset"]) && isset ($_GET["id"])) {
+	$msg = reset_password($_GET["reset"], $_GET["id"]);	
 	$msg1= '<a href="'.api_get_path(WEB_PATH).'main/auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
-	Display::display_normal_message($msg);
 	echo '<br/><br/><div class="actions" >'.$msg1.'</div>';
-}
-else
-{
+} else {
 	$form = new FormValidator('lost_password');
 	$form->add_textfield('email', get_lang('Email'), false, 'size="40"');
 	$form->applyFilter('email','strtolower');

@@ -239,4 +239,6 @@ $AvgAllUsersInAllCourses = "Media su tutti gli utenti e moduli del corso";
 $AvgExercisesScore = "Punteggio Test";
 $TrainingTime = "Tempo di accesso";
 $CourseProgress = "Avanzamento";
+$ViewMinus = "Mostra meno";
+$ResourcesTracking = "Report sulle risorse";
 ?>

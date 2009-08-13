@@ -264,8 +264,8 @@ while ($row = Database::fetch_array($result_select)) {
 		} else {
 				$allow_use_sub_language='';
 				$all_information_of_sub_language=AdminManager::get_all_information_of_language($row['id']);
-				$allow_add_term_sub_language = "&nbsp;<a href='register_sub_language.php?action=registersublanguage&id=".$all_information_of_sub_language['parent_id']."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";									
-				$allow_delete_sub_language = "&nbsp;<a href='new_sub_language.php?action=deletesublanguage&id=".$all_information_of_sub_language['parent_id']."'>".Display::return_icon('delete_data.gif', get_lang('DeleteSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";		
+				$allow_add_term_sub_language = "&nbsp;<a href='register_sub_language.php?action=registersublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";									
+				$allow_delete_sub_language = "&nbsp;<a href='new_sub_language.php?action=deletesublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('delete_data.gif', get_lang('DeleteSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";		
 		}
 		
 	} else {

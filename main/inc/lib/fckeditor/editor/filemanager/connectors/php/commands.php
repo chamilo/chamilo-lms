@@ -214,7 +214,7 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 		// Get the extension.
 		$sExtension = substr( $sFileName, ( strrpos($sFileName, '.') + 1 ) ) ;
 		$sExtension = strtolower( $sExtension ) ;
-
+		
 		if ( isset( $Config['SecureImageUploads'] ) )
 		{
 			if ( ( $isImageValid = IsImageValid( $oFile['tmp_name'], $sExtension ) ) === false )
@@ -245,7 +245,7 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 				{
 					$iCounter++ ;
 					$sFileName = RemoveExtension( $sOriginalFileName ) . '(' . $iCounter . ').' . $sExtension ;
-					$sErrorNumber = '201' ;
+					$sErrorNumber = '0' ; //Change sErrorNumber $ 201 to 0 to allow create record files renamed
 				}
 				else
 				{
@@ -273,7 +273,6 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 					break ;
 				}
 			}
-
 			if ( file_exists( $sFilePath ) )
 			{
 				//previous checks failed, try once again
@@ -294,7 +293,6 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 	}
 	else
 		$sErrorNumber = '202' ;
-
 	if ($sErrorNumber == '0')
 	{
 		// While we are in a course: Registering the newly uploaded file in the course's database.
@@ -309,16 +307,17 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 				global $group_properties;
 				$to_group_id = $group_properties['id'];
 			}
-
-			$file_path = substr($sFilePath, strpos($sFilePath, $repository_path) + strlen($repository_path) - 1);
-			$path = explode('/', $file_path);
-			$file_name = $path[count($path) - 1];
-			$path[count($path) - 1] = '';
-			$folder_path = '/' + implode('/', $path);
-			$file_size = @filesize($sFilePath);
-			$doc_id = add_document($_course, $file_path, 'file', $file_size, $file_name);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $to_group_id);
-			item_property_update_on_folder($_course, $folder_path, $_user['user_id']);
+			if ( file_exists( $sFilePath ) ) {
+				$file_path = substr($sFilePath, strpos($sFilePath, $repository_path) + strlen($repository_path) - 1);
+				$path = explode('/', $file_path);
+				$file_name = $path[count($path) - 1];
+				$path[count($path) - 1] = '';
+				$folder_path = '/' + implode('/', $path);
+				$file_size = @filesize($sFilePath);
+				$doc_id = add_document($_course, $file_path, 'file', $file_size, $file_name);
+				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $to_group_id);
+				item_property_update_on_folder($_course, $folder_path, $_user['user_id']);
+			}
 		}
 	}
 

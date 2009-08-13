@@ -252,7 +252,11 @@ function deletelinkcategory($type)
 		global $id;
 		// -> items are no longer fysically deleted, but the visibility is set to 2 (in item_property). This will
 		// make a restore function possible for the platform administrator
-		//$sql="DELETE FROM $tbl_link WHERE id='".$_GET['id']."'";
+		if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
+			$sql="UPDATE $tbl_link SET on_homepage='0' WHERE id='".Database::escape_string($_GET['id'])."'";
+			Database::query($sql,__FILE__,__LINE__);			
+		}
+
 		api_item_property_update($_course, TOOL_LINK, $id, "delete", $_user['user_id']);
 		delete_link_from_search_engine(api_get_course_id(), $id);
 		$catlinkstatus = get_lang("LinkDeleted");
@@ -340,7 +344,7 @@ function editlinkcategory($type)
 		// this is used to populate the link-form with the info found in the database
 		$sql = "SELECT * FROM ".$tbl_link." WHERE id='".$_GET['id']."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		if ($myrow = mysql_fetch_array($result))
+		if ($myrow = Database::fetch_array($result))
 		{
 			$urllink = $myrow["url"];
 			$title = $myrow["title"];

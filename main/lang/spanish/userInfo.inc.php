@@ -84,4 +84,7 @@ $ViewMySharedProfile = "Mi perfil compartido";
 $UserStatistics = "Informes de este usuario";
 $EditUser = "Editar usuario";
 $ViewUser = "Ver usuario";
+$RSSFeeds = "Agregador RSS";
+$NoFriendsInYourContactList = "No tiene amigos en su lista de contacto";
+$TryAndFindSomeFriends = "Intente y busque algunos amigos";
 ?>

@@ -2598,7 +2598,7 @@ div.image-social-content center.friend {
  *****************************************************/
 /* BUTTONS */
 button {
-	margin:2px 5px 3px 3px !important;
+	margin:5px 5px 3px 0px !important;
 	background-color: #DFDFDF;
 	border-width: 1px;
 	/*    -moz-border-radius-topright : 5px;

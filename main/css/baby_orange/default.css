@@ -278,6 +278,7 @@ a.breadcrumb0 {
 	min-height: 380px;
 	height: auto !important;
 	height: 380px;
+	margin-top:10px;
 }
 .menu #lang_form select {
 	margin: 1em 31px;

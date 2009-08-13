@@ -228,7 +228,7 @@ a.breadcrumb0 {
 /* my courses styles */
 .maincontent {
 	/* float: left; */
-	width: 77%;
+	width: 71%;
 	min-height: 333px;
 	margin-top:0;
 	float: right;
@@ -281,6 +281,7 @@ a.breadcrumb0 {
 	min-height: 320px;
 	height: auto !important;
 	height: 320px;
+	margin-top:10px;
 }
 .menu #lang_form select {
 	margin: 1em 31px;

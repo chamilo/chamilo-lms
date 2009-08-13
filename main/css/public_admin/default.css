@@ -2499,11 +2499,11 @@ div.image-social-content center.friend {
 	float: left;
 }
 #social-profile-container {
-/*width: 100%;*/
+	/*width: 100%;*/
 }
 #social-profile-left {
 	float:left;
-	width:22%;
+	width:21%;
 }
 .left-side {
 	min-width: 198px;
@@ -2511,11 +2511,11 @@ div.image-social-content center.friend {
 }
 #social-profile-content {
 	float:right;
-	width:47%;
+	width:46%;
 }
 #social-profile-right {
 	float:right;
-	width:30%;
+	width:32%;
 }
 .social-profile-post {
 	background : #EFEFEF;

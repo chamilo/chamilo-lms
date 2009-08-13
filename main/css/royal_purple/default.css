@@ -2293,25 +2293,26 @@ div.image-social-content center.friend {
 }
 /* general layout of the profile page */
 #social-profile-wrapper {
-	width: 1000px;
+	width: 100%;
 	text-align:left;
 	margin:0 auto;
-}
+	float: left;
+}	
 #social-profile-container {
-	width: 705px;
+	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:220px;
+	width:22%;	
 }
 #social-profile-content {
 	float:right;
-	width:480px;
+	width:47%;
 	margin-left: 4px;
 }
 #social-profile-right {
 	float:right;
-	width:290px;
+	width:30%;
 	margin-left: 4px;
 }
 /*****************************************************

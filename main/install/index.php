@@ -311,8 +311,7 @@ if($installType=='update' && in_array($my_old_version,$update_from_version_8))
 	include_once '../inc/conf/configuration.php';
 }
 
-if(!isset($_GET['running']))
-{
+if(!isset($_GET['running'])) {
 	$dbHostForm='localhost';
 	$dbUsernameForm='root';
 	$dbPassForm='';
@@ -541,6 +540,13 @@ if ($encryptPassForm=='1' ) {
 </div>
 
 <table cellpadding="6" cellspacing="0" border="0" width="72%" align="center">
+<tr>
+<td>
+	<div id="note" style="float:right;">
+		<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide.</a>
+	</div>
+</td>
+</tr>
 <tr>
   <td>
 	<input type="hidden" name="updatePath"           value="<?php if(!$badUpdatePath) echo api_htmlentities($proposedUpdatePath, ENT_QUOTES, $charset); ?>" />

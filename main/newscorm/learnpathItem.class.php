@@ -1020,20 +1020,17 @@ class learnpathItem{
     			if($update_local==true){
     				$this->set_status($row['status']);
     			}
-	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'],0);}
-	    		error_log("status 1".$row['status']);
+	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'],0);}	    		
     			return $row['status'];
     		}
     	} else {
     		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - in get_status: using attrib',0);}
 	    	if(!empty($this->status)) {
-	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning attrib: '.$this->status,0);}
-	    		error_log("status 2".$this->status);
+	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning attrib: '.$this->status,0);}	    		
 	    		return $this->status;
 	    	}
     	}
-   		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning default '.$this->possible_status[0],0);}
-    	error_log("status 3".$this->possible_status[0]);
+   		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning default '.$this->possible_status[0],0);}    	
     	return $this->possible_status[0];
     }
     /**

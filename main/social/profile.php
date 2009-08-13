@@ -788,15 +788,18 @@ echo '<div id="social-profile-container">';
 				//-----Announcements
 				$announcement_content = '';		
 				$my_announcement_by_user_id=isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
+
 		    	foreach ($course_list_code as $course) {
-	    			$content = get_all_annoucement_by_user_course($course['dbName'],$my_announcement_by_user_id);	 			
+	    			$content = get_all_annoucement_by_user_course($course['dbName'],$my_announcement_by_user_id);	
+	    			$course_info=api_get_course_info($course['code']); 			
 	    	  		if (!empty($content)) {		    	  			  
 						$announcement_content.= '<div class="social-background-content" style="width:100%">';	
-						$announcement_content.= '<div class="actions">'.$course['title'].'</div>';					
+						$announcement_content.= '<div class="actions">'.$course_info['name'].'</div>';					
 						$announcement_content.= $content;	
 						$announcement_content.= '</div>';
 						$announcement_content.= '<br/>';
 	    	  		}
+
 	    	  	}
 	    	  	
 	    	  	if(!empty($announcement_content)) {

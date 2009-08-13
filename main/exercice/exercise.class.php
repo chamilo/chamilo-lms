@@ -878,7 +878,7 @@ class Exercise
 		$form -> addElement('html','<div class="row">
 		<div class="label"></div>
 		<div class="formw" style="height:50px">
-			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'</span></a>
+			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'</span></a>
 		</div>
 		</div>');
 		

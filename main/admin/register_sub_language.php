@@ -15,7 +15,7 @@
 $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once 'admin.class.php';
+require_once 'sub_language.class.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -97,11 +97,11 @@ require_once api_get_path(LIBRARY_PATH).'text.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
-	$language_name=AdminManager::get_name_of_language_by_id ($_GET['id']);
-	$all_data_of_language=AdminManager::get_all_information_of_language($_GET['id']);
+	$language_name=SubLanguageManager::get_name_of_language_by_id ($_GET['id']);
+	$all_data_of_language=SubLanguageManager::get_all_information_of_language($_GET['id']);
 	$my_language=$language_name;
-	if (AdminManager::check_if_exist_language_by_id($_GET['id'])===true) {
-		$parent_id=$_GET['id'];
+	if (SubLanguageManager::check_if_exist_language_by_id($_GET['id'])===true) {
+		$parent_id=intval($_GET['id']);
 		$language_id_exist=true;
 	} else {
 		$language_id_exist=false;
@@ -125,7 +125,7 @@ if (!is_dir($dokeos_path_folder) || strlen($all_data_of_language['dokeos_folder'
 
 Display :: display_header($language_name);
 
-$all_file_of_directory=AdminManager::get_all_data_of_dokeos_folder ($dokeos_path_folder);
+$all_file_of_directory=SubLanguageManager::get_all_data_of_dokeos_folder ($dokeos_path_folder);
 $load_array_in_select=array();
 sort($all_file_of_directory);
 foreach ($all_file_of_directory as $value_all_file_of_directory) {
@@ -202,9 +202,9 @@ if (isset($_REQUEST['txt_search_word']) && strlen(trim($_REQUEST['txt_search_wor
 	$search_data=true;	
 }
 if($search_data===true) { 
-	$parent_id=Security::remove_XSS($_REQUEST['id']);
-	$sub_language_id=Security::remove_XSS($_REQUEST['sub_language_id']);
-	$get_all_info_of_sub_language=AdminManager::get_all_information_of_sub_language ($parent_id,$sub_language_id);
+	$parent_id=intval($_REQUEST['id']);
+	$sub_language_id=intval($_REQUEST['sub_language_id']);
+	$get_all_info_of_sub_language=SubLanguageManager::get_all_information_of_sub_language ($parent_id,$sub_language_id);
 	$dokeos_path_file=api_get_path('SYS_LANG_PATH').$all_data_of_language['dokeos_folder'].'/'.$request_file;	
 
 	$dokeos_english_path_file=api_get_path('SYS_LANG_PATH').'english/'.$request_file;
@@ -215,10 +215,10 @@ if($search_data===true) {
 		$sub_language_exist=false;
 	}
 
-	$all_language_variable=AdminManager::get_all_language_variable_in_file ($dokeos_path_file);
-	$all_english_language_variable=AdminManager::get_all_language_variable_in_file($dokeos_english_path_file);
+	$all_language_variable=SubLanguageManager::get_all_language_variable_in_file ($dokeos_path_file);
+	$all_english_language_variable=SubLanguageManager::get_all_language_variable_in_file($dokeos_english_path_file);
 	if ($sub_language_exist===true) {
-		$get_all_sub_language_variable=AdminManager::get_all_language_variable_in_file($dokeos_sub_language_path_file);
+		$get_all_sub_language_variable=SubLanguageManager::get_all_language_variable_in_file($dokeos_sub_language_path_file);
 	}
 	$i=0;
 	foreach ($all_language_variable as $index_language_variable =>$value_language_variable) {

@@ -14,7 +14,7 @@
 $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once 'admin.class.php';
+require_once 'sub_language.class.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -86,13 +86,13 @@ function check_if_language_exist ($original_name,$english_name,$isocode,$sublang
  * get name of language by id
  */
 function get_name_of_language_by_id ($language_id) {
-	return AdminManager::get_name_of_language_by_id($language_id);
+	return SubLanguageManager::get_name_of_language_by_id($language_id);
 }
 /**
  * check if language exist by id
  */
 function check_if_exist_language_by_id ($language_id) {
-	return AdminManager::check_if_exist_language_by_id($language_id); 
+	return SubLanguageManager::check_if_exist_language_by_id($language_id); 
 }
 /**
  * check if is parent of sub-language
@@ -110,20 +110,20 @@ function ckeck_if_is_parent_of_sub_language ($parent_id) {
  * Get all information of sub-language
  */
 function allow_get_all_information_of_sub_language ($parent_id,$sub_language_id) {
-	return AdminManager::get_all_information_of_sub_language($parent_id,$sub_language_id); 
+	return SubLanguageManager::get_all_information_of_sub_language($parent_id,$sub_language_id); 
 }
 
 /**
  * Add directory for sub-language 
  */
 function add_directory_of_sub_language ($path_sub_language) {
-	return AdminManager::add_directory_of_sub_language($path_sub_language);
+	return SubLanguageManager::add_directory_of_sub_language($path_sub_language);
 }
 /**
  * Remove directory of sub-language
  */
 function remove_directory_of_sub_language ($path) {
-	$content=AdminManager::get_all_data_of_dokeos_folder($path);
+	$content=SubLanguageManager::get_all_data_of_dokeos_folder($path);
 
 	if (count($content)>0) {
 		foreach ($content as $value_content) {
@@ -250,7 +250,7 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
 	if (is_dir($path)) {
 		$rs=remove_directory_of_sub_language($path);
 		if ($rs===true) {
-			AdminManager::removed_sub_language($parent_id,$sub_language_id);
+			SubLanguageManager::removed_sub_language($parent_id,$sub_language_id);
 			Display::display_confirmation_message(get_lang('TheSubLanguageHasBeenRemoved'));
 		}
 		

@@ -310,7 +310,7 @@ if (get_setting('allow_terms_conditions')=='true') {
 		if (!empty($term_preview['content'])) {			
 			$preview = LegalManager::show_last_condition($term_preview);
 			$term_preview  = '<div class="row">
-					<div class="label">'.get_lang('Conditions').'</div>
+					<div class="label">'.get_lang('TermsAndConditions').'</div>
 					<div class="formw">
 					'.$preview.'
 					<br />				

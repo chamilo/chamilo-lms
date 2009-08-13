@@ -69,10 +69,10 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 function advanced_parameters() {
 	if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
 	} else {
 					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
 	}
 }
 </script>';
@@ -1477,7 +1477,7 @@ if ($_GET['action']=='edit')
 				if((api_is_allowed_to_edit() || api_is_platform_admin()) && $row['reflink']!='index')
 				{
 
-					echo'<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus" style="float:right">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>';
+					echo'<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus" style="float:right">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>';
 					
 					echo '<div id="options" style="display:none; margin: 20px;" >';					
 					

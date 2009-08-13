@@ -588,7 +588,7 @@ return true;
 	
 		$_clean['group_id']=(int)$_SESSION['_gid']; // TODO: check if delete ?
 	
-		echo'<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus" style="float:right">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>';
+		echo'<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus" style="float:right">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>';
 		echo '<div id="options" style="display:none; margin: 20px;" >';					
 
 		//task

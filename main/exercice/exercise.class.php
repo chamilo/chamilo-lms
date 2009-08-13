@@ -900,7 +900,7 @@ class Exercise
 		$form -> addElement('html','<div class="row">
 			<div class="label">&nbsp;</div>
 			<div class="formw">
-				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top" ><img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
+				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
 			</div>
 			</div>');
 			

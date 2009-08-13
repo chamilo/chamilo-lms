@@ -436,7 +436,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						$form_folder -> addElement('html','<div class="row">
 	 	                         <div class="label">&nbsp;</div>
  	  	                         <div class="formw">
- 	  	                                 <a href="javascript://" onclick=" return plus();" ><span id="plus">&nbsp;<img src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+ 	  	                                 <a href="javascript://" onclick=" return plus();" ><span id="plus">&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
  	  	                         </div>
 	  	                         </div>	');
 	  	                         
@@ -1185,10 +1185,10 @@ function to_javascript_work() {
 			function plus() {
 				if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif').'&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
+					document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
 				} else {
 				document.getElementById(\'options\').style.display = \'none\';
-				document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
+				document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
 				}	
 			}
 			

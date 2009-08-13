@@ -128,7 +128,7 @@ else
 
 
 <script>
-var ddlObj1=$("#questiontypes").finalselect({id:"test",viewWidth:'260px', viewHeight:'150px',selectText:'<?php echo get_lang('SelectQuestionType')."&nbsp;&nbsp;".Display::return_icon('div_hide',null,array('style'=>'vertical-align:middle'));?>',selectImage:'<?php echo api_get_path(WEB_IMG_PATH); ?>select.png', viewMouseoverColor: '#EFEFEF'});
+var ddlObj1=$("#questiontypes").finalselect({id:"test",viewWidth:'260px', viewHeight:'150px',selectText:'<?php echo get_lang('SelectQuestionType')."&nbsp;&nbsp;".Display::return_icon('div_hide',get_lang('Show'),array('style'=>'vertical-align:middle'));?>',selectImage:'<?php echo api_get_path(WEB_IMG_PATH); ?>select.png', viewMouseoverColor: '#EFEFEF'});
 $("#test-select").bind('click',function(){
 	$("#question_type_hidden").val(ddlObj1.getText());
 });

@@ -684,20 +684,20 @@ function selectAll(cbList,bSelect,showwarning)
 function plus_attachment() {
 				if (document.getElementById('options').style.display == 'none') {
 					document.getElementById('options').style.display = 'block';
-					document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+					document.getElementById('plus').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
 				} else {
 				document.getElementById('options').style.display = 'none';
-				document.getElementById('plus').innerHTML='&nbsp;<img src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+				document.getElementById('plus').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
 				}
 }
 
 function plus_repeated_event() {
 				if (document.getElementById('options2').style.display == 'none') {
 					document.getElementById('options2').style.display = 'block';
-					document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('RepeatEvent')."';
+					document.getElementById('plus2').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('RepeatEvent')."';
 				} else {
 				document.getElementById('options2').style.display = 'none';
-				document.getElementById('plus2').innerHTML='&nbsp;<img src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('RepeatEvent')."';
+				document.getElementById('plus2').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('RepeatEvent')."';
 				}
 }
 
@@ -2878,7 +2878,7 @@ function show_add_form($id = '')
 	// File attachment
 	echo '	<div class="row">
 				<div class="label">
-					<a href="javascript://" onclick="return plus_attachment();"><span id="plus">'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang('AddAnAttachment').'</span></a>
+					<a href="javascript://" onclick="return plus_attachment();"><span id="plus"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AddAnAttachment').'</span></a>
 				</div>
 				<div class="formw">
 					<table id="options" style="display: none;">
@@ -2904,7 +2904,7 @@ function show_add_form($id = '')
     {
 	echo '	<div class="row">
 				<div class="label">
-					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">'.Display::return_icon('div_show.gif').'&nbsp;'.get_lang('RepeatEvent').'</span></a>
+					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('RepeatEvent').'</span></a>
 				</div>
 				<div class="formw">';
 ?>
@@ -3453,7 +3453,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 			if ($setting_agenda_link == 'coursecode')
 			{
 				$title=$array_course_info['title'];
-				$agenda_link = api_substr($title, 0, 14);
+				$agenda_link = cut($title,14,true);
 			}
 			else
 			{

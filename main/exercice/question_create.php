@@ -128,7 +128,7 @@ else
 
 
 <script>
-var ddlObj1=$("#questiontypes").finalselect({id:"test",viewWidth:'260px',viewHeight:'150px',selectText:'-<?php echo get_lang('SelectQuestionType');?>-',selectImage:'<?php echo api_get_path(WEB_IMG_PATH); ?>select.png', viewMouseoverColor: '#EFEFEF'});
+var ddlObj1=$("#questiontypes").finalselect({id:"test",viewWidth:'260px', viewHeight:'150px',selectText:'<?php echo get_lang('SelectQuestionType')."&nbsp;&nbsp;".Display::return_icon('div_hide',null,array('style'=>'vertical-align:middle'));?>',selectImage:'<?php echo api_get_path(WEB_IMG_PATH); ?>select.png', viewMouseoverColor: '#EFEFEF'});
 $("#test-select").bind('click',function(){
 	$("#question_type_hidden").val(ddlObj1.getText());
 });
@@ -147,7 +147,7 @@ $pictures_question_types[6] = 'hotspot.gif';
 foreach (Question::$questionTypes as $key=>$value)
 {
 	?>
-	ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],addslashes(get_lang($value[1])),array('height'=>'40px;', 'style' => 'vertical-align:top;')); ?></td><td><span class="thistext"><?php echo addslashes(get_lang($value[1])); ?></span><br/><sub><?php echo addslashes(get_lang($value[1].'Comment')); ?></sub></td></tr></table>','');
+	ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],addslashes(get_lang($value[1])),array('height'=>'40px;', 'style' => 'vertical-align:top;')); ?></td><td><span class="thistext"><?php echo addslashes(get_lang($value[1])); ?></span><br/><sub><?php /*echo addslashes(get_lang($value[1].'Comment'));*/ ?></sub></td></tr></table>','');
 	<?php
 }
 ?>

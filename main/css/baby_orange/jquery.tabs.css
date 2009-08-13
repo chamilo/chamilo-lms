@@ -16,6 +16,8 @@
 	list-style: none;
 	margin: 0;
 	padding: 0 0 0 4px;
+    background:#FDDEAA;
+    border-bottom:0px; 	
 }
 .tabs-nav:after { /* clearing without presentational markup, IE gets extra treatment */
 	display: block;

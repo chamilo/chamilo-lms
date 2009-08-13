@@ -112,7 +112,7 @@ class SubLanguageManager {
      * @return boolean
      */	      
    public static function add_directory_of_sub_language($path_sub_language) {
-   		$rs=@mkdir($path_sub_language,octdec(0777));
+   		$rs=@mkdir($path_sub_language,0777);
 		if ($rs) {
 			return true;
 		} else {

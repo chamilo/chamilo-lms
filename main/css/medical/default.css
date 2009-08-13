@@ -2469,30 +2469,33 @@ div.image-social-content center.friend {
 	padding-left:10px;
 	width:200px;
 }
+/* general layout of the profile page */
 #social-profile-wrapper {
 	width: 100%;
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}
+}	
 #social-profile-container {
-/*width: 100%;*/
+	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;
+	width:21%;	
+}
+#social-profile-content {
+	float:right;
+	width:46%;
+	margin-left: 2px;
+}
+#social-profile-right {
+	float:right;
+	width:32%;
+	margin-left: 2px;
 }
 .left-side {
 	min-width: 198px;
 	margin: 0px;
-}
-#social-profile-content {
-	float:right;
-	width:48%;
-}
-#social-profile-right {
-	float:right;
-	width:30%;
 }
 .social-profile-post {
 	width: 450px;

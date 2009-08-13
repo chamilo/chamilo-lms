@@ -211,10 +211,8 @@ if($nb_menu_items>1)
 		}
 	}
 }
-echo '
-		<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-		<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-';
+echo '<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
+echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '' : '<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 echo '</div>';
 echo '<h4>'.$title.'</h4>';
 
@@ -1162,7 +1160,7 @@ function display_user_overview_export_options()
 	if ($_GET['export'] == 'options')
 	{
 		// get all the defined extra fields
-		$extrafields = UserManager::get_extra_fields(0,50,5,'ASC');
+		$extrafields = UserManager::get_extra_fields(0,50,5,'ASC', false);
 
 		// creating the form with all the defined extra fields
 		$form = new FormValidator('exportextrafields', 'post', api_get_self()."?view=".Security::remove_XSS($_GET['view']).'&display='.Security::remove_XSS($_GET['display']).'&export='.Security::remove_XSS($_GET['export']));

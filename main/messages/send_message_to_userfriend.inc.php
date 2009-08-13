@@ -25,6 +25,7 @@ if ( isset($_REQUEST['user_friend']) ) {
  	$info_user_friend=api_get_user_info($userfriend_id);
  	$info_path_friend=UserManager::get_user_picture_path_by_id($userfriend_id,'web',false,true);
 }
+
 ?>
 <table width="600" border="0" height="220">
     <tr height="180">

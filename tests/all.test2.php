@@ -26,6 +26,10 @@ class AllTests2 extends TestSuite {
         //$this->addTestFile(dirname(__FILE__).'/main/exercice/hotpotatoes.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/newscorm/scorm.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/user/userInfoLib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/webservices/user_import/import.lib.test.php');
+        
+        
+        
        
 
     }

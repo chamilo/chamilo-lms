@@ -46,4 +46,6 @@ $General = "Xeneral";
 $SearchFeatureDoIndexLink = "Indexar título e descrición?";
 $langSaveLink = "Gardar a ligazón";
 $langSaveCategory = "Gardar a categoría";
+$BackToLinksOverview = "Regresar á lista de enlaces";
+$AddTargetOfLinkOnHomepage = "Seleccione o \"target\" co que se mostrará o enlace na páxina principal do curso";
 ?>

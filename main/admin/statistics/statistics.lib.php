@@ -81,21 +81,26 @@ class Statistics
 		return $obj->number;
 	}
 	
-		/**
+	/**
 	 * Count activities from track_e_default_table 
 	 * @return int Number of activities counted
 	 */
 	function get_number_of_activities()
-	{		
+	{  
 		// Database table definitions
-		$track_e_default 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);		
-		
-		$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default ";				
+		$track_e_default  = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);  
+		  
+		$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user WHERE default_user_id = user.user_id ";  
+		  
+		if (isset($_GET['keyword'])) {
+		$keyword = Database::escape_string($_GET['keyword']);
+		$sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
+		}
+		   
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
 	}
-		
 	/**
 	 * Get activities data to display
 	 */

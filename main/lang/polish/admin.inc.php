@@ -21,6 +21,7 @@ $ThereAreNoVirtualCourses = "Nie ma wirtualnych kursów na tej platformie";
 $ConfigureHomePage = "Edycja strony g&#322;ównej";
 $CourseCreateActiveToolsTitle = "Aktywne modu&#322;y w nowo utworzonym kursie";
 $CourseCreateActiveToolsComment = "Które narz&#281;dzia maj&#261; zosta&#263; standardowo aktywowane (by&#263; widoczne) wraz z utworzeniem nowego kursu?";
+$ModifyInformation = "Edytuj informacje";
 $langCourseBackup = "Zrób kopi&#281; tego kursu";
 $langCourseTitular = "Nauczyciel";
 $langCourseTitle = "Nazwa kursu";

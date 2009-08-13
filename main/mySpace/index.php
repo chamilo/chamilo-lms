@@ -332,7 +332,7 @@ if($view=='coach' || $view=='drh')
 	 else
 	 {
 		 echo '
-		 <div class="admin_section">
+		 <div class="report_section">
 			<h4>
 				<a href="student.php"><img src="'.api_get_path(WEB_IMG_PATH).'students.gif">&nbsp;'.get_lang('Probationers').' ('.$nbStudents.')'.'</a> 
 			</h4>
@@ -454,7 +454,7 @@ if($view == 'coach')
 	 {
 	
 		echo '
-		 <div class="admin_section">
+		 <div class="report_section">
 			<h4>
 				<a href="session.php"><img src="'.api_get_path(WEB_IMG_PATH).'sessions.gif">&nbsp;'.get_lang('Sessions').' ('.$nbSessions.')'.'</a>
 			</h4>

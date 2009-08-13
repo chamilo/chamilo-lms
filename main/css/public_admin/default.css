@@ -1,6 +1,12 @@
 /*****************************************************
  *  MAIN  - PUBLIC ADMIN CSS		                 *                   
  *****************************************************/
+ 
+/* the sticky effect */
+html {
+	height: 100%;
+}
+
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
     behavior:url("/main/css/csshover3.htc");
@@ -9,8 +15,17 @@ body {
 	color: #000;
 	margin: 0;
 	padding: 0;
-	background-color: #ffffff;
+	background-color: #ffffff;	
+	height: 100%; /* stick */
 }
+
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -8em;
+}
+
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
 }
@@ -44,7 +59,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 */
 .maincontent {
 	float: left;
-	width: 68%;
+	width: 65%;
 	padding: 0 20px 0 20px;
 	background-color: #fff;
 	min-height: 333px;
@@ -393,22 +408,34 @@ input[text] {
  *  FOOTER STYLES                                    *
  *****************************************************/
 #footer {
-	padding: 50px 20px 10px 20px;
-	height: 30px;
+	height: 8em;
 	background-color: #305582;
 	background-image: url(images/footer.jpg);
 	background-repeat: no-repeat;
 	font-size: 12px;
 	color:#ffffff;
 }
+.push {
+	height: 8em; /* Very important */
+}
 #footer .copyright {
 	float: right;
+	padding-top:60px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:60px;
+	margin-left:10px;
 }
 #footer a {
 	color:#f1d40d;
 }
 #bottom_corner {
 }
+
+
+
 /*
 ==============================================================================
     NAVIGATION MENU
@@ -1298,12 +1325,27 @@ div.admin_section {
 	float: left;
 	padding: 5px;
 	margin: 10px 20px;
+	min-height:200px;
 }
 div.admin_section h4 {
 	margin: 0;
 	border-bottom: 1px solid gray;
 	width: 100%;
 }
+
+/* Report section */
+div.report_section {
+	width: 40%;
+	float: left;
+	padding: 5px;
+	margin: 10px 20px;
+}
+div.report_section h4 {
+	margin: 0;
+	border-bottom: 1px solid gray;
+	width: 100%;
+}
+
 .user_course_category {
 	background-color: #efefef;
 	border: 1px solid #666;
@@ -2457,11 +2499,11 @@ div.image-social-content center.friend {
 	float: left;
 }
 #social-profile-container {
-/*width: 100%;*/
+	/*width: 100%;*/
 }
 #social-profile-left {
 	float:left;
-	width:22%;
+	width:21%;
 }
 .left-side {
 	min-width: 198px;
@@ -2469,11 +2511,11 @@ div.image-social-content center.friend {
 }
 #social-profile-content {
 	float:right;
-	width:48%;
+	width:46%;
 }
 #social-profile-right {
 	float:right;
-	width:30%;
+	width:32%;
 }
 .social-profile-post {
 	background : #EFEFEF;

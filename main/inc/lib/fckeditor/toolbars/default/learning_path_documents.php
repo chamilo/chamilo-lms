@@ -11,7 +11,7 @@
 $config['ToolbarSets']['Normal'] = array(
 	array('PasteWord','-','Undo','Redo'),
 	array('Link','Unlink','Anchor'),
-	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','Table','SpecialChar'),
+	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath','Table','SpecialChar'),
 	array('Outdent','Indent','TextColor','BGColor','-','OrderedList','UnorderedList','JustifyLeft','JustifyCenter','JustifyRight'),
 	'/',	
 	array('Style','FontFormat','FontName','FontSize'),

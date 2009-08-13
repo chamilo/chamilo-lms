@@ -836,33 +836,26 @@ if ($show == 'test') {
 ?>
 <table class="data_table">
   <?php
-
 	if (($is_allowedToEdit) and ($origin != 'learnpath')) {
 ?>
 	  <tr class="row_odd">
 	    <th colspan="3"><?php  echo get_lang('ExerciseName');?></th>
 	     <th><?php echo get_lang('QuantityQuestions');?></th>
 		 <!--<th>--><?php
-
 ?>
-
 <!--</th>-->
-		 <th><?php echo get_lang('Modify');?></th>
-	
+		 <th><?php echo get_lang('Modify');?></th>	
 	  </tr>
 	  <?php
-
 	} else {
+		//student only
 ?> <tr>
-	     <th colspan="3"><?php echo get_lang('ExerciseName');?></th>
+	     <th colspan="2"><?php echo get_lang('ExerciseName');?></th>
 	     <th><?php echo get_lang('QuantityQuestions');?></th>
-		 <th><?php echo get_lang('State');?></th>
-	
+		 <th><?php echo get_lang('State');?></th>	
 	  </tr>
 		<?php
-
 	}
-
 	// show message if no HP test to show
 	if (!($nbrExercises + $nbrHpTests)) {
 ?>
@@ -870,7 +863,6 @@ if ($show == 'test') {
 	    <td <?php echo ($is_allowedToEdit?'colspan="6"':'colspan="5"'); ?>><?php echo get_lang("NoEx"); ?></td>
 	  </tr>
 	  <?php
-
 	}
 	$i = 1;
 	// while list exercises
@@ -937,32 +929,26 @@ if ($show == 'test') {
 <!--" /></a>-->	    
 			<a href="exercice.php?choice=delete&exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>					
 			<?php
-
 				//if active
 				if ($row['active']) {
 ?>
 	      		<a href="exercice.php?choice=disable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/visible.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset); ?>" /></a>
 	    		<?php
-
 				} else {
 					// else if not active
 ?>
 	      		<a href="exercice.php?choice=enable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/invisible.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
 	    		<?php
-
 				}
 				echo "</td>";
 				echo "</tr>\n";
 			} else { // student only
 ?>
 	          <tr>
-	            <td><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
-	            <td>&nbsp;</td>
+	            <td><?php echo ($i+($page*$limitExPage)).'.'; ?></td>	            
 	            <?php $row['title']=api_parse_tex($row['title']);?>
 	            <td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$myllpitemid; ?>&exerciseId=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a></td>
-				 <td align="center"> <?php
-
-
+				<td align="center"> <?php
 				$exid = $row['id'];
 				//count number exercise questions
 				$sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . Database :: escape_string($exid) . "'";

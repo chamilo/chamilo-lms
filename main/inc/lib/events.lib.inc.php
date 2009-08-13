@@ -105,7 +105,6 @@ function event_login()
 				(login_user_id,
 				 login_ip,
 				 login_date)
-
 				 VALUES
 					('".$_user['user_id']."',
 					'".Database::escape_string($_SERVER['REMOTE_ADDR'])."',
@@ -135,28 +134,23 @@ function event_access_course()
 	if(api_get_setting('use_session_mode')=='true' && isset($_SESSION['id_session']))
 	{
 		$id_session = intval($_SESSION['id_session']);
-	}
+	} 
 	else
 	{
 		$id_session = 0;
 	}
 
 	$reallyNow = time();
-	if ($_user['user_id'])
-	{
+	if ($_user['user_id']) {
 		$user_id = "'".$_user['user_id']."'";
-	}
-	else // anonymous
-		{
-		$user_id = "NULL";
+	} else {
+		$user_id = "0"; // no one
 	}
 	$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
 				(access_user_id,
 				 access_cours_code,
 				 access_date)
-
 				VALUES
-
 				(".$user_id.",
 				'".$_cid."',
 				FROM_UNIXTIME(".$reallyNow."))";
@@ -214,7 +208,7 @@ function event_access_tool($tool, $id_session=0)
 	}
 
 	$reallyNow = time();
-	$user_id = $_user['user_id'] ? "'".$_user['user_id']."'" : "NULL"; // "NULL" is anonymous
+	$user_id = $_user['user_id'] ? "'".$_user['user_id']."'" : "0"; // no one
 	// record information
 	// only if user comes from the course $_cid
 	//if( eregi($_configuration['root_web'].$_cid,$_SERVER['HTTP_REFERER'] ) )
@@ -230,9 +224,7 @@ function event_access_tool($tool, $id_session=0)
 							 access_cours_code,
 							 access_tool,
 							 access_date)
-
 							VALUES
-
 							(".$user_id.",".// Don't add ' ' around value, it's already done.
 					"'".$_cid."' ,
 					'".htmlspecialchars($tool, ENT_QUOTES)."',
@@ -285,10 +277,8 @@ function event_download($doc_url)
 	if ($_user['user_id'])
 	{
 		$user_id = "'".$_user['user_id']."'";
-	}
-	else // anonymous
-		{
-		$user_id = "NULL";
+	} else {
+		$user_id = "0";
 	}
 	$sql = "INSERT INTO ".$TABLETRACK_DOWNLOADS."
 				(
@@ -323,30 +313,23 @@ function event_upload($doc_id)
 	global $_cid;
 	global $TABLETRACK_UPLOADS;
 	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled'])
-	{
+	if (!$_configuration['tracking_enabled']) {
 		return 0;
 	}
 
 	$reallyNow = time();
-	if ($_user['user_id'])
-	{
+	if (isset($_user['user_id']) && $_user['user_id']!='') {
 		$user_id = "'".$_user['user_id']."'";
-	}
-	else // anonymous
-		{
-		$user_id = "NULL";
+	} else {
+		$user_id = "0"; // anonymous
 	}
 	$sql = "INSERT INTO ".$TABLETRACK_UPLOADS."
-				(
-				 upload_user_id,
-				 upload_cours_id,
-				 upload_work_id,
-				 upload_date
+				( upload_user_id,
+				  upload_cours_id,
+				  upload_work_id,
+				  upload_date
 				)
-
-				VALUES
-				(
+				VALUES (
 				 ".$user_id.",
 				 '".$_cid."',
 				 '".$doc_id."',
@@ -375,11 +358,11 @@ function event_link($link_id)
 	}
 
 	$reallyNow = time();
-	if ($_user['user_id']) {
+	if (isset($_user['user_id']) && $_user['user_id']!='') {
 		$user_id = "'".Database::escape_string($_user['user_id'])."'";
 	} else {
 		// anonymous
-		$user_id = "NULL";
+		$user_id = "0";
 	}
 	
 	$sql = "INSERT INTO ".$TABLETRACK_LINKS."
@@ -445,11 +428,11 @@ function create_event_exercice($exo_id)
 	global $_user, $_cid, $_configuration;
 	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$reallyNow = time();
-	if ($_user['user_id']) {
+	if (isset($_user['user_id']) && $_user['user_id']!='') {
 		$user_id = "'".$_user['user_id']."'";
 	} else {
 		// anonymous
-		$user_id = "NULL";
+		$user_id = "0";
 	}
 
 	if(defined('ENABLED_LIVE_EXERCISE_TRACKING')){
@@ -500,7 +483,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	}
 
 	$reallyNow = time();
-	if ($_user['user_id'])
+	if (isset($_user['user_id']) && $_user['user_id']!='')
 	{
 		$user_id = "'".$_user['user_id']."'";
 	}

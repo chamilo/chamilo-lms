@@ -729,4 +729,11 @@ $ConversionFailled = "Conversione fallita";
 $AlreadyExists = "Già esistente";
 $TheNewWordHasBeenAdded = "Il nuovo termine è stato aggiunto";
 $CommentErrorExportDocument = "Alcuni documenti sono troppo complessi per essere trattati automaticamente dal sistema di conversione";
+$EventType = "Tipo di evento";
+$DataType = "Tipo di dati";
+$Value = "Valore";
+$System = "Sistema";
+$ImportantActivities = "Attività rilevanti";
+$SearchActivities = "Ricerca attività";
+$SearchActivities = "Ricerca attività";
 ?>

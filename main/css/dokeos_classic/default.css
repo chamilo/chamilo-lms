@@ -1,6 +1,9 @@
 /*****************************************************
  *  MAIN		                                    *
  *****************************************************/
+html {
+	height: 100%;
+}
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
         behavior:url("/main/css/csshover3.htc");
@@ -10,14 +13,22 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
+	height: 100%; /* stick */
 }
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-	background-image:url(images/shadow.gif);
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -4em;
 }
 #outerframe {
 	position: relative;  /* do not remove, fixes a bug in IE */
 	border: 1px solid #fff;
 	background-color: #fff;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+	background-image:url(images/shadow.gif);
 }
 /* Hides from IE5-mac \*/
 * html #outerframe {
@@ -373,11 +384,26 @@ input[text] {
  *  FOOTER STYLES                                    *
  *****************************************************/
 #footer {
-	padding: 8px;
+	height: 3.9em;
 	border-top: 1px solid #4171B5;
 	background-color: #E5EDF9;
 	font-size: 12px;
 }
+.push {
+	height: 4em; /* Very important */
+}
+
+#footer .copyright {
+	float: right;
+	padding-top:10px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:10px;
+	margin-left:10px;
+}
+
 #footer .copyright {
 	float: right;
 }
@@ -1302,8 +1328,21 @@ div.admin_section {
 	float: left;
 	padding: 5px;
 	margin: 10px 20px;
+	min-height:200px;
 }
 div.admin_section h4 {
+	margin: 0;
+	border-bottom: 1px solid gray;
+	width: 100%;
+}
+/* Report section */
+div.report_section {
+	width: 40%;
+	float: left;
+	padding: 5px;
+	margin: 10px 20px;
+}
+div.report_section h4 {
 	margin: 0;
 	border-bottom: 1px solid gray;
 	width: 100%;
@@ -2474,31 +2513,31 @@ div.image-social-content center.friend {
 	padding-left:10px;
 	width:200px;
 }
+/* general layout of the profile page */
 #social-profile-wrapper {
 	width: 100%;
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}
+}	
 #social-profile-container {
-/*width: 100%;*/
+	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;
-}
-.left-side {
-	min-width: 198px;
-	margin: 0px;
+	width:20%;	
 }
 #social-profile-content {
 	float:right;
-	width:48%;
+	width:47%;
+	margin-left: 2px;
 }
 #social-profile-right {
 	float:right;
-	width:30%;
+	width:32%;
+	margin-left: 2px;
 }
+
 .social-profile-post {
 	width: 450px;
 	background : #EFEFEF;

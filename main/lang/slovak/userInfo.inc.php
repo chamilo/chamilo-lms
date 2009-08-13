@@ -30,4 +30,5 @@ $langUnregister = "Zruši&#357; registráciu";
 $langAddAUser = "Prida&#357; používate&#318;a";
 $UsersUnsubscribed = "Vybraný používate&#318; bol odhlásený z kurzu.";
 $ThisStudentIsSubscribeThroughASession = "Tento študent sa prihlásil do kurzu cez session. Nemôžete upravova&#357; jeho informácie.";
+$NoDataAvailable = "Nie sú k dispozícii žiadne údaje";
 ?>

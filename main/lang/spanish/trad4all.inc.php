@@ -734,4 +734,6 @@ $DataType = "Tipo de dato";
 $Value = "Valor";
 $System = "Sistema";
 $ImportantActivities = "Actividades importantes";
+$SearchActivities = "Buscar actividades";
+$SearchActivities = "Buscar actividades";
 ?>

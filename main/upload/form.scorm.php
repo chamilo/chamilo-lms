@@ -47,7 +47,7 @@ echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.D
 echo '</div>';
 
 
-$form = new FormValidator('','POST','upload.php','','id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 600px;"');
+$form = new FormValidator('','POST','upload.php','','id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 620px;"');
 $form->addElement('header', '', $nameTools);
 $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('hidden', 'tool', $my_tool);

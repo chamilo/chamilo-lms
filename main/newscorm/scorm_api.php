@@ -27,7 +27,7 @@
 *   @author   Yannick Warnier <ywarnier@beeznest.org>
 *	@version  v 1.0
 *	@access   public
-*	@package dokeos.learnpath
+*   @package  dokeos.learnpath.scorm
 ============================================================================== 
 */
 /**

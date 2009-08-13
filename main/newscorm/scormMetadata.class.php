@@ -1,7 +1,7 @@
 <?php //$id:$
 /**
  * Container for the scormMetadata class, setup to hold information about the <metadata> element in imsmanifest files
- * @package	dokeos.scorm
+ * @package dokeos.learnpath.scorm
  */
 /**
  * scormMetadata class, handling each <metadata> element found in an imsmanifest file

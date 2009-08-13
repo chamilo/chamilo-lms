@@ -19,7 +19,7 @@ $config['ToolbarSets']['Normal'] = array(
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
-	array('Rule','Table','SpecialChar','mimetex')
+	array('Rule','Table','SpecialChar','mimetex','asciimath')
 );
 
 // This is the visible toolbar set when the editor is maximized.
@@ -34,7 +34,7 @@ $config['ToolbarSets']['Maximized'] = array(
 	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('Rule','SpecialChar','PageBreak'),
-	array('mimetex','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
+	array('mimetex','asciimath','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),

@@ -76,7 +76,7 @@ $langFormula = "Yours sincerely";
 $langProblem = "In case of trouble, contact us.";
 $langIs = "is";
 $langAddress = "The address of ";
-$langSettings = "with the following settings :Login :";
+$langSettings = "with the following settings : \\nLogin :";
 $langYouAreReg = "You are registered on";
 $langDear = "Dear";
 $langYourReg = "Your registration on";
@@ -170,4 +170,6 @@ $EditNormalProfile = "Edit normal profile";
 $EditExtendProfile = "Edit extended profile";
 $EditInformation = "Edit profile";
 $RegisterUser = "Register";
+$IHaveReadAndAgree = "I have read and agree to the";
+$ByClickingRegisterYouAgreeTermsAndConditions = "By clicking on \'Register\' below you are agreeing to the Terms and Conditions";
 ?>

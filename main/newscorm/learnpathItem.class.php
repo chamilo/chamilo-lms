@@ -1020,17 +1020,17 @@ class learnpathItem{
     			if($update_local==true){
     				$this->set_status($row['status']);
     			}
-	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'],0);}
+	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'],0);}	    		
     			return $row['status'];
     		}
     	} else {
     		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - in get_status: using attrib',0);}
 	    	if(!empty($this->status)) {
-	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning attrib: '.$this->status,0);}
+	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning attrib: '.$this->status,0);}	    		
 	    		return $this->status;
 	    	}
     	}
-   		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning default '.$this->possible_status[0],0);}
+   		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning default '.$this->possible_status[0],0);}    	
     	return $this->possible_status[0];
     }
     /**
@@ -2249,6 +2249,7 @@ function get_terms()
 	     		if ($this->type!=TOOL_QUIZ) {
 	     				$my_status = $this->get_status(false);
 	     		}*/
+
 		     	$sql = "INSERT INTO $item_view_table " .
 		     			"(total_time, " .
 		     			"start_time, " .
@@ -2379,6 +2380,7 @@ function get_terms()
 	     				}*/
 	     				
 	     			}
+
 			     	$sql = "UPDATE $item_view_table " .
 			     			"SET " .$total_time.
 			     			" start_time = ".$this->get_current_start_time().", " .

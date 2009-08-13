@@ -7,10 +7,10 @@
 */
 /*
 ==============================================================================
-		Class AdminManager
+		Class SubLanguageManager
 ==============================================================================
 */
-class AdminManager {
+class SubLanguageManager {
 
     private function __construct() {
     	//void
@@ -39,11 +39,12 @@ class AdminManager {
     /**
      * Get all information of sub-language
      * @param Integer The parent id(Language father id)
+     * @param Integer The sub language id
      * @return Array All information about sub-language
      */
-	public static function get_all_information_of_sub_language ($parent_id) {
+	public static function get_all_information_of_sub_language ($parent_id,$sub_language_id) {
 		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
-		$sql='SELECT * FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($parent_id).'"';
+		$sql='SELECT * FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($parent_id).'" AND id="'.Database::escape_string($sub_language_id).'"';
 		$rs=Database::query($sql,__FILE__,__LINE__);
 		$all_information=array();
 		while ($row=Database::fetch_array($rs,'ASSOC')) {
@@ -111,7 +112,7 @@ class AdminManager {
      * @return boolean
      */	      
    public static function add_directory_of_sub_language($path_sub_language) {
-   		$rs=@mkdir($path_sub_language,0777);
+   		$rs=@mkdir($path_sub_language,octdec(0777));
 		if ($rs) {
 			return true;
 		} else {
@@ -123,9 +124,9 @@ class AdminManager {
 	 * @param Integer The parent id
 	 * @return void()
 	 */   
-   public static function removed_sub_language ($parent_id) {
+   public static function removed_sub_language ($parent_id,$sub_language_id) {
    		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);		
-		$sql='DELETE FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($parent_id).'"';
+		$sql='DELETE FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($parent_id).'" AND id="'.Database::escape_string($sub_language_id).'" ';
     	$rs=Database::query($sql,__FILE__,__LINE__);
    }
    	/**

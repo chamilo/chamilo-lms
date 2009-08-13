@@ -27,7 +27,7 @@ $cidReset = true;
 
 // include global script
 require_once '../inc/global.inc.php';
-require_once 'admin.class.php';
+require_once 'sub_language.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -36,13 +36,13 @@ api_protect_admin_script();
 if (isset($_POST['sent_http_request'])) {
 	if (isset($_POST['visibility']) && $_POST['visibility']==strval(intval($_POST['visibility'])) && $_POST['visibility']==0) {
 		if (isset($_POST['id'])&& $_POST['id']==strval(intval($_POST['id']))) {
-			AdminManager::make_unavailable_language($_POST['id']);
+			SubLanguageManager::make_unavailable_language($_POST['id']);
 			echo 'set_hidden';	
 		}
 	} 
 	if (isset($_POST['visibility']) && $_POST['visibility']==strval(intval($_POST['visibility'])) && $_POST['visibility']==1) {
 		if (isset($_POST['id'])&& $_POST['id']==strval(intval($_POST['id']))) {
-			AdminManager::make_available_language($_POST['id']);
+			SubLanguageManager::make_available_language($_POST['id']);
 			echo 'set_visible';			
 		}
 	} 	
@@ -124,19 +124,19 @@ $tbl_settings_current 	= Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT)
 if ($_GET['action'] == 'makeunavailable') {
 
 	if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
-		AdminManager::make_unavailable_language($_GET['id']);
+		SubLanguageManager::make_unavailable_language($_GET['id']);
 	}
 }
 if ($_GET['action'] == 'makeavailable') {
 
 	if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
-		AdminManager::make_available_language($_GET['id']);
+		SubLanguageManager::make_available_language($_GET['id']);
 	}
 }
 if ($_GET['action'] == 'setplatformlanguage') {
 
 	if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
-		AdminManager::set_platform_language($_GET['id']);		
+		SubLanguageManager::set_platform_language($_GET['id']);		
 	}
 
 }
@@ -250,10 +250,10 @@ while ($row = Database::fetch_array($result_select)) {
 	}	
 	if (api_get_setting('allow_use_sub_language')=='true') {
 
-		$verified_if_is_sub_language=AdminManager::check_if_language_is_sub_language($row['id']);
+		$verified_if_is_sub_language=SubLanguageManager::check_if_language_is_sub_language($row['id']);
 
 		if ($verified_if_is_sub_language===false) {
-			$verified_if_is_father=AdminManager::check_if_language_is_father($row['id']);
+			$verified_if_is_father=SubLanguageManager::check_if_language_is_father($row['id']);
 			$allow_use_sub_language = "&nbsp;<a href='new_sub_language.php?action=definenewsublanguage&id=".$row['id']."'>".Display::return_icon('mas.gif', get_lang('CreateSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";		
 			if ($verified_if_is_father===true) {
 				//$allow_add_term_sub_language = "&nbsp;<a href='register_sub_language.php?action=registersublanguage&id=".$row['id']."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";						
@@ -263,9 +263,9 @@ while ($row = Database::fetch_array($result_select)) {
 			}
 		} else {
 				$allow_use_sub_language='';
-				$all_information_of_sub_language=AdminManager::get_all_information_of_language($row['id']);
-				$allow_add_term_sub_language = "&nbsp;<a href='register_sub_language.php?action=registersublanguage&id=".$all_information_of_sub_language['parent_id']."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";									
-				$allow_delete_sub_language = "&nbsp;<a href='new_sub_language.php?action=deletesublanguage&id=".$all_information_of_sub_language['parent_id']."'>".Display::return_icon('delete_data.gif', get_lang('DeleteSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";		
+				$all_information_of_sub_language=SubLanguageManager::get_all_information_of_language($row['id']);
+				$allow_add_term_sub_language = "&nbsp;<a href='register_sub_language.php?action=registersublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";									
+				$allow_delete_sub_language = "&nbsp;<a href='new_sub_language.php?action=deletesublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('delete_data.gif', get_lang('DeleteSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";		
 		}
 		
 	} else {

@@ -139,7 +139,7 @@ function search_courses($needle,$type)
 			
 		} else {
 	
-			$return .= '<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:300px;">';
+			$return .= '<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:340px;">';
 			while($course = Database :: fetch_array($rs)) {	
 				$course_list[] = $course['code'];
 				$course_title=str_replace("'","\'",$course_title);				
@@ -276,13 +276,16 @@ if($add_type == 'multiple') {
 	$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'&nbsp;&nbsp;&nbsp;';
 	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
+
+
+// the form header
+$session_info = SessionManager::fetch($id_session);
 echo '<div class="actions">';
 echo $link_add_type_unique.$link_add_type_multiple;
 echo '</div>';
 
-// the form header
-$session_info = SessionManager::fetch($id_session);
-echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info['name'].')</div></div>';
+echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info['name'].')</div></div><br />';
+
 
 
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_course;
@@ -403,7 +406,7 @@ if(!empty($errorMsg))
 
 <?php
 if(!($add_type == 'multiple')){
-	?>
+	?>	
 	<input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value,'single')" />
 	<div id="ajax_list_courses_single"></div>
 	<?php
@@ -412,7 +415,7 @@ else
 {
 	?> 
 	<div id="ajax_list_courses_multiple">
-	<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:300px;"> <?php
+	<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:320px;"> <?php
 	foreach($nosessionCourses as $enreg)
 	{
 		?>
@@ -429,15 +432,15 @@ unset($nosessionCourses);
   <?php
   if ($ajax_search) {
   ?>
-  	<input type="button" onclick="remove_item(document.getElementById('destination'))" value="<<" />
+  	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
   <?php
   }
   else
   {
   ?>
-  	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" value="onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
+  	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
 	<br /><br />
-	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" value="onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
+	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
   <?php 
   } 
   ?>
@@ -453,7 +456,7 @@ unset($nosessionCourses);
 	}
 	?>
   </td>
-  <td width="45%" align="center"><select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:300px;">
+  <td width="45%" align="center"><select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:320px;">
 
 <?php
 foreach($sessionCourses as $enreg)

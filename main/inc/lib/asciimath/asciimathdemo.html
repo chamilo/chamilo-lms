@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>ASCIIMathML.js demo</title>
+<script type="text/javascript" src="ASCIIMathML.js"></script>
+<script type="text/javascript">
+translateOnLoad=false;
+function display() {
+  var str = document.getElementById("inputText").value;
+  var outnode = document.getElementById("outputNode");
+  var n = outnode.childNodes.length;
+  for (var i=0; i<n; i++)
+    outnode.removeChild(outnode.firstChild);
+  outnode.appendChild(document.createTextNode(str));
+  AMprocessNode(outnode);
+}
+</script>
+<style type="text/css">
+#menu, #title, #subtitle, #author {text-align: center}
+body {font-family: Arial; background-color:beige;}
+</style>
+</head>
+<body onload="display()">
+
+<div id="menu">
+| <a href="asciimath.html">Home Page</a> |
+<a href="asciimathsyntax.html">Syntax</a> |
+<a href="asciimathdemo.html">Try it</a> |
+<a href="asciimathcalculator.html">Calculator</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/mathml/asciimathdownload.html">Download</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathGraphs.html">Graphs</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathFAQ.html">ASCIIMath FAQ</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathMLSandbox.html">Sandbox</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathCommentsAndSuggestions.html">Comments</a> |
+</div>
+
+<hr/>
+
+<h2 id="title">
+ASCIIMathML.js: Try it yourself (HTML version)
+</h2>
+
+<center>
+<b>
+This page requires Internet Explorer 6+<a 
+href="http://www.dessci.com/en/products/mathplayer">MathPlayer</a> 
+or Mozilla/Firefox/Netscape 7+.
+</b>
+<p>
+Edit the formulas below (the display updates dynamically).
+If you know (La)TeX formula syntax, you can try some of that as well
+(LaTeX formulas work best when enclosed in $-signs).
+The "amath" token switches on the new auto-math-recognize mode.</p>
+
+<form>
+<textarea id="inputText" rows="10" cols="80" onkeyup="display()">
+amath
+
+Let's try some interesting formulas: E=m c^2
+and e^(i pi)=-1
+and AA x in CC (sin^2x+cos^2x=1)
+and one more: sum_(i=1)^n i^3=((n(n+1))/2)^2
+
+(add your own -- note that text-tokens are only recognized if separated by spaces)
+
+</textarea>
+</form>
+
+<p>
+<div id="outputNode"></div>
+</p>
+
+<hr/>
+<p>
+<b>Note that this is dynamic XHTML running locally on your machine!</b>
+<br>
+Right-click on an output formula to copy or view the MathML code.
+</p>
+</center>
+(Copy and paste the following lines to see what symbols they produce)<br/>
+<b>You can use the following ASCIIMathML constructs:</b> 
+<tt> `(x+1)/(x-1) x^(i+j) x_(ij) sqrt(x) root(n)(x) stackrel(+)(->) text(any) "any"`</tt><br/>
+<b>Operation symbols</b> 
+<tt> `+ - * ** // \\ xx -: @ o+ ox sum prod ^^ ^^^ vv vvv nn nnn uu uuu`</tt><br/>
+<b>Relation symbols</b>
+<tt> `= != &lt; &lt;= > >= -&lt; >- in !in sub sup sube supe -= ~= ~~ prop`</tt><br/>
+<b>Logical symbols</b><tt> `\and \or \not => if iff AA EE _|_ TT |-- |==`</tt><br/>
+<b>Miscellaneous symbols</b> 
+<tt> `int oint del grad +- O/ oo aleph ... cdots \  quad qquad diamond square |__ __| |~ ~| CC NN QQ RR ZZ`</tt><br/>
+<b>Standard functions</b> 
+<tt> `sin cos tan csc sec cot sinh cosh tanh log ln det dim lim mod gcd lcm`</tt><br/>
+<b>Grouping brackets</b><tt> `( ) [ ] { } (: :) {: :}` </tt> 
+<b>Arrows</b><tt> `uarr darr rarr -> larr harr rArr lArr hArr` </tt><br/>
+<b>Accents</b><tt> `hatx barx ulx vecx dotx ddotx` </tt>
+<b>Font commands</b><tt> `bbA bbbA ccA ttA frA sfA` </tt>
+<b>Matrices</b><tt> `[[a,b],[c,d]] ((1,0),(0,1))` </tt><br/>
+<b>Greek letters</b><tt> `alpha beta chi delta Delta epsi eta gamma Gamma
+iota kappa lambda Lambda mu nu omega Omega phi Phi pi Pi psi rho sigma Sigma 
+tau theta Theta upsilon xi Xi zeta`</tt> 
+
+<p>
+This demo page shows that ASCIIMathML.js can be used easily to
+dynamically preview mathematical formulas (client-side). E.g. here is a
+(beta) webpage that can be used to <b><a
+href="http://math.chapman.edu/email/">write and read
+mathematical emails and discussion group articles</a></b>. Since most
+email communication is still done with ASCII text (or at least not yet
+with XHTML), this is a reasonable (and inexpensive) solution for
+communicating with students in online math courses.
+</p>
+
+<hr/>
+<div id="author">
+<a href="http://www.chapman.edu/~jipsen/">Peter Jipsen</a>, 
+<a href="http://www.chapman.edu/">Chapman University</a>, September 2007
+</div>
+</body>
+</html>

@@ -20,5 +20,6 @@ $YouMustEnterATermName = "Morate unijeti pojam";
 $YouMustEnterATermDefinition = "Morate unijeti definiciju pojma";
 $TableView = "Tabelarni prikaz";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Ovaj pojam ve&#263; postoji. Molim promijenite naziv pojma.";
-$GlossaryManagement  = "Upravljanje pojmovnikom";
+$GlossaryManagement  = "Upravljanje rje&#269;nikom";
+$TermMoved = "Pojam je premješten";
 ?>

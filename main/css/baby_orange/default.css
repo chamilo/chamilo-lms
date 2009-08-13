@@ -1,14 +1,9 @@
-/* Styles that should disappear */
-.row {
-	width:100%;
+/*****************************************************
+ *  MAIN - BABY     	                             *
+ *****************************************************/
+html {
+	height: 100%;
 }
-div.row div.label {
-	width: 0%;
-}
-div.row div.formw {
-	width: 100%;
-}
-/* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
         behavior:url("/main/css/csshover3.htc");
@@ -18,6 +13,13 @@ body {
 	background-color: #fff;
 	margin: 0;
 	padding: 0;
+	height: 100%; /* stick */	
+}
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -10em;
 }
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
@@ -175,11 +177,30 @@ a.breadcrumb0 {
 	padding-left: 22px;
 }
 /* footer styles */
+
 #footer {
-	background: #4171b5 url('images/bg.jpg') no-repeat 100% 100%;
-	color: #f7d77e;
-	padding: 82px 0 .8em 2%;
+	height:10em;
+	background:transparent url(images/bg.jpg) no-repeat scroll 100% 100%;
+	clear:both;
+	color:#F7D77E;
+	float:left;
+	width:98%;	
+	padding: 0 0 0 2%;
 }
+.push {
+	height: 10em; /* Very important */
+}
+#footer .copyright {
+	float: right;
+	padding-top:98px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:98px;
+	margin-left:10px;
+}
+
 #footerright {
 	margin-top: 10px;
 	float: right;
@@ -191,6 +212,8 @@ a.breadcrumb0 {
 #footer a {
 	font-weight:normal;
 }
+
+
 /* main styles */
 #main {
  //padding-left: 30px;
@@ -201,11 +224,10 @@ a.breadcrumb0 {
 	padding-bottom: 5px;
 }
 /* my courses styles */
-#maincontent {
-	float: left;
-	width: 80%;
-	min-height: 333px;
-	margin-top:0;
+
+.maincontent {
+	margin: 0 0 1em 1em;
+	width: 69%;
 	float: right;
 	clear: right;
 }
@@ -253,9 +275,10 @@ a.breadcrumb0 {
 	margin: 0 0 1em 0;
 	padding: 0 0 .3em 0;
 	/* min-height hack for ie6 or older*/
-	min-height: 320px;
+	min-height: 380px;
 	height: auto !important;
-	height: 320px;
+	height: 380px;
+	margin-top:10px;
 }
 .menu #lang_form select {
 	margin: 1em 31px;
@@ -775,8 +798,23 @@ div.admin_section {
 	float: left;
 	margin: 10px 20px;
 	border: 1px solid #EE4C03;
+	min-height:200px;
 }
 div.admin_section h4 {
+	background-color: #FDDEAA;
+	font-weight: bold;
+	list-style-type: none;
+	margin: 0px;
+	padding: 5px;	
+}
+/* Report section */
+div.report_section {
+	width: 40%;
+	float: left;
+	margin: 10px 20px;
+	border: 1px solid #EE4C03;
+}
+div.report_section h4 {
 	background-color: #FDDEAA;
 	font-weight: bold;
 	list-style-type: none;
@@ -1736,30 +1774,33 @@ div.image-social-content center.friend {
 	padding-left:10px;
 	width:200px;
 }
+/* general layout of the profile page */
 #social-profile-wrapper {
 	width: 100%;
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}
+}	
 #social-profile-container {
-/*width: 100%;*/
+	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;
+	width:21%;	
+}
+#social-profile-content {
+	float:right;
+	width:46%;
+	margin-left: 2px;
+}
+#social-profile-right {
+	float:right;
+	width:32%;
+	margin-left: 2px;
 }
 .left-side {
 	min-width: 198px;
 	margin: 0px;
-}
-#social-profile-content {
-	float:right;
-	width:48%;
-}
-#social-profile-right {
-	float:right;
-	width:30%;
 }
 .social-profile-post {
 	width: 450px;

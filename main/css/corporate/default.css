@@ -1,12 +1,8 @@
-/* Styles that should disappear */
-.row {
-	width:100%;
-}
-div.row div.label {
-	width: 0%;
-}
-div.row div.formw {
-	width: 100%;
+/*****************************************************
+ *  MAIN - CORPORATE	                             *
+ *****************************************************/
+html {
+	height: 100%;
 }
 /* Redefining html styles */
 body {
@@ -16,6 +12,13 @@ body {
 	font-size: 12px;
 	margin: 0;
 	padding: 0;
+	height: 100%; /* stick */	
+}
+#wrapper{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -4em;
 }
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
@@ -65,7 +68,6 @@ input[type=button], input[type=submit] {
 #my_courses {
 	float: right;
 	font-weight: bold;
-	margin-right: 100px;
 }
 #header1 img {
 	border: 0px;
@@ -107,13 +109,27 @@ input[type=button], input[type=submit] {
 	height:auto;
 	font-weight: bold;
 }
-#header3 ul {
+
+
+#header3 UL {
+	PADDING-RIGHT: 2px;
+	PADDING-LEFT: 10px;
+	PADDING-BOTTOM: 0px;
+	MARGIN: 0px;
 	list-style:none;
+	display: inline;
 }
-#header3 li {
-	/*display:inline;*/
-    cursor: pointer;
+#header3 LI {
+	PADDING-RIGHT: 0px;
+	PADDING-LEFT: 2px;
+	FLOAT: left;
+	PADDING-BOTTOM: 0px;
+	MARGIN: 0px;
+	PADDING-TOP: 0px;/*border-bottom: 1px solid #dcdcdc;*/
+	cursor: pointer;
 }
+
+
 #header3 a {
 	float:left;
 	background:url(../../img/dokeosgrey/tab_left.gif) no-repeat left top;
@@ -157,30 +173,21 @@ input[type=button], input[type=submit] {
 	display:block;
 	background:url(../../img/dokeosgrey/tab_right_active.gif) no-repeat right top;
 }
-#logout li a {
+
+#header3 #logout {
+	margin-top: 0px;
+}
+#header3 input.logout:hover {
+}
+#logout {
+	display: inline;
 	float: right;
-	vertical-align:top;
-	background:url(../../img/dokeosgrey/tab_left.gif) no-repeat left top;
-	margin-right:5px;
-	text-decoration:none;
+	width: auto;
+	text-align: right;
+	font-size: 1.0em;
 }
-#logout li a:hover {
-	float: right;
-	vertical-align:top;
-	background:url(../../img/dokeosgrey/tab_left_hover.gif) no-repeat left top;
-	text-decoration:none;
-	margin-right:5px;
-}
-#logout li a span {
-	float:left;
-	display:block;
-	background:url(../../img/dokeosgrey/tab_right.gif) no-repeat right top;
-	color:#333;
-	cursor: pointer;
-}
-#logout li a:hover span {
-	background:url(../../img/dokeosgrey/tab_right_hover.gif) no-repeat right top;
-}
+
+
 /* header 4 styles */ 
 #header4 {
 	margin-left: 5px;
@@ -196,7 +203,24 @@ a.breadcrumb0 {
 /* footer styles */
 #footer {
 	border-top: 1px solid #aeaeae;
+	height:3.5em;	
+	color:#fff;	
+	background-color: #434343;
 }
+.push {
+	height: 4em; /* Very important */
+}
+#footer .copyright {
+	float: right;
+	padding-top:8px;
+	margin-right:10px;
+}
+#footer #platformmanager {
+	float: left;
+	padding-top:8px;
+	margin-left:10px;
+}
+
 #footerright {
 	margin-top: 10px;
 	float: right;
@@ -206,6 +230,7 @@ a.breadcrumb0 {
 	padding-top: 10px;
 }
 #footer a {
+	color:#fff;
 }
 /* main styles */
 #main {
@@ -216,9 +241,9 @@ a.breadcrumb0 {
 	padding-bottom: 5px;
 }
 /* my courses styles */
-#maincontent {
+.maincontent {
 	float: left;
-	width: 75%;
+	width: 73%;
 	min-height: 333px;
 	margin-top:0;
 }
@@ -265,6 +290,7 @@ a.breadcrumb0 {
 	margin-right: 0px;
 	margin-bottom: 10px;
 	padding-bottom: 10px;
+	margin-top:10px;
 }
 .menu form {
 	margin: 0px 6px 0 6px;
@@ -799,8 +825,25 @@ div.admin_section {
 	float: left;
 	padding: 5px;
 	margin: 10px 20px;
+	min-height:210px;
 }
 div.admin_section h4 {
+	background-color: #EFEFEF;
+	border: 1px solid #cccccc;
+	font-weight: bold;
+	color: #666666;
+	list-style-type: none;
+	margin: 5px;
+	padding: 5px;
+}
+/* Report section */
+div.report_section {
+	width: 40%;
+	float: left;
+	padding: 5px;
+	margin: 10px 20px;
+}
+div.report_section h4 {
 	background-color: #EFEFEF;
 	border: 1px solid #cccccc;
 	font-weight: bold;
@@ -1747,30 +1790,33 @@ div.image-social-content center.friend {
 	padding-left:10px;
 	width:200px;
 }
+/* general layout of the profile page */
 #social-profile-wrapper {
 	width: 100%;
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}
+}	
 #social-profile-container {
-/*width: 100%;*/
+	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;
+	width:21%;	
+}
+#social-profile-content {
+	float:right;
+	width:46%;
+	margin-left: 2px;
+}
+#social-profile-right {
+	float:right;
+	width:32%;
+	margin-left: 2px;
 }
 .left-side {
 	min-width: 198px;
 	margin: 0px;
-}
-#social-profile-content {
-	float:right;
-	width:48%;
-}
-#social-profile-right {
-	float:right;
-	width:30%;
 }
 .social-profile-post {
 	width: 450px;

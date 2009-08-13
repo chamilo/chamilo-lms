@@ -5,7 +5,6 @@ $langActivate = "Activa";
 $langDeactivate = "Desactiva";
 $langInLnk  = "Enllaços desactivats";
 $langDelLk = "Voleu realment esborrar aquest enllaç?";
-$langEnter  = "Entra";
 $langCourseCreate  = "Crear un curs web";
 $langNameOfTheLink  = "Nom de l\'enllaç";
 $lang_main_categories_list                  = "Llista de categories principal";

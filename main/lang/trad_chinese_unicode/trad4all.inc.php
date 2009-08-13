@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Title = "標題";
 $UsersOnline = "線上使用者";
 $Remove = "移除";
+$langEnter  = "進入";
 $Description = "描述";
 $Links = "連結";
 $langWorks = "作業論文";
@@ -187,6 +188,7 @@ $UplNotAZip = "你選的檔案並非 zip 格式。";
 $UplUploadSucceeded = "成功上傳檔案！";
 $ExportAsCSV = "以 CSV 檔匯出";
 $ExportAsXLS = "以 XLS 檔匯出";
+$langOpenarea = "個人開放區";
 $Done = "完成";
 $Documents = "文件";
 $DocumentAdded = "已加入文件";

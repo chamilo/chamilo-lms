@@ -53,7 +53,6 @@ $ViewOpenCourses = "Veure cursos oberts";
 $langCompetences = "Competències";
 $langDiplomas = "Diplomes";
 $langTeach = "Que pot ensenyar el/ella?";
-$langOpenarea = "Àrea personal pública";
 $langProductions = "Produccions";
 $langSendChatRequest = "Enviar una sol·licitud de xat a aquesta persona";
 $langRequestDenied = "Aquesta petició ha estat rebutjada";

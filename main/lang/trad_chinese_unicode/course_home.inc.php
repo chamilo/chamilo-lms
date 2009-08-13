@@ -5,7 +5,6 @@ $langActivate = "公開";
 $langDeactivate = "隱藏";
 $langInLnk  = "隱藏的工具";
 $langDelLk = "確定要移除這連結嗎? ";
-$langEnter  = "進入";
 $langCourseCreate  = "創建課程";
 $langNameOfTheLink  = "鏈接名稱";
 $lang_main_categories_list                  = "主分類清單";

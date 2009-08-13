@@ -5,7 +5,6 @@ $langActivate = "แสดง";
 $langDeactivate = "ซ่อน";
 $langInLnk  = "ส่วนประกอบของหน้าโฮมเพจวิชา<b>ที่อาจารย์ยังไม่เปิดให้ใช้งาน</b>";
 $langDelLk = "คุณแน่ใจว่าจะลบรายการ การเชื่อมโยงนี้";
-$langEnter  = "ตกลง";
 $langCourseCreate  = "สร้างโฮมเพจรายวิชา";
 $langNameOfTheLink  = "ชื่อการเชื่อมโยง";
 $lang_main_categories_list                  = "รายการประเภทวิชาหลัก";

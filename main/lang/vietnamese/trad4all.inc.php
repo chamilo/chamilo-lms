@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Remove = "Xoá";
+$langEnter  = "Enter";
 $Description = "Mô tả tóm tắt";
 $Links = "Liên kết";
 $langWorks = "Bài làm";

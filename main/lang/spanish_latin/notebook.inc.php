@@ -24,4 +24,5 @@ $AddNote = "Crear nota";
 $ModifyNote = "Editar mi agenda personal";
 $BackToNoteList = "Regresar a la lista de notas";
 $NotebookManagement = "Administración de la agenda";
+$NotesSortedByTitleAsc = "Notas en orden ascendente por título";
 ?>

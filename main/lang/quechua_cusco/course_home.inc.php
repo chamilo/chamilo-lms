@@ -5,7 +5,6 @@ $langActivate = "Kancharichiy";
 $langDeactivate = "Wañurichiy";
 $langInLnk  = "Wataquna wañuchisqa";
 $langDelLk = " Cheqaychu munanki wañuchiyta kay llank\'anata ?";
-$langEnter  = "Haykuy";
 $langCourseCreate  = "Kamachiy huy yachachinata";
 $langNameOfTheLink  = "Wataq sutin";
 $lang_main_categories_list                  = "Kuraq mitakuna jupachasqa";

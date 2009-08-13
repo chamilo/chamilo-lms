@@ -5,7 +5,6 @@ $langActivate = "Show";
 $langDeactivate = "Hide";
 $langInLnk  = "Hidden tools and links";
 $langDelLk = "Do you really want to delete this link?";
-$langEnter  = "Enter";
 $langCourseCreate  = "Create a training";
 $langNameOfTheLink  = "Name of the link";
 $lang_main_categories_list                  = "Main category list";

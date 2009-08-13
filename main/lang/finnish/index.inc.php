@@ -47,7 +47,6 @@ $ViewOpenCourses = "Näytä avoimet kurssit";
 $langCompetences = "Koulutus";
 $langDiplomas = "Suoritukset";
 $langTeach = "Mitä hän voi opettaa";
-$langOpenarea = "Yleinen kuvaus";
 $langProductions = "Tuotokset";
 $langSendChatRequest = "Lähetä keskustelupyyntö hänelle";
 $langRequestDenied = "Kutsu hylätty.";

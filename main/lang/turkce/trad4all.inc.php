@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Title = "BaÅŸlÄ±k";
 $UsersOnline = "Online kullan&#305;c&#305;lar";
 $Remove = "Kaldýr";
+$langEnter  = "Giri&#351;";
 $Description = "Açýklama";
 $Links = "Baðlantýlar";
 $langWorks = "Öðrenci Yazýlarý";
@@ -237,6 +238,7 @@ $UplNotAZip = "Seçti&#287;iniz dosya Zip dosyas&#305; de&#287;il.";
 $UplUploadSucceeded = "Dosya gönderildi!";
 $ExportAsCSV = "CSV dosyas&#305; olarak Export";
 $ExportAsXLS = "XLS dosyas&#305; olarak Export";
+$langOpenarea = "Ki&#351;isel alan";
 $Done = "Tamam";
 $Documents = "Belgeler";
 $DocumentAdded = "Belge eklendi";

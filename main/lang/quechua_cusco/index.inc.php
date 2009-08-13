@@ -53,7 +53,6 @@ $ViewOpenCourses = "Qhaway kichasqa yachachikunata";
 $langCompetences = "Atipanakuykuna";
 $langDiplomas = "Sutinchayninkuna";
 $langTeach = "Imata yachachiyman";
-$langOpenarea = "Llapan runakunapaq kancha";
 $langProductions = "Llank\'anakuna";
 $langSendChatRequest = "Kachariy huj chat nisqa mañakuyta kay runaman";
 $langRequestDenied = "Kay waqyayqa mana chaskisqachu";

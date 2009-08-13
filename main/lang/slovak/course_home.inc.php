@@ -5,7 +5,6 @@ $langActivate = "Ukáž";
 $langDeactivate = "Schovaj";
 $langInLnk  = "Skryté nástroje a odkazy";
 $langDelLk = "Naozaj zmaza&#357; odkaz?";
-$langEnter  = "Vstup";
 $langCourseCreate  = "Vytvor  webstránku kurzu";
 $langNameOfTheLink  = "Názov pre odkaz";
 $lang_main_categories_list                  = "Zoznam hlavných kategórii";

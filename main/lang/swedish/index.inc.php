@@ -53,7 +53,6 @@ $ViewOpenCourses = "Visa öppna kurser";
 $langCompetences = "Kompetenser";
 $langDiplomas = "Diplom";
 $langTeach = "Vad hon/han undervisar i";
-$langOpenarea = "Personlig öppen yta";
 $langProductions = "Produktioner";
 $langSendChatRequest = "Skicka chattinbjudan till denna person";
 $langRequestDenied = "Inbjudan har blivit avslagen.";

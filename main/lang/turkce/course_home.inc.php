@@ -5,7 +5,6 @@ $langActivate = "Göster";
 $langDeactivate = "Gizle";
 $langInLnk  = "Gizli araç ve ba&#287;lant&#305;lar";
 $langDelLk = "Bu ba&#287;lant&#305;y&#305; silmek istiyor musunuz?";
-$langEnter  = "Giri&#351;";
 $langCourseCreate  = "Ders web sitesi olu&#351;tur";
 $langNameOfTheLink  = "Ba&#287;lant&#305; ad&#305;";
 $lang_main_categories_list                  = "Ana kategori listesi";

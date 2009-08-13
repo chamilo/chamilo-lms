@@ -53,7 +53,6 @@ $ViewOpenCourses = "Rodyti veikiančius kursus";
 $langCompetences = "Kompetencijos";
 $langDiplomas = "Diplomai";
 $langTeach = "Ką jis/ji gali mokyti";
-$langOpenarea = "Privati atvira sritis";
 $langProductions = "Kūriniai";
 $langSendChatRequest = "Siūsti chat kvietimą šiam vartotojui";
 $langRequestDenied = "Kvietimas atmestas.";

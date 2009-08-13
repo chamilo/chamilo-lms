@@ -53,7 +53,6 @@ $ViewOpenCourses = "ดูวิชาที่เปิดเรียน";
 $langCompetences = "ความสามารถพิเศษ";
 $langDiplomas = "คุณวุฒิ";
 $langTeach = "วิชาที่สามารถสอนได้";
-$langOpenarea = "ข้อมูลส่วนตัวที่เปิดเผยได้";
 $langProductions = "ผลงาน";
 $langSendChatRequest = "ส่งข้อความเชิญร่วมสนทนาออนไลน์";
 $langRequestDenied = "ไม่รับคำเชิญ";

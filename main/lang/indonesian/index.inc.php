@@ -53,7 +53,6 @@ $ViewOpenCourses = "Lihat mata-kuliah yang terbuka";
 $langCompetences = "Kompeten";
 $langDiplomas = "Diploma";
 $langTeach = "Apa yang dapat diajarkannya";
-$langOpenarea = "Area terbuka personal";
 $langProductions = "Produksi";
 $langSendChatRequest = "Kirim permintaan chat ke orang ini";
 $langRequestDenied = "Panggilan ditolak.";

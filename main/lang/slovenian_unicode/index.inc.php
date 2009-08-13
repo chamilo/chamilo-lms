@@ -53,7 +53,6 @@ $ViewOpenCourses = "Poglej odprte tečaje";
 $langCompetences = "Kompetence";
 $langDiplomas = "Kvalifikacije";
 $langTeach = "Kaj on/ona (lahko) uči";
-$langOpenarea = "Osebna interesna področja";
 $langProductions = "Rezultati dela";
 $langSendChatRequest = "Pošlji vabilo za klepet tej osebi";
 $langRequestDenied = "Poziv je bil zavrnjen.";

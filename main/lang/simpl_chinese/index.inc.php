@@ -53,7 +53,6 @@ $ViewOpenCourses = "查看开放课程";
 $langCompetences = "资格";
 $langDiplomas = "毕业证书";
 $langTeach = "他/她能教什么";
-$langOpenarea = "个人开放区";
 $langProductions = "作品";
 $langSendChatRequest = "发送回复给这个人";
 $langRequestDenied = "已拒绝请求.";

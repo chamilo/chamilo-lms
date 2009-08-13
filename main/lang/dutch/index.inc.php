@@ -53,7 +53,6 @@ $ViewOpenCourses = "Bekijk open cursussen";
 $langCompetences = "Competenties";
 $langDiplomas = "Diploma\'s";
 $langTeach = "Waarin u kunt lesgeven";
-$langOpenarea = "Persoonlijke ruimte";
 $langProductions = "Producties";
 $langSendChatRequest = "Zend een chatverzoek naar deze persoon";
 $langRequestDenied = "Het verzoek is geweigerd.";

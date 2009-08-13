@@ -52,7 +52,6 @@ $ViewOpenCourses = "檢視已公開課程";
 $langCompetences = "個人能力";
 $langDiplomas = "畢業證書";
 $langTeach = "他/她可任教的科目";
-$langOpenarea = "個人開放區";
 $langProductions = "作品";
 $langSendChatRequest = "發送對話請求給這人";
 $langRequestDenied = "已拒絕請求.";

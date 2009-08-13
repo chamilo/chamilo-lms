@@ -239,4 +239,6 @@ $AvgAllUsersInAllCourses = "Moyenne de tous les apprenants dans tous les cours d
 $AvgExercisesScore = "Score aux tests";
 $TrainingTime = "Temps";
 $CourseProgress = "Progrès";
+$ViewMinus = "Voir moins";
+$ResourcesTracking = "Rapport de ressources";
 ?>

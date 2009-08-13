@@ -1019,7 +1019,6 @@ $TermsAndConditions = "Termini e condizioni";
 $HTMLText = "HTML";
 $PageLink = "Collegamento";
 $DisplayTermsConditions = "Mostra le avvertenze sulla privacy, i termini e le condizioni d\'uso nella pagina di registrazione, richiedendo l\'assenso per la fornitura del servizio.";
-$AllowTermsAndConditionsComment = "Abilita le informazioni su privacy e sui termini e condizioni d\'uso";
 $AllowTermsAndConditionsTitle = "Abilita Privacy, Termini e Condizioni";
 $AllowTermsAndConditionsComment = "L\'opzione farà precedere la registrazione dalla descrizione dei termini e delle condizioni d\'uso, oltre che sul trattamento della privacy ";
 $Load = "Carica";

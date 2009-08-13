@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Title = "Nadpis";
 $UsersOnline = "U&#382;ivatel online";
 $Remove = "Odstranit";
+$langEnter  = "Vstoupit";
 $Description = "Popis";
 $Links = "Odkazy";
 $langWorks = "Publikace student&#367;";

@@ -53,7 +53,6 @@ $ViewOpenCourses = "Visualizza i corsi aperti alla registrazione";
 $langCompetences = "Competenze";
 $langDiplomas = "Certificati e diplomi";
 $langTeach = "Cosa sa insegnare";
-$langOpenarea = "Spazio personale";
 $langProductions = "Prodotti";
 $langSendChatRequest = "Richiedi una chat con questa persona";
 $langRequestDenied = "Consenso negato";

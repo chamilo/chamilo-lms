@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $UsersOnline = "Usuaris connectats";
 $Remove = "Elimina";
+$langEnter  = "Entra";
 $Description = "Descripció";
 $Links = "Enllaços";
 $langWorks = "Treballs dels estudiants";
@@ -225,6 +226,7 @@ $UplNotAZip = "L\'arxiu que has seleccionat no és un arxiu zip.";
 $UplUploadSucceeded = "L\'arxiu ha estat enviat!";
 $ExportAsCSV = "Exportar a un arxiu CSV";
 $ExportAsXLS = "Exportar a un arxiu XLS";
+$langOpenarea = "Àrea personal pública";
 $Done = "Fet";
 $Documents = "Documents";
 $DocumentAdded = "Documents afegits";

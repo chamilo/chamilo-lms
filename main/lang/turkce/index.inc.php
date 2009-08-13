@@ -53,7 +53,6 @@ $ViewOpenCourses = "Aç&#305;k kurslar";
 $langCompetences = "Beceriler";
 $langDiplomas = "Diplomalar";
 $langTeach = "Bran&#351;&#305;";
-$langOpenarea = "Ki&#351;isel alan";
 $langProductions = "Yay&#305;nlar&#305;-Eserleri";
 $langSendChatRequest = "Sohbet iste&#287;i gönder";
 $langRequestDenied = "Ça&#287;r&#305;n&#305;z kabul edilmedi.";

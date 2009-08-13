@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Title = "Judul";
 $UsersOnline = "User Online";
 $Remove = "Hapus";
+$langEnter  = "Enter";
 $Description = "Deskripsi";
 $Links = "Link";
 $langWorks = "Tugas-tugas";
@@ -237,6 +238,7 @@ $UplNotAZip = "File yang anda file bukan file zip.";
 $UplUploadSucceeded = "Upload file berhasil!";
 $ExportAsCSV = "Export sebagai file CSV";
 $ExportAsXLS = "Eksport sebagai file XLS";
+$langOpenarea = "Area terbuka personal";
 $Done = "Dilakukan";
 $Documents = "Dokumen";
 $DocumentAdded = "Dokumen ditambahkan";

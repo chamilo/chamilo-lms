@@ -5,7 +5,6 @@ $langActivate = "Mutat";
 $langDeactivate = "Elrejt";
 $langInLnk  = "Rejtett eszközök és linkek";
 $langDelLk = "Valóban ki akarja törölni ezt a linket?";
-$langEnter  = "Belépés";
 $langCourseCreate  = "Kurzus website létrehozása";
 $langNameOfTheLink  = "A link neve";
 $lang_main_categories_list                  = "F&#337; kategóriák listája";

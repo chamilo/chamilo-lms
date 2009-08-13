@@ -5,7 +5,6 @@ $langActivate = "Mostra";
 $langDeactivate = "Nascondi";
 $langInLnk  = "Collegamenti nascosti";
 $langDelLk = "Vuoi veramente eliminare il collegamento?";
-$langEnter  = "Entra";
 $langCourseCreate  = "Crea un corso";
 $langNameOfTheLink  = "Nome del collegamento";
 $lang_main_categories_list                  = "Categorie";

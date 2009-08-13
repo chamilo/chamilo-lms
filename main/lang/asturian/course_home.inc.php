@@ -5,7 +5,6 @@ $langActivate = "Activar";
 $langDeactivate = "Desactivar";
 $langInLnk  = "Enllaces desactivaos";
 $langDelLk = "¿ Ta seguru de querer desactivar esta ferramienta ?";
-$langEnter  = "Entrar";
 $langCourseCreate  = "Crear un cursu";
 $langNameOfTheLink  = "Nome del enllaz";
 $lang_main_categories_list                  = "Llistáu de categoríes princpales";

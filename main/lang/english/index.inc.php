@@ -53,7 +53,6 @@ $ViewOpenCourses = "View open trainings";
 $langCompetences = "Competences";
 $langDiplomas = "Diplomas";
 $langTeach = "What s/he can teach";
-$langOpenarea = "Personal area";
 $langProductions = "Productions";
 $langSendChatRequest = "Send a chat proposal to this person";
 $langRequestDenied = "The invitation has been rejected.";

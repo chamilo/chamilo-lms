@@ -5,7 +5,6 @@ $langActivate = "Activeren";
 $langDeactivate = "Inactiveren";
 $langInLnk  = "Deze onderdelen en links zijn nu inactief.";
 $langDelLk = "Wilt u deze link verwijderen?";
-$langEnter  = "Enter";
 $langCourseCreate  = "Maak een webcursus";
 $langNameOfTheLink  = "Naam van de link";
 $lang_main_categories_list                  = "Lijst \"Algemene categorieën\"";

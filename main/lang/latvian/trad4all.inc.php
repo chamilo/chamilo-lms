@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Title = "Virsraksts ";
 $UsersOnline = "Lietot&#257;ji tiešsaist&#275;";
 $Remove = "Iz&#326;emt";
+$langEnter  = "Ieiet";
 $Description = "Apraksts";
 $Links = "Vietnes";
 $langWorks = "Studentu publik&#257;cijas";
@@ -270,6 +271,7 @@ $UplNotAZip = "Dokuments, ko izv&#275;l&#275;j&#257;ties, nav ZIP fails.";
 $UplUploadSucceeded = "Uzl&#257;de notika veiksm&#299;gi!";
 $ExportAsCSV = "Izeksport&#275;t k&#257; CSV failu";
 $ExportAsXLS = "Izeksport&#275;t k&#257; XLS failu";
+$langOpenarea = "Person&#299;gais lauci&#326;š";
 $Done = "Dar&#299;ts!";
 $Documents = "Dokumenti";
 $DocumentAdded = "Dokuments pievienots";

@@ -1019,7 +1019,6 @@ $TermsAndConditions = "Términos y condiciones";
 $HTMLText = "HTML";
 $PageLink = "Enlace";
 $DisplayTermsConditions = "Mostrar Términos y condiciones en la página de registro, el visitante debe aceptar los T&C para poder registrarse.";
-$AllowTermsAndConditionsComment = "Permitir términos y comentario de condiciones";
 $AllowTermsAndConditionsTitle = "Habilitar Términos y Condiciones";
 $AllowTermsAndConditionsComment = "Esta opción mostrará los Términos y Condiciones en el formulario de registro para los nuevos usuarios";
 $Load = "Cargar";

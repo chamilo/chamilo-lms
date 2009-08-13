@@ -52,7 +52,6 @@ $ViewOpenCourses = "Widok otwartych kursów";
 $langCompetences = "Kompetencje";
 $langDiplomas = "Dyplomy";
 $langTeach = "Czego on/ona umiej&#261; uczy&#263;";
-$langOpenarea = "Otwarte pole osobiste";
 $langProductions = "Produkcje";
 $langSendChatRequest = "Wy&#347;lij tej osobie zaproszenie do czatu";
 $langRequestDenied = "Odmowa realizacji tego po&#322;&#261;czenia";

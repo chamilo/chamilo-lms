@@ -170,4 +170,6 @@ $EditNormalProfile = "Modifier le profil normal";
 $EditExtendProfile = "Modifier le profil étendu";
 $EditInformation = "Modifier information";
 $RegisterUser = "Valider mon inscription";
+$IHaveReadAndAgree = "J\'ai lu et accepte les";
+$ByClickingRegisterYouAgreeTermsAndConditions = "En cliquant sur le bouton \"Valider mon inscription\" ci-dessous, vous marquez votre accord avec les termes et conditions de ce site.";
 ?>

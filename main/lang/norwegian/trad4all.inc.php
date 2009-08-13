@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Title = "Tittel";
 $UsersOnline = "Brukere online";
 $Remove = "Fjern";
+$langEnter  = "Registrer";
 $Description = "Beskrivelse";
 $Forums = "Forum";
 $langCreateDir = "Opprett en mappe";
@@ -228,6 +229,7 @@ $UplNotAZip = "Filen du valgte er ikke en zip-fil.";
 $UplUploadSucceeded = "Filopplasting korrekt!";
 $ExportAsCSV = "Eksporter som CSV-fil";
 $ExportAsXLS = "Eksporter som XLS-fil";
+$langOpenarea = "Personlig åpent område";
 $Done = "Utført";
 $Documents = "Dokumenter";
 $DocumentAdded = "Dokument lagt til";

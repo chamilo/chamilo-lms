@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Remove = "Padam";
+$langEnter  = "Masuk";
 $Description = "Penerangan";
 $Links = "Pautan";
 $langWorks = "Tugasan";

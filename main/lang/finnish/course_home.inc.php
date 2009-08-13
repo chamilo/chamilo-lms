@@ -5,7 +5,6 @@ $langActivate = "Näytä";
 $langDeactivate = "Piilota";
 $langInLnk  = "Piilotetut työkalut ja linkit";
 $langDelLk = "Haluatko varmasti poistaa tämän linkin?";
-$langEnter  = "Sisään";
 $langCourseCreate  = "Luo kurssille nettisivu";
 $langNameOfTheLink  = "Linkin nimi";
 $lang_main_categories_list                  = "Aihealueet";

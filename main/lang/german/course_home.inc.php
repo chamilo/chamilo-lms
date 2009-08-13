@@ -5,7 +5,6 @@ $langActivate = "Anzeigen";
 $langDeactivate = "Verstecken";
 $langInLnk  = "Versteckte Tools und Links";
 $langDelLk = "Wollen Sie diesen Link wirklich löschen?";
-$langEnter  = "Eingabe";
 $langCourseCreate  = "Einen Kurs einrichten";
 $langNameOfTheLink  = "Name des Links";
 $lang_main_categories_list                  = "Haupt-Kategorieliste";

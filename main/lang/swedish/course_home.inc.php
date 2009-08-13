@@ -5,7 +5,6 @@ $langActivate = "aktivera";
 $langDeactivate = "deaktivera";
 $langInLnk  = "Deaktiverade länkar";
 $langDelLk = "Vill du verkligen radera denna länk?";
-$langEnter  = "Stig in";
 $langCourseCreate  = "Skapa en webbkurs";
 $langNameOfTheLink  = "Namn på länken";
 $lang_main_categories_list                  = "Huvudkategorilista";

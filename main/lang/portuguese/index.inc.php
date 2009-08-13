@@ -53,7 +53,6 @@ $ViewOpenCourses = "Visualizar cursos abertos";
 $langCompetences = "Competências";
 $langDiplomas = "Diplomas";
 $langTeach = "Habilitações";
-$langOpenarea = "Área pessoal";
 $langProductions = "Produções";
 $langSendChatRequest = "Convidar esta pessoa para sessão no Chat";
 $langRequestDenied = "O convite foi negado.";

@@ -53,7 +53,6 @@ $ViewOpenCourses = "Nyílt kurzusok megtekintése";
 $langCompetences = "Kompetenciák";
 $langDiplomas = "Diplomák";
 $langTeach = "Amit tanít";
-$langOpenarea = "Személyes";
 $langProductions = "Productions";
 $langSendChatRequest = "Chat-felhívás küldése";
 $langRequestDenied = "Visszautasítva.";

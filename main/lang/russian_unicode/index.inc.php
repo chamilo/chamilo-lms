@@ -53,7 +53,6 @@ $ViewOpenCourses = "Просмотреть открытые курсы";
 $langCompetences = "Компетентность";
 $langDiplomas = "Диплом";
 $langTeach = "Что он(а) может преподавать";
-$langOpenarea = "Частная зона";
 $langProductions = "Продукция";
 $langSendChatRequest = "Послать предложение о разговоре в чате этому человеку";
 $langRequestDenied = "Приглашение отклонено";

@@ -5,7 +5,6 @@ $langActivate = "Prikaži";
 $langDeactivate = "Sakrij";
 $langInLnk  = "Sakriveni alati i linkovi";
 $langDelLk = "Da li zaista želite da obrišete ovaj link?";
-$langEnter  = "U&#273;i";
 $langCourseCreate  = "Kreiranje Web sajta kursa";
 $langNameOfTheLink  = "Ime linka";
 $lang_main_categories_list                  = "Lista glavne kategorije";

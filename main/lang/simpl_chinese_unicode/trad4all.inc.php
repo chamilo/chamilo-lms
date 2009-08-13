@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$langEnter  = "进入";
 $langWorks = "作业论文";
 $langExercices = "测验";
 $langComment = "摘要";
@@ -85,6 +86,7 @@ $lang_no_access_here = "在这里你没有访问权限";
 $langOtherCourses = "其他课程";
 $langDenied = "拒绝";
 $langCourseHomepageLink = "课程首页";
+$langOpenarea = "个人开放区";
 $langChat = "聊天";
 $langhomepage_link = "在本页面添加链接";
 $langbackup = "课程备份";

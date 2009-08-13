@@ -5,7 +5,6 @@ $langActivate = "Rodyti";
 $langDeactivate = "Slėpti";
 $langInLnk  = "Paslėpti įrankiai ir nuorodos";
 $langDelLk = "Ar tikrai norite ištrinti šią nuorodą?";
-$langEnter  = "Įeiti";
 $langCourseCreate  = "Sukurti kurso tinklapį";
 $langNameOfTheLink  = "Nuorodos pavadinimas";
 $lang_main_categories_list                  = "Pagrindinis kategorijų sąrašas";

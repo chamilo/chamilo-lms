@@ -5,7 +5,6 @@ $langActivate = "Prezinta";
 $langDeactivate = "Ascunde";
 $langInLnk  = "Unelte si legaturi ascunse";
 $langDelLk = "Chiar vrei sa stergi acest link?";
-$langEnter  = "Intra";
 $langCourseCreate  = "Creaza o pagina web a cursului";
 $langNameOfTheLink  = "Numele legaturii";
 $lang_main_categories_list                  = "Lista principala categorii";

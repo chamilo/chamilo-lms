@@ -5,7 +5,6 @@ $langActivate = "Gør aktiv/ synlig for deltagerne";
 $langDeactivate = "Gør passiv/ skjul for deltagerne";
 $langInLnk  = "Ikke aktive funktioner og links";
 $langDelLk = "Er du sikkert på, at du vil slettet dette link?";
-$langEnter  = "Indtast";
 $langCourseCreate  = "Opret kursusside";
 $langNameOfTheLink  = "Navn på link";
 $lang_main_categories_list                  = "Hovedkategoriliste";

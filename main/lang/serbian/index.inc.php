@@ -51,7 +51,6 @@ $langCourseClosed = "(kurs je trenutno zatvoren)";
 $langCompetences = "Kompetencije";
 $langDiplomas = "Diplome";
 $langTeach = "Šta može da predaje";
-$langOpenarea = "Li&#269;no otvoreno okruženje";
 $langProductions = "Produkcije";
 $langSendChatRequest = "P&#1086;šalji sagovorniku zahtev za Chat";
 $langRequestDenied = "Poziv je odbijen.";

@@ -5,7 +5,6 @@ $langActivate = "Prikaži";
 $langDeactivate = "Skrij";
 $langInLnk  = "Skrita orodja in povezave";
 $langDelLk = "Ali res želiš odstraniti to povezavo?";
-$langEnter  = "Vstopi";
 $langCourseCreate  = "Tvori spletno stran tečaja";
 $langNameOfTheLink  = "Ime povezave";
 $lang_main_categories_list                  = "Seznam glavnih kategorij";

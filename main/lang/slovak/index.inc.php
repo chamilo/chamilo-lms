@@ -53,7 +53,6 @@ $ViewOpenCourses = "Prezrie&#357; otvorené kurzy";
 $langCompetences = "Oprávnenia";
 $langDiplomas = "Diplomy";
 $langTeach = "&#268;o môže u&#269;i&#357;";
-$langOpenarea = "Osobná zóna";
 $langProductions = "Práce";
 $langSendChatRequest = "Posla&#357; tejto osobe požiadavku na pokec";
 $langRequestDenied = "Pozvanie bolo odmietnuté";

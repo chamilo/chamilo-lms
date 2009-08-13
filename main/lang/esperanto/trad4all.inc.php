@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $Title = "Titolo";
 $UsersOnline = "Konektitaj uzuloj";
 $Remove = "Forigi ";
+$langEnter  = "Enigi";
 $Description = "Priskribo";
 $Links = "Ligiloj ";
 $langWorks = "Studentaj publika&#309;oj ";
@@ -237,6 +238,7 @@ $UplNotAZip = "La de vi transsendita dosiero ne estas zip-dosiero.";
 $UplUploadSucceeded = "La dosiero estis sukcese al&#349;utita!";
 $ExportAsCSV = "Eksporti kiel CSV-dosieron";
 $ExportAsXLS = "Eksporti kiel XLS-dosieron";
+$langOpenarea = "Persona areo ";
 $Done = "Preta";
 $Documents = "Dokumentoj";
 $DocumentAdded = "Dokumento aldonita";

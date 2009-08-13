@@ -53,7 +53,6 @@ $ViewOpenCourses = "Pririgardi malfermajn kursojn";
 $langCompetences = "Kompetentoj ";
 $langDiplomas = "Diplomoj";
 $langTeach = "Pri kio vi kapablas instrui ";
-$langOpenarea = "Persona areo ";
 $langProductions = "Produkta&#309;oj ";
 $langSendChatRequest = "Sendi babilpeton al tiu persono ";
 $langRequestDenied = "La peto estas malakceptita. ";

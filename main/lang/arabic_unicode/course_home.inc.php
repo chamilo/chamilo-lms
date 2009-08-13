@@ -5,7 +5,6 @@ $langActivate = " إظهار ";
 $langDeactivate = " إخفاء";
 $langInLnk  = " الأدوات والروابط المخفية";
 $langDelLk = " هل تريد حقا حذف هذا الرابط؟ ";
-$langEnter  = " أدخل";
 $langCourseCreate  = " إنشاء مقرر";
 $langNameOfTheLink  = " اسم الرابط ";
 $lang_main_categories_list                  = " قائمة التصنيفات الرئيسية ";

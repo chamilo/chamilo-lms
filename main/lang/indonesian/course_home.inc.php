@@ -5,7 +5,6 @@ $langActivate = "Aktifkan";
 $langDeactivate = "Non-aktifkan";
 $langInLnk  = "Non-aktif link";
 $langDelLk = "Apakah anda sungguh-sungguh ingin menghapus link ini?";
-$langEnter  = "Enter";
 $langCourseCreate  = "Buat situs mata kuliah";
 $langNameOfTheLink  = "Judul link";
 $lang_main_categories_list                  = "Daftar kategori utama";

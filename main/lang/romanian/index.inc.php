@@ -53,7 +53,6 @@ $ViewOpenCourses = "Vezi cursurile deschise";
 $langCompetences = "Competente";
 $langDiplomas = "Diplome";
 $langTeach = "Ce poate preda?";
-$langOpenarea = "Zona personala";
 $langProductions = "Productii";
 $langSendChatRequest = "Solicita chat cu aceasta persoana";
 $langRequestDenied = "Apelul nu a fost acceptat.";

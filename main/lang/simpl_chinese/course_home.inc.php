@@ -5,7 +5,6 @@ $langActivate = "显示";
 $langDeactivate = "隐藏";
 $langInLnk  = "隐藏工具和链接";
 $langDelLk = "确实要删除此链接吗? ";
-$langEnter  = "进入";
 $langCourseCreate  = "创建课程站点";
 $langNameOfTheLink  = "链接名称";
 $lang_main_categories_list                  = "主分类列表";

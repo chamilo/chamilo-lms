@@ -5,7 +5,6 @@ $langActivate = "Aktivigi ";
 $langDeactivate = "Malaktivigi ";
 $langInLnk  = "Tiuj &#265;i moduloj kaj ligiloj estas nun ne aktivaj ";
 $langDelLk = "&#264;u vi volas forigi &#265;i-ligilon?";
-$langEnter  = "Enigi";
 $langCourseCreate  = "Krei retkurson ";
 $langNameOfTheLink  = "Nomo de la ligilo ";
 $lang_main_categories_list                  = "&#284;enerala kategorilisto ";

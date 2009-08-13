@@ -5,7 +5,6 @@ $langActivate = "Активировать";
 $langDeactivate = "Сделать неактивным";
 $langInLnk  = "Сделать неактивными инструменты и ссылки";
 $langDelLk = "Вы действительно хотите удалить эту ссылку?";
-$langEnter  = "Ввод";
 $langCourseCreate  = "Создать вебсайт курса";
 $langNameOfTheLink  = "Название ссылки";
 $lang_main_categories_list                  = "Основной список разделов";

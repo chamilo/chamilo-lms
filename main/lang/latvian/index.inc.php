@@ -52,7 +52,6 @@ $langCourseClosed = "(šis kurss šobr&#299;d nav pieejams)";
 $langCompetences = "Kompetences";
 $langDiplomas = "Diplomi";
 $langTeach = "Ko vi&#326;š/a var doc&#275;t";
-$langOpenarea = "Person&#299;gais lauci&#326;š";
 $langProductions = "Ražojumi";
 $langSendChatRequest = "Uzaicin&#257;t šo personu uz sarunu p&#316;&#257;p&#257;tuv&#275; (&#269;at&#257;)";
 $langRequestDenied = "Uzaicin&#257;jums tika noraid&#299;ts.";

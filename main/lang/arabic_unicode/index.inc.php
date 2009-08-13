@@ -53,7 +53,6 @@ $ViewOpenCourses = "معاينة المقررات المفتوحة ";
 $langCompetences = "القدرات ";
 $langDiplomas = "الشهادات ";
 $langTeach = "ماالذي يمكنه / يمكنها تدريسه ";
-$langOpenarea = "المنطقة الشخصية المفتوحة ";
 $langProductions = "المنتجات ";
 $langSendChatRequest = "أرسل طلب محادثة إلى هذا الشخص ";
 $langRequestDenied = "لقد تم حظر  المكالمة ";

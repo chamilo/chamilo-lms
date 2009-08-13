@@ -5,7 +5,6 @@ $langActivate = "Vis";
 $langDeactivate = "Skjul";
 $langInLnk  = "Skjulte verktøy og lenker";
 $langDelLk = "Skal lenken slettes?";
-$langEnter  = "Registrer";
 $langCourseCreate  = "Opprett ett kursnettsted";
 $langNameOfTheLink  = "Navn på lenken";
 $lang_main_categories_list                  = "Liste hovedkategorier";

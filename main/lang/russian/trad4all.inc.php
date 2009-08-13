@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Remove = "&#x0423;&#x0434;&#x0430;&#x043B;&#x0438;&#x0442;&#x044C;";
+$langEnter  = "&#x0412;&#x0432;&#x043E;&#x0434;";
 $Description = "Описание";
 $Links = "Ссылки";
 $langWorks = "Задания";

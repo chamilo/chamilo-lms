@@ -8,6 +8,9 @@ require_once('simpletest/mock_objects.php');
 require_once('simpletest/autorun.php');
 require_once(api_get_path(SYS_CODE_PATH).'admin/calendar.lib.php');
 require_once(api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once(api_get_path(SYS_CODE_PATH).'/survey/survey.lib.php');
+
 
 $_SESSION['_user']['user_id'] = 1;
 $_user= 1;
@@ -23,10 +26,12 @@ class AllTests2 extends TestSuite {
         //$this->addTestFile(dirname(__FILE__).'/main/auth/openid/openid.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/chat/chat_functions.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/conference/get_translation.lib.test.php');
+        //$this->addTestFile(dirname(__FILE__).'/main/install/install_upgrade_.lib.test.php');
+       	  $this->addTestFile(dirname(__FILE__).'/main/survey/survey.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/exercice/hotpotatoes.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/newscorm/scorm.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/user/userInfoLib.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/webservices/user_import/import.lib.test.php');
+        //$this->addTestFile(dirname(__FILE__).'/main/webservices/user_import/import.lib.test.php');
         
         
         

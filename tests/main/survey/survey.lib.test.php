@@ -4,23 +4,36 @@ Mock::generate('Display');
 $config['survey']['debug'] = false;
 require_once(api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
 
+
 class TestSurvey extends UnitTestCase {
 	
 	public $smanager;
 	public $squestion;
+	public $syesno;
+	public $multiplechoice;
+	public $personality;
+	public $multipleresponse;
 	public function TestSurvey() {
 	
 	$this->UnitTestCase('');
 	
 	}
 	public function setUp() {
-		$this-> smanager = new survey_manager();
-		$this-> squestion = new question();
+		$this->smanager = new survey_manager();
+		$this->squestion = new question();
+		$this->syesno = new yesno();
+		$this->smultiplechoice = new multiplechoice();
+		$this->spersonality = new personality();
+		$this->smultipleresponse = new multipleresponse();
 	}
 	
 	public function tearDown() {
 		$this-> smanager = null;
 		$this-> squestion = null;
+		$this-> syesno = null;
+		$this->smultiplechoice = null;
+		$this->personality = null;
+		$this->multipleresponse = null;
 	}
 	/*
 	public function testGetSurvey() {
@@ -275,7 +288,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($result);
 		//var_dump($res); 
 	}
-	
+	/*
 	public function testDeleteSharedSurveyQuestion(){
 		$instans = new MockDatabase();
 		$survey_id=1;
@@ -394,7 +407,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($result);
 		//var_dump($sql);
 	}
-
+*/
 	public function testCreateForm(){
 		$instans = new MockDisplay();
 		global $charset;
@@ -412,10 +425,9 @@ class TestSurvey extends UnitTestCase {
 	
 	public function testRenderForm(){
 		ob_start();
-		$res = $this->squestion->render_form();
+		$this->squestion->render_form();
 		ob_end_clean();
-		$this->assertTrue(is_null($res));
-		$this->assertNull($res);
+		$this->assertNotNull($this->squestion->html);
 		//var_dump($res);		
 	}
 	
@@ -437,10 +449,76 @@ class TestSurvey extends UnitTestCase {
 		$form_content['answers'] =array();
 		$res = $this->squestion->add_remove_buttons($form_content);
 		$this->assertTrue($res);
+		//var_dump($res);
 	}
 	
-	
+	public function testRenderQuestion(){
+		$form_content=array('');
+		$res = $this->squestion->render_question($form_content);
+		$this->assertNull($res);
+		$this->assertTrue(is_null($res));
+		//var_dump($res);
+	}
 
+	public function testCreateForm1(){
+		$form_content=array('');
+		$this->syesno->create_form($form_content);
+		$this->assertNotNull($this->syesno->html);
+	}
+	
+	public function testRenderQuestion1(){
+		ob_start();
+		$form_content['options']=array('');
+		$answers=array();
+		$this->syesno->render_question($form_content,$answers);
+		ob_end_clean();
+		$this->assertNotNull($this->syesno->html);
+	}
+	
+	public function testCreateForm2(){
+		global $charset;
+		$form_content=array('');
+		$this->smultiplechoice->create_form($form_content);
+		$this->assertNotNull($this->smultiplechoice->html);
+		$this->assertTrue(!is_null(html));
+	}
+	/**
+	 * 	@todo it would make more sense to consider yesno as a 
+	 *  special case of multiplechoice and not the other way 
+	 *  around
+	 */
+	 
+	public function testRenderQuestion2(){
+		$form_content= array('');
+		$answers=array('');
+		$this->smultiplechoice->render_question($form_content, $answers);
+		$this->assertNull($this->smultiplechoice->html);
+	}
+	
+	public function testCreateForm3(){
+		$form_content['answers']=array();
+		$count= 0;
+		$this->spersonality;
+		$this->spersonality->create_form($form_content);
+		$this->assertNotNull($this->spersonality->html);
+		$this->assertTrue($this->spersonality->html);
+	}
+	
+	public function testRenderQuestion3(){
+		$form_content=array();
+		$answers=array();
+		$this->spersonality->render_question($form_content,$answers);
+		$this->assertNull($this->spersonality->html);
+		$this->assertFalse($this->spersonality->html);
+	}
+	 	
+	public function testCreateForm4(){
+		global $charset;
+		$form_content=array();
+		$this->smultipleresponse->create_form($form_content);
+		$this->assertNotNull($this->smultipleresponse->html);
+		$this->assertTrue($this->smultipleresponse->html);
+	}
 	
 }
 

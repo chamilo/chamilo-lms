@@ -61,7 +61,7 @@ class TestInstallUpgrade extends UnitTestCase{
 	 * Call to undefined function trueFalse() in 
 	 * /var/www/dokeos1861/main/install/install_upgrade.lib.php on line 192
 	 */
-	/*public function testWriteDokeosConfigFile(){
+	 /* public function testWriteDokeosConfigFile(){
 		global $dbHostForm;
 		global $dbUsernameForm;
 		global $dbPassForm;

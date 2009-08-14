@@ -16,7 +16,7 @@ class AllTests2 extends TestSuite {
     function AllTests2() {
     	$this->TestSuite('All tests2');
 
-    	//$this->addTestFile(dirname(__FILE__).'/main/admin/calendar.lib.test.php');
+ 	  	//$this->addTestFile(dirname(__FILE__).'/main/admin/calendar.lib.test.php');
     	//$this->addTestFile(dirname(__FILE__).'/main/admin/statistics/statistics.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/auth/lost_password.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/auth/openid/xrds.lib.test.php');
@@ -25,15 +25,26 @@ class AllTests2 extends TestSuite {
         //$this->addTestFile(dirname(__FILE__).'/main/conference/get_translation.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/exercice/hotpotatoes.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/newscorm/scorm.lib.test.php');
+        //$this->addTestFile(dirname(__FILE__).'/main/survey/survey.lib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/user/userInfoLib.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/webservices/user_import/import.lib.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/work/work.lib.test.php');
-        
-        
-        
-        
-       
+        //$this->addTestFile(dirname(__FILE__).'/main/work/work.lib.test.php');
 
+		
+    	$this->addTestFile(dirname(__FILE__).'/main/admin/calendar.lib.test.php');
+    	$this->addTestFile(dirname(__FILE__).'/main/admin/statistics/statistics.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/auth/lost_password.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/auth/openid/xrds.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/auth/openid/openid.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/chat/chat_functions.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/conference/get_translation.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/exercice/hotpotatoes.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/newscorm/scorm.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/survey/survey.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/user/userInfoLib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/webservices/user_import/import.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/work/work.lib.test.php');        
+       
     }
 }
 $test = &new AllTests2();

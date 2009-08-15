@@ -322,15 +322,6 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	public function testApiAddPcreUnicodeModifier(){
-		$pcre='áéíóúº|\/?Ç][ç]';
-		$encoding = null;
-		$res = api_add_pcre_unicode_modifier($pcre, $encoding);
-		$this->assertTrue(is_string($res));	
-		$this->assertTrue($res);
-		//var_dump($res);
-	}
-	
 	public function testApiStrcasecmp(){
 		$string1='áéíóu';
 		$string2='áeióu';

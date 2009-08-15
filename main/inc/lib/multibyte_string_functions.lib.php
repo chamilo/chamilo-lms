@@ -8,6 +8,8 @@
  * @author: Ivan Tcholakov, ivantcholakov@gmail.com
  * October 2008 - initial implementation.
  * May 2009 - refactoring and minor corrections have been implemented.
+ * August 2009 - PCRE-related functions have been added,
+ *               dependancy on mbstring extension has been lowered.
  * @package dokeos.library
  * ==============================================================================
  */
@@ -91,12 +93,18 @@ function api_convert_encoding($string, $to_encoding, $from_encoding = null) {
 		// When conversion is not needed, the string is returned directly, without validation.
 		return $string;
 	}
-	if (api_mb_supports($to_encoding) && api_mb_supports($from_encoding)) {
+	elseif (api_mb_supports($to_encoding) && api_mb_supports($from_encoding)) {
 		return @mb_convert_encoding($string, $to_encoding, $from_encoding);
 	}
 	elseif (api_iconv_supports($to_encoding) && api_iconv_supports($from_encoding)) {
 		return @iconv($from_encoding, $to_encoding, $string);
-	} 
+	}
+	elseif (api_is_utf8($to_encoding) && api_is_latin1($from_encoding)) {
+		return utf8_encode($string);
+	}
+	elseif (api_is_latin1($to_encoding) && api_is_utf8($from_encoding)) {
+		return utf8_decode($string);
+	}
 	// Here the function gives up.
 	return $string;
 }
@@ -117,11 +125,14 @@ function api_utf8_encode($string, $from_encoding = null) {
 		// When conversion is not needed, the string is returned directly, without validation.
 		return $string;
 	}
-	if (api_mb_supports($from_encoding)) {
+	elseif (api_mb_supports($from_encoding)) {
 		return @mb_convert_encoding($string, 'UTF-8', $from_encoding);
 	}
 	elseif (api_iconv_supports($from_encoding)) {
 		return @iconv($from_encoding, 'UTF-8', $string);
+	}
+	elseif (api_is_latin1($from_encoding)) {
+		return utf8_encode($string);
 	}
 	// Here the function gives up.
 	return $string;
@@ -143,11 +154,14 @@ function api_utf8_decode($string, $to_encoding = null) {
 		// When conversion is not needed, the string is returned directly, without validation.
 		return $string;
 	}
-	if (api_mb_supports($to_encoding)) {
+	elseif (api_mb_supports($to_encoding)) {
 		return @mb_convert_encoding($string, $to_encoding, 'UTF-8');
 	}
 	elseif (api_iconv_supports($to_encoding)) {
 		return @iconv('UTF-8', $to_encoding, $string);
+	}
+	elseif (api_is_latin1($to_encoding)) {
+		return utf8_decode($string);
 	}
 	// Here the function gives up.
 	return $string;
@@ -404,7 +418,7 @@ function api_stripos($haystack, $needle, $offset = 0, $encoding = null) {
 	}
 	if (api_mb_supports($encoding)) {
 		return @mb_stripos($haystack, $needle, $offset, $encoding);
-	} elseif (api_iconv_supports($encoding)) {
+	} elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_stripos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8'), $encoding);
 	}
 	return stripos($haystack, $needle, $offset);
@@ -431,7 +445,7 @@ function api_stristr($haystack, $needle, $part = false, $encoding = null) {
 	if (api_mb_supports($encoding)) {
 		return @mb_stristr($haystack, $needle, $part, $encoding);
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_stristr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'));
 	}
 	return stristr($haystack, $needle, $part);
@@ -461,6 +475,9 @@ function api_strlen($string, $encoding = null) {
 	elseif (api_iconv_supports($encoding)) {
 		return @iconv_strlen($string, $encoding);
 	}
+	elseif (api_is_utf8($encoding)) {
+    	return strlen(preg_replace("/[\x80-\xBF]/", '', $string));
+	}
 	return strlen($string);
 }
 
@@ -483,7 +500,7 @@ function api_strpos($haystack, $needle, $offset = 0, $encoding = null) {
 	if (api_mb_supports($encoding)) {
 		return @mb_strpos($haystack, $needle, $offset, $encoding);
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_strpos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8'), $encoding);
 	}
 	return strpos($haystack, $needle, $offset);
@@ -510,7 +527,7 @@ function api_strrchr($haystack, $needle, $part = false, $encoding = null) {
 	if (api_mb_supports($encoding)) {
 		return @mb_strrchr($haystack, $needle, $part, $encoding);
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_strrchr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'), $encoding);
 	}
 	return strrchr($haystack, $needle);
@@ -557,7 +574,7 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
 	if (api_mb_supports($encoding)) {
 		return @mb_strrpos($haystack, $needle, $offset, $encoding);
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_strrpos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8'), $encoding);
 	}
 	return strrpos($haystack, $needle, $offset);
@@ -584,7 +601,7 @@ function api_strstr($haystack, $needle, $part = false, $encoding = null) {
 	if (api_mb_supports($encoding)) {
 		return @mb_strstr($haystack, $needle, $part, $encoding);
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_strstr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'), $encoding);
 	}
 	return strstr($haystack, $needle, $part);
@@ -606,7 +623,7 @@ function api_strtolower($string, $encoding = null) {
 	if (api_mb_supports($encoding)) {
 		return @mb_strtolower($string, $encoding);
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_strtolower(api_utf8_encode($string, $encoding), 'UTF-8'), $encoding);
 	}
 	return strtolower($string);
@@ -628,7 +645,7 @@ function api_strtoupper($string, $encoding = null) {
 	if (api_mb_supports($encoding)) {
 		return @mb_strtoupper($string, $encoding);
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_strtoupper(api_utf8_encode($string, $encoding), 'UTF-8'), $encoding);
 	}
 	return strtoupper($string);
@@ -711,7 +728,7 @@ function api_substr($string, $start, $length = null, $encoding = null) {
 	if (api_mb_supports($encoding)) {
 		return @mb_substr($string, $start, $length, $encoding);
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_substr(api_utf8_encode($string, $encoding), $start, $length, 'UTF-8'), $encoding);
 	}
 	return substr($string, $start, $length);
@@ -782,7 +799,7 @@ function api_ucwords($string, $encoding = null) {
     if (api_mb_supports($encoding)) {
 		return @mb_convert_case($string, MB_CASE_TITLE, $encoding);
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_convert_case(api_utf8_encode($string, $encoding), MB_CASE_TITLE, 'UTF-8'), $encoding);
 	}
 	return ucwords($string);
@@ -816,7 +833,7 @@ function api_ereg($pattern, $string, & $regs = null) {
 			return $result;
 		}
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		api_mb_regex_encoding('UTF-8');
 		if ($count < 3) {
 			$result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
@@ -861,7 +878,7 @@ function api_ereg_replace($pattern, $replacement, $string, $option = null) {
 			return @mb_ereg_replace($pattern, $replacement, $string, $option);
 		}
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		api_mb_regex_encoding('UTF-8');
 
 		if (is_null($option)) {
@@ -897,7 +914,7 @@ function api_eregi($pattern, $string, & $regs = null) {
 			return @mb_eregi($pattern, $string, $regs);
 		}
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		api_mb_regex_encoding('UTF-8');
 
 		if ($count < 3) {
@@ -943,7 +960,7 @@ function api_eregi_replace($pattern, $replacement, $string, $option = null) {
 			return @mb_eregi_replace($pattern, $replacement, $string, $option);
 		}
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		api_mb_regex_encoding('UTF-8');
 		if (is_null($option)) {
 			$result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
@@ -955,6 +972,121 @@ function api_eregi_replace($pattern, $replacement, $string, $option = null) {
 	} else {
 		return eregi_replace($pattern, $replacement, $string);
 	}
+}
+
+/**
+ * Performs a regular expression match, UTF-8 aware when it is applicable.
+ * @param string $pattern				The pattern to search for, as a string.
+ * @param string $subject				The input string.
+ * @param array &$matches (optional)	If matches is provided, then it is filled with the results of search (as an array).
+ * 										$matches[0] will contain the text that matched the full pattern, $matches[1] will have the text that matched the first captured parenthesized subpattern, and so on.
+ * @param int $flags (optional)			Could be PREG_OFFSET_CAPTURE. If this flag is passed, for every occurring match the appendant string offset will also be returned.
+ * 										Note that this changes the return value in an array where every element is an array consisting of the matched string at index 0 and its string offset into subject at index 1.
+ * @param int $offset (optional)		Normally, the search starts from the beginning of the subject string. The optional parameter offset can be used to specify the alternate place from which to start the search.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return int|boolean					Returns the number of times pattern matches or FALSE if an error occurred.
+ * @link http://php.net/preg_match
+ */
+function api_preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0, $encoding = null) {
+	if (empty($encoding)){
+		$encoding = api_get_system_encoding();
+	}
+	return preg_match(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $matches, $flags, $offset);
+}
+
+/**
+ * Performs a global regular expression match, UTF-8 aware when it is applicable.
+ * @param string $pattern				The pattern to search for, as a string.
+ * @param string $subject				The input string.
+ * @param array &$matches (optional)	Array of all matches in multi-dimensional array ordered according to $flags.
+ * @param int $flags (optional)			Can be a combination of the following flags (note that it doesn't make sense to use PREG_PATTERN_ORDER together with PREG_SET_ORDER):
+ * PREG_PATTERN_ORDER - orders results so that $matches[0] is an array of full pattern matches, $matches[1] is an array of strings matched by the first parenthesized subpattern, and so on;
+ * PREG_SET_ORDER - orders results so that $matches[0] is an array of first set of matches, $matches[1] is an array of second set of matches, and so on;
+ * PREG_OFFSET_CAPTURE - If this flag is passed, for every occurring match the appendant string offset will also be returned. Note that this changes the value of matches
+ * in an array where every element is an array consisting of the matched string at offset 0 and its string offset into subject at offset 1.
+ * If no order flag is given, PREG_PATTERN_ORDER is assumed.
+ * @param int $offset (optional)		Normally, the search starts from the beginning of the subject string. The optional parameter offset can be used to specify the alternate place from which to start the search.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return int|boolean					Returns the number of full pattern matches (which might be zero), or FALSE if an error occurred.
+ * @link http://php.net/preg_match_all
+ */
+function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN_ORDER, $offset = 0, $encoding = null) {
+	if (empty($encoding)){
+		$encoding = api_get_system_encoding();
+	}
+	return preg_match_all(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $matches, $flags, $offset);
+}
+
+/**
+ * Performs a regular expression search and replace, UTF-8 aware when it is applicable.
+ * @param string|array $pattern			The pattern to search for. It can be either a string or an array with strings.
+ * @param string|array $replacement		The string or an array with strings to replace.
+ * @param string|array $subject			The string or an array with strings to search and replace.
+ * @param int $limit					The maximum possible replacements for each pattern in each subject string. Defaults to -1 (no limit).
+ * @param int &$count					If specified, this variable will be filled with the number of replacements done.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return array|string|null			returns an array if the subject parameter is an array, or a string otherwise.
+ * If matches are found, the new subject will be returned, otherwise subject will be returned unchanged or NULL if an error occurred.
+ * @link http://php.net/preg_replace
+ */
+function api_preg_replace($pattern, $replacement, $subject, $limit= -1, &$count = 0, $encoding = null) {
+	if (empty($encoding)){
+		$encoding = api_get_system_encoding();
+	}
+	if (is_array($pattern)) {
+		foreach ($pattern as &$p) {
+			$p = api_is_utf8($encoding) ? $p.'u' : $p;
+		}
+	} else {
+		$pattern = api_is_utf8($encoding) ? $pattern.'u' : $pattern;
+	}
+	return preg_replace($pattern, $replacement, $subject, $limit, $count);
+}
+
+/**
+ * Performs a regular expression search and replace using a callback function, UTF-8 aware when it is applicable.
+ * @param string|array $pattern			The pattern to search for. It can be either a string or an array with strings.
+ * @param function $callback			A callback that will be called and passed an array of matched elements in the $subject string. The callback should return the replacement string.
+ * @param string|array $subject			The string or an array with strings to search and replace.
+ * @param int $limit (optional)			The maximum possible replacements for each pattern in each subject string. Defaults to -1 (no limit).
+ * @param int &$count (optional)		If specified, this variable will be filled with the number of replacements done.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return array|string					Returns an array if the subject parameter is an array, or a string otherwise.
+ * @link http://php.net/preg_replace_callback
+ */
+function api_preg_replace_callback($pattern, $callback, $subject, $limit= -1, &$count = 0, $encoding = null) {
+	if (empty($encoding)){
+		$encoding = api_get_system_encoding();
+	}
+	if (is_array($pattern)) {
+		foreach ($pattern as &$p) {
+			$p = api_is_utf8($encoding) ? $p.'u' : $p;
+		}
+	} else {
+		$pattern = api_is_utf8($encoding) ? $pattern.'u' : $pattern;
+	}
+	return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
+}
+
+/**
+ * Splits a string by a regular expression, UTF-8 aware when it is applicable.
+ * @param string $pattern				The pattern to search for, as a string.
+ * @param string $subject				The input string.
+ * @param int $limit (optional)			If specified, then only substrings up to $limit are returned with the rest of the string being placed in the last substring. A limit of -1, 0 or null means "no limit" and, as is standard across PHP.
+ * @param int $flags (optional)			$flags can be any combination of the following flags (combined with bitwise | operator):
+ * PREG_SPLIT_NO_EMPTY - if this flag is set, only non-empty pieces will be returned;
+ * PREG_SPLIT_DELIM_CAPTURE - if this flag is set, parenthesized expression in the delimiter pattern will be captured and returned as well;
+ * PREG_SPLIT_OFFSET_CAPTURE - If this flag is set, for every occurring match the appendant string offset will also be returned.
+ * Note that this changes the return value in an array where every element is an array consisting of the matched string at offset 0 and its string offset into subject at offset 1.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return array						Returns an array containing substrings of $subject split along boundaries matched by $pattern.
+ * @link http://php.net/preg_split
+ */
+function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding = null) {
+	if (empty($encoding)){
+		$encoding = api_get_system_encoding();
+	}
+	return preg_split(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $limit, $flags);
 }
 
 /**
@@ -977,7 +1109,7 @@ function api_split($pattern, $string, $limit = null) {
 			return @mb_split($pattern, $string, $limit);
 		}
 	}
-	elseif (api_iconv_supports($encoding)) {
+	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		api_mb_regex_encoding('UTF-8');
 		if (is_null($limit)) {
 			$result = @mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
@@ -994,19 +1126,6 @@ function api_split($pattern, $string, $limit = null) {
 			return split($pattern, $string, $limit);
 		}
 	}
-}
-
-/**
- * This function adds a unicode modifier (u suffix) to a Perl-compatible regular expression depending on the specified encoding.
- * @param string $pcre					The Perl-compatible regular expression.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return string						Returns the same regular expression wit a suffix 'u' if $encoding is 'UTF-8'.
- */
-function api_add_pcre_unicode_modifier($pcre, $encoding = null) {
-	if (empty($encoding)){
-		$encoding = api_get_system_encoding();
-	}
-	return api_is_utf8($encoding) ? $pcre.'u' : $pcre;
 }
 
 /**
@@ -1662,7 +1781,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
 	// ASCII is always valid NFC!
 	// If we're only ever given plain ASCII, we can avoid the overhead
 	// of initializing the decomposition tables by skipping out early.
-	if (!preg_match('/[\x80-\xff]/', $string)) {
+	if (api_is_valid_ascii($string)) {
 		return $string;
 	}
 
@@ -2026,6 +2145,14 @@ function api_get_file_system_encoding() {
  * Note: This function should be called once the initialization. Please, avoid further manipulation of the internal default encodings.
  */
 function api_set_default_encoding($encoding) {
+	if (MBSTRING_INSTALLED) {
+		// Additional mbstring-related initialization operations.
+		@ini_set('mbstring.func_overload', 0);
+		@ini_set('mbstring.encoding_translation', 0);
+		@ini_set('mbstring.http_input', 'pass');
+		@ini_set('mbstring.http_output', 'pass');
+		@ini_set('mbstring.language', 'neutral');
+	}
 	api_mb_internal_encoding($encoding);
 	api_mb_regex_encoding($encoding);
 	api_iconv_set_encoding('iconv_internal_encoding', $encoding);
@@ -2042,7 +2169,11 @@ function api_mb_internal_encoding($encoding = null) {
 	static $mb_internal_encoding = null;
 	if (empty($encoding)) {
 		if (is_null($mb_internal_encoding)) {
-			$mb_internal_encoding = @mb_internal_encoding();
+			if (MBSTRING_INSTALLED) {
+				$mb_internal_encoding = @mb_internal_encoding();
+			} else {
+				$mb_internal_encoding = 'ISO-8859-15';
+			}
 		}
 		return $mb_internal_encoding;
 	}
@@ -2064,7 +2195,11 @@ function api_mb_regex_encoding($encoding = null) {
 	static $mb_regex_encoding = null;
 	if (empty($encoding)) {
 		if (is_null($mb_regex_encoding)) {
-			$mb_regex_encoding = @mb_regex_encoding();
+			if (MBSTRING_INSTALLED) {
+				$mb_regex_encoding = @mb_regex_encoding();
+			} else {
+				$mb_regex_encoding = 'ISO-8859-15';
+			}
 		}
 		return $mb_regex_encoding;
 	}
@@ -2180,11 +2315,15 @@ function api_mb_supports($encoding) {
 	static $supported = array();
 	$encoding = api_refine_encoding_id($encoding);
 	if (!isset($supported[$encoding])) {
-		$mb_encodings = mb_list_encodings();
-		$mb_encodings = array_map('api_refine_encoding_id', $mb_encodings);
+		if (MBSTRING_INSTALLED) {
+			$mb_encodings = mb_list_encodings();
+			$mb_encodings = array_map('api_refine_encoding_id', $mb_encodings);
+		} else {
+			$mb_encodings = array();
+		}
 		$supported[$encoding] = in_array($encoding, $mb_encodings);
 	}
-	return $supported[$encoding] ? true : false;
+	return $supported[$encoding];
 }
 
 /**
@@ -2206,7 +2345,6 @@ function api_iconv_supports($encoding) {
 			$supported[$encoding] = false;
 		}
 	}
-
 	return $supported[$encoding];
 }
 
@@ -2262,19 +2400,7 @@ function api_is_valid_utf8($string) {
 	// wrongly detected as UTF-8. Possibly, there would be problems with other
 	// languages too. An alternative implementation will be used.
 
-	//$len = strlen($string); // mbstring.func_overload might change behaviour of the function strlen().
-	// Ivan Tcholakov, 11-JUN-2009: Let us calculate for sure the length in bytes.
-	static $use_mb_strlen;
-	if (!isset($use_mb_strlen)) {
-		$use_mb_strlen = MBSTRING_INSTALLED && ((int) ini_get('mbstring.func_overload') & 2);
-	}
-	if ($use_mb_strlen) {
-		$len = mb_strlen($string, '8bit');
-	} else {
-		$len = strlen($string);
-	}
-	// For PHP6 all this fragment probably will contain:
-	//$len = strlen((binary)$string);
+	$len = api_byte_count($string);
 
 	$i = 0;
 
@@ -2460,7 +2586,10 @@ function api_is_valid_utf8($string) {
  * @return bool				Returns TRUE when the tested string contains 7-bit ASCII characters only, FALSE othewise.
  */
 function api_is_valid_ascii($string) {
-	return @mb_detect_encoding($string, 'ASCII', true) == 'ASCII' ? true : false;
+	if (MBSTRING_INSTALLED) {
+		return @mb_detect_encoding($string, 'ASCII', true) == 'ASCII' ? true : false;
+	}
+	return ! preg_match('/[^\x00-\x7F]/S', $string);
 }
 
 /**

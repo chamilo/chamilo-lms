@@ -291,219 +291,6 @@ function api_file_system_decode($string, $to_encoding = null) {
  */
 
 /**
- * Executes a regular expression match with extended multibyte support.
- * By default this function uses the platform character set.
- * @param string $pattern			The regular expression pattern.
- * @param string $string			The searched string.
- * @param array $regs (optional)	If specified, by this passed by reference parameter an array containing found match and its substrings is returned.
- * @return mixed					1 if match is found, FALSE if not. If $regs has been specified, byte-length of the found match is returned, or FALSE if no match has been found.
- * This function is aimed at replacing the functions ereg() and mb_ereg() for human-language strings.
- * @link http://php.net/manual/en/function.ereg
- * @link http://php.net/manual/en/function.mb-ereg
- */
-function api_ereg($pattern, $string, & $regs = null) {
-	$count = func_num_args();
-	$encoding = api_mb_regex_encoding();
-	if (api_mb_supports($encoding)) {
-		if ($count < 3) {
-			return @mb_ereg($pattern, $string);
-		} else {
-			$result = @mb_ereg($pattern, $string, $regs);
-			return $result;
-		}
-	}
-	elseif (api_iconv_supports($encoding)) {
-		api_mb_regex_encoding('UTF-8');
-		if ($count < 3) {
-			$result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
-		} else {
-			$result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
-			$regs = _api_array_utf8_decode($regs, $encoding);
-		}
-		api_mb_regex_encoding($encoding);
-		return $result;
-	} else {
-		if ($count < 3) {
-			return ereg($pattern, $string);
-		} else {
-			return ereg($pattern, $string, $regs);
-		}
-	}
-}
-
-/**
- * Scans string for matches to pattern, then replaces the matched text with replacement, with extended multibyte support.
- * By default this function uses the platform character set.
- * @param string $pattern				The regular expression pattern.
- * @param string $replacement			The replacement text.
- * @param string $string				The searched string.
- * @param string $option (optional)		Matching condition.
- * If i is specified for the matching condition parameter, the case will be ignored.
- * If x is specified, white space will be ignored.
- * If m is specified, match will be executed in multiline mode and line break will be included in '.'.
- * If p is specified, match will be executed in POSIX mode, line break will be considered as normal character.
- * If e is specified, replacement string will be evaluated as PHP expression.
- * @return mixed						The modified string is returned. If no matches are found within the string, then it will be returned unchanged. FALSE will be returned on error.
- * This function is aimed at replacing the functions ereg_replace() and mb_ereg_replace() for human-language strings.
- * @link http://php.net/manual/en/function.ereg-replace
- * @link http://php.net/manual/en/function.mb-ereg-replace
- */
-function api_ereg_replace($pattern, $replacement, $string, $option = null) {
-	$encoding = api_mb_regex_encoding();
-	if (api_mb_supports($encoding)) {
-		if (is_null($option)) {
-			return @mb_ereg_replace($pattern, $replacement, $string);
-		} else {
-			return @mb_ereg_replace($pattern, $replacement, $string, $option);
-		}
-	}
-	elseif (api_iconv_supports($encoding)) {
-		api_mb_regex_encoding('UTF-8');
-
-		if (is_null($option)) {
-			$result = api_utf8_decode(@mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
-		} else {
-			$result = api_utf8_decode(@mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
-		}
-		api_mb_regex_encoding($encoding);
-		return $result;
-	} else {
-		return ereg_replace($pattern, $replacement, $string);
-	}
-}
-
-// This is a helper callback function for internal purposes.
-function _api_array_utf8_decode($variable, $encoding) {
-	if (is_array($variable)) {
-		return array_map('_api_array_utf8_decode', $variable, $encoding);
-	}
-    if (is_string($var)) {
-    	return api_utf8_decode($variable, $encoding);
-    }
-    return $variable;
-}
-
-/**
- * Executes a regular expression match, ignoring case, with extended multibyte support.
- * By default this function uses the platform character set.
- * @param string $pattern			The regular expression pattern.
- * @param string $string			The searched string.
- * @param array $regs (optional)	If specified, by this passed by reference parameter an array containing found match and its substrings is returned.
- * @return mixed					1 if match is found, FALSE if not. If $regs has been specified, byte-length of the found match is returned, or FALSE if no match has been found.
- * This function is aimed at replacing the functions eregi() and mb_eregi() for human-language strings.
- * @link http://php.net/manual/en/function.eregi
- * @link http://php.net/manual/en/function.mb-eregi
- */
-function api_eregi($pattern, $string, & $regs = null) {
-	$count = func_num_args();
-	$encoding = api_mb_regex_encoding();
-	if (api_mb_supports($encoding)) {
-		if ($count < 3) {
-			return @mb_eregi($pattern, $string);
-		} else {
-			return @mb_eregi($pattern, $string, $regs);
-		}
-	}
-	elseif (api_iconv_supports($encoding)) {
-		api_mb_regex_encoding('UTF-8');
-
-		if ($count < 3) {
-			$result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
-		} else {
-			$result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
-			$regs = _api_array_utf8_decode($regs, $encoding);
-		}
-		api_mb_regex_encoding($encoding);
-		return $result;
-	} else {
-		if ($count < 3) {
-			return eregi($pattern, $string);
-		} else {
-			return eregi($pattern, $string, $regs);
-		}
-	}
-}
-
-/**
- * Scans string for matches to pattern, then replaces the matched text with replacement, ignoring case, with extended multibyte support.
- * By default this function uses the platform character set.
- * @param string $pattern				The regular expression pattern.
- * @param string $replacement			The replacement text.
- * @param string $string				The searched string.
- * @param string $option (optional)		Matching condition.
- * If i is specified for the matching condition parameter, the case will be ignored.
- * If x is specified, white space will be ignored.
- * If m is specified, match will be executed in multiline mode and line break will be included in '.'.
- * If p is specified, match will be executed in POSIX mode, line break will be considered as normal character.
- * If e is specified, replacement string will be evaluated as PHP expression.
- * @return mixed						The modified string is returned. If no matches are found within the string, then it will be returned unchanged. FALSE will be returned on error.
- * This function is aimed at replacing the functions eregi_replace() and mb_eregi_replace() for human-language strings.
- * @link http://php.net/manual/en/function.eregi-replace
- * @link http://php.net/manual/en/function.mb-eregi-replace
- */
-function api_eregi_replace($pattern, $replacement, $string, $option = null) {
-	$encoding = api_mb_regex_encoding();
-	if (api_mb_supports($encoding)) {
-		if (is_null($option)) {
-			return @mb_eregi_replace($pattern, $replacement, $string);
-		} else {
-			return @mb_eregi_replace($pattern, $replacement, $string, $option);
-		}
-	}
-	elseif (api_iconv_supports($encoding)) {
-		api_mb_regex_encoding('UTF-8');
-		if (is_null($option)) {
-			$result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
-		} else {
-			$result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
-		}
-		api_mb_regex_encoding($encoding);
-		return $result;
-	} else {
-		return eregi_replace($pattern, $replacement, $string);
-	}
-}
-
-/**
- * Splits a multibyte string using regular expression pattern and returns the result as an array.
- * By default this function uses the platform character set.
- * @param string $pattern			The regular expression pattern.
- * @param string $string			The string being split.
- * @param int $limit (optional)		If this optional parameter $limit is specified, the string will be split in $limit elements as maximum.
- * @return array					The result as an array.
- * This function is aimed at replacing the functions split() and mb_split() for human-language strings.
- * @link http://php.net/manual/en/function.split
- * @link http://php.net/manual/en/function.mb-split
- */
-function api_split($pattern, $string, $limit = null) {
-	$encoding = api_mb_regex_encoding();
-	if (api_mb_supports($encoding)) {
-		if (is_null($limit)) {
-			return @mb_split($pattern, $string);
-		} else {
-			return @mb_split($pattern, $string, $limit);
-		}
-	}
-	elseif (api_iconv_supports($encoding)) {
-		api_mb_regex_encoding('UTF-8');
-		if (is_null($limit)) {
-			$result = @mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
-		} else {
-			$result = @mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $limit);
-		}
-		$result = _api_array_utf8_decode($result, $encoding);
-		api_mb_regex_encoding($encoding);
-		return $result;
-	} else {
-		if (is_null($limit)) {
-			return split($pattern, $string);
-		} else {
-			return split($pattern, $string, $limit);
-		}
-	}
-}
-
-/**
  * This function returns a string or an array with all occurrences of search in subject (ignoring case) replaced with the given replace value.
  * @param mixed $search					String or array of strings to be found.
  * @param mixed $replace				String or array of strings used for replacement.
@@ -1002,6 +789,214 @@ function api_ucwords($string, $encoding = null) {
 }
 
 /**
+ * ----------------------------------------------------------------------------
+ * String operations using regular expressions
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Executes a regular expression match with extended multibyte support.
+ * By default this function uses the platform character set.
+ * @param string $pattern			The regular expression pattern.
+ * @param string $string			The searched string.
+ * @param array $regs (optional)	If specified, by this passed by reference parameter an array containing found match and its substrings is returned.
+ * @return mixed					1 if match is found, FALSE if not. If $regs has been specified, byte-length of the found match is returned, or FALSE if no match has been found.
+ * This function is aimed at replacing the functions ereg() and mb_ereg() for human-language strings.
+ * @link http://php.net/manual/en/function.ereg
+ * @link http://php.net/manual/en/function.mb-ereg
+ */
+function api_ereg($pattern, $string, & $regs = null) {
+	$count = func_num_args();
+	$encoding = api_mb_regex_encoding();
+	if (api_mb_supports($encoding)) {
+		if ($count < 3) {
+			return @mb_ereg($pattern, $string);
+		} else {
+			$result = @mb_ereg($pattern, $string, $regs);
+			return $result;
+		}
+	}
+	elseif (api_iconv_supports($encoding)) {
+		api_mb_regex_encoding('UTF-8');
+		if ($count < 3) {
+			$result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
+		} else {
+			$result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
+			$regs = _api_array_utf8_decode($regs, $encoding);
+		}
+		api_mb_regex_encoding($encoding);
+		return $result;
+	} else {
+		if ($count < 3) {
+			return ereg($pattern, $string);
+		} else {
+			return ereg($pattern, $string, $regs);
+		}
+	}
+}
+
+/**
+ * Scans string for matches to pattern, then replaces the matched text with replacement, with extended multibyte support.
+ * By default this function uses the platform character set.
+ * @param string $pattern				The regular expression pattern.
+ * @param string $replacement			The replacement text.
+ * @param string $string				The searched string.
+ * @param string $option (optional)		Matching condition.
+ * If i is specified for the matching condition parameter, the case will be ignored.
+ * If x is specified, white space will be ignored.
+ * If m is specified, match will be executed in multiline mode and line break will be included in '.'.
+ * If p is specified, match will be executed in POSIX mode, line break will be considered as normal character.
+ * If e is specified, replacement string will be evaluated as PHP expression.
+ * @return mixed						The modified string is returned. If no matches are found within the string, then it will be returned unchanged. FALSE will be returned on error.
+ * This function is aimed at replacing the functions ereg_replace() and mb_ereg_replace() for human-language strings.
+ * @link http://php.net/manual/en/function.ereg-replace
+ * @link http://php.net/manual/en/function.mb-ereg-replace
+ */
+function api_ereg_replace($pattern, $replacement, $string, $option = null) {
+	$encoding = api_mb_regex_encoding();
+	if (api_mb_supports($encoding)) {
+		if (is_null($option)) {
+			return @mb_ereg_replace($pattern, $replacement, $string);
+		} else {
+			return @mb_ereg_replace($pattern, $replacement, $string, $option);
+		}
+	}
+	elseif (api_iconv_supports($encoding)) {
+		api_mb_regex_encoding('UTF-8');
+
+		if (is_null($option)) {
+			$result = api_utf8_decode(@mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
+		} else {
+			$result = api_utf8_decode(@mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
+		}
+		api_mb_regex_encoding($encoding);
+		return $result;
+	} else {
+		return ereg_replace($pattern, $replacement, $string);
+	}
+}
+
+/**
+ * Executes a regular expression match, ignoring case, with extended multibyte support.
+ * By default this function uses the platform character set.
+ * @param string $pattern			The regular expression pattern.
+ * @param string $string			The searched string.
+ * @param array $regs (optional)	If specified, by this passed by reference parameter an array containing found match and its substrings is returned.
+ * @return mixed					1 if match is found, FALSE if not. If $regs has been specified, byte-length of the found match is returned, or FALSE if no match has been found.
+ * This function is aimed at replacing the functions eregi() and mb_eregi() for human-language strings.
+ * @link http://php.net/manual/en/function.eregi
+ * @link http://php.net/manual/en/function.mb-eregi
+ */
+function api_eregi($pattern, $string, & $regs = null) {
+	$count = func_num_args();
+	$encoding = api_mb_regex_encoding();
+	if (api_mb_supports($encoding)) {
+		if ($count < 3) {
+			return @mb_eregi($pattern, $string);
+		} else {
+			return @mb_eregi($pattern, $string, $regs);
+		}
+	}
+	elseif (api_iconv_supports($encoding)) {
+		api_mb_regex_encoding('UTF-8');
+
+		if ($count < 3) {
+			$result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
+		} else {
+			$result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
+			$regs = _api_array_utf8_decode($regs, $encoding);
+		}
+		api_mb_regex_encoding($encoding);
+		return $result;
+	} else {
+		if ($count < 3) {
+			return eregi($pattern, $string);
+		} else {
+			return eregi($pattern, $string, $regs);
+		}
+	}
+}
+
+/**
+ * Scans string for matches to pattern, then replaces the matched text with replacement, ignoring case, with extended multibyte support.
+ * By default this function uses the platform character set.
+ * @param string $pattern				The regular expression pattern.
+ * @param string $replacement			The replacement text.
+ * @param string $string				The searched string.
+ * @param string $option (optional)		Matching condition.
+ * If i is specified for the matching condition parameter, the case will be ignored.
+ * If x is specified, white space will be ignored.
+ * If m is specified, match will be executed in multiline mode and line break will be included in '.'.
+ * If p is specified, match will be executed in POSIX mode, line break will be considered as normal character.
+ * If e is specified, replacement string will be evaluated as PHP expression.
+ * @return mixed						The modified string is returned. If no matches are found within the string, then it will be returned unchanged. FALSE will be returned on error.
+ * This function is aimed at replacing the functions eregi_replace() and mb_eregi_replace() for human-language strings.
+ * @link http://php.net/manual/en/function.eregi-replace
+ * @link http://php.net/manual/en/function.mb-eregi-replace
+ */
+function api_eregi_replace($pattern, $replacement, $string, $option = null) {
+	$encoding = api_mb_regex_encoding();
+	if (api_mb_supports($encoding)) {
+		if (is_null($option)) {
+			return @mb_eregi_replace($pattern, $replacement, $string);
+		} else {
+			return @mb_eregi_replace($pattern, $replacement, $string, $option);
+		}
+	}
+	elseif (api_iconv_supports($encoding)) {
+		api_mb_regex_encoding('UTF-8');
+		if (is_null($option)) {
+			$result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
+		} else {
+			$result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
+		}
+		api_mb_regex_encoding($encoding);
+		return $result;
+	} else {
+		return eregi_replace($pattern, $replacement, $string);
+	}
+}
+
+/**
+ * Splits a multibyte string using regular expression pattern and returns the result as an array.
+ * By default this function uses the platform character set.
+ * @param string $pattern			The regular expression pattern.
+ * @param string $string			The string being split.
+ * @param int $limit (optional)		If this optional parameter $limit is specified, the string will be split in $limit elements as maximum.
+ * @return array					The result as an array.
+ * This function is aimed at replacing the functions split() and mb_split() for human-language strings.
+ * @link http://php.net/manual/en/function.split
+ * @link http://php.net/manual/en/function.mb-split
+ */
+function api_split($pattern, $string, $limit = null) {
+	$encoding = api_mb_regex_encoding();
+	if (api_mb_supports($encoding)) {
+		if (is_null($limit)) {
+			return @mb_split($pattern, $string);
+		} else {
+			return @mb_split($pattern, $string, $limit);
+		}
+	}
+	elseif (api_iconv_supports($encoding)) {
+		api_mb_regex_encoding('UTF-8');
+		if (is_null($limit)) {
+			$result = @mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
+		} else {
+			$result = @mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $limit);
+		}
+		$result = _api_array_utf8_decode($result, $encoding);
+		api_mb_regex_encoding($encoding);
+		return $result;
+	} else {
+		if (is_null($limit)) {
+			return split($pattern, $string);
+		} else {
+			return split($pattern, $string, $limit);
+		}
+	}
+}
+
+/**
  * This function adds a unicode modifier (u suffix) to a Perl-compatible regular expression depending on the specified encoding.
  * @param string $pcre					The Perl-compatible regular expression.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
@@ -1012,6 +1007,54 @@ function api_add_pcre_unicode_modifier($pcre, $encoding = null) {
 		$encoding = api_get_system_encoding();
 	}
 	return api_is_utf8($encoding) ? $pcre.'u' : $pcre;
+}
+
+/**
+ * ----------------------------------------------------------------------------
+ * Common sting operations with arrays
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Checks if a value exists in an array, a case insensitive version of in_array() function with extended multibyte support.
+ * @param mixed $needle					The searched value. If needle is a string, the comparison is done in a case-insensitive manner.
+ * @param array $haystack				The array.
+ * @param bool $strict (optional)		If is set to TRUE then the function will also check the types of the $needle in the $haystack. The default value if FALSE.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return bool							Returns TRUE if $needle is found in the array, FALSE otherwise.
+ * @link http://php.net/manual/en/function.in-array.php
+ */
+function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = null) {
+	if (is_array($needle)) {
+		foreach ($needle as $item) {
+			if (api_in_array_nocase($item, $haystack, $strict, $encoding)) return true;
+		}
+		return false;
+	}
+	if (!is_string($needle)) {
+		return in_array($needle, $haystack, $strict);
+	}
+	$needle = api_strtolower($needle, $encoding);
+	foreach ($haystack as $item) {
+		if ($strict && !is_string($item)) {
+			continue;
+		}
+		if (api_strtolower($item, $encoding) == $needle) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// This is a helper callback function for internal purposes.
+function _api_array_utf8_decode($variable, $encoding) {
+	if (is_array($variable)) {
+		return array_map('_api_array_utf8_decode', $variable, $encoding);
+	}
+    if (is_string($var)) {
+    	return api_utf8_decode($variable, $encoding);
+    }
+    return $variable;
 }
 
 /**
@@ -1090,37 +1133,6 @@ function api_strnatcmp($string1, $string2, $language = null, $encoding = null) {
 		}
 	}
 	return strnatcmp($string1, $string2);
-}
-
-/**
- * Checks if a value exists in an array, a case insensitive version of in_array() function with extended multibyte support.
- * @param mixed $needle					The searched value. If needle is a string, the comparison is done in a case-insensitive manner.
- * @param array $haystack				The array.
- * @param bool $strict (optional)		If is set to TRUE then the function will also check the types of the $needle in the $haystack. The default value if FALSE.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool							Returns TRUE if $needle is found in the array, FALSE otherwise.
- * @link http://php.net/manual/en/function.in-array.php
- */
-function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = null) {
-	if (is_array($needle)) {
-		foreach ($needle as $item) {
-			if (api_in_array_nocase($item, $haystack, $strict, $encoding)) return true;
-		}
-		return false;
-	}
-	if (!is_string($needle)) {
-		return in_array($needle, $haystack, $strict);
-	}
-	$needle = api_strtolower($needle, $encoding);
-	foreach ($haystack as $item) {
-		if ($strict && !is_string($item)) {
-			continue;
-		}
-		if (api_strtolower($item, $encoding) == $needle) {
-			return true;
-		}
-	}
-	return false;
 }
 
 // Returns an instance of Collator class (ICU) created for a specified language, for internal use.
@@ -2531,7 +2543,7 @@ function api_get_locale_from_language($language = null) {
  */
 function api_set_default_locale($locale = null) {
 	static $default_locale = 'en';
-	if (!empty($language)) {
+	if (!empty($locale)) {
 		$default_locale = $locale;
 		if (INTL_INSTALLED) {
 			return @locale_set_default($locale);

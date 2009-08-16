@@ -198,14 +198,7 @@ define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
 ==============================================================================
 */
 
-// Including extensions to the main API works in two different ways: 
-if (api_get_path(LIBRARY_PATH) == '/lib/' || api_get_path(LIBRARY_PATH) == 'lib/') {
-	// when we are running the installer script.
-	require_once 'multibyte_string_functions.lib.php';
-} else {
-	// when the system has been already installed, this is the usual way.
-	require_once api_get_path(LIBRARY_PATH).'multibyte_string_functions.lib.php';
-}
+require_once dirname(__FILE__).'/multibyte_string_functions.lib.php';
 
 /*
 ==============================================================================

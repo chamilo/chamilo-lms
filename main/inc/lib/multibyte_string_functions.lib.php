@@ -626,6 +626,41 @@ function api_strtolower($string, $encoding = null) {
 	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_strtolower(api_utf8_encode($string, $encoding), 'UTF-8'), $encoding);
 	}
+	elseif (api_is_utf8($encoding)) {
+		// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
+		$codepoints = api_utf8_to_unicode($string);
+		$length = count($codepoints);
+		$matched = false;
+		$result = array();
+		for ($i = 0 ; $i < $length; $i++) {
+			$codepoint = $codepoints[$i];
+			if ($codepoint < 128) {
+				$str = strtolower(chr($codepoint));
+				$strlen = api_byte_count($str);
+				for ($ii = 0 ; $ii < $strlen; $ii++) {
+					$lower = ord($str[$ii]);
+				}
+				$result[] = $lower;
+				$matched = true;
+			} else {
+				$matched = false;
+				$properties = _api_utf8_get_letter_case_properties($codepoint, 'upper');
+				if (!empty($properties)) {
+					foreach ($properties as $key => $value) {
+						if ($properties[$key]['upper'] == $codepoint && count($properties[$key]['lower'][0]) === 1) {
+							$result[] = $properties[$key]['lower'][0];
+							$matched = true;
+							break 1;
+						}
+					}
+				}
+			}
+			if ($matched === false) {
+				$result[] = $codepoint;
+			}
+		}
+		return api_utf8_from_unicode($result);
+	}
 	return strtolower($string);
 }
 
@@ -647,6 +682,79 @@ function api_strtoupper($string, $encoding = null) {
 	}
 	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_strtoupper(api_utf8_encode($string, $encoding), 'UTF-8'), $encoding);
+	}
+	elseif (api_is_utf8($encoding)) {
+		// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
+		$codepoints = api_utf8_to_unicode($string);
+		$length = count($codepoints);
+		$matched = false;
+		$replaced = array();
+		$result = array();
+		for ($i = 0 ; $i < $length; $i++) {
+			$codepoint = $codepoints[$i];
+			if ($codepoint < 128) {
+				$str = strtoupper(chr($codepoint));
+				$strlen = api_byte_count($str);
+				for ($ii = 0 ; $ii < $strlen; $ii++) {
+					$lower = ord($str[$ii]);
+				}
+				$result[] = $lower;
+				$matched = true;
+			} else {
+				$matched = false;
+				$properties = _api_utf8_get_letter_case_properties($codepoint);
+				$property_count = count($properties);
+				if (!empty($properties)) {
+					foreach ($properties as $key => $value) {
+						$matched = false;
+						$replace = 0;
+						if ($length > 1 && count($properties[$key]['lower']) > 1) {
+							$j = 0;
+							for ($ii = 0; $ii < count($properties[$key]['lower']); $ii++) {
+								$next_codepoint = $next_codepoints[$i + $ii];
+								if (isset($next_codepoint) && ($next_codepoint == $properties[$key]['lower'][$j + $ii])) {
+									$replace++;
+								}
+							}
+							if ($replace == count($properties[$key]['lower'])) {
+								$result[] = $properties[$key]['upper'];
+								$replaced = array_merge($replaced, array_values($properties[$key]['lower']));
+								$matched = true;
+								break 1;
+							}
+						} elseif ($length > 1 && $property_count > 1) {
+							$j = 0;
+							for ($ii = 1; $ii < $property_count; $ii++) {
+								$next_codepoint = $next_codepoints[$i + $ii - 1];
+								if (in_array($next_codepoint, $properties[$ii]['lower'])) {
+									for ($jj = 0; $jj < count($properties[$ii]['lower']); $jj++) {
+										$next_codepoint = $next_codepoints[$i + $jj];
+										if (isset($next_codepoint) && ($next_codepoint == $properties[$ii]['lower'][$j + $jj])) {
+											$replace++;
+										}
+									}
+									if ($replace == count($properties[$ii]['lower'])) {
+										$result[] = $properties[$ii]['upper'];
+										$replaced = array_merge($replaced, array_values($properties[$ii]['lower']));
+										$matched = true;
+										break 2;
+									}
+								}
+							}
+						}
+						if ($properties[$key]['lower'][0] == $codepoint) {
+							$result[] = $properties[$key]['upper'];
+							$matched = true;
+							break 1;
+						}
+					}
+				}
+			}
+			if ($matched === false && !in_array($codepoint, $replaced, true)) {
+				$result[] = $codepoint;
+			}
+		}
+		return api_utf8_from_unicode($result);
 	}
 	return strtoupper($string);
 }
@@ -803,6 +911,292 @@ function api_ucwords($string, $encoding = null) {
 		return api_utf8_decode(@mb_convert_case(api_utf8_encode($string, $encoding), MB_CASE_TITLE, 'UTF-8'), $encoding);
 	}
 	return ucwords($string);
+}
+
+/**
+ * Takes an UTF-8 string and returns an array of ints representing the 
+ * Unicode characters. Astral planes are supported ie. the ints in the
+ * output can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
+ * are not allowed.
+ * @param string $string				The UTF-8 encoded string.
+ * @param string $unknown (optional)	A US-ASCII character to represent invalid bytes.
+ * @return array						Returns an array of unicode code points.
+ * @author Henri Sivonen, mailto:hsivonen@iki.fi
+ * @link http://hsivonen.iki.fi/php-utf8/
+ * @author Ivan Tcholakov, 2009, modifications for the Dokeos LMS.
+*/
+function api_utf8_to_unicode($string, $unknown = '?') {
+	if (!empty($unknown)) {
+		$unknown = ord($unknown[0]);
+	}
+	$state = 0;			// cached expected number of octets after the current octet
+						// until the beginning of the next UTF8 character sequence
+	$codepoint  = 0;	// cached Unicode character
+	$bytes = 1;			// cached expected number of octets in the current sequence
+
+	$result = array();
+
+	$len = api_byte_count($string);
+
+	for ($i = 0; $i < $len; $i++) {
+
+		$byte = ord($string[$i]);
+
+		if ($state == 0) {
+
+			// When mState is zero we expect either a US-ASCII character or a
+			// multi-octet sequence.
+			if (0 == (0x80 & ($byte))) {
+				// US-ASCII, pass straight through.
+				$result[] = $byte;
+				$bytes = 1;
+
+			} else if (0xC0 == (0xE0 & ($byte))) {
+				// First octet of 2 octet sequence
+				$codepoint = ($byte);
+				$codepoint = ($codepoint & 0x1F) << 6;
+				$state = 1;
+				$bytes = 2;
+
+			} else if (0xE0 == (0xF0 & ($byte))) {
+				// First octet of 3 octet sequence
+				$codepoint = ($byte);
+				$codepoint = ($codepoint & 0x0F) << 12;
+				$state = 2;
+				$bytes = 3;
+
+			} else if (0xF0 == (0xF8 & ($byte))) {
+				// First octet of 4 octet sequence
+				$codepoint = ($byte);
+				$codepoint = ($codepoint & 0x07) << 18;
+				$state = 3;
+				$bytes = 4;
+
+            } else if (0xF8 == (0xFC & ($byte))) {
+				// First octet of 5 octet sequence.
+				// This is illegal because the encoded codepoint must be either
+				// (a) not the shortest form or
+				// (b) outside the Unicode range of 0-0x10FFFF.
+				// Rather than trying to resynchronize, we will carry on until the end
+				// of the sequence and let the later error handling code catch it.
+                $codepoint = ($byte);
+                $codepoint = ($codepoint & 0x03) << 24;
+                $state = 4;
+                $bytes = 5;
+
+			} else if (0xFC == (0xFE & ($byte))) {
+				// First octet of 6 octet sequence, see comments for 5 octet sequence.
+				$codepoint = ($byte);
+				$codepoint = ($codepoint & 1) << 30;
+				$state = 5;
+				$bytes = 6;
+
+			} else {
+				// Current octet is neither in the US-ASCII range nor a legal first
+				// octet of a multi-octet sequence.
+				$state = 0;
+				$codepoint = 0;
+				$bytes = 1;
+				if (!empty($unknown)) {
+					$result[] = $unknown;
+				}
+				continue ;
+			}
+
+		} else {
+
+			// When mState is non-zero, we expect a continuation of the multi-octet
+			// sequence
+			if (0x80 == (0xC0 & ($byte))) {
+
+				// Legal continuation.
+				$shift = ($state - 1) * 6;
+				$tmp = $byte;
+				$tmp = ($tmp & 0x0000003F) << $shift;
+				$codepoint |= $tmp;
+
+				// End of the multi-octet sequence. mUcs4 now contains the final
+				// Unicode codepoint to be output
+                if (0 == --$state) {
+
+					// Check for illegal sequences and codepoints.
+					// From Unicode 3.1, non-shortest form is illegal
+					if (((2 == $bytes) && ($codepoint < 0x0080)) ||
+						((3 == $bytes) && ($codepoint < 0x0800)) ||
+						((4 == $bytes) && ($codepoint < 0x10000)) ||
+						(4 < $bytes) ||
+						// From Unicode 3.2, surrogate characters are illegal
+						(($codepoint & 0xFFFFF800) == 0xD800) ||
+						// Codepoints outside the Unicode range are illegal
+						($codepoint > 0x10FFFF)) {
+
+						$state = 0;
+						$codepoint = 0;
+						$bytes = 1;
+						if (!empty($unknown)) {
+							$result[] = $unknown;
+						}
+						continue ;
+					}
+
+					if (0xFEFF != $codepoint) {
+						// BOM is legal but we don't want to output it
+						$result[] = $codepoint;
+					}
+
+					// Initialize UTF8 cache
+					$state = 0;
+					$codepoint = 0;
+					$bytes = 1;
+				}
+
+			} else {
+
+				// ((0xC0 & (*in) != 0x80) && (mState != 0))
+				// Incomplete multi-octet sequence.
+				$state = 0;
+				$codepoint = 0;
+				$bytes = 1;
+				if (!empty($unknown)) {
+					$result[] = $unknown;
+				}
+			}
+		}
+	}
+	return $result;
+}
+
+/**
+ * Takes an array of ints representing the Unicode characters and returns 
+ * a UTF-8 string. Astral planes are supported ie. the ints in the
+ * input can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
+ * are not allowed.
+ * @param array $array					An array of unicode code points representing a string
+ * @param string $unknown (optional)	A US-ASCII character to represent invalid bytes.
+ * @return string						Returns a UTF-8 string constructed using the given code points
+ * @author Henri Sivonen, mailto:hsivonen@iki.fi
+ * @link http://hsivonen.iki.fi/php-utf8/
+ * @author Ivan Tcholakov, 2009, modifications for the Dokeos LMS.
+*/
+function api_utf8_from_unicode($array, $unknown = '?') {
+
+	foreach (array_keys($array) as $i) {
+
+		$codepoint = $array[$i];
+
+		// ASCII range (including control chars)
+		if ( ($codepoint >= 0) && ($codepoint <= 0x007f) ) {
+
+			$array[$i] = chr($codepoint);
+
+		// 2 byte sequence
+		} else if ($codepoint <= 0x07ff) {
+
+			$array[$i] = chr(0xc0 | ($codepoint >> 6)) . chr(0x80 | ($codepoint & 0x003f));
+
+		// Byte order mark (skip)
+		} else if($codepoint == 0xFEFF) {
+
+			// nop -- zap the BOM
+			$array[$i] = '';
+        
+		// Test for illegal surrogates
+		} else if ($codepoint >= 0xD800 && $codepoint <= 0xDFFF) {
+
+			// found a surrogate
+			$array[$i] = $unknown;
+
+		// 3 byte sequence
+		} else if ($codepoint <= 0xffff) {
+
+			$array[$i] = chr(0xe0 | ($codepoint >> 12)) . chr(0x80 | (($codepoint >> 6) & 0x003f)) . chr(0x80 | ($codepoint & 0x003f));
+
+		// 4 byte sequence
+		} else if ($codepoint <= 0x10ffff) {
+
+			$array[$i] = chr(0xf0 | ($codepoint >> 18)) . chr(0x80 | (($codepoint >> 12) & 0x3f)) . chr(0x80 | (($codepoint >> 6) & 0x3f)) . chr(0x80 | ($codepoint & 0x3f));
+
+		} else {
+
+ 			// out of range
+			$array[$i] = $unknown;
+		}
+	}
+
+	return implode($array);
+}
+
+// Reads case folding properties about a given character from a file-based "database".
+// For internal use in this API only.
+function _api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
+	static $config = array();
+	static $range = array();
+
+	if (!isset($range[$codepoint])) {
+		if ($codepoint > 128 && $codepoint < 256)  {
+			$range[$codepoint] = '0080_00ff'; // Latin-1 Supplement
+		} elseif ($codepoint < 384) {
+			$range[$codepoint] = '0100_017f'; // Latin Extended-A
+		} elseif ($codepoint < 592) {
+			$range[$codepoint] = '0180_024F'; // Latin Extended-B
+		} elseif ($codepoint < 688) {
+			$range[$codepoint] = '0250_02af'; // IPA Extensions
+		} elseif ($codepoint >= 880 && $codepoint < 1024) {
+			$range[$codepoint] = '0370_03ff'; // Greek and Coptic
+		} elseif ($codepoint < 1280) {
+			$range[$codepoint] = '0400_04ff'; // Cyrillic
+		} elseif ($codepoint < 1328) {
+			$range[$codepoint] = '0500_052f'; // Cyrillic Supplement
+		} elseif ($codepoint < 1424) {
+			$range[$codepoint] = '0530_058f'; // Armenian
+		} elseif ($codepoint >= 7680 && $codepoint < 7936) {
+			$range[$codepoint] = '1e00_1eff'; // Latin Extended Additional
+		} elseif ($codepoint < 8192) {
+			$range[$codepoint] = '1f00_1fff'; // Greek Extended
+		} elseif ($codepoint >= 8448 && $codepoint < 8528) {
+			$range[$codepoint] = '2100_214f'; // Letterlike Symbols
+		} elseif ($codepoint < 8592) {
+			$range[$codepoint] = '2150_218f'; // Number Forms
+		} elseif ($codepoint >= 9312 && $codepoint < 9472) {
+			$range[$codepoint] = '2460_24ff'; // Enclosed Alphanumerics
+		} elseif ($codepoint >= 11264 && $codepoint < 11360) {
+			$range[$codepoint] = '2c00_2c5f'; // Glagolitic
+		} elseif ($codepoint < 11392) {
+			$range[$codepoint] = '2c60_2c7f'; // Latin Extended-C
+		} elseif ($codepoint < 11520) {
+			$range[$codepoint] = '2c80_2cff'; // Coptic
+		} elseif ($codepoint >= 65280 && $codepoint < 65520) {
+			$range[$codepoint] = 'ff00_ffef'; // Halfwidth and Fullwidth Forms
+		} else {
+			$range[$codepoint] = false;
+		}
+
+		if ($range[$codepoint] === false) {
+			return null;
+		}
+		if (!isset($config[$range[$codepoint]])) {
+			$file = dirname(__FILE__) . '/multibyte_string_database/casefolding/' . $range[$codepoint] . '.php';
+			if (file_exists($file)) {
+				include $file;
+			}
+		}
+	}
+
+	if ($range[$codepoint] === false || !isset($config[$range[$codepoint]])) {
+		return null;
+	}
+
+	$result = array();
+	$count = count($config[$range[$codepoint]]);
+
+	for ($i = 0; $i < $count; $i++) {
+		if ($type === 'lower' && $config[$range[$codepoint]][$i][$type][0] === $codepoint) {
+			$result[] = $config[$range[$codepoint]][$i];
+		} elseif ($type === 'upper' && $config[$range[$codepoint]][$i][$type] === $codepoint) {
+			$result[] = $config[$range[$codepoint]][$i];
+		}
+	}
+	return $result;
 }
 
 /**
@@ -1893,13 +2287,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
 				$bank = $ord >> 8;
 				// Check if we need to load a new bank
 				if (!isset($map[$bank])) {
-					if (api_get_path(LIBRARY_PATH) == '/lib/') {
-						// Include the bank when we are running the installer script.
-						$file = 'transliteration_database/' . sprintf('x%02x', $bank) . '.php';
-					} else {
-						// Include the bank when the system has been already installed, this is the usual way.
-						$file = api_get_path(LIBRARY_PATH).'transliteration_database/' . sprintf('x%02x', $bank) . '.php';
-					}
+					$file = dirname(__FILE__) . '/multibyte_string_database/transliteration/' . sprintf('x%02x', $bank) . '.php';
 					if (file_exists($file)) {
 						$map[$bank] = include ($file);
 					} else {

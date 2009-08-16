@@ -57,23 +57,14 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
 		return false;
 }
 
-
-function generate_course_code($course_title)
+// TODO: Such a function might be useful in other places too. It might be moved in the CourseManager class.
+// Also, the function might be upgraded for avoiding code duplications.
+function generate_course_code($course_title, $encoding = null)
 {
-	global $charset;
-
-	//$wantedCode = strtr($course_title, "�����������������������������������������������������������", "AAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
-	//$wantedCode = substr(str_replace(
-	//	array('Á','À','Â','Ä','Ã','Å','Æ' ,'Ç','É','È','Ê','Ë','Í','Ì','Î','Ï','Ĩ','Ó','Ò','Ô','Ö','Õ','Ø' ,'Œ' ,'Ú','Ù','Û','Ü','Ũ','Ÿ','Ý','Ð','Ñ','ß' ,'à','á','â','ä','ã','å','æ' ,'ç','Š','é','è','ê','ë','ì','í','î','ï','ĩ','ò','ó','ô','ö','õ','ø' ,'œ' ,'ú','ù','û','ü','ũ','ÿ','ý','ñ','š','€'),
-	//	array('A','A','A','A','A','A','Ae','C','E','E','E','E','I','I','I','I','I','O','O','O','O','O','Oe','Oe','U','U','U','U','U','Y','Y','D','N','SS','a','a','a','a','a','a','ae','c','S','e','e','e','e','i','i','i','i','i','o','o','o','o','o','oe','oe','u','u','u','u','u','y','y','n','š','Euro'),
-	//	$course_title)
-	//	,0,20);
-
-	$string = api_htmlentities(api_strtolower(str_replace('"','',$course_title), $charset), ENT_QUOTES, $charset);
-   	$string = strtoupper(preg_replace("/&(.)(acute|grave|cedil|circ|ring|tilde|uml|slash|elig|Elig|mp);/", "$1", $string));
-   	$string = preg_replace(api_add_pcre_unicode_modifier("/[^A-Z0-9]/", $charset), "", api_html_entity_decode($string, ENT_QUOTES, $charset));
-
-	return $string;
+	if (empty($encoding)) {
+		$encoding = api_get_system_encoding();
+	}
+	return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, $encoding))), 0, 20);
 }
 
 

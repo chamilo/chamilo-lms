@@ -185,7 +185,7 @@ class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
             // name has unbalanced square brackets. Dunno whether we really
             // need this after the fix for #8123, but I'm wary of making big
             // changes to this code.  
-            preg_match(api_add_pcre_unicode_modifier('/([^]]*)\\[([^]]*)\\]/'), $ret['name'], $matches);
+            api_preg_match('/([^]]*)\\[([^]]*)\\]/', $ret['name'], $matches);
             if (isset($matches[1])) {
                 $sKeysSub = api_substr_replace($ret['name'], '', 0, api_strlen($matches[1]));
                 $sKeysSub = str_replace(

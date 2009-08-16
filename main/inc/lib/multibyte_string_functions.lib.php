@@ -349,7 +349,7 @@ function api_str_ireplace($search, $replace, $subject, & $count = null, $encodin
 	$subject_lower = api_strtolower($subject, $encoding);
 	$total_matched_strlen = 0;
 	$i = 0;
-	while (preg_match(api_add_pcre_unicode_modifier('/(.*?)'.preg_quote($search, '/').'/s', $encoding), $subject_lower, $matches)) {
+	while (api_preg_match('/(.*?)'.preg_quote($search, '/').'/s', $subject_lower, $matches, 0, 0, $encoding)) {
 		$matched_strlen = api_strlen($matches[0], $encoding);
 		$subject_lower = api_substr($subject_lower, $matched_strlen, api_strlen($subject_lower, $encoding), $encoding);
 		$offset = $total_matched_strlen + api_strlen($matches[1], $encoding) + ($i * (api_strlen($replace, $encoding) - 1));

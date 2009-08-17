@@ -17,8 +17,193 @@
  * ----------------------------------------------------------------------------
  */
 
+/**
+ * Takes an UTF-8 string and returns an array of ints representing the 
+ * Unicode characters. Astral planes are supported ie. the ints in the
+ * output can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
+ * are not allowed.
+ * @param string $string				The UTF-8 encoded string.
+ * @param string $unknown (optional)	A US-ASCII character to represent invalid bytes.
+ * @return array						Returns an array of unicode code points.
+ * @author Henri Sivonen, mailto:hsivonen@iki.fi
+ * @link http://hsivonen.iki.fi/php-utf8/
+ * @author Ivan Tcholakov, 2009, modifications for the Dokeos LMS.
+*/
+function _api_utf8_to_unicode($string, $unknown = '?') {
+	if (!empty($unknown)) {
+		$unknown = ord($unknown[0]);
+	}
+	$state = 0;			// cached expected number of octets after the current octet
+						// until the beginning of the next UTF8 character sequence
+	$codepoint  = 0;	// cached Unicode character
+	$bytes = 1;			// cached expected number of octets in the current sequence
+	$result = array();
+	$len = api_byte_count($string);
+	for ($i = 0; $i < $len; $i++) {
+		$byte = ord($string[$i]);
+		if ($state == 0) {
+			// When state is zero we expect either a US-ASCII character or a
+			// multi-octet sequence.
+			if (0 == (0x80 & ($byte))) {
+				// US-ASCII, pass straight through.
+				$result[] = $byte;
+				$bytes = 1;
+			} else if (0xC0 == (0xE0 & ($byte))) {
+				// First octet of 2 octet sequence
+				$codepoint = ($byte);
+				$codepoint = ($codepoint & 0x1F) << 6;
+				$state = 1;
+				$bytes = 2;
+			} else if (0xE0 == (0xF0 & ($byte))) {
+				// First octet of 3 octet sequence
+				$codepoint = ($byte);
+				$codepoint = ($codepoint & 0x0F) << 12;
+				$state = 2;
+				$bytes = 3;
+			} else if (0xF0 == (0xF8 & ($byte))) {
+				// First octet of 4 octet sequence
+				$codepoint = ($byte);
+				$codepoint = ($codepoint & 0x07) << 18;
+				$state = 3;
+				$bytes = 4;
+            } else if (0xF8 == (0xFC & ($byte))) {
+				// First octet of 5 octet sequence.
+				// This is illegal because the encoded codepoint must be either
+				// (a) not the shortest form or
+				// (b) outside the Unicode range of 0-0x10FFFF.
+				// Rather than trying to resynchronize, we will carry on until the end
+				// of the sequence and let the later error handling code catch it.
+                $codepoint = ($byte);
+                $codepoint = ($codepoint & 0x03) << 24;
+                $state = 4;
+                $bytes = 5;
+			} else if (0xFC == (0xFE & ($byte))) {
+				// First octet of 6 octet sequence, see comments for 5 octet sequence.
+				$codepoint = ($byte);
+				$codepoint = ($codepoint & 1) << 30;
+				$state = 5;
+				$bytes = 6;
+			} else {
+				// Current octet is neither in the US-ASCII range nor a legal first
+				// octet of a multi-octet sequence.
+				$state = 0;
+				$codepoint = 0;
+				$bytes = 1;
+				if (!empty($unknown)) {
+					$result[] = $unknown;
+				}
+				continue ;
+			}
+		} else {
+			// When state is non-zero, we expect a continuation of the multi-octet
+			// sequence
+			if (0x80 == (0xC0 & ($byte))) {
+				// Legal continuation.
+				$shift = ($state - 1) * 6;
+				$tmp = $byte;
+				$tmp = ($tmp & 0x0000003F) << $shift;
+				$codepoint |= $tmp;
+				// End of the multi-octet sequence. $codepoint now contains the final
+				// Unicode codepoint to be output
+                if (0 == --$state) {
+					// Check for illegal sequences and codepoints.
+					// From Unicode 3.1, non-shortest form is illegal
+					if (((2 == $bytes) && ($codepoint < 0x0080)) ||
+						((3 == $bytes) && ($codepoint < 0x0800)) ||
+						((4 == $bytes) && ($codepoint < 0x10000)) ||
+						(4 < $bytes) ||
+						// From Unicode 3.2, surrogate characters are illegal
+						(($codepoint & 0xFFFFF800) == 0xD800) ||
+						// Codepoints outside the Unicode range are illegal
+						($codepoint > 0x10FFFF)) {
+						$state = 0;
+						$codepoint = 0;
+						$bytes = 1;
+						if (!empty($unknown)) {
+							$result[] = $unknown;
+						}
+						continue ;
+					}
+					if (0xFEFF != $codepoint) {
+						// BOM is legal but we don't want to output it
+						$result[] = $codepoint;
+					}
+					// Initialize UTF8 cache
+					$state = 0;
+					$codepoint = 0;
+					$bytes = 1;
+				}
+			} else {
+				// ((0xC0 & (*in) != 0x80) && (state != 0))
+				// Incomplete multi-octet sequence.
+				$state = 0;
+				$codepoint = 0;
+				$bytes = 1;
+				if (!empty($unknown)) {
+					$result[] = $unknown;
+				}
+			}
+		}
+	}
+	return $result;
+}
+
+/**
+ * Takes an array of ints representing the Unicode characters and returns 
+ * a UTF-8 string. Astral planes are supported ie. the ints in the
+ * input can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
+ * are not allowed.
+ * @param array $array					An array of unicode code points representing a string.
+ * @param string $unknown (optional)	A US-ASCII character to represent invalid bytes.
+ * @return string						Returns a UTF-8 string constructed using the given code points.
+ * @author Henri Sivonen, mailto:hsivonen@iki.fi
+ * @link http://hsivonen.iki.fi/php-utf8/
+ * @author Ivan Tcholakov, 2009, modifications for the Dokeos LMS.
+ * @see _api_utf8_from_unicodepoint()
+*/
+function _api_utf8_from_unicode($array, $unknown = '?') {
+	foreach ($array as $i => &$codepoint) {
+		$codepoint = _api_utf8_from_unicodepoint($codepoint, $unknown);
+	}
+	return implode($array);
+}
+
+/**
+ * Takes an integer value and returns its correspondent representing the Unicode character.
+ * @param array $array					An array of unicode code points representing a string
+ * @param string $unknown (optional)	A US-ASCII character to represent invalid bytes.
+ * @return string						Returns the corresponding  UTF-8 character.
+ * @see _api_utf8_from_unicode()
+ */
+function _api_utf8_from_unicodepoint($codepoint, $unknown = '?') {
+	// ASCII range (including control chars)
+	if ( ($codepoint >= 0) && ($codepoint <= 0x007f) ) {
+		$result = chr($codepoint);
+	// 2 byte sequence
+	} else if ($codepoint <= 0x07ff) {
+		$result = chr(0xc0 | ($codepoint >> 6)) . chr(0x80 | ($codepoint & 0x003f));
+	// Byte order mark (skip)
+	} else if($codepoint == 0xFEFF) {
+		// nop -- zap the BOM
+		$result = '';
+	// Test for illegal surrogates
+	} else if ($codepoint >= 0xD800 && $codepoint <= 0xDFFF) {
+		// found a surrogate
+		$result = $unknown;
+	// 3 byte sequence
+	} else if ($codepoint <= 0xffff) {
+		$result = chr(0xe0 | ($codepoint >> 12)) . chr(0x80 | (($codepoint >> 6) & 0x003f)) . chr(0x80 | ($codepoint & 0x003f));
+	// 4 byte sequence
+	} else if ($codepoint <= 0x10ffff) {
+		$result = chr(0xf0 | ($codepoint >> 18)) . chr(0x80 | (($codepoint >> 12) & 0x3f)) . chr(0x80 | (($codepoint >> 6) & 0x3f)) . chr(0x80 | ($codepoint & 0x3f));
+	} else {
+ 		// out of range
+		$result = $unknown;
+	}
+	return $result;
+}
+
 // Reads case folding properties about a given character from a file-based "database".
-// For internal use in this API only.
 function _api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
 	static $config = array();
 	static $range = array();

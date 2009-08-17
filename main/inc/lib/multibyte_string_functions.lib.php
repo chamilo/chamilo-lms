@@ -224,16 +224,30 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
 	if (!api_is_utf8($encoding) && api_html_entity_supports($encoding)) {
 		return htmlentities($string, $quote_style, $encoding);
 	}
-	if (!api_is_encoding_supported($encoding)) {
-		return $string;
+	if (api_mb_supports($encoding) || api_iconv_supports($encoding)) {
+		$string = api_convert_encoding(api_utf8_encode($string, $encoding), 'HTML-ENTITIES', 'UTF-8');
+	} else {
+		if (api_is_utf8($encoding)) {
+			$result = _api_utf8_to_unicode($string);
+			foreach ($result as $key => &$value) {
+				if ($value < 128) {
+					$value = chr($value);
+				} else {
+					$value = '&#'.$value.';';
+				}
+			}
+			$string = implode($result);
+		} else {
+			// Here the function gives up.
+			return $string;
+		}
 	}
-	$string = api_convert_encoding(api_utf8_encode($string, $encoding), 'HTML-ENTITIES', 'UTF-8');
 	switch($quote_style) {
 		case ENT_COMPAT:
-			$string = str_replace("'", '&quot;', $string);
+			$string = str_replace('\'', '&quot;', $string);
 			break;
 		case ENT_QUOTES:
-			$string = str_replace("'", '&#039;', str_replace('"', '&quot;', $string));
+			$string = str_replace(array('\'', '"'), array('&#039;', '&quot;'), $string);
 			break;
 	}
 	return $string;
@@ -631,7 +645,7 @@ function api_strtolower($string, $encoding = null) {
 	}
 	elseif (api_is_utf8($encoding)) {
 		// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
-		$codepoints = api_utf8_to_unicode($string);
+		$codepoints = _api_utf8_to_unicode($string);
 		$length = count($codepoints);
 		$matched = false;
 		$result = array();
@@ -662,7 +676,7 @@ function api_strtolower($string, $encoding = null) {
 				$result[] = $codepoint;
 			}
 		}
-		return api_utf8_from_unicode($result);
+		return _api_utf8_from_unicode($result);
 	}
 	return strtolower($string);
 }
@@ -688,7 +702,7 @@ function api_strtoupper($string, $encoding = null) {
 	}
 	elseif (api_is_utf8($encoding)) {
 		// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
-		$codepoints = api_utf8_to_unicode($string);
+		$codepoints = _api_utf8_to_unicode($string);
 		$length = count($codepoints);
 		$matched = false;
 		$replaced = array();
@@ -757,7 +771,7 @@ function api_strtoupper($string, $encoding = null) {
 				$result[] = $codepoint;
 			}
 		}
-		return api_utf8_from_unicode($result);
+		return _api_utf8_from_unicode($result);
 	}
 	return strtoupper($string);
 }
@@ -916,218 +930,6 @@ function api_ucwords($string, $encoding = null) {
 	return ucwords($string);
 }
 
-/**
- * Takes an UTF-8 string and returns an array of ints representing the 
- * Unicode characters. Astral planes are supported ie. the ints in the
- * output can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
- * are not allowed.
- * @param string $string				The UTF-8 encoded string.
- * @param string $unknown (optional)	A US-ASCII character to represent invalid bytes.
- * @return array						Returns an array of unicode code points.
- * @author Henri Sivonen, mailto:hsivonen@iki.fi
- * @link http://hsivonen.iki.fi/php-utf8/
- * @author Ivan Tcholakov, 2009, modifications for the Dokeos LMS.
-*/
-function api_utf8_to_unicode($string, $unknown = '?') {
-	if (!empty($unknown)) {
-		$unknown = ord($unknown[0]);
-	}
-	$state = 0;			// cached expected number of octets after the current octet
-						// until the beginning of the next UTF8 character sequence
-	$codepoint  = 0;	// cached Unicode character
-	$bytes = 1;			// cached expected number of octets in the current sequence
-
-	$result = array();
-
-	$len = api_byte_count($string);
-
-	for ($i = 0; $i < $len; $i++) {
-
-		$byte = ord($string[$i]);
-
-		if ($state == 0) {
-
-			// When mState is zero we expect either a US-ASCII character or a
-			// multi-octet sequence.
-			if (0 == (0x80 & ($byte))) {
-				// US-ASCII, pass straight through.
-				$result[] = $byte;
-				$bytes = 1;
-
-			} else if (0xC0 == (0xE0 & ($byte))) {
-				// First octet of 2 octet sequence
-				$codepoint = ($byte);
-				$codepoint = ($codepoint & 0x1F) << 6;
-				$state = 1;
-				$bytes = 2;
-
-			} else if (0xE0 == (0xF0 & ($byte))) {
-				// First octet of 3 octet sequence
-				$codepoint = ($byte);
-				$codepoint = ($codepoint & 0x0F) << 12;
-				$state = 2;
-				$bytes = 3;
-
-			} else if (0xF0 == (0xF8 & ($byte))) {
-				// First octet of 4 octet sequence
-				$codepoint = ($byte);
-				$codepoint = ($codepoint & 0x07) << 18;
-				$state = 3;
-				$bytes = 4;
-
-            } else if (0xF8 == (0xFC & ($byte))) {
-				// First octet of 5 octet sequence.
-				// This is illegal because the encoded codepoint must be either
-				// (a) not the shortest form or
-				// (b) outside the Unicode range of 0-0x10FFFF.
-				// Rather than trying to resynchronize, we will carry on until the end
-				// of the sequence and let the later error handling code catch it.
-                $codepoint = ($byte);
-                $codepoint = ($codepoint & 0x03) << 24;
-                $state = 4;
-                $bytes = 5;
-
-			} else if (0xFC == (0xFE & ($byte))) {
-				// First octet of 6 octet sequence, see comments for 5 octet sequence.
-				$codepoint = ($byte);
-				$codepoint = ($codepoint & 1) << 30;
-				$state = 5;
-				$bytes = 6;
-
-			} else {
-				// Current octet is neither in the US-ASCII range nor a legal first
-				// octet of a multi-octet sequence.
-				$state = 0;
-				$codepoint = 0;
-				$bytes = 1;
-				if (!empty($unknown)) {
-					$result[] = $unknown;
-				}
-				continue ;
-			}
-
-		} else {
-
-			// When mState is non-zero, we expect a continuation of the multi-octet
-			// sequence
-			if (0x80 == (0xC0 & ($byte))) {
-
-				// Legal continuation.
-				$shift = ($state - 1) * 6;
-				$tmp = $byte;
-				$tmp = ($tmp & 0x0000003F) << $shift;
-				$codepoint |= $tmp;
-
-				// End of the multi-octet sequence. mUcs4 now contains the final
-				// Unicode codepoint to be output
-                if (0 == --$state) {
-
-					// Check for illegal sequences and codepoints.
-					// From Unicode 3.1, non-shortest form is illegal
-					if (((2 == $bytes) && ($codepoint < 0x0080)) ||
-						((3 == $bytes) && ($codepoint < 0x0800)) ||
-						((4 == $bytes) && ($codepoint < 0x10000)) ||
-						(4 < $bytes) ||
-						// From Unicode 3.2, surrogate characters are illegal
-						(($codepoint & 0xFFFFF800) == 0xD800) ||
-						// Codepoints outside the Unicode range are illegal
-						($codepoint > 0x10FFFF)) {
-
-						$state = 0;
-						$codepoint = 0;
-						$bytes = 1;
-						if (!empty($unknown)) {
-							$result[] = $unknown;
-						}
-						continue ;
-					}
-
-					if (0xFEFF != $codepoint) {
-						// BOM is legal but we don't want to output it
-						$result[] = $codepoint;
-					}
-
-					// Initialize UTF8 cache
-					$state = 0;
-					$codepoint = 0;
-					$bytes = 1;
-				}
-
-			} else {
-
-				// ((0xC0 & (*in) != 0x80) && (mState != 0))
-				// Incomplete multi-octet sequence.
-				$state = 0;
-				$codepoint = 0;
-				$bytes = 1;
-				if (!empty($unknown)) {
-					$result[] = $unknown;
-				}
-			}
-		}
-	}
-	return $result;
-}
-
-/**
- * Takes an array of ints representing the Unicode characters and returns 
- * a UTF-8 string. Astral planes are supported ie. the ints in the
- * input can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
- * are not allowed.
- * @param array $array					An array of unicode code points representing a string
- * @param string $unknown (optional)	A US-ASCII character to represent invalid bytes.
- * @return string						Returns a UTF-8 string constructed using the given code points
- * @author Henri Sivonen, mailto:hsivonen@iki.fi
- * @link http://hsivonen.iki.fi/php-utf8/
- * @author Ivan Tcholakov, 2009, modifications for the Dokeos LMS.
-*/
-function api_utf8_from_unicode($array, $unknown = '?') {
-
-	foreach (array_keys($array) as $i) {
-
-		$codepoint = $array[$i];
-
-		// ASCII range (including control chars)
-		if ( ($codepoint >= 0) && ($codepoint <= 0x007f) ) {
-
-			$array[$i] = chr($codepoint);
-
-		// 2 byte sequence
-		} else if ($codepoint <= 0x07ff) {
-
-			$array[$i] = chr(0xc0 | ($codepoint >> 6)) . chr(0x80 | ($codepoint & 0x003f));
-
-		// Byte order mark (skip)
-		} else if($codepoint == 0xFEFF) {
-
-			// nop -- zap the BOM
-			$array[$i] = '';
-        
-		// Test for illegal surrogates
-		} else if ($codepoint >= 0xD800 && $codepoint <= 0xDFFF) {
-
-			// found a surrogate
-			$array[$i] = $unknown;
-
-		// 3 byte sequence
-		} else if ($codepoint <= 0xffff) {
-
-			$array[$i] = chr(0xe0 | ($codepoint >> 12)) . chr(0x80 | (($codepoint >> 6) & 0x003f)) . chr(0x80 | ($codepoint & 0x003f));
-
-		// 4 byte sequence
-		} else if ($codepoint <= 0x10ffff) {
-
-			$array[$i] = chr(0xf0 | ($codepoint >> 18)) . chr(0x80 | (($codepoint >> 12) & 0x3f)) . chr(0x80 | (($codepoint >> 6) & 0x3f)) . chr(0x80 | ($codepoint & 0x3f));
-
-		} else {
-
- 			// out of range
-			$array[$i] = $unknown;
-		}
-	}
-
-	return implode($array);
-}
 
 
 /**
@@ -2035,21 +1837,16 @@ function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
  */
 function api_transliterate($string, $unknown = '?', $from_encoding = null) {
 	static $map = array();
-
 	$string = api_utf8_encode($string, $from_encoding);
-
 	// Screen out some characters that eg won't be allowed in XML.
 	$string = preg_replace('/[\x00-\x08\x0b\x0c\x0e-\x1f]/', $unknown, $string);
-
 	// ASCII is always valid NFC!
 	// If we're only ever given plain ASCII, we can avoid the overhead
 	// of initializing the decomposition tables by skipping out early.
 	if (api_is_valid_ascii($string)) {
 		return $string;
 	}
-
 	static $tail_bytes;
-
 	if (!isset($tail_bytes)) {
 		// Each UTF-8 head byte is followed by a certain
 		// number of tail bytes.
@@ -2084,7 +1881,6 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
 	// Don't chop up Unicode areas for punctuation, though,
 	// that wastes energy.
 	preg_match_all('/[\x00-\x7f]+|[\x80-\xff][\x00-\x40\x5b-\x5f\x7b-\xff]*/', $string, $matches);
-
 	$result = '';
 	foreach ($matches[0] as $str) {
 		if ($str{0} < "\x80") {
@@ -2093,19 +1889,16 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
 			$result .= $str;
 			continue;
 		}
-
 		// We'll have to examine the chunk byte by byte to ensure
 		// that it consists of valid UTF-8 sequences, and to see
 		// if any of them might not be normalized.
 		//
 		// Since PHP is not the fastest language on earth, some of
 		// this code is a little ugly with inner loop optimizations.
-
 		$head = '';
 		$chunk = api_byte_count($str);
 		// Counting down is faster. I'm *so* sorry.
 		$len = $chunk + 1;
-
 		for ($i = -1; --$len; ) {
 			$c = $str{++$i};
 			if ($remaining = $tail_bytes[$c]) {
@@ -2134,7 +1927,6 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
 						}
 					}
 				} while (--$remaining);
-
 				$n = ord($head);
 				if ($n <= 0xdf) {
 					$ord = ($n - 192) * 64 + (ord($sequence{1}) - 128);
@@ -2151,7 +1943,6 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
 				else if ($n <= 0xfd) {
 					$ord = ($n - 252) * 1073741824 + (ord($sequence{1}) - 128) * 16777216 + (ord($sequence{2}) - 128) * 262144 + (ord($sequence{3}) - 128) * 4096 + (ord($sequence{4}) - 128) * 64 + (ord($sequence{5}) - 128);
 				}
-
 				// Lookup and replace a character from the transliteration database.
 				$bank = $ord >> 8;
 				// Check if we need to load a new bank
@@ -2660,9 +2451,7 @@ function api_is_valid_utf8($string) {
 	// languages too. An alternative implementation will be used.
 
 	$len = api_byte_count($string);
-
 	$i = 0;
-
 	while ($i < $len) {
 		$byte1 = ord($string[$i++]);		// Here the current character begins. Its size is
 											// determined by the senior bits in the first byte.
@@ -2681,8 +2470,9 @@ function api_is_valid_utf8($string) {
 											// -------- --------
 											// 11000000 10000000
 											// The character contains two bytes.
-			if ($i == $len)
+			if ($i == $len) {
 				return false;				// Here the string ends unexpectedly.
+			}
 
 			if (!((ord($string[$i++]) & 0xC0) == 0x80))
 				return false;				// Invalid second byte, invalid string.
@@ -2697,15 +2487,12 @@ function api_is_valid_utf8($string) {
 			if ($i == $len) {
 				return false;				// Unexpected end of the string.
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;				// Invalid second byte.
 			}
-
 			if ($i == $len) {
 				return false;				// Unexpected end of the string.
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;				// Invalid third byte, invalid string.
 			}
@@ -2720,23 +2507,18 @@ function api_is_valid_utf8($string) {
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
-
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
-
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
@@ -2751,31 +2533,24 @@ function api_is_valid_utf8($string) {
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
-
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
-
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
-
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
@@ -2790,39 +2565,30 @@ function api_is_valid_utf8($string) {
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
-
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
-
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
-
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
-
 			if ($i == $len) {
 				return false;
 			}
-
 			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
@@ -2835,7 +2601,6 @@ function api_is_valid_utf8($string) {
 											// matches to some of the cases above.
 				 							// The next character is to be examinated.
 	}
-
 	return true;							// Empty strings are valid too.
 }
 

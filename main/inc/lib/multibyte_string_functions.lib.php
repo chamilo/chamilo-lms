@@ -244,7 +244,7 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
 	}
 	switch($quote_style) {
 		case ENT_COMPAT:
-			$string = str_replace('\'', '&quot;', $string);
+			$string = str_replace('"', '&quot;', $string);
 			break;
 		case ENT_QUOTES:
 			$string = str_replace(array('\'', '"'), array('&#039;', '&quot;'), $string);
@@ -266,13 +266,13 @@ function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 
 	if (empty($encoding)) {
 		$encoding = api_mb_internal_encoding();
 	}
-	if (!api_is_utf8($encoding) && api_html_entity_supports($encoding)) {
+	if (api_html_entity_supports($encoding)) {
 		return html_entity_decode($string, $quote_style, $encoding);
 	}
-	if (!api_is_encoding_supported($encoding)) {
-		return $string;
+	if (api_is_encoding_supported($encoding)) {
+		return api_utf8_decode(html_entity_decode(api_convert_encoding($string, 'UTF-8', $encoding), $quote_style, 'UTF-8'), $encoding);
 	}
-	return api_utf8_decode(html_entity_decode(api_convert_encoding($string, 'UTF-8', $encoding), $quote_style, 'UTF-8'), $encoding);
+	return $string;
 }
 
 /**
@@ -336,7 +336,6 @@ function api_file_system_decode($string, $to_encoding = null) {
  * If $search is an array and $replace is a string, then this replacement string is used for every value of search.
  * This function is aimed at replacing the function str_ireplace() for human-language strings.
  * @link http://php.net/manual/en/function.str-ireplace
- * TODO: To be revised and to be checked.
  */
 function api_str_ireplace($search, $replace, $subject, & $count = null, $encoding = null) {
 	if (empty($encoding)) {

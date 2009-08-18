@@ -525,11 +525,7 @@ if($_GET['studentlist'] == 'false') {
 		$table -> set_header(7, get_lang('Messages'),false);
 		$table -> set_header(8, get_lang('FirstLogin'), false, 'align="center"');
 		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');
-		$table -> set_header(10, get_lang('Details'),false);
-	     
-	    if ($export_csv) {
-			$csv_content[] = array ();
-		}
+		$table -> set_header(10, get_lang('Details'),false);     
 	    
 	    $all_datas = array();
 	    $course_code = $_course['id'];
@@ -593,9 +589,8 @@ if($_GET['studentlist'] == 'false') {
 	}
 	
 	// send the csv file if asked
-	if ($export_csv) {
-		
-		$csv_content[] = array ( 
+	if ($export_csv) {		
+		$csv_headers = array ( 
 									get_lang('OfficialCode'),
 									get_lang('LastName'),
 									get_lang('FirstName'),
@@ -608,6 +603,7 @@ if($_GET['studentlist'] == 'false') {
 									get_lang('LatestLogin')
 								   );
 		ob_end_clean();
+		array_unshift($csv_content,$csv_headers); // adding headers before the content
 		Export :: export_table_csv($csv_content, 'reporting_student_list');
 	}
 	

@@ -75,7 +75,7 @@ Display::display_header($tool_name);
 $tool_name=get_lang('ModifySessionCourse');
 api_display_tool_title($tool_name);
 ?>
-<form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $_GET['page'] ?>" style="margin:0px;">
+<form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo Security::remove_XSS($_GET['page']) ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 
 <table border="0" cellpadding="5" cellspacing="0" width="550">

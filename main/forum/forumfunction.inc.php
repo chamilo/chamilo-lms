@@ -3193,7 +3193,7 @@ function forum_search() {
 	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles"');
 	$form->applyFilter('search_term', 'html_filter');
 	$form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation')/*, $dissertation[$_GET['opleidingsonderdeelcode']]['code']*/);
-	$form->addElement('style_submit_button', 'SubmitForumSearch', get_lang('Search'), 'class="search"');
+	$form->addElement('style_submit_button', null, get_lang('Search'), 'class="search"');
 
 	// setting the rules
 	$form->addRule('search_term', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
@@ -3203,8 +3203,7 @@ function forum_search() {
 	if( $form->validate() ) {
 	   $values = $form->exportValues();
 	   $form->setDefaults($values);
-	   $form->display();
-	   
+	   $form->display();	   
 	   // display the search results
 	   display_forum_search_results($values['search_term']);
 	} else {

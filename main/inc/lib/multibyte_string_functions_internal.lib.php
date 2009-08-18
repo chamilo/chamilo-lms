@@ -13,6 +13,140 @@
 
 /**
  * ----------------------------------------------------------------------------
+ * Appendix to "Multibyte string conversion functions"
+ * ----------------------------------------------------------------------------
+ */
+
+// This is a php-implementation of the function api_convert_encoding().
+function _api_convert_encoding($string, $to_encoding, $from_encoding) {
+	static $character_map = array();
+	static $utf8_like = array('UTF-8', 'US-ASCII');
+	static $unknown = 63; // '?'
+	if (empty($string)) {
+		return $string;
+	}
+	$to_encoding = api_refine_encoding_id($to_encoding);
+	$from_encoding = api_refine_encoding_id($from_encoding);
+	if (api_equal_encodings($to_encoding, $from_encoding)) {
+		return $string;
+	}
+	$to = _api_get_character_map_name($to_encoding);
+	$from = _api_get_character_map_name($from_encoding);
+	if (empty($to) || empty($from) || $to == $from || (in_array($to, $utf8_like) && in_array($from, $utf8_like))) {
+		return $string;
+	}
+	if (!isset($character_map[$to])) {
+		$character_map[$to] = _api_parse_character_map($to);
+	}
+	if ($character_map[$to] === false) {
+		return $string;
+	}
+	if (!isset($character_map[$from])) {
+		$character_map[$from] = _api_parse_character_map($from);
+	}
+	if ($character_map[$from] === false) {
+		return $string;
+	}
+	if ($from != 'UTF-8') {
+		$len = api_byte_count($string);
+		$codepoints = array();
+		for ($i = 0; $i < $len; $i++) {
+			$ord = ord($string[$i]);
+			if ($ord > 127) {
+				if (isset($character_map[$from]['local'][$ord])) {
+					$codepoints[] = $character_map[$from]['local'][$ord];
+				} else {
+					$codepoints[] = $unknown;
+				}
+			} else {
+				$codepoints[] = $ord;
+			}
+		}
+	} else {
+		$codepoints = _api_utf8_to_unicode($string);
+	}
+	if ($to != 'UTF-8') {
+		$unknown_char = chr($unknown);
+		foreach ($codepoints as $i => &$codepoint) {
+			if ($codepoint > 127) {
+				if (isset($character_map[$from]['local'][$codepoint])) {
+					$codepoint = chr($character_map[$from]['local'][$codepoint]);
+				} else {
+					$codepoint = $unknown_char;
+				}
+			} else {
+				$codepoint = chr($codepoint);
+			}
+		}
+		$string = implode($codepoints);
+	} else {
+		$string = _api_utf8_from_unicode($codepoints);
+	}
+	return $string;
+}
+
+// This function determines the name of the conversion table, dealing with
+// aliases if the encoding identificator.
+function _api_get_character_map_name($encoding) {
+	static $character_map_selector;
+	if (!isset($character_map_selector)) {
+		$file = dirname(__FILE__) . '/multibyte_string_database/conversion/character_map_selector.php';
+		if (file_exists($file)) {
+			$character_map_selector = include ($file);
+		} else {
+			$character_map_selector = array();
+		}
+	}
+	return isset($character_map_selector[$encoding]) ? $character_map_selector[$encoding] : '';
+}
+
+// This function parses a given conversion table (a text file) and creates in the memory
+// two tables for conversion - character set from/to Unicode codepoints.
+function &_api_parse_character_map($name) {
+	$result = array('local' => array(), 'unicode' => array());
+	$file = dirname(__FILE__) . '/multibyte_string_database/conversion/' . $name . '.TXT';
+	if (file_exists($file)) {
+		$text = @file_get_contents($file);
+		if ($text !== false) {
+			$text = explode(chr(10), $text);
+			foreach ($text as $line) {
+				if (empty($line)) {
+					continue;
+				}
+				if (!empty($line) && trim($line) && $line[0] != '#') {
+					$matches = array();
+					preg_match('/[[:space:]]*0x([[:alnum:]]*)[[:space:]]+0x([[:alnum:]]*)[[:space:]]+/', $line, $matches);
+					$ord = hexdec(trim($matches[1]));
+					if ($ord > 127) {
+						$result['local'][$ord] = hexdec(trim($matches[2]));
+						$result['unicode'][$result['local'][$ord]] = $ord;
+					}
+				}
+			}
+		} else {
+			return false ;
+		}
+	} else {
+		return false;
+	}
+	return $result;
+}
+
+// Converts UTF-8 string into htmlentities, a php-implementation. 
+function _api_utf8_to_htmlentities($string) {
+	$result = _api_utf8_to_unicode($string);
+	foreach ($result as $key => &$value) {
+		if ($value < 128) {
+			$value = chr($value);
+		} else {
+			$value = '&#'.$value.';';
+		}
+	}
+	return implode($result);
+}
+
+/**
+ * ----------------------------------------------------------------------------
  * Appendix to "Common multibyte string functions"
  * ----------------------------------------------------------------------------
  */
@@ -353,6 +487,23 @@ function _api_get_collator_sort_flag($sort_flag = SORT_REGULAR) {
 			return Collator::SORT_NUMERIC;
 	}
 	return Collator::SORT_REGULAR;
+}
+
+
+/**
+ * ----------------------------------------------------------------------------
+ * Appendix to "Encoding management functions"
+ * ----------------------------------------------------------------------------
+ */
+
+// This function checks whether the function _api_convert_encoding() (the php-
+// implementation) is able to convert from/to a given encoding.
+function _api_convert_encoding_supports($encoding) {
+	static $supports = array();
+	if (!isset($supports[encoding])) {
+		$supports[encoding] = _api_get_character_map_name($encoding) != '';
+	}
+	return $supports[encoding];
 }
 
 

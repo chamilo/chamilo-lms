@@ -788,7 +788,7 @@ function api_strtoupper($string, $encoding = null) {
  * @return string						Returns a copy of $string, translating all occurrences of each character in $from to the corresponding character in $to.
  * This function is aimed at replacing the function strtr() for human-language strings.
  * @link http://php.net/manual/en/function.strtr
- * TODO: To be revised and tested. Probably this function will be not needed.
+ * TODO: To be revised and tested. Probably this function will not be needed.
  */
 function api_strtr($string, $from, $to = null, $encoding = null) {
 	if (empty($string)) {
@@ -858,6 +858,70 @@ function api_substr($string, $start, $length = null, $encoding = null) {
 	}
 	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
 		return api_utf8_decode(@mb_substr(api_utf8_encode($string, $encoding), $start, $length, 'UTF-8'), $encoding);
+	}
+	elseif (api_is_utf8($encoding)) {
+		// The following branch of code is from the Drupal CMS, see the function drupal_substr().
+		$strlen = api_byte_count($string);
+		// Find the starting byte offset
+		$bytes = 0;
+		if ($start > 0) {
+			// Count all the continuation bytes from the start until we have found
+			// $start characters
+			$bytes = -1; $chars = -1;
+			while ($bytes < $strlen && $chars < $start) {
+				$bytes++;
+				$c = ord($string[$bytes]);
+				if ($c < 0x80 || $c >= 0xC0) {
+					$chars++;
+				}
+			}
+		}
+		else if ($start < 0) {
+			// Count all the continuation bytes from the end until we have found
+			// abs($start) characters
+			$start = abs($start);
+			$bytes = $strlen; $chars = 0;
+			while ($bytes > 0 && $chars < $start) {
+				$bytes--;
+				$c = ord($string[$bytes]);
+				if ($c < 0x80 || $c >= 0xC0) {
+					$chars++;
+				}
+			}
+		}
+		$istart = $bytes;
+		// Find the ending byte offset
+		if ($length === NULL) {
+			$bytes = $strlen - 1;
+		}
+		else if ($length > 0) {
+			// Count all the continuation bytes from the starting index until we have
+			// found $length + 1 characters. Then backtrack one byte.
+			$bytes = $istart; $chars = 0;
+			while ($bytes < $strlen && $chars < $length) {
+				$bytes++;
+				$c = ord($string[$bytes]);
+				if ($c < 0x80 || $c >= 0xC0) {
+					$chars++;
+				}
+			}
+			$bytes--;
+		}
+		else if ($length < 0) {
+			// Count all the continuation bytes from the end until we have found
+			// abs($length) characters
+			$length = abs($length);
+			$bytes = $strlen - 1; $chars = 0;
+			while ($bytes >= 0 && $chars < $length) {
+				$c = ord($string[$bytes]);
+				if ($c < 0x80 || $c >= 0xC0) {
+					$chars++;
+				}
+				$bytes--;
+			}
+		}
+		$iend = $bytes;
+		return substr($string, $istart, max(0, $iend - $istart + 1));
 	}
 	return substr($string, $start, $length);
 }
@@ -932,7 +996,6 @@ function api_ucwords($string, $encoding = null) {
 	}
 	return ucwords($string);
 }
-
 
 
 /**
@@ -1373,35 +1436,6 @@ function api_strnatcmp($string1, $string2, $language = null, $encoding = null) {
 	}
 	return strnatcmp($string1, $string2);
 }
-
-// Returns an instance of Collator class (ICU) created for a specified language, for internal use.
-function _api_get_collator($language = null) {
-	static $collator = array();
-	if (!isset($collator[$language])) {
-		$locale = api_get_locale_from_language($language);
-		$collator[$language] = collator_create($locale);
-		if (is_object($collator[$language])) {
-			collator_set_attribute($collator[$language], Collator::CASE_FIRST, Collator::UPPER_FIRST);
-		}
-	}
-	return $collator[$language];
-}
-
-// Returns an instance of Collator class (ICU) created for a specified language, for internal use.
-// This collator treats substrings of digits as numbers.
-function _api_get_alpha_numerical_collator($language = null) {
-	static $collator = array();
-	if (!isset($collator[$language])) {
-		$locale = api_get_locale_from_language($language);
-		$collator[$language] = collator_create($locale);
-		if (is_object($collator[$language])) {
-			collator_set_attribute($collator[$language], Collator::CASE_FIRST, Collator::UPPER_FIRST);
-			collator_set_attribute($collator[$language], Collator::NUMERIC_COLLATION, Collator::ON);
-		}
-	}
-	return $collator[$language];
-}
-
 
 /**
  * ----------------------------------------------------------------------------
@@ -2739,5 +2773,3 @@ function api_get_default_locale() {
  */
 
 require_once dirname(__FILE__).'/multibyte_string_functions_internal.lib.php';
-
-?>

@@ -146,12 +146,6 @@ function _api_utf8_to_htmlentities($string) {
 }
 
 /**
- * ----------------------------------------------------------------------------
- * Appendix to "Common multibyte string functions"
- * ----------------------------------------------------------------------------
- */
-
-/**
  * Takes an UTF-8 string and returns an array of ints representing the 
  * Unicode characters. Astral planes are supported ie. the ints in the
  * output can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
@@ -337,6 +331,13 @@ function _api_utf8_from_unicodepoint($codepoint, $unknown = '?') {
 	return $result;
 }
 
+
+/**
+ * ----------------------------------------------------------------------------
+ * Appendix to "Common multibyte string functions"
+ * ----------------------------------------------------------------------------
+ */
+
 // Reads case folding properties about a given character from a file-based "database".
 function _api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
 	static $config = array();
@@ -434,6 +435,34 @@ function _api_array_utf8_decode($variable, $encoding) {
  * Appendix to "String comparison"
  * ----------------------------------------------------------------------------
  */
+
+// Returns an instance of Collator class (ICU) created for a specified language.
+function _api_get_collator($language = null) {
+	static $collator = array();
+	if (!isset($collator[$language])) {
+		$locale = api_get_locale_from_language($language);
+		$collator[$language] = collator_create($locale);
+		if (is_object($collator[$language])) {
+			collator_set_attribute($collator[$language], Collator::CASE_FIRST, Collator::UPPER_FIRST);
+		}
+	}
+	return $collator[$language];
+}
+
+// Returns an instance of Collator class (ICU) created for a specified language.
+// This collator treats substrings of digits as numbers.
+function _api_get_alpha_numerical_collator($language = null) {
+	static $collator = array();
+	if (!isset($collator[$language])) {
+		$locale = api_get_locale_from_language($language);
+		$collator[$language] = collator_create($locale);
+		if (is_object($collator[$language])) {
+			collator_set_attribute($collator[$language], Collator::CASE_FIRST, Collator::UPPER_FIRST);
+			collator_set_attribute($collator[$language], Collator::NUMERIC_COLLATION, Collator::ON);
+		}
+	}
+	return $collator[$language];
+}
 
 // Global variables used by the sorting functions.
 $_api_collator = null;
@@ -595,5 +624,3 @@ if (MBSTRING_INSTALLED && !function_exists('mb_strstr')) {
 		}
 	}
 }
-
-?>

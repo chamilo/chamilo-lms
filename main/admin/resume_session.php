@@ -2,7 +2,7 @@
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
-	@author Bart Mollet
+*	@author Bart Mollet
 *	@package dokeos.admin
 ==============================================================================
 */
@@ -57,8 +57,13 @@ if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id'])
 if($_GET['action'] == 'delete')
 {
 	$idChecked = $_GET['idChecked'];
-	if(is_array($idChecked))
-	{
+	if(is_array($idChecked)) {		
+		$my_temp = array(); 
+		foreach ($idChecked as $id){
+			$my_temp[]= Database::escape_string($id);// forcing the escape_string
+		}
+		$idChecked = $my_temp;		
+		
 		$idChecked="'".implode("','",$idChecked)."'";
 
 		api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
@@ -71,7 +76,7 @@ if($_GET['action'] == 'delete')
 	}
 
 	if(!empty($_GET['class'])){
-		api_sql_query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".$_GET['class'],__FILE__,__LINE__);
+		api_sql_query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']),__FILE__,__LINE__);
 
 		$nbr_affected_rows=mysql_affected_rows();
 
@@ -80,11 +85,11 @@ if($_GET['action'] == 'delete')
 	}
 
 	if(!empty($_GET['user'])){
-		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session='$id_session' AND id_user=".$_GET['user'],__FILE__,__LINE__);
+		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']),__FILE__,__LINE__);
 		$nbr_affected_rows=mysql_affected_rows();
 		api_sql_query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
 
-		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".$_GET['user'],__FILE__,__LINE__);
+		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']),__FILE__,__LINE__);
 		$nbr_affected_rows=mysql_affected_rows();
 		api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'",__FILE__,__LINE__);
 	}

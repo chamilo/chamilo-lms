@@ -317,7 +317,7 @@ function get_dropbox_categories($filter='')
 	global $_user;
 	global $dropbox_cnf;
 
-	echo '<h1>'.$filter.'</h1>';
+	//echo '<h1>'.$filter.'</h1>';
 
 	$return_array=array();
 

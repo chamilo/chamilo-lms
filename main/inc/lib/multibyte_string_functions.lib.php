@@ -101,11 +101,14 @@ function api_convert_encoding($string, $to_encoding, $from_encoding = null) {
 	elseif (api_iconv_supports($to_encoding) && api_iconv_supports($from_encoding)) {
 		return @iconv($from_encoding, $to_encoding, $string);
 	}
-	elseif (api_is_utf8($to_encoding) && api_is_latin1($from_encoding)) {
+	elseif (api_is_utf8($to_encoding) && api_is_latin1($from_encoding, true)) {
 		return utf8_encode($string);
 	}
-	elseif (api_is_latin1($to_encoding) && api_is_utf8($from_encoding)) {
+	elseif (api_is_latin1($to_encoding, true) && api_is_utf8($from_encoding)) {
 		return utf8_decode($string);
+	}
+	elseif (_api_convert_encoding_supports($to_encoding) && _api_convert_encoding_supports($from_encoding)) {
+		return _api_convert_encoding($string, $to_encoding, $from_encoding);
 	}
 	// Here the function gives up.
 	return $string;
@@ -133,8 +136,11 @@ function api_utf8_encode($string, $from_encoding = null) {
 	elseif (api_iconv_supports($from_encoding)) {
 		return @iconv($from_encoding, 'UTF-8', $string);
 	}
-	elseif (api_is_latin1($from_encoding)) {
+	elseif (api_is_latin1($from_encoding, true)) {
 		return utf8_encode($string);
+	}
+	elseif (_api_convert_encoding_supports($from_encoding)) {
+		return _api_convert_encoding($string, 'UTF-8', $from_encoding);
 	}
 	// Here the function gives up.
 	return $string;
@@ -162,8 +168,11 @@ function api_utf8_decode($string, $to_encoding = null) {
 	elseif (api_iconv_supports($to_encoding)) {
 		return @iconv('UTF-8', $to_encoding, $string);
 	}
-	elseif (api_is_latin1($to_encoding)) {
+	elseif (api_is_latin1($to_encoding, true)) {
 		return utf8_decode($string);
+	}
+	elseif (_api_convert_encoding_supports($to_encoding)) {
+		return _api_convert_encoding($string, $to_encoding, 'UTF-8');
 	}
 	// Here the function gives up.
 	return $string;
@@ -226,21 +235,16 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
 	}
 	if (api_mb_supports($encoding) || api_iconv_supports($encoding)) {
 		$string = api_convert_encoding(api_utf8_encode($string, $encoding), 'HTML-ENTITIES', 'UTF-8');
-	} else {
-		if (api_is_utf8($encoding)) {
-			$result = _api_utf8_to_unicode($string);
-			foreach ($result as $key => &$value) {
-				if ($value < 128) {
-					$value = chr($value);
-				} else {
-					$value = '&#'.$value.';';
-				}
-			}
-			$string = implode($result);
-		} else {
-			// Here the function gives up.
-			return $string;
-		}
+	}
+	elseif (api_is_utf8($encoding)) {
+		$string = _api_utf8_to_htmlentities($string);
+	}
+	elseif (_api_convert_encoding_supports($encoding)) {
+		$string = _api_convert_encoding(_api_utf8_to_htmlentities(_api_convert_encoding($string), 'UTF-8', $encoding), $encoding, 'UTF-8');
+	}
+	else {
+		// Here the function gives up.
+		return $string;
 	}
 	switch($quote_style) {
 		case ENT_COMPAT:
@@ -492,7 +496,7 @@ function api_strlen($string, $encoding = null) {
 		return @iconv_strlen($string, $encoding);
 	}
 	elseif (api_is_utf8($encoding)) {
-    	return strlen(preg_replace("/[\x80-\xBF]/", '', $string));
+    	return api_byte_count(preg_replace("/[\x80-\xBF]/", '', $string));
 	}
 	return strlen($string);
 }
@@ -2130,9 +2134,17 @@ function api_is_utf8($encoding) {
  * @param string $encoding		The tested encoding.
  * @return bool					Returns TRUE if the given encoding id means Latin 1 character set, otherwise returns false.
  */
-function api_is_latin1($encoding) {
-	static $latin1_encodings = array('ISO-8859-15', 'ISO-8859-1', 'WINDOWS-1252', 'CP1252', 'ISO8859-15', 'ISO8859-1', 'WIN-1252', '1252');
-	return in_array(api_refine_encoding_id($encoding), $latin1_encodings);
+function api_is_latin1($encoding, $strict = false) {
+	static $latin1_encodings = array('ISO-8859-1', 'ISO8859-1', 'CP819', 'LATIN1');
+	static $latin1_encodings_like = array(
+		'ISO-8859-1', 'ISO8859-1', 'CP819', 'LATIN1',
+		'ISO-8859-15', 'ISO8859-15', 'CP923', 'LATIN0', 'LATIN-9',
+		'WINDOWS-1252', 'CP1252', 'WIN-1252', 'WIN1252'
+	);
+	if ($strict) {
+		return in_array(api_refine_encoding_id($encoding), $latin1_encodings);
+	}
+	return in_array(api_refine_encoding_id($encoding), $latin1_encodings_like);
 }
 
 /**
@@ -2351,7 +2363,7 @@ function api_iconv_set_encoding($type, $encoding = null) {
  * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
  */
 function api_is_encoding_supported($encoding) {
-	return api_mb_supports($encoding) || api_iconv_supports($encoding);
+	return api_mb_supports($encoding) || api_iconv_supports($encoding) || _api_convert_encoding_supports($encoding);
 }
 
 /**

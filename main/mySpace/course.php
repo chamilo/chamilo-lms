@@ -100,10 +100,10 @@ $table -> set_header(1, get_lang('NbStudents'), false);
 $table -> set_header(2, get_lang('TimeSpentInTheCourse'), false);
 $table -> set_header(3, get_lang('AvgStudentsProgress'), false);
 $table -> set_header(4, get_lang('AvgCourseScore'), false);
-$table -> set_header(5, get_lang('AvgExercisesScore'), false);
-$table -> set_header(6, get_lang('AvgMessages'), false);
-$table -> set_header(7, get_lang('AvgAssignments'), false);
-$table -> set_header(8, get_lang('Details'), false);
+//$table -> set_header(5, get_lang('AvgExercisesScore'), false);// no code for this?
+$table -> set_header(5, get_lang('AvgMessages'), false);
+$table -> set_header(6, get_lang('AvgAssignments'), false);
+$table -> set_header(7, get_lang('Details'), false);
 
 $csv_content[] = array(
 				get_lang('CourseTitle'),
@@ -111,7 +111,7 @@ $csv_content[] = array(
 				get_lang('TimeSpentInTheCourse'),
 				get_lang('AvgStudentsProgress'),
 				get_lang('AvgCourseScore'),
-				get_lang('AvgExercisesScore'),
+				//get_lang('AvgExercisesScore'),
 				get_lang('AvgMessages'),
 				get_lang('AvgAssignments')
 				);

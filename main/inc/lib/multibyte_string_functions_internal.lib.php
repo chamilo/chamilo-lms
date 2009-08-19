@@ -132,19 +132,6 @@ function &_api_parse_character_map($name) {
 	return $result;
 }
 
-// Converts UTF-8 string into htmlentities, a php-implementation. 
-function _api_utf8_to_htmlentities($string) {
-	$result = _api_utf8_to_unicode($string);
-	foreach ($result as $key => &$value) {
-		if ($value < 128) {
-			$value = chr($value);
-		} else {
-			$value = '&#'.$value.';';
-		}
-	}
-	return implode($result);
-}
-
 /**
  * Takes an UTF-8 string and returns an array of ints representing the 
  * Unicode characters. Astral planes are supported ie. the ints in the
@@ -524,6 +511,17 @@ function _api_get_collator_sort_flag($sort_flag = SORT_REGULAR) {
  * Appendix to "Encoding management functions"
  * ----------------------------------------------------------------------------
  */
+
+// Ckecks whether a given encoding defines single-byte characters.
+// The result might be not accurate for unknown by this library encodings.
+function _api_is_single_byte_encoding($encoding) {
+	static $checked = array();
+	if (!isset($checked[$encoding])) {
+		$character_map = _api_get_character_map_name(api_refine_encoding_id($encoding));
+		$checked[$encoding] = (!empty($character_map) && $character_map != 'UTF-8');
+	}
+	return $checked[$encoding];
+}
 
 // This function checks whether the function _api_convert_encoding() (the php-
 // implementation) is able to convert from/to a given encoding.

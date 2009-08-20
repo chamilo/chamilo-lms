@@ -71,13 +71,8 @@ Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 ?>
 
-<div id="main">
-
 <form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
-
-<br>
-
-
+<br />
 <?php
 $tableHeader = array();
 $tableHeader[] = array(' ');

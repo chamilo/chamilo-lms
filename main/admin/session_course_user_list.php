@@ -63,51 +63,32 @@ $interbreadcrumb[]=array("url" => "session_list.php","name" => get_lang('Session
 $interbreadcrumb[]=array("url" => "session_course_list.php?id_session=$id_session","name" => get_lang('ListOfCoursesOfSession')." &quot;".api_htmlentities($session_name,ENT_QUOTES,$charset)."&quot;");
 
 Display::display_header($tool_name);
-
 api_display_tool_title($tool_name);
 ?>
-
-<div id="main">
-
 <form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
-
 <div align="right">
-
 <?php
-if($page)
-{
+if($page) {
 ?>
-
 <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Previous');?></a>
-
 <?php
-}
-else
-{
+} else {
 	echo get_lang('Previous');
 }
 ?>
-
 |
-
 <?php
-if($nbr_results > $limit)
-{
+if($nbr_results > $limit) {
 ?>
-
 <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next');?></a>
-
 <?php
-}
-else
-{
+} else {
 	echo get_lang('Next');
 }
 ?>
 
 </div>
-
-<br>
+<br />
 
 <table class="data_table" width="100%">
 <tr>
@@ -162,23 +143,17 @@ if($nbr_results > $limit) {
 ?>
 <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next'); ?></a>
 <?php
-}
-else
-{
+} else {
 	echo get_lang('Next');
 }
 ?>
-
 </div>
-
-<br>
-
+<br />
 <select name="action">
 <option value="delete"><?php echo get_lang('UnsubscribeSelectedUsersFromSession');?></option>
 </select>
 <button class="save" type="submit"> <?php echo get_lang('Ok'); ?></button>
 </table>
-</div>
 </form>
 <?php
 Display::display_footer();

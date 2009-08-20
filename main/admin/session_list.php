@@ -169,6 +169,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	<?php
 	if(count($Sessions)==0 && isset($_POST['keyword'])) {
 		echo get_lang('NoSearchResults');
+		echo '	</div>';
 	} else {
 		if ($num > $limit) {
 			if ($page) {

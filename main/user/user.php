@@ -1,24 +1,5 @@
-<?php // $Id: user.php 22291 2009-07-22 17:39:20Z herodoto $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
 ==============================================================================
@@ -77,7 +58,7 @@ require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 	Constants and variables
 -----------------------------------------------------------
 */
-$currentCourseID = $_course['sysCode'];
+$currentCourseID = Database::escape_string($_course['sysCode']);
 
 
 /*--------------------------------------
@@ -506,9 +487,10 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$temp[] = $o_course_user['lastname'];				
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ',$groups_name);//Group
-				$temp[] = $o_course_user['official_code'];					
-				$temp[] = $user_id;
-				
+				$temp[] = $o_course_user['official_code'];	
+				if ( api_is_allowed_to_edit()) {
+					$temp[] = $user_id;
+				}				
 			}			
 			$a_users[$user_id] = $temp;
 		}
@@ -596,15 +578,16 @@ if ( api_is_allowed_to_edit()) {
 	$table->set_header($header_nr++, get_lang('CourseManager'),false);
 	$table->set_header($header_nr++, get_lang('Active'),false);
 	$table->set_column_filter(9,'active_filter');
+	//actions column
+	$table->set_header($header_nr++, get_lang('Modify'), false);
+	$table->set_column_filter($header_nr-1,'modify_filter');
+ 	if ( api_is_allowed_to_edit()) {
+		$table->set_form_actions(array ('unsubscribe' => get_lang('Unreg')), 'user');
+	}
 }
 
-//actions column
-$table->set_header($header_nr++, get_lang('Modify'), false);
 
-$table->set_column_filter($header_nr-1,'modify_filter');
- if ( api_is_allowed_to_edit()) {
-	$table->set_form_actions(array ('unsubscribe' => get_lang('Unreg')), 'user');
-}
+
 
 $table->display();
 

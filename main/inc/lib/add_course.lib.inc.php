@@ -64,7 +64,7 @@ function generate_course_code($course_title, $encoding = null)
 	if (empty($encoding)) {
 		$encoding = api_get_system_encoding();
 	}
-	return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, $encoding))), 0, 20);
+	return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, 'X', $encoding))), 0, 20);
 }
 
 

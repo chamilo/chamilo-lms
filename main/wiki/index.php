@@ -38,13 +38,12 @@
 $language_file = 'wiki';
 
 // security
-if(isset($_GET['id_session']))
-{
-	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']); 
+if(isset($_GET['id_session'])) {
+	$_SESSION['id_session'] = intval($_GET['id_session']); 
 }
-
+  
 // including the global dokeos file
-include('../inc/global.inc.php');  
+include('../inc/global.inc.php');
 
 // section (for the tabs)
 $this_section=SECTION_COURSES; 

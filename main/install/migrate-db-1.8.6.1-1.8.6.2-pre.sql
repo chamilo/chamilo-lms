@@ -32,3 +32,4 @@ ALTER TABLE glossary ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (sessio
 ALTER TABLE link ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE wiki ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE tool ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
+ALTER TABLE link_category ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);

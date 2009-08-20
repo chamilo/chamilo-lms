@@ -282,15 +282,14 @@ if ($allowedToEditContent)
 // Back button for each display mode (Top)
 echo '<div class="actions">';
 echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';
-if (!is_numeric($_GET['editMainUserInfo']))
-{
-	echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.gif',get_lang('EditUser')).get_lang('EditUser').'</a>';
+if (api_is_allowed_to_edit()) {
+	if (!is_numeric($_GET['editMainUserInfo'])) {	
+		echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.gif',get_lang('EditUser')).get_lang('EditUser').'</a>';
+	} else {
+		echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('members.gif',get_lang('ViewUser')).get_lang('ViewUser').'</a>';
+	}
+	echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&amp;origin=user_course&amp;student='.$userIdViewed.'&amp;details=true&amp;course='.$_course['id'].'">'.Display::return_icon('statistics.gif',get_lang('UserStatistics')).get_lang('UserStatistics').'</a>';
 }
-else 
-{
-	echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('members.gif',get_lang('ViewUser')).get_lang('ViewUser').'</a>';
-}
-echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&amp;origin=user_course&amp;student='.$userIdViewed.'&amp;details=true&amp;course='.$_course['id'].'">'.Display::return_icon('statistics.gif',get_lang('UserStatistics')).get_lang('UserStatistics').'</a>';
 echo '</div>';
 
 

@@ -13,6 +13,11 @@
 -- This first part is for the main database
 -- xxMAINxx
 ALTER TABLE gradebook_evaluation ADD COLUMN type varchar(40) NOT NULL;
+ALTER TABLE session ADD COLUMN visibility int NOT NULL default 1;
+ALTER TABLE session_rel_course_rel_user ADD COLUMN visibility int NOT NULL default 1;
+CREATE TABLE session_category (id int(11) NOT NULL auto_increment, name varchar(100) default NULL, date_start date default NULL, date_end date default NULL, PRIMARY KEY  (id));
+ALTER TABLE session ADD COLUMN session_category_id INT NOT NULL;
+
 
 -- xxSTATSxx
 

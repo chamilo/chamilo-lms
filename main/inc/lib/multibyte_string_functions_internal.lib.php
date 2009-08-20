@@ -10,6 +10,10 @@
  * ==============================================================================
  */
 
+// Global variables used by some callback functions.
+$_api_encoding = null;
+$_api_collator = null;
+
 
 /**
  * ----------------------------------------------------------------------------
@@ -400,12 +404,13 @@ function _api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
 
 // This (callback) function convers from UTF-8 to other encoding.
 // It works with arrays of strings too.
-function _api_array_utf8_decode($variable, $encoding) {
+function _api_array_utf8_decode($variable) {
+	global $_api_encoding;
 	if (is_array($variable)) {
-		return array_map('_api_array_utf8_decode', $variable, $encoding);
+		return array_map('_api_array_utf8_decode', $variable);
 	}
     if (is_string($var)) {
-    	return api_utf8_decode($variable, $encoding);
+    	return api_utf8_decode($variable, $_api_encoding);
     }
     return $variable;
 }
@@ -444,10 +449,6 @@ function _api_get_alpha_numerical_collator($language = null) {
 	}
 	return $collator[$language];
 }
-
-// Global variables used by the sorting functions.
-$_api_collator = null;
-$_api_encoding = null;
 
 // A string comparison function that serves sorting functions.
 function _api_cmp($string1, $string2) {

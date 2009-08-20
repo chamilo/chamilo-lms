@@ -1965,7 +1965,7 @@ function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
  * 	'&#1060;&#1105;&#1076;&#1086;&#1088; '.
  * 	'&#1052;&#1080;&#1093;&#1072;&#1081;&#1083;&#1086;&#1074;&#1080;&#1095; '.
  * 	'&#1044;&#1086;&#1089;&#1090;&#1086;&#1077;&#1074;&#1082;&#1080;&#1081;',
- * 	ENT_QUOTES, 'UTF-8'), 'UTF-8');
+ * 	ENT_QUOTES, 'UTF-8'), 'X', 'UTF-8');
  * The output should be: Fyodor Mihaylovich Dostoevkiy
  *
  * @param string $string					The input string.

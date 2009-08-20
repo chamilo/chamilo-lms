@@ -1,27 +1,5 @@
-<?php // $Id: user_add.php 22233 2009-07-20 09:54:05Z ivantcholakov $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	@package dokeos.admin
@@ -199,103 +177,106 @@ $form->addElement('radio','active','',get_lang('Inactive'),0);
 // EXTRA FIELDS
 $extra = UserManager::get_extra_fields(0,50,5,'ASC');
 $extra_data = UserManager::get_extra_user_data(0,true);
-foreach($extra as $id => $field_details)
-{
-	switch($field_details[2])
-	{
-		case USER_FIELD_TYPE_TEXT:
-			$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
-			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-			$form->applyFilter('extra_'.$field_details[1], 'trim');
-			break;
-		case USER_FIELD_TYPE_TEXTAREA:
-			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-			//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
-			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-			$form->applyFilter('extra_'.$field_details[1], 'trim');
-			break;
-		case USER_FIELD_TYPE_RADIO:
-			$group = array();
-			foreach($field_details[9] as $option_id => $option_details)
-			{
-				$options[$option_details[1]] = $option_details[2];
-				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
-			}
-			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
-			break;
-		case USER_FIELD_TYPE_SELECT:
-			$options = array();
-			foreach($field_details[9] as $option_id => $option_details)
-			{
-				$options[$option_details[1]] = $option_details[2];
-			}
-			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');			
-			break;
-		case USER_FIELD_TYPE_SELECT_MULTIPLE:
-			$options = array();
-			foreach($field_details[9] as $option_id => $option_details)
-			{
-				$options[$option_details[1]] = $option_details[2];
-			}
-			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
-			break;
-		case USER_FIELD_TYPE_DATE:
-			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_add'));
-			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
-			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-			$form -> setDefaults($defaults);
-			$form->applyFilter('theme', 'trim');
-			break;
-		case USER_FIELD_TYPE_DATETIME:
-			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_add'));
-			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
-			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-			$form -> setDefaults($defaults);
-			$form->applyFilter('theme', 'trim');
-			break;
-		case USER_FIELD_TYPE_DOUBLE_SELECT:
-			foreach ($field_details[9] as $key=>$element)
-			{
-				if ($element[2][0] == '*')
-				{
-					$values['*'][$element[0]] = str_replace('*','',$element[2]);
-				}
-				else 
-				{
-					$values[0][$element[0]] = $element[2];
-				}
-			}
-			
-			$group='';
-			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1],'',$values[0],'');
-			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*','',$values['*'],'');
-			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 
-			// recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
-			if (key_exists('extra_'.$field_details[1], $extra_data))
-			{
-				// exploding all the selected values (of both select forms)
-				$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
-				$extra_data['extra_'.$field_details[1]]  =array();
-				
-				// looping through the selected values and assigning the selected values to either the first or second select form
-				foreach ($selected_values as $key=>$selected_value)
+foreach($extra as $id => $field_details)
+{	
+	if ($field_details[6]==1) { // only show extra fields that are visible
+		switch($field_details[2])
+		{
+			case USER_FIELD_TYPE_TEXT:
+				$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
+				$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+				$form->applyFilter('extra_'.$field_details[1], 'trim');
+				break;
+			case USER_FIELD_TYPE_TEXTAREA:
+				$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+				//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
+				$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+				$form->applyFilter('extra_'.$field_details[1], 'trim');
+				break;
+			case USER_FIELD_TYPE_RADIO:
+				$group = array();
+				foreach($field_details[9] as $option_id => $option_details)
 				{
-					if (key_exists($selected_value,$values[0]))
+					$options[$option_details[1]] = $option_details[2];
+					$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
+				}
+				$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
+				break;
+			case USER_FIELD_TYPE_SELECT:
+				$options = array();
+				foreach($field_details[9] as $option_id => $option_details)
+				{
+					$options[$option_details[1]] = $option_details[2];
+				}
+				$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');			
+				break;
+			case USER_FIELD_TYPE_SELECT_MULTIPLE:
+				$options = array();
+				foreach($field_details[9] as $option_id => $option_details)
+				{
+					$options[$option_details[1]] = $option_details[2];
+				}
+				$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
+				break;
+			case USER_FIELD_TYPE_DATE:
+				$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_add'));
+				$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+				$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
+				$form -> setDefaults($defaults);
+				$form->applyFilter('theme', 'trim');
+				break;
+			case USER_FIELD_TYPE_DATETIME:
+				$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_add'));
+				$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+				$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
+				$form -> setDefaults($defaults);
+				$form->applyFilter('theme', 'trim');
+				break;
+			case USER_FIELD_TYPE_DOUBLE_SELECT:
+				foreach ($field_details[9] as $key=>$element)
+				{
+					if ($element[2][0] == '*')
 					{
-						$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
+						$values['*'][$element[0]] = str_replace('*','',$element[2]);
 					}
 					else 
 					{
-						$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
+						$values[0][$element[0]] = $element[2];
 					}
 				}
-			}
-			break;
-		case USER_FIELD_TYPE_DIVIDER:
-			$form->addElement('static',$field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
-			break;
+				
+				$group='';
+				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1],'',$values[0],'');
+				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*','',$values['*'],'');
+				$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+	
+				// recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
+				if (key_exists('extra_'.$field_details[1], $extra_data))
+				{
+					// exploding all the selected values (of both select forms)
+					$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
+					$extra_data['extra_'.$field_details[1]]  =array();
+					
+					// looping through the selected values and assigning the selected values to either the first or second select form
+					foreach ($selected_values as $key=>$selected_value)
+					{
+						if (key_exists($selected_value,$values[0]))
+						{
+							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
+						}
+						else 
+						{
+							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
+						}
+					}
+				}
+				break;
+			case USER_FIELD_TYPE_DIVIDER:
+				$form->addElement('static',$field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
+				break;
+		}
 	}
 }
 

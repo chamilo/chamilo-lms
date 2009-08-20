@@ -179,10 +179,10 @@ class SessionManager {
 						nb_days_access_after_end = ".$nb_days_acess_after." 
 					  WHERE id='$id'";
 				api_sql_query($sql,__FILE__,__LINE__);
-				$sqlu = "UPDATE $tbl_session_rel_course " .
+				/*$sqlu = "UPDATE $tbl_session_rel_course " .
 						  " SET id_coach='$id_coach'" .
 						  " WHERE id_session='$id'";
-				api_sql_query($sqlu,__FILE__,__LINE__);
+				api_sql_query($sqlu,__FILE__,__LINE__);*/
 				return $id;
 			}
 		}

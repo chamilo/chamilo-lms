@@ -278,7 +278,8 @@ a.breadcrumb0 {
 	margin: 0px;
 }
 .session_course_item .courses {
-	height:22px;
+	margin-bottom: 5px;
+	height:35px;
 }
 
 .menu {

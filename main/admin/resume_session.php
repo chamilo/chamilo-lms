@@ -121,7 +121,7 @@ api_display_tool_title($tool_name);
 	<td><?php echo $session['lastname'].' '.$session['firstname'].' ('.$session['username'].')' ?></td>
 </tr>
 <tr>
-	<td><?php echo ('Dates'); ?> :</td>
+	<td><?php echo get_lang('Date'); ?> :</td>
 	<td>
 	<?php
 		if($session['date_start']=='00-00-0000')

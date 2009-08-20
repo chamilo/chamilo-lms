@@ -21,7 +21,6 @@
 function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 	static $character_map = array();
 	static $utf8_like = array('UTF-8', 'US-ASCII');
-	static $unknown = 63; // '?'
 	if (empty($string)) {
 		return $string;
 	}
@@ -56,7 +55,7 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 				if (isset($character_map[$from]['local'][$ord])) {
 					$codepoints[] = $character_map[$from]['local'][$ord];
 				} else {
-					$codepoints[] = $unknown;
+					$codepoints[] = 0xFFFD; // U+FFFD REPLACEMENT CHARACTER is the general substitute character in the Unicode Standard.
 				}
 			} else {
 				$codepoints[] = $ord;
@@ -66,13 +65,12 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 		$codepoints = _api_utf8_to_unicode($string);
 	}
 	if ($to != 'UTF-8') {
-		$unknown_char = chr($unknown);
 		foreach ($codepoints as $i => &$codepoint) {
 			if ($codepoint > 127) {
 				if (isset($character_map[$from]['local'][$codepoint])) {
 					$codepoint = chr($character_map[$from]['local'][$codepoint]);
 				} else {
-					$codepoint = $unknown_char;
+					$codepoint = '?'; // Unknown character.
 				}
 			} else {
 				$codepoint = chr($codepoint);
@@ -138,16 +136,12 @@ function &_api_parse_character_map($name) {
  * output can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
  * are not allowed.
  * @param string $string				The UTF-8 encoded string.
- * @param string $unknown (optional)	A US-ASCII character to represent invalid bytes.
  * @return array						Returns an array of unicode code points.
  * @author Henri Sivonen, mailto:hsivonen@iki.fi
  * @link http://hsivonen.iki.fi/php-utf8/
  * @author Ivan Tcholakov, 2009, modifications for the Dokeos LMS.
 */
-function _api_utf8_to_unicode($string, $unknown = '?') {
-	if (!empty($unknown)) {
-		$unknown = ord($unknown[0]);
-	}
+function _api_utf8_to_unicode($string) {
 	$state = 0;			// cached expected number of octets after the current octet
 						// until the beginning of the next UTF8 character sequence
 	$codepoint  = 0;	// cached Unicode character
@@ -204,9 +198,7 @@ function _api_utf8_to_unicode($string, $unknown = '?') {
 				$state = 0;
 				$codepoint = 0;
 				$bytes = 1;
-				if (!empty($unknown)) {
-					$result[] = $unknown;
-				}
+				$result[] = 0xFFFD; // U+FFFD REPLACEMENT CHARACTER is the general substitute character in the Unicode Standard.
 				continue ;
 			}
 		} else {
@@ -234,9 +226,7 @@ function _api_utf8_to_unicode($string, $unknown = '?') {
 						$state = 0;
 						$codepoint = 0;
 						$bytes = 1;
-						if (!empty($unknown)) {
-							$result[] = $unknown;
-						}
+						$result[] = 0xFFFD;
 						continue ;
 					}
 					if (0xFEFF != $codepoint) {
@@ -254,9 +244,7 @@ function _api_utf8_to_unicode($string, $unknown = '?') {
 				$state = 0;
 				$codepoint = 0;
 				$bytes = 1;
-				if (!empty($unknown)) {
-					$result[] = $unknown;
-				}
+				$result[] = 0xFFFD;
 			}
 		}
 	}
@@ -264,33 +252,28 @@ function _api_utf8_to_unicode($string, $unknown = '?') {
 }
 
 /**
- * Takes an array of ints representing the Unicode characters and returns 
- * a UTF-8 string. Astral planes are supported ie. the ints in the
- * input can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
- * are not allowed.
- * @param array $array					An array of unicode code points representing a string.
- * @param string $unknown (optional)	A US-ASCII character to represent invalid bytes.
+ * Takes an array of ints representing the Unicode characters and returns a UTF-8 string.
+ * @param array $codepoints				An array of unicode code points representing a string.
  * @return string						Returns a UTF-8 string constructed using the given code points.
- * @author Henri Sivonen, mailto:hsivonen@iki.fi
- * @link http://hsivonen.iki.fi/php-utf8/
- * @author Ivan Tcholakov, 2009, modifications for the Dokeos LMS.
- * @see _api_utf8_from_unicodepoint()
 */
-function _api_utf8_from_unicode($array, $unknown = '?') {
-	foreach ($array as $i => &$codepoint) {
-		$codepoint = _api_utf8_from_unicodepoint($codepoint, $unknown);
-	}
-	return implode($array);
+function _api_utf8_from_unicode($codepoints) {
+	return implode(array_map('_api_utf8_chr', $codepoints));
 }
 
 /**
- * Takes an integer value and returns its correspondent representing the Unicode character.
+ * Takes an integer value (codepoint) and returns its correspondent representing the Unicode character.
+ * Astral planes are supported, ie the intger input can be > 0xFFFF. Occurrances of the BOM are ignored.
+ * Surrogates are not allowed.
  * @param array $array					An array of unicode code points representing a string
- * @param string $unknown (optional)	A US-ASCII character to represent invalid bytes.
  * @return string						Returns the corresponding  UTF-8 character.
+ * @author Henri Sivonen, mailto:hsivonen@iki.fi
+ * @link http://hsivonen.iki.fi/php-utf8/
+ * @author Ivan Tcholakov, 2009, modifications for the Dokeos LMS.
  * @see _api_utf8_from_unicode()
+ * This is a UTF-8 aware version of the function chr().
+ * @link http://php.net/manual/en/function.chr.php
  */
-function _api_utf8_from_unicodepoint($codepoint, $unknown = '?') {
+function _api_utf8_chr($codepoint) {
 	// ASCII range (including control chars)
 	if ( ($codepoint >= 0) && ($codepoint <= 0x007f) ) {
 		$result = chr($codepoint);
@@ -304,7 +287,7 @@ function _api_utf8_from_unicodepoint($codepoint, $unknown = '?') {
 	// Test for illegal surrogates
 	} else if ($codepoint >= 0xD800 && $codepoint <= 0xDFFF) {
 		// found a surrogate
-		$result = $unknown;
+		$result = _api_utf8_chr(0xFFFD); // U+FFFD REPLACEMENT CHARACTER is the general substitute character in the Unicode Standard.
 	// 3 byte sequence
 	} else if ($codepoint <= 0xffff) {
 		$result = chr(0xe0 | ($codepoint >> 12)) . chr(0x80 | (($codepoint >> 6) & 0x003f)) . chr(0x80 | ($codepoint & 0x003f));
@@ -313,9 +296,25 @@ function _api_utf8_from_unicodepoint($codepoint, $unknown = '?') {
 		$result = chr(0xf0 | ($codepoint >> 18)) . chr(0x80 | (($codepoint >> 12) & 0x3f)) . chr(0x80 | (($codepoint >> 6) & 0x3f)) . chr(0x80 | ($codepoint & 0x3f));
 	} else {
  		// out of range
-		$result = $unknown;
+		$result = _api_utf8_chr(0xFFFD);
 	}
 	return $result;
+}
+
+/**
+ * Takes the first UTF-8 character in a string and returns its codepoint (integer).
+ * @param string $utf8_character	The UTF-8 encoded character.
+ * @return int						Returns: the codepoint; or 0xFFFD (unknown character) when the input string is empty.
+ * This is a UTF-8 aware version of the function ord().
+ * @link http://php.net/manual/en/function.ord.php
+ * Note about a difference with the original funtion ord(): ord('') returns 0.
+ */
+function _api_utf8_ord($utf8_character) {
+	if (empty($utf8_character)) {
+		return 0xFFFD;
+	}
+	$codepoints = _api_utf8_to_unicode($utf8_character);
+	return $codepoints[0];
 }
 
 
@@ -329,7 +328,6 @@ function _api_utf8_from_unicodepoint($codepoint, $unknown = '?') {
 function _api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
 	static $config = array();
 	static $range = array();
-
 	if (!isset($range[$codepoint])) {
 		if ($codepoint > 128 && $codepoint < 256)  {
 			$range[$codepoint] = '0080_00ff'; // Latin-1 Supplement
@@ -368,7 +366,6 @@ function _api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
 		} else {
 			$range[$codepoint] = false;
 		}
-
 		if ($range[$codepoint] === false) {
 			return null;
 		}
@@ -379,14 +376,11 @@ function _api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
 			}
 		}
 	}
-
 	if ($range[$codepoint] === false || !isset($config[$range[$codepoint]])) {
 		return null;
 	}
-
 	$result = array();
 	$count = count($config[$range[$codepoint]]);
-
 	for ($i = 0; $i < $count; $i++) {
 		if ($type === 'lower' && $config[$range[$codepoint]][$i][$type][0] === $codepoint) {
 			$result[] = $config[$range[$codepoint]][$i];

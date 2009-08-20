@@ -425,7 +425,7 @@ function api_str_split($string, $split_length = 1, $encoding = null) {
 			$result[] = @mb_substr($string, $i, $split_length, $encoding);
 		}
 	}
-	elseif (api_iconv_supports($encoding) || api_is_utf8($encoding)) {
+	elseif (api_is_encoding_supported($encoding)) {
 		for ($i = 0, $length = api_strlen($string, $encoding); $i < $length; $i += $split_length) {
 			$result[] = api_substr($string, $i, $split_length, $encoding);
 		}
@@ -454,11 +454,12 @@ function api_stripos($haystack, $needle, $offset = 0, $encoding = null) {
 	if (api_mb_supports($encoding)) {
 		return @mb_stripos($haystack, $needle, $offset, $encoding);
 	}
-	elseif (MBSTRING_INSTALLED && (api_iconv_supports($encoding) || _api_convert_encoding_supports($encoding))) {
-		return api_utf8_decode(@mb_stripos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8'), $encoding);
-	}
-	elseif (api_iconv_supports($encoding) || _api_convert_encoding_supports($encoding)) {
-		api_strpos(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $offset, $encoding);
+	elseif (api_is_encoding_supported($encoding)) {
+		if (MBSTRING_INSTALLED) {
+			return api_utf8_decode(@mb_stripos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8'), $encoding);
+		} else {
+			return api_strpos(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $offset, $encoding);
+		}
 	}
 	return stripos($haystack, $needle, $offset);
 }
@@ -467,27 +468,40 @@ function api_stripos($haystack, $needle, $offset = 0, $encoding = null) {
  * Finds first occurrence of a string within another, case insensitive.
  * @param string $haystack				The string from which to get the first occurrence.
  * @param string @needle				The string to be found.
- * @param bool $part (optional)			Determines which portion of $haystack this function returns. The default value is FALSE.
+ * @param bool $before_needle (optional)	Determines which portion of $haystack this function returns. The default value is FALSE.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return mixed						Returns the portion of $haystack, or FALSE if $needle is not found.
  * Notes:
- * If $part is set to TRUE, the function returns all of $haystack from the beginning to the first occurrence of $needle.
- * If $part is set to FALSE, the function returns all of $haystack from the first occurrence of $needle to the end.
+ * If $before_needle is set to TRUE, the function returns all of $haystack from the beginning to the first occurrence of $needle.
+ * If $before_needle is set to FALSE, the function returns all of $haystack from the first occurrence of $needle to the end.
  * This function is aimed at replacing the functions stristr() and mb_stristr() for human-language strings.
  * @link http://php.net/manual/en/function.stristr
  * @link http://php.net/manual/en/function.mb-stristr
  */
-function api_stristr($haystack, $needle, $part = false, $encoding = null) {
+function api_stristr($haystack, $needle, $before_needle = false, $encoding = null) {
 	if (empty($encoding)) {
 		$encoding = api_mb_internal_encoding();
 	}
 	if (api_mb_supports($encoding)) {
-		return @mb_stristr($haystack, $needle, $part, $encoding);
+		return @mb_stristr($haystack, $needle, $before_needle, $encoding);
 	}
-	elseif (MBSTRING_INSTALLED && (api_iconv_supports($encoding) || _api_convert_encoding_supports($encoding))) {
-		return api_utf8_decode(@mb_stristr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'));
+	elseif (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
+		return api_utf8_decode(@mb_stristr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $before_needle, 'UTF-8'));
 	}
-	return stristr($haystack, $needle, $part);
+	elseif (api_is_encoding_supported($encoding)) {
+		$result = api_strstr(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $before_needle, $encoding);
+		if ($result === false) {
+			return false;
+		}
+		if ($before_needle) {
+			return api_substr($haystack, 0, api_strlen($result, $encoding), $encoding);
+		}
+		return api_substr($haystack, api_strlen($haystack, $encoding) - api_strlen($result, $encoding), null, $encoding);
+	}
+	if (PHP_VERSION < 5.3) {
+		return stristr($haystack, $needle);
+	}
+	return stristr($haystack, $needle, $before_needle);
 }
 
 /**
@@ -574,17 +588,17 @@ function api_strpos($haystack, $needle, $offset = 0, $encoding = null) {
  * Finds the last occurrence of a character in a string.
  * @param string $haystack				The string from which to get the last occurrence.
  * @param string $needle				The string which first character is to be found.
- * @param bool $part (optional)			Determines which portion of $haystack this function returns. The default value is FALSE.
+ * @param bool $before_needle (optional)	Determines which portion of $haystack this function returns. The default value is FALSE.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return mixed						Returns the portion of $haystack, or FALSE if the first character from $needle is not found.
  * Notes:
- * If $part is set to TRUE, the function returns all of $haystack from the beginning to the first occurrence.
- * If $part is set to FALSE, the function returns all of $haystack from the first occurrence to the end.
+ * If $before_needle is set to TRUE, the function returns all of $haystack from the beginning to the first occurrence.
+ * If $before_needle is set to FALSE, the function returns all of $haystack from the first occurrence to the end.
  * This function is aimed at replacing the functions strrchr() and mb_strrchr() for human-language strings.
  * @link http://php.net/manual/en/function.strrchr
  * @link http://php.net/manual/en/function.mb-strrchr
  */
-function api_strrchr($haystack, $needle, $part = false, $encoding = null) {
+function api_strrchr($haystack, $needle, $before_needle = false, $encoding = null) {
 	if (empty($encoding)) {
 		$encoding = api_mb_internal_encoding();
 	}
@@ -592,10 +606,10 @@ function api_strrchr($haystack, $needle, $part = false, $encoding = null) {
 		return strrchr($haystack, $needle);
 	}
 	elseif (api_mb_supports($encoding)) {
-		return @mb_strrchr($haystack, $needle, $part, $encoding);
+		return @mb_strrchr($haystack, $needle, $before_needle, $encoding);
 	}
 	elseif (MBSTRING_INSTALLED && (api_iconv_supports($encoding) || _api_convert_encoding_supports($encoding))) {
-		return api_utf8_decode(@mb_strrchr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'), $encoding);
+		return api_utf8_decode(@mb_strrchr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $before_needle, 'UTF-8'), $encoding);
 	}
 	return strrchr($haystack, $needle);
 }
@@ -651,30 +665,65 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
  * Finds first occurrence of a string within another.
  * @param string $haystack				The string from which to get the first occurrence.
  * @param string @needle				The string to be found.
- * @param bool $part (optional)			Determines which portion of $haystack this function returns. The default value is FALSE.
+ * @param bool $before_needle (optional)	Determines which portion of $haystack this function returns. The default value is FALSE.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return mixed						Returns the portion of $haystack, or FALSE if $needle is not found.
  * Notes:
- * If $part is set to TRUE, the function returns all of $haystack from the beginning to the first occurrence of $needle.
- * If $part is set to FALSE, the function returns all of $haystack from the first occurrence of $needle to the end.
+ * If $before_needle is set to TRUE, the function returns all of $haystack from the beginning to the first occurrence of $needle.
+ * If $before_needle is set to FALSE, the function returns all of $haystack from the first occurrence of $needle to the end.
  * This function is aimed at replacing the functions strstr() and mb_strstr() for human-language strings.
  * @link http://php.net/manual/en/function.strstr
  * @link http://php.net/manual/en/function.mb-strstr
  */
-function api_strstr($haystack, $needle, $part = false, $encoding = null) {
+function api_strstr($haystack, $needle, $before_needle = false, $encoding = null) {
 	if (empty($encoding)) {
 		$encoding = api_mb_internal_encoding();
 	}
+	if (!is_string($needle)) {
+		$needle = (int)$needle;
+		if (api_is_utf8($encoding)) {
+			$needle = _api_utf8_chr($needle);
+		} else {
+			$needle = chr($needle);
+		}
+	}
 	if (_api_is_single_byte_encoding($encoding)) {
-		return strstr($haystack, $needle, $part);
+		// Adding the missing parameter $before_needle to the original function strstr(), PHP_VERSION < 5.3
+		if (!$before_needle) {
+			return strstr($haystack, $needle);
+		}
+		if (PHP_VERSION < 5.3) {
+			$result = explode($needle, $haystack, 2);
+			if ($result === false || count($result) < 2) {
+				return false;
+			}
+			return $result[0];
+		}
+		return strstr($haystack, $needle, $before_needle);
 	}
 	if (api_mb_supports($encoding)) {
-		return @mb_strstr($haystack, $needle, $part, $encoding);
+		return @mb_strstr($haystack, $needle, $before_needle, $encoding);
 	}
-	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
-		return api_utf8_decode(@mb_strstr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $part, 'UTF-8'), $encoding);
+	elseif (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
+		$result = @mb_strstr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $before_needle, 'UTF-8');
+		if ($result !== false) {
+			return api_utf8_decode($result, $encoding);
+		} else {
+			return false;
+		}
 	}
-	return strstr($haystack, $needle, $part);
+	// Adding the missing parameter $before_needle to the original function strstr(), PHP_VERSION < 5.3
+	if (!$before_needle) {
+		return strstr($haystack, $needle);
+	}
+	if (PHP_VERSION < 5.3) {
+		$result = explode($needle, $haystack, 2);
+		if ($result === false || count($result) < 2) {
+			return false;
+		}
+		return $result[0];
+	}
+	return strstr($haystack, $needle, $before_needle);
 }
 
 /**
@@ -2461,7 +2510,11 @@ function api_iconv_set_encoding($type, $encoding = null) {
  * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
  */
 function api_is_encoding_supported($encoding) {
-	return api_mb_supports($encoding) || api_iconv_supports($encoding) || _api_convert_encoding_supports($encoding);
+	static $supported = array();
+	if (!isset($supported[$encoding])) {
+		$supported[$encoding] = api_mb_supports($encoding) || api_iconv_supports($encoding) || _api_convert_encoding_supports($encoding);
+	}
+	return $supported[$encoding];
 }
 
 /**

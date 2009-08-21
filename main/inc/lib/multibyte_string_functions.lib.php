@@ -66,7 +66,6 @@ function api_byte_count($string) {
 		return mb_strlen($string, '8bit');
 	}
 	return strlen($string);
-
 	// For PHP6 this function probably will contain:
 	//return strlen((binary)$string);
 }
@@ -88,30 +87,32 @@ function api_byte_count($string) {
  * @link http://php.net/manual/en/function.mb-convert-encoding
  */
 function api_convert_encoding($string, $to_encoding, $from_encoding = null) {
+	static $equal_encodings = array();
 	if (empty($from_encoding)) {
 		$from_encoding = api_mb_internal_encoding();
 	}
-	if (api_equal_encodings($to_encoding, $from_encoding)) {
-		// When conversion is not needed, the string is returned directly, without validation.
-		return $string;
+	if (!isset($equal_encodings[$to_encoding][$from_encoding])) {
+		$equal_encodings[$to_encoding][$from_encoding] = api_equal_encodings($to_encoding, $from_encoding);
 	}
-	elseif (api_mb_supports($to_encoding) && api_mb_supports($from_encoding)) {
+	if ($equal_encodings[$to_encoding][$from_encoding]) {
+		return $string; // When conversion is not needed, the string is returned directly, without validation.
+	}
+	if (api_mb_supports($to_encoding) && api_mb_supports($from_encoding)) {
 		return @mb_convert_encoding($string, $to_encoding, $from_encoding);
 	}
-	elseif (api_iconv_supports($to_encoding) && api_iconv_supports($from_encoding)) {
+	if (api_iconv_supports($to_encoding) && api_iconv_supports($from_encoding)) {
 		return @iconv($from_encoding, $to_encoding, $string);
 	}
-	elseif (api_is_utf8($to_encoding) && api_is_latin1($from_encoding, true)) {
+	if (api_is_utf8($to_encoding) && api_is_latin1($from_encoding, true)) {
 		return utf8_encode($string);
 	}
-	elseif (api_is_latin1($to_encoding, true) && api_is_utf8($from_encoding)) {
+	if (api_is_latin1($to_encoding, true) && api_is_utf8($from_encoding)) {
 		return utf8_decode($string);
 	}
-	elseif (_api_convert_encoding_supports($to_encoding) && _api_convert_encoding_supports($from_encoding)) {
+	if (_api_convert_encoding_supports($to_encoding) && _api_convert_encoding_supports($from_encoding)) {
 		return _api_convert_encoding($string, $to_encoding, $from_encoding);
 	}
-	// Here the function gives up.
-	return $string;
+	return $string; // Here the function gives up.
 }
 
 /**
@@ -127,23 +128,21 @@ function api_utf8_encode($string, $from_encoding = null) {
 		$from_encoding = api_mb_internal_encoding();
 	}
 	if (api_is_utf8($from_encoding)) {
-		// When conversion is not needed, the string is returned directly, without validation.
-		return $string;
+		return $string; // When conversion is not needed, the string is returned directly, without validation.
 	}
-	elseif (api_mb_supports($from_encoding)) {
+	if (api_mb_supports($from_encoding)) {
 		return @mb_convert_encoding($string, 'UTF-8', $from_encoding);
 	}
-	elseif (api_iconv_supports($from_encoding)) {
+	if (api_iconv_supports($from_encoding)) {
 		return @iconv($from_encoding, 'UTF-8', $string);
 	}
-	elseif (api_is_latin1($from_encoding, true)) {
+	if (api_is_latin1($from_encoding, true)) {
 		return utf8_encode($string);
 	}
-	elseif (_api_convert_encoding_supports($from_encoding)) {
+	if (_api_convert_encoding_supports($from_encoding)) {
 		return _api_convert_encoding($string, 'UTF-8', $from_encoding);
 	}
-	// Here the function gives up.
-	return $string;
+	return $string; // Here the function gives up.
 }
 
 /**
@@ -159,23 +158,21 @@ function api_utf8_decode($string, $to_encoding = null) {
 		$to_encoding = api_mb_internal_encoding();
 	}
 	if (api_is_utf8($to_encoding)) {
-		// When conversion is not needed, the string is returned directly, without validation.
-		return $string;
+		return $string; // When conversion is not needed, the string is returned directly, without validation.
 	}
-	elseif (api_mb_supports($to_encoding)) {
+	if (api_mb_supports($to_encoding)) {
 		return @mb_convert_encoding($string, $to_encoding, 'UTF-8');
 	}
-	elseif (api_iconv_supports($to_encoding)) {
+	if (api_iconv_supports($to_encoding)) {
 		return @iconv('UTF-8', $to_encoding, $string);
 	}
-	elseif (api_is_latin1($to_encoding, true)) {
+	if (api_is_latin1($to_encoding, true)) {
 		return utf8_decode($string);
 	}
-	elseif (_api_convert_encoding_supports($to_encoding)) {
+	if (_api_convert_encoding_supports($to_encoding)) {
 		return _api_convert_encoding($string, $to_encoding, 'UTF-8');
 	}
-	// Here the function gives up.
-	return $string;
+	return $string; // Here the function gives up.
 }
 
 /**
@@ -288,9 +285,16 @@ function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 
 		return html_entity_decode($string, $quote_style, $encoding);
 	}
 	if (api_is_encoding_supported($encoding)) {
-		return api_utf8_decode(html_entity_decode(api_convert_encoding($string, 'UTF-8', $encoding), $quote_style, 'UTF-8'), $encoding);
+		if (!api_is_utf8($encoding)) {
+			$string = api_utf8_encode($string, $encoding);
+		}
+		$string = html_entity_decode($string, $quote_style, 'UTF-8');
+		if (!api_is_utf8($encoding)) {
+			return api_utf8_decode($string, $encoding);
+		}
+		return $string;
 	}
-	return $string;
+	return $string; // Here the function guves up.
 }
 
 /**
@@ -301,7 +305,12 @@ function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 
  */
 function api_xml_http_response_encode($string, $from_encoding = null) {
 	if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-		return api_convert_encoding($string, 'UTF-8', $from_encoding);
+		if (empty($from_encoding)) {
+			$from_encoding = api_mb_internal_encoding();
+		}
+		if (!api_is_utf8($from_encoding)) {
+			return api_utf8_encode($string, $from_encoding);
+		}
 	}
 	return $string;
 }
@@ -464,7 +473,11 @@ function api_stripos($haystack, $needle, $offset = 0, $encoding = null) {
 	}
 	elseif (api_is_encoding_supported($encoding)) {
 		if (MBSTRING_INSTALLED) {
-			return @mb_stripos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8');
+			if (!api_is_utf8($encoding)) {
+				$haystack = api_utf8_encode($haystack, $encoding);
+				$needle = api_utf8_encode($needle, $encoding);
+			}
+			return @mb_stripos($haystack, $needle, $offset, 'UTF-8');
 		}
 		return api_strpos(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $offset, $encoding);
 	}
@@ -474,7 +487,7 @@ function api_stripos($haystack, $needle, $offset = 0, $encoding = null) {
 /**
  * Finds first occurrence of a string within another, case insensitive.
  * @param string $haystack					The string from which to get the first occurrence.
- * @param mixed $needle					The string to be found.
+ * @param mixed $needle						The string to be found.
  * @param bool $before_needle (optional)	Determines which portion of $haystack this function returns. The default value is FALSE.
  * @param string $encoding (optional)		The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return mixed							Returns the portion of $haystack, or FALSE if $needle is not found.
@@ -503,11 +516,18 @@ function api_stristr($haystack, $needle, $before_needle = false, $encoding = nul
 	}
 	elseif (api_is_encoding_supported($encoding)) {
 		if (MBSTRING_INSTALLED) {
-			$result = @mb_stristr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $before_needle, 'UTF-8');
+			if (!api_is_utf8($encoding)) {
+				$haystack = api_utf8_encode($haystack, $encoding);
+				$needle = api_utf8_encode($needle, $encoding);
+			}
+			$result = @mb_stristr($haystack, $needle, $before_needle, 'UTF-8');
 			if ($result === false) {
 				return false;
 			}
-			return api_utf8_decode($result, $encoding);
+			if (!api_is_utf8($encoding)) {
+				return api_utf8_decode($result, $encoding);
+			}
+			return $result;
 		}
 		$result = api_strstr(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $before_needle, $encoding);
 		if ($result === false) {
@@ -545,13 +565,13 @@ function api_strlen($string, $encoding = null) {
 	if (_api_is_single_byte_encoding($encoding)) {
 		return strlen($string);
 	}
-	elseif (api_mb_supports($encoding)) {
+	if (api_mb_supports($encoding)) {
 		return @mb_strlen($string, $encoding);
 	}
-	elseif (api_iconv_supports($encoding)) {
+	if (api_iconv_supports($encoding)) {
 		return @iconv_strlen($string, $encoding);
 	}
-	elseif (api_is_utf8($encoding)) {
+	if (api_is_utf8($encoding)) {
     	return api_byte_count(preg_replace("/[\x80-\xBF]/", '', $string));
 	}
 	return strlen($string);
@@ -580,12 +600,12 @@ function api_strpos($haystack, $needle, $offset = 0, $encoding = null) {
 		return @mb_strpos($haystack, $needle, $offset, $encoding);
 	}
 	elseif (api_is_encoding_supported($encoding)) {
-		if (MBSTRING_INSTALLED) {
-			return @mb_strpos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8');
-		}
 		if (!api_is_utf8($encoding)) {
 			$haystack = api_utf8_encode($haystack, $encoding);
 			$needle = api_utf8_encode($needle, $encoding);
+		}
+		if (MBSTRING_INSTALLED) {
+			return @mb_strpos($haystack, $needle, $offset, 'UTF-8');
 		}
 		if (empty($offset)) {
 			$haystack = explode($needle, $haystack, 2);
@@ -644,11 +664,18 @@ function api_strrchr($haystack, $needle, $before_needle = false, $encoding = nul
 		return @mb_strrchr($haystack, $needle, $before_needle, $encoding);
 	}
 	elseif (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
-		$result = @mb_strrchr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $before_needle, 'UTF-8');
+		if (!api_is_utf8($encoding)) {
+			$haystack = api_utf8_encode($haystack, $encoding);
+			$needle = api_utf8_encode($needle, $encoding);
+		}
+		$result = @mb_strrchr($haystack, $needle, $before_needle, 'UTF-8');
 		if ($result === false) {
 			return false;
 		}
-		return api_utf8_decode($result, $encoding);
+		if (!api_is_utf8($encoding)) {
+			return api_utf8_decode($result, $encoding);
+		}
+		return $result;
 	}
 	if (!$before_needle) {
 		return strrchr($haystack, $needle);
@@ -707,14 +734,14 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
 		return @mb_strrpos($haystack, $needle, $offset, $encoding);
 	}
 	elseif (api_is_encoding_supported($encoding)) {
-		if (MBSTRING_INSTALLED) {
-			return @mb_strrpos(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $offset, 'UTF-8');
-		}
-		// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
 		if (!api_is_utf8($encoding)) {
 			$haystack = api_utf8_encode($haystack, $encoding);
 			$needle = api_utf8_encode($needle, $encoding);
 		}
+		if (MBSTRING_INSTALLED) {
+			return @mb_strrpos($haystack, $needle, $offset, 'UTF-8');
+		}
+		// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
 		$found = false;
 		$haystack = _api_utf8_to_unicode($haystack);
 		$haystack_count = count($haystack);
@@ -792,12 +819,18 @@ function api_strstr($haystack, $needle, $before_needle = false, $encoding = null
 		return @mb_strstr($haystack, $needle, $before_needle, $encoding);
 	}
 	elseif (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
-		$result = @mb_strstr(api_utf8_encode($haystack, $encoding), api_utf8_encode($needle, $encoding), $before_needle, 'UTF-8');
-		if ($result !== false) {
-			return api_utf8_decode($result, $encoding);
-		} else {
-			return false;
+		if (!api_is_utf8($encoding)) {
+			$haystack = api_utf8_encode($haystack, $encoding);
+			$needle = api_utf8_encode($needle, $encoding);
 		}
+		$result = @mb_strstr($haystack, $needle, $before_needle, 'UTF-8');
+		if ($result !== false) {
+			if (!api_is_utf8($encoding)) {
+				return api_utf8_decode($result, $encoding);
+			}
+			return $result;
+		}
+		return false;
 	}
 	// Adding the missing parameter $before_needle to the original function strstr(), PHP_VERSION < 5.3
 	if (!$before_needle) {
@@ -830,47 +863,48 @@ function api_strtolower($string, $encoding = null) {
 		return @mb_strtolower($string, $encoding);
 	}
 	elseif (api_is_encoding_supported($encoding)) {
-		if (MBSTRING_INSTALLED) {
-			return api_utf8_decode(@mb_strtolower(api_utf8_encode($string, $encoding), 'UTF-8'), $encoding);
-		}
-		// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
 		if (!api_is_utf8($encoding)) {
 			$string = api_utf8_encode($string, $encoding);
 		}
-		$codepoints = _api_utf8_to_unicode($string);
-		$length = count($codepoints);
-		$matched = false;
-		$result = array();
-		for ($i = 0 ; $i < $length; $i++) {
-			$codepoint = $codepoints[$i];
-			if ($codepoint < 128) {
-				$str = strtolower(chr($codepoint));
-				$strlen = api_byte_count($str);
-				for ($ii = 0 ; $ii < $strlen; $ii++) {
-					$lower = ord($str[$ii]);
-				}
-				$result[] = $lower;
-				$matched = true;
-			} else {
-				$matched = false;
-				$properties = _api_utf8_get_letter_case_properties($codepoint, 'upper');
-				if (!empty($properties)) {
-					foreach ($properties as $key => $value) {
-						if ($properties[$key]['upper'] == $codepoint && count($properties[$key]['lower'][0]) === 1) {
-							$result[] = $properties[$key]['lower'][0];
-							$matched = true;
-							break 1;
+		if (MBSTRING_INSTALLED) {
+			$string = @mb_strtolower($string, 'UTF-8');
+		} else {
+			// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
+			$codepoints = _api_utf8_to_unicode($string);
+			$length = count($codepoints);
+			$matched = false;
+			$result = array();
+			for ($i = 0 ; $i < $length; $i++) {
+				$codepoint = $codepoints[$i];
+				if ($codepoint < 128) {
+					$str = strtolower(chr($codepoint));
+					$strlen = api_byte_count($str);
+					for ($ii = 0 ; $ii < $strlen; $ii++) {
+						$lower = ord($str[$ii]);
+					}
+					$result[] = $lower;
+					$matched = true;
+				} else {
+					$matched = false;
+					$properties = _api_utf8_get_letter_case_properties($codepoint, 'upper');
+					if (!empty($properties)) {
+						foreach ($properties as $key => $value) {
+							if ($properties[$key]['upper'] == $codepoint && count($properties[$key]['lower'][0]) === 1) {
+								$result[] = $properties[$key]['lower'][0];
+								$matched = true;
+								break 1;
+							}
 						}
 					}
 				}
+				if ($matched === false) {
+					$result[] = $codepoint;
+				}
 			}
-			if ($matched === false) {
-				$result[] = $codepoint;
-			}
+			$string = _api_utf8_from_unicode($result);
 		}
-		$string = _api_utf8_from_unicode($result);
 		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_decode($string, $encoding);
+			return api_utf8_decode($string, $encoding);
 		}
 		return $string;
 	}
@@ -894,85 +928,86 @@ function api_strtoupper($string, $encoding = null) {
 		return @mb_strtoupper($string, $encoding);
 	}
 	elseif (api_is_encoding_supported($encoding)) {
-		if (MBSTRING_INSTALLED) {
-			return api_utf8_decode(@mb_strtoupper(api_utf8_encode($string, $encoding), 'UTF-8'), $encoding);
-		}
-		// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
 		if (!api_is_utf8($encoding)) {
 			$string = api_utf8_encode($string, $encoding);
 		}
-		$codepoints = _api_utf8_to_unicode($string);
-		$length = count($codepoints);
-		$matched = false;
-		$replaced = array();
-		$result = array();
-		for ($i = 0 ; $i < $length; $i++) {
-			$codepoint = $codepoints[$i];
-			if ($codepoint < 128) {
-				$str = strtoupper(chr($codepoint));
-				$strlen = api_byte_count($str);
-				for ($ii = 0 ; $ii < $strlen; $ii++) {
-					$lower = ord($str[$ii]);
-				}
-				$result[] = $lower;
-				$matched = true;
-			} else {
-				$matched = false;
-				$properties = _api_utf8_get_letter_case_properties($codepoint);
-				$property_count = count($properties);
-				if (!empty($properties)) {
-					foreach ($properties as $key => $value) {
-						$matched = false;
-						$replace = 0;
-						if ($length > 1 && count($properties[$key]['lower']) > 1) {
-							$j = 0;
-							for ($ii = 0; $ii < count($properties[$key]['lower']); $ii++) {
-								$next_codepoint = $next_codepoints[$i + $ii];
-								if (isset($next_codepoint) && ($next_codepoint == $properties[$key]['lower'][$j + $ii])) {
-									$replace++;
+		if (MBSTRING_INSTALLED) {
+			$string = @mb_strtoupper($string, 'UTF-8');
+		} else {
+			// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
+			$codepoints = _api_utf8_to_unicode($string);
+			$length = count($codepoints);
+			$matched = false;
+			$replaced = array();
+			$result = array();
+			for ($i = 0 ; $i < $length; $i++) {
+				$codepoint = $codepoints[$i];
+				if ($codepoint < 128) {
+					$str = strtoupper(chr($codepoint));
+					$strlen = api_byte_count($str);
+					for ($ii = 0 ; $ii < $strlen; $ii++) {
+						$lower = ord($str[$ii]);
+					}
+					$result[] = $lower;
+					$matched = true;
+				} else {
+					$matched = false;
+					$properties = _api_utf8_get_letter_case_properties($codepoint);
+					$property_count = count($properties);
+					if (!empty($properties)) {
+						foreach ($properties as $key => $value) {
+							$matched = false;
+							$replace = 0;
+							if ($length > 1 && count($properties[$key]['lower']) > 1) {
+								$j = 0;
+								for ($ii = 0; $ii < count($properties[$key]['lower']); $ii++) {
+									$next_codepoint = $next_codepoints[$i + $ii];
+									if (isset($next_codepoint) && ($next_codepoint == $properties[$key]['lower'][$j + $ii])) {
+										$replace++;
+									}
+								}
+								if ($replace == count($properties[$key]['lower'])) {
+									$result[] = $properties[$key]['upper'];
+									$replaced = array_merge($replaced, array_values($properties[$key]['lower']));
+									$matched = true;
+									break 1;
+								}
+							} elseif ($length > 1 && $property_count > 1) {
+								$j = 0;
+								for ($ii = 1; $ii < $property_count; $ii++) {
+									$next_codepoint = $next_codepoints[$i + $ii - 1];
+									if (in_array($next_codepoint, $properties[$ii]['lower'])) {
+										for ($jj = 0; $jj < count($properties[$ii]['lower']); $jj++) {
+											$next_codepoint = $next_codepoints[$i + $jj];
+											if (isset($next_codepoint) && ($next_codepoint == $properties[$ii]['lower'][$j + $jj])) {
+												$replace++;
+											}
+										}
+										if ($replace == count($properties[$ii]['lower'])) {
+											$result[] = $properties[$ii]['upper'];
+											$replaced = array_merge($replaced, array_values($properties[$ii]['lower']));
+											$matched = true;
+											break 2;
+										}
+									}
 								}
 							}
-							if ($replace == count($properties[$key]['lower'])) {
+							if ($properties[$key]['lower'][0] == $codepoint) {
 								$result[] = $properties[$key]['upper'];
-								$replaced = array_merge($replaced, array_values($properties[$key]['lower']));
 								$matched = true;
 								break 1;
 							}
-						} elseif ($length > 1 && $property_count > 1) {
-							$j = 0;
-							for ($ii = 1; $ii < $property_count; $ii++) {
-								$next_codepoint = $next_codepoints[$i + $ii - 1];
-								if (in_array($next_codepoint, $properties[$ii]['lower'])) {
-									for ($jj = 0; $jj < count($properties[$ii]['lower']); $jj++) {
-										$next_codepoint = $next_codepoints[$i + $jj];
-										if (isset($next_codepoint) && ($next_codepoint == $properties[$ii]['lower'][$j + $jj])) {
-											$replace++;
-										}
-									}
-									if ($replace == count($properties[$ii]['lower'])) {
-										$result[] = $properties[$ii]['upper'];
-										$replaced = array_merge($replaced, array_values($properties[$ii]['lower']));
-										$matched = true;
-										break 2;
-									}
-								}
-							}
-						}
-						if ($properties[$key]['lower'][0] == $codepoint) {
-							$result[] = $properties[$key]['upper'];
-							$matched = true;
-							break 1;
 						}
 					}
 				}
+				if ($matched === false && !in_array($codepoint, $replaced, true)) {
+					$result[] = $codepoint;
+				}
 			}
-			if ($matched === false && !in_array($codepoint, $replaced, true)) {
-				$result[] = $codepoint;
-			}
+			$string = _api_utf8_from_unicode($result);
 		}
-		$string = _api_utf8_from_unicode($result);
 		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_decode($string, $encoding);
+			return api_utf8_decode($string, $encoding);
 		}
 		return $string;
 	}
@@ -989,6 +1024,7 @@ function api_strtoupper($string, $encoding = null) {
  * This function is aimed at replacing the function strtr() for human-language strings.
  * @link http://php.net/manual/en/function.strtr
  * TODO: To be revised and tested. Probably this function will not be needed.
+ * TODO: This function will be removed. It is not needed. 21-AUG-2009.
  */
 function api_strtr($string, $from, $to = null, $encoding = null) {
 	if (empty($string)) {
@@ -1060,74 +1096,75 @@ function api_substr($string, $start, $length = null, $encoding = null) {
 		return @mb_substr($string, $start, $length, $encoding);
 	}
 	elseif (api_is_encoding_supported($encoding)) {
-		if (MBSTRING_INSTALLED) {
-			return api_utf8_decode(@mb_substr(api_utf8_encode($string, $encoding), $start, $length, 'UTF-8'), $encoding);
-		}
-		// The following branch of code is from the Drupal CMS, see the function drupal_substr().
 		if (!api_is_utf8($encoding)) {
 			$string = api_utf8_encode($string, $encoding);
 		}
-		$strlen = api_byte_count($string);
-		// Find the starting byte offset
-		$bytes = 0;
-		if ($start > 0) {
-			// Count all the continuation bytes from the start until we have found
-			// $start characters
-			$bytes = -1; $chars = -1;
-			while ($bytes < $strlen && $chars < $start) {
-				$bytes++;
-				$c = ord($string[$bytes]);
-				if ($c < 0x80 || $c >= 0xC0) {
-					$chars++;
+		if (MBSTRING_INSTALLED) {
+			$string = @mb_substr($string, $start, $length, 'UTF-8');
+		} else {
+			// The following branch of code is from the Drupal CMS, see the function drupal_substr().
+			$strlen = api_byte_count($string);
+			// Find the starting byte offset
+			$bytes = 0;
+			if ($start > 0) {
+				// Count all the continuation bytes from the start until we have found
+				// $start characters
+				$bytes = -1; $chars = -1;
+				while ($bytes < $strlen && $chars < $start) {
+					$bytes++;
+					$c = ord($string[$bytes]);
+					if ($c < 0x80 || $c >= 0xC0) {
+						$chars++;
+					}
 				}
 			}
-		}
-		else if ($start < 0) {
-			// Count all the continuation bytes from the end until we have found
-			// abs($start) characters
-			$start = abs($start);
-			$bytes = $strlen; $chars = 0;
-			while ($bytes > 0 && $chars < $start) {
-				$bytes--;
-				$c = ord($string[$bytes]);
-				if ($c < 0x80 || $c >= 0xC0) {
-					$chars++;
+			else if ($start < 0) {
+				// Count all the continuation bytes from the end until we have found
+				// abs($start) characters
+				$start = abs($start);
+				$bytes = $strlen; $chars = 0;
+				while ($bytes > 0 && $chars < $start) {
+					$bytes--;
+					$c = ord($string[$bytes]);
+					if ($c < 0x80 || $c >= 0xC0) {
+						$chars++;
+					}
 				}
 			}
-		}
-		$istart = $bytes;
-		// Find the ending byte offset
-		if ($length === NULL) {
-			$bytes = $strlen - 1;
-		}
-		else if ($length > 0) {
-			// Count all the continuation bytes from the starting index until we have
-			// found $length + 1 characters. Then backtrack one byte.
-			$bytes = $istart; $chars = 0;
-			while ($bytes < $strlen && $chars < $length) {
-				$bytes++;
-				$c = ord($string[$bytes]);
-				if ($c < 0x80 || $c >= 0xC0) {
-					$chars++;
-				}
+			$istart = $bytes;
+			// Find the ending byte offset
+			if ($length === NULL) {
+				$bytes = $strlen - 1;
 			}
-			$bytes--;
-		}
-		else if ($length < 0) {
-			// Count all the continuation bytes from the end until we have found
-			// abs($length) characters
-			$length = abs($length);
-			$bytes = $strlen - 1; $chars = 0;
-			while ($bytes >= 0 && $chars < $length) {
-				$c = ord($string[$bytes]);
-				if ($c < 0x80 || $c >= 0xC0) {
-					$chars++;
+			else if ($length > 0) {
+				// Count all the continuation bytes from the starting index until we have
+				// found $length + 1 characters. Then backtrack one byte.
+				$bytes = $istart; $chars = 0;
+				while ($bytes < $strlen && $chars < $length) {
+					$bytes++;
+					$c = ord($string[$bytes]);
+					if ($c < 0x80 || $c >= 0xC0) {
+						$chars++;
+					}
 				}
 				$bytes--;
 			}
+			else if ($length < 0) {
+				// Count all the continuation bytes from the end until we have found
+				// abs($length) characters
+				$length = abs($length);
+				$bytes = $strlen - 1; $chars = 0;
+				while ($bytes >= 0 && $chars < $length) {
+					$c = ord($string[$bytes]);
+					if ($c < 0x80 || $c >= 0xC0) {
+						$chars++;
+					}
+					$bytes--;
+				}
+			}
+			$iend = $bytes;
+			$string = substr($string, $istart, max(0, $iend - $istart + 1));
 		}
-		$iend = $bytes;
-		$string = substr($string, $istart, max(0, $iend - $istart + 1));
 		if (!api_is_utf8($encoding)) {
 			$string = api_utf8_decode($string, $encoding);
 		}
@@ -1159,7 +1196,12 @@ function api_substr_replace($string, $replacement, $start, $length = null, $enco
 	if (empty($encoding)) {
 		$encoding = api_mb_internal_encoding();
 	}
-	if (api_is_encoding_supported($encoding) && !_api_is_single_byte_encoding($encoding)) {
+	if (_api_is_single_byte_encoding($encoding)) {
+		return substr_replace($string, $replacement, $start, $length);
+	}
+	if (api_is_encoding_supported($encoding)) {
+		// This fragment (branch) of code is adaptation of a published proposition:
+		// http://php.net/manual/en/function.substr-replace.php#90146
 		$string_length = api_strlen($string, $encoding);
 		if ($start < 0) {
 			$start = max(0, $string_length + $start);
@@ -1214,8 +1256,24 @@ function api_ucwords($string, $encoding = null) {
     if (api_mb_supports($encoding)) {
 		return @mb_convert_case($string, MB_CASE_TITLE, $encoding);
 	}
-	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
-		return api_utf8_decode(@mb_convert_case(api_utf8_encode($string, $encoding), MB_CASE_TITLE, 'UTF-8'), $encoding);
+	if (api_is_encoding_supported($encoding)) {
+		if (!api_is_utf8($encoding)) {
+			$string = api_utf8_encode($string, $encoding);
+		}
+		if (MBSTRING_INSTALLED) {
+			$string = @mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
+		} else {
+			// The following fragment (branch) of code is based on the function utf8_ucwords() by Harry Fuecks
+			// See http://dev.splitbrain.org/view/darcs/dokuwiki/inc/utf8.php
+			// Note: [\x0c\x09\x0b\x0a\x0d\x20] matches - form feeds, horizontal tabs, vertical tabs, linefeeds and carriage returns.
+			// This corresponds to the definition of a "word" defined at http://www.php.net/ucwords
+			$pattern = '/(^|([\x0c\x09\x0b\x0a\x0d\x20]+))([^\x0c\x09\x0b\x0a\x0d\x20]{1})[^\x0c\x09\x0b\x0a\x0d\x20]*/u';
+			$string = preg_replace_callback($pattern, '_api_utf8_ucwords_callback', $string);
+		}
+		if (!api_is_utf8($encoding)) {
+			return api_utf8_decode($string, $encoding);
+		}
+		return $string;
 	}
 	return ucwords($string);
 }
@@ -1228,6 +1286,8 @@ function api_ucwords($string, $encoding = null) {
  */
 
 /**
+ * Note: Try to avoid using this function. Use api_preg_match() with Perl-compatible regular expression syntax.
+ *
  * Executes a regular expression match with extended multibyte support.
  * By default this function uses the platform character set.
  * @param string $pattern			The regular expression pattern.
@@ -1244,12 +1304,10 @@ function api_ereg($pattern, $string, & $regs = null) {
 	if (api_mb_supports($encoding)) {
 		if ($count < 3) {
 			return @mb_ereg($pattern, $string);
-		} else {
-			$result = @mb_ereg($pattern, $string, $regs);
-			return $result;
 		}
+		return @mb_ereg($pattern, $string, $regs);
 	}
-	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
+	if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
 		global $_api_encoding;
 		$_api_encoding = $encoding;
 		api_mb_regex_encoding('UTF-8');
@@ -1261,16 +1319,16 @@ function api_ereg($pattern, $string, & $regs = null) {
 		}
 		api_mb_regex_encoding($encoding);
 		return $result;
-	} else {
-		if ($count < 3) {
-			return ereg($pattern, $string);
-		} else {
-			return ereg($pattern, $string, $regs);
-		}
 	}
+	if ($count < 3) {
+		return ereg($pattern, $string);
+	}
+	return ereg($pattern, $string, $regs);
 }
 
 /**
+ * Note: Try to avoid using this function. Use api_preg_replace() with Perl-compatible regular expression syntax.
+ *
  * Scans string for matches to pattern, then replaces the matched text with replacement, with extended multibyte support.
  * By default this function uses the platform character set.
  * @param string $pattern				The regular expression pattern.
@@ -1292,13 +1350,11 @@ function api_ereg_replace($pattern, $replacement, $string, $option = null) {
 	if (api_mb_supports($encoding)) {
 		if (is_null($option)) {
 			return @mb_ereg_replace($pattern, $replacement, $string);
-		} else {
-			return @mb_ereg_replace($pattern, $replacement, $string, $option);
 		}
+		return @mb_ereg_replace($pattern, $replacement, $string, $option);
 	}
-	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
+	if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
 		api_mb_regex_encoding('UTF-8');
-
 		if (is_null($option)) {
 			$result = api_utf8_decode(@mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
 		} else {
@@ -1306,12 +1362,13 @@ function api_ereg_replace($pattern, $replacement, $string, $option = null) {
 		}
 		api_mb_regex_encoding($encoding);
 		return $result;
-	} else {
-		return ereg_replace($pattern, $replacement, $string);
 	}
+	return ereg_replace($pattern, $replacement, $string);
 }
 
 /**
+ * Note: Try to avoid using this function. Use api_preg_match() with Perl-compatible regular expression syntax.
+ *
  * Executes a regular expression match, ignoring case, with extended multibyte support.
  * By default this function uses the platform character set.
  * @param string $pattern			The regular expression pattern.
@@ -1328,11 +1385,10 @@ function api_eregi($pattern, $string, & $regs = null) {
 	if (api_mb_supports($encoding)) {
 		if ($count < 3) {
 			return @mb_eregi($pattern, $string);
-		} else {
-			return @mb_eregi($pattern, $string, $regs);
 		}
+		return @mb_eregi($pattern, $string, $regs);
 	}
-	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
+	if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
 		global $_api_encoding;
 		$_api_encoding = $encoding;
 		api_mb_regex_encoding('UTF-8');
@@ -1344,16 +1400,16 @@ function api_eregi($pattern, $string, & $regs = null) {
 		}
 		api_mb_regex_encoding($encoding);
 		return $result;
-	} else {
-		if ($count < 3) {
-			return eregi($pattern, $string);
-		} else {
-			return eregi($pattern, $string, $regs);
-		}
 	}
+	if ($count < 3) {
+		return eregi($pattern, $string);
+	}
+	return eregi($pattern, $string, $regs);
 }
 
 /**
+ * Note: Try to avoid using this function. Use api_preg_replace() with Perl-compatible regular expression syntax.
+ *
  * Scans string for matches to pattern, then replaces the matched text with replacement, ignoring case, with extended multibyte support.
  * By default this function uses the platform character set.
  * @param string $pattern				The regular expression pattern.
@@ -1375,11 +1431,10 @@ function api_eregi_replace($pattern, $replacement, $string, $option = null) {
 	if (api_mb_supports($encoding)) {
 		if (is_null($option)) {
 			return @mb_eregi_replace($pattern, $replacement, $string);
-		} else {
-			return @mb_eregi_replace($pattern, $replacement, $string, $option);
 		}
+		return @mb_eregi_replace($pattern, $replacement, $string, $option);
 	}
-	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
+	if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
 		api_mb_regex_encoding('UTF-8');
 		if (is_null($option)) {
 			$result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
@@ -1388,9 +1443,8 @@ function api_eregi_replace($pattern, $replacement, $string, $option = null) {
 		}
 		api_mb_regex_encoding($encoding);
 		return $result;
-	} else {
-		return eregi_replace($pattern, $replacement, $string);
 	}
+	return eregi_replace($pattern, $replacement, $string);
 }
 
 /**
@@ -1448,16 +1502,17 @@ function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN
  * If matches are found, the new subject will be returned, otherwise subject will be returned unchanged or NULL if an error occurred.
  * @link http://php.net/preg_replace
  */
-function api_preg_replace($pattern, $replacement, $subject, $limit= -1, &$count = 0, $encoding = null) {
+function api_preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0, $encoding = null) {
 	if (empty($encoding)){
 		$encoding = api_get_system_encoding();
 	}
+	$is_utf8 = api_is_utf8($encoding);
 	if (is_array($pattern)) {
 		foreach ($pattern as &$p) {
-			$p = api_is_utf8($encoding) ? $p.'u' : $p;
+			$p = $is_utf8 ? $p.'u' : $p;
 		}
 	} else {
-		$pattern = api_is_utf8($encoding) ? $pattern.'u' : $pattern;
+		$pattern = $is_utf8 ? $pattern.'u' : $pattern;
 	}
 	return preg_replace($pattern, $replacement, $subject, $limit, $count);
 }
@@ -1473,7 +1528,7 @@ function api_preg_replace($pattern, $replacement, $subject, $limit= -1, &$count 
  * @return array|string					Returns an array if the subject parameter is an array, or a string otherwise.
  * @link http://php.net/preg_replace_callback
  */
-function api_preg_replace_callback($pattern, $callback, $subject, $limit= -1, &$count = 0, $encoding = null) {
+function api_preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0, $encoding = null) {
 	if (empty($encoding)){
 		$encoding = api_get_system_encoding();
 	}
@@ -1509,6 +1564,8 @@ function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding =
 }
 
 /**
+ * Note: Try to avoid using this function. Use api_preg_split() with Perl-compatible regular expression syntax.
+ *
  * Splits a multibyte string using regular expression pattern and returns the result as an array.
  * By default this function uses the platform character set.
  * @param string $pattern			The regular expression pattern.
@@ -1524,11 +1581,10 @@ function api_split($pattern, $string, $limit = null) {
 	if (api_mb_supports($encoding)) {
 		if (is_null($limit)) {
 			return @mb_split($pattern, $string);
-		} else {
-			return @mb_split($pattern, $string, $limit);
 		}
+		return @mb_split($pattern, $string, $limit);
 	}
-	elseif (MBSTRING_INSTALLED && api_iconv_supports($encoding)) {
+	if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
 		global $_api_encoding;
 		$_api_encoding = $encoding;
 		api_mb_regex_encoding('UTF-8');
@@ -1540,13 +1596,11 @@ function api_split($pattern, $string, $limit = null) {
 		$result = _api_array_utf8_decode($result);
 		api_mb_regex_encoding($encoding);
 		return $result;
-	} else {
-		if (is_null($limit)) {
-			return split($pattern, $string);
-		} else {
-			return split($pattern, $string, $limit);
-		}
 	}
+	if (is_null($limit)) {
+		return split($pattern, $string);
+	}
+	return split($pattern, $string, $limit);
 }
 
 /**
@@ -2265,12 +2319,10 @@ function api_get_non_utf8_encoding($language = null) {
 	if (is_array($encodings[$language])) {
 		if (!empty($encodings[$language][0])) {
 			return $encodings[$language][0];
-		} else {
-			return 'ISO-8859-15';
 		}
-	} else {
 		return 'ISO-8859-15';
 	}
+	return 'ISO-8859-15';
 }
 
 /**
@@ -2375,11 +2427,10 @@ function api_refine_encoding_id($encoding) {
  * @return bool							Returns TRUE if the encodings are equal, FALSE otherwise.
  */
 function api_equal_encodings($encoding1, $encoding2) {
-	$is_array_encoding1 = is_array($encoding1);
 	$is_array_encoding2 = is_array($encoding2);
 	$encoding1 = api_refine_encoding_id($encoding1);
 	$encoding2 = api_refine_encoding_id($encoding2);
-	if (!$is_array_encoding1 && !$is_array_encoding2) {
+	if (!is_array($encoding1) && !$is_array_encoding2) {
 		return $encoding1 == $encoding2;
 	}
 	if ($is_array_encoding2) {
@@ -2587,13 +2638,10 @@ function api_iconv_set_encoding($type, $encoding = null) {
 				if(@iconv_set_encoding($type, $encoding)) {
 					$iconv_internal_encoding = $encoding;
 					return true;
-				} else {
-					return false;
 				}
-			} else {
 				return false;
 			}
-			break;
+			return false;
 		case 'iconv_input_encoding':
 			if (empty($encoding)) {
 				if (is_null($iconv_input_encoding)) {
@@ -2605,13 +2653,10 @@ function api_iconv_set_encoding($type, $encoding = null) {
 				if(@iconv_set_encoding($type, $encoding)) {
 					$iconv_input_encoding = $encoding;
 					return true;
-				} else {
-					return false;
 				}
-			} else {
 				return false;
 			}
-			break;
+			return false;
 		case 'iconv_output_encoding':
 			if (empty($encoding)) {
 				if (is_null($iconv_output_encoding)) {
@@ -2623,16 +2668,12 @@ function api_iconv_set_encoding($type, $encoding = null) {
 				if(@iconv_set_encoding($type, $encoding)) {
 					$iconv_output_encoding = $encoding;
 					return true;
-				} else {
-					return false;
 				}
-			} else {
 				return false;
 			}
-			break;
-		default:
 			return false;
 	}
+	return false;
 }
 
 /**

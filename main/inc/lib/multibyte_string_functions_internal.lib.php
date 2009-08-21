@@ -8,6 +8,10 @@
  * @author: Ivan Tcholakov, ivantcholakov@gmail.com, 2009
  * @package dokeos.library
  * ==============================================================================
+ * 
+ * Note: All functions and data structures here are not to be used directly.
+ * See the file multibyte_string_functions.lib.php which contains the "public" API.
+ * 
  */
 
 // Global variables used by some callback functions.
@@ -24,7 +28,7 @@ $_api_collator = null;
 // This is a php-implementation of the function api_convert_encoding().
 function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 	static $character_map = array();
-	static $utf8_like = array('UTF-8', 'US-ASCII');
+	static $utf8_compatible = array('UTF-8', 'US-ASCII');
 	if (empty($string)) {
 		return $string;
 	}
@@ -35,7 +39,7 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 	}
 	$to = _api_get_character_map_name($to_encoding);
 	$from = _api_get_character_map_name($from_encoding);
-	if (empty($to) || empty($from) || $to == $from || (in_array($to, $utf8_like) && in_array($from, $utf8_like))) {
+	if (empty($to) || empty($from) || $to == $from || (in_array($to, $utf8_compatible) && in_array($from, $utf8_compatible))) {
 		return $string;
 	}
 	if (!isset($character_map[$to])) {
@@ -395,6 +399,20 @@ function _api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
 	return $result;
 }
 
+/**
+ * A callback function for serving the function api_ucwords()
+ * @author Harry Fuecks
+ * @link http://dev.splitbrain.org/view/darcs/dokuwiki/inc/utf8.php
+ * @author Ivan Tcholakov, adaptation for the Dokeos LMS, 2009
+ * @param array $matches	Input array of matches corresponding to a single word
+ * @return string			Returns a with first char of the word in uppercase
+ */
+function _api_utf8_ucwords_callback($matches) {
+	$leadingws = $matches[2];
+	$ucfirst = api_strtoupper($matches[3], 'UTF-8');
+	$ucword = api_substr_replace(ltrim($matches[0]), $ucfirst, 0, 1, 'UTF-8');
+	return $leadingws . $ucword;
+}
 
 /**
  * ----------------------------------------------------------------------------
@@ -571,11 +589,10 @@ if (MBSTRING_INSTALLED && !function_exists('mb_stristr')) {
 		if ($pos === false) {
 			return false;
 		}
-		elseif($part == true) {
+		if($part == true) {
 			return mb_substr($haystack, 0, $pos + 1, $encoding);
-		} else {
-			return mb_substr($haystack, $pos, mb_strlen($haystack, $encoding), $encoding);
 		}
+		return mb_substr($haystack, $pos, mb_strlen($haystack, $encoding), $encoding);
 	}
 }
 
@@ -591,11 +608,11 @@ if (MBSTRING_INSTALLED && !function_exists('mb_strrchr')) {
 		$pos = mb_strrpos($haystack, $needle, mb_strlen($haystack, $encoding) - 1, $encoding);
 		if ($pos === false) {
 			return false;
-		} elseif($part == true) {
+		} 
+		if($part == true) {
 			return mb_substr($haystack, 0, $pos + 1, $encoding);
-		} else {
-			return mb_substr($haystack, $pos, mb_strlen($haystack, $encoding), $encoding);
 		}
+		return mb_substr($haystack, $pos, mb_strlen($haystack, $encoding), $encoding);
 	}
 }
 
@@ -610,10 +627,10 @@ if (MBSTRING_INSTALLED && !function_exists('mb_strstr')) {
 		$pos = mb_strpos($haystack, $needle, 0, $encoding);
 		if ($pos === false) {
 			return false;
-		} elseif($part == true) {
-			return mb_substr($haystack, 0, $pos + 1, $encoding);
-		} else {
-			return mb_substr($haystack, $pos, mb_strlen($haystack, $encoding), $encoding);
 		}
+		if($part == true) {
+			return mb_substr($haystack, 0, $pos + 1, $encoding);
+		}
+		return mb_substr($haystack, $pos, mb_strlen($haystack, $encoding), $encoding);
 	}
 }

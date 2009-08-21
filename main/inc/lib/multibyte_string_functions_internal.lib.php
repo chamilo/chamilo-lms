@@ -260,9 +260,9 @@ function _api_utf8_to_unicode($string) {
 }
 
 /**
- * Takes an array of ints representing the Unicode characters and returns a UTF-8 string.
- * @param array $codepoints				An array of unicode code points representing a string.
- * @return string						Returns a UTF-8 string constructed using the given code points.
+ * Takes an array of codepoints (integer) representing Unicode characters and returns a UTF-8 string.
+ * @param array $codepoints				An array of Unicode codepoints representing a string.
+ * @return string						Returns a UTF-8 string constructed using the given codepoints.
 */
 function _api_utf8_from_unicode($codepoints) {
 	return implode(array_map('_api_utf8_chr', $codepoints));
@@ -525,6 +525,218 @@ function _api_get_collator_sort_flag($sort_flag = SORT_REGULAR) {
  * ----------------------------------------------------------------------------
  */
 
+/**
+ * Returns a table with non-UTF-8 encodings for all system languages.
+ * @return array		Returns an array in the form array('language1' => array('encoding1', encoding2', ...), ...)
+ * Note: The function api_get_non_utf8_encoding() returns the first encoding from this array that is correspondent to the given language. 
+ */
+function & _api_non_utf8_encodings() {
+	// The following list may have some inconsistencies.
+	// Place the most used for your language encoding at the first place.
+	// If you are adding an encoding, check whether it is supported either by
+	// mbstring library, either by iconv library.
+	// If you modify this list, please, follow the given syntax exactly.
+	// The language names must be stripped of any suffixes, such as _unicode, _corporate, _org, etc.
+	static $encodings =
+'
+arabic: WINDOWS-1256, ISO-8859-6;
+asturian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+bosnian: WINDOWS-1250;
+brazilian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+bulgarian: WINDOWS-1251;
+catalan: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+croatian: WINDOWS-1250;
+czech: WINDOWS-1250, ISO-8859-2;
+danish: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+dari: WINDOWS-1256;
+dutch: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+english: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+euskera:  ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+esperanto: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+finnish: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+french: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+friulian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+galician: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+georgian: GEORGIAN-ACADEMY, GEORGIAN-PS;
+german: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+greek: WINDOWS-1253, ISO-8859-7;
+hebrew: ISO-8859-8, WINDOWS-1255;
+hungarian: WINDOWS-1250, ISO-8859-2;
+indonesian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+italian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+japanese: EUC-JP, ISO-2022-JP, Shift-JIS;
+korean: EUC-KR, ISO-2022-KR, CP949;
+latvian: WINDOWS-1257, ISO-8859-13;
+lithuanian: WINDOWS-1257, ISO-8859-13;
+macedonian: WINDOWS-1251;
+malay: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+norwegian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+occitan: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+pashto: WINDOWS-1256;
+persian: WINDOWS-1256;
+polish: WINDOWS-1250, ISO-8859-2;
+portuguese: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+quechua_cusco: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+romanian: WINDOWS-1250, ISO-8859-2;
+russian: KOI8-R, WINDOWS-1251;
+serbian: ISO-8859-15, WINDOWS-1252, ISO-8859-1, WINDOWS-1251;
+simpl_chinese: GB2312, WINDOWS-936;
+slovak: WINDOWS-1250, ISO-8859-2;
+slovenian: WINDOWS-1250, ISO-8859-2;
+spanish: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+swahili: ISO-8859-1;
+swedish: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+thai: WINDOWS-874, ISO-8859-11;
+trad_chinese: BIG-5, EUC-TW;
+turkce: WINDOWS-1254, ISO-8859-9;
+ukrainian: KOI8-U;
+vietnamese: WINDOWS-1258, VISCII, TCVN;
+yoruba: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
+';
+
+	if (!is_array($encodings)) {
+		$table = explode(';', str_replace(' ', '', $encodings));
+		$encodings = array();
+		foreach ($table as & $row) {
+			$row = trim($row);
+			if (!empty($row)) {
+				$row = explode(':', $row);
+				$encodings[$row[0]] = explode(',', strtoupper($row[1]));
+			}
+		}
+	}
+	return $encodings;
+}
+
+/**
+ * Sets/Gets internal character encoding of the common string functions within the PHP mbstring extension.
+ * @param string $encoding (optional)	When this parameter is given, the function sets the internal encoding.
+ * @return string						When $encoding parameter is not given, the function returns the internal encoding.
+ * Note: This function is used in the global initialization script for setting the internal encoding to the platform's character set.
+ * @link http://php.net/manual/en/function.mb-internal-encoding
+ */
+function _api_mb_internal_encoding($encoding = null) {
+	static $mb_internal_encoding = null;
+	if (empty($encoding)) {
+		if (is_null($mb_internal_encoding)) {
+			if (MBSTRING_INSTALLED) {
+				$mb_internal_encoding = @mb_internal_encoding();
+			} else {
+				$mb_internal_encoding = 'ISO-8859-15';
+			}
+		}
+		return $mb_internal_encoding;
+	}
+	$mb_internal_encoding = $encoding;
+	if (_api_mb_supports($encoding)) {
+		return @mb_internal_encoding($encoding);
+	}
+	return false;
+}
+
+/**
+ * Sets/Gets internal character encoding of the regular expression functions (ereg-like) within the PHP mbstring extension.
+ * @param string $encoding (optional)	When this parameter is given, the function sets the internal encoding.
+ * @return string						When $encoding parameter is not given, the function returns the internal encoding.
+ * Note: This function is used in the global initialization script for setting the internal encoding to the platform's character set.
+ * @link http://php.net/manual/en/function.mb-regex-encoding
+ */
+function _api_mb_regex_encoding($encoding = null) {
+	static $mb_regex_encoding = null;
+	if (empty($encoding)) {
+		if (is_null($mb_regex_encoding)) {
+			if (MBSTRING_INSTALLED) {
+				$mb_regex_encoding = @mb_regex_encoding();
+			} else {
+				$mb_regex_encoding = 'ISO-8859-15';
+			}
+		}
+		return $mb_regex_encoding;
+	}
+	$mb_regex_encoding = $encoding;
+	if (_api_mb_supports($encoding)) {
+		return @mb_regex_encoding($encoding);
+	}
+	return false;
+}
+
+/**
+ * Retrieves specified internal encoding configuration variable within the PHP iconv extension.
+ * @param string $type	The parameter $type could be: 'iconv_internal_encoding', 'iconv_input_encoding', or 'iconv_output_encoding'.
+ * @return mixed		The function returns the requested encoding or FALSE on error.
+ * @link http://php.net/manual/en/function.iconv-get-encoding
+ */
+function _api_iconv_get_encoding($type) {
+	return _api_iconv_set_encoding($type);
+}
+
+/**
+ * Sets specified internal encoding configuration variables within the PHP iconv extension.
+ * @param string $type					The parameter $type could be: 'iconv_internal_encoding', 'iconv_input_encoding', or 'iconv_output_encoding'.
+ * @param string $encoding (optional)	The desired encoding to be set.
+ * @return bool							Returns TRUE on success, FALSE on error.
+ * Note: This function is used in the global initialization script for setting these three internal encodings to the platform's character set.
+ * @link http://php.net/manual/en/function.iconv-set-encoding
+ */
+// Sets current setting for character encoding conversion.
+// The parameter $type could be: 'iconv_internal_encoding', 'iconv_input_encoding', or 'iconv_output_encoding'.
+function _api_iconv_set_encoding($type, $encoding = null) {
+	static $iconv_internal_encoding = null;
+	static $iconv_input_encoding = null;
+	static $iconv_output_encoding = null;
+	if (!ICONV_INSTALLED) {
+		return false;
+	}
+	switch ($type) {
+		case 'iconv_internal_encoding':
+			if (empty($encoding)) {
+				if (is_null($iconv_internal_encoding)) {
+					$iconv_internal_encoding = @iconv_get_encoding($type);
+				}
+				return $iconv_internal_encoding;
+			}
+			if (_api_iconv_supports($encoding)) {
+				if(@iconv_set_encoding($type, $encoding)) {
+					$iconv_internal_encoding = $encoding;
+					return true;
+				}
+				return false;
+			}
+			return false;
+		case 'iconv_input_encoding':
+			if (empty($encoding)) {
+				if (is_null($iconv_input_encoding)) {
+					$iconv_input_encoding = @iconv_get_encoding($type);
+				}
+				return $iconv_input_encoding;
+			}
+			if (_api_iconv_supports($encoding)) {
+				if(@iconv_set_encoding($type, $encoding)) {
+					$iconv_input_encoding = $encoding;
+					return true;
+				}
+				return false;
+			}
+			return false;
+		case 'iconv_output_encoding':
+			if (empty($encoding)) {
+				if (is_null($iconv_output_encoding)) {
+					$iconv_output_encoding = @iconv_get_encoding($type);
+				}
+				return $iconv_output_encoding;
+			}
+			if (_api_iconv_supports($encoding)) {
+				if(@iconv_set_encoding($type, $encoding)) {
+					$iconv_output_encoding = $encoding;
+					return true;
+				}
+				return false;
+			}
+			return false;
+	}
+	return false;
+}
+
 // Ckecks whether a given encoding defines single-byte characters.
 // The result might be not accurate for unknown by this library encodings.
 function _api_is_single_byte_encoding($encoding) {
@@ -536,6 +748,48 @@ function _api_is_single_byte_encoding($encoding) {
 	return $checked[$encoding];
 }
 
+/**
+ * Checks whether the specified encoding is supported by the PHP mbstring extension.
+ * @param string $encoding	The specified encoding.
+ * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
+ */
+function _api_mb_supports($encoding) {
+	static $supported = array();
+	$encoding = api_refine_encoding_id($encoding);
+	if (!isset($supported[$encoding])) {
+		if (MBSTRING_INSTALLED) {
+			$mb_encodings = mb_list_encodings();
+			$mb_encodings = array_map('api_refine_encoding_id', $mb_encodings);
+		} else {
+			$mb_encodings = array();
+		}
+		$supported[$encoding] = in_array($encoding, $mb_encodings);
+	}
+	return $supported[$encoding];
+}
+
+/**
+ * Checks whether the specified encoding is supported by the PHP iconv extension.
+ * @param string $encoding	The specified encoding.
+ * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
+ */
+function _api_iconv_supports($encoding) {
+	static $supported = array();
+	$encoding = api_refine_encoding_id($encoding);
+	if (!isset($supported[$encoding])) {
+		if (ICONV_INSTALLED) {
+			$test_string = '';
+			for ($i = 32; $i < 128; $i++) {
+				$test_string .= chr($i);
+			}
+			$supported[$encoding] = (@iconv_strlen($test_string, $encoding)) ? true : false;
+		} else {
+			$supported[$encoding] = false;
+		}
+	}
+	return $supported[$encoding];
+}
+
 // This function checks whether the function _api_convert_encoding() (the php-
 // implementation) is able to convert from/to a given encoding.
 function _api_convert_encoding_supports($encoding) {
@@ -544,6 +798,64 @@ function _api_convert_encoding_supports($encoding) {
 		$supports[encoding] = _api_get_character_map_name($encoding) != '';
 	}
 	return $supports[encoding];
+}
+
+/**
+ * Checks whether the specified encoding is supported by the html-entitiy related functions.
+ * @param string $encoding	The specified encoding.
+ * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
+ */
+function _api_html_entity_supports($encoding) {
+	static $supported = array();
+	$encoding = api_refine_encoding_id($encoding);
+	if (!isset($supported[$encoding])) {
+		// See http://php.net/manual/en/function.htmlentities.php
+		$html_entity_encodings = array(explode(',',
+'
+ISO-8859-1, ISO8859-1,
+ISO-8859-15, ISO8859-15,
+UTF-8,
+cp866, ibm866, 866,
+cp1251, Windows-1251, win-1251, 1251,
+cp1252, Windows-1252, 1252,
+KOI8-R, koi8-ru, koi8r,
+BIG5, 950,
+GB2312, 936,
+BIG5-HKSCS,
+Shift_JIS, SJIS, 932,
+EUC-JP, EUCJP
+'));
+		$html_entity_encodings = array_map('trim', $html_entity_encodings);
+		$html_entity_encodings = array_map('api_refine_encoding_id', $html_entity_encodings);
+		$supported[$encoding] = in_array($encoding, $html_entity_encodings);
+	}
+	return $supported[$encoding] ? true : false;
+}
+
+
+/**
+ * ----------------------------------------------------------------------------
+ * Appendix to "Language management functions"
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * This function returns an array of those languages that can use Latin 1 encoding.
+ * @return array	The array of languages that can use Latin 1 encoding (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...).
+ * Note: The returned language identificators are purified, without suffixes.
+ */
+function _api_get_latin1_compatible_languages() {
+	static $latin1_languages;
+	if (!isset($latin1_languages)) {
+		$latin1_languages = array();
+		$encodings = & _api_non_utf8_encodings();
+		foreach ($encodings as $key => $value) {
+			if (api_is_latin1($value[0])) {
+				$latin1_languages[] = $key;
+			}
+		}
+	}
+	return $latin1_languages;
 }
 
 

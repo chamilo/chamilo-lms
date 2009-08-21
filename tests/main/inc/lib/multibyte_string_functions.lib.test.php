@@ -626,7 +626,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	}
 	
 	public function testApiNonUtf8Encodings(){
-		$res = & api_non_utf8_encodings();
+		$res = & _api_non_utf8_encodings();
 		$this->assertTrue($res);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
@@ -692,7 +692,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	
 	public function testapi_mb_internal_encoding(){
 		$encoding = null;
-		$res = api_mb_internal_encoding($encoding);
+		$res = _api_mb_internal_encoding($encoding);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res);
 		//var_dump($res);
@@ -700,7 +700,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	
 	public function testapi_mb_regex_encoding(){
 		$encoding = null;
-		$res = api_mb_regex_encoding($encoding);
+		$res = _api_mb_regex_encoding($encoding);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res);
 		//var_dump($res);
@@ -708,7 +708,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	
 	public function testapi_iconv_get_encoding($type){
 		$type='UTF-8';
-		$res = api_iconv_get_encoding($type);
+		$res = _api_iconv_get_encoding($type);
 		if(!is_string($res)) :
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res=== true || $res === false);
@@ -719,7 +719,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	public function testApiIconvSetEncoding(){
 		$type='UTF-8';
 		$encoding = null;
-		$res = api_iconv_set_encoding($type, $encoding);
+		$res = _api_iconv_set_encoding($type, $encoding);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === true|| $res === false);
 		//var_dump($res);
@@ -736,7 +736,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	
 	public function testapi_mb_supports(){
 		$encoding='UTF-8';
-		$res = api_mb_supports($encoding);
+		$res = _api_mb_supports($encoding);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === true || $res === false);
 		//var_dump($res);
@@ -744,7 +744,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	
 	public function testapi_iconv_supports(){
 		$encoding='UTF-8';
-		$res = api_iconv_supports($encoding);
+		$res = _api_iconv_supports($encoding);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === true || $res === false);
 		$this->assertTrue($res);
@@ -753,7 +753,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	
 	public function testapi_html_entity_supports(){
 		$encoding='UTF-8';
-		$res = api_html_entity_supports($encoding);
+		$res = _api_html_entity_supports($encoding);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === true || $res === false);
 		//var_dump($res);

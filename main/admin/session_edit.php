@@ -94,7 +94,7 @@ if (!empty($return)) {
 
 <div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
 
-<table border="0" cellpadding="5" cellspacing="0" width="550">
+<table border="0" cellpadding="5" cellspacing="0" width="600">
 
 <tr>
   <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>

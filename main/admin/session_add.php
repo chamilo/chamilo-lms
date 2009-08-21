@@ -146,7 +146,7 @@ if (!empty($return)) {
 <form method="post" name="form" action="<?php echo api_get_self(); ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 <div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
-<table border="0" cellpadding="5" cellspacing="0" width="550">
+<table border="0" cellpadding="5" cellspacing="0" width="600">
 <tr>
   <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
   <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>"></td>
@@ -200,7 +200,7 @@ if (intval($count_users)<50) {
   	<input type="checkbox" name="nolimit" onChange="setDisable(this)" />
   </td>
 <tr>
-  <td width="30%"><?php echo get_lang('DateStart') ?>&nbsp;&nbsp;</td>
+  <td width="30%"><?php echo get_lang('DateStartSession') ?>&nbsp;&nbsp;</td>
   <td width="70%">
   <select name="day_start">
 	<option value="1">01</option>
@@ -265,7 +265,7 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
   </td>
 </tr>
 <tr>
-  <td width="30%"><?php echo get_lang('DateEnd') ?>&nbsp;&nbsp;</td>
+  <td width="30%"><?php echo get_lang('DateEndSession') ?>&nbsp;&nbsp;</td>
   <td width="70%">
   <select name="day_end">
 	<option value="1">01</option>

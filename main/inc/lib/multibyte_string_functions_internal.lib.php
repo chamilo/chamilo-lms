@@ -44,6 +44,12 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 	if (api_equal_encodings($to_encoding, $from_encoding)) {
 		return $string;
 	}
+	if ($to_encoding == 'HTML-ENTITIES') {
+		return api_htmlentities($string, ENT_QUOTES, $from_encoding);
+	}
+	if ($from_encoding == 'HTML-ENTITIES') {
+		return api_html_entity_decode($string, ENT_QUOTES, $to_encoding);
+	}
 	$to = _api_get_character_map_name($to_encoding);
 	$from = _api_get_character_map_name($from_encoding);
 	if (empty($to) || empty($from) || $to == $from || (in_array($to, $utf8_compatible) && in_array($from, $utf8_compatible))) {

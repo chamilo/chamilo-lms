@@ -12,6 +12,8 @@ return array(
 	'CP367' => 'US-ASCII',
 	'ISO646-US' => 'US-ASCII',
 
+	'HTML-ENTITIES' => 'HTML-ENTITIES',
+
 	'ISO-8859-1' => '8859-1',
 	'ISO8859-1' => '8859-1',
 	'LATIN1' => '8859-1',

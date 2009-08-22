@@ -253,9 +253,10 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 		Display::display_error_message(get_lang('UplNotEnoughSpace'));
 		return false;
 	}
+	
 	//if the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
 	if ($unzip == 1 && preg_match("/.zip$/", strtolower($uploaded_file['name'])) )
-	{
+	{	
 		return unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $maxFilledSpace, $output, $to_group_id);
 		//display_message("Unzipping file");
 	}
@@ -902,13 +903,13 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	global $_user;
 	global $to_user_id;
 	global $to_group_id;
-
+	
 	$zip_file = new pclZip($uploaded_file['tmp_name']);
 
 	// Check the zip content (real size and file extension)
 
 	$zip_content_array = $zip_file->listContent();
-
+	
 	foreach((array) $zip_content_array as $this_content)
 	{
 		$real_filesize += $this_content['size'];
@@ -934,10 +935,10 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	$save_dir = getcwd();
 	chdir($base_work_dir.$upload_path);
 	//we extract using a callback function that "cleans" the path
-	$unzipping_state = $zip_file->extract(PCLZIP_CB_PRE_EXTRACT, 'clean_up_files_in_zip');
+	$unzipping_state = $zip_file->extract(PCLZIP_CB_PRE_EXTRACT, 'clean_up_files_in_zip');	
 	// Add all documents in the unzipped folder to the database
 	add_all_documents_in_folder_to_database($_course,$_user['user_id'],$base_work_dir,$upload_path == '/' ? '' : $upload_path, $to_group_id);
-	
+	Display::display_normal_message(get_lang('UplZipExtractSuccess'));
 	return true;
 	/*
 	if ($upload_path != '/')
@@ -1854,9 +1855,10 @@ function build_missing_files_form($missing_files,$upload_path,$file_name)
 function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path='',$to_group_id=0)
 {
 
-$path = $base_work_dir.$current_path;
-//open dir
-$handle=opendir($path);
+	$path = $base_work_dir.$current_path;
+	
+	//open dir
+	$handle=opendir($path);
 	//run trough
 	while($file=readdir($handle))
 	{
@@ -1864,7 +1866,7 @@ $handle=opendir($path);
 
 	   $completepath="$path/$file";
 	   //directory?
-	   
+  
 	   if (is_dir($completepath))
 	   {
 	   	$title=get_document_title($file);

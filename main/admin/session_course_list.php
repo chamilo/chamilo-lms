@@ -37,7 +37,7 @@ if(!list($session_name)=mysql_fetch_row($result))
 }
 
 if($action == 'delete') {
-	$idChecked = $_POST['idChecked'];
+	$idChecked = $_REQUEST['idChecked'];
 	if(is_array($idChecked) && count($idChecked)>0) {		
 		$my_temp = array(); 
 		foreach ($idChecked as $id){

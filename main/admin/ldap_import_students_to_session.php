@@ -130,8 +130,8 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed']))
 		$info = ldap_get_entries($ds, $sr);
 
 		for ($key = 0; $key < $info["count"]; $key ++) {
-			$nom_form[] = $info[$key]["sn"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["sn"][0]);
-			$prenom_form[] = $info[$key]["givenname"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
+			$nom_form[] = $info[$key]["sn"][0];//api_utf8_decode($info[$key]["sn"][0], api_get_setting('platform_charset'));
+			$prenom_form[] = $info[$key]["givenname"][0];//api_utf8_decode($info[$key]["givenname"][0], api_get_setting('platform_charset'));
 			$email_form[] = $info[$key]["mail"][0];
 			// Get uid from dn
 			//$dn_array=ldap_explode_dn($info[$key]["dn"],1);

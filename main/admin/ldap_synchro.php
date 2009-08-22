@@ -109,8 +109,8 @@ foreach($Sessions as $session){
 					echo "<pre>";
 					print_r($info[$key]);
 					echo "</pre>";
-					$lastname = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]["sn"][0]);
-					$firstname = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
+					$lastname = api_utf8_decode($info[$key]["sn"][0], api_get_setting('platform_charset'));
+					$firstname = api_utf8_decode($info[$key]["givenname"][0], api_get_setting('platform_charset'));
 					$email = $info[$key]["mail"][0];
 					// Get uid from dn
 					$dn_array=ldap_explode_dn($info[$key]["dn"],1);

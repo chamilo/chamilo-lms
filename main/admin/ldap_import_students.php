@@ -109,7 +109,7 @@ elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0;
 		for($i = 0; $i < $info['count']; $i ++)
 		{
 			//presupose LDAP server is UTF-8
-			$composante[$info[$i]['ou'][0]] = iconv('utf-8', api_get_setting('platform_charset'), $info[$i]['description'][0]);
+			$composante[$info[$i]['ou'][0]] = api_utf8_decode($info[$i]['description'][0], api_get_setting('platform_charset'));
 		}
 		$oucompotab3=$composante;
 
@@ -189,7 +189,7 @@ elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0com
 			if ($ouetapetab[$key] != $tempcomp) {
 				$etape = $ouetapetab2[$key];
 				$tempcomp = '"'.$ouetapetab[$key].'"';
-				$tempcomp = iconv('utf-8',api_get_setting('platform_charset'),$tempcomp);
+				$tempcomp = api_utf8_decode($tempcomp, api_get_setting('platform_charset'));
 
 				$annee = str_word_count($etape, 1);
 				echo '<option value="'.$etape.'">'.$tempcomp.'</option>';
@@ -255,8 +255,8 @@ elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed']))
 		$info = ldap_get_entries($ds, $sr);
 
 		for ($key = 0; $key < $info["count"]; $key ++) {
-			$nom_form[] = $info[$key]["sn"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["sn"][0]);
-			$prenom_form[] = $info[$key]["givenname"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
+			$nom_form[] = $info[$key]["sn"][0];//api_utf8_decode($info[$key]["sn"][0], api_get_setting('platform_charset'));
+			$prenom_form[] = $info[$key]["givenname"][0];//api_utf8_decode($info[$key]["givenname"][0], api_get_setting('platform_charset'));
 			$email_form[] = $info[$key]["mail"][0];
 			// Get uid from dn
 			//$dn_array=ldap_explode_dn($info[$key]["dn"],1);

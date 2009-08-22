@@ -2449,7 +2449,7 @@ function api_get_file_system_encoding() {
  * Note: This function should be called once the initialization. Please, avoid further manipulation of the internal default encodings.
  */
 function api_set_default_encoding($encoding) {
-	if (MBSTRING_INSTALLED) {
+	if (MBSTRING_INSTALLED) { // This fragment of initialization code should find a better place in the future.
 		// Additional mbstring-related initialization operations.
 		@ini_set('mbstring.func_overload', 0);
 		@ini_set('mbstring.encoding_translation', 0);

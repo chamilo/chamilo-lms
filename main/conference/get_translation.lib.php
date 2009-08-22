@@ -55,7 +55,7 @@ function get_language_file_as_xml($language='english')
 				//todo: The following conversion should only happen for old language files (encoded in ISO-8859-1).
 				if($convert)
 				{
-					$string = mb_convert_encoding($items[2],'UTF-8','ISO-8859-1');
+					$string = api_convert_encoding($items[2],'UTF-8','ISO-8859-1');
 				}
 				else
 				{

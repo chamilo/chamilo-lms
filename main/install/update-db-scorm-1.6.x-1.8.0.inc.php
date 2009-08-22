@@ -1032,8 +1032,8 @@ foreach($scorms as $my_course_code => $paths_list )
             //parse manifest file
             $manifest = $oScorm->parse_manifest($scorm_lp_paths[$my_content_id]['ims']);
             //the title is already escaped in the method
-            //$my_lp_title = mb_convert_encoding($oScorm->get_title(),'ISO-8859-1',$oScorm->manifest_encoding);
-            $my_lp_title = mb_convert_encoding($oScorm->get_title(),'ISO-8859-1','UTF-8');
+            //$my_lp_title = api_convert_encoding($oScorm->get_title(),'ISO-8859-1',$oScorm->manifest_encoding);
+            $my_lp_title = api_convert_encoding($oScorm->get_title(),'ISO-8859-1','UTF-8');
             if(!empty($my_lp_title)){
                 $my_new_lp = $db_name.$new_lp;  
                 $my_sql = "UPDATE $my_new_lp " .

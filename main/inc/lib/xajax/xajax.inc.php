@@ -1162,7 +1162,14 @@ class xajax
 		{
 			$sFuncToUse = NULL;
 			
-			if (function_exists('iconv'))
+			// An adaptation for the Dokeos LMS, 22-AUG-2009.
+			if (function_exists('api_convert_encoding'))
+			{
+				$sFuncToUse = "api_convert_encoding";
+			}
+			//if (function_exists('iconv'))
+			elseif (function_exists('iconv'))
+			//
 			{
 				$sFuncToUse = "iconv";
 			}
@@ -1191,6 +1198,12 @@ class xajax
 					{
 						$sValue = mb_convert_encoding($sValue, $this->sEncoding, "UTF-8");
 					}
+					// Added code, an adaptation for the Dokeos LMS, 22-AUG-2009.
+					else if ($sFuncToUse == "api_convert_encoding")
+					{
+						$sValue = api_convert_encoding($sValue, $this->sEncoding, "UTF-8");
+					}
+					//
 					else
 					{
 						$sValue = utf8_decode($sValue);

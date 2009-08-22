@@ -529,7 +529,13 @@ class xajaxResponse
 	function _cmdXML($aAttributes, $sData)
 	{
 		if ($this->bOutputEntities) {
-			if (function_exists('mb_convert_encoding')) {
+			// An adaptation for the Dokeos LMS, 22-AUG-2009.
+			if (function_exists('api_convert_encoding')) {
+				$sData = call_user_func_array('api_convert_encoding', array(&$sData, 'HTML-ENTITIES', $this->sEncoding));
+			}
+			//if (function_exists('mb_convert_encoding')) {
+			elseif (function_exists('mb_convert_encoding')) {
+			//
 				$sData = call_user_func_array('mb_convert_encoding', array(&$sData, 'HTML-ENTITIES', $this->sEncoding));
 			}
 			else {

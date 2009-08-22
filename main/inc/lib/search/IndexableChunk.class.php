@@ -61,7 +61,7 @@ abstract class _IndexableChunk
     public function addTerm($term, $flag) {
       global $charset;
       if (strlen($flag) == 1) {
-        $this->terms[] = array('name' => mb_convert_encoding(stripslashes($term),'UTF-8',$charset), 'flag' => $flag);
+        $this->terms[] = array('name' => api_convert_encoding(stripslashes($term),'UTF-8',$charset), 'flag' => $flag);
       }
     }
 

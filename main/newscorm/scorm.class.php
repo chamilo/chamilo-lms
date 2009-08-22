@@ -448,10 +448,10 @@ class scorm extends learnpath {
 				//the XML document encoding is. This means that we have to convert
 				//the data to the declared encoding when it is not UTF-8
 				if($this->manifest_encoding != 'UTF-8'){
-		     		$title = mb_convert_encoding($title,$this->manifest_encoding,'UTF-8');
+		     		$title = api_convert_encoding($title,$this->manifest_encoding,'UTF-8');
 		     	}
 				//if($this->manifest_encoding != $charset){
-		     	//	$title = mb_convert_encoding($title,$charset,$this->manifest_encoding);
+		     	//	$title = api_convert_encoding($title,$charset,$this->manifest_encoding);
 		     	//}
 				$identifier = Database::escape_string($item['identifier']);
 				$prereq = Database::escape_string($item['prerequisites']);

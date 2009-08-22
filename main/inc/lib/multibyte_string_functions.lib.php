@@ -47,6 +47,58 @@
 
 /**
  * ----------------------------------------------------------------------------
+ * Initialization
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Initialization of some internal default valies of the multibyte string library.
+ * @return void
+ * Note: This function should be called once in the initialization script.
+ */
+function api_initialize_string_library() {
+	if (MBSTRING_INSTALLED) {
+		@ini_set('mbstring.func_overload', 0);
+		@ini_set('mbstring.encoding_translation', 0);
+		@ini_set('mbstring.http_input', 'pass');
+		@ini_set('mbstring.http_output', 'pass');
+		@ini_set('mbstring.language', 'neutral');
+	}
+	api_set_string_library_default_encoding('ISO-8859-15');
+	api_set_string_library_default_language('english');
+}
+
+/**
+ * Sets the internal default encoding for the multi-byte string functions.
+ * @param string $encoding		The specified default encoding.
+ * @return string				Returns the old value of the default encoding.
+ */
+function api_set_string_library_default_encoding($encoding) {
+	$encoding = api_refine_encoding_id($encoding);
+	$result = _api_mb_internal_encoding();
+	_api_mb_internal_encoding($encoding);
+	_api_mb_regex_encoding($encoding);
+	_api_iconv_set_encoding('iconv_internal_encoding', $encoding);
+	return $result;
+}
+
+/**
+ * Sets the internal default language value.
+ * If the intl extension is present, given language identificator modifies string comparison and sorting functionaliry.
+ * @param string $language		The specified default language.
+ * @return string				Returns the old value of the default language.
+ */
+function api_set_string_library_default_language($language) {
+	static $old_language = 'english';
+	_api_set_default_locale(_api_get_locale_from_language($language));
+	$result = $old_language;
+	$old_language = $language;
+	return $result;
+}
+
+
+/**
+ * ----------------------------------------------------------------------------
  * A safe way to calculate binary lenght of a string (as number of bytes)
  * ----------------------------------------------------------------------------
  */
@@ -2304,26 +2356,6 @@ function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = nu
  */
 
 /**
- * Returns the most-probably used non-UTF-8 encoding for the given language.
- * @param string $language (optional)	The specified language, the default value is the user intrface language.
- * @return string						The correspondent encoding to the specified language.
- */
-function api_get_non_utf8_encoding($language = null) {
-	if (empty($language)) {
-		$language = api_get_interface_language();
-	}
-	$language = api_refine_language_id($language);
-	$encodings = & _api_non_utf8_encodings();
-	if (is_array($encodings[$language])) {
-		if (!empty($encodings[$language][0])) {
-			return $encodings[$language][0];
-		}
-		return 'ISO-8859-15';
-	}
-	return 'ISO-8859-15';
-}
-
-/**
  * This function unifies the encoding identificators, so they could be compared.
  * @param string/array $encoding	The specified encoding.
  * @return string					Returns the encoding identificator modified in suitable for comparison way.
@@ -2443,26 +2475,6 @@ function api_get_file_system_encoding() {
 }
 
 /**
- * Sets all internal default encodings of the multi-byte functions to the given value.
- * @param string $encoding		The specified default encoding.
- * @return void
- * Note: This function should be called once the initialization. Please, avoid further manipulation of the internal default encodings.
- */
-function api_set_default_encoding($encoding) {
-	if (MBSTRING_INSTALLED) { // This fragment of initialization code should find a better place in the future.
-		// Additional mbstring-related initialization operations.
-		@ini_set('mbstring.func_overload', 0);
-		@ini_set('mbstring.encoding_translation', 0);
-		@ini_set('mbstring.http_input', 'pass');
-		@ini_set('mbstring.http_output', 'pass');
-		@ini_set('mbstring.language', 'neutral');
-	}
-	_api_mb_internal_encoding($encoding);
-	_api_mb_regex_encoding($encoding);
-	_api_iconv_set_encoding('iconv_internal_encoding', $encoding);
-}
-
-/**
  * Checks whether a specified encoding is supported by this API.
  * @param string $encoding	The specified encoding.
  * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
@@ -2475,6 +2487,26 @@ function api_is_encoding_supported($encoding) {
 	return $supported[$encoding];
 }
 
+
+/**
+ * Returns the most-probably used non-UTF-8 encoding for the given language.
+ * @param string $language (optional)	The specified language, the default value is the user intrface language.
+ * @return string						The correspondent encoding to the specified language.
+ */
+function api_get_non_utf8_encoding($language = null) {
+	if (empty($language)) {
+		$language = api_get_interface_language();
+	}
+	$language = api_refine_language_id($language);
+	$encodings = & _api_non_utf8_encodings();
+	if (is_array($encodings[$language])) {
+		if (!empty($encodings[$language][0])) {
+			return $encodings[$language][0];
+		}
+		return 'ISO-8859-15';
+	}
+	return 'ISO-8859-15';
+}
 
 /**
  * ----------------------------------------------------------------------------
@@ -2691,60 +2723,6 @@ function api_is_latin1_compatible($language) {
 	}
 	$language = api_refine_language_id($language);
 	return in_array($language, $latin1_languages);
-}
-
-
-/**
- * ----------------------------------------------------------------------------
- * ICU locales (accessible through intl extension).
- * ----------------------------------------------------------------------------
- */
-
-/**
- * Returns isocode (see api_get_language_isocode()) which is purified accordingly to
- * be used by the php intl extension (ICU library).
- * @param string $language (optional)	This is the name of the folder containing translations for the corresponding language.
- * If $language is omitted, interface language is assumed then.
- * @return string						The found language locale id or null on error. Examples: bg, en, pt_BR, ...
- */
-function api_get_locale_from_language($language = null) {
-	static $locale = array();
-	if (!isset($locale[$language])) {
-		$locale[$language] = Database::get_language_isocode($language);
-		if (!is_null($locale[$language])) {
-			$locale[$language] = str_replace('-', '_', $locale[$language]);
-		}
-	}
-	return $locale[$language];
-}
-
-/**
- * Sets/gets the default internal value of the locale id (for the intl extension, ICU).
- * @param string $locale (optional)	The locale id to be set. When it is omitted, the function returns (gets, reads) the default internal value.
- * @return mixed						When the function sets the default value, it returns TRUE on success or FALSE on error. Otherwise the function returns as string the current default value.
- */
-function api_set_default_locale($locale = null) {
-	static $default_locale = 'en';
-	if (!empty($locale)) {
-		$default_locale = $locale;
-		if (INTL_INSTALLED) {
-			return @locale_set_default($locale);
-		}
-		return true;
-	} else {
-		if (INTL_INSTALLED) {
-			$default_locale = @locale_get_default();
-		}
-	}
-	return $default_locale;
-}
-
-/**
- * Gets the default internal value of the locale id (for the intl extension, ICU).
- * @return string		Returns as string the current default value.
- */
-function api_get_default_locale() {
-	return api_set_default_locale();
 }
 
 

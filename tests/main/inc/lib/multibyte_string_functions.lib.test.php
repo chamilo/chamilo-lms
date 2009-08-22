@@ -683,7 +683,8 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	
 	public function testApiSetDefaultEncoding(){
 		$encoding ='UTF-8';
-		$res = api_set_default_encoding($encoding);
+		$res = api_set_string_library_default_encoding($encoding);
+		api_set_string_library_default_encoding($res); // This is for restoring the original internal value.
 		if(!is_null($res)) :
 		$this->assertTrue($res);
 		endif;
@@ -798,7 +799,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	
 	public function testapi_get_locale_from_language(){
 		$language = 'EN';
-		$res = api_get_locale_from_language($language);
+		$res = _api_get_locale_from_language($language);
 		if(!is_null($res)):
 		$this->assertTrue($res);
 		$this->assertTrue(is_string);
@@ -808,7 +809,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	
 	public function testapi_set_default_locale(){
 		$locale = null;
-		$res = api_set_default_locale($locale);
+		$res = _api_set_default_locale($locale);
 		if(!is_string($res)) :
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === true || $res === false);

@@ -467,7 +467,7 @@ function _api_array_utf8_decode($variable) {
 function _api_get_collator($language = null) {
 	static $collator = array();
 	if (!isset($collator[$language])) {
-		$locale = api_get_locale_from_language($language);
+		$locale = _api_get_locale_from_language($language);
 		$collator[$language] = collator_create($locale);
 		if (is_object($collator[$language])) {
 			collator_set_attribute($collator[$language], Collator::CASE_FIRST, Collator::UPPER_FIRST);
@@ -484,7 +484,7 @@ function _api_get_collator($language = null) {
 function _api_get_alpha_numerical_collator($language = null) {
 	static $collator = array();
 	if (!isset($collator[$language])) {
-		$locale = api_get_locale_from_language($language);
+		$locale = _api_get_locale_from_language($language);
 		$collator[$language] = collator_create($locale);
 		if (is_object($collator[$language])) {
 			collator_set_attribute($collator[$language], Collator::CASE_FIRST, Collator::UPPER_FIRST);
@@ -576,6 +576,64 @@ function _api_get_collator_sort_flag($sort_flag = SORT_REGULAR) {
 			return Collator::SORT_NUMERIC;
 	}
 	return Collator::SORT_REGULAR;
+}
+
+
+/**
+ * ----------------------------------------------------------------------------
+ * ICU locales (accessible through intl extension).
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Returns isocode (see api_get_language_isocode()) which is purified accordingly to
+ * be used by the php intl extension (ICU library).
+ * @param string $language (optional)	This is the name of the folder containing translations for the corresponding language.
+ * If $language is omitted, interface language is assumed then.
+ * @return string						The found language locale id or null on error. Examples: bg, en, pt_BR, ...
+ */
+function _api_get_locale_from_language($language = null) {
+	static $locale = array();
+	if (!isset($locale[$language])) {
+		if (class_exists('Database')) {
+			$locale[$language] = Database::get_language_isocode($language);
+		} else {
+			return 'en';
+		}
+		if (!is_null($locale[$language])) {
+			$locale[$language] = str_replace('-', '_', $locale[$language]);
+		}
+	}
+	return $locale[$language];
+}
+
+/**
+ * Sets/gets the default internal value of the locale id (for the intl extension, ICU).
+ * @param string $locale (optional)	The locale id to be set. When it is omitted, the function returns (gets, reads) the default internal value.
+ * @return mixed						When the function sets the default value, it returns TRUE on success or FALSE on error. Otherwise the function returns as string the current default value.
+ */
+function _api_set_default_locale($locale = null) {
+	static $default_locale = 'en';
+	if (!empty($locale)) {
+		$default_locale = $locale;
+		if (INTL_INSTALLED) {
+			return @locale_set_default($locale);
+		}
+		return true;
+	} else {
+		if (INTL_INSTALLED) {
+			$default_locale = @locale_get_default();
+		}
+	}
+	return $default_locale;
+}
+
+/**
+ * Gets the default internal value of the locale id (for the intl extension, ICU).
+ * @return string		Returns as string the current default value.
+ */
+function api_get_default_locale() {
+	return _api_set_default_locale();
 }
 
 

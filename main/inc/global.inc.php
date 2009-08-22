@@ -260,8 +260,11 @@ if (empty($charset)) {
 }
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
-// Initialization of the default encoding that will be used by the string routines.
-api_set_default_encoding($charset);
+
+// Initialization of the multibyte string library.
+api_initialize_string_library();
+// Initialization of the default encoding that will be used by the multibyte string routines.
+api_set_string_library_default_encoding($charset);
 
 /*
 --------------------------------------------
@@ -570,8 +573,8 @@ if ($_course['language'])
 // to use it within the function get_lang(...).
 $language_interface_initial_value = $language_interface;
 
-// Initialization the default ICU locale id based in the current interface language.
-api_set_default_locale(api_get_locale_from_language($language_interface));
+// Initialization of the default language for the multibyte string library.
+api_set_string_library_default_language($language_interface);
 
 /*
  * Include all necessary language files

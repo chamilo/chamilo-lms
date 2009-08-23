@@ -285,22 +285,11 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
 	if (_api_mb_supports($encoding) || _api_iconv_supports($encoding)) {
 		$string = api_convert_encoding(api_utf8_encode($string, $encoding), 'HTML-ENTITIES', 'UTF-8');
 	}
-	elseif (api_is_utf8($encoding)) {
-		$string = _api_utf8_to_htmlentities($string);
-	}
 	elseif (_api_convert_encoding_supports($encoding)) {
 		if (!api_is_utf8($encoding)) {
 			$string = _api_convert_encoding($string, 'UTF-8', $encoding);
 		}
-		$string = _api_utf8_to_unicode($string);
-		foreach ($string as $key => &$value) {
-			if ($value < 128) {
-				$value = chr($value);
-			} else {
-				$value = '&#'.$value.';';
-			}
-		}
-		$string = implode($string);
+		$string = implode(array_map('_api_html_entity_from_unicode', _api_utf8_to_unicode($string)));
 		if (!api_is_utf8($encoding)) {
 			$string = _api_convert_encoding($string, $encoding, 'UTF-8');
 		}
@@ -693,6 +682,17 @@ function api_stripos($haystack, $needle, $offset = 0, $encoding = null) {
 	if (empty($encoding)){
 		$encoding = _api_mb_internal_encoding();
 	}
+	if (!is_string($needle)) {
+		$needle = (int)$needle;
+		if (api_is_utf8($encoding)) {
+			$needle = _api_utf8_chr($needle);
+		} else {
+			$needle = chr($needle);
+		}
+	}
+	if ($needle == '') {
+		return false;
+	}
 	if (_api_mb_supports($encoding)) {
 		return @mb_stripos($haystack, $needle, $offset, $encoding);
 	}
@@ -735,6 +735,9 @@ function api_stristr($haystack, $needle, $before_needle = false, $encoding = nul
 		} else {
 			$needle = chr($needle);
 		}
+	}
+	if ($needle == '') {
+		return false;
 	}
 	if (_api_mb_supports($encoding)) {
 		return @mb_stristr($haystack, $needle, $before_needle, $encoding);
@@ -818,6 +821,17 @@ function api_strpos($haystack, $needle, $offset = 0, $encoding = null) {
 	if (empty($encoding)) {
 		$encoding = _api_mb_internal_encoding();
 	}
+	if (!is_string($needle)) {
+		$needle = (int)$needle;
+		if (api_is_utf8($encoding)) {
+			$needle = _api_utf8_chr($needle);
+		} else {
+			$needle = chr($needle);
+		}
+	}
+	if ($needle == '') {
+		return false;
+	}
 	if (_api_is_single_byte_encoding($encoding)) {
 		return strpos($haystack, $needle, $offset);
 	}
@@ -874,6 +888,9 @@ function api_strrchr($haystack, $needle, $before_needle = false, $encoding = nul
 		} else {
 			$needle = chr($needle);
 		}
+	}
+	if ($needle == '') {
+		return false;
 	}
 	if (_api_is_single_byte_encoding($encoding)) {
 		if (!$before_needle) {
@@ -952,6 +969,17 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
 	if (empty($encoding)) {
 		$encoding = _api_mb_internal_encoding();
 	}
+	if (!is_string($needle)) {
+		$needle = (int)$needle;
+		if (api_is_utf8($encoding)) {
+			$needle = _api_utf8_chr($needle);
+		} else {
+			$needle = chr($needle);
+		}
+	}
+	if ($needle == '') {
+		return false;
+	}
 	if (_api_is_single_byte_encoding($encoding)) {
 		return strrpos($haystack, $needle, $offset);
 	}
@@ -1025,6 +1053,9 @@ function api_strstr($haystack, $needle, $before_needle = false, $encoding = null
 		} else {
 			$needle = chr($needle);
 		}
+	}
+	if ($needle == '') {
+		return false;
 	}
 	if (_api_is_single_byte_encoding($encoding)) {
 		// Adding the missing parameter $before_needle to the original function strstr(), PHP_VERSION < 5.3
@@ -1240,61 +1271,6 @@ function api_strtoupper($string, $encoding = null) {
 }
 
 /**
- * Translates certain characters.
- * @param string $string				The string being translated.
- * @param mixed $from					A string that contains the character to be replaced. This parameter can be also an array with pairs of characters 'from' => 'to'.
- * @param string $to (optional)			A string that contains the replacing characters.
- * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return string						Returns a copy of $string, translating all occurrences of each character in $from to the corresponding character in $to.
- * This function is aimed at replacing the function strtr() for human-language strings.
- * @link http://php.net/manual/en/function.strtr
- * TODO: To be revised and tested. Probably this function will not be needed.
- * TODO: This function will be removed. It is not needed. 21-AUG-2009.
- */
-function api_strtr($string, $from, $to = null, $encoding = null) {
-	if (empty($string)) {
-		return '';
-	}
-	if (is_array($from)) {
-		if (empty($from)) {
-			return $string;
-		}
-		$encoding = $to;
-		if (empty($encoding)){
-			$encoding = _api_mb_internal_encoding();
-		}
-		$translator = $from;
-	} else {
-		if (empty($from) || empty($to)) {
-			return $string;
-		}
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$translator = array();
-		$arr_from = api_str_split($from, 1, $encoding);
-		$arr_to = api_str_split($to, 1, $encoding);
-		$n = count($arr_from);
-		$n2 = count($arr_to);
-		if ($n > $n2) $n = $n2;
-		for ($i = 0; $i < $n; $i++) {
-			$translator[$arr_from[$i]] = $arr_to[$i];
-		}
-	}
-	$arr_string = api_str_split($string, 1, $encoding);
-	$n = count($arr_string);
-	$result = '';
-	for ($i = 0; $i < $n; $i++) {
-		if (is_set($translator[$arr_string[$i]])) {
-			$result .= $translator[$arr_string[$i]];
-		} else {
-			$result .= $arr_string[$i];
-		}
-	}
-	return $result;
-}
-
-/**
 // Gets part of a string.
  * @param string $string				The input string.
  * @param int $start					The first position from which the extracted part begins.
@@ -1425,26 +1401,14 @@ function api_substr_replace($string, $replacement, $start, $length = null, $enco
 		return substr_replace($string, $replacement, $start, $length);
 	}
 	if (api_is_encoding_supported($encoding)) {
-		// This fragment (branch) of code is adaptation of a published proposition:
-		// http://php.net/manual/en/function.substr-replace.php#90146
-		$string_length = api_strlen($string, $encoding);
-		if ($start < 0) {
-			$start = max(0, $string_length + $start);
+		if (is_null($length)) {
+			$length = api_strlen($string);
 		}
-		else if ($start > $string_length) {
-			$start = $string_length;
+		if ($start > 0) {
+			 return api_substr($string, 0, $start) . $replacement . api_substr($string, $start + $length);
 		}
-		if ($length < 0) {
-			$length = max(0, $string_length - $start + $length);
-		}
-		else if (is_null($length) || ($length > $string_length)) {
-			$length = $string_length;
-		}
-		if (($start + $length) > $string_length) {
-			$length = $string_length - $start;
-		}
-		return api_substr($string, 0, $start, $encoding) . $replacement . api_substr($string, $start + $length, $string_length - $start - $length, $encoding);
-	}
+		return $replacement . api_substr($string, $start + $length);
+ 	}
 	if (is_null($length)) {
 		return substr_replace($string, $replacement, $start);
 	}
@@ -2337,6 +2301,9 @@ function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = nu
 		return in_array($needle, $haystack, $strict);
 	}
 	$needle = api_strtolower($needle, $encoding);
+	if (!is_array($haystack)) {
+		return false;
+	}
 	foreach ($haystack as $item) {
 		if ($strict && !is_string($item)) {
 			continue;

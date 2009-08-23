@@ -341,6 +341,18 @@ function _api_utf8_ord($utf8_character) {
 	return $codepoints[0];
 }
 
+/**
+ * Makes a html-entity from Unicode codepoint.
+ * @param int $codepoint			The Unicode codepoint.
+ * @return string					Returns the corresponding html-entity; or ASCII character if $codepoint < 128.
+ */
+function _api_html_entity_from_unicode($codepoint) {
+	if ($codepoint < 128) {
+		return chr($codepoint);
+	}
+	return '&#'.$codepoint.';';
+}
+
 
 /**
  * ----------------------------------------------------------------------------
@@ -421,18 +433,12 @@ function _api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
 }
 
 /**
- * A callback for serving the function api_ucwords()
- * @author Harry Fuecks
- * @link http://dev.splitbrain.org/view/darcs/dokuwiki/inc/utf8.php
- * @author Ivan Tcholakov, adaptation for the Dokeos LMS, 2009
+ * A callback for serving the function api_ucwords().
  * @param array $matches	Input array of matches corresponding to a single word
  * @return string			Returns a with first char of the word in uppercase
  */
 function _api_utf8_ucwords_callback($matches) {
-	$leadingws = $matches[2];
-	$ucfirst = api_strtoupper($matches[3], 'UTF-8');
-	$ucword = api_substr_replace(ltrim($matches[0]), $ucfirst, 0, 1, 'UTF-8');
-	return $leadingws . $ucword;
+	return $matches[2] . api_ucfirst(ltrim($matches[0]), 'UTF-8');
 }
 
 

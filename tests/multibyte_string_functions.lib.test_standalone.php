@@ -35,10 +35,11 @@ $_SESSION['_user']['user_id'] = 1;
 
 class MultibyteStringLibraryTests extends TestSuite {
 
-    function TestMultibyteStringLibrary() {
+    function  MultibyteStringLibraryTests() {
         $this->TestSuite('Multibyte String Library Tests');
 
-      $this->addTestFile($_test_sys_library_path.'multibyte_string_functions.lib.test.php');
+        global $_test_sys_library_path;
+		$this->addTestFile($_test_sys_library_path.'multibyte_string_functions.lib.test.php');
     }
 
 }

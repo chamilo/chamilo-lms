@@ -109,12 +109,12 @@ function get_navigation_items($include_admin_tools = false)
 			$sql_result = api_sql_query($course_settings_sql);
 			$course_setting_info = mysql_fetch_array($sql_result);
 			$course_setting_visual_name = get_lang(ucfirst($course_setting_info['name']));
-
-			// course settings item
-			$navigation_items['course_settings']['image'] = $course_setting_info['image'];
-			$navigation_items['course_settings']['link'] = api_get_path(REL_CODE_PATH).'course_info/infocours.php';
-			$navigation_items['course_settings']['name'] = $course_setting_visual_name;
-
+			if (api_get_session_id()==0) {
+				// course settings item
+				$navigation_items['course_settings']['image'] = $course_setting_info['image'];
+				$navigation_items['course_settings']['link'] = api_get_path(REL_CODE_PATH).'course_info/infocours.php';
+				$navigation_items['course_settings']['name'] = $course_setting_visual_name;
+			}
 		}
 	}
 	foreach($navigation_items as $key => $navigation_item)

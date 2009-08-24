@@ -164,7 +164,7 @@ if(!empty($msgErr))
 </tr>
 <tr>
   <td align="right"><?php echo get_lang('Name'); ?> :</td>
-  <td><input type="text" name="name_link" size="50" value="<?php if($_POST['formSent']) echo htmlentities($name_link,ENT_QUOTES,$charset); else echo $toolid ? htmlspecialchars($row['name'],ENT_QUOTES,$charset) : ''; ?>"></td>
+  <td><input type="text" name="name_link" size="50" value="<?php if($_POST['formSent']) echo api_htmlentities($name_link,ENT_QUOTES,$charset); else echo $toolid ? htmlspecialchars($row['name'],ENT_QUOTES,$charset) : ''; ?>"></td>
 </tr>
 <tr>
   <td align="right"><?php echo get_lang('LinkTarget'); ?> :</td>

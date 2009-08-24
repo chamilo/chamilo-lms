@@ -333,7 +333,7 @@ if (is_array($list) && count($list) > 0){
 						$view_score = ($score == 0 ? '/' : ($maxscore === 0 ? $score : $score . '/' . float_format($maxscore, 1)));
 					}
 					$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . api_convert_encoding(get_lang('Attempt'), $lp_charset, $dokeos_charset) . ' ' . $row['iv_view_count'] . "</td>\n"
-					//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
+					//."<td><font color='$color'><div class='mystatus'>".api_htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 					 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . $view_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';
 					
 					if (!empty($export_csv)) {
@@ -587,7 +587,7 @@ if (is_array($list) && count($list) > 0){
 					$correct_test_link = '-';
 				}
 				
-				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
+				//."<td><font color='$color'><div class='mystatus'>".api_htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 				$title = Security::remove_XSS($title);
 				if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {					
 					$output .= "<tr class='$oddclass' >\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' .$title. '</div></td>' . "\n";				

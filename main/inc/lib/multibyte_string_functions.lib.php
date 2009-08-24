@@ -578,45 +578,60 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
  * If $search is an array and $replace is a string, then this replacement string is used for every value of search.
  * This function is aimed at replacing the function str_ireplace() for human-language strings.
  * @link http://php.net/manual/en/function.str-ireplace
+ * @author Henri Sivonen, mailto:hsivonen@iki.fi
+ * @link http://hsivonen.iki.fi/php-utf8/
+ * @author Ivan Tcholakov, August 2009, adaptation for the Dokeos LMS.
  */
 function api_str_ireplace($search, $replace, $subject, & $count = null, $encoding = null) {
 	if (empty($encoding)) {
 		$encoding = _api_mb_internal_encoding();
 	}
-	if (is_array($subject)) {
-		foreach ($subject as $key => $val) {
-			$subject[$key] = api_str_ireplace($search, $replace, $val, $count, $encoding);
+	if (!is_array($search) && !is_array($replace)) {
+		if (!api_is_utf8($encoding)) {
+			$search = api_utf8_encode($search, $encoding);
+		}
+		$slen = api_byte_count($search);
+		if ( $slen == 0 ) {
+			return $subject;
+		}
+		if (!api_is_utf8($encoding)) {
+			$replace = api_utf8_encode($replace, $encoding);
+			$subject = api_utf8_encode($subject, $encoding);
+		}
+		$lendif = api_byte_count($replace) - api_byte_count($search);
+		$search = api_strtolower($search, 'UTF-8');
+		$search = preg_quote($search);
+		$lstr = api_strtolower($subject, 'UTF-8');
+		$i = 0;
+		$matched = 0;
+		while (preg_match('/(.*)'.$search.'/Us', $lstr, $matches) ) {
+			if ($i === $count) {
+				break;
+			}
+			$mlen = api_byte_count($matches[0]);
+			$lstr = substr($lstr, $mlen);
+			$subject = substr_replace($subject, $replace, $matched + api_byte_count($matches[1]), $slen);
+			$matched += $mlen + $lendif;
+			$i++;
+		}
+		if (!api_is_utf8($encoding)) {
+			$subject = api_utf8_decode($subject, $encoding);
 		}
 		return $subject;
-	}
-	if (is_array($search)) {
-		foreach (array_keys($search) as $key) {
+	} else {
+		foreach (array_keys($search) as $k) {
 			if (is_array($replace)) {
-				if (array_key_exists($key, $replace)) {
-					$subject = api_str_ireplace($search[$key], $replace[$key], $subject, $count, $encoding);
+				if (array_key_exists($k, $replace)) {
+					$subject = api_str_ireplace($search[$k], $replace[$k], $subject, $count);
 				} else {
-					$subject = api_str_ireplace($search[$key], '', $subject, $count, $encoding);
+					$subject = api_str_ireplace($search[$k], '', $subject, $count);
 				}
 			} else {
-				$subject = api_str_ireplace($search[$key], $replace, $subject, $count, $encoding);
+				$subject = api_str_ireplace($search[$k], $replace, $subject, $count);
 			}
 		}
 		return $subject;
 	}
-	$search = api_strtolower($search, $encoding);
-	$subject_lower = api_strtolower($subject, $encoding);
-	$total_matched_strlen = 0;
-	$i = 0;
-	while (api_preg_match('/(.*?)'.preg_quote($search, '/').'/s', $subject_lower, $matches, 0, 0, $encoding)) {
-		$matched_strlen = api_strlen($matches[0], $encoding);
-		$subject_lower = api_substr($subject_lower, $matched_strlen, api_strlen($subject_lower, $encoding), $encoding);
-		$offset = $total_matched_strlen + api_strlen($matches[1], $encoding) + ($i * (api_strlen($replace, $encoding) - 1));
-		$subject = api_substr_replace($subject, $replace, $offset, api_strlen($search), $encoding);
-		$total_matched_strlen += $matched_strlen;
-		$i++;
-	}
-	$count += $i;
-	return $subject;
 }
 
 /**
@@ -1419,7 +1434,7 @@ function api_substr_replace($string, $replacement, $start, $length = null, $enco
 			$string = api_utf8_decode($string, $encoding);
 		}
 		return $string;
- 	}
+	}
 	if (is_null($length)) {
 		return substr_replace($string, $replacement, $start);
 	}

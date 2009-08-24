@@ -168,7 +168,7 @@ function &_api_parse_character_map($name) {
  * @return array						Returns an array of unicode code points.
  * @author Henri Sivonen, mailto:hsivonen@iki.fi
  * @link http://hsivonen.iki.fi/php-utf8/
- * @author Ivan Tcholakov, 2009, adaptation for the Dokeos LMS.
+ * @author Ivan Tcholakov, August 2009, adaptation for the Dokeos LMS.
 */
 function _api_utf8_to_unicode($string) {
 	$state = 0;			// cached expected number of octets after the current octet

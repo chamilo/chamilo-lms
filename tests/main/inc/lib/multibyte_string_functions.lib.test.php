@@ -158,7 +158,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
  */
 
 	public function test_api_str_ireplace() {
-		$search = 'á'; // UTF-8
+		$search = 'Á'; // UTF-8
 		$replace = 'a';
 		$subject = 'bájando'; // UTF-8
 		$count = null; 

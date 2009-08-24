@@ -141,6 +141,10 @@ function showtools2($cat)
 
 	foreach ($toolsRow_all as $toolsRow)
 	{
+		if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
+				continue;
+		}
+		
 		$cell_content = '';
 		// the name of the tool
 		$tool_name = ($toolsRow['name_translated'] != "" ? $toolsRow['name_translated'] : htmlspecialchars($toolsRow['name'],ENT_QUOTES,$charset)); // RH: added htmlspecialchars

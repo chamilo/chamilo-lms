@@ -170,7 +170,9 @@ function show_tools_category($course_tool_category)
 	{
 		foreach($tmp_all_tools_list as $toolsRow)
 		{
-
+			if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
+				continue;
+			}
 			if($toolsRow['image'] == 'blog.gif')
 			{
 				// Init

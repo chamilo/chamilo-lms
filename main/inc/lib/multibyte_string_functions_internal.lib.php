@@ -88,8 +88,8 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 	if ($to != 'UTF-8') {
 		foreach ($codepoints as $i => &$codepoint) {
 			if ($codepoint > 127) {
-				if (isset($character_map[$from]['local'][$codepoint])) {
-					$codepoint = chr($character_map[$from]['local'][$codepoint]);
+				if (isset($character_map[$to]['unicode'][$codepoint])) {
+					$codepoint = chr($character_map[$to]['unicode'][$codepoint]);
 				} else {
 					$codepoint = '?'; // Unknown character.
 				}
@@ -130,7 +130,7 @@ function _api_get_character_map_name($encoding) {
  * @return array			Returns an array that contains forward and reverse tables (from/to Unicode).
  */
 function &_api_parse_character_map($name) {
-	$result = array('local' => array(), 'unicode' => array());
+	$result = array();
 	$file = dirname(__FILE__) . '/multibyte_string_database/conversion/' . $name . '.TXT';
 	if (file_exists($file)) {
 		$text = @file_get_contents($file);
@@ -145,8 +145,9 @@ function &_api_parse_character_map($name) {
 					preg_match('/[[:space:]]*0x([[:alnum:]]*)[[:space:]]+0x([[:alnum:]]*)[[:space:]]+/', $line, $matches);
 					$ord = hexdec(trim($matches[1]));
 					if ($ord > 127) {
-						$result['local'][$ord] = hexdec(trim($matches[2]));
-						$result['unicode'][$result['local'][$ord]] = $ord;
+						$codepoint =  hexdec(trim($matches[2]));
+						$result['local'][$ord] = $codepoint;
+						$result['unicode'][$codepoint] = $ord;
 					}
 				}
 			}
@@ -876,7 +877,8 @@ function _api_is_single_byte_encoding($encoding) {
 	static $checked = array();
 	if (!isset($checked[$encoding])) {
 		$character_map = _api_get_character_map_name(api_refine_encoding_id($encoding));
-		$checked[$encoding] = (!empty($character_map) && $character_map != 'UTF-8');
+		$checked[$encoding] = (!empty($character_map)
+			&& !in_array($character_map, array('UTF-8', 'HTML-ENTITIES')));
 	}
 	return $checked[$encoding];
 }
@@ -888,15 +890,12 @@ function _api_is_single_byte_encoding($encoding) {
  */
 function _api_mb_supports($encoding) {
 	static $supported = array();
-	$encoding = api_refine_encoding_id($encoding);
 	if (!isset($supported[$encoding])) {
 		if (MBSTRING_INSTALLED) {
-			$mb_encodings = mb_list_encodings();
-			$mb_encodings = array_map('api_refine_encoding_id', $mb_encodings);
+			$supported[$encoding] = api_equal_encodings($encoding, mb_list_encodings());
 		} else {
-			$mb_encodings = array();
+			$supported[$encoding] = false;
 		}
-		$supported[$encoding] = in_array($encoding, $mb_encodings);
 	}
 	return $supported[$encoding];
 }
@@ -908,14 +907,18 @@ function _api_mb_supports($encoding) {
  */
 function _api_iconv_supports($encoding) {
 	static $supported = array();
-	$encoding = api_refine_encoding_id($encoding);
 	if (!isset($supported[$encoding])) {
 		if (ICONV_INSTALLED) {
-			$test_string = '';
-			for ($i = 32; $i < 128; $i++) {
-				$test_string .= chr($i);
+			$enc = api_refine_encoding_id($encoding);
+			if ($enc != 'HTML-ENTITIES') {
+				$test_string = '';
+				for ($i = 32; $i < 128; $i++) {
+					$test_string .= chr($i);
+				}
+				$supported[$encoding] = (@iconv_strlen($test_string, $enc)) ? true : false;
+			} else {
+				$supported[$encoding] = false;
 			}
-			$supported[$encoding] = (@iconv_strlen($test_string, $encoding)) ? true : false;
 		} else {
 			$supported[$encoding] = false;
 		}
@@ -927,10 +930,10 @@ function _api_iconv_supports($encoding) {
 // implementation) is able to convert from/to a given encoding.
 function _api_convert_encoding_supports($encoding) {
 	static $supports = array();
-	if (!isset($supports[encoding])) {
-		$supports[encoding] = _api_get_character_map_name($encoding) != '';
+	if (!isset($supports[$encoding])) {
+		$supports[$encoding] = _api_get_character_map_name(api_refine_encoding_id($encoding)) != '';
 	}
-	return $supports[encoding];
+	return $supports[$encoding];
 }
 
 /**
@@ -939,30 +942,26 @@ function _api_convert_encoding_supports($encoding) {
  * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
  */
 function _api_html_entity_supports($encoding) {
-	static $supported = array();
-	$encoding = api_refine_encoding_id($encoding);
-	if (!isset($supported[$encoding])) {
+	static $supports = array();
+	if (!isset($supports[$encoding])) {
 		// See http://php.net/manual/en/function.htmlentities.php
-		$html_entity_encodings = array(explode(',',
-'
-ISO-8859-1, ISO8859-1,
-ISO-8859-15, ISO8859-15,
-UTF-8,
-cp866, ibm866, 866,
-cp1251, Windows-1251, win-1251, 1251,
-cp1252, Windows-1252, 1252,
-KOI8-R, koi8-ru, koi8r,
-BIG5, 950,
-GB2312, 936,
-BIG5-HKSCS,
-Shift_JIS, SJIS, 932,
-EUC-JP, EUCJP
-'));
-		$html_entity_encodings = array_map('trim', $html_entity_encodings);
-		$html_entity_encodings = array_map('api_refine_encoding_id', $html_entity_encodings);
-		$supported[$encoding] = in_array($encoding, $html_entity_encodings);
+		$html_entity_encodings = array(
+			'ISO-8859-1',
+			'ISO-8859-15',
+			'UTF-8',
+			'CP866',
+			'CP1251',
+			'CP1252',
+			'KOI8-R',
+			'BIG5', '950',
+			'GB2312', '936',
+			'BIG5-HKSCS',
+			'Shift_JIS', 'SJIS', '932',
+			'EUC-JP', 'EUCJP'
+		);
+		$supports[$encoding] = api_equal_encodings($encoding, $html_entity_encodings);
 	}
-	return $supported[$encoding] ? true : false;
+	return $supports[$encoding];
 }
 
 

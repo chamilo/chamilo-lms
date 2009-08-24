@@ -1399,16 +1399,26 @@ function api_substr_replace($string, $replacement, $start, $length = null, $enco
 		$encoding = _api_mb_internal_encoding();
 	}
 	if (_api_is_single_byte_encoding($encoding)) {
+		if (is_null($length)) {
+			return substr_replace($string, $replacement, $start);
+		}
 		return substr_replace($string, $replacement, $start, $length);
 	}
 	if (api_is_encoding_supported($encoding)) {
 		if (is_null($length)) {
 			$length = api_strlen($string);
 		}
-		if ($start > 0) {
-			 return api_substr($string, 0, $start) . $replacement . api_substr($string, $start + $length);
+		if (!api_is_utf8($encoding)) {
+			$string = api_utf8_encode($string, $encoding);
+			$replacement = api_utf8_encode($replacement, $encoding);
 		}
-		return $replacement . api_substr($string, $start + $length);
+		$string = _api_utf8_to_unicode($string);
+		array_splice($string, $start, $length, _api_utf8_to_unicode($replacement));
+		$string = _api_utf8_from_unicode($string);
+		if (!api_is_utf8($encoding)) {
+			$string = api_utf8_decode($string, $encoding);
+		}
+		return $string;
  	}
 	if (is_null($length)) {
 		return substr_replace($string, $replacement, $start);

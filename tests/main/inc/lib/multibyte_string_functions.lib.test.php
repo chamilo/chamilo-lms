@@ -306,22 +306,22 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	}
 
 	public function test_api_ucfirst() {
-		$string = 'áéíóúº|\/?Ç][ç]'; // UTF-8
+		$string = 'áéíóúº|\/? xx ][ xx ]'; // UTF-8
 		$encoding = 'UTF-8';
 		$res = api_ucfirst($string, $encoding);
 		$this->assertTrue($res);
 		$this->assertTrue(is_string($res));
-		$this->assertTrue($res == 'Áéíóúº|\/?Ç][ç]');
+		$this->assertTrue($res == 'Áéíóúº|\/? xx ][ xx ]');
 		//var_dump($res);
 	}
 
 	public function test_api_ucwords() {
-		$string = 'áéí óúº|\/?Ç][ ç]'; // UTF-8
+		$string = 'áéíóúº|\/? xx ][ xx ]'; // UTF-8
 		$encoding = 'UTF-8';
 		$res = api_ucwords($string, $encoding);
 		$this->assertTrue($res);
 		$this->assertTrue(is_string($res));
-		$this->assertTrue($res == 'Áéí Óúº|\/?Ç][ Ç]');
+		$this->assertTrue($res == 'Áéíóúº|\/? Xx ][ Xx ]');
 		//var_dump($res);
 	}
 

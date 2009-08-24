@@ -586,52 +586,58 @@ function api_str_ireplace($search, $replace, $subject, & $count = null, $encodin
 	if (empty($encoding)) {
 		$encoding = _api_mb_internal_encoding();
 	}
-	if (!is_array($search) && !is_array($replace)) {
-		if (!api_is_utf8($encoding)) {
-			$search = api_utf8_encode($search, $encoding);
-		}
-		$slen = api_byte_count($search);
-		if ( $slen == 0 ) {
+	if (api_is_encoding_supported($encoding)) {
+		if (!is_array($search) && !is_array($replace)) {
+			if (!api_is_utf8($encoding)) {
+				$search = api_utf8_encode($search, $encoding);
+			}
+			$slen = api_byte_count($search);
+			if ( $slen == 0 ) {
+				return $subject;
+			}
+			if (!api_is_utf8($encoding)) {
+				$replace = api_utf8_encode($replace, $encoding);
+				$subject = api_utf8_encode($subject, $encoding);
+			}
+			$lendif = api_byte_count($replace) - api_byte_count($search);
+			$search = api_strtolower($search, 'UTF-8');
+			$search = preg_quote($search);
+			$lstr = api_strtolower($subject, 'UTF-8');
+			$i = 0;
+			$matched = 0;
+			while (preg_match('/(.*)'.$search.'/Us', $lstr, $matches) ) {
+				if ($i === $count) {
+					break;
+				}
+				$mlen = api_byte_count($matches[0]);
+				$lstr = substr($lstr, $mlen);
+				$subject = substr_replace($subject, $replace, $matched + api_byte_count($matches[1]), $slen);
+				$matched += $mlen + $lendif;
+				$i++;
+			}
+			if (!api_is_utf8($encoding)) {
+				$subject = api_utf8_decode($subject, $encoding);
+			}
+			return $subject;
+		} else {
+			foreach (array_keys($search) as $k) {
+				if (is_array($replace)) {
+					if (array_key_exists($k, $replace)) {
+						$subject = api_str_ireplace($search[$k], $replace[$k], $subject, $count);
+					} else {
+						$subject = api_str_ireplace($search[$k], '', $subject, $count);
+					}
+				} else {
+					$subject = api_str_ireplace($search[$k], $replace, $subject, $count);
+				}
+			}
 			return $subject;
 		}
-		if (!api_is_utf8($encoding)) {
-			$replace = api_utf8_encode($replace, $encoding);
-			$subject = api_utf8_encode($subject, $encoding);
-		}
-		$lendif = api_byte_count($replace) - api_byte_count($search);
-		$search = api_strtolower($search, 'UTF-8');
-		$search = preg_quote($search);
-		$lstr = api_strtolower($subject, 'UTF-8');
-		$i = 0;
-		$matched = 0;
-		while (preg_match('/(.*)'.$search.'/Us', $lstr, $matches) ) {
-			if ($i === $count) {
-				break;
-			}
-			$mlen = api_byte_count($matches[0]);
-			$lstr = substr($lstr, $mlen);
-			$subject = substr_replace($subject, $replace, $matched + api_byte_count($matches[1]), $slen);
-			$matched += $mlen + $lendif;
-			$i++;
-		}
-		if (!api_is_utf8($encoding)) {
-			$subject = api_utf8_decode($subject, $encoding);
-		}
-		return $subject;
-	} else {
-		foreach (array_keys($search) as $k) {
-			if (is_array($replace)) {
-				if (array_key_exists($k, $replace)) {
-					$subject = api_str_ireplace($search[$k], $replace[$k], $subject, $count);
-				} else {
-					$subject = api_str_ireplace($search[$k], '', $subject, $count);
-				}
-			} else {
-				$subject = api_str_ireplace($search[$k], $replace, $subject, $count);
-			}
-		}
-		return $subject;
 	}
+	if (is_null($count)) {
+		return str_ireplace($search, $replace, $subject);
+	}
+	return str_ireplace($search, $replace, $subject, $count);
 }
 
 /**

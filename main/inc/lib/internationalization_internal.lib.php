@@ -16,6 +16,39 @@
 
 /**
  * ----------------------------------------------------------------------------
+ * Appendix to "Language support"
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Upgrades the function get_lang() with the following logic:
+ * 1. Checks whether the retrieved human language string is UTF-8 valid or not.
+ * 2. If the system encoding is UTF-8 and the string is not UTF-8, the function
+ * performs conversion from supposed non UTF-8 encodeng.
+ * 3. If the system encoding is non UTF-8 but the string is valid UTF-8, then
+ * conversion from UTF-8 is performed.
+ * 4. At the end the string is purified from HTML entities.
+ * @param string $string	This is the retrieved human language string.
+ * @param string $language	A language identiticator.
+ * @return string			Returns the human language string, checked for proper encodeing and purified.
+ */
+function & _get_lang_purify(& $string, & $language) {
+	$system_encoding = api_get_system_encoding();
+	if (api_is_utf8($system_encoding)) {
+		if (!api_is_valid_utf8($string)) {
+			$string = api_utf8_encode($string, api_get_non_utf8_encoding($language));
+		}
+	} else {
+		if (api_is_valid_utf8($string)) {
+			$string = api_utf8_decode($string, $system_encoding);
+		}
+	}
+	return api_html_entity_decode($string, ENT_QUOTES, $system_encoding);
+}
+
+
+/**
+ * ----------------------------------------------------------------------------
  * Appendix to "Date and time formats"
  * ----------------------------------------------------------------------------
  */

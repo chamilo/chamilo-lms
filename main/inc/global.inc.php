@@ -625,12 +625,12 @@ if (is_array($language_files)) {
 			$num_row_sub_language=Database::num_rows($rs_sub_language);
 			
 			if (file_exists($langfile)) {
-				include_once $langfile;
+				include $langfile;
 				for ($i=0;$i<$num_row_sub_language;$i++) {
 					$row_sub_language=Database::result($rs_sub_language,$i,'dokeos_folder');
 					$sub_langfile = $langpath.$row_sub_language.'/'.$language_file.'.inc.php';
 					if (file_exists($sub_langfile)) {
-						include_once $sub_langfile;
+						include $sub_langfile;
 					}
 				}
 				

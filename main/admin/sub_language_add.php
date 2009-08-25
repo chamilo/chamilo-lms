@@ -227,7 +227,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 			$mkdir_result=add_directory_of_sub_language($path);
 			if ($mkdir_result===true) {
 			  	add_sub_language($original_name,$english_name,$isocode,$sublanguage_available,$parent_id);
-			  	Display::display_confirmation_message(get_lang('TheNewSubLanguageHasBeenAdd').$str_info);
+			  	Display::display_confirmation_message(get_lang('TheNewSubLanguageHasBeenAdd').$str_info,false);
 			} else {
 				  Display::display_error_message(get_lang('LanguageDirectoryNotWriteableContactAdmin'));			
 			}

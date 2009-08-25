@@ -88,17 +88,19 @@ if (get_setting('show_teacher_data')=='true') {
 	$id_course=api_get_course_id();
 	if (isset($id_course) && $id_course!=-1) {
 		echo '<span id="coursemanager">';
-		$mail=CourseManager::get_emails_of_tutors_to_course($id_course);		
-		if (count($mail)>1){
-			$bar='&nbsp;|&nbsp;';
-			echo '&nbsp;'.get_lang('Teachers').' : ';
+		$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
+		if (!empty($mail)) {		
+			if (count($mail)>1){
+				$bar='&nbsp;|&nbsp;';
+				echo '&nbsp;'.get_lang('Teachers').' : ';
 			} else {
-			$bar='';
-			echo '&nbsp;'.get_lang('Teacher').' : ';
-		}
-		foreach ($mail as $value=>$key) {
-			foreach ($key as $email=>$name){
-				echo Display::encrypted_mailto_link($email,$name).$bar;		
+				$bar='';
+				echo '&nbsp;'.get_lang('Teacher').' : ';
+			}
+			foreach ($mail as $value=>$key) {
+				foreach ($key as $email=>$name){
+					echo Display::encrypted_mailto_link($email,$name).$bar;		
+				}
 			}
 		}
 		echo '</span>';

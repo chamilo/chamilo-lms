@@ -9,7 +9,7 @@
  * October 2008 - initial implementation.
  * May 2009 - refactoring and minor corrections have been implemented.
  * August 2009 - PCRE-related functions have been added,
- *               dependancy on mbstring extension has been lowered.
+ *               dependancy on mbstring extension has been removed.
  * @package dokeos.library
  * ==============================================================================
  */
@@ -1149,7 +1149,7 @@ function api_strtolower($string, $encoding = null) {
 					$matched = true;
 				} else {
 					$matched = false;
-					$properties = _api_utf8_get_letter_case_properties($codepoint, 'upper');
+					$properties = &_api_utf8_get_letter_case_properties($codepoint, 'upper');
 					if (!empty($properties)) {
 						foreach ($properties as $key => $value) {
 							if ($properties[$key]['upper'] == $codepoint && count($properties[$key]['lower'][0]) === 1) {
@@ -1215,7 +1215,7 @@ function api_strtoupper($string, $encoding = null) {
 					$matched = true;
 				} else {
 					$matched = false;
-					$properties = _api_utf8_get_letter_case_properties($codepoint);
+					$properties = &_api_utf8_get_letter_case_properties($codepoint);
 					$property_count = count($properties);
 					if (!empty($properties)) {
 						foreach ($properties as $key => $value) {

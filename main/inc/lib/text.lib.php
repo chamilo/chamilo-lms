@@ -61,8 +61,9 @@ function make_clickable($string)
  * @return the formatted date
  */
 
-function format_locale_date($date_format, $time_stamp = -1)
+function format_locale_date($date_format, $time_stamp = -1, $language = null)
 {
+	/*
 	static $initialized = false;
 	static $days_short, $days_long, $months_short, $months_long;
 
@@ -91,7 +92,8 @@ function format_locale_date($date_format, $time_stamp = -1)
 	$date = ereg_replace('%[b]', $months_short[(int)strftime('%m', $time_stamp)-1], $date);
 
 	return strftime($date, $time_stamp);
-
+	*/
+	return api_format_date($date_format, $time_stamp, $language);
 } // end function format_locale_date
 
 

@@ -199,6 +199,7 @@ define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
 */
 
 require_once dirname(__FILE__).'/multibyte_string_functions.lib.php';
+require_once dirname(__FILE__).'/internationalization.lib.php';
 
 /*
 ==============================================================================

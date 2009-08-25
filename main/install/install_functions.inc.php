@@ -426,8 +426,8 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 				<td class="requirements-value">'.check_extension('xml', get_lang('Yes'), get_lang('No')).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('support').'</td>
-				<td class="requirements-value">'.check_extension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable')).'</td>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
+				<td class="requirements-value">'.check_extension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable'), true).'</td>
 			</tr>
 			<tr>
 				<td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.get_lang('support').' ('.get_lang('Optional').')</td>

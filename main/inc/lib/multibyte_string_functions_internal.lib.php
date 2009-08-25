@@ -61,13 +61,13 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 		return $string;
 	}
 	if (!isset($character_map[$to])) {
-		$character_map[$to] = _api_parse_character_map($to);
+		$character_map[$to] = &_api_parse_character_map($to);
 	}
 	if ($character_map[$to] === false) {
 		return $string;
 	}
 	if (!isset($character_map[$from])) {
-		$character_map[$from] = _api_parse_character_map($from);
+		$character_map[$from] = &_api_parse_character_map($from);
 	}
 	if ($character_map[$from] === false) {
 		return $string;
@@ -372,7 +372,7 @@ function _api_html_entity_from_unicode($codepoint) {
  * @param string $type (optional)	The type of initial case to be altered: 'lower' (default) or 'upper'.
  * @return array					Returns an array with properties used to change case of the character.
  */
-function _api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
+function &_api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
 	static $config = array();
 	static $range = array();
 	if (!isset($range[$codepoint])) {

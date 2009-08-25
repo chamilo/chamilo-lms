@@ -518,16 +518,69 @@ else
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
 $user_language = '';
-if(!empty($_GET['language']))
-{
+if(!empty($_GET['language'])) {
 	$user_language = $_GET["language"];
 }
 
-if (!empty($_POST["language_list"]))
-{
+if (!empty($_POST["language_list"])) {
 	$user_language = str_replace("index.php?language=","",$_POST["language_list"]);
 }
 
+
+/* This will only work if we are in the page to edit a sub_language */
+if (api_get_self() == '/main/admin/sub_language.php' || api_get_self() == '/main/admin/sub_language_ajax.inc.php' ) {
+	require_once '../admin/sub_language.class.php';
+	// getting the arrays of files to load i.e notification, trad4all, etc
+	$language_files_to_load = SubLanguageManager::get_all_data_of_dokeos_folder(api_get_path(SYS_LANG_PATH).'english',true);
+	$parent_language	= SubLanguageManager::get_all_information_of_language(intval($_REQUEST['id']));
+	$sub_language		= SubLanguageManager::get_all_information_of_language(intval($_REQUEST['sub_language_id']));	
+	$langpath = api_get_path(SYS_CODE_PATH).'lang/';
+	
+	//echo '<pre>';
+	$english_language_array = $parent_language_array= $sub_language_array=array();
+	foreach ($language_files_to_load as $language_file_item) {
+		$lang_list_pre = array_keys($GLOBALS);
+		include $langpath.'english/'.$language_file_item.'.inc.php';			 //loading english
+		$lang_list_post = array_keys($GLOBALS);		
+		$lang_list_result = array_diff($lang_list_post, $lang_list_pre);				
+		unset($lang_list_pre);
+		
+		// ------  english language array
+		$english_language_array[$language_file_item]= compact($lang_list_result);
+		
+		//cleaning the $GLOBALS 
+		foreach($lang_list_result as $item) {					
+			unset(${$item});			
+		}		
+		$parent_file = $langpath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
+		if (is_file($parent_file))
+			include $parent_file;
+			 
+		// ------  parent language array
+		$parent_language_array[$language_file_item]= compact($lang_list_result);
+		
+		//cleaning the $GLOBALS 
+		foreach($lang_list_result as $item) {					
+			unset(${$item});			
+		}
+		$sub_file = $langpath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
+		if (is_file($sub_file))
+			include $sub_file; 
+		// ------  sub language array
+		$sub_language_array[$language_file_item]= compact($lang_list_result);
+		
+		//cleaning the $GLOBALS 
+		foreach($lang_list_result as $item) {					
+			unset(${$item});			
+		}		
+	}		
+	/*
+	print_r($english_language_array);
+	print_r($parent_language_array); 
+	print_r($sub_language_array); exit
+	*/
+}
+	
 // Checking if we have a valid language. If not we set it to the platform language.
 $valid_languages=api_get_languages();
 if (!in_array($user_language,$valid_languages['folder']))
@@ -630,8 +683,8 @@ if (is_array($language_files)) {
 			}
 		}
 	}
-
 }
+
 
 // The global variable $charset has been defined in a language file too (trad4all.inc.php), this is legacy situation.
 // So, we have to reassign this variable again in order to keep its value right.

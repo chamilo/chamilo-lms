@@ -1,10 +1,5 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
-/**
-==============================================================================
-	@author Isaac flores - Added 9 july of 2009
-==============================================================================
-*/
 /*
 ==============================================================================
 		INIT SECTION
@@ -260,7 +255,7 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
 	//
 	if (isset($_GET['action']) && $_GET['action']=='definenewsublanguage') {
 		$text=$language_name;
-		$form = new FormValidator('addsublanguage', 'post', 'new_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&action=definenewsublanguage');
+		$form = new FormValidator('addsublanguage', 'post', 'sub_language_add.php?id='.Security::remove_XSS($_GET['id']).'&action=definenewsublanguage');
 		$class='add';
 		$form->addElement('header', '', $text);			
 		$form->addElement('text', 'original_name', get_lang('OriginalName'),'class="input_titles"');
@@ -275,7 +270,7 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
 	} else {
 		if (isset($_GET['action']) && $_GET['action']=='deletesublanguage') {
 			$text=$language_name;
-			$form = new FormValidator('deletesublanguage', 'post', 'new_sub_language.php?id='.Security::remove_XSS($_GET['id']).'&sub_language_id='.Security::remove_XSS($_GET['sub_language_id']));
+			$form = new FormValidator('deletesublanguage', 'post', 'sub_language_add.php?id='.Security::remove_XSS($_GET['id']).'&sub_language_id='.Security::remove_XSS($_GET['sub_language_id']));
 			$class='minus';
 			$form->addElement('header', '', $text);
 			$form->addElement('static', '', get_lang('OriginalName'),$original_name);

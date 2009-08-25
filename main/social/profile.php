@@ -410,7 +410,7 @@ function get_logged_user_course_html($my_course, $count) {
  */
 function get_user_feeds($user,$limit=5) {
     if (!function_exists('fetch_rss')) { return '';}
-	$fields = UserManager::get_extra_fields();
+    $fields = UserManager::get_extra_fields();
     $feed_fields = array();
     $feeds = array();
     $res = '<div class="sectiontitle">'.get_lang('RSSFeeds').'</div>';
@@ -420,6 +420,7 @@ function get_user_feeds($user,$limit=5) {
     $feeds = split(';',$feed['rssfeeds']);
     if (count($feeds)==0) { return ''; }
     foreach ($feeds as $url) {
+	if (empty($url)) { continue; }
         $rss = fetch_rss($url);
     	$res .= '<h2>'.$rss->channel['title'].'</h2>';
         $res .= '<div class="social-rss-channel-items">';

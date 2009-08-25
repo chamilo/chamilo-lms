@@ -573,9 +573,6 @@ if ($_course['language'])
 // to use it within the function get_lang(...).
 $language_interface_initial_value = $language_interface;
 
-// Initialization of the default language for the multibyte string library.
-api_set_string_library_default_language($language_interface);
-
 /*
  * Include all necessary language files
  * - trad4all

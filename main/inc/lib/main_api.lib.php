@@ -1438,6 +1438,9 @@ function & get_lang_to_system_encoding(& $string, $language) {
  */
 function api_get_interface_language($purified = false) {
 	global 	$language_interface;
+	if (empty($language_interface)) {
+		return 'english';
+	}
 	if ($purified) {
 		return api_refine_language_id($language_interface);
 	}
@@ -3477,19 +3480,14 @@ if ( !function_exists('sys_get_temp_dir') )
         }
     }
 }
+
 /**
  * This function allow know when request sent is XMLHttpRequest
  */
 function api_is_xml_http_request() {
-	/*
-	if ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') {
-		return true;
-	} else {
-		return false;
-	}
-	*/
 	return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') ? true : false;
 }
+
 /**
  * This function gets the hash in md5 or sha1 (it depends in the platform config) of a given password
  * @param  string password

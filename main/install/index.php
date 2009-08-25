@@ -161,8 +161,6 @@ header('Content-Type: text/html; charset='. $charset);
 api_initialize_string_library();
 // Initialization of the default encoding that will be used by the multibyte string routines.
 api_set_string_library_default_encoding($charset);
-// Initialization of the default language for the multibyte string library.
-api_set_string_library_default_language($install_language);
 
 require_once 'install_upgrade.lib.php'; //also defines constants
 require_once 'install_functions.inc.php';

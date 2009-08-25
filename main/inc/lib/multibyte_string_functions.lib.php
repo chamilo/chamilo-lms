@@ -65,7 +65,6 @@ function api_initialize_string_library() {
 		@ini_set('mbstring.language', 'neutral');
 	}
 	api_set_string_library_default_encoding('ISO-8859-15');
-	api_set_string_library_default_language('english');
 }
 
 /**
@@ -79,20 +78,6 @@ function api_set_string_library_default_encoding($encoding) {
 	_api_mb_internal_encoding($encoding);
 	_api_mb_regex_encoding($encoding);
 	_api_iconv_set_encoding('iconv_internal_encoding', $encoding);
-	return $result;
-}
-
-/**
- * Sets the internal default language value.
- * If the intl extension is present, given language identificator modifies string comparison and sorting functionaliry.
- * @param string $language		The specified default language.
- * @return string				Returns the old value of the default language.
- */
-function api_set_string_library_default_language($language) {
-	static $old_language = 'english';
-	_api_set_default_locale(_api_get_locale_from_language($language));
-	$result = $old_language;
-	$old_language = $language;
 	return $result;
 }
 
@@ -1521,7 +1506,7 @@ function api_ucwords($string, $encoding = null) {
  */
 function api_preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0, $encoding = null) {
 	if (empty($encoding)) {
-		$encoding = api_get_system_encoding();
+		$encoding = _api_mb_internal_encoding();
 	}
 	return preg_match(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $matches, $flags, $offset);
 }
@@ -1544,7 +1529,7 @@ function api_preg_match($pattern, $subject, &$matches = null, $flags = 0, $offse
  */
 function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN_ORDER, $offset = 0, $encoding = null) {
 	if (empty($encoding)) {
-		$encoding = api_get_system_encoding();
+		$encoding = _api_mb_internal_encoding();
 	}
 	if (is_null($flags)) {
 		$flags = PREG_PATTERN_ORDER;
@@ -1566,7 +1551,7 @@ function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN
  */
 function api_preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0, $encoding = null) {
 	if (empty($encoding)) {
-		$encoding = api_get_system_encoding();
+		$encoding = _api_mb_internal_encoding();
 	}
 	$is_utf8 = api_is_utf8($encoding);
 	if (is_array($pattern)) {
@@ -1592,7 +1577,7 @@ function api_preg_replace($pattern, $replacement, $subject, $limit = -1, &$count
  */
 function api_preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0, $encoding = null) {
 	if (empty($encoding)) {
-		$encoding = api_get_system_encoding();
+		$encoding = _api_mb_internal_encoding();
 	}
 	if (is_array($pattern)) {
 		foreach ($pattern as &$p) {
@@ -1620,7 +1605,7 @@ function api_preg_replace_callback($pattern, $callback, $subject, $limit = -1, &
  */
 function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding = null) {
 	if (empty($encoding)) {
-		$encoding = api_get_system_encoding();
+		$encoding = _api_mb_internal_encoding();
 	}
 	return preg_split(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $limit, $flags);
 }
@@ -2458,15 +2443,18 @@ function api_is_latin1($encoding, $strict = false) {
  * @return string	The system's encoding.
  * Note: The value of api_get_setting('platform_charset') is tried to be returned first,
  * on the second place the global variable $charset is tried to be returned. If for some
- * reason both attempts fail, 'ISO-8859-15' will be returned.
+ * reason both attempts fail, then the libraly's internal value will be returned.
  */
 function api_get_system_encoding() {
 	$system_encoding = api_get_setting('platform_charset');
-	if (!empty($system_encoding)) {
-		return $system_encoding;
+	if (empty($system_encoding)) {
+		global $charset;
+		if (empty($charset)) {
+			return _api_mb_internal_encoding();
+		}
+		return $charset;
 	}
-	global $charset;
-	return empty($charset) ? 'ISO-8859-15' : $charset;
+	return $system_encoding;
 }
 
 /**
@@ -2738,8 +2726,11 @@ function api_is_valid_ascii($string) {
  * @param string			The same purified or filtered language identificator, for example 'french'.
  */
 function api_refine_language_id($language) {
-	static $search = array('_unicode', '_latin', '_corporate', '_org', '_KM');
-	return strtolower(str_replace($search, '', $language));
+	static $purified = array();
+	if (!isset($purified[$language])) {
+		$purified[$language] = strtolower(str_replace(array('_unicode', '_latin', '_corporate', '_org', '_KM'), '', $language));
+	}
+	return $purified[$language];
 }
 
 /**

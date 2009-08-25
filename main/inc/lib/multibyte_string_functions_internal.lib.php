@@ -8,13 +8,18 @@
  * @author: Ivan Tcholakov, ivantcholakov@gmail.com, 2009
  * @package dokeos.library
  * ==============================================================================
- * 
+ *
  * Note: All functions and data structures here are not to be used directly.
  * See the file multibyte_string_functions.lib.php which contains the "public" API.
- * 
  */
 
-// Global variables used by some callback functions.
+
+/**
+ * ----------------------------------------------------------------------------
+ * Global variables used by some callback functions
+ * ----------------------------------------------------------------------------
+ */
+
 $_api_encoding = null;
 $_api_collator = null;
 
@@ -479,6 +484,9 @@ function _api_array_utf8_decode($variable) {
  */
 function _api_get_collator($language = null) {
 	static $collator = array();
+	if (empty($language)) {
+		$language = api_get_interface_language();
+	}
 	if (!isset($collator[$language])) {
 		$locale = _api_get_locale_from_language($language);
 		$collator[$language] = collator_create($locale);
@@ -496,6 +504,9 @@ function _api_get_collator($language = null) {
  */
 function _api_get_alpha_numerical_collator($language = null) {
 	static $collator = array();
+	if (empty($language)) {
+		$language = api_get_interface_language();
+	}
 	if (!isset($collator[$language])) {
 		$locale = _api_get_locale_from_language($language);
 		$collator[$language] = collator_create($locale);
@@ -607,13 +618,18 @@ function _api_get_collator_sort_flag($sort_flag = SORT_REGULAR) {
  */
 function _api_get_locale_from_language($language = null) {
 	static $locale = array();
+	if (empty($language)) {
+		$language = api_get_interface_language();
+	}
 	if (!isset($locale[$language])) {
 		if (class_exists('Database')) {
 			$locale[$language] = Database::get_language_isocode($language);
 		} else {
 			return 'en';
 		}
-		if (!is_null($locale[$language])) {
+		if (empty($locale[$language])) {
+			$locale[$language] = 'en';
+		} else {
 			$locale[$language] = str_replace('-', '_', $locale[$language]);
 		}
 	}

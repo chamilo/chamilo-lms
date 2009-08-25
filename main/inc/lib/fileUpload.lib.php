@@ -938,7 +938,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	$unzipping_state = $zip_file->extract(PCLZIP_CB_PRE_EXTRACT, 'clean_up_files_in_zip');	
 	// Add all documents in the unzipped folder to the database
 	add_all_documents_in_folder_to_database($_course,$_user['user_id'],$base_work_dir,$upload_path == '/' ? '' : $upload_path, $to_group_id);
-	Display::display_normal_message(get_lang('UplZipExtractSuccess'));
+	//Display::display_normal_message(get_lang('UplZipExtractSuccess'));
 	return true;
 	/*
 	if ($upload_path != '/')

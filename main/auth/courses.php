@@ -1,27 +1,5 @@
-<?php // $Id: courses.php 20565 2009-05-12 20:39:59Z aportugal $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com 
-==============================================================================
-*/
+<?php 
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	@package dokeos.auth
@@ -926,27 +904,23 @@ function display_subscribe_icon($current_course, $user_coursecodes)
 {
 	global $stok;
 	// we display the icon to subscribe or the text already subscribed
-	if (in_array($current_course['code'],$user_coursecodes))
-	{
-		echo get_lang("AlreadySubscribed");
-	}
-	else
-	{
+	if (in_array($current_course['code'],$user_coursecodes)) {		
+		Display::display_icon('enroll_na.gif', get_lang('AlreadySubscribed'));
+	} else {
 		if ($current_course['subscribe'] == SUBSCRIBE_ALLOWED)
 		{
 			echo "<form action=\"".$_SERVER["REQUEST_URI"]."\" method=\"post\">";
 			echo '<input type="hidden" name="sec_token" value="'.$stok.'">';
 			echo "<input type=\"hidden\" name=\"subscribe\" value=\"".$current_course['code']."\" />";
-			if(!empty($_POST['search_term']))
-			{
+			if(!empty($_POST['search_term'])) {
 				echo '<input type="hidden" name="search_course" value="1" />';
 				echo '<input type="hidden" name="search_term" value="'.Security::remove_XSS($_POST['search_term']).'" />';
 			}
-			echo "<input type=\"image\" name=\"unsub\" src=\"../img/enroll.gif\" alt=\"".get_lang("Subscribe")."\" />".get_lang("Subscribe")."</form>";
-		}
-		else
-		{
-			echo get_lang("SubscribingNotAllowed");
+			echo "<input style=\"border-color:#fff\" type=\"image\" name=\"unsub\" src=\"../img/enroll.gif\" title=\"".get_lang("Subscribe")."\" alt=\"".get_lang("Subscribe")."\" /></form>";
+		} else {
+		//	echo get_lang("SubscribingNotAllowed");
+			Display::display_icon('enroll_na.gif', get_lang('SubscribingNotAllowed'));
+			
 		}
 	}
 }
@@ -987,17 +961,15 @@ function display_course_icons($key, $number_of_courses, $course)
 		echo "</a></td>";
 	}
 	echo "<td rowspan=\"2\" valign=\"top\" class=\"invisible\">";
-	if ($course['status'] != 1)
-	{
-		if ($course['unsubscr'] == 1)
-			{	// changed link to submit to avoid action by the search tool indexer
+	if ($course['status'] != 1) {
+		if ($course['unsubscr'] == 1) {	
+				// changed link to submit to avoid action by the search tool indexer
 				echo	"<form action=\"".api_get_self()."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"),ENT_QUOTES,$charset))."')) return false;\">";
 				echo    '<input type="hidden" name="sec_token" value="'.$stok.'">';
 				echo 	"<input type=\"hidden\" name=\"unsubscribe\" value=\"".$course['code']."\" />";
-				echo 	"<input type=\"image\" name=\"unsub\" src=\"../img/delete.gif\" alt=\"".get_lang("_unsubscribe")."\" /></form>";
-			}
-		else
-			{display_info_text(get_lang("UnsubscribeNotAllowed"));}
+				echo 	'<input type="image" name="unsub" style="border-color:#fff"  src="../img/delete.gif" title="'.get_lang("_unsubscribe").'"  alt="'.get_lang("_unsubscribe").'" /></form>';
+		} else {
+			display_info_text(get_lang("UnsubscribeNotAllowed"));}
 	}
 	else
 	{

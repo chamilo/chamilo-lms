@@ -1940,7 +1940,9 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	$prenom = $_user['firstName'];
 
 	include (api_get_path(SYS_CODE_PATH) . "lang/english/create_course.inc.php");
-	include (api_get_path(SYS_CODE_PATH) . "lang/".$language . "/create_course.inc.php");
+	$file_to_include = "lang/".$language . "/create_course.inc.php";
+	if (file_exists($file_to_include))
+		include (api_get_path(SYS_CODE_PATH) . $file_to_include);
 
 	mysql_select_db("$courseDbName");
 

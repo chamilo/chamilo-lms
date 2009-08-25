@@ -491,18 +491,23 @@ if (!empty($_POST["language_list"])) {
 	$user_language = str_replace("index.php?language=","",$_POST["language_list"]);
 }
 
+// Include all files (first english and then current interface language)
+$langpath = api_get_path(SYS_CODE_PATH).'lang/';
+
 
 /* This will only work if we are in the page to edit a sub_language */
 if (api_get_self() == '/main/admin/sub_language.php' || api_get_self() == '/main/admin/sub_language_ajax.inc.php' ) {
 	require_once '../admin/sub_language.class.php';
-	// getting the arrays of files to load i.e notification, trad4all, etc
+	// getting the arrays of files i.e notification, trad4all, etc
 	$language_files_to_load = SubLanguageManager::get_all_data_of_dokeos_folder(api_get_path(SYS_LANG_PATH).'english',true);
+	//getting parent info
 	$parent_language	= SubLanguageManager::get_all_information_of_language(intval($_REQUEST['id']));
+	//getting sub language info
 	$sub_language		= SubLanguageManager::get_all_information_of_language(intval($_REQUEST['sub_language_id']));	
-	$langpath = api_get_path(SYS_CODE_PATH).'lang/';
-	
+
 	//echo '<pre>';
 	$english_language_array = $parent_language_array= $sub_language_array=array();
+	
 	foreach ($language_files_to_load as $language_file_item) {
 		$lang_list_pre = array_keys($GLOBALS);
 		include $langpath.'english/'.$language_file_item.'.inc.php';			 //loading english
@@ -513,7 +518,7 @@ if (api_get_self() == '/main/admin/sub_language.php' || api_get_self() == '/main
 		// ------  english language array
 		$english_language_array[$language_file_item]= compact($lang_list_result);
 		
-		//cleaning the $GLOBALS 
+		//cleaning the variables 
 		foreach($lang_list_result as $item) {					
 			unset(${$item});			
 		}		
@@ -524,7 +529,7 @@ if (api_get_self() == '/main/admin/sub_language.php' || api_get_self() == '/main
 		// ------  parent language array
 		$parent_language_array[$language_file_item]= compact($lang_list_result);
 		
-		//cleaning the $GLOBALS 
+		//cleaning the variables 
 		foreach($lang_list_result as $item) {					
 			unset(${$item});			
 		}
@@ -534,7 +539,7 @@ if (api_get_self() == '/main/admin/sub_language.php' || api_get_self() == '/main
 		// ------  sub language array
 		$sub_language_array[$language_file_item]= compact($lang_list_result);
 		
-		//cleaning the $GLOBALS 
+		//cleaning the variables 
 		foreach($lang_list_result as $item) {					
 			unset(${$item});			
 		}		
@@ -609,8 +614,7 @@ if( isset($language_file) )
 		$language_files = array_merge($language_files,$language_file);
 	}
 }
-// Include all files (first english and then current interface language)
-$langpath = api_get_path(SYS_CODE_PATH).'lang/';
+
 
 if (is_array($language_files)) {
 	if (api_get_setting('allow_use_sub_language')=='true') {

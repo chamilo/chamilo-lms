@@ -126,6 +126,11 @@ $default_description_title_editable[7] = true;
 		MAIN CODE
 ==============================================================================
 */
+$sql = "SELECT id,title FROM $tbl_course_description ORDER BY id";
+$result = api_sql_query($sql, __FILE__, __LINE__);
+while ($row = Database::fetch_array($result)) {
+  $default_description_titles[$row['id']] = $row['title'];
+}
 
 if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {	
 	$description_id = intval($description_id);
@@ -222,30 +227,30 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		}
 		// Show the form
 		else {
-				// menu top 
-				//***********************************
-					if (api_is_allowed_to_edit()) {
-						$categories = array ();
-						
-						foreach ($default_description_titles as $id => $title) {
-							$categories[$id] = $title;
-						}
-						$categories[ADD_BLOCK] = get_lang('NewBloc');
-						
-						$i=1;
-						echo '<div class="actions">';
-						ksort($categories);
-						foreach ($categories as $id => $title) {
-							if ($i==8) { 
-								echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>';
-								break;
-							} else {
-								echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$id.'">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>&nbsp;&nbsp;';
-								$i++;
-							}
-						}
-						echo '</div>';
+			// menu top 
+			//***********************************
+			if (api_is_allowed_to_edit()) {
+				$categories = array ();
+				
+				foreach ($default_description_titles as $id => $title) {
+					$categories[$id] = $title;
+				}
+				$categories[ADD_BLOCK] = get_lang('NewBloc');
+					
+				$i=1;
+				echo '<div class="actions">';
+				ksort($categories);
+				foreach ($categories as $id => $title) {
+					if ($i==8) { 
+						echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>';
+						break;
+					} else {
+						echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$id.'">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>&nbsp;&nbsp;';
+						$i++;
 					}
+				}
+				echo '</div>';
+			}
 				//***********************************
 			if ($show_peda_suggest) {
 				if (isset ($question[$description_id])) {
@@ -270,9 +275,11 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 if ($show_description_list) {
 	$sql = "SELECT * FROM $tbl_course_description ORDER BY id";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	$descriptions;
+	$descriptions = array();;
 	while ($description = Database::fetch_object($result)) {
 		$descriptions[$description->id] = $description;
+		//reload titles to ensure we have the last version (after edition)
+		$default_description_titles[$description->id] = $description->title;
 	}
 	if (api_is_allowed_to_edit()) {
 		$categories = array ();

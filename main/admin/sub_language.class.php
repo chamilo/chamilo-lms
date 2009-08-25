@@ -18,15 +18,22 @@ class SubLanguageManager {
     /**
      * Get all data of dokeos folder (forum.inc.php,gradebook.inc.php,notebook.inc.php)
      * @param String The dokeos path folder  (/var/www/my_dokeos/main/lang/spanish)
+     * @param bool true if we only want the "subname" trad4all instead of  trad4all.inc.php
      * @return Array All file of dokeos folder
+     * 
      */
-    public static function get_all_data_of_dokeos_folder ($dokeos_path_folder) {
+    public static function get_all_data_of_dokeos_folder ($dokeos_path_folder,$only_main_name=false) {
 	   $content_dir=array();
 	    if (is_dir($dokeos_path_folder)) {
 		    if ($dh = opendir($dokeos_path_folder)) {
 		        while (($file = readdir($dh)) !== false) {
-		           if ($file[0]<>'.' && substr($file,-4,strlen($file))=='.php') {
-		           	  $content_dir[]=$file;
+		           if ($file[0]<>'.' && substr($file,-4,strlen($file))=='.php') {		           	
+		           		if ($only_main_name) {
+		           			if ($file!='' && strpos($file, '.inc.php'))
+		           				$content_dir[]=substr($file, 0, strpos($file, '.inc.php'));
+		           		} else {
+		           	  		$content_dir[]=$file;
+		           		}
 		           }
 		           
 		        }
@@ -44,7 +51,7 @@ class SubLanguageManager {
      */
 	public static function get_all_information_of_sub_language ($parent_id,$sub_language_id) {
 		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
-		$sql='SELECT * FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($parent_id).'" AND id="'.Database::escape_string($sub_language_id).'"';
+	 	$sql='SELECT * FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($parent_id).'" AND id="'.Database::escape_string($sub_language_id).'"';
 		$rs=Database::query($sql,__FILE__,__LINE__);
 		$all_information=array();
 		while ($row=Database::fetch_array($rs,'ASSOC')) {
@@ -73,14 +80,14 @@ class SubLanguageManager {
      * @return Array Contains all information of dokeos file
      */	  
    public static function get_all_language_variable_in_file ($dokeos_path_file) {
-   	$info_file=file($dokeos_path_file);
-   	foreach ($info_file as $line) {
-        if (substr($line,0,1)!='$') { continue; }
-    	list($var,$val) = split('=',$line,2);
-        $var = trim($var); $val = trim($val);
-        $res_list[$var] = $val;
-    }
-		return $res_list;
+	   	$info_file=file($dokeos_path_file);
+	   	foreach ($info_file as $line) {
+	        if (substr($line,0,1)!='$') { continue; }
+	    	list($var,$val) = split('=',$line,2);
+	        $var = trim($var); $val = trim($val);
+	        $res_list[$var] = $val;
+	    }
+			return $res_list;
    }
    
      /**

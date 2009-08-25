@@ -136,6 +136,9 @@ function show_tools($course_tool_category)
 		$lnk = array();
 		foreach ($all_tools_list as $toolsRow)
 		{
+			if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
+				continue;
+			}
 
 			if (!($i%2))
 			{

@@ -249,25 +249,39 @@ class Statistics
 		switch($type)
 		{
 			case 'month':
+				$months = api_get_months_long();
 				$period = get_lang('PeriodMonth');
-				$sql = "SELECT DATE_FORMAT( login_date, '%Y %b' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY login_date ";
+				$sql = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY login_date ";
 				break;
 			case 'hour':
 				$period = get_lang('PeriodHour');
 				$sql = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY stat_date ";
 				break;
 			case 'day':
+				$week_days = api_get_week_days_long();
 				$period = get_lang('PeriodDay');
-				$sql = "SELECT DATE_FORMAT( login_date, '%a' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
+				$sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
 				break;
 		}
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$result = array();
 		while($obj = Database::fetch_object($res))
 		{
-			$result[$obj->stat_date] = $obj->number_of_logins;
+			$stat_date = $obj->stat_date;
+			switch($type)
+			{
+				case 'month':
+					$stat_date = explode('-', $stat_date);
+					$stat_date[1] = $months[$stat_date[1] - 1];
+					$stat_date = implode(' ', $stat_date);
+					break;
+				case 'day':
+					$stat_date = $week_days[$stat_date];
+					break;
+			}
+			$result[$stat_date] = $obj->number_of_logins;
 		}
-		Statistics::print_stats(get_lang('Logins').' ('.$period.')',$result,true);
+		Statistics::print_stats(get_lang('Logins').' ('.$period.')', $result, true);
 	}
 	/**
 	 * Print the number of recent logins

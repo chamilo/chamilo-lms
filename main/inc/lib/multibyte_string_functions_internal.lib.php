@@ -113,7 +113,7 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 function _api_get_character_map_name($encoding) {
 	static $character_map_selector;
 	if (!isset($character_map_selector)) {
-		$file = dirname(__FILE__) . '/multibyte_string_database/conversion/character_map_selector.php';
+		$file = dirname(__FILE__) . '/internationalization_database/conversion/character_map_selector.php';
 		if (file_exists($file)) {
 			$character_map_selector = include ($file);
 		} else {
@@ -131,7 +131,7 @@ function _api_get_character_map_name($encoding) {
  */
 function &_api_parse_character_map($name) {
 	$result = array();
-	$file = dirname(__FILE__) . '/multibyte_string_database/conversion/' . $name . '.TXT';
+	$file = dirname(__FILE__) . '/internationalization_database/conversion/' . $name . '.TXT';
 	if (file_exists($file)) {
 		$text = @file_get_contents($file);
 		if ($text !== false) {
@@ -412,7 +412,7 @@ function _api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
 			return null;
 		}
 		if (!isset($config[$range[$codepoint]])) {
-			$file = dirname(__FILE__) . '/multibyte_string_database/casefolding/' . $range[$codepoint] . '.php';
+			$file = dirname(__FILE__) . '/internationalization_database/casefolding/' . $range[$codepoint] . '.php';
 			if (file_exists($file)) {
 				include $file;
 			}

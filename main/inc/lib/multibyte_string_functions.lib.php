@@ -524,7 +524,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
 				$bank = $ord >> 8;
 				// Check if we need to load a new bank
 				if (!isset($map[$bank])) {
-					$file = dirname(__FILE__) . '/multibyte_string_database/transliteration/' . sprintf('x%02x', $bank) . '.php';
+					$file = dirname(__FILE__) . '/internationalization_database/transliteration/' . sprintf('x%02x', $bank) . '.php';
 					if (file_exists($file)) {
 						$map[$bank] = include ($file);
 					} else {

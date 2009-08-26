@@ -32,7 +32,7 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 			<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
-				@import "main/css/public_admin/default.css";
+				@import "main/css/dokeos_blue/default.css";
 				/*]]>*/
 			</style>
 		</head>
@@ -100,7 +100,7 @@ $error_message_not_installed = <<<EOM
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 			<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
-				@import "main/css/public_admin/default.css";
+				@import "main/css/dokeos_blue/default.css";
 				/*]]>*/
 			</style>
 		</head>
@@ -109,7 +109,16 @@ $error_message_not_installed = <<<EOM
 				<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
 				<div class="clear"></div>
 				<div id="header2">&nbsp;</div>
-				<div id="header3">&nbsp;</div>
+				<div id="header3">
+					<ul id="logout">
+						<li><a href="" target="_top"><span>&nbsp;</span></a></li>
+					</ul>
+					<ul>
+						<li id="current"><a href="#"><span>Installation</span></a></li>
+					</ul>
+					<div style="clear: both;" class="clear"></div>
+				</div>
+				<div id="header4">&nbsp;</div>
 			</div>
 
 			<div style="text-align: center;"><br /><br />

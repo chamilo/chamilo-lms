@@ -30,7 +30,7 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 			<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
-				@import "../css/public_admin/default.css";
+				@import "../css/dokeos_blue/default.css";
 				/*]]>*/
 			</style>
 		</head>
@@ -40,12 +40,21 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 					<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
 					<div class="clear"></div>
 					<div id="header2">&nbsp;</div>
-					<div id="header3">&nbsp;</div>
+					<div id="header3">
+						<ul id="logout">
+							<li><a href="" target="_top"><span>&nbsp;</span></a></li>
+						</ul>
+						<ul>
+							<li id="current"><a href="#"><span>Installation</span></a></li>
+						</ul>
+						<div style="clear:both;" class="clear"></div>
+					</div>
+					<div id="header4">&nbsp;</div>
 				</div>
 
 				<div style="text-align: center;"><br /><br />
 						The version of scripting language on your server is wrong. Your server has to support PHP 5.x.x .<br />
-						<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide.</a><br /><br />
+						<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide</a><br /><br />
 				</div>
 				<div id="push"></div>
 				</div>
@@ -399,7 +408,7 @@ if ($encryptPassForm=='1' ) {
 	<title>&mdash; <?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
-		@import "../css/public_admin/default.css";
+		@import "../css/dokeos_blue/default.css";
 		/*]]>*/
 	</style>
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.js"></script>
@@ -507,7 +516,7 @@ if ($encryptPassForm=='1' ) {
 <tr>
 <td>
 	<div id="note" style="float:right;">
-		<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide.</a>
+		<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide</a>
 	</div>
 </td>
 </tr>

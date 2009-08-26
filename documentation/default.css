@@ -41,8 +41,10 @@ img {
 #header1 {
 	font-size: 12px;
 	padding: 4px;
-	background-color: #264269; 
-	color: #fff; 
+	/*background-color: #264269; */
+	color: #fff;
+	background-color: #4171b5;
+	/*color: #264269;*/
 	border-bottom: 1px solid white;
 }
 #header1 a {

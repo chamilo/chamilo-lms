@@ -580,9 +580,7 @@ if ($formSent) {
 								$answer = $choice;
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
 							} elseif ($answerType == UNIQUE_ANSWER) {
-								$sql = "select id from $table_ans where question_id='" . Database :: escape_string($questionId) . "' and position='" . Database :: escape_string($choice) . "'";
-								$res = api_sql_query($sql, __FILE__, __LINE__);
-								$answer = Database :: result($res, 0, "id");
+								$answer = $choice;
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
 							} elseif ($answerType == HOT_SPOT) {
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);

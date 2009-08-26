@@ -42,7 +42,11 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = 'admin';
+if ($_GET['category']=='Templates') {
+	$language_file = array('admin','document');
+} else {
+	$language_file = array('admin');
+}
 // resetting the course id
 $cidReset=true;
 // including some necessary dokeos files
@@ -954,10 +958,10 @@ function handle_templates()
 function display_templates()
 {
 	$table = new SortableTable('templates', 'get_number_of_templates', 'get_template_data',1);
-	$table->set_additional_parameters(array('category'=>$_GET['category']));
+	$table->set_additional_parameters(array('category'=>Security::remove_XSS($_GET['category'])));
 	$table->set_header(0, get_lang('Image'), true, array ('style' => 'width:101px;'));
 	$table->set_header(1, get_lang('Title'));
-	$table->set_header(2, get_lang('Actions'), false, array ('style' => 'width:30px;'));	
+	$table->set_header(2, get_lang('Actions'), false, array ('style' => 'width:50px;'));	
 	$table->set_column_filter(2,'actions_filter');
 	$table->set_column_filter(0,'image_filter');
 	$table->display();	
@@ -1009,11 +1013,10 @@ function get_template_data($from, $number_of_items, $column, $direction)
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";	
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	while ($row = Database::fetch_array($result))
-	{
+	while ($row = Database::fetch_array($result)) {
+		$row['1'] = get_lang($row['1']);
 		$return[]=$row;
 	}
-	
 	// returning all the information for the sortable table
 	return $return;
 }
@@ -1070,8 +1073,7 @@ function add_edit_template()
 	$form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.$_GET['action'].'&id='.$_GET['id']);
 	
 	// settting the form elements: the header
-	if ($_GET['action'] == 'add')
-	{
+	if ($_GET['action'] == 'add') {
 		$title = get_lang('AddTemplate');
 	}
 	else 
@@ -1093,17 +1095,17 @@ function add_edit_template()
 	$form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
 	
 	// getting all the information of the template when editing a template 
-	if ($_GET['action'] == 'edit')
-	{
+	if ($_GET['action'] == 'edit') {
 		// Database table definition		
 		$table_system_template = Database :: get_main_table('system_template');
 		$sql = "SELECT * FROM $table_system_template WHERE id = '".Database::escape_string($_GET['id'])."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$row = Database::fetch_array($result);
 		
-		$defaults['template_id'] 	= $_GET['id'];
+		$defaults['template_id'] 	= intval($_GET['id']);
 		$defaults['template_text'] 	= $row['content'];
-		$defaults['title'] 			= $row['title'];
+		//forcing a get_lang
+		$defaults['title'] 			= get_lang($row['title']);
 		
 		// adding an extra field: a hidden field with the id of the template we are editing
 		$form->addElement('hidden','template_id');

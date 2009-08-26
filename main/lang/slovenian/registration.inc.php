@@ -175,4 +175,6 @@ $EditNormalProfile = "Uredi obièajen profil";
 $EditExtendProfile = "Uredi razširjen profil";
 $EditInformation = "Uredi informacije";
 $RegisterUser = "Vpiši uporabnika";
+$IHaveReadAndAgree = "Sem prebral in se strinjam z";
+$ByClickingRegisterYouAgreeTermsAndConditions = "S klikom se strinjam z naèini in pogoji rabe";
 ?>

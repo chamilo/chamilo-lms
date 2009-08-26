@@ -321,4 +321,6 @@ $ReachedTimeLimitAdmin = "Nastavitev časovnih omejitev";
 $LastScoreTest = "Zadnji rezultat testa";
 $BackToResultList = "Nazaj na spisek rezultatov";
 $EditingScoreCauseProblemsToExercisesInLP = "Pri urejanju točkovnih vrednosti pomnite, da je ta test trenutno aktivnen v tečaju";
+$SelectExercice = "Izberi vajo";
+$YouHaveToSelectATest = "Izbrati morate vajo/test";
 ?>

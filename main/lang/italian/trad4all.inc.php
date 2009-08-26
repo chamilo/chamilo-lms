@@ -11,7 +11,7 @@ $Links = "Collegamenti";
 $langWorks = "Elaborati";
 $Forums = "Forum";
 $langExercices = "Test";
-$langCreateDir = "Crea cartella";
+$langCreateDir = "Crea una cartella";
 $Name = "Nome";
 $langComment = "Commento";
 $langVisible = "Visibile";
@@ -738,4 +738,8 @@ $System = "Sistema";
 $ImportantActivities = "Attività rilevanti";
 $SearchActivities = "Ricerca attività";
 $SearchActivities = "Ricerca attività";
+$Parent  = "Origine";
+$SurveyAdded = "Questionario aggiunto";
+$WikiAdded = "Wiki aggiunto";
+$ReadOnly = "Sola lettura";
 ?>

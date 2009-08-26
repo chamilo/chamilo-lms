@@ -75,4 +75,8 @@ $CourseCategoryEditStored = "La catégorie a été mise à jour";
 $buttonCreateCourseCategory = "Créer la catégorie";
 $buttonSaveCategory = "Enregistrer la catégorie";
 $buttonChangeCategory = "Changer la catégorie";
+$SessionName = "Titre de session";
+$SessionCategory = "Catégorie de session";
+$Expand = "Déplier";
+$Collapse = "Replier";
 ?>

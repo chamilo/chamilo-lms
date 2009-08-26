@@ -626,4 +626,5 @@ $SendAMessage = "Üzenet küldése";
 $Menu = "Menü";
 $BackToUserList = "Vissza a felhasználói listához";
 $GraphicNotAvailable = "Kép nem található";
+$Parent  = "Szül&#337;";
 ?>

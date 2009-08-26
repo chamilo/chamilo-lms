@@ -85,4 +85,7 @@ $UserStatistics = "Statistiche dell\'utente";
 $EditUser = "Modifica dati utente";
 $ViewUser = "Vedi dati utente";
 $RSSFeeds = "Feed RSS";
+$NoFriendsInYourContactList = "Nessun amico nella tua lista di contatti";
+$TryAndFindSomeFriends = "Prova a trovare qualche amico";
+$ClearSearchResults = "Cancella i risultati della ricerca";
 ?>

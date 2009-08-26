@@ -100,7 +100,7 @@ $langPropositions = "Propuestas de mejora de";
 $langMaj = "Actualizar";
 $langModify = "Modificar";
 $langDelete = "Eliminar";
-$langInvisible = "invisible";
+$langInvisible = "Invisible";
 $langSave = "Guardar";
 $langMove = "Mover";
 $Help = "Ayuda";
@@ -738,4 +738,7 @@ $System = "Sistema";
 $ImportantActivities = "Actividades importantes";
 $SearchActivities = "Buscar actividades";
 $SearchActivities = "Buscar actividades";
+$SurveyAdded = "Encuesta añadida";
+$WikiAdded = "Wiki añadido";
+$ReadOnly = "Solo lectura";
 ?>

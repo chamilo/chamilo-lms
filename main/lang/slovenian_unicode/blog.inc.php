@@ -100,4 +100,6 @@ $TaskDeleted = "Opravilo je bilo odstranjeno.";
 $TaskAssignmentDeleted = "Dodeljeno opravilo je bilo odstranjeno.";
 $CommentDeleted = "Komentar je bil odstranjen";
 $RatingAdded = "Ocena je bila dodana.";
+$BlogPosts = "Blog: objave";
+$BlogComments = "Blog: komentarji";
 ?>

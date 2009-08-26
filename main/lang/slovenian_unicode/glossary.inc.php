@@ -21,4 +21,5 @@ $YouMustEnterATermDefinition = "Vstaviti morate definicijo termina";
 $TableView = "Pogled tabele";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Ta termin je že dodan. Izberite drugo ime termina.";
 $GlossaryManagement  = "Upravljanje glosarija";
+$TermMoved = "Izraz je bil premaknjen";
 ?>

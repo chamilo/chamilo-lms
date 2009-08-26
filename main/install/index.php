@@ -157,7 +157,7 @@ elseif(!empty($dokeos_version)) //variable coming from installedVersion, normall
 }
 
 $new_version = '1.8.6.1';
-$new_version_stable = false;
+$new_version_stable = true;
 $new_version_major = false;
 /*
 ==============================================================================

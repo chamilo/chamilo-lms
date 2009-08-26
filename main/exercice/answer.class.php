@@ -114,7 +114,7 @@ class Answer
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
 
-		$sql="SELECT answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination FROM
+		$sql="SELECT id,answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination FROM
 		      $TBL_ANSWER WHERE question_id ='".Database::escape_string($questionId)."' ORDER BY position";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -124,6 +124,7 @@ class Answer
 		// while a record is found
 		while($object=mysql_fetch_object($result))
 		{
+			$this->id[$i]=$object->id;
 			$this->answer[$i]=$object->answer;
 			$this->correct[$i]=$object->correct;
 			$this->comment[$i]=$object->comment;
@@ -216,8 +217,8 @@ class Answer
 	{
 		return $this->destination[$id];
 	}
-
-	/**
+	
+/**
 	 * returns the answer title
 	 *
 	 * @author - Olivier Brouckaert
@@ -227,6 +228,21 @@ class Answer
 	function selectAnswer($id)
 	{
 		return $this->answer[$id];
+	}	
+	/**
+	 * returns the answer title from an answer's position
+	 *
+	 * @author - Yannick Warnier
+	 * @param - integer $id - answer ID
+	 * @return - string - answer title
+	 */
+	function selectAnswerIdByPosition($pos)
+	{
+		foreach ($this->position as $k => $v) {
+			if ($v != $pos) { continue; }
+			return $k;
+		}
+		return false;
 	}
 
 	/**

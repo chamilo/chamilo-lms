@@ -1008,14 +1008,14 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 		
 		if (count($emailto) > 0) {
 			$emailto = implode(',', $emailto);
-			$emailfromaddr = get_setting('emailAdministrator');
-			$emailfromname = get_setting('siteName');
-			$emailsubject = "[" . get_setting('siteName') . "] ";
-			$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-		    $email_admin = get_setting('emailAdministrator');
+			$emailfromaddr = api_get_setting('emailAdministrator');
+			$emailfromname = api_get_setting('siteName');
+			$emailsubject = "[" . api_get_setting('siteName') . "] ";
+			$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+		    $email_admin = api_get_setting('emailAdministrator');
 			// The body can be as long as you wish, and any combination of text and variables
 						
-			$emailbody = get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path." (" . stripslashes($title) . ")\n\n" . get_setting('administratorName') . " " . get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . get_setting('siteName') . "\n" . get_lang('Email') . " : " . get_setting('emailAdministrator');
+			$emailbody = get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path." (" . stripslashes($title) . ")\n\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');
 
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last															

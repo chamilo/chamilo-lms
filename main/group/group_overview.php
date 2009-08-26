@@ -112,7 +112,7 @@ else
 echo '<div class="actions">';
 echo Display::return_icon('groupadd.gif', get_lang('NewGroupCreate')) . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>';	
 echo Display::return_icon('group.gif', get_lang('Groups')) .'<a href="group.php?'.api_get_cidreq().'">'.get_lang('Groups').'</a>';
-if (get_setting('allow_group_categories') == 'true') {
+if (api_get_setting('allow_group_categories') == 'true') {
 	echo Display::return_icon('folder_new.gif', get_lang('AddCategory')) . '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;';
 } else {
 	//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';

@@ -41,7 +41,7 @@ class TestLostPassword extends UnitTestCase {
 		ob_start();
 		$user=array('abc');
 		$emailHeaders = get_email_headers(); // Email Headers
-		$emailSubject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
+		$emailSubject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 		$userAccountList = get_user_account_list($user, true); // BODY
 		$emailTo = $user[0]["email"];
 		$secretword = get_secret_word($emailTo);	
@@ -49,8 +49,8 @@ class TestLostPassword extends UnitTestCase {
 		$emailBody .= "-----------------------------------------------\n".$userAccountList."\n-----------------------------------------------\n\n";
 		$emailBody .=get_lang('PasswordEncryptedForSecurity');
 		$emailBody .="\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
-		$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-    	$email_admin = get_setting('emailAdministrator');
+		$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+    	$email_admin = api_get_setting('emailAdministrator');
 		$res=handle_encrypted_password($user);
 		if(!is_array($res))$this->assertTrue(is_null($res));
 		ob_end_clean();

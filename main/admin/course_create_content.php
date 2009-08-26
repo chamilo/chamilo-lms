@@ -47,7 +47,7 @@ $tool_name = get_lang('DummyCourseCreator');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 Display::display_header($tool_name);
 //api_display_tool_title($tool_name);
-if( get_setting('server_type') != 'test')
+if(api_get_setting('server_type') != 'test')
 {
 	echo get_lang('DummyCourseOnlyOnTestServer');	
 }

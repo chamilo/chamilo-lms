@@ -485,13 +485,13 @@ function display_subscribe_to_courses($courses)
 		echo "\t<tr>\n";
 		echo "\t\t<td>\n";
 		echo "<b>".$course['title']."</b><br />";
-		if (get_setting("display_coursecode_in_courselist") == "true") {
+		if (api_get_setting("display_coursecode_in_courselist") == "true") {
 			echo $course['visual_code'];
 		}
-		if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true") {
+		if (api_get_setting("display_coursecode_in_courselist") == "true" AND api_get_setting("display_teacher_in_courselist") == "true") {
 			echo " - ";
 		}
-		if (get_setting("display_teacher_in_courselist") == "true")
+		if (api_get_setting("display_teacher_in_courselist") == "true")
 		{
 			echo $course['tutor'];
 		}
@@ -839,15 +839,15 @@ function display_courses_in_category($user_category_id, $showicons)
 		echo "\t\t<td>\n";
 		echo '<a name="course'.$course['code'].'"></a>'; // display an internal anchor.
 		echo "<b>".$course['title']."</b><br />";
-		if (get_setting("display_coursecode_in_courselist") == "true")
+		if (api_get_setting("display_coursecode_in_courselist") == "true")
 		{
 			echo $course['visual_code'];
 		}
-		if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true")
+		if (api_get_setting("display_coursecode_in_courselist") == "true" AND api_get_setting("display_teacher_in_courselist") == "true")
 		{
 			echo " - ";
 		}
-		if (get_setting("display_teacher_in_courselist") == "true")
+		if (api_get_setting("display_teacher_in_courselist") == "true")
 		{
 			echo $course['tutor'];
 		}

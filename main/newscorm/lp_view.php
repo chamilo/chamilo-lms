@@ -217,7 +217,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 $_SESSION['oLP']->set_previous_item($lp_item_id);
 $nameTools = Security :: remove_XSS(api_convert_encoding($_SESSION['oLP']->get_name(), $charset, api_get_system_encoding()));
 
-$save_setting = get_setting("show_navigation_menu");
+$save_setting = api_get_setting("show_navigation_menu");
 global $_setting;
 $_setting['show_navigation_menu'] = 'false';
 $scorm_css_header=true; 	

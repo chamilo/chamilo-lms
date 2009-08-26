@@ -57,14 +57,14 @@ if (api_is_platform_admin()) {
 */
 api_plugin('footer');
 	
-if (get_setting('show_administrator_data')=='true') {
+if (api_get_setting('show_administrator_data')=='true') {
 	
 	// Platform manager
-	echo '<span id="platformmanager">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(get_setting('emailAdministrator'), get_setting('administratorName').' '.get_setting('administratorSurname'));
+	echo '<span id="platformmanager">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
 
 }
 
-if (get_setting('show_tutor_data')=='true'){
+if (api_get_setting('show_tutor_data')=='true'){
 	
 	// course manager
 	$id_course=api_get_course_id();
@@ -83,7 +83,7 @@ if (get_setting('show_tutor_data')=='true'){
 	
 }
 
-if (get_setting('show_teacher_data')=='true') {	
+if (api_get_setting('show_teacher_data')=='true') {	
 	// course manager
 	$id_course=api_get_course_id();
 	if (isset($id_course) && $id_course!=-1) {

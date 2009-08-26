@@ -1886,8 +1886,8 @@ class CourseManager {
 			$emailbody		.=get_lang('FirstName').': '.$student['firstname']."\n";
 			$emailbody		.=get_lang('Email').': '.$student['email']."\n\n";				
 			$recipient_name = $tutor['firstname'].' '.$tutor['lastname'];															
-			$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-	    	$email_admin = get_setting('emailAdministrator');				
+			$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+	    	$email_admin = api_get_setting('emailAdministrator');				
 			@api_mail($recipient_name, $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
 		}
 	}

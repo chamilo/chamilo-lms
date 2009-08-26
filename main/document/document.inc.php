@@ -47,7 +47,7 @@
 function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRenderer=false)
 {
 	$folder_titles = array();
-	if(get_setting('use_document_title') == 'true')
+	if(api_get_setting('use_document_title') == 'true')
 	{
 		if (is_array($folders))
 		{

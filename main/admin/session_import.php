@@ -118,10 +118,10 @@ if ($_POST['formSent']) {
 							// send an email to users
 							if($sendMail) {														
 								$recipient_name = $firstname.' '.$lastname;
-								$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');			
-								$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');						
-								$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-							    $email_admin = get_setting('emailAdministrator');							
+								$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');			
+								$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ".api_get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');						
+								$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+							    $email_admin = api_get_setting('emailAdministrator');							
 								@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
 							}
 						} else {

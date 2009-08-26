@@ -197,17 +197,17 @@ if($register)
 		$emailto       = "$lastname_form $firstname_form <$email_form>";
 		$emailfromaddr = $administratorEmail;
 		$emailfromname = api_get_setting('siteName');
-		$emailsubject  = get_lang('YourReg').' '.get_setting('siteName');
+		$emailsubject  = get_lang('YourReg').' '.api_get_setting('siteName');
 
-		$emailheaders  = "From: ".get_setting('administratorSurname')." ".get_setting('administratorName')." <".$administratorEmail.">\n";
+		$emailheaders  = "From: ".api_get_setting('administratorSurname')." ".api_get_setting('administratorName')." <".$administratorEmail.">\n";
 		$emailheaders .= "Reply-To: ".$administratorEmail."\n";
 		$emailheaders .= "Return-Path: ".$administratorEmail."\n";
 		$emailheaders .= "charset: ".$charset."\n";
 		$emailheaders .= "X-Mailer: PHP/" . phpversion() . "\n";
 		$emailheaders .= "X-Sender-IP: $REMOTE_ADDR"; // (small security precaution...)
 		$recipient_name = $firstname_form.' '.$lastname_form;
-		$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-	    $email_admin = get_setting('emailAdministrator');
+		$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+	    $email_admin = api_get_setting('emailAdministrator');
 	    
 		$portal_url = $_configuration['root_web'];
 		if ($_configuration['multiple_access_urls']==true) {
@@ -220,12 +220,12 @@ if($register)
 						
 		if ($courseRegSucceed)
 		{
-			$emailbody = get_lang('Dear')." ".stripslashes("$firstname_form $lastname_form").",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".get_setting('siteName')." ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".get_setting('administratorSurname')." ".get_setting('administratorName')."\n".get_lang('Manager')." ".get_setting('siteName')." \nT. ".get_setting('administratorTelephone')."\n".get_lang('Email').": ".get_setting('emailAdministrator')."\n";
+			$emailbody = get_lang('Dear')." ".stripslashes("$firstname_form $lastname_form").",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".api_get_setting('siteName')." ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_setting('administratorSurname')." ".api_get_setting('administratorName')."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
 			$message = get_lang('TheU')." ".stripslashes("$firstname_form $lastname_form")." ".get_lang('AddedToCourse')."<a href=\"user.php\">".get_lang('BackUser')."</a>\n";
 		}
 		else
 		{
-			$emailbody = get_lang('Dear')."  $firstname_form $lastname_form,\n ".get_lang('YouAreReg')."  ".get_setting('siteName')."  ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".get_setting('administratorSurname')." ".get_setting('administratorName')."\n".get_lang('Manager')." ".get_setting('siteName')." \nT. ".get_setting('administratorTelephone')."\n".get_lang('Email').": ".get_setting('emailAdministrator')."\n";
+			$emailbody = get_lang('Dear')."  $firstname_form $lastname_form,\n ".get_lang('YouAreReg')."  ".api_get_setting('siteName')."  ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_setting('administratorSurname')." ".api_get_setting('administratorName')."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
 
 			$message = stripslashes("$firstname_form $lastname_form")." ".get_lang('AddedU');
 		}

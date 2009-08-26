@@ -219,7 +219,7 @@ if (isset ($_user['user_id']))
 	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=month\">".Display::return_icon('calendar_month.gif', get_lang('MonthView'))." ".get_lang('MonthView')."</a> \n";
 	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=week\">".Display::return_icon('calendar_week.gif', get_lang('WeekView'))." ".get_lang('WeekView')."</a> \n";
 	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=day\">".Display::return_icon('calendar_day.gif', get_lang('DayView'))." ".get_lang('DayView')."</a> \n";
-	if (get_setting('allow_personal_agenda') == 'true')
+	if (api_get_setting('allow_personal_agenda') == 'true')
 	{
 		echo "\t<a href=\"".api_get_self()."?action=add_personal_agenda_item\">".Display::return_icon('calendar_personal_add.gif', get_lang('AddPersonalItem'))." ".get_lang('AddPersonalItem')."</a> \n";
 		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=personal\">".Display::return_icon('calendar_personal.gif', get_lang('ViewPersonalItem'))."  ".get_lang('ViewPersonalItem')."</a> \n";
@@ -232,7 +232,7 @@ if (isset ($_user['user_id']))
 	echo "<td width=\"220\" valign=\"top\">";
 	$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
 	$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
-	if (get_setting('allow_personal_agenda') == 'true')
+	if (api_get_setting('allow_personal_agenda') == 'true')
 	{
 		$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 	}
@@ -249,7 +249,7 @@ if (isset ($_user['user_id']))
 		case "month_view" :
 			$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
-			if (get_setting("allow_personal_agenda") == "true")
+			if (api_get_setting("allow_personal_agenda") == "true")
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 			}
@@ -258,7 +258,7 @@ if (isset ($_user['user_id']))
 		case "week_view" :
 			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
-			if (get_setting("allow_personal_agenda") == "true")
+			if (api_get_setting("allow_personal_agenda") == "true")
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
 			}
@@ -267,7 +267,7 @@ if (isset ($_user['user_id']))
 		case "day_view" :
 			$agendaitems = get_day_agendaitems($courses_dbs, $month, $year, $day);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
-			if (get_setting("allow_personal_agenda") == "true")
+			if (api_get_setting("allow_personal_agenda") == "true")
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
 			}

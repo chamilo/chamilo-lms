@@ -160,11 +160,11 @@ if(api_is_platform_admin()) {
 	    echo '<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
 	  }
 	  
-	  if (get_setting('allow_reservation')=='true') {
+	  if (api_get_setting('allow_reservation')=='true') {
 		  	echo '<li><a href="../reservation/m_category.php">'.get_lang('BookingSystem').'</a></li>';
 	  }
 	  
-  	  if (get_setting('allow_terms_conditions')=='true') {
+  	  if (api_get_setting('allow_terms_conditions')=='true') {
 		  	echo '<li><a href="legal_add.php">'.get_lang('TermsAndConditions').'</a></li>';
 	  }
 		

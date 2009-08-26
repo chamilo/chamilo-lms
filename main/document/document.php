@@ -722,7 +722,7 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 	//*************************************************************************************************
 	//do we need the title field for the document name or not?
 	//we get the setting here, so we only have to do it once
-	$use_document_title = get_setting('use_document_title');
+	$use_document_title = api_get_setting('use_document_title');
 	//create a sortable table with our data
 	$sortable_data = array();
 	

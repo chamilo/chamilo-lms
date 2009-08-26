@@ -22,7 +22,7 @@ require_once(api_get_path(INCLUDE_PATH).'lib/legal.lib.php');
 //require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 
 // Load terms & conditions from the current lang
-if (get_setting('allow_terms_conditions')=='true') {	
+if (api_get_setting('allow_terms_conditions')=='true') {	
 	$get = array_keys($_GET);
 	if (isset($get)) {
 		if ($get[0]=='legal'){				
@@ -58,11 +58,11 @@ echo '<div class="actions-title">';
 echo $tool_name;
 echo '</div>';
 // Forbidden to self-register
-if (get_setting('allow_registration') == 'false') {
+if (api_get_setting('allow_registration') == 'false') {
 	api_not_allowed();
 }
 //api_display_tool_title($tool_name);
-if (get_setting('allow_registration')=='approval') {
+if (api_get_setting('allow_registration')=='approval') {
 	Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
 }
 //if openid was not found
@@ -71,7 +71,7 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 }
 
 $form = new FormValidator('registration');
-if (get_setting('allow_terms_conditions')=='true') {
+if (api_get_setting('allow_terms_conditions')=='true') {
 	if (!isset($_SESSION['update_term_and_condition'][1])) {
 		$display_all_form=true;
 	} else {
@@ -133,11 +133,11 @@ if (api_get_setting('registration', 'phone') == 'true')
 }*/
 
 //	LANGUAGE
-if (get_setting('registration', 'language') == 'true') {
+if (api_get_setting('registration', 'language') == 'true') {
 	$form->addElement('select_language', 'language', get_lang('Language'));
 }
 //	STUDENT/TEACHER
-if (get_setting('allow_registration_as_teacher') <> 'false') {
+if (api_get_setting('allow_registration_as_teacher') <> 'false') {
 	$form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT);
 	$form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
 }
@@ -279,7 +279,7 @@ foreach ($extra as $id => $field_details) {
 
 }
 //------------ Terms and conditions
-if (get_setting('allow_terms_conditions')=='true') {	
+if (api_get_setting('allow_terms_conditions')=='true') {	
 	//$language = api_get_setting('platformLanguage');
 	$language = api_get_interface_language();
 	$language = api_get_language_id($language);
@@ -358,7 +358,7 @@ if ($form->validate()) {
 	
 	$values['username'] = api_substr($values['username'],0,20); //make *sure* the login isn't too long
 
-	if (get_setting('allow_registration_as_teacher') == 'false') {
+	if (api_get_setting('allow_registration_as_teacher') == 'false') {
 		$values['status'] = STUDENT;
 	}
 	
@@ -366,7 +366,7 @@ if ($form->validate()) {
 	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language'],$values['phone'],$picture_uri);	
 
 		// Terms & Conditions
-	if (get_setting('allow_terms_conditions')=='true') {	
+	if (api_get_setting('allow_terms_conditions')=='true') {	
 		// update the terms & conditions
 		if (isset($values['legal_accept_type'])) {
 			$cond_array = explode(':',$values['legal_accept_type']);
@@ -428,7 +428,7 @@ if ($form->validate()) {
 		}
 
 		// if there is a default duration of a valid account then we have to change the expiration_date accordingly
-		if (get_setting('account_valid_duration')<>'')
+		if (api_get_setting('account_valid_duration')<>'')
 		{
 			$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
 						SET expiration_date='registration_date+1' WHERE user_id='".$user_id."'";
@@ -436,7 +436,7 @@ if ($form->validate()) {
 		}
 
 		// if the account has to be approved then we set the account to inactive, sent a mail to the platform admin and exit the page.
-		if (get_setting('allow_registration')=='approval')
+		if (api_get_setting('allow_registration')=='approval')
 		{
 			$TABLE_USER= Database::get_main_table(TABLE_MAIN_USER);
 			// 1. set account inactive
@@ -466,8 +466,8 @@ if ($form->validate()) {
 				$emailbody		.=get_lang('Status').': '.$values['status']."\n\n";
 				$emailbody		.=get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;	
 				
-				$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-			    $email_admin = get_setting('emailAdministrator');				
+				$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+			    $email_admin = api_get_setting('emailAdministrator');				
 				@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
 				
 			}
@@ -508,7 +508,7 @@ if ($form->validate()) {
 			$email = $values['email'];
 			$emailfromaddr = api_get_setting('emailAdministrator');
 			$emailfromname = api_get_setting('siteName');
-			$emailsubject = "[".get_setting('siteName')."] ".get_lang('YourReg')." ".get_setting('siteName');
+			$emailsubject = "[".api_get_setting('siteName')."] ".get_lang('YourReg')." ".api_get_setting('siteName');
 
 			// The body can be as long as you wish, and any combination of text and variables
 			$portal_url = $_configuration['root_web'];
@@ -520,12 +520,12 @@ if ($form->validate()) {
 				}
 			} 
 	
-			$emailbody = get_lang('Dear')." ".stripslashes(Security::remove_XSS($recipient_name)).",\n\n".get_lang('YouAreReg')." ".get_setting('siteName')." ".get_lang('Settings')." ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is')." : ".$portal_url."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n".get_lang('Manager')." ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n".get_lang('Email')." : ".get_setting('emailAdministrator');
+			$emailbody = get_lang('Dear')." ".stripslashes(Security::remove_XSS($recipient_name)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$portal_url."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
 			
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last			
-			$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-		    $email_admin = get_setting('emailAdministrator');						
+			$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+		    $email_admin = api_get_setting('emailAdministrator');						
 			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);	
 		}
 	}

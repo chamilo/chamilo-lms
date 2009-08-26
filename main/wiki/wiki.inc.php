@@ -1736,13 +1736,13 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 		{		
 			if(empty($charset)){$charset='ISO-8859-1';}
 			$headers = 'Content-Type: text/html; charset='. $charset;
-			$userinfo=Database::get_user_info_from_id($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
-			$name_to=$userinfo['firstname'].' '.$userinfo['lastname'];
-			$email_to=$userinfo['email'];
-			$sender_name=get_setting('emailAdministrator');
-			$sender_email=get_setting('emailAdministrator');
+			$userinfo = Database::get_user_info_from_id($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
+			$name_to = $userinfo['firstname'].' '.$userinfo['lastname'];
+			$email_to = $userinfo['email'];
+			$sender_name = api_get_setting('emailAdministrator');
+			$sender_email = api_get_setting('emailAdministrator');
 			$email_subject = get_lang('EmailWikiChanges').' - '.$_course['official_code'];
-			$email_body= get_lang('DearUser').' '.$userinfo['firstname'].' '.$userinfo['lastname'].',<br /><br />';
+			$email_body = get_lang('DearUser').' '.$userinfo['firstname'].' '.$userinfo['lastname'].',<br /><br />';
 			$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br /><br /><br />';						
 			$email_body .= $email_user_author.' ('.$email_date_changes.')<br /><br /><br />';		
 			$email_body .= $email_assignment.'<br /><br /><br />';					

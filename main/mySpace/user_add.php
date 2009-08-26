@@ -377,9 +377,9 @@ if( $form->validate())
 		if (!empty ($email) && $send_mail)
 		{
 			$emailto = '"'.$firstname.' '.$lastname.'" <'.$email.'>';
-			$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
-			$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
-			$emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
+			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+			$emailheaders = 'From: '.api_get_setting('administratorName').' '.api_get_setting('administratorSurname').' <'.api_get_setting('emailAdministrator').">\n";
+			$emailheaders .= 'Reply-To: '.api_get_setting('emailAdministrator');
 			
 			$portal_url = $_configuration['root_web'];
 			if ($_configuration['multiple_access_urls']==true) {
@@ -389,7 +389,7 @@ if( $form->validate())
 					$portal_url = $url['url'];
 				}
 			}			
-			$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ".$portal_url."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
+			$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ".$portal_url."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 			@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 		}
 		Security::clear_token();

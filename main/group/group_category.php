@@ -70,7 +70,7 @@ function check_groups_per_user($value)
 	return true;
 }
 
-if (get_setting('allow_group_categories') == 'true')
+if (api_get_setting('allow_group_categories') == 'true')
 {
 	if (isset ($_GET['id']))
 	{
@@ -116,7 +116,7 @@ else
 	$form->addElement('html', '</div>');
 
 // If categories allowed, show title & description field
-if (get_setting('allow_group_categories') == 'true')
+if (api_get_setting('allow_group_categories') == 'true')
 {
 	$form->add_textfield('title', get_lang('Title'));
 	$form->addElement('textarea', 'description', get_lang('Description'),array('cols'=>50,'rows'=>6));

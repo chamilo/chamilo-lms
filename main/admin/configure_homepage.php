@@ -90,7 +90,7 @@ if(!empty($_SESSION['user_language_choice'])) {
 } elseif(!empty($_SESSION['_user']['language'])) {
 	$lang=$_SESSION['_user']['language'];
 } else {
-	$lang=get_setting('platformLanguage');
+	$lang=api_get_setting('platformLanguage');
 }
 
 // ----- Ensuring availability of main files in the corresponding language -----

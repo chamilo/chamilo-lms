@@ -1197,8 +1197,10 @@ class api_failure
 		CONFIGURATION SETTINGS
 ==============================================================================
 */
+
 /**
 * DEPRECATED, use api_get_setting instead
+* TODO: To be removed for Dokeos 1.8.7.
 */
 function get_setting($variable, $key = NULL) {
 	global $_setting;
@@ -3557,7 +3559,7 @@ function api_get_tools_lists ($my_tool=null) {
  */
 function api_check_term_condition($user_id) {
 	$return = false;
-	if (get_setting('allow_terms_conditions')=='true') {
+	if (api_get_setting('allow_terms_conditions')=='true') {
 		require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);

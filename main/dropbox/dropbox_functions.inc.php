@@ -1023,7 +1023,7 @@ function store_add_dropbox()
 			api_mail($recipent_temp['lastname'].' '.$recipent_temp['firstname'],$recipent_temp['email'],
 				get_lang('NewDropboxFileUploaded'),
 				get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".$_user['firstName']." ".$_user['lastName']."\n".  get_lang('Email') ." : ".$_user['mail'], $_user['firstName']." ".$_user['lastName'],$_user['mail']);
-				//get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator'),get_setting('administratorName')." ".get_setting('administratorSurname'),get_setting('emailAdministrator'));
+				//get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator'),api_get_setting('administratorName')." ".api_get_setting('administratorSurname'),api_get_setting('emailAdministrator'));
 		}
 	}
 	

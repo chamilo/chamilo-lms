@@ -90,7 +90,7 @@ $form->add_progress_bar();
 if (isset($_user["language"]) && $_user["language"]!="") {
 	$values['course_language'] = $_user["language"];
 } else {
-	$values['course_language'] = get_setting('platformLanguage');
+	$values['course_language'] = api_get_setting('platformLanguage');
 }
 
 $values['tutor_name'] = $_user['firstName']." ".$_user['lastName'];

@@ -75,7 +75,7 @@ Display::display_header($tool_name);
 <a href="<?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?>"><?php Display::display_icon('course_home.gif'); ?> <?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?></a>
 <br/>
 <?php
-if( get_setting('server_type') == 'test')
+if(api_get_setting('server_type') == 'test')
 {
 	?>
 	<a href="course_create_content.php?course_code=<?php echo $course->code ?>"><?php echo get_lang('AddDummyContentToCourse') ?></a>

@@ -48,7 +48,7 @@
 
 define("DISK_QUOTA_FIELD", "disk_quota"); //name of the database field
 /** default quota for the course documents folder */
-define("DEFAULT_DOCUMENT_QUOTA", get_setting('default_document_quotum'));
+define("DEFAULT_DOCUMENT_QUOTA", api_get_setting('default_document_quotum'));
 
 /*
 ============================================================================== 
@@ -801,7 +801,7 @@ class DocumentManager {
 		$new_path = $path.'_DELETED_'.$document_id;
 		if ($document_id)
 		{
-			if (get_setting('permanently_remove_deleted_files') == 'true') //deleted files are *really* deleted
+			if (api_get_setting('permanently_remove_deleted_files') == 'true') //deleted files are *really* deleted
 			{
 				$what_to_delete_sql = "SELECT id FROM ".$TABLE_DOCUMENT." WHERE path='".$path."' OR path LIKE BINARY '".$path."/%'";
 				//get all id's of documents that are deleted

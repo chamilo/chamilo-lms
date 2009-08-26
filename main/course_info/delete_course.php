@@ -62,7 +62,7 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'yes')
 	unset ($_cid);
 	$noPHP_SELF = true;
 	$message = get_lang('Course')." &quot;".$currentCourseName."&quot; "."(".$currentCourseCode.") ".get_lang('HasDel');
-	$message .=  "<br /><br /><a href=\"../../index.php\">".get_lang('BackHome')." ".get_setting('siteName')."</a>";
+	$message .=  "<br /><br /><a href=\"../../index.php\">".get_lang('BackHome')." ".api_get_setting('siteName')."</a>";
 
 } // end if $delete
 else

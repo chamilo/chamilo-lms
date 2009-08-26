@@ -459,16 +459,16 @@ function get_logged_user_course_html($my_course) {
 		$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
 	}
 	// show the course_code and teacher if chosen to display this
-	if (get_setting('display_coursecode_in_courselist') == 'true' OR get_setting('display_teacher_in_courselist') == 'true') {
+	if (api_get_setting('display_coursecode_in_courselist') == 'true' OR api_get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= '<br />';
 	}
-	if (get_setting('display_coursecode_in_courselist') == 'true') {
+	if (api_get_setting('display_coursecode_in_courselist') == 'true') {
 		$result .= $course_display_code;
 	}
-	if (get_setting('display_coursecode_in_courselist') == 'true' AND get_setting('display_teacher_in_courselist') == 'true') {
+	if (api_get_setting('display_coursecode_in_courselist') == 'true' AND api_get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= ' &ndash; ';
 	}
-	if (get_setting('display_teacher_in_courselist') == 'true') {
+	if (api_get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= $course_teacher;
 		if(!empty($course_teacher_email)) {
 			$result .= ' ('.$course_teacher_email.')';
@@ -972,7 +972,7 @@ if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu']))
 	echo '</div>';
 }
 
-if (get_setting('allow_reservation')=='true' && api_is_allowed_to_create_course() ){ 
+if (api_get_setting('allow_reservation')=='true' && api_is_allowed_to_create_course() ){ 
 	//include_once('main/reservation/rsys.php'); 
 	echo '<div class="menusection">';
 	echo '<span class="menusectioncaption">'.get_lang('Booking').'</span>';

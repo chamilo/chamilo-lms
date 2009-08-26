@@ -533,7 +533,7 @@ $form->addElement('hidden','curdirpath',$path);
 
 $form->addElement('file','user_upload',get_lang('File'),'id="user_upload" size="45"');
 
-if(get_setting('use_document_title')=='true')
+if(api_get_setting('use_document_title')=='true')
 {
 	$form->addElement('text','title',get_lang('Title'),'size="20" style="width:300px;"');
 	$form->addElement('textarea','comment',get_lang('Comment'),'wrap="virtual" style="width:300px;"');

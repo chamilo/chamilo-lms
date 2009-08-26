@@ -207,7 +207,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 //$_SESSION['info_current_user'][1] is user name
 //$_SESSION['info_current_user'][2] is current password encrypted
 //$_SESSION['update_term_and_condition'][1] is current user id, of user in session
-if (get_setting('allow_terms_conditions')=='true') {
+if (api_get_setting('allow_terms_conditions')=='true') {
 	if (isset($_POST['login']) && isset($_POST['password']) && isset($_SESSION['update_term_and_condition'][1])) {
 	
 	 	$user_id=$_SESSION['update_term_and_condition'][1];	// user id
@@ -269,7 +269,7 @@ if (get_setting('allow_terms_conditions')=='true') {
                 /*if ($userPasswordCrypted) {
                 	$password = md5($password);
                 } */
-                if (get_setting('allow_terms_conditions')=='true') {
+                if (api_get_setting('allow_terms_conditions')=='true') {
 	                if (isset($_POST['password']) && isset($_SESSION['info_current_user'][2]) && $_POST['password']==$_SESSION['info_current_user'][2]) {
 	                	$password=$_POST['password'];
 	                } else {
@@ -278,7 +278,7 @@ if (get_setting('allow_terms_conditions')=='true') {
                 } else {
                 	$password = api_get_encrypted_password($password); 
                 }
-				if (get_setting('allow_terms_conditions')=='true') {
+				if (api_get_setting('allow_terms_conditions')=='true') {
 			       if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
 						$temp_user_id = $uData['user_id'];
 						$term_and_condition_status=api_check_term_condition($temp_user_id);//false or true

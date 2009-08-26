@@ -26,7 +26,7 @@ $tool_name = get_lang('LostPassword');
 Display :: display_header($tool_name);
 
 // Forbidden to retrieve the lost password
-if (get_setting('allow_lostpassword') == "false")
+if (api_get_setting('allow_lostpassword') == "false")
 {
 	api_not_allowed();
 }

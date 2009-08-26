@@ -563,7 +563,7 @@ elseif ($displayMode == "viewContentList") // default display
 		Display :: display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));
 	}
 
-	if (get_setting('allow_user_headings') == 'true' && $allowedToEditDef) // only course administrators see this line
+	if (api_get_setting('allow_user_headings') == 'true' && $allowedToEditDef) // only course administrators see this line
 	{
 		echo	"<div align=right>",
 				"<form method=\"post\" action=\"".api_get_self()."\">",

@@ -187,7 +187,7 @@ else {	//give them a link to create a directory
 </td>
 </tr>
 <?php
-if(get_setting('use_document_title')=='true')
+if(api_get_setting('use_document_title')=='true')
 {
 	?>
     <tr>

@@ -170,7 +170,7 @@ $html_editor_config = array(
 	'BaseHref' =>  api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir
 );
 
-$use_document_title = (get_setting('use_document_title')=='true')?true:false;
+$use_document_title = (api_get_setting('use_document_title')=='true') ? true : false;
 $noPHP_SELF=true;
 
 /*

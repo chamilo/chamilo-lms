@@ -304,16 +304,16 @@ function get_logged_user_course_html($my_course, $count) {
 	// show the course_code and teacher if chosen to display this
 	// we dont need this! 	
 	/*
-			if (get_setting('display_coursecode_in_courselist') == 'true' OR get_setting('display_teacher_in_courselist') == 'true') {
+			if (api_get_setting('display_coursecode_in_courselist') == 'true' OR api_get_setting('display_teacher_in_courselist') == 'true') {
 				$result .= '<br />';
 			}
-			if (get_setting('display_coursecode_in_courselist') == 'true') {
+			if (api_get_setting('display_coursecode_in_courselist') == 'true') {
 				$result .= $course_display_code;
 			}
-			if (get_setting('display_coursecode_in_courselist') == 'true' AND get_setting('display_teacher_in_courselist') == 'true') {
+			if (api_get_setting('display_coursecode_in_courselist') == 'true' AND api_get_setting('display_teacher_in_courselist') == 'true') {
 				$result .= ' &ndash; ';
 			}
-			if (get_setting('display_teacher_in_courselist') == 'true') {
+			if (api_get_setting('display_teacher_in_courselist') == 'true') {
 				$result .= $course_teacher;
 				if(!empty($course_teacher_email)) {
 					$result .= ' ('.$course_teacher_email.')';

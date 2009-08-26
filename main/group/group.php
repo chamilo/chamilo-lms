@@ -204,7 +204,7 @@ if (api_is_allowed_to_edit(false,true))
 		echo Display::return_icon('group.gif', get_lang('GroupOverview')) .'<a href="group_overview.php?'.api_get_cidreq().'">'.get_lang('GroupOverview').'</a>&nbsp;';
 	}
 	
-	if (get_setting('allow_group_categories') == 'true') {
+	if (api_get_setting('allow_group_categories') == 'true') {
 		echo Display::return_icon('folder_new.gif', get_lang('AddCategory')) . '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;';
 	} else {
 		//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
@@ -215,7 +215,7 @@ if (api_is_allowed_to_edit(false,true))
 	//echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang('NewGroupCreate').'</a>&nbsp;';
 }
 $group_cats = GroupManager :: get_categories();
-if (get_setting('allow_group_categories') == 'true' && count($group_cats) > 1)
+if (api_get_setting('allow_group_categories') == 'true' && count($group_cats) > 1)
 {
 	//echo '<p><a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a></p>';
 	echo Display::return_icon('group.gif').' <a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a>';
@@ -229,7 +229,7 @@ foreach ($group_cats as $index => $category)
 	global $charset;
 	$group_list = array ();
 	$in_category = false;
-	if (get_setting('allow_group_categories') == 'true')
+	if (api_get_setting('allow_group_categories') == 'true')
 	{
 		if (isset ($_GET['show_all']) || (isset ($_GET['category']) && $_GET['category'] == $category['id']))
 		{

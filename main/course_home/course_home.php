@@ -278,15 +278,15 @@ Display::display_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 	the platform administration section
 -----------------------------------------------------------
 */
-if(get_setting('homepage_view') == "activity")
+if(api_get_setting('homepage_view') == "activity")
 {
 	include('activity.php');
 }
-elseif(get_setting('homepage_view') == "2column")
+elseif(api_get_setting('homepage_view') == "2column")
 {
 	include('2column.php');
 }
-elseif(get_setting('homepage_view') == "3column")
+elseif(api_get_setting('homepage_view') == "3column")
 {
 	include('3column.php');
 }

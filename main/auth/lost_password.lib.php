@@ -10,10 +10,10 @@
 function get_email_headers()
 {
 	global $charset;
-	$emailHeaders = "From: \"".addslashes(get_setting('administratorSurname')." ".get_setting('administratorName'))."\" <".get_setting('emailAdministrator').">\n";
-	$emailHeaders .= "Reply-To: ".get_setting('emailAdministrator')."\n";
-	$emailHeaders .= "Return-Path: ".get_setting('emailAdministrator')."\n";
-	$emailHeaders .= "X-Sender: ".get_setting('emailAdministrator')."\n";	
+	$emailHeaders = "From: \"".addslashes(api_get_setting('administratorSurname')." ".api_get_setting('administratorName'))."\" <".api_get_setting('emailAdministrator').">\n";
+	$emailHeaders .= "Reply-To: ".api_get_setting('emailAdministrator')."\n";
+	$emailHeaders .= "Return-Path: ".api_get_setting('emailAdministrator')."\n";
+	$emailHeaders .= "X-Sender: ".api_get_setting('emailAdministrator')."\n";	
 	$emailHeaders .= "X-Mailer: PHP / ".phpversion()."\n";
 	$emailHeaders .= "Content-Type: text/plain;\n\tcharset=\"".$charset."\"\n";
 	$emailHeaders .= "Mime-Version: 1.0";
@@ -71,7 +71,7 @@ function send_password_to_user($user)
 	global $charset;
 	global $_configuration;
 	$emailHeaders = get_email_headers(); // Email Headers
-	$emailSubject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
+	$emailSubject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 	$userAccountList = get_user_account_list($user); // BODY
 	$portal_url = $_configuration['root_web'];
 	if ($_configuration['multiple_access_urls']==true) {
@@ -85,13 +85,13 @@ function send_password_to_user($user)
 	$emailBody = get_lang('YourAccountParam')." ".$portal_url."\n\n$userAccountList";
 	// SEND MESSAGE
 	$emailTo = $user[0]["email"];			
-	$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-    $email_admin = get_setting('emailAdministrator');			
+	$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+    $email_admin = api_get_setting('emailAdministrator');			
 				
 	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin)==1) {
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
 	} else {
-		$message = get_lang('SystemUnableToSendEmailContact') . Display :: encrypted_mailto_link(get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
+		$message = get_lang('SystemUnableToSendEmailContact') . Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
 		Display::display_error_message($message, false);
 	}
 }
@@ -108,7 +108,7 @@ function handle_encrypted_password($user)
 	global $charset;
 	global $_configuration;
 	$emailHeaders = get_email_headers(); // Email Headers
-	$emailSubject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
+	$emailSubject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 	$userAccountList = get_user_account_list($user, true); // BODY
 	$emailTo = $user[0]["email"];
 	$secretword = get_secret_word($emailTo);	
@@ -116,8 +116,8 @@ function handle_encrypted_password($user)
 	$emailBody .= "-----------------------------------------------\n".$userAccountList."\n-----------------------------------------------\n\n";
 	$emailBody .=get_lang('PasswordEncryptedForSecurity');
 	$emailBody .="\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
-	$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-    $email_admin = get_setting('emailAdministrator');
+	$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+    $email_admin = api_get_setting('emailAdministrator');
 			
 	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin)==1)
 	{
@@ -125,7 +125,7 @@ function handle_encrypted_password($user)
 	}
 	else
 	{
-		$message = get_lang('SystemUnableToSendEmailContact') . Display :: encrypted_mailto_link(get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
+		$message = get_lang('SystemUnableToSendEmailContact') . Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
 		Display::display_error_message($message, false);
 	}
 }

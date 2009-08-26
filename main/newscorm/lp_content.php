@@ -89,7 +89,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 $nameTools = $_SESSION['oLP']->get_name();
 $interbreadcrumb[]= array ("url"=>"./lp_list.php", "name"=> get_lang('Doc'));
 //update global setting to avoid displaying right menu
-$save_setting = get_setting("show_navigation_menu");
+$save_setting = api_get_setting("show_navigation_menu");
 global $_setting;
 $_setting['show_navigation_menu'] = false;
 if($debug>0){error_log('New LP - In lp_content.php - Loading '.$src,0);}

@@ -120,7 +120,7 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
 	die();
 }
 //Delete session neccesary for legal terms
-if (get_setting('allow_terms_conditions')=='true') {
+if (api_get_setting('allow_terms_conditions')=='true') {
 	unset($_SESSION['update_term_and_condition']);
 	unset($_SESSION['info_current_user']);
 }
@@ -207,7 +207,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 	} elseif(!empty($_SESSION['_user']['language'])) {
 		$user_selected_language=$_SESSION['_user']['language'];
 	} else {
-		$user_selected_language=get_setting('platformLanguage');
+		$user_selected_language=api_get_setting('platformLanguage');
 	}
 	
 	if(!file_exists($home.'home_news_'.$user_selected_language.'.html')) {
@@ -380,10 +380,10 @@ function display_anonymous_right_menu() {
 		}
 		if (api_get_setting('allow_lostpassword') == 'true' OR api_get_setting('allow_registration') == 'true') {
 			echo '<div class="menusection"><span class="menusectioncaption">'.get_lang('MenuUser').'</span><ul class="menulist">';
-			if (get_setting('allow_registration') <> 'false') {
+			if (api_get_setting('allow_registration') <> 'false') {
 				echo '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
 			}
-			if (get_setting('allow_lostpassword') == 'true') {
+			if (api_get_setting('allow_lostpassword') == 'true') {
 				display_lost_password_info();
 			}
 			echo '</ul></div>';
@@ -740,13 +740,13 @@ function display_anonymous_course_list() {
 					$courses_shown++;
 					$courses_list_string .= "<li>\n";
 				$courses_list_string .= "<a href=\"".$web_course_path.$course['directory']."/\">".$course['title']."</a><br />";
-				if (get_setting("display_coursecode_in_courselist") == "true") {
+				if (api_get_setting("display_coursecode_in_courselist") == "true") {
 					$courses_list_string .= $course['visual_code'];
 				}
-				if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true") {
+				if (api_get_setting("display_coursecode_in_courselist") == "true" AND api_get_setting("display_teacher_in_courselist") == "true") {
 					$courses_list_string .= " - ";
 				}
-				if (get_setting("display_teacher_in_courselist") == "true") {
+				if (api_get_setting("display_teacher_in_courselist") == "true") {
 					$courses_list_string .= $course['tutor_name'];
 				}				
 					if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage')) {
@@ -781,13 +781,13 @@ function display_anonymous_course_list() {
 							OR api_is_platform_admin()) {
 						$courses_list_string .="</a><br />";
 					}
-					if (get_setting("display_coursecode_in_courselist") == "true") {
+					if (api_get_setting("display_coursecode_in_courselist") == "true") {
 						$courses_list_string .= $course['visual_code'];
 					}
-					if (get_setting("display_coursecode_in_courselist") == "true" AND get_setting("display_teacher_in_courselist") == "true") {
+					if (api_get_setting("display_coursecode_in_courselist") == "true" AND api_get_setting("display_teacher_in_courselist") == "true") {
 						$courses_list_string .= " - ";
 					}
-					if (get_setting("display_teacher_in_courselist") == "true")
+					if (api_get_setting("display_teacher_in_courselist") == "true")
 					{
 						$courses_list_string .= $course['tutor_name'];
 					}				

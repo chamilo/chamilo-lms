@@ -75,7 +75,7 @@ if (isset ($_POST['action']))
 				{
 					$group['places'] = $_POST['group_0_places'];
 				}
-				if (get_setting('allow_group_categories') == 'false')
+				if (api_get_setting('allow_group_categories') == 'false')
 				{
 					$group['category'] = DEFAULT_GROUP_CATEGORY;
 				}
@@ -223,7 +223,7 @@ EOT;
 	// Table heading
 	$group_el = array ();
 	$group_el[] = & $form->createElement('static', null, null, '<b>'.get_lang('GroupName').'</b>');
-	if (get_setting('allow_group_categories') == 'true')
+	if (api_get_setting('allow_group_categories') == 'true')
 	{
 		$group_el[] = & $form->createElement('static', null, null, '<b>'.get_lang('GroupCategory').'</b>');
 	}
@@ -235,7 +235,7 @@ EOT;
 	{
 		$group_el = array ();
 		$group_el[] = & $form->createElement('static', null, null, ' ');
-		if (get_setting('allow_group_categories') == 'true')
+		if (api_get_setting('allow_group_categories') == 'true')
 		{
 			$group_el[] = & $form->createElement('checkbox', 'same_category', null, get_lang('SameForAll'), array ('onclick' => "javascript:switch_state('category')"));
 		}
@@ -248,7 +248,7 @@ EOT;
 	{
 		$group_el = array ();
 		$group_el[] = & $form->createElement('text', 'group_'.$group_number.'_name');
-		if (get_setting('allow_group_categories') == 'true')
+		if (api_get_setting('allow_group_categories') == 'true')
 		{
 			$group_el[] = & $form->createElement('select', 'group_'.$group_number.'_category', null, $cat_options, array ('id' => 'category_'.$group_number));
 		}
@@ -310,7 +310,7 @@ else
 	/*
 	 * Show form to generate subgroups
 	 */
-	if (get_setting('allow_group_categories') == 'true' && count(GroupManager :: get_group_list()) > 0)
+	if (api_get_setting('allow_group_categories') == 'true' && count(GroupManager :: get_group_list()) > 0)
 	{
 		$base_group_options = array ();
 		$groups = GroupManager :: get_group_list();
@@ -365,7 +365,7 @@ else
 
 		$create_class_groups_form = new FormValidator('create_class_groups_form');
 		$create_class_groups_form->addElement('hidden', 'action');
-		if (get_setting('allow_group_categories') == 'true')
+		if (api_get_setting('allow_group_categories') == 'true')
 		{
 			$group_categories = GroupManager :: get_categories();
 			$cat_options = array ();

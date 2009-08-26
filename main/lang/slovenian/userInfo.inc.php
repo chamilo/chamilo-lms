@@ -84,4 +84,8 @@ $ViewMySharedProfile = "Moj skupen profil";
 $UserStatistics = "Poroèila tega uporabnika";
 $EditUser = "Uredi tega uporabnika";
 $ViewUser = "Poglej tega uporabnika";
+$RSSFeeds = "RSS vir";
+$NoFriendsInYourContactList = "Ni prijateljev v tvojem seznamu kontaktov";
+$TryAndFindSomeFriends = "Poskusi poiskati kakšnega prijatelja";
+$ClearSearchResults = "Poèisti rezultate iskanja";
 ?>

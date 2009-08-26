@@ -242,4 +242,6 @@ $SaveSection = "Shrani razdelek";
 $AddLinkToCourse = "Dodaj povezavo k tečaju";
 $AddAssignmentToCourse = "Dodaj nalogo/zadolžitev tečaju";
 $AddForumToCourse = "Dodaj forum tečaju";
+$SaveAudioAndOrganization = "Shrani zvok in organizacijo";
+$UploadOnlyMp3Files = "Prosim, naložite zgolj MP3 datoteke";
 ?>

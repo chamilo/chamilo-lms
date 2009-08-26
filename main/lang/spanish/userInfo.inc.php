@@ -87,4 +87,5 @@ $ViewUser = "Ver usuario";
 $RSSFeeds = "Agregador RSS";
 $NoFriendsInYourContactList = "No tiene amigos en su lista de contacto";
 $TryAndFindSomeFriends = "Intente y busque algunos amigos";
+$ClearSearchResults = "Limpiar el resultado de la búsqueda";
 ?>

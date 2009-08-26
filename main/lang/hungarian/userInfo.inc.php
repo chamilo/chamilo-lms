@@ -84,4 +84,7 @@ $ViewMySharedProfile = "Megosztott profilom";
 $UserStatistics = "A felhasználóhoz tartozó jelentések";
 $EditUser = "A felhasználó szerkesztése";
 $ViewUser = "A felhasználó megtekintése";
+$RSSFeeds = "RSS forrás";
+$NoFriendsInYourContactList = "A kapcsolatok listában még nincsenek barátok.";
+$TryAndFindSomeFriends = "Próbálja ki és keressen barátokat";
 ?>

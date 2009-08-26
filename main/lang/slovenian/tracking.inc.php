@@ -239,4 +239,6 @@ $AvgAllUsersInAllCourses = "Povpreèje vseh teèajnikov vseh teèajev za ta teèaj";
 $AvgExercisesScore = "Rezultat testa/vaje";
 $TrainingTime = "Èas";
 $CourseProgress = "Napredek";
+$ViewMinus = "Poglej manj";
+$ResourcesTracking = "Poroèilo vira";
 ?>

@@ -239,4 +239,6 @@ $AvgAllUsersInAllCourses = "Povprečje vseh tečajnikov v vseh tečajih";
 $AvgExercisesScore = "Povprečen rezultat testa/vaje";
 $TrainingTime = "Čas v tečaju";
 $CourseProgress = "Napredovanje v tečaju";
+$ViewMinus = "Poglej manj";
+$ResourcesTracking = "Poročilo vira";
 ?>

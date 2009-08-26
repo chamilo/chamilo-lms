@@ -298,6 +298,65 @@ function api_get_months_long($language = null) {
 
 /**
  * ----------------------------------------------------------------------------
+ * Name order conventions
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Answers in what order names of a person to be shown or sorted, depending on a given language.
+ * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
+ * @return bool							The result TRUE means that the order shold be first_name last_name, FALSE means last_name first_name.
+ * Note: You may use this function:
+ * 1. for determing the order of the fields or columns "First name" and "Last name" in forms and tables;
+ * 2. for constructing the ORDER clause of SQL queries, related to first name and last name;
+ * 3. for adjusting php-implemented sorting by names in tables and reports.
+ */
+function api_is_western_name_order($language = null) {
+	static $order = array();
+	if (empty($language)) {
+		$language = api_get_interface_language();
+	}
+	$language = api_refine_language_id($language);
+	if (!isset($order[$language])) {
+		$conventions = &_get_name_conventions();
+		$convention = $conventions[$language];
+		if (_api_is_valid_name_convention($convention)) {
+			$order[$language] = (strpos($convention, '%f') < strpos($convention, '%l'));
+		} else {
+			$order[$language] = true;
+		}
+	}
+	return $order[$language];
+}
+
+/**
+ * Builds a person (full) name depending on the convention for a given language.
+ * @param string $first_name			The first name of the preson.
+ * @param string $last_name				The last name of the person.
+ * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
+ * @return bool							The result is sort of full name of the person.
+ * Sample results:
+ * Peter Ustinoff - the western order
+ * Ustinoff Peter - the eastern order
+ * Ustinoff, Peter - the librarians' order
+ * Note: See the file dokeos/main/inc/lib/internationalization_database/name_order_conventions.php
+ * where you can revise the convention for your language.
+ */
+function api_get_person_name($first_name, $last_name, $language = null) {
+	if (empty($language)) {
+		$language = api_get_interface_language();
+	}
+	$language = api_refine_language_id($language);
+	$conventions = &_get_name_conventions();
+	$convention = $conventions[$language];
+	if (_api_is_valid_name_convention($convention)) {
+		return str_replace(array('%f', '%l'), array($first_name, $last_name), $convention);
+	}
+	return $first_name . ' ' . $last_name;
+}
+
+/**
+ * ----------------------------------------------------------------------------
  * Functions for internal use behind this API.
  * ----------------------------------------------------------------------------
  */

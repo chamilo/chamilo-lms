@@ -30,7 +30,7 @@
  * 4. At the end the string is purified from HTML entities.
  * @param string $string	This is the retrieved human language string.
  * @param string $language	A language identiticator.
- * @return string			Returns the human language string, checked for proper encodeing and purified.
+ * @return string			Returns the human language string, checked for proper encoding and purified.
  */
 function & _get_lang_purify(& $string, & $language) {
 	$system_encoding = api_get_system_encoding();
@@ -56,7 +56,7 @@ function & _get_lang_purify(& $string, & $language) {
 /**
  * Returns an array of translated week days and months, short and normal names.
  * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
- * @return string						Returns a multidimensional array with translated week days and months.
+ * @return array						Returns a multidimensional array with translated week days and months.
  */
 function &_api_get_day_month_names($language = null) {
 	static $date_parts = array();
@@ -76,4 +76,47 @@ function &_api_get_day_month_names($language = null) {
 		}
 	}
 	return $date_parts[$language];
+}
+
+
+/**
+ * ----------------------------------------------------------------------------
+ * Appendix to "Name order conventions"
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Returns an array of conventions (patterns) of writting personal names for all "known" languages.
+ * @return array	Returns the array in the following form: attay('language1 => 'pattern1', ...).
+ * @link http://en.wikipedia.org/wiki/Personal_name#Naming_convention
+ */
+function &_get_name_conventions() {
+	static $conventions;
+	if (!isset($conventions)) {
+		$file = dirname(__FILE__) . '/internationalization_database/name_order_conventions.php';
+		if (file_exists($file)) {
+			$conventions = include ($file);
+		} else {
+			$conventions = array('english' => 'first_name last_name');
+		}
+		$search = array('first_name', 'last_name');
+		$replacement = array('%f', '%l');
+		foreach ($conventions as $key => &$value) {
+			$value = str_ireplace($search, $replacement, $value);
+		}
+	}
+	return $conventions;
+}
+
+/**
+ * Checks whether the input namin convention (a pattern) is valid or not.
+ * @param string $convention	The input convention to be verified. 
+ * @return bool					Returns TRUE if the pattern is valid, FALSE othewise.
+ */
+function _api_is_valid_name_convention($convention) {
+	static $cache = array();
+	if (!isset($cache[$convention])) {
+		$cache[$convention] = !empty($convention) && strpos($convention, '%f') !== false && strpos($convention, '%l') !== false;
+	}
+	return $cache[$convention];
 }

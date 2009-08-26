@@ -2507,9 +2507,12 @@ function api_is_encoding_supported($encoding) {
 
 
 /**
- * Returns the most-probably used non-UTF-8 encoding for the given language.
+ * Returns in an array the most-probably used non-UTF-8 encoding for the given language.
+ * The first (leading) value is actually used by the system at the moment.
  * @param string $language (optional)	The specified language, the default value is the user intrface language.
  * @return string						The correspondent encoding to the specified language.
+ * Note: See the file dokeos/main/inc/lib/internationalization_database/non_utf8_encodings.php
+ * if you wish to revise the leading non-UTF-8 encoding for your language.
  */
 function api_get_non_utf8_encoding($language = null) {
 	if (empty($language)) {

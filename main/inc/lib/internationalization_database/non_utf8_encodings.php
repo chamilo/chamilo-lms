@@ -59,5 +59,5 @@ return array(
 	'turkce' => array('WINDOWS-1254', 'ISO-8859-9'),
 	'ukrainian' => array('KOI8-U'),
 	'vietnamese' => array('WINDOWS-1258', 'VISCII', 'TCVN'),
-	'yoruba' => array('ISO-8859-15', 'WINDOWS-1252', 'ISO-8859-1'),
+	'yoruba' => array('ISO-8859-15', 'WINDOWS-1252', 'ISO-8859-1')
 );

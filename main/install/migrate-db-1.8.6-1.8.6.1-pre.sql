@@ -21,20 +21,18 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'none', 'ShowGlossaryInDocumentsIsNone');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'ismanual', 'ShowGlossaryInDocumentsIsManual');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'isautomatic', 'ShowGlossaryInDocumentsIsAutomatic');
-
 CREATE TABLE legal (legal_id int NOT NULL auto_increment, language_id int NOT NULL, date int NOT NULL default 0, content text, type int NOT NULL, changes text NOT NULL, version int, PRIMARY KEY (legal_id));
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'legal_accept','Legal',0,0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'false', 'No');
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_tutor_data',NULL,'radio','Platform','true','ShowTutorDataTitle','ShowTutorDataComment',NULL,NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_teacher_data',NULL,'radio','Platform','true','ShowTeacherDataTitle','ShowTeacherDataComment',NULL,NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_tutor_data','true','Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_tutor_data','false','No');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_teacher_data','true','Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_teacher_data','false','No');
-INSERT IGNORE INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.1.7945','DokeosDatabaseVersion','',NULL,NULL,1,0);
+INSERT IGNORE INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.1.8171','DokeosDatabaseVersion','',NULL,NULL,1,0);
 ALTER TABLE user_friend ADD COLUMN last_edit DATETIME;
 
 -- xxSTATSxx

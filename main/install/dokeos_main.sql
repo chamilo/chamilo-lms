@@ -350,8 +350,10 @@ CREATE TABLE language (
   isocode varchar(10) default NULL,
   dokeos_folder varchar(250) default NULL,
   available tinyint NOT NULL default '1',
+  parent_id tinyint unsigned,
   PRIMARY KEY  (id)
 );
+ALTER TABLE language ADD INDEX idx_language_dokeos_folder(dokeos_folder);
 
 --
 -- Dumping data for table language
@@ -715,7 +717,12 @@ VALUES
 ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,0),
 ('allow_social_tool', NULL, 'radio', 'Tools', 'false', 'AllowSocialToolTitle', 'AllowSocialToolComment', NULL, NULL, 0),
 ('allow_students_to_browse_courses',NULL,'radio','Platform','true','AllowStudentsToBrowseCoursesTitle','AllowStudentsToBrowseCoursesComment',NULL,NULL, 1),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.7945','DokeosDatabaseVersion','',NULL,NULL,0); 
+('allow_use_sub_language', NULL, 'radio', 'Platform', 'false', 'AllowUseSubLanguageTitle', 'AllowUseSubLanguageComment', NULL, NULL,0),
+('show_glossary_in_documents', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInDocumentsTitle', 'ShowGlossaryInDocumentsComment', NULL, NULL),
+('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL,0),
+('show_tutor_data',NULL,'radio','Platform','true','ShowTutorDataTitle','ShowTutorDataComment',NULL,NULL, 1),
+('show_teacher_data',NULL,'radio','Platform','true','ShowTeacherDataTitle','ShowTeacherDataComment',NULL,NULL, 1),
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.8171','DokeosDatabaseVersion','',NULL,NULL,0); 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -881,7 +888,18 @@ VALUES
 ('allow_students_to_browse_courses','true','Yes'),
 ('allow_students_to_browse_courses','false','No'),
 ('show_email_of_teacher_or_tutor ', 'true', 'Yes'),
-('show_email_of_teacher_or_tutor ', 'false', 'No');
+('show_email_of_teacher_or_tutor ', 'false', 'No'),
+('allow_use_sub_language', 'true', 'Yes'),
+('allow_use_sub_language', 'false', 'No'),
+('show_glossary_in_documents', 'none', 'ShowGlossaryInDocumentsIsNone'),
+('show_glossary_in_documents', 'ismanual', 'ShowGlossaryInDocumentsIsManual'),
+('show_glossary_in_documents', 'isautomatic', 'ShowGlossaryInDocumentsIsAutomatic'),
+('allow_terms_conditions', 'true', 'Yes'),
+('allow_terms_conditions', 'false', 'No'),
+('show_tutor_data','true','Yes'),
+('show_tutor_data','false','No'),
+('show_teacher_data','true','Yes'),
+('show_teacher_data','false','No');
 
 UNLOCK TABLES;
 
@@ -2081,13 +2099,13 @@ CREATE TABLE user_friend(
   user_id int unsigned not null,
   friend_user_id int unsigned not null,
   relation_type int not null default 0,
+  last_edit DATETIME,
   PRIMARY KEY(id)
 );
 
 ALTER TABLE user_friend ADD INDEX idx_user_friend_user (user_id);
 ALTER TABLE user_friend ADD INDEX idx_user_friend_friend_user(friend_user_id);
 ALTER TABLE user_friend ADD INDEX idx_user_friend_user_friend_user(user_id,friend_user_id);
-ALTER TABLE user_friend ADD COLUMN last_edit DATETIME;
 
 --
 -- Table structure for table user_friend_relation_type
@@ -2129,6 +2147,7 @@ ALTER TABLE message ADD INDEX idx_message_user_sender(user_sender_id);
 ALTER TABLE message ADD INDEX idx_message_user_receiver(user_receiver_id);
 ALTER TABLE message ADD INDEX idx_message_user_sender_user_receiver(user_sender_id,user_receiver_id);
 ALTER TABLE message ADD INDEX idx_message_msg_status(msg_status);
+
 INSERT INTO user_friend_relation_type (id,title)
 VALUES
 (1,'SocialUnknow'),
@@ -2137,15 +2156,6 @@ VALUES
 (4,'SocialGoodFriend'),
 (5,'SocialEnemy'),
 (6,'SocialDeleted');
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_use_sub_language', NULL, 'radio', 'Platform', 'false', 'AllowUseSubLanguageTitle', 'AllowUseSubLanguageComment', NULL, NULL);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_use_sub_language', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_use_sub_language', 'false', 'No');
-ALTER TABLE language ADD COLUMN parent_id tinyint unsigned;
-ALTER TABLE language ADD INDEX idx_dokeos_folder(dokeos_folder);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('show_glossary_in_documents', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInDocumentsTitle', 'ShowGlossaryInDocumentsComment', NULL, NULL);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'none', 'ShowGlossaryInDocumentsIsNone');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'ismanual', 'ShowGlossaryInDocumentsIsManual');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'isautomatic', 'ShowGlossaryInDocumentsIsAutomatic');
 
 --
 -- Table structure for table legal (Terms & Conditions)
@@ -2164,7 +2174,4 @@ CREATE TABLE  legal (
 
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'legal_accept','Legal',0,0);
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'false', 'No');
 

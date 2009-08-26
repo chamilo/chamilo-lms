@@ -93,9 +93,14 @@ echo $language_name;
 echo '</div>';
 echo '<br />';
 
+$txt_search_word = Security::remove_XSS($_REQUEST['txt_search_word']);
 $html.='<div style="float:left" class="actions">';
-$html.='<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="post" action="sub_language.php?id='.Security::remove_XSS($_GET['id']).'&sub_language_id='.Security::remove_XSS($_GET['sub_language_id']).'">';
+$html.='<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="GET" action="sub_language.php">';
 $html.='&nbsp;'.get_lang('OriginalName').'&nbsp; :&nbsp;';
+
+$html.='<input name="id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['id']).'" />';
+$html.='<input name="sub_language_id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['sub_language_id']).'" />';
+
 $html.='<input name="txt_search_word" type="text" size="50"  id="txt_search_word" value="'.Security::remove_XSS($_REQUEST['txt_search_word']).'" />';
 $html.="&nbsp;".'<button name="SubmitSearchLanguage" class="search" type="submit">'.get_lang('Search').'</button>';
 $html.='</form>';
@@ -255,15 +260,14 @@ function search_language_term($term, $search_in_variable = true , $search_in_eng
 }
 
 //allow see data in sortetable
-if (isset($_REQUEST['txt_search_word']) && strlen(trim($_REQUEST['txt_search_word']))!=0) {	
-	$list_info = search_language_term($_REQUEST['txt_search_word'],true, true, true,true);
-}
-//var_dump($list_info);
-$parameters=array('id'=>intval($_GET['id']),'sub_language_id'=>intval($_GET['sub_language_id']));
-if (isset($_REQUEST['txt_search_word']) && strlen($_REQUEST['txt_search_word'])>0) {
-	$parameters['txt_search_word']=Security::remove_XSS($_REQUEST['txt_search_word']);
+if (isset($_REQUEST['txt_search_word'])) {	
+	//@todo fix to accept a char with 1 char
+	if (strlen(trim($_REQUEST['txt_search_word']))>2) {	
+		$list_info = search_language_term($_REQUEST['txt_search_word'],true, true, true,true);
+	}
 }
 
+$parameters=array('id'=>intval($_GET['id']),'sub_language_id'=>intval($_GET['sub_language_id']),'txt_search_word'=> $txt_search_word);
 $table = new SortableTableFromArrayConfig($list_info, 1,20,'data_info');
 $table->set_additional_parameters($parameters);
 //$table->set_header(0, '');
@@ -273,6 +277,7 @@ $table->set_header(2, get_lang('EnglishName'));
 $table->set_header(3, get_lang('OriginalName'));
 $table->set_header(4, get_lang('SubLanguage'),false);
 $table->set_header(5, get_lang('Edit'),false);
+
 $table->display();
 
 /*

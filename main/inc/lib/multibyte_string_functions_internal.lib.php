@@ -678,78 +678,13 @@ function api_get_default_locale() {
  * Note: The function api_get_non_utf8_encoding() returns the first encoding from this array that is correspondent to the given language. 
  */
 function & _api_non_utf8_encodings() {
-	// The following list may have some inconsistencies.
-	// Place the most used for your language encoding at the first place.
-	// If you are adding an encoding, check whether it is supported either by
-	// mbstring library, either by iconv library.
-	// If you modify this list, please, follow the given syntax exactly.
-	// The language names must be stripped of any suffixes, such as _unicode, _corporate, _org, etc.
-	static $encodings =
-'
-arabic: WINDOWS-1256, ISO-8859-6;
-asturian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-bosnian: WINDOWS-1250;
-brazilian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-bulgarian: WINDOWS-1251;
-catalan: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-croatian: WINDOWS-1250;
-czech: WINDOWS-1250, ISO-8859-2;
-danish: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-dari: WINDOWS-1256;
-dutch: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-english: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-euskera:  ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-esperanto: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-finnish: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-french: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-friulian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-galician: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-georgian: GEORGIAN-ACADEMY, GEORGIAN-PS;
-german: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-greek: WINDOWS-1253, ISO-8859-7;
-hebrew: ISO-8859-8, WINDOWS-1255;
-hungarian: WINDOWS-1250, ISO-8859-2;
-indonesian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-italian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-japanese: EUC-JP, ISO-2022-JP, Shift-JIS;
-korean: EUC-KR, ISO-2022-KR, CP949;
-latvian: WINDOWS-1257, ISO-8859-13;
-lithuanian: WINDOWS-1257, ISO-8859-13;
-macedonian: WINDOWS-1251;
-malay: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-norwegian: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-occitan: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-pashto: WINDOWS-1256;
-persian: WINDOWS-1256;
-polish: WINDOWS-1250, ISO-8859-2;
-portuguese: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-quechua_cusco: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-romanian: WINDOWS-1250, ISO-8859-2;
-russian: KOI8-R, WINDOWS-1251;
-serbian: ISO-8859-15, WINDOWS-1252, ISO-8859-1, WINDOWS-1251;
-simpl_chinese: GB2312, WINDOWS-936;
-slovak: WINDOWS-1250, ISO-8859-2;
-slovenian: WINDOWS-1250, ISO-8859-2;
-spanish: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-swahili: ISO-8859-1;
-swedish: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-thai: WINDOWS-874, ISO-8859-11;
-trad_chinese: BIG-5, EUC-TW;
-turkce: WINDOWS-1254, ISO-8859-9;
-ukrainian: KOI8-U;
-vietnamese: WINDOWS-1258, VISCII, TCVN;
-yoruba: ISO-8859-15, WINDOWS-1252, ISO-8859-1;
-';
-
-	if (!is_array($encodings)) {
-		$table = explode(';', str_replace(' ', '', $encodings));
-		$encodings = array();
-		foreach ($table as & $row) {
-			$row = trim($row);
-			if (!empty($row)) {
-				$row = explode(':', $row);
-				$encodings[$row[0]] = explode(',', strtoupper($row[1]));
-			}
+	static $encodings;
+	if (!isset($encodings)) {
+		$file = dirname(__FILE__) . '/internationalization_database/non_utf8_encodings.php';
+		if (file_exists($file)) {
+			$encodings = include ($file);
+		} else {
+			$encodings = array('english' => array('ISO-8859-15'));
 		}
 	}
 	return $encodings;

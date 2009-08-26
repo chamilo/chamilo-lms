@@ -466,7 +466,7 @@ class ActionDisplay extends HTML_QuickForm_Action_Display
 		<head>
 		<title>-- Dokeos - upgrade to version <?php echo $dokeos_version; ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
-		<link rel="stylesheet" href="../css/public_admin/default.css" type="text/css"/>
+		<link rel="stylesheet" href="../css/dokeos_blue/default.css" type="text/css"/>
 		</head>
 		<body dir="<?php echo get_lang('text_dir'); ?>">
 		<div id="header1">
@@ -533,7 +533,7 @@ class ActionProcess extends HTML_QuickForm_Action
 		<head>
 		<title>-- Dokeos installation -- version <?php echo $dokeos_version; ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
-		<link rel="stylesheet" href="../css/public_admin/default.css" type="text/css"/>
+		<link rel="stylesheet" href="../css/dokeos_blue/default.css" type="text/css"/>
 		</head>
 		<body dir="<?php echo get_lang('text_dir'); ?>">
 		<div style="background-color:#4171B5;color:white;font-size:x-large;">
@@ -595,7 +595,7 @@ function display_upgrade_header($text_dir, $dokeos_version, $install_type, $upda
 		<title>&mdash; <?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$dokeos_version; ?></title>
 		<style type="text/css" media="screen, projection">
 			/*<![CDATA[*/
-			@import "../css/public_admin/default.css";
+			@import "../css/dokeos_blue/default.css";
 			/*]]>*/
 		</style>
 	<?php if(!empty($charset)){ ?>

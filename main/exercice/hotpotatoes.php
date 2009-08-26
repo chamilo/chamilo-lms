@@ -227,9 +227,6 @@ if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
 	}
 
 	Display::display_header($nameTools,"Exercise");
-	?>
-
-<?php
 
 	if ($finish==2) //if we are in the img upload process
 	{

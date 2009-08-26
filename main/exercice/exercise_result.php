@@ -600,8 +600,10 @@ foreach ($questionList as $questionId) {
 		$nbrAnswers = 1;
 	}
 		
+	// We're inside *one* question. Go through each possible answer for this question
 	for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 		
+		//select answer of *position*=$answerId
 		$answer=$objAnswerTmp->selectAnswer($answerId);
 		$answerComment=$objAnswerTmp->selectComment($answerId);
 		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
@@ -609,6 +611,10 @@ foreach ($questionList as $questionId) {
 		switch ($answerType) {
 			// for unique answer
 			case UNIQUE_ANSWER :
+					// if the student choice is equal to the answer ID
+					// then give him the corresponding score
+					// (maybe a negative score, positive score or 0)
+					// Positive score should only be given when we are going over the right answer
 					$studentChoice=($choice == $answerId)?1:0;
 					if($studentChoice) {
 					  	$questionScore+=$answerWeighting;
@@ -999,14 +1005,9 @@ foreach ($questionList as $questionId) {
 			exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
 		}
 		elseif ($answerType==UNIQUE_ANSWER) {
-			$sql = "SELECT id FROM $table_ans WHERE question_id='".Database::escape_string($questionId)."' and position='".Database::escape_string($choice)."'";
-			$res = api_sql_query($sql, __FILE__, __LINE__);
-			if (Database::num_rows($res)>0) {			
-				$answer = Database::result($res,0,"id");
-				exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
-			} else {
-				exercise_attempt($questionScore,0 ,$quesId,$exeId,0);
-			}
+			// exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
+			// In fact, we are not storing the results by answer ID, but by *position*, which is stored in $choice
+			exercise_attempt($questionScore,$choice,$quesId,$exeId,0);
 		} elseif ($answerType == HOT_SPOT) {
 			exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
 			if (is_array($exerciseResultCoordinates[$quesId])) {

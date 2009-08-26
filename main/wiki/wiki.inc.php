@@ -698,7 +698,7 @@ return true;
 		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkotherlimit" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;'.get_lang('OtherSettings').'';		
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
 		echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
-		echo '<div style="font-weight:normal"; align="center">'.get_lang('Max_text').':&nbsp;<input type="text" name="max_text" size="3">&nbsp;&nbsp;'.get_lang('Max_version').':&nbsp;<input type="text" name="max_version" size="3"></div>';
+		echo '<div style="font-weight:normal"; align="center">'.get_lang('NMaxWords').':&nbsp;<input type="text" name="max_text" size="3">&nbsp;&nbsp;'.get_lang('NMaxVersion').':&nbsp;<input type="text" name="max_version" size="3"></div>';
 		echo '</div>';
 
 		//to define as an individual assignment

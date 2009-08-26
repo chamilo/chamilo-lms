@@ -160,12 +160,13 @@ function search_language_term($term, $search_in_variable = true , $search_in_eng
 					$english_name_variable = $english_language_array[$lang_file][$parent_name_variable];	
 					
 					//config buttons					
-					if (strlen($english_name_variable)>1500) {			
+					/*if (strlen($english_name_variable)>1500) {			
 						$size =20;
 					} else {
 						$size =4;
-					}
-					$obj_text='<textarea rows="'.$size.'" cols="40" name="txt|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="txtid_'.$parent_name_variable.'" >'.$sub_language_name_variable.'</textarea>';			
+					}*/
+          
+					$obj_text='<textarea rows="10" cols="40" name="txt|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="txtid_'.$parent_name_variable.'" >'.$sub_language_name_variable.'</textarea>';			
 					$obj_button='<button class="save" type="button" name="btn|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="btnid_'.$parent_name_variable.'"  />'.get_lang('Save').'</button>';		
 							
 					$list_info[]=array($lang_file.'.inc.php', 
@@ -254,7 +255,7 @@ function search_language_term($term, $search_in_variable = true , $search_in_eng
 			}
 		}
 	}
-	
+
 	$list_info = array_unique_dimensional($list_info);
 	return $list_info;	
 }

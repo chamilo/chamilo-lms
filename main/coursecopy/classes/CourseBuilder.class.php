@@ -59,7 +59,10 @@ class CourseBuilder
 		$this->build_announcements();
 		$this->build_links();
 		$this->build_tool_intro();
-		//$this->build_forums();
+		// Enabled by Ivan Tcholakov, 27-AUG-2009.
+		////$this->build_forums();
+		$this->build_forums();
+		//
 		$this->build_documents();
 		$this->build_course_descriptions();
 		$this->build_quizzes();
@@ -479,4 +482,3 @@ class CourseBuilder
 		}
 	}	
 }
-?>

@@ -78,8 +78,12 @@ class CourseRecycler
 		$this->recycle_events();
 		$this->recycle_announcements();
 		$this->recycle_documents();
-		//$this->recycle_forums();
-		//$this->recycle_forum_categories();
+		// Enabled by Ivan Tcholakov, 27-AUG-2009.
+		////$this->recycle_forums();
+		////$this->recycle_forum_categories();
+		$this->recycle_forums();
+		$this->recycle_forum_categories();
+		//
 		$this->recycle_quizzes();
 		$this->recycle_surveys();
 		$this->recycle_learnpaths();
@@ -122,14 +126,58 @@ class CourseRecycler
 	{
 		if ($this->course->has_resources(RESOURCE_FORUM))
 		{
+			$table_category = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 			$table_forum = Database :: get_course_table(TABLE_FORUM);
 			$table_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
 			$table_post = Database :: get_course_table(TABLE_FORUM_POST);
+			$table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+			$table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
+			$table_mail_queue = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
+			$table_thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+			$table_thread_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
+
 			$forum_ids = implode(',', (array_keys($this->course->resources[RESOURCE_FORUM])));
+
+			$sql = "DELETE FROM ".$table_attachment.
+				" USING ".$table_attachment." INNER JOIN ".$table_post.
+				" WHERE ".$table_attachment.".post_id = ".$table_post.".post_id".
+				" AND ".$table_post.".forum_id IN(".$forum_ids.");";
+			api_sql_query($sql,__FILE__,__LINE__);
+
+			$sql = "DELETE FROM ".$table_mail_queue.
+				" USING ".$table_mail_queue." INNER JOIN ".$table_post.
+				" WHERE ".$table_mail_queue.".post_id = ".$table_post.".post_id".
+				" AND ".$table_post.".forum_id IN(".$forum_ids.");";
+			api_sql_query($sql,__FILE__,__LINE__);
+
+			// Just in case, deleting in the same table using thread_id as record-linker.
+			$sql = "DELETE FROM ".$table_mail_queue.
+				" USING ".$table_mail_queue." INNER JOIN ".$table_thread.
+				" WHERE ".$table_mail_queue.".thread_id = ".$table_thread.".thread_id".
+				" AND ".$table_thread.".forum_id IN(".$forum_ids.");";
+			api_sql_query($sql,__FILE__,__LINE__);
+
+			$sql = "DELETE FROM ".$table_thread_qualify.
+				" USING ".$table_thread_qualify." INNER JOIN ".$table_thread.
+				" WHERE ".$table_thread_qualify.".thread_id = ".$table_thread.".thread_id".
+				" AND ".$table_thread.".forum_id IN(".$forum_ids.");";
+			api_sql_query($sql,__FILE__,__LINE__);
+
+			$sql = "DELETE FROM ".$table_thread_qualify_log.
+				" USING ".$table_thread_qualify_log." INNER JOIN ".$table_thread.
+				" WHERE ".$table_thread_qualify_log.".thread_id = ".$table_thread.".thread_id".
+				" AND ".$table_thread.".forum_id IN(".$forum_ids.");";
+			api_sql_query($sql,__FILE__,__LINE__);
+
+			$sql = "DELETE FROM ".$table_notification." WHERE forum_id IN(".$forum_ids.")";
+			api_sql_query($sql,__FILE__,__LINE__);
+
 			$sql = "DELETE FROM ".$table_post." WHERE forum_id IN(".$forum_ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
+
 			$sql = "DELETE FROM ".$table_thread." WHERE forum_id IN(".$forum_ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
+
 			$sql = "DELETE FROM ".$table_forum." WHERE forum_id IN(".$forum_ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
@@ -297,5 +345,3 @@ class CourseRecycler
 		}
 	}
 }
-?>
-

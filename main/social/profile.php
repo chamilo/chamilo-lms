@@ -560,7 +560,7 @@ echo '<div id="social-profile-wrapper">';
 				$friend_html .= '<div class="sectiontitle">'.get_lang('Friends').'</div>';
 				$friend_html.= '<div id="friend-container" class="social-friend-container">';
 				$friend_html.= '<div id="friend-header">';				
-				$friend_html.= '<div style="float:left; padding:0px 8px 0px 8px;">'.get_lang('NoFriendsInYourContactList').'<br /><a href="/whoisonline.php">'.get_lang('TryAndFindSomeFriends').'</a></div>';				
+				$friend_html.= '<div style="float:left; padding:0px 8px 0px 8px;">'.get_lang('NoFriendsInYourContactList').'<br /><a href="'.api_get_path(WEB_PATH).'whoisonline.php">'.get_lang('TryAndFindSomeFriends').'</a></div>';				
 				$friend_html.= '</div>'; // close div friend-header					
 			}
 			$friend_html.= '</div>'; 		

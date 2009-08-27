@@ -25,6 +25,14 @@ define('DATE_FORMAT_SHORT', 1);		// 25.08.2009
 define('DATE_FORMAT_LONG', 2);		// Aug 25, 09
 define('DATE_TIME_FORMAT_LONG', 3);	// August 25, 2009 at 03:28 PM
 
+// Formatting person's name.
+define('PERSON_NAME_COMMON_CONVENTION', 0);	// Formatting person's name using the pattern as it has been
+											// configured in the internationalization database for every language.
+											// This (default) option would be the most used.
+// The followind options may be used in limited number of places for overriding the common convention:
+define('PERSON_NAME_WESTERN_ORDER', 1);		// Formatting person's name in Western order: first_name last_name
+define('PERSON_NAME_EASTERN_ORDER', 2);		// Formatting person's name in Eastern order: last_name first_name
+define('PERSON_NAME_LIBRARY_ORDER', 3);		// Formatting person's name in library order: last_name, first_name
 
 /**
  * ----------------------------------------------------------------------------
@@ -334,26 +342,40 @@ function api_is_western_name_order($language = null) {
  * @param string $first_name			The first name of the preson.
  * @param string $last_name				The last name of the person.
  * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
+ * @param int (optional) $option		A parameter for overriding the common convention, it should be used in limited number of cases.
+ * Its values may be: PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
  * @return bool							The result is sort of full name of the person.
  * Sample results:
- * Peter Ustinoff - the western order
- * Ustinoff Peter - the eastern order
- * Ustinoff, Peter - the librarians' order
+ * Peter Ustinoff - the Western order
+ * Ustinoff Peter - the Eastern order
+ * Ustinoff, Peter - the library order
  * Note: See the file dokeos/main/inc/lib/internationalization_database/name_order_conventions.php
  * where you can revise the convention for your language.
  */
-function api_get_person_name($first_name, $last_name, $language = null) {
-	if (empty($language)) {
-		$language = api_get_interface_language();
+function api_get_person_name($first_name, $last_name, $language = null, $option = PERSON_NAME_COMMON_CONVENTION) {
+	switch ($option) {
+		case PERSON_NAME_WESTERN_ORDER:
+			return $first_name . ' ' . $last_name;
+		case PERSON_NAME_EASTERN_ORDER:
+			return $last_name . ' ' . $first_name;
+		case PERSON_NAME_LIBRARY_ORDER:
+			return $last_name . ', ' . $first_name;
+		case PERSON_NAME_COMMON_CONVENTION:
+		default:
+			if (empty($language)) {
+				$language = api_get_interface_language();
+			}
+			$language = api_refine_language_id($language);
+			$conventions = &_get_name_conventions();
+			$convention = $conventions[$language];
+			break;
 	}
-	$language = api_refine_language_id($language);
-	$conventions = &_get_name_conventions();
-	$convention = $conventions[$language];
 	if (_api_is_valid_name_convention($convention)) {
 		return str_replace(array('%f', '%l'), array($first_name, $last_name), $convention);
 	}
 	return $first_name . ' ' . $last_name;
 }
+
 
 /**
  * ----------------------------------------------------------------------------

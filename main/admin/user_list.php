@@ -440,7 +440,7 @@ function modify_filter($user_id,$url_params,$row)
 					<div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
 					</a>&nbsp;&nbsp;';
 	} else {
-		$result .= Display::return_icon('course_na.gif').'&nbsp;&nbsp;';
+		$result .= Display::return_icon('course_na.gif',get_lang('Courses')).'&nbsp;&nbsp;';
 	}
 	
 	if (api_is_platform_admin()) {

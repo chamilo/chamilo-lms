@@ -52,6 +52,7 @@ class CourseRecycler
 	 */
 	function recycle()
 	{
+		$table_tool_intro = Database::get_course_table(TABLE_TOOL_INTRO);
 		$table_linked_resources = Database :: get_course_table(TABLE_LINKED_RESOURCES, $this->course->destination_db);
 		$table_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
 		foreach ($this->course->resources as $type => $resources)
@@ -60,8 +61,16 @@ class CourseRecycler
 			{
 				$sql = "DELETE FROM ".$table_linked_resources." WHERE (source_type = '".$type."' AND source_id = '".$id."') OR (resource_type = '".$type."' AND resource_id = '".$id."')  ";
 				api_sql_query($sql,__FILE__,__LINE__);
-				$sql = "DELETE FROM ".$table_item_properties." WHERE tool ='".$resource->get_tool()."' AND ref=".$id;
-				api_sql_query($sql);
+				if(is_numeric($id))
+				{
+					$sql = "DELETE FROM ".$table_item_properties." WHERE tool ='".$resource->get_tool()."' AND ref=".$id;
+					api_sql_query($sql, __FILE__, __LINE__);
+				}
+				elseif ($type == RESOURCE_TOOL_INTRO)
+				{
+					$sql = "DELETE FROM $table_tool_intro WHERE id='$id'";
+					api_sql_query($sql, __FILE__, __LINE__);
+				}
 			}
 		}
 		$this->recycle_links();

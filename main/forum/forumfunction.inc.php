@@ -2828,7 +2828,7 @@ function send_notification_mails($thread_id, $reply_info) {
 		$sql="SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."' AND post_notification='1'";
 		$result=api_sql_query($sql, __LINE__, __FILE__);
 		*/
-		$table_notification = Database::get_course_table('forum_notification');
+		$table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
 		$sql = "SELECT * FROM $table_notification WHERE forum_id = '".Database::escape_string($current_forum['forum_id'])."' OR thread_id = '".Database::escape_string($thread_id)."'";
 		$result=api_sql_query($sql, __FILE__, __LINE__);
 		while ($row=Database::fetch_array($result)) {
@@ -3595,7 +3595,7 @@ function set_notification($content,$id, $add_only = false) {
 	}
 	
 	// database table definition
-	$table_notification = Database::get_course_table('forum_notification');
+	$table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
 	
 	// first we check if the notification is already set for this
 	$sql = "SELECT * FROM $table_notification WHERE $database_field = '".Database::escape_string($id)."' AND user_id = '".Database::escape_string($_user['user_id'])."'";
@@ -3642,7 +3642,7 @@ function get_notifications($content,$id) {
 		$database_field = 'thread_id';
 	}
 	// database table definition
-	$table_notification = Database::get_course_table('forum_notification');
+	$table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
 	$sql = "SELECT user.user_id, user.firstname, user.lastname, user.email, user.user_id user FROM $table_users user, $table_notification notification
 			WHERE user.user_id = notification.user_id
 			AND notification.$database_field= '".Database::escape_string($id)."'";
@@ -3737,7 +3737,7 @@ function get_notifications_of_user($user_id = 0, $force = false) {
 	}
 	
 	// database table definition
-	$table_notification = Database::get_course_table('forum_notification');
+	$table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
 	$my_code = isset($_course['code']) ? $_course['code'] : '';
 	if (!isset($_SESSION['forum_notification']) OR $_SESSION['forum_notification']['course'] <> $my_code OR $force=true) {
 		$_SESSION['forum_notification']['course'] = $my_code;

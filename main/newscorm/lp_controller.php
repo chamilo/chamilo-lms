@@ -100,7 +100,7 @@ if($lp_found == false || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id
 		if($debug>0) error_log('New LP - lp_id is defined',0);
 		//select the lp in the database and check which type it is (scorm/dokeos/aicc) to generate the
 		//right object
-		$lp_table = Database::get_course_table('lp');
+		$lp_table = Database::get_course_table(TABLE_LP_MAIN);
 		if(!empty($_REQUEST['lp_id'])){
 			$lp_id = $_REQUEST['lp_id'];
 		} else {

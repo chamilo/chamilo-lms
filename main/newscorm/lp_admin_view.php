@@ -63,9 +63,9 @@ $language_file = "learnpath";
 */ 
 $is_allowed_to_edit = api_is_allowed_to_edit();
 
-$tbl_lp = Database::get_course_table('lp');
-$tbl_lp_item = Database::get_course_table('lp_item');
-$tbl_lp_view = Database::get_course_table('lp_view');
+$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
@@ -207,7 +207,7 @@ if (isset($_POST['save_audio']))
 		if (substr($key,0,9) == 'removemp3') {
 			$lp_items_to_remove_audio[] = str_ireplace('removemp3','',$key);			
 			// removing the audio from the learning path item
-			$tbl_lp_item = Database::get_course_table('lp_item');
+			$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 			$in = implode(',',$lp_items_to_remove_audio);
 		}
 	}
@@ -272,7 +272,7 @@ if (isset($_POST['save_audio']))
 			$file = $file_components[count($file_components)-1];	
 
 			// store the mp3 file in the lp_item table
-			$tbl_lp_item = Database::get_course_table('lp_item');
+			$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 			$sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' WHERE id = '".Database::escape_string($lp_item_id)."'";
 			api_sql_query($sql_insert_audio, __FILE__, __LINE__);			
 			

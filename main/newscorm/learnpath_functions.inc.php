@@ -414,7 +414,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 	global $color2;
 	global $xml_output;
 	global $learnpath_id;
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 	
 	
 	// @todo: coding standards: Language variables are CaMMelCaSe, all other variables should use the underscoring method.
@@ -703,7 +703,7 @@ function display_learnpath_items($categoryid)
 {
 	global $xml_output;
 	global $lang_prerequisites, $lang_move_down, $lang_move_up, $lang_edit_learnpath_item, $lang_delete_learnpath_item, $learnpath_id, $lang_add_prereq, $lang_prereq_deleted_error, $lang_pre_short, $langThisItem;
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
 	$sql_items = "SELECT * FROM $tbl_lp_item WHERE parent_item_id='$categoryid' ORDER BY display_order ASC";
 	$result_items = api_sql_query($sql_items,__FILE__,__LINE__);
@@ -844,7 +844,7 @@ function learnpath_chapters($learnpath_id)
 {
 	global $xml_output, $learnpath_id;
 	//$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 	
 
 	$sql_items = "SELECT * FROM $tbl_lp_item WHERE lp_id='$learnpath_id' AND item_type='dokeos_chapter' ORDER BY display_order ASC";
@@ -868,7 +868,7 @@ function learnpath_chapters($learnpath_id)
 function is_prereq($learnpath_id)
 {
 	global $xml_output;
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 	
 	$prereq = false;
 
@@ -1050,7 +1050,7 @@ function get_learnpath_tree($learnpath_id)
 	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
 	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 	*/
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
 	$tree = array ();
 	$chapters = array ();

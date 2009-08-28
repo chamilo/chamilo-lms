@@ -31,7 +31,7 @@ class learnpathList {
     		//proceed with course code given
     	}else{
 		$course_code = api_get_course_id();
-		$lp_table = Database::get_course_table('lp');
+		$lp_table = Database::get_course_table(TABLE_LP_MAIN);
     	}
     	$this->course_code = $course_code;
     	$this->user_id = $user_id;

@@ -370,7 +370,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 	global $_course, $learnpath_id, $tbl_learnpath_item, $items;
 	global $curDirPath, $_configuration, $enableDocumentParsing, $_course, $_user, $_cid;
 
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 	$hyperlink_target_parameter = ''; //or e.g. 'target="_blank"'
 
 	$length = ((($builder == 'builder') and ($icon == 'nolink')) ? 65 : 32);
@@ -1166,7 +1166,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 	global $_course, $learnpath_id, $tbl_learnpath_item, $items;
 	global $curDirPath, $_configuration, $enableDocumentParsing, $_user, $_cid;
 
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 	$hyperlink_target_parameter = ""; //or e.g. target='_blank'
  $builder = 'player';
 	$origin='learnpath';
@@ -1803,7 +1803,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 	//error_log('In rl_get_resource_link_for_learnpath()',0);
 	$_course = Database::get_course_info($course_code);
 	
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
 	$sql_item = "SELECT * FROM $tbl_lp_item " .
 			"WHERE lp_id = $learnpath_id AND id = $id_in_path";
@@ -1946,7 +1946,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 {
 	$_course = Database::get_course_info($course_code);
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
 	$sql_item = "SELECT * FROM $tbl_lp_item " .
 			"WHERE lp_id = $learnpath_id AND id = $id_in_path";

@@ -69,7 +69,7 @@ class learnpathItem{
     function learnpathItem($db_id, $user_id) {
     	//get items table
     	if($this->debug>0){error_log('New LP - In learnpathItem constructor: '.$db_id.','.$user_id,0);}
-    	$items_table = Database::get_course_table('lp_item');
+    	$items_table = Database::get_course_table(TABLE_LP_ITEM);
     	$id = (int) $db_id;
     	$sql = "SELECT * FROM $items_table WHERE id = $id";
     	//error_log('New LP - Creating item object from DB: '.$sql,0);
@@ -207,8 +207,8 @@ class learnpathItem{
     function delete()
     {
     	if($this->debug>0){error_log('New LP - In learnpath_item::delete() for item '.$this->db_id,0);}
-    	$lp_item_view = Database::get_course_table('lp_item_view');
-    	$lp_item = Database::get_course_table('lp_item');
+    	$lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+    	$lp_item = Database::get_course_table(TABLE_LP_ITEM);
     	$sql_del_view = "DELETE FROM $lp_item_view WHERE item_id = ".$this->db_id;
 		//error_log('New LP - Deleting from lp_item_view: '.$sql_del_view,0);
 		$res_del_view = api_sql_query($sql_del_view);
@@ -403,7 +403,7 @@ class learnpathItem{
      */
     function load_interactions() {
             $this->interactions = array();
-            $tbl = Database::get_course_table('lp_item_view');
+            $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
             $sql = "SELECT id FROM $tbl " .
                     "WHERE lp_item_id = ".$this->db_id." " .
                     "AND   lp_view_id = ".$this->view_id." " .
@@ -412,7 +412,7 @@ class learnpathItem{
             if (Database::num_rows($res)>0) {
                 $row = Database::fetch_array($res);
                 $lp_iv_id = $row[0];
-                $iva_table = Database::get_course_table('lp_iv_interaction');
+                $iva_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
                 $iva_sql = "SELECT * FROM $iva_table " .
                             "WHERE lp_iv_id = $lp_iv_id ";
                 $res_sql = api_sql_query($iva_sql);
@@ -431,7 +431,7 @@ class learnpathItem{
     	if($this->debug>1){error_log('New LP - In learnpathItem::get_interactions_count()',0);}
     	$return = 0;
         if ($checkdb) {
-            $tbl = Database::get_course_table('lp_item_view');
+            $tbl = Database::get_course_table(TABLE_LP_VIEW);
             $sql = "SELECT id FROM $tbl " .
                     "WHERE lp_item_id = ".$this->db_id." " .
                     "AND   lp_view_id = ".$this->view_id." " .
@@ -440,7 +440,7 @@ class learnpathItem{
             if (Database::num_rows($res)>0) {
                 $row = Database::fetch_array($res);
                 $lp_iv_id = $row[0];
-                $iva_table = Database::get_course_table('lp_iv_interaction');
+                $iva_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
                 $iva_sql = "SELECT count(id) as mycount FROM $iva_table " .
                             "WHERE lp_iv_id = $lp_iv_id ";
                 $res_sql = api_sql_query($iva_sql);
@@ -626,7 +626,7 @@ class learnpathItem{
 		if($this->debug>2){error_log('New LP - In learnpathItem::get_prevent_reinit()',0);}
     	if(!isset($this->prevent_reinit)){
 	    	if(!empty($this->lp_id)){
-	    		$db = Database::get_course_table('lp');
+	    		$db = Database::get_course_table(TABLE_LP_MAIN);
 			   	$sql = "SELECT * FROM $db WHERE id = ".$this->lp_id;
 		    	$res = @api_sql_query($sql);
 		    	if(Database::num_rows($res)<1)
@@ -1010,7 +1010,7 @@ class learnpathItem{
     	if($this->debug>0){error_log('New LP - In learnpathItem::get_status() on item '.$this->db_id,0);}
     	if($check_db) {
     		if($this->debug>2){error_log('New LP - In learnpathItem::get_status(): checking db',0);}
-    		$table = Database::get_course_table('lp_item_view');
+    		$table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     		$sql = "SELECT * FROM $table WHERE id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";
     		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Checking DB: '.$sql,0);}
 
@@ -1828,7 +1828,7 @@ function get_terms()
     	if(!empty($lp_view_id) and $lp_view_id = intval(strval($lp_view_id)))
      	{
      		$this->view_id = $lp_view_id;
-	     	$item_view_table = Database::get_course_table('lp_item_view');
+	     	$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 	     	//get the lp_item_view with the highest view_count
 	     	$sql = "SELECT * FROM $item_view_table WHERE lp_item_id = ".$this->get_id()." " .
 	     			" AND lp_view_id = ".$lp_view_id." ORDER BY view_count DESC";
@@ -1850,7 +1850,7 @@ function get_terms()
 		     	if($this->debug>2){error_log('New LP - In learnpathItem::set_lp_view() - Updated item object with database values',0);}
 
 		     	//now get the number of interactions for this little guy
-		     	$item_view_interaction_table = Database::get_course_table('lp_iv_interaction');
+		     	$item_view_interaction_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
 		     	$sql = "SELECT * FROM $item_view_interaction_table WHERE lp_iv_id = '".$this->db_item_view_id."'"; 
 				$res = api_sql_query($sql,__FILE__,__LINE__);
 				if($res !== false){
@@ -1859,7 +1859,7 @@ function get_terms()
 					$this->interactions_count = 0;
 				}
 		     	//now get the number of objectives for this little guy
-		     	$item_view_objective_table = Database::get_course_table('lp_iv_objective');
+		     	$item_view_objective_table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
 		     	$sql = "SELECT * FROM $item_view_objective_table WHERE lp_iv_id = '".$this->db_item_view_id."'"; 
 				$res = api_sql_query($sql,__FILE__,__LINE__);
 				if($res !== false){
@@ -2116,7 +2116,7 @@ function get_terms()
    		if($this->debug>0){error_log('New LP - In learnpathItem::write_objectives_to_db()',0);}
      	if(is_array($this->objectives) && count($this->objectives)>0){
      		//save objectives
-     		$tbl = Database::get_course_table('lp_item_view');
+     		$tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
      		$sql = "SELECT id FROM $tbl " .
      				"WHERE lp_item_id = ".$this->db_id." " .
      				"AND   lp_view_id = ".$this->view_id." " .
@@ -2127,7 +2127,7 @@ function get_terms()
      			$lp_iv_id = $row[0];
      			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Got item_view_id '.$lp_iv_id.', now checking objectives ',0);}
 	     		foreach($this->objectives as $index => $objective){
-	     			$iva_table = Database::get_course_table('lp_iv_objective');
+	     			$iva_table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
 	     			$iva_sql = "SELECT id FROM $iva_table " .
 	     					"WHERE lp_iv_id = $lp_iv_id " .
 	     					//"AND order_id = $index";
@@ -2178,7 +2178,7 @@ function get_terms()
    		$credit = $this->get_credit();
    		$my_verified_status=$this->get_status(false);
    		
-   		$item_view_table = Database::get_course_table('lp_item_view');
+   		$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 		$sql_verified='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
 		$rs_verified=api_sql_query($sql_verified,__FILE__,__LINE__);
 		$row_verified=Database::fetch_array($rs_verified);
@@ -2234,7 +2234,7 @@ function get_terms()
 		     	$inserted = true;	
 		   }     		
       		
-	     	$item_view_table = Database::get_course_table('lp_item_view');
+	     	$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 	     	$check = "SELECT * FROM $item_view_table " .
 	     			"WHERE lp_item_id = ".$this->db_id. " " .
 	     			"AND   lp_view_id = ".$this->view_id. " ".
@@ -2405,7 +2405,7 @@ function get_terms()
 	     	//}
 	     	if(is_array($this->interactions) && count($this->interactions)>0){
 	     		//save interactions
-	     		$tbl = Database::get_course_table('lp_item_view');
+	     		$tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 	     		$sql = "SELECT id FROM $tbl " .
 	     				"WHERE lp_item_id = ".$this->db_id." " .
 	     				"AND   lp_view_id = ".$this->view_id." " .
@@ -2423,7 +2423,7 @@ function get_terms()
 		     				}
 		     				$correct_resp = substr($correct_resp,0,strlen($correct_resp)-1);
 		     			}
-		     			$iva_table = Database::get_course_table('lp_iv_interaction');
+		     			$iva_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
 		     			$iva_sql = "SELECT id FROM $iva_table " .
 		     					"WHERE lp_iv_id = $lp_iv_id " .
 //		     					"AND order_id = $index";

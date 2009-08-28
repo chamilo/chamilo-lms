@@ -109,7 +109,7 @@ $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+$user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
 
 // getting the survey information
 

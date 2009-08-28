@@ -44,8 +44,8 @@ function display_announcement($announcement_id)
 	
 	if ($announcement_id != strval(intval($announcement_id))) { return false; } // potencial sql injection
 	
-	$tbl_announcement 	= Database::get_course_table('announcement');
-	$tbl_item_property	= Database::get_course_table('item_property');
+	$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
+	$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 	
 	if ($_user['user_id'])
 	{

@@ -150,9 +150,9 @@ $tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $tbl_stats_exercices_attempts 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-//$tbl_course_lp_view 		= Database :: get_course_table('lp_view');
-//$tbl_course_lp_view_item = Database :: get_course_table('lp_item_view');
-//$tbl_course_lp_item 		= Database :: get_course_table('lp_item');
+//$tbl_course_lp_view 		= Database :: get_course_table(TABLE_LP_VIEW);
+//$tbl_course_lp_view_item = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+//$tbl_course_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
 
 $tbl_course_lp_view = 'lp_view';
 $tbl_course_lp_view_item = 'lp_item_view';

@@ -192,18 +192,14 @@ if($modifyAnswers)
     {
     	// At least 1 answer
     	if ($nbrAnswers > 1) {
-
             $nbrAnswers--;
-
             // Remove the last answer
 			$tmp = array_pop($_SESSION['tmp_answers']['answer']);
 			$tmp = array_pop($_SESSION['tmp_answers']['comment']);
 			$tmp = array_pop($_SESSION['tmp_answers']['weighting']);
 			$tmp = array_pop($_SESSION['tmp_answers']['hotspot_coordinates']);
 			$tmp = array_pop($_SESSION['tmp_answers']['hotspot_type']);
-    	}
-    	else
-    	{
+    	} else {
     		$msgErr=get_lang('MinHotspot');
     	}
     }

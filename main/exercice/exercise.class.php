@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
-
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
 *	Exercise class: This class allows to instantiate an object of type Exercise
@@ -519,8 +499,7 @@ class Exercise
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);        
         $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
-
-		
+	
 		$id=$this->id;
 		$exercise=$this->exercise;
 		$description=$this->description;
@@ -529,8 +508,7 @@ class Exercise
 		$attempts=$this->attempts;
 		$feedbacktype=$this->feedbacktype;
 		$random=$this->random;
-		$active=$this->active;				
-		
+		$active=$this->active;					
 		if ($feedbacktype==1){
 			$results_disabled = 1;
 		} else {
@@ -595,7 +573,6 @@ class Exercise
 						'".Database::escape_string($attempts)."',
 						'".Database::escape_string($feedbacktype)."'
 						)";
-			//var_dump($description);
 			api_sql_query($sql,__FILE__,__LINE__);			
 			$this->id=Database::insert_id();		
         	// insert into the item_property table
@@ -878,21 +855,16 @@ class Exercise
 		$form -> addElement('html','<div class="row">
 		<div class="label"></div>
 		<div class="formw" style="height:50px">
-			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'</span></a>
+			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'</span></a>
 		</div>
-		</div>');
+		</div>'); 
 		
 		$editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
 		if(is_array($type)){
 			$editor_config = array_merge($editor_config, $type);
 		}	
-		/*
-		$form -> addElement ('html','<div id="media" style="display:none;">');
-		$form -> add_html_editor ('exerciseDescription', get_lang('langQuestionDescription'), null, null, array('ToolbarSet' => 'TestDescription', 'Width' => '100%', 'Height' => '200'));
-		$form -> addElement ('html','</div>');		
-		*/
 				
-		$form -> addElement ('html','<div id="media" style="display:block;">');
+		$form -> addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" >');
 		$form -> add_html_editor('exerciseDescription', get_lang('langExerciseDescription'), false, false, $editor_config);
 		$form -> addElement ('html','</div>');
 

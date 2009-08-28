@@ -1,24 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
 *	Exercise administration
@@ -55,14 +36,28 @@ $htmlHeadXtra[] = '<script>
 				document.getElementById(\'options\').style.display = \'none\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 			}	
-		}			 	
-				
+		}	
+			
+						 	
+		function FCKeditor_OnComplete( editorInstance )
+			{
+			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
+			      HideFCKEditorByInstanceName (editorInstance.Name);
+			   }
+			}
+			
+			function HideFCKEditorByInstanceName ( editorInstanceName ) {
+			   if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
+			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
+			      }
+			}		
 		function show_media() {
-			if(document.getElementById(\'media\').style.display == \'none\') {
-				document.getElementById(\'media\').style.display = \'block\';
+			var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display; 
+				if(my_display== \'none\' || my_display == \'\') {
+				document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'block\';
 				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
 			} else {			
-				document.getElementById(\'media\').style.display = \'none\';
+				document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'none\';
 				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
 				
 			}	
@@ -96,7 +91,6 @@ $htmlHeadXtra[] = '<script>
 
 include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $objExercise = new Exercise();
-
 
 /*********************
  * INIT FORM
@@ -144,6 +138,9 @@ if ($form -> validate()) {
 		if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
 				Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
 		}
+	
+	// to hide the exercise description 	
+	echo '<style> .media { display:none;}</style>';	
 	$form -> display ();
 }
 Display::display_footer();

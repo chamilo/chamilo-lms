@@ -2823,13 +2823,13 @@ if (!defined('__CLASS_HTML2PDF__'))
 				if ($this->maxH) $this->o_BR(array());
 				$this->o_BR(array());
 			}
-			
+						
 			$this->style->save();
 			$this->style->analyse('p', $param);
 			$this->style->setPosition($this->pdf->x, $this->pdf->y);
 			$this->style->FontSet();
 			
-			if ($this->style->value['text-indent']>0) $this->pdf->x+= $this->style->value['text-indent'];
+			if ($this->style->value['text-indent']>0) $this->pdf->x+= $this->style->value['text-indent'];	
 			
 			return true;
 		}

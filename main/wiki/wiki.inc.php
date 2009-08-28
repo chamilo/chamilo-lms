@@ -784,7 +784,11 @@ function display_wiki_entry()
 	{
 		if(api_is_allowed_to_edit() || api_is_platform_admin() || GroupManager :: is_user_in_group(api_get_user_id(),$_SESSION['_gid'])) 
 		{
-			$content=sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH));
+			//Table structure for better export to pdf
+			$default_table_for_content_Start='<table align="center" border="0"><tr><td align="center">';
+			$default_table_for_content_End='</td></tr></table>';
+		
+			$content=$default_table_for_content_Start.sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH)).$default_table_for_content_End;
 			$title=get_lang('DefaultTitle');
 		}
 		else

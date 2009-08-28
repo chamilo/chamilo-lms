@@ -2823,13 +2823,24 @@ if (!defined('__CLASS_HTML2PDF__'))
 				if ($this->maxH) $this->o_BR(array());
 				$this->o_BR(array());
 			}
-			
+						
 			$this->style->save();
 			$this->style->analyse('p', $param);
 			$this->style->setPosition($this->pdf->x, $this->pdf->y);
 			$this->style->FontSet();
 			
 			if ($this->style->value['text-indent']>0) $this->pdf->x+= $this->style->value['text-indent'];
+			
+			// Hack for improve center paragraph by Juan Carlos Raña			
+			$parent_w = $this->pdf->w - $this->pdf->lMargin - $this->pdf->rMargin;				
+			if ($parent_w>$w)
+			{				
+				if ($this->style->value['text-align']=='center')		$this->pdf->x = $this->pdf->x + ($parent_w-$w)*0.5;
+			}
+			
+			$this->style->setPosition($this->pdf->x, $this->pdf->y);
+			//
+			
 			
 			return true;
 		}

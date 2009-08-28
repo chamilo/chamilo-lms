@@ -57,7 +57,7 @@ class Exercise
 	{
 		$this->id=0;
 		$this->exercise='';
-		$this->description='hola';
+		$this->description='';
 		$this->sound='';
 		$this->type=1;
 		$this->random=0;

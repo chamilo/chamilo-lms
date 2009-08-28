@@ -1031,14 +1031,14 @@ if (is_array($arrid) && is_array($arrmarks)) {
 if ($is_allowedToEdit) {		
 	if (in_array($origin, array('tracking_course','user_course'))) {
 		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.urlencode($test).'&emailid='.$emailId.'&origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].'" method="post">';
-		if (isset($_GET['myid']) && isset($_GET['my_lp_id']) && isset($_GET['student'])) {
+		echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';
+		if (isset($_GET['myid']) && isset($_GET['my_lp_id']) && isset($_GET['student'])) {			
 			?>
 			<input type = "hidden" name="lp_item_id" value="<?php echo Security::remove_XSS($_GET['myid']); ?>">
 			<input type = "hidden" name="lp_item_view_id" value="<?php echo Security::remove_XSS($_GET['my_lp_id']); ?>">
 			<input type = "hidden" name="student_id" value="<?php echo Security::remove_XSS($_GET['student']);?>">
 			<input type = "hidden" name="total_score" value="<?php echo $totalScore; ?>">
-			<input type = "hidden" name="total_time" value="<?php echo Security::remove_XSS($_GET['total_time']);?>">
-			<input type = "hidden" name="totalWeighting" value="<?php echo $totalWeighting; ?>">
+			<input type = "hidden" name="total_time" value="<?php echo Security::remove_XSS($_GET['total_time']);?>">			
 			<input type = "hidden" name="my_exe_exo_id" value="<?php echo Security::remove_XSS($_GET['my_exe_exo_id']); ?>">		
 			<?php		 
 		}

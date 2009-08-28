@@ -235,8 +235,8 @@ class aicc extends learnpath {
         $row = Database::fetch_array($res);
         $dbname = Database::get_course_table_prefix().$row['db_name'].Database::get_database_glue();
 		
-		$new_lp = Database::get_course_table('lp');
-		$new_lp_item = Database::get_course_table('lp_item');
+		$new_lp = Database::get_course_table(TABLE_LP_MAIN);
+		$new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     	$get_max = "SELECT MAX(display_order) FROM $new_lp";
     	$res_max = api_sql_query($get_max);
     	if(Database::num_rows($res_max)<1){
@@ -561,7 +561,7 @@ class aicc extends learnpath {
 		if($this->debug>0){error_log('In aicc::set_proximity('.$proxy.') method',0);}
 	 	$lp = $this->get_id();
 	 	if($lp!=0){
-	 		$tbl_lp = Database::get_course_table('lp');
+	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE id = ".$lp;
 	 		$res = api_sql_query($sql);
 	 		return $res;
@@ -578,7 +578,7 @@ class aicc extends learnpath {
 		if($this->debug>0){error_log('In aicc::set_theme('.$theme.') method',0);}
 	 	$lp = $this->get_id();
 	 	if($lp!=0){
-	 		$tbl_lp = Database::get_course_table('lp');
+	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET theme = '$theme' WHERE id = ".$lp;
 	 		$res = api_sql_query($sql);
 	 		return $res;
@@ -595,7 +595,7 @@ class aicc extends learnpath {
 		if($this->debug>0){error_log('In aicc::set_preview_image('.$preview_image.') method',0);}
 	 	$lp = $this->get_id();
 	 	if($lp!=0){
-	 		$tbl_lp = Database::get_course_table('lp');
+	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' WHERE id = ".$lp;
 	 		$res = api_sql_query($sql);
 	 		return $res;
@@ -612,7 +612,7 @@ class aicc extends learnpath {
 		if($this->debug>0){error_log('In aicc::set_author('.$author.') method',0);}
 	 	$lp = $this->get_id();
 	 	if($lp!=0){
-	 		$tbl_lp = Database::get_course_table('lp');
+	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET author = '$author' WHERE id = ".$lp;
 	 		$res = api_sql_query($sql);
 	 		return $res;
@@ -631,7 +631,7 @@ class aicc extends learnpath {
 		if($this->debug>0){error_log('In aicc::set_maker method('.$maker.')',0);}
 	 	$lp = $this->get_id();
 	 	if($lp!=0){
-	 		$tbl_lp = Database::get_course_table('lp');
+	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE id = ".$lp;
 	 		$res = api_sql_query($sql);
 	 		return $res;
@@ -668,7 +668,7 @@ class aicc extends learnpath {
 		require_once (api_get_path(LIBRARY_PATH)."document.lib.php");
 		require_once (api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
 		require_once ("learnpath_functions.inc.php");
-		$tbl_lp = Database::get_course_table('lp');
+		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 		$_course = Database::get_course_info(api_get_course_id());
 
 		$sql = "SELECT * FROM $tbl_lp WHERE id=".$lp_id;

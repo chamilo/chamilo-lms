@@ -694,7 +694,7 @@ class CourseRestorer
 		return $new_id;
 	}
 	/**
-	 * Restore Quiz
+	 * Restore surveys
 	 */
 	function restore_surveys()
 	{

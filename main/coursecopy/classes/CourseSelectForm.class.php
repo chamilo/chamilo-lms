@@ -107,7 +107,7 @@ class CourseSelectForm
 		
 		echo '<script language="javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
-		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
+		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 		
 		foreach ($course->resources as $type => $resources) {
@@ -123,11 +123,11 @@ class CourseSelectForm
 					case RESOURCE_SCORM:
 						break;
 					default :
-						echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" />';
+						echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript: exp('."'$type'".');" />';
 						echo '<b  onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
 						echo '<div id="div_'.$type.'">';
 						echo '<blockquote>';
-						echo "[<a href=\"#\" onclick=\"javascript:setCheckbox('$type',true);\" >".get_lang('All')."</a> - <a href=\"#\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>]";
+						echo "[<a href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a> | <a href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>]";
 						echo '<br />'; 
 						foreach ($resources as $id => $resource) {
 							echo '<input type="checkbox" name="resource['.$type.']['.$id.']" id="resource['.$type.']['.$id.']"/>';
@@ -158,7 +158,7 @@ class CourseSelectForm
 				echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
 			}
 		}
-		echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.get_lang('Ok').'</button>';
+		echo '<br /><button class="save" type="submit" onclick="javascript: checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.get_lang('Ok').'</button>';
 
 		CourseSelectForm :: display_hidden_quiz_questions($course);
 		CourseSelectForm :: display_hidden_scorm_directories($course);

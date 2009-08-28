@@ -418,7 +418,7 @@ function mdstore($allow_create)
 {
     global $_course; if (!isset($_course)) return;
     
-    define('MDS_TABLE', Database::get_course_table('metadata'));
+    define('MDS_TABLE', Database::get_course_table(TABLE_METADATA));
 
     if (!api_sql_query("SELECT eid FROM " . MDS_TABLE))
     if ($allow_create)

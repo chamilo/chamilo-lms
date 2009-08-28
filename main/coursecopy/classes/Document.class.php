@@ -61,7 +61,13 @@ class Document extends Resource
 	function show()
 	{
 		parent::show();
-		echo substr($this->path,8);	
+		echo preg_replace('@^document@', '', $this->path);
+		if (!empty($this->title) && (api_get_setting('use_document_title') == 'true'))
+		{
+			if (strpos($this->path, $this->title) === false)
+			{
+				echo " - ".$this->title;
+			}
+		}
 	}
 }
-?>

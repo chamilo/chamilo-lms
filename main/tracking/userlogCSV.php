@@ -73,7 +73,7 @@ require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 // charset determination
 if ($_GET['scormcontopen'])
 {
-	$tbl_lp = Database::get_course_table('lp');
+	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = (int) $_GET['scormcontopen'];
 	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
 	$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -141,10 +141,10 @@ if(api_get_setting('use_session_mode') == "true") {
 	}
 }
 
-$tbl_learnpath_main = Database::get_course_table('lp');
-$tbl_learnpath_item = Database::get_course_table('lp_item');
-$tbl_learnpath_view = Database::get_course_table('lp_view');
-$tbl_learnpath_item_view = Database::get_course_table('lp_item_view');
+$tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
+$tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 

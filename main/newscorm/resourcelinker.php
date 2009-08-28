@@ -66,8 +66,8 @@ $item_property_table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 //$tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
 //$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 //$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
-$tbl_lp = Database::get_course_table('lp');
-$tbl_lp_item = Database::get_course_table('lp_item');
+$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
 $action = $_REQUEST['action'];
 $add = $_REQUEST['add'];

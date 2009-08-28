@@ -38,17 +38,13 @@ class ForumTopic extends Resource
 	 */
 	var $time;
 	/**
-	 * Poster firstname
+	 * Poster id
 	 */
-	 var $firstname;
+	 var $topic_poster_id;
 	 /**
-	  * Poster lastname
+	 * Poster name
 	  */
-	 var $lastname;
-	 /**
-	  * Topic notify
-	  */
-	 var $topic_notify;
+	 var $topic_poster_name;
 	 /**
 	  * Parent forum
 	  */
@@ -57,19 +53,61 @@ class ForumTopic extends Resource
 	  * Last post
 	  */
 	 var $last_post;
-	/**
+	 /**
+	  * How many replies are there
+	  */
+	 var $replies;
+	 /**
+	  * How many times has been viewed
+	  */
+	 var $views;
+	 /**
+	  * Sticky or not
+	  */
+	 var $sticky;
+	 /**
+	  * Locked or not
+	  */
+	 var $locked;
+	 /**
+	  * Date of closing
+	  */
+	 var $time_closed;
+
+	 // From the Gradebook tool?
+	 /**
+	  * Weight
+	  */
+	 var $weight;
+	 /**
+	  * Weight
+	  */
+	 var $title_qualify;
+	 /**
+	  * Weight
+	  */
+	 var $qualify_max;
+	 
+	 /**
 	 * Create a new ForumTopic
 	 */
-	function ForumTopic($id,$title,$time,$firstname,$lastname,$topic_notify,$forum_id,$last_post)
+	function ForumTopic($id, $title, $time, $topic_poster_id, $topic_poster_name, $forum_id, $last_post, $replies, $views, $sticky, $locked, $time_closed, $weight, $title_qualify, $qualify_max)
 	{
-		parent::Resource($id,RESOURCE_FORUMTOPIC);
+		parent::Resource($id, RESOURCE_FORUMTOPIC);
 		$this->title = $title;
 		$this->time = $time;
-		$this->firstname = $firstname;
-		$this->lastname = $lastname;
-		$this->topic_notify = $topic_notify;
+		$this->topic_poster_id = $topic_poster_id;
+		$this->topic_poster_name = $topic_poster_name;
 		$this->forum_id = $forum_id;
 		$this->last_post = $last_post;
+		$this->replies = $replies;
+		$this->views = $views;
+		$this->sticky = $sticky;
+		$this->locked = $locked;
+		$this->time_closed = $time_closed;
+		$this->weight = $weight;
+		$this->title_qualify = $title_qualify;
+		$this->qualify_max = $qualify_max;
 	}
 	/**
 	 * Show this resource
@@ -77,7 +115,6 @@ class ForumTopic extends Resource
 	function show()
 	{
 		parent::show();
-		echo $this->title.' ('.$this->firstname.' '.$this->lastname.', '.$this->topic_time.')';	
+		echo $this->title.' ('.$this->topic_poster_name.', '.$this->topic_time.')';	
 	}
 }
-?>

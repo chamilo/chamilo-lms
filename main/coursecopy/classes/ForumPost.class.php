@@ -46,13 +46,9 @@ class ForumPost extends Resource
 	 */
 	var $poster_ip;
 	/**
-	 * Poster firstname
+	 * Poster name
 	 */
-	 var $firstname;
-	 /**
-	  * Poster lastname
-	  */
-	 var $lastname;
+	 var $poster_name;
 	 /**
 	  * Topic notify
 	  */
@@ -65,21 +61,25 @@ class ForumPost extends Resource
 	  * Topic id
 	  */
 	 var $topic_id;
-	/**
+	 /**
+	  * Visible flag
+	  */
+	 var $visible;
+	 /**
 	 * Create a new ForumPost
 	 */
-	function ForumPost($id,$title,$text,$post_time,$poster_ip,$firstname,$lastname,$topic_notify,$parent_post_id,$topic_id)
+	function ForumPost($id, $title, $text, $post_time, $poster_ip, $poster_name, $topic_notify, $parent_post_id, $topic_id, $visible)
 	{
-		parent::Resource($id,RESOURCE_FORUMPOST);
+		parent::Resource($id, RESOURCE_FORUMPOST);
 		$this->title = $title;
 		$this->text = $text;
 		$this->post_time = $post_time;
 		$this->poster_ip = $poster_ip;
-		$this->firstname = $firstname;
-		$this->lastname = $lastname;
+		$this->poster_name = $poster_name;
 		$this->topic_notify = $topic_notify;
 		$this->parent_post_id = $parent_post_id;
 		$this->topic_id = $topic_id;
+		$this->visible = $visible;
 	}
 	/**
 	 * Show this resource
@@ -87,7 +87,6 @@ class ForumPost extends Resource
 	function show()
 	{
 		parent::show();
-		echo $this->title.' ('.$this->firstname.' '.$this->lastname.', '.$this->post_time.')';	
+		echo $this->title.' ('.$this->poster_name.', '.$this->post_time.')';	
 	}
 }
-?>

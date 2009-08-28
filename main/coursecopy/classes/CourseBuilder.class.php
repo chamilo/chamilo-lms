@@ -131,9 +131,9 @@ class CourseBuilder
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
-			$forum = new Forum($obj->forum_id, $obj->forum_name, $obj->forum_description, $obj->cat_id, $obj->forum_last_post_id);
+			$forum = new Forum($obj->forum_id, $obj->forum_title, $obj->forum_comment, $obj->forum_category, $obj->forum_last_post, $obj->forum_threads, $obj->forum_posts, $obj->allow_anonymous, $obj->allow_edit, $obj->approval_direct_post, $obj->allow_attachements, $obj->allow_new_threads, $obj->default_view, $obj->forum_of_group, $obj->forum_group_public_private, $obj->forum_order, $obj->locked, $obj->session_id, $obj->forum_image);
 			$this->course->add_resource($forum);
-			$this->build_forum_category($obj->cat_id);
+			$this->build_forum_category($obj->forum_category);
 		}
 		$this->build_forum_topics();
 		$this->build_forum_posts();
@@ -148,7 +148,7 @@ class CourseBuilder
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
-			$forum_category = new ForumCategory($obj->cat_id, $obj->cat_title);
+			$forum_category = new ForumCategory($obj->cat_id, $obj->cat_title, $obj->cat_comment, $obj->cat_order, $obj->locked, $obj->session_id);
 			$this->course->add_resource($forum_category);
 		}
 	}
@@ -162,7 +162,7 @@ class CourseBuilder
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
-			$forum_topic = new ForumTopic($obj->topic_id, $obj->topic_title, $obj->topic_time, $obj->prenom, $obj->nom, $obj->topic_notify, $obj->forum_id, $obj->topic_last_post_id);
+			$forum_topic = new ForumTopic($obj->thread_id, $obj->thread_title, $obj->thread_date, $obj->thread_poster_id, $obj->thread_poster_name, $obj->forum_id, $obj->thread_last_post, $obj->thread_replies, $obj->thread_views, $obj->thread_sticky, $obj->locked, $obj->thread_close_date, $obj->thread_weight, $obj->thread_title_qualify, $obj->thread_qualify_max);
 			$this->course->add_resource($forum_topic);
 		}
 	}
@@ -172,12 +172,11 @@ class CourseBuilder
 	function build_forum_posts()
 	{
 		$table_post = Database :: get_course_table(TABLE_FORUM_POST);
-		$table_posttext = Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
-		$sql = 'SELECT * FROM '.$table_post.' p,'.$table_posttext.' pt WHERE p.post_id = pt.post_id';
+		$sql = 'SELECT * FROM '.$table_post;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
-			$forum_post = new ForumPost($obj->post_id, $obj->post_title, $obj->post_text, $obj->post_time, $obj->poster_ip, $obj->prenom, $obj->nom, $obj->topic_notify, $obj->parent_id, $obj->topic_id);
+			$forum_post = new ForumPost($obj->post_id, $obj->post_title, $obj->post_text, $obj->post_date, $obj->poster_ip, $obj->poster_name, $obj->post_notification, $obj->post_parent_id, $obj->thread_id, $obj->visible);
 			$this->course->add_resource($forum_post);
 		}
 	}

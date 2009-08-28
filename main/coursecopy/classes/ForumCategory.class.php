@@ -34,12 +34,32 @@ class ForumCategory extends Resource
 	 */
 	var $title;
 	/**
+	 * The description
+	 */
+	var $description;
+	/**
+	 * The order
+	 */
+	var $order;
+	/**
+	 * Locked flag
+	 */
+	var $locked;
+	/**
+	 * The session id
+	 */
+	var $session_id;
+	/**
 	 * Create a new ForumCategory
 	 */
-	function ForumCategory($id,$title)
+	function ForumCategory($id, $title, $description, $order, $locked, $session_id)
 	{
 		parent::Resource($id,RESOURCE_FORUMCATEGORY);
 		$this->title = $title;
+		$this->description = $description;
+		$this->order = $order;
+		$this->locked = $locked;
+		$this->session_id = $session_id;
 	}
 	/**
 	 * Show this resource
@@ -50,4 +70,3 @@ class ForumCategory extends Resource
 		echo $this->title;	
 	}
 }
-?>

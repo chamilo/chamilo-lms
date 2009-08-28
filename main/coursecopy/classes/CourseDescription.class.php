@@ -38,11 +38,10 @@ class CourseDescription extends Resource
 	 */
 	var $content;
 	/**
-	 * Create a new Event
+	 * Create a new course description
 	 * @param int $id
 	 * @param string $title
 	 * @param string $content
-	 * @param string $date
 	 */
 	function CourseDescription($id,$title,$content)
 	{
